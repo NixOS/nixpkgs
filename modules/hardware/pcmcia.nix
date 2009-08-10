@@ -53,17 +53,9 @@ mkIf config.hardware.pcmcia.enable {
     options
   ];
 
-  boot = {
-    kernelModules = [ "pcmcia" ];
-  };
+  boot.kernelModules = [ "pcmcia" ];
 
-  services = {
-    udev = {
-      addUdevPkgs = [ pcmciaUtils ];
-    };
-  };
+  services.udev.packages = [ pcmciaUtils ];
 
-  environment = {
-    extraPackages = [ pcmciaUtils ];
-  };
+  environment.systemPackages = [ pcmciaUtils ];
 }

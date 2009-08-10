@@ -12,22 +12,18 @@ let
     src = ./udev-firmware-loader.sh;
     path = "${stdenv.coreutils}/bin";
     isExecutable = true;
-    inherit firmwareDirs;
+    firmwareDirs = cfg.addFirmware;
   };
 
-  firmwareDirs = config.services.udev.addFirmware;
-  
-  extraUdevPkgs = config.services.udev.addUdevPkgs
-    ++ pkgs.lib.optional (cfg.extraRules != "")
-      (pkgs.writeTextFile {
-        name = "extra-udev-rules";
-        text = cfg.extraRules;
-        destination = "/custom/udev/rules.d/10-local.rules";
-        });
+  extraUdevRules = pkgs.writeTextFile {
+    name = "extra-udev-rules";
+    text = cfg.extraRules;
+    destination = "/etc/udev/rules.d/10-local.rules";
+  };
 
   modprobe = config.system.sbin.modprobe;
     
-  nixRules = writeText "90-nix.rules" ''
+  nixosRules = ''
   
     # Miscellaneous devices.
     KERNEL=="sonypi",               MODE="0666"
@@ -60,10 +56,14 @@ let
     #src = cleanSource ./udev-rules;
     buildCommand = ''
       ensureDir $out
-      ln -s ${nixRules} $out/${nixRules.name}
       shopt -s nullglob
+
+      # Use all the default udev rules.
       cp ${udev}/*/udev/rules.d/*.rules $out/
-      
+
+      # If auto-configuration is disabled, then remove
+      # udev's 80-drivers.rules file, which contains rules for
+      # automatically calling modprobe.
       ${if config.boot.hardwareScan then
         ''
           substituteInPlace $out/80-drivers.rules \
@@ -74,7 +74,9 @@ let
           rm $out/80-drivers.rules
         ''
       }
-      for i in ${toString extraUdevPkgs}; do
+
+      # Add the udev rules from other packages.
+      for i in ${toString cfg.packages}; do
         for j in $i/*/udev/rules.d/*; do
           ln -s $j $out/$(basename $j)
         done
@@ -122,23 +124,24 @@ in
       addFirmware = mkOption {
         default = [];
         example = ["/mnt/big-storage/firmware/"];
+        merge = mergeListOption; 
         description = ''
           To specify firmware that is not too spread to ensure 
           a package, or have an interactive process of extraction
           and cannot be redistributed.
         '';
-        merge = pkgs.lib.mergeListOption;
       };
 
-      addUdevPkgs = mkOption {
+      packages = mkOption {
         default = [];
+        merge = mergeListOption;
         description = ''
           List of packages containing <command>udev</command> rules.
           All files found in
-          <filename><replaceable>pkg</replaceable>/udev/rules.d</filename>
+          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
+          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
           will be included.
         '';
-        merge = pkgs.lib.mergeListOption;
       };
 
       extraRules = mkOption {
@@ -146,6 +149,7 @@ in
         example = ''
           KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
         '';
+        merge = mergeStringOption;
         description = ''
           Additional <command>udev</command> rules. They'll be written
           into file <filename>10-local.rules</filename>. Thus they are
@@ -171,6 +175,10 @@ in
   ###### implementation
 
   config = {
+
+    services.udev.extraRules = nixosRules;
+    
+    services.udev.packages = [extraUdevRules];
 
     jobs = singleton
       { name = "udev";

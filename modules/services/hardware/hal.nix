@@ -94,7 +94,7 @@ in
         exec = "${hal}/sbin/hald --daemon=no";
       };
 
-    services.udev.addUdevPkgs = [hal];
+    services.udev.packages = [hal];
 
     services.dbus.enable = true;
     services.dbus.packages = [hal];

@@ -8,18 +8,10 @@ let
 in
 
 {
-  boot = {
-    extraModulePackages = wisGo7007Pkg;
-  };
+  boot.extraModulePackages = [wisGo7007Pkg];
 
-  environment = {
-    extraPackages = wisGo7007Pkg;
-  };
+  environment.extraPackages = [wisGo7007Pkg];
 
-  services = {
-    udev = {
-      addFirmware = wisGo7007Firmware;
-      addUdevPkgs = wisGo7007Pkg;
-    };
-  };
+  services.udev.addFirmware = [wisGo7007Firmware];
+  services.udev.packages = [wisGo7007Pkg];
 }
