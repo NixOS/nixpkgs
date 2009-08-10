@@ -3613,7 +3613,8 @@ let
   };
 
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
-  libsigsegv_25 =  builderDefsPackage ../development/libraries/libsigsegv/2.5.nix {
+  libsigsegv_25 =  import ../development/libraries/libsigsegv/2.5.nix {
+    inherit fetchurl stdenv;
   };
 
   libsndfile = import ../development/libraries/libsndfile {
