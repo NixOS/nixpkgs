@@ -4,10 +4,10 @@
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
-  version = "2009.2.0.1";
+  version = "2009.2.0.2";
   src = fetchurl {
     url = "http://hackage.haskell.org/platform/${self.version}/cabal/${self.pname}-${self.version}.tar.gz";
-    sha256 = "33a828ed6cd1e6cc32cfec3fd55e6ab4d8026bd7451bab65ec0873880c0f11c5";
+    sha256 = "e0469fac9b1d091d8299ae16a4e2e7fcd504285bba066b17153a0f0104a049bd";
   };
   propagatedBuildInputs = [
     GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
