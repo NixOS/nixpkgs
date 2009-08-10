@@ -1,78 +1,12 @@
 {pkgs, config, ...}:
 
-###### interface
-let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-
-    boot.hardwareScan = mkOption {
-      default = true;
-      description = "
-        Whether to try to load kernel modules for all detected hardware.
-        Usually this does a good job of providing you with the modules
-        you need, but sometimes it can crash the system or cause other
-        nasty effects.  If the hardware scan is turned on, it can be
-        disabled at boot time by adding the <literal>safemode</literal>
-        parameter to the kernel command line.
-      ";
-    };
-  
-    services = {
-      udev = {
-
-        addFirmware = mkOption {
-          default = [];
-          example = ["/mnt/big-storage/firmware/"];
-          description = "
-            To specify firmware that is not too spread to ensure 
-            a package, or have an interactive process of extraction
-            and cannot be redistributed.
-          ";
-          merge = pkgs.lib.mergeListOption;
-        };
-
-        addUdevPkgs = mkOption {
-          default = [];
-          description = "
-            List of packages containing udev rules. All files found in $out/*/udev/rules.d/*.rules will be recognized
-          ";
-          merge = pkgs.lib.mergeListOption;
-        };
-
-        extraRules = mkOption {
-          default = "";
-          example = ''
-            KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
-          '';
-          description = "
-            Add custom rules. They'll be written into file 10-local.rules.
-            Thus they are read before all other rules.
-          ";
-        };
-        
-        sndMode = mkOption {
-          default = "0600";
-          example = "0666";
-          description = "
-            Permissions for /dev/snd/*, in case you have multiple 
-            logged in users or if the devices belong to root for 
-            some reason.
-          ";
-        };
-      };
-    };
-  };
-in
-
-###### implementation
+with pkgs.lib;
 
 let
 
   inherit (pkgs) substituteAll stdenv writeText udev procps;
 
   cfg = config.services.udev;
-
 
   firmwareLoader = substituteAll {
     src = ./udev-firmware-loader.sh;
@@ -82,6 +16,7 @@ let
   };
 
   firmwareDirs = config.services.udev.addFirmware;
+  
   extraUdevPkgs = config.services.udev.addUdevPkgs
     ++ pkgs.lib.optional (cfg.extraRules != "")
       (pkgs.writeTextFile {
@@ -166,21 +101,87 @@ in
 
 {
 
-  require = [
-    options
-  ];
+  ###### interface
+  
+  options = {
 
-  services = {
-    extraJobs = [{
-      name = "udev";
-      
-      job = ''
-        start on startup
-        stop on shutdown
+    boot.hardwareScan = mkOption {
+      default = true;
+      description = ''
+        Whether to try to load kernel modules for all detected hardware.
+        Usually this does a good job of providing you with the modules
+        you need, but sometimes it can crash the system or cause other
+        nasty effects.  If the hardware scan is turned on, it can be
+        disabled at boot time by adding the <literal>safemode</literal>
+        parameter to the kernel command line.
+      '';
+    };
+  
+    services.udev = {
 
-        env UDEV_CONFIG_FILE=${conf}
+      addFirmware = mkOption {
+        default = [];
+        example = ["/mnt/big-storage/firmware/"];
+        description = ''
+          To specify firmware that is not too spread to ensure 
+          a package, or have an interactive process of extraction
+          and cannot be redistributed.
+        '';
+        merge = pkgs.lib.mergeListOption;
+      };
 
-        start script
+      addUdevPkgs = mkOption {
+        default = [];
+        description = ''
+          List of packages containing <command>udev</command> rules.
+          All files found in
+          <filename><replaceable>pkg</replaceable>/udev/rules.d</filename>
+          will be included.
+        '';
+        merge = pkgs.lib.mergeListOption;
+      };
+
+      extraRules = mkOption {
+        default = "";
+        example = ''
+          KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
+        '';
+        description = ''
+          Additional <command>udev</command> rules. They'll be written
+          into file <filename>10-local.rules</filename>. Thus they are
+          read before all other rules.
+        '';
+      };
+
+      sndMode = mkOption {
+        default = "0600";
+        example = "0666";
+        description = ''
+          Permissions for sound devices, in case you have multiple
+          logged in users or if the devices belong to root for some
+          reason.
+        '';
+      };
+        
+    };
+    
+  };
+  
+
+  ###### implementation
+
+  config = {
+
+    jobs = singleton
+      { name = "udev";
+
+        startOn = "startup";
+        stopOn = "shutdown";
+
+        environment = { UDEV_CONFIG_FILE = conf; };
+
+        preStart =
+          ''
             echo "" > /proc/sys/kernel/hotplug
 
             # Get rid of possible old udev processes.
@@ -217,12 +218,12 @@ in
             done
 
             initctl emit new-devices
-        end script
+          '';
 
-        respawn ${udev}/sbin/udevd
-      '';
+        exec = "${udev}/sbin/udevd";
 
-      passthru = {inherit udevRules;};
-    }];
+      };
+
   };
+
 }
