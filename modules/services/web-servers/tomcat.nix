@@ -122,7 +122,7 @@ mkIf config.services.tomcat.enable {
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/conf
 	    
 	    # Symlink the config files in the conf/ directory (except for catalina.properties and server.xml)
-	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties server.xml)
+	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties | grep -v server.xml)
 	    do
 	        ln -sf ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
 	    done
