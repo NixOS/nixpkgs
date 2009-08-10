@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "smartmontools-5.36";
+stdenv.mkDerivation rec {
+  name = "smartmontools-5.38";
   
   src = fetchurl {
-    url = mirror://sourceforge/smartmontools/smartmontools-5.36.tar.gz;
-    sha256 = "1x2bcbyrl5c4djcvnsnasdry498w6slx1gixgynpmlgq4bgjl0zj";
+    url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
+    sha256 = "1s1i5y5n3jx681y03jj459yy4ijaq564z8bp2cgqb97wl4h762dj";
   };
 
   meta = {
