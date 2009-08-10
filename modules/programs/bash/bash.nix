@@ -30,12 +30,14 @@ in
         # should go into this script.
         source = pkgs.substituteAll {
           src = ./bashrc.sh;
+
+          bash = pkgs.bash;
           systemPath = config.system.path;
           wrapperDir = config.security.wrapperDir;
           modulesTree = config.system.modulesTree;
           shellInit = config.environment.shellInit;
         };
-        target = "bashrc";      
+        target = "bashrc";
       }
 
       { # Script executed when the shell starts as a login shell.

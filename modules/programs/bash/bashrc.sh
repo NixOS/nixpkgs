@@ -61,3 +61,13 @@ alias ll="ls -l"
 alias l="ls -alh"
 alias which="type -p"
 
+# Completion.
+if [ -d "@bash@/etc/bash_completion.d" ]
+then
+    export BASH_COMPLETION_DIR="@bash@/etc/bash_completion.d"
+fi
+if [ -f "@bash@/etc/bash_completion" ]
+then
+    export BASH_COMPLETION="@bash@/etc/bash_completion"
+    source "$BASH_COMPLETION"
+fi
