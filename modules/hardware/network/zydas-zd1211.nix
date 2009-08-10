@@ -1,9 +1,5 @@
 {pkgs, config, ...}:
 
 {
-  services = {
-    udev = {
-      addFirmware = [ pkgs.zd1211fw ];
-    };
-  };
+  hardware.firmware = [ pkgs.zd1211fw ];
 }

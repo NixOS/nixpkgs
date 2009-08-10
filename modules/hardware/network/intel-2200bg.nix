@@ -27,7 +27,7 @@
   
     # Warning: setting this option requires acceptance of the firmware
     # license, see http://ipw2200.sourceforge.net/firmware.php?fid=7.
-    services.udev.addFirmware = [ pkgs.ipw2200fw ];
+    hardware.firmware = [ pkgs.ipw2200fw ];
 
   };
   

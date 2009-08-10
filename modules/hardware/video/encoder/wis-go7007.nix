@@ -1,17 +1,15 @@
 {pkgs, config, ...}:
 
 let
-  wisGo7007 = config.boot.kernelPackages.wis_go7007;
-
-  wisGo7007Pkg = [ wis_go7007 ];
-  wisGo7007Firmware = [ "${wis_go7007}/firmware" ];
+  wis_go7007 = config.boot.kernelPackages.wis_go7007;
 in
 
 {
-  boot.extraModulePackages = [wisGo7007Pkg];
+  boot.extraModulePackages = [wis_go7007];
 
-  environment.extraPackages = [wisGo7007Pkg];
+  environment.systemPackages = [wis_go7007];
 
-  services.udev.addFirmware = [wisGo7007Firmware];
-  services.udev.packages = [wisGo7007Pkg];
+  hardware.firmware = ["${wis_go7007}/firmware"];
+  
+  services.udev.packages = [wis_go7007];
 }

@@ -179,21 +179,10 @@ let
 in
 
 {
-  require = [
-    options
+  require = [options];
 
-    # udev
-  ];
+  system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
-  system = {
-    # include kernel modules.
-    modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
-  };
-
-  services = {
-    udev = {
-      # The Linux kernel >= 2.6.27 provides firmware
-      addFirmware = [ "${kernel}/lib/firmware" ];
-    };
-  };
+  # The Linux kernel >= 2.6.27 provides firmware.
+  hardware.firmware = [ "${kernel}/lib/firmware" ];
 }

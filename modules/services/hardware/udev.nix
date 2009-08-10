@@ -4,16 +4,9 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) substituteAll stdenv writeText udev procps;
+  inherit (pkgs) stdenv writeText udev procps;
 
   cfg = config.services.udev;
-
-  firmwareLoader = substituteAll {
-    src = ./udev-firmware-loader.sh;
-    path = "${stdenv.coreutils}/bin";
-    isExecutable = true;
-    firmwareDirs = cfg.addFirmware;
-  };
 
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
@@ -45,9 +38,6 @@ let
     KERNEL=="timer",                NAME="snd/%k", MODE="${cfg.sndMode}"
     KERNEL=="seq",                  NAME="snd/%k", MODE="${cfg.sndMode}"
 
-    # Firmware loading.
-    SUBSYSTEM=="firmware",          ACTION=="add", RUN+="${firmwareLoader}"
-    
   '';
   
   # Perform substitutions in all udev rules files.
@@ -120,17 +110,6 @@ in
     };
   
     services.udev = {
-
-      addFirmware = mkOption {
-        default = [];
-        example = ["/mnt/big-storage/firmware/"];
-        merge = mergeListOption; 
-        description = ''
-          To specify firmware that is not too spread to ensure 
-          a package, or have an interactive process of extraction
-          and cannot be redistributed.
-        '';
-      };
 
       packages = mkOption {
         default = [];
