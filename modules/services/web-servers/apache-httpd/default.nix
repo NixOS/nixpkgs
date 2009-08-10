@@ -443,18 +443,6 @@ in
         description = "Whether to enable the PHP module.";
       };
 
-      mod_jk = {
-        enable = mkOption {
-          default = false;
-          description = "Whether to enable the Apache Tomcat connector.";
-        };
-
-        applicationMappings = mkOption {
-          default = [];
-          description = "List of Java webapplications that should be mapped to the servlet container (Tomcat/JBoss)";
-        };
-      };
-
       virtualHosts = mkOption {
         default = [];
         example = [
