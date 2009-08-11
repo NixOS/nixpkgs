@@ -1129,7 +1129,7 @@ let
   };
 
   parted = import ../tools/misc/parted {
-    inherit fetchurl stdenv devicemapper e2fsprogs gettext readline;
+    inherit fetchurl stdenv devicemapper libuuid gettext readline;
   };
 
   patch = gnupatch;
@@ -3980,11 +3980,12 @@ let
     inherit fetchurl stdenv liboil pkgconfig;
   };
 
-  SDL = import ../development/libraries/SDL {
+  SDL = makeOverridable (import ../development/libraries/SDL) {
     inherit fetchurl stdenv pkgconfig x11 mesa alsaLib pulseaudio;
     inherit (xlibs) libXrandr;
     openglSupport = mesaSupported;
     alsaSupport = true;
+    pulseaudioSupport = false; # better go through ALSA
   };
 
   SDL_image = import ../development/libraries/SDL_image {
@@ -4761,8 +4762,8 @@ let
 
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
-      libusb dbus dbus_glib libuuid perl perlXMLParser                                     
-      gettext zlib eject libsmbios udev gperf dmidecode;                                   
+      libusb dbus dbus_glib libuuid perl perlXMLParser
+      gettext zlib eject libsmbios udev gperf dmidecode;
     inherit (gtkLibs) glib;
   };
 

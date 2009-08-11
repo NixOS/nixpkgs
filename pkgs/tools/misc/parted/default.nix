@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, e2fsprogs, gettext, readline }:
+{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline }:
 
 stdenv.mkDerivation rec {
   name = "parted-1.9.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02amqpzl8lgk247cjsbaz1nsiz9i1pbj0adx0z109h94p90i48sk";
   };
 
-  buildInputs = [ devicemapper e2fsprogs gettext readline ];
+  buildInputs = [ devicemapper libuuid gettext readline ];
 
   # XXX: For some reason our libreadline.so doesn't have libncurses as
   # NEEDED and `configure' links with `-Wl,--as-needed' so when
