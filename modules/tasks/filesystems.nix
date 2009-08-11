@@ -102,22 +102,9 @@ let
   
     system.sbin.mount = mkOption {
       internal = true;
-      default = pkgs.utillinuxng.override {
-        buildMountOnly = true;
-        mountHelpers = pkgs.buildEnv {
-          name = "mount-helpers";
-          paths = [
-            pkgs.ntfs3g
-            pkgs.mount_cifs
-            pkgs.nfsUtils
-          ];
-          pathsToLink = "/sbin";
-        } + "/sbin";
-      };
+      default = pkgs.utillinuxng;
       description = "
-        A patched `mount' command that looks in a directory in the Nix
-        store instead of in /sbin for mount helpers (like mount.ntfs-3g or
-        mount.cifs).
+        Package containing mount and umount.
       ";
     };
     
@@ -240,10 +227,14 @@ in
 
 {
   require = [options];
+  
   services = {
     extraJobs = [{
       name = "filesystems";
       inherit job;
     }];
   };
+
+  # Add the mount helpers to the system path so that `mount' can find them.
+  environment.systemPackages = [pkgs.ntfs3g pkgs.mount_cifs pkgs.nfsUtils];
 }
