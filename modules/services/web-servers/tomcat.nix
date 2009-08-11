@@ -211,6 +211,15 @@ mkIf config.services.tomcat.enable {
 		    do
 		        ln -sf $j ${cfg.baseDir}/webapps/`basename $j`
 		    done
+		    
+		    # Also symlink the configuration files if they are included
+		    if [ -d $i/conf/Catalina ]
+		    then
+			for j in $i/conf/Catalina/*
+			do
+			    ln -sf $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
+			done
+		    fi
 		fi
 	    done	    	    
 	    
@@ -238,6 +247,15 @@ mkIf config.services.tomcat.enable {
 		      do
 		          ln -sf $j ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $j`
 		      done
+		      
+		      # Also symlink the configuration files if they are included
+		      if [ -d $i/conf/Catalina ]
+		      then
+			  for j in $i/conf/Catalina/*
+			  do
+			      ln -sf $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
+			  done
+		      fi
                   fi	                  
 	      done
 	      
@@ -275,6 +293,15 @@ mkIf config.services.tomcat.enable {
 			do
 			    ln -sf $j ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $j`
 			done
+			
+			# Also symlink the configuration files if they are included
+		        if [ -d $i/conf/Catalina ]
+		        then
+			    for j in $i/conf/Catalina/*
+			    do
+			        ln -sf $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
+			    done
+		        fi
 		    fi
 		done    
 		''
