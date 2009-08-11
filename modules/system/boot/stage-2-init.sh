@@ -83,25 +83,21 @@ mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
 mkdir -m 0755 -p /etc/nixos
 
-echo "Filesystems mounted"
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run
 rm -rf /var/lock
 
-echo "On-boot /var cleanup done"
-
 #echo -n "cleaning \`/tmp'..."
 #rm -rf --one-file-system /tmp/*
 #echo " done"
+
 
 # This is a good time to clean up /nix/var/nix/chroots.  Doing an `rm
 # -rf' on it isn't safe in general because it can contain bind mounts
 # to /nix/store and other places.  But after rebooting these are all
 # gone, of course.
 rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
-
-echo "Nix chroots removed"
 
 if test -n "$safeMode"; then
     mkdir -m 0755 -p /var/run
@@ -119,13 +115,11 @@ if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
 fi
 
-echo -n "Activating configuration .. "
+echo "running activation script..."
 
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
 @activateConfiguration@ "$systemConfig"
-
-echo ".. done"
 
 
 # Record the boot configuration.  !!! Should this be a GC root?
@@ -141,7 +135,7 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @postBootCommands@
 
-echo "Running Upstart"
+echo "starting Upstart..."
 
 # Start Upstart's init.  We start it through the
 # /var/run/current-system symlink indirection so that we can upgrade
