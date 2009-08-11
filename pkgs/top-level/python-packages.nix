@@ -154,21 +154,26 @@ rec {
   });
 
   pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.5.14";
+    name = "pycryptopp-0.5.15";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
-      sha256 = "1xvxyvqdi1223pkx0d6idzzlprmkk3hp9fr5r8jlib73cl0vh7rl";
+      sha256 = "0f8v3cs8vjpj423yx3ikj7qjvljrm86x0qpkckidv69kah8kndxa";
     };
+
+    # Use our own copy of Crypto++.
+    preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
 
     buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
 
     meta = {
-      homepage = http://pypi.python.org/pypi/pycryptopp/0.5.14;
+      homepage = http://allmydata.org/trac/pycryptopp;
 
       description = "Python wrappers for the Crypto++ library";
 
       license = "GPLv2+";
+
+      maintainers = [ stdenv.lib.maintainers.ludo ];
     };
   });
 
