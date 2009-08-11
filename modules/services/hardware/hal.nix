@@ -9,15 +9,11 @@ let
 
   inherit (pkgs) hal;
 
-  fdi =
-    if cfg.extraFdi == [] then
-      "${hal}/share/hal/fdi"
-    else
-      pkgs.buildEnv {
-        name = "hal-fdi";
-        pathsToLink = [ "/preprobe" "/information" "/policy" ];
-        paths = [ "${hal}/share/hal/fdi" ] ++ cfg.extraFdi;
-      };
+  fdi = pkgs.buildEnv {
+    name = "hal-fdi";
+    pathsToLink = [ "/share/hal/fdi" ];
+    paths = cfg.packages;
+  };
 
 in
 
@@ -31,17 +27,16 @@ in
     
       enable = mkOption {
         default = true;
-        description = "
+        description = ''
           Whether to start the HAL daemon.
-        ";
+        '';
       };
 
-      extraFdi = mkOption {
+      packages = mkOption {
         default = [];
-        example = [ "/nix/store/.../fdi" ];
-        description = "
-          Extend HAL daemon configuration with additionnal paths.
-        ";
+        description = ''
+          Packages containing additional HAL configuration data.
+        '';
       };
 
     };
@@ -54,6 +49,8 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [hal];
+
+    services.hal.packages = [hal pkgs.hal_info];
 
     users.extraUsers = singleton
       { name = "haldaemon";
@@ -79,9 +76,9 @@ in
         # !!! HACK? These environment variables manipulated inside
         # 'src'/hald/mmap_cache.c are used for testing the daemon
         environment =
-          { HAL_FDI_SOURCE_PREPROBE = "${fdi}/preprobe";
-            HAL_FDI_SOURCE_INFORMATION = "${fdi}/information";
-            HAL_FDI_SOURCE_POLICY = "${fdi}/policy";
+          { HAL_FDI_SOURCE_PREPROBE = "${fdi}/share/hal/fdi/preprobe";
+            HAL_FDI_SOURCE_INFORMATION = "${fdi}/share/hal/fdi/information";
+            HAL_FDI_SOURCE_POLICY = "${fdi}/share/hal/fdi/policy";
           };
 
         preStart =

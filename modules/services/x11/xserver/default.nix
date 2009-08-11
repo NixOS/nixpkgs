@@ -359,10 +359,10 @@ let
     ];
 
 
-  halConfigFiles = [
+  halConfigFiles = singleton
     (pkgs.writeTextFile {
       name = "hal-policy-keymap";
-      destination = "/policy/30-keymap.fdi";
+      destination = "/share/hal/fdi/policy/30-keymap.fdi";
       text = ''
         <?xml version="1.0" encoding="ISO-8859-1"?>
         <deviceinfo version="0.2">
@@ -380,9 +380,9 @@ let
           </device>
         </deviceinfo>
       '';
-    })
-  ];
+    });
 
+    
   configFile = stdenv.mkDerivation {
     name = "xserver.conf";
     src = ./xserver.conf;
@@ -618,9 +618,7 @@ mkIf cfg.enable {
       };
     };
 
-    hal = {
-      extraFdi = halConfigFiles;
-    };
+    hal.packages = halConfigFiles;
 
     extraJobs = [{
       name = "xserver";
