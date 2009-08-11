@@ -25,22 +25,22 @@ let
       
       
           # Set the hardware clock to the system time.
-          echo "Setting the hardware clock..."
-          hwclock --systohc --utc || true
+          echo "setting the hardware clock..."
+          hwclock --systohc --utc
       
       
           # Do an initial sync just in case.
-          sync || true
+          sync
       
       
           # Kill all remaining processes except init and this one.
-          echo "Sending the TERM signal to all processes..."
-          kill -TERM -1 || true
+          echo "sending the TERM signal to all processes..."
+          kill -TERM -1
       
           sleep 1 # wait briefly
-      
-          echo "Sending the KILL signal to all processes..."
-          kill -KILL -1 || true
+
+          echo "sending the KILL signal to all processes..."
+          kill -KILL -1
       
       
           # Unmount helper functions.
@@ -69,15 +69,18 @@ let
               for mp in $(getMountPoints); do
                   device=$(getDevice $mp)
                   echo "unmounting $mp..."
-                  # !!! Don't unmount /nix/store or /hostfs.  This is
-                  # a quick hack to cleanly shutdown VMs that mount
-                  # the Nix store via CIFS.  "mount -f" will actually
-                  # work on such filesystems, which makes all commands
-                  # needed below disappear.
-                  if test "$mp" != /nix/store -a "$mp" != /hostfs && umount -f -n "$mp"; then
+
+                  # Note: don't use `umount -f'; it's very buggy.
+                  # (For instance, when applied to a bind-mount it
+                  # unmounts the target of the bind-mount.)  !!! But
+                  # we should use `-f' for NFS.
+                  if umount -n "$mp"; then
                       if test "$mp" != /; then tryAgain=1; fi
                   else
-                      mount -n -o remount,ro "$mp" || true
+                      # `-i' is to workaround a bug in mount.cifs (it
+                      # doesn't recognise the `remount' option, and
+                      # instead mounts the FS again).
+                      mount -n -i -o remount,ro "$mp"
                   fi
       
                   # Hack: work around a bug in mount (mount -o remount on a
@@ -85,23 +88,25 @@ let
                   # /etc/mtab).
                   if echo "$device" | grep -q '/dev/loop'; then
                       echo "removing loop device $device..."
-                      losetup -d "$device" || true
+                      losetup -d "$device"
                   fi
               done
           done
       
-          cat /proc/mounts
-      
       
           # Final sync.
-          sync || true
+          sync
       
       
           # Either reboot or power-off the system.  Note that the "halt"
           # event also does a power-off.
           if test ${event} = reboot; then
+              echo "rebooting..."
+              sleep 1
               exec reboot -f
           else
+              echo "powering off..."
+              sleep 1
               exec halt -f -p
           fi
       
