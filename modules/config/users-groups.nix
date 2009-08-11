@@ -115,6 +115,18 @@ let
           { name = "lp";
             gid = ids.gids.lp;
           }
+          { name = "cdrom";
+            gid = ids.gids.cdrom;
+          }
+          { name = "tape";
+            gid = ids.gids.tape;
+          }
+          { name = "video";
+            gid = ids.gids.video;
+          }
+          { name = "dialout";
+            gid = ids.gids.dialout;
+          }
           { name = "nogroup";
             gid = ids.gids.nogroup;
           }

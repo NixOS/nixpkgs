@@ -75,7 +75,11 @@ in
     tomcat = 21;
     pulseaudio = 22; # must match `pulseaudio' UID
     gpsd = 23;
-    
+    cdrom = 24;
+    tape = 25;
+    video = 26;
+    dialout = 27;
+
     users = 100;
     nixbld = 30000;
     nogroup = 65534;
