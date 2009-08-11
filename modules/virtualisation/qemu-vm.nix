@@ -126,4 +126,9 @@ in
     ''
       EnableSendFile Off
     '';
+
+  # When building a regular system configuration, override whatever
+  # video driver the host uses.
+  services.xserver.videoDriver = pkgs.lib.mkOverride 50 {} "vesa";
+  services.xserver.defaultDepth = pkgs.lib.mkOverride 50 {} 16;
 }
