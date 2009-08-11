@@ -15,12 +15,14 @@ Usage: $0 [OPTIONS...] OPERATION
 
 The operation is one of the following:
 
-  switch:  make the configuration the boot default and activate now
-  boot:    make the configuration the boot default
-  test:    activate the configuration, but don't make it the boot default
-  build:   build the configuration, but don't make it the default or
-           activate it
-  dry-run: just show what store paths would be built/downloaded
+  switch:   make the configuration the boot default and activate now
+  boot:     make the configuration the boot default
+  test:     activate the configuration, but don't make it the boot default
+  build:    build the configuration, but don't make it the default or
+            activate it
+  build-vm: build a virtual machine containing the configuration
+            (useful for testing)
+  dry-run:  just show what store paths would be built/downloaded
 
 Options:
 
@@ -54,7 +56,8 @@ while test "$#" -gt 0; do
     i="$1"; shift 1
     if test "$i" = "--help"; then
         showSyntax
-    elif test "$i" = switch -o "$i" = boot -o "$i" = test -o "$i" = build -o "$i" = dry-run; then
+    elif test "$i" = switch -o "$i" = boot -o "$i" = test -o "$i" = build \
+        -o "$i" = dry-run -o "$i" = build-vm; then
         action="$i"
     elif test "$i" = --install-grub; then
         export NIXOS_INSTALL_GRUB=1
@@ -129,6 +132,9 @@ if test "$action" = switch -o "$action" = boot; then
 elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
     nix-build $NIXOS -A system -K -k $extraBuildFlags
     pathToConfig=./result
+elif test "$action" = build-vm; then
+    nix-build $NIXOS -A vm -K -k $extraBuildFlags
+    pathToConfig=./result
 else
     showSyntax
 fi
@@ -141,11 +147,19 @@ if test "$action" = switch -o "$action" = boot -o "$action" = test; then
 fi
 
 
-if test "$action" = "test"; then
+if test "$action" = test; then
     cat >&2 <<EOF
 
 Warning: if you remove or overwrite the symlink \`$pathToConfig', the
 active system configuration may be garbage collected!  This may render
 the system inoperable (though a reboot will fix things).
+EOF
+fi
+
+
+if test "$action" = build-vm; then
+    cat >&2 <<EOF
+
+Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm).
 EOF
 fi

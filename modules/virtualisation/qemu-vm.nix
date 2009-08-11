@@ -85,8 +85,12 @@ in
     '';
 
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
-  # of the host into our own filesystem.
-  fileSystems =
+  # of the host into our own filesystem.  We use mkOverride to allow
+  # this module to be applied to "normal" NixOS system configuration,
+  # where the regular value for the `fileSystems' attribute should be
+  # disregarded for the purpose of building a VM test image (since
+  # those filesystems don't exist in the VM).
+  fileSystems = pkgs.lib.mkOverride 50 {}
     [ { mountPoint = "/";
         device = "/dev/vda";
       }

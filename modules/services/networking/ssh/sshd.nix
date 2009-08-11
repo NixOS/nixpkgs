@@ -5,9 +5,7 @@ let
   inherit (pkgs.lib) mkOption mkIf;
   inherit (pkgs) openssh;
 
-  cfg = (config.services.sshd);
-
-  nssModules = config.system.nssModules.list;
+  cfg = config.services.sshd;
 
   nssModulesPath = config.system.nssModules.path;
 

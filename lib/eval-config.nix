@@ -7,6 +7,7 @@
 , nixpkgs ? import ./from-env.nix "NIXPKGS" /etc/nixos/nixpkgs
 , pkgs ? import nixpkgs {inherit system;}
 , extraArgs ? {}
+, extraModules ? []
 }:
 
 let extraArgs_ = extraArgs; in
@@ -14,10 +15,12 @@ let extraArgs_ = extraArgs; in
 rec {
   inherit nixpkgs pkgs;
 
-  configComponents = [
-    configuration
-    ./check-config.nix
-  ] ++ (import ../modules/module-list.nix);
+  configComponents =
+    [ configuration
+      ./check-config.nix
+    ]
+    ++ extraModules
+    ++ (import ../modules/module-list.nix);
 
   extraArgs = extraArgs_ // {
     inherit pkgs;
