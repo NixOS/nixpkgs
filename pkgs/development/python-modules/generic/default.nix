@@ -6,7 +6,9 @@
 { python, setuptools, makeWrapper, lib }:
 
 { name, namePrefix ? "python-", src, meta, patches ? []
-, doCheck ? true, ... } @ attrs:
+, doCheck ? true, checkPhase ? "python setup.py test"
+, postInstall ? ""
+, ... } @ attrs:
 
 let
     # Return the list of recursively propagated build inputs of PKG.
@@ -27,7 +29,7 @@ python.stdenv.mkDerivation (
   //
 
   (rec {
-  inherit src meta patches doCheck;
+  inherit src meta patches doCheck checkPhase;
 
   name = namePrefix + attrs.name;
 
@@ -41,9 +43,6 @@ python.stdenv.mkDerivation (
 
   buildPhase = "true";
 
-  # Many packages, but not all, support this.
-  checkPhase = "python setup.py test";
-
   # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
   # to have a noticeable impact on small scripts.
   installPhase = ''
@@ -52,6 +51,8 @@ python.stdenv.mkDerivation (
     echo "installing \`${name}' with \`easy_install'..."
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
     easy_install --prefix="$out" .
+
+    ${postInstall}
   '';
 
   postFixup = ''
