@@ -4715,8 +4715,8 @@ let
     inherit fetchurl stdenv;
   };
 
-  dmidecode = composedArgsAndFun (selectVersion ../os-specific/linux/dmidecode "2.9") {
-    inherit fetchurl stdenv builderDefs;
+  dmidecode = import ../os-specific/linux/dmidecode {
+    inherit fetchurl stdenv;
   };
 
   dietlibc = import ../os-specific/linux/dietlibc {
