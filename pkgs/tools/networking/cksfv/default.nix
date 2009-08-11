@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "cksfv-1.3.13";
+stdenv.mkDerivation rec {
+  name = "cksfv-1.3.14";
   
   src = fetchurl {
-    url = http://zakalwe.fi/~shd/foss/cksfv/files/cksfv-1.3.13.tar.bz2;
-    sha256 = "0d8lipfdwcs31qql3qhqvgd2c6jhdlfnhdsyw84kka781ay1pvhn";
+    url = "http://zakalwe.fi/~shd/foss/cksfv/files/${name}.tar.bz2";
+    sha256 = "0lnz0z57phl6s52hjvlryn96xrlph9b0h89ahhv027sa79pj8g4g";
   };
 
   meta = {
