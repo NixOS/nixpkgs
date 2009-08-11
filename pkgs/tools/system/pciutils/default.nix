@@ -12,12 +12,14 @@ stdenv.mkDerivation {
 
   pciids = fetchurl {
     # Obtained from http://pciids.sourceforge.net/v2.2/pci.ids.bz2.
-    url = http://nixos.org/tarballs/pci.ids.20090220.bz2;
-    sha256 = "1zdp85vcxhgrw1rwcsa35pk4j1b3scb7i61gzghbcn2mrm9cwwd9";
+    url = http://nixos.org/tarballs/pci.ids.20090727.bz2;
+    sha256 = "0q7fs5ww92a6v5dc514ff4vy7v9hzpdqbd1agbafc2wk2zgi10mk";
   };
 
   # Override broken auto-detect logic.
-  makeFlags = "ZLIB=yes DNS=yes SHARED=yes PREFIX=\${out}";
+  # Note: we can't compress pci.ids (ZLIB=yes) because udev requires
+  # an uncompressed pci.ids.
+  makeFlags = "ZLIB=no DNS=yes SHARED=yes PREFIX=\${out}";
 
   preBuild = ''
     bunzip2 < $pciids > pci.ids
