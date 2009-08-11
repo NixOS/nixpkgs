@@ -5539,7 +5539,8 @@ let
   };*/
 
   udev = import ../os-specific/linux/udev {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gperf pkgconfig acl libusb usbutils pciutils;
+    inherit (gtkLibs) glib;
   };
 
   uml = import ../os-specific/linux/kernel/linux-2.6.20.nix {
