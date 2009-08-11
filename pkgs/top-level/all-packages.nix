@@ -5568,7 +5568,7 @@ let
   };
 
   usbutils = import ../os-specific/linux/usbutils {
-    inherit fetchurl stdenv libusb;
+    inherit fetchurl stdenv pkgconfig libusb;
   };
 
   utillinux = utillinuxng;
