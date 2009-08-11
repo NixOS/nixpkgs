@@ -105,6 +105,12 @@ in
         options = "bind";
         neededForBoot = true;
       }
+      # Mount the host's Nix database.  This allows read-only Nix
+      # operations in the guest to work properly.
+      { mountPoint = "/nix/var/nix/db";
+        device = "/hostfs/nix/var/nix/db";
+        options = "bind";
+      }
     ];
 
   # Starting DHCP brings down eth0, which kills the connection to the
