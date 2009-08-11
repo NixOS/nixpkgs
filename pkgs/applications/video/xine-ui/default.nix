@@ -11,13 +11,15 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig xineLib libpng readline ncurses curl
       xlibs.xlibs xlibs.libXext xlibs.libXv xlibs.libXxf86vm xlibs.libXtst xlibs.inputproto
-    ] ++ stdenv.lib.optional xineLib.xineramaSupport xineLib.libXinerama;
+      xlibs.libXinerama
+    ];
 
   configureFlags = "--with-readline=${readline}";
   
   NIX_LDFLAGS = "-lXext -lgcc_s";
 
-  meta = {
+  meta = { 
+    homepage = http://www.xine-project.org/;
     description = "Xlib-based interface to Xine, a video player";
   };
 }

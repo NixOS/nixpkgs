@@ -4125,9 +4125,8 @@ let
   };
 
   xineLib = import ../development/libraries/xine-lib {
-    inherit fetchurl stdenv zlib x11 libdvdcss alsaLib pkgconfig mesa aalib SDL
-      libvorbis libtheora speex;
-    inherit (xlibs) libXv libXinerama;
+    inherit fetchurl stdenv zlib libdvdcss alsaLib pkgconfig mesa aalib
+      libvorbis libtheora speex xlibs perl ffmpeg;
   };
 
   xautolock = import ../misc/screensavers/xautolock {
