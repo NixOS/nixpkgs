@@ -4648,7 +4648,7 @@ let
   };
 
   nfsUtils = import ../os-specific/linux/nfs-utils {
-    inherit fetchurl stdenv tcpWrapper e2fsprogs;
+    inherit fetchurl stdenv tcpWrapper libuuid;
   };
 
   acpi = import ../os-specific/linux/acpi {
@@ -4724,17 +4724,10 @@ let
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
 
-  # libuuid is used as an (indirect) dependency for lots of other
-  # packages such as X and KDE, which we don't want to rebuild every
-  # time we update e2fsprogs.
-  e2fsprogsOld = import ../os-specific/linux/e2fsprogs/1.41.5.nix {
-    inherit fetchurl stdenv;
-  };
+  libuuid = utillinuxng;
 
-  libuuid = e2fsprogsOld;
-
-  e2fsprogs = import ../os-specific/linux/e2fsprogs/1.41.6.nix {
-    inherit fetchurl stdenv;
+  e2fsprogs = import ../os-specific/linux/e2fsprogs/1.41.8.nix {
+    inherit fetchurl stdenv pkgconfig libuuid;
   };
 
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
@@ -5576,7 +5569,7 @@ let
   utillinuxCurses = utillinuxngCurses;
 
   utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv libuuid;
+    inherit fetchurl stdenv;
   };
 
   utillinuxngCurses = utillinuxng.override {
