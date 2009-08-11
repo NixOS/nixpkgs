@@ -1,14 +1,12 @@
-{stdenv, fetchurl, pkgconfig, hal}:
+{stdenv, fetchurl, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "hal-info-20090414";
+  name = "hal-info-20090716";
   
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "03zsh4psq189k7i8mwazsmallwc10naavkdrp1sp68jjjkf8gp9k";
+    sha256 = "179m2ip79jpr1mrmbcm2nx7l1mjlwcfmlw4ycd4dh0jrib64m3sp";
   };
-
-  buildInputs = [pkgconfig hal];
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/hal;

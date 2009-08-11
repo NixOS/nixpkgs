@@ -3,16 +3,16 @@ args: with args;
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "hal-0.5.11";
+  name = "hal-0.5.13";
   
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "145s20fzb4gaqxmv3r6i29ndwgnap95ric63n1z6g2gp80iry2kk";
+    sha256 = "1by8z7vy1c1m3iyh57rlqx6rah5gj6kx3ba30s9305bnffij5kzb";
   };
   
   buildInputs = [
     pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
-    libvolume_id perl perlXMLParser gettext zlib libsmbios gperf
+    libuuid perl perlXMLParser gettext zlib gperf
     # !!! libsmbios is broken; it doesn't install headers.
   ];
 
@@ -21,18 +21,21 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --with-pci-ids=${pciutils}/share
     --with-usb-ids=${usbutils}/share
-    --disable-docbook-docs
-    --disable-gtk-doc
     --localstatedir=/var
     --with-eject=${eject}/bin/eject
+    --with-linux-input-header=${stdenv.glibc}/include/linux/input.h
     --disable-policy-kit
   '';
 
-  propagatedBuildInputs = [libusb];
+  propagatedBuildInputs = [libusb libsmbios];
 
   preConfigure = ''
-    substituteInPlace hald/linux/coldplug.c --replace /usr/bin/udevinfo ${udev}/bin/udevinfo
-
-    substituteInPlace tools/Makefile.in --replace /usr/include ${stdenv.glibc}/include
+    for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
+             hald/linux/coldplug.c hald/linux/blockdev.c
+    do
+      substituteInPlace $i \
+        --replace /usr/sbin/dmidecode ${dmidecode}/sbin/dmidecode \
+        --replace /sbin/udevadm ${udev}/sbin/udevadm
+    done
   '';
 }

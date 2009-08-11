@@ -4761,13 +4761,13 @@ let
 
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
-      libusb dbus dbus_glib libvolume_id perl perlXMLParser
-      gettext zlib eject libsmbios udev gperf;
+      libusb dbus dbus_glib libuuid perl perlXMLParser                                     
+      gettext zlib eject libsmbios udev gperf dmidecode;                                   
     inherit (gtkLibs) glib;
   };
 
   hal_info = import ../os-specific/linux/hal/info.nix {
-    inherit fetchurl stdenv pkgconfig hal;
+    inherit fetchurl stdenv pkgconfig;
   };
 
   hdparm = import ../os-specific/linux/hdparm {
