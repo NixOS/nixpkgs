@@ -5,7 +5,7 @@ rec {
     sha256 = "04vqdlg90j0mk5jkxpfg9fp6ss4gs1g5pappgns6183q3i6j02hd";
   };
 
-  buildInputs = [e2fsprogs];
+  buildInputs = [libuuid];
   configureFlags = [];
 
   /* doConfigure should be specified separately */

@@ -4690,7 +4690,7 @@ let
   };
 
   btrfsProgs = builderDefsPackage (import ../os-specific/linux/btrfsprogs) {
-    inherit e2fsprogs zlib acl;
+    inherit libuuid zlib acl;
   };
 
   cpufrequtils = import ../os-specific/linux/cpufrequtils {
@@ -4830,7 +4830,7 @@ let
   };
 
   jfsUtils = builderDefsPackage (selectVersion ../os-specific/linux/jfsutils "1.1.12") {
-    inherit e2fsprogs;
+    inherit libuuid;
   };
 
   kbd = import ../os-specific/linux/kbd {
@@ -5595,7 +5595,7 @@ let
   };
 
   xfsProgs = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
-    inherit libtool gettext e2fsprogs;
+    inherit libtool gettext libuuid;
   };
 
   xmoto = builderDefsPackage (import ../games/xmoto) {
