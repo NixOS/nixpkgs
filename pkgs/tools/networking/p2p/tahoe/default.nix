@@ -40,6 +40,18 @@ buildPythonPackage (rec {
   # them to run.
   doCheck = false;
 
+  postInstall = ''
+    # Install the documentation.
+
+    # FIXME: Inkscape setfaults when run from here.  Setting $HOME to
+    # something writable doesn't help; providing $FONTCONFIG_FILE doesn't
+    # help either.  So we just don't run `make' under `docs/'.
+
+    ensureDir "$out/share/doc/${name}"
+    cp -rv "docs/"* "$out/share/doc/${name}"
+    find "$out/share/doc/${name}" -name Makefile -exec rm -v {} \;
+  '';
+
   meta = {
     description = "Tahoe, a decentralized, fault-tolerant, distributed storage system";
 
