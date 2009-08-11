@@ -141,7 +141,11 @@ let
       cp -p ${pkgs.glibc}/lib/libdl.so.* $out/lib
 
       # Copy some utillinux stuff.
-      cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount ${pkgs.utillinux}/sbin/pivot_root $out/bin
+      cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
+         ${pkgs.utillinux}/sbin/fsck ${pkgs.utillinux}/sbin/pivot_root \
+         ${pkgs.utillinux}/sbin/blkid $out/bin
+      cp -pd ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
+      cp -pd ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 
       # Copy some coreutils.
       cp ${pkgs.coreutils}/bin/basename $out/bin
@@ -149,7 +153,6 @@ let
       # Copy e2fsck and friends.      
       cp ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
       cp ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
-      cp ${pkgs.e2fsprogs}/sbin/fsck $out/bin
       cp ${pkgs.reiserfsprogs}/sbin/reiserfsck $out/bin
       ln -s e2fsck $out/bin/fsck.ext2
       ln -s e2fsck $out/bin/fsck.ext3
@@ -170,8 +173,7 @@ let
 
       # Copy udev.
       cp ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
-      cp ${pkgs.udev}/lib/udev/*_id $out/bin
-      cp ${pkgs.udev}/lib/libvolume_id.so.* $out/lib
+      cp ${pkgs.udev}/libexec/*_id $out/bin
       
       # Copy bash.
       cp ${pkgs.bash}/bin/bash $out/bin
@@ -202,7 +204,7 @@ let
       $out/bin/tune2fs 2> /dev/null | grep "tune2fs "
       $out/bin/fsck -N
       $out/bin/udevadm --version
-      $out/bin/vol_id 2>&1 | grep "no device"
+      $out/bin/blkid -v 2>&1 | grep "blkid from util-linux-ng"
       if test -n "$devicemapper"; then
           $out/bin/dmsetup --version | grep "version:"
           LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
@@ -226,13 +228,14 @@ let
     name = "udev-rules";
     buildCommand = ''
       ensureDir $out
-      cp ${pkgs.udev}/*/udev/rules.d/60-persistent-storage.rules $out/
+      cp ${pkgs.udev}/libexec/rules.d/60-persistent-storage.rules $out/
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ata_id ${extraUtils}/bin/ata_id \
         --replace usb_id ${extraUtils}/bin/usb_id \
         --replace scsi_id ${extraUtils}/bin/scsi_id \
         --replace path_id ${extraUtils}/bin/path_id \
-        --replace vol_id ${extraUtils}/bin/vol_id
+        --replace vol_id ${extraUtils}/bin/vol_id \
+        --replace /sbin/blkid ${extraUtils}/bin/blkid
       sed -e '/^ENV[{]DEVTYPE[}]=="disk", .*GOTO/d' -i $out/60-persistent-storage.rules 
     ''; # */
   };

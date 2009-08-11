@@ -112,6 +112,7 @@ echo shutdown > /sys/power/disk
 
 # Create device nodes in /dev.
 export UDEV_CONFIG_FILE=@udevConf@
+mkdir -p /dev/.udev # !!! bug in udev?
 udevd --daemon
 udevadm trigger
 udevadm settle
@@ -282,7 +283,7 @@ fi
 
 
 # Stop udevd.
-kill $(minips -C udevd -o pid=)
+kill $(minips -C udevd -o pid=) 2> /dev/null
 
 
 if test -n "$debug1mounts"; then fail; fi
