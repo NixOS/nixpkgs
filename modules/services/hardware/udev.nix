@@ -24,46 +24,37 @@ let
     KERNEL=="kqemu",                NAME="%k", MODE="0666"
     KERNEL=="vboxdrv", NAME="vboxdrv", OWNER="root", GROUP="root", MODE="0666"
 
-    # Create symlinks for CD/DVD devices.
-    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM}=="?*", SYMLINK+="cdrom cdrom-%k"
-    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM_CD_RW}=="?*", SYMLINK+="cdrw cdrw-%k"
-    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM_DVD}=="?*", SYMLINK+="dvd dvd-%k"
-    ACTION=="add", SUBSYSTEM=="block", ENV{ID_CDROM_DVD_RW}=="?*", SYMLINK+="dvdrw dvdrw-%k"
-    
-    # ALSA sound devices.
-    KERNEL=="controlC[0-9]*",       NAME="snd/%k", MODE="${cfg.sndMode}"
-    KERNEL=="hwC[D0-9]*",           NAME="snd/%k", MODE="${cfg.sndMode}"
-    KERNEL=="pcmC[D0-9cp]*",        NAME="snd/%k", MODE="${cfg.sndMode}"
-    KERNEL=="midiC[D0-9]*",         NAME="snd/%k", MODE="${cfg.sndMode}"
-    KERNEL=="timer",                NAME="snd/%k", MODE="${cfg.sndMode}"
-    KERNEL=="seq",                  NAME="snd/%k", MODE="${cfg.sndMode}"
-
   '';
   
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
-    #src = cleanSource ./udev-rules;
     buildCommand = ''
       ensureDir $out
       shopt -s nullglob
 
       # Use all the default udev rules.
-      cp ${udev}/*/udev/rules.d/*.rules $out/
+      cp ${udev}/libexec/rules.d/*.rules $out/
+
+      # Set a reasonable $PATH for programs called by udev rules.
+      echo 'ENV{PATH}="${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.utillinux}/bin"' > $out/00-path.rules
+
+      # Set the firmware search path so that the firmware.sh helper
+      # called by 50-firmware.rules works properly.
+      echo 'ENV{FIRMWARE_DIRS}="${toString config.hardware.firmware}"' >> $out/00-path.rules
+      
+      # Fix some paths in the standard udev rules.
+      for i in $out/*.rules; do
+        substituteInPlace $i \
+          --replace /sbin/modprobe ${modprobe}/sbin/modprobe \
+          --replace /sbin/blkid ${pkgs.utillinux}/sbin/blkid \
+          --replace /sbin/mdadm ${pkgs.mdadm}/sbin/madm
+      done
 
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
       # automatically calling modprobe.
-      ${if config.boot.hardwareScan then
-        ''
-          substituteInPlace $out/80-drivers.rules \
-            --replace /sbin/modprobe ${modprobe}/sbin/modprobe
-        ''
-        else
-        ''
-          rm $out/80-drivers.rules
-        ''
-      }
+      ${if !config.boot.hardwareScan then "rm $out/80-drivers.rules" else ""}
 
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
@@ -71,6 +62,15 @@ let
           ln -s $j $out/$(basename $j)
         done
       done
+
+      # Use the persistent device rules (naming for CD/DVD and
+      # network devices) stored in 
+      # /var/lib/udev/rules.d/70-persistent-{cd,net}.rules.  These are
+      # modified by the write_{cd,net}_rules helpers called from
+      # 75-cd-aliases-generator.rules and
+      # 75-persistent-net-generator.rules.
+      ln -s /var/lib/udev/rules.d/70-persistent-cd.rules $out/
+      ln -s /var/lib/udev/rules.d/70-persistent-net.rules $out/
     ''; # */
   };
 
@@ -136,16 +136,18 @@ in
         '';
       };
 
-      sndMode = mkOption {
-        default = "0600";
-        example = "0666";
-        description = ''
-          Permissions for sound devices, in case you have multiple
-          logged in users or if the devices belong to root for some
-          reason.
-        '';
-      };
-        
+    };
+    
+    hardware.firmware = mkOption {
+      default = [];
+      example = ["/root/my-firmware"];
+      merge = mergeListOption; 
+      description = ''
+        List of directories containing firmware files.  Such files
+        will be loaded automatically if the kernel asks for them
+        (i.e., when it has detected specific hardware that requires
+        firmware to function).
+      '';
     };
     
   };
@@ -171,6 +173,8 @@ in
           ''
             echo "" > /proc/sys/kernel/hotplug
 
+            mkdir -p /var/lib/udev/rules.d
+
             # Get rid of possible old udev processes.
             ${procps}/bin/pkill -u root "^udevd$" || true
 
@@ -182,6 +186,7 @@ in
             done
 
             # Start udev.
+            mkdir -p /dev/.udev # !!! bug in udev?
             ${udev}/sbin/udevd --daemon
 
             # Let udev create device nodes for all modules that have already
