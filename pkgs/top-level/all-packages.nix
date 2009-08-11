@@ -7070,7 +7070,7 @@ let
   };
 
   tahoe = import ../tools/networking/p2p/tahoe {
-    inherit fetchurl unzip nettools buildPythonPackage;
+    inherit fetchurl lib unzip nettools buildPythonPackage;
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite;
   };

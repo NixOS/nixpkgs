@@ -1,13 +1,13 @@
-{ fetchurl, unzip, buildPythonPackage, twisted, foolscap, nevow
+{ fetchurl, lib, unzip, buildPythonPackage, twisted, foolscap, nevow
 , simplejson, zfec, pycryptopp, pysqlite, nettools }:
 
 buildPythonPackage (rec {
-  name = "tahoe-1.4.1";
+  name = "tahoe-1.5.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://allmydata.org/source/tahoe/releases/allmydata-${name}.zip";
-    sha256 = "1q1fc3cixjqk0agbyiqs4zqdyqsp73nxx0f168djx7yp2q1p8nsm";
+    sha256 = "1cgwm7v49mlfsq47k8gw2bz14d6lnls0mr6dc18815pf24z4f00n";
   };
 
   patchPhase = ''
@@ -53,5 +53,7 @@ buildPythonPackage (rec {
     homepage = http://allmydata.org/;
 
     license = "GPLv2+";
+
+    maintainers = [ lib.maintainers.ludo ];
   };
 })
