@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true}:
 
 let
-  version = "1.2.4";
+  version = "1.2.16";
   
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1f7v79ws34mh6j75fk6w4w9v441vffll0fwf5vk94mwa0bc28g5b";
+    sha256 = "1j742d22ablcgxfxa3hcwf5bq6bd1pba7fiwc3dvnjvcdb0k32ln";
   };
   
   configureFlags = "--localstatedir=/var --with-session-socket-dir=/tmp";
