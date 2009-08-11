@@ -18,8 +18,8 @@ with pkgs.lib;
     jobs = pkgs.lib.singleton
       { name = "bluetoothd";
 
-        startOn = "dbus";
-        stopOn = "dbus";
+        startOn = "dbus/started";
+        stopOn = "dbus/stop";
 
         preStart =
           ''
