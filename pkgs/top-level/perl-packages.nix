@@ -2127,6 +2127,14 @@ rec {
     doCheck = false;
   };
 
+  TextAligner = buildPerlPackage rec {
+    name = "Text-Aligner-0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AN/ANNO/${name}.tar.gz";
+      sha256 = "137m8w13ffdm3fbvy6yw0izrl2p87zawp1840qvsdw1nd0plxyp9";
+    };
+  };
+
   TextCSV = buildPerlPackage rec {
     name = "Text-CSV-1.10";
     src = fetchurl {
@@ -2141,6 +2149,15 @@ rec {
       url = mirror://cpan/authors/id/S/SR/SRI/Text-SimpleTable-0.05.tar.gz;
       sha256 = "028pdfmr2gnaq8w3iar8kqvrpxcghnag8ls7h4227l9zbxd1k9p9";
     };
+  };
+
+  TextTable = buildPerlPackage rec {
+    name = "Text-Table-1.114";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AN/ANNO/${name}.tar.gz";
+      sha256 = "0qnpfyv7l98hyah3bnq19c33m9jh5sg0fmw2xxzaygmnp2pgpmpm";
+    };
+    propagatedBuildInputs = [TextAligner];
   };
 
   TieIxhash = buildPerlPackage rec {
