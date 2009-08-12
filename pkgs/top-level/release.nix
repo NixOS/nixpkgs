@@ -178,6 +178,7 @@ in {
   gw6c = linux;
   gzip = all;
   hal = linux;
+  hal_info = linux;
   hddtemp = linux;
   hdparm = linux;
   hello = all;
@@ -393,6 +394,11 @@ in {
     fr = all;
     nl = all;
     ru = all;
+  };
+
+  dbus = {
+    libs = linux;
+    tools = linux;
   };
 
   emacs22Packages = {
