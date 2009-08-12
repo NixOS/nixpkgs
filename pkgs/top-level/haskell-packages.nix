@@ -575,7 +575,7 @@ rec {
   };
 
   hlint = import ../development/tools/haskell/hlint {
-    inherit cabal haskellSrcExts mtl uniplate hscolour;
+    inherit cabal haskellSrcExts mtl uniplate hscolour parallel;
   };
 
   hslogger = import ../development/tools/haskell/hslogger {

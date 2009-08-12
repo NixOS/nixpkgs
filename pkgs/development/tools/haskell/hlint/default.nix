@@ -1,11 +1,11 @@
-{cabal, haskellSrcExts, mtl, uniplate, hscolour}:
+{cabal, haskellSrcExts, mtl, uniplate, hscolour, parallel}:
 
 cabal.mkDerivation (self : {
   pname = "hlint";
-  version = "1.4";
+  version = "1.6.5";
   name = self.fname;
-  sha256 = "deddcd8b2a2e1dce2510395dae1d6c78dc9264766e362ff378fe0f008db42e4e";
-  extraBuildInputs = [haskellSrcExts mtl uniplate hscolour];
+  sha256 = "70b8a70e268e5cd5079e1d187cba83f20a2fd967668a0fdf92f5207ec96e1a7e";
+  extraBuildInputs = [haskellSrcExts mtl uniplate hscolour parallel];
   meta = {
     description = "Source code suggestions";
   };
