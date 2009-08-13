@@ -47,15 +47,13 @@ rec {
 
         let
 
-          trace = x: builtins.trace x x;
-
           # `find-includes.pl' returns the dependencies of the current
           # source file (`key') as a list, e.g. [{type = "tex"; name =
           # "introduction.tex";} {type = "img"; name = "example"}].
           # The type denotes the kind of dependency, which determines
           # what extensions we use to look for it.
           deps = import (pkgs.runCommand "latex-includes"
-            { src = trace key; }
+            { src = key; }
             "${pkgs.perl}/bin/perl ${./find-includes.pl}");
 
           # Look for the dependencies of `key', trying various
@@ -70,7 +68,7 @@ rec {
               fn = pkgs.lib.findFirst (fn: builtins.pathExists fn) null
                 (map (ext: "${dirOf key}/${dep.name}${ext}") exts);
             in if fn != null then [{key = fn;}] ++ xs
-               else builtins.trace "not found: ${dep.name}" xs;
+               else xs;
 
         in pkgs.lib.fold foundDeps [] deps;
     };
@@ -88,15 +86,12 @@ rec {
 
         let
 
-          trace = x: builtins.trace x x;
-
           deps = import (pkgs.runCommand "lhs2tex-includes"
-            { src = trace key; }
+            { src = key; }
             "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
 
-        in pkgs.lib.concatMap (x : if builtins.pathExists x then [{key = x;}]
-                                   else builtins.trace ("not found: ${toString x}") [])
-                              (map (x : trace "${dirOf key}/${x}") deps);
+        in pkgs.lib.concatMap (x : if builtins.pathExists x then [{key = x;}] else [])
+                              (map (x : "${dirOf key}/${x}") deps);
     };
 
   dot2pdf =
