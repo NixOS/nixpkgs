@@ -2445,6 +2445,11 @@ let
     qt = if getPkgConfig "doxygen" "qt4" true then qt4 else null;
   };
 
+  eggdbus = import ../development/tools/misc/eggdbus {
+    inherit stdenv fetchurl pkgconfig dbus dbus_glib;
+    inherit (gtkLibs) glib;
+  };
+
   elfutils = import ../development/tools/misc/elfutils {
     inherit fetchurl stdenv m4;
   };
@@ -3892,6 +3897,11 @@ let
   plib = import ../development/libraries/plib {
     inherit fetchurl stdenv mesa freeglut SDL;
     inherit (xlibs) libXi libSM libXmu libXext libX11;
+  };
+
+  PolicyKit = import ../development/libraries/PolicyKit {
+    inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext;
+    inherit (gtkLibs) glib;
   };
 
   poppler = import ../development/libraries/poppler {
