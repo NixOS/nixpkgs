@@ -639,6 +639,10 @@ rec {
 
   # Games.
 
+  LambdaHack = import ../games/LambdaHack {
+    inherit cabal binary mtl zlib vty;
+  };
+
   MazesOfMonad = import ../games/MazesOfMonad {
     inherit cabal HUnit mtl regexPosix time;
   };
