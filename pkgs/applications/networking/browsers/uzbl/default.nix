@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "2009.07.18" a; 
+  version = a.lib.attrByPath ["version"] "2009.08.08" a; 
   buildInputs = with a; [
     pkgconfig webkit libsoup gtk makeWrapper
   ];
@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://github.com/Dieterbe/uzbl/tarball/${version}";
-    sha256 = "1bgx2pl3f4y20s43xpz62dx9pa80z38d0l6kzyzjbpzikih69vkw";
+    sha256 = "06f0ae1e34bc0b0f77feeba5f832cdc2349ac04cbc7a5a5b9e7e5ff086a9c497";
     name = "uzbl-master-${version}.tar.gz";
   };
 
