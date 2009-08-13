@@ -113,6 +113,7 @@ in {
   dovecot = linux;
   doxygen = linux;
   dpkg = linux;
+  drgeo = linux;
   e2fsprogs = linux;
   ejabberd = linux;
   elinks = linux;
@@ -254,6 +255,7 @@ in {
   nfsUtils = linux;
   nix = all;
   nixUnstable = all;
+  nmap = linux;
   nss_ldap = linux;
   nssmdns = linux;
   ntfs3g = linux;
@@ -285,6 +287,7 @@ in {
   procps = linux;
   pwdutils = linux;
   pthreadmanpages = all;
+  pygtk = linux;
   python = allBut "i686-cygwin";
   pythonFull = linux;
   sbcl = all;
@@ -358,6 +361,7 @@ in {
   vim = linux;
   vimHugeX = linux;
   vlc = linux;
+  vncrec = linux;
   vorbisTools = linux;
   vpnc = linux;
   vsftpd = linux;
@@ -369,6 +373,7 @@ in {
   wireshark = linux;
   wirelesstools = linux;
   wpa_supplicant = linux;
+  wxGTK = all;
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;
@@ -560,7 +565,10 @@ in {
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
     xf86inputevdev = linux;
+    xf86inputsynaptics = linux;
+    xf86videoati = linux;
     xf86videointel = linux;
+    xf86videonv = linux;
     xf86videovesa = linux;
     xfs = linux;
     xkbcomp = linux;
