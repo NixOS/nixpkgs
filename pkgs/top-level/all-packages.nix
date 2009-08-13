@@ -2074,6 +2074,9 @@ let
 
   ### DEVELOPMENT / INTERPRETERS
 
+  acl2 = builderDefsPackage ../development/interpreters/acl2 {
+    inherit sbcl;
+  };
 
   clisp = import ../development/interpreters/clisp {
     inherit fetchurl stdenv libsigsegv gettext
