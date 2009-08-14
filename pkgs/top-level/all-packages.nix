@@ -1245,7 +1245,7 @@ let
 
   relfs = composedArgsAndFun (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
-      builderDefs e2fsprogs pkgconfig;
+      builderDefs pkgconfig libuuid;
     inherit (gnome) gnomevfs GConf;
   };
 

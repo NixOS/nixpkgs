@@ -10,7 +10,7 @@ args : with args;
 	};
 		
 		buildInputs = [ocaml fuse postgresql pcre
-			e2fsprogs gnomevfs pkgconfig GConf];
+			libuuid gnomevfs pkgconfig GConf];
 		configureFlags = [];
 		    build = builderDefs.stringsWithDeps.fullDepEntry ("
 			cd deps 
