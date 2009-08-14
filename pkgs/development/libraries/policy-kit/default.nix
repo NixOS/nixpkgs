@@ -1,9 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, eggdbus, expat, pam, intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  # ... or should we name this package "polkit"?  Upstream doesn't
-  # seem to know either...
-  name = "PolicyKit-0.92";
+  name = "policy-kit-0.92";
   
   src = fetchurl {
     url = http://hal.freedesktop.org/releases/polkit-0.92.tar.gz;

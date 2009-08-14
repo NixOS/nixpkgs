@@ -3902,7 +3902,7 @@ let
     inherit (xlibs) libXi libSM libXmu libXext libX11;
   };
 
-  PolicyKit = import ../development/libraries/PolicyKit {
+  policy_kit = import ../development/libraries/policy-kit {
     inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext;
     inherit (gtkLibs) glib;
   };
@@ -5440,12 +5440,6 @@ let
     firmware = getConfig ["pcmciaUtils" "firmware"] [];
     config = getConfig ["pcmciaUtils" "config"] null;
     inherit lib;
-  };
-
-  policyKit = import ../os-specific/linux/polkit {
-    inherit fetchurl stdenv pkgconfig intltool expat dbus dbus_glib pam;
-    inherit gettext;
-    inherit (gtkLibs) glib;
   };
 
   powertop = import ../os-specific/linux/powertop {
@@ -7616,7 +7610,7 @@ let
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool enchant isocodes policyKit
+      xmlto docbook2x docbook_xsl intltool enchant isocodes policy_kit
       libproxy sqlite;
   });
 
