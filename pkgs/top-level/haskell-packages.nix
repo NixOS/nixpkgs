@@ -217,6 +217,10 @@ rec {
     inherit (pkgs) sqlite;
   };
 
+  HGL = import ../development/libraries/haskell/HGL {
+    inherit cabal X11;
+  };
+
   highlightingKate = import ../development/libraries/haskell/highlighting-kate {
     inherit cabal parsec pcreLight xhtml;
   };
