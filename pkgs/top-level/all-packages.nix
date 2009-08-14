@@ -2881,8 +2881,8 @@ let
     inherit fetchurl stdenv;
   };
 
-  ConsoleKit = import ../development/libraries/ConsoleKit {
-    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam;
+  console_kit = import ../development/libraries/console-kit {
+    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam policy_kit;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
