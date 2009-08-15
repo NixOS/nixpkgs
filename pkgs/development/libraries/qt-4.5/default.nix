@@ -56,10 +56,8 @@ stdenv.mkDerivation {
     ${if buildDemos == true then "" else "-nomake demos"}
     ${if buildExamples == true then "" else "-nomake examples"}
   '';
-  
-  # For some reason I cannot automatically choose the edition, except by passing
-  # 'o' the the stdin of configure
-  configureScript = "yes o | ./configure";
+    
+  configurePhase = "echo o | ./configure $configureFlags";
   
   patchPhase = ''
     substituteInPlace configure --replace /bin/pwd pwd
