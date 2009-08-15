@@ -293,6 +293,7 @@ in {
   sbcl = all;
   qt3 = allBut "i686-cygwin";
   qt4 = linux;
+  qt45 = linux;
   quake3demo = linux;
   readline = all;
   reiserfsprogs = linux;

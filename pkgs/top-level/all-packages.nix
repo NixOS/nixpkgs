@@ -3964,6 +3964,15 @@ let
     inherit (gnome) glib;
   };
 
+  qt45 = import ../development/libraries/qt-4.5 {
+    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus
+    fontconfig freetype pkgconfig libtiff;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+    libXmu libXinerama xineramaproto libXcursor libXext
+    inputproto fixesproto libXfixes;
+    inherit (gnome) glib;
+  };
+  
   readline = readline6;
 
   readline4 = import ../development/libraries/readline/readline4.nix {
@@ -7641,7 +7650,11 @@ let
   kde42 = import ../desktops/kde-4.2 (pkgs // {
     openexr = openexr_1_6_1;
   });
-
+  
+  kde43 = import ../desktops/kde-4.3 (pkgs // {
+    openexr = openexr_1_6_1;
+  });
+  
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
 
