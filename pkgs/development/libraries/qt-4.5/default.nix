@@ -47,6 +47,7 @@ stdenv.mkDerivation {
   prefixKey = "-prefix ";
   
   configureFlags = ''
+    -prefix $out
     -v -no-separate-debug-info -release
     -system-zlib -system-libpng -system-libjpeg -fast
     -qt-gif -confirm-license
