@@ -10,9 +10,20 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig glib eggdbus expat pam intltool gettext ];
 
-  postInstall = ''
-    chmod a+rX -R "$out"
-  '';
+  configureFlags = "--localstatedir=/var";
+
+  installFlags = "localstatedir=$(TMPDIR)/var"; # keep `make install' happy
+  
+  postInstall =
+    ''
+      # Allow some files with paranoid permissions to be stripped in
+      # the fixup phase.
+      chmod a+rX -R $out
+
+      # Fix the pathname in the frobnicate example.
+      substituteInPlace $out/share/polkit-1/actions/org.freedesktop.policykit.examples.pkexec.policy \
+          --replace /usr/bin/pk-example-frobnicate $out/bin/pk-example-frobnicate
+    '';
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;
