@@ -57,6 +57,7 @@ in
     wheel = 1;
     kmem = 2;
     tty = 3;
+    messagebus = 4; # D-Bus
     haldaemon = 5;
     disk = 6;
     vsftpd = 7;
