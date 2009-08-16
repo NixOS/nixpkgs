@@ -36,11 +36,17 @@ let
       chmod ${mode} "$target"
     '';
 
-  makeEtc = import ./make-etc.nix {
-    inherit (pkgs) stdenv;
-    configFiles = config.environment.etc;
+  makeEtc = pkgs.stdenv.mkDerivation {
+    name = "etc";
+
+    builder = ./make-etc.sh;
+
+    /* !!! Use toXML. */
+    sources = map (x: x.source) config.environment.etc;
+    targets = map (x: x.target) config.environment.etc;
+    modes = map (x: if x ? mode then x.mode else "symlink") config.environment.etc;
   };
-  
+
 in
 
 {
