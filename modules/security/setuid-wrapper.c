@@ -7,6 +7,8 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <assert.h>
+#include <string.h>
+#include <errno.h>
 
 /* Make sure assertions are not compiled out.  */
 #undef NDEBUG
@@ -71,6 +73,9 @@ int main(int argc, char * * argv)
     //printf("real = %s, len = %d\n", real, len);
 
     execve(real, argv, environ);
+
+    fprintf(stderr, "%s: cannot run `%s': %s\n",
+        argv[0], real, strerror(errno));
     
     exit(1);
 }
