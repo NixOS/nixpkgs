@@ -10,7 +10,8 @@ let
     name = "setuid-wrapper";
     buildCommand = ''
       ensureDir $out/bin
-      gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" ${./setuid-wrapper.c} -o $out/bin/setuid-wrapper
+      gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" \
+          ${./setuid-wrapper.c} -o $out/bin/setuid-wrapper
       strip -s $out/bin/setuid-wrapper
     '';
   };
@@ -24,10 +25,7 @@ in
   options = {
 
     security.setuidPrograms = mkOption {
-      default =
-        [ "passwd" "su" "crontab" "ping" "ping6"
-          "fusermount" "wodim" "cdrdao" "growisofs"
-        ];
+      default = [];
       description = ''
         Only the programs from system path listed here will be made
         setuid root (through a wrapper program).
@@ -75,7 +73,12 @@ in
   ###### implementation
 
   config = {
-  
+
+    security.setuidPrograms =
+      [ "passwd" "su" "crontab" "ping" "ping6"
+        "fusermount" "wodim" "cdrdao" "growisofs"
+      ];
+
     system.activationScripts.setuid =
       let
         setuidPrograms =
