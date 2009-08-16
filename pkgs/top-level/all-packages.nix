@@ -2927,6 +2927,13 @@ let
     useX11 = true; # !!! `false' doesn't build
   };
 
+  # !!! temporary fork; will replace dbus soon.
+  dbus_temp = import ../development/libraries/dbus/temp.nix {
+    inherit fetchurl stdenv pkgconfig expat;
+    inherit (xlibs) libX11 libICE libSM;
+    useX11 = true; # !!! `false' doesn't build
+  };
+
   dbus_glib = import ../development/libraries/dbus-glib {
     inherit fetchurl stdenv pkgconfig gettext dbus expat;
     inherit (gtkLibs) glib;
