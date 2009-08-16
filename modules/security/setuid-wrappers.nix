@@ -4,11 +4,13 @@ with pkgs.lib;
 
 let
 
+  inherit (config.security) wrapperDir;
+
   setuidWrapper = pkgs.stdenv.mkDerivation {
     name = "setuid-wrapper";
     buildCommand = ''
       ensureDir $out/bin
-      gcc -Wall -O2 -DWRAPPER_DIR=\"${config.security.wrapperDir}\" ${./setuid-wrapper.c} -o $out/bin/setuid-wrapper
+      gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" ${./setuid-wrapper.c} -o $out/bin/setuid-wrapper
       strip -s $out/bin/setuid-wrapper
     '';
   };
@@ -76,56 +78,47 @@ in
   
     system.activationScripts.setuid =
       let
-        setuidPrograms = builtins.toString (
-          config.security.setuidPrograms ++
-          config.security.extraSetuidPrograms ++
-          map (x: x.program) config.security.setuidOwners
-        );
+        setuidPrograms =
+          (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
+            (config.security.setuidPrograms ++
+             config.security.extraSetuidPrograms))
+          ++ config.security.setuidOwners;
 
-        adjustSetuidOwner = concatStrings (map
-          (_entry: let entry = {
-            owner = "nobody";
-            group = "nogroup";
-            setuid = false;
-            setgid = false;
-          } //_entry; in
+        makeSetuidWrapper =
+          { program
+          , source ? ""
+          , owner ? "nobody"
+          , group ? "nogroup"
+          , setuid ? false
+          , setgid ? false
+          , permissions ? "u+rx,g+rx,o+rx"
+          }:
+
           ''
-            chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
-            chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
-            chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program}
-          '')
-          config.security.setuidOwners);
+            source=${if source != "" then source else "$(PATH=$SETUID_PATH type -tP ${program})"}
+            if test -z "$source"; then
+                # If we can't find the program, fall back to the
+                # system profile.
+                source=/nix/var/nix/profiles/default/bin/${program}
+            fi
+            
+            cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}/${program}
+            echo -n "$source" > ${wrapperDir}/${program}.real
+            chmod 0000 ${wrapperDir}/${program} # to prevent races
+            chown ${owner}.${group} ${wrapperDir}/${program}
+            chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
+          '';
 
       in pkgs.stringsWithDeps.fullDepEntry
         ''
           # Look in the system path and in the default profile for
-          # programs to be wrapped.  However, having setuid programs
-          # in a profile is problematic, since the NixOS activation
-          # script won't be rerun automatically when you install a
-          # wrappable program in the profile with nix-env.
-          SETUID_PATH=/nix/var/nix/profiles/default/sbin:/nix/var/nix/profiles/default/bin:${config.system.path}/bin:${config.system.path}/sbin
+          # programs to be wrapped.
+          SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          wrapperDir=${config.security.wrapperDir}
-          if test -d $wrapperDir; then rm -f $wrapperDir/*; fi # */
-          mkdir -p $wrapperDir
-          
-          for i in ${setuidPrograms}; do
-              program=$(PATH=$SETUID_PATH type -tP $i)
-              if test -z "$program"; then
-                  # XXX: It would be preferable to detect this problem before
-                  # `activate-configuration' is invoked.
-                  #echo "WARNING: No executable named \`$i' was found" >&2
-                  #echo "WARNING: but \`$i' was specified as a setuid program." >&2
-                  true
-              else
-                  cp ${setuidWrapper}/bin/setuid-wrapper $wrapperDir/$i
-                  echo -n "$program" > $wrapperDir/$i.real
-                  chown root.root $wrapperDir/$i
-                  chmod 4755 $wrapperDir/$i
-              fi
-          done
+          if test -d ${wrapperDir}; then rm -f ${wrapperDir}/*; fi # */
+          mkdir -p ${wrapperDir}
 
-          ${adjustSetuidOwner}
+          ${concatMapStrings makeSetuidWrapper setuidPrograms}
         '' [ "defaultPath" "users" ];
 
   };
