@@ -1,5 +1,0 @@
-auth     include        common
-account  include        common
-password include        common
-session  include        common
-session  include        common-console

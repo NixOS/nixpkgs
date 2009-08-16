@@ -1,140 +1,116 @@
 {pkgs, config, ...}:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption;
 
-  options = {
-    services = {
-      atd = {
-
-        enable = mkOption {
-          default = true;
-          description = ''
-            Whether to enable the `at' daemon, a command scheduler.
-          '';
-        };
-
-        allowEveryone = mkOption {
-          default = false;
-          description = ''
-            Whether to make /var/spool/at{jobs,spool} writeable 
-            by everyone (and sticky).  This is normally not needed since
-            the `at' commands are setuid/setgid `atd'.
-          '';
-        };
-      };
-
-    };
-  };
-in
-
-###### implementation
-let
   cfg = config.services.atd;
-  inherit (pkgs.lib) mkIf;
+  
   inherit (pkgs) at;
 
-  user = {
-    name = "atd";
-    uid = config.ids.uids.atd;
-    description = "atd user";
-    home = "/var/empty";
-  };
+  job =
+    ''
+      description "at daemon (atd)"
 
-  group = {
-    name = "atd";
-    gid = config.ids.gids.atd;
-  };
+      start on startup
+      stop on shutdown
 
-  job = ''
-description "at daemon (atd)"
+      start script
+         # Snippets taken and adapted from the original `install' rule of
+         # the makefile.
 
-start on startup
-stop on shutdown
+         # We assume these values are those actually used in Nixpkgs for
+         # `at'.
+         spooldir=/var/spool/atspool
+         jobdir=/var/spool/atjobs
+         etcdir=/etc/at
 
-start script
-   # Snippets taken and adapted from the original `install' rule of
-   # the makefile.
+         for dir in "$spooldir" "$jobdir" "$etcdir"
+         do
+           if [ ! -d "$dir" ]
+           then
+               mkdir -p "$dir" && chown atd:atd "$dir"
+           fi
+         done
+         chmod 1770 "$spooldir" "$jobdir"
+         ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
+         if [ ! -f "$etcdir"/at.deny ]
+         then
+             touch "$etcdir"/at.deny && \
+             chown root:atd "$etcdir"/at.deny && \
+             chmod 640 "$etcdir"/at.deny
+         fi
+         if [ ! -f "$jobdir"/.SEQ ]
+         then
+             touch "$jobdir"/.SEQ && \
+             chown atd:atd "$jobdir"/.SEQ && \
+             chmod 600 "$jobdir"/.SEQ
+         fi
+      end script
 
-   # We assume these values are those actually used in Nixpkgs for
-   # `at'.
-   spooldir=/var/spool/atspool
-   jobdir=/var/spool/atjobs
-   etcdir=/etc/at
+      respawn ${at}/sbin/atd
+    '';
 
-   for dir in "$spooldir" "$jobdir" "$etcdir"
-   do
-     if [ ! -d "$dir" ]
-     then
-         mkdir -p "$dir" && chown atd:atd "$dir"
-     fi
-   done
-   chmod 1770 "$spooldir" "$jobdir"
-   ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
-   if [ ! -f "$etcdir"/at.deny ]
-   then
-       touch "$etcdir"/at.deny && \
-       chown root:atd "$etcdir"/at.deny && \
-       chmod 640 "$etcdir"/at.deny
-   fi
-   if [ ! -f "$jobdir"/.SEQ ]
-   then
-       touch "$jobdir"/.SEQ && \
-       chown atd:atd "$jobdir"/.SEQ && \
-       chmod 600 "$jobdir"/.SEQ
-   fi
-end script
-
-respawn ${at}/sbin/atd
-'';
 in
 
-mkIf cfg.enable {
-  require = [
-    options
+{
 
-    # config.services.extraJobs
-    #../upstart-jobs/default.nix
+  ###### interface
 
-    # config.environment.etc
-    #../etc/default.nix
+  options = {
+  
+    services.atd.enable = mkOption {
+      default = true;
+      description = ''
+        Whether to enable the `at' daemon, a command scheduler.
+      '';
+    };
 
-    # users.*
-    #../system/users-groups.nix
+    services.atd.allowEveryone = mkOption {
+      default = false;
+      description = ''
+        Whether to make /var/spool/at{jobs,spool} writeable 
+        by everyone (and sticky).  This is normally not needed since
+        the `at' commands are setuid/setgid `atd'.
+     '';
+    };
+    
+  };
+  
 
-    # ? # config.environment.extraPackages
-    # ? # config.security.extraSetuidPrograms
-  ];
+  ###### implementation
 
-  security = {
-    setuidOwners = map (program: {
-        inherit program;
-        owner = "atd";
-        group = "atd";
-        setuid = true;
-        setgid = true;
-      }) [ "at" "atq" "atrm" ];
+  config = mkIf cfg.enable {
+
+    security.setuidOwners = map (program: {
+      inherit program;
+      owner = "atd";
+      group = "atd";
+      setuid = true;
+      setgid = true;
+    }) [ "at" "atq" "atrm" ];
+
+    environment.systemPackages = [ at ];
+
+    security.pam.services = [ { name = "atd"; } ];
+
+    users.extraUsers = singleton
+      { name = "atd";
+        uid = config.ids.uids.atd;
+        description = "atd user";
+        home = "/var/empty";
+      };
+
+    users.extraGroups = singleton
+      { name = "atd";
+        gid = config.ids.gids.atd;
+      };
+
+    services.extraJobs = singleton # !!! convert to job
+      { name = "atd";
+        inherit job;
+      };
+
   };
 
-  environment = {
-    extraPackages = [ at ];
-
-    etc = [{
-      source = ./atd.pam;
-      target = "pam.d/atd";
-    }];
-  };
-
-  users = {
-    extraUsers = [user];
-    extraGroups = [group];
-  };
-
-  services = {
-    extraJobs = [{
-      name = "atd";
-      inherit job;
-    }];
-  };
 }

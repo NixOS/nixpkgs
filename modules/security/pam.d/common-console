@@ -1,1 +1,0 @@
-session  optional       @pam_console@/lib/security/pam_console.so debug handlersfile=@pamConsoleHandlers@

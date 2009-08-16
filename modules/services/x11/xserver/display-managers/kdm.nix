@@ -1,35 +1,15 @@
 {pkgs, config, ...}:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption;
 
-  options = {
-
-    services.xserver.displayManager.kdm = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the KDE display manager.
-        ";
-      };
-    };
-
-  };
-
-in
-
-###### implementation
-let
-  xcfg = config.services.xserver;
-  dmcfg = xcfg.displayManager;
+  dmcfg = config.services.xserver.displayManager;
   cfg = dmcfg.kdm;
 
-  inherit (pkgs.lib) mkIf;
-  inherit (pkgs) stdenv;
   inherit (pkgs.kde42) kdebase_workspace;
 
-  kdmrc = stdenv.mkDerivation {
+  kdmrc = pkgs.stdenv.mkDerivation {
     name = "kdmrc";
     # -e "s|Session=${kdebase_workspace}/share/config/kdm/Xsession|Session=${dmcfg.session.script}|" \
     buildCommand = ''
@@ -50,20 +30,36 @@ let
 
 in
 
-mkIf cfg.enable {
-  require = [
-    options
-  ];
+{
 
-  services = {
-    xserver = {
-      displayManager = {
-        job = {
-          beforeScript = "";
-          env = "";
-          execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}/kdmrc";
-        };
+  ###### interface
+  
+  options = {
+
+    services.xserver.displayManager.kdm = {
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable the KDE display manager.
+        '';
       };
     };
+
   };
+  
+  
+  ###### implementation
+  
+  config = mkIf cfg.enable {
+  
+    services.xserver.displayManager.job =
+      { beforeScript = "";
+        env = "";
+        execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}/kdmrc";
+      };
+
+    security.pam.services = [ { name = "slim"; localLogin = true; } ];
+      
+  };
+  
 }

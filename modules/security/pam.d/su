@@ -1,6 +1,0 @@
-auth     sufficient     pam_rootok.so
-auth     include        common
-account  include        common
-password include        common
-session  include        common
-session  optional       pam_xauth.so xauthpath=@xauth@/bin/xauth systemuser=99
