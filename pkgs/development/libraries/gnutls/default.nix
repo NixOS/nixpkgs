@@ -5,17 +5,16 @@ assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-2.6.6";
+  name = "gnutls-2.8.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.bz2";
-    sha256 = "17nwmf7hfcjpwi1hmnkjjrygwn1wjripdf391is8ay6aa65mpn03";
+    sha256 = "163rgpd12w869faki6wkk6lya2pyw7976plr9yxih9nzy3b4k3zh";
   };
 
-  patches = [ ./tmpdir.patch ];
-
   configurePhase = ''
-    ./configure --prefix="$out" \
+    ./configure --prefix="$out"                                 \
+      --disable-dependency-tracking --enable-fast-install       \
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
         else ""}
@@ -47,5 +46,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = "LGPLv2.1+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
