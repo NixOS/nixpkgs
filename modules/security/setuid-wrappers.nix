@@ -4,56 +4,6 @@ with pkgs.lib;
 
 let
 
-  options = {
-    security = {
-      setuidPrograms = mkOption {
-        default = [
-          "passwd" "su" "crontab" "ping" "ping6"
-          "fusermount" "wodim" "cdrdao" "growisofs"
-        ];
-        description = ''
-          Only the programs from system path listed her will be made setuid root
-          (through a wrapper program).  It's better to set
-          <option>security.extraSetuidPrograms</option>.
-        '';
-      };
-
-      # !!! obsolete
-      extraSetuidPrograms = mkOption {
-        default = [];
-        example = ["fusermount"];
-        description = ''
-          This option lists additional programs that must be made setuid
-          root.
-        '';
-      };
-
-      setuidOwners = mkOption {
-        default = [];
-        example = [{
-          program = "sendmail";
-          owner = "nobody";
-          group = "postdrop";
-          setuid = false;
-          setgid = true;
-        }];
-        description = ''
-          This option allows the ownership and permissions on the setuid
-          wrappers for specific programs to be overriden from the
-          default (setuid root, but not setgid root).
-        '';
-      };
-
-      wrapperDir = mkOption {
-        default = "/var/setuid-wrappers";
-        description = ''
-          This option defines the path to the setuid wrappers.  It
-          should generally not be overriden.
-        '';
-      };
-    };
-  };
-
   setuidWrapper = pkgs.stdenv.mkDerivation {
     name = "setuid-wrapper";
     buildCommand = ''
@@ -66,33 +16,88 @@ let
 in
 
 {
-  require = [options];
 
-  system = {
-    activationScripts = {
-      setuid =
-        let
-          setuidPrograms = builtins.toString (
-            config.security.setuidPrograms ++
-            config.security.extraSetuidPrograms ++
-            map (x: x.program) config.security.setuidOwners
-          );
+  ###### interface
 
-          adjustSetuidOwner = concatStrings (map
-            (_entry: let entry = {
-              owner = "nobody";
-              group = "nogroup";
-              setuid = false;
-              setgid = false;
-            } //_entry; in
-            ''
-              chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
-              chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
-              chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program}
-            '')
-            config.security.setuidOwners);
+  options = {
 
-        in pkgs.stringsWithDeps.fullDepEntry ''
+    security.setuidPrograms = mkOption {
+      default =
+        [ "passwd" "su" "crontab" "ping" "ping6"
+          "fusermount" "wodim" "cdrdao" "growisofs"
+        ];
+      description = ''
+        Only the programs from system path listed here will be made
+        setuid root (through a wrapper program).
+      '';
+    };
+
+    # !!! obsolete
+    security.extraSetuidPrograms = mkOption {
+      default = [];
+      example = ["fusermount"];
+      description = ''
+        This option lists additional programs that must be made setuid
+        root.
+      '';
+    };
+
+    security.setuidOwners = mkOption {
+      default = [];
+      example =
+        [ { program = "sendmail";
+            owner = "nobody";
+            group = "postdrop";
+            setuid = false;
+            setgid = true;
+          }
+        ];
+      description = ''
+        This option allows the ownership and permissions on the setuid
+        wrappers for specific programs to be overriden from the
+        default (setuid root, but not setgid root).
+      '';
+    };
+
+    security.wrapperDir = mkOption {
+      default = "/var/setuid-wrappers";
+      description = ''
+        This option defines the path to the setuid wrappers.  It
+        should generally not be overriden.
+      '';
+    };
+
+  };
+
+
+  ###### implementation
+
+  config = {
+  
+    system.activationScripts.setuid =
+      let
+        setuidPrograms = builtins.toString (
+          config.security.setuidPrograms ++
+          config.security.extraSetuidPrograms ++
+          map (x: x.program) config.security.setuidOwners
+        );
+
+        adjustSetuidOwner = concatStrings (map
+          (_entry: let entry = {
+            owner = "nobody";
+            group = "nogroup";
+            setuid = false;
+            setgid = false;
+          } //_entry; in
+          ''
+            chown ${entry.owner}.${entry.group} $wrapperDir/${entry.program}
+            chmod u${if entry.setuid then "+" else "-"}s $wrapperDir/${entry.program} 
+            chmod g${if entry.setgid then "+" else "-"}s $wrapperDir/${entry.program}
+          '')
+          config.security.setuidOwners);
+
+      in pkgs.stringsWithDeps.fullDepEntry
+        ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.  However, having setuid programs
           # in a profile is problematic, since the NixOS activation
@@ -122,6 +127,7 @@ in
 
           ${adjustSetuidOwner}
         '' [ "defaultPath" "users" ];
-    };
+
   };
+  
 }
