@@ -18,6 +18,18 @@ let
 
   pamConsolePerms = ./console.perms;
 
+  otherService = pkgs.writeText "other.pam"
+    ''
+      auth     required pam_warn.so
+      auth     required pam_deny.so
+      account  required pam_warn.so
+      account  required pam_deny.so
+      password required pam_warn.so
+      password required pam_deny.so
+      session  required pam_warn.so
+      session  required pam_deny.so
+    '';
+
   makePAMService =
     { name
     , # If set, root doesn't need to authenticate (e.g. for the "chsh"
@@ -111,7 +123,12 @@ in
       [ pkgs.pam pam_unix2 ]
       ++ optional config.users.ldap.enable pam_ldap;
 
-    environment.etc = map makePAMService config.security.pam.services;
+    environment.etc =
+      map makePAMService config.security.pam.services
+      ++ singleton
+        { source = otherService;
+          target = "pam.d/other";
+        };
 
     security.pam.services =
       # Most of these should be moved to specific modules.
