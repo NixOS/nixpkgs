@@ -36,7 +36,7 @@ rec {
   };
   
   GConf = import ./platform/GConf {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat policyKit;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat policy_kit;
     inherit (pkgs.gtkLibs) glib gtk;
     inherit intltool ORBit2;
   };
