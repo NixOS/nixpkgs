@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig glib eggdbus expat pam intltool gettext ];
 
+  postInstall = ''
+    chmod a+rX -R "$out"
+  '';
+
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
