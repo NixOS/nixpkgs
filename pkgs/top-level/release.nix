@@ -92,6 +92,7 @@ in {
   clisp = linux;
   cmake = all;
   compiz = linux;
+  console_kit = linux;
   coreutils = all;
   cpio = all;
   cron = linux;
@@ -280,6 +281,7 @@ in {
   pkgconfig = all;
   pltScheme = linux;
   pmccabe = linux;
+  policy_kit = linux;
   portmap = linux;
   postgresql = all;
   postfix = linux;
