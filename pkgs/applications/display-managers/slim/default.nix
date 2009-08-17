@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     # pam_response structures, not a pointer to an array of pointers to
     # pam_response structures.  Of course C can't tell the difference...
     ./pam.patch
+
+    # Don't set PAM_RHOST to "localhost", it confuses ConsoleKit
+    # (which assumes that a non-empty string means a remote session).
+    ./pam2.patch
   ];
 
   buildInputs = [x11 libjpeg libpng libXmu freetype pam];

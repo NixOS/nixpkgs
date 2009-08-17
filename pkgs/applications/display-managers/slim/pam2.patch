@@ -1,0 +1,20 @@
+diff -rc slim-1.3.1-orig/app.cpp slim-1.3.1/app.cpp
+*** slim-1.3.1-orig/app.cpp	2008-09-26 02:54:15.000000000 +0200
+--- slim-1.3.1/app.cpp	2009-08-17 02:59:37.000000000 +0200
+***************
+*** 226,232 ****
+          pam.start("slim");
+          pam.set_item(PAM::Authenticator::TTY, DisplayName);
+          pam.set_item(PAM::Authenticator::Requestor, "root");
+!         pam.set_item(PAM::Authenticator::Host, "localhost");
+  
+      }
+      catch(PAM::Exception& e){
+--- 226,232 ----
+          pam.start("slim");
+          pam.set_item(PAM::Authenticator::TTY, DisplayName);
+          pam.set_item(PAM::Authenticator::Requestor, "root");
+!         pam.set_item(PAM::Authenticator::Host, "");
+  
+      }
+      catch(PAM::Exception& e){
