@@ -23,7 +23,9 @@
   ./programs/pwdutils/pwdutils.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./security/console-kit.nix
   ./security/pam.nix
+  ./security/policy-kit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
   ./services/audio/alsa.nix
@@ -72,7 +74,6 @@
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
-  ./services/system/consolekit.nix
   ./services/system/dbus.nix
   ./services/system/nscd.nix
   ./services/ttys/gpm.nix

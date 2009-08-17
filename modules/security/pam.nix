@@ -7,16 +7,7 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) pam_unix2 pam_console pam_ldap;
-
-  # !!! ugh, these files shouldn't be created here.
-  pamConsoleHandlers = pkgs.writeText "console.handlers" ''
-    console consoledevs /dev/tty[0-9][0-9]* :[0-9]\.[0-9] :[0-9]
-    ${pkgs.pam_console}/sbin/pam_console_apply lock logfail wait -t tty -s -c ${pamConsolePerms}
-    ${pkgs.pam_console}/sbin/pam_console_apply unlock logfail wait -r -t tty -s -c ${pamConsolePerms}
-  '';
-
-  pamConsolePerms = ./console.perms;
+  inherit (pkgs) pam_unix2 pam_ldap;
 
   otherService = pkgs.writeText "other.pam"
     ''
@@ -73,12 +64,23 @@ let
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           session required ${pam_unix2}/lib/security/pam_unix2.so
           ${optionalString localLogin
-              "session optional ${pam_console}/lib/security/pam_console.so debug handlersfile=${pamConsoleHandlers}"}
+              ''
+                session required pam_env.so debug conffile=${envFile} readenv=0
+                session optional ${pkgs.console_kit}/lib/security/pam_ck_connector.so debug
+              ''}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
         '';
       target = "pam.d/${name}";
     };
+
+  # This is needed to get an active session in ConsoleKit.  Apparently
+  # a better way is to run ck-launch-session from the session starter
+  # (or let xdm/kdm do it).
+  envFile = pkgs.writeText "pam_env.conf"
+    ''
+      CKCON_X11_DISPLAY_DEVICE DEFAULT="/dev/tty7"
+    '';
 
 in
 

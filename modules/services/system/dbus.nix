@@ -17,6 +17,8 @@ let
     buildCommand = ''
       ensureDir $out
       
+      ln -s ${dbus}/etc/dbus-1/session.conf $out/session.conf
+      
       cp ${dbus}/etc/dbus-1/system.conf $out/system.conf
 
       # Tell the daemon where the setuid wrapper around
@@ -30,9 +32,16 @@ let
           
       # Note: system.conf includes ./system.d (i.e. it has a relative,
       # not absolute path).
+      ensureDir $out/session.d
       ensureDir $out/system.d
+      
       for i in ${toString cfg.packages}; do
-        ln -s $i/etc/dbus-1/system.d/* $out/system.d/
+        for j in $i/etc/dbus-1/session.d/*; do
+          ln -s $j  $out/session.d/
+        done
+        for j in $i/etc/dbus-1/system.d/*; do
+          ln -s $j $out/system.d/
+        done
       done
     ''; # */
   };
