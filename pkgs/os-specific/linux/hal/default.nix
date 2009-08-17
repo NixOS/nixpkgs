@@ -31,11 +31,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
-             hald/linux/coldplug.c hald/linux/blockdev.c
+             hald/linux/coldplug.c hald/linux/blockdev.c \
+             tools/hal-storage-mount.c ./tools/hal-storage-shared.c
     do
       substituteInPlace $i \
         --replace /usr/sbin/dmidecode ${dmidecode}/sbin/dmidecode \
-        --replace /sbin/udevadm ${udev}/sbin/udevadm
+        --replace /sbin/udevadm ${udev}/sbin/udevadm \
+        --replace /bin/mount ${utillinuxng}/bin/mount \
+        --replace /bin/umount ${utillinuxng}/bin/umount
     done
   '';
 }
