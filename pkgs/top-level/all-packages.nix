@@ -3914,6 +3914,13 @@ let
     inherit (gtkLibs) glib;
   };
 
+  policy_kit_0_9 = import ../development/libraries/policy-kit/0.9.nix {
+    inherit stdenv fetchurl pkgconfig expat pam intltool gettext 
+      dbus_glib;
+    inherit (gtkLibs) glib;
+    dbus = dbus.libs;
+  };
+
   poppler = import ../development/libraries/poppler {
     inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg
       pkgconfig;
