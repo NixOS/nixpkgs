@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
       # Don't hardcore the FIRMWARE_DIRS variable; obtain it from the
       # environment of the caller.
       sed '3,4d' -i $out/libexec/firmware.sh
+
+      ln -s $out/lib/ConsoleKit $out/etc/ConsoleKit
     '';
   
   meta = {
