@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 policy_kit ];
 
+  configureFlags = "--enable-pam-module --with-pam-module-dir=$(out)/lib/security --localstatedir=/var --sysconfdir=/etc";
+
+  # Needed for pthread_cancel().
+  NIX_LDFLAGS = "-lgcc_s";
+
+  installFlags = "sysconfdir=$(out)/etc DBUS_SYS_DIR=$(out)/etc/dbus-1/system.d"; # keep `make install' happy
+  
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/ConsoleKit;
     description = "A framework for defining and tracking users, login sessions, and seats";
