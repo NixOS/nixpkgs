@@ -105,7 +105,7 @@ in
         execCmd = "${pkgs.slim}/bin/slim";
       };
 
-    security.pam.services = [ { name = "slim"; localLogin = true; } ];
+    security.pam.services = [ { name = "slim"; localLogin = true; ckHack = true; } ];
 
   };
 

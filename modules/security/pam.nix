@@ -29,6 +29,8 @@ let
     , # If set, this is a local login (e.g. virtual console or X), so
       # the user gets ownership of audio devices etc.
       localLogin ? false
+    , # Temporary hack to get SLiM to work with ConsoleKit.
+      ckHack ? false
     , # Whether to forward XAuth keys between users.  Mostly useful
       # for "su".
       forwardXAuth ? false
@@ -63,11 +65,10 @@ let
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           session required ${pam_unix2}/lib/security/pam_unix2.so
+          ${optionalString ckHack
+              "session required pam_env.so debug conffile=${envFile} readenv=0"}
           ${optionalString localLogin
-              ''
-                session required pam_env.so debug conffile=${envFile} readenv=0
-                session optional ${pkgs.console_kit}/lib/security/pam_ck_connector.so debug
-              ''}
+              "session optional ${pkgs.console_kit}/lib/security/pam_ck_connector.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
         '';
