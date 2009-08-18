@@ -45,6 +45,16 @@ rec {
     
     inherit src;
 
+    patches = [
+      # Fix for Flash crashing in fullscreen mode with Xv acceleration
+      # on NVIDIA cards:
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=493541
+      (fetchurl {
+        url = http://hg.mozilla.org/mozilla-central/raw-rev/dae91a0884c9;
+        sha256 = "13w0bhm92sic7sx6847h98qm50cazm0cwi9hyp17y62q70b799ps";
+      })
+    ];
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
