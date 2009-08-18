@@ -109,13 +109,11 @@ mkIf config.services.tomcat.enable {
         stop on network-interfaces/stop
         
         start script
-	    rm -Rf ${cfg.baseDir}
-	    
 	    # Create the base directory
 	    mkdir -p ${cfg.baseDir}
 	    
 	    # Create a symlink to the bin directory of the tomcat component
-	    ln -sf ${pkgs.tomcat6}/bin ${cfg.baseDir}/bin
+	    ln -sfn ${pkgs.tomcat6}/bin ${cfg.baseDir}/bin
 	    
 	    # Create a conf/ directory
 	    mkdir -p ${cfg.baseDir}/conf
@@ -124,7 +122,7 @@ mkIf config.services.tomcat.enable {
 	    # Symlink the config files in the conf/ directory (except for catalina.properties and server.xml)
 	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties | grep -v server.xml)
 	    do
-	        ln -sf ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
+	        ln -sfn ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
 	    done
 	    
 	    # Create a modified catalina.properties file 
@@ -163,7 +161,7 @@ mkIf config.services.tomcat.enable {
 		if [ -f $i ]
 		then
 		    # If the given web application is a file, symlink it into the common/lib/ directory
-		    ln -sf $i ${cfg.baseDir}/lib/`basename $i`
+		    ln -sfn $i ${cfg.baseDir}/lib/`basename $i`
 		elif [ -d $i ]
 		then
 		    # If the given web application is a directory, then iterate over the files
@@ -171,7 +169,7 @@ mkIf config.services.tomcat.enable {
 		    
 		    for j in $i/lib/*
 		    do
-			ln -sf $j ${cfg.baseDir}/lib/`basename $j`
+			ln -sfn $j ${cfg.baseDir}/lib/`basename $j`
 		    done
 		fi
 	    done	    	     
@@ -182,7 +180,7 @@ mkIf config.services.tomcat.enable {
 		if [ -f $i ]
 		then
 		    # If the given web application is a file, symlink it into the common/lib/ directory
-		    ln -sf $i ${cfg.baseDir}/shared/lib/`basename $i`
+		    ln -sfn $i ${cfg.baseDir}/shared/lib/`basename $i`
 		elif [ -d $i ]
 		then
 		    # If the given web application is a directory, then iterate over the files
@@ -190,7 +188,7 @@ mkIf config.services.tomcat.enable {
 		    
 		    for j in $i/shared/lib/*
 		    do
-			ln -sf $j ${cfg.baseDir}/shared/lib/`basename $j`
+			ln -sfn $j ${cfg.baseDir}/shared/lib/`basename $j`
 		    done
 		fi
 	    done 
@@ -201,7 +199,7 @@ mkIf config.services.tomcat.enable {
 		if [ -f $i ]
 		then
 		    # If the given web application is a file, symlink it into the webapps/ directory
-		    ln -sf $i ${cfg.baseDir}/webapps/`basename $i`
+		    ln -sfn $i ${cfg.baseDir}/webapps/`basename $i`
 		elif [ -d $i ]
 		then
 		    # If the given web application is a directory, then iterate over the files
@@ -209,7 +207,7 @@ mkIf config.services.tomcat.enable {
 		    
 		    for j in $i/webapps/*
 		    do
-		        ln -sf $j ${cfg.baseDir}/webapps/`basename $j`
+		        ln -sfn $j ${cfg.baseDir}/webapps/`basename $j`
 		    done
 		    
 		    # Also symlink the configuration files if they are included
@@ -217,7 +215,7 @@ mkIf config.services.tomcat.enable {
 		    then
 			for j in $i/conf/Catalina/*
 			do
-			    ln -sf $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
+			    ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
 			done
 		    fi
 		fi
@@ -237,7 +235,7 @@ mkIf config.services.tomcat.enable {
 		  if [ -f $i ]
 		  then
 		      # If the given web application is a file, symlink it into the webapps/ directory
-		      ln -sf $i ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $i`
+		      ln -sfn $i ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $i`
 		  elif [ -d $i ]
 		  then
 		      # If the given web application is a directory, then iterate over the files
@@ -245,7 +243,7 @@ mkIf config.services.tomcat.enable {
 		    
 		      for j in $i/webapps/*
 		      do
-		          ln -sf $j ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $j`
+		          ln -sfn $j ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $j`
 		      done
 		      
 		      # Also symlink the configuration files if they are included
@@ -253,7 +251,7 @@ mkIf config.services.tomcat.enable {
 		      then
 			  for j in $i/conf/Catalina/*
 			  do
-			      ln -sf $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
+			      ln -sfn $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
 			  done
 		      fi
                   fi	                  
@@ -283,7 +281,7 @@ mkIf config.services.tomcat.enable {
 		    if [ -f $i ]
 		    then
 			# If the given web service is a file, symlink it into the webapps/axis2/WEB-INF/services
-			ln -sf $i ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $i`
+			ln -sfn $i ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $i`
 		    elif [ -d $i ]
 		    then
 			# If the given web application is a directory, then iterate over the files
@@ -291,7 +289,7 @@ mkIf config.services.tomcat.enable {
 			
 			for j in $i/webapps/axis2/WEB-INF/services/*
 			do
-			    ln -sf $j ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $j`
+			    ln -sfn $j ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $j`
 			done
 			
 			# Also symlink the configuration files if they are included
@@ -299,7 +297,7 @@ mkIf config.services.tomcat.enable {
 		        then
 			    for j in $i/conf/Catalina/*
 			    do
-			        ln -sf $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
+			        ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
 			    done
 		        fi
 		    fi
