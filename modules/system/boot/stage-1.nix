@@ -228,14 +228,22 @@ let
     name = "udev-rules";
     buildCommand = ''
       ensureDir $out
+      
+      cp ${pkgs.udev}/libexec/rules.d/60-cdrom_id.rules $out/
       cp ${pkgs.udev}/libexec/rules.d/60-persistent-storage.rules $out/
-      substituteInPlace $out/60-persistent-storage.rules \
-        --replace ata_id ${extraUtils}/bin/ata_id \
-        --replace usb_id ${extraUtils}/bin/usb_id \
-        --replace scsi_id ${extraUtils}/bin/scsi_id \
-        --replace path_id ${extraUtils}/bin/path_id \
-        --replace vol_id ${extraUtils}/bin/vol_id \
-        --replace /sbin/blkid ${extraUtils}/bin/blkid
+
+      for i in $out/*.rules; do
+          substituteInPlace $i \
+            --replace ata_id ${extraUtils}/bin/ata_id \
+            --replace usb_id ${extraUtils}/bin/usb_id \
+            --replace scsi_id ${extraUtils}/bin/scsi_id \
+            --replace path_id ${extraUtils}/bin/path_id \
+            --replace vol_id ${extraUtils}/bin/vol_id \
+            --replace cdrom_id ${extraUtils}/bin/cdrom_id \
+            --replace /sbin/blkid ${extraUtils}/bin/blkid
+      done
+
+      # !!! What does this do?
       sed -e '/^ENV[{]DEVTYPE[}]=="disk", .*GOTO/d' -i $out/60-persistent-storage.rules 
     ''; # */
   };
