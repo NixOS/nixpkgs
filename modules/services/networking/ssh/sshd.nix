@@ -31,11 +31,11 @@ let
       GatewayPorts ${cfg.gatewayPorts}
     '';
 
-  # !!! is this assertion evaluated anywhere???
-  assertion = cfg.permitRootLogin == "yes" ||
-       cfg.permitRootLogin == "without-password" ||
-       cfg.permitRootLogin == "forced-commands-only" ||
-       cfg.permitRootLogin == "no";
+  permitRootLoginCheck = v:
+    v == "yes" ||
+    v == "without-password" ||
+    v == "forced-commands-only" ||
+    v == "no";
 
 in
 
@@ -73,6 +73,7 @@ in
 
       permitRootLogin = mkOption {
         default = "yes";
+        check = permitRootLoginCheck;
         description = ''
           Whether the root user can login using ssh. Valid values are
           <literal>yes</literal>, <literal>without-password</literal>,
