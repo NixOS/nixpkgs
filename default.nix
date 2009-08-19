@@ -3,9 +3,9 @@
 
 let
   
-  inherit
-    (import ./lib/eval-config.nix {inherit configuration;})
-    config optionDeclarations pkgs;
+  eval = import ./lib/eval-config.nix {inherit configuration;};
+
+  inherit (eval) config pkgs;
 
   vmConfig = (import ./lib/eval-config.nix {
     inherit configuration;
@@ -15,7 +15,7 @@ let
 in
 
 {
-  inherit config;
+  inherit eval config;
 
   system = config.system.build.system;
 
