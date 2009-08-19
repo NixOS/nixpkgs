@@ -54,7 +54,7 @@ let
   modprobe = config.system.sbin.modprobe;
 
   exports = if builtins.pathExists cfg.exports
-    then cfg.export else pkgs.writeText "exports" cfg.exports;
+    then cfg.exports else pkgs.writeText "exports" cfg.exports;
 
 in
 
