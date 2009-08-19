@@ -243,7 +243,11 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid
       done
 
-      # !!! What does this do?
+      # Remove rule preventing creation of a by-label symlink
+      # for a CD-ROM if disk removal will not be properly reported.
+      # Such a link can get obsolete in a running system, but 
+      # during boot stage 1 it is unlikely. We need this change
+      # to be able to boot on a wider choice of CD drives.
       sed -e '/^ENV[{]DEVTYPE[}]=="disk", .*GOTO/d' -i $out/60-persistent-storage.rules 
     ''; # */
   };
