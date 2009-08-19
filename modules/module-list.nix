@@ -69,6 +69,7 @@
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/vsftpd.nix
+  ./services/networking/xinetd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix
