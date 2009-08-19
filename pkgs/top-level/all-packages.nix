@@ -4639,6 +4639,10 @@ let
     inherit fetchurl openssl stdenv libcap pam;
   };
 
+  xinetd = import ../servers/xinetd {
+    inherit fetchurl stdenv;
+  };
+
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa mesaHeaders
