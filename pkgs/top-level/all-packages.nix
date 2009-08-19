@@ -1063,6 +1063,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  netkittftp = import ../tools/networking/netkit/tftp {
+    inherit fetchurl stdenv;
+  };
+
+
   netpbm = import ../tools/graphics/netpbm {
     inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2;
   };
