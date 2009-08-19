@@ -6,7 +6,7 @@ rec {
   };
 
   buildInputs = [ncurses];
-  configureFlags = [];
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   /* doConfigure should be specified separately */
   phaseNames = [ "doConfigure" "doMakeInstall"];
