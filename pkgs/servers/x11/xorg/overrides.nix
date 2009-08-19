@@ -50,6 +50,7 @@
   };
 
   xf86videoopenchrome = attrs: attrs // {
+    name = "xf86-video-openchrome-svn-754";
     src = args.fetchsvn {
       url = http://svn.openchrome.org/svn/trunk;
       md5 = "9a64a317d1f0792c5709e516c14f383b";
