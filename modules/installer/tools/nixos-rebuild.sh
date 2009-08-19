@@ -31,6 +31,8 @@ Options:
                          channel manifest
   --no-build-nix         don't build the latest Nix from Nixpkgs before
                          building NixOS
+  --rollback             restore the previous NixOS configuration (only
+                         with switch, boot, test, build)
 
 Various nix-build options are also accepted, in particular:
 
@@ -51,6 +53,7 @@ extraBuildFlags=
 action=
 pullManifest=1
 buildNix=1
+rollback=
 
 while test "$#" -gt 0; do
     i="$1"; shift 1
@@ -65,6 +68,8 @@ while test "$#" -gt 0; do
         pullManifest=
     elif test "$i" = --no-build-nix; then
         buildNix=
+    elif test "$i" = --rollback; then
+        rollback=1
     elif test "$i" = --show-trace -o "$i" = --no-build-hook -o "$i" = --keep-failed -o "$i" = -K \
         -o "$i" = --keep-going -o "$i" = -k -o "$i" = --verbose -o "$i" = -v; then
         extraBuildFlags="$extraBuildFlags $i"
@@ -81,6 +86,11 @@ if test -z "$action"; then showSyntax; fi
 
 if test "$action" = dry-run; then
     extraBuildFlags="$extraBuildFlags --dry-run"
+fi
+
+if test -n "$rollback"; then
+    pullManifest=
+    buildNix=
 fi
 
 
@@ -126,17 +136,33 @@ fi
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
-if test "$action" = switch -o "$action" = boot; then
-    nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
-    pathToConfig=/nix/var/nix/profiles/system
-elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
-    nix-build $NIXOS -A system -K -k $extraBuildFlags
-    pathToConfig=./result
-elif test "$action" = build-vm; then
-    nix-build $NIXOS -A vm -K -k $extraBuildFlags
-    pathToConfig=./result
-else
-    showSyntax
+if test -z "$rollback"; then
+    if test "$action" = switch -o "$action" = boot; then
+        nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
+        pathToConfig=/nix/var/nix/profiles/system
+    elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
+        nix-build $NIXOS -A system -K -k $extraBuildFlags
+        pathToConfig=./result
+    elif test "$action" = build-vm; then
+        nix-build $NIXOS -A vm -K -k $extraBuildFlags
+        pathToConfig=./result
+    else
+        showSyntax
+    fi
+else # test -n "$rollback"
+    if test "$action" = switch -o "$action" = boot; then
+        nix-env --rollback -p /nix/var/nix/profiles/system
+        pathToConfig=/nix/var/nix/profiles/system
+    elif test "$action" = test -o "$action" = build; then
+        systemNumber=$(
+            nix-env -p /nix/var/nix/profiles/system --list-generations |
+            sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
+        )
+        ln -sT /nix/var/nix/profiles/system-${systemNumber}-link ./result
+        pathToConfig=./result
+    else
+        showSyntax
+    fi
 fi
 
 
