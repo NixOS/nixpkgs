@@ -35,6 +35,8 @@ args:
 
       nix_repository_manager = { type = "darcs"; url = "http://mawercer.de/~marc/repos/nix-repository-manager"; };
 
+      pywebcvs = { type = "svn"; url = "https://pywebsvcs.svn.sourceforge.net/svnroot/pywebsvcs/trunk"; };
+
       plugins = { type = "darcs"; url="http://code.haskell.org/~dons/code/hs-plugins/"; groups="haskell"; };
 
       hg2git = { type = "git"; url="git://repo.or.cz/hg2git.git"; };

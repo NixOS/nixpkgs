@@ -537,11 +537,15 @@ in
     name = "soappy-0.12";
     pyCheck = "from SOAPpy import WSDL";
     propagatedBuildInputs = [ t.fpconst ];
+    src = p.bleedingEdgeRepos.sourceByName "pywebcvs";
+    postUnpack = "sourceRoot=$sourceRoot/SOAPpy";
+    /* The release is buggy. I can't get list of dedicated netboots from ovh ?
     src = fetchurl {
       url = "http://switch.dl.sourceforge.net/sourceforge/pywebsvcs/SOAPpy-0.12.0.tar.gz";
       sha256 = "02a0wpir0gl0n9cl7a5hxliwsywvcw847i5in7i14i57kk6dl7rd";
     };
     patches = [ ./gentoo-python-2.5-compat.patch ];
+    */
     meta = {
       description = "SOAP implementation for Python";
       homepage="http://pywebsvcs.sourceforge.net/";

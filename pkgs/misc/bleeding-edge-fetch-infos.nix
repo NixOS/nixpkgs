@@ -259,4 +259,8 @@
     url = "http://mawercer.de/~nix/repos/ghc_syb-876b121e73f1b5ca4b17b0c6908b27ba7efb0374.tar.gz";
     sha256 = "325a19962e90dc5fb07845d2ac4df6e332061cda4b8950b95bcb782706ed3e31";
   };
+  pywebcvs = args: with args; fetchurl { # Wed Aug 12 15:00:25 CEST 2009
+    url = "http://mawercer.de/~nix/repos/pywebcvs-1493.tar.gz";
+    sha256 = "4183b18f48738cf607ef29baae75f7edec46504d1fb31bdedfbc897dcadbe599";
+  };
 }
