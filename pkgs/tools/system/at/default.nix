@@ -1,20 +1,21 @@
 { fetchurl, stdenv, bison, flex, pam, ssmtp }:
 
 stdenv.mkDerivation {
-  name = "at-3.1.10.1";
+  name = "at-3.1.11";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.10.2.tar.gz;
-    sha256 = "03v96zil1xs15px26xmhxsfn7wx84a3zwpnwmp69hn5s911api1m";
+    url = mirror://debian/pool/main/a/at/at_3.1.11.orig.tar.gz;
+    sha256 = "0n995h57x87xg10n8rkq06lynnb3syynfngwspfg91cp22cphycb";
   };
 
   patches = [ ./install.patch ];
 
-  buildInputs = [ bison flex pam
-
-                  # `configure' and `atd' want the `sendmail' command.
-                  ssmtp ];
+  buildInputs =
+    [ bison flex pam
+      # `configure' and `atd' want the `sendmail' command.
+      ssmtp
+    ];
 
   configurePhase = ''
     export PATH="${ssmtp}/sbin:$PATH"
