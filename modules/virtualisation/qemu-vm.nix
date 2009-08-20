@@ -51,7 +51,7 @@ let
           -kernel ${config.system.build.system}/kernel \
           -initrd ${config.system.build.system}/initrd \
           $QEMU_OPTS \
-          -append "$(cat ${config.system.build.system}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.system}"
+          -append "$(cat ${config.system.build.system}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.system} $QEMU_KERNEL_PARAMS"
     '';
 
 in
