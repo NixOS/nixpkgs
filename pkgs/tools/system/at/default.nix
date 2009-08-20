@@ -17,12 +17,21 @@ stdenv.mkDerivation {
       ssmtp
     ];
 
-  configurePhase = ''
-    export PATH="${ssmtp}/sbin:$PATH"
-    ./configure --prefix=$out --with-etcdir=/etc/at \
-                --with-jobdir=/var/spool/atjobs --with-atspool=/var/spool/atspool \
-		--with-daemon_username=atd --with-daemon_groupname=atd
-  '';
+  preConfigure =
+    ''
+      export PATH="${ssmtp}/sbin:$PATH"
+
+      # Purity: force atd.pid to be placed in /var/run regardless of
+      # whether it exists now.
+      substituteInPlace ./configure --replace "test -d /var/run" "true"
+    '';
+
+  configureFlags =
+    ''
+       --with-etcdir=/etc/at
+       --with-jobdir=/var/spool/atjobs --with-atspool=/var/spool/atspool
+       --with-daemon_username=atd --with-daemon_groupname=atd
+    '';
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';
