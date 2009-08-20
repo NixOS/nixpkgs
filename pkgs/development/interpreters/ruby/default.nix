@@ -2,6 +2,7 @@
   , lib
   , zlib ? null
   , openssl ? null
+  , gdbm ? null
   , makeOverridable
 }:
 
@@ -16,6 +17,7 @@ makeOverridable (stdenv.mkDerivation) rec {
   buildInputs = [ncurses readline]
     ++(lib.optional (zlib != null) zlib)
     ++(lib.optional (openssl != null) openssl)
+    ++(lib.optional (gdbm != null) gdbm)
   ;
   configureFlags = ["--enable-shared" "--enable-pthread"] ;
 

@@ -2228,7 +2228,7 @@ let
   };
 
   ruby18 = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses zlib lib openssl makeOverridable;
+    inherit fetchurl stdenv readline ncurses zlib lib openssl makeOverridable gdbm;
   };
   ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
   ruby = ruby18;
