@@ -27,4 +27,9 @@ makeOverridable (stdenv.mkDerivation) rec {
     homepage = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
   };
+
+  passthru = {
+    # install ruby libs into "$out/${ruby.libPath}"
+    libPath = "lib/ruby-1.8";
+  };
 }

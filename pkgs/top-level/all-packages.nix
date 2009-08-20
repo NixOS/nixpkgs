@@ -4160,6 +4160,16 @@ let
     inherit fetchurl stdenv;
   };
 
+
+  xapian = makeOverridable (selectVersion ../development/libraries/xapian "1.0.14") {
+    inherit fetchurl stdenv zlib;
+  };
+
+  xapianBindings = (selectVersion ../development/libraries/xapian/bindings "1.0.14") {
+    inherit fetchurl stdenv xapian composableDerivation pkgconfig;
+    inherit ruby perl php tcl python; # TODO perl php Java, tcl, C#, python
+  };
+
   Xaw3d = import ../development/libraries/Xaw3d {
     inherit fetchurl stdenv x11 bison;
     flex = flex2533;
