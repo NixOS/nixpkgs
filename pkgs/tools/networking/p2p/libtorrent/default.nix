@@ -1,13 +1,13 @@
 args: with args;
 stdenv.mkDerivation ( rec {
   pname = "libtorrent";
-  version = "0.11.9";
+  version = "0.12.5";
 
   name = "${pname}-${version}";
   
   src = fetchurl {
     url = "http://libtorrent.rakshasa.no/downloads/${name}.tar.gz";
-    sha256 = "71f09218a7784b21ab53cdfcd8fa122da60352e5ca117fda7cd8d2763f908a08";
+    sha256 = "1hcxc9aalkswb1v6ww8yf0a8dfc449g6cghndhbj0m9rzl6gfqz9";
   };
 
   buildInputs = [ pkgconfig openssl libsigcxx ];
