@@ -23,7 +23,7 @@ rec {
     ++ (import ../modules/module-list.nix);
 
   extraArgs = extraArgs_ // {
-    inherit pkgs;
+    inherit pkgs optionDeclarations;
     modulesPath = ../modules;
   };
 

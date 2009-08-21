@@ -1,4 +1,4 @@
-{pkgs}:
+{ pkgs, optionDeclarations }:
 
 let
 
@@ -7,9 +7,14 @@ let
       services.nixosManual.enable = false;
     };
 
+  # To prevent infinite recursion, remove system.path from the
+  # options.  Not sure why this happens.
+  optionDeclarations_ =
+    optionDeclarations //
+    { system = removeAttrs optionDeclarations.system ["path"]; };
+
   options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
-    (builtins.toXML (pkgs.lib.optionAttrSetToDocList ""
-      (import ../../lib/eval-config.nix {inherit pkgs; configuration = manualConfig;}).optionDeclarations)));
+    (builtins.toXML (pkgs.lib.optionAttrSetToDocList "" optionDeclarations_)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${options} 

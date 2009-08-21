@@ -3,7 +3,7 @@
 # of the virtual consoles.  The latter is useful for the installation
 # CD.
 
-{pkgs, config, ...}:
+{pkgs, config, optionDeclarations, ...}:
 
 let
 
@@ -15,7 +15,7 @@ let
     # We could speed up the evaluation of the manual expression by
     # providing it the optionDeclarations of the current
     # configuration.
-    import ../../../doc/manual {inherit pkgs;};
+    import ../../../doc/manual {inherit pkgs optionDeclarations;};
     
 in
 
