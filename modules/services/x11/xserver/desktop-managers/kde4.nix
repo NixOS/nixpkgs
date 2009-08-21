@@ -28,7 +28,7 @@ in
   
   config = mkIf (xcfg.enable && cfg.enable) {
 
-    # If KDE 4 is enabled, make it default desktop manager (unless
+    # If KDE 4 is enabled, make it the default desktop manager (unless
     # overriden by the user's configuration).
     # !!! doesn't work yet ("Multiple definitions. Only one is allowed
     # for this option.")
