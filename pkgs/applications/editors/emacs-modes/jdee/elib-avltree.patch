@@ -2,6 +2,22 @@ JDEE refers to the `avltree' module from GNU Elib, but GNU Elib
 no longer exists (see http://www.gnu.org/software/elib/).  This
 patch updates the module names to what's current in Emacs.
 
+--- jde/config/build.el
++++ jde/config/build.el
+@@ -33,11 +33,10 @@ compile.
+ CEDET-DIR is the cedet lisp code base directory (see PATHS).
+ 
+ PATHS are sub directories under CEDET-DIR we use to compile."
+-  (dolist (path (list dir lisp-src-dir elib-dir cedet-dir))
++  (dolist (path (list dir lisp-src-dir cedet-dir))
+     (if (not (file-directory-p path))
+ 	(error "Doesn't exist or not a directory: %s" path)))
+   (let ((autoload-buf (jde-make-autoloads dir autoload-libname)))
+-    (add-to-list 'load-path elib-dir t)
+     (dolist (path paths)
+       (add-to-list 'load-path (expand-file-name path cedet-dir) t))
+     (add-to-list 'load-path lisp-src-dir t)
+
 --- jde/lisp/jde-parse.el	(revision 90)
 +++ jde/lisp/jde-parse.el	(working copy)
 @@ -24,7 +24,7 @@

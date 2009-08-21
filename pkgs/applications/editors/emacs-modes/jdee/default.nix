@@ -1,7 +1,7 @@
 { fetchsvn, stdenv, emacs, cedet, ant }:
 
 let
-  revision = "90";
+  revision = "137";
 in
   stdenv.mkDerivation rec {
     name = "jdee-svn${revision}";
@@ -12,14 +12,13 @@ in
       # Looks like they're not sure whether to put one or two `e'...
       url = "https://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jde";
       rev = revision;
-      sha256 = "06q1956yrs4r83a6sf3fk915jhsmg1q84wrrgjbdccfv5akid435";
+      sha256 = "0pjkbr1srx2m428xkky1csf97fr5219prs4dif7njlydyrwp0gnn";
     };
 
     patches = [
-      ./installation-layout.patch ./cedet-paths.patch ./elib-avltree.patch
-      ./java-directory.patch ./jde-directory-files-recurs.patch
-      ./jde-help-find-javadoc.patch ./jde-wiz-update-implements-clause.patch
-      ./jde-help-docsets.patch
+      ./build-properties.patch
+      ./cedet-paths.patch ./elib-avltree.patch
+      ./java-directory.patch
     ];
 
     configurePhase = ''
@@ -32,11 +31,12 @@ in
         dist.doc.dir  dist/doc/${name}
         prefix.dir = $out
         cedet.dir = ${cedet}/share/emacs/site-lisp
+        elib.dir = /nowhere
         build.bin.emacs = ${emacs}/bin/emacs
       EOF
 
       # Substitute variables, à la Autoconf.
-      for i in lisp/*.el
+      for i in "lisp/"*.el
       do
         sed -i "$i" -e "s|@out@|$out|g ;
                         s|@javadir@|$out/lib/java|g ;
