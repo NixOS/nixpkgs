@@ -4544,6 +4544,11 @@ let
     inherit fetchurl stdenv apacheHttpd python;
   };
 
+  myserver = import ../servers/http/myserver {
+    inherit fetchurl stdenv libgcrypt libevent libidn gnutls libxml2
+      zlib texinfo cppunit;
+  };
+
   nginx = builderDefsPackage (import ../servers/http/nginx) {
     inherit openssl pcre zlib libxml2 libxslt;
   };
