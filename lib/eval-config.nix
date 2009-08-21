@@ -32,6 +32,8 @@ rec {
 
   # "fixableDeclarationsOf" is used instead of "declarationsOf" because some
   # option default values may depends on the definition of other options.
+  # !!! This seems inefficent.  Didn't definitionsOf already compute
+  # the option declarations?
   optionDeclarations =
     pkgs.lib.fixableDeclarationsOf configComponents extraArgs config_;
 
