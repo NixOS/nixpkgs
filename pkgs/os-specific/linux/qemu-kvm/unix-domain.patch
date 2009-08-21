@@ -68,7 +68,7 @@ diff -rc qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-rc1/slirp/socke
   	setsockopt(s,SOL_SOCKET,SO_OOBINLINE,(char *)&opt,sizeof(int));
   
 !         if (unix_socket) {
-!             so->so_fport = haddr;
+!             so->so_fport = hport;
 !             so->so_faddr = slirp->vhost_addr;
 !         } else {
 !             getsockname(s,(struct sockaddr *)&addr,&addrlen);
