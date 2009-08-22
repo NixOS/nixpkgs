@@ -57,11 +57,12 @@ rec {
         else
           let entry = head todo; in
           if isAttrs entry then
+            builtins.trace "warning, passing attrs to textClosureList instead of dep entry names is depreceated and may cause failure" (
             let x = f done entry.deps;
                 y = f x.done (tail todo);
             in { result = x.result ++ [entry.text] ++ y.result;
                  done = y.done;
-               }
+               })
           else if hasAttr entry done then f done (tail todo)
           else f (done // listToAttrs [{name = entry; value = 1;}]) ([(builtins.getAttr entry predefined)] ++ tail todo);
     in (f {} arg).result;
