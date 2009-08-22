@@ -6039,8 +6039,8 @@ let
     version = "0.6.2";
   };
 
-  compizBase = builderDefsPackage (selectVersion ../applications/window-managers/compiz "0.8.0") {
-    inherit lib builderDefs stringsWithDeps;
+  compizBase = (builderDefsPackage (selectVersion ../applications/window-managers/compiz "0.8.0")) {
+    inherit lib stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
       intltool binutils;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
@@ -6058,9 +6058,9 @@ let
     inherit dbus dbus_glib;
   };
 
-  compiz = compizBase.passthru.function {
+  compiz = compizBase.passthru.function (x : x // {
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
-  };
+  });
 
   compizFusion = import ../applications/window-managers/compiz-fusion {
     version = getConfig ["compizFusion" "version"] "0.7.8";
