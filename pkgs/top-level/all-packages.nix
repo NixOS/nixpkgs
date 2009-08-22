@@ -6039,10 +6039,10 @@ let
     version = "0.6.2";
   };
 
-  compizBase = composedArgsAndFun (selectVersion ../applications/window-managers/compiz "0.8.0") {
+  compizBase = builderDefsPackage (selectVersion ../applications/window-managers/compiz "0.8.0") {
     inherit lib builderDefs stringsWithDeps;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
-      intltool;
+      intltool binutils;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
       libXinerama libICE libSM libXrender xextproto compositeproto fixesproto
       damageproto randrproto xineramaproto renderproto kbproto xproto libX11
