@@ -255,6 +255,7 @@ rec {
 
   libgweather = stdenv.mkDerivation {
     inherit (desktop.libgweather) name src;
+    configureFlags = "--with-zoneinfo-dir=/etc/localtime"; # is created by nixos. This is the default location of debian/ gentoo as well
     buildInputs = [
       gettext perl perlXMLParser pkgconfig gtk libxml2 gnomevfs
       intltool libsoup
