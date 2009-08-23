@@ -6,14 +6,17 @@
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-let lib = import ../../../lib/default.nix; in
+let 
+  lib = import ../../../lib/default.nix; 
+  s = import ./src-for-default.nix;
+in
 
 stdenv.mkDerivation rec {
-  name = "wine-1.1.23";
+  name = "wine-${s.version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "0fg8s3y8975bwjyfw705q0sjch56vsndw3pc8n0j8dshhcbbrv5p";
+    url = s.url;
+    sha256 = s.hash;
   };
 
   buildInputs = [
