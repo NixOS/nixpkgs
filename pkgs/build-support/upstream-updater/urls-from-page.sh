@@ -1,0 +1,12 @@
+#! /bin/sh
+
+url="$1"
+protocol="${url%%:*}"
+path="${url#$protocol://}"
+server="${path%%/*}"
+relpath="${path#$server}"
+ 
+echo "URL: $url" >&2
+
+curl -k "$url" | sed -re 's/^/-/;s/[hH][rR][eE][fF]="([^"]*)"/\n+\1\n-/g' | \
+  sed -e '/^-/d; s/^[+]//; /^#/d;'"s/^\\//$protocol:\\/\\/$server\\//g"
