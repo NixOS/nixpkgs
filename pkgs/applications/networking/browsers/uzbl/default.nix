@@ -4,7 +4,7 @@ let
 
   version = a.lib.attrByPath ["version"] "2009.08.08" a; 
   buildInputs = with a; [
-    pkgconfig webkit libsoup gtk makeWrapper
+    libsoup pkgconfig webkit gtk makeWrapper
   ];
 in
 rec {
@@ -18,7 +18,10 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doMakeInstall" "doWrap"];
+  phaseNames = ["addInputs" "setVars" "doMakeInstall" "doWrap"];
+
+  setVars = a.noDepEntry (''
+  '');
 
   doWrap = a.makeManyWrappers "$out/bin/uzbl" 
     ''
@@ -29,6 +32,9 @@ rec {
     '';
 
   installFlags = "PREFIX=$out";
+  makeFlags = [
+    "CC='gcc ${a.glib}/lib/libglib-2.0.so ${a.glib}/lib/libgio-2.0.so ${a.glib}/lib/libgobject-2.0.so' "
+  ];
       
   name = "uzbl-" + version;
   meta = {

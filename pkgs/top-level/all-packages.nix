@@ -7211,6 +7211,7 @@ let
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk;
     libsoup = gnome26.libsoup_git_head;
+    glib = gtkLibs.glib_2_21;
   };
 
   valknut = import ../applications/networking/p2p/valknut {
