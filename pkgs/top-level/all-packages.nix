@@ -4125,7 +4125,7 @@ let
   };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    inherit (gnome26) libsoup_git_head;
+    libsoup = gnome26.libsoup_git_head;
     inherit (gnome) gtkdoc;
     inherit (gtkLibs) gtk atk pango;
     inherit freetype fontconfig gettext gperf curl
@@ -6767,7 +6767,7 @@ let
       which gettext makeWrapper file libidn sqlite docutils libnotify;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) gtksourceview;
-    inherit (gnome26) libsoup;
+    libsoup = gnome26.libsoup_git_head;
   };
 
   minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
@@ -7210,7 +7210,7 @@ let
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk;
-    inherit (gnome26) libsoup;
+    libsoup = gnome26.libsoup_git_head;
   };
 
   valknut = import ../applications/networking/p2p/valknut {
