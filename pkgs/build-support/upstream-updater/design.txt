@@ -14,8 +14,8 @@ src-info-for-file.nix:
 downloadPage
 sourceRegexp (default = '.*[.]tar[.].*')
 choiceCommand (default = 'head -1')
-versionExtractorSedScript (default = 's/.*-([0-9.a-z]+)[.].*/\1/')
-versionReferenceCreator (default = 's/-([0-9.a-z]+)[.]/-${version}./')
+versionExtractorSedScript (default = 's/.*-([0-9.]+)[.].*/\1/')
+versionReferenceCreator (default = 's/-([0-9.]+)[.]/-${version}./')
 mirrorSedScript (default = none)
 
 src-for-file.nix:

@@ -6529,6 +6529,11 @@ let
       libjpeg readline libtool;
   };
 
+  gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
+    inherit libgphoto2 fuse pkgconfig; 
+    inherit (gtkLibs) glib;
+  };
+
   gtkpod = import ../applications/audio/gtkpod {
     inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag;
     inherit (gtkLibs) gtk glib;
