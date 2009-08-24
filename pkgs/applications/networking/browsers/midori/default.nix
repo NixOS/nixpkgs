@@ -24,10 +24,14 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doUnpack" (doPatchShebangs ".") "doConfigure" 
-    "doMakeInstall" (doPatchShebangs "$out/bin") 
-    (makeManyWrappers "$out/bin/*" "--set WEBKIT_IGNORE_SSL_ERRORS 1")];
+  phaseNames = ["doUnpack" "shebangsHere" "doConfigure" 
+    "doMakeInstall" "shebangsInstalled" "wrapWK"
+    ];
       
+  shebangsHere = (doPatchShebangs ".");
+  shebangsInstalled = (doPatchShebangs "$out/bin");
+  wrapWK = (makeManyWrappers "$out/bin/*" "--set WEBKIT_IGNORE_SSL_ERRORS 1");
+
   name = "midori-" + version;
   meta = {
     description = "Light WebKit-based web browser with GTK GUI.";
