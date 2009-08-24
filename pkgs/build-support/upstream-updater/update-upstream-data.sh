@@ -9,6 +9,8 @@ defs_file="$main_dir"/src-info-for-"$file_name"
 src_file="$main_dir"/src-for-"$file_name"
 new_src_file="$main_dir"/updated-src-for-"$file_name"
 
+forcedUrl="$2"
+
 defs_dir="$("$own_dir"/attrset-to-dir.sh "$defs_file")"
 src_defs_dir="$("$own_dir"/attrset-to-dir.sh "$src_file")"
 
@@ -19,11 +21,15 @@ getAttr () {
     echo "$data"
 }
 
-freshUrl="$("$own_dir"/urls-from-page.sh "$(getAttr downloadPage)" |
-  egrep "$(getAttr sourceRegexp '.*[.]tar[.].*')" | 
-  sh -c "$(getAttr choiceCommand 'head -1')")"
+if [ -z "$forcedUrl" ] ; then
+    freshUrl="$("$own_dir"/urls-from-page.sh "$(getAttr downloadPage)" |
+      egrep "$(getAttr sourceRegexp '.*[.]tar[.].*')" | 
+      sh -c "$(getAttr choiceCommand 'head -1')")"
 
-echo "Found download link: $freshUrl" >&2
+    echo "Found download link: $freshUrl" >&2
+else
+    freshUrl="$forcedUrl"
+fi
 
 if [ x"$freshUrl" = x"$(cat "$src_defs_dir"/advertisedUrl)" ]; then
     echo "Source link not changed" >&2

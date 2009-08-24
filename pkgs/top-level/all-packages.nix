@@ -4125,7 +4125,7 @@ let
   };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    inherit (gnome26) libsoup;
+    inherit (gnome26) libsoup_git_head;
     inherit (gnome) gtkdoc;
     inherit (gtkLibs) gtk atk pango;
     inherit freetype fontconfig gettext gperf curl

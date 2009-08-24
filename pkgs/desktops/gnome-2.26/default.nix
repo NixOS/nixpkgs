@@ -130,6 +130,12 @@ rec {
     inherit GConf;
   };
 
+  libsoup_git_head = import ./desktop/libsoup/git-head.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite curl;
+    inherit (pkgs.gtkLibs) glib;
+    inherit GConf;
+  };
+
   libwnck = import ./desktop/libwnck {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit (pkgs.xlibs) libX11;
