@@ -32,9 +32,6 @@ rec {
     '';
 
   installFlags = "PREFIX=$out";
-  makeFlags = [
-    "CC='gcc ${a.glib}/lib/libglib-2.0.so ${a.glib}/lib/libgio-2.0.so ${a.glib}/lib/libgobject-2.0.so' "
-  ];
       
   name = "uzbl-" + version;
   meta = {

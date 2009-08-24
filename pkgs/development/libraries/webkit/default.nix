@@ -27,7 +27,11 @@ rec {
     "--enable-web-sockets"
     # Fails the build..
     # "--enable-shared-workers"
-    "--enable-wml"
+    # WML support causes crash on
+    # Slashdot.org. It is fixed upstream,
+    # but the required update is too big
+    # Let us wait for a GTK release..
+    #"--enable-wml"
     ];
 
   /* doConfigure should be specified separately */

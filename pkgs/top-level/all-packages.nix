@@ -3202,7 +3202,7 @@ let
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
              it is depreceated and didn't build on amd64 due to samba dependenccy */ gtkdoc;
-    libsoup = gnome26.libsoup_git_head;
+    libsoup = gnome26.libsoup;
   });
 
   gnet = import ../development/libraries/gnet {
@@ -4125,7 +4125,7 @@ let
   };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    libsoup = gnome26.libsoup_git_head;
+    libsoup = gnome26.libsoup;
     inherit (gnome) gtkdoc;
     inherit (gtkLibs) gtk atk pango;
     inherit freetype fontconfig gettext gperf curl
@@ -6767,8 +6767,8 @@ let
       which gettext makeWrapper file libidn sqlite docutils libnotify;
     inherit (gtkLibs) gtk;
     inherit (gnome) gtksourceview;
-    libsoup = gnome26.libsoup_git_head;
-    glib = gtkLibs.glib_2_21;
+    libsoup = gnome26.libsoup;
+    glib = gtkLibs.glib;
   };
 
   minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
@@ -7211,8 +7211,8 @@ let
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk;
-    libsoup = gnome26.libsoup_git_head;
-    glib = gtkLibs.glib_2_21;
+    libsoup = gnome26.libsoup;
+    glib = gtkLibs.glib;
   };
 
   valknut = import ../applications/networking/p2p/valknut {
