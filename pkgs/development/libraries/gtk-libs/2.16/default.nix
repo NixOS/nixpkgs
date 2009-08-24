@@ -3,6 +3,7 @@ args: with args;
 rec {
 
   glib = (import ./glib) args;
+  glib_2_21 = (import ./glib/2.21.4.nix) args;
 
   atk = (import ./atk) (args // { inherit glib; });
 

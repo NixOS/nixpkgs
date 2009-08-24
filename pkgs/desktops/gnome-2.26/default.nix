@@ -47,6 +47,12 @@ rec {
     inherit (pkgs.gtkLibs) glib gtk pango atk;
     inherit intltool libart_lgpl libglade;
   };
+
+  # for git-head builds
+  gnome_common = import platform/gnome-common {
+    inherit (pkgs) stdenv fetchgit pkgconfig
+      autoconf automake libtool;
+  };
   
   gnome_mime_data = import ./platform/gnome-mime-data {
     inherit (pkgs) stdenv fetchurl;
@@ -130,10 +136,13 @@ rec {
     inherit GConf;
   };
 
+  # fails with a mysterious error on linking
+  # symbol not found although it is actually present
   libsoup_git_head = import ./desktop/libsoup/git-head.nix {
-    inherit (pkgs) stdenv fetchgit pkgconfig libxml2 gnutls libproxy sqlite curl;
-    inherit (pkgs.gtkLibs) glib;
-    inherit GConf;
+    inherit (pkgs) stdenv fetchgit pkgconfig libxml2 gnutls libproxy sqlite curl
+      automake autoconf libtool which;
+    glib = pkgs.gtkLibs216.glib_2_21;
+    inherit GConf gnome_common gtk_doc gnome_keyring;
   };
 
   libwnck = import ./desktop/libwnck {
