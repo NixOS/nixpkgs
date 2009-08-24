@@ -17,4 +17,5 @@ stdenv.mkDerivation {
     export ACLOCAL_FLAGS='-I ${pkgconfig}/share/aclocal -I ${gtk_doc}/share/aclocal -I ${libtool}/share/aclocal'
     ./autogen.sh
   '';
+  configureFlags = ["--without-gnome"];
 }
