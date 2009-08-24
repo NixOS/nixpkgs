@@ -27,10 +27,7 @@ rec {
     "--enable-web-sockets"
     # Fails the build..
     # "--enable-shared-workers"
-    # Related to Slashdot.org crash
-    # fixed upstream, but fresh release requires 
-    # too many updates
-    #"--enable-wml"
+    "--enable-wml"
     ];
 
   /* doConfigure should be specified separately */
