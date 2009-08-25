@@ -66,7 +66,7 @@ in {
 
   tarball = import ./make-tarball.nix;
 
-} // (mapTestOn ((selectMaintained pkgs) // rec {
+} // (mapTestOn (/*(selectMaintained pkgs) // */ rec {
 
   MPlayer = linux;
   abcde = linux;
