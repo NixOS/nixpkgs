@@ -14,10 +14,11 @@ let
   debug = import ./debug.nix;
   misc = import ./misc.nix;
   maintainers = import ./maintainers.nix;
+  platforms = import ./platforms.nix;
 
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
-      properties modules types meta debug maintainers;
+      properties modules types meta debug maintainers platforms;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.

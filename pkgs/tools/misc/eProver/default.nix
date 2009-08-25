@@ -28,5 +28,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "E automated theorem prover";
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.all;
   };
 }
