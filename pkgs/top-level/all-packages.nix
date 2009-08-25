@@ -7007,12 +7007,13 @@ let
     inherit (xlibs) libX11;
   };
 
-  RealPlayer = import ../applications/video/RealPlayer {
-    inherit fetchurl stdenv;
-    inherit (gtkLibs) glib pango atk gtk;
-    inherit (xlibs) libX11;
-    libstdcpp5 = gcc33.gcc;
-  };
+  RealPlayer = platformPackage ["i686-linux"] 
+    (import ../applications/video/RealPlayer {
+      inherit fetchurl stdenv;
+      inherit (gtkLibs) glib pango atk gtk;
+      inherit (xlibs) libX11;
+      libstdcpp5 = gcc33.gcc;
+    });
 
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv acl;
