@@ -33,6 +33,23 @@ let
           (pkgs.lib.getAttrFromPath path pkgs);
       in testOn job.systems getPkg);
 
+  selectMaintained = attrSet: let
+    pairs = pkgs.lib.concatMap 
+      (x: let val = processPackage (builtins.getAttr x attrSet); in
+        if val != [] then [{name=x; value=val;}] else [])
+      (builtins.attrNames attrSet);
+    in
+      builtins.listToAttrs pairs;
+  processPackage = attrSet: 
+    if builtins.isAttrs attrSet then
+      if pkgs.lib.attrByPath ["recurseForDerivations"] false attrSet then
+        selectMaintained attrSet 
+      else
+        if (pkgs.lib.attrByPath ["meta" "maintainers"] [] attrSet) != [] then 
+          pkgs.lib.attrByPath ["meta" "platforms"] [] attrSet
+        else []
+    else [];
+
   /* Common platform groups on which to test packages. */
   linux = ["i686-linux" "x86_64-linux"];
   darwin = ["i686-darwin"];
@@ -49,7 +66,7 @@ in {
 
   tarball = import ./make-tarball.nix;
 
-} // mapTestOn rec {
+} // (mapTestOn ((selectMaintained pkgs) // rec {
 
   MPlayer = linux;
   abcde = linux;
@@ -582,4 +599,4 @@ in {
     xset = linux;
   };
 
-}
+} ))

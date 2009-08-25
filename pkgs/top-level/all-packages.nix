@@ -190,6 +190,10 @@ let
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
     };
 
+  condPackage = condition: package: if condition then package else {};
+  platformPackage = platforms : package : 
+    (condPackage (lib.any (x: x == system) platforms) package) //
+    { meta.platforms = platforms; };
 
   ### STANDARD ENVIRONMENT
 
@@ -1704,10 +1708,14 @@ let
     profiledCompiler = true;
   });
 
-  gccApple = wrapGCC (import ../development/compilers/gcc-apple {
-    inherit fetchurl stdenv noSysDirs;
-    profiledCompiler = true;
-  });
+  gccApple = (condPackage stdenv.isDarwin 
+    (wrapGCC (import ../development/compilers/gcc-apple {
+      inherit fetchurl stdenv noSysDirs;
+      profiledCompiler = true;
+    }))) // {
+      meta.platforms = ["i686-darwin"];
+      meta.maintainers = [];
+    };
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -2042,17 +2050,17 @@ let
     inherit fetchurl stdenv perl texinfo;
   };
 
-  visualcpp = import ../development/compilers/visual-c++ {
+  visualcpp = platformPackage ["i686-cygwin"] (import ../development/compilers/visual-c++ {
     inherit fetchurl stdenv cabextract;
-  };
+  });
 
   webdsl = import ../development/compilers/webdsl {
     inherit stdenv fetchurl pkgconfig strategoPackages;
   };
 
-  win32hello = import ../development/compilers/visual-c++/test {
+  win32hello = platformPackage ["i686-cygwin"] ( import ../development/compilers/visual-c++/test {
     inherit fetchurl stdenv visualcpp windowssdk;
-  };
+  });
 
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
@@ -3142,26 +3150,28 @@ let
   };
 
   glibc_multi =
-    assert system == "x86_64-linux";
-    runCommand "${glibc.name}-multi"
-      { glibc64 = glibc;
-        glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
-      }
-      ''
-        ensureDir $out
-        ln -s $glibc64/* $out/
+    let package = (
+      runCommand "${glibc.name}-multi"
+        { glibc64 = glibc;
+          glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
+        }
+        ''
+          ensureDir $out
+          ln -s $glibc64/* $out/
 
-        rm $out/lib $out/lib64
-        ensureDir $out/lib
-        ln -s $glibc64/lib/* $out/lib
-        ln -s $glibc32/lib $out/lib/32
-        ln -s lib $out/lib64
+          rm $out/lib $out/lib64
+          ensureDir $out/lib
+          ln -s $glibc64/lib/* $out/lib
+          ln -s $glibc32/lib $out/lib/32
+          ln -s lib $out/lib64
 
-        rm $out/include
-        cp -rs $glibc32/include $out
-        chmod -R u+w $out/include
-        cp -rsf $glibc64/include $out
-      ''; # */
+          rm $out/include
+          cp -rs $glibc32/include $out
+          chmod -R u+w $out/include
+          cp -rsf $glibc64/include $out
+        '' # */
+        );
+    in platformPackage ["x86_64-linux"] package;
 
   gmime = import ../development/libraries/gmime {
     inherit fetchurl stdenv pkgconfig zlib;
@@ -4741,6 +4751,9 @@ let
     inherit stdenv fetchurl alsaLib gettext ncurses;
   };
 
+  /*
+  # Will maybe move to kernelPackages properly later.
+
   blcr = builderDefsPackage (selectVersion ../os-specific/linux/blcr "0.6.5"){
     inherit perl;
   };
@@ -4748,6 +4761,7 @@ let
   blcrCurrent = kernel : (blcr.passthru.function {
     inherit kernel;
   });
+  */
 
   bluez = import ../os-specific/linux/bluez {
     inherit fetchurl stdenv pkgconfig dbus libusb alsaLib;
@@ -6044,7 +6058,7 @@ let
   };
 
   compizBase = (builderDefsPackage (selectVersion ../applications/window-managers/compiz "0.8.0")) {
-    inherit lib stringsWithDeps;
+    inherit lib stringsWithDeps builderDefs;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
       intltool binutils;
     inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
