@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free Pascal Compiler from a source distribution";
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

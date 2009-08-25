@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 	  description = "ANSI Common Lisp Implementation";
 	  homepage = http://clisp.cons.org;
 	  maintainers = [stdenv.lib.maintainers.raskin];
+	  platforms = stdenv.lib.platforms.linux;
   };
 }
 

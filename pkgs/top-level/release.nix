@@ -102,7 +102,6 @@ in {
   chatzilla = linux;
   cksfv = all;
   classpath = linux;
-  clisp = linux;
   cmake = all;
   compiz = linux;
   console_kit = linux;

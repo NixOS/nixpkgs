@@ -38,5 +38,7 @@ rec {
   meta = {
     description = "Lazarus graphical IDE for FreePascal language";
     homepage = http://www.lazarus.freepascal.org ;
+    maintainers = [args.lib.maintainers.raskin];
+    platforms = args.lib.platforms.linux;
   };
 }
