@@ -7866,9 +7866,10 @@ let
     inherit fetchurl stdenv pkgconfig expat zlib libpng libjpeg xlibs;
   };
 
-  foldingathome = import ../misc/foldingathome {
-    inherit fetchurl stdenv;
-  };
+  foldingathome = platformPackage ["i686-linux"]
+    (import ../misc/foldingathome {
+      inherit fetchurl stdenv;
+    });
 
   freestyle = import ../misc/freestyle {
     inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
