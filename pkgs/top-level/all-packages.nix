@@ -6602,12 +6602,13 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  googleearth = import ../applications/misc/googleearth {
-    inherit stdenv fetchurl glibc mesa freetype;
-    inherit (gtkLibs) glib;
-    inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
-      libXcursor libXinerama libXext libX11;
-  };
+  googleearth = platformPackage ["i686-linux"] ( 
+    import ../applications/misc/googleearth {
+      inherit stdenv fetchurl glibc mesa freetype;
+      inherit (gtkLibs) glib;
+      inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
+        libXcursor libXinerama libXext libX11;
+    });
 
   gpsbabel = import ../applications/misc/gpsbabel {
     inherit fetchurl stdenv zlib expat;
