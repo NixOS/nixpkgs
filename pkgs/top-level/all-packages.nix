@@ -1918,10 +1918,10 @@ let
 
   jdkdistro = installjdk: pluginSupport:
     platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"]
-    assert supportsJDK;
+    (assert supportsJDK;
     (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
       inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper;
-    });
+    }));
 
   jikes = import ../development/compilers/jikes {
     inherit fetchurl stdenv;
