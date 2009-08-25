@@ -6454,13 +6454,15 @@ let
 
   flashplayer = flashplayer10;
 
-  flashplayer9 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
-    inherit fetchurl stdenv zlib alsaLib;
-  };
+  flashplayer9 = platformPackage ["i686-linux"] (
+    import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
+      inherit fetchurl stdenv zlib alsaLib;
+    });
 
-  flashplayer10 = import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
-    inherit fetchurl stdenv zlib alsaLib curl;
-  };
+  flashplayer10 = platformPackage ["i686-linux" "x86_64-linux"] (
+    import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
+      inherit fetchurl stdenv zlib alsaLib curl;
+    });
 
   flite = import ../applications/misc/flite {
     inherit fetchurl stdenv;
