@@ -1016,6 +1016,12 @@ let
     inherit fetchurl stdenv ocaml zlib ncurses;
   };
 
+  monit = builderDefsPackage ../tools/system/monit {
+    flex = flex2535;
+    bison = bison24;
+    inherit openssl;
+  };
+
   mpage = import ../tools/text/mpage {
     inherit fetchurl stdenv;
   };
