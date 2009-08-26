@@ -521,4 +521,9 @@ let inherit (builtins) head tail trace; in
      ensureDir $(toPythonPath $out)
      export PYTHONPATH=$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath $out)
    '') ["minInit" "addInputs" "defEnsureDir"];
+
+   fetchUrlFromSrcInfo = srcInfo: fetchurl {
+     url = srcInfo.url;
+     sha256 = srcInfo.hash;
+   };
 }) // args

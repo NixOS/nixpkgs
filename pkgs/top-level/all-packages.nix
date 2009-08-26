@@ -1516,6 +1516,11 @@ let
     inherit (gtkLibs) glib;
   };
 
+  webdruid = builderDefsPackage ../tools/admin/webdruid {
+    inherit zlib libpng freetype gd which 
+      libxml2 geoip;
+  };
+
   wget = import ../tools/networking/wget {
     inherit fetchurl stdenv gettext openssl;
   };
@@ -3095,6 +3100,10 @@ let
     #  avocodec avformat librsvg
     inherit cairo libjpeg librsvg;
     inherit (gtkLibs) pango glib gtk;
+  };
+
+  geoip = builderDefsPackage ../development/libraries/geoip {
+    inherit zlib;
   };
 
   geos = import ../development/libraries/geos {

@@ -2,7 +2,7 @@ a :
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
-    
+    zlib
   ];
 in
 rec {
@@ -14,11 +14,12 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
+  goSrcDir = "cd GeoIP-*/";
       
   meta = {
-    description = "${abort "Specify description"}";
+    description = "Geolocation API";
     maintainers = [
-      a.lib.maintainers.(abort "Specify maintainer")
+      a.lib.maintainers.raskin
     ];
   };
 }

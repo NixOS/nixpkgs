@@ -12,6 +12,7 @@ Attributes:
 src-info-for-file.nix:
 
 downloadPage
+baseName (default = unnamed-package)
 sourceRegexp (default = '.*[.]tar[.].*')
 choiceCommand (default = 'head -1')
 versionExtractorSedScript (default = 's/.*-([0-9.]+)[.].*/\1/')
@@ -24,3 +25,4 @@ advertisedUrl (its match is the check for update presence)
 url
 hash
 version
+name
