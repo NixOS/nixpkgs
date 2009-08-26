@@ -195,7 +195,7 @@ let
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
     };
 
-  condPackage = condition: package: if condition then package else {};
+  condPackage = condition: package: if condition then package else throw "package not supported";
   platformPackage = platforms : package : 
     (condPackage (lib.any (x: x == system) platforms) package) //
     { meta.platforms = platforms; };
