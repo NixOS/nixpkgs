@@ -29,8 +29,14 @@
 , gccWithCC ? true
 , gccWithProfiling ? true
 
+, # Allow a configuration attribute set to be passed in as an
+  # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
+  # ~/.nixpkgs/config.nix.
+  config ? null
 }:
 
+
+let config_ = config; in # rename the function argument
 
 let
 
@@ -39,7 +45,7 @@ let
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
   config =
-    let {
+    let
       toPath = builtins.toPath;
       getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
       pathExists = name:
@@ -50,19 +56,18 @@ let
       configFile2 = homeDir + "/.nixpkgs/config.nix";
 
       configExpr =
-        if configFile != "" && pathExists configFile
-        then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2
-        then import (toPath configFile2)
+        if config_ != null then config_
+        else if configFile != "" && pathExists configFile then import (toPath configFile)
+        else if homeDir != "" && pathExists configFile2 then import (toPath configFile2)
         else {};
 
+    in
       # allow both:
       # { /* the config */ } and
       # { pkgsOrig, pkgs, ... } : { /* the config */ }
-      body = if builtins.isFunction configExpr
+      if builtins.isFunction configExpr
         then configExpr { inherit pkgs pkgsOrig; }
         else configExpr;
-    };
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
@@ -200,7 +205,7 @@ let
 
   allStdenvs = import ../stdenv {
     inherit system stdenvType;
-    allPackages = import ./all-packages.nix;
+    allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
   };
 
   defaultStdenv = allStdenvs.stdenv;
@@ -1074,7 +1079,6 @@ let
   netkittftp = import ../tools/networking/netkit/tftp {
     inherit fetchurl stdenv;
   };
-
 
   netpbm = import ../tools/graphics/netpbm {
     inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2;
