@@ -6085,24 +6085,7 @@ let
     inherit (gnome) esound;
   };
 
-  compiz_050 = import ../applications/window-managers/compiz/0.5.0.nix {
-    inherit fetchurl stdenv pkgconfig libpng mesa;
-    inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
-      libXinerama libICE libSM libXrender xextproto;
-    inherit (gnome) startupnotification libwnck GConf;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libgnome libgnomeui metacity glib pango
-      libglade libgtkhtml gtkhtml libgnomecanvas libgnomeprint
-      libgnomeprintui gnomepanel;
-    gnomegtk = gnome.gtk;
-    inherit librsvg fuse;
-  };
-
-  compiz_062 = compiz.passthru.function {
-    version = "0.6.2";
-  };
-
-  compizBase = (builderDefsPackage (selectVersion ../applications/window-managers/compiz "0.8.0")) {
+  compizBase = (builderDefsPackage (import ../applications/window-managers/compiz/0.8.0.nix)) {
     inherit lib stringsWithDeps builderDefs;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
       intltool binutils;
