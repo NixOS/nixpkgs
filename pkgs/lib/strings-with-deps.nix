@@ -52,23 +52,19 @@ rec {
 
   textClosureList = predefined: arg:
     let
-      warn = map (x : if isAttrs x
-            then builtins.trace "warning, passing attrs to textClosureList instead of dep entry names is depreceated and may cause failure" x
-            else x );
-
       f = done: todo:
         if todo == [] then {result = []; inherit done;}
         else
           let entry = head todo; in
           if isAttrs entry then
-            let x = f done (warn entry.deps);
+            let x = f done entry.deps;
                 y = f x.done (tail todo);
             in { result = x.result ++ [entry.text] ++ y.result;
                  done = y.done;
                }
           else if hasAttr entry done then f done (tail todo)
           else f (done // listToAttrs [{name = entry; value = 1;}]) ([(builtins.getAttr entry predefined)] ++ tail todo);
-    in (f {} (warn arg)).result;
+    in (f {} arg).result;
 
   textClosureMap = f: predefined: names:
     concatStringsSep "\n" (map f (textClosureList predefined names));
