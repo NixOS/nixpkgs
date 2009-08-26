@@ -104,8 +104,8 @@ $ svn add pkgs/development/libraries/libfoo/default.nix</screen>
         </listitem>
 
         <listitem>
-          <para>Firefox: <link
-          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/networking/browsers/firefox-3/default.nix"><filename>pkgs/applications/networking/browsers/firefox-3/default.nix</filename></link>.
+          <para>Thunderbird: <link
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/networking/mailreaders/thunderbird-2.x/default.nix"><filename>pkgs/applications/networking/mailreaders/thunderbird-2.x/default.nix</filename></link>.
           Lots of dependencies.</para>
         </listitem>
 
@@ -120,20 +120,19 @@ $ svn add pkgs/development/libraries/libfoo/default.nix</screen>
 
         <listitem>
           <para>XML::Simple, a Perl module: <link
-          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/all-packages.nix"><filename>pkgs/top-level/all-packages.nix</filename></link>
-          (search for the <varname>perlXMLSimple</varname>
-          attribute).  Most Perl modules are so simple to build that
-          they are defined directly in
-          <filename>all-packages.nix</filename>, no need to make a
-          separate file for them.</para>
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/perl-packages.nix"><filename>pkgs/top-level/perl-packages.nix</filename></link>
+          (search for the <varname>XMLSimple</varname> attribute).
+          Most Perl modules are so simple to build that they are
+          defined directly in <filename>perl-packages.nix</filename>;
+          no need to make a separate file for them.</para>
         </listitem>
 
         <listitem>
           <para>Adobe Reader: <link
-          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/acrobat-reader/default.nix"><filename>pkgs/applications/misc/acrobat-reader/default.nix</filename></link>.
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/adobe-reader/default.nix"><filename>pkgs/applications/misc/adobe-reader/default.nix</filename></link>.
           Shows how binary-only packages can be supported.  In
           particular the <link
-          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/acrobat-reader/builder.sh">builder</link>
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/misc/adobe-reader/builder.sh">builder</link>
           uses <command>patchelf</command> to set the RUNPATH and ELF
           interpreter of the executables so that the right libraries
           are found at runtime.</para>
