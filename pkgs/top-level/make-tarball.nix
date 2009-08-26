@@ -52,7 +52,7 @@ releaseTools.makeSourceTarball {
     for platform in i686-linux x86_64-linux powerpc-linux i686-freebsd powerpc-darwin i686-darwin; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
         nix-env --readonly-mode -f pkgs/top-level/all-packages.nix \
-            --argstr system "$platform" \
+            --show-trace --argstr system "$platform" \
             -qa \* --drv-path --system-filter \* --system
         stopNest
     done
