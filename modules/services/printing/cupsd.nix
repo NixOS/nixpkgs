@@ -15,6 +15,13 @@ let
           ";
         };
 
+        bindirCmds = mkOption {
+          default = "";
+          description = "
+            add commands adding additional symlinks to the bindir such as bjnp
+          ";
+        };
+
       };
     };
   };
@@ -31,6 +38,7 @@ let
 
   modprobe = config.system.sbin.modprobe;
 
+  cfg = config.services.printing;
 
   # Here we can enable additional backends, filters, etc. that are not
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
@@ -56,6 +64,7 @@ let
     ensureDir $out/lib/cups/filter
     ln -s ${cups}/lib/cups/filter/* $out/lib/cups/filter/
     ln -s ${pkgs.ghostscript}/lib/cups/filter/* $out/lib/cups/filter/
+    ${cfg.bindirCmds}
   ''; # */
   
 
