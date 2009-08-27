@@ -4519,11 +4519,6 @@ let
     sslSupport = true;
   };
 
-  apacheHttpdModPython = import ../servers/http/apache-httpd/mod-python.nix {
-    inherit stdenv fetchurl apacheHttpd python;
-    inherit (bleedingEdgeRepos) sourceByName;
-  };
-
   bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {
     inherit openssl libtool;
   };
