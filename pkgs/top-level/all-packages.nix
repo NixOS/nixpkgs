@@ -7882,6 +7882,10 @@ let
     inherit fetchurl stdenv zlib libjpeg libpng libtiff pam openssl;
   };
 
+  cupsBjnp = import ../misc/cups/drivers/cups-bnjp {
+    inherit fetchurl stdenv cups;
+  };
+
   dblatex = import ../misc/tex/dblatex {
     inherit fetchurl stdenv python libxslt tetex;
   };
