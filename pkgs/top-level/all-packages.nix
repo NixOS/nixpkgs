@@ -3494,6 +3494,9 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  libev = builderDefsPackage ../development/libraries/libev {
+  };
+
   libevent = import ../development/libraries/libevent {
     inherit fetchurl stdenv;
   };
