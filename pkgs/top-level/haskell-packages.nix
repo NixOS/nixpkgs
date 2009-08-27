@@ -366,6 +366,10 @@ rec {
     inherit cabal;
   };
 
+  scion = import ../development/libraries/haskell/scion {
+    inherit cabal ghcPaths ghcSyb hslogger json multiset time uniplate;
+  };
+
   syb = import ../development/libraries/haskell/syb {
     inherit cabal;
   };
