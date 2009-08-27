@@ -3,13 +3,12 @@
 
 let
   
-  eval = import ./lib/eval-config.nix {inherit configuration;};
+  eval = import ./lib/eval-config.nix { modules = [ configuration ]; };
 
   inherit (eval) config pkgs;
 
   vmConfig = (import ./lib/eval-config.nix {
-    inherit configuration;
-    extraModules = [./modules/virtualisation/qemu-vm.nix];
+    modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
   }).config;
     
 in

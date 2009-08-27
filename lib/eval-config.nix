@@ -2,13 +2,12 @@
 # configuration object (`config') from which we can retrieve option
 # values.
 
-{ configuration
-, system ? builtins.currentSystem
+{ system ? builtins.currentSystem
 , nixpkgs ? import ./from-env.nix "NIXPKGS" /etc/nixos/nixpkgs
 , pkgs ? null
 , baseModules ? import ../modules/module-list.nix
 , extraArgs ? {}
-, extraModules ? []
+, modules
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs; in
@@ -16,10 +15,7 @@ let extraArgs_ = extraArgs; pkgs_ = pkgs; in
 rec {
 
   # These are the NixOS modules that constitute the system configuration.
-  configComponents =
-    [ configuration ]
-    ++ extraModules
-    ++ baseModules;
+  configComponents = modules ++ baseModules;
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.  This is called "configFast" because it's
@@ -50,7 +46,7 @@ rec {
       inherit system;
       config =
         (import ./eval-config.nix {
-          inherit configuration system nixpkgs extraArgs extraModules;
+          inherit system nixpkgs extraArgs modules;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];

@@ -63,7 +63,7 @@ mount -t sysfs none /sys
 
 
 # Process the kernel command line.
-stage2Init=/init
+export stage2Init=/init
 for o in $(cat /proc/cmdline); do
     case $o in
         init=*)
@@ -297,8 +297,9 @@ fi
 
 
 # Start stage 2.  `run-init' deletes all files in the ramfs on the
-# current /.
-if test -z "$stage2Init" -o ! -e "$targetRoot/$stage2Init"; then
+# current /.  Note that $stage2Init might be an absolute symlink, in
+# which case "-e" won't work because we're not in the chroot yet.
+if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
     echo "stage 2 init script not found"
     fail
 fi

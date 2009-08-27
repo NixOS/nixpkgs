@@ -1,4 +1,4 @@
-{ nixpkgs ? ../nixpkgs-wc }:
+{ nixpkgs ? ../nixpkgs }:
 
 let
 
@@ -16,12 +16,11 @@ let
 
       version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
+      versionModule = { system.nixosVersion = version; };
+      
       iso = (import lib/eval-config.nix {
-        inherit system nixpkgs;        
-        configuration =
-          { require = module;
-            system.nixosVersion = version;
-          };
+        inherit system nixpkgs;
+        modules = [ module versionModule ];
       }).config.system.build.isoImage;
 
     in
@@ -75,6 +74,11 @@ let
 
       import "${nixosSrc}/doc/manual" {
         pkgs = import nixpkgs {};
+        optionDeclarations =
+          (import lib/eval-config.nix {
+            inherit nixpkgs;
+            modules = [ ];
+          }).optionDeclarations;
       };
 
 

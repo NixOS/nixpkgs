@@ -140,6 +140,11 @@ in
           "ln -s ${config.system.build.system} $out";
         target = "/system";
       }
+      { # Idem for the stage-2 init script.
+        source = pkgs.runCommand "system" {}
+          "ln -s ${config.system.build.bootStage2} $out";
+        target = "/init";
+      }
     ];
 
   # The Grub menu.
@@ -150,7 +155,7 @@ in
         chainloader +1
     
       title NixOS Installer / Rescue
-        kernel /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=/system ${toString config.boot.kernelParams}
+        kernel /boot/vmlinuz init=/init systemConfig=/system ${toString config.boot.kernelParams}
         initrd /boot/initrd
     '';
 
