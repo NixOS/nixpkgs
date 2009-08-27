@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     perlXMLParser python pygtk gettext intltool babl gegl
   ];
 
+  passthru = { inherit gtk; }; # probably its a good idea to use the same gtk in plugins ?
+
   configureFlags = [ "--disable-print" ];
 
   # "screenshot" needs this.

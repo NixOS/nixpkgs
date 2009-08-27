@@ -7882,6 +7882,15 @@ let
     inherit fetchurl stdenv zlib libjpeg libpng libtiff pam openssl;
   };
 
+  gutenprint = import ../misc/drivers/gutenprint {
+    inherit fetchurl stdenv lib pkgconfig composableDerivation cups libtiff libpng
+      openssl git gimp;
+  };
+
+  gutenprintBin = import ../misc/drivers/gutenprint/bin.nix { 
+    inherit fetchurl stdenv rpm cpio zlib;
+  };
+
   cupsBjnp = import ../misc/cups/drivers/cups-bnjp {
     inherit fetchurl stdenv cups;
   };
