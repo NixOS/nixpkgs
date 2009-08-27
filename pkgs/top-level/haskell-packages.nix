@@ -586,6 +586,10 @@ rec {
     inherit cabal mtl network time;
   };
 
+  mkcabal = import ../development/tools/haskell/mkcabal {
+    inherit cabal mtl pcreLight readline;
+  };
+
   tar = import ../development/tools/haskell/tar {
     inherit cabal binary;
   };
