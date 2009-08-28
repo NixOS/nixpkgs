@@ -35,20 +35,20 @@ let
 
   selectMaintained = attrSet: let
     pairs = pkgs.lib.concatMap 
-      (x: let val = processPackage (builtins.getAttr x attrSet); in
-        if val != [] then [{name=x; value=val;}] else [])
+      (x: let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
+        if val.success && val.value != [] then [{name=x; value=val.value;}] else [])
       (builtins.attrNames attrSet);
     in
       builtins.listToAttrs pairs;
+  # May fail as much as it wishes, we will catch the error
   processPackage = attrSet: 
-    if builtins.isAttrs attrSet then
-      if pkgs.lib.attrByPath ["recurseForDerivations"] false attrSet then
-        selectMaintained attrSet 
+    if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then 
+      selectMaintained attrSet
+    else
+      if attrSet.meta.maintainers != [] then 
+        attrSet.meta.platforms
       else
-        if (pkgs.lib.attrByPath ["meta" "maintainers"] [] attrSet) != [] then 
-          pkgs.lib.attrByPath ["meta" "platforms"] [] attrSet
-        else []
-    else [];
+        [];
 
   /* Common platform groups on which to test packages. */
   inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
@@ -62,7 +62,7 @@ in {
 
   tarball = import ./make-tarball.nix;
 
-} // (mapTestOn (/* (selectMaintained pkgs) // */ rec {
+} // (mapTestOn ((selectMaintained pkgs) // rec {
 
   MPlayer = linux;
   abcde = linux;

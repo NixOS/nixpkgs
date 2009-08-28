@@ -195,11 +195,6 @@ let
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
     };
 
-  condPackage = condition: package: if condition then package else throw "package not supported";
-  platformPackage = platforms : package : 
-    (condPackage (lib.any (x: x == system) platforms) package) //
-    { meta.platforms = platforms; };
-
   ### STANDARD ENVIRONMENT
 
 
@@ -1723,14 +1718,10 @@ let
     profiledCompiler = true;
   });
 
-  gccApple = (condPackage stdenv.isDarwin 
-    (wrapGCC (import ../development/compilers/gcc-apple {
+  gccApple = wrapGCC (import ../development/compilers/gcc-apple {
       inherit fetchurl stdenv noSysDirs;
       profiledCompiler = true;
-    }))) // {
-      meta.platforms = ["i686-darwin"];
-      meta.maintainers = [];
-    };
+    });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -1908,13 +1899,13 @@ let
     inherit lib fetchurl stdenv composableDerivation;
   };
 
-  j2sdk14x = platformPackage ["i686-linux"] (
+  j2sdk14x = (
     assert system == "i686-linux";
     import ../development/compilers/jdk/default-1.4.nix {
       inherit fetchurl stdenv;
     });
 
-  jdk5 = platformPackage ["i686-linux" "x86_64-linux"] (
+  jdk5 = (
     assert system == "i686-linux" || system == "x86_64-linux";
     import ../development/compilers/jdk/default-5.nix {
       inherit fetchurl stdenv unzip;
@@ -1932,8 +1923,7 @@ let
     system == "powerpc-linux";
 
   jdkdistro = installjdk: pluginSupport:
-    platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"]
-    (assert supportsJDK;
+       (assert supportsJDK;
     (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
       inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper;
     }));
@@ -2066,7 +2056,7 @@ let
     inherit fetchurl stdenv perl texinfo;
   };
 
-  visualcpp = platformPackage ["i686-cygwin"] (import ../development/compilers/visual-c++ {
+  visualcpp = (import ../development/compilers/visual-c++ {
     inherit fetchurl stdenv cabextract;
   });
 
@@ -2074,9 +2064,9 @@ let
     inherit stdenv fetchurl pkgconfig strategoPackages;
   };
 
-  win32hello = platformPackage ["i686-cygwin"] ( import ../development/compilers/visual-c++/test {
+  win32hello = import ../development/compilers/visual-c++/test {
     inherit fetchurl stdenv visualcpp windowssdk;
-  });
+  };
 
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
@@ -2345,7 +2335,7 @@ let
     inherit fetchurl stdenv guile texinfo;
   };
 
-  windowssdk = platformPackage ["i686-cygwin"] (
+  windowssdk = (
     import ../development/misc/windows-sdk {
       inherit fetchurl stdenv cabextract;
     });
@@ -3171,7 +3161,6 @@ let
   };
 
   glibc_multi =
-    let package = (
       runCommand "${glibc.name}-multi"
         { glibc64 = glibc;
           glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
@@ -3191,8 +3180,7 @@ let
           chmod -R u+w $out/include
           cp -rsf $glibc64/include $out
         '' # */
-        );
-    in platformPackage ["x86_64-linux"] package;
+        ;
 
   gmime = import ../development/libraries/gmime {
     inherit fetchurl stdenv pkgconfig zlib;
@@ -4190,10 +4178,9 @@ let
 
   wxGTK28 = wxGTK28deps null;
 
-  wtk = platformPackage ["i686-linux"] ( 
-    import ../development/libraries/wtk {
+  wtk = import ../development/libraries/wtk {
       inherit fetchurl stdenv unzip xlibs;
-    });
+    };
 
   x264 = import ../development/libraries/x264 {
     inherit fetchurl stdenv;
@@ -4407,10 +4394,9 @@ let
     inherit fetchurl stdenv python zlib libjpeg freetype;
   };
 
-  psyco = platformPackage ["i686-linux"] ( 
-    import ../development/python-modules/psyco {
+  psyco = import ../development/python-modules/psyco {
       inherit fetchurl stdenv python;
-    });
+    };
 
   pycairo = import ../development/python-modules/pycairo {
     inherit fetchurl stdenv python pkgconfig cairo x11;
@@ -4797,7 +4783,7 @@ let
     inherit libuuid zlib acl;
   };
 
-  cpufrequtils = platformPackage ["i686-linux" "x86_64-linux"] (
+  cpufrequtils = (
     import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
     glibc = stdenv.gcc.libc;
@@ -4900,7 +4886,7 @@ let
     inherit fetchurl stdenv flex bison db4;
   };
 
-  iputils = platformPackage ["i686-linux" "x86_64-linux"] (
+  iputils = (
     import ../os-specific/linux/iputils {
     inherit fetchurl stdenv;
     glibc = stdenv.gcc.libc;
@@ -4965,25 +4951,24 @@ let
     inherit fetchurl stdenv perl;
   };
 
-  kernelHeadersArm = platformPackage ["i686-linux"] (
+  kernelHeadersArm = (
     import ../os-specific/linux/kernel-headers-cross {
       inherit fetchurl stdenv;
       cross = "arm-linux";
     });
 
-  kernelHeadersMips = platformPackage ["i686-linux"] (
+  kernelHeadersMips = (
     import ../os-specific/linux/kernel-headers-cross {
       inherit fetchurl stdenv;
       cross = "mips-linux";
     });
 
-  kernelHeadersSparc = platformPackage ["i686-linux"] ( 
-    import ../os-specific/linux/kernel-headers-cross {
+  kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
       inherit fetchurl stdenv;
       cross = "sparc-linux";
-    });
+    };
 
-  kernel_2_6_20 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_20 = (
     import ../os-specific/linux/kernel/linux-2.6.20.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5009,7 +4994,7 @@ let
     ];
   });
 
-  kernel_2_6_21 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_21 = (
     import ../os-specific/linux/kernel/linux-2.6.21.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5043,7 +5028,7 @@ let
     ];
   });
 
-  kernel_2_6_22 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_22 = (
     import ../os-specific/linux/kernel/linux-2.6.22.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5063,8 +5048,7 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   });
 
-  kernel_2_6_23 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] ( 
-    import ../os-specific/linux/kernel/linux-2.6.23.nix {
+  kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       /*
@@ -5106,9 +5090,9 @@ let
       lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
-  });
+  };
 
-  kernel_2_6_25 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_25 = (
     import ../os-specific/linux/kernel/linux-2.6.25.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5131,8 +5115,7 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   });
 
-  kernel_2_6_26 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] ( 
-    import ../os-specific/linux/kernel/linux-2.6.26.nix {
+  kernel_2_6_26 = import ../os-specific/linux/kernel/linux-2.6.26.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "fbcondecor-0.9.4-2.6.25-rc6";
@@ -5151,10 +5134,9 @@ let
     extraConfig =
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
-  });
+  };
 
-  kernel_2_6_27 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
-    import ../os-specific/linux/kernel/linux-2.6.27.nix {
+  kernel_2_6_27 = import ../os-specific/linux/kernel/linux-2.6.27.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "fbcondecor-0.9.4-2.6.27";
@@ -5173,9 +5155,9 @@ let
     extraConfig =
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
-  });
+  };
 
-  kernel_2_6_28 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_28 = (
     import ../os-specific/linux/kernel/linux-2.6.28.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5204,7 +5186,7 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   });
 
-  kernel_2_6_29 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_29 = (
     makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
@@ -5223,8 +5205,7 @@ let
     ];
   });
 
-  kernel_2_6_31_rc4 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] ( 
-    makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc4.nix) {
+  kernel_2_6_31_rc4 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc4.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [ 
       { name = "rc4 patch";
@@ -5234,15 +5215,15 @@ let
 	};
       }
     ];
-  });
+  };
 
   # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc4_old_i686 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_31_rc4_old_i686 = (
     kernel_2_6_31_rc4.override {
       oldI686 = true;
     });
 
-  kernel_2_6_31_rc3 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_31_rc3 = (
     makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc3.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [ 
@@ -5256,12 +5237,12 @@ let
   });
 
   # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc3_old_i686 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_31_rc3_old_i686 = (
     kernel_2_6_31_rc3.override {
     oldI686 = true;
   });
 
-  kernel_2_6_31_rc2 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_31_rc2 = (
     makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc2.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [ 
@@ -5275,7 +5256,7 @@ let
   });
 
   # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc2_old_i686 = platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] (
+  kernel_2_6_31_rc2_old_i686 = (
     kernel_2_6_31_rc2.override {
     oldI686 = true;
   });
@@ -5286,7 +5267,7 @@ let
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  kernelPackagesFor = kernel: platformPackage ["i686-linux" "x86_64-linux" "powerpc-linux"] 
+  kernelPackagesFor = kernel: 
   rec {
 
     inherit kernel;
@@ -5920,7 +5901,7 @@ let
     inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  adobeReader = platformPackage ["i686-linux"] (
+  adobeReader = (
     import ../applications/misc/adobe-reader {
       inherit fetchurl stdenv zlib libxml2 cups;
       inherit (xlibs) libX11;
@@ -6479,12 +6460,12 @@ let
 
   flashplayer = flashplayer10;
 
-  flashplayer9 = platformPackage ["i686-linux"] (
+  flashplayer9 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
       inherit fetchurl stdenv zlib alsaLib;
     });
 
-  flashplayer10 = platformPackage ["i686-linux" "x86_64-linux"] (
+  flashplayer10 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
       inherit fetchurl stdenv zlib alsaLib curl;
     });
@@ -6602,13 +6583,12 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  googleearth = platformPackage ["i686-linux"] ( 
-    import ../applications/misc/googleearth {
+  googleearth = import ../applications/misc/googleearth {
       inherit stdenv fetchurl glibc mesa freetype;
       inherit (gtkLibs) glib;
       inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
         libXcursor libXinerama libXext libX11;
-    });
+    };
 
   gpsbabel = import ../applications/misc/gpsbabel {
     inherit fetchurl stdenv zlib expat;
@@ -6901,12 +6881,11 @@ let
     inherit fetchurl stdenv ncurses gettext;
   };
 
-  nedit = platformPackage ["i686-linux"] ( 
-    import ../applications/editors/nedit {
+  nedit = import ../applications/editors/nedit {
       inherit fetchurl stdenv x11;
       inherit (xlibs) libXpm;
       motif = lesstif;
-    });
+    };
 
   nvi = import ../applications/editors/nvi {
     inherit fetchurl stdenv ncurses;
@@ -7037,7 +7016,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  RealPlayer = platformPackage ["i686-linux"] 
+  RealPlayer = 
     (import ../applications/video/RealPlayer {
       inherit fetchurl stdenv;
       inherit (gtkLibs) glib pango atk gtk;
@@ -7674,9 +7653,9 @@ let
     python24 = python;
   };*/
 
-  ut2004demo = platformPackage ["i686-linux"] ( import ../games/ut2004demo {
+  ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
-  });
+  };
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
@@ -7906,10 +7885,9 @@ let
     inherit fetchurl stdenv pkgconfig expat zlib libpng libjpeg xlibs;
   };
 
-  foldingathome = platformPackage ["i686-linux"]
-    (import ../misc/foldingathome {
+  foldingathome = import ../misc/foldingathome {
       inherit fetchurl stdenv;
-    });
+    };
 
   freestyle = import ../misc/freestyle {
     inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
@@ -8154,11 +8132,11 @@ let
     inherit stdenv fetchurl aterm;
   };
 
-  trac = platformPackage ["i686-linux"] ( import ../misc/trac {
+  trac = import ../misc/trac {
     inherit stdenv fetchurl python clearsilver makeWrapper
       sqlite subversion;
     inherit (pythonPackages) pysqlite;
-  });
+  };
 
    vice = import ../misc/emulators/vice {
      inherit stdenv fetchurl perl gettext libpng giflib libjpeg alsaLib readline mesa;
