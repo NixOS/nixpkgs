@@ -226,7 +226,8 @@ let
 
   inherit (import ../stdenv/adapters.nix {inherit (pkgs) dietlibc fetchurl runCommand;})
     overrideGCC overrideInStdenv overrideSetup
-    useDietLibC useKlibc makeStaticBinaries;
+    useDietLibC useKlibc makeStaticBinaries addAttrsToDerivation
+    addCoverageInstrumentation;
 
 
   ### BUILD SUPPORT
@@ -2771,11 +2772,11 @@ let
     inherit (xlibs) libX11;
   };
 
-  apr = import ../development/libraries/apr {
+  apr = makeOverridable (import ../development/libraries/apr) {
     inherit fetchurl stdenv;
   };
 
-  aprutil = import ../development/libraries/apr-util {
+  aprutil = makeOverridable (import ../development/libraries/apr-util) {
     inherit fetchurl stdenv apr expat db4;
     bdbSupport = true;
   };
@@ -2802,7 +2803,7 @@ let
     inherit fetchurl stdenv;
   });
 
-  aterm25 = import ../development/libraries/aterm/2.5.nix {
+  aterm25 = makeOverridable (import ../development/libraries/aterm/2.5.nix) {
     inherit fetchurl stdenv;
   };
 
@@ -4500,7 +4501,7 @@ let
   ### SERVERS
 
 
-  apacheHttpd = import ../servers/http/apache-httpd {
+  apacheHttpd = makeOverridable (import ../servers/http/apache-httpd) {
     inherit fetchurl stdenv perl openssl zlib apr aprutil pcre;
     sslSupport = true;
   };
@@ -6613,7 +6614,7 @@ let
     inherit fetchurl stdenv Xaw3d ghostscriptX;
   };
 
-  hello = import ../applications/misc/hello/ex-2 {
+  hello = makeOverridable (import ../applications/misc/hello/ex-2) {
     inherit fetchurl stdenv;
   };
 
