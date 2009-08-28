@@ -33,7 +33,7 @@ let
           (pkgs.lib.getAttrFromPath path pkgs);
       in testOn job.systems getPkg);
 
-  selectMaintained = attrSet: let
+/*  selectMaintained = attrSet: let
     pairs = pkgs.lib.concatMap 
       (x: let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
         if val.success && val.value != [] then [{name=x; value=val.value;}] else [])
@@ -48,7 +48,7 @@ let
       if attrSet.meta.maintainers != [] then 
         attrSet.meta.platforms
       else
-        [];
+        []; */
 
   /* Common platform groups on which to test packages. */
   inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
@@ -62,7 +62,7 @@ in {
 
   tarball = import ./make-tarball.nix;
 
-} // (mapTestOn ((selectMaintained pkgs) // rec {
+} // (mapTestOn (/*(selectMaintained pkgs) // */ rec {
 
   MPlayer = linux;
   abcde = linux;
