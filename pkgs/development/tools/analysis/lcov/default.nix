@@ -1,17 +1,12 @@
 {stdenv, fetchurl, perl}:
 
-stdenv.mkDerivation {
-  name = "lcov-1.6";
+stdenv.mkDerivation rec {
+  name = "lcov-1.7";
   
   src = fetchurl {
-    url = mirror://sourceforge/ltp/lcov-1.6.tar.gz;
-    sha256 = "0d6lb0vlj3lvqmm678jic9h25q4dnlkbv37wg5yj311hdr9ls1kx";
+    url = "mirror://sourceforge/ltp/${name}.tar.gz";
+    sha256 = "1cx3haizs0rw6wjsn486qcn50f3qpybflkkb1780cg6s8jzcwdin";
   };
-
-  patches = [
-    # http://ltp.cvs.sourceforge.net/ltp/utils/analysis/lcov/bin/geninfo?revision=1.33&view=markup&pathrev=HEAD
-    ./string.patch
-  ];
 
   preBuild = ''
     makeFlagsArray=(PREFIX=$out BIN_DIR=$out/bin MAN_DIR=$out/share/man)
@@ -31,5 +26,4 @@ stdenv.mkDerivation {
     description = "A code coverage tool for Linux";
     homepage = http://ltp.sourceforge.net/coverage/lcov.php;
   };
-
 }
