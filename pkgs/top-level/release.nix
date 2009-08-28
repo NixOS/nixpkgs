@@ -33,16 +33,15 @@ let
           (pkgs.lib.getAttrFromPath path pkgs);
       in testOn job.systems getPkg);
 
-  selectMaintained = attrSet: let
+  selectMaintained = attrSet: 
     if builtins  ? tryEval then 
-      pairs = pkgs.lib.concatMap 
+      let pairs = pkgs.lib.concatMap 
         (x: let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
           if val.success && val.value != [] then [{name=x; value=val.value;}] else [])
         (builtins.attrNames attrSet);
-    else
-      [];
-    in
-      builtins.listToAttrs pairs;
+      in
+        builtins.listToAttrs pairs
+    else {};
   # May fail as much as it wishes, we will catch the error
   processPackage = attrSet: 
     if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then 
