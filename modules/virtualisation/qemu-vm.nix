@@ -97,7 +97,7 @@ in
       { mountPoint = "/hostfs";
         device = "//10.0.2.4/qemu";
         fsType = "cifs";
-        options = "guest,username=nobody";
+        options = "guest,username=nobody,noperm";
         neededForBoot = true;
       }
       { mountPoint = "/nix/store";
