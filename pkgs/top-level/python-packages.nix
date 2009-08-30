@@ -359,7 +359,7 @@ rec {
     
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
     
-    propagatedBuildInputs = [ genshi ];
+    propagatedBuildInputs = [ genshi pkgs.setuptools ];
     
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
