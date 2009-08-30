@@ -2,6 +2,15 @@
 
 let
   inherit (pkgs.lib) mkOption;
+  
+  # Build a Subversion instance with Apache modules and Swig/Python bindings.
+  subversion = pkgs.subversion.override (origArgs: {
+    bdbSupport = true;
+    httpServer = true;
+    sslSupport = true;
+    compressionSupport = true;
+    pythonBindings = true;
+  });
 in
 {
   options = {
@@ -32,7 +41,8 @@ in
 	"${pkgs.pythonPackages.trac}/lib/python2.5/site-packages:" +
 	"${pkgs.setuptools}/lib/python2.5/site-packages:" +
 	"${pkgs.pythonPackages.genshi}/lib/python2.5/site-packages:" +
-	"${pkgs.pythonPackages.psycopg2}/lib/python2.5/site-packages";
+	"${pkgs.pythonPackages.psycopg2}/lib/python2.5/site-packages:" +
+	"${subversion}/lib/python2.5/site-packages";
     }
   ];
 }
