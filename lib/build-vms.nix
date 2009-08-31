@@ -1,5 +1,6 @@
-{ nixos ? /etc/nixos/nixos
+{ nixos ? ./..
 , nixpkgs ? /etc/nixos/nixpkgs
+, services ? /etc/nixos/services
 }:
 
 let pkgs = import nixpkgs { config = {}; }; in
@@ -54,7 +55,7 @@ rec {
     nodes: configuration:
 
     import "${nixos}/lib/eval-config.nix" {
-      inherit nixpkgs;
+      inherit nixpkgs services;
       modules = [ configuration ];
       extraArgs = { inherit nodes; };
       /* !!! bug in the module/option handling: this ignores the
@@ -175,6 +176,9 @@ rec {
       echo "making report..."
       ensureDir $out/coverage
       ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/out.info -o $out/coverage
+
+      ensureDir $out/nix-support
+      echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
     ''; # */
     
 }

@@ -1,4 +1,4 @@
-{config, pkgs, serverInfo}:
+{ config, pkgs, serverInfo, servicesPath, ... }:
 
 let
 
@@ -31,7 +31,7 @@ let
   # Build the maintenance scripts and commit hooks.
   scripts = substituteInAll {
     name = "svn-server-scripts";
-    src = pkgs.lib.cleanSource ../../../../services/subversion/src/scripts;
+    src = pkgs.lib.cleanSource "${servicesPath}/subversion/src/scripts";
 
     # The variables to substitute:
     
@@ -75,7 +75,7 @@ let
 
   
   # Build our custom authentication modules.
-  authModules = import ../../../../services/subversion/src/auth {
+  authModules = import "${servicesPath}/subversion/src/auth" {
     inherit (pkgs) stdenv apacheHttpd;
   };
 
@@ -115,7 +115,7 @@ let
 
 
   # Build ViewVC.
-  viewvc = import ../../../../services/subversion/src/viewvc {
+  viewvc = import "${servicesPath}/subversion/src/viewvc" {
     inherit (pkgs) fetchurl stdenv python enscript;
     inherit urlPrefix reposDir adminAddr subversion;
   };
@@ -149,7 +149,7 @@ let
 
 
   # Build WebSVN.
-  websvn = import ../../../../services/subversion/src/websvn {
+  websvn = import "${servicesPath}/subversion/src/websvn" {
     inherit (pkgs) fetchurl stdenv writeText enscript gnused diffutils;
     inherit urlPrefix reposDir subversion;
     cacheDir = tmpDir;
@@ -232,7 +232,7 @@ let
 
   staticFiles = substituteInSome {
     name = "svn-static-files";
-    src = pkgs.lib.cleanSource ../../../../services/subversion/root;
+    src = pkgs.lib.cleanSource "${servicesPath}/subversion/root";
     files = ["xsl/svnindex.xsl"];
     inherit urlPrefix;
   };

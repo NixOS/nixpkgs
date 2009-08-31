@@ -4,6 +4,7 @@
 
 { system ? builtins.currentSystem
 , nixpkgs ? import ./from-env.nix "NIXPKGS" /etc/nixos/nixpkgs
+, services ? /etc/nixos/services
 , pkgs ? null
 , baseModules ? import ../modules/module-list.nix
 , extraArgs ? {}
@@ -28,6 +29,7 @@ rec {
   extraArgs = extraArgs_ // {
     inherit pkgs optionDeclarations;
     modulesPath = ../modules;
+    servicesPath = services;
   };
 
   # Import Nixpkgs, allowing the NixOS option nixpkgs.config to
@@ -46,7 +48,7 @@ rec {
       inherit system;
       config =
         (import ./eval-config.nix {
-          inherit system nixpkgs extraArgs modules;
+          inherit system nixpkgs services extraArgs modules;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];

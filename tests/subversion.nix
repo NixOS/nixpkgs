@@ -1,4 +1,9 @@
-with import ../lib/build-vms.nix {};
+{ nixos ? ./..
+, nixpkgs ? /etc/nixos/nixpkgs
+, services ? /etc/nixos/services
+}:
+
+with import ../lib/build-vms.nix { inherit nixos nixpkgs services; };
 
 let
 

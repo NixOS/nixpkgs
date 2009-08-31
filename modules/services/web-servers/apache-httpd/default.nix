@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, servicesPath, ... }:
 
 with pkgs.lib;
 
@@ -70,7 +70,7 @@ let
           startupScript = "";
           options = {};
         };
-        res = defaults // svcFunction {inherit config pkgs serverInfo;};
+        res = defaults // svcFunction {inherit config pkgs serverInfo servicesPath;};
       in res;
     in map f defs;
 

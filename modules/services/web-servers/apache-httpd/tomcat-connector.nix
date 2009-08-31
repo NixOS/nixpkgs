@@ -1,4 +1,4 @@
-{config, pkgs, serverInfo}:
+{ config, pkgs, serverInfo, ... }:
 
 let
   workersProperties = pkgs.writeText "workers.properties" ''

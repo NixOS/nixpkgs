@@ -96,6 +96,14 @@ let
       module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
       description = "graphical";
     };
+
+
+    tests.subversion =
+      { services ? ../services }:
+
+      (import ./tests/subversion.nix {
+        inherit nixpkgs services;
+      }).report;
     
 
   };
