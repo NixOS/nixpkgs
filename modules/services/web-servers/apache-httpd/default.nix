@@ -606,6 +606,9 @@ in
           in concatMapStrings f (concatMap (svc: svc.globalEnvVars) allSubservices)
         }
 
+        # !!! This should be added in test-instrumentation.nix.  It
+        # shouldn't hurt though, since packages usually aren't built
+        # with coverage enabled.
         env GCOV_PREFIX=/tmp/coverage-data
 
         env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${concatStringsSep ":" (concatMap (svc: svc.extraServerPath) allSubservices)}
