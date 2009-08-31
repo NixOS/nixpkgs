@@ -155,7 +155,6 @@ in
   # installation.
   installer.nixpkgsURL = http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable;
 
-  /*
   boot.postBootCommands =
     ''
       export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
@@ -177,7 +176,6 @@ in
       # running system on the CD/DVD.
       cp ${dummyConfiguration} /etc/nixos/configuration.nix
     '';
-    */
 
   # Some more help text.
   services.mingetty.helpLine =
