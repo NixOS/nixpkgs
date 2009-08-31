@@ -31,7 +31,7 @@ let
   # Build the maintenance scripts and commit hooks.
   scripts = substituteInAll {
     name = "svn-server-scripts";
-    src = pkgs.lib.cleanSource "${servicesPath}/subversion/src/scripts";
+    src = /* pkgs.lib.cleanSource */ "${servicesPath}/subversion/src/scripts";
 
     # The variables to substitute:
     
@@ -232,7 +232,7 @@ let
 
   staticFiles = substituteInSome {
     name = "svn-static-files";
-    src = pkgs.lib.cleanSource "${servicesPath}/subversion/root";
+    src = /* pkgs.lib.cleanSource */ "${servicesPath}/subversion/root";
     files = ["xsl/svnindex.xsl"];
     inherit urlPrefix;
   };
