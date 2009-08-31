@@ -746,6 +746,12 @@ let
     inherit (xlibs) xproto libXt libX11;
   };
 
+  glusterfs = builderDefsPackage ../tools/networking/glusterfs {
+    inherit fuse;
+    bison = bison24;
+    flex = flex2535;
+  };
+
   glxinfo = import ../tools/graphics/glxinfo {
     inherit fetchurl stdenv x11 mesa;
   };
