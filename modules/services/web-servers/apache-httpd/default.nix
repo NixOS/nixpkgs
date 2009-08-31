@@ -606,6 +606,8 @@ in
           in concatMapStrings f (concatMap (svc: svc.globalEnvVars) allSubservices)
         }
 
+        env GCOV_PREFIX=/tmp/coverage-data
+
         env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${concatStringsSep ":" (concatMap (svc: svc.extraServerPath) allSubservices)}
 
         respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
