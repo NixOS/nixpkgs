@@ -58,7 +58,7 @@ stdenv.mkDerivation (
 
       # Set GCC flags for coverage analysis, if desired.
       if test -n "${toString doCoverageAnalysis}"; then
-          export NIX_CFLAGS_COMPILE="-O0 -fprofile-arcs -ftest-coverage $NIX_CFLAGS_COMPILE"
+          export NIX_CFLAGS_COMPILE="-O0 --coverage $NIX_CFLAGS_COMPILE"
           export CFLAGS="-O0"
           export CXXFLAGS="-O0"
       fi
