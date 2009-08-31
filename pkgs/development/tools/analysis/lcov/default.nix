@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cx3haizs0rw6wjsn486qcn50f3qpybflkkb1780cg6s8jzcwdin";
   };
 
+  patches = [ ./find-source.patch ];
+
   preBuild = ''
     makeFlagsArray=(PREFIX=$out BIN_DIR=$out/bin MAN_DIR=$out/share/man)
   '';
