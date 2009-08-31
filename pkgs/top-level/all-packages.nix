@@ -195,6 +195,7 @@ let
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
     };
 
+    
   ### STANDARD ENVIRONMENT
 
 
@@ -2779,11 +2780,11 @@ let
   };
 
   apr = makeOverridable (import ../development/libraries/apr) {
-    inherit fetchurl stdenv;
+    inherit (pkgsOverriden) fetchurl stdenv;
   };
 
   aprutil = makeOverridable (import ../development/libraries/apr-util) {
-    inherit fetchurl stdenv apr expat db4;
+    inherit (pkgsOverriden) fetchurl stdenv apr expat db4;
     bdbSupport = true;
   };
 
@@ -4508,7 +4509,7 @@ let
 
 
   apacheHttpd = makeOverridable (import ../servers/http/apache-httpd) {
-    inherit fetchurl stdenv perl openssl zlib apr aprutil pcre;
+    inherit (pkgsOverriden) fetchurl stdenv perl openssl zlib apr aprutil pcre;
     sslSupport = true;
   };
 
@@ -4573,8 +4574,8 @@ let
     inherit fetchurl stdenv pcre libxml2 zlib attr bzip2;
   };
 
-  mod_python = import ../servers/http/apache-modules/mod_python {
-    inherit fetchurl stdenv apacheHttpd python;
+  mod_python = makeOverridable (import ../servers/http/apache-modules/mod_python) {
+    inherit (pkgsOverriden) fetchurl stdenv apacheHttpd python;
   };
 
   myserver = import ../servers/http/myserver {
@@ -7106,7 +7107,7 @@ let
   };
 
   subversion16 = makeOverridable (import ../applications/version-management/subversion/1.6.nix) {
-    inherit fetchurl stdenv apr aprutil expat swig zlib jdk sqlite;
+    inherit (pkgsOverriden) fetchurl stdenv apr aprutil expat swig zlib jdk sqlite;
     neon = neon028;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
     httpServer = getConfig ["subversion" "httpServer"] false;
@@ -7116,7 +7117,7 @@ let
     perlBindings = getConfig ["subversion" "perlBindings"] false;
     javahlBindings = getConfig ["subversion" "javahlBindings"] false;
     compressionSupport = getConfig ["subversion" "compressionSupport"] true;
-    httpd = apacheHttpd;
+    httpd = pkgsOverriden.apacheHttpd;
   };
 
   subversionStatic = lowPrio (appendToName "static" (import ../applications/version-management/subversion/1.6.nix {
