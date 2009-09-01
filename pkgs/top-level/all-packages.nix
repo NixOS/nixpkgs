@@ -848,6 +848,10 @@ let
     inherit (gnome) libsoup libglade gnomeicontheme;
   };
 
+  gvpe = builderDefsPackage ../tools/networking/gvpe {
+    inherit openssl;
+  };
+
   gzip = useFromStdenv "gzip"
     (import ../tools/compression/gzip {
       inherit fetchurl stdenv;

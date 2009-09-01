@@ -2,7 +2,7 @@ a :
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
-    
+    openssl
   ];
 in
 rec {
@@ -16,11 +16,10 @@ rec {
   phaseNames = ["doConfigure" "doMakeInstall"];
       
   meta = {
-    description = "${abort "Specify description"}";
+    description = "A proteted multinode virtual network";
     maintainers = [
-      a.lib.maintainers.(abort "Specify maintainer")
+      a.lib.maintainers.raskin
     ];
-    platforms = with a.lib.platforms; 
-      (abort "Specify supported platforms");
+    platforms = with a.lib.platforms; linux ++ freebsd;
   };
 }
