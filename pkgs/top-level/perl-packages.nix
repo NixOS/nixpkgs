@@ -80,6 +80,22 @@ rec {
     propagatedBuildInputs = [ScopeGuard];
   };
 
+  Autodia = buildPerlPackage rec {
+    name = "Autodia-2.03";
+    src = fetchurl {
+      url = "http://www.aarontrevena.co.uk/opensource/autodia/download/${name}.tar.gz";
+      sha256 = "1pzp30lnqkip2yrmnyzrf62g08xwn751nf9gmwdxjc09daaihwaz";
+    };
+    propagatedBuildInputs = [ TemplateToolkit ];
+
+    # FIXME: `autodia_java.pl' needs `Inline' and `Inline::Java'.
+
+    meta = {
+      description = "AutoDia, create UML diagrams from source code";
+      homepage = http://www.aarontrevena.co.uk/opensource/autodia/;
+    };
+  };
+
   BerkeleyDB = import ../development/perl-modules/BerkeleyDB {
     inherit buildPerlPackage fetchurl;
     inherit (pkgs) db4;
