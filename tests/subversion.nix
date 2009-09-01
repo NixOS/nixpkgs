@@ -51,7 +51,6 @@ rec {
         { config, pkgs, ... }:
 
         {
-          boot.kernelModules = [ "gcov-proc" ];
           services.httpd.enable = true;
           services.httpd.adminAddr = "e.dolstra@tudelft.nl";
           services.httpd.extraSubservices =
@@ -131,13 +130,6 @@ rec {
       # Stop Apache to gather all the coverage data.
       $webserver->stopJob("httpd");
       $webserver->execute("sleep 10"); # !!!
-
-      # !!! move this to build-vms.nix
-      my $kernelDir = $webserver->mustSucceed("echo \$(dirname \$(readlink -f /var/run/current-system/kernel))/.build/linux-*");
-      chomp $kernelDir;
-      my $coverageDir = "/hostfs" . $webserver->stateDir() . "/coverage-data/$kernelDir";
-      $webserver->execute("for i in \$(cd /proc/gcov && find -name module -prune -o -name '*.gcda'); do echo \$i; mkdir -p $coverageDir/\$(dirname \$i); cp -v /proc/gcov/\$i $coverageDir/\$i; done");
-      $webserver->execute("for i in \$(cd /proc/gcov/module/nix/store/*/.build/* && find -name module -prune -o -name '*.gcda'); do mkdir -p $coverageDir/\$(dirname \$i); cp /proc/gcov/module/nix/store/*/.build/*/\$i $coverageDir/\$i; done");
     '';
 
   report = makeReport test;

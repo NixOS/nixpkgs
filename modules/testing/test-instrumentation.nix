@@ -31,6 +31,11 @@ with pkgs.lib;
           ln -s /hostfs/$hostTmpDir/coverage-data /tmp/coverage-data
         )
       '';
+
+    # If the kernel has been built with coverage instrumentation, make
+    # it available under /proc/gcov.
+    boot.kernelModules = [ "gcov-proc" ];
+      
   };
 
 }
