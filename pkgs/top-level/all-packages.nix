@@ -849,7 +849,7 @@ let
   };
 
   gvpe = builderDefsPackage ../tools/networking/gvpe {
-    inherit openssl;
+    inherit openssl gmp;
   };
 
   gzip = useFromStdenv "gzip"

@@ -2,7 +2,7 @@ a :
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
-    openssl
+    openssl gmp
   ];
 in
 rec {
@@ -10,7 +10,11 @@ rec {
 
   inherit (s) name;
   inherit buildInputs;
-  configureFlags = [];
+  configureFlags = [
+    "--enable-tcp"
+    "--enable-http-proxy"
+    "--enable-dns"
+    ];
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
