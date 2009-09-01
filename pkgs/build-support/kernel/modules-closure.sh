@@ -29,6 +29,11 @@ for module in $closure; do
     mkdir -p $(dirname $target)
     echo $module
     cp $module $target
+    # If the kernel is compiled with coverage instrumentation, it
+    # contains the paths of the *.gcda coverage data output files
+    # (which it doesn't actually use...).  Get rid of them to prevent
+    # the whole kernel from being included in the initrd.
+    nuke-refs $target
     echo $target >> $out/insmod-list
 done
 

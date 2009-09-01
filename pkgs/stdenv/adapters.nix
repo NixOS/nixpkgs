@@ -121,32 +121,32 @@ rec {
     { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
 
 
+  /* Return a modified stdenv that perfoms the build under $out/.build
+     instead of in $TMPDIR.  Thus, the sources are kept available.
+     This is useful for things like debugging or generation of
+     dynamic analysis reports. */ 
+  keepBuildTree = stdenv:
+    addAttrsToDerivation
+      { prePhases = "moveBuildDir";
+
+        moveBuildDir =
+          ''
+            ensureDir $out/.build
+            cd $out/.build
+          '';
+      } stdenv;
+
+
   /* Return a modified stdenv that builds packages with GCC's coverage
      instrumentation.  The coverage note files (*.gcno) are stored in
-     $out/.coverage, along with the source code of the package, to
-     enable programs like lcov to produce pretty-printed reports.
+     $out/.build, along with the source code of the package, to enable
+     programs like lcov to produce pretty-printed reports.
   */
   addCoverageInstrumentation = stdenv:
     addAttrsToDerivation
       { NIX_CFLAGS_COMPILE = "-O0 --coverage";
 
-        prePhases = "moveBuildDir";
         postPhases = "cleanupBuildDir";
-
-        # Object files instrumented with coverage analysis write
-        # runtime coverage data to <path>/<object>.gcda, where <path>
-        # is the location where gcc originally created the object
-        # file.  That would be /tmp/nix-build-<something>, which will
-        # be long gone by the time we run the program.  Furthermore,
-        # the <object>.gcno files created at compile time are also
-        # written there.  And to make nice coverage reports with lcov,
-        # we need the source code.  So we move the whole build tree to
-        # $out/.coverage.
-        moveBuildDir =
-          ''
-            ensureDir $out/.coverage
-            cd $out/.coverage
-          '';
 
         # This is an uberhack to prevent libtool from removing gcno
         # files.  This has been fixed in libtool, but there are
@@ -165,10 +165,21 @@ rec {
         # suite.
         cleanupBuildDir =
           ''
-             find $out/.coverage/ -type f -a ! \
-               \( -name "*.c" -o -name "*.gcno" -o -name "*.h" \) \
-               | xargs rm -f --
+            find $out/.build/ -type f -a ! \
+              \( -name "*.c" -o -name "*.gcno" -o -name "*.h" \) \
+              | xargs rm -f --
           '';
       }
-      stdenv;
+      
+      # Object files instrumented with coverage analysis write
+      # runtime coverage data to <path>/<object>.gcda, where <path>
+      # is the location where gcc originally created the object
+      # file.  That would be /tmp/nix-build-<something>, which will
+      # be long gone by the time we run the program.  Furthermore,
+      # the <object>.gcno files created at compile time are also
+      # written there.  And to make nice coverage reports with lcov,
+      # we need the source code.  So we have to use the
+      # `keepBuildTree' adapter as well.
+      (keepBuildTree stdenv);
+      
 }

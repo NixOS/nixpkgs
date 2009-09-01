@@ -228,7 +228,7 @@ let
   inherit (import ../stdenv/adapters.nix {inherit (pkgs) dietlibc fetchurl runCommand;})
     overrideGCC overrideInStdenv overrideSetup
     useDietLibC useKlibc makeStaticBinaries addAttrsToDerivation
-    addCoverageInstrumentation;
+    keepBuildTree addCoverageInstrumentation;
 
 
   ### BUILD SUPPORT
@@ -324,7 +324,8 @@ let
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {
-      inherit stdenv module_init_tools kernel rootModules allowMissing;
+      inherit stdenv module_init_tools kernel nukeReferences
+        rootModules allowMissing;
     };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -5169,8 +5170,7 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
-  kernel_2_6_28 = (
-    import ../os-specific/linux/kernel/linux-2.6.28.nix {
+  kernel_2_6_28 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.28.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "fbcondecor-0.9.5-2.6.28";
@@ -5196,7 +5196,7 @@ let
     extraConfig =
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
-  });
+  };
 
   kernel_2_6_29 = (
     makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
@@ -5279,8 +5279,7 @@ let
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  kernelPackagesFor = kernel: 
-  rec {
+  kernelPackagesFor = kernel: rec {
 
     inherit kernel;
 
