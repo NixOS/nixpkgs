@@ -6342,6 +6342,10 @@ let
       inherit fetchsvn stdenv cedet ant emacs;
     };
 
+    stratego = import ../applications/editors/emacs-modes/stratego {
+      inherit fetchsvn stdenv;
+    };
+
     haskellMode = import ../applications/editors/emacs-modes/haskell {
       inherit fetchurl stdenv emacs;
     };
