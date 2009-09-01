@@ -596,4 +596,6 @@ in {
     xset = linux;
   };
 
-} ))
+} 
+# Just a test to check for Hydra Nix version..
+// (if builtins.tryEval then {} else {hello=[];}) ))
