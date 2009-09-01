@@ -20,6 +20,26 @@ let
         apacheHttpd = do pkgs.apacheHttpd;
         mod_python = do pkgs.mod_python;
         subversion = do pkgs.subversion;
+
+        # To build the kernel with coverage instrumentation, we need a
+        # special patch to make coverage data available under /proc.
+        kernel_2_6_28 = pkgs.kernel_2_6_28.override (orig: {
+          stdenv = pkgs.keepBuildTree orig.stdenv;
+          kernelPatches = orig.kernelPatches ++ pkgs.lib.singleton
+            { name = "gcov";
+              patch = pkgs.fetchurl {
+                url = http://buildfarm.st.ewi.tudelft.nl/~eelco/dist/linux-2.6.28-gcov.patch;
+                sha256 = "0ck9misa3pgh3vzyb7714ibf7ix7piyg5dvfa9r42v15scjqiyny";
+              };
+              extraConfig =
+                ''
+                  CONFIG_GCOV_PROFILE=y
+                  CONFIG_GCOV_ALL=y
+                  CONFIG_GCOV_PROC=m
+                  CONFIG_GCOV_HAMMER=n
+                '';
+            };
+        });
       };
 
 in
@@ -31,6 +51,7 @@ rec {
         { config, pkgs, ... }:
 
         {
+          boot.kernelModules = [ "gcov-proc" ];
           services.httpd.enable = true;
           services.httpd.adminAddr = "e.dolstra@tudelft.nl";
           services.httpd.extraSubservices =
@@ -109,7 +130,14 @@ rec {
 
       # Stop Apache to gather all the coverage data.
       $webserver->stopJob("httpd");
-      $webserver->execute("sleep 5"); # !!!
+      $webserver->execute("sleep 10"); # !!!
+
+      # !!! move this to build-vms.nix
+      my $kernelDir = $webserver->mustSucceed("echo \$(dirname \$(readlink -f /var/run/current-system/kernel))/.build/linux-*");
+      chomp $kernelDir;
+      my $coverageDir = "/hostfs" . $webserver->stateDir() . "/coverage-data/$kernelDir";
+      $webserver->execute("for i in \$(cd /proc/gcov && find -name module -prune -o -name '*.gcda'); do echo \$i; mkdir -p $coverageDir/\$(dirname \$i); cp -v /proc/gcov/\$i $coverageDir/\$i; done");
+      $webserver->execute("for i in \$(cd /proc/gcov/module/nix/store/*/.build/* && find -name module -prune -o -name '*.gcda'); do mkdir -p $coverageDir/\$(dirname \$i); cp /proc/gcov/module/nix/store/*/.build/*/\$i $coverageDir/\$i; done");
     '';
 
   report = makeReport test;

@@ -130,6 +130,7 @@ rec {
           mkdir $out
           cp ${./test-driver/Machine.pm} Machine.pm
           ${perl}/bin/perl ${./test-driver/test-driver.pl} ${network}/vms/*/bin/run-*-vm
+          find .
           for i in */coverage-data; do
             ensureDir $out/coverage-data
             mv $i $out/coverage-data/$(dirname $i)
@@ -152,7 +153,7 @@ rec {
               if ! test -e $TMPDIR/gcov/nix/store/$i; then
                   echo "copying $i"
                   mkdir -p $TMPDIR/gcov/$(echo $i | cut -c34-)
-                  rsync -rv /nix/store/$i/.coverage/ $TMPDIR/gcov/$(echo $i | cut -c34-)
+                  rsync -rv /nix/store/$i/.build/ $TMPDIR/gcov/$(echo $i | cut -c34-)
               fi
           done
 
@@ -161,7 +162,7 @@ rec {
           find $TMPDIR/gcov -name "*.gcda" -exec rm {} \;
 
           for i in $(cd $d/nix/store && ls); do
-              rsync -rv $d/nix/store/$i/.coverage/ $TMPDIR/gcov/$(echo $i | cut -c34-)
+              rsync -rv $d/nix/store/$i/.build/ $TMPDIR/gcov/$(echo $i | cut -c34-)
           done
 
           find $TMPDIR/gcov -name "*.gcda" -exec chmod 644 {} \;
@@ -171,11 +172,9 @@ rec {
           cat $TMPDIR/app.info >> $TMPDIR/full.info
       done
             
-      ${pkgs.lcov}/bin/lcov --remove $TMPDIR/full.info "/nix/store/*" > $TMPDIR/out.info
-      
       echo "making report..."
       ensureDir $out/coverage
-      ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/out.info -o $out/coverage
+      ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/full.info -o $out/coverage
 
       ensureDir $out/nix-support
       echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products

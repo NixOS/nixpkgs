@@ -50,6 +50,12 @@ sub name {
 }
 
 
+sub stateDir {
+    my ($self) = @_;
+    return $self->{stateDir};
+}
+
+
 sub start {
     my ($self) = @_;
     return if $self->{booted};
@@ -131,7 +137,7 @@ sub execute {
 
     $self->log("running command: $command");
 
-    print { $self->{socket} } ("($command); echo '|!=EOF' \$?\n");
+    print { $self->{socket} } ("( $command ); echo '|!=EOF' \$?\n");
 
     my $out = "";
 
