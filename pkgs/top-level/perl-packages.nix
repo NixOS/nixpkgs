@@ -86,7 +86,7 @@ rec {
       url = "http://www.aarontrevena.co.uk/opensource/autodia/download/${name}.tar.gz";
       sha256 = "1pzp30lnqkip2yrmnyzrf62g08xwn751nf9gmwdxjc09daaihwaz";
     };
-    propagatedBuildInputs = [ TemplateToolkit Inline InlineJava ];
+    propagatedBuildInputs = [ TemplateToolkit Inline InlineJava GraphViz ];
 
     meta = {
       description = "AutoDia, create UML diagrams from source code";
@@ -1101,6 +1101,24 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.43.tar.gz;
       sha256 = "1qamc5aggp35xk590a4hy660f2rhc2l7j65hbyxdya9yvg7z437l";
+    };
+  };
+
+  GraphViz = buildPerlPackage rec {
+    name = "GraphViz-2.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LB/LBROCARD/${name}.tar.gz";
+      sha256 = "1gxpajd49pb9w9ka7nq5477my8snp3myrgiarnk6hj922jpn62xd";
+    };
+
+    # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
+    buildInputs = [ pkgs.graphviz ];
+    propagatedBuildInputs = [ IPCRun ];
+
+    meta = {
+      description = "Perl interface to the GraphViz graphing tool";
+      license = [ "Artistic" ];
+      maintainers = [ stdenv.lib.maintainers.ludo ];
     };
   };
 
