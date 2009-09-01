@@ -17,7 +17,11 @@ rec {
     ];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
+  preBuild = a.fullDepEntry (''
+    sed -e 's@"/sbin/ifconfig.*"@"${a.iproute}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
+    sed -e 's@/sbin/ifconfig@${a.nettools}/sbin/ifconfig@g' -i src/device-*.C
+  '') ["minInit" "doUnpack"];
       
   meta = {
     description = "A proteted multinode virtual network";
