@@ -103,6 +103,7 @@ let
 
       (import ./tests/subversion.nix {
         inherit nixpkgs services;
+        system = "i686-linux";
       }).report;
     
 

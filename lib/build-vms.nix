@@ -1,6 +1,7 @@
 { nixos ? ./..
 , nixpkgs ? /etc/nixos/nixpkgs
 , services ? /etc/nixos/services
+, system ? builtins.currentSystem
 }:
 
 let pkgs = import nixpkgs { config = {}; }; in
@@ -55,7 +56,7 @@ rec {
     nodes: configuration:
 
     import "${nixos}/lib/eval-config.nix" {
-      inherit nixpkgs services;
+      inherit nixpkgs services system;
       modules = [ configuration ];
       extraArgs = { inherit nodes; };
       /* !!! bug in the module/option handling: this ignores the
