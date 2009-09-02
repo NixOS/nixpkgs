@@ -1,8 +1,8 @@
-diff -rc xorg-server-X11R7.2-1.2.0-orig/glx/glxdri.c xorg-server-X11R7.2-1.2.0/glx/glxdri.c
-*** xorg-server-X11R7.2-1.2.0-orig/glx/glxdri.c	Tue Jan 23 04:13:14 2007
---- xorg-server-X11R7.2-1.2.0/glx/glxdri.c	Tue Feb 27 00:15:38 2007
+diff --exclude '*~' -rc xorg-server-1.5.3-orig/glx/glxdri.c xorg-server-1.5.3/glx/glxdri.c
+*** xorg-server-1.5.3-orig/glx/glxdri.c	2008-11-05 19:48:30.000000000 +0100
+--- xorg-server-1.5.3/glx/glxdri.c	2009-09-02 23:11:06.000000000 +0200
 ***************
-*** 945,952 ****
+*** 1013,1020 ****
   	goto handle_error;
       }
   
@@ -11,7 +11,7 @@ diff -rc xorg-server-X11R7.2-1.2.0-orig/glx/glxdri.c xorg-server-X11R7.2-1.2.0/g
   
       screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
       if (screen->driver == NULL) {
---- 945,955 ----
+--- 1013,1023 ----
   	goto handle_error;
       }
   
@@ -20,6 +20,31 @@ diff -rc xorg-server-X11R7.2-1.2.0-orig/glx/glxdri.c xorg-server-X11R7.2-1.2.0/g
 + 
       snprintf(filename, sizeof filename, "%s/%s_dri.so",
 !              real_dri_driver_path, driverName);
+  
+      screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+      if (screen->driver == NULL) {
+diff --exclude '*~' -rc xorg-server-1.5.3-orig/glx/glxdriswrast.c xorg-server-1.5.3/glx/glxdriswrast.c
+*** xorg-server-1.5.3-orig/glx/glxdriswrast.c	2008-11-05 17:52:17.000000000 +0100
+--- xorg-server-1.5.3/glx/glxdriswrast.c	2009-09-02 23:12:19.000000000 +0200
+***************
+*** 470,477 ****
+      screen->base.swapInterval   = NULL;
+      screen->base.pScreen       = pScreen;
+  
+      snprintf(filename, sizeof filename,
+! 	     "%s/%s_dri.so", dri_driver_path, driverName);
+  
+      screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+      if (screen->driver == NULL) {
+--- 470,480 ----
+      screen->base.swapInterval   = NULL;
+      screen->base.pScreen       = pScreen;
+  
++     char *real_dri_driver_path = getenv("XORG_DRI_DRIVER_PATH");
++     if (!real_dri_driver_path) real_dri_driver_path = dri_driver_path;
++ 
+      snprintf(filename, sizeof filename,
+! 	     "%s/%s_dri.so", real_dri_driver_path, driverName);
   
       screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
       if (screen->driver == NULL) {
