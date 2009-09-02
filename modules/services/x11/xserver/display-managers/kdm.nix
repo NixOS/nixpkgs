@@ -9,23 +9,33 @@ let
 
   inherit (pkgs.kde42) kdebase_workspace;
 
+  defaultConfig =
+    ''
+      [Shutdown]
+      HaltCmd=${pkgs.upstart}/sbin/halt
+      RebootCmd=${pkgs.upstart}/sbin/reboot
+
+      [X-*-Core]
+      Xrdb=${pkgs.xlibs.xrdb}/bin/xrdb
+      SessionsDirs=${dmcfg.session.desktops}
+      FailsafeClient=${pkgs.xterm}/bin/xterm
+
+      [X-:*-Core]
+      ServerCmd=${dmcfg.xserverBin} ${dmcfg.xserverArgs}
+
+      [X-*-Greeter]
+      HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10
+      PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so
+    '';
+
   kdmrc = pkgs.stdenv.mkDerivation {
     name = "kdmrc";
-    # -e "s|Session=${kdebase_workspace}/share/config/kdm/Xsession|Session=${dmcfg.session.script}|" \
-    buildCommand = ''
-      cp ${kdebase_workspace}/share/config/kdm/kdmrc .
-      sed -i -e "s|#HaltCmd=|HaltCmd=${pkgs.upstart}/sbin/halt|" \
-             -e "s|#RebootCmd=|RebootCmd=${pkgs.upstart}/sbin/reboot|" \
-	     -e "s|#Xrdb=|Xrdb=${pkgs.xlibs.xrdb}/bin/xrdb|" \
-	     -e "s|#HiddenUsers=root|HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10|" \
-	     -e "s|ServerCmd=/FOO/bin/X|ServerCmd=${dmcfg.xserverBin} ${dmcfg.xserverArgs}|" \
- 	     -e "s|^SessionsDirs=.*$|SessionsDirs=${dmcfg.session.desktops}|" \
-	     -e "s|#FailsafeClient=|FailsafeClient=${pkgs.xterm}/bin/xterm|" \
-	     -e "s|#PluginsLogin=sign|PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so|" \
-      kdmrc
-      ensureDir $out
-      cp kdmrc $out
-    '';
+    config = defaultConfig + cfg.extraConfig;
+    buildCommand =
+      ''
+        echo "$config" > $out
+        cat ${kdebase_workspace}/share/config/kdm/kdmrc >> $out
+      '';
   };
 
 in
@@ -37,12 +47,22 @@ in
   options = {
 
     services.xserver.displayManager.kdm = {
+    
       enable = mkOption {
         default = false;
         description = ''
           Whether to enable the KDE display manager.
         '';
       };
+
+      extraConfig = mkOption {
+        default = "";
+        description = ''
+          Options appended to <filename>kdmrc</filename>, the
+          configuration file of KDM.
+        '';
+      };
+      
     };
 
   };
@@ -55,7 +75,7 @@ in
     services.xserver.displayManager.job =
       { beforeScript = "";
         env = "";
-        execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}/kdmrc";
+        execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}";
       };
 
     security.pam.services = [ { name = "kde"; localLogin = true; } ];
