@@ -1,6 +1,6 @@
-diff -x '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
+diff --exclude '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
 *** lcov-1.7-orig/bin/geninfo	2008-11-17 14:50:26.000000000 +0100
---- lcov-1.7/bin/geninfo	2009-08-28 18:33:21.000000000 +0200
+--- lcov-1.7/bin/geninfo	2009-09-02 10:55:25.000000000 +0200
 ***************
 *** 51,56 ****
 --- 51,57 ----
@@ -83,7 +83,7 @@ diff -x '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
   		@result = read_gcov_file($gcov_file);
 ***************
 *** 949,954 ****
---- 955,974 ----
+--- 955,979 ----
   }
   
   
@@ -91,6 +91,11 @@ diff -x '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
 + {
 +         my ($base_dir, $source) = @_;
 +         my $dir = $base_dir;
++ 
++         # Hack to make absolute paths work on Nixpkgs coverage
++         # reports.  The source is in /nix/store/<bla>/.build/<bla>.
++         $source = $1 if $source =~ /^\/.*\/\.build\/(.*)$/;
++         
 +         while (!-e "$dir/$source") {
 +                 $dir = $dir . "/..";
 +                 if (length $dir > 1000) {
@@ -113,7 +118,7 @@ diff -x '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
   
   			read(INPUT, $packed_word, 4);
   			$lineno = unpack_int32($packed_word, $endianness);
---- 1498,1504 ----
+--- 1503,1509 ----
   			$function_name =~ s/\W/_/g;
   			(undef, $filename) =
   				read_gcno_string(*INPUT, $endianness);
@@ -130,7 +135,7 @@ diff -x '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
   							$base_dir, $filename);
   					if (!defined($result{$filename}))
   					{
---- 1550,1556 ----
+--- 1555,1561 ----
   				}
   				if ($blocks > 1)
   				{
