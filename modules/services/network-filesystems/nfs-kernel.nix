@@ -75,9 +75,8 @@ mkIf config.services.nfsKernel.enable {
         start on network-interfaces/started
         stop on network-interfaces/stop
 
-        PATH=${pkgs.nfsUtils}/sbin
-
         start script
+	  export PATH=${pkgs.nfsUtils}/sbin
           ${modprobe}/sbin/modprobe nfsd || true
           exportfs -a
         end script
@@ -85,6 +84,7 @@ mkIf config.services.nfsKernel.enable {
         respawn sleep 1000000
 
         start script
+	  export PATH=${pkgs.nfsUtils}/sbin
           exportfs -au
         end script
       '';
