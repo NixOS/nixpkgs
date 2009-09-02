@@ -321,6 +321,7 @@ in {
   rxvt_unicode = all;
   samba = linux;
   screen = linux ++ darwin;
+  scrot = linux;
   sdparm = linux;
   seccure = linux;
   sgtpuzzles = linux;
