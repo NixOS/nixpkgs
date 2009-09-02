@@ -4,7 +4,7 @@
 , system ? builtins.currentSystem
 }:
 
-let pkgs = import nixpkgs { config = {}; }; in
+let pkgs = import nixpkgs { config = {}; inherit system; }; in
 
 with pkgs;
 
