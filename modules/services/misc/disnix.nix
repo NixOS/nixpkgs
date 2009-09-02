@@ -4,24 +4,14 @@
 ###### interface
 let
   inherit (pkgs.lib) mkOption;
-
+  
   options = {
     services = {
       disnix = {
         enable = mkOption {
           default = false;
           description = "Whether to enable Disnix";
-        };
-        
-        activateHook = mkOption {
-          default = "";
-          description = "Custom script or executable that activates services through Disnix";
-        };
-
-        deactivateHook = mkOption {
-          default = "";
-          description = "Custom script or executable that deactivates services through Disnix";
-        };
+        };        
       };
     };
   };
@@ -40,8 +30,14 @@ let
 
       start on dbus
       stop on shutdown  
-          
-      respawn ${pkgs.bash}/bin/sh -c 'export PATH=/var/run/current-system/sw/bin:$PATH; export HOME=/root; export DISNIX_ACTIVATE_HOOK=${cfg.activateHook}; export DISNIX_DEACTIVATE_HOOK=${cfg.deactivateHook}; ${pkgs.disnix}/bin/disnix-service'
+    
+      script
+        export ACTIVATION_SCRIPTS=${pkgs.disnix_activation_scripts}/libexec/disnix/activation-scripts
+        export PATH=${pkgs.nixUnstable}/bin
+        export HOME=/root
+	
+        ${pkgs.disnix}/bin/disnix-service
+      end script
     '';
   };
 in
@@ -52,13 +48,15 @@ mkIf cfg.enable {
     #../upstart-jobs/dbus.nix # services.dbus.*
     options
   ];
+  
+  environment.systemPackages = [ pkgs.disnix ];
 
   services = {
     extraJobs = [job];
 
     dbus = {
       enable = true;
-      packages = [pkgs.disnix];
+      packages = [ pkgs.disnix ];
     };
   };
 }
