@@ -4,7 +4,7 @@
 , system ? builtins.currentSystem
 }:
 
-with import ../lib/build-vms.nix { inherit nixos nixpkgs services; };
+with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
 
 let
 
