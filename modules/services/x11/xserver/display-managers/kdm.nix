@@ -58,7 +58,7 @@ in
         execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}/kdmrc";
       };
 
-    security.pam.services = [ { name = "slim"; localLogin = true; } ];
+    security.pam.services = [ { name = "kde"; localLogin = true; } ];
       
   };
   
