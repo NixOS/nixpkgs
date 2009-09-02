@@ -1,5 +1,4 @@
 [ ./config/fonts.nix
-  ./config/guest-users.nix
   ./config/i18n.nix
   ./config/ldap.nix
   ./config/networking.nix

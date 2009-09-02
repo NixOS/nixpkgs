@@ -1,54 +1,17 @@
 {pkgs, config, ...}:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption;
 
-  options = {
-    users = {
-      extraUsers = mkOption {
-        default = [];
-        example = [
-          { name = "alice";
-            uid = 1234;
-            description = "Alice";
-            home = "/home/alice";
-            createHome = true;
-            group = "users";
-            extraGroups = ["wheel"];
-            shell = "/bin/sh";
-          }
-        ];
-        description = "
-          Additional user accounts to be created automatically by the system.
-        ";
-      };
-
-      extraGroups = mkOption {
-        default = [];
-        example = [
-          { name = "students";
-            gid = 1001;
-          }
-        ];
-        description = "
-          Additional groups to be created automatically by the system.
-        ";
-      };
-    };
-  };
-in
-
-###### implementation
-let
   ids = config.ids;
 
+  
   # User accounts to be created/updated by NixOS.
   users =
     let
       defaultUsers =
-        [
-          { name = "root";
+        [ { name = "root";
             uid = ids.uids.root;
             description = "System administrator";
             home = "/root";
@@ -80,8 +43,9 @@ let
         , shell ? (if useDefaultShell then config.users.defaultUserShell else "/noshell")
         , createHome ? false
         , useDefaultShell ? false
+        , password ? null
         }:
-        { inherit name description uid group extraGroups home shell createHome; };
+        { inherit name description uid group extraGroups home shell createHome password; };
 
     in map addAttrs (defaultUsers ++ nixBuildUsers ++ config.users.extraUsers);
 
@@ -90,8 +54,7 @@ let
   groups =
     let
       defaultGroups = 
-        [
-          { name = "root";
+        [ { name = "root";
             gid = ids.gids.root;
           }
           { name = "wheel";
@@ -144,31 +107,63 @@ let
 
     in map addAttrs (defaultGroups ++ config.users.extraGroups);
 
-  inherit (pkgs.lib) concatStringsSep;
 
-  serializedUser = u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}";
+  # Note: the 'X' in front of the password is to distinguish between
+  # having an empty password, and not having a password.
+  serializedUser = u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n";
   serializedGroup = g: "${g.name}\n${toString g.gid}";
-in
-
-let
-  inherit (pkgs.stringsWithDeps) fullDepEntry;
-
+  
   # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
-  usersFile = pkgs.writeText "users" (concatStringsSep "\n" (map serializedUser users));
+  usersFile = pkgs.writeText "users" (concatStrings (map serializedUser users));
+  
 in
 
 {
-  require = [
-    options
 
-    # config.system.activationScripts
-    # ../system/activate-configuration.nix
-  ];
+  ###### interface
 
-  system = {
-    activationScripts = {
+  options = {
+  
+    users.extraUsers = mkOption {
+      default = [];
+      example =
+        [ { name = "alice";
+            uid = 1234;
+            description = "Alice";
+            home = "/home/alice";
+            createHome = true;
+            group = "users";
+            extraGroups = ["wheel"];
+            shell = "/bin/sh";
+            password = "foobar";
+          }
+        ];
+      description = ''
+        Additional user accounts to be created automatically by the system.
+      '';
+    };
 
-      users = fullDepEntry ''
+    users.extraGroups = mkOption {
+      default = [];
+      example =
+        [ { name = "students";
+            gid = 1001;
+          }
+        ];
+      description = ''
+        Additional groups to be created automatically by the system.
+      '';
+    };
+
+  };
+  
+
+  ###### implementation
+
+  config = {
+
+    system.activationScripts.users = fullDepEntry
+      ''
         cat ${usersFile} | while true; do
             read name || break
             read description
@@ -178,6 +173,7 @@ in
             read home
             read shell
             read createHome
+            read password
 
             if ! curEnt=$(getent passwd "$name"); then
                 echo "creating user $name..."
@@ -190,6 +186,9 @@ in
                     --home "$home" \
                     --shell "$shell" \
                     ''${createHome:+--create-home}
+                if test "''${password:0:1}" = 'X'; then
+                    echo "''${password:1}" | ${pkgs.pwdutils}/bin/passwd --stdin "$name"
+                fi
             else
                 #echo "updating user $name..."
                 oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
@@ -210,10 +209,12 @@ in
                     ''${home:+--home "$home"} \
                     --shell "$shell"
             fi
+
         done
       '' [ "groups" ];
 
-      groups = fullDepEntry ''
+    system.activationScripts.groups = fullDepEntry
+      ''
         while true; do
             read name || break
             read gid
@@ -236,6 +237,6 @@ in
         EndOfGroupList
       '' [ "rootPasswd" "binsh" "etc" "var" ];
 
-    };
   };
+
 }
