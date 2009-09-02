@@ -1,17 +1,12 @@
-{stdenv, fetchsvn, openssl, dbus, autoconf, automake, pkgconfig, dbus_glib}:
+{stdenv, fetchsvn, autoconf, automake, libtool, pkgconfig, dbus_glib, openssl, libxml2}:
 
 stdenv.mkDerivation {
-    name = "disnix-0.1";
-    src = fetchsvn {
-	url = https://svn.nixos.org/repos/nix/disnix/disnix/trunk;
-	md5 = "7b342fa667740b089e4a51bba62312e6";
-	rev = 12590;
-    };
-    
-    preConfigure = "./bootstrap";
-    buildInputs = [ openssl dbus autoconf automake pkgconfig dbus_glib ];
-    
-    meta = {
-	license = "LGPL";
-    };
+  name = "disnix-test";
+  src = fetchsvn {
+    url = https://svn.nixos.org/repos/nix/disnix/disnix/trunk;
+    sha256 = "4397dc0bf4b4ecca795784d0011eb631538b17bd81e77b84bf15d89bf85e94bb";
+    rev = 16924;
+  };
+  buildInputs = [ autoconf automake libtool pkgconfig dbus_glib openssl libxml2 ];
+  preConfigure = "./bootstrap";
 }

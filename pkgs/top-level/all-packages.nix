@@ -8007,7 +8007,7 @@ let
     };
 
   disnix = import ../tools/package-management/disnix {
-    inherit stdenv fetchsvn openssl dbus autoconf automake pkgconfig dbus_glib;
+    inherit stdenv fetchsvn openssl autoconf automake libtool pkgconfig dbus_glib libxml2;
   };
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
