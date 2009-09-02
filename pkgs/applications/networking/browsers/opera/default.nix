@@ -10,7 +10,7 @@ assert motif != null -> libXt != null;
 # Hm, does Opera 9.x still use Motif for anything?
 
 stdenv.mkDerivation rec {
-  version = "9.64";
+  version = "10.0";
   name = "opera-${version}";
 
   inherit libstdcpp5;
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
     src = if (stdenv.system == "i686-linux") then
       fetchurl {
-	url = ftp://mirror.liteserver.nl/pub/opera/linux/964/final/en/i386/static/opera-9.64.gcc295-static-qt3.i386.tar.gz;
-        sha256 = "0ryza8wrqhlcs9hs3vs38ig3pjwifymxi8jsx83kvxg963p2k825";
+	url = http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/i386/shared/opera-10.00.gcc4-shared-qt3.i386.tar.gz ;
+        sha256 = "1l87rxdzq2mb92jbwj4gg79j177yzyfbkqb52gcdwicw8jcmhsad";
       } else if (stdenv.system == "x86_64-linux") then
       fetchurl {
-        url = http://mirror.liteserver.nl/pub/opera/linux/964/final/en/x86_64/opera-9.64.gcc4-shared-qt3.x86_64.tar.gz ;
-        sha256 = "1zmj8lr1mx3d98adyd93kw2ldxxb13wzi6xzlgmb3dr4pn9j85n2";
+        url = http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/x86_64/opera-10.00.gcc4-shared-qt3.x86_64.tar.gz ;
+        sha256 = "0w9a56j3jz0bjdj98k6n4xmrjnkvlxm32cfvh2c0f5pvgwcr642i";
       } else throw "unsupported platform ${stdenv.system} (only i686-linux and x86_64 linux supported yet)";
 
   dontStrip = 1;

@@ -23,7 +23,7 @@ installPhase() {
     gcc=$(cat $NIX_GCC/nix-support/orig-gcc)
     rpath="$rpath:$libstdcpp5/lib$suf"
     
-    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugincleaner; do
+    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugincleaner $out/lib/opera/*/operapluginwrapper-native; do
         [ -h "$i" ] && i=$(readline "$i")
         echo "$i <<<<<<<<<<<<"
         patchelf \
