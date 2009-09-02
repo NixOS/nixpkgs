@@ -373,6 +373,7 @@ rec {
       pkgconfig perl perlXMLParser glib gtk libgnome libgnomeui
       libglade libgnomeprintui gnomedesktop gnomepanel libgtop
       scrollkeeper gnomedocutils gettext libxslt xlibs.libXmu intltool
+      which
     ]; 
 
     configureFlags = "--disable-scrollkeeper";
