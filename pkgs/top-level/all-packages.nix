@@ -8009,6 +8009,10 @@ let
   disnix = import ../tools/package-management/disnix {
     inherit stdenv fetchsvn openssl autoconf automake libtool pkgconfig dbus_glib libxml2;
   };
+  
+  disnix_activation_scripts = import ../tools/package-management/disnix/activation-scripts {
+    inherit stdenv fetchsvn autoconf automake;
+  };
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
     inherit stdenv fetchsvn apacheAnt jdk axis2 shebangfix;
