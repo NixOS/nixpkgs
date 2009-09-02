@@ -13,8 +13,21 @@ rec {
         { config, pkgs, ... }:
 
         { services.xserver.enable = true;
+        
+          services.xserver.displayManager.slim.enable = false;
+          services.xserver.displayManager.kdm.enable = true;
+          services.xserver.displayManager.kdm.extraConfig =
+            ''
+              [X-:0-Core]
+              AutoLoginEnable=true
+              AutoLoginUser=alice
+              AutoLoginPass=foobar
+            '';
+            
           services.xserver.desktopManager.default = "kde4";
           services.xserver.desktopManager.kde4.enable = true;
+
+          services.sshd.enable = true;
 
           users.extraUsers = pkgs.lib.singleton
             { name = "alice";
@@ -22,6 +35,7 @@ rec {
               home = "/home/alice";
               createHome = true;
               useDefaultShell = true;
+              password = "foobar";
             };
 
           environment.systemPackages = [ pkgs.xorg.xclock pkgs.xorg.xwd ];
@@ -36,7 +50,7 @@ rec {
 
       $client->waitForFile("/tmp/.X11-unix/X0");
 
-      sleep 20;
+      sleep 60;
 
       print STDERR $client->execute("DISPLAY=:0.0 xwd -root > /hostfs/$ENV{out}/screen.xwd");
     '';
