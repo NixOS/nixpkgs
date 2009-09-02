@@ -228,7 +228,7 @@ let
   inherit (import ../stdenv/adapters.nix {inherit (pkgs) dietlibc fetchurl runCommand;})
     overrideGCC overrideInStdenv overrideSetup
     useDietLibC useKlibc makeStaticBinaries addAttrsToDerivation
-    keepBuildTree addCoverageInstrumentation;
+    keepBuildTree cleanupBuildTree addCoverageInstrumentation;
 
 
   ### BUILD SUPPORT

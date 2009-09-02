@@ -137,6 +137,23 @@ rec {
       } stdenv;
 
 
+  cleanupBuildTree = stdenv:
+    addAttrsToDerivation
+      { postPhases = "cleanupBuildDir";
+
+        # Get rid of everything that isn't a gcno file or a C source
+        # file.  This also includes the gcda files; we're not
+        # interested in coverage resulting from the package's own test
+        # suite.
+        cleanupBuildDir =
+          ''
+            find $out/.build/ -type f -a ! \
+              \( -name "*.c" -o -name "*.h" -o -name "*.gcno" \) \
+              | xargs rm -f --
+          '';
+      } stdenv;          
+      
+
   /* Return a modified stdenv that builds packages with GCC's coverage
      instrumentation.  The coverage note files (*.gcno) are stored in
      $out/.build, along with the source code of the package, to enable
@@ -145,8 +162,6 @@ rec {
   addCoverageInstrumentation = stdenv:
     addAttrsToDerivation
       { NIX_CFLAGS_COMPILE = "-O0 --coverage";
-
-        postPhases = "cleanupBuildDir";
 
         # This is an uberhack to prevent libtool from removing gcno
         # files.  This has been fixed in libtool, but there are
@@ -157,17 +172,6 @@ rec {
             for i in $(find -name ltmain.sh); do
                 substituteInPlace $i --replace '*.$objext)' '*.$objext | *.gcno)'
             done
-          '';
-
-        # Get rid of everything that isn't a gcno file or a C source
-        # file.  This also includes the gcda files; we're not
-        # interested in coverage resulting from the package's own test
-        # suite.
-        cleanupBuildDir =
-          ''
-            find $out/.build/ -type f -a ! \
-              \( -name "*.c" -o -name "*.gcno" -o -name "*.h" \) \
-              | xargs rm -f --
           '';
       }
       
@@ -180,6 +184,6 @@ rec {
       # written there.  And to make nice coverage reports with lcov,
       # we need the source code.  So we have to use the
       # `keepBuildTree' adapter as well.
-      (keepBuildTree stdenv);
+      (cleanupBuildTree (keepBuildTree stdenv));
       
 }
