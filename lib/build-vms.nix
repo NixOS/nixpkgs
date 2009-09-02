@@ -153,7 +153,7 @@ rec {
               if ! test -e $TMPDIR/gcov/nix/store/$i; then
                   echo "copying $i"
                   mkdir -p $TMPDIR/gcov/$(echo $i | cut -c34-)
-                  rsync -rv /nix/store/$i/.build/ $TMPDIR/gcov/$(echo $i | cut -c34-)
+                  rsync -rv /nix/store/$i/.build/* $TMPDIR/gcov/
               fi
           done
 
@@ -162,7 +162,7 @@ rec {
           find $TMPDIR/gcov -name "*.gcda" -exec rm {} \;
 
           for i in $(cd $d/nix/store && ls); do
-              rsync -rv $d/nix/store/$i/.build/ $TMPDIR/gcov/$(echo $i | cut -c34-)
+              rsync -rv $d/nix/store/$i/.build/* $TMPDIR/gcov/
           done
 
           find $TMPDIR/gcov -name "*.gcda" -exec chmod 644 {} \;
