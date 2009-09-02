@@ -13,7 +13,7 @@ installPhase() {
 
     [ -z ${system##*64*} ] && suf=64
 
-    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugincleaner $out/lib/opera/*/operapluginwrapper; do
+    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugincleaner $out/lib/opera/*/operapluginwrapper $out/lib/opera/*/operapluginwrapper-native; do
         echo "$i <<<<<<<<<<<<"
         patchelf \
             --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
