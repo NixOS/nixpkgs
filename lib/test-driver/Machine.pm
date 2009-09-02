@@ -187,6 +187,18 @@ sub waitForJob {
 }
 
 
+# Wait until the specified file exists.
+sub waitForFile {
+    my ($self, $fileName) = @_;
+    while (1) {
+        my ($status, $out) = $self->execute("test -e $fileName");
+        return if $status == 0;
+        sleep 1;
+        # !!! need a timeout
+    }
+}
+
+
 sub stopJob {
     my ($self, $jobName) = @_;
     $self->execute("initctl stop $jobName");
