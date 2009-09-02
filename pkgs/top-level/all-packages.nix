@@ -1344,6 +1344,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  scrot = import ../tools/graphics/scrot {
+    inherit fetchurl stdenv giblib x11;
+  };
+
   seccure = import ../tools/security/seccure/0.4.nix {
     inherit fetchurl stdenv libgcrypt;
   };
@@ -3139,6 +3143,10 @@ let
       url = ftp://ftp.remotesensing.org/gdal/gdal-1.6.1-RC1.tar.gz;
       sha256 = "0f7da588yvb1d3l3gk5m0hrqlhg8m4gw93aip3dwkmnawz9r0qcw";
     };
+  };
+
+  giblib = import ../development/libraries/giblib {
+    inherit fetchurl stdenv x11 imlib2;
   };
 
   glew = import ../development/libraries/glew {
@@ -6424,7 +6432,7 @@ let
   };
 
   feh = import ../applications/graphics/feh {
-    inherit fetchurl stdenv x11 imlib2 libjpeg libpng;
+    inherit fetchurl stdenv x11 imlib2 libjpeg libpng giblib;
   };
 
   firefox = firefox35;
