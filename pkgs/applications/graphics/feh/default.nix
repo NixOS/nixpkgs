@@ -1,18 +1,5 @@
-{stdenv, fetchurl, x11, imlib2, libjpeg, libpng}:
+{ stdenv, fetchurl, x11, imlib2, libjpeg, libpng, giblib }:
 
-let
-
-  giblib = stdenv.mkDerivation {
-    name = "giblib-1.2.4";
-    src = fetchurl {
-      url = http://linuxbrit.co.uk/downloads/giblib-1.2.4.tar.gz;
-      sha256 = "1b4bmbmj52glq0s898lppkpzxlprq9aav49r06j2wx4dv3212rhp";
-    };
-    buildInputs = [x11 imlib2];
-  };
-
-in
-  
 stdenv.mkDerivation {
   name = "feh-1.3.4";
 
