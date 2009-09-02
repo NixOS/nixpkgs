@@ -130,10 +130,19 @@ rec {
         ''
           mkdir $out
           cp ${./test-driver/Machine.pm} Machine.pm
+          
           ${perl}/bin/perl ${./test-driver/test-driver.pl} ${network}/vms/*/bin/run-*-vm
+          
           for i in */coverage-data; do
             ensureDir $out/coverage-data
             mv $i $out/coverage-data/$(dirname $i)
+          done
+
+          for i in $out/*.xwd; do
+            j=$out/$(basename $i .xwd).png
+            ${pkgs.imagemagick}/bin/convert $i $j
+            ensureDir $out/nix-support
+            echo "report screenshot $j" >> $out/nix-support/hydra-build-products
           done
         ''; # */
     };

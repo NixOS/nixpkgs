@@ -106,6 +106,13 @@ let
         system = "i686-linux";
       }).report;
     
+    tests.kde4 =
+      { services ? ../services }:
+
+      (import ./tests/kde4.nix {
+        inherit nixpkgs services;
+        system = "i686-linux";
+      }).test;
 
   };
   
