@@ -1,5 +1,7 @@
 args: with args;
 
+assert stdenv.isLinux;
+
 /* usage: (sorry, its still impure but works!)
 
 impure directory:
