@@ -24,7 +24,7 @@ let
         # To build the kernel with coverage instrumentation, we need a
         # special patch to make coverage data available under /proc.
         kernel_2_6_28 = pkgs.kernel_2_6_28.override (orig: {
-          stdenv = pkgs.keepBuildTree orig.stdenv;
+          stdenv = pkgs.cleanupBuildTree (pkgs.keepBuildTree orig.stdenv);
           kernelPatches = orig.kernelPatches ++ pkgs.lib.singleton
             { name = "gcov";
               patch = pkgs.fetchurl {
