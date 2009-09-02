@@ -130,7 +130,6 @@ rec {
           mkdir $out
           cp ${./test-driver/Machine.pm} Machine.pm
           ${perl}/bin/perl ${./test-driver/test-driver.pl} ${network}/vms/*/bin/run-*-vm
-          find .
           for i in */coverage-data; do
             ensureDir $out/coverage-data
             mv $i $out/coverage-data/$(dirname $i)
@@ -175,6 +174,7 @@ rec {
       echo "making report..."
       ensureDir $out/coverage
       ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/full.info -o $out/coverage
+      cp $TMPDIR/full.info $out/coverage/
 
       ensureDir $out/nix-support
       echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
