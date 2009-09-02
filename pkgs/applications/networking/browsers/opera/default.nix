@@ -1,37 +1,33 @@
-{ stdenv, fetchurl, qt, zlib, libX11, libXext, libSM, libICE, libstdcpp5, glibc
-, motif ? null, libXt ? null
+{ stdenv, fetchurl, qt, zlib, libX11, libXext, libSM, libICE, libXt, glibc
 , makeDesktopItem
 }:
 
-assert motif != null -> libXt != null;
-
-# !!! Add Xinerama and Xrandr dependencies?  Or should those be in Qt?
-
-# Hm, does Opera 9.x still use Motif for anything?
+assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "10.0";
-  name = "opera-${version}";
-
-  inherit libstdcpp5;
+  name = "opera-10.00";
 
   builder = ./builder.sh;
-    src = if (stdenv.system == "i686-linux") then
+  
+  src =
+    if stdenv.system == "i686-linux" then
       fetchurl {
-	url = http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/i386/shared/opera-10.00.gcc4-shared-qt3.i386.tar.gz ;
+        url = "http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/i386/shared/${name}.gcc4-shared-qt3.i386.tar.gz";
         sha256 = "1l87rxdzq2mb92jbwj4gg79j177yzyfbkqb52gcdwicw8jcmhsad";
-      } else if (stdenv.system == "x86_64-linux") then
+      }
+    else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/x86_64/opera-10.00.gcc4-shared-qt3.x86_64.tar.gz ;
+        url = "http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/x86_64/${name}.gcc4-shared-qt3.x86_64.tar.gz";
         sha256 = "0w9a56j3jz0bjdj98k6n4xmrjnkvlxm32cfvh2c0f5pvgwcr642i";
-      } else throw "unsupported platform ${stdenv.system} (only i686-linux and x86_64 linux supported yet)";
+      }
+    else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 
   dontStrip = 1;
-  # operapluginwrapper seems to require libXt ?
-  # Adding it makes startup faster and omits error messages (on x68)
-  libPath =
-    [glibc qt motif zlib libX11 libXt libXext libSM libICE libstdcpp5]
-    ++ (if motif != null then [motif ] else []);
+  
+  # `operapluginwrapper' requires libXt. Adding it makes startup faster
+  # and omits error messages (on x86).
+  libPath = stdenv.lib.makeLibraryPath
+    [ stdenv.gcc.gcc glibc qt zlib libX11 libXt libXext libSM libICE ];
 
   desktopItem = makeDesktopItem {
     name = "Opera";
@@ -43,8 +39,8 @@ stdenv.mkDerivation rec {
     categories = "Application;Network;";
   };
 
-
   meta = {
     homepage = http://www.opera.com;
+    description = "The Opera web browser";
   };
 }

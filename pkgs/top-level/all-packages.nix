@@ -4003,12 +4003,6 @@ let
     mysqlSupport = getConfig ["qt" "mysql"] false;
   };
 
-  qt3gcc33 = qt3.override {
-    stdenv = overrideGCC stdenv gcc33;
-    openglSupport = false;
-    mysqlSupport = false;
-  };
-
   qt3mysql = qt3.override {
     mysqlSupport = true;
   };
@@ -6918,11 +6912,8 @@ let
 
   opera = import ../applications/networking/browsers/opera {
     inherit fetchurl zlib glibc stdenv makeDesktopItem;
-# stdenv = overrideGCC stdenv gcc40;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
-    #33motif = lesstif;
-    qt = if (stdenv.system == "i686-linux") then qt3gcc33 else qt3;
-    libstdcpp5 = (if (stdenv.system == "i686-linux") then gcc33 /* stdc++ 3.8 is used */ else gcc42).gcc;
+    qt = qt3;
   };
 
   pan = import ../applications/networking/newsreaders/pan {
