@@ -1,17 +1,16 @@
 args: with args;
 
-let version = "6.4.8-9"; in
+let version = "6.5.5-6"; in
 
 stdenv.mkDerivation (rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/${name}.tar.bz2";
-    sha256 = "1ngfs99wryrc7v5pqrjbcrvhsilc29iaj6zplzxm450f49xmpidq";
+    sha256 = "1037nsvfpw7wdgsvvzvi0bn1n5d667d8aj1xam7zgmf7xi6xha3q";
   };
 
   configureFlags = ''
-    --with-dots
     --with-gs-font-dir=${ghostscript}/share/ghostscript/fonts
     --with-gslib
     ${if args ? tetex then "--with-frozenpaths" else ""}
