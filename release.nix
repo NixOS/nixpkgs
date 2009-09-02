@@ -114,6 +114,14 @@ let
         system = "i686-linux";
       }).test;
 
+    tests.quake3 =
+      { services ? ../services }:
+
+      (import ./tests/quake3.nix {
+        inherit nixpkgs services;
+        system = "i686-linux";
+      }).test;
+
   };
   
 

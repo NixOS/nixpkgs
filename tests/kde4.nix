@@ -27,8 +27,6 @@ rec {
           services.xserver.desktopManager.default = "kde4";
           services.xserver.desktopManager.kde4.enable = true;
 
-          services.sshd.enable = true;
-
           users.extraUsers = pkgs.lib.singleton
             { name = "alice";
               description = "Alice Foobar";
@@ -38,7 +36,7 @@ rec {
               password = "foobar";
             };
 
-          environment.systemPackages = [ pkgs.xorg.xclock pkgs.xorg.xwd ];
+          environment.systemPackages = [ pkgs.scrot ];
         };
     };
 
@@ -52,7 +50,7 @@ rec {
 
       sleep 60;
 
-      print STDERR $client->execute("DISPLAY=:0.0 xwd -root > /hostfs/$ENV{out}/screen.xwd");
+      print STDERR $client->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen.png");
     '';
   
 }
