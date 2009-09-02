@@ -5927,7 +5927,7 @@ let
   audacious_plugins = import ../applications/audio/audacious/plugins.nix {
     inherit fetchurl stdenv pkgconfig audacious dbus_glib gettext
       libmad xlibs alsaLib taglib libmpcdec libogg libvorbis
-      libcdio libcddb;
+      libcdio libcddb libxml2;
   };
 
   audacity = import ../applications/audio/audacity {

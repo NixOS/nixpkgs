@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, audacious, dbus_glib, gettext
 , libmad, xlibs, alsaLib, taglib, libmpcdec, libogg, libvorbis
-, libcdio, libcddb
+, libcdio, libcddb, libxml2
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig audacious dbus_glib gettext libmad
     xlibs.libXcomposite alsaLib taglib libmpcdec
-    libogg libvorbis libcdio libcddb
+    libogg libvorbis libcdio libcddb libxml2
   ];
 
   preBuild = ''
