@@ -64,6 +64,11 @@ mkIf config.services.nfsKernel.enable {
     options
   ];
 
+  environment.etc = [
+    { source = exports;
+      target = "exports"; }
+  ];
+
   services = {
     extraJobs = [
     {
@@ -77,15 +82,17 @@ mkIf config.services.nfsKernel.enable {
 
         start script
 	  export PATH=${pkgs.nfsUtils}/sbin
+	  mkdir -p /var/lib/nfs
           ${modprobe}/sbin/modprobe nfsd || true
-          exportfs -a
+          exportfs -ra
         end script
 
         respawn sleep 1000000
 
         start script
+	  mkdir -p /var/lib/nfs
 	  export PATH=${pkgs.nfsUtils}/sbin
-          exportfs -au
+          exportfs -ra
         end script
       '';
     }
@@ -111,6 +118,22 @@ mkIf config.services.nfsKernel.enable {
         stop on nfs-kernel-exports/stop
 
         respawn ${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}
+      '';
+    }
+    {
+      name = "nfs-kernel-statd";
+      
+      job = ''
+        description "NSM (Network Status Monitor) of the RPC protocol"
+      
+        start on nfs-kernel-rpc-nfsd/started
+	stop on nfs-kernel-exports/stop
+	
+        start script
+          mkdir -p /var/lib/nfs
+        end script
+
+        respawn ${pkgs.nfsUtils}/sbin/rpc.statd
       '';
     }
     ];
