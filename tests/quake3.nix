@@ -8,15 +8,29 @@ with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
 
 rec {
 
+  client = 
+    { config, pkgs, ... }:
+
+    { services.xserver.enable = true;
+      services.xserver.driSupport = true;
+      environment.systemPackages = [ pkgs.scrot pkgs.icewm pkgs.quake3demo ];
+    };
+
   nodes =
-    { client =
+    { server =
         { config, pkgs, ... }:
 
-        { services.xserver.enable = true;
-          services.xserver.driSupport = true;
-        
-          environment.systemPackages = [ pkgs.scrot pkgs.xorg.twm pkgs.quake3demo ];
+        { jobs = pkgs.lib.singleton
+            { name = "quake3-server";
+              startOn = "startup";
+              exec =
+                "${pkgs.quake3demo}/bin/quake3 '+set dedicated 1' '+set g_gametype 0' " +
+                "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
+            };
         };
+
+      client1 = client;
+      client2 = client;
     };
 
   vms = buildVirtualNetwork { inherit nodes; };
@@ -25,15 +39,25 @@ rec {
     ''
       startAll;
 
-      $client->waitForFile("/tmp/.X11-unix/X0");
+      $server->waitForJob("quake3-server");
+      $client1->waitForFile("/tmp/.X11-unix/X0");
+      $client2->waitForFile("/tmp/.X11-unix/X0");
 
       sleep 20;
 
-      print STDERR $client->execute("DISPLAY=:0.0 quake3 &");
+      print STDERR $client1->execute("DISPLAY=:0.0 icewm &");
+      print STDERR $client1->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
+ 
+      print STDERR $client2->execute("DISPLAY=:0.0 icewm &");
+      print STDERR $client2->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
+ 
+      sleep 40;
 
-      sleep 20;
-
-      print STDERR $client->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen.png");
+      $server->mustSucceed("grep -q 'Foo.*entered the game' /tmp/log");
+      $server->mustSucceed("grep -q 'Bar.*entered the game' /tmp/log");
+      
+      print STDERR $client1->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen1.png");
+      print STDERR $client2->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen2.png");
     '';
   
 }
