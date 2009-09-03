@@ -94,7 +94,7 @@ sub connect {
     while (1) {
         last if -e ($self->{stateDir} . "/running");
         sleep 1;
-        die ("VM " . $self->{name} . " timed out") if $try++ > 180;
+        die ("VM " . $self->{name} . " timed out") if $try++ > 300;
     }
 
     while (1) {
