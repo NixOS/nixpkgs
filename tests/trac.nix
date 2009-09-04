@@ -11,42 +11,27 @@ rec {
     storage = 
       {pkgs, config, ...}:
       {
-        services = {
-          portmap = {
-            enable = true;
-          };
-    
-          nfsKernel = {
-            enable = true;
-            exports = ''
-              /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
-            '';
-	    createMountPoints = true;
-          };    
-        };  
+        services.portmap.enable = true;
+        services.nfsKernel.enable = true;
+        services.nfsKernel.exports = ''
+          /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
+        '';
+	services.nfsKernel.createMountPoints = true;
       };
 
     postgresql =
       {config, pkgs, ...}:
       {
-        services = {
-          sshd = {
-            enable = true;
-          };
-    
-          postgresql = {
-            enable = true;
-    	    enableTCPIP = true;
-	    
-            authentication = ''
-              # Generated file; do not edit!
-              local all all                trust
-              host  all all 127.0.0.1/32   trust
-	      host  all all ::1/128        trust
-	      host  all all 192.168.1.0/24 trust
-            '';
-          };
-        };  
+        services.sshd.enable = true;
+        services.postgresql.enable = true;
+    	services.postgresql.enableTCPIP = true;
+        services.postgresql.authentication = ''
+          # Generated file; do not edit!
+          local all all                trust
+          host  all all 127.0.0.1/32   trust
+	  host  all all ::1/128        trust
+	  host  all all 192.168.1.0/24 trust
+        '';
       };
 
     webserver = 
@@ -58,76 +43,38 @@ rec {
 	    device = "storage:/repos"; } 
 	];
       
-        services = {
-	  portmap = {
-	    enable = true;
-	  };
-
-          nfsKernel = {
-            enable = true;
-          };
-  
-          httpd = {
-            enable = true;
-            adminAddr = "root@localhost";
-            extraSubservices = [
-	      { serviceType = "trac"; }
-            ];
-          };
-        };
-	
-	environment = {
-	  extraPackages = [ pkgs.pythonPackages.trac pkgs.subversion ];
-	};
+        services.portmap.enable = true;
+        services.nfsKernel.enable = true;
+        services.httpd.enable = true;
+        services.httpd.adminAddr = "root@localhost";
+        services.httpd.extraSubservices = [ { serviceType = "trac"; } ];
+	environment.systemPackages = [ pkgs.pythonPackages.trac pkgs.subversion ];
       };
       
     client = 
       {config, pkgs, ...}:
       {
-        services = {
-	  xserver = {
-	    enable = true;
-
-            displayManager = {
-	      slim = {
-	        enable = false;
-	      };
-              kdm = {
-	        enable = true;
-		extraConfig =
-                  ''
-                    [X-:0-Core]
-                    AutoLoginEnable=true
-                    AutoLoginUser=alice
-                    AutoLoginPass=foobar
-                  '';
-	      };
-	    };
-	    desktopManager = {
-	      default = "kde4";
-	      kde4 = {
-	        enable = true;
-	      };
-	    };            
-	  };
-	};
-	
-	users = {
-	  extraUsers = pkgs.lib.singleton { 
-	      name = "alice";
-              description = "Alice Foobar";
-              home = "/home/alice";
-              createHome = true;
-              useDefaultShell = true;
-              password = "foobar";
-          };
+        services.xserver.enable = true;
+        services.xserver.displayManager.slim.enable = false;
+        services.xserver.displayManager.kdm.enable = true;
+	services.xserver.displayManager.kdm.extraConfig =
+          ''
+            [X-:0-Core]
+            AutoLoginEnable=true
+            AutoLoginUser=alice
+            AutoLoginPass=foobar
+          '';
+	services.xserver.desktopManager.default = "kde4";
+	services.xserver.desktopManager.kde4.enable = true;
+	users.extraUsers = pkgs.lib.singleton { 
+	  name = "alice";
+          description = "Alice Foobar";
+          home = "/home/alice";
+          createHome = true;
+          useDefaultShell = true;
+          password = "foobar";
         };
- 
-        environment = {
-	  extraPackages = [
-	    pkgs.scrot
-	  ];
-	};
+        environment.systemPackages = [ pkgs.scrot ];
       };
   };
     
