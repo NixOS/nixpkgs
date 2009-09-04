@@ -19,16 +19,11 @@ rec {
           nfsKernel = {
             enable = true;
             exports = ''
-              /repos/trac 192.168.1.0/255.255.255.0(rw,no_root_squash)
+              /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
             '';
+	    createMountPoints = true;
           };    
-        };
-  
-        environment = {
-          extraPackages = [
-            pkgs.subversion
-          ];
-        };
+        };  
       };
 
     postgresql =
@@ -57,6 +52,12 @@ rec {
     webserver = 
       {config, pkgs, ...}:
       {
+        fileSystems = pkgs.lib.mkOverride 50 {} 
+	[ 
+	  { mountPoint = "/repos";
+	    device = "storage:/repos"; } 
+	];
+      
         services = {
 	  portmap = {
 	    enable = true;
@@ -64,7 +65,7 @@ rec {
 
           nfsKernel = {
             enable = true;
-          };	  
+          };
   
           httpd = {
             enable = true;
@@ -76,7 +77,7 @@ rec {
         };
 	
 	environment = {
-	  extraPackages = [ pkgs.pythonPackages.trac ];
+	  extraPackages = [ pkgs.pythonPackages.trac pkgs.subversion ];
 	};
       };
       
@@ -124,7 +125,6 @@ rec {
  
         environment = {
 	  extraPackages = [
-	    pkgs.firefoxWrapper
 	    pkgs.scrot
 	  ];
 	};
@@ -137,24 +137,21 @@ rec {
     ''
       startAll;
       
-      $storage->mustSucceed("mkdir -p /repos/trac");
-      $storage->mustSucceed("svnadmin create /repos/trac");
-      
       $postgresql->waitForFile("/tmp/.s.PGSQL.5432");
       $postgresql->mustSucceed("createdb trac");
-
-      $webserver->mustSucceed("mkdir -p /repos/trac");
-      #$webserver->mustSucceed("mount storage:/repos/trac /repos/trac");
       
-      $webserver->waitForFile("/var/trac");
+      $webserver->mustSucceed("mkdir -p /repos/trac");
+      $webserver->mustSucceed("svnadmin create /repos/trac");
+      
+      $webserver->waitForFile("/var/trac");      
       $webserver->mustSucceed("mkdir -p /var/trac/projects/test");
       $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/python2.5/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
       
       $client->waitForFile("/tmp/.X11-unix/X0");
       sleep 60;
       
-      print STDERR $client->execute("DISPLAY=:0.0 konqueror http://webserver/projects/test &");
-      sleep 30;
+      print STDERR $client->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://webserver/projects/test &'");
+      sleep 120;
       
       print STDERR $client->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen1.png");
     '';
