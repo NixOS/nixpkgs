@@ -52,7 +52,7 @@ rec {
 
       $client->waitForFile("/tmp/.X11-unix/X0");
 
-      sleep 50;
+      sleep 70;
 
       print STDERR $client->execute("su - alice -c 'DISPLAY=:0.0 kwrite /var/log/messages &'");
 
