@@ -60,6 +60,8 @@ let
               ${job.postStop}
             end script
           '' else ""}
+
+          ${job.extraConfig}
         '';
 
     in
@@ -235,6 +237,15 @@ in
           example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
           description = ''
             Environment variables passed to the job's processes.
+          '';
+        };
+
+        extraConfig = mkOption {
+          type = types.string;
+          default = "";
+          example = "limit nofile 4096 4096";
+          description = ''
+            Additional Upstart stanzas not otherwise supported.
           '';
         };
 

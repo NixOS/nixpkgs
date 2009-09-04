@@ -230,6 +230,11 @@ in
           ${config.nix.envVars}
           exec nice -n ${builtins.toString config.nix.daemonNiceLevel} ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
         '';
+
+      extraConfig = 
+        ''
+          limit nofile 4096 4096
+        '';
     };
 
   environment.shellInit =
