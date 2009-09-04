@@ -4658,6 +4658,10 @@ let
     inherit fetchurl stdenv readline ncurses zlib;
   };
 
+  postgresql84 = selectVersion ../servers/sql/postgresql "8.4.0" {
+    inherit fetchurl stdenv readline ncurses zlib;
+  };
+
   postgresql_jdbc = import ../servers/sql/postgresql/jdbc {
     inherit fetchurl stdenv ant;
   };
