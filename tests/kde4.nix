@@ -54,6 +54,10 @@ rec {
 
       sleep 50;
 
+      print STDERR $client->execute("su - alice -c 'DISPLAY=:0.0 kwrite /var/log/messages &'");
+
+      sleep 10;
+      
       print STDERR $client->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");
 
       sleep 10;
