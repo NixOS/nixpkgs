@@ -92,5 +92,5 @@ let
 in {
   require = [options];
 
-  system.build.system = system;
+  system.build.toplevel = system;
 }

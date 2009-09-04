@@ -48,10 +48,10 @@ let
           -no-kvm-irqchip \
           -net nic,model=virtio -net user -smb / \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
-          -kernel ${config.system.build.system}/kernel \
-          -initrd ${config.system.build.system}/initrd \
+          -kernel ${config.system.build.toplevel}/kernel \
+          -initrd ${config.system.build.toplevel}/initrd \
           $QEMU_OPTS \
-          -append "$(cat ${config.system.build.system}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.system} $QEMU_KERNEL_PARAMS"
+          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} $QEMU_KERNEL_PARAMS"
     '';
 
 in
@@ -122,7 +122,7 @@ in
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
       ensureDir $out/bin
-      ln -s ${config.system.build.system} $out/system
+      ln -s ${config.system.build.toplevel} $out/system
       ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
     '';
 

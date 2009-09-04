@@ -16,7 +16,7 @@ in
 {
   inherit eval config;
 
-  system = config.system.build.system;
+  system = config.system.build.toplevel;
 
   vm = vmConfig.system.build.vm;
 

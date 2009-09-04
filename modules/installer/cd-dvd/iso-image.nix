@@ -98,7 +98,7 @@ in
   # script and the top-level system configuration directory.
   isoImage.storeContents =
     [ config.system.build.bootStage2
-      config.system.build.system
+      config.system.build.toplevel
     ];
 
   # Create the squashfs image that contains the Nix store.
@@ -137,7 +137,7 @@ in
         # menu.lst.  Break the cyclic dependency by having a /system
         # symlink on the CD, and having menu.lst refer to /system.
         source = pkgs.runCommand "system" {}
-          "ln -s ${config.system.build.system} $out";
+          "ln -s ${config.system.build.toplevel} $out";
         target = "/system";
       }
       { # Idem for the stage-2 init script.
