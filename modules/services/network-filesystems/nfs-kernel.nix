@@ -41,6 +41,11 @@ let
             specify  the  number  of NFS server threads. (-> man rpc.nfsd). Defaults to recommended value 8
           ";
         };
+	
+	createMountPoints = mkOption {
+	  default = false;
+	  description = "Whether to create the mount points in the exports file at startup time.";
+	};
       };
     };
   };
@@ -81,19 +86,27 @@ mkIf config.services.nfsKernel.enable {
         stop on network-interfaces/stop
 
         start script
-	  export PATH=${pkgs.nfsUtils}/sbin
+	  export PATH=${pkgs.nfsUtils}/sbin:$PATH
 	  mkdir -p /var/lib/nfs
           ${modprobe}/sbin/modprobe nfsd || true
+	  
+	  ${if cfg.createMountPoints == true then
+	    ''
+	      cat /etc/exports | while read line
+	      do
+	        for i in $line
+		do
+		  mkdir -p $i
+		  break
+		done
+	      done
+	    ''
+	    else ""}
+	    	  
           exportfs -ra
         end script
 
         respawn sleep 1000000
-
-        start script
-	  mkdir -p /var/lib/nfs
-	  export PATH=${pkgs.nfsUtils}/sbin
-          exportfs -ra
-        end script
       '';
     }
     {
