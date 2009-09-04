@@ -14,6 +14,10 @@ rec {
 
         { services.xserver.enable = true;
         
+          services.httpd.enable = true;
+          services.httpd.adminAddr = "foo@example.org";
+          services.httpd.documentRoot = "${pkgs.valgrind}/share/doc/valgrind/html";
+  
           services.xserver.displayManager.slim.enable = false;
           services.xserver.displayManager.kdm.enable = true;
           services.xserver.displayManager.kdm.extraConfig =
@@ -48,8 +52,12 @@ rec {
 
       $client->waitForFile("/tmp/.X11-unix/X0");
 
-      sleep 60;
+      sleep 50;
 
+      print STDERR $client->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");
+
+      sleep 10;
+      
       print STDERR $client->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen.png");
     '';
   
