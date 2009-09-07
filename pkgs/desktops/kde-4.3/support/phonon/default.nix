@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake
-, libXau, libXdmcp,
+, libXau, libXdmcp
 , qt4, pthread_stubs
 , gst_all, xineLib
 , automoc4}:
