@@ -1,4 +1,5 @@
-{stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, gnum4, pam}:
+{ stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
+, nettools, lsof, procps }:
 
 stdenv.mkDerivation {
   name = "lsh-2.0.4";
@@ -9,7 +10,21 @@ stdenv.mkDerivation {
 
   patches = [ ./pam-service-name.patch ];
 
-  buildInputs = [gperf guile gmp zlib liboop gnum4 pam];
+  preConfigure = ''
+    # Patch `lsh-make-seed' so that it can gather enough entropy.
+    sed -i "src/lsh-make-seed.c" \
+        -e "s|/usr/sbin/arp|${nettools}/sbin/arp|g ;
+            s|/usr/bin/netstat|${nettools}/bin/netstat|g ;
+            s|/usr/local/bin/lsof|${lsof}/bin/lsof|g ;
+            s|/bin/vmstat|${procps}/bin/vmstat|g ;
+            s|/bin/ps|${procps}/bin/sp|g ;
+            s|/usr/bin/w|${procps}/bin/w|g ;
+            s|/usr/bin/df|$(type -P df)|g ;
+            s|/usr/bin/ipcs|$(type -P ipcs)|g ;
+            s|/usr/bin/uptime|$(type -P uptime)|g"
+  '';
+
+  buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
 
   meta = {
     description = "GNU lsh, a GPL'd implementation of the SSH protocol";
@@ -19,8 +34,10 @@ stdenv.mkDerivation {
       version 2 protocol, currently being standardised by the IETF
       SECSH working group.
     '';
-    
+
     homepage = http://www.lysator.liu.se/~nisse/lsh/;
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

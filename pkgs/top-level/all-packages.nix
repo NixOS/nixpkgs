@@ -967,7 +967,8 @@ let
   };
 
   lsh = import ../tools/networking/lsh {
-    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam;
+    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam
+      readline nettools lsof procps;
   };
 
   lzma = import ../tools/compression/lzma {
