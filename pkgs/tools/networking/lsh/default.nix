@@ -4,11 +4,11 @@
 stdenv.mkDerivation {
   name = "lsh-2.0.4";
   src = fetchurl {
-    url = http://www.lysator.liu.se/~nisse/archive/lsh-2.0.4.tar.gz;
+    url = "mirror://gnu/lsh/${name}.tar.gz";
     sha256 = "614b9d63e13ad3e162c82b6405d1f67713fc622a8bc11337e72949d613713091";
   };
 
-  patches = [ ./pam-service-name.patch ];
+  patches = [ ./pam-service-name.patch ./lshd-no-root-login.patch ];
 
   preConfigure = ''
     # Patch `lsh-make-seed' so that it can gather enough entropy.
