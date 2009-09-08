@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, perl, bzip2, qt4, libxml2, exiv2, fam
-, log4cxx, cluceneCore
+{ stdenv, fetchurl, lib, cmake, qt4, perl, bzip2, libxml2, expat, exiv2
+, cluceneCore
 }:
 
 stdenv.mkDerivation {
@@ -14,12 +14,15 @@ stdenv.mkDerivation {
   
   CLUCENE_HOME = cluceneCore;
   
+  # Dependencies such as SQLite and FAM are unreliable in this release
   buildInputs = [
-    cmake perl bzip2 stdenv.gcc.libc qt4 libxml2 exiv2 fam /* log4cxx */ cluceneCore
+    cmake perl qt4 bzip2 stdenv.gcc.libc libxml2 expat exiv2 cluceneCore
   ];
 
   meta = {
-    homepage = http://strigi.sourceforge.net/;
+    homepage = http://strigi.sourceforge.net;
     description = "A very fast and efficient crawler to index data on your harddrive";
+    license = "LGPL";
+    maintainers = [ lib.maintainers.sander ];
   };
 }

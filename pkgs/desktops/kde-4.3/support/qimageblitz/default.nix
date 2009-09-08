@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, qt4}:
+{stdenv, fetchurl, lib, cmake, qt4}:
 
 stdenv.mkDerivation {
   name = "qimageblitz-0.0.4";
@@ -8,4 +8,10 @@ stdenv.mkDerivation {
   };
   includeAllQtDirs = true;
   buildInputs = [ cmake qt4 ];
+  meta = {
+    description = "Graphical effect and filter library for KDE4";
+    license = "BSD";
+    homepage = http://qimageblitz.sourceforge.net;
+    maintainers = [ lib.maintainers.sander ];
+  };
 }

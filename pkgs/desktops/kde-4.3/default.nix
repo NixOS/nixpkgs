@@ -3,46 +3,46 @@ pkgs:
 rec {
 ### SUPPORT
   automoc4 = import ./support/automoc4 {
-    inherit (pkgs) stdenv fetchurl cmake;
+    inherit (pkgs) stdenv fetchurl lib cmake;
     inherit (pkgs) qt4;
   };
 
   phonon = import ./support/phonon {
-    inherit (pkgs) stdenv fetchurl cmake;
+    inherit (pkgs) stdenv fetchurl lib cmake;
     inherit (pkgs) qt4 pthread_stubs gst_all xineLib;
     inherit (pkgs.xlibs) libXau libXdmcp;
     inherit automoc4;
   };
 
   strigi = import ./support/strigi {
-    inherit (pkgs) stdenv fetchurl cmake perl;
-    inherit (pkgs) bzip2 qt4 libxml2 exiv2 fam log4cxx cluceneCore;
+    inherit (pkgs) stdenv fetchurl lib cmake perl;
+    inherit (pkgs) bzip2 qt4 libxml2 expat exiv2 cluceneCore;
   };
   
   soprano = import ./support/soprano {
-    inherit (pkgs) stdenv fetchurl cmake;
-    inherit (pkgs) qt4 jdk cluceneCore redland;
+    inherit (pkgs) stdenv fetchurl lib cmake;
+    inherit (pkgs) qt4 cluceneCore redland;
   };
   
   qimageblitz = import ./support/qimageblitz {
-    inherit (pkgs) stdenv fetchurl cmake qt4;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4;
   };
   
   qca2 = import ./support/qca2 {
-    inherit (pkgs) stdenv fetchurl which qt4;
+    inherit (pkgs) stdenv fetchurl lib which qt4;
   };
   
   akonadi = import ./support/akonadi {
-    inherit (pkgs) stdenv fetchurl cmake qt4 shared_mime_info libxslt boost mysql;
-    inherit automoc4;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 shared_mime_info libxslt boost mysql;
+    inherit automoc4 soprano;
   };
   
   decibel = import ./support/decibel {
-    inherit (pkgs) stdenv fetchurl cmake qt4 tapioca_qt telepathy_qt dbus;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 tapioca_qt telepathy_qt;
   };
   
   eigen = import ./support/eigen {
-    inherit (pkgs) stdenv fetchurl cmake;
+    inherit (pkgs) stdenv fetchurl lib cmake;
   };
   
 ### LIBS
