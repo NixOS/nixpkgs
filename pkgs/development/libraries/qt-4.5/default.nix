@@ -45,12 +45,11 @@ stdenv.mkDerivation {
   ];
   
   prefixKey = "-prefix ";
-  
+
   configureFlags = ''
-    -prefix $out
     -v -no-separate-debug-info -release
     -system-zlib -system-libpng -system-libjpeg -fast
-    -qt-gif -confirm-license
+    -qt-gif -confirm-license -opensource
     -opengl -xrender -xrandr -xinerama -xcursor -qt-sql-mysql
     -qdbus -cups -glib -xfixes -dbus-linked
     -fontconfig -I${freetype}/include/freetype2
@@ -58,8 +57,6 @@ stdenv.mkDerivation {
     ${if buildExamples == true then "" else "-nomake examples"}
   '';
     
-  configurePhase = "echo o | ./configure $configureFlags";
-  
   patchPhase = ''
     substituteInPlace configure --replace /bin/pwd pwd
     sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf
