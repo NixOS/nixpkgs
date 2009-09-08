@@ -4034,7 +4034,7 @@ let
   };
 
   qt45 = import ../development/libraries/qt-4.5 {
-    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus
+    inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
     fontconfig freetype pkgconfig libtiff;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
     libXmu libXinerama xineramaproto libXcursor libXext

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, lib
 , libXft, libXrender, randrproto, xextproto, libXinerama, xineramaproto, libXcursor, libXmu
 , libXext, libXfixes, inputproto, fixesproto, libXrandr, freetype, fontconfig
 , zlib, libjpeg, mysql, libpng, which, mesa, openssl, dbus, cups, pkgconfig, libtiff, glib
@@ -72,5 +72,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.qtsoftware.com/downloads/opensource/appdev/linux-x11-cpp;
     description = "A cross-platform application framework for C++";
+    license = "QPL/GPL/LGPL";
+    maintainers = [ lib.maintainers.sander ];
   };
 }
