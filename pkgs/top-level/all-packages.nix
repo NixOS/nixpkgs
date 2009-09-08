@@ -403,6 +403,10 @@ let
   ### TOOLS
 
 
+  acct = import ../tools/system/acct {
+    inherit fetchurl stdenv;
+  };
+
   aefs = import ../tools/security/aefs {
     inherit fetchurl stdenv fuse;
   };
