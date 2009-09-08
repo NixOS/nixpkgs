@@ -7754,6 +7754,7 @@ let
   
   kde43 = import ../desktops/kde-4.3 (pkgs // {
     openexr = openexr_1_6_1;
+    qt4 = qt45;
   });
   
   kdelibs = kde3.kdelibs;
