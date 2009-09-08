@@ -526,4 +526,10 @@ let inherit (builtins) head tail trace; in
      url = srcInfo.url;
      sha256 = srcInfo.hash;
    };
+
+   fetchGitFromSrcInfo = srcInfo: fetchgit {
+     url = srcInfo.url;
+     rev = srcInfo.rev;
+     sha256 = srcInfo.hash;
+   };
 }) // args

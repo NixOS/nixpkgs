@@ -5298,6 +5298,10 @@ let
       inherit fetchurl stdenv kernel;
     };
 
+    aufs2 = import ../os-specific/linux/aufs2 {
+      inherit fetchgit stdenv kernel;
+    };
+
     exmap = import ../os-specific/linux/exmap {
       inherit fetchurl stdenv kernel boost pcre pkgconfig;
       inherit (gtkLibs) gtkmm;

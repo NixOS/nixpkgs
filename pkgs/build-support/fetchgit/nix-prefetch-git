@@ -42,6 +42,8 @@ if test -z "$finalPath"; then
       echo $tmpFile
       git checkout $rev
     fi
+    # Allow doing additional processing before .git removal
+    eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     find $tmpFile -name .git\* | xargs rm -rf
 
     # Compute the hash.

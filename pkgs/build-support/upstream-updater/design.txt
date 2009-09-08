@@ -12,6 +12,7 @@ Attributes:
 src-info-for-file.nix:
 
 downloadPage
+rev (for repos)
 baseName (default = unnamed-package)
 sourceRegexp (default = '.*[.]tar[.].*')
 choiceCommand (default = 'head -1')
