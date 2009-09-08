@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
 , nettools, lsof, procps }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "lsh-2.0.4";
   src = fetchurl {
     url = "mirror://gnu/lsh/${name}.tar.gz";
