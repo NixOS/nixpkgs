@@ -1,11 +1,11 @@
-args: with args;
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "clucene-core-0.9.20";
+  name = "clucene-core-0.9.21b";
 
   src = fetchurl {
     url = "mirror://sf/clucene/${name}.tar.bz2";
-    sha256 = "1hwq3b4qp1dgygmypgpg3blj68wnksq2rbqkwyxvl5dldn12q7rg";
+    sha256 = "202ee45af747f18642ae0a088d7c4553521714a511a1a9ec99b8144cf9928317";
   };
   
   meta = {
