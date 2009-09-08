@@ -978,6 +978,10 @@ let
   lzma = import ../tools/compression/lzma {
     inherit fetchurl stdenv;
   };
+  
+  xz = import ../tools/compression/xz {
+    inherit fetchurl stdenv lib;
+  };
 
   lzop = import ../tools/compression/lzop {
     inherit fetchurl stdenv lzo;
