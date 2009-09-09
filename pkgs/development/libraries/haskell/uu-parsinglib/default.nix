@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "uu-parsinglib";
-  version = "2.2.0";
-  sha256 = "f66b16d112d8a013eaf14823d2f3d228b476dfd117558a97a949a29961db5290";
+  version = "2.2.1";
+  sha256 = "f05088d621715e5ebc7037f1a8cb5f34fd13ed055a26bf2dc331bdbeef7552dc";
   meta = {
     description = "New version of the Utrecht University parser combinator library";
   };
