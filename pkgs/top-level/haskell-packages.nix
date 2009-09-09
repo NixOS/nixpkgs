@@ -316,6 +316,10 @@ rec {
     inherit cabal;
   };
 
+  parseargs = import ../development/libraries/haskell/parseargs {
+    inherit cabal;
+  };
+
   parsec = import ../development/libraries/haskell/parsec {
     inherit cabal;
   };
