@@ -11,13 +11,13 @@
 }:
 
 stdenv.mkDerivation {
-  name = "thunderbird-2.0.0.21";
+  name = "thunderbird-2.0.0.23";
 
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/2.0.0.21/source/thunderbird-2.0.0.21-source.tar.bz2;
-    sha1 = "8bb2f7ce60635f6082c3c4542fff10c4b7445dc0";
+    url = ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/2.0.0.23/source/thunderbird-2.0.0.23-source.tar.bz2;
+    sha1 = "a237bfb92ec9c4b2bed7ea744e95d01ec43e07f1";
   };
 
   buildInputs = [
@@ -51,5 +51,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mozilla Thunderbird, a full-featured email client";
+    maintainers = [stdenv.lib.maintainers.eelco];
   };
 }
