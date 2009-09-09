@@ -47,29 +47,34 @@ rec {
   
 ### LIBS
   kdelibs = import ./libs {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
-    inherit (pkgs) giflib jasper openexr aspell avahi shared_mime_info;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
+    inherit (pkgs) xz flex bison giflib jasper openexr aspell avahi shared_mime_info;
     inherit automoc4 phonon strigi soprano;
   };
 
+  kdelibs_experimental = import ./libs-experimental {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
+    inherit automoc4 kdelibs phonon;
+  };
+  
 ### BASE  
   kdebase_workspace = import ./base-workspace {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl python pam sip pyqt4;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python pam sip pyqt4;
     inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs boost ConsoleKit;
     inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver;
-    inherit kdelibs kdepimlibs kdebindings;
-    inherit automoc4 phonon strigi soprano qimageblitz;
+    inherit kdelibs kdelibs_experimental kdepimlibs kdebindings;
+    inherit automoc4 phonon strigi soprano qimageblitz akonadi;
   };
   
   kdebase = import ./base {
-    inherit (pkgs) stdenv fetchurl cmake perl qt4 pciutils libraw1394;
-    inherit kdelibs;
+    inherit (pkgs) stdenv fetchurl lib cmake perl qt4 pciutils libraw1394;
+    inherit kdelibs kdebase_workspace;
     inherit automoc4 phonon strigi qimageblitz soprano;
   };
   
   kdebase_runtime = import ./base-runtime {
-    inherit (pkgs) stdenv fetchurl cmake perl bzip2 qt4;
-    inherit (pkgs) xineLib alsaLib samba cluceneCore;
+    inherit (pkgs) stdenv fetchurl cmake lib perl bzip2 xz qt4;
+    inherit (pkgs) shared_mime_info xineLib alsaLib samba cluceneCore;
     inherit kdelibs;
     inherit automoc4 phonon strigi soprano;
   };
@@ -77,7 +82,8 @@ rec {
 ### ADDITIONAL
 
   kdepimlibs = import ./pimlibs {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost cyrus_sasl gpgme libical openldap;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl boost cyrus_sasl gpgme;
+    inherit (pkgs) libical openldap shared_mime_info;
     inherit kdelibs;
     inherit automoc4 phonon akonadi;
   };
