@@ -69,12 +69,11 @@
     patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch];
     buildInputs = attrs.buildInputs ++ [args.zlib xorg.xf86bigfontproto];
     propagatedBuildInputs = [xorg.libpciaccess];
-    /*
-    configureFlags = "--with-xkb-output=/var/tmp";
-    postPatch = ''
-      sed -i -e 's@ -w @ -I${args.xkeyboard_config}/etc/X11/xkb -w @' xkb/ddxLoad.c
-    '';
-    */
+    postInstall =
+      ''
+        rm -rf $out/share/X11/xkb/compiled
+        ln -s /var/tmp $out/share/X11/xkb/compiled
+      '';
   };
   
 }
