@@ -84,11 +84,21 @@ in
         preStart =
           ''
             mkdir -m 0755 -p /var/cache/hald
+            mkdir -m 0755 -p /var/run/hald
             
             rm -f /var/cache/hald/fdi-cache
+
+            # !!! Hack: start the daemon here to make sure it's
+            # running when the Upstart job reaches the "running"
+            # state.  Should be fixable in Upstart 0.6.
+            ${hal}/sbin/hald
           '';
 
-        exec = "${hal}/sbin/hald --daemon=no";
+        postStop =
+          '' 
+            pid=$(cat /var/run/hald/pid)
+            test -n "$pid" && kill "$pid"
+         '';
       };
 
     services.udev.packages = [hal];
