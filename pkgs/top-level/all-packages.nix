@@ -789,13 +789,12 @@ let
   };
 
   gnuplot = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib gd texinfo readline;
-  };
-
-  gnuplotX = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib gd texinfo readline;
+    inherit fetchurl stdenv zlib gd texinfo readline emacs;
     inherit (xlibs) libX11 libXt libXaw libXpm;
-    x11Support = true;
+    x11Support = getPkgConfig "gnuplot" "x11" false;
+    wxGTK = if getPkgConfig "gnuplot" "wxGtk" false then wxGTK28 else null;
+    inherit (gtkLibs) pango;
+    inherit cairo pkgconfig;
   };
 
   gnused = useFromStdenv "gnused"
