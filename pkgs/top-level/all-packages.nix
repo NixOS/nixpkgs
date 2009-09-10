@@ -7268,7 +7268,7 @@ let
   });*/
 
   timidity = import ../tools/misc/timidity {
-    inherit fetchurl stdenv alsaLib;
+    inherit fetchurl stdenv lib alsaLib composableDerivation jackaudio ncurses;
   };
 
   tkcvs = import ../applications/version-management/tkcvs {
