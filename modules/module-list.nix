@@ -96,6 +96,8 @@
   ./services/x11/xserver/display-managers/default.nix
   ./services/x11/xserver/display-managers/kdm.nix
   ./services/x11/xserver/display-managers/slim.nix
+  ./services/x11/xserver/hardware/synaptics.nix
+  ./services/x11/xserver/hardware/wacom.nix
   ./services/x11/xserver/window-managers/compiz.nix
   ./services/x11/xserver/window-managers/default.nix
   ./services/x11/xserver/window-managers/kwm.nix

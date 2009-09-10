@@ -3,10 +3,11 @@
 let
   inherit (pkgs.lib) mkOption mergeOneOption optionals filter concatMap concatMapStrings;
   cfg = config.services.xserver;
-  xorg = cfg.package;
+  xorg = pkgs.xorg;
 
   # file provided by services.xserver.displayManager.session.script
-  xsession = wm: dm: pkgs.writeScript "xsession" ''#!/bin/sh
+  xsession = wm: dm: pkgs.writeScript "xsession" ''
+    #!/bin/sh
 
     source /etc/profile
 
@@ -161,12 +162,10 @@ in
         job = mkOption {
           default = {};
           example = {
-            beforeScript = ''
+            preStart = ''
               rm -f /var/log/slim.log
             '';
-            env = ''
-              env SLIM_CFGFILE=/etc/slim.conf
-            '';
+            environment = { SLIM_CFGFILE = /etc/slim.conf; };
             execCmd = "${pkgs.slim}/bin/slim";
           };
 

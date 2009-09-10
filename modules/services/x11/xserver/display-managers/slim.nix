@@ -93,15 +93,14 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.job =
-      { beforeScript =
+      { preStart =
           ''
             rm -f /var/log/slim.log
           '';
-        env =
-          ''
-            env SLIM_CFGFILE=${slimConfig}
-            env SLIM_THEMESDIR=${slimThemesDir}
-          '';
+        environment =
+          { SLIM_CFGFILE = slimConfig;
+            SLIM_THEMESDIR = slimThemesDir;
+          };
         execCmd = "${pkgs.slim}/bin/slim";
       };
 

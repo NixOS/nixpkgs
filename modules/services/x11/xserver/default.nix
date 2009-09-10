@@ -1,353 +1,38 @@
-{config, pkgs, ...}:
-# TODO: this file need some make-up (Nicolas Pierron)
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
 let
+
   kernelPackages = config.boot.kernelPackages;
-  # List of font directories.
-  fontDirectories = config.fonts.fonts;
-
-  options = {
-    services = {
-
-      xserver = {
-
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the X server.
-          ";
-        };
-
-        autorun = mkOption {
-          default = true;
-          description = "
-            Switch to false to create upstart-job and configuration, 
-            but not run it automatically
-          ";
-        };
-
-        exportConfiguration = mkOption {
-          default = false;
-          description = "
-            Create /etc/X11/xorg.conf and a file with environment
-            variables
-          ";
-        };
-
-        tcpEnable = mkOption {
-          default = false;
-          description = "
-            Whether to enable TCP socket for the X server.
-          ";
-        };
-
-        resolutions = mkOption {
-          default = [{x = 1024; y = 768;} {x = 800; y = 600;} {x = 640; y = 480;}];
-          description = "
-            The screen resolutions for the X server.  The first element is the default resolution.
-          ";
-        };
-
-        videoDriver = mkOption {
-          default = "vesa";
-          example = "i810";
-          description = "
-            The name of the video driver for your graphics card.
-          ";
-        };
-
-        driSupport = mkOption {
-          default = false;
-          description = "
-            Whether to enable accelerated OpenGL rendering through the
-            Direct Rendering Interface (DRI).
-          ";
-        };
-
-/*
-        sessionType = mkOption {
-          default = "gnome";
-          example = "xterm";
-          description = "
-            The kind of session to start after login.  Current possibilies
-            are <literal>kde</literal> (which starts KDE),
-            <literal>gnome</literal> (which starts
-            <command>gnome-terminal</command>) and <literal>xterm</literal>
-            (which starts <command>xterm</command>).
-          ";
-        };
-
-        windowManager = mkOption {
-          default = "";
-          description = "
-            This option selects the window manager.  Available values are
-            <literal>twm</literal> (extremely primitive),
-            <literal>metacity</literal>, <literal>xmonad</literal>
-            and <literal>compiz</literal>.  If
-            left empty, the <option>sessionType</option> determines the
-            window manager, e.g., Metacity for Gnome, and
-            <command>kwm</command> for KDE.
-          ";
-        };
-
-        sessionStarter = mkOption {
-          example = "${pkgs.xterm}/bin/xterm -ls";
-          description = "
-            The command executed after login and after the window manager
-            has been started.  Used if
-            <option>services.xserver.sessionType</option> is empty.
-          ";
-        };
-*/
-
-        startSSHAgent = mkOption {
-          default = true;
-          description = "
-            Whether to start the SSH agent when you log in.  The SSH agent
-            remembers private keys for you so that you don't have to type in
-            passphrases every time you make an SSH connection.  Use
-            <command>ssh-add</command> to add a key to the agent.
-          ";
-        };
-
-        isClone = mkOption {
-          default = true;
-          example = false;
-          description = "
-            Whether to enable the X server clone mode for dual-head.
-          ";
-        };
-
-        synaptics = {
-          enable = mkOption {
-            default = false;
-            example = true;
-            description = "
-              Whether to replace mouse with touchpad.
-            ";
-          };
-          dev = mkOption {
-            default = "/dev/input/event0";
-            description = "
-              Event device for Synaptics touchpad.
-            ";
-          };
-          minSpeed = mkOption {
-            default = "0.06";
-            description = "Cursor speed factor for precision finger motion";
-          };
-          maxSpeed = mkOption {
-            default = "0.12";
-            description = "Cursor speed factor for highest-speed finger motion";
-          };
-          twoFingerScroll = mkOption {
-            default = false;
-            description = "Whether to enable two-finger drag-scrolling";
-          };
-        };
-
-        wacom = {
-	  enable = mkOption {
-	    default = false;
-	    description = "Whether to enable Wacom touchscreen/digitizer";
-	  };
-
-          device = mkOption {
-	    default = "/dev/ttyS0";
-	    description = "Device to use";
-	  };
-
-	  forceDeviceType = mkOption {
-	    default = "ISDV4";
-	    example = null;
-	    description = "Some models (think touchscreen) require forcing device type";
-	  };
-
-	};
-
-        layout = mkOption {
-          default = "us";
-          description = "
-            Keyboard layout.
-          ";
-        };
-
-        xkbModel = mkOption {
-          default = "pc104";
-          example = "presario";
-          description = "
-            Keyboard model.
-          ";
-        };
-
-        xkbOptions = mkOption {
-          default = "";
-          example = "grp:caps_toggle, grp_led:scroll";
-          description = "
-            X keyboard options; layout switching goes here.
-          ";
-        };
-
-        useInternalAGPGART = mkOption {
-          default = "";
-          example = "no";
-          description = "
-            Just the wrapper for an xorg.conf option.
-          ";
-        };
-
-        extraDeviceConfig = mkOption {
-          default = "";
-          example = "VideoRAM 131072";
-          description = "
-            Just anything to add into Device section.
-          ";
-        };
-
-        extraMonitorSettings = mkOption {
-          default = "";
-          example = "HorizSync 28-49";
-          description = "
-            Just anything to add into Monitor section.
-          ";
-        };
-
-        extraDisplaySettings = mkOption {
-          default = "";
-          example = "Virtual 2048 2048";
-          description = "
-            Just anything to add into Display subsection (located in Screen section).
-          ";
-        };
-   
-        extraModules = mkOption {
-          default = "";
-          example = "
-            SubSection \"extmod\"
-            EndSubsection
-          ";
-          description = "
-            Just anything to add into Modules section.
-          ";
-        };
-
-        serverLayoutOptions = mkOption {
-          default = "";
-          example = "
-            Option \"AIGLX\" \"true\"
-          ";
-          description = "
-            Just anything to add into Monitor section.
-          ";
-        };
-
-        defaultDepth = mkOption {
-          default = 24;
-          example = 8;
-          description = "
-            Default colour depth.
-          ";
-        };
-        
-        useXFS = mkOption {
-          default = false;
-          example = "unix/:7100";
-          description = "
-            Way to access the X Font Server to use.
-          ";
-        };
-
-        tty = mkOption {
-          default = 7;
-          example = 9;
-          description = "
-            Virtual console for the X server.
-          ";
-        };
-
-        display = mkOption {
-          default = 0;
-          example = 1;
-          description = "
-            Display number for the X server.
-          ";
-        };
-
-        package = mkOption {
-          default = pkgs.xorg;
-          description = "
-            Alternative X.org package to use. For 
-            example, you can replace individual drivers.
-          ";
-        };
-
-        virtualScreen = mkOption {
-          default = null;
-          example = {
-            x=2048;
-            y=2048;
-          };
-          description = "
-            Virtual screen size for Xrandr
-          ";
-        };
-      };
-
-    };
-
-    environment.x11Packages = mkOption {
-      default = [];
-      type = types.list types.package;
-      description = "
-        List of packages added to the system when the xserver is
-        activated. (<option>services.xserver.enable</option>).
-      ";
-    };
-  };
-in
-
-let
 
   # Abbreviations.
   cfg = config.services.xserver;
-  xorg = cfg.package;
-  stdenv = pkgs.stdenv;
+  xorg = pkgs.xorg;
 
+
+  # Map the video driver setting to a driver.
   knownVideoDrivers = {
-    nvidia = { modulesFirst = [ kernelPackages.nvidia_x11 ]; };  #make sure it first loads the nvidia libs
-    vesa =   { modules = [xorg.xf86videovesa]; };
-    vga =    { modules = [xorg.xf86videovga]; };
-    sis =    { modules = [xorg.xf86videosis]; };
-    i810 =   { modules = [xorg.xf86videoi810]; };
-    intel =  { modules = [xorg.xf86videointel]; };
-    nv =     { modules = [xorg.xf86videonv]; };
-    ati =    { modules = [xorg.xf86videoati]; };
-    openchrome = { modules = [xorg.xf86videoopenchrome]; };
-    cirrus = { modules = [xorg.xf86videocirrus]; };
+    nvidia =     { modules = [ kernelPackages.nvidia_x11 ]; };
+    vesa =       { modules = [ xorg.xf86videovesa ]; };
+    vga =        { modules = [ xorg.xf86videovga ]; };
+    sis =        { modules = [ xorg.xf86videosis ]; };
+    i810 =       { modules = [ xorg.xf86videoi810 ]; };
+    intel =      { modules = [ xorg.xf86videointel ]; };
+    nv =         { modules = [ xorg.xf86videonv ]; };
+    ati =        { modules = [ xorg.xf86videoati ]; };
+    openchrome = { modules = [ xorg.xf86videoopenchrome ]; };
+    cirrus =     { modules = [ xorg.xf86videocirrus ]; };
+    vmware =     { modules = [ xorg.xf86videovmware ]; };
   };
 
-  # Get a bunch of user settings.
   videoDriver = cfg.videoDriver;
-  resolutions = map (res: ''"${toString res.x}x${toString res.y}"'') (cfg.resolutions);
 
-  videoDriverModules = attrByPath [videoDriver] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
-
-  modules = 
-    attrByPath ["modulesFirst"] [] videoDriverModules
-    ++ [
-      xorg.xorgserver
-      xorg.xf86inputevdev
-    ] 
-    ++ attrByPath ["modules"] [] videoDriverModules
-    ++ optional cfg.synaptics.enable xorg.xf86inputsynaptics
-    ++ (optional cfg.wacom.enable ["${pkgs.linuxwacom}"])
-    ;
+  videoDriverInfo = attrByPath [videoDriver] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
 
 
   fontsForXServer =
-    fontDirectories ++
+    config.fonts.fonts ++
     # We don't want these fonts in fonts.conf, because then modern,
     # fontconfig-based applications will get horrible bitmapped
     # Helvetica fonts.  It's better to get a substitution (like Nimbus
@@ -359,314 +44,445 @@ let
     ];
 
 
-  halConfigFiles = singleton
-    (pkgs.writeTextFile {
-      name = "hal-policy-keymap";
-      destination = "/share/hal/fdi/policy/30-keymap.fdi";
-      text = ''
-        <?xml version="1.0" encoding="ISO-8859-1"?>
-        <deviceinfo version="0.2">
-          <device>
-            <match key="info.capabilities" contains="input.keymap">
-              <append key="info.callouts.add" type="strlist">hal-setup-keymap</append>
-            </match>
-
-            <match key="info.capabilities" contains="input.keys">
-              <merge key="input.x11_options.XkbRules" type="string">base</merge>
-              <merge key="input.x11_options.XkbModel" type="string">${cfg.xkbModel}</merge>
-              <merge key="input.x11_options.XkbLayout" type="string">${cfg.layout}</merge>
-              <append key="input.x11_options.XkbOptions" type="strlist">${cfg.xkbOptions}</append>
-            </match>
-          </device>
-        </deviceinfo>
-      '';
-    });
-
-    
-  configFile = stdenv.mkDerivation {
+  configFile = pkgs.stdenv.mkDerivation {
     name = "xserver.conf";
-    src = ./xserver.conf;
-    inherit fontsForXServer videoDriver resolutions;
-    isClone = if cfg.isClone then "on" else "off";
 
-    synapticsInputDevice = if cfg.synaptics.enable then ''
-      Section "InputDevice"
-        Identifier "Touchpad[0]"
-        Driver "synaptics"
-        Option "Device" "${cfg.synaptics.dev}"
-        Option "Protocol" "PS/2"
-        Option "LeftEdge" "1700"
-        Option "RightEdge" "5300"
-        Option "TopEdge" "1700"
-        Option "BottomEdge" "4200"
-        Option "FingerLow" "25"
-        Option "FingerHigh" "30"
-        Option "MaxTapTime" "180"
-        Option "MaxTapMove" "220"
-        Option "VertScrollDelta" "100"
-        Option "MinSpeed" "${cfg.synaptics.minSpeed}"
-        Option "MaxSpeed" "${cfg.synaptics.maxSpeed}"
-        Option "AccelFactor" "0.0010"
-        Option "SHMConfig" "on"
-        Option "Repeater" "/dev/input/mice"
-        Option "TapButton1" "1"
-        Option "TapButton2" "2"
-        Option "TapButton3" "3"
-        Option "VertTwoFingerScroll" "${if cfg.synaptics.twoFingerScroll then "1" else "0"}"
-        Option "HorizTwoFingerScroll" "${if cfg.synaptics.twoFingerScroll then "1" else "0"}"
-      EndSection
-    '' else "";
-
-    wacomInputDevice = if cfg.wacom.enable then ''
-      Section "InputDevice"
-        Driver "wacom"
-        Identifier "Wacom_stylus"
-        Option "Device" "${cfg.wacom.device}"
-        Option "Type" "stylus"
-        ${if cfg.wacom.forceDeviceType!=null then ''Option "ForceDevice" "${cfg.wacom.forceDeviceType}"'' else ""}
-        Option "Button2" "3"
-      EndSection
-      Section "InputDevice"
-        Driver "wacom"
-        Identifier "Wacom_eraser"
-        Option "Device" "${cfg.wacom.device}"
-        Option "Type" "eraser"
-        ${if cfg.wacom.forceDeviceType!=null then ''Option "ForceDevice" "${cfg.wacom.forceDeviceType}"'' else ""}
-        Option "Button1" "2"
-      EndSection
-      Section "InputDevice"
-        Driver "wacom"
-        Identifier "Wacom_cursor"
-        Option "Device" "${cfg.wacom.device}"
-        Option "Type" "cursor"
-        ${if cfg.wacom.forceDeviceType!=null then ''Option "ForceDevice" "${cfg.wacom.forceDeviceType}"'' else ""}
-      EndSection
-    '' else "";
-
-    xkbOptions = if cfg.xkbOptions == "" then "" else  ''
-      Option "XkbOptions" "${cfg.xkbOptions}"
-    '';
-
-    setCorePointer = 
-      if cfg.synaptics.enable then ''
-        InputDevice "Touchpad[0]" "CorePointer"
-      '' else "";
-
-    internalAGPGART =
-      if cfg.useInternalAGPGART == "yes" then
-        ''  Option "UseInternalAGPGART" "yes"''
-      else if cfg.useInternalAGPGART == "no" then
-        ''  Option "UseInternalAGPGART" "no"''
-      else "";
-
-    extraDeviceConfig = cfg.extraDeviceConfig; 
-    extraMonitorSettings = cfg.extraMonitorSettings; 
-    extraDisplaySettings = cfg.extraDisplaySettings;
-    extraModules = cfg.extraModules; 
-    serverLayoutOptions = cfg.serverLayoutOptions +
-    (if cfg.wacom.enable then ''
-      InputDevice "Wacom_stylus"
-      InputDevice "Wacom_cursor"
-      InputDevice "Wacom_eraser"
-    '' else "")
-    ; 
-    defaultDepth = cfg.defaultDepth; 
-    virtualScreen = if cfg.virtualScreen != null then 
-        "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}" 
-      else "";
-
-    xfs = if cfg.useXFS == false then "" else 
+    xfs = optionalString (cfg.useXFS != false)
       ''FontPath "${toString cfg.useXFS}"'';
 
-    buildCommand = ''
-      buildCommand= # urgh, don't substitute this
+    inherit (cfg) config;
 
-      export fontPaths=
-      for i in $fontsForXServer; do
-        if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
-          for j in $(find $i -name fonts.dir); do
-            fontPaths="''${fontPaths}FontPath \"$(dirname $j)\"''\n"
-          done
-        fi
-      done
+    buildCommand =
+      ''
+        echo 'Section "Files"' >> $out
+        echo $xfs >> $out
 
-      export modulePaths=
-      for i in $(find ${toString modules} -type d); do
-        if ls $i/*.so* > /dev/null 2>&1; then
-          modulePaths="''${modulePaths}ModulePath \"$i\"''\n"
-        fi
-      done
+        for i in ${toString fontsForXServer}; do
+          if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
+            for j in $(find $i -name fonts.dir); do
+              echo "  FontPath \"$(dirname $j)\"" >> $out
+            done
+          fi
+        done
+                
+        for i in $(find ${toString cfg.modules} -type d); do
+          if test $(echo $i/*.so* | wc -w) -ne 0; then
+            echo "  ModulePath \"$i\"" >> $out
+          fi
+        done
 
-      export moduleSection=""
-      export screen=""
-      export device=""
-      export extensions=""
-
-
-      #if only my gf were this dirty
-      if test "${toString videoDriver}" == "nvidia"; then
-        export screen='
-          Option "AddARGBGLXVisuals" "true"
-          Option "DisableGLXRootClipping" "true"
-          Option "RandRRotation" "on"
-        '
+        echo 'EndSection' >> $out
         
-        export device='
-          Option "RenderAccel" "true"
-          Option "AllowGLXWithComposite" "true"
-          Option "AddARGBGLXVisuals" "true"
-        '
-        
-        export extensions='
-          Option "Composite" "Enable"
-        '
-      fi
-        
-      if [ "${toString videoDriver}" = i810 ]; then
-        export extensions='
-          Option "Composite" "Enable"
-        ';
-      fi;
-
-      if [ "${toString videoDriver}" = ati ]; then
-        export extensions='
-          Option "Composite" "Enable"
-        ';
-      fi;
-
-      if [ "${toString videoDriver}" = radeonhd ]; then
-        export extensions='
-          Option "Composite" "Enable"
-        ';
-      fi;
-
-      substituteAll $src $out
-    ''; # */
+        echo "$config" >> $out
+      ''; # */
   };
 
 
+  halConfigFiles = singleton (pkgs.writeTextFile
+    { name = "hal-policy-keymap";
+      destination = "/share/hal/fdi/policy/30-keymap.fdi";
+      text =
+        ''
+          <?xml version="1.0" encoding="ISO-8859-1"?>
+          <deviceinfo version="0.2">
+            <device>
+              <match key="info.capabilities" contains="input.keymap">
+                <append key="info.callouts.add" type="strlist">hal-setup-keymap</append>
+              </match>
 
+              <match key="info.capabilities" contains="input.keys">
+                <merge key="input.x11_options.XkbRules" type="string">base</merge>
+                <merge key="input.x11_options.XkbModel" type="string">${cfg.xkbModel}</merge>
+                <merge key="input.x11_options.XkbLayout" type="string">${cfg.layout}</merge>
+                <append key="input.x11_options.XkbOptions" type="strlist">${cfg.xkbOptions}</append>
+              </match>
+            </device>
+          </deviceinfo>
+        '';
+    });
+
+  
 in
 
-mkIf cfg.enable {
+{
 
-  assertions = [ { assertion = config.services.hal.enable == true; message = "The X server needs HAL running. Set services.hal.enable to true"; } ];
-
-  require = [
-    options
-
-    # services.xserver.*Manager
-    ./display-managers/default.nix
-    ./window-managers/default.nix
-    ./desktop-managers/default.nix
-
-    # services.extraJobs
-    # ../../upstart-jobs/default.nix
-
-    # environment.etc
-    # ../../etc/default.nix
-
-    # fonts.fonts
-    # ../../system/fonts.nix
-
-    # boot.extraModulePackages
-    # security.extraSetuidPrograms
-    # environment.extraPackages
-  ];
-
-  boot = {
-    extraModulePackages = mkIf (cfg.videoDriver == "nvidia") [
-      kernelPackages.nvidia_x11
-    ];
-  };
-
-  environment = {
-    etc = mkIf cfg.exportConfiguration [
-      { source = "${configFile}";
-        target = "X11/xorg.conf";
-      }
-      # -xkbdir command line option does not seems to be passed to xkbcomp.
-      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-        target = "X11/xkb";
-      }
+  imports =
+    [ ./display-managers/default.nix
+      ./window-managers/default.nix
+      ./desktop-managers/default.nix
     ];
 
-    x11Packages = [
-      xorg.xrandr
-      xorg.xrdb
-      xorg.setxkbmap
-      xorg.iceauth # required for KDE applications (it's called by dcopserver)
-    ]
-    ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11;
 
-    extraPackages = config.environment.x11Packages;
-  };
+  ###### interface
+  
+  options = {
+  
+    services.xserver = {
 
-  services = {
-    xserver = {
-      displayManager = {
-        xserverArgs = [
-          "-ac"
-          "-logverbose"
-          "-verbose"
-          "-terminate"
-          "-logfile" "/var/log/X.${toString cfg.display}.log"
-          "-config ${configFile}"
-          ":${toString cfg.display}" "vt${toString cfg.tty}"
-          "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
-        ] ++ optional (!cfg.tcpEnable) "-nolisten tcp";
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable the X server.
+        '';
       };
+
+      autorun = mkOption {
+        default = true;
+        description = ''
+          Whether to start the X server automatically.
+        '';
+      };
+
+      exportConfiguration = mkOption {
+        default = false;
+        description = ''
+          Whether to symlink the X server configuration under
+          <filename>/etc/X11/xorg.conf</filename>.
+        '';
+      };
+
+      enableTCP = mkOption {
+        default = false;
+        description = ''
+          Whether to allow the X server to accept TCP connections.
+        '';
+      };
+
+      modules = mkOption {
+        default = [];
+        example = [ pkgs.linuxwacom ];
+        description = "Packages to be added to the module search path of the X server.";
+      };
+
+      resolutions = mkOption {
+        default = [ {x = 1024; y = 768;} {x = 800; y = 600;} {x = 640; y = 480;} ];
+        description = ''
+          The screen resolutions for the X server.  The first element is the default resolution.
+        '';
+      };
+
+      videoDriver = mkOption {
+        default = "vesa";
+        example = "i810";
+        description = ''
+          The name of the video driver for your graphics card.
+        '';
+      };
+
+      driSupport = mkOption {
+        default = true;
+        description = ''
+          Whether to enable accelerated OpenGL rendering through the
+          Direct Rendering Interface (DRI).
+        '';
+      };
+
+      startSSHAgent = mkOption {
+        default = true;
+        description = ''
+          Whether to start the SSH agent when you log in.  The SSH agent
+          remembers private keys for you so that you don't have to type in
+          passphrases every time you make an SSH connection.  Use
+          <command>ssh-add</command> to add a key to the agent.
+        '';
+      };
+
+      isClone = mkOption {
+        default = true;
+        example = false;
+        description = ''
+          Whether to enable the X server clone mode for dual-head.
+        '';
+      };
+
+      layout = mkOption {
+        default = "us";
+        description = ''
+          Keyboard layout.
+        '';
+      };
+
+      xkbModel = mkOption {
+        default = "pc104";
+        example = "presario";
+        description = ''
+          Keyboard model.
+        '';
+      };
+
+      xkbOptions = mkOption {
+        default = "";
+        example = "grp:caps_toggle, grp_led:scroll";
+        description = ''
+          X keyboard options; layout switching goes here.
+        '';
+      };
+
+      config = mkOption {
+        description = ''
+          The contents of the configuration file of the X server
+          (<filename>xorg.conf</filename>).
+        '';
+      };
+
+      deviceSection = mkOption {
+        default = "";
+        example = "VideoRAM 131072";
+        description = "Contents of the first Device section of the X server configuration file.";
+      };
+
+      monitorSection = mkOption {
+        default = "";
+        example = "HorizSync 28-49";
+        description = "Contents of the first Monitor section of the X server configuration file.";
+      };
+
+      moduleSection = mkOption {
+        default = "";
+        example =
+          ''
+            SubSection "extmod"
+            EndSubsection
+          '';
+        description = "Contents of the Module section of the X server configuration file.";
+      };
+
+      serverLayoutSection = mkOption {
+        default = "";
+        example =
+          ''
+            Option "AIGLX" "true"
+          '';
+        description = "Contents of the ServerLayout section of the X server configuration file.";
+      };
+
+      extraDisplaySettings = mkOption {
+        default = "";
+        example = "Virtual 2048 2048";
+        description = "Lines to be added to every Display subsection of the Screen section.";
+      };
+
+      defaultDepth = mkOption {
+        default = 24;
+        example = 8;
+        description = "Default colour depth.";
+      };
+
+      useXFS = mkOption {
+        default = false;
+        example = "unix/:7100";
+        description = "Determines how to connect to the X Font Server.";
+      };
+
+      tty = mkOption {
+        default = 7;
+        example = 9;
+        description = "Virtual console for the X server.";
+      };
+
+      display = mkOption {
+        default = 0;
+        example = 1;
+        description = "Display number for the X server.";
+      };
+
+      virtualScreen = mkOption {
+        default = null;
+        example = { x = 2048; y = 2048; };
+        description = ''
+          Virtual screen size for Xrandr.
+        '';
+      };
+      
     };
 
-    hal.packages = halConfigFiles;
-
-    extraJobs = [{
-      name = "xserver";
-      job = ''
-        start on ${if cfg.autorun then "hal" else "never"}
-
-        start script
-
-          # Ugly hack: wait until udev has started since the X server
-          # needs various devices.  This would more properly be
-          # expressed as an Upstart dependency, but AFAIK in "start
-          # on" we can't express a logical AND.
-          while ! initctl status udev 2>&1 | grep -q running; do
-              sleep 1
-          done
-        
-          rm -f /var/run/opengl-driver
-          ${if videoDriver == "nvidia"
-            then ''
-              ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
-            ''
-            else if cfg.driSupport
-            then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
-            else ""
-           }
-
-          ${cfg.displayManager.job.beforeScript}
-
-          rm -f /tmp/.X0-lock
-
-        end script
-
-        ${cfg.displayManager.job.env}
-        env FONTCONFIG_FILE=/etc/fonts/fonts.conf # !!! cleanup
-        env XKB_BINDIR=${xorg.xkbcomp}/bin # Needed for the Xkb extension.
-
-        ${if videoDriver == "nvidia" 
-          then "env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib"
-          else ""
-        }
-
-        ${if videoDriver != "nvidia"
-          then "env XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/dri"
-          else ""
-        }
-
-        exec ${cfg.displayManager.job.execCmd}
+    environment.x11Packages = mkOption {
+      default = [];
+      type = types.list types.package;
+      description = ''
+        List of packages added to the system when the X server is
+        activated (<option>services.xserver.enable</option>).
       '';
-    }];
+    };
+    
   };
+
+
+  ###### implementation
+  
+  config = mkIf cfg.enable {
+
+    assertions = singleton
+      { assertion = config.services.hal.enable == true;
+        message = "The X server needs HAL running. Set services.hal.enable to true";
+      };
+
+    boot.extraModulePackages =
+      optional (cfg.videoDriver == "nvidia") kernelPackages.nvidia_x11;
+
+    environment.etc = optionals cfg.exportConfiguration
+      [ { source = "${configFile}";
+          target = "X11/xorg.conf";
+        }
+        # -xkbdir command line option does not seems to be passed to xkbcomp.
+        { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+          target = "X11/xkb";
+        }
+      ];
+    
+    environment.x11Packages =
+      [ xorg.xorgserver
+        xorg.xrandr
+        xorg.xrdb
+        xorg.setxkbmap
+        xorg.iceauth # required for KDE applications (it's called by dcopserver)
+        xorg.xsetroot
+      ]
+      ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11;
+
+    environment.systemPackages = config.environment.x11Packages;
+    
+    services.hal.packages = halConfigFiles;
+
+    jobs = singleton
+      { name = "xserver";
+
+        startOn = if cfg.autorun then "hal" else "never";
+ 
+        environment =
+          { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
+            XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
+          } // optionalAttrs (videoDriver != "nvidia") {
+            XORG_DRI_DRIVER_PATH = "${pkgs.mesa}/lib/dri";
+          } // optionalAttrs (videoDriver == "nvidia") {
+            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
+          } // cfg.displayManager.job.environment;
+
+        preStart =
+          ''
+            # Ugly hack: wait until udev has started since the X server
+            # needs various devices.  This would more properly be
+            # expressed as an Upstart dependency, but AFAIK in "start
+            # on" we can't express a logical AND.
+            while ! initctl status udev 2>&1 | grep -q running; do
+                sleep 1
+            done
+        
+            rm -f /var/run/opengl-driver
+            ${if videoDriver == "nvidia"
+              then ''
+                ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
+              ''
+              else if cfg.driSupport
+              then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
+              else ""
+             }
+
+            ${cfg.displayManager.job.beforeScript}
+
+            rm -f /tmp/.X0-lock
+          '';
+
+        exec = "${cfg.displayManager.job.execCmd}";
+      };
+
+    services.xserver.displayManager.xserverArgs =
+      [ "-ac"
+        "-logverbose"
+        "-verbose"
+        "-terminate"
+        "-logfile" "/var/log/X.${toString cfg.display}.log"
+        "-config ${configFile}"
+        ":${toString cfg.display}" "vt${toString cfg.tty}"
+        "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
+      ] ++ optional (!cfg.enableTCP) "-nolisten tcp";
+
+    services.xserver.modules = videoDriverInfo.modules
+      ++ [ xorg.xorgserver xorg.xf86inputevdev ];
+    
+    services.xserver.config =
+      ''
+        Section "ServerFlags"
+          Option "AllowMouseOpenFail" "on"
+        EndSection
+
+        Section "Module"
+          ${cfg.moduleSection}
+        EndSection
+
+        Section "Monitor"
+          ${cfg.monitorSection}
+        EndSection
+
+        Section "Device"
+          ${cfg.deviceSection}
+        EndSection
+
+        Section "ServerLayout"
+          ${cfg.serverLayoutSection}
+        EndSection
+
+        Section "Screen"
+          Identifier "Screen[0]"
+          Device "Device[0]"
+          Monitor "Monitor[0]"
+
+          ${optionalString (cfg.defaultDepth != 0) ''
+            DefaultDepth ${toString cfg.defaultDepth}
+          ''}
+
+          ${optionalString (cfg.videoDriver == "nvidia") ''
+            Option "RandRRotation" "on"
+          ''}
+
+          ${
+            let
+              f = depth:
+                ''
+                  SubSection "Display"
+                    Depth ${toString depth}
+                    Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}
+                    ${cfg.extraDisplaySettings}
+                    ${optionalString (cfg.virtualScreen != null)
+                      "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
+                  EndSubSection
+                '';
+            in concatMapStrings f [8 16 24]
+          }
+
+        EndSection
+
+        Section "Extensions"
+          ${optionalString (cfg.videoDriver == "nvidia" || cfg.videoDriver == "i810" || cfg.videoDriver == "ati" || cfg.videoDriver == "radeonhd") ''
+            Option "Composite" "Enable"
+          ''}
+        EndSection
+
+        Section "DRI"
+          Mode 0666 # !!! FIX THIS!
+        EndSection
+      '';
+
+    services.xserver.monitorSection =
+      ''
+        Identifier "Monitor[0]"
+      '';
+      
+    services.xserver.deviceSection =
+      ''
+        Identifier "Device[0]"
+        Driver "${cfg.videoDriver}"
+
+        # !!! Is the "Clone" option still useful?
+        Option "Clone" "${if cfg.isClone then "on" else "off"}"
+      '';
+
+    services.xserver.serverLayoutSection =
+      ''
+        Identifier "Layout[all]"
+        Screen "Screen[0]"
+      '';
+
+  };
+
 }

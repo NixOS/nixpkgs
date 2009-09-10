@@ -6,7 +6,7 @@ let
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.kde4;
-  xorg = xcfg.package;
+  xorg = pkgs.xorg;
 
 in
 

@@ -74,11 +74,11 @@ in
   
     services.xserver.displayManager.job =
       { beforeScript = "";
-        env = "";
+        environment = {};
         execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}";
       };
 
-    security.pam.services = [ { name = "kde"; localLogin = true; } ];
+    security.pam.services = [ { name = "kde"; localLogin = true; ckHack = true; } ];
       
   };
   
