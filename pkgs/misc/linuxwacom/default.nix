@@ -1,18 +1,15 @@
-{stdenv, fetchurl, libX11, libXi, 
-  inputproto, xproto, ncurses, pkgconfig,
-  xorgserver,
-  udevSupport ? false}:
+{ stdenv, fetchurl, libX11, libXi, inputproto
+, xproto, ncurses, pkgconfig, xorgserver }:
 
-stdenv.mkDerivation {
-  name = "linuxwacom-0.8.4";
+stdenv.mkDerivation rec {
+  name = "linuxwacom-0.8.4-1";
   
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/linuxwacom/linuxwacom-0.8.4.tar.bz2";
-    sha256 = "1g1myn9wmczavkkb9jjfqq87la3n94nnwjm7w7yyyxsrdw4bavp5";
+    url = "mirror://sourceforge/linuxwacom/${name}.tar.bz2";
+    sha256 = "1gfsjm9i1c8d0w0g8v9q3xfrpxsmmsc9qlidr5mkwidr070cphz9";
   };
   
-  buildInputs = [libX11 libXi inputproto 
-    xproto ncurses pkgconfig xorgserver];
+  buildInputs = [ libX11 libXi inputproto xproto ncurses pkgconfig xorgserver ];
   
   preConfigure = ''
     ./configure --enable-wacomdrv --prefix=$out \
@@ -21,12 +18,11 @@ stdenv.mkDerivation {
     mv configure configure.removed
   '';
 
-  postInstall = ''
-    if test -n "${toString udevSupport}"; then
+  postInstall =
+    ''
       ensureDir $out/etc/udev/rules.d
       cp ${./10-wacom.rules} $out/etc/udev/rules.d/10-wacom.rules
-    fi
-  '';
+    '';
 
   meta = {
     maintainers = [stdenv.lib.maintainers.raskin];
