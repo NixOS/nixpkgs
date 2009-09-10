@@ -1277,11 +1277,6 @@ let
     inherit stdenv fetchurl;
   };
 
-  qtparted = import ../tools/misc/qtparted {
-    inherit fetchurl stdenv e2fsprogs ncurses readline parted zlib qt3;
-    inherit (xlibs) libX11 libXext;
-  };
-
   relfs = composedArgsAndFun (selectVersion ../tools/misc/relfs "cvs.2008.03.05") {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs pkgconfig libuuid;

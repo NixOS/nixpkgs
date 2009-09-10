@@ -33,6 +33,8 @@ args:
     # you can add groups names to update some repositories at once
     # see nix-repository-manager expression in haskellPackages
 
+      unsermake = { type = "svn"; url = "svn://anonsvn.kde.org/home/kde/trunk/kdenonbeta/unsermake"; };
+
       nix_repository_manager = { type = "darcs"; url = "http://mawercer.de/~marc/repos/nix-repository-manager"; };
 
       pywebcvs = { type = "svn"; url = "https://pywebsvcs.svn.sourceforge.net/svnroot/pywebsvcs/trunk"; };
