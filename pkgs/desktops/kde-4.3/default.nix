@@ -121,9 +121,9 @@ rec {
   };
   
   kdemultimedia = import ./multimedia {
-    inherit (pkgs) stdenv fetchurl cmake perl qt4;
-    inherit (pkgs) alsaLib xineLib libvorbis flac taglib cdparanoia;
-    inherit kdelibs;
+    inherit (pkgs) stdenv fetchurl lib cmake perl qt4;
+    inherit (pkgs) alsaLib xineLib libvorbis flac taglib cdparanoia lame;
+    inherit kdelibs kdelibs_experimental;
     inherit automoc4 phonon;
   };
   
@@ -176,13 +176,13 @@ rec {
   };
   
   kdesdk = import ./sdk {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost subversion apr aprutil;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt boost subversion apr aprutil;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon strigi;
   };
   
   kdewebdev = import ./webdev {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt boost;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon;
   };
