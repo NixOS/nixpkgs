@@ -7602,6 +7602,12 @@ let
     flex = flex2535;
   };
 
+  gparted = import ../tools/misc/gparted {
+    inherit fetchurl stdenv parted intltool gettext libuuid pkgconfig libxml2;
+    inherit (gtkLibs) gtk glib gtkmm;
+    inherit (gnome) gnomedocutils;
+  };
+
   hexen = import ../games/hexen {
     inherit stdenv fetchurl SDL;
   };
