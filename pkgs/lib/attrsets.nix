@@ -161,4 +161,9 @@ rec {
   /* Check whether the argument is a derivation. */
   isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
 
+
+  /* If the Boolean `cond' is true, return the attribute set `as',
+     otherwise an empty attribute set. */
+  optionalAttrs = cond: as: if cond then as else {};
+  
 }
