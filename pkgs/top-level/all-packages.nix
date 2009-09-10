@@ -2855,6 +2855,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  boolstuff = import ../development/libraries/boolstuff {
+    inherit fetchurl stdenv lib pkgconfig;
+  };
+
   boost_1_36_0 = import ../development/libraries/boost/1.36.0.nix {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
