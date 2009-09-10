@@ -137,4 +137,7 @@ in
   # video driver the host uses.
   services.xserver.videoDriver = pkgs.lib.mkOverride 50 {} "vesa";
   services.xserver.defaultDepth = pkgs.lib.mkOverride 50 {} 16;
+
+  # Wireless won't work in the VM.
+  networking.enableWLAN = pkgs.lib.mkOverride 50 {} false;
 }
