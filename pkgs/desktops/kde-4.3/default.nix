@@ -105,10 +105,10 @@ rec {
   };
   
   kdeedu = import ./edu {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt openbabel boost;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt openbabel boost;
     inherit (pkgs) readline gmm gsl facile ocaml;
     inherit kdelibs;
-    inherit automoc4 phonon;
+    inherit automoc4 phonon eigen;
   };
   
   kdegraphics = import ./graphics {
