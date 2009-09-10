@@ -3989,8 +3989,9 @@ let
   };
 
   popplerQt4 = import ../development/libraries/poppler {
-    inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg
+    inherit fetchurl stdenv cairo freetype fontconfig zlib libjpeg
       pkgconfig;
+    qt4 = qt45;
     inherit (gtkLibs) glib gtk;
     qt4Support = true;
   };

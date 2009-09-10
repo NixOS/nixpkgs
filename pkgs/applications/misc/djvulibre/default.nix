@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "djvulibre-3.5.21";
+  name = "djvulibre-3.5.22";
 
   src = fetchurl {
-    url = mirror://sourceforge/djvu/djvulibre-3.5.21.tar.gz;
-    sha256 = "39f80c1810be22c5ea7f6a44bbb449c3e29902895dcff9da6a8440891a67b8b4";
+    url = mirror://sourceforge/djvu/djvulibre-3.5.22.tar.gz;
+    sha256 = "1gphi67qiq1ky7k8vymkwcgla80cwy8smk1rla6grxdqipwl54ix";
   };
 
   buildInputs = [qt libX11 libjpeg libtiff libpng ghostscript zlib libungif x11 mesa];

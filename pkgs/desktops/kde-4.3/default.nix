@@ -73,12 +73,16 @@ rec {
   };
   
   kdebase_runtime = import ./base-runtime {
-    inherit (pkgs) stdenv fetchurl cmake lib perl bzip2 xz qt4;
+    inherit (pkgs) stdenv fetchurl lib cmake perl bzip2 xz qt4;
     inherit (pkgs) shared_mime_info xineLib alsaLib samba cluceneCore;
     inherit kdelibs;
     inherit automoc4 phonon strigi soprano;
   };
 
+  oxygen_icons = import ./oxygen-icons {
+    inherit (pkgs) stdenv fetchurl lib cmake;
+  };
+  
 ### ADDITIONAL
 
   kdepimlibs = import ./pimlibs {
@@ -95,7 +99,7 @@ rec {
   };
   
   kdeartwork = import ./artwork {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl xscreensaver;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl xscreensaver;
     inherit kdelibs kdebase_workspace;
     inherit automoc4 phonon strigi eigen;
   };
@@ -108,8 +112,8 @@ rec {
   };
   
   kdegraphics = import ./graphics {
-    inherit (pkgs) stdenv fetchurl cmake perl qt4 exiv2 lcms saneBackends libgphoto2;
-    inherit (pkgs) libspectre djvulibre chmlib;
+    inherit (pkgs) stdenv fetchurl lib cmake perl qt4 exiv2 lcms saneBackends libgphoto2;
+    inherit (pkgs) libspectre djvulibre chmlib shared_mime_info;
     inherit (pkgs.xlibs) libXxf86vm;
     poppler = pkgs.popplerQt4;
     inherit kdelibs;
@@ -146,7 +150,7 @@ rec {
   };
   
   kdegames = import ./games {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
     inherit kdelibs;
     inherit automoc4 phonon qca2;
   };
