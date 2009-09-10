@@ -1,16 +1,16 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-1.12";
+  name = "gsl-1.13";
 
   src = fetchurl {
     url = "mirror://gnu/gsl/${name}.tar.gz";
-    sha256 = "1fdpqw981gcc0wkvcacm16mrrsq5f4jdq395zk59lxjcsa492092";
+    sha256 = "1ix2ic7m8spkbmkxz9549385agpy2vxi6wim0vhcnm08wjk4hih9";
   };
 
   doCheck = true;
 
-  meta = { 
+  meta = {
     description = "The GNU Scientific Library, a large numerical library";
 
     longDescription = ''
@@ -26,5 +26,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gsl/;
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
