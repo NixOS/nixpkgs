@@ -7075,9 +7075,10 @@ let
   };
 
   # = urxvt
-  rxvt_unicode = import ../applications/misc/rxvt_unicode {
+  rxvt_unicode = makeOverridable (import ../applications/misc/rxvt_unicode) {
     inherit lib fetchurl stdenv perl ncurses;
     inherit (xlibs) libXt libX11 libXft;
+    perlSupport = false;
   };
 
   sbagen = import ../applications/misc/sbagen {
