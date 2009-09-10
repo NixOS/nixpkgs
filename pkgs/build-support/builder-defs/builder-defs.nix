@@ -35,6 +35,7 @@ let inherit (builtins) head tail trace; in
 
                 else (abort "unknown archive type : ${s}"));
 
+        # changing this ? see [1]
         defAddToSearchPath = fullDepEntry ("
                 addToSearchPathWithCustomDelimiter() {
                         local delimiter=\$1
@@ -57,6 +58,7 @@ let inherit (builtins) head tail trace; in
                 }
         ") ["defNest"];
 
+        # changing this ? see [1]
         defNest = noDepEntry ("
                 nestingLevel=0
 
@@ -86,6 +88,8 @@ let inherit (builtins) head tail trace; in
                 trap \"closeNest\" EXIT
         ");
 
+
+        # changing this ? see [1]
         minInit = fullDepEntry ("
                 set -e
                 NIX_GCC=${stdenv.gcc}
@@ -114,6 +118,7 @@ let inherit (builtins) head tail trace; in
                 "
         else "")) ["defNest" "defAddToSearchPath"];
                 
+        # if you change this rewrite using '' instead of "" to get rid of indentation in builder scripts
         addInputs = fullDepEntry ("
                 # Recursively find all build inputs.
                 findInputs()
@@ -180,6 +185,7 @@ let inherit (builtins) head tail trace; in
                 PATH=\$_PATH\${_PATH:+\"\${PATH_DELIMITER}\"}\$PATH
         ") ["minInit"];
         
+        # changing this ? see [1]
         defEnsureDir = fullDepEntry ("
                 # Ensure that the given directories exists.
                 ensureDir() {
@@ -190,6 +196,7 @@ let inherit (builtins) head tail trace; in
                 }
         ") ["minInit"];
 
+        # changing this ? see [1]
         toSrcDir = s : fullDepEntry ((if (archiveType s) == "tar" then "
                 tar xvf '${s}'
                 cd \"\$(tar tf '${s}' | head -1 | sed -e 's@/.*@@' )\"
@@ -237,15 +244,18 @@ let inherit (builtins) head tail trace; in
 
         configureCommand = attrByPath ["configureCommand"] "./configure" args;
 
+        # changing this ? see [1]
         doConfigure = fullDepEntry ("
                 ${configureCommand} --prefix=\"\$prefix\" ${toString configureFlags}
         ") ["minInit" "addInputs" "doUnpack"];
 
+        # changing this ? see [1]
 	doIntltool = fullDepEntry ("
 		mkdir -p config
 		intltoolize --copy --force
 	") ["minInit" "addInputs" "doUnpack"];
 
+        # changing this ? see [1]
         doAutotools = fullDepEntry ("
                 mkdir -p config
                 libtoolize --copy --force
@@ -256,12 +266,14 @@ let inherit (builtins) head tail trace; in
                 autoconf
         ")["minInit" "addInputs" "doUnpack"];
 
+        # changing this ? see [1]
         doMake = fullDepEntry ("        
                 make ${toString makeFlags}
         ") ["minInit" "addInputs" "doUnpack"];
 
         doUnpack = toSrcDir (toString src);
 
+        # changing this ? see [1]
         installPythonPackage = fullDepEntry ("
                 python setup.py install --prefix=\"\$prefix\" 
                 ") ["minInit" "addInputs" "doUnpack"];
@@ -276,10 +288,12 @@ let inherit (builtins) head tail trace; in
           python configure.py -b "$prefix/bin" -d "$(toPythonPath "$prefix")" -v "$prefix/share/sip" ${toString configureFlags}
         '') ["minInit" "addInputs" "doUnpack"]; 
 
+        # changing this ? see [1]
         doMakeInstall = fullDepEntry ("
                 make ${toString (attrByPath ["makeFlags"] "" args)} "+
                         "${toString (attrByPath ["installFlags"] "" args)} install") ["doMake"];
 
+        # changing this ? see [1]
         doForceShare = fullDepEntry (" 
                 ensureDir \"\$prefix/share\"
                 for d in ${toString forceShare}; do
@@ -320,6 +334,7 @@ let inherit (builtins) head tail trace; in
         "echo export ${head l}='\"'\"\\\$${head l}:${head (tail l)}\"'\"';\n" +
                 envAdderList (tail (tail l));
 
+        # changing this ? see [1]
         wrapEnv = cmd: env: "
                 mv \"${cmd}\" \"${cmd}-orig\";
                 touch \"${cmd}\";
@@ -533,3 +548,6 @@ let inherit (builtins) head tail trace; in
      sha256 = srcInfo.hash;
    };
 }) // args
+
+# [1]: rewrite using '' instead of " so that indentation gets stripped. It's
+# only about some spaces but in the end they will sum up
