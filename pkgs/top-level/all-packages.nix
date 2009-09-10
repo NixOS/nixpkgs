@@ -2737,6 +2737,10 @@ let
     inherit fetchurl stdenv ncurses lzma;
   };
 
+  texi2html = import ../development/tools/misc/texitohtml {
+    inherit fetchurl stdenv lib perl;
+  };
+
   uisp = import ../development/tools/misc/uisp {
     inherit fetchurl stdenv;
   };
