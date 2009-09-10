@@ -6962,6 +6962,12 @@ let
     inherit fetchurl stdenv cmake qt4;
   };
 
+  partitionManager = import ../tools/misc/partition-manager {
+    inherit fetchurl stdenv lib cmake pkgconfig gettext parted libuuid perl;
+    kde = kde43;
+    qt = qt4;
+  };
+
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr
       gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool;
