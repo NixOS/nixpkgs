@@ -93,7 +93,7 @@ rec {
   };
   
   kdeadmin = import ./admin {
-    inherit (pkgs) stdenv fetchurl cmake qt4 pkgconfig perl python sip pyqt4 pycups system_config_printer rhpl;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 pkgconfig perl python sip pyqt4 pycups system_config_printer rhpl;
     inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon;
   };
@@ -162,15 +162,15 @@ rec {
   };
     
   kdeutils = import ./utils {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl python gmp libzip libarchive sip pyqt4 pycups system_config_printer rhpl;
-    inherit kdelibs kdepimlibs kdebindings;
-    inherit automoc4 phonon qimageblitz;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python gmp libzip libarchive xz sip pyqt4 pycups system_config_printer rhpl;
+    inherit kdelibs kdelibs_experimental kdepimlibs kdebase kdebindings;
+    inherit automoc4 phonon qimageblitz qca2;
   };
   
 ### DEVELOPMENT
 
   kdebindings = import ./bindings {
-    inherit (pkgs) stdenv fetchurl python sip zlib libpng pyqt4 freetype fontconfig qt4;
+    inherit (pkgs) stdenv fetchurl lib python sip zlib libpng pyqt4 freetype fontconfig qt4;
     inherit (pkgs.xlibs) libSM libXrender libXrandr libXfixes libXcursor libXinerama libXext;
     inherit kdelibs;
   };
