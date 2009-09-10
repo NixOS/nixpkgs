@@ -22,6 +22,8 @@ let
 
       [X-:*-Core]
       ServerCmd=${dmcfg.xserverBin} ${dmcfg.xserverArgs}
+      # Needed to prevent the X server from dying on logout and not coming back:
+      TerminateServer=true
 
       [X-*-Greeter]
       HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10
