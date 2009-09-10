@@ -1,25 +1,37 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption filter concatMap concatStringsSep;
-  failed = map (x : x.message) (filter (x: ! x.assertion) config.assertions);
-in
 
+  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+in
+  
 {
 
-  assertions = mkOption {
-    default = [];
-    example = [{ assertion = false; msg = "you can't enable this for that reason"; }];
-    merge = pkgs.lib.mergeListOption;
-    description = ''
-      Add something like this
-      assertions = mkAlways [ { assertion = false; message = "false should have been true"; } ];
-      to your upstart-job.
-    '';
+  options = {
+
+    assertions = mkOption {
+      default = [];
+      example = [ { assertion = false; msg = "you can't enable this for that reason"; } ];
+      merge = pkgs.lib.mergeListOption;
+      description = ''
+        This option allows modules to express conditions that must
+        hold for the evaluation of the system configuration to
+        succeed, along with associated error messages for the user.
+      '';
+    };
+
   };
 
-  environment = {
-    # extraPackages are evaluated always. Thus the assertions are checked as well. hacky!
-    extraPackages = if [] == failed then [] else throw "\n!! failed assertions: !!\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}";
+  config = {
+
+    # This option is evaluated always. Thus the assertions are checked as well. hacky!
+    environment.systemPackages =
+      if [] == failed then []
+      else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}";
+
   };
+  
 }
