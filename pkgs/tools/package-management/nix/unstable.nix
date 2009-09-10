@@ -2,10 +2,12 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , supportOldDBs ? true
+, nameSuffix ? ""
+, patches ? []
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-0.13pre16857";
+  name = "nix-0.13pre16857${nameSuffix}";
   
   src = fetchurl {
     url = "http://hydra.nixos.org/build/64096/download/4/${name}.tar.bz2";
@@ -30,4 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://nixos.org/;
     license = "LGPL";
   };
+
+  inherit patches;
 }
