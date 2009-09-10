@@ -2327,7 +2327,7 @@ let
   avrgcclibc = import ../development/misc/avr-gcc-with-avr-libc {
     inherit fetchurl stdenv writeTextFile gnumake coreutils gnutar bzip2
       gnugrep gnused gawk;
-    inherit gcc;
+    gcc = gcc40;
   };
 
   avr8burnomat = import ../development/misc/avr8-burn-omat {
