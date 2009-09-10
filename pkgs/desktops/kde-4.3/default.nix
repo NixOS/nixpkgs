@@ -128,18 +128,18 @@ rec {
   };
   
   kdenetwork = import ./network {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
     inherit (pkgs) libidn libvncserver tapioca_qt libmsn;
     inherit (pkgs.xlibs) libXtst libXdamage libXxf86vm;
     inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon qca2 soprano qimageblitz;
+    inherit automoc4 phonon qca2 soprano qimageblitz strigi;
   };
   
   kdepim = import ./pim {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl boost gpgme libassuan libgpgerror libxslt;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl boost gpgme libassuan libgpgerror libxslt;
     inherit (pkgs) shared_mime_info;
     inherit (pkgs.xlibs) libXScrnSaver;
-    inherit kdelibs kdepimlibs;
+    inherit kdelibs kdelibs_experimental kdepimlibs;
     inherit automoc4 phonon akonadi strigi soprano qca2;
   };
   
