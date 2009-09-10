@@ -4889,6 +4889,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  halevt = import ../os-specific/linux/hal/hal-evt.nix {
+    inherit fetchurl stdenv lib libxml2 pkgconfig boolstuff hal dbus_glib;
+  };
+
   hal_info = import ../os-specific/linux/hal/info.nix {
     inherit fetchurl stdenv pkgconfig;
   };
