@@ -522,6 +522,11 @@ in {
     kdeutils = linux;
     kdesdk = linux;
     kdewebdev = linux;
+    krusader = linux;
+    kmplayer = linux;
+    ktorrent = linux;
+    koffice = linux;
+    kdesvn = linux;
   };
 
   kernelPackages_2_6_25 = {
