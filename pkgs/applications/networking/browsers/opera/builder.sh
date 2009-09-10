@@ -13,12 +13,16 @@ installPhase() {
 
     [ -z ${system##*64*} ] && suf=64
 
-    for i in $out/lib/opera/*/opera $out/lib/opera/*/operaplugincleaner $out/lib/opera/*/operapluginwrapper $out/lib/opera/*/operapluginwrapper-native; do
-        echo "$i <<<<<<<<<<<<"
+    find $out -type f | while read f; do
+      echo testing "$f"
+      # patch all executables
+      if readelf -h "$f" | grep 'EXEC (Executable file)' &> /dev/null; then
+        echo "patching $f <<"
         patchelf \
             --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
             --set-rpath "$libPath" \
-            "$i"
+            "$f"
+      fi
     done
     
     # Substitute pwd as late as possible so that the md5 checksum check of opera passes.

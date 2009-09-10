@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
   
   # `operapluginwrapper' requires libXt. Adding it makes startup faster
   # and omits error messages (on x86).
-  libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.gcc.gcc glibc qt zlib libX11 libXt libXext libSM libICE ];
+  libPath =
+    let list = [ stdenv.gcc.gcc glibc qt zlib libX11 libXt libXext libSM libICE];
+    in stdenv.lib.makeLibraryPath list
+        + ":" + (if stdenv.system == "x86_64-linux" then stdenv.lib.makeSearchPath "lib64" list else []);
 
   desktopItem = makeDesktopItem {
     name = "Opera";
