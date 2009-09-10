@@ -79,17 +79,6 @@ rec {
   # [] for zsh
   escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
-  # arg: http://foo/bar/bz.ext returns bz.ext
-  # !!! isn't this what the `baseNameOf' primop does?
-  dropPath = s : 
-      if s == "" then "" else
-      let takeTillSlash = left : c : s :
-          if left == 0 then s
-          else if (substring left 1 s == "/") then
-                  (substring (add left 1) (sub c 1) s)
-          else takeTillSlash (sub left 1) (add c 1) s; in
-      takeTillSlash (sub (stringLength s) 1) 1 s;
-
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
   eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);

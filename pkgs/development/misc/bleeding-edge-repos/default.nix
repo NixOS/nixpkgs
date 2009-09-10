@@ -17,7 +17,7 @@ args:
           then (getAttr name fetchInfos) { inherit fetchurl; }
           else throw "no bleeding edge source attribute found in bleeding-edge-fetch-infos.nix with name ${name}\n"
                      "run NO_FETCH=1 nix-repository-manager <path to nixpkgs> --update <reponame> to add it automatically";
-        localTarGZ = managedRepoDir+"/dist/${ lib.dropPath (head fetchinfo.urls) }"; # hack, dropPath should be implemented as primop
+        localTarGZ = managedRepoDir+"/dist/${ builtins.baseNameOf (head fetchinfo.urls) }"; # hack, dropPath should be implemented as primop
         fetchInfos = import ../../../misc/bleeding-edge-fetch-infos.nix; in
     if (getConfig ["bleedingEdgeRepos" "useLocalRepos"] false && builtins.pathExists localTarGZ)
         then localTarGZ else fetchinfo;
