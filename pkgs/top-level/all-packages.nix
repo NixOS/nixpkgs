@@ -8002,6 +8002,15 @@ let
     inherit fetchurl stdenv tetex;
   };
 
+  lilypond = import ../misc/lilypond {
+    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl stdenv lib automake autoconf
+      ghostscript texinfo imagemagick texi2html guile python gettext
+      perl bison pkgconfig texLive fontconfig freetype fontforge help2man;
+    inherit (gtkLibs) pango;
+    flex = flex2535;
+  };
+
   linuxwacom = import ../misc/linuxwacom {
     inherit fetchurl stdenv ncurses pkgconfig;
     inherit (xorg) libX11 libXi xproto inputproto xorgserver;
