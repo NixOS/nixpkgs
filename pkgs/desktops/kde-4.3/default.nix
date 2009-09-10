@@ -156,7 +156,7 @@ rec {
   };
 
   kdetoys = import ./toys {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
     inherit kdelibs kdebase_workspace;
     inherit automoc4 phonon;
   };
