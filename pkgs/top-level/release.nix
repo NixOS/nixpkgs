@@ -500,6 +500,30 @@ in {
     krusader = linux;
   };
 
+  kde43 = {
+    kdelibs = linux;
+    kdelibs_experimental = linux;
+    kdebase_workspace = linux;
+    kdebase = linux;
+    kdebase_runtime = linux;
+    oxygen_icons = linux;
+    kdepimlibs = linux;
+    kdeadmin = linux;
+    kdeartwork = linux;
+    kdeedu = linux;
+    kdegraphics = linux;
+    kdemultimedia = linux;
+    kdenetwork = linux;
+    kdepim = linux;
+    kdepim_runtime = linux;
+    kdeplasma_addons = linux;
+    kdegames = linux;
+    kdetoys = linux;
+    kdeutils = linux;
+    kdesdk = linux;
+    kdewebdev = linux;
+  };
+
   kernelPackages_2_6_25 = {
     aufs = linux;
     kernel = linux;
