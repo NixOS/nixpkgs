@@ -73,9 +73,7 @@ in
   config = mkIf cfg.enable {
   
     services.xserver.displayManager.job =
-      { beforeScript = "";
-        environment = {};
-        execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}";
+      { execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}";
       };
 
     security.pam.services = [ { name = "kde"; localLogin = true; ckHack = true; } ];

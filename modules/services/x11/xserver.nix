@@ -378,7 +378,7 @@ in
               else ""
              }
 
-            ${cfg.displayManager.job.beforeScript}
+            ${cfg.displayManager.job.preStart}
 
             rm -f /tmp/.X0-lock
           '';
