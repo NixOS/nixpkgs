@@ -115,9 +115,9 @@
     url = http://mawercer.de/~nix/repos/mkcabal.tar.gz;
     sha256 = "9f231756c36b46d29516ed327a320837194799a76de4833dc6a5c88e5ccd1658";
   };
-  nix_repository_manager = args: with args; fetchurl { # Tue Jul 14 13:57:15 CEST 2009
-    url = "http://mawercer.de/~nix/repos/nix_repository_manager-nrmtag4.tar.gz";
-    sha256 = "f5097caf8aff29192ed0fcb578819b0d2fc62c0bc6e1400294c76cc45c0bfc4d";
+  nix_repository_manager = args: with args; fetchurl { # Sun Sep  6 16:46:13 CEST 2009
+    url = "http://mawercer.de/~nix/repos/nix_repository_manager-nrmtag6.tar.gz";
+    sha256 = "6c5daa1b320ada16ce7e8c2279ab3a27726e23fa3c1115f8c0bbd64ff806c7b7";
   };
   plugins = args: with args; fetchurl {
     url = http://mawercer.de/~nix/repos/plugins.tar.gz;
@@ -262,5 +262,9 @@
   pywebcvs = args: with args; fetchurl { # Wed Aug 12 15:00:25 CEST 2009
     url = "http://mawercer.de/~nix/repos/pywebcvs-1493.tar.gz";
     sha256 = "4183b18f48738cf607ef29baae75f7edec46504d1fb31bdedfbc897dcadbe599";
+  };
+  MPlayer = args: with args; fetchurl { # Sun Sep  6 16:46:45 CEST 2009
+    url = "http://mawercer.de/~nix/repos/MPlayer-29652.tar.gz";
+    sha256 = "c202a43041d753b78777c3bb22a60068626b8a8aaf59f1d2cd054844a7c8546b";
   };
 }

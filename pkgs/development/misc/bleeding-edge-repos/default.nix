@@ -43,6 +43,8 @@ args:
 
       hg2git = { type = "git"; url="git://repo.or.cz/hg2git.git"; };
 
+      MPlayer = { type = "svn"; url="svn://svn.mplayerhq.hu/mplayer/trunk"; };
+
       # darcs repositories haskell 
       http =  { type= "darcs"; url="http://darcs.haskell.org/http/"; groups="happs"; };
       syb_with_class =  { type="darcs"; url="http://happs.org/HAppS/syb-with-class"; groups="happs"; };

@@ -6899,6 +6899,20 @@ let
       # !!! should depend on MPlayer
     };
 
+  MPlayerTrunk = import ../applications/video/MPlayer/trunk.nix {
+    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
+      cdparanoia mesa pkgconfig;
+    inherit (xlibs) libX11 libXv libXinerama libXrandr;
+    alsaSupport = true;
+    alsa = alsaLib;
+    theoraSupport = true;
+    cacaSupport = true;
+    xineramaSupport = true;
+    randrSupport = true;
+    cddaSupport = true;
+  };
+
   mrxvt = import ../applications/misc/mrxvt {
     inherit lib fetchurl stdenv freetype pkgconfig which;
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXft

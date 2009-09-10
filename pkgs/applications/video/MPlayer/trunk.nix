@@ -1,3 +1,4 @@
+# the hompepage even recommends using trunk
 { alsaSupport ? false, xvSupport ? true, theoraSupport ? false, cacaSupport ? false
 , xineramaSupport ? false, randrSupport ? false, dvdnavSupport ? true
 , stdenv, fetchurl, x11, freetype, freefont_ttf, zlib
@@ -5,6 +6,7 @@
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
 , mesa, pkgconfig
+, sourceByName
 }:
 
 assert alsaSupport -> alsa != null;
@@ -29,13 +31,10 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0rc2-r28450";
 
-  # 1.0_rc2 is outdated according to website - use trunk instead
-  src = fetchurl {
-    url = mirror://gentoo/distfiles/mplayer-1.0_rc2_p28450.tar.bz2;
-    sha256 = "0cbils58mq20nablywgjfpfx2pzjgnhin23sb8k1s5h2rxgvi3vf";
-  };
+  name = "mplayer-trunk";
+
+  src = sourceByName "MPlayer";
 
   buildInputs =
     [x11 libXv freetype zlib mesa pkgconfig]
@@ -54,7 +53,7 @@ stdenv.mkDerivation {
     --win32codecsdir=${win32codecs}
     --realcodecsdir=${rp9codecs}
     --enable-runtime-cpudetection
-    --enable-x11 --with-extraincdir=${libX11}/include
+    --enable-x11
     --disable-xanim
     --disable-ivtv
   '';
