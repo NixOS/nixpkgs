@@ -202,7 +202,7 @@ rec {
   };
   
   kdesvn = import ./extragear/kdesvn {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext apr aprutil subversion db4;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
     inherit automoc4 phonon;
   };
