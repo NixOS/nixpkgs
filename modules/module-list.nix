@@ -84,28 +84,28 @@
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss.nix
   ./services/web-servers/tomcat.nix
+  ./services/x11/desktop-managers/default.nix
+  ./services/x11/desktop-managers/gnome.nix
+  ./services/x11/desktop-managers/kde-environment.nix
+  ./services/x11/desktop-managers/kde.nix
+  ./services/x11/desktop-managers/kde4.nix
+  ./services/x11/desktop-managers/none.nix
+  ./services/x11/desktop-managers/xterm.nix
+  ./services/x11/display-managers/default.nix
+  ./services/x11/display-managers/kdm.nix
+  ./services/x11/display-managers/slim.nix
+  ./services/x11/hardware/synaptics.nix
+  ./services/x11/hardware/wacom.nix
+  ./services/x11/window-managers/compiz.nix
+  ./services/x11/window-managers/default.nix
+  ./services/x11/window-managers/kwm.nix
+  ./services/x11/window-managers/metacity.nix
+  ./services/x11/window-managers/none.nix
+  ./services/x11/window-managers/twm.nix
+  ./services/x11/window-managers/wmii.nix
+  ./services/x11/window-managers/xmonad.nix
   ./services/x11/xfs.nix
-  ./services/x11/xserver/default.nix
-  ./services/x11/xserver/desktop-managers/default.nix
-  ./services/x11/xserver/desktop-managers/gnome.nix
-  ./services/x11/xserver/desktop-managers/kde-environment.nix
-  ./services/x11/xserver/desktop-managers/kde.nix
-  ./services/x11/xserver/desktop-managers/kde4.nix
-  ./services/x11/xserver/desktop-managers/none.nix
-  ./services/x11/xserver/desktop-managers/xterm.nix
-  ./services/x11/xserver/display-managers/default.nix
-  ./services/x11/xserver/display-managers/kdm.nix
-  ./services/x11/xserver/display-managers/slim.nix
-  ./services/x11/xserver/hardware/synaptics.nix
-  ./services/x11/xserver/hardware/wacom.nix
-  ./services/x11/xserver/window-managers/compiz.nix
-  ./services/x11/xserver/window-managers/default.nix
-  ./services/x11/xserver/window-managers/kwm.nix
-  ./services/x11/xserver/window-managers/metacity.nix
-  ./services/x11/xserver/window-managers/none.nix
-  ./services/x11/xserver/window-managers/twm.nix
-  ./services/x11/xserver/window-managers/wmii.nix
-  ./services/x11/xserver/window-managers/xmonad.nix
+  ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
   ./system/boot/kernel.nix
