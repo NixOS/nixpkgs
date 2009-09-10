@@ -6727,6 +6727,11 @@ let
     inherit fetchurl stdenv ant;
   };
 
+  jigdo = import ../applications/misc/jigdo {
+    inherit fetchurl stdenv db45 libwpd bzip2;
+    inherit (gtkLibs) gtk;
+  };
+
   joe = import ../applications/editors/joe {
     inherit stdenv fetchurl;
   };
