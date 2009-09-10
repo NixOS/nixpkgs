@@ -4475,7 +4475,7 @@ let
   };
 
   sip = import ../development/python-modules/python-sip {
-    inherit stdenv fetchurl python;
+    inherit stdenv fetchurl lib python;
   };
 
   pyqt = builderDefsPackage (selectVersion ../development/python-modules/pyqt "4.3.3") {
@@ -4486,7 +4486,8 @@ let
   };
 
   pyqt4 = import ../development/python-modules/pyqt {
-    inherit stdenv fetchurl python sip qt4;
+    inherit stdenv fetchurl lib python sip;
+    qt4 = qt45;
   };
 
   pyx = import ../development/python-modules/pyx {
