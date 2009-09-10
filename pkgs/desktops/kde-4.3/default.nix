@@ -215,7 +215,7 @@ rec {
   };
   
   krusader = import ./extragear/krusader {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
     inherit kdelibs;
     inherit automoc4 phonon;
   };

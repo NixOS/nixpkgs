@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, qt4, perl, gettext, kdelibs, automoc4, phonon}:
+{stdenv, fetchurl, lib, cmake, qt4, perl, gettext, kdelibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
   name = "krusader-2.0.0";
@@ -8,4 +8,10 @@ stdenv.mkDerivation {
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl gettext kdelibs automoc4 phonon ];
+  meta = {
+    description = "Norton/Total Commander clone for KDE";
+    license = "GPL";
+    homepage = http://www.krusader.org;
+    maintainers = [ lib.maintainers.sander ];
+  };
 }
