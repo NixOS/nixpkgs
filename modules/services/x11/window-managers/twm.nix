@@ -3,7 +3,7 @@
 let
   inherit (pkgs.lib) mkOption mkIf;
   cfg = config.services.xserver.windowManager.twm;
-  xorg = config.services.xserver.package;
+  xorg = pkgs.xorg;
 
   option = { services = { xserver = { windowManager = {
 
