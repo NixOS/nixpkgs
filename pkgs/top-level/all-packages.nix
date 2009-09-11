@@ -5431,6 +5431,7 @@ let
   kernelPackages_2_6_31_rc3_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3_old_i686);
   kernelPackages_2_6_31_rc2 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2);
   kernelPackages_2_6_31_rc2_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2_old_i686);
+  kernelPackages_2_6_31_zen0 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen0);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;
