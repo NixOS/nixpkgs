@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, perl, zip, libIDL, libXi
-, libjpeg, libpng, zlib, cairo
+, libjpeg, libpng, zlib, cairo, sqlite
 
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Mail", enable this option.  However, those
