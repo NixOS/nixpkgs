@@ -1,5 +1,7 @@
 source $stdenv/setup
 
+export NIX_LDFLAGS="$NIX_LDFLAGS -lsqlite3"
+
 postInstall() {
 
     # Strip some more stuff
