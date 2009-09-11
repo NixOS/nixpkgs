@@ -7282,7 +7282,8 @@ let
   };
 
   thunderbird = import ../applications/networking/mailreaders/thunderbird-2.x {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      sqlite;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;

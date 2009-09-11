@@ -22,6 +22,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     pkgconfig gtk perl zip libIDL libXi libjpeg libpng zlib cairo
+    sqlite
   ];
 
   patches = [
