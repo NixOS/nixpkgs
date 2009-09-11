@@ -174,7 +174,6 @@ in {
   gnupatch = all;
   gnupg2 = linux;
   gnuplot = allBut "i686-cygwin";
-  gnuplotX = linux;
   gnused = all;
   gnutar = all;
   gnutls = linux;
