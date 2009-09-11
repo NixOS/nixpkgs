@@ -69,7 +69,7 @@ stdenv.mkDerivation {
         [ -f "$out/virtualbox/$file" ] && ln -sfv $out/bin/VBox.sh $out/bin/$file
     done
     ensureDir $out/share/applications
-    ln -sfv $out/virtualbox/VirtualBox.desktop $out/share/applications
+    ln -sfv $out/virtualbox/virtualbox.desktop $out/share/applications
   '';
   
   meta = {
