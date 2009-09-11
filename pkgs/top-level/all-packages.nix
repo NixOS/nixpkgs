@@ -8238,7 +8238,7 @@ let
   };
 
    vice = import ../misc/emulators/vice {
-     inherit stdenv fetchurl perl gettext libpng giflib libjpeg alsaLib readline mesa;
+     inherit stdenv fetchurl lib perl gettext libpng giflib libjpeg alsaLib readline mesa;
      inherit pkgconfig SDL makeDesktopItem autoconf automake;
      inherit (gtkLibs) gtk;
    };

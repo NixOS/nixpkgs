@@ -376,6 +376,7 @@ in {
   uzbl = linux;
   valgrind = linux;
   viking = linux;
+  vice = linux;
   vim = linux;
   vimHugeX = linux;
   vlc = linux;

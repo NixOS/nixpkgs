@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gettext, libpng, giflib, libjpeg, alsaLib, readline, mesa
+{ stdenv, fetchurl, lib, perl, gettext, libpng, giflib, libjpeg, alsaLib, readline, mesa
 , pkgconfig, gtk, SDL, autoconf, automake, makeDesktopItem
 }:
 
@@ -36,5 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Commodore 64, 128 and other emulators";
     homepage = http://www.viceteam.org;
+    license = "GPL";
+    maintainers = [ lib.maintainers.sander ];
   };
 }
