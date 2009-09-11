@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   libPath =
     let list = [ stdenv.gcc.gcc glibc qt zlib libX11 libXt libXext libSM libICE];
     in stdenv.lib.makeLibraryPath list
-        + ":" + (if stdenv.system == "x86_64-linux" then stdenv.lib.makeSearchPath "lib64" list else []);
+        + ":" + (if stdenv.system == "x86_64-linux" then stdenv.lib.makeSearchPath "lib64" list else "");
 
   desktopItem = makeDesktopItem {
     name = "Opera";
