@@ -40,17 +40,18 @@ in
         start =
           ''
             # Start KDE.
-            exec ${pkgs.kde42.kdebase_workspace}/bin/startkde
+            exec ${pkgs.kde43.kdebase_workspace}/bin/startkde
           '';
       };
 
     security.setuidPrograms = [ "kcheckpass" ];
 
     environment.kdePackages =
-      [ pkgs.kde42.kdelibs
-        pkgs.kde42.kdebase
-        pkgs.kde42.kdebase_runtime
-        pkgs.kde42.kdebase_workspace
+      [ pkgs.kde43.kdelibs
+        pkgs.kde43.kdebase
+        pkgs.kde43.kdebase_runtime
+        pkgs.kde43.kdebase_workspace
+	pkgs.kde43.oxygen_icons
         pkgs.shared_mime_info
       ];
 
