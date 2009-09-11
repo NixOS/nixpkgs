@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
+{ stdenv, fetchurl, lib, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
 , python, which, alsaLib, curl
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-3.0.2-${kernel.version}";
+  name = "virtualbox-3.0.6-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.0.2/VirtualBox-3.0.2-OSE.tar.bz2;
-    sha256 = "1s4zwfwskmj1arvvjx2qbvqg0bv6b39payqz63lfmbh3f720zvj1";
+    url = http://download.virtualbox.org/virtualbox/3.0.6/VirtualBox-3.0.6-OSE.tar.bz2;
+    sha256 = "1vrirm9m8728m77f46l23prshcwjn3ncqgazxkspd01i5cf9cljz";
   };
 
   buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python alsaLib curl];
@@ -75,5 +75,6 @@ stdenv.mkDerivation {
   meta = {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;
+    maintainers = [ lib.maintainers.sander ];
   };
 }
