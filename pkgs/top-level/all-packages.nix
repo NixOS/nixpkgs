@@ -4050,6 +4050,11 @@ let
     inherit (gnome) glib;
   };
   
+  qtscriptgenerator = import ../development/libraries/qtscriptgenerator {
+    inherit stdenv fetchurl;
+    qt4 = qt45;
+  };
+  
   readline = readline6;
 
   readline4 = import ../development/libraries/readline/readline4.nix {
@@ -4133,6 +4138,10 @@ let
 
   taglib = import ../development/libraries/taglib {
     inherit fetchurl stdenv zlib;
+  };
+
+  taglib_extras = import ../development/libraries/taglib-extras {
+    inherit stdenv fetchurl cmake taglib;
   };
 
   tapioca_qt = import ../development/libraries/tapioca-qt {

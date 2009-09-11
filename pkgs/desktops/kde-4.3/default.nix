@@ -196,7 +196,8 @@ rec {
 #### EXTRA GEAR
 
   amarok = import ./extragear/amarok {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext curl mysql libxml2 taglib loudmouth;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 qtscriptgenerator perl gettext;
+    inherit (pkgs) curl mysql libxml2 taglib taglib_extras loudmouth;
     inherit kdelibs;
     inherit automoc4 phonon strigi soprano;
   };
