@@ -527,6 +527,7 @@ in {
     ktorrent = linux;
     koffice = linux;
     kdesvn = linux;
+    amarok = linux;
   };
 
   kernelPackages_2_6_25 = {
