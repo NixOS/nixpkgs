@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, libxml2, libxslt, openbabel, boost, readline, gmm, gsl
-, facile, ocaml
+, facile, ocaml, xplanet
 , kdelibs, automoc4, phonon, eigen}:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha1 = "6326cff7779dfadc1b18a3a6bbe7b0750fb7ceaf";
   };
   includeAllQtDirs=true;
-  buildInputs = [ cmake qt4 perl libxml2 libxslt openbabel boost readline gmm gsl facile ocaml
+  buildInputs = [ cmake qt4 perl libxml2 libxslt openbabel boost readline gmm gsl facile ocaml xplanet
                   kdelibs automoc4 phonon eigen ];
   meta = {
     description = "KDE Educative software";

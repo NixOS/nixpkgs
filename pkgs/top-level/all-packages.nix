@@ -7828,6 +7828,12 @@ let
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
 
+  ### SCIENCE
+  
+  xplanet = import ../applications/science/xplanet {
+    inherit stdenv fetchurl lib pkgconfig freetype libpng libjpeg giflib libtiff;
+    inherit (gtkLibs) pango;
+  };
 
   ### SCIENCE/GEOMETRY
 
