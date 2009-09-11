@@ -23,13 +23,13 @@ in
 
   preConfigure = '' 
     killOption () {
-      sed -re "s/$1=[ym]/# $1 is not set" -i .config
+      sed -re "s/$1=[ym]/# $1 is not set/" -i .config
     }
     setOptionMod () {
-      sed -re "s/# $1 is not set/$1=m" -i .config
+      sed -re "s/# $1 is not set/$1=m/" -i .config
     }
     setOptionYes () {
-      sed -re "s/# $1 is not set/$1=y" -i .config
+      sed -re "s/# $1 is not set/$1=y/" -i .config
     }
 
     make allmodconfig
