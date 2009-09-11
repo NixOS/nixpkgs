@@ -986,6 +986,11 @@ let
     inherit fetchurl stdenv lzo;
   };
 
+  mailutils = import ../tools/networking/mailutils {
+    inherit fetchurl stdenv gettext gdbm libtool pam readline ncurses
+      gnutls mysql guile texinfo gnum4;
+  };
+
   man = import ../tools/misc/man {
     inherit fetchurl stdenv groff less;
   };
