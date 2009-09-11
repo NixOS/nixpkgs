@@ -5310,6 +5310,11 @@ let
     oldI686 = true;
   });
 
+  kernel_2_6_31_zen0 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen0.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools 
+      lib builderDefs;
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages

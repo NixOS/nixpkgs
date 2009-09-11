@@ -75,7 +75,7 @@ prefetchClause=""
     "
     export NIX_HASH_ALGO=sha256
     rev="$(getAttr rev '')";
-    rev_and_hash="$("$own_dir"/../fetchgit/nix-prefetch-git "$repoUrl" "$rev" | tail -2)"
+    rev_and_hash="$("$own_dir"/../fetchgit/nix-prefetch-git "$repoUrl" "$rev" | tee /dev/stderr | tail -2)"
 
     rev="$(echo "$rev_and_hash" | head -1)"
     url="$repoUrl";

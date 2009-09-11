@@ -36,6 +36,7 @@
   extraConfig ? []
 
 , preConfigure ? ""
+, extraMeta ? {}
 , ...
 }:
 
@@ -96,5 +97,5 @@ stdenv.mkDerivation {
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
-  };
+  } // extraMeta;
 }
