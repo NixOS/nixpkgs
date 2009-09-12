@@ -156,8 +156,7 @@ in
 
       job = mkOption {
         default = {};
-        type = types.optionSet;
-        merge = mergeOneOption;
+        type = types.uniq types.optionSet;
         description = "This option defines how to start the display manager.";
 
         options = {
