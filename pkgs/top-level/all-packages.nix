@@ -5361,7 +5361,7 @@ let
     };
 
     kqemu = builderDefsPackage (selectVersion ../os-specific/linux/kqemu "1.4.0pre1") {
-      inherit kernel;
+      inherit kernel perl;
     };
 
     splashutils =

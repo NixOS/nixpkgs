@@ -6,7 +6,7 @@ rec {
     sha256 = "14dlmawn3gia1j401ag5si5k1a1vav7jpv86rl37p1hwmr7fihxs";
   };
 
-  buildInputs = [];
+  buildInputs = [perl];
   configureFlags = [''--PREFIx=$out'' ''--kernel-path=$(ls -d ${kernel}/lib/modules/*/build)''];
   debugStep = fullDepEntry (''
   	cat config-host.mak
