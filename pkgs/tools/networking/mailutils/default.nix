@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
 
+    homepage = http://www.gnu.org/software/mailutils/;
+
     platforms = stdenv.lib.platforms.all;
   };
 }
