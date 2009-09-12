@@ -560,6 +560,10 @@ in {
     virtualbox = linux;
   };
 
+  kernelPackages_2_6_31 = {
+    kernel = linux;
+  };
+
   kernelPackages_2_6_31_rc4 = {
     aufs = linux;
     kernel = linux;
