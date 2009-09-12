@@ -29,7 +29,7 @@ import ./generic.nix (
           sed -re "1i$1=m" -i .config
         }
         setOptionYes () {
-          sed -re 's/^# )'"$1"') is not set/\1=y/' -i .config
+          sed -re 's/^# ('"$1"') is not set/\1=y/' -i .config
           sed -re "1i$1=y" -i .config
         }
         
