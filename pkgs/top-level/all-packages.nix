@@ -5254,6 +5254,11 @@ let
     ];
   });
 
+  kernel_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [];
+  };
+
   kernel_2_6_31_rc4 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc4.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [ 
@@ -5432,6 +5437,7 @@ let
   kernelPackages_2_6_31_rc2 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2);
   kernelPackages_2_6_31_rc2_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2_old_i686);
   kernelPackages_2_6_31_zen0 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen0);
+  kernelPackages_2_6_31 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;
