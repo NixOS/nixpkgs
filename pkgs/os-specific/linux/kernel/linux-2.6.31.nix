@@ -35,6 +35,8 @@ import ./generic.nix (
         
         make allmodconfig
         
+	killOption CONFIG_CMDLINE_OVERRIDE
+
         killOption CONFIG_IMA
         killOption 'CONFIG_.*_DEBUG.*'
         killOption CONFIG_AUDIT_ARCH
