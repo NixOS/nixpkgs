@@ -78,6 +78,7 @@ mkIf config.services.bitlbee.enable {
           if ! test -d /var/lib/bitlbee
           then
               mkdir -p /var/lib/bitlbee
+              chown bitlbee:bitlbee /var/lib/bitlbee
           fi
       end script
 
