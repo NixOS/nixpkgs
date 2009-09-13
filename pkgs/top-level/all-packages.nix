@@ -6983,6 +6983,9 @@ let
       motif = lesstif;
     };
 
+  netsurfBrowser = netsurf.browser;
+  netsurf = import ../applications/networking/browsers/netsurf { inherit pkgs; };
+
   nvi = import ../applications/editors/nvi {
     inherit fetchurl stdenv ncurses;
   };

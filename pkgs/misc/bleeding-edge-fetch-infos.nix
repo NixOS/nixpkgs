@@ -267,4 +267,28 @@
     url = "http://mawercer.de/~nix/repos/MPlayer-29652.tar.gz";
     sha256 = "c202a43041d753b78777c3bb22a60068626b8a8aaf59f1d2cd054844a7c8546b";
   };
+  netsurf = args: with args; fetchurl { # Mon Sep  7 10:00:40 CEST 2009
+    url = "http://mawercer.de/~nix/repos/netsurf-9549.tar.gz";
+    sha256 = "4395ec1d4f4a305998daae3aff237398be3307b16285267a996b0a7f6a15758c";
+  };
+  libCSS = args: with args; fetchurl { # Tue Sep  8 00:41:38 CEST 2009
+    url = "http://mawercer.de/~nix/repos/libCSS-9553.tar.gz";
+    sha256 = "6e97cc97898ef1732a47063a51cec9b7ca47e672b685c23fee899e2b4d0b3c6e";
+  };
+  libwapcaplet = args: with args; fetchurl { # Thu Sep 10 21:10:43 CEST 2009
+    url = "http://mawercer.de/~nix/repos/libwapcaplet-9563.tar.gz";
+    sha256 = "242844c6146dc3ee3e151b54ba7ed9b086ef6a4e351c499af2ce10fe93c91ce6";
+  };
+  libsvgtiny = args: with args; fetchurl { # Fri Sep 11 00:06:40 CEST 2009
+    url = "http://mawercer.de/~nix/repos/libsvgtiny-9563.tar.gz";
+    sha256 = "d4ec2b2219cf48c1f6f71c5aa45922192e9f4c4cbae5871df018d70d5ca461a3";
+  };
+  libdom = args: with args; fetchurl { # Fri Sep 11 00:21:12 CEST 2009
+    url = "http://mawercer.de/~nix/repos/libdom-9563.tar.gz";
+    sha256 = "9c55cc13ec0df6a64826e0000fe844bf8091c934875a53b762ca85a3c822af17";
+  };
+  netsurf_haru = args: with args; fetchurl { # Fri Sep 11 01:18:09 CEST 2009
+    url = "http://mawercer.de/~nix/repos/netsurf_haru-9563.tar.gz";
+    sha256 = "da4eb5382af8d684e08236ad6125f413633cd37d6edc472d22a171c3fc1de584";
+  };
 }

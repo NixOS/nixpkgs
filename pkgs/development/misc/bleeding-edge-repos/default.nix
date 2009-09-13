@@ -82,5 +82,13 @@ args:
 
       getOptions = { type="darcs"; url="http://repetae.net/john/repos/GetOptions"; groups=""; };
       ghc_syb = { type = "git"; url = "git://github.com/nominolo/ghc-syb.git"; groups="haskell scien"; };
+
+      libCSS = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libcss"; groups = "netsurf_group"; };
+      netsurf = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/netsurf"; groups = "netsurf_group"; };
+      libwapcaplet = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libwapcaplet"; groups = "netsurf_group"; };
+      libsvgtiny = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libsvgtiny"; groups = "netsurf_group"; };
+      libdom = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/dom"; groups = "netsurf_group"; };
+      netsurf_haru = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libharu"; groups = "netsurf_group"; };
+
     } // kde4support // getConfig [ "bleedingEdgeRepos" "repos" ] {};
 }
