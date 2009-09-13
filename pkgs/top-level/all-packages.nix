@@ -6274,6 +6274,20 @@ let
     inherit (xlibs) libX11;
   };
 
+  eclipseRunner = import ../applications/editors/eclipse/runner.nix {
+    inherit stdenv lib jre;
+    inherit (gtkLibs) gtk glib;
+    inherit (xlibs) libXtst;
+  };
+
+  /* commenting out eclipse - Have a look at eclipseRunner - Marc Weber
+     
+    Reason: You can get Eclipse in many prepacked variations on eclipse.org
+    No need to duplicate efforts.
+    To make Equinox p2 work you have to create a local copy of Eclipse anyway (AFAIK).
+    Maybe there is a solution. I don't have time to investigate. I want to prevent
+    people from using old crappy Eclipse versions.
+
   # put something like this into your ~/.nixpkgs/config.nix file
   #eclipse = {
   # plugins = {eclipse, version, plugins } : let p = plugins; in
@@ -6317,6 +6331,7 @@ let
 #   eclipsePlugins = import ../applications/editors/eclipse/plugins.nix {
 #     inherit fetchurl stdenv;
 #   };
+  */
 
   ed = import ../applications/editors/ed {
     inherit fetchurl stdenv;
