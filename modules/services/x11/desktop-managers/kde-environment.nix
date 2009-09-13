@@ -24,7 +24,7 @@ let
 
       kdePackages = mkOption {
         default = [];
-        example = [ pkgs.kde43.kdegames ];
+        example = [ pkgs.kde4.kdegames ];
         type = types.list types.package;
         description = ''
           Additional KDE packages to be used when you use KDE as a desktop

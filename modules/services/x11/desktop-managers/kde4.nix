@@ -40,24 +40,23 @@ in
         start =
           ''
             # Start KDE.
-            exec ${pkgs.kde43.kdebase_workspace}/bin/startkde
+            exec ${pkgs.kde4.kdebase_workspace}/bin/startkde
           '';
       };
 
     security.setuidPrograms = [ "kcheckpass" ];
 
     environment.kdePackages =
-      [ pkgs.kde43.kdelibs
-        pkgs.kde43.kdebase
-        pkgs.kde43.kdebase_runtime
-        pkgs.kde43.kdebase_workspace
-	pkgs.kde43.oxygen_icons
+      [ pkgs.kde4.kdelibs
+        pkgs.kde4.kdebase
+        pkgs.kde4.kdebase_runtime
+        pkgs.kde4.kdebase_workspace
         pkgs.shared_mime_info
-      ];
+      ] ++ optional (pkgs.kde4 ? oxygen_icons) pkgs.kde4.oxygen_icons;
 
     environment.x11Packages =
       [ xorg.xmessage # so that startkde can show error messages
-        pkgs.qt4 # needed for qdbus
+        pkgs.kde4.qt4 # needed for qdbus
         xorg.xset # used by startkde, non-essential
       ];
 

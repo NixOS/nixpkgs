@@ -7,7 +7,7 @@ let
   dmcfg = config.services.xserver.displayManager;
   cfg = dmcfg.kdm;
 
-  inherit (pkgs.kde43) kdebase_workspace;
+  inherit (pkgs.kde4) kdebase_workspace;
 
   defaultConfig =
     ''
