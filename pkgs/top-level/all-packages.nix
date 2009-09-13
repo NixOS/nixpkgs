@@ -5343,7 +5343,7 @@ let
     };
 
     aufs2 = import ../os-specific/linux/aufs2 {
-      inherit fetchgit stdenv kernel;
+      inherit fetchgit stdenv kernel perl;
     };
 
     exmap = import ../os-specific/linux/exmap {

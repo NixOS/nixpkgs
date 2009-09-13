@@ -1,4 +1,4 @@
-{stdenv, fetchgit, kernel}:
+{ stdenv, fetchgit, kernel, perl }:
 
 let s = import ./src-for-default.nix; in
 
@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     inherit (s) url rev;
     sha256 = s.hash;
   };
+
+  buildInputs = [ perl ];
 
   buildPhase = ''
     kernelVersion=$(cd ${kernel}/lib/modules && ls)
