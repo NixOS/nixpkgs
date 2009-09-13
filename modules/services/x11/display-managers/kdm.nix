@@ -14,6 +14,9 @@ let
       [Shutdown]
       HaltCmd=${pkgs.upstart}/sbin/halt
       RebootCmd=${pkgs.upstart}/sbin/reboot
+      ${optionalString (config.boot.grubDevice != "") ''
+        BootManager=Grub
+      ''}
 
       [X-*-Core]
       Xrdb=${pkgs.xlibs.xrdb}/bin/xrdb
@@ -76,7 +79,7 @@ in
   config = mkIf cfg.enable {
   
     services.xserver.displayManager.job =
-      { execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}";
+      { execCmd = "PATH=${pkgs.grub}/sbin:$PATH ${kdebase_workspace}/bin/kdm -config ${kdmrc}";
         logsXsession = true;
       };
 

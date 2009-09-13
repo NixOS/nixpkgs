@@ -384,7 +384,7 @@ in
             rm -f /tmp/.X0-lock
           '';
 
-        exec = "${cfg.displayManager.job.execCmd}";
+        script = "${cfg.displayManager.job.execCmd}";
       };
 
     services.xserver.displayManager.xserverArgs =
