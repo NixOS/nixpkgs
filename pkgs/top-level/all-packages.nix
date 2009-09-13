@@ -7850,7 +7850,7 @@ let
 
   };
 
-  kde4 = kde42;
+  kde4 = kde43;
 
   kde42 = import ../desktops/kde-4.2 (pkgs // {
     openexr = openexr_1_6_1;
