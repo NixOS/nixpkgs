@@ -337,6 +337,7 @@ in
         xorg.setxkbmap
         xorg.iceauth # required for KDE applications (it's called by dcopserver)
         xorg.xsetroot
+        xorg.xprop
       ]
       ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11;
 
