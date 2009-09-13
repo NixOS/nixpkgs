@@ -39,6 +39,7 @@ import ./generic.nix (
 
         killOption CONFIG_IMA
         killOption 'CONFIG_.*_DEBUG.*'
+        killOption 'CONFIG_DEBUG.*'
         killOption CONFIG_AUDIT_ARCH
         
         killOption CONFIG_KERNEL_BZIP2
