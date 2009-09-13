@@ -12,7 +12,7 @@ let
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
       xserver_arguments ${dmcfg.xserverArgs}
-      sessions ${pkgs.lib.concatStringsSep "," dmcfg.session.names}
+      sessions ${pkgs.lib.concatStringsSep "," (dmcfg.session.names ++ ["custom"])}
       login_cmd exec ${pkgs.stdenv.bash}/bin/sh ${dmcfg.session.script} "%session"
       halt_cmd ${pkgs.upstart}/sbin/shutdown -h now
       reboot_cmd ${pkgs.upstart}/sbin/shutdown -r now
