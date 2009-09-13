@@ -26,11 +26,9 @@ let
     , # If set, root doesn't need to authenticate (e.g. for the "chsh"
       # service).
       rootOK ? false
-    , # If set, this is a local login (e.g. virtual console or X), so
-      # the user gets ownership of audio devices etc.
-      localLogin ? false
-    , # Temporary hack to get SLiM to work with ConsoleKit.
-      ckHack ? false
+    , # If set, use ConsoleKit's PAM connector module to claim
+      # ownership of audio devices etc.
+      ownDevices ? false
     , # Whether to forward XAuth keys between users.  Mostly useful
       # for "su".
       forwardXAuth ? false
@@ -65,23 +63,13 @@ let
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           session required ${pam_unix2}/lib/security/pam_unix2.so
-          ${optionalString ckHack
-              "session required pam_env.so debug conffile=${envFile} readenv=0"}
-          ${optionalString localLogin
+          ${optionalString ownDevices
               "session optional ${pkgs.console_kit}/lib/security/pam_ck_connector.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
         '';
       target = "pam.d/${name}";
     };
-
-  # This is needed to get an active session in ConsoleKit.  Apparently
-  # a better way is to run ck-launch-session from the session starter
-  # (or let xdm/kdm do it).
-  envFile = pkgs.writeText "pam_env.conf"
-    ''
-      CKCON_X11_DISPLAY_DEVICE DEFAULT="/dev/tty7"
-    '';
 
 in
 
@@ -104,13 +92,13 @@ in
           the name of the service.  The attribute
           <varname>rootOK</varname> specifies whether the root user is
           allowed to use this service without authentication.  The
-          attribute <varname>localLogin</varname> specifies whether
-          this is a local login service (e.g. <command>xdm</command>),
-          which implies that the user gets ownership of devices such
-          as audio and CD-ROM drives.  The
-          attribute <varname>forwardXAuth</varname> specifies whether
-          X authentication keys should be passed from the calling user
-          to the target user (e.g. for <command>su</command>).
+          attribute <varname>ownDevices</varname> specifies whether
+          ConsoleKit's PAM connector module should be used to give the
+          user ownership of devices such as audio and CD-ROM drives.
+          The attribute <varname>forwardXAuth</varname> specifies
+          whether X authentication keys should be passed from the
+          calling user to the target user (e.g. for
+          <command>su</command>).
         '';
     };
 
@@ -151,7 +139,7 @@ in
         { name = "useradd"; rootOK = true; }
         # Used by groupadd etc.
         { name = "shadow"; rootOK = true; }
-        { name = "login"; localLogin = true; }
+        { name = "login"; ownDevices = true; }
       ];
 
   };

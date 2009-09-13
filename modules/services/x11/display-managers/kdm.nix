@@ -80,7 +80,7 @@ in
         logsXsession = true;
       };
 
-    security.pam.services = [ { name = "kde"; localLogin = true; ckHack = true; } ];
+    security.pam.services = [ { name = "kde"; } ];
       
   };
   
