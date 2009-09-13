@@ -3563,6 +3563,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  libharu = import ../development/libraries/libharu {
+    inherit fetchurl stdenv lib zlib libpng; 
+  };
+
   libical = import ../development/libraries/libical {
     inherit stdenv fetchurl perl;
   };
