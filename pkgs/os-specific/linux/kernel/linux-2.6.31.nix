@@ -41,6 +41,10 @@ import ./generic.nix (
         killOption 'CONFIG_.*_DEBUG.*'
         killOption 'CONFIG_DEBUG.*'
         killOption CONFIG_AUDIT_ARCH
+        killOption CONFIG_PERF_COUNTERS
+        killOption 'CONFIG_GCOV.*'
+        killOption 'CONFIG_KGDB.*'
+        killOption 'CONFIG_.*_TEST'
         
         killOption CONFIG_KERNEL_BZIP2
         killOption CONFIG_KERNEL_LZMA
