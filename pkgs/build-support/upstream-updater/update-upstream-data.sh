@@ -37,7 +37,7 @@ prefetchClause=""
           eval "egrep \"$(getAttr sourceRegexp '.*[.]tar[.].*')\"" | 
           eval "$(getAttr choiceCommand 'head -1')")"
     
-        if ! egrep ':' freshUrl ; then 
+        if ! egrep ':' <<< "$freshUrl" ; then 
     	    freshUrl="$(dirname "$(getAttr downloadPage).")/$freshUrl"
         fi
     
@@ -54,6 +54,7 @@ prefetchClause=""
       eval "sed -r -e \"$(getAttr versionReferenceCreator \
         's/-([0-9.]+)[.]/-${version}./')\"" |
       eval "sed -r -e \"$(getAttr mirrorSedScript)\"")"
+    url="$mirrorUrl"
     
     name="$baseName-$version"
     
