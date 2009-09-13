@@ -21,60 +21,48 @@ NixOS.</para>
 
 <example xml:id='conf-syntax'><title>Usual configuration file</title>
 <programlisting>
-{pkgs, config, ...}: <co xml:id='conf-syntax-1' />
+{config, modulesPath, pkgs, ...}: <co xml:id='conf-syntax-1' />
 
-###### interface
 let
-  inherit (pkgs.lib) mkOption; <co xml:id='conf-syntax-2' />
+  inherit (pkgs.lib) mkOption mkIf mkThenElse types; <co xml:id='conf-syntax-2' />
 
-  options = { <co xml:id='conf-syntax-3' />
-    services = {
-      locate = {
-
-        enable = mkOption {
-          default = false;
-          example = true;
-          description = ''
-            If enabled, NixOS will periodically update the database of
-            files used by the <command>locate</command> command.
-          '';
-        };
-
-        period = mkOption {
-          default = "15 02 * * *";
-          description = ''
-            This option defines (in the format used by cron) when the
-            locate database is updated.
-            The default is to update at 02:15 (at night) every day.
-          '';
-        };
-
-      };
-
-    };
-  };
-in
-
-###### implementation
-let
   cfg = config.services.locate; <co xml:id='conf-syntax-4' />
-  inherit (pkgs.lib) mkIf mkThenElse;
-
   locatedb = "/var/cache/locatedb";
   logfile = "/var/log/updatedb";
   cmd = "root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}";
 in
 
-mkIf cfg.enable { <co xml:id='conf-syntax-5' />
-  require = [ <co xml:id='conf-syntax-6' />
-    options
-
-    # config.services.cron
-    (import ../../upstart-jobs/cron.nix)
+{
+  imports = [ <co xml:id='conf-syntax-6' />
+    (modulesPath + /services/scheduling/cron.nix)
   ];
 
-  services = {
-    cron = {
+  options = { <co xml:id='conf-syntax-3' />
+    services.locate = {
+      enable = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = ''
+          If enabled, NixOS will periodically update the database of
+          files used by the <command>locate</command> command.
+        '';
+      };
+
+      period = mkOption {
+        default = "15 02 * * *";
+        type = types.uniq type.string;
+        description = ''
+          This option defines (in the format used by cron) when the
+          locate database is updated.
+          The default is to update at 02:15 (at night) every day.
+        '';
+      };
+    };
+  };
+
+  config = mkIf cfg.enable { <co xml:id='conf-syntax-5' />
+    services.cron = {
       systemCronJobs = mkThenElse { <co xml:id='conf-syntax-7' />
         thenPart = "${cfg.period}  root ${cmd}";
         elsePart = "";
@@ -125,7 +113,7 @@ mkIf cfg.enable { <co xml:id='conf-syntax-5' />
 
   <callout arearefs='conf-syntax-2'>
 
-    <para>This line is used to import a function that is useful for
+    <para>This line is used to import a functions that are useful for
     writing this configuration file.</para>
 
   </callout>
@@ -185,24 +173,25 @@ mkIf cfg.enable { <co xml:id='conf-syntax-5' />
 
   <callout arearefs='conf-syntax-6'>
 
-    <para>The attribute <varname>require</varname> is the only special
-    option that exists.  It is used to embed all option declarations that
-    are required by your configuration file and it is also used to provide
-    the options that you are declaring.</para>
+    <para>The attribute <varname>imports</varname> contains a list of other
+    module location.  These modules should provide option declarations for
+    the current module in order to be evaluated safely.</para>
 
-    <para>This attribute is processed
-    with <varname>pkgs.lib.uniqFlatten</varname> to collect all
-    configuration files that are used by your system and it avoid the
-    insertion of duplicated elements by comparing the configuration set codes.</para>
-
-    <para>Currently, the file <filename>configuration.nix</filename>
-    implicitly embeds <filename>system/options.nix</filename>.  If you need
-    a special configuration file, then you will have to add similar lines
-    to your computer configuration.</para>
+    <para>When a dependence on a NixOS module has to be made, then you
+    should use the argument <varname>modulesPath</varname> to prefix the
+    location of your NixOS repository.</para>
 
   </callout>
 
   <callout arearefs='conf-syntax-7'>
+
+    <para>The attribute <varname>config</varname>, which should not be
+    confused with the argument of the same name, contains a set of option
+    definitions defined by this module. When there is
+    neither <varname>imports</varname> nor <varname>options</varname>, then
+    this attribute set can be return without any enclosing.  This feature
+    allow you to write your <filename>configuration.nix</filename> as a
+    module which does not contains any option declarations.</para>
 
     <para>As <varname>mkIf</varname> does not need
     any <emphasis>then</emphasis> part or <emphasis>else</emphasis> part,
@@ -238,7 +227,7 @@ mkIf cfg.enable { <co xml:id='conf-syntax-5' />
 <para>
 
 <screen>
-$ nix-build /etc/nixos/nixos <replaceable>attr</replaceable></screen>
+$ nix-build /etc/nixos/nixos -A <replaceable>attr</replaceable></screen>
 
 where <replaceable>attr</replaceable> is an attribute in
 <filename>/etc/nixos/nixos/default.nix</filename>.  Attributes of interest include:
@@ -246,55 +235,84 @@ where <replaceable>attr</replaceable> is an attribute in
 <variablelist>
 
   <varlistentry>
-    <term><varname>kernel</varname></term>
-    <listitem><para>The kernel.</para></listitem>
+    <term><varname>config</varname></term>
+    <listitem><para>The computer configuration generated from
+    the <env>NIXOS_CONFIG</env> environment variable (default
+    is <filename>/etc/nixos/configuration.nix</filename>) with the NixOS
+    default set of modules.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>initialRamdisk</varname></term>
-    <listitem><para>The initial ramdisk (initrd) for this configuration.</para></listitem>
+    <term><varname>system</varname></term>
+    <listitem><para>The derivation which build your computer system.  It is
+    built by the command <command>nixos-rebuild
+    build</command></para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>bootStage1</varname></term>
-    <listitem><para>The stage 1 (initrd) init script.</para></listitem>
+    <term><varname>vm</varname></term>
+    <listitem><para>The derivation which build your computer system inside a
+    virtual machine.  It is built by the command <command>nixos-rebuild
+    build-vm</command></para></listitem>
   </varlistentry>
-
-  <varlistentry>
-    <term><varname>bootStage2</varname></term>
-    <listitem><para>The stage 2 init script.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>etc</varname></term>
-    <listitem><para>The statically computed parts of <filename>/etc</filename>.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>upstartJobs</varname></term>
-    <listitem><para>An attribute set containing the Upstart jobs.  For
-    instance, the <varname>sshd</varname> Upstart job can be built by
-    doing <literal>nix-build /etc/nixos/nixos -A
-    tests.upstartJobs.sshd</literal>.</para></listitem>
-  </varlistentry>
-
 </variablelist>
 
 </para>
+
+<para>
+Most parts of NixOS can be build through the <varname>config</varname>
+attribute set.  This attribute set allows you to have a view of the merged
+option definitions and all its derivations.  Important derivations are store
+inside the option <option>system.build</option> and can be listed with the
+command <command>nix-instantiate --xml --eval-only /etc/nixos/nixos -A
+config.system.build</command>
+</para>.
 
 </section>
 
 
 <section>
 
+<title>Building your own NixOS CD</title>
+
+<para>Building a NixOS CD is as easy as configuring your own computer. The
+idea is to use another module which will replace
+your <filename>configuration.nix</filename> to configure the system that
+would be install on the CD.</para>
+
+<para>Default CD/DVD configurations are available
+inside <filename>nixos/modules/installer/cd-dvd</filename>.  To build them
+you have to set <env>NIXOS_CONFIG</env> before
+running <command>nix-build</command> to build the ISO.
+
+<screen>
+$ export NIXOS_CONFIG=/etc/nixos/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
+$ nix-build /etc/nixos/nixos -A config.system.build.isoImage</screen>
+
+</para>
+
+<para>Before burning your CD/DVD, you can check the content of the image by mounting anywhere like
+suggested by the following command:
+
+<screen>
+$ mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
+
+</para>
+
+</section>
+
+<section>
+
 <title>Testing the installer</title>
+
 
 <para>Building, burning, and booting from an installation CD is rather
 tedious, so here is a quick way to see if the installer works
 properly:
 
 <screen>
-$ nix-build .../nixos/configuration/rescue-cd.nix -A system.nixosInstall
+$ export NIXOS_CONFIG=/etc/nixos/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
+$ nix-build /etc/nixos/nixos -A config.system.build.nixosInstall
 $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
 $ yes | mke2fs -j diskimage
 $ mount -o loop diskimage /mnt
@@ -314,8 +332,8 @@ boot correctly is to use QEMU’s <option>-kernel</option> and
 <option>-initrd</option> options:
 
 <screen>
-$ nix-build /etc/nixos/nixos -A initialRamdisk -o initrd
-$ nix-build /etc/nixos/nixos -A kernel -o kernel
+$ nix-build /etc/nixos/nixos -A config.system.build.initialRamdisk -o initrd
+$ nix-build /etc/nixos/nixos -A config.system.build.kernel -o kernel
 $ qemu-system-x86_64 -kernel ./kernel/vmlinuz -initrd ./initrd/initrd -hda /dev/null
 </screen>
 

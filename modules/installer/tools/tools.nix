@@ -80,4 +80,6 @@ in
       nixosHardwareScan
       nixosGenSeccureKeys
     ];
+
+  system.build = { inherit nixosInstall; };
 }

@@ -180,6 +180,7 @@ in
 {
   require = [options];
 
+  system.build = { inherit kernel; };
   system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
   # The Linux kernel >= 2.6.27 provides firmware.
