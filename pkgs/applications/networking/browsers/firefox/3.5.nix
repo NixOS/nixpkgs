@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.5.2";
+  firefoxVersion = "3.5.3";
   
-  xulVersion = "1.9.1.2"; # this attribute is used by other packages
+  xulVersion = "1.9.1.3"; # this attribute is used by other packages
 
   
   src = fetchurl {
-    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}-source.tar.bz2";
-    sha1 = "6439923ff9d316297926ebe193bac3ac1a41b494";
+    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha1 = "83b2625eb74e81b473ac40ac52505e5fc9a497eb";
   };
 
 
@@ -44,16 +44,6 @@ rec {
     name = "xulrunner-${xulVersion}";
     
     inherit src;
-
-    patches = [
-      # Fix for Flash crashing in fullscreen mode with Xv acceleration
-      # on NVIDIA cards:
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=493541
-      (fetchurl {
-        url = http://hg.mozilla.org/mozilla-central/raw-rev/dae91a0884c9;
-        sha256 = "13w0bhm92sic7sx6847h98qm50cazm0cwi9hyp17y62q70b799ps";
-      })
-    ];
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
