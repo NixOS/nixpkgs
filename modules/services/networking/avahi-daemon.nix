@@ -20,7 +20,7 @@ let
         };
 
         hostName = mkOption {
-          default = "nixos";  # XXX: Would be nice to use `networking.hostName'.
+          default = config.networking.hostName;
           description = ''Host name advertised on the LAN.'';
         };
 
