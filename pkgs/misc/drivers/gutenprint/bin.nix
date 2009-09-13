@@ -1,6 +1,6 @@
 args: with args;
 
-assert stdenv.isLinux;
+assert stdenv.system == "x86_64-linux";
 
 /* usage: (sorry, its still impure but works!)
 

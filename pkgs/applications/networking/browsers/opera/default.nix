@@ -2,7 +2,7 @@
 , makeDesktopItem
 }:
 
-assert stdenv.isLinux;
+assert stdenv.isLinux && stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
   name = "opera-10.00";
