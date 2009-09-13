@@ -3997,21 +3997,22 @@ let
     dbus = dbus.libs;
   };
 
-  poppler = import ../development/libraries/poppler {
-    inherit fetchurl stdenv qt4 cairo freetype fontconfig zlib libjpeg
-      pkgconfig;
+  poppler = makeOverridable (import ../development/libraries/poppler) {
+    inherit fetchurl stdenv cairo freetype fontconfig zlib libjpeg pkgconfig;
     inherit (gtkLibs) glib gtk;
-    qt4Support = getConfig [ "poppler" "qt4Support" ] false;
+    qt4Support = false;
   };
 
-  popplerQt4 = import ../development/libraries/poppler {
-    inherit fetchurl stdenv cairo freetype fontconfig zlib libjpeg
-      pkgconfig;
-    qt4 = qt45;
-    inherit (gtkLibs) glib gtk;
+  popplerQt44 = poppler.override {
     qt4Support = true;
+    qt4 = qt44;
   };
-
+  
+  popplerQt45 = poppler.override {
+    qt4Support = true;
+    qt4 = qt45;
+  };
+  
   popt = import ../development/libraries/popt {
     inherit fetchurl stdenv;
   };
@@ -4040,21 +4041,23 @@ let
     mysqlSupport = true;
   };
 
-  qt4 = import ../development/libraries/qt-4 {
+  qt4 = qt44;
+
+  qt44 = import ../development/libraries/qt-4.4 {
     inherit fetchurl stdenv fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
-    fontconfig freetype pkgconfig libtiff;
+      fontconfig freetype pkgconfig libtiff;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-    libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
-    inputproto fixesproto libXfixes;
+      libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
+      inputproto fixesproto libXfixes;
     inherit (gnome) glib;
   };
 
   qt45 = import ../development/libraries/qt-4.5 {
     inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
-    fontconfig freetype pkgconfig libtiff;
+      fontconfig freetype pkgconfig libtiff;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-    libXmu libXinerama xineramaproto libXcursor libXext
-    inputproto fixesproto libXfixes;
+      libXmu libXinerama xineramaproto libXcursor libXext
+      inputproto fixesproto libXfixes;
     inherit (gnome) glib;
   };
   
@@ -7851,11 +7854,14 @@ let
 
   kde42 = import ../desktops/kde-4.2 (pkgs // {
     openexr = openexr_1_6_1;
+    qt4 = qt44;
+    popplerQt4 = popplerQt44;
   });
   
   kde43 = import ../desktops/kde-4.3 (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt45;
+    popplerQt4 = popplerQt45;
   });
   
   kdelibs = kde3.kdelibs;

@@ -1,6 +1,8 @@
 pkgs:
 
 rec {
+  inherit (pkgs) qt4;
+  
 ### SUPPORT
   automoc4 = import ./support/automoc4 {
     inherit (pkgs) stdenv fetchurl cmake;
