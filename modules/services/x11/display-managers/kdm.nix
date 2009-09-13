@@ -18,6 +18,7 @@ let
       [X-*-Core]
       Xrdb=${pkgs.xlibs.xrdb}/bin/xrdb
       SessionsDirs=${dmcfg.session.desktops}
+      Session=${dmcfg.session.script}
       FailsafeClient=${pkgs.xterm}/bin/xterm
 
       [X-:*-Core]
@@ -76,6 +77,7 @@ in
   
     services.xserver.displayManager.job =
       { execCmd = "${kdebase_workspace}/bin/kdm -config ${kdmrc}";
+        logsXsession = true;
       };
 
     security.pam.services = [ { name = "kde"; localLogin = true; ckHack = true; } ];

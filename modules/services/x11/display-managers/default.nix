@@ -20,35 +20,47 @@ let
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
       #! /bin/sh
- 
-      exec > $HOME/.xsession-errors 2>&1
+
+      # Handle being called by kdm.
+      if test "''${1:0:1}" = /; then eval exec "$1"; fi
+
+      # The first argument of this script is the session type.
+      sessionType="$1"
+      if test "$sessionType" = default; then sessionType=""; fi
+
+      ${optionalString (!cfg.displayManager.job.logsXsession) ''
+        exec > ~/.xsession-errors 2>&1
+      ''}
+
+      ${optionalString cfg.startSSHAgent ''
+        if test -z "$SSH_AUTH_SOCK"; then
+            # Restart this script as a child of the SSH agent.  (It is
+            # also possible to start the agent as a child that prints
+            # the required environment variabled on stdout, but in
+            # that mode ssh-agent is not terminated when we log out.)
+            export SSH_ASKPASS=${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass
+            exec ${pkgs.openssh}/bin/ssh-agent "$0" "$sessionType"
+        fi
+      ''}
+
+      # Load X defaults.
+      if test -e ~/.Xdefaults; then
+          ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+      fi
 
       source /etc/profile
 
-      ### Load X defaults.
-      if test -e ~/.Xdefaults; then
-        ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+      # Allow the user to setup a custom session type.
+      if test "$sessionType" = custom; then
+          test -x ~/.xsession && exec ~/.xsession
+          sessionType="" # fall-thru if there is no ~/.xsession
       fi
 
-      ${optionalString cfg.startSSHAgent ''
-        ### Start the SSH agent.
-        export SSH_ASKPASS=${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass
-        eval $(${pkgs.openssh}/bin/ssh-agent)
-      ''}
-
-      ### Allow user to override system-wide configuration
-      if test -f ~/.xsession; then
-          source ~/.xsession
-      fi
-
-      # The first argument of this script is the session type
-      sessionType="$1"
-
-      # The session type "<desktop-manager> + <window-manager>", so
+      # The session type is "<desktop-manager> + <window-manager>", so
       # extract those.
-      windowManager="''${arg##* + }"
+      windowManager="''${sessionType##* + }"
       : ''${windowManager:=${cfg.windowManager.default}}
-      desktopManager="''${arg% + *}"
+      desktopManager="''${sessionType% + *}"
       : ''${desktopManager:=${cfg.desktopManager.default}}
 
       # Start the window manager.
@@ -176,6 +188,15 @@ in
             default = {};
             example = { SLIM_CFGFILE = /etc/slim.conf; };
             description = "Additional environment variables needed by the display manager.";
+          };
+         
+          logsXsession = mkOption {
+            default = false;
+            description = ''
+              Whether the display manager redirects the
+              output of the session script to
+              <filename>~/.xsession-errors</filename>.
+            '';
           };
          
         };
