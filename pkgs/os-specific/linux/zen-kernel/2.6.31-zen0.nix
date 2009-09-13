@@ -36,6 +36,8 @@ in
 
     make allmodconfig
 
+    killOption CONFIG_CMDLINE_OVERRIDE
+
     killOption CONFIG_IMA
     killOption 'CONFIG_.*_DEBUG.*'
     killOption CONFIG_AUDIT_ARCH
@@ -47,6 +49,14 @@ in
     killOption CONFIG_TASKSTATS
     killOption CONFIG_PREEMPT_NONE
     setOptionYes CONFIG_PREEMPT_VOLUNTARY
+
+    killOption CONFIG_SLQB
+    killOption CONFIG_SLQB_ALLOCATOR
+    setOptionYes CONFIG_SLUB_ALLOCATOR
+    setOptionYes CONFIG_SLUB
+    killOption CONFIG_ACPI_CUSTOM_DSDT_INITRD
+    killOption CONFIG_DEVTMPFS
+    killOption CONFIG_DEVTMPFS_MOUNT
 
     cp .config ${config}
   '';
