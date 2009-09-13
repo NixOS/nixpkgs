@@ -3631,6 +3631,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  libmng = import ../development/libraries/libmng {
+    inherit fetchurl stdenv lib zlib libpng libjpeg lcms automake autoconf libtool;
+  };
+
   libmpcdec = import ../development/libraries/libmpcdec {
     inherit fetchurl stdenv;
   };
