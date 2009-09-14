@@ -21,6 +21,14 @@ stdenv.mkDerivation {
     # Patch to make Perl 5.8.8 build with GCC 4.2.  Taken from
     # http://www.nntp.perl.org/group/perl.perl5.porters/2006/11/msg117738.html
     ./gcc-4.2.patch
+
+    # Fix for "SysV.xs:7:25: error: asm/page.h: No such file or
+    # directory" on recent kernel headers.  From
+    # http://bugs.gentoo.org/show_bug.cgi?id=168312.
+    (fetchurl {
+      url = http://bugs.gentoo.org/attachment.cgi?id=111427;
+      sha256 = "017pj0nbqb7kwj3cs727c2l2d8c45l9cwxf71slgb807kn3ppgmn";
+    })
   ];
 
   setupHook = ./setup-hook.sh;
