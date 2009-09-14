@@ -19,6 +19,14 @@ stdenv.mkDerivation {
     kernelSource=$(echo $(pwd)/linux-*)
     cp -prd $kernelBuild/* $kernelSource
 
+    # Looks like GCC3 and GCC4 protect stack differently
+    # We do have the protection with recent GCC3 and GCC4, so override 
+    # the check
+    chmod u+w $kernelSource/scripts/gcc-x86_32-has-stack-protector.sh
+    chmod u+w $kernelSource/scripts/gcc-x86_64-has-stack-protector.sh
+    echo echo y > $kernelSource/scripts/gcc-x86_32-has-stack-protector.sh
+    echo echo y > $kernelSource/scripts/gcc-x86_64-has-stack-protector.sh
+
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$PWD/include"
   
     make KDIR=$kernelSource aufs.ko
