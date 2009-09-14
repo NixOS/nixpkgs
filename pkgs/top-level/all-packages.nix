@@ -6815,6 +6815,10 @@ let
     inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
   };
 
+  kermit = import ../tools/misc/kermit {
+    inherit fetchurl stdenv ncurses;
+  };
+
   kino = import ../applications/video/kino {
     inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser
       libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
