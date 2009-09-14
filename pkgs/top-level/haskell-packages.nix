@@ -473,7 +473,7 @@ rec {
   };
 
   vacuum = import ../development/libraries/haskell/vacuum {
-    inherit cabal ghcPaths haskellSrcMeta;
+    inherit cabal ghcPaths;
   };
 
   vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {

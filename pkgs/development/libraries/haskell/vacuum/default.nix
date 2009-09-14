@@ -1,10 +1,10 @@
-{cabal, ghcPaths, haskellSrcMeta}:
+{cabal, ghcPaths}:
 
 cabal.mkDerivation (self : {
   pname = "vacuum";
-  version = "0.0.94";
-  sha256 = "7056dfa38a9f579ee897d2980938fd484ddfa93c472014ad7ea5a5cd9100bfad";
-  propagatedBuildInputs = [ghcPaths haskellSrcMeta];
+  version = "1.0.0";
+  sha256 = "2229948ce801052c5ffb70ffc07e301d87d60740b053df8a7b7851ad02c01d9f";
+  propagatedBuildInputs = [ghcPaths];
   meta = {
     description = "Extract graph representations of ghc heap values";
   };

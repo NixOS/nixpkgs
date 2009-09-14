@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "cpphs";
-  version = "1.6";
-  sha256 = "2e7c430fde17adbb3905e6d2a3c3845a40349c61a53fcfa40c733e8b43e73295";
+  version = "1.9";
+  sha256 = "d93fab09e8bc10b54d483daf2b636ee07548c9f8fb60a900f1d665d568b7b9c8";
   meta = {
     description = "A liberalised re-implementation of cpp, the C pre-processor";
   };
