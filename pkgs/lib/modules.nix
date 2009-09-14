@@ -64,8 +64,10 @@ rec {
 
   moduleClosure = initModules: args:
     let
-      moduleImport = m: lib.addErrorContext "Import module ${m}." (
-        (unifyModuleSyntax (applyIfFunction (import m) args)) // {
+      moduleImport = m: lib.addErrorContext 
+        "Import module ${(if builtins.isAttrs m then "{...}" else m)}." (
+        (unifyModuleSyntax (applyIfFunction 
+	  (if builtins.isAttrs m then m else import m) args)) // {
           # used by generic closure to avoid duplicated imports.
           key = m;
           paths = [ m ];
