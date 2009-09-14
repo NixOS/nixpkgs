@@ -237,7 +237,7 @@ where <replaceable>attr</replaceable> is an attribute in
   <varlistentry>
     <term><varname>config</varname></term>
     <listitem><para>The computer configuration generated from
-    the <env>NIXOS_CONFIG</env> environment variable (default
+    the <envar>NIXOS_CONFIG</envar> environment variable (default
     is <filename>/etc/nixos/configuration.nix</filename>) with the NixOS
     default set of modules.</para></listitem>
   </varlistentry>
@@ -282,7 +282,7 @@ would be install on the CD.</para>
 
 <para>Default CD/DVD configurations are available
 inside <filename>nixos/modules/installer/cd-dvd</filename>.  To build them
-you have to set <env>NIXOS_CONFIG</env> before
+you have to set <envar>NIXOS_CONFIG</envar> before
 running <command>nix-build</command> to build the ISO.
 
 <screen>
