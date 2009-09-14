@@ -5345,6 +5345,10 @@ let
       inherit fetchurl stdenv kernel;
     };
 
+    # Currently it is broken
+    # Build requires exporting some symbols from kernel
+    # Go to package homepage to learn about the needed 
+    # patch. Feel free to take over the package.
     aufs2 = import ../os-specific/linux/aufs2 {
       inherit fetchgit stdenv kernel perl;
     };
