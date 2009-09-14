@@ -32,16 +32,10 @@ rec {
     else
       f;
 
-  moduleClosure = initModules: args:
+  # Convert module to a set which has imports / options and config
+  # attributes.
+  unifyModuleSyntax = m:
     let
-      moduleImport = m:
-        (applyIfFunction (importIfPath m) args) // {
-          # used by generic closure to avoid duplicated imports.
-          key = m;
-        };
-
-      removeKeys = list: map (m: removeAttrs m ["key"]) list;
-
       getImports = m:
         if m ? config || m ? options then
           attrByPath ["imports"] [] m
@@ -51,13 +45,39 @@ rec {
       getImportedPaths = m: filter isPath (getImports m);
       getImportedSets = m: filter (x: !isPath x) (getImports m);
 
-      inlineImportedSets = list:
-        lib.concatMap (m:[m] ++ map moduleImport (getImportedSets m)) list;
+      getConfig = m:
+        removeAttrs (delayProperties m) ["require"];
     in
-      removeKeys (inlineImportedSets (lazyGenericClosure {
+      if m ? config || m ? options then
+        m
+      else
+        {
+          imports = getImportedPaths m;
+          config = getConfig m;
+        } // (
+          if getImportedSets m != [] then
+            assert tail (getImportedSets m) == [];
+            { options = head (getImportedSets m); }
+          else
+            {}
+        );
+
+  moduleClosure = initModules: args:
+    let
+      moduleImport = m: lib.addErrorContext "Import module ${m}." (
+        (unifyModuleSyntax (applyIfFunction (import m) args)) // {
+          # used by generic closure to avoid duplicated imports.
+          key = m;
+          paths = [ m ];
+        }
+      );
+
+      getImports = m: attrByPath ["imports"] [] m;
+    in
+      lazyGenericClosure {
         startSet = map moduleImport initModules;
-        operator = m: map moduleImport (getImportedPaths m);
-      }));
+        operator = m: map moduleImport (getImports m);
+      };
 
   selectDeclsAndDefs = modules:
     lib.concatMap (m:
