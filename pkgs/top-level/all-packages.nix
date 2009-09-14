@@ -5331,6 +5331,10 @@ let
       lib builderDefs;
   };
 
+  kernel_2_6_31_zen0_bfs = kernel_2_6_31_zen0.override {
+    ckSched = true;
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages

@@ -62,7 +62,12 @@ in
     killOption CONFIG_ACPI_CUSTOM_DSDT_INITRD
     killOption CONFIG_DEVTMPFS
     killOption CONFIG_DEVTMPFS_MOUNT
-
+  '' +
+  (if a.lib.attrByPath ["ckSched"] false a then ''
+    killOption CONFIG_CPU_CFS
+    setOptionYes CONFIG_CPU_BFS
+  ''else "") +
+  ''
     cp .config ${config}
   '';
 })
