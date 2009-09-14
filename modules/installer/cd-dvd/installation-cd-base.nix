@@ -149,6 +149,10 @@ in
 
       # Wait for SCSI devices to appear.
       "scsi_wait_scan"
+
+      # Add vfat to enable people to copy the contents of the CD to a
+      # bootable USB stick.
+      "vfat"
     ];
 
   # nixos-install will do a pull from this channel to speed up the
