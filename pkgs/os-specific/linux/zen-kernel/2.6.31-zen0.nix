@@ -11,6 +11,7 @@ in
   features = {
     iwlwifi = true;
     zen = true;
+    fbConDecor = true;
   };
 
   extraMeta = {
@@ -32,6 +33,10 @@ in
     setOptionYes () {
       sed -re 's/^# ('"$1"') is not set/\1=y/' -i .config
       sed -re "1i$1=y" -i .config
+    }
+    setOptionVal () {
+      sed -re 's/^('"$1"')=.*/\1='"$2"'/' -i .config
+      sed -re "1i$1=$2" -i .config
     }
 
     make allmodconfig
@@ -66,6 +71,10 @@ in
   (if a.lib.attrByPath ["ckSched"] false a then ''
     killOption CONFIG_CPU_CFS
     setOptionYes CONFIG_CPU_BFS
+    killOption CONFIG_NO_HZ
+    killOption CONFIG_HZ_1000
+    setOptionYes CONFIG_HZ_250
+    setOptionVal CONFIG_HZ 250
   ''else "") +
   ''
     cp .config ${config}
