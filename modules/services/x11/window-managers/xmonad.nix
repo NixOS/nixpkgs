@@ -6,27 +6,25 @@ let
 in
 
 {
-  services = {
-    xserver = {
-
-      windowManager = {
-        xmonad = {
-          enable = mkOption {
-            default = false;
-            example = true;
-            description = "Enable the xmonad window manager.";
-          };
-        };
-
-        session = mkIf cfg.enable [{
-          name = "xmonad";
-          start = "
-            ${pkgs.haskellPackages.xmonad}/bin/xmonad &
-            waitPID=$!
-          ";
-        }];
+  options = {
+    services.xserver.windowManager.xmonad = {
+      enable = mkOption {
+        default = false;
+        example = true;
+        description = "Enable the xmonad window manager.";
       };
+    };
+  };
 
+  config = {
+    services.xserver.windowManager = {
+      session = mkIf cfg.enable [{
+        name = "xmonad";
+        start = "
+          ${pkgs.haskellPackages.xmonad}/bin/xmonad &
+          waitPID=$!
+        ";
+      }];
     };
   };
 }

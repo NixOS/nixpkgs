@@ -6,7 +6,7 @@ let
 in
 
 {
-  require = [
+  imports = [
     ./compiz.nix
     ./kwm.nix
     ./metacity.nix
@@ -16,43 +16,43 @@ in
     ./xmonad.nix
   ];
 
-  services = {
-    xserver = {
-      displayManager = {
-        session = cfg.session;
+  options = {
+    services.xserver.windowManager = {
+
+      session = mkOption {
+        default = [];
+        example = [{
+          name = "wmii";
+          start = "...";
+        }];
+        description = "
+          Internal option used to add some common line to window manager
+          scripts before forwarding the value to the
+          <varname>displayManager</varname>.
+        ";
+        apply = map (d: d // {
+          manage = "window";
+        });
       };
 
-      windowManager = {
-        session = mkOption {
-          default = [];
-          example = [{
-            name = "wmii";
-            start = "...";
-          }];
-          description = "
-            Internal option used to add some common line to window manager
-            scripts before forwarding the value to the
-            <varname>displayManager</varname>.
-          ";
-          apply = map (d: d // {
-            manage = "window";
-          });
-        };
-
-        default = mkOption {
-          default = "none";
-          example = "wmii";
-          description = "
-            Default window manager loaded if none have been chosen.
-          ";
-          merge = mergeOneOption;
-          apply = defaultWM:
-            if any (w: w.name == defaultWM) cfg.session then
-              defaultWM
-            else
-              throw "Default window manager (${defaultWM}) not found.";
-        };
+      default = mkOption {
+        default = "none";
+        example = "wmii";
+        description = "
+          Default window manager loaded if none have been chosen.
+        ";
+        merge = mergeOneOption;
+        apply = defaultWM:
+          if any (w: w.name == defaultWM) cfg.session then
+            defaultWM
+          else
+            throw "Default window manager (${defaultWM}) not found.";
       };
+
     };
+  };
+
+  config = {
+    services.xserver.displayManager.session = cfg.session;
   };
 }
