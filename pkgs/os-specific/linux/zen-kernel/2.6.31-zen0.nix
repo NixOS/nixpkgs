@@ -12,6 +12,7 @@ in
     iwlwifi = true;
     zen = true;
     fbConDecor = true;
+    aufs = true;
   };
 
   extraMeta = {

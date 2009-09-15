@@ -5357,9 +5357,11 @@ let
       inherit fetchgit stdenv kernel perl;
     };
 
-    aufs2Utils = builderDefsPackage ../os-specific/linux/aufs2-utils {
-      inherit kernel;
-    };
+    aufs2Utils = if kernel.features ? aufs then
+      builderDefsPackage ../os-specific/linux/aufs2-utils {
+        inherit kernel;
+      } 
+    else null;
 
     exmap = import ../os-specific/linux/exmap {
       inherit fetchurl stdenv kernel boost pcre pkgconfig;

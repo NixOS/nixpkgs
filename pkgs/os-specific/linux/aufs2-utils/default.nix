@@ -1,6 +1,4 @@
 a :  
-if (a.lib.attrByPath ["features" "zen"] false a.kernel) ||
-  (a.lib.attrByPath ["features" "aufs"] false a.kernel) then
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
@@ -35,4 +33,3 @@ rec {
       linux;
   };
 }
-else throw "Kernel doesn't support AUFS"
