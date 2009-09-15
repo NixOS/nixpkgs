@@ -64,22 +64,20 @@ rec {
 
   moduleClosure = initModules: args:
     let
-      moduleImport = m: lib.addErrorContext 
-        "Import module ${(if builtins.isAttrs m then "{...}" else m)}." (
-        (unifyModuleSyntax (applyIfFunction 
-	  (if builtins.isAttrs m then m else import m) args)) // {
+      moduleImport = m:
+        (unifyModuleSyntax (applyIfFunction (importIfPath m) args)) // {
           # used by generic closure to avoid duplicated imports.
-          key = m;
-          paths = [ m ];
-        }
-      );
+          key = if isPath m then m else
+            /bad/developer/implies/bad/error/messages;
+        };
 
       getImports = m: attrByPath ["imports"] [] m;
+
     in
-      lazyGenericClosure {
-        startSet = map moduleImport initModules;
+      (lazyGenericClosure {
+        startSet = map moduleImport (filter isPath initModules);
         operator = m: map moduleImport (getImports m);
-      };
+      }) ++ (map moduleImport (filter (m: ! isPath m) initModules));
 
   selectDeclsAndDefs = modules:
     lib.concatMap (m:
