@@ -74,11 +74,11 @@ let
 
       import "${nixosSrc}/doc/manual" {
         pkgs = import nixpkgs {};
-        optionDeclarations =
+        options =
           (import lib/eval-config.nix {
             inherit nixpkgs;
             modules = [ ];
-          }).optionDeclarations;
+          }).options;
       };
 
 

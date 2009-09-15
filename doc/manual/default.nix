@@ -1,23 +1,17 @@
-{ pkgs, optionDeclarations }:
+{ pkgs, options }:
 
 let
-
-  manualConfig =
-    { environment.checkConfigurationOptions = false;
-      services.nixosManual.enable = false;
-    };
-
   # To prevent infinite recursion, remove system.path from the
   # options.  Not sure why this happens.
-  optionDeclarations_ =
-    optionDeclarations //
-    { system = removeAttrs optionDeclarations.system ["path"]; };
+  options_ =
+    options //
+    { system = removeAttrs options.system ["path"]; };
 
-  options = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
-    (builtins.toXML (pkgs.lib.optionAttrSetToDocList "" optionDeclarations_)));
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
+    (builtins.toXML (pkgs.lib.optionAttrSetToDocList "" options_)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
-    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${options} 
+    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${optionsXML} 
   '';
     
   manual = pkgs.stdenv.mkDerivation {

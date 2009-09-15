@@ -25,11 +25,12 @@ rec {
 
   optionDefinitions = systemModule.config;
   optionDeclarations = systemModule.options;
+  inherit (systemModule) options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
   extraArgs = extraArgs_ // {
-    inherit pkgs optionDeclarations;
+    inherit pkgs;
     modulesPath = ../modules;
     servicesPath = services;
   };
@@ -62,5 +63,5 @@ rec {
   # option declarations.
   config = pkgs.checker optionDefinitions
     optionDefinitions.environment.checkConfigurationOptions
-    optionDeclarations optionDefinitions;
+    options optionDefinitions;
 }
