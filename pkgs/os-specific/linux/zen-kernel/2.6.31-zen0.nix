@@ -69,6 +69,10 @@ in
     killOption CONFIG_DEVTMPFS
     killOption CONFIG_DEVTMPFS_MOUNT
   '' +
+  (''
+    killOption CONFIG_FB_TILEBLITTING
+    setOptionYes CONFIG_FB_CON_DECOR
+  '')+
   (if a.lib.attrByPath ["ckSched"] false a then ''
     killOption CONFIG_CPU_CFS
     setOptionYes CONFIG_CPU_BFS
