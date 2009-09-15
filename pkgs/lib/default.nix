@@ -23,4 +23,4 @@ in
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
-  // properties // options // types // meta // debug // misc
+  // properties // options // types // meta // debug // misc // modules

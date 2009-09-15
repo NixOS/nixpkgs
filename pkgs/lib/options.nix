@@ -8,7 +8,6 @@ with import ./lists.nix;
 with import ./misc.nix;
 with import ./attrsets.nix;
 with import ./properties.nix;
-with import ./modules.nix;
 
 rec {
 
@@ -69,22 +68,43 @@ rec {
           }
         else opt;
 
+      convertOptionsToModules = opt:
+        if opt ? options then
+          opt // {
+            options = map (decl:
+              let module = lib.applyIfFunction decl {}; in
+              if lib.isModule module then
+                decl
+              else
+                arg: { options = lib.applyIfFunction decl arg; }
+            ) opt.options;
+          }
+        else
+          opt;
+
       handleOptionSets = opt:
         if decl ? type && decl.type.hasOptions then
           let
+            
             optionConfig = opts: config:
-               map (f: applyIfFunction f config)
-                 (decl.options ++ [opts]);
+               map (f: lib.applyIfFunction f config)
+                 (opt.options ++ toList opts);
           in
             opt // {
               merge = list:
                 decl.type.iter
                   (path: opts:
-                     lib.fix (fixableMergeFun (recurseInto path) (optionConfig opts))
+                    (lib.fix
+                      (fixableMergeFun (recurseInto path) (optionConfig opts))
+                    ).config
                   )
                   opt.name
                   (opt.merge list);
-              options = recurseInto (decl.type.docPath opt.name) decl.options;
+              options =
+                let path = decl.type.docPath opt.name; in
+                (lib.fix
+                  (fixableMergeFun (recurseInto path) (optionConfig []))
+                ).options;
             }
         else
           opt;
@@ -99,6 +119,7 @@ rec {
         # override settings
         ensureMergeInputType
         ensureDefaultType
+        convertOptionsToModules
         handleOptionSets
       ];
 
@@ -186,121 +207,33 @@ rec {
     else head list;
 
 
-  # Handle the traversal of option sets.  All sets inside 'opts' are zipped
-  # and options declaration and definition are separated.  If no option are
-  # declared at a specific depth, then the function recurse into the values.
-  # Other cases are handled by the optionHandler which contains two
-  # functions that are used to defined your goal.
-  # - export is a function which takes two arguments which are the option
-  # and the list of values.
-  # - notHandle is a function which takes the list of values are not handle
-  # by this function.
-  handleOptionSets = optionHandler@{export, notHandle, ...}: path: opts:
-    if all isAttrs opts then
-      lib.zip (attr: opts:
-        let
-          recurseInto = name: attrs:
-            handleOptionSets optionHandler name attrs;
-
-          # Compute the path to reach the attribute.
-          name = if path == "" then attr else path + "." + attr;
-
-          # Divide the definitions of the attribute "attr" between
-          # declaration (isOption) and definitions (!isOption).
-          test = partition (x: isOption (rmProperties x)) opts;
-          decls = map rmProperties test.right; defs = test.wrong;
-
-          # Make the option declaration more user-friendly by adding default
-          # settings and some verifications based on the declaration content
-          # (like type correctness).
-          opt = addOptionMakeUp
-            { inherit name recurseInto; }
-            (mergeOptionDecls decls);
-
-          # Return the list of option sets.
-          optAttrs = map delayProperties defs;
-
-          # return the list of option values.
-          # Remove undefined values that are coming from evalIf.
-          optValues = evalProperties defs;
-        in
-          if decls == [] then recurseInto name optAttrs
-          else lib.addErrorContext "while evaluating the option ${name}:" (
-            export opt optValues
-          )
-      ) opts
-   else lib.addErrorContext "while evaluating ${path}:" (notHandle opts);
-
-  # Merge option sets and produce a set of values which is the merging of
-  # all options declare and defined.  If no values are defined for an
-  # option, then the default value is used otherwise it use the merge
-  # function of each option to get the result.
-  mergeOptionSets =
-    handleOptionSets {
-      export = opt: values:
-        opt.apply (
-          if values == [] then
-            if opt ? default then opt.default
-            else throw "Not defined."
-          else opt.merge values
-        );
-      notHandle = opts: throw "Used without option declaration.";
-    };
-
-  # Keep all option declarations.
-  filterOptionSets =
-    handleOptionSets {
-      export = opt: values: opt;
-      notHandle = opts: {};
-    };
-
-
   fixableMergeFun = merge: f: config:
     merge (
-      # remove require because this is not an option.
-      map (m: removeAttrs m ["require"]) (
-        # Delay top-level properties like mkIf
-        map delayProperties (
-          # generate the list of option sets.
-          f config
-        )
-      )
+      # generate the list of option sets.
+      f config
     );
 
   fixableMergeModules = merge: initModules: {...}@args: config:
     fixableMergeFun merge (config:
-      # filter the list of option sets.
-      selectDeclsAndDefs (
-        # generate the list of modules from a closure of imports/require
-        # attribtues.
-        moduleClosure initModules (args // { inherit config; })
-      )
+      lib.moduleClosure initModules (args // { inherit config; })
     ) config;
 
 
   fixableDefinitionsOf = initModules: {...}@args:
-    fixableMergeModules (mergeOptionSets "") initModules args;
+    fixableMergeModules (modules: (lib.moduleMerge "" modules).config) initModules args;
 
   fixableDeclarationsOf = initModules: {...}@args:
-    fixableMergeModules (filterOptionSets "") initModules args;
+    fixableMergeModules (modules: (lib.moduleMerge "" modules).options) initModules args;
 
   definitionsOf = initModules: {...}@args:
-    lib.fix (fixableDefinitionsOf initModules args);
+    (lib.fix (module:
+      fixableMergeModules (lib.moduleMerge "") initModules args module.config
+    )).config;
 
   declarationsOf = initModules: {...}@args:
-    lib.fix (fixableDeclarationsOf initModules args);
-
-
-  fixMergeModules = merge: initModules: {...}@args:
-    lib.fix (fixableMergeModules merge initModules args);
-
-
-  # old interface.
-  fixOptionSetsFun = merge: {...}@args: initModules: config:
-    fixableMergeModules (merge "") initModules args config;
-
-  fixOptionSets = merge: args: initModules:
-    fixMergeModules (merge "") initModules args;
+    (lib.fix (module:
+      fixableMergeModules (lib.moduleMerge "") initModules args module.config
+    )).options;
 
 
   # Generate documentation template from the list of option declaration like
