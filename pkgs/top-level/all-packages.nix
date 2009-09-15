@@ -2069,6 +2069,10 @@ let
     inherit fetchurl stdenv pkgconfig aterm getopt jdk;
   };
 
+  strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk;
+  };
+
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
     inherit fetchurl stdenv ;
   };
