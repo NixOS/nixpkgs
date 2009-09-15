@@ -239,10 +239,10 @@ rec {
   };
 
   CatalystDevel = buildPerlPackage rec {
-    name = "Catalyst-Devel-1.19";
+    name = "Catalyst-Devel-1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-      sha256 = "1m6wrdlzdns0mg9hk8dnrz4lk2b382cp9ngss1ya562fg92yvpkv";
+      sha256 = "0p2fa7dcb987ppi6kvrfb1slmxkfax4g2nwp709cbnv3sflhlhhq";
     };
     propagatedBuildInputs = [
       CatalystRuntime CatalystActionRenderView
@@ -294,10 +294,10 @@ rec {
   };
 
   CatalystRuntime = buildPerlPackage rec{
-    name = "Catalyst-Runtime-5.80007";
+    name = "Catalyst-Runtime-5.80012";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-      sha256 = "166rj6i7h28gmkw95qgbsb2g7qvavvs2mqymxpinhx24af7w4gdx";
+      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
+      sha256 = "1kafxm92b5q2chdrcwqk73gdh3dbvfqa2718sms0md637vqczpip";
     };
     propagatedBuildInputs = [
       LWP ClassAccessor ClassDataInheritable ClassInspector
@@ -306,7 +306,7 @@ rec {
       SubExporter MROCompat TestMockObject ClassMOP Moose
       NamespaceClean ScopeUpper MooseXEmulateClassAccessorFast
       ClassC3 ClassC3AdoptNEXT NamespaceAutoclean MooseXMethodAttributes
-      StringRewritePrefix
+      StringRewritePrefix ModulePluggable
     ];
   };
 
@@ -411,22 +411,22 @@ rec {
   };
 
   CatalystViewDownload = buildPerlPackage rec {
-    name = "Catalyst-View-Download-0.04";
+    name = "Catalyst-View-Download-0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAUDEON/${name}.tar.gz";
-      sha256 = "1d5ck28db6vbks7cwkj1qh0glhxskl3vymksv3izfzbk6xnjrabi";
+      sha256 = "0l9jvc4sqchhpmhn70lm46k2avdsdk19i9wgas1awhzyr445c0b3";
     };
     propagatedBuildInputs = [
       CatalystRuntime TestWWWMechanizeCatalyst TestUseOk
-      TextCSV
+      TextCSV XMLSimple
     ];
   };
 
   CatalystViewTT = buildPerlPackage rec {
-    name = "Catalyst-View-TT-0.29";
+    name = "Catalyst-View-TT-0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
-      sha256 = "11j78szkdnlx43ph94rmpyphvmwvxv5w75c9dkvpmsvc7l3xby84";
+      sha256 = "15r5l0b943x2s863n38g3ir5xazja1s1kj022gs5bm4lw2hnkcvm";
     };
     propagatedBuildInputs = [
       CatalystRuntime TemplateToolkit ClassAccessor
@@ -1576,10 +1576,10 @@ rec {
   };
 
   MooseXMethodAttributes = buildPerlPackage rec {
-    name = "MooseX-MethodAttributes-0.14";
+    name = "MooseX-MethodAttributes-0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "0ddlvx6g3s1aniixwwcn2f4czd4s14prb8dmdmqd58wis0mv2c4g";
+      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
+      sha256 = "1cfpslsn7kqcbi6rvb5095ba8f4qdjb2bksxdbalpr4yf88hrc5n";
     };
     propagatedBuildInputs = [Moose MooseXTypes TestException];
   };
@@ -1777,11 +1777,11 @@ rec {
     };
   };
 
-  ModulePluggable = buildPerlPackage {
-    name = "Module-Pluggable-3.5";
+  ModulePluggable = buildPerlPackage rec {
+    name = "Module-Pluggable-3.9";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-3.5.tar.gz;
-      sha256 = "08rywi79pqn2c8zr17fmd18lpj5hm8lxd1j4v2k002ni8vhl43nv";
+      url = "mirror://cpan/authors/id/S/SI/SIMONW/${name}.tar.gz";
+      sha256 = "0psryh1dz828zly92db9zcv905n82in2awixzqngqhzg4y7fg4wc";
     };
     patches = [
       # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
@@ -2072,10 +2072,10 @@ rec {
   };
 
   TemplateToolkit = buildPerlPackage rec {
-    name = "Template-Toolkit-2.21";
+    name = "Template-Toolkit-2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABW/${name}.tar.gz";
-      sha256 = "1az1c7gs6f3wrhmblaqkymhscv52p9g7xhcadlr9as5r3nrwcmwh";
+      sha256 = "023sb6mf43m085pf8qq1dh1ill66p424mmj66xna5ji1nkw96pm3";
     };
     propagatedBuildInputs = [AppConfig];
     patches = [
