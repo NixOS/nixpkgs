@@ -19,10 +19,12 @@ rec {
   configComponents = modules ++ baseModules;
 
   # Merge the option definitions in all modules, forming the full
-  # system configuration.  This is called "configFast" because it's
-  # not checked for undeclared options.
-  configFast =
-    pkgs.lib.definitionsOf configComponents extraArgs;
+  # system configuration.  It's not checked for undeclared options.
+  systemModule =
+    pkgs.lib.fixMergeModules configComponents extraArgs;
+
+  optionDefinitions = systemModule.config;
+  optionDeclarations = systemModule.options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
@@ -53,19 +55,12 @@ rec {
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
           pkgs = import nixpkgs { inherit system; config = {}; };
-        }).configFast.nixpkgs.config;
+        }).optionDefinitions.nixpkgs.config;
     };
-
-  # "fixableDeclarationsOf" is used instead of "declarationsOf" because some
-  # option default values may depends on the definition of other options.
-  # !!! This seems inefficent.  Didn't definitionsOf already compute
-  # the option declarations?
-  optionDeclarations =
-    pkgs.lib.fixableDeclarationsOf configComponents extraArgs configFast;
 
   # Optionally check wether all config values have corresponding
   # option declarations.
-  config = pkgs.checker configFast
-    configFast.environment.checkConfigurationOptions
-    optionDeclarations configFast;
+  config = pkgs.checker optionDefinitions
+    optionDefinitions.environment.checkConfigurationOptions
+    optionDeclarations optionDefinitions;
 }
