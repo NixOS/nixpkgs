@@ -1,11 +1,11 @@
 {stdenv, fetchurl, bison, flex, perl}:
 
-stdenv.mkDerivation {
-  name = "lm_sensors-3.0.2";
+stdenv.mkDerivation rec {
+  name = "lm_sensors-3.1.1";
   
   src = fetchurl {
-    url = http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-3.0.2.tar.bz2;
-    sha256 = "0msvgjbj63maibip9y8xcjm55y7crc37lbzdff5x5pk1hqpgqq8l";
+    url = "http://dl.lm-sensors.org/lm-sensors/releases/${name}.tar.bz2";
+    sha256 = "1vsrs2cl35h2gry03lp0pwbzpw0nbpsbpds5w4mdmx16clm3ynnr";
   };
 
   buildInputs = [bison flex perl];
