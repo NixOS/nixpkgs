@@ -1,20 +1,14 @@
-args :  
+a :  
 let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  fullDepEntry = args.fullDepEntry;
-
-  version = lib.attrByPath ["version"] "0.7.47" args; 
-  buildInputs = with args; [
+  s = import ./src-for-default.nix;
+  buildInputs = with a; [
     openssl zlib pcre libxml2 libxslt
   ];
 in
 rec {
-  src = fetchurl {
-    url = "http://sysoev.ru/nginx/nginx-${version}.tar.gz";
-    sha256 = "0wcb5qmvlp2b9vfz8b897gk783bwp55kprxg4gss1i9r72jdp16a";
-  };
+  src = a.fetchUrlFromSrcInfo s;
 
+  inherit (s) name;
   inherit buildInputs;
   configureFlags = [
     "--with-http_ssl_module"
@@ -25,15 +19,18 @@ rec {
     "--with-http_secure_link_module"
   ];
 
-  preConfigure = fullDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${args.libxml2}/include/libxml2"
+  preConfigure = a.fullDepEntry ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.libxml2}/include/libxml2"
   '' [];
 
-  /* doConfigure should be specified separately */
   phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
       
-  name = "nginx-" + version;
   meta = {
     description = "nginx - 'engine x' - reverse proxy and lightweight webserver";
+    maintainers = [
+      a.lib.maintainers.raskin
+    ];
+    platforms = with a.lib.platforms; 
+      all;
   };
 }
