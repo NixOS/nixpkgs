@@ -76,6 +76,7 @@ in
     setOptionYes CONFIG_FB
     make oldconfig
     setOptionYes CONFIG_FB_CON_DECOR
+    setOptionYes CONFIG_FB_VESA
   ''+
   ''
     killOption CONFIG_PREEMPT_NONE
