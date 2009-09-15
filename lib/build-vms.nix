@@ -53,11 +53,14 @@ rec {
 
 
   buildVM =
-    nodes: configuration:
+    nodes: configurations:
 
     import "${nixos}/lib/eval-config.nix" {
       inherit nixpkgs services system;
-      modules = [ configuration ];
+      modules = configurations ++ [
+        "${nixos}/modules/virtualisation/qemu-vm.nix" # !!!
+        "${nixos}/modules/testing/test-instrumentation.nix" # !!! should only get added for automated test runs
+      ];
       extraArgs = { inherit nodes; };
       /* !!! bug in the module/option handling: this ignores the
          config from assignIPAddresses.  Too much magic. 
@@ -88,13 +91,8 @@ rec {
       # Generate a /etc/hosts file.
       hosts = lib.concatMapStrings (m: "${m.second} ${m.first}\n") machinesWithIP;
 
-      nodes_ = map (m: lib.nameValuePair m.first
-          { imports = [
-              (lib.getAttr m.first nodes)
-              "${nixos}/modules/virtualisation/qemu-vm.nix" # !!!
-              "${nixos}/modules/testing/test-instrumentation.nix" # !!! should only get added for automated test runs
-            ];
-            config =
+      nodes_ = map (m: lib.nameValuePair m.first [
+          { config =
               { networking.hostName = m.first;
                 networking.interfaces =
                   [ { name = "eth1";
@@ -105,7 +103,8 @@ rec {
                 services.nixosManual.enable = false; # !!!
               };
           }
-        ) machinesWithIP;
+          (lib.getAttr m.first nodes)
+        ]) machinesWithIP;
 
     in lib.listToAttrs nodes_;
 
