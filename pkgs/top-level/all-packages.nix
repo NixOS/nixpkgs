@@ -2167,6 +2167,11 @@ let
     inherit fetchurl stdenv readline libtool gmp gawk makeWrapper;
   };
 
+  guile_1_9 = import ../development/interpreters/guile/1.9.nix {
+    inherit fetchurl stdenv readline libtool gmp gawk makeWrapper
+      libunistring pkgconfig boehmgc;
+  };
+
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
       libpng libtiff libjpeg readline libsndfile libxml2
