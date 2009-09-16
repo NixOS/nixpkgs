@@ -25,7 +25,7 @@ in
     services.uptimed = {
 
       enable = mkOption {
-        default = true;
+        default = false;
         description = ''
           Uptimed allows you to track your highest uptimes.
         '';
