@@ -4,7 +4,7 @@ let
 
 
   makeIso =
-    { module, description }:
+    { module, description, maintainers ? ["eelco"]}:
     { nixosSrc ? {outPath = ./.; rev = 1234;}
     , officialRelease ? false
     , system ? "i686-linux"
@@ -28,7 +28,7 @@ let
       runCommand "nixos-iso-${version}"
         { meta = {
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
-            maintainers = [lib.maintainers.eelco];
+            maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
           };
         }
         ''
@@ -85,6 +85,12 @@ let
     iso_minimal = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
       description = "minimal";
+    };
+
+    iso_minimal_fresh_kernel = makeIso {
+      module = ./modules/installer/cd-dvd/installation-cd-minimal-fresh-kernel.nix;
+      description = "minimal with 2.6.31-zen0";
+      maintainers = ["raskin"];
     };
 
     /*    

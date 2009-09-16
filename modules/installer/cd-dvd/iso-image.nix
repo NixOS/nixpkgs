@@ -86,7 +86,9 @@ in
 
   # We need squashfs in the initrd to mount the compressed Nix store,
   # and aufs to make the root filesystem appear writable.
-  boot.extraModulePackages = [config.boot.kernelPackages.aufs];
+  boot.extraModulePackages = (pkgs.lib.optional 
+    (! config.boot.kernelPackages.kernel.features ? aufs) 
+    config.boot.kernelPackages.aufs);
   boot.initrd.extraKernelModules = ["aufs" "squashfs"];
 
   # Tell stage 1 of the boot to mount a tmpfs on top of the CD using
