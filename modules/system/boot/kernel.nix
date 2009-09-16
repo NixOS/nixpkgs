@@ -25,6 +25,7 @@ let
 
       kernelParams = mkOption {
         default = [
+          "selinux=0"
           "apm=on"
           "acpi=on"
           "vga=0x317"
