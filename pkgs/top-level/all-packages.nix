@@ -811,6 +811,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  gnuvd = import ../tools/misc/gnuvd {
+    inherit fetchurl stdenv;
+  };
+
   graphviz = import ../tools/graphics/graphviz {
     inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
       libtool fontconfig gd;
