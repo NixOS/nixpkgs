@@ -1541,6 +1541,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  uptimed = import ../tools/system/uptimed {
+    inherit fetchurl stdenv automake autoconf libtool;
+  };
+
   wdfs = import ../tools/networking/wdfs {
     inherit stdenv fetchurl neon fuse pkgconfig;
     inherit (gtkLibs) glib;
