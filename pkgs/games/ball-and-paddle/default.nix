@@ -36,5 +36,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/ballandpaddle/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+
+    # The fancy libs aren't available on {Cyg,Dar}win.
+    platforms = stdenv.lib.platforms.linux;
   };
 }
