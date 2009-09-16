@@ -5378,7 +5378,7 @@ let
       inherit fetchgit stdenv kernel perl;
     };
 
-    aufs2Utils = if kernel.features ? aufs then
+    aufs2Utils = if lib.attrByPath ["features" "aufs"] false kernel then
       builderDefsPackage ../os-specific/linux/aufs2-utils {
         inherit kernel;
       } 
