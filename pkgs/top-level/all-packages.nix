@@ -602,6 +602,10 @@ let
     inherit fetchurl stdenv gettext libjpeg lcms;
   };
 
+  ddclient = import ../tools/networking/ddclient {
+    inherit fetchurl buildPerlPackage perl;
+  };
+
   ddrescue = builderDefsPackage (selectVersion ../tools/system/ddrescue "1.8") {};
 
   desktop_file_utils = import ../tools/misc/desktop-file-utils {
