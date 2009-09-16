@@ -45,5 +45,14 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/cflow/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+
+    /* On Darwin, build fails with:
+
+       Undefined symbols:
+         "_argp_program_version", referenced from:
+             _argp_program_version$non_lazy_ptr in libcflow.a(argp-parse.o)
+       ld: symbol(s) not found
+     */
+    platforms = stdenv.lib.platforms.allBut "i686-darwin";
   };
 }
