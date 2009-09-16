@@ -79,6 +79,7 @@ rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = python.passthru.platforms;
     };
   });
 
@@ -173,6 +174,7 @@ rec {
       license = "revised-BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = python.passthru.platforms;
     };
   });
 
@@ -216,6 +218,7 @@ rec {
       license = "GPLv2+";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = python.passthru.platforms;
     };
   });
 
@@ -269,6 +272,7 @@ rec {
       license = "revised BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = python.passthru.platforms;
     };
   });
 
@@ -391,6 +395,7 @@ rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = python.passthru.platforms;
     };
   };
 
