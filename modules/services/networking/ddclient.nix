@@ -15,18 +15,18 @@ let
   ddclientFlags = "-foreground -file ${ddclientCfg}";
 
   ddclientCfg = pkgs.writeText "ddclient.conf" ''
-daemon=600
-cache=${stateDir}/ddclient.cache
-pid=${stateDir}/ddclient.pid
-use=${config.services.ddclient.web}
-login=${config.services.ddclient.username}
-password=${config.services.ddclient.password}
-protocol=${config.services.ddclient.protocol}
-server=${config.services.ddclient.server}
-wildcard=YES
-${config.services.ddclient.domain}
-${config.services.ddclient.extraConfig}
-'';
+    daemon=600
+    cache=${stateDir}/ddclient.cache
+    pid=${stateDir}/ddclient.pid
+    use=${config.services.ddclient.web}
+    login=${config.services.ddclient.username}
+    password=${config.services.ddclient.password}
+    protocol=${config.services.ddclient.protocol}
+    server=${config.services.ddclient.server}
+    wildcard=YES
+    ${config.services.ddclient.domain}
+    ${config.services.ddclient.extraConfig}
+  '';
 
 in
 
@@ -113,24 +113,20 @@ in
     jobs = singleton {
 
       name = "ddclient";
-      
-      job = ''
-        description "ddclient daemon"
 
-        start on startup
-        stop on shutdown
+      startOn = "startup";
+      stopOn = "shutdown"; 
 
-        start script
+      preStart = ''
+         mkdir -m 0755 -p ${stateDir}
+         chown ${ddclientUser} ${stateDir}
 
-            mkdir -m 0755 -p ${stateDir}
-            chown ${ddclientUser} ${stateDir}
+         # Needed to run ddclient as an unprivileged user.
+         ${modprobe}/sbin/modprobe capability || true
+      '';
 
-            # Needed to run ddclient as an unprivileged user.
-            ${modprobe}/sbin/modprobe capability || true
-
-        end script
-
-        respawn ${ddclient}/bin/ddclient ${ddclientFlags}
+      script = ''
+        ${ddclient}/bin/ddclient ${ddclientFlags}
       '';
 
     };
