@@ -1012,7 +1012,7 @@ let
   };
 
   mc = import ../tools/misc/mc {
-    inherit fetchurl stdenv pkgconfig ncurses shebangfix perl zip;
+    inherit fetchurl stdenv lib pkgconfig ncurses shebangfix perl zip unzip slang gettext;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
@@ -4143,7 +4143,7 @@ let
   };
 
   slang = import ../development/libraries/slang {
-    inherit fetchurl stdenv pcre libpng;
+    inherit fetchurl stdenv ncurses pcre libpng zlib readline;
   };
 
   snack = import ../development/libraries/snack {
