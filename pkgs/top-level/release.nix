@@ -47,8 +47,10 @@ let
     if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then 
       selectMaintained attrSet
     else
-      if attrSet.meta.maintainers != [] then 
-        attrSet.meta.platforms
+      if attrSet.meta.maintainers != [] then
+        (if builtin.hasAttr "platforms" attrSet.meta
+         then builtin.getAttr "platforms" attrSet.meta
+         else pkgs.lib.platforms.all)
       else
         []; 
 
