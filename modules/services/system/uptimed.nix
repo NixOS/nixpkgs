@@ -39,6 +39,7 @@ in
   ###### implementation
 
   config = mkIf config.services.uptimed.enable {
+    environment.systemPackages = [ uptimed ];
   
     users.extraUsers = singleton
       { name = uptimedUser;
