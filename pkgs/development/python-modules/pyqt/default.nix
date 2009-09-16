@@ -13,5 +13,6 @@ stdenv.mkDerivation {
     license = "GPL";
     homepage = http://www.riverbankcomputing.co.uk;
     maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.mesaPlatforms;
   };
 }

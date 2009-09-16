@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
     license = "GPL";
     maintainers = [args.lib.maintainers.marcweber];
+    platforms = args.lib.platforms.linux;
   };
 }

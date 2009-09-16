@@ -9,4 +9,5 @@ rec {
   cygwin = ["i686-cygwin"];
   all = linux ++ darwin ++ cygwin ++ freebsd;
   allBut = platform: lists.filter (x: platform != x) all;
+  mesaPlatforms = linux ++ darwin ++ freebsd;
 }
