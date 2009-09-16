@@ -1,4 +1,5 @@
-{stdenv, fetchurl, lib, pkgconfig, glib, ncurses, libX11, shebangfix, perl, zip, unzip, gettext, slang}:
+{ stdenv, fetchurl, lib, pkgconfig, glib, ncurses
+, libX11, libXt, shebangfix, perl, zip, unzip, gettext, slang}:
 
 stdenv.mkDerivation rec {
   name = "mc-4.6.1";
@@ -6,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "http://www.ibiblio.org/pub/Linux/utils/file/managers/mc/${name}.tar.gz";
     sha256 = "0zly25mwdn84s0wqx9mzyqi177mm828716nv1n6a4a5cm8yv0sh8";
   };
-  buildInputs = [pkgconfig glib ncurses libX11 shebangfix perl zip unzip slang gettext];
+  buildInputs = [pkgconfig glib ncurses libX11 libXt shebangfix perl zip unzip slang gettext];
   configureFlags = "--enable-charset";
   
   # Stole some patches from LFS which fix some nasty bugs
@@ -43,7 +44,8 @@ stdenv.mkDerivation rec {
     iconv -f KOI8-U -t UTF-8 lib/mc.hint.uk > lib/mc.hint.uk.utf8 &&
     mv lib/mc.hint.uk.utf8 lib/mc.hint.uk &&
     iconv -f BIG5 -t UTF-8 lib/mc.hint.zh > lib/mc.hint.zh.utf8 &&
-    mv lib/mc.hint.zh.utf8 lib/mc.hint.zh				  
+    mv lib/mc.hint.zh.utf8 lib/mc.hint.zh
+    # foo
   '';
   
   makeFlags = "UNZIP=unzip";

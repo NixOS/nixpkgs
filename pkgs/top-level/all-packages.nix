@@ -1014,7 +1014,7 @@ let
   mc = import ../tools/misc/mc {
     inherit fetchurl stdenv lib pkgconfig ncurses shebangfix perl zip unzip slang gettext;
     inherit (gtkLibs) glib;
-    inherit (xlibs) libX11;
+    inherit (xlibs) libX11 libXt;
   };
 
   mcabber = import ../applications/networking/instant-messengers/mcabber {
