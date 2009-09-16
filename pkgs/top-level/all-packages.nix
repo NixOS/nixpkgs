@@ -1012,7 +1012,8 @@ let
   };
 
   mc = import ../tools/misc/mc {
-    inherit fetchurl stdenv lib pkgconfig ncurses shebangfix perl zip unzip slang gettext;
+    inherit fetchurl stdenv lib pkgconfig ncurses shebangfix perl zip unzip slang;
+    inherit gettext e2fsprogs gpm;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11 libXt;
   };

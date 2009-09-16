@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, pkgconfig, glib, ncurses
+{ stdenv, fetchurl, lib, pkgconfig, glib, ncurses, e2fsprogs, gpm
 , libX11, libXt, shebangfix, perl, zip, unzip, gettext, slang}:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,13 @@ stdenv.mkDerivation rec {
     url = "http://www.ibiblio.org/pub/Linux/utils/file/managers/mc/${name}.tar.gz";
     sha256 = "0zly25mwdn84s0wqx9mzyqi177mm828716nv1n6a4a5cm8yv0sh8";
   };
-  buildInputs = [pkgconfig glib ncurses libX11 libXt shebangfix perl zip unzip slang gettext];
+  buildInputs = [pkgconfig glib ncurses libX11 libXt
+                 shebangfix perl zip unzip slang gettext e2fsprogs gpm];
+  
+  # Fix the paths to the terminfo files. Otherwise mc has no colors
+  preConfigure = ''
+    sed -i -e "s|/usr/lib/terminfo|${ncurses}/lib/terminfo|" configure
+  '';
   configureFlags = "--enable-charset";
   
   # Stole some patches from LFS which fix some nasty bugs
