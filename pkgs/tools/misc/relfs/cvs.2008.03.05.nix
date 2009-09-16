@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
 		description = "A relational filesystem on top of FUSE";
 		inherit src;
     		maintainers = [args.lib.maintainers.raskin];
+		platforms = args.lib.platforms.linux;
 	};
 }
