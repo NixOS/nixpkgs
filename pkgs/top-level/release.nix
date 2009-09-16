@@ -48,8 +48,8 @@ let
       selectMaintained attrSet
     else
       if attrSet.meta.maintainers != [] then
-        (if builtin.hasAttr "platforms" attrSet.meta
-         then builtin.getAttr "platforms" attrSet.meta
+        (if builtins.hasAttr "platforms" attrSet.meta
+         then builtins.getAttr "platforms" attrSet.meta
          else pkgs.lib.platforms.all)
       else
         []; 
