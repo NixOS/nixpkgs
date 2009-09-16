@@ -76,5 +76,6 @@ stdenv.mkDerivation {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;
     maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.linux;
   };
 }
