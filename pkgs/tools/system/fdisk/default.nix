@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, parted, e2fsprogs, gettext }:
+{ fetchurl, stdenv, parted, libuuid, gettext }:
 
 stdenv.mkDerivation rec {
   name = "fdisk-1.2.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "04nsa0xf1m5zy45wqv88ksk3xxc86r9n8f4mj3r6gm7rz0sfiqil";
   };
 
-  buildInputs = [ parted e2fsprogs gettext ];
+  buildInputs = [ parted libuuid gettext ];
 
   doCheck = true;
 

@@ -684,7 +684,7 @@ let
   };
 
   fdisk = import ../tools/system/fdisk {
-    inherit fetchurl stdenv parted e2fsprogs gettext;
+    inherit fetchurl stdenv parted libuuid gettext;
   };
 
   figlet = import ../tools/misc/figlet {
