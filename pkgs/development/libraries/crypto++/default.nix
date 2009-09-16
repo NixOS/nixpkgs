@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unzip }:
+{ fetchurl, stdenv, unzip, libtool }:
 
 stdenv.mkDerivation rec {
   name = "crypto++-5.6.0";
@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (builtins.currentSystem != "i686-cygwin") ./dll.patch;
 
 
-  buildInputs = [ unzip ];
+  buildInputs = [ unzip ]
+
+    # For some reason the makefile sets "AR = libtool" on Darwin.
+    ++ stdenv.lib.optional (builtins.currentSystem == "i686-darwin") libtool;
 
   # Unpack the thing in a subdirectory.
   unpackPhase = ''

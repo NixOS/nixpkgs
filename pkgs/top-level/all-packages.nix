@@ -2982,7 +2982,7 @@ let
   };
 
   cryptopp = import ../development/libraries/crypto++ {
-    inherit fetchurl stdenv unzip;
+    inherit fetchurl stdenv unzip libtool;
   };
 
   cyrus_sasl = import ../development/libraries/cyrus-sasl {
