@@ -161,5 +161,8 @@ stdenv.mkDerivation ({
       # Add your name here!
       stdenv.lib.maintainers.ludo
     ];
+
+    # Volunteers needed for the {Cyg,Dar}win ports.
+    platforms = stdenv.lib.platforms.linux;
   };
 })
