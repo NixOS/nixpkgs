@@ -159,10 +159,10 @@ rec {
         );
 
       errorSource = modules:
-        "The error may comes from the following files:\n" + (
+        "The error may come from the following files:\n" + (
           lib.concatStringsSep "\n" (
             map (m:
-              if m ? key then toString m.key else "<unknow location>"
+              if m ? key then toString m.key else "<unknown location>"
             ) modules
           )
         );
