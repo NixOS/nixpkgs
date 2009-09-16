@@ -23,6 +23,8 @@ in {
      with some minor edits.
    */
 
+  guile = linux;
+
   lsh = linux;
   mailutils = linux;
   mcron = linux;
