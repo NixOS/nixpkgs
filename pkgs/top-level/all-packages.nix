@@ -3921,7 +3921,7 @@ let
   };
 
   nettle = import ../development/libraries/nettle {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gmp gnum4;
   };
 
   nspr = import ../development/libraries/nspr {
