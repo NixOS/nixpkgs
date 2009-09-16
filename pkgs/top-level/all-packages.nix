@@ -5967,6 +5967,10 @@ let
     inherit builderDefs;
   };
 
+  xhtml1 = import ../data/sgml+xml/schemas/xml-dtd/xhtml1 {
+    inherit fetchurl stdenv libxml2;
+  };
+
   xkeyboard_config = import ../data/misc/xkeyboard-config {
     inherit fetchurl stdenv perl perlXMLParser gettext intltool;
     inherit (xlibs) xkbcomp;
