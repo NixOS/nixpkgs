@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, strategoPackages}:
 
 stdenv.mkDerivation rec {
-  name = "webdsl-8.8pre25482548";
+  name = "webdsl-9.7pre3056.tar.gz";
 
   src = fetchurl {
-    url = "http://releases.strategoxt.org/webdsl/${name}-chm695sm/webdsl-8.8pre2548.tar.gz";
-    sha256 = "cc4bcc9ef98d35e96b9874d48e061c5bc18cb26300a031becc227a1cd5a1deac";
+    url = "http://hydra.nixos.org/build/71896/download/1/webdsl-9.7pre3056.tar.gz";
+    sha256 = "3446b7e9dac27a9fd35541a57e961be5b74f2f9e3fb02dc14c86f945b47df045";
   };
 
   buildInputs = [
