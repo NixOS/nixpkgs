@@ -48,6 +48,7 @@ in
     pulseaudio = 22; # must match `pulseaudio' GID
     gpsd = 23;
     uptimed = 24;
+    ddclient = 25;
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;

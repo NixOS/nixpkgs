@@ -56,6 +56,7 @@
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
   ./services/networking/dhclient.nix
+  ./services/networking/ddclient.nix
   ./services/networking/dhcpd.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
