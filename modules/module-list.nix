@@ -79,6 +79,7 @@
   ./services/scheduling/fcron.nix
   ./services/system/dbus.nix
   ./services/system/nscd.nix
+  ./services/system/uptimed.nix
   ./services/ttys/gpm.nix
   ./services/ttys/mingetty.nix
   ./services/web-servers/apache-httpd/default.nix
