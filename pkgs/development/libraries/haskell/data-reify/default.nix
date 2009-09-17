@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "data-reify";
-  version = "0.4";
-  sha256 = "567536195159117e14bb4e9a9c13a7de179da27c45966e5a5c189a9df33b11fa";
+  version = "0.5";
+  sha256 = "ca501cbde57d3b53b4def9ce3de9ecccc5136fb0575877e98e163668ebe23055";
   meta = {
     description = "Reify a recursive data structure into an explicit graph";
   };
