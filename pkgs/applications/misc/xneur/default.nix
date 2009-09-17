@@ -1,11 +1,12 @@
 args: with args;
 
+let s = import ./src-for-default.nix; in
+
 stdenv.mkDerivation rec {
-  version = "0.9.5";
-  name="xneur";
+  inherit (s) version name;
   src = fetchurl {
-    url = "http://dists.xneur.ru/release-${version}/tgz/${name}-${version}.tar.bz2";
-    sha256 = "06rl7blpyhm61p5hyip55z8gdra6z89d8h4g4mbn4cbs8hd8hq8w";
+    inherit(s) url;
+    sha256 = s.hash;
   };
 
   buildInputs = [libX11 pkgconfig pcre GStreamer glib libxml2 aspell
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     description = "xneur is the keyboard layout switcher.";
     homepage = http://xneur.ru;
     license = "GPL2+";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
   };
 
 }
