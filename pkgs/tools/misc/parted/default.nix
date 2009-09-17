@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02amqpzl8lgk247cjsbaz1nsiz9i1pbj0adx0z109h94p90i48sk";
   };
 
-  buildInputs = [ libuuid gettext readline ] ++
-    stdenv.lib.optional stdenv.isLinux devicemapper;
+  buildInputs = [ libuuid gettext readline libuuid devicemapper ];
 
   # XXX: For some reason our libreadline.so doesn't have libncurses as
   # NEEDED and `configure' links with `-Wl,--as-needed' so when
@@ -44,5 +43,8 @@ stdenv.mkDerivation rec {
       # Add your name here!
       stdenv.lib.maintainers.ludo
     ];
+
+    # GNU Parted requires libuuid, which is part of e2fsprogs.
+    platforms = stdenv.lib.platforms.linux;
   };
 }
