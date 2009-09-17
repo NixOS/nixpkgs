@@ -52,7 +52,7 @@ prefetchClause=""
     
     mirrorUrl="$(echo "$freshUrl" | 
       eval "sed -r -e \"$(getAttr versionReferenceCreator \
-        's/-([0-9.]+)[.]/-${version}./')\"" |
+        's/-'"${version}"'[.]/-\${version}./')\"" |
       eval "sed -r -e \"$(getAttr mirrorSedScript)\"")"
     url="$mirrorUrl"
     
