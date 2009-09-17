@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 		description = "A set of screensavers";
 		inherit src;
     		maintainers = [stdenv.lib.maintainers.raskin];
+		platforms = stdenv.lib.platforms.allBut "i686-cygwin";
 	};
 }
 
