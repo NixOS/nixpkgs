@@ -5362,6 +5362,15 @@ let
     ckSched = true;
   };
 
+  kernel_2_6_31_zen1 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen1.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools 
+      lib builderDefs;
+  };
+
+  kernel_2_6_31_zen1_bfs = kernel_2_6_31_zen1.override {
+    ckSched = true;
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5489,6 +5498,7 @@ let
   kernelPackages_2_6_31_rc2 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2);
   kernelPackages_2_6_31_rc2_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2_old_i686);
   kernelPackages_2_6_31_zen0 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen0);
+  kernelPackages_2_6_31_zen1 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen1);
   kernelPackages_2_6_31 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
 
   # The current default kernel / kernel modules.
