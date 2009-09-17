@@ -2,24 +2,27 @@
 
 with pkgs.lib;
 
-###### interface
 let
+
+  inherit (config.environment) nix;
+
+in
+
+{
+
+  ###### interface
 
   options = {
 
-    environment = {
-
-      nix = mkOption {
-        default = pkgs.nixUnstable;
-        example = pkgs.nixCustomFun /root/nix.tar.gz;
-        merge = mergeOneOption;
-        description = "
-          This option specifies the Nix package instance to use throughout the system.
-        ";
-      };
-      
+    environment.nix = mkOption {
+      default = pkgs.nixUnstable;
+      example = pkgs.nixCustomFun /root/nix.tar.gz;
+      merge = mergeOneOption;
+      description = "
+        This option specifies the Nix package instance to use throughout the system.
+      ";
     };
-
+    
     nix = {
 
       maxJobs = mkOption {
@@ -119,135 +122,126 @@ let
         example = "http://127.0.0.1:3128";
       };
 
-      # Environment variables for running Nix.
-      # !!! Fix description.
+      # Environment variables for running Nix.  !!! Misnomer - it's
+      # actually a shell script.
       envVars = mkOption {
         internal = true;
         default = "";
-        description = "
-          Define the environment variables used by nix to 
-        ";
-
         merge = pkgs.lib.mergeStringOption;
-
-        # other option should be used to define the content instead of using
-        # the apply function.
-        apply = conf: ''
-          export NIX_CONF_DIR=/nix/etc/nix
-
-          # Enable the copy-from-other-stores substituter, which allows builds
-          # to be sped up by copying build results from remote Nix stores.  To
-          # do this, mount the remote file system on a subdirectory of
-          # /var/run/nix/remote-stores.
-          export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
-          
-        '' + # */
-        (if config.nix.distributedBuilds then
-          ''
-            export NIX_BUILD_HOOK=${config.environment.nix}/libexec/nix/build-remote.pl
-            export NIX_REMOTE_SYSTEMS=/etc/nix.machines
-            export NIX_CURRENT_LOAD=/var/run/nix/current-load
-          ''
-        else "")
-        +
-        (if config.nix.proxy != "" then
-          ''
-            export http_proxy=${config.nix.proxy}
-            export https_proxy=${config.nix.proxy}
-            export ftp_proxy=${config.nix.proxy}
-          ''
-        else "")
-        + conf;
+        description = "
+          Environment variables used by Nix.
+        ";
       };
     };
   };
 
-in
 
-###### implementation
+  ###### implementation
 
-let 
-  inherit (config.environment) nix;
-in
+  config = {
 
-{
-  require = [
-    options
-  ];
-
-  environment.etc =
-    [ { # Nix configuration.
-        source =
-          let
-            # Tricky: if we're using a chroot for builds, then we need
-            # /bin/sh in the chroot (our own compromise to purity).
-            # However, since /bin/sh is a symlink to some path in the
-            # Nix store, which furthermore has runtime dependencies on
-            # other paths in the store, we need the closure of /bin/sh
-            # in `build-chroot-dirs' - otherwise any builder that uses
-            # /bin/sh won't work.
-            binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
+    environment.etc =
+      [ { # Nix configuration.
+          source =
+            let
+              # Tricky: if we're using a chroot for builds, then we need
+              # /bin/sh in the chroot (our own compromise to purity).
+              # However, since /bin/sh is a symlink to some path in the
+              # Nix store, which furthermore has runtime dependencies on
+              # other paths in the store, we need the closure of /bin/sh
+              # in `build-chroot-dirs' - otherwise any builder that uses
+              # /bin/sh won't work.
+              binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
   
-            # Likewise, if chroots are turned on, we need Nix's own
-            # closure in the chroot.  Otherwise nix-channel and nix-env
-            # won't work because the dependencies of its builders (like
-            # coreutils and Perl) aren't visible.  Sigh.
-            nixDeps = pkgs.writeReferencesToFile config.environment.nix;
-          in 
-            pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
-              extraPaths=$(for i in $(cat ${binshDeps} ${nixDeps}); do if test -d $i; then echo $i; fi; done)
-              cat > $out <<END
-              # WARNING: this file is generated.
-              build-users-group = nixbld
-              build-max-jobs = ${toString (config.nix.maxJobs)}
-              build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-              build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths)
-              $extraOptions
-              END
-            '';
-        target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
-      }
-    ]
+              # Likewise, if chroots are turned on, we need Nix's own
+              # closure in the chroot.  Otherwise nix-channel and nix-env
+              # won't work because the dependencies of its builders (like
+              # coreutils and Perl) aren't visible.  Sigh.
+              nixDeps = pkgs.writeReferencesToFile config.environment.nix;
+            in 
+              pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
+                extraPaths=$(for i in $(cat ${binshDeps} ${nixDeps}); do if test -d $i; then echo $i; fi; done)
+                cat > $out <<END
+                # WARNING: this file is generated.
+                build-users-group = nixbld
+                build-max-jobs = ${toString (config.nix.maxJobs)}
+                build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
+                build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths)
+                $extraOptions
+                END
+              '';
+          target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
+        }
+      ]
 
-    ++ optional config.nix.distributedBuilds
-      { # List of machines for distributed Nix builds in the format expected
-        # by build-remote.pl.
-        source = pkgs.writeText "nix.machines"
-          (pkgs.lib.concatStrings (map (machine:
-            "${machine.sshUser}@${machine.hostName} ${machine.system} ${machine.sshKey} ${toString machine.maxJobs}\n"
-          ) config.nix.buildMachines));
-        target = "nix.machines";
+      ++ optional config.nix.distributedBuilds
+        { # List of machines for distributed Nix builds in the format expected
+          # by build-remote.pl.
+          source = pkgs.writeText "nix.machines"
+            (pkgs.lib.concatStrings (map (machine:
+              "${machine.sshUser}@${machine.hostName} "
+              + (if machine ? system then machine.system else concatStringsSep "," machine.systems) 
+              + " ${machine.sshKey} ${toString machine.maxJobs} "
+              + (if machine ? speedFactor then toString machine.speedFactor else "1" )
+              + "\n"
+            ) config.nix.buildMachines));
+          target = "nix.machines";
+        };
+
+    jobs = pkgs.lib.singleton
+      { name = "nix-daemon";
+
+        startOn = "startup";
+
+        script =
+          ''
+            export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
+            ${config.nix.envVars}
+            exec nice -n ${builtins.toString config.nix.daemonNiceLevel} ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
+          '';
+
+        extraConfig = 
+          ''
+            limit nofile 4096 4096
+          '';
       };
 
-  jobs = pkgs.lib.singleton
-    { name = "nix-daemon";
-
-      startOn = "startup";
-
-      script =
-        ''
-          export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
-          ${config.nix.envVars}
-          exec nice -n ${builtins.toString config.nix.daemonNiceLevel} ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
-        '';
-
-      extraConfig = 
-        ''
-          limit nofile 4096 4096
-        '';
-    };
-
-  environment.shellInit =
-    ''
-      # Set up the environment variables for running Nix.
-      ${config.nix.envVars}
+    environment.shellInit =
+      ''
+        # Set up the environment variables for running Nix.
+        ${config.nix.envVars}
       
-      # Set up secure multi-user builds: non-root users build through the
-      # Nix daemon.
-      if test "$USER" != root; then
-          export NIX_REMOTE=daemon
-      else
-          export NIX_REMOTE=
-      fi
-    '';
+        # Set up secure multi-user builds: non-root users build through the
+        # Nix daemon.
+        if test "$USER" != root; then
+            export NIX_REMOTE=daemon
+        else
+            export NIX_REMOTE=
+        fi
+      '';
+
+    nix.envVars =
+      ''
+        export NIX_CONF_DIR=/nix/etc/nix
+
+        # Enable the copy-from-other-stores substituter, which allows builds
+        # to be sped up by copying build results from remote Nix stores.  To
+        # do this, mount the remote file system on a subdirectory of
+        # /var/run/nix/remote-stores.
+        export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
+      '' 
+      + optionalString config.nix.distributedBuilds ''
+        export NIX_BUILD_HOOK=${config.environment.nix}/libexec/nix/build-remote.pl
+        export NIX_REMOTE_SYSTEMS=/etc/nix.machines
+        export NIX_CURRENT_LOAD=/var/run/nix/current-load
+      ''
+      # !!! These should not be defined here, but in some general proxy configuration module!
+      + optionalString (config.nix.proxy != "") ''
+        export http_proxy=${config.nix.proxy}
+        export https_proxy=${config.nix.proxy}
+        export ftp_proxy=${config.nix.proxy}
+      '';
+
+  };
+
 }
