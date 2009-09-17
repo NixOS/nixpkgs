@@ -1827,6 +1827,10 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
+  # GHC
+
+  # GHC binaries are around for bootstrapping purposes
+
   #ghc = haskellPackages.ghc;
 
   ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
@@ -1842,6 +1846,9 @@ let
   ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
+
+  # For several compiler versions, we export a large set of Haskell-related
+  # packages.
 
   haskellPackages = haskellPackages_ghc6104;
 
@@ -1915,6 +1922,15 @@ let
       ghc = ghc6101Binary;
     };
   });
+
+  haskellPackages_ghcHEAD = import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.11.nix {
+      inherit fetchurl stdenv perl ncurses gmp libedit;
+      inherit (haskellPackages) happy alex; # hope these aren't required for the final version
+      ghc = ghc6101Binary;
+    };
+  };
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;
