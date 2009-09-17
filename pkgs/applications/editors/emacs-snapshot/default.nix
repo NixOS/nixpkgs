@@ -52,5 +52,7 @@ stdenv.mkDerivation {
     description = "GNU Emacs with Unicode, GTK and Xft support (23.x alpha)";
     homepage = http://www.emacswiki.org/cgi-bin/wiki/XftGnuEmacs;
     license = "GPLv3+";
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = linux;  # GTK & co. are needed.
   };
 }

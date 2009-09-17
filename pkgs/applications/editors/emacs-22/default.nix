@@ -42,5 +42,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/emacs/;
     license = "GPLv3+";
+
+    platforms = linux;  # GTK & co. are needed.
   };
 }
