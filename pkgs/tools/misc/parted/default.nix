@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "02amqpzl8lgk247cjsbaz1nsiz9i1pbj0adx0z109h94p90i48sk";
   };
 
-  buildInputs = [ devicemapper libuuid gettext readline ];
+  buildInputs = [ libuuid gettext readline ] ++
+    stdenv.lib.optional stdenv.isLinux devicemapper;
 
   # XXX: For some reason our libreadline.so doesn't have libncurses as
   # NEEDED and `configure' links with `-Wl,--as-needed' so when
