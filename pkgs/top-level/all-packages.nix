@@ -1108,6 +1108,10 @@ let
     inherit fetchurl stdenv openssl;
   };
 
+  ncftp = import ../tools/networking/ncftp {
+    inherit fetchurl stdenv ncurses coreutils;
+  };
+
   netcat = import ../tools/networking/netcat {
     inherit fetchurl stdenv;
   };
