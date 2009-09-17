@@ -32,5 +32,8 @@ let version = "0.9"; in
       license = "GPLv3+";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+
+      # libevent fails to build on Cygwin and Guile has troubles on Darwin.
+      platforms = stdenv.lib.platforms.gnu;
     };
   }
