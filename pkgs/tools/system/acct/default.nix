@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/acct/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
   };
 }
