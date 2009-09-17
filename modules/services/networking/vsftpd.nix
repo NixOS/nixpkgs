@@ -21,6 +21,13 @@ let
           ";
         };
  
+        anonymousUserHome = mkOption {
+          default = "/home/ftp";
+          description = "
+            Path to anonymous user data.
+          ";
+        };
+ 
         localUsers = mkOption {
           default = false;
           description = "
@@ -78,7 +85,7 @@ in
 
 let 
 
-  inherit (config.services.vsftpd) anonymousUser localUsers writeEnable anonymousUploadEnable anonymousMkdirEnable
+  inherit (config.services.vsftpd) anonymousUser anonymousUserHome localUsers writeEnable anonymousUploadEnable anonymousMkdirEnable
     chrootlocalUser userlistEnable userlistDeny;
   inherit (pkgs) vsftpd;
 
@@ -104,7 +111,7 @@ mkIf config.services.vsftpd.enable {
           uid = config.ids.uids.ftp;
           group = "ftp";
           description = "Anonymous ftp user";
-          home = "/home/ftp";
+          home = anonymousUserHome;
         };
 
     extraGroups = [
@@ -141,8 +148,8 @@ mkIf config.services.vsftpd.enable {
         secure_chroot_dir=/var/ftp/empty
         EOF
 
-        mkdir -p /home/ftp &&
-        chown -R ftp:ftp /home/ftp
+        mkdir -p ${anonymousUserHome} &&
+        chown -R ftp:ftp ${anonymousUserHome}
         end script
 
         respawn ${vsftpd}/sbin/vsftpd /etc/vsftpd.conf
