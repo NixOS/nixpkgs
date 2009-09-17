@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = http://xneur.ru;
     license = "GPL2+";
     maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }
