@@ -53,6 +53,6 @@ stdenv.mkDerivation {
     homepage = http://www.emacswiki.org/cgi-bin/wiki/XftGnuEmacs;
     license = "GPLv3+";
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = linux;  # GTK & co. are needed.
+    platforms = stdenv.lib.platforms.linux;  # GTK & co. are needed.
   };
 }
