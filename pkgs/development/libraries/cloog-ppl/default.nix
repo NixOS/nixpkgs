@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = stdenv.lib.allBut "i686-cygwin";
+    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
   };
 }
