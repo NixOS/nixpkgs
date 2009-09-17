@@ -55,5 +55,7 @@ rec {
   meta = {
     description = "Common Lisp-based ratpoison-like window manager.";
     maintainers = [args.lib.maintainers.raskin];
+    platforms = with args.lib.platforms;
+      linux ++ freebsd;
   };
 }
