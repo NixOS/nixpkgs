@@ -6927,6 +6927,13 @@ let
     qt = qt3;
   };
 
+  kphone = import ../applications/networking/kphone {
+    inherit fetchurl lib autoconf automake libtool pkgconfig openssl libpng alsaLib;
+    qt = qt3;
+    inherit (xlibs) libX11 libXext libXt libICE libSM;
+    stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
+  };
+
   kuickshow = import ../applications/graphics/kuickshow {
     inherit fetchurl stdenv kdelibs arts libpng libjpeg libtiff libungif imlib expat perl;
     inherit (xlibs) libX11 libXext libSM;
