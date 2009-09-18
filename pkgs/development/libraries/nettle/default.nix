@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
+              ./cygwin.patch;
+
   meta = {
     description = "GNU Nettle, a cryptographic library";
 
