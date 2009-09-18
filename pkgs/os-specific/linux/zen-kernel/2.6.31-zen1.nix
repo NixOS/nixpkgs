@@ -82,6 +82,9 @@ in
     killOption CONFIG_PREEMPT_NONE
     setOptionYes CONFIG_PREEMPT_VOLUNTARY
   ''+
+  ''
+    killOption CONFIG_PRAMFS
+  ''+
   (if a.lib.attrByPath ["ckSched"] false a then ''
     killOption CONFIG_CPU_CFS
     setOptionYes CONFIG_CPU_BFS
