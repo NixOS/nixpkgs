@@ -7,14 +7,14 @@
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf;
+  inherit (pkgs.lib) mkOption mkIf types;
 
   cfg = config.services.nixosManual;
 
-  manual =
-    # We could speed up the evaluation of the manual expression by
-    # providing it the options of the current configuration.
-    import ../../../doc/manual {inherit pkgs options;};
+  manual = import ../../../doc/manual {
+    inherit (cfg) revision;
+    inherit pkgs options;
+  };
     
 in
 
@@ -48,6 +48,16 @@ in
       default = "${pkgs.w3m}/bin/w3m";
       description = ''
         Browser used to show the manual.
+      '';
+    };
+
+    services.nixosManual.revision = mkOption {
+      default = "local";
+      type = types.uniq types.string;
+      description = ''
+        Revision of the targeted source file.  This value can either be
+        <literate>"local"</literate>, <literate>"HEAD"</literate> or any
+        revision number embedded in a string.
       '';
     };
 
