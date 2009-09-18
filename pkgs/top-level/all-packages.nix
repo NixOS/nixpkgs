@@ -3844,6 +3844,12 @@ let
     pythonSupport = false;
   };
 
+  # !!! Merge later.
+  libxml2New = makeOverridable (import ../development/libraries/libxml2/2.7.4.nix) {
+    inherit fetchurl stdenv zlib python;
+    pythonSupport = false;
+  };
+
   libxml2Python = libxml2.override {
     pythonSupport = true;
   };
