@@ -54,9 +54,10 @@ rec {
         removeAttrs (delayProperties m) ["require"];
     in
       if isModule m then
-        m
+        { key = "<unknow location>"; } // m
       else
         {
+          key = "<unknow location>";
           imports = getImportedPaths m;
           config = getConfig m;
         } // (
@@ -72,8 +73,7 @@ rec {
       moduleImport = m:
         (unifyModuleSyntax (applyIfFunction (importIfPath m) args)) // {
           # used by generic closure to avoid duplicated imports.
-          key = if isPath m then m else
-            /bad/developer/implies/bad/error/messages;
+          key = if isPath m then m else "<unknow location>";
         };
 
       getImports = m: attrByPath ["imports"] [] m;
@@ -188,9 +188,25 @@ rec {
         moduleZip {
           options = lib.zip (name: values:
             if any isOption values then
-              addOptionMakeUp
-                { name = addName name; recurseInto = recurseForOption; }
-                (mergeOptionDecls values)
+              let
+                # locations to sub-options declarations
+                decls =
+                  map (m:
+                    mapSubOptions (subModule:
+                      let module = lib.applyIfFunction subModule {}; in
+                      if lib.isModule module then
+                        { inherit (m) key; } // subModule
+                      else
+                        args: {
+                          inherit (m) key;
+                          options = lib.applyIfFunction subModule args;
+                        }
+                    ) m.options
+                  ) (declarationsOf name);
+              in
+                addOptionMakeUp
+                  { name = addName name; recurseInto = recurseForOption; }
+                  (mergeOptionDecls decls)
             else if all isAttrs values then
               (recurseInto name modules).options
             else

@@ -27,6 +27,14 @@ rec {
     # options (set of sub-options declarations & definitions)
   };
 
+  mapSubOptions = f: opt:
+    if opt ? options then
+      opt // {
+        options = map f (toList opt.options);
+      }
+    else
+      opt;
+
   # Make the option declaration more user-friendly by adding default
   # settings and some verifications based on the declaration content (like
   # type correctness).
@@ -68,20 +76,6 @@ rec {
           }
         else opt;
 
-      convertOptionsToModules = opt:
-        if opt ? options then
-          opt // {
-            options = map (decl:
-              let module = lib.applyIfFunction decl {}; in
-              if lib.isModule module then
-                decl
-              else
-                arg: { options = lib.applyIfFunction decl arg; }
-            ) opt.options;
-          }
-        else
-          opt;
-
       handleOptionSets = opt:
         if decl ? type && decl.type.hasOptions then
           let
@@ -119,7 +113,6 @@ rec {
         # override settings
         ensureMergeInputType
         ensureDefaultType
-        convertOptionsToModules
         handleOptionSets
       ];
 
