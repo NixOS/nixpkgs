@@ -5,7 +5,7 @@ with pkgs;
 rec {
 
 
-  inherit (kernelPackages_2_6_26) kernel;
+  inherit (kernelPackages_2_6_27) kernel;
 
   klibcShrunk = pkgs.klibcShrunk.override { klibc = klibc_15; };
 
@@ -184,7 +184,7 @@ rec {
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
-    PATH=${coreutils}/bin:${kvm}/bin:${samba}/sbin
+    PATH=${coreutils}/bin:${qemu_kvm}/bin:${samba}/sbin
 
     diskImage=''${diskImage:-/dev/null}
 
