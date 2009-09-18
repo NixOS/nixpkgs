@@ -240,6 +240,9 @@ rec {
             inherit (opt) name;
             description = if opt ? description then opt.description else
               throw "Option ${opt.name}: No description.";
+
+            declarations = map (x: toString x.source) opt.declarations;
+            definitions = map (x: toString x.source) opt.definitions;
           }
           // (if opt ? example then {inherit(opt) example;} else {})
           // (if opt ? default then {inherit(opt) default;} else {});

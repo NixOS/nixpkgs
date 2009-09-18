@@ -207,6 +207,19 @@ rec {
                 addOptionMakeUp
                   { name = addName name; recurseInto = recurseForOption; }
                   (mergeOptionDecls decls)
+                // {
+                  declarations =
+                    map (m: {
+                      source = m.key;
+                      value = m.options;
+                    }) (declarationsOf name);
+    
+                  definitions =
+                    map (m: {
+                      source = m.key;
+                      value = m.config;
+                    }) (definitionsOf name);
+                }
             else if all isAttrs values then
               (recurseInto name modules).options
             else
