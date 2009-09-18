@@ -23,6 +23,9 @@ stdenv.mkDerivation {
 
     # Don't include directories in the Debian `conffiles' file.
     ./etc-dirs.patch
+
+    # Support Glibc >= 2.8.
+    ./glibc-check.patch
   ];
 
   buildInputs = [gettext];
