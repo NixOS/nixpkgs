@@ -1,6 +1,6 @@
 { fetchurl, stdenv, flex, libxml2, libxslt
 , docbook_xml_dtd_42, docbook_xsl, w3m
-, glibc, bash, getopt, mktemp, findutils
+, bash, getopt, mktemp, findutils
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "xmlto.in" \
       --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace "xmlto.in" \
-      --replace "/usr/bin/locale" "${glibc}/bin/locale"
+      --replace "/usr/bin/locale" "$(type -P locale)"
   '';
 
   configureFlags = ''
@@ -48,5 +48,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv2+";
     homepage = http://cyberelk.net/tim/software/xmlto/;
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
