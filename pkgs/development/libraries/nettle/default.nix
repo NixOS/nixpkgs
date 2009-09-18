@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp gnum4 ];
 
-  doCheck = true;
+  doCheck = (stdenv.system != "i686-cygwin");
 
   patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
               ./cygwin.patch;
