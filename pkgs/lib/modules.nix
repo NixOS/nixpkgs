@@ -54,10 +54,10 @@ rec {
         removeAttrs (delayProperties m) ["require"];
     in
       if isModule m then
-        { key = "<unknow location>"; } // m
+        { key = "<unknown location>"; } // m
       else
         {
-          key = "<unknow location>";
+          key = "<unknown location>";
           imports = getImportedPaths m;
           config = getConfig m;
         } // (
@@ -73,7 +73,7 @@ rec {
       moduleImport = m:
         (unifyModuleSyntax (applyIfFunction (importIfPath m) args)) // {
           # used by generic closure to avoid duplicated imports.
-          key = if isPath m then m else "<unknow location>";
+          key = if isPath m then m else "<unknown location>";
         };
 
       getImports = m: attrByPath ["imports"] [] m;
