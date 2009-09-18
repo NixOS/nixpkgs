@@ -9,6 +9,10 @@ stdenv.mkDerivation {
     sha256 = "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3";
   };
 
+  patches =
+    stdenv.lib.optional (stdenv.system == "i686-cygwin")
+                        ./cygwin-pthread-dl.patch;
+
   doCheck = true;
 
   meta = {

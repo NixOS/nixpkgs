@@ -1,0 +1,24 @@
+Don't pass "-lpthread -ldl" on Cygwin.  See
+http://thread.gmane.org/gmane.comp.programming.garbage-collection.boehmgc/3219
+for details.
+
+--- gc-7.1/configure	2008-05-04 02:52:50.000000000 +0200
++++ gc-7.1/configure	2009-09-18 16:23:30.000000000 +0200
+@@ -4859,7 +4859,7 @@
+ 	cat >>confdefs.h <<\_ACEOF
+ #define THREAD_LOCAL_ALLOC 1
+ _ACEOF
+-
++	THREADDLLIBS=""
+ 	win32_threads=true
+ 	;;
+      *-*-darwin*)
+@@ -5934,6 +5934,7 @@
+ # dyld calls anyway
+ case "$host" in
+   *-*-darwin*) ;;
++  *-*-cygwin*) ;;
+   *)
+     { echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+ echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
+
