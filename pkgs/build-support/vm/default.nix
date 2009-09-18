@@ -71,6 +71,7 @@ rec {
       esac
     done
 
+    
     for i in $(cat ${modulesClosure}/insmod-list); do
       args=
       case $i in
@@ -893,21 +894,21 @@ rec {
     } // args);
 
     debian50i386 = args: makeImageFromDebDist ({
-      name = "debian-5.0.1-lenny-i386";
-      fullName = "Debian 5.0.1 Lenny (i386)";
+      name = "debian-5.0.3-lenny-i386";
+      fullName = "Debian 5.0.3 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "a8257890a83302ebe8e4413cbec83bea1ac6b7345646465566d625d70558aeb6";
+        sha256 = "87886ed314c53a57c6689022c0043c25c3c96c643e3034fc51acae0572b5ff1f";
       };
       urlPrefix = mirror://debian;
     } // args);
         
     debian50x86_64 = args: makeImageFromDebDist ({
-      name = "debian-5.0.1-lenny-amd64";
-      fullName = "Debian 5.0.1 Lenny (amd64)";
+      name = "debian-5.0.3-lenny-amd64";
+      fullName = "Debian 5.0.3 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "6812c7462f4b2b767c157d01139e0fc9e17f99c492dcc59361dbd48ed8ec0e63";
+        sha256 = "c51dc5b87d7cd12bd3537bb905428a49869a0f4e0e7cb3546dd8a00fb32db380";
       };
       urlPrefix = mirror://debian;
     } // args);
