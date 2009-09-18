@@ -1,4 +1,7 @@
-{ pkgs, options }:
+{ pkgs, options
+# revision can have multiple values: local, HEAD or any revision number.
+, revision ? "HEAD"
+}:
 
 let
   # To prevent infinite recursion, remove system.path from the
@@ -33,7 +36,7 @@ let
 
     buildCommand = ''
       
-      ln -s $sources/*.xml .
+      ln -s $sources/*.xml . # */
       ln -s ${optionsDocBook} options-db.xml
 
       dst=$out/share/doc/nixos

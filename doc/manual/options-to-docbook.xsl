@@ -58,6 +58,20 @@
                    </literal>
                  </para>
                </xsl:if>
+
+               <xsl:if test="count(attr[@name = 'declarations']/list/*) != 0">
+                 <para>
+                   <emphasis>Declared by:</emphasis>
+                   <xsl:apply-templates select="attr[@name = 'declarations']" />
+                 </para>
+               </xsl:if>
+
+               <xsl:if test="count(attr[@name = 'definitions']/list/*) != 0">
+                 <para>
+                   <emphasis>Defined by:</emphasis>
+                   <xsl:apply-templates select="attr[@name = 'definitions']" />
+                 </para>
+               </xsl:if>
                
              </listitem>
 
