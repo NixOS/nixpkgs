@@ -56,7 +56,7 @@ in
       type = types.uniq types.string;
       description = ''
         Revision of the targeted source file.  This value can either be
-        <literate>"local"</literate>, <literate>"HEAD"</literate> or any
+        <literal>"local"</literal>, <literal>"HEAD"</literal> or any
         revision number embedded in a string.
       '';
     };
