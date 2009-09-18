@@ -10,13 +10,32 @@ let
     options //
     { system = removeAttrs options.system ["path"]; };
 
-  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
+  optionsXML_ = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
     (builtins.toXML (pkgs.lib.optionAttrSetToDocList "" options_)));
 
-  optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
-    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${optionsXML} 
+  optionsXML = pkgs.runCommand "options2.xml" {} ''
+    sed '
+      \,<attr name="\(declarations\|definitions\)">, {
+        n # fetch the next line
+        : rewriteLinks
+        n # fetch the next line
+        \,</list>, b # leave if this is the end of the list
+        ${if revision == "local" then "" else ''
+        # redirect nixos internals to the repository
+        s,<string value="[^"]*/modules/\([^"]*\)" />,<string value="!https://svn.nixos.org/viewvc/nix/nixos/trunk/modules/\1?revision=${revision}!!../nixos/modules/\1!" />, #"
+        t rewriteLinks # jump to rewriteLinks if done
+        ''}
+        # redirect local file to their locations
+        s,<string value="\([^"]*\)" />,<string value="!file://\1\!!../nixos/modules/\1!" />, #"
+        b rewriteLinks # jump to rewriteLinks
+      }
+    ' ${optionsXML_} > $out
   '';
-    
+
+  optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
+    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${optionsXML}
+  '';
+
   manual = pkgs.stdenv.mkDerivation {
     name = "nixos-manual";
 
@@ -42,9 +61,14 @@ let
       dst=$out/share/doc/nixos
       ensureDir $dst
       xsltproc $xsltFlags --nonet --xinclude \
-        --output $dst/manual.html \
+        --output ./manual.html \
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
         ./manual.xml
+
+      sed '
+        s,!\([^!]*\)!!\([^!]*\)!,<a class="link" href="\1" target="_top"><code class="filename">\2</code></a>,g
+      ' ./manual.html > $dst/manual.html
+
       ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $dst/
       cp ${./style.css} $dst/style.css
 

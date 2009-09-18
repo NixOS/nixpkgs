@@ -136,6 +136,13 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
+  <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">
+    <itemizedlist>
+      <xsl:for-each select="list/string">
+        <listitem><xsl:text> </xsl:text><xsl:value-of select="@value" /></listitem>
+      </xsl:for-each>
+    </itemizedlist>
+  </xsl:template>  
   
 </xsl:stylesheet>
