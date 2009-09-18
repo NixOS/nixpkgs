@@ -79,7 +79,8 @@ let
             inherit nixpkgs;
             modules = [ ];
           }).options;
-        revision = if rev == 1234 then "HEAD" else toString rev;
+        revision = with nixosSrc;
+          if rev == 1234 then "HEAD" else toString rev;
       };
 
 
