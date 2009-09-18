@@ -5713,6 +5713,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  rt73fw = import ../os-specific/linux/firmware/rt73 {
+    inherit fetchurl stdenv unzip;
+  };
+
   sdparm = import ../os-specific/linux/sdparm {
     inherit fetchurl stdenv;
   };
