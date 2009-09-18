@@ -71,7 +71,6 @@ rec {
       esac
     done
 
-    
     for i in $(cat ${modulesClosure}/insmod-list); do
       args=
       case $i in
