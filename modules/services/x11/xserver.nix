@@ -14,6 +14,7 @@ let
   # Map the video driver setting to a driver.
   knownVideoDrivers = {
     nvidia =     { modules = [ kernelPackages.nvidia_x11 ]; };
+    nvidiaLegacy =     { modules = [ kernelPackages.nvidia_x11_legacy ]; };
     vesa =       { modules = [ xorg.xf86videovesa ]; };
     vga =        { modules = [ xorg.xf86videovga ]; };
     sis =        { modules = [ xorg.xf86videosis ]; };
@@ -318,7 +319,8 @@ in
       };
 
     boot.extraModulePackages =
-      optional (cfg.videoDriver == "nvidia") kernelPackages.nvidia_x11;
+      optional (cfg.videoDriver == "nvidia") kernelPackages.nvidia_x11 ++ 
+      optional (cfg.videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy;
 
     environment.etc = optionals cfg.exportConfiguration
       [ { source = "${configFile}";
@@ -339,7 +341,8 @@ in
         xorg.xsetroot
         xorg.xprop
       ]
-      ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11;
+      ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11
+      ++ optional (videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy;
 
     environment.systemPackages = config.environment.x11Packages;
     
@@ -357,6 +360,8 @@ in
             XORG_DRI_DRIVER_PATH = "${pkgs.mesa}/lib/dri";
           } // optionalAttrs (videoDriver == "nvidia") {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
+          } // optionalAttrs (videoDriver == "nvidiaLegacy") {
+            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy}/lib";
           } // cfg.displayManager.job.environment;
 
         preStart =
@@ -373,6 +378,10 @@ in
             ${if videoDriver == "nvidia"
               then ''
                 ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
+              ''
+	      else if videoDriver == "nvidia"
+              then ''
+                ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver
               ''
               else if cfg.driSupport
               then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
@@ -454,7 +463,7 @@ in
         EndSection
 
         Section "Extensions"
-          ${optionalString (cfg.videoDriver == "nvidia" || cfg.videoDriver == "i810" || cfg.videoDriver == "ati" || cfg.videoDriver == "radeonhd") ''
+          ${optionalString (cfg.videoDriver == "nvidia" || cfg.videoDriver == "nvidiaLegacy" || cfg.videoDriver == "i810" || cfg.videoDriver == "ati" || cfg.videoDriver == "radeonhd") ''
             Option "Composite" "Enable"
           ''}
         EndSection
@@ -472,7 +481,7 @@ in
     services.xserver.deviceSection =
       ''
         Identifier "Device[0]"
-        Driver "${cfg.videoDriver}"
+        Driver "${if cfg.videoDriver == "nvidiaLegacy" then "nvidia" else cfg.videoDriver}"
 
         # !!! Is the "Clone" option still useful?
         Option "Clone" "${if cfg.isClone then "on" else "off"}"
