@@ -7,6 +7,7 @@
 , bison ? null
 , flex ? null
 , w3m ? null
+, libxml2 ? null
 , docbook5_xsl ? null, libxslt ? null
 , docbook5 ? null, docbook_xml_dtd_43 ? null 
 , configureFlags ? []
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
   	++ (if docbook5 != null then [docbook5] else [])
   	++ (if docbook_xml_dtd_43 != null then [docbook_xml_dtd_43] else [])
   	++ (if w3m != null then [w3m] else [])
+  	++ (if libxml2 != null then [libxml2] else [])
   ;
 
   preConfigure = 

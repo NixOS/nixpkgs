@@ -8225,7 +8225,7 @@ let
       flex = flex2533;
       aterm = aterm242fixes;
       db4 = db45;
-      inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
+      inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m libxml2;
     };
 
   disnix = import ../tools/package-management/disnix {
