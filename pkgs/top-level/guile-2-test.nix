@@ -7,7 +7,9 @@ let
   allPackages = import ./all-packages.nix;
 
   pkgs = allPackages {
-    packageOverrides = pkgs: pkgs // { guile = pkgs.guile_1_9; };
+    config = {
+      packageOverrides = pkgs: pkgs // { guile = pkgs.guile_1_9; };
+    };
   };
 
   inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
