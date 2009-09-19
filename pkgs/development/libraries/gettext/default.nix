@@ -43,7 +43,7 @@ stdenv.mkDerivation (rec {
 (if (stdenv.system == "i686-darwin" || stdenv.system == "i686-cygwin")
     then {
       buildInputs = [
-        stdenv.mkDerivation rec {
+        (stdenv.mkDerivation rec {
           name = "libiconv-1.13.1";
 
           src = fetchurl {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (rec {
             homepage = http://www.gnu.org/software/libiconv/;
             license = "LGPLv2+";
           };
-        }
+        })
       ];
     }
     else {}))
