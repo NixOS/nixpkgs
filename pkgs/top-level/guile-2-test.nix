@@ -8,7 +8,7 @@ let
 
   pkgs = allPackages {
     config = {
-      packageOverrides = pkgs: pkgs // { guile = pkgs.guile_1_9; };
+      packageOverrides = (pkgs: pkgs // { guile = pkgs.guile_1_9; });
     };
   };
 
