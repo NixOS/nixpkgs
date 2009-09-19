@@ -15,8 +15,8 @@
   fonts.enableFontConfig = false;
   fonts.enableCoreFonts = false;
 
-  # Use Linux 2.6.31-zen0 (with aufs2).
-  boot.kernelPackages = pkgs.kernelPackages_2_6_31_zen0;
+  # Use Linux 2.6.31-zen2 (with aufs2).
+  boot.kernelPackages = pkgs.kernelPackages_2_6_31_zen2;
 
   # We need squashfs and aufs. Zen Linux Kernel contains kernel side.
   boot.initrd.extraUtilsCommands = ''
