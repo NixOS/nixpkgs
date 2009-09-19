@@ -5448,6 +5448,10 @@ let
       inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
     };
 
+    nvidia_x11_legacy = import ../os-specific/linux/nvidia-x11/legacy.nix {
+      inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
+    };
+
     wis_go7007 = import ../os-specific/linux/wis-go7007 {
       inherit fetchurl stdenv kernel ncurses fxload;
     };

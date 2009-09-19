@@ -60,7 +60,10 @@ installPhase() {
 
     patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
     patchelf --set-rpath $out/lib:$glPath $out/lib/libXvMCNVIDIA.so.*.*
+    set +e
+    # Legacy nvidia doesn't have cuda
     patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
+    set -e
     patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
 
     for i in nvidia-settings nvidia-xconfig; do
