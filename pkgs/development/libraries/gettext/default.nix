@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation (rec {
   name = "gettext-0.17";
@@ -42,21 +42,6 @@ stdenv.mkDerivation (rec {
 
 (if (stdenv.system == "i686-darwin" || stdenv.system == "i686-cygwin")
     then {
-      buildInputs = [
-        (stdenv.mkDerivation rec {
-          name = "libiconv-1.13.1";
-
-          src = fetchurl {
-            url = "mirror://gnu/libiconv/${name}.tar.gz";
-            sha256 = "0jcsjk2g28bq20yh7rvbn8xgq6q42g8dkkac0nfh12b061l638sm";
-          };
-
-          meta = {
-            description = "GNU libiconv, an iconv(3) implementation";
-            homepage = http://www.gnu.org/software/libiconv/;
-            license = "LGPLv2+";
-          };
-        })
-      ];
+      buildInputs = [ libiconv ];
     }
     else {}))

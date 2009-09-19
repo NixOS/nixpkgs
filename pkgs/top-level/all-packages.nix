@@ -3188,7 +3188,7 @@ let
   };
 
   gettext = import ../development/libraries/gettext {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libiconv;
   };
 
   gd = import ../development/libraries/gd {
@@ -3630,6 +3630,10 @@ let
   libgsf = import ../development/libraries/libgsf {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2 gettext bzip2 python;
     inherit (gnome) glib gnomevfs libbonobo;
+  };
+
+  libiconv = import ../development/libraries/libiconv {
+    inherit fetchurl stdenv;
   };
 
   libid3tag = import ../development/libraries/libid3tag {
