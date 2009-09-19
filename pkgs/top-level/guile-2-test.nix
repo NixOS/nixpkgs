@@ -12,6 +12,9 @@ let
     };
   };
 
+  toJob = x: if builtins.isAttrs x then x else
+    { type = "job"; systems = x; schedulingPriority = 10; };
+
   /* Perform a job on the given set of platforms.  The function `f' is
      called by Hydra for each platform, and should return some job
      to build on that platform.  `f' is passed the Nixpkgs collection
