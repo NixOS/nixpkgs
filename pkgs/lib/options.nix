@@ -235,6 +235,12 @@ rec {
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = ignore: newOptionAttrSetToDocList;
   newOptionAttrSetToDocList = attrs:
+    let tryEval = v:
+      let res = builtins.tryEval v; in
+      if builtins ? tryEval then
+        if res.success then res.value else "<error>"
+      else v;
+    in
     let options = collect isOption attrs; in
       fold (opt: rest:
         let
@@ -246,8 +252,8 @@ rec {
             declarations = map (x: toString x.source) opt.declarations;
             definitions = map (x: toString x.source) opt.definitions;
           }
-          // (if opt ? example then {inherit(opt) example;} else {})
-          // (if opt ? default then {inherit(opt) default;} else {});
+          // optionalAttrs (opt ? example) { example = tryEval opt.example; }
+          // optionalAttrs (opt ? default) { default = tryEval opt.default; };
 
           subOptions =
             if opt ? options then
