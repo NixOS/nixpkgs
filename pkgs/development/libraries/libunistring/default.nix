@@ -1,12 +1,17 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libunistring-0.9.1";
+  name = "libunistring-0.9.1.1";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "0cisnd4psxhgwlb8ak4hn74zdayp9s48i5rzrl6xmni1dqz6j6y5";
+    sha256 = "02qrsncjn7r350p1wgggkg14gbw2r4g4a7awvrggfriqs6nl5qf5";
   };
+
+  buildInputs =
+    stdenv.lib.optional (stdenv.system == "i686-cygwin"
+                         || stdenv.system == "i686-darwin")
+                        libiconv;
 
   doCheck = true;
 

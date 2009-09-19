@@ -3779,7 +3779,7 @@ let
   };
 
   libunistring = import ../development/libraries/libunistring {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libiconv;
   };
 
   libupnp = import ../development/libraries/pupnp {
