@@ -3,7 +3,7 @@
 
 {config, pkgs, ...}:
 
-{
+rec {
   require = [./installation-cd-base.nix];
 
   installer.configModule = "./nixos/modules/installer/cd-dvd/installation-cd-minimal.nix";
@@ -34,4 +34,8 @@
     "iso9660" "loop" "squashfs"
     ];
   boot.initrd.allowMissing = true;
+
+  environment.systemPackages = [
+    pkgs.klibc
+    ];
 }
