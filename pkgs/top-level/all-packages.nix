@@ -2722,6 +2722,10 @@ let
     inherit (gtkLibs) gtk;
     inherit (gnome) vte;
     lua = lua5;
+    useX11 = getConfig ["radare" "useX11"] false;
+    pythonBindings = getConfig ["radare" "pythonBindings"] false;
+    rubyBindings = getConfig ["radare" "rubyBindings"] false;
+    luaBindings = getConfig ["radare" "luaBindings"] false;
   };
 
   ragel = import ../development/tools/parsing/ragel {
