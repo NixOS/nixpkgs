@@ -35,7 +35,28 @@ rec {
     ];
   boot.initrd.allowMissing = true;
 
-  environment.systemPackages = [
-    pkgs.klibc
+  environment.systemPackages = with pkgs; [
+    klibc 
+
+    dmraid
+
+    cryptsetup ccrypt 
+
+    utillinuxCurses ddrescue testdisk
+    pciutils sdparm hdparm hddtemp usbutils
+    btrfsProgs xfsProgs jfsUtils jfsrec
+    wpa_supplicant iproute 
+    fuse ntfs3g smbfsFuse sshfsFuse
+    manpages irssi elinks mcabber mutt openssh lftp 
+    openssl ncat socat
+    gnupg gnupg2
+    patch which diffutils gcc binutils bc file
+    screen
+    bvi joe nvi 
+    subversion16 monotone git darcs mercurial bazaar cvs
+    unrar unzip zip lzma cabextract cpio 
+    dar p7zip xz lrzip rzip lzop
+    lsof
+    gcc gnused gnumake ncurses gnugrep findutils ed
     ];
 }
