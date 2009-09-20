@@ -4905,7 +4905,7 @@ let
   };
 
   cryptsetup = import ../os-specific/linux/cryptsetup {
-    inherit stdenv fetchurl e2fsprogs popt devicemapper udev;
+    inherit stdenv fetchurl libuuid popt devicemapper udev;
   };
 
   cramfsswap = import ../os-specific/linux/cramfsswap {
