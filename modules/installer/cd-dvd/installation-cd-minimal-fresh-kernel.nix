@@ -6,7 +6,7 @@
 rec {
   require = [./installation-cd-base.nix];
 
-  installer.configModule = "./nixos/modules/installer/cd-dvd/installation-cd-minimal.nix";
+  installer.configModule = "./nixos/modules/installer/cd-dvd/installation-cd-minimal-fresh-kernel.nix";
 
   # Don't include X libraries.
   environment.noXlibs = true;
