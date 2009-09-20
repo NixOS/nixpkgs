@@ -37,12 +37,12 @@
 
 let
   inherit (builtins) getAttr attrNames;
-  inherit (lib) concatStringsSep mapRecordFlatten;
+  inherit (lib) concatStringsSep mapAttrsFlatten;
   toConfigLine = name : set : 
     "[(\"name\",\"${name}\")," + ( concatStringsSep "," (map (a: "(\"${a}\",\"${getAttr a set}\")" ) (attrNames set)))+"]";
   config = writeText "nix-repository-manager_config"
         (bleedingEdgeRepos.managedRepoDir+"\n" +
-        concatStringsSep "\n" (mapRecordFlatten toConfigLine (bleedingEdgeRepos.repos)));
+        concatStringsSep "\n" (mapAttrsFlatten toConfigLine (bleedingEdgeRepos.repos)));
 
   cfg = getConfig ["nixRepositoryManager" ] {};
 

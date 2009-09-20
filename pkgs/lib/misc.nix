@@ -243,8 +243,8 @@ rec {
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
   # calls a function (f attr value ) for each record item. returns a list
-  # should be renamed to mapAttrsFlatten
-  mapRecordFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
+  mapAttrsFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
+  mapRecordFlatten = builtins.trace "depreceated usage of mapRecordFlatten, use mapAttrsFlatten instead" mapAttrsFlatten;
 
   # attribute set containing one attribute
   nvs = name : value : listToAttrs [ (nameValuePair name value) ];
