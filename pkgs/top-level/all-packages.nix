@@ -2689,6 +2689,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  openocd = import ../development/tools/misc/openocd {
+    inherit fetchurl stdenv;
+  };
+
   oprofile = import ../development/tools/profiling/oprofile {
     inherit fetchurl stdenv binutils popt;
     inherit makeWrapper gawk which gnugrep;
