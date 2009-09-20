@@ -2,6 +2,7 @@
   ./config/i18n.nix
   ./config/ldap.nix
   ./config/networking.nix
+  ./config/no-x-libs.nix
   ./config/nsswitch.nix
   ./config/system-path.nix
   ./config/timezone.nix
