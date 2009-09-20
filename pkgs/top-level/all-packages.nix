@@ -4884,6 +4884,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  alsaPlugins = import ../os-specific/linux/alsa-plugins {
+    inherit fetchurl stdenv lib pkgconfig alsaLib pulseaudio;
+  };
+
   alsaUtils = import ../os-specific/linux/alsa-utils {
     inherit stdenv fetchurl alsaLib gettext ncurses;
   };

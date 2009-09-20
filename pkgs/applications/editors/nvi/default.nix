@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/vi
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/ex
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/view
+    ln -s $out/bin/{,vi-}nvi # create a symlink so that all vi(m) users will find it
   '';
 
   meta = {

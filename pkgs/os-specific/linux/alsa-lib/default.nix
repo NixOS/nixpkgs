@@ -10,6 +10,7 @@ stdenv.mkDerivation {
   # Fix pcm.h file in order to prevent some compilation bugs
   patchPhase = ''
     sed -i -e 's|//int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);|/\*int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);\*/|' include/pcm.h
+    unset patchPhase; patchPhase
   '';
   meta = {
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
@@ -21,4 +22,10 @@ stdenv.mkDerivation {
 
     homepage = http://www.alsa-project.org/;
   };
+
+  patches = [
+    /* allow specifying alternatives alsa plugin locations using
+       export ALSA_PLUGIN_DIRS=$(nix-build -A alsaPlugins)/lib/alsa-lib */
+    ./alsa-plugin-dirs.patch
+  ];
 }

@@ -1,0 +1,64 @@
+diff --git a/src/pcm/pcm.c b/src/pcm/pcm.c
+index 74d1d1a..17ffb12 100644
+--- a/src/pcm/pcm.c
++++ b/src/pcm/pcm.c
+@@ -2042,6 +2042,19 @@ static const char *const build_in_pcms[] = {
+ 	NULL
+ };
+ 
++
++// helper funcion used below
++int file_exists(const char * filename)
++{
++	FILE * file;
++	if (file = fopen(filename, "r"))
++	{
++		fclose(file);
++		return 1;
++	}
++	return 0;
++}
++
+ static int snd_pcm_open_conf(snd_pcm_t **pcmp, const char *name,
+ 			     snd_config_t *pcm_root, snd_config_t *pcm_conf,
+ 			     snd_pcm_stream_t stream, int mode)
+@@ -2141,8 +2154,38 @@ static int snd_pcm_open_conf(snd_pcm_t **pcmp, const char *name,
+ 				err = -ENOMEM;
+ 				goto _err;
+ 			}
+-			lib = buf1;
+ 			sprintf(buf1, "%s/libasound_module_pcm_%s.so", ALSA_PLUGIN_DIR, str);
++			if (!file_exists(buf1)){
++				// try to locate plugin in one of ALSA_PLUGIN_DIRS which is colon separated list of paths
++				char * pdirs = getenv("ALSA_PLUGIN_DIRS");
++
++				if (pdirs){ // env var set?
++					char * saveptr;
++					while (1) {
++						char * dir_tok = strtok_r(pdirs, "::::", &saveptr); // "::::" to work around bug in glibc and -O2 ? ":" seems to cause a segfault
++						if (dir_tok == NULL)
++                            break;
++						char * so_file = malloc(strlen(str) + strlen(dir_tok) + 32);
++						if (so_file == NULL) {
++							err = -ENOMEM;
++							goto _err;
++						}
++
++						sprintf(so_file, "%s/libasound_module_pcm_%s.so", dir_tok, str);
++
++						if (file_exists(so_file)){
++
++							free(buf1);
++							buf1 = so_file;
++							break;
++						} else {
++							free (so_file);
++						}
++						pdirs = NULL;
++					}
++				}
++			}
++			lib = buf1;
+ 		}
+ 	}
+ #ifndef PIC
