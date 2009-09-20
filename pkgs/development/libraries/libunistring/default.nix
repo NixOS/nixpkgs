@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02qrsncjn7r350p1wgggkg14gbw2r4g4a7awvrggfriqs6nl5qf5";
   };
 
-  buildInputs =
+  propagatedBuildInputs =
     stdenv.lib.optional (stdenv.system == "i686-cygwin"
                          || stdenv.system == "i686-darwin")
                         libiconv;
