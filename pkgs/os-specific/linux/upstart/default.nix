@@ -1,5 +1,8 @@
 {stdenv, fetchurl}:
 
+let bashCompletion = ./upstart-bash-completion;
+in
+
 stdenv.mkDerivation {
   name = "upstart-0.3.0";
   
@@ -25,6 +28,11 @@ stdenv.mkDerivation {
   passthru = {
     interfaceVersion = 1;
   };
+
+  postInstall = ''
+    t=$out/etc/bash_completion.d
+    ensureDir $t; cp ${bashCompletion} $t/upstart
+  '';
 
   meta = {
     homepage = "http://upstart.ubuntu.com/";
