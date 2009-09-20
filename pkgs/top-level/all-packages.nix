@@ -2946,6 +2946,10 @@ let
     inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype libsigcxx;
   };
 
+  ccrtp = import ../development/libraries/ccrtp {
+    inherit fetchurl stdenv lib pkgconfig openssl libgcrypt commoncpp2;
+  };
+
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
     inherit cmake freeglut mesa;
     inherit (xlibs) libX11 xproto inputproto libXi libXmu;
@@ -2986,6 +2990,10 @@ let
 
   cluceneCore = (import ../development/libraries/clucene-core) {
     inherit fetchurl stdenv;
+  };
+
+  commoncpp2 = import ../development/libraries/commoncpp2 {
+    inherit stdenv fetchurl lib;
   };
 
   console_kit = import ../development/libraries/console-kit {
@@ -3876,6 +3884,10 @@ let
 
   libzip = import ../development/libraries/libzip {
     inherit fetchurl stdenv zlib;
+  };
+
+  libzrtpcpp = import ../development/libraries/libzrtpcpp {
+    inherit fetchurl stdenv lib commoncpp2 openssl pkgconfig ccrtp;
   };
 
   lightning = import ../development/libraries/lightning {
@@ -7460,6 +7472,14 @@ let
 
   tla = import ../applications/version-management/arch {
     inherit fetchurl stdenv diffutils gnutar gnupatch which;
+  };
+
+  twinkle = import ../applications/networking/twinkle {
+    inherit fetchurl stdenv lib pkgconfig commoncpp2 ccrtp openssl speex libjpeg perl
+      libzrtpcpp libsndfile libxml2 file readline alsaLib;
+    qt = qt3;
+    boost = boostFull;
+    inherit (xlibs) libX11 libXaw libICE libXext;
   };
 
   unison = import ../applications/networking/sync/unison {
