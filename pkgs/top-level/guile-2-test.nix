@@ -6,11 +6,8 @@
 let
   allPackages = import ./all-packages.nix;
 
-  pkgs = allPackages {
-    config = {
-      packageOverrides = (p: { guile = p.guile_1_9; });
-    };
-  };
+  pkgs = let orig = (allPackages {}); in
+    orig // { __overrides = { guile = orig.guile_1_9; }; };
 
   toJob = x: if builtins.isAttrs x then x else
     { type = "job"; systems = x; schedulingPriority = 10; };
