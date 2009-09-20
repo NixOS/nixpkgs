@@ -5,7 +5,10 @@
 , glib, gtk, x11, ming, dejagnu, python
 , lib, makeWrapper }:
 
+assert stdenv ? glibc;
+
 let version = "0.8.5"; in
+
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
 
