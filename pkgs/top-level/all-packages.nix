@@ -4926,6 +4926,10 @@ let
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
 
+  dmraid = builderDefsPackage ../os-specific/linux/dmraid {
+    inherit devicemapper;
+  };
+
   libuuid = utillinuxng;
 
   e2fsprogs = import ../os-specific/linux/e2fsprogs/1.41.8.nix {
