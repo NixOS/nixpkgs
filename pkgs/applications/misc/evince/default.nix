@@ -3,7 +3,9 @@
 , libgnome, libgnomeui, scrollkeeper, libxslt
 , libglade, dbus, dbus_glib
 , poppler, libspectre, djvulibre, shared_mime_info
-, makeWrapper, which }:
+, makeWrapper, which
+, recentListSize ? null # 5 is not enough, allow passing a different number
+}:
 
 stdenv.mkDerivation rec {
   name = "evince-2.26.0";
@@ -27,6 +29,11 @@ stdenv.mkDerivation rec {
 
     # Do not update Scrollkeeper's database (GNOME's help system).
     + "--disable-scrollkeeper";
+
+  postUnpack = if recentListSize != null then ''
+    sed -i 's/\(gtk_recent_chooser_set_limit .*\)5)/\1${builtins.toString recentListSize})/' */shell/ev-open-recent-action.c
+    sed -i 's/\(if (++n_items == \)5\(.*\)/\1${builtins.toString recentListSize}\2/' */shell/ev-window.c
+  '' else "";
 
   postInstall = ''
     # Tell Glib/GIO about the MIME info directory, which is used
