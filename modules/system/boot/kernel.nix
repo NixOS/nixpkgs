@@ -28,9 +28,9 @@ let
           "selinux=0"
           "apm=on"
           "acpi=on"
-          "vga=0x317"
           "console=tty1"
           "splash=verbose"
+          "vga=0x317"
         ];
         description = "
           The kernel parameters.  If you want to add additional
@@ -101,12 +101,17 @@ let
             
             # Support USB keyboards, in case the boot fails and we only have
             # a USB keyboard.
+            "uhci_hcd"
             "ehci_hcd"
             "ohci_hcd"
             "usbhid"
 
             # LVM.
             "dm_mod"
+
+	    # All-mod-config case:
+	    "unix"
+	    "i8042" "pcips2" "serio" "atkbd" "xtkbd"
           ];
           description = "
             The set of kernel modules in the initial ramdisk used during the
@@ -179,7 +184,7 @@ let
 in
 
 {
-  require = [options];
+  require = [ options ];
 
   system.build = { inherit kernel; };
   system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;

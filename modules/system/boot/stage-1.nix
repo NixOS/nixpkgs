@@ -31,7 +31,7 @@ let
     };
 
     boot.initrd.allowMissing = mkOption {
-      default = false;
+      default = true;
       description = ''
         Allow some initrd components to be missing. Useful for
         custom kernel that are changed too often to track needed

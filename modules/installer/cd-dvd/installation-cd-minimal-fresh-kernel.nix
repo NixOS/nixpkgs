@@ -26,10 +26,6 @@ rec {
   '';
 
   boot.initrd.extraKernelModules = [
-    "i8042" "pcips2" "serio" "mousedev" "evdev" "psmouse" "sermouse"
-    "synaptics_i2c" "unix" "usbhid" "uhci_hcd" "ehci_hcd" "ohci_hcd" 
-    "atkbd" "xtkbd" 
-    # CD part
     "iso9660" "loop" "squashfs"
     ];
   boot.initrd.allowMissing = true;

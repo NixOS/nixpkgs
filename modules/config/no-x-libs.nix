@@ -5,7 +5,11 @@
     environment.noXlibs = pkgs.lib.mkOption {
       default = false;
       example = true;
-      description = "Removing on-by-default X-dependent settings";
+      description = ''
+        Switch off the options in the default configuration that require X libraries.
+	Currently this includes: sshd.forwardX11, dbus, hal, fonts.enableCoreFonts,
+	fonts.enableFontConfig
+      '';
     };
   };
   config = pkgs.lib.mkIf config.environment.noXlibs {
