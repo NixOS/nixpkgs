@@ -87,7 +87,7 @@ rec {
       name = "attribute set of ${elemType}s";
       check = x: lib.traceValIfNot builtins.isAttrs x
         && fold (e: v: v && elemType.check e) true (lib.attrValues x);
-      merge = fold lib.mergeAttrs {};
+      merge = lib.zip elemType.merge;
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
       fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
       docPath = path: elemType.docPath (path + ".<name>");
