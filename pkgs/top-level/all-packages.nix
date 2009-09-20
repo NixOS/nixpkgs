@@ -6597,6 +6597,12 @@ let
     inherit stdenv fetchurl openssl;
   };
 
+  grip = import ../applications/misc/grip {
+    inherit fetchurl stdenv lib grip pkgconfig curl;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) libgnome libgnomeui vte;
+  };
+
   gwenview = import ../applications/graphics/gwenview {
     inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3;
     inherit (kde3) kdelibs;
