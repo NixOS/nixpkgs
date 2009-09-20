@@ -7,7 +7,9 @@ let
   allPackages = import ./all-packages.nix;
 
   pkgs = allPackages {
-    packageOverrides = (p: { guile = p.guile_1_9; });
+    config = {
+      packageOverrides = (p: { guile = p.guile_1_9; });
+    };
   };
 
   toJob = x: if builtins.isAttrs x then x else
