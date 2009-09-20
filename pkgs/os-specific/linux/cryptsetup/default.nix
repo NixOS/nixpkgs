@@ -19,5 +19,7 @@ stdenv.mkDerivation {
     homepage = http://code.google.com/p/cryptsetup/;
     description = "LUKS for dm-crypt";
     license = "GPLv2";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

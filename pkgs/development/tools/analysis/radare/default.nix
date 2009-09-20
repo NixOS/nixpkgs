@@ -31,5 +31,7 @@ stdenv.mkDerivation
     description = "Free advanced command line hexadecimal editor";
     homepage = http://radare.org/;
     license = "GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -10,4 +10,5 @@
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
+  viric = "Lluís Batlle i Rossell <viriketo@gmail.com>";
 }
