@@ -6598,7 +6598,7 @@ let
   };
 
   grip = import ../applications/misc/grip {
-    inherit fetchurl stdenv lib grip pkgconfig curl;
+    inherit fetchurl stdenv lib grip pkgconfig curl cdparanoia libid3tag;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnome libgnomeui vte;
   };
