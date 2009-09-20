@@ -18,7 +18,7 @@ let
      for the platform in question. */
   testOn = systems: f: {system ? builtins.currentSystem}:
     if pkgs.lib.elem system systems
-    then f (allPackages {inherit system;})
+    then f (pkgs {inherit system;})
     else {};
 
   /* Map an attribute of the form `foo = [platforms...]'  to `testOn
