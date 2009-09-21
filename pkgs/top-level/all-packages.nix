@@ -7349,6 +7349,14 @@ let
     inherit guile mesa libtool jackaudio alsaLib;
   };
 
+  sonicVisualizer = import ../applications/audio/sonic-visualizer {
+    inherit fetchurl stdenv lib libsndfile libsamplerate bzip2 librdf
+      rubberband jackaudio pulseaudio libmad 
+      libogg liblo alsaLib librdf_raptor librdf_rasqal redland fftw;
+    inherit (vamp) vampSDK;
+    qt = qt4;
+  };
+
   sox = import ../applications/misc/audio/sox {
     inherit fetchurl stdenv lib composableDerivation;
     # optional features
