@@ -1,9 +1,13 @@
 args: with args;
+
+let name = "jackmeter-0.3";
+in
 stdenv.mkDerivation {
-  name = "jackmeeter-0.3";
+
+  inherit name;
 
   src = fetchurl {
-    url = http://www.aelius.com/njh/jackmeter/jackmeter-0.3.tar.gz;
+    url = "http://www.aelius.com/njh/jackmeter/${name}.tar.gz";
     sha256 = "03siznnq3f0nnqyighgw9qdq1y4bfrrxs0mk6394pza3sz4b6sgp";
   };
 
