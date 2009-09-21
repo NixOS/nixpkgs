@@ -2894,6 +2894,11 @@ let
       inherit stdenv fetchurl gettext libtool;
     });
 
+  aubio = import ../development/libraries/aubio {
+    inherit fetchurl stdenv lib pkgconfig fftw libsndfile libsamplerate python
+      alsaLib jackaudio;
+  };
+
   axis = import ../development/libraries/axis {
     inherit fetchurl stdenv;
   };
