@@ -4153,10 +4153,20 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  librdf_raptor = import ../development/libraries/librdf/raptor.nix {
+    inherit fetchurl stdenv lib libxml2 curl;
+  };
+  librdf_rasqal = import ../development/libraries/librdf/rasqal.nix {
+    inherit fetchurl stdenv lib pcre libxml2 gmp librdf_raptor;
+  };
+  librdf = import ../development/libraries/librdf {
+    inherit fetchurl stdenv lib pkgconfig librdf_raptor ladspaH openssl zlib;
+  };
+
   # Also known as librdf, includes raptor and rasqal
   redland = import ../development/libraries/redland {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
-      mysql libxslt curl pcre;
+      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
   };
 
