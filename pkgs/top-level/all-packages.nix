@@ -4178,6 +4178,12 @@ let
     inherit fetchurl stdenv;
   };
 
+  rubberband = import ../development/libraries/rubberband {
+    inherit fetchurl stdenv lib pkgconfig libsamplerate libsndfile ladspaH;
+    fftw = fftwSinglePrec;
+    inherit (vamp) vampSDK;
+  };
+
   schroedinger = import ../development/libraries/schroedinger {
     inherit fetchurl stdenv liboil pkgconfig;
   };
@@ -4275,6 +4281,10 @@ let
     inherit fetchurl stdenv unixODBC glibc libtool openssl zlib;
     inherit postgresql mysql sqlite;
   });
+
+  vamp = import ../development/libraries/audio/vamp {
+    inherit fetchurl stdenv lib pkgconfig libsndfile;
+  };
 
   vtk = import ../development/libraries/vtk {
     inherit stdenv fetchurl cmake mesa;
