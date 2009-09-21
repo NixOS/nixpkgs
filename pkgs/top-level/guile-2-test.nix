@@ -6,8 +6,14 @@
 let
   allPackages = import ./all-packages.nix;
 
-  pkgsFun = {system ? builtins.currentSystem}: let orig = (allPackages {inherit system;}); in
-    orig // { __overrides = { guile = orig.guile_1_9; }; };
+  pkgsFun = { system ? builtins.currentSystem }:
+    allPackages {
+      inherit system;
+      config.packageOverrides = pkgs: {
+        guile = pkgs.guile_1_9;
+      };
+    };
+
   pkgs = pkgsFun {};
 
   toJob = x: if builtins.isAttrs x then x else
