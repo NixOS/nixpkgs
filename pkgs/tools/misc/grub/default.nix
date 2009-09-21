@@ -22,6 +22,15 @@ stdenv.mkDerivation {
     # /dev/disk/by-label/bla.  The symlink resolution code in
     # grub-install isn't smart enough.
     ./symlink.patch
+
+    # Provide support for the "savedefault --once" command in the Grub
+    # shell.  KDE uses this to allow rebooting into a non-default
+    # entry.
+    (fetchurl {
+      url = http://cvs.mandriva.com/cgi-bin/viewvc.cgi/SPECS/grub/grub-0.97-once.patch?revision=1.3;
+      sha256 = "1g5qfn8lvl32h4pggdf7dmjqjpi42jblknzakb5h909fi5i1qyw8";
+    })
+    
   ] ++ (stdenv.lib.optional buggyBiosCDSupport ./buggybios.patch);
 
   # Autoconf/automake required for the splashimage patch.
