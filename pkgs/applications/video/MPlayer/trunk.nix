@@ -3,8 +3,8 @@
 , xineramaSupport ? false, randrSupport ? false, dvdnavSupport ? true
 , stdenv, fetchurl, x11, freetype, freefont_ttf, zlib
 , alsa ? null, libX11, libXv ? null, libtheora ? null, libcaca ? null
-, libXinerama ? null, libXrandr ? null, libdvdnav ? null
-, cdparanoia ? null, cddaSupport ? true
+, libXinerama ? null, libXrandr ? null, libdvdnav ? null, jackaudio ? null
+, cdparanoia ? null, cddaSupport ? true, jackaudioSupport ? true
 , mesa, pkgconfig
 , sourceByName
 }:
@@ -17,6 +17,7 @@ assert xineramaSupport -> libXinerama != null;
 assert randrSupport -> libXrandr != null;
 assert dvdnavSupport -> libdvdnav != null;
 assert cddaSupport -> cdparanoia != null;
+assert jackaudioSupport -> jackaudio != null;
 
 let
 
@@ -45,7 +46,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional xineramaSupport libXinerama
     ++ stdenv.lib.optional randrSupport libXrandr
     ++ stdenv.lib.optionals dvdnavSupport [libdvdnav libdvdnav.libdvdread]
-    ++ stdenv.lib.optional cddaSupport cdparanoia;
+    ++ stdenv.lib.optional cddaSupport cdparanoia
+    ++ stdenv.lib.optional jackaudioSupport jackaudio;
 
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}

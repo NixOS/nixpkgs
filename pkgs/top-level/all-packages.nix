@@ -7133,7 +7133,7 @@ let
   MPlayerTrunk = import ../applications/video/MPlayer/trunk.nix {
     inherit (bleedingEdgeRepos) sourceByName;
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
-      cdparanoia mesa pkgconfig;
+      cdparanoia mesa pkgconfig jackaudio;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
