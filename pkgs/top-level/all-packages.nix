@@ -6135,6 +6135,16 @@ let
     libstdcpp = gcc33.gcc;
   };
 
+  ardour = import ../applications/audio/ardour {
+    inherit fetchurl stdenv lib pkgconfig scons boost redland librdf_raptor
+      librdf_rasqal jackaudio flac libsamplerate alsaLib libxml2 libxslt
+      libsndfile libsigcxx libusb cairomm librdf liblo fftw fftwSinglePrec
+      aubio libmad;
+    inherit (gtkLibs) glib pango gtk glibmm gtkmm;
+
+    inherit (gnome) libgnomecanvas ;
+  };
+
   audacious = import ../applications/audio/audacious/player.nix {
     inherit fetchurl stdenv pkgconfig libmowgli libmcs gettext xlibs dbus_glib;
     inherit (gnome) libglade;
