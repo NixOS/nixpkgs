@@ -3577,6 +3577,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  liblo = import ../development/libraries/liblo {
+    inherit fetchurl stdenv lib;
+  };
+
   libev = builderDefsPackage ../development/libraries/libev {
   };
 
