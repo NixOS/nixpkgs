@@ -50,6 +50,8 @@ rec {
     };
   };
 
+  /*
+  # unfinished - experimental
   libdom = stdenv.mkDerivation {
     name = "libdom-devel";
 
@@ -65,6 +67,7 @@ rec {
       platforms = lib.platforms.linux;
     };
   };
+  */
 
   netsurfHaru = import ./haru.nix {
     inherit fetchurl stdenv lib zlib libpng; 

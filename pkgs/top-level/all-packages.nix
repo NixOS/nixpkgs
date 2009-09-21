@@ -7179,7 +7179,7 @@ let
     };
 
   netsurfBrowser = netsurf.browser;
-  netsurf = import ../applications/networking/browsers/netsurf { inherit pkgs; };
+  netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
   nvi = import ../applications/editors/nvi {
     inherit fetchurl stdenv ncurses;

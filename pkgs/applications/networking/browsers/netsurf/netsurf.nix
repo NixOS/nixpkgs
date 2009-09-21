@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     curl libpng libxml2 lcms glib libharu libmng
     gtk libglade libCSS];
 
+  installPhase = "make PREFIX=$out install";
+
   meta = { 
     description = "free, open source web browser";
     homepage = http://www.netsurf-browser.org;
