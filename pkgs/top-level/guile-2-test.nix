@@ -61,6 +61,7 @@ in (mapTestOn {
   guileLib = linux;
   guileLint = linux;
   gwrap = linux;
+  swig = linux;
   gnutls = linux;
   dico = linux;
   trackballs = linux;
