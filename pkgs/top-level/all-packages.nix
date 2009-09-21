@@ -6936,6 +6936,10 @@ let
     inherit (gtkLibs) glib;
   };
 
+  jackmeter = import ../applications/audio/jackmeter {
+    inherit fetchurl stdenv lib jackaudio pkgconfig;
+  };
+
   jedit = import ../applications/editors/jedit {
     inherit fetchurl stdenv ant;
   };
