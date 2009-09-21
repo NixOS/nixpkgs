@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "utility program to help you manage the disk devices";
     homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
     license = "GPL";
-    maintainers = [args.lib.maintainers.marcweber];
+    #maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
   };
 }
