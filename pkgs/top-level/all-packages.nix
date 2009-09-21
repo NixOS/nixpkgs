@@ -2768,9 +2768,10 @@ let
   };
 
   swig = import ../development/tools/misc/swig {
-    inherit fetchurl stdenv perl python;
+    inherit fetchurl stdenv boost perl python guile;
     perlSupport = true;
     pythonSupport = true;
+    guileSupport = true;
     javaSupport = false;
   };
 
@@ -2779,9 +2780,10 @@ let
   };
 
   swigWithJava = lowPrio (appendToName "with-java" (import ../development/tools/misc/swig {
-    inherit fetchurl stdenv jdk;
+    inherit fetchurl stdenv boost jdk;
     perlSupport = false;
     pythonSupport = false;
+    guileSupport = false;
     javaSupport = true;
   }));
 
