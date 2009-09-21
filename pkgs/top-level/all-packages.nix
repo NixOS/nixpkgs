@@ -44,6 +44,7 @@ let
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
+  # for NIXOS (nixos-rebuild): use nixpkgs.config option
   config =
     let
       toPath = builtins.toPath;
