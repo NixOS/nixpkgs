@@ -4915,7 +4915,10 @@ let
   };
 
   alsaPlugins = import ../os-specific/linux/alsa-plugins {
-    inherit fetchurl stdenv lib pkgconfig alsaLib pulseaudio;
+    inherit fetchurl stdenv lib pkgconfig alsaLib pulseaudio jackaudio;
+  };
+  alsaPluginWrapper = import ../os-specific/linux/alsa-plugins/wrapper.nix {
+    inherit stdenv alsaPlugins writeScriptBin;
   };
 
   alsaUtils = import ../os-specific/linux/alsa-utils {

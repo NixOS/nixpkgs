@@ -7,9 +7,8 @@ stdenv.mkDerivation {
     sha256 = "000iqwlz93ykl0w19hw4qjh3gcw7f45ykmi91cw2m7dg4iy0igk7";
   };
 
-  # TODO make this customizable
-  buildInputs = [pkgconfig alsaLib pulseaudio];
-
+  # TODO make backends such as jack, pulseaudio optional
+  buildInputs = [pkgconfig alsaLib pulseaudio jackaudio];
 
   meta = { 
     description = "plugins for alsa eg conneckt jack, pluseaudio applications easily to the daemons using alsa devices";
