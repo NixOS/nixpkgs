@@ -4971,6 +4971,11 @@ let
     inherit fetchurl stdenv zlib;
   };
 
+  davfs2 = import ../os-specific/linux/davfs2 {
+    inherit fetchurl stdenv zlib;
+    neon = neon028;
+  };
+
   devicemapper = import ../os-specific/linux/device-mapper {
     inherit fetchurl stdenv;
   };
