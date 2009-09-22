@@ -4182,7 +4182,7 @@ let
   # Also known as librdf, includes raptor and rasqal
   redland = import ../development/libraries/redland {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
-      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
+      mysql libxslt curl pcre;
     bdb = db4;
   };
 
