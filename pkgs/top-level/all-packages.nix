@@ -4170,11 +4170,12 @@ let
   };
 
   # Also known as librdf, includes raptor and rasqal
-  redland = import ../development/libraries/redland {
+  redland = composedArgsAndFun (selectVersion ../development/libraries/redland "1.0.9") {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
-      mysql libxslt curl pcre;
+      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
   };
+  redland_1_0_8 = redland.passthru.function { version = "1.0.8"; };
 
   rte = import ../development/libraries/rte {
     inherit fetchurl stdenv;
