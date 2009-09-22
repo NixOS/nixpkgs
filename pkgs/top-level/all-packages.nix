@@ -671,6 +671,10 @@ let
     };
   };
 
+  ethtool = import ../tools/misc/ethtool {
+    inherit fetchurl stdenv;
+  };
+
   exif = import ../tools/graphics/exif {
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
