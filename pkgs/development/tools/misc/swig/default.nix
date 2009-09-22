@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit perl python jdk guile;
+    inherit perlSupport pythonSupport guileSupport javaSupport;
   };
 
   meta = {
