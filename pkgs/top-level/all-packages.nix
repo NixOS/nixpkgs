@@ -654,6 +654,10 @@ let
     inherit fetchurl stdenv cdrkit m4;
   };
 
+  ecj = import ../development/compilers/ecj {
+    inherit fetchurl stdenv unzip ant;
+  };
+
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
     inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
   };
