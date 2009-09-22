@@ -2772,24 +2772,14 @@ let
   };
 
   swig = import ../development/tools/misc/swig {
-    inherit fetchurl stdenv boost perl python guile;
-    perlSupport = true;
-    pythonSupport = true;
-    guileSupport = true;
-    javaSupport = false;
+    inherit fetchurl stdenv boost perl python guile jdk;
   };
+
+  swigWithJava = swig;
 
   swftools = import ../tools/video/swftools {
     inherit fetchurl stdenv x264 zlib libjpeg freetype giflib;
   };
-
-  swigWithJava = lowPrio (appendToName "with-java" (import ../development/tools/misc/swig {
-    inherit fetchurl stdenv boost jdk;
-    perlSupport = false;
-    pythonSupport = false;
-    guileSupport = false;
-    javaSupport = true;
-  }));
 
   texinfo49 = import ../development/tools/misc/texinfo/4.9.nix {
     inherit fetchurl stdenv ncurses;

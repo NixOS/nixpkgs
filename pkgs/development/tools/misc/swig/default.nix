@@ -1,4 +1,8 @@
-{ perlSupport, pythonSupport, javaSupport, guileSupport
+{ /* SWIG doesn't carry any run-time dependency on Perl, Python, etc., so
+     it's safe to enable everything by default.  */
+  perlSupport ? true, pythonSupport ? true, javaSupport ? true
+, guileSupport ? true
+
 , stdenv, fetchurl, boost, perl ? null, python ? null, jdk ? null
 , guile ? null }:
 
