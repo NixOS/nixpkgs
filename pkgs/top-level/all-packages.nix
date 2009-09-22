@@ -654,7 +654,8 @@ let
     inherit fetchurl stdenv cdrkit m4;
   };
 
-  ecj = import ../development/compilers/ecj {
+  # FIXME: Remove/merge with `ecj'.
+  ecjNew = import ../development/compilers/ecj {
     inherit fetchurl stdenv unzip ant;
   };
 
