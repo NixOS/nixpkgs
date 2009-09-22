@@ -164,7 +164,7 @@ let
     else x);
 
   builderDefs = composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
-    inherit stringsWithDeps lib stdenv writeScript 
+    inherit stringsWithDeps lib stdenv writeScript
       fetchurl fetchmtn fetchgit;
   };
 
@@ -196,7 +196,7 @@ let
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
     };
 
-    
+
   ### STANDARD ENVIRONMENT
 
 
@@ -990,7 +990,7 @@ let
   lzma = import ../tools/compression/lzma {
     inherit fetchurl stdenv;
   };
-  
+
   xz = import ../tools/compression/xz {
     inherit fetchurl stdenv lib;
   };
@@ -1569,7 +1569,7 @@ let
   };
 
   webdruid = builderDefsPackage ../tools/admin/webdruid {
-    inherit zlib libpng freetype gd which 
+    inherit zlib libpng freetype gd which
       libxml2 geoip;
   };
 
@@ -3628,7 +3628,7 @@ let
   };
 
   libharu = import ../development/libraries/libharu {
-    inherit fetchurl stdenv lib zlib libpng; 
+    inherit fetchurl stdenv lib zlib libpng;
   };
 
   libical = import ../development/libraries/libical {
@@ -4035,7 +4035,7 @@ let
 
   openlierox = builderDefsPackage ../games/openlierox {
     inherit (xlibs) libX11 xproto;
-    inherit gd SDL SDL_image SDL_mixer zlib libxml2 
+    inherit gd SDL SDL_image SDL_mixer zlib libxml2
       pkgconfig;
   };
 
@@ -4070,7 +4070,7 @@ let
   };
 
   policy_kit_0_9 = import ../development/libraries/policy-kit/0.9.nix {
-    inherit stdenv fetchurl pkgconfig expat pam intltool gettext 
+    inherit stdenv fetchurl pkgconfig expat pam intltool gettext
       dbus_glib;
     inherit (gtkLibs) glib;
     dbus = dbus.libs;
@@ -4086,12 +4086,12 @@ let
     qt4Support = true;
     qt4 = qt44;
   };
-  
+
   popplerQt45 = poppler.override {
     qt4Support = true;
     qt4 = qt45;
   };
-  
+
   popt = import ../development/libraries/popt {
     inherit fetchurl stdenv;
   };
@@ -4139,12 +4139,12 @@ let
       inputproto fixesproto libXfixes;
     inherit (gnome) glib;
   };
-  
+
   qtscriptgenerator = import ../development/libraries/qtscriptgenerator {
     inherit stdenv fetchurl;
     qt4 = qt45;
   };
-  
+
   readline = readline6;
 
   readline4 = import ../development/libraries/readline/readline4.nix {
@@ -5387,7 +5387,7 @@ let
 
   kernel_2_6_31_rc4 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc4.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [ 
+    kernelPatches = [
       { name = "rc4 patch";
         patch = fetchurl {
           url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc4.bz2";
@@ -5406,7 +5406,7 @@ let
   kernel_2_6_31_rc3 = (
     makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc3.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [ 
+    kernelPatches = [
       { name = "rc3 patch";
         patch = fetchurl {
           url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc3.bz2";
@@ -5425,7 +5425,7 @@ let
   kernel_2_6_31_rc2 = (
     makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc2.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [ 
+    kernelPatches = [
       { name = "rc2 patch";
         patch = fetchurl {
           url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc2.bz2";
@@ -5442,7 +5442,7 @@ let
   });
 
   kernel_2_6_31_zen0 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen0.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools 
+    inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
   };
 
@@ -5451,7 +5451,7 @@ let
   };
 
   kernel_2_6_31_zen2 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen2.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools 
+    inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
   };
 
@@ -5475,7 +5475,7 @@ let
 
     # Currently it is broken
     # Build requires exporting some symbols from kernel
-    # Go to package homepage to learn about the needed 
+    # Go to package homepage to learn about the needed
     # patch. Feel free to take over the package.
     aufs2 = import ../os-specific/linux/aufs2 {
       inherit fetchgit stdenv kernel perl;
@@ -5484,7 +5484,7 @@ let
     aufs2Utils = if lib.attrByPath ["features" "aufs"] false kernel then
       builderDefsPackage ../os-specific/linux/aufs2-utils {
         inherit kernel;
-      } 
+      }
     else null;
 
     exmap = import ../os-specific/linux/exmap {
@@ -6445,7 +6445,7 @@ let
   };
 
   /* commenting out eclipse - Have a look at eclipseRunner - Marc Weber
-     
+
     Reason: You can get Eclipse in many prepacked variations on eclipse.org
     No need to duplicate efforts.
     To make Equinox p2 work you have to create a local copy of Eclipse anyway (AFAIK).
@@ -6815,7 +6815,7 @@ let
   };
 
   gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
-    inherit libgphoto2 fuse pkgconfig; 
+    inherit libgphoto2 fuse pkgconfig;
     inherit (gtkLibs) glib;
   };
 
@@ -7318,7 +7318,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  RealPlayer = 
+  RealPlayer =
     (import ../applications/video/RealPlayer {
       inherit fetchurl stdenv;
       inherit (gtkLibs) glib pango atk gtk;
@@ -7371,7 +7371,7 @@ let
 
   sonicVisualizer = import ../applications/audio/sonic-visualizer {
     inherit fetchurl stdenv lib libsndfile libsamplerate bzip2 librdf
-      rubberband jackaudio pulseaudio libmad 
+      rubberband jackaudio pulseaudio libmad
       libogg liblo alsaLib librdf_raptor librdf_rasqal redland fftw;
     inherit (vamp) vampSDK;
     qt = qt4;
@@ -7563,7 +7563,7 @@ let
     glib = gtkLibs.glib;
   };
 
-  uzblExperimental = builderDefsPackage 
+  uzblExperimental = builderDefsPackage
         (import ../applications/networking/browsers/uzbl/experimental.nix) {
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk;
@@ -7744,12 +7744,12 @@ let
   };
 
   xournal = builderDefsPackage (import ../applications/graphics/xournal) {
-    inherit ghostscript fontconfig freetype zlib 
+    inherit ghostscript fontconfig freetype zlib
       poppler popplerData autoconf automake
       libtool pkgconfig;
     inherit (xlibs) xproto libX11;
     inherit (gtkLibs) gtk atk pango glib;
-    inherit (gnome) libgnomeprint libgnomeprintui 
+    inherit (gnome) libgnomeprint libgnomeprintui
       libgnomecanvas;
   };
 
@@ -8063,18 +8063,18 @@ let
     qt4 = qt44;
     popplerQt4 = popplerQt44;
   });
-  
+
   kde43 = import ../desktops/kde-4.3 (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt45;
     popplerQt4 = popplerQt45;
   });
-  
+
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
 
   ### SCIENCE
-  
+
   xplanet = import ../applications/science/xplanet {
     inherit stdenv fetchurl lib pkgconfig freetype libpng libjpeg giflib libtiff;
     inherit (gtkLibs) pango;
@@ -8204,7 +8204,7 @@ let
       openssl git gimp;
   };
 
-  gutenprintBin = import ../misc/drivers/gutenprint/bin.nix { 
+  gutenprintBin = import ../misc/drivers/gutenprint/bin.nix {
     inherit fetchurl stdenv rpm cpio zlib;
   };
 
@@ -8346,7 +8346,7 @@ let
   disnix = import ../tools/package-management/disnix {
     inherit stdenv fetchsvn openssl autoconf automake libtool pkgconfig dbus_glib libxml2;
   };
-  
+
   disnix_activation_scripts = import ../tools/package-management/disnix/activation-scripts {
     inherit stdenv fetchsvn autoconf automake;
   };
@@ -8401,7 +8401,8 @@ let
   };
 
   xlockmore = import ../misc/screensavers/xlockmore {
-    inherit fetchurl stdenv pam x11 freetype;
+    inherit fetchurl stdenv x11 freetype;
+    pam = if getPkgConfig "xlockmore" "pam" true then pam else null;
   };
 
   saneBackends = import ../misc/sane-backends {
