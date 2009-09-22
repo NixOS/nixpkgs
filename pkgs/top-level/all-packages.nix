@@ -654,11 +654,6 @@ let
     inherit fetchurl stdenv cdrkit m4;
   };
 
-  # FIXME: Remove/merge with `ecj'.
-  ecjNew = import ../development/compilers/ecj {
-    inherit fetchurl stdenv unzip ant;
-  };
-
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
     inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
   };
@@ -2397,7 +2392,7 @@ let
   };
 
   ecj = import ../development/eclipse/ecj {
-    inherit fetchurl stdenv unzip jre ant;
+    inherit fetchurl stdenv unzip ant gcj;
   };
 
   jdtsdk = import ../development/eclipse/jdt-sdk {
