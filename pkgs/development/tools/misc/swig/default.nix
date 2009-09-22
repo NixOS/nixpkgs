@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
    */
   doCheck = false;
 
+  passthru = {
+    inherit perl python jdk guile;
+  };
+
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
 

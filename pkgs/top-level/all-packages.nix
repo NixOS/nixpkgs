@@ -7564,6 +7564,14 @@ let
     glib = gtkLibs.glib;
   };
 
+  uzblExperimental = builderDefsPackage 
+        (import ../applications/networking/browsers/uzbl/experimental.nix) {
+    inherit pkgconfig webkit makeWrapper;
+    inherit (gtkLibs) gtk;
+    libsoup = gnome26.libsoup;
+    glib = gtkLibs.glib;
+  };
+
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
     qt = qt3;
