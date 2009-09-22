@@ -244,7 +244,7 @@ rec {
 
   # calls a function (f attr value ) for each record item. returns a list
   mapAttrsFlatten = f : r : map (attr: f attr (builtins.getAttr attr r) ) (attrNames r);
-  mapRecordFlatten = builtins.trace "depreceated usage of mapRecordFlatten, use mapAttrsFlatten instead" mapAttrsFlatten;
+  mapRecordFlatten = builtins.trace "deprecated usage of mapRecordFlatten, use mapAttrsFlatten instead" mapAttrsFlatten;
 
   # attribute set containing one attribute
   nvs = name : value : listToAttrs [ (nameValuePair name value) ];
@@ -276,7 +276,7 @@ rec {
   # { buildInputs = [a b]; }
   # merging buildPhase does'nt really make sense. The cases will be rare where appending /prefixing will fit your needs?
   # in these cases the first buildPhase will override the second one
-  # ! depreceated, use mergeAttrByFunc instead
+  # ! deprecated, use mergeAttrByFunc instead
   mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
                            overrideSnd ? [ "buildPhase" ]
                          } : attrs1 : attrs2 :
