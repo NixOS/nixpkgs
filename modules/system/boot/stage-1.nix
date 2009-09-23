@@ -128,17 +128,19 @@ let
       devicemapper = if config.boot.initrd.lvm then pkgs.devicemapper else null;
       lvm2 = if config.boot.initrd.lvm then pkgs.lvm2 else null;
       allowedReferences = ["out"]; # prevent accidents like glibc being included in the initrd
+      doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
     }
     ''
       ensureDir $out/bin
       ensureDir $out/lib
       
       # Copy what we need from Glibc.
-      cp -p ${pkgs.glibc}/lib/ld-linux*.so.2 $out/lib
+      cp -p ${pkgs.glibc}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.glibc}/lib/libc.so.* $out/lib
       cp -p ${pkgs.glibc}/lib/libpthread.so.* $out/lib
       cp -p ${pkgs.glibc}/lib/librt.so.* $out/lib
       cp -p ${pkgs.glibc}/lib/libdl.so.* $out/lib
+      cp -p ${pkgs.gcc.gcc}/lib/libgcc_s.so.* $out/lib
 
       # Copy some utillinux stuff.
       cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
@@ -190,7 +192,10 @@ let
       for i in $out/bin/*; do
           if ! test -L $i; then
               echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib $i || true
+              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              if [ "$doublePatchelf" -eq 1 ]; then
+                  patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              fi
           fi
       done
 
