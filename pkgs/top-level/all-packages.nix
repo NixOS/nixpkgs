@@ -5644,7 +5644,12 @@ let
     inherit stdenv klibc;
   };
 
-  kvm = kvm86;
+  kvm = kvm76;
+
+  kvm76 = import ../os-specific/linux/kvm/76.nix {
+    inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
+    inherit (glibc) kernelHeaders;
+  };
 
   kvm86 = import ../os-specific/linux/kvm/86.nix {
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
