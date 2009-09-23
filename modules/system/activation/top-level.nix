@@ -32,11 +32,14 @@ let
     config.nesting.children;
 
 
-  systemBuilder =
-    ''
+  systemBuilder = let
+      kernelfile = if (pkgs.stdenv.system == "armv5tel-linux")
+        then "${config.boot.kernelPackages.kernel}/uImage"
+        else "${config.boot.kernelPackages.kernel}/vmlinuz";
+    in ''
       ensureDir $out
 
-      ln -s ${config.boot.kernelPackages.kernel}/uImage $out/kernel
+      ln -s ${kernelfile} $out/kernel
       if [ -n "$grub" ]; then 
         ln -s $grub $out/grub
       fi
