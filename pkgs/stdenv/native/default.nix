@@ -38,6 +38,9 @@ rec {
     
     alias make=gmake
     alias grep=ggrep
+    alias mv=gmv
+    alias ln=gln
+    alias sed=gsed
     export MAKE=gmake
     shopt -s expand_aliases
 
