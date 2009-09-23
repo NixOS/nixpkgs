@@ -19,11 +19,12 @@ let
         };
 
         exports = mkOption {
-          default = "/etc/exports";
+          check = v: v != "/etc/exports"; # this won't work
           description = "
             the file listing the directories to be exported.
             install nfsUtils and run man exports to learn about its format.
             The exports setting can either be a file path or the file contents.
+            Don't use /etc/exports. This won't work as nix will overwrite it.
           ";
         };
 
@@ -92,17 +93,16 @@ mkIf config.services.nfsKernel.enable {
 	  
 	  ${if cfg.createMountPoints == true then
 	    ''
-	      cat /etc/exports | while read line
-	      do
-	        for i in $line
-		do
-		  mkdir -p $i
-		  break
-		done
-	      done
+              # create export directories:
+              # skip comments, take first col which may either be a quoted
+              # "foo bar" or just foo (-> man export)
+              sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+              | xargs -d '\n' mkdir -p
 	    ''
 	    else ""}
 	    	  
+          # exports file is ${exports}
+          # keep this comment so that this job is restarted whenever exports changes!
           exportfs -ra
         end script
 
@@ -146,7 +146,7 @@ mkIf config.services.nfsKernel.enable {
           mkdir -p /var/lib/nfs
         end script
 
-        respawn ${pkgs.nfsUtils}/sbin/rpc.statd
+        respawn ${pkgs.nfsUtils}/sbin/rpc.statd -F
       '';
     }
     ];
