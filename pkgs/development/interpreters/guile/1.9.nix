@@ -8,8 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "10q0k4884b68nba272bg1ym4djpvq35r9m8xw444mrh1jqfz9gsj";
   };
 
-  buildInputs = [ makeWrapper gawk readline libtool libunistring pkgconfig ];
-  propagatedBuildInputs = [ gmp boehmgc ];
+  buildInputs = [ makeWrapper gawk readline libtool libunistring ];
+  propagatedBuildInputs = [
+    /* XXX: Temporary Hack so that guile-config(1) gets to see `pkg-config',
+       until this is fixed upstream.  */
+    pkgconfig
+
+    gmp boehmgc
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
