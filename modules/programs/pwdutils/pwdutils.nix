@@ -33,7 +33,14 @@ in
 
       { # /etc/default/passwd: configuration for passwd and friends
         # (e.g., hash algorithm for /etc/passwd).
-        source = ./passwd.conf;
+        source = pkgs.substituteAll {
+          src = ./passwd.conf;
+          # This depends on pam_unix2 being built with libxcrypt or libc's libcrypt.
+          # Only in the first case it will understand 'blowfish'. And pam_unix2
+          # is not built with libxcrypt at the time of writing (it did not build)
+          filesCipher = if (pkgs.stdenv.system == "armv5tel-linux") then
+            "des" else "blowfish";
+        };
         target = "default/passwd";
       }
 
