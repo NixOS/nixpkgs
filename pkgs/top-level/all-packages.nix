@@ -1759,16 +1759,16 @@ let
     enableMultilib = true;
   }));
 
-  gcc44 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
+  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
     inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
       gettext which noSysDirs;
     profiledCompiler = true;
-  });
+  }));
 
   gccApple = wrapGCC (import ../development/compilers/gcc-apple {
-      inherit fetchurl stdenv noSysDirs;
-      profiledCompiler = true;
-    });
+    inherit fetchurl stdenv noSysDirs;
+    profiledCompiler = true;
+  });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
