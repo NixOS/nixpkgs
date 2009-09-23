@@ -74,7 +74,8 @@ let
                || result.system == "powerpc-linux";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
-               || result.system == "i686-freebsd";
+               || result.system == "i686-freebsd"
+               || result.system == "i686-openbsd";
         is64bit = result.system == "x86_64-linux";
 
         # Utility function: allow stdenv to be easily regenerated with
