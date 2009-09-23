@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, gdb }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.4.1";
+  name = "valgrind-3.5.0";
 
   src = fetchurl {
     url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "1ac465lh0b61q46xjrvs9ld1x4fk6nzdgdjr0590bad3p2mfg7k6";
+    sha256 = "105s4y6h5rsfvml1dfhsjvqgsxvnclbnxbpgk8b4ghpbpcr52fkl";
   };
 
   # Perl is needed for `cg_annotate'.
