@@ -15,10 +15,9 @@ in
     services.mingetty = {
 
       ttys = mkOption {
-        default = [1 2 3 4 5 6];
+        default = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
         description = ''
-          The list of tty (virtual console) devices on which to start a
-          login prompt.
+          The list of tty devices on which to start a login prompt.
         '';
       };
 
@@ -58,13 +57,13 @@ in
   config = {
 
     # Generate a separate job for each tty.  
-    jobs = map (ttyNumber: {
+    jobs = map (tty: {
     
-      name = "tty${toString ttyNumber}";
+      name = tty;
 
       startOn = "udev";
 
-      exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.pam_login}/bin/login --noclear tty${toString ttyNumber}";
+      exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.pam_login}/bin/login --noclear ${tty}";
       
     }) config.services.mingetty.ttys;
 
