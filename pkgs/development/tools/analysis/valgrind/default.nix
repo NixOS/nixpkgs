@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
     
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.cygwin;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
