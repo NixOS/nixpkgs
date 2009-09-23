@@ -102,7 +102,18 @@ rec {
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    mount.cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody
+    n=.
+    echo "mounting host filesystem..."
+    while true; do
+      if mount.cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody; then
+        break
+      else
+        n=".$n"
+        test ''${#n} -le 10 || exit 1
+        sleep 1
+        echo "retrying..."
+      fi
+    done
 
     mkdir -p /fs/nix/store
     mount -o bind /fs/hostfs/nix/store /fs/nix/store
