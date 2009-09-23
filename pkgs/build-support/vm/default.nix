@@ -880,7 +880,7 @@ rec {
       fullName = "Ubuntu 9.04 Jaunty (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/jaunty/main/binary-amd64/Packages.bz2;
-        sha256 = "adc46fec04a5d87571c60fa1a29dfb73ca69ad6eb0276615b28595a3f06988e1";
+        sha256 = "af760ce04e43f066b8938b1abdeff979a642f940515659ede44f7877ca358ca8";
       };
       urlPrefix = mirror://ubuntu;
     } // args);
