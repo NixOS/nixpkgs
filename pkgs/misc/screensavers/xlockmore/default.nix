@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # Don't try to install `xlock' setuid.  Instead, the user should add
   # it to `security.extraSetuidPrograms'.
   configureFlags =
-    + " --with-crypt"		# TODO: set --enable-appdefaultdir to a suitable value
+      " --with-crypt"		# TODO: set --enable-appdefaultdir to a suitable value
     + " --disable-setuid"
     + " --without-editres"
     + " --without-xpm"
