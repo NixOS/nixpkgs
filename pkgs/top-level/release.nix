@@ -33,8 +33,10 @@ let
           (pkgs.lib.getAttrFromPath path pkgs);
       in testOn job.systems getPkg);
 
-  selectMaintained = attrSet: 
-    if builtins  ? tryEval then 
+  /* Find all packages that have a meta.platforms field listing the
+     supported platforms. */
+  packagesWithMetaPlatform = attrSet: 
+    if builtins ? tryEval then 
       let pairs = pkgs.lib.concatMap 
         (x: let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
           if val.success && val.value != [] then [{name=x; value=val.value;}] else [])
@@ -42,17 +44,15 @@ let
       in
         builtins.listToAttrs pairs
     else {};
-  # May fail as much as it wishes, we will catch the error
+    
+  # May fail as much as it wishes, we will catch the error.
   processPackage = attrSet: 
     if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then 
-      selectMaintained attrSet
+      packagesWithMetaPlatform attrSet
     else
-      if attrSet.meta.maintainers != [] then
-        (if builtins.hasAttr "platforms" attrSet.meta
-         then builtins.getAttr "platforms" attrSet.meta
-         else pkgs.lib.platforms.all)
-      else
-        []; 
+      if builtins.hasAttr "platforms" attrSet.meta
+      then builtins.getAttr "platforms" attrSet.meta
+      else [];
 
   /* Common platform groups on which to test packages. */
   inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
@@ -66,7 +66,7 @@ in {
 
   tarball = import ./make-tarball.nix;
 
-} // (mapTestOn ((selectMaintained pkgs) // rec {
+} // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
 
   MPlayer = linux;
   abcde = linux;
@@ -161,7 +161,6 @@ in {
   gcc43_multi = ["x86_64-linux"];
   gcc44 = linux;
   gcj44 = linux;
-  gdb = all;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;
@@ -375,7 +374,6 @@ in {
   utillinux = linux;
   utillinuxCurses = linux;
   uzbl = linux;
-  valgrind = linux;
   viking = linux;
   vice = linux;
   vim = linux;

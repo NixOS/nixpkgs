@@ -29,5 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/gdb/;
 
     license = "GPLv3+";
+
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.cygwin;
   };
 }

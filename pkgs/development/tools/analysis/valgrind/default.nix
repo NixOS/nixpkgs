@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl gdb ];
+  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =
     if stdenv.system == "x86_64-linux" then ["--enable-only64bit"] else [];
@@ -37,5 +37,9 @@ stdenv.mkDerivation rec {
     '';
 
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.cygwin;
   };
 }
