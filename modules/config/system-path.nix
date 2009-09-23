@@ -27,7 +27,6 @@ let
       pkgs.gnupatch
       pkgs.gnused
       pkgs.gnutar
-      pkgs.grub
       pkgs.gzip
       pkgs.host
       pkgs.iputils
@@ -60,7 +59,8 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
-    ] ++ config.environment.extraPackages;
+    ] ++ optional (pkgs.stdenv.system != "armv5tel-linux") [ pkgs.grub ]
+    ++ config.environment.extraPackages;
 
 
   options = {

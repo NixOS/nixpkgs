@@ -36,8 +36,10 @@ let
     ''
       ensureDir $out
 
-      ln -s ${config.boot.kernelPackages.kernel}/vmlinuz $out/kernel
-      ln -s $grub $out/grub
+      ln -s ${config.boot.kernelPackages.kernel}/uImage $out/kernel
+      if [ -n "$grub" ]; then 
+        ln -s $grub $out/grub
+      fi
       ln -s ${config.system.build.bootStage2} $out/init
       ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
       ln -s ${config.system.activationScripts.script} $out/activate
@@ -71,7 +73,8 @@ let
     name = "system";
     buildCommand = systemBuilder;
     inherit children;
-    inherit (pkgs) grub;
+    grub = if (pkgs.stdenv.system != "armv5tel-linux") then pkgs.grub
+      else null;
     grubDevice = config.boot.grubDevice;
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
