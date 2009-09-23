@@ -4,12 +4,13 @@
 { name ? "debian-build"
 , diskImage
 , src, stdenv, vmTools, checkinstall
+, fsTranslation ? false
 , ... } @ args:
 
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
   {
-    doCheck = true;
+    #doCheck = true;
 
     prefix = "/usr";
 
@@ -53,7 +54,9 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       eval "$preInstall" 
       export LOGNAME=root
 
-      ${checkinstall}/sbin/checkinstall --nodoc -y -D --fstrans=no make install
+      ${checkinstall}/sbin/checkinstall --nodoc -y -D \
+        --fstrans=${if fsTranslation then "yes" else "no"} \
+        make install
 
       ensureDir $out/debs
       find . -name "*.deb" -exec cp {} $out/debs \;
