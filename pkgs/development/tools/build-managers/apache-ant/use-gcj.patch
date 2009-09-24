@@ -1,0 +1,18 @@
+Setting `java.compiler' or `build.compiler' in `build.properties' isn't enough.
+
+--- apache-ant-1.7.1/build.xml	2008-06-27 07:05:23.000000000 +0200
++++ apache-ant-1.7.1/build.xml	2009-09-24 15:10:53.000000000 +0200
+@@ -578,12 +578,7 @@
+       classname="com.jcraft.jsch.Session"
+       classpathref="classpath"/>
+ 
+-    <condition property="build.compiler" value="classic">
+-      <not>
+-        <isset property="jdk1.3+"/>
+-      </not>
+-    </condition>
+-    <property name="build.compiler" value="modern"/>
++    <property name="build.compiler" value="gcj"/>
+ 
+     <!--check for XSD support in the parser-->
+     <condition property="xmlschema.present">
