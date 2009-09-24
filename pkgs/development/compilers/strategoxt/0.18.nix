@@ -31,8 +31,8 @@ rec {
     name = "strategoxt-0.18pre19956";
 
     src = fetchurl {
-      url = "http://hydra.nixos.org/build/66370/download/1/strategoxt-0.18pre19956.tar.gz";
-      sha256 = "abf1347dafbf8d17a388314b9bca81f5bbbdda9268836c74a93c0fdb1a372d7b";
+      url = "http://hydra.nixos.org/build/78820/download/1/strategoxt-0.18pre20012.tar.gz";
+      sha256 = "4e5adacb79909439d6fd39d4a846aec19ba155e536236ccbea5029b86e6f27e9";
     };
 
     buildInputs = [pkgconfig aterm sdf getopt];
