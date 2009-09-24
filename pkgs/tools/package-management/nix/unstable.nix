@@ -1,13 +1,41 @@
-{ stdenv, fetchurl, aterm, db4, perl, curl, bzip2, openssl ? null
+{ stdenv, fetchurl, lib, aterm, db4, perl, curl, bzip2, openssl ? null
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , supportOldDBs ? true
 , nameSuffix ? ""
+, debugcCoercionFailuresPatch ? false
+  /* enabling this experimental patch will output a xml representation of the
+     thing which didn't match the expected type - for debugging only
+
+     The message of
+      let a = {}; in builtins.substring a a a; # always cause failure
+     looks like
+ 
+     value is an attribute set while an integer was expected
+     <?xml version='1.0' encoding='utf-8'?>
+     <expr>
+       <attrs>
+       </attrs>
+     </expr>
+   */
 , patches ? []
 }:
 
-stdenv.mkDerivation rec {
-  name = "nix-0.13pre17232${nameSuffix}";
+
+let
+   
+
+  allPatches =
+      patches ++ lib.optional debugcCoercionFailuresPatch
+                      (fetchurl { url = http://mawercer.de/~marc/debug-coercion-failures.patch; sha256 = "13q6vbxp3p36hqzlfp0hw84n6f1hzljnxqy73vr2bmglp8np24wy"; });
+  
+  vName = "nix-0.13pre17232";
+  name = "${vName}${nameSuffix}${if allPatches == [] then "" else "-patched"}";
+in
+
+stdenv.mkDerivation {
+  
+  inherit name;
   
   src = fetchurl {
     url = "http://hydra.nixos.org/build/75293/download/4/${name}.tar.bz2";
@@ -33,5 +61,5 @@ stdenv.mkDerivation rec {
     license = "LGPL";
   };
 
-  inherit patches;
+  patches = allPatches;
 }

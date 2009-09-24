@@ -8337,7 +8337,7 @@ let
 
   # The bleeding edge.
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl;
+    inherit fetchurl stdenv lib perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
     supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
