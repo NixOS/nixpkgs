@@ -811,6 +811,28 @@ rec {
       archs = ["noarch" "x86_64"];
     } // args);
 
+    opensuse111i386 = args: makeImageFromRPMDist ({
+      name = "opensuse-11.1-i586";
+      fullName = "openSUSE 11.1 (i586)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/distribution/11.1/repo/oss/suse/repodata/primary.xml.gz;
+        sha256 = "1mfmp9afikj0hci1s8cpwjdr0ycbpfym9gdhci590r9fa75w221j";
+      };
+      urlPrefix = mirror://opensuse/distribution/11.1/repo/oss/suse/;
+      archs = ["noarch" "i586"];
+    } // args);
+
+    opensuse111x86_64 = args: makeImageFromRPMDist ({
+      name = "opensuse-11.1-x86_64";
+      fullName = "openSUSE 11.1 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/distribution/11.1/repo/oss/suse/repodata/primary.xml.gz;
+        sha256 = "1mfmp9afikj0hci1s8cpwjdr0ycbpfym9gdhci590r9fa75w221j";
+      };
+      urlPrefix = mirror://opensuse/distribution/11.1/repo/oss/suse/;
+      archs = ["noarch" "x86_64"];
+    } // args);
+
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
     # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
@@ -1052,6 +1074,8 @@ rec {
     opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"]; };
     opensuse110i386 = diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages; };
     opensuse110x86_64 = diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages; };
+    opensuse111i386 = diskImageFuns.opensuse111i386 { packages = commonOpenSUSEPackages; };
+    opensuse111x86_64 = diskImageFuns.opensuse111x86_64 { packages = commonOpenSUSEPackages; };
     
     ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
     ubuntu804i386 = diskImageFuns.ubuntu804i386 { packages = commonDebianPackages; };
