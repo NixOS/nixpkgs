@@ -2702,7 +2702,7 @@ let
   };
 
   openocd = import ../development/tools/misc/openocd {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libftdi;
   };
 
   oprofile = import ../development/tools/profiling/oprofile {
@@ -3615,6 +3615,10 @@ let
 
   libffi = import ../development/libraries/libffi {
     inherit fetchurl stdenv;
+  };
+
+  libftdi = import ../development/libraries/libftdi {
+    inherit fetchurl stdenv libusb;
   };
 
   libgcrypt = import ../development/libraries/libgcrypt {
