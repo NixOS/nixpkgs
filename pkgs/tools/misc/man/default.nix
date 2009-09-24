@@ -19,6 +19,10 @@ stdenv.mkDerivation {
     ./share.patch
   ];
 
+  preConfigure = ''
+    sed 's/^PREPATH=.*/PREPATH=$PATH/' -i configure
+  '';
+
   postInstall =
     ''
       # Use UTF-8 by default.  Otherwise man won't know how to deal
