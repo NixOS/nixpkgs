@@ -264,7 +264,7 @@ rec {
     fold (n: set : if (__hasAttr n set) 
                         then setAttr set n (f (__getAttr n set) (__getAttr n set2))
                         else set )
-           set1 (__attrNames set2);
+           (set2 // set1) (__attrNames set2);
 
   # merging two attribute set concatenating the values of same attribute names
   # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
