@@ -2436,6 +2436,13 @@ let
     name = "ant-" + j2sdk14x.name;
   };
 
+  apacheAntGcj = import ../development/tools/build-managers/apache-ant/from-source.nix {
+    inherit fetchurl stdenv;
+    inherit junit; # must be either pre-built or built with GCJ *alone*
+    javac = gcj;
+    jvm = gcj;
+  };
+
   autobuild = import ../development/tools/misc/autobuild {
     inherit fetchurl stdenv makeWrapper perl openssh rsync;
   };
