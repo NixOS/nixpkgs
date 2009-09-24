@@ -48,8 +48,8 @@ rec {
     name = "java-front-0.9";
 
     src = fetchurl {
-      url = "ftp://ftp.strategoxt.org/pub/stratego/java-front/java-front-0.9/java-front-0.9.tar.gz";
-      sha256 = "96f40bf31486d3ced3ecebdcc0067e83ce6acbdbe57e3c847136ac3d7b62cc3c";
+      url = "http://hydra.nixos.org/build/79602/download/1/java-front-0.9.1pre19993.tar.gz";
+      sha256 = "e07e7d9ecc4a57c24d7af309d576d6eda75cb07a9d3d06594edfded366863c9c";
     };
 
     buildInputs = [pkgconfig aterm sdf strategoxt];
