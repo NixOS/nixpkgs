@@ -1,9 +1,9 @@
 args : with args; let localDefs = builderDefs.passthru.function (args // rec {
-                version = lib.attrByPath ["version"] "5.07" args;
+                version = lib.attrByPath ["version"] "5.10" args;
 		src = /* put a fetchurl here */
 		fetchurl {
 		    url = "http://www.jwz.org/xscreensaver/xscreensaver-${version}.tar.gz";
-		    sha256 = "1dmd9gwwqr4rnhxl71x1wn8j3xgijbpf6ydx42xzrzxi0x6afl4c";
+		    sha256 = "07zy157wqwgcapqycyv89yabxa8byk4p8jn3zlvhf7lx5w1xmval";
 		};
 		useConfig = true;
 		reqsList = [
@@ -22,14 +22,14 @@ args : with args; let localDefs = builderDefs.passthru.function (args // rec {
 		];
 	});
 	in with localDefs;
-let 
+let
 	preConfigure = fullDepEntry ("
 		sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' "+
 		"-i driver/Makefile.in po/Makefile.in.in;
 	") ["minInit" "doUnpack"];
 in
 stdenv.mkDerivation rec {
-	name = "xscreensaver-5.07";
+	name = "xscreensaver-5.10";
 	buildCommand = textClosure localDefs
           [preConfigure doConfigure doMakeInstall doForceShare doPropagate];
 	meta = {
@@ -39,4 +39,3 @@ stdenv.mkDerivation rec {
 		platforms = stdenv.lib.platforms.allBut "i686-cygwin";
 	};
 }
-
