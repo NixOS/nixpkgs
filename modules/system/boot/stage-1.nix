@@ -140,7 +140,7 @@ let
       cp -p ${pkgs.glibc}/lib/libpthread.so.* $out/lib
       cp -p ${pkgs.glibc}/lib/librt.so.* $out/lib
       cp -p ${pkgs.glibc}/lib/libdl.so.* $out/lib
-      cp -p ${pkgs.gcc.gcc}/lib/libgcc_s.so.* $out/lib
+      cp -p ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
 
       # Copy some utillinux stuff.
       cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
