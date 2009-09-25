@@ -5774,6 +5774,10 @@ let
     inherit lib;
   };
 
+  pmutils = import ../os-specific/linux/pm-utils {
+    inherit fetchurl stdenv;
+  };
+
   powertop = import ../os-specific/linux/powertop {
     inherit fetchurl stdenv ncurses gettext;
   };
