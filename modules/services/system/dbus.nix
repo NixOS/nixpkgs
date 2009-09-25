@@ -116,7 +116,7 @@ in
     jobs = singleton
       { name = "dbus";
 
-        startOn = "startup";
+        startOn = "udev";
         stopOn = "shutdown";
 
         preStart =
