@@ -5005,7 +5005,7 @@ let
 
   libuuid = utillinuxng;
 
-  e2fsprogs = import ../os-specific/linux/e2fsprogs/1.41.8.nix {
+  e2fsprogs = import ../os-specific/linux/e2fsprogs/default.nix {
     inherit fetchurl stdenv pkgconfig libuuid;
   };
 
