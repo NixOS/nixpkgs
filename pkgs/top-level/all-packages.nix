@@ -3011,7 +3011,7 @@ let
   };
 
   consolekit = import ../development/libraries/consolekit {
-    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam polkit;
+    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam policykit expat;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
@@ -5041,7 +5041,8 @@ let
   hal = import ../os-specific/linux/hal {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libuuid perl perlXMLParser
-      gettext zlib eject libsmbios udev gperf dmidecode utillinuxng;
+      gettext zlib eject libsmbios udev gperf dmidecode utillinuxng
+      consolekit policykit;
     inherit (gtkLibs) glib;
   };
 

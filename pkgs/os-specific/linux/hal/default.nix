@@ -4,7 +4,7 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
   name = "hal-0.5.13";
-  
+
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "1by8z7vy1c1m3iyh57rlqx6rah5gj6kx3ba30s9305bnffij5kzb";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
     libuuid perl perlXMLParser gettext zlib gperf
+    consolekit policykit
     # !!! libsmbios is broken; it doesn't install headers.
   ];
 
@@ -24,7 +25,6 @@ stdenv.mkDerivation rec {
     --localstatedir=/var
     --with-eject=${eject}/bin/eject
     --with-linux-input-header=${stdenv.glibc}/include/linux/input.h
-    --disable-policy-kit
   '';
 
   propagatedBuildInputs = [libusb libsmbios];

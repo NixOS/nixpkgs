@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, libX11, polkit }:
+{ stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, libX11, policykit, expat }:
 
 stdenv.mkDerivation rec {
-  name = "consolekit-0.3.1";
+  name = "consolekit-0.2.10";
   
   src = fetchurl {
-    url = http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-0.3.1.tar.bz2;
-    sha256 = "0b834ly6l8l76awr2pn2xz3ic6ilhfif4h3nsi96ffa91n09ydk0";
+    url = http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-0.2.10.tar.gz;
+    sha256 = "1jrv33shrmc1klwpgp02pycmbk9lfaxkd5q7bqxb6v95cl7m3f82";
   };
   
-  buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 polkit ];
+  buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 policykit expat ];
 
   configureFlags = "--enable-pam-module --with-pam-module-dir=$(out)/lib/security --localstatedir=/var --sysconfdir=/etc";
 
