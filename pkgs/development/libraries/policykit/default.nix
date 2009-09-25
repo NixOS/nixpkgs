@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig glib dbus.libs dbus_glib expat pam intltool gettext ];
 
-  configureFlags = "--localstatedir=/var";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc";
 
-  installFlags = "localstatedir=$(TMPDIR)/var"; # keep `make install' happy
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc"; # keep `make install' happy
   
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;
