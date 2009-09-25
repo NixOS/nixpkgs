@@ -33,6 +33,7 @@
   <xi:include href="meta.xml" />
   <xi:include href="language-support.xml" />
   <xi:include href="package-notes.xml" />
+  <xi:include href="coding-conventions.xml" />
   
         
 </book>

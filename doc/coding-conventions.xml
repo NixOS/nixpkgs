@@ -1,0 +1,175 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-conventions">
+
+<title>Coding conventions</title>
+
+
+<section><title>Syntax</title>
+
+<itemizedlist>
+
+  <listitem><para>Use 2 spaces of indentation per indentation level in
+  Nix expressions, 4 spaces in shell scripts.</para></listitem>
+
+  <listitem><para>Do not use tab characters, i.e. configure your
+  editor to use soft tabs.  For instance, use <literal>(setq-default
+  indent-tabs-mode nil)</literal> in Emacs.  Everybody has different
+  tab settings so it’s asking for trouble.</para></listitem>
+
+  <listitem><para>Use <literal>lowerCamelCase</literal> for variable
+  names, not <literal>UpperCamelCase</literal>.  TODO: naming of
+  attributes in
+  <filename>all-packages.nix</filename>?</para></listitem>
+
+  <listitem><para>Function calls with attribute set arguments are
+  written as
+
+<programlisting>
+foo {
+  arg = ...;
+}
+</programlisting>
+
+  not
+
+<programlisting>
+foo
+{
+  arg = ...;
+}
+</programlisting>
+
+  Also fine is
+
+<programlisting>
+foo { arg = ...; }
+</programlisting>
+
+  if it's a short call.</para></listitem>
+
+  <listitem><para>In attribute sets or lists that span multiple lines,
+  the attribute names or list elements should be aligned:
+
+<programlisting>
+# A long list.
+list =
+  [ elem1
+    elem2
+    elem3
+  ];
+
+# A long attribute set.
+attrs =
+  { attr1 = short_expr;
+    attr2 =
+      if true then big_expr else big_expr;
+  };
+
+# Alternatively:
+attrs = {
+  attr1 = short_expr;
+  attr2 =
+    if true then big_expr else big_expr;
+};
+</programlisting>
+
+  </para></listitem>
+
+  <listitem><para>Short lists or attribute sets can be written on one
+  line:
+
+<programlisting>
+# A short list.
+list = [ elem1 elem2 elem3 ];
+
+# A short set.
+attrs = { x = 1280; y = 1024; };
+</programlisting>
+
+  </para></listitem>
+
+  <listitem><para>Breaking in the middle of a function argument can
+  give hard-to-read code, like
+
+<programlisting>
+someFunction { x = 1280;
+  y = 1024; } otherArg
+  yetAnotherArg
+</programlisting>
+
+  (especially if the argument is very large, spanning multiple
+  lines).</para>
+
+  <para>Better:
+
+<programlisting>
+someFunction
+  { x = 1280; y = 1024; }
+  otherArg
+  yetAnotherArg
+</programlisting>
+
+  or
+
+<programlisting>
+let res = { x = 1280; y = 1024; };
+in someFunction res otherArg yetAnotherArg
+</programlisting>
+
+  </para></listitem>
+
+  <listitem><para>The bodies of functions, asserts, and withs are not
+  indented to prevent a lot of superfluous indentation levels, i.e.
+
+<programlisting>
+{ arg1, arg2 }:
+assert system == "i686-linux";
+stdenv.mkDerivation { ...
+</programlisting>
+
+  not
+
+<programlisting>
+{ arg1, arg2 }:
+  assert system == "i686-linux";
+    stdenv.mkDerivation { ...
+</programlisting>
+
+  </para></listitem>
+
+  <listitem><para>Function formal arguments are written as:
+
+<programlisting>
+{ arg1, arg2, arg3 }:
+</programlisting>
+
+  but if they don't fit on one line they're written as:
+
+<programlisting>
+{ arg1, arg2, arg3
+, arg4, ...
+, # Some comment...
+  argN
+}:
+</programlisting>
+
+  </para></listitem>
+
+</itemizedlist>
+
+</section>
+
+
+<section><title>File naming and organisation</title>
+
+<para>Names of files and directories should be in lowercase, with
+dashes between words — not in camel case.  For instance, it should be
+<filename>all-packages.nix</filename>, not
+<filename>allPackages.nix</filename> or
+<filename>AllPackages.nix</filename>.</para>
+
+</section>
+
+
+</chapter>
