@@ -170,7 +170,7 @@ ClassC3Componentised = buildPerlPackage rec {
 <para>
   Python packages that use <varname>buildPythonPackage</varname> are
   defined
-  in <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/python-packages.nix"><filename>pkgs/python-packages.nix</filename></link>.
+  in <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>.
   Most of them are simple.  For example:
 
   <programlisting>

@@ -21,11 +21,10 @@
 
     <copyright>
       <year>2008</year>
+      <year>2009</year>
       <holder>Eelco Dolstra</holder>
     </copyright>
 
-    <date>June 2008</date>
-    
   </info>
 
   <xi:include href="introduction.xml" />
