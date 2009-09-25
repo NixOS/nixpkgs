@@ -28,7 +28,8 @@
   ./programs/ssmtp.nix
   ./security/consolekit.nix
   ./security/pam.nix
-  ./security/polkit.nix
+  ./security/policykit.nix
+  #./security/polkit.nix # Currently disabled; using the old policykit.
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
   ./services/audio/alsa.nix

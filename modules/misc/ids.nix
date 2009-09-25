@@ -47,8 +47,10 @@ in
     gnunetd = 17;
     pulseaudio = 22; # must match `pulseaudio' GID
     gpsd = 23;
-    uptimed = 24;
-    ddclient = 25;
+    polkituser = 28;
+    uptimed = 29;
+    ddclient = 30;
+    # When adding a uid, make sure it doesn't match an existing gid.
 
     nixbld = 30000; # start of range of uids
     nobody = 65534;
@@ -82,6 +84,8 @@ in
     tape = 25;
     video = 26;
     dialout = 27;
+    polkituser = 28;
+    # When adding a gid, make sure it doesn't match an existing uid.
 
     users = 100;
     nixbld = 30000;
