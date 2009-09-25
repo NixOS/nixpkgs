@@ -64,7 +64,7 @@ let
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           session required ${pam_unix2}/lib/security/pam_unix2.so
           ${optionalString ownDevices
-              "session optional ${pkgs.console_kit}/lib/security/pam_ck_connector.so"}
+              "session optional ${pkgs.consolekit}/lib/security/pam_ck_connector.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
         '';

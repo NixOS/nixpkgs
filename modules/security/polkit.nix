@@ -6,9 +6,9 @@ with pkgs.lib;
 
   config = {
 
-    environment.systemPackages = [ pkgs.policy_kit ];
+    environment.systemPackages = [ pkgs.polkit ];
 
-    services.dbus.packages = [ pkgs.policy_kit ];
+    services.dbus.packages = [ pkgs.polkit ];
 
     security.pam.services = [ { name = "polkit-1"; } ];
 

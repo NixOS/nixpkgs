@@ -46,7 +46,7 @@ let
       # Start a ConsoleKit session so that we get ownership of various
       # devices.
       if test -z "$XDG_SESSION_COOKIE"; then
-          exec ${pkgs.console_kit}/bin/ck-launch-session "$0" "$sessionType"
+          exec ${pkgs.consolekit}/bin/ck-launch-session "$0" "$sessionType"
       fi
 
       # Load X defaults.

@@ -6,15 +6,15 @@ with pkgs.lib;
 
   config = {
 
-    environment.systemPackages = [ pkgs.console_kit ];
+    environment.systemPackages = [ pkgs.consolekit ];
 
-    services.dbus.packages = [ pkgs.console_kit ];
+    services.dbus.packages = [ pkgs.consolekit ];
 
     environment.etc = singleton
       { source = (pkgs.buildEnv {
-          name = "console-kit-config";
+          name = "consolekit-config";
           pathsToLink = [ "/etc/ConsoleKit" ];
-          paths = [ pkgs.console_kit pkgs.udev ];
+          paths = [ pkgs.consolekit pkgs.udev ];
         }) + "/etc/ConsoleKit";
         target = "ConsoleKit";
       };
