@@ -11,9 +11,7 @@ let
   backgrounds =
     let
     
-      specificThemes =
-        config.services.ttyBackgrounds.defaultSpecificThemes
-        ++ config.services.ttyBackgrounds.specificThemes;
+      specificThemes = config.services.ttyBackgrounds.specificThemes;
         
       overridenTTYs = map (x: x.tty) specificThemes;
 
@@ -24,8 +22,8 @@ let
         pkgs.lib.filter (x: !(pkgs.lib.elem x overridenTTYs)) requiredTTYs;
 
     in      
-      (map (ttyNumber: {
-        tty = ttyNumber;
+      (map (tty: {
+        inherit tty;
         theme = config.services.ttyBackgrounds.defaultTheme;
       }) defaultTTYs)
       ++ specificThemes;
@@ -71,33 +69,10 @@ in
         '';
       };
 
-      defaultSpecificThemes = mkOption {
-        default = [
-          /*
-          { tty = 6;
-            theme = pkgs.fetchurl { # Yeah!
-              url = mirror://gentoo/distfiles/Theme-Pativo.tar.bz2;
-              md5 = "9e13beaaadf88d43a5293e7ab757d569";
-            };
-          }
-          */
-          { tty = 10;
-            theme = pkgs.themes "theme-gnu";
-          }
-        ];
-        description = ''
-          This option sets specific themes for virtual consoles.  If you
-          just want to set themes for additional consoles, use
-          <option>services.ttyBackgrounds.specificThemes</option>.
-        '';
-      };
-
       specificThemes = mkOption {
-        default = [
-        ];
+        default = [ ];
         description = ''
-          This option allows you to set specific themes for virtual
-          consoles.
+          This option overrides the theme for specific virtual consoles.
         '';
       };
       
@@ -113,6 +88,11 @@ in
     assertions = singleton
       { assertion = kernelPackages.splashutils != null;
         message = "kernelPackages.splashutils may not be false";
+      };
+
+    services.ttyBackgrounds.specificThemes = singleton
+      { tty = config.services.syslogd.tty;
+        theme = pkgs.themes "theme-gnu";
       };
 
     environment.etc = singleton
@@ -136,24 +116,23 @@ in
           # For each console...
           for tty in ${toString (map (x: x.tty) backgrounds)}; do
               # Make sure that the console exists.
-              echo -n "" > /dev/tty$tty 
+              echo -n "" > /dev/$tty
 
               # Set the theme as determined by tty-backgrounds-combine.sh
-              # above.
+              # above.  Note that splashutils needs a TTY number
+              # instead of a device name, hence the ''${tty:3}.
               theme=$(readlink ${themesUnpacked}/$tty)
-              ${splashutils}/${splashutils.controlName} --tty $tty -c setcfg -t $theme || true
-              ${splashutils}/${splashutils.controlName} --tty $tty -c setpic -t $theme || true
-              ${splashutils}/${splashutils.controlName} --tty $tty -c on || true
+              ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c setcfg -t $theme || true
+              ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c setpic -t $theme || true
+              ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c on || true
           done
         '';
 
       postStop =
         ''
-          /var/run/current-system/sw/bin/ps -axuw > /tmp/ps
-        
           # Disable the theme on each console.
           for tty in ${toString (map (x: x.tty) backgrounds)}; do
-              ${splashutils}/${splashutils.controlName} --tty $tty -c off || true
+              ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c off || true
           done
         '';
     };

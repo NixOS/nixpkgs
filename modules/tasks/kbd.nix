@@ -1,14 +1,15 @@
 {pkgs, config, ...}:
 
+with pkgs.lib;
+
 let
 
   # think about where to put this chunk of code!
   # required by other pieces as well
   requiredTTYs = config.services.mingetty.ttys
     ++ config.boot.extraTTYs
-    ++ [config.services.syslogd.tty];
-  ttyNumbers = requiredTTYs;
-  ttys = map (nr: "/dev/tty" + toString nr) ttyNumbers;
+    ++ [ config.services.syslogd.tty ];
+  ttys = map (dev: "/dev/${dev}") requiredTTYs;
   defaultLocale = config.i18n.defaultLocale;
   consoleFont = config.i18n.consoleFont;
   consoleKeyMap = config.i18n.consoleKeyMap;
@@ -22,21 +23,21 @@ in
 
     # most options are defined in i18n.nix
 
-    boot.extraTTYs = pkgs.lib.mkOption {
+    boot.extraTTYs = mkOption {
       default = [];
-      example = [8 9];
-      description = "
+      example = ["tty8" "tty9"];
+      description = ''
         Tty (virtual console) devices, in addition to the consoles on
         which mingetty and syslogd run, that must be initialised.
         Only useful if you have some program that you want to run on
         some fixed console.  For example, the NixOS installation CD
         opens the manual in a web browser on console 7, so it sets
-        <option>boot.extraTTYs</option> to <literal>[7]</literal>.
-      ";
+        <option>boot.extraTTYs</option> to <literal>["tty7"]</literal>.
+      '';
     };
     
     # dummy option so that requiredTTYs can be passed
-    requiredTTYs = pkgs.lib.mkOption {
+    requiredTTYs = mkOption {
       default = [];
       description = "
         FIXME: find another place for this option.
@@ -55,16 +56,14 @@ in
 
     environment.systemPackages = [pkgs.kbd];
   
-    jobs = pkgs.lib.singleton {
-      name = "kbd";
+    jobs = singleton
+      { name = "kbd";
 
-      job = ''
-        description "Keyboard / console initialisation"
+        description = "Keyboard / console initialisation";
 
-        start on udev
+        startOn = "udev";
 
-        script
-
+        preStart = ''
           export LANG=${defaultLocale}
           export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
           export PATH=${pkgs.gzip}/bin:$PATH # Needed by setfont
@@ -116,10 +115,8 @@ in
 
           # Set the keymap.
           ${pkgs.kbd}/bin/loadkeys '${consoleKeyMap}'
-
-        end script
-      '';
-    };
+        '';
+      };
 
   };
 

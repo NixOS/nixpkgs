@@ -1,12 +1,19 @@
-{pkgs, config, ...}: 
+# Execute the game `rogue' on tty 9.  Mostly used by the NixOS
+# installation CD.
 
-# Show rogue game on tty9
-# Originally used only by installation CD
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
-  inherit (pkgs.lib) mkOption;
+  cfg = config.services.rogue;
+
+in
   
+{
+  ###### interface
+
   options = {
   
     services.rogue.enable = mkOption {
@@ -17,43 +24,40 @@ let
       '';
     };
 
-    services.rogue.ttyNumber = mkOption {
-      default = "9";
+    services.rogue.tty = mkOption {
+      default = "tty9";
       description = ''
         Virtual console on which to run Rogue.
       '';
     };
 
   };
+
   
-  cfg = config.services.rogue;
+  ###### implementation
 
-in
+  config = mkIf cfg.enable {
 
-pkgs.lib.mkIf cfg.enable {
-  require = [options];
-
-  boot.extraTTYs = [cfg.ttyNumber];
+    boot.extraTTYs = [ cfg.tty ];
   
-  services.extraJobs = pkgs.lib.singleton
-    { name = "rogue";
+    jobs = singleton
+      { name = "rogue";
 
-      job = ''
-        description "Rogue dungeon crawling game"
-	
-        start on udev
-        stop on shutdown
+        description = "Rogue dungeon crawling game";
 
-        chdir /root
+        startOn = "udev";
+        stopOn = "shutdown";
 
-        respawn ${pkgs.rogue}/bin/rogue < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
-      '';
-    };
+        extraConfig = "chdir /root";
 
-  services.ttyBackgrounds.specificThemes = pkgs.lib.singleton
-    { tty = cfg.ttyNumber;
-      theme = pkgs.themes "theme-gnu";
-    };
+        exec = "${pkgs.rogue}/bin/rogue < /dev/{cfg.tty} > /dev/{cfg.tty} 2>&1";
+      };
 
-  services.mingetty.helpLine = "\nPress <Alt-F${toString cfg.ttyNumber}> to play Rogue.";
+    services.ttyBackgrounds.specificThemes = singleton
+      { tty = cfg.tty;
+        theme = pkgs.themes "theme-gnu";
+      };
+
+  };
+    
 }
