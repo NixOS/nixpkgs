@@ -114,23 +114,23 @@ composableDerivation {} ( fixed : {
     };
 
   cfg = {
-    mysqlSupport = true;
-    mysqliSupport = true;
-    pdo_mysqlSupport = true;
-    libxml2Support = true;
-    apxs2Support = true;
-    bcmathSupport = true;
-    socketsSupport = true;
-    curlSupport = true;
-    gettextSupport = true;
-    postgresqlSupport = true;
-    sqliteSupport = true;
-    soapSupport = true;
-    zlibSupport = true;
-    opensslSupport = true;
-    xdebugSupport = true;
-    mbstringSupport = true;
-    gdSupport = true;
+    mysqlSupport = getConfig ["php" "mysql"] true;
+    mysqliSupport = getConfig ["php" "mysqli"] true;
+    pdo_mysqlSupport = getConfig ["php" "pdo_mysql"] true;
+    libxml2Support = getConfig ["php" "libxml2"] true;
+    apxs2Support = getConfig ["php" "apxs2"] true;
+    bcmathSupport = getConfig ["php" "bcmath"] true;
+    socketsSupport = getConfig ["php" "sockets"] true;
+    curlSupport = getConfig ["php" "curl"] true;
+    gettextSupport = getConfig ["php" "gettext"] true;
+    postgresqlSupport = getConfig ["php" "postgresql"] true;
+    sqliteSupport = getConfig ["php" "sqlite"] true;
+    soapSupport = getConfig ["php" "soap"] true;
+    zlibSupport = getConfig ["php" "zlib"] true;
+    opensslSupport = getConfig ["php" "openssl"] true;
+    xdebugSupport = getConfig ["php" "xdebug"] true;
+    mbstringSupport = getConfig ["php" "mbstring"] true;
+    gdSupport = getConfig ["php" "gd"] true;
   };
 
   # only -O1

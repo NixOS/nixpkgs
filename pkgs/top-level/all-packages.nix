@@ -2262,7 +2262,7 @@ let
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
       flex bison apacheHttpd mysql libxml2 # gettext
-      zlib curl gd postgresql openssl pkgconfig sqlite;
+      zlib curl gd postgresql openssl pkgconfig sqlite getConfig;
   };
 
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
