@@ -3010,7 +3010,7 @@ let
     inherit stdenv fetchurl lib;
   };
 
-  console_kit = import ../development/libraries/console-kit {
+  consolekit = import ../development/libraries/consolekit {
     inherit stdenv fetchurl pkgconfig dbus_glib zlib pam polkit;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;

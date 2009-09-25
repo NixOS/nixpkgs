@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, libX11, polkit }:
 
 stdenv.mkDerivation rec {
-  name = "console-kit-0.3.1";
+  name = "consolekit-0.3.1";
   
   src = fetchurl {
     url = http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-0.3.1.tar.bz2;
