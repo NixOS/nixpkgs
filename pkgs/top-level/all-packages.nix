@@ -3011,7 +3011,7 @@ let
   };
 
   console_kit = import ../development/libraries/console-kit {
-    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam policy_kit;
+    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam polkit;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
   };
@@ -4080,16 +4080,14 @@ let
     inherit (xlibs) libXi libSM libXmu libXext libX11;
   };
 
-  policy_kit = import ../development/libraries/policy-kit {
+  polkit = import ../development/libraries/polkit {
     inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext;
     inherit (gtkLibs) glib;
   };
 
-  policy_kit_0_9 = import ../development/libraries/policy-kit/0.9.nix {
-    inherit stdenv fetchurl pkgconfig expat pam intltool gettext
-      dbus_glib;
+  policykit = import ../development/libraries/policykit {
+    inherit stdenv fetchurl pkgconfig dbus dbus_glib expat pam intltool gettext;
     inherit (gtkLibs) glib;
-    dbus = dbus.libs;
   };
 
   poppler = makeOverridable (import ../development/libraries/poppler) {
@@ -8052,7 +8050,7 @@ let
       gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
       libcm python dbus dbus_glib ncurses which libxml2Python
       iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool enchant isocodes policy_kit
+      xmlto docbook2x docbook_xsl intltool enchant isocodes polkit
       libproxy sqlite;
   });
 

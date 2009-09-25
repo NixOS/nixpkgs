@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, libX11, policy_kit }:
+{ stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, libX11, polkit }:
 
 stdenv.mkDerivation rec {
   name = "console-kit-0.3.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b834ly6l8l76awr2pn2xz3ic6ilhfif4h3nsi96ffa91n09ydk0";
   };
   
-  buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 policy_kit ];
+  buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 polkit ];
 
   configureFlags = "--enable-pam-module --with-pam-module-dir=$(out)/lib/security --localstatedir=/var --sysconfdir=/etc";
 

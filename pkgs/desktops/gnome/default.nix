@@ -329,7 +329,7 @@ rec {
     buildInputs = [
       pkgconfig perl perlXMLParser GConf gnomedocutils
       gtk libgnome libgnomeui gettext libxslt intltool
-      policy_kit dbus_glib
+      polkit dbus_glib
     ];
 
     configureFlags = "--disable-scrollkeeper";
