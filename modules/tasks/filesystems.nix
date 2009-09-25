@@ -112,10 +112,9 @@ let
 
 ###### implementation
 
-  inherit (pkgs) e2fsprogs;
   fileSystems = config.fileSystems;
   mountPoints = map (fs: fs.mountPoint) fileSystems;
-  devices = map (fs: if fs.device != null then fs.device else "LABEL=" + fs.label) fileSystems;
+  devices = map (fs: if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
   fsTypes = map (fs: fs.fsType) fileSystems;
   optionss = map (fs: fs.options) fileSystems;
   autocreates = map (fs: fs.autocreate) fileSystems;
@@ -127,7 +126,7 @@ let
     start on ip-up
 
     script
-      PATH=${e2fsprogs}/sbin:$PATH
+      PATH=${pkgs.e2fsprogs}/sbin:${pkgs.utillinuxng}/sbin:$PATH
 
       mountPoints=(${toString mountPoints})  
       devices=(${toString devices})
@@ -152,25 +151,29 @@ let
           options=''${optionss[$n]}
           autocreate=''${autocreates[$n]}
 
-          isLabel=
-          if echo "$device" | grep -q '^LABEL='; then isLabel=1; fi
-
+          # A device is a pseudo-device (i.e. not an actual device
+          # node) if it's not an absolute path (e.g. an NFS server
+          # such as machine:/path), if it starts with // (a CIFS FS),
+          # a known pseudo filesystem (such as tmpfs), or the device
+          # is a directory (e.g. a bind mount).
           isPseudo=
-          if test "$fsType" = "nfs" || test "$fsType" = "tmpfs" ||
-            test "$fsType" = "ext3cow"; then isPseudo=1; fi
+          test "''${device:0:1}" != / -o "''${device:0:2}" = // -o "$fsType" = "tmpfs" \
+              -o -d "$device" && isPseudo=1
 
-          if ! test -n "$isLabel" -o -n "$isPseudo" -o -e "$device"; then
+          if ! test -n "$isPseudo" -o -e "$device"; then
               echo "skipping $device, doesn't exist (yet)"
               continue
           fi
 
-          # !!! quick hack: if mount point already exists, try a
-          # remount to change the options but nothing else.
+          # !!! quick hack: if the mount point is already mounted, try
+          # a remount to change the options but nothing else.
           if cat /proc/mounts | grep -F -q " $mountPoint "; then
-              echo "remounting $device on $mountPoint"
-              ${mount}/bin/mount -t "$fsType" \
-                  -o remount,"$options" \
-                  "$device" "$mountPoint" || true
+              if test "''${device:0:2}" != //; then
+                  echo "remounting $device on $mountPoint"
+                  ${mount}/bin/mount -t "$fsType" \
+                      -o remount,"$options" \
+                      "$device" "$mountPoint" || true
+              fi
               continue
           fi
 
@@ -178,8 +181,7 @@ let
           # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
           # contains more accurate info when using loop devices.
 
-          # !!! not very smart about labels yet; should resolve the label somehow.
-          if test -z "$isLabel" -a -z "$isPseudo"; then
+          if test -z "$isPseudo"; then
 
             device=$(readlink -f "$device")
 
