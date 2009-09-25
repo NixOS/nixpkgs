@@ -138,7 +138,14 @@ in
           ''
             pid=$(cat ${homeDir}/pid)
             if test -n "$pid"; then
-                kill -9 $pid
+                kill $pid
+            fi
+
+            # !!! Hack: doesn't belong here.
+            pid=$(cat /var/run/ConsoleKit/pid)
+            if test -n "$pid"; then
+                kill $pid
+                rm /var/run/ConsoleKit/pid
             fi
           '';
       };
