@@ -1105,6 +1105,11 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  nbd = import ../tools/networking/nbd {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) glib;
+  };
+
   nc6 = composedArgsAndFun (selectVersion ../tools/networking/nc6 "1.0") {
     inherit builderDefs;
   };
