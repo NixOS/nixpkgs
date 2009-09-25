@@ -7,14 +7,14 @@
 
 assert stdenv ? glibc;
 
-let version = "0.8.5"; in
+let version = "0.8.6"; in
 
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnash/${version}/${name}.tar.bz2";
-    sha256 = "1cqhnbp99rb0n4x2bsz8wwh7vvc2kclxc1wmrl5vaapd9qhp5whn";
+    sha256 = "1sijafl5c5a005p8jxgn1cdmxkj7a6142dklrlzm9g55n9gbgx05";
   };
 
   builder = ./builder.sh;
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ming dejagnu python
   ];
 
-  inherit SDL_mixer SDL;
+  inherit SDL_mixer SDL gstPluginsBase;
 
   # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
   NIX_LDFLAGS="-lX11 -lXext";
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
 
     # Wrap programs so the find the GStreamer plug-ins they need
     # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
-    for prog in $out/bin/*
+    for prog in "$out/bin/"*
     do
-      wrapProgram "$prog" --prefix                                              \
+      wrapProgram "$prog" --prefix                                            \
         GST_PLUGIN_PATH ":"                                                     \
         "${gstPluginsBase}/lib/gstreamer-0.10:${gstFfmpeg}/lib/gstreamer-0.10"
     done
@@ -70,7 +70,20 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/gnash/;
-    description = "GNU Gnash, an SWF movie player";
+    description = "GNU Gnash, a libre SWF (Flash) movie player";
+
+    longDescription = ''
+      Gnash is a GNU Flash movie player.  Flash is an animation file format
+      pioneered by Macromedia which continues to be supported by their
+      successor company, Adobe.  Flash has been extended to include audio and
+      video content, and programs written in ActionScript, an
+      ECMAScript-compatible language.  Gnash is based on GameSWF, and
+      supports most SWF v7 features and some SWF v8 and v9.
+    '';
+
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;
   };
 } // {mozillaPlugin = "/plugins";}
