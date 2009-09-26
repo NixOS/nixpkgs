@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     --localstatedir=/var
     --with-eject=${eject}/bin/eject
     --with-linux-input-header=${stdenv.glibc}/include/linux/input.h
+    --enable-umount-helper
   '';
 
   propagatedBuildInputs = [libusb libsmbios];
@@ -41,4 +42,6 @@ stdenv.mkDerivation rec {
         --replace /bin/umount ${utillinuxng}/bin/umount
     done
   '';
+
+  installFlags = "slashsbindir=$(out)/sbin";
 }
