@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE window>
+
+<!-- To edit this file I recommend you to use: 
+     http://xulfr.org/outils/xulediteur.xul
+  -->
+
+<window
+  id     = "nixos-gui"
+  title  = "NixOS gui"
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="jquery-1.3.2.js"/>
+  <script src="treeView.js"/>
+  <script src="main.js"/>
+  <script src="io.js"/>
+  <tree flex="1" id="option-list" persist="height">
+    <treecols>
+      <treecol persist="hidden width" flex="1" id="opt-success" label="Success"/>
+      <splitter class="tree-splitter"/>
+      <treecol persist="hidden width" flex="30" id="opt-name" label="Option"/>
+      <splitter class="tree-splitter"/>
+      <treecol persist="hidden width" flex="50" id="opt-desc" label="Description"
+               primary="true"/>
+    </treecols>
+    <treechildren id="first-child" flex="1"/>
+  </tree>
+  <progressmeter id="progress-bar" value="0%"/>
+</window>
