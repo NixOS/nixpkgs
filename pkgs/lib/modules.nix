@@ -211,14 +211,15 @@ rec {
                   declarations =
                     map (m: {
                       source = m.key;
-                      value = m.options;
                     }) (declarationsOf name);
     
                   definitions =
                     map (m: {
                       source = m.key;
-                      value = m.config;
                     }) (definitionsOf name);
+
+                  config = builtins.tryEval
+                    (lib.getAttr name result.config);
                 }
             else if all isAttrs values then
               (recurseInto name modules).options
