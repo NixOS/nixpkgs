@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kp4l21786kbvnzlf3n9svl4m93nzi1hr9pknv0r3zhzfz3hgkw4";
   };
 
+  configureFlags = "--sysconfdir=/etc";
+
   preConfigure =
     ''
       # Install the manpages (xmlto isn't really needed).
@@ -15,6 +17,8 @@ stdenv.mkDerivation rec {
 
       # Don't screw up the PATH.
       substituteInPlace pm/pm-functions.in --replace '/sbin:/usr/sbin:/bin:/usr/bin' '$PATH'
+
+      substituteInPlace pm/sleep.d/00logging --replace /bin/uname "$(type -P uname)"
     '';
 
   meta = {
