@@ -49,7 +49,7 @@ rec {
   };
 
   topGit = stdenv.mkDerivation {
-    name = "TopGit-git-patched";
+    name = "TopGit-git"; # official release 0.8
     src = sourceByName "topGit"; # destination directory is patched
     phases="unpackPhase patchPhase installPhase";
     installPhase = ''
