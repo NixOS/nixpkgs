@@ -1,9 +1,9 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "mercurial-1.2.2";
+stdenv.mkDerivation rec {
+  name = "mercurial-1.2.1";
   src = fetchurl {
-    url = http://www.selenic.com/mercurial/release/mercurial-1.2.1.tar.gz;
+    url = "http://www.selenic.com/mercurial/release/${name}.tar.gz";
     sha256 = "0zmldqvl6lbg40d4jbx6hm8790bi8h4dfmawinvq5gfgpij78603";
   };
 
