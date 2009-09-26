@@ -5043,7 +5043,7 @@ let
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libuuid perl perlXMLParser
       gettext zlib eject libsmbios udev gperf dmidecode utillinuxng
-      consolekit policykit;
+      consolekit policykit pmutils;
     inherit (gtkLibs) glib;
   };
 

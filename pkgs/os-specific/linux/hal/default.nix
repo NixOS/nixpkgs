@@ -33,13 +33,17 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
              hald/linux/coldplug.c hald/linux/blockdev.c \
-             tools/hal-storage-mount.c ./tools/hal-storage-shared.c
+             tools/hal-storage-mount.c ./tools/hal-storage-shared.c \
+             tools/hal-system-power-pm-is-supported.c \
+             tools/linux/hal-*-linux
     do
       substituteInPlace $i \
         --replace /usr/sbin/dmidecode ${dmidecode}/sbin/dmidecode \
         --replace /sbin/udevadm ${udev}/sbin/udevadm \
         --replace /bin/mount ${utillinuxng}/bin/mount \
-        --replace /bin/umount ${utillinuxng}/bin/umount
+        --replace /bin/umount ${utillinuxng}/bin/umount \
+        --replace /usr/bin/pm-is-supported ${pmutils}/bin/pm-is-supported \
+        --replace /usr/sbin/pm ${pmutils}/sbin/pm
     done
   '';
 
