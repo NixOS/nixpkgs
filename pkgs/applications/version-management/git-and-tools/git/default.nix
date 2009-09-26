@@ -87,6 +87,23 @@ stdenv.mkDerivation rec {
    + ''# install bash completion script
       d="$out/etc/bash_completion.d"
       ensureDir $d; cp contrib/completion/git-completion.bash "$d"
+     ''
+   # Don't know why hardlinks aren't created. git installs the same executable multiple times into $out
+   # so replace duplicates by symlinks because I haven't tested whether the nix
+   # distribution system can handle hardlinks. This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
+   + ''#
+      set -x
+      declare -A seen
+      find $out -type f | while read f; do
+        sum=$(md5sum "$f");
+        sum=''\${sum/ */}
+        if [ -z "''\${seen["$sum"]}" ]; then
+          seen["$sum"]="$f"
+        else
+          rm "$f"; ln -s "''\${seen["$sum"]}" "$f"
+        fi
+      done
+
      '';
 
   meta = {
