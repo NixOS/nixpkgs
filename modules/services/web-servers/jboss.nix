@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{servicesPath, pkgs, config, ...}:
 
 ###### interface
 let
@@ -55,7 +55,7 @@ in
 let
 
 cfg = config.services.jboss;
-jbossService = import ../../services/jboss {
+jbossService = import (servicesPath + /jboss) {
         inherit (pkgs) stdenv jboss su;
         inherit (cfg) tempDir logDir libUrl deployDir serverDir user useJK;
 };
