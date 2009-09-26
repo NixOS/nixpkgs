@@ -48,7 +48,8 @@ in
   
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [hal];
+    # !!! move pmutils somewhere else
+    environment.systemPackages = [hal pkgs.pmutils];
 
     services.hal.packages = [hal pkgs.hal_info];
 
@@ -73,12 +74,25 @@ in
         startOn = if config.powerManagement.enable then "acpid" else "dbus";
         stopOn = "shutdown";
 
-        # !!! HACK? These environment variables manipulated inside
-        # 'src'/hald/mmap_cache.c are used for testing the daemon
         environment =
-          { HAL_FDI_SOURCE_PREPROBE = "${fdi}/share/hal/fdi/preprobe";
+          { # !!! HACK? These environment variables manipulated inside
+            # 'src'/hald/mmap_cache.c are used for testing the daemon.
+            HAL_FDI_SOURCE_PREPROBE = "${fdi}/share/hal/fdi/preprobe";
             HAL_FDI_SOURCE_INFORMATION = "${fdi}/share/hal/fdi/information";
             HAL_FDI_SOURCE_POLICY = "${fdi}/share/hal/fdi/policy";
+
+            # Stuff needed by the shell scripts run by HAL (in particular pm-utils).
+            HALD_RUNNER_PATH = concatStringsSep ":"
+              [ "${pkgs.coreutils}/bin"
+                "${pkgs.gnugrep}/bin"
+                "${pkgs.dbus.tools}/bin"
+                "${pkgs.procps}/bin"
+                "${pkgs.procps}/sbin"
+                "${config.system.sbin.modprobe}/sbin"
+                "${pkgs.module_init_tools}/bin"
+                "${pkgs.module_init_tools}/sbin"
+                "${pkgs.kbd}/bin"
+              ];
           };
 
         preStart =
@@ -91,7 +105,7 @@ in
             # !!! Hack: start the daemon here to make sure it's
             # running when the Upstart job reaches the "running"
             # state.  Should be fixable in Upstart 0.6.
-            ${hal}/sbin/hald
+            ${hal}/sbin/hald --use-syslog # --verbose=yes 
           '';
 
         postStop =
