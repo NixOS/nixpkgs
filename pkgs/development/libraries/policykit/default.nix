@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   configureFlags = "--localstatedir=/var --sysconfdir=/etc";
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc"; # keep `make install' happy
+
+  # Read policy files from /etc/PolicyKit/policy instead of
+  # /usr/share/PolicyKit/policy.  Using PACKAGE_DATA_DIR is hacky, but
+  # it works because it's only used in the C code for finding the
+  # policy directory.
+  NIX_CFLAGS_COMPILE = "-DPACKAGE_DATA_DIR=\"/etc\"";
   
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;
