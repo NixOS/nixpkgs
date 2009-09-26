@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, expat, pam
-, intltool, gettext }:
+, intltool, gettext, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "policykit-0.9";
@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1dw05s4xqj67i3c13knzl04l8jap0kywzpav6fidpmqrximpq37l";
   };
   
-  buildInputs = [ pkgconfig glib dbus.libs dbus_glib expat pam intltool gettext ];
+  buildInputs =
+    [ pkgconfig glib dbus.libs dbus_glib expat pam intltool
+      gettext libxslt
+    ];
 
   configureFlags = "--localstatedir=/var --sysconfdir=/etc";
 
@@ -20,6 +23,9 @@ stdenv.mkDerivation rec {
   # it works because it's only used in the C code for finding the
   # policy directory.
   NIX_CFLAGS_COMPILE = "-DPACKAGE_DATA_DIR=\"/etc\"";
+
+  # Needed to build the manpages.
+  XML_CATALOG_FILES = "${docbook_xsl}/xml/xsl/docbook/catalog.xml";
   
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;

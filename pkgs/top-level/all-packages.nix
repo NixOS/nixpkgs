@@ -4086,7 +4086,8 @@ let
   };
 
   policykit = import ../development/libraries/policykit {
-    inherit stdenv fetchurl pkgconfig dbus dbus_glib expat pam intltool gettext;
+    inherit stdenv fetchurl pkgconfig dbus dbus_glib expat pam
+      intltool gettext libxslt docbook_xsl;
     inherit (gtkLibs) glib;
   };
 
