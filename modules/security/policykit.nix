@@ -2,6 +2,21 @@
 
 with pkgs.lib;
 
+let
+
+  conf = pkgs.writeText "PolicyKit.conf"
+    ''
+      <?xml version="1.0" encoding="UTF-8"?>
+
+      <!DOCTYPE pkconfig PUBLIC "-//freedesktop//DTD PolicyKit Configuration 1.0//EN"
+        "http://hal.freedesktop.org/releases/PolicyKit/1.0/config.dtd">
+
+      <config version="0.1">
+      </config>
+    '';
+
+in
+
 {
 
   config = {
@@ -21,6 +36,11 @@ with pkgs.lib;
     users.extraGroups = singleton
       { name = "polkituser";
         gid = config.ids.gids.polkituser;
+      };
+
+    environment.etc = singleton
+      { source = conf;
+        target = "PolicyKit/PolicyKit.conf";
       };
 
     system.activationScripts.policyKit = fullDepEntry
