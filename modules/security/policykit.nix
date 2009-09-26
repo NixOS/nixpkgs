@@ -38,11 +38,19 @@ in
         gid = config.ids.gids.polkituser;
       };
 
-    environment.etc = singleton
-      { source = conf;
-        target = "PolicyKit/PolicyKit.conf";
-      };
-
+    environment.etc =
+      [ { source = conf;
+          target = "PolicyKit/PolicyKit.conf";
+        }
+        { source = (pkgs.buildEnv {
+            name = "PolicyKit-policies";
+            pathsToLink = [ "/share/PolicyKit/policy" ];
+            paths = [ pkgs.policykit pkgs.consolekit pkgs.hal ];
+          }) + "/share/PolicyKit/policy";
+          target = "PolicyKit/policy";
+        }
+      ];
+      
     system.activationScripts.policyKit = fullDepEntry
       ''
         mkdir -m 0770 -p /var/run/PolicyKit
