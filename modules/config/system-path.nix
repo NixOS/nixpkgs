@@ -20,6 +20,7 @@ let
       pkgs.curl
       pkgs.diffutils
       pkgs.e2fsprogs
+      pkgs.eject # HAL depends on it anyway
       pkgs.findutils
       pkgs.gawk
       pkgs.glibc # for ldd, getent
