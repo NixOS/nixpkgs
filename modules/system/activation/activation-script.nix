@@ -94,7 +94,6 @@ let
 
       mkdir -m 1777 -p /var/tmp
 
-
       # Empty, read-only home directory of many system accounts.
       mkdir -m 0555 -p /var/empty
     '' [
@@ -175,6 +174,10 @@ let
 
       # Prevent the current configuration from being garbage-collected.
       ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
+    '';
+
+    media = noDepEntry ''
+      mkdir -p /media
     '';
     
   };
