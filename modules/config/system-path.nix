@@ -60,7 +60,7 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
-    ] ++ optional (pkgs.stdenv.system != "armv5tel-linux") [ pkgs.grub ]
+    ]
     ++ config.environment.extraPackages;
 
 

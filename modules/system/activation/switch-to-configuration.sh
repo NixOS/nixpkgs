@@ -22,14 +22,20 @@ EOF
 fi
 
 if test "$action" = "switch" -o "$action" = "boot"; then
-    if test -n "@grubDevice@"; then
-        mkdir -m 0700 -p /boot/grub
-        @grubMenuBuilder@ @out@
-        if test "$NIXOS_INSTALL_GRUB" = 1; then
-            @grub@/sbin/grub-install "@grubDevice@" --no-floppy --recheck
-        fi
+    if [ "@bootLoader@" == "grub" ]; then
+      if test -n "@grubDevice@"; then
+          mkdir -m 0700 -p /boot/grub
+          @menuBuilder@ @out@
+          if test "$NIXOS_INSTALL_GRUB" = 1; then
+              @grub@/sbin/grub-install "@grubDevice@" --no-floppy --recheck
+          fi
+      else
+          echo "Warning: don't know how to make this configuration bootable; please set \`boot.grubDevice'." 1>&2
+      fi
+    elif [ "@bootLoader@" == "generationsDir" ]; then
+          @menuBuilder@ @out@
     else
-        echo "Warning: don't know how to make this configuration bootable; please set \`boot.grubDevice'." 1>&2
+          echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
     fi
 fi
 

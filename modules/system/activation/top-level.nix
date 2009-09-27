@@ -17,6 +17,20 @@ let
         Additional configurations to build.
       '';
     };
+
+    system.boot.loader.id = pkgs.lib.mkOption {
+      default = "";
+      description = ''
+        Id string of the used bootloader.
+      '';
+    };
+
+    system.boot.loader.kernelFile = pkgs.lib.mkOption {
+      default = "";
+      description = ''
+        Name of the kernel file to be passed to the bootloader.
+      '';
+    };
     
   };
 
@@ -33,13 +47,17 @@ let
 
 
   systemBuilder = let
-      kernelfile = if (pkgs.stdenv.system == "armv5tel-linux")
-        then "${config.boot.kernelPackages.kernel}/uImage"
-        else "${config.boot.kernelPackages.kernel}/vmlinuz";
-    in ''
+      kernelPath = "${config.boot.kernelPackages.kernel}/" +
+        "${config.system.boot.loader.kernelFile}";
+    in 
+      ''
       ensureDir $out
 
-      ln -s ${kernelfile} $out/kernel
+      if [ ! -f ${kernelPath} ]; then
+        echo "The bootloader cannot find the proper kernel image."
+        echo "(Expecting ${kernelPath})"
+      fi
+      ln -s ${kernelPath} $out/kernel
       if [ -n "$grub" ]; then 
         ln -s $grub $out/grub
       fi
@@ -76,13 +94,9 @@ let
     name = "system";
     buildCommand = systemBuilder;
     inherit children;
-    grub = if (pkgs.stdenv.system != "armv5tel-linux") then pkgs.grub
-      else null;
-    grubDevice = config.boot.grubDevice;
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
-    grubMenuBuilder = config.system.build.grubMenuBuilder;
-    configurationName = config.boot.configurationName;
+    menuBuilder = config.system.build.menuBuilder;
     # Most of these are needed by grub-install.
     path = [
       pkgs.coreutils
@@ -92,6 +106,12 @@ let
       pkgs.diffutils
       pkgs.upstart # for initctl
     ];
+
+    # Boot loaders
+    bootLoader = config.system.boot.loader.id;
+    grub = if config.boot.loader.grub.enable then pkgs.grub else null;
+    grubDevice = config.boot.loader.grub.grubDevice;
+    configurationName = config.boot.loader.grub.configurationName;
   };
 
 
