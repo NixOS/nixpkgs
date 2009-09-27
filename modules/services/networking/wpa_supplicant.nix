@@ -25,7 +25,7 @@ in
         <manvolnum>5</manvolnum></citerefentry>).
       '';
     };
-  
+
   };
 
 
@@ -49,7 +49,7 @@ in
 
         exec =
           "${pkgs.wpa_supplicant}/sbin/wpa_supplicant " +
-          "-C /var/run/wpa_supplicant -c ${configFile} -iwlan0";
+          "-C /var/run/wpa_supplicant -c ${configFile} -ieth1";
       };
   
   };
