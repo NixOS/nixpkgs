@@ -14,7 +14,7 @@ let
       [Shutdown]
       HaltCmd=${pkgs.upstart}/sbin/halt
       RebootCmd=${pkgs.upstart}/sbin/reboot
-      ${optionalString (config.boot.grubDevice != "") ''
+      ${optionalString (config.system.boot.loader.id == "grub") ''
         BootManager=Grub
       ''}
 
