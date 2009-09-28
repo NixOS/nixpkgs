@@ -10,15 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig gettext perl];
 
-  # TODO: The setup script adds --disable-static to ./configure by
-  # default. The nbd-server, however, would like to link this library
-  # statically (so that nbd-server can itself be a static binary). I
-  # have no clue how to solve it properly, but a solution that would
-  # work is this one:
-  #
-  # configureFlags = "--enable-static";
-  #
-  # There has to be a better way?
+  # The nbd package depends on a static version of this library; hence
+  # the default configure flag --disable-static is switched off.
+  dontDisableStatic = true;
+  configureFlags = "--enable-static --enable-shared";
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
