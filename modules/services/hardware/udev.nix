@@ -80,15 +80,6 @@ let
     #udev_log="debug"
   '';
 
-  # Dummy file indicating whether we've run udevtrigger/udevsettle.
-  # Since that *recreates* all device nodes with default permissions,
-  # it's not nice to do that when a user is logged in (it messes up
-  # the permissions set by pam_devperm).
-  # !!! Actually, this makes the udev configuration less declarative;
-  # changes may not take effect until the user reboots.  We should
-  # find a better way to preserve the permissions of logged-in users.
-  devicesCreated = "/var/run/devices-created";
-
 in
 
 {
@@ -192,11 +183,8 @@ in
             # Let udev create device nodes for all modules that have already
             # been loaded into the kernel (or for which support is built into
             # the kernel).
-            if ! test -e ${devicesCreated}; then
-                ${udev}/sbin/udevadm trigger
-                ${udev}/sbin/udevadm settle # wait for udev to finish
-                touch ${devicesCreated}
-            fi
+            ${udev}/sbin/udevadm trigger
+            ${udev}/sbin/udevadm settle # wait for udev to finish
 
             # Kill udev, let Upstart restart and monitor it.  (This is nasty,
             # but we have to run `udevadm trigger' first.  Maybe we can use
