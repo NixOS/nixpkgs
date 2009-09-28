@@ -36,10 +36,9 @@ rec {
   };
   
   GConf = import ./platform/GConf {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat policykit;
     inherit (pkgs.gtkLibs) glib gtk;
     inherit intltool ORBit2;
-    policy_kit = pkgs.policy_kit_0_9;
   };
 
   libgnomecanvas = import ./platform/libgnomecanvas {

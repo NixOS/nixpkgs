@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, glib, gtk, ORBit2, libxml2
-, expat, policy_kit, intltool}:
+, expat, policykit, intltool}:
 
 stdenv.mkDerivation {
   name = "GConf-2.26.2";
@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     sha256 = "1vb7hjxddy54g4vch936621g66n0mhi3wkhm9lwqh449vdqg4yki";
   };
   buildInputs = [ pkgconfig glib gtk dbus_glib ORBit2 libxml2
-                  expat policy_kit intltool ];
+                  expat policykit intltool ];
 }
