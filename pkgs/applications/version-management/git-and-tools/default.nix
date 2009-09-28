@@ -15,7 +15,6 @@ rec {
       cpio tcl tk makeWrapper subversion;
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
     guiSupport = getConfig ["git" "guiSupport"] false;
-    gitkGlobSupport = getConfig ["git" "gitkGlobSupport"] false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 

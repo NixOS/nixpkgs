@@ -3,7 +3,6 @@
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
-, gitkGlobSupport
 }:
 
 # `git-svn' support requires Subversion and various Perl libraries.
@@ -17,12 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "fc7e4d6c4172c62c93d5e974019f7193b03c8bc0a1c6f3a9fcc1d0928b808d7a";
   };
 
-  patches = [ ./docbook2texi.patch ]
-      ++ # adds possibility to highlight all changes to files matching a glob pattern
-          stdenv.lib.optional (guiSupport && gitkGlobSupport) (fetchurl {
-          url = "http://mawercer.de/~marc/git-jrnieder.patch";
-          sha256 = "187wf8chdjifwh3rrdc80nkak08jk7n74xq1bfzr2bhx2wicrv0x";
-          });
+  patches = [ ./docbook2texi.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
