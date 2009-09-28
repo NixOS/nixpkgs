@@ -34,7 +34,7 @@ in zipModules ([]
 
 # usage example:
 # ++ rename alias "services.xserver.slim.theme" to "services.xserver.displayManager.slim.theme"
-# ++ rename obsolete "environment.extraPackages" to "environment.systemPackages"
+++ rename obsolete "environment.extraPackages" to "environment.systemPackages"
 
 
 

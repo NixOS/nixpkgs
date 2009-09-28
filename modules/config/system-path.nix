@@ -60,8 +60,7 @@ let
       pkgs.usbutils
       pkgs.utillinux
       pkgs.wirelesstools
-    ]
-    ++ config.environment.extraPackages;
+    ];
 
 
   options = {
@@ -69,6 +68,8 @@ let
     environment = {
 
       systemPackages = mkOption {
+        default = [];
+        example = [pkgs.firefox pkgs.thunderbird];
         description = ''
           The set of packages that appear in
           /var/run/current-system/sw.  These packages are
@@ -77,16 +78,6 @@ let
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           <filename>/nix/var/nix/profiles/default</filename>.
-        '';
-      };
-
-      # !!! Obsolete.
-      extraPackages = mkOption {
-        default = [];
-        example = [pkgs.firefox pkgs.thunderbird];
-        description = ''
-          This option allows you to add additional packages to the system
-          path.
         '';
       };
 
