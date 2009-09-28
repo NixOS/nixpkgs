@@ -216,6 +216,7 @@ rec {
                   definitions =
                     map (m: {
                       source = m.key;
+                      value = m.config;
                     }) (definitionsOf name);
 
                   config = builtins.tryEval
