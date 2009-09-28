@@ -2,7 +2,7 @@
 
 let lib = import ./default.nix;
 
-inherit (builtins) substring add sub stringLength;
+inherit (builtins) add sub lessThan;
 
 in
 
@@ -82,4 +82,28 @@ rec {
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
   eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
+
+  # Cut a string with a separator and produces a list of strings which were
+  # separated by this separator. e.g.,
+  # `splitString "." "foo.bar.baz"' returns ["foo" "bar" "baz"].
+  splitString = sep: s:
+    let
+      sepLen = stringLength sep;
+      sLen = stringLength s;
+      lastSearch = sub sLen sepLen;
+      startWithSep = startAt:
+        substring startAt sepLen s == sep;
+
+      recurse = index: startAt:
+        let cutUntil = i: [(substring startAt (sub i startAt) s)]; in
+        if lessThan index lastSearch then
+          if startWithSep index then
+            let restartAt = add index sepLen; in
+            cutUntil index ++ recurse restartAt restartAt
+          else
+            recurse (add index 1) startAt
+        else
+          cutUntil sLen;
+    in
+      recurse 0 0;
 }
