@@ -328,9 +328,17 @@ rec {
     inherit cabal mtl;
   };
 
+  parsimony = import ../development/libraries/haskell/parsimony {
+    inherit cabal utf8String;
+  };
+
   pcreLight = import ../development/libraries/haskell/pcre-light {
     inherit cabal;
     inherit (pkgs) pcre;
+  };
+
+  polyparse = import ../development/libraries/haskell/polyparse {
+    inherit cabal;
   };
 
   QuickCheck  = QuickCheck1;
