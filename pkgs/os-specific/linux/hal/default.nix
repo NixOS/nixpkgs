@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
     libuuid perl perlXMLParser gettext zlib gperf
-    consolekit policykit
+    consolekit policykit libsmbios
     # !!! libsmbios is broken; it doesn't install headers.
   ];
 

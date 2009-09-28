@@ -5637,7 +5637,7 @@ let
   };
 
   libsmbios = import ../os-specific/linux/libsmbios {
-    inherit fetchurl stdenv libxml2;
+    inherit fetchurl stdenv pkgconfig libxml2 perl;
   };
 
   lm_sensors = import ../os-specific/linux/lm_sensors {
