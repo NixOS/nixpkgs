@@ -230,10 +230,14 @@ rec {
               }"
           );
 
-          config = lib.zipWithNames (modulesNames modules) (name: values:
+          config = lib.zipWithNames (modulesNames modules) (name: values_:
             let
               hasOpt = builtins.hasAttr name result.options;
               opt = lib.getAttr name result.options;
+              values = values_ ++
+                optionals
+                  (hasOpt && isOption opt && opt ? extraConfigs)
+                  opt.extraConfigs;
 
             in if hasOpt && isOption opt then
               let defs = evalProperties values; in

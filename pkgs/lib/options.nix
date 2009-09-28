@@ -25,6 +25,7 @@ rec {
     # merge (function used to merge definitions into one definition: [ /type/ ] -> /type/)
     # apply (convert the option value to ease the manipulation of the option result)
     # options (set of sub-options declarations & definitions)
+    # extraConfigs (list of possible configurations)
   };
 
   mapSubOptions = f: opt:
@@ -138,14 +139,17 @@ rec {
         assert opt1 ? merge -> ! opt2 ? merge;
         assert opt1 ? apply -> ! opt2 ? apply;
         assert opt1 ? type -> ! opt2 ? type;
-        if opt1 ? options || opt2 ? options then
-          opt1 // opt2 // {
+        opt1 // opt2
+        // optionalAttrs (opt1 ? options || opt2 ? options) {
             options =
                (toList (attrByPath ["options"] [] opt1))
             ++ (toList (attrByPath ["options"] [] opt2));
           }
-        else
-          opt1 // opt2
+        // optionalAttrs (opt1 ? extraConfigs || opt2 ? extraConfigs) {
+            extraConfigs =
+               (attrByPath ["extraConfigs"] [] opt1)
+            ++ (attrByPath ["extraConfigs"] [] opt2);
+          }
       )) {} opts;
 
   
