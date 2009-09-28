@@ -127,5 +127,13 @@ rec {
       else { right = t.right; wrong = [h] ++ t.wrong; }
     ) { right = []; wrong = []; };
 
-    
+
+  zipListsWith = f: fst: snd:
+    if fst != [] && snd != [] then
+      [ (f (head fst) (head snd)) ]
+      ++ zipLists (tail fst) (tail snd)
+    else [];
+
+  zipLists = zipListsWith (fst: snd: { inherit fst snd; });
+
 }
