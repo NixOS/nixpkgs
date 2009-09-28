@@ -280,7 +280,7 @@ rec {
       let module = { inherit (result) options config; }; in
 
       moduleMerge "" (
-        moduleClosure initModules (args // module)
+        moduleClosure initModules (module // args)
       )
     );
 
