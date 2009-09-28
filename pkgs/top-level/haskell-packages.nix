@@ -30,6 +30,10 @@ rec {
     QuickCheck = QuickCheck2101;
   };
 
+  ansiTerminal = import ../development/libraries/haskell/ansi-terminal {
+    inherit cabal;
+  };
+
   benchpress = import ../development/libraries/haskell/benchpress {
     inherit cabal;
   };
@@ -48,6 +52,10 @@ rec {
 
   cgi = import ../development/libraries/haskell/cgi {
     inherit cabal mtl network parsec xhtml;
+  };
+
+  colorizeHaskell = import ../development/libraries/haskell/colorize-haskell {
+    inherit cabal ansiTerminal haskellLexer;
   };
 
   convertible = import ../development/libraries/haskell/convertible {
@@ -114,7 +122,7 @@ rec {
   };
 
   ghcCore = import ../development/libraries/haskell/ghc-core {
-    inherit cabal pcreLight hscolour;
+    inherit cabal pcreLight colorizeHaskell;
   };
 
   ghcPaths = import ../development/libraries/haskell/ghc-paths {
@@ -165,6 +173,10 @@ rec {
 
   haskeline = import ../development/libraries/haskell/haskeline {
     inherit cabal extensibleExceptions mtl utf8String;
+  };
+
+  haskellLexer = import ../development/libraries/haskell/haskell-lexer {
+    inherit cabal;
   };
 
   haskellSrc = import ../development/libraries/haskell/haskell-src {

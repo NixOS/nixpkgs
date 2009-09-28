@@ -1,10 +1,10 @@
-{cabal, pcreLight, hscolour}:
+{cabal, pcreLight, colorizeHaskell}:
 
 cabal.mkDerivation (self : {
   pname = "ghc-core";
-  version = "0.4.3";
-  sha256 = "cdd6082ebc692087db781cb10194bbbf34a768b31eea0dcb78c73921c7047444";
-  propagatedBuildInputs = [pcreLight hscolour];
+  version = "0.5";
+  sha256 = "9880ea553a24a1ad6585c4d69505a3b1ac90aaf0f48ca8c126f41e8f170651ef";
+  propagatedBuildInputs = [pcreLight colorizeHaskell];
   configureFlags = ''--constraint=base<4'';
   meta = {
     description = "Display GHC's core and assembly output in a pager";
