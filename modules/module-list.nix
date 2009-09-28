@@ -27,6 +27,7 @@
   ./programs/pwdutils/pwdutils.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./rename.nix
   ./security/consolekit.nix
   ./security/pam.nix
   ./security/policykit.nix
