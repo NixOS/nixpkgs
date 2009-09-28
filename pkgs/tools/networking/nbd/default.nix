@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [pkgconfig glib];
 
-  # Desirable, but doesn't work because glib is compiled without static
-  # libraries by default:
-  #
-  # configureFlags = "LDFLAGS=-static";
+  # Link this package statically to generate an nbd-server binary that
+  # has no dynamic dependencies and that can be used on (non-Nix) remote
+  # machines that have a different setup than the local one.
+  configureFlags = "LDFLAGS=-static";
 }
