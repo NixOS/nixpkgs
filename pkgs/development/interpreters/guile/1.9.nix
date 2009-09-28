@@ -19,10 +19,22 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
+
+    # XXX: Hack until fixed upstream.
+    # See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 .
+    sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
+        -e 's|-Wl,-z -Wl,relro||g ;
+            s|-lunistring|-L${libunistring}/lib -lunistring|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
+            s|-lltdl|-L${libtool}/lib -lltdl|g'
   '';
 
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+
+    # XXX: Hack until fixed upstream.
+    sed -i "meta/guile-config" \
+        -e "/^exec guile/i export GUILE_AUTO_COMPILE=0"
   '';
 
   doCheck = true;
