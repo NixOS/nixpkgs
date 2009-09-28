@@ -219,7 +219,7 @@ rec {
                     }) (definitionsOf name);
 
                   config = builtins.tryEval
-                    (lib.getAttr name result.config);
+                    (builtins.toXML (lib.getAttr name result.config));
                 }
             else if all isAttrs values then
               (recurseInto name modules).options
