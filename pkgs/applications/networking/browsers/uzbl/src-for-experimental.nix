@@ -1,8 +1,8 @@
 rec {
-   version="327db778f3a5446d57969bb6ce1e038799aa86aa";
-   name="uzbl-experimental-327db778f3a5446d57969bb6ce1e038799aa86aa";
-   hash="eadf0286dc2d7111f765d43805324d6e72a536a1490edbb6791c2e148aeaffc2";
-   rev="327db778f3a5446d57969bb6ce1e038799aa86aa";
+   version="6614e842b56f3372034823be215f68d9d7bd1ce1";
+   name="uzbl-experimental-6614e842b56f3372034823be215f68d9d7bd1ce1";
+   hash="1e2e5e45940be871996d3a1a0d3e664610f93e32259168565b44060abeab5fa6";
+   rev="6614e842b56f3372034823be215f68d9d7bd1ce1";
    url="git://github.com/Dieterbe/uzbl.git";
   
   
