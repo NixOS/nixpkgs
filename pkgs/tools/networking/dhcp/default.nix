@@ -8,6 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0il966bcls7nfd93qfqrgvd2apkm0kv7pk35lnl1nvbm7fyrik7z";
   };
 
+  patches =
+    [ # Don't bring down interfaces, because wpa_supplicant doesn't
+      # recover when the wlan interface goes down.  Instead just flush
+      # all addresses, routes and neighbours of the interface.
+      ./flush-if.patch
+    ];
+
   # Fixes "socket.c:591: error: invalid application of 'sizeof' to
   # incomplete type 'struct in6_pktinfo'".  See
   # http://www.mail-archive.com/blfs-book@linuxfromscratch.org/msg13013.html
@@ -24,10 +31,11 @@ stdenv.mkDerivation rec {
         "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${stdenv.coreutils}/bin:${stdenv.gnused}/bin"
     '';
 
-  preConfigure = ''
+  preConfigure =
+    ''
       sed -i "includes/dhcpd.h" \
 	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
-  '';
+    '';
 
   meta = {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";

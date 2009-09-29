@@ -1,0 +1,76 @@
+diff --exclude '*~' -rc dhcp-4.1.0p1-orig/client/scripts/linux dhcp-4.1.0p1/client/scripts/linux
+*** dhcp-4.1.0p1-orig/client/scripts/linux	2008-05-23 15:56:07.000000000 +0200
+--- dhcp-4.1.0p1/client/scripts/linux	2009-09-29 17:56:57.000000000 +0200
+***************
+*** 67,72 ****
+--- 67,80 ----
+    exit $exit_status
+  }
+  
++ # Delete the old addresses, routes and ARP information for this
++ # interface.
++ flush_if() {
++   ${ip} address flush dev $interface
++   ${ip} route flush dev $interface
++   ${ip} neighbour flush dev $interface
++ }
++ 
+  # Invoke the local dhcp client enter hooks, if they exist.
+  if [ -f /etc/dhclient-enter-hooks ]; then
+    exit_status=0
+***************
+*** 150,159 ****
+      ifconfig $interface:0- inet 0
+    fi
+    if [ x$old_ip_address != x ] && [ x$old_ip_address != x$new_ip_address ]; then
+!     # IP address changed. Bringing down the interface will delete all routes,
+!     # and clear the ARP cache.
+!     ifconfig $interface inet 0 down
+! 
+    fi
+    if [ x$old_ip_address = x ] || [ x$old_ip_address != x$new_ip_address ] || \
+       [ x$reason = xBOUND ] || [ x$reason = xREBOOT ]; then
+--- 158,165 ----
+      ifconfig $interface:0- inet 0
+    fi
+    if [ x$old_ip_address != x ] && [ x$old_ip_address != x$new_ip_address ]; then
+!     # IP address changed.
+!     flush_if
+    fi
+    if [ x$old_ip_address = x ] || [ x$old_ip_address != x$new_ip_address ] || \
+       [ x$reason = xBOUND ] || [ x$reason = xREBOOT ]; then
+***************
+*** 189,196 ****
+      ifconfig $interface:0- inet 0
+    fi
+    if [ x$old_ip_address != x ]; then
+!     # Shut down interface, which will delete routes and clear arp cache.
+!     ifconfig $interface inet 0 down
+    fi
+    if [ x$alias_ip_address != x ]; then
+      ifconfig $interface:0 inet $alias_ip_address $alias_subnet_arg
+--- 195,201 ----
+      ifconfig $interface:0- inet 0
+    fi
+    if [ x$old_ip_address != x ]; then
+!     flush_if
+    fi
+    if [ x$alias_ip_address != x ]; then
+      ifconfig $interface:0 inet $alias_ip_address $alias_subnet_arg
+***************
+*** 225,231 ****
+      make_resolv_conf
+      exit_with_hooks 0
+    fi
+!   ifconfig $interface inet 0 down
+    exit_with_hooks 1
+  fi
+  
+--- 230,236 ----
+      make_resolv_conf
+      exit_with_hooks 0
+    fi
+!   flush_if
+    exit_with_hooks 1
+  fi
+  
