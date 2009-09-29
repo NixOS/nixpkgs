@@ -1162,6 +1162,11 @@ let
     inherit fetchurl stdenv libevent;
   };
 
+  obexd = import ../tools/bluetooth/obexd {
+    inherit fetchurl stdenv pkgconfig dbus openobex bluez;
+    inherit (gtkLibs) glib;
+  };
+
   obexfs = import ../tools/bluetooth/obexfs {
     inherit fetchurl stdenv pkgconfig fuse obexftp;
   };
