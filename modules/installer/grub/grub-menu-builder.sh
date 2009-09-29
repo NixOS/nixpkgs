@@ -11,8 +11,8 @@ if test -z "$1"; then
     exit 1
 fi
 
-bootMount="@bootMount@"
-if test -z "$bootMount"; then bootMount=/boot; fi
+bootDevice="@bootDevice@"
+if test -z "$bootDevice"; then bootDevice=/boot; fi
 
 
 echo "updating the GRUB menu..."
@@ -28,11 +28,11 @@ timeout 5
 GRUBEND
 
 
-if test -n "@grubSplashImage@"; then
-    splashLocation=@grubSplashImage@
+if test -n "@splashImage@"; then
+    splashLocation=@splashImage@
     # Splash images in /nix/store don't seem to work, so copy them.
     cp -f $splashLocation /boot/background.xpm.gz
-    splashLocation="$bootMount/background.xpm.gz"
+    splashLocation="$bootDevice/background.xpm.gz"
     echo "splashimage $splashLocation" >> $tmp
 fi
 
@@ -40,7 +40,7 @@ fi
 configurationCounter=0
 configurationLimit="@configurationLimit@"
 numAlienEntries=`cat <<EOF | egrep '^[[:space:]]*title' | wc -l
-@extraGrubEntries@
+@extraEntries@
 EOF`
 
 if test $((configurationLimit+numAlienEntries)) -gt 190; then
@@ -100,8 +100,8 @@ addEntry() {
 	cp "$(readlink -f "$path/init")" /boot/nixos-init
 	cat > /boot/nixos-grub-config <<EOF
 	title Emergency boot
-	kernel ${bootMount:-/boot}/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
-	initrd ${bootMount:-/boot}/nixos-initrd
+	kernel ${bootDevice:-/boot}/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
+	initrd ${bootDevice:-/boot}/nixos-initrd
 EOF
     fi
 
@@ -110,9 +110,9 @@ EOF
         copyToKernelsDir $initrd; initrd=$result
     fi
     
-    if test -n "$bootMount"; then
-        kernel=$(echo $kernel | sed -e "s^/boot^$bootMount^")
-        initrd=$(echo $initrd | sed -e "s^/boot^$bootMount^")
+    if test -n "$bootDevice"; then
+        kernel=$(echo $kernel | sed -e "s^/boot^$bootDevice^")
+        initrd=$(echo $initrd | sed -e "s^/boot^$bootDevice^")
     fi
     
     local confName=$(if test -e $path/configuration-name; then 
@@ -137,19 +137,19 @@ fi
 
 
 # Additional entries specified verbatim by the configuration.
-extraGrubEntries=`cat <<EOF
-@extraGrubEntries@
+extraEntries=`cat <<EOF
+@extraEntries@
 EOF`
 
 
-if test -n "@extraGrubEntriesBeforeNixos@"; then 
-    echo "$extraGrubEntries" >> $tmp
+if test -n "@extraEntriesBeforeNixOS@"; then 
+    echo "$extraEntries" >> $tmp
 fi
 
 addEntry "NixOS - Default" $default ""
 
-if test -z "@extraGrubEntriesBeforeNixos@"; then 
-    echo "$extraGrubEntries" >> $tmp
+if test -z "@extraEntriesBeforeNixOS@"; then 
+    echo "$extraEntries" >> $tmp
 fi
 
 # Add all generations of the system profile to the menu, in reverse

@@ -46,7 +46,8 @@ let
     config.nesting.children;
 
 
-  systemBuilder = let
+  systemBuilder =
+    let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
     in 
@@ -110,7 +111,7 @@ let
     # Boot loaders
     bootLoader = config.system.boot.loader.id;
     grub = if config.boot.loader.grub.enable then pkgs.grub else null;
-    grubDevice = config.boot.loader.grub.grubDevice;
+    grubDevice = config.boot.loader.grub.device;
     configurationName = config.boot.loader.grub.configurationName;
   };
 

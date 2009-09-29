@@ -36,6 +36,12 @@ in zipModules ([]
 # ++ rename alias "services.xserver.slim.theme" to "services.xserver.displayManager.slim.theme"
 ++ rename obsolete "environment.extraPackages" to "environment.systemPackages"
 
+# Old Grub-related options.
+++ rename obsolete "boot.copyKernels" to "boot.loader.grub.copyKernels"
+++ rename obsolete "boot.extraGrubEntries" to "boot.loader.grub.extraEntries"
+++ rename obsolete "boot.extraGrubEntriesBeforeNixos" to "boot.loader.grub.extraEntriesBeforeNixOS"
+++ rename obsolete "boot.grubDevice" to "boot.loader.grub.device"
+++ rename obsolete "boot.bootMount" to "boot.loader.grub.bootDevice"
 
 
 ) # do not add renaming after this.
