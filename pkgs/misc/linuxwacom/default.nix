@@ -1,12 +1,14 @@
 { stdenv, fetchurl, libX11, libXi, inputproto
 , xproto, ncurses, pkgconfig, xorgserver }:
 
+let s = import ./src-for-default.nix; in
+
 stdenv.mkDerivation rec {
-  name = "linuxwacom-0.8.4-1";
+  inherit (s) name;
   
   src = fetchurl {
-    url = "mirror://sourceforge/linuxwacom/${name}.tar.bz2";
-    sha256 = "1gfsjm9i1c8d0w0g8v9q3xfrpxsmmsc9qlidr5mkwidr070cphz9";
+    url = s.url;
+    sha256 = s.hash;
   };
   
   buildInputs = [ libX11 libXi inputproto xproto ncurses pkgconfig xorgserver ];
