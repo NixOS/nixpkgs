@@ -15,8 +15,10 @@ let
     let
       setTo = setAttrByPath (splitString "." to);
       setFrom = setAttrByPath (splitString "." from);
-      toOf = attrByPath (splitString "." to) (abort "bad renaming");
-      fromOf = attrByPath (splitString "." from) (abort "IE: renaming error");
+      toOf = attrByPath (splitString "." to)
+        (abort "Renaming Error: option '${to}' does not exists.");
+      fromOf = attrByPath (splitString "." from)
+        (abort "Internal Error: option '${from}' should be declared.");
     in
       [{
         options = setFrom (mkOption {
