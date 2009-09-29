@@ -8,17 +8,13 @@ rec {
   buildInputs = [boost];
   configureFlags = [];
 
-  doFixBoost = fullDepEntry (''
-    sed -e 's/-lboost_[a-z_]*/&-mt/g' -i src/Makefile.in
-  '') ["minInit" "doUnpack"];
-
   doFixInc = fullDepEntry (''
     sed -e '/[#]include [<]config.h[>]/a\#include <string.h>' -i src/unicode_to_utf8.cpp
     cat src/unicode_to_utf8.cpp
   '') ["minInit" "doUnpack"];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doFixBoost" "doFixInc" "doConfigure" "doMakeInstall"];
+  phaseNames = ["doFixInc" "doConfigure" "doMakeInstall"];
       
   name = "jfsrec-" + version;
   meta = {
