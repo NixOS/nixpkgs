@@ -47,63 +47,31 @@ let
        );
 
 
-  mkProtect = name: value: { _type = "protect"; inherit name value; };
-  isProtected = attr: (pkgs.lib.typeOf attr) == "protect";
-
-  getName = set: with pkgs.lib;
-    if isProtected set then
-      set.name
-    else
-      getName (head (attrValues set));
-
-  rmProtect = set: with pkgs.lib;
-    if isProtected set then
-      set.value
-    else
-      mapAttrs (n: rmProtect) set;
-
   # Create a list of modules where each module contains only one failling
   # options.
   introspectionModules = with pkgs.lib;
     let
-      genericFun = f: set:
-        fold (name: rest:
-          (map (v:
-            listToAttrs [(nameValuePair name v)]
-          ) (f (getAttr name set)))
-          ++ rest
-        ) [] (attrNames set);
-
-      addIntrospection = opt: mkProtect opt.name (
-        throw "Usage introspection of '${opt.name}' by forced failure."
-      );
-
-      f = v:
-        if isOption v then
-          [(addIntrospection v)]
-        else
-          genericFun f v;
+      setIntrospection = opt: rec {
+        name = opt.name;
+        path = splitString "." opt.name;
+        config = setAttrByPath path
+          (throw "Usage introspection of '${name}' by forced failure.");
+      };
     in
-      genericFun f eval.options;
+      map setIntrospection (collect isOption eval.options);
 
-  overrideConfig = override: with pkgs.lib;
-    let f = configs:
-      zip (n: v:
-        if tail v == [] || isProtected (head v) then
-          head v
-        else
-          f v
-      ) configs;
-    in
-      f [ override eval.config ];
+  overrideConfig = thrower:
+    pkgs.lib.recursiveUpdateUntil (path: old: new:
+      path == thrower.path
+    ) eval.config thrower.config;
 
 
   graph = with pkgs.lib;
     map (thrower: {
-      option = getName thrower;
+      option = thrower.name;
       usedBy = reportNewFailures eval.options (evalFun {
         extraArgs = {
-          config = overrideConfig (rmProtect thrower);
+          config = overrideConfig thrower;
         };
       }).options;
     }) introspectionModules;
