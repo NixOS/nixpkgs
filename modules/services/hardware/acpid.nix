@@ -1,21 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
-let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    powerManagement = {
-
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable power management (ACPI daemon)";
-      };
-    };
-  };
-in
-
-###### implementation
+with pkgs.lib;
 
 let
 
@@ -35,6 +20,8 @@ let
       }
     '';
   
+  events = [powerEvent lidEvent acEvent];
+  
   # Called when the power button is pressed.
   powerEvent =
     { name = "power-button";
@@ -52,14 +39,6 @@ let
       action =
         ''
           #! ${pkgs.bash}/bin/sh
-
-          # Suspend to RAM if the lid is closed.  (We also get this event
-          # when the lid just opened, in which case we obviously don't
-          # want to suspend again.) 
-          if grep -q closed /proc/acpi/button/lid/LID/state; then
-              sync
-              echo mem > /sys/power/state
-          fi
         '';
     };
   
@@ -70,36 +49,43 @@ let
       action = 
         ''
           #! ${pkgs.bash}/bin/sh
-
-          if grep -q "state:.*on-line" /proc/acpi/ac_adapter/AC/state; then
-             echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-          elif grep -q "state:.*off-line" /proc/acpi/ac_adapter/AC/state; then
-             echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-          fi
         '';
     };
 
-  events = [powerEvent lidEvent acEvent];
-
 in
 
-mkIf config.powerManagement.enable {
-  require = [
-    options
-  ];
+{
 
-  services = {
-    extraJobs = [{
-      name = "acpid";
+  ###### interface
 
-      job = ''
-        description "ACPI daemon"
+  options = {
+  
+    powerManagement = {
 
-        start on udev
-        stop on shutdown
-
-        respawn ${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}
-      '';
-    }];
+      enable = mkOption {
+        default = false;
+        description = "Whether to enable power management (ACPI daemon)";
+      };
+      
+    };
+    
   };
+  
+
+  ###### implementation
+
+  config = mkIf config.powerManagement.enable {
+
+    jobs = singleton
+      { name = "acpid";
+        description = "ACPI daemon";
+
+        startOn = "udev";
+        stopOn = "shutdown";
+
+        exec = "${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}";
+      };
+      
+  };
+  
 }
