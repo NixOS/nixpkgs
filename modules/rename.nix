@@ -3,16 +3,38 @@
 
 let
   to = throw "This is just a dummy keyword";
-  alias = { name = "Alias"; };
-  obsolete = { name = "Obsolete name"; };
+
+  alias = from: to: {
+    name = "Alias";
+    msg.use = x: x;
+    msg.define = x: x;
+  };
+
+  obsolete = from: to: {
+    name = "Obsolete name";
+    msg.use = x:
+      builtins.trace "Option '${from}' is used instead of '${to}'." x;
+    msg.define = x:
+      builtins.trace "Option '${from}' is defined instead of '${to}'." x;
+  };
+
+  deprecated = from: to: {
+    name = "Deprecated name";
+    msg.use = x:
+      abort "Option '${from}' is used instead of '${to}'.";
+    msg.define = x:
+      abort "Option '${from}' is defined instead of '${to}'.";
+  };
+
 
   zipModules = list: with pkgs.lib;
     zip (n: v:
       if tail v != [] then zipModules v else head v
     ) list;
 
-  rename = fromStatus: from: keyword: to: with pkgs.lib;
+  rename = statusTemplate: from: keyword: to: with pkgs.lib;
     let
+      status = statusTemplate from to;
       setTo = setAttrByPath (splitString "." to);
       setFrom = setAttrByPath (splitString "." from);
       toOf = attrByPath (splitString "." to)
@@ -22,13 +44,16 @@ let
     in
       [{
         options = setFrom (mkOption {
-          description = "${fromStatus.name} of <option>${to}</option>.";
-          apply = x: toOf config;
+          description = "${status.name} of <option>${to}</option>.";
+          apply = x: status.msg.use (toOf config);
         });
       }] ++
       [{
         options = setTo (mkOption {
-          extraConfigs = map (def: def.value) (fromOf options).definitions;
+          extraConfigs =
+            let externalDefs = (fromOf options).definitions; in
+            if externalDefs == [] then []
+            else map (def: def.value) (status.msg.define externalDefs);
         });
       }];
 
