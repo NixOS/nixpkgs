@@ -44,6 +44,7 @@ in zipModules ([]
 ++ rename obsolete "boot.extraGrubEntriesBeforeNixos" to "boot.loader.grub.extraEntriesBeforeNixOS"
 ++ rename obsolete "boot.grubDevice" to "boot.loader.grub.device"
 ++ rename obsolete "boot.bootMount" to "boot.loader.grub.bootDevice"
+++ rename obsolete "boot.grubSplashImage" to "boot.loader.grub.splashImage"
 
 
 ) # do not add renaming after this.
