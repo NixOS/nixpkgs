@@ -85,7 +85,7 @@ rec {
 
      Example:
        collect builtins.isList { a = { b = ["b"]; }; c = [1]; }
-       => ["b" 1]
+       => [["b"] [1]]
 
        collect (x: x ? outPath)
           { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
