@@ -4,7 +4,7 @@ rec {
   src = fetchurl {
     url = http://go6.net/4105/file.asp?file_id=166;
     sha256 = "e6b345f11398026c8be17e0c26fc22632a6a1053bbf18b5303e514cf44b52c4a";
-    name = "gateway6-client-${version}.tar.gz";
+    name = "gateway6-client-${version}.tar";
   };
 
   buildInputs = [nettools openssl procps];
