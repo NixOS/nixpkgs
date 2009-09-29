@@ -124,6 +124,15 @@ in
 
   config = {
 
+    environment.systemPackages =
+      [ pkgs.host
+        pkgs.iproute
+        pkgs.iputils
+        pkgs.nettools
+        pkgs.wirelesstools
+      ];
+    
+
     jobs = pkgs.lib.singleton
       { name = "network-interfaces";
 

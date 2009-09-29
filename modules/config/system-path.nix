@@ -29,8 +29,6 @@ let
       pkgs.gnused
       pkgs.gnutar
       pkgs.gzip
-      pkgs.host
-      pkgs.iputils
       pkgs.less
       pkgs.libcap
       pkgs.lvm2
@@ -40,7 +38,6 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nettools
       pkgs.ntp
       pkgs.openssh
       pkgs.pciutils
@@ -59,7 +56,6 @@ let
       pkgs.upstart
       pkgs.usbutils
       pkgs.utillinux
-      pkgs.wirelesstools
     ];
 
 
