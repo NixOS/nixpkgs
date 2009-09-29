@@ -6,7 +6,7 @@
 , libXinerama, openssl, gperf, cppunit
 }:
 
-let version = "3.0.1"; in
+let version = "3.1.1"; in
 stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
       url = "http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=core&version=${version}";
       name = "OOo_${version}_src_core.tar.bz2";
-      sha256 = "0fgk7n766lzsxn09p8g5ddabw568jw56k9bcdc02nlmk6k3a9qq0";
+      sha256 = "95440f09f8dce616178b86b26af8e543c869d01579207aa68e8474019b59caca";
     };
 
   patches = [ ./oo.patch ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src_system = fetchurl {
       url = "http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=system&version=${version}";
       name = "OOo_${version}_src_system.tar.bz2";
-      sha256 = "1zp8lbn5x9wwbv82inqkanaip4l2jyiybjqv1dpx7wbh6nrasgdv";
+      sha256 = "bb4a440ca91a40cd2b5692abbc19e8fbd3d311525edb266dc5cd9ebc324f2b4a";
     };
 
   configureFlags = "
