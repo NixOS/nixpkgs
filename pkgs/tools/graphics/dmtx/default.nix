@@ -25,5 +25,6 @@ rec {
   meta = {
     description = "DataMatrix (2D bar code) processing tools.";
     maintainers = [args.lib.maintainers.raskin];
+    platforms = args.lib.platforms.linux;
   };
 }
