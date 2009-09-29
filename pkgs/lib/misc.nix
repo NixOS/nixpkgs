@@ -197,20 +197,6 @@ rec {
 	else condConcat
 		name (tail (tail list)) checker;
 
-  # Merge sets of attributes and use the function f to merge
-  # attributes values.
-  zip = f: sets:
-    zipWithNames (concatMap builtins.attrNames sets) f sets;
-
-  zipWithNames = names: f: sets:
-    builtins.listToAttrs (map (name: {
-      inherit name;
-      value =
-        f name
-          (map (__getAttr name)
-            (filter (__hasAttr name) sets));
-    }) names);
-
   lazyGenericClosure = {startSet, operator}:
     let
       work = list: doneKeys: result:

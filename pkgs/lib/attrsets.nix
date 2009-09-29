@@ -173,5 +173,90 @@ rec {
   /* If the Boolean `cond' is true, return the attribute set `as',
      otherwise an empty attribute set. */
   optionalAttrs = cond: as: if cond then as else {};
-  
+
+
+  /* Merge sets of attributes and use the function f to merge attributes
+     values. */
+  zipAttrsWithNames = names: f: sets:
+    listToAttrs (map (name: {
+      inherit name;
+      value = f name (catAttrs name sets);
+    }) names);
+
+  # implentation note: Common names  appear multiple times in the list of
+  # names, hopefully this does not affect the system because the maximal
+  # laziness avoid computing twice the same expression and listToAttrs does
+  # not care about duplicated attribute names.
+  zipAttrsWith = f: sets: zipWithNames (concatMap attrNames sets) f sets;
+
+  zipAttrs = zipAttrsWith (name: values: values);
+
+  /* backward compatibility */
+  zipWithNames = zipAttrsWithNames;
+  zip = zipAttrsWith;
+
+
+  /* Does the same as the update operator '//' except that attributes are
+     merged until the given pedicate is verified.  The predicate should
+     except 3 arguments which are the path to reach the attribute, a part of
+     the first attribute set and a part of the second attribute set.  When
+     the predicate is verified, the value of the first attribute set is
+     replaced by the value of the second attribute set.
+
+     Example:
+       recursiveUpdateUntil (path: l: r: path == ["foo"]) {
+         # first attribute set
+         foo.bar = 1;
+         foo.baz = 2;
+         bar = 3;
+       } {
+         #second attribute set
+         foo.bar = 1;
+         foo.quz = 2;
+         baz = 4;
+       }
+
+       returns: {
+         foo.bar = 1; # 'foo.*' from the second set
+         foo.quz = 2; # 
+         bar = 3;     # 'bar' from the first set
+         baz = 4;     # 'baz' from the second set
+       }
+
+     */
+  recursiveUpdateUntil = pred: lhs: rhs:
+    let f = attrPath:
+      zipAttrsWith (n: values:
+        if tail values == []
+        || pred attrPath (head (tail values)) (head values) then
+          head values
+        else
+          f (attrPath ++ [n]) values
+      );
+    in f [] [rhs lhs];
+
+  /* Does the same as the update operator '//' and keep siblings attribute.
+     This recusion stop when one of the attribute value is not an attribute
+     set, in which case the right hand side value takes precedence over the
+     left hand side value.
+
+     Example:
+       recursiveUpdate {
+         boot.loader.grub.enable = true;
+         boot.loader.grub.device = "/dev/hda";
+       } {
+         boot.loader.grub.device = "";
+       }
+
+       returns: {
+         boot.loader.grub.enable = true;
+         boot.loader.grub.device = "";
+       }
+
+     */
+  recursiveUpdate = lhs: rhs:
+    recursiveUpdateUntil (path: lhs: rhs:
+      !(isAttrs lhs && isAttrs rhs)
+    ) lhs rhs;
+
 }
