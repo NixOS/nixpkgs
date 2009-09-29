@@ -428,6 +428,10 @@ let
     inherit fetchurl stdenv bison flex pam ssmtp;
   };
 
+  autogen = import ../development/tools/misc/autogen {
+    inherit fetchurl stdenv guile which;
+  };
+
   autojump = import ../tools/misc/autojump {
     inherit fetchurl stdenv python;
   };
