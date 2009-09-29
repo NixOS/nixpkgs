@@ -3,7 +3,7 @@
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
-, libXinerama, openssl, gperf, cppunit
+, libXinerama, openssl, gperf, cppunit, GConf
 }:
 
 let version = "3.1.1"; in
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
-    cups libXinerama openssl gperf
+    cups libXinerama openssl gperf GConf
   ];
 
   inherit icu fontconfig libjpeg jdk cups;

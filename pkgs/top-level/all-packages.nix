@@ -7240,6 +7240,7 @@ let
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
+    inherit (gnome26) GConf;
   };
 
   opera = import ../applications/networking/browsers/opera {

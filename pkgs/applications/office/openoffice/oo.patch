@@ -50,20 +50,20 @@ index 5719272..75c31b7 100644
  BUILD_ACTION=$(GNUMAKE)
  BUILD_FLAGS+= -j$(EXTMAXPROCESS)
  BUILD_DIR=$(CONFIGURE_DIR)
-diff --git a/hunspell/hunspell-1.1.12.patch b/hunspell/hunspell-1.1.12.patch
+diff --git a/hunspell/hunspell-1.2.8.patch b/hunspell/hunspell-1.2.8.patch
 index 37b7964..e6fd962 100644
---- a/hunspell/hunspell-1.1.12.patch
-+++ b/hunspell/hunspell-1.1.12.patch
-@@ -487,3 +487,15 @@
-  i68568utf.test \
-  1706659.test \
-  digits_in_words.test \
-+diff --git a/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh b/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
+--- a/hunspell/hunspell-1.2.8.patch
++++ b/hunspell/hunspell-1.2.8.patch
+@@ -619,3 +619,15 @@
+              p++;
+          }
+          if (i > 0 && buf[i - 1] == '\n') {
++diff --git a/hunspell/unxlngi6.pro/misc/build/hunspell-1.2.8/tests/test.sh b/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
 +index 90080f6..f069517 100755
-+--- a/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
-++++ b/hunspell/unxlngi6.pro/misc/build/hunspell-1.1.12/tests/test.sh
-+--- misc/hunspell-1.1.12/tests/test.sh	Sep  4 01:25:35 2007
-++++ misc/build/hunspell-1.1.12/tests/test.sh	Jun 18 11:53:11 2008
++--- a/hunspell/unxlngi6.pro/misc/build/hunspell-1.2.8/tests/test.sh
+++++ b/hunspell/unxlngi6.pro/misc/build/hunspell-1.2.8/tests/test.sh
++--- misc/hunspell-1.2.8/tests/test.sh	Sep  4 01:25:35 2007
+++++ misc/build/hunspell-1.2.8/tests/test.sh	Jun 18 11:53:11 2008
 +@@ -1,4 +1,4 @@
 +-#!/bin/bash
 ++#!/bin/sh

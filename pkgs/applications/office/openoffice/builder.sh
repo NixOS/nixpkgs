@@ -17,12 +17,9 @@ preConfigure() {
     SRCDIR=
 
     sed -e '/CURL_NO_OLDIES/d' -i ucb/source/ucp/ftp/makefile.mk
-
-    cd config_office/
 }
 
 postConfigure() {
-    cd ..
     for i in LinuxX86*Env.Set; do
 	substituteInPlace $i --replace /usr /no-such-path
     done
