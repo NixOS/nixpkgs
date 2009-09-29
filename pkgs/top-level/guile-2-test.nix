@@ -55,6 +55,7 @@ in (mapTestOn {
 
   guile = linux;
 
+  autogen = linux;
   lsh = linux;
   mailutils = linux;
   mcron = linux;
