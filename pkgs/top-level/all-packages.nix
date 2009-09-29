@@ -3396,6 +3396,13 @@ let
     xineramaSupport = true;
   };
 
+  gtkLibs218 = import ../development/libraries/gtk-libs/2.18 {
+    inherit fetchurl stdenv pkgconfig gettext perl x11 jasper
+            libtiff libjpeg libpng cairo libsigcxx cairomm;
+    inherit (xlibs) libXinerama libXrandr;
+    xineramaSupport = true;
+  };
+
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
     inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
     inherit (gnome) gtk;
