@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${dbus_glib}/include/dbus-1.0 -I${policykit}/include/PolicyKit -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${dbus_libs}/include/dbus-1.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${dbus_glib}/include/dbus-1.0 -I${policykit}/include/PolicyKit -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${dbus_libs}/include/dbus-1.0 -I${dbus_libs}/lib/dbus-1.0/include"
   '';
 
   buildInputs = [ pkgconfig glib gtk dbus_glib ORBit2 libxml2
