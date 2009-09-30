@@ -35,5 +35,8 @@ rec {
   name = "midori-" + version;
   meta = {
     description = "Light WebKit-based web browser with GTK GUI.";
+    maintainers = [args.lib.maintainers.raskin];
+    platforms = with args.lib.platforms;
+      linux;
   };
 }
