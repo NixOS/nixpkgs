@@ -138,15 +138,6 @@ rec {
     inherit GConf;
   };
 
-  # fails with a mysterious error on linking
-  # symbol not found although it is actually present
-  libsoup_git_head = import ./desktop/libsoup/git-head.nix {
-    inherit (pkgs) stdenv fetchgit pkgconfig libxml2 gnutls libproxy sqlite curl
-      automake autoconf libtool which;
-    glib = pkgs.gtkLibs216.glib_2_21;
-    inherit GConf gnome_common gtk_doc gnome_keyring;
-  };
-
   libwnck = import ./desktop/libwnck {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit (pkgs.xlibs) libX11;
@@ -251,6 +242,12 @@ rec {
     inherit gnome_doc_utils intltool GConf libglade libgnome libgnomeui libgnomekbd;
     inherit librsvg gnome_menus gnome_desktop gnome_panel metacity gnome_settings_daemon;
     inherit libbonobo libbonoboui libgnomecanvas libart_lgpl gnome_vfs ORBit2;
+    libxml2 = pkgs.libxml2Python;
+  };
+
+  gtksourceview = import ./desktop/gtksourceview {
+    inherit (pkgs) stdenv fetchurl pkgconfig cairo perl intltool;
+    inherit (pkgs.gtkLibs) atk glib gtk pango;
     libxml2 = pkgs.libxml2Python;
   };
   
