@@ -214,6 +214,18 @@ rec {
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need.
     http://download.gnome.org/
+
+    http://ftp.unina.it/pub/linux/GNOME/
+    http://fr2.rpmfind.net/linux/gnome.org/
+    ftp://ftp.dit.upm.es/pub/GNOME/
+    ftp://ftp.no.gnome.org/pub/GNOME/
+    http://ftp.acc.umu.se/pub/GNOME/
+    http://ftp.belnet.be/mirror/ftp.gnome.org/
+    http://ftp.df.lth.se/pub/gnome/
+    http://linorg.usp.br/gnome/
+    http://mirror.aarnet.edu.au/pub/GNOME/
+    ftp://ftp.cse.buffalo.edu/pub/Gnome/
+    ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/
   ];
 
   # Tcpdump (see http://www.tcpdump.org/mirrors.html).
