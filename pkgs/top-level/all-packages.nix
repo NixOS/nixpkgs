@@ -8086,7 +8086,7 @@ let
 
   gnome26 = import ../desktops/gnome-2.26 pkgs;
 
-  gnome28 = import ../desktops/gnome-2.28 (pkgs// {gtkLibs = gtkLibs218});
+  gnome28 = import ../desktops/gnome-2.28 (pkgs// {gtkLibs = gtkLibs218;});
 
   kde3 = {
 
