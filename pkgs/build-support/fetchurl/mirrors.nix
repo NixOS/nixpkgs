@@ -102,6 +102,7 @@ rec {
   gentoo = [
     http://ftp.snt.utwente.nl/pub/os/linux/gentoo/
     http://distfiles.gentoo.org/
+    ftp://mirrors.kernel.org/gentoo/
   ];
 
   savannah = [
