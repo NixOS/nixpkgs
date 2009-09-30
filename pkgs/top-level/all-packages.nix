@@ -4268,6 +4268,11 @@ let
     inherit fetchurl stdenv ncurses pcre libpng zlib readline;
   };
 
+  slibGuile = import ../development/libraries/slib {
+    inherit fetchurl stdenv unzip texinfo;
+    scheme = guile;
+  };
+
   snack = import ../development/libraries/snack {
     inherit fetchurl stdenv tcl tk pkgconfig x11;
         # optional
