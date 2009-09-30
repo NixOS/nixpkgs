@@ -4,7 +4,7 @@
 stdenv.mkDerivation {
   name = "libgnome-2.28.0";
   src = fetchurl {
-    url = nirror://gnome/sources/libgnome/2.28/libgnome-2.28.0.tar.bz2;
+    url = mirror://gnome/sources/libgnome/2.28/libgnome-2.28.0.tar.bz2;
     sha256 = "03hc1m88swxxw4cq491kz7495ksv762imamzbbvhci41bc40anwv";
   };
   buildInputs = [ pkgconfig glib popt intltool esound audiofile libbonobo GConf gnome_vfs ];

@@ -6,7 +6,7 @@
 stdenv.mkDerivation {
   name = "gnome-panel-2.28.0";
   src = fetchurl {
-    url = nirror://gnome/sources/gnome-panel/2.28/gnome-panel-2.28.0.tar.bz2;
+    url = mirror://gnome/sources/gnome-panel/2.28/gnome-panel-2.28.0.tar.bz2;
     sha256 = "0rc4f6vmyrm3s8ncbll0a1ik2j1gg068fq3xal120sc4iw68q5n1";
   };
   buildInputs = [ pkgconfig gtk dbus_glib popt which libxml2 libxslt bzip2 python libXau

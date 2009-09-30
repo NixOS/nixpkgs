@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "gtk-doc-1.11";
   src = fetchurl {
-    url = nirror://gnome/sources/gtk-doc/1.11/gtk-doc-1.11.tar.bz2;
+    url = mirror://gnome/sources/gtk-doc/1.11/gtk-doc-1.11.tar.bz2;
     sha256 = "08zz6gn90aqps84hfhdgarsilbdj0bbnj3wjm2x552n4i7gmq4wj";
   };
   

@@ -7,7 +7,7 @@
 stdenv.mkDerivation {
   name = "gnome-control-center-2.28.0";
   src = fetchurl {
-    url = nirror://gnome/sources/gnome-control-center/2.28/gnome-control-center-2.28.0.tar.bz2;
+    url = mirror://gnome/sources/gnome-control-center/2.28/gnome-control-center-2.28.0.tar.bz2;
     sha256 = "0m0z7dn5qzl63cpc8ivagm4yfsfgigfawl5v3df3pw3z4jk2bsfp";
   };
   buildInputs = [ pkgconfig dbus_glib libxml2 libxslt libxklavier hal popt which python shared_mime_info desktop_file_utils

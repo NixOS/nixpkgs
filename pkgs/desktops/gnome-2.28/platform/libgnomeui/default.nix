@@ -5,7 +5,7 @@
 stdenv.mkDerivation {
   name = "libgnomeui-2.24.2";
   src = fetchurl {
-    url = nirror://gnome/sources/libgnomeui/2.24/libgnomeui-2.24.2.tar.bz2;
+    url = mirror://gnome/sources/libgnomeui/2.24/libgnomeui-2.24.2.tar.bz2;
     sha256 = "04296nf6agg8zsbw6pzl3mzn890bkcczs6fnna5jay7fvnrmjx5f";
   };
   buildInputs = [ pkgconfig libxml2 popt libX11 libICE glib gtk pango

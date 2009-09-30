@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libgweather-2.28.0";
   src = fetchurl {
-    url = nirror://gnome/sources/libgweather/2.28/libgweather-2.28.0.tar.bz2;
+    url = mirror://gnome/sources/libgweather/2.28/libgweather-2.28.0.tar.bz2;
     sha256 = "0m4ncqzf13037zvyihydif1asgp6pnzdkmx5qnmffzb1gd6qxzb5";
   };
   configureFlags = "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo";
