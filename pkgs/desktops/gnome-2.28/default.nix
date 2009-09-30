@@ -246,7 +246,8 @@ rec {
   };
 
   gtksourceview = import ./desktop/gtksourceview {
-    inherit (pkgs) stdenv fetchurl pkgconfig cairo perl intltool;
+    inherit (pkgs) stdenv fetchurl pkgconfig cairo perl intltool
+      gettext;
     inherit (pkgs.gtkLibs) atk glib gtk pango;
     libxml2 = pkgs.libxml2Python;
   };
