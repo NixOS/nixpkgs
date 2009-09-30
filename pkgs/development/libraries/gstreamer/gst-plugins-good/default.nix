@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
   name = "gst-plugins-good-0.10.14";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.bz2";
+    urls = [
+      "${meta.homepage}/src/gst-plugins-good/${name}.tar.bz2"
+      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      ];
     sha256 = "12kq60zdqxkshpjr76iwzykzhjaq3g1rm81nz7b0x44rrc0ms80j";
   };
 

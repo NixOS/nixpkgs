@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "gst-ffmpeg-0.10.5";
 
   src = fetchurl {
-    url = "http://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2";
+    urls = [
+      "http://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2"
+      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      ];
     sha256 = "12y240jp2lda57frz7pj96izqxcns0k31cc5rp4kdfwwfdsvy5ik";
   };
 

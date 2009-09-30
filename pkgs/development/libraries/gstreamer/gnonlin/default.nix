@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "gnonlin-0.10.10";
 
   src = fetchurl {
-    url = "http://gstreamer.freedesktop.org/src/gnonlin/${name}.tar.gz";
+    urls = [
+      "http://gstreamer.freedesktop.org/src/gnonlin/${name}.tar.gz"
+      "mirror://gentoo/distfiles/${name}.tar.gz"
+      ];
     sha256 = "041in2y0x3755hw29rhnyhsh216v2fl1q1p12m9faxiv2r52x83y";
   };
 
