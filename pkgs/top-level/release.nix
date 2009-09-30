@@ -108,7 +108,7 @@ in {
   classpath = linux;
   cmake = all;
   compiz = linux;
-  console_kit = linux;
+  consolekit = linux;
   coreutils = all;
   cpio = all;
   cron = linux;
@@ -295,7 +295,7 @@ in {
   pkgconfig = all;
   pltScheme = linux;
   pmccabe = linux;
-  policy_kit = linux;
+  policykit = linux;
   portmap = linux;
   postgresql = all;
   postfix = linux;
