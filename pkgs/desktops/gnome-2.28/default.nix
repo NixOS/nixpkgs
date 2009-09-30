@@ -181,8 +181,9 @@ rec {
   };
   
   gnome_doc_utils = import ./desktop/gnome-doc-utils {
-    inherit (pkgs) stdenv fetchurl python pkgconfig libxml2 libxslt;
+    inherit (pkgs) stdenv fetchurl python pkgconfig libxslt;
     inherit intltool scrollkeeper;
+    libxml2 = pkgs.libxml2Python;
   };
   
   zenity = import ./desktop/zenity {
