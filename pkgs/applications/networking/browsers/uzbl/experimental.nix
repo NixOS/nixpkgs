@@ -29,6 +29,6 @@ rec {
     description = "Tiny externally controllable webkit browser";
     maintainers = [a.lib.maintainers.raskin];
     platforms = with a.lib.platforms; 
-      linux ++ freebsd ++ darwin;
+      linux;
   };
 }
