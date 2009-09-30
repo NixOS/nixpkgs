@@ -3324,6 +3324,14 @@ let
     cxx = true;
   };
 
+  goffice = import ../development/libraries/goffice {
+    inherit fetchurl stdenv pkgconfig libgsf libxml2 cairo
+      intltool gettext bzip2;
+    inherit (gnome) glib gtk libglade libgnomeui pango;
+    gconf = gnome.GConf;
+    libart = gnome.libart_lgpl;
+  };
+
   goocanvas = import ../development/libraries/goocanvas {
     inherit fetchurl stdenv pkgconfig cairo;
     inherit (gnome) gtk glib;
