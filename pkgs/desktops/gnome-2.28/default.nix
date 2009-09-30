@@ -39,6 +39,7 @@ rec {
     inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat policykit;
     inherit (pkgs.gtkLibs) glib gtk;
     inherit intltool ORBit2;
+    dbus_libs = pkgs.dbus.libs;
   };
 
   libgnomecanvas = import ./platform/libgnomecanvas {

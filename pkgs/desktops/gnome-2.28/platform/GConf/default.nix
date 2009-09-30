@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, glib, gtk, ORBit2, libxml2
-, expat, policykit, intltool}:
+, expat, policykit, intltool, dbus_libs}:
 
 stdenv.mkDerivation {
   name = "GConf-2.28.0";
@@ -9,9 +9,9 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${dbus_glib}/include/dbus-1.0 -I${policykit}/include/PolicyKit -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${dbus_glib}/include/dbus-1.0 -I${policykit}/include/PolicyKit -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${dbus_libs}/include/dbus-1.0"
   '';
 
   buildInputs = [ pkgconfig glib gtk dbus_glib ORBit2 libxml2
-                  expat policykit intltool ];
+                  expat policykit intltool dbus_libs];
 }
