@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "scrollkeeper-0.3.14";
   src = fetchurl {
-    url = mirror:/gnome/sources/scrollkeeper/0.3/scrollkeeper-0.3.14.tar.bz2.sha256sum;
-    sha256 = "0anwj7481k1klnwblhlkdxls50fbaqk942flf0s1zcdjli6ari9v"
+    url = mirror://gnome/sources/scrollkeeper/0.3/scrollkeeper-0.3.14.tar.bz2;
+    sha256 = "08n1xgj1f53zahwm0wpn3jid3rfbhi3iwby0ilaaldnid5qriqgc"
   };
   preConfigure = "
     substituteInPlace extract/dtds/Makefile.am --replace /usr/bin/xmlcatalog xmlcatalog
