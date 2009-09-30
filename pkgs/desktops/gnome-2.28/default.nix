@@ -108,6 +108,9 @@ rec {
     inherit (pkgs) docbook_xml_dtd_43 docbook_xsl;
     inherit gnome_doc_utils;
   };
+
+  # What name should we use??
+  gtkdoc = gtk_doc; 
   
   # Freedesktop library
   startup_notification = import ./platform/startup-notification {
