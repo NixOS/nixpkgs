@@ -64,6 +64,7 @@ in (mapTestOn {
   gwrap = linux;
   swig = linux;
   gnutls = linux;
+  slibGuile = linux;
   dico = linux;
   trackballs = linux;
   beast = linux;
