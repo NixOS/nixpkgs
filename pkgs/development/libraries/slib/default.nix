@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     SCHEME_LIBRARY_PATH="$out/lib/slib" make catalogs
 
     sed -i "$out/bin/slib" \
-        -e "/^SCHEME_LIBRARY_PATH/i export PATH=\"${scheme}/bin:$PATH\""
+        -e "/^SCHEME_LIBRARY_PATH/i export PATH=\"${scheme}/bin:\$PATH\""
   '';
 
   # There's no test suite (?!).
   doCheck = false;
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "The SLIB Portable Scheme Library";
