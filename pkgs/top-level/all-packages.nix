@@ -3342,6 +3342,18 @@ let
     libsoup = gnome26.libsoup;
   });
 
+  gst_all_gtk_218 = recurseIntoAttrs (import ../development/libraries/gstreamer {
+    inherit lib selectVersion stdenv fetchurl perl bison pkgconfig libxml2
+      python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
+      libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
+      dbus libavc1394 ladspaH taglib pulseaudio gdbm bzip2 which;
+    flex = flex2535;
+    inherit (xorg) libX11 libXv libXext;
+    inherit (gtkLibs218) glib pango gtk;
+    inherit (gnome28) gnomevfs /* <- only passed for the no longer used older versions
+             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc libsoup;
+  });
+
   gnet = import ../development/libraries/gnet {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
@@ -4330,14 +4342,13 @@ let
   };
 
   webkit = builderDefsPackage (import ../development/libraries/webkit) {
-    libsoup = gnome26.libsoup;
-    inherit (gnome) gtkdoc;
-    inherit (gtkLibs) gtk atk pango;
+    inherit (gnome28) gtkdoc libsoup;
+    inherit (gtkLibs218) gtk atk pango;
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
       pkgconfig autoconf bison libproxy enchant;
-    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
+    inherit (gst_all_gtk_218) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
     flex = flex2535;
     inherit (xlibs) libXt;
@@ -7117,10 +7128,8 @@ let
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) gtksourceview;
-    libsoup = gnome26.libsoup;
-    glib = gtkLibs.glib;
+    inherit (gtkLibs218) gtk glib;
+    inherit (gnome28) gtksourceview libsoup;
   };
 
   minicom = builderDefsPackage (selectVersion ../tools/misc/minicom "2.3") {
@@ -7601,17 +7610,15 @@ let
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs) gtk;
-    libsoup = gnome26.libsoup;
-    glib = gtkLibs.glib;
+    inherit (gtkLibs218) gtk glib;
+    libsoup = gnome28.libsoup;
   };
 
   uzblExperimental = builderDefsPackage
         (import ../applications/networking/browsers/uzbl/experimental.nix) {
     inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs) gtk;
-    libsoup = gnome26.libsoup;
-    glib = gtkLibs.glib;
+    inherit (gtkLibs218) gtk glib;
+    libsoup = gnome28.libsoup;
   };
 
   valknut = import ../applications/networking/p2p/valknut {
@@ -8079,7 +8086,7 @@ let
 
   gnome26 = import ../desktops/gnome-2.26 pkgs;
 
-  gnome28 = import ../desktops/gnome-2.28 pkgs;
+  gnome28 = import ../desktops/gnome-2.28 (pkgs// {gtkLibs = gtkLibs218});
 
   kde3 = {
 

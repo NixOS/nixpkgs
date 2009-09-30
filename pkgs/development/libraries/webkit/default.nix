@@ -25,13 +25,8 @@ rec {
     "--enable-3D-transforms"
     "--enable-filters"
     "--enable-web-sockets"
-    # Fails the build..
-    # "--enable-shared-workers"
-    # WML support causes crash on
-    # Slashdot.org. It is fixed upstream,
-    # but the required update is too big
-    # Let us wait for a GTK release..
-    #"--enable-wml"
+    # GTK release!
+    "--enable-wml"
     ];
 
   /* doConfigure should be specified separately */
@@ -59,7 +54,7 @@ rec {
     sed -re 's@( |^)//.*@/* & */@' -i $(find . -name '*.c' -o -name '*.h')
   '') ["minInit" "doUnpack"];
 
-  name = "webkit-" + version;
+  name = s.name;
   meta = {
     description = "WebKit - a fast and correct HTML renderer";
     maintainers = [stdenv.lib.maintainers.raskin];

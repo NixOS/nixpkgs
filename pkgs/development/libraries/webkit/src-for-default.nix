@@ -1,6 +1,9 @@
 rec {
-  advertisedUrl="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r47011.tar.bz2";
-  version = "r47011";
-  url="http://builds.nightly.webkit.org/files/trunk/src/WebKit-${version}.tar.bz2";
-  hash = "03lzw3hh7nnbwb8vyv98lgqqgpmd4pc536z7xfn47yg4q76069wq";
+   version="r48908";
+   name="webkit-r48908";
+   hash="18hymchzix56yhl830mxfiayxxjhd5kgm3ga4jc9k627ypqsdycg";
+   url="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r48908.tar.bz2";
+   advertisedUrl="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r48908.tar.bz2";
+  
+  
 }
