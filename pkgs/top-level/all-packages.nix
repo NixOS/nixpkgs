@@ -3077,6 +3077,11 @@ let
     inherit (gtkLibs) glib;
   };
 
+  dbus_glib_gtk_218 = import ../development/libraries/dbus-glib {
+    inherit fetchurl stdenv pkgconfig gettext dbus expat;
+    inherit (gtkLibs218) glib;
+  };
+
   dclib = import ../development/libraries/dclib {
     inherit fetchurl stdenv libxml2 openssl bzip2;
   };
@@ -8086,7 +8091,10 @@ let
 
   gnome26 = import ../desktops/gnome-2.26 pkgs;
 
-  gnome28 = import ../desktops/gnome-2.28 (pkgs// {gtkLibs = gtkLibs218;});
+  gnome28 = import ../desktops/gnome-2.28 (pkgs// {
+    gtkLibs = gtkLibs218;
+    dbus_glib = dbus_glib_gtk_218;
+  });
 
   kde3 = {
 
