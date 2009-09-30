@@ -25,8 +25,8 @@ rec {
     "--enable-3D-transforms"
     "--enable-filters"
     "--enable-web-sockets"
-    # GTK release!
-    "--enable-wml"
+    # WML fails recent builds..
+    # "--enable-wml"
     ];
 
   /* doConfigure should be specified separately */
