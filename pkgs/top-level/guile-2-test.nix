@@ -69,6 +69,7 @@ in (mapTestOn {
   trackballs = linux;
   beast = linux;
   elinks = linux;
+  gnucash = linux;
   gnunet = linux;
   snd = linux;
   ballAndPaddle = linux;
