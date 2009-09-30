@@ -136,7 +136,7 @@ rec {
   libsoup = import ./desktop/libsoup {
     inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite curl;
     inherit (pkgs.gtkLibs) glib;
-    inherit GConf;
+    inherit GConf gnome_keyring;
   };
 
   libwnck = import ./desktop/libwnck {
