@@ -4,8 +4,8 @@ rec {
 
   shell = "/bin/bash";
 
-  path = ["/" "/usr" "/usr/local"];
-
+  path = (if system == "i386-sunos" then [ "/usr/gnu" ] else []) ++
+    ["/" "/usr" "/usr/local"];
 
   prehookBase = builtins.toFile "prehook-base.sh" ''
     # Disable purity tests; it's allowed (even needed) to link to
@@ -91,7 +91,7 @@ rec {
     name = "gcc-native";
     nativeTools = true;
     nativeLibc = true;
-    nativePrefix = "/usr";
+    nativePrefix = if system == "i386-sunos" then "/usr/gnu" else "/usr";
     stdenv = stdenvBoot0;
   };
 
