@@ -7424,6 +7424,7 @@ let
 
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv acl;
+    enableACLs = system != "i686-darwin";
   };
 
   rxvt = import ../applications/misc/rxvt {
