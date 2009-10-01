@@ -4560,8 +4560,13 @@ let
     inherit (xlibs) libXtst;
   };
 
-  xalanj = import ../development/libraries/java/xalanj {
-    inherit stdenv fetchurl;
+  xalanj = xalanJava;
+  xalanJava = import ../development/libraries/java/xalanj {
+    inherit fetchurl stdenv;
+    ant    = apacheAntGcj;  # for bootstrap purposes
+    javac  = gcj;
+    jvm    = gcj;
+    xerces = xercesJava;
   };
 
   zziplib = import ../development/libraries/zziplib {
