@@ -1182,6 +1182,7 @@ let
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
+    etcDir = getConfig [ "openssh" "etcDir" ] "/etc/ssh";
   };
 
   openvpn = import ../tools/networking/openvpn {
