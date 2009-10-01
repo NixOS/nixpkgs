@@ -304,6 +304,7 @@ in {
   pwdutils = linux;
   pthreadmanpages = all;
   pygtk = linux;
+  pyqt4 = linux;
   python = allBut "i686-cygwin";
   pythonFull = linux;
   sbcl = all;
