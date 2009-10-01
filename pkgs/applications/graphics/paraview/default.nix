@@ -32,5 +32,13 @@ stdenv.mkDerivation {
     '';
 
   buildInputs = [ cmake qt4 ];
+
+  meta = {
+    homepage = "http://www.paraview.org/";
+    description = "3D Data analysis and visualization application";
+    license = "free";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
+  };
 }
 

@@ -12,5 +12,7 @@ stdenv.mkDerivation {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = http://www.vtk.org/;
     license = "BSD";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -14,5 +14,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = http://www.opencascade.org/;
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
