@@ -244,10 +244,15 @@ rec {
     http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
   ];
 
-  # Apache mirrors.
+  # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
     http://apache.cs.uu.nl/dist/
     http://www.eu.apache.org/dist/
+    ftp://ftp.inria.fr/pub/Apache/
+    http://apache.cict.fr/
+    ftp://ftp.fu-berlin.de/unix/www/apache/
+    ftp://crysys.hit.bme.hu/pub/apache/dist/
+    http://mirror.cc.columbia.edu/pub/software/apache/
     http://www.apache.org/dist/
     http://archive.apache.org/dist/ # fallback for old releases
   ];

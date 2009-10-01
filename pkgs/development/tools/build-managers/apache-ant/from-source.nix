@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "ant-gcj-${version}";
 
   src = fetchurl {
-    url = "http://mirrors.linhub.com/apache/ant/source/apache-ant-${version}-src.tar.bz2";
+    url = "mirror://apache/ant/source/apache-ant-${version}-src.tar.bz2";
     sha256 = "19pvqvgkxgpgsqm4lvbki5sm0z84kxmykdqicvfad47gc1r9mi2d";
   };
 
