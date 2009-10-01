@@ -458,7 +458,9 @@ rec {
 
     prepareImagePhase = ''
       if test -n "$extraRPMs"; then
-        rpm -iv $extraRPMs
+        for rpmdir in $extraRPMs ; do
+          rpm -iv $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)
+        done
       fi
     '';
   

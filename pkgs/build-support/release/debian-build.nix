@@ -38,7 +38,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
 
     installExtraDebsPhase = ''
       for i in $extraDebs; do
-        dpkg --install $i    
+        dpkg --install $(ls $i/debs/*.deb | sort | head -1)
       done
     '';
 
