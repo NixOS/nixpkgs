@@ -438,11 +438,6 @@ in
         ";
       };
 
-      mod_php = mkOption {
-        default = false;
-        description = "Whether to enable the PHP module.";
-      };
-
       virtualHosts = mkOption {
         default = [];
         example = [
