@@ -478,6 +478,7 @@ in {
 
   kde42 = {
     amarok = linux;
+    kdeaccessibility = linux;
     kdeadmin = linux;
     kdeartwork = linux;
     kdebase = linux;

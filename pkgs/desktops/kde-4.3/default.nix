@@ -112,6 +112,13 @@ rec {
     inherit automoc4 phonon strigi eigen;
   };
   
+  kdeaccessibility = import ./accessibility {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl alsaLib;
+    inherit (pkgs.xlibs) libXtst;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+  
   kdeedu = import ./edu {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt openbabel boost;
     inherit (pkgs) readline gmm gsl facile ocaml xplanet;
