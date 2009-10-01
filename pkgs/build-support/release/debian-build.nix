@@ -69,7 +69,11 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         echo "file deb $i" >> $out/nix-support/hydra-build-products
         stopNest
       done
- 
+
+      for i in $extraDebs; do
+        echo "file deb $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products
+      done
+
       eval "$postInstall" 
     ''; # */
 
