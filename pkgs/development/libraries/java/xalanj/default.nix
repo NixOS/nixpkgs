@@ -5,7 +5,7 @@ let
   options = "-Dbuild.compiler=gcj";   # FIXME: We assume GCJ here.
 in
   stdenv.mkDerivation {
-    name = "xerces-j-${version}";
+    name = "xalan-j-${version}";
 
     src = fetchurl {
       url = "mirror://apache/xml/xalan-j/source/xalan-j_2_7_1-src.tar.gz";
