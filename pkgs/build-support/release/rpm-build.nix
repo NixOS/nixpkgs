@@ -29,6 +29,9 @@ vmTools.buildRPM (
       for i in $out/rpms/*/*.rpm; do
         echo "file rpm $i" >> $out/nix-support/hydra-build-products
       done
+      for rpmdir in $extraRPMs ; do
+        echo "file rpm $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)" >> $out/nix-support/hydra-build-products
+      done
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {
