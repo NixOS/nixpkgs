@@ -7079,6 +7079,11 @@ let
     inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
   };
 
+  kbasket = import ../applications/misc/kbasket {
+    inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg
+      perl qt3 gpgme libgpgerror;
+  };
+
   kermit = import ../tools/misc/kermit {
     inherit fetchurl stdenv ncurses;
   };
