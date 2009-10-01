@@ -4426,6 +4426,13 @@ let
     inherit (xlibs) libXScrnSaver scrnsaverproto;
   };
 
+  xercesJava = import ../development/libraries/java/xerces {
+    inherit fetchurl stdenv;
+    ant   = apacheAntGcj;  # for bootstrap purposes
+    javac = gcj;
+    jvm   = gcj;
+  };
+
   xlibsWrapper = import ../development/libraries/xlibs-wrapper {
     inherit stdenv;
     packages = [
