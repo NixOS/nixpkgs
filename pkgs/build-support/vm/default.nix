@@ -1062,36 +1062,65 @@ rec {
       '';
     };
     
-    fedora2i386 = diskImageFuns.fedora2i386 { packages = commonFedoraPackages; };
-    fedora3i386 = diskImageFuns.fedora3i386 { packages = commonFedoraPackages; };
-    fedora5i386 = diskImageFuns.fedora5i386 { packages = commonFedoraPackages ++ ["util-linux"]; };
-    fedora7i386 = diskImageFuns.fedora7i386 { packages = commonFedoraPackages; };
-    fedora8i386 = diskImageFuns.fedora8i386 { packages = commonFedoraPackages; };
-    fedora9i386 = diskImageFuns.fedora9i386 { packages = commonFedoraPackages       ++ [ "cronie" "util-linux-ng" ]; };
-    fedora9x86_64 = diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages   ++ [ "cronie" "util-linux-ng" ]; };
-    fedora10i386 = diskImageFuns.fedora10i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ]; };
-    fedora10x86_64 = diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ]; };
-    fedora11i386 = diskImageFuns.fedora11i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ]; };
-    fedora11x86_64 = diskImageFuns.fedora11x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ]; };
-    opensuse103i386 = diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"]; };
-    opensuse110i386 = diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages; };
-    opensuse110x86_64 = diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages; };
-    opensuse111i386 = diskImageFuns.opensuse111i386 { packages = commonOpenSUSEPackages; };
-    opensuse111x86_64 = diskImageFuns.opensuse111x86_64 { packages = commonOpenSUSEPackages; };
+    fedora2i386 = diskImageExtraFuns.fedora2i386 [];
+    fedora3i386 = diskImageExtraFuns.fedora3i386 [];
+    fedora5i386 = diskImageExtraFuns.fedora5i386 [];
+    fedora7i386 = diskImageExtraFuns.fedora7i386 [];
+    fedora8i386 = diskImageExtraFuns.fedora8i386 [];
+    fedora9i386 = diskImageExtraFuns.fedora9i386 [];
+    fedora9x86_64 = diskImageExtraFuns.fedora9x86_64 [];
+    fedora10i386 = diskImageExtraFuns.fedora10i386 [];
+    fedora10x86_64 = diskImageExtraFuns.fedora10x86_64 [];
+    fedora11i386 = diskImageExtraFuns.fedora11i386 [];
+    fedora11x86_64 = diskImageExtraFuns.fedora11x86_64 [];
+    opensuse103i386 = diskImageExtraFuns.opensuse103i386 [];
+    opensuse110i386 = diskImageExtraFuns.opensuse110i386 [];
+    opensuse110x86_64 = diskImageExtraFuns.opensuse110x86_64 [];
+    opensuse111i386 = diskImageExtraFuns.opensuse111i386 [];
+    opensuse111x86_64 = diskImageExtraFuns.opensuse111x86_64 [];
     
-    ubuntu710i386 = diskImageFuns.ubuntu710i386 { packages = commonDebianPackages; };
-    ubuntu804i386 = diskImageFuns.ubuntu804i386 { packages = commonDebianPackages; };
-    ubuntu804x86_64 = diskImageFuns.ubuntu804x86_64 { packages = commonDebianPackages; };
-    ubuntu810i386 = diskImageFuns.ubuntu810i386 { packages = commonDebianPackages; };
-    ubuntu810x86_64 = diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages; };
-    ubuntu904i386 = diskImageFuns.ubuntu904i386 { packages = commonDebianPackages; };
-    ubuntu904x86_64 = diskImageFuns.ubuntu904x86_64 { packages = commonDebianPackages; };
-    debian40i386 = diskImageFuns.debian40i386 { packages = commonDebianPackages; };
-    debian40x86_64 = diskImageFuns.debian40x86_64 { packages = commonDebianPackages; };
-    debian50i386 = diskImageFuns.debian50i386 { packages = commonDebianPackages; };
-    debian50x86_64 = diskImageFuns.debian50x86_64 { packages = commonDebianPackages; };
-
+    ubuntu710i386 = diskImageExtraFuns.ubuntu710i386 [];
+    ubuntu804i386 = diskImageExtraFuns.ubuntu804i386 [];
+    ubuntu804x86_64 = diskImageExtraFuns.ubuntu804x86_64 [];
+    ubuntu810i386 = diskImageExtraFuns.ubuntu810i386 [];
+    ubuntu810x86_64 = diskImageExtraFuns.ubuntu810x86_64 [];
+    ubuntu904i386 = diskImageExtraFuns.ubuntu904i386 [];
+    ubuntu904x86_64 = diskImageExtraFuns.ubuntu904x86_64 [];
+    debian40i386 = diskImageExtraFuns.debian40i386 [];
+    debian40x86_64 = diskImageExtraFuns.debian40x86_64 [];
+    debian50i386 = diskImageExtraFuns.debian50i386 [];
+    debian50x86_64 = diskImageExtraFuns.debian50x86_64 [];
   };
 
+  diskImageExtraFuns = {
+    fedora2i386 = extraVirtualPackages : diskImageFuns.fedora2i386 { packages = commonFedoraPackages ++ extraVirtualPackages; };
+    fedora3i386 = extraVirtualPackages : diskImageFuns.fedora3i386 { packages = commonFedoraPackages ++ extraVirtualPackages; };
+    fedora5i386 = extraVirtualPackages : diskImageFuns.fedora5i386 { packages = commonFedoraPackages ++ ["util-linux"] ++ extraVirtualPackages; };
+    fedora7i386 = extraVirtualPackages : diskImageFuns.fedora7i386 { packages = commonFedoraPackages ++ extraVirtualPackages; };
+    fedora8i386 = extraVirtualPackages : diskImageFuns.fedora8i386 { packages = commonFedoraPackages ++ extraVirtualPackages; };
+    fedora9i386 = extraVirtualPackages : diskImageFuns.fedora9i386 { packages = commonFedoraPackages       ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora9x86_64 = extraVirtualPackages : diskImageFuns.fedora9x86_64 { packages = commonFedoraPackages   ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora10i386 = extraVirtualPackages : diskImageFuns.fedora10i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora10x86_64 = extraVirtualPackages : diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora11i386 = extraVirtualPackages : diskImageFuns.fedora11i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora11x86_64 = extraVirtualPackages : diskImageFuns.fedora11x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    opensuse103i386 = extraVirtualPackages : diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"] ++ extraVirtualPackages; };
+    opensuse110i386 = extraVirtualPackages : diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages ++ extraVirtualPackages; };
+    opensuse110x86_64 = extraVirtualPackages : diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages ++ extraVirtualPackages; };
+    opensuse111i386 = extraVirtualPackages : diskImageFuns.opensuse111i386 { packages = commonOpenSUSEPackages ++ extraVirtualPackages; };
+    opensuse111x86_64 = extraVirtualPackages : diskImageFuns.opensuse111x86_64 { packages = commonOpenSUSEPackages ++ extraVirtualPackages; };
+
+    ubuntu710i386 = extraVirtualPackages : diskImageFuns.ubuntu710i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    ubuntu804i386 = extraVirtualPackages : diskImageFuns.ubuntu804i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    ubuntu804x86_64 = extraVirtualPackages : diskImageFuns.ubuntu804x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    ubuntu810i386 = extraVirtualPackages : diskImageFuns.ubuntu810i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    ubuntu810x86_64 = extraVirtualPackages : diskImageFuns.ubuntu810x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    ubuntu904i386 = extraVirtualPackages : diskImageFuns.ubuntu904i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    ubuntu904x86_64 = extraVirtualPackages : diskImageFuns.ubuntu904x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    debian40i386 = extraVirtualPackages : diskImageFuns.debian40i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    debian40x86_64 = extraVirtualPackages : diskImageFuns.debian40x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    debian50i386 = extraVirtualPackages : diskImageFuns.debian50i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
+    debian50x86_64 = extraVirtualPackages : diskImageFuns.debian50x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
+  };
 
 }
