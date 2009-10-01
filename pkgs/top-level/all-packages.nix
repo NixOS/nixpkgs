@@ -3169,6 +3169,10 @@ let
     inherit fetchurl stdenv unzip;
   };
 
+  freetts = import ../development/libraries/freetts {
+    inherit stdenv fetchurl apacheAnt unzip sharutils lib;
+  };
+
   cfitsio = import ../development/libraries/cfitsio {
     inherit fetchurl stdenv;
   };
