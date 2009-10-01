@@ -35,5 +35,5 @@ stdenv.mkDerivation rec {
     cp contrib/ssh-copy-id.1 $out/share/man/man1/
   ";
 
-  installTargets = "install-nokeys";
+  installTargets = "install-nosysconf";
 }
