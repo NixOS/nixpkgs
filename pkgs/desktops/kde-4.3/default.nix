@@ -48,6 +48,11 @@ rec {
     inherit (pkgs) stdenv fetchurl lib cmake;
   };
   
+  polkit_qt = import ./support/polkit-qt {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 policykit;
+    inherit automoc4;
+  };
+  
 ### LIBS
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
@@ -66,7 +71,7 @@ rec {
     inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs boost ConsoleKit;
     inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver;
     inherit kdelibs kdelibs_experimental kdepimlibs kdebindings;
-    inherit automoc4 phonon strigi soprano qimageblitz akonadi;
+    inherit automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt;
   };
   
   kdebase = import ./base {
