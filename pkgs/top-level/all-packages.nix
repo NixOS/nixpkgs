@@ -7519,35 +7519,6 @@ let
     httpd = pkgsOverriden.apacheHttpd;
   };
 
-  subversionStatic = lowPrio (appendToName "static" (import ../applications/version-management/subversion/1.6.nix {
-    inherit fetchurl stdenv apr aprutil expat swig jdk;
-    neon = import ../development/libraries/neon/0.28.nix {
-        inherit fetchurl stdenv libxml2 zlib openssl;
-        compressionSupport = true;
-        sslSupport = true;
-        static = true;
-        shared = false;
-    };
-    zlib = import ../development/libraries/zlib {
-      inherit fetchurl stdenv;
-      static = true;
-    };
-      sqlite = import ../development/libraries/sqlite {
-      inherit fetchurl stdenv readline;
-      static = true;
-    };
-    bdbSupport = true;
-    httpServer = false;
-    httpSupport = true;
-    sslSupport = true;
-    pythonBindings = false;
-    perlBindings = false;
-    javahlBindings = false;
-    compressionSupport = true;
-    httpd = null;
-    static = true;
-  }));
-
   svk = perlPackages.SVK;
 
   sylpheed = import ../applications/networking/mailreaders/sylpheed {
