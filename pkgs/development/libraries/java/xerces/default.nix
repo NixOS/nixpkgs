@@ -12,7 +12,7 @@ in
     name = "xerces-j-${version}";
 
     src = fetchurl {
-      url = "mirror://apache/xerces/j/source/Xerces-J-src.2.9.1.tar.gz";
+      url = "mirror://apache/xerces/j/source/Xerces-J-src.${version}.tar.gz";
       sha256 = "14h5jp58999f0rg4mkyab015hkgsxa8n6cx53ia0sjialxi01bqk";
     };
 
