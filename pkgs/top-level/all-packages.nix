@@ -7511,7 +7511,7 @@ let
     sslSupport = getConfig ["subversion" "sslSupport"] true;
     pythonBindings = getConfig ["subversion" "pythonBindings"] false;
     perlBindings = getConfig ["subversion" "perlBindings"] false;
-    javahlBindings = getConfig ["subversion" "javahlBindings"] false;
+    javahlBindings = supportsJDK && getConfig ["subversion" "javahlBindings"] false;
     compressionSupport = getConfig ["subversion" "compressionSupport"] true;
     httpd = pkgsOverriden.apacheHttpd;
   };
