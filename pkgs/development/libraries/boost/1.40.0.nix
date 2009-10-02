@@ -21,6 +21,12 @@ let
     (stdenv.lib.optional enableShared "shared" ++
      stdenv.lib.optional enableStatic "static");
 
+  # To avoid library name collisions
+  finalLayout = if ((enableRelease && enableDebug) ||
+    (enableSingleThreaded && enableMultiThreaded) ||
+    (enableShared && enableStatic)) then
+    "system" else "tagged";
+
 in
 
 stdenv.mkDerivation {
@@ -42,7 +48,7 @@ stdenv.mkDerivation {
   configureScript = "./bootstrap.sh";
   configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python";
 
-  buildPhase = "./bjam -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=system variant=${variant} threading=${threading} link=${link} install";
+  buildPhase = "./bjam -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} install";
 
   installPhase = ":";
 }
