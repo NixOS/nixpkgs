@@ -665,19 +665,6 @@ let
       sha256 = "1yaslcpj6sd6s8gx2hv60gfjf515gggd8f2jv4zqbp5q9wcapx0i";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
-
-    # The libXaw installation is broken on MacOS X. The package has hard-coded
-    # know-how that assumes shared libraries use an .so suffix. MacOS, however,
-    # uses .dylib. Furthermore, the package fails to install an unversioned
-    # libtool .la file for the library.
-    postInstall = ''
-      cd $out/lib
-      ln -s libXaw8.la libXaw.la
-      if [ ${stdenv.system} = "i686-darwin" ]; then
-        rm *.so*
-	ln -s libXaw8.dylib libXaw.dylib
-      fi
-    '';
   })) // {inherit printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ;};
     
   libXcomposite = (stdenv.mkDerivation ((if overrides ? libXcomposite then overrides.libXcomposite else x: x) {
