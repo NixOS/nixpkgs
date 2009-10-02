@@ -1545,6 +1545,7 @@ let
   truecrypt = import ../applications/misc/truecrypt {
     inherit fetchurl stdenv pkgconfig fuse devicemapper;
     wxGTK = wxGTK28;
+    wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
   };
 
   /* don't have time to fix the builderDefs based expression
