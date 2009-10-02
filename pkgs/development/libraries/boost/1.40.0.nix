@@ -25,7 +25,7 @@ let
   finalLayout = if ((enableRelease && enableDebug) ||
     (enableSingleThreaded && enableMultiThreaded) ||
     (enableShared && enableStatic)) then
-    "system" else "tagged";
+    "tagged" else "system";
 
 in
 
