@@ -258,4 +258,12 @@ rec {
     inherit kdelibs;
     inherit automoc4 phonon;
   };
+
+### LOCALIZATION
+
+  l10n_ca = import ./l10n/catalan.nix {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
+    inherit kdelibs;
+    inherit automoc4 phonon;
+  };
 }
