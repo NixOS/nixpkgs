@@ -2444,6 +2444,8 @@ let
     inherit fetchurl stdenv jre;
   };
 
+  antDarwin = apacheAnt.override rec { jdk = openjdkDarwin ; name = "ant-" + jdk.name ; } ;
+
   ant = apacheAnt;
   apacheAnt = makeOverridable (import ../development/tools/build-managers/apache-ant) {
     inherit fetchurl stdenv jdk;
