@@ -1978,6 +1978,10 @@ let
     inherit lib fetchurl stdenv composableDerivation;
   };
 
+  openjdkDarwin = import ../development/compilers/openjdk-darwin {
+    inherit fetchurl stdenv;
+  };
+
   j2sdk14x = (
     assert system == "i686-linux";
     import ../development/compilers/jdk/default-1.4.nix {
