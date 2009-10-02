@@ -26,5 +26,7 @@ stdenv.mkDerivation {
     homepage = http://multitran.sourceforge.net/;
     description = "Multitran: simple command line utilities for dictionary maintainance";
     license = "GPLv2";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -73,5 +73,7 @@ stdenv.mkDerivation {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = http://www.truecrypt.org/;
     license = "TrueCrypt License Version 2.6";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

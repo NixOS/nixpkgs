@@ -20,8 +20,11 @@ stdenv.mkDerivation {
     ln -s $out/eaglemode.sh $out/bin/eaglemode.sh
   '';
  
-  meta = { homepage = "http://eaglemode.sourceforge.net";
-           description = "Zoomable User Interface";
-           license="GPLv3";
-         };
+  meta = {
+    homepage = "http://eaglemode.sourceforge.net";
+    description = "Zoomable User Interface";
+    license="GPLv3";
+    maintainersv = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
+  };
 }
