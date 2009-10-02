@@ -580,7 +580,8 @@ rec {
         
         echo "running post-install script..."
         eval "$postInstall"
-        
+        ln -sf dash /mnt/bin/sh
+
         rm /mnt/.debug
         
         ${klibcShrunk}/bin/umount /mnt/inst/nix/store
@@ -1008,6 +1009,7 @@ rec {
     "perl"
     "sysvinit"
     "bash"
+    "dash"
     "gzip"
     "bzip2"
     "tar"
