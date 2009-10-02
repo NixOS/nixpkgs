@@ -34,14 +34,10 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-
+      
       if test "$NIX_ENFORCE_PURITY" = "1"; then
-        case $system in
-          *-linux)  LIBC=$(cat $NIX_GCC/nix-support/orig-libc) ;;
-          *-darwin) LIBC=/usr ;;
-          *)        echo unsupported system $system; exit 1 ;;
-        esac
-        configureFlags="$configureFlags -Dlocincpth=$LIBC/include -Dloclibpth=$LIBC/lib"
+        GLIBC=$(cat $NIX_GCC/nix-support/orig-libc)
+        configureFlags="$configureFlags -Dlocincpth=$GLIBC/include -Dloclibpth=$GLIBC/lib"
       fi
     '';
 

@@ -1,12 +1,8 @@
 source $stdenv/setup
 
 if test "$NIX_ENFORCE_PURITY" = "1"; then
-    case $system in
-        *-linux)  LIBC=$(cat $NIX_GCC/nix-support/orig-libc) ;;
-        *-darwin) LIBC=/usr ;;
-        *)        echo unsupported system $system; exit 1 ;;
-    esac
-    extraflags="-Dlocincpth=$LIBC/include -Dloclibpth=$LIBC/lib"
+    GLIBC=$(cat $NIX_GCC/nix-support/orig-libc)
+    extraflags="-Dlocincpth=$GLIBC/include -Dloclibpth=$GLIBC/lib"
 fi
 
 configureScript=./Configure
