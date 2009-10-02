@@ -16,7 +16,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   appres = (stdenv.mkDerivation ((if overrides ? appres then overrides.appres else x: x) {
     name = "appres-1.0.1";
     builder = ./builder.sh;
@@ -26,7 +26,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXt ];
   })) // {inherit libX11 libXt ;};
-
+    
   bdftopcf = (stdenv.mkDerivation ((if overrides ? bdftopcf then overrides.bdftopcf else x: x) {
     name = "bdftopcf-1.0.1";
     builder = ./builder.sh;
@@ -36,7 +36,7 @@ let
     };
     buildInputs = [pkgconfig libXfont ];
   })) // {inherit libXfont ;};
-
+    
   bigreqsproto = (stdenv.mkDerivation ((if overrides ? bigreqsproto then overrides.bigreqsproto else x: x) {
     name = "bigreqsproto-1.0.2";
     builder = ./builder.sh;
@@ -46,7 +46,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   bitmap = (stdenv.mkDerivation ((if overrides ? bitmap then overrides.bitmap else x: x) {
     name = "bitmap-1.0.3";
     builder = ./builder.sh;
@@ -56,7 +56,7 @@ let
     };
     buildInputs = [pkgconfig libXaw libX11 xbitmaps libXmu libXt ];
   })) // {inherit libXaw libX11 xbitmaps libXmu libXt ;};
-
+    
   compositeproto = (stdenv.mkDerivation ((if overrides ? compositeproto then overrides.compositeproto else x: x) {
     name = "compositeproto-0.4";
     builder = ./builder.sh;
@@ -66,7 +66,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   damageproto = (stdenv.mkDerivation ((if overrides ? damageproto then overrides.damageproto else x: x) {
     name = "damageproto-1.1.0";
     builder = ./builder.sh;
@@ -76,7 +76,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   dmxproto = (stdenv.mkDerivation ((if overrides ? dmxproto then overrides.dmxproto else x: x) {
     name = "dmxproto-2.2.2";
     builder = ./builder.sh;
@@ -86,7 +86,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   dri2proto = (stdenv.mkDerivation ((if overrides ? dri2proto then overrides.dri2proto else x: x) {
     name = "dri2proto-2.0";
     builder = ./builder.sh;
@@ -96,7 +96,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   encodings = (stdenv.mkDerivation ((if overrides ? encodings then overrides.encodings else x: x) {
     name = "encodings-1.0.2";
     builder = ./builder.sh;
@@ -106,7 +106,7 @@ let
     };
     buildInputs = [pkgconfig mkfontscale ];
   })) // {inherit mkfontscale ;};
-
+    
   evieext = (stdenv.mkDerivation ((if overrides ? evieext then overrides.evieext else x: x) {
     name = "evieext-1.0.2";
     builder = ./builder.sh;
@@ -116,7 +116,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   fixesproto = (stdenv.mkDerivation ((if overrides ? fixesproto then overrides.fixesproto else x: x) {
     name = "fixesproto-4.0";
     builder = ./builder.sh;
@@ -126,7 +126,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   fontadobe100dpi = (stdenv.mkDerivation ((if overrides ? fontadobe100dpi then overrides.fontadobe100dpi else x: x) {
     name = "font-adobe-100dpi-1.0.0";
     builder = ./builder.sh;
@@ -136,7 +136,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontadobe75dpi = (stdenv.mkDerivation ((if overrides ? fontadobe75dpi then overrides.fontadobe75dpi else x: x) {
     name = "font-adobe-75dpi-1.0.0";
     builder = ./builder.sh;
@@ -146,7 +146,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontadobeutopia100dpi = (stdenv.mkDerivation ((if overrides ? fontadobeutopia100dpi then overrides.fontadobeutopia100dpi else x: x) {
     name = "font-adobe-utopia-100dpi-1.0.1";
     builder = ./builder.sh;
@@ -156,7 +156,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontadobeutopia75dpi = (stdenv.mkDerivation ((if overrides ? fontadobeutopia75dpi then overrides.fontadobeutopia75dpi else x: x) {
     name = "font-adobe-utopia-75dpi-1.0.1";
     builder = ./builder.sh;
@@ -166,7 +166,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontadobeutopiatype1 = (stdenv.mkDerivation ((if overrides ? fontadobeutopiatype1 then overrides.fontadobeutopiatype1 else x: x) {
     name = "font-adobe-utopia-type1-1.0.1";
     builder = ./builder.sh;
@@ -174,9 +174,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-adobe-utopia-type1-1.0.1.tar.bz2;
       sha256 = "1p604j44vqfp7iv4a7p38vi6d1qk26grmnkdsz1dapr7zz475ip9";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontalias = (stdenv.mkDerivation ((if overrides ? fontalias then overrides.fontalias else x: x) {
     name = "font-alias-1.0.1";
     builder = ./builder.sh;
@@ -186,7 +186,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   fontarabicmisc = (stdenv.mkDerivation ((if overrides ? fontarabicmisc then overrides.fontarabicmisc else x: x) {
     name = "font-arabic-misc-1.0.0";
     builder = ./builder.sh;
@@ -196,7 +196,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontbh100dpi = (stdenv.mkDerivation ((if overrides ? fontbh100dpi then overrides.fontbh100dpi else x: x) {
     name = "font-bh-100dpi-1.0.0";
     builder = ./builder.sh;
@@ -206,7 +206,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontbh75dpi = (stdenv.mkDerivation ((if overrides ? fontbh75dpi then overrides.fontbh75dpi else x: x) {
     name = "font-bh-75dpi-1.0.0";
     builder = ./builder.sh;
@@ -216,7 +216,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontbhlucidatypewriter100dpi = (stdenv.mkDerivation ((if overrides ? fontbhlucidatypewriter100dpi then overrides.fontbhlucidatypewriter100dpi else x: x) {
     name = "font-bh-lucidatypewriter-100dpi-1.0.0";
     builder = ./builder.sh;
@@ -226,7 +226,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontbhlucidatypewriter75dpi = (stdenv.mkDerivation ((if overrides ? fontbhlucidatypewriter75dpi then overrides.fontbhlucidatypewriter75dpi else x: x) {
     name = "font-bh-lucidatypewriter-75dpi-1.0.0";
     builder = ./builder.sh;
@@ -236,7 +236,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontbhttf = (stdenv.mkDerivation ((if overrides ? fontbhttf then overrides.fontbhttf else x: x) {
     name = "font-bh-ttf-1.0.0";
     builder = ./builder.sh;
@@ -244,9 +244,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-bh-ttf-1.0.0.tar.bz2;
       sha256 = "0i6nsw1i43ydljws2xzadvbmxs1p50jn9akhinwrh8z4yxr5w6ks";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontbhtype1 = (stdenv.mkDerivation ((if overrides ? fontbhtype1 then overrides.fontbhtype1 else x: x) {
     name = "font-bh-type1-1.0.0";
     builder = ./builder.sh;
@@ -254,9 +254,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-bh-type1-1.0.0.tar.bz2;
       sha256 = "0nv4qdr8z68iczqic4gj492ln6y1xy04kxx08dhdaaf8y89mb2js";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontbitstream100dpi = (stdenv.mkDerivation ((if overrides ? fontbitstream100dpi then overrides.fontbitstream100dpi else x: x) {
     name = "font-bitstream-100dpi-1.0.0";
     builder = ./builder.sh;
@@ -266,7 +266,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontbitstream75dpi = (stdenv.mkDerivation ((if overrides ? fontbitstream75dpi then overrides.fontbitstream75dpi else x: x) {
     name = "font-bitstream-75dpi-1.0.0";
     builder = ./builder.sh;
@@ -276,7 +276,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontbitstreamspeedo = (stdenv.mkDerivation ((if overrides ? fontbitstreamspeedo then overrides.fontbitstreamspeedo else x: x) {
     name = "font-bitstream-speedo-1.0.0";
     builder = ./builder.sh;
@@ -286,7 +286,7 @@ let
     };
     buildInputs = [pkgconfig mkfontdir ];
   })) // {inherit mkfontdir ;};
-
+    
   fontbitstreamtype1 = (stdenv.mkDerivation ((if overrides ? fontbitstreamtype1 then overrides.fontbitstreamtype1 else x: x) {
     name = "font-bitstream-type1-1.0.0";
     builder = ./builder.sh;
@@ -294,9 +294,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-bitstream-type1-1.0.0.tar.bz2;
       sha256 = "00yrahjc884mghhbm713c41x7r2kbg1ply515qs3g20nrwnlkkjg";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontcacheproto = (stdenv.mkDerivation ((if overrides ? fontcacheproto then overrides.fontcacheproto else x: x) {
     name = "fontcacheproto-0.1.2";
     builder = ./builder.sh;
@@ -306,7 +306,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   fontcronyxcyrillic = (stdenv.mkDerivation ((if overrides ? fontcronyxcyrillic then overrides.fontcronyxcyrillic else x: x) {
     name = "font-cronyx-cyrillic-1.0.0";
     builder = ./builder.sh;
@@ -316,7 +316,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontcursormisc = (stdenv.mkDerivation ((if overrides ? fontcursormisc then overrides.fontcursormisc else x: x) {
     name = "font-cursor-misc-1.0.0";
     builder = ./builder.sh;
@@ -326,7 +326,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontdaewoomisc = (stdenv.mkDerivation ((if overrides ? fontdaewoomisc then overrides.fontdaewoomisc else x: x) {
     name = "font-daewoo-misc-1.0.0";
     builder = ./builder.sh;
@@ -336,7 +336,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontdecmisc = (stdenv.mkDerivation ((if overrides ? fontdecmisc then overrides.fontdecmisc else x: x) {
     name = "font-dec-misc-1.0.0";
     builder = ./builder.sh;
@@ -346,7 +346,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontibmtype1 = (stdenv.mkDerivation ((if overrides ? fontibmtype1 then overrides.fontibmtype1 else x: x) {
     name = "font-ibm-type1-1.0.0";
     builder = ./builder.sh;
@@ -354,9 +354,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-ibm-type1-1.0.0.tar.bz2;
       sha256 = "07j6kk7wd0lbnjxn9a4kjahjniiwjyzc8lp1lvw46sahwg193l1h";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontisasmisc = (stdenv.mkDerivation ((if overrides ? fontisasmisc then overrides.fontisasmisc else x: x) {
     name = "font-isas-misc-1.0.0";
     builder = ./builder.sh;
@@ -366,7 +366,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontjismisc = (stdenv.mkDerivation ((if overrides ? fontjismisc then overrides.fontjismisc else x: x) {
     name = "font-jis-misc-1.0.0";
     builder = ./builder.sh;
@@ -376,7 +376,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontmicromisc = (stdenv.mkDerivation ((if overrides ? fontmicromisc then overrides.fontmicromisc else x: x) {
     name = "font-micro-misc-1.0.0";
     builder = ./builder.sh;
@@ -386,7 +386,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontmisccyrillic = (stdenv.mkDerivation ((if overrides ? fontmisccyrillic then overrides.fontmisccyrillic else x: x) {
     name = "font-misc-cyrillic-1.0.0";
     builder = ./builder.sh;
@@ -396,7 +396,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontmiscethiopic = (stdenv.mkDerivation ((if overrides ? fontmiscethiopic then overrides.fontmiscethiopic else x: x) {
     name = "font-misc-ethiopic-1.0.0";
     builder = ./builder.sh;
@@ -404,9 +404,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-misc-ethiopic-1.0.0.tar.bz2;
       sha256 = "0hficywkkzl4dpws9sg47d3m1igpb7m4myw8zabkf1na0648dljq";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontmiscmeltho = (stdenv.mkDerivation ((if overrides ? fontmiscmeltho then overrides.fontmiscmeltho else x: x) {
     name = "font-misc-meltho-1.0.0";
     builder = ./builder.sh;
@@ -414,9 +414,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-misc-meltho-1.0.0.tar.bz2;
       sha256 = "091ripcw30cs6032p12gwcy2hg8b1y24irgacwsky1dn4scjpqf7";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   fontmiscmisc = (stdenv.mkDerivation ((if overrides ? fontmiscmisc then overrides.fontmiscmisc else x: x) {
     name = "font-misc-misc-1.0.0";
     builder = ./builder.sh;
@@ -426,7 +426,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontmuttmisc = (stdenv.mkDerivation ((if overrides ? fontmuttmisc then overrides.fontmuttmisc else x: x) {
     name = "font-mutt-misc-1.0.0";
     builder = ./builder.sh;
@@ -436,7 +436,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontschumachermisc = (stdenv.mkDerivation ((if overrides ? fontschumachermisc then overrides.fontschumachermisc else x: x) {
     name = "font-schumacher-misc-1.0.0";
     builder = ./builder.sh;
@@ -446,7 +446,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ];
   })) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
-
+    
   fontscreencyrillic = (stdenv.mkDerivation ((if overrides ? fontscreencyrillic then overrides.fontscreencyrillic else x: x) {
     name = "font-screen-cyrillic-1.0.1";
     builder = ./builder.sh;
@@ -456,7 +456,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontsonymisc = (stdenv.mkDerivation ((if overrides ? fontsonymisc then overrides.fontsonymisc else x: x) {
     name = "font-sony-misc-1.0.0";
     builder = ./builder.sh;
@@ -466,7 +466,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontsproto = (stdenv.mkDerivation ((if overrides ? fontsproto then overrides.fontsproto else x: x) {
     name = "fontsproto-2.0.2";
     builder = ./builder.sh;
@@ -476,7 +476,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   fontsunmisc = (stdenv.mkDerivation ((if overrides ? fontsunmisc then overrides.fontsunmisc else x: x) {
     name = "font-sun-misc-1.0.0";
     builder = ./builder.sh;
@@ -486,7 +486,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontutil = (stdenv.mkDerivation ((if overrides ? fontutil then overrides.fontutil else x: x) {
     name = "font-util-1.0.1";
     builder = ./builder.sh;
@@ -496,7 +496,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   fontwinitzkicyrillic = (stdenv.mkDerivation ((if overrides ? fontwinitzkicyrillic then overrides.fontwinitzkicyrillic else x: x) {
     name = "font-winitzki-cyrillic-1.0.0";
     builder = ./builder.sh;
@@ -506,7 +506,7 @@ let
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir mkfontscale ];
   })) // {inherit bdftopcf mkfontdir mkfontscale ;};
-
+    
   fontxfree86type1 = (stdenv.mkDerivation ((if overrides ? fontxfree86type1 then overrides.fontxfree86type1 else x: x) {
     name = "font-xfree86-type1-1.0.1";
     builder = ./builder.sh;
@@ -514,9 +514,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/font-xfree86-type1-1.0.1.tar.bz2;
       sha256 = "0hgksnwch59bxxxpmzlwrm2qqhnpj651m458bv1azn1026wgkncg";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)";
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; preInstall = "installFlags=(FCCACHE=true)"; 
   })) // {inherit mkfontdir mkfontscale ;};
-
+    
   gccmakedep = (stdenv.mkDerivation ((if overrides ? gccmakedep then overrides.gccmakedep else x: x) {
     name = "gccmakedep-1.0.2";
     builder = ./builder.sh;
@@ -526,7 +526,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   glproto = (stdenv.mkDerivation ((if overrides ? glproto then overrides.glproto else x: x) {
     name = "glproto-1.4.9";
     builder = ./builder.sh;
@@ -536,7 +536,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   iceauth = (stdenv.mkDerivation ((if overrides ? iceauth then overrides.iceauth else x: x) {
     name = "iceauth-1.0.2";
     builder = ./builder.sh;
@@ -546,7 +546,7 @@ let
     };
     buildInputs = [pkgconfig libICE xproto ];
   })) // {inherit libICE xproto ;};
-
+    
   imake = (stdenv.mkDerivation ((if overrides ? imake then overrides.imake else x: x) {
     name = "imake-1.0.2";
     builder = ./builder.sh;
@@ -556,7 +556,7 @@ let
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
-
+    
   inputproto = (stdenv.mkDerivation ((if overrides ? inputproto then overrides.inputproto else x: x) {
     name = "inputproto-1.4.4";
     builder = ./builder.sh;
@@ -566,7 +566,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   kbproto = (stdenv.mkDerivation ((if overrides ? kbproto then overrides.kbproto else x: x) {
     name = "kbproto-1.0.3";
     builder = ./builder.sh;
@@ -576,7 +576,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   libAppleWM = (stdenv.mkDerivation ((if overrides ? libAppleWM then overrides.libAppleWM else x: x) {
     name = "libAppleWM-1.0.0";
     builder = ./builder.sh;
@@ -586,7 +586,7 @@ let
     };
     buildInputs = [pkgconfig applewmproto libX11 libXext xextproto ];
   })) // {inherit applewmproto libX11 libXext xextproto ;};
-
+    
   libFS = (stdenv.mkDerivation ((if overrides ? libFS then overrides.libFS else x: x) {
     name = "libFS-1.0.1";
     builder = ./builder.sh;
@@ -596,7 +596,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto xproto xtrans ];
   })) // {inherit fontsproto xproto xtrans ;};
-
+    
   libICE = (stdenv.mkDerivation ((if overrides ? libICE then overrides.libICE else x: x) {
     name = "libICE-1.0.4";
     builder = ./builder.sh;
@@ -606,7 +606,7 @@ let
     };
     buildInputs = [pkgconfig xproto xtrans ];
   })) // {inherit xproto xtrans ;};
-
+    
   libSM = (stdenv.mkDerivation ((if overrides ? libSM then overrides.libSM else x: x) {
     name = "libSM-1.1.0";
     builder = ./builder.sh;
@@ -614,10 +614,9 @@ let
       url = mirror://xorg/X11R7.4/src/everything/libSM-1.1.0.tar.bz2;
       sha256 = "10iap6ydxmk0g5qcfnsf9yc30fhvqshgppm0sca21y0z5qwaqdkm";
     };
-    configureFlags = if stdenv.system == "i686-darwin" then "LIBUUID_CFLAGS='' LIBUUID_LIBS=''" else "";
     buildInputs = [pkgconfig libICE libuuid xproto xtrans ];
   })) // {inherit libICE libuuid xproto xtrans ;};
-
+    
   libWindowsWM = (stdenv.mkDerivation ((if overrides ? libWindowsWM then overrides.libWindowsWM else x: x) {
     name = "libWindowsWM-1.0.0";
     builder = ./builder.sh;
@@ -627,7 +626,7 @@ let
     };
     buildInputs = [pkgconfig windowswmproto libX11 libXext xextproto ];
   })) // {inherit windowswmproto libX11 libXext xextproto ;};
-
+    
   libX11 = (stdenv.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
     name = "libX11-1.2.1";
     builder = ./builder.sh;
@@ -637,7 +636,7 @@ let
     };
     buildInputs = [pkgconfig bigreqsproto inputproto kbproto libXau libxcb xcmiscproto libXdmcp xextproto xf86bigfontproto xproto xtrans ];
   })) // {inherit bigreqsproto inputproto kbproto libXau libxcb xcmiscproto libXdmcp xextproto xf86bigfontproto xproto xtrans ;};
-
+    
   libXScrnSaver = (stdenv.mkDerivation ((if overrides ? libXScrnSaver then overrides.libXScrnSaver else x: x) {
     name = "libXScrnSaver-1.1.3";
     builder = ./builder.sh;
@@ -647,7 +646,7 @@ let
     };
     buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
   })) // {inherit scrnsaverproto libX11 libXext xextproto ;};
-
+    
   libXau = (stdenv.mkDerivation ((if overrides ? libXau then overrides.libXau else x: x) {
     name = "libXau-1.0.4";
     builder = ./builder.sh;
@@ -657,7 +656,7 @@ let
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
-
+    
   libXaw = (stdenv.mkDerivation ((if overrides ? libXaw then overrides.libXaw else x: x) {
     name = "libXaw-1.0.4";
     builder = ./builder.sh;
@@ -667,7 +666,7 @@ let
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ];
   })) // {inherit printproto libX11 libXau libXext xextproto libXmu libXp libXpm xproto libXt ;};
-
+    
   libXcomposite = (stdenv.mkDerivation ((if overrides ? libXcomposite then overrides.libXcomposite else x: x) {
     name = "libXcomposite-0.4.0";
     builder = ./builder.sh;
@@ -677,7 +676,7 @@ let
     };
     buildInputs = [pkgconfig compositeproto fixesproto libX11 libXext libXfixes xproto ];
   })) // {inherit compositeproto fixesproto libX11 libXext libXfixes xproto ;};
-
+    
   libXcursor = (stdenv.mkDerivation ((if overrides ? libXcursor then overrides.libXcursor else x: x) {
     name = "libXcursor-1.1.9";
     builder = ./builder.sh;
@@ -687,7 +686,7 @@ let
     };
     buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
   })) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
-
+    
   libXdamage = (stdenv.mkDerivation ((if overrides ? libXdamage then overrides.libXdamage else x: x) {
     name = "libXdamage-1.1.1";
     builder = ./builder.sh;
@@ -697,7 +696,7 @@ let
     };
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
   })) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
-
+    
   libXdmcp = (stdenv.mkDerivation ((if overrides ? libXdmcp then overrides.libXdmcp else x: x) {
     name = "libXdmcp-1.0.2";
     builder = ./builder.sh;
@@ -707,7 +706,7 @@ let
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
-
+    
   libXext = (stdenv.mkDerivation ((if overrides ? libXext then overrides.libXext else x: x) {
     name = "libXext-1.0.5";
     builder = ./builder.sh;
@@ -717,7 +716,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXau xextproto xproto ];
   })) // {inherit libX11 libXau xextproto xproto ;};
-
+    
   libXfixes = (stdenv.mkDerivation ((if overrides ? libXfixes then overrides.libXfixes else x: x) {
     name = "libXfixes-4.0.3";
     builder = ./builder.sh;
@@ -727,7 +726,7 @@ let
     };
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
   })) // {inherit fixesproto libX11 xextproto xproto ;};
-
+    
   libXfont = (stdenv.mkDerivation ((if overrides ? libXfont then overrides.libXfont else x: x) {
     name = "libXfont-1.3.3";
     builder = ./builder.sh;
@@ -737,7 +736,7 @@ let
     };
     buildInputs = [pkgconfig fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ];
   })) // {inherit fontcacheproto libfontenc fontsproto freetype xproto xtrans zlib ;};
-
+    
   libXfontcache = (stdenv.mkDerivation ((if overrides ? libXfontcache then overrides.libXfontcache else x: x) {
     name = "libXfontcache-1.0.4";
     builder = ./builder.sh;
@@ -747,7 +746,7 @@ let
     };
     buildInputs = [pkgconfig fontcacheproto libX11 libXext xextproto ];
   })) // {inherit fontcacheproto libX11 libXext xextproto ;};
-
+    
   libXft = (stdenv.mkDerivation ((if overrides ? libXft then overrides.libXft else x: x) {
     name = "libXft-2.1.13";
     builder = ./builder.sh;
@@ -757,7 +756,7 @@ let
     };
     buildInputs = [pkgconfig fontconfig freetype libXrender ];
   })) // {inherit fontconfig freetype libXrender ;};
-
+    
   libXi = (stdenv.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
     name = "libXi-1.1.3";
     builder = ./builder.sh;
@@ -767,7 +766,7 @@ let
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto ];
   })) // {inherit inputproto libX11 libXext xextproto xproto ;};
-
+    
   libXinerama = (stdenv.mkDerivation ((if overrides ? libXinerama then overrides.libXinerama else x: x) {
     name = "libXinerama-1.0.3";
     builder = ./builder.sh;
@@ -777,7 +776,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
   })) // {inherit libX11 libXext xextproto xineramaproto ;};
-
+    
   libXmu = (stdenv.mkDerivation ((if overrides ? libXmu then overrides.libXmu else x: x) {
     name = "libXmu-1.0.4";
     builder = ./builder.sh;
@@ -787,7 +786,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
   })) // {inherit libX11 libXext xextproto xproto libXt ;};
-
+    
   libXp = (stdenv.mkDerivation ((if overrides ? libXp then overrides.libXp else x: x) {
     name = "libXp-1.0.0";
     builder = ./builder.sh;
@@ -797,7 +796,7 @@ let
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto ];
   })) // {inherit printproto libX11 libXau libXext xextproto ;};
-
+    
   libXpm = (stdenv.mkDerivation ((if overrides ? libXpm then overrides.libXpm else x: x) {
     name = "libXpm-3.5.7";
     builder = ./builder.sh;
@@ -807,7 +806,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
   })) // {inherit libX11 libXext xextproto xproto libXt ;};
-
+    
   libXrandr = (stdenv.mkDerivation ((if overrides ? libXrandr then overrides.libXrandr else x: x) {
     name = "libXrandr-1.2.3";
     builder = ./builder.sh;
@@ -817,7 +816,7 @@ let
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
   })) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
-
+    
   libXrender = (stdenv.mkDerivation ((if overrides ? libXrender then overrides.libXrender else x: x) {
     name = "libXrender-0.9.4";
     builder = ./builder.sh;
@@ -827,7 +826,7 @@ let
     };
     buildInputs = [pkgconfig renderproto libX11 xproto ];
   })) // {inherit renderproto libX11 xproto ;};
-
+    
   libXres = (stdenv.mkDerivation ((if overrides ? libXres then overrides.libXres else x: x) {
     name = "libXres-1.0.3";
     builder = ./builder.sh;
@@ -837,7 +836,7 @@ let
     };
     buildInputs = [pkgconfig resourceproto libX11 libXext xextproto xproto ];
   })) // {inherit resourceproto libX11 libXext xextproto xproto ;};
-
+    
   libXt = (stdenv.mkDerivation ((if overrides ? libXt then overrides.libXt else x: x) {
     name = "libXt-1.0.5";
     builder = ./builder.sh;
@@ -847,7 +846,7 @@ let
     };
     buildInputs = [pkgconfig kbproto libSM libX11 xproto ];
   })) // {inherit kbproto libSM libX11 xproto ;};
-
+    
   libXtst = (stdenv.mkDerivation ((if overrides ? libXtst then overrides.libXtst else x: x) {
     name = "libXtst-1.0.3";
     builder = ./builder.sh;
@@ -857,7 +856,7 @@ let
     };
     buildInputs = [pkgconfig inputproto recordproto libX11 libXext xextproto ];
   })) // {inherit inputproto recordproto libX11 libXext xextproto ;};
-
+    
   libXv = (stdenv.mkDerivation ((if overrides ? libXv then overrides.libXv else x: x) {
     name = "libXv-1.0.4";
     builder = ./builder.sh;
@@ -867,7 +866,7 @@ let
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto ];
   })) // {inherit videoproto libX11 libXext xextproto xproto ;};
-
+    
   libXvMC = (stdenv.mkDerivation ((if overrides ? libXvMC then overrides.libXvMC else x: x) {
     name = "libXvMC-1.0.4";
     builder = ./builder.sh;
@@ -877,7 +876,7 @@ let
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto libXv ];
   })) // {inherit videoproto libX11 libXext xextproto xproto libXv ;};
-
+    
   libXxf86dga = (stdenv.mkDerivation ((if overrides ? libXxf86dga then overrides.libXxf86dga else x: x) {
     name = "libXxf86dga-1.0.2";
     builder = ./builder.sh;
@@ -887,7 +886,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86dgaproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86dgaproto xproto ;};
-
+    
   libXxf86misc = (stdenv.mkDerivation ((if overrides ? libXxf86misc then overrides.libXxf86misc else x: x) {
     name = "libXxf86misc-1.0.1";
     builder = ./builder.sh;
@@ -897,7 +896,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86miscproto xproto ;};
-
+    
   libXxf86vm = (stdenv.mkDerivation ((if overrides ? libXxf86vm then overrides.libXxf86vm else x: x) {
     name = "libXxf86vm-1.0.2";
     builder = ./builder.sh;
@@ -907,7 +906,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
-
+    
   libdmx = (stdenv.mkDerivation ((if overrides ? libdmx then overrides.libdmx else x: x) {
     name = "libdmx-1.0.2";
     builder = ./builder.sh;
@@ -917,7 +916,7 @@ let
     };
     buildInputs = [pkgconfig dmxproto libX11 libXext xextproto ];
   })) // {inherit dmxproto libX11 libXext xextproto ;};
-
+    
   libfontenc = (stdenv.mkDerivation ((if overrides ? libfontenc then overrides.libfontenc else x: x) {
     name = "libfontenc-1.0.4";
     builder = ./builder.sh;
@@ -927,7 +926,7 @@ let
     };
     buildInputs = [pkgconfig xproto zlib ];
   })) // {inherit xproto zlib ;};
-
+    
   libpciaccess = (stdenv.mkDerivation ((if overrides ? libpciaccess then overrides.libpciaccess else x: x) {
     name = "libpciaccess-0.10.5";
     builder = ./builder.sh;
@@ -937,7 +936,7 @@ let
     };
     buildInputs = [pkgconfig zlib ];
   })) // {inherit zlib ;};
-
+    
   libpthreadstubs = (stdenv.mkDerivation ((if overrides ? libpthreadstubs then overrides.libpthreadstubs else x: x) {
     name = "libpthread-stubs-0.1";
     builder = ./builder.sh;
@@ -947,7 +946,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   libxcb = (stdenv.mkDerivation ((if overrides ? libxcb then overrides.libxcb else x: x) {
     name = "libxcb-1.2";
     builder = ./builder.sh;
@@ -957,7 +956,7 @@ let
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   })) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
-
+    
   libxkbfile = (stdenv.mkDerivation ((if overrides ? libxkbfile then overrides.libxkbfile else x: x) {
     name = "libxkbfile-1.0.5";
     builder = ./builder.sh;
@@ -967,7 +966,7 @@ let
     };
     buildInputs = [pkgconfig kbproto libX11 ];
   })) // {inherit kbproto libX11 ;};
-
+    
   lndir = (stdenv.mkDerivation ((if overrides ? lndir then overrides.lndir else x: x) {
     name = "lndir-1.0.1";
     builder = ./builder.sh;
@@ -977,7 +976,7 @@ let
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
-
+    
   luit = (stdenv.mkDerivation ((if overrides ? luit then overrides.luit else x: x) {
     name = "luit-1.0.3";
     builder = ./builder.sh;
@@ -987,7 +986,7 @@ let
     };
     buildInputs = [pkgconfig libfontenc libX11 zlib ];
   })) // {inherit libfontenc libX11 zlib ;};
-
+    
   makedepend = (stdenv.mkDerivation ((if overrides ? makedepend then overrides.makedepend else x: x) {
     name = "makedepend-1.0.1";
     builder = ./builder.sh;
@@ -997,7 +996,7 @@ let
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
-
+    
   mkfontdir = (stdenv.mkDerivation ((if overrides ? mkfontdir then overrides.mkfontdir else x: x) {
     name = "mkfontdir-1.0.4";
     builder = ./builder.sh;
@@ -1007,7 +1006,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   mkfontscale = (stdenv.mkDerivation ((if overrides ? mkfontscale then overrides.mkfontscale else x: x) {
     name = "mkfontscale-1.0.5";
     builder = ./builder.sh;
@@ -1017,7 +1016,7 @@ let
     };
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
   })) // {inherit libfontenc freetype xproto zlib ;};
-
+    
   pixman = (stdenv.mkDerivation ((if overrides ? pixman then overrides.pixman else x: x) {
     name = "pixman-0.15.2";
     builder = ./builder.sh;
@@ -1027,7 +1026,7 @@ let
     };
     buildInputs = [pkgconfig perl ];
   })) // {inherit perl ;};
-
+    
   printproto = (stdenv.mkDerivation ((if overrides ? printproto then overrides.printproto else x: x) {
     name = "printproto-1.0.4";
     builder = ./builder.sh;
@@ -1037,7 +1036,7 @@ let
     };
     buildInputs = [pkgconfig libXau ];
   })) // {inherit libXau ;};
-
+    
   randrproto = (stdenv.mkDerivation ((if overrides ? randrproto then overrides.randrproto else x: x) {
     name = "randrproto-1.2.1";
     builder = ./builder.sh;
@@ -1047,7 +1046,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   recordproto = (stdenv.mkDerivation ((if overrides ? recordproto then overrides.recordproto else x: x) {
     name = "recordproto-1.13.2";
     builder = ./builder.sh;
@@ -1057,7 +1056,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   renderproto = (stdenv.mkDerivation ((if overrides ? renderproto then overrides.renderproto else x: x) {
     name = "renderproto-0.9.3";
     builder = ./builder.sh;
@@ -1067,7 +1066,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   resourceproto = (stdenv.mkDerivation ((if overrides ? resourceproto then overrides.resourceproto else x: x) {
     name = "resourceproto-1.0.2";
     builder = ./builder.sh;
@@ -1077,7 +1076,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   scrnsaverproto = (stdenv.mkDerivation ((if overrides ? scrnsaverproto then overrides.scrnsaverproto else x: x) {
     name = "scrnsaverproto-1.1.0";
     builder = ./builder.sh;
@@ -1087,7 +1086,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   sessreg = (stdenv.mkDerivation ((if overrides ? sessreg then overrides.sessreg else x: x) {
     name = "sessreg-1.0.4";
     builder = ./builder.sh;
@@ -1097,7 +1096,7 @@ let
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
-
+    
   setxkbmap = (stdenv.mkDerivation ((if overrides ? setxkbmap then overrides.setxkbmap else x: x) {
     name = "setxkbmap-1.0.4";
     builder = ./builder.sh;
@@ -1107,7 +1106,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   })) // {inherit libX11 libxkbfile ;};
-
+    
   smproxy = (stdenv.mkDerivation ((if overrides ? smproxy then overrides.smproxy else x: x) {
     name = "smproxy-1.0.2";
     builder = ./builder.sh;
@@ -1117,7 +1116,7 @@ let
     };
     buildInputs = [pkgconfig libXmu libXt ];
   })) // {inherit libXmu libXt ;};
-
+    
   trapproto = (stdenv.mkDerivation ((if overrides ? trapproto then overrides.trapproto else x: x) {
     name = "trapproto-3.4.3";
     builder = ./builder.sh;
@@ -1127,7 +1126,7 @@ let
     };
     buildInputs = [pkgconfig libXt ];
   })) // {inherit libXt ;};
-
+    
   twm = (stdenv.mkDerivation ((if overrides ? twm then overrides.twm else x: x) {
     name = "twm-1.0.4";
     builder = ./builder.sh;
@@ -1137,7 +1136,7 @@ let
     };
     buildInputs = [pkgconfig libICE libSM libX11 libXext libXmu libXt ];
   })) // {inherit libICE libSM libX11 libXext libXmu libXt ;};
-
+    
   utilmacros = (stdenv.mkDerivation ((if overrides ? utilmacros then overrides.utilmacros else x: x) {
     name = "util-macros-1.1.6";
     builder = ./builder.sh;
@@ -1147,7 +1146,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   videoproto = (stdenv.mkDerivation ((if overrides ? videoproto then overrides.videoproto else x: x) {
     name = "videoproto-2.2.2";
     builder = ./builder.sh;
@@ -1157,7 +1156,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   windowswmproto = (stdenv.mkDerivation ((if overrides ? windowswmproto then overrides.windowswmproto else x: x) {
     name = "windowswmproto-1.0.3";
     builder = ./builder.sh;
@@ -1167,7 +1166,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   x11perf = (stdenv.mkDerivation ((if overrides ? x11perf then overrides.x11perf else x: x) {
     name = "x11perf-1.5";
     builder = ./builder.sh;
@@ -1177,7 +1176,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext libXft libXmu libXrender ];
   })) // {inherit libX11 libXext libXft libXmu libXrender ;};
-
+    
   xauth = (stdenv.mkDerivation ((if overrides ? xauth then overrides.xauth else x: x) {
     name = "xauth-1.0.3";
     builder = ./builder.sh;
@@ -1187,7 +1186,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXau libXext libXmu ];
   })) // {inherit libX11 libXau libXext libXmu ;};
-
+    
   xbacklight = (stdenv.mkDerivation ((if overrides ? xbacklight then overrides.xbacklight else x: x) {
     name = "xbacklight-1.1";
     builder = ./builder.sh;
@@ -1197,7 +1196,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXrandr libXrender ];
   })) // {inherit libX11 libXrandr libXrender ;};
-
+    
   xbitmaps = (stdenv.mkDerivation ((if overrides ? xbitmaps then overrides.xbitmaps else x: x) {
     name = "xbitmaps-1.0.1";
     builder = ./builder.sh;
@@ -1207,7 +1206,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xcbproto = (stdenv.mkDerivation ((if overrides ? xcbproto then overrides.xcbproto else x: x) {
     name = "xcb-proto-1.4";
     builder = ./builder.sh;
@@ -1217,7 +1216,7 @@ let
     };
     buildInputs = [pkgconfig python ];
   })) // {inherit python ;};
-
+    
   xcbutil = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
     name = "xcb-util-0.3.4";
     builder = ./builder.sh;
@@ -1227,7 +1226,7 @@ let
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
-
+    
   xclock = (stdenv.mkDerivation ((if overrides ? xclock then overrides.xclock else x: x) {
     name = "xclock-1.0.3";
     builder = ./builder.sh;
@@ -1237,7 +1236,7 @@ let
     };
     buildInputs = [pkgconfig libXaw libX11 libXft libxkbfile libXrender libXt ];
   })) // {inherit libXaw libX11 libXft libxkbfile libXrender libXt ;};
-
+    
   xcmiscproto = (stdenv.mkDerivation ((if overrides ? xcmiscproto then overrides.xcmiscproto else x: x) {
     name = "xcmiscproto-1.1.2";
     builder = ./builder.sh;
@@ -1247,7 +1246,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xcmsdb = (stdenv.mkDerivation ((if overrides ? xcmsdb then overrides.xcmsdb else x: x) {
     name = "xcmsdb-1.0.1";
     builder = ./builder.sh;
@@ -1257,7 +1256,7 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
   xcursorgen = (stdenv.mkDerivation ((if overrides ? xcursorgen then overrides.xcursorgen else x: x) {
     name = "xcursorgen-1.0.2";
     builder = ./builder.sh;
@@ -1267,7 +1266,7 @@ let
     };
     buildInputs = [pkgconfig libpng libX11 libXcursor ];
   })) // {inherit libpng libX11 libXcursor ;};
-
+    
   xcursorthemes = (stdenv.mkDerivation ((if overrides ? xcursorthemes then overrides.xcursorthemes else x: x) {
     name = "xcursor-themes-1.0.1";
     builder = ./builder.sh;
@@ -1277,7 +1276,7 @@ let
     };
     buildInputs = [pkgconfig libXcursor ];
   })) // {inherit libXcursor ;};
-
+    
   xdpyinfo = (stdenv.mkDerivation ((if overrides ? xdpyinfo then overrides.xdpyinfo else x: x) {
     name = "xdpyinfo-1.0.3";
     builder = ./builder.sh;
@@ -1287,7 +1286,7 @@ let
     };
     buildInputs = [pkgconfig libdmx libX11 libXext libXi libXinerama libXp libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
   })) // {inherit libdmx libX11 libXext libXi libXinerama libXp libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
-
+    
   xdriinfo = (stdenv.mkDerivation ((if overrides ? xdriinfo then overrides.xdriinfo else x: x) {
     name = "xdriinfo-1.0.2";
     builder = ./builder.sh;
@@ -1297,7 +1296,7 @@ let
     };
     buildInputs = [pkgconfig glproto libX11 ];
   })) // {inherit glproto libX11 ;};
-
+    
   xev = (stdenv.mkDerivation ((if overrides ? xev then overrides.xev else x: x) {
     name = "xev-1.0.3";
     builder = ./builder.sh;
@@ -1307,7 +1306,7 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
   xextproto = (stdenv.mkDerivation ((if overrides ? xextproto then overrides.xextproto else x: x) {
     name = "xextproto-7.0.5";
     builder = ./builder.sh;
@@ -1317,7 +1316,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xeyes = (stdenv.mkDerivation ((if overrides ? xeyes then overrides.xeyes else x: x) {
     name = "xeyes-1.0.1";
     builder = ./builder.sh;
@@ -1327,7 +1326,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext libXmu libXt ];
   })) // {inherit libX11 libXext libXmu libXt ;};
-
+    
   xf86bigfontproto = (stdenv.mkDerivation ((if overrides ? xf86bigfontproto then overrides.xf86bigfontproto else x: x) {
     name = "xf86bigfontproto-1.1.2";
     builder = ./builder.sh;
@@ -1337,7 +1336,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xf86dga = (stdenv.mkDerivation ((if overrides ? xf86dga then overrides.xf86dga else x: x) {
     name = "xf86dga-1.0.2";
     builder = ./builder.sh;
@@ -1347,7 +1346,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXaw libXmu libXt libXxf86dga ];
   })) // {inherit libX11 libXaw libXmu libXt libXxf86dga ;};
-
+    
   xf86dgaproto = (stdenv.mkDerivation ((if overrides ? xf86dgaproto then overrides.xf86dgaproto else x: x) {
     name = "xf86dgaproto-2.0.3";
     builder = ./builder.sh;
@@ -1357,7 +1356,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xf86driproto = (stdenv.mkDerivation ((if overrides ? xf86driproto then overrides.xf86driproto else x: x) {
     name = "xf86driproto-2.0.4";
     builder = ./builder.sh;
@@ -1367,7 +1366,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xf86inputacecad = (stdenv.mkDerivation ((if overrides ? xf86inputacecad then overrides.xf86inputacecad else x: x) {
     name = "xf86-input-acecad-1.2.2";
     builder = ./builder.sh;
@@ -1377,7 +1376,7 @@ let
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   })) // {inherit inputproto randrproto xorgserver xproto ;};
-
+    
   xf86inputaiptek = (stdenv.mkDerivation ((if overrides ? xf86inputaiptek then overrides.xf86inputaiptek else x: x) {
     name = "xf86-input-aiptek-1.1.1";
     builder = ./builder.sh;
@@ -1387,7 +1386,7 @@ let
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   })) // {inherit inputproto randrproto xorgserver xproto ;};
-
+    
   xf86inputevdev = (stdenv.mkDerivation ((if overrides ? xf86inputevdev then overrides.xf86inputevdev else x: x) {
     name = "xf86-input-evdev-2.2.2";
     builder = ./builder.sh;
@@ -1397,7 +1396,7 @@ let
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   })) // {inherit inputproto xorgserver xproto ;};
-
+    
   xf86inputjoystick = (stdenv.mkDerivation ((if overrides ? xf86inputjoystick then overrides.xf86inputjoystick else x: x) {
     name = "xf86-input-joystick-1.3.2";
     builder = ./builder.sh;
@@ -1407,7 +1406,7 @@ let
     };
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
   })) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
-
+    
   xf86inputkeyboard = (stdenv.mkDerivation ((if overrides ? xf86inputkeyboard then overrides.xf86inputkeyboard else x: x) {
     name = "xf86-input-keyboard-1.3.1";
     builder = ./builder.sh;
@@ -1417,7 +1416,7 @@ let
     };
     buildInputs = [pkgconfig inputproto kbproto randrproto xorgserver xproto ];
   })) // {inherit inputproto kbproto randrproto xorgserver xproto ;};
-
+    
   xf86inputmouse = (stdenv.mkDerivation ((if overrides ? xf86inputmouse then overrides.xf86inputmouse else x: x) {
     name = "xf86-input-mouse-1.3.0";
     builder = ./builder.sh;
@@ -1427,7 +1426,7 @@ let
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   })) // {inherit inputproto randrproto xorgserver xproto ;};
-
+    
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
     name = "xf86-input-synaptics-0.15.0";
     builder = ./builder.sh;
@@ -1437,7 +1436,7 @@ let
     };
     buildInputs = [pkgconfig inputproto randrproto libX11 xorgserver xproto ];
   })) // {inherit inputproto randrproto libX11 xorgserver xproto ;};
-
+    
   xf86inputvmmouse = (stdenv.mkDerivation ((if overrides ? xf86inputvmmouse then overrides.xf86inputvmmouse else x: x) {
     name = "xf86-input-vmmouse-12.5.1";
     builder = ./builder.sh;
@@ -1447,7 +1446,7 @@ let
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   })) // {inherit inputproto randrproto xorgserver xproto ;};
-
+    
   xf86inputvoid = (stdenv.mkDerivation ((if overrides ? xf86inputvoid then overrides.xf86inputvoid else x: x) {
     name = "xf86-input-void-1.1.1";
     builder = ./builder.sh;
@@ -1457,7 +1456,7 @@ let
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   })) // {inherit inputproto randrproto xorgserver xproto ;};
-
+    
   xf86miscproto = (stdenv.mkDerivation ((if overrides ? xf86miscproto then overrides.xf86miscproto else x: x) {
     name = "xf86miscproto-0.9.2";
     builder = ./builder.sh;
@@ -1467,7 +1466,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xf86videoapm = (stdenv.mkDerivation ((if overrides ? xf86videoapm then overrides.xf86videoapm else x: x) {
     name = "xf86-video-apm-1.2.0";
     builder = ./builder.sh;
@@ -1477,7 +1476,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videoark = (stdenv.mkDerivation ((if overrides ? xf86videoark then overrides.xf86videoark else x: x) {
     name = "xf86-video-ark-0.7.0";
     builder = ./builder.sh;
@@ -1487,7 +1486,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
-
+    
   xf86videoast = (stdenv.mkDerivation ((if overrides ? xf86videoast then overrides.xf86videoast else x: x) {
     name = "xf86-video-ast-0.85.0";
     builder = ./builder.sh;
@@ -1497,7 +1496,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videoati = (stdenv.mkDerivation ((if overrides ? xf86videoati then overrides.xf86videoati else x: x) {
     name = "xf86-video-ati-6.12.2";
     builder = ./builder.sh;
@@ -1507,7 +1506,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videochips = (stdenv.mkDerivation ((if overrides ? xf86videochips then overrides.xf86videochips else x: x) {
     name = "xf86-video-chips-1.2.0";
     builder = ./builder.sh;
@@ -1517,7 +1516,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videocirrus = (stdenv.mkDerivation ((if overrides ? xf86videocirrus then overrides.xf86videocirrus else x: x) {
     name = "xf86-video-cirrus-1.2.1";
     builder = ./builder.sh;
@@ -1527,7 +1526,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videodummy = (stdenv.mkDerivation ((if overrides ? xf86videodummy then overrides.xf86videodummy else x: x) {
     name = "xf86-video-dummy-0.3.0";
     builder = ./builder.sh;
@@ -1537,7 +1536,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videofbdev = (stdenv.mkDerivation ((if overrides ? xf86videofbdev then overrides.xf86videofbdev else x: x) {
     name = "xf86-video-fbdev-0.4.0";
     builder = ./builder.sh;
@@ -1547,7 +1546,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ;};
-
+    
   xf86videogeode = (stdenv.mkDerivation ((if overrides ? xf86videogeode then overrides.xf86videogeode else x: x) {
     name = "xf86-video-geode-2.10.1";
     builder = ./builder.sh;
@@ -1557,7 +1556,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videoglide = (stdenv.mkDerivation ((if overrides ? xf86videoglide then overrides.xf86videoglide else x: x) {
     name = "xf86-video-glide-1.0.1";
     builder = ./builder.sh;
@@ -1567,7 +1566,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
-
+    
   xf86videoglint = (stdenv.mkDerivation ((if overrides ? xf86videoglint then overrides.xf86videoglint else x: x) {
     name = "xf86-video-glint-1.2.1";
     builder = ./builder.sh;
@@ -1577,7 +1576,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xorgserver xproto ;};
-
+    
   xf86videoi128 = (stdenv.mkDerivation ((if overrides ? xf86videoi128 then overrides.xf86videoi128 else x: x) {
     name = "xf86-video-i128-1.3.1";
     builder = ./builder.sh;
@@ -1587,7 +1586,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videoi740 = (stdenv.mkDerivation ((if overrides ? xf86videoi740 then overrides.xf86videoi740 else x: x) {
     name = "xf86-video-i740-1.2.0";
     builder = ./builder.sh;
@@ -1597,7 +1596,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videoimpact = (stdenv.mkDerivation ((if overrides ? xf86videoimpact then overrides.xf86videoimpact else x: x) {
     name = "xf86-video-impact-0.2.0";
     builder = ./builder.sh;
@@ -1607,7 +1606,7 @@ let
     };
     buildInputs = [pkgconfig xorgserver xproto ];
   })) // {inherit xorgserver xproto ;};
-
+    
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
     name = "xf86-video-intel-2.7.1";
     builder = ./builder.sh;
@@ -1617,7 +1616,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libXext xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ];
   })) // {inherit fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libXext xextproto xf86driproto xineramaproto xorgserver xproto libXvMC ;};
-
+    
   xf86videomach64 = (stdenv.mkDerivation ((if overrides ? xf86videomach64 then overrides.xf86videomach64 else x: x) {
     name = "xf86-video-mach64-6.8.0";
     builder = ./builder.sh;
@@ -1627,7 +1626,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videomga = (stdenv.mkDerivation ((if overrides ? xf86videomga then overrides.xf86videomga else x: x) {
     name = "xf86-video-mga-1.4.9";
     builder = ./builder.sh;
@@ -1637,7 +1636,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
-
+    
   xf86videoneomagic = (stdenv.mkDerivation ((if overrides ? xf86videoneomagic then overrides.xf86videoneomagic else x: x) {
     name = "xf86-video-neomagic-1.2.1";
     builder = ./builder.sh;
@@ -1647,7 +1646,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videonewport = (stdenv.mkDerivation ((if overrides ? xf86videonewport then overrides.xf86videonewport else x: x) {
     name = "xf86-video-newport-0.2.1";
     builder = ./builder.sh;
@@ -1657,7 +1656,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
-
+    
   xf86videonv = (stdenv.mkDerivation ((if overrides ? xf86videonv then overrides.xf86videonv else x: x) {
     name = "xf86-video-nv-2.1.12";
     builder = ./builder.sh;
@@ -1667,7 +1666,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videoopenchrome = (stdenv.mkDerivation ((if overrides ? xf86videoopenchrome then overrides.xf86videoopenchrome else x: x) {
     name = "xf86-video-openchrome-0.2.903";
     builder = ./builder.sh;
@@ -1677,7 +1676,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 xextproto xf86driproto xorgserver xproto libXvMC ;};
-
+    
   xf86videor128 = (stdenv.mkDerivation ((if overrides ? xf86videor128 then overrides.xf86videor128 else x: x) {
     name = "xf86-video-r128-6.8.0";
     builder = ./builder.sh;
@@ -1687,7 +1686,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videorendition = (stdenv.mkDerivation ((if overrides ? xf86videorendition then overrides.xf86videorendition else x: x) {
     name = "xf86-video-rendition-4.2.0";
     builder = ./builder.sh;
@@ -1697,7 +1696,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
-
+    
   xf86videos3 = (stdenv.mkDerivation ((if overrides ? xf86videos3 then overrides.xf86videos3 else x: x) {
     name = "xf86-video-s3-0.6.0";
     builder = ./builder.sh;
@@ -1707,7 +1706,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videos3virge = (stdenv.mkDerivation ((if overrides ? xf86videos3virge then overrides.xf86videos3virge else x: x) {
     name = "xf86-video-s3virge-1.10.1";
     builder = ./builder.sh;
@@ -1717,7 +1716,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videosavage = (stdenv.mkDerivation ((if overrides ? xf86videosavage then overrides.xf86videosavage else x: x) {
     name = "xf86-video-savage-2.2.1";
     builder = ./builder.sh;
@@ -1727,7 +1726,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
-
+    
   xf86videosiliconmotion = (stdenv.mkDerivation ((if overrides ? xf86videosiliconmotion then overrides.xf86videosiliconmotion else x: x) {
     name = "xf86-video-siliconmotion-1.6.0";
     builder = ./builder.sh;
@@ -1737,7 +1736,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videosis = (stdenv.mkDerivation ((if overrides ? xf86videosis then overrides.xf86videosis else x: x) {
     name = "xf86-video-sis-0.10.0";
     builder = ./builder.sh;
@@ -1747,7 +1746,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xf86miscproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videosisusb = (stdenv.mkDerivation ((if overrides ? xf86videosisusb then overrides.xf86videosisusb else x: x) {
     name = "xf86-video-sisusb-0.9.0";
     builder = ./builder.sh;
@@ -1757,7 +1756,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto videoproto xextproto xf86miscproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videosunbw2 = (stdenv.mkDerivation ((if overrides ? xf86videosunbw2 then overrides.xf86videosunbw2 else x: x) {
     name = "xf86-video-sunbw2-1.1.0";
     builder = ./builder.sh;
@@ -1767,7 +1766,7 @@ let
     };
     buildInputs = [pkgconfig randrproto xorgserver xproto ];
   })) // {inherit randrproto xorgserver xproto ;};
-
+    
   xf86videosuncg14 = (stdenv.mkDerivation ((if overrides ? xf86videosuncg14 then overrides.xf86videosuncg14 else x: x) {
     name = "xf86-video-suncg14-1.1.0";
     builder = ./builder.sh;
@@ -1777,7 +1776,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
-
+    
   xf86videosuncg3 = (stdenv.mkDerivation ((if overrides ? xf86videosuncg3 then overrides.xf86videosuncg3 else x: x) {
     name = "xf86-video-suncg3-1.1.0";
     builder = ./builder.sh;
@@ -1787,7 +1786,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
-
+    
   xf86videosuncg6 = (stdenv.mkDerivation ((if overrides ? xf86videosuncg6 then overrides.xf86videosuncg6 else x: x) {
     name = "xf86-video-suncg6-1.1.0";
     builder = ./builder.sh;
@@ -1797,7 +1796,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
-
+    
   xf86videosunffb = (stdenv.mkDerivation ((if overrides ? xf86videosunffb then overrides.xf86videosunffb else x: x) {
     name = "xf86-video-sunffb-1.2.0";
     builder = ./builder.sh;
@@ -1807,7 +1806,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm randrproto renderproto xextproto xf86driproto xorgserver xproto ;};
-
+    
   xf86videosunleo = (stdenv.mkDerivation ((if overrides ? xf86videosunleo then overrides.xf86videosunleo else x: x) {
     name = "xf86-video-sunleo-1.2.0";
     builder = ./builder.sh;
@@ -1817,7 +1816,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
-
+    
   xf86videosuntcx = (stdenv.mkDerivation ((if overrides ? xf86videosuntcx then overrides.xf86videosuntcx else x: x) {
     name = "xf86-video-suntcx-1.1.0";
     builder = ./builder.sh;
@@ -1827,7 +1826,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
-
+    
   xf86videotdfx = (stdenv.mkDerivation ((if overrides ? xf86videotdfx then overrides.xf86videotdfx else x: x) {
     name = "xf86-video-tdfx-1.4.0";
     builder = ./builder.sh;
@@ -1837,7 +1836,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
-
+    
   xf86videotga = (stdenv.mkDerivation ((if overrides ? xf86videotga then overrides.xf86videotga else x: x) {
     name = "xf86-video-tga-1.2.0";
     builder = ./builder.sh;
@@ -1847,7 +1846,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videotrident = (stdenv.mkDerivation ((if overrides ? xf86videotrident then overrides.xf86videotrident else x: x) {
     name = "xf86-video-trident-1.3.0";
     builder = ./builder.sh;
@@ -1857,7 +1856,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videotseng = (stdenv.mkDerivation ((if overrides ? xf86videotseng then overrides.xf86videotseng else x: x) {
     name = "xf86-video-tseng-1.2.0";
     builder = ./builder.sh;
@@ -1867,7 +1866,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
-
+    
   xf86videov4l = (stdenv.mkDerivation ((if overrides ? xf86videov4l then overrides.xf86videov4l else x: x) {
     name = "xf86-video-v4l-0.2.0";
     builder = ./builder.sh;
@@ -1877,7 +1876,7 @@ let
     };
     buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
   })) // {inherit randrproto videoproto xorgserver xproto ;};
-
+    
   xf86videovermilion = (stdenv.mkDerivation ((if overrides ? xf86videovermilion then overrides.xf86videovermilion else x: x) {
     name = "xf86-video-vermilion-1.0.1";
     builder = ./builder.sh;
@@ -1887,7 +1886,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto renderproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videovesa = (stdenv.mkDerivation ((if overrides ? xf86videovesa then overrides.xf86videovesa else x: x) {
     name = "xf86-video-vesa-2.2.0";
     builder = ./builder.sh;
@@ -1897,7 +1896,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
-
+    
   xf86videovmware = (stdenv.mkDerivation ((if overrides ? xf86videovmware then overrides.xf86videovmware else x: x) {
     name = "xf86-video-vmware-10.16.5";
     builder = ./builder.sh;
@@ -1907,7 +1906,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videovoodoo = (stdenv.mkDerivation ((if overrides ? xf86videovoodoo then overrides.xf86videovoodoo else x: x) {
     name = "xf86-video-voodoo-1.2.0";
     builder = ./builder.sh;
@@ -1917,7 +1916,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
-
+    
   xf86videowsfb = (stdenv.mkDerivation ((if overrides ? xf86videowsfb then overrides.xf86videowsfb else x: x) {
     name = "xf86-video-wsfb-0.2.1";
     builder = ./builder.sh;
@@ -1927,7 +1926,7 @@ let
     };
     buildInputs = [pkgconfig xorgserver xproto ];
   })) // {inherit xorgserver xproto ;};
-
+    
   xf86videoxgi = (stdenv.mkDerivation ((if overrides ? xf86videoxgi then overrides.xf86videoxgi else x: x) {
     name = "xf86-video-xgi-1.5.0";
     builder = ./builder.sh;
@@ -1937,7 +1936,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto glproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ;};
-
+    
   xf86videoxgixp = (stdenv.mkDerivation ((if overrides ? xf86videoxgixp then overrides.xf86videoxgixp else x: x) {
     name = "xf86-video-xgixp-1.7.99.3";
     builder = ./builder.sh;
@@ -1947,7 +1946,7 @@ let
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
-
+    
   xf86vidmodeproto = (stdenv.mkDerivation ((if overrides ? xf86vidmodeproto then overrides.xf86vidmodeproto else x: x) {
     name = "xf86vidmodeproto-2.2.2";
     builder = ./builder.sh;
@@ -1957,7 +1956,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xfs = (stdenv.mkDerivation ((if overrides ? xfs then overrides.xfs else x: x) {
     name = "xfs-1.0.8";
     builder = ./builder.sh;
@@ -1967,7 +1966,7 @@ let
     };
     buildInputs = [pkgconfig libFS libXfont xtrans ];
   })) // {inherit libFS libXfont xtrans ;};
-
+    
   xgamma = (stdenv.mkDerivation ((if overrides ? xgamma then overrides.xgamma else x: x) {
     name = "xgamma-1.0.2";
     builder = ./builder.sh;
@@ -1977,7 +1976,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXxf86vm ];
   })) // {inherit libX11 libXxf86vm ;};
-
+    
   xhost = (stdenv.mkDerivation ((if overrides ? xhost then overrides.xhost else x: x) {
     name = "xhost-1.0.2";
     builder = ./builder.sh;
@@ -1987,7 +1986,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXau libXmu ];
   })) // {inherit libX11 libXau libXmu ;};
-
+    
   xineramaproto = (stdenv.mkDerivation ((if overrides ? xineramaproto then overrides.xineramaproto else x: x) {
     name = "xineramaproto-1.1.2";
     builder = ./builder.sh;
@@ -1997,7 +1996,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xinput = (stdenv.mkDerivation ((if overrides ? xinput then overrides.xinput else x: x) {
     name = "xinput-1.3.0";
     builder = ./builder.sh;
@@ -2007,7 +2006,7 @@ let
     };
     buildInputs = [pkgconfig inputproto libX11 libXext libXi ];
   })) // {inherit inputproto libX11 libXext libXi ;};
-
+    
   xkbcomp = (stdenv.mkDerivation ((if overrides ? xkbcomp then overrides.xkbcomp else x: x) {
     name = "xkbcomp-1.0.5";
     builder = ./builder.sh;
@@ -2017,7 +2016,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   })) // {inherit libX11 libxkbfile ;};
-
+    
   xkbevd = (stdenv.mkDerivation ((if overrides ? xkbevd then overrides.xkbevd else x: x) {
     name = "xkbevd-1.0.2";
     builder = ./builder.sh;
@@ -2027,7 +2026,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   })) // {inherit libX11 libxkbfile ;};
-
+    
   xkbutils = (stdenv.mkDerivation ((if overrides ? xkbutils then overrides.xkbutils else x: x) {
     name = "xkbutils-1.0.1";
     builder = ./builder.sh;
@@ -2037,7 +2036,7 @@ let
     };
     buildInputs = [pkgconfig libXaw libX11 libxkbfile ];
   })) // {inherit libXaw libX11 libxkbfile ;};
-
+    
   xkill = (stdenv.mkDerivation ((if overrides ? xkill then overrides.xkill else x: x) {
     name = "xkill-1.0.1";
     builder = ./builder.sh;
@@ -2047,7 +2046,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   })) // {inherit libX11 libXmu ;};
-
+    
   xlsatoms = (stdenv.mkDerivation ((if overrides ? xlsatoms then overrides.xlsatoms else x: x) {
     name = "xlsatoms-1.0.1";
     builder = ./builder.sh;
@@ -2057,7 +2056,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   })) // {inherit libX11 libXmu ;};
-
+    
   xlsclients = (stdenv.mkDerivation ((if overrides ? xlsclients then overrides.xlsclients else x: x) {
     name = "xlsclients-1.0.1";
     builder = ./builder.sh;
@@ -2067,7 +2066,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   })) // {inherit libX11 libXmu ;};
-
+    
   xmessage = (stdenv.mkDerivation ((if overrides ? xmessage then overrides.xmessage else x: x) {
     name = "xmessage-1.0.2";
     builder = ./builder.sh;
@@ -2077,7 +2076,7 @@ let
     };
     buildInputs = [pkgconfig libXaw libXt ];
   })) // {inherit libXaw libXt ;};
-
+    
   xmodmap = (stdenv.mkDerivation ((if overrides ? xmodmap then overrides.xmodmap else x: x) {
     name = "xmodmap-1.0.3";
     builder = ./builder.sh;
@@ -2087,7 +2086,7 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
   xorgcffiles = (stdenv.mkDerivation ((if overrides ? xorgcffiles then overrides.xorgcffiles else x: x) {
     name = "xorg-cf-files-1.0.2";
     builder = ./builder.sh;
@@ -2097,7 +2096,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xorgdocs = (stdenv.mkDerivation ((if overrides ? xorgdocs then overrides.xorgdocs else x: x) {
     name = "xorg-docs-1.4";
     builder = ./builder.sh;
@@ -2107,7 +2106,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
     name = "xorg-server-1.5.3";
     builder = ./builder.sh;
@@ -2117,7 +2116,7 @@ let
     };
     buildInputs = [pkgconfig renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto dri2proto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm ];
   })) // {inherit renderproto bigreqsproto compositeproto damageproto dbus libdmx dmxproto dri2proto evieext fixesproto fontcacheproto libfontenc fontsproto freetype mesa glproto hal inputproto kbproto libdrm mkfontdir mkfontscale openssl libpciaccess perl pixman printproto randrproto recordproto resourceproto scrnsaverproto trapproto videoproto libX11 libXau libXaw xcmiscproto libXdmcp libXext xextproto xf86dgaproto xf86driproto xf86miscproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXtst libXv libXxf86misc libXxf86vm ;};
-
+    
   xorgsgmldoctools = (stdenv.mkDerivation ((if overrides ? xorgsgmldoctools then overrides.xorgsgmldoctools else x: x) {
     name = "xorg-sgml-doctools-1.2";
     builder = ./builder.sh;
@@ -2127,7 +2126,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xpr = (stdenv.mkDerivation ((if overrides ? xpr then overrides.xpr else x: x) {
     name = "xpr-1.0.2";
     builder = ./builder.sh;
@@ -2137,7 +2136,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   })) // {inherit libX11 libXmu ;};
-
+    
   xprop = (stdenv.mkDerivation ((if overrides ? xprop then overrides.xprop else x: x) {
     name = "xprop-1.0.4";
     builder = ./builder.sh;
@@ -2147,7 +2146,7 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
   xproto = (stdenv.mkDerivation ((if overrides ? xproto then overrides.xproto else x: x) {
     name = "xproto-7.0.15";
     builder = ./builder.sh;
@@ -2157,7 +2156,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xrandr = (stdenv.mkDerivation ((if overrides ? xrandr then overrides.xrandr else x: x) {
     name = "xrandr-1.2.3";
     builder = ./builder.sh;
@@ -2167,7 +2166,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXrandr libXrender ];
   })) // {inherit libX11 libXrandr libXrender ;};
-
+    
   xrdb = (stdenv.mkDerivation ((if overrides ? xrdb then overrides.xrdb else x: x) {
     name = "xrdb-1.0.5";
     builder = ./builder.sh;
@@ -2177,7 +2176,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXmu ];
   })) // {inherit libX11 libXmu ;};
-
+    
   xrefresh = (stdenv.mkDerivation ((if overrides ? xrefresh then overrides.xrefresh else x: x) {
     name = "xrefresh-1.0.2";
     builder = ./builder.sh;
@@ -2187,7 +2186,7 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
   xset = (stdenv.mkDerivation ((if overrides ? xset then overrides.xset else x: x) {
     name = "xset-1.0.4";
     builder = ./builder.sh;
@@ -2197,7 +2196,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext libXfontcache libXmu libXp libXxf86misc ];
   })) // {inherit libX11 libXext libXfontcache libXmu libXp libXxf86misc ;};
-
+    
   xsetmode = (stdenv.mkDerivation ((if overrides ? xsetmode then overrides.xsetmode else x: x) {
     name = "xsetmode-1.0.0";
     builder = ./builder.sh;
@@ -2207,7 +2206,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXi ];
   })) // {inherit libX11 libXi ;};
-
+    
   xsetroot = (stdenv.mkDerivation ((if overrides ? xsetroot then overrides.xsetroot else x: x) {
     name = "xsetroot-1.0.2";
     builder = ./builder.sh;
@@ -2217,7 +2216,7 @@ let
     };
     buildInputs = [pkgconfig libX11 xbitmaps libXmu ];
   })) // {inherit libX11 xbitmaps libXmu ;};
-
+    
   xtrans = (stdenv.mkDerivation ((if overrides ? xtrans then overrides.xtrans else x: x) {
     name = "xtrans-1.2.1";
     builder = ./builder.sh;
@@ -2227,7 +2226,7 @@ let
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
-
+    
   xvinfo = (stdenv.mkDerivation ((if overrides ? xvinfo then overrides.xvinfo else x: x) {
     name = "xvinfo-1.0.2";
     builder = ./builder.sh;
@@ -2237,7 +2236,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXv ];
   })) // {inherit libX11 libXv ;};
-
+    
   xwd = (stdenv.mkDerivation ((if overrides ? xwd then overrides.xwd else x: x) {
     name = "xwd-1.0.2";
     builder = ./builder.sh;
@@ -2247,7 +2246,7 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
   xwininfo = (stdenv.mkDerivation ((if overrides ? xwininfo then overrides.xwininfo else x: x) {
     name = "xwininfo-1.0.4";
     builder = ./builder.sh;
@@ -2257,7 +2256,7 @@ let
     };
     buildInputs = [pkgconfig libX11 libXext ];
   })) // {inherit libX11 libXext ;};
-
+    
   xwud = (stdenv.mkDerivation ((if overrides ? xwud then overrides.xwud else x: x) {
     name = "xwud-1.0.1";
     builder = ./builder.sh;
@@ -2267,5 +2266,5 @@ let
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
-
+    
 }; in xorg

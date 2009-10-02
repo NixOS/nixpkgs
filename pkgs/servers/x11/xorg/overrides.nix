@@ -75,5 +75,9 @@
         ln -s /var/tmp $out/share/X11/xkb/compiled
       '';
   };
+
+  libSM = attrs: attrs // args.stdenv.lib.optionalAttrs (args.stdenv.system == "i686-darwin") {
+    configureFlags = "LIBUUID_CFLAGS='' LIBUUID_LIBS=''";
+  };
   
 }
