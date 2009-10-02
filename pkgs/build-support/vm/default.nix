@@ -530,7 +530,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin
+        PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin:${lzma}/bin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -546,7 +546,7 @@ rec {
         # Make the Nix store available in /mnt, because that's where the .debs live.
         mkdir -p /mnt/inst/nix/store
         ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/inst/nix/store
-
+        ${klibcShrunk}/bin/mount -o bind /proc /mnt/proc
         ${klibcShrunk}/bin/mount -o bind /dev /mnt/dev
         
         # Misc. files/directories assumed by various packages.
@@ -584,6 +584,7 @@ rec {
         rm /mnt/.debug
         
         ${klibcShrunk}/bin/umount /mnt/inst/nix/store
+        ${klibcShrunk}/bin/umount /mnt/proc
         ${klibcShrunk}/bin/umount /mnt/dev
         ${klibcShrunk}/bin/umount /mnt
       '';
