@@ -6631,7 +6631,7 @@ let
       libpng libjpeg libungif libtiff texinfo dbus;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
-    xawSupport = getPkgConfig "emacs" "xawSupport" false;
+    xawSupport = system == "i686-darwin" || getPkgConfig "emacs" "xawSupport" false;
     xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
     xftSupport = getPkgConfig "emacs" "xftSupport" true;
