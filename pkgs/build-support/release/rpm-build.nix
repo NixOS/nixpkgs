@@ -30,7 +30,7 @@ vmTools.buildRPM (
         echo "file rpm $i" >> $out/nix-support/hydra-build-products
       done
       for rpmdir in $extraRPMs ; do
-        echo "file rpm $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)" >> $out/nix-support/hydra-build-products
+        echo "file rpm-extra $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)" >> $out/nix-support/hydra-build-products
       done
     ''; # */
 

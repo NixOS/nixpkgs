@@ -71,7 +71,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       done
 
       for i in $extraDebs; do
-        echo "file deb $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products
+        echo "file deb-extra $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products
       done
 
       eval "$postInstall" 
