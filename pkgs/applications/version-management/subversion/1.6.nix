@@ -8,7 +8,6 @@
 , javahlBindings ? false
 , stdenv, fetchurl, apr, aprutil, neon, zlib, sqlite
 , httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, static ? false
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     --disable-keychain
-    ${if static then "--disable-shared --enable-all-static" else ""}
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
