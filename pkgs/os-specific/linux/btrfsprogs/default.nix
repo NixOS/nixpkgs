@@ -8,7 +8,7 @@ let
   ];
 in
 
-assert libuuid != null;
+assert a.libuuid != null;
 
 rec {
   src = fetchurl {
