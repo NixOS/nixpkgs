@@ -472,6 +472,10 @@ rec {
     inherit cabal;
   };
 
+  transformers = import ../development/libraries/haskell/transformers {
+    inherit cabal;
+  };
+
   uniplate = import ../development/libraries/haskell/uniplate {
     inherit cabal mtl;
   };
