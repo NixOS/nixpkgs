@@ -3274,7 +3274,11 @@ let
     inherit fetchurl stdenv pkgconfig gettext;
   };
 
-  glibc = useFromStdenv "glibc" (if getConfig ["brokenRedHatKernel"] false then glibc25 else glibc29);
+  glibc =
+    let haveRedHatKernel       = system == "i686-linux" || system == "x86_64-linux";
+        haveBrokenRedHatKernel = haveRedHatKernel && getConfig ["brokenRedHatKernel"] false;
+    in
+    useFromStdenv "glibc" (if haveBrokenRedHatKernel then glibc25 else glibc29);
 
   glibc25 = import ../development/libraries/glibc-2.5 {
     inherit fetchurl stdenv kernelHeaders;
