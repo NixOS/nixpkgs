@@ -1,15 +1,4 @@
-{ /* SWIG doesn't carry any run-time dependency on Perl, Python, etc., so
-     it's safe to enable everything by default.  */
-  perlSupport ? true, pythonSupport ? true, javaSupport ? true
-, guileSupport ? true
-
-, stdenv, fetchurl, boost, perl ? null, python ? null, jdk ? null
-, guile ? null }:
-
-assert perlSupport -> perl != null;
-assert pythonSupport -> python != null;
-assert guileSupport -> guile != null;
-assert javaSupport -> jdk != null;
+{ stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
   name = "swig-1.3.40";
@@ -19,11 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02dc8g8wy75nd2is1974rl24c6mdl0ai1vszs1xpg9nd7dlv6i8r";
   };
 
-  buildInputs = [ boost ]  # Boost is used in the test suite
-    ++ stdenv.lib.optional perlSupport    perl
-    ++ stdenv.lib.optional pythonSupport  python
-    ++ stdenv.lib.optional guileSupport   guile
-    ++ stdenv.lib.optional javaSupport    jdk;
+  #buildInputs = [ boost ]; # needed for `make check'
 
   /* The test suite fails this way:
 
@@ -35,11 +20,6 @@ stdenv.mkDerivation rec {
      This may be an uninitialized mutex or mutexattr or something.
    */
   doCheck = false;
-
-  passthru = {
-    inherit perl python jdk guile;
-    inherit perlSupport pythonSupport guileSupport javaSupport;
-  };
 
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";

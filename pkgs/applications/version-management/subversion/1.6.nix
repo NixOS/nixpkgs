@@ -7,32 +7,32 @@
 , perlBindings ? false
 , javahlBindings ? false
 , stdenv, fetchurl, apr, aprutil, neon, zlib, sqlite
-, httpd ? null, expat, swig ? null, jdk ? null
+, httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
 , static ? false
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> httpd != null;
-assert pythonBindings -> swig != null && swig.pythonSupport;
-assert javahlBindings -> jdk != null;
+assert pythonBindings -> swig != null && python != null;
+assert javahlBindings -> jdk != null && perl != null;
 assert sslSupport -> neon.sslSupport;
 assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.4";
+  version = "1.6.5";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "http://subversion.tigris.org/downloads/${name}.tar.bz2";
-    sha256 = "0lhfmz0bnvwka3w8j8hpfimcyqz1w6khqv100wvzx13wfgkgd6vw";
+    sha256 = "1badvnx1305dm79g31l1536z78nsi7n9wi4v6s6lp64y8pd1ncv4";
   };
 
   buildInputs = [zlib apr aprutil sqlite]
     ++ stdenv.lib.optional httpSupport neon
-    ++ stdenv.lib.optional pythonBindings swig.python
-    ++ stdenv.lib.optional perlBindings swig.perl
+    ++ stdenv.lib.optional pythonBindings python
+    ++ stdenv.lib.optional perlBindings perl
     ;
 
   configureFlags = ''
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     ensureDir $out/share/emacs/site-lisp
     cp contrib/client-side/emacs/*.el $out/share/emacs/site-lisp/
 
-    if test "$pythonBindings"; then
+    if test -n "$pythonBindings"; then
         make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
         make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
     fi
 
-    if test "$perlBindings"; then
+    if test -n "$perlBindings"; then
         make swig-pl-lib
         make install-swig-pl-lib
         cd subversion/bindings/swig/perl/native
