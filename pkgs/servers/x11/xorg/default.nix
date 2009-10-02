@@ -614,6 +614,7 @@ let
       url = mirror://xorg/X11R7.4/src/everything/libSM-1.1.0.tar.bz2;
       sha256 = "10iap6ydxmk0g5qcfnsf9yc30fhvqshgppm0sca21y0z5qwaqdkm";
     };
+    configureFlags = if stdenv.system == "i686-darwin" then "LIBUUID_CFLAGS='' LIBUUID_LIBS=''" else "";
     buildInputs = [pkgconfig libICE libuuid xproto xtrans ];
   })) // {inherit libICE libuuid xproto xtrans ;};
     
