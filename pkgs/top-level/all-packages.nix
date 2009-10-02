@@ -7932,7 +7932,8 @@ let
   };
 
   exult = import ../games/exult {
-    inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip;
+    inherit fetchurl SDL SDL_mixer zlib libpng unzip;
+    stdenv = overrideGCC stdenv gcc42;
   };
 
   /*
