@@ -1,13 +1,18 @@
 source $stdenv/setup
 
+# This hook is supposed to be run on Linux. It patches the proper locations of
+# the crt{1,i,n}.o files into the build to ensure that Emacs is linked with
+# *our* versions, not the ones found in the system, as it would do by default.
+# On other platforms, this appears to be unnecessary.
 preConfigure() {
+    case "${system}" in
+	x86_64-linux)	glibclibdir=lib64 ;;
+	i686-linux)	glibclibdir=lib ;;
+        *)              return;
+    esac
+
     libc=$(cat ${NIX_GCC}/nix-support/orig-libc)
     echo "libc: $libc"
-
-    case "${system}" in
-	x86_64-*)	glibclibdir=lib64 ;;
-	*)		glibclibdir=lib ;;
-    esac
 
     for i in src/s/*.h src/m/*.h; do
         substituteInPlace $i \
