@@ -7502,9 +7502,7 @@ let
     clisp = clisp_2_44_1;
   };
 
-  subversion = subversion16;
-
-  subversion16 = makeOverridable (import ../applications/version-management/subversion/1.6.nix) {
+  subversion = makeOverridable (import ../applications/version-management/subversion/default.nix) {
     inherit (pkgsOverriden) fetchurl stdenv apr aprutil expat swig zlib jdk python perl sqlite;
     neon = neon028;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;

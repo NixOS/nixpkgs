@@ -342,8 +342,6 @@ in {
   stlport = linux;
   strace = linux;
   su = linux;
-  subversion = all;
-  subversion16 = all;
   sudo = linux;
   superTuxKart = linux;
   swig = linux;
