@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 		  automoc4 phonon akonadi soprano strigi ];
   CMAKE_PREFIX_PATH=kdepimlibs;
   includeAllQtDirs=true;
+  builder = ./builder.sh;
   meta = {
     description = "KDE PIM runtime";
     homepage = http://www.kde.org;
