@@ -159,9 +159,10 @@ rec {
   };
   
   kdepim_runtime = import ./pim-runtime {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt boost;
+    inherit (pkgs) shared_mime_info;
     inherit kdelibs kdelibs_experimental kdepimlibs;
-    inherit automoc4 phonon;
+    inherit automoc4 phonon akonadi soprano strigi;
   };
   
   kdeplasma_addons = import ./plasma-addons {
