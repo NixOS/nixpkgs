@@ -1,6 +1,6 @@
 pkgs:
 
-rec {
+pkgs.recurseIntoAttrs (rec {
   inherit (pkgs) qt4;
 
 ### SUPPORT
@@ -262,9 +262,9 @@ rec {
 
 ### LOCALIZATION
 
-  l10n_ca = import ./l10n/catalan.nix {
+  l10n = pkgs.recurseIntoAttrs (import ./l10n {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
     inherit kdelibs;
     inherit automoc4 phonon;
-  };
-}
+  });
+})
