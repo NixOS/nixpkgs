@@ -277,7 +277,7 @@
   };
   libwapcaplet = args: with args; fetchurl { # Thu Sep 10 21:10:43 CEST 2009
     url = "http://mawercer.de/~nix/repos/libwapcaplet-9563.tar.gz";
-    sha256 = "242844c6146dc3ee3e151b54ba7ed9b086ef6a4e351c499af2ce10fe93c91ce6";
+    sha256 = "165mimp2hawmfdrhnbz8mwl8rv2p9rsiqpr0j4nzqh1bw1yy5g82";
   };
   libsvgtiny = args: with args; fetchurl { # Fri Sep 11 00:06:40 CEST 2009
     url = "http://mawercer.de/~nix/repos/libsvgtiny-9563.tar.gz";
