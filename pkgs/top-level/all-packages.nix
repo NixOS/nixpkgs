@@ -846,6 +846,10 @@ let
     buggyBiosCDSupport = (getConfig ["grub" "buggyBiosCDSupport"] true);
   };
 
+  grub2 = import ../tools/misc/grub/1.9x.nix {
+    inherit stdenv fetchurl bison ncurses libusb freetype;
+  };
+
   gssdp = import ../development/libraries/gssdp {
     inherit fetchurl stdenv pkgconfig libxml2;
     inherit (gtkLibs) glib;
