@@ -34,6 +34,10 @@ rec {
     inherit cabal;
   };
 
+  ansiWLPprint = import ../development/libraries/haskell/ansi-wl-pprint {
+    inherit cabal ansiTerminal;
+  };
+
   benchpress = import ../development/libraries/haskell/benchpress {
     inherit cabal;
   };
