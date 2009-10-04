@@ -2876,6 +2876,14 @@ let
     inherit (xlibs) libX11;
   };
 
+  amrnb = import ../development/libraries/amrnb {
+    inherit fetchurl stdenv unzip;
+  };
+
+  amrwb = import ../development/libraries/amrwb {
+    inherit fetchurl stdenv unzip;
+  };
+
   apr = makeOverridable (import ../development/libraries/apr) {
     inherit (pkgsOverriden) fetchurl stdenv;
   };
@@ -7227,7 +7235,7 @@ let
 
   MPlayer = import ../applications/video/MPlayer {
     inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
-      cdparanoia mesa pkgconfig;
+      cdparanoia mesa pkgconfig unzip amrnb amrwb;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
@@ -7236,6 +7244,7 @@ let
     xineramaSupport = true;
     randrSupport = true;
     cddaSupport = true;
+    amrSupport = getConfig [ "MPlayer" "amr" ] false;
   };
 
   MPlayerPlugin = browser:
