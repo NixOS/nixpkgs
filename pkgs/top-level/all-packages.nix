@@ -1469,7 +1469,7 @@ let
   };
 
   privoxy = import ../tools/networking/privoxy {
-    inherit fetchurl stdenv autoconf automake coreutils ;
+    inherit fetchurl stdenv autoconf automake ;
   };
 
   tcpdump = import ../tools/networking/tcpdump {
