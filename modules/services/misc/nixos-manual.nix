@@ -66,6 +66,8 @@ in
 
   config = mkIf cfg.enable {
 
+    system.build.manual = manual;
+
     environment.systemPackages = [manual];
 
     boot.extraTTYs = mkIf cfg.showManual [cfg.ttyNumber];
