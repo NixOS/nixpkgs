@@ -2439,6 +2439,13 @@ let
     inherit fetchurl stdenv guile pkgconfig cairo guileLib;
   };
 
+  guileGnome = import ../development/guile-modules/guile-gnome {
+    inherit fetchurl stdenv guile guileLib gwrap pkgconfig guileCairo;
+    gconf = gnome.GConf;
+    inherit (gnome) glib gnomevfs gtk libglade libgnome libgnomecanvas
+      libgnomeui pango;
+  };
+
   guileLib = import ../development/guile-modules/guile-lib {
     inherit fetchurl stdenv guile texinfo;
   };
