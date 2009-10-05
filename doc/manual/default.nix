@@ -11,30 +11,13 @@ let
     options //
     { system = removeAttrs options.system ["path"]; };
 
-  optionsXML_ = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
     (builtins.toXML (pkgs.lib.optionAttrSetToDocList "" options_)));
 
-  optionsXML = pkgs.runCommand "options2.xml" {} ''
-    sed '
-      \,<attr name="\(declarations\|definitions\)">, {
-        n # fetch the next line
-        : rewriteLinks
-        n # fetch the next line
-        \,</list>, b # leave if this is the end of the list
-        ${if revision == "local" then "" else ''
-        # redirect nixos internals to the repository
-        s,<string value="[^"]*/modules/\([^"]*\)" />,<string value="!https://svn.nixos.org/viewvc/nix/nixos/trunk/modules/\1?revision=${revision}!!../nixos/modules/\1!" />, #"
-        t rewriteLinks # jump to rewriteLinks if done
-        ''}
-        # redirect local file to their locations
-        s,<string value="\([^"]*\)" />,<string value="!file://\1\!!../nixos/modules/\1!" />, #"
-        b rewriteLinks # jump to rewriteLinks
-      }
-    ' ${optionsXML_} > $out
-  '';
-
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
-    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${optionsXML_}
+    ${pkgs.libxslt}/bin/xsltproc \
+      --stringparam revision '${revision}' \
+      -o $out ${./options-to-docbook.xsl} ${optionsXML}
   '';
 
   manual = pkgs.stdenv.mkDerivation {

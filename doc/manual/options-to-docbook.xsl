@@ -10,6 +10,8 @@
 
   <xsl:output method='xml' encoding="UTF-8" />
 
+  <xsl:param name="revision" />
+
   
   <xsl:template match="/expr/list">
 
@@ -140,7 +142,20 @@
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">
     <simplelist>
       <xsl:for-each select="list/string">
-        <member><filename xlink:href="http://example.org"><xsl:value-of select="@value" /></filename></member>
+        <member><filename>
+          <!-- Hyperlink the filename either to the NixOS Subversion
+          repository (if it’s a module and we have a revision number),
+          or to the local filesystem. -->
+          <xsl:choose>
+            <xsl:when test="$revision != 'local' and contains(@value, '/modules/')">
+              <xsl:attribute name="xlink:href">https://svn.nixos.org/viewvc/nix/nixos/trunk/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/>?revision=<xsl:value-of select="$revision"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="@value" />
+        </filename></member>
       </xsl:for-each>
     </simplelist>
   </xsl:template>  
