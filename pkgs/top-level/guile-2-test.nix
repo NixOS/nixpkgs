@@ -60,6 +60,7 @@ in (mapTestOn {
   mailutils = linux;
   mcron = linux;
   guileCairo = linux;
+  guileGnome = linux;
   guileLib = linux;
   guileLint = linux;
   gwrap = linux;
