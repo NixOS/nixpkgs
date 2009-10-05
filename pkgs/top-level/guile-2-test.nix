@@ -59,6 +59,7 @@ in (mapTestOn {
   lsh = linux;
   mailutils = linux;
   mcron = linux;
+  guileCairo = linux;
   guileLib = linux;
   guileLint = linux;
   gwrap = linux;
