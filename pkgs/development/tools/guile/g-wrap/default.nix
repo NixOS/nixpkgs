@@ -9,8 +9,11 @@ stdenv.mkDerivation rec {
   };
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's
-  # used by Guile-GNOME).  Guile-Library is needed by the test suite.
-  buildInputs = [ guile libffi pkgconfig glib guileLib ];
+  # used by Guile-GNOME).
+  buildInputs = [ guile pkgconfig glib ]
+    ++ stdenv.lib.optional doCheck guileLib;
+
+  propagatedBuildInputs = [ libffi ];
 
   # GMP 4.2.2 uses GNU "extern inline".  With GCC 4.2 in C99 mode,
   # this yields warnings such as:
@@ -32,5 +35,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.nongnu.org/g-wrap/;
     license = "LGPLv2+";
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
