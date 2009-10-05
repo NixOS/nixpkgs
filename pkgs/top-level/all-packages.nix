@@ -1465,7 +1465,7 @@ let
   };
 
   sitecopy = import ../tools/networking/sitecopy {
-    inherit fetchurl stdenv neon;
+    inherit fetchurl stdenv neon openssl;
   };
 
   tcpdump = import ../tools/networking/tcpdump {
