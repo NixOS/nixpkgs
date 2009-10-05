@@ -76,7 +76,7 @@ let
         
   jobs =
     [pkgs.upstart] # for the built-in logd job
-    ++ map makeJob (config.jobs ++ config.services.extraJobs);
+    ++ (map makeJob (mapAttrsFlatten (name: job: job // { inherit name; } ) config.jobAttrs));
   
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
@@ -94,24 +94,7 @@ let
       done
     ''; # */
 
-in
-  
-{
-
-  ###### interface
-  
-  options = {
-  
-    jobs = mkOption {
-      default = [];
-      description = ''
-        This option defines the system jobs started and managed by the
-        Upstart daemon.
-      '';
-
-      type = types.list types.optionSet;
-
-      options = {
+  listJobOptions = {
 
         name = mkOption {
           type = types.string;
@@ -250,6 +233,44 @@ in
         };
 
       };
+
+    attrJobOptions = builtins.removeAttrs listJobOptions ["name"];
+
+in
+  
+{
+
+  ###### interface
+  
+  options = {
+
+    jobAttrs = mkOption {
+      default = {};
+      description = ''
+        This option defines the system jobs started and managed by the
+        Upstart daemon.
+
+        It's filled by config.jobs by now. A warning is print.
+
+        You can overwrite settings easily. Example:
+
+          config.jobAttrs.sshd.startOn = "never";
+      '';
+
+      options = attrJobOptions;
+      type = types.attrsOf types.optionSet;
+    };
+   
+  
+    jobs = mkOption {
+      default = [];
+      description = ''
+        See jobAttrs
+      '';
+
+      type = types.list types.optionSet;
+
+      options = listJobOptions;
       
     };
 
@@ -276,6 +297,16 @@ in
   ###### implementation
   
   config = {
+
+    # add jobs of list style. If there are some print deprecation message
+    jobAttrs =
+      let deprecatedJobDefs = config.jobs ++ config.services.extraJobs;
+          jobList = concatStringsSep ", " (map (j: j.name) deprecatedJobDefs);
+          jobs = if deprecatedJobDefs != [] then
+                    builtins.trace "Make the following jobs use jobAttrs please. Using jobs is depreceated: ${jobList}"
+                          deprecatedJobDefs
+                    else deprecatedJobDefs;
+      in builtins.listToAttrs (map (job: { inherit (job) name; value = builtins.removeAttrs job ["name"]; }) jobs);
 
     environment.etc =
       [ { # The Upstart events defined above.
