@@ -62,15 +62,15 @@
                <xsl:if test="count(attr[@name = 'declarations']/list/*) != 0">
                  <para>
                    <emphasis>Declared by:</emphasis>
-                   <xsl:apply-templates select="attr[@name = 'declarations']" />
                  </para>
+                 <xsl:apply-templates select="attr[@name = 'declarations']" />
                </xsl:if>
 
                <xsl:if test="count(attr[@name = 'definitions']/list/*) != 0">
                  <para>
                    <emphasis>Defined by:</emphasis>
-                   <xsl:apply-templates select="attr[@name = 'definitions']" />
                  </para>
+                 <xsl:apply-templates select="attr[@name = 'definitions']" />
                </xsl:if>
                
              </listitem>
@@ -129,20 +129,20 @@
   <xsl:template match="derivation">
     <xsl:choose>
       <xsl:when test="attr[@name = 'url']/string/@value">
-        <emphasis>(download of <xsl:value-of select="attr[@name = 'url']/string/@value" />)</emphasis>
+        <replaceable>(download of <xsl:value-of select="attr[@name = 'url']/string/@value" />)</replaceable>
       </xsl:when>
       <xsl:otherwise>
-        <emphasis>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</emphasis>
+        <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">
-    <itemizedlist>
+    <simplelist>
       <xsl:for-each select="list/string">
-        <listitem><xsl:text> </xsl:text><xsl:value-of select="@value" /></listitem>
+        <member><filename xlink:href="http://example.org"><xsl:value-of select="@value" /></filename></member>
       </xsl:for-each>
-    </itemizedlist>
+    </simplelist>
   </xsl:template>  
   
 </xsl:stylesheet>

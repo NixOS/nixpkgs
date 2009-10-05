@@ -4,6 +4,7 @@
 }:
 
 let
+
   # To prevent infinite recursion, remove system.path from the
   # options.  Not sure why this happens.
   options_ =
@@ -33,7 +34,7 @@ let
   '';
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
-    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${optionsXML}
+    ${pkgs.libxslt}/bin/xsltproc -o $out ${./options-to-docbook.xsl} ${optionsXML_}
   '';
 
   manual = pkgs.stdenv.mkDerivation {
@@ -67,13 +68,9 @@ let
       dst=$out/share/doc/nixos
       ensureDir $dst
       xsltproc $xsltFlags --nonet --xinclude \
-        --output ./manual.html \
+        --output $dst/manual.html \
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
         ./manual.xml
-
-      sed '
-        s,!\([^!]*\)!!\([^!]*\)!,<a class="link" href="\1" target="_top"><code class="filename">\2</code></a>,g
-      ' ./manual.html > $dst/manual.html
 
       ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $dst/
       cp ${./style.css} $dst/style.css
@@ -83,6 +80,7 @@ let
       xsltproc --nonet --xinclude \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
+        --param man.endnotes.are.numbered 0 \
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
         ./man-pages.xml
       
