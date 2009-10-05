@@ -266,7 +266,7 @@ option definitions and all its derivations.  Important derivations are store
 inside the option <option>system.build</option> and can be listed with the
 command <command>nix-instantiate --xml --eval-only /etc/nixos/nixos -A
 config.system.build</command>
-</para>.
+</para>
 
 </section>
 

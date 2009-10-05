@@ -41,7 +41,7 @@ let
 
     sources = pkgs.lib.sourceFilesBySuffices ./. [".xml"];
 
-    buildInputs = [pkgs.libxslt];
+    buildInputs = [pkgs.libxml2New pkgs.libxslt];
 
     xsltFlags = ''
       --param section.autolabel 1
@@ -58,6 +58,12 @@ let
       ln -s $sources/*.xml . # */
       ln -s ${optionsDocBook} options-db.xml
 
+      # Check the validity of the manual sources.
+      xmllint --noout --nonet --xinclude --noxincludenode \
+        --relaxng ${pkgs.docbook5}/xml/rng/docbook/docbook.rng \
+        manual.xml
+
+      # Generate the HTML manual.
       dst=$out/share/doc/nixos
       ensureDir $dst
       xsltproc $xsltFlags --nonet --xinclude \
@@ -72,6 +78,7 @@ let
       ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $dst/
       cp ${./style.css} $dst/style.css
 
+      # Generate manpages.
       ensureDir $out/share/man
       xsltproc --nonet --xinclude \
         --param man.output.in.separate.dir 1 \
