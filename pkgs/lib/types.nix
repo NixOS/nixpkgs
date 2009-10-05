@@ -87,7 +87,7 @@ rec {
       name = "attribute set of ${elemType}s";
       check = x: lib.traceValIfNot builtins.isAttrs x
         && fold (e: v: v && elemType.check e) true (lib.attrValues x);
-      merge = lib.zip elemType.merge;
+      merge = lib.zip (name: elemType.merge);
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
       fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
       docPath = path: elemType.docPath (path + ".<name>");
@@ -114,6 +114,8 @@ rec {
     # an argument.
     optionSet = mkOptionType {
       name = "option set";
+      # merge is done in "options.nix > addOptionMakeUp > handleOptionSets"
+      merge = lib.id;
       check = x: lib.traceValIfNot builtins.isAttrs x;
       hasOptions = true;
     };
