@@ -19,5 +19,7 @@ stdenv.mkDerivation {
     description = "Viewer of CBR and CBZ files, often used to store scanned comics";
     homepage = http://comical.sourceforge.net/;
     license = "GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
