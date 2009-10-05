@@ -1464,6 +1464,10 @@ let
     inherit stdenv fetchurl perl perlXMLParser desktop_file_utils;
   };
 
+  sitecopy = import ../tools/networking/sitecopy {
+    inherit fetchurl stdenv neon;
+  };
+
   tcpdump = import ../tools/networking/tcpdump {
     inherit fetchurl stdenv libpcap;
   };
