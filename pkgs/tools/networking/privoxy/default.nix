@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, coreutils}:
+{stdenv, fetchurl, autoconf, automake}:
 
 stdenv.mkDerivation {
   name = "privoxy-3.0.12";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "16ngim1p4pb4zk8h7js4zjw280fxqxamasfngixikp2ivmzxl469";
   };
 
-  buildInputs = [automake autoconf coreutils];
+  buildInputs = [automake autoconf ];
 
   patches = [./disable-user-error.patch];
 
