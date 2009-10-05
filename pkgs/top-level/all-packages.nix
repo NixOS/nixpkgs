@@ -2435,6 +2435,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  guileCairo = import ../development/guile-modules/guile-cairo {
+    inherit fetchurl stdenv guile pkgconfig cairo guileLib;
+  };
+
   guileLib = import ../development/guile-modules/guile-lib {
     inherit fetchurl stdenv guile texinfo;
   };
