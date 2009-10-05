@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postInstall =
+    # Install headers in the right place.
+    '' ln -sv "$out/lib/"libffi*/include "$out/include"
+    '';
+
   meta = {
     description = "libffi, a foreign function call interface library";
 
@@ -30,5 +35,7 @@ stdenv.mkDerivation rec {
     homepage = http://sources.redhat.com/libffi/;
 
     license = "http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/libffi/LICENSE?rev=1.6&content-type=text/plain&cvsroot=libffi&only_with_tag=MAIN";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
