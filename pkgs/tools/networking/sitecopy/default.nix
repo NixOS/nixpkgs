@@ -8,4 +8,5 @@ stdenv.mkDerivation {
     sha256 = "1bsqfhfq83g1qambqf8i1ivvggz5d2byg94hmrpxqkg50yhdsvz0";
   };
 
+  configureFlags= "--with-ssl=openssl"; 
 }
