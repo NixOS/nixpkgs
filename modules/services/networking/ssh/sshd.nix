@@ -108,8 +108,7 @@ in
         home = "/var/empty";
       };
 
-    jobs = pkgs.lib.singleton
-      { name = "sshd";
+    jobAttrs.sshd = {
 
         description = "OpenSSH server";
 
