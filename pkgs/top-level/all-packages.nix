@@ -1468,6 +1468,10 @@ let
     inherit fetchurl stdenv neon openssl;
   };
 
+  privoxy = import ../tools/networking/privoxy {
+    inherit fetchurl stdenv autoconf automake coreutils ;
+  };
+
   tcpdump = import ../tools/networking/tcpdump {
     inherit fetchurl stdenv libpcap;
   };
