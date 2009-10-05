@@ -50,6 +50,8 @@ in
     polkituser = 28;
     uptimed = 29;
     ddclient = 30;
+    davfs2 = 31;
+    privoxy = 32;
     # When adding a uid, make sure it doesn't match an existing gid.
 
     nixbld = 30000; # start of range of uids
@@ -85,6 +87,8 @@ in
     video = 26;
     dialout = 27;
     polkituser = 28;
+    davfs2 = 31;
+    privoxy = 32;
     # When adding a gid, make sure it doesn't match an existing uid.
 
     users = 100;
