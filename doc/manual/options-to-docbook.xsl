@@ -157,7 +157,7 @@
           <!-- Print the filename and make it user-friendly by removing the
           /nix/store/<hash> prefix. -->
           <xsl:choose>
-            <xsl:when test="start-with(@value, '/nix/store/')">
+            <xsl:when test="starts-with(@value, '/nix/store/')">
               <xsl:value-of select="substring-after(@value, '-')"/>
             </xsl:when>
             <xsl:otherwise>
