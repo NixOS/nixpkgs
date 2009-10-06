@@ -106,4 +106,18 @@ rec {
           cutUntil sLen;
     in
       recurse 0 0;
+
+  # return the suffix of the second argument if the first argument match its
+  # prefix. e.g.,
+  # `removePrefix "foo." "foo.bar.baz"' returns "bar.baz".
+  removePrefix = pre: s:
+    let
+      preLen = stringLength pre;
+      sLen = stringLength s;
+    in
+      if pre == substring 0 preLen s then
+        substring preLen (sub sLen preLen) s
+      else
+        s;
+
 }
