@@ -6,20 +6,6 @@ let
 
   options = {
 
-    kde = {
-
-      extraPackages = mkOption {
-        default = [];
-        merge = builtins.trace "!!! kde.extraPackages is obsolete, you should use environment.kdePackages." pkgs.lib.mergeDefaultOption;
-        description = ''
-          ** Obsolete **
-          Additional KDE packages to be used when you use KDE as a desktop
-          manager.  By default, you only get the KDE base packages.
-        '';
-      };
-
-    };
-
     environment = {
 
       kdePackages = mkOption {
@@ -30,7 +16,6 @@ let
           Additional KDE packages to be used when you use KDE as a desktop
           manager.  By default, you only get the KDE base packages.
         '';
-        apply = pkgs: pkgs ++ config.kde.extraPackages;
       };
 
     };
