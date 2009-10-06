@@ -1,13 +1,13 @@
 { stdenv, fetchurl, ncurses }:
 
-stdenv.mkDerivation {
-  name = "libedit-20090405-3.0";
-  
+stdenv.mkDerivation rec {
+  name = "libedit-20090923-3.0";
+
   src = fetchurl {
-    url = http://www.thrysoee.dk/editline/libedit-20090405-3.0.tar.gz;
-    sha256 = "1il68apydk6nnm30v8gn61vbi23ii571bixp7662j96xsivy7z5l";
+    url = "http://www.thrysoee.dk/editline/${name}.tar.gz";
+    sha256 = "02j66qbd1c9wfghpjb8dzshkcj4i0n9xanxy81552j3is9ilxjka";
   };
-  
+
   propagatedBuildInputs = [ ncurses ];
 
   meta = {
