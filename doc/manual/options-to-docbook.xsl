@@ -154,11 +154,12 @@
               <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
-          <!-- Print the filename and make it user-friendly by removing the
-          /nix/store/<hash> prefix. -->
+          <!-- Print the filename and make it user-friendly by replacing the
+          /nix/store/<hash> prefix by the default location of nixos
+          sources. -->
           <xsl:choose>
             <xsl:when test="starts-with(@value, '/nix/store/')">
-              <xsl:value-of select="substring-after(@value, '-')"/>
+              /etc/nixos/nixos/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="@value" />
