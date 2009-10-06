@@ -71,5 +71,6 @@ in zipModules ([]
 ++ rename obsolete "boot.bootMount" to "boot.loader.grub.bootDevice"
 ++ rename obsolete "boot.grubSplashImage" to "boot.loader.grub.splashImage"
 
+++ rename obsolete "services.extraJobs" to "jobs"
 
 ) # do not add renaming after this.

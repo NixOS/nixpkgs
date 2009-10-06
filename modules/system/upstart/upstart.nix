@@ -75,9 +75,19 @@ let
 
         
   jobs =
-    [pkgs.upstart] # for the built-in logd job
-    ++ (map makeJob (mapAttrsFlatten (name: job: job // { inherit name; } ) config.jobAttrs));
-  
+    let
+      deprecatedJobDefs = config.jobs;
+      jobList = concatStringsSep ", " (map (j: j.name) deprecatedJobDefs);
+      jobs =
+        if deprecatedJobDefs != [] then
+          builtins.trace "Make the following jobs use jobAttrs please. Using jobs is depreceated: ${jobList}" deprecatedJobDefs
+        else
+          deprecatedJobDefs;
+    in
+       [pkgs.upstart] # for the built-in logd job
+    ++ map (job: job.upstartPkg) (attrValues config.jobAttrs)
+    ++ map (job: job.upstartPkg) jobs;
+
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
   jobsDir = pkgs.runCommand "upstart-jobs" {inherit jobs;}
@@ -94,9 +104,11 @@ let
       done
     ''; # */
 
-  listJobOptions = {
+  # !! remove extra indentations.
+  jobOptions = {
 
         name = mkOption {
+          # !!! The type should ensure that this could be a filename.
           type = types.string;
           example = "sshd";
           description = ''
@@ -234,7 +246,26 @@ let
 
       };
 
-    attrJobOptions = builtins.removeAttrs listJobOptions ["name"];
+  upstartJob = {name, config, ...}: {
+    options = {
+      upstartPkg = mkOption {
+        default = makeJob config;
+        type = types.uniq types.package;
+        description = ''
+          Upstart package which contains upstart events inside
+          <filename>/etc/event.d/</filename>.  The default value is
+          generated from other options.
+        '';
+      };
+    };
+
+    config = {
+      # The default name is the name extracted from the attribute path.
+      name = mkDefaultValue (
+        replaceChars ["<" ">" "*"] ["_" "_" "_name_"] name
+      );
+    };
+  };
 
 in
   
@@ -257,8 +288,8 @@ in
           config.jobAttrs.sshd.startOn = "never";
       '';
 
-      options = attrJobOptions;
       type = types.attrsOf types.optionSet;
+      options = [ jobOptions upstartJob ];
     };
    
   
@@ -269,16 +300,7 @@ in
       '';
 
       type = types.list types.optionSet;
-
-      options = listJobOptions;
-      
-    };
-
-    services.extraJobs = mkOption {
-      default = [];
-      description = ''
-        Obsolete - don't use.
-      '';
+      options = [ jobOptions upstartJob ];
     };
 
     tests.upstartJobs = mkOption {
@@ -298,16 +320,6 @@ in
   
   config = {
 
-    # add jobs of list style. If there are some print deprecation message
-    jobAttrs =
-      let deprecatedJobDefs = config.jobs ++ config.services.extraJobs;
-          jobList = concatStringsSep ", " (map (j: j.name) deprecatedJobDefs);
-          jobs = if deprecatedJobDefs != [] then
-                    builtins.trace "Make the following jobs use jobAttrs please. Using jobs is depreceated: ${jobList}"
-                          deprecatedJobDefs
-                    else deprecatedJobDefs;
-      in builtins.listToAttrs (map (job: { inherit (job) name; value = builtins.removeAttrs job ["name"]; }) jobs);
-
     environment.etc =
       [ { # The Upstart events defined above.
           source = "${jobsDir}/etc/event.d";
@@ -317,9 +329,10 @@ in
 
     # see test/test-upstart-job.sh (!!! check whether this still works)
     tests.upstartJobs = { recurseForDerivations = true; } //
-      builtins.listToAttrs (map (job:
-        { name = if job ? jobName then job.jobName else job.name; value = job; }
-      ) jobs);
+      builtins.listToAttrs (map (job: {
+        name = removePrefix "upstart-" job.name;
+        value = job;
+      }) jobs);
   
   };
 
