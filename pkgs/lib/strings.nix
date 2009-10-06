@@ -67,7 +67,7 @@ rec {
   stringToCharacters = s: let l = stringLength s; in
     if l == 0
     then []
-    else [(substring 0 1 s)] ++ stringToCharacters (substring 1 (builtins.sub l 1) s);
+    else map (p: substring p 1 s) (lib.range 0 (sub l 1));
 
     
   # Manipulate a string charcater by character and replace them by strings
