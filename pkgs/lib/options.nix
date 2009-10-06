@@ -83,16 +83,17 @@ rec {
         if opt ? type && opt.type.hasOptions then
           let
             
-            optionConfig = opts: config:
-               map (f: lib.applyIfFunction f config)
-                 (opt.options ++ toList opts);
+            optionConfig = vals: path: config:
+              let name = lib.removePrefix (opt.name + ".") path; in
+              map (f: lib.applyIfFunction f ({inherit name;} // config))
+                (opt.options ++ toList vals);
           in
             opt // {
               merge = list:
                 opt.type.iter
-                  (path: opts:
+                  (path: vals:
                     (lib.fix
-                      (fixableMergeFun (recurseInto path) (optionConfig opts))
+                      (fixableMergeFun (recurseInto path) (optionConfig vals path))
                     ).config
                   )
                   opt.name
@@ -100,7 +101,7 @@ rec {
               options =
                 let path = opt.type.docPath opt.name; in
                 (lib.fix
-                  (fixableMergeFun (recurseInto path) (optionConfig []))
+                  (fixableMergeFun (recurseInto path) (optionConfig [] path))
                 ).options;
             }
         else
