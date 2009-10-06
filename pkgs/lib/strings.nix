@@ -70,14 +70,35 @@ rec {
     else [(substring 0 1 s)] ++ stringToCharacters (substring 1 (builtins.sub l 1) s);
 
     
+  # Manipulate a string charcater by character and replace them by strings
+  # before concatenating the results.
+  stringAsChars = f: s:
+    concatStrings (
+      map f (stringToCharacters s)
+    );
+
   # same as vim escape function.
   # Each character contained in list is prefixed by "\"
   escape = list : string :
-    lib.concatStrings (map (c: if lib.elem c list then "\\${c}" else c) (stringToCharacters string));
+    stringAsChars (c: if lib.elem c list then "\\${c}" else c) string;
 
   # still ugly slow. But more correct now
   # [] for zsh
   escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
+
+  # replace characters by their substitutes.  This function is equivalent to
+  # the `tr' command except that one character can be replace by multiple
+  # ones.  e.g.,
+  # replaceChars ["<" ">"] ["&lt;" "&gt;"] "<foo>" returns "&lt;foo&gt;".
+  replaceChars = del: new: s:
+    let
+      subst = c:
+        (lib.fold
+          (sub: res: if sub.fst == c then sub else res)
+          {fst = c; snd = c;} (lib.zipLists del new)
+        ).snd;
+    in
+      stringAsChars subst s;
 
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
