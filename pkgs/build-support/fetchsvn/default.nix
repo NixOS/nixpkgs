@@ -1,8 +1,27 @@
 {stdenv, subversion, sshSupport ? false, openssh ? null}: 
 {url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
 
+let
+  repoName = with stdenv.lib;
+    let
+      fst = head;
+      snd = l: head (tail l);
+      trd = l: head (tail (tail l));
+      path_ = reverseList (splitString "/" url);
+      path = if head path_ == "" then tail path_ else path_;
+    in
+      # ../repo/trunk -> repo
+      if fst path == "trunk" then snd path
+      # ../repo/branches/branch -> repo-branch
+      else if snd path == "branches" then "${trd path}-${fst path}"
+      # ../repo/tags/tag -> repo-tag
+      else if snd path == "tags" then     "${trd path}-${fst path}"
+      # ../repo (no trunk) -> repo
+      else fst path;
+in
+
 stdenv.mkDerivation {
-  name = "svn-export";
+  name = "${repoName}-r${toString rev}";
   builder = ./builder.sh;
   buildInputs = [subversion];
 

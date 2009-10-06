@@ -19,11 +19,18 @@ fi
 
 test -n "$rev" || rev="HEAD"
 
+repoName=$(echo $url | sed '
+  s,.*/\([^/]\+\)/trunk/*$,\1,;t
+  s,.*/\([^/]\+\)/branches/\([^/]\+\)/*$,\1-\2,;t
+  s,.*/\([^/]\+\)/tags/\([^/]\+\)/*$,\1-\2,;t
+  s,.*/\([^/]\+\)/*$,\1,;t
+')
+dstFile=$repoName-r$rev
 
 # If the hash was given, a file with that hash may already be in the
 # store.
 if test -n "$expHash"; then
-    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" svn-export)
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" $dstFile)
     if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
         finalPath=
     fi
@@ -34,9 +41,8 @@ fi
 # If we don't know the hash or a path with that hash doesn't exist,
 # download the file and add it to the store.
 if test -z "$finalPath"; then
-
     tmpPath=/tmp/svn-checkout-tmp-$$
-    tmpFile=$tmpPath/svn-export
+    tmpFile=$tmpPath/$dstFile
     mkdir $tmpPath
 
     trap "rm -rf $tmpPath" EXIT
