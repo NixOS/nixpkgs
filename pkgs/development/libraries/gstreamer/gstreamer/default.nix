@@ -1,5 +1,5 @@
 { fetchurl, stdenv, perl, bison, flex, pkgconfig, python
-, which, gtkdoc, glib, libxml2 }:
+, which, gtkdoc, glib, libxml2, ... }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-0.10.22";

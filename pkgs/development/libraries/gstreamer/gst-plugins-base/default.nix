@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer
 , libX11, libXv, libXext, alsaLib, cdparanoia , libogg
 , libtheora, libvorbis, freetype, pango
-, liboil, gtk, which, gtkdoc }:
+, liboil, gtk, which, gtkdoc, ... }:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-base-0.10.22";

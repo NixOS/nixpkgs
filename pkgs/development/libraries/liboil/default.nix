@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib}:
+{stdenv, fetchurl, pkgconfig, glib, ...}:
 
 stdenv.mkDerivation rec {
   name = "liboil-0.3.15";

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gstPluginsBase, bzip2 }:
+{ fetchurl, stdenv, pkgconfig, gstPluginsBase, bzip2, ... }:
 
 stdenv.mkDerivation rec {
   name = "gst-ffmpeg-0.10.5";

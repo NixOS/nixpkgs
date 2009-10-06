@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gstPluginsBase, aalib, cairo
 , flac , hal, libjpeg, zlib, speex, libpng, libdv, libcaca, dbus
 , libiec61883, libavc1394, ladspaH, taglib, gdbm, pulseaudio
-, libsoup
+, libsoup, ...
 }:
 
 stdenv.mkDerivation rec {

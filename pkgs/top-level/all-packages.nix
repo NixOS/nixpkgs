@@ -191,9 +191,16 @@ let
   # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
   #     noBuildInputs = d.override { buildInputs = []; }
   #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
+  deepOverride = newArgs: name: x: if builtins.isAttrs x then (
+    if x ? deepOverride then (x.deepOverride newArgs) else
+    if x ? override then (x.override newArgs) else 
+    x) else x;
   makeOverridable = f: origArgs: f origArgs //
     { override = newArgs:
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
+      deepOverride = newArgs: 
+        makeOverridable f ((lib.mapAttrs (deepOverride newArgs) origArgs) // newArgs);
+      origArgs = origArgs;
     };
 
 
@@ -439,7 +446,7 @@ let
   avahi =
     let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
     in
-      import ../development/libraries/avahi {
+      makeOverridable (import ../development/libraries/avahi) {
         inherit stdenv fetchurl pkgconfig libdaemon dbus perl perlXMLParser
           expat gettext intltool lib;
         inherit (gtkLibs) glib gtk;
@@ -3058,7 +3065,9 @@ let
     inherit stdenv fetchurl lib;
   };
 
-  consolekit = import ../development/libraries/consolekit {
+  consolekit = makeOverridable 
+      (import ../development/libraries/consolekit) 
+  {
     inherit stdenv fetchurl pkgconfig dbus_glib zlib pam policykit expat;
     inherit (gtkLibs) glib;
     inherit (xlibs) libX11;
@@ -3111,14 +3120,11 @@ let
     useX11 = true; # !!! `false' doesn't build
   };
 
-  dbus_glib = import ../development/libraries/dbus-glib {
+  dbus_glib = makeOverridable 
+      (import ../development/libraries/dbus-glib) 
+  {
     inherit fetchurl stdenv pkgconfig gettext dbus expat;
     inherit (gtkLibs) glib;
-  };
-
-  dbus_glib_gtk_218 = import ../development/libraries/dbus-glib {
-    inherit fetchurl stdenv pkgconfig gettext dbus expat;
-    inherit (gtkLibs218) glib;
   };
 
   dclib = import ../development/libraries/dclib {
@@ -3129,7 +3135,9 @@ let
     inherit fetchurl stdenv perl;
   };
 
-  enchant = selectVersion ../development/libraries/enchant "1.3.0" {
+  enchant = makeOverridable 
+      (selectVersion ../development/libraries/enchant "1.3.0") 
+  {
     inherit fetchurl stdenv aspell pkgconfig;
     inherit (gnome) glib;
   };
@@ -3393,25 +3401,13 @@ let
     inherit lib selectVersion stdenv fetchurl perl bison pkgconfig libxml2
       python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
       libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
-      dbus libavc1394 ladspaH taglib pulseaudio gdbm bzip2 which;
+      dbus libavc1394 ladspaH taglib pulseaudio gdbm bzip2 which makeOverridable;
     flex = flex2535;
     inherit (xorg) libX11 libXv libXext;
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
              it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc;
     libsoup = gnome26.libsoup;
-  });
-
-  gst_all_gtk_218 = recurseIntoAttrs (import ../development/libraries/gstreamer {
-    inherit lib selectVersion stdenv fetchurl perl bison pkgconfig libxml2
-      python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
-      libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
-      dbus libavc1394 ladspaH taglib pulseaudio gdbm bzip2 which;
-    flex = flex2535;
-    inherit (xorg) libX11 libXv libXext;
-    inherit (gtkLibs218) glib pango gtk;
-    inherit (gnome28) gnomevfs /* <- only passed for the no longer used older versions
-             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc libsoup;
   });
 
   gnet = import ../development/libraries/gnet {
@@ -3832,7 +3828,9 @@ let
     inherit fetchurl stdenv;
   };
 
-  liboil = import ../development/libraries/liboil {
+  liboil = makeOverridable 
+      (import ../development/libraries/liboil) 
+  {
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) glib;
   };
@@ -4174,7 +4172,7 @@ let
     inherit (gtkLibs) glib;
   };
 
-  policykit = import ../development/libraries/policykit {
+  policykit = makeOverridable (import ../development/libraries/policykit) {
     inherit stdenv fetchurl pkgconfig dbus dbus_glib expat pam
       intltool gettext libxslt docbook_xsl;
     inherit (gtkLibs) glib;
@@ -4407,18 +4405,26 @@ let
    inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
   };
 
-  webkit = builderDefsPackage (import ../development/libraries/webkit) {
+  webkit = builderDefsPackage (import ../development/libraries/webkit) 
+  (lib.mapAttrs (deepOverride
+    {
+      # It needs fresh GTK
+      inherit (gnome28) gtkdoc libsoup GConf;
+      inherit (gtkLibs218) gtk atk pango glib;
+      gconf = gnome28.GConf;
+    })
+  {
     inherit (gnome28) gtkdoc libsoup;
-    inherit (gtkLibs218) gtk atk pango;
+    inherit (gtkLibs218) gtk atk pango glib;
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
       pkgconfig autoconf bison libproxy enchant;
-    inherit (gst_all_gtk_218) gstreamer gstPluginsBase gstFfmpeg
+    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
     flex = flex2535;
     inherit (xlibs) libXt;
-  };
+  });
 
   wxGTK = wxGTK26;
 
@@ -4856,7 +4862,7 @@ let
     inherit fetchurl stdenv db4 openssl cyrus_sasl glibc;
   };
 
-  pulseaudio = import ../servers/pulseaudio {
+  pulseaudio = makeOverridable (import ../servers/pulseaudio) {
     inherit fetchurl stdenv pkgconfig gnum4 gdbm
       dbus hal avahi liboil libsamplerate libsndfile speex
       intltool gettext;
@@ -5144,7 +5150,7 @@ let
     flex = flex2535;
   };
 
-  hal = import ../os-specific/linux/hal {
+  hal = makeOverridable (import ../os-specific/linux/hal) {
     inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
       libusb dbus dbus_glib libuuid perl perlXMLParser
       gettext zlib eject libsmbios udev gperf dmidecode utillinuxng
@@ -5993,7 +5999,7 @@ let
     inherit (xlibs) libX11 xproto;
   };*/
 
-  udev = import ../os-specific/linux/udev {
+  udev = makeOverridable (import ../os-specific/linux/udev) {
     inherit fetchurl stdenv gperf pkgconfig acl libusb usbutils pciutils;
     inherit (gtkLibs) glib;
   };
@@ -8137,7 +8143,15 @@ let
 
   gnome28 = import ../desktops/gnome-2.28 (pkgs// {
     gtkLibs = gtkLibs218;
-    dbus_glib = dbus_glib_gtk_218;
+    dbus_glib = dbus_glib.override {
+        inherit (gtkLibs218) glib; 
+      };
+    policykit = policykit.deepOverride {
+        inherit (gtkLibs218) glib; 
+      };
+    hal = hal.deepOverride {
+        inherit (gtkLibs218) glib; 
+      };
   });
 
   kde3 = {

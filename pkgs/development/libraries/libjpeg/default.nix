@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libtool, static ? false}: 
+{stdenv, fetchurl, libtool, static ? false, ...}: 
 
 stdenv.mkDerivation {
   name = "libjpeg-6b";
