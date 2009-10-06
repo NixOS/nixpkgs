@@ -1,10 +1,10 @@
 {stdenv, fetchurl, lib, cmake, qt4, perl, alsaLib, libXtst, kdelibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdeaccessibility-4.3.1";
+  name = "kdeaccessibility-4.3.2";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.1/src/kdeaccessibility-4.3.1.tar.bz2;
-    sha1 = "bc9c56beb161ddf6c1474d356360ec75db0733bc";
+    url = mirror://kde/stable/4.3.2/src/kdeaccessibility-4.3.2.tar.bz2;
+    sha1 = "63pn3kaqipn7mmibw042ijvlz8y2vapn";
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl alsaLib libXtst kdelibs automoc4 phonon ];

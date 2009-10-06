@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon, akonadi}:
 
 stdenv.mkDerivation {
-  name = "kdepimlibs-4.3.1";
+  name = "kdepimlibs-4.3.2";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.1/src/kdepimlibs-4.3.1.tar.bz2;
-    sha1 = "f4b04b21a6aa3accc530bc6c32cf0d820c611265";
+    url = mirror://kde/stable/4.3.2/src/kdepimlibs-4.3.2.tar.bz2;
+    sha1 = "g8r7ryks6y0v1grkc8g15nh4krhvjj0x";
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl boost cyrus_sasl gpgme stdenv.gcc.libc libical openldap shared_mime_info

@@ -3,10 +3,10 @@
 , automoc4, phonon, akonadi, soprano, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdepim-runtime-4.3.1";
+  name = "kdepim-runtime-4.3.2";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.1/src/kdepim-runtime-4.3.1.tar.bz2;
-    sha1 = "c39b0fc1d3721fb8c6074ba6a174ad8716c6c604";
+    url = mirror://kde/stable/4.3.2/src/kdepim-runtime-4.3.2.tar.bz2;
+    sha1 = "j46sbwxqrdwzcr3bxxxaja2phjrg8q90";
   };
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost shared_mime_info
                   kdelibs kdelibs_experimental kdepimlibs

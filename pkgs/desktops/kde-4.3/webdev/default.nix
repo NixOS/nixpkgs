@@ -2,10 +2,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdewebdev-4.3.1";
+  name = "kdewebdev-4.3.2";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.1/src/kdewebdev-4.3.1.tar.bz2;
-    sha1 = "28580c6f283fa7a6405f6a4415ebe9a4167f0992";
+    url = mirror://kde/stable/4.3.2/src/kdewebdev-4.3.2.tar.bz2;
+    sha1 = "ngda4f98jkcxziscmhcdr2md3cqjwjp4";
   };
   includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
