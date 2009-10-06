@@ -136,4 +136,10 @@ rec {
 
   zipLists = zipListsWith (fst: snd: { inherit fst snd; });
 
+  # invert the order of the elements of a list.
+  reverseList = l:
+    let reverse_ = accu: l:
+      if l == [] then accu
+      else reverse_ ([(head l)] ++ accu) (tail l);
+    in reverse_ [] l;
 }
