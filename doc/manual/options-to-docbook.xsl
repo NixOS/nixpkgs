@@ -154,7 +154,16 @@
               <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:value-of select="@value" />
+          <!-- Print the filename and make it user-friendly by removing the
+          /nix/store/<hash> prefix. -->
+          <xsl:choose>
+            <xsl:when test="start-with(@value, '/nix/store/')">
+              <xsl:value-of select="substring-after(@value, '-')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@value" />
+            </xsl:otherwise>
+          </xsl:choose>
         </filename></member>
       </xsl:for-each>
     </simplelist>
