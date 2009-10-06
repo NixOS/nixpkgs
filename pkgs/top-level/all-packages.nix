@@ -5578,7 +5578,7 @@ let
     ckSched = true;
   };
 
-  kernel_2_6_31_zen2 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen2.nix) {
+  kernel_2_6_31_zen2 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
   };
