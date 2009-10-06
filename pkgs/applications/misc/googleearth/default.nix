@@ -1,15 +1,16 @@
 { stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv,
-libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11 }:
+libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11,
+zlib, patchelf05 }:
 
 /* I haven't found any x86_64 package from them */
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "googleearth-5.11337.1968";
+  name = "googleearth-5.1.3509.4636";
 
   src = fetchurl {
     url = http://dl.google.com/earth/client/current/GoogleEarthLinux.bin;
-    sha256 = "1h090rbdkp3pa97xkkjzj71k343ic8dlngj2cihw5cd1hh3f9idc";
+    sha256 = "6c948c64eed5f30adb67019c0d26c148b9ad7a821891018548da650fe812dca8";
   };
 
   buildInputs = [
@@ -29,6 +30,7 @@ stdenv.mkDerivation {
     freetype 
     libXext 
     libX11 
+    zlib
   ];
 
   phases = "unpackPhase installPhase";
@@ -40,8 +42,6 @@ stdenv.mkDerivation {
     ensureDir $out/{opt/googleearth/,bin};
     tar xf googleearth-data.tar -C $out/opt/googleearth
     tar xf googleearth-linux-x86.tar -C $out/opt/googleearth
-    rm $out/opt/googleearth/libstdc+*
-    rm $out/opt/googleearth/libgcc*
     cp bin/googleearth $out/opt/googleearth
     cat > $out/bin/googleearth << EOF
     #!/bin/sh
@@ -55,12 +55,12 @@ stdenv.mkDerivation {
       fullPath=$fullPath:$i/lib
     done
           
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    ${patchelf05}/bin/patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       --set-rpath $fullPath \
       $out/opt/googleearth/googleearth-bin
 
     for a in $out/opt/googleearth/*.so* ; do
-      patchelf --set-rpath $fullPath $a
+      ${patchelf05}/bin/patchelf --set-rpath $fullPath $a
     done
   '';
 
