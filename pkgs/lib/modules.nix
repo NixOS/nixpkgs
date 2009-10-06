@@ -192,16 +192,13 @@ rec {
                 # locations to sub-options declarations
                 decls =
                   map (m:
-                    mapSubOptions (subModule:
-                      let module = lib.applyIfFunction subModule {}; in
+                    mapSubOptions (subModule: (args:
+                      let module = lib.applyIfFunction subModule args; in
                       if lib.isModule module then
-                        { inherit (m) key; } // subModule
+                        { inherit (m) key; } // module
                       else
-                        args: {
-                          inherit (m) key;
-                          options = lib.applyIfFunction subModule args;
-                        }
-                    ) m.options
+                        { inherit (m) key; options = module; }
+                    )) m.options
                   ) (declarationsOf name);
               in
                 addOptionMakeUp
