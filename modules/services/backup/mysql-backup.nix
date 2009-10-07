@@ -46,7 +46,7 @@ in
       location = mkOption {
         default = "/var/backup/mysql";
         description = ''
-          Location to put the gzipped PostgreSQL database dumps.
+          Location to put the gzipped MySQL database dumps.
         '';
       };
     };
