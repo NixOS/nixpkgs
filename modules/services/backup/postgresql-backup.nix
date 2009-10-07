@@ -14,8 +14,6 @@ in
 
 {
 
-  ###### interface
-  
   options = {
   
     services.postgresqlBackup = {
@@ -53,7 +51,6 @@ in
 
   };
 
-  ###### implementation
   config = mkIf config.services.postgresqlBackup.enable {
     services.cron = {
       systemCronJobs = 
