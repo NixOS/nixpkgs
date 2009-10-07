@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     homepage = http://p7zip.sourceforge.net/;
     description = "A port of the 7-zip archiver";
     # license = "LGPLv2.1+"; + "unRAR restriction"
-    platforms = [ stdenv.lib.platforms.unix ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
