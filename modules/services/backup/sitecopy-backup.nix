@@ -13,8 +13,6 @@ in
 
 {
 
-  ###### interface
-  
   options = {
   
     services.sitecopy = {
@@ -60,9 +58,6 @@ in
     };
 
   };
-
-
-  ###### implementation
 
   config = mkIf config.services.sitecopy.enable {
     environment.systemPackages = [ sitecopy ];
