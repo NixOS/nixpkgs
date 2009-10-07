@@ -63,7 +63,7 @@ in
     environment.systemPackages = [ sitecopy ];
 
     services.cron = {
-      systemCronJobs = concatStrings (map sitecopyCron config.services.sitecopy.backups);
+      systemCronJobs = map sitecopyCron config.services.sitecopy.backups;
     };
 
 

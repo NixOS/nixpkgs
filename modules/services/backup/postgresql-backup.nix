@@ -53,10 +53,7 @@ in
 
   config = mkIf config.services.postgresqlBackup.enable {
     services.cron = {
-      systemCronJobs = 
-        pkgs.lib.optional
-          config.services.postgresqlBackup.enable
-          (concatStrings (map postgresqlBackupCron config.services.postgresqlBackup.databases));
+      systemCronJobs = map postgresqlBackupCron config.services.postgresqlBackup.databases;
     };
 
     system.activationScripts.postgresqlBackup = pkgs.stringsWithDeps.noDepEntry ''

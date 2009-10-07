@@ -52,10 +52,7 @@ in
 
   config = mkIf config.services.mysqlBackup.enable {
     services.cron = {
-      systemCronJobs = 
-        pkgs.lib.optional
-          config.services.mysqlBackup.enable
-          (concatStrings (map mysqlBackupCron config.services.mysqlBackup.databases));
+      systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
     };
 
     system.activationScripts.mysqlBackup = pkgs.stringsWithDeps.noDepEntry ''
