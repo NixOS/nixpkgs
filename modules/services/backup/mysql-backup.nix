@@ -13,9 +13,6 @@ let
 in
 
 {
-
-  ###### interface
-  
   options = {
   
     services.mysqlBackup = {
@@ -53,7 +50,6 @@ in
 
   };
 
-  ###### implementation
   config = mkIf config.services.mysqlBackup.enable {
     services.cron = {
       systemCronJobs = 
