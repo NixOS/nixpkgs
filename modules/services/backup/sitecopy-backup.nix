@@ -63,9 +63,7 @@ in
     environment.systemPackages = [ sitecopy ];
 
     services.cron = {
-      systemCronJobs = pkgs.lib.optional
-          config.services.sitecopy.enable
-          (concatStrings (map sitecopyCron config.services.sitecopy.backups));
+      systemCronJobs = concatStrings (map sitecopyCron config.services.sitecopy.backups);
     };
 
 
