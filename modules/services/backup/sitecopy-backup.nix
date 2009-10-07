@@ -48,8 +48,7 @@ in
                 };
            Username/password are extracted from ${stateDir}/sitecopy.secrets at activation 
            time. The secrets file lines should have the following structure:
-
-             <server> <username> <password>
+             server username password
  
         '';
       }; 
