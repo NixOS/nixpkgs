@@ -830,6 +830,11 @@ rec {
     inherit (pkgs) sqlite;
   };
 
+  DBDmysql = import ../development/perl-modules/DBD-mysql {
+    inherit fetchurl buildPerlPackage DBI;
+    inherit (pkgs) mysql;
+  };
+
   DBDPg = import ../development/perl-modules/DBD-Pg {
     inherit fetchurl buildPerlPackage DBI;
     inherit (pkgs) postgresql;
@@ -1500,6 +1505,11 @@ rec {
     };
     propagatedBuildInputs = [URI HTMLParser HTMLTagset];
   };
+
+  maatkit = import ../development/perl-modules/maatkit {
+    inherit fetchurl buildPerlPackage stdenv DBDmysql;
+  };
+
 
   MailIMAPClient = buildPerlPackage {
     name = "Mail-IMAPClient-2.2.9";
