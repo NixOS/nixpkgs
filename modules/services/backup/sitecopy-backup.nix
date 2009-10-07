@@ -67,7 +67,7 @@ in
     };
 
 
-    system.activationScripts.postgresqlBackup = 
+    system.activationScripts.sitecopyBackup = 
       pkgs.stringsWithDeps.noDepEntry ''  
           mkdir -m 0700 -p ${stateDir}
           chown root ${stateDir}
