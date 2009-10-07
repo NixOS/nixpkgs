@@ -1590,8 +1590,15 @@ let
     inherit fetchurl stdenv zlib;
   };
 
-  unzip = import ../tools/archivers/unzip {
+  unzip = unzip552;
+
+  # TODO: remove in the next stdenv update.
+  unzip552 = import ../tools/archivers/unzip/5.52.nix {
     inherit fetchurl stdenv;
+  };
+
+  unzip60 = import ../tools/archivers/unzip/6.0.nix {
+    inherit fetchurl stdenv bzip2;
   };
 
   uptimed = import ../tools/system/uptimed {
