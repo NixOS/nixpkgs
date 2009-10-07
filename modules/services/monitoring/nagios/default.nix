@@ -192,7 +192,7 @@ mkIf cfg.enable {
       }
     ];
 
-    extraPackages = [pkgs.nagios];
+    systemPackages = [pkgs.nagios];
   };
 
   users = {

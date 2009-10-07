@@ -43,7 +43,7 @@ mkIf config.services.pulseaudio.enable {
   ];
 
   environment = {
-    extraPackages = [pkgs.pulseaudio];
+    systemPackages = [pkgs.pulseaudio];
   };
 
   users = {

@@ -160,5 +160,5 @@ in
 {
   require = options;
 
-  environment.extraPackages = [nixosCheckout];
+  environment.systemPackages = [nixosCheckout];
 }

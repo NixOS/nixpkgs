@@ -107,7 +107,7 @@ in
       }
     ];
 
-    extraPackages = ifEnabled [pkgs.fcron];
+    systemPackages = ifEnabled [pkgs.fcron];
   };
 
   services = {

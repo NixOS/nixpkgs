@@ -67,7 +67,7 @@ cat > /mnt/etc/nixos/configuration.nix <<EOF
   };
 
   environment = {
-    extraPackages = [
+    systemPackages = [
       pkgs.socat (pkgs.lowPrio pkgs.nixUnstable)
     ];
     nix = pkgs.nixCustomFun (pkgs.nixUnstable.src)

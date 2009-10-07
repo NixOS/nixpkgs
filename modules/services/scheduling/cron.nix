@@ -70,7 +70,7 @@ in
       }
     ];
 
-    extraPackages = [pkgs.cron];
+    systemPackages = [pkgs.cron];
   };
 
   services = {

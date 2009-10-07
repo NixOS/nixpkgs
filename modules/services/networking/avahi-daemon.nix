@@ -140,7 +140,7 @@ mkIf cfg.enable {
   };
 
   environment = {
-    extraPackages = [avahi];
+    systemPackages = [avahi];
   };
 
   users = {

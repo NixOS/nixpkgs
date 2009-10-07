@@ -125,7 +125,7 @@ in
     system.boot.loader.id = "grub";
     system.boot.loader.kernelFile = "vmlinuz";
     
-    environment.extraPackages = mkIf config.boot.loader.grub.enable [ pkgs.grub ];
+    environment.systemPackages = mkIf config.boot.loader.grub.enable [ pkgs.grub ];
     
     # and many other things that have to be moved inside this file.
     

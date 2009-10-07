@@ -87,5 +87,5 @@ mkIf cfg.directDelivery {
       }
     ];
 
-  environment.extraPackages = [pkgs.ssmtp];
+  environment.systemPackages = [pkgs.ssmtp];
 }
