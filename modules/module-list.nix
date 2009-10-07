@@ -36,6 +36,9 @@
   ./security/sudo.nix
   ./services/audio/alsa.nix
   ./services/audio/pulseaudio.nix
+  ./services/backup/mysql-backup.nix
+  ./services/backup/postgresql-backup.nix
+  ./services/backup/sitecopy-backup.nix
   ./services/databases/mysql.nix
   ./services/databases/postgresql.nix
   ./services/hardware/acpid.nix
