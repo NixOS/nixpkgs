@@ -889,6 +889,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  pigz = import ../tools/compression/pigz {
+    inherit fetchurl stdenv zlib;
+  };
+
   halibut = import ../tools/typesetting/halibut {
     inherit fetchurl stdenv perl;
   };
