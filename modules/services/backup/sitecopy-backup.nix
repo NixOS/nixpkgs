@@ -36,20 +36,24 @@ in
       };
 
       backups = mkOption {
+        example = [
+          { name = "test"; 
+            local = "/tmp/backup"; 
+            remote = "/staff-groups/ewi/st/strategoxt/backup/test";
+            server = "webdata.tudelft.nl";
+            protocol = "webdav";
+            https = true ;
+          }
+        ];
         default = [];
         description = ''
            List of attributesets describing the backups. 
-           E.g. { name = "test"; 
-                  local = "/tmp/backup"; 
-                  remote = "/staff-groups/ewi/st/strategoxt/backup/test";
-                  server = "webdata.tudelft.nl";
-                  protocol = "webdav";
-                  https = true ;
-                };
-           Username/password are extracted from ${stateDir}/sitecopy.secrets at activation 
+
+           Username/password are extracted from <filename>${stateDir}/sitecopy.secrets</filename> at activation 
            time. The secrets file lines should have the following structure:
+           <screen>
              server username password
- 
+           </screen>
         '';
       }; 
 
