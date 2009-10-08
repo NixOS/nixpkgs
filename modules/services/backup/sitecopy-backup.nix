@@ -68,7 +68,7 @@ in
 
 
     system.activationScripts.sitecopyBackup = 
-      pkgs.stringsWithDeps.noDepEntry ''  
+      pkgs.stringsWithDeps.fullDepEntry ''  
           mkdir -m 0700 -p ${stateDir}
           chown root ${stateDir}
           touch ${stateDir}/sitecopy.secrets
@@ -99,7 +99,7 @@ in
             '' ) config.services.sitecopy.backups 
          )}
 
-      '';
+      '' [ "stdio" "defaultPath" "systemConfig" "users" ] ;
   };
   
 }

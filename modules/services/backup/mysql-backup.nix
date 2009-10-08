@@ -55,10 +55,10 @@ in
       systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
     };
 
-    system.activationScripts.mysqlBackup = pkgs.stringsWithDeps.noDepEntry ''
+    system.activationScripts.mysqlBackup = pkgs.stringsWithDeps.fullDepEntry ''
          mkdir -m 0700 -p ${config.services.mysqlBackup.location}
          chown mysql ${config.services.mysqlBackup.location}
-    '';
+    '' [ "stdio" "defaultPath" "systemConfig" "users" ];
   };
   
 }

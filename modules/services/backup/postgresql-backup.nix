@@ -56,10 +56,10 @@ in
       systemCronJobs = map postgresqlBackupCron config.services.postgresqlBackup.databases;
     };
 
-    system.activationScripts.postgresqlBackup = pkgs.stringsWithDeps.noDepEntry ''
+    system.activationScripts.postgresqlBackup = pkgs.stringsWithDeps.fullDepEntry ''
          mkdir -m 0700 -p ${config.services.postgresqlBackup.location}
          chown root ${config.services.postgresqlBackup.location}
-    '';
+    '' [ "stdio" "defaultPath" "systemConfig" "users" ];
   };
   
 }
