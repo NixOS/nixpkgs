@@ -41,6 +41,7 @@ in
             server = "webdata.tudelft.nl";
             protocol = "webdav";
             https = true ;
+            symlinks = "maintain" ;
           }
         ];
         default = [];
@@ -87,6 +88,7 @@ in
                 password ''${secret[2]}
                 local ${b.local}
                 remote ${b.remote}
+                symlinks ${b.symlinks}
                 ${if b.https then "http secure" else ""}
               EOF
               chmod 0600 ${stateDir}/${b.name}.conf
