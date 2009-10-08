@@ -1251,6 +1251,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  pg_top = import ../tools/misc/pg_top {
+    inherit fetchurl stdenv ncurses postgresql;
+  };
+
   pdsh = import ../tools/networking/pdsh {
     inherit fetchurl stdenv perl;
     readline = if getPkgConfig "pdsh" "readline" true then readline else null;
