@@ -1,0 +1,190 @@
+diff --git a/usr/sbin/debootstrap b/usr/sbin/debootstrap
+index a0dacf3..6331b3d 100755
+--- a/usr/sbin/debootstrap
++++ b/usr/sbin/debootstrap
+@@ -14,7 +14,7 @@ if [ "$DEBOOTSTRAP_DIR" = "" ]; then
+ 	fi
+ fi
+ 
+-if [ -x "/usr/bin/gettext" ]; then
++if [ -x "@gettext@" ]; then
+ 	USE_GETTEXT_INTERACTION=yes
+ fi
+ 
+@@ -334,12 +334,12 @@ fi
+ 
+ if [ "$ARCH" != "" ]; then
+ 	true
+-elif [ -x /usr/bin/dpkg ] && \
+-     /usr/bin/dpkg --print-installation-architecture >/dev/null 2>&1; then
+-	ARCH=`/usr/bin/dpkg --print-installation-architecture`
++elif [ -x @dpkg@ ] && \
++     @dpkg@ --print-installation-architecture >/dev/null 2>&1; then
++	ARCH=`@dpkg@ --print-installation-architecture`
+ elif type udpkg >/dev/null 2>&1 && \
+      udpkg --print-architecture >/dev/null 2>&1; then
+-	ARCH=`/usr/bin/udpkg --print-architecture`
++	ARCH=`@udpkg@ --print-architecture`
+ elif [ -e $DEBOOTSTRAP_DIR/arch ]; then
+ 	ARCH=`cat $DEBOOTSTRAP_DIR/arch`
+ else
+@@ -349,7 +349,7 @@ fi
+ export ARCH SUITE TARGET
+ 
+ if am_doing_phase first_stage second_stage; then
+-	if [ -x /usr/bin/id ] && [ `id -u` -ne 0 ]; then
++	if [ -x @id@ ] && [ `id -u` -ne 0 ]; then
+ 		error 1 NEEDROOT "debootstrap can only run as root"
+ 	fi
+ 	# Ensure that we can create working devices and executables on the target.
+diff --git a/usr/share/debootstrap/functions b/usr/share/debootstrap/functions
+index b9180ba..33feac3 100755
+--- a/usr/share/debootstrap/functions
++++ b/usr/share/debootstrap/functions
+@@ -914,7 +914,7 @@ setup_dselect_method () {
+ # For the debootstrap udeb, pkgdetails is provided by the bootstrap-base
+ # udeb, so the pkgdetails API needs to be kept in sync with that.
+ 
+-if [ -x /usr/bin/perl ]; then
++if [ -x @perl@ ]; then
+ 	PKGDETAILS=pkgdetails_perl
+ 
+ 	pkgdetails_field () {
+@@ -1264,7 +1264,7 @@ close LD_SO_CONF;
+ 
+ unshift @ld_library_path, split(/:/, $ENV{LD_LIBRARY_PATH});
+ 
+-$unamearch = `/bin/uname -m`;
++$unamearch = `@uname -m`;
+ chomp $unamearch;
+ 
+ foreach my $file (@ARGV) {
+
+
+diff --git a/usr/share/debootstrap/functions b/usr/share/debootstrap/functions
+index 730df3a..197b2fb 100755
+--- a/usr/share/debootstrap/functions
++++ b/usr/share/debootstrap/functions
+@@ -18,7 +18,7 @@ error () {
+ 		for x in "$@"; do echo "EA: $x"; done
+ 		echo "EF: $fmt") >&4
+ 	elif [ "$USE_GETTEXT_INTERACTION" ]; then
+-		(printf "E: `LANG=$GETTEXT_LANG gettext debootstrap "$fmt"`\n" "$@") >&4
++		(printf "E: `LANG=$GETTEXT_LANG @gettext@ debootstrap "$fmt"`\n" "$@") >&4
+ 	else
+ 		(printf "E: $fmt\n" "$@") >&4
+ 	fi
+@@ -35,7 +35,7 @@ warning () {
+ 		for x in "$@"; do echo "WA: $x"; done
+ 		echo "WF: $fmt") >&4
+ 	elif [ "$USE_GETTEXT_INTERACTION" ]; then
+-		printf "W: `LANG=$GETTEXT_LANG gettext debootstrap "$fmt"`\n" "$@" >&4
++		printf "W: `LANG=$GETTEXT_LANG @gettext@ debootstrap "$fmt"`\n" "$@" >&4
+ 	else
+ 		printf "W: $fmt\n" "$@" >&4
+ 	fi
+@@ -51,7 +51,7 @@ info () {
+ 		for x in "$@"; do echo "IA: $x"; done
+ 		echo "IF: $fmt") >&4
+ 	elif [ "$USE_GETTEXT_INTERACTION" ]; then
+-		printf "I: `LANG=$GETTEXT_LANG gettext debootstrap "$fmt"`\n" "$@" >&4
++		printf "I: `LANG=$GETTEXT_LANG @gettext@ debootstrap "$fmt"`\n" "$@" >&4
+ 	else
+ 		printf "I: $fmt\n" "$@" >&4
+ 	fi
+
+
+diff --git a/usr/share/debootstrap/functions b/usr/share/debootstrap/functions
+index 98d2056..c1d7430 100755
+--- a/usr/share/debootstrap/functions
++++ b/usr/share/debootstrap/functions
+@@ -501,9 +501,9 @@ download_release_indices () {
+ 		local md=
+ 		if [ "$normmd" != "" ]; then
+ 			md="$normmd"
+-		elif [ -x /bin/bunzip2 ] && [ "$bz2md" != "" ]; then
++		elif [ -x @bunzip2@ ] && [ "$bz2md" != "" ]; then
+ 			md="$bz2md"
+-		elif [ -x /bin/gunzip ] && [ "$gzmd" != "" ]; then
++		elif [ -x @gunzip@ ] && [ "$gzmd" != "" ]; then
+ 			md="$gzmd"
+ 		fi
+ 		if [ "$md" != "" ]; then
+@@ -529,11 +529,11 @@ download_release_indices () {
+ 			ext="$ext $normmd ."
+ 			md="$normmd"
+ 		fi
+-		if [ -x /bin/bunzip2 ] && [ "$bz2md" != "" ]; then
++		if [ -x @bunzip2@ ] && [ "$bz2md" != "" ]; then
+ 			ext="$ext $bz2md bz2"
+ 			md="${md:-$bz2md}"
+ 		fi
+-		if [ -x /bin/gunzip ] && [ "$gzmd" != "" ]; then
++		if [ -x @gunzip@ ] && [ "$gzmd" != "" ]; then
+ 			ext="$ext $gzmd gz"
+ 			md="${md:-$gzmd}"
+ 		fi
+@@ -663,7 +663,7 @@ download_main_indices () {
+ 	    for c in $COMPONENTS; do
+ 		local path="dists/$SUITE/$c/binary-$ARCH/Packages"
+ 		local pkgdest="$TARGET/$($DLDEST pkg "$SUITE" "$c" "$ARCH" "$m" "$path")"
+-		if [ -x /bin/gunzip ] && get "$m/${path}.gz" "${pkgdest}.gz"; then
++		if [ -x @gunzip@ ] && get "$m/${path}.gz" "${pkgdest}.gz"; then
+ 			rm -f "$pkgdest"
+ 			gunzip "$pkgdest.gz"
+ 		elif get "$m/$path" "$pkgdest"; then
+
+
+diff --git a/usr/share/debootstrap/functions b/usr/share/debootstrap/functions
+index 15051e8..a5de422 100755
+--- a/usr/share/debootstrap/functions
++++ b/usr/share/debootstrap/functions
+@@ -70,13 +70,13 @@ wgetprogress () {
+ 	[ ! "$verbose" ] && QSWITCH="-q"
+ 	local ret=0
+ 	if [ "$USE_DEBIANINSTALLER_INTERACTION" ] && [ "$PROGRESS_NEXT" ]; then
+-		wget "$@" 2>&1 >/dev/null | $PKGDETAILS "WGET%" $PROGRESS_NOW $PROGRESS_NEXT $PROGRESS_END >&3
++		@wget@ "$@" 2>&1 >/dev/null | $PKGDETAILS "WGET%" $PROGRESS_NOW $PROGRESS_NEXT $PROGRESS_END >&3
+ 		ret=$?
+ 	elif [ "$USE_BOOTFLOPPIES_INTERACTION" ] && [ "$PROGRESS_NEXT" ]; then
+-		wget "$@" 2>&1 >/dev/null | $PKGDETAILS "WGET%" $PROGRESS_NOW $PROGRESS_NEXT $PROGRESS_END "$PROGRESS_WHAT" >&3
++		@wget@ "$@" 2>&1 >/dev/null | $PKGDETAILS "WGET%" $PROGRESS_NOW $PROGRESS_NEXT $PROGRESS_END "$PROGRESS_WHAT" >&3
+ 		ret=$?
+ 	else
+-		wget $QSWITCH "$@"
++		@wget@ $QSWITCH "$@"
+ 		ret=$?
+ 	fi
+ 	return $ret
+
+diff --git a/usr/share/debootstrap/functions b/usr/share/debootstrap/functions
+index 8d60d8e..e238644 100755
+--- a/usr/share/debootstrap/functions
++++ b/usr/share/debootstrap/functions
+@@ -921,7 +921,7 @@ if [ -x  ]; then
+ 
+ 	pkgdetails_field () {
+ 		# uniq field mirror Packages values...
+-		perl -le '
++		@perl@ -le '
+ $unique = shift @ARGV; $field = lc(shift @ARGV); $mirror = shift @ARGV;
+ $cnt = length(@ARGV);
+ %fields = map { $_, 0 } @ARGV;
+@@ -959,7 +959,7 @@ for $v (keys %fields) {
+ 	pkgdetails_perl () {
+ 		if [ "$1" = "WGET%" ]; then
+ 			shift;
+-			perl -e '
++			@perl@ -e '
+ $v = 0;
+ while (read STDIN, $x, 1) {
+ 	if ($x =~ m/\d/) {
+@@ -974,7 +974,7 @@ while (read STDIN, $x, 1) {
+ }' "$@"
+ 		elif [ "$1" = "GETDEPS" ]; then
+ 			local pkgdest="$2"; shift; shift
+-			perl -e '
++			@perl@ -e '
+ while (<STDIN>) {
+ 	chomp;
+ 	$in = 1 if (/^Package: (.*)$/ && grep {$_ eq $1} @ARGV);
