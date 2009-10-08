@@ -470,6 +470,10 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  eggdrop = import ../tools/networking/eggdrop {
+    inherit fetchurl stdenv tcl;
+  };
+
   mcrl = import ../tools/misc/mcrl {
     inherit fetchurl stdenv coreutils;
   };
@@ -933,6 +937,10 @@ let
 
   idutils = import ../tools/misc/idutils {
     inherit fetchurl stdenv emacs;
+  };
+
+  iftop = import ../tools/networking/iftop {
+    inherit fetchurl stdenv ncurses libpcap;
   };
 
   imapsync = import ../tools/networking/imapsync {
