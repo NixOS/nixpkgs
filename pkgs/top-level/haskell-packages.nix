@@ -175,6 +175,10 @@ rec {
     inherit cabal HaXml mtl network stm hslogger HAppSUtil HAppSData bytestring binary hspread;
   };
 
+  hashedStorage = import ../development/libraries/haskell/hashed-storage {
+    inherit cabal mtl zlib mmap;
+  };
+
   haskeline = import ../development/libraries/haskell/haskeline {
     inherit cabal extensibleExceptions mtl utf8String;
   };
@@ -283,6 +287,10 @@ rec {
 
   maybench = import ../development/libraries/haskell/maybench {
     inherit cabal benchpress;
+  };
+
+  mmap = import ../development/libraries/haskell/mmap {
+    inherit cabal;
   };
 
   monadlab = import ../development/libraries/haskell/monadlab {
@@ -641,8 +649,8 @@ rec {
   # Applications.
 
   darcs = import ../applications/version-management/darcs/darcs-2.nix {
-    inherit cabal html mtl parsec regexCompat;
-    inherit (pkgs) zlib curl;
+    inherit cabal html mtl parsec regexCompat haskeline hashedStorage;
+    inherit (pkgs) curl;
   };
 
   leksah = import ../applications/editors/leksah {
