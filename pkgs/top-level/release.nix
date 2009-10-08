@@ -212,7 +212,7 @@ in {
   iputils = linux;
   iproute = linux;
   irssi = linux;
-  jfsUtils = linux;
+  jfsutils = linux;
   jfsrec = linux;
   jnettop = linux;
   jwhois = linux;
@@ -395,7 +395,7 @@ in {
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;
-  xfsProgs = linux;
+  xfsprogs = linux;
   xineUI = linux;
   xkeyboard_config = linux;
   xlockmore = linux;
