@@ -1,17 +1,17 @@
 { stdenv, fetchurl, lib, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, qt3, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
+, libXcursor, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
 , python, which, alsaLib, curl
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-3.0.6-${kernel.version}";
+  name = "virtualbox-3.0.8-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.0.6/VirtualBox-3.0.6-OSE.tar.bz2;
-    sha256 = "1vrirm9m8728m77f46l23prshcwjn3ncqgazxkspd01i5cf9cljz";
+    url = http://download.virtualbox.org/virtualbox/3.0.8/VirtualBox-3.0.8-OSE.tar.bz2;
+    sha256 = "1qcbl7sf9svs4997rb48yqh3ccj97xz6pnsn5xs3rg3wqxpdywk4";
   };
 
-  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt3 qt4 libIDL SDL hal libcap glib kernel python alsaLib curl];
+  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl];
 
   patchPhase = "
     set -x
@@ -25,9 +25,7 @@ stdenv.mkDerivation {
   ";
 
   configurePhase = ''
-    # It wants the qt utils from qt3, and it takes them from QTDIR
-    export QTDIR=${qt3}
-    ./configure --with-qt-dir=${qt3} --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening
+    ./configure --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
@@ -48,14 +46,19 @@ stdenv.mkDerivation {
   '';
     
   installPhase = ''
+    # Install VirtualBox files
     cd out/linux.*/release/bin
     ensureDir $out/virtualbox
     cp -av * $out/virtualbox
+    
+    # Install kernel module
     cd src
     kernelVersion=$(cd ${kernel}/lib/modules; ls)
     export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
     ensureDir $MODULE_DIR    
     make install
+    
+    # Create wrapper script
     ensureDir $out/bin
     cp -v ${./VBox.sh} $out/bin/VBox.sh
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
@@ -68,7 +71,10 @@ stdenv.mkDerivation {
     do
         [ -f "$out/virtualbox/$file" ] && ln -sfv $out/bin/VBox.sh $out/bin/$file
     done
+    
+    # Create and fix desktop item
     ensureDir $out/share/applications
+    sed -i -e "s|Icon=VBox|Icon=$out/virtualbox/VBox.png|" $out/virtualbox/virtualbox.desktop
     ln -sfv $out/virtualbox/virtualbox.desktop $out/share/applications
   '';
   
