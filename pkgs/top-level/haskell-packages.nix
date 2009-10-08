@@ -245,6 +245,10 @@ rec {
     inherit cabal;
   };
 
+  HList = import ../development/libraries/haskell/HList {
+    inherit cabal ;
+  };
+
   hscolour = import ../development/libraries/haskell/hscolour {
     inherit cabal;
   };
