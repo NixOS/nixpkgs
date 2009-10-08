@@ -34,8 +34,8 @@
       pkgs.ddrescue
       pkgs.cdrkit 
       pkgs.btrfsProgs
-      pkgs.xfsProgs
-      pkgs.jfsUtils
+      pkgs.xfsprogs
+      pkgs.jfsutils
       pkgs.jfsrec
       pkgs.ntfs3g 
       pkgs.subversion16

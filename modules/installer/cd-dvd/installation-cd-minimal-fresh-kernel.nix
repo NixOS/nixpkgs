@@ -34,7 +34,7 @@ rec {
     klibc dmraid cryptsetup ccrypt 
     utillinuxCurses ddrescue testdisk
     pciutils sdparm hdparm usbutils
-    btrfsProgs xfsProgs jfsUtils jfsrec
+    btrfsProgs xfsprogs jfsutils jfsrec
     wpa_supplicant iproute 
     manpages openssh openssl ncat socat
     fuse ntfs3g gnupg gnupg2

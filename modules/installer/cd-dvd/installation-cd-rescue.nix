@@ -19,7 +19,7 @@
   environment.systemPackages = with pkgs; [
     utillinuxCurses ddrescue 
     pciutils sdparm hdparm hddtemp usbutils
-    btrfsProgs xfsProgs jfsUtils jfsrec
+    btrfsProgs xfsprogs jfsutils jfsrec
     wpa_supplicant iproute 
     fuse ntfs3g smbfsFuse sshfsFuse
     manpages irssi elinks mcabber mutt openssh lftp 
