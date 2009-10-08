@@ -618,10 +618,11 @@ let
     inherit fetchurl stdenv gettext libjpeg lcms;
   };
 
+  /*
   debootstrap = import ../tools/misc/debootstrap {
     inherit fetchurl stdenv lib dpkg gettext gawk wget perl;
-    inherit (bleedingEdgeRepos) sourceByName;
   };
+  */
 
   ddclient = import ../tools/networking/ddclient {
     inherit fetchurl buildPerlPackage perl;
