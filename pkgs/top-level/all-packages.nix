@@ -5252,8 +5252,8 @@ let
     inherit boost;
   };
 
-  jfsUtils = builderDefsPackage (selectVersion ../os-specific/linux/jfsutils "1.1.12") {
-    inherit libuuid;
+  jfsutils = import ../os-specific/linux/jfsutils/default.nix {
+    inherit fetchurl stdenv libuuid;
   };
 
   kbd = import ../os-specific/linux/kbd {
@@ -6081,8 +6081,8 @@ let
     inherit fetchurl stdenv qt4 imagemagick inkscape;
   };
 
-  xfsProgs = builderDefsPackage (selectVersion ../os-specific/linux/xfsprogs "2.9.7-1"){
-    inherit libtool gettext libuuid;
+  xfsprogs = import ../os-specific/linux/xfsprogs/default.nix {
+    inherit fetchurl stdenv libtool gettext libuuid;
   };
 
   xmoto = builderDefsPackage (import ../games/xmoto) {

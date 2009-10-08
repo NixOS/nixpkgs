@@ -39,6 +39,9 @@ args : with args;
 		") ["minInit" "doUnpack" "addInputs"];
 	};
 	in with localDefs;
+
+assert args.libuuid != null;
+        
 stdenv.mkDerivation rec {
 	name = "relfs-"+version;
 	builder = writeScript (name + "-builder")
