@@ -21,9 +21,9 @@ rec {
   mkNotdef = {_type = "notdef";};
 
   # General property type, it has a property attribute and a content
-  # attribute.  The property attribute refer to an attribute set which
+  # attribute.  The property attribute refers to an attribute set which
   # contains a _type attribute and a list of functions which are used to
-  # evaluate this property.  The content attribute is used to stack property
+  # evaluate this property.  The content attribute is used to stack properties
   # on top of each other.
   # 
   # The optional functions which may be contained in the property attribute
@@ -188,7 +188,7 @@ rec {
     inherit content;
   };
 
-  # Create a "ThenElse" property which contains choices which can choosed by
+  # Create a "ThenElse" property which contains choices being chosen by
   # the evaluation of an "If" statement.
   isThenElse = attrs: (typeOf attrs) == "then-else";
   mkThenElse = attrs:
@@ -202,7 +202,7 @@ rec {
       content = mkNotdef;
     };
 
-  # Create an "Always" property remove ignore all "If" statement.
+  # Create an "Always" property removing/ ignoring all "If" statement.
   isAlways = attrs: (typeOf attrs) == "always";
   mkAlways = value:
     mkProperty {
@@ -222,8 +222,8 @@ rec {
     ) id;
 
   # Evaluate the "If" statements when either "ThenElse" or "Always"
-  # statement is encounter.  Otherwise it remove multiple If statement and
-  # replace them by one "If" staement where the condition is the list of all
+  # statement is encountered.  Otherwise it removes multiple If statements and
+  # replaces them by one "If" statement where the condition is the list of all
   # conditions joined with a "and" operation.
   onIfGlobalDelay = name: content:
     let
@@ -281,9 +281,9 @@ rec {
   /* mkOverride */
 
   # Create an "Override" statement which allow the user to define
-  # prioprities between values.  The default priority is 100 and the lowest
+  # priorities between values.  The default priority is 100. The lowest
   # priorities are kept.  The template argument must reproduce the same
-  # attribute set hierachy to override leaves of the hierarchy.
+  # attribute set hierarchy to override leaves of the hierarchy.
   isOverride = attrs: (typeOf attrs) == "override";
   mkOverride = priority: template: content: mkProperty {
     property = {
@@ -319,7 +319,8 @@ rec {
     else
       p;
 
-  # Ignore all values which have a higher value of the priority number.
+  # Keep values having lowest priority numbers only throwing away those having
+  # a higher priority assigned.
   onOverrideGlobalEval = valList:
     let
       defaultPrio = 100;
