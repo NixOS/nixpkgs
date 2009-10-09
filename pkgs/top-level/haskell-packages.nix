@@ -496,6 +496,10 @@ rec {
     inherit cabal mtl;
   };
 
+  uniqueid = import ../development/libraries/haskell/uniqueid {
+    inherit cabal;
+  };
+
   utf8String = import ../development/libraries/haskell/utf8-string {
     inherit cabal;
   };
