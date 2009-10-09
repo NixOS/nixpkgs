@@ -68,6 +68,16 @@ rec {
             {}
         );
 
+
+  unifyOptionModule = {key ? "<unknown location>"}: m: (args:
+    let module = lib.applyIfFunction m args; in
+    if lib.isModule module then
+      { inherit key; } // module
+    else
+      { inherit key; options = module; }
+  );
+
+
   moduleClosure = initModules: args:
     let
       moduleImport = m:
@@ -189,16 +199,11 @@ rec {
           options = lib.zip (name: values:
             if any isOption values then
               let
-                # locations to sub-options declarations
-                decls =
+                decls = # add location to sub-module options.
                   map (m:
-                    mapSubOptions (subModule: (args:
-                      let module = lib.applyIfFunction subModule args; in
-                      if lib.isModule module then
-                        { inherit (m) key; } // module
-                      else
-                        { inherit (m) key; options = module; }
-                    )) m.options
+                    mapSubOptions
+                      (unifyOptionModule {inherit (m) key;})
+                      m.options
                   ) (declarationsOf name);
               in
                 addOptionMakeUp
