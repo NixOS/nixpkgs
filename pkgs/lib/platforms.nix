@@ -5,9 +5,10 @@ rec {
   linux = ["i686-linux" "x86_64-linux" "powerpc-linux"];
   darwin = ["i686-darwin" "powerpc-darwin"];
   freebsd = ["i686-freebsd" "x86_64-freebsd" "powerpc-freebsd"];
+  openbsd = ["i686-openbsd" "x86_64-openbsd"];
   cygwin = ["i686-cygwin"];
-  unix = linux ++ darwin ++ freebsd;
-  all = linux ++ darwin ++ cygwin ++ freebsd;
+  unix = linux ++ darwin ++ freebsd ++ openbsd;
+  all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd;
   allBut = platform: lists.filter (x: platform != x) all;
   mesaPlatforms = linux ++ darwin ++ freebsd;
 }
