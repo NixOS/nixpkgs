@@ -69,17 +69,20 @@ rec {
   # Move properties from the current attribute set to the attribute
   # contained in this attribute set.  This trigger property handlers called
   # `onDelay' and `onGlobalDelay'.
-  delayProperties = attrs:
+  delayPropertiesWithIter = iter: path: attrs:
     let cleanAttrs = rmProperties attrs; in
     if isProperty attrs then
-      lib.mapAttrs (a: v:
+      iter (a: v:
         lib.addErrorContext "while moving properties on the attribute `${a}'." (
           triggerPropertiesGlobalDelay a (
             triggerPropertiesDelay a (
               copyProperties attrs v
-      )))) cleanAttrs
+      )))) path cleanAttrs
     else
       attrs;
+
+  delayProperties = # implicit attrs argument.
+    delayPropertiesWithIter (f: p: v: lib.mapAttrs f v) "";
 
   # Call onDelay functions.
   triggerPropertiesDelay = name: attrs:
