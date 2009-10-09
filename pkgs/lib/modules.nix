@@ -113,16 +113,8 @@ rec {
         value
     ) module;
 
-
   delayModule = module:
     moduleApply { config = delayProperties; } module;
-
-  evalDefinitions = opt: values:
-    if opt ? type && opt.type.delayProperties then
-      map (delayPropertiesTemplate opt.type.iter opt.name) values
-    else
-      evalProperties values;
-
 
   selectModule = name: m:
     { inherit (m) key;
@@ -251,7 +243,7 @@ rec {
                   opt.extraConfigs;
 
             in if hasOpt && isOption opt then
-              let defs = evalDefinitions opt values; in
+              let defs = evalProperties values; in
               lib.addErrorContext "${eol
                 }while evaluating the option '${addName name}'.${eol
                 }${errorSource (modulesOf name)}${eol
