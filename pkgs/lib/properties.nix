@@ -69,17 +69,20 @@ rec {
   # Move properties from the current attribute set to the attribute
   # contained in this attribute set.  This trigger property handlers called
   # `onDelay' and `onGlobalDelay'.
-  delayProperties = attrs:
+  delayPropertiesWithIter = iter: path: attrs:
     let cleanAttrs = rmProperties attrs; in
     if isProperty attrs then
-      lib.mapAttrs (a: v:
+      iter (a: v:
         lib.addErrorContext "while moving properties on the attribute `${a}'." (
           triggerPropertiesGlobalDelay a (
             triggerPropertiesDelay a (
               copyProperties attrs v
-      )))) cleanAttrs
+      )))) path cleanAttrs
     else
       attrs;
+
+  delayProperties = # implicit attrs argument.
+    delayPropertiesWithIter (f: p: v: lib.mapAttrs f v) "";
 
   # Call onDelay functions.
   triggerPropertiesDelay = name: attrs:
@@ -285,7 +288,7 @@ rec {
   # priorities are kept.  The template argument must reproduce the same
   # attribute set hierarchy to override leaves of the hierarchy.
   isOverride = attrs: (typeOf attrs) == "override";
-  mkOverride = priority: template: content: mkProperty {
+  mkOverrideTemplate = priority: template: content: mkProperty {
     property = {
       _type = "override";
       onDelay = onOverrideDelay;
@@ -294,6 +297,10 @@ rec {
     };
     inherit content;
   };
+
+  # Currently an alias, but sooner or later the template argument should be
+  # removed.
+  mkOverride = mkOverrideTemplate;
 
   # Sugar to override the default value of the option by making a new
   # default value based on the configuration.
