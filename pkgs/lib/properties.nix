@@ -288,7 +288,7 @@ rec {
   # priorities are kept.  The template argument must reproduce the same
   # attribute set hierarchy to override leaves of the hierarchy.
   isOverride = attrs: (typeOf attrs) == "override";
-  mkOverride = priority: template: content: mkProperty {
+  mkOverrideTemplate = priority: template: content: mkProperty {
     property = {
       _type = "override";
       onDelay = onOverrideDelay;
@@ -297,6 +297,10 @@ rec {
     };
     inherit content;
   };
+
+  # Currently an alias, but sooner or later the template argument should be
+  # removed.
+  mkOverride = mkOverrideTemplate;
 
   # Sugar to override the default value of the option by making a new
   # default value based on the configuration.
