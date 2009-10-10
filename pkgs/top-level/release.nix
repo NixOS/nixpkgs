@@ -527,6 +527,7 @@ in {
     kmplayer = linux;
     ktorrent = linux;
     koffice = linux;
+    konversation = linux;
     kdesvn = linux;
     amarok = linux;
   };

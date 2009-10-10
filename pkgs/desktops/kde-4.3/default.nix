@@ -251,6 +251,13 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon qca2;
   };
   
+  konversation = import ./extragear/konversation {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
+    inherit (pkgs.xlibs) libXScrnSaver;
+    inherit kdelibs kdepimlibs;
+    inherit automoc4 phonon qca2;
+  };
+  
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
     inherit (pkgs.xlibs) libX11;
