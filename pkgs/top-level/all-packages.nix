@@ -963,6 +963,10 @@ let
     inherit fetchurl stdenv unzip jdk;
   };
 
+  jhead = import ../tools/graphics/jhead {
+    inherit stdenv fetchurl;
+  };
+
   jing = import ../tools/text/xml/jing {
     inherit fetchurl stdenv unzip;
   };
