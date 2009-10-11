@@ -698,6 +698,11 @@ let
     inherit fetchurl stdenv pkgconfig libexif popt;
   };
 
+  exiftags = import ../tools/graphics/exiftags {
+    inherit stdenv fetchurl;
+  };
+
+
   expect = import ../tools/misc/expect {
     inherit fetchurl stdenv tcl tk autoconf;
     inherit (xorg) xproto libX11;
