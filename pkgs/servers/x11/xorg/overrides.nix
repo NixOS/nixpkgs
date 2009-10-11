@@ -65,11 +65,11 @@
   };
 
   xf86videoopenchrome = attrs: attrs // {
-    name = "xf86-video-openchrome-svn-754";
+    name = "xf86-video-openchrome-svn-798";
     src = args.fetchsvn {
       url = http://svn.openchrome.org/svn/trunk;
-      md5 = "9a64a317d1f0792c5709e516c14f383b";
-      rev = 754;
+      sha256 = "00kz5775090nwlsxyqrp1wsmislszj58fv3kvq612xgql4vgx4ab";
+      rev = 798;
       };
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa args.automake args.autoconf args.libtool xorg.libXext];
     preConfigure = "chmod +x autogen.sh";
