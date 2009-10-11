@@ -218,12 +218,6 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon strigi soprano;
   };
 
-  libkipi = import ./extragear/libkipi {
-    inherit (pkgs) stdenv fetchurl lib qt4 perl gettext;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-  
   kdesvn = import ./extragear/kdesvn {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
