@@ -2827,6 +2827,10 @@ let
     inherit composableDerivation fetchurl transfig texLive;
   };
 
+  remake = import ../development/tools/build-managers/remake {
+      inherit fetchurl stdenv;
+    };
+
   # couldn't find the source yet
   seleniumRCBin = import ../development/tools/selenium/remote-control {
     inherit fetchurl stdenv unzip;
