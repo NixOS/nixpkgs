@@ -126,7 +126,7 @@ rec {
       filter (x: !isNotdef x) (
         lib.addErrorContext "while evaluating properties." (
           triggerPropertiesGlobalEval (
-            map triggerPropertiesEval valList
+            evalLocalProperties valList
       )))
     else
       valList;
