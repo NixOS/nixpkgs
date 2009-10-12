@@ -75,18 +75,8 @@ let
 
 
   jobs =
-    let
-      deprecatedJobDefs = config.jobs;
-      jobList = concatStringsSep ", " (map (j: j.name) deprecatedJobDefs);
-      jobs =
-        if deprecatedJobDefs != [] then
-          builtins.trace "Make the following jobs use jobAttrs please. Using jobs is depreceated: ${jobList}" deprecatedJobDefs
-        else
-          deprecatedJobDefs;
-    in
-       [pkgs.upstart] # for the built-in logd job
-    ++ map (job: job.upstartPkg) (attrValues config.jobAttrs)
-    ++ map (job: job.upstartPkg) jobs;
+    [pkgs.upstart] # for the built-in logd job
+    ++ map (job: job.upstartPkg) (attrValues config.jobAttrs);
 
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
@@ -264,29 +254,11 @@ in
       description = ''
         This option defines the system jobs started and managed by the
         Upstart daemon.
-
-        It's filled by config.jobs by now. A warning is print.
-
-        You can overwrite settings easily. Example:
-
-          config.jobAttrs.sshd.startOn = "never";
       '';
-
       type = types.attrsOf types.optionSet;
       options = [ jobOptions upstartJob ];
     };
-   
   
-    jobs = mkOption {
-      default = [];
-      description = ''
-        See jobAttrs
-      '';
-
-      type = types.list types.optionSet;
-      options = [ jobOptions upstartJob ];
-    };
-
     tests.upstartJobs = mkOption {
       internal = true;
       default = {};
