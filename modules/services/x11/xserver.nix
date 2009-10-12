@@ -348,10 +348,8 @@ in
     
     services.hal.packages = halConfigFiles;
 
-    jobs = singleton
-      { name = "xserver";
-
-        startOn = if cfg.autorun then "hal" else "never";
+    jobAttrs.xserver =
+      { startOn = if cfg.autorun then "hal" else "never";
  
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup

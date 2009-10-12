@@ -1,7 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf singleton;
 
   cfg = config.services.mysql;
 
@@ -71,9 +72,8 @@ in
 
     environment.systemPackages = [mysql];
 
-    jobs = singleton
-      { name = "mysql";
-        description = "MySQL server";
+    jobAttrs.mysql =
+      { description = "MySQL server";
 
         startOn = "filesystems";
         stopOn = "shutdown";

@@ -63,10 +63,8 @@ in
         gid = config.ids.gids.atd;
       };
 
-    jobs = singleton
-      { name = "atd";
-
-        description = "at daemon (atd)";
+    jobAttrs.atd =
+      { description = "at daemon (atd)";
 
         startOn = "startup";
         stopOn = "shutdown";

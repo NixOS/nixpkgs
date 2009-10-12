@@ -1,10 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-let
-
-  inherit (pkgs.lib) mkOption mkIf singleton;
-  
-in
+with pkgs.lib;
 
 {
 
@@ -57,15 +53,13 @@ in
   config = {
 
     # Generate a separate job for each tty.  
-    jobs = map (tty: {
+    jobAttrs = listToAttrs (map (tty: nameValuePair tty {
     
-      name = tty;
-
       startOn = "udev";
 
       exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.pam_login}/bin/login --noclear ${tty}";
       
-    }) config.services.mingetty.ttys;
+    }) config.services.mingetty.ttys);
 
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.

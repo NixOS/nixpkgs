@@ -1,7 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf mergeEnableOption mergeListOption;
 
   inherit (pkgs) nettools dhcp lib;
 
@@ -60,10 +61,8 @@ in
   
   config = mkIf config.networking.useDHCP {
 
-    jobs = pkgs.lib.singleton
-      { name = "dhclient";
-
-        startOn = "network-interfaces/started";
+    jobAttrs.dhclient = 
+      { startOn = "network-interfaces/started";
         stopOn = "network-interfaces/stop";
 
         preStart =

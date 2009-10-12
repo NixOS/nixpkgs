@@ -1,5 +1,5 @@
 # HAL daemon.
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -64,10 +64,8 @@ in
         gid = config.ids.gids.haldaemon;
       };
 
-    jobs = singleton
-      { name = "hal";
-
-        description = "HAL daemon";
+    jobAttrs.hal =
+      { description = "HAL daemon";
         
         # !!! TODO: make sure that HAL starts after acpid,
         # otherwise hald-addon-acpi will grab /proc/acpi/event.

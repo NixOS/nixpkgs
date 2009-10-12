@@ -119,10 +119,8 @@ in
 
   config = mkIf cfg.enable {
 
-    jobs = singleton
-      { name = "xinetd";
-      
-        description = "xinetd server";
+    jobAttrs.xinetd =
+      { description = "xinetd server";
 
         startOn = "network-interfaces/started";
         stopOn = "network-interfaces/stop";

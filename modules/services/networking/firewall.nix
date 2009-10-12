@@ -78,10 +78,8 @@ in
 
     environment.systemPackages = [pkgs.iptables];
 
-    jobs = singleton
-      { name = "firewall";
-
-        startOn = "network-interfaces/started";
+    jobAttrs.firewall =
+      { startOn = "network-interfaces/started";
 
         preStart =
           ''

@@ -1,8 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-
-  inherit (pkgs.lib) mkOption mkIf singleton;
 
   inherit (pkgs) privoxy;
 
@@ -77,27 +77,24 @@ in
         home = stateDir;
       };
 
-    jobs = singleton {
+    jobAttrs.privoxy =
+      { name = "privoxy";
 
-      name = "privoxy";
+        startOn = "startup";
+        stopOn = "shutdown"; 
 
-      startOn = "startup";
-      stopOn = "shutdown"; 
+        preStart =
+          ''
+            mkdir -m 0755 -p ${stateDir}
+            chown ${privoxyUser} ${stateDir}
 
-      preStart = ''
-         mkdir -m 0755 -p ${stateDir}
-         chown ${privoxyUser} ${stateDir}
+            # Needed to run privoxy as an unprivileged user.
+            ${modprobe}/sbin/modprobe capability || true
+          '';
 
-         # Needed to run privoxy as an unprivileged user.
-         ${modprobe}/sbin/modprobe capability || true
-      '';
+        exec = "${privoxy}/sbin/privoxy ${privoxyFlags}";
+      };
 
-      script = ''
-        ${privoxy}/sbin/privoxy ${privoxyFlags}
-      '';
-
-    };
-    
   };
   
 }

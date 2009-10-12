@@ -40,10 +40,8 @@ in
 
     boot.extraTTYs = [ cfg.tty ];
   
-    jobs = singleton
-      { name = "rogue";
-
-        description = "Rogue dungeon crawling game";
+    jobAttrs.rogue =
+      { description = "Rogue dungeon crawling game";
 
         startOn = "udev";
         stopOn = "shutdown";

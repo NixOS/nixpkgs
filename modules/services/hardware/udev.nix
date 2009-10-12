@@ -152,10 +152,8 @@ in
     
     services.udev.packages = [extraUdevRules];
 
-    jobs = singleton
-      { name = "udev";
-
-        startOn = "startup";
+    jobAttrs.udev =
+      { startOn = "startup";
         stopOn = "shutdown";
 
         environment = { UDEV_CONFIG_FILE = conf; };

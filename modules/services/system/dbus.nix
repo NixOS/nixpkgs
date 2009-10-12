@@ -113,10 +113,8 @@ in
         gid = config.ids.gids.messagebus;
       };
 
-    jobs = singleton
-      { name = "dbus";
-
-        startOn = "udev";
+    jobAttrs.dbus =
+      { startOn = "udev";
         stopOn = "shutdown";
 
         preStart =

@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -56,10 +56,8 @@ in
 
     environment.systemPackages = [pkgs.kbd];
   
-    jobs = singleton
-      { name = "kbd";
-
-        description = "Keyboard / console initialisation";
+    jobAttrs.kbd =
+      { description = "Keyboard / console initialisation";
 
         startOn = "udev";
 

@@ -9,10 +9,8 @@ with pkgs.lib;
 
   config = {
 
-    jobs = singleton
-      { name = "backdoor";
-      
-        startOn = "network-interfaces";
+    jobAttrs.backdoor =
+      { startOn = "network-interfaces";
         
         preStart =
           ''

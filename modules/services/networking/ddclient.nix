@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 let
 
@@ -110,27 +110,24 @@ in
         home = stateDir;
       };
 
-    jobs = singleton {
+    jobAttrs.ddclient =
+      { name = "ddclient";
 
-      name = "ddclient";
+        startOn = "startup";
+        stopOn = "shutdown"; 
 
-      startOn = "startup";
-      stopOn = "shutdown"; 
+        preStart =
+          ''
+            mkdir -m 0755 -p ${stateDir}
+            chown ${ddclientUser} ${stateDir}
 
-      preStart = ''
-         mkdir -m 0755 -p ${stateDir}
-         chown ${ddclientUser} ${stateDir}
+            # Needed to run ddclient as an unprivileged user.
+            ${modprobe}/sbin/modprobe capability || true
+          '';
 
-         # Needed to run ddclient as an unprivileged user.
-         ${modprobe}/sbin/modprobe capability || true
-      '';
+        exec = "${ddclient}/bin/ddclient ${ddclientFlags}";
+      };
 
-      script = ''
-        ${ddclient}/bin/ddclient ${ddclientFlags}
-      '';
-
-    };
-    
   };
   
 }

@@ -73,7 +73,7 @@ let
           echo "$jobText" > $out/etc/event.d/${job.name}
         '';
 
-        
+
   jobs =
     let
       deprecatedJobDefs = config.jobs;

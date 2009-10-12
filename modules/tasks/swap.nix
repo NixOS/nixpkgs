@@ -1,9 +1,10 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   inherit (pkgs) utillinux;
-  inherit (pkgs.lib) mkOption filter types;
 
   toPath = x: if x.device != null then x.device else "/dev/disk/by-label/${x.label}";
   
@@ -65,10 +66,8 @@ in
 
   config = {
 
-    jobs = pkgs.lib.singleton
-      { name = "swap";
-
-        task = true;
+    jobAttrs.swap =
+      { task = true;
         
         startOn = ["startup" "new-devices"];
 

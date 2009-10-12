@@ -17,10 +17,8 @@ in
         description = "Name service cache daemon user";
       };
 
-    jobs = singleton
-      { name = "nscd";
-
-        description = "Name Service Cache Daemon";
+    jobAttrs.nscd =
+      { description = "Name Service Cache Daemon";
 
         startOn = "startup";
         stopOn = "shutdown";

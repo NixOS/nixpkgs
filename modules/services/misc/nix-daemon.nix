@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -127,7 +127,7 @@ in
       envVars = mkOption {
         internal = true;
         default = "";
-        merge = pkgs.lib.mergeStringOption;
+        merge = mergeStringOption;
         description = "
           Environment variables used by Nix.
         ";
@@ -178,7 +178,7 @@ in
         { # List of machines for distributed Nix builds in the format expected
           # by build-remote.pl.
           source = pkgs.writeText "nix.machines"
-            (pkgs.lib.concatStrings (map (machine:
+            (concatStrings (map (machine:
               "${machine.sshUser}@${machine.hostName} "
               + (if machine ? system then machine.system else concatStringsSep "," machine.systems) 
               + " ${machine.sshKey} ${toString machine.maxJobs} "
@@ -188,10 +188,8 @@ in
           target = "nix.machines";
         };
 
-    jobs = pkgs.lib.singleton
-      { name = "nix-daemon";
-
-        startOn = "startup";
+    jobAttrs.nixDaemon =
+      { startOn = "startup";
 
         script =
           ''

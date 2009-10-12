@@ -47,10 +47,8 @@ in
 
   config = {
   
-    jobs = singleton
-      { name = "syslogd";
-
-        description = "Syslog daemon";
+    jobAttrs.syslogd =
+      { description = "Syslog daemon";
 
         startOn = "udev";
         stopOn = "shutdown";

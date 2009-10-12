@@ -1,8 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-
-  inherit (pkgs.lib) mkOption types;
 
   inherit (pkgs) nettools;
 
@@ -132,7 +132,7 @@ in
         pkgs.wirelesstools
       ];
     
-    jobs = pkgs.lib.singleton
+    jobAttrs.networkInterfaces = 
       { name = "network-interfaces";
 
         startOn = "udev";

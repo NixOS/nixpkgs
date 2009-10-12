@@ -1,4 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
@@ -12,7 +14,7 @@ in
 
   options = {
   
-    networking.enableWLAN = pkgs.lib.mkOption {
+    networking.enableWLAN = mkOption {
       default = false;
       description = ''
         Whether to start <command>wpa_supplicant</command> to scan for
@@ -31,14 +33,12 @@ in
 
   ###### implementation
   
-  config = pkgs.lib.mkIf config.networking.enableWLAN {
+  config = mkIf config.networking.enableWLAN {
 
     environment.systemPackages = [pkgs.wpa_supplicant];
 
-    jobs = pkgs.lib.singleton
-      { name = "wpa_supplicant";
-
-        startOn = "network-interfaces/started";
+    jobAttrs.wpa_supplicant = 
+      { startOn = "network-interfaces/started";
         stopOn = "network-interfaces/stop";
 
         preStart =

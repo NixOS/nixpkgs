@@ -1,8 +1,9 @@
 # ALSA sound support.
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption singleton mkIf;
 
   inherit (pkgs) alsaUtils;
 
@@ -23,7 +24,7 @@ in
         description = ''
           Whether to enable ALSA sound.
         '';
-        merge = pkgs.lib.mergeEnableOption;
+        merge = mergeEnableOption;
       };
 
     };
@@ -44,10 +45,8 @@ in
         gid = config.ids.gids.audio;
       };
 
-    jobs = singleton
-      { name = "alsa";
-
-        startOn = "udev";
+    jobAttrs.alsa =
+      { startOn = "udev";
 
         preStart =
           ''

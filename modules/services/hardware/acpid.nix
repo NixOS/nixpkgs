@@ -76,9 +76,8 @@ in
 
   config = mkIf config.powerManagement.enable {
 
-    jobs = singleton
-      { name = "acpid";
-        description = "ACPI daemon";
+    jobAttrs.acpid =
+      { description = "ACPI daemon";
 
         startOn = "udev";
         stopOn = "shutdown";
