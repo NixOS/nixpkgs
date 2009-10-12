@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   
   NIX_CFLAGS_CXXFLAGS = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
 
-  NIX_LDFLAGS = if stdenv.system == "x86_64-linux" then "-lgcc_s" else "";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   postInstall =
     ''
