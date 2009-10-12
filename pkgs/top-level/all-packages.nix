@@ -7137,6 +7137,10 @@ let
     lua = lua5;
   };
 
+  iptraf = import ../applications/networking/iptraf {
+    inherit fetchurl stdenv ncurses;
+  };
+
   irssi = import ../applications/networking/irc/irssi {
     inherit stdenv fetchurl pkgconfig ncurses openssl;
     inherit (gtkLibs) glib;
