@@ -50,7 +50,7 @@ in
 
   config = mkIf cfg.enable {
 
-    jobAttrs.ejabberd =
+    jobs.ejabberd =
       { description = "EJabberd server";
 
         startOn = "network-interface/started";

@@ -132,7 +132,7 @@ in
         pkgs.wirelesstools
       ];
     
-    jobAttrs.networkInterfaces = 
+    jobs.networkInterfaces = 
       { name = "network-interfaces";
 
         startOn = "udev";

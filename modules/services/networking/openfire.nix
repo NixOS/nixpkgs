@@ -49,7 +49,7 @@ in
         message = "openfire assertion failed";
       };
 
-    jobAttrs.openfire =
+    jobs.openfire =
       { description = "OpenFire XMPP server";
 
         startOn = "${startDependency}/started";

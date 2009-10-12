@@ -63,7 +63,7 @@ in
         inherit gid;
       };
 
-    jobAttrs.portmap =
+    jobs.portmap =
       { description = "ONC RPC portmap";
 
         startOn = "network-interfaces/started";

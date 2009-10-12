@@ -85,7 +85,7 @@ in
         inherit gid;
       };
 
-    jobAttrs.gpsd =
+    jobs.gpsd =
       { description = "GPSD daemon";
 
         startOn = "network-interfaces/started";

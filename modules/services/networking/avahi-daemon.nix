@@ -115,7 +115,7 @@ in
 
     environment.systemPackages = [ avahi ];
 
-    jobAttrs.avahi_daemon =
+    jobs.avahi_daemon =
       { name = "avahi-daemon";
 
         startOn = "network-interfaces/started";

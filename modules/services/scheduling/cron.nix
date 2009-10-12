@@ -66,7 +66,7 @@ in
 
     environment.systemPackages = [pkgs.cron];
 
-    jobAttrs.cron =
+    jobs.cron =
       { description = "Cron daemon";
 
         startOn = "startup";

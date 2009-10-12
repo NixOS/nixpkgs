@@ -76,7 +76,7 @@ in
         target = "exports";
       };
 
-    jobAttrs.nfs_kernel_exports =
+    jobs.nfs_kernel_exports =
       { name = "nfs-kernel-exports";
       
         description = "Kernel NFS server";
@@ -106,7 +106,7 @@ in
           '';
       };
 
-    jobAttrs.nfs_kernel_nfsd =
+    jobs.nfs_kernel_nfsd =
       { name = "nfs-kernel-nfsd";
 
         description = "Kernel NFS server";
@@ -117,7 +117,7 @@ in
         exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} ${builtins.toString cfg.nproc}";
       };
 
-    jobAttrs.nfs_kernel_mountd =
+    jobs.nfs_kernel_mountd =
       { name = "nfs-kernel-mountd";
 
         description = "Kernel NFS server - mount daemon";
@@ -128,7 +128,7 @@ in
         exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}";
       };
 
-    jobAttrs.nfs_kernel_statd =
+    jobs.nfs_kernel_statd =
       { name = "nfs-kernel-statd";
       
         description = "Kernel NFS server - Network Status Monitor";

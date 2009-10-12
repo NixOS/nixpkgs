@@ -116,6 +116,6 @@ let
 in
 
 {
-  jobAttrs = listToAttrs (map (n: nameValuePair "sys-${n}" (jobFun n))
+  jobs = listToAttrs (map (n: nameValuePair "sys-${n}" (jobFun n))
     [ "reboot" "halt" "system-halt" "power-off" ] );
 }

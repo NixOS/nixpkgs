@@ -348,7 +348,7 @@ in
     
     services.hal.packages = halConfigFiles;
 
-    jobAttrs.xserver =
+    jobs.xserver =
       { startOn = if cfg.autorun then "hal" else "never";
  
         environment =

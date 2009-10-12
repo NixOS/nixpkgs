@@ -49,7 +49,7 @@ in
         home = stateDir;
       };
 
-    jobAttrs.uptimed =
+    jobs.uptimed =
       { description = "Uptimed daemon";
 
         startOn = "startup";

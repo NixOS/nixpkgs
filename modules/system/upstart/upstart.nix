@@ -73,10 +73,9 @@ let
           echo "$jobText" > $out/etc/event.d/${job.name}
         '';
 
-
   jobs =
     [pkgs.upstart] # for the built-in logd job
-    ++ map (job: job.upstartPkg) (attrValues config.jobAttrs);
+    ++ map (job: job.upstartPkg) (attrValues config.jobs);
 
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
@@ -249,7 +248,7 @@ in
   
   options = {
 
-    jobAttrs = mkOption {
+    jobs = mkOption {
       default = {};
       description = ''
         This option defines the system jobs started and managed by the

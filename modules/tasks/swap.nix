@@ -66,7 +66,7 @@ in
 
   config = {
 
-    jobAttrs.swap =
+    jobs.swap =
       { task = true;
         
         startOn = ["startup" "new-devices"];

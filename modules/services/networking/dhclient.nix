@@ -61,7 +61,7 @@ in
   
   config = mkIf config.networking.useDHCP {
 
-    jobAttrs.dhclient = 
+    jobs.dhclient = 
       { startOn = "network-interfaces/started";
         stopOn = "network-interfaces/stop";
 

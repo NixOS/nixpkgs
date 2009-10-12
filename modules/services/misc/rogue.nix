@@ -40,7 +40,7 @@ in
 
     boot.extraTTYs = [ cfg.tty ];
   
-    jobAttrs.rogue =
+    jobs.rogue =
       { description = "Rogue dungeon crawling game";
 
         startOn = "udev";

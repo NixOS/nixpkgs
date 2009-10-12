@@ -3,7 +3,7 @@
 ###### implementation
 
 {
-  jobAttrs.maintenance_shell =
+  jobs.maintenance_shell =
     { name = "maintenance-shell";
 
       startOn = [ "maintenance" "stalled" ];

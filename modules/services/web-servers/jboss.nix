@@ -70,7 +70,7 @@ in
 
   config = mkIf config.services.jboss.enable {
 
-    jobAttrs.jboss =
+    jobs.jboss =
       { description = "JBoss server";
 
         exec = "${jbossService}/bin/control start";

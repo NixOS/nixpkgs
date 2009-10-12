@@ -78,7 +78,7 @@ in
 
     environment.systemPackages = [pkgs.iptables];
 
-    jobAttrs.firewall =
+    jobs.firewall =
       { startOn = "network-interfaces/started";
 
         preStart =

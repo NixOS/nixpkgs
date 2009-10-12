@@ -68,7 +68,7 @@ in
 
   config = {
 
-    jobAttrs =
+    jobs =
     
       optionalAttrs cfgC.enable
         { synergyClient = 

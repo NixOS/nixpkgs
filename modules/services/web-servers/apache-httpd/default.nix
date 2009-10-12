@@ -559,7 +559,7 @@ in
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 
-    jobAttrs.httpd =
+    jobs.httpd =
       { # Statically verify the syntactic correctness of the generated
         # httpd.conf.  !!! this is impure!  It doesn't just check for
         # syntax, but also whether the Apache user/group exist,

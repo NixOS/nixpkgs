@@ -152,7 +152,7 @@ in
     
     services.udev.packages = [extraUdevRules];
 
-    jobAttrs.udev =
+    jobs.udev =
       { startOn = "startup";
         stopOn = "shutdown";
 

@@ -275,7 +275,7 @@ in
         }
       ];
 
-    jobAttrs.postfix =
+    jobs.postfix =
       # I copy _lots_ of shipped configuration filed 
       # that can be left as is. I am afraid the exact
       # will list slightly change in next Postfix 

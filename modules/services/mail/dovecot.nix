@@ -113,7 +113,7 @@ in
         gid = config.ids.gids.dovecot;
       };
 
-    jobAttrs.dovecot =
+    jobs.dovecot =
       { description = "Dovecot IMAP/POP3 server";
 
         startOn = "${startingDependency}/started";

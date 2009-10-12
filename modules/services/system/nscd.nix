@@ -17,7 +17,7 @@ in
         description = "Name service cache daemon user";
       };
 
-    jobAttrs.nscd =
+    jobs.nscd =
       { description = "Name Service Cache Daemon";
 
         startOn = "startup";

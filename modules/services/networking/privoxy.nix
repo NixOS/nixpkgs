@@ -77,7 +77,7 @@ in
         home = stateDir;
       };
 
-    jobAttrs.privoxy =
+    jobs.privoxy =
       { name = "privoxy";
 
         startOn = "startup";

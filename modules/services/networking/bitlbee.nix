@@ -64,7 +64,7 @@ in
         gid = config.ids.gids.bitlbee;
       };
 
-    jobAttrs.bitlbee =
+    jobs.bitlbee =
       { description = "BitlBee IRC to other chat networks gateway";
 
         startOn = "network-interfaces/started";

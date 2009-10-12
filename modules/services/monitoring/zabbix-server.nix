@@ -51,7 +51,7 @@ in
         description = "Zabbix daemon user";
       };
 
-    jobAttrs.zabbix_server =
+    jobs.zabbix_server =
       { #name = "zabbix-server"; !!! mkIf bug
 
         description = "Zabbix server daemon";

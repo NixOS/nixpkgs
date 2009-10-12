@@ -119,7 +119,7 @@ in
 
   config = mkIf cfg.enable {
 
-    jobAttrs.xinetd =
+    jobs.xinetd =
       { description = "xinetd server";
 
         startOn = "network-interfaces/started";

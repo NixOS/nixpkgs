@@ -70,7 +70,7 @@ in
         home = stateDir;
       };
 
-    jobAttrs.ntpd =
+    jobs.ntpd =
       { description = "NTP daemon";
 
         startOn = "ip-up";

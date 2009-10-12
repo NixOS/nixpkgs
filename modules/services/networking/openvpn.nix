@@ -121,7 +121,7 @@ in
 
   config = mkIf cfg.enable {
 
-    jobAttrs = listToAttrs (map (c: nameValuePair "openvpn-${cfg.id}" (makeOpenVPNJob c)) cfg.servers);
+    jobs = listToAttrs (map (c: nameValuePair "openvpn-${cfg.id}" (makeOpenVPNJob c)) cfg.servers);
   
   };
   

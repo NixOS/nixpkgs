@@ -53,7 +53,7 @@ with pkgs.lib;
   config = {
 
     # Generate a separate job for each tty.  
-    jobAttrs = listToAttrs (map (tty: nameValuePair tty {
+    jobs = listToAttrs (map (tty: nameValuePair tty {
     
       startOn = "udev";
 

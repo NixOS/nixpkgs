@@ -12,7 +12,7 @@ in
   
 {
 
-  jobAttrs.swraid =
+  jobs.swraid =
     { startOn = "udev"; # !!! or on "new-devices"
       
       script =

@@ -117,7 +117,7 @@ in
     users.extraGroups = singleton
       { name = "ircd"; };
 
-    jobAttrs.ircd_hybrid =
+    jobs.ircd_hybrid =
       { # name = "ircd-hybrid"; !!! mkIf bug
 
         description = "IRCD Hybrid server";

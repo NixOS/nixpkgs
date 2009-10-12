@@ -62,7 +62,7 @@ in
         inherit gid;
       };
 
-    jobAttrs.pulseaudio =
+    jobs.pulseaudio =
       { description = "PulseAudio system-wide server";
 
         startOn = "startup";

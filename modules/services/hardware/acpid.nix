@@ -76,7 +76,7 @@ in
 
   config = mkIf config.powerManagement.enable {
 
-    jobAttrs.acpid =
+    jobs.acpid =
       { description = "ACPI daemon";
 
         startOn = "udev";

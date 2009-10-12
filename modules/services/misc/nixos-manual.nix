@@ -72,7 +72,7 @@ in
 
     boot.extraTTYs = mkIf cfg.showManual [cfg.ttyNumber];
 
-    jobAttrs = mkIf cfg.showManual
+    jobs = mkIf cfg.showManual
       { nixosManual = 
         { name = "nixos-manual";
 

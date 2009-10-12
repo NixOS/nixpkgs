@@ -72,7 +72,7 @@ in
         source = pkgs.writeText "auto.master" cfg.autoMaster;
       };
 
-    jobAttrs.autofs =
+    jobs.autofs =
       { description = "Filesystem automounter";
 
         startOn = "network-interfaces/started";

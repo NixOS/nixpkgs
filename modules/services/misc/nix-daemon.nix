@@ -188,7 +188,7 @@ in
           target = "nix.machines";
         };
 
-    jobAttrs.nixDaemon =
+    jobs.nixDaemon =
       { startOn = "startup";
 
         script =

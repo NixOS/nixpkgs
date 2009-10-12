@@ -99,7 +99,7 @@ in
         gid = config.ids.gids.ftp;
       };
 
-    jobAttrs.vsftpd =
+    jobs.vsftpd =
       { description = "vsftpd server";
 
         startOn = "network-interfaces/started";

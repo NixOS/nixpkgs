@@ -101,7 +101,7 @@ in
         home = "/homeless-shelter";
       };
       
-    jobAttrs.tomcat =
+    jobs.tomcat =
       { description = "Apache Tomcat server";
 
         startOn = "network-interface/started";

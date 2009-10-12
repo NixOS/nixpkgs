@@ -38,7 +38,7 @@ in
 
   config = mkIf cfg.enable {
 
-    jobAttrs.gpm =
+    jobs.gpm =
       { description = "General purpose mouse";
 
         startOn = "udev";

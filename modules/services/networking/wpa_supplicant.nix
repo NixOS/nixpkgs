@@ -37,7 +37,7 @@ in
 
     environment.systemPackages = [pkgs.wpa_supplicant];
 
-    jobAttrs.wpa_supplicant = 
+    jobs.wpa_supplicant = 
       { startOn = "network-interfaces/started";
         stopOn = "network-interfaces/stop";
 

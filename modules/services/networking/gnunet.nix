@@ -191,7 +191,7 @@ in
         home = "/var/empty";
       };
 
-    jobAttrs.gnunetd =
+    jobs.gnunetd =
       { description = "The GNUnet Daemon";
 
         startOn = "network-interfaces/started";

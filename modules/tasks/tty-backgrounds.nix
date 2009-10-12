@@ -102,7 +102,7 @@ in
         target = "splash";
       };
 
-    jobAttrs.ttyBackgrounds =
+    jobs.ttyBackgrounds =
       { name = "tty-backgrounds";
 
         startOn = "udev";

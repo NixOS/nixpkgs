@@ -55,7 +55,7 @@ in
 
   config = mkIf config.networking.interfaceMonitor.enable {
 
-    jobAttrs.ifplugd =
+    jobs.ifplugd =
       { description = "Network interface connectivity monitor";
 
         startOn = "network-interfaces/started";

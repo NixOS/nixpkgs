@@ -164,7 +164,7 @@ in
       });
 
     # Dummy job to start the real Samba daemons (nmbd, smbd, winbindd).
-    jobAttrs.sambaControl =
+    jobs.sambaControl =
       { name = "samba";
         description = "Samba server";
 
@@ -176,11 +176,11 @@ in
 
     # nmbd says "standard input is not a socket, assuming -D option",
     # but using -i makes it stay in foreground (?)
-    jobAttrs.nmbd = daemonJob "nmbd" " -i -F";
+    jobs.nmbd = daemonJob "nmbd" " -i -F";
 
-    jobAttrs.smbd = daemonJob "smbd" " -i -F";
+    jobs.smbd = daemonJob "smbd" " -i -F";
 
-    jobAttrs.winbindd = daemonJob "winbindd" " -F";
+    jobs.winbindd = daemonJob "winbindd" " -F";
 
   };
   

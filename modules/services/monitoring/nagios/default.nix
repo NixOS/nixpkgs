@@ -158,7 +158,7 @@ in
 
     environment.systemPackages = [ pkgs.nagios ];
 
-    jobAttrs.nagios =
+    jobs.nagios =
       { # Run `nagios -v' to check the validity of the configuration file so
         # that a nixos-rebuild fails *before* we kill the running Nagios
         # daemon.

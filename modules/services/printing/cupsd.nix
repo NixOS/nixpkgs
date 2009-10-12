@@ -155,7 +155,7 @@ in
         }
       ];
 
-    jobAttrs.cupsd =
+    jobs.cupsd =
       { description = "CUPS printing daemon";
 
         startOn = "network-interfaces/started";

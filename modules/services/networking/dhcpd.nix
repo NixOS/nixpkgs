@@ -108,7 +108,7 @@ in
 
   config = mkIf config.services.dhcpd.enable {
 
-    jobAttrs.dhcpd =
+    jobs.dhcpd =
       { description = "DHCP server";
 
         startOn = "network-interfaces/started";

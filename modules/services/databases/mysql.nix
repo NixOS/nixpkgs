@@ -72,7 +72,7 @@ in
 
     environment.systemPackages = [mysql];
 
-    jobAttrs.mysql =
+    jobs.mysql =
       { description = "MySQL server";
 
         startOn = "filesystems";

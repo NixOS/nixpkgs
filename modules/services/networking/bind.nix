@@ -105,7 +105,7 @@ in
 
   config = mkIf config.services.bind.enable {
 
-    jobAttrs.bind =
+    jobs.bind =
       { description = "BIND name server job";
 
         preStart =

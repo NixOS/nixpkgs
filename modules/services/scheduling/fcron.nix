@@ -97,7 +97,7 @@ in
 
     environment.systemPackages = [ pkgs.fcron ];
 
-    jobAttrs.fcron =
+    jobs.fcron =
       { description = "fcron daemon";
 
         startOn = "startup";

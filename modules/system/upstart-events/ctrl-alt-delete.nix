@@ -3,7 +3,7 @@
 ###### implementation
 
 {
-  jobAttrs.ctrl_alt_delete =
+  jobs.ctrl_alt_delete =
     { name = "ctrl-alt-delete";
 
       startOn = "ctrlaltdel";

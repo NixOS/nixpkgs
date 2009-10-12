@@ -6,7 +6,7 @@
 
   config = {
 
-    jobAttrs.lvm =
+    jobs.lvm =
       { startOn = " udev"; # !!! or on new-devices
 
         script =

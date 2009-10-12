@@ -64,7 +64,7 @@ in
         gid = config.ids.gids.haldaemon;
       };
 
-    jobAttrs.hal =
+    jobs.hal =
       { description = "HAL daemon";
         
         # !!! TODO: make sure that HAL starts after acpid,

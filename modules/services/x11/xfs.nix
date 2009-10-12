@@ -40,7 +40,7 @@ in
         message = "Please enable fontDir (fonts.enableFontDir) to use xfs.";
       };
 
-    jobAttrs.xfs =
+    jobs.xfs =
       { description = "X Font Server";
       
         startOn = "${startingDependency}/started";

@@ -47,7 +47,7 @@ in
 
   config = {
   
-    jobAttrs.syslogd =
+    jobs.syslogd =
       { description = "Syslog daemon";
 
         startOn = "udev";

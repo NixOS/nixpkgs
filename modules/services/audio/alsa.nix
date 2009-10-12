@@ -45,7 +45,7 @@ in
         gid = config.ids.gids.audio;
       };
 
-    jobAttrs.alsa =
+    jobs.alsa =
       { startOn = "udev";
 
         preStart =

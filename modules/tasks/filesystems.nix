@@ -233,7 +233,7 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     environment.systemPackages = [pkgs.ntfs3g pkgs.mount_cifs pkgs.nfsUtils];
     
-    jobAttrs.filesystems =
+    jobs.filesystems =
       { startOn = [ "startup" "new-devices" "ip-up" ];
 
         script = task;

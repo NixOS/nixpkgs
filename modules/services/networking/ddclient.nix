@@ -110,7 +110,7 @@ in
         home = stateDir;
       };
 
-    jobAttrs.ddclient =
+    jobs.ddclient =
       { name = "ddclient";
 
         startOn = "startup";

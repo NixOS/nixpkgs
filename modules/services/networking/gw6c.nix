@@ -129,7 +129,7 @@ in
 
   config = mkIf cfg.enable {
 
-    jobAttrs.gw6c =
+    jobs.gw6c =
       { description = "Gateway6 client";
       
         startOn = if cfg.autorun then "network-interfaces/started" else "";

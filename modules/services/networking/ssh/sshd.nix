@@ -108,7 +108,7 @@ in
         home = "/var/empty";
       };
 
-    jobAttrs.sshd = {
+    jobs.sshd = {
 
         description = "OpenSSH server";
 

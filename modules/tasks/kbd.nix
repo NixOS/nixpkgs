@@ -56,7 +56,7 @@ in
 
     environment.systemPackages = [pkgs.kbd];
   
-    jobAttrs.kbd =
+    jobs.kbd =
       { description = "Keyboard / console initialisation";
 
         startOn = "udev";

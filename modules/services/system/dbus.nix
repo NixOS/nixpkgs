@@ -113,7 +113,7 @@ in
         gid = config.ids.gids.messagebus;
       };
 
-    jobAttrs.dbus =
+    jobs.dbus =
       { startOn = "udev";
         stopOn = "shutdown";
 

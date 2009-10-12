@@ -10,7 +10,7 @@ in
 
 {
 
-  jobAttrs.klogd =
+  jobs.klogd =
     { description = "Kernel log daemon";
 
       startOn = "syslogd";

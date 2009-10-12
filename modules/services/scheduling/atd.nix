@@ -63,7 +63,7 @@ in
         gid = config.ids.gids.atd;
       };
 
-    jobAttrs.atd =
+    jobs.atd =
       { description = "at daemon (atd)";
 
         startOn = "startup";

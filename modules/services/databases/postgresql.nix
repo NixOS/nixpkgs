@@ -113,7 +113,7 @@ in
 
     environment.systemPackages = [postgresql];
 
-    jobAttrs.postgresql =
+    jobs.postgresql =
       { description = "PostgreSQL server";
 
         startOn = "${startDependency}/started";

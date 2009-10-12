@@ -36,7 +36,7 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ pkgs.disnix ];
 
-    jobAttrs.disnix =
+    jobs.disnix =
       { description = "Disnix server";
 
         startOn = "dbus";

@@ -116,7 +116,7 @@ in
 
   config = mkIf cfg.enable {
 
-    jobAttrs.lshd =
+    jobs.lshd =
       { description = "GNU lshd SSH2 daemon";
 
         startOn = "network-interfaces/started";

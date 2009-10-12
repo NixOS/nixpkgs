@@ -64,7 +64,7 @@ in
         description = "Zabbix daemon user";
       };
 
-    jobAttrs.zabbix_agent =
+    jobs.zabbix_agent =
       { #name = "zabbix-agent"; !!! mkIf bug
 
         description = "Zabbix agent daemon";
