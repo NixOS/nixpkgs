@@ -41,7 +41,7 @@ in
       };
 
       dataDir = mkOption {
-        default = "/var/mysql";
+        default = "/var/mysql"; # !!! should be /var/db/mysql
         description = "Location where MySQL stores its table files";
       };
 
@@ -71,16 +71,16 @@ in
 
     environment.systemPackages = [mysql];
 
-    jobs = singleton {
-      name = "mysql";
-      
-      job = ''
-        description "MySQL server"
+    jobs = singleton
+      { name = "mysql";
+        description = "MySQL server";
 
-        stop on shutdown
+        startOn = "filesystems";
+        stopOn = "shutdown";
 
-        start script
-            if ! test -e ${cfg.dataDir}; then
+        preStart =
+          ''
+            if ! test -e ${cfg.dataDir}/mysql; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R ${cfg.user} ${cfg.dataDir}
                 ${mysql}/bin/mysql_install_db ${mysqldOptions}
@@ -88,17 +88,17 @@ in
 
             mkdir -m 0700 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
-        end script
+          '';
 
-        respawn ${mysql}/bin/mysqld ${mysqldOptions}
+        exec = "${mysql}/bin/mysqld ${mysqldOptions}";
 
-        stop script
+        postStop =
+          ''
             pid=$(cat ${pidFile})
             kill "$pid"
             ${mysql}/bin/mysql_waitpid "$pid" 1000
-        end script
-      '';
-    };
+          '';
+      };
 
   };
 
