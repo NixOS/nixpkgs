@@ -6,12 +6,12 @@
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  version = "2.2.13";
+  version = "2.2.14";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    md5 = "8d8d904e7342125825ec70f03c5745ef";
+    md5 = "a5226203aaf97e5b941c41a71c112704";
   };
 
   #inherit sslSupport;
