@@ -165,7 +165,7 @@ rec {
       declarationsOf = name: filter (m: m ? options) (modulesOf name);
       definitionsOf  = name: filter (m: m ? config ) (modulesOf name);
 
-      recurseInto = name: modules:
+      recurseInto = name:
         moduleMerge (addName name) (modulesOf name);
 
       recurseForOption = name: modules:
@@ -184,105 +184,126 @@ rec {
 
       eol = "\n";
 
-      errDefinedWithoutDeclaration = name:
-        let
-          badModules =
-            filter (m: ! isAttrs m.config)
-              (definitionsOf name);
-        in
-          "${eol
-          }Option '${addName name}' defined without option declaration.${eol
-          }${errorSource badModules}${eol
-          }";
+      allNames = modulesNames modules;
+
+      getResults = m:
+        let fetchResult = s: mapAttrs (n: v: v.result) s; in {
+          options = fetchResult m.options;
+          config = fetchResult m.config;
+        };
 
       endRecursion =  { options = {}; config = {}; };
 
     in if modules == [] then endRecursion else
+      getResults (fix (crossResults: moduleZip {
+        options = lib.zipWithNames allNames (name: values: rec {
+          config = lib.getAttr name crossResults.config;
 
-      lib.fix (result:
-        moduleZip {
-          options = lib.zip (name: values:
-            if any isOption values then
-              let
-                decls = # add location to sub-module options.
-                  map (m:
-                    mapSubOptions
-                      (unifyOptionModule {inherit (m) key;})
-                      m.options
-                  ) (declarationsOf name);
-              in
-                addOptionMakeUp
-                  { name = addName name; recurseInto = recurseForOption; }
-                  (mergeOptionDecls decls)
-                // {
-                  declarations =
-                    map (m: {
-                      source = m.key;
-                    }) (declarationsOf name);
-    
-                  definitions =
-                    map (m: {
-                      source = m.key;
-                      value = m.config;
-                    }) (definitionsOf name);
+          declarations = declarationsOf name;
+          declarationSources =
+            map (m: {
+              source = m.key;
+            }) declarations;
 
-                  config = builtins.tryEval
-                    (builtins.toXML (lib.getAttr name result.config));
-                }
-            else if all isAttrs values then
-              (recurseInto name modules).options
+
+          hasOptions = values != [];
+          isOption = any lib.isOption values;
+
+          decls = # add location to sub-module options.
+            map (m:
+              mapSubOptions
+                (unifyOptionModule {inherit (m) key;})
+                m.options
+            ) declarations;
+
+          decl =
+            addOptionMakeUp
+              { name = addName name; recurseInto = recurseForOption; }
+              (mergeOptionDecls decls);
+
+          value = decl // (with config; {
+            inherit (config) isNotDefined;
+            declarations = declarationSources;
+            definitions = definitionSources;
+            config = strictResult;
+          });
+
+          recurse = (recurseInto name).options;
+
+          result =
+            if isOption then value
+            else if all isAttrs values then recurse
             else
               throw "${eol
                 }Unexpected type where option declarations are expected.${eol
-                }${errorSource (declarationsOf name)}${eol
-              }"
-          );
+                }${errorSource declarations}${eol
+              }";
 
-          config = lib.zipWithNames (modulesNames modules) (name: values_:
-            let
-              hasOpt = builtins.hasAttr name result.options;
-              opt = lib.getAttr name result.options;
-              values = values_ ++
-                optionals
-                  (hasOpt && isOption opt && opt ? extraConfigs)
-                  opt.extraConfigs;
+        });
 
-            in if hasOpt && isOption opt then
-              let defs = evalDefinitions opt values; in
-              lib.addErrorContext "${eol
-                }while evaluating the option '${addName name}'.${eol
-                }${errorSource (modulesOf name)}${eol
-              }" (
-                opt.apply (
-                  if defs == [] then
-                    if opt ? default then opt.default
-                    else throw "Not defined."
-                  else opt.merge defs
-                )
+        config = lib.zipWithNames allNames (name: values_: rec {
+          option = lib.getAttr name crossResults.options;
+
+          definitions = definitionsOf name;
+          definitionSources =
+            map (m: {
+              source = m.key;
+              value = m.config;
+            }) definitions;
+
+
+          values = values_ ++
+            optionals (option.isOption && option.decl ? extraConfigs)
+              option.decl.extraConfigs;
+
+          defs = evalDefinitions option.decl values;
+
+          isNotDefined = defs == [];
+
+          value =
+            lib.addErrorContext "${eol
+              }while evaluating the option '${addName name}'.${eol
+              }${errorSource (modulesOf name)}${eol
+            }" (
+              let opt = option.decl; in
+              opt.apply (
+                if isNotDefined then
+                  if opt ? default then opt.default
+                  else throw "Not defined."
+                else opt.merge defs
               )
+            );
 
-            else if hasOpt && lib.attrNames opt == [] then
-              throw (errDefinedWithoutDeclaration name)
+          strictResult = builtins.tryEval (builtins.toXML value);
 
-            else if any (v: isOption (rmProperties v)) values then
-              let
-                badModules =
-                  filter (m: isOption m.config)
-                    (definitionsOf name);
-              in
-                throw "${eol
-                  }Option ${addName name} is defined in the configuration section.${eol
-                  }${errorSource badModules}${eol
-                }"
+          recurse = (recurseInto name).config;
 
-            else if all isAttrs values then
-              (recurseInto name modules).config
-            else
-              throw (errDefinedWithoutDeclaration name)
-          );
+          configIsAnOption = v: isOption (rmProperties v);
+          errConfigIsAnOption =
+            let badModules = filter (m: configIsAnOption m.config) definitions; in
+            "${eol
+              }Option ${addName name} is defined in the configuration section.${eol
+              }${errorSource badModules}${eol
+            }";
 
-        } modules
-      );
+          errDefinedWithoutDeclaration =
+            let badModules = definitions; in
+            "${eol
+              }Option '${addName name}' defined without option declaration.${eol
+              }${errorSource badModules}${eol
+            }";
+
+          result =
+            if option.isOption then value
+            else if !option.hasOptions then throw errDefinedWithoutDeclaration
+            else if any configIsAnOption values then throw errConfigIsAnOption
+            else if all isAttrs values then recurse
+            # plain value during the traversal
+            else throw errDefinedWithoutDeclaration;
+
+        });
+      } modules));
+
 
   fixMergeModules = initModules: {...}@args:
     lib.fix (result:
