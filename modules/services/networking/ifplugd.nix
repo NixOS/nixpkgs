@@ -1,7 +1,8 @@
 {pkgs, config, ...}:
 
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption mkIf;
 
   inherit (pkgs) ifplugd;
 
@@ -54,20 +55,19 @@ in
 
   config = mkIf config.networking.interfaceMonitor.enable {
 
-    jobs = pkgs.lib.singleton {
-      name = "ifplugd";
+    jobAttrs.ifplugd =
+      { description = "Network interface connectivity monitor";
 
-      job = ''
-        description "Network interface connectivity monitor"
+        startOn = "network-interfaces/started";
+        stopOn = "network-interfaces/stop";
 
-        start on network-interfaces/started
-        stop on network-interfaces/stop
-
-        respawn ${ifplugd}/sbin/ifplugd --no-daemon --no-startup --no-shutdown \
-            ${if config.networking.interfaceMonitor.beep then "" else "--no-beep"} \
-            --run ${plugScript}
-      '';
-    };
+        exec =
+          ''
+            ${ifplugd}/sbin/ifplugd --no-daemon --no-startup --no-shutdown \
+              ${if config.networking.interfaceMonitor.beep then "" else "--no-beep"} \
+              --run ${plugScript}
+          '';
+      };
 
     environment.systemPackages = [ifplugd];
       

@@ -559,59 +559,54 @@ in
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
 
-    jobs = singleton {
-      name = "httpd";
+    jobAttrs.httpd =
+      { # Statically verify the syntactic correctness of the generated
+        # httpd.conf.  !!! this is impure!  It doesn't just check for
+        # syntax, but also whether the Apache user/group exist,
+        # whether SSL keys exist, etc.
+        buildHook =
+          ''
+            echo
+            echo '=== Checking the generated Apache configuration file ==='
+            ${httpd}/bin/httpd -f ${httpdConf} -t || true
+          '';
 
-      # Statically verify the syntactic correctness of the generated
-      # httpd.conf.  !!! this is impure!  It doesn't just check for
-      # syntax, but also whether the Apache user/group exist, whether SSL
-      # keys exist, etc.
-      buildHook = ''
-        echo
-        echo '=== Checking the generated Apache configuration file ==='
-        ${httpd}/bin/httpd -f ${httpdConf} -t || true
-      '';
+        description = "Apache HTTPD";
 
-      job = ''
-        description "Apache HTTPD"
+        startOn = "${startingDependency}/started";
+        stopOn = "shutdown";
 
-        start on ${startingDependency}/started
-        stop on shutdown
+        environment =
+          { # !!! This should be added in test-instrumentation.nix.  It
+            # shouldn't hurt though, since packages usually aren't built
+            # with coverage enabled.
+           GCOV_PREFIX = "/tmp/coverage-data";
 
-        start script
-          mkdir -m 0700 -p ${mainCfg.stateDir}
-          mkdir -m 0700 -p ${mainCfg.logDir}
+           PATH = "${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${concatStringsSep ":" (concatMap (svc: svc.extraServerPath) allSubservices)}";
+          } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
-          # Get rid of old semaphores.  These tend to accumulate across
-          # server restarts, eventually preventing it from restarting
-          # succesfully.
-          for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
-              ${pkgs.utillinux}/bin/ipcrm -s $i
-          done
+        preStart =
+          ''
+            mkdir -m 0700 -p ${mainCfg.stateDir}
+            mkdir -m 0700 -p ${mainCfg.logDir}
 
-          # Run the startup hooks for the subservices.
-          for i in ${toString (map (svn: svn.startupScript) allSubservices)}; do
-              echo Running Apache startup hook $i...
-              $i
-          done
-        end script
+            # Get rid of old semaphores.  These tend to accumulate across
+            # server restarts, eventually preventing it from restarting
+            # succesfully.
+            for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
+                ${pkgs.utillinux}/bin/ipcrm -s $i
+            done
 
-        ${
-          let f = {name, value}: "env ${name}=${value}\n";
-          in concatMapStrings f (concatMap (svc: svc.globalEnvVars) allSubservices)
-        }
+            # Run the startup hooks for the subservices.
+            for i in ${toString (map (svn: svn.startupScript) allSubservices)}; do
+                echo Running Apache startup hook $i...
+                $i
+            done
+          '';
 
-        # !!! This should be added in test-instrumentation.nix.  It
-        # shouldn't hurt though, since packages usually aren't built
-        # with coverage enabled.
-        env GCOV_PREFIX=/tmp/coverage-data
+        exec = "${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH";
+      };
 
-        env PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${concatStringsSep ":" (concatMap (svc: svc.extraServerPath) allSubservices)}
-
-        respawn ${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH
-      '';
-    };
-    
   };
   
 }

@@ -1,8 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-
-  inherit (pkgs.lib) mkOption mkIf singleton;
 
   inherit (pkgs) ntp;
 
@@ -70,19 +70,14 @@ in
         home = stateDir;
       };
 
-    jobs = singleton {
+    jobAttrs.ntpd =
+      { description = "NTP daemon";
 
-      name = "ntpd";
-      
-      job = ''
-        description "NTP daemon"
+        startOn = "ip-up";
+        stopOn = "ip-down";
 
-        start on ip-up
-        stop on ip-down
-        stop on shutdown
-
-        start script
-
+        preStart =
+          ''
             mkdir -m 0755 -p ${stateDir}
             chown ${ntpUser} ${stateDir}
 
@@ -95,13 +90,10 @@ in
             # phase.  Thus a hanging ntpd job can block system
             # shutdown.
             # ${ntp}/bin/ntpd -q -g ${ntpFlags}
+          '';
 
-        end script
-
-        respawn ${ntp}/bin/ntpd -g -n ${ntpFlags}
-      '';
-
-    };
+        exec = "${ntp}/bin/ntpd -g -n ${ntpFlags}";
+      };
     
   };
   

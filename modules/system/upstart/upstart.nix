@@ -5,11 +5,11 @@ with pkgs.lib;
 let
 
   # From a job description, generate an Upstart job file.
-  makeJob = job@{buildHook ? "", ...}:
+  makeJob = job:
 
     let
 
-      jobText = if job.job != "" then job.job else
+      jobText =
         ''
           # Upstart job `${job.name}'.  This is a generated file.  Do not edit.
         
@@ -66,7 +66,7 @@ let
 
     in
       pkgs.runCommand ("upstart-" + job.name)
-        { inherit buildHook; inherit jobText; }
+        { inherit (job) buildHook; inherit jobText; }
         ''
           eval "$buildHook"
           ensureDir $out/etc/event.d
@@ -113,22 +113,6 @@ let
           example = "sshd";
           description = ''
             Name of the Upstart job.
-          '';
-        };
-
-        job = mkOption {
-          default = "";
-          type = types.string;
-          example =
-            ''
-              description "nc"
-              start on started network-interfaces
-              respawn
-              env PATH=/var/run/current-system/sw/bin
-              exec sh -c "echo 'hello world' | ${pkgs.netcat}/bin/nc -l -p 9000"
-            '';
-          description = ''
-            Contents of the Upstart job.
           '';
         };
 

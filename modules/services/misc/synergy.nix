@@ -94,7 +94,7 @@ in
 
             exec =
               ''
-                respawn ${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} \
+                ${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} \
                   -f ${if cfgS.address == "" then "" else "-a ${cfgS.address}"} \
                   ${if cfgS.screenName == "" then "" else "-n ${cfgS.screenName}" }
               '';

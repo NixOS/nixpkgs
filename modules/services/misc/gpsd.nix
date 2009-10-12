@@ -93,10 +93,10 @@ in
 
         exec =
           ''
-            respawn ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"   \
-                       -S "${toString cfg.port}"                             \
-                       ${if cfg.readonly then "-b" else ""}                  \
-                       "${cfg.device}"
+            ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
+              -S "${toString cfg.port}"                             \
+              ${if cfg.readonly then "-b" else ""}                  \
+              "${cfg.device}"
           '';
       };
 

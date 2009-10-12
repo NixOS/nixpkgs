@@ -39,6 +39,7 @@ in
   ###### implementation
 
   config = mkIf config.services.uptimed.enable {
+  
     environment.systemPackages = [ uptimed ];
   
     users.extraUsers = singleton
@@ -48,18 +49,14 @@ in
         home = stateDir;
       };
 
-    jobs = singleton {
+    jobAttrs.uptimed =
+      { description = "Uptimed daemon";
 
-      name = "uptimed";
-      
-      job = ''
-        description "Uptimed daemon"
+        startOn = "startup";
+        stopOn = "shutdown";
 
-        start on startup
-        stop on shutdown
-
-        start script
-
+        preStart =
+          ''
             mkdir -m 0755 -p ${stateDir}
             chown ${uptimedUser} ${stateDir}
 
@@ -69,13 +66,10 @@ in
             if ! test -f ${stateDir}/bootid ; then
               ${uptimed}/sbin/uptimed -b
             fi
+          '';
 
-        end script
-
-        respawn ${uptimed}/sbin/uptimed ${uptimedFlags}
-      '';
-
-    };
+        exec = "${uptimed}/sbin/uptimed ${uptimedFlags}";
+      };
     
   };
   

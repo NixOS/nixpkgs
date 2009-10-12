@@ -205,7 +205,7 @@ in
 
         exec =
           ''
-            respawn ${pkgs.gnunet}/bin/gnunetd              \
+            ${pkgs.gnunet}/bin/gnunetd              \
               ${if debug then "--debug" else "" }           \
               --user="gnunetd"                              \
               --config="${configFile}"                      \

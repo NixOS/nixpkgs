@@ -113,27 +113,24 @@ in
 
     environment.systemPackages = [postgresql];
 
-    jobs = singleton {
-      name = "postgresql";
+    jobAttrs.postgresql =
+      { description = "PostgreSQL server";
 
-      job = ''
-        description "PostgreSQL server"
+        startOn = "${startDependency}/started";
+        stopOn = "shutdown";
 
-        start on ${startDependency}/started
-        stop on shutdown
-        
-        start script
+        preStart =
+          ''
             if ! test -e ${cfg.dataDir}; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R postgres ${cfg.dataDir}
                 ${run} -c '${postgresql}/bin/initdb -D ${cfg.dataDir} -U root'
             fi
             cp -f ${pkgs.writeText "pg_hba.conf" cfg.authentication} ${cfg.dataDir}/pg_hba.conf
-        end script
+          '';
 
-        respawn ${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir} ${toString flags}'
-      '';
-    };
+        exec = "${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir} ${toString flags}'";
+      };
 
   };
   
