@@ -118,7 +118,7 @@ rec {
     moduleApply { config = delayProperties; } module;
 
   evalDefinitions = opt: values:
-    if opt ? type && opt.type.delayOnGlobalEval then
+    if opt ? options && opt.options != [] && opt ? type && opt.type.delayOnGlobalEval then
       map (delayPropertiesWithIter opt.type.iter opt.name)
         (evalLocalProperties values)
     else
