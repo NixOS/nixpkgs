@@ -7763,6 +7763,10 @@ let
     alsa = alsaLib;
   };
 
+  vnstat = import ../applications/networking/vnstat {
+    inherit fetchurl stdenv ncurses;
+  };
+
   vorbisTools = import ../applications/audio/vorbis-tools {
     inherit fetchurl stdenv libogg libvorbis libao pkgconfig curl glibc
       speex flac;
