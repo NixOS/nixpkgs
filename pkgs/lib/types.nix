@@ -19,7 +19,7 @@ rec {
   # iter (iterate on all elements contained in this type)
   # fold (fold all elements contained in this type)
   # hasOptions (boolean: whatever this option contains an option set)
-  # delayProperties (boolean: should properties go through the evaluation of this option)
+  # delayOnGlobalEval (boolean: should properties go through the evaluation of this option)
   # docPath (path concatenated to the option name contained in the option set)
   isOptionType = attrs: typeOf attrs == "option-type";
   mkOptionType =
@@ -32,11 +32,11 @@ rec {
     , docPath ? lib.id
     # If the type can contains option sets.
     , hasOptions ? false
-    , delayProperties ? false
+    , delayOnGlobalEval ? false
     }:
 
     { _type = "option-type";
-      inherit name check merge iter fold docPath hasOptions delayProperties;
+      inherit name check merge iter fold docPath hasOptions delayOnGlobalEval;
     };
 
     
@@ -87,7 +87,7 @@ rec {
 
       # You cannot define multiple configurations of one entity, therefore
       # no reason justify to delay properties inside list elements.
-      delayProperties = false;
+      delayOnGlobalEval = false;
     };
 
     attrsOf = elemType: mkOptionType {
@@ -98,7 +98,7 @@ rec {
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
       fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
       docPath = path: elemType.docPath (path + ".<name>");
-      inherit (elemType) hasOptions delayProperties;
+      inherit (elemType) hasOptions delayOnGlobalEval;
     };
 
     uniq = elemType: mkOptionType {
@@ -125,7 +125,7 @@ rec {
       merge = lib.id;
       check = x: lib.traceValIfNot builtins.isAttrs x;
       hasOptions = true;
-      delayProperties = true;
+      delayOnGlobalEval = true;
     };
 
   };

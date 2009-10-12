@@ -124,12 +124,18 @@ rec {
   evalProperties = valList:
     if valList != [] then
       filter (x: !isNotdef x) (
-        lib.addErrorContext "while evaluating properties an attribute." (
+        lib.addErrorContext "while evaluating properties." (
           triggerPropertiesGlobalEval (
             map triggerPropertiesEval valList
       )))
     else
       valList;
+
+  evalLocalProperties = valList:
+    filter (x: !isNotdef x) (
+      lib.addErrorContext "while evaluating local properties." (
+        map triggerPropertiesEval valList
+    ));
 
   # Call onEval function
   triggerPropertiesEval = val:

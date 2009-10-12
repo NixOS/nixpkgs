@@ -118,8 +118,9 @@ rec {
     moduleApply { config = delayProperties; } module;
 
   evalDefinitions = opt: values:
-    if opt ? type && opt.type.delayProperties then
-      map (delayPropertiesWithIter opt.type.iter opt.name) values
+    if opt ? type && opt.type.delayOnGlobalEval then
+      map (delayPropertiesWithIter opt.type.iter opt.name)
+        (evalLocalProperties values)
     else
       evalProperties values;
 
