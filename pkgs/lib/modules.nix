@@ -150,11 +150,7 @@ rec {
 
   moduleZip = funs: modules:
     lib.mapAttrs (name: fun:
-      fun (
-        map (lib.getAttr name) (
-          filter (builtins.hasAttr name) modules
-        )
-      )
+      fun (catAttrs name modules)
     ) funs;
 
   moduleMerge = path: modules:
