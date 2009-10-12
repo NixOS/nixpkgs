@@ -1,24 +1,22 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 ###### implementation
 
 {
-  services = {
-    extraJobs = [{
-      name = "maintenance-shell";
-      
-      job = ''
-          start on maintenance
-          start on stalled
-          
-          script
-              exec < /dev/tty1 > /dev/tty1 2>&1
-              echo \"\"
-              echo \"<<< MAINTENANCE SHELL >>>\"
-              echo \"\"
-              exec ${pkgs.bash}/bin/sh
-          end script
-      '';
-  }];
-  };
+  jobAttrs.maintenance_shell =
+    { name = "maintenance-shell";
+
+      startOn = [ "maintenance" "stalled" ];
+
+      task = true;
+
+      script =
+        ''
+          exec < /dev/tty1 > /dev/tty1 2>&1
+          echo \
+          echo "<<< MAINTENANCE SHELL >>>"
+          echo ""
+          exec ${pkgs.bash}/bin/sh
+        '';
+    };
 }

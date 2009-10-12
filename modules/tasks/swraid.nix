@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 ###### implementation
 
@@ -12,16 +12,11 @@ in
   
 {
 
-  services = {
-    extraJobs = [{
-      name = "swraid";
+  jobAttrs.swraid =
+    { startOn = "udev"; # !!! or on "new-devices"
       
-      job = ''
-      start on udev
-      #start on new-devices
-      
-      script
-      
+      script =
+        ''
           # Load the necessary RAID personalities.
           # !!! hm, doesn't the kernel load these automatically?
           for mod in raid0 raid1 raid5; do
@@ -35,10 +30,9 @@ in
           ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
       
           initctl emit new-devices
-          
-      end script
-      
-      '';
-    }];
-  };
+        '';
+
+      task = true;        
+    };
+
 }

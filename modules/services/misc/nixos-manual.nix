@@ -3,11 +3,11 @@
 # of the virtual consoles.  The latter is useful for the installation
 # CD.
 
-{pkgs, config, options, ...}:
+{ config, pkgs, options, ... }:
+
+with pkgs.lib;
 
 let
-
-  inherit (pkgs.lib) mkOption mkIf types;
 
   cfg = config.services.nixosManual;
 
@@ -72,18 +72,22 @@ in
 
     boot.extraTTYs = mkIf cfg.showManual [cfg.ttyNumber];
 
-    services.extraJobs = mkIf cfg.showManual (pkgs.lib.singleton
-      { name = "nixos-manual";
+    jobAttrs = mkIf cfg.showManual
+      { nixosManual = 
+        { name = "nixos-manual";
 
-        job = ''
-          description "NixOS manual"
+          description = "NixOS manual";
 
-          start on udev
-          stop on shutdown
-          respawn ${cfg.browser} ${manual}/share/doc/nixos/manual.html \
-            < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
-        '';
-      });
+          startOn = "udev";
+          stopOn = "shutdown";
+
+          exec =
+            ''
+              ${cfg.browser} ${manual}/share/doc/nixos/manual.html \
+                < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
+            '';
+        };
+      };
 
     services.ttyBackgrounds.specificThemes = mkIf cfg.showManual 
       [ { tty = cfg.ttyNumber;

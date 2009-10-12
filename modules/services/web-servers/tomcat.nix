@@ -1,114 +1,114 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption mkIf;
+
+  cfg = config.services.tomcat;
+  
+in
+
+{
+
+  ###### interface
 
   options = {
-    services = {
-      tomcat = {
+  
+    services.tomcat = {
+    
+      enable = mkOption {
+        default = false;
+        description = "Whether to enable Apache Tomcat";
+      };
+
+      baseDir = mkOption {
+        default = "/var/tomcat";
+        description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+      };
+
+      user = mkOption {
+        default = "tomcat";
+        description = "User account under which Apache Tomcat runs.";
+      };      
+
+      group = mkOption {
+        default = "tomcat";
+        description = "Group account under which Apache Tomcat runs.";
+      };      
+
+      javaOpts = mkOption {
+        default = "";
+        description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
+      };
+
+      catalinaOpts = mkOption {
+        default = "";
+        description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
+      };
+
+      sharedLibs = mkOption {
+        default = [];
+        description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
+      };
+
+      commonLibs = mkOption {
+        default = [];
+        description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
+      };
+
+      webapps = mkOption {
+        default = [ pkgs.tomcat6 ];
+        description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
+      };
+
+      virtualHosts = mkOption {
+        default = [];
+        description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
+      };
+
+      axis2 = {
+      
         enable = mkOption {
           default = false;
-          description = "Whether to enable Apache Tomcat";
+          description = "Whether to enable an Apache Axis2 container";
         };
-        
-        baseDir = mkOption {
-          default = "/var/tomcat";
-          description = "Location where Tomcat stores configuration files, webapplications and logfiles";
-        };
-        
-        user = mkOption {
-          default = "tomcat";
-          description = "User account under which Apache Tomcat runs.";
-        };      
-        
-	group = mkOption {
-          default = "tomcat";
-          description = "Group account under which Apache Tomcat runs.";
-        };      
-        
-        javaOpts = mkOption {
-          default = "";
-          description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
-        };
-        
-        catalinaOpts = mkOption {
-          default = "";
-          description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
-        };
-        
-        sharedLibs = mkOption {
+
+        services = mkOption {
           default = [];
-          description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
+          description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
         };
         
-        commonLibs = mkOption {
-          default = [];
-          description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
-        };
-	
-	webapps = mkOption {
-	  default = [ pkgs.tomcat6 ];
-	  description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
-	};
-	
-	virtualHosts = mkOption {
-	  default = [];
-	  description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
-	};
-	
-	axis2 = {
-	  enable = mkOption {
-	    default = false;
-	    description = "Whether to enable an Apache Axis2 container";
-	  };
-	  
-	  services = mkOption {
-	    default = [];
-	    description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
-	  };
-	};
       };
+      
     };
+
   };
-in
 
-###### implementation
 
-let
-  cfg = config.services.tomcat;
-in
+  ###### implementation
 
-mkIf config.services.tomcat.enable {
-  require = [
-    options
-  ];
+  config = mkIf config.services.tomcat.enable {
 
-  services = {
-    extraJobs = [{
-      name = "tomcat";
+    users.extraGroups = singleton
+      { name = "tomcat";
+        gid = config.ids.gids.tomcat;
+      };
       
-      groups = [
-        { name = "tomcat";
-          gid = config.ids.gids.tomcat;
-        }
-      ];
+    users.extraUsers = singleton
+      { name = "tomcat";
+        uid = config.ids.uids.tomcat;
+        description = "Tomcat user";
+        home = "/homeless-shelter";
+      };
       
-      users = [
-        { name = "tomcat";
-          uid = config.ids.uids.tomcat;
-          description = "Tomcat user";
-          home = "/homeless-shelter";
-        }
-      ];
-      
-      job = ''
-        description "Apache Tomcat server"
+    jobAttrs.tomcat =
+      { description = "Apache Tomcat server";
 
-        start on network-interface/started
-        stop on network-interfaces/stop
-        
-        start script
+        startOn = "network-interface/started";
+        stopOn = "network-interfaces/stop";
+
+        preStart =
+          ''        
 	    # Create the base directory
 	    mkdir -p ${cfg.baseDir}
 	    
@@ -304,15 +304,21 @@ mkIf config.services.tomcat.enable {
 		done    
 		''
 	    else ""}
-        end script
-        
-        respawn ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${pkgs.tomcat6}/bin/startup.sh; sleep 1000d'
-        
-        stop script
+          ''; # */
+
+        exec =
+          ''
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${pkgs.tomcat6}/bin/startup.sh; sleep 1000d'
+          '';
+
+        postStop =
+          ''
             echo "Stopping tomcat..."
             CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${pkgs.tomcat6}/bin/shutdown.sh
-        end script
-      '';
-    }];
+          '';
+
+      };
+
   };
+
 }

@@ -1,54 +1,54 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption mkIf;
+
+  configFile = ./xfs.conf;
+  
+  startingDependency =
+    if config.services.gw6c.enable && config.services.gw6c.autorun
+    then "gw6c"
+    else "network-interfaces";
+  
+in
+
+{
+
+  ###### interface
 
   options = {
-    services = {
-      xfs = {
+  
+    services.xfs = {
 
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the X Font Server.
-          ";
-        };
-
+      enable = mkOption {
+        default = false;
+        description = "Whether to enable the X Font Server.";
       };
+
     };
+
   };
-in
-
-###### implementation
 
 
-let
-  configFile = ./xfs.conf;
-  startingDependency = if config.services.gw6c.enable && config.services.gw6c.autorun then "gw6c" else "network-interfaces";
-in
+  ###### implementation
 
-mkIf config.services.xfs.enable {
+  config = mkIf config.services.xfs.enable {
 
-  assertions = [ { assertion = config.fonts.enableFontDir; message = "Please enable fontDir (fonts.enableFontDir) to use xfs."; } ];
+    assertions = singleton
+      { assertion = config.fonts.enableFontDir;
+        message = "Please enable fontDir (fonts.enableFontDir) to use xfs.";
+      };
 
-  require = [
-    options
-  ];
+    jobAttrs.xfs =
+      { description = "X Font Server";
+      
+        startOn = "${startingDependency}/started";
+        stopOn = "shutdown";
 
-  services = {
+        exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
+      };
 
-    extraJobs = [ (rec {
-      name = "xfs";
-      groups = [];
-      users = [];
-      job = ''
-        description "X Font Server"
-        start on ${startingDependency}/started
-        stop on shutdown
-
-        respawn ${pkgs.xorg.xfs}/bin/xfs -config ${configFile}
-      '';
-    })];
   };
+  
 }

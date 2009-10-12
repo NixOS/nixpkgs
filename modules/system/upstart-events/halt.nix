@@ -1,19 +1,20 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 ###### implementation
-
 
 let
 
   inherit (pkgs) bash utillinux;
 
-  jobFun = event : {
-    name = "sys-" + event;
-    
-    job = ''
-      start on ${event}
-      
-      script
+  jobFun = event:
+    { startOn = event;
+
+      task = true;
+
+      script =
+        ''
           set +e # continue in case of errors
       
           exec < /dev/tty1 > /dev/tty1 2>&1
@@ -109,16 +110,12 @@ let
               sleep 1
               exec halt -f -p
           fi
-      
-      end script
-    '';
-  };
+        '';
+    };
 
 in
 
-
 {
-  services = {
-    extraJobs = map jobFun ["reboot" "halt" "system-halt" "power-off"];
-  };
+  jobAttrs = listToAttrs (map (n: nameValuePair "sys-${n}" (jobFun n))
+    [ "reboot" "halt" "system-halt" "power-off" ] );
 }

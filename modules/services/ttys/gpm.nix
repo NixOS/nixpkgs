@@ -1,58 +1,52 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption;
+
+  cfg = config.services.gpm;
+
+in
+  
+{
+
+  ###### interface
 
   options = {
-    services = {
-      gpm = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable general purpose mouse daemon.
-          ";
-        };
-        protocol = mkOption {
-          default = "ps/2";
-          description = "
-            Mouse protocol to use.
-          ";
-        };
+  
+    services.gpm = {
+    
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable GPM, the General Purpose Mouse daemon,
+          which enables mouse support in virtual consoles.
+        '';
       };
+        
+      protocol = mkOption {
+        default = "ps/2";
+        description = "Mouse protocol to use.";
+      };
+
     };
+    
   };
-in
+  
 
-###### implementation
-let
-  cfg = config.services.gpm;
-  inherit (pkgs.lib) mkIf;
+  ###### implementation
 
-  gpm = pkgs.gpm;
-  gpmBin = "${gpm}/sbin/gpm";
+  config = mkIf cfg.enable {
 
-  job = {
-    name = "gpm";
-    job = ''
-      description = "General purpose mouse"
+    jobAttrs.gpm =
+      { description = "General purpose mouse";
 
-      start on udev
-      stop on shutdown
+        startOn = "udev";
+        stopOn = "shutdown";
 
-      respawn ${gpmBin} -m /dev/input/mice -t ${cfg.protocol} -D &>/dev/null
-    '';
+        exec = "${pkgs.gpm}/sbin/gpm -m /dev/input/mice -t ${cfg.protocol} -D &>/dev/null";
+      };
+
   };
-in
-
-mkIf cfg.enable {
-  require = [
-    # ../upstart-jobs/default.nix # config.services.extraJobs
-    # /etc/security/console.perms (should be generated ?)
-    options
-  ];
-
-  services = {
-    extraJobs = [job];
-  };
+  
 }

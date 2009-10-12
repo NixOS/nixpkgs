@@ -1,154 +1,149 @@
+{ config, pkgs, ... }:
 
-{pkgs, config, ...}:
+with pkgs.lib;
 
-###### interface
 let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    services = {
-      nfsKernel = {
-
-        enable = mkOption {
-          default = false;
-          description = "
-            wether to use the kernel nfs functionality to export filesystems.
-            You should be aware about existing security issues.
-            requires portmap!
-          ";
-        };
-
-        exports = mkOption {
-          check = v: v != "/etc/exports"; # this won't work
-          description = "
-            the file listing the directories to be exported.
-            install nfsUtils and run man exports to learn about its format.
-            The exports setting can either be a file path or the file contents.
-            Don't use /etc/exports. This won't work as nix will overwrite it.
-          ";
-        };
-
-        hostName = mkOption {
-          default = null;
-          description = "
-             specify a particular hostname (or address) that NFS requests will be accepted on.
-             Default: all.
-             See man rpc.nfsd (-H option)
-          ";
-        };
-        nproc = mkOption {
-          default = 8;
-          description = "
-            specify  the  number  of NFS server threads. (-> man rpc.nfsd). Defaults to recommended value 8
-          ";
-        };
-	
-	createMountPoints = mkOption {
-	  default = false;
-	  description = "Whether to create the mount points in the exports file at startup time.";
-	};
-      };
-    };
-  };
-
-###### implementation
 
   inherit (pkgs) writeText openssh;
 
-  cfg = (config.services.nfsKernel);
+  cfg = config.services.nfsKernel;
 
-  modprobe = config.system.sbin.modprobe;
-
-  exports = if builtins.pathExists cfg.exports
-    then cfg.exports else pkgs.writeText "exports" cfg.exports;
+  exports =
+    if builtins.pathExists cfg.exports
+    then cfg.exports
+    else pkgs.writeText "exports" cfg.exports;
 
 in
 
+{
 
-mkIf config.services.nfsKernel.enable {
-  require = [
-    options
-  ];
+  ###### interface
 
-  environment.etc = [
-    { source = exports;
-      target = "exports"; }
-  ];
+  options = {
+  
+    services.nfsKernel = {
 
-  services = {
-    extraJobs = [
-    {
-      name = "nfs-kernel-exports";
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable the kernel's NFS server.
+        '';
+      };
 
-      job = ''
-        description "export filesystems using kernel nfs"
+      # !!! Why is this a file?  Why not a list of export entries?
+      exports = mkOption {
+        check = v: v != "/etc/exports"; # this won't work
+        description = ''
+          The file listing the directories to be exported.  See
+          <citerefentry><refentrytitle>exports</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for the format.
+        '';
+      };
 
-        start on network-interfaces/started
-        stop on network-interfaces/stop
-
-        start script
-	  export PATH=${pkgs.nfsUtils}/sbin:$PATH
-	  mkdir -p /var/lib/nfs
-          ${modprobe}/sbin/modprobe nfsd || true
-	  
-	  ${if cfg.createMountPoints == true then
-	    ''
-              # create export directories:
-              # skip comments, take first col which may either be a quoted
-              # "foo bar" or just foo (-> man export)
-              sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-              | xargs -d '\n' mkdir -p
-	    ''
-	    else ""}
-	    	  
-          # exports file is ${exports}
-          # keep this comment so that this job is restarted whenever exports changes!
-          exportfs -ra
-        end script
-
-        respawn sleep 1000000
-      '';
-    }
-    {
-      name = "nfs-kernel-rpc-nfsd";
-
-      job = ''
-        description "export filesystems using kernel nfs"
-
-        start on nfs-kernel-exports/started
-        stop on nfs-kernel-exports/stop
-
-        respawn ${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} ${builtins.toString cfg.nproc}
-      '';
-    }
-    {
-      name = "nfs-kernel-mountd";
-
-      job = ''
-        description "export filesystems using kernel nfs"
-
-        start on nfs-kernel-rpc-nfsd/started
-        stop on nfs-kernel-exports/stop
-
-        respawn ${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}
-      '';
-    }
-    {
-      name = "nfs-kernel-statd";
+      hostName = mkOption {
+        default = null;
+        description = ''
+          Hostname or address on which NFS requests will be accepted.
+          Default is all.  See the <option>-H</option> option in
+          <citerefentry><refentrytitle>nfsd</refentrytitle>
+          <manvolnum>8</manvolnum></citerefentry>.
+        '';
+      };
       
-      job = ''
-        description "NSM (Network Status Monitor) of the RPC protocol"
-      
-        start on nfs-kernel-rpc-nfsd/started
-	stop on nfs-kernel-exports/stop
-	
-        start script
-          mkdir -p /var/lib/nfs
-        end script
+      nproc = mkOption {
+        default = 8;
+        description = ''
+          Number of NFS server threads.  Defaults to the recommended value of 8.
+        '';
+      };
 
-        respawn ${pkgs.nfsUtils}/sbin/rpc.statd -F
-      '';
-    }
-    ];
+      createMountPoints = mkOption {
+        default = false;
+        description = "Whether to create the mount points in the exports file at startup time.";
+      };
+      
+    };
+
   };
+
+
+  ###### implementation
+
+  config = mkIf config.services.nfsKernel.enable {
+
+    environment.etc = singleton
+      { source = exports;
+        target = "exports";
+      };
+
+    jobAttrs.nfs_kernel_exports =
+      { name = "nfs-kernel-exports";
+      
+        description = "Kernel NFS server";
+
+        startOn = "network-interfaces/started";
+        stopOn = "network-interfaces/stop";
+
+        preStart =
+          ''
+            export PATH=${pkgs.nfsUtils}/sbin:$PATH
+            mkdir -p /var/lib/nfs
+            ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
+
+            ${optionalString cfg.createMountPoints
+              ''
+                # create export directories:
+                # skip comments, take first col which may either be a quoted
+                # "foo bar" or just foo (-> man export)
+                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+                | xargs -d '\n' mkdir -p
+	      ''
+            }
+	    	  
+            # exports file is ${exports}
+            # keep this comment so that this job is restarted whenever exports changes!
+            exportfs -ra
+          '';
+      };
+
+    jobAttrs.nfs_kernel_nfsd =
+      { name = "nfs-kernel-nfsd";
+
+        description = "Kernel NFS server";
+
+        startOn = "nfs-kernel-exports/started";
+        stopOn = "nfs-kernel-exports/stop";
+
+        exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} ${builtins.toString cfg.nproc}";
+      };
+
+    jobAttrs.nfs_kernel_mountd =
+      { name = "nfs-kernel-mountd";
+
+        description = "Kernel NFS server - mount daemon";
+
+        startOn = "nfs-kernel-nfsd/started";
+        stopOn = "nfs-kernel-exports/stop";
+
+        exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}";
+      };
+
+    jobAttrs.nfs_kernel_statd =
+      { name = "nfs-kernel-statd";
+      
+        description = "Kernel NFS server - Network Status Monitor";
+      
+        startOn = "nfs-kernel-nfsd/started";
+	stopOn = "nfs-kernel-exports/stop";
+
+        preStart =
+          ''	
+            mkdir -p /var/lib/nfs
+          '';
+
+        exec = "${pkgs.nfsUtils}/sbin/rpc.statd -F";
+      };
+      
+  };
+  
 }

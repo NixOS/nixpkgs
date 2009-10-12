@@ -1,65 +1,62 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
-let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    services = {
-      openfire = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable OpenFire XMPP server.
-          ";
-        };
-        usePostgreSQL = mkOption {
-          default = true;
-          description = "
-            Whether you use PostgreSQL service for your storage back-end.
-          ";
-        };
-      };
-    };
-  };
-in
-
-###### implementation
+with pkgs.lib;
 
 let
+
   inherit (pkgs) jre openfire coreutils which gnugrep gawk gnused;
     
-  startDependency = if config.services.openfire.usePostgreSQL then 
-    "postgresql"
-  else
-    if config.services.gw6c.enable then 
-      "gw6c" 
-    else 
-      "network-interfaces";
+  startDependency =
+    if config.services.openfire.usePostgreSQL then "postgresql" else
+    if config.services.gw6c.enable then "gw6c" else
+    "network-interfaces";
+    
 in
 
-mkIf config.services.openfire.enable {
+{
 
-  assertions = [ {
-    assertion = !(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable);
-    message = "openfire assertion failed";
-  } ];
+  ###### interface
 
-  require = [
-    options
-  ];
+  options = {
+  
+    services.openfire = {
+    
+      enable = mkOption {
+        default = false;
+        description = "
+          Whether to enable OpenFire XMPP server.
+        ";
+      };
+      
+      usePostgreSQL = mkOption {
+        default = true;
+        description = "
+          Whether you use PostgreSQL service for your storage back-end.
+        ";
+      };
+
+    };
+
+  };
 
 
-  services = {
-      extraJobs = [{
-        name = "openfire";
-        job = ''
-          description "OpenFire XMPP server"
+  ###### implementation
 
-          start on ${startDependency}/started
-          stop on shutdown
+  config = mkIf config.services.openfire.enable {
 
-          script 
+    assertions = singleton
+      { assertion = !(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable);
+        message = "openfire assertion failed";
+      };
+
+    jobAttrs.openfire =
+      { description = "OpenFire XMPP server";
+
+        startOn = "${startDependency}/started";
+        stopOn = "shutdown";
+
+        script =
+          ''
             export PATH=${jre}/bin:${openfire}/bin:${coreutils}/bin:${which}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
             export HOME=/tmp
             mkdir /var/log/openfire || true 
@@ -70,8 +67,9 @@ mkIf config.services.openfire.enable {
                 fi
             done
             openfire start
-          end script
-        '';
-    }];
+          ''; # */
+      };
+
   };
+  
 }

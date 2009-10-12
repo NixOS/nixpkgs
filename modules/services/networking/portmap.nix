@@ -1,89 +1,84 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption mkIf;
+
+  uid = config.ids.uids.portmap;
+  gid = config.ids.gids.portmap;
+
+  portmap = pkgs.portmap.override { daemonUID = uid; daemonGID = gid; };
+  
+in
+
+{
+
+  ###### interface
 
   options = {
-    services = {
-      portmap = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable `portmap', an ONC RPC directory service
-            notably used by NFS and NIS, and which can be queried
-            using the rpcinfo(1) command.
-          '';
-        };
-
-        verbose = mkOption {
-          default = false;
-          description = ''
-            Whether to enable verbose output.
-          '';
-        };
-
-        chroot = mkOption {
-          default = "/var/empty";
-          description = ''
-            If non-empty, a path to change root to.
-          '';
-        };
-
+  
+    services.portmap = {
+    
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable `portmap', an ONC RPC directory service
+          notably used by NFS and NIS, and which can be queried
+          using the rpcinfo(1) command.
+        '';
       };
+
+      verbose = mkOption {
+        default = false;
+        description = ''
+          Whether to enable verbose output.
+        '';
+      };
+
+      chroot = mkOption {
+        default = "/var/empty";
+        description = ''
+          If non-empty, a path to change root to.
+        '';
+      };
+
     };
+
   };
-in
+  
 
-###### implementation
+  ###### implementation
 
-let uid = config.ids.uids.portmap;
-    gid = config.ids.gids.portmap;
-in
+  config = mkIf config.services.portmap.enable {
 
-mkIf config.services.portmap.enable {
-
-  require = [
-    options
-  ];
-
-
-  users = {
-    extraUsers = [
+    users.extraUsers = singleton
       { name = "portmap";
         inherit uid;
         description = "portmap daemon user";
         home = "/var/empty";
-      }
-    ];
+      };
 
-    extraGroups = [
+    users.extraGroups = singleton
       { name = "portmap";
         inherit gid;
-      }
-    ];
-  };
+      };
 
-  services = {
-    extraJobs = [{ 
-      name = "portmap";
-      
+    jobAttrs.portmap =
+      { description = "ONC RPC portmap";
 
-      job =
-        let portmap = pkgs.portmap.override { daemonUID = uid; daemonGID = gid; };
-        in
+        startOn = "network-interfaces/started";
+        stopOn = "network-interfaces/stop";
+
+        exec =
           ''
-          description "ONC RPC portmap"
+            ${portmap}/sbin/portmap -f \
+              ${if config.services.portmap.chroot == ""
+                then ""
+                else "-t \"${config.services.portmap.chroot}\""} \
+              ${if config.services.portmap.verbose then "-v" else ""}
+          '';
+      };
 
-          start on network-interfaces/started
-          stop on network-interfaces/stop
-
-          respawn ${portmap}/sbin/portmap -f \
-            ${if config.services.portmap.chroot == ""
-              then ""
-              else "-t \"${config.services.portmap.chroot}\""} \
-            ${if config.services.portmap.verbose then "-v" else ""}
-        '';
-    }];
   };
+
 }

@@ -1,8 +1,9 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
-let 
+let
+
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
   cfg = config.services.dovecot;
@@ -112,23 +113,18 @@ in
         gid = config.ids.gids.dovecot;
       };
 
-    services.extraJobs = singleton
-      { name = "dovecot";
+    jobAttrs.dovecot =
+      { description = "Dovecot IMAP/POP3 server";
 
-        job =
+        startOn = "${startingDependency}/started";
+
+        preStart =
           ''
-            description "Dovecot IMAP/POP3 server"
-
-            start on ${startingDependency}/started
-            stop on never
-
-            start script
-              ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login 
-              ${pkgs.coreutils}/bin/chown -R ${cfg.user}.${cfg.group} /var/run/dovecot
-            end script 
-
-            respawn ${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}
+            ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login 
+            ${pkgs.coreutils}/bin/chown -R ${cfg.user}.${cfg.group} /var/run/dovecot
           '';
+
+        exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}";
       };
       
   };

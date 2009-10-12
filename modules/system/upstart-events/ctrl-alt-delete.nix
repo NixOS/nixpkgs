@@ -1,20 +1,18 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 ###### implementation
 
 {
+  jobAttrs.ctrl_alt_delete =
+    { name = "ctrl-alt-delete";
 
-  services = {
-    extraJobs = [{
-      name = "ctrl-alt-delete";
-      
-      job = ''
-        on ctrlaltdel
-        
-        script
-            shutdown -r now 'Ctrl-Alt-Delete pressed'
-        end script
-       '';
-    }];
-  };
+      startOn = "ctrlaltdel";
+
+      task = true;
+
+      script =
+        ''
+          shutdown -r now 'Ctrl-Alt-Delete pressed'
+        '';
+    };
 }

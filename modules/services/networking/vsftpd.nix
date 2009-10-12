@@ -1,92 +1,11 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
-let
-  inherit (pkgs.lib) mkOption mkIf;
-
-  options = {
-    services = {
-      vsftpd = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the vsftpd FTP server.
-          ";
-        };
-        
-        anonymousUser = mkOption {
-          default = false;
-          description = "
-            Whether to enable the anonymous FTP user.
-          ";
-        };
- 
-        anonymousUserHome = mkOption {
-          default = "/home/ftp";
-          description = "
-            Path to anonymous user data.
-          ";
-        };
- 
-        localUsers = mkOption {
-          default = false;
-          description = "
-            Whether to enable FTP for the local users.
-          ";
-        };
-
-        writeEnable = mkOption {
-          default = false;
-          description = "
-            Whether any write activity is permitted to users.
-          ";
-        };
-
-        anonymousUploadEnable = mkOption {
-          default = false;
-          description = "
-            Whether any uploads are permitted to anonymous users.
-          ";
-        };
-
-        anonymousMkdirEnable = mkOption {
-          default = false;
-          description = "
-            Whether mkdir is permitted to anonymous users.
-          ";
-        };
-
-        chrootlocalUser = mkOption {
-          default = false;
-          description = "
-            Whether u can like out of ur home dir.
-          ";
-        };
-  
-        userlistEnable  = mkOption {
-          default = false;
-          description = "
-            Whether users are included.
-          ";
-        };
-  
-        userlistDeny  = mkOption {
-          default = false;
-          description = "
-            Whether users are excluded.
-          ";
-        };
-      };
-    };
-  };
-in
-
-###### implementation
+with pkgs.lib;
 
 let 
 
-  inherit (config.services.vsftpd) anonymousUser anonymousUserHome localUsers writeEnable anonymousUploadEnable anonymousMkdirEnable
-    chrootlocalUser userlistEnable userlistDeny;
+  cfg = config.services.vsftpd;
+  
   inherit (pkgs) vsftpd;
 
   yesNoOption = p : name :
@@ -94,67 +13,123 @@ let
 
 in
 
-mkIf config.services.vsftpd.enable {
-  require = [
-    options
-  ];
+{
 
-  users = {
-    extraUsers = [
-        { name = "vsftpd";
+  ###### interface
+
+  options = {
+  
+    services.vsftpd = {
+    
+      enable = mkOption {
+        default = false;
+        description = "Whether to enable the vsftpd FTP server.";
+      };
+
+      anonymousUser = mkOption {
+        default = false;
+        description = "Whether to enable the anonymous FTP user.";
+      };
+
+      anonymousUserHome = mkOption {
+        default = "/home/ftp";
+        description = "Path to anonymous user data.";
+      };
+
+      localUsers = mkOption {
+        default = false;
+        description = "Whether to enable FTP for local users.";
+      };
+
+      writeEnable = mkOption {
+        default = false;
+        description = "Whether any write activity is permitted to users.";
+      };
+
+      anonymousUploadEnable = mkOption {
+        default = false;
+        description = "Whether any uploads are permitted to anonymous users.";
+      };
+
+      anonymousMkdirEnable = mkOption {
+        default = false;
+        description = "Whether mkdir is permitted to anonymous users.";
+      };
+
+      chrootlocalUser = mkOption {
+        default = false;
+        description = "Whether local users are confined to their home directory.";
+      };
+
+      userlistEnable = mkOption {
+        default = false;
+        description = "Whether users are included.";
+      };
+
+      userlistDeny = mkOption {
+        default = false;
+        description = "Whether users are excluded.";
+      };
+
+    };
+    
+  };
+  
+
+  ###### implementation
+
+  config = mkIf cfg.enable {
+
+    users.extraUsers =
+      [ { name = "vsftpd";
           uid = config.ids.uids.vsftpd;
           description = "VSFTPD user";
           home = "/homeless-shelter";
         }
-      ] ++ pkgs.lib.optional anonymousUser
+      ] ++ pkgs.lib.optional cfg.anonymousUser
         { name = "ftp";
           uid = config.ids.uids.ftp;
           group = "ftp";
-          description = "Anonymous ftp user";
-          home = anonymousUserHome;
+          description = "Anonymous FTP user";
+          home = cfg.anonymousUserHome;
         };
 
-    extraGroups = [
+    users.extraGroups = singleton
       { name = "ftp";
         gid = config.ids.gids.ftp;
-      }
-    ];
-      
+      };
+
+    jobAttrs.vsftpd =
+      { description = "vsftpd server";
+
+        startOn = "network-interfaces/started";
+        stopOn = "network-interfaces/stop";
+
+        preStart =
+          ''
+            # !!! Why isn't this generated in the normal way?
+            cat > /etc/vsftpd.conf <<EOF
+            ${yesNoOption cfg.anonymousUser "anonymous_enable"}
+            ${yesNoOption cfg.localUsers "local_enable"}
+            ${yesNoOption cfg.writeEnable "write_enable"}
+            ${yesNoOption cfg.anonymousUploadEnable "anon_upload_enable"}
+            ${yesNoOption cfg.anonymousMkdirEnable "anon_mkdir_write_enable"}
+            ${yesNoOption cfg.chrootlocalUser "chroot_local_user"}
+            ${yesNoOption cfg.userlistEnable "userlist_enable"}
+            ${yesNoOption cfg.userlistDeny "userlist_deny"}
+            background=NO
+            listen=YES
+            nopriv_user=vsftpd
+            secure_chroot_dir=/var/ftp/empty
+            EOF
+
+            mkdir -p ${cfg.anonymousUserHome}
+            chown -R ftp:ftp ${cfg.anonymousUserHome}
+          '';
+
+        exec = "${vsftpd}/sbin/vsftpd /etc/vsftpd.conf";
+      };
+
   };
-
-  services = {
-    extraJobs = [{
-      name = "vsftpd";
-
-      job = ''
-        description "vsftpd server"
-
-        start on network-interfaces/started
-        stop on network-interfaces/stop
-
-        start script
-        cat > /etc/vsftpd.conf <<EOF
-        ${yesNoOption anonymousUser "anonymous_enable"}
-        ${yesNoOption localUsers "local_enable"}
-        ${yesNoOption writeEnable "write_enable"}
-        ${yesNoOption anonymousUploadEnable "anon_upload_enable"}
-        ${yesNoOption anonymousMkdirEnable "anon_mkdir_write_enable"}
-        ${yesNoOption chrootlocalUser "chroot_local_user"}
-        ${yesNoOption userlistEnable "userlist_enable"}
-        ${yesNoOption userlistDeny "userlist_deny"}
-        background=NO
-        listen=YES
-        nopriv_user=vsftpd
-        secure_chroot_dir=/var/ftp/empty
-        EOF
-
-        mkdir -p ${anonymousUserHome} &&
-        chown -R ftp:ftp ${anonymousUserHome}
-        end script
-
-        respawn ${vsftpd}/sbin/vsftpd /etc/vsftpd.conf
-      '';
-      
-    }];
-  };
+  
 }

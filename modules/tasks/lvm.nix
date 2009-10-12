@@ -1,27 +1,18 @@
-{pkgs, config, ...}:
-
-###### implementation
-
-let
-  modprobe = config.system.sbin.modprobe;
-
-in
-
+{ config, pkgs, ... }:
 
 {
 
-  services = {
-    extraJobs = [{
-      name = "lvm";
-      
-      job = ''
-        start on udev
-        #start on new-devices
+  ###### implementation
 
-        script
+  config = {
 
+    jobAttrs.lvm =
+      { startOn = " udev"; # !!! or on new-devices
+
+        script =
+          ''
             # Load the device mapper.
-            ${modprobe}/sbin/modprobe dm_mod || true
+            ${config.system.sbin.modprobe}/sbin/modprobe dm_mod || true
 
             ${pkgs.devicemapper}/sbin/dmsetup mknodes
             # Scan for block devices that might contain LVM physical volumes
@@ -33,9 +24,11 @@ in
             ${pkgs.lvm2}/sbin/vgchange --available y
 
             initctl emit new-devices
-            
-        end script
-      '';
-    }];
+          '';
+
+        task = true;
+      };
+
   };
+  
 }

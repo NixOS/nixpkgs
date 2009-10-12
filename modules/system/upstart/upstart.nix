@@ -327,7 +327,7 @@ in
         }
       ];
 
-    # see test/test-upstart-job.sh (!!! check whether this still works)
+    # !!! fix this
     tests.upstartJobs = { recurseForDerivations = true; } //
       builtins.listToAttrs (map (job: {
         name = removePrefix "upstart-" job.name;
