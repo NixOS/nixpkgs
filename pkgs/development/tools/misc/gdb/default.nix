@@ -8,9 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "1k9y271gnnvi0fny8ycydcd79snigwh88rgwi03ad782r2awcl67";
   };
 
+  # TODO: Add optional support for Python scripting.
   buildInputs = [ ncurses readline gmp mpfr texinfo ];
 
   configureFlags = "--with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline";
+
+  postInstall = ''
+    # Remove Info files already provided by Binutils and other packages.
+    rm -v $out/share/info/{standards,configure,bfd}.info
+  '';
 
   meta = {
     description = "GDB, the GNU Project debugger";
@@ -26,5 +32,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.cygwin;
+    maintainers = stdenv.lib.maintainers.ludo;
   };
 }
