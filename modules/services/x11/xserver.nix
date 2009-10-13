@@ -446,7 +446,7 @@ in
             Option "RandRRotation" "on"
           ''}
 
-          ${
+          ${if cfg.videoDriver != "vboxvideo" then
             let
               f = depth:
                 ''
@@ -459,6 +459,8 @@ in
                   EndSubSection
                 '';
             in concatMapStrings f [8 16 24]
+	    else
+	      "" # The VirtualBox driver does not support dynamic resizing if resolutions are defined
           }
 
         EndSection
