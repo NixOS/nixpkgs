@@ -27,6 +27,7 @@ if test "$action" = "switch" -o "$action" = "boot"; then
           mkdir -m 0700 -p /boot/grub
           @menuBuilder@ @out@
           if test "$NIXOS_INSTALL_GRUB" = 1; then
+	      echo "running \`@grub@/sbin/grub-install'..."
               @grub@/sbin/grub-install "@grubDevice@" --no-floppy --recheck
           fi
       else

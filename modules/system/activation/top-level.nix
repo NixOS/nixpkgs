@@ -110,7 +110,12 @@ let
 
     # Boot loaders
     bootLoader = config.system.boot.loader.id;
-    grub = if config.boot.loader.grub.enable then pkgs.grub else null;
+    grub =
+      if config.boot.loader.grub.enable
+      then (if config.boot.loader.grub.version == 1
+            then pkgs.grub
+            else pkgs.grub2)
+      else null;
     grubDevice = config.boot.loader.grub.device;
     configurationName = config.boot.loader.grub.configurationName;
   };
