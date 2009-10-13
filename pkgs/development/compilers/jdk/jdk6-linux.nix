@@ -13,18 +13,18 @@ assert swingSupport -> xlibs != null;
 
 stdenv.mkDerivation ({
   name =
-    if installjdk then "jdk-1.6.0_13" else "jre-1.6.0_13";
+    if installjdk then "jdk-1.6.0_16" else "jre-1.6.0_16";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u13-dlj-linux-i586.bin;
-        md5 = "b95c9cab85d92b6bbfa2c5b825a478af";
+        url = http://download.java.net/dlj/binaries/jdk-6u16-dlj-linux-i586.bin;
+        sha256 = "18syxbfsch7j109qcgjh510yvksbzxawf8ij67mx7p92icgf9ss6";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u13-dlj-linux-amd64.bin;
-        md5 = "37180c40b18bb1cc23620c0da52d0be4";
+        url = http://download.java.net/dlj/binaries/jdk-6u16-dlj-linux-amd64.bin;
+        sha256 = "1kxk9wp7i5ymcpnp48qxjbkr749nshi068yld4q3rx2s3hvi824k";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
