@@ -53,7 +53,7 @@ releaseTools.makeSourceTarball {
         header "checking pkgs/top-level/all-packages.nix on $platform"
         nix-env --readonly-mode -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
-            -qa \* --drv-path --system-filter \* --system
+            -qa \* --drv-path --system-filter \* --system --meta --xml
         stopNest
     done
   '';
