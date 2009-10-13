@@ -380,7 +380,7 @@ in
               then ''
                 ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
               ''
-	      else if videoDriver == "nvidia"
+	      else if videoDriver == "nvidiaLegacy"
               then ''
                 ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver
               ''
