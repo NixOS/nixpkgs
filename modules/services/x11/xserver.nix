@@ -348,7 +348,8 @@ in
       
     environment.systemPackages = config.environment.x11Packages;
     
-    services.hal.packages = halConfigFiles;
+    services.hal.packages = halConfigFiles ++
+      optional (videoDriver == "vboxvideo") kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
       { startOn = if cfg.autorun then "hal" else "never";
