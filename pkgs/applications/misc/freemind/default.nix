@@ -9,8 +9,6 @@ stdenv.mkDerivation {
 
   buildInputs = [jdk ant];
 
-  inherit jre;
-
   phases="unpackPhase buildPhase installPhase";
 
   buildPhase="ant dist";
@@ -29,13 +27,10 @@ stdenv.mkDerivation {
     sed -i 's/which/type -p/' $out/nix-support/dist/freemind.sh
     cat > $out/bin/freemind << EOF
     #!/bin/sh
-    # using pure env has removed the segfault for me :-)
-    exec env -i  sh -c "
-      export PATH=\"${args.coreutils}/bin:${args.gnugrep}/bin\";
-      export DISPLAY=\"\$DISPLAY\";
-      export JAVA_HOME=\"$jre\";
-      export LIBXCB_ALLOW_SLOPPY_LOCK=true;
-      $out/nix-support/dist/freemind.sh"
+    export PATH=${args.coreutils}/bin:${args.gnugrep}/bin:"$PATH"
+    export JAVA_HOME="${jre}"
+    export LIBXCB_ALLOW_SLOPPY_LOCK=true
+    $out/nix-support/dist/freemind.sh
     EOF
 
     chmod +x $out/{bin/freemind,nix-support/dist/freemind.sh}
