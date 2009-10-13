@@ -25,6 +25,7 @@ let
     openchrome = { modules = [ xorg.xf86videoopenchrome ]; };
     cirrus =     { modules = [ xorg.xf86videocirrus ]; };
     vmware =     { modules = [ xorg.xf86videovmware ]; };
+    vboxvideo =  { modules = [ kernelPackages.virtualboxGuestAdditions ]; };
   };
 
   videoDriver = cfg.videoDriver;
@@ -320,7 +321,8 @@ in
 
     boot.extraModulePackages =
       optional (cfg.videoDriver == "nvidia") kernelPackages.nvidia_x11 ++ 
-      optional (cfg.videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy;
+      optional (cfg.videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy ++
+      optional (cfg.videoDriver == "vboxvideo") kernelPackages.virtualboxGuestAdditions;
 
     environment.etc = optionals cfg.exportConfiguration
       [ { source = "${configFile}";
@@ -343,7 +345,7 @@ in
       ]
       ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11
       ++ optional (videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy;
-
+      
     environment.systemPackages = config.environment.x11Packages;
     
     services.hal.packages = halConfigFiles;
