@@ -66,6 +66,10 @@ stdenv.mkDerivation {
     ensureDir $out/share/applications
     cp -v vboxclient.desktop $out/share/applications
     
+    # Install HAL FDI file
+    ensureDir $out/share/hal/fdi/policy
+    install -m 644 90-vboxguest.fdi $out/share/hal/fdi/policy
+    
     # Install Xorg drivers
     ensureDir $out/lib/xorg/modules/{drivers,input}
     install -m 644 vboxvideo_drv_15.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
