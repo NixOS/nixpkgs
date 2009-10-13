@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   #};
   src = fetchsvn {
     url = http://svn.process-one.net/ejabberd/trunk;
-    rev = "r22196";
-    sha256 = "6a9a3e6962e95feffccce2f67485da6e8d92b0cf904bc96fc259c5d0cc4b7659";
+    rev = "2666";
+    sha256 = "c927ddc08c9cd748db93f48bcae96f9bd1c36e1ce107c9b4774e5423574ab7cb";
   };
   buildInputs = [ expat erlang zlib openssl pam ];
   patchPhase = ''
