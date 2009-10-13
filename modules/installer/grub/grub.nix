@@ -23,13 +23,13 @@ in
   ###### interface
 
   options = {
-  
+
     boot.loader.grub = {
 
       enable = mkOption {
         default = true;
         description = ''
-          Whether to enable the GRUB boot loader.
+          Whether to enable the GNU GRUB boot loader.
         '';
       };
 
@@ -45,48 +45,48 @@ in
       device = mkOption {
         default = "";
         example = "/dev/hda";
-        description = "
-          The device on which the boot loader, Grub, will be installed.
-          If empty, Grub won't be installed and it's your responsibility
+        description = ''
+          The device on which the boot loader, GRUB, will be installed.
+          If empty, GRUB won't be installed and it's your responsibility
           to make the system bootable.
-        ";
+        '';
       };
 
       bootDevice = mkOption {
         default = "";
         example = "(hd0,0)";
-        description = "
+        description = ''
           If the system partition may be wiped on reinstall, it is better
           to have /boot on a small partition. To do it, we need to explain
           to GRUB where the kernels live. Specify the partition here (in 
           GRUB notation).
-        ";
+        '';
       };
 
       configurationName = mkOption {
         default = "";
         example = "Stable 2.6.21";
-        description = "
-          Grub entry name instead of default.
-        ";
+        description = ''
+          GRUB entry name instead of default.
+        '';
       };
 
       extraEntries = mkOption {
         default = "";
-        example = "
+        example = ''
           title Windows
             chainloader (hd0,1)+1
-        ";
-        description = "
-          Any additional entries you want added to the Grub boot menu.
-        ";
+        '';
+        description = ''
+          Any additional entries you want added to the GRUB boot menu.
+        '';
       };
 
       extraEntriesBeforeNixOS = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether extraEntries are included before the default option.
-        ";
+        '';
       };
 
       splashImage = mkOption {
@@ -102,32 +102,32 @@ in
             sha256 = "0y8fvxalwxyid4k438k7c21bnv728qjsb92rqfapsmpv2bcj7f6k";
           };
         example = null;
-        description = "
-          Background image used for Grub.  It must be a 640x480,
+        description = ''
+          Background image used for GRUB.  It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
           <command>gzip</command> or <command>bzip2</command>.  Set to
-          <literal>null</literal> to run Grub in text mode.
-        ";
+          <literal>null</literal> to run GRUB in text mode.
+        '';
       };
 
       configurationLimit = mkOption {
         default = 100;
         example = 120;
-        description = "
+        description = ''
           Maximum of configurations in boot menu. GRUB has problems when
           there are too many entries.
-        ";
+        '';
       };
 
       copyKernels = mkOption {
         default = false;
-        description = "
-          Whether the Grub menu builder should copy kernels and initial
+        description = ''
+          Whether the GRUB menu builder should copy kernels and initial
           ramdisks to /boot.  This is necessary when /nix is on a
           different file system than /boot.
-        ";
+        '';
       };
-      
+
     };
 
   };
