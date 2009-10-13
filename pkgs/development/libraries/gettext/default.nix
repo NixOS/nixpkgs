@@ -40,7 +40,7 @@ stdenv.mkDerivation (rec {
 
 //
 
-(if (stdenv.system == "i686-darwin" || stdenv.system == "i686-cygwin")
+(if (!stdenv.isLinux) # any non-GNU system
     then {
       buildInputs = [ libiconv ];
     }
