@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://zziplib.sourceforge.net/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = python.passthru.platforms;
+    platforms = python.meta.platforms;
   };
 }

@@ -75,9 +75,11 @@ stdenv.mkDerivation ( {
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null);
     libPrefix = "python2.5";
+  };
 
+  meta = {
     # List of supported platforms.
     #  - On Darwin, `python.exe' fails with "Bus Error".
     platforms = stdenv.lib.platforms.allBut "i686-darwin";
-  } ;
+  };
 } // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch ./nolongdouble.patch]; } else {} ) )
