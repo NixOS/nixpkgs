@@ -5745,7 +5745,7 @@ let
     
     virtualboxGuestAdditions = import ../applications/virtualization/virtualbox/guest-additions {
       inherit stdenv fetchurl lib patchelf cdrkit kernel;
-      inherit (xlibs) libX11 libXt libXext libXmu libXcomposite;
+      inherit (xlibs) libX11 libXt libXext libXmu libXcomposite libXfixes;
     };
   };
 

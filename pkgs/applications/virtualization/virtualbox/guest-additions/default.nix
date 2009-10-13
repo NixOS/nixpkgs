@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel
-, libX11, libXt, libXext, libXmu, libXcomposite}:
+, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes}:
 
 stdenv.mkDerivation {
   name = "VirtualBox-GuestAdditions-3.0.8";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     done
 
     # Change rpath for various binaries and libraries
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib ./VBoxClient
+    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib ./VBoxClient
 
     for i in ./VBoxOGL{arrayspu,errorspu,feedbackspu,packspu,passthroughspu}.so
     do
