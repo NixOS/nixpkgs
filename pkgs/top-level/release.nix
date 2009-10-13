@@ -530,6 +530,11 @@ in {
     konversation = linux;
     kdesvn = linux;
     amarok = linux;
+    l10n.ca = linux;
+    l10n.de = linux;
+    l10n.fr = linux;
+    l10n.nl = linux;
+    l10n.ru = linux;
   };
 
   kernelPackages_2_6_25 = {
