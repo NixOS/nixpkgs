@@ -5742,6 +5742,11 @@ let
       inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;
     };
+    
+    virtualboxGuestAdditions = import ../applications/virtualization/virtualbox/guest-additions {
+      inherit stdenv fetchurl lib patchelf cdrkit kernel;
+      inherit (xlibs) libX11 libXt libXext libXmu libXcomposite;
+    };
   };
 
   # Build the kernel modules for the some of the kernels.
