@@ -1,5 +1,11 @@
 { fetchurl, stdenv, bison, ncurses, libusb, freetype }:
 
+let unifont_bdf = fetchurl {
+      url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
+      sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
+    };
+in
+
 stdenv.mkDerivation rec {
   name = "grub-1.97beta3";
 
@@ -10,6 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ bison ncurses libusb freetype ];
+
+  patchPhase =
+    '' gunzip < "${unifont_bdf}" > "unifont.bdf"
+       sed -i "configure" \
+           -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
+    '';
 
   doCheck = true;
 
