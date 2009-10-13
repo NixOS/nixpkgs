@@ -486,6 +486,10 @@ in
         Identifier "Device[0]"
         Driver "${if cfg.videoDriver == "nvidiaLegacy" then "nvidia" else cfg.videoDriver}"
 
+        ${if cfg.videoDriver == "nvidiaLegacy" then ''
+        # This option allows suspending with a nvidiaLegacy card
+	Option "NvAGP" "1"''
+        else ""}
         # !!! Is the "Clone" option still useful?
         Option "Clone" "${if cfg.isClone then "on" else "off"}"
       '';
