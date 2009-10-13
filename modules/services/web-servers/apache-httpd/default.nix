@@ -386,7 +386,7 @@ in
 
       extraModules = mkOption {
         default = [];
-        example = [ "proxy_connect" { name = "php5_module"; path = "${pkgs.php}/modules/libphp5.so"; } ];
+        example = [ "proxy_connect" { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
         description = ''
           Specifies additional Apache modules.  These can be specified
           as a string in the case of modules distributed with Apache,
