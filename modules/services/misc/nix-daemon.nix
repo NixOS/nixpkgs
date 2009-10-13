@@ -189,7 +189,9 @@ in
         };
 
     jobs.nixDaemon =
-      { startOn = "startup";
+      { name = "nix-daemon";
+
+        startOn = "startup";
 
         script =
           ''
