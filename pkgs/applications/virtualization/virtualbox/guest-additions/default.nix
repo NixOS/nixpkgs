@@ -63,8 +63,8 @@ stdenv.mkDerivation {
     ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
     
     # Install desktop file
-    ensureDir $out/share/applications
-    cp -v vboxclient.desktop $out/share/applications
+    ensureDir $out/share/autostart
+    cp -v vboxclient.desktop $out/share/autostart
     
     # Install HAL FDI file
     ensureDir $out/share/hal/fdi/policy
