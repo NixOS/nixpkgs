@@ -34,6 +34,8 @@ Options:
   --rollback             restore the previous NixOS configuration (only
                          with switch, boot, test, build)
 
+  --redo                 same as --no-pull --no-build-nix --show-trace
+
 Various nix-build options are also accepted, in particular:
 
   --show-trace           show a detailed stack trace for evaluation errors
@@ -76,6 +78,10 @@ while test "$#" -gt 0; do
     elif test "$i" = --max-jobs -o "$i" = -j; then
         j="$1"; shift 1
         extraBuildFlags="$extraBuildFlags $i $j"
+    elif test "$i" = --redo; then
+        buildNix=
+        pullManifest=
+        extraBuildFlags="$extraBuildFlags --show-trace"
     else
         echo "$0: unknown option \`$i'"
         exit 1
