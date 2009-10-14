@@ -153,6 +153,10 @@ in
     
     services.udev.packages = [extraUdevRules];
 
+    # As a fallback, allow firmware to be placed in
+    # /root/test-firmware (primarily for testing).
+    hardware.firmware = [ "/root/test-firmware" ];
+
     jobs.udev =
       { startOn = "startup";
         stopOn = "shutdown";
