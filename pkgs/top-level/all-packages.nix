@@ -4958,11 +4958,13 @@ let
     inherit builderDefs jre;
   };
 
-  postgresql = selectVersion ../servers/sql/postgresql "8.3.0" {
+  postgresql = postgresql83;
+
+  postgresql83 = import ../servers/sql/postgresql/8.3.x.nix {
     inherit fetchurl stdenv readline ncurses zlib;
   };
 
-  postgresql84 = selectVersion ../servers/sql/postgresql "8.4.0" {
+  postgresql84 = import ../servers/sql/postgresql/8.4.x.nix {
     inherit fetchurl stdenv readline ncurses zlib;
   };
 
