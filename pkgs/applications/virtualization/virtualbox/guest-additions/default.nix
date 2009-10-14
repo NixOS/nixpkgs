@@ -12,8 +12,17 @@ stdenv.mkDerivation {
   buildCommand = ''
     isoinfo -J -i $src -x /VBoxLinuxAdditions-x86.run > ./VBoxLinuxAdditions-x86.run
   
-    chmod 755 ./VBoxLinuxAdditions-x86.run
-    ./VBoxLinuxAdditions-x86.run --noexec --keep
+    ${if stdenv.system == "i686-linux" then ''
+        chmod 755 ./VBoxLinuxAdditions-x86.run
+        ./VBoxLinuxAdditions-x86.run --noexec --keep
+      ''
+      else if stdenv.system == "x86_64-linux" then ''
+        chmod 755 ./VBoxLinuxAdditions-amd64.run
+	./VBoxLinuxAdditions-amd64.run --noexec --keep
+      ''
+      else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+    }
+    
     cd linux
 
     # Build kernel modules
@@ -28,7 +37,14 @@ stdenv.mkDerivation {
     # Change the interpreter for various binaries
     for i in ./{mount.vboxsf,vboxadd-service,VBoxClient,VBoxControl}
     do
-        patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $i
+        ${if stdenv.system == "i686-linux" then ''
+          patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $i
+	''
+	else if stdenv.system == "x86_64-linux" then ''
+	  patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $i
+	''
+	else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+	}
     done
 
     # Change rpath for various binaries and libraries
