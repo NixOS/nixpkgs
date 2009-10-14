@@ -5,7 +5,7 @@ stdenv.mkDerivation ( rec {
   name = "skype-2.0";
 
   src = fetchurl {
-    url = http://www.skype.com/go/getskype-linux-static;
+    url = http://download.skype.com/linux/skype_static-2.0.0.72.tar.bz2;
     sha256 = "2f37963e8f19c0ec5efd8631abe9633b6551f09dee024460c40fad10728bc580";
     name = "${pname}_static-${version}.tar.bz2";
   };
