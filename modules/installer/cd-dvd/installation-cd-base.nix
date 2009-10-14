@@ -72,6 +72,7 @@ in
       ./iso-image.nix
       ./memtest.nix
       ../../hardware/network/intel-3945abg.nix
+      ../../hardware/network/rt73.nix
     ];
 
   # ISO naming.
@@ -191,6 +192,9 @@ in
         else ""
       }
     '';
+  
+  # Have the redistributable firmware of rt73 wifi nics.
+  networking.enableRT73Firmware = true;
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
