@@ -3,13 +3,13 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "adobe-reader-9.1.1-1";
+  name = "adobe-reader-9.2-1";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/9.1.1/enu/AdbeRdr9.1.1-1_i486linux_enu.tar.bz2;
-    sha256 = "1j3f7d5s7yfm6vg1628f6as462sbm1ika79v0flq0zgljc111vna";
+    url = http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/9.2/enu/AdbeRdr9.2-1_i486linux_enu.tar.bz2;
+    sha256 = "0067w0kjj2c04342g8c9qvcs49kkiqlxn2zyx9qzlg7a32qfc9l2";
   };
 
   # !!! Adobe Reader contains copies of OpenSSL, libcurl, and libicu.

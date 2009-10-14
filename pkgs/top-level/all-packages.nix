@@ -6310,12 +6310,11 @@ let
     inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  adobeReader = (
-    import ../applications/misc/adobe-reader {
-      inherit fetchurl stdenv zlib libxml2 cups;
-      inherit (xlibs) libX11;
-      inherit (gtkLibs) glib pango atk gtk;
-    });
+  adobeReader = import ../applications/misc/adobe-reader {
+    inherit fetchurl stdenv zlib libxml2 cups;
+    inherit (xlibs) libX11;
+    inherit (gtkLibs) glib pango atk gtk;
+  };
 
   amsn = import ../applications/networking/instant-messengers/amsn {
     inherit fetchurl stdenv which tcl tk x11;
