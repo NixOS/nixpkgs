@@ -10,13 +10,13 @@ stdenv.mkDerivation {
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit ];
   buildCommand = ''
-    isoinfo -J -i $src -x /VBoxLinuxAdditions-x86.run > ./VBoxLinuxAdditions-x86.run
-  
     ${if stdenv.system == "i686-linux" then ''
+        isoinfo -J -i $src -x /VBoxLinuxAdditions-x86.run > ./VBoxLinuxAdditions-x86.run
         chmod 755 ./VBoxLinuxAdditions-x86.run
         ./VBoxLinuxAdditions-x86.run --noexec --keep
       ''
       else if stdenv.system == "x86_64-linux" then ''
+        isoinfo -J -i $src -x /VBoxLinuxAdditions-amd64.run > ./VBoxLinuxAdditions-amd64.run
         chmod 755 ./VBoxLinuxAdditions-amd64.run
 	./VBoxLinuxAdditions-amd64.run --noexec --keep
       ''
