@@ -2115,9 +2115,21 @@ let
     inherit fetchurl stdenv;
   };
 
-  ocaml = getVersion  "ocaml" ocaml_alts;
+  ocaml = ocaml_3_11_1;
 
-  ocaml_alts = import ../development/compilers/ocaml {
+  ocaml_3_08_0 = import ../development/compilers/ocaml/3.08.0.nix {
+    inherit fetchurl stdenv x11 ncurses;
+  };
+
+  ocaml_3_09_1 = import ../development/compilers/ocaml/3.09.1.nix {
+    inherit fetchurl stdenv x11 ncurses;
+  };
+
+  ocaml_3_10_0 = import ../development/compilers/ocaml/3.10.0.nix {
+    inherit fetchurl stdenv x11 ncurses;
+  };
+
+  ocaml_3_11_1 = import ../development/compilers/ocaml/3.11.1.nix {
     inherit fetchurl stdenv x11 ncurses;
   };
 
@@ -2145,7 +2157,7 @@ let
 
   qcmm = import ../development/compilers/qcmm {
     lua   = lua4;
-    ocaml = builtins.getAttr "3.08.0" ocaml_alts;
+    ocaml = ocaml_3_08_0;
     inherit fetchurl stdenv mk noweb groff;
   };
 
@@ -3204,7 +3216,7 @@ let
   facile = import ../development/libraries/facile {
     inherit fetchurl stdenv;
     # Actually, we don't need this version but we need native-code compilation
-    ocaml = builtins.getAttr "3.10.0" ocaml_alts;
+    ocaml = ocaml_3_10_0;
   };
 
   faac = import ../development/libraries/faac {
