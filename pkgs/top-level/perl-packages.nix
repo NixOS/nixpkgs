@@ -1101,6 +1101,14 @@ rec {
     };
   };
 
+  FileSlurp = buildPerlPackage rec {
+    name = "File-Slurp-9999.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1rdkih4iv77y4xaprwdaw85d8pmja01152ngw66rb1h9rby3n1dv";
+    };
+  };
+
   FreezeThaw = buildPerlPackage {
     name = "FreezeThaw-0.43";
     src = fetchurl {
@@ -1168,6 +1176,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.10.tar.gz;
       sha256 = "05k292qy7jzjlmmybis8nncpnwwa4jfkm7q3gq6866ydxrzds9xh";
+    };
+  };
+
+  HTMLTemplate = buildPerlPackage rec {
+    name = "HTML-Template-2.9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SAMTREGAR/${name}.tar.gz";
+      sha256 = "0is026jn1731lvfjglv4003dsr8drshvw25zlbjrywk59kx7nsb2";
     };
   };
 
@@ -2257,6 +2273,16 @@ rec {
       url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/${name}.tar.gz";
       sha256 = "0vb0093v3kk7iczb46zzdg7myfyjldwrk8wbk7ibk56gvj350f7c";
     };
+  };
+
+  TextMarkdown = buildPerlPackage rec {
+    name = "Text-Markdown-1.0.26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "1ch8018yhn8mz38k0mrv5iljji1qqby2gfnvhvcm2vp65pjq2zdn";
+    };
+    buildInputs = [ FileSlurp ListMoreUtils Encode
+      ExtUtilsMakeMaker TestException ];
   };
 
   TextSimpleTable = buildPerlPackage {

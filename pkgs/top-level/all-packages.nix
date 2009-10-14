@@ -7120,6 +7120,11 @@ let
     inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
   };
 
+  ikiwiki = import ../applications/misc/ikiwiki {
+    inherit fetchurl stdenv perl gettext makeWrapper;
+    inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate TimeDate;
+  };
+
   imagemagick = import ../applications/graphics/ImageMagick {
     inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
       libjpeg libpng libtiff libxml2 zlib libtool;
