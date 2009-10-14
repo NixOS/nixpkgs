@@ -3011,7 +3011,7 @@ let
     });
 
   aubio = import ../development/libraries/aubio {
-    inherit fetchurl stdenv lib pkgconfig fftw libsndfile libsamplerate python
+    inherit fetchurl stdenv pkgconfig fftw libsndfile libsamplerate python
       alsaLib jackaudio;
   };
 
@@ -6341,8 +6341,7 @@ let
       libsndfile libsigcxx libusb cairomm librdf liblo fftw fftwSinglePrec
       aubio libmad;
     inherit (gtkLibs) glib pango gtk glibmm gtkmm;
-
-    inherit (gnome) libgnomecanvas ;
+    inherit (gnome) libgnomecanvas;
   };
 
   audacious = import ../applications/audio/audacious/player.nix {
