@@ -7130,7 +7130,8 @@ let
 
   ikiwiki = import ../applications/misc/ikiwiki {
     inherit fetchurl stdenv perl gettext makeWrapper;
-    inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate TimeDate;
+    inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder;
+    inherit git; # The RCS should be optional
   };
 
   imagemagick = import ../applications/graphics/ImageMagick {

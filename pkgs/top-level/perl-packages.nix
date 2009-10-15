@@ -453,12 +453,21 @@ rec {
     };
   };
 
-  CGISession = buildPerlPackage {
-    name = "CGI-Session-3.95";
+  CGIFormBuilder = buildPerlPackage rec {
+    name = "CGI-FormBuilder-3.0501";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHERZODR/CGI-Session-3.95.tar.gz;
-      md5 = "fe9e46496c7c711c54ca13209ded500b";
+      url = "mirror://cpan/authors/id/N/NW/NWIGER/${name}.tgz";
+      sha256 = "031sgxifl2dq8d4s4d9vnixvqdd3p952k0jrkyqp823k74glps25";
     };
+  };
+
+  CGISession = buildPerlPackage rec {
+    name = "CGI-Session-4.42";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKSTOS/${name}.tar.gz";
+      sha256 = "186lqqmfvisw3i74anvnsaqlbp6ww3wyhlsgdpni0mlcnh56h4gw";
+    };
+    buildInputs = [ DBFile ];
   };
 
   CGISimple = buildPerlPackage {

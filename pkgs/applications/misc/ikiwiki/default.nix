@@ -1,5 +1,7 @@
 {stdenv, fetchurl, perl, gettext, makeWrapper,
-TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate}:
+TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate,
+CGISession, CGIFormBuilder, DBFile,
+git}:
 
 stdenv.mkDerivation {
   name = "ikiwiki_3.20091009";
@@ -10,19 +12,22 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-    TimeDate gettext makeWrapper ];
+    TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder ];
 
   patchPhase = ''
     sed -i s@/usr/bin/perl@${perl}/bin/perl@ pm_filter mdwn2man
     sed -i s@/etc/ikiwiki@$out/etc@ Makefile.PL
     sed -i /ENV{PATH}/d ikiwiki.in
+    # State the gcc dependency, and make the cgi use our wrapper
+    sed -i -e 's@$0@"'$out/bin/ikiwiki'"@' \
+        -e "s@'cc'@'${stdenv.gcc}/bin/gcc'@" IkiWiki/Wrapper.pm
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";
 
   postInstall = ''
     for a in $out/bin/*; do
-      wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin
+      wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin:${git}/bin
     done
   '';
 
