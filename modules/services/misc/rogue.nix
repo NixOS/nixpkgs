@@ -48,7 +48,7 @@ in
 
         extraConfig = "chdir /root";
 
-        exec = "${pkgs.rogue}/bin/rogue < /dev/{cfg.tty} > /dev/{cfg.tty} 2>&1";
+        exec = "${pkgs.rogue}/bin/rogue < /dev/${cfg.tty} > /dev/${cfg.tty} 2>&1";
       };
 
     services.ttyBackgrounds.specificThemes = singleton
