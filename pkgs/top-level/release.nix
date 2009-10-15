@@ -540,31 +540,32 @@ in {
   kernelPackages_2_6_25 = {
     aufs = linux;
     kernel = linux;
-    virtualbox = linux;
   };
 
   kernelPackages_2_6_26 = {
     aufs = linux;
     kernel = linux;
-    virtualbox = linux;
   };
   
   kernelPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
+    virtualboxGuestAdditions = linux;
   };
   
   kernelPackages_2_6_28 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
+    virtualboxGuestAdditions = linux;
   };
 
   kernelPackages_2_6_29 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
+    virtualboxGuestAdditions = linux;
   };
 
   kernelPackages_2_6_31 = {
