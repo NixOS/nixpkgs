@@ -70,7 +70,7 @@ in
 
     environment.systemPackages = [manual];
 
-    boot.extraTTYs = mkIf cfg.showManual [cfg.ttyNumber];
+    boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
     jobs = mkIf cfg.showManual
       { nixosManual = 
@@ -90,7 +90,7 @@ in
       };
 
     services.ttyBackgrounds.specificThemes = mkIf cfg.showManual 
-      [ { tty = cfg.ttyNumber;
+      [ { tty = "tty${cfg.ttyNumber}";
           theme = pkgs.themes "green";
         }
       ];
