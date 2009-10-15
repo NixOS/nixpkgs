@@ -46,9 +46,10 @@ rec {
             '' ["defEnsureDir"];
 
   preBuild = fullDepEntry (''
-		cp config.log /tmp/snd-config.log
+                if [ -d /tmp ] && [ -w /tmp ]; then
+		    cp -v config.log /tmp/snd-config.log
+                fi
 		export NIX_LDFLAGS="$NIX_LDFLAGS -L${args.libX11}/lib -lX11"
-                
             '') ["minInit" "doUnpack" "makeDocsWork"];
 
   name = "Snd-" + version;
