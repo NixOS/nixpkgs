@@ -8,9 +8,11 @@
 
   installer.configModule = "./nixos/modules/installer/cd-dvd/installation-cd-minimal.nix";
 
-  # allow starting sshd by running "start sshd"
+  # Allow sshd to be started manually through "start sshd".  It should
+  # not be started by default on the installation CD because the
+  # default root password is empty.
   services.sshd.enable = true;
-  jobs.sshd.startOn = "never-start-ssh-automatically-you-should-set-root-password-first";
+  jobs.sshd.startOn = "";
 
   # Don't include X libraries.
   services.sshd.forwardX11 = false;
