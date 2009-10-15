@@ -12,7 +12,7 @@
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.sshd.enable = true;
-  jobs.sshd.startOn = "";
+  jobs.sshd.startOn = pkgs.lib.mkOverride 50 {} "";
 
   # Don't include X libraries.
   services.sshd.forwardX11 = false;
