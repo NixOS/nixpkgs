@@ -57,9 +57,12 @@ let
       source /etc/profile
 
       # Allow the user to setup a custom session type.
-      if test "$sessionType" = custom; then
-          test -x ~/.xsession && exec ~/.xsession
-          sessionType="" # fall-thru if there is no ~/.xsession
+      if test -x ~/.xsession; then
+          exec ~/.xsession
+      else
+          if test "$sessionType" = "custom"; then
+              sessionType="" # fall-thru if there is no ~/.xsession
+          fi
       fi
 
       # The session type is "<desktop-manager> + <window-manager>", so
