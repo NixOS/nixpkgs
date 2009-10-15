@@ -67,10 +67,18 @@ in
       };
 
       daemonNiceLevel = mkOption {
-        default = 2;
+        default = 10;
         description = "
           Nix daemon process priority. This priority propagates to build processes.
           0 is the default Unix process priority, 20 is the lowest.
+        ";
+      };
+
+      daemonIONiceLevel = mkOption {
+        default = 7;
+        description = "
+          Nix daemon process I/O priority. This priority propagates to build processes.        
+          0 is the default Unix process I/O priority, 7 is the lowest.
         ";
       };
 
@@ -197,7 +205,10 @@ in
           ''
             export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
             ${config.nix.envVars}
-            exec nice -n ${builtins.toString config.nix.daemonNiceLevel} ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
+            exec \
+              nice -n ${builtins.toString config.nix.daemonNiceLevel} \
+              ${pkgs.utillinux}/bin/ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
+              ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
           '';
 
         extraConfig = 
