@@ -1723,6 +1723,17 @@ rec {
     doCheck = false; # seems to hang waiting for connections
   };
 
+  NetTwitterLite = buildPerlPackage {
+    name = "Net-Twitter-Lite-0.08003";
+
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MM/MMIMS/Net-Twitter-Lite-0.08003.tar.gz;
+      sha256 = "11p8w650cpfplwcrnk3qrz3l5235i37dwgrji8xpgccix4vsrfpl";
+    };
+
+    propagatedBuildInputs = [JSONAny Encode LWP];
+  };
+
   ObjectSignature = buildPerlPackage {
     name = "Object-Signature-1.05";
     src = fetchurl {
