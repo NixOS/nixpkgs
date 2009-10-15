@@ -112,7 +112,6 @@ let
           # (bootstrap problem!).
           echo "root:x:0:0:System administrator:$rootHome:${config.users.defaultUserShell}" >> /etc/passwd
           echo "root::::::::" >> /etc/shadow
-          echo | passwd --stdin root
       fi
     '' [
       "defaultPath" # path to touch & passwd

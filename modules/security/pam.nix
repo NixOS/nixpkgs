@@ -32,6 +32,14 @@ let
     , # Whether to forward XAuth keys between users.  Mostly useful
       # for "su".
       forwardXAuth ? false
+    , # Whether to allow logging into accounts that have no password
+      # set (i.e., have an empty password field in /etc/passwd or
+      # /etc/group).  This does not enable logging into disabled
+      # accounts (i.e., that have the password field set to `!').
+      # Note that regardless of what the pam_unix2 documentation says,
+      # accounts with hashed empty passwords are always allowed to log
+      # in.
+      allowNullPassword ? false
     }:
 
     { source = pkgs.writeText "${name}.pam"
@@ -49,7 +57,8 @@ let
               "auth sufficient pam_rootok.so"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
-          auth sufficient ${pam_unix2}/lib/security/pam_unix2.so
+          auth sufficient ${pam_unix2}/lib/security/pam_unix2.so ${
+            optionalString allowNullPassword "nullok"}
           auth required   pam_deny.so
 
           # Password management.
@@ -139,7 +148,7 @@ in
         { name = "useradd"; rootOK = true; }
         # Used by groupadd etc.
         { name = "shadow"; rootOK = true; }
-        { name = "login"; ownDevices = true; }
+        { name = "login"; ownDevices = true; allowNullPassword = true; }
       ];
 
   };
