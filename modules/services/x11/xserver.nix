@@ -25,7 +25,7 @@ let
     openchrome = { modules = [ xorg.xf86videoopenchrome ]; };
     cirrus =     { modules = [ xorg.xf86videocirrus ]; };
     vmware =     { modules = [ xorg.xf86videovmware ]; };
-    vboxvideo =  { modules = [ kernelPackages.virtualboxGuestAdditions ]; };
+    virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; };
   };
 
   videoDriver = cfg.videoDriver;
@@ -322,7 +322,7 @@ in
     boot.extraModulePackages =
       optional (cfg.videoDriver == "nvidia") kernelPackages.nvidia_x11 ++ 
       optional (cfg.videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy ++
-      optional (cfg.videoDriver == "vboxvideo") kernelPackages.virtualboxGuestAdditions;
+      optional (cfg.videoDriver == "virtualbox") kernelPackages.virtualboxGuestAdditions;
 
     environment.etc = optionals cfg.exportConfiguration
       [ { source = "${configFile}";
@@ -349,7 +349,7 @@ in
     environment.systemPackages = config.environment.x11Packages;
     
     services.hal.packages = halConfigFiles ++
-      optional (videoDriver == "vboxvideo") kernelPackages.virtualboxGuestAdditions;
+      optional (videoDriver == "virtualbox") kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
       { startOn = if cfg.autorun then "hal" else "never";
@@ -446,7 +446,7 @@ in
             Option "RandRRotation" "on"
           ''}
 
-          ${if cfg.videoDriver != "vboxvideo" then
+          ${if cfg.videoDriver != "virtualbox" then
             let
               f = depth:
                 ''
@@ -484,7 +484,9 @@ in
     services.xserver.deviceSection =
       ''
         Identifier "Device[0]"
-        Driver "${if cfg.videoDriver == "nvidiaLegacy" then "nvidia" else cfg.videoDriver}"
+        Driver "${if cfg.videoDriver == "nvidiaLegacy" then "nvidia" 
+	          else if cfg.videoDriver == "virtualbox" then "vboxvideo"
+	          else cfg.videoDriver}"
 
         ${if cfg.videoDriver == "nvidiaLegacy" then ''
         # This option allows suspending with a nvidiaLegacy card
