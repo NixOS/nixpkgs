@@ -77,6 +77,13 @@ installPhase() {
     ensureDir $out/share
     ln -s $out/lib/openoffice/openoffice.org3/share/xdg $out/share/applications
     
+    # Copy icons so that the menu items in KDE and GNOME will look much nicer
+    (cd $SRC_ROOT/sysui/desktops/icons
+     install -v -d $out/share/icons/{hicolor,locolor} -m 755
+     cp -rv hicolor/*x* $out/share/icons/hicolor
+     cp -rv locolor/*x* $out/share/icons/locolor
+    )
+    
     # The desktop files expect a openoffice.org3 executable in the PATH, which is a symlink to soffice
     ln -s $out/bin/soffice $out/bin/openoffice.org3
 }
