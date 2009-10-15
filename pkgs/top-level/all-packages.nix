@@ -1999,6 +1999,14 @@ let
     };
   });
 
+  haskellPackages_ghc6121 = import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.12.1.nix {
+      inherit fetchurl stdenv perl ncurses gmp;
+      ghc = ghc6101Binary;
+    };
+  };
+
   haskellPackages_ghcHEAD = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.11.nix {
