@@ -3,6 +3,7 @@
   CGISession, CGIFormBuilder, DBFile
   , git ? null
   , monotone ? null
+  , extraUtils ? []
   }:
 
 stdenv.mkDerivation {
@@ -37,6 +38,7 @@ stdenv.mkDerivation {
         ''--prefix PATH : ${git}/bin \''}
       ${lib.optionalString (monotone != null) 
         ''--prefix PATH : ${monotone}/bin \''}
+      ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
 
     done
   '';

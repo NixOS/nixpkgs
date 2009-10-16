@@ -7134,6 +7134,7 @@ let
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder;
     inherit git; # The RCS should be optional
     monotone = null;
+    extraUtils = [];
   };
 
   imagemagick = import ../applications/graphics/ImageMagick {
