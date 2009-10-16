@@ -27,6 +27,7 @@ rec {
     source ${prehookBase}
     
     alias make=gmake
+    alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
 
@@ -42,6 +43,7 @@ rec {
     alias mv=gmv
     alias ln=gln
     alias sed=gsed
+    alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
 
@@ -54,6 +56,7 @@ rec {
     
     alias make=gmake
     alias sed=gsed
+    alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
     
