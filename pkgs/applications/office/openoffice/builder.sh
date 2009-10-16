@@ -83,7 +83,7 @@ installPhase() {
     do
         chmod 644 $appl # What's wrong with the file permissions?
         sed -i '/Icon/d' $appl
-        echo "Icon=`echo $appl | sed 's/.desktop//'`" >> $appl    
+        echo "Icon=$(echo $(basename $appl) | sed 's/.desktop//')" >> $appl    
     done
     
     # Copy icons so that the menu items in KDE and GNOME will look much nicer
