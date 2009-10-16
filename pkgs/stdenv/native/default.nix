@@ -5,6 +5,7 @@ rec {
   shell = "/bin/bash";
 
   path = (if system == "i386-sunos" then [ "/usr/gnu" ] else []) ++
+    (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     ["/" "/usr" "/usr/local"];
 
   prehookBase = builtins.toFile "prehook-base.sh" ''
@@ -48,6 +49,18 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
+  prehookNetBSD = builtins.toFile "prehook-netbsd.sh" ''
+    source ${prehookBase}
+    
+    alias make=gmake
+    alias sed=gsed
+    export MAKE=gmake
+    shopt -s expand_aliases
+    
+    # Filter out stupid GCC warnings (in gcc-wrapper).
+    export NIX_GCC_NEEDS_GREP=1
+  '';
+
   prehookCygwin = builtins.toFile "prehook-cygwin.sh" ''
     source ${prehookBase}
     
@@ -71,6 +84,7 @@ rec {
         if system == "i686-darwin" || system == "powerpc-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
+	if system == "i686-netbsd" then prehookNetBSD else
         prehookBase;
 
       initialPath = extraPath ++ path;
