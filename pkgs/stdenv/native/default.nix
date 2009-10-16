@@ -28,6 +28,7 @@ rec {
     
     alias make=gmake
     alias tar=gtar
+    alias sed=gsed
     export MAKE=gmake
     shopt -s expand_aliases
 
