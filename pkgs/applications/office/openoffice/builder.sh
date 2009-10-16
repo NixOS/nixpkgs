@@ -81,6 +81,7 @@ installPhase() {
     # The openoffice- prefix should be removed from the icon identifiers
     for appl in $out/share/applications/*.desktop
     do
+        chmod 644 $appl # What's wrong with the file permissions?
         sed -i '/Icon/d' $appl
         echo "Icon=`echo $appl | sed 's/.desktop//'`" >> $appl    
     done
