@@ -79,7 +79,7 @@ installPhase() {
 
     # Apply a minor correction to the *.desktop files in order to correctly address the icons
     # The openoffice- prefix should be removed from the icon identifiers
-    for appl in *.desktop
+    for appl in $out/share/applications/*.desktop
     do
         sed -i '/Icon/d' $appl
         echo "Icon=`echo $appl | sed 's/.desktop//'`" >> $appl    
