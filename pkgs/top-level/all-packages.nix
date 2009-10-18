@@ -1293,6 +1293,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  plotutils = import ../tools/graphics/plotutils {
+    inherit fetchurl stdenv lib libpng;
+  };
+
   povray = import ../tools/graphics/povray {
     inherit fetchurl stdenv;
   };
