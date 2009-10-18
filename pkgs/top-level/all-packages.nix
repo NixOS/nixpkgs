@@ -7589,6 +7589,14 @@ let
     inherit fetchurl stdenv;
   };
 
+  scribus = import ../applications/office/scribus {
+    inherit fetchurl stdenv lib cmake pkgconfig freetype lcms libtiff libxml2
+      cairo python cups fontconfig zlib libjpeg libpng;
+    inherit (gnome) libart_lgpl;
+    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
+    qt = qt3;
+  };
+
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
     inherit glibc alsaLib freetype fontconfig libsigcxx gcc;
