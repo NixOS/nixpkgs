@@ -7162,6 +7162,7 @@ let
       popt libxml2 libxslt libpng boehmgc fontconfig
       libsigcxx lcms boost gettext cairomm
       python pyxml makeWrapper;
+    inherit (pythonPackages) lxml;
     inherit (gtkLibs) gtk glib glibmm gtkmm;
     inherit (xlibs) libXft;
   };
