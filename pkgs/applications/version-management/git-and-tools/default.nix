@@ -59,10 +59,10 @@ rec {
     '';
     meta = {
       description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
+      maintainers = [args.lib.maintainers.marcweber];
       homepage = http://repo.or.cz/w/topgit.git; # maybe there is also another one, I haven't checked
       license = "GPLv2";
     };
-    patches = [ ./print-update-ranges.patch ./tg-push.patch ];
   };
 
   tig = stdenv.mkDerivation {
