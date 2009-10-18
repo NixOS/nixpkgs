@@ -3410,6 +3410,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  glibcInfo = import ../development/libraries/glibc-2.9/info.nix {
+    inherit fetchurl stdenv texinfo perl;
+  };
+
   glibc_multi =
       runCommand "${glibc.name}-multi"
         { glibc64 = glibc;
