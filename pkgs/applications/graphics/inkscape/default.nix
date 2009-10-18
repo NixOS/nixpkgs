@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
       files in the W3C SVG (Scalable Vector Graphics) file format.
+
+      If you want to import .eps files install ps2edit
     '';
+
   };
 }

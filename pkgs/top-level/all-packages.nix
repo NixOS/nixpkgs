@@ -1321,6 +1321,10 @@ let
     inherit stdenv fetchurl ncurses;
   };
 
+  pstoedit = import ../tools/graphics/pstoedit {
+    inherit fetchurl stdenv lib pkgconfig ghostscript gd zlib plotutils;
+  };
+
   pv = import ../tools/misc/pv {
     inherit fetchurl stdenv;
   };
