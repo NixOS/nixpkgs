@@ -1488,6 +1488,10 @@ let
     inherit builderDefs gmp;
   };
 
+  stun = import ../tools/networking/stun {
+    inherit fetchurl stdenv lib;
+  };
+
   stunnel = import ../tools/networking/stunnel {
     inherit fetchurl stdenv openssl;
   };
