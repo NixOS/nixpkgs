@@ -8005,6 +8005,12 @@ let
     inherit (xlibs) libXmu libXext libXfixes libXdamage libX11;
   };
 
+  yate = import ../applications/misc/yate {
+    inherit sox speex openssl automake autoconf pkgconfig;
+    inherit fetchurl stdenv lib composableDerivation;
+    qt = qt4;
+  };
+
   # doesn't compile yet - in case someone else want's to continue ..
   qgis =  (selectVersion ../applications/misc/qgis "1.0.1-2") {
     inherit composableDerivation fetchsvn stdenv flex lib
