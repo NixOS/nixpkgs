@@ -4366,6 +4366,13 @@ let
   };
   redland_1_0_8 = redland.passthru.function { version = "1.0.8"; };
 
+  rhino = import ../development/libraries/java/rhino {
+    inherit fetchurl stdenv unzip;
+    ant = apacheAntGcj;
+    javac = gcj;
+    jvm = gcj;
+  };
+
   rte = import ../development/libraries/rte {
     inherit fetchurl stdenv;
   };
