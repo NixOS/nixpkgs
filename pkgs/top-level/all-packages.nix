@@ -7064,7 +7064,7 @@ let
   };
 
   gtkpod = import ../applications/audio/gtkpod {
-    inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag;
+    inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag libvorbis;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libglade;
   };

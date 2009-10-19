@@ -1,9 +1,13 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "lame-3.97";
+  name = "lame-3.98.2";
   src = fetchurl {
-    url = mirror://sourceforge/lame/lame-3.97.tar.gz ;
-    sha256 = "05xy9lv6m9s013lzlvhxwvr1586c239xaiiwka52k18hs6k388qa";
+    url = mirror://sourceforge/lame/lame-398-2.tar.gz;
+    sha256 = "0cmgr515szd9kd19mpzvwl3cbnpfyjyi47swj4afblcfkmb2hym1";
   };
+
+  # Either disable static, or fix the rpath of 'lame' for it to point
+  # properly to the libmp3lame shared object.
+  dontDisableStatic = true;
 }

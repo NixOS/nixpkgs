@@ -1,10 +1,10 @@
 {stdenv, fetchurl, gettext, perl, perlXMLParser, pkgconfig, glib, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "libgpod-0.7";
+  name = "libgpod-0.7.2";
   src = fetchurl {
-    url = mirror://sourceforge/gtkpod/libgpod-0.7.0.tar.gz;
-    sha256 = "07jfxf4v6wd33aps9ry8kmp0k7lg1k933bag4f9vnpns3j5l63g1";
+    url = mirror://sourceforge/gtkpod/libgpod-0.7.2.tar.gz;
+    sha256 = "0xq7947rqf99n9zvbpxfwwkid5z8d2szv5s0024rq37d6zy333rf";
   };
 
   buildInputs = [ gettext perl perlXMLParser pkgconfig glib libxml2 ];
