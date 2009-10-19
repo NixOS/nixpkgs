@@ -2,14 +2,14 @@ args: with args;
 
 stdenv.mkDerivation rec {
   name = "pango-1.24.1";
-  
+
   src = fetchurl {
     url = "mirror://gnome/sources/pango/1.24/${name}.tar.bz2";
     sha256 = "1cls9cbk6sx81101gh2pkiri8v14shqpvy37cydbh8scs4yk8370";
   };
-  
-  buildInputs = [pkgconfig];
-  
+
+  buildInputs = [pkgconfig] ++ (if stdenv.system == "i686-darwin" then [gettext] else []);
+
   propagatedBuildInputs = [x11 glib cairo libpng];
 
   meta = {
