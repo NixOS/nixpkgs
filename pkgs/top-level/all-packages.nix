@@ -3506,6 +3506,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  gtkimageview = import ../development/libraries/gtkimageview {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gnome) gtk;
+  };
+
   gtkLibs = recurseIntoAttrs gtkLibs216;
 
   gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
