@@ -1,6 +1,6 @@
 { fetchurl, stdenv, texinfo, perl
 , XMLSAX, XMLParser, XMLNamespaceSupport
-, groff, libxml2, libxslt, gnused
+, groff, libxml2, libxslt, gnused, libiconv
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
   buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
-                  XMLSAX XMLParser XMLNamespaceSupport ];
+                  XMLSAX XMLParser XMLNamespaceSupport
+  	        ] ++ (if libiconv != null then [libiconv] else []);
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal

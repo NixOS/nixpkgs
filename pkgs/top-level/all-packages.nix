@@ -663,6 +663,7 @@ let
     inherit fetchurl stdenv texinfo perl
             gnused groff libxml2 libxslt makeWrapper;
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
+    libiconv = if system == "i686-darwin" then libiconv else null;
   };
 
   dosfstools = composedArgsAndFun (import ../tools/misc/dosfstools) {
