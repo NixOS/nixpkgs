@@ -1,5 +1,7 @@
 args: with args;
 
+assert stdenv.gcc ? gcc;
+
 # NOTE: ! If Scribus doesn't render text try another font.
 
 # a lot of templates, colour palettes, colour profiles or gradients
