@@ -2341,16 +2341,15 @@ let
     inherit (bleedingEdgeRepos) sourceByName;
   };
 
-  perl = if !stdenv.isLinux then sysPerl else perlReal;
-
-  perl58 = if !stdenv.isLinux then sysPerl else
-    import ../development/interpreters/perl-5.8 {
+  perl58 = import ../development/interpreters/perl-5.8 {
       inherit fetchurl stdenv;
+      impureLibcPath = if stdenv.isLinux then null else "/usr";
     };
 
-  perlReal = import ../development/interpreters/perl-5.10 {
-    fetchurl = fetchurlBoot;
+  perl = import ../development/interpreters/perl-5.10 {
     inherit stdenv;
+    fetchurl = fetchurlBoot;
+    impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)

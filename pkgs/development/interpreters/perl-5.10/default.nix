@@ -1,4 +1,6 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl
+, impureLibcPath ? null
+}:
 
 stdenv.mkDerivation {
   name = "perl-5.10.0";
@@ -34,9 +36,9 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-      
-      if test "$NIX_ENFORCE_PURITY" = "1"; then
-        GLIBC=$(cat $NIX_GCC/nix-support/orig-libc)
+
+      if test "${if impureLibcPath == null then "$NIX_ENFORCE_PURITY" else "1"}" = "1"; then
+        GLIBC=${if impureLibcPath == null then "$(cat $NIX_GCC/nix-support/orig-libc)" else impureLibcPath}
         configureFlags="$configureFlags -Dlocincpth=$GLIBC/include -Dloclibpth=$GLIBC/lib"
       fi
     '';
@@ -44,7 +46,7 @@ stdenv.mkDerivation {
   preBuild =
     ''
       # Make Cwd work on NixOS (where we don't have a /bin/pwd).
-      substituteInPlace lib/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
+      ${if stdenv.system == "i686-darwin" then "" else "substituteInPlace lib/Cwd.pm --replace \"'/bin/pwd'\" \"'$(type -tP pwd)'\""}
     '';
 
   setupHook = ./setup-hook.sh;

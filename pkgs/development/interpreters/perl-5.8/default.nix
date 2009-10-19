@@ -1,9 +1,37 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl
+, impureLibcPath ? null
+}:
 
 stdenv.mkDerivation {
   name = "perl-5.8.8";
 
-  builder = ./builder.sh;
+  builder =
+   ''
+source $stdenv/setup
+
+if test "$NIX_ENFORCE_PURITY" = "1"; then
+    GLIBC=${if impureLibcPath == null then "$(cat $NIX_GCC/nix-support/orig-libc)" else impureLibcPath}
+    extraflags="-Dlocincpth=$GLIBC/include -Dloclibpth=$GLIBC/lib"
+fi
+
+configureScript=./Configure
+configureFlags="-de -Dcc=gcc -Dprefix=$out -Uinstallusrbinperl $extraflags"
+dontAddPrefix=1
+
+preBuild() {
+    # Make Cwd work on NixOS (where we don't have a /bin/pwd).
+    substituteInPlace lib/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
+}
+
+postInstall() {
+    ensureDir "$out/nix-support"
+    cp $setupHook $out/nix-support/setup-hook
+}
+
+genericBuild
+
+   '';
+
   src = fetchurl {
     url = mirror://cpan/src/perl-5.8.8.tar.bz2;
     sha256 = "1j8vzc6lva49mwdxkzhvm78dkxyprqs4n4057amqvsh4kh6i92l1";
