@@ -2406,6 +2406,22 @@ let
     xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
   };
 
+  python26Base = composedArgsAndFun (import ../development/interpreters/python/2.6) {
+    inherit fetchurl stdenv zlib bzip2 gdbm;
+  };
+
+  python26Full = python26Base.passthru.function {
+    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
+    db4 = if getConfig ["python" "db4Support"] true then db4 else null;
+    sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
+    readline = if getConfig ["python" "readlineSupport"] true then readline else null;
+    openssl = if getConfig ["python" "opensslSupport"] true then openssl else null;
+    tk = if getConfig ["python" "tkSupport"] true then tk else null;
+    tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
+    libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
+    xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
+  };
+
   # new python and lib proposal
   # - adding a python lib to buildinputs should be enough
   #   (handles .pth files by patching site.py
