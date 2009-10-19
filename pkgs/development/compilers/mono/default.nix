@@ -10,6 +10,8 @@ stdenv.mkDerivation {
   buildInputs = [bison pkgconfig glib gettext perl];
   propagatedBuildInputs = [glib];
 
+  NIX_LDFLAGS = "-lgcc_s" ;
+
   preBuild = "
     makeFlagsArray=(INSTALL=`type -tp install`)
     patchShebangs ./
