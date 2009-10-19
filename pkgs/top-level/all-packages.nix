@@ -1542,6 +1542,12 @@ let
     inherit fetchurl stdenv;
   };
 
+  ufraw = import ../applications/graphics/ufraw {
+    inherit fetchurl stdenv pkgconfig gettext bzip2 zlib
+      libjpeg libtiff cfitsio exiv2 lcms gtkimageview;
+    inherit (gnome) gtk;
+  };
+
   upx = import ../tools/compression/upx {
     inherit fetchurl stdenv ucl zlib;
   };
