@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
+    ${if stdenv.isDarwin then "export DYLD_LIBRARY_PATH=${gmp}/lib" else ""}
     cp $(type -P pwd) utils/pwd/pwd
     ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include
   '';
@@ -71,19 +72,12 @@ stdenv.mkDerivation rec {
   postInstall =
     (if stdenv.isDarwin then
       ''
-        ensureDir $out/frameworks/GMP.framework/Versions/A
-        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
-        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
-        # !!! fix this
-        ensureDir $out/frameworks/GNUeditline.framework/Versions/A
-        ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/GNUeditline
-        ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/Versions/A/GNUeditline
-
         mv $out/bin $out/bin-orig
         mkdir $out/bin
         for i in $(cd $out/bin-orig && ls); do
             echo "#! $SHELL -e" >> $out/bin/$i
-            echo "DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \"\$@\"" >> $out/bin/$i
+            echo "export DYLD_LIBRARY_PATH=\"${gmp}/lib:${libedit}/lib\"" >> $out/bin/$i
+            echo "exec $out/bin-orig/$i \"\$@\"" >> $out/bin/$i
             chmod +x $out/bin/$i
         done
       '' else "")
