@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gwt-dragdrop-1.2.6";
+  name = "gwt-dnd-2.6.5";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://gwt-dnd.googlecode.com/files/gwt-dragdrop-1.2.6.jar;
-    sha1 = "97bbbd3e8fb3f8feaa4cfab99b371aa3abec5896";
+    url = http://gwt-dnd.googlecode.com/files/gwt-dnd-2.6.5.jar;
+    sha256 = "07zdlr8afs499asnw0dcjmw1cnjc646v91lflx5dv4qj374c97fw";
   };  
 }
