@@ -2044,7 +2044,7 @@ let
   };
 
   gwt = import ../development/compilers/gwt {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl jdk;
     inherit (gtkLibs) glib gtk pango atk;
     inherit (xlibs) libX11 libXt;
     libstdcpp5 = gcc33.gcc;

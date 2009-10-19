@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gwt-widgets-0.1.5";
+  name = "gwt-widgets-0.2.0";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://heanet.dl.sourceforge.net/sourceforge/gwt-widget/gwt-widgets-0.1.5-bin.tar.gz;
-    md5 = "daf59b3bc28a9045b6165f185e3e77a0";
+    url = mirror://sourceforge/gwt-widget/gwt-widgets-0.2.0-bin.tar.gz;
+    sha256 = "09isj4j6842rj13nv8264irkjjhvmgihmi170ciabc98911bakxb";
   };  
 }
