@@ -8,6 +8,6 @@ stdenv.mkDerivation {
   };
   buildCommand = ''
     ensureDir $out/share/java
-    cp $src $out/share/java
+    cp $src $out/share/java/$name.jar
   '';
 }
