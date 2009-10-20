@@ -259,4 +259,9 @@ rec {
     inherit (pkgs.gtkLibs) gtk;
     inherit gnome_desktop libunique intltool GConf;
   };
+
+  gtkglext = import ./platform/gtkglext {
+    inherit (pkgs) stdenv fetchurl mesa pkgconfig;
+    inherit (pkgs.gtkLibs) gtk;
+  };
 }
