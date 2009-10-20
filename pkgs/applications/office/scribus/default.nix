@@ -1,6 +1,6 @@
 args: with args;
 
-assert stdenv.gcc ? gcc;
+assert stdenv.gcc.gcc != null;
 
 # NOTE: ! If Scribus doesn't render text try another font.
 
@@ -31,11 +31,12 @@ stdenv.mkDerivation {
     set +x
   '';
 
-  buildInputs = [ pkgconfig /*<- required fro cairo only?*/ cmake freetype lcms libtiff libxml2 libart_lgpl qt
-                  python cups fontconfig
-                  libXaw libXext libX11 libXtst libXi libXinerama
-                  libjpeg libtiff zlib libpng
-  ] ++ (if useCairo then [cairo] else []);
+  buildInputs =
+    [ pkgconfig /*<- required fro cairo only?*/ cmake freetype lcms libtiff libxml2 libart_lgpl qt
+      python cups fontconfig
+      libXaw libXext libX11 libXtst libXi libXinerama
+      libjpeg libtiff zlib libpng
+    ] ++ lib.optional useCairo cairo;
 
   # fix rpath which is removed by cmake..
   postFixup = ''
@@ -47,11 +48,11 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      maintainers = [lib.maintainers.marcweber];
-      platforms = lib.platforms.linux;
-      description = "Desktop Publishing (DTP) and Layout program for Linux.";
-      homepage = http://www.scribus.net;
-      license = "GPLv2";
-    };
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
+    description = "Desktop Publishing (DTP) and Layout program for Linux.";
+    homepage = http://www.scribus.net;
+    license = "GPLv2";
+  };
 }
 
