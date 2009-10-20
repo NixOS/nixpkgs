@@ -2683,6 +2683,11 @@ let
     inherit (xlibs) libX11 libXt;
   };
 
+  distcc = import ../development/tools/misc/distcc {
+    inherit fetchurl stdenv popt avahi pkgconfig python;
+    inherit (gtkLibs) gtk;
+  };
+
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
     inherit python pil makeWrapper;
   };
