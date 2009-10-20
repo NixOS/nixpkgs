@@ -8,10 +8,12 @@
 , tcl ? null
 , libX11 ? null
 , xproto ? null
+, arch ? null
 }:
 
 assert zlibSupport -> zlib != null;
 assert gdbmSupport -> gdbm != null;
+assert stdenv.isDarwin -> arch != null;
 
 with stdenv.lib;
 
@@ -30,6 +32,7 @@ let
     ++ optional (tcl != null) tcl
     ++ optional (libX11 != null) libX11
     ++ optional (xproto != null) xproto
+    ++ optional (arch != null) arch
     ;
 
 in
@@ -50,7 +53,7 @@ stdenv.mkDerivation ( {
   inherit buildInputs;
   C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
   LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-  configureFlags = "--enable-shared --with-wctype-functions";
+  configureFlags = ''${if stdenv.isDarwin then "" else " --enable-shared"} --with-wctype-functions'';
 
   preConfigure = ''
     # Purity.
@@ -83,4 +86,4 @@ stdenv.mkDerivation ( {
     # platforms = stdenv.lib.platforms.allBut "i686-darwin";
     # Re-enabled for 2.6 to see whether the problem still occurs.
   };
-} // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch ./nolongdouble.patch]; } else {} ) )
+} // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
