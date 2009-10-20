@@ -6878,6 +6878,10 @@ let
     remember = import ../applications/editors/emacs-modes/remember {
       inherit fetchurl stdenv texinfo emacs bbdb;
     };
+
+    scalaMode = import ../applications/editors/emacs-modes/scala-mode {
+      inherit fetchsvn stdenv emacs;
+    };
   });
 
   emacs22Packages = emacsPackages emacs22;
