@@ -3659,6 +3659,10 @@ let
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip xlibs libjpeg;
   };
+  
+  jetty_gwt = import ../development/libraries/java/jetty-gwt {
+    inherit stdenv fetchurl;
+  };
 
   lablgtk = import ../development/libraries/lablgtk {
     inherit fetchurl stdenv ocaml pkgconfig;
