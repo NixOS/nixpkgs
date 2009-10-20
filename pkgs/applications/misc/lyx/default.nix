@@ -1,11 +1,12 @@
 # I haven't put much effort into this expressions .. so some optional depencencies may be missing - Marc
 args: with args;
-stdenv.mkDerivation {
-  name = "lyx-1.5.4";
+stdenv.mkDerivation rec {
+  version = "1.6.4";
+  name = "lyx-${version}";
 
   src = fetchurl {
-    url = http://lyx.cybermirror.org/stable/lyx-1.5.4.tar.bz2;
-    sha256 = "6c8b9aafc287ee683b68ebb08166e660e27af9942a30291f14c18de39aca8f2b";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/1.6.x/${name}.tar.bz2";
+    sha256 = "1b56e53e6884a9f1417811c03e5c986d79955444e8169244a2b80b0709223d15";
   };
 
   buildInputs = [texLive qt python];
