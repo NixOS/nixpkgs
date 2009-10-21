@@ -12,14 +12,14 @@ assert openglSupport -> mesa != null;
 assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> pulseaudio != null;
 
-stdenv.mkDerivation {
-  name = "SDL-1.2.13";
-  
+stdenv.mkDerivation rec {
+  name = "SDL-1.2.14";
+
   src = fetchurl {
-    url = http://www.libsdl.org/release/SDL-1.2.13.tar.gz;
-    sha256 = "0cp155296d6fy3w31jj481jxl9b43fkm01klyibnna8gsvqrvycl";
+    url = "http://www.libsdl.org/release/${name}.tar.gz";
+    sha256 = "1dnrxr18cyar0xd13dca7h8wp1fin4n3iyncxfq6pjrlf0l7x4jx";
   };
-  
+
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = [ x11 libXrandr ] ++
     stdenv.lib.optional pulseaudioSupport pulseaudio;
