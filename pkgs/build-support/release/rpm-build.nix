@@ -27,7 +27,12 @@ vmTools.buildRPM (
 
     postInstall = ''
       for i in $out/rpms/*/*.rpm; do
-        echo "file rpm $i" >> $out/nix-support/hydra-build-products
+        if echo $i | grep -vq '\.src\.rpm$'; then
+          echo "file rpm $i" >> $out/nix-support/hydra-build-products
+        fi
+      done
+      for i in $out/rpms/*/*.src.rpm; do
+        echo "file srpm $i" >> $out/nix-support/hydra-build-products
       done
       for rpmdir in $extraRPMs ; do
         echo "file rpm-extra $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)" >> $out/nix-support/hydra-build-products
