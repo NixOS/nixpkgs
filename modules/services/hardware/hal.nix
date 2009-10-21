@@ -100,6 +100,11 @@ in
             
             rm -f /var/cache/hald/fdi-cache
 
+            # For some weird reason HAL sometimes fails to start at
+            # boot time, which seems to be timing-dependent.  As a
+            # temporary workaround, sleep for a while here.
+            sleep 2
+
             # !!! Hack: start the daemon here to make sure it's
             # running when the Upstart job reaches the "running"
             # state.  Should be fixable in Upstart 0.6.
@@ -108,7 +113,7 @@ in
 
         postStop =
           '' 
-            pid=$(cat /var/run/hald/pid)
+            pid=$(cat /var/run/hald/pid || true)
             test -n "$pid" && kill "$pid"
          '';
       };
