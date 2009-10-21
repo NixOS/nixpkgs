@@ -4,6 +4,10 @@
 , pulseaudioSupport ? true, pulseaudio ? null
 }:
 
+# OSS is no longer supported, for it's much crappier than ALSA and
+# PulseAudio.
+assert alsaSupport || pulseaudioSupport;
+
 assert openglSupport -> mesa != null;
 assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> pulseaudio != null;
@@ -28,6 +32,7 @@ stdenv.mkDerivation {
   # we must arrange to add it to its RPATH; however, `patchelf' seems
   # to fail at doing this, hence `--disable-pulseaudio-shared'.
   configureFlags = ''
+    --disable-oss
     --disable-x11-shared --disable-alsa-shared --enable-rpath --disable-pulseaudio-shared
     ${if alsaSupport then "--with-alsa-prefix=${alsaLib}/lib" else ""}
   '';
