@@ -106,9 +106,8 @@ composableDerivation {} ( fixed : {
       xdebug = {
         buildInputs = [ automake autoconf ];
         xdebug_src = args.fetchurl {
-          name = "xdebug-2.0.2.tar.gz";
-          url = "http://xdebug.org/link.php?url=xdebug202";
-          sha256 = "1h0bxvf8krr203fmk1k7izrrr81gz537xmd3pqh4vslwdlbhrvic";
+          url = "http://xdebug.org/files/xdebug-2.0.5.tgz";
+          sha256 = "1cmq7c36gj8n41mfq1wba5rij8j77yqhydpcsbcysk1zchg68f26";
         };
       };
     };
@@ -128,7 +127,7 @@ composableDerivation {} ( fixed : {
     soapSupport = getConfig ["php" "soap"] true;
     zlibSupport = getConfig ["php" "zlib"] true;
     opensslSupport = getConfig ["php" "openssl"] true;
-    xdebugSupport = getConfig ["php" "xdebug"] true;
+    xdebugSupport = getConfig ["php" "xdebug"] false;
     mbstringSupport = getConfig ["php" "mbstring"] true;
     gdSupport = getConfig ["php" "gd"] true;
   };
@@ -148,7 +147,7 @@ composableDerivation {} ( fixed : {
 
     # Now Let's build xdebug if flag has been given
     # TODO I think there are better paths than the given below
-    if [ -n $flag_set_xdebug ]; then
+    if [ -n "$flag_set_xdebug" ]; then
       PATH=$PATH:$out/bin
       tar xfz $xdebug_src;
       cd xdebug*
