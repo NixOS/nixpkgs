@@ -39,7 +39,7 @@ stdenv.mkDerivation ( rec {
     cp -r * \$out/opt/skype/;
     cat >\$out/bin/skype << EOF
 #!/bin/sh
-      \$out/opt/skype/skype
+      \$out/opt/skype/skype --resources=\$out/opt/skype \\$@
 EOF
     chmod +x \$out/bin/skype
 
