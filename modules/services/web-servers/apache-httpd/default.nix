@@ -121,7 +121,7 @@ let
     LogFormat "%{Referer}i -> %U" referer
     LogFormat "%{User-agent}i" agent
 
-    CustomLog ${mainCfg.logDir}/access_log common
+    CustomLog ${mainCfg.logDir}/access_log ${mainCfg.logFormat}
   '';
 
 
@@ -218,7 +218,7 @@ let
 
     ${if !isMainServer && mainCfg.logPerVirtualHost then ''
       ErrorLog ${mainCfg.logDir}/error_log-${cfg.hostName}
-      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} common
+      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${mainCfg.logFormat}
     '' else ""}
 
     ${robotsConf}
@@ -429,6 +429,13 @@ in
         ";
       };
 
+      logFormat = mkOption {
+        default = "common";
+        description = "
+          Log format for Apache's log files. 
+        ";
+      };
+
       stateDir = mkOption {
         default = "/var/run/httpd";
         description = "
@@ -455,6 +462,7 @@ in
           are the non-global options permissible for the main host.
         '';
       };
+
 
       subservices = {
 
