@@ -1215,6 +1215,11 @@ let
     inherit fetchurl stdenv pkgconfig openobex bluez;
   };
 
+  openjade = import ../tools/text/sgml/openjade {
+    inherit fetchurl opensp perl;
+    stdenv = overrideGCC stdenv gcc33;
+  };
+
   openobex = import ../tools/bluetooth/openobex {
     inherit fetchurl stdenv pkgconfig bluez libusb;
   };
@@ -1223,6 +1228,11 @@ let
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
     etcDir = getConfig [ "openssh" "etcDir" ] "/etc/ssh";
+  };
+
+  opensp = import ../tools/text/sgml/opensp {
+    inherit fetchurl;
+    stdenv = overrideGCC stdenv gcc33;
   };
 
   openvpn = import ../tools/networking/openvpn {
