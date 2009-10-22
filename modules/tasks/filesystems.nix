@@ -5,22 +5,11 @@ with pkgs.lib;
 let
 
   fileSystems = config.fileSystems;
-  mountPoints = map (fs: fs.mountPoint) fileSystems;
-  devices = map (fs: if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
-  fsTypes = map (fs: fs.fsType) fileSystems;
-  optionss = map (fs: fs.options) fileSystems;
-  autocreates = map (fs: fs.autocreate) fileSystems;
   mount = config.system.sbin.mount;
 
   task =
     ''
       PATH=${pkgs.e2fsprogs}/sbin:${pkgs.utillinuxng}/sbin:$PATH
-
-      mountPoints=(${toString mountPoints})  
-      devices=(${toString devices})
-      fsTypes=(${toString fsTypes})
-      optionss=(${toString optionss})
-      autocreates=(${toString autocreates})
 
       newDevices=1
 
@@ -29,86 +18,87 @@ let
       # for loopback mounts).
 
       while test -n "$newDevices"; do
-
         newDevices=
 
-        for ((n = 0; n < ''${#mountPoints[*]}; n++)); do
-          mountPoint=''${mountPoints[$n]}
-          device=''${devices[$n]}
-          fsType=''${fsTypes[$n]}
-          options=''${optionss[$n]}
-          autocreate=''${autocreates[$n]}
+        ${flip concatMapStrings fileSystems
+          (fs: ''
+            mountPoint='${fs.mountPoint}'
+            device='${if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}"}'
+            fsType='${fs.fsType}'
+          
+            # A device is a pseudo-device (i.e. not an actual device
+            # node) if it's not an absolute path (e.g. an NFS server
+            # such as machine:/path), if it starts with // (a CIFS FS),
+            # a known pseudo filesystem (such as tmpfs), or the device
+            # is a directory (e.g. a bind mount).
+            isPseudo=
+            test "''${device:0:1}" != / -o "''${device:0:2}" = // -o "$fsType" = "tmpfs" \
+                -o -d "$device" && isPseudo=1
 
-          # A device is a pseudo-device (i.e. not an actual device
-          # node) if it's not an absolute path (e.g. an NFS server
-          # such as machine:/path), if it starts with // (a CIFS FS),
-          # a known pseudo filesystem (such as tmpfs), or the device
-          # is a directory (e.g. a bind mount).
-          isPseudo=
-          test "''${device:0:1}" != / -o "''${device:0:2}" = // -o "$fsType" = "tmpfs" \
-              -o -d "$device" && isPseudo=1
-
-          if ! test -n "$isPseudo" -o -e "$device"; then
-              echo "skipping $device, doesn't exist (yet)"
-              continue
-          fi
-
-          # !!! quick hack: if the mount point is already mounted, try
-          # a remount to change the options but nothing else.
-          if cat /proc/mounts | grep -F -q " $mountPoint "; then
-              if test "''${device:0:2}" != //; then
-                  echo "remounting $device on $mountPoint"
-                  ${mount}/bin/mount -t "$fsType" \
-                      -o remount,"$options" \
-                      "$device" "$mountPoint" || true
-              fi
-              continue
-          fi
-
-          # If $device is already mounted somewhere else, unmount it first.
-          # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
-          # contains more accurate info when using loop devices.
-
-          if test -z "$isPseudo"; then
-
-            device=$(readlink -f "$device")
-
-            prevMountPoint=$(
-                cat /etc/mtab \
-                | grep "^$device " \
-                | sed 's|^[^ ]\+ \+\([^ ]\+\).*|\1|' \
-            )
-
-            if test "$prevMountPoint" = "$mountPoint"; then
-                echo "remounting $device on $mountPoint"
-                ${mount}/bin/mount -t "$fsType" \
-                    -o remount,"$options" \
-                    "$device" "$mountPoint" || true
+            if ! test -n "$isPseudo" -o -e "$device"; then
+                echo "skipping $device, doesn't exist (yet)"
                 continue
             fi
 
-            if test -n "$prevMountPoint"; then
-                echo "unmount $device from $prevMountPoint"
-                ${mount}/bin/umount "$prevMountPoint" || true
+            # !!! quick hack: if the mount point is already mounted, try
+            # a remount to change the options but nothing else.
+            if cat /proc/mounts | grep -F -q " $mountPoint "; then
+                if test "''${device:0:2}" != //; then
+                    echo "remounting $device on $mountPoint"
+                    ${mount}/bin/mount -t "$fsType" \
+                        -o remount,"${fs.options}" \
+                        "$device" "$mountPoint" || true
+                fi
+                continue
             fi
 
-          fi
+            # If $device is already mounted somewhere else, unmount it first.
+            # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
+            # contains more accurate info when using loop devices.
 
-          echo "mounting $device on $mountPoint"
+            if test -z "$isPseudo"; then
 
-          # !!! should do something with the result; also prevent repeated fscks.
-          if test -z "$isPseudo"; then
-              fsck -a "$device" || true
-          fi
+              device=$(readlink -f "$device")
 
-          if test "$autocreate" = 1; then mkdir -p "$mountPoint"; fi
+              prevMountPoint=$(
+                  cat /etc/mtab \
+                  | grep "^$device " \
+                  | sed 's|^[^ ]\+ \+\([^ ]\+\).*|\1|' \
+              )
 
-          if ${mount}/bin/mount -t "$fsType" -o "$options" "$device" "$mountPoint"; then
-              newDevices=1
-          fi
-   
-        done
+              if test "$prevMountPoint" = "$mountPoint"; then
+                  echo "remounting $device on $mountPoint"
+                  ${mount}/bin/mount -t "$fsType" \
+                      -o remount,"${fs.options}" \
+                      "$device" "$mountPoint" || true
+                  continue
+              fi
 
+              if test -n "$prevMountPoint"; then
+                  echo "unmount $device from $prevMountPoint"
+                  ${mount}/bin/umount "$prevMountPoint" || true
+              fi
+
+            fi
+
+            echo "mounting $device on $mountPoint"
+
+            # !!! should do something with the result; also prevent repeated fscks.
+            if test -z "$isPseudo"; then
+                fsck -a "$device" || true
+            fi
+
+            ${optionalString fs.autocreate
+              ''
+                mkdir -p "$mountPoint"
+              ''
+            }
+
+            if ${mount}/bin/mount -t "$fsType" -o "$options" "$device" "$mountPoint"; then
+                newDevices=1
+            fi
+          '')
+        }
       done
     '';
 
