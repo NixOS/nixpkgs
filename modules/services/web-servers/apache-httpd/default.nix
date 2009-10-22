@@ -431,8 +431,9 @@ in
 
       logFormat = mkOption {
         default = "common";
+        example = "combined";
         description = "
-          Log format for Apache's log files. 
+          Log format for Apache's log files. Possible values are: combined, common, referer, agent.
         ";
       };
 
