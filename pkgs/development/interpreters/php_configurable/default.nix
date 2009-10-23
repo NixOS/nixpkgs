@@ -99,7 +99,7 @@ composableDerivation {} ( fixed : {
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
          Xdebug could be put in its own derivation.
-      */
+      * /
         meta = {
                 description = "debugging support for PHP";
                 homepage = http://xdebug.org;
