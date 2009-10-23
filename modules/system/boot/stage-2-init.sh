@@ -132,6 +132,7 @@ fi
 # Ensure that the module tools can find the kernel modules.
 export MODULE_DIR=@kernel@/lib/modules/
 
+echo "Running post-boot commands"
 
 # Run any user-specified commands.
 @shell@ @postBootCommands@

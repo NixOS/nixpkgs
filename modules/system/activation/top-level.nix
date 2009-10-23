@@ -42,7 +42,9 @@ let
   # as you use, but with another kernel
   # !!! fix this
   children = map (x: ((import ../../../default.nix)
-    { configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
+    { configuration = x//{boot=((x.boot)//
+    	{loader=x.boot.loader//{grub=x.boot.loader.grub//
+	{device = "";};};});};}).system)
     config.nesting.children;
 
 
