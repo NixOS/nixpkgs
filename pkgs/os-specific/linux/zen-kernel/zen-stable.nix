@@ -6,7 +6,7 @@ in
   inherit (a) stdenv fetchurl perl mktemp module_init_tools;
 
   src = a.builderDefs.fetchGitFromSrcInfo s;
-  version = "2.6.31-zen2";
+  version = "2.6.31-zen5";
   config = "./kernel-config";
   features = {
     iwlwifi = true;
@@ -62,6 +62,9 @@ in
 
     killOption CONFIG_IMA
   '' +
+  ''
+    killOption CONFIG_USB_OTG_BLACKLIST_HUB
+  ''+
   ''
     killOption CONFIG_KERNEL_BZIP2
     killOption CONFIG_KERNEL_LZMA
