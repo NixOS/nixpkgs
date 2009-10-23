@@ -96,7 +96,10 @@ composableDerivation {} ( fixed : {
       };
 
       /*
-         Building xdebug withing php to be able to add the parameters to the ini file.. Ther should be a better way
+         php is build within this derivation in order to add the xdebug lines to the php.ini.
+         So both Apache and command line php both use xdebug without having to configure anything.
+         Xdebug could be put in its own derivation.
+      */
         meta = {
                 description = "debugging support for PHP";
                 homepage = http://xdebug.org;
@@ -147,7 +150,7 @@ composableDerivation {} ( fixed : {
 
     # Now Let's build xdebug if flag has been given
     # TODO I think there are better paths than the given below
-    if [ -n "$flag_set_xdebug" ]; then
+    if [ -n "$xdebug_src" ]; then
       PATH=$PATH:$out/bin
       tar xfz $xdebug_src;
       cd xdebug*
