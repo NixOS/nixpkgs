@@ -15,4 +15,6 @@ rec {
   # Take a function and evaluate it with its own returned value.
   fix = f: let result = f result; in result;
 
+  # Flip argument order
+  flip = f: x: y: f y x;
 }
