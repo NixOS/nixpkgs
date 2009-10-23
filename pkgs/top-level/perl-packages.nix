@@ -239,10 +239,10 @@ rec {
   };
 
   CatalystDevel = buildPerlPackage rec {
-    name = "Catalyst-Devel-1.20";
+    name = "Catalyst-Devel-1.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-      sha256 = "0p2fa7dcb987ppi6kvrfb1slmxkfax4g2nwp709cbnv3sflhlhhq";
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "0akqzyagx3fzngmnc880wk0z2spnmzs32s2mmpskkrq2yc7spyjn";
     };
     propagatedBuildInputs = [
       CatalystRuntime CatalystActionRenderView
@@ -281,10 +281,10 @@ rec {
   };
 
   CatalystModelDBICSchema = buildPerlPackage rec {
-    name = "Catalyst-Model-DBIC-Schema-0.25";
+    name = "Catalyst-Model-DBIC-Schema-0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
-      sha256 = "1y10zxc3wqyj7xavylbrnbixqg3h1p5i43qsrin2la7har5k20lg";
+      sha256 = "136m988xkxbjzaj4jix7arb9l65sx6bahbw7v1ma6m4ifpgpj5fq";
     };
     propagatedBuildInputs = [
       CatalystRuntime CatalystDevel DBIxClass UNIVERSALrequire
@@ -311,19 +311,19 @@ rec {
   };
 
   CatalystPluginAuthentication = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Authentication-0.10013";
+    name = "Catalyst-Plugin-Authentication-0.10015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "1hbk8vi3v8jkrpg9w9dy2142j7qlvdk0b2mahwinahs9g56ajdqk";
+      sha256 = "01hfsxgbpkvcli4hpmzig1hfrjfllwnig6p287v0bc72l6gklzbd";
     };
     propagatedBuildInputs = [CatalystRuntime CatalystPluginSession];
   };
 
   CatalystPluginAuthorizationACL = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Authorization-ACL-0.11";
+    name = "Catalyst-Plugin-Authorization-ACL-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "1glil82irw9179dgc6j41p765d7shp915f7bdg89x7b5wacz27v5";
+      sha256 = "12pj3c8hhm72jzyj83pjmxib0l48s3954spln97n3s0nsvliya98";
     };
     propagatedBuildInputs = [CatalystRuntime ClassThrowable];
   };
@@ -359,10 +359,10 @@ rec {
   };
 
   CatalystPluginSession = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-0.24";
+    name = "Catalyst-Plugin-Session-0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "1n3qx5p6yycgg59drjicmjnclggj72jjbyqv6xy3q9y8ywq9sif9";
+      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
+      sha256 = "1sdrcip5ipi2jz9af3ak200l4qdimypljfc55wyp7228s2rlv99s";
     };
     propagatedBuildInputs = [
       CatalystRuntime TestMockObject ObjectSignature
@@ -371,10 +371,10 @@ rec {
   };
 
   CatalystPluginSessionStateCookie = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-State-Cookie-0.11";
+    name = "Catalyst-Plugin-Session-State-Cookie-0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "1gfx1chann2m12yg0rn981aksaj0gsjwasjcrhqajn7yplyb06bn";
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
+      sha256 = "1rvxbfnpf9x2pc2zgpazlcgdlr2dijmxgmcs0m5nazs0w6xikssb";
     };
     propagatedBuildInputs = [
       CatalystRuntime CatalystPluginSession TestMockObject
@@ -382,10 +382,10 @@ rec {
   };
 
   CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-Store-FastMmap-0.06";
+    name = "Catalyst-Plugin-Session-Store-FastMmap-0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KARMAN/${name}.tar.gz";
-      sha256 = "0by8w1zbp2802f9n3sqp0cmm2q0pwnycf0jgzvvv75riicq1m9pn";
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
+      sha256 = "0h46848mr3i9yadaxvsrdpfn7z22bvk8pa3g71hs7f8m4wd19ns7";
     };
     propagatedBuildInputs = [
       PathClass CatalystPluginSession CacheFastMmap
@@ -393,19 +393,19 @@ rec {
   };
 
   CatalystPluginStackTrace = buildPerlPackage rec {
-    name = "Catalyst-Plugin-StackTrace-0.10";
+    name = "Catalyst-Plugin-StackTrace-0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
-      sha256 = "1pywxjhvn5zmcpnxj9ba77pz1jxq4d037yd43y0ks9sc31p01ydh";
+      sha256 = "1ingivnga1yb4dqsj6icc4a58i9wdalzpn2qflsn8n2skgm223qb";
     };
     propagatedBuildInputs = [CatalystRuntime DevelStackTrace];
   };
 
   CatalystPluginStaticSimple = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Static-Simple-0.21";
+    name = "Catalyst-Plugin-Static-Simple-0.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "1qpicgfha81ykxzg4kjll2qw8b1rwzdgvj4s3q9s20zl86gmfr3p";
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "1f457b8sci1wablvzwplp4n5gn8902qz3s1qp40jb4k7y13wq74j";
     };
     propagatedBuildInputs = [CatalystRuntime MIMETypes];
   };
@@ -888,10 +888,10 @@ rec {
   };
 
   DBIxClassSchemaLoader = buildPerlPackage rec {
-    name = "DBIx-Class-Schema-Loader-0.04999_06";
+    name = "DBIx-Class-Schema-Loader-0.04999_09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
-      sha256 = "169ydwjarq6qk48jdxcn5ks8rx9aksk9fnx07gl5mz7banw5cs6y";
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
+      sha256 = "1v4lqhjh9b6wwd8rayxmvr4nq44z5yffl5jkfccyhcp8lp84ysmf";
     };
     propagatedBuildInputs = [
       DBI DBDSQLite DataDump UNIVERSALrequire
