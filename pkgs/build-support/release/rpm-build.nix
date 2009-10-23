@@ -27,7 +27,7 @@ vmTools.buildRPM (
 
     postInstall = ''
       for i in $out/rpms/*/*.rpm; do
-        if echo $i | grep -vq '\.src\.rpm$'; then
+        if echo $i | grep -vq "\.src\.rpm$"; then
           echo "file rpm $i" >> $out/nix-support/hydra-build-products
         fi
       done
