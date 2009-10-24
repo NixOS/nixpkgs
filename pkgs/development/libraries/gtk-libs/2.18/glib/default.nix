@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "glib-2.22.0";
+  name = "glib-2.22.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/2.22/${name}.tar.bz2";
-    sha256 = "0wd6r0bdrrd9k1ipryf5dfk8cf5vcnhiib49s5x5xskwzaaxlz7p";
+    sha256 = "18ycpaf69wlpp4wq385hkq7bcfhbis8ncd7wl7zmwgrdzh11v954";
   };
 
   buildInputs = [pkgconfig gettext perl];

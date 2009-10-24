@@ -1,19 +1,27 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, x11, glib, atk, pango, libtiff, libjpeg
+, libpng, cairo, libXrandr, perl, jasper
+, xineramaSupport ? true, libXinerama ? null
+, cupsSupport ? true, cups ? null, openssl ? null
+}:
+
+assert xineramaSupport -> libXinerama != null;
+assert cupsSupport -> cups != null && openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.18.0";
+  name = "gtk+-2.18.3";
   
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.18/${name}.tar.bz2";
-    sha256 = "0hfjib98m47nrmv31h6k82fz35hzahykhifdsi5afy5yglrfkz05";
+    sha256 = "1gv8lx7a00yp95ss0vzvmda4nv213m8adjdkx18hhmhaavz6a1hw";
   };
   
   buildInputs = [ pkgconfig perl jasper ];
   
-  propagatedBuildInputs = [
-    x11 glib atk pango libtiff libjpeg libpng cairo libXrandr
-  ] ++ stdenv.lib.optional xineramaSupport libXinerama;
-    
+  propagatedBuildInputs =
+    [ x11 glib atk pango libtiff libjpeg libpng cairo libXrandr ]
+    ++ stdenv.lib.optional xineramaSupport libXinerama
+    ++ stdenv.lib.optionals cupsSupport [ cups openssl ];
+
   passthru = { inherit libtiff libjpeg libpng; };
 
   meta = {

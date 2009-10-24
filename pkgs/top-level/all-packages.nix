@@ -3590,7 +3590,8 @@ let
 
   gtkLibs218 = import ../development/libraries/gtk-libs/2.18 {
     inherit fetchurl stdenv pkgconfig gettext perl x11 jasper
-            libtiff libjpeg libpng cairo libsigcxx cairomm;
+            libtiff libjpeg libpng cairo libsigcxx cairomm cups
+            openssl;
     inherit (xlibs) libXinerama libXrandr;
     xineramaSupport = true;
   };
@@ -4111,7 +4112,7 @@ let
     pythonSupport = true;
   };
 
-  libxslt = import ../development/libraries/libxslt {
+  libxslt = makeOverridable (import ../development/libraries/libxslt) {
     inherit fetchurl stdenv libxml2;
   };
 

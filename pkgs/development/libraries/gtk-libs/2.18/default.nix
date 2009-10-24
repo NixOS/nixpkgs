@@ -8,9 +8,11 @@ rec {
 
   pango = (import ./pango) (args // { inherit glib cairo; });
 
-  gtk = (import ./gtk+) (args // {
-    inherit glib atk pango;
-  });
+  gtk = import ./gtk+ {
+    inherit stdenv fetchurl pkgconfig x11 glib atk pango libtiff
+      libjpeg libpng cairo libXrandr libXinerama perl jasper
+      cups openssl;
+  };
 
   glibmm = (import ./glibmm) (args // { inherit glib; });
 
