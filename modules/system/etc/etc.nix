@@ -63,9 +63,15 @@ in
       etc = pkgs.lib.fullDepEntry ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-	/etc/kill-etc || true
-	${makeEtc}/bin/fill-etc
-	echo "/etc is set up"
+	if [ "$(readlink /etc/kill-etc)" != "${makeEtc}/bin/kill-etc" ]; then
+	    /etc/kill-etc || true
+	    ${makeEtc}/bin/fill-etc
+	    echo -e "#! /bin/sh\n${makeEtc}/bin/kill-etc\n${makeEtc}/bin/fill-etc" > /etc/refill-etc
+	    chmod 0755 /etc/refill-etc
+	    echo "/etc is set up"
+	else
+	    echo "/etc unchanged"
+	fi
       '' [
         "systemConfig"
         "defaultPath" # path to cp, chmod, chown
