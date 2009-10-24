@@ -1565,6 +1565,10 @@ let
     inherit fetchurl stdenv ucl zlib;
   };
 
+  vbetool = builderDefsPackage ../tools/system/vbetool {
+    inherit pciutils libx86 zlib;
+  };
+
   viking = import ../applications/misc/viking {
     inherit fetchurl stdenv pkgconfig intltool gettext expat curl
       gpsd bc file;
@@ -4082,6 +4086,8 @@ let
     inherit fetchurl stdenv pkgconfig libgsf libxml2 bzip2;
     inherit (gnome) glib;
   };
+
+  libx86 = builderDefsPackage ../development/libraries/libx86 {};
 
   libxcrypt = import ../development/libraries/libxcrypt {
     inherit fetchurl stdenv;
