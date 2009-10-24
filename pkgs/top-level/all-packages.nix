@@ -3245,7 +3245,9 @@ let
   };
 
   directfb = import ../development/libraries/directfb {
-    inherit fetchurl stdenv perl;
+    inherit fetchurl stdenv perl zlib libjpeg freetype
+      SDL libpng;
+    inherit (xlibs) libX11 libXext xproto xextproto;
   };
 
   enchant = makeOverridable 
@@ -7352,6 +7354,12 @@ let
 
   links = import ../applications/networking/browsers/links {
     inherit fetchurl stdenv;
+  };
+
+  links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
+    inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff directfb
+      gpm openssl SDL SDL_image SDL_net pkgconfig;
+    inherit (xlibs) libX11 libXau xproto libXt;
   };
 
   lynx = import ../applications/networking/browsers/lynx {
