@@ -542,7 +542,7 @@ let
   };
 
   cdrdao = import ../tools/cd-dvd/cdrdao {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv lame libvorbis libmad pkgconfig libao;
   };
 
   cdrkit = import ../tools/cd-dvd/cdrkit {
