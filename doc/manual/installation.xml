@@ -365,22 +365,26 @@ whether everything compiles cleanly.</para>
 <title>Keeping NixOS up to date</title>
 
 <para>The currently best way to keep your NixOS installation up to
-date is to track the NixOS Subversion repository.  You should replace
-the static NixOS/Nixpkgs sources installed in
-<filename>/etc/nixos</filename> with a Subversion checkout.  The
-program <command>nixos-checkout</command> does that for you (and it
-also installs Subversion into your current profile).</para>
+date is to track the NixOS Subversion repository.  The program
+<command>nixos-checkout</command> does that for you.  It will
+check if the NixOS/NixPkgs sources are present and if they are under a
+version control system (VCS) before updating them to the latest version.  If your
+sources are not under a VCS, then you can rename them before
+running <command>nixos-checkout</command> which will checkout the sources.</para>
 
 <para>To build the latest and greatest, do
 
 <screen>
-$ svn up /etc/nixos/nixos
-$ svn up /etc/nixos/nixpkgs
+$ nixos-checkout
 $ nixos-rebuild switch</screen>
 
 (Or instead of <literal>switch</literal>, use any of the alternatives
 shown in <xref linkend="sec-changing-config"/>.)</para>
 
+<para>To customize your VCS or to handle more repositories with
+<command>nixos-checkout</command>, you can have a look at the
+options <option>installer.repos.nixos</option>
+and <option>installer.repos.nixpkgs</option>.</para>
 
 </section>
 
