@@ -6301,6 +6301,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  miscfiles = import ../data/misc/miscfiles {
+    inherit fetchurl stdenv;
+  };
+
   mph_2b_damase = import ../data/fonts/mph-2b-damase {
     inherit fetchurl stdenv unzip;
   };
@@ -8132,6 +8136,10 @@ let
 
   ballAndPaddle = import ../games/ball-and-paddle {
     inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_ttf guile gettext;
+  };
+
+  bsdgames = import ../games/bsdgames {
+    inherit fetchurl stdenv ncurses openssl flex bison miscfiles;
   };
 
   castleCombat = import ../games/castle-combat {
