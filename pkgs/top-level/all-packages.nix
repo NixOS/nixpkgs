@@ -426,6 +426,10 @@ let
     inherit fetchurl stdenv libpcap openssl zlib wirelesstools;
   };
 
+  ec2apitools = import ../tools/virtualization/amazon-ec2-api-tools {
+    inherit stdenv fetchurl unzip ;
+  };
+
   amule = import ../tools/networking/p2p/amule {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
     wxGTK = wxGTK28;
