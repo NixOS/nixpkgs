@@ -5,5 +5,6 @@ rec {
    rev="847ddc83ccbd7964898980f3f4dd520937ea3bbe";
    url="git://github.com/Dieterbe/uzbl.git";
   
+   depth="100";
   
 }

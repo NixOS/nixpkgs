@@ -1,5 +1,5 @@
 {stdenv, git}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", depth ? 1}:
 
 stdenv.mkDerivation {
   name = "git-export";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev ;
+  inherit url rev depth;
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow

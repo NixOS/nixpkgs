@@ -546,11 +546,11 @@ let inherit (builtins) head tail trace; in
      sha256 = srcInfo.hash;
    };
 
-   fetchGitFromSrcInfo = srcInfo: fetchgit {
+   fetchGitFromSrcInfo = srcInfo: fetchgit ({
      url = srcInfo.url;
      rev = srcInfo.rev;
      sha256 = srcInfo.hash;
-   };
+   } // (if srcInfo ? depth then {inherit (srcInfo) depth;} else {}));
 }) // args
 
 # [1]: rewrite using '' instead of " so that indentation gets stripped. It's
