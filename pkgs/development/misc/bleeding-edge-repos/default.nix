@@ -41,7 +41,7 @@ args:
 
       plugins = { type = "darcs"; url="http://code.haskell.org/~dons/code/hs-plugins/"; groups="haskell"; };
 
-      hg2git = { type = "git"; url="git://repo.or.cz/hg2git.git"; };
+      git_fast_export = { type = "git"; url="git://repo.or.cz/hg2git.git"; };
 
       MPlayer = { type = "svn"; url="svn://svn.mplayerhq.hu/mplayer/trunk"; };
 

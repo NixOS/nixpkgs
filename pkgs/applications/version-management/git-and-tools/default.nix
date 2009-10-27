@@ -3,7 +3,7 @@
 */
 args: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchurl getConfig;
+  inherit (pkgs) stdenv fetchurl getConfig subversion;
   inherit (pkgs.bleedingEdgeRepos) sourceByName;
 in
 rec {
@@ -83,8 +83,8 @@ rec {
     };
   };
 
-  hg2git = import ./hg2git {
-    inherit fetchurl stdenv mercurial coreutils git makeWrapper;
+  gitFastExport = import ./fast-export {
+    inherit fetchurl stdenv mercurial coreutils git makeWrapper subversion;
     inherit (bleedingEdgeRepos) sourceByName;
   };
 
