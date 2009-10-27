@@ -20,8 +20,8 @@ let
       while test -n "$newDevices"; do
         newDevices=
 
-        ${flip concatMapStrings fileSystems
-          (fs: ''
+        ${flip concatMapStrings fileSystems (fs: ''
+          for theContinueKeyword in theFollowingCode; do
             mountPoint='${fs.mountPoint}'
             device='${if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}"}'
             fsType='${fs.fsType}'
@@ -97,8 +97,8 @@ let
             if ${mount}/bin/mount -t "$fsType" -o "$options" "$device" "$mountPoint"; then
                 newDevices=1
             fi
-          '')
-        }
+          done
+        '')}
       done
     '';
 
