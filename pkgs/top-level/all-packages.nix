@@ -5278,7 +5278,7 @@ let
   };
 
   fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
-    inherit fontconfig gpm freetype pkgconfig;
+    inherit fontconfig gpm freetype pkgconfig ncurses;
   };
 
   fuse = import ../os-specific/linux/fuse {

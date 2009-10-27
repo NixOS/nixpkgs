@@ -2,17 +2,14 @@ a :
 let 
   fetchurl = a.fetchurl;
   
-  version = a.lib.attrByPath ["version"] "1.2" a; 
   buildInputs = with a; [
-    gpm fontconfig freetype pkgconfig
+    gpm freetype fontconfig pkgconfig ncurses
   ];
+  s = import ./src-for-default.nix; 
 in
 rec {
-  src = fetchurl {
-    url = "http://fbterm.googlecode.com/files/fbterm-${version}.tar.gz";
-    sha256 = "0q4axmnpwlpjlpaj19iw7nyxkqsvwq767szdkzsgancq99afwqyd";
-  };
-
+  src = a.fetchUrlFromSrcInfo s; 
+  inherit(s) name;
   inherit buildInputs;
   configureFlags = [];
 
@@ -20,10 +17,19 @@ rec {
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
   '') ["doUnpack" "minInit"];
 
+  fixMakeInstall = a.fullDepEntry (''
+    sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\
+    ' -i src/Makefile.in
+  '') ["doUnpack" "minInit"];
+
+  setVars = a.noDepEntry (''
+    export HOME=$PWD;
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
+  '') ;
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["fixInc" "doConfigure" "doMakeInstall"];
+  phaseNames = ["setVars" "fixInc" "fixMakeInstall" "doConfigure" "doMakeInstall"];
       
-  name = "fbterm-" + version;
   meta = {
     description = "Framebuffer terminal emulator";
     maintainers = [a.lib.maintainers.raskin];
