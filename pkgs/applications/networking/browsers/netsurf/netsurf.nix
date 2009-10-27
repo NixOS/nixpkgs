@@ -17,6 +17,7 @@ stdenv.mkDerivation {
     curl libpng libxml2 lcms glib libharu libmng
     gtk libglade libCSS];
 
+  buildPhase = "make PREFIX=$out";
   installPhase = "make PREFIX=$out install";
 
   meta = { 
@@ -26,5 +27,6 @@ stdenv.mkDerivation {
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
   };
+
 }
 
