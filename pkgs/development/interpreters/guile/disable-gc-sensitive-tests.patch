@@ -1,0 +1,15 @@
+This patch disable GC-sensitive tests.  This is particularly useful when
+compiling with `-O0' (as is done with coverage analysis) since there may
+be many false references held on the stack, leading to the failure of
+such tests.
+
+--- a/test-suite/tests/threads.test
++++ b/test-suite/tests/threads.test
+@@ -366,6 +366,7 @@
+ 	    (not (mutex-owner m))))
+ 
+         (pass-if "mutex with owner not retained (bug #27450)"
++          (throw 'unresolved)
+           (let ((g (make-guardian)))
+             (g (let ((m (make-mutex))) (lock-mutex m) m))
+ 

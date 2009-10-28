@@ -1,7 +1,12 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, gawk, makeWrapper }:
+, gawk, makeWrapper, coverageAnalysis ? null }:
 
-stdenv.mkDerivation rec {
+# Do either a coverage analysis build or a standard build.
+(if coverageAnalysis != null
+ then coverageAnalysis
+ else stdenv.mkDerivation)
+
+rec {
   name = "guile-1.9.4";  # This is an alpha release!
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
@@ -10,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper gawk readline libtool libunistring pkgconfig ];
   propagatedBuildInputs = [ gmp boehmgc ];
+
+  patches =
+    stdenv.lib.optionals (coverageAnalysis != null)
+      [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"

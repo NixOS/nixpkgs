@@ -54,6 +54,7 @@ in (mapTestOn {
    */
 
   guile = linux;
+  guile_1_9_coverage = linux;
 
   autogen = linux;
   lsh = linux;
