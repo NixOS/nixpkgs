@@ -1,11 +1,12 @@
 # TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
 
 args: with args;
+
 stdenv.mkDerivation {
 
 #TODO add plugins!
 
-  name = "sonic-visualizer";
+  name = "sonic-visualizer-1.6";
 
   src = fetchurl {
     url = http://downloads.sourceforge.net/sv1/sonic-visualiser-1.6.tar.bz2;
@@ -19,7 +20,6 @@ stdenv.mkDerivation {
     # portaudio
     pulseaudio
     libmad
-
     libogg # ?
     # fishsound
     liblo
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   meta = { 
-    description = "view and analyse contents of music audio files";
+    description = "View and analyse contents of music audio files";
     homepage = http://www.sonicvisualiser.org/;
     license = "GPLv2";
     maintainers = [args.lib.maintainers.marcweber];

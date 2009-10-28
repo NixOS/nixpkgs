@@ -1,5 +1,7 @@
-args: with args; stdenv.mkDerivation {
-  name = "icewm";
+args: with args;
+
+stdenv.mkDerivation {
+  name = "icewm-1.2.32";
 
   buildInputs = [ gettext libX11 libXft libXext libXinerama libXrandr libjpeg libtiff libungif libpng imlib ];
 
@@ -9,7 +11,7 @@ args: with args; stdenv.mkDerivation {
   };
 
   meta = {
-    description = "IceWM is a window manager for the X Window System.";
-    homepage = "http://www.icewm.org";
+    description = "A window manager for the X Window System";
+    homepage = http://www.icewm.org/;
   };
 }

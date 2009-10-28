@@ -2969,8 +2969,8 @@ let
     inherit fetchurl stdenv ncurses lzma;
   };
 
-  texi2html = import ../development/tools/misc/texitohtml {
-    inherit fetchurl stdenv lib perl;
+  texi2html = import ../development/tools/misc/texi2html {
+    inherit fetchurl stdenv perl;
   };
 
   uisp = import ../development/tools/misc/uisp {
@@ -3807,7 +3807,7 @@ let
   };
 
   liblo = import ../development/libraries/liblo {
-    inherit fetchurl stdenv lib;
+    inherit fetchurl stdenv;
   };
 
   libev = builderDefsPackage ../development/libraries/libev {
@@ -7685,7 +7685,7 @@ let
     inherit (xlibs) libXmu;
   };
 
-  sndBase =  builderDefsPackage (import ../applications/audio/snd) {
+  sndBase = builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
     inherit pkgconfig gmp gettext;
     inherit (xlibs) libXpm libX11;
@@ -8587,8 +8587,7 @@ let
 
   keynav = import ../tools/X11/keynav {
     inherit stdenv fetchurl;
-    inherit (xlibs) libX11 xextproto libXtst
-    imake libXi libXext;
+    inherit (xlibs) libX11 xextproto libXtst imake libXi libXext;
   };
 
   lazylist = import ../misc/tex/lazylist {

@@ -2,7 +2,7 @@
 , pkgconfig, gtk, glib, pango, libglade }:
 
 stdenv.mkDerivation rec {
-  name = "sysprof-1.0.10";
+  name = "sysprof-1.0.10-${kernel.version}";
 
   src = fetchurl {
     url = "http://www.daimi.au.dk/~sandmann/sysprof/${name}.tar.gz";

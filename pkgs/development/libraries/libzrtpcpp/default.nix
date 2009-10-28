@@ -1,9 +1,10 @@
 args: with args;
-stdenv.mkDerivation {
-  name = "libzrtpcpp-1.4.1.tar";
+
+stdenv.mkDerivation rec {
+  name = "libzrtpcpp-1.4.1";
 
   src = fetchurl {
-    url = mirror://gnu/ccrtp/libzrtpcpp-1.4.1.tar.gz;
+    url = "mirror://gnu/ccrtp/${name}.tar.gz";
     sha256 = "0gj5xiv15xnxdbppa06fy02j8jg0zm1capva4nhbpgzg08n7p8y0";
   };
 

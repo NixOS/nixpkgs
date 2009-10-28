@@ -1,6 +1,7 @@
 args: with args;
+
 stdenv.mkDerivation {
-  name = "xmacro";
+  name = "xmacro-0.3pre20000911";
 
   src = fetchurl {
     url = mirror://sourceforge/xmacro/xmacro-pre0.3-20000911.tar.gz;

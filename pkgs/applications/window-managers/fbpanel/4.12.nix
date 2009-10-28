@@ -12,7 +12,7 @@ args : with args;
 	}; /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "fbpanel";
+	name = "fbpanel-4.12";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {

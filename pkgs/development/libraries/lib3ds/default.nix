@@ -1,18 +1,19 @@
-args:
-args.stdenv.mkDerivation {
-  name = "lib3ds";
+{ stdenv, fetchurl, unzip }:
+        
+stdenv.mkDerivation rec {
+  name = "lib3ds-1.3.0";
 
-  src = args.fetchurl {
-    url = mirror://sourceforge/lib3ds/lib3ds-1.3.0.zip;
+  src = fetchurl {
+    url = "mirror://sourceforge/lib3ds/${name}.zip";
     sha256 = "1qr9arfdkjf7q11xhvxwzmhxqz3nhcjkyb8zzfjpz9jm54q0rc7m";
   };
 
-  buildInputs =(with args; [unzip]);
+  buildInputs = [ unzip ];
 
   meta = { 
-      description = "library for managing 3D-Studio Release 3 and 4 \".3DS\" files";
-      homepage = http://lib3ds.sourceforge.net/;
-      license = "LGPL";
-    };
+    description = "Library for managing 3D-Studio Release 3 and 4 \".3DS\" files";
+    homepage = http://lib3ds.sourceforge.net/;
+    license = "LGPL";
+  };
 }
 

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, strategoPackages}:
 
 stdenv.mkDerivation rec {
-  name = "webdsl-9.7pre3056.tar.gz";
+  name = "webdsl-9.7pre3056";
 
   src = fetchurl {
     url = "http://hydra.nixos.org/build/71896/download/1/webdsl-9.7pre3056.tar.gz";

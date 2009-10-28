@@ -1,4 +1,7 @@
 args: with args;
+
+# !!! What does this package do, and does it belong in Nixpkgs?
+
 stdenv.mkDerivation {
 	name = "xlaunch";
 	inherit xorgserver;
