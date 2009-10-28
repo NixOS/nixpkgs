@@ -3430,12 +3430,6 @@ let
     inherit (xlibs) libXmu libXi;
   };
 
-  # don't know wether this newer version breaks anything..
-  # not replacing the existing one.
-  glib214 = import ../development/libraries/glib {
-    inherit fetchurl stdenv pkgconfig gettext;
-  };
-
   glibc =
     let haveRedHatKernel       = system == "i686-linux" || system == "x86_64-linux";
         haveBrokenRedHatKernel = haveRedHatKernel && getConfig ["brokenRedHatKernel"] false;
@@ -8079,8 +8073,7 @@ let
 
   xmacro = import ../tools/X11/xmacro {
     inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXi
-  libXtst xextproto inputproto;
+    inherit (xlibs) libX11 libXi libXtst xextproto inputproto;
   };
 
   xmove = import ../applications/misc/xmove {
