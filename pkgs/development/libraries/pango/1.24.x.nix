@@ -1,18 +1,19 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng }:
 
 stdenv.mkDerivation rec {
-  name ="pangomm-2.14.1";
+  name = "pango-1.24.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pangomm/2.14/${name}.tar.bz2";
-    sha256 = "0mrm5hv8kb84qzb97lqbipzzc8g0b97pfgz2hqq33xs2ha3lswnp";
+    url = "mirror://gnome/sources/pango/1.24/${name}.tar.bz2";
+    sha256 = "1cls9cbk6sx81101gh2pkiri8v14shqpvy37cydbh8scs4yk8370";
   };
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pango glibmm cairomm libpng ];
+  buildInputs = [pkgconfig] ++ (if stdenv.system == "i686-darwin" then [gettext] else []);
+
+  propagatedBuildInputs = [x11 glib cairo libpng];
 
   meta = {
-    description = "C++ interface to the Pango text rendering library";
+    description = "A library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an

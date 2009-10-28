@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, perl, glib }:
 
 stdenv.mkDerivation rec {
   name = "atk-1.24.0";

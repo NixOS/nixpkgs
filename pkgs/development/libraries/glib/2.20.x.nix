@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, gettext, perl }:
 
 stdenv.mkDerivation rec {
   name = "glib-2.20.1";

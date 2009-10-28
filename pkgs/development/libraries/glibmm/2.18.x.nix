@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, glib, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = "glibmm-2.18.1";

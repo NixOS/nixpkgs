@@ -1,4 +1,7 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, perl, jasper, x11, glib, atk, pango
+, libtiff, libjpeg, libpng, cairo, xlibs
+, xineramaSupport ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "gtk+-2.16.2";
@@ -11,8 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig perl jasper ];
   
   propagatedBuildInputs = [
-    x11 glib atk pango libtiff libjpeg libpng cairo libXrandr
-  ] ++ stdenv.lib.optional xineramaSupport libXinerama;
+    x11 glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr
+  ] ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama;
     
   passthru = { inherit libtiff libjpeg libpng; };
 
