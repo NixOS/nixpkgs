@@ -291,10 +291,6 @@
     url = "http://mawercer.de/~nix/repos/netsurf_haru-9654.tar.gz";
     sha256 = "ca8fcdcbcb1e4007742d2214adf2eaa49829e988b6d9f0fe74108ca18e487d3b";
   };
-  netsurf_haru = args: with args; fetchurl { # Fri Oct 23 13:22:40 CEST 2009
-    url = "http://mawercer.de/~nix/repos/netsurf_haru-9652.tar.gz";
-    sha256 = "e31a3cb949b801af58ac76f3e5c0ab0829050a3f13ebe1200c8bea3786a30260";
-  };
   git_fast_export = args: with args; fetchurl { # Mon Oct 26 07:16:34 CET 2009
     url = "http://mawercer.de/~nix/repos/git_fast_export-1464dabbff7fe42b9069e98869db40276d295ad6.tar.gz";
     sha256 = "4d99bf7eefe86dd3305fc5ce27581830fc7dfe10f66ff5c5da054f737704b0bd";
