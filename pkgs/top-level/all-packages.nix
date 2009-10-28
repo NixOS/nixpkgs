@@ -2826,8 +2826,8 @@ let
     inherit (perlPackages) XMLSimple;
   };
 
-  indent = composedArgsAndFun (selectVersion ../development/tools/misc/indent "2.2.9") {
-    inherit fetchurl stdenv builderDefs;
+  indent = import ../development/tools/misc/indent {
+    inherit fetchurl stdenv;
   };
 
   jikespg = import ../development/tools/parsing/jikespg {
