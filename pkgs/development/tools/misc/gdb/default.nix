@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, texinfo }:
+{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "gdb-7.0";
@@ -9,14 +9,17 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: Add optional support for Python scripting.
-  buildInputs = [ ncurses readline gmp mpfr texinfo ];
+  buildInputs = [ ncurses readline gmp mpfr expat texinfo ];
 
-  configureFlags = "--with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline";
+  configureFlags =
+    '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
+       --with-expat --with-libexpat-prefix=${expat}
+    '';
 
-  postInstall = ''
-    # Remove Info files already provided by Binutils and other packages.
-    rm -v $out/share/info/{standards,configure,bfd}.info
-  '';
+  postInstall =
+    '' # Remove Info files already provided by Binutils and other packages.
+       rm -v $out/share/info/{standards,configure,bfd}.info
+    '';
 
   meta = {
     description = "GDB, the GNU Project debugger";
@@ -32,6 +35,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.cygwin;
-    maintainers = stdenv.lib.maintainers.ludo;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

@@ -2984,7 +2984,7 @@ let
   };
 
   gdb = import ../development/tools/misc/gdb {
-    inherit fetchurl stdenv ncurses gmp mpfr texinfo;
+    inherit fetchurl stdenv ncurses gmp mpfr expat texinfo;
     readline = readline5;
   };
 
