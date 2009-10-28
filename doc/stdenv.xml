@@ -879,7 +879,7 @@ distribution of the package.  The default
 <function>distPhase</function> first calls <command>make
 dist</command>, then it copies the resulting source tarballs to
 <filename>$out/tarballs/</filename>.  This phase is only executed if
-the <varname>doDist</varname> is not set.</para>
+the attribute <varname>doDist</varname> is not set.</para>
 
 <variablelist>
   <title>Variables controlling the distribution phase</title>
