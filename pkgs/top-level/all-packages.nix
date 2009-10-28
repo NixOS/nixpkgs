@@ -3387,6 +3387,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  gdk_pixbuf = import ../development/libraries/gdk-pixbuf {
+    inherit fetchurl stdenv libtiff libjpeg libpng;
+    inherit (gtkLibs1x) gtk;
+  };
+
   gegl = import ../development/libraries/gegl {
     inherit fetchurl stdenv libpng pkgconfig babl;
     openexr = openexr_1_6_1;
@@ -3558,29 +3563,16 @@ let
 
   gtkLibs = recurseIntoAttrs gtkLibs216;
 
-  gtkLibs1x = import ../development/libraries/gtk-libs/1.x {
-    inherit fetchurl stdenv x11 libtiff libjpeg libpng;
-  };
+  gtkLibs1x = rec {
 
-  gtkLibs210 = import ../development/libraries/gtk-libs/2.10 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng cairo libsigcxx cairomm;
-    inherit (xlibs) libXinerama libXrandr;
-    xineramaSupport = true;
-  };
+    glib = import ../development/libraries/glib/1.2.x.nix {
+      inherit fetchurl stdenv;
+    };
 
-  gtkLibs212 = import ../development/libraries/gtk-libs/2.12 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11
-            libtiff libjpeg libpng cairo libsigcxx cairomm;
-    inherit (xlibs) libXinerama libXrandr;
-    xineramaSupport = true;
-  };
-
-  gtkLibs214 = import ../development/libraries/gtk-libs/2.14 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11 jasper
-            libtiff libjpeg libpng cairo libsigcxx cairomm;
-    inherit (xlibs) libXinerama libXrandr;
-    xineramaSupport = true;
+    gtk = import ../development/libraries/gtk+/1.2.x.nix {
+      inherit fetchurl stdenv x11 glib;
+    };
+  
   };
 
   gtkLibs216 = import ../development/libraries/gtk-libs/2.16 {
@@ -7909,9 +7901,8 @@ let
   };
 
   w3m = import ../applications/networking/browsers/w3m {
-    inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib;
+    inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib imlib2 x11;
     graphicsSupport = false;
-    inherit (gtkLibs1x) gdkpixbuf;
   };
 
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...

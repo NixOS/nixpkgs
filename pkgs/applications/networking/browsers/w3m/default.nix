@@ -1,11 +1,12 @@
 { stdenv, fetchurl
 , sslSupport ? true
 , graphicsSupport ? false
-, ncurses, openssl ? null, boehmgc, gettext, zlib, gdkpixbuf ? null
+, ncurses, openssl ? null, boehmgc, gettext, zlib
+, imlib2 ? null, x11 ? null
 }:
 
 assert sslSupport -> openssl != null;
-assert graphicsSupport -> gdkpixbuf != null;
+assert graphicsSupport -> x11 != null;
 
 stdenv.mkDerivation {
   name = "w3m-0.5.2";
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ncurses boehmgc gettext zlib]
     ++ stdenv.lib.optional sslSupport openssl
-    ++ stdenv.lib.optional graphicsSupport gdkpixbuf;
+    ++ stdenv.lib.optionals graphicsSupport [imlib2 x11];
 
   configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}";
 
