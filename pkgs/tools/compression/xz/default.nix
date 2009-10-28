@@ -1,7 +1,7 @@
 {stdenv, fetchurl, lib}:
 
 stdenv.mkDerivation {
-  name = "xz";
+  name = "xz-4.999.9beta";
   
   src = fetchurl {
     url = http://tukaani.org/xz/xz-4.999.9beta.tar.bz2;
