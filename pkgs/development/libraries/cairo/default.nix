@@ -1,12 +1,14 @@
 { postscriptSupport ? true
 , pdfSupport ? true
 , pngSupport ? true
+, xcbSupport ? false
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype
-, zlib, libpng, pixman, libxcb, xcbutil
+, zlib, libpng, pixman, libxcb ? null, xcbutil ? null
 }:
 
 assert postscriptSupport -> zlib != null;
 assert pngSupport -> libpng != null;
+assert xcbSupport -> libxcb != null && xcbutil != null;
 
 stdenv.mkDerivation rec {
   name = "cairo-1.8.8";
@@ -16,16 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "140w8pz2k2kmjdaav3rfy009rjf2hqycsnk7lq0nwnf4bpgd6l9w";
   };
 
-  buildInputs = [
-    pkgconfig x11 fontconfig pixman libxcb xcbutil
-  ];
+  buildInputs =
+    [ pkgconfig x11 fontconfig pixman ] ++ 
+    stdenv.lib.optionals xcbSupport [ libxcb xcbutil ];
 
   propagatedBuildInputs =
     [ freetype ] ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     
-  configureFlags = ["--enable-xcb"] ++
+  configureFlags =
+    stdenv.lib.optional xcbSupport "--enable-xcb" ++
     stdenv.lib.optional pdfSupport "--enable-pdf";
 
   preConfigure = ''
