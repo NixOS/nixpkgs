@@ -147,10 +147,11 @@ $ svn add pkgs/development/libraries/libfoo/default.nix</screen>
       <itemizedlist>
 
         <listitem>
-          <para>All <varname>meta</varname> attributes are optional,
-          but it’s still a good idea to provide at least the
-          <varname>description</varname> and
-          <varname>homepage</varname>.</para>
+          <para>All <varname linkend="chap-meta">meta</varname>
+          attributes are optional, but it’s still a good idea to
+          provide at least the <varname>description</varname>,
+          <varname>homepage</varname> and <varname
+          linkend="sec-meta-license">license</varname>.</para>
         </listitem>
 
         <listitem>

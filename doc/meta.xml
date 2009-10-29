@@ -124,7 +124,7 @@ interpretation:</para>
 </section>
 
 
-<section><title>Licenses</title>
+<section xml:id="sec-meta-license"><title>Licenses</title>
 
 <note><para>This is just a first attempt at standardising the license
 attribute.</para></note>
