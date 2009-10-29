@@ -183,6 +183,10 @@ rec {
     inherit cabal extensibleExceptions mtl utf8String;
   };
 
+  haskelineClass = import ../development/libraries/haskell/haskeline-class {
+    inherit cabal haskeline mtl;
+  };
+
   haskellLexer = import ../development/libraries/haskell/haskell-lexer {
     inherit cabal;
   };
@@ -477,6 +481,10 @@ rec {
 
   testpack = import ../development/libraries/haskell/testpack {
     inherit cabal HUnit QuickCheck mtl;
+  };
+
+  text = import ../development/libraries/haskell/text {
+    inherit cabal;
   };
 
   /* time is Haskell Platform default, time113 is more recent but incompatible */
