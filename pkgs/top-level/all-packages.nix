@@ -8462,6 +8462,11 @@ let
     inherit fetchurl stdenv clisp;
   };
 
+  wxmaxima = import ../applications/science/math/wxmaxima {
+    inherit fetchurl stdenv maxima;
+    wxGTK = wxGTK28;
+  };
+
   scilab = (import ../applications/science/math/scilab) {
     inherit stdenv fetchurl lib gfortran;
     inherit (gtkLibs) gtk;
