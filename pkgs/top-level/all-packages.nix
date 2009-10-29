@@ -187,14 +187,15 @@ let
     in
       import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
 
-  # usage: (you can use override multiple times)
-  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
-  #     noBuildInputs = d.override { buildInputs = []; }
-  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   deepOverride = newArgs: name: x: if builtins.isAttrs x then (
     if x ? deepOverride then (x.deepOverride newArgs) else
     if x ? override then (x.override newArgs) else 
     x) else x;
+    
+  # usage: (you can use override multiple times)
+  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
+  #     noBuildInputs = d.override { buildInputs = []; }
+  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   makeOverridable = f: origArgs: f origArgs //
     { override = newArgs:
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
@@ -3541,7 +3542,7 @@ let
     inherit (gnome) gtk;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs216;
+  gtkLibs = recurseIntoAttrs gtkLibs218;
 
   glib = gtkLibs.glib;
 
@@ -4557,17 +4558,9 @@ let
    inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
   };
 
-  webkit = builderDefsPackage (import ../development/libraries/webkit) 
-  (lib.mapAttrs (deepOverride
-    {
-      # It needs fresh GTK
-      inherit (gnome28) gtkdoc libsoup GConf;
-      inherit (gtkLibs218) gtk atk pango glib;
-      gconf = gnome28.GConf;
-    })
-  {
+  webkit = builderDefsPackage (import ../development/libraries/webkit) {
     inherit (gnome28) gtkdoc libsoup;
-    inherit (gtkLibs218) gtk atk pango glib;
+    inherit (gtkLibs) gtk atk pango glib;
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
@@ -4576,7 +4569,7 @@ let
       gstPluginsGood;
     flex = flex2535;
     inherit (xlibs) libXt;
-  });
+  };
 
   wxGTK = wxGTK26;
 
@@ -7390,7 +7383,7 @@ let
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify;
-    inherit (gtkLibs218) gtk glib;
+    inherit (gtkLibs) gtk glib;
     inherit (gnome28) gtksourceview libsoup;
   };
 
@@ -7837,14 +7830,14 @@ let
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs218) gtk glib;
+    inherit (gtkLibs) gtk glib;
     libsoup = gnome28.libsoup;
   };
 
   uzblExperimental = builderDefsPackage
         (import ../applications/networking/browsers/uzbl/experimental.nix) {
     inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs218) gtk glib;
+    inherit (gtkLibs) gtk glib;
     libsoup = gnome28.libsoup;
   };
 
@@ -8324,18 +8317,7 @@ let
 
   gnome26 = import ../desktops/gnome-2.26 pkgs;
 
-  gnome28 = import ../desktops/gnome-2.28 (pkgs// {
-    gtkLibs = gtkLibs218;
-    dbus_glib = dbus_glib.override {
-        inherit (gtkLibs218) glib; 
-      };
-    policykit = policykit.deepOverride {
-        inherit (gtkLibs218) glib; 
-      };
-    hal = hal.deepOverride {
-        inherit (gtkLibs218) glib; 
-      };
-  });
+  gnome28 = import ../desktops/gnome-2.28 pkgs;
 
   kde3 = {
 
