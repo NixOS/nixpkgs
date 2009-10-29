@@ -19,6 +19,10 @@
     preBuild = "substituteInPlace mkfontdir.cpp --replace BINDIR ${xorg.mkfontscale}/bin";
   };
 
+  libXext = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.libXau];
+  };
+
   libXpm = attrs: attrs // {
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
@@ -82,8 +86,13 @@
 
   xorgserver = attrs: attrs // {
     patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch];
-    buildInputs = attrs.buildInputs ++ [args.zlib xorg.xf86bigfontproto];
-    propagatedBuildInputs = [xorg.libpciaccess];
+    buildInputs = attrs.buildInputs ++
+      [ args.zlib xorg.xf86bigfontproto xorg.glproto args.mesa xorg.xf86driproto
+        xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
+        xorg.xineramaproto xorg.dri2proto xorg.xf86dgaproto xorg.dmxproto
+        xorg.libdmx xorg.xf86vidmodeproto
+      ];
+    propagatedBuildInputs = [xorg.libpciaccess xorg.inputproto];
     postInstall =
       ''
         rm -rf $out/share/X11/xkb/compiled

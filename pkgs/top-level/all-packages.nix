@@ -3812,7 +3812,8 @@ let
   };
 
   libdrm = import ../development/libraries/libdrm {
-    inherit fetchurl stdenv pkgconfig pthread_stubs;
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xorg) libpthreadstubs;
   };
 
   libdvdcss = import ../development/libraries/libdvdcss {
@@ -4350,10 +4351,6 @@ let
   };
 
   pth = import ../development/libraries/pth {
-    inherit fetchurl stdenv;
-  };
-
-  pthread_stubs = import ../development/libraries/pthread-stubs {
     inherit fetchurl stdenv;
   };
 
