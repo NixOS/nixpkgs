@@ -476,30 +476,6 @@ in {
     kdelibs = linux;
   };
 
-  kde42 = {
-    amarok = linux;
-    kdeadmin = linux;
-    kdeartwork = linux;
-    kdebase = linux;
-    kdebase_runtime = linux;
-    kdebase_workspace = linux;
-    kdeedu = linux;
-    kdegames = linux;
-    kdegraphics = linux;
-    kdelibs = linux;
-    kdemultimedia = linux;
-    kdenetwork = linux;
-    kdepim = linux;
-    kdeplasma_addons = linux;
-    kdesdk = linux;
-    kdetoys = linux;
-    kdeutils = linux;
-    kdewebdev = linux;
-    ktorrent = linux;
-    kdesvn = linux;
-    krusader = linux;
-  };
-
   kde43 = {
     kdelibs = linux;
     kdelibs_experimental = linux;
