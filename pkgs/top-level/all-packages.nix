@@ -8337,12 +8337,6 @@ let
 
   kde4 = kde43;
 
-  kde42 = import ../desktops/kde-4.2 (pkgs // {
-    openexr = openexr_1_6_1;
-    qt4 = qt44;
-    popplerQt4 = popplerQt44;
-  });
-
   kde43 = import ../desktops/kde-4.3 (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt45;
@@ -8671,7 +8665,7 @@ let
     {
       inherit stdenv fetchurl zlib aspell sox openssl qt4;
       inherit (xlibs) xproto libX11 libSM libICE;
-      qca2 = kde42.qca2;
+      qca2 = kde.qca2;
     };
 
   putty = import ../applications/networking/remote/putty {
