@@ -1,22 +1,23 @@
 {stdenv, fetchurl, freetype, expat}:
 
-stdenv.mkDerivation {
-  name = "fontconfig-2.6.0";
+stdenv.mkDerivation rec {
+  name = "fontconfig-2.7.3";
   
   src = fetchurl {
-    url = http://fontconfig.org/release/fontconfig-2.6.0.tar.gz;
-    sha256 = "19fqr2vh7rzpqfh2lnkymh7q5pxn9r4w2z35lh36crp5l3m3k9m9";
+    url = "http://fontconfig.org/release/${name}.tar.gz";
+    sha256 = "0l5hjifapv4v88a204ixg6w6xly81cji2cr65znra0vbbkqvz3xs";
   };
   
   buildInputs = [freetype];
   propagatedBuildInputs = [expat]; # !!! shouldn't be necessary, but otherwise pango breaks
 
-  preConfigure = ''
-    configureFlags="--with-confdir=$out/etc/fonts --disable-docs --with-default-fonts="
-  '';
+  configureFlags = "--with-confdir=/etc/fonts --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
+
+  installFlags = "CONFDIR=$(out)/etc RUN_FC_CACHE_TEST=false";
 
   meta = {
     description = "A library for font customization and configuration";
     homepage = http://fontconfig.org/;
+    license = "bsd";
   };  
 }
