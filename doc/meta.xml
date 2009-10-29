@@ -189,6 +189,12 @@ following:
   </varlistentry>
 
   <varlistentry>
+    <term><varname>free-non-copyleft</varname></term>
+    <listitem><para>Catch-all for free, non-copyleft software licenses
+    not listed above.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>unfree-redistributable</varname></term>
     <listitem><para>Unfree package that can be redistributed in binary
     form.  That is, it’s legal to redistribute the
