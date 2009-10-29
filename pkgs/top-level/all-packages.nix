@@ -8665,7 +8665,7 @@ let
     {
       inherit stdenv fetchurl zlib aspell sox openssl qt4;
       inherit (xlibs) xproto libX11 libSM libICE;
-      qca2 = kde.qca2;
+      qca2 = kde4.qca2;
     };
 
   putty = import ../applications/networking/remote/putty {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, cmake, perl, python, pam, ConsoleKit
 , qt4, sip, pyqt4, kdelibs, kdelibs_experimental, kdepimlibs, kdebindings
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
-, lm_sensors, libxklavier, libusb, pthread_stubs, boost
+, lm_sensors, libxklavier, libusb, libpthreadstubs, boost
 , automoc4, phonon, strigi, soprano, qimageblitz, akonadi, polkit_qt
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   CMAKE_PREFIX_PATH=kdepimlibs;
   inherit kdelibs_experimental;
   builder = ./builder.sh;
-  buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdelibs_experimental kdepimlibs /*kdebindings*/ pthread_stubs boost libusb stdenv.gcc.libc
+  buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdelibs_experimental kdepimlibs /*kdebindings*/ libpthreadstubs boost libusb stdenv.gcc.libc
                   libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver
                   lm_sensors libxklavier automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt ];
   meta = {
