@@ -2696,8 +2696,10 @@ let
   };
 
   distcc = import ../development/tools/misc/distcc {
-    inherit fetchurl stdenv popt avahi pkgconfig python;
-    inherit (gtkLibs) gtk;
+    inherit fetchurl stdenv popt python;
+    avahi = if getPkgConfig "distcc" "avahi" false then avahi else null;
+    pkgconfig = if getPkgConfig "distcc" "gtk" false then pkgconfig else null;
+    gtk = if getPkgConfig "distcc" "gtk" false then gtkLibs.gtk else null;
   };
 
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
