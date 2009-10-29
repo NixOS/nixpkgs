@@ -477,6 +477,10 @@ let
     inherit fetchurl stdenv perl;
   };
 
+  bootchart = import ../tools/system/bootchart {
+    inherit fetchurl stdenv gnutar gzip coreutils utillinux gnugrep gnused psmisc nettools;
+  };
+
   eggdrop = import ../tools/networking/eggdrop {
     inherit fetchurl stdenv tcl;
   };
