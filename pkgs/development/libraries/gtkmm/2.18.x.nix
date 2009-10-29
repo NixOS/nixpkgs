@@ -1,11 +1,11 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, gtk, atk, glibmm, cairomm, pangomm }:
 
 stdenv.mkDerivation rec {
-  name = "gtkmm-2.18.1";
+  name = "gtkmm-2.18.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/2.18/${name}.tar.bz2";
-    sha256 = "09d66g7i6acfy5gijml54kw5gvynmrq04zl02x2k9aixpa9xybql";
+    sha256 = "0kj71db6qwgybmrs0myaz6hfz1zdfzh286vkmv5ldh6d5vi07h6z";
   };
 
   buildInputs = [pkgconfig];

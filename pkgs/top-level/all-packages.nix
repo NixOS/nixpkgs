@@ -3614,12 +3614,37 @@ let
   
   };
 
-  gtkLibs218 = import ../development/libraries/gtk-libs/2.18 {
-    inherit fetchurl stdenv pkgconfig gettext perl x11 jasper
-            libtiff libjpeg libpng cairo libsigcxx cairomm cups
-            openssl;
-    inherit (xlibs) libXinerama libXrandr;
-    xineramaSupport = true;
+  gtkLibs218 = rec {
+
+    glib = import ../development/libraries/glib/2.22.x.nix {
+      inherit fetchurl stdenv pkgconfig gettext perl;
+    };
+
+    glibmm = import ../development/libraries/glibmm/2.22.x.nix {
+      inherit fetchurl stdenv pkgconfig glib libsigcxx;
+    };
+
+    atk = import ../development/libraries/atk/1.28.x.nix {
+      inherit fetchurl stdenv pkgconfig perl glib;
+    };
+
+    pango = import ../development/libraries/pango/1.26.x.nix {
+      inherit fetchurl stdenv pkgconfig gettext x11 glib cairo libpng;
+    };
+
+    pangomm = import ../development/libraries/pangomm/2.26.x.nix {
+      inherit fetchurl stdenv pkgconfig pango glibmm cairomm libpng;
+    };
+
+    gtk = import ../development/libraries/gtk+/2.18.x.nix {
+      inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
+        libtiff libjpeg libpng cairo xlibs cups openssl;
+    };
+  
+    gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
+      inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
+    };
+  
   };
 
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, x11, glib, atk, pango, libtiff, libjpeg
-, libpng, cairo, libXrandr, perl, jasper
-, xineramaSupport ? true, libXinerama ? null
+{ stdenv, fetchurl, pkgconfig, glib, atk, pango, libtiff, libjpeg
+, libpng, cairo, perl, jasper, xlibs
+, xineramaSupport ? true
 , cupsSupport ? true, cups ? null, openssl ? null
 }:
 
-assert xineramaSupport -> libXinerama != null;
+assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null && openssl != null;
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig perl jasper ];
   
   propagatedBuildInputs =
-    [ x11 glib atk pango libtiff libjpeg libpng cairo libXrandr ]
-    ++ stdenv.lib.optional xineramaSupport libXinerama
+    [ xlibs.xlibs glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr ]
+    ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups openssl ];
 
   passthru = { inherit libtiff libjpeg libpng; };
