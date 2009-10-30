@@ -6167,6 +6167,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  upstart06 = import ../os-specific/linux/upstart/0.6.nix {
+    inherit fetchurl stdenv pkgconfig dbus expat;
+  };
+
   upstartJobControl = import ../os-specific/linux/upstart/jobcontrol.nix {
     inherit stdenv;
   };

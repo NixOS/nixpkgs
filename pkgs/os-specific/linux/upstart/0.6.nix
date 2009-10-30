@@ -1,22 +1,21 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, pkgconfig, dbus, expat }:
 
-stdenv.mkDerivation {
-  name = "upstart-0.3.0";
+stdenv.mkDerivation rec {
+  name = "upstart-0.6.2";
   
   src = fetchurl {
-    url = http://nixos.org/tarballs/upstart-0.3.0.tar.bz2;
-    md5 = "269046f41c6418225306280044a799eb";
+    url = "http://upstart.ubuntu.com/download/0.6/${name}.tar.bz2";
+    sha256 = "107xg5g2nms8wxr6imnh3ll4cmi784l671rp9dr06cvimcbk2pwj";
   };
 
-  dontDisableStatic = true;
+  buildInputs = [ pkgconfig dbus expat ];
   
-  configureFlags = "--enable-compat";
-  
-  patches = [./cfgdir.patch];
-  
-  preBuild =
+  NIX_CFLAGS_COMPILE =
     ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DSHELL=\"$SHELL\""
+      -DSHELL="${stdenv.shell}"
+      -DCONFFILE="/etc/init.conf"
+      -DCONFDIR="/etc/init"
+      -DPATH="/no-path"
     '';
 
   # The interface version prevents NixOS from switching to an
@@ -25,9 +24,7 @@ stdenv.mkDerivation {
   # in a backwards-incompatible way.  If the interface version of two
   # Upstart builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru = {
-    interfaceVersion = 1;
-  };
+  passthru.interfaceVersion = 2;
 
   postInstall =
     ''
