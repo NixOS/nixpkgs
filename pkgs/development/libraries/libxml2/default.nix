@@ -1,13 +1,13 @@
-{stdenv, fetchurl, zlib, python ? null, pythonSupport ? true, ...}:
+{stdenv, fetchurl, zlib, python ? null, pythonSupport ? true}:
 
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation {
-  name = "libxml2-2.7.3";
+  name = "libxml2-2.7.6";
 
   src = fetchurl {
-    url = ftp://xmlsoft.org/libxml2/libxml2-sources-2.7.3.tar.gz;
-    sha256 = "01bgxgvl0gcx97zmlz9f2ivgbiv86kqbs9l93n2cbxywv1pc4jd5";
+    url = ftp://xmlsoft.org/libxml2/libxml2-sources-2.7.6.tar.gz;
+    sha256 = "0n61rqqfiv0m64p01cwx205i6hb0mmzf7r0ya40s4fiqd2nhkkg0";
   };
 
   configureFlags = ''                                                  
@@ -23,5 +23,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://xmlsoft.org/;
     description = "A XML parsing library for C";
+    license = "bsd";
   };
 }

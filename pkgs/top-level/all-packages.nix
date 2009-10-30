@@ -4117,12 +4117,6 @@ let
     pythonSupport = false;
   };
 
-  # !!! Merge later.
-  libxml2New = makeOverridable (import ../development/libraries/libxml2/2.7.4.nix) {
-    inherit fetchurl stdenv zlib python;
-    pythonSupport = false;
-  };
-
   libxml2Python = libxml2.override {
     pythonSupport = true;
   };
@@ -8605,12 +8599,11 @@ let
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
-        autoconf libtool configureFlags enableScripts lib bison;
+        autoconf libtool configureFlags enableScripts lib bison libxml2;
       flex = flex2533;
       aterm = aterm242fixes;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
-      libxml2 = libxml2New;
     };
 
   disnix = import ../tools/package-management/disnix {
