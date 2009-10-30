@@ -6574,10 +6574,13 @@ let
 
   chrome = import ../applications/networking/browsers/chromium {
     inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip patchelf05;
-    inherit (xlibs) libX11 libXext libXrender ;
+    inherit (xlibs) libX11 libXext libXrender libXt ;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
   };
+
+  chromeWrapper = wrapFirefox chrome "chrome" "";
+
 
   cinelerra = import ../applications/video/cinelerra {
     inherit fetchurl stdenv
@@ -7020,12 +7023,16 @@ let
 
   flashplayer9 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
-      inherit fetchurl stdenv zlib alsaLib;
+      inherit fetchurl stdenv zlib alsaLib nss nspr fontconfig freetype expat;
+      inherit (xlibs) libX11 libXext libXrender libXt ;
+      inherit (gtkLibs) gtk glib pango atk;
     });
 
   flashplayer10 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
-      inherit fetchurl stdenv zlib alsaLib curl;
+      inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat;
+      inherit (xlibs) libX11 libXext libXrender libXt ;
+      inherit (gtkLibs) gtk glib pango atk;
     });
 
   flite = import ../applications/misc/flite {
