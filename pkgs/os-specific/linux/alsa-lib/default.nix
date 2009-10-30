@@ -1,17 +1,20 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "alsa-lib-1.0.19";
+stdenv.mkDerivation rec {
+  name = "alsa-lib-1.0.21a";
+  
   src = fetchurl {
-    url = ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.0.19.tar.bz2;
-    sha256 = "11i898dc6qbachn046gl6dg6g7bl2k8crddl97f3z5i57bcjdvij";
-  };  
+    url = "ftp://ftp.alsa-project.org/pub/lib/${name}.tar.bz2";
+    sha256 = "0x00sxvf1271vfg829yabaj0xkm4xgvk5vvwcq4qnhn5mnphkkm6";
+  };
+  
   configureFlags = "--disable-xmlto";
+  
   # Fix pcm.h file in order to prevent some compilation bugs
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's|//int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);|/\*int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);\*/|' include/pcm.h
-    unset patchPhase; patchPhase
   '';
+  
   meta = {
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
 

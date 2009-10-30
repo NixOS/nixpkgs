@@ -1,12 +1,15 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses}:
 
-stdenv.mkDerivation {
-  name = "alsa-utils-1.0.19";
+stdenv.mkDerivation rec {
+  name = "alsa-utils-1.0.21";
+  
   src = fetchurl {
-    url = ftp://ftp.alsa-project.org/pub/utils/alsa-utils-1.0.19.tar.bz2;
-    sha256 = "1bcchd5nwgb2hy0z9c6jxbqlzirkh6wvxv6nldjcwmvqmvsj8j8z";
+    url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
+    sha256 = "19jpqfrlc13yxvw3vzdw6cgdwjd97spsmn348v5181wkid8lkwvd";
   };
+  
   buildInputs = [ alsaLib gettext ncurses ];
+  
   configureFlags = "--disable-xmlto";
 
   meta = {

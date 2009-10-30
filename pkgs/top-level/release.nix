@@ -234,7 +234,6 @@ in {
   libtool_2 = all;
   libtopology = all;
   libxml2 = all;
-  libxml2New = all;
   libxslt = all;
   linuxwacom = linux;
   lout = linux;
