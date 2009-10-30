@@ -45,6 +45,7 @@ in
       device = mkOption {
         default = "";
         example = "/dev/hda";
+        type = with pkgs.lib.types; uniq string;
         description = ''
           The device on which the boot loader, GRUB, will be installed.
           If empty, GRUB won't be installed and it's your responsibility

@@ -41,9 +41,17 @@ let
   # you can provide an easy way to boot the same configuration 
   # as you use, but with another kernel
   # !!! fix this
-  children = map (x: ((import ../../../default.nix)
-    { configuration = x//{boot=((x.boot)//{grubDevice = "";});};}).system) 
-    config.nesting.children;
+  children =
+    map (childConfig:
+      (import ../../../default.nix {
+        configuration =
+          pkgs.lib.recursiveUpdate childConfig {
+            boot.loader.grub.device = "";
+            # undefined the obsolete name of the previous option.
+            boot.grubDevice = pkgs.lib.mkNotdef;
+          };
+      }).system
+    ) config.nesting.children;
 
 
   systemBuilder =
