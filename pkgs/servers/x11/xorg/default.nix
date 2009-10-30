@@ -104,8 +104,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-adobe-100dpi-1.0.1.tar.bz2;
       sha256 = "0b5m5iwc6925ysf0ljghx5znh9nkl792l77i26spdyzqsslbqhm7";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobe75dpi = (stdenv.mkDerivation ((if overrides ? fontadobe75dpi then overrides.fontadobe75dpi else x: x) {
     name = "font-adobe-75dpi-1.0.1";
@@ -114,8 +114,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-adobe-75dpi-1.0.1.tar.bz2;
       sha256 = "0wczvzn5pc3c46xxp4328s207giisy4vwwv5if574w3bs9jigrad";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobeutopia100dpi = (stdenv.mkDerivation ((if overrides ? fontadobeutopia100dpi then overrides.fontadobeutopia100dpi else x: x) {
     name = "font-adobe-utopia-100dpi-1.0.2";
@@ -124,8 +124,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-adobe-utopia-100dpi-1.0.2.tar.bz2;
       sha256 = "0plmfm3x5lsaa27slslw0sxx4jv9wb6zwwv2n8r957sq15akz36x";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobeutopia75dpi = (stdenv.mkDerivation ((if overrides ? fontadobeutopia75dpi then overrides.fontadobeutopia75dpi else x: x) {
     name = "font-adobe-utopia-75dpi-1.0.2";
@@ -134,8 +134,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-adobe-utopia-75dpi-1.0.2.tar.bz2;
       sha256 = "0mv5pa2x7xvz8cjkcfihnfnl98ljx8bbxdb26qxy2wsvbfxa8g1v";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobeutopiatype1 = (stdenv.mkDerivation ((if overrides ? fontadobeutopiatype1 then overrides.fontadobeutopiatype1 else x: x) {
     name = "font-adobe-utopia-type1-1.0.2";
@@ -144,8 +144,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-adobe-utopia-type1-1.0.2.tar.bz2;
       sha256 = "0cz2aqknq4r923v77s9r61bxvxi1jy7igz2c3ff23xjawi92fpwc";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontalias = (stdenv.mkDerivation ((if overrides ? fontalias then overrides.fontalias else x: x) {
     name = "font-alias-1.0.2";
@@ -164,8 +164,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-arabic-misc-1.0.1.tar.bz2;
       sha256 = "0q3gxbk4wcj1cpw1fhs66vf7ddar8fmkml47g8rlv127zmd31c7l";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontbh100dpi = (stdenv.mkDerivation ((if overrides ? fontbh100dpi then overrides.fontbh100dpi else x: x) {
     name = "font-bh-100dpi-1.0.1";
@@ -174,8 +174,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bh-100dpi-1.0.1.tar.bz2;
       sha256 = "15rk3k1w12pidz9373y388zqmbrmw13pmj2aydk35689gd46hvf4";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontbh75dpi = (stdenv.mkDerivation ((if overrides ? fontbh75dpi then overrides.fontbh75dpi else x: x) {
     name = "font-bh-75dpi-1.0.1";
@@ -184,8 +184,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bh-75dpi-1.0.1.tar.bz2;
       sha256 = "0h4xnrbznb2vyy950h9iq0fyxgwpdkw5pb2l424g0sgifylpacca";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontbhlucidatypewriter100dpi = (stdenv.mkDerivation ((if overrides ? fontbhlucidatypewriter100dpi then overrides.fontbhlucidatypewriter100dpi else x: x) {
     name = "font-bh-lucidatypewriter-100dpi-1.0.1";
@@ -194,8 +194,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bh-lucidatypewriter-100dpi-1.0.1.tar.bz2;
       sha256 = "1acd04cd2ls7c1gihywa2hf67ijm7iz4q5c7q9wd9yx3wp2gfml1";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontbhlucidatypewriter75dpi = (stdenv.mkDerivation ((if overrides ? fontbhlucidatypewriter75dpi then overrides.fontbhlucidatypewriter75dpi else x: x) {
     name = "font-bh-lucidatypewriter-75dpi-1.0.1";
@@ -204,8 +204,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bh-lucidatypewriter-75dpi-1.0.1.tar.bz2;
       sha256 = "0h9qxgb7v6i12qjyc98ry3ym52a602kkpsvycjb6r4f62icrrzr0";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontbhttf = (stdenv.mkDerivation ((if overrides ? fontbhttf then overrides.fontbhttf else x: x) {
     name = "font-bh-ttf-1.0.1";
@@ -214,8 +214,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bh-ttf-1.0.1.tar.bz2;
       sha256 = "1j57lzrvnzhi56y7nzz4najymgvf093574czjh77zpy4ls22zrqw";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontbhtype1 = (stdenv.mkDerivation ((if overrides ? fontbhtype1 then overrides.fontbhtype1 else x: x) {
     name = "font-bh-type1-1.0.1";
@@ -224,8 +224,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bh-type1-1.0.1.tar.bz2;
       sha256 = "0idvayiwbysvhmrm0870hpw0cy0hgadcfl0zhgrvmq6dqqk5yfys";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontbitstream100dpi = (stdenv.mkDerivation ((if overrides ? fontbitstream100dpi then overrides.fontbitstream100dpi else x: x) {
     name = "font-bitstream-100dpi-1.0.1";
@@ -234,8 +234,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bitstream-100dpi-1.0.1.tar.bz2;
       sha256 = "0iq3kzabfvdssivhi4vmzhjan535ws48hxgc8rp0xh0d9nvwj19y";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontbitstream75dpi = (stdenv.mkDerivation ((if overrides ? fontbitstream75dpi then overrides.fontbitstream75dpi else x: x) {
     name = "font-bitstream-75dpi-1.0.1";
@@ -244,8 +244,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bitstream-75dpi-1.0.1.tar.bz2;
       sha256 = "0av66i14x3wj379jkgcjswawkis0imvr31v7wmkaa5qmqaqir7ng";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontbitstreamtype1 = (stdenv.mkDerivation ((if overrides ? fontbitstreamtype1 then overrides.fontbitstreamtype1 else x: x) {
     name = "font-bitstream-type1-1.0.1";
@@ -254,8 +254,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-bitstream-type1-1.0.1.tar.bz2;
       sha256 = "1aqkw51m69k8dlwj3cllnqnfjgvpy59vd8n140v1ah4isk0pq0ji";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontcronyxcyrillic = (stdenv.mkDerivation ((if overrides ? fontcronyxcyrillic then overrides.fontcronyxcyrillic else x: x) {
     name = "font-cronyx-cyrillic-1.0.1";
@@ -264,8 +264,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-cronyx-cyrillic-1.0.1.tar.bz2;
       sha256 = "08ilkby85m8pj2nn3hnfawmxzg8gq36fpw4g7r8i2cgyi913md7p";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontcursormisc = (stdenv.mkDerivation ((if overrides ? fontcursormisc then overrides.fontcursormisc else x: x) {
     name = "font-cursor-misc-1.0.1";
@@ -274,8 +274,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-cursor-misc-1.0.1.tar.bz2;
       sha256 = "1cy1gl9xnkab8ddb1krxpisa2c4cr0h47flsir23b8za3f305vny";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontdaewoomisc = (stdenv.mkDerivation ((if overrides ? fontdaewoomisc then overrides.fontdaewoomisc else x: x) {
     name = "font-daewoo-misc-1.0.1";
@@ -284,8 +284,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-daewoo-misc-1.0.1.tar.bz2;
       sha256 = "14g4wqymc0csnpc0qa0pjndl3wqid13ll2vgk1yfqvy6h113wa72";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontdecmisc = (stdenv.mkDerivation ((if overrides ? fontdecmisc then overrides.fontdecmisc else x: x) {
     name = "font-dec-misc-1.0.1";
@@ -294,8 +294,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-dec-misc-1.0.1.tar.bz2;
       sha256 = "0lk596dw3yk9wspqy167q72r76pwzph9v4rhx0vf41ywzm5dl87v";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontibmtype1 = (stdenv.mkDerivation ((if overrides ? fontibmtype1 then overrides.fontibmtype1 else x: x) {
     name = "font-ibm-type1-1.0.1";
@@ -304,8 +304,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-ibm-type1-1.0.1.tar.bz2;
       sha256 = "06f9dihdss70w3h3rdak1zwkr0gdnryfw2lnsi85rp8grjashzl8";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontisasmisc = (stdenv.mkDerivation ((if overrides ? fontisasmisc then overrides.fontisasmisc else x: x) {
     name = "font-isas-misc-1.0.1";
@@ -314,8 +314,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-isas-misc-1.0.1.tar.bz2;
       sha256 = "0yza5kqj89b81whkrdhficwryhzfgya4w5p8l33lvscixdlh9zjj";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontjismisc = (stdenv.mkDerivation ((if overrides ? fontjismisc then overrides.fontjismisc else x: x) {
     name = "font-jis-misc-1.0.1";
@@ -324,8 +324,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-jis-misc-1.0.1.tar.bz2;
       sha256 = "1kz8ajxsalxhkqbs9m1icwrqji0972f1knqljaa62nrr0k19hfx6";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontmicromisc = (stdenv.mkDerivation ((if overrides ? fontmicromisc then overrides.fontmicromisc else x: x) {
     name = "font-micro-misc-1.0.1";
@@ -334,8 +334,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-micro-misc-1.0.1.tar.bz2;
       sha256 = "0awpwich27vhaccrqh6rg330yvfaab0d3jm6d0wzclxz73m8gfd5";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontmisccyrillic = (stdenv.mkDerivation ((if overrides ? fontmisccyrillic then overrides.fontmisccyrillic else x: x) {
     name = "font-misc-cyrillic-1.0.1";
@@ -344,8 +344,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-misc-cyrillic-1.0.1.tar.bz2;
       sha256 = "0xdgv2ad4qq1dvp6cy99wmrynri267n8dzbjk5220n6rjgyzpyns";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontmiscethiopic = (stdenv.mkDerivation ((if overrides ? fontmiscethiopic then overrides.fontmiscethiopic else x: x) {
     name = "font-misc-ethiopic-1.0.1";
@@ -354,8 +354,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-misc-ethiopic-1.0.1.tar.bz2;
       sha256 = "0j6rsf5nwgm8afvjr6c3ga5rnhpd2dqhwnczsyr4fh3c9fcklfxz";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontmiscmeltho = (stdenv.mkDerivation ((if overrides ? fontmiscmeltho then overrides.fontmiscmeltho else x: x) {
     name = "font-misc-meltho-1.0.1";
@@ -364,8 +364,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-misc-meltho-1.0.1.tar.bz2;
       sha256 = "0616v6pamg41q4yhm7wiaycky49hhkfwvabn8r89w64ayfhdfrjk";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   fontmiscmisc = (stdenv.mkDerivation ((if overrides ? fontmiscmisc then overrides.fontmiscmisc else x: x) {
     name = "font-misc-misc-1.1.0";
@@ -374,8 +374,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-misc-misc-1.1.0.tar.bz2;
       sha256 = "0ys9in88psmxsryci4pq5jj9208jlzamsmfdxw8rlcagp6555xsh";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontmuttmisc = (stdenv.mkDerivation ((if overrides ? fontmuttmisc then overrides.fontmuttmisc else x: x) {
     name = "font-mutt-misc-1.0.1";
@@ -384,8 +384,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-mutt-misc-1.0.1.tar.bz2;
       sha256 = "09bfj00kaf31zncj5k2dm1in5ldp8pmrhrji9vprp16iyp5k7gvp";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontschumachermisc = (stdenv.mkDerivation ((if overrides ? fontschumachermisc then overrides.fontschumachermisc else x: x) {
     name = "font-schumacher-misc-1.1.0";
@@ -394,8 +394,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-schumacher-misc-1.1.0.tar.bz2;
       sha256 = "0k8vvssb2dyr9vwal493zkq7x1d0draffvh8wvjzwc1rnmgr20rh";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontscreencyrillic = (stdenv.mkDerivation ((if overrides ? fontscreencyrillic then overrides.fontscreencyrillic else x: x) {
     name = "font-screen-cyrillic-1.0.2";
@@ -404,8 +404,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-screen-cyrillic-1.0.2.tar.bz2;
       sha256 = "04dyzq73yq0278pk9ssbhb9ia518djgzj9ybi8snvw9zn4gqipf5";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontsonymisc = (stdenv.mkDerivation ((if overrides ? fontsonymisc then overrides.fontsonymisc else x: x) {
     name = "font-sony-misc-1.0.1";
@@ -414,8 +414,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-sony-misc-1.0.1.tar.bz2;
       sha256 = "1jjnzhxzbk2x1byp77yddcni0myd73sxilqj75fkkkkl9j22d5fs";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontsproto = (stdenv.mkDerivation ((if overrides ? fontsproto then overrides.fontsproto else x: x) {
     name = "fontsproto-2.1.0";
@@ -434,8 +434,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-sun-misc-1.0.1.tar.bz2;
       sha256 = "02cxmssnri09iz2a673f38x3wj94yn96m55b69s1m5cgxbsj45a1";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontutil = (stdenv.mkDerivation ((if overrides ? fontutil then overrides.fontutil else x: x) {
     name = "font-util-1.1.1";
@@ -454,8 +454,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-winitzki-cyrillic-1.0.1.tar.bz2;
       sha256 = "0ihlvf6rsd8hpdyp09zfisvp44sxdddpi3zbld1ya66vf2gw4mvw";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit bdftopcf mkfontdir ;};
     
   fontxfree86type1 = (stdenv.mkDerivation ((if overrides ? fontxfree86type1 then overrides.fontxfree86type1 else x: x) {
     name = "font-xfree86-type1-1.0.2";
@@ -464,8 +464,8 @@ let
       url = mirror://xorg/X11R7.5/src/everything/font-xfree86-type1-1.0.2.tar.bz2;
       sha256 = "1k86ryqkhq3rrvsz5w7a28i9n5jv29hx6p5kq6r1k9p5mzm6l0ks";
     };
-    buildInputs = [pkgconfig ];
-  })) // {inherit ;};
+    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+  })) // {inherit mkfontdir mkfontscale ;};
     
   gccmakedep = (stdenv.mkDerivation ((if overrides ? gccmakedep then overrides.gccmakedep else x: x) {
     name = "gccmakedep-1.0.2";
