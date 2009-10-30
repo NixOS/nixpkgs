@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, libjpeg, libpng, libtiff, pam, openssl}:
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl, dbus }:
 
 let version = "1.4.1"; in
 
@@ -17,24 +17,22 @@ stdenv.mkDerivation {
       })
     ];
 
-  buildInputs = [ zlib libjpeg libpng libtiff pam ];
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus ];
 
   propagatedBuildInputs = [ openssl ];
 
-  preConfigure = ''
-    configureFlags="--localstatedir=/var"
-  '';
+  configureFlags = "--localstatedir=/var --enable-dbus"; # --with-dbusdir
 
-  preBuild = ''
-    makeFlagsArray=(INITDIR=$out/etc/rc.d)
-  '';
-  
   installFlags =
     [ # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
       "LOGDIR=$(TMPDIR)/dummy"
       "REQUESTS=$(TMPDIR)/dummy"
       "STATEDIR=$(TMPDIR)/dummy"
+      # Idem for /etc.
+      "PAMDIR=$(out)/etc/pam.d"
+      "DBUSDIR=$(out)/etc/dbus-1"
+      "INITDIR=$(out)/etc/rc.d"
       # Work around a Makefile bug.
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];

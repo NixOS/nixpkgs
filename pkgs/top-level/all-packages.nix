@@ -8474,7 +8474,7 @@ let
   };
 
   cups = import ../misc/cups {
-    inherit fetchurl stdenv zlib libjpeg libpng libtiff pam openssl;
+    inherit fetchurl stdenv pkgconfig zlib libjpeg libpng libtiff pam openssl dbus;
   };
 
   gutenprint = import ../misc/drivers/gutenprint {
