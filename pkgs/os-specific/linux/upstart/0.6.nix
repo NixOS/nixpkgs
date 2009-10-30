@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, dbus, expat }:
 
 stdenv.mkDerivation rec {
-  name = "upstart-0.6.2";
+  name = "upstart-0.6.3";
   
   src = fetchurl {
     url = "http://upstart.ubuntu.com/download/0.6/${name}.tar.bz2";
-    sha256 = "107xg5g2nms8wxr6imnh3ll4cmi784l671rp9dr06cvimcbk2pwj";
+    sha256 = "0m472fxd466ycm3l1hnkhi7dlyk1w9q42b7b1j9y1zq5nz6cnf42";
   };
 
   buildInputs = [ pkgconfig dbus expat ];
