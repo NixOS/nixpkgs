@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-confdir=/etc/fonts --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 
   # Don't try to write to /etc/fonts or /var/cache/fontconfig at install time.
-  installFlags = "CONFDIR=$(out)/etc RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
+  installFlags = "CONFDIR=$(out)/etc/fonts RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
 
   meta = {
     description = "A library for font customization and configuration";
