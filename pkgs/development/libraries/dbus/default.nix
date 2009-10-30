@@ -8,7 +8,7 @@ let
     sha256 = "1j742d22ablcgxfxa3hcwf5bq6bd1pba7fiwc3dvnjvcdb0k32ln";
   };
   
-  configureFlags = "--localstatedir=/var --with-session-socket-dir=/tmp";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
   
 in rec {
 
@@ -19,10 +19,13 @@ in rec {
     
     inherit src configureFlags;
     
-    patchPhase = ''
-      sed -i '/mkinstalldirs.*localstatedir/d' bus/Makefile.in
-      sed -i '/SUBDIRS/s/ tools//' Makefile.in
-    '';
+    patchPhase =
+      ''
+        sed -i '/mkinstalldirs.*localstatedir/d' bus/Makefile.in
+        sed -i '/SUBDIRS/s/ tools//' Makefile.in
+      '';
+
+    installFlags = "sysconfdir=$(out)/etc";
   };
 
   tools = stdenv.mkDerivation {
@@ -39,10 +42,11 @@ in rec {
     
     makeFlags = "DBUS_DAEMONDIR=${daemon}/bin";
 
-    patchPhase = ''
-      sed -i 's@ $(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
-      substituteInPlace tools/Makefile.in --replace 'install-localstatelibDATA:' 'disabled:'
-    '';
+    patchPhase =
+      ''
+        sed -i 's@ $(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
+        substituteInPlace tools/Makefile.in --replace 'install-localstatelibDATA:' 'disabled:'
+      '';
   };
 
   # I'm too lazy to separate daemon and libs now.
