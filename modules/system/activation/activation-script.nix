@@ -11,7 +11,6 @@ let
       text = ''
         #### actionScripts snippet ${a} :
         #    ========================================
-	echo "executing activation snippet ${a} at $(${pkgs.coreutils}/bin/date)"
         ${v.text}
       '';
     });
@@ -124,14 +123,8 @@ let
       # Set up Nix.
       mkdir -p /nix/etc/nix
       ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
-      stat /nix/store/ | \
-        egrep \
-	  'Access: [(]1775/[-drwxt]*[)] *Uid: [(][0-9 ]*/ *root[)] *Gid: [(][0-9 ]*/ *nixbld[)]' \
-	  > /dev/null || {
-
-              chown root.nixbld /nix/store
-              chmod 1775 /nix/store
-      }
+      chown root.nixbld /nix/store
+      chmod 1775 /nix/store
 
       # Nix initialisation.
       mkdir -m 0755 -p \
