@@ -6572,6 +6572,13 @@ let
       };
     };
 
+  chrome = import ../applications/networking/browsers/chromium {
+    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip patchelf05;
+    inherit (xlibs) libX11 libXext libXrender ;
+    inherit (gtkLibs) gtk glib pango atk;
+    inherit (gnome) GConf;
+  };
+
   cinelerra = import ../applications/video/cinelerra {
     inherit fetchurl stdenv
       automake autoconf libtool
