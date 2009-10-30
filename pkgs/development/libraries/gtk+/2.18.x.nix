@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, atk, pango, libtiff, libjpeg
 , libpng, cairo, perl, jasper, xlibs
 , xineramaSupport ? true
-, cupsSupport ? true, cups ? null, openssl ? null
+, cupsSupport ? true, cups ? null
 }:
 
 assert xineramaSupport -> xlibs.libXinerama != null;
-assert cupsSupport -> cups != null && openssl != null;
+assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
   name = "gtk+-2.18.3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr ]
     ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
-    ++ stdenv.lib.optionals cupsSupport [ cups openssl ];
+    ++ stdenv.lib.optionals cupsSupport [ cups ];
 
   passthru = { inherit libtiff libjpeg libpng; };
 

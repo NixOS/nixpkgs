@@ -3615,7 +3615,7 @@ let
 
     gtk = import ../development/libraries/gtk+/2.18.x.nix {
       inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
-        libtiff libjpeg libpng cairo xlibs cups openssl;
+        libtiff libjpeg libpng cairo xlibs cups;
     };
   
     gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
