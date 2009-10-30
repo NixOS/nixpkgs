@@ -92,7 +92,7 @@
         xorg.xineramaproto xorg.dri2proto xorg.xf86dgaproto xorg.dmxproto
         xorg.libdmx xorg.xf86vidmodeproto
       ];
-    propagatedBuildInputs = [xorg.libpciaccess xorg.inputproto];
+    propagatedBuildInputs = [xorg.libpciaccess xorg.inputproto xorg.xextproto];
     postInstall =
       ''
         rm -rf $out/share/X11/xkb/compiled
