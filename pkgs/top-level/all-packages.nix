@@ -8286,22 +8286,11 @@ let
     inherit stdenv fetchurl pkgconfig x11 xlibs dbus imlib2 freetype;
   };
 
-  gnome = recurseIntoAttrs (import ../desktops/gnome {
-    inherit
-      fetchurl stdenv pkgconfig
-      flex bison popt zlib libxml2 libxslt
-      perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
-      docbook_xml_dtd_43
-      gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
-      libcm python dbus dbus_glib ncurses which libxml2Python
-      iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool enchant isocodes polkit
-      libproxy sqlite;
-  });
-
   gnome26 = import ../desktops/gnome-2.26 pkgs;
 
   gnome28 = import ../desktops/gnome-2.28 pkgs;
+
+  gnome = gnome28;
 
   kde3 = {
 
