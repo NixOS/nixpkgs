@@ -7768,7 +7768,7 @@ let
     inherit (xlibs) xextproto libXtst inputproto;
   };
 
-  tahoe = import ../tools/networking/p2p/tahoe {
+  tahoelafs = import ../tools/networking/p2p/tahoe-lafs {
     inherit fetchurl lib unzip nettools buildPythonPackage;
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite;

@@ -2,16 +2,16 @@
 , simplejson, zfec, pycryptopp, pysqlite, nettools }:
 
 buildPythonPackage (rec {
-  name = "tahoe-1.5.0";
+  name = "tahoe-lafs-1.5.0";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://allmydata.org/source/tahoe/releases/allmydata-${name}.zip";
+    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.5.0.zip";
     sha256 = "1cgwm7v49mlfsq47k8gw2bz14d6lnls0mr6dc18815pf24z4f00n";
   };
 
   patchPhase = ''
-    echo "forcing Tahoe to use \`setuptools' 0.6c9 rather than an unreleased version"
+    echo "forcing the use of \`setuptools' 0.6c9 rather than an unreleased version"
     for i in *setup.py
     do
       sed -i "$i" -es'/0.6c12dev/0.6c9/g'
@@ -43,7 +43,7 @@ buildPythonPackage (rec {
   postInstall = ''
     # Install the documentation.
 
-    # FIXME: Inkscape setfaults when run from here.  Setting $HOME to
+    # FIXME: Inkscape segfaults when run from here.  Setting $HOME to
     # something writable doesn't help; providing $FONTCONFIG_FILE doesn't
     # help either.  So we just don't run `make' under `docs/'.
 
@@ -53,10 +53,10 @@ buildPythonPackage (rec {
   '';
 
   meta = {
-    description = "Tahoe, a decentralized, fault-tolerant, distributed storage system";
+    description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
 
     longDescription = ''
-      Tahoe is a secure, decentralized, fault-tolerant filesystem.
+      Tahoe-LAFS is a secure, decentralized, fault-tolerant filesystem.
       This filesystem is encrypted and spread over multiple peers in
       such a way that it remains available even when some of the peers
       are unavailable, malfunctioning, or malicious.
@@ -64,7 +64,7 @@ buildPythonPackage (rec {
 
     homepage = http://allmydata.org/;
 
-    license = "GPLv2+";
+    license = [ "GPLv2+" /* or */ "TGPPLv1+" ];
 
     maintainers = [ lib.maintainers.ludo ];
   };
