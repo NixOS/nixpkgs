@@ -19,7 +19,7 @@ import ./generic.nix (
     features = {
       iwlwifi = true;
     };
- 
+
     preConfigure = ''
         killOption () {
           sed -re 's/^('"$1"')=[ym]/# \1 is not set/' -i .config

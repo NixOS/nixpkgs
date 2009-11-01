@@ -5161,13 +5161,6 @@ let
     inherit bleedingEdgeRepos fetchurl stdenv flex bison kernelHeaders;
   };
 
-  # this creates a patch which can be applied to the kernel to integrate this module..
-  kernel_module_acerhk = import ../os-specific/linux/kernel/acerhk {
-    inherit fetchurl stdenv gnupatch;
-    kernel = kernel_2_6_21;
-    debug = true;
-  };
-
   _915resolution = import ../os-specific/linux/915resolution {
     inherit fetchurl stdenv;
   };
@@ -5408,149 +5401,22 @@ let
     inherit fetchurl stdenv perl;
   };
 
-  kernelHeadersArm = (
-    import ../os-specific/linux/kernel-headers-cross {
-      inherit fetchurl stdenv;
-      cross = "arm-linux";
-    });
-
-  kernelHeadersMips = (
-    import ../os-specific/linux/kernel-headers-cross {
-      inherit fetchurl stdenv;
-      cross = "mips-linux";
-    });
-
-  kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
-      inherit fetchurl stdenv;
-      cross = "sparc-linux";
-    };
-
-  kernel_2_6_20 = (
-    import ../os-specific/linux/kernel/linux-2.6.20.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "paravirt-nvidia";
-        patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
-      }
-      { name = "skas-2.6.20-v9-pre9";
-        patch = fetchurl {
-          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
-          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
-        };
-        extraConfig =
-          "CONFIG_PROC_MM=y\n" +
-          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
-      }
-      { name = "fbsplash-0.9.2-r5-2.6.20-rc6";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/gensplash/archive/fbsplash-0.9.2-r5-2.6.20-rc6.patch;
-          sha256 = "11v4f85f4jnh9sbhqcyn47krb7l1czgzjw3w8wgbq14jm0sp9294";
-        };
-        extraConfig = "CONFIG_FB_SPLASH=y";
-      }
-    ];
-  });
-
-  kernel_2_6_21 = (
-    import ../os-specific/linux/kernel/linux-2.6.21.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      /* Commented out because only acer users have need for it..
-         It takes quite a while to create the patch when unpacking the kernel sources only for that task
-      { name = "acerhk";
-        patch = kernel_module_acerhk + "/acerhk-patch.tar.bz2" ;
-        extraConfig =
-  "CONFIG_ACERHK=m\n";
-      }
-      */
-      { name = "paravirt-nvidia";
-        patch = ../os-specific/linux/kernel/2.6.20-paravirt-nvidia.patch;
-      }
-      { name = "skas-2.6.20-v9-pre9";
-        patch = fetchurl {
-          url = http://www.user-mode-linux.org/~blaisorblade/patches/skas3-2.6/skas-2.6.20-v9-pre9/skas-2.6.20-v9-pre9.patch.bz2;
-          md5 = "02e619e5b3aaf0f9768f03ac42753e74";
-        };
-        extraConfig =
-          "CONFIG_PROC_MM=y\n" +
-          "# CONFIG_PROC_MM_DUMPABLE is not set\n";
-      }
-      { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl { # !!! missing!
-          url = http://dev.gentoo.org/~dsd/genpatches/trunk/2.6.21/4200_fbsplash-0.9.2-r5.patch;
-          sha256 = "00s8074fzsly2zpir885zqkvq267qyzg6vhsn7n1z2v1z78avxd8";
-        };
-        extraConfig = "CONFIG_FB_SPLASH=y";
-      }
-    ];
-  });
-
-  kernel_2_6_22 = (
-    import ../os-specific/linux/kernel/linux-2.6.22.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
-          url = http://nixos.org/tarballs/4200_fbsplash-0.9.2-r5.patch;
-          sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
-        };
-        extraConfig = "CONFIG_FB_SPLASH=y";
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "no_hz"] false) "CONFIG_NO_HZ=y" ++
-      lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
-      lib.optional (getConfig ["kernel" "usb_suspend"] false) "CONFIG_USB_SUSPEND=y" ++
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
-  });
-
-  kernel_2_6_23 = import ../os-specific/linux/kernel/linux-2.6.23.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      /*
-      { # resume with resume=swap:/dev/xx
-        name = "tux on ice"; # (swsusp2)
-        patch = fetchurl {
-          url = "http://www.tuxonice.net/downloads/all/tuxonice-3.0-rc5-for-2.6.23.14.patch.bz2";
-          sha256 = "187190rxbn9x1c6bwv59mwy1zhff8nn5ad58cfiz23wa5wrk4mif";
-        };
-        extraConfig = "
-          CONFIG_SUSPEND2=y
-          CONFIG_SUSPEND2_FILE=y
-          CONFIG_SUSPEND2_SWAP=y
-          CONFIG_CRYPTO_LZF=y
-        ";
-      }
-      */
-      { name = "fbsplash-0.9.2-r5-2.6.21";
-        patch = fetchurl {
-          url = http://nixos.org/tarballs/4200_fbsplash-0.9.2-r5.patch;
-          sha256 = "0822wwlf2dqsap5qslnnp0yl1nbvvvb76l73w2dd8zsyn0bqg3px";
-        };
-        extraConfig = "CONFIG_FB_SPLASH=y";
-        features = { fbSplash = true; };
-      }
-      /* !!! Not needed anymore for the NixOS LiveCD - we have AUFS. */
-      { name = "unionfs-2.2.2";
-        patch = fetchurl {
-          url = http://download.filesystems.org/unionfs/unionfs-2.x/unionfs-2.2.2_for_2.6.23.13.diff.gz;
-          sha256 = "104hahp6fjpxwprcl2njw5mimyh442ma3cp5r1ww0mzq3vwrcdyz";
-        };
-        extraConfig = ''
-          CONFIG_UNION_FS=m
-          CONFIG_UNION_FS_XATTR=y
-        '';
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
+  kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
+    inherit fetchurl stdenv;
+    cross = "arm-linux";
   };
 
-  kernel_2_6_25 = (
-    import ../os-specific/linux/kernel/linux-2.6.25.nix {
+  kernelHeadersMips = import ../os-specific/linux/kernel-headers-cross {
+    inherit fetchurl stdenv;
+    cross = "mips-linux";
+  };
+
+  kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
+    inherit fetchurl stdenv;
+    cross = "sparc-linux";
+  };
+
+  kernel_2_6_25 = import ../os-specific/linux/kernel/linux-2.6.25.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "fbcondecor-0.9.4-2.6.25-rc6";
@@ -5570,7 +5436,7 @@ let
       lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
       lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
       [(getConfig ["kernel" "addConfig"] "")];
-  });
+  };
 
   kernel_2_6_26 = import ../os-specific/linux/kernel/linux-2.6.26.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -5642,8 +5508,7 @@ let
       [(getConfig ["kernel" "addConfig"] "")];
   };
 
-  kernel_2_6_29 = (
-    makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
+  kernel_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [
       { name = "fbcondecor-0.9.5-2.6.28";
@@ -5659,68 +5524,12 @@ let
         features = { secPermPatch = true; };
       }
     ];
-  });
+  };
 
   kernel_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches = [];
   };
-
-  kernel_2_6_31_rc4 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc4.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "rc4 patch";
-        patch = fetchurl {
-          url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc4.bz2";
-          sha256 =  "1qyjh8gf0clj4a8aiblrn2p7244h7dp2psnidylxr2y53z2vg62s";
-	};
-      }
-    ];
-  };
-
-  # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc4_old_i686 = (
-    kernel_2_6_31_rc4.override {
-      oldI686 = true;
-    });
-
-  kernel_2_6_31_rc3 = (
-    makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc3.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "rc3 patch";
-        patch = fetchurl {
-          url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc3.bz2";
-          sha256 =  "0659p61w8pgl00wh06vmmnkmpjy1ybhi6xnffq695nvsckcgjx79";
-	};
-      }
-    ];
-  });
-
-  # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc3_old_i686 = (
-    kernel_2_6_31_rc3.override {
-    oldI686 = true;
-  });
-
-  kernel_2_6_31_rc2 = (
-    makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31-rc2.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "rc2 patch";
-        patch = fetchurl {
-          url =  "http://kernel.org/pub/linux/kernel/v2.6/testing/patch-2.6.31-rc2.bz2";
-          sha256 =  "1xwsa9z4saz2yrsj44lcabcvqarmvrc6mgpi4xf9vlfq3pn0bfvr";
-	};
-      }
-    ];
-  });
-
-  # For older x86 processors without PAE/PAT
-  kernel_2_6_31_rc2_old_i686 = (
-    kernel_2_6_31_rc2.override {
-    oldI686 = true;
-  });
 
   kernel_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools
@@ -5856,21 +5665,14 @@ let
   };
 
   # Build the kernel modules for the some of the kernels.
-  kernelPackages_2_6_23 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_23);
   kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
   kernelPackages_2_6_26 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_26);
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
-  kernelPackages_2_6_31_rc4 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc4);
-  kernelPackages_2_6_31_rc4_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc4_old_i686);
-  kernelPackages_2_6_31_rc3 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3);
-  kernelPackages_2_6_31_rc3_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc3_old_i686);
-  kernelPackages_2_6_31_rc2 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2);
-  kernelPackages_2_6_31_rc2_old_i686 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_rc2_old_i686);
-  kernelPackages_2_6_31_zen5 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen5);
-  kernelPackages_2_6_31_zen =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen);
-  kernelPackages_2_6_31 =          recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
+  kernelPackages_2_6_31_zen5 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen5);
+  kernelPackages_2_6_31_zen = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen);
+  kernelPackages_2_6_31 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;

@@ -572,26 +572,6 @@ in {
     kernel = linux;
   };
 
-  kernelPackages_2_6_31_rc4 = {
-    aufs = linux;
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_31_rc4_old_i686 = {
-    aufs = ["i686-linux"];
-    kernel = ["i686-linux"];
-  };
-
-  kernelPackages_2_6_31_rc2 = {
-    aufs = linux;
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_31_rc2_old_i686 = {
-    aufs = ["i686-linux"];
-    kernel = ["i686-linux"];
-  };
-
   strategoPackages = {
     sdf = all;
     strategoxt = all;
