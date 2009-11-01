@@ -1,6 +1,10 @@
 pkgs:
 
 rec {
+
+  inherit (pkgs.gtkLibs) glib pango atk gtk;
+
+
 #### PLATFORM
   audiofile = import ./platform/audiofile {
     inherit (pkgs) stdenv fetchurl;
