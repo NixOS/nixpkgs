@@ -2662,6 +2662,15 @@ let
     inherit fetchurl stdenv;
   };
 
+  camlp5_strict = import ../development/tools/ocaml/camlp5 {
+    inherit stdenv fetchurl ocaml;
+  };
+
+  camlp5_transitional = import ../development/tools/ocaml/camlp5 {
+    inherit stdenv fetchurl ocaml;
+    transitional = true;
+  };
+
   ccache = import ../development/tools/misc/ccache {
     inherit fetchurl stdenv;
   };
@@ -5219,13 +5228,6 @@ let
   btrfsProgs = builderDefsPackage (import ../os-specific/linux/btrfsprogs) {
     inherit libuuid zlib acl;
   };
-
-  camlp5_strict = import ../development/tools/ocaml/camlp5
-    { inherit stdenv fetchurl ocaml; };
-
-  camlp5_transitional = import ../development/tools/ocaml/camlp5
-    { inherit stdenv fetchurl ocaml;
-      transitional = true; };
 
   cpufrequtils = (
     import ../os-specific/linux/cpufrequtils {
@@ -8278,9 +8280,9 @@ let
   ### SCIENCE/LOGIC
 
   coq = import ../applications/science/logic/coq {
-    inherit fetchurl stdenv ocaml ncurses;
+    inherit stdenv fetchurl ocaml lablgtk ncurses;
+    camlp5 = camlp5_transitional;
   };
-
 
   ### SCIENCE / ELECTRONICS
 

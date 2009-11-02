@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildFlags = "world.opt";
 
   meta = {
-    description = "Preprocessor-pretty-printer for OCaml.";
+    description = "Preprocessor-pretty-printer for OCaml";
     longDescription = ''
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
