@@ -49,6 +49,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.ejabberd ];
 
     jobs.ejabberd =
       { description = "EJabberd server";
@@ -65,12 +66,16 @@ in
             then
                 cp -av ${pkgs.ejabberd}/var/lib/ejabberd /var/lib
             fi
-
-            mkdir -p ${cfg.confDir}
-            test -f ${cfg.confDir}/ejabberd.cfg || sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
+            
+            if ! test -d ${cfg.confDir}
+	    then
+		mkdir -p ${cfg.confDir}
+	        cp ${pkgs.ejabberd}/etc/ejabberd/* ${cfg.confDir}
+	        sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
+	    fi
           '';
 
-        exec = "${pkgs.bash}/bin/sh -c 'export PATH=$PATH:${pkgs.ejabberd}/sbin:${pkgs.coreutils}/bin:${pkgs.bash}/bin; cd ~; ejabberdctl --logs ${cfg.logsDir} --spool ${cfg.spoolDir} --config ${cfg.confDir}/ejabberd.cfg start; sleep 1d'";
+        exec = "${pkgs.bash}/bin/sh -c 'export PATH=$PATH:${pkgs.ejabberd}/sbin:${pkgs.coreutils}/bin:${pkgs.bash}/bin; ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start; sleep 1d'";
 
         postStop =
           ''        
