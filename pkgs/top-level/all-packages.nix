@@ -5220,6 +5220,13 @@ let
     inherit libuuid zlib acl;
   };
 
+  camlp5_strict = import ../development/tools/ocaml/camlp5
+    { inherit stdenv fetchurl ocaml; };
+
+  camlp5_transitional = import ../development/tools/ocaml/camlp5
+    { inherit stdenv fetchurl ocaml;
+      transitional = true; };
+
   cpufrequtils = (
     import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
