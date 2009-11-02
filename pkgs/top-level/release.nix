@@ -157,6 +157,7 @@ in {
   gcc = all;
   gcc33 = linux;
   gcc34 = linux;
+  gcc41 = linux;
   gcc42 = linux;
   gcc43_multi = ["x86_64-linux"];
   gcc44 = linux;
