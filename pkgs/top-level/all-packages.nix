@@ -3725,6 +3725,10 @@ let
   jetty_gwt = import ../development/libraries/java/jetty-gwt {
     inherit stdenv fetchurl;
   };
+  
+  jetty_util = import ../development/libraries/java/jetty-util {
+    inherit stdenv fetchurl;
+  };
 
   lablgtk = import ../development/libraries/lablgtk {
     inherit fetchurl stdenv ocaml pkgconfig;
