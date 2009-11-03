@@ -6559,6 +6559,12 @@ let
     inherit (xlibs) libXtst;
   };
 
+  eclipseNewer = import ../applications/editors/eclipse-classic {
+    inherit stdenv fetchurl patchelf makeDesktopItem freetype fontconfig jre;
+    inherit (gtkLibs) glib gtk;
+    inherit (xlibs) libX11 libXext libXrender libXtst;
+  };
+
   /* commenting out eclipse - Have a look at eclipseRunner - Marc Weber
 
     Reason: You can get Eclipse in many prepacked variations on eclipse.org
@@ -6582,11 +6588,6 @@ let
     inherit (xlibs) libXtst;
   });
 
-  eclipseNewer = import ../applications/editors/eclipse-classic {
-    inherit stdenv fetchurl patchelf makeDesktopItem freetype fontconfig jre;
-    inherit (gtkLibs) glib gtk;
-    inherit (xlibs) libX11 libXext libXrender libXtst;
-  };
 
   eclipse = plugins:
     import ../applications/editors/eclipse {
