@@ -193,12 +193,12 @@ let
   #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   deepOverride = newArgs: name: x: if builtins.isAttrs x then (
     if x ? deepOverride then (x.deepOverride newArgs) else
-    if x ? override then (x.override newArgs) else 
+    if x ? override then (x.override newArgs) else
     x) else x;
   makeOverridable = f: origArgs: f origArgs //
     { override = newArgs:
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
-      deepOverride = newArgs: 
+      deepOverride = newArgs:
         makeOverridable f ((lib.mapAttrs (deepOverride newArgs) origArgs) // newArgs);
       origArgs = origArgs;
     };
@@ -500,7 +500,7 @@ let
   };
 
   asciidoc = import ../tools/typesetting/asciidoc {
-    inherit fetchurl stdenv bash python;
+    inherit fetchurl stdenv python;
   };
 
   bibtextools = import ../tools/typesetting/bibtex-tools {
@@ -3256,8 +3256,8 @@ let
     inherit (xlibs) libX11 libXext xproto xextproto;
   };
 
-  enchant = makeOverridable 
-      (selectVersion ../development/libraries/enchant "1.3.0") 
+  enchant = makeOverridable
+      (selectVersion ../development/libraries/enchant "1.3.0")
   {
     inherit fetchurl stdenv aspell pkgconfig;
     inherit (gnome) glib;
@@ -3568,7 +3568,7 @@ let
     gtk = import ../development/libraries/gtk+/1.2.x.nix {
       inherit fetchurl stdenv x11 glib;
     };
-  
+
   };
 
   gtkLibs216 = rec {
@@ -3597,11 +3597,11 @@ let
       inherit fetchurl stdenv pkgconfig perl jasper x11 glib atk pango
         libtiff libjpeg libpng cairo xlibs;
     };
-  
+
     gtkmm = import ../development/libraries/gtkmm/2.14.x.nix {
       inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
     };
-  
+
   };
 
   gtkLibs218 = rec {
@@ -3630,11 +3630,11 @@ let
       inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
         libtiff libjpeg libpng cairo xlibs cups openssl;
     };
-  
+
     gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
       inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
     };
-  
+
   };
 
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
@@ -3722,11 +3722,11 @@ let
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip xlibs libjpeg;
   };
-  
+
   jetty_gwt = import ../development/libraries/java/jetty-gwt {
     inherit stdenv fetchurl;
   };
-  
+
   jetty_util = import ../development/libraries/java/jetty-util {
     inherit stdenv fetchurl;
   };
@@ -4575,7 +4575,7 @@ let
    inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
   };
 
-  webkit = builderDefsPackage (import ../development/libraries/webkit) 
+  webkit = builderDefsPackage (import ../development/libraries/webkit)
   (lib.mapAttrs (deepOverride
     {
       # It needs fresh GTK
@@ -5671,7 +5671,7 @@ let
       inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;
     };
-    
+
     virtualboxGuestAdditions = import ../applications/virtualization/virtualbox/guest-additions {
       inherit stdenv fetchurl lib patchelf cdrkit kernel;
       inherit (xlibs) libX11 libXt libXext libXmu libXcomposite libXfixes;
@@ -7049,7 +7049,7 @@ let
 
   ikiwiki = makeOverridable (import ../applications/misc/ikiwiki) {
     inherit fetchurl stdenv perl gettext makeWrapper lib;
-    inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber 
+    inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder;
     inherit git; # The RCS should be optional
     monotone = null;
@@ -8166,13 +8166,13 @@ let
   gnome28 = import ../desktops/gnome-2.28 (pkgs// {
     gtkLibs = gtkLibs218;
     dbus_glib = dbus_glib.override {
-        inherit (gtkLibs218) glib; 
+        inherit (gtkLibs218) glib;
       };
     policykit = policykit.deepOverride {
-        inherit (gtkLibs218) glib; 
+        inherit (gtkLibs218) glib;
       };
     hal = hal.deepOverride {
-        inherit (gtkLibs218) glib; 
+        inherit (gtkLibs218) glib;
       };
   });
 
