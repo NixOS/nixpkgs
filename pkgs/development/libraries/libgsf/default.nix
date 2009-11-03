@@ -4,17 +4,23 @@
 
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.9";
+  name = "libgsf-1.14.16";
 
   src = fetchurl {
     url = "http://ftp.gnome.org/pub/gnome/sources/libgsf/1.14/${name}.tar.bz2";
-    sha256 = "1mkw60052sd6k9sq8ppz4yra0s3sdinngqi6bcmrj9977zk8yqfi";
+    sha256 = "0249n2hgrcnzphinaxng0cpn7afchg84l4ka4wka9kyv3g58zz8i";
   };
 
-  buildInputs = [
-    perl perlXMLParser pkgconfig libxml2 glib gettext bzip2
-    gnomevfs libbonobo python intltool
-  ];
+  buildInputs =
+    [ perl perlXMLParser pkgconfig gettext bzip2 gnomevfs python intltool ];
+
+  propagatedBuildInputs = [ glib libxml2 libbonobo ];
+
+  preConfigure =
+    ''
+      export NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags glib-2.0)"
+      export NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags libbonobo-2.0)"
+    '';
 
   doCheck = true;
 
