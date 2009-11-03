@@ -44,8 +44,8 @@ rec {
   };
   
   GConf = import ./platform/GConf {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat policykit;
-    inherit (pkgs.gtkLibs) glib gtk;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 policykit;
+    inherit (pkgs.gtkLibs) glib;
     inherit intltool ORBit2;
     dbus_libs = pkgs.dbus.libs;
   };
@@ -80,9 +80,9 @@ rec {
   };
   
   libgnome = import ./platform/libgnome {
-    inherit (pkgs) stdenv fetchurl pkgconfig popt;
+    inherit (pkgs) stdenv fetchurl pkgconfig popt zlib;
     inherit (pkgs.gtkLibs) glib;
-    inherit intltool esound audiofile libbonobo GConf gnome_vfs ORBit2;
+    inherit intltool esound libbonobo GConf gnome_vfs ORBit2;
   };
   
   libgnomeui = import ./platform/libgnomeui {
