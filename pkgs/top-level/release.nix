@@ -437,11 +437,9 @@ in {
   };
 
   gnome = {
-    gconfeditor = linux;
-    gnomepanel = linux;
-    gnometerminal = linux;
-    gnomeutils = linux;
+    gnome_panel = linux;
     metacity = linux;
+    gnome_vfs = linux;
   };
 
   gtkLibs = {

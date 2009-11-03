@@ -4,6 +4,10 @@ rec {
 
   inherit (pkgs.gtkLibs) glib pango atk gtk;
 
+  # Backward compatibility.
+  gnomevfs = gnome_vfs;
+  startupnotification = startup_notification;
+
 
 #### PLATFORM
   audiofile = import ./platform/audiofile {
