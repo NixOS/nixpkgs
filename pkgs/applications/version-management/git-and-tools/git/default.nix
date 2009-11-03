@@ -1,5 +1,5 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, cpio
-, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
+, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_42 libxslt ]
+         docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";

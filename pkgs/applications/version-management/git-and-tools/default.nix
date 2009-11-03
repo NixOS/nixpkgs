@@ -11,7 +11,7 @@ rec {
   git = import ./git {
     inherit fetchurl stdenv curl openssl zlib expat perl gettext
       asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_42 libxslt
+      docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
     guiSupport = getConfig ["git" "guiSupport"] false;
@@ -21,7 +21,7 @@ rec {
   gitGit = import ./git/git-git.nix {
     inherit fetchurl stdenv curl openssl zlib expat perl gettext
       asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_42 libxslt
+      docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion autoconf;
     inherit (bleedingEdgeRepos) sourceByName;
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
