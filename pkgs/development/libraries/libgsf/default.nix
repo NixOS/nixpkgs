@@ -16,12 +16,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib libxml2 libbonobo ];
 
-  preConfigure =
-    ''
-      export NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags glib-2.0)"
-      export NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags libbonobo-2.0)"
-    '';
-
   doCheck = true;
 
   meta = {
