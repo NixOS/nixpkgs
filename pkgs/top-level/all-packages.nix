@@ -6085,6 +6085,10 @@ let
     inherit fetchurl stdenv unzip;
   };
 
+  docbook_xml_dtd_45 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix {
+    inherit fetchurl stdenv unzip;
+  };
+
   docbook_xml_ebnf_dtd = import ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf {
     inherit fetchurl stdenv unzip;
   };
