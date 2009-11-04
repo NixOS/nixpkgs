@@ -6,7 +6,7 @@
 {config, pkgs, ...}:
 
 let
-  inherit (pkgs.lib) mkOption addDefaultOptionValues;
+  inherit (pkgs.lib) mkOption addDefaultOptionValues types;
 
   perServerOptions = {forMainServer}: {
 
@@ -161,6 +161,7 @@ in
             documentRoot = "/data/webroot-bar";
           }
         ];
+        type = with types; listOf optionSet;
         description = ''
           Specification of the virtual hosts served by Apache.  Each
           element should be an attribute set specifying the
@@ -168,12 +169,9 @@ in
           are the non-global options permissible for the main host.
         '';
 
-        # Add the default value for each function which is not defined.
-        # This should be replaced by sub-modules.
-        apply =
-          map (vhost:
-            addDefaultOptionValues vhostOptions vhost
-          );
+        options = [
+          vhostOptions
+        ];
       };
 
     }
