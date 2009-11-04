@@ -35,7 +35,7 @@ rec {
   };
   
   libglade = import ./platform/libglade {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 expat python gettext;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 python gettext;
     inherit (pkgs.gtkLibs) gtk;
   };
   
@@ -51,8 +51,8 @@ rec {
   };
 
   libgnomecanvas = import ./platform/libgnomecanvas {
-    inherit (pkgs) stdenv fetchurl pkgconfig cairo;
-    inherit (pkgs.gtkLibs) glib gtk pango atk;
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit (pkgs.gtkLibs) gtk;
     inherit intltool libart_lgpl libglade;
   };
 
@@ -86,11 +86,9 @@ rec {
   };
   
   libgnomeui = import ./platform/libgnomeui {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 popt cairo;
-    inherit (pkgs.xlibs) libX11 libICE;
-    inherit (pkgs.gtkLibs) glib gtk atk pango;
-    inherit intltool libgnome libgnomecanvas libbonobo libbonoboui GConf;
-    inherit gnome_vfs gnome_keyring libglade libart_lgpl ORBit2;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 xlibs;
+    inherit intltool libgnome libgnomecanvas libbonoboui GConf;
+    inherit gnome_vfs gnome_keyring libglade glib pango;
   };
   
   libbonobo = import ./platform/libbonobo {
@@ -100,9 +98,8 @@ rec {
   };
   
   libbonoboui = import ./platform/libbonoboui {
-    inherit (pkgs) stdenv fetchurl bison pkgconfig popt libxml2 cairo;
-    inherit (pkgs.gtkLibs) glib gtk atk pango;
-    inherit intltool libbonobo GConf libgnomecanvas libgnome libglade ORBit2 libart_lgpl;
+    inherit (pkgs) stdenv fetchurl bison pkgconfig popt libxml2;
+    inherit intltool libbonobo GConf libgnomecanvas libgnome libglade gtk;
   };
   
   at_spi = import ./platform/at-spi {

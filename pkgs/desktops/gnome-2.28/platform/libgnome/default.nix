@@ -9,6 +9,6 @@ stdenv.mkDerivation {
     sha256 = "03hc1m88swxxw4cq491kz7495ksv762imamzbbvhci41bc40anwv";
   };
   
-  buildInputs = [ pkgconfig popt zlib intltool esound GConf gnome_vfs ];
-  propagatedBuildInputs = [ glib libbonobo ];
+  buildInputs = [ pkgconfig popt zlib intltool GConf gnome_vfs ];
+  propagatedBuildInputs = [ glib libbonobo esound ];
 }
