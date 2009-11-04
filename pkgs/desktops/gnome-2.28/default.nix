@@ -7,6 +7,15 @@ rec {
   # Backward compatibility.
   gnomevfs = gnome_vfs;
   startupnotification = startup_notification;
+  gnomedocutils = gnome_doc_utils;
+  gnomeicontheme = gnome_icon_theme;
+
+  # !!! Missing! Need to add these.
+  libgnomeprint = throw "libgnomeprint not implemented";
+  libgtkhtml = throw "libgtkhtml not implemented";
+  vte = throw "vte not implemented";
+  libglademm = throw "libglademm not implemented";
+  gtksourceview_24 = gtksourceview;
 
 
 #### PLATFORM
@@ -129,6 +138,11 @@ rec {
     inherit (pkgs.gtkLibs) gtk;
   };
   
+  gtkglext = import ./platform/gtkglext {
+    inherit (pkgs) stdenv fetchurl mesa pkgconfig;
+    inherit (pkgs.gtkLibs) gtk pango;
+  };
+
 #### DESKTOP
 
   gnome_keyring = import ./desktop/gnome-keyring {
@@ -264,8 +278,9 @@ rec {
     inherit gnome_desktop libunique intltool GConf;
   };
 
-  gtkglext = import ./platform/gtkglext {
-    inherit (pkgs) stdenv fetchurl mesa pkgconfig;
-    inherit (pkgs.gtkLibs) gtk pango;
+  gnome_icon_theme = import ./desktop/gnome-icon-theme {
+    inherit (pkgs) stdenv fetchurl pkgconfig intltool iconnamingutils;
+    #inherit (pkgs.gtkLibs) gtk pango;
   };
+  
 }

@@ -1,7 +1,7 @@
 { fetchurl, stdenv, perl, perlXMLParser, gettext, intltool
 , pkgconfig, glib, gtk, gnomedocutils, gnomeicontheme
 , libgnome, libgnomeui, scrollkeeper, libxslt
-, libglade, dbus, dbus_glib
+, libglade, gnome_keyring, dbus, dbus_glib
 , poppler, libspectre, djvulibre, shared_mime_info
 , makeWrapper, which
 , recentListSize ? null # 5 is not enough, allow passing a different number
@@ -16,13 +16,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    perl perlXMLParser gettext intltool
-    pkgconfig glib gtk gnomedocutils gnomeicontheme
-    libgnome libgnomeui libglade scrollkeeper
+    perl perlXMLParser gettext intltool pkgconfig glib gtk
+    gnomedocutils gnomeicontheme libgnome libgnomeui libglade
+    scrollkeeper gnome_keyring
     libxslt  # for `xsltproc'
-    dbus dbus_glib
-    poppler libspectre djvulibre
-    makeWrapper which
+    dbus dbus_glib poppler libspectre djvulibre makeWrapper which
   ];
 
   configureFlags = "--with-libgnome --enable-dbus --enable-pixbuf "

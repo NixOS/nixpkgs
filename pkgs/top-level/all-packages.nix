@@ -6888,7 +6888,7 @@ let
       pkgconfig poppler libspectre djvulibre libxslt
       dbus dbus_glib shared_mime_info which makeWrapper;
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
-      libgnomeui libglade glib gtk scrollkeeper;
+      libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
   };
 
   exrdisplay = import ../applications/graphics/exrdisplay {
