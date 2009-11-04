@@ -1,16 +1,16 @@
-{stdenv, fetchurl, readline, static ? false}:
+{stdenv, fetchurl, readline, tcl, static ? false}:
 
 stdenv.mkDerivation rec {
-  name = "sqlite-3.6.16";
+  name = "sqlite-3.6.19";
 
   # Note: don't use the "amalgamation" source release, since it
   # doesn't install sqlite3.pc.
   src = fetchurl {
     url = "http://www.sqlite.org/${name}.tar.gz";
-    sha256 = "1kadzd5c82x3i7vd0cfqxc3r8a2smc04fhsxpl07jxjlva4khvqc";
+    sha256 = "7d8649c44fb97b874aa59144faaeb2356ec1fc6a8a7baa1d16e9ff5f1e097003";
   };
 
-  buildInputs = [readline];
+  buildInputs = [readline tcl];
 
   configureFlags = ''
     --enable-load-extension

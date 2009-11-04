@@ -4509,7 +4509,7 @@ let
   };
 
   sqlite = import ../development/libraries/sqlite {
-    inherit fetchurl stdenv readline;
+    inherit fetchurl stdenv readline tcl;
   };
 
   stlport =  import ../development/libraries/stlport {
