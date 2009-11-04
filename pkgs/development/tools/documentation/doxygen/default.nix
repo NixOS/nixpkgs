@@ -1,11 +1,11 @@
 {stdenv, fetchurl, graphviz, perl, flex, bison, gnumake, libX11, libXext, qt}:
 
 stdenv.mkDerivation rec {
-  name = "doxygen-1.5.8";
+  name = "doxygen-1.6.1";
 
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "1y2gyijhknam51jyh5ja2z5hlj0mr7r328rrwf27g7ljgsphlm01";
+    sha256 = "1lrrsljidil1860a8528qy3hiif5y47i89n1x1zhyjm1abqfsnjc";
   };
 
   patches = [ ./tmake.patch ];
