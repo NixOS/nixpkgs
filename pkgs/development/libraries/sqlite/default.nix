@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
   buildInputs = [readline tcl];
 
   configureFlags = ''
+    CFLAGS=-O3
     --enable-load-extension
     ${if static then "--disable-shared --enable-static" else ""}
-    --disable-amalgamation
+    --enable-amalgamation
     --enable-threadsafe
     --disable-cross-thread-connections
     --disable-tcl
