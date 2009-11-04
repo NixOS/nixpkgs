@@ -1,4 +1,22 @@
-{stdenv, fetchurl, zlib, alsaLib, curl}:
+{ stdenv
+, fetchurl
+, zlib
+, alsaLib
+, curl
+, nss
+, nspr
+, fontconfig
+, freetype
+, expat
+, libX11
+, libXext
+, libXrender
+, libXt
+, gtk 
+, glib
+, pango
+, atk
+}:
 
 stdenv.mkDerivation {
   name = "flashplayer-10.0.32.18";
@@ -23,7 +41,7 @@ stdenv.mkDerivation {
     mozillaPlugin = "/lib/mozilla/plugins";
   };
 
-  rpath = "${zlib}/lib:${alsaLib}/lib:${curl}/lib";
+  rpath = stdenv.lib.makeLibraryPath [zlib alsaLib curl nss nspr fontconfig freetype expat libX11 libXext libXrender libXt gtk glib pango atk] ;
 
   meta = {
     description = "Adobe Flash Player browser plugin";

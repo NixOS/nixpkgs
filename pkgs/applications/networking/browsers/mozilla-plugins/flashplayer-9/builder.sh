@@ -6,7 +6,7 @@ dontPatchELF=1
 installPhase() {
     ensureDir $out/lib/mozilla/plugins
     cp -p libflashplayer.so $out/lib/mozilla/plugins
-    patchelf --set-rpath "$zlib/lib:$alsaLib/lib" $out/lib/mozilla/plugins/libflashplayer.so
+    patchelf --set-rpath $rpath $out/lib/mozilla/plugins/libflashplayer.so
 }
 
 genericBuild

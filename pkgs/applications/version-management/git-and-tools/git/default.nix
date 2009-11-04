@@ -1,5 +1,5 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, cpio
-, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_42
+, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
@@ -9,11 +9,11 @@
 assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBindings);
 
 stdenv.mkDerivation rec {
-  name = "git-1.6.5.1";
+  name = "git-1.6.5.2";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "1zfrg8ifwfqgwp0x52rkpg4j9p0lvxlsb8k0fsszhl52amm2r3np";
+    sha256 = "a7050b45a4c5a2b40db83dc67dc3ff4b422ef1864df72316b3221ead2eefb5c1";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
        [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_42 libxslt ]
+         docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";

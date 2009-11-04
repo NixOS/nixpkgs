@@ -19,6 +19,9 @@ with stdenv.lib;
 
 let
 
+  majorVersion = "2.6";
+  version = "${majorVersion}.4";
+
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
     [bzip2]
@@ -38,11 +41,11 @@ let
 in
 
 stdenv.mkDerivation ( {
-  name = "python-2.6.3";
+  name = "python-${version}";
 
   src = fetchurl {
-    url = http://www.python.org/ftp/python/2.6.3/Python-2.6.3.tar.bz2;
-    sha256 = "096wxhibhss3clgcj5n3xx5wmdsqmywk3h3bp68sicp7sy4y6rs3";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
+    sha256 = "dad8d5575144a210d5cc4fdbc40b8a26386e9cdb1ef58941bec0be02c7cb9d89";
   };
 
   patches = [
@@ -53,7 +56,7 @@ stdenv.mkDerivation ( {
   inherit buildInputs;
   C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
   LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-  configureFlags = ''${if stdenv.isDarwin then "" else " --enable-shared"} --with-wctype-functions'';
+  configureFlags = ''${if stdenv.isDarwin then "" else " --enable-shared"} --with-threads --enable-unicode --with-wctype-functions'';
 
   preConfigure = ''
     # Purity.
@@ -67,7 +70,7 @@ stdenv.mkDerivation ( {
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
-    rm -rf $out/lib/python2.6/test
+    rm -rf "$out/lib/python${majorVersion}/test"
   '';
 
   passthru = {
@@ -77,7 +80,7 @@ stdenv.mkDerivation ( {
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null);
-    libPrefix = "python2.6";
+    libPrefix = "python${majorVersion}";
   };
 
   meta = {

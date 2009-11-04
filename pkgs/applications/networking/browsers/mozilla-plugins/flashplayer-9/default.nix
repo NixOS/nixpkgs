@@ -1,4 +1,21 @@
-{stdenv, fetchurl, zlib, alsaLib}:
+{ stdenv
+, fetchurl
+, zlib
+, alsaLib
+, nss
+, nspr
+, fontconfig
+, freetype
+, expat
+, libX11
+, libXext
+, libXrender
+, libXt
+, gtk
+, glib
+, pango
+, atk
+}:
 
 assert stdenv.system == "i686-linux";
 
@@ -16,6 +33,8 @@ stdenv.mkDerivation {
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
   };
+
+  rpath = stdenv.lib.makeLibraryPath [zlib alsaLib nss nspr fontconfig freetype expat libX11 libXext libXrender libXt gtk glib pango atk] ;
 
   meta = {
     description = "Adobe Flash Player browser plugin";

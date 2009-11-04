@@ -4,13 +4,13 @@
 , freetype, fontconfig
 , application ? "browser" }:
 
-let version = "3.5.3"; in
+let version = "3.5.4"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.bz2";
-    sha256 = "0cjf75crk4g84swya57ixm7152v774hsxif3xrws4yz9dasqlz5j";
+    sha256 = "0j506l2qg30xg11zlfk8b2jwrp8bghc286j21gx0ws2qy6snagnr";
   };
 
   buildInputs = [
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     export dontPatchELF=1;
 
     # Strip some more stuff
-    strip -S $out/lib/*/* || true
-    
+    strip -S "$out/lib/"*"/"* || true
+
     # This fixes starting IceCat when there already is a running
     # instance.  The `icecat' wrapper script actually expects to be
     # in the same directory as `run-mozilla.sh', apparently.
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     # Put the GNU IceCat icon in the right place.
     ensureDir $out/lib/$libDir/chrome/icons/default
     ln -s ../../../icons/default.xpm  $out/lib/$libDir/chrome/icons/default/
-  ''; # */
+  '';
 
   meta = {
     description = "GNU IceCat, a free web browser based on Mozilla Firefox";
@@ -109,5 +109,3 @@ stdenv.mkDerivation {
     isFirefox3Like = true;
   };
 }
-
-

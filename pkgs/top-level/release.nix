@@ -158,6 +158,7 @@ in {
   gcc = all;
   gcc33 = linux;
   gcc34 = linux;
+  gcc41 = linux;
   gcc42 = linux;
   gcc43_multi = ["x86_64-linux"];
   gcc44 = linux;
@@ -351,7 +352,7 @@ in {
   syslinux = ["i686-linux"];
   sysvinit = linux;
   sysvtools = linux;
-  tahoe = linux;
+  tahoelafs = linux;
   tangogps = linux;
   tcl = linux;
   tcpdump = linux;
@@ -544,26 +545,6 @@ in {
 
   kernelPackages_2_6_31 = {
     kernel = linux;
-  };
-
-  kernelPackages_2_6_31_rc4 = {
-    aufs = linux;
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_31_rc4_old_i686 = {
-    aufs = ["i686-linux"];
-    kernel = ["i686-linux"];
-  };
-
-  kernelPackages_2_6_31_rc2 = {
-    aufs = linux;
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_31_rc2_old_i686 = {
-    aufs = ["i686-linux"];
-    kernel = ["i686-linux"];
   };
 
   strategoPackages = {
