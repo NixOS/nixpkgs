@@ -7020,8 +7020,9 @@ let
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser
       python pygtk gettext xlibs intltool babl gegl;
-    inherit (gnome) gtk libgtkhtml libart_lgpl;
+    inherit (gnome) gtk libart_lgpl;
   };
+  
   gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
