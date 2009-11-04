@@ -38,8 +38,9 @@ let
   packagesWithMetaPlatform = attrSet: 
     if builtins ? tryEval then 
       let pairs = pkgs.lib.concatMap 
-        (x: let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
-          if val.success && val.value != [] then [{name=x; value=val.value;}] else [])
+        (x:
+          let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
+          if builtins.isAttrs x && val.success && val.value != [] then [{name=x; value=val.value;}] else [])
         (builtins.attrNames attrSet);
       in
         builtins.listToAttrs pairs
