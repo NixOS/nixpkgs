@@ -56,6 +56,10 @@
     buildInputs = attrs.buildInputs ++ [xorg.kbproto xorg.libxkbfile xorg.randrproto];
   };
 
+  xf86inputsynaptics = attrs: attrs // {
+    makeFlags = "sdkdir=\${out}/include/xorg";
+  };
+
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
