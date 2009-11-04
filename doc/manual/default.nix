@@ -25,7 +25,7 @@ let
 
     sources = pkgs.lib.sourceFilesBySuffices ./. [".xml"];
 
-    buildInputs = [pkgs.libxml2New pkgs.libxslt];
+    buildInputs = [pkgs.libxml2 pkgs.libxslt];
 
     xsltFlags = ''
       --param section.autolabel 1

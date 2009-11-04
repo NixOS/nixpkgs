@@ -7,8 +7,7 @@ let
 
   cfg = config.services.dbus;
 
-  # !!! dbus_temp uses /etc/dbus-1; will be merged into pkgs.dbus later.
-  dbus = pkgs.dbus_temp;
+  inherit (pkgs) dbus;
 
   homeDir = "/var/run/dbus";
 
