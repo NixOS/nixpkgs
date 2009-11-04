@@ -33,24 +33,12 @@ let
     fullConfig = config; # machine config
   };
 
-
-  vhostOptions = import ./per-server-options.nix {
-    inherit mkOption;
-    forMainServer = false;
-  };
-
-  vhosts = let
-    makeVirtualHost = cfgIn: 
-      let
-        # Fill in defaults for missing options.
-        cfg = addDefaultOptionValues vhostOptions cfgIn;
-      in cfg;
-    in map makeVirtualHost mainCfg.virtualHosts;
-
+  vhosts = mainCfg.virtualHosts;
 
   allHosts = [mainCfg] ++ vhosts;
     
-
+  # !!! This should be replaced by sub-modules to allow non-intrusive
+  # extensions of NixOS.
   callSubservices = serverInfo: defs:
     let f = svc:
       let 
@@ -377,13 +365,6 @@ in
         ";
       };
 
-      extraConfig = mkOption {
-        default = "";
-        description = "
-          These configuration lines will be passed verbatim to the apache config
-        ";
-      };
-
       extraModules = mkOption {
         default = [];
         example = [ "proxy_connect" { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
@@ -444,24 +425,6 @@ in
           files).  It is created automatically.  Note that the default,
           <filename>/var/run/httpd</filename>, is deleted at boot time.
         ";
-      };
-
-      virtualHosts = mkOption {
-        default = [];
-        example = [
-          { hostName = "foo";
-            documentRoot = "/data/webroot-foo";
-          }
-          { hostName = "bar";
-            documentRoot = "/data/webroot-bar";
-          }
-        ];
-        description = ''
-          Specification of the virtual hosts served by Apache.  Each
-          element should be an attribute set specifying the
-          configuration of the virtual host.  The available options
-          are the non-global options permissible for the main host.
-        '';
       };
 
 
@@ -542,13 +505,7 @@ in
 
       };
 
-    }
-
-    # Include the options shared between the main server and virtual hosts.
-    // (import ./per-server-options.nix {
-      inherit mkOption;
-      forMainServer = true;
-    });
+    };
 
   };
 

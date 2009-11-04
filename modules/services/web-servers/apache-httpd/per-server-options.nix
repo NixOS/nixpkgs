@@ -3,8 +3,13 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{forMainServer, mkOption}:
+{config, pkgs, ...}:
 
+let
+  inherit (pkgs.lib) mkOption addDefaultOptionValues;
+
+  perServerOptions = {forMainServer}:
+# !!! The following have to be re-indent later.
 {
 
   hostName = mkOption {
@@ -135,4 +140,46 @@
     ";
   };
 
+};
+
+
+  vhostOptions = perServerOptions {
+    forMainServer = false;
+  };
+
+in
+
+{
+  options = {
+    services.httpd = {
+
+      virtualHosts = mkOption {
+        default = [];
+        example = [
+          { hostName = "foo";
+            documentRoot = "/data/webroot-foo";
+          }
+          { hostName = "bar";
+            documentRoot = "/data/webroot-bar";
+          }
+        ];
+        description = ''
+          Specification of the virtual hosts served by Apache.  Each
+          element should be an attribute set specifying the
+          configuration of the virtual host.  The available options
+          are the non-global options permissible for the main host.
+        '';
+
+        # Add the default value for each function which is not defined.
+        # This should be replaced by sub-modules.
+        apply =
+          map (vhost:
+            addDefaultOptionValues vhostOptions vhost
+          );
+      };
+
+    }
+    // perServerOptions {forMainServer = true;}
+    ;
+  };
 }
