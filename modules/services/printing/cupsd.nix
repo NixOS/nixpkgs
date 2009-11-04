@@ -145,6 +145,8 @@ in
 
     environment.systemPackages = [cups];
 
+    services.dbus.packages = [cups];
+
     environment.etc =
       [ # CUPS expects the following files in its ServerRoot.
         { source = "${cups}/etc/cups/mime.convs";
