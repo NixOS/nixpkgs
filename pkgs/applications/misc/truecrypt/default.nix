@@ -45,12 +45,12 @@ library, use the 'NOGUI' parameter:
 }:
 
 stdenv.mkDerivation {
-  name = "truecrypt-6.2a";
+  name = "truecrypt-6.3";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.sfr-fresh.com/unix/misc/TrueCrypt-6.2a-Source.tar.gz;
-    sha256 = "1a75wkn33bdcjhb483f383hid5w9p0ap1xk0lj226350pm71sa56";
+    url = http://www.sfr-fresh.com/unix/misc/TrueCrypt_6.3_Source.tar.gz;
+    sha256 = "0vgyng5zmdjdqlhai0szzapfm14njr3swamnw6yyb6pnjdncd0jq";
   };
 
   pkcs11h = fetchurl {
