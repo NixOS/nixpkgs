@@ -8287,8 +8287,6 @@ let
     inherit stdenv fetchurl pkgconfig x11 xlibs dbus imlib2 freetype;
   };
 
-  gnome26 = import ../desktops/gnome-2.26 pkgs;
-
   gnome28 = import ../desktops/gnome-2.28 pkgs;
 
   gnome = gnome28;
