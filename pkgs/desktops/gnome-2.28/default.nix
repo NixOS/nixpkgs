@@ -2,7 +2,7 @@ pkgs:
 
 rec {
 
-  inherit (pkgs.gtkLibs) glib pango atk gtk;
+  inherit (pkgs.gtkLibs) glib pango atk gtk gtkmm;
 
   # Backward compatibility.
   gnomevfs = gnome_vfs;
@@ -14,11 +14,11 @@ rec {
   libgnomeprint = throw "libgnomeprint not implemented";
   libgtkhtml = throw "libgtkhtml not implemented";
   vte = throw "vte not implemented";
-  libglademm = throw "libglademm not implemented";
   gtksourceview_24 = gtksourceview;
 
 
 #### PLATFORM
+
   audiofile = import ./platform/audiofile {
     inherit (pkgs) stdenv fetchurl;
   };
@@ -280,7 +280,13 @@ rec {
 
   gnome_icon_theme = import ./desktop/gnome-icon-theme {
     inherit (pkgs) stdenv fetchurl pkgconfig intltool iconnamingutils;
-    #inherit (pkgs.gtkLibs) gtk pango;
   };
   
+#### BINDINGS
+
+  libglademm = import ./bindings/libglademm {
+    inherit (pkgs) stdenv fetchurl pkgconfig intltool;
+    inherit gtkmm libglade;
+  };
+
 }
