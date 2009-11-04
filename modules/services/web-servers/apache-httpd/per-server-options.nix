@@ -3,12 +3,18 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{config, pkgs, ...}:
+{options, config, pkgs, ...}@moduleArguments:
 
 let
   inherit (pkgs.lib) mkOption addDefaultOptionValues types;
 
-  perServerOptions = {forMainServer}: {
+  mainServerArgs = {
+    config = config.services.httpd;
+    options = options.services.httpd;
+  };
+
+
+  perServerOptions = {forMainServer}: {config, ...}: {
 
     hostName = mkOption {
       default = "localhost";
@@ -26,10 +32,12 @@ let
     };
 
     port = mkOption {
-      default = 0;
+      default = if config.enableSSL then 443 else 80;
+      type = with types; uniq int;
       description = "
-        Port for the server.  0 means use the default port: 80 for http
-        and 443 for https (i.e. when enableSSL is set).
+        Port for the server.  The default port depends on the
+        <option>enableSSL</option> option of this server. (80 for http and
+        443 for https).
       ";
     };
 
@@ -175,7 +183,7 @@ in
       };
 
     }
-    // perServerOptions {forMainServer = true;}
+    // perServerOptions {forMainServer = true;} mainServerArgs
     ;
   };
 }

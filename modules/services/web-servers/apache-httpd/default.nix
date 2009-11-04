@@ -10,7 +10,7 @@ let
 
   httpd = pkgs.apacheHttpd;
 
-  getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
+  getPort = cfg: cfg.port;
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
   extraForeignModules = filter builtins.isAttrs extraModules;
