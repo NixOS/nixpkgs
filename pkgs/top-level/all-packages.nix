@@ -3508,8 +3508,8 @@ let
     inherit (xorg) libX11 libXv libXext;
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
-             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc;
-    libsoup = gnome26.libsoup;
+             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc
+	     libsoup;
   });
 
   gnet = import ../development/libraries/gnet {
@@ -7489,7 +7489,7 @@ let
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
-    inherit (gnome26) GConf ORBit2;
+    inherit (gnome) GConf ORBit2;
   };
 
   opera = import ../applications/networking/browsers/opera {
