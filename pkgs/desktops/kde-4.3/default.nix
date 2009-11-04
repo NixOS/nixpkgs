@@ -11,8 +11,8 @@ pkgs.recurseIntoAttrs (rec {
 
   phonon = import ./support/phonon {
     inherit (pkgs) stdenv fetchurl lib cmake;
-    inherit (pkgs) qt4 pthread_stubs gst_all xineLib;
-    inherit (pkgs.xlibs) libXau libXdmcp;
+    inherit (pkgs) qt4 gst_all xineLib;
+    inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
     inherit automoc4;
   };
 
@@ -68,8 +68,8 @@ pkgs.recurseIntoAttrs (rec {
 ### BASE  
   kdebase_workspace = import ./base-workspace {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python pam sip pyqt4;
-    inherit (pkgs) lm_sensors libxklavier libusb pthread_stubs boost ConsoleKit;
-    inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver;
+    inherit (pkgs) lm_sensors libxklavier libusb boost ConsoleKit;
+    inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver libpthreadstubs;
     inherit kdelibs kdelibs_experimental kdepimlibs kdebindings;
     inherit automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt;
   };

@@ -146,6 +146,27 @@ while (<>) {
 	$extraAttrs{$pkg} = " preInstall = \"installFlags=(FCCACHE=true)\"; ";
     }
 
+    my $isFont;
+
+    if ($file =~ /XORG_FONT_BDF_UTILS/) {
+        push @requires, "bdftopcf", "mkfontdir";
+        $isFont = 1;
+    }
+
+    if ($file =~ /XORG_FONT_SCALED_UTILS/) {
+        push @requires, "mkfontscale", "mkfontdir";
+        $isFont = 1;
+    }
+
+    if ($file =~ /XORG_FONT_UCS2ANY/) {
+        push @requires, "fontutil";
+        $isFont = 1;
+    }
+
+    if ($isFont) {
+        $extraAttrs{$pkg} = " configureFlags = \"--with-fontrootdir=\$(out)/lib/X11/fonts\"; ";
+    }
+
     sub process {
         my $requires = shift;
 	my $s = shift;

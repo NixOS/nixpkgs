@@ -124,7 +124,7 @@ interpretation:</para>
 </section>
 
 
-<section><title>Licenses</title>
+<section xml:id="sec-meta-license"><title>Licenses</title>
 
 <note><para>This is just a first attempt at standardising the license
 attribute.</para></note>
@@ -165,6 +165,18 @@ following:
   </varlistentry>
 
   <varlistentry>
+    <term><varname>bsd</varname></term>
+    <listitem><para>Catch-all for licenses that are essentially
+    similar to <link
+    xlink:href="http://www.gnu.org/licenses/license-list.html#ModifiedBSD">the
+    original BSD license with the advertising clause removed</link>,
+    i.e. permissive non-copyleft free software licenses.  This
+    includes the <link
+    xlink:href="http://www.gnu.org/licenses/license-list.html#X11License">X11
+    (“MIT”) License</link>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>free</varname></term>
     <listitem><para>Catch-all for free software licenses not listed
     above.</para></listitem>
@@ -174,6 +186,12 @@ following:
     <term><varname>free-copyleft</varname></term>
     <listitem><para>Catch-all for free, copyleft software licenses not
     listed above.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>free-non-copyleft</varname></term>
+    <listitem><para>Catch-all for free, non-copyleft software licenses
+    not listed above.</para></listitem>
   </varlistentry>
 
   <varlistentry>

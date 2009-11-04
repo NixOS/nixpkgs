@@ -1,7 +1,24 @@
 pkgs:
 
 rec {
+
+  inherit (pkgs.gtkLibs) glib pango atk gtk gtkmm;
+
+  # Backward compatibility.
+  gnomevfs = gnome_vfs;
+  startupnotification = startup_notification;
+  gnomedocutils = gnome_doc_utils;
+  gnomeicontheme = gnome_icon_theme;
+
+  # !!! Missing! Need to add these.
+  libgnomeprint = throw "libgnomeprint not implemented";
+  libgtkhtml = throw "libgtkhtml not implemented";
+  vte = throw "vte not implemented";
+  gtksourceview_24 = gtksourceview;
+
+
 #### PLATFORM
+
   audiofile = import ./platform/audiofile {
     inherit (pkgs) stdenv fetchurl;
   };
@@ -27,7 +44,7 @@ rec {
   };
   
   libglade = import ./platform/libglade {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 expat python gettext;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 python gettext;
     inherit (pkgs.gtkLibs) gtk;
   };
   
@@ -36,15 +53,15 @@ rec {
   };
   
   GConf = import ./platform/GConf {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 expat policykit;
-    inherit (pkgs.gtkLibs) glib gtk;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxml2 policykit;
+    inherit (pkgs.gtkLibs) glib;
     inherit intltool ORBit2;
     dbus_libs = pkgs.dbus.libs;
   };
 
   libgnomecanvas = import ./platform/libgnomecanvas {
-    inherit (pkgs) stdenv fetchurl pkgconfig cairo;
-    inherit (pkgs.gtkLibs) glib gtk pango atk;
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit (pkgs.gtkLibs) gtk;
     inherit intltool libart_lgpl libglade;
   };
 
@@ -72,17 +89,15 @@ rec {
   };
   
   libgnome = import ./platform/libgnome {
-    inherit (pkgs) stdenv fetchurl pkgconfig popt;
+    inherit (pkgs) stdenv fetchurl pkgconfig popt zlib;
     inherit (pkgs.gtkLibs) glib;
-    inherit intltool esound audiofile libbonobo GConf gnome_vfs ORBit2;
+    inherit intltool esound libbonobo GConf gnome_vfs ORBit2;
   };
   
   libgnomeui = import ./platform/libgnomeui {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 popt cairo;
-    inherit (pkgs.xlibs) libX11 libICE;
-    inherit (pkgs.gtkLibs) glib gtk atk pango;
-    inherit intltool libgnome libgnomecanvas libbonobo libbonoboui GConf;
-    inherit gnome_vfs gnome_keyring libglade libart_lgpl ORBit2;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 xlibs;
+    inherit intltool libgnome libgnomecanvas libbonoboui GConf;
+    inherit gnome_vfs gnome_keyring libglade glib pango;
   };
   
   libbonobo = import ./platform/libbonobo {
@@ -92,9 +107,8 @@ rec {
   };
   
   libbonoboui = import ./platform/libbonoboui {
-    inherit (pkgs) stdenv fetchurl bison pkgconfig popt libxml2 cairo;
-    inherit (pkgs.gtkLibs) glib gtk atk pango;
-    inherit intltool libbonobo GConf libgnomecanvas libgnome libglade ORBit2 libart_lgpl;
+    inherit (pkgs) stdenv fetchurl bison pkgconfig popt libxml2;
+    inherit intltool libbonobo GConf libgnomecanvas libgnome libglade gtk;
   };
   
   at_spi = import ./platform/at-spi {
@@ -115,8 +129,7 @@ rec {
   
   # Freedesktop library
   startup_notification = import ./platform/startup-notification {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit (pkgs.xlibs) libX11 libxcb libICE xcbutil libSM;
+    inherit (pkgs) stdenv fetchurl pkgconfig xlibs;
   };
   
   # Required for nautilus
@@ -125,6 +138,11 @@ rec {
     inherit (pkgs.gtkLibs) gtk;
   };
   
+  gtkglext = import ./platform/gtkglext {
+    inherit (pkgs) stdenv fetchurl mesa pkgconfig;
+    inherit (pkgs.gtkLibs) gtk pango;
+  };
+
 #### DESKTOP
 
   gnome_keyring = import ./desktop/gnome-keyring {
@@ -260,8 +278,15 @@ rec {
     inherit gnome_desktop libunique intltool GConf;
   };
 
-  gtkglext = import ./platform/gtkglext {
-    inherit (pkgs) stdenv fetchurl mesa pkgconfig;
-    inherit (pkgs.gtkLibs) gtk pango;
+  gnome_icon_theme = import ./desktop/gnome-icon-theme {
+    inherit (pkgs) stdenv fetchurl pkgconfig intltool iconnamingutils;
   };
+  
+#### BINDINGS
+
+  libglademm = import ./bindings/libglademm {
+    inherit (pkgs) stdenv fetchurl pkgconfig intltool;
+    inherit gtkmm libglade;
+  };
+
 }

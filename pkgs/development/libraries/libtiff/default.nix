@@ -1,14 +1,18 @@
-{stdenv, fetchurl, zlib, libjpeg}:
-
-assert zlib != null && libjpeg != null;
+{ stdenv, fetchurl, zlib, libjpeg }:
 
 stdenv.mkDerivation {
-  name = "libtiff-3.8.2";
-  builder = ./builder.sh;
+  name = "libtiff-3.9.1";
+  
   src = fetchurl {
-    url = ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.8.2.tar.gz;
-    md5 = "fbb6f446ea4ed18955e2714934e5b698";
+    url = ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.9.1.tar.gz;
+    sha256 = "168yssav47xih2y17m7psj4k6ngnfai300bbfznc75hn3crxfdil";
   };
+  
   propagatedBuildInputs = [zlib libjpeg];
-  inherit zlib libjpeg;
+
+  meta = {
+    description = "Library and utilities for working with the TIFF image file format";
+    homepage = http://www.libtiff.org/;
+    license = "bsd";
+  };
 }

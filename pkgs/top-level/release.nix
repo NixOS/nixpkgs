@@ -236,7 +236,6 @@ in {
   libtool_2 = all;
   libtopology = all;
   libxml2 = all;
-  libxml2New = all;
   libxslt = all;
   linuxwacom = linux;
   lout = linux;
@@ -440,11 +439,9 @@ in {
   };
 
   gnome = {
-    gconfeditor = linux;
-    gnomepanel = linux;
-    gnometerminal = linux;
-    gnomeutils = linux;
+    gnome_panel = linux;
     metacity = linux;
+    gnome_vfs = linux;
   };
 
   gtkLibs = {
@@ -476,30 +473,6 @@ in {
   kde3 = {
     kdebase = linux;
     kdelibs = linux;
-  };
-
-  kde42 = {
-    amarok = linux;
-    kdeadmin = linux;
-    kdeartwork = linux;
-    kdebase = linux;
-    kdebase_runtime = linux;
-    kdebase_workspace = linux;
-    kdeedu = linux;
-    kdegames = linux;
-    kdegraphics = linux;
-    kdelibs = linux;
-    kdemultimedia = linux;
-    kdenetwork = linux;
-    kdepim = linux;
-    kdeplasma_addons = linux;
-    kdesdk = linux;
-    kdetoys = linux;
-    kdeutils = linux;
-    kdewebdev = linux;
-    ktorrent = linux;
-    kdesvn = linux;
-    krusader = linux;
   };
 
   kde43 = {

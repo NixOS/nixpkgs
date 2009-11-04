@@ -187,14 +187,15 @@ let
     in
       import (dir + "/${pVersion}.nix") (args // { version = pVersion; });
 
-  # usage: (you can use override multiple times)
-  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
-  #     noBuildInputs = d.override { buildInputs = []; }
-  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   deepOverride = newArgs: name: x: if builtins.isAttrs x then (
     if x ? deepOverride then (x.deepOverride newArgs) else
     if x ? override then (x.override newArgs) else
     x) else x;
+    
+  # usage: (you can use override multiple times)
+  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
+  #     noBuildInputs = d.override { buildInputs = []; }
+  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   makeOverridable = f: origArgs: f origArgs //
     { override = newArgs:
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
@@ -3235,13 +3236,6 @@ let
     useX11 = true; # !!! `false' doesn't build
   };
 
-  # !!! temporary fork; will replace dbus soon.
-  dbus_temp = import ../development/libraries/dbus/temp.nix {
-    inherit fetchurl stdenv pkgconfig expat;
-    inherit (xlibs) libX11 libICE libSM;
-    useX11 = true; # !!! `false' doesn't build
-  };
-
   dbus_glib = makeOverridable (import ../development/libraries/dbus-glib) {
     inherit fetchurl stdenv pkgconfig gettext dbus expat glib;
   };
@@ -3528,8 +3522,8 @@ let
     inherit (xorg) libX11 libXv libXext;
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
-             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc;
-    libsoup = gnome26.libsoup;
+             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc
+	     libsoup;
   });
 
   gnet = import ../development/libraries/gnet {
@@ -3555,7 +3549,7 @@ let
     inherit (gnome) gtk;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs216;
+  gtkLibs = recurseIntoAttrs gtkLibs218;
 
   glib = gtkLibs.glib;
 
@@ -3628,7 +3622,7 @@ let
 
     gtk = import ../development/libraries/gtk+/2.18.x.nix {
       inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
-        libtiff libjpeg libpng cairo xlibs cups openssl;
+        libtiff libjpeg libpng cairo xlibs cups;
     };
 
     gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
@@ -3829,7 +3823,8 @@ let
   };
 
   libdrm = import ../development/libraries/libdrm {
-    inherit fetchurl stdenv pkgconfig pthread_stubs;
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xorg) libpthreadstubs;
   };
 
   libdvdcss = import ../development/libraries/libdvdcss {
@@ -4144,12 +4139,6 @@ let
     pythonSupport = false;
   };
 
-  # !!! Merge later.
-  libxml2New = makeOverridable (import ../development/libraries/libxml2/2.7.4.nix) {
-    inherit fetchurl stdenv zlib python;
-    pythonSupport = false;
-  };
-
   libxml2Python = libxml2.override {
     pythonSupport = true;
   };
@@ -4374,14 +4363,10 @@ let
     inherit fetchurl stdenv;
   };
 
-  pthread_stubs = import ../development/libraries/pthread-stubs {
-    inherit fetchurl stdenv;
-  };
-
   qt3 = makeOverridable (import ../development/libraries/qt-3) {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor;
+      libXmu libXinerama libXcursor;
     openglSupport = mesaSupported;
     mysqlSupport = getConfig ["qt" "mysql"] false;
   };
@@ -4579,17 +4564,9 @@ let
    inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
   };
 
-  webkit = builderDefsPackage (import ../development/libraries/webkit)
-  (lib.mapAttrs (deepOverride
-    {
-      # It needs fresh GTK
-      inherit (gnome28) gtkdoc libsoup GConf;
-      inherit (gtkLibs218) gtk atk pango glib;
-      gconf = gnome28.GConf;
-    })
-  {
+  webkit = builderDefsPackage (import ../development/libraries/webkit) {
     inherit (gnome28) gtkdoc libsoup;
-    inherit (gtkLibs218) gtk atk pango glib;
+    inherit (gtkLibs) gtk atk pango glib;
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
@@ -4598,7 +4575,7 @@ let
       gstPluginsGood;
     flex = flex2535;
     inherit (xlibs) libXt;
-  });
+  };
 
   wxGTK = wxGTK26;
 
@@ -6754,7 +6731,7 @@ let
       pkgconfig poppler libspectre djvulibre libxslt
       dbus dbus_glib shared_mime_info which makeWrapper;
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
-      libgnomeui libglade glib gtk scrollkeeper;
+      libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
   };
 
   exrdisplay = import ../applications/graphics/exrdisplay {
@@ -6890,8 +6867,9 @@ let
     inherit fetchurl stdenv pkgconfig freetype fontconfig
       libtiff libjpeg libpng libexif zlib perl perlXMLParser
       python pygtk gettext xlibs intltool babl gegl;
-    inherit (gnome) gtk libgtkhtml libart_lgpl;
+    inherit (gnome) gtk libart_lgpl;
   };
+  
   gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
@@ -7237,7 +7215,7 @@ let
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify;
-    inherit (gtkLibs218) gtk glib;
+    inherit (gtkLibs) gtk glib;
     inherit (gnome28) gtksourceview libsoup;
   };
 
@@ -7359,7 +7337,7 @@ let
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
-    inherit (gnome26) GConf ORBit2;
+    inherit (gnome) GConf ORBit2;
   };
 
   opera = import ../applications/networking/browsers/opera {
@@ -7684,14 +7662,14 @@ let
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs218) gtk glib;
+    inherit (gtkLibs) gtk glib;
     libsoup = gnome28.libsoup;
   };
 
   uzblExperimental = builderDefsPackage
         (import ../applications/networking/browsers/uzbl/experimental.nix) {
     inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs218) gtk glib;
+    inherit (gtkLibs) gtk glib;
     libsoup = gnome28.libsoup;
   };
 
@@ -8156,33 +8134,9 @@ let
     inherit stdenv fetchurl pkgconfig x11 xlibs dbus imlib2 freetype;
   };
 
-  gnome = recurseIntoAttrs (import ../desktops/gnome {
-    inherit
-      fetchurl stdenv pkgconfig
-      flex bison popt zlib libxml2 libxslt
-      perl perlXMLParser docbook_xml_dtd_42 docbook_xml_dtd_412
-      docbook_xml_dtd_43
-      gettext x11 libtiff libjpeg libpng gtkLibs xlibs bzip2
-      libcm python dbus dbus_glib ncurses which libxml2Python
-      iconnamingutils openssl hal samba fam libgcrypt libtasn1
-      xmlto docbook2x docbook_xsl intltool enchant isocodes polkit
-      libproxy sqlite;
-  });
+  gnome28 = import ../desktops/gnome-2.28 pkgs;
 
-  gnome26 = import ../desktops/gnome-2.26 pkgs;
-
-  gnome28 = import ../desktops/gnome-2.28 (pkgs// {
-    gtkLibs = gtkLibs218;
-    dbus_glib = dbus_glib.override {
-        inherit (gtkLibs218) glib;
-      };
-    policykit = policykit.deepOverride {
-        inherit (gtkLibs218) glib;
-      };
-    hal = hal.deepOverride {
-        inherit (gtkLibs218) glib;
-      };
-  });
+  gnome = gnome28;
 
   kde3 = {
 
@@ -8204,12 +8158,6 @@ let
   };
 
   kde4 = kde43;
-
-  kde42 = import ../desktops/kde-4.2 (pkgs // {
-    openexr = openexr_1_6_1;
-    qt4 = qt44;
-    popplerQt4 = popplerQt44;
-  });
 
   kde43 = import ../desktops/kde-4.3 (pkgs // {
     openexr = openexr_1_6_1;
@@ -8348,7 +8296,7 @@ let
   };
 
   cups = import ../misc/cups {
-    inherit fetchurl stdenv zlib libjpeg libpng libtiff pam openssl;
+    inherit fetchurl stdenv pkgconfig zlib libjpeg libpng libtiff pam openssl dbus;
   };
 
   gutenprint = import ../misc/drivers/gutenprint {
@@ -8486,12 +8434,11 @@ let
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
-        autoconf libtool configureFlags enableScripts lib bison;
+        autoconf libtool configureFlags enableScripts lib bison libxml2;
       flex = flex2533;
       aterm = aterm242fixes;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
-      libxml2 = libxml2New;
     };
 
   disnix = import ../tools/package-management/disnix {
@@ -8539,7 +8486,7 @@ let
     {
       inherit stdenv fetchurl zlib aspell sox openssl qt4;
       inherit (xlibs) xproto libX11 libSM libICE;
-      qca2 = kde42.qca2;
+      qca2 = kde4.qca2;
     };
 
   putty = import ../applications/networking/remote/putty {

@@ -1,20 +1,23 @@
 {stdenv, fetchurl, perl, XMLSimple}:
 
-stdenv.mkDerivation {
-  name = "icon-naming-utils-0.8.7";
+stdenv.mkDerivation rec {
+  name = "icon-naming-utils-0.8.90";
 
   src = fetchurl {
-    url = http://tango.freedesktop.org/releases/icon-naming-utils-0.8.7.tar.gz;
-    sha256 = "1lj0lffdg7fjfinhrn0vsq1kj010dxlxlix4jfc969j6l3k9rd0w";
+    url = "http://tango.freedesktop.org/releases/${name}.tar.gz";
+    sha256 = "071fj2jm5kydlz02ic5sylhmw6h2p3cgrm3gwdfabinqkqcv4jh4";
   };
   
   buildInputs = [perl XMLSimple];
 
-  postInstall = "
-    # Add XML::Simple to the runtime search path.
-    substituteInPlace $out/libexec/icon-name-mapping \\
-        --replace '/bin/perl' '/bin/perl -I${XMLSimple}/lib/perl5/site_perl';
-    ensureDir $out/lib
-    ln -s $out/share/pkgconfig $out/lib/pkgconfig # WTF?
-  ";
+  postInstall =
+    ''
+      # Add XML::Simple to the runtime search path.
+      substituteInPlace $out/libexec/icon-name-mapping \
+          --replace '/bin/perl' '/bin/perl -I${XMLSimple}/lib/perl5/site_perl'
+    '';
+
+  meta = {
+    homepage = http://tango.freedesktop.org/Standard_Icon_Naming_Specification;
+  };
 }
