@@ -4106,6 +4106,10 @@ let
     inherit fetchurl stdenv pkgconfig ncurses gpm glib;
   };
 
+  libvterm = import ../development/libraries/libvterm {
+    inherit fetchurl stdenv pkgconfig ncurses glib;
+  };
+
   libvorbis = import ../development/libraries/libvorbis {
     inherit fetchurl stdenv libogg;
   };
@@ -7744,7 +7748,7 @@ let
   };
 
   vwm = import ../applications/window-managers/vwm {
-    inherit fetchurl stdenv ncurses pkgconfig libviper libpseudo gpm glib;
+    inherit fetchurl stdenv ncurses pkgconfig libviper libpseudo gpm glib libvterm;
   };
 
   w3m = import ../applications/networking/browsers/w3m {

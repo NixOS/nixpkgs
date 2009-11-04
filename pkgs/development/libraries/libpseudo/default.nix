@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, glib, ncurses}:
-stdenv.mkDerivation {
-  name = "libpseudo-1.1.0";
+stdenv.mkDerivation rec {
+  name = "libpseudo-1.2.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/libpseudo/libpseudo-1.1.0.tar.gz;
-    sha256 = "0fp64c6sbdrp4gs4a7rnh5zwis73p7zg04basdn91byshvs1giwv";
+    url = "mirror://sourceforge/libpseudo/${name}.tar.gz";
+    sha256 = "0d3pw0m3frycr3x5kzqcaj4r2qh43iv6b0fpd6l4yk0aa4a9560n";
   };
 
   patchPhase = ''

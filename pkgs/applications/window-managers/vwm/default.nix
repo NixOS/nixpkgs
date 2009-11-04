@@ -1,11 +1,12 @@
-{stdenv, fetchurl, ncurses, pkgconfig, glib, libviper, libpseudo, gpm}:
+{stdenv, fetchurl, ncurses, pkgconfig, glib, libviper, libpseudo, gpm,
+libvterm}:
 
-stdenv.mkDerivation {
-  name = "vwm-2.0.1";
+stdenv.mkDerivation rec {
+  name = "vwm-2.1.3";
  
   src = fetchurl {
-    url = mirror://sourceforge/vwm/vwm-2.0.1.tar.gz;
-    sha256 = "1kn1ga35kvl10s3xvgr5ys18gd4pp0gwah4pnvmfkvg0xazjrc0h";
+    url = "mirror://sourceforge/vwm/${name}.tar.gz";
+    sha256 = "1r5wiqyfqwnyx7dfihixlnavbvg8rni36i4gq169aisjcg7laxaf";
   };
 
   prePatch = ''
@@ -15,17 +16,17 @@ stdenv.mkDerivation {
       -e /ldconfig/d Makefile modules/*/Makefile vwm.h
   '';
 
-  patches = [ ./signal.patch ];
-
   preInstall = ''
     ensureDir $out/bin $out/include
   '';
  
-  buildInputs = [ ncurses pkgconfig glib libviper libpseudo gpm];
+  buildInputs = [ ncurses pkgconfig glib libviper libpseudo gpm libvterm ];
  
   meta = {
     homepage = http://vwm.sourceforge.net/;
     description = "Dynamic window manager for the console";
     license="GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

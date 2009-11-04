@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, glib, ncurses, gpm}:
-stdenv.mkDerivation {
-  name = "libviper-1.2.2";
+stdenv.mkDerivation rec {
+  name = "libviper-1.4.5";
 
   src = fetchurl {
-    url = mirror://sourceforge/libviper/libviper-1.4.2.tar.gz;
-    sha256 = "06ff9i914cxi3ifnr5xfpfbvz46kx150jaxvr6rcha6ylglw48c9";
+    url = "mirror://sourceforge/libviper/${name}.tar.gz";
+    sha256 = "1lryqv9xfsshx8x8c858h8fmsi2fkja0mhw415wa2bj9cqyb8byz";
   };
 
   patchPhase = ''
