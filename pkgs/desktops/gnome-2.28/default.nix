@@ -123,8 +123,7 @@ rec {
   
   # Freedesktop library
   startup_notification = import ./platform/startup-notification {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit (pkgs.xlibs) libX11 libxcb libICE xcbutil libSM;
+    inherit (pkgs) stdenv fetchurl pkgconfig xlibs;
   };
   
   # Required for nautilus
