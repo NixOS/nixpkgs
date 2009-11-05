@@ -7816,9 +7816,10 @@ let
   };
 
   xara = import ../applications/graphics/xara {
-    inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK26
+    inherit fetchurl stdenv autoconf automake libtool gettext cvs
       pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
     inherit (gtkLibs) gtk;
+    wxGTK = wxGTK26;
   };
 
   xawtv = import ../applications/video/xawtv {
@@ -8099,7 +8100,7 @@ let
 
   scorched3d = import ../games/scorched3d {
     inherit stdenv fetchurl mesa openal autoconf automake libtool freealut freetype fftw SDL SDL_net zlib libpng libjpeg;
-    inherit wxGTK26;
+    wxGTK = wxGTK26;
   };
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
