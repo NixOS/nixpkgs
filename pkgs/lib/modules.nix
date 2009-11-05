@@ -223,6 +223,7 @@ rec {
 
           value = decl // (with config; {
             inherit (config) isNotDefined;
+            isDefined = ! isNotDefined;
             declarations = declarationSources;
             definitions = definitionSources;
             config = strictResult;
