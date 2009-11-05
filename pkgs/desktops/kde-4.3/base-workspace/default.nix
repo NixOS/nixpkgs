@@ -6,10 +6,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "kdebase-workspace-4.3.2";
+  name = "kdebase-workspace-4.3.3";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.2/src/kdebase-workspace-4.3.2.tar.bz2;
-    sha1 = "4sh5xrqk5jpb3sisi85lwcmx9bkg61rs";
+    url = mirror://kde/stable/4.3.3/src/kdebase-workspace-4.3.3.tar.bz2;
+    sha1 = "kl5brn6c2nahxmavd38fmy6frq9yjf98";
   };
   includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
