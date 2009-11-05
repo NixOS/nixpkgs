@@ -23,6 +23,7 @@ let
     nv =         { modules = [ xorg.xf86videonv ]; };
     ati =        { modules = [ xorg.xf86videoati ]; };
     openchrome = { modules = [ xorg.xf86videoopenchrome ]; };
+    unichrome  = { modules = [ pkgs.xorgVideoUnichrome ]; };
     cirrus =     { modules = [ xorg.xf86videocirrus ]; };
     vmware =     { modules = [ xorg.xf86videovmware ]; };
     virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; };
