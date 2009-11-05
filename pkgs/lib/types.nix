@@ -110,6 +110,12 @@ rec {
           throw "Multiple definitions. Only one is allowed for this option.";
     };
 
+    none = elemType: mkOptionType {
+      inherit (elemType) name check iter fold docPath hasOptions;
+      merge = list:
+        throw "No definitions are allowed for this option.";
+    };
+
     nullOr = elemType: mkOptionType {
       inherit (elemType) name merge docPath hasOptions;
       check = x: builtins.isNull x || elemType.check x;
