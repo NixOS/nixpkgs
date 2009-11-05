@@ -94,6 +94,7 @@
   ./services/ttys/mingetty.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/apache-httpd/per-server-options.nix
+  ./services/web-servers/apache-httpd/services.nix
   ./services/web-servers/jboss.nix
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix

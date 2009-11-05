@@ -41,25 +41,14 @@ let
   # extensions of NixOS.
   callSubservices = serverInfo: defs:
     let f = svc:
-      let 
-        svcFunction =
-          if svc ? function then svc.function
-          else import "${./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix";
-        config = addDefaultOptionValues res.options
-          (if svc ? config then svc.config else svc);
-        defaults = {
-          extraConfig = "";
-          extraModules = [];
-          extraModulesPre = [];
-          extraPath = [];
-          extraServerPath = [];
-          globalEnvVars = [];
-          robotsEntries = "";
-          startupScript = "";
-          options = {};
-        };
-        res = defaults // svcFunction {inherit config pkgs serverInfo servicesPath;};
-      in res;
+      rec {
+        config =
+          if res ? options then
+            addDefaultOptionValues res.options svc.config
+          else
+            svc.config;
+        res = svc // svc.function {inherit config pkgs serverInfo servicesPath;};
+      }.res;
     in map f defs;
 
 

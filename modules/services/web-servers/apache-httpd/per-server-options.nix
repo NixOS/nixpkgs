@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{options, config, pkgs, ...}@moduleArguments:
+{options, config, pkgs, ...}:
 
 let
   inherit (pkgs.lib) mkOption addDefaultOptionValues types;
@@ -119,13 +119,6 @@ let
       description = "
         These lines go to httpd.conf verbatim. They will go after
         directories and directory aliases defined by default.
-      ";
-    };
-
-    extraSubservices = mkOption {
-      default = [];
-      description = "
-        Extra subservices to enable in the webserver.
       ";
     };
 
