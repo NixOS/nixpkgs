@@ -234,7 +234,6 @@ in {
   libsmbios = linux;
   libtool = all;
   libtool_2 = all;
-  libtopology = all;
   libxml2 = all;
   libxslt = all;
   linuxwacom = linux;
