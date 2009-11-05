@@ -8257,6 +8257,11 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  ssreflect = import ../applications/science/logic/ssreflect {
+    inherit stdenv fetchurl ocaml coq;
+    camlp5 = camlp5_transitional;
+  };
+
   ### SCIENCE / ELECTRONICS
 
   ngspice = import ../applications/science/electronics/ngspice {
