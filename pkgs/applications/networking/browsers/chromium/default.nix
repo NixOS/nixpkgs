@@ -18,24 +18,25 @@
 , atk
 , makeWrapper
 , unzip
-, patchelf05
+, expat
+, zlib
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
-  name = "chrome-20565";
-
+  name = "chrome-${version}";
+  version = "31080";
   src = 
     if stdenv.system == "x86_64-linux" then 
       fetchurl {
-        url = http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/30565/chrome-linux.zip;
-        sha256 = "0ngxbb27g6yqwllkbwyb41vldz00nr5r0rfb3b0arznql2dkynhy";
+        url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/${version}/chrome-linux.zip";
+        sha256 = "1km6mrhzgdlhy7pl60g8wh8hlxp0ymv6rqpp3aqd94mqj9g5asm9";
       } 
     else if stdenv.system == "i686-linux" then 
       fetchurl {
-        url = http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/30565/chrome-linux.zip;
-        sha256 = "0q5432zn9jhy54s0w0xgdc2y0h7a51b8acc782s7j179hcgfa30a";
+        url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/${version}/chrome-linux.zip";
+        sha256 = "12awdamkkcb8kq2z7kila00yhn9msihq7b6970k9hghbwq95hjrk";
       } 
     else null;
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
 
   libPath = 
     stdenv.lib.makeLibraryPath
-       [ stdenv.glibc stdenv.gcc.gcc ffmpeg cairo pango glib libXrender gtk nspr nss fontconfig freetype alsaLib libX11 GConf libXext atk libXt] ;
+       [ stdenv.glibc stdenv.gcc.gcc ffmpeg cairo pango glib libXrender gtk nspr nss fontconfig freetype alsaLib libX11 GConf libXext atk libXt expat zlib] ;
 
   installPhase = ''
     ensureDir $out/bin
