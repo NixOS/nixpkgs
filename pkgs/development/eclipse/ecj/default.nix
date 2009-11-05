@@ -1,15 +1,15 @@
 { stdenv, fetchurl, unzip, ant, gcj }:
 
 let
-  version = "3.5";
-  date    = "200906111540";
+  version = "3.5.1";
+  date    = "200909170800";
 in
   stdenv.mkDerivation rec {
     name = "ecj-${version}";
 
     src = fetchurl {
       url = "http://eclipse.ialto.org/eclipse/downloads/drops/R-${version}-${date}/ecjsrc-${version}.zip";
-      sha256 = "0f5xfi0458w31dr4pkvrjh1f9h2hbn7ssq9gnnma6gznj45jvy7k";
+      sha256 = "1vnl2mavisc567bip736xzsvvbjif5279wc4a7pbdik5wlir8qr7";
     };
 
     buildInputs = [ unzip ant gcj ];
