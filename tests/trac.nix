@@ -16,7 +16,7 @@ rec {
         services.nfsKernel.exports = ''
           /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
         '';
-	services.nfsKernel.createMountPoints = true;
+        services.nfsKernel.createMountPoints = true;
       };
 
     postgresql =
@@ -24,13 +24,13 @@ rec {
       {
         services.sshd.enable = true;
         services.postgresql.enable = true;
-    	services.postgresql.enableTCPIP = true;
+        services.postgresql.enableTCPIP = true;
         services.postgresql.authentication = ''
           # Generated file; do not edit!
           local all all                trust
           host  all all 127.0.0.1/32   trust
-	  host  all all ::1/128        trust
-	  host  all all 192.168.1.0/24 trust
+          host  all all ::1/128        trust
+          host  all all 192.168.1.0/24 trust
         '';
       };
 
@@ -38,17 +38,16 @@ rec {
       {config, pkgs, ...}:
       {
         fileSystems = pkgs.lib.mkOverride 50 {} 
-	[ 
-	  { mountPoint = "/repos";
-	    device = "storage:/repos"; } 
-	];
+        [ 
+          { mountPoint = "/repos";
+            device = "storage:/repos"; } 
+        ];
       
         services.portmap.enable = true;
-        services.nfsKernel.enable = true;
         services.httpd.enable = true;
         services.httpd.adminAddr = "root@localhost";
         services.httpd.extraSubservices = [ { serviceType = "trac"; } ];
-	environment.systemPackages = [ pkgs.pythonPackages.trac pkgs.subversion ];
+        environment.systemPackages = [ pkgs.pythonPackages.trac pkgs.subversion ];
       };
       
     client = 
@@ -57,17 +56,17 @@ rec {
         services.xserver.enable = true;
         services.xserver.displayManager.slim.enable = false;
         services.xserver.displayManager.kdm.enable = true;
-	services.xserver.displayManager.kdm.extraConfig =
+        services.xserver.displayManager.kdm.extraConfig =
           ''
             [X-:0-Core]
             AutoLoginEnable=true
             AutoLoginUser=alice
             AutoLoginPass=foobar
           '';
-	services.xserver.desktopManager.default = "kde4";
-	services.xserver.desktopManager.kde4.enable = true;
-	users.extraUsers = pkgs.lib.singleton { 
-	  name = "alice";
+        services.xserver.desktopManager.default = "kde4";
+        services.xserver.desktopManager.kde4.enable = true;
+        users.extraUsers = pkgs.lib.singleton { 
+          name = "alice";
           description = "Alice Foobar";
           home = "/home/alice";
           createHome = true;

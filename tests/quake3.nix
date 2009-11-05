@@ -20,7 +20,7 @@ rec {
     { server =
         { config, pkgs, ... }:
 
-        { jobs = pkgs.lib.singleton
+        { jobs.quake3Server =
             { name = "quake3-server";
               startOn = "startup";
               exec =
