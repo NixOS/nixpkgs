@@ -1934,7 +1934,7 @@ let
     inherit zip unzip zlib boehmgc gettext pkgconfig;
     inherit (gtkLibs) gtk;
     inherit (gnome) libart_lgpl;
-    inherit (xlibs) libX11 libXt libSM libICE libXtst libXrender
+    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 

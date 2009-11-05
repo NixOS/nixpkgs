@@ -11,7 +11,7 @@
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
-, libXrandr ? null, inputproto ? null, randrproto ? null
+, libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , enableMultilib ? false
 , name ? "gcc"
 }:
@@ -40,7 +40,7 @@ let version = "4.4.2";
     };
 
     xlibs = [
-      libX11 libXt libSM libICE libXtst libXrender libXrandr
+      libX11 libXt libSM libICE libXtst libXrender libXrandr libXi
       xproto renderproto xextproto inputproto randrproto
     ];
 
