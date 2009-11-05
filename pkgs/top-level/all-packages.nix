@@ -4973,6 +4973,10 @@ let
       pam fetchsvn;
   };
 
+  couchdb = import ../servers/http/couchdb {
+    inherit fetchurl stdenv erlang spidermonkey icu;
+  };
+
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
     inherit fetchurl stdenv;
   };
