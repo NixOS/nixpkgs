@@ -3681,6 +3681,10 @@ let
     inherit stdenv fetchurl unzip;
   };
 
+  hwloc = import ../development/libraries/hwloc {
+    inherit fetchurl stdenv pkgconfig cairo expat;
+  };
+
   icu = import ../development/libraries/icu {
     inherit fetchurl stdenv;
   };
@@ -4067,10 +4071,6 @@ let
 
   libtommath = import ../development/libraries/libtommath {
     inherit fetchurl stdenv libtool;
-  };
-
-  libtopology = import ../development/libraries/libtopology {
-    inherit fetchurl stdenv pkgconfig cairo;
   };
 
   libunistring = import ../development/libraries/libunistring {
