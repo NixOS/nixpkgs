@@ -1938,11 +1938,9 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
-  /*
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit gmp mpfr m4 binutils ;
   };
-  */
 
   # GHC
 
@@ -7459,7 +7457,7 @@ let
   ratpoison = import ../applications/window-managers/ratpoison {
     inherit fetchurl stdenv fontconfig readline;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
-      libXtst xextproto;
+      libXtst xextproto libXi;
   };
 
   rcs = import ../applications/version-management/rcs {

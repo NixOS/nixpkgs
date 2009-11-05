@@ -1,5 +1,5 @@
 {stdenv, fetchurl, libX11, inputproto, libXt, libXpm, libXft, fontconfig,
-	libXtst, xextproto, readline}:
+	libXtst, xextproto, readline, libXi}:
 stdenv.mkDerivation {
   name = "ratpoison-1.4.5";
 
@@ -10,5 +10,5 @@ stdenv.mkDerivation {
 
   buildInputs = [libX11 inputproto libXt
 	 libXpm libXft fontconfig libXtst
-	xextproto readline];
+	xextproto readline libXi];
 }
