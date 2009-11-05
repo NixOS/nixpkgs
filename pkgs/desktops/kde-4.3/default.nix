@@ -114,7 +114,7 @@ pkgs.recurseIntoAttrs (rec {
   
   kdeaccessibility = import ./accessibility {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl alsaLib;
-    inherit (pkgs.xlibs) libXtst;
+    inherit (pkgs.xlibs) libXi libXtst;
     inherit kdelibs;
     inherit automoc4 phonon;
   };
@@ -145,7 +145,7 @@ pkgs.recurseIntoAttrs (rec {
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
     inherit (pkgs) libidn libvncserver tapioca_qt libmsn;
-    inherit (pkgs.xlibs) libXtst libXdamage libXxf86vm;
+    inherit (pkgs.xlibs) libXi libXtst libXdamage libXxf86vm;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qca2 soprano qimageblitz strigi;
   };

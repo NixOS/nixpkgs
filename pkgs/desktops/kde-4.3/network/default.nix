@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, speex, gmp, libxml2, libxslt, sqlite, alsaLib, libidn
 , libvncserver, tapioca_qt, libmsn
-, libXtst, libXdamage, libXxf86vm
+, libXi, libXtst, libXdamage, libXxf86vm
 , kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz, strigi}:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
                   libvncserver tapioca_qt libmsn
-		  libXtst libXdamage libXxf86vm
+		  libXi libXtst libXdamage libXxf86vm
                   kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz strigi ];
   meta = {
     description = "KDE network utilities";

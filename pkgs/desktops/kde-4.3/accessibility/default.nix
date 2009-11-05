@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, cmake, qt4, perl, alsaLib, libXtst, kdelibs, automoc4, phonon}:
+{stdenv, fetchurl, lib, cmake, qt4, perl, alsaLib, libXi, libXtst, kdelibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
   name = "kdeaccessibility-4.3.3";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha1 = "g71fn825bd3ici3vypjgnizypgv345hw";
   };
   includeAllQtDirs=true;
-  buildInputs = [ cmake qt4 perl alsaLib libXtst kdelibs automoc4 phonon ];
+  buildInputs = [ cmake qt4 perl alsaLib libXi libXtst kdelibs automoc4 phonon ];
   meta = {
     description = "KDE accessibility tools";
     license = "GPL";
