@@ -1938,9 +1938,11 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
+  /*
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit gmp mpfr m4 binutils ;
   };
+  */
 
   # GHC
 
