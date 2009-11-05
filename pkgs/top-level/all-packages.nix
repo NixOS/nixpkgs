@@ -5157,6 +5157,13 @@ let
     inherit fetchurl stdenv automake autoconf libtool xorg composedArgsAndFun;
   };
 
+  xorgVideoUnichrome = import ../servers/x11/xorg/unichrome/default.nix {
+    inherit stdenv fetchgit pkgconfig libdrm mesa automake autoconf libtool;
+    inherit (xorg) fontsproto libpciaccess randrproto renderproto videoproto
+      libX11 xextproto xf86driproto xorgserver xproto libXvMC glproto
+      libXext utilmacros;
+  };
+
   zabbixAgent = import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv;
     enableServer = false;

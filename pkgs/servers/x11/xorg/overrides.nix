@@ -76,8 +76,8 @@
     name = "xf86-video-openchrome-svn-798";
     src = args.fetchsvn {
       url = http://svn.openchrome.org/svn/trunk;
-      sha256 = "00kz5775090nwlsxyqrp1wsmislszj58fv3kvq612xgql4vgx4ab";
-      rev = 798;
+      sha256 = "1mhfh1n1x7fnxdbbkbz13lzd57m6xi3n9cblzgm43mz5bamacr02";
+      rev = 816;
       };
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa args.automake args.autoconf args.libtool xorg.libXext];
     preConfigure = "chmod +x autogen.sh";
