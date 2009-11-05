@@ -217,9 +217,14 @@ rec {
             ) declarations;
 
           decl =
-            addOptionMakeUp
-              { name = addName name; recurseInto = recurseForOption; }
-              (mergeOptionDecls decls);
+            lib.addErrorContext "${eol
+              }while enhancing option '${addName name}'.${eol
+              }${errorSource declarations}${eol
+            }" (
+              addOptionMakeUp
+                { name = addName name; recurseInto = recurseForOption; }
+                (mergeOptionDecls decls)
+            );
 
           value = decl // (with config; {
             inherit (config) isNotDefined;
