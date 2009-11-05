@@ -1,17 +1,13 @@
 a :  
 let 
   fetchurl = a.fetchurl;
-
-  version = a.lib.attrByPath ["version"] "1.0.29" a; 
+  s= import ./src-for-default.nix;
   buildInputs = with a; [
     clisp makeWrapper
   ];
 in
 rec {
-  src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/sbcl/sbcl-${version}-source.tar.bz2";
-    sha256 = "1bdsn4rnrz289068f1bdnxyijs4r02if4p87fv726glp5wm20q1z";
-  };
+  src = a.fetchUrlFromSrcInfo s;
 
   inherit buildInputs;
   configureFlags = [];
@@ -20,7 +16,7 @@ rec {
   phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
       
   goSrcDir = ''
-    cd sbcl-${version}/
+    cd sbcl-${s.version}/
   '';
 
   setVars = a.fullDepEntry (''
@@ -28,7 +24,7 @@ rec {
   '') ["minInit"];
 
   setVersion = a.fullDepEntry (''
-    echo '"${version}.nixos"' > version.lisp-expr
+    echo '"${s.version}.nixos"' > version.lisp-expr
     echo "
     (lambda (features)
       (flet ((enable (x)
@@ -71,10 +67,13 @@ rec {
     sh install.sh
   '') ["doBuild" "minInit" "addInputs"];
 
-  name = "sbcl-" + version;
+  inherit(s) name;
   meta = {
     description = "Lisp compiler";
+    homepage = "http://www.sbcl.org";
+    license = "bsd";
     maintainers = [a.lib.maintainers.raskin];
+    platforms = with a.lib.platforms; all;
   };
 }
 
