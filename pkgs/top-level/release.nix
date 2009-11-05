@@ -135,8 +135,8 @@ in {
   e2fsprogs = linux;
   ejabberd = linux;
   elinks = linux;
-  emacs22 = all;
-  emacs23 = all;
+  emacs22 = gtkSupported;
+  emacs23 = gtkSupported;
   enscript = all;
   eprover = linux;
   evince = linux;
