@@ -53,14 +53,12 @@ let
 
 
       serviceType = mkOption {
-        default = "";
         description = "Obsolete name of <option>serviceName</option>.";
         # serviceType is the old name of serviceName.
         apply = x: config.serviceName;
       };
 
       serviceName = mkOption {
-        default = "";
         example = "trac";
         description = "
           (Deprecated)
@@ -90,7 +88,7 @@ let
             f;
       };
 
-      config = mkOption {
+      configuration = mkOption {
         default = {};
         description = "
           (Deprecated) Define option values of the current sub-service.

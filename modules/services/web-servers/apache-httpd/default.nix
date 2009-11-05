@@ -44,9 +44,9 @@ let
       rec {
         config =
           if res ? options then
-            addDefaultOptionValues res.options svc.config
+            addDefaultOptionValues res.options svc.configuration
           else
-            svc.config;
+            svc.configuration;
         res = svc // svc.function {inherit config pkgs serverInfo servicesPath;};
       }.res;
     in map f defs;
