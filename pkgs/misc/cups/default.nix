@@ -4,7 +4,7 @@ let version = "1.4.1"; in
 
 stdenv.mkDerivation {
   name = "cups-${version}";
-  
+
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
     sha256 = "1fnkq993hr8l87x6f7a7wik2spac3f7nn4wksrvwk690r8a6zxng";
@@ -33,6 +33,10 @@ stdenv.mkDerivation {
       "PAMDIR=$(out)/etc/pam.d"
       "DBUSDIR=$(out)/etc/dbus-1"
       "INITDIR=$(out)/etc/rc.d"
+      "XINETD=$(out)/etc/xinetd.d"
+      # Idem for /usr.
+      "MENUDIR=$(out)/share/applications"
+      "ICONDIR=$(out)/share/icons"
       # Work around a Makefile bug.
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
