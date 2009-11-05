@@ -433,7 +433,7 @@ let
 
   amule = import ../tools/networking/p2p/amule {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
   };
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
@@ -493,7 +493,7 @@ let
   mcrl2 = import ../tools/misc/mcrl2 {
     inherit fetchurl stdenv mesa ;
     inherit (xorg) libX11;
-    wxGTK = wxGTK28 ;
+    inherit wxGTK;
   };
 
   syslogng = import ../tools/misc/syslog-ng {
@@ -835,7 +835,7 @@ let
     inherit fetchurl stdenv zlib gd texinfo readline emacs;
     inherit (xlibs) libX11 libXt libXaw libXpm;
     x11Support = getPkgConfig "gnuplot" "x11" false;
-    wxGTK = if getPkgConfig "gnuplot" "wxGtk" false then wxGTK28 else null;
+    wxGTK = if getPkgConfig "gnuplot" "wxGtk" false then wxGTK else null;
     inherit (gtkLibs) pango;
     inherit cairo pkgconfig;
   };
@@ -1626,7 +1626,7 @@ let
 
   truecrypt = import ../applications/misc/truecrypt {
     inherit fetchurl stdenv pkgconfig fuse devicemapper;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
   };
 
@@ -4579,11 +4579,11 @@ let
     inherit (xlibs) libXt;
   };
 
-  wxGTK = wxGTK26;
+  wxGTK = wxGTK28;
 
   wxGTK26 = import ../development/libraries/wxGTK-2.6 {
     inherit fetchurl stdenv pkgconfig;
-    inherit (gtkLibs) gtk;
+    inherit (gtkLibs216) gtk;
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
@@ -4591,7 +4591,7 @@ let
 
   wxGTK28deps = wxGTK28fun {
     inherit fetchurl stdenv pkgconfig mesa;
-    inherit (gtkLibs) gtk;
+    inherit (gtkLibs216) gtk;
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
@@ -4913,7 +4913,7 @@ let
 
   wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
     inherit fetchurl stdenv pkgconfig python;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
   };
 
   twisted = pythonPackages.twisted;
@@ -6260,7 +6260,7 @@ let
     inherit fetchurl stdenv gettext pkgconfig zlib perl intltool libogg
       libvorbis libmad;
     inherit (gtkLibs) gtk glib;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
   };
 
   aumix = import ../applications/audio/aumix {
@@ -6470,7 +6470,7 @@ let
 
   comical = import ../applications/graphics/comical {
     inherit stdenv fetchurl utillinux zlib;
-    inherit wxGTK;
+    wxGTK = wxGTK26;
   };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
@@ -7000,7 +7000,7 @@ let
   hugin = import ../applications/graphics/hugin {
     inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
     openexr = openexr_1_6_1;
   };
 
@@ -7788,7 +7788,7 @@ let
   };
 
   xara = import ../applications/graphics/xara {
-    inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK
+    inherit fetchurl stdenv autoconf automake libtool gettext cvs wxGTK26
       pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
     inherit (gtkLibs) gtk;
   };
@@ -7804,7 +7804,7 @@ let
   };
 
   xchm = import ../applications/misc/xchm {
-    inherit fetchurl stdenv wxGTK chmlib;
+    inherit fetchurl stdenv wxGTK26 chmlib;
   };
 
   /* Doesn't work yet
@@ -8070,7 +8070,7 @@ let
 
   scorched3d = import ../games/scorched3d {
     inherit stdenv fetchurl mesa openal autoconf automake libtool freealut freetype fftw SDL SDL_net zlib libpng libjpeg;
-    wxGTK = wxGTK28;
+    inherit wxGTK26;
   };
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
@@ -8263,7 +8263,7 @@ let
 
   wxmaxima = import ../applications/science/math/wxmaxima {
     inherit fetchurl stdenv maxima;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
   };
 
   scilab = (import ../applications/science/math/scilab) {
@@ -8465,7 +8465,7 @@ let
 
   pgadmin = import ../applications/misc/pgadmin {
     inherit fetchurl stdenv postgresql libxml2 libxslt openssl;
-    wxGTK = wxGTK28;
+    inherit wxGTK;
   };
 
   pgf = pgf2;
