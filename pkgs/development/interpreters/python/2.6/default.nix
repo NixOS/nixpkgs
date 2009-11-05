@@ -9,11 +9,13 @@
 , libX11 ? null
 , xproto ? null
 , arch ? null
+, sw_vers ? null
 }:
 
 assert zlibSupport -> zlib != null;
 assert gdbmSupport -> gdbm != null;
 assert stdenv.isDarwin -> arch != null;
+assert stdenv.isDarwin -> sw_vers != null;
 
 with stdenv.lib;
 
@@ -36,6 +38,7 @@ let
     ++ optional (libX11 != null) libX11
     ++ optional (xproto != null) xproto
     ++ optional (arch != null) arch
+    ++ optional (sw_vers != null) sw_vers
     ;
 
 in
@@ -56,7 +59,7 @@ stdenv.mkDerivation ( {
   inherit buildInputs;
   C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
   LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-  configureFlags = ''${if stdenv.isDarwin then "" else " --enable-shared"} --with-threads --enable-unicode --with-wctype-functions'';
+  configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
 
   preConfigure = ''
     # Purity.
@@ -84,9 +87,6 @@ stdenv.mkDerivation ( {
   };
 
   meta = {
-    # List of supported platforms.
-    #  - On Darwin, `python.exe' fails with "Bus Error".
-    # platforms = stdenv.lib.platforms.allBut "i686-darwin";
-    # Re-enabled for 2.6 to see whether the problem still occurs.
+    platforms = stdenv.lib.platforms;
   };
 } // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )

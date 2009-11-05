@@ -415,6 +415,10 @@ let
     inherit stdenv;
   };
 
+  darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
+    inherit stdenv;
+  };
+
   acct = import ../tools/system/acct {
     inherit fetchurl stdenv;
   };
@@ -2428,6 +2432,7 @@ let
   python26Base = composedArgsAndFun (import ../development/interpreters/python/2.6) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   };
 
   python26Full = python26Base.passthru.function {
