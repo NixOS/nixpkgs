@@ -7783,7 +7783,8 @@ let
     inherit builderDefs openssl zlib libjpeg ;
     inherit (xlibs) libXfixes fixesproto libXdamage damageproto
       libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
-      libXext xextproto inputproto recordproto;
+      libXext xextproto inputproto recordproto libXi renderproto
+      libXrender;
   };
 
   x2vnc = composedArgsAndFun (selectVersion ../tools/X11/x2vnc "1.7.2") {

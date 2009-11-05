@@ -8,7 +8,8 @@ args : with args; with builderDefs;
 
     buildInputs = [libXfixes fixesproto openssl libXdamage damageproto
       zlib libX11 xproto libjpeg libXtst libXinerama xineramaproto
-      libXrandr randrproto libXext xextproto inputproto recordproto];
+      libXrandr randrproto libXext xextproto inputproto recordproto libXi
+      libXrender renderproto];
     configureFlags = [];
   });
   in with localDefs;
