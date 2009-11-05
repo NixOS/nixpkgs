@@ -2181,23 +2181,6 @@ let
     inherit fetchurl stdenv x11 ncurses;
   };
 
-  /*
-  gcj = import ../build-support/gcc-wrapper/default2.nix {
-    name = "gcj-wrapper";
-    nativeTools = false;
-    nativeLibc = false;
-    gcc = import ../development/compilers/gcc-4.0 {
-      inherit fetchurl stdenv noSysDirs;
-      langJava = true;
-      langCC   = false;
-      langC    = false;
-      langF77  = false;
-    };
-    inherit (stdenv.gcc) binutils libc;
-    inherit stdenv;
-  };
-  */
-
   opencxx = import ../development/compilers/opencxx {
     inherit fetchurl stdenv libtool;
     gcc = gcc33;
