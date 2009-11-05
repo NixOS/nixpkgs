@@ -1938,6 +1938,10 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
+  gcl = builderDefsPackage ../development/compilers/gcl {
+    inherit gmp mpfr m4 binutils ;
+  };
+
   # GHC
 
   # GHC binaries are around for bootstrapping purposes
@@ -3253,8 +3257,9 @@ let
 
   directfb = import ../development/libraries/directfb {
     inherit fetchurl stdenv perl zlib libjpeg freetype
-      SDL libpng;
-    inherit (xlibs) libX11 libXext xproto xextproto;
+      SDL libpng giflib;
+    inherit (xlibs) libX11 libXext xproto xextproto renderproto
+      libXrender;
   };
 
   enchant = makeOverridable
@@ -5264,6 +5269,11 @@ let
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
 
+  directvnc = builderDefsPackage ../os-specific/linux/directvnc {
+    inherit libjpeg pkgconfig zlib directfb;
+    inherit (xlibs) xproto;
+  };
+
   dmraid = builderDefsPackage ../os-specific/linux/dmraid {
     inherit devicemapper;
   };
@@ -7199,7 +7209,7 @@ let
   };
 
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
-    inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff directfb
+    inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
       gpm openssl SDL SDL_image SDL_net pkgconfig;
     inherit (xlibs) libX11 libXau xproto libXt;
   };
@@ -7813,7 +7823,8 @@ let
   };
 
   xchm = import ../applications/misc/xchm {
-    inherit fetchurl stdenv wxGTK26 chmlib;
+    inherit fetchurl stdenv chmlib;
+    wxGTK = wxGTK26;
   };
 
   /* Doesn't work yet
