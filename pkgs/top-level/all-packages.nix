@@ -2370,11 +2370,13 @@ let
       impureLibcPath = if stdenv.isLinux then null else "/usr";
     };
 
-  perl = import ../development/interpreters/perl-5.10 {
+  perl510 = import ../development/interpreters/perl-5.10 {
     inherit stdenv;
     fetchurl = fetchurlBoot;
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
+
+  perl = if system != "i686-cygwin" then perl510 else sysPerl;
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   phpOld = import ../development/interpreters/php {
