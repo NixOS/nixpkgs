@@ -4,14 +4,14 @@
 , supportOldDBs ? true
 }:
 
-stdenv.mkDerivation {
-  name = "nix-0.12";
+stdenv.mkDerivation rec {
+  name = "nix-0.13";
   
   src = fetchurl {
-    url = http://nixos.org/releases/nix/nix-0.12/nix-0.12.tar.bz2;
-    sha256 = "44454670876ad0e96d551c94ba993903b84594ccf57fef17bc2d92b1f6b155b1";
+    url = "http://hydra.nixos.org/build/118589/download/4/${name}.tar.bz2";
+    sha256 = "6da44cacb7185e67dff39a2339c42f9c722081bac0dc593565bd89674beb1f94";
   };
-  
+
   buildInputs = [perl curl openssl];
 
   configureFlags = ''
@@ -20,6 +20,10 @@ stdenv.mkDerivation {
     ${if supportOldDBs then "--with-bdb=${db4}" else "--disable-old-db-compat"}
     --disable-init-state
   '';
+
+  doCheck = true;
+
+  passthru = { inherit aterm; };
 
   meta = {
     description = "The Nix Deployment System";
