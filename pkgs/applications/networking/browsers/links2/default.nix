@@ -3,7 +3,7 @@ let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     libpng libjpeg bzip2 zlib libtiff
-    directfb libX11 libXau xproto gpm
+    libX11 libXau xproto gpm
     openssl libXt pkgconfig
   ];
 in
