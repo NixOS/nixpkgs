@@ -1,8 +1,8 @@
 rec {
-   version="cd9caea74b8f90e8dded45a93a173f0f5c5aef25";
-   name="zen-linux-cd9caea74b8f90e8dded45a93a173f0f5c5aef25";
-   hash="86e254d1aab17a66d7f5a83d93430b11dbeb95be1ee06f1d6a4c36219e4dfaf4";
-   rev="cd9caea74b8f90e8dded45a93a173f0f5c5aef25";
+   version="66a44aa93959818bdb8153fea27b0992197ebc54";
+   name="zen-linux-66a44aa93959818bdb8153fea27b0992197ebc54";
+   hash="f5c86214424c8a7202c2dd9bbbd800561940af00800edb8afab080a73c185bca";
+   rev="66a44aa93959818bdb8153fea27b0992197ebc54";
    url="git://zen-kernel.org/kernel/zen-stable.git";
   
   

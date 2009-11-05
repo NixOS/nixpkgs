@@ -1,12 +1,12 @@
 a :  
 let 
-  s = import ./src-for-zen-stable.nix;
-in 
+  s = import ./src-for-2.6.31-zen5.nix;
+  in 
 (import ../kernel/generic.nix) (rec {
   inherit (a) stdenv fetchurl perl mktemp module_init_tools;
 
   src = a.builderDefs.fetchGitFromSrcInfo s;
-  version = "2.6.31-zen7";
+  version = "2.6.31-zen5";
   config = "./kernel-config";
   features = {
     iwlwifi = true;

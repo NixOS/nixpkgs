@@ -5537,7 +5537,7 @@ let
     kernelPatches = [];
   };
 
-  kernel_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
+  kernel_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen5.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
   };
@@ -5546,8 +5546,17 @@ let
     ckSched = true;
   };
 
-  kernel_2_6_31_zen = kernel_2_6_31_zen5;
-  kernel_2_6_31_zen_bfs = kernel_2_6_31_zen5_bfs;
+  kernel_2_6_31_zen7 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools
+      lib builderDefs;
+  };
+
+  kernel_2_6_31_zen7_bfs = kernel_2_6_31_zen7.override {
+    ckSched = true;
+  };
+
+  kernel_2_6_31_zen = kernel_2_6_31_zen7;
+  kernel_2_6_31_zen_bfs = kernel_2_6_31_zen7_bfs;
 
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
