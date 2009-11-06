@@ -179,6 +179,7 @@ in
       };
 
       videoDrivers = mkOption {
+        default = [];
         example = [ "vesa" ];
         description = ''
           The names of the video drivers that the X server should
