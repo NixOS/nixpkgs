@@ -59,9 +59,11 @@ in
     jobs.kbd =
       { description = "Keyboard / console initialisation";
 
-        startOn = "udev";
+        startOn = "started udev";
 
-        preStart = ''
+        task = true;
+
+        script = ''
           export LANG=${defaultLocale}
           export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
           export PATH=${pkgs.gzip}/bin:$PATH # Needed by setfont

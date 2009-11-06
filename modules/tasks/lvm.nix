@@ -7,7 +7,7 @@
   config = {
 
     jobs.lvm =
-      { startOn = " udev"; # !!! or on new-devices
+      { startOn = "started udev or new-devices";
 
         script =
           ''
