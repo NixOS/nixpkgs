@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   dontPatchElf = true;
 
   patchPhase = ''
-    sed -i -e 's@\./data@'$out/data@ share/base_config.h
-    sed -i -e 's@\./locale@'$out/locale@ share/base_config.h
+    sed -i -e 's@\./data@'$out/data@ share/base_config.h Makefile
+    sed -i -e 's@\./locale@'$out/locale@ share/base_config.h Makefile
     sed -i -e 's@-lvorbisfile@-lvorbisfile -lX11 -lgcc_s@' Makefile
   '';
 
