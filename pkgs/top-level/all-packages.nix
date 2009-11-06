@@ -2207,7 +2207,7 @@ let
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper;
-    clisp = clisp;
+    clisp = clisp_2_44_1;
   };
 
   scala = import ../development/compilers/scala {

@@ -35,6 +35,7 @@ prefetchClause=""
     if [ -z "$forcedUrl" ] ; then
         freshUrl="$("$own_dir"/urls-from-page.sh "$(getAttr downloadPage)" |
           eval "egrep \"$(getAttr sourceRegexp '.*[.]tar[.].*')\"" | 
+	  eval "egrep -v \"$(getAttr blacklistRegexp '^$')\"" |
           eval "$(getAttr choiceCommand 'head -1')")"
     
         if ! egrep ':' <<< "$freshUrl" ; then 
