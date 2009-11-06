@@ -1938,11 +1938,16 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
+  /*
+  Broken; fails because of unability to find its own symbols during linking
+
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs;
     inherit (xlibs) libX11 xproto inputproto libXi 
       libXext xextproto libXt libXaw libXmu;
+    stdenv = (overrideGCC stdenv gcc34) // {gcc = gcc33;};
   };
+  */
 
   # GHC
 
