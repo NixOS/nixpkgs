@@ -73,10 +73,12 @@ let
           echo "$jobText" > $out/etc/event.d/${job.name}
         '';
 
+        
   jobs =
     [pkgs.upstart] # for the built-in logd job
     ++ map (job: job.upstartPkg) (attrValues config.jobs);
 
+    
   # Create an etc/event.d directory containing symlinks to the
   # specified list of Upstart job files.
   jobsDir = pkgs.runCommand "upstart-jobs" {inherit jobs;}
@@ -93,132 +95,133 @@ let
       done
     ''; # */
 
-  # !! remove extra indentations.
+
   jobOptions = {
 
-        name = mkOption {
-          # !!! The type should ensure that this could be a filename.
-          type = types.string;
-          example = "sshd";
-          description = ''
-            Name of the Upstart job.
-          '';
-        };
+    name = mkOption {
+      # !!! The type should ensure that this could be a filename.
+      type = types.string;
+      example = "sshd";
+      description = ''
+        Name of the Upstart job.
+      '';
+    };
 
-        buildHook = mkOption {
-          type = types.string;
-          default = "true";
-          description = ''
-            Command run while building the Upstart job.  Can be used
-            to perform simple regression tests (e.g., the Apache
-            Upstart job uses it to check the syntax of the generated
-            <filename>httpd.conf</filename>.
-          '';
-        };
+    buildHook = mkOption {
+      type = types.string;
+      default = "true";
+      description = ''
+        Command run while building the Upstart job.  Can be used
+        to perform simple regression tests (e.g., the Apache
+        Upstart job uses it to check the syntax of the generated
+        <filename>httpd.conf</filename>.
+      '';
+    };
 
-        description = mkOption {
-          type = types.string;
-          default = "(no description given)";
-          description = ''
-            A short description of this job.
-          '';
-        };
+    description = mkOption {
+      type = types.string;
+      default = "(no description given)";
+      description = ''
+        A short description of this job.
+      '';
+    };
 
-        startOn = mkOption {
-          # !!! Re-enable this once we're on Upstart >= 0.6.
-          #type = types.string; 
-          default = "";
-          description = ''
-            The Upstart event that triggers this job to be started.
-            If empty, the job will not start automatically.
-          '';
-        };
+    startOn = mkOption {
+      # !!! Re-enable this once we're on Upstart >= 0.6.
+      #type = types.string; 
+      default = "";
+      description = ''
+        The Upstart event that triggers this job to be started.
+        If empty, the job will not start automatically.
+      '';
+    };
 
-        stopOn = mkOption {
-          type = types.string;
-          default = "shutdown";
-          description = ''
-            The Upstart event that triggers this job to be stopped.
-          '';
-        };
+    stopOn = mkOption {
+      type = types.string;
+      default = "shutdown";
+      description = ''
+        The Upstart event that triggers this job to be stopped.
+      '';
+    };
 
-        preStart = mkOption {
-          type = types.string;
-          default = "";
-          description = ''
-            Shell commands executed before the job is started
-            (i.e. before the job's main process is started).
-          '';
-        };
+    preStart = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed before the job is started
+        (i.e. before the job's main process is started).
+      '';
+    };
 
-        postStop = mkOption {
-          type = types.string;
-          default = "";
-          description = ''
-            Shell commands executed after the job has stopped
-            (i.e. after the job's main process has terminated).
-          '';
-        };
+    postStop = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed after the job has stopped
+        (i.e. after the job's main process has terminated).
+      '';
+    };
 
-        exec = mkOption {
-          type = types.string;
-          default = "";
-          description = ''
-            Command to start the job's main process.  If empty, the
-            job has no main process, but can still have pre/post-start
-            and pre/post-stop scripts, and is considered "running"
-            until it is stopped.
-          '';
-        };
+    exec = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Command to start the job's main process.  If empty, the
+        job has no main process, but can still have pre/post-start
+        and pre/post-stop scripts, and is considered "running"
+        until it is stopped.
+      '';
+    };
 
-        script = mkOption {
-          type = types.string;
-          default = "";
-          description = ''
-            Shell commands executed as the job's main process.  Can be
-            specified instead of the <varname>exec</varname> attribute.
-          '';
-        };
+    script = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed as the job's main process.  Can be
+        specified instead of the <varname>exec</varname> attribute.
+      '';
+    };
 
-        respawn = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Whether to restart the job automatically if its process
-            ends unexpectedly.
-          '';
-        };
+    respawn = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to restart the job automatically if its process
+        ends unexpectedly.
+      '';
+    };
 
-        task = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether this job is a task rather than a service.  Tasks
-            are executed only once, while services are restarted when
-            they exit.
-          '';
-        };
+    task = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether this job is a task rather than a service.  Tasks
+        are executed only once, while services are restarted when
+        they exit.
+      '';
+    };
 
-        environment = mkOption {
-          type = types.attrs;
-          default = {};
-          example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
-          description = ''
-            Environment variables passed to the job's processes.
-          '';
-        };
+    environment = mkOption {
+      type = types.attrs;
+      default = {};
+      example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
+      description = ''
+        Environment variables passed to the job's processes.
+      '';
+    };
 
-        extraConfig = mkOption {
-          type = types.string;
-          default = "";
-          example = "limit nofile 4096 4096";
-          description = ''
-            Additional Upstart stanzas not otherwise supported.
-          '';
-        };
+    extraConfig = mkOption {
+      type = types.string;
+      default = "";
+      example = "limit nofile 4096 4096";
+      description = ''
+        Additional Upstart stanzas not otherwise supported.
+      '';
+    };
 
-      };
+  };
 
+  
   upstartJob = {name, config, ...}: {
     options = {
       upstartPkg = mkOption {
