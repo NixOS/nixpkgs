@@ -141,9 +141,6 @@ export MODULE_DIR=@kernel@/lib/modules/
 # For debugging Upstart.
 #@shell@ --login < /dev/console > /dev/console 2>&1 &
 
-# Start Upstart's init.  We start it through the
-# /var/run/current-system symlink indirection so that we can upgrade
-# init in a running system by changing the symlink and sending init a
-# HUP signal.
+# Start Upstart's init.
 echo "starting Upstart..."
-exec /var/run/current-system/upstart/sbin/init -v
+PATH=/var/run/current-system/upstart/sbin exec init

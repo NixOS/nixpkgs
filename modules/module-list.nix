@@ -126,8 +126,8 @@
   ./system/boot/stage-2.nix
   ./system/etc/etc.nix
   ./system/upstart-events/control-alt-delete.nix
-  ./system/upstart-events/halt.nix
-  ./system/upstart-events/maintenance-shell.nix
+  ./system/upstart-events/runlevel.nix
+  ./system/upstart-events/shutdown.nix
   ./system/upstart/upstart.nix
   ./tasks/filesystems.nix
   ./tasks/kbd.nix
