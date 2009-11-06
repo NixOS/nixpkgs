@@ -39,7 +39,7 @@ trap 'fail' ERR
 
 # Print a greeting.
 echo
-echo "<<< NixOS Stage 1 >>>"
+echo "[1;32m<<< NixOS Stage 1 >>>[0m"
 echo
 
 

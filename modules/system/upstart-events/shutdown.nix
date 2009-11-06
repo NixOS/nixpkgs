@@ -19,7 +19,11 @@ with pkgs.lib;
       
           exec < /dev/console > /dev/console 2>&1
           echo ""
-          echo "<<< SYSTEM SHUTDOWN >>>"
+          if test "$MODE" = maintenance; then
+              echo "[1;32m<<< Entering maintenance mode >>>[0m"
+          else
+              echo "[1;32m<<< System shutdown >>>[0m"
+          fi
           echo ""
       
           export PATH=${pkgs.utillinux}/bin:${pkgs.utillinux}/sbin:$PATH
@@ -58,7 +62,7 @@ with pkgs.lib;
           # back up.
           if test "$MODE" = maintenance; then
               echo ""
-              echo "<<< MAINTENANCE SHELL >>>"
+              echo "[1;32m<<< Maintenance shell >>>[0m"
               echo ""
               while ! ${pkgs.bash}/bin/bash --login; do true; done
               initctl emit -n startup
@@ -121,8 +125,7 @@ with pkgs.lib;
           sync
       
       
-          # Either reboot or power-off the system.  Note that the "halt"
-          # event also does a power-off.
+          # Either reboot or power-off the system.
           if test "$MODE" = reboot; then
               echo "rebooting..."
               sleep 1

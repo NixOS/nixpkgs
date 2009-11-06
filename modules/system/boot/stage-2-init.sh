@@ -5,7 +5,7 @@
 
 # Print a greeting.
 echo
-echo "<<< NixOS Stage 2 >>>"
+echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
 echo
 
 
