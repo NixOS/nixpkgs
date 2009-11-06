@@ -35,8 +35,8 @@ with pkgs.lib;
 
 
           # Stop all Upstart jobs.
-          initctl list | while read jobName rest; do
-              if test "$jobName" != shutdown; then
+          initctl list | while IFS=", " read jobName status rest; do
+              if test "$jobName" != shutdown -a "$status" != "stop/waiting"; then
                   echo "stopping $jobName..."
                   stop "$jobName"
               fi
