@@ -1,4 +1,4 @@
-{stdenv, fetchurl, erlang, spidermonkey, icu}:
+{stdenv, fetchurl, erlang, spidermonkey, icu, getopt}:
 
 stdenv.mkDerivation rec {
   name = "apache-couchdb-0.8.1-incubating";
@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [erlang spidermonkey icu];
 
+  postInstall = ''
+    sed -i -e "s|\`getopt|\`${getopt}/bin/getopt|" $out/bin/couchdb
+  '';
+ 
   configureFlags = "--with-erlang=${erlang}/lib/erlang/usr/include"; 
 
 }
