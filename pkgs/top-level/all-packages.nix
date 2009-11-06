@@ -4327,6 +4327,10 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
+  physfs = import ../development/libraries/physfs {
+    inherit fetchurl stdenv cmake;
+  };
+
   plib = import ../development/libraries/plib {
     inherit fetchurl stdenv mesa freeglut SDL;
     inherit (xlibs) libXi libSM libXmu libXext libX11;
@@ -5816,7 +5820,7 @@ let
 
   neverball = import ../games/neverball {
     inherit stdenv fetchurl SDL mesa libpng libjpeg SDL_ttf libvorbis
-      gettext;
+      gettext physfs;
   };
 
   numactl = import ../os-specific/linux/numactl {
