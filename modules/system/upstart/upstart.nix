@@ -38,16 +38,16 @@ let
             else ""
           }
           
-          ${if job.stopOn != "" then "stop on ${job.stopOn}" else ""}
+          ${optionalString (job.stopOn != "") "stop on ${job.stopOn}"}
 
           env PATH=${makeSearchPath "bin" upstartPath}:${makeSearchPath "sbin" upstartPath}
           ${concatMapStrings (n: "env ${n}=${getAttr n job.environment}\n") (attrNames job.environment)}
           
-          ${if job.preStart != "" then ''
+          ${optionalString (job.preStart != "") ''
             pre-start script
               ${job.preStart}
             end script
-          '' else ""}
+          ''}
           
           ${if job.script != "" && job.exec != "" then
               abort "Job ${job.name} has both a `script' and `exec' attribute."
@@ -64,13 +64,28 @@ let
             else ""
           }
 
-          ${if job.respawn && !job.task then "respawn" else ""}
+          ${optionalString (job.postStart != "") ''
+            post-start script
+              ${job.postStart}
+            end script
+          ''}
+          
+          ${optionalString job.task "task"}
+          ${optionalString job.respawn "respawn"}
 
-          ${if job.postStop != "" then ''
+          ${optionalString (job.postStop != "") ''
             post-stop script
               ${job.postStop}
             end script
-          '' else ""}
+          ''}
+
+          ${optionalString (!job.task) (
+             if job.daemonType == "fork" then "expect fork" else
+             if job.daemonType == "daemon" then "expect daemon" else
+             if job.daemonType == "stop" then "expect stop" else
+             if job.daemonType == "none" then "" else
+             throw "invalid daemon type `${job.daemonType}'"
+          )}
 
           ${job.extraConfig}
         '';
@@ -141,6 +156,16 @@ let
       '';
     };
 
+    postStart = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed after the job is started (i.e. after
+        the job's main process is started), but before the job is
+        considered “running”.
+      '';
+    };
+
     postStop = mkOption {
       type = types.string;
       default = "";
@@ -156,7 +181,7 @@ let
       description = ''
         Command to start the job's main process.  If empty, the
         job has no main process, but can still have pre/post-start
-        and pre/post-stop scripts, and is considered "running"
+        and pre/post-stop scripts, and is considered “running”
         until it is stopped.
       '';
     };
@@ -195,6 +220,20 @@ let
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = ''
         Environment variables passed to the job's processes.
+      '';
+    };
+
+    daemonType = mkOption {
+      type = types.string;
+      default = "none";
+      description = ''
+        Determines how Upstart detects when a daemon should be
+        considered “running”.  The value <literal>none</literal> means
+        that the daemon is considered ready immediately.  The value
+        <literal>fork</literal> means that the daemon will fork once.
+        The value <literal>daemon</literal> means that the daemon will
+        fork twice.  The value <literal>stop</literal> means that the
+        daemon will raise the SIGSTOP signal to indicate readiness.
       '';
     };
 

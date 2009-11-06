@@ -99,21 +99,14 @@ in
             mkdir -m 0755 -p /var/run/hald
             
             rm -f /var/cache/hald/fdi-cache
-
-            # !!! Hack: start the daemon here to make sure it's
-            # running when the Upstart job reaches the "running"
-            # state.  Should be fixable in Upstart 0.6.
-            # The `PATH=' works around a bug in HAL: it concatenates
-            # its libexec directory to $PATH, but using a 512-byte
-            # buffer.  So if $PATH is too long it fails.
-            PATH= ${hal}/sbin/hald --use-syslog # --verbose=yes 
           '';
 
-        postStop =
-          '' 
-            pid=$(cat /var/run/hald/pid || true)
-            test -n "$pid" && kill "$pid"
-         '';
+        daemonType = "fork";
+
+        # The `PATH=' works around a bug in HAL: it concatenates
+        # its libexec directory to $PATH, but using a 512-byte
+        # buffer.  So if $PATH is too long it fails.
+        script = "PATH= exec ${hal}/sbin/hald --use-syslog";
       };
 
     services.udev.packages = [hal];
