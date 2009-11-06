@@ -19,12 +19,12 @@ let
     intel        = { modules = [ xorg.xf86videointel ]; };
     nv           = { modules = [ xorg.xf86videonv ]; };
     nvidia       = { modules = [ kernelPackages.nvidia_x11 ]; };
-    nvidiaLegacy = { modules = [ kernelPackages.nvidia_x11_legacy ]; name = "nvidia"; };
+    nvidiaLegacy = { modules = [ kernelPackages.nvidia_x11_legacy ]; driverName = "nvidia"; };
     openchrome   = { modules = [ xorg.xf86videoopenchrome ]; };
     sis          = { modules = [ xorg.xf86videosis ]; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     vesa         = { modules = [ xorg.xf86videovesa ]; };
-    virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; name = "vboxvideo"; };
+    virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
     vmware       = { modules = [ xorg.xf86videovmware ]; };
   };
 
@@ -32,7 +32,7 @@ let
     optional (cfg.videoDriver != null) cfg.videoDriver ++ cfg.videoDrivers;
 
   drivers = flip map driverNames
-    (name: { inherit name; } //
+    (name: { inherit name; driverName = name; } //
       attrByPath [name] (throw "unknown video driver `${name}'") knownVideoDrivers);
 
 
@@ -453,7 +453,7 @@ in
         
           Section "Device"
             Identifier "Device-${driver.name}[0]"
-            Driver "${driver.name}"
+            Driver "${driver.driverName}"
             ${optionalString (driver.name == "nvidiaLegacy") ''
               # This option allows suspending with a nvidiaLegacy card
               Option "NvAGP" "1"
