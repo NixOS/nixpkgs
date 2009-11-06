@@ -75,8 +75,8 @@ in
     jobs.autofs =
       { description = "Filesystem automounter";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         environment =
           { PATH = "${pkgs.nfsUtils}/sbin:${config.system.sbin.modprobe}/sbin";

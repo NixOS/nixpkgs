@@ -70,7 +70,6 @@ in
         # !!! TODO: make sure that HAL starts after acpid,
         # otherwise hald-addon-acpi will grab /proc/acpi/event.
         startOn = if config.powerManagement.enable then "started acpid" else "started dbus";
-        stopOn = "shutdown";
 
         environment =
           { # !!! HACK? These environment variables manipulated inside

@@ -116,8 +116,7 @@ in
     jobs.postgresql =
       { description = "PostgreSQL server";
 
-        startOn = "${startDependency}/started";
-        stopOn = "shutdown";
+        startOn = "started ${startDependency}";
 
         preStart =
           ''

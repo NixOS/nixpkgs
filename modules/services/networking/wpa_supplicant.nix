@@ -38,8 +38,8 @@ in
     environment.systemPackages = [pkgs.wpa_supplicant];
 
     jobs.wpa_supplicant = 
-      { startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+      { startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''

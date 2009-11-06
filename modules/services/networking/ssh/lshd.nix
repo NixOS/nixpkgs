@@ -119,8 +119,8 @@ in
     jobs.lshd =
       { description = "GNU lshd SSH2 daemon";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         environment =
           { LD_LIBRARY_PATH = config.system.nssModules.path; };

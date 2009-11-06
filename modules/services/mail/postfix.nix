@@ -283,7 +283,7 @@ in
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
-        startOn = "${startingDependency}/started";
+        startOn = "started ${startingDependency}";
 
         script =
           ''

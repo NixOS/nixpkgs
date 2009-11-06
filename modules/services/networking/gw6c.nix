@@ -134,8 +134,8 @@ in
     jobs.gw6c =
       { description = "Gateway6 client";
       
-        startOn = if cfg.autorun then "network-interfaces/started" else "";
-        stopOn = "network-interfaces/stop";
+        startOn = if cfg.autorun then "started network-interfaces" else "";
+        stopOn = "stopping network-interfaces";
 
         exec = "${gw6cService}/bin/control start";
       };

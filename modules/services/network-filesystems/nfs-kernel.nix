@@ -81,8 +81,8 @@ in
       
         description = "Kernel NFS server";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''
@@ -111,8 +111,8 @@ in
 
         description = "Kernel NFS server";
 
-        startOn = "nfs-kernel-exports/started";
-        stopOn = "nfs-kernel-exports/stop";
+        startOn = "started nfs-kernel-exports";
+        stopOn = "stopping nfs-kernel-exports";
 
         exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} ${builtins.toString cfg.nproc}";
       };
@@ -122,8 +122,8 @@ in
 
         description = "Kernel NFS server - mount daemon";
 
-        startOn = "nfs-kernel-nfsd/started";
-        stopOn = "nfs-kernel-exports/stop";
+        startOn = "started nfs-kernel-nfsd";
+        stopOn = "stopping nfs-kernel-exports";
 
         exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}";
       };
@@ -133,8 +133,8 @@ in
       
         description = "Kernel NFS server - Network Status Monitor";
       
-        startOn = "nfs-kernel-nfsd/started";
-	stopOn = "nfs-kernel-exports/stop";
+        startOn = "started nfs-kernel-nfsd";
+	stopOn = "stopping nfs-kernel-exports";
 
         preStart =
           ''	

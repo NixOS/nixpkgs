@@ -70,7 +70,6 @@ in
       { description = "Cron daemon";
 
         startOn = "startup";
-        stopOn = "shutdown";
  
         # Needed to interpret times in the local timezone.
         environment = { TZ = config.time.timeZone; };

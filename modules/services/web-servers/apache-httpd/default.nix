@@ -450,8 +450,7 @@ in
 
         description = "Apache HTTPD";
 
-        startOn = "${startingDependency}/started";
-        stopOn = "shutdown";
+        startOn = "started ${startingDependency}";
 
         environment =
           { # !!! This should be added in test-instrumentation.nix.  It

@@ -75,8 +75,7 @@ in
     jobs.mysql =
       { description = "MySQL server";
 
-        startOn = "filesystems";
-        stopOn = "shutdown";
+        startOn = "started filesystems";
 
         preStart =
           ''

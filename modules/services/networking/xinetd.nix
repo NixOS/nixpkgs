@@ -122,8 +122,8 @@ in
     jobs.xinetd =
       { description = "xinetd server";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         exec = "${xinetd}/sbin/xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
       };

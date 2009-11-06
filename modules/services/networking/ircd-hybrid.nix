@@ -122,8 +122,8 @@ in
 
         description = "IRCD Hybrid server";
 
-        startOn = "${startingDependency}/started";
-        stopOn = "${startingDependency}/stop";
+        startOn = "started ${startingDependency}";
+        stopOn = "stopping ${startingDependency}";
 
         exec = "${ircdService}/bin/control start";
       };

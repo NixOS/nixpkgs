@@ -54,8 +54,8 @@ in
     jobs.ejabberd =
       { description = "EJabberd server";
 
-        startOn = "network-interface/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interface";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''

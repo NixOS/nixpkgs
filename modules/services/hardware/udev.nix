@@ -159,7 +159,6 @@ in
 
     jobs.udev =
       { startOn = "startup";
-        stopOn = "shutdown";
 
         environment = { UDEV_CONFIG_FILE = conf; };
 

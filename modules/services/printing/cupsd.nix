@@ -160,8 +160,8 @@ in
     jobs.cupsd =
       { description = "CUPS printing daemon";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''

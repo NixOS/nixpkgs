@@ -114,7 +114,6 @@ in
       { name = "ddclient";
 
         startOn = "startup";
-        stopOn = "shutdown"; 
 
         preStart =
           ''

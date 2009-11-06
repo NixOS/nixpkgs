@@ -43,8 +43,7 @@ in
     jobs.xfs =
       { description = "X Font Server";
       
-        startOn = "${startingDependency}/started";
-        stopOn = "shutdown";
+        startOn = "started ${startingDependency}";
 
         exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
       };

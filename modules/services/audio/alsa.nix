@@ -46,7 +46,7 @@ in
       };
 
     jobs.alsa =
-      { startOn = "udev";
+      { startOn = "started udev";
 
         preStart =
           ''

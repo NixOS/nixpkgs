@@ -360,7 +360,7 @@ in
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
-      { startOn = if cfg.autorun then "hal" else "never";
+      { startOn = if cfg.autorun then "started hal" else "";
  
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup

@@ -79,8 +79,7 @@ in
     jobs.acpid =
       { description = "ACPI daemon";
 
-        startOn = "udev";
-        stopOn = "shutdown";
+        startOn = "started udev";
 
         exec = "${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}";
       };

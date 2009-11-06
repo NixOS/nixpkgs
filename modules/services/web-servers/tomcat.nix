@@ -104,8 +104,8 @@ in
     jobs.tomcat =
       { description = "Apache Tomcat server";
 
-        startOn = "network-interface/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interface";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''        
