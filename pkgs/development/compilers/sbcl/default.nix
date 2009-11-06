@@ -15,10 +15,6 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
       
-  goSrcDir = ''
-    cd sbcl-${s.version}/
-  '';
-
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
   '') ["minInit"];
