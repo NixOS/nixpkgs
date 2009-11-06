@@ -113,8 +113,7 @@ in
       };
 
     jobs.dbus =
-      { startOn = "udev";
-        stopOn = "shutdown";
+      { startOn = "started udev";
 
         preStart =
           ''
