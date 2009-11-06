@@ -82,7 +82,7 @@ in
             chown ${ntpUser} ${stateDir}
 
             # Needed to run ntpd as an unprivileged user.
-            ${modprobe}/sbin/modprobe capability || true
+            ${modprobe}/sbin/modprobe --quiet capability
 
             # !!! This can hang indefinitely if the network is down or
             # the servers are unreachable.  This is particularly bad

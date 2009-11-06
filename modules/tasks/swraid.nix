@@ -31,7 +31,7 @@ in
           # Activate each device found.
           ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
       
-          initctl emit new-devices
+          initctl emit -n new-devices
         '';
 
       task = true;        

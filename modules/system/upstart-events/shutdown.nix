@@ -61,7 +61,7 @@ with pkgs.lib;
               echo "<<< MAINTENANCE SHELL >>>"
               echo ""
               while ! ${pkgs.bash}/bin/bash --login; do true; done
-              initctl emit startup
+              initctl emit -n startup
               exit 0
           fi
                 

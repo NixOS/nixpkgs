@@ -28,11 +28,11 @@ let
           # it"), so we silently lose time synchronisation.
           ${config.system.build.upstart}/sbin/initctl stop ntpd
           
-          ${config.system.build.upstart}/sbin/initctl emit ip-up
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-up
       fi
 
       if test "$reason" = EXPIRE -o "$reason" = RELEASE; then
-          ${config.system.build.upstart}/sbin/initctl emit ip-down
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-down
       fi
     '';
   

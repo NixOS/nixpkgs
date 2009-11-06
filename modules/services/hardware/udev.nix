@@ -191,7 +191,7 @@ in
             ${udev}/sbin/udevadm trigger
             ${udev}/sbin/udevadm settle # wait for udev to finish
 
-            initctl emit new-devices
+            initctl emit -n new-devices
           '';
         
       };
