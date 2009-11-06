@@ -1,0 +1,14 @@
+This patch is to make sure `gnutls-cli' is explicitly linked against
+libgcrypt since it really needs to.
+
+--- gnutls-2.8.5/src/Makefile.in	2009-11-02 11:36:01.000000000 +0100
++++ gnutls-2.8.5/src/Makefile.in	2009-11-06 23:30:42.000000000 +0100
+@@ -840,6 +840,7 @@ libcmd_psk_la_CFLAGS = 
+ libcmd_psk_la_SOURCES = psk.gaa psk-gaa.h psk-gaa.c
+ gnutls_cli_SOURCES = cli.c common.h common.c
+ gnutls_cli_LDADD = ../lib/libgnutls.la ../libextra/libgnutls-extra.la \
++	-lgcrypt \
+ 	libcmd-cli.la ../gl/libgnu.la $(LIBSOCKET) $(GETADDRINFO_LIB)
+ libcmd_cli_la_CFLAGS = 
+ libcmd_cli_la_SOURCES = cli.gaa cli-gaa.h cli-gaa.c
+

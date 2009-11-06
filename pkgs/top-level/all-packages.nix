@@ -3533,7 +3533,7 @@ let
   };
 
   gnutls = import ../development/libraries/gnutls {
-    inherit fetchurl stdenv libgcrypt zlib lzo guile;
+    inherit fetchurl stdenv libgcrypt zlib lzo libtasn1 guile;
     guileBindings = getConfig ["gnutls" "guile"] true;
   };
 
