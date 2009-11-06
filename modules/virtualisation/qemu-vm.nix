@@ -119,6 +119,8 @@ in
 
   networking.defaultGateway = "10.0.2.2";
 
+  networking.nameservers = [ "10.0.2.3" ];
+
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
       ensureDir $out/bin
