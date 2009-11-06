@@ -4969,7 +4969,7 @@ let
   };
 
   couchdb = import ../servers/http/couchdb {
-    inherit fetchurl stdenv erlang spidermonkey icu;
+    inherit fetchurl stdenv erlang spidermonkey icu getopt; 
   };
 
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
