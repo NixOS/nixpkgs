@@ -135,7 +135,7 @@ in
     jobs.networkInterfaces = 
       { name = "network-interfaces";
 
-        startOn = "udev";
+        startOn = "started udev";
 
         preStart =
           ''

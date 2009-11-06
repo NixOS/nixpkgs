@@ -112,8 +112,7 @@ in
 
         description = "OpenSSH server";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
@@ -126,7 +125,9 @@ in
             fi
           '';
 
-        exec = "${openssh}/sbin/sshd -D -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
+        daemonType = "fork";
+
+        exec = "${openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
       };
 
     networking.firewall.allowedTCPPorts = [22];

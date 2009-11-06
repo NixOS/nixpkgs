@@ -31,8 +31,7 @@ let
           console output
 
           ${if isList job.startOn then
-              # This is a hack to support or-dependencies on Upstart 0.3.
-              concatMapStrings (x: "start on ${x}\n") job.startOn
+              "start on ${concatStringsSep " or " job.startOn}"
             else if job.startOn != "" then
               "start on ${job.startOn}"
             else ""

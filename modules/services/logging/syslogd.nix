@@ -50,12 +50,13 @@ in
     jobs.syslogd =
       { description = "Syslog daemon";
 
-        startOn = "udev";
-        stopOn = "shutdown";
+        startOn = "started udev";
 
         environment = { TZ = config.time.timeZone; };
 
-        exec = "${pkgs.sysklogd}/sbin/syslogd -n -f ${syslogConf}";
+        daemonType = "fork";
+
+        exec = "${pkgs.sysklogd}/sbin/syslogd -f ${syslogConf}";
       };
 
   };
