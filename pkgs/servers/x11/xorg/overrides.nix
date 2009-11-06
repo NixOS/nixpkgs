@@ -5,7 +5,9 @@
   fontmiscmisc = attrs: attrs // {
     postInstall =
       ''
-        ln -s ${xorg.fontalias}/lib/X11/fonts/misc/fonts.alias $out/lib/X11/fonts/misc/fonts.alias
+        ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
+        test -f $ALIASFILE
+        ln -s $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
       '';
   };
 
