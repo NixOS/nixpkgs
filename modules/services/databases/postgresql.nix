@@ -118,6 +118,8 @@ in
 
         startOn = "started ${startDependency}";
 
+        environment = { TZ = config.time.timeZone; };
+
         preStart =
           ''
             if ! test -e ${cfg.dataDir}; then
