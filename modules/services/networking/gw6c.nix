@@ -6,10 +6,12 @@ let
 
   cfg = config.services.gw6c;
 
+  # !!! Move this from the services tree to the nixos tree.
   gw6cService = import (servicesPath + /gw6c) {
     inherit (pkgs) stdenv gw6c coreutils 
-      procps upstart iputils gnused 
+      procps iputils gnused 
       gnugrep seccure writeScript;
+    upstart = config.system.build.upstart;
     username = cfg.username;
     password = cfg.password;
     server = cfg.server;

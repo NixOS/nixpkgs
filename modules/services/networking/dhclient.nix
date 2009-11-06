@@ -26,13 +26,13 @@ let
           # hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation.
-          ${pkgs.upstart}/sbin/initctl stop ntpd
+          ${config.system.build.upstart}/sbin/initctl stop ntpd
           
-          ${pkgs.upstart}/sbin/initctl emit ip-up
+          ${config.system.build.upstart}/sbin/initctl emit ip-up
       fi
 
       if test "$reason" = EXPIRE -o "$reason" = RELEASE; then
-          ${pkgs.upstart}/sbin/initctl emit ip-down
+          ${config.system.build.upstart}/sbin/initctl emit ip-down
       fi
     '';
   

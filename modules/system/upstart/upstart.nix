@@ -4,6 +4,9 @@ with pkgs.lib;
 
 let
 
+  upstart = pkgs.upstart;
+
+
   # From a job description, generate an Upstart job file.
   makeJob = job:
 
@@ -75,7 +78,7 @@ let
 
         
   jobs =
-    [pkgs.upstart] # for the built-in logd job
+    [ upstart ] # for the built-in logd job
     ++ map (job: job.upstartPkg) (attrValues config.jobs);
 
     
@@ -277,6 +280,8 @@ in
   ###### implementation
   
   config = {
+
+    system.build.upstart = upstart;
 
     environment.etc =
       [ { # The Upstart events defined above.

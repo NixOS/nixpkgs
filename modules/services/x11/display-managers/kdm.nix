@@ -12,8 +12,8 @@ let
   defaultConfig =
     ''
       [Shutdown]
-      HaltCmd=${pkgs.upstart}/sbin/halt
-      RebootCmd=${pkgs.upstart}/sbin/reboot
+      HaltCmd=${config.system.build.upstart}/sbin/halt
+      RebootCmd=${config.system.build.upstart}/sbin/reboot
       ${optionalString (config.system.boot.loader.id == "grub") ''
         BootManager=Grub
       ''}

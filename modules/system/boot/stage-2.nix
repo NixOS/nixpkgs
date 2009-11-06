@@ -15,9 +15,10 @@ let
 
   };
 
-  inherit (pkgs) substituteAll writeText coreutils utillinux udev upstart;
+  inherit (pkgs) substituteAll writeText coreutils utillinux udev;
   kernel = config.boot.kernelPackages.kernel;
   activateConfiguration = config.system.activationScripts.script;
+  upstart = config.system.build.upstart;
 
   # Path for Upstart jobs.  Should be quite minimal.
   upstartPath =
@@ -25,7 +26,7 @@ let
       pkgs.findutils
       pkgs.gnugrep
       pkgs.gnused
-      pkgs.upstart
+      upstart
     ];
 
   bootStage2 = substituteAll {

@@ -75,11 +75,11 @@ let
       ln -s ${config.system.activationScripts.script} $out/activate
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
-      ln -s ${pkgs.upstart} $out/upstart
+      ln -s ${config.system.build.upstart} $out/upstart
 
       echo "$kernelParams" > $out/kernel-params
       echo "$configurationName" > $out/configuration-name
-      echo "${toString pkgs.upstart.interfaceVersion}" > $out/upstart-interface-version
+      echo "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
 
       mkdir $out/fine-tune
       childCount=0;
@@ -113,7 +113,7 @@ let
       pkgs.gnugrep
       pkgs.findutils
       pkgs.diffutils
-      pkgs.upstart # for initctl
+      config.system.build.upstart # for initctl
     ];
 
     # Boot loaders
