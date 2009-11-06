@@ -2,10 +2,10 @@
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes}:
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-3.0.8";
+  name = "VirtualBox-GuestAdditions-3.0.10";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.0.8/VBoxGuestAdditions_3.0.8.iso;
-    sha256 = "0ia231klahqpn21qkn9x3bvy0mxaz051j8hgqv1afvnx2f3gjsvf";
+    url = http://download.virtualbox.org/virtualbox/3.0.10/VBoxGuestAdditions_3.0.10.iso;
+    sha256 = "08m7n3127nwcla1ws744n1d2i2mz4s1k4460i2h6qyvgnrgz32yv";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit ];
@@ -88,8 +88,8 @@ stdenv.mkDerivation {
     
     # Install Xorg drivers
     ensureDir $out/lib/xorg/modules/{drivers,input}
-    install -m 644 vboxvideo_drv_15.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
-    install -m 644 vboxmouse_drv_15.so $out/lib/xorg/modules/input/vboxmouse_drv.so
+    install -m 644 vboxvideo_drv_17.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 vboxmouse_drv_17.so $out/lib/xorg/modules/input/vboxmouse_drv.so
     
     # Install kernel modules
     cd module
