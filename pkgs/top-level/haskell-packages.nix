@@ -320,6 +320,10 @@ rec {
     inherit cabal mtl;
   };
 
+  mpppc = import ../development/libraries/haskell/mpppc {
+    inherit cabal ansiTerminal split text;
+  };
+
   mtl = import ../development/libraries/haskell/mtl {
     inherit cabal;
   };
