@@ -72,6 +72,12 @@ let
           ${optionalString job.task "task"}
           ${optionalString job.respawn "respawn"}
 
+          ${optionalString (job.preStop != "") ''
+            pre-stop script
+              ${job.preStop}
+            end script
+          ''}
+
           ${optionalString (job.postStop != "") ''
             post-stop script
               ${job.postStop}
@@ -162,6 +168,16 @@ let
         Shell commands executed after the job is started (i.e. after
         the job's main process is started), but before the job is
         considered “running”.
+      '';
+    };
+
+    preStop = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed before the job is stopped
+        (i.e. before Upstart kills the job's main process).  This can
+        be used to cleanly shut down a daemon.
       '';
     };
 

@@ -480,7 +480,14 @@ in
             done
           '';
 
-        exec = "${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH";
+        daemonType = "fork";
+
+        exec = "${httpd}/bin/httpd -f ${httpdConf}";
+
+        preStop =
+          ''
+            ${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop
+          '';
       };
 
   };
