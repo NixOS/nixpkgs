@@ -11,27 +11,29 @@ let
   xorg = pkgs.xorg;
 
 
-  # Map the video driver setting to a driver.
+  # Map video driver names to driver packages.
   knownVideoDrivers = {
-    nvidia =     { modules = [ kernelPackages.nvidia_x11 ]; };
-    nvidiaLegacy =     { modules = [ kernelPackages.nvidia_x11_legacy ]; };
-    vesa =       { modules = [ xorg.xf86videovesa ]; };
-    vga =        { modules = [ xorg.xf86videovga ]; };
-    sis =        { modules = [ xorg.xf86videosis ]; };
-    i810 =       { modules = [ xorg.xf86videoi810 ]; };
-    intel =      { modules = [ xorg.xf86videointel ]; };
-    nv =         { modules = [ xorg.xf86videonv ]; };
-    ati =        { modules = [ xorg.xf86videoati ]; };
-    openchrome = { modules = [ xorg.xf86videoopenchrome ]; };
-    unichrome  = { modules = [ pkgs.xorgVideoUnichrome ]; };
-    cirrus =     { modules = [ xorg.xf86videocirrus ]; };
-    vmware =     { modules = [ xorg.xf86videovmware ]; };
-    virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; };
+    ati          = { modules = [ xorg.xf86videoati ]; };
+    cirrus       = { modules = [ xorg.xf86videocirrus ]; };
+    i810         = { modules = [ xorg.xf86videoi810 ]; };
+    intel        = { modules = [ xorg.xf86videointel ]; };
+    nv           = { modules = [ xorg.xf86videonv ]; };
+    nvidia       = { modules = [ kernelPackages.nvidia_x11 ]; };
+    nvidiaLegacy = { modules = [ kernelPackages.nvidia_x11_legacy ]; name = "nvidia"; };
+    openchrome   = { modules = [ xorg.xf86videoopenchrome ]; };
+    sis          = { modules = [ xorg.xf86videosis ]; };
+    unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
+    vesa         = { modules = [ xorg.xf86videovesa ]; };
+    virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; name = "vboxvideo"; };
+    vmware       = { modules = [ xorg.xf86videovmware ]; };
   };
 
-  videoDriver = cfg.videoDriver;
+  driverNames =
+    optional (cfg.videoDriver != null) cfg.videoDriver ++ cfg.videoDrivers;
 
-  videoDriverInfo = attrByPath [videoDriver] (throw "unknown video driver: `${videoDriver}'") knownVideoDrivers;
+  drivers = flip map driverNames
+    (name: { inherit name; } //
+      attrByPath [name] (throw "unknown video driver `${name}'") knownVideoDrivers);
 
 
   fontsForXServer =
@@ -158,17 +160,30 @@ in
       };
 
       resolutions = mkOption {
-        default = [ {x = 1024; y = 768;} {x = 800; y = 600;} {x = 640; y = 480;} ];
+        default = [];
         description = ''
-          The screen resolutions for the X server.  The first element is the default resolution.
+          The screen resolutions for the X server.  The first element
+          is the default resolution.  If this list is empty, the X
+          server will automatically configure the resolution.
         '';
       };
 
       videoDriver = mkOption {
-        default = "vesa";
+        default = null;
         example = "i810";
         description = ''
-          The name of the video driver for your graphics card.
+          The name of the video driver for your graphics card.  This
+          option is obsolete; please set the
+          <option>videoDrivers</option> instead.
+        '';
+      };
+
+      videoDrivers = mkOption {
+        example = [ "vesa" ];
+        description = ''
+          The names of the video drivers that the X server should
+          support.  The X server will try all of the drivers listed
+          here until it finds one that supports your video card.
         '';
       };
 
@@ -187,14 +202,6 @@ in
           remembers private keys for you so that you don't have to type in
           passphrases every time you make an SSH connection.  Use
           <command>ssh-add</command> to add a key to the agent.
-        '';
-      };
-
-      isClone = mkOption {
-        default = true;
-        example = false;
-        description = ''
-          Whether to enable the X server clone mode for dual-head.
         '';
       };
 
@@ -266,7 +273,7 @@ in
       };
 
       defaultDepth = mkOption {
-        default = 24;
+        default = 0;
         example = 8;
         description = "Default colour depth.";
       };
@@ -321,9 +328,9 @@ in
       };
 
     boot.extraModulePackages =
-      optional (cfg.videoDriver == "nvidia") kernelPackages.nvidia_x11 ++ 
-      optional (cfg.videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy ++
-      optional (cfg.videoDriver == "virtualbox") kernelPackages.virtualboxGuestAdditions;
+      optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
+      optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy ++
+      optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     environment.etc = optionals cfg.exportConfiguration
       [ { source = "${configFile}";
@@ -344,13 +351,13 @@ in
         xorg.xsetroot
         xorg.xprop
       ]
-      ++ optional (videoDriver == "nvidia") kernelPackages.nvidia_x11
-      ++ optional (videoDriver == "nvidiaLegacy") kernelPackages.nvidia_x11_legacy;
+      ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
+      ++ optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy;
       
     environment.systemPackages = config.environment.x11Packages;
     
     services.hal.packages = halConfigFiles ++
-      optional (videoDriver == "virtualbox") kernelPackages.virtualboxGuestAdditions;
+      optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
       { startOn = if cfg.autorun then "hal" else "never";
@@ -358,11 +365,12 @@ in
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
-          } // optionalAttrs (videoDriver != "nvidia") {
+          } # !!! Depends on the driver selected at runtime.
+            // optionalAttrs (!elem "nvidia" driverNames) {
             XORG_DRI_DRIVER_PATH = "${pkgs.mesa}/lib/dri";
-          } // optionalAttrs (videoDriver == "nvidia") {
+          } // optionalAttrs (elem "nvidia" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
-          } // optionalAttrs (videoDriver == "nvidiaLegacy") {
+          } // optionalAttrs (elem "nvidiaLegacy" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy}/lib";
           } // cfg.displayManager.job.environment;
 
@@ -377,16 +385,15 @@ in
             done
         
             rm -f /var/run/opengl-driver
-            ${if videoDriver == "nvidia"
-              then ''
+            ${# !!! The OpenGL driver depends on what's detected at runtime.
+              if elem "nvidia" driverNames then ''
                 ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
               ''
-	      else if videoDriver == "nvidiaLegacy"
-              then ''
+	      else if elem "nvidiaLegacy" driverNames then ''
                 ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver
               ''
-              else if cfg.driSupport
-              then "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
+              else if cfg.driSupport then
+                "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
               else ""
              }
 
@@ -409,8 +416,11 @@ in
         "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
       ] ++ optional (!cfg.enableTCP) "-nolisten tcp";
 
-    services.xserver.modules = videoDriverInfo.modules
-      ++ [ xorg.xorgserver xorg.xf86inputevdev ];
+    services.xserver.modules =
+      concatLists (catAttrs "modules" drivers) ++
+      [ xorg.xorgserver
+        xorg.xf86inputevdev
+      ];
     
     services.xserver.config =
       ''
@@ -423,85 +433,71 @@ in
         EndSection
 
         Section "Monitor"
+          Identifier "Monitor[0]"
           ${cfg.monitorSection}
         EndSection
 
-        Section "Device"
-          ${cfg.deviceSection}
-        EndSection
-
         Section "ServerLayout"
+          Identifier "Layout[all]"
           ${cfg.serverLayoutSection}
+          # Reference the Screen sections for each driver.  This will
+          # cause the X server to try each in turn.
+          ${flip concatMapStrings drivers (d: ''
+            Screen "Screen-${d.name}[0]"
+          '')}
         EndSection
 
-        Section "Screen"
-          Identifier "Screen[0]"
-          Device "Device[0]"
-          Monitor "Monitor[0]"
+        # For each supported driver, add a "Device" and "Screen"
+        # section.
+        ${flip concatMapStrings drivers (driver: ''
+        
+          Section "Device"
+            Identifier "Device-${driver.name}[0]"
+            Driver "${driver.name}"
+            ${optionalString (driver.name == "nvidiaLegacy") ''
+              # This option allows suspending with a nvidiaLegacy card
+              Option "NvAGP" "1"
+            ''}
+            ${cfg.deviceSection}
+          EndSection
 
-          ${optionalString (cfg.defaultDepth != 0) ''
-            DefaultDepth ${toString cfg.defaultDepth}
-          ''}
+          Section "Screen"
+            Identifier "Screen-${driver.name}[0]"
+            Device "Device-${driver.name}[0]"
 
-          ${optionalString (cfg.videoDriver == "nvidia") ''
-            Option "RandRRotation" "on"
-          ''}
+            ${optionalString (cfg.defaultDepth != 0) ''
+              DefaultDepth ${toString cfg.defaultDepth}
+            ''}
 
-          ${if cfg.videoDriver != "virtualbox" then
-            let
-              f = depth:
-                ''
-                  SubSection "Display"
-                    Depth ${toString depth}
-                    Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}
-                    ${cfg.extraDisplaySettings}
-                    ${optionalString (cfg.virtualScreen != null)
-                      "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
-                  EndSubSection
-                '';
-            in concatMapStrings f [8 16 24]
-	    else
-	      "" # The VirtualBox driver does not support dynamic resizing if resolutions are defined
-          }
+            ${optionalString (driver.name == "nvidia") ''
+              Option "RandRRotation" "on"
+            ''}
 
-        EndSection
-
-        Section "Extensions"
-          ${optionalString (cfg.videoDriver == "nvidia" || cfg.videoDriver == "nvidiaLegacy" || cfg.videoDriver == "i810" || cfg.videoDriver == "ati" || cfg.videoDriver == "radeonhd") ''
-            Option "Composite" "Enable"
-          ''}
-        EndSection
-
-        Section "DRI"
-          Mode 0666 # !!! FIX THIS!
-        EndSection
+            ${optionalString
+                (driver.name != "virtualbox" && (cfg.resolutions != []
+                 || cfg.extraDisplaySettings != "" || cfg.virtualScreen != null)) (
+              let
+                f = depth:
+                  ''
+                    SubSection "Display"
+                      Depth ${toString depth}
+                      ${optionalString (cfg.resolutions != [])
+                        "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
+                      ${cfg.extraDisplaySettings}
+                      ${optionalString (cfg.virtualScreen != null)
+                        "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
+                    EndSubSection
+                  '';
+              in concatMapStrings f [8 16 24]
+            )}
+          
+          EndSection
+        '')}
       '';
 
-    services.xserver.monitorSection =
-      ''
-        Identifier "Monitor[0]"
-      '';
-      
-    services.xserver.deviceSection =
-      ''
-        Identifier "Device[0]"
-        Driver "${if cfg.videoDriver == "nvidiaLegacy" then "nvidia" 
-	          else if cfg.videoDriver == "virtualbox" then "vboxvideo"
-	          else cfg.videoDriver}"
-
-        ${if cfg.videoDriver == "nvidiaLegacy" then ''
-        # This option allows suspending with a nvidiaLegacy card
-	Option "NvAGP" "1"''
-        else ""}
-        # !!! Is the "Clone" option still useful?
-        Option "Clone" "${if cfg.isClone then "on" else "off"}"
-      '';
-
-    services.xserver.serverLayoutSection =
-      ''
-        Identifier "Layout[all]"
-        Screen "Screen[0]"
-      '';
+    # The default set of supported video drivers.  !!! We'd like "nv"
+    # here, but it segfaults the X server.  Idem for "vmware".
+    services.xserver.videoDrivers = [ "ati" "cirrus" "intel" "vesa" ];
 
   };
 

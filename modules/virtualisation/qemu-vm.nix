@@ -135,8 +135,10 @@ in
 
   # When building a regular system configuration, override whatever
   # video driver the host uses.
-  services.xserver.videoDriver = pkgs.lib.mkOverride 50 {} "vesa";
-  services.xserver.defaultDepth = pkgs.lib.mkOverride 50 {} 16;
+  services.xserver.videoDriver = pkgs.lib.mkOverride 50 {} null;
+  services.xserver.videoDrivers = pkgs.lib.mkOverride 50 {} [ "cirrus" "vesa" ];
+  services.xserver.defaultDepth = pkgs.lib.mkOverride 50 {} 0;
+  services.xserver.resolutions = pkgs.lib.mkOverride 50 {} [];
 
   # Wireless won't work in the VM.
   networking.enableWLAN = pkgs.lib.mkOverride 50 {} false;
