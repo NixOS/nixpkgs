@@ -1939,7 +1939,9 @@ let
   });
 
   gcl = builderDefsPackage ../development/compilers/gcl {
-    inherit gmp mpfr m4 binutils ;
+    inherit mpfr m4 binutils fetchcvs emacs;
+    inherit (xlibs) libX11 xproto inputproto libXi 
+      libXext xextproto libXt libXaw libXmu;
   };
 
   # GHC
@@ -2200,7 +2202,7 @@ let
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper;
-    clisp = clisp_2_44_1;
+    clisp = clisp;
   };
 
   scala = import ../development/compilers/scala {
