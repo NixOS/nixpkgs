@@ -1,10 +1,10 @@
 rec {
-   version="847ddc83ccbd7964898980f3f4dd520937ea3bbe";
-   name="uzbl-experimental-847ddc83ccbd7964898980f3f4dd520937ea3bbe";
-   hash="51f271fb6a9b676019c45142a9998a840bb664045fb2c5ec71d8d62a56621592";
-   rev="847ddc83ccbd7964898980f3f4dd520937ea3bbe";
+   version="1461ac760f79b8f153c8317c4534cb047a48331a";
+   name="uzbl-experimental-1461ac760f79b8f153c8317c4534cb047a48331a";
+   hash="b5dfae5245b1b3934ca918831fbe9fa0bb7ae790c682b69f5ecc042cccf58894";
+   rev="1461ac760f79b8f153c8317c4534cb047a48331a";
    url="git://github.com/Dieterbe/uzbl.git";
   
-   depth="100";
+   depth="50";
   
 }
