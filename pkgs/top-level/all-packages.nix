@@ -3731,6 +3731,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  krb5 = import ../development/libraries/kerberos/krb5.nix {
+    inherit stdenv fetchurl perl ncurses yacc;
+  };
+
   lablgtk = import ../development/libraries/lablgtk {
     inherit fetchurl stdenv ocaml pkgconfig;
     inherit (gtkLibs) gtk;
