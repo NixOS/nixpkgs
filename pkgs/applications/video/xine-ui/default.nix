@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig xineLib libpng readline ncurses curl
       xlibs.xlibs xlibs.libXext xlibs.libXv xlibs.libXxf86vm xlibs.libXtst xlibs.inputproto
-      xlibs.libXinerama
+      xlibs.libXinerama xlibs.libXi
     ];
 
   configureFlags = "--with-readline=${readline}";
