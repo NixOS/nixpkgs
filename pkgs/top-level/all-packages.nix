@@ -1311,7 +1311,7 @@ let
   };
 
   plotutils = import ../tools/graphics/plotutils {
-    inherit fetchurl stdenv lib libpng;
+    inherit fetchurl stdenv libpng;
   };
 
   povray = import ../tools/graphics/povray {
