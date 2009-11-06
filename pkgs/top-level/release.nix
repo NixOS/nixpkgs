@@ -39,8 +39,19 @@ let
     if builtins ? tryEval then 
       let pairs = pkgs.lib.concatMap 
         (x:
-          let val = builtins.tryEval (processPackage (builtins.getAttr x attrSet)); in
-          if builtins.isAttrs x && val.success && val.value != [] then [{name=x; value=val.value;}] else [])
+	  let pair = builtins.tryEval
+	        (let 
+		   attrVal = (builtins.getAttr x attrSet);
+		 in
+		   {val=(processPackage attrVal); 
+		    attrVal = attrVal;
+		    attrValIsAttrs = builtins.isAttrs attrVal;
+		    });
+	      success = (builtins.tryEval pair.value.attrVal).success;
+	  in
+          if success && pair.value.attrValIsAttrs && 
+	      pair.value.val != [] then 
+	    [{name= x; value=pair.value.val;}] else [])
         (builtins.attrNames attrSet);
       in
         builtins.listToAttrs pairs
@@ -51,9 +62,9 @@ let
     if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then 
       packagesWithMetaPlatform attrSet
     else
-      if builtins.hasAttr "platforms" attrSet.meta
-      then builtins.getAttr "platforms" attrSet.meta
-      else [];
+      if attrSet ? meta && attrSet.meta ? platforms
+        then attrSet.meta.platforms
+        else [];
 
   /* Common platform groups on which to test packages. */
   inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
