@@ -311,6 +311,10 @@ in
           target = "init/${job.name}.conf";
         } );
 
+    # Upstart can listen on the system bus, allowing normal users to
+    # do status queries.
+    services.dbus.packages = [ upstart ];
+
     # !!! fix this
     /*
     tests.upstartJobs = { recurseForDerivations = true; } //

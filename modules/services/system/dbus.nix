@@ -130,6 +130,12 @@ in
 
         exec = "${dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf";
 
+        postStart =
+          ''
+            # Signal Upstart that it can connect to the system bus.
+            kill -HUP 1 || true
+          '';
+
         postStop =
           ''
             # !!! Hack: doesn't belong here.
