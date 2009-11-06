@@ -106,9 +106,11 @@ if test -n "$safeMode"; then
 fi
 
 
-# Create the minimal device nodes needed before we run udev.
+# Create the minimal device nodes needed for the activation scripts
+# and Upstart.
 mknod -m 0666 /dev/null c 1 3
 mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
+mknod -m 0644 /dev/console c 5 1
 
 
 # Clear the resume device.
@@ -136,12 +138,12 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @postBootCommands@
 
-echo "starting Upstart..."
+# For debugging Upstart.
+#@shell@ --login < /dev/console > /dev/console 2>&1 &
 
 # Start Upstart's init.  We start it through the
 # /var/run/current-system symlink indirection so that we can upgrade
 # init in a running system by changing the symlink and sending init a
 # HUP signal.
-export UPSTART_CFG_DIR=/etc/event.d
-setPath "@upstartPath@"
-exec /var/run/current-system/upstart/sbin/init
+echo "starting Upstart..."
+exec /var/run/current-system/upstart/sbin/init -v

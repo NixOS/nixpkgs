@@ -4,9 +4,19 @@ with pkgs.lib;
 
 let
 
-  upstart = pkgs.upstart;
+  upstart = pkgs.upstart06;
 
 
+  # Path for Upstart jobs.  Should be quite minimal.
+  upstartPath =
+    [ pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      upstart
+    ];
+
+    
   # From a job description, generate an Upstart job file.
   makeJob = job:
 
@@ -18,6 +28,8 @@ let
         
           description "${job.description}"
 
+          console output
+
           ${if isList job.startOn then
               # This is a hack to support or-dependencies on Upstart 0.3.
               concatMapStrings (x: "start on ${x}\n") job.startOn
@@ -28,10 +40,11 @@ let
           
           ${if job.stopOn != "" then "stop on ${job.stopOn}" else ""}
 
+          env PATH=${makeSearchPath "bin" upstartPath}:${makeSearchPath "sbin" upstartPath}
           ${concatMapStrings (n: "env ${n}=${getAttr n job.environment}\n") (attrNames job.environment)}
           
           ${if job.preStart != "" then ''
-            start script
+            pre-start script
               ${job.preStart}
             end script
           '' else ""}
@@ -48,18 +61,13 @@ let
               ''
                 exec ${job.exec}
               ''
-            else
-              # Simulate jobs without a main process (which Upstart 0.3
-              # doesn't support) using a semi-infinite sleep.
-              ''
-                exec sleep 1e100
-              ''
+            else ""
           }
 
           ${if job.respawn && !job.task then "respawn" else ""}
 
           ${if job.postStop != "" then ''
-            stop script
+            post-stop script
               ${job.postStop}
             end script
           '' else ""}
@@ -68,37 +76,14 @@ let
         '';
 
     in
-      pkgs.runCommand ("upstart-" + job.name)
+      pkgs.runCommand ("upstart-" + job.name + ".conf")
         { inherit (job) buildHook; inherit jobText; }
         ''
           eval "$buildHook"
-          ensureDir $out/etc/event.d
-          echo "$jobText" > $out/etc/event.d/${job.name}
+          echo "$jobText" > $out
         '';
 
         
-  jobs =
-    [ upstart ] # for the built-in logd job
-    ++ map (job: job.upstartPkg) (attrValues config.jobs);
-
-    
-  # Create an etc/event.d directory containing symlinks to the
-  # specified list of Upstart job files.
-  jobsDir = pkgs.runCommand "upstart-jobs" {inherit jobs;}
-    ''
-      ensureDir $out/etc/event.d
-      for i in $jobs; do
-        if ln -s $i . ; then
-          if test -d $i; then
-            ln -s $i/etc/event.d/* $out/etc/event.d/
-          fi
-        else
-          echo Duplicate entry: $i;
-        fi;
-      done
-    ''; # */
-
-
   jobOptions = {
 
     name = mkOption {
@@ -227,13 +212,12 @@ let
   
   upstartJob = {name, config, ...}: {
     options = {
-      upstartPkg = mkOption {
+      jobDrv = mkOption {
         default = makeJob config;
         type = types.uniq types.package;
         description = ''
-          Upstart package which contains upstart events inside
-          <filename>/etc/event.d/</filename>.  The default value is
-          generated from other options.
+          Derivation that builds the Upstart job file.  The default
+          value is generated from other options.
         '';
       };
     };
@@ -284,18 +268,19 @@ in
     system.build.upstart = upstart;
 
     environment.etc =
-      [ { # The Upstart events defined above.
-          source = "${jobsDir}/etc/event.d";
-          target = "event.d";
-        }
-      ];
+      flip map (attrValues config.jobs) (job:
+        { source = job.jobDrv;
+          target = "init/${job.name}.conf";
+        } );
 
     # !!! fix this
+    /*
     tests.upstartJobs = { recurseForDerivations = true; } //
       builtins.listToAttrs (map (job: {
         name = removePrefix "upstart-" job.name;
         value = job;
       }) jobs);
+    */
   
   };
 
