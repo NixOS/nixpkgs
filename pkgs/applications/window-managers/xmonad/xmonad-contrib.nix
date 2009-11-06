@@ -1,11 +1,11 @@
-{cabal, xmonad, X11}:
+{cabal, xmonad, X11, utf8String}:
 
 cabal.mkDerivation (self : {
   pname = "xmonad-contrib";
   name = "${self.fname}";
-  version = "0.8.1";
-  sha256 = "dedbd2e7718f7383e403f5f0b40d411f27099625e7e1dcddd42f7c12bf6488a9";
-  propagatedBuildInputs = [X11 xmonad];
+  version = "0.9";
+  sha256 = "f67471785eba323ac416f912d3503976ef6ed43e93e53fabf5621b2c93351ae9";
+  propagatedBuildInputs = [X11 xmonad utf8String];
   meta = {
     description = "a huge extension library for xmonad";
   };

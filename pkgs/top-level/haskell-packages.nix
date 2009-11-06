@@ -716,7 +716,7 @@ rec {
   };
 
   xmonadContrib = import ../applications/window-managers/xmonad/xmonad-contrib.nix {
-    inherit cabal xmonad X11;
+    inherit cabal xmonad X11 utf8String;
   };
 
 

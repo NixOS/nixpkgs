@@ -4,8 +4,8 @@ assert xineramaSupport -> (libXinerama != null && libXext != null);
 
 cabal.mkDerivation (self : {
   pname = "X11";
-  version = "1.4.5";
-  sha256 = "6665056b9fe5801ca27bf960a90215c940ae70b549753efed0303d5ed8d89ddb";
+  version = "1.4.6.1";
+  sha256 = "3e1375d4e53a8366fa2ea12bd9c3033ffe2f7dd00443acd84f722cf0dfff0fa9";
   propagatedBuildInputs = [libX11] ++ (if xineramaSupport then [libXinerama libXext] else []);
   meta = {
     description = "A Haskell binding to the X11 graphics library";
