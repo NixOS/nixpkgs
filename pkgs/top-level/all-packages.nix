@@ -8459,6 +8459,9 @@ let
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
+    supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
+    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
+    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
   # The bleeding edge.
