@@ -546,6 +546,14 @@ in {
     kernel = linux;
   };
 
+  kernelPackages_2_6_31_zen = {
+    kernel = linux;
+  };
+
+  kernelPackages_2_6_31_zen_bfs = {
+    kernel = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
