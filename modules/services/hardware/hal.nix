@@ -67,9 +67,7 @@ in
     jobs.hal =
       { description = "HAL daemon";
         
-        # !!! TODO: make sure that HAL starts after acpid,
-        # otherwise hald-addon-acpi will grab /proc/acpi/event.
-        startOn = if config.powerManagement.enable then "started acpid" else "started dbus";
+        startOn = "started dbus" + optionalString config.powerManagement.enable " and started acpid";
 
         environment =
           { # !!! HACK? These environment variables manipulated inside
