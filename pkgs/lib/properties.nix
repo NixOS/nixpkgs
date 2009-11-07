@@ -441,4 +441,42 @@ rec {
     in
       map (x: x.value) (sort cmp rankValList);
 
+  /* mkFixStrictness */
+
+  # This is a hack used to restore laziness on some option definitions.
+  # Some option definitions are evaluated when they are not used.  This
+  # error is caused by the strictness of type checking builtins.  Builtins
+  # like 'isAttrs' are too strict because they have to evaluate their
+  # arguments to check if the type is correct.  This evaluation, cause the
+  # strictness of properties.
+  #
+  # Properties can be stacked on top of each other.  The stackability of
+  # properties on top of the option definition is nice for user manipulation
+  # but require to check if the content of the property is not another
+  # property.  Such testing implies to verify if this is an attribute set
+  # and if it possess the type "property". (see isProperty & typeOf)
+  #
+  # To avoid strict evaluation of option definitions, 'mkFixStrictness' is
+  # introduced.  This property protect the option definition by replacing
+  # the base of the stack of properties by 'mkNotDef', when this property is
+  # evaluated it returns the original definition.
+  #
+  # This property is useful over any elements which may depends on an
+  # options which may raise an error if it gets evaluated whitout the proper
+  # settings.  You do not need to use this on top of plain list or attribute
+  # set.
+  #
+  # This is a Hack, you should avoid it!
+
+  # This property has a long name because you should avoid it.
+  isFixStrictness = attrs: (typeOf attrs) == "fix-strictness";
+  mkFixStrictness = value:
+    mkProperty {
+      property = {
+        _type = "fix-strictness";
+        onEval = p: value;
+      };
+      content = mkNotdef;
+    };
+
 }
