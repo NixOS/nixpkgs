@@ -89,14 +89,12 @@ in
             chown -R ${cfg.user} ${cfg.pidDir}
           '';
 
-        exec = "${mysql}/bin/mysqld ${mysqldOptions}";
+        exec = "${mysql}/libexec/mysqld ${mysqldOptions}";
 
-        postStop =
-          ''
-            pid=$(cat ${pidFile})
-            kill "$pid"
-            ${mysql}/bin/mysql_waitpid "$pid" 1000
-          '';
+        # !!! Need a postStart script to wait until mysqld is ready to
+        # accept connections.
+
+        extraConfig = "kill timeout 60";
       };
 
   };
