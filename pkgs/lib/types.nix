@@ -135,7 +135,7 @@ rec {
       name = "option set";
       # merge is done in "options.nix > addOptionMakeUp > handleOptionSets"
       merge = lib.id;
-      check = x: lib.traceValIfNot builtins.isAttrs x;
+      check = x: isAttrs x || builtins.isFunction x;
       hasOptions = true;
       delayOnGlobalEval = true;
     };
