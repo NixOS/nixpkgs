@@ -454,17 +454,19 @@ rec {
   # properties on top of the option definition is nice for user manipulation
   # but require to check if the content of the property is not another
   # property.  Such testing implies to verify if this is an attribute set
-  # and if it possess the type "property". (see isProperty & typeOf)
+  # and if it possess the type 'property'. (see isProperty & typeOf)
   #
   # To avoid strict evaluation of option definitions, 'mkFixStrictness' is
-  # introduced.  This property protect the option definition by replacing
+  # introduced.  This property protects an option definition by replacing
   # the base of the stack of properties by 'mkNotDef', when this property is
   # evaluated it returns the original definition.
   #
-  # This property is useful over any elements which may depends on an
-  # options which may raise an error if it gets evaluated whitout the proper
-  # settings.  You do not need to use this on top of plain list or attribute
-  # set.
+  # This property is useful over any elements which depends on options which
+  # are raising errors when they get evaluated without the proper settings.
+  #
+  # Plain list and attribute set are lazy structures, which means that the
+  # container gets evaluated but not the content.  Thus, using this property
+  # on top of plain list or attribute set is pointless.
   #
   # This is a Hack, you should avoid it!
 
