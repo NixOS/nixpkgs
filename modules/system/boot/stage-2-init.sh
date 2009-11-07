@@ -27,7 +27,7 @@ setPath "@path@"
 # Mount special file systems.
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
-[ -s /etc/mtab ] && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
+test -s /etc/mtab && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
 rm -f /etc/mtab* # not that we care about stale locks
 mkdir -m 0755 -p /proc
 mount -n -t proc none /proc
@@ -99,11 +99,6 @@ rm -rf /var/lock
 # to /nix/store and other places.  But after rebooting these are all
 # gone, of course.
 rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
-
-if test -n "$safeMode"; then
-    mkdir -m 0755 -p /var/run
-    touch /var/run/safemode
-fi
 
 
 # Create the minimal device nodes needed for the activation scripts
