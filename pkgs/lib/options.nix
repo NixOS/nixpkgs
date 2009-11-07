@@ -83,26 +83,35 @@ rec {
         if opt ? type && opt.type.hasOptions then
           let
             
-            optionConfig = vals: path: config:
-              let name = lib.removePrefix (opt.name + ".") path; in
-              map (f: lib.applyIfFunction f ({inherit name;} // config))
+            optionConfig = vals: args:
+              map (f: lib.applyIfFunction f args)
                 (opt.options ++ toList vals);
+
+            # Evaluate sub-modules.
+            subModuleMerge = path: vals:
+              lib.fix (args:
+                let result = recurseInto path (optionConfig vals args); in {
+                  inherit (result) config options;
+                  name = lib.removePrefix (opt.name + ".") path;
+                }
+              );
+
+            # Add _options in sub-modules to make it viewable from other
+            # modules.
+            subModuleMergeConfig = path: vals:
+              let result = subModuleMerge path vals; in
+                { _args = result; } // result.config;
+
           in
             opt // {
               merge = list:
                 opt.type.iter
-                  (path: vals:
-                    (lib.fix
-                      (fixableMergeFun (recurseInto path) (optionConfig vals path))
-                    ).config
-                  )
+                  subModuleMergeConfig
                   opt.name
                   (opt.merge list);
               options =
                 let path = opt.type.docPath opt.name; in
-                (lib.fix
-                  (fixableMergeFun (recurseInto path) (optionConfig [] path))
-                ).options;
+                  (subModuleMerge path []).options;
             }
         else
           opt;
