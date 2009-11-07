@@ -238,6 +238,7 @@ rec {
 
           result =
             if isOption then value
+            else if !hasOptions then {}
             else if all isAttrs values then recurse
             else
               throw "${eol
@@ -322,5 +323,29 @@ rec {
         moduleClosure initModules (module // args)
       )
     );
+
+  # Visit all definitions to raise errors related to undeclared options.
+  checkModule = path: {config, options, ...}@m:
+    let
+      eol = "\n";
+      addName = name:
+        if path == "" then name else path + "." + name;
+    in
+    if lib.isOption options then
+      if options ? options then
+        options.type.fold
+          (cfg: res: res && checkModule (options.type.docPath path) cfg._args)
+          true config
+      else
+        true
+    else if isAttrs options && lib.attrNames m.options != [] then
+      all (name:
+        lib.addErrorContext "${eol
+          }while checking the attribute '${addName name}'.${eol
+        }" (checkModule (addName name) (selectModule name m))
+      ) (lib.attrNames m.config)
+    else
+      builtins.trace "try to evaluate config ${lib.showVal config}."
+      false;
 
 }
