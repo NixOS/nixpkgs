@@ -382,4 +382,63 @@ rec {
           mkNotdef
       ) prioValList;
 
+  /* mkOrder */
+
+  # Order definitions based on there index value.  This property is useful
+  # when the result of the merge function depends on the order on the
+  # initial list.  (e.g. concatStrings) Definitions are ordered based on
+  # their rank.  The lowest ranked definition would be the first to element
+  # of the list used by the merge function.  And the highest ranked
+  # definition would be the last.  Definitions which does not have any rank
+  # value have the default rank of 100.
+  isOrder = attrs: (typeOf attrs) == "order";
+  mkOrder = rank: content: mkProperty {
+    property = {
+      _type = "order";
+      onGlobalEval = onOrderGlobalEval;
+      inherit rank;
+    };
+    inherit content;
+  };
+
+  mkHeader = mkOrder 10;
+  mkFooter = mkOrder 1000;
+
+  # Fetch the rank of each definition (add the default rank is none) and
+  # sort them based on their ranking.
+  onOrderGlobalEval = valList:
+    let
+      defaultRank = 100;
+
+      inherit (builtins) lessThan;
+
+      getRankVal =
+        foldProperty
+          (foldFilter isOrder
+            (p@{property, content, ...}:
+              if content ? rank then
+                content
+              else
+                content // {
+                  inherit (property) rank;
+                }
+            )
+            (p@{property, content, ...}:
+              content // {
+                value = p // { content = content.value; };
+              }
+            )
+          ) (value: { inherit value; });
+
+      addDefaultRank = x:
+        if x ? rank then x
+        else x // { rank = defaultRank; };
+
+      rankValList = map (x: addDefaultRank (getRankVal x)) valList;
+
+      cmp = x: y:
+        builtins.lessThan x.rank y.rank;
+    in
+      map (x: x.value) (sort cmp rankValList);
+
 }

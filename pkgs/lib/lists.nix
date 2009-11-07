@@ -142,4 +142,23 @@ rec {
       if l == [] then accu
       else reverse_ ([(head l)] ++ accu) (tail l);
     in reverse_ [] l;
+
+  # Sort a list based on the `strictLess' function which compare the two
+  # elements and return true if the first argument is strictly below the
+  # second argument.  The returned list is sorted in an increasing order.
+  # The implementation does a quick-sort.
+  sort = strictLess: list:
+    let
+      # This implementation only have one element lists on the left hand
+      # side of the concatenation operator.
+      qs = l: concat:
+        if l == [] then concat
+        else if tail l == [] then l ++ concat
+        else let
+          part = partition (strictLess (head l)) (tail l);
+        in
+          qs part.wrong ([(head l)] ++ qs part.right []);
+    in
+      qs list [];
+
 }
