@@ -200,7 +200,8 @@ rec {
   };
   
   gnome_doc_utils = import ./desktop/gnome-doc-utils {
-    inherit (pkgs) stdenv fetchurl python pkgconfig libxslt;
+    inherit (pkgs) stdenv fetchurl python pkgconfig libxslt
+      makeWrapper;
     inherit intltool scrollkeeper;
     libxml2 = pkgs.libxml2Python;
   };
