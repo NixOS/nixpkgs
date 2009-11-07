@@ -1,9 +1,9 @@
 rec {
-   version="0.8.4-2";
-   name="linuxwacom-0.8.4-2";
-   hash="0czsmg4danh0ia784nrv4cifvs6wn1dw0mbs6l1ln0w2mvxxkgz0";
-   url="http://downloads.sourceforge.net/linuxwacom/files/linuxwacom/${version}/linuxwacom-${version}.tar.bz2";
-   advertisedUrl="http://downloads.sourceforge.net/linuxwacom/files/linuxwacom/0.8.4-2/linuxwacom-0.8.4-2.tar.bz2";
+   version="0.8.5-1";
+   name="linuxwacom-0.8.5-1";
+   hash="0a4j9fdvi207s11h4xnx3yfnf8lqijwn6w5blwpaq8spd94xywrs";
+   url="http://downloads.sourceforge.net/linuxwacom/files/linuxwacom-dev/${version}/linuxwacom-${version}.tar.bz2";
+   advertisedUrl="http://downloads.sourceforge.net/linuxwacom/files/linuxwacom-dev/0.8.5-1/linuxwacom-0.8.5-1.tar.bz2";
   
   
 }
