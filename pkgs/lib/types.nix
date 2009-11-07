@@ -40,7 +40,7 @@ rec {
     };
 
     
-  types = {
+  types = rec {
 
     inferred = mkOptionType {
       name = "inferred type";
@@ -61,6 +61,12 @@ rec {
       name = "string";
       check = lib.traceValIfNot (x: builtins ? isString -> builtins.isString x);
       merge = lib.concatStrings;
+    };
+
+    envVar = mkOptionType {
+      name = "environment variable";
+      inherit (string) check;
+      merge = lib.concatStringsSep ":";
     };
 
     attrs = mkOptionType {
