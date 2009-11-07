@@ -381,6 +381,7 @@ in {
   unrar = linux;
   unzip = all;
   upstart = linux;
+  upstart06 = linux;
   usbutils = linux;
   utillinux = linux;
   utillinuxCurses = linux;
