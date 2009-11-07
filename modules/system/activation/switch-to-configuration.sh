@@ -54,27 +54,24 @@ EOF
         exit 1
     fi
 
-    oldEvents=$(readlink -f /etc/event.d || true)
-    newEvents=$(readlink -f @out@/etc/event.d)
+    oldJobs=$(readlink -f /etc/static/init)
+    newJobs=$(readlink -f @out@/etc/init)
 
-    #echo "old: $oldEvents"
-    #echo "new: $newEvents"
+    echo "old: $oldJobs"
+    echo "new: $newJobs"
 
     stopJob() {
         local job=$1
-        initctl stop "$job"
-        while ! initctl status "$job" 2>&1 | grep -q "(stop) waiting"; do
-            echo "waiting for $job to stop..."
-            sleep 1
-        done
+        initctl stop "$job" || true
     }
 
     # Stop all services that are not in the new Upstart
     # configuration.
-    for event in $(cd $oldEvents && ls); do
-        if ! test -e "$newEvents/$event"; then
-            echo "stopping $event..."
-            stopJob $event
+    for job in $(cd $oldJobs && ls *.conf); do
+        job=$(basename $job .conf)
+        if ! test -e "$newJobs/$job.conf"; then
+            echo "stopping $job..."
+            stopJob $job
         fi
     done
 
@@ -83,26 +80,27 @@ EOF
     echo "activating the configuration..."
     @out@/activate @out@
 
-    # Make Upstart reload its events.  !!! Should wait until it has
-    # finished processing its stop events.
-    kill -TERM 1 
+    # Make Upstart reload its jobs.
+    initctl reload-configuration
 
     # Start all new services and restart all changed services.
-    for event in $(cd $newEvents && ls); do
+    for job in $(cd $newJobs && ls *.conf); do
 
-        # Hack: skip the sys-* and ctrl-alt-delete events.
+        job=$(basename $job .conf)
+        
+        # Hack: skip the shutdown and control-alt-delete jobs.
         # Another hack: don't restart the X server (that would kill all the clients).
         # And don't restart dbus, since that causes ConsoleKit to
         # forget about current sessions.
-        if echo "$event" | grep -q "^sys-\|^ctrl-\|^xserver$\|^dbus$"; then continue; fi
-    
-        if ! test -e "$oldEvents/$event"; then
-            echo "starting $event..."
-            initctl start "$event"
-        elif test "$(readlink "$oldEvents/$event")" != "$(readlink "$newEvents/$event")"; then
-            echo "restarting $event..."
-            stopJob $event
-            initctl start "$event"
+        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$"; then continue; fi
+
+        if ! test -e "$oldJobs/$job.conf"; then
+            echo "starting $job..."
+            initctl start "$job" || true
+        elif test "$(readlink "$oldJobs/$job.conf")" != "$(readlink "$newJobs/$job.conf")"; then
+            echo "restarting $job..."
+            stopJob $job
+            initctl start "$job" || true
         fi
     done
 fi
