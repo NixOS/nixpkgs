@@ -3,6 +3,4 @@
   rev = "origin/master";
   baseName = "zen-linux";
   method = "fetchgit";
-  extraVars = "depth";
-  eval_depth = "depth=500";
 }
