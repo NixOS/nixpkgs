@@ -65,6 +65,7 @@ let
       if [ ! -f ${kernelPath} ]; then
         echo "The bootloader cannot find the proper kernel image."
         echo "(Expecting ${kernelPath})"
+        false
       fi
       ln -s ${kernelPath} $out/kernel
       if [ -n "$grub" ]; then 

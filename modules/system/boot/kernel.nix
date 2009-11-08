@@ -1,8 +1,9 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 ###### interface
 let
-  inherit (pkgs.lib) mkOption;
 
   options = {
     boot = {
@@ -148,31 +149,12 @@ let
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
       ";
-      merge = pkgs.lib.mergeListOption;
+      merge = mergeListOption;
 
       # Convert the list of path to only one path.
       apply = pkgs.aggregateModules;
     };
 
-    system.sbin.modprobe = mkOption {
-      # should be moved in module-init-tools
-      internal = true;
-      default = pkgs.writeTextFile {
-        name = "modprobe";
-        destination = "/sbin/modprobe";
-        executable = true;
-        text =
-          ''
-            #! ${pkgs.stdenv.shell}
-            export MODULE_DIR=${config.system.modulesTree}/lib/modules
-            exec ${pkgs.module_init_tools}/sbin/modprobe "$@"
-          '';
-      };
-      description = ''
-        Wrapper around modprobe that sets the path to the modules
-        tree.
-      '';
-    };
   };
   
 in

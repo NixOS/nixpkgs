@@ -1,5 +1,6 @@
 [ ./config/fonts.nix
   ./config/i18n.nix
+  ./config/krb5.nix
   ./config/ldap.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
@@ -93,8 +94,6 @@
   ./services/ttys/gpm.nix
   ./services/ttys/mingetty.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/apache-httpd/per-server-options.nix
-  ./services/web-servers/apache-httpd/services.nix
   ./services/web-servers/jboss.nix
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix
@@ -122,6 +121,7 @@
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
   ./system/boot/kernel.nix
+  ./system/boot/modprobe.nix
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/etc/etc.nix

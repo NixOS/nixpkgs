@@ -28,7 +28,7 @@ let
         mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
       fi
 
-      passwdFile="$(sed -n 's/^.*smb[ ]\+passwd[ ]\+file[ ]\+=[ ]\+\(.*\)/\1/p' /nix/store/nnmrqalldfv2vkwy6qpg340rv7w34lmp-smb.conf)"
+      passwdFile="$(sed -n 's/^.*smb[ ]\+passwd[ ]\+file[ ]\+=[ ]\+\(.*\)/\1/p' ${configFile})"
       if [ -n "$passwdFile" ]; then
         echo 'INFO: creating directory containing passwd file'
         mkdir -p "$(dirname "$passwdFile")"

@@ -10,7 +10,7 @@ let
 
   httpd = pkgs.apacheHttpd;
 
-  getPort = cfg: cfg.port;
+  getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
   extraForeignModules = filter builtins.isAttrs extraModules;
@@ -33,22 +33,45 @@ let
     fullConfig = config; # machine config
   };
 
-  vhosts = mainCfg.virtualHosts;
+
+  vhostOptions = import ./per-server-options.nix {
+    inherit mkOption;
+    forMainServer = false;
+  };
+
+  vhosts = let
+    makeVirtualHost = cfgIn: 
+      let
+        # Fill in defaults for missing options.
+        cfg = addDefaultOptionValues vhostOptions cfgIn;
+      in cfg;
+    in map makeVirtualHost mainCfg.virtualHosts;
+
 
   allHosts = [mainCfg] ++ vhosts;
     
-  # !!! This should be replaced by sub-modules to allow non-intrusive
-  # extensions of NixOS.
+
   callSubservices = serverInfo: defs:
     let f = svc:
-      rec {
-        config =
-          if res ? options then
-            addDefaultOptionValues res.options svc.configuration
-          else
-            svc.configuration;
-        res = svc // svc.function {inherit config pkgs serverInfo servicesPath;};
-      }.res;
+      let 
+        svcFunction =
+          if svc ? function then svc.function
+          else import "${./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix";
+        config = addDefaultOptionValues res.options
+          (if svc ? config then svc.config else svc);
+        defaults = {
+          extraConfig = "";
+          extraModules = [];
+          extraModulesPre = [];
+          extraPath = [];
+          extraServerPath = [];
+          globalEnvVars = [];
+          robotsEntries = "";
+          startupScript = "";
+          options = {};
+        };
+        res = defaults // svcFunction {inherit config pkgs serverInfo servicesPath;};
+      in res;
     in map f defs;
 
 
@@ -354,6 +377,13 @@ in
         ";
       };
 
+      extraConfig = mkOption {
+        default = "";
+        description = "
+          These configuration lines will be passed verbatim to the apache config
+        ";
+      };
+
       extraModules = mkOption {
         default = [];
         example = [ "proxy_connect" { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
@@ -416,7 +446,109 @@ in
         ";
       };
 
-    };
+      virtualHosts = mkOption {
+        default = [];
+        example = [
+          { hostName = "foo";
+            documentRoot = "/data/webroot-foo";
+          }
+          { hostName = "bar";
+            documentRoot = "/data/webroot-bar";
+          }
+        ];
+        description = ''
+          Specification of the virtual hosts served by Apache.  Each
+          element should be an attribute set specifying the
+          configuration of the virtual host.  The available options
+          are the non-global options permissible for the main host.
+        '';
+      };
+
+
+      subservices = {
+
+        # !!! remove this
+        subversion = {
+
+          enable = mkOption {
+            default = false;
+            description = "
+              Whether to enable the Subversion subservice in the webserver.
+            ";
+          };
+
+          notificationSender = mkOption {
+            default = "svn-server@example.org";
+            example = "svn-server@example.org";
+            description = "
+              The email address used in the Sender field of commit
+              notification messages sent by the Subversion subservice.
+            ";
+          };
+
+          userCreationDomain = mkOption {
+            default = "example.org"; 
+            example = "example.org";
+            description = "
+              The domain from which user creation is allowed.  A client can
+              only create a new user account if its IP address resolves to
+              this domain.
+            ";
+          };
+
+          autoVersioning = mkOption {
+            default = false;
+            description = "
+              Whether you want the Subversion subservice to support
+              auto-versioning, which enables Subversion repositories to be
+              mounted as read/writable file systems on operating systems that
+              support WebDAV.
+            ";
+          };
+
+          dataDir = mkOption {
+            default = "/no/such/path/exists";
+            description = "
+              Place to put SVN repository.
+            ";
+          };
+
+          organization = {
+
+            name = mkOption {
+              default = null;
+              description = "
+                Name of the organization hosting the Subversion service.
+              ";
+            };
+
+            url = mkOption {
+              default = null;
+              description = "
+                URL of the website of the organization hosting the Subversion service.
+              ";
+            };
+
+            logo = mkOption {
+              default = null;
+              description = "
+                Logo the organization hosting the Subversion service.
+              ";
+            };
+
+          };
+
+        };
+
+      };
+
+    }
+
+    # Include the options shared between the main server and virtual hosts.
+    // (import ./per-server-options.nix {
+      inherit mkOption;
+      forMainServer = true;
+    });
 
   };
 

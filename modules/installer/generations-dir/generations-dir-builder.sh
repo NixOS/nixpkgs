@@ -68,18 +68,31 @@ addEntry() {
     mkdir -p $outdir
     ln -sf $(readlink -f $path) $outdir/system
     ln -sf $(readlink -f $path/init) $outdir/init
-    ln -sf $(readlink -f $path/initrd) $outdir/initrd
-    ln -sf $(readlink -f $path/kernel) $outdir/kernel
+    ln -sf $initrd $outdir/initrd
+    ln -sf $kernel $outdir/kernel
 
     if test $(readlink -f "$path") = "$default"; then
       cp "$kernel" /boot/nixos-kernel
       cp "$initrd" /boot/nixos-initrd
       cp "$(readlink -f "$path/init")" /boot/nixos-init
+
       mkdir -p /boot/default
+      if [ -e /boot/default/system ];
+        rm /boot/default/system
+      fi
       ln -sf $(readlink -f $path) /boot/default/system
+      if [ -e /boot/default/init ];
+        rm /boot/default/init
+      fi
       ln -sf $(readlink -f $path/init) /boot/default/init
-      ln -sf $(readlink -f $path/initrd) /boot/default/initrd
-      ln -sf $(readlink -f $path/kernel) /boot/default/kernel
+      if [ -e /boot/default/initrd ];
+        rm /boot/default/initrd
+      fi
+      ln -sf $initrd /boot/default/initrd
+      if [ -e /boot/default/kernel ];
+        rm /boot/default/kernel
+      fi
+      ln -sf $kernel /boot/default/kernel
     fi
 }
 
