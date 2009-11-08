@@ -37,12 +37,16 @@
 
 , preConfigure ? ""
 , extraMeta ? {}
-, platform ? { uboot = null; }
+, platform ? { name = "pc"; uboot = null; }
 , ...
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
   || stdenv.system == "armv5tel-linux";
+
+assert platform.name == "sheevaplug" -> platform.uboot != null;
+assert (platform.name == "sheevaplug" || platform.name == "versatileARM") ->
+  stdenv.system == "armv5tel-linux";
 
 let
 
@@ -75,6 +79,9 @@ stdenv.mkDerivation {
 
   buildInputs = [perl mktemp]
     ++ lib.optional (platform.uboot != null) [platform.uboot];
+
+
+  platformName = platform.name;
   
   arch =
     if xen then "xen" else
@@ -90,8 +97,6 @@ stdenv.mkDerivation {
 
   allowLocalVersion = false; # don't allow patches to set a suffix
   inherit localVersion; # but do allow the user to set one.
-
-  makeUImage = if (platform.uboot != null) then true else false;
 
   meta = {
     description =

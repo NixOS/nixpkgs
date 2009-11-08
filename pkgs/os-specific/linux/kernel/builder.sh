@@ -55,7 +55,7 @@ configurePhase() {
 }
 
 postBuild() {
-   if [ -n "$makeUImage" ]; then
+   if [ "$platformName" == "sheevaplug" ]; then
        make uImage
    fi
 }
@@ -77,13 +77,17 @@ installPhase() {
         ensureDir $out/bin
         cp linux $out/bin
     else
-       if [ -n "$makeUImage" ]; then
-           image=arch/$archDir/boot/uImage
+       case $platformName in
+         sheevaplug)
            cp arch/$archDir/boot/uImage $out
-       else
+           ;;
+         versatileARM)
+           cp arch/$archDir/boot/zImage $out
+           ;;
+         *)
            cp arch/$archDir/boot/bzImage $out/vmlinuz
-       fi
-
+           ;;
+       esac
     fi
 
     cp vmlinux $out
