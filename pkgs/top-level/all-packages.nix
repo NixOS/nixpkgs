@@ -4944,7 +4944,7 @@ let
   };
 
   sabnzbd = import ../servers/sabnzbd {
-    inherit fetchurl stdenv python cheetahTemplate makeWrapper;
+    inherit fetchurl stdenv python cheetahTemplate makeWrapper par2cmdline unzip unrar;
   };
 
   bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {
