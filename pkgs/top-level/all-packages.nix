@@ -2498,8 +2498,6 @@ let
     inherit fetchurl stdenv sqlite ruby ;
   };
 
-  scsh = import ../development/interpreters/scsh { inherit stdenv fetchurl; };
-
   spidermonkey = import ../development/interpreters/spidermonkey {
     inherit fetchurl stdenv readline;
   };
@@ -5337,6 +5335,10 @@ let
 
   hal_info = import ../os-specific/linux/hal/info.nix {
     inherit fetchurl stdenv pkgconfig;
+  };
+
+  hal_info_synaptics = import ../os-specific/linux/hal/synaptics.nix {
+    inherit stdenv;
   };
 
   hdparm = import ../os-specific/linux/hdparm {
