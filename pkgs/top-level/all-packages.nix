@@ -321,7 +321,7 @@ let
   };
 
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
-    inherit stdenv perl cpio contents uboot;
+    inherit stdenv perl cpio contents platform;
   };
 
   makeSetupHook = script: runCommand "hook" {} ''
