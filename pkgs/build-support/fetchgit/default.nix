@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev depth;
+  inherit url rev;
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow
