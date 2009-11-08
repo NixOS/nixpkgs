@@ -11,7 +11,7 @@ header "getting revision $selector";
 
 done=;
 for source in $dbs; do
-	if mtn pull --debug --db "$cacheDB" "$source" "${branch}"; then
+	if mtn pull --db "$cacheDB" "$source" "${branch}"; then
 		revision="$(mtn --db "$cacheDB" au toposort $(mtn --db "$cacheDB" au select "$selector") | tail -1)";
 		if [ -n "$revision" ]; then
 			if mtn --db "$cacheDB" au get_revision "$revision"; then
