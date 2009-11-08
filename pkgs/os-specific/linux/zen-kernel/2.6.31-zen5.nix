@@ -112,6 +112,17 @@ let
 
   configureBaseVersatileARM = '' 
     ARCH=arm make versatile_defconfig
+
+    setOptionYes CONFIG_IP_PNP_DHCP
+    setOptionYes CONFIG_TUN
+    # This versatile arm is for the sheevaplug compatibility, so, EABI
+    setOptionYes CONFIG_AEABI
+    setOptionYes CONFIG_TMPFS
+    # For the qemu block device 'hda' to work
+    setOptionYes CONFIG_PCI
+    setOptionYes CONFIG_SCSI
+    setOptionYes CONFIG_BLK_DEV_SD
+    setOptionYes CONFIG_SCSI_SYM53C8XX_2
   '';
 
   configureARM = '' 
