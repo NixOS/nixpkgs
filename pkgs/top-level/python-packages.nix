@@ -243,8 +243,8 @@ rec {
     name = "pysqlite-2.5.5";
 
     src = fetchurl {
-      url = "http://oss.itsystementwicklung.de/download/pysqlite/2.5/2.5.5/${name}.tar.gz";
-      sha256 = "0kylyjzxc4kd0z3xsvs0i63163kphfh0xcc4f0d0wyck93safz7g";
+      url = "http://pysqlite.googlecode.com/files/${name}.tar.gz";
+      sha256 = "ef7ca7f44893790e1a7084b10ea083770e138689406fddc7076d12d6bff4d44f";
     };
 
     # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files

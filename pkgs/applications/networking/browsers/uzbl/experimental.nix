@@ -13,7 +13,11 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["addInputs" "doMakeInstall" "doWrap"];
+  phaseNames = ["setVars" "addInputs" "doMakeInstall" "doWrap"];
+
+  setVars = a.noDepEntry ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lX11"
+  '';
       
   doWrap = a.makeManyWrappers "$out/bin/uzbl*" 
     ''
