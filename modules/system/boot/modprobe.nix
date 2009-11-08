@@ -72,9 +72,16 @@ with pkgs.lib;
         target = "modprobe.conf";
       };
 
+    boot.blacklistedKernelModules =
+      [ # This module is for debugging and generates gigantic amounts
+        # of log output, so it should never be loaded automatically.
+        "evbug"
+
+        # !!! Hm, Ubuntu blacklists all framebuffer devices because
+        # they're "buggy" and cause suspend problems.  Maybe we should
+        # too?
+      ];
+
   };
 
 }
-
-
-        
