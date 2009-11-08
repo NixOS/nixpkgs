@@ -4945,6 +4945,10 @@ let
     sslSupport = true;
   };
 
+  sabnzbd = import ../servers/sabnzbd {
+    inherit fetchurl stdenv python cheetahTemplate makeWrapper;
+  };
+
   bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {
     inherit openssl libtool;
   };
