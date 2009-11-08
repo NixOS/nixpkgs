@@ -86,6 +86,10 @@
     configureScript = "./autogen.sh";
   };
 
+  xdriinfo = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
+  };
+
   xkbcomp = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
   };
