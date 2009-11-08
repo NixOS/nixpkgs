@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, cheetahTemplate, makeWrapper}:
+{stdenv, fetchurl, python, cheetahTemplate, makeWrapper, par2cmdline, unzip, unrar}:
 
 stdenv.mkDerivation {
   name = "sabnzbd-0.4.12";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [makeWrapper python cheetahTemplate];
-  inherit stdenv python cheetahTemplate; 
+  inherit stdenv python cheetahTemplate par2cmdline unzip unrar; 
 
   builder = ./builder.sh;
   
