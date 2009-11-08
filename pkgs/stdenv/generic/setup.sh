@@ -78,6 +78,10 @@ addToSearchPath() {
 
 set -e
 
+# Check that the directory pointed by HOME, usually '/homeless-shelter',
+# does not exist, as it may be a good source for impurities.
+! test -e $HOME
+
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
 
