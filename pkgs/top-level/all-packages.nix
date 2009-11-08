@@ -321,7 +321,7 @@ let
   };
 
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
-    inherit stdenv perl cpio contents;
+    inherit stdenv perl cpio contents uboot;
   };
 
   makeSetupHook = script: runCommand "hook" {} ''
@@ -408,6 +408,23 @@ let
       done < graph
     '';
 
+
+  platformPC = assert system == "i686-linux" || system == "x86_64-linux"; {
+    name = "pc";
+    uboot = null;
+  };
+
+  platformSheevaplug = assert system == "armv5tel-linux"; {
+    name = "sheevaplug";
+    inherit uboot;
+  };
+
+  platformVersatileARM = assert system == "armv5tel-linux"; {
+    name = "versatileARM";
+    uboot = null;
+  };
+
+  platform = platformPC;
 
   ### TOOLS
 
@@ -589,14 +606,22 @@ let
     inherit fetchurl stdenv ppl;
   };
 
-  coreutils = useFromStdenv "coreutils"
-    (makeOverridable (if stdenv ? isDietLibC
+  coreutils75_real = makeOverridable (import ../tools/misc/coreutils/7.5.nix) {
+    inherit fetchurl stdenv acl;
+    aclSupport = stdenv.isLinux;
+  };
+
+  coreutils_real = makeOverridable (if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
     {
       inherit fetchurl stdenv acl;
       aclSupport = stdenv.isLinux;
-    });
+    };
+
+  coreutils = useFromStdenv "coreutils"
+    (if system == "armv5tel-linux" then coreutils75_real
+    else coreutils_real);
 
   cpio = import ../tools/archivers/cpio {
     inherit fetchurl stdenv;
@@ -1096,7 +1121,7 @@ let
   };
 
   mldonkey = import ../applications/networking/p2p/mldonkey {
-    inherit fetchurl stdenv ocaml zlib ncurses;
+    inherit fetchurl stdenv ocaml zlib ncurses gd libpng;
   };
 
   monit = builderDefsPackage ../tools/system/monit {
@@ -1682,7 +1707,7 @@ let
   };
 
   wget = import ../tools/networking/wget {
-    inherit fetchurl stdenv gettext openssl;
+    inherit fetchurl stdenv gettext gnutls perl;
   };
 
   which = import ../tools/system/which {
@@ -2171,7 +2196,7 @@ let
   ocaml = ocaml_3_11_1;
 
   ocaml_3_08_0 = import ../development/compilers/ocaml/3.08.0.nix {
-    inherit fetchurl stdenv x11 ncurses;
+    inherit fetchurl stdenv fetchcvs x11 ncurses;
   };
 
   ocaml_3_09_1 = import ../development/compilers/ocaml/3.09.1.nix {
@@ -2264,7 +2289,7 @@ let
     nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
     gcc = baseGCC;
     libc = glibc;
-    inherit stdenv binutils;
+    inherit stdenv binutils coreutils;
   };
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
@@ -3446,8 +3471,13 @@ let
     #installLocales = false;
   };
 
-  glibc29 = import ../development/libraries/glibc-2.9 {
+  glibc29 = makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit fetchurl stdenv kernelHeaders;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
+
+  eglibc = import ../development/libraries/eglibc {
+    inherit fetchsvn stdenv kernelHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
@@ -3491,13 +3521,11 @@ let
 
   gmp = import ../development/libraries/gmp {
     inherit fetchurl stdenv m4;
-    cxx = false;
   };
 
-  gmpxx = import ../development/libraries/gmp {
-    inherit fetchurl stdenv m4;
-    cxx = true;
-  };
+  # `gmpxx' used to mean "GMP with C++ bindings".  Now `gmp' has C++ bindings
+  # by default, so that distinction is obsolete.
+  gmpxx = gmp;
 
   goffice = import ../development/libraries/goffice {
     inherit fetchurl stdenv pkgconfig libgsf libxml2 cairo
@@ -5550,13 +5578,14 @@ let
   };
 
   kernel_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
+    inherit fetchurl stdenv perl mktemp module_init_tools platform;
     kernelPatches = [];
   };
 
   kernel_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen5.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
+    inherit platform;
   };
 
   kernel_2_6_31_zen5_bfs = kernel_2_6_31_zen5.override {
@@ -5860,7 +5889,7 @@ let
   };
 
   pam_unix2 = import ../os-specific/linux/pam_unix2 {
-    inherit stdenv fetchurl pam libxcrypt;
+    inherit stdenv fetchurl pam;
   };
 
   pcmciaUtils = composedArgsAndFun (import ../os-specific/linux/pcmciautils) {
@@ -5983,6 +6012,14 @@ let
     inherit mesa tcl freeglut;
     inherit (xlibs) libX11 xproto;
   };*/
+
+  uboot = import ../misc/uboot {
+    inherit fetchurl stdenv unzip;
+  };
+
+  uclibc = import ../os-specific/linux/uclibc {
+    inherit fetchurl stdenv kernelHeaders;
+  };
 
   udev = makeOverridable (import ../os-specific/linux/udev) {
     inherit fetchurl stdenv gperf pkgconfig acl libusb usbutils pciutils glib;

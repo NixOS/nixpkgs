@@ -9,7 +9,20 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ncurses];
-  
+
+  patchFlags = "-p0";
+  patches =
+    [ ./link-against-ncurses.patch ]
+    ++
+    (let
+       patch = nr: sha256:
+         fetchurl {
+           url = "mirror://gnu/readline/readline-6.0-patches/readline60-${nr}";
+           inherit sha256;
+         };
+     in
+       import ./readline-patches.nix patch);
+
   meta = {
     description = "GNU Readline, a library for interactive line editing";
 
@@ -31,5 +44,7 @@ stdenv.mkDerivation rec {
     homepage = http://savannah.gnu.org/projects/readline/;
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

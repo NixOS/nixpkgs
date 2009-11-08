@@ -20,7 +20,7 @@ import ./generic.nix (
       iwlwifi = true;
     };
 
-    preConfigure = ''
+    preConfigure = if (stdenv.system != "armv5tel-linux") then ''
         killOption () {
           sed -re 's/^('"$1"')=[ym]/# \1 is not set/' -i .config
         }
@@ -55,9 +55,10 @@ import ./generic.nix (
         setOptionYes CONFIG_PREEMPT_VOLUNTARY
         
         cp .config ${config}
-    '';
+    '' else "";
 
-    config = "./kernel-config";
+    config = if (stdenv.system == "armv5tel-linux") then 
+      (./config-2.6.31-armv5tel) else "./kernel-config";
   }
 
   // args

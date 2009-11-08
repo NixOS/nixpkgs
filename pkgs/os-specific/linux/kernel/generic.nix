@@ -37,10 +37,12 @@
 
 , preConfigure ? ""
 , extraMeta ? {}
+, platform ? { uboot = null; }
 , ...
 }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+  || stdenv.system == "armv5tel-linux";
 
 let
 
@@ -71,13 +73,15 @@ stdenv.mkDerivation {
           map (p: if p ? extraConfig then p.extraConfig else "") kernelPatches;
     in lib.concatStrings (addNewlines (configFromPatches ++ extraConfig));
 
-  buildInputs = [perl mktemp];
+  buildInputs = [perl mktemp]
+    ++ lib.optional (platform.uboot != null) [platform.uboot];
   
   arch =
     if xen then "xen" else
     if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
+    if stdenv.system == "armv5tel-linux" then "arm" else
     abort "Platform ${stdenv.system} is not supported.";
 
   makeFlags = if userModeLinux then "ARCH=um SHELL=bash" else "";
@@ -86,6 +90,8 @@ stdenv.mkDerivation {
 
   allowLocalVersion = false; # don't allow patches to set a suffix
   inherit localVersion; # but do allow the user to set one.
+
+  makeUImage = if (platform.uboot != null) then true else false;
 
   meta = {
     description =

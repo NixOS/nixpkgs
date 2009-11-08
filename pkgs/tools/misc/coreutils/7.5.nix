@@ -1,11 +1,11 @@
 {stdenv, fetchurl, aclSupport ? false, acl}:
 
 stdenv.mkDerivation rec {
-  name = "coreutils-7.6";
+  name = "coreutils-7.5";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "1m153jmnrg9v4x6qiw7azd3cjms13s32yihbzb7zi9bw8a5zx6qx";
+    sha256 = "1hf333y85fm0q7f1apx2zjjhivwj620nc8kcifdcm0sg8fwlj7rl";
   };
 
   buildInputs = stdenv.lib.optional aclSupport acl;

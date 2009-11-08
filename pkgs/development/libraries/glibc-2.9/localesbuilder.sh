@@ -47,20 +47,4 @@ postConfigure() {
     unset CFLAGS
 }
 
-
-postInstall() {
-    if test -n "$installLocales"; then
-        make localedata/install-locales
-    fi
-    rm $out/etc/ld.so.cache
-    (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
-
-    # Fix for NIXOS-54 (ldd not working on x86_64).  Make a symlink
-    # "lib64" to "lib".
-    if test -n "$is64bit"; then
-        ln -s lib $out/lib64
-    fi
-}
-
-
 genericBuild

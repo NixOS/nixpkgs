@@ -19,6 +19,7 @@ import ./generic.nix (
     config =
       if stdenv.system == "i686-linux" then ./config-2.6.29-i686-smp else
       if stdenv.system == "x86_64-linux" then ./config-2.6.29-x86_64-smp else
+      if stdenv.system == "armv5tel-linux" then ./config-2.6.29-arm else
       abort "No kernel configuration for your platform!";
   }
 

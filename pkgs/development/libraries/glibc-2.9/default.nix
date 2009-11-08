@@ -9,8 +9,13 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/glibc-2.9-20081208.tar.bz2;
-    sha256 = "0zhxbgcsl97pf349m0lz8d5ljvvzrcqc23yf08d888xlk4ms8m3h";
+    url = http://ftp.gnu.org/gnu/glibc/glibc-2.9.tar.bz2;
+    sha256 = "0v53m7flx6qcx7cvrvvw6a4dx4x3y6k8nvpc4wfv5xaaqy2am2q9";
+  };
+
+  srcPorts = fetchurl {
+    url = http://ftp.gnu.org/gnu/glibc/glibc-ports-2.9.tar.bz2;
+    sha256 = "0r2sn527wxqifi63di7ns9wbjh1cainxn978w178khhy7yw9fk42";
   };
 
   inherit kernelHeaders installLocales;
@@ -46,12 +51,28 @@ stdenv.mkDerivation rec {
 
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
+
+    /* Support GNU Binutils 2.20 and above.  */
+    ./binutils-2.20.patch
   ];
 
-  configureFlags = ''
-    --enable-add-ons
-    --with-headers=${kernelHeaders}/include
-    ${if profilingLibraries then "--enable-profile" else "--disable-profile"}
+  configureFlags = [
+    "--enable-add-ons"
+    "--with-headers=${kernelHeaders}/include"
+    (if profilingLibraries then "--enable-profile" else "--disable-profile")
+  ] ++ (if (stdenv.system == "armv5tel-linux") then [
+    "--host=arm-linux-gnueabi"
+    "--build=arm-linux-gnueabi"
+    "--without-fp"
+  ] else []);
+
+  preInstall = ''
+    ensureDir $out/lib
+    ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+  '';
+
+  postInstall = ''
+    rm $out/lib/libgcc_s.so.1
   '';
 
   # Workaround for this bug:

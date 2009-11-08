@@ -3,6 +3,7 @@
 , langJava ? false
 , profiledCompiler ? false
 , staticCompiler ? false
+, enableShared ? true
 , texinfo ? null
 , gmp, mpfr
 , bison ? null, flex ? null
@@ -15,7 +16,7 @@ assert langTreelang -> bison != null && flex != null;
 
 with stdenv.lib;
 
-let version = "4.3.3"; in
+let version = "4.3.4"; in
 
 stdenv.mkDerivation ({
   name = "${name}-${version}";
@@ -25,19 +26,19 @@ stdenv.mkDerivation ({
   src =
     optional /*langC*/ true (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "08yksvipnqmqbmif30rwjkg3y0m6ray5r84wa2argv8q0bpz9426";
+      sha256 = "1yk80nwyw8vkpw8d3x7lkg3zrv3ngjqlvj0i8zslzgj7a27q729i";
     }) ++
     optional langCC (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-g++-${version}.tar.bz2";
-      sha256 = "12z2zh03yq214qs2cqzh8c64jjfz544nk1lzi9rygjwm8yjsvzm9";
+      sha256 = "0d8pyk5c9zmph25f4fl63vd8vhljj6ildbxpz2hr594g5i6pplpq";
     }) ++
     optional langFortran (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-      sha256 = "1b2wbysviyh7l9fqbd6zy5y6y89xgysy99gr8wx8xkc1hy2nwdsq";
+      sha256 = "1xf2njykv1qcgxiqwj693dxjf77ss1rcxirylvnsp5hs89mdlj12";
     }) ++
     optional langJava (fetchurl {
       url = "mirror://gcc/releases/gcc-${version}/gcc-java-${version}.tar.bz2";
-      sha256 = "1mlazpydd9qv7zwxkbb5sw3clfawfndhcc3f5lzycminvn6qmfkb";
+      sha256 = "1v3krhxi3zyaqfj0x8dbxvg67fjp29cr1psyf71r9zf757p3vqsw";
     });
     
   patches =
@@ -56,6 +57,7 @@ stdenv.mkDerivation ({
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
+    ${if enableShared then "" else "--disable-shared"}
     --disable-libstdcxx-pch
     --with-system-zlib
     --enable-languages=${

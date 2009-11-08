@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, libxcrypt}:
+{stdenv, fetchurl, pam, libxcrypt ? null}:
    
 stdenv.mkDerivation {
   name = "pam_unix2-2.6";
@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     sha256 = "067xnyd3q8ik73glxwyx1lydk4bgl78lzq44mnqqp4jrpnpd04ml";
   };
 
-  buildInputs = [pam libxcrypt];
+  buildInputs = [pam ];
 }

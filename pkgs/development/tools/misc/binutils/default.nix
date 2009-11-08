@@ -1,11 +1,11 @@
 {stdenv, fetchurl, noSysDirs}:
 
 stdenv.mkDerivation rec {
-  name = "binutils-2.19.1";
-  
+  name = "binutils-2.20";
+
   src = fetchurl {
     url = "mirror://gnu/binutils/${name}.tar.bz2";
-    sha256 = "1xirhxwc94bk6hn2k6i5ly4knbcjsqgy2lp7kl1s5q5csys2b0iy";
+    sha256 = "1c3m789p5rwmmnck5ms4zcnc40axss3gxzivz571al1vmbq0kpz1";
   };
 
   patches = [
@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
   ];
-  
+
   inherit noSysDirs;
 
   preConfigure = ''
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then
-        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+	echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
     fi
   '';
-  
+
   configureFlags = "--disable-werror"; # needed for dietlibc build
 
   meta = {

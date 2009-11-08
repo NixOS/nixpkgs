@@ -11,28 +11,25 @@ export PWD_P=$(type -tP pwd)
 # stdenv-linux bootstrap.
 export BASH_SHELL=/bin/sh
 
-
 preConfigure() {
 
-    for i in configure io/ftwtest-sh; do
+    for i in libc/configure libc/io/ftwtest-sh; do
         # Can't use substituteInPlace here because replace hasn't been
         # built yet in the bootstrap.
         sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
     done
 
-    # In the glibc 2.6/2.7 tarballs C-translit.h is a little bit older
-    # than C-translit.h.in, forcing Make to rebuild it unnecessarily.
-    # This wouldn't be problem except that it requires Perl, which we
-    # don't want as a dependency in the Nixpkgs bootstrap.  So force
-    # the output file to be newer.
-    touch locale/C-translit.h
+    # Include source for debugging
+    ensureDir $out/src
+    cp -R libc ports $out/src
+    ln -s $out/src/ports $out/src/libc/ports
+    # glibc wants -O2 minimum
+    export CFLAGS="-pipe -g -O2"
 
-    tar xvjf "$srcPorts"
+    mkdir $NIX_BUILD_TOP/build
+    cd $NIX_BUILD_TOP/build
     
-    mkdir build
-    cd build
-    
-    configureScript=../configure
+    configureScript=$out/src/libc/configure
 }
 
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlibSupport ? false, zlib ? null, sslSupport ? false, openssl ? null}:
+{stdenv, fetchurl, zlibSupport ? false, zlib ? null, sslSupport ? false, openssl ? null, linkStatic ? false}:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
     
   configureFlags = ''
     ${if sslSupport then "--with-ssl=${openssl}" else "--without-ssl"}
+    ${if linkStatic then "--enable-static --disable-shared" else ""}
   '';
+
+  dontDisableStatic = if linkStatic then true else false;
   
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
+  LDFLAGS = if linkStatic then "-static" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";
+
+  # libtool hack to get a static binary. Notice that to 'configure' I passed
+  # other LDFLAGS, because it doesn't use libtool for linking in the tests.
+  makeFlags = if linkStatic then "LDFLAGS=-all-static" else "";
 
   passthru = {
     inherit sslSupport openssl;

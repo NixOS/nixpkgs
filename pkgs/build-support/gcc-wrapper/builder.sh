@@ -83,7 +83,7 @@ mkGccWrapper() {
 
     if ! test -f "$src"; then
         echo "$src does not exist (skipping)"
-        return
+        return 1
     fi
 
     gccProg="$src"
@@ -91,17 +91,23 @@ mkGccWrapper() {
     chmod +x "$dst"
 }
 
-mkGccWrapper $out/bin/gcc $gccPath/gcc
-ln -s gcc $out/bin/cc
-
-mkGccWrapper $out/bin/g++ $gccPath/g++
-ln -s g++ $out/bin/c++
-
-if test -e $gccPath/gfortran; then
-    mkGccWrapper $out/bin/gfortran $gccPath/gfortran
-    ln -s gfortran $out/bin/g77
-    ln -s gfortran $out/bin/f77
+if mkGccWrapper $out/bin/gcc $gccPath/gcc
+then
+    ln -sv gcc $out/bin/cc
 fi
+
+if mkGccWrapper $out/bin/g++ $gccPath/g++
+then
+    ln -sv g++ $out/bin/c++
+fi
+
+if mkGccWrapper $out/bin/gfortran $gccPath/gfortran
+then
+    ln -sv gfortran $out/bin/g77
+    ln -sv gfortran $out/bin/f77
+fi
+
+mkGccWrapper $out/bin/gcj $gccPath/gcj || true
 
 
 # Create a symlink to as (the assembler).  This is useful when a

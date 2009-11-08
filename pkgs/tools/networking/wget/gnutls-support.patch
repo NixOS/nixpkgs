@@ -1,0 +1,16 @@
+This patch fixes GnuTLS support:
+
+  http.o: In function `gethttp':
+  http.c:(.text+0x26c6): undefined reference to `ssl_connect_wget'
+
+--- wget-1.12/src/http.c	2009-09-22 05:02:18.000000000 +0200
++++ wget-1.12/src/http.c	2009-10-03 17:24:46.000000000 +0200
+@@ -1762,7 +1762,7 @@ gethttp (struct url *u, struct http_stat
+ 
+       if (conn->scheme == SCHEME_HTTPS)
+         {
+-          if (!ssl_connect_wget (sock))
++          if (!ssl_connect (sock))
+             {
+               fd_close (sock);
+               return CONSSLERR;

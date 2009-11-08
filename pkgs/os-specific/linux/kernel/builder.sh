@@ -54,6 +54,11 @@ configurePhase() {
     cat .config
 }
 
+postBuild() {
+   if [ -n "$makeUImage" ]; then
+       make uImage
+   fi
+}
 
 installPhase() {
 
@@ -65,14 +70,23 @@ installPhase() {
         archDir=x86
     fi
 
+
     # Copy the bzImage and System.map.
     cp System.map $out
     if test "$arch" = um; then
         ensureDir $out/bin
         cp linux $out/bin
     else
-        cp arch/$archDir/boot/bzImage $out/vmlinuz
+       if [ -n "$makeUImage" ]; then
+           image=arch/$archDir/boot/uImage
+           cp arch/$archDir/boot/uImage $out
+       else
+           cp arch/$archDir/boot/bzImage $out/vmlinuz
+       fi
+
     fi
+
+    cp vmlinux $out
 
     # Install the modules in $out/lib/modules with matching paths
     # in modules.dep (i.e., refererring to $out/lib/modules, not

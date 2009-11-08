@@ -10,13 +10,35 @@
 
 stdenv.mkDerivation rec {
   name = "glibc-locales-2.9";
-  
+
+  builder = ./localesbuilder.sh;
+
   src = fetchurl {
-    url = http://nixos.org/tarballs/glibc-2.9-20081208.tar.bz2;
-    sha256 = "0zhxbgcsl97pf349m0lz8d5ljvvzrcqc23yf08d888xlk4ms8m3h";
+    url = http://ftp.gnu.org/gnu/glibc/glibc-2.9.tar.bz2;
+    sha256 = "0v53m7flx6qcx7cvrvvw6a4dx4x3y6k8nvpc4wfv5xaaqy2am2q9";
   };
 
-  configurePhase = "true";
+  srcPorts = fetchurl {
+    url = http://ftp.gnu.org/gnu/glibc/glibc-ports-2.9.tar.bz2;
+    sha256 = "0r2sn527wxqifi63di7ns9wbjh1cainxn978w178khhy7yw9fk42";
+  };
+
+  inherit (stdenv) is64bit;
+
+  configureFlags = [
+    "--enable-add-ons"
+    "--without-headers"
+    "--disable-profile"
+  ] ++ (if (stdenv.system == "armv5tel-linux") then [
+    "--host=arm-linux-gnueabi"
+    "--build=arm-linux-gnueabi"
+    "--without-fp"
+  ] else []);
+
+  patches = [
+    /* Support GNU Binutils 2.20 and above.  */
+    ./binutils-2.20.patch
+  ];
 
   # Awful hack: `localedef' doesn't allow the path to `locale-archive'
   # to be overriden, but you *can* specify a prefix, i.e. it will use
@@ -25,8 +47,6 @@ stdenv.mkDerivation rec {
   # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
   buildPhase =
     ''
-      touch config.make
-      touch config.status
       mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
       make localedata/install-locales \
           LOCALEDEF="localedef --prefix=$TMPDIR" \

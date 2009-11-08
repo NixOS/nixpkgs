@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, linkStatic ? false}:
 
 stdenv.mkDerivation {
   name = "bzip2-1.0.5";
@@ -11,7 +11,11 @@ stdenv.mkDerivation {
   };
 
   sharedLibrary =
-    !stdenv.isDarwin && !(stdenv ? isDietLibC) && !(stdenv ? isStatic) && stdenv.system != "i686-cygwin";
+    !stdenv.isDarwin && !(stdenv ? isDietLibC) && !(stdenv ? isStatic) && stdenv.system != "i686-cygwin" && !linkStatic;
+
+  makeFlags = if linkStatic then "LDFLAGS=-static" else "";
+
+  inherit linkStatic;
     
   meta = {
     homepage = http://www.bzip.org;

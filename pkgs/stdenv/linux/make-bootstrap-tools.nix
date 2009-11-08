@@ -10,20 +10,26 @@ rec {
     aclSupport = false;
   });
 
+  gccLinkStatic = wrapGCCWith (import ../../build-support/gcc-wrapper) uclibc
+    stdenv.gcc.gcc;
+  stdenvLinkStatic = overrideGCC stdenv gccLinkStatic;
 
-  curlDiet = import ../../tools/networking/curl {
+  curlStatic = import ../../tools/networking/curl {
+    stdenv = stdenvLinkStatic;
     inherit fetchurl;
-    stdenv = useDietLibC stdenv;
     zlibSupport = false;
     sslSupport = false;
+    linkStatic = true;
   };
 
 
-  bzip2Diet = import ../../tools/compression/bzip2 {
+  bzip2Static = import ../../tools/compression/bzip2 {
+    stdenv = stdenvLinkStatic;
     inherit fetchurl;
-    stdenv = useDietLibC stdenv;
+    linkStatic = true;
   };
 
+  #gccNoShared = wrapGCC ( gcc.gcc.override { enableShared = false; } );
 
   build = 
 
@@ -33,6 +39,7 @@ rec {
       buildInputs = [nukeReferences cpio];
 
       buildCommand = ''
+	set -x
         ensureDir $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
@@ -132,8 +139,8 @@ rec {
         cp ${klibc}/lib/klibc/bin.static/cpio $out/in-nixpkgs
         cp ${klibc}/lib/klibc/bin.static/mkdir $out/in-nixpkgs
         cp ${klibc}/lib/klibc/bin.static/ln $out/in-nixpkgs
-        cp ${curlDiet}/bin/curl $out/in-nixpkgs
-        cp ${bzip2Diet}/bin/bzip2 $out/in-nixpkgs
+        cp ${curlStatic}/bin/curl $out/in-nixpkgs
+        cp ${bzip2Static}/bin/bzip2 $out/in-nixpkgs
         chmod u+w $out/in-nixpkgs/*
         strip $out/in-nixpkgs/*
         nuke-refs $out/in-nixpkgs/*
