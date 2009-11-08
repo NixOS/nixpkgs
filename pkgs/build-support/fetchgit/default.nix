@@ -1,5 +1,5 @@
 {stdenv, git}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", depth ? 1}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
 
 stdenv.mkDerivation {
   name = "git-export";
