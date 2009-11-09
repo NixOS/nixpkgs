@@ -1,14 +1,21 @@
-{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk}:
+{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, makeStaticBinaries}:
 
 rec {
 
   inherit aterm;
 
-  sdfStatic = stdenv.mkDerivation ( rec {
-    name = "${sdf.name}-static";
-    configureFlags = "--enable-shared=no --enable-static=yes";
+  stdenvStatic = makeStaticBinaries stdenv ;
 
-    inherit (sdf) src buildInputs preConfigure meta; 
+  atermStatic = stdenvStatic.mkDerivation ( rec {
+    name = "${aterm.name}-static";
+    inherit (aterm) src meta patches; 
+  } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
+
+
+  sdfStatic = stdenvStatic.mkDerivation ( rec {
+    name = "${sdf.name}-static";
+    inherit (sdf) src preConfigure meta; 
+    buildInputs = [pkgconfig atermStatic];
   } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
   
   sdf = stdenv.mkDerivation ( rec {
