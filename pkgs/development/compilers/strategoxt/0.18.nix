@@ -9,6 +9,7 @@ rec {
   atermStatic = stdenvStatic.mkDerivation ( rec {
     name = "${aterm.name}-static";
     inherit (aterm) src meta patches; 
+    configureFlags = "--enable-static=yes"; 
   } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
 
 
@@ -16,6 +17,7 @@ rec {
     name = "${sdf.name}-static";
     inherit (sdf) src preConfigure meta; 
     buildInputs = [pkgconfig atermStatic];
+    configureFlags = "--enable-static=yes"; 
   } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
   
   sdf = stdenv.mkDerivation ( rec {
