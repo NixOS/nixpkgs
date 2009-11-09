@@ -178,6 +178,7 @@ let
     setOptionYes CONFIG_REISERFS_FS
     setOptionYes CONFIG_FUSE_FS
     setOptionYes CONFIG_ISO9660_FS
+    setOptionMod CONFIG_IPV6
   ''+
   (if a.lib.attrByPath ["ckSched"] false a then ''
     killOption CONFIG_CPU_CFS
