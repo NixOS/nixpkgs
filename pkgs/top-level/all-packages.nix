@@ -5775,6 +5775,11 @@ let
     inherit (glibc) kernelHeaders;
   };
 
+  kvm88 = import ../os-specific/linux/kvm/88.nix {
+    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
+    inherit (glibc) kernelHeaders;
+  };
+
   libcap = import ../os-specific/linux/libcap {
     inherit fetchurl stdenv attr;
   };
@@ -7847,8 +7852,7 @@ let
   };
 
   xchm = import ../applications/misc/xchm {
-    inherit fetchurl stdenv chmlib;
-    wxGTK = wxGTK26;
+    inherit fetchurl stdenv chmlib wxGTK;
   };
 
   /* Doesn't work yet
