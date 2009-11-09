@@ -567,6 +567,7 @@ in {
   };
 
   strategoPackages = {
+    sdfStatic = all;
     sdf = all;
     strategoxt = all;
     javafront = all;
