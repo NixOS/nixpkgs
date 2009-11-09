@@ -4,6 +4,12 @@ rec {
 
   inherit aterm;
 
+  sdfStatic = stdenv.mkDerivation ( rec {
+    name = "${sdf.name}-static";
+    configureFlags = "--enable-shared=no --enable-static=yes";
+
+    inherit (sdf) src buildInputs preConfigure meta; 
+  } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
   
   sdf = stdenv.mkDerivation ( rec {
     name = "sdf2-bundle-2.4";
