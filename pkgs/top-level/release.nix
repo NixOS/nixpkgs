@@ -567,6 +567,13 @@ in {
   };
 
   strategoPackages = {
+    sdf = all;
+    strategoxt = all;
+    javafront = all;
+    dryad = linux;
+  };
+
+  strategoPackages018 = {
     sdfStatic = all;
     sdf = all;
     strategoxt = all;
