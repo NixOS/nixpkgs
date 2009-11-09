@@ -2498,6 +2498,10 @@ let
     inherit fetchurl stdenv sqlite ruby ;
   };
 
+  scsh = import ../development/interpreters/scsh {
+    inherit stdenv fetchurl;
+  };
+
   spidermonkey = import ../development/interpreters/spidermonkey {
     inherit fetchurl stdenv readline;
   };
