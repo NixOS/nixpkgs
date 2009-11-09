@@ -4,20 +4,18 @@ rec {
 
   inherit aterm;
 
-  stdenvStatic = makeStaticBinaries stdenv ;
-
-  atermStatic = stdenvStatic.mkDerivation ( rec {
+  atermStatic = stdenv.mkDerivation ( rec {
     name = "${aterm.name}-static";
+    configureFlags = "--enable-shared=no --enable-static=yes";
+
     inherit (aterm) src meta patches; 
-    configureFlags = "--enable-static=yes"; 
   } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
-
-
-  sdfStatic = stdenvStatic.mkDerivation ( rec {
+  
+  sdfStatic = stdenv.mkDerivation ( rec {
     name = "${sdf.name}-static";
-    inherit (sdf) src preConfigure meta; 
-    buildInputs = [pkgconfig atermStatic];
-    configureFlags = "--enable-static=yes"; 
+    configureFlags = "--enable-shared=no --enable-static=yes";
+
+    inherit (sdf) src buildInputs preConfigure meta; 
   } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
   
   sdf = stdenv.mkDerivation ( rec {
