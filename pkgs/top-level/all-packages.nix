@@ -2880,6 +2880,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  openafsClient = import ../servers/openafs-client {
+    inherit stdenv fetchurl autoconf automake flex yacc;
+    inherit kernel_2_6_28 glibc ncurses perl krb5;
+  };
+
   openocd = import ../development/tools/misc/openocd {
     inherit fetchurl stdenv libftdi;
   };
