@@ -60,6 +60,7 @@
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/nfs-kernel.nix
+  ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/samba.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
