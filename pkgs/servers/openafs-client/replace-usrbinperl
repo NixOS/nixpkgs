@@ -1,0 +1,16 @@
+src/libafs/make_kbuild_makefile.pl
+src/mkdest.pl
+src/tools/install/write_fstab.pl
+src/tools/install/write_pam.pl
+src/tools/install/check_udebug.pl
+src/config/make_libafs_tree.pl
+src/config/make_vnode.pl
+src/packaging/Debian/afs-newcell
+src/packaging/Debian/afs-rootvol
+src/packaging/Debian/kernel-version
+src/packaging/MacOS/csrvdbmerge.pl
+src/packaging/MacOS/decode-panic
+src/packaging/MacOS/Uninstall
+src/packaging/RedHat/mockbuild.pl
+src/packaging/RedHat/openafs-buildfedora.pl
+src/packaging/RedHat/makesrpm.pl
