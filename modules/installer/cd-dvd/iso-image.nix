@@ -55,12 +55,21 @@ let
   };
 
 
+  # The Grub image.
+  grubImage = pkgs.runCommand "grub_eltorito" {}
+    ''
+      ${pkgs.grub2}/bin/grub-mkimage -o tmp biosdisk iso9660 help linux linux16 sh chain
+      cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
+    ''; # */
+
+
   # The configuration file for Grub.
   grubCfg = 
     ''
-      default 0
-      timeout 10
-      splashimage /boot/background.xpm.gz
+      set default = 0
+      set timeout = 10
+
+      #splashimage /boot/background.xpm.gz
 
       ${config.boot.extraGrubEntries}
     '';
@@ -112,11 +121,11 @@ in
   # Individual files to be included on the CD, outside of the Nix
   # store on the CD.
   isoImage.contents =
-    [ { source = "${pkgs.grub}/lib/grub/${if pkgs.stdenv.system == "i686-linux" then "i386-pc" else "x86_64-unknown"}/stage2_eltorito";
-        target = "/boot/grub/stage2_eltorito";
+    [ { source = grubImage;
+        target = "/boot/grub/grub_eltorito";
       }
-      { source = pkgs.writeText "menu.lst" grubCfg;
-        target = "/boot/grub/menu.lst";
+      { source = pkgs.writeText "grub.cfg" grubCfg;
+        target = "/boot/grub/grub.cfg";
       }
       { source = config.boot.kernelPackages.kernel + "/vmlinuz";
         target = "/boot/vmlinuz";
@@ -152,13 +161,15 @@ in
   # The Grub menu.
   boot.extraGrubEntries =
     ''
-      title Boot from hard disk
-        root (hd0)
+      menuentry "Boot from hard disk" {
+        set root=(hd0)
         chainloader +1
+      }
     
-      title NixOS Installer / Rescue
-        kernel /boot/vmlinuz init=/init systemConfig=/system ${toString config.boot.kernelParams}
+      menuentry "NixOS Installer / Rescue" {
+        linux /boot/vmlinuz init=/init systemConfig=/system ${toString config.boot.kernelParams}
         initrd /boot/initrd
+      }
     '';
 
   # Create the ISO image.
@@ -168,7 +179,7 @@ in
     inherit (config.isoImage) isoName compressImage volumeID contents;
 
     bootable = true;
-    bootImage = "/boot/grub/stage2_eltorito";
+    bootImage = "/boot/grub/grub_eltorito";
   };
 
   boot.postBootCommands =

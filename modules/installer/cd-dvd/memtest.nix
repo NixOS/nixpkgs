@@ -12,8 +12,9 @@ in
 {
   boot.extraGrubEntries =
     ''
-      title Memtest86+
-        kernel ${memtestPath}
+      menuentry "Memtest86+" {
+        linux16 ${memtestPath}
+      }
     '';
 
   isoImage.contents =

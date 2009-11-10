@@ -1,20 +1,22 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
-    system.nixosVersion = pkgs.lib.mkOption {
+    system.nixosVersion = mkOption {
       default = "${builtins.readFile ../../../VERSION}";
       description = ''
         NixOS version number.
       '';
     };
 
-    installer.configModule = pkgs.lib.mkOption {
+    installer.configModule = mkOption {
       example = "./nixos/modules/installer/cd-dvd/installation-cd.nix";
       description = ''
         Filename of the configuration module that builds the CD
@@ -38,10 +40,12 @@ let
     '';
 
   # Put the current directory in a tarball.
-  nixosTarball = makeTarball "nixos.tar.bz2" (pkgs.lib.cleanSource ../../..);
+  nixosTarball = makeTarball "nixos.tar.bz2" (cleanSource ../../..);
 
   # Put Nixpkgs in a tarball.
-  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (pkgs.lib.cleanSource pkgs.path);
+  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource pkgs.path);
+
+  includeSources = true;
 
 
   # A dummy /etc/nixos/configuration.nix in the booted CD that
@@ -169,12 +173,14 @@ in
 
       # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
       # for nixos-install.
-      echo "unpacking the NixOS/Nixpkgs sources..."
-      mkdir -p /etc/nixos/nixos
-      tar xjf ${nixosTarball}/nixos.tar.bz2 -C /etc/nixos/nixos
-      mkdir -p /etc/nixos/nixpkgs
-      tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
-      chown -R root.root /etc/nixos
+      ${optionalString includeSources ''
+        echo "unpacking the NixOS/Nixpkgs sources..."
+        mkdir -p /etc/nixos/nixos
+        tar xjf ${nixosTarball}/nixos.tar.bz2 -C /etc/nixos/nixos
+        mkdir -p /etc/nixos/nixpkgs
+        tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
+        chown -R root.root /etc/nixos
+     ''}
 
       # Provide a configuration for the CD/DVD itself, to allow users
       # to run nixos-rebuild to change the configuration of the
