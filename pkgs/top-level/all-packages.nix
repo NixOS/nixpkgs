@@ -7240,6 +7240,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ledger = import ../applications/office/ledger {
+    inherit stdenv fetchurl emacs gmp pcre;
+  };
+
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
     inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
       gpm openssl SDL SDL_image SDL_net pkgconfig;
