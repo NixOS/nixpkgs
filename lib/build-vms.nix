@@ -1,6 +1,6 @@
 { nixos ? ./..
-, nixpkgs ? /etc/nixos/nixpkgs
-, services ? /etc/nixos/services
+, nixpkgs ? ../../nixpkgs
+, services ? ../../nixos/services
 , system ? builtins.currentSystem
 }:
 
