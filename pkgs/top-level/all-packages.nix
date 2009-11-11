@@ -5002,7 +5002,7 @@ let
   };
 
   jboss = import ../servers/http/jboss {
-    inherit fetchurl stdenv jdk5 jdk;
+    inherit fetchurl stdenv unzip jdk lib;
   };
 
   jboss_mysql_jdbc = import ../servers/http/jboss/jdbc/mysql {
