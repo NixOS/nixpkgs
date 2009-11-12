@@ -7629,7 +7629,7 @@ let
   # linux only by now
   synergy = import ../applications/misc/synergy {
     inherit fetchurl bleedingEdgeRepos stdenv x11;
-    inherit (xlibs) xextproto libXtst inputproto;
+    inherit (xlibs) xextproto libXtst inputproto libXi;
   };
 
   tahoelafs = import ../tools/networking/p2p/tahoe-lafs {

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
   */
 
-  buildInputs = [x11 xextproto libXtst inputproto];
+  buildInputs = [x11 xextproto libXtst inputproto libXi];
 
   patches = [ (fetchurl {
     url = http://mawercer.de/~nix/syncergy-gcc43.patch.gz;
