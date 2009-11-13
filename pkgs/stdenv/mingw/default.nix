@@ -77,7 +77,7 @@ let {
            * binutils is on the path because it contains dlltool, which
            * is invoked on the PATH by some packages.
            */
-          initialPath = [make binutils gccCore gccCpp mingwRuntimeSrc w32apiSrc replace msys];
+          initialPath = [make binutils gccCore gccCpp mingwRuntimeSrc w32apiSrc msys];
           gcc = gccCore;
           shell = msysShell;
           inherit curl;

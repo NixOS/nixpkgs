@@ -19,7 +19,7 @@ let {
       mkDerivation = attrs:
         derivation ((removeAttrs attrs ["meta"]) // {
           builder = shell;
-          args = extraShellOptions ++ ["-e" attrs.builder];
+          args = extraShellOptions ++ ["-e" ] ++ [attrs.builder]; # (if attrs ? builder then [attrs.builder] else [ ../fix-builder.sh ../default-builder.sh] ) ;
           stdenv = body;
           system = body.system;
         }

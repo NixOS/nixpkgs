@@ -23,7 +23,7 @@ rec {
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/mingw32-make-3.81-1.tar.gz;
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/mingw32-make-3.81-1.tar.gz;
           md5 = "74c2f44ecc699b318edeb07d838feae5";
         };
     };
@@ -33,12 +33,12 @@ rec {
    */
   gccCore =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "mingw-gcc-core-3.4.2-20040916-1";
+      name = "gcc-core-3.4.5-mingw32";
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/gcc-core-3.4.2-20040916-1.tar.gz;
-          md5 = "d9cd78f926fc31ef101c6fa7072fc65d";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/GCC%20Version%203/Current%20Release_%20gcc-3.4.5-20060117-3/gcc-core-3.4.5-20060117-3.tar.gz;
+          sha256= "1jjj3397fzrly4w0i28mclmawv18g35fak8j8pyr3f34hr1cjwxy";
         };
     };
 
@@ -47,12 +47,12 @@ rec {
    */
   gccCpp =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "mingw-gcc-g++-3.4.2-20040916-1";
+      name = "gcc-g++-3.4.5-mingw32";
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/gcc-g++-3.4.2-20040916-1.tar.gz;
-          md5 = "e5c7eb2c1e5f7e10842eac03d1d6fcdc";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/GCC%20Version%203/Current%20Release_%20gcc-3.4.5-20060117-3/gcc-g++-3.4.5-20060117-3.tar.gz;
+          sha256 = "022g90p0h2jmfsj03vvni1bw3x9z4lbwchwph39bbm1ilk71a66b";
         };
     };
 
@@ -61,56 +61,56 @@ rec {
    */
   binutils =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "mingw-binutils-2.16.91-20060119-1";
+      name = "binutils-2.19.1-mingw32";
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/binutils-2.16.91-20060119-1.tar.gz;
-          md5 = "a54f33ca9d6cf56dc99c0c5367f58ea3";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/GNU%20Binutils/Current%20Release_%20GNU%20binutils-2.19.1/binutils-2.19.1-mingw32-bin.tar.gz;
+          sha256 = "037vh2n9iv2vccvplk48vd3al91p7yhc73p5nkfsrb6sg977shj2";
         };
     };
 
   mingwRuntimeBin = {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "mingw-runtime-3.10";
+      name = "mingwrt-3.16";
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/mingw-runtime-3.10.tar.gz;
-          md5 = "7fa2638d23136fd84d5d627bef3b408a";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/MinGW%20Runtime/mingwrt-3.16/mingwrt-3.16-mingw32-dev.tar.gz;
+          sha256 = "1xqpp7lvsj88grs6jlk0fnlkvis2y4avcqrpwsaxxrpjlg5bwzci";
         };
     };
 
   mingwRuntimeSrc = {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "mingw-runtime-3.10";
+      name = "mingwrt-3.16-mingw32";
       builder = ./src-builder.sh;
       src =
         fetchurl {
-          url = mirror://sourceforge/mingw/mingw-runtime-3.10-src.tar.gz;
-          md5 = "9225684e663eafa900b4075731c25f4c";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/MinGW%20Runtime/mingwrt-3.16/mingwrt-3.16-mingw32-src.tar.gz;
+          sha256 = "0rljw3v94z9wzfa63b7lvyprms5l5jgf11lws8vm8z7x7q7h1k38";
         };
     };
 
   w32apiBin = {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "w32api-3.7";
+      name = "w32api-3.13-mingw32";
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/w32api-3.7.tar.gz;
-          md5 = "0b3a6d08136581c93b3a3207588acea9";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/MinGW%20API%20for%20MS-Windows/Current%20Release_%20w32api-3.13/w32api-3.13-mingw32-dev.tar.gz;
+          sha256 = "19jm2hdym5ixi9b874xmmilixlpxvfdpi5y3bx0bs88fdah03gvx";
         };
     };
 
   w32apiSrc = {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "w32api-3.7";
+      name = "w32api-3.13-mingw32";
       builder = ./src-builder.sh;
       src = 
         fetchurl {
-          url = mirror://sourceforge/mingw/w32api-3.7-src.tar.gz;
-          md5 = "d799c407b4c1b480d0339994d01f355d";
+          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/MinGW%20API%20for%20MS-Windows/Current%20Release_%20w32api-3.13/w32api-3.13-mingw32-src.tar.gz;
+          sha256 = "1i1gpwilfc21s3yr4sx39i0w4g7lbij427wwxa34gjfgz0awdkh2";
         };
     };
 
