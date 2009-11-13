@@ -31,28 +31,14 @@ rec {
   /**
    * GCC. Binary
    */
-  gccCore =  {stdenv, fetchurl} :
+  gccFull =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "gcc-core-3.4.5-mingw32";
+      name = "gcc-full-4.4.0-mingw32";
       builder = ./bin-builder.sh;
       src = 
         fetchurl {
-          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/GCC%20Version%203/Current%20Release_%20gcc-3.4.5-20060117-3/gcc-core-3.4.5-20060117-3.tar.gz;
-          sha256= "1jjj3397fzrly4w0i28mclmawv18g35fak8j8pyr3f34hr1cjwxy";
-        };
-    };
-
-  /**
-   * GCC C++. Binary.
-   */
-  gccCpp =  {stdenv, fetchurl} :
-    stdenv.mkDerivation {
-      name = "gcc-g++-3.4.5-mingw32";
-      builder = ./bin-builder.sh;
-      src = 
-        fetchurl {
-          url = http://surfnet.dl.sourceforge.net/sourceforge/mingw/files/GCC%20Version%203/Current%20Release_%20gcc-3.4.5-20060117-3/gcc-g++-3.4.5-20060117-3.tar.gz;
-          sha256 = "022g90p0h2jmfsj03vvni1bw3x9z4lbwchwph39bbm1ilk71a66b";
+          url = ftp://ftp.strategoxt.org/pub/mingw/gcc-full-4.4.0-mingw32-bin-2.tar.gz;
+          sha256= "6c5a125591837817c940f4c66140cd7393b3f5837dd738c7ed315157e6270a60";
         };
     };
 

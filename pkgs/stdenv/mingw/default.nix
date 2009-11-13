@@ -39,7 +39,7 @@ let {
       path = [
         (make + "/bin")
         (binutils + "/bin")
-        (gccCore + "/bin")
+        (gccFull + "/bin")
         (mingwRuntimeBin + "/bin")
         (w32apiBin + "/bin")
         (msys + "/bin")
@@ -77,8 +77,8 @@ let {
            * binutils is on the path because it contains dlltool, which
            * is invoked on the PATH by some packages.
            */
-          initialPath = [make binutils gccCore gccCpp mingwRuntimeSrc w32apiSrc msys];
-          gcc = gccCore;
+          initialPath = [make binutils gccFull mingwRuntimeSrc w32apiSrc msys];
+          gcc = gccFull;
           shell = msysShell;
           inherit curl;
           isDarwin = false;
@@ -167,14 +167,8 @@ let {
       stdenv = stdenvInit2;
     };
 
-  gccCore =
-    (import ./pkgs).gccCore {
-      stdenv = stdenvInit2;
-      inherit fetchurl;
-    };
-
-  gccCpp =
-    (import ./pkgs).gccCpp {
+  gccFull =
+    (import ./pkgs).gccFull {
       stdenv = stdenvInit2;
       inherit fetchurl;
     };
