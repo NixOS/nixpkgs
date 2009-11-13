@@ -151,7 +151,7 @@ let {
       builder = ./msys-builder.sh;
       src =
         fetchurlInit1 {
-          url = http://www.cs.uu.nl/people/martin/msys-1.0.11.tar.gz;
+          url = ftp://ftp.strategoxt.org/pub/mingw/msys-1.0.11.tar.gz;
           md5 = "85ce547934797019d2d642ec3b53934b";
         };
     };
