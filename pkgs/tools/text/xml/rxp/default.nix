@@ -6,6 +6,8 @@ stdenv.mkDerivation {
     url = http://ftp.de.debian.org/debian/pool/main/r/rxp/rxp_1.2.3.orig.tar.gz;
     sha256 = "1r4khvmnl5231y37ji8f3mikxy0dhdz155wi3qihfi27mc1yv534";
   };
+  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+
   installPhase = ''
     ensureDir $out/bin
     cp rxp $out/bin

@@ -1,9 +1,22 @@
-{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk}:
+{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, makeStaticBinaries}:
 
 rec {
 
   inherit aterm;
 
+  atermStatic = stdenv.mkDerivation ( rec {
+    name = "${aterm.name}-static";
+    configureFlags = "--enable-shared=no --enable-static=yes";
+
+    inherit (aterm) src meta patches; 
+  } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
+  
+  sdfStatic = stdenv.mkDerivation ( rec {
+    name = "${sdf.name}-static";
+    configureFlags = "--enable-shared=no --enable-static=yes";
+
+    inherit (sdf) src buildInputs preConfigure meta; 
+  } // ( if stdenv.system == "i686-cygwin" then { inherit (sdf) CFLAGS; } else {} ) ) ;
   
   sdf = stdenv.mkDerivation ( rec {
     name = "sdf2-bundle-2.4";
@@ -31,7 +44,7 @@ rec {
     name = "strategoxt-0.18pre20033";
 
     src = fetchurl {
-      url = "http://hydra.nixos.org/build/82252/download/1/strategoxt-0.18pre20033.tar.gz";
+      url = "ftp://ftp.strategoxt.org/pub/stratego/StrategoXT/strategoxt-0.18pre20033.tar.gz";
       sha256 = "070052cff1fd27b2ca4bed8b6aa0238574a18922b21feae2506e6df5d2201c1c";
     };
 

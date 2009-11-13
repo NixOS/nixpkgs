@@ -573,6 +573,14 @@ in {
     dryad = linux;
   };
 
+  strategoPackages018 = {
+    sdfStatic = all;
+    sdf = all;
+    strategoxt = all;
+    javafront = all;
+    dryad = linux;
+  };
+
   perlPackages = {
     TaskCatalystTutorial = linux;
   };

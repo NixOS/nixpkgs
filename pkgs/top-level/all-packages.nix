@@ -2256,7 +2256,7 @@ let
   };
 
   strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk;
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries; 
   };
 
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
@@ -2523,7 +2523,9 @@ let
     inherit fetchurl stdenv sqlite ruby ;
   };
 
-  scsh = import ../development/interpreters/scsh { inherit stdenv fetchurl; };
+  scsh = import ../development/interpreters/scsh {
+    inherit stdenv fetchurl;
+  };
 
   spidermonkey = import ../development/interpreters/spidermonkey {
     inherit fetchurl stdenv readline;
@@ -2901,6 +2903,11 @@ let
 
   noweb = import ../development/tools/literate-programming/noweb {
     inherit fetchurl stdenv;
+  };
+
+  openafsClient = import ../servers/openafs-client {
+    inherit stdenv fetchurl autoconf automake flex yacc;
+    inherit kernel_2_6_28 glibc ncurses perl krb5;
   };
 
   openocd = import ../development/tools/misc/openocd {
@@ -4973,6 +4980,10 @@ let
     sslSupport = true;
   };
 
+  sabnzbd = import ../servers/sabnzbd {
+    inherit fetchurl stdenv python cheetahTemplate makeWrapper par2cmdline unzip unrar;
+  };
+
   bind = builderDefsPackage (selectVersion ../servers/dns/bind "9.5.0") {
     inherit openssl libtool;
   };
@@ -5019,7 +5030,7 @@ let
   };
 
   jboss = import ../servers/http/jboss {
-    inherit fetchurl stdenv jdk5 jdk;
+    inherit fetchurl stdenv unzip jdk lib;
   };
 
   jboss_mysql_jdbc = import ../servers/http/jboss/jdbc/mysql {
@@ -5361,6 +5372,10 @@ let
 
   hal_info = import ../os-specific/linux/hal/info.nix {
     inherit fetchurl stdenv pkgconfig;
+  };
+
+  hal_info_synaptics = import ../os-specific/linux/hal/synaptics.nix {
+    inherit stdenv;
   };
 
   hdparm = import ../os-specific/linux/hdparm {
@@ -5794,6 +5809,11 @@ let
   };
 
   kvm86 = import ../os-specific/linux/kvm/86.nix {
+    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
+    inherit (glibc) kernelHeaders;
+  };
+
+  kvm88 = import ../os-specific/linux/kvm/88.nix {
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
     inherit (glibc) kernelHeaders;
   };
@@ -7262,6 +7282,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ledger = import ../applications/office/ledger {
+    inherit stdenv fetchurl emacs gmp pcre;
+  };
+
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
     inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
       gpm openssl SDL SDL_image SDL_net pkgconfig;
@@ -7499,9 +7523,8 @@ let
     inherit fetchurl stdenv pkgconfig imagemagick boost python;
   };
 
-  qemu = import ../applications/virtualization/qemu/0.10.3.nix {
-    inherit fetchurl SDL zlib which;
-    stdenv = overrideGCC stdenv gcc34;
+  qemu = import ../applications/virtualization/qemu/0.11.0.nix {
+    inherit stdenv fetchurl SDL zlib which;
   };
 
   qemuSVN = import ../applications/virtualization/qemu/svn-6642.nix {
@@ -7643,7 +7666,7 @@ let
   # linux only by now
   synergy = import ../applications/misc/synergy {
     inherit fetchurl bleedingEdgeRepos stdenv x11;
-    inherit (xlibs) xextproto libXtst inputproto;
+    inherit (xlibs) xextproto libXtst inputproto libXi;
   };
 
   tahoelafs = import ../tools/networking/p2p/tahoe-lafs {
@@ -7879,8 +7902,7 @@ let
   };
 
   xchm = import ../applications/misc/xchm {
-    inherit fetchurl stdenv chmlib;
-    wxGTK = wxGTK26;
+    inherit fetchurl stdenv chmlib wxGTK;
   };
 
   /* Doesn't work yet
@@ -8270,10 +8292,11 @@ let
   };
 
   arb = import ../applications/science/biology/arb {
-    inherit fetchurl stdenv readline libpng zlib x11 lesstif93 freeglut perl;
+    inherit fetchurl readline libpng zlib x11 lesstif93 freeglut perl;
     inherit (xlibs) libXpm libXaw libX11 libXext libXt;
     inherit mesa glew libtiff lynx rxp sablotron jdk transfig gv gnuplot;
     lesstif = lesstif93;
+    stdenv = overrideGCC stdenv gcc42;
   };
 
   biolib = import ../development/libraries/science/biology/biolib {

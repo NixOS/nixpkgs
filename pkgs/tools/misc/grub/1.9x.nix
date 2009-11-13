@@ -7,11 +7,11 @@ let unifont_bdf = fetchurl {
 in
 
 stdenv.mkDerivation rec {
-  name = "grub-1.97";
+  name = "grub-1.97.1";
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/grub/${name}.tar.gz";
-    sha256 = "0wsnwrng8h3d3mkwyxpc9a4c5vrsjc6c7lxfxmrpqvdb4yb2wn4d";
+    sha256 = "1grpz4jphrhlmjr0ai4vi5rs1xknwfqgb376cq7hlwzblcblbw2i";
   };
 
   buildInputs = [ bison ncurses libusb freetype ];

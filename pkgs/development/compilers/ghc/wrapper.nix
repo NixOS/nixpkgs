@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     #! /bin/bash -e
     declare -A GHC_PACKAGES_HASH # using bash4 hashs to get uniq paths
 
-    for arg in \$($out/bin/ghc-get-packages.sh 6.10.3 "$(dirname $0)"); do
+    for arg in \$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\"); do
       case "\$arg" in
         -package-conf) ;;
         *)

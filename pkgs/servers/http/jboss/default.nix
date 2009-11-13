@@ -1,20 +1,27 @@
-{ stdenv, fetchurl, jdk5, jdk }:
+{ stdenv, fetchurl, unzip, jdk, lib }:
 
 stdenv.mkDerivation {
-  name = "jboss-4.2.2.GA";
+  name = "jboss-5.1.0.GA";
+  src = fetchurl {
+    url = mirror://sourceforge/jboss/jboss-5.1.0.GA-jdk6.zip;
+    sha256 = "0wy5666h554x1qq4w0rzg3krp4rqrijq0ql7dkx6qgl3vpj9xr5y";
+  };
 
-  builder = ./builder.sh;
-  src = 
-    fetchurl {
-      url = http://garr.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA-src.tar.gz;
-      md5 = "2a626cdccabe712628555676d67ad44a";
-    };
-
-  inherit jdk5 jdk;
-
+  buildInputs = [ unzip ];
+      
+  buildPhase = ''
+    sed -i -e "/GREP/aJAVA_HOME=${jdk}" bin/run.sh
+  '';
+  
+  installPhase = ''
+    ensureDir $out
+    cp -av * $out
+  '';
+  
   meta = {
     homepage = "http://www.jboss.org/";
     description = "JBoss, Open Source J2EE application server";
     license = "GPL/LGPL";
+    maintainers = [ lib.maintainers.sander ];
   };
 }

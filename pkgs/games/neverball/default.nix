@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     sed -i -e 's@-lvorbisfile@-lvorbisfile -lX11 -lgcc_s@' Makefile
   '';
 
+  # The map generation code requires a writable HOME
+  preConfigure = "export HOME=$TMPDIR";
+
   installPhase = ''
     ensureDir $out/bin $out
     cp -R data locale $out
