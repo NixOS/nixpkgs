@@ -10,7 +10,7 @@ let
 in
 
 {
-  boot.extraGrubEntries =
+  boot.loader.grub.extraEntries =
     ''
       menuentry "Memtest86+" {
         linux16 ${memtestPath}

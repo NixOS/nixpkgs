@@ -58,7 +58,7 @@ let
   # The Grub image.
   grubImage = pkgs.runCommand "grub_eltorito" {}
     ''
-      ${pkgs.grub2}/bin/grub-mkimage -o tmp biosdisk iso9660 help linux linux16 sh chain
+      ${pkgs.grub2}/bin/grub-mkimage -o tmp biosdisk iso9660 help linux linux16 sh chain gfxterm vbe png jpeg
       cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
     ''; # */
 
@@ -66,18 +66,35 @@ let
   # The configuration file for Grub.
   grubCfg = 
     ''
-      set default = 0
-      set timeout = 10
+      set default=0
+      set timeout=10
 
-      #splashimage /boot/background.xpm.gz
+      if loadfont /boot/grub/unicode.pf2; then
+        set gfxmode=640x480
+        insmod gfxterm
+        insmod vbe
+        terminal_output.gfxterm
 
-      ${config.boot.extraGrubEntries}
+        insmod png
+        if background_image /boot/grub/splash.png; then
+          set color_normal=white/black
+          set color_highlight=black/white
+        else
+          set menu_color_normal=cyan/blue
+          set menu_color_highlight=white/blue
+        fi
+        
+      fi
+
+      ${config.boot.loader.grub.extraEntries}
     '';
   
 in
 
 {
   require = options;
+
+  boot.loader.grub.version = 2;
 
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
   # so that we don't need to know its device.
@@ -133,8 +150,11 @@ in
       { source = config.system.build.initialRamdisk + "/initrd";
         target = "/boot/initrd";
       }
-      { source = config.boot.grubSplashImage;
-        target = "/boot/background.xpm.gz";
+      { source = "${pkgs.grub2}/share/grub/unicode.pf2";
+        target = "/boot/grub/unicode.pf2";
+      }
+      { source = config.boot.loader.grub.splashImage;
+        target = "/boot/grub/splash.png";
       }
       { source = config.system.build.squashfsStore;
         target = "/nix-store.squashfs";
@@ -159,7 +179,7 @@ in
     ];
 
   # The Grub menu.
-  boot.extraGrubEntries =
+  boot.loader.grub.extraEntries =
     ''
       menuentry "Boot from hard disk" {
         set root=(hd0)
