@@ -1,6 +1,6 @@
 let lib = import ./default.nix;
 
-inherit (builtins) trace attrNamesToStr isAttrs isFunction isList head substring attrNames;
+inherit (builtins) trace attrNamesToStr isAttrs isFunction isList isInt isString head substring attrNames;
 
 in
 
@@ -37,7 +37,10 @@ rec {
       else if x == true then "x is boolean true"
       else if x == false then "x is boolean false"
       else if x == null then "x is null"
-      else "x is probably a string `${substring 0 50 x}...'";
+      else if isInt x then "x is an integer `${toString x}'"
+      else if isString x then "x is a string `${substring 0 50 x}...'"
+      else "x is probably a path `${substring 0 50 (toString x)}'";
+
   # trace the arguments passed to function and its result 
   traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
   traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
