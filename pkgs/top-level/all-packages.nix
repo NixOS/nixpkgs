@@ -290,7 +290,6 @@ let
     sshSupport = true;
   };
 
-  # TODO do some testing
   fetchhg = import ../build-support/fetchhg {
     inherit stdenv mercurial nix;
   };

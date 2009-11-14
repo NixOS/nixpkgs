@@ -1,7 +1,8 @@
 {stdenv, mercurial, nix}: {url, tag ? null, md5}:
 
+# TODO: statically check if mercurial as the https support if the url starts woth https.
 stdenv.mkDerivation {
-  name = "fetchdarcs";
+  name = "fetchhg";
   builder = ./builder.sh;
   buildInputs = [mercurial nix];
 
