@@ -27,6 +27,7 @@ stdenv.mkDerivation {
     # only for 386 build
     # !!! substituteInPlace does not seems to be effective.
     sed -i 's,/lib/ld-linux.so.2,${glibc}/lib/ld-linux.so.2,' src/cmd/8l/asm.c
+    sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo.go
   '';
 
   GOOS = "linux";

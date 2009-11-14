@@ -1,7 +1,7 @@
 diff -r b51fd2d6c160 src/pkg/Makefile
 --- a/src/pkg/Makefile	Tue Nov 10 20:05:24 2009 -0800
 +++ b/src/pkg/Makefile	Sat Nov 14 19:42:42 2009 +0100
-@@ -100,16 +100,19 @@
+@@ -100,16 +100,18 @@
  
  NOTEST=\
  	debug/proc\
@@ -17,7 +17,6 @@ diff -r b51fd2d6c160 src/pkg/Makefile
  	runtime\
  	syscall\
  	testing/iotest\
-+	time\
  
  TEST=\
  	$(filter-out $(NOTEST),$(DIRS))
