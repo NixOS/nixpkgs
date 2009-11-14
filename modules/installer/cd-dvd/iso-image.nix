@@ -2,20 +2,22 @@
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.isoImage.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
-    isoImage.isoName = pkgs.lib.mkOption {
+    isoImage.isoName = mkOption {
       default = "cd.iso";
       description = ''
         Name of the generated ISO image file.
       '';
     };
 
-    isoImage.compressImage = pkgs.lib.mkOption {
+    isoImage.compressImage = mkOption {
       default = false;
       description = ''
         Whether the ISO image should be compressed using
@@ -23,7 +25,7 @@ let
       '';
     };
 
-    isoImage.volumeID = pkgs.lib.mkOption {
+    isoImage.volumeID = mkOption {
       default = "NIXOS_BOOT_CD";
       description = ''
         Specifies the label or volume ID of the generated ISO image.
@@ -32,7 +34,7 @@ let
       '';
     };
 
-    isoImage.contents = pkgs.lib.mkOption {
+    isoImage.contents = mkOption {
       example =
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
@@ -44,7 +46,7 @@ let
       '';
     };
 
-    isoImage.storeContents = pkgs.lib.mkOption {
+    isoImage.storeContents = mkOption {
       example = [pkgs.stdenv];
       description = ''
         This option lists additional derivations to be included in the
@@ -96,6 +98,15 @@ in
 
   boot.loader.grub.version = 2;
 
+  # Don't build the GRUB menu builder script, since we don't need it
+  # here and it causes a cyclic dependency.
+  boot.loader.grub.enable = false;
+
+  # !!! Hack - attributes expected by other modules.
+  system.build.menuBuilder = "true";
+  system.boot.loader.kernelFile = "vmlinuz";
+  environment.systemPackages = [ pkgs.grub2 ];
+
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
   # so that we don't need to know its device.
   fileSystems =
@@ -112,7 +123,7 @@ in
 
   # We need squashfs in the initrd to mount the compressed Nix store,
   # and aufs to make the root filesystem appear writable.
-  boot.extraModulePackages = (pkgs.lib.optional 
+  boot.extraModulePackages = (optional 
     (! config.boot.kernelPackages.kernel.features ? aufs) 
     config.boot.kernelPackages.aufs);
   boot.initrd.extraKernelModules = ["aufs" "squashfs"];
@@ -163,19 +174,6 @@ in
         source = pkgs.runCommand "empty" {} "ensureDir $out";
         target = "/nix/store";
       }
-      { # Another quick hack: the kernel needs a systemConfig
-        # parameter in menu.lst, but the system config depends on
-        # menu.lst.  Break the cyclic dependency by having a /system
-        # symlink on the CD, and having menu.lst refer to /system.
-        source = pkgs.runCommand "system" {}
-          "ln -s ${config.system.build.toplevel} $out";
-        target = "/system";
-      }
-      { # Idem for the stage-2 init script.
-        source = pkgs.runCommand "system" {}
-          "ln -s ${config.system.build.bootStage2} $out";
-        target = "/init";
-      }
     ];
 
   # The Grub menu.
@@ -187,7 +185,7 @@ in
       }
     
       menuentry "NixOS Installer / Rescue" {
-        linux /boot/vmlinuz init=/init systemConfig=/system ${toString config.boot.kernelParams}
+        linux /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${toString config.boot.kernelParams}
         initrd /boot/initrd
       }
     '';
