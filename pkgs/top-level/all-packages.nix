@@ -7265,8 +7265,12 @@ let
   };
 
   mercurial = import ../applications/version-management/mercurial {
-    inherit fetchurl stdenv python makeWrapper getConfig tk;
+    inherit fetchurl stdenv makeWrapper getConfig tk;
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
+    python = # allow cloning sources from https servers.
+      if getConfig ["mercurial" "httpsSupport"] true
+      then pythonFull
+      else pythonBase;
   };
 
   meshlab = import ../applications/graphics/meshlab {
