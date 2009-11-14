@@ -2065,6 +2065,10 @@ let
     inherit cmake;
   };
 
+  go = import ../development/compilers/go {
+    inherit stdenv fetchhg glibc bison ed which bash;
+  };
+
   gprolog = import ../development/compilers/gprolog {
     inherit fetchurl stdenv;
   };
