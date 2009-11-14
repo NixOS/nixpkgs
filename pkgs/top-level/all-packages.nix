@@ -213,7 +213,14 @@ let
     allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
   };
 
+  allStdenvsCross = cross : import ../stdenv {
+    inherit system stdenvType cross;
+    allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
+  };
+
   defaultStdenv = allStdenvs.stdenv;
+
+  stdenvCross = cross : (allStdenvsCross cross).stdenv;
 
   stdenv =
     if bootStdenv != null then bootStdenv else
@@ -1785,6 +1792,11 @@ let
     inherit fetchurl stdenv bison;
   };
 
+  bashRealArm = makeOverridable (import ../shells/bash) {
+    inherit fetchurl bison;
+    stdenv = stdenvCross "armv5tel-unknown-linux-gnueabi";
+  };
+
   bashInteractive = appendToName "interactive" (bashReal.override {
     inherit readline texinfo;
     interactive = true;
@@ -1883,6 +1895,16 @@ let
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
   }));
+
+  gcc43_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.3) {
+    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs cross;
+    binutilsCross = binutilsCross cross;
+    glibcHeadersCross = glibcHeadersCross cross;
+    profiledCompiler = false;
+    enableMultilib = true;
+  };
+
+  gccCross = cross: gcc43_realCross cross;
 
   gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43_real.gcc.override {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
@@ -2671,6 +2693,11 @@ let
     (import ../development/tools/misc/binutils {
       inherit fetchurl stdenv noSysDirs;
     });
+
+  binutilsCross = cross : import ../development/tools/misc/binutils {
+      inherit stdenv fetchurl cross;
+      noSysDirs = true;
+  };
 
   bison = bison23;
 
@@ -3482,6 +3509,23 @@ let
     inherit fetchurl stdenv kernelHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
+
+  glibc29HeadersCross = cross: import ../development/libraries/glibc-2.9/headers.nix {
+    inherit fetchurl stdenv;
+    kernelHeaders = kernelHeadersCross cross;
+  };
+
+  glibcHeadersCross = cross: glibc29HeadersCross cross;
+
+  glibc29Cross = cross : makeOverridable (import ../development/libraries/glibc-2.9) {
+    inherit fetchurl stdenv cross;
+    binutilsCross = binutilsCross cross;
+    gccCross = gccCross cross;
+    kernelHeaders = kernelHeadersCross cross;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
+
+  glibcCross = cross: glibc29Cross cross;
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv kernelHeaders;
@@ -5446,6 +5490,10 @@ let
   };
 
   kernelHeaders = kernelHeaders_2_6_28;
+
+  kernelHeadersCross = cross : import ../os-specific/linux/kernel-headers/2.6.28.nix {
+    inherit fetchurl stdenv perl cross;
+  };
 
   kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
     inherit fetchurl stdenv unifdef;

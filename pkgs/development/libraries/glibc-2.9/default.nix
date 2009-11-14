@@ -1,10 +1,14 @@
 { stdenv, fetchurl, kernelHeaders
 , installLocales ? true
 , profilingLibraries ? false
+, cross ? null
+, binutilsCross ? null
+, gccCross ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "glibc-2.9";
+  name = "glibc-2.9" +
+    stdenv.lib.optionalString (cross != null) "-${cross}";
 
   builder = ./builder.sh;
 
@@ -60,11 +64,15 @@ stdenv.mkDerivation rec {
     "--enable-add-ons"
     "--with-headers=${kernelHeaders}/include"
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
+  ] ++ stdenv.lib.optionals (cross != null) [
+    "--target=${cross}"
   ] ++ (if (stdenv.system == "armv5tel-linux") then [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
   ] else []);
+
+  buildInputs = stdenv.lib.optionals (cross != null) [ binutilsCross gccCross ];
 
   preInstall = ''
     ensureDir $out/lib

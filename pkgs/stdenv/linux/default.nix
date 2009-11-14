@@ -5,7 +5,8 @@
 # ensuring purity of components produced by it.
 
 # The function defaults are for easy testing.
-{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix}:
+{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix,
+cross ? null}:
 
 rec {
 
@@ -197,7 +198,22 @@ rec {
     bootStdenv = stdenvLinuxBoot3;
   };
 
-  
+  wrapGCCCross =
+    {gcc, libc, binutils, shell ? "", name ? "bootstrap-gcc-wrapper"}:
+    
+    import ../../build-support/gcc-cross-wrapper {
+      nativeTools = false;
+      nativeLibc = false;
+      inherit gcc binutils libc shell name cross;
+      stdenv = stdenvLinuxBoot3;
+    };
+
+  gccCross = wrapGCCCross rec {
+      gcc = stdenvLinuxBoot3Pkgs.gccCross cross;
+      binutils = stdenvLinuxBoot3Pkgs.gccCross cross;
+      libc = stdenvLinuxBoot3Pkgs.glibcCross cross;
+  };
+
   # 8) Construct the final stdenv.  It uses the Glibc, GCC and
   #    Binutils built above, and adds in dynamically linked versions
   #    of all other tools.
@@ -205,7 +221,8 @@ rec {
   #    When updating stdenvLinux, make sure that the result has no
   #    dependency (`nix-store -qR') on bootstrapTools.
   stdenvLinux = import ../generic {
-    name = "stdenv-linux";
+    name = "stdenv-linux" +
+      stdenvLinuxBoot3Pkgs.lib.optionalString (cross != null) "-${cross}";
     
     inherit system;
     
@@ -213,7 +230,10 @@ rec {
     
     initialPath = 
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
-      ++ [stdenvLinuxBoot3Pkgs.patchelf];
+      ++ [stdenvLinuxBoot3Pkgs.patchelf]
+      ++ stdenvLinuxBoot3Pkgs.lib.optionals (cross != null)
+        [ (stdenvLinuxBoot3Pkgs.binutilsCross cross)
+           gccCross ];
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;

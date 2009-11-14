@@ -87,10 +87,12 @@ postInstall() {
 }
 
 
-if test -z "$profiledCompiler"; then
-    buildFlags="bootstrap $buildFlags"
-else    
-    buildFlags="profiledbootstrap $buildFlags"
+if test -n "$cross"; then
+    if test -z "$profiledCompiler"; then
+        buildFlags="bootstrap $buildFlags"
+    else    
+        buildFlags="profiledbootstrap $buildFlags"
+    fi
 fi
 
 genericBuild

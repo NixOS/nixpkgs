@@ -10,16 +10,22 @@
 , zlib ? null, boehmgc ? null
 , enableMultilib ? false
 , name ? "gcc"
+, cross ? null
+, binutilsCross ? null
+, glibcHeadersCross ? null
 }:
 
 assert langTreelang -> bison != null && flex != null;
+
+assert cross != null -> profiledCompiler == false && enableMultilib == true;
 
 with stdenv.lib;
 
 let version = "4.3.4"; in
 
 stdenv.mkDerivation ({
-  name = "${name}-${version}";
+  name = "${name}-${version}" +
+    stdenv.lib.optionalString (cross != null) "-${cross}";
   
   builder = ./builder.sh;
   
@@ -53,6 +59,7 @@ stdenv.mkDerivation ({
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
+    ++ (optionals (cross != null) [binutilsCross])
     ;
 
   configureFlags = "
@@ -71,7 +78,16 @@ stdenv.mkDerivation ({
       )
     }
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
+    ${if cross != null then "--disable-libssp --disable-nls" +
+      " --with-headers=${glibcHeadersCross}/include --target=${cross}" +
+      " --disable-shared" else ""}
   ";
+  #Above I added a hack on making the build different than the host.
+
+  # Needed for the cross compilation to work
+  AR = "ar";
+  LD = "ld";
+  CC = "gcc";
 
   NIX_EXTRA_LDFLAGS = if staticCompiler then "-static" else "";
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}:
+{stdenv, fetchurl, perl, cross ? null}:
 
 assert stdenv.isLinux;
 
@@ -12,7 +12,9 @@ stdenv.mkDerivation {
     sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
   };
 
+
   platform = 
+    if cross == "armv5tel-unknown-linux-gnueabi" then "arm" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
