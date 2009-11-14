@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   patches = [
     ./disable-system-dependent-tests.patch
     ./pkg-log-test-accept-period-in-file-path.patch
+    ./cgo-set-local-to-match-gcc-error-messages.patch
   ];
 
   prePatch = ''
@@ -32,9 +33,6 @@ stdenv.mkDerivation {
 
   GOOS = "linux";
   GOARCH = "386";
-
-  # The go-c interface depends on the error output of GCC.
-  LC_ALL = "C";
 
   installPhase = ''
     ensureDir "$out"
