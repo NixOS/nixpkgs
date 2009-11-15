@@ -31,6 +31,7 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
+
     extraCFlags="-g0 -I$gmp/include -I$mpfr/include $extraCFlags"
     extraLDFlags="--strip-debug $extraLDFlags"
 
@@ -39,14 +40,37 @@ if test "$noSysDirs" = "1"; then
         export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
     done
 
-    makeFlagsArray=( \
-        "${makeFlagsArray[@]}" \
-        NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        X_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        )
+    set -x
+    if test -n "$cross"; then
+        if test -z "$crossStageStatic"; then
+            extraXCFlags="-B${glibcCross}/lib -idirafter ${glibcCross}/include"
+            extraXLDFlags="-L${glibcCross}/lib"
+            export NIX_EXTRA_CFLAGS_TARGET=$extraXCFlags
+            for i in $extraXLDFlags; do
+                export NIX_EXTRA_LDFLAGS_TARGET="$NIX_EXTRA_LDFLAGS_TARGET -Wl,$i"
+            done
+        fi
+
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            CFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+            LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+            )
+    else
+        export NIX_EXTRA_CFLAGS_TARGET=$NIX_EXTRA_CFLAGS
+        export NIX_EXTRA_LDFLAGS_TARGET=$NIX_EXTRA_LDFLAGS
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            CFLAGS_FOR_BUILD="$NIX_EXTRA_X_CFLAGS $NIX_EXTRA_X_LDFLAGS" \
+            CFLAGS_FOR_TARGET="$NIX_EXTRA_X_CFLAGS $NIX_EXTRA_X_LDFLAGS" \
+            LDFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            LDFLAGS_FOR_TARGET="$NIX_EXTRA_X_CFLAGS $NIX_EXTRA_X_LDFLAGS" \
+            )
+    fi
 
     if test -n "$cross" -a "$crossStageStatic" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
@@ -61,6 +85,7 @@ if test "$noSysDirs" = "1"; then
             LIMITS_H_TEST=true \
             )
     fi
+    set +x
 fi
 
 if test -n "$cross"; then

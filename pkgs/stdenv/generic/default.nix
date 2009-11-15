@@ -1,4 +1,5 @@
 { system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
+, cross ? null
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}
 
@@ -17,7 +18,7 @@ let
     result =
 
       derivation {
-        inherit system name;
+        inherit system cross name;
 
         builder = shell;
 
@@ -52,6 +53,7 @@ let
                 ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               stdenv = result;
               system = result.system;
+              cross = result.cross;
             })
           )
           # The meta attribute is passed in the resulting attribute set,

@@ -1895,7 +1895,7 @@ let
     #stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs cross;
     binutilsCross = binutilsCross cross;
-    glibcHeadersCross = glibcCross cross;
+    glibcCross = glibcCross cross;
     profiledCompiler = false;
     enableMultilib = true;
     crossStageStatic = false;
@@ -1904,6 +1904,7 @@ let
   gccCrossStageStatic = cross: (gcc43_realCross cross).override {
     crossStageStatic = true;
     langCC = false;
+    glibcCross = null;
   };
 
   gccCrossStageFinal = cross: wrapGCCCross {

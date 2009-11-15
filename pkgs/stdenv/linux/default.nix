@@ -219,6 +219,13 @@ rec {
         [ (stdenvLinuxBoot3Pkgs.binutilsCross cross)
            (stdenvLinuxBoot3Pkgs.gccCrossStageFinal cross) ];
 
+    postHook = if (cross != null) then
+        (builtins.toFile "cross-posthook.sh" ''
+            configureFlags="$configureFlags --build=${system} --host=${cross}"
+            dontStrip=1
+        '')
+        else null;
+
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       inherit (stdenvLinuxBoot3Pkgs) coreutils;

@@ -12,7 +12,7 @@
 , name ? "gcc"
 , cross ? null
 , binutilsCross ? null
-, glibcHeadersCross ? null
+, glibcCross ? null
 , crossStageStatic ? true
 }:
 
@@ -34,8 +34,12 @@ let
       " --disable-threads " +
       " --disable-libmudflap " +
       " --disable-libgomp " +
-      " --disable-shared" else
-      " --with-headers=${glibcHeadersCross}"
+      " --disable-shared"
+      else
+      " --with-headers=${glibcCross}/include" +
+      " --enable-__cxa_atexit" +
+      " --enable-long-long" +
+      " --enable-threads=posix"
       );
   stageNameAddon = if (crossStageStatic) then "-stage-static" else
     "-stage-final";
@@ -72,7 +76,8 @@ stdenv.mkDerivation ({
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
     ++ optional langJava ./java-jvgenmain-link.patch;
     
-  inherit noSysDirs profiledCompiler staticCompiler cross crossStageStatic binutilsCross;
+  inherit noSysDirs profiledCompiler staticCompiler cross crossStageStatic
+    binutilsCross glibcCross;
 
   buildInputs = [texinfo gmp mpfr]
     ++ (optionals langTreelang [bison flex])
