@@ -40,7 +40,6 @@ if test "$noSysDirs" = "1"; then
         export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
     done
 
-    set -x
     if test -n "$cross"; then
         if test -z "$crossStageStatic"; then
             extraXCFlags="-B${glibcCross}/lib -idirafter ${glibcCross}/include"
@@ -65,10 +64,10 @@ if test "$noSysDirs" = "1"; then
             "${makeFlagsArray[@]}" \
             NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
             SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-            CFLAGS_FOR_BUILD="$NIX_EXTRA_X_CFLAGS $NIX_EXTRA_X_LDFLAGS" \
-            CFLAGS_FOR_TARGET="$NIX_EXTRA_X_CFLAGS $NIX_EXTRA_X_LDFLAGS" \
+            CFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            CFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
             LDFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-            LDFLAGS_FOR_TARGET="$NIX_EXTRA_X_CFLAGS $NIX_EXTRA_X_LDFLAGS" \
+            LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
             )
     fi
 
@@ -85,7 +84,6 @@ if test "$noSysDirs" = "1"; then
             LIMITS_H_TEST=true \
             )
     fi
-    set +x
 fi
 
 if test -n "$cross"; then
