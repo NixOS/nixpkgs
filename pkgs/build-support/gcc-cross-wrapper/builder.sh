@@ -5,17 +5,10 @@ source $stdenv/setup
 cflagsCompile="-B$out/bin/"
 
 if test -z "$nativeLibc"; then
-    # The "-B$glibc/lib/" flag is a quick hack to force gcc to link
-    # against the crt1.o from our own glibc, rather than the one in
-    # /usr/lib.  The real solution is of course to prevent those paths
-    # from being used by gcc in the first place.
-    # The dynamic linker is passed in `ldflagsBefore' to allow
-    # explicit overrides of the dynamic linker by callers to gcc/ld
-    # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$libc/usr/lib/ -isystem $libc/usr/include"
-    ldflags="$ldflags -L$libc/usr/lib"
-    #ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.2"
-    ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
+    cflagsCompile="$cflagsCompile -B$libc/lib/ -isystem $libc/include"
+    ldflags="$ldflags -L$libc/lib"
+    ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.?"
+    #ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
 fi
 
 if test -n "$nativeTools"; then
