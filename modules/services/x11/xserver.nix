@@ -363,7 +363,7 @@ in
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
-      { startOn = if cfg.autorun then "started hal" else "";
+      { startOn = if cfg.autorun then "started udev and started hal" else "";
  
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
@@ -379,14 +379,6 @@ in
 
         preStart =
           ''
-            # Ugly hack: wait until udev has started since the X server
-            # needs various devices.  This would more properly be
-            # expressed as an Upstart dependency, but AFAIK in "start
-            # on" we can't express a logical AND.
-            while ! initctl status udev 2>&1 | grep -q running; do
-                sleep 1
-            done
-        
             rm -f /var/run/opengl-driver
             ${# !!! The OpenGL driver depends on what's detected at runtime.
               if elem "nvidia" driverNames then ''
