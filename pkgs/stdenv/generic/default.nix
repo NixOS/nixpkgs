@@ -18,7 +18,7 @@ let
     result =
 
       derivation {
-        inherit system cross name;
+        inherit system name cross;
 
         builder = shell;
 
@@ -53,7 +53,9 @@ let
                 ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               stdenv = result;
               system = result.system;
-              cross = result.cross;
+              # The env variable 'cross' is used in all the crosscompiler
+              # bootstrapping in another sense
+              crossTarget = result.cross;
             })
           )
           # The meta attribute is passed in the resulting attribute set,

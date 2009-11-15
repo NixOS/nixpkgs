@@ -208,7 +208,7 @@ rec {
     name = "stdenv-linux" +
       stdenvLinuxBoot3Pkgs.lib.optionalString (cross != null) "-${cross}";
     
-    inherit system;
+    inherit system cross;
     
     preHook = builtins.toFile "prehook.sh" commonPreHook;
     
