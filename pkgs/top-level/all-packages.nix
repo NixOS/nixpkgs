@@ -6096,8 +6096,12 @@ let
     inherit (xlibs) libX11 xproto;
   };*/
 
-  uboot = import ../misc/uboot {
+  uboot = makeOverridable (import ../misc/uboot) {
     inherit fetchurl stdenv unzip;
+  };
+
+  ubootArm = uboot.override {
+    stdenv = stdenvCross "armv5tel-unknown-linux-gnueabi";
   };
 
   uclibc = import ../os-specific/linux/uclibc {
