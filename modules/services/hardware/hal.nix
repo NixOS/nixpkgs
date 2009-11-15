@@ -48,10 +48,9 @@ in
   
   config = mkIf cfg.enable {
 
-    # !!! move pmutils somewhere else
-    environment.systemPackages = [hal pkgs.pmutils];
+    environment.systemPackages = [ hal ];
 
-    services.hal.packages = [hal pkgs.hal_info];
+    services.hal.packages = [ hal pkgs.hal_info ];
 
     users.extraUsers = singleton
       { name = "haldaemon";
@@ -67,7 +66,7 @@ in
     jobs.hal =
       { description = "HAL daemon";
         
-        startOn = "started dbus" + optionalString config.powerManagement.enable " and started acpid";
+        startOn = "started dbus" + optionalString config.services.acpid.enable " and started acpid";
 
         environment =
           { # !!! HACK? These environment variables manipulated inside
