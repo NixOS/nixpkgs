@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0r2sn527wxqifi63di7ns9wbjh1cainxn978w178khhy7yw9fk42";
   };
 
-  inherit kernelHeaders installLocales;
+  inherit kernelHeaders installLocales cross;
 
   inherit (stdenv) is64bit;
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
     /* Support GNU Binutils 2.20 and above.  */
     ./binutils-2.20.patch
+
+    ./binutils-ld.patch
   ];
 
   configureFlags = [
@@ -65,7 +67,12 @@ stdenv.mkDerivation rec {
     "--with-headers=${kernelHeaders}/include"
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
-    "--target=${cross}"
+    "--host=${cross}"
+    "--build=${stdenv.system}"
+    "--with-tls"
+    "--enable-kernel=2.6.0"
+    "--without-fp"
+    "--with-__thread"
   ] ++ (if (stdenv.system == "armv5tel-linux") then [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"

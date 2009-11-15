@@ -29,10 +29,29 @@ preConfigure() {
 
     tar xvjf "$srcPorts"
     
+    if test -n "$cross"; then
+        sed -i s/-lgcc_eh//g Makeconfig
+    fi
+
     mkdir build
     cd build
     
     configureScript=../configure
+    if test -n "$cross"; then
+        cat > config.cache << "EOF"
+libc_cv_forced_unwind=yes
+libc_cv_c_cleanup=yes
+libc_cv_gnu89_inline=yes
+EOF
+        export BUILD_CC=gcc
+        export CC="${cross}-gcc"
+        export AR="${cross}-ar"
+        export RANLIB="${cross}-ranlib"
+        configureFlags="${configureFlags} --cache-file=config.cache"
+
+        # The host stripp will destroy everything in the target binaries otherwise
+        dontStrip=1
+    fi
 }
 
 
@@ -52,7 +71,7 @@ postInstall() {
     if test -n "$installLocales"; then
         make localedata/install-locales
     fi
-    rm $out/etc/ld.so.cache
+    test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
     (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
 
     # Fix for NIXOS-54 (ldd not working on x86_64).  Make a symlink

@@ -2,7 +2,9 @@
 
 assert stdenv.isLinux;
 
-let version = "2.6.28.5"; in 
+let
+    version = "2.6.28.5";
+in 
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
@@ -12,14 +14,17 @@ stdenv.mkDerivation {
     sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
   };
 
+  inherit cross;
 
   platform = 
     if cross == "armv5tel-unknown-linux-gnueabi" then "arm" else
+    assert(cross == null);
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
     if stdenv.system == "armv5tel-linux" then "arm" else
-    abort "don't know what the kernel include directory is called for this platform";
+    abort "don't know what the kernel include directory is called for this
+    platform";
 
   buildInputs = [perl];
 
@@ -31,6 +36,9 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    if test -n "$cross"; then
+       export ARCH=$platform
+    fi
     make mrproper headers_check
   '';
 

@@ -1792,11 +1792,6 @@ let
     inherit fetchurl stdenv bison;
   };
 
-  bashRealArm = makeOverridable (import ../shells/bash) {
-    inherit fetchurl bison;
-    stdenv = stdenvCross "armv5tel-unknown-linux-gnueabi";
-  };
-
   bashInteractive = appendToName "interactive" (bashReal.override {
     inherit readline texinfo;
     interactive = true;
@@ -1897,14 +1892,39 @@ let
   }));
 
   gcc43_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.3) {
-    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs cross;
+    #stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
+    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs cross;
     binutilsCross = binutilsCross cross;
-    glibcHeadersCross = glibcHeadersCross cross;
+    glibcHeadersCross = glibcCross cross;
     profiledCompiler = false;
     enableMultilib = true;
+    langCC = false;
   };
 
-  gccCross = cross: gcc43_realCross cross;
+  gccCrossStageStatic = cross: (gcc43_realCross cross).override {
+    crossStageStatic = true;
+  };
+
+  /*
+  gccCrossStageStatic = cross: wrapGCCCross {
+    gcc = (gcc43_realCross cross).override {
+        crossStageStatic = true;
+    };
+    #libc = glibc;
+    libc = stdenv.gcc.libc;
+    binutils = binutilsCross cross;
+    inherit cross;
+  };
+  */
+
+  gccCrossStageFinal = cross: wrapGCCCross {
+    gcc = (gcc43_realCross cross).override {
+        crossStageStatic = false;
+    };
+    libc = glibcCross cross;
+    binutils = binutilsCross cross;
+    inherit cross;
+  };
 
   gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43_real.gcc.override {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
@@ -2316,6 +2336,15 @@ let
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
 
+  wrapGCCCross =
+    {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
+    
+    import ../build-support/gcc-cross-wrapper {
+      nativeTools = false;
+      nativeLibc = false;
+      inherit stdenv gcc binutils libc shell name cross;
+    };
+
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
   # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
   wrapGCCUPC = baseGCC: import ../build-support/gcc-upc-wrapper {
@@ -2700,6 +2729,11 @@ let
   };
 
   bison = bison23;
+
+  bisonArm = import ../development/tools/parsing/bison/bison-2.3.nix {
+    inherit fetchurl m4;
+    stdenv = stdenvCross "armv5tel-unknown-linux-gnueabi";
+  };
 
   bison1875 = import ../development/tools/parsing/bison/bison-1.875.nix {
     inherit fetchurl stdenv m4;
@@ -3510,17 +3544,10 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc29HeadersCross = cross: import ../development/libraries/glibc-2.9/headers.nix {
-    inherit fetchurl stdenv;
-    kernelHeaders = kernelHeadersCross cross;
-  };
-
-  glibcHeadersCross = cross: glibc29HeadersCross cross;
-
   glibc29Cross = cross : makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit fetchurl stdenv cross;
     binutilsCross = binutilsCross cross;
-    gccCross = gccCross cross;
+    gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
   };

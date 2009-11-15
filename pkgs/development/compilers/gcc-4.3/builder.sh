@@ -43,13 +43,30 @@ if test "$noSysDirs" = "1"; then
         "${makeFlagsArray[@]}" \
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        LIMITS_H_TEST=true \
         X_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
         LDFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
         LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
         )
+
+    if test -n "$cross" -a "$crossStageStatic" == 1; then
+        # We don't want the gcc build to assume there will be a libc providing
+        # limits.h in this stagae
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            LIMITS_H_TEST=false \
+            )
+    else
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            LIMITS_H_TEST=true \
+            )
+    fi
 fi
 
+if test -n "$cross"; then
+    # The host stripp will destroy everything in the target binaries otherwise
+    dontStrip=1
+fi
 
 preConfigure() {
     # Perform the build in a different directory.
@@ -84,15 +101,24 @@ postInstall() {
             ln -sfn g++ $i
         fi
     done
+
+    # gcc will look for the binutils there, called through collect2
+    if test -n "$cross"; then
+      ln -s $binutilsCross/$cross/bin $out/$cross/bin
+    fi
 }
 
 
-if test -n "$cross"; then
+if test -z "$cross"; then
     if test -z "$profiledCompiler"; then
         buildFlags="bootstrap $buildFlags"
     else    
         buildFlags="profiledbootstrap $buildFlags"
     fi
+else
+:
+#    buildFlags="all-gcc all-target-libgcc $buildFlags"
+#    installTargets="install-gcc install-target-libgcc"
 fi
 
 genericBuild

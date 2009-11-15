@@ -13,19 +13,38 @@
 , cross ? null
 , binutilsCross ? null
 , glibcHeadersCross ? null
+, crossStageStatic ? true
 }:
 
 assert langTreelang -> bison != null && flex != null;
 
 assert cross != null -> profiledCompiler == false && enableMultilib == true;
+assert (cross != null && crossStageStatic) -> (langCC == false && langFortran
+== false && langTreelang == false);
 
 with stdenv.lib;
 
-let version = "4.3.4"; in
+let
+  version = "4.3.4";
+  crossConfigureFlags =
+    "--target=${cross}" +
+    (if crossStageStatic then
+      " --disable-libssp --disable-nls" +
+      " --without-headers" +
+      " --disable-threads " +
+      " --disable-libmudflap " +
+      " --disable-libgomp " +
+      " --disable-shared" else
+      " --with-headers=${glibcHeadersCross}"
+      );
+  stageNameAddon = if (crossStageStatic) then "-stage-static" else
+    "-stage-final";
+  crossNameAddon = if (cross != null) then "-${cross}" + stageNameAddon else "";
+
+in
 
 stdenv.mkDerivation ({
-  name = "${name}-${version}" +
-    stdenv.lib.optionalString (cross != null) "-${cross}";
+  name = "${name}-${version}" + crossNameAddon;
   
   builder = ./builder.sh;
   
@@ -53,7 +72,7 @@ stdenv.mkDerivation ({
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
     ++ optional langJava ./java-jvgenmain-link.patch;
     
-  inherit noSysDirs profiledCompiler staticCompiler;
+  inherit noSysDirs profiledCompiler staticCompiler cross crossStageStatic binutilsCross;
 
   buildInputs = [texinfo gmp mpfr]
     ++ (optionals langTreelang [bison flex])
@@ -78,9 +97,7 @@ stdenv.mkDerivation ({
       )
     }
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
-    ${if cross != null then "--disable-libssp --disable-nls" +
-      " --with-headers=${glibcHeadersCross}/include --target=${cross}" +
-      " --disable-shared" else ""}
+    ${if cross != null then crossConfigureFlags else ""}
   ";
   #Above I added a hack on making the build different than the host.
 

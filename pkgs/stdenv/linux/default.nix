@@ -198,22 +198,6 @@ rec {
     bootStdenv = stdenvLinuxBoot3;
   };
 
-  wrapGCCCross =
-    {gcc, libc, binutils, shell ? "", name ? "bootstrap-gcc-wrapper"}:
-    
-    import ../../build-support/gcc-cross-wrapper {
-      nativeTools = false;
-      nativeLibc = false;
-      inherit gcc binutils libc shell name cross;
-      stdenv = stdenvLinuxBoot3;
-    };
-
-  gccCross = wrapGCCCross rec {
-      gcc = stdenvLinuxBoot3Pkgs.gccCross cross;
-      binutils = stdenvLinuxBoot3Pkgs.gccCross cross;
-      libc = stdenvLinuxBoot3Pkgs.glibcCross cross;
-  };
-
   # 8) Construct the final stdenv.  It uses the Glibc, GCC and
   #    Binutils built above, and adds in dynamically linked versions
   #    of all other tools.
@@ -233,7 +217,7 @@ rec {
       ++ [stdenvLinuxBoot3Pkgs.patchelf]
       ++ stdenvLinuxBoot3Pkgs.lib.optionals (cross != null)
         [ (stdenvLinuxBoot3Pkgs.binutilsCross cross)
-           gccCross ];
+           (stdenvLinuxBoot3Pkgs.gccCrossStageFinal cross) ];
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
