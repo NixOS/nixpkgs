@@ -1898,29 +1898,16 @@ let
     glibcHeadersCross = glibcCross cross;
     profiledCompiler = false;
     enableMultilib = true;
-    langCC = false;
+    crossStageStatic = false;
   };
 
   gccCrossStageStatic = cross: (gcc43_realCross cross).override {
     crossStageStatic = true;
+    langCC = false;
   };
-
-  /*
-  gccCrossStageStatic = cross: wrapGCCCross {
-    gcc = (gcc43_realCross cross).override {
-        crossStageStatic = true;
-    };
-    #libc = glibc;
-    libc = stdenv.gcc.libc;
-    binutils = binutilsCross cross;
-    inherit cross;
-  };
-  */
 
   gccCrossStageFinal = cross: wrapGCCCross {
-    gcc = (gcc43_realCross cross).override {
-        crossStageStatic = false;
-    };
+    gcc = gcc43_realCross cross;
     libc = glibcCross cross;
     binutils = binutilsCross cross;
     inherit cross;
