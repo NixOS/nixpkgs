@@ -11,7 +11,8 @@ let
       #! ${pkgs.stdenv.shell}
       action="$1"
       if [ "$action" = "resume" ]; then
-          ${cfg.resumeCommands}        
+          ${cfg.resumeCommands}
+          ${cfg.powerUpCommands}
       fi
     '';
 
@@ -37,6 +38,17 @@ in
       resumeCommands = mkOption {
         default = "";
         description = "Commands executed after the system resumes from suspend-to-RAM.";
+      };
+      
+      powerUpCommands = mkOption {
+        default = "";
+        example = "${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda";
+        description =
+          ''
+            Commands executed when the machine powers up.  That is,
+            they're executed both when the system first boots and when
+            it resumes from suspend or hibernation.
+          '';
       };
       
     };

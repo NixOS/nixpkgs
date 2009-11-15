@@ -29,7 +29,11 @@ let
         utillinux
         udev
       ];
-    postBootCommands = writeText "local-cmds" config.boot.postBootCommands;
+    postBootCommands = writeText "local-cmds"
+      ''
+        ${config.boot.postBootCommands}
+        ${config.powerManagement.powerUpCommands}
+      '';
   };
   
 in
