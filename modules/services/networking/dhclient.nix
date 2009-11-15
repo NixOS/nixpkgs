@@ -103,6 +103,22 @@ in
         }
       ];
 
+    powerManagement.resumeCommands =
+      ''
+        export PATH=${config.system.build.upstart}/sbin:$PATH
+      
+        restart() {
+            local job="$1"
+            if initctl status "$job" 2> /dev/null | grep -q 'running'; then
+                initctl stop "$job"
+                initctl start "$job"
+            fi
+        }
+
+        restart wpa_supplicant      
+        restart dhclient
+      '';
+
   };  
   
 }
