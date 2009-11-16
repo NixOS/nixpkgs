@@ -41,7 +41,7 @@ rec {
 
   
   strategoxt = stdenv.mkDerivation rec {
-    name = "strategoxt-0.18pre20033";
+    name = "strategoxt-0.18pre20227";
 
     src = fetchurl {
       url = "http://hydra.nixos.org/build/124117/download/1/strategoxt-0.18pre20227.tar.gz";
