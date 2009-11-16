@@ -130,8 +130,8 @@ rec {
       setupHook = ../../../development/tools/misc/pkgconfig/setup-hook.sh;
       src =
         fetchurl {
-          url = ftp://ftp.strategoxt.org/pub/mingw/pkg-config-0.23-bin.tar.gz;
-          sha256 = "1z4zyg20g25qvx102mm2nzsxyh8fcsbz2lgi7qp32b5vrixi1037";
+          url = ftp://ftp.strategoxt.org/pub/mingw/pkg-config-0.23.tar.gz;
+          sha256 = "1vab3rdnw16nhma1bln41bbrn6phbpcv9wiz79map8y5znaiv6mq";
         };
     };
 
