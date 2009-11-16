@@ -4,7 +4,7 @@ let
     basename = "binutils-2.20";
 in
 stdenv.mkDerivation rec {
-  name = basename + stdenv.lib.optionalString (cross != null) "-${cross}";
+  name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = "--disable-werror" # needed for dietlibc build
-      + stdenv.lib.optionalString (cross != null) " --target=${cross}";
+      + stdenv.lib.optionalString (cross != null) " --target=${cross.config}";
 
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";

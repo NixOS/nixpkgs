@@ -2720,7 +2720,12 @@ let
 
   bisonArm = import ../development/tools/parsing/bison/bison-2.3.nix {
     inherit fetchurl m4;
-    stdenv = stdenvCross "armv5tel-unknown-linux-gnueabi";
+    stdenv = stdenvCross {
+      config = "armv5tel-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "soft";
+    };
   };
 
   bison1875 = import ../development/tools/parsing/bison/bison-1.875.nix {

@@ -20,7 +20,8 @@ stdenv.mkDerivation {
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
-  inherit nativeTools nativeLibc nativePrefix gcc libc binutils cross;
+  inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
+  crossConfig = if (cross != null) then cross.config else null;
   name = if name == "" then gcc.name else name;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;

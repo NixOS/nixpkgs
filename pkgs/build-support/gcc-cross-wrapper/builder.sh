@@ -60,24 +60,24 @@ mkGccWrapper() {
     chmod +x "$dst"
 }
 
-mkGccWrapper $out/bin/$cross-gcc $gccPath/$cross-gcc
+mkGccWrapper $out/bin/$crossConfig-gcc $gccPath/$crossConfig-gcc
 #ln -s gcc $out/bin/cc
 
-mkGccWrapper $out/bin/g++ $gccPath/g++
-ln -s g++ $out/bin/c++
+mkGccWrapper $out/bin/$crossConfig-g++ $gccPath/$crossConfig-g++
+ln -s $crossConfig-g++ $out/bin/$crossConfig-c++
 
-mkGccWrapper $out/bin/g77 $gccPath/g77
-ln -s g77 $out/bin/f77
+mkGccWrapper $out/bin/$crossConfig-g77 $gccPath/$crossConfig-g77
+ln -s $crossConfig-g77 $out/bin/$crossConfig-f77
 
-ln -s $binutils/bin/$cross-ar $out/bin/$cross-ar
-ln -s $binutils/bin/$cross-as $out/bin/$cross-as
-ln -s $binutils/bin/$cross-nm $out/bin/$cross-nm
-ln -s $binutils/bin/$cross-strip $out/bin/$cross-strip
+ln -s $binutils/bin/$crossConfig-ar $out/bin/$crossConfig-ar
+ln -s $binutils/bin/$crossConfig-as $out/bin/$crossConfig-as
+ln -s $binutils/bin/$crossConfig-nm $out/bin/$crossConfig-nm
+ln -s $binutils/bin/$crossConfig-strip $out/bin/$crossConfig-strip
 
 
 # Make a wrapper around the linker.
-doSubstitute "$ldWrapper" "$out/bin/$cross-ld"
-chmod +x "$out/bin/$cross-ld"
+doSubstitute "$ldWrapper" "$out/bin/$crossConfig-ld"
+chmod +x "$out/bin/$crossConfig-ld"
 
 
 # Emit a setup hook.  Also store the path to the original GCC and

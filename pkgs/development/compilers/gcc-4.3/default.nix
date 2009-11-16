@@ -27,7 +27,7 @@ with stdenv.lib;
 let
   version = "4.3.4";
   crossConfigureFlags =
-    "--target=${cross}" +
+    "--target=${cross.config}" +
     (if crossStageStatic then
       " --disable-libssp --disable-nls" +
       " --without-headers" +
@@ -43,7 +43,7 @@ let
       );
   stageNameAddon = if (crossStageStatic) then "-stage-static" else
     "-stage-final";
-  crossNameAddon = if (cross != null) then "-${cross}" + stageNameAddon else "";
+  crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
 
 in
 
@@ -76,8 +76,9 @@ stdenv.mkDerivation ({
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
     ++ optional langJava ./java-jvgenmain-link.patch;
     
-  inherit noSysDirs profiledCompiler staticCompiler cross crossStageStatic
+  inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
     binutilsCross glibcCross;
+  crossConfig = if (cross != null) then cross.config else null;
 
   buildInputs = [texinfo gmp mpfr]
     ++ (optionals langTreelang [bison flex])

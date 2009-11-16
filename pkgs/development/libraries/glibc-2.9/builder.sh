@@ -29,7 +29,7 @@ preConfigure() {
 
     tar xvjf "$srcPorts"
     
-    if test -n "$cross"; then
+    if test -n "$crossConfig"; then
         sed -i s/-lgcc_eh//g Makeconfig
     fi
 
@@ -37,16 +37,16 @@ preConfigure() {
     cd build
     
     configureScript=../configure
-    if test -n "$cross"; then
+    if test -n "$crossConfig"; then
         cat > config.cache << "EOF"
 libc_cv_forced_unwind=yes
 libc_cv_c_cleanup=yes
 libc_cv_gnu89_inline=yes
 EOF
         export BUILD_CC=gcc
-        export CC="${cross}-gcc"
-        export AR="${cross}-ar"
-        export RANLIB="${cross}-ranlib"
+        export CC="${crossConfig}-gcc"
+        export AR="${crossConfig}-ar"
+        export RANLIB="${crossConfig}-ranlib"
         configureFlags="${configureFlags} --cache-file=config.cache"
 
         # The host stripp will destroy everything in the target binaries otherwise

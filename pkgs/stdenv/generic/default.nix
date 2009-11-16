@@ -18,7 +18,7 @@ let
     result =
 
       derivation {
-        inherit system name cross;
+        inherit system name;
 
         builder = shell;
 
@@ -55,7 +55,7 @@ let
               system = result.system;
               # The env variable 'cross' is used in all the crosscompiler
               # bootstrapping in another sense
-              crossTarget = result.cross;
+              crossTarget = if (cross != null) then cross.config else null;
             })
           )
           # The meta attribute is passed in the resulting attribute set,

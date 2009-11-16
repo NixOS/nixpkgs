@@ -206,7 +206,7 @@ rec {
   #    dependency (`nix-store -qR') on bootstrapTools.
   stdenvLinux = import ../generic {
     name = "stdenv-linux" +
-      stdenvLinuxBoot3Pkgs.lib.optionalString (cross != null) "-${cross}";
+      stdenvLinuxBoot3Pkgs.lib.optionalString (cross != null) "-${cross.config}";
     
     inherit system cross;
     
@@ -221,7 +221,7 @@ rec {
 
     postHook = if (cross != null) then
         (builtins.toFile "cross-posthook.sh" ''
-            configureFlags="$configureFlags --build=${system} --host=${cross}"
+            configureFlags="$configureFlags --build=${system} --host=${cross.config}"
             dontStrip=1
         '')
         else null;

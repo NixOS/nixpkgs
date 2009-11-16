@@ -14,11 +14,10 @@ stdenv.mkDerivation {
     sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
   };
 
-  inherit cross;
+  crossConfig = if (cross != null) then cross.config else null;
 
   platform = 
-    if cross == "armv5tel-unknown-linux-gnueabi" then "arm" else
-    assert(cross == null);
+    if cross != null then cross.arch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
@@ -29,14 +28,16 @@ stdenv.mkDerivation {
   buildInputs = [perl];
 
   extraIncludeDirs =
-    if stdenv.system == "powerpc-linux" then ["ppc"] else [];
+    if cross != null then
+        (if cross.arch == "powerpc" then ["ppc"] else [])
+    else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
 
   patchPhase = ''
     sed -i '/scsi/d' include/Kbuild
   '';
 
   buildPhase = ''
-    if test -n "$cross"; then
+    if test -n "$crossConfig"; then
        export ARCH=$platform
     fi
     make mrproper headers_check

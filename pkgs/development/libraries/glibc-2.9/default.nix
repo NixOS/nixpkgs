@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name = "glibc-2.9" +
-    stdenv.lib.optionalString (cross != null) "-${cross}";
+    stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   builder = ./builder.sh;
 
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0r2sn527wxqifi63di7ns9wbjh1cainxn978w178khhy7yw9fk42";
   };
 
-  inherit kernelHeaders installLocales cross;
+  inherit kernelHeaders installLocales;
+  crossConfig = if (cross != null) then cross.config else null;
 
   inherit (stdenv) is64bit;
 
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     "--with-headers=${kernelHeaders}/include"
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
-    "--host=${cross}"
+    "--host=${cross.config}"
     "--build=${stdenv.system}"
     "--with-tls"
     "--enable-kernel=2.6.0"
