@@ -1,7 +1,7 @@
-diff -r b51fd2d6c160 src/pkg/Makefile
---- a/src/pkg/Makefile	Tue Nov 10 20:05:24 2009 -0800
-+++ b/src/pkg/Makefile	Sat Nov 14 19:42:42 2009 +0100
-@@ -100,16 +100,18 @@
+diff -r cb140bac9ab0 src/pkg/Makefile
+--- a/src/pkg/Makefile	Thu Nov 12 14:55:26 2009 -0800
++++ b/src/pkg/Makefile	Mon Nov 16 11:50:34 2009 +0100
+@@ -100,12 +100,15 @@
  
  NOTEST=\
  	debug/proc\
@@ -11,18 +11,15 @@ diff -r b51fd2d6c160 src/pkg/Makefile
  	go/token\
  	hash\
  	image\
++	log\
  	malloc\
 +	os\
  	rand\
  	runtime\
  	syscall\
- 	testing/iotest\
- 
- TEST=\
- 	$(filter-out $(NOTEST),$(DIRS))
-diff -r b51fd2d6c160 src/run.bash
---- a/src/run.bash	Tue Nov 10 20:05:24 2009 -0800
-+++ b/src/run.bash	Sat Nov 14 19:42:42 2009 +0100
+diff -r cb140bac9ab0 src/run.bash
+--- a/src/run.bash	Thu Nov 12 14:55:26 2009 -0800
++++ b/src/run.bash	Mon Nov 16 11:50:34 2009 +0100
 @@ -69,7 +69,3 @@
  ./timing.sh -test
  ) || exit $?
