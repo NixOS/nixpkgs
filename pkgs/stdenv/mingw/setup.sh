@@ -648,7 +648,7 @@ fixupPhase() {
                     ensureDir $prefix/share
                     if test -w $prefix/share; then
                         mv -v $prefix/$d $prefix/share
-                        ln -sv share/$d $prefix/$d
+                        ln -sv $prefix/share/$d $prefix/$d
                     fi
                 fi
             fi
