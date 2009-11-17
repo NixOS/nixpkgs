@@ -109,16 +109,38 @@ rec {
 
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
-  makeStdenvCross = stdenv: binutilsCross : gccCross: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        
-        buildInputs =
-          (if args ? buildInputs then args.buildInputs else [])
-          ++ [ gccCross binutilsCross ];
+  makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
+    { mkDerivation = {name, buildInputs ? null, hostInputs ? null,
+            propagatedBuildInputs ? null, propagatedHostInputs ? null, ...}@args: let
+            buildInputsList = if (buildInputs != null) then
+                buildInputs else [];
+            hostInputsList = if (hostInputs != null) then
+                hostInputs else [];
+            propagatedBuildInputsList = if (propagatedBuildInputs != null) then
+                propagatedBuildInputs else [];
+            propagatedHostInputsList = if (propagatedHostInputs != null) then
+                propagatedHostInputs else [];
+            buildInputsDrvs = map (drv: drv.buildDrv) buildInputsList;
+            hostInputsDrvs = map (drv: drv.hostDrv) hostInputsList;
+            propagatedBuildInputsDrvs = map (drv: drv.buildDrv) propagatedBuildInputsList;
+            propagatedHostInputsDrvs = map (drv: drv.buildDrv) propagatedHostInputsList;
+            buildDrv = stdenv.mkDerivation (args // {
+                buildInputs = buildInputsDrvs ++ hostInputsDrvs;
+                propagatedBuildInputs = propagatedBuildInputsDrvs ++
+                    propagatedHostInputsDrvs;
+            });
+            hostDrv = if (cross == null) then buildDrv else
+                stdenv.mkDerivation (args // { 
+                    name = name + "-" + cross.config;
+                    buildInputs = buildInputsDrvs
+                      ++ [ gccCross binutilsCross ];
 
-        crossConfig = gccCross.cross.config;
-      });
-    };
+                    crossConfig = cross.config;
+                });
+        in hostDrv // {
+            inherit hostDrv buildDrv;
+        };
+    } // { inherit cross; };
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.

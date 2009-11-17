@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pn13j6f9376kwki69050x3zh62yb1w31l37rws5nwr5q02xk68i";
   };
 
-  propagatedBuildInputs = [ncurses];
+  propagatedHostInputs = [ncurses];
 
   patchFlags = "-p0";
   patches =

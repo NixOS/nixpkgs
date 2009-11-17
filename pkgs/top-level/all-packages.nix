@@ -33,6 +33,7 @@
   # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
   # ~/.nixpkgs/config.nix.
   config ? null
+, crossSystem ? null
 }:
 
 
@@ -215,7 +216,7 @@ let
 
   defaultStdenv = allStdenvs.stdenv;
 
-  stdenv =
+  stdenvNoCross = 
     if bootStdenv != null then bootStdenv else
       let changer = getConfig ["replaceStdenv"] null;
       in if changer != null then
@@ -224,6 +225,10 @@ let
           overrideSetup = overrideSetup;
         }
       else defaultStdenv;
+
+  stdenv = if (bootStdenv != null || crossSystem == null) then stdenvNoCross else
+    makeStdenvCross stdenvNoCross crossSystem (binutilsCross crossSystem)
+    (gccCrossStageFinal crossSystem);
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -238,9 +243,6 @@ let
     overrideGCC overrideInStdenv overrideSetup
     useDietLibC useKlibc makeStaticBinaries addAttrsToDerivation
     keepBuildTree cleanupBuildTree addCoverageInstrumentation makeStdenvCross;
-
-  stdenvCross = cross : makeStdenvCross stdenv (binutilsCross cross)
-      (gccCrossStageFinal cross);
 
 
   ### BUILD SUPPORT
@@ -304,7 +306,8 @@ let
   # from being built.
   fetchurl = useFromStdenv "fetchurl"
     (import ../build-support/fetchurl {
-      inherit curl stdenv;
+      curl = curlNoCross;
+      stdenv = stdenvNoCross;
     });
 
   # fetchurlBoot is used for curl and its dependencies in order to
@@ -638,11 +641,17 @@ let
     inherit fetchurl stdenv;
   };
 
-  curl = import ../tools/networking/curl {
+  curl = makeOverridable (import ../tools/networking/curl) {
     fetchurl = fetchurlBoot;
     inherit stdenv zlib openssl;
     zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
     sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
+  };
+
+  curlNoCross = curl.override {
+    stdenv = stdenvNoCross;
+    zlib = zlib.override { stdenv = stdenvNoCross; };
+    openssl = opensslNoCross;
   };
 
   curlftpfs = import ../tools/networking/curlftpfs {
@@ -1066,8 +1075,12 @@ let
       readline nettools lsof procps;
   };
 
-  lzma = import ../tools/compression/lzma {
+  lzma = makeOverridable (import ../tools/compression/lzma) {
     inherit fetchurl stdenv;
+  };
+
+  lzmaNoCross = lzma.override {
+    stdenv = stdenvNoCross;
   };
 
   xz = import ../tools/compression/xz {
@@ -1883,13 +1896,17 @@ let
   gcc43 = useFromStdenv "gcc" gcc43_real;
 
   gcc43_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
-    inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
+    inherit fetchurl gmp mpfr noSysDirs;
+    stdenv = stdenvNoCross;
+    texinfo = texinfoNoCross;
     profiledCompiler = true;
   }));
 
   gcc43_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.3) {
     #stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs cross;
+    inherit fetchurl gmp mpfr noSysDirs cross;
+    stdenv = stdenvNoCross;
+    texinfo = texinfoNoCross;
     binutilsCross = binutilsCross cross;
     glibcCross = glibcCross cross;
     profiledCompiler = false;
@@ -2326,7 +2343,8 @@ let
     import ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
-      inherit stdenv gcc binutils libc shell name cross;
+      inherit gcc binutils libc shell name cross;
+      stdenv = stdenvNoCross;
     };
 
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
@@ -2428,13 +2446,18 @@ let
       impureLibcPath = if stdenv.isLinux then null else "/usr";
     };
 
-  perl510 = import ../development/interpreters/perl-5.10 {
+  perl510 = makeOverridable (import ../development/interpreters/perl-5.10) {
     inherit stdenv;
     fetchurl = fetchurlBoot;
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
   perl = if system != "i686-cygwin" then perl510 else sysPerl;
+
+  perlNoCross = perl.override
+  {
+    stdenv = stdenvNoCross;
+  };
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   phpOld = import ../development/interpreters/php {
@@ -2708,21 +2731,12 @@ let
     });
 
   binutilsCross = cross : import ../development/tools/misc/binutils {
-      inherit stdenv fetchurl cross;
+      inherit fetchurl cross;
+      stdenv = stdenvNoCross;
       noSysDirs = true;
   };
 
   bison = bison23;
-
-  bisonArm = import ../development/tools/parsing/bison/bison-2.3.nix {
-    inherit fetchurl m4;
-    stdenv = stdenvCross {
-      config = "armv5tel-unknown-linux-gnueabi";  
-      bigEndian = false;
-      arch = "arm";
-      float = "soft";
-    };
-  };
 
   bison1875 = import ../development/tools/parsing/bison/bison-1.875.nix {
     inherit fetchurl stdenv m4;
@@ -2859,11 +2873,15 @@ let
 
   m4 = gnum4;
 
+  m4NoCross = m4.override {
+    stdenv = stdenvNoCross;
+  };
+
   global = import ../development/tools/misc/global {
     inherit fetchurl stdenv;
   };
 
-  gnum4 = import ../development/tools/misc/gnum4 {
+  gnum4 = makeOverridable (import ../development/tools/misc/gnum4) {
     inherit fetchurl stdenv;
   };
 
@@ -3055,8 +3073,14 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  texinfo = import ../development/tools/misc/texinfo {
+  texinfo = makeOverridable (import ../development/tools/misc/texinfo) {
     inherit fetchurl stdenv ncurses lzma;
+  };
+
+  texinfoNoCross = texinfo.override {
+    stdenv = stdenvNoCross;
+    ncurses = ncursesNoCross;
+    lzma = lzmaNoCross;
   };
 
   texi2html = import ../development/tools/misc/texi2html {
@@ -3534,7 +3558,8 @@ let
   };
 
   glibc29Cross = cross : makeOverridable (import ../development/libraries/glibc-2.9) {
-    inherit fetchurl stdenv cross;
+    inherit fetchurl cross;
+    stdenv = stdenvNoCross;
     binutilsCross = binutilsCross cross;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
@@ -3587,7 +3612,9 @@ let
   };
 
   gmp = import ../development/libraries/gmp {
-    inherit fetchurl stdenv m4;
+    inherit fetchurl;
+    stdenv = stdenvNoCross;
+    m4 = m4NoCross;
   };
 
   # `gmpxx' used to mean "GMP with C++ bindings".  Now `gmp' has C++ bindings
@@ -3609,7 +3636,8 @@ let
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = import ../development/libraries/mpfr {
-    inherit fetchurl stdenv gmp;
+    inherit fetchurl gmp;
+    stdenv = stdenvNoCross;
   };
 
   gst_all = recurseIntoAttrs (import ../development/libraries/gstreamer {
@@ -4320,9 +4348,15 @@ let
     inherit fetchurl stdenv;
   };
 
-  ncurses = composedArgsAndFun (import ../development/libraries/ncurses) {
+  ncurses = makeOverridable (composedArgsAndFun (import ../development/libraries/ncurses)) {
     inherit fetchurl stdenv;
-    unicode = (system != "i686-cygwin");
+    # The "! (stdenv ? cross)" is for the cross-built arm ncurses, which
+    # don't build for me in unicode.
+    unicode = (system != "i686-cygwin" && ! (stdenv ? cross));
+  };
+
+  ncursesNoCross = ncurses.override {
+    stdenv = stdenvNoCross;
   };
 
   neon = neon026;
@@ -4404,9 +4438,14 @@ let
       pkgconfig;
   };
 
-  openssl = import ../development/libraries/openssl {
+  openssl = makeOverridable (import ../development/libraries/openssl) {
     fetchurl = fetchurlBoot;
     inherit stdenv perl;
+  };
+
+  opensslNoCross = openssl.override {
+    stdenv = stdenvNoCross;
+    perl = perlNoCross;
   };
 
   ortp = import ../development/libraries/ortp {
@@ -4757,7 +4796,7 @@ let
     inherit ncurses flex bison autoconf automake m4 coreutils;
   };
 
-  zlib = import ../development/libraries/zlib {
+  zlib = makeOverridable (import ../development/libraries/zlib) {
     fetchurl = fetchurlBoot;
     inherit stdenv;
   };
@@ -5508,7 +5547,9 @@ let
   kernelHeaders = kernelHeaders_2_6_28;
 
   kernelHeadersCross = cross : import ../os-specific/linux/kernel-headers/2.6.28.nix {
-    inherit fetchurl stdenv perl cross;
+    inherit fetchurl cross;
+    stdenv = stdenvNoCross;
+    perl = perlNoCross;
   };
 
   kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
@@ -6099,10 +6140,6 @@ let
 
   uboot = makeOverridable (import ../misc/uboot) {
     inherit fetchurl stdenv unzip;
-  };
-
-  ubootArm = uboot.override {
-    stdenv = stdenvCross "armv5tel-unknown-linux-gnueabi";
   };
 
   uclibc = import ../os-specific/linux/uclibc {
