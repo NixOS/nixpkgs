@@ -373,10 +373,6 @@ let inherit (builtins) head tail trace; in
         /*debug = x:(trace x x);
         debugX = x:(trace (toXML x) x);*/
 
-        replaceScriptVar = file: name: value: "sed -e 's`^${name}=.*`${name}='\\''${value}'\\''`' -i ${file}";
-        replaceInScript = file: l: concatStringsSep "\n" ((pairMap (replaceScriptVar file) l));
-        replaceScripts = l: concatStringsSep "\n" (pairMap replaceInScript l);
-        doReplaceScripts = fullDepEntry (replaceScripts (attrByPath ["shellReplacements"] [] args)) ["minInit"];
         makeNest = x: if x == defNest.text then x else "startNest\n" + x + "\nstopNest\n";
         textClosure = a: steps: textClosureMap makeNest a (["defNest"] ++ steps);
 

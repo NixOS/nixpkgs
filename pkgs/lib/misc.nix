@@ -88,14 +88,6 @@ rec {
   # }
   composedArgsAndFun = f: foldArgs defaultMerge f {};
 
-  # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
-  # result: ["ab" "cd"]
-  innerPairMap = acc: f: l: 
-  	if l == [] then acc else
-	innerPairMap (acc ++ [(f (head l)(head (tail l)))])
-		f (tail (tail l));
-  pairMap = innerPairMap [];
-
   
   # shortcut for attrByPath ["name"] default attrs
   maybeAttr = name: default: attrs:
