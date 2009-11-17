@@ -209,6 +209,7 @@ rec {
     http://ftp.funet.fi/pub/linux/mirrors/opensuse/
     http://ftp5.gwdg.de/pub/opensuse/
     http://ftp.opensuse.org/pub/opensuse/
+    http://ftp5.gwdg.de/pub/opensuse/discontinued/
   ];
 
   # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).
