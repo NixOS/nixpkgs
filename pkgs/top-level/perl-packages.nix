@@ -939,6 +939,14 @@ rec {
     propagatedBuildInputs = [DigestSHA1];
   };
 
+  DigestSHA = buildPerlPackage rec {
+    name = "Digest-SHA-5.47";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSHELOR/${name}.tar.gz";
+      sha256 = "1xk9hdds4dk5iklxr8fdfbgfvd8cwgcjh5jqmjxhaw57ss2dh5wx";
+    };
+  };
+
   DigestSHA1 = buildPerlPackage {
     name = "Digest-SHA1-2.11";
     src = fetchurl {
