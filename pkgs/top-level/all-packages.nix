@@ -4971,8 +4971,7 @@ let
   };
 
   ejabberd = import ../servers/xmpp/ejabberd {
-    inherit fetchurl stdenv expat erlang zlib openssl
-      pam fetchsvn;
+    inherit fetchurl stdenv expat erlang zlib openssl pam lib;
   };
 
   couchdb = import ../servers/http/couchdb {
