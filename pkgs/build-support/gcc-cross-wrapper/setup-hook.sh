@@ -23,3 +23,6 @@ fi
 if test -n "@glibc@"; then
     PATH=$PATH:@glibc@/bin
 fi
+
+configureFlags="$configureFlags --build=$system --host=$crossConfig"
+dontStrip=1

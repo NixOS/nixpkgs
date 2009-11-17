@@ -107,6 +107,18 @@ rec {
       isStatic = true;
     } // {inherit fetchurl;};
 
+  # Return a modified stdenv that adds a cross compiler to the
+  # builds.
+  makeStdenvCross = stdenv: binutilsCross : gccCross: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        
+        buildInputs =
+          (if args ? buildInputs then args.buildInputs else [])
+          ++ [ gccCross binutilsCross ];
+
+        crossConfig = gccCross.cross.config;
+      });
+    };
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.

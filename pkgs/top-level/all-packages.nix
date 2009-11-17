@@ -213,14 +213,7 @@ let
     allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
   };
 
-  allStdenvsCross = cross : import ../stdenv {
-    inherit system stdenvType cross;
-    allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
-  };
-
   defaultStdenv = allStdenvs.stdenv;
-
-  stdenvCross = cross : (allStdenvsCross cross).stdenv;
 
   stdenv =
     if bootStdenv != null then bootStdenv else
@@ -244,7 +237,10 @@ let
   inherit (import ../stdenv/adapters.nix {inherit (pkgs) dietlibc fetchurl runCommand;})
     overrideGCC overrideInStdenv overrideSetup
     useDietLibC useKlibc makeStaticBinaries addAttrsToDerivation
-    keepBuildTree cleanupBuildTree addCoverageInstrumentation;
+    keepBuildTree cleanupBuildTree addCoverageInstrumentation makeStdenvCross;
+
+  stdenvCross = cross : makeStdenvCross stdenv (binutilsCross cross)
+      (gccCrossStageFinal cross);
 
 
   ### BUILD SUPPORT

@@ -30,4 +30,8 @@ stdenv.mkDerivation {
   meta = if gcc != null then gcc.meta else
     { description = "System C compiler wrapper";
     };
+
+  passthru = {
+    inherit cross;
+  };
 }

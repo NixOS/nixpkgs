@@ -1,5 +1,4 @@
 { system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
-, cross ? null
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}
 
@@ -53,9 +52,6 @@ let
                 ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               stdenv = result;
               system = result.system;
-              # The env variable 'cross' is used in all the crosscompiler
-              # bootstrapping in another sense
-              crossTarget = if (cross != null) then cross.config else null;
             })
           )
           # The meta attribute is passed in the resulting attribute set,

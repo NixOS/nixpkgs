@@ -5,8 +5,7 @@
 # ensuring purity of components produced by it.
 
 # The function defaults are for easy testing.
-{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix,
-cross ? null}:
+{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix}:
 
 rec {
 
@@ -205,26 +204,15 @@ rec {
   #    When updating stdenvLinux, make sure that the result has no
   #    dependency (`nix-store -qR') on bootstrapTools.
   stdenvLinux = import ../generic {
-    name = "stdenv-linux" +
-      stdenvLinuxBoot3Pkgs.lib.optionalString (cross != null) "-${cross.config}";
+    name = "stdenv-linux";
     
-    inherit system cross;
+    inherit system;
     
     preHook = builtins.toFile "prehook.sh" commonPreHook;
     
     initialPath = 
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
-      ++ [stdenvLinuxBoot3Pkgs.patchelf]
-      ++ stdenvLinuxBoot3Pkgs.lib.optionals (cross != null)
-        [ (stdenvLinuxBoot3Pkgs.binutilsCross cross)
-           (stdenvLinuxBoot3Pkgs.gccCrossStageFinal cross) ];
-
-    postHook = if (cross != null) then
-        (builtins.toFile "cross-posthook.sh" ''
-            configureFlags="$configureFlags --build=${system} --host=${cross.config}"
-            dontStrip=1
-        '')
-        else null;
+      ++ [stdenvLinuxBoot3Pkgs.patchelf];
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
