@@ -296,12 +296,6 @@ rec {
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
 
-  # pick attrs subset_attr_names and apply f 
-  subsetmap = f : attrs : subset_attr_names : 
-    listToAttrs (fold ( attr : r : if hasAttr attr attrs
-          then r ++ [ ( nameValuePair attr ( f (getAttr attr attrs) ) ) ] else r ) []
-      subset_attr_names );
-
   # prepareDerivationArgs tries to make writing configurable derivations easier
   # example:
   #  prepareDerivationArgs {
