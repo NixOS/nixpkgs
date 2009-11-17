@@ -8492,7 +8492,7 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-  nix = import ../tools/package-management/nix {
+  nix = makeOverridable (import ../tools/package-management/nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     db4 = db45;
