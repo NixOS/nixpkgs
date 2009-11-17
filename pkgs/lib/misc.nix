@@ -9,23 +9,6 @@ with import ./strings.nix;
 
 rec {
 
-
-  # accumulates / merges all attr sets until null is fed.
-  # example: sumArgs id { a = 'a'; x = 'x'; } { y = 'y'; x = 'X'; } null
-  # result : { a = 'a'; x = 'X'; y = 'Y'; }
-  innerSumArgs = f : x : y : (if y == null then (f x)
-	else (innerSumArgs f (x // y)));
-  sumArgs = f : innerSumArgs f {};
-
-  # Advanced sumArgs version. Hm, twice as slow, I'm afraid.
-  # composedArgs id (x:x//{a="b";}) (x:x//{b=x.a + "c";}) null;
-  # {a="b" ; b="bc";};
-  innerComposedArgs = f : x : y : (if y==null then (f x)
-  	else (if (builtins.isAttrs y) then 
-		(innerComposedArgs f (x//y))
-	else (innerComposedArgs f (y x))));
-  composedArgs = f: innerComposedArgs f {};
-
   defaultMergeArg = x : y: if builtins.isAttrs y then
     y
   else 

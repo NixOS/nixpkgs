@@ -938,14 +938,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  /*
-  hyppocampusFun = lib.sumArgs ( selectVersion ../tools/misc/hyppocampus "0.3rc1") {
-    inherit builderDefs stdenv fetchurl libdbi libdbiDrivers fuse
-      pkgconfig perl gettext dbus dbus_glib pcre libscd bison glib;
-    flex = flex2533;
-  };
-  */
-
   iasl = import ../development/compilers/iasl {
     inherit fetchurl stdenv bison flex;
   };
@@ -4046,12 +4038,6 @@ let
     inherit fetchurl stdenv pkgconfig ncurses glib;
   };
 
-  /*libscdFun = lib.sumArgs (selectVersion ../development/libraries/libscd "0.4.2") {
-    inherit stdenv fetchurl builderDefs libextractor perl pkgconfig;
-  };
-
-  libscd = libscdFun null;*/
-
   libsigcxx = import ../development/libraries/libsigcxx {
     inherit fetchurl stdenv pkgconfig;
   };
@@ -4608,15 +4594,11 @@ let
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
-  wxGTK28fun = lib.sumArgs (import ../development/libraries/wxGTK-2.8);
-
-  wxGTK28deps = wxGTK28fun {
+  wxGTK28 = makeOverridable (import ../development/libraries/wxGTK-2.8) {
     inherit fetchurl stdenv pkgconfig mesa;
     inherit (gtkLibs216) gtk;
     inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
-
-  wxGTK28 = wxGTK28deps null;
 
   wtk = import ../development/libraries/wtk {
       inherit fetchurl stdenv unzip xlibs;
@@ -7199,14 +7181,6 @@ let
     qt = qt3;
   };
 
-  /*kiwixBuilderFun = lib.sumArgs (import ../applications/misc/kiwixbuilder) {
-    inherit builderDefs;
-    inherit (gnome) glib;
-    zlib = zlibStatic;
-  };
-
-  kiwixBuilder = kiwixBuilderFun null;*/
-
   konversation = import ../applications/networking/irc/konversation {
     inherit fetchurl stdenv perl arts kdelibs zlib libpng libjpeg expat;
     inherit (xlibs) libX11 libXt libXext libXrender libXft;
@@ -8064,12 +8038,12 @@ let
     inherit stdenv fetchurl pkgconfig mesa;
     inherit (gtkLibs) glib gtk;
     inherit (xlibs) libX11 xproto;
-    wxGTK = wxGTK28deps {unicode = false;};
+    wxGTK = wxGTK28.override {unicode = false;};
   };
 
   fsgAltBuild = import ../games/fsg/alt-builder.nix {
     inherit stdenv fetchurl mesa;
-    wxGTK = wxGTK28deps {unicode = false;};
+    wxGTK = wxGTK28.override {unicode = false;};
     inherit (xlibs) libX11 xproto;
     inherit stringsWithDeps builderDefs;
   };

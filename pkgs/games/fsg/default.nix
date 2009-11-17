@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
   };
 
-  buildInputs = [gtk glib pkgconfig mesa (wxGTK null) libX11 xproto];
+  buildInputs = [gtk glib pkgconfig mesa wxGTK libX11 xproto];
 
 /*  
 #	One day Unicode will overcome?
