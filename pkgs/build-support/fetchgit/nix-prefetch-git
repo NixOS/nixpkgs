@@ -36,11 +36,11 @@ if test -z "$finalPath"; then
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    git clone --depth 1 "$url" $tmpFile
+    git clone --depth 1 "$url" $tmpFile 1>&2
     if test -n "$rev"; then
       cd $tmpFile
       echo $tmpFile
-      git checkout $rev
+      git checkout $rev 1>&2
     fi
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
