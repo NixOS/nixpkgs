@@ -124,7 +124,14 @@ in
                     echo "Creating initial database: ${database.name}"
                     ( echo "create database ${database.name};"
                       echo "use ${database.name};"
-                      cat ${database.schema} ) | ${mysql}/bin/mysql -u root -N
+		      if [ -f "${database.schema}" ]
+		      then
+                          cat ${database.schema}
+		      elif [ -d "${database.schema}" ]
+		      then
+		          cat ${database.schema}/mysql-databases/*.sql
+		      fi
+		    ) | ${mysql}/bin/mysql -u root -N
                 fi
               '') cfg.initialDatabases}            
 	  '';
