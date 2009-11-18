@@ -4,7 +4,9 @@
 
 let 
   inherit (pkgs.lib) mkOption mkIf;
+
   cfg = config.services.gvpe;
+
   finalConfig = if cfg.configFile != null then 
     cfg.configFile
   else if cfg.configText != null then
@@ -14,6 +16,7 @@ let
     }
   else 
     throw "You must either specify contents of the config file or the config file itself for GVPE";
+
   ifupScript = if cfg.ipAddress == null || cfg.subnet == null then 
      throw "Specify IP address and subnet (with mask) for GVPE" 
    else if cfg.nodename == null then 
@@ -34,10 +37,12 @@ let
     '';
     executable = true;
   });
+
   exec = "${pkgs.gvpe}/sbin/gvpe -c /var/gvpe -D ${cfg.nodename} "
     + " ${cfg.nodename}.pid-file=/var/gvpe/gvpe.pid"
     + " ${cfg.nodename}.if-up=if-up"
     + " &> /var/log/gvpe";
+
   inherit (cfg) startOn stopOn;
 in
 
@@ -116,8 +121,7 @@ in
       };
     };
   };
-  config = mkIf cfg.enable 
-  {
+  config = mkIf cfg.enable {
     jobs.gvpe = {
       description = "GNU Virtual Private Ethernet node";
       
@@ -129,7 +133,7 @@ in
         chown root /var/gvpe
         chmod 700 /var/gvpe
         cp ${finalConfig} /var/gvpe/gvpe.conf
-	cp ${ifupScript} /var/gvpe/if-up
+        cp ${ifupScript} /var/gvpe/if-up
       '';
 
       inherit exec;
