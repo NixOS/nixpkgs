@@ -8,7 +8,7 @@ addCVars () {
     fi
 }
 
-envHooks=(${envHooks[@]} addCVars)
+envHooksHost=(${envHooksHost[@]} addCVars)
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 
