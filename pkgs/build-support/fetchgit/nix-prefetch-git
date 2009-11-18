@@ -44,7 +44,11 @@ if test -z "$finalPath"; then
     fi
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
-    find $tmpFile -name .git\* | xargs rm -rf
+    if test "$NIX_PREFETCH_GIT_LEAVE_DOT_GIT" != 1
+    then
+	echo "removing \`.git'..."
+	rm -rf .git
+    fi
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
