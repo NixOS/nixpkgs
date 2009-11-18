@@ -6,7 +6,7 @@ expHash=$3
 
 hashType=$NIX_HASH_ALGO
 if test -z "$hashType"; then
-    hashType=md5
+    hashType=sha256
 fi
 
 if test -z "$url"; then
