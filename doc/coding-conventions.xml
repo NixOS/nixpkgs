@@ -156,6 +156,52 @@ stdenv.mkDerivation { ...
 
   </para></listitem>
 
+  <listitem><para>Functions should list their expected arguments as
+  precisely as possible.  That is, write
+
+<programlisting>
+{ stdenv, fetchurl, perl }: <replaceable>...</replaceable>
+</programlisting>
+
+  instead of
+
+<programlisting>
+args: with args; <replaceable>...</replaceable>
+</programlisting>
+
+  or 
+  
+<programlisting>
+{ stdenv, fetchurl, perl, ... }: <replaceable>...</replaceable>
+</programlisting>
+
+  </para>
+
+  <para>For functions that are truly generic in the number of
+  arguments (such as wrappers around <varname>mkDerivation</varname>)
+  that have some required arguments, you should write them using an
+  <literal>@</literal>-pattern:
+
+<programlisting>
+{ stdenv, doCoverageAnalysis ? false, ... } @ args:
+
+stdenv.mkDerivation (args // {
+  <replaceable>...</replaceable> if doCoverageAnalysis then "bla" else "" <replaceable>...</replaceable>
+})
+</programlisting>
+
+  instead of
+
+<programlisting>
+args:
+
+args.stdenv.mkDerivation (args // {
+  <replaceable>...</replaceable> if args ? doCoverageAnalysis &amp;&amp; args.doCoverageAnalysis then "bla" else "" <replaceable>...</replaceable>
+})
+</programlisting>
+
+  </para></listitem>
+
 </itemizedlist>
 
 </section>
