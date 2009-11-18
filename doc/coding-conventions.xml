@@ -215,7 +215,281 @@ dashes between words — not in camel case.  For instance, it should be
 <filename>allPackages.nix</filename> or
 <filename>AllPackages.nix</filename>.</para>
 
-</section>
+<para>Each package should be stored in its own directory somewhere in
+the <filename>pkgs/</filename> tree, i.e. in
+<filename>pkgs/<replaceable>category</replaceable>/<replaceable>subcategory</replaceable>/<replaceable>...</replaceable>/<replaceable>pkgname</replaceable></filename>.
+Below are some rules for picking the right category for a package.
+Many packages fall under several categories; what matters is the
+<emphasis>primary</emphasis> purpose of a package.  For example, the
+<literal>libxml2</literal> package builds both a library and some
+tools; but it’s a library foremost, so it goes under
+<filename>pkgs/development/libraries</filename>.</para>
 
+<para>When in doubt, consider refactoring the
+<filename>pkgs/</filename> tree, e.g. creating new categories or
+splitting up an existing category.</para>
+
+<variablelist>
+  <varlistentry>
+    <term>If it’s used to support <emphasis>software development</emphasis>:</term>
+    <listitem>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a <emphasis>library</emphasis> used by other packages:</term>
+          <listitem>
+            <para><filename>development/libraries</filename> (e.g. <filename>libxml2</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>compiler</emphasis>:</term>
+          <listitem>
+            <para><filename>development/compilers</filename> (e.g. <filename>gcc</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s an <emphasis>interpreter</emphasis>:</term>
+          <listitem>
+            <para><filename>development/interpreters</filename> (e.g. <filename>guile</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a (set of) development <emphasis>tool(s)</emphasis>:</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>If it’s a <emphasis>parser generator</emphasis> (including lexers):</term>
+                <listitem>
+                  <para><filename>development/tools/parsing</filename> (e.g. <filename>bison</filename>, <filename>flex</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s a <emphasis>build manager</emphasis>:</term>
+                <listitem>
+                  <para><filename>development/tools/build-managers</filename> (e.g. <filename>gnumake</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>Else:</term>
+                <listitem>
+                  <para><filename>development/tools/misc</filename> (e.g. <filename>binutils</filename>)</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>development/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a (set of) <emphasis>tool(s)</emphasis>:</term>
+    <listitem>
+      <para>(A tool is a relatively small program, especially one intented
+      to be used non-interactively.)</para>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s for <emphasis>networking</emphasis>:</term>
+          <listitem>
+            <para><filename>tools/networking</filename> (e.g. <filename>wget</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>text processing</emphasis>:</term>
+          <listitem>
+            <para><filename>tools/text</filename> (e.g. <filename>diffutils</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>system utility</emphasis>, i.e.,
+          something related or essential to the operation of a
+          system:</term>
+          <listitem>
+            <para><filename>tools/system</filename> (e.g. <filename>cron</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s an <emphasis>archiver</emphasis> (which may
+          include a compression function):</term>
+          <listitem>
+            <para><filename>tools/archivers</filename> (e.g. <filename>zip</filename>, <filename>tar</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>compression</emphasis> program:</term>
+          <listitem>
+            <para><filename>tools/compression</filename> (e.g. <filename>gzip</filename>, <filename>bzip2</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>security</emphasis>-related program:</term>
+          <listitem>
+            <para><filename>tools/security</filename> (e.g. <filename>nmap</filename>, <filename>gnupg</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>tools/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>shell</emphasis>:</term>
+    <listitem>
+      <para><filename>shells</filename> (e.g. <filename>bash</filename>)</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>server</emphasis>:</term>
+    <listitem>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a web server:</term>
+          <listitem>
+            <para><filename>servers/http</filename> (e.g. <filename>apache-httpd</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s an implementation of the X Windowing System:</term>
+          <listitem>
+            <para><filename>servers/x11</filename> (e.g. <filename>xorg</filename> — this includes the client libraries and programs)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>servers/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>desktop environment</emphasis>
+    (including <emphasis>window managers</emphasis>):</term>
+    <listitem>
+      <para><filename>desktops</filename> (e.g. <filename>kde</filename>, <filename>gnome</filename>, <filename>enlightenment</filename>)</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s an <emphasis>application</emphasis>:</term>
+    <listitem>
+      <para>A (typically large) program with a distinct user
+      interface, primarily used interactively.</para>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a <emphasis>version management system</emphasis>:</term>
+          <listitem>
+            <para><filename>applications/version-management</filename> (e.g. <filename>subversion</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>video playback / editing</emphasis>:</term>
+          <listitem>
+            <para><filename>applications/video</filename> (e.g. <filename>vlc</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>graphics viewing / editing</emphasis>:</term>
+          <listitem>
+            <para><filename>applications/graphics</filename> (e.g. <filename>gimp</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>networking</emphasis>:</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>If it’s a <emphasis>mailreader</emphasis>:</term>
+                <listitem>
+                  <para><filename>applications/networking/mailreaders</filename> (e.g. <filename>thunderbird</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s a <emphasis>newsreader</emphasis>:</term>
+                <listitem>
+                  <para><filename>applications/networking/newsreaders</filename> (e.g. <filename>pan</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s a <emphasis>web browser</emphasis>:</term>
+                <listitem>
+                  <para><filename>applications/networking/browsers</filename> (e.g. <filename>firefox</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>Else:</term>
+                <listitem>
+                  <para><filename>applications/networking/misc</filename></para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>applications/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s <emphasis>data</emphasis> (i.e., does not have a
+    straight-forward executable semantics):</term>
+    <listitem>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a <emphasis>font</emphasis>:</term>
+          <listitem>
+            <para><filename>data/fonts</filename></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s related to <emphasis>SGML/XML processing</emphasis>:</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>If it’s an <emphasis>XML DTD</emphasis>:</term>
+                <listitem>
+                  <para><filename>data/sgml+xml/schemas/xml-dtd</filename> (e.g. <filename>docbook</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s an <emphasis>XSLT stylesheet</emphasis>:</term>
+                <listitem>
+                  <para>(Okay, these are executable...)</para>
+                  <para><filename>data/sgml+xml/stylesheets/xslt</filename> (e.g. <filename>docbook-xsl</filename>)</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>game</emphasis>:</term>
+    <listitem>
+      <para><filename>games</filename></para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>Else:</term>
+    <listitem>
+      <para><filename>misc</filename></para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+</section>
 
 </chapter>
