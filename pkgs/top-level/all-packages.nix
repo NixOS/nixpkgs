@@ -131,29 +131,6 @@ let
   # Return the first available value in the order: pkg.val, val, or default.
   getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
 
-  # Return user-choosen version of given package. If you define package as
-  #
-  # pkgname_alts =
-  # {
-  #   v_0_1 = ();
-  #   v_0_2 = ();
-  #   default = v_0_1;
-  #   recurseForDerivations = true;
-  # };
-  # pkgname = getVersion "name" pkgname_alts;
-  #
-  # user will be able to write in his configuration.nix something like
-  # name = { version = "0.2"; }; and pkgname will be equal
-  # to getAttr pkgname_alts "0.2". Using alts.default by default.
-  getVersion = name: alts: builtins.getAttr
-    (getConfig [ name "version" ] "default") alts;
-
-  # The same, another syntax.
-  # Warning: syntax for configuration.nix changed too
-  useVersion = name: f: f {
-    version = getConfig [ "environment" "versions" name ];
-  };
-
   # Check absence of non-used options
   checker = x: flag: opts: config:
     (if flag then let result=(
