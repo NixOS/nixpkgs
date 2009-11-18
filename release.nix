@@ -92,7 +92,7 @@ let
 
     iso_minimal_fresh_kernel = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-minimal-fresh-kernel.nix;
-      description = "minimal with 2.6.31-zen2-branch";
+      description = "minimal with 2.6.31-zen-branch";
       maintainers = ["raskin"];
     };
 

@@ -355,7 +355,8 @@ in
         xorg.xprop
       ]
       ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
-      ++ optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy;
+      ++ optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy
+      ++ optional (elem "virtualbox" driverNames) xorg.xrefresh;
       
     environment.systemPackages = config.environment.x11Packages;
     

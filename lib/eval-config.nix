@@ -4,7 +4,7 @@
 
 { system ? builtins.currentSystem
 , nixpkgs ? import ./from-env.nix "NIXPKGS" /etc/nixos/nixpkgs
-, services ? /etc/nixos/services
+, services ? ../../services
 , pkgs ? null
 , baseModules ? import ../modules/module-list.nix
 , extraArgs ? {}

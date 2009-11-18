@@ -77,19 +77,19 @@ addEntry() {
       cp "$(readlink -f "$path/init")" /boot/nixos-init
 
       mkdir -p /boot/default
-      if [ -e /boot/default/system ];
+      if [ -e /boot/default/system ]; then
         rm /boot/default/system
       fi
       ln -sf $(readlink -f $path) /boot/default/system
-      if [ -e /boot/default/init ];
+      if [ -e /boot/default/init ]; then
         rm /boot/default/init
       fi
       ln -sf $(readlink -f $path/init) /boot/default/init
-      if [ -e /boot/default/initrd ];
+      if [ -e /boot/default/initrd ]; then
         rm /boot/default/initrd
       fi
       ln -sf $initrd /boot/default/initrd
-      if [ -e /boot/default/kernel ];
+      if [ -e /boot/default/kernel ]; then
         rm /boot/default/kernel
       fi
       ln -sf $kernel /boot/default/kernel

@@ -20,8 +20,8 @@ rec {
   # Most users will download it anyway
   security.sudo.enable = true;
 
-  # Use Linux 2.6.31-zen2 (with aufs2).
-  boot.kernelPackages = pkgs.kernelPackages_2_6_31_zen2;
+  # Use Linux 2.6.31-zen (with aufs2).
+  boot.kernelPackages = pkgs.kernelPackages_2_6_31_zen;
 
   # We need squashfs and aufs. Zen Linux Kernel contains kernel side.
   boot.initrd.extraUtilsCommands = ''
