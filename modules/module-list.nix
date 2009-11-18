@@ -56,6 +56,7 @@
   ./services/misc/nixos-manual.nix
   ./services/misc/rogue.nix
   ./services/misc/synergy.nix
+  ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
