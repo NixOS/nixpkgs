@@ -1,10 +1,7 @@
 args: with args;
 
-let name = "redland-${version}";
-in 
-
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "redland-1.0.8";
 
   src = fetchurl {
     url = "mirror://sf/librdf/${name}.tar.gz";
