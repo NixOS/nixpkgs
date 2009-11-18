@@ -39,14 +39,14 @@ if test -z "$finalPath"; then
     git clone "$url" $tmpFile 1>&2
     if test -n "$rev"; then
       cd $tmpFile
-      echo $tmpFile
+      echo $tmpFile >&2
       git checkout $rev 1>&2
     fi
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test "$NIX_PREFETCH_GIT_LEAVE_DOT_GIT" != 1
     then
-	echo "removing \`.git'..."
+	echo "removing \`.git'..." >&2
 	rm -rf .git
     fi
 
