@@ -207,7 +207,7 @@ args.stdenv.mkDerivation (args // {
 </section>
 
 
-<section><title>File naming and organisation</title>
+<section xml:id="sec-organisation"><title>File naming and organisation</title>
 
 <para>Names of files and directories should be in lowercase, with
 dashes between words — not in camel case.  For instance, it should be
