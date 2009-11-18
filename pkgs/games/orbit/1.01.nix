@@ -30,7 +30,7 @@ EOF
 	});
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "space-orbit-"+version;
+	name = "space-orbit-1.01";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[ customBuild doForceShare doPropagate]);

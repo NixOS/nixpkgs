@@ -22,7 +22,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doInstall" (doPatchShebangs "$out/share/msf")];
       
-  name = "metasploit-framework" + version;
+  name = "metasploit-framework-3.1";
   meta = {
     description = "Metasploit Framework - a collection of exploits";
     homepage = "http://framework.metasploit.org/";

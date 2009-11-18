@@ -15,7 +15,7 @@ args : with args; with builderDefs;
 	});
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "wqy-zenhei-"+version;
+	name = "wqy-zenhei-0.4.23-1";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);

@@ -20,7 +20,7 @@ rec {
     autoconf -I .
   '') ["minInit" "addInputs" "doUnpack"];
       
-  name = "monotone-viz-" + version;
+  name = "monotone-viz-mtn-head";
   meta = {
     description = "Monotone commit tree visualizer";
     maintainers = [args.lib.maintainers.raskin];

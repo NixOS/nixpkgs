@@ -39,7 +39,7 @@ rec {
     ++ (lib.optional externalPurple2 "postInstall")
   ;
       
-  name = "carrier-" + version;
+  name = "carrier-2.5.0";
   meta = {
     description = "Carrier - PidginIM GUI fork with user-friendly development model";
     homepage = http://funpidgin.sf.net; 

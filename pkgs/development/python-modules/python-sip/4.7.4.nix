@@ -11,7 +11,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doPythonConfigure" "doMakeInstall"];
       
-  name = "python-sip-" + version;
+  name = "python-sip-4.7.4";
   meta = {
     description = "Python/C++ bindings generator";
   };

@@ -17,7 +17,7 @@ args : with args; with builderDefs;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "smbfs-fuse-"+version;
+	name = "smbfs-fuse-0.8.7";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doConfigure doMakeInstall postInstall doForceShare doPropagate]);

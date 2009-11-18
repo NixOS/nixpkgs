@@ -1,4 +1,5 @@
-args : with args; 
+args : with args;
+
 rec {
   src = fetchurl {
     url = mirror://debian/pool/main/p/python-qt4/python-qt4_4.3.3.orig.tar.gz;
@@ -12,7 +13,7 @@ rec {
   phaseNames = ["doPythonConfigure" "doMakeInstall"];
   extraPythonConfigureCommand = ''echo yes | \'';
 
-  name = "python-qt-" + version;
+  name = "python-qt-4.3.3";
   meta = {
     description = "Qt bindings for Python";
     license = "GPL";

@@ -13,11 +13,11 @@ args : with args;
 let 
 doCopy = fullDepEntry ("
   ensureDir \$out/share/qemu-images
-  cp linux-${version}.img  \$out/share/qemu-images/
+  cp linux-0.2.img \$out/share/qemu-images/
 ") [minInit doUnpack defEnsureDir];
 in
 stdenv.mkDerivation rec {
-	name = "QEmu-Linux-Image-"+version;
+	name = "QEmu-Linux-Image-0.2";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doCopy doForceShare doPropagate]);
 	meta = {

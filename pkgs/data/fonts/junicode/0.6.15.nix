@@ -16,7 +16,7 @@ args : with args; with builderDefs;
 	});
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "junicode-"+version;
+	name = "junicode-0.6.15";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);

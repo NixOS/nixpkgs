@@ -18,7 +18,7 @@ args : with args; with builderDefs;
 	});
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "ssss-"+version;
+	name = "ssss-0.5";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			["doPatch" doMakeInstall doForceShare doPropagate]);

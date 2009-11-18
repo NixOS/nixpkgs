@@ -27,7 +27,7 @@ let
 	") [ addInputs minInit doUnpack defEnsureDir];
 in
 stdenv.mkDerivation rec {
-	name = "Qi-"+version;
+	name = "Qi-9.1";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [allBuild doForceShare doPropagate]);
 	meta = {

@@ -11,7 +11,7 @@ args : with args;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "libextractor-"+version;
+	name = "libextractor-0.5.18";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {

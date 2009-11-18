@@ -1,6 +1,7 @@
-args: with args;
+{ stdenv, fetchurl, zlib }:
+
 stdenv.mkDerivation {
-  name = "xapian-${version}";
+  name = "xapian-1.0.14";
 
   src = fetchurl {
     url = http://oligarchy.co.uk/xapian/1.0.14/xapian-core-1.0.14.tar.gz;
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
   buildInputs = [zlib];
 
   meta = { 
-      description = "Xapian Probabilistic Information Retrieval library";
-      homepage = "http://xapian.org";
-      license = "GPLv2";
+    description = "Xapian Probabilistic Information Retrieval library";
+    homepage = "http://xapian.org";
+    license = "GPLv2";
   };
 }

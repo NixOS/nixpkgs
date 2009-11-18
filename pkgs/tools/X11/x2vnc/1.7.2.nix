@@ -15,7 +15,7 @@ args : with args; with builderDefs.passthru.function {src="";};
 	}) // args); /* null is a terminator for sumArgs */
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "x2vnc-"+version;
+	name = "x2vnc-1.7.2";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doConfigure doCreatePrefix doMakeInstall doForceShare doPropagate]);

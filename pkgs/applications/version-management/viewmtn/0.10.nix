@@ -38,7 +38,7 @@ rec {
     ln -s $fullOut/static $out/share/viewmtn/
   '') ["minInit" "defEnsureDir" "addInputs" "doUnpack"];
 
-  name = "viewmtn-" + version;
+  name = "viewmtn-0.10";
   meta = {
     description = "Monotone web interface";
   };

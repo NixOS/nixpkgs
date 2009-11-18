@@ -17,7 +17,7 @@ postInstall = fullDepEntry (''
 '') [minInit doMakeInstall];
 in
 stdenv.mkDerivation rec {
-	name = "atheros-"+version;
+	name = "atheros-0.9.4";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doMakeInstall 
 			postInstall doForceShare doPropagate]);

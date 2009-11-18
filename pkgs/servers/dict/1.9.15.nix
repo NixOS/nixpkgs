@@ -11,7 +11,7 @@ args : with args; with builderDefs;
         }) // args);
         in with localDefs;
 stdenv.mkDerivation rec {
-        name = "dict-"+version;
+        name = "dict-1.9.15";
         builder = writeScript (name + "-builder")
                 (textClosure localDefs 
                         [doConfigure doMakeInstall doForceShare doPropagate]);

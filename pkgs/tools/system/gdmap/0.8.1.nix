@@ -11,7 +11,7 @@ args : with args;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "gdmap-"+version;
+	name = "gdmap-0.8.1";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
 	meta = {

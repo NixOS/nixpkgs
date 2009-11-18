@@ -20,7 +20,7 @@ args : with args;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "construo-"+version;
+	name = "construo-0.2.2";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs ["preConfigure" "doConfigure" "doMakeInstall" "doForceShare" "doPropagate"]);
 	meta = {

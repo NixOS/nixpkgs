@@ -3,7 +3,7 @@ args: with args;
 let inherit (args.composableDerivation) composableDerivation wwf; in
 composableDerivation {} {
 
-    name = "xapian-bindings-${version}";
+    name = "xapian-bindings-1.0.14";
 
     src = fetchurl {
       url = http://oligarchy.co.uk/xapian/1.0.14/xapian-bindings-1.0.14.tar.gz;

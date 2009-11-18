@@ -8,7 +8,7 @@ rec{
   buildInputs = [];
   phaseNames = ["doUnpack" "installFonts"];
 
-  name = "linux-libertine-" + version;
+  name = "linux-libertine-2.7";
   meta = {
     description = "Linux Libertine Fonts";
     homepage = http://linuxlibertine.sf.net;
