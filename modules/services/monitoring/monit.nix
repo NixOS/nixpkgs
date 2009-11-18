@@ -3,7 +3,7 @@
 
 {config, pkgs, ...}: 
 
-let inherit (pkgs.lib) mkOption;
+let inherit (pkgs.lib) mkOption mkIf;
 in
 
 {
@@ -37,7 +37,7 @@ in
         mode = "0400";
       }
     ];
-    jobs.monit = {
+    jobs.monit = mkIf config.services.monit.enable {
       description = "Monit system watcher";
       
       startOn = config.services.monit.startOn;
