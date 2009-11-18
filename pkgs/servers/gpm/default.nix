@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, lzma, flex, bison, ncurses }:
+{ stdenv, fetchurl, flex, bison, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "gpm-1.20.6";
   
   src = fetchurl {
-    url = "http://linux.schottelius.org/gpm/archives/${name}.tar.lzma";
-    sha256 = "13w61bh9nyjaa0n5a7qq1rvbqxjbxpqz5qmdmqqpqgrd2jlviar7";
+    url = "http://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
+    sha256 = "1990i19ddzn8gg5xwm53yn7d0mya885f48sd2hyvr7dvzyaw7ch8";
   };
 
-  buildInputs = [lzma flex bison ncurses];
+  buildInputs = [ flex bison ncurses ];
 
   preConfigure =
     ''
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     '';
       
   meta = {
-    description = "Mouse daemon";
+    homepage = http://www.nico.schottelius.org/software/gpm/;
+    description = "A daemon that provides mouse support on the Linux console";
   };
 }

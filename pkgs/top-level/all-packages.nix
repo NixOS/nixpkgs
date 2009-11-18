@@ -5261,7 +5261,7 @@ let
   };
 
   gpm = import ../servers/gpm {
-    inherit fetchurl stdenv lzma ncurses bison;
+    inherit fetchurl stdenv ncurses bison;
     flex = flex2535;
   };
 
