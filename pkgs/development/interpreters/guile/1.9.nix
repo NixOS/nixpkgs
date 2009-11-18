@@ -7,11 +7,13 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-1.9.4";  # This is an alpha release!
+  name = "guile-1.9.5";  # This is an alpha release!
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
-    sha256 = "1p136fb0s46q1cycfsnd7nny14ji43xva58cz39szvq36p9kjbbg";
+    sha256 = "0plzdpm22fk2n5m1pjjlckfvksy13aj7n45lx1nw4334i87d6sll";
   };
+
+  /* 1.9.5 has funny directory names, which contain "GNU Guile"!  */
 
   buildInputs = [ makeWrapper gawk readline libtool libunistring pkgconfig ];
   propagatedBuildInputs = [ gmp boehmgc ];
