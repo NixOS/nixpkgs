@@ -110,24 +110,19 @@ rec {
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
-    { mkDerivation = {name, buildInputs ? null, hostInputs ? null,
-            propagatedBuildInputs ? null, propagatedHostInputs ? null, ...}@args: let
-            buildInputsList = if (buildInputs != null) then
-                buildInputs else [];
-            hostInputsList = if (hostInputs != null) then
-                hostInputs else [];
-            propagatedBuildInputsList = if (propagatedBuildInputs != null) then
-                propagatedBuildInputs else [];
-            propagatedHostInputsList = if (propagatedHostInputs != null) then
-                propagatedHostInputs else [];
-            buildInputsDrvs = map (drv: drv.buildDrv) buildInputsList;
-            hostInputsDrvs = map (drv: drv.hostDrv) hostInputsList;
-            propagatedBuildInputsDrvs = map (drv: drv.buildDrv) propagatedBuildInputsList;
-            propagatedHostInputsDrvs = map (drv: drv.buildDrv) propagatedHostInputsList;
+    { mkDerivation = {name, buildInputs ? [], hostInputs ? [],
+            propagatedBuildInputs ? [], propagatedHostInputs ? [], ...}@args: let
+            # propagatedBuildInputs exists temporarily as another name for
+            # propagatedHostInputs.
+            buildInputsDrvs = map (drv: drv.buildDrv) buildInputs;
+            hostInputsDrvs = map (drv: drv.hostDrv) hostInputs;
+            propagatedHostInputsDrvs = map (drv: drv.buildDrv) (propagatedBuildInputs
+                ++ propagatedHostInputs);
             buildDrv = stdenv.mkDerivation (args // {
+                # buildInputs in the base stdenv will be named hostInputs
                 buildInputs = buildInputsDrvs ++ hostInputsDrvs;
-                propagatedBuildInputs = propagatedBuildInputsDrvs ++
-                    propagatedHostInputsDrvs;
+                # Should be propagatedHostInputs one day:
+                propagatedBuildInputs = propagatedHostInputsDrvs;
             });
             hostDrv = if (cross == null) then buildDrv else
                 stdenv.mkDerivation (args // { 

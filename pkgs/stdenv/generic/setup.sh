@@ -159,7 +159,7 @@ findInputs() {
             ;;
     esac
 
-    $var="${!var} $pkg "
+    eval $var="'${!var} $pkg '"
 
     if test -f $pkg/nix-support/setup-hook; then
         source $pkg/nix-support/setup-hook
@@ -177,13 +177,14 @@ for i in $buildInputs $propagatedBuildInputs; do
     findInputs $i pkgs
 done
 
-pkgsHost=""
-for i in $hostInputs $propagatedHostInputs; do
-    findInputs $i pkgsHost
+hostPkgs=""
+for i in $hostInputs $propagatedBuildInputs; do
+    findInputs $i hostPkgs
 done
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
+envHostHooks=()
 addToEnv() {
     local pkg=$1
 
@@ -205,12 +206,12 @@ addToEnvHost() {
     local pkg=$1
 
     # Run the package-specific hooks set by the setup-hook scripts.
-    for i in "${envHooksHost[@]}"; do
+    for i in "${envHostHooks[@]}"; do
         $i $pkg
     done
 }
 
-for i in $pkgsHost; do
+for i in $hostPkgs; do
     addToEnvHost $i
 done
 
