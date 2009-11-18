@@ -5232,7 +5232,7 @@ let
 
   libuuid = if stdenv.system != "i686-darwin" then utillinuxng else null;
 
-  e2fsprogs = import ../os-specific/linux/e2fsprogs/default.nix {
+  e2fsprogs = import ../os-specific/linux/e2fsprogs {
     inherit fetchurl stdenv pkgconfig libuuid;
   };
 
