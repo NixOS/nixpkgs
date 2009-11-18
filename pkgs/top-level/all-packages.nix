@@ -4420,7 +4420,12 @@ let
       mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
   };
-  redland_1_0_8 = redland.passthru.function { version = "1.0.8"; };
+
+  redland_1_0_8 = composedArgsAndFun (import ../development/libraries/redland/1.0.8.nix) {
+    inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
+      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
+    bdb = db4;
+  };
 
   rhino = import ../development/libraries/java/rhino {
     inherit fetchurl stdenv unzip;
