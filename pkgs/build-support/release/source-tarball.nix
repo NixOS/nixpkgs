@@ -73,33 +73,35 @@ stdenv.mkDerivation (
       # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
       # update it eventually.)
       echo ${versionSuffix} | sed -e s/pre// > svn-revision
-    
+
       eval "$preAutoconf"
-    
-      if test -f ./bootstrap; then ./bootstrap
-      elif test -f ./bootstrap.sh; then ./bootstrap.sh
-      elif test -f ./reconf; then ./reconf
+
+      if test -x ./bootstrap; then ./bootstrap
+      elif test -x ./bootstrap.sh; then ./bootstrap.sh
+      elif test -x ./autogen.sh; then ./autogen.sh
+      elif test -x ./autogen ; then ./autogen
+      elif test -x ./reconf; then ./reconf
       elif test -f ./configure.in || test -f ./configure.ac; then
           autoreconf --install --force --verbose
       else
           echo "No bootstrap, bootstrap.sh, configure.in or configure.ac. Assuming this is not an GNU Autotools package."
       fi
-    
+
       eval "$postAutoconf"
     '';
 
     # Cause distPhase to copy tar.bz2 in addition to tar.gz.
-    tarballs = "*.tar.gz *.tar.bz2";
+    tarballs = "*.tar.gz *.tar.bz2 *.tar.xz";
 
     finalPhase = ''
-      for i in $out/tarballs/*; do
+      for i in "$out/tarballs/"*; do
           echo "file source-dist $i" >> $out/nix-support/hydra-build-products
       done
 
       # Try to figure out the release name.
       releaseName=$( (cd $out/tarballs && ls) | head -n 1 | sed -e 's^\.[a-z].*^^')
       test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
-    ''; # */
+    '';
 
     passthru = {
       inherit src;
