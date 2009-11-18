@@ -26,7 +26,7 @@ in
     };
   };
   
-  config = {
+  config = mkIf config.services.monit.enable {
     environment.etc = [
       {
         source = pkgs.writeTextFile {
@@ -37,7 +37,7 @@ in
         mode = "0400";
       }
     ];
-    jobs.monit = mkIf config.services.monit.enable {
+    jobs.monit = {
       description = "Monit system watcher";
       
       startOn = config.services.monit.startOn;
