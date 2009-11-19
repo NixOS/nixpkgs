@@ -125,7 +125,7 @@ let
 
   inherit lib config getConfig;
 
-  inherit (lib) lowPrio appendToName;
+  inherit (lib) lowPrio appendToName makeOverridable;
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
@@ -156,23 +156,6 @@ let
   builderDefsPackage = builderDefs.builderDefsPackage builderDefs;
 
   stringsWithDeps = lib.stringsWithDeps;
-
-  deepOverride = newArgs: name: x: if builtins.isAttrs x then (
-    if x ? deepOverride then (x.deepOverride newArgs) else
-    if x ? override then (x.override newArgs) else
-    x) else x;
-    
-  # usage: (you can use override multiple times)
-  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
-  #     noBuildInputs = d.override { buildInputs = []; }
-  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
-  makeOverridable = f: origArgs: f origArgs //
-    { override = newArgs:
-        makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
-      deepOverride = newArgs:
-        makeOverridable f ((lib.mapAttrs (deepOverride newArgs) origArgs) // newArgs);
-      origArgs = origArgs;
-    };
 
 
   ### STANDARD ENVIRONMENT
