@@ -87,24 +87,24 @@ in
 	    ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start
 	    
 	    ${if cfg.loadDumps == [] then "" else
-	      ''
-	        # Wait until the ejabberd server is available for use
-                count=0
-                while ! ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} status
-                do
-                    if [ $count -eq 30 ]
-                    then
-                        echo "Tried 30 times, giving up..."
-	                exit 1
-                    fi
-
-                    echo "Ejabberd daemon not yet started. Waiting for 1 second..."
-                    count=$((count++))
-                    sleep 1
-                done
-	      
+	      ''	      
 	        if [ "$initialize" = "1" ]
 	        then
+	            # Wait until the ejabberd server is available for use
+                    count=0
+                    while ! ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} status
+                    do
+                        if [ $count -eq 30 ]
+                        then
+                            echo "Tried 30 times, giving up..."
+	                    exit 1
+                        fi
+
+                        echo "Ejabberd daemon not yet started. Waiting for 1 second..."
+                        count=$((count++))
+                        sleep 1
+                    done
+
 	            ${concatMapStrings (dump:
 		      ''
 		        echo "Importing dump: ${dump}"
