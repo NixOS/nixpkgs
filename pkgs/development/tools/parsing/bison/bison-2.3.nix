@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     url = mirror://gnu/bison/bison-2.3.tar.bz2;
     md5 = "c18640c6ec31a169d351e3117ecce3ec";
   };
-  buildInputs = [m4];
+  buildNativeInputs = [m4];
 
   meta = {
     description = "GNU Bison, a Yacc-compatible parser generator";

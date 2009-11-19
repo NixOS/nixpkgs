@@ -110,29 +110,25 @@ rec {
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
-    { mkDerivation = {name, buildInputs ? [], hostInputs ? [],
-            propagatedBuildInputs ? [], propagatedHostInputs ? [], ...}@args: let
+    { mkDerivation = {name, buildInputs ? [], buildNativeInputs ? [],
+            propagatedBuildInputs ? [], ...}@args: let
             # propagatedBuildInputs exists temporarily as another name for
             # propagatedHostInputs.
-            buildInputsDrvs = map (drv: drv.buildDrv) buildInputs;
-            hostInputsDrvs = map (drv: drv.hostDrv) hostInputs;
-            propagatedHostInputsDrvs = map (drv: drv.buildDrv) (propagatedBuildInputs
-                ++ propagatedHostInputs);
-            buildDrv = stdenv.mkDerivation (args // {
-                # buildInputs in the base stdenv will be named hostInputs
-                buildInputs = buildInputsDrvs ++ hostInputsDrvs;
-                # Should be propagatedHostInputs one day:
-                propagatedBuildInputs = propagatedHostInputsDrvs;
-            });
+            getBuildDrv = drv : if (drv ? buildDrv) then drv.buildDrv else drv;
+            buildInputsDrvs = map (getBuildDrv) buildNativeInputs;
+            hostInputsDrvs = map (drv: drv.hostDrv) buildInputs;
+            hostInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
+            propagatedHostInputsDrvs = map (drv: drv.buildDrv) (propagatedBuildInputs);
+            buildDrv = stdenv.mkDerivation args;
             hostDrv = if (cross == null) then buildDrv else
-                stdenv.mkDerivation (args // { 
+                stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
                     buildInputs = buildInputsDrvs
                       ++ [ gccCross binutilsCross ];
 
                     crossConfig = cross.config;
                 });
-        in hostDrv // {
+        in buildDrv // {
             inherit hostDrv buildDrv;
         };
     } // { inherit cross; };

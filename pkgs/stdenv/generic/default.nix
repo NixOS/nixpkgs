@@ -45,14 +45,20 @@ let
         mkDerivation = attrs:
           (derivation (
             (removeAttrs attrs ["meta" "passthru"])
-            //
+            // (let
+                buildInputs = if attrs ? buildInputs then attrs.buildInputs
+                    else [];
+                buildNativeInputs = if attrs ? buildNativeInputs then attrs.buildNativeInputs
+                    else [];
+            in
             {
               builder = if attrs ? realBuilder then attrs.realBuilder else shell;
               args = if attrs ? args then attrs.args else
                 ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               stdenv = result;
               system = result.system;
-            })
+              buildInputs = buildInputs ++ buildNativeInputs;
+            }))
           )
           # The meta attribute is passed in the resulting attribute set,
           # but it's not part of the actual derivation, i.e., it's not

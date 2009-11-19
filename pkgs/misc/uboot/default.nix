@@ -1,6 +1,7 @@
 {stdenv, fetchurl, unzip}:
 
-# assert stdenv.system == "armv5tel-linux";
+# We should enable this check once we have the cross target system information
+# assert stdenv.system == "armv5tel-linux" || crossConfig == "armv5tel-linux";
 
 # All this file is made for the Marvell Sheevaplug
    
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
     if test -z "$crossTarget"; then
         make clean all
     else
-        make clean all ARCH=arm CROSS_COMPILE=$crossTarget-
+        make clean all ARCH=arm CROSS_COMPILE=$crossConfig-
     fi
   '';
 
