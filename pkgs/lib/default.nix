@@ -15,6 +15,7 @@ let
   misc = import ./misc.nix;
   maintainers = import ./maintainers.nix;
   platforms = import ./platforms.nix;
+  customisation = import ./customisation.nix;
 
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
@@ -24,3 +25,4 @@ in
   # commonly used functions.
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
   // properties // options // types // meta // debug // misc // modules
+  // customisation

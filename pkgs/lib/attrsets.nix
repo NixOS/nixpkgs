@@ -13,7 +13,7 @@ rec {
 
   /* Return an attribute from nested attribute sets.  For instance
      ["x" "y"] applied to some set e returns e.x.y, if it exists.  The
-     default value is returned otherwise.  */
+     default value is returned otherwise. */
   attrByPath = attrPath: default: e:
     let attr = head attrPath;
     in
