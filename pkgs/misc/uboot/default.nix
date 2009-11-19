@@ -35,14 +35,14 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     unset src
-    if test -z "$crossTarget"; then
+    if test -z "$crossConfig"; then
         make clean all
     else
         make clean all ARCH=arm CROSS_COMPILE=$crossConfig-
     fi
   '';
 
-  buildInputs = [ unzip ];
+  buildNativeInputs = [ unzip ];
 
   dontStrip = true;
   NIX_STRIP_DEBUG = false;

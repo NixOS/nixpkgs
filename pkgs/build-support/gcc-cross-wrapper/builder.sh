@@ -40,7 +40,7 @@ doSubstitute() {
         --subst-var "cflagsLink" \
         --subst-var "ldflags" \
         --subst-var "ldflagsBefore" \
-        --subst-var-by "ld" "$ldPath/ld"
+        --subst-var-by "ld" "$ldPath/$crossConfig-ld"
 }
 
 
