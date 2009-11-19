@@ -75,6 +75,12 @@ let
   getConfig = attrPath: default: lib.attrByPath attrPath default config;
 
 
+  # Helper functions that are exported through `pkgs'.
+  helperFunctions = 
+    (import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; }) //
+    (import ../build-support/trivial-builders.nix { inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
+
+
   # Allow packages to be overriden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
   # as an argument and returns a set of new or overriden packages.
@@ -88,11 +94,11 @@ let
 
   pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
   pkgsOverriden = pkgsFun __overrides; # the overriden, final packages
-  pkgs = pkgsOverriden;
+  pkgs = pkgsOverriden // helperFunctions;
 
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = __overrides: rec {
+  pkgsFun = __overrides: with helperFunctions; rec {
 
 
   inherit __overrides;
@@ -198,12 +204,6 @@ let
     else
       stdenv;
 
-  inherit (import ../stdenv/adapters.nix {inherit (pkgs) dietlibc fetchurl runCommand;})
-    overrideGCC overrideInStdenv overrideSetup
-    useDietLibC useKlibc makeStaticBinaries addAttrsToDerivation
-    keepBuildTree cleanupBuildTree addCoverageInstrumentation
-    replaceMaintainersField;
-
 
   ### BUILD SUPPORT
 
@@ -288,11 +288,6 @@ let
     inherit stdenv perl cpio contents;
   };
 
-  makeSetupHook = script: runCommand "hook" {} ''
-    ensureDir $out/nix-support
-    cp ${script} $out/nix-support/setup-hook
-  '';
-
   makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
@@ -302,38 +297,6 @@ let
     };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
-
-  # Run the shell command `buildCommand' to produce a store object
-  # named `name'.  The attributes in `env' are added to the
-  # environment prior to running the command.
-  runCommand = name: env: buildCommand: stdenv.mkDerivation ({
-    inherit name buildCommand;
-  } // env);
-
-  symlinkJoin = name: paths: runCommand name {inherit paths;} "mkdir -p $out; for i in $paths; do ${xorg.lndir}/bin/lndir $i $out; done";
-
-  # Create a single file.
-  writeTextFile =
-    { name # the name of the derivation
-    , text
-    , executable ? false # run chmod +x ?
-    , destination ? ""   # relative path appended to $out eg "/bin/foo"
-    }:
-    runCommand name {inherit text executable; } ''
-      n=$out${destination}
-      mkdir -p "$(dirname "$n")"
-      echo -n "$text" > "$n"
-      (test -n "$executable" && chmod +x "$n") || true
-    '';
-
-  # Shorthands for `writeTextFile'.
-  writeText = name: text: writeTextFile {inherit name text;};
-  writeScript = name: text: writeTextFile {inherit name text; executable = true;};
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
-
-  # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
-  linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
-    (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
   srcOnly = args: (import ../build-support/src-only) ({inherit stdenv; } // args);
 
@@ -356,21 +319,6 @@ let
   composableDerivation = (import ../lib/composable-derivation.nix) {
     inherit pkgs lib;
   };
-
-  # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
-  writeReferencesToFile = path: runCommand "runtime-deps"
-    {
-      exportReferencesGraph = ["graph" path];
-    }
-    ''
-      touch $out
-      while read path; do
-        echo $path >> $out
-        read dummy
-        read nrRefs
-        for ((i = 0; i < nrRefs; i++)); do read ref; done
-      done < graph
-    '';
 
 
   ### TOOLS
