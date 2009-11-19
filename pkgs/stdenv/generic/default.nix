@@ -48,8 +48,13 @@ let
             // (let
                 buildInputs = if attrs ? buildInputs then attrs.buildInputs
                     else [];
-                buildNativeInputs = if attrs ? buildNativeInputs then attrs.buildNativeInputs
-                    else [];
+                buildNativeInputs = if attrs ? buildNativeInputs then
+                    attrs.buildNativeInputs else [];
+                propagatedBuildInputs = if attrs ? propagatedBuildInputs then
+                    attrs.propagatedBuildInputs else [];
+                propagatedBuildNativeInputs = if attrs ?
+                    propagatedBuildNativeInputs then
+                    attrs.propagatedBuildNativeInputs else [];
             in
             {
               builder = if attrs ? realBuilder then attrs.realBuilder else shell;
@@ -57,7 +62,14 @@ let
                 ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               stdenv = result;
               system = result.system;
-              buildInputs = buildInputs ++ buildNativeInputs;
+
+              # That build by the cross compiler
+              buildInputs = [];
+              propagatedBuildInputs = [];
+              # That build by the usual native compiler
+              buildNativeInputs = buildInputs ++ buildNativeInputs;
+              propagatedBuildNativeInputs = propagatedBuildInputs ++
+                propagatedBuildNativeInputs;
             }))
           )
           # The meta attribute is passed in the resulting attribute set,

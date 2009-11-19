@@ -8,7 +8,7 @@ addCVars () {
     fi
 }
 
-envHooksHost=(${envHooksHost[@]} addCVars)
+crossEnvHooks=(${crossEnvHooks[@]} addCVars)
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 
@@ -25,4 +25,3 @@ if test -n "@glibc@"; then
 fi
 
 configureFlags="$configureFlags --build=$system --host=$crossConfig"
-dontStrip=1

@@ -153,6 +153,7 @@ runHook addInputsHook
 findInputs() {
     local pkg=$1
     local var=$2
+    local propagatedBuildInputsFile=$3
 
     case ${!var} in
         *\ $pkg\ *)
@@ -166,27 +167,26 @@ findInputs() {
         source $pkg/nix-support/setup-hook
     fi
 
-    if test -f $pkg/nix-support/propagated-build-inputs; then
-        for i in $(cat $pkg/nix-support/propagated-build-inputs); do
+    if test -f $pkg/nix-support/$propagatedBuildInputsFile; then
+        for i in $(cat $pkg/nix-support/$propagatedBuildInputsFile); do
             findInputs $i $var
         done
     fi
 }
 
-pkgs=""
+crossPkgs=""
 for i in $buildInputs $propagatedBuildInputs; do
-    findInputs $i pkgs
+    findInputs $i crossPkgs propagated-build-inputs
 done
 
-hostPkgs=""
-for i in $hostInputs $propagatedBuildInputs; do
-    findInputs $i hostPkgs
+nativePkgs=""
+for i in $buildNativeInputs $propagatedBuildNativeInputs; do
+    findInputs $i nativePkgs propagated-build-native-inputs
 done
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
-envHostHooks=()
-addToEnv() {
+addToNativeEnv() {
     local pkg=$1
 
     if test -d $1/bin; then
@@ -199,21 +199,22 @@ addToEnv() {
     done
 }
 
-for i in $pkgs; do
-    addToEnv $i
+for i in $nativePkgs; do
+    addToNativeEnv $i
 done
 
-addToEnvHost() {
+crossEnvHooks=()
+addToCrossEnv() {
     local pkg=$1
 
     # Run the package-specific hooks set by the setup-hook scripts.
-    for i in "${envHostHooks[@]}"; do
+    for i in "${crossEnvHooks[@]}"; do
         $i $pkg
     done
 }
 
-for i in $hostPkgs; do
-    addToEnvHost $i
+for i in $crossPkgs; do
+    addToCrossEnv $i
 done
 
 
@@ -714,6 +715,11 @@ fixupPhase() {
     if test -n "$propagatedBuildInputs"; then
         ensureDir "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+    fi
+
+    if test -n "$propagatedBuildNativeInputs"; then
+        ensureDir "$out/nix-support"
+        echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
     fi
 
     if test -n "$setupHook"; then

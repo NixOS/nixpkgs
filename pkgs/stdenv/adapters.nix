@@ -111,20 +111,34 @@ rec {
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
     { mkDerivation = {name, buildInputs ? [], buildNativeInputs ? [],
-            propagatedBuildInputs ? [], ...}@args: let
-            # propagatedBuildInputs exists temporarily as another name for
-            # propagatedHostInputs.
+            propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [], ...}@args: let
+
+            # *BuildInputs exists temporarily as another name for
+            # *HostInputs.
+
             getBuildDrv = drv : if (drv ? buildDrv) then drv.buildDrv else drv;
-            buildInputsDrvs = map (getBuildDrv) buildNativeInputs;
-            hostInputsDrvs = map (drv: drv.hostDrv) buildInputs;
-            hostInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
-            propagatedHostInputsDrvs = map (drv: drv.buildDrv) (propagatedBuildInputs);
+            buildNativeInputsDrvs = map (getBuildDrv) buildNativeInputs;
+            buildInputsDrvs = map (drv: drv.hostDrv) buildInputs;
+            buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
+            propagatedBuildInputsDrvs = map (drv: drv.hostDrv) (propagatedBuildInputs);
+            propagatedBuildNativeInputsDrvs = map (drv: drv.buildDrv)
+                (propagatedBuildNativeInputs);
+
+            # The base stdenv already knows that buildNativeInputs and
+            # buildInputs should be built with the usual gcc-wrapper
+            # And the same for propagatedBuildInputs.
             buildDrv = stdenv.mkDerivation args;
+
+            # We should overwrite the input attributes in hostDrv, to overwrite
+            # the defaults for only-native builds in the base stdenv
             hostDrv = if (cross == null) then buildDrv else
                 stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
-                    buildInputs = buildInputsDrvs
+                    buildNativeInputs = buildNativeInputsDrvs
                       ++ [ gccCross binutilsCross ];
+                    buildInputs = buildInputsDrvs;
+                    propagatedBuildInputs = propagatedBuildInputsDrvs;
+                    propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
 
                     crossConfig = cross.config;
                 });

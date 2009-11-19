@@ -4195,7 +4195,7 @@ let
   };
 
   ncurses = makeOverridable (composedArgsAndFun (import ../development/libraries/ncurses)) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv ncurses;
     # The "! (stdenv ? cross)" is for the cross-built arm ncurses, which
     # don't build for me in unicode.
     unicode = (system != "i686-cygwin" && ! (stdenv ? cross));
