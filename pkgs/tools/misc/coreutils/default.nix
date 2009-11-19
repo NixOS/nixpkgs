@@ -1,14 +1,16 @@
 {stdenv, fetchurl, aclSupport ? false, acl}:
 
 stdenv.mkDerivation rec {
-  name = "coreutils-7.6";
+  name = "coreutils-8.1";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "1m153jmnrg9v4x6qiw7azd3cjms13s32yihbzb7zi9bw8a5zx6qx";
+    sha256 = "1c68q4c4fg6x22ba2p8xb0ddn4xdl847np2g33h63bgj9pdav8ay";
   };
 
   buildInputs = stdenv.lib.optional aclSupport acl;
+
+  doCheck = true;
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
