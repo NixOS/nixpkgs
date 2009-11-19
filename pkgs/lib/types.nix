@@ -12,6 +12,10 @@ rec {
   hasType = x: isAttrs x && x ? _type;
   typeOf = x: if hasType x then x._type else "";
 
+  setType = typeName: value: value // {
+    _type = typeName;
+  };
+
   
   # name (name of the type)
   # check (boolean function)
