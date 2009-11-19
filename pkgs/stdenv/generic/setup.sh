@@ -4,11 +4,12 @@
 # environment variables) and from shell scripts (as functions). 
 runHook() {
     local hookName="$1"
-    if test "$(type -t $hookName)" = function; then
-        $hookName
-    else
-        eval "${!hookName}"
-    fi
+    case "$(type -t $hookName)" in
+        (function|alias|builtin) $hookName;;
+        (file) source $hookName;;
+        (keyword) :;;
+        (*) eval "${!hookName}";;
+    esac
 }
 
 
