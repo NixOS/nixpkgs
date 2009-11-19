@@ -36,6 +36,32 @@ stdenv.mkDerivation (
 
     preConfigurePhases = "autoconfPhase";
     postPhases = "finalPhase";
+
+    # Autoconfiscate the sources.
+    autoconfPhase = ''
+      export VERSION=${version}
+      export VERSION_SUFFIX=${versionSuffix}
+
+      # `svn-revision' is set for backwards compatibility with the old
+      # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
+      # update it eventually.)
+      echo ${versionSuffix} | sed -e s/pre// > svn-revision
+
+      eval "$preAutoconf"
+
+      if test -x ./bootstrap; then ./bootstrap
+      elif test -x ./bootstrap.sh; then ./bootstrap.sh
+      elif test -x ./autogen.sh; then ./autogen.sh
+      elif test -x ./autogen ; then ./autogen
+      elif test -x ./reconf; then ./reconf
+      elif test -f ./configure.in || test -f ./configure.ac; then
+          autoreconf --install --force --verbose
+      else
+          echo "No bootstrap, bootstrap.sh, configure.in or configure.ac. Assuming this is not an GNU Autotools package."
+      fi
+
+      eval "$postAutoconf"
+    '';
   }
 
   # Then, the caller-supplied attributes.
@@ -63,32 +89,6 @@ stdenv.mkDerivation (
     '';
 
     nextPostUnpack = if args ? postUnpack then args.postUnpack else "";
-
-    # Autoconfiscate the sources.
-    autoconfPhase = ''
-      export VERSION=${version}
-      export VERSION_SUFFIX=${versionSuffix}
-
-      # `svn-revision' is set for backwards compatibility with the old
-      # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
-      # update it eventually.)
-      echo ${versionSuffix} | sed -e s/pre// > svn-revision
-
-      eval "$preAutoconf"
-
-      if test -x ./bootstrap; then ./bootstrap
-      elif test -x ./bootstrap.sh; then ./bootstrap.sh
-      elif test -x ./autogen.sh; then ./autogen.sh
-      elif test -x ./autogen ; then ./autogen
-      elif test -x ./reconf; then ./reconf
-      elif test -f ./configure.in || test -f ./configure.ac; then
-          autoreconf --install --force --verbose
-      else
-          echo "No bootstrap, bootstrap.sh, configure.in or configure.ac. Assuming this is not an GNU Autotools package."
-      fi
-
-      eval "$postAutoconf"
-    '';
 
     # Cause distPhase to copy tar.bz2 in addition to tar.gz.
     tarballs = "*.tar.gz *.tar.bz2 *.tar.xz";
