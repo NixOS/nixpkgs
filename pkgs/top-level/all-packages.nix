@@ -3685,6 +3685,10 @@ let
     inherit stdenv fetchurl gettext python;
   };
 
+  jamp = builderDefsPackage ../games/jamp {
+    inherit mesa SDL SDL_image SDL_mixer;
+  };
+
   jasper = import ../development/libraries/jasper {
     inherit fetchurl stdenv unzip xlibs libjpeg;
   };
