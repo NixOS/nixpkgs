@@ -3420,6 +3420,11 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
+  glibc211 = makeOverridable (import ../development/libraries/glibc-2.11) {
+    inherit fetchurl stdenv kernelHeaders;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
+
   glibcCross = cross: glibc29Cross cross;
 
   eglibc = import ../development/libraries/eglibc {
