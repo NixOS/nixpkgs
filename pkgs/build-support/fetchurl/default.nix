@@ -1,6 +1,3 @@
-# Argh, this thing is duplicated (more-or-less) in Nix (in corepkgs).
-# Need to find a way to combine them.
-
 {stdenv, curl}: # Note that `curl' may be `null', in case of the native stdenv.
 
 let

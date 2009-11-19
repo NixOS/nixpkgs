@@ -18,7 +18,7 @@ releaseTools.makeSourceTarball {
     libxml2 # Needed for the release notes.
     libxslt
     w3m
-    nixUnstable # Needed to check whether the expressions are valid.
+    nix # Needed to check whether the expressions are valid.
     tetex dblatex
   ];
 

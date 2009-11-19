@@ -11,7 +11,7 @@ args : with args; with builderDefs;
 	};
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "rlwrap-"+version;
+	name = "rlwrap-0.28";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doConfigure doMakeInstall doForceShare doPropagate]);

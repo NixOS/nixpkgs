@@ -6,7 +6,7 @@ expHash=$3
 
 hashType=$NIX_HASH_ALGO
 if test -z "$hashType"; then
-    hashType=md5
+    hashType=sha256
 fi
 
 if test -z "$url"; then
@@ -36,15 +36,19 @@ if test -z "$finalPath"; then
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    git clone --depth 1 "$url" $tmpFile
+    git clone "$url" $tmpFile 1>&2
     if test -n "$rev"; then
       cd $tmpFile
-      echo $tmpFile
-      git checkout $rev
+      echo $tmpFile >&2
+      git checkout $rev 1>&2
     fi
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
-    find $tmpFile -name .git\* | xargs rm -rf
+    if test "$NIX_PREFETCH_GIT_LEAVE_DOT_GIT" != 1
+    then
+	echo "removing \`.git'..." >&2
+	rm -rf .git
+    fi
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)

@@ -1,7 +1,8 @@
-args: with args;
+{ stdenv, fetchurl, autoconf, automake, libtool
+, pkgconfig, alsaLib, ffmpeg, speex, ortp }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer2-" + version;
+  name = "mediastreamer2-2.2.0-cvs20080207";
 
 # This url is not related to mediastreamer. fetchcvs doesn't work on my laptop,
 # so I've created cvs snapshot and put it to my server.

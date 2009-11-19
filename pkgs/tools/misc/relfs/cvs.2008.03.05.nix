@@ -43,7 +43,7 @@ args : with args;
 assert args.libuuid != null;
         
 stdenv.mkDerivation rec {
-	name = "relfs-"+version;
+	name = "relfs-2008.03.05";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs ["build" "doMakeInstall" "doForceShare" "doPropagate"]);
 	meta = {

@@ -11,7 +11,7 @@ let localDefs = builderDefs.passthru.function (rec {
     });
 in with localDefs;
 stdenv.mkDerivation rec {
-  name = "nc6-"+version;
+  name = "nc6-1.0";
   builder = writeScript (name + "-builder")
     (textClosure localDefs 
      [doConfigure doMakeInstall doForceShare doPropagate]);

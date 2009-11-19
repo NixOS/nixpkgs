@@ -12,7 +12,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["doConfigure" "doMakeInstall"];
       
-  name = "bind-" + version;
+  name = "bind-9.5.0";
   meta = {
     description = "ISC BIND: a domain name server";
   };

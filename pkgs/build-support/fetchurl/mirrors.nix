@@ -22,10 +22,18 @@ rec {
 
   sf = sourceforge;
 
-  # GNU.
+  # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
+    # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
+    # mirror.
+    http://ftpmirror.gnu.org/
+
     http://ftp.nluug.nl/pub/gnu/
     http://mirrors.kernel.org/gnu/
+    ftp://mirror.cict.fr/gnu/
+    ftp://ftp.cs.tu-berlin.de/pub/gnu/
+    ftp://ftp.chg.ru/pub/gnu/
+
     http://ftp.gnu.org/pub/gnu/
   ];
 
@@ -209,6 +217,7 @@ rec {
     http://ftp.funet.fi/pub/linux/mirrors/opensuse/
     http://ftp5.gwdg.de/pub/opensuse/
     http://ftp.opensuse.org/pub/opensuse/
+    http://ftp5.gwdg.de/pub/opensuse/discontinued/
   ];
 
   # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).

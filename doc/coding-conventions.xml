@@ -156,18 +156,448 @@ stdenv.mkDerivation { ...
 
   </para></listitem>
 
+  <listitem><para>Functions should list their expected arguments as
+  precisely as possible.  That is, write
+
+<programlisting>
+{ stdenv, fetchurl, perl }: <replaceable>...</replaceable>
+</programlisting>
+
+  instead of
+
+<programlisting>
+args: with args; <replaceable>...</replaceable>
+</programlisting>
+
+  or 
+  
+<programlisting>
+{ stdenv, fetchurl, perl, ... }: <replaceable>...</replaceable>
+</programlisting>
+
+  </para>
+
+  <para>For functions that are truly generic in the number of
+  arguments (such as wrappers around <varname>mkDerivation</varname>)
+  that have some required arguments, you should write them using an
+  <literal>@</literal>-pattern:
+
+<programlisting>
+{ stdenv, doCoverageAnalysis ? false, ... } @ args:
+
+stdenv.mkDerivation (args // {
+  <replaceable>...</replaceable> if doCoverageAnalysis then "bla" else "" <replaceable>...</replaceable>
+})
+</programlisting>
+
+  instead of
+
+<programlisting>
+args:
+
+args.stdenv.mkDerivation (args // {
+  <replaceable>...</replaceable> if args ? doCoverageAnalysis &amp;&amp; args.doCoverageAnalysis then "bla" else "" <replaceable>...</replaceable>
+})
+</programlisting>
+
+  </para></listitem>
+
 </itemizedlist>
 
 </section>
 
 
-<section><title>File naming and organisation</title>
+<section><title>Package naming</title>
+
+<para>In Nixpkgs, there are generally three different names associated with a package:
+
+<itemizedlist>
+
+  <listitem><para>The <varname>name</varname> attribute of the
+  derivation (excluding the version part).  This is what most users
+  see, in particular when using
+  <command>nix-env</command>.</para></listitem>
+
+  <listitem><para>The variable name used for the instantiated package
+  in <filename>all-packages.nix</filename>, and when passing it as a
+  dependency to other functions.  This is what Nix expression authors
+  see.  It can also be used when installing using <command>nix-env
+  -iA</command>.</para></listitem>
+
+  <listitem><para>The filename for (the directory containing) the Nix
+  expression.</para></listitem>
+
+</itemizedlist>
+
+Most of the time, these are the same.  For instance, the package
+<literal>e2fsprogs</literal> has a <varname>name</varname> attribute
+<literal>"e2fsprogs-<replaceable>version</replaceable>"</literal>, is
+bound to the variable name <varname>e2fsprogs</varname> in
+<filename>all-packages.nix</filename>, and the Nix expression is in
+<filename>pkgs/os-specific/linux/e2fsprogs/default.nix</filename>.
+However, identifiers in the Nix language don’t allow certain
+characters (e.g. dashes), so sometimes a different variable name
+should be used.  For instance, the
+<literal>module-init-tools</literal> package is bound to the
+<literal>module_init_tools</literal> variable in
+<filename>all-packages.nix</filename>.</para>
+
+<para>There are a few naming guidelines:
+
+<itemizedlist>
+
+  <listitem><para>Generally, try to stick to the upstream package
+  name.</para></listitem>
+
+  <listitem><para>Don’t use uppercase letters in the
+  <literal>name</literal> attribute — e.g.,
+  <literal>"mplayer-1.0rc2"</literal> instead of
+  <literal>"MPlayer-1.0rc2"</literal>.</para></listitem>
+
+  <listitem><para>The version part of the <literal>name</literal>
+  attribute <emphasis>must</emphasis> start with a digit (following a
+  dash) — e.g., <literal>"hello-0.3-pre-r3910"</literal> instead of
+  <literal>"hello-svn-r3910"</literal>, as the latter would be seen as
+  a package named <literal>hello-svn</literal> by
+  <command>nix-env</command>.</para></listitem>
+
+  <listitem><para>Dashes in the package name should be changed to
+  underscores in variable names, rather than to camel case — e.g.,
+  <varname>module_init_tools</varname> instead of
+  <varname>moduleInitTools</varname>.</para></listitem>
+
+  <listitem><para>If there are multiple versions of a package, this
+  should be reflected in the variable names in
+  <filename>all-packages.nix</filename>,
+  e.g. <varname>hello_0_3</varname> and <varname>hello_0_4</varname>.
+  If there is an obvious “default” version, make an attribute like
+  <literal>hello = hello_0_4;</literal>.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+</section>
+
+
+<section xml:id="sec-organisation"><title>File naming and organisation</title>
 
 <para>Names of files and directories should be in lowercase, with
 dashes between words — not in camel case.  For instance, it should be
 <filename>all-packages.nix</filename>, not
 <filename>allPackages.nix</filename> or
 <filename>AllPackages.nix</filename>.</para>
+
+<section><title>Hierachy</title>
+
+<para>Each package should be stored in its own directory somewhere in
+the <filename>pkgs/</filename> tree, i.e. in
+<filename>pkgs/<replaceable>category</replaceable>/<replaceable>subcategory</replaceable>/<replaceable>...</replaceable>/<replaceable>pkgname</replaceable></filename>.
+Below are some rules for picking the right category for a package.
+Many packages fall under several categories; what matters is the
+<emphasis>primary</emphasis> purpose of a package.  For example, the
+<literal>libxml2</literal> package builds both a library and some
+tools; but it’s a library foremost, so it goes under
+<filename>pkgs/development/libraries</filename>.</para>
+
+<para>When in doubt, consider refactoring the
+<filename>pkgs/</filename> tree, e.g. creating new categories or
+splitting up an existing category.</para>
+
+<variablelist>
+  <varlistentry>
+    <term>If it’s used to support <emphasis>software development</emphasis>:</term>
+    <listitem>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a <emphasis>library</emphasis> used by other packages:</term>
+          <listitem>
+            <para><filename>development/libraries</filename> (e.g. <filename>libxml2</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>compiler</emphasis>:</term>
+          <listitem>
+            <para><filename>development/compilers</filename> (e.g. <filename>gcc</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s an <emphasis>interpreter</emphasis>:</term>
+          <listitem>
+            <para><filename>development/interpreters</filename> (e.g. <filename>guile</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a (set of) development <emphasis>tool(s)</emphasis>:</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>If it’s a <emphasis>parser generator</emphasis> (including lexers):</term>
+                <listitem>
+                  <para><filename>development/tools/parsing</filename> (e.g. <filename>bison</filename>, <filename>flex</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s a <emphasis>build manager</emphasis>:</term>
+                <listitem>
+                  <para><filename>development/tools/build-managers</filename> (e.g. <filename>gnumake</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>Else:</term>
+                <listitem>
+                  <para><filename>development/tools/misc</filename> (e.g. <filename>binutils</filename>)</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>development/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a (set of) <emphasis>tool(s)</emphasis>:</term>
+    <listitem>
+      <para>(A tool is a relatively small program, especially one intented
+      to be used non-interactively.)</para>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s for <emphasis>networking</emphasis>:</term>
+          <listitem>
+            <para><filename>tools/networking</filename> (e.g. <filename>wget</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>text processing</emphasis>:</term>
+          <listitem>
+            <para><filename>tools/text</filename> (e.g. <filename>diffutils</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>system utility</emphasis>, i.e.,
+          something related or essential to the operation of a
+          system:</term>
+          <listitem>
+            <para><filename>tools/system</filename> (e.g. <filename>cron</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s an <emphasis>archiver</emphasis> (which may
+          include a compression function):</term>
+          <listitem>
+            <para><filename>tools/archivers</filename> (e.g. <filename>zip</filename>, <filename>tar</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>compression</emphasis> program:</term>
+          <listitem>
+            <para><filename>tools/compression</filename> (e.g. <filename>gzip</filename>, <filename>bzip2</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s a <emphasis>security</emphasis>-related program:</term>
+          <listitem>
+            <para><filename>tools/security</filename> (e.g. <filename>nmap</filename>, <filename>gnupg</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>tools/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>shell</emphasis>:</term>
+    <listitem>
+      <para><filename>shells</filename> (e.g. <filename>bash</filename>)</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>server</emphasis>:</term>
+    <listitem>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a web server:</term>
+          <listitem>
+            <para><filename>servers/http</filename> (e.g. <filename>apache-httpd</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s an implementation of the X Windowing System:</term>
+          <listitem>
+            <para><filename>servers/x11</filename> (e.g. <filename>xorg</filename> — this includes the client libraries and programs)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>servers/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>desktop environment</emphasis>
+    (including <emphasis>window managers</emphasis>):</term>
+    <listitem>
+      <para><filename>desktops</filename> (e.g. <filename>kde</filename>, <filename>gnome</filename>, <filename>enlightenment</filename>)</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s an <emphasis>application</emphasis>:</term>
+    <listitem>
+      <para>A (typically large) program with a distinct user
+      interface, primarily used interactively.</para>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a <emphasis>version management system</emphasis>:</term>
+          <listitem>
+            <para><filename>applications/version-management</filename> (e.g. <filename>subversion</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>video playback / editing</emphasis>:</term>
+          <listitem>
+            <para><filename>applications/video</filename> (e.g. <filename>vlc</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>graphics viewing / editing</emphasis>:</term>
+          <listitem>
+            <para><filename>applications/graphics</filename> (e.g. <filename>gimp</filename>)</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s for <emphasis>networking</emphasis>:</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>If it’s a <emphasis>mailreader</emphasis>:</term>
+                <listitem>
+                  <para><filename>applications/networking/mailreaders</filename> (e.g. <filename>thunderbird</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s a <emphasis>newsreader</emphasis>:</term>
+                <listitem>
+                  <para><filename>applications/networking/newsreaders</filename> (e.g. <filename>pan</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s a <emphasis>web browser</emphasis>:</term>
+                <listitem>
+                  <para><filename>applications/networking/browsers</filename> (e.g. <filename>firefox</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>Else:</term>
+                <listitem>
+                  <para><filename>applications/networking/misc</filename></para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Else:</term>
+          <listitem>
+            <para><filename>applications/misc</filename></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s <emphasis>data</emphasis> (i.e., does not have a
+    straight-forward executable semantics):</term>
+    <listitem>
+      <variablelist>
+        <varlistentry>
+          <term>If it’s a <emphasis>font</emphasis>:</term>
+          <listitem>
+            <para><filename>data/fonts</filename></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>If it’s related to <emphasis>SGML/XML processing</emphasis>:</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>If it’s an <emphasis>XML DTD</emphasis>:</term>
+                <listitem>
+                  <para><filename>data/sgml+xml/schemas/xml-dtd</filename> (e.g. <filename>docbook</filename>)</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>If it’s an <emphasis>XSLT stylesheet</emphasis>:</term>
+                <listitem>
+                  <para>(Okay, these are executable...)</para>
+                  <para><filename>data/sgml+xml/stylesheets/xslt</filename> (e.g. <filename>docbook-xsl</filename>)</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>game</emphasis>:</term>
+    <listitem>
+      <para><filename>games</filename></para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>Else:</term>
+    <listitem>
+      <para><filename>misc</filename></para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+</section>
+
+<section><title>Versioning</title>
+
+<para>Because every version of a package in Nixpkgs creates a
+potential maintenance burden, old versions of a package should not be
+kept unless there is a good reason to do so.  For instance, Nixpkgs
+contains several versions of GCC because other packages don’t build
+with the latest version of GCC.  Other examples are having both the
+latest stable and latest pre-release version of a package, or to keep
+several major releases of an application that differ significantly in
+functionality.</para>
+
+<para>If there is only one version of a package, its Nix expression
+should be named <filename>e2fsprogs/default.nix</filename>.  If there
+are multiple versions, this should be reflected in the filename,
+e.g. <filename>e2fsprogs/1.41.8.nix</filename> and
+<filename>e2fsprogs/1.41.9.nix</filename>.  The version in the
+filename should leave out unnecessary detail.  For instance, if we
+keep the latest Firefox 2.0.x and 3.5.x versions in Nixpkgs, they
+should be named <filename>firefox/2.0.nix</filename> and
+<filename>firefox/3.5.nix</filename>, respectively (which, at a given
+point, might contain versions <literal>2.0.0.20</literal> and
+<literal>3.5.4</literal>).  If a version requires many auxiliary
+files, you can use a subdirectory for each version,
+e.g. <filename>firefox/2.0/default.nix</filename> and
+<filename>firefox/3.5/default.nix</filename>.</para>
+
+<para>All versions of a package <emphasis>must</emphasis> be included
+in <filename>all-packages.nix</filename> to make sure that they
+evaluate correctly.</para>
+
+</section>
 
 </section>
 

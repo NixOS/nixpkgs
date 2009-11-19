@@ -100,7 +100,7 @@
       [ args.zlib xorg.xf86bigfontproto xorg.glproto args.mesa xorg.xf86driproto
         xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
         xorg.xineramaproto xorg.dri2proto xorg.xf86dgaproto xorg.dmxproto
-        xorg.libdmx xorg.xf86vidmodeproto
+        xorg.libdmx xorg.xf86vidmodeproto xorg.libXext 
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto ];

@@ -1,0 +1,13 @@
+diff -r 21cae7efdcc6 src/cmd/cgo/main.go
+--- a/src/cmd/cgo/main.go	Sat Nov 14 12:23:24 2009 -0800
++++ b/src/cmd/cgo/main.go	Sun Nov 15 00:00:09 2009 +0100
+@@ -52,6 +52,9 @@
+ 		fatal("unknown architecture %s", arch)
+ 	}
+ 
++	// Define the language of gcc error messages.
++	os.Setenv("LC_ALL", "C");
++
+ 	p := openProg(input);
+ 	for _, cref := range p.Crefs {
+ 		// Convert C.ulong to C.unsigned long, etc.

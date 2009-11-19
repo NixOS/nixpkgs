@@ -14,7 +14,7 @@ args : with args; with builderDefs;
   });
   in with localDefs;
 stdenv.mkDerivation rec {
-  name = "x11vnc-"+version;
+  name = "x11vnc-0.9.3";
   builder = writeScript (name + "-builder")
     (textClosure localDefs 
       [doConfigure doMakeInstall doForceShare doPropagate]);

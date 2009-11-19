@@ -211,4 +211,20 @@ rec {
       # `keepBuildTree' adapter as well.
       (cleanupBuildTree (keepBuildTree stdenv));
       
+
+  /* Replace the meta.maintainers field of a derivation.  This is useful
+     when you want to fork to update some packages without disturbing other
+     developers.
+
+     e.g.:  in all-packages.nix:
+
+     # remove all maintainers.
+     defaultStdenv = replaceMaintainersField allStdenvs.stdenv pkgs [];
+  */
+  replaceMaintainersField = stdenv: pkgs: maintainers: stdenv //
+    { mkDerivation = args:
+        pkgs.lib.recursiveUpdate
+          (stdenv.mkDerivation args)
+          { meta.maintainers = maintainers; };
+    };
 }

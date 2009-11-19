@@ -9,23 +9,6 @@ with import ./strings.nix;
 
 rec {
 
-
-  # accumulates / merges all attr sets until null is fed.
-  # example: sumArgs id { a = 'a'; x = 'x'; } { y = 'y'; x = 'X'; } null
-  # result : { a = 'a'; x = 'X'; y = 'Y'; }
-  innerSumArgs = f : x : y : (if y == null then (f x)
-	else (innerSumArgs f (x // y)));
-  sumArgs = f : innerSumArgs f {};
-
-  # Advanced sumArgs version. Hm, twice as slow, I'm afraid.
-  # composedArgs id (x:x//{a="b";}) (x:x//{b=x.a + "c";}) null;
-  # {a="b" ; b="bc";};
-  innerComposedArgs = f : x : y : (if y==null then (f x)
-  	else (if (builtins.isAttrs y) then 
-		(innerComposedArgs f (x//y))
-	else (innerComposedArgs f (y x))));
-  composedArgs = f: innerComposedArgs f {};
-
   defaultMergeArg = x : y: if builtins.isAttrs y then
     y
   else 
@@ -104,14 +87,6 @@ rec {
   #   # c2 is equal to c
   # }
   composedArgsAndFun = f: foldArgs defaultMerge f {};
-
-  # example a = pairMap (x : y : x + y) ["a" "b" "c" "d"];
-  # result: ["ab" "cd"]
-  innerPairMap = acc: f: l: 
-  	if l == [] then acc else
-	innerPairMap (acc ++ [(f (head l)(head (tail l)))])
-		f (tail (tail l));
-  pairMap = innerPairMap [];
 
   
   # shortcut for attrByPath ["name"] default attrs
@@ -320,12 +295,6 @@ rec {
   # returns atribute values as a list 
   flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
   mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
-
-  # pick attrs subset_attr_names and apply f 
-  subsetmap = f : attrs : subset_attr_names : 
-    listToAttrs (fold ( attr : r : if hasAttr attr attrs
-          then r ++ [ ( nameValuePair attr ( f (getAttr attr attrs) ) ) ] else r ) []
-      subset_attr_names );
 
   # prepareDerivationArgs tries to make writing configurable derivations easier
   # example:

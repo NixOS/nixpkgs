@@ -16,6 +16,7 @@ let
   maintainers = import ./maintainers.nix;
   platforms = import ./platforms.nix;
   systems = import ./systems.nix;
+  customisation = import ./customisation.nix;
 
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
@@ -26,3 +27,4 @@ in
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
   // properties // options // types // meta // debug // misc // modules
   // systems
+  // customisation

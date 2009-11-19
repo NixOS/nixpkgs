@@ -12,12 +12,12 @@ composableDerivation.composableDerivation {} {
                   "-DWITH_INTERNAL_SQLITE3=TRUE"
                 ];
 
-  name = "qgis-${version}";
+  name = "qgis-1.0.1-2";
 
   # src = args.fetchsvn { url=https://svn.qgis.org/repos/qgis/trunk/qgis;
   #                md5="ac0560e0a2d4e6258c8639f1e9b56df3"; rev="7704"; };
   src = fetchurl {
-    url = "http://download.osgeo.org/qgis/src/qgis_${version}.tar.gz";
+    url = "http://download.osgeo.org/qgis/src/qgis_1.0.1-2.tar.gz";
     sha256 = "07yyic9sn1pz20wjk7k560jwqz6b19rhf2gawybz38xq1f8rjwd4";
   };
 

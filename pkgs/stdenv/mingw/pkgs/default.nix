@@ -29,6 +29,20 @@ rec {
     };
 
   /**
+   * Tar
+   */
+  tar = {stdenv, fetchurl} :
+    stdenv.mkDerivation {
+      name = "mingw-tar";
+      builder = ./bin-builder.sh;
+      src = 
+        fetchurl {
+          url = ftp://ftp.strategoxt.org/pub/mingw/tar-1.22-1-msys-1.0.11-bin.tar.gz;
+          sha256 = "17rbv159g56q3bp8rh5vzv8hw8clxs7vk731cgqg0vy1fzls6yfq";
+        };
+    };
+
+  /**
    * GCC. Binary
    */
   gccFull =  {stdenv, fetchurl} :
@@ -111,13 +125,13 @@ rec {
    */
   pkgconfigBin =  {stdenv, fetchurl} :
     stdenv.mkDerivation {
-      name = "pkgconfig-0.20";
+      name = "pkgconfig-0.23";
       builder = ./pkgconfig-builder.sh;
       setupHook = ../../../development/tools/misc/pkgconfig/setup-hook.sh;
       src =
         fetchurl {
-          url = http://www.cs.uu.nl/people/martin/pkg-config-0.20-bin.tar.gz;
-          md5 = "71f9595a022619b8e8b0f7853790c4c7";
+          url = ftp://ftp.strategoxt.org/pub/mingw/pkg-config-0.23.tar.gz;
+          sha256 = "1vab3rdnw16nhma1bln41bbrn6phbpcv9wiz79map8y5znaiv6mq";
         };
     };
 

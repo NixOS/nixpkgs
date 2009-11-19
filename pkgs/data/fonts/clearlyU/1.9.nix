@@ -18,7 +18,7 @@ args : with args; with builderDefs;
 	});
 	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "clearlyU-12-"+version;
+	name = "clearlyU-12-1.9";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs 
 			[doInstall doForceShare doPropagate]);

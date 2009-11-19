@@ -1,6 +1,6 @@
 args: with args; 
 	let localDefs = builderDefs.passthru.function {
-  		buildInputs =[mesa (wxGTK null) libX11 xproto];
+  		buildInputs =[mesa wxGTK libX11 xproto];
 		  src = 
 			fetchurl {
 				url = http://www.piettes.com/fallingsandgame/fsg-src-4.4.tar.gz;

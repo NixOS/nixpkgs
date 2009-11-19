@@ -38,6 +38,7 @@ let {
       shell = msysShell;
       path = [
         (make + "/bin")
+        (tar + "/bin")
         (binutils + "/bin")
         (gccFull + "/bin")
         (mingwRuntimeBin + "/bin")
@@ -77,7 +78,7 @@ let {
            * binutils is on the path because it contains dlltool, which
            * is invoked on the PATH by some packages.
            */
-          initialPath = [make binutils gccFull mingwRuntimeSrc w32apiSrc msys];
+          initialPath = [make tar binutils gccFull mingwRuntimeSrc w32apiSrc msys];
           gcc = gccFull;
           shell = msysShell;
           inherit curl;
@@ -152,7 +153,7 @@ let {
       src =
         fetchurlInit1 {
           url = ftp://ftp.strategoxt.org/pub/mingw/msys-1.0.11.tar.gz;
-          md5 = "85ce547934797019d2d642ec3b53934b";
+          sha256 = "08qp4jk279i66q6ngksg58fx3cfv1r6p5n394h2kfrs56qs9zvz4";
         };
     };
 
@@ -175,6 +176,12 @@ let {
 
   make =
    (import ./pkgs).make {
+     stdenv = stdenvInit2;
+     inherit fetchurl;
+   };
+
+  tar =
+   (import ./pkgs).tar {
      stdenv = stdenvInit2;
      inherit fetchurl;
    };

@@ -25,8 +25,8 @@ $ cd nixpkgs</screen>
     <filename>pkgs/development/libraries/<replaceable>pkgname</replaceable></filename>,
     while a web browser goes into
     <filename>pkgs/applications/networking/browsers/<replaceable>pkgname</replaceable></filename>.
-    See Section XXX for some hints on the tree organisation.  Create a
-    directory for your package, e.g.
+    See <xref linkend="sec-organisation" /> for some hints on the tree
+    organisation.  Create a directory for your package, e.g.
 
 <screen>
 $ svn mkdir pkgs/development/libraries/libfoo</screen>

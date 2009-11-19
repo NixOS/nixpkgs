@@ -15,7 +15,7 @@ rec {
 
   /* Return an attribute from nested attribute sets.  For instance
      ["x" "y"] applied to some set e returns e.x.y, if it exists.  The
-     default value is returned otherwise.  */
+     default value is returned otherwise. */
   attrByPath = attrPath: default: e:
     let attr = head attrPath;
     in
@@ -200,7 +200,7 @@ rec {
 
   /* Does the same as the update operator '//' except that attributes are
      merged until the given pedicate is verified.  The predicate should
-     except 3 arguments which are the path to reach the attribute, a part of
+     accept 3 arguments which are the path to reach the attribute, a part of
      the first attribute set and a part of the second attribute set.  When
      the predicate is verified, the value of the first attribute set is
      replaced by the value of the second attribute set.

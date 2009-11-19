@@ -16,7 +16,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["installPythonPackage" (makeManyWrappers ''$out/bin/*'' ''--prefix PYTHONPATH : $(toPythonPath $out)'')];
       
-  name = "codeville-" + version;
+  name = "codeville-0.8.0";
   meta = {
     description = "Codeville - RCS with powerful merge.";
   };

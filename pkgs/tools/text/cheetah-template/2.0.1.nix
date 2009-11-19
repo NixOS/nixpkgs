@@ -11,7 +11,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = ["installPythonPackage" (makeManyWrappers ''$out/bin/*'' ''--prefix PYTHONPATH : $(toPythonPath $out)'')];
       
-  name = "cheetah-template-" + version;
+  name = "cheetah-template-2.0.1";
   meta = {
     description = "Templating engine";
   };
