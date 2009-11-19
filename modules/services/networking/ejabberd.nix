@@ -56,6 +56,10 @@ in
 
         startOn = "started network-interface";
         stopOn = "stopping network-interfaces";
+	
+	environment = {
+	  PATH = "$PATH:${pkgs.ejabberd}/sbin:${pkgs.ejabberd}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:${pkgs.gnused}/bin";
+	};
 
         preStart =
           ''
@@ -73,13 +77,13 @@ in
 	        cp ${pkgs.ejabberd}/etc/ejabberd/* ${cfg.confDir}
 	        sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
 	    fi
+	    
+	    ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start
           '';
-
-        exec = "${pkgs.bash}/bin/sh -c 'export PATH=$PATH:${pkgs.ejabberd}/sbin:${pkgs.coreutils}/bin:${pkgs.bash}/bin; ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start; sleep 1d'";
 
         postStop =
           ''        
-            ${pkgs.ejabberd}/sbin/ejabberdctl stop
+            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} stop
           '';
       };
 
