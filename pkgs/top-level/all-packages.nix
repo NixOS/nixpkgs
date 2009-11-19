@@ -6539,21 +6539,7 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  emacs = emacs22;
-
-  emacs21 = import ../applications/editors/emacs-21 {
-    inherit fetchurl stdenv ncurses x11 Xaw3d;
-    inherit (xlibs) libXaw libXpm;
-    xaw3dSupport = true;
-  };
-
-  emacs22 = import ../applications/editors/emacs-22 {
-    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d;
-    inherit (xlibs) libXaw libXpm;
-    inherit (gtkLibs) gtk;
-    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
-    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
-  };
+  emacs = emacs23;
 
   emacs23 = import ../applications/editors/emacs-23 {
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
@@ -6648,11 +6634,7 @@ let
     };
   });
 
-  emacs22Packages = emacsPackages emacs22;
   emacs23Packages = emacsPackages emacs23;
-
-  # The forthcoming GNU Emacs 23 used to be referred to as `emacsUnicode' here.
-  emacsUnicode = emacs23;
 
   evince = makeOverridable (import ../applications/misc/evince) {
     inherit fetchurl stdenv perl perlXMLParser gettext intltool
