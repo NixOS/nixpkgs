@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bmpp31sfjl3nzj8psvnsqrrv4gwnqzii8dxpxr6djz508yavsv6";
   };
 
-  buildInputs = [ lzma m4 perl ];
+  buildNativeInputs = [ lzma m4 perl ];
 
   unpackCmd = "lzma -d < $src | tar xv";
 

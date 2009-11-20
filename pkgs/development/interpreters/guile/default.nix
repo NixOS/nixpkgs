@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1czhcrn6l63xhsw3fjmv88djflqxbdpxjhgmwwvscm8rv4wn7vmz";
   };
 
-  buildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [readline libtool gmp gawk];
+  buildNativeInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ libtool ];
+  propagatedBuildNativeInputs = [readline gmp gawk];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"

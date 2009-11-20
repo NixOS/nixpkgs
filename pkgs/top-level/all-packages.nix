@@ -132,7 +132,8 @@ let
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
 
-  useFromStdenv = it : alternative : if (builtins.hasAttr it stdenv) then
+  useFromStdenv = it : alternative : if ((bootStdenv != null ||
+    crossSystem == null) && builtins.hasAttr it stdenv) then
     (builtins.getAttr it stdenv) else alternative;
 
   # Return the first available value in the order: pkg.val, val, or default.
