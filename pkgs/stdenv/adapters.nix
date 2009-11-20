@@ -110,7 +110,7 @@ rec {
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
-    { mkDerivation = {name, buildInputs ? [], buildNativeInputs ? [],
+    { mkDerivation = {name ? "", buildInputs ? [], buildNativeInputs ? [],
             propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [], ...}@args: let
 
             # *BuildInputs exists temporarily as another name for
