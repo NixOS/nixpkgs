@@ -215,6 +215,7 @@ in
 		    then
 			for j in $i/conf/Catalina/*
 			do
+			    mkdir -p ${cfg.baseDir}/conf/Catalina/localhost
 			    ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
 			done
 		    fi
@@ -251,6 +252,7 @@ in
 		      then
 			  for j in $i/conf/Catalina/*
 			  do
+			      mkdir -p ${cfg.baseDir}/conf/Catalina/${virtualHost.name}
 			      ln -sfn $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
 			  done
 		      fi
