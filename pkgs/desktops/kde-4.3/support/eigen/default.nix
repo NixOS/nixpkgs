@@ -1,10 +1,10 @@
 {stdenv, fetchurl, lib, cmake}:
 
 stdenv.mkDerivation {
-  name = "eigen-2.0.5";
+  name = "eigen-2.0.9";
   src = fetchurl {
-    url = http://bitbucket.org/eigen/eigen2/get/2.0.5.tar.bz2;
-    sha256 = "0wzixg09fh0vmn8sh2vcdn3j1pxhvd2k2axmpr0vjss98aapvqgf";
+    url = http://bitbucket.org/eigen/eigen/get/2.0.9.tar.bz2;
+    sha256 = "0hdsn44lv6nxypbrh3y19qk1p1579wk2v32fkav799c99wh0lss5";
   };
   buildInputs = [ cmake ];  
   meta = {
