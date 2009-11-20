@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ] ++ stdenv.lib.optional aclSupport acl;
 
-  // The check failed the last time we enabled it
+  # The check failed the last time we enabled it
   doCheck = false;
 
   meta = {
