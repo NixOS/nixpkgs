@@ -1,4 +1,6 @@
-{pkgs, ctags, writeScriptBin, lib, makeOverridable}:
+{ pkgs, ctags, writeScriptBin }:
+
+with pkgs.stdenv.lib;
 
 # define some ctags wrappers adding support for some not that common languages
 # customization:
@@ -13,9 +15,9 @@
   # the derivation. use language extensions specified by args
   ctagsWrapped = makeOverridable ( {args, name} :  pkgs.writeScriptBin name ''
   #!/bin/sh
-  exec ${pkgs.ctags}/bin/ctags ${lib.concatStringsSep " " (map lib.escapeShellArg args)} "$@"
+  exec ${pkgs.ctags}/bin/ctags ${concatStringsSep " " (map escapeShellArg args)} "$@"
   '') {
-    args = let x = pkgs.ctagsWrapped; in lib.concatLists [
+    args = let x = pkgs.ctagsWrapped; in concatLists [
       x.defaultArgs x.phpLang x.jsLang x.nixLang x.asLang x.rubyLang
     ];
     name = "${ctags.name}-wrapped";

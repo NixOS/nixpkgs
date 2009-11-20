@@ -2356,9 +2356,9 @@ let
   };
 
   ruby18 = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses zlib lib openssl makeOverridable gdbm;
+    inherit fetchurl stdenv readline ncurses zlib openssl gdbm;
   };
-  ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
+  #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
   ruby = ruby18;
 
   rubyLibs = recurseIntoAttrs (import ../development/interpreters/ruby/libs.nix {
@@ -2577,7 +2577,7 @@ let
   };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
-    inherit pkgs ctags writeScriptBin lib makeOverridable;
+    inherit pkgs ctags writeScriptBin;
   };
 
   cmake = import ../development/tools/build-managers/cmake {
