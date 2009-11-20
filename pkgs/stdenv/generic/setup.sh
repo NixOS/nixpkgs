@@ -418,14 +418,10 @@ unpackFile() {
     header "unpacking source archive $curSrc" 3
 
     case "$curSrc" in
-        *.tar)
+        *.tar | *.tar.* | *.tgz | *.tbz2)
+	    # GNU tar can automatically select the decompression method
+	    # (info "(tar) gzip").
             tar xvf $curSrc
-            ;;
-        *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $curSrc | tar xvf -
-            ;;
-        *.tar.bz2 | *.tbz2)
-            bzip2 -d < $curSrc | tar xvf -
             ;;
         *.zip)
             unzip $curSrc
