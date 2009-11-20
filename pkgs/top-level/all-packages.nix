@@ -3425,6 +3425,14 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
+  glibc211Cross = cross : makeOverridable (import ../development/libraries/glibc-2.11) {
+    inherit stdenv fetchurl cross;
+    binutilsCross = binutilsCross cross;
+    gccCross = gccCrossStageStatic cross;
+    kernelHeaders = kernelHeadersCross cross;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
+
   glibcCross = cross: glibc29Cross cross;
 
   eglibc = import ../development/libraries/eglibc {
@@ -4200,7 +4208,7 @@ let
   };
 
   ncurses = makeOverridable (composedArgsAndFun (import ../development/libraries/ncurses)) {
-    inherit fetchurl stdenv ncurses;
+    inherit fetchurl stdenv;
     # The "! (stdenv ? cross)" is for the cross-built arm ncurses, which
     # don't build for me in unicode.
     unicode = (system != "i686-cygwin" && ! (stdenv ? cross));

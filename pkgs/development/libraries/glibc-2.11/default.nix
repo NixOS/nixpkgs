@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
     longDescription =
       '' Any Unix-like operating system needs a C library: the library which
-         defines the ``system calls'' and other basic facilities such as
+         defines the "system calls" and other basic facilities such as
          open, malloc, printf, exit...
 
          The GNU C library is used as the C library in the GNU system and
