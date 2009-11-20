@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   # "fixed" path in generated files!
   dontPatchShebangs = true;
 
-  doCheck = true;
+  # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
+  # leads to the failure of a number of tests.
+  doCheck = false;
 
   meta = {
     description = "GNU Libtool, a generic library support script";
