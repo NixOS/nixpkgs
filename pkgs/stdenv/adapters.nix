@@ -111,7 +111,8 @@ rec {
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
     { mkDerivation = {name ? "", buildInputs ? [], buildNativeInputs ? [],
-            propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [], ...}@args: let
+            propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [],
+            selfNativeBuildInput ? false, ...}@args: let
 
             # *BuildInputs exists temporarily as another name for
             # *HostInputs.
@@ -135,7 +136,8 @@ rec {
                 stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
                     buildNativeInputs = buildNativeInputsDrvs
-                      ++ [ gccCross binutilsCross ];
+                      ++ [ gccCross binutilsCross ] ++
+                      stdenv.lib.optional selfNativeBuildInput buildDrv;
                     buildInputs = buildInputsDrvs;
                     propagatedBuildInputs = propagatedBuildInputsDrvs;
                     propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
