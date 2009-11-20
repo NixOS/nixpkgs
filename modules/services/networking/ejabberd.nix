@@ -108,7 +108,17 @@ in
 	            ${concatMapStrings (dump:
 		      ''
 		        echo "Importing dump: ${dump}"
-		        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load ${dump}
+			
+			if [ -f ${dump} ]
+			then
+		            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load ${dump}
+			elif [ -d ${dump} ]
+			then
+			    for i in ${dump}/ejabberd-dump/*
+			    do
+			        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load $i
+			    done
+			fi
 		      '') cfg.loadDumps}
 	        fi
 	      ''}
