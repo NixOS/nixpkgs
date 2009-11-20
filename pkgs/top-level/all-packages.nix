@@ -6466,7 +6466,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  eclipse = import ../applications/editors/eclipse-classic {
+  eclipse = import ../applications/editors/eclipse {
     inherit stdenv fetchurl patchelf makeDesktopItem makeWrapper freetype fontconfig jre zlib;
     # GTK 2.18 gives glitches such as mouse clicks on buttons not
     # working correctly.

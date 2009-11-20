@@ -51,4 +51,9 @@ stdenv.mkDerivation rec {
     ensureDir $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
+
+  meta = {
+    homepage = http://www.eclipse.org/;
+    description = "A extensible multi-language software development environment";
+  };
 }
