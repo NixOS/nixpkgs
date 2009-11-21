@@ -5,12 +5,10 @@ stdenv.mkDerivation rec {
   name = "ufraw-0.16";
 
   src = fetchurl {
+    # XXX: These guys appear to mutate uploaded tarballs!
     url = "mirror://sourceforge/ufraw/${name}.tar.gz";
-    sha256 = "0d3hd04msdk6l0nv1n8zs3ybipy3jikli57d9q41pb7v0hnl6hzd";
+    sha256 = "06fzyd7wyv5ixbmhbsz80pphhbic18d1w8ji0gz38aq1vdmgxw9n";
   };
-
-  patches = [ ./mkinstalldirs.patch ];
-  preConfigure = "chmod +x mkinstalldirs";
 
   buildInputs =
     [ pkgconfig gtk gtkimageview gettext bzip2 zlib
@@ -35,5 +33,6 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # needs GTK+
   };
 }
