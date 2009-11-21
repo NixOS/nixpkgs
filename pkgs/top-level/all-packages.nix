@@ -2874,10 +2874,15 @@ let
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
    * of glib and pkgconfig itself on MinGW.
    */
-  pkgconfig = useFromStdenv "pkgconfig"
+  pkgconfigReal = useFromStdenv "pkgconfig"
     (import ../development/tools/misc/pkgconfig {
       inherit fetchurl stdenv;
     });
+
+  /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
+     because most usage of pkgconfig as buildInput (inheritance of
+     pre-cross nixpkgs) means using it using as buildNativeInput */
+  pkgconfig = pkgconfigReal // { hostDrv = pkgconfigReal.buildDrv; };
 
   radare = import ../development/tools/analysis/radare {
     inherit stdenv fetchurl pkgconfig libusb readline gtkdialog python

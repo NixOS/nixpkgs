@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libpthreadstubs ];
 
+  preConfigure = ''
+    # General case: non intel.
+    if test -n "$crossConfig"; then
+      configureFlags="$configureFlags --disable-intel";
+    fi
+  '';
+
   meta = {
     homepage = http://dri.freedesktop.org/libdrm/;
     description = "Library for accessing the kernel's Direct Rendering Manager";

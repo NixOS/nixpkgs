@@ -22,7 +22,17 @@
   };
 
   libxcb = attrs : attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.xproto ];
+    # I only remove python from the original, and add xproto. I don't know how
+    # to achieve that referring to attrs.buildInputs.
+    buildInputs = [args.pkgconfig args.libxslt xorg.libpthreadstubs /*xorg.python*/
+        xorg.libXau xorg.xcbproto xorg.libXdmcp ] ++ [ xorg.xproto ];
+    buildNativeInputs = [ args.python ];
+  };
+
+  xcbproto = attrs : attrs // {
+    # I only remove python from the original.
+    buildInputs = [args.pkgconfig  /*xorg.python*/ ];
+    buildNativeInputs = [ args.python ];
   };
 
   libXext = attrs: attrs // {

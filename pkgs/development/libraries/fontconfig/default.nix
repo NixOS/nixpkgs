@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-confdir=/etc/fonts --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 
+  crossArch = stdenv.cross.arch;
+
+  preConfigure = ''
+    if test -n "$crossConfig"; then
+      configureFlags="$configureFlags --with-arch=$crossArch";
+    fi
+  '';
+
   # Don't try to write to /etc/fonts or /var/cache/fontconfig at install time.
   installFlags = "CONFDIR=$(out)/etc/fonts RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
 
