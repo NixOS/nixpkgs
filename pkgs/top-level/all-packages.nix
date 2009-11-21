@@ -2881,7 +2881,10 @@ let
 
   /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
      because most usage of pkgconfig as buildInput (inheritance of
-     pre-cross nixpkgs) means using it using as buildNativeInput */
+     pre-cross nixpkgs) means using it using as buildNativeInput
+     cross_renaming: we should make all programs use pkgconfig as
+     buildNativeInput after the renaming.
+     */
   pkgconfig = pkgconfigReal // { hostDrv = pkgconfigReal.buildDrv; };
 
   radare = import ../development/tools/analysis/radare {
