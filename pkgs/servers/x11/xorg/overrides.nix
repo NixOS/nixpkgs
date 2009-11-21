@@ -1,5 +1,11 @@
 {args, xorg}:
-
+let
+   setMalloc0ReturnsNullCrossCompiling = ''
+      if test -n "$crossConfig"; then
+        configureFlags="$configureFlags --enable-malloc0returnsnull";
+      fi
+    '';
+in
 {
 
   fontmiscmisc = attrs: attrs // {
@@ -35,8 +41,35 @@
     buildNativeInputs = [ args.python ];
   };
 
+  libX11 = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXrender = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXxf86vm = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXrandr = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXt = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXft = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.libX11
+        xorg.renderproto ];
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
   libXext = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXau];
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXpm = attrs: attrs // {
