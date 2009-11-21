@@ -202,4 +202,29 @@ rec {
           (stdenv.mkDerivation args)
           { meta.maintainers = maintainers; };
     };
+
+
+  /* Use the trace output to report all processed derivations with their
+     license name.
+ 
+  */
+  traceDrvLicenses = stdenv: stdenv //
+    { mkDerivation = args:
+        let
+          pkg = stdenv.mkDerivation args;
+          printDrvPath = val: let
+            drvPath = builtins.unsafeDiscardStringContext pkg.drvPath;
+            license =
+              if pkg ? meta && pkg.meta ? license then
+                pkg.meta.license
+              else
+                null;
+          in
+            builtins.trace "@:drv:${toString drvPath}:${builtins.exprToString license}:@"
+              val;
+        in pkg // {
+          outPath = printDrvPath pkg.outPath;
+          drvPath = printDrvPath pkg.drvPath;
+        };
+    };
 }
