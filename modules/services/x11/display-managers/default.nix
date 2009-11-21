@@ -43,6 +43,17 @@ let
         fi
       ''}
 
+      ${optionalString cfg.startGnuPGAgent ''
+        if test -z "$SSH_AUTH_SOCK"; then
+            # Restart this script as a child of the GnuPG agent.
+            exec "${pkgs.gnupg2}/bin/gpg-agent"                         \
+              --enable-ssh-support --daemon                             \
+              --pinentry-program "${pkgs.pinentry}/bin/pinentry-gtk-2"  \
+              --write-env-file "$HOME/.gpg-agent-info"                  \
+              "$0" "$sessionType"
+        fi
+      ''}
+
       # Start a ConsoleKit session so that we get ownership of various
       # devices.
       if test -z "$XDG_SESSION_COOKIE"; then

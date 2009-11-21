@@ -208,6 +208,16 @@ in
         '';
       };
 
+      startGnuPGAgent = mkOption {
+        default = true;
+        description = ''
+          Whether to start the GnuPG agent when you log in.  The GnuPG agent
+          remembers private keys for you so that you don't have to type in
+          passphrases every time you make an SSH connection or sign/encrypt
+          data.  Use <command>ssh-add</command> to add a key to the agent.
+        '';
+      };
+
       layout = mkOption {
         default = "us";
         description = ''
@@ -322,13 +332,21 @@ in
 
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
 
-    assertions = singleton
-      { assertion = config.services.hal.enable == true;
-        message = "The X server needs HAL running. Set services.hal.enable to true";
-      };
+    assertions =
+      [ { assertion = config.services.hal.enable == true;
+          message = "The X server needs HAL running. Set services.hal.enable to true";
+        }
+
+        { assertion = (cfg.startSSHAgent -> !cfg.startGnuPGAgent)
+                       && (cfg.startGnuPGAgent -> !cfg.startSSHAgent);
+          message =
+            "The OpenSSH SSH agent and GnuPG agent cannot be started " +
+            "both.  Choose between `startSSHAgent' and `startGnuPGAgent'.";
+        }
+      ];
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
