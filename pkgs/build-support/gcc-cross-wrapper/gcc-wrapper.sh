@@ -112,6 +112,8 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     source "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
+# We want gcc to call the wrapper linker, not that of binutils.
+export PATH="@ldPath@:$PATH"
 
 # Call the real `gcc'.  Filter out warnings from stderr about unused
 # `-B' flags, since they confuse some programs.  Deep bash magic to

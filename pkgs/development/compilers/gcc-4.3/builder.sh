@@ -124,11 +124,6 @@ postInstall() {
             ln -sfn g++ $i
         fi
     done
-
-    # gcc will look for the binutils there, called through collect2
-    if test -n "$crossConfig"; then
-      ln -s $binutilsCross/$crossConfig/bin $out/$crossConfig/bin
-    fi
 }
 
 

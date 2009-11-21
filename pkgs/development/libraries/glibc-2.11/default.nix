@@ -2,7 +2,6 @@
 , installLocales ? true
 , profilingLibraries ? false
 , cross ? null
-, binutilsCross ? null
 , gccCross ? null
 }:
 
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
     "--without-fp"
   ] else []);
 
-  buildInputs = stdenv.lib.optionals (cross != null) [ binutilsCross gccCross ];
+  buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
 
   preInstall = ''
     ensureDir $out/lib

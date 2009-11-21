@@ -121,7 +121,7 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
 
     # Finally, add `-rpath' switches.
     for i in $rpath; do
-        extra=(${extra[@]} -rpath $i)
+        extra=(${extra[@]} -rpath $i -rpath-link $i)
     done
 fi
 

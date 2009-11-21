@@ -9,12 +9,14 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ libtool ];
-  propagatedBuildNativeInputs = [readline gmp gawk];
+  propagatedBuildInputs = [ libtool gmp ];
+  propagatedBuildNativeInputs = [readline gawk];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   '';
+
+  NIX_DEBUG=1;
 
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c

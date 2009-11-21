@@ -5,13 +5,13 @@
 # stdenv.mkDerivation provides a wrapper that sets up the right environment
 # variables so that the compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
+{ name ? "", stdenv, nativeTools, nativeLibc, noLibc ? false, nativePrefix ? ""
 , gcc ? null, libc ? null, binutils ? null, shell ? "", cross ? ""
 }:
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
-assert !nativeLibc -> libc != null;
+assert !noLibc -> (!nativeLibc -> libc != null);
 
 stdenv.mkDerivation {
   builder = ./builder.sh;

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j5pklq36ivg2cim5wfysns229a544lqkimp3mlzkwjl513ra0ma";
   };
 
-  buildInputs = [m4];
+  buildNativeInputs = [m4];
 
   preConfigure = "ln -sf configfsf.guess config.guess";
 

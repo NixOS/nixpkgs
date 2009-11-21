@@ -17,7 +17,7 @@ if test -n "$nativeTools"; then
 else
     ldflags="$ldflags -L$gcc/lib"
     gccPath="$gcc/bin"
-    ldPath="$binutils/bin"
+    ldPath="$binutils/$crossConfig/bin"
 fi
 
 
@@ -40,7 +40,8 @@ doSubstitute() {
         --subst-var "cflagsLink" \
         --subst-var "ldflags" \
         --subst-var "ldflagsBefore" \
-        --subst-var-by "ld" "$ldPath/$crossConfig-ld"
+        --subst-var "ldPath" \
+        --subst-var-by "ld" "$ldPath/ld"
 }
 
 

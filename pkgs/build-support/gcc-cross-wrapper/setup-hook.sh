@@ -26,5 +26,6 @@ if test -n "@libc@"; then
 fi
 
 configureFlags="$configureFlags --build=$system --host=$crossConfig"
-dontPatchELF=1
-dontStrip=1
+# Disabling the tests when cross compiling, as usually the tests are meant for
+# native compilations.
+doCheck=""

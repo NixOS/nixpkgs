@@ -1785,10 +1785,15 @@ let
     crossStageStatic = false;
   };
 
-  gccCrossStageStatic = cross: (gcc43_realCross cross).override {
-    crossStageStatic = true;
-    langCC = false;
-    glibcCross = null;
+  gccCrossStageStatic = cross: wrapGCCCross {
+    gcc = (gcc43_realCross cross).override {
+        crossStageStatic = true;
+        langCC = false;
+        glibcCross = null;
+    };
+    libc = null;
+    binutils = binutilsCross cross;
+    inherit cross;
   };
 
   gccCrossStageFinal = cross: wrapGCCCross {
@@ -2218,6 +2223,7 @@ let
     import ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
+      noLibc = (libc == null);
       inherit stdenv gcc binutils libc shell name cross;
     };
 
@@ -3415,7 +3421,6 @@ let
 
   glibc29Cross = cross : makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit stdenv fetchurl cross;
-    binutilsCross = binutilsCross cross;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
@@ -3428,7 +3433,6 @@ let
 
   glibc211Cross = cross : makeOverridable (import ../development/libraries/glibc-2.11) {
     inherit stdenv fetchurl cross;
-    binutilsCross = binutilsCross cross;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
