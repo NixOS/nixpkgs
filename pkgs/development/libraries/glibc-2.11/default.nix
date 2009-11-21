@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-add-ons"
     "--with-headers=${kernelHeaders}/include"
+
+    /* Make sure `nscd' et al. are linked against `libssp'.  */
+    "LDFLAGS=-fstack-protector"
+
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
     "--host=${cross.config}"
