@@ -53,11 +53,6 @@ stdenv.mkDerivation rec {
 
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
-
-    /* Support GNU Binutils 2.20 and above.  */
-    ./binutils-2.20.patch
-
-    ./binutils-ld.patch
   ];
 
   configureFlags = [
