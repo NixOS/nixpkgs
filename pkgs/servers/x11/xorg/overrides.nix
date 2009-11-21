@@ -21,6 +21,10 @@
     preBuild = "substituteInPlace mkfontdir.cpp --replace BINDIR ${xorg.mkfontscale}/bin";
   };
 
+  libxcb = attrs : attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.xproto ];
+  };
+
   libXext = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXau];
   };
