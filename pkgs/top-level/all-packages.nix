@@ -707,7 +707,7 @@ let
   };
 
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
-    inherit intltool perl gettext;
+    inherit intltool perl gettext libusb;
   };
 
   gnugrep = useFromStdenv "gnugrep"
