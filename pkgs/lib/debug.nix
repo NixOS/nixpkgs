@@ -3,7 +3,7 @@ let lib = import ./default.nix;
 inherit (builtins) trace attrNamesToStr isAttrs isFunction isList isInt
         isString isBool head substring attrNames;
 
-inherit (lib) all id mapAttrsFlatten;
+inherit (lib) all id mapAttrsFlatten elem;
 
 in
 
@@ -59,9 +59,15 @@ rec {
      expected, actual}, denoting the attribute name of the failing
      test and its expected and actual results.  Used for regression
      testing of the functions in lib; see tests.nix for an example.
+     Only tests having names starting with "test" are run.
+     Add attr { tests = ["testName"]; } to run these test only
   */
   runTests = tests: lib.concatLists (lib.attrValues (lib.mapAttrs (name: test:
-    if ! lib.eqStrict test.expr test.expected
+    let testsToRun = if tests ? tests then tests.tests else [];
+    in if (substring 0 4 name == "test" ||  elem name testsToRun)
+       && ((testsToRun == []) || elem name tests.tests)
+       && (!lib.eqStrict test.expr test.expected)
+
       then [ { inherit name; expected = test.expected; result = test.expr; } ]
       else [] ) tests));
   
