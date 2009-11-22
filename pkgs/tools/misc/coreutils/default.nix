@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ] ++ stdenv.lib.optional aclSupport acl;
 
-  # The check failed the last time we enabled it
+  # The tests are known broken on Cygwin
+  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025).
+  # For the rest, wait for upstream reply at:
+  # http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19024 .
   doCheck = false;
 
   meta = {
