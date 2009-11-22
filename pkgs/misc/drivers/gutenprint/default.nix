@@ -1,13 +1,16 @@
 # this package was called gimp-print in the past
-args: with args;
-let inherit (args.composableDerivation) composableDerivation edf wwf; in
+{ fetchurl, stdenv, lib, pkgconfig, composableDerivation, cups
+, libtiff, libpng, openssl, git, gimp }@args :
+
+let
+   version = "5.2.4";
+   inherit (args.composableDerivation) composableDerivation edf wwf;
+in
 composableDerivation {} {
-
-
-  name = "gutenprint-drivers";
+  name = "gutenprint-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/gimp-print/files/gutenprint-5.2/5.2.4/gutenprint-5.2.4.tar.bz2;
+    url = "mirror://sourceforge/gimp-print/files/gutenprint-5.2/${version}/gutenprint-${version}.tar.bz2";
     sha256 = "09lnmf92h51sm0hmzd1hn2kl1sh6dxlnc0zjd9lrifzg0miyh45n";
   };
 
