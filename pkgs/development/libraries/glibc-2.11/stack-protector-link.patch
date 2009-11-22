@@ -6,7 +6,7 @@ Make sure `nscd' et al. are linked against `libssp'.
  ifeq (yesyes,$(have-fpie)$(build-shared))
  relro-LDFLAGS += -Wl,-z,now
  
-+$(objpfx)nscd: LDFLAGS += -fstack-protector
++$(objpfx)nscd: LDFLAGS += -lssp
  $(objpfx)nscd: $(addprefix $(objpfx),$(nscd-modules:=.o))
  	$(+link-pie)
  endif
