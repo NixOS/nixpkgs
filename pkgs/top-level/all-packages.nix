@@ -3453,11 +3453,11 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibcLocales = makeOverridable (import ../development/libraries/glibc-2.9/locales.nix) {
+  glibcLocales = makeOverridable (import ../development/libraries/glibc-2.11/locales.nix) {
     inherit fetchurl stdenv;
   };
 
-  glibcInfo = import ../development/libraries/glibc-2.9/info.nix {
+  glibcInfo = import ../development/libraries/glibc-2.11/info.nix {
     inherit fetchurl stdenv texinfo perl;
   };
 
