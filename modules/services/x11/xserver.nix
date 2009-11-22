@@ -340,11 +340,14 @@ in
           message = "The X server needs HAL running. Set services.hal.enable to true";
         }
 
-        { assertion = (cfg.startSSHAgent -> !cfg.startGnuPGAgent)
-                       && (cfg.startGnuPGAgent -> !cfg.startSSHAgent);
+        { assertion = if cfg.startSSHAgent
+                      then !cfg.startGnuPGAgent
+                      else (if cfg.startGnuPGAgent
+                            then !cfg.startSSHAgent
+                            else true);
           message =
-            "The OpenSSH SSH agent and GnuPG agent cannot be started " +
-            "both.  Choose between `startSSHAgent' and `startGnuPGAgent'.";
+            "The OpenSSH agent and GnuPG agent cannot be started both.  "
+            "Choose between `startSSHAgent' and `startGnuPGAgent'.";
         }
       ];
 
