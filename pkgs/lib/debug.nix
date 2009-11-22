@@ -71,7 +71,9 @@ rec {
       then [ { inherit name; expected = test.expected; result = test.expr; } ]
       else [] ) tests));
   
-
+  # create a test assuming that list elements are true
+  # usage: { testX = allTrue [ true ]; }
+  testAllTrue = expr : { inherit expr; expected = map (x: true) expr; };
 
   # evaluate everything once so that errors will occur earlier
   # hacky: traverse attrs by adding a dummy
