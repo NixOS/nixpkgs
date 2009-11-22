@@ -105,3 +105,16 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
+
+//
+
+(if (stdenv.system == "i686-linux")
+ then {
+   # Workaround for this bug:
+   #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
+   # I.e. when gcc is compiled with --with-arch=i686, then the
+   # preprocessor symbol `__i686' will be defined to `1'.  This causes
+   # the symbol __i686.get_pc_thunk.dx to be mangled.
+   NIX_CFLAGS_COMPILE = "-U__i686";
+ }
+ else {})
