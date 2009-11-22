@@ -3,52 +3,52 @@ with import ./default.nix;
 
 runTests {
 
-  id = {
+  testId = {
     expr = id 1;
     expected = 1;
   };
   
-  const = {
+  testConst = {
     expr = const 2 3;
     expected = 2;
   };
   
-  or = {
+  testOr = {
     expr = or true false;
     expected = true;
   };
   
-  and = {
+  testAnd = {
     expr = and true false;
     expected = false;
   };
   
-  fix = {
+  testFix = {
     expr = fix (x: {a = if x ? a then "a" else "b";});
     expected = {a = "a";};
   };
 
-  concatMapStrings = {
+  testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") ["a" "b" "c"];
     expected = "a;b;c;";
   };
 
-  concatStringsSep = {
+  testConcatStringsSep = {
     expr = concatStringsSep "," ["a" "b" "c"];
     expected = "a,b,c";
   };
 
-  filter = {
+  testFilter = {
     expr = filter (x: x != "a") ["a" "b" "c" "a"];
     expected = ["b" "c"];
   };
 
-  fold = {
+  testFold = {
     expr = fold (builtins.add) 0 (range 0 100);
     expected = 5050;
   };
 
-  eqStrict = {
+  testEqStrict = {
     expr = all id [
       (eqStrict 2 2)
       (!eqStrict 3 2)
@@ -61,7 +61,7 @@ runTests {
     expected = true;
   };
 
-  overridableDelayableArgsTest = {
+  testOverridableDelayableArgsTest = {
     expr = 
       let res1 = defaultOverridableDelayableArgs id {};
           res2 = defaultOverridableDelayableArgs id { a = 7; };
