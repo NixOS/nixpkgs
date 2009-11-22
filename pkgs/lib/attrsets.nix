@@ -22,6 +22,7 @@ rec {
       then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
+      
   /* Return nested attribute set in which an attribute is set.  For instance
      ["x" "y"] applied with some value v returns `x.y = v;' */
   setAttrByPath = attrPath: value:

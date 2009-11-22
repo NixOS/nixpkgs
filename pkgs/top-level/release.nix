@@ -146,6 +146,7 @@ in {
   e2fsprogs = linux;
   ejabberd = linux;
   elinks = linux;
+  emacs22 = gtkSupported;
   emacs23 = gtkSupported;
   enscript = all;
   eprover = linux;
@@ -435,13 +436,16 @@ in {
     tools = linux;
   };
 
-  emacs23Packages = {
+  emacs22Packages = {
     bbdb = linux;
     cedet = linux;
     ecb = linux;
     emacsw3m = linux;
     emms = linux;
     nxml = all;
+  };
+
+  emacs23Packages = emacs22Packages // {
     jdee = linux;
   };
 

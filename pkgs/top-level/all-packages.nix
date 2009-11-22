@@ -6489,6 +6489,14 @@ let
 
   emacs = emacs23;
 
+  emacs22 = import ../applications/editors/emacs-22 {
+    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d;
+    inherit (xlibs) libXaw libXpm;
+    inherit (gtkLibs) gtk;
+    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
+    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
+  };
+
   emacs23 = import ../applications/editors/emacs-23 {
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
       libpng libjpeg libungif libtiff texinfo dbus;
@@ -6582,6 +6590,7 @@ let
     };
   });
 
+  emacs22Packages = emacsPackages emacs22;
   emacs23Packages = emacsPackages emacs23;
 
   evince = makeOverridable (import ../applications/misc/evince) {
