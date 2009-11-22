@@ -1,18 +1,18 @@
 { stdenv, fetchurl, kernelHeaders
 , installLocales ? true
 , profilingLibraries ? false
-, cross ? null
 , gccCross ? null
 }:
 
-let build = import ./common.nix;
+let
+  build = import ./common.nix;
+  cross = if gccCross != null then gccCross.target else null;
 in
   build ({
-    name = "glibc" +
-      stdenv.lib.optionalString (cross != null) "-${cross.config}";
+    name = "glibc";
 
     inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
-      cross gccCross;
+      cross;
 
     builder = ./builder.sh;
 
@@ -44,10 +44,6 @@ EOF
         export CC="$crossConfig-gcc"
         export AR="$crossConfig-ar"
         export RANLIB="$crossConfig-ranlib"
-
-        # The host strip will destroy everything in the target binaries
-        # otherwise.
-        dontStrip=1
       '';
    }
    else {}))

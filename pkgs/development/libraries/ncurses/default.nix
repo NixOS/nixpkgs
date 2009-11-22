@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ${if unicode then "--enable-widec" else ""}
   '';
 
-  selfNativeBuildInput = true;
+  selfBuildNativeInput = true;
     
   preBuild = ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
 

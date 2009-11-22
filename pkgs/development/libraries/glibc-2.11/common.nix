@@ -61,8 +61,6 @@ stdenv.mkDerivation ({
      then "--enable-profile"
      else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
-    "--host=${cross.config}"
-    "--build=${stdenv.system}"
     "--with-tls"
     "--enable-kernel=2.6.0"
     "--without-fp"
@@ -101,7 +99,8 @@ stdenv.mkDerivation ({
  //
 
 {
-  name = args.name + "-${version}";
+  name = args.name + "-${version}" +
+    stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";

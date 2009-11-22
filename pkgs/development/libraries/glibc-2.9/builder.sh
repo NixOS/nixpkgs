@@ -48,9 +48,6 @@ EOF
         export AR="${crossConfig}-ar"
         export RANLIB="${crossConfig}-ranlib"
         configureFlags="${configureFlags} --cache-file=config.cache"
-
-        # The host stripp will destroy everything in the target binaries otherwise
-        dontStrip=1
     fi
 }
 
