@@ -71,6 +71,9 @@ in zipModules ([]
 ++ rename obsolete "boot.bootMount" to "boot.loader.grub.bootDevice"
 ++ rename obsolete "boot.grubSplashImage" to "boot.loader.grub.splashImage"
 
+# X11
+++ rename obsolete "services.xserver.startSSHAgent" to "services.xserver.startOpenSSHAgent"
+
 # KDE
 ++ rename deprecated "kde.extraPackages" to "environment.kdePackages"
 

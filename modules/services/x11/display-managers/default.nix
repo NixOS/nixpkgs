@@ -32,7 +32,7 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
-      ${optionalString cfg.startSSHAgent ''
+      ${optionalString cfg.startOpenSSHAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
             # Restart this script as a child of the SSH agent.  (It is
             # also possible to start the agent as a child that prints
