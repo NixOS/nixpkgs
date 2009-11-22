@@ -342,9 +342,9 @@ in
 
         { assertion = if cfg.startOpenSSHAgent
                       then !cfg.startGnuPGAgent
-                      else (if cfg.startGnuPGAgent
-                            then !cfg.startOpenSSHAgent
-                            else true);
+                      else if cfg.startGnuPGAgent
+                           then !cfg.startOpenSSHAgent
+                           else true;
           message =
             "The OpenSSH agent and GnuPG agent cannot be started both.  "
             "Choose between `startOpenSSHAgent' and `startGnuPGAgent'.";
