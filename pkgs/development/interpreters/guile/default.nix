@@ -3,15 +3,15 @@
 
 stdenv.mkDerivation rec {
   name = "guile-1.8.7";
+
   src = fetchurl {
     url = "mirror://gnu/guile/" + name + ".tar.gz";
     sha256 = "1czhcrn6l63xhsw3fjmv88djflqxbdpxjhgmwwvscm8rv4wn7vmz";
   };
 
+  buildInputs = [ gawk ];
   buildNativeInputs = [ makeWrapper ];
-  buildInputs = [ libtool ];
   propagatedBuildInputs = [ readline gmp libtool ];
-  propagatedBuildNativeInputs = [ gawk ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
