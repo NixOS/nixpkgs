@@ -227,4 +227,44 @@ rec {
           drvPath = printDrvPath pkg.drvPath;
         };
     };
+
+  /* Abort if the license predicate is not verified for a derivation
+     declared with mkDerivation.
+
+     One possible predicate to avoid all non-free packages can be achieved
+     with the following function:
+
+     isFree = license: with builtins;
+       if isNull license then true
+       else if isList license then lib.all isFree license
+       else license != "non-free" && license != "unfree";
+
+     This adapter can be defined on the defaultStdenv definition.  You can
+     use it by patching the all-packages.nix file or by using the override
+     feature of ~/.nixpkgs/config.nix .
+  */
+  validateLicenses = licensePred: stdenv: stdenv //
+    { mkDerivation = args:
+        let
+          pkg = stdenv.mkDerivation args;
+          license =
+            if pkg ? meta && pkg.meta ? license then
+              pkg.meta.license
+            else
+              null;
+
+          validate = arg:
+            if licensePred license then arg
+            else abort "
+              Error while building ${builtins.unsafeDiscardStringContext pkg.drvPath}:
+              The license predicate is not verified.
+
+              bad license: ${builtins.exprToString license}
+            ";
+
+        in pkg // {
+          outPath = validate pkg.outPath;
+          drvPath = validate pkg.drvPath;
+        };
+    };
 }
