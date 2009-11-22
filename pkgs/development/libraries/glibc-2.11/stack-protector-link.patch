@@ -1,0 +1,12 @@
+Make sure `nscd' et al. are linked against `libssp'.
+
+--- glibc-2.11/nscd/Makefile	2009-10-30 18:17:08.000000000 +0100
++++ glibc-2.11/nscd/Makefile	2009-11-22 01:19:37.000000000 +0100
+@@ -126,6 +126,7 @@ CFLAGS-res_hconf.c += $(nscd-cflags)
+ ifeq (yesyes,$(have-fpie)$(build-shared))
+ relro-LDFLAGS += -Wl,-z,now
+ 
++$(objpfx)nscd: LDFLAGS += -fstack-protector
+ $(objpfx)nscd: $(addprefix $(objpfx),$(nscd-modules:=.o))
+ 	$(+link-pie)
+ endif

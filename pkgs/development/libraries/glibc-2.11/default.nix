@@ -53,15 +53,14 @@ stdenv.mkDerivation rec {
 
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
+
+    /* Make sure `nscd' et al. are linked against `libssp'.  */
+    ./stack-protector-link.patch
   ];
 
   configureFlags = [
     "--enable-add-ons"
     "--with-headers=${kernelHeaders}/include"
-
-    /* Make sure `nscd' et al. are linked against `libssp'.  */
-    "LDFLAGS=-fstack-protector"
-
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
     "--host=${cross.config}"
