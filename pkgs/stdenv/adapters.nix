@@ -130,12 +130,21 @@ rec {
             # And the same for propagatedBuildInputs.
             buildDrv = stdenv.mkDerivation args;
 
+            # Temporary expression until the cross_renaming, to handle the
+            # case of pkgconfig given as buildInput, but to be used as
+            # buildNativeInput.
+            hostAsBuildDrv = drv: builtins.unsafeDiscardStringContext
+                drv.buildDrv.drvPath == builtins.unsafeDiscardStringContext
+                drv.hostDrv.drvPath;
+            nativeInputsFromBuildInputs = stdenv.lib.filter (hostAsBuildDrv) buildInputs;
+
             # We should overwrite the input attributes in hostDrv, to overwrite
             # the defaults for only-native builds in the base stdenv
             hostDrv = if (cross == null) then buildDrv else
                 stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
                     buildNativeInputs = buildNativeInputsDrvs
+                      ++ nativeInputsFromBuildInputs
                       ++ [ gccCross binutilsCross ] ++
                       stdenv.lib.optional selfNativeBuildInput buildDrv;
                     buildInputs = buildInputsDrvs;

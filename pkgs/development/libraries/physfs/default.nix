@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "072hqprni4vf4ax6b659s2xxrbz0y6iziarsczawbhi69m4azpyb";
   };
 
-  buildInputs = [ cmake ];
+  buildNativeInputs = [ cmake ];
 
   meta = {
     homepage = http://icculus.org/physfs/;

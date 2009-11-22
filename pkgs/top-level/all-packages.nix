@@ -183,6 +183,8 @@ let
         }
       else stdenvCross;
 
+  forceBuildDrv = drv : drv // { hostDrv = drv.buildDrv; };
+
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
@@ -1776,7 +1778,6 @@ let
   }));
 
   gcc43_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.3) {
-    #stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs cross;
     binutilsCross = binutilsCross cross;
     glibcCross = glibcCross cross;
@@ -1786,18 +1787,18 @@ let
   };
 
   gccCrossStageStatic = cross: wrapGCCCross {
-    gcc = (gcc43_realCross cross).override {
+    gcc = forceBuildDrv ((gcc43_realCross cross).override {
         crossStageStatic = true;
         langCC = false;
         glibcCross = null;
-    };
+    });
     libc = null;
     binutils = binutilsCross cross;
     inherit cross;
   };
 
   gccCrossStageFinal = cross: wrapGCCCross {
-    gcc = gcc43_realCross cross;
+    gcc = forceBuildDrv (gcc43_realCross cross);
     libc = glibcCross cross;
     binutils = binutilsCross cross;
     inherit cross;
@@ -2220,12 +2221,12 @@ let
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
     
-    import ../build-support/gcc-cross-wrapper {
+    forceBuildDrv (import ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
       noLibc = (libc == null);
       inherit stdenv gcc binutils libc shell name cross;
-    };
+    });
 
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
   # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
@@ -2605,10 +2606,10 @@ let
       inherit fetchurl stdenv noSysDirs;
     });
 
-  binutilsCross = cross : import ../development/tools/misc/binutils {
+  binutilsCross = cross : forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl cross;
       noSysDirs = true;
-  };
+  });
 
   bison = bison23;
 
@@ -2885,7 +2886,7 @@ let
      cross_renaming: we should make all programs use pkgconfig as
      buildNativeInput after the renaming.
      */
-  pkgconfig = pkgconfigReal // { hostDrv = pkgconfigReal.buildDrv; };
+  pkgconfig = forceBuildDrv pkgconfigReal;
 
   radare = import ../development/tools/analysis/radare {
     inherit stdenv fetchurl pkgconfig libusb readline gtkdialog python
@@ -3427,26 +3428,28 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc29Cross = cross : makeOverridable (import ../development/libraries/glibc-2.9) {
-    inherit stdenv fetchurl cross;
+  glibc29Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
+    inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
-  };
+  });
+
+  glibcCross = cross: glibc29Cross cross;
 
   glibc211 = makeOverridable (import ../development/libraries/glibc-2.11) {
     inherit fetchurl stdenv kernelHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc211Cross = cross : makeOverridable (import ../development/libraries/glibc-2.11) {
+  glibc211CrossReal = cross : forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
     inherit stdenv fetchurl cross;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
-  };
+  });
 
-  glibcCross = cross: glibc29Cross cross;
+  glibc211Cross = cross : forceBuildDrv (glibc211CrossReal cross);
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv kernelHeaders;
@@ -5395,9 +5398,9 @@ let
 
   kernelHeaders = kernelHeaders_2_6_28;
 
-  kernelHeadersCross = cross : import ../os-specific/linux/kernel-headers/2.6.28.nix {
+  kernelHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.28.nix {
     inherit stdenv fetchurl cross perl;
-  };
+  });
 
   kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
     inherit fetchurl stdenv unifdef;

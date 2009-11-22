@@ -55,6 +55,8 @@ let
                 propagatedBuildNativeInputs = if attrs ?
                     propagatedBuildNativeInputs then
                     attrs.propagatedBuildNativeInputs else [];
+                crossConfig = if (attrs ? crossConfig) then attrs.crossConfig else
+                   null;
             in
             {
               builder = if attrs ? realBuilder then attrs.realBuilder else shell;
@@ -64,12 +66,14 @@ let
               system = result.system;
 
               # That build by the cross compiler
-              buildInputs = [];
-              propagatedBuildInputs = [];
+              buildInputs = lib.optionals (crossConfig != null) buildInputs;
+              propagatedBuildInputs = lib.optionals (crossConfig != null)
+                  propagatedBuildInputs;
               # That build by the usual native compiler
-              buildNativeInputs = buildInputs ++ buildNativeInputs;
-              propagatedBuildNativeInputs = propagatedBuildInputs ++
-                propagatedBuildNativeInputs;
+              buildNativeInputs = buildNativeInputs ++ lib.optionals
+                (crossConfig == null) buildInputs;
+              propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
+                lib.optionals (crossConfig == null) propagatedBuildInputs;
             }))
           )
           # The meta attribute is passed in the resulting attribute set,

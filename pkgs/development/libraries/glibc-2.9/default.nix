@@ -1,10 +1,11 @@
 { stdenv, fetchurl, kernelHeaders
 , installLocales ? true
 , profilingLibraries ? false
-, cross ? null
 , gccCross ? null
 }:
-
+let
+    cross = if gccCross != null then gccCross.target else null;
+in
 stdenv.mkDerivation rec {
   name = "glibc-2.9" +
     stdenv.lib.optionalString (cross != null) "-${cross.config}";
@@ -67,8 +68,6 @@ stdenv.mkDerivation rec {
     "--with-headers=${kernelHeaders}/include"
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
-    "--host=${cross.config}"
-    "--build=${stdenv.system}"
     "--with-tls"
     "--enable-kernel=2.6.0"
     "--without-fp"
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
     "--without-fp"
   ] else []);
 
-  buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
+  buildNativeInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
 
   preInstall = ''
     ensureDir $out/lib

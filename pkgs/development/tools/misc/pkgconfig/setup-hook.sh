@@ -3,4 +3,8 @@ addPkgConfigPath () {
     addToSearchPath PKG_CONFIG_PATH $1/share/pkgconfig
 }
 
-envHooks=(${envHooks[@]} addPkgConfigPath)
+if test -n "$crossConfig"; then
+    crossEnvHooks=(${crossEnvHooks[@]} addPkgConfigPath)
+else
+    envHooks=(${envHooks[@]} addPkgConfigPath)
+fi

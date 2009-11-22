@@ -9,17 +9,24 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ libtool gmp ];
-  propagatedBuildNativeInputs = [readline gawk];
+  buildInputs = [ libtool ];
+  propagatedBuildInputs = [ readline gmp libtool ];
+  propagatedBuildNativeInputs = [ gawk ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   '';
 
-  NIX_DEBUG=1;
-
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+  '';
+
+  # Guile needs patching to preset results for the configure tests
+  # about pthreads, which work only in native builds.
+  preConfigure = ''
+    if test -n "$crossConfig"; then
+      configureFlags="--with-threads=no $configureFlags"
+    fi
   '';
 
   doCheck = true;

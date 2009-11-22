@@ -6,7 +6,7 @@
 # variables so that the compiler and the linker just "work".
 
 { name ? "", stdenv, nativeTools, nativeLibc, noLibc ? false, nativePrefix ? ""
-, gcc ? null, libc ? null, binutils ? null, shell ? "", cross ? ""
+, gcc ? null, libc ? null, binutils ? null, shell ? "", cross
 }:
 
 assert nativeTools -> nativePrefix != "";
@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     };
 
   passthru = {
-    inherit cross;
+    target = cross;
   };
 }

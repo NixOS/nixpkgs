@@ -78,7 +78,7 @@ stdenv.mkDerivation ({
     
   inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
     binutilsCross glibcCross;
-  crossConfig = if (cross != null) then cross.config else null;
+  targetConfig = if (cross != null) then cross.config else null;
 
   buildInputs = [texinfo gmp mpfr]
     ++ (optionals langTreelang [bison flex])

@@ -124,6 +124,7 @@ if test -z "$SHELL"; then echo "SHELL not set"; exit 1; fi
 
 # Hack: run gcc's setup hook.
 envHooks=()
+crossEnvHooks=()
 if test -f $NIX_GCC/nix-support/setup-hook; then
     source $NIX_GCC/nix-support/setup-hook
 fi
@@ -203,9 +204,15 @@ for i in $nativePkgs; do
     addToNativeEnv $i
 done
 
-crossEnvHooks=()
 addToCrossEnv() {
     local pkg=$1
+
+    # Some programs put important build scripts (freetype-config and similar)
+    # into their hostDrv bin path. Intentionally these should go after
+    # the nativePkgs in PATH.
+    if test -d $1/bin; then
+        addToSearchPath _PATH $1/bin
+    fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
     for i in "${crossEnvHooks[@]}"; do

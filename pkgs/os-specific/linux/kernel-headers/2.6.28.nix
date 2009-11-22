@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
   };
 
-  crossConfig = if (cross != null) then cross.config else null;
+  targetConfig = if (cross != null) then cross.config else null;
 
   platform = 
     if cross != null then cross.arch else
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    if test -n "$crossConfig"; then
+    if test -n "$targetConfig"; then
        export ARCH=$platform
     fi
     make mrproper headers_check

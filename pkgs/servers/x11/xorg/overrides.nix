@@ -30,6 +30,7 @@ in
   libxcb = attrs : attrs // {
     # I only remove python from the original, and add xproto. I don't know how
     # to achieve that referring to attrs.buildInputs.
+    # I should use: builtins.unsafeDiscardStringContext
     buildInputs = [args.pkgconfig args.libxslt xorg.libpthreadstubs /*xorg.python*/
         xorg.libXau xorg.xcbproto xorg.libXdmcp ] ++ [ xorg.xproto ];
     buildNativeInputs = [ args.python ];

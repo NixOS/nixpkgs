@@ -40,7 +40,7 @@ if test "$noSysDirs" = "1"; then
         export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
     done
 
-    if test -n "$crossConfig"; then
+    if test -n "$targetConfig"; then
         if test -z "$crossStageStatic"; then
             extraXCFlags="-B${glibcCross}/lib -idirafter ${glibcCross}/include"
             extraXLDFlags="-L${glibcCross}/lib"
@@ -71,7 +71,7 @@ if test "$noSysDirs" = "1"; then
             )
     fi
 
-    if test -n "$crossConfig" -a "$crossStageStatic" == 1; then
+    if test -n "$targetConfig" -a "$crossStageStatic" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
         # limits.h in this stagae
         makeFlagsArray=( \
@@ -86,7 +86,7 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if test -n "$crossConfig"; then
+if test -n "$targetConfig"; then
     # The host strip will destroy everything in the target binaries otherwise
     dontStrip=1
 fi
@@ -127,7 +127,7 @@ postInstall() {
 }
 
 
-if test -z "$crossConfig"; then
+if test -z "$targetConfig"; then
     if test -z "$profiledCompiler"; then
         buildFlags="bootstrap $buildFlags"
     else    
