@@ -69,6 +69,7 @@ doSubstitute() {
         -e "s^@gcc@^$gcc^g" \
         -e "s^@gccProg@^$gccProg^g" \
         -e "s^@binutils@^$binutils^g" \
+        -e "s^@coreutils@^$coreutils^g" \
         -e "s^@libc@^$libc^g" \
         -e "s^@ld@^$ldPath/ld^g" \
         < "$src" > "$dst" 
