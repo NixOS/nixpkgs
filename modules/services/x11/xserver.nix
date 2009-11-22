@@ -209,7 +209,7 @@ in
       };
 
       startGnuPGAgent = mkOption {
-        default = true;
+        default = false;
         description = ''
           Whether to start the GnuPG agent when you log in.  The GnuPG agent
           remembers private keys for you so that you don't have to type in
