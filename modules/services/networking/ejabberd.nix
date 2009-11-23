@@ -59,7 +59,7 @@ in
     jobs.ejabberd =
       { description = "EJabberd server";
 
-        startOn = "started network-interface";
+        startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 	
 	environment = {
