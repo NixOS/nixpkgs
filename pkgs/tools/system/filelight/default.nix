@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   configureFlags = "--without-debug --without-arts";
   
   preConfigure = ''
-    sed -e '/sys_lib_\(dl\)\{0,1\}search_path_spec=/d' -i configure
+    sed -e 's/.*sys_lib_\(dl\)\{0,1\}search_path_spec=.*/:/' -i configure
     sed -e '/X_LDFLAGS=/d' -i configure
   '';
 
