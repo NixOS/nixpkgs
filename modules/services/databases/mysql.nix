@@ -83,7 +83,7 @@ in
     jobs.mysql =
       { description = "MySQL server";
 
-        startOn = "started filesystems";
+        startOn = "started network-interfaces";
 
         preStart =
           ''

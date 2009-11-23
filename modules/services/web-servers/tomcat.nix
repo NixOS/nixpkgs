@@ -100,11 +100,11 @@ in
         description = "Tomcat user";
         home = "/homeless-shelter";
       };
-      
+            
     jobs.tomcat =
       { description = "Apache Tomcat server";
 
-        startOn = "started network-interface";
+        startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
         preStart =
