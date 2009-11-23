@@ -71,6 +71,6 @@ rec {
   # Quickly create a set of symlinks to derivations.
   # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
-    (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
+    (stdenv.lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
 }
