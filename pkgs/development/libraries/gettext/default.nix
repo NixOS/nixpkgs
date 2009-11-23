@@ -10,6 +10,17 @@ stdenv.mkDerivation (rec {
 
   configureFlags = "--disable-csharp";
 
+  # On cross building, gettext supposes that the wchar.h from libc
+  # does not fulfill gettext needs, so it tries to work with its
+  # own wchar.h file, which does not cope well with the system's
+  # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+  preConfigure = ''
+    if test -n "$crossConfig"; then
+      echo gl_cv_func_wcwidth_works=yes > cachefile
+      configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
+    fi
+  '';
+
   meta = {
     description = "GNU gettext, a well integrated set of translation tools and documentation";
 
