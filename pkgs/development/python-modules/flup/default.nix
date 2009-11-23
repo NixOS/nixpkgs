@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, setuptools }:
+{ stdenv, fetchurl, python, setuptools, ... }:
 
 stdenv.mkDerivation rec {
   name = "flup-r2311";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python setuptools ];
+
+  phaseNames = ["addInputs" "createPythonInstallationTarget" "installPythonPackage"];
 
   meta = {
     description = "FastCGI Python module set";

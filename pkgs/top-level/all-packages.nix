@@ -1375,6 +1375,10 @@ let
     inherit fetchurl stdenv openssl;
   };
 
+  socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
+    inherit fetchurl stdenv openssl;
+  };
+
   sudo = import ../tools/security/sudo {
     inherit fetchurl stdenv coreutils pam groff;
   };
@@ -4710,7 +4714,7 @@ let
     inherit fetchurl stdenv python db4;
   };
 
-  flup = import ../development/python-modules/flup {
+  flup = builderDefsPackage ../development/python-modules/flup {
     inherit fetchurl stdenv;
     python = python25;
     setuptools = setuptools.passthru.function {python = python25;};
@@ -5518,8 +5522,8 @@ let
       inherit fetchurl stdenv kernel ncurses fxload;
     };
 
-    kqemu = import ../os-specific/linux/kqemu/1.4.0pre1.nix {
-      inherit fetchurl stdenv kernel perl;
+    kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
+      inherit kernel perl;
     };
 
     splashutils =

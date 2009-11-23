@@ -4,7 +4,7 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.attrByPath ["version"] "" args; 
+  version = "11"; 
   buildInputs = with args; [
     unzip
   ];
