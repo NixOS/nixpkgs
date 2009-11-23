@@ -147,8 +147,14 @@ rec {
                       ++ nativeInputsFromBuildInputs
                       ++ [ gccCross binutilsCross ] ++
                       stdenv.lib.optional selfBuildNativeInput buildDrv;
-                    buildInputs = buildInputsDrvs;
-                    propagatedBuildInputs = propagatedBuildInputsDrvs;
+
+                    # Cross-linking dynamic libraries, every buildInput should
+                    # be propagated because ld needs the -rpath-link to find
+                    # any library needed to link the program dynamically at
+                    # loader time. ld(1) explains it.
+                    buildInputs = [];
+                    propagatedBuildInputs = propagatedBuildInputsDrvs +
+                      buildInputsDrvs;
                     propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
 
                     crossConfig = cross.config;
