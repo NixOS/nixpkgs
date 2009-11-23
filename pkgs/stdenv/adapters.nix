@@ -153,7 +153,7 @@ rec {
                     # any library needed to link the program dynamically at
                     # loader time. ld(1) explains it.
                     buildInputs = [];
-                    propagatedBuildInputs = propagatedBuildInputsDrvs +
+                    propagatedBuildInputs = propagatedBuildInputsDrvs ++
                       buildInputsDrvs;
                     propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
 
