@@ -170,7 +170,7 @@ findInputs() {
 
     if test -f $pkg/nix-support/$propagatedBuildInputsFile; then
         for i in $(cat $pkg/nix-support/$propagatedBuildInputsFile); do
-            findInputs $i $var
+            findInputs $i $var $propagatedBuildInputsFile
         done
     fi
 }
