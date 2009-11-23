@@ -44,6 +44,8 @@ EOF
         export CC="$crossConfig-gcc"
         export AR="$crossConfig-ar"
         export RANLIB="$crossConfig-ranlib"
+
+        dontStrip = 1
       '';
    }
    else {}))

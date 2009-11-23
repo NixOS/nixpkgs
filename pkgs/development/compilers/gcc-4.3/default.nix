@@ -39,7 +39,8 @@ let
       " --with-headers=${glibcCross}/include" +
       " --enable-__cxa_atexit" +
       " --enable-long-long" +
-      " --enable-threads=posix"
+      " --enable-threads=posix" +
+      " --enable-nls"
       );
   stageNameAddon = if (crossStageStatic) then "-stage-static" else
     "-stage-final";

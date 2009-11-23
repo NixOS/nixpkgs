@@ -80,14 +80,14 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
 
-  preInstall = ''
+  preInstall = if (cross != null) then ''
     ensureDir $out/lib
     ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-  '';
+  '' else "";
 
-  postInstall = ''
+  postInstall = if (cross != null) then ''
     rm $out/lib/libgcc_s.so.1
-  '';
+  '' else "";
 
   # Workaround for this bug:
   #   http://sourceware.org/bugzilla/show_bug.cgi?id=411

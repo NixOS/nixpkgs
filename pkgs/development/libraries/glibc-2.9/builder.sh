@@ -48,6 +48,9 @@ EOF
         export AR="${crossConfig}-ar"
         export RANLIB="${crossConfig}-ranlib"
         configureFlags="${configureFlags} --cache-file=config.cache"
+
+        # Disable the native stripping, because it breaks libc_nonshared.a
+        dontStrip=1
     fi
 }
 

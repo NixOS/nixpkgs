@@ -27,14 +27,17 @@ crossStripDirs() {
 
     if test -n "${dirs}"; then
         header "stripping (with flags $stripFlags) in $dirs"
+        # libc_nonshared.a should never be stripped, or builds will break.
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} $crossConfig-strip $stripFlags || true
         stopNest
     fi
 }
 
 crossStrip () {
+    # In cross_renaming we may rename dontCrossStrip to dontStrip, and
+    # dontStrip to dontNativeStrip.
     # TODO: strip _only_ ELF executables, and return || fail here...
-    if test -z "$dontStrip"; then
+    if test -z "$dontCrossStrip"; then
         stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
         if test -n "$stripDebugList"; then
             crossStripDirs "$stripDebugList" "${stripDebugFlags:--S}"
