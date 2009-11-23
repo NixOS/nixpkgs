@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1czhcrn6l63xhsw3fjmv88djflqxbdpxjhgmwwvscm8rv4wn7vmz";
   };
 
-  buildInputs = [ gawk ];
-  buildNativeInputs = [ makeWrapper ];
+  buildNativeInputs = [ makeWrapper gawk ];
   propagatedBuildInputs = [ readline gmp libtool ];
   selfBuildNativeInput = true;
 
