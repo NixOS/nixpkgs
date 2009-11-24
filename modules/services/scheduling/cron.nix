@@ -9,8 +9,8 @@ let
   # Put all the system cronjobs together.
   systemCronJobsFile = pkgs.writeText "system-crontab"
     ''
-      SHELL=${pkgs.bash}/bin/sh
-      PATH=${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnused}/bin:${pkgs.su}/bin
+      SHELL=${pkgs.bash}/bin/bash
+      PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
       MAILTO="${config.services.cron.mailto}"
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
