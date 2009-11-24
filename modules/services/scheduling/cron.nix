@@ -10,7 +10,7 @@ let
   systemCronJobsFile = pkgs.writeText "system-crontab"
     ''
       SHELL=${pkgs.bash}/bin/bash
-      PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
+      PATH=${config.system.path}/bin:${config.system.path}/sbin
       MAILTO="${config.services.cron.mailto}"
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
