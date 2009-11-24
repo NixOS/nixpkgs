@@ -198,13 +198,23 @@ in
         '';
       };
 
-      startSSHAgent = mkOption {
+      startOpenSSHAgent = mkOption {
         default = true;
         description = ''
-          Whether to start the SSH agent when you log in.  The SSH agent
+          Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
           remembers private keys for you so that you don't have to type in
           passphrases every time you make an SSH connection.  Use
           <command>ssh-add</command> to add a key to the agent.
+        '';
+      };
+
+      startGnuPGAgent = mkOption {
+        default = false;
+        description = ''
+          Whether to start the GnuPG agent when you log in.  The GnuPG agent
+          remembers private keys for you so that you don't have to type in
+          passphrases every time you make an SSH connection or sign/encrypt
+          data.  Use <command>ssh-add</command> to add a key to the agent.
         '';
       };
 
@@ -322,13 +332,24 @@ in
 
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
 
-    assertions = singleton
-      { assertion = config.services.hal.enable == true;
-        message = "The X server needs HAL running. Set services.hal.enable to true";
-      };
+    assertions =
+      [ { assertion = config.services.hal.enable == true;
+          message = "The X server needs HAL running. Set services.hal.enable to true";
+        }
+
+        { assertion = if cfg.startOpenSSHAgent
+                      then !cfg.startGnuPGAgent
+                      else (if cfg.startGnuPGAgent
+                            then !cfg.startOpenSSHAgent
+                            else true);
+          message =
+            "The OpenSSH agent and GnuPG agent cannot be started both.  " +
+            "Choose between `startOpenSSHAgent' and `startGnuPGAgent'.";
+        }
+      ];
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 

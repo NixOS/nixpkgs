@@ -73,6 +73,7 @@
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
   ./services/networking/gnunet.nix
+  ./services/networking/gvpe.nix
   ./services/networking/gw6c.nix
   ./services/networking/ifplugd.nix
   ./services/networking/ircd-hybrid.nix

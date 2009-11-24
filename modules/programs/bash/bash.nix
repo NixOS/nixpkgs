@@ -32,7 +32,6 @@ in
           src = ./bashrc.sh;
 
           bash = pkgs.bash;
-          systemPath = config.system.path;
           wrapperDir = config.security.wrapperDir;
           modulesTree = config.system.modulesTree;
           shellInit = config.environment.shellInit;

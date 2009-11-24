@@ -32,7 +32,7 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
-      ${optionalString cfg.startSSHAgent ''
+      ${optionalString cfg.startOpenSSHAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
             # Restart this script as a child of the SSH agent.  (It is
             # also possible to start the agent as a child that prints
@@ -40,6 +40,17 @@ let
             # that mode ssh-agent is not terminated when we log out.)
             export SSH_ASKPASS=${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass
             exec ${pkgs.openssh}/bin/ssh-agent "$0" "$sessionType"
+        fi
+      ''}
+
+      ${optionalString cfg.startGnuPGAgent ''
+        if test -z "$SSH_AUTH_SOCK"; then
+            # Restart this script as a child of the GnuPG agent.
+            exec "${pkgs.gnupg2}/bin/gpg-agent"                         \
+              --enable-ssh-support --daemon                             \
+              --pinentry-program "${pkgs.pinentry}/bin/pinentry-gtk-2"  \
+              --write-env-file "$HOME/.gpg-agent-info"                  \
+              "$0" "$sessionType"
         fi
       ''}
 
