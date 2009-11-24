@@ -6204,7 +6204,8 @@ let
   };
 
   avidemux = import ../applications/video/avidemux {
-    inherit fetchurl stdenv cmake pkgconfig libxml2 qt4 gettext SDL;
+    inherit fetchurl stdenv cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
+      alsaLib lame faac faad2 libvorbis;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
   };

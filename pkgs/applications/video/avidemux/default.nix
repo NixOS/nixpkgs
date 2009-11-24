@@ -1,5 +1,8 @@
 {stdenv, fetchurl, cmake, pkgconfig, libxml2, qt4, gtk, gettext, SDL,
-libXv, pixman, libpthreadstubs, libXau, libXdmcp }:
+libXv, pixman, libpthreadstubs, libXau, libXdmcp, libxslt, x264,
+alsaLib, lame, faac, faad2, libvorbis }:
+
+assert stdenv ? glibc;
 
 stdenv.mkDerivation {
   name = "avidemux-2.5.1";
@@ -10,15 +13,28 @@ stdenv.mkDerivation {
   };
   
   buildInputs = [ cmake pkgconfig libxml2 qt4 gtk gettext SDL libXv
-    pixman libpthreadstubs libXau libXdmcp ];
+    pixman libpthreadstubs libXau libXdmcp libxslt x264 alsaLib 
+    lame faac faad2 libvorbis ];
 
-  cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.gcc.libc}/include" +
+  cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include" +
     " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
     " -DSDL_INCLUDE_DIR=${SDL}/include/SDL" +
     " -DCMAKE_SKIP_BUILD_RPATH=ON" +
     " -DCMAKE_BUILD_TYPE=Release";
 
-  NIX_LDFLAGS="-lxml2 -lXv -lSDL -lQtGui -lQtCore";
+  NIX_LDFLAGS="-lxml2 -lXv -lSDL -lQtGui -lQtCore -lpthread";
+
+  postInstall = ''
+    cd $NIX_BUILD_TOP/$sourceRoot
+    mkdir build_plugins
+    cd build_plugins
+    cmake $cmakeFlags -DAVIDEMUX_INSTALL_PREFIX=$out \
+      -DAVIDEMUX_SOURCE_DIR=$NIX_BUILD_TOP/$sourceRoot \
+      -DAVIDEMUX_CORECONFIG_DIR=$NIX_BUILD_TOP/$sourceRoot/build/config ../plugins
+
+    make
+    make install
+  '';
 
   meta = { 
     homepage = http://fixounet.free.fr/avidemux/;
