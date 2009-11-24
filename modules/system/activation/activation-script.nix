@@ -89,8 +89,10 @@ let
       # (Upstart 0.6 apparently uses nscd to do some name lookups,
       # resulting in it holding some mmap mapping to deleted files in
       # /var/run/nscd.)
-      mkdir -p /var/run/nscd
-      ${pkgs.utillinux}/bin/mount -t tmpfs -o "mode=755" none /var/run/nscd
+      if [ ! -e /var/run/nscd ]; then
+          mkdir -p /var/run/nscd
+          ${pkgs.utillinux}/bin/mount -t tmpfs -o "mode=755" none /var/run/nscd
+      fi
 
       mkdir -m 0755 -p /var/log
 
