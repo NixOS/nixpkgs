@@ -138,7 +138,7 @@ in
             # database is up, but it requires a `postgres' user to
             # exist.  And we can't call `createuser' before the
             # database is running.
-            ${run} -c '${postgresql}/bin/pg_ctl start'
+            ${run} -c '${postgresql}/bin/pg_ctl start -o "${toString flags}"'
 
             # So wait until the server is running.
             while ! ${run} -c '${postgresql}/bin/pg_ctl status'; do
