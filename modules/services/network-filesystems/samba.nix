@@ -56,8 +56,8 @@ let
     { name = "samba-${appName}";
       description = "Samba Service daemon ${appName}";
 
-      startOn = "samba/started";
-      stopOn = "samba-control/stop";
+      startOn = "started samba";
+      stopOn = "stopping samba-control";
 
       exec = "${samba}/sbin/${appName} ${args}";
     };
@@ -168,8 +168,8 @@ in
       { name = "samba";
         description = "Samba server";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         preStart = setupScript;
       };

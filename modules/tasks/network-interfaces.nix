@@ -135,7 +135,7 @@ in
     jobs.networkInterfaces = 
       { name = "network-interfaces";
 
-        startOn = "udev";
+        startOn = "started udev";
 
         preStart =
           ''
@@ -178,6 +178,11 @@ in
 
             # Run any user-specified commands.
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands} || true
+
+            # Emit the ip-up event (e.g. to start ntpd).
+            ${optionalString (cfg.interfaces != []) ''
+              initctl emit -n ip-up
+            ''}
           '';
 
         postStop =

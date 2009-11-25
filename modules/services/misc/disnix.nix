@@ -39,8 +39,7 @@ in
     jobs.disnix =
       { description = "Disnix server";
 
-        startOn = "dbus";
-        stopOn = "shutdown";
+        startOn = "started dbus";
 
         script =
           ''    

@@ -159,7 +159,6 @@ in
 
     jobs.udev =
       { startOn = "startup";
-        stopOn = "shutdown";
 
         environment = { UDEV_CONFIG_FILE = conf; };
 
@@ -169,9 +168,6 @@ in
 
             mkdir -p /var/lib/udev/rules.d
 
-            # Get rid of possible old udev processes.
-            ${procps}/bin/pkill -u root "^udevd$" || true
-
             # Do the loading of additional stage 2 kernel modules.
             # Maybe this isn't the best place...
             for i in ${toString config.boot.kernelModules}; do
@@ -179,32 +175,24 @@ in
                 ${modprobe}/sbin/modprobe $i || true
             done
 
-            # Start udev.
             mkdir -p /dev/.udev # !!! bug in udev?
-            ${udev}/sbin/udevd --daemon
+          '';
 
+        daemonType = "fork";
+
+        exec = "${udev}/sbin/udevd --daemon";
+
+        postStart =
+          ''
             # Let udev create device nodes for all modules that have already
             # been loaded into the kernel (or for which support is built into
             # the kernel).
             ${udev}/sbin/udevadm trigger
             ${udev}/sbin/udevadm settle # wait for udev to finish
 
-            # Kill udev, let Upstart restart and monitor it.  (This is nasty,
-            # but we have to run `udevadm trigger' first.  Maybe we can use
-            # Upstart's `binary' keyword, but it isn't implemented yet.)
-            if ! ${procps}/bin/pkill -u root "^udevd$"; then
-                echo "couldn't stop udevd"
-            fi
-
-            while ${procps}/bin/pgrep -u root "^udevd$"; do
-                sleep 1
-            done
-
-            initctl emit new-devices
+            initctl emit -n new-devices
           '';
-
-        exec = "${udev}/sbin/udevd";
-
+        
       };
 
   };

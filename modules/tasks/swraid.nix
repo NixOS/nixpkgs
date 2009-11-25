@@ -13,7 +13,7 @@ in
 {
 
   jobs.swraid =
-    { startOn = "udev"; # !!! or on "new-devices"
+    { startOn = "started udev or new-devices";
       
       script =
         ''
@@ -25,11 +25,13 @@ in
       
           # Scan /proc/partitions for RAID devices.
           ${mdadm}/sbin/mdadm --examine --brief --scan -c partitions > ${tempConf}
+          
+          if ! test -s ${tempConf}; then exit 0; fi
       
           # Activate each device found.
           ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
       
-          initctl emit new-devices
+          initctl emit -n new-devices
         '';
 
       task = true;        

@@ -10,6 +10,7 @@ let
   requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
       config.system.sbin.mount # must take precedence over util-linux
+      config.system.build.upstart
       config.environment.nix
       pkgs.acl
       pkgs.attr
@@ -53,7 +54,6 @@ let
       pkgs.sysvtools
       pkgs.time
       pkgs.udev
-      pkgs.upstart
       pkgs.usbutils
       pkgs.utillinux
     ];

@@ -48,10 +48,9 @@ in
   
   config = mkIf cfg.enable {
 
-    # !!! move pmutils somewhere else
-    environment.systemPackages = [hal pkgs.pmutils];
+    environment.systemPackages = [ hal ];
 
-    services.hal.packages = [hal pkgs.hal_info];
+    services.hal.packages = [ hal pkgs.hal_info ];
 
     users.extraUsers = singleton
       { name = "haldaemon";
@@ -67,10 +66,7 @@ in
     jobs.hal =
       { description = "HAL daemon";
         
-        # !!! TODO: make sure that HAL starts after acpid,
-        # otherwise hald-addon-acpi will grab /proc/acpi/event.
-        startOn = if config.powerManagement.enable then "acpid" else "dbus";
-        stopOn = "shutdown";
+        startOn = "started dbus" + optionalString config.services.acpid.enable " and started acpid";
 
         environment =
           { # !!! HACK? These environment variables manipulated inside
@@ -99,23 +95,14 @@ in
             mkdir -m 0755 -p /var/run/hald
             
             rm -f /var/cache/hald/fdi-cache
-
-            # For some weird reason HAL sometimes fails to start at
-            # boot time, which seems to be timing-dependent.  As a
-            # temporary workaround, sleep for a while here.
-            sleep 2
-
-            # !!! Hack: start the daemon here to make sure it's
-            # running when the Upstart job reaches the "running"
-            # state.  Should be fixable in Upstart 0.6.
-            ${hal}/sbin/hald --use-syslog # --verbose=yes 
           '';
 
-        postStop =
-          '' 
-            pid=$(cat /var/run/hald/pid || true)
-            test -n "$pid" && kill "$pid"
-         '';
+        daemonType = "fork";
+
+        # The `PATH=' works around a bug in HAL: it concatenates
+        # its libexec directory to $PATH, but using a 512-byte
+        # buffer.  So if $PATH is too long it fails.
+        script = "PATH= exec ${hal}/sbin/hald --use-syslog";
       };
 
     services.udev.packages = [hal];

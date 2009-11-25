@@ -98,10 +98,7 @@ in
             sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
           }
           # GRUB 1.97 doesn't support gzipped XPMs.
-          else pkgs.fetchurl {
-            url = http://www.gnu.org/graphics/winkler-gnu-blue.png;
-            sha256 = "0y8fvxalwxyid4k438k7c21bnv728qjsb92rqfapsmpv2bcj7f6k";
-          };
+          else ./winkler-gnu-blue-640x480.png;
         example = null;
         description = ''
           Background image used for GRUB.  It must be a 640x480,

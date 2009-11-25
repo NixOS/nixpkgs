@@ -5,6 +5,7 @@
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
+  ./config/power-management.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
@@ -128,9 +129,9 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/etc/etc.nix
-  ./system/upstart-events/ctrl-alt-delete.nix
-  ./system/upstart-events/halt.nix
-  ./system/upstart-events/maintenance-shell.nix
+  ./system/upstart-events/control-alt-delete.nix
+  ./system/upstart-events/runlevel.nix
+  ./system/upstart-events/shutdown.nix
   ./system/upstart/upstart.nix
   ./tasks/filesystems.nix
   ./tasks/kbd.nix

@@ -66,7 +66,6 @@ in
       { description = "PulseAudio system-wide server";
 
         startOn = "startup";
-        stopOn = "shutdown";
 
         preStart =
           ''

@@ -12,8 +12,8 @@ let
   defaultConfig =
     ''
       [Shutdown]
-      HaltCmd=${pkgs.upstart}/sbin/halt
-      RebootCmd=${pkgs.upstart}/sbin/reboot
+      HaltCmd=${config.system.build.upstart}/sbin/halt
+      RebootCmd=${config.system.build.upstart}/sbin/reboot
       ${optionalString (config.system.boot.loader.id == "grub") ''
         BootManager=Grub
       ''}
@@ -26,6 +26,8 @@ let
 
       [X-:*-Core]
       ServerCmd=${dmcfg.xserverBin} ${dmcfg.xserverArgs}
+      # The default timeout (15) is too short in a heavily loaded boot process.
+      ServerTimeout=60
       # Needed to prevent the X server from dying on logout and not coming back:
       TerminateServer=true
 

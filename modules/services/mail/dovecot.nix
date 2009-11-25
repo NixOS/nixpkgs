@@ -116,7 +116,7 @@ in
     jobs.dovecot =
       { description = "Dovecot IMAP/POP3 server";
 
-        startOn = "${startingDependency}/started";
+        startOn = "started ${startingDependency}";
 
         preStart =
           ''

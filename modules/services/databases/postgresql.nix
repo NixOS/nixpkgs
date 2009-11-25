@@ -116,20 +116,40 @@ in
     jobs.postgresql =
       { description = "PostgreSQL server";
 
-        startOn = "${startDependency}/started";
-        stopOn = "shutdown";
+        startOn = "started ${startDependency}";
+
+        environment =
+          { TZ = config.time.timeZone;
+            PGDATA = cfg.dataDir;
+          };
 
         preStart =
           ''
+            # Initialise the database.
             if ! test -e ${cfg.dataDir}; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R postgres ${cfg.dataDir}
-                ${run} -c '${postgresql}/bin/initdb -D ${cfg.dataDir} -U root'
+                ${run} -c '${postgresql}/bin/initdb -U root'
             fi
+            
             cp -f ${pkgs.writeText "pg_hba.conf" cfg.authentication} ${cfg.dataDir}/pg_hba.conf
+
+            # We'd like to use the `-w' flag here to wait until the
+            # database is up, but it requires a `postgres' user to
+            # exist.  And we can't call `createuser' before the
+            # database is running.
+            ${run} -c '${postgresql}/bin/pg_ctl start -o "${toString flags}"'
+
+            # So wait until the server is running.
+            while ! ${run} -c '${postgresql}/bin/pg_ctl status'; do
+                sleep 1
+            done
           '';
 
-        exec = "${run} -c '${postgresql}/bin/postgres -D ${cfg.dataDir} ${toString flags}'";
+        postStop =
+          ''
+            ${run} -c '${postgresql}/bin/pg_ctl stop -m fast'
+          '';
       };
 
   };

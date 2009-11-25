@@ -84,6 +84,16 @@ let
       mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
       mkdir -m 0700 -p /var/run/nix/remote-stores
 
+      # Use a tmpfs for /var/run/nscd to ensure that / or /var can be
+      # unmounted or at least remounted read-only during shutdown.
+      # (Upstart 0.6 apparently uses nscd to do some name lookups,
+      # resulting in it holding some mmap mapping to deleted files in
+      # /var/run/nscd.)
+      if [ ! -e /var/run/nscd ]; then
+          mkdir -p /var/run/nscd
+          ${pkgs.utillinux}/bin/mount -t tmpfs -o "mode=755" none /var/run/nscd
+      fi
+
       mkdir -m 0755 -p /var/log
 
       touch /var/log/wtmp # must exist

@@ -53,7 +53,6 @@ in
       { description = "Uptimed daemon";
 
         startOn = "startup";
-        stopOn = "shutdown";
 
         preStart =
           ''

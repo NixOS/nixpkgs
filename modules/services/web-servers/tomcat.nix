@@ -100,12 +100,12 @@ in
         description = "Tomcat user";
         home = "/homeless-shelter";
       };
-      
+            
     jobs.tomcat =
       { description = "Apache Tomcat server";
 
-        startOn = "network-interface/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''        
@@ -215,6 +215,7 @@ in
 		    then
 			for j in $i/conf/Catalina/*
 			do
+			    mkdir -p ${cfg.baseDir}/conf/Catalina/localhost
 			    ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
 			done
 		    fi
@@ -251,6 +252,7 @@ in
 		      then
 			  for j in $i/conf/Catalina/*
 			  do
+			      mkdir -p ${cfg.baseDir}/conf/Catalina/${virtualHost.name}
 			      ln -sfn $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
 			  done
 		      fi
@@ -304,13 +306,10 @@ in
 		done    
 		''
 	    else ""}
-          ''; # */
 
-        exec =
-          ''
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${pkgs.tomcat6}/bin/startup.sh; sleep 1000d'
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${pkgs.tomcat6}/bin/startup.sh'
           '';
-
+	
         postStop =
           ''
             echo "Stopping tomcat..."

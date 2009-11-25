@@ -78,8 +78,7 @@ in
 
           description = "NixOS manual";
 
-          startOn = "udev";
-          stopOn = "shutdown";
+          startOn = "started udev";
 
           exec =
             ''

@@ -81,7 +81,6 @@ in
       { name = "privoxy";
 
         startOn = "startup";
-        stopOn = "shutdown"; 
 
         preStart =
           ''

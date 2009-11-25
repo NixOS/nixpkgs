@@ -21,7 +21,6 @@ in
       { description = "Name Service Cache Daemon";
 
         startOn = "startup";
-        stopOn = "shutdown";
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
         

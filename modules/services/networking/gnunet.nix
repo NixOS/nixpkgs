@@ -194,8 +194,8 @@ in
     jobs.gnunetd =
       { description = "The GNUnet Daemon";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         preStart =
           ''

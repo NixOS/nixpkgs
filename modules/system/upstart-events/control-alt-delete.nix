@@ -3,10 +3,10 @@
 ###### implementation
 
 {
-  jobs.ctrl_alt_delete =
-    { name = "ctrl-alt-delete";
+  jobs.control_alt_delete =
+    { name = "control-alt-delete";
 
-      startOn = "ctrlaltdel";
+      startOn = "control-alt-delete";
 
       task = true;
 

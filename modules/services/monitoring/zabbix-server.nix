@@ -56,8 +56,8 @@ in
 
         description = "Zabbix server daemon";
 
-        startOn = "postgresql";
-        stopOn = "shutdown";
+        startOn = "started postgresql";
+        stopOn = "stopping postgresql";
 
         preStart =
           ''

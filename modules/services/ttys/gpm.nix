@@ -41,8 +41,7 @@ in
     jobs.gpm =
       { description = "General purpose mouse";
 
-        startOn = "udev";
-        stopOn = "shutdown";
+        startOn = "started udev";
 
         exec = "${pkgs.gpm}/sbin/gpm -m /dev/input/mice -t ${cfg.protocol} -D &>/dev/null";
       };

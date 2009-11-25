@@ -101,7 +101,6 @@ in
       { description = "fcron daemon";
 
         startOn = "startup";
-        stopOn = "shutdown";
 
         environment =
           { PATH = "/var/run/current-system/sw/bin";

@@ -76,8 +76,8 @@ in
 
             description = "Synergy client";
 
-            startOn = "network-interfaces/started";
-            stopOn = "network-interfaces/stopped";
+            startOn = "started network-interfaces";
+            stopOn = "stopping network-interfaces";
 
             exec = "${pkgs.synergy}/bin/synergyc ${if cfgS.screenName == "" then "" else "-n ${cfgS.screenName}" }";
           };
@@ -89,8 +89,8 @@ in
 
             description = "Synergy server";
 
-            startOn = "network-interfaces/started";
-            stopOn = "network-interfaces/stopped";
+            startOn = "started network-interfaces";
+            stopOn = "stopping network-interfaces";
 
             exec =
               ''

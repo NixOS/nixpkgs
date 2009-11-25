@@ -16,7 +16,6 @@ let
       #! ${pkgs.stdenv.shell}
       if test "$2" = up; then
         initctl stop dhclient
-        sleep 1
         initctl start dhclient
       fi
     '';
@@ -58,8 +57,8 @@ in
     jobs.ifplugd =
       { description = "Network interface connectivity monitor";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
         exec =
           ''

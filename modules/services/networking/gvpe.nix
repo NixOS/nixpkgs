@@ -56,13 +56,13 @@ in
         '';
       };
       startOn = mkOption {
-        default = "network-interfaces/started";
+        default = "started network-interfaces";
         description = ''
           Condition to start GVPE
         '';
       };
       stopOn = mkOption {
-        default = "network-interfaces/stop";
+        default = "stopping network-interfaces";
         description = ''
           Condition to stop GVPE
         '';

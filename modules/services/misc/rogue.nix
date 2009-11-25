@@ -43,8 +43,7 @@ in
     jobs.rogue =
       { description = "Rogue dungeon crawling game";
 
-        startOn = "udev";
-        stopOn = "shutdown";
+        startOn = "started udev";
 
         extraConfig = "chdir /root";
 

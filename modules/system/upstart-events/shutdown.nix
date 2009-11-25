@@ -2,29 +2,33 @@
 
 with pkgs.lib;
 
-###### implementation
+{
 
-let
-
-  inherit (pkgs) bash utillinux;
-
-  jobFun = event:
-    { startOn = event;
+  jobs.shutdown =
+    { name = "shutdown";
 
       task = true;
+
+      environment = { MODE = "poweroff"; };
 
       script =
         ''
           set +e # continue in case of errors
+
+          ${pkgs.kbd}/bin/chvt 1
       
-          exec < /dev/tty1 > /dev/tty1 2>&1
+          exec < /dev/console > /dev/console 2>&1
           echo ""
-          echo "<<< SYSTEM SHUTDOWN >>>"
+          if test "$MODE" = maintenance; then
+              echo "[1;32m<<< Entering maintenance mode >>>[0m"
+          else
+              echo "[1;32m<<< System shutdown >>>[0m"
+          fi
           echo ""
       
-          export PATH=${utillinux}/bin:${utillinux}/sbin:$PATH
+          export PATH=${pkgs.utillinux}/bin:${pkgs.utillinux}/sbin:$PATH
       
-      
+
           # Set the hardware clock to the system time.
           echo "setting the hardware clock..."
           hwclock --systohc --utc
@@ -32,6 +36,15 @@ let
       
           # Do an initial sync just in case.
           sync
+
+
+          # Stop all Upstart jobs.
+          initctl list | while IFS=", " read jobName status rest; do
+              if test "$jobName" != shutdown -a "$status" != "stop/waiting"; then
+                  echo "stopping $jobName..."
+                  stop "$jobName"
+              fi
+          done
       
       
           # Kill all remaining processes except init and this one.
@@ -42,7 +55,20 @@ let
 
           echo "sending the KILL signal to all processes..."
           kill -KILL -1
-      
+
+
+          # If maintenance mode is requested, start a root shell, and
+          # afterwards emit the "startup" event to bring everything
+          # back up.
+          if test "$MODE" = maintenance; then
+              echo ""
+              echo "[1;32m<<< Maintenance shell >>>[0m"
+              echo ""
+              while ! ${pkgs.bash}/bin/bash --login; do true; done
+              initctl emit -n startup
+              exit 0
+          fi
+                
       
           # Unmount helper functions.
           getMountPoints() {
@@ -99,9 +125,8 @@ let
           sync
       
       
-          # Either reboot or power-off the system.  Note that the "halt"
-          # event also does a power-off.
-          if test ${event} = reboot; then
+          # Either reboot or power-off the system.
+          if test "$MODE" = reboot; then
               echo "rebooting..."
               sleep 1
               exec reboot -f
@@ -113,9 +138,4 @@ let
         '';
     };
 
-in
-
-{
-  jobs = listToAttrs (map (n: nameValuePair "sys-${n}" (jobFun n))
-    [ "reboot" "halt" "system-halt" "power-off" ] );
 }

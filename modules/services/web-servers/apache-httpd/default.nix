@@ -582,8 +582,7 @@ in
 
         description = "Apache HTTPD";
 
-        startOn = "${startingDependency}/started";
-        stopOn = "shutdown";
+        startOn = "started ${startingDependency}";
 
         environment =
           { # !!! This should be added in test-instrumentation.nix.  It
@@ -613,7 +612,14 @@ in
             done
           '';
 
-        exec = "${httpd}/bin/httpd -f ${httpdConf} -DNO_DETACH";
+        daemonType = "fork";
+
+        exec = "${httpd}/bin/httpd -f ${httpdConf}";
+
+        preStop =
+          ''
+            ${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop
+          '';
       };
 
   };

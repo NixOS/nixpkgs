@@ -7,7 +7,7 @@
   config = {
 
     jobs.lvm =
-      { startOn = " udev"; # !!! or on new-devices
+      { startOn = "started udev or new-devices";
 
         script =
           ''
@@ -23,7 +23,7 @@
             # make them appear in /dev.
             ${pkgs.lvm2}/sbin/vgchange --available y
 
-            initctl emit new-devices
+            initctl emit -n new-devices
           '';
 
         task = true;

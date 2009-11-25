@@ -67,7 +67,6 @@ in
       { description = "at daemon (atd)";
 
         startOn = "startup";
-        stopOn = "shutdown";
 
         preStart =
           ''
@@ -97,11 +96,11 @@ in
                 chown atd:atd "$jobdir"/.SEQ && \
                 chmod 600 "$jobdir"/.SEQ
             fi
-
-            # `atd' doesn't have a no-fork flag, so start it here. !!!
-            # Fix this once we have Upstart 0.6.
-            ${at}/sbin/atd
           '';
+
+        daemonType = "fork";
+
+        exec = "${at}/sbin/atd";
 
         postStop =
           ''

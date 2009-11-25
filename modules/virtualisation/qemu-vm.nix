@@ -9,6 +9,8 @@
 
 {config, pkgs, ...}:
 
+with pkgs.lib;
+
 let
 
   vmName = config.networking.hostName;
@@ -16,7 +18,7 @@ let
   options = {
 
     virtualisation.diskImage =
-      pkgs.lib.mkOption {
+      mkOption {
         default = "./${vmName}.qcow2";
         description =
           ''
@@ -90,7 +92,7 @@ in
   # where the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
-  fileSystems = pkgs.lib.mkOverride 50 {}
+  fileSystems = mkOverride 50 {}
     [ { mountPoint = "/";
         device = "/dev/vda";
       }
@@ -119,6 +121,13 @@ in
 
   networking.defaultGateway = "10.0.2.2";
 
+  networking.nameservers = [ "10.0.2.3" ];
+
+  networking.interfaces = singleton
+    { name = "eth0";
+      ipAddress = "10.0.2.15";
+    };
+
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
       ensureDir $out/bin
@@ -135,11 +144,11 @@ in
 
   # When building a regular system configuration, override whatever
   # video driver the host uses.
-  services.xserver.videoDriver = pkgs.lib.mkOverride 50 {} null;
-  services.xserver.videoDrivers = pkgs.lib.mkOverride 50 {} [ "cirrus" "vesa" ];
-  services.xserver.defaultDepth = pkgs.lib.mkOverride 50 {} 0;
-  services.xserver.resolutions = pkgs.lib.mkOverride 50 {} [];
+  services.xserver.videoDriver = mkOverride 50 {} null;
+  services.xserver.videoDrivers = mkOverride 50 {} [ "cirrus" "vesa" ];
+  services.xserver.defaultDepth = mkOverride 50 {} 0;
+  services.xserver.resolutions = mkOverride 50 {} [];
 
   # Wireless won't work in the VM.
-  networking.enableWLAN = pkgs.lib.mkOverride 50 {} false;
+  networking.enableWLAN = mkOverride 50 {} false;
 }

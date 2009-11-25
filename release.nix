@@ -30,10 +30,11 @@ let
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
           };
+          inherit iso;
         }
         ''
           ensureDir $out/nix-support
-          echo "file iso" ${iso}/iso/*.iso* >> $out/nix-support/hydra-build-products
+          echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''; # */
 
 

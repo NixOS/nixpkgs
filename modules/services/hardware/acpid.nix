@@ -60,11 +60,11 @@ in
 
   options = {
   
-    powerManagement = {
+    services.acpid = {
 
       enable = mkOption {
         default = false;
-        description = "Whether to enable power management (ACPI daemon)";
+        description = "Whether to enable the ACPI daemon.";
       };
       
     };
@@ -74,13 +74,12 @@ in
 
   ###### implementation
 
-  config = mkIf config.powerManagement.enable {
+  config = mkIf config.services.acpid.enable {
 
     jobs.acpid =
       { description = "ACPI daemon";
 
-        startOn = "udev";
-        stopOn = "shutdown";
+        startOn = "started udev";
 
         exec = "${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}";
       };

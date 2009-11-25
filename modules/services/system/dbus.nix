@@ -113,8 +113,7 @@ in
       };
 
     jobs.dbus =
-      { startOn = "udev";
-        stopOn = "shutdown";
+      { startOn = "started udev";
 
         preStart =
           ''
@@ -125,24 +124,19 @@ in
             ${dbus.tools}/bin/dbus-uuidgen --ensure
  
             rm -f ${homeDir}/pid
-            # !!! hack - dbus should be running once this job is
-            # considered "running"; should be fixable once we have
-            # Upstart 0.6.
-            ${dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf
           '';
+
+        daemonType = "fork";
+
+        exec = "${dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf";
 
         postStop =
           ''
-            pid=$(cat ${homeDir}/pid)
-            if test -n "$pid"; then
-                kill $pid
-            fi
-
             # !!! Hack: doesn't belong here.
-            pid=$(cat /var/run/ConsoleKit/pid)
+            pid=$(cat /var/run/ConsoleKit/pid || true)
             if test -n "$pid"; then
-                kill $pid
-                rm /var/run/ConsoleKit/pid
+                kill $pid || true
+                rm -f /var/run/ConsoleKit/pid
             fi
           '';
       };

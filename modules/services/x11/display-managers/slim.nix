@@ -14,8 +14,8 @@ let
       xserver_arguments ${dmcfg.xserverArgs}
       sessions ${pkgs.lib.concatStringsSep "," (dmcfg.session.names ++ ["custom"])}
       login_cmd exec ${pkgs.stdenv.bash}/bin/sh ${dmcfg.session.script} "%session"
-      halt_cmd ${pkgs.upstart}/sbin/shutdown -h now
-      reboot_cmd ${pkgs.upstart}/sbin/shutdown -r now
+      halt_cmd ${config.system.build.upstart}/sbin/shutdown -h now
+      reboot_cmd ${config.system.build.upstart}/sbin/shutdown -r now
       ${if cfg.defaultUser != "" then "default_user " + cfg.defaultUser else ""}
       ${if cfg.hideCursor then "hidecursor true" else ""}
     '';

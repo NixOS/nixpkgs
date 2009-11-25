@@ -105,7 +105,7 @@ in
     jobs.ttyBackgrounds =
       { name = "tty-backgrounds";
 
-        startOn = "udev";
+        startOn = "started udev";
 
         preStart =
           ''

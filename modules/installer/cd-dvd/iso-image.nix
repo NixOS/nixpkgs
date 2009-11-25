@@ -2,20 +2,22 @@
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.isoImage.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
-    isoImage.isoName = pkgs.lib.mkOption {
+    isoImage.isoName = mkOption {
       default = "cd.iso";
       description = ''
         Name of the generated ISO image file.
       '';
     };
 
-    isoImage.compressImage = pkgs.lib.mkOption {
+    isoImage.compressImage = mkOption {
       default = false;
       description = ''
         Whether the ISO image should be compressed using
@@ -23,7 +25,7 @@ let
       '';
     };
 
-    isoImage.volumeID = pkgs.lib.mkOption {
+    isoImage.volumeID = mkOption {
       default = "NIXOS_BOOT_CD";
       description = ''
         Specifies the label or volume ID of the generated ISO image.
@@ -32,7 +34,7 @@ let
       '';
     };
 
-    isoImage.contents = pkgs.lib.mkOption {
+    isoImage.contents = mkOption {
       example =
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
@@ -44,7 +46,7 @@ let
       '';
     };
 
-    isoImage.storeContents = pkgs.lib.mkOption {
+    isoImage.storeContents = mkOption {
       example = [pkgs.stdenv];
       description = ''
         This option lists additional derivations to be included in the
@@ -55,20 +57,55 @@ let
   };
 
 
+  # The Grub image.
+  grubImage = pkgs.runCommand "grub_eltorito" {}
+    ''
+      ${pkgs.grub2}/bin/grub-mkimage -o tmp biosdisk iso9660 help linux linux16 sh chain gfxterm vbe png jpeg
+      cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
+    ''; # */
+
+
   # The configuration file for Grub.
   grubCfg = 
     ''
-      default 0
-      timeout 10
-      splashimage /boot/background.xpm.gz
+      set default=0
+      set timeout=10
 
-      ${config.boot.extraGrubEntries}
+      if loadfont /boot/grub/unicode.pf2; then
+        set gfxmode=640x480
+        insmod gfxterm
+        insmod vbe
+        terminal_output.gfxterm
+
+        insmod png
+        if background_image /boot/grub/splash.png; then
+          set color_normal=white/black
+          set color_highlight=black/white
+        else
+          set menu_color_normal=cyan/blue
+          set menu_color_highlight=white/blue
+        fi
+        
+      fi
+
+      ${config.boot.loader.grub.extraEntries}
     '';
   
 in
 
 {
   require = options;
+
+  boot.loader.grub.version = 2;
+
+  # Don't build the GRUB menu builder script, since we don't need it
+  # here and it causes a cyclic dependency.
+  boot.loader.grub.enable = false;
+
+  # !!! Hack - attributes expected by other modules.
+  system.build.menuBuilder = "true";
+  system.boot.loader.kernelFile = "vmlinuz";
+  environment.systemPackages = [ pkgs.grub2 ];
 
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
   # so that we don't need to know its device.
@@ -86,7 +123,7 @@ in
 
   # We need squashfs in the initrd to mount the compressed Nix store,
   # and aufs to make the root filesystem appear writable.
-  boot.extraModulePackages = (pkgs.lib.optional 
+  boot.extraModulePackages = (optional 
     (! config.boot.kernelPackages.kernel.features ? aufs) 
     config.boot.kernelPackages.aufs);
   boot.initrd.extraKernelModules = ["aufs" "squashfs"];
@@ -112,11 +149,11 @@ in
   # Individual files to be included on the CD, outside of the Nix
   # store on the CD.
   isoImage.contents =
-    [ { source = "${pkgs.grub}/lib/grub/${if pkgs.stdenv.system == "i686-linux" then "i386-pc" else "x86_64-unknown"}/stage2_eltorito";
-        target = "/boot/grub/stage2_eltorito";
+    [ { source = grubImage;
+        target = "/boot/grub/grub_eltorito";
       }
-      { source = pkgs.writeText "menu.lst" grubCfg;
-        target = "/boot/grub/menu.lst";
+      { source = pkgs.writeText "grub.cfg" grubCfg;
+        target = "/boot/grub/grub.cfg";
       }
       { source = config.boot.kernelPackages.kernel + "/vmlinuz";
         target = "/boot/vmlinuz";
@@ -124,8 +161,11 @@ in
       { source = config.system.build.initialRamdisk + "/initrd";
         target = "/boot/initrd";
       }
-      { source = config.boot.grubSplashImage;
-        target = "/boot/background.xpm.gz";
+      { source = "${pkgs.grub2}/share/grub/unicode.pf2";
+        target = "/boot/grub/unicode.pf2";
+      }
+      { source = config.boot.loader.grub.splashImage;
+        target = "/boot/grub/splash.png";
       }
       { source = config.system.build.squashfsStore;
         target = "/nix-store.squashfs";
@@ -134,31 +174,20 @@ in
         source = pkgs.runCommand "empty" {} "ensureDir $out";
         target = "/nix/store";
       }
-      { # Another quick hack: the kernel needs a systemConfig
-        # parameter in menu.lst, but the system config depends on
-        # menu.lst.  Break the cyclic dependency by having a /system
-        # symlink on the CD, and having menu.lst refer to /system.
-        source = pkgs.runCommand "system" {}
-          "ln -s ${config.system.build.toplevel} $out";
-        target = "/system";
-      }
-      { # Idem for the stage-2 init script.
-        source = pkgs.runCommand "system" {}
-          "ln -s ${config.system.build.bootStage2} $out";
-        target = "/init";
-      }
     ];
 
   # The Grub menu.
-  boot.extraGrubEntries =
+  boot.loader.grub.extraEntries =
     ''
-      title Boot from hard disk
-        root (hd0)
+      menuentry "Boot from hard disk" {
+        set root=(hd0)
         chainloader +1
+      }
     
-      title NixOS Installer / Rescue
-        kernel /boot/vmlinuz init=/init systemConfig=/system ${toString config.boot.kernelParams}
+      menuentry "NixOS Installer / Rescue" {
+        linux /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${toString config.boot.kernelParams}
         initrd /boot/initrd
+      }
     '';
 
   # Create the ISO image.
@@ -168,7 +197,7 @@ in
     inherit (config.isoImage) isoName compressImage volumeID contents;
 
     bootable = true;
-    bootImage = "/boot/grub/stage2_eltorito";
+    bootImage = "/boot/grub/grub_eltorito";
   };
 
   boot.postBootCommands =

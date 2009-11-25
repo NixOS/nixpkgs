@@ -41,6 +41,11 @@ in
         description = "Virtualhosts that ejabberd should host. Hostnames are surrounded with doublequotes and separated by commas";
       };
 
+      loadDumps = mkOption {
+        default = [];
+        description = "Configuration dump that should be loaded on the first startup";
+	example = [ ./myejabberd.dump ];
+      };
     };
     
   };
@@ -54,8 +59,12 @@ in
     jobs.ejabberd =
       { description = "EJabberd server";
 
-        startOn = "network-interface/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
+	
+	environment = {
+	  PATH = "$PATH:${pkgs.ejabberd}/sbin:${pkgs.ejabberd}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:${pkgs.gnused}/bin";
+	};
 
         preStart =
           ''
@@ -64,6 +73,7 @@ in
 
             if ! test -d ${cfg.spoolDir}
             then
+	        initialize=1
                 cp -av ${pkgs.ejabberd}/var/lib/ejabberd /var/lib
             fi
             
@@ -73,13 +83,50 @@ in
 	        cp ${pkgs.ejabberd}/etc/ejabberd/* ${cfg.confDir}
 	        sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
 	    fi
-          '';
+	    
+	    ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start
+	    
+	    ${if cfg.loadDumps == [] then "" else
+	      ''	      
+	        if [ "$initialize" = "1" ]
+	        then
+	            # Wait until the ejabberd server is available for use
+                    count=0
+                    while ! ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} status
+                    do
+                        if [ $count -eq 30 ]
+                        then
+                            echo "Tried 30 times, giving up..."
+	                    exit 1
+                        fi
 
-        exec = "${pkgs.bash}/bin/sh -c 'export PATH=$PATH:${pkgs.ejabberd}/sbin:${pkgs.coreutils}/bin:${pkgs.bash}/bin; ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start; sleep 1d'";
+                        echo "Ejabberd daemon not yet started. Waiting for 1 second..."
+                        count=$((count++))
+                        sleep 1
+                    done
+
+	            ${concatMapStrings (dump:
+		      ''
+		        echo "Importing dump: ${dump}"
+			
+			if [ -f ${dump} ]
+			then
+		            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load ${dump}
+			elif [ -d ${dump} ]
+			then
+			    for i in ${dump}/ejabberd-dump/*
+			    do
+			        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load $i
+			    done
+			fi
+		      '') cfg.loadDumps}
+	        fi
+	      ''}
+          '';
 
         postStop =
           ''        
-            ${pkgs.ejabberd}/sbin/ejabberdctl stop
+            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} stop
           '';
       };
 

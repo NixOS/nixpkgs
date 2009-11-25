@@ -5,7 +5,7 @@
 
 # Print a greeting.
 echo
-echo "<<< NixOS Stage 2 >>>"
+echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
 echo
 
 
@@ -27,7 +27,7 @@ setPath "@path@"
 # Mount special file systems.
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
-[ -s /etc/mtab ] && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
+test -s /etc/mtab && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
 rm -f /etc/mtab* # not that we care about stale locks
 mkdir -m 0755 -p /proc
 mount -n -t proc none /proc
@@ -100,15 +100,12 @@ rm -rf /var/lock
 # gone, of course.
 rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 
-if test -n "$safeMode"; then
-    mkdir -m 0755 -p /var/run
-    touch /var/run/safemode
-fi
 
-
-# Create the minimal device nodes needed before we run udev.
+# Create the minimal device nodes needed for the activation scripts
+# and Upstart.
 mknod -m 0666 /dev/null c 1 3
 mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
+mknod -m 0644 /dev/console c 5 1
 
 
 # Clear the resume device.
@@ -136,12 +133,9 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @postBootCommands@
 
-echo "starting Upstart..."
+# For debugging Upstart.
+#@shell@ --login < /dev/console > /dev/console 2>&1 &
 
-# Start Upstart's init.  We start it through the
-# /var/run/current-system symlink indirection so that we can upgrade
-# init in a running system by changing the symlink and sending init a
-# HUP signal.
-export UPSTART_CFG_DIR=/etc/event.d
-setPath "@upstartPath@"
-exec /var/run/current-system/upstart/sbin/init
+# Start Upstart's init.
+echo "starting Upstart..."
+PATH=/var/run/current-system/upstart/sbin exec init
