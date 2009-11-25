@@ -2658,7 +2658,7 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-  flex = flex2535;
+  flex = flex254a;
 
   flex2535 = import ../development/tools/parsing/flex/flex-2.5.35.nix {
     inherit fetchurl stdenv yacc m4;
