@@ -8294,10 +8294,8 @@ let
     inherit stdenv fetchurl jdk;
   };
 
-  # don't have time for the source build right now
-  # maven2
-  mvn_bin = import ../misc/maven/maven-2.nix {
-    inherit fetchurl stdenv unzip;
+  maven2 = import ../misc/maven {
+    inherit stdenv fetchurl jdk makeWrapper;
   };
 
   nix = makeOverridable (import ../tools/package-management/nix) {
