@@ -6834,6 +6834,12 @@ let
     browser = firefox35;
   };
 
+  geeqie = import ../applications/graphics/geeqie {
+    inherit fetchurl stdenv pkgconfig libpng lcms exiv2
+      intltool gettext;
+    inherit (gtkLibs) gtk;
+  };
+
   gqview = import ../applications/graphics/gqview {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
