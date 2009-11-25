@@ -2658,7 +2658,7 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-  flex = flex254a;
+  flex = flex2535;
 
   flex2535 = import ../development/tools/parsing/flex/flex-2.5.35.nix {
     inherit fetchurl stdenv yacc m4;
@@ -2672,9 +2672,11 @@ let
     inherit fetchurl stdenv yacc m4;
   };
 
-  flex254a = import ../development/tools/parsing/flex/flex-2.5.4a.nix {
+  # Note: 2.5.4a is much older than 2.5.35 but happens first when sorting
+  # alphabetically, hence the low priority.
+  flex254a = lowPrio (import ../development/tools/parsing/flex/flex-2.5.4a.nix {
     inherit fetchurl stdenv yacc;
-  };
+  });
 
   m4 = gnum4;
 
