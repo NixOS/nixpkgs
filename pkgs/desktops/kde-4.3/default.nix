@@ -218,6 +218,12 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon strigi soprano;
   };
 
+  filelight = import ./extragear/filelight {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
+    inherit kdelibs kdebase_workspace;
+    inherit automoc4 phonon qimageblitz;
+  };
+
   kdesvn = import ./extragear/kdesvn {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;

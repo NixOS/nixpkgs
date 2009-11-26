@@ -86,7 +86,7 @@ rec {
       name = "stdenv-native";
 
       preHook =
-        if system == "i686-darwin" || system == "powerpc-darwin" then prehookDarwin else
+        if system == "i686-darwin" || system == "powerpc-darwin" || system == "x86_64-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
 	if system == "i686-netbsd" then prehookNetBSD else

@@ -1,0 +1,20 @@
+diff -rc 173tourney/server-src/Mail.hs 173tourney2/server-src/Mail.hs
+*** 173tourney/server-src/Mail.hs	2009-11-05 13:00:58.971443217 +0100
+--- 173tourney2/server-src/Mail.hs	2009-11-24 10:38:38.325669644 +0100
+***************
+*** 17,23 ****
+           -> IO Bool
+  mailFrom fromAddr toAddrs subject body = do
+    (stdin,stdout,stderr,process) <- 
+!     runInteractiveCommand "/usr/sbin/sendmail -t"
+    let sendMail = do
+          hSetBinaryMode stdin False
+          hPutStrLn stdin $ "To: " ++ (concat $ intersperse ", " toAddrs)
+--- 17,23 ----
+           -> IO Bool
+  mailFrom fromAddr toAddrs subject body = do
+    (stdin,stdout,stderr,process) <- 
+!     runInteractiveCommand "sendmail -t"
+    let sendMail = do
+          hSetBinaryMode stdin False
+          hPutStrLn stdin $ "To: " ++ (concat $ intersperse ", " toAddrs)

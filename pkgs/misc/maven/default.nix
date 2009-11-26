@@ -1,16 +1,15 @@
-{stdenv, fetchurl, jdk}:
+{stdenv, fetchurl, jdk, makeWrapper}:
 
 assert jdk != null;
 
 stdenv.mkDerivation {
-	name = "maven-2.0.3";
-	mavenBinary = "mvn";
+	name = "apache-maven-2.2.1";
 	builder = ./builder.sh;
 	src = fetchurl {
-		url = http://apache.cs.uu.nl/dist/maven/binaries/maven-2.0.3-bin.tar.bz2;
-		md5 = "14b3a62c45f5c7b3a7f72f87ffadb8e0";
+		url = mirror://apache/maven/binaries/apache-maven-2.2.1-bin.tar.gz;
+		sha256 = "0xnk08ndf1jx458sr5dfr8rh7wi92kyn887vqyzjm1ka91cnb8xr";
 	};
-	makeWrapper = ../../build-support/make-wrapper/make-wrapper.sh;
 	
+        buildInputs = [makeWrapper]; 
 	inherit jdk;
 }

@@ -22,7 +22,6 @@ stdenv.mkDerivation (
 
     showBuildStats = true;
 
-    # Hack - swap checkPhase and installPhase (otherwise Stratego barfs).
     phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase ${if doCoverageAnalysis then "coverageReportPhase" else ""} finalPhase";
 
     finalPhase =

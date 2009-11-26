@@ -2,11 +2,11 @@
 , libvorbis, libogg, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "supertuxkart-0.6.1a";
+  name = "supertuxkart-0.6.2a";
 
   src = fetchurl {
-    url = "mirror://sourceforge/supertuxkart/${name}.tar.bz2";
-    sha256 = "1p4jl4v74f7ff7qkw10k48fvyg247wqzc097ds07y3pvn9a696w4";
+    url = "mirror://sourceforge/supertuxkart/${name}-src.tar.bz2";
+    sha256 = "0bdn12kg85bgcgj9shfc40k56228hysiixfaxkycgb688nhldngr";
   };
 
   buildInputs = [

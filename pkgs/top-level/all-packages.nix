@@ -739,7 +739,7 @@ let
   };
 
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
-    inherit intltool perl gettext;
+    inherit intltool perl gettext libusb;
   };
 
   gnugrep = useFromStdenv "gnugrep"
@@ -1404,6 +1404,10 @@ let
   };
 
   socat = import ../tools/networking/socat {
+    inherit fetchurl stdenv openssl;
+  };
+
+  socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
   };
 
@@ -2742,9 +2746,11 @@ let
     inherit fetchurl stdenv yacc m4;
   };
 
-  flex254a = import ../development/tools/parsing/flex/flex-2.5.4a.nix {
+  # Note: 2.5.4a is much older than 2.5.35 but happens first when sorting
+  # alphabetically, hence the low priority.
+  flex254a = lowPrio (import ../development/tools/parsing/flex/flex-2.5.4a.nix {
     inherit fetchurl stdenv yacc;
-  };
+  });
 
   m4 = gnum4;
 
@@ -3546,7 +3552,6 @@ let
     inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2 glib;
   };
 
-  # gnu scientific library
   gsl = import ../development/libraries/gsl {
     inherit fetchurl stdenv;
   };
@@ -4820,7 +4825,7 @@ let
     inherit fetchurl stdenv python db4;
   };
 
-  flup = import ../development/python-modules/flup {
+  flup = builderDefsPackage ../development/python-modules/flup {
     inherit fetchurl stdenv;
     python = python25;
     setuptools = setuptools.passthru.function {python = python25;};
@@ -5633,8 +5638,8 @@ let
       inherit fetchurl stdenv kernel ncurses fxload;
     };
 
-    kqemu = import ../os-specific/linux/kqemu/1.4.0pre1.nix {
-      inherit fetchurl stdenv kernel perl;
+    kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
+      inherit kernel perl;
     };
 
     splashutils =
@@ -6322,6 +6327,13 @@ let
     inherit fetchurl stdenv cmake libpng libtiff libjpeg panotools libxml2;
   };
 
+  avidemux = import ../applications/video/avidemux {
+    inherit fetchurl stdenv cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
+      alsaLib lame faac faad2 libvorbis;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
+  };
+
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
   };
@@ -6612,6 +6624,14 @@ let
 
   emacs = emacs23;
 
+  emacs22 = import ../applications/editors/emacs-22 {
+    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d;
+    inherit (xlibs) libXaw libXpm;
+    inherit (gtkLibs) gtk;
+    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
+    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
+  };
+
   emacs23 = import ../applications/editors/emacs-23 {
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
       libpng libjpeg libungif libtiff texinfo dbus;
@@ -6705,6 +6725,7 @@ let
     };
   });
 
+  emacs22Packages = emacsPackages emacs22;
   emacs23Packages = emacsPackages emacs23;
 
   evince = makeOverridable (import ../applications/misc/evince) {
@@ -6937,6 +6958,12 @@ let
     browser = firefox35;
   };
 
+  geeqie = import ../applications/graphics/geeqie {
+    inherit fetchurl stdenv pkgconfig libpng lcms exiv2
+      intltool gettext;
+    inherit (gtkLibs) gtk;
+  };
+
   gqview = import ../applications/graphics/gqview {
     inherit fetchurl stdenv pkgconfig libpng;
     inherit (gtkLibs) gtk;
@@ -7044,10 +7071,9 @@ let
   };
 
   inkscape = import ../applications/graphics/inkscape {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
-      popt libxml2 libxslt libpng boehmgc fontconfig
-      libsigcxx lcms boost gettext cairomm
-      python pyxml makeWrapper;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib popt
+      libxml2 libxslt libpng boehmgc libsigcxx lcms boost gettext
+      cairomm python pyxml makeWrapper intltool gsl;
     inherit (pythonPackages) lxml;
     inherit (gtkLibs) gtk glib glibmm gtkmm;
     inherit (xlibs) libXft;
@@ -8397,10 +8423,8 @@ let
     inherit stdenv fetchurl jdk;
   };
 
-  # don't have time for the source build right now
-  # maven2
-  mvn_bin = import ../misc/maven/maven-2.nix {
-    inherit fetchurl stdenv unzip;
+  maven2 = import ../misc/maven {
+    inherit stdenv fetchurl jdk makeWrapper;
   };
 
   nix = makeOverridable (import ../tools/package-management/nix) {
@@ -8413,17 +8437,12 @@ let
   };
 
   # The bleeding edge.
-  nixUnstable = nix;
-  /*
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
-    db4 = db45;
-    supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
-  */
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {

@@ -4,7 +4,7 @@ let
 
   s = import ./src-for-default.nix; 
   buildInputs = with a; [
-    perl intltool gettext
+    perl intltool gettext libusb
   ];
 in
 rec {

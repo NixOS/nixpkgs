@@ -1,5 +1,5 @@
 let lib = import ./default.nix;
-    inherit (builtins) isFunction hasAttr getAttr head tail isList isAttrs attrNames;
+    inherit (builtins) isFunction hasAttr getAttr head tail isList isAttrs isInt attrNames;
 
 in
 
@@ -348,6 +348,18 @@ rec {
       ["flags" "cfg" "mergeAttrBy" ];
 
 
+  nixType = x:
+      if isAttrs x then
+          if x ? outPath then "derivation"
+          else "aattrs"
+      else if isFunction x then "function"
+      else if isList x then "list"
+      else if x == true then "bool"
+      else if x == false then "bool"
+      else if x == null then "null"
+      else if isInt x then "int"
+      else "string";
+
   # deep, strict equality testing. This should be implemented as primop
   eqStrict = a : b :
     let eqListStrict = a : b :
@@ -355,9 +367,10 @@ rec {
       else if a == [] then true
       else eqStrict (head a) (head b) && eqListStrict (tail a) (tail b);
     in
-    if isList a && isList b then eqListStrict a b
-    else if isAttrs a && isAttrs b then
-      (eqListStrict (attrNames a) (attrNames b))
-      && (eqListStrict (lib.attrValues a) (lib.attrValues b))
-    else a == b; # FIXME !
+    if nixType a != nixType b then false
+      else if isList a then eqListStrict a b
+        else if isAttrs a then
+          (eqListStrict (attrNames a) (attrNames b))
+          && (eqListStrict (lib.attrValues a) (lib.attrValues b))
+        else a == b; # FIXME !
 }

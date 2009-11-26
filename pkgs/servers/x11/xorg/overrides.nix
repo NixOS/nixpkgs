@@ -123,7 +123,7 @@ in
   };
 
   xf86videoopenchrome = attrs: attrs // {
-    name = "xf86-video-openchrome-svn-798";
+    name = "xf86-video-openchrome-svn-816";
     src = args.fetchsvn {
       url = http://svn.openchrome.org/svn/trunk;
       sha256 = "1mhfh1n1x7fnxdbbkbz13lzd57m6xi3n9cblzgm43mz5bamacr02";

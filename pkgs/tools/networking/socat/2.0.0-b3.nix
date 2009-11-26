@@ -1,4 +1,8 @@
 args : with args; 
+let 
+  version = "2.0.0-b3"; 
+  patches = [];
+in
 rec {
   src = /* Here a fetchurl expression goes */
         fetchurl {

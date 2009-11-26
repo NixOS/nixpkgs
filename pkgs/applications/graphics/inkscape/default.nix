@@ -1,14 +1,14 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.46";
+  name = "inkscape-0.47";
 
   src = fetchurl {
-    url = "mirror://sf/inkscape/${name}.tar.gz";
-    sha256 = "0flrjqa68vnnn8lrhj86xpa6h2cyzrvjy6873v9id092f86ix1li";
+    url = "mirror://sourceforge/inkscape/${name}.tar.gz";
+    sha256 = "15wvcllq0nj69hkyanzvxbjhlq06cwabqabaa54n5n4307hrp2g5";
   };
 
-  patches = [ ./configure-python-libs.patch ./libpng-setjmp.patch ./gtk-clist.patch ]; 
+  patches = [ ./configure-python-libs.patch ]; 
 
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
@@ -17,24 +17,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pkgconfig perl perlXMLParser gtk libXft fontconfig libpng zlib popt boehmgc
+    pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
-    makeWrapper
+    makeWrapper intltool gsl
   ];
 
   configureFlags = "--with-python";
-
-  # Fix compilation on glibc 2.9 by adding missing string header
-  preConfigure = ''
-    echo "#include <string.h>" > tmp.cpp
-    cat tmp.cpp src/dom/io/uristream.cpp > src/dom/io/uristream.cpp.new
-    rm tmp.cpp
-    mv src/dom/io/uristream.cpp.new src/dom/io/uristream.cpp
-  '';
-
-  preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I./extension/script"
-  '';
 
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
@@ -46,6 +34,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  NIX_LDFLAGS = "-lX11";
+
   meta = {
     license = "GPL";
     homepage = http://www.inkscape.org;
@@ -53,7 +43,7 @@ stdenv.mkDerivation rec {
       Inkscape is a feature-rich vector graphics editor that edits
       files in the W3C SVG (Scalable Vector Graphics) file format.
 
-      If you want to import .eps files install ps2edit
+      If you want to import .eps files install ps2edit.
     '';
 
   };
