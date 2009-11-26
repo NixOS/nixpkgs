@@ -65,8 +65,8 @@ in
 
         description = "AFS client";
 
-        startOn = "network-interfaces/started";
-        stopOn = "network-interfaces/stop";
+        startOn = "start network-interfaces";
+        stopOn = "stop network-interfaces";
 
 	preStart = ''
 	  mkdir -m 0755 /afs || true
