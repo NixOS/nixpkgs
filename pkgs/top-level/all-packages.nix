@@ -2425,9 +2425,9 @@ let
   };
 
   ruby18 = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses zlib lib openssl makeOverridable gdbm;
+    inherit fetchurl stdenv readline ncurses zlib openssl gdbm;
   };
-  ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
+  #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
   ruby = ruby18;
 
   rubyLibs = recurseIntoAttrs (import ../development/interpreters/ruby/libs.nix {
@@ -2651,7 +2651,7 @@ let
   };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
-    inherit pkgs ctags writeScriptBin lib makeOverridable;
+    inherit pkgs ctags writeScriptBin;
   };
 
   cmake = import ../development/tools/build-managers/cmake {
@@ -3095,7 +3095,7 @@ let
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
 
-  boost = makeOverridable (import ../development/libraries/boost/1.40.0.nix) {
+  boost = makeOverridable (import ../development/libraries/boost/1.41.0.nix) {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
 
@@ -6589,65 +6589,13 @@ let
     inherit (xlibs) libX11;
   };
 
-  eclipseRunner = import ../applications/editors/eclipse/runner.nix {
-    inherit stdenv lib jre;
-    inherit (gtkLibs) gtk glib;
-    inherit (xlibs) libXtst;
-  };
-
-  eclipseNewer = import ../applications/editors/eclipse-classic {
-    inherit stdenv fetchurl patchelf makeDesktopItem freetype fontconfig jre;
-    inherit (gtkLibs) glib gtk;
+  eclipse = import ../applications/editors/eclipse-classic {
+    inherit stdenv fetchurl patchelf makeDesktopItem makeWrapper freetype fontconfig jre zlib;
+    # GTK 2.18 gives glitches such as mouse clicks on buttons not
+    # working correctly.
+    inherit (gtkLibs216) glib gtk;
     inherit (xlibs) libX11 libXext libXrender libXtst;
   };
-
-  /* commenting out eclipse - Have a look at eclipseRunner - Marc Weber
-
-    Reason: You can get Eclipse in many prepacked variations on eclipse.org
-    No need to duplicate efforts.
-    To make Equinox p2 work you have to create a local copy of Eclipse anyway (AFAIK).
-    Maybe there is a solution. I don't have time to investigate. I want to prevent
-    people from using old crappy Eclipse versions.
-
-  # put something like this into your ~/.nixpkgs/config.nix file
-  #eclipse = {
-  # plugins = {eclipse, version, plugins } : let p = plugins; in
-  #   [  p.pdt # PHP developement
-  #      p.viPlugin # vim keybindings (see license)
-  #   ];
-  #};
-  eclipseNew = import ../applications/editors/eclipse-new/3.3.1.1.nix {
-    # outdated, but 3.3.1.1 does already compile on nix, feel free to work 3.4
-    inherit fetchurl stdenv makeWrapper jdk unzip ant buildEnv
-    getConfig lib zip writeTextFile runCommand;
-    inherit (gtkLibs) gtk glib;
-    inherit (xlibs) libXtst;
-  };
-
-
-  eclipse = plugins:
-    import ../applications/editors/eclipse {
-      inherit fetchurl stdenv jdk;
-      inherit (gtkLibs) gtk glib;
-      inherit (xlibs) libXtst;
-      inherit plugins makeOverridable unzip;
-    };
-
-  eclipsesdk = eclipse [];
-
-#   eclipseSpoofax = lowPrio (appendToName "with-spoofax" (eclipse [eclipsePlugins.spoofax]));
-#   eclipseCDT = import ../applications/editors/eclipse/eclipse-cdt.nix {
-#     inherit fetchurl stdenv eclipse;
-#   };
-#   # quinox p2 installer
-#   eclipseMinimal = import ../applications/editors/eclipse/eclipse-p2-installer.nix {
-#     inherit fetchurl stdenv eclipse;
-#   };
-#
-#   eclipsePlugins = import ../applications/editors/eclipse/plugins.nix {
-#     inherit fetchurl stdenv;
-#   };
-  */
 
   ed = import ../applications/editors/ed {
     inherit fetchurl stdenv;
