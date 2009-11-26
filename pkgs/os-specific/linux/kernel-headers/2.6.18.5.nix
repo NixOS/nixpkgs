@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "24f0e0011cdae42e3dba56107bb6a60c57c46d1d688a9b0300fec53e80fd1e53";
   };
 
+  patches = [ ./unifdef-getline.patch ];
+
   buildInputs = [ unifdef ];
 
   platform = 
