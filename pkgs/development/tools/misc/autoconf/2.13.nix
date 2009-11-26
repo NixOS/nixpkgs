@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [m4 perl lzma];
-  
-  unpackCmd = "lzma -d < $src | tar -x ";
 
   doCheck = true;
 

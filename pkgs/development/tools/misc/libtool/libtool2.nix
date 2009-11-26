@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ lzma m4 perl ];
 
-  unpackCmd = "lzma -d < $src | tar xv";
-
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
