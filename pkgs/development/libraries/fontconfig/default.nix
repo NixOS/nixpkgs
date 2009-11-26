@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-confdir=/etc/fonts --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 
-  crossArch = stdenv.cross.arch;
+  # We should find a better way to access the arch reliably.
+  crossArch = if (stdenv ? cross && stdenv.cross != null)
+    then stdenv.cross.arch else null;
+
 
   preConfigure = ''
     if test -n "$crossConfig"; then
