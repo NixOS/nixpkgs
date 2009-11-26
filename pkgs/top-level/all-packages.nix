@@ -3444,7 +3444,6 @@ let
     inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2 glib;
   };
 
-  # gnu scientific library
   gsl = import ../development/libraries/gsl {
     inherit fetchurl stdenv;
   };
@@ -6949,10 +6948,9 @@ let
   };
 
   inkscape = import ../applications/graphics/inkscape {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib
-      popt libxml2 libxslt libpng boehmgc fontconfig
-      libsigcxx lcms boost gettext cairomm
-      python pyxml makeWrapper;
+    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib popt
+      libxml2 libxslt libpng boehmgc libsigcxx lcms boost gettext
+      cairomm python pyxml makeWrapper intltool gsl;
     inherit (pythonPackages) lxml;
     inherit (gtkLibs) gtk glib glibmm gtkmm;
     inherit (xlibs) libXft;
