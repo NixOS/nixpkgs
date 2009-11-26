@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   preBuild =
     ''
       # Make Cwd work on NixOS (where we don't have a /bin/pwd).
-      ${if stdenv.system == "i686-darwin" then "" else "substituteInPlace lib/Cwd.pm --replace \"'/bin/pwd'\" \"'$(type -tP pwd)'\""}
+      ${if stdenv.isDarwin then "" else "substituteInPlace lib/Cwd.pm --replace \"'/bin/pwd'\" \"'$(type -tP pwd)'\""}
     '';
 
   setupHook = ./setup-hook.sh;
