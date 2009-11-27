@@ -1,4 +1,4 @@
-{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, readline}:
+{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, readline, ncurses}:
 
 rec {
 
@@ -51,7 +51,7 @@ rec {
       sha256 = "0q21vks9gaw9v4rxz90wb0pxzb19l7gwi4nbjvk4zb1imdk7znck";
     };
 
-    buildInputs = [pkgconfig aterm sdf strategoxt getopt];
+    buildInputs = [pkgconfig aterm sdf strategoxt getopt readline ncurses];
 
     meta = {
       homepage = http://strategoxt.org/;

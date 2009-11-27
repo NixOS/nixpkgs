@@ -2122,7 +2122,7 @@ let
   };
 
   strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk;
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk ncurses;
     readline = readline5;
   };
 
