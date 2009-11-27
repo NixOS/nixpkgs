@@ -1761,10 +1761,11 @@ let
     profiledCompiler = true;
   }));
 
-  gccApple = wrapGCC (import ../development/compilers/gcc-apple {
-    inherit fetchurl stdenv noSysDirs;
-    profiledCompiler = true;
-  });
+  gccApple = 
+    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
+      inherit fetchurl stdenv noSysDirs;
+      profiledCompiler = true;
+    }) ;
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
