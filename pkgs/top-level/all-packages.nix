@@ -1738,7 +1738,7 @@ let
     inherit fetchurl stdenv gawk system;
   };
 
-  gcc = gcc43;
+  gcc = gcc44;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
