@@ -76,7 +76,7 @@ let
 
 
   # Helper functions that are exported through `pkgs'.
-  helperFunctions = 
+  helperFunctions =
     (import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; }) //
     (import ../build-support/trivial-builders.nix { inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
@@ -1761,7 +1761,7 @@ let
     profiledCompiler = true;
   }));
 
-  gccApple = 
+  gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;
       profiledCompiler = true;
@@ -1834,7 +1834,7 @@ let
 
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs;
-    inherit (xlibs) libX11 xproto inputproto libXi 
+    inherit (xlibs) libX11 xproto inputproto libXi
       libXext xextproto libXt libXaw libXmu;
     stdenv = (overrideGCC stdenv gcc34) // {gcc = gcc33;};
   };
@@ -2126,7 +2126,7 @@ let
   };
 
   strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries; 
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries;
   };
 
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
@@ -4877,7 +4877,7 @@ let
   };
 
   couchdb = import ../servers/http/couchdb {
-    inherit fetchurl stdenv erlang spidermonkey icu getopt; 
+    inherit fetchurl stdenv erlang spidermonkey icu getopt;
   };
 
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
@@ -6319,7 +6319,7 @@ let
     };
 
   chrome = import ../applications/networking/browsers/chromium {
-    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib; 
+    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib;
     inherit (xlibs) libX11 libXext libXrender libXt ;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
@@ -6590,6 +6590,10 @@ let
       inherit fetchurl stdenv;
     };
 
+    prologMode = import ../applications/editors/emacs-modes/prolog {
+      inherit fetchurl stdenv;
+    };
+
     quack = import ../applications/editors/emacs-modes/quack {
       inherit fetchurl stdenv emacs;
     };
@@ -6749,7 +6753,7 @@ let
       python pygtk gettext xlibs intltool babl gegl;
     inherit (gnome) gtk libart_lgpl;
   };
-  
+
   gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
