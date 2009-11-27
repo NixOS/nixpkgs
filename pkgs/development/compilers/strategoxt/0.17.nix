@@ -1,4 +1,4 @@
-{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk}:
+{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, readline}:
 
 rec {
 
@@ -36,6 +36,22 @@ rec {
     };
 
     buildInputs = [pkgconfig aterm sdf getopt];
+
+    meta = {
+      homepage = http://strategoxt.org/;
+      meta = "A language and toolset for program transformation";
+    };
+  };
+
+  strategoShell = stdenv.mkDerivation rec {
+    name = "stratego-shell-0.7";
+
+    src = fetchurl {
+      url = "ftp://ftp.strategoxt.org/pub/stratego/StrategoXT/strategoxt-0.17/stratego-shell-0.17.tar.gz";
+      sha256 = "0q21vks9gaw9v4rxz90wb0pxzb19l7gwi4nbjvk4zb1imdk7znck";
+    };
+
+    buildInputs = [pkgconfig aterm sdf strategoxt getopt];
 
     meta = {
       homepage = http://strategoxt.org/;

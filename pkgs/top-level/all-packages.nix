@@ -2123,6 +2123,7 @@ let
 
   strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
     inherit fetchurl stdenv pkgconfig aterm getopt jdk;
+    readline = readline5;
   };
 
   strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
