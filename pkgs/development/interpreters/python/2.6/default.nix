@@ -89,4 +89,4 @@ stdenv.mkDerivation ( {
   meta = {
     platforms = stdenv.lib.platforms;
   };
-} // (if stdenv.system == "i686-darwin" then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
+} // (if stdenv.isDarwin then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
