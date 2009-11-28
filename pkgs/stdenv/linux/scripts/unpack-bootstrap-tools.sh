@@ -40,8 +40,8 @@ mv $out/lib/libpthread.so.tmp $out/lib/libpthread.so
 
 # Provide some additional symlinks.
 ln -s bash $out/bin/sh
-
 ln -s bzip2 $out/bin/bunzip2
+ln -s gzip $out/bin/gunzip
 
 # fetchurl needs curl.
 bzip2 -d < $curl > $out/bin/curl
