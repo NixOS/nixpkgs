@@ -57,7 +57,8 @@ stdenv.mkDerivation {
       ${if stdenv.system == "armv5tel-linux" then "-Dldflags=\"-lm -lrt\"" else ""};
     '';
 
-  preBuild = if (stdenv.gcc.nativeTools) then preBuildNative else preBuildNoNative;
+  preBuild = if (stdenv ? gcc && stdenv.gcc.nativeTools) then
+    preBuildNative else preBuildNoNative;
 
   setupHook = ./setup-hook.sh;
 }
