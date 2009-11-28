@@ -41,7 +41,13 @@ mv $out/lib/libpthread.so.tmp $out/lib/libpthread.so
 # Provide some additional symlinks.
 ln -s bash $out/bin/sh
 ln -s bzip2 $out/bin/bunzip2
-ln -s gzip $out/bin/gunzip
+
+# Mimic the gunzip script as in gzip installations
+cat > $out/bin/gunzip <<EOF
+#!$out/bin/sh
+exec $out/bin/gzip -d "\$@"
+EOF
+chmod +x $out/bin/gunzip
 
 # fetchurl needs curl.
 bzip2 -d < $curl > $out/bin/curl
