@@ -4,11 +4,11 @@ assert stdenv.isLinux;
 
 let
     version = "2.6.28.5";
-in 
+in
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
-  
+
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
     sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   targetConfig = if (cross != null) then cross.config else null;
 
-  platform = 
+  platform =
     if cross != null then cross.arch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
@@ -29,11 +29,11 @@ stdenv.mkDerivation {
 
   extraIncludeDirs =
     if cross != null then
-        (if cross.arch == "powerpc" then ["ppc"] else [])
+	(if cross.arch == "powerpc" then ["ppc"] else [])
     else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
 
   patchPhase = ''
-    patch -p1 "${./unifdef-getline.patch}"
+    patch --verbose -p1 "${./unifdef-getline.patch}"
     sed -i '/scsi/d' include/Kbuild
   '';
 
@@ -57,6 +57,6 @@ stdenv.mkDerivation {
     ln -s asm $out/include/asm-$platform
     if test "$platform" = "i386" -o "$platform" = "x86_64"; then
       ln -s asm $out/include/asm-x86
-    fi  
+    fi
   '';
 }
