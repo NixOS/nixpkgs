@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
 
   patchPhase = ''
-    patch --verbose -p1 "${./unifdef-getline.patch}"
+    patch --verbose -p1 < "${./unifdef-getline.patch}"
     sed -i '/scsi/d' include/Kbuild
   '';
 
