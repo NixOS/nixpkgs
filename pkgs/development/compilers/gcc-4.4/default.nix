@@ -3,6 +3,7 @@
 , langJava ? false
 , profiledCompiler ? false
 , staticCompiler ? false
+, enableShared ? true
 , texinfo ? null
 , gmp, mpfr, gettext, which
 , ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
@@ -14,6 +15,10 @@
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , enableMultilib ? false
 , name ? "gcc"
+, cross ? null
+, binutilsCross ? null
+, glibcCross ? null
+, crossStageStatic ? true
 }:
 
 assert langTreelang -> bison != null && flex != null;
@@ -46,13 +51,33 @@ let version = "4.4.2";
 
     javaAwtGtk = langJava && gtk != null;
 
+    crossConfigureFlags =
+      "--target=${cross.config}" +
+      (if crossStageStatic then
+        " --disable-libssp --disable-nls" +
+        " --without-headers" +
+        " --disable-threads " +
+        " --disable-libmudflap " +
+        " --disable-libgomp " +
+        " --disable-shared"
+        else
+        " --with-headers=${glibcCross}/include" +
+        " --enable-__cxa_atexit" +
+        " --enable-long-long" +
+        " --enable-threads=posix" +
+        " --enable-nls"
+        );
+    stageNameAddon = if (crossStageStatic) then "-stage-static" else
+      "-stage-final";
+    crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
+
 in
 
 # We need all these X libraries when building AWT with GTK+.
 assert gtk != null -> (filter (x: x == null) xlibs) == [];
 
 stdenv.mkDerivation ({
-  name = "${name}-${version}";
+  name = "${name}-${version}" + crossNameAddon;
 
   builder = ./builder.sh;
 
@@ -79,6 +104,7 @@ stdenv.mkDerivation ({
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
+    ${if enableShared then "" else "--disable-shared"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
@@ -100,7 +126,15 @@ stdenv.mkDerivation ({
       )
     }
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
+    ${if cross != null then crossConfigureFlags else ""}
   ";
+
+  targetConfig = if (cross != null) then cross.config else null;
+
+  # Needed for the cross compilation to work
+  AR = "ar";
+  LD = "ld";
+  CC = "gcc";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find
   # the library headers and binaries, regarless of the language being

@@ -1,8 +1,8 @@
 /* Build configuration used to build glibc, Info files, and locale
    information.  */
 
-{ name, fetchurl, stdenv, installLocales ? false
-, cross ? null, gccCross ? null, kernelHeaders ? null
+cross : { name, fetchurl, stdenv, installLocales ? false
+, gccCross ? null, kernelHeaders ? null
 , profilingLibraries ? false, meta, ... }@args :
 
 let version = "2.10.1";

@@ -1774,9 +1774,9 @@ let
     profiledCompiler = false;
   });
 
-  gcc43 = useFromStdenv "gcc" gcc43_real;
+  gcc44 = useFromStdenv "gcc" gcc44_real;
 
-  gcc43_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
+  gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
   }));
@@ -1790,8 +1790,18 @@ let
     crossStageStatic = false;
   };
 
+  gcc44_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.4) {
+    inherit stdenv fetchurl texinfo gmp mpfr ppl cloogppl noSysDirs cross
+        gettext which;
+    binutilsCross = binutilsCross cross;
+    glibcCross = glibcCross cross;
+    profiledCompiler = false;
+    enableMultilib = true;
+    crossStageStatic = false;
+  };
+
   gccCrossStageStatic = cross: wrapGCCCross {
-    gcc = forceBuildDrv ((gcc43_realCross cross).override {
+    gcc = forceBuildDrv ((gcc44_realCross cross).override {
         crossStageStatic = true;
         langCC = false;
         glibcCross = null;
@@ -1802,19 +1812,19 @@ let
   };
 
   gccCrossStageFinal = cross: wrapGCCCross {
-    gcc = forceBuildDrv (gcc43_realCross cross);
+    gcc = forceBuildDrv (gcc44_realCross cross);
     libc = glibcCross cross;
     binutils = binutilsCross cross;
     inherit cross;
   };
 
-  gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43_real.gcc.override {
+  gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43.gcc.override {
     stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
     profiledCompiler = false;
     enableMultilib = true;
   }));
 
-  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
+  gcc44_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
     inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
       gettext which noSysDirs;
     profiledCompiler = true;
@@ -1855,7 +1865,7 @@ let
     inherit gmp mpfr;
   });
 
-  gfortran43 = wrapGCC (gcc43_real.gcc.override {
+  gfortran43 = wrapGCC (gcc43.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -3205,7 +3215,8 @@ let
   };
 
   cyrus_sasl = import ../development/libraries/cyrus-sasl {
-    inherit fetchurl stdenv openssl db4 gettext;
+    inherit fetchurl openssl db4 gettext;
+    stdenv = overrideGCC stdenv gcc43;
   };
 
   db4 = db45;
@@ -3443,7 +3454,14 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
-  glibcCross = cross: glibc29Cross cross;
+  glibc210Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.10) {
+    inherit stdenv fetchurl;
+    gccCross = gccCrossStageStatic cross;
+    kernelHeaders = kernelHeadersCross cross;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  });
+
+  glibcCross = cross: glibc210Cross cross;
 
   glibc210 = makeOverridable (import ../development/libraries/glibc-2.10) {
     inherit fetchurl stdenv kernelHeaders;
@@ -8157,16 +8175,18 @@ let
 
     kdelibs = import ../desktops/kde-3/kdelibs {
       inherit
-        fetchurl stdenv xlibs zlib perl openssl pcre pkgconfig
+        fetchurl xlibs zlib perl openssl pcre pkgconfig
         libjpeg libpng libtiff libxml2 libxslt libtool
         expat freetype bzip2 cups attr acl;
+      stdenv = overrideGCC stdenv gcc43;
       qt = qt3;
     };
 
     kdebase = import ../desktops/kde-3/kdebase {
       inherit
-        fetchurl stdenv pkgconfig x11 xlibs zlib libpng libjpeg perl
+        fetchurl pkgconfig x11 xlibs zlib libpng libjpeg perl
         kdelibs openssl bzip2 fontconfig pam hal dbus glib;
+      stdenv = overrideGCC stdenv gcc43;
       qt = qt3;
     };
 

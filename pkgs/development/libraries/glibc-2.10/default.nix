@@ -8,11 +8,11 @@ let
   build = import ./common.nix;
   cross = if gccCross != null then gccCross.target else null;
 in
-  build ({
+  build cross ({
     name = "glibc";
 
     inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
-      cross;
+      gccCross;
 
     builder = ./builder.sh;
 
