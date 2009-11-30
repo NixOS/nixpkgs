@@ -319,4 +319,8 @@
     url = "http://mawercer.de/~nix/repos/haxe_xml_light-F_00-39-46.tar.gz";
     sha256 = "b23004c09d5e76b76de5a1938333c1aaccf059ebe62ad25728a267df79069a43";
   };
+  neko = args: with args; fetchurl { # Fri Nov 27 18:37:43 CET 2009
+    url = "http://mawercer.de/~nix/repos/neko-F_18-37-40.tar.gz";
+    sha256 = "eac9c6144872d741c31a1c15539672b001977e877f30f01b9649f69b4df1d97c";
+  };
 }

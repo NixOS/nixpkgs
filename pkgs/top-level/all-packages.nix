@@ -2064,6 +2064,13 @@ let
       makeWrapper graphviz which python;
   };
 
+  neko = import ../development/compilers/neko {
+    inherit (bleedingEdgeRepos) sourceByName ;
+    inherit fetchurl stdenv lib pkgconfig composableDerivation boehmgc apacheHttpd
+      mysql zlib sqlite pcre apr makeWrapper;
+    inherit (gtkLibs) gtk;
+  };
+
   nasm = import ../development/compilers/nasm {
     inherit fetchurl stdenv;
   };
