@@ -3333,6 +3333,11 @@ let
     inherit (xlibs) libXmu libXi;
   };
 
+  glefw = import ../development/libraries/glefw {
+    inherit fetchurl stdenv lib mesa;
+    inherit (xlibs) libX11 libXext xextproto;
+  };
+
   glibc =
     let haveRedHatKernel       = system == "i686-linux" || system == "x86_64-linux";
         haveBrokenRedHatKernel = haveRedHatKernel && getConfig ["brokenRedHatKernel"] false;
