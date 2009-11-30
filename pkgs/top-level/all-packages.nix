@@ -1953,6 +1953,11 @@ let
     };
   };
 
+  haxe = import ../development/compilers/haxe {
+    inherit fetchurl stdenv lib ocaml zlib makeWrapper;
+    inherit (bleedingEdgeRepos) sourceByName;
+  };
+
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;
   };
