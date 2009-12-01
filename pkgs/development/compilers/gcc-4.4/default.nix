@@ -100,6 +100,7 @@ stdenv.mkDerivation ({
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
+    ++ (optionals (cross != null) [binutilsCross])
     ;
 
   configureFlags = "

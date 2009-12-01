@@ -40,16 +40,19 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
-    # Setting $CPATH makes sure both `gcc' and `xgcc' find the C
-    # library headers, regarless of the language being compiled.
-    export CPATH="$NIX_FIXINC_DUMMY${CPATH:+:}$CPATH"
+    # We should not allow gcc find the headers of the native glibc
+    # (Here I only think of c,c++ compilers)
+    if test -z "$targetConfig"; then
+        # Setting $CPATH makes sure both `gcc' and `xgcc' find the C
+        # library headers, regarless of the language being compiled.
+        export CPATH="$NIX_FIXINC_DUMMY${CPATH:+:}$CPATH"
 
-    # Likewise, to help it find `crti.o' and similar files.
-    export LIBRARY_PATH="$glibc_libdir${LIBRARY_PATH:+:}$LIBRARY_PATH"
+        # Likewise, to help it find `crti.o' and similar files.
+        export LIBRARY_PATH="$glibc_libdir${LIBRARY_PATH:+:}$LIBRARY_PATH"
 
-    echo "setting \$CPATH to \`$CPATH'"
-    echo "setting \$LIBRARY_PATH to \`$LIBRARY_PATH'"
-
+        echo "setting \$CPATH to \`$CPATH'"
+        echo "setting \$LIBRARY_PATH to \`$LIBRARY_PATH'"
+    fi
 
     extraCFlags="-g0 $extraCFlags"
     extraLDFlags="--strip-debug $extraLDFlags"
@@ -110,6 +113,13 @@ if test -n "$targetConfig"; then
 fi
 
 preConfigure() {
+    if test -n "$newlibSrc"; then
+        tar xvf "$newlibSrc" -C ..
+        ln -s ../newlib-*/newlib newlib
+        # Patch to get armvt5el working:
+        sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
+    fi
+
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
