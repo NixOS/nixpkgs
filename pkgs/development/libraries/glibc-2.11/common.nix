@@ -1,8 +1,8 @@
 /* Build configuration used to build glibc, Info files, and locale
    information.  */
 
-{ name, fetchurl, stdenv, installLocales ? false
-, cross ? null, gccCross ? null, kernelHeaders ? null
+cross : { name, fetchurl, stdenv, installLocales ? false
+, gccCross ? null, kernelHeaders ? null
 , profilingLibraries ? false, meta, ... }@args :
 
 let version = "2.11";
@@ -107,6 +107,11 @@ stdenv.mkDerivation ({
     sha256 = "0b6nbr89qmqcvzz26ggnw7gcxhvnzbc8z299h12wqjmcix4hxwcy";
   };
 
+  srcPorts = fetchurl {
+    url = "mirror://gnu/glibc/glibc-ports-${version}.tar.bz2";
+    sha256 = "12b53f5k4gcr8rr1kg2ycf2701rygqsyf9r8gz4j3l9flaqi5liq";
+  };
+
   # `fetchurl' is a function and thus should not be passed to the
   # `derivation' primitive.
   fetchurl = null;
@@ -119,6 +124,9 @@ stdenv.mkDerivation ({
         # built yet in the bootstrap.
         sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
     done
+
+    tar xvjf "$srcPorts"
+
     mkdir ../build
     cd ../build
 

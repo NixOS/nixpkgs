@@ -3429,8 +3429,7 @@ let
         haveBrokenRedHatKernel = haveRedHatKernel && getConfig ["brokenRedHatKernel"] false;
     in
     useFromStdenv "glibc" (if haveBrokenRedHatKernel then glibc25 else
-      # glibc211 does not have ports still.
-      if (system == "armv5tel-linux") then glibc210 else glibc211);
+        glibc211);
 
   glibc25 = import ../development/libraries/glibc-2.5 {
     inherit fetchurl stdenv kernelHeaders;
@@ -3454,6 +3453,11 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
+  glibc210 = makeOverridable (import ../development/libraries/glibc-2.10) {
+    inherit fetchurl stdenv kernelHeaders;
+    installLocales = getPkgConfig "glibc" "locales" false;
+  };
+
   glibc210Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.10) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
@@ -3461,26 +3465,19 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
-  glibcCross = cross: glibc210Cross cross;
-
-  glibc210 = makeOverridable (import ../development/libraries/glibc-2.10) {
-    inherit fetchurl stdenv kernelHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
-  };
-
   glibc211 = makeOverridable (import ../development/libraries/glibc-2.11) {
     inherit fetchurl stdenv kernelHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc211CrossReal = cross : forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
-    inherit stdenv fetchurl cross;
+  glibc211Cross = cross : forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
+    inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = kernelHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
-  glibc211Cross = cross : forceBuildDrv (glibc211CrossReal cross);
+  glibcCross = cross: glibc211Cross cross;
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv kernelHeaders;
