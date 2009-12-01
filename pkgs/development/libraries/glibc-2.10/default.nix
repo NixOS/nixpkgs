@@ -45,7 +45,7 @@ EOF
         export AR="$crossConfig-ar"
         export RANLIB="$crossConfig-ranlib"
 
-        dontStrip = 1
+        dontStrip=1
       '';
    }
    else {}))

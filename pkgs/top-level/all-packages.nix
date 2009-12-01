@@ -1801,7 +1801,7 @@ let
   };
 
   gccCrossStageStatic = cross: wrapGCCCross {
-    gcc = forceBuildDrv ((gcc44_realCross cross).override {
+    gcc = forceBuildDrv ((gcc43_realCross cross).override {
         crossStageStatic = true;
         langCC = false;
         glibcCross = null;
@@ -1812,7 +1812,7 @@ let
   };
 
   gccCrossStageFinal = cross: wrapGCCCross {
-    gcc = forceBuildDrv (gcc44_realCross cross);
+    gcc = forceBuildDrv (gcc43_realCross cross);
     libc = glibcCross cross;
     binutils = binutilsCross cross;
     inherit cross;
