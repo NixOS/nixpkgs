@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     make oldconfig
   '';
 
+  patches = [ ./unifdef-getline.patch ];
+
   installPhase = ''
     mkdir -p $out
     make PREFIX=$out install
