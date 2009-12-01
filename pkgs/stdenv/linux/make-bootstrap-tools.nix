@@ -107,6 +107,8 @@ rec {
 
         cp -d ${gmp}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        cp -d ${ppl}/lib/libppl*.so* $out/lib
+        cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
         
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
