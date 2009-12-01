@@ -10,7 +10,7 @@
 
 let build = import ./common.nix;
 in
-  build {
+  build null {
     name = "glibc-locales";
 
     inherit fetchurl stdenv;
