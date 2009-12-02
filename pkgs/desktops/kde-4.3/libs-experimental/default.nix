@@ -1,10 +1,10 @@
 {stdenv, fetchurl, lib, cmake, qt4, perl, automoc4, kdelibs, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdelibs-experimental-4.3.3";
+  name = "kdelibs-experimental-4.3.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.3/src/kdelibs-experimental-4.3.3.tar.bz2;
-    sha1 = "5fhzsmpmhpzn923rg25dk9siqpmqzab8";
+    url = mirror://kde/stable/4.3.4/src/kdelibs-experimental-4.3.4.tar.bz2;
+    sha1 = "43e19c44c3cdc1049c9ee9aca2e2f83a48ffe8bd";
   };
   builder = ./builder.sh;
   buildInputs = [ cmake qt4 perl automoc4 kdelibs phonon ];

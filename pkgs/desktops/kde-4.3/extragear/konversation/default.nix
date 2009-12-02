@@ -2,10 +2,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, qca2}:
 
 stdenv.mkDerivation {
-  name = "konversation";
+  name = "konversation-1.2.1";
   src = fetchurl {
-    url = mirror://kde/stable/konversation/1.2/src/konversation-1.2.tar.bz2;
-    sha256 = "16plhy7m8sch52a8hyzsqgc10wj4lgygqbwicfssbad7l6j2a935";
+    url = mirror://kde/stable/konversation/1.2.1/src/konversation-1.2.1.tar.bz2;
+    sha256 = "1rx4xgw14cfzkxghgn80np8i2ndq26sbdvv96g46r0s14qkdyq8w";
   };
   includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;

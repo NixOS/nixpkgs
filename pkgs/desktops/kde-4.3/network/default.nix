@@ -4,10 +4,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdenetwork-4.3.3";
+  name = "kdenetwork-4.3.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.3/src/kdenetwork-4.3.3.tar.bz2;
-    sha1 = "1ky5w8cm7pakfw1n9gkrg999wv7z0hmq";
+    url = mirror://kde/stable/4.3.4/src/kdenetwork-4.3.4.tar.bz2;
+    sha1 = "e066c3642d254e1e8213ef511546e960c5658596";
   };
   includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
