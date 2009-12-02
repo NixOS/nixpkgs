@@ -14,6 +14,14 @@ let
 
   flags = if cfg.enableTCPIP then ["-i"] else [];
 
+  # The main PostgreSQL configuration file.
+  configFile = pkgs.writeText "postgresql.conf"
+    ''
+      hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
+      ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
+      log_destination = 'syslog'
+    '';  
+
 in
 
 {
@@ -52,14 +60,6 @@ in
         '';
       };
       
-      subServices = mkOption {
-        default = [];
-        description = ''
-          Subservices list. As it is already implememnted, 
-          here is an interface...
-        '';
-      };
-      
       authentication = mkOption {
         default = ''
           # Generated file; do not edit!
@@ -68,14 +68,14 @@ in
           host  all all ::1/128      md5
         '';
         description = ''
-          Hosts (except localhost), who you allow to connect.
+          Defines how users authenticate themselves to the server.
         '';
       };
       
-      allowedHosts = mkOption {
-        default = [];
+      identMap = mkOption {
+        default = "";
         description = ''
-          Hosts (except localhost), who you allow to connect.
+          Defines the mapping from system users to database users.
         '';
       };
       
@@ -130,9 +130,10 @@ in
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R postgres ${cfg.dataDir}
                 ${run} -c '${postgresql}/bin/initdb -U root'
+                rm -f ${cfg.dataDir}/*.conf
             fi
-            
-            cp -f ${pkgs.writeText "pg_hba.conf" cfg.authentication} ${cfg.dataDir}/pg_hba.conf
+
+            ln -sfn ${configFile} ${cfg.dataDir}/postgresql.conf
 
             # We'd like to use the `-w' flag here to wait until the
             # database is up, but it requires a `postgres' user to
@@ -144,7 +145,7 @@ in
             while ! ${run} -c '${postgresql}/bin/pg_ctl status'; do
                 sleep 1
             done
-          '';
+          ''; # */
 
         postStop =
           ''
