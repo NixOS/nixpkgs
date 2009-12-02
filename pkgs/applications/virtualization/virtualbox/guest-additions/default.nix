@@ -2,10 +2,10 @@
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes}:
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-3.1.0";
+  name = "VirtualBox-GuestAdditions-3.0.10";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.1.0/VBoxGuestAdditions_3.1.0.iso;
-    sha256 = "1wbsivis1l1bzsxy9dcn5lh5zwzqvk3n935z4ky81jz3ybiq4pmb";
+    url = http://download.virtualbox.org/virtualbox/3.0.10/VBoxGuestAdditions_3.0.10.iso;
+    sha256 = "08m7n3127nwcla1ws744n1d2i2mz4s1k4460i2h6qyvgnrgz32yv";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit ];
