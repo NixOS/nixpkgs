@@ -67,7 +67,7 @@ preConfigure() {
     cd ../build
 
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=$langs --disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib --with-gxx-include-dir=${STDCXX_INCDIR}"
+    configureFlags="--enable-languages=$langs --disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib --with-gxx-include-dir=${STDCXX_INCDIR} --host=x86_64-apple-darwin10 --build=x86_64-apple-darwin10 --target=x86_64-apple-darwin10"
 }
 
 
@@ -123,3 +123,5 @@ patchPhase() {
 }
 
 genericBuild
+
+ln -s $out/lib/x86_64 $out/lib64
