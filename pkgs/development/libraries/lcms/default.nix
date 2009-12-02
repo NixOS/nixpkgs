@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "lcms-1.17";
+  name = "lcms-1.19";
 
   src = fetchurl {
-    url = http://www.littlecms.com/lcms-1.17.tar.gz;
-    sha256 = "10s5s6b6r5mhf0g6l431l6fwymhjzqrvm7g214h7fmh9ngdb9wsy";
+    url = http://www.littlecms.com/lcms-1.19.tar.gz;
+    sha256 = "1abkf8iphwyfs3z305z3qczm3z1i9idc1lz4gvfg92jnkz5k5bl0";
   };
 
   meta = {
