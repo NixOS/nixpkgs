@@ -2985,6 +2985,12 @@ let
     readline = readline5;
   };
 
+  gdbCross = import ../development/tools/misc/gdb {
+    inherit fetchurl stdenv ncurses gmp mpfr expat texinfo;
+    readline = readline5;
+    target = crossSystem;
+  };
+
   valgrind = import ../development/tools/analysis/valgrind {
     inherit fetchurl stdenv perl gdb;
   };
