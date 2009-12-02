@@ -573,7 +573,7 @@ let
     inherit fetchurl stdenv texinfo perl
             gnused groff libxml2 libxslt makeWrapper;
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
-    libiconv = if system == "i686-darwin" then libiconv else null;
+    libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
   dosfstools = composedArgsAndFun (import ../tools/misc/dosfstools) {
@@ -641,7 +641,7 @@ let
   };
 
   findutils = useFromStdenv "findutils"
-    (if system == "i686-darwin" then findutils4227 else
+    (if stdenv.isDarwin then findutils4227 else
       import ../tools/misc/findutils {
         inherit fetchurl stdenv coreutils;
       }
@@ -4108,6 +4108,7 @@ let
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
+    system == "x86_64-darwin" ||
     system == "i686-darwin";
 
   mesa = import ../development/libraries/mesa {
@@ -5189,7 +5190,7 @@ let
     inherit devicemapper;
   };
 
-  libuuid = if stdenv.system != "i686-darwin" then utillinuxng else null;
+  libuuid = if ! stdenv.isDarwin then utillinuxng else null;
 
   e2fsprogs = import ../os-specific/linux/e2fsprogs {
     inherit fetchurl stdenv pkgconfig libuuid;
@@ -6533,7 +6534,7 @@ let
       libpng libjpeg libungif libtiff texinfo dbus;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
-    xawSupport = system == "i686-darwin" || getPkgConfig "emacs" "xawSupport" false;
+    xawSupport = stdenv.isDarwin || getPkgConfig "emacs" "xawSupport" false;
     xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
     xftSupport = getPkgConfig "emacs" "xftSupport" true;
@@ -7373,7 +7374,7 @@ let
 
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv acl;
-    enableACLs = system != "i686-darwin";
+    enableACLs = !stdenv.isDarwin;
   };
 
   rxvt = import ../applications/misc/rxvt {
