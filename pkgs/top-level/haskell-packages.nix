@@ -288,6 +288,10 @@ rec {
     inherit cabal;
   };
 
+  httpdShed = import ../development/libraries/haskell/httpd-shed {
+    inherit cabal network;
+  };
+
   HUnit = import ../development/libraries/haskell/HUnit {
     inherit cabal;
   };
