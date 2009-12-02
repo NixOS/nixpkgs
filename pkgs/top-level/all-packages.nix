@@ -517,7 +517,7 @@ let
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
     {
-      inherit fetchurl stdenv acl perl;
+      inherit fetchurl stdenv acl perl gmp;
       aclSupport = stdenv.isLinux;
     };
 
