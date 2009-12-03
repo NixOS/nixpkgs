@@ -111,8 +111,7 @@ in
     };
 
     dbUser = mkOption {
-      default = "wwwrun";
-      example = "mediawiki";
+      default = "mediawiki";
       description = "The user name for accessing the database.";
     };
     
@@ -179,7 +178,11 @@ in
       if ! ${pkgs.postgresql}/bin/psql -l | grep -q ' ${config.dbName} ' ; then
           ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
           ${pkgs.postgresql}/bin/createdb "${config.dbName}" -O "${config.dbUser}"
-          ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} "${config.dbUser}" -c "(echo 'CREATE LANGUAGE plpgsql;'; cat ${mediawikiRoot}/maintenance/postgres/tables.sql; echo 'CREATE TEXT SEARCH CONFIGURATION public.default ( COPY = pg_catalog.english );'; echo COMMIT) | ${pkgs.postgresql}/bin/psql ${config.dbName}"
+          ( echo 'CREATE LANGUAGE plpgsql;'
+            cat ${mediawikiRoot}/maintenance/postgres/tables.sql
+            echo 'CREATE TEXT SEARCH CONFIGURATION public.default ( COPY = pg_catalog.english );'
+            echo COMMIT
+          ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
     '');
 }
