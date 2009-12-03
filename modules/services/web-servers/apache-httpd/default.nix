@@ -464,84 +464,6 @@ in
         '';
       };
 
-
-      subservices = {
-
-        # !!! remove this
-        subversion = {
-
-          enable = mkOption {
-            default = false;
-            description = "
-              Whether to enable the Subversion subservice in the webserver.
-            ";
-          };
-
-          notificationSender = mkOption {
-            default = "svn-server@example.org";
-            example = "svn-server@example.org";
-            description = "
-              The email address used in the Sender field of commit
-              notification messages sent by the Subversion subservice.
-            ";
-          };
-
-          userCreationDomain = mkOption {
-            default = "example.org"; 
-            example = "example.org";
-            description = "
-              The domain from which user creation is allowed.  A client can
-              only create a new user account if its IP address resolves to
-              this domain.
-            ";
-          };
-
-          autoVersioning = mkOption {
-            default = false;
-            description = "
-              Whether you want the Subversion subservice to support
-              auto-versioning, which enables Subversion repositories to be
-              mounted as read/writable file systems on operating systems that
-              support WebDAV.
-            ";
-          };
-
-          dataDir = mkOption {
-            default = "/no/such/path/exists";
-            description = "
-              Place to put SVN repository.
-            ";
-          };
-
-          organization = {
-
-            name = mkOption {
-              default = null;
-              description = "
-                Name of the organization hosting the Subversion service.
-              ";
-            };
-
-            url = mkOption {
-              default = null;
-              description = "
-                URL of the website of the organization hosting the Subversion service.
-              ";
-            };
-
-            logo = mkOption {
-              default = null;
-              description = "
-                Logo the organization hosting the Subversion service.
-              ";
-            };
-
-          };
-
-        };
-
-      };
-
     }
 
     # Include the options shared between the main server and virtual hosts.
@@ -590,7 +512,20 @@ in
             # with coverage enabled.
            GCOV_PREFIX = "/tmp/coverage-data";
 
-           PATH = "${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${concatStringsSep ":" (concatMap (svc: svc.extraServerPath) allSubservices)}";
+           PATH = concatStringsSep ":" (
+             [ "${pkgs.coreutils}/bin" "${pkgs.gnugrep}/bin" ]
+             ++ # Needed for PHP's mail() function.  !!! Probably the
+                # ssmtp module should export the path to sendmail in
+                # some way.
+                optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
+             ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
+
+           PHPRC = pkgs.writeText "php.ini"
+             ''
+               ; Needed for PHP's mail() function.
+               sendmail_path = sendmail -t -i
+             '';
+           
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =

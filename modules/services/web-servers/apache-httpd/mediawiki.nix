@@ -41,6 +41,9 @@ let
         $wgDBserver = "";
         $wgDBuser = "wwwrun";
         $wgDBname = "mediawiki";
+
+        $wgEmergencyContact = "${serverInfo.serverConfig.adminAddr}";
+        $wgPasswordSender = $wgEmergencyContact;
       ?>
     '';
 
@@ -172,5 +175,4 @@ in
           ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} wwwrun -c "(echo 'CREATE LANGUAGE plpgsql;'; cat /nix/store/q9gdf3f4362yhsdi8inlhpk26d9b8af6-mediawiki-1.15.1/maintenance/postgres/tables.sql; echo 'CREATE TEXT SEARCH CONFIGURATION public.default ( COPY = pg_catalog.english );'; echo COMMIT) | ${pkgs.postgresql}/bin/psql mediawiki"
       fi
     '';
-
 }
