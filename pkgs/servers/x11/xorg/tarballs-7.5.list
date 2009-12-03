@@ -114,6 +114,7 @@ mirror://xorg/X11R7.5/src/everything/xf86dgaproto-2.1.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xf86driproto-2.1.0.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xf86-input-acecad-1.4.0.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xf86-input-aiptek-1.3.0.tar.bz2
+mirror://xorg/individual/driver/xf86-input-evdev-2.3.1.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xf86-input-evdev-2.3.0.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xf86-input-joystick-1.4.99.2.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xf86-input-keyboard-1.4.0.tar.bz2
@@ -179,7 +180,7 @@ mirror://xorg/X11R7.5/src/everything/xlsatoms-1.0.2.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xlsclients-1.0.2.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xmodmap-1.0.4.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xorg-docs-1.5.tar.bz2
-mirror://xorg/X11R7.5/src/everything/xorg-server-1.7.1.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.7.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xorg-sgml-doctools-1.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xpr-1.0.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xprop-1.1.0.tar.bz2

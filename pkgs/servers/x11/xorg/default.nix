@@ -1308,11 +1308,11 @@ let
   })) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputevdev = (stdenv.mkDerivation ((if overrides ? xf86inputevdev then overrides.xf86inputevdev else x: x) {
-    name = "xf86-input-evdev-2.3.0";
+    name = "xf86-input-evdev-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xf86-input-evdev-2.3.0.tar.bz2;
-      sha256 = "1j36qckxn8pbj11da800ab4xrzwri6ygdidm5x7s20cjrq644mvd";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.3.1.tar.bz2;
+      sha256 = "13qxa5ah10d3m4501n7wpj2vzp04rlva4r57kzh8g6iqzpi2lbs6";
     };
     buildInputs = [pkgconfig xorgserver xproto ];
   })) // {inherit xorgserver xproto ;};
@@ -1998,11 +1998,11 @@ let
   })) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.7.1";
+    name = "xorg-server-1.7.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xorg-server-1.7.1.tar.bz2;
-      sha256 = "082c7d8xhb9zm063r01ja442mvfi9alp1vn538d7saxxkki0v355";
+      url = mirror://xorg/individual/xserver/xorg-server-1.7.3.tar.bz2;
+      sha256 = "1d1dkidb8bpnws8akihy8wfxqqz055jpng602mvcf3q3rl9l2r2b";
     };
     buildInputs = [pkgconfig bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ];
   })) // {inherit bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ;};
