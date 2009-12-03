@@ -49,6 +49,14 @@ let
 
         $wgSitename = "${config.siteName}";
 
+        ${optionalString (config.logo != "") ''
+          $wgLogo = "${config.logo}";
+        ''}
+
+        ${optionalString (config.articleUrlPrefix != "") ''
+          $wgArticlePath = "${config.articleUrlPrefix}/$1";
+        ''}
+
         ${config.extraConfig}
       ?>
     '';
@@ -95,6 +103,10 @@ in
           Allow from all
           DirectoryIndex index.php
       </Directory>
+
+      ${optionalString (config.articleUrlPrefix != "") ''
+        Alias ${config.articleUrlPrefix} ${mediawikiRoot}/index.php
+      ''}
     '';
 
   options = {
@@ -168,11 +180,26 @@ in
       description = "Name of the wiki";
     };
 
+    logo = mkOption {
+      default = "";
+      example = "/images/logo.png";
+      description = "The URL of the site's logo (which should be a 135x135px image).";
+    };
+
     urlPrefix = mkOption {
-      example = "/wiki";
-      default = "/wiki";
+      default = "/w";
       description = ''
         The URL prefix under which the Mediawiki service appears.
+      '';
+    };
+
+    articleUrlPrefix = mkOption {
+      default = "/wiki";
+      example = "";
+      description = ''
+        The URL prefix under which article pages appear,
+        e.g. http://server/wiki/Page.  Leave empty to use the main URL
+        prefix, e.g. http://server/w/index.php?title=Page.
       '';
     };
 
@@ -207,5 +234,13 @@ in
           ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
     '');
-    
+
+  robotsEntries = optionalString (config.articleUrlPrefix != "")
+    ''
+      User-agent: *
+      Disallow: ${config.urlPrefix}/
+      Disallow: ${config.articleUrlPrefix}/Special:Search
+      Disallow: ${config.articleUrlPrefix}/Special:Random
+    '';
+
 }
