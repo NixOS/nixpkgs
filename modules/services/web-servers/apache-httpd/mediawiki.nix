@@ -37,13 +37,19 @@ let
         $wgDebugLogFile = "/tmp/mediawiki_debug_log.txt";
 
         # Database configuration.
-        $wgDBtype = "postgres";
-        $wgDBserver = "";
-        $wgDBuser = "wwwrun";
-        $wgDBname = "mediawiki";
+        $wgDBtype = "${config.dbType}";
+        $wgDBserver = "${config.dbServer}";
+        $wgDBuser = "${config.dbUser}";
+        $wgDBpassword = "${config.dbPassword}";
+        $wgDBname = "${config.dbName}";
 
-        $wgEmergencyContact = "${serverInfo.serverConfig.adminAddr}";
-        $wgPasswordSender = $wgEmergencyContact;
+        # E-mail.
+        $wgEmergencyContact = "${config.emergencyContact}";
+        $wgPasswordSender = "${config.passwordSender}";
+
+        $wgSitename = "${config.siteName}";
+
+        ${config.extraConfig}
       ?>
     '';
 
@@ -83,79 +89,65 @@ in
 
   options = {
 
-    /*
-    dbName = mkOption {
-      example = "wikidb";
-      default = "wikidb";
-      description = "
-        Name of the wiki database that holds MediaWiki data.
-      ";
-    };
-    
-    dbEmergencyContact = mkOption {
-      example = "admin@example.com";
-      default = "e.dolstra@tudelft.nl";
-      description = "
-	In case of emergency, contact this e-mail.
-      ";
-    };
-    
-    dbPasswordSender = mkOption {
-      example = "passwordrecovery@example.com";
-      default = "e.dolstra@tudelft.nl";
-      description = "
-	From which e-mail the recovery password for database users will be sent
-      ";
-    };
-
     dbType = mkOption {
+      default = "postgres";
       example = "mysql";
-      default = "mysql";
-      description = "
-	Which type of database should be used
-      ";
+      description = "Database type.";
     };
 
+    dbName = mkOption {
+      default = "mediawiki";
+      description = "Name of the database that holds the MediaWiki data.";
+    };
+    
     dbServer = mkOption {
+      default = ""; # use a Unix domain socket
       example = "10.0.2.2";
-      default = "10.0.2.2";
-      description = "
-	The location of the database server, e.g. localhost or remote ip address.
-      ";
-    };
-
-    dbPortNumber = mkOption {
-      example = "3306";
-      default = "3306";
-      description = "
-	Portnumber used to connect to the database server. Default: 3306.
-      ";
+      description = ''
+	The location of the database server.  Leave empty to use a
+        database server running on the same machine through a Unix
+        domain socket.
+      '';
     };
 
     dbUser = mkOption {
-      example = "root";
-      default = "root";
-      description = "
-	The username for accessing the database.
-      ";
+      default = "wwwrun";
+      example = "mediawiki";
+      description = "The user name for accessing the database.";
     };
     
     dbPassword = mkOption {
-      example = "foobar";
       default = "";
-      description = "
-	The dbUser's password.
-      ";
+      example = "foobar";
+      description = ''
+        The password of the database user.  Warning: this is stored in
+        cleartext in the Nix store!
+      '';
     };
     
-    dbSiteName = mkOption {
-      example = "wikipedia";
-      default = "wiki";
-      description = "
-	Name of the wiki site.
-      ";
+    emergencyContact = mkOption {
+      default = serverInfo.serverConfig.adminAddr;
+      example = "admin@example.com";
+      description = ''
+        Emergency contact e-mail address.  Defaults to the Apache
+        admin address.
+      '';
     };
-    */
+    
+    passwordSender = mkOption {
+      default = serverInfo.serverConfig.adminAddr;
+      example = "password@example.com";
+      description = ''
+        E-mail address from which password confirmations originate.
+        Defaults to the Apache admin address.
+      '';
+    };
+
+    siteName = mkOption {
+      default = "MediaWiki";
+      example = "Foobar Wiki";
+      description = "Name of the wiki";
+    };
 
     urlPrefix = mkOption {
       example = "/wiki";
@@ -165,14 +157,29 @@ in
       '';
     };
 
+    extraConfig = mkOption {
+      default = "";
+      example =
+        ''
+          $wgEnableEmail = false;
+        '';
+      description = ''
+        Any additional text to be appended to MediaWiki's
+        configuration file.  This is a PHP script.  For configuration
+        settings, see <link xlink:href='http://www.mediawiki.org/wiki/Manual:Configuration_settings'/>.
+      '';
+    };
+
   };
 
   startupScript = pkgs.writeScript "mediawiki_startup.sh"
-    ''
-      if ! ${pkgs.postgresql}/bin/psql -l | grep -q ' mediawiki ' ; then
-          ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole wwwrun || true
-          ${pkgs.postgresql}/bin/createdb mediawiki -O wwwrun
-          ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} wwwrun -c "(echo 'CREATE LANGUAGE plpgsql;'; cat /nix/store/q9gdf3f4362yhsdi8inlhpk26d9b8af6-mediawiki-1.15.1/maintenance/postgres/tables.sql; echo 'CREATE TEXT SEARCH CONFIGURATION public.default ( COPY = pg_catalog.english );'; echo COMMIT) | ${pkgs.postgresql}/bin/psql mediawiki"
+    # Initialise the database automagically if we're using a Postgres
+    # server on localhost.
+    (optionalString (config.dbType == "postgres" && config.dbServer == "") ''
+      if ! ${pkgs.postgresql}/bin/psql -l | grep -q ' ${config.dbName} ' ; then
+          ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
+          ${pkgs.postgresql}/bin/createdb "${config.dbName}" -O "${config.dbUser}"
+          ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} "${config.dbUser}" -c "(echo 'CREATE LANGUAGE plpgsql;'; cat ${mediawikiRoot}/maintenance/postgres/tables.sql; echo 'CREATE TEXT SEARCH CONFIGURATION public.default ( COPY = pg_catalog.english );'; echo COMMIT) | ${pkgs.postgresql}/bin/psql ${config.dbName}"
       fi
-    '';
+    '');
 }
