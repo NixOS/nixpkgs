@@ -71,6 +71,16 @@ let
         cp ${mediawikiConfig} $out/LocalSettings.php
       '';
   };
+
+  mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts"
+    { buildInputs = [ pkgs.makeWrapper ]; }
+    ''
+      ensureDir $out/bin
+      for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php; do
+        makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
+          --add-flags ${mediawikiRoot}/maintenance/$i
+      done
+    '';
   
 in
 
@@ -88,6 +98,16 @@ in
     '';
 
   options = {
+
+    id = mkOption {
+      default = "main";
+      description = ''
+        A unique identifier necessary to keep multiple MediaWiki server
+        instances on the same machine apart.  This is used to
+        disambiguate the administrative scripts, which get names like
+        mediawiki-$id-change-password.
+      '';
+    };
 
     dbType = mkOption {
       default = "postgres";
@@ -171,6 +191,8 @@ in
 
   };
 
+  extraPath = [ mediawikiScripts ];
+  
   startupScript = pkgs.writeScript "mediawiki_startup.sh"
     # Initialise the database automagically if we're using a Postgres
     # server on localhost.
@@ -185,4 +207,5 @@ in
           ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
     '');
+    
 }

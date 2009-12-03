@@ -1,7 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf singleton;
 
   cfg = config.services.postgresql;
 
@@ -12,7 +13,7 @@ let
 
   run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} postgres";
 
-  flags = if cfg.enableTCPIP then ["-i"] else [];
+  flags = optional cfg.enableTCPIP "-i";
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeText "postgresql.conf"
