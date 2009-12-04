@@ -1558,13 +1558,7 @@ let
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
   };
 
-  /* don't have time to fix the builderDefs based expression
-  ttmkfdirX = import ../tools/misc/ttmkfdir {
-    inherit debPackage freetype fontconfig libunwind libtool bison;
-    flex = flex2534;
-  };
-  */
-  ttmkfdir = import ../tools/misc/ttmkfdir/normal-builder.nix {
+  ttmkfdir = import ../tools/misc/ttmkfdir {
     inherit stdenv fetchurl freetype fontconfig libunwind libtool bison;
     flex = flex2534;
   };
