@@ -12,7 +12,7 @@
 , name ? "gcc"
 , cross ? null
 , binutilsCross ? null
-, glibcCross ? null
+, libcCross ? null
 , crossStageStatic ? true
 }:
 
@@ -36,7 +36,7 @@ let
       " --disable-libgomp " +
       " --disable-shared"
       else
-      " --with-headers=${glibcCross}/include" +
+      " --with-headers=${libcCross}/include" +
       " --enable-__cxa_atexit" +
       " --enable-long-long" +
       " --enable-threads=posix" +
@@ -78,7 +78,7 @@ stdenv.mkDerivation ({
     ++ optional langJava ./java-jvgenmain-link.patch;
     
   inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
-    binutilsCross glibcCross;
+    binutilsCross libcCross;
   targetConfig = if (cross != null) then cross.config else null;
 
   buildInputs = [texinfo gmp mpfr]
