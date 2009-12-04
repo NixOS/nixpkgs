@@ -1358,6 +1358,10 @@ let
     inherit fetchurl stdenv bzip2;
   };
 
+  s3backer = import ../tools/filesystems/s3backer {
+    inherit fetchurl stdenv pkgconfig fuse curl expat;
+  };
+
   sablotron = import ../tools/text/xml/sablotron {
     inherit fetchurl stdenv expat;
   };
