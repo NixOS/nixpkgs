@@ -54,6 +54,7 @@
   ./services/misc/disnix.nix
   ./services/misc/gpsd.nix
   ./services/misc/nix-daemon.nix
+  ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/rogue.nix
   ./services/misc/synergy.nix
