@@ -32,6 +32,13 @@ in
             ourselfs to the server.
             ";
         };
+        serverAddress = mkOption {
+          description = " 
+            The server address is of the form: [hostname][:port].  The
+            hostname must be the address or hostname of the server.  The
+            port overrides the default port, 24800.
+          ";
+        };
       };
 
       server = {
@@ -79,7 +86,10 @@ in
             startOn = "started network-interfaces";
             stopOn = "stopping network-interfaces";
 
-            exec = "${pkgs.synergy}/bin/synergyc ${if cfgS.screenName == "" then "" else "-n ${cfgS.screenName}" }";
+            exec = ''${pkgs.synergy}/bin/synergyc \
+              -f ${if cfgC.screenName == "" then "" else "-n ${cfgC.screenName}"} \
+              ${cfgC.serverAddress}
+            '';
           };
         }
         
