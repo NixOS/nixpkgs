@@ -16,6 +16,12 @@ let
     then ""
     else if src ? rev then "pre${toString src.rev}" else "";
 
+  # By default, provide all the GNU Build System as input.
+  bootstrapBuildInputs =
+    if (args ? bootstrapBuildInputs)
+    then args.bootstrapBuildInputs
+    else [ autoconf automake libtool ];
+
 in
 
 stdenv.mkDerivation (
@@ -71,7 +77,7 @@ stdenv.mkDerivation (
   {
     name = name + "-" + version + versionSuffix;
 
-    buildInputs = buildInputs ++ [autoconf automake libtool];
+    buildInputs = buildInputs ++ bootstrapBuildInputs;
     
     postHook = ''
       ensureDir $out/nix-support
