@@ -306,19 +306,11 @@ let
 
   ### TOOLS
 
-  darwinArchUtility = import ../os-specific/darwin/arch {
-    inherit stdenv;
-  };
-
-  darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
-    inherit stdenv;
-  };
-
   acct = import ../tools/system/acct {
     inherit fetchurl stdenv;
   };
 
-  aefs = import ../tools/security/aefs {
+  aefs = import ../tools/filesystems/aefs {
     inherit fetchurl stdenv fuse;
   };
 
@@ -379,6 +371,10 @@ let
 
   bootchart = import ../tools/system/bootchart {
     inherit fetchurl stdenv gnutar gzip coreutils utillinux gnugrep gnused psmisc nettools;
+  };
+
+  btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
+    inherit libuuid zlib acl;
   };
 
   eggdrop = import ../tools/networking/eggdrop {
@@ -512,7 +508,7 @@ let
     sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
   };
 
-  curlftpfs = import ../tools/networking/curlftpfs {
+  curlftpfs = import ../tools/filesystems/curlftpfs {
     inherit fetchurl stdenv fuse curl pkgconfig zlib glib;
   };
 
@@ -576,12 +572,16 @@ let
     libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
-  dosfstools = composedArgsAndFun (import ../tools/misc/dosfstools) {
+  dosfstools = composedArgsAndFun (import ../tools/filesystems/dosfstools) {
     inherit builderDefs;
   };
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
     inherit fetchurl stdenv cdrkit m4;
+  };
+
+  e2fsprogs = import ../tools/filesystems/e2fsprogs {
+    inherit fetchurl stdenv pkgconfig libuuid;
   };
 
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
@@ -612,7 +612,6 @@ let
   exiftags = import ../tools/graphics/exiftags {
     inherit stdenv fetchurl;
   };
-
 
   expect = import ../tools/misc/expect {
     inherit fetchurl stdenv tcl tk autoconf;
@@ -681,6 +680,10 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  genext2fs = import ../tools/filesystems/genext2fs {
+    inherit fetchurl stdenv;
+  };
+
   getopt = import ../tools/misc/getopt {
     inherit fetchurl stdenv;
   };
@@ -696,7 +699,7 @@ let
     inherit (xlibs) xproto libXt libX11;
   };
 
-  glusterfs = builderDefsPackage ../tools/networking/glusterfs {
+  glusterfs = builderDefsPackage ../tools/filesystems/glusterfs {
     inherit fuse;
     bison = bison24;
     flex = flex2535;
@@ -866,6 +869,14 @@ let
 
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
+  };
+
+  jfsrec = import ../tools/filesystems/jfsrec {
+    inherit fetchurl stdenv boost;
+  };
+
+  jfsutils = import ../tools/filesystems/jfsutils {
+    inherit fetchurl stdenv libuuid;
   };
 
   jhead = import ../tools/graphics/jhead {
@@ -1082,6 +1093,14 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  ntfs3g = import ../tools/filesystems/ntfs-3g {
+    inherit fetchurl stdenv utillinux;
+  };
+
+  ntfsprogs = import ../tools/filesystems/ntfsprogs {
+    inherit fetchurl stdenv libuuid;
+  };
+
   ntp = import ../tools/networking/ntp {
     inherit fetchurl stdenv libcap;
   };
@@ -1269,7 +1288,15 @@ let
     inherit stdenv fetchurl;
   };
 
-  relfs = composedArgsAndFun (import ../tools/misc/relfs/cvs.2008.03.05.nix) {
+  reiser4progs = import ../tools/filesystems/reiser4progs {
+    inherit fetchurl stdenv libaal;
+  };
+
+  reiserfsprogs = import ../tools/filesystems/reiserfsprogs {
+    inherit fetchurl stdenv;
+  };
+
+  relfs = composedArgsAndFun (import ../tools/filesystems/relfs) {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs pkgconfig libuuid;
     inherit (gnome) gnomevfs GConf;
@@ -1367,7 +1394,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  smbfsFuse = composedArgsAndFun (import ../tools/networking/smbfs-fuse/0.8.7.nix) {
+  smbfsFuse = composedArgsAndFun (import ../tools/filesystems/smbfs-fuse) {
     inherit builderDefs samba fuse;
   };
 
@@ -1377,6 +1404,14 @@ let
 
   socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
+  };
+
+  squashfsTools = import ../tools/filesystems/squashfs {
+    inherit fetchurl stdenv zlib;
+  };
+
+  sshfsFuse = import ../tools/filesystems/sshfs-fuse {
+    inherit fetchurl stdenv pkgconfig fuse glib;
   };
 
   sudo = import ../tools/security/sudo {
@@ -1390,10 +1425,6 @@ let
     inherit stdenv fetchurl kdebase kdelibs zlib libjpeg
       perl qt3 python libpng freetype expat;
     inherit (xlibs) libX11 libXext libXt libXaw libXpm;
-  };
-
-  sshfsFuse = import ../tools/networking/sshfs-fuse {
-    inherit fetchurl stdenv pkgconfig fuse glib;
   };
 
   ssmtp = import ../tools/networking/ssmtp {
@@ -1565,7 +1596,7 @@ let
     inherit fetchurl stdenv automake autoconf libtool;
   };
 
-  wdfs = import ../tools/networking/wdfs {
+  wdfs = import ../tools/filesystems/wdfs {
     inherit stdenv fetchurl neon fuse pkgconfig glib;
   };
 
@@ -1599,6 +1630,10 @@ let
   xclip = import ../tools/misc/xclip {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXmu;
+  };
+
+  xfsprogs = import ../tools/filesystems/xfsprogs {
+    inherit fetchurl stdenv libtool gettext libuuid;
   };
 
   xmlroff = import ../tools/typesetting/xmlroff {
@@ -5139,10 +5174,6 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
-  btrfsProgs = builderDefsPackage (import ../os-specific/linux/btrfsprogs) {
-    inherit libuuid zlib acl;
-  };
-
   cpufrequtils = (
     import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
@@ -5160,6 +5191,14 @@ let
 
   cramfsswap = import ../os-specific/linux/cramfsswap {
     inherit fetchurl stdenv zlib;
+  };
+
+  darwinArchUtility = import ../os-specific/darwin/arch {
+    inherit stdenv;
+  };
+
+  darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
+    inherit stdenv;
   };
 
   davfs2 = import ../os-specific/linux/davfs2 {
@@ -5192,10 +5231,6 @@ let
 
   libuuid = if ! stdenv.isDarwin then utillinuxng else null;
 
-  e2fsprogs = import ../os-specific/linux/e2fsprogs {
-    inherit fetchurl stdenv pkgconfig libuuid;
-  };
-
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
   };
@@ -5213,10 +5248,6 @@ let
   };
 
   fxload = import ../os-specific/linux/fxload {
-    inherit fetchurl stdenv;
-  };
-
-  genext2fs = import ../os-specific/linux/genext2fs {
     inherit fetchurl stdenv;
   };
 
@@ -5297,14 +5328,6 @@ let
 
   iwlwifi5000ucode = import ../os-specific/linux/firmware/iwlwifi-5000-ucode {
     inherit fetchurl stdenv;
-  };
-
-  jfsrec = import ../os-specific/linux/jfsrec {
-    inherit fetchurl stdenv boost;
-  };
-
-  jfsutils = import ../os-specific/linux/jfsutils/default.nix {
-    inherit fetchurl stdenv libuuid;
   };
 
   kbd = import ../os-specific/linux/kbd {
@@ -5806,14 +5829,6 @@ let
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
   };
 
-  reiserfsprogs = import ../os-specific/linux/reiserfsprogs {
-    inherit fetchurl stdenv;
-  };
-
-  reiser4progs = import ../os-specific/linux/reiser4progs {
-    inherit fetchurl stdenv libaal;
-  };
-
   radeontools = import ../os-specific/linux/radeontools {
     inherit pciutils;
     inherit fetchurl stdenv;
@@ -5841,10 +5856,6 @@ let
     inherit fetchurl stdenv klibc;
     zlib = zlibStatic;
     libjpeg = libjpegStatic;
-  };
-
-  squashfsTools = import ../os-specific/linux/squashfs {
-    inherit fetchurl stdenv zlib;
   };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) {
@@ -5954,10 +5965,6 @@ let
 
   wpa_supplicant_gui_qt4 = import ../os-specific/linux/wpa_supplicant/gui-qt4.nix {
     inherit fetchurl stdenv qt4 imagemagick inkscape;
-  };
-
-  xfsprogs = import ../os-specific/linux/xfsprogs/default.nix {
-    inherit fetchurl stdenv libtool gettext libuuid;
   };
 
   xmoto = builderDefsPackage (import ../games/xmoto) {
@@ -8365,14 +8372,6 @@ let
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
     inherit stdenv fetchsvn apacheAnt jdk axis2 shebangfix;
-  };
-
-  ntfs3g = import ../misc/ntfs-3g {
-    inherit fetchurl stdenv utillinux;
-  };
-
-  ntfsprogs = import ../misc/ntfsprogs {
-    inherit fetchurl stdenv libuuid;
   };
 
   pgadmin = import ../applications/misc/pgadmin {
