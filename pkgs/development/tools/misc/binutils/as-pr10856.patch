@@ -6,8 +6,8 @@ Crypto++:
 http://groups.google.com/group/cryptopp-users/browse_thread/thread/7ce734e479586640/29c6649b7c7adee2?#29c6649b7c7adee2 .
 
 diff -u -r1.77.2.1 -r1.77.2.2
---- a/src/gas/expr.c	2009/09/11 15:28:43	1.77.2.1
-+++ b/src/gas/expr.c	2009/10/28 08:23:48	1.77.2.2
+--- a/gas/expr.c	2009/09/11 15:28:43	1.77.2.1
++++ b/gas/expr.c	2009/10/28 08:23:48	1.77.2.2
 @@ -1997,6 +1997,7 @@
    /* Help out with CSE.  */
    valueT final_val = expressionP->X_add_number;
