@@ -1,0 +1,83 @@
+Fix a regression in GNU as:
+http://sourceware.org/bugzilla/show_bug.cgi?id=10856 .
+
+The bug appears to be responsible for invalid code generated for
+Crypto++:
+http://groups.google.com/group/cryptopp-users/browse_thread/thread/7ce734e479586640/29c6649b7c7adee2?#29c6649b7c7adee2 .
+
+diff -u -r1.77.2.1 -r1.77.2.2
+--- a/src/gas/expr.c	2009/09/11 15:28:43	1.77.2.1
++++ b/src/gas/expr.c	2009/10/28 08:23:48	1.77.2.2
+@@ -1997,6 +1997,7 @@
+   /* Help out with CSE.  */
+   valueT final_val = expressionP->X_add_number;
+   symbolS *add_symbol = expressionP->X_add_symbol;
++  symbolS *orig_add_symbol = add_symbol;
+   symbolS *op_symbol = expressionP->X_op_symbol;
+   operatorT op = expressionP->X_op;
+   valueT left, right;
+@@ -2078,6 +2079,7 @@
+ 	      left = right;
+ 	      seg_left = seg_right;
+ 	      add_symbol = op_symbol;
++	      orig_add_symbol = expressionP->X_op_symbol;
+ 	      op = O_symbol;
+ 	      break;
+ 	    }
+@@ -2122,18 +2124,19 @@
+ 	    {
+ 	      if (op == O_bit_exclusive_or || op == O_bit_inclusive_or)
+ 		{
+-		  if (seg_right != absolute_section || right != 0)
++		  if (!(seg_right == absolute_section && right == 0))
+ 		    {
+ 		      seg_left = seg_right;
+ 		      left = right;
+ 		      add_symbol = op_symbol;
++		      orig_add_symbol = expressionP->X_op_symbol;
+ 		    }
+ 		  op = O_symbol;
+ 		  break;
+ 		}
+ 	      else if (op == O_left_shift || op == O_right_shift)
+ 		{
+-		  if (seg_left != absolute_section || left != 0)
++		  if (!(seg_left == absolute_section && left == 0))
+ 		    {
+ 		      op = O_symbol;
+ 		      break;
+@@ -2149,6 +2152,7 @@
+ 	      seg_left = seg_right;
+ 	      left = right;
+ 	      add_symbol = op_symbol;
++	      orig_add_symbol = expressionP->X_op_symbol;
+ 	      op = O_symbol;
+ 	      break;
+ 	    }
+@@ -2158,11 +2162,11 @@
+ 	      op = O_symbol;
+ 	      break;
+ 	    }
+-	  else if (left != right
+-		   || ((seg_left != reg_section || seg_right != reg_section)
+-		       && (seg_left != undefined_section
+-			   || seg_right != undefined_section
+-			   || add_symbol != op_symbol)))
++	  else if (!(left == right
++		     && ((seg_left == reg_section && seg_right == reg_section)
++			 || (seg_left == undefined_section
++			     && seg_right == undefined_section
++			     && add_symbol == op_symbol))))
+ 	    return 0;
+ 	  else if (op == O_bit_and || op == O_bit_inclusive_or)
+ 	    {
+@@ -2233,7 +2237,8 @@
+ 	op = O_constant;
+       else if (seg_left == reg_section && final_val == 0)
+ 	op = O_register;
+-      else if (add_symbol != expressionP->X_add_symbol)
++      else if (seg_left == undefined_section
++	       && add_symbol != orig_add_symbol)
+ 	final_val += left;
+       expressionP->X_add_symbol = add_symbol;
+     }

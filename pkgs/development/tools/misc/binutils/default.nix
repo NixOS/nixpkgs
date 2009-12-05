@@ -1,6 +1,6 @@
 {stdenv, fetchurl, noSysDirs, cross ? null}:
 
-let 
+let
     basename = "binutils-2.20";
 in
 stdenv.mkDerivation rec {
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
+
+    ./as-pr10856.patch
   ];
 
   inherit noSysDirs;
