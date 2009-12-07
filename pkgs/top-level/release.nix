@@ -570,7 +570,7 @@ in {
     sdf = all;
     strategoxt = all;
     javafront = all;
-    strategoShell = linux;
+    strategoShell = linux ++ darwin;
     dryad = linux;
   };
 
@@ -579,6 +579,7 @@ in {
     sdf = all;
     strategoxt = all;
     javafront = all;
+    strategoShell = linux ++ darwin;
     dryad = linux;
   };
 
