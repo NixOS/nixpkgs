@@ -93,6 +93,18 @@ rec {
   } // ( if stdenv.system == "i686-cygwin" then { CFLAGS = "-O2"; } else {} ) ) ;
 
 
+  aspectjfront = stdenv.mkDerivation (rec {
+    name = "aspectj-front-0.2pre20035";
+
+    src = fetchurl {
+      url = "http://hydra.nixos.org/build/175690/download/1/aspectj-front-0.2pre20035.tar.gz";
+      sha256 = "48f6cda6f9f19436e9553e8d27e6bb42500d08370332e3ad214affb49851e58e";
+    };
+
+    buildInputs = [pkgconfig aterm sdf strategoxt javafront];
+
+  } // ( if stdenv.system == "i686-cygwin" then { CFLAGS = "-O2"; } else {} ) ) ;
+
   dryad = stdenv.mkDerivation rec {
     name = "dryad-0.2pre1835518355";
 
