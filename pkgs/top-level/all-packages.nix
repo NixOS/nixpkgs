@@ -2172,7 +2172,8 @@ let
   };
 
   strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries;
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries ncurses;
+    readline = readline5; 
   };
 
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {

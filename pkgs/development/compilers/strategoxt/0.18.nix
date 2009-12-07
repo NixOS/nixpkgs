@@ -1,4 +1,4 @@
-{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, makeStaticBinaries}:
+{stdenv, fetchurl, aterm, pkgconfig, getopt, jdk, makeStaticBinaries, readline, ncurses}:
 
 rec {
 
@@ -56,6 +56,21 @@ rec {
     };
   };
 
+  strategoShell = stdenv.mkDerivation rec {
+    name = "stratego-shell-0.7";
+
+    src = fetchurl {
+      url = "ftp://ftp.strategoxt.org/pub/stratego/StrategoXT/strategoxt-0.17/stratego-shell-0.7.tar.gz";
+      sha256 = "0q21vks9gaw9v4rxz90wb0pxzb19l7gwi4nbjvk4zb1imdk7znck";
+    };
+
+    buildInputs = [pkgconfig aterm sdf strategoxt getopt readline ncurses];
+
+    meta = {
+      homepage = http://strategoxt.org/;
+      meta = "A language and toolset for program transformation";
+    };
+  };
 
   javafront = stdenv.mkDerivation (rec {
     name = "java-front-0.9";
