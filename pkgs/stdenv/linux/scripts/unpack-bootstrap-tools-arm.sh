@@ -12,7 +12,7 @@ echo Patching the bootstrap tools...
 # use a copy of patchelf.
 LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? $out/bin/cp $out/bin/patchelf .
 
-for i in $out/bin/* $out/libexec/gcc/*/*/*; do
+for i in $out/bin/* $out/libexec/gcc/*/*/* $out/lib/librt*; do
     echo patching $i
     if ! test -L $i; then
          LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
@@ -21,13 +21,13 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
              $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
     fi
 done
-for i in $out/lib/librt* ; do
+for i in $out/lib/libppl* $out/lib/libgmp*; do
     echo patching $i
     if ! test -L $i; then
          LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
          LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
     fi
 done
 
