@@ -42,8 +42,8 @@ if test "$noSysDirs" = "1"; then
 
     if test -n "$targetConfig"; then
         if test -z "$crossStageStatic"; then
-            extraXCFlags="-B${glibcCross}/lib -idirafter ${glibcCross}/include"
-            extraXLDFlags="-L${glibcCross}/lib"
+            extraXCFlags="-B${libcCross}/lib -idirafter ${libcCross}/include"
+            extraXLDFlags="-L${libcCross}/lib"
             export NIX_EXTRA_CFLAGS_TARGET=$extraXCFlags
             for i in $extraXLDFlags; do
                 export NIX_EXTRA_LDFLAGS_TARGET="$NIX_EXTRA_LDFLAGS_TARGET -Wl,$i"

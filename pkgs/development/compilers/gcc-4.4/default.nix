@@ -17,7 +17,7 @@
 , name ? "gcc"
 , cross ? null
 , binutilsCross ? null
-, glibcCross ? null
+, libcCross ? null
 , crossStageStatic ? true
 }:
 
@@ -61,7 +61,7 @@ let version = "4.4.2";
         " --disable-libgomp " +
         " --disable-shared"
         else
-        " --with-headers=${glibcCross}/include" +
+        " --with-headers=${libcCross}/include" +
         " --enable-__cxa_atexit" +
         " --enable-long-long" +
         " --enable-threads=posix" +
@@ -87,10 +87,14 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [./pass-cxxcpp.patch]
+    [./pass-cxxcpp.patch
+     ./libtool-glibc.patch   # some libraries don't let the proper -Btargetglibcpath pass
+     ./libstdc++-target.patch # (fixed in gcc 4.4.3) bad mixture of build/target flags
+     ]
     ++ optional noSysDirs ./no-sys-dirs.patch;
 
-  inherit noSysDirs profiledCompiler staticCompiler langJava;
+  inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
+    libcCross;
 
   buildInputs = [ texinfo gmp mpfr gettext which ]
     ++ (optional (ppl != null) ppl)

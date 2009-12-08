@@ -1,0 +1,48 @@
+diff --git a/libgomp/configure b/libgomp/configure
+index deef673..9e4a790 100755
+--- a/libgomp/configure
++++ b/libgomp/configure
+@@ -23848,6 +23848,11 @@ old_archive_cmds=$lt_old_archive_cmds
+ # A language specific compiler.
+ CC=$lt_compiler
+ 
++# Ugly hack to get libmudflap (and other libraries) to build.
++# Libtool filters out \`-B' flags when linking (why?), so the \`-B' flag
++# to Glibc gets lost.  Here we forcibly add it to any invocation.
++CC="\$CC $NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET"
++
+ # Is the compiler the GNU compiler?
+ with_gcc=$GCC
+ 
+diff --git a/libmudflap/configure b/libmudflap/configure
+index ae1be92..4ee1e18 100755
+--- a/libmudflap/configure
++++ b/libmudflap/configure
+@@ -15044,6 +15044,11 @@ old_archive_cmds=$lt_old_archive_cmds
+ # A language specific compiler.
+ CC=$lt_compiler
+ 
++# Ugly hack to get libmudflap (and other libraries) to build.
++# Libtool filters out \`-B' flags when linking (why?), so the \`-B' flag
++# to Glibc gets lost.  Here we forcibly add it to any invocation.
++CC="\$CC $NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET"
++
+ # Is the compiler the GNU compiler?
+ with_gcc=$GCC
+ 
+diff --git a/libssp/configure b/libssp/configure
+index ee2a41f..7f3e1fd 100755
+--- a/libssp/configure
++++ b/libssp/configure
+@@ -12926,6 +12926,11 @@ old_archive_cmds=$lt_old_archive_cmds
+ # A language specific compiler.
+ CC=$lt_compiler
+ 
++# Ugly hack to get libmudflap (and other libraries) to build.
++# Libtool filters out \`-B' flags when linking (why?), so the \`-B' flag
++# to Glibc gets lost.  Here we forcibly add it to any invocation.
++CC="\$CC $NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET"
++
+ # Is the compiler the GNU compiler?
+ with_gcc=$GCC
+ 

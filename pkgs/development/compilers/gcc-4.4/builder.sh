@@ -10,9 +10,9 @@ mkdir $NIX_FIXINC_DUMMY
 export CPP="gcc -E"
 
 if test "$staticCompiler" = "1"; then
-    EXTRA_LDFLAGS="-static"
+    NIX_EXTRA_LDFLAGS="-static"
 else
-    EXTRA_LDFLAGS=""
+    NIX_EXTRA_LDFLAGS=""
 fi
 
 if test "$noSysDirs" = "1"; then
@@ -40,55 +40,47 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
-    # We should not allow gcc find the headers of the native glibc
-    # (Here I only think of c,c++ compilers)
-    if test -z "$targetConfig"; then
-        # Setting $CPATH makes sure both `gcc' and `xgcc' find the C
-        # library headers, regarless of the language being compiled.
-        export CPATH="$NIX_FIXINC_DUMMY${CPATH:+:}$CPATH"
+    extraCFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY $extraCFlags"
+    extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
-        # Likewise, to help it find `crti.o' and similar files.
-        export LIBRARY_PATH="$glibc_libdir${LIBRARY_PATH:+:}$LIBRARY_PATH"
-
-        echo "setting \$CPATH to \`$CPATH'"
-        echo "setting \$LIBRARY_PATH to \`$LIBRARY_PATH'"
-    fi
-
-    extraCFlags="-g0 $extraCFlags"
-    extraLDFlags="--strip-debug $extraLDFlags"
-
+    export NIX_EXTRA_CFLAGS="$extraCFlags"
     for i in $extraLDFlags; do
-        export EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
+        export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
     done
 
     if test -n "$targetConfig"; then
+        # Cross-compiling, we need gcc not to read ./specs in order to build
+        # the g++ compiler (after the specs for the cross-gcc are created).
+        # Having LIBRARY_PATH= makes gcc read the specs from ., and the build
+        # breaks. Having this variable comes from the default.nix code to bring
+        # gcj in.
+        unset LIBRARY_PATH
+        unset CPATH
         if test -z "$crossStageStatic"; then
-            extraXCFlags="-B${glibcCross}/lib -idirafter ${glibcCross}/include"
-            extraXLDFlags="-L${glibcCross}/lib"
-            export EXTRA_CFLAGS_TARGET=$extraXCFlags
-            for i in $extraXLDFlags; do
-                export EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS_TARGET -Wl,$i"
-            done
+            export NIX_EXTRA_CFLAGS_TARGET="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
+            export NIX_EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
         fi
-
-        makeFlagsArray=( \
-            "${makeFlagsArray[@]}" \
-            NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-            SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-            CFLAGS_FOR_TARGET="$EXTRA_CFLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
-            LDFLAGS_FOR_TARGET="$EXTRA_CFLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
-            )
     else
-        export EXTRA_CFLAGS_TARGET=$EXTRA_CFLAGS
-        export EXTRA_LDFLAGS_TARGET=$EXTRA_LDFLAGS
+        # To be read by configure scripts (libtool-glibc.patch)
+        export NIX_EXTRA_CFLAGS_TARGET="$NIX_EXTRA_CFLAGS"
+        export NIX_EXTRA_LDFLAGS_TARGET="$NIX_EXTRA_LDFLAGS"
+    fi
+
+    makeFlagsArray=( \
+        "${makeFlagsArray[@]}" \
+        NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+        SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+        CFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+        CFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+        LDFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+        LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+        )
+
+    if test -z "$targetConfig"; then
         makeFlagsArray=( \
             "${makeFlagsArray[@]}" \
-            NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-            SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-            CFLAGS_FOR_BUILD="$extraCflags $EXTRA_CFLAGS $EXTRA_LDFLAGS" \
-            CFLAGS_FOR_TARGET="$EXTRA_CFLAGS $EXTRA_LDFLAGS" \
-            LDFLAGS_FOR_BUILD="$extraCflags $EXTRA_CFLAGS $EXTRA_LDFLAGS" \
-            LDFLAGS_FOR_TARGET="$EXTRA_CFLAGS $EXTRA_LDFLAGS" \
+            BOOT_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            BOOT_LDFLAGS="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
             )
     fi
 
@@ -118,6 +110,13 @@ preConfigure() {
         ln -s ../newlib-*/newlib newlib
         # Patch to get armvt5el working:
         sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
+    fi
+    # Bug - they packaged zlib
+    if test -d "zlib"; then
+        # This breaks the build without-headers, which should build only
+        # the target libgcc as target libraries.
+        # See 'configure:5370'
+        rm -Rf zlib
     fi
 
     # Perform the build in a different directory.

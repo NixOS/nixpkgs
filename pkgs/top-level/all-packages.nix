@@ -1784,7 +1784,7 @@ let
   gcc43_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs cross;
     binutilsCross = binutilsCross cross;
-    glibcCross = libcCross cross;
+    libcCross = libcCross cross;
     profiledCompiler = false;
     enableMultilib = true;
     crossStageStatic = false;
@@ -1794,17 +1794,17 @@ let
     inherit stdenv fetchurl texinfo gmp mpfr ppl cloogppl noSysDirs cross
         gettext which;
     binutilsCross = binutilsCross cross;
-    glibcCross = libcCross cross;
+    libcCross = libcCross cross;
     profiledCompiler = false;
     enableMultilib = true;
     crossStageStatic = false;
   };
 
   gccCrossStageStatic = cross: wrapGCCCross {
-    gcc = forceBuildDrv ((gcc43_realCross cross).override {
+    gcc = forceBuildDrv ((gcc44_realCross cross).override {
         crossStageStatic = true;
         langCC = false;
-        glibcCross = null;
+        libcCross = null;
     });
     libc = null;
     binutils = binutilsCross cross;
@@ -1812,7 +1812,7 @@ let
   };
 
   gccCrossStageFinal = cross: wrapGCCCross {
-    gcc = forceBuildDrv (gcc43_realCross cross);
+    gcc = forceBuildDrv (gcc44_realCross cross);
     libc = libcCross cross;
     binutils = binutilsCross cross;
     inherit cross;
@@ -3484,8 +3484,8 @@ let
   });
 
   # We can choose:
-  # glibcCross = cross: glibc211Cross cross;
-  libcCross = cross: uclibcCross cross;
+  libcCross = cross: glibc211Cross cross;
+  # libcCross = cross: uclibcCross cross;
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv kernelHeaders;
