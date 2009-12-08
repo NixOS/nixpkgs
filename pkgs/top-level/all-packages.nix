@@ -519,6 +519,11 @@ let
     inherit fetchurl stdenv zlib bzip2 openssl;
   };
 
+  davfs2 = import ../tools/filesystems/davfs2 {
+    inherit fetchurl stdenv zlib;
+    neon = neon028;
+  };
+
   dcraw = import ../tools/graphics/dcraw {
     inherit fetchurl stdenv gettext libjpeg lcms;
   };
@@ -5198,11 +5203,6 @@ let
 
   darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
     inherit stdenv;
-  };
-
-  davfs2 = import ../os-specific/linux/davfs2 {
-    inherit fetchurl stdenv zlib;
-    neon = neon028;
   };
 
   devicemapper = import ../os-specific/linux/device-mapper {
