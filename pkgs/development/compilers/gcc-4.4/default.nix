@@ -88,7 +88,7 @@ stdenv.mkDerivation ({
 
   patches =
     [./pass-cxxcpp.patch
-     ./libtool-glibc.patch   # some libraries don't let the proper -Btargetglibcpath pass
+#     ./libtool-glibc.patch   # some libraries don't let the proper -Btargetglibcpath pass
      ./libstdc++-target.patch # (fixed in gcc 4.4.3) bad mixture of build/target flags
      ]
     ++ optional noSysDirs ./no-sys-dirs.patch;

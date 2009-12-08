@@ -10,9 +10,9 @@ mkdir $NIX_FIXINC_DUMMY
 export CPP="gcc -E"
 
 if test "$staticCompiler" = "1"; then
-    NIX_EXTRA_LDFLAGS="-static"
+    EXTRA_LDFLAGS="-static"
 else
-    NIX_EXTRA_LDFLAGS=""
+    EXTRA_LDFLAGS=""
 fi
 
 if test "$noSysDirs" = "1"; then
@@ -21,7 +21,7 @@ if test "$noSysDirs" = "1"; then
 
         # Figure out what extra flags to pass to the gcc compilers
         # being generated to make sure that they use our glibc.
-        extraCFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
+        extraFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
         extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
 
         # Use *real* header files, otherwise a limits.h is generated
@@ -34,18 +34,18 @@ if test "$noSysDirs" = "1"; then
         
     else
         # Hack: support impure environments.
-        extraCFlags="-isystem /usr/include"
+        extraFlags="-isystem /usr/include"
         extraLDFlags="-L/usr/lib64 -L/usr/lib"
         glibc_libdir="/usr/lib"
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
-    extraCFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY $extraCFlags"
+    extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY $extraFlags"
     extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
-    export NIX_EXTRA_CFLAGS="$extraCFlags"
+    EXTRA_FLAGS="$extraFlags"
     for i in $extraLDFlags; do
-        export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
+        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
     done
 
     if test -n "$targetConfig"; then
@@ -57,30 +57,34 @@ if test "$noSysDirs" = "1"; then
         unset LIBRARY_PATH
         unset CPATH
         if test -z "$crossStageStatic"; then
-            export NIX_EXTRA_CFLAGS_TARGET="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
-            export NIX_EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
+            EXTRA_FLAGS_TARGET="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
+            EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
         fi
     else
-        # To be read by configure scripts (libtool-glibc.patch)
-        export NIX_EXTRA_CFLAGS_TARGET="$NIX_EXTRA_CFLAGS"
-        export NIX_EXTRA_LDFLAGS_TARGET="$NIX_EXTRA_LDFLAGS"
+        EXTRA_FLAGS_TARGET="$EXTRA_FLAGS"
+        EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS"
     fi
 
+    # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
+    # the startfiles.
+    # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
+    # for the startfiles.
     makeFlagsArray=( \
         "${makeFlagsArray[@]}" \
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        CFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        CFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
-        LDFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+        CFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
+        CFLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+        FLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+        LDFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
+        LDFLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
         )
 
     if test -z "$targetConfig"; then
         makeFlagsArray=( \
             "${makeFlagsArray[@]}" \
-            BOOT_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-            BOOT_LDFLAGS="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+            BOOT_CFLAGS="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
+            BOOT_LDFLAGS="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
             )
     fi
 
