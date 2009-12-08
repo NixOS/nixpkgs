@@ -1,14 +1,14 @@
-{stdenv, fetchurl, pkgconfig, glib, fuse}:
+{ stdenv, fetchurl, pkgconfig, glib, fuse }:
 
-stdenv.mkDerivation {
-  name = "sshfs-fuse-2.1";
+stdenv.mkDerivation rec {
+  name = "sshfs-fuse-2.2";
   
   src = fetchurl {
-    url = mirror://sourceforge/fuse/sshfs-fuse-2.1.tar.gz;
-    sha256 = "0cyjq8dwrv3rhj7a52sd3fmljh5fdphlsnvqx51v6hbgd3jgld0j";
+    url = "mirror://sourceforge/fuse/${name}.tar.gz";
+    sha256 = "08sl7q8nqwg57bxbzp2wb9h204gnl1w9c1f7zjdh7xdr9jybqvi0";
   };
   
-  buildInputs = [pkgconfig glib fuse];
+  buildInputs = [ pkgconfig glib fuse ];
 
   meta = {
     homepage = http://fuse.sourceforge.net/sshfs.html;
