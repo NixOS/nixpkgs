@@ -10,7 +10,7 @@ with pkgs.lib;
   config = {
 
     jobs.backdoor =
-      { startOn = "network-interfaces";
+      { startOn = "started network-interfaces";
         
         preStart =
           ''

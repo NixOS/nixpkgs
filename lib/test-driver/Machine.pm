@@ -180,7 +180,7 @@ sub waitForJob {
     my ($self, $jobName) = @_;
     while (1) {
         my ($status, $out) = $self->execute("initctl status $jobName");
-        return if $out =~ /\(start\)\s+running/;
+        return if $out =~ /start\/running/;
         sleep 1;
         # !!! need a timeout
     }
@@ -204,7 +204,7 @@ sub stopJob {
     $self->execute("initctl stop $jobName");
     while (1) {
         my ($status, $out) = $self->execute("initctl status $jobName");
-        return if $out =~ /\(stop\)\s+waiting/;
+        return if $out =~ /stop\/waiting/;
         sleep 1;
         # !!! need a timeout
     }
