@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libftdi}:
 
 stdenv.mkDerivation {
-  name = "openocd-0.2.0";
+  name = "openocd-0.3.1";
 
   src = fetchurl {
-    url = "http://download.berlios.de/openocd/openocd-0.2.0.tar.bz2";
-    sha256 = "1qdl2a2mxhl07xz32l9nxjvmf16b0717aqlrhd28akn6si3jps54";
+    url = "http://download.berlios.de/openocd/openocd-0.3.1.tar.bz2";
+    sha256 = "1ww66gj4mn3ih4k0b2w21795gfl6g53nm41irii9n7bbjn2dmgrp";
   };
 
 
