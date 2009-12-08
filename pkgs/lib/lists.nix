@@ -161,4 +161,10 @@ rec {
     in
       qs list [];
 
+
+  # haskell's take:  take 2 [1 2 3 4]  yields  [1 2] 
+  take = count: list:
+    if list == [] || count == 0 then []
+    else [ (head list) ] ++ take (builtins.sub count 1) (tail list);
+
 }
