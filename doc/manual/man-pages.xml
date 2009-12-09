@@ -24,5 +24,6 @@
   </info>
   
   <xi:include href="man-configuration.xml" />
+  <xi:include href="man-nixos-rebuild.xml" />
 
 </reference>
