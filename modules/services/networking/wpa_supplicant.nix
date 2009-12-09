@@ -28,6 +28,13 @@ in
       '';
     };
 
+    networking.WLANInterface = mkOption {
+      default = "wlan0";
+      description = ''
+        The interface wpa_supplicant will use, if enableWLAN is enabled.
+      '';
+    };
+
   };
 
 
@@ -49,7 +56,7 @@ in
 
         exec =
           "${pkgs.wpa_supplicant}/sbin/wpa_supplicant " +
-          "-C /var/run/wpa_supplicant -c ${configFile} -iwlan0";
+          "-C /var/run/wpa_supplicant -c ${configFile} -i${config.networking.WLANInterface}";
       };
   
   };
