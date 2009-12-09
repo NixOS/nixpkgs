@@ -57,9 +57,6 @@ EOF
     oldJobs=$(readlink -f /etc/static/init)
     newJobs=$(readlink -f @out@/etc/init)
 
-    echo "old: $oldJobs"
-    echo "new: $newJobs"
-
     stopJob() {
         local job=$1
         initctl stop "$job" || true

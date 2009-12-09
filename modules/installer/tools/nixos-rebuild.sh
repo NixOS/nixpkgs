@@ -132,8 +132,9 @@ fi
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
 if test -n "$buildNix"; then
-    if ! nix-build $NIXOS -A nixFallback -o $tmpDir/nix; then
-        nix-build $NIXPKGS -A nixUnstable -o $tmpDir/nix
+    echo "building Nix..." >&2
+    if ! nix-build $NIXOS -A nixFallback -o $tmpDir/nix > /dev/null; then
+        nix-build $NIXPKGS -A nixUnstable -o $tmpDir/nix > /dev/null
     fi
     PATH=$tmpDir/nix/bin:$PATH
 fi
@@ -143,14 +144,15 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if test -z "$rollback"; then
+    echo "building the system configuration..." >&2
     if test "$action" = switch -o "$action" = boot; then
         nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
         pathToConfig=/nix/var/nix/profiles/system
     elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
-        nix-build $NIXOS -A system -K -k $extraBuildFlags
+        nix-build $NIXOS -A system -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
     elif test "$action" = build-vm; then
-        nix-build $NIXOS -A vm -K -k $extraBuildFlags
+        nix-build $NIXOS -A vm -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
     else
         showSyntax
