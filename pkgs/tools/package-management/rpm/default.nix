@@ -1,31 +1,26 @@
-{stdenv, fetchurl, cpio, zlib, bzip2, file, sqlite, beecrypt, neon, elfutils}:
+{ stdenv, fetchurl, cpio, zlib, bzip2, xz, file, elfutils, nspr, nss, popt, db4 }:
 
-stdenv.mkDerivation {
-  name = "rpm-4.4.8";
+stdenv.mkDerivation rec {
+  name = "rpm-4.7.2";
 
   src = fetchurl {
-    url = http://wraptastic.org/pub/rpm-4.4.x/rpm-4.4.8.tar.gz;
-    sha256 = "02ddf076bwcpxzxq9i0ii1fzw2r69fk0gjkk2yrzgzsmb01na230";
+    url = "http://rpm.org/releases/rpm-4.7.x/${name}.tar.bz2";
+    sha1 = "07b90f653775329ea726ce0005c4c82f56167ca0";
   };
+
+  buildInputs = [ cpio zlib bzip2 xz file nspr nss popt db4 ];
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  buildInputs = [cpio zlib bzip2 file sqlite beecrypt neon];
-
-  NIX_CFLAGS_COMPILE = "-I${beecrypt}/include/beecrypt -I${neon}/include/neon -I${elfutils}/include";
+  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${elfutils}/include";
 
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
+  
+  configureFlags = "--with-external-db --without-lua";
 
-  preConfigure = ''
-    rm -rf zlib file sqlite
-
-    substituteInPlace ./installplatform --replace /usr/bin/env $(type -tp env)
-    substituteInPlace Makefile.in --replace /var/tmp $(pwd)/dummy
-  '';
-
-  dontDisableStatic = true;
-
-  configureFlags = "--without-selinux --without-lua --without-python --without-perl";
-
-  patches = [./no-lua.patch];
+  meta = {
+    homepage = http://www.rpm.org/;
+    license = "GPLv2";
+    description = "The RPM Package Manager";
+  };
 }

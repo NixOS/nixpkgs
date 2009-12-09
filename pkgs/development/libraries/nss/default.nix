@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nss-3.12.3";
+  name = "nss-3.12.4";
   
   src = fetchurl {
-    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_3_RTM/src/nss-3.12.3.tar.bz2;
-    sha1 = "eeca14a37629287baa10eb7562a5fb927e9dd171";
+    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_4_RTM/src/nss-3.12.4.tar.gz;
+    sha1 = "a152bf980f3a3dcf575c2d149fb279058ef2e757";
   };
 
   buildInputs = [nspr perl zlib];

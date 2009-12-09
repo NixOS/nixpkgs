@@ -1339,7 +1339,8 @@ let
   };
 
   rpm = import ../tools/package-management/rpm {
-    inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
+    inherit fetchurl stdenv cpio zlib bzip2 xz file elfutils nspr nss popt;
+    db4 = db45;
   };
 
   rrdtool = import ../tools/misc/rrdtool {
