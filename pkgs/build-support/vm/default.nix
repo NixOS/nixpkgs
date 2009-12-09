@@ -773,6 +773,28 @@ rec {
       archs = ["noarch" "x86_64"];
     } // args);
 
+    fedora12i386 = args: makeImageFromRPMDist ({
+      name = "fedora-12-i386";
+      fullName = "Fedora 12 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/12/Fedora/i386/os/repodata/92857daf45687583ffa0fa6f8f97c71d08c50d8b6305dfeea8a3332bf2f7f27c-primary.xml.gz;
+        sha256 = "0z7jyzr2ncx3m3pdy1b3ic6wa20xqybqyvzsl3zq6xb88nppv1cj";
+      };
+      urlPrefix = mirror://fedora/linux/releases/12/Fedora/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+    } // args);
+
+    fedora12x86_64 = args: makeImageFromRPMDist ({
+      name = "fedora-12-x86_64";
+      fullName = "Fedora 12 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/12/Fedora/x86_64/os/repodata/a4ebee776b3c4898086e124a512e7f8c701ab1699fd83b2dcea3d7592b5c9ff0-primary.xml.gz;
+        sha256 = "1w4zbhmmkmx3rqnkpn4zd6qilw4cgwp52jhjdq49hj1wddvyxsx4";
+      };
+      urlPrefix = mirror://fedora/linux/releases/12/Fedora/x86_64/os;
+      archs = ["noarch" "x86_64"];
+    } // args);
+
     opensuse103i386 = args: makeImageFromRPMDist ({
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1091,6 +1113,8 @@ rec {
     fedora10x86_64 = diskImageExtraFuns.fedora10x86_64 [];
     fedora11i386 = diskImageExtraFuns.fedora11i386 [];
     fedora11x86_64 = diskImageExtraFuns.fedora11x86_64 [];
+    fedora12i386 = diskImageExtraFuns.fedora12i386 [];
+    fedora12x86_64 = diskImageExtraFuns.fedora12x86_64 [];
     opensuse103i386 = diskImageExtraFuns.opensuse103i386 [];
     opensuse110i386 = diskImageExtraFuns.opensuse110i386 [];
     opensuse110x86_64 = diskImageExtraFuns.opensuse110x86_64 [];
@@ -1124,6 +1148,8 @@ rec {
     fedora10x86_64 = extraVirtualPackages : diskImageFuns.fedora10x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
     fedora11i386 = extraVirtualPackages : diskImageFuns.fedora11i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
     fedora11x86_64 = extraVirtualPackages : diskImageFuns.fedora11x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora12i386 = extraVirtualPackages : diskImageFuns.fedora12i386 { packages = commonFedoraPackages     ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
+    fedora12x86_64 = extraVirtualPackages : diskImageFuns.fedora12x86_64 { packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ] ++ extraVirtualPackages; };
     opensuse103i386 = extraVirtualPackages : diskImageFuns.opensuse103i386 { packages = commonOpenSUSEPackages ++ ["devs"] ++ extraVirtualPackages; };
     opensuse110i386 = extraVirtualPackages : diskImageFuns.opensuse110i386 { packages = commonOpenSUSEPackages ++ extraVirtualPackages; };
     opensuse110x86_64 = extraVirtualPackages : diskImageFuns.opensuse110x86_64 { packages = commonOpenSUSEPackages ++ extraVirtualPackages; };
