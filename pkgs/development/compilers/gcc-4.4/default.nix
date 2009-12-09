@@ -88,8 +88,14 @@ stdenv.mkDerivation ({
 
   patches =
     [./pass-cxxcpp.patch
-#     ./libtool-glibc.patch   # some libraries don't let the proper -Btargetglibcpath pass
-     ./libstdc++-target.patch # (fixed in gcc 4.4.3) bad mixture of build/target flags
+
+     # libmudflap and libstdc++ receive the build CPP,
+     # and not the target.
+     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42279
+     ./target-cpp.patch
+
+     # (fixed in gcc 4.4.3) bad mixture of build/target flags
+     ./libstdc++-target.patch
      ]
     ++ optional noSysDirs ./no-sys-dirs.patch;
 
