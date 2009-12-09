@@ -38,6 +38,7 @@ stdenv.mkDerivation {
       -e 's@^DEVEL_PREFIX.*@DEVEL_PREFIX="/"@' \
       -e 's@.*UCLIBC_HAS_WCHAR.*@UCLIBC_HAS_WCHAR=y@' \
       -e 's@.*DO_C99_MATH.*@DO_C99_MATH=y@' \
+      -e 's@.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*@UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y@' \
       ${configArmEABI} \
       ${configBigEndian} \
       -i .config
