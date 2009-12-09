@@ -29,21 +29,6 @@
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
 
-  libXaw = attrs: attrs // {
-    # The libXaw installation is broken on MacOS X. The package has hard-coded
-    # know-how that assumes shared libraries use an .so suffix. MacOS, however,
-    # uses .dylib. Furthermore, the package fails to install an unversioned
-    # libtool .la file for the library.
-    postInstall = ''
-      cd $out/lib
-      ln -s libXaw8.la libXaw.la
-      if [ ${args.stdenv.system} = "i686-darwin" ]; then
-        rm *.so*
-        ln -s libXaw8.dylib libXaw.dylib
-      fi
-    '';
-  };
-
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
@@ -100,7 +85,7 @@
       [ args.zlib xorg.xf86bigfontproto xorg.glproto args.mesa xorg.xf86driproto
         xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
         xorg.xineramaproto xorg.dri2proto xorg.xf86dgaproto xorg.dmxproto
-        xorg.libdmx xorg.xf86vidmodeproto xorg.libXext 
+        xorg.libdmx xorg.xf86vidmodeproto xorg.libXext
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto ];
