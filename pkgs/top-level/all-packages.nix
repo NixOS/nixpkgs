@@ -2178,7 +2178,7 @@ let
 
   strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
     inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries ncurses;
-    readline = readline5; 
+    readline = readline5;
   };
 
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
@@ -2186,7 +2186,8 @@ let
   };
 
   swiProlog = import ../development/compilers/swi-prolog {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gmp readline openssl libjpeg unixODBC zlib;
+    inherit (xlibs) libXinerama libXft libXpm libSM libXt;
   };
 
   tinycc = import ../development/compilers/tinycc {
