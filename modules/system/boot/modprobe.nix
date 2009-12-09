@@ -2,8 +2,6 @@
 
 with pkgs.lib;
 
-# blacklist "cirrusfb" "i2c_piix4"
-
 {
 
   ###### interface
