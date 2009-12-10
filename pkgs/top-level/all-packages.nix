@@ -1783,6 +1783,8 @@ let
 
   gcc43 = useFromStdenv "gcc" gcc43_real;
 
+  gcc43_wrapper2 = wrapGCC2 gcc43.gcc;
+
   gcc43_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit fetchurl stdenv texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
@@ -2217,6 +2219,7 @@ let
   };
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
+  wrapGCC2 = wrapGCCWith (import ../build-support/gcc-wrapper2) glibc;
 
   # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
   # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
@@ -6234,12 +6237,14 @@ let
   };
 
   autopanosiftc = import ../applications/graphics/autopanosiftc {
-    inherit fetchurl stdenv cmake libpng libtiff libjpeg panotools libxml2;
+    inherit fetchurl cmake libpng libtiff libjpeg panotools libxml2;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   avidemux = import ../applications/video/avidemux {
-    inherit fetchurl stdenv cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
+    inherit fetchurl cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
       alsaLib lame faac faad2 libvorbis;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
   };
@@ -6768,7 +6773,8 @@ let
   };
 
   freepv = import ../applications/graphics/freepv {
-    inherit fetchurl stdenv mesa freeglut libjpeg zlib cmake libxml2 libpng;
+    inherit fetchurl mesa freeglut libjpeg zlib cmake libxml2 libpng;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
     inherit (xlibs) libX11 libXxf86vm;
   };
 
@@ -6918,10 +6924,11 @@ let
   };
 
   hugin = import ../applications/graphics/hugin {
-    inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig
+    inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc;
     inherit wxGTK;
     openexr = openexr_1_6_1;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   i810switch = import ../applications/misc/i810 {
@@ -7285,7 +7292,8 @@ let
   };
 
   paraview = import ../applications/graphics/paraview {
-    inherit fetchurl stdenv cmake qt4;
+    inherit fetchurl cmake qt4;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   partitionManager = import ../tools/misc/partition-manager {

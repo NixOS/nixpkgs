@@ -18,11 +18,9 @@ stdenv.mkDerivation {
 
   cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include" +
     " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
-    " -DSDL_INCLUDE_DIR=${SDL}/include/SDL" +
-    " -DCMAKE_SKIP_BUILD_RPATH=ON" +
-    " -DCMAKE_BUILD_TYPE=Release";
+    " -DSDL_INCLUDE_DIR=${SDL}/include/SDL";
 
-  NIX_LDFLAGS="-lxml2 -lXv -lSDL -lQtGui -lQtCore -lpthread";
+  NIX_LDFLAGS="-lpthread";
 
   postInstall = ''
     cd $NIX_BUILD_TOP/$sourceRoot

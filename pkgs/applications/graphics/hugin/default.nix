@@ -15,29 +15,9 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-lrt";
 
-  # I added these flags to get all the rpaths right, which I guess they are
-  # taken from the qt4 sources. Not very nice.
-  cmakeFlags = "-DCMAKE_SHARED_LINKER_FLAGS=\"-Wl,-rpath,$out/lib\"" +
-    " -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-rpath,$out/lib" +
-    " -lpng12 -lpano13 -lImath -lIlmImf -lIex -lHalf -lIlmThread" +
-    " -ljpeg -ltiff -lz -lexiv2 -lboost_thread\"" +
-    " -DCMAKE_SKIP_BUILD_RPATH=ON" +
-    " -DCMAKE_BUILD_TYPE=Release" +
-    " -DCMAKE_INSTALL_PREFIX=$out";
+  buildInputs = [ cmake panotools wxGTK libtiff libpng openexr boost pkgconfig
+    exiv2 gettext ilmbase ];
 
-  buildInputs = [ cmake panotools wxGTK libtiff libpng openexr boost pkgconfig exiv2 gettext ilmbase ];
-
-  dontUseCmakeConfigure = true;
-
-  # I rewrote the configure phase to get the $out references evaluated in
-  # cmakeFlags
-  configurePhase = ''
-    set -x
-    mkdir -p build;
-    cd build
-    eval -- "cmake .. $cmakeFlags"
-    set +x
-    '';
   postInstall = ''
     ensureDir "$out/nix-support"
     echo "${enblendenfuse} ${autopanosiftc}" > $out/nix-support/propagated-user-env-packages
