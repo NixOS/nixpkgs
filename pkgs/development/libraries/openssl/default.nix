@@ -18,4 +18,4 @@ stdenv.mkDerivation (rec {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
   };
-} // (if stdenv.system == "i686-darwin" then { patches = [ ./darwin-arch.patch ]; } else {}))
+} // (if stdenv.isDarwin then { patches = [ ./darwin-arch.patch ]; } else {}))

@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   src = fetchcvs {
     cvsRoot = ":pserver:anonymous@cinepaint.cvs.sourceforge.net:/cvsroot/cinepaint";
     module = "cinepaint-project";
-    date = "2004-03-01";
-    sha256 = "bf6dc04f3ea2094b7ef6f87f40f2c90d75a557e40a773f8eb76e8a71f14362cf";
+    date = "2008-11-06";
+    sha256 = "f5ac249628ffe04349d1bb3b1e078be0cda7575dd71d12ae74143baa006acb6d";
   };
 
   buildInputs = [ cmake pkgconfig gtk freetype fontconfig lcms fltk flex libtiff
@@ -35,5 +35,7 @@ stdenv.mkDerivation {
     homepage = http://www.cinepaint.org/;
     license = "free";
     description = "Image editor which supports images over 8bpp and ICC profiles";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

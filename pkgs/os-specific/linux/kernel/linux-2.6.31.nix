@@ -45,7 +45,9 @@ import ./generic.nix (
         killOption 'CONFIG_GCOV.*'
         killOption 'CONFIG_KGDB.*'
         killOption 'CONFIG_.*_TEST'
-        
+
+        killOption 'CONFIG_USB_OTG_BLACKLIST_HUB'
+
         killOption CONFIG_KERNEL_BZIP2
         killOption CONFIG_KERNEL_LZMA
         setOptionYes CONFIG_KERNEL_GZIP

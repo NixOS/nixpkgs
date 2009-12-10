@@ -1,18 +1,18 @@
-args: with args;
+{ stdenv, fetchurl, utillinux }:
 
-stdenv.mkDerivation {
-  name = "fuse-2.7.4";
+stdenv.mkDerivation rec {
+  name = "fuse-2.8.1";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = mirror://sourceforge/fuse/fuse-2.7.4.tar.gz;
-    sha256 = "1rj9xn6ynbcqp6n5pf54jcyq13viij0jhv7adv89pq6lwpn71c68";
+    url = "mirror://sourceforge/fuse/${name}.tar.gz";
+    sha256 = "1brfgm2yxy060i6kcdlg30g2d48r6v9nhyxbfscpr6ijrrb10zq0";
   };
   
   configureFlags = "--disable-kernel-module";
   
-  buildInputs = [utillinux];
+  buildInputs = [ utillinux ];
   
   inherit utillinux;
 

@@ -48,7 +48,14 @@ if test -z "$finalPath"; then
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    echo p | svn export --quiet -r "$rev" "$url" $tmpFile >&2
+    if test "$NIX_PREFETCH_SVN_LEAVE_DOT_SVN" != 1
+    then
+	command="export"
+    else
+	command="checkout"
+    fi
+
+    echo p | svn "$command" --quiet -r "$rev" "$url" "$tmpFile" >&2
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)

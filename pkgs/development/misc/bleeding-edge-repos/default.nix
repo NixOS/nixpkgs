@@ -90,5 +90,16 @@ args:
       libdom = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/dom"; groups = "netsurf_group"; };
       netsurf_haru = { type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libharu"; groups = "netsurf_group"; };
 
+      # haxe
+      haxe = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "haxe"; groups = "haxe_group"; };
+      haxe_swflib = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/swflib"; groups = "haxe_group"; };
+      haxe_extc = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extc"; groups = "haxe_group"; };
+      haxe_extlib_dev = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extlib-dev"; groups = "haxe_group"; };
+      haxe_xml_light = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/xml-light"; groups = "haxe_group"; };
+      haxe_neko_include = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko/libs/include/ocaml"; groups = "haxe_group"; };
+
+      neko = { type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko"; };
+
+
     } // kde4support // getConfig [ "bleedingEdgeRepos" "repos" ] {};
 }

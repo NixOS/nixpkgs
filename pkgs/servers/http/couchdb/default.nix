@@ -1,13 +1,16 @@
-{stdenv, fetchurl, erlang, spidermonkey, icu, getopt}:
+args @ {stdenv, fetchurl, erlang, spidermonkey, 
+	icu, getopt, curl, ...}:
+
+let s = import ./src-for-default.nix; in
 
 stdenv.mkDerivation rec {
-  name = "apache-couchdb-0.8.1-incubating";
+  inherit (s) name;
   src = fetchurl {
-    url = mirror://apache/incubator/couchdb/0.8.1-incubating/apache-couchdb-0.8.1-incubating.tar.gz;
-    sha256 = "0w59kl7p5mgym1cd7j2pji6fcjq0y7yabcx2hx43vrcyjw31azv4";
+    inherit (s) url;
+    sha256 = s.hash;
   };
 
-  buildInputs = [erlang spidermonkey icu];
+  buildInputs = [erlang spidermonkey icu curl];
 
   postInstall = ''
     sed -i -e "s|\`getopt|\`${getopt}/bin/getopt|" $out/bin/couchdb

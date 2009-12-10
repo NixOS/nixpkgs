@@ -1,4 +1,4 @@
-let version = "5.2.9"; in
+let version = "5.2.11"; in
 
 args: with args;
 
@@ -177,7 +177,7 @@ composableDerivation {} ( fixed : {
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    md5 = "280d6cda7f72a4fc6de42fda21ac2db7";
+    md5 = "286bf34630f5643c25ebcedfec5e0a09";
     name = "php-${version}.tar.bz2";
   };
 

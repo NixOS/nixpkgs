@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   
   buildInputs = [pcre];
 
-  doCheck = if stdenv.system == "i686-darwin" then false else true;
+  doCheck = if stdenv.isDarwin then false else true;
 
   # On Mac OS X, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.

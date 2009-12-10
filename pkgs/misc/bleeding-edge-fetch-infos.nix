@@ -295,4 +295,32 @@
     url = "http://mawercer.de/~nix/repos/git_fast_export-1464dabbff7fe42b9069e98869db40276d295ad6.tar.gz";
     sha256 = "4d99bf7eefe86dd3305fc5ce27581830fc7dfe10f66ff5c5da054f737704b0bd";
   };
+  haxe = args: with args; fetchurl { # Fri Nov 27 00:39:37 CET 2009
+    url = "http://mawercer.de/~nix/repos/haxe-F_00-39-37.tar.gz";
+    sha256 = "7c5f275568b1a5ce7b672bfad232696004e5b6607f3767bbfe8c32880d6583b1";
+  };
+  haxe_extc = args: with args; fetchurl { # Fri Nov 27 00:39:38 CET 2009
+    url = "http://mawercer.de/~nix/repos/haxe_extc-F_00-39-38.tar.gz";
+    sha256 = "78800c67ecc328fd5358ebdbf561189f40125238f3f35045eb8b5416e77fc115";
+  };
+  haxe_extlib_dev = args: with args; fetchurl { # Fri Nov 27 00:39:39 CET 2009
+    url = "http://mawercer.de/~nix/repos/haxe_extlib_dev-F_00-39-39.tar.gz";
+    sha256 = "383044c91d39585e960c416b9c2eeaaa3f89613171662cb78dcb75fe6fe918b7";
+  };
+  haxe_neko_include = args: with args; fetchurl { # Fri Nov 27 00:39:40 CET 2009
+    url = "http://mawercer.de/~nix/repos/haxe_neko_include-F_00-39-40.tar.gz";
+    sha256 = "efbb4ce93d01a649b2d32e46c4a0e1fb016d104a136cd428b8cc1704b4ab3dc7";
+  };
+  haxe_swflib = args: with args; fetchurl { # Fri Nov 27 00:39:45 CET 2009
+    url = "http://mawercer.de/~nix/repos/haxe_swflib-F_00-39-45.tar.gz";
+    sha256 = "05ae9c8006b2ffac91794c13db7189b5f21687a4afe0d1358fd3681be18705ba";
+  };
+  haxe_xml_light = args: with args; fetchurl { # Fri Nov 27 00:39:46 CET 2009
+    url = "http://mawercer.de/~nix/repos/haxe_xml_light-F_00-39-46.tar.gz";
+    sha256 = "b23004c09d5e76b76de5a1938333c1aaccf059ebe62ad25728a267df79069a43";
+  };
+  neko = args: with args; fetchurl { # Fri Nov 27 18:37:43 CET 2009
+    url = "http://mawercer.de/~nix/repos/neko-F_18-37-40.tar.gz";
+    sha256 = "eac9c6144872d741c31a1c15539672b001977e877f30f01b9649f69b4df1d97c";
+  };
 }

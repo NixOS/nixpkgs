@@ -61,6 +61,15 @@ runTests {
     expected = true;
   };
 
+  testTake = testAllTrue [
+    ([] == (take 0 [  1 2 3 ]))
+    ([1] == (take 1 [  1 2 3 ]))
+    ([ 1 2 ] == (take 2 [  1 2 3 ]))
+    ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
+    ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
+  ];
+
+
   testOverridableDelayableArgsTest = {
     expr = 
       let res1 = defaultOverridableDelayableArgs id {};

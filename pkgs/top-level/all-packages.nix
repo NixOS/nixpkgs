@@ -77,7 +77,7 @@ let
 
 
   # Helper functions that are exported through `pkgs'.
-  helperFunctions = 
+  helperFunctions =
     (import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; }) //
     (import ../build-support/trivial-builders.nix { inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
@@ -330,19 +330,11 @@ let
 
   ### TOOLS
 
-  darwinArchUtility = import ../os-specific/darwin/arch {
-    inherit stdenv;
-  };
-
-  darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
-    inherit stdenv;
-  };
-
   acct = import ../tools/system/acct {
     inherit fetchurl stdenv;
   };
 
-  aefs = import ../tools/security/aefs {
+  aefs = import ../tools/filesystems/aefs {
     inherit fetchurl stdenv fuse;
   };
 
@@ -403,6 +395,10 @@ let
 
   bootchart = import ../tools/system/bootchart {
     inherit fetchurl stdenv gnutar gzip coreutils utillinux gnugrep gnused psmisc nettools;
+  };
+
+  btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
+    inherit libuuid zlib acl;
   };
 
   eggdrop = import ../tools/networking/eggdrop {
@@ -537,7 +533,7 @@ let
     sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
   };
 
-  curlftpfs = import ../tools/networking/curlftpfs {
+  curlftpfs = import ../tools/filesystems/curlftpfs {
     inherit fetchurl stdenv fuse curl pkgconfig zlib glib;
   };
 
@@ -546,6 +542,11 @@ let
 
   dar = import ../tools/archivers/dar {
     inherit fetchurl stdenv zlib bzip2 openssl;
+  };
+
+  davfs2 = import ../tools/filesystems/davfs2 {
+    inherit fetchurl stdenv zlib;
+    neon = neon028;
   };
 
   dcraw = import ../tools/graphics/dcraw {
@@ -598,15 +599,19 @@ let
     inherit fetchurl stdenv texinfo perl
             gnused groff libxml2 libxslt makeWrapper;
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
-    libiconv = if system == "i686-darwin" then libiconv else null;
+    libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
-  dosfstools = composedArgsAndFun (import ../tools/misc/dosfstools) {
+  dosfstools = composedArgsAndFun (import ../tools/filesystems/dosfstools) {
     inherit builderDefs;
   };
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
     inherit fetchurl stdenv cdrkit m4;
+  };
+
+  e2fsprogs = import ../tools/filesystems/e2fsprogs {
+    inherit fetchurl stdenv pkgconfig libuuid;
   };
 
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
@@ -638,7 +643,6 @@ let
     inherit stdenv fetchurl;
   };
 
-
   expect = import ../tools/misc/expect {
     inherit fetchurl stdenv tcl tk autoconf;
     inherit (xorg) xproto libX11;
@@ -666,7 +670,7 @@ let
   };
 
   findutils = useFromStdenv "findutils"
-    (if system == "i686-darwin" then findutils4227 else
+    (if stdenv.isDarwin then findutils4227 else
       import ../tools/misc/findutils {
         inherit fetchurl stdenv coreutils;
       }
@@ -706,6 +710,10 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  genext2fs = import ../tools/filesystems/genext2fs {
+    inherit fetchurl stdenv;
+  };
+
   getopt = import ../tools/misc/getopt {
     inherit fetchurl stdenv;
   };
@@ -721,7 +729,7 @@ let
     inherit (xlibs) xproto libXt libX11;
   };
 
-  glusterfs = builderDefsPackage ../tools/networking/glusterfs {
+  glusterfs = builderDefsPackage ../tools/filesystems/glusterfs {
     inherit fuse;
     bison = bison24;
     flex = flex2535;
@@ -891,6 +899,14 @@ let
 
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
+  };
+
+  jfsrec = import ../tools/filesystems/jfsrec {
+    inherit fetchurl stdenv boost;
+  };
+
+  jfsutils = import ../tools/filesystems/jfsutils {
+    inherit fetchurl stdenv libuuid;
   };
 
   jhead = import ../tools/graphics/jhead {
@@ -1107,6 +1123,14 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  ntfs3g = import ../tools/filesystems/ntfs-3g {
+    inherit fetchurl stdenv utillinux;
+  };
+
+  ntfsprogs = import ../tools/filesystems/ntfsprogs {
+    inherit fetchurl stdenv libuuid;
+  };
+
   ntp = import ../tools/networking/ntp {
     inherit fetchurl stdenv libcap;
   };
@@ -1294,7 +1318,15 @@ let
     inherit stdenv fetchurl;
   };
 
-  relfs = composedArgsAndFun (import ../tools/misc/relfs/cvs.2008.03.05.nix) {
+  reiser4progs = import ../tools/filesystems/reiser4progs {
+    inherit fetchurl stdenv libaal;
+  };
+
+  reiserfsprogs = import ../tools/filesystems/reiserfsprogs {
+    inherit fetchurl stdenv;
+  };
+
+  relfs = composedArgsAndFun (import ../tools/filesystems/relfs) {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs pkgconfig libuuid;
     inherit (gnome) gnomevfs GConf;
@@ -1332,7 +1364,8 @@ let
   };
 
   rpm = import ../tools/package-management/rpm {
-    inherit fetchurl stdenv cpio zlib bzip2 file sqlite beecrypt neon elfutils;
+    inherit fetchurl stdenv cpio zlib bzip2 xz file elfutils nspr nss popt;
+    db4 = db45;
   };
 
   rrdtool = import ../tools/misc/rrdtool {
@@ -1354,6 +1387,10 @@ let
 
   rzip = import ../tools/compression/rzip {
     inherit fetchurl stdenv bzip2;
+  };
+
+  s3backer = import ../tools/filesystems/s3backer {
+    inherit fetchurl stdenv pkgconfig fuse curl expat;
   };
 
   sablotron = import ../tools/text/xml/sablotron {
@@ -1392,7 +1429,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  smbfsFuse = composedArgsAndFun (import ../tools/networking/smbfs-fuse/0.8.7.nix) {
+  smbfsFuse = composedArgsAndFun (import ../tools/filesystems/smbfs-fuse) {
     inherit builderDefs samba fuse;
   };
 
@@ -1402,6 +1439,14 @@ let
 
   socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
+  };
+
+  squashfsTools = import ../tools/filesystems/squashfs {
+    inherit fetchurl stdenv zlib;
+  };
+
+  sshfsFuse = import ../tools/filesystems/sshfs-fuse {
+    inherit fetchurl stdenv pkgconfig fuse glib;
   };
 
   sudo = import ../tools/security/sudo {
@@ -1415,10 +1460,6 @@ let
     inherit stdenv fetchurl kdebase kdelibs zlib libjpeg
       perl qt3 python libpng freetype expat;
     inherit (xlibs) libX11 libXext libXt libXaw libXpm;
-  };
-
-  sshfsFuse = import ../tools/networking/sshfs-fuse {
-    inherit fetchurl stdenv pkgconfig fuse glib;
   };
 
   ssmtp = import ../tools/networking/ssmtp {
@@ -1552,13 +1593,7 @@ let
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
   };
 
-  /* don't have time to fix the builderDefs based expression
-  ttmkfdirX = import ../tools/misc/ttmkfdir {
-    inherit debPackage freetype fontconfig libunwind libtool bison;
-    flex = flex2534;
-  };
-  */
-  ttmkfdir = import ../tools/misc/ttmkfdir/normal-builder.nix {
+  ttmkfdir = import ../tools/misc/ttmkfdir {
     inherit stdenv fetchurl freetype fontconfig libunwind libtool bison;
     flex = flex2534;
   };
@@ -1590,7 +1625,7 @@ let
     inherit fetchurl stdenv automake autoconf libtool;
   };
 
-  wdfs = import ../tools/networking/wdfs {
+  wdfs = import ../tools/filesystems/wdfs {
     inherit stdenv fetchurl neon fuse pkgconfig glib;
   };
 
@@ -1624,6 +1659,10 @@ let
   xclip = import ../tools/misc/xclip {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXmu;
+  };
+
+  xfsprogs = import ../tools/filesystems/xfsprogs {
+    inherit fetchurl stdenv libtool gettext libuuid;
   };
 
   xmlroff = import ../tools/typesetting/xmlroff {
@@ -1823,10 +1862,11 @@ let
     profiledCompiler = true;
   }));
 
-  gccApple = wrapGCC (import ../development/compilers/gcc-apple {
-    inherit fetchurl stdenv noSysDirs;
-    profiledCompiler = true;
-  });
+  gccApple =
+    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
+      inherit fetchurl stdenv noSysDirs;
+      profiledCompiler = true;
+    }) ;
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -1895,7 +1935,7 @@ let
 
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs;
-    inherit (xlibs) libX11 xproto inputproto libXi 
+    inherit (xlibs) libX11 xproto inputproto libXi
       libXext xextproto libXt libXaw libXmu;
     stdenv = (overrideGCC stdenv gcc34) // {gcc = gcc33;};
   };
@@ -2014,6 +2054,11 @@ let
     };
   };
 
+  haxe = import ../development/compilers/haxe {
+    inherit fetchurl stdenv lib ocaml zlib makeWrapper;
+    inherit (bleedingEdgeRepos) sourceByName;
+  };
+
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;
   };
@@ -2120,6 +2165,13 @@ let
       makeWrapper graphviz which python;
   };
 
+  neko = import ../development/compilers/neko {
+    inherit (bleedingEdgeRepos) sourceByName ;
+    inherit fetchurl stdenv lib pkgconfig composableDerivation boehmgc apacheHttpd
+      mysql zlib sqlite pcre apr makeWrapper;
+    inherit (gtkLibs) gtk;
+  };
+
   nasm = import ../development/compilers/nasm {
     inherit fetchurl stdenv;
   };
@@ -2183,11 +2235,13 @@ let
   };
 
   strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk;
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk ncurses;
+    readline = readline5;
   };
 
   strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries; 
+    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries ncurses;
+    readline = readline5;
   };
 
   metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
@@ -2195,7 +2249,8 @@ let
   };
 
   swiProlog = import ../development/compilers/swi-prolog {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gmp readline openssl libjpeg unixODBC zlib;
+    inherit (xlibs) libXinerama libXft libXpm libSM libXt;
   };
 
   tinycc = import ../development/compilers/tinycc {
@@ -3423,6 +3478,11 @@ let
     inherit (xlibs) libXmu libXi;
   };
 
+  glefw = import ../development/libraries/glefw {
+    inherit fetchurl stdenv lib mesa;
+    inherit (xlibs) libX11 libXext xextproto;
+  };
+
   glibc =
     let haveRedHatKernel       = system == "i686-linux" || system == "x86_64-linux";
         haveBrokenRedHatKernel = haveRedHatKernel && getConfig ["brokenRedHatKernel"] false;
@@ -4220,6 +4280,7 @@ let
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
+    system == "x86_64-darwin" ||
     system == "i686-darwin";
 
   mesa = import ../development/libraries/mesa {
@@ -5009,7 +5070,8 @@ let
   };
 
   couchdb = import ../servers/http/couchdb {
-    inherit fetchurl stdenv erlang spidermonkey icu getopt; 
+    inherit fetchurl stdenv erlang spidermonkey icu getopt
+      curl;
   };
 
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
@@ -5252,10 +5314,6 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
-  btrfsProgs = builderDefsPackage (import ../os-specific/linux/btrfsprogs) {
-    inherit libuuid zlib acl;
-  };
-
   cpufrequtils = (
     import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
@@ -5275,9 +5333,12 @@ let
     inherit fetchurl stdenv zlib;
   };
 
-  davfs2 = import ../os-specific/linux/davfs2 {
-    inherit fetchurl stdenv zlib;
-    neon = neon028;
+  darwinArchUtility = import ../os-specific/darwin/arch {
+    inherit stdenv;
+  };
+
+  darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
+    inherit stdenv;
   };
 
   devicemapper = import ../os-specific/linux/device-mapper {
@@ -5303,11 +5364,7 @@ let
     inherit devicemapper;
   };
 
-  libuuid = if stdenv.system != "i686-darwin" then utillinuxng else null;
-
-  e2fsprogs = import ../os-specific/linux/e2fsprogs {
-    inherit fetchurl stdenv pkgconfig libuuid;
-  };
+  libuuid = if ! stdenv.isDarwin then utillinuxng else null;
 
   e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
     inherit stdenv fetchurl gettext;
@@ -5326,10 +5383,6 @@ let
   };
 
   fxload = import ../os-specific/linux/fxload {
-    inherit fetchurl stdenv;
-  };
-
-  genext2fs = import ../os-specific/linux/genext2fs {
     inherit fetchurl stdenv;
   };
 
@@ -5410,14 +5463,6 @@ let
 
   iwlwifi5000ucode = import ../os-specific/linux/firmware/iwlwifi-5000-ucode {
     inherit fetchurl stdenv;
-  };
-
-  jfsrec = import ../os-specific/linux/jfsrec {
-    inherit fetchurl stdenv boost;
-  };
-
-  jfsutils = import ../os-specific/linux/jfsutils/default.nix {
-    inherit fetchurl stdenv libuuid;
   };
 
   kbd = import ../os-specific/linux/kbd {
@@ -5924,14 +5969,6 @@ let
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
   };
 
-  reiserfsprogs = import ../os-specific/linux/reiserfsprogs {
-    inherit fetchurl stdenv;
-  };
-
-  reiser4progs = import ../os-specific/linux/reiser4progs {
-    inherit fetchurl stdenv libaal;
-  };
-
   radeontools = import ../os-specific/linux/radeontools {
     inherit pciutils;
     inherit fetchurl stdenv;
@@ -5959,10 +5996,6 @@ let
     inherit fetchurl stdenv klibc;
     zlib = zlibStatic;
     libjpeg = libjpegStatic;
-  };
-
-  squashfsTools = import ../os-specific/linux/squashfs {
-    inherit fetchurl stdenv zlib;
   };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) {
@@ -6065,7 +6098,7 @@ let
   utillinuxCurses = utillinuxngCurses;
 
   utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv autoconf libtool automake gettext cvs pkgconfig;
   };
 
   utillinuxngCurses = utillinuxng.override {
@@ -6086,10 +6119,6 @@ let
 
   wpa_supplicant_gui_qt4 = import ../os-specific/linux/wpa_supplicant/gui-qt4.nix {
     inherit fetchurl stdenv qt4 imagemagick inkscape;
-  };
-
-  xfsprogs = import ../os-specific/linux/xfsprogs/default.nix {
-    inherit fetchurl stdenv libtool gettext libuuid;
   };
 
   xmoto = builderDefsPackage (import ../games/xmoto) {
@@ -6470,7 +6499,7 @@ let
     };
 
   chrome = import ../applications/networking/browsers/chromium {
-    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib; 
+    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib;
     inherit (xlibs) libX11 libXext libXrender libXt ;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
@@ -6666,7 +6695,7 @@ let
       libpng libjpeg libungif libtiff texinfo dbus;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
-    xawSupport = system == "i686-darwin" || getPkgConfig "emacs" "xawSupport" false;
+    xawSupport = stdenv.isDarwin || getPkgConfig "emacs" "xawSupport" false;
     xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
     xftSupport = getPkgConfig "emacs" "xftSupport" true;
@@ -6738,6 +6767,10 @@ let
     };
 
     nxml = import ../applications/editors/emacs-modes/nxml {
+      inherit fetchurl stdenv;
+    };
+
+    prologMode = import ../applications/editors/emacs-modes/prolog {
       inherit fetchurl stdenv;
     };
 
@@ -6900,7 +6933,7 @@ let
       python pygtk gettext xlibs intltool babl gegl;
     inherit (gnome) gtk libart_lgpl;
   };
-  
+
   gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
@@ -7502,7 +7535,7 @@ let
 
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv acl;
-    enableACLs = system != "i686-darwin";
+    enableACLs = !stdenv.isDarwin;
   };
 
   rxvt = import ../applications/misc/rxvt {
@@ -8142,8 +8175,8 @@ let
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
-      libICE libXmu libXext;
-    inherit gnuchess;
+      libICE libXmu libXext libXpm;
+    inherit gnuchess texinfo;
   };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
@@ -8495,14 +8528,6 @@ let
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
     inherit stdenv fetchsvn apacheAnt jdk axis2 shebangfix;
-  };
-
-  ntfs3g = import ../misc/ntfs-3g {
-    inherit fetchurl stdenv utillinux;
-  };
-
-  ntfsprogs = import ../misc/ntfsprogs {
-    inherit fetchurl stdenv libuuid;
   };
 
   pgadmin = import ../applications/misc/pgadmin {

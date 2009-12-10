@@ -2,10 +2,10 @@
  kdelibs, kdepimlibs, kdebase_workspace, automoc4, phonon, qca2}:
 
 stdenv.mkDerivation {
-  name = "ktorrent-3.2.4";
+  name = "ktorrent-3.3.1";
   src = fetchurl {
-    url = http://ktorrent.org/downloads/3.2.4/ktorrent-3.2.4.tar.bz2;
-    sha256 = "1h06fwjykmk4sxjfsic0a42wfh4wwaa9z6a4470vwi5fyx2apxbn";
+    url = http://ktorrent.org/downloads/3.3.1/ktorrent-3.3.1.tar.bz2;
+    sha256 = "15cyq9bixism15qb3g196ga47q6iyw68sizclcn43nw91g0xl9r1";
   };
   includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;

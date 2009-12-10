@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   cmakeFlags = "-DCMAKE_SHARED_LINKER_FLAGS=\"-Wl,-rpath,$out/lib\"" +
     " -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-rpath,$out/lib" +
     " -lpng12 -lpano13 -lImath -lIlmImf -lIex -lHalf -lIlmThread" +
-    " -ljpeg -ltiff -lz -lexiv2 -lboost_thread-mt\"" +
+    " -ljpeg -ltiff -lz -lexiv2 -lboost_thread\"" +
     " -DCMAKE_SKIP_BUILD_RPATH=ON" +
     " -DCMAKE_BUILD_TYPE=Release" +
     " -DCMAKE_INSTALL_PREFIX=$out";
@@ -47,5 +47,7 @@ stdenv.mkDerivation {
     homepage = http://hugin.sourceforge.net/;
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = "GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
