@@ -6098,7 +6098,7 @@ let
   utillinuxCurses = utillinuxngCurses;
 
   utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv autoconf libtool automake gettext cvs pkgconfig;
+    inherit fetchurl stdenv;
   };
 
   utillinuxngCurses = utillinuxng.override {
