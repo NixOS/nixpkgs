@@ -8023,8 +8023,8 @@ let
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
-      libICE libXmu libXext;
-    inherit gnuchess;
+      libICE libXmu libXext libXpm;
+    inherit gnuchess texinfo;
   };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
