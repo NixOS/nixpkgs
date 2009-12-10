@@ -2347,6 +2347,10 @@ let
       libXt;
   };
 
+  polyml = import ../development/compilers/polyml {
+    inherit stdenv fetchurl;
+  };
+
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
   pythonBase = python25Base;
