@@ -5739,7 +5739,7 @@ let
       inherit fetchurl stdenv perl curl bzip2 openssl bison;
       inherit libtool automake autoconf docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m;
 
-      aterm = aterm242fixes;
+      aterm = aterm25;
       db4 = db45;
 
       flex = flex2533;
@@ -8493,7 +8493,7 @@ let
 
   nix = makeOverridable (import ../tools/package-management/nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
-    aterm = aterm242fixes;
+    aterm = aterm25;
     db4 = db45;
     supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
@@ -8503,7 +8503,7 @@ let
   # The bleeding edge.
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
-    aterm = aterm242fixes;
+    aterm = aterm25;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
@@ -8513,7 +8513,7 @@ let
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
         autoconf libtool configureFlags enableScripts lib bison libxml2;
       flex = flex2533;
-      aterm = aterm242fixes;
+      aterm = aterm25;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
     };
