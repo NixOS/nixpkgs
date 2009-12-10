@@ -1,15 +1,15 @@
 {stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? true}:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.11";
+  name = "automake-1.11.1";
 
   builder = ./builder.sh;
-  
+
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
     url = "mirror://gnu/automake/${name}.tar.bz2";
-    sha256 = "1h5a821z4i3dbgqg67igvbxcwn487kkkkx83q0m00n9mw9xz5ai9";
+    sha256 = "1bn7jl11wbkyy4ivgja92zkyjj8w3agwp2xnf7g8f7qa1qy9s5av";
   };
 
   buildInputs = [perl autoconf makeWrapper];
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
   preCheck = "unset NIX_INDENT_MAKE";
-  
+
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
-  
+
   meta = {
     homepage = http://www.gnu.org/software/automake/;
     description = "GNU Automake, a GNU standard-compliant makefile generator";
@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
