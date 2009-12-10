@@ -219,6 +219,8 @@ in
   };
 
   extraPath = [ mediawikiScripts ];
+
+  # !!! Need to specify that Apache has a dependency on PostgreSQL!
   
   startupScript = pkgs.writeScript "mediawiki_startup.sh"
     # Initialise the database automagically if we're using a Postgres
