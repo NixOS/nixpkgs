@@ -15,6 +15,9 @@ let
 
       UsePAM yes
 
+      ${ pkgs.lib.concatMapStrings (port : ''Port ${toString port}
+                                           '') cfg.ports}
+
       ${if cfg.forwardX11 then "
         X11Forwarding yes
         XAuthLocation ${pkgs.xlibs.xauth}/bin/xauth
@@ -91,6 +94,13 @@ in
           <manvolnum>5</manvolnum></citerefentry>.
         '';
       };
+
+      ports = mkOption {
+        default = [22];
+        description = ''
+          Specifies on which ports the SSH daemon listens.
+        '';
+      };
       
     };
 
@@ -130,7 +140,7 @@ in
         exec = "${openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
       };
 
-    networking.firewall.allowedTCPPorts = [22];
+    networking.firewall.allowedTCPPorts = cfg.ports ;
           
   };
 
