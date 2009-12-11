@@ -1889,7 +1889,7 @@ let
 
   ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
     inherit fetchurl stdenv ncurses gmp;
-    readline = if stdenv.system == "i686-linux" then readline4 else readline;
+    readline = if stdenv.system == "i686-linux" then readline4 else readline5;
     perl = perl58;
   });
 
@@ -1925,7 +1925,8 @@ let
   haskellPackages_ghc682 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.8.2.nix {
-      inherit fetchurl stdenv readline perl gmp ncurses m4;
+      inherit fetchurl stdenv perl gmp ncurses m4;
+      readline = readline5;
       ghc = ghc642Binary;
     };
   };
