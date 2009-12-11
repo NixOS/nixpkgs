@@ -4,6 +4,10 @@ let ghcReal = pkgs.lowPrio ghc; in
 
 rec {
 
+  # ==> You're looking for a package but can't find it? Get hack-nix.
+  # -> http://github.com/MarcWeber/hack-nix. Read its README file.
+  # You can install (almost) all packages from hackage easily.
+
   inherit ghcReal;
 
   # In the remainder, `ghc' refers to the wrapper.  This is because
