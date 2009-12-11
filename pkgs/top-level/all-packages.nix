@@ -8173,6 +8173,10 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  isabelle = import ../applications/science/logic/isabelle {
+    inherit (pkgs) stdenv fetchurl nettools perl polyml emacs emacsPackages;
+  };
+
   ssreflect = import ../applications/science/logic/ssreflect {
     inherit stdenv fetchurl ocaml coq;
     camlp5 = camlp5_transitional;
