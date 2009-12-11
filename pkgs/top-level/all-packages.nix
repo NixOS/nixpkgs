@@ -2662,6 +2662,7 @@ let
 
   cscope = import ../development/tools/misc/cscope {
     inherit fetchurl stdenv ncurses pkgconfig emacs;
+    installEmacsMode = getConfig [ "cscope" "installEmacsMode" ] false;
   };
 
   dejagnu = import ../development/tools/misc/dejagnu {
