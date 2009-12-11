@@ -15,6 +15,7 @@ rec {
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
     guiSupport = getConfig ["git" "guiSupport"] false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
+    additionalPatches = getConfig ["git" "additionalPatches"] [];
   };
 
   gitGit = import ./git/git-git.nix {

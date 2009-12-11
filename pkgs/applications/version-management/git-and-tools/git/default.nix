@@ -3,6 +3,7 @@
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
+, additionalPatches ? []
 }:
 
 # `git-svn' support requires Subversion and various Perl libraries.
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "4d1aaf16b4c37c8412cceab09b009bfc0f8d7b9f30a809b82027ab7fa66fdbb3";
   };
 
-  patches = [ ./docbook2texi.patch ];
+  patches = [ ./docbook2texi.patch ] ++ additionalPatches;
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ # documentation tools
