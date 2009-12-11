@@ -1887,11 +1887,13 @@ let
 
   #ghc = haskellPackages.ghc;
 
+  /*
   ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
     inherit fetchurl stdenv ncurses gmp;
     readline = if stdenv.system == "i686-linux" then readline4 else readline5;
     perl = perl58;
   });
+  */
 
   ghc6101Binary = lowPrio (import ../development/compilers/ghc/6.10.1-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
@@ -1906,6 +1908,7 @@ let
 
   haskellPackages = haskellPackages_ghc6104;
 
+  /*
   haskellPackages_ghc642 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.4.2.nix {
@@ -1945,6 +1948,7 @@ let
       };
     };
   });
+  */
 
   haskellPackages_ghc6101 = import ./haskell-packages.nix {
     inherit pkgs;
