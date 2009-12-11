@@ -1,8 +1,4 @@
-{ fetchurl, stdenv, ncurses, pkgconfig
-, installEmacsMode ? false, emacs ? null
-}:
-
-assert installEmacsMode -> emacs != null;
+{ fetchurl, stdenv, ncurses, pkgconfig, emacs}:
 
 stdenv.mkDerivation rec {
   name = "cscope-15.7a";
@@ -21,9 +17,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-ncurses=${ncurses}";
 
-  buildInputs = [ ncurses pkgconfig ] ++ stdenv.lib.optional installEmacsMode emacs;
+  buildInputs = [ ncurses pkgconfig emacs ];
 
-  postInstall = if installEmacsMode then ''
+  postInstall = ''
     # Install Emacs mode.
     cd "contrib/xcscope"
 
@@ -33,7 +29,7 @@ stdenv.mkDerivation rec {
     ensureDir "$out/share/emacs/site-lisp"
     emacs --batch --eval '(byte-compile-file "xcscope.el")'
     cp xcscope.el{,c} "$out/share/emacs/site-lisp"
-  '' else "";
+  '';
 
   meta = {
     description = "Cscope, a developer's tool for browsing source code";
@@ -49,5 +45,9 @@ stdenv.mkDerivation rec {
     license = "BSD-style";
 
     homepage = http://cscope.sourceforge.net/;
+
+    maintainers = with stdenv.lib.maintainers; [viric];
+
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
