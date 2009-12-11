@@ -68,8 +68,8 @@ let
   # The configuration file for Grub.
   grubCfg = 
     ''
-      set default=0
-      set timeout=10
+      set default=${builtins.toString config.boot.loader.grub.default}
+      set timeout=${builtins.toString config.boot.loader.grub.timeout}
 
       if loadfont /boot/grub/unicode.pf2; then
         set gfxmode=640x480
@@ -189,6 +189,7 @@ in
         initrd /boot/initrd
       }
     '';
+  boot.loader.grub.timeout = 10;
 
   # Create the ISO image.
   system.build.isoImage = import ../../../lib/make-iso9660-image.nix {

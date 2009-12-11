@@ -13,7 +13,7 @@ let
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     inherit (config.boot.loader.grub) copyKernels extraEntries extraEntriesBeforeNixOS
-      splashImage bootDevice configurationLimit version;
+      splashImage bootDevice configurationLimit version default timeout;
   };
   
 in
@@ -123,6 +123,20 @@ in
           Whether the GRUB menu builder should copy kernels and initial
           ramdisks to /boot.  This is necessary when /nix is on a
           different file system than /boot.
+        '';
+      };
+
+      timeout = mkOption {
+        default = 5;
+        description = ''
+          after timeout seconds grub will boot the default menu item.
+        '';
+      };
+
+      default = mkOption {
+        default = 1;
+        description = ''
+          index of grub menu item which will be booted
         '';
       };
 
