@@ -750,11 +750,6 @@ rec {
     inherit (pkgs) stdenv fetchurl;
   };
 
-  nixRepositoryManager = import ../tools/package-management/nix-repository-manager {
-    inherit (pkgs) stdenv lib writeText writeScriptBin getConfig bleedingEdgeRepos ;
-    inherit ghcReal;
-  };
-
   # Games.
 
   LambdaHack = import ../games/LambdaHack {
