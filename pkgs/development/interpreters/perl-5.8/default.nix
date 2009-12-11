@@ -5,7 +5,8 @@
 stdenv.mkDerivation {
   name = "perl-5.8.8";
 
-  builder =
+  phases = "phase";
+  phase =
    ''
 source $stdenv/setup
 
@@ -28,6 +29,7 @@ postInstall() {
     cp $setupHook $out/nix-support/setup-hook
 }
 
+unset phases
 genericBuild
 
    '';
