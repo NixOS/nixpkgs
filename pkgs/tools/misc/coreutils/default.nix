@@ -1,11 +1,11 @@
 {stdenv, fetchurl, aclSupport ? false, acl, perl, gmp}:
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.1";
+  name = "coreutils-8.2";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "1c68q4c4fg6x22ba2p8xb0ddn4xdl847np2g33h63bgj9pdav8ay";
+    sha256 = "0hagmpqm3wyx0hhw7i0mswary5w8flrk2vxhqfgfskam2rfhbhyk";
   };
 
   buildInputs = [ perl gmp ] ++ stdenv.lib.optional aclSupport acl;
