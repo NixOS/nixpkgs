@@ -6624,6 +6624,10 @@ let
       inherit fetchurl stdenv;
     };
 
+    proofgeneral = import ../applications/editors/emacs-modes/proofgeneral {
+       inherit stdenv fetchurl emacs perl;
+    };
+
     quack = import ../applications/editors/emacs-modes/quack {
       inherit fetchurl stdenv emacs;
     };
