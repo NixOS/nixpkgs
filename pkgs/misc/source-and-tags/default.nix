@@ -24,17 +24,18 @@ args: with args; {
             TAG_FILE="$SRC_DEST/${a.name}$tagSuffix"
             echo running tag cmd "${a.tagCmd}" in `pwd`
             ${a.tagCmd}
-            TAG_FILES="$TAG_FILES\''${TAG_FILES:+:}$TAG_FILE"
+            TAG_FILES="$TAG_FILES''${TAG_FILES:+:}$TAG_FILE"
            '') createTagFiles );
       in ''
       SRC_DEST=$out/src/$name
       ensureDir $SRC_DEST
+      pwd; ls
       cp -r $srcDir $SRC_DEST
       cd $SRC_DEST
       ${createTags}
 
       ensureDir $out/nix-support
-      echo "TAG_FILES=\"\$TAG_FILES\\''${TAG_FILES:+:}$TAG_FILES\"" >> $out/nix-support/setup-hook
+      echo "TAG_FILES=\"\$TAG_FILES\''${TAG_FILES:+:}$TAG_FILES\"" >> $out/nix-support/setup-hook
     '';
   };
   # example usage
@@ -51,7 +52,14 @@ args: with args; {
          createTagFiles = [
                { name = "${deriv.name}_haskell";
                  # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
-                 tagCmd = "${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
+                 # *.*hs.* to catch gtk2hs .hs.pp files
+                 tagCmd = "
+                   srcs=\"`find . -type f -name \"*.*hs\"; find . -type f -name \"*.*hs.*\";`\"
+                   [ -z \"$srcs\" ] || {
+                    ${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags $srcs
+                    sort tags > \$TAG_FILE
+                   }";
+              }
           ];
        };
     };
