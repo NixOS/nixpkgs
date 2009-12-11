@@ -14,7 +14,10 @@ composableDerivation {} ( fixed : {
 
   name = "neko-cvs";
 
-  src = sourceByName "neko";
+  # REGION AUTO UPDATE:           { name="neko"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko"; }
+  src= sourceFromHead "neko-F_01-20-32.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/neko-F_01-20-32.tar.gz"; sha256 = "785449f6df718fe26b6c87a2b7aa3cc587a72e7127582e6300ce966d97d6d16b"; });
+  # END
 
   # optionally remove apache mysql like gentoo does?
   # they just remove libs/{apache,mod_neko}

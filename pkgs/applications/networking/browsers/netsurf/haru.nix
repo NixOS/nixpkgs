@@ -3,7 +3,10 @@ stdenv.mkDerivation {
 
   name = "netsurf-haru-trunk";
 
-  src = sourceByName "netsurf_haru";
+  # REGION AUTO UPDATE:     { name="netsurf_haru"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libharu"; groups = "netsurf_group"; }
+  src= sourceFromHead "netsurf_haru-9721.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/netsurf_haru-9721.tar.gz"; sha256 = "8113492823e1069f428ef8970c2c7a09b4c36c645480ce81f8351331ce097656"; });
+  # END
 
   preConfigure = "cd upstream";
   configureFlags = "--with-zlib=${zlib} --with-png=${libpng}";

@@ -8,7 +8,10 @@ stdenv.mkDerivation {
 
   # It's too tiresome to apply all patches which are availible (see previous rev).
   # Using git repo which seems to be the same anyway..
-  src = bleedingEdgeRepos.sourceByName "autofs";
+  # REGION AUTO UPDATE:   { name="autofs"; type="git"; url="http://ftp.riken.go.jp/Linux/kernel.org/scm/linux/storage/autofs/autofs.git"; }
+  src = sourceFromHead "autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"; sha256 = "405c769b87f8ec2116faaca021ae03bb69d0a996cd574493b4eede34cb587061"; });
+  # END
   /*fetchurl {
     url = "${baseURL}/autofs-5.0.4.tar.bz2";
     sha256 = "06ysv24jwhwvl8vbafy4jxcg9ps1iq5nrz2nyfm6c761rniy27v3";

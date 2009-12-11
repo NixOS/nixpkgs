@@ -3,7 +3,7 @@
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
-, sourceByName
+, sourceFromHead
 , autoconf
 }:
 
@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
   # contact marco-oweber@gmx.de if you want to know more details
   name = "git-git-with-glob-patch";
 
-  src = sourceByName "git";
+  # REGION AUTO UPDATE:     { name="git"; type="git"; url="git://git.kernel.org/pub/scm/git/git.git"; }
+  src = sourceFromHead "git-8b43d378dff4d490165dbac05a0bf5da2011bfa5.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/git-8b43d378dff4d490165dbac05a0bf5da2011bfa5.tar.gz"; sha256 = "a910bbac05c6e349a0bcfd9a27f7045916e5d07dc4acb4baf6d92475c30e28dc"; });
+  # END
 
   patchePhase = ''
     patch -p1 < ${./docbook2texi-2.patch}

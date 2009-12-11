@@ -1995,8 +1995,7 @@ let
   };
 
   haxe = import ../development/compilers/haxe {
-    inherit fetchurl stdenv lib ocaml zlib makeWrapper;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper;
   };
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
@@ -2106,9 +2105,8 @@ let
   };
 
   neko = import ../development/compilers/neko {
-    inherit (bleedingEdgeRepos) sourceByName ;
-    inherit fetchurl stdenv lib pkgconfig composableDerivation boehmgc apacheHttpd
-      mysql zlib sqlite pcre apr makeWrapper;
+    inherit sourceFromHead fetchurl stdenv lib pkgconfig composableDerivation
+      boehmgc apacheHttpd mysql zlib sqlite pcre apr makeWrapper;
     inherit (gtkLibs) gtk;
   };
 
@@ -2307,12 +2305,11 @@ let
 
   # mercurial (hg) bleeding edge version
   octaveHG = import ../development/interpreters/octave/hg.nix {
-    inherit fetchurl readline ncurses perl flex atlas getConfig glibc qhull gfortran;
+    inherit fetchurl sourceFromHead readline ncurses perl flex atlas getConfig glibc qhull gfortran;
     inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
     inherit stdenv;
     inherit (xlibs) libX11;
     #stdenv = overrideGCC stdenv gcc40;
-    inherit (bleedingEdgeRepos) sourceByName;
   };
 
   perl58 = import ../development/interpreters/perl-5.8 {
@@ -2495,8 +2492,8 @@ let
   };
   */
 
-  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos {
-    inherit getConfig fetchurl lib;
+  sourceFromHead = import ../build-support/source-from-head-fun.nix {
+    inherit getConfig;
   };
 
   ecj = import ../development/eclipse/ecj {
@@ -2639,7 +2636,7 @@ let
   };
 
   ctags = import ../development/tools/misc/ctags {
-    inherit fetchurl stdenv bleedingEdgeRepos automake autoconf;
+    inherit fetchurl sourceFromHead stdenv automake autoconf;
   };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
@@ -2767,14 +2764,6 @@ let
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
   };
-
-  /*
-  hsc2hs = import ../development/tools/misc/hsc2hs {
-    inherit bleedingEdgeRepos stdenv;
-    ghc = ghcsAndLibs.ghc68.ghc;
-    libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ base directory process cabal_darcs ];
-  };
-  */
 
   guileLint = import ../development/tools/guile/guile-lint {
     inherit fetchurl stdenv guile;
@@ -5143,7 +5132,7 @@ let
   ### OS-SPECIFIC
 
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
-    inherit bleedingEdgeRepos fetchurl stdenv flex bison kernelHeaders;
+    inherit sourceFromHead fetchurl stdenv flex bison kernelHeaders;
   };
 
   _915resolution = import ../os-specific/linux/915resolution {
@@ -6266,7 +6255,6 @@ let
   beast = import ../applications/audio/beast {
 # stdenv = overrideGCC stdenv gcc34;
     inherit stdenv fetchurl zlib guile pkgconfig intltool libogg libvorbis python libxml2 bash perl gettext;
-    inherit (bleedingEdgeRepos) sourceByName;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnomecanvas libart_lgpl;
     inherit automake autoconf;
@@ -6367,7 +6355,7 @@ let
 
 
   cinelerra = import ../applications/video/cinelerra {
-    inherit fetchurl stdenv
+    inherit lib fetchurl sourceFromHead stdenv
       automake autoconf libtool
       a52dec alsaLib   lame libavc1394 libiec61883 libraw1394 libsndfile
       libvorbis libogg libjpeg libtiff freetype mjpegtools x264
@@ -6375,8 +6363,7 @@ let
       pkgconfig;
       openexr = openexr_1_6_1;
     fftw = fftwSinglePrec;
-    inherit (xorg) libXxf86vm libXv;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit (xorg) libXxf86vm libXv libXi libX11 xextproto;
     inherit (gnome) esound;
   };
 
@@ -7204,9 +7191,8 @@ let
     };
 
   MPlayerTrunk = import ../applications/video/MPlayer/trunk.nix {
-    inherit (bleedingEdgeRepos) sourceByName;
-    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
-      cdparanoia mesa pkgconfig jackaudio;
+    inherit fetchurl sourceFromHead stdenv freetype x11 zlib libtheora libcaca
+      freefont_ttf libdvdnav cdparanoia mesa pkgconfig jackaudio;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
@@ -7495,7 +7481,7 @@ let
 
   # linux only by now
   synergy = import ../applications/misc/synergy {
-    inherit fetchurl bleedingEdgeRepos stdenv x11;
+    inherit fetchurl sourceFromHead stdenv x11;
     inherit (xlibs) xextproto libXtst inputproto libXi;
   };
 
@@ -8325,8 +8311,7 @@ let
   };
 
   lilypond = import ../misc/lilypond {
-    inherit (bleedingEdgeRepos) sourceByName;
-    inherit fetchurl stdenv lib automake autoconf
+    inherit fetchurl sourceFromHead stdenv lib automake autoconf
       ghostscript texinfo imagemagick texi2html guile python gettext
       perl bison pkgconfig texLive fontconfig freetype fontforge help2man;
     inherit (gtkLibs) pango;

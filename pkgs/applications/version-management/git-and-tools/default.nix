@@ -4,7 +4,6 @@
 args: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchurl getConfig subversion;
-  inherit (pkgs.bleedingEdgeRepos) sourceByName;
 in
 rec {
 
@@ -19,11 +18,10 @@ rec {
   };
 
   gitGit = import ./git/git-git.nix {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext
+    inherit fetchurl sourceFromHead stdenv curl openssl zlib expat perl gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion autoconf;
-    inherit (bleedingEdgeRepos) sourceByName;
     svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
     guiSupport = getConfig ["git" "guiSupport"] false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
@@ -36,9 +34,8 @@ rec {
   };
 
   qgitGit = import ./qgit/qgit-git.nix {
-    inherit fetchurl stdenv;
+    inherit fetchurl sourceFromHead stdenv;
     inherit (xlibs) libXext libX11;
-    inherit (bleedingEdgeRepos) sourceByName;
     qt = qt4;
   };
 
@@ -49,7 +46,10 @@ rec {
 
   topGit = stdenv.mkDerivation {
     name = "TopGit-git"; # official release 0.8
-    src = sourceByName "topGit"; # destination directory is patched
+    # REGION AUTO UPDATE:    { name = "topGit"; type="git"; url="http://repo.or.cz/w/topgit.git"; }
+    src = sourceFromHead "topGit-f59e4f9e87e5f485fdaee0af002edd2105fa298a.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/topGit-f59e4f9e87e5f485fdaee0af002edd2105fa298a.tar.gz"; sha256 = "12aa6d34c82d505066b851e24069fe9d6930d70913b7d94a0cc6e8f06f127170"; });
+    # END
     phases="unpackPhase patchPhase installPhase";
     installPhase = ''
       mkdir -p $out/etc/bash_completion.d
@@ -84,8 +84,8 @@ rec {
   };
 
   gitFastExport = import ./fast-export {
-    inherit fetchurl stdenv mercurial coreutils git makeWrapper subversion;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv mercurial coreutils git makeWrapper
+      subversion;
   };
 
 }

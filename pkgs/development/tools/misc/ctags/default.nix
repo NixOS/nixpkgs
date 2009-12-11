@@ -1,8 +1,11 @@
-{stdenv, fetchurl, bleedingEdgeRepos, automake, autoconf}:
+{stdenv, fetchurl, sourceFromHead, automake, autoconf}:
 
 stdenv.mkDerivation rec {
   name = "ctags-svn";
-  src = bleedingEdgeRepos.sourceByName "ctags";
+  # REGION AUTO UPDATE:      { name="ctags"; type = "svn"; url = "https://ctags.svn.sourceforge.net/svnroot/ctags/trunk"; }
+  src= sourceFromHead "ctags-749.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/ctags-749.tar.gz"; sha256 = "01dd4bf2e55dbedc38def81febef60eece912cb7624df1c0a2cf1ed6e4bc4ecf"; });
+  # END
 
   preConfigure = ''
     autoheader

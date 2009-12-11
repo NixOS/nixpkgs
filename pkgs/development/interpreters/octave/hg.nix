@@ -1,5 +1,5 @@
 {stdenv, fetchurl, gfortran, readline, ncurses, perl, flex,
- bison, autoconf, automake, sourceByName, getConfig, lib, atlas, gperf, python, glibc, gnuplot, texinfo, texLive, qhull, libX11}:
+ bison, autoconf, automake, sourceFromHead, getConfig, lib, atlas, gperf, python, glibc, gnuplot, texinfo, texLive, qhull, libX11}:
 
 let commonBuildInputs = [gfortran readline ncurses perl glibc qhull libX11 texinfo]; in
 
@@ -14,7 +14,10 @@ stdenv.mkDerivation ({
 } // (
   if (getConfig ["octave" "devVersion"] false) then {
     name = "octave-hg"; # developement version mercurial repo
-    src =  sourceByName "octave";
+    # REGION AUTO UPDATE:   { name="octave"; type = "hg"; url = "http://www.octave.org/hg/octave"; }
+    src = sourceFromHead "octave-03b414516dd8.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/octave-03b414516dd8.tar.gz"; sha256 = "30877f1e2ff1a456e7a76153aabf7c59ce7c7a8b63eda0515b1eead6a4351ce7"; });
+    # END
     # HOME is set to $TMP because octave needs to access ${HOME}/.octave_hist while running targets
     # in doc/interpreter.. Maybe this can be done better. This hack is fastest :)
     preConfigure = ''

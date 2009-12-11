@@ -133,7 +133,8 @@ rec {
   };
 
   getOptions = import ../development/libraries/haskell/get-options {
-    inherit cabal mtl; inherit (pkgs.bleedingEdgeRepos) sourceByName;
+    inherit (pkgs) fetchurl sourceFromHead;
+    inherit cabal mtl;
   };
 
   ghcCore = import ../development/libraries/haskell/ghc-core {
@@ -145,7 +146,8 @@ rec {
   };
 
   ghcSyb = import ../development/libraries/haskell/ghc-syb {
-    inherit cabal syb; inherit (pkgs.bleedingEdgeRepos) sourceByName;
+    inherit (pkgs) fetchurl sourceFromHead;
+    inherit cabal syb;
   };
 
   gitit = import ../development/libraries/haskell/gitit {
