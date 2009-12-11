@@ -34,8 +34,8 @@ let
     in {
       description = "OpenVPN-${name}";
 
-      startOn = "network-interfaces/started";
-      stopOn = "network-interfaces/stop";
+      startOn = "started network-interfaces";
+      stopOn = "stopping network-interfaces";
 
       environment = { PATH = "${pkgs.coreutils}/bin"; };
 

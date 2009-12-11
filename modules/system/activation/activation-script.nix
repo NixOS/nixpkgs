@@ -2,7 +2,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs mapRecordFlatten
+  inherit (pkgs.lib) mkOption mergeTypedOption mergeAttrs
     mapAttrs addErrorContext fold id filter textClosureMap noDepEntry
     fullDepEntry;
   inherit (builtins) attrNames;

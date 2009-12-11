@@ -82,6 +82,7 @@ in
           <literal>yes</literal>, <literal>without-password</literal>,
           <literal>forced-commands-only</literal> or
           <literal>no</literal>.
+          If without-password doesn't work try <literal>yes</literal>.
         '';
       };
 
