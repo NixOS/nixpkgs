@@ -12,24 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake alsaLib ];
 
-  cmakeFlags = "-DCMAKE_SHARED_LINKER_FLAGS=\"-Wl,-rpath,$out/lib/\"" +
-    " -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-rpath,$out/lib\"" +
-    " -DCMAKE_SKIP_BUILD_RPATH=ON" +
-    " -DCMAKE_BUILD_TYPE=Release" +
-    " -DCMAKE_INSTALL_PREFIX=$out";
-
-  dontUseCmakeConfigure = true;
-
-  # I rewrote the configure phase to get the $out references evaluated in
-  # cmakeFlags
-  configurePhase = ''
-    set -x
-    mkdir -p build;
-    cd build
-    eval -- "cmake .. $cmakeFlags"
-    set +x
-    '';
-
   meta = {
     description = "OpenAL, a cross-platform 3D audio API";
 

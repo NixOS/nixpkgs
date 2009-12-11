@@ -4227,7 +4227,8 @@ let
   };
 
   openal = import ../development/libraries/openal {
-    inherit fetchurl stdenv cmake alsaLib;
+    inherit fetchurl cmake alsaLib;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   # added because I hope that it has been easier to compile on x86 (for blender)
