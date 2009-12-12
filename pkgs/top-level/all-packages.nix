@@ -2652,6 +2652,10 @@ let
     inherit fetchurl stdenv replace ncurses;
   };
 
+  coccinelle = import ../development/tools/misc/coccinelle {
+    inherit fetchurl stdenv perl python ocaml ncurses makeWrapper;
+  };
+
   cproto = import ../development/tools/misc/cproto {
     inherit fetchurl stdenv flex bison;
   };
