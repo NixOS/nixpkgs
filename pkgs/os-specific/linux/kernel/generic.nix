@@ -31,13 +31,8 @@
   # "-my-kernel").
   localVersion ? ""
 
-, # A list of additional statements to be appended to the
-  # configuration file.
-  extraConfig ? []
-
 , preConfigure ? ""
 , extraMeta ? {}
-, ...
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -59,19 +54,21 @@ stdenv.mkDerivation {
   
   builder = ./builder.sh;
 
+  generateConfig = ./generate-config.pl;
+
   inherit preConfigure;
 
   inherit src config;
   
   patches = map (p: p.patch) kernelPatches;
-  
-  extraConfig =
-    let addNewlines = map (s: "\n" + s + "\n");
-        configFromPatches =
-          map (p: if p ? extraConfig then p.extraConfig else "") kernelPatches;
-    in lib.concatStrings (addNewlines (configFromPatches ++ extraConfig));
 
-  buildInputs = [perl mktemp];
+  kernelConfig =
+    let
+      configFromPatches =
+        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
+    in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
+
+  buildInputs = [ perl mktemp ];
   
   arch =
     if xen then "xen" else

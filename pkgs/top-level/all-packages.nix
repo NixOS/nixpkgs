@@ -5919,7 +5919,7 @@ let
     inherit fetchurl stdenv gperf pkgconfig acl libusb usbutils pciutils glib;
   };
 
-  uml = import ../os-specific/linux/kernel/linux-2.6.20.nix {
+  uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     userModeLinux = true;
   };

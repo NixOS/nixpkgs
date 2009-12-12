@@ -21,37 +21,14 @@ configurePhase() {
     fi
 
 
+    # Patch kconfig to print "###" after every question -
+    # generate-config.pl expects this.
+    sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
+
     # Create the config file.
-    cp $config .config
-    chmod u+w .config
-
-    echo --extraConfig--;
-    echo "${extraConfig}";
-
-    echo "$extraConfig" | while read; do
-	optionName=$( echo "$REPLY" | sed -e 's/[^A-Z_]//g' );
-	echo --optionName--;
-	echo "$REPLY";
-	echo ${optionName};
-	if [ -n "${optionName}" ]; then 
-	    sed -e s/.'*'${optionName}.'*'/"$REPLY/" -i .config
-	fi;
-    done;
-
-    echo "$extraConfig" >> .config
-
-    #substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
-    #    --replace /usr /no-such-path
-
-    # Necessary until NIXPKGS-38 is fixed:
-    echo "#! $SHELL" > scripts/kconfig/lxdialog/check-lxdialog.sh
-    chmod +x scripts/kconfig/lxdialog/check-lxdialog.sh
-    
-    make oldconfig \
-        $makeFlags "${makeFlagsArray[@]}"
-
-    echo --finalConfig--
-    cat .config
+    echo "generating kernel configuration..."
+    echo "$kernelConfig" > kernel-config
+    ARCH=$arch KERNEL_CONFIG=kernel-config SHELL=bash NIX_INDENT_MAKE= perl -w $generateConfig
 }
 
 
