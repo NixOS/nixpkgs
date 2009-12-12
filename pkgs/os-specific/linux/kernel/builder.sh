@@ -1,6 +1,10 @@
 source $stdenv/setup
 
 
+export SHELL=bash
+export ARCH=$arch
+
+
 configurePhase() {
     if test -n "$preConfigure"; then 
         eval "$preConfigure"; 
@@ -10,12 +14,8 @@ configurePhase() {
     export INSTALL_MOD_PATH=$out
 
 
-    # Get rid of any "localversion" files installed by patches.
-    if test -z "$allowLocalVersion"; then
-        rm -f localversion*
-    fi
-
     # Set our own localversion, if specified.
+    rm -f localversion*
     if test -n "$localVersion"; then
         echo "$localVersion" > localversion-nix
     fi
@@ -28,7 +28,7 @@ configurePhase() {
     # Create the config file.
     echo "generating kernel configuration..."
     echo "$kernelConfig" > kernel-config
-    ARCH=$arch KERNEL_CONFIG=kernel-config SHELL=bash NIX_INDENT_MAKE= perl -w $generateConfig
+    KERNEL_CONFIG=kernel-config perl -w $generateConfig
 }
 
 

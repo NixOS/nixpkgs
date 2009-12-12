@@ -123,7 +123,7 @@ while (<CONFIG>) {
 close CONFIG;
 
 foreach my $name (sort (keys %answers)) {
-    print STDERR "unused option: $name\n"
+    die "unused option: $name\n"
         unless defined $config{$name};
     die "option not set correctly: $name\n"
         if $config{$name} && $config{$name} ne $answers{$name};

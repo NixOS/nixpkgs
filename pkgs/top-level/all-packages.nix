@@ -5477,7 +5477,23 @@ let
           url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.29.2.patch;
           sha256 = "1yppvji13sgnql62h4wmskzl9l198pp1pbixpbymji7mr4a0ylx1";
         };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
+        extraConfig =
+          ''
+            FB_CON_DECOR y
+
+            # fbcondecor is picky about some other settings.
+            FB y
+            FB_TILEBLITTING n
+            FB_MATROX n
+            FB_S3 n
+            FB_VT8623 n
+            FB_ARK n
+            FB_CFB_FILLRECT y
+            FB_CFB_COPYAREA y
+            FB_CFB_IMAGEBLIT y
+            FB_VESA y
+            FRAMEBUFFER_CONSOLE y
+          '';
         features = { fbConDecor = true; };
       }
       { name = "sec_perm-2.6.24";

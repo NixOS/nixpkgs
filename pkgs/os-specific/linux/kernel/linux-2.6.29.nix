@@ -33,7 +33,9 @@ import ./generic.nix (
         XEN y
 
         # We need 64 GB (PAE) support for Xen guest support.
-        HIGHMEM64G y
+        ${stdenv.lib.optionalString (stdenv.system == "i686-linux") ''
+          HIGHMEM64G y
+        ''}
 
         # Enable the kernel's built-in memory tester.
         MEMTEST y
@@ -91,16 +93,6 @@ import ./generic.nix (
 
         # Some settings to make sure that fbcondecor works - in particular,
         # disable tileblitting and the drivers that need it.
-        FB y
-        FB_TILEBLITTING n
-        FB_MATROX n
-        FB_S3 n
-        FB_VT8623 n
-        FB_ARK n
-        FB_CFB_FILLRECT y
-        FB_CFB_COPYAREA y
-        FB_CFB_IMAGEBLIT y
-        FB_VESA y
 
         # Enable various FB devices.
         FB_EFI y
