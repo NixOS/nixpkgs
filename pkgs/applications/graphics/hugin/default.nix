@@ -1,22 +1,23 @@
 {stdenv, fetchurl, panotools, cmake, wxGTK, libtiff, libpng, openexr, boost,
-  pkgconfig, exiv2, gettext, ilmbase, enblendenfuse, autopanosiftc }:
+  pkgconfig, exiv2, gettext, ilmbase, enblendenfuse, autopanosiftc, mesa, freeglut,
+ glew, libXmu, libXi }:
 
-stdenv.mkDerivation {
-  name = "hugin-0.7.0";
+stdenv.mkDerivation rec {
+  name = "hugin-2009.2.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/hugin/hugin-0.7.0.tar.gz;
-    sha256 = "0nbrvzz94gqgk2v1900lly101g0wjz4zksnh5718226n2g8zlccf";
+    url = "mirror://sourceforge/hugin/${name}.tar.gz";
+    sha256 = "1z5hb1sfkpk6d1xnzqh8vy6rs7fhfjs5196pz98hwnx6wfi8w3k2";
   };
 
-  patches = [ ./levmar-64-bit-alignment.patch ];
+#   patches = [ ./levmar-64-bit-alignment.patch ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
   NIX_LDFLAGS = "-lrt";
 
   buildInputs = [ cmake panotools wxGTK libtiff libpng openexr boost pkgconfig
-    exiv2 gettext ilmbase ];
+    exiv2 gettext ilmbase mesa freeglut glew libXmu libXi ];
 
   postInstall = ''
     ensureDir "$out/nix-support"

@@ -6926,8 +6926,10 @@ let
 
   hugin = import ../applications/graphics/hugin {
     inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
-      exiv2 gettext ilmbase enblendenfuse autopanosiftc;
+      exiv2 gettext ilmbase enblendenfuse autopanosiftc mesa freeglut
+      glew;
     inherit wxGTK;
+    inherit (xlibs) libXi libXmu;
     openexr = openexr_1_6_1;
     stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
