@@ -2,9 +2,9 @@ args: with args;
 stdenv.mkDerivation {
   name = "libCSS-devel";
 
-  # REGION AUTO UPDATE:      { name="libCSS"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libcss"; groups = "netsurf_group"; }
+  # REGION AUTO UPDATE:       { name="libCSS"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/libcss"; groups = "netsurf_group"; }
   src= sourceFromHead "libCSS-9721.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/libCSS-9721.tar.gz"; sha256 = "b6ac015351e78c080b71bbe834eadee0d1cb2c6c4657c338be6cbf0f51d5f8a9"; });
+               (fetchurl { url = "http://mawercer.de/~nix/repos/libCSS-9721.tar.gz"; sha256 = "47b44653f7b53c21da6224ffb1f81df934cc711d6a5795c5584755a8bd48e5ac"; });
   # END
 
   installPhase = "make PREFIX=$out install";
