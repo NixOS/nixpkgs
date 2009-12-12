@@ -2,7 +2,10 @@ args: with args;
 stdenv.mkDerivation {
   name = "synergy-cvs";
 
-  src = bleedingEdgeRepos.sourceByName "synergy";
+  # REGION AUTO UPDATE:          { name="synergy"; type = "cvs"; cvsRoot = ":pserver:anonymous@synergy2.cvs.sourceforge.net:/cvsroot/synergy2"; module="syngery"; }
+  src = sourceFromHead "synergy-F_09-55-29.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/synergy-F_09-55-28.tar.gz"; sha256 = "443bb8cf8d4e365b2adaadd8770096fcafa0c54532e83f6a267eb3b05042b84c"; });
+  # END
   /*
   fetchcvs {
     cvsRoot = ":pserver:anonymous@synergy2.cvs.sourceforge.net:/cvsroot/synergy2";

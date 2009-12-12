@@ -6,7 +6,7 @@
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null, jackaudio ? null
 , cdparanoia ? null, cddaSupport ? true, jackaudioSupport ? true
 , mesa, pkgconfig
-, sourceByName
+, sourceFromHead
 }:
 
 assert alsaSupport -> alsa != null;
@@ -35,7 +35,10 @@ stdenv.mkDerivation {
 
   name = "mplayer-trunk";
 
-  src = sourceByName "MPlayer";
+  # REGION AUTO UPDATE:     { name="MPlayer"; type = "svn"; url="svn://svn.mplayerhq.hu/mplayer/trunk"; }
+  src= sourceFromHead "MPlayer-29990.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/MPlayer-29990.tar.gz"; sha256 = "8d9ac59e7cc3e2bc9ca46281ac2c268d460e041aceac056b600205c8c5235169"; });
+  # END
 
   buildInputs =
     [x11 libXv freetype zlib mesa pkgconfig]

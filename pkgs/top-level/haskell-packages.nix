@@ -4,6 +4,10 @@ let ghcReal = pkgs.lowPrio ghc; in
 
 rec {
 
+  # ==> You're looking for a package but can't find it? Get hack-nix.
+  # -> http://github.com/MarcWeber/hack-nix. Read its README file.
+  # You can install (almost) all packages from hackage easily.
+
   inherit ghcReal;
 
   # In the remainder, `ghc' refers to the wrapper.  This is because
@@ -129,7 +133,8 @@ rec {
   };
 
   getOptions = import ../development/libraries/haskell/get-options {
-    inherit cabal mtl; inherit (pkgs.bleedingEdgeRepos) sourceByName;
+    inherit (pkgs) fetchurl sourceFromHead;
+    inherit cabal mtl;
   };
 
   ghcCore = import ../development/libraries/haskell/ghc-core {
@@ -141,7 +146,8 @@ rec {
   };
 
   ghcSyb = import ../development/libraries/haskell/ghc-syb {
-    inherit cabal syb; inherit (pkgs.bleedingEdgeRepos) sourceByName;
+    inherit (pkgs) fetchurl sourceFromHead;
+    inherit cabal syb;
   };
 
   gitit = import ../development/libraries/haskell/gitit {
@@ -742,11 +748,6 @@ rec {
   myhasktags = import ../tools/misc/myhasktags {
     inherit ghcReal;
     inherit (pkgs) stdenv fetchurl;
-  };
-
-  nixRepositoryManager = import ../tools/package-management/nix-repository-manager {
-    inherit (pkgs) stdenv lib writeText writeScriptBin getConfig bleedingEdgeRepos ;
-    inherit ghcReal;
   };
 
   # Games.

@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, emacs }:
+{ fetchurl, stdenv, ncurses, pkgconfig, emacs}:
 
 stdenv.mkDerivation rec {
-  name = "cscope-15.6";
+  name = "cscope-15.7a";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cscope/${name}.tar.gz";
-    sha256 = "1jn5r9xhys7dlhxxiwffx9wrxlaf9i9ffh6dw516w79a83pn2r3d";
+    url = "mirror://sourceforge/cscope/${name}.tar.bz2";
+    sha256 = "0dv0r66x31y2xxvad54x0wal8yb1krwbx3gjc82qpg4hlz5qnqq2";
   };
 
   preConfigure = ''
@@ -45,5 +45,9 @@ stdenv.mkDerivation rec {
     license = "BSD-style";
 
     homepage = http://cscope.sourceforge.net/;
+
+    maintainers = with stdenv.lib.maintainers; [viric];
+
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -2,7 +2,10 @@ args: with args;
 stdenv.mkDerivation {
   name = "fast-export";
 
-  src = sourceByName "git_fast_export";
+  # REGION AUTO UPDATE:    { name="git_fast_export"; type = "git"; url="git://repo.or.cz/hg2git.git"; }
+  src = sourceFromHead "git_fast_export-1464dabbff7fe42b9069e98869db40276d295ad6.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/git_fast_export-1464dabbff7fe42b9069e98869db40276d295ad6.tar.gz"; sha256 = "0808bafddce07c8f3dc2116f2c33e56f5589927630e0b72219e64d8a6c8c0023"; });
+  # END
 
   buildInputs =([mercurial.python mercurial makeWrapper subversion]);
 

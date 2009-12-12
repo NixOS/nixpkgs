@@ -13,7 +13,7 @@
 p: # p = pkgs
 let 
   inherit (builtins) isAttrs hasAttr;
-  inherit (p) lib fetchurl stdenv getConfig;
+  inherit (p) lib fetchurl stdenv getConfig sourceFromHead;
   inherit (p.composableDerivation) composableDerivation;
   # withName prevents  nix-env -qa \* from aborting (pythonLibStub is a derivation but hasn't a name)
   withName = lib.mapAttrs (n : v : if (isAttrs v && (!hasAttr "name" v)) then null else v);
@@ -382,22 +382,6 @@ in
     };
   };
 
-#  zope = t.pythonLibStub.merge rec {
-#[> version = "3.3.1";
-#    version = "svn";
-#    name = "zope-${version}";
-#    [>src = p.blending.sourceByName "zope";
-#    src = "/home/marc/managed_repos/zope";
-
-#    [>fetchurl {
-#    [> Doh! Python version 2.4.3 before continuing. Versions
-#    [> 2.4.7 2.4.6 2.4.5 2.4.4 2.4.2 2.4.1 also work, but not as optimally.
-#    [>  url = "http://www.zope.org/Products/Zope3/${version}/Zope-${version}.tgz";
-#    [>  sha256 = "1qvvh384j7blzhwgfmd5kqvr5vzpv5khaj8ha46ln3hrwffrk2b1";
-#    [>};
-#    pyCheck = "";
-#  };
-
   setuptools = t.pythonLibSetup.merge {
     name = "setuptools-0.6c9";
     postUnpack = ''
@@ -537,7 +521,10 @@ in
     name = "soappy-0.12";
     pyCheck = "from SOAPpy import WSDL";
     propagatedBuildInputs = [ t.fpconst ];
-    src = p.bleedingEdgeRepos.sourceByName "pywebcvs";
+    # REGION AUTO UPDATE:   { name="pywebcvs"; type = "svn"; url = "https://pywebsvcs.svn.sourceforge.net/svnroot/pywebsvcs/trunk"; }
+    src = sourceFromHead "pywebcvs-1493.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/pywebcvs-1493.tar.gz"; sha256 = "54e9faca87d8a59a22e06374b8416555cf76d3f411fa2be168ad542c2d8e6fc1"; });
+    # END
     postUnpack = "sourceRoot=$sourceRoot/SOAPpy";
     /* The release is buggy. I can't get list of dedicated netboots from ovh ?
     src = fetchurl {
@@ -560,7 +547,10 @@ in
       import sqlalchemy.orm
       import sqlalchemy.orm.collections
     '';
-    src = p.bleedingEdgeRepos.sourceByName "sqlalchemy05";
+    # REGION AUTO UPDATE:   { name="sqlalchemy05"; type = "svn"; url="http://svn.sqlalchemy.org/sqlalchemy/trunk"; }
+    src = sourceFromHead "sqlalchemy05-6076.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/sqlalchemy05-6076.tar.gz"; sha256 = "f35e6475996f7591d49affbc935c40b4c93e4cdaff86a50af9321774de2025b2"; });
+    # END
     meta = { 
       description = "sql orm wrapper for python";
       homepage = http://www.sqlalchemy.org;
@@ -578,11 +568,18 @@ in
 
       iElectric: column.alter could be broken ..
     */
-    installMigration = ''
+    installMigration =
+    let src = {
+      # REGION AUTO UPDATE:   { name="sqlalchemyMigrate"; type = "svn"; url="http://sqlalchemy-migrate.googlecode.com/svn/trunk"; }
+      src = sourceFromHead "sqlalchemyMigrate-569.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/sqlalchemyMigrate-569.tar.gz"; sha256 = "3b076b33aa13bb2923e719489fd7988a5660bd8d8e87dac03f453b510e2695f4"; });
+      # END
+    }.src; in
+    ''
       cd $TMP
       mkdir migrate
       cd migrate
-      unpackFile ${p.bleedingEdgeRepos.sourceByName "sqlalchemyMigrate"}
+      unpackFile ${src}
       cd *
       python setup.py $setupFlags build
       python setup.py $setupFlags install --prefix=$out
@@ -605,7 +602,10 @@ in
       import migrate.changeset
       import migrate.changeset.schema
     '';
-    src = p.bleedingEdgeRepos.sourceByName "sqlalchemyMigrate";
+    # REGION AUTO UPDATE:   { name="sqlalchemyMigrate"; type = "svn"; url="http://sqlalchemy-migrate.googlecode.com/svn/trunk"; }
+    src = sourceFromHead "sqlalchemyMigrate-569.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/sqlalchemyMigrate-569.tar.gz"; sha256 = "2bfbd41e31c9dce4434ca4cb209338ccef1fd0394999b18111be838b79db703b"; });
+    # END
     meta = { 
       description = "sqlalchemy database versioning and scheme migration";
       homepage = http://packages.python.org/sqlalchemy-migrate/download.html;

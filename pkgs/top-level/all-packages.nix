@@ -1807,6 +1807,7 @@ let
   });
 
   gcc44 = useFromStdenv "gcc" gcc44_real;
+  gcc44_wrapper2 = wrapGCC2 gcc44.gcc;
 
   gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
@@ -1947,11 +1948,13 @@ let
 
   #ghc = haskellPackages.ghc;
 
+  /*
   ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
     inherit fetchurl stdenv ncurses gmp;
-    readline = if stdenv.system == "i686-linux" then readline4 else readline;
+    readline = if stdenv.system == "i686-linux" then readline4 else readline5;
     perl = perl58;
   });
+  */
 
   ghc6101Binary = lowPrio (import ../development/compilers/ghc/6.10.1-binary.nix {
     inherit fetchurl stdenv perl ncurses gmp libedit;
@@ -1966,6 +1969,7 @@ let
 
   haskellPackages = haskellPackages_ghc6104;
 
+  /*
   haskellPackages_ghc642 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.4.2.nix {
@@ -1985,7 +1989,8 @@ let
   haskellPackages_ghc682 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.8.2.nix {
-      inherit fetchurl stdenv readline perl gmp ncurses m4;
+      inherit fetchurl stdenv perl gmp ncurses m4;
+      readline = readline5;
       ghc = ghc642Binary;
     };
   };
@@ -2004,6 +2009,7 @@ let
       };
     };
   });
+  */
 
   haskellPackages_ghc6101 = import ./haskell-packages.nix {
     inherit pkgs;
@@ -2055,8 +2061,7 @@ let
   };
 
   haxe = import ../development/compilers/haxe {
-    inherit fetchurl stdenv lib ocaml zlib makeWrapper;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper;
   };
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
@@ -2166,9 +2171,8 @@ let
   };
 
   neko = import ../development/compilers/neko {
-    inherit (bleedingEdgeRepos) sourceByName ;
-    inherit fetchurl stdenv lib pkgconfig composableDerivation boehmgc apacheHttpd
-      mysql zlib sqlite pcre apr makeWrapper;
+    inherit sourceFromHead fetchurl stdenv lib pkgconfig composableDerivation
+      boehmgc apacheHttpd mysql zlib sqlite pcre apr makeWrapper;
     inherit (gtkLibs) gtk;
   };
 
@@ -2279,6 +2283,7 @@ let
   };
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
+  wrapGCC2 = wrapGCCWith (import ../build-support/gcc-wrapper2) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
@@ -2376,12 +2381,11 @@ let
 
   # mercurial (hg) bleeding edge version
   octaveHG = import ../development/interpreters/octave/hg.nix {
-    inherit fetchurl readline ncurses perl flex atlas getConfig glibc qhull gfortran;
+    inherit fetchurl sourceFromHead readline ncurses perl flex atlas getConfig glibc qhull gfortran;
     inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
     inherit stdenv;
     inherit (xlibs) libX11;
     #stdenv = overrideGCC stdenv gcc40;
-    inherit (bleedingEdgeRepos) sourceByName;
   };
 
   perl58 = import ../development/interpreters/perl-5.8 {
@@ -2417,6 +2421,10 @@ let
     inherit (xorg) libX11 libXaw libXft libXrender libICE xproto
       renderproto pixman libSM libxcb libXext xextproto libXmu
       libXt;
+  };
+
+  polyml = import ../development/compilers/polyml {
+    inherit stdenv fetchurl;
   };
 
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
@@ -2560,8 +2568,8 @@ let
   };
   */
 
-  bleedingEdgeRepos = import ../development/misc/bleeding-edge-repos {
-    inherit getConfig fetchurl lib;
+  sourceFromHead = import ../build-support/source-from-head-fun.nix {
+    inherit getConfig;
   };
 
   ecj = import ../development/eclipse/ecj {
@@ -2709,7 +2717,7 @@ let
   };
 
   ctags = import ../development/tools/misc/ctags {
-    inherit fetchurl stdenv bleedingEdgeRepos automake autoconf;
+    inherit fetchurl sourceFromHead stdenv automake autoconf;
   };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
@@ -2718,6 +2726,10 @@ let
 
   cmake = import ../development/tools/build-managers/cmake {
     inherit fetchurl stdenv replace ncurses;
+  };
+
+  coccinelle = import ../development/tools/misc/coccinelle {
+    inherit fetchurl stdenv perl python ocaml ncurses makeWrapper;
   };
 
   cproto = import ../development/tools/misc/cproto {
@@ -2837,14 +2849,6 @@ let
     inherit fetchurl stdenv pkgconfig;
     inherit (gtkLibs) gtk;
   };
-
-  /*
-  hsc2hs = import ../development/tools/misc/hsc2hs {
-    inherit bleedingEdgeRepos stdenv;
-    ghc = ghcsAndLibs.ghc68.ghc;
-    libs = with (ghc68extraLibs ghcsAndLibs.ghc68 // ghcsAndLibs.ghc68.core_libs); [ base directory process cabal_darcs ];
-  };
-  */
 
   guileLint = import ../development/tools/guile/guile-lint {
     inherit fetchurl stdenv guile;
@@ -4353,7 +4357,8 @@ let
   };
 
   openal = import ../development/libraries/openal {
-    inherit fetchurl stdenv cmake alsaLib;
+    inherit fetchurl cmake alsaLib;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   # added because I hope that it has been easier to compile on x86 (for blender)
@@ -5268,7 +5273,7 @@ let
   ### OS-SPECIFIC
 
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
-    inherit bleedingEdgeRepos fetchurl stdenv flex bison kernelHeaders;
+    inherit sourceFromHead fetchurl stdenv flex bison kernelHeaders;
   };
 
   _915resolution = import ../os-specific/linux/915resolution {
@@ -6382,12 +6387,14 @@ let
   };
 
   autopanosiftc = import ../applications/graphics/autopanosiftc {
-    inherit fetchurl stdenv cmake libpng libtiff libjpeg panotools libxml2;
+    inherit fetchurl cmake libpng libtiff libjpeg panotools libxml2;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   avidemux = import ../applications/video/avidemux {
-    inherit fetchurl stdenv cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
+    inherit fetchurl cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
       alsaLib lame faac faad2 libvorbis;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
   };
@@ -6408,7 +6415,6 @@ let
   beast = import ../applications/audio/beast {
 # stdenv = overrideGCC stdenv gcc34;
     inherit stdenv fetchurl zlib guile pkgconfig intltool libogg libvorbis python libxml2 bash perl gettext;
-    inherit (bleedingEdgeRepos) sourceByName;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnomecanvas libart_lgpl;
     inherit automake autoconf;
@@ -6509,7 +6515,7 @@ let
 
 
   cinelerra = import ../applications/video/cinelerra {
-    inherit fetchurl stdenv
+    inherit lib fetchurl sourceFromHead stdenv
       automake autoconf libtool
       a52dec alsaLib   lame libavc1394 libiec61883 libraw1394 libsndfile
       libvorbis libogg libjpeg libtiff freetype mjpegtools x264
@@ -6517,8 +6523,7 @@ let
       pkgconfig;
       openexr = openexr_1_6_1;
     fftw = fftwSinglePrec;
-    inherit (xorg) libXxf86vm libXv;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit (xorg) libXxf86vm libXv libXi libX11 xextproto;
     inherit (gnome) esound;
   };
 
@@ -6774,6 +6779,10 @@ let
       inherit fetchurl stdenv;
     };
 
+    proofgeneral = import ../applications/editors/emacs-modes/proofgeneral {
+       inherit stdenv fetchurl emacs perl;
+    };
+
     quack = import ../applications/editors/emacs-modes/quack {
       inherit fetchurl stdenv emacs;
     };
@@ -6916,7 +6925,8 @@ let
   };
 
   freepv = import ../applications/graphics/freepv {
-    inherit fetchurl stdenv mesa freeglut libjpeg zlib cmake libxml2 libpng;
+    inherit fetchurl mesa freeglut libjpeg zlib cmake libxml2 libpng;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
     inherit (xlibs) libX11 libXxf86vm;
   };
 
@@ -7066,10 +7076,11 @@ let
   };
 
   hugin = import ../applications/graphics/hugin {
-    inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig
+    inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc;
     inherit wxGTK;
     openexr = openexr_1_6_1;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   i810switch = import ../applications/misc/i810 {
@@ -7344,9 +7355,8 @@ let
     };
 
   MPlayerTrunk = import ../applications/video/MPlayer/trunk.nix {
-    inherit (bleedingEdgeRepos) sourceByName;
-    inherit fetchurl stdenv freetype x11 zlib libtheora libcaca freefont_ttf libdvdnav
-      cdparanoia mesa pkgconfig jackaudio;
+    inherit fetchurl sourceFromHead stdenv freetype x11 zlib libtheora libcaca
+      freefont_ttf libdvdnav cdparanoia mesa pkgconfig jackaudio;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
@@ -7433,7 +7443,8 @@ let
   };
 
   paraview = import ../applications/graphics/paraview {
-    inherit fetchurl stdenv cmake qt4;
+    inherit fetchurl cmake qt4;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
   };
 
   partitionManager = import ../tools/misc/partition-manager {
@@ -7634,7 +7645,7 @@ let
 
   # linux only by now
   synergy = import ../applications/misc/synergy {
-    inherit fetchurl bleedingEdgeRepos stdenv x11;
+    inherit fetchurl sourceFromHead stdenv x11;
     inherit (xlibs) xextproto libXtst inputproto libXi;
   };
 
@@ -8319,6 +8330,10 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  isabelle = import ../applications/science/logic/isabelle {
+    inherit (pkgs) stdenv fetchurl nettools perl polyml emacs emacsPackages;
+  };
+
   ssreflect = import ../applications/science/logic/ssreflect {
     inherit stdenv fetchurl ocaml coq;
     camlp5 = camlp5_transitional;
@@ -8466,8 +8481,7 @@ let
   };
 
   lilypond = import ../misc/lilypond {
-    inherit (bleedingEdgeRepos) sourceByName;
-    inherit fetchurl stdenv lib automake autoconf
+    inherit fetchurl sourceFromHead stdenv lib automake autoconf
       ghostscript texinfo imagemagick texi2html guile python gettext
       perl bison pkgconfig texLive fontconfig freetype fontforge help2man;
     inherit (gtkLibs) pango;

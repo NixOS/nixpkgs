@@ -39,6 +39,9 @@ cmakeConfigurePhase()
         cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ -DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
     fi
 
+    # Avoid cmake resetting the rpath of binaries, on make install
+    cmakeFlags="-DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
     cmake ${cmakeDir:-.} $cmakeFlags ${cmakeFlagsArray[@]}

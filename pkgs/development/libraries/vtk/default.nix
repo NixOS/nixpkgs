@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "vtk-5.2.1";
   src = fetchurl {
-    url = http://www.vtk.org/files/release/5.2/vtk-5.2.1.tar.gz;
-    sha256 = "c81521b3767a044745336212cbde500d6e97a1f8ba647bc590857e36f57003bb";
+    url = http://www.vtk.org/files/release/5.4/vtk-5.4.2.tar.gz;
+    sha256 = "0gd7xlxiqww6xxcs2kicz0g6k147y3200np4jnsf10vlxs10az03";
   };
   buildInputs = [ cmake mesa libX11 xproto libXt ];
 

@@ -2,7 +2,10 @@ args: with args;
 stdenv.mkDerivation {
 
   name = "netsurf-devel";
-  src = sourceByName "netsurf";
+  # REGION AUTO UPDATE:      { name="netsurf"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/netsurf"; groups = "netsurf_group"; }
+  src= sourceFromHead "netsurf-9721.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/netsurf-9721.tar.gz"; sha256 = "4705f059596fbd95b1a80d9a6c5d08daf051fd0e5e868ccd40b30af8a45e8f56"; });
+  # END
 
   # name = "netsurf-2.1";
   /*

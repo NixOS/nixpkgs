@@ -1,0 +1,6 @@
+To be removed after we merge stdenv-updates in.
+stdenv-updates should have this gcc-wrapper2 as gcc-wrapper.
+
+Changelog against gcc-wrapper:
+- Support for linking shared objects with direct mention of the /path/libxxx.so object,
+  thus, adding its path to the rpath.

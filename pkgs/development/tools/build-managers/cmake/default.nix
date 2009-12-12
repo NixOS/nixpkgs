@@ -1,10 +1,10 @@
 {fetchurl, stdenv, replace, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "cmake-2.6.4";
+  name = "cmake-2.8.0";
 
   # We look for cmake modules in .../share/cmake-${majorVersion}/Modules.
-  majorVersion = "2.6";
+  majorVersion = "2.8";
 
   setupHook = ./setup-hook.sh;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.cmake.org/files/v${majorVersion}/${name}.tar.gz";
-    sha256 = "1wpxr5x4aggaqrqzjq3kg4hh09f0vyr1njik1pad01bvwd923pcw";
+    sha256 = "0va7kxczqb920n61xnyhr99ajs4v05mssk4n0p6z55yvr9g62zc4";
   };
 
   patches = [ ./findqt4.patch ];

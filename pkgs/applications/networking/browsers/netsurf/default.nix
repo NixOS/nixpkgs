@@ -8,8 +8,8 @@ rec {
   };
 
   libCSS = import ./libCSS.nix {
-    inherit fetchurl stdenv lib pkgconfig libParserUtils libwapcaplet;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv lib pkgconfig libParserUtils
+      libwapcaplet;
   };
 
   libnsbmp = import ./libnsbmp.nix {
@@ -21,13 +21,11 @@ rec {
   };
 
   libwapcaplet = import ./libwapcaplet.nix {
-    inherit fetchurl stdenv lib;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv lib;
   };
 
   libsvgtiny = import ./libsvgtiny.nix {
-    inherit fetchurl stdenv lib pkgconfig gperf libxml2;
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv lib pkgconfig gperf libxml2;
   };
 
   hubub = stdenv.mkDerivation {
@@ -55,7 +53,10 @@ rec {
   libdom = stdenv.mkDerivation {
     name = "libdom-devel";
 
-    src = bleedingEdgeRepos.sourceByName "libdom";
+    # REGION AUTO UPDATE:     { name="libdom"; type = "svn"; url = "svn://svn.netsurf-browser.org/trunk/dom"; groups = "netsurf_group"; }
+    src= sourceFromHead "libdom-9721.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/libdom-9721.tar.gz"; sha256 = "ca4b94a8dd32036787331a14133c36a49daded40bdb4c04edc3eab99e2193abc"; });
+    # END
     installPhase = "make PREFIX=$out install";
     buildInputs = [pkgconfig];
 
@@ -70,17 +71,15 @@ rec {
   */
 
   netsurfHaru = import ./haru.nix {
-    inherit fetchurl stdenv lib zlib libpng; 
-    inherit (bleedingEdgeRepos) sourceByName;
+    inherit fetchurl sourceFromHead stdenv lib zlib libpng; 
   };
 
   browser = import ./netsurf.nix {
-    inherit fetchurl stdenv lib pkgconfig
+    inherit fetchurl sourceFromHead stdenv lib pkgconfig
       libnsbmp libnsgif libsvgtiny libwapcaplet hubub libParserUtils
       libpng libxml2 libCSS lcms curl libmng;
     libharu = netsurfHaru;
     inherit (gnome) glib gtk libglade;
-    inherit (bleedingEdgeRepos) sourceByName;
   };
 
 

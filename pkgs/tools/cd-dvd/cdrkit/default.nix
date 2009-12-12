@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cmake libcap zlib bzip2];
 
+  patches = [ ./include-path.patch ];
+
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
     ln -s $out/bin/genisoimage $out/bin/mkisofs
