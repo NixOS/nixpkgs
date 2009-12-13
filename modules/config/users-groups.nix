@@ -23,14 +23,19 @@ let
             description = "Unprivileged account (don't use!)";
           }
         ];
-      
+
       makeNixBuildUser = nr:
         { name = "nixbld${toString nr}";
           description = "Nix build user ${toString nr}";
+
+          /* For consistency with the setgid(2), setuid(2), and setgroups(2)
+             calls in `libstore/build.cc', don't add any supplementary group
+             here.  */
           uid = builtins.add ids.uids.nixbld nr;
-          extraGroups = ["nixbld"];
+          group = "nixbld";
+          extraGroups = [];
         };
-        
+
       nixBuildUsers = map makeNixBuildUser (pkgs.lib.range 1 10);
       
       addAttrs =
@@ -208,6 +213,16 @@ in
                     --groups "$extraGroups" \
                     ''${home:+--home "$home"} \
                     --shell "$shell"
+                if test -z "$extraGroups"
+                then
+                    # Make sure the user is listed as belonging to its
+                    # primary group when it has no supplementary groups.  The
+                    # main reason is to have the `nixbld[0-9]' users be
+                    # listed as `nixbld' members; this allows `nix-store' to
+                    # get the UIDs of all the build users by doing a
+                    # getprnam("nixbld") call.
+                    groupmod "$group" -A "$name"
+                fi
             fi
 
         done
