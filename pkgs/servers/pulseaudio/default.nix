@@ -53,5 +53,8 @@ stdenv.mkDerivation rec {
     # Note: Practically, the server is under the GPL due to the
     # dependency on `libsamplerate'.  See `LICENSE' for details.
     licenses = "LGPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;
   };
 }
