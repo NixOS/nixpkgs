@@ -7550,11 +7550,11 @@ let
   thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird-3.x {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 libpng alsaLib sqlite
-      patchelf;
+      patchelf nspr;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
     #enableOfficialBranding = true;
-    xulrunner = xulrunner3;
+    xulrunner = xulrunner35;
     autoconf = autoconf213;
   });*/
 
@@ -8139,6 +8139,12 @@ let
 
   mrbayes = import ../applications/science/biology/mrbayes {
     inherit fetchurl stdenv readline;
+  };
+
+  ncbiCTools = builderDefsPackage ../development/libraries/ncbi {
+    inherit tcsh mesa lesstif;
+    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
+      libXmu libXext;
   };
 
   ncbi_tools = import ../applications/science/biology/ncbi-tools {
