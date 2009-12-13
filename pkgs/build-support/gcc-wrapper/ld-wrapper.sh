@@ -81,7 +81,7 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         elif test "$p" = "-L"; then
             addToLibPath ${p2}
             n=$((n + 1))
-        elif $(echo "$p" | grep -q '\.so\($\|\.\)'); then
+        elif $(echo "$p" | grep -q '^[^-].*\.so\($\|\.\)'); then
             path="$(dirname "$p")";
             addToLibPath "${path}"
         fi
@@ -116,7 +116,7 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
                 # I haven't seen `-l foo', but you never know...
                 addToRPath $i
                 break
-            elif $(echo "$p" | grep -q '\.so\($\|\.\)'); then
+            elif $(echo "$p" | grep -q '^[^-].*\.so\($\|\.\)'); then
                 path="$(dirname "$p")";
                 if test "$path" == "$i"; then
                   addToRPath $i
