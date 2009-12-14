@@ -5396,21 +5396,6 @@ let
     ];
   };
 
-  kernel_2_6_26 = import ../os-specific/linux/kernel/linux-2.6.26.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.4-2.6.25-rc6";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
-          sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      kernelPatches.sec_perm_2_6_24
-    ];
-  };
-
   kernel_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
@@ -5424,7 +5409,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_28
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.ext4_softlockups
+        kernelPatches.ext4_softlockups_2_6_28
       ];
   };
 
@@ -5593,7 +5578,6 @@ let
 
   # Build the kernel modules for the some of the kernels.
   kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
-  kernelPackages_2_6_26 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_26);
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);

@@ -528,11 +528,6 @@ in {
     kernel = linux;
   };
 
-  kernelPackages_2_6_26 = {
-    aufs = linux;
-    kernel = linux;
-  };
-  
   kernelPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
