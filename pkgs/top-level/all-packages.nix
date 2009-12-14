@@ -5529,6 +5529,40 @@ let
   kernel_2_6_31_zen = kernel_2_6_31_zen7;
   kernel_2_6_31_zen_bfs = kernel_2_6_31_zen7_bfs;
 
+  kernel_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches = [
+      { name = "fbcondecor-0.9.6-2.6.31.2";
+        patch = fetchurl {
+          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.31.2.patch;
+          sha256 = "1avk0yn0y2qbpsxf31r6d14y4a1mand01r4k4i71yfxvpqcgxka9";
+        };
+        extraConfig =
+          ''
+            FB_CON_DECOR y
+
+            # fbcondecor is picky about some other settings.
+            FB y
+            FB_TILEBLITTING n
+            FB_MATROX n
+            FB_S3 n
+            FB_VT8623 n
+            FB_ARK n
+            FB_CFB_FILLRECT y
+            FB_CFB_COPYAREA y
+            FB_CFB_IMAGEBLIT y
+            FB_VESA y
+            FRAMEBUFFER_CONSOLE y
+          '';
+        features = { fbConDecor = true; };
+      }
+      { name = "sec_perm-2.6.24";
+        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
+        features = { secPermPatch = true; };
+      }
+    ];
+  };
+
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
