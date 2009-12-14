@@ -5,7 +5,7 @@ let
   version = "1.5"; 
   buildInputs = with a; [
     mesa lesstif libX11 libXaw xproto libXt libSM libICE 
-      libXmu libXext 
+      libXmu libXext libXcursor
   ];
 in
 rec {
@@ -29,7 +29,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["unpackTarballs" 
-    "setPlatform"
+    "setPlatform" "extraVars"
     "buildVibrant" "buildContent" 
     "install"];
 
@@ -52,6 +52,10 @@ rec {
     sed -e 's/${platformTLAContent}=no/${platformTLAContent}=/' -i content/makefile_v
   '') ["minInit" "unpackTarballs"];
 
+  extraVars = a.noDepEntry ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lXcursor"
+  '';
+
   buildVibrant = a.fullDepEntry (''
     cd vibrant/build
     
@@ -73,7 +77,12 @@ rec {
   '') ["addInputs" "buildVibrant" "setPlatform"];
 
   install = a.fullDepEntry (''
-    ensureDir $out/share/${name}/build-snapshot
+    ensureDir $out/share/${name}/build-snapshot $out/bin $out/lib $out/share/${name}/doc
+    find . -name '*.o' -exec cp '{}' $out/lib ';'
+    find . -name '*.so' -exec cp '{}' $out/lib ';'
+    find . -name '*.txt' -exec cp '{}' $out/share/${name}/doc ';'
+    find . -name '*.hlp' -exec cp '{}' $out/share/${name}/doc ';'
+    find . -perm +111 -a ! -name '*.*' -exec cp '{}' $out/bin ';'
     cp -r . $out/share/${name}/build-snapshot
   '') ["buildContent" "defEnsureDir" "minInit"];
       
