@@ -1,4 +1,4 @@
-args @ {stdenv, fetchurl, userModeLinux ? false, ...}:
+args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? "", ... }:
 
 import ./generic.nix (
 
@@ -33,9 +33,7 @@ import ./generic.nix (
         XEN y
 
         # We need 64 GB (PAE) support for Xen guest support.
-        ${stdenv.lib.optionalString (stdenv.system == "i686-linux") ''
-          HIGHMEM64G y
-        ''}
+        HIGHMEM64G? y
 
         # Enable the kernel's built-in memory tester.
         MEMTEST y
@@ -223,6 +221,8 @@ import ./generic.nix (
         USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
         X86_CHECK_BIOS_CORRUPTION y
         X86_MCE y
+
+        ${extraConfig}
       '';
   }
 

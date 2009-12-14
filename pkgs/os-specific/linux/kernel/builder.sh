@@ -1,8 +1,7 @@
 source $stdenv/setup
 
 
-export SHELL=bash
-export ARCH=$arch
+makeFlags="ARCH=$arch"
 
 
 configurePhase() {
@@ -28,7 +27,7 @@ configurePhase() {
     # Create the config file.
     echo "generating kernel configuration..."
     echo "$kernelConfig" > kernel-config
-    KERNEL_CONFIG=kernel-config perl -w $generateConfig
+    DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config perl -w $generateConfig
 }
 
 
@@ -77,6 +76,7 @@ installPhase() {
 
     # copy config
     cp .config $out/lib/modules/$version/build/.config
+    ln -s $out/lib/modules/$version/build/.config $out/config
 
     if test "$arch" != um; then
         # copy all Makefiles and Kconfig files
