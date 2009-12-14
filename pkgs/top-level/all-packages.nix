@@ -8170,6 +8170,12 @@ let
     inherit fetchurl stdenv gfortran;
   };
 
+  content = builderDefsPackage ../applications/science/math/content {
+    inherit mesa lesstif;
+    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
+      libXmu libXext;
+  };
+
   /* liblapack = import ../development/libraries/science/math/liblapack {
     inherit fetchurl stdenv gfortran;
   }; */
