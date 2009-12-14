@@ -7,7 +7,7 @@ let
   location = config.services.mysqlBackup.location ;
 
   mysqlBackupCron = db : ''
-    ${config.services.mysqlBackup.period} mysql ${mysql}/bin/mysqldump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
+    ${config.services.mysqlBackup.period} ${config.services.mysqlBackup.user} ${mysql}/bin/mysqldump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
   ''; 
 
 in
@@ -30,6 +30,13 @@ in
           This option defines (in the format used by cron) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
+        '';
+      };
+
+      user = mkOption {
+        default = "mysql";
+        description = ''
+          User to be used to perform backup.
         '';
       };
 
@@ -57,7 +64,7 @@ in
 
     system.activationScripts.mysqlBackup = pkgs.stringsWithDeps.fullDepEntry ''
          mkdir -m 0700 -p ${config.services.mysqlBackup.location}
-         chown mysql ${config.services.mysqlBackup.location}
+         chown ${config.services.mysqlBackup.user} ${config.services.mysqlBackup.location}
     '' [ "stdio" "defaultPath" "systemConfig" "users" ];
   };
   
