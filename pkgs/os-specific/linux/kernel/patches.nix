@@ -30,6 +30,16 @@ in
       features.secPermPatch = true;
     };
 
+  fbcondecor_2_6_25 =
+    { name = "fbcondecor-0.9.4-2.6.25-rc6";
+      patch = fetchurl {
+        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
+        sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
+      };
+      extraConfig = fbcondecorConfig;
+      features.fbConDecor = true;
+    };
+      
   fbcondecor_2_6_27 =
     { name = "fbcondecor-0.9.4-2.6.27";
       patch = fetchurl {
