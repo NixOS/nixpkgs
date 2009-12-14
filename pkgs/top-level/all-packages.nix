@@ -5346,18 +5346,6 @@ let
     inherit fetchurl stdenv unifdef;
   };
 
-  kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.16.nix {
-    inherit fetchurl stdenv;
-  };
-
-  kernelHeaders_2_6_26 = import ../os-specific/linux/kernel-headers/2.6.26.2.nix {
-    inherit fetchurl stdenv;
-  };
-
-  kernelHeaders_2_6_27 = import ../os-specific/linux/kernel-headers/2.6.27.8.nix {
-    inherit fetchurl stdenv;
-  };
-
   kernelHeaders_2_6_28 = import ../os-specific/linux/kernel-headers/2.6.28.nix {
     inherit fetchurl stdenv perl;
   };
