@@ -106,6 +106,26 @@ rec {
     };
   };
 
+  jinja2 = buildPythonPackage {
+    name = "jinja2-2.2.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.2.1.tar.gz";
+      md5 = "fea849d68891218eb0b21c170f1c32d5";
+    };
+
+    meta = {
+      homepage = http://jinja.pocoo.org/;
+      description = "Stand-alone template engine.";
+      license = "BSD";
+      longDescription = ''
+        Jinja2 is a template engine written in pure Python. It provides a
+        Django inspired non-XML syntax but supports inline expressions and
+        an optional sandboxed environment.
+      '';
+    };
+  };
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-2.2.2";
 
@@ -120,6 +140,39 @@ rec {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = http://codespeak.net/lxml/index.html;
       license = "BSD";
+    };
+  });
+
+  namebench = buildPythonPackage (rec {
+    name = "namebench-1.0.5";
+
+    src = fetchurl {
+      url = "http://namebench.googlecode.com/files/${name}.tgz";
+      sha256 = "6cbde35ce94d1f31e7d48f5d8eec13238b4dbc505675a33f1e183e600c1482c3";
+    };
+
+    # No support of GUI yet.
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://namebench.googlecode.com/;
+      description = "Find fastest DNS servers available.";
+      license = [
+        "Apache-2.0"
+        # third-party program licenses (embedded in the sources)
+        "LGPL" # Crystal_Clear
+        "free" # dns
+        "Apache-2.0" # graphy
+        "BSD" # jinja2
+      ];
+      longDescription = ''
+        It hunts down the fastest DNS servers available for your computer to
+        use. namebench runs a fair and thorough benchmark using your web
+        browser history, tcpdump output, or standardized datasets in order
+        to provide an individualized recommendation. namebench is completely
+        free and does not modify your system in any way.
+      '';
     };
   });
 
