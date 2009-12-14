@@ -128,7 +128,9 @@ while (<CONFIG>) {
 close CONFIG;
 
 foreach my $name (sort (keys %answers)) {
-    my $f = $requiredAnswers{$name} ? sub { die @_; } : sub { warn @_; };
+    my $f = $requiredAnswers{$name} && $ENV{'ignoreConfigErrors'} ne "1"
+        ? sub { die @_; } : sub { warn @_; };
+    my $f = sub { warn @_; };
     &$f("unused option: $name\n") unless defined $config{$name};
     &$f("option not set correctly: $name\n")
         if $config{$name} && $config{$name} ne $answers{$name};

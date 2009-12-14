@@ -66,6 +66,9 @@ stdenv.mkDerivation {
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
 
+  # For UML, just ignore all options that don't apply (I'm lazy).
+  ignoreConfigErrors = userModeLinux;
+
   buildInputs = [ perl mktemp ];
   
   arch =

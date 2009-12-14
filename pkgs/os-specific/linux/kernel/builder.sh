@@ -1,7 +1,7 @@
 source $stdenv/setup
 
 
-makeFlags="ARCH=$arch"
+makeFlags="ARCH=$arch SHELL=/bin/sh"
 
 
 configurePhase() {
