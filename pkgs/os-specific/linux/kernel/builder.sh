@@ -21,8 +21,8 @@ configurePhase() {
     fi
 
 
-    # Patch kconfig to print "###" after every question -
-    # generate-config.pl expects this.
+    # Patch kconfig to print "###" after every question so that
+    # generate-config.pl can answer them.
     sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
 
     # Create the config file.

@@ -18,12 +18,17 @@ $SIG{PIPE} = 'IGNORE';
 
 # Read the answers.
 my %answers;
+my %requiredAnswers;
 open ANSWERS, "<$ENV{KERNEL_CONFIG}" or die;
 while (<ANSWERS>) {
     chomp;
     s/#.*//;
-    my ($name, $value) = split / /;
-    $answers{$name} = $value if $name;
+    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(\S+)\s*$/) {
+        $answers{$1} = $3;
+        $requiredAnswers{$1} = 1 unless defined $2;
+    } elsif (!/^\s*$/) {
+        die "invalid config line: $_";
+    }
 }
 close ANSWERS;
 
@@ -123,8 +128,8 @@ while (<CONFIG>) {
 close CONFIG;
 
 foreach my $name (sort (keys %answers)) {
-    die "unused option: $name\n"
-        unless defined $config{$name};
-    die "option not set correctly: $name\n"
+    my $f = $requiredAnswers{$name} ? sub { die @_; } : sub { warn @_; };
+    &$f("unused option: $name\n") unless defined $config{$name};
+    &$f("option not set correctly: $name\n")
         if $config{$name} && $config{$name} ne $answers{$name};
 }

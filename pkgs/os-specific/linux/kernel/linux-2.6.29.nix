@@ -47,7 +47,7 @@ import ./generic.nix (
         # Disable some expensive (?) features.
         MARKERS n
         KPROBES n
-        NUMA n
+        NUMA? n
         PM_TRACE_RTC n
 
         # Enable various subsystems.
@@ -78,9 +78,7 @@ import ./generic.nix (
         # Wireless networking.
         IPW2100_MONITOR y # support promiscuous mode
         IPW2200_MONITOR y # support promiscuous mode
-        ${stdenv.lib.optionalString (!userModeLinux) ''
-          IWLWIFI_LEDS y
-        ''}
+        IWLWIFI_LEDS? y
         IWLWIFI_RFKILL y
         IWLAGN_SPECTRUM_MEASUREMENT y
         IWLAGN_LEDS y
@@ -192,7 +190,7 @@ import ./generic.nix (
         BT_RFCOMM_TTY y # RFCOMM TTY support
         CPU_FREQ_DEBUG n
         CRASH_DUMP n
-        DMAR n # experimental
+        DMAR? n # experimental
         DVB_DYNAMIC_MINORS y # we use udev
         FUSION y # Fusion MPT device support
         IDE_GD_ATAPI y # ATAPI floppy support
