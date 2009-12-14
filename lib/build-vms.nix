@@ -129,6 +129,7 @@ rec {
         ''
           mkdir $out
           cp ${./test-driver/Machine.pm} Machine.pm
+          ensureDir $out/nix-support
           
           ${perl}/bin/perl ${./test-driver/test-driver.pl} ${network}/vms/*/bin/run-*-vm
           
@@ -138,7 +139,6 @@ rec {
           done
 
           for i in $out/*.png; do
-            ensureDir $out/nix-support
             echo "report screenshot $i" >> $out/nix-support/hydra-build-products
           done
         ''; # */
