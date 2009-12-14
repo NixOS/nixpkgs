@@ -16,7 +16,14 @@ let
   vmName = config.networking.hostName;
 
   options = {
-
+    virtualisation.memorySize = 
+      mkOption {
+        default = 384;
+        description =
+          ''
+            Memory size (M) of virtual machine.
+          '';
+      };
     virtualisation.diskImage =
       mkOption {
         default = "./${vmName}.qcow2";
@@ -46,7 +53,7 @@ let
       
       # -no-kvm-irqchip is needed to prevent the CIFS mount from
       # hanging the VM on x86_64.
-      exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 -m 384 \
+      exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 -m ${toString config.virtualisation.memorySize} \
           -no-kvm-irqchip \
           -net nic,model=virtio -net user -smb / \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
