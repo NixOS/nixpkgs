@@ -116,7 +116,7 @@ rec {
 
     meta = {
       homepage = http://jinja.pocoo.org/;
-      description = "Stand-alone template engine.";
+      description = "Stand-alone template engine";
       license = "BSD";
       longDescription = ''
         Jinja2 is a template engine written in pure Python. It provides a
@@ -157,7 +157,7 @@ rec {
 
     meta = {
       homepage = http://namebench.googlecode.com/;
-      description = "Find fastest DNS servers available.";
+      description = "Find fastest DNS servers available";
       license = [
         "Apache-2.0"
         # third-party program licenses (embedded in the sources)
