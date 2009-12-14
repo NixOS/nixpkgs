@@ -8173,7 +8173,7 @@ let
   content = builderDefsPackage ../applications/science/math/content {
     inherit mesa lesstif;
     inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
-      libXmu libXext;
+      libXmu libXext libXcursor;
   };
 
   /* liblapack = import ../development/libraries/science/math/liblapack {
