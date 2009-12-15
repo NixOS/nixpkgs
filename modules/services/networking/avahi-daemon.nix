@@ -118,8 +118,8 @@ in
     jobs.avahi_daemon =
       { name = "avahi-daemon";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        startOn = "ip-up";
+        stopOn = "ip-down";
 
         script =
           ''

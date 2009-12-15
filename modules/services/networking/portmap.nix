@@ -66,8 +66,8 @@ in
     jobs.portmap =
       { description = "ONC RPC portmap";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        startOn = "ip-up";
+        stopOn = "ip-down";
 
         exec =
           ''

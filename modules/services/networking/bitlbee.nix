@@ -67,8 +67,8 @@ in
     jobs.bitlbee =
       { description = "BitlBee IRC to other chat networks gateway";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        startOn = "ip-up";
+        stopOn = "ip-down";
 
         preStart =
           ''

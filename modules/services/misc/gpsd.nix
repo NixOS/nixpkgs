@@ -88,8 +88,8 @@ in
     jobs.gpsd =
       { description = "GPSD daemon";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        startOn = "ip-up";
+        stopOn = "ip-down";
 
         exec =
           ''
