@@ -16,7 +16,8 @@ rec {
     inherit gstPluginsBase;
     inherit (args) fetchurl stdenv pkgconfig aalib cairo flac hal
       libjpeg zlib speex libpng libdv libcaca dbus libiec61883
-      libavc1394 ladspaH taglib gdbm pulseaudio libsoup libcap;
+      libavc1394 ladspaH taglib gdbm pulseaudio libsoup libcap 
+      libtasn1;
   };
 
   gstFfmpeg = makeOverridable (import ./gst-ffmpeg) {
