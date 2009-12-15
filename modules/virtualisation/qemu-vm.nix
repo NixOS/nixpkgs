@@ -71,8 +71,8 @@ in
   # All the modules the initrd needs to mount the host filesystem via
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
-  boot.initrd.kernelModules =
-    ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
+  boot.initrd.availableKernelModules =
+    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" ];
 
   boot.initrd.extraUtilsCommands =
     ''

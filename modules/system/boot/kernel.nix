@@ -61,13 +61,65 @@ let kernel = config.boot.kernelPackages.kernel; in
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
         mount the root file system should be added to
+        <option>boot.initrd.availableKernelModules</option> or
         <option>boot.initrd.kernelModules</option>.
       '';
     };
 
+    boot.initrd.availableKernelModules = mkOption {
+      default = [];
+      example = [ "sata_nv" "ext3" ];
+      description = ''
+        The set of kernel modules in the initial ramdisk used during the
+        boot process.  This set must include all modules necessary for
+        mounting the root device.  That is, it should include modules
+        for the physical device (e.g., SCSI drivers) and for the file
+        system (e.g., ext3).  The set specified here is automatically
+        closed under the module dependency relation, i.e., all
+        dependencies of the modules list here are included
+        automatically.  The modules listed here are available in the
+        initrd, but are only loaded on demand (e.g., the ext3 module is
+        loaded automatically when an ext3 filesystem is mounted, and
+        modules for PCI devices are loaded when they match the PCI ID
+        of a device in your system).  To force a module to be loaded,
+        include it in <option>boot.initrd.kernelModules</option>.
+      '';
+    };
+    
     boot.initrd.kernelModules = mkOption {
       default = [
-        # Note: most of these (especially the SATA/PATA modules)
+      ];
+      description = "List of modules that are always loaded by the initrd.";
+    };
+
+    system.modulesTree = mkOption {
+      internal = true;
+      default = [];
+      description = ''
+        Tree of kernel modules.  This includes the kernel, plus modules
+        built outside of the kernel.  Combine these into a single tree of
+        symlinks because modprobe only supports one directory.
+      '';
+      merge = mergeListOption;
+      # Convert the list of path to only one path.
+      apply = pkgs.aggregateModules;
+    };
+
+  };
+
+
+  ###### implementation
+
+  config = {
+
+    system.build = { inherit kernel; };
+    
+    system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+
+    boot.kernelModules = [ "loop" ];
+
+    boot.initrd.availableKernelModules =
+      [ # Note: most of these (especially the SATA/PATA modules)
         # shouldn't be included by default since nixos-hardware-scan
         # detects them, but I'm keeping them for now for backwards
         # compatibility.
@@ -100,50 +152,17 @@ let kernel = config.boot.kernelPackages.kernel; in
         "ohci_hcd"
         "usbhid"
 
-        # LVM.
-        "dm_mod"
-
-        # All-mod-config case:
+        # Unix domain sockets (needed by udev).
         "unix"
+        
+        # Misc. stuff.
         "i8042" "pcips2" "serio" "atkbd" "xtkbd"
       ];
-      description = ''
-        The set of kernel modules in the initial ramdisk used during the
-        boot process.  This set must include all modules necessary for
-        mounting the root device.  That is, it should include modules
-        for the physical device (e.g., SCSI drivers) and for the file
-        system (e.g., ext3).  The set specified here is automatically
-        closed under the module dependency relation, i.e., all
-        dependencies of the modules list here are included
-        automatically.
-      '';
-    };
-
-    system.modulesTree = mkOption {
-      internal = true;
-      default = [];
-      description = ''
-        Tree of kernel modules.  This includes the kernel, plus modules
-        built outside of the kernel.  Combine these into a single tree of
-        symlinks because modprobe only supports one directory.
-      '';
-      merge = mergeListOption;
-      # Convert the list of path to only one path.
-      apply = pkgs.aggregateModules;
-    };
-
-  };
-
-
-  ###### implementation
-
-  config = {
-
-    system.build = { inherit kernel; };
-    
-    system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
-
-    boot.kernelModules = [ "loop" ];
+      
+    boot.initrd.kernelModules =
+      [ # For LVM.
+        "dm_mod"
+      ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
     hardware.firmware = [ "${kernel}/lib/firmware" ];

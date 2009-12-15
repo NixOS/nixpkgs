@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 let
 
@@ -28,15 +28,6 @@ let
         Device for manual resume attempt during boot. Looks like 
         major:minor. ls -l /dev/SWAP_PARTION shows them.
       ";
-    };
-
-    boot.initrd.allowMissing = mkOption {
-      default = true;
-      description = ''
-        Allow some initrd components to be missing. Useful for
-        custom kernel that are changed too often to track needed
-        kernelModules.
-      '';
     };
 
     boot.initrd.lvm = mkOption {
@@ -82,6 +73,7 @@ let
     };
 
     boot.initrd.extraUtilsCommands = mkOption {
+      internal = true;
       default = "";
       merge = pkgs.lib.mergeStringOption;
       description = ''
@@ -110,9 +102,9 @@ let
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.kernelModules;
+    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = modulesTree;
-    allowMissing = config.boot.initrd.allowMissing;
+    allowMissing = true;
   };
 
 
@@ -125,7 +117,7 @@ let
     { buildInputs = [pkgs.nukeReferences];
       devicemapper = if config.boot.initrd.lvm then pkgs.devicemapper else null;
       lvm2 = if config.boot.initrd.lvm then pkgs.lvm2 else null;
-      allowedReferences = ["out"]; # prevent accidents like glibc being included in the initrd
+      allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
       doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
     }
     ''
@@ -179,9 +171,9 @@ let
       cp ${pkgs.bash}/bin/bash $out/bin
       ln -s bash $out/bin/sh
 
-      # Copy insmod.
-      cp ${pkgs.module_init_tools}/sbin/insmod $out/bin
-      
+      # Copy modprobe.
+      cp ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe.real
+
       ${config.boot.initrd.extraUtilsCommands}
 
       # Run patchelf to make the programs refer to the copied libraries.
@@ -191,12 +183,20 @@ let
           if ! test -L $i; then
               echo "patching $i..."
               patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
-              if [ "$doublePatchelf" -eq 1 ]; then
+              if [ -n "$doublePatchelf" ]; then
                   patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
               fi
           fi
       done
 
+      # Make the modprobe wrapper that sets $MODULE_DIR.
+      cat > $out/bin/modprobe <<EOF
+      #! $out/bin/bash
+      export MODULE_DIR=${modulesClosure}/lib/modules
+      exec $out/bin/modprobe.real "\$@"
+      EOF
+      chmod u+x $out/bin/modprobe
+      
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/bash --version
@@ -215,7 +215,7 @@ let
       $out/bin/reiserfsck -V
       $out/bin/mdadm --version
       $out/bin/basename --version
-      $out/bin/insmod --version
+      $out/bin/modprobe --version
     ''; # */
   
 
@@ -234,6 +234,7 @@ let
       
       cp ${pkgs.udev}/libexec/rules.d/60-cdrom_id.rules $out/
       cp ${pkgs.udev}/libexec/rules.d/60-persistent-storage.rules $out/
+      cp ${pkgs.udev}/libexec/rules.d/80-drivers.rules $out/
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -243,7 +244,8 @@ let
             --replace path_id ${extraUtils}/bin/path_id \
             --replace vol_id ${extraUtils}/bin/vol_id \
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
-            --replace /sbin/blkid ${extraUtils}/bin/blkid
+            --replace /sbin/blkid ${extraUtils}/bin/blkid \
+            --replace /sbin/modprobe ${extraUtils}/bin/modprobe
       done
 
       # Remove rule preventing creation of a by-label symlink
@@ -272,12 +274,14 @@ let
 
     isExecutable = true;
 
-    inherit modulesClosure udevConf extraUtils;
-    
+    klibc = pkgs.klibcShrunk;
+
+    inherit udevConf extraUtils;
+
     inherit (config.boot) isLiveCD resumeDevice;
 
     inherit (config.boot.initrd) checkJournalingFS
-      postDeviceCommands postMountCommands;
+      postDeviceCommands postMountCommands kernelModules;
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =
@@ -287,14 +291,6 @@ let
     devices = map (fs: if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
     fsTypes = map (fs: fs.fsType) fileSystems;
     optionss = map (fs: fs.options) fileSystems;
-
-    path = [
-      # `extraUtils' comes first because it overrides the `mount'
-      # command provided by klibc (which isn't capable of
-      # auto-detecting FS types).
-      extraUtils
-      pkgs.klibcShrunk
-    ];
   };
 
 

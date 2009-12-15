@@ -128,7 +128,7 @@ in
       (! config.boot.kernelPackages.kernel.features ? aufs) 
       config.boot.kernelPackages.aufs;
       
-  boot.initrd.kernelModules = ["aufs" "squashfs"];
+  boot.initrd.availableKernelModules = [ "aufs" "squashfs" ];
 
   # Tell stage 1 of the boot to mount a tmpfs on top of the CD using
   # AUFS.  !!! It would be nicer to make the stage 1 init pluggable

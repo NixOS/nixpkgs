@@ -3,6 +3,7 @@
 targetRoot=/mnt-root
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
+export PATH=@extraUtils@/bin:@klibc@/bin
 
 
 fail() {
@@ -43,16 +44,6 @@ echo "[1;32m<<< NixOS Stage 1 >>>[0m"
 echo
 
 
-# Set the PATH.
-export PATH=/empty
-for i in @path@; do
-    PATH=$PATH:$i/bin
-    if test -e $i/sbin; then
-        PATH=$PATH:$i/sbin
-    fi
-done
-
-
 # Mount special file systems.
 mkdir -p /etc # to shut up mount
 echo -n > /etc/fstab # idem
@@ -87,10 +78,11 @@ for o in $(cat /proc/cmdline); do
 done
 
 
-# Load some kernel modules.
-for i in $(cat @modulesClosure@/insmod-list); do
+# Load the required kernel modules.
+echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+for i in @kernelModules@; do
     echo "loading module $(basename $i)..."
-    insmod $i || true
+    modprobe $i || true
 done
 
 
@@ -107,12 +99,13 @@ if test -e /sys/power/tuxonice/resume; then
 fi
 
 if test -e /sys/power/resume -a -e /sys/power/disk; then
-  echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
-  echo shutdown > /sys/power/disk
+    echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+    echo shutdown > /sys/power/disk
 fi
 
 
 # Create device nodes in /dev.
+echo "running udev..."
 export UDEV_CONFIG_FILE=@udevConf@
 mkdir -p /dev/.udev # !!! bug in udev?
 udevd --daemon
@@ -120,10 +113,10 @@ udevadm trigger
 udevadm settle
 
 if type -p dmsetup > /dev/null; then
-  echo "starting device mapper and LVM..."
-  dmsetup mknodes
-  lvm vgscan --ignorelockingfailure
-  lvm vgchange -ay --ignorelockingfailure
+    echo "starting device mapper and LVM..."
+    dmsetup mknodes
+    lvm vgscan --ignorelockingfailure
+    lvm vgchange -ay --ignorelockingfailure
 fi
 
 if test -n "$debug1devices"; then fail; fi
