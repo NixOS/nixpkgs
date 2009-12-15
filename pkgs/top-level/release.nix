@@ -132,7 +132,6 @@ in {
   dico = linux;
   dietlibc = linux;
   diffutils = all;
-  dmtx = all;
   docbook5 = all;
   docbook5_xsl = all;
   docbook_xml_dtd_42 = all;
