@@ -20,7 +20,7 @@ in
         description = "monit.conf content";
       };
       startOn = mkOption {
-        default = "networking/started";
+        default = "network-interfaces/started";
         description = "What Monit supposes to be already present";
       };
     };
