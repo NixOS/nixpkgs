@@ -34,9 +34,23 @@ let
             exist.
           '';
       };
+    virtualisation.graphics =
+      mkOption {
+        default = true;
+        description =
+          ''
+            Whether to run qemu with a graphics window, or access
+            the guest computer serial port through the host tty.
+          '';
+      };
 
   };
 
+  cfg = config.virtualisation;
+
+  qemuGraphics = if (cfg.graphics) then "" else "-nographic";
+  kernelConsole = if (cfg.graphics) then "" else "console=ttyS0";
+  ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
   # Shell script to start the VM.
   startVM =
@@ -59,8 +73,9 @@ let
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
           -kernel ${config.system.build.toplevel}/kernel \
           -initrd ${config.system.build.toplevel}/initrd \
+          ${qemuGraphics} \
           $QEMU_OPTS \
-          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} $QEMU_KERNEL_PARAMS"
+          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${kernelConsole} $QEMU_KERNEL_PARAMS"
     '';
 
 in
@@ -155,6 +170,8 @@ in
   services.xserver.videoDrivers = mkOverride 50 {} [ "cirrus" "vesa" ];
   services.xserver.defaultDepth = mkOverride 50 {} 0;
   services.xserver.resolutions = mkOverride 50 {} [];
+
+  services.mingetty.ttys = ttys ++ optional (!cfg.graphics) "ttyS0";
 
   # Wireless won't work in the VM.
   networking.enableWLAN = mkOverride 50 {} false;
