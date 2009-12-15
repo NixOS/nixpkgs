@@ -17,7 +17,7 @@ rec {
     fetchurl {
       url = "http://github.com/stevedekorte/io/tarball/${version}";
       name = "io-${version}.tar.gz";
-      sha256 = "0mn7vm2q1r5l3la5k4hdx5cqrp3nhpw01ywnx43k9gfxkdbajn9g";
+      sha256 = "1i1hcidcf93145jj1vwwa2jvp8lb25pn2kg0cb56a059narrqxlv";
     };
 
   inherit buildInputs;
@@ -51,5 +51,7 @@ rec {
   name = "io-" + version;
   meta = {
     description = "Io programming language";
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib,platforms.linux;
   };
 }
