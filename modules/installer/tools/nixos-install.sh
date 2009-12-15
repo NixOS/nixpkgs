@@ -152,7 +152,6 @@ echo "building the system configuration..."
 NIXPKGS=/mnt/etc/nixos/nixpkgs chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
     -f "/mnt$NIXOS" \
-    --arg configuration "import $NIXOS_CONFIG" \
     --set -A system
 
 

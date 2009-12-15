@@ -118,7 +118,6 @@ INFO "building the system configuration..."
 @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system \
     -f "$NIXOS" \
-    --arg configuration "import $NIXOS_CONFIG" \
     --set -A system \
     $NIX_ENV_ARGS
 
