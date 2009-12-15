@@ -4,12 +4,12 @@ with pkgs.lib;
 
 let
 
+  grub = if config.boot.loader.grub.version == 1 then pkgs.grub else pkgs.grub2;
+
   grubMenuBuilder = pkgs.substituteAll {
     src = ./grub-menu-builder.sh;
     isExecutable = true;
-    grub = if config.boot.loader.grub.version == 1
-           then pkgs.grub
-           else pkgs.grub2;
+    inherit grub;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     inherit (config.boot.loader.grub) copyKernels extraEntries extraEntriesBeforeNixOS
@@ -156,17 +156,8 @@ in
     system.boot.loader.id = "grub";
     system.boot.loader.kernelFile = "vmlinuz";
 
-    environment.systemPackages =
-      mkIf config.boot.loader.grub.enable
-           (let version = config.boot.loader.grub.version; in
-              assert version != 1 -> version == 2;
+    environment.systemPackages = mkIf config.boot.loader.grub.enable [ grub ];
 
-              if version == 1
-              then [ pkgs.grub ]
-              else [ pkgs.grub2 ]);
-
-    # and many other things that have to be moved inside this file.
-    
   };
   
 }
