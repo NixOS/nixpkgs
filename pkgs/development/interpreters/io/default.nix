@@ -52,6 +52,6 @@ rec {
   meta = {
     description = "Io programming language";
     maintainers = [lib.maintainers.raskin];
-    platforms = lib,platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
