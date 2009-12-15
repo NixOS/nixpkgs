@@ -98,7 +98,7 @@ let
             "ide_generic"
             
             # Filesystems.
-            "ext3"
+            "ext2" "ext3"
             
             # Support USB keyboards, in case the boot fails and we only have
             # a USB keyboard.
@@ -170,6 +170,8 @@ in
 
   system.build = { inherit kernel; };
   system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+
+  boot.kernelModules = [ "loop" ];
 
   # The Linux kernel >= 2.6.27 provides firmware.
   hardware.firmware = [ "${kernel}/lib/firmware" ];
