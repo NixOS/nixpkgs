@@ -61,13 +61,12 @@ let
 
       kernelModules = mkOption {
         default = [];
-        description = "
+        description = ''
           The set of kernel modules to be loaded in the second stage of
-          the boot process.  That is, these modules are not included in
-          the initial ramdisk, so they'd better not be required for
-          mounting the root file system.  Add them to
-          <option>boot.initrd.extraKernelModules</option> if they are.
-        ";
+          the boot process.  Note that modules that are needed to
+          mount the root file system should be added to
+          <option>boot.initrd.kernelModules</option>.
+        '';
       };
 
       initrd = {
@@ -122,19 +121,7 @@ let
             system (e.g., ext3).  The set specified here is automatically
             closed under the module dependency relation, i.e., all
             dependencies of the modules list here are included
-            automatically.  If you want to add additional
-            modules, it's best to set
-            <option>boot.initrd.extraKernelModules</option>.
-          ";
-        };
-
-        extraKernelModules = mkOption {
-          default = [];
-          description = "
-            Additional kernel modules for the initial ramdisk.  These are
-            loaded before the modules listed in
-            <option>boot.initrd.kernelModules</option>, so they take
-            precedence.
+            automatically.
           ";
         };
 

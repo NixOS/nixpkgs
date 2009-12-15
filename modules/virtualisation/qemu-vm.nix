@@ -7,7 +7,7 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -71,7 +71,7 @@ in
   # All the modules the initrd needs to mount the host filesystem via
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
-  boot.initrd.extraKernelModules =
+  boot.initrd.kernelModules =
     ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
 
   boot.initrd.extraUtilsCommands =

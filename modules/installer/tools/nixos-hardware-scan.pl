@@ -216,7 +216,7 @@ print <<EOF ;
 # This is a generated file.  Do not modify!
 # Make changes to /etc/nixos/configuration.nix instead.
 {
-  boot.initrd.extraKernelModules = [ $initrdKernelModules ];
+  boot.initrd.kernelModules = [ $initrdKernelModules ];
   boot.kernelModules = [ $kernelModules ];
 
   nix.maxJobs = $cpus;

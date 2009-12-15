@@ -33,8 +33,7 @@ no services have been started.</para>
 <literal>safemode</literal> to the kernel command line.  This will
 disable auto-loading of modules for your PCI devices.  However, you
 will probably need to explicitly add modules to
-<option>boot.extraKernelModules</option> to get network support
-etc.</para>
+<option>boot.kernelModules</option> to get network support etc.</para>
 
 </section>
 

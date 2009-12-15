@@ -177,10 +177,10 @@ $ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix</screen>
     xlink:href="https://svn.nixos.org/repos/nix/configurations/trunk/"/>.</para>
 
     <note><para>It is very important that you specify in the option
-    <option>boot.initrd.extraKernelModules</option> all kernel modules
-    that are necessary for mounting the root file system, otherwise
-    the installed system will not be able to boot.  (If this happens,
-    boot from CD again, mount the target file system on
+    <option>boot.initrd.kernelModules</option> all kernel modules that
+    are necessary for mounting the root file system, otherwise the
+    installed system will not be able to boot.  (If this happens, boot
+    from CD again, mount the target file system on
     <filename>/mnt</filename>, fix
     <filename>/mnt/etc/nixos/configuration.nix</filename> and rerun
     <filename>nixos-install</filename>.)
@@ -279,12 +279,8 @@ $ reboot</screen>
 <example xml:id='ex-config'><title>NixOS configuration</title>
 <screen>
 {
-  boot = {
-    initrd = {
-      extraKernelModules = [ "ata_piix" ];
-    };
-    grubDevice = "/dev/sda";
-  };
+  boot.initrd.kernelModules = [ "ata_piix" ];
+  boot.grubDevice = "/dev/sda";
 
   fileSystems = [
     { mountPoint = "/";
@@ -296,11 +292,7 @@ $ reboot</screen>
     { label = "swap"; }
   ];
   
-  services = {
-    sshd = {
-      enable = true;
-    };
-  };
+  services.sshd.enable = true;
 }</screen>
 </example>
 

@@ -14,9 +14,7 @@
 {
   boot = {
     grubDevice = "/dev/sda";
-    initrd = {
-      extraKernelModules = ["ata_piix"];
-    };
+    initrd.kernelModules = ["ata_piix"];
     copyKernels = true;
     bootMount = "(hd0,0)";
   };

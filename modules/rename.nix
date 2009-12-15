@@ -71,6 +71,8 @@ in zipModules ([]
 ++ rename obsolete "boot.bootMount" to "boot.loader.grub.bootDevice"
 ++ rename obsolete "boot.grubSplashImage" to "boot.loader.grub.splashImage"
 
+++ rename obsolete "boot.initrd.extraKernelModules" to "boot.initrd.kernelModules"
+
 # X11
 ++ rename obsolete "services.xserver.startSSHAgent" to "services.xserver.startOpenSSHAgent"
 

@@ -31,7 +31,7 @@ rec {
     ln -s /bin "$out/var/run/current-system/sw/sbin"
   '';
 
-  boot.initrd.extraKernelModules = [
+  boot.initrd.kernelModules = [
     "iso9660" "loop" "squashfs"
     ];
   boot.initrd.allowMissing = true;

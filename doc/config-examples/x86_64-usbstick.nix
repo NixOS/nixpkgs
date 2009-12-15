@@ -4,7 +4,7 @@
   boot = {
     grubDevice = "/dev/sda";
     initrd = {
-      extraKernelModules = ["usb_storage" "ehci_hcd" "ohci_hcd"];
+      kernelModules = ["usb_storage" "ehci_hcd" "ohci_hcd"];
       enableSplashScreen = false;
     };
   };

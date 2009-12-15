@@ -110,9 +110,7 @@ let
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
-    rootModules =
-      config.boot.initrd.extraKernelModules ++
-      config.boot.initrd.kernelModules;
+    rootModules = config.boot.initrd.kernelModules;
     kernel = modulesTree;
     allowMissing = config.boot.initrd.allowMissing;
   };

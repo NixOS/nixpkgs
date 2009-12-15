@@ -19,7 +19,7 @@ in
   };
 
 
-  boot.initrd.extraKernelModules =
+  boot.initrd.kernelModules =
     ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
 
   environment.systemPackages = [ pkgs.vim_configurable ];

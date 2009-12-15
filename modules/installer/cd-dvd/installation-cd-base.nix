@@ -114,7 +114,7 @@ in
 
   # The initrd has to contain any module that might be necessary for
   # mounting the CD/DVD.
-  boot.initrd.extraKernelModules =
+  boot.initrd.kernelModules =
     [ # SATA/PATA support.
       "ahci"
 
@@ -158,6 +158,9 @@ in
       # Add vfat to enable people to copy the contents of the CD to a
       # bootable USB stick.
       "vfat"
+
+      # And of course we need to be able to mount the CD.
+      "iso9660" "loop" "squashfs"
     ];
 
   # nixos-install will do a pull from this channel to speed up the
