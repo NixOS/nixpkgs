@@ -1,10 +1,10 @@
-# this is the configuration which will be installed.
-# The configuration is prebuild before starting the vm because starting the vm
-# causes some overhead.
+# configuration being installed by NixOS kvm installation test
 {pkgs, config, ...}: {
 
   # make system boot and accessible:
-  require = [ ./installation-cd-minimal-test-insecure.nix ];
+  require = [
+    ./module-insecure.nix
+  ];
 
   boot.loader.grub = {
     device = "/dev/sda";
@@ -18,6 +18,8 @@
       neededForBoot = true;
     }
   ];
+
+  swapDevices = [ { device = "/dev/sda2"; } ];
 
   fonts = {
     enableFontConfig = false; 

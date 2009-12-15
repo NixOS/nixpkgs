@@ -1,32 +1,28 @@
-# See installation-cd-minimal.nix
-# it's called insecure because it allows logging in as root without password
-# So don't boot this cdrom to install your system :-)
+# this allows logging in as root without password.
 
-{config, pkgs, ...}:
+# This module is shared by the iso configuration and the system configuration
+# which is build by the test
+
+{pkgs, config, ...}:
 
 let
   doOverride = pkgs.lib.mkOverride 0 {};
 in
 
 {
-  require = [ ./installation-cd-minimal.nix ];
 
-  installer.configModule = "./nixos/modules/installer/cd-dvd/installation-cd-minimal-test-insecure";
-
-  services.sshd.permitRootLogin = "yes";
+  services.sshd = {
+    enable = true;
+    permitRootLogin = "yes";
+  };
   jobs.sshd = {
     startOn = doOverride "started network-interfaces";
   };
-
 
   boot.initrd.kernelModules =
     ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
 
   environment.systemPackages = [ pkgs.vim_configurable ];
-
-  boot.loader.grub.timeout = doOverride 0; 
-  boot.loader.grub.default = 2;
-  boot.loader.grub.version = doOverride 2;
 
   # FIXME: rewrite pam.services the to be an attr list
   # I only want to override sshd
@@ -52,4 +48,3 @@ in
       ];
 
 }
-

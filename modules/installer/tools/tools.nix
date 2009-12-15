@@ -67,7 +67,6 @@ let
       name = "nixos-prepare-install";
       src = ./installer2/nixos-prepare-install.sh;
 
-      inherit (pkgs) perl pathsFromGraph;
       inherit nix nixClosure nixosBootstrap;
     };
 
@@ -87,8 +86,10 @@ let
       nixpkgsURL = config.installer.nixpkgsURL;
     };
 
-    # see ./nixos-bootstrap-archive/README
-    minimalInstaller = import ./nixos-bootstrap-archive {
+    # see ./nixos-bootstrap-archive/README-BOOTSTRAP-NIXOS
+    # TODO refactor: It should *not* depend on configuration.nix
+    # maybe even move this in nixpkgs?
+    minimalInstallArchive = import ./nixos-bootstrap-archive {
       inherit (pkgs) stdenv runCommand perl pathsFromGraph gnutar coreutils bzip2;
       inherit nixosPrepareInstall runInChroot nixosBootstrap nixClosure;
     };
@@ -129,6 +130,6 @@ in
     inherit nixosInstall;
 
     # expose scripts
-    inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstaller;
+    inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstallArchive;
   };
 }

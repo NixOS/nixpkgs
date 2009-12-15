@@ -1,8 +1,7 @@
-{ nixos ? ./..
-, nixpkgs ? ../../nixpkgs
-, services ? ../../nixos/services
+{ nixos ? ../..
+, nixpkgs ? ../../../nixpkgs
+, services ? ../../../nixos/services
 , system ? builtins.currentSystem
-, configPath ? ./test-nixos-install-from-cd.nix
 }:
 
 let
@@ -21,21 +20,29 @@ let
    nixosTarball = makeTarball "nixos.tar.bz2" (cleanSource ../../..);
    nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource pkgs.path);
 
+   If test fails at "waiting for socket" rerun the test
+
 */
 
-  isos = (import ../release.nix) { inherit nixpkgs; };
+  configuration_iso =  ./configuration-iso.nix;
+  configuration_install = ./configuration.nix;
 
-  isoFile = 
-    # passed system = systom of iso 
-    (isos.iso_minimal_test_insecure { inherit system; }).iso;
+  release = (import ../../release.nix) { inherit nixpkgs; };
 
-  configuration = ../modules/installer/cd-dvd/test-nixos-install-from-cd-config.nix;
+  isoFile = (
+    release.makeIso 
+      {
+        module = configuration_iso;
+        description = "minimal-testing-only";
+        maintainers = ["MarcWeber"];
+      }
+      { inherit system; }
+      ).iso;
 
-  eval = import ../lib/eval-config.nix {
+  eval = import ../../lib/eval-config.nix {
     inherit system nixpkgs;
-    modules = [ configuration ];
+    modules = [ configuration_install ];
   };
-
 
   inherit (eval) pkgs config;
 
@@ -57,9 +64,13 @@ rec {
     # FIXME: X shouldn't be required
     # Is there a way to use kvm when not running as root?
     # Would using uml provide any advantages?
+
+    # TODO add nix-env -i command and verify that root can install additional
+    # tools such as git or sshfs-fuse!
+    # run this test when booting both: the iso and the installed system
     pkgs.runCommand "nixos-installation-test" { inherit systemDerivation; } ''
 
-    INFO(){ echo $@; }
+    INFO(){ echo "INFO: " $@; }
 
     die(){ echo $@; exit 1; }
 
@@ -86,7 +97,7 @@ rec {
     cat >> run-kvm.sh << EOF
     #!/bin/sh -e
     # maybe swap should be used ?
-    exec qemu-system-x86_64 -m 2048 \
+    exec qemu-system-x86_64 -m 512 \
         -no-kvm-irqchip \
         -net nic,model=virtio -net user -smb /nix \
         -hda image \
@@ -135,7 +146,10 @@ rec {
 
 
     INFO "creating image file"
-    qemu-img create -f qcow2 image 2G
+    # 2GB = data; 1GB=swap
+    # Maybe using 1GB swap is much. But qcow2 doesn't fill holes so it only
+    # used when required (?)
+    qemu-img create -f qcow2 image 3G
 
     RUN_KVM -boot d -cdrom $(echo ${isoFile}/iso/*.iso)
     
@@ -144,13 +158,22 @@ rec {
     # INSTALLATION
     INFO "creating filesystem .."
     SSH_STDIN_E << EOF
+      set -x
       parted /dev/sda mklabel msdos
       parted /dev/sda mkpart primary 0 2G
-      while [ ! -e /dev/sda1 ]; do
-        echo "waiting for /dev/sda1 to appear"
-        sleep 1;
-      done
+      parted /dev/sda mkpart primary 1G 3G
+      waitFor(){
+        while [ ! -e "\$1" ]; do
+          echo "waiting for \$1 to appear"; sleep 1;
+        done
+      }
+      waitFor /dev/sda2
+      mkswap /dev/sda2
+      swapon /dev/sda2
+
+      waitFor /dev/sda1
       mkfs.ext3 /dev/sda1
+
       mount /dev/sda1 /mnt
       mkdir -p /mnt/nix-on-host
       mount //10.0.2.4/qemu -oguest,username=nobody,noperm -tcifs /mnt/nix-on-host
@@ -162,7 +185,7 @@ rec {
       nixos-hardware-scan > /tmp/test.nix
     EOF
 
-    INFO "copying sources and Nix, preparing configuration, starting installation"
+    INFO "copying sources and Nix, starting installation"
     SSH_STDIN_E << EOF
 
       nixos-prepare-install
@@ -170,12 +193,11 @@ rec {
       # has the generated configuration.nix file syntax errors?
       nix-instantiate --eval-only /tmp/test.nix
 
-      # NixOS sources are in /etc/nixos, copy those configuration files.
-      cp /etc/nixos/nixos/modules/installer/cd-dvd/test-nixos-install-from-cd-config.nix /mnt/etc/nixos/configuration.nix
-      # the configuration file is referencing additional files:
-      cp -r /etc/nixos/nixos/modules/installer/cd-dvd/*.nix /mnt/etc/nixos/
+      echo 'export NIXOS_CONFIG=/etc/nixos/nixos/tests/test-nixos-install-from-cd/configuration.nix' >> /root/.bashrc
+      . ~/.bashrc
       export NIX_OTHER_STORES=/nix-on-host
-      run-in-chroot "/nix/store/nixos-bootstrap --install"
+
+      run-in-chroot "/nix/store/nixos-bootstrap --install --no-pull"
       #nixos-install
     EOF
 

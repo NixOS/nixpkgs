@@ -17,11 +17,13 @@ let
       version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
       versionModule = { system.nixosVersion = version; };
-      
-      iso = (import lib/eval-config.nix {
+
+      config = (import lib/eval-config.nix {
         inherit system nixpkgs;
         modules = [ module versionModule ];
-      }).config.system.build.isoImage;
+      }).config;
+      
+      iso = config.system.build.isoImage;
 
     in
       # Declare the ISO as a build product so that it shows up in Hydra.
@@ -31,6 +33,7 @@ let
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
           };
           inherit iso;
+          passthru = { inherit config; };
         }
         ''
           ensureDir $out/nix-support
@@ -39,6 +42,8 @@ let
 
 
   jobs = rec {
+
+    inherit makeIso; # used by tests/test-nixos-install-from-cd/
 
 
     tarball =
@@ -90,11 +95,6 @@ let
       description = "minimal";
     };
 
-    iso_minimal_test_insecure = makeIso {
-      module = ./modules/installer/cd-dvd/installation-cd-minimal-test-insecure.nix;
-      description = "minimal-testing-only";
-    };
-
     iso_minimal_fresh_kernel = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-minimal-fresh-kernel.nix;
       description = "minimal with 2.6.31-zen-branch";
@@ -113,6 +113,9 @@ let
       description = "graphical";
     };
 
+    # Hacky: doesn't depend on configuration. Yet configuration is evaluated (TODO)
+    minimal_install_archive = {system ? "i686-linux"}: (iso_minimal {inherit system;})
+      .config.system.build.minimalInstallArchive;
 
     tests.subversion =
       { services ? ../services }:
@@ -137,6 +140,18 @@ let
         inherit nixpkgs services;
         system = "i686-linux";
       }).test;
+
+    ### tests about installing NixOS
+
+    # installs NixOs in a qemu_kvm instance using a tweaked iso.
+    tests.nixosInstallation = 
+      (import ./tests/test-nixos-install-from-cd/test.nix {
+        inherit nixpkgs;
+      }).test;
+
+    # the archive installer can't be tested without chroot which requires being root
+    # options: run in kvm or uml ?
+    # TODO
 
   };
   

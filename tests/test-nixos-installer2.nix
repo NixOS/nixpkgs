@@ -18,8 +18,8 @@ let
 
   isos = (import ../release.nix) { inherit nixpkgs; };
 
-  # using same configuration as ased by kvm test.
-  configuration = ../modules/installer/cd-dvd/test-nixos-install-from-cd-config.nix;
+  # using same configuration as used by kvm test.
+  configuration = ./test-nixos-install-from-cd/configuration.nix;
 
   eval = import ../lib/eval-config.nix {
     inherit system nixpkgs;

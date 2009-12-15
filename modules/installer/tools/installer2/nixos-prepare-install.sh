@@ -100,8 +100,6 @@ if ! grep -F -q " $mountPoint " /proc/mounts && [ "$MUST_BE_MOUNTPOINT" = 1 ]; t
     die "$mountPoint doesn't appear to be a mount point"
 fi
 
-# Get the store paths to copy from the references graph.
-storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 # = utils =
 
 backup(){
@@ -151,6 +149,19 @@ realise_repo(){
 
 }
 
+# only keep /nix/store/* lines
+# print them only once
+pathsFromGraph(){
+  declare -A a
+  local prefix=/nix/store/
+  while read l; do
+    if [ "${l/#$prefix/}" != "$l" ] && [ -z "${a["$l"]}" ]; then
+      echo "$l";
+      a["$l"]=1;
+    fi
+  done
+}
+
 # = run actions: =
 for a in $ACTIONS; do
   case "$a" in
@@ -173,13 +184,14 @@ for a in $ACTIONS; do
     ;;
 
     copy-nix)
-      if [ -n "$FROM_ARCHIVE" ]; then
+      if [ "$FROM_ARCHIVE" = 1 ]; then
         NIX_CLOSURE=${mountPoint}@nixClosure@
       else
         INFO "Copy Nix to the Nix store on the target device."
         createDirs
         echo "copying Nix to $mountPoint...."
-        for i in $storePaths; do
+
+        for i in `cat $NIX_CLOSURE | pathsFromGraph`; do
             echo "  $i"
             rsync -a $i $mountPoint/nix/store/
         done
@@ -218,7 +230,7 @@ if [ -e "$T/nixos" ] && [ -e "$T/nixpkgs" ] && [ -e "$T/configuration.nix" ]; th
   cat << EOF
     To realise your NixOS installtion execute:
 
-    run-in-chroot "/nix/store/nixos-bootstrap --install"
+    run-in-chroot "/nix/store/nixos-bootstrap --install -j2 --keep-going"
 EOF
 else
   for t in "$T/configuration.nix" "$T/nixpkgs" "$T/configuration.nix"; do

@@ -15,7 +15,10 @@ usage(){
 
   --debug:    set -x
 
-  -j n   : will be passed to nix-env = number of build tasks done simultaniously
+  options which will be passed to nix-env:
+
+  -j n        : number of build tasks done simultaniously
+  --keep-going: Build as much as possible.
 
   Description:
   This scripts installs NixOS and should be run within the target chroot.
@@ -46,7 +49,7 @@ NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
 NIXOS_PULL=${NIXOS_PULL:-1}
 NIXOS_INSTALL_GRUB=${NIXOS_INSTALL_GRUB:-1} 
 
-ps="with-prepared-chroot.sh"
+ps="run-in-chroot"
 
 check "$NIXOS_CONFIG"
 check "$NIXOS/modules"  "nixos repo not found"
@@ -70,12 +73,13 @@ INSTALL=
 
 for arg in $@; do
   case $arg in
-    --no-pull) NIXOS_PULL=0;;
-    --install) INSTALL=1;;
-    --no-grub) NIXOS_INSTALL_GRUB=;;
-    --debug)   set -x;;
-    -j*)       NIX_ENV_ARGS="$NIX_ENV_ARGS $arg";;
-    *)         usage;
+    --no-pull)     NIXOS_PULL=0;;
+    --install)     INSTALL=1;;
+    --no-grub)     NIXOS_INSTALL_GRUB=;;
+    --debug)       set -x;;
+    -j*)           NIX_ENV_ARGS="$NIX_ENV_ARGS $arg";;
+    --keep-going)  NIX_ENV_ARGS="$NIX_ENV_ARGS $arg";;
+    *)             usage;
   esac
 done
 

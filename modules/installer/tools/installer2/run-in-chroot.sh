@@ -11,8 +11,6 @@ usage(){
   --unprepare  : only unmount
   --debug      : set -x
 
-  requisites: perl
-
   $SCRIPT --prepare:   prepare chroot only
   $SCRIPT --unprepare: unprepare chroot only
   $SCRIPT command:     run /bin/sh command in chroot
@@ -26,18 +24,6 @@ EOF
 
 die(){ echo "!>> " $@; exit 1; }
 INFO(){ echo "INFO: " $@; }
-
-# this is no longer needed because umount -l unmounts rescursive --rbound mounts as well
-#umountUnder() {
-#    local dir="$1"
-#    for i in $(grep -F " $dir" /proc/mounts \
-#        | perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
-#        | sort -r);
-#    do
-#        echo umount $i || true
-#    done
-#}
-
 
 prepare(){
   INFO "Enable networking: copying /etc/resolv.conf"
