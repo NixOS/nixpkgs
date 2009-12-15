@@ -129,14 +129,14 @@ in
       timeout = mkOption {
         default = 5;
         description = ''
-          after timeout seconds grub will boot the default menu item.
+          Timeout (in seconds) until GRUB boots the default menu item.          
         '';
       };
 
       default = mkOption {
-        default = 1;
+        default = 0;
         description = ''
-          index of grub menu item which will be booted
+          Index of the default menu item to be booted.
         '';
       };
 
