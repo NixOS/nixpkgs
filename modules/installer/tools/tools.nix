@@ -53,6 +53,47 @@ let
       "cp refs $out";
   };
 
+  # rewrite of nixosInstall: each tool does exactly one job.
+  # So they get more useful.
+  installer2 =
+  let nixClosure = pkgs.runCommand "closure"
+        {exportReferencesGraph = ["refs" config.environment.nix];}
+        "cp refs $out";
+
+      nix = config.environment.nix;
+  in rec {
+
+    nixosPrepareInstall = makeProg {
+      name = "nixos-prepare-install";
+      src = ./installer2/nixos-prepare-install.sh;
+
+      inherit (pkgs) perl pathsFromGraph;
+      inherit nix nixClosure nixosBootstrap;
+    };
+
+    runInChroot = makeProg {
+     name = "run-in-chroot";
+       src = ./installer2/run-in-chroot.sh;
+    };
+
+    nixosBootstrap = makeProg {
+      name = "nixos-bootstrap";
+      src = ./installer2/nixos-bootstrap.sh;
+
+      inherit (pkgs) coreutils;
+      inherit nixClosure nix;
+
+      # TODO shell ?
+      nixpkgsURL = config.installer.nixpkgsURL;
+    };
+
+    # see ./nixos-bootstrap-archive/README
+    minimalInstaller = import ./nixos-bootstrap-archive {
+      inherit (pkgs) stdenv runCommand perl pathsFromGraph gnutar coreutils bzip2;
+      inherit nixosPrepareInstall runInChroot nixosBootstrap nixClosure;
+    };
+  };
+
   nixosRebuild = makeProg {
     name = "nixos-rebuild";
     src = ./nixos-rebuild.sh;
@@ -79,7 +120,15 @@ in
       nixosRebuild
       nixosHardwareScan
       nixosGenSeccureKeys
+
+      installer2.runInChroot
+      installer2.nixosPrepareInstall
     ];
 
-  system.build = { inherit nixosInstall; };
+  system.build = {
+    inherit nixosInstall;
+
+    # expose scripts
+    inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstaller;
+  };
 }

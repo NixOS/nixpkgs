@@ -1,0 +1,16 @@
+HOWTO install NixOS from a bootstrap archive
+=============================================
+
+export mountPoint=$target # defaults to /mnt
+tar xfj $ARCHIV -C $mountPoint 
+
+bash $mountPoint/nix/store/nixos-prepare-install # see --help
+
+$EDITOR $mountPoint/etc/nixos/configuration.nix
+
+# you can replace --install by --help to get more info
+bash $mountPoint/nix/store/run-in-chroot "/nix/store/nixos-bootstrap --install"
+
+
+This archive is create by
+nix-build $NIXOS -A config.system.build.minimalInstaller

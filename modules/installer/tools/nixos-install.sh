@@ -60,6 +60,8 @@ mount --bind /proc $mountPoint/proc
 mount --bind /sys $mountPoint/sys
 mount --rbind / $mountPoint/mnt
 
+# Note: probably umount -l is enough. It umounts recursive mount points having been mounted by --rbind!
+# Probably umountUnder can be removed ?
 umountUnder() {
     local dir="$1"
     for i in $(grep -F " $dir" /proc/mounts \

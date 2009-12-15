@@ -26,6 +26,7 @@ in
 
   boot.loader.grub.timeout = doOverride 0; 
   boot.loader.grub.default = 2;
+  boot.loader.grub.version = doOverride 2;
 
   # FIXME: rewrite pam.services the to be an attr list
   # I only want to override sshd

@@ -4,11 +4,11 @@
 {pkgs, config, ...}: {
 
   # make system boot and accessible:
-  require = [ ../modules/installer/cd-dvd/installation-cd-minimal-test-insecure.nix ];
+  require = [ ./installation-cd-minimal-test-insecure.nix ];
 
   boot.loader.grub = {
     device = "/dev/sda";
-    copyKernels = true;
+    copyKernels = false;
     bootDevice = "(hd0,0)";
   };
 
