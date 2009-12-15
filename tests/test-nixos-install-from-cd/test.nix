@@ -67,7 +67,6 @@ rec {
 
     # TODO add nix-env -i command and verify that root can install additional
     # tools such as git or sshfs-fuse!
-    # run this test when booting both: the iso and the installed system
     pkgs.runCommand "nixos-installation-test" { inherit systemDerivation; } ''
 
     INFO(){ echo "INFO: " $@; }
@@ -96,7 +95,10 @@ rec {
     # creating shell script for debugging purposes
     cat >> run-kvm.sh << EOF
     #!/bin/sh -e
-    # maybe swap should be used ?
+
+    # don't ask me why I have to remove the socket.. If I don't it won't be
+    # reused by kvm_qemu!
+    rm $SOCKET_NAME || true
     exec qemu-system-x86_64 -m 512 \
         -no-kvm-irqchip \
         -net nic,model=virtio -net user -smb /nix \
@@ -206,6 +208,26 @@ rec {
     INFO "booting installed system"
     RUN_KVM -boot c
     waitForSSHD
+
+
+    INFO "verifying that nix-env -i works"
+
+    SSH_STDIN_E << EOF
+
+      cat >> test.nix << EOF_TEST
+      let pkgs = import /etc/nixos/nixpkgs/pkgs/top-level/all-packages.nix {};
+      in pkgs.stdenv.mkDerivation {
+        name = "test";
+        phases = "create_out";
+        create_out = "mkdir -p $out/ok";
+      }
+    EOF_TEST
+
+      set -x
+      nix-env -i -f test.nix
+      [ -e ~/.nix-profile/ok ]
+    EOF
+
     SHUTDOWN_VM
 
     echo "$(date) success" > $out
