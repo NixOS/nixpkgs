@@ -291,6 +291,10 @@ if ! test -e $targetRoot/dev/console; then
 fi
 
 
+# Restore /proc/sys/kernel/modprobe to its original value.
+echo /sbin/modprobe > /proc/sys/kernel/modprobe
+
+
 # Start stage 2.  `run-init' deletes all files in the ramfs on the
 # current /.  Note that $stage2Init might be an absolute symlink, in
 # which case "-e" won't work because we're not in the chroot yet.
