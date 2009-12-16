@@ -97,17 +97,21 @@ with pkgs.lib;
                   device=$(getDevice $mp)
                   echo "unmounting $mp..."
 
+                  # We need to remount,ro before attempting any
+                  # umount, or bind mounts may get confused, with
+                  # the fs not being properly flushed at the end.
+
+                  # `-i' is to workaround a bug in mount.cifs (it
+                  # doesn't recognise the `remount' option, and
+                  # instead mounts the FS again).
+                  mount -n -i -o remount,ro "$mp"
+
                   # Note: don't use `umount -f'; it's very buggy.
                   # (For instance, when applied to a bind-mount it
                   # unmounts the target of the bind-mount.)  !!! But
                   # we should use `-f' for NFS.
                   if umount -n "$mp"; then
                       if test "$mp" != /; then tryAgain=1; fi
-                  else
-                      # `-i' is to workaround a bug in mount.cifs (it
-                      # doesn't recognise the `remount' option, and
-                      # instead mounts the FS again).
-                      mount -n -i -o remount,ro "$mp"
                   fi
       
                   # Hack: work around a bug in mount (mount -o remount on a
