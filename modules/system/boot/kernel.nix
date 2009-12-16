@@ -156,12 +156,14 @@ let kernel = config.boot.kernelPackages.kernel; in
         "unix"
         
         # Misc. stuff.
-        "i8042" "pcips2" "serio" "atkbd" "xtkbd"
+        "pcips2" "serio" "atkbd" "xtkbd"
       ];
       
     boot.initrd.kernelModules =
       [ # For LVM.
         "dm_mod"
+        # For usual AT keyboards
+        "i8042" 
       ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
