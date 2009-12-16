@@ -8,9 +8,9 @@ stdenv.mkDerivation {
 
   # It's too tiresome to apply all patches which are availible (see previous rev).
   # Using git repo which seems to be the same anyway..
-  # REGION AUTO UPDATE:   { name="autofs"; type="git"; url="http://ftp.riken.go.jp/Linux/kernel.org/scm/linux/storage/autofs/autofs.git"; }
-  src = sourceFromHead "autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"; sha256 = "405c769b87f8ec2116faaca021ae03bb69d0a996cd574493b4eede34cb587061"; });
+  # REGION AUTO UPDATE:    { name="autofs"; type="git"; url="http://ftp.riken.go.jp/Linux/kernel.org/scm/linux/storage/autofs/autofs.git"; }
+  src= sourceFromHead "autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"; sha256 = "6764390e1f202eaef2f800146c8ccef616d502cec9471b006abde0781a62237f"; });
   # END
   /*fetchurl {
     url = "${baseURL}/autofs-5.0.4.tar.bz2";
