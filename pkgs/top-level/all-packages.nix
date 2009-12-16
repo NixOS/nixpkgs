@@ -4133,6 +4133,16 @@ let
     inherit fetchurl stdenv;
   };
 
+  liquidwar = builderDefsPackage ../games/liquidwar {
+    inherit (xlibs) xproto libX11 libXrender;
+    inherit gmp guile mesa libjpeg libpng 
+      expat gettext perl
+      SDL SDL_image SDL_mixer SDL_ttf
+      curl sqlite
+      libogg libvorbis
+      ;
+  };
+
   log4cxx = import ../development/libraries/log4cxx {
     inherit fetchurl stdenv automake autoconf libtool cppunit libxml2 boost;
     inherit apr aprutil db45 expat;
