@@ -6,7 +6,7 @@ let
 
   cfg = config.services.mysql;
 
-  mysql = pkgs.mysql;
+  mysql = cfg.mysql;
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
@@ -28,6 +28,13 @@ in
         default = false;
         description = "
           Whether to enable the MySQL server.
+        ";
+      };
+
+      mysql = mkOption {
+        default = pkgs.mysql;
+        description = "
+          Which MySQL derivation to use.
         ";
       };
 
