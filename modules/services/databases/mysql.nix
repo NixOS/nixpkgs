@@ -6,7 +6,7 @@ let
 
   cfg = config.services.mysql;
 
-  mysql = cfg.mysql;
+  mysql = cfg.package;
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
@@ -31,7 +31,7 @@ in
         ";
       };
 
-      mysql = mkOption {
+      package = mkOption {
         default = pkgs.mysql;
         description = "
           Which MySQL derivation to use.
