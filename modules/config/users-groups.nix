@@ -32,8 +32,8 @@ let
              calls in `libstore/build.cc', don't add any supplementary group
              here.  */
           uid = builtins.add ids.uids.nixbld nr;
-          group = "nogroup";
-          extraGroups = ["nixbld"];
+          group = "nixbld";
+          extraGroups = [];
         };
 
       nixBuildUsers = map makeNixBuildUser (pkgs.lib.range 1 10);
@@ -169,6 +169,8 @@ in
 
     system.activationScripts.users = fullDepEntry
       ''
+        echo "updating users..."
+
         cat ${usersFile} | while true; do
             read name || break
             read description
@@ -181,7 +183,6 @@ in
             read password
 
             if ! curEnt=$(getent passwd "$name"); then
-                echo "creating user $name..."
                 useradd --system \
                     "$name" \
                     --comment "$description" \
@@ -215,17 +216,27 @@ in
                     --shell "$shell"
             fi
 
+            if test "$group" = nixbld; then
+                # As a special hack, add users that have nixbld as the
+                # primary group to the /etc/group entry for the nixbld
+                # group.  `nix-store' currently expects this in order
+                # to get the UIDs of all the build users by doing a
+                # getprnam("nixbld") call.
+                groupmod "$group" -A "$name"
+            fi
+
         done
       '' [ "groups" ];
 
     system.activationScripts.groups = fullDepEntry
       ''
+        echo "updating groups..."
+        
         while true; do
             read name || break
             read gid
 
             if ! curEnt=$(getent group "$name"); then
-                echo "creating group $name..."
                 groupadd --system \
                     "$name" \
                     ''${gid:+--gid $gid}
