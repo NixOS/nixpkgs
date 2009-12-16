@@ -1,5 +1,7 @@
 {pkgs, config, ...}:
 
+with pkgs.lib;
+
 let
 
   nssModulesPath = config.system.nssModules.path;
@@ -9,7 +11,27 @@ let
 in
 
 {
-  config = {
+
+  ###### interface
+
+  options = {
+
+    services.nscd = {
+
+      enable = mkOption {
+        default = true;
+        description = "
+          Whether to enable the Name Service Cache Daemon.
+        ";
+      };
+
+    };
+
+  };
+
+  ###### implementation
+
+  config = mkIf config.services.nscd.enable {
   
     users.extraUsers = singleton
       { name = "nscd";
