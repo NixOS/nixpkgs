@@ -861,7 +861,7 @@ let
   };
 
   inetutils = import ../tools/networking/inetutils {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv ncurses;
   };
 
   iodine = import ../tools/networking/iodine {
