@@ -13,7 +13,7 @@ let
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     inherit (config.boot.loader.grub) copyKernels extraEntries extraEntriesBeforeNixOS
-      splashImage bootDevice configurationLimit version default timeout;
+      splashImage configurationLimit version default timeout;
   };
   
 in
@@ -53,15 +53,10 @@ in
         '';
       };
 
+      # !!! How can we mark options as obsolete?
       bootDevice = mkOption {
         default = "";
-        example = "(hd0,0)";
-        description = ''
-          If the system partition may be wiped on reinstall, it is better
-          to have /boot on a small partition. To do it, we need to explain
-          to GRUB where the kernels live. Specify the partition here (in 
-          GRUB notation).
-        '';
+        description = "Obsolete.";
       };
 
       configurationName = mkOption {
@@ -121,8 +116,8 @@ in
         default = false;
         description = ''
           Whether the GRUB menu builder should copy kernels and initial
-          ramdisks to /boot.  This is necessary when /nix is on a
-          different file system than /boot.
+          ramdisks to /boot.  This is done automatically if /boot is
+          on a different partition than /.
         '';
       };
 
