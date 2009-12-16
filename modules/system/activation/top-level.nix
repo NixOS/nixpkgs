@@ -122,10 +122,12 @@ let
     bootLoader = config.system.boot.loader.id;
     grub =
       if config.boot.loader.grub.enable
-      then (if config.boot.loader.grub.version == 1
-            then pkgs.grub
-            else pkgs.grub2)
+      then config.system.build.grub
       else null;
+    grubVersion = 
+      if config.boot.loader.grub.enable
+      then (builtins.parseDrvName config.system.build.grub.name).version
+      else "";
     grubDevice = config.boot.loader.grub.device;
     configurationName = config.boot.loader.grub.configurationName;
   };

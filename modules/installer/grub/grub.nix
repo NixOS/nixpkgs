@@ -158,6 +158,8 @@ in
 
     environment.systemPackages = mkIf config.boot.loader.grub.enable [ grub ];
 
+    system.build.grub = grub;
+
   };
   
 }

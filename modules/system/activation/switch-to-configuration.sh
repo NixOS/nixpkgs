@@ -21,26 +21,38 @@ EOF
     exit 1
 fi
 
-if test "$action" = "switch" -o "$action" = "boot"; then
-    if [ "@bootLoader@" == "grub" ]; then
-      if test -n "@grubDevice@"; then
+# Install or update the bootloader.
+if [ "$action" = "switch" -o "$action" = "boot" ]; then
+    
+    if [ "@bootLoader@" = "grub" ]; then
+        
+      if [ -n "@grubDevice@" ]; then
           mkdir -m 0700 -p /boot/grub
           @menuBuilder@ @out@
-          if test "$NIXOS_INSTALL_GRUB" = 1; then
-	      echo "running \`@grub@/sbin/grub-install'..."
+
+          # If the GRUB version has changed, then force a reinstall.
+          oldGrubVersion="$(cat /boot/grub/version 2>/dev/null || true)"
+          newGrubVersion="@grubVersion@"
+
+          if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
+	      echo "installing the GRUB bootloader..."
               @grub@/sbin/grub-install "@grubDevice@" --no-floppy --recheck
+              echo "$newGrubVersion" > /boot/grub/version
           fi
+          
       else
           echo "Warning: don't know how to make this configuration bootable; please set \`boot.grubDevice'." 1>&2
       fi
-    elif [ "@bootLoader@" == "generationsDir" ]; then
+      
+    elif [ "@bootLoader@" = "generationsDir" ]; then
           @menuBuilder@ @out@
     else
           echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
     fi
 fi
 
-if test "$action" = "switch" -o "$action" = "test"; then
+# Activate the new configuration.
+if [ "$action" = "switch" -o "$action" = "test" ]; then
 
     oldVersion=$(cat /var/run/current-system/upstart-interface-version 2> /dev/null || echo 0)
     newVersion=$(cat @out@/upstart-interface-version 2> /dev/null || echo 0)
