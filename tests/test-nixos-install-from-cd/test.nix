@@ -20,8 +20,6 @@ let
    nixosTarball = makeTarball "nixos.tar.bz2" (cleanSource ../../..);
    nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource pkgs.path);
 
-   If test fails at "waiting for socket" rerun the test
-
 */
 
   configuration_iso =  ./configuration-iso.nix;
@@ -55,6 +53,15 @@ let
 
   # TODO test both: copyKernels = true and false. true doesn't work ?
 
+  debug = if false then ''
+    export DISPLAY=localhost:0.0
+  ''
+  else
+  # That's crazy: You see nothing but your computer is doing a *lot* of work :-)
+  ''
+    KVM_OPTIONS="-nographic"
+  '';
+
 in
 
 rec {
@@ -65,9 +72,12 @@ rec {
     # Is there a way to use kvm when not running as root?
     # Would using uml provide any advantages?
 
-    # TODO add nix-env -i command and verify that root can install additional
-    # tools such as git or sshfs-fuse!
+
+    # TODO: Run installation withoun networking support ?
+    # This can be done by using either firewalls or building system by .drv path?
     pkgs.runCommand "nixos-installation-test" { inherit systemDerivation; } ''
+
+    set -e
 
     INFO(){ echo "INFO: " $@; }
 
@@ -87,8 +97,7 @@ rec {
     PATH=${pkgs.samba}/sbin:$PATH
 
     # install the system
-
-    export DISPLAY=localhost:0.0
+    ${debug}
 
     SOCKET_NAME=65535.socket
 
@@ -96,14 +105,12 @@ rec {
     cat >> run-kvm.sh << EOF
     #!/bin/sh -e
 
-    # don't ask me why I have to remove the socket.. If I don't it won't be
-    # reused by kvm_qemu!
-    rm $SOCKET_NAME || true
     exec qemu-system-x86_64 -m 512 \
         -no-kvm-irqchip \
         -net nic,model=virtio -net user -smb /nix \
         -hda image \
         -redir tcp:''${SOCKET_NAME/.socket/}::22 \
+        $KVM_OPTIONS \
         "\$@"
     EOF
     chmod +x run-kvm.sh
@@ -117,13 +124,19 @@ rec {
 
     waitTill(){
       echo $1
-      while ! eval "$2"; do sleep 1; done
+      eval "while ! $2; do sleep 1; done"
     }
 
     SSH(){
+      # if timout occurs ssh command will be retried.
+      # Waiting forever doesn't seem to work because
+      # there seems to be a race condition where
+      # SSH connects but sshd doesn't notice it.
+      # Thus fail and retry
       ssh -o UserKnownHostsFile=/dev/null \
         -o StrictHostKeyChecking=no \
         -o ProxyCommand="socat stdio ./$SOCKET_NAME" \
+        -o ConnectTimeout=1 \
         root@127.0.0.1 \
         "$@";
     }
@@ -138,11 +151,28 @@ rec {
     # wait for socket
 
     waitForSSHD(){
-      waitTill "waiting for socket in $TMP" '[ ! -e ./$SOCKET_NAME ]'
       waitTill "waiting for sshd job" "SSH 'echo Hello > /dev/tty1' &> /dev/null"
     }
 
+    nixBuildTest(){
+    INFO "verifying that nix-env -i works"
 
+    SSH_STDIN_E << EOF
+
+      cat >> test.nix << EOF_TEST
+      let pkgs = import /etc/nixos/nixpkgs/pkgs/top-level/all-packages.nix {};
+      in pkgs.stdenv.mkDerivation {
+        name = "test";
+        phases = "create_out";
+        create_out = "mkdir -p \\\$out/ok";
+      }
+    EOF_TEST
+
+      nix-build test.nix
+      [ -e result/ok ]
+    EOF
+
+    }
 
     ### test installting NixOS: install system then reboot
 
@@ -157,10 +187,11 @@ rec {
     
     waitForSSHD
 
+    nixBuildTest
+
     # INSTALLATION
     INFO "creating filesystem .."
     SSH_STDIN_E << EOF
-      set -x
       parted /dev/sda mklabel msdos
       parted /dev/sda mkpart primary 0 2G
       parted /dev/sda mkpart primary 1G 3G
@@ -195,8 +226,9 @@ rec {
       # has the generated configuration.nix file syntax errors?
       nix-instantiate --eval-only /tmp/test.nix
 
-      echo 'export NIXOS_CONFIG=/etc/nixos/nixos/tests/test-nixos-install-from-cd/configuration.nix' >> /root/.bashrc
-      . ~/.bashrc
+      mkdir /mnt/root
+      echo 'export NIXOS_CONFIG=/etc/nixos/nixos/tests/test-nixos-install-from-cd/configuration.nix' >> /mnt/root/.bashrc
+      . /mnt/root/.bashrc
       export NIX_OTHER_STORES=/nix-on-host
 
       run-in-chroot "/nix/store/nixos-bootstrap --install --no-pull"
@@ -209,24 +241,7 @@ rec {
     RUN_KVM -boot c
     waitForSSHD
 
-
-    INFO "verifying that nix-env -i works"
-
-    SSH_STDIN_E << EOF
-
-      cat >> test.nix << EOF_TEST
-      let pkgs = import /etc/nixos/nixpkgs/pkgs/top-level/all-packages.nix {};
-      in pkgs.stdenv.mkDerivation {
-        name = "test";
-        phases = "create_out";
-        create_out = "mkdir -p $out/ok";
-      }
-    EOF_TEST
-
-      set -x
-      nix-env -i -f test.nix
-      [ -e ~/.nix-profile/ok ]
-    EOF
+    nixBuildTest
 
     SHUTDOWN_VM
 
