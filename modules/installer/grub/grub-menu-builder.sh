@@ -180,7 +180,7 @@ EOF
         copyToKernelsDir $initrd; initrd=$result
     fi
     
-    local confName=$(cat $path/configuration-name 2>/dev/null)
+    local confName=$(cat $path/configuration-name 2>/dev/null || true)
     if test -n "$confName"; then
 	name="$confName $3"
     fi
