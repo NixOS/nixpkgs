@@ -113,7 +113,7 @@ in
       };
 
     jobs.dbus =
-      { startOn = "started udev";
+      { startOn = "started udev and started syslogd";
 
         preStart =
           ''
