@@ -203,9 +203,11 @@ in
         else ""
       }
     '';
-  
-  # Have the redistributable firmware of rt73 wifi nics.
+
+  # Include the firmware for various wireless cards.
   networking.enableRT73Firmware = true;
+  networking.enableIntel2200BGFirmware = true;
+  networking.enableIntel3945ABGFirmware = true;
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
