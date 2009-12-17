@@ -22,7 +22,7 @@ in
     boot.loader.initScript = {
 
       enable = mkOption {
-        default = true;
+        default = false;
         description = ''
           Some systems require a /sbin/init script which is started.
           Or having it makes starting NixOS easier.
