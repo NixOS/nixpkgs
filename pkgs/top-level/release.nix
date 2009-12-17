@@ -274,6 +274,7 @@ in {
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
+  mysql51 = linux;
   namazu = all;
   nano = allBut "i686-cygwin";
   ncat = linux;
