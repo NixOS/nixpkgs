@@ -12,6 +12,12 @@ stdenv.mkDerivation {
     # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
     ./max-long.patch
   ];
+
+  # There are apparently still some aliasing bugs left in
+  # aterm-2.4.2-fixes-r2 (in AT_setAnnotations to be precise), but
+  # under my reading of the C standard it should be fine. Anyway, just
+  # disable strict aliasing.
+  NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
   
   doCheck = true;
 
