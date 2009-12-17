@@ -49,6 +49,9 @@ stdenv.mkDerivation ({
 
     /* Make sure `nscd' et al. are linked against `libssp'.  */
     ./stack-protector-link.patch
+
+    /* MOD_NANO definition, for ntp (taken from glibc upstream) */
+    ./mod_nano.patch
   ];
 
   configureFlags = [
