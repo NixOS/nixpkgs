@@ -1,0 +1,20 @@
+diff -rc mysql-5.1.40/Makefile.in mysql-5.1.40-new/Makefile.in
+*** mysql-5.1.40/Makefile.in	2009-10-06 19:57:22.000000000 +0200
+--- mysql-5.1.40-new/Makefile.in	2009-12-16 13:07:16.060108763 +0100
+***************
+*** 891,897 ****
+  		--srcdir=$(top_srcdir)
+  	storage/myisam/myisamchk --silent --fast $(distdir)/win/data/mysql/*.MYI
+  
+! all-local:		@ABI_CHECK@	
+  
+  tags:
+  	support-files/build-tags
+--- 891,897 ----
+  		--srcdir=$(top_srcdir)
+  	storage/myisam/myisamchk --silent --fast $(distdir)/win/data/mysql/*.MYI
+  
+! all-local:		
+  
+  tags:
+  	support-files/build-tags

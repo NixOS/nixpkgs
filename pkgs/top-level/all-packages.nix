@@ -5040,6 +5040,11 @@ let
     ps = procps; /* !!! Linux only */
   };
 
+  mysql51 = import ../servers/sql/mysql51 {
+    inherit fetchurl ncurses zlib perl openssl stdenv;
+    ps = procps; /* !!! Linux only */
+  };
+
   mysql = mysql5;
 
   mysql_jdbc = import ../servers/sql/mysql/jdbc {
