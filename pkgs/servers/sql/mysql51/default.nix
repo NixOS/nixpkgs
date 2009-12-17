@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ps ncurses zlib perl openssl];
 
-  configureFlags = "--enable-thread-safe-client --with-ssl=${openssl} --with-embedded-server" +
+  configureFlags = "--enable-thread-safe-client --with-ssl=${openssl} --with-embedded-server --with-plugins=max-no-ndb" +
     (if stdenv.system == "x86_64-linux" then " --with-lib-ccflags=-fPIC" else "");
 
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
