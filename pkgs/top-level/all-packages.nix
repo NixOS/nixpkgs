@@ -7829,6 +7829,11 @@ let
     inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXext libXft luit;
   };
 
+  xtrace = import ../tools/X11/xtrace {
+    inherit stdenv fetchurl;
+    inherit (xlibs) libX11;
+  };
+
   xlaunch = import ../tools/X11/xlaunch {
     inherit stdenv;
     inherit (xorg) xorgserver;
