@@ -15,6 +15,7 @@
   ./hardware/network/rt73.nix 
   ./hardware/pcmcia.nix
   ./installer/grub/grub.nix
+  ./installer/init-script/init-script.nix
   ./installer/generations-dir/generations-dir.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix

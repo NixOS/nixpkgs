@@ -49,6 +49,8 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
     else
           echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
     fi
+
+    @initScriptBuilder@ @out@
 fi
 
 # Activate the new configuration.

@@ -108,6 +108,7 @@ let
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
     menuBuilder = config.system.build.menuBuilder;
+    initScriptBuilder = config.system.build.initScriptBuilder;
     # Most of these are needed by grub-install.
     path = [
       pkgs.coreutils
