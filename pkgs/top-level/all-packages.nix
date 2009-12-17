@@ -1177,6 +1177,10 @@ let
 
   patch = gnupatch;
 
+  pbzip2 = import ../tools/compression/pbzip2 {
+    inherit fetchurl stdenv bzip2;
+  };
+
   pciutils = import ../tools/system/pciutils {
     inherit fetchurl stdenv zlib;
   };
