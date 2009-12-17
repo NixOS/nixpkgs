@@ -45,12 +45,14 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
       fi
       
     elif [ "@bootLoader@" = "generationsDir" ]; then
-          @menuBuilder@ @out@
+        @menuBuilder@ @out@
     else
-          echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
+        echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
     fi
 
-    @initScriptBuilder@ @out@
+    if [ -n "@initScriptBuilder@" ]; then
+        @initScriptBuilder@ @out@
+    fi
 fi
 
 # Activate the new configuration.
