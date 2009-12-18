@@ -533,6 +533,9 @@ patchPhase() {
             *.bz2)
                 uncompress="bzip2 -d"
                 ;;
+            *.lzma)
+                uncompress="lzma -d"
+                ;;
         esac
         $uncompress < $i | patch ${patchFlags:--p1}
         stopNest
