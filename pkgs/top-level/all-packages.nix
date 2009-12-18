@@ -5503,7 +5503,7 @@ let
     };
 
     nvidia_x11 = import ../os-specific/linux/nvidia-x11 {
-      inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
+      inherit stdenv fetchurl kernel xlibs gtkLibs zlib perl;
     };
 
     nvidia_x11_legacy = import ../os-specific/linux/nvidia-x11/legacy.nix {
