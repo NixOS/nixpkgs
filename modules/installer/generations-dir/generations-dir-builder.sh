@@ -46,8 +46,7 @@ copyToKernelsDir() {
 }
 
 
-# Add an entry for a configuration to the Grub menu, and if
-# appropriate, copy its kernel and initrd to /boot/kernels.
+# Copy its kernel and initrd to /boot/kernels.
 addEntry() {
     local path="$1"
     local generation="$2"
@@ -77,22 +76,11 @@ addEntry() {
       cp "$(readlink -f "$path/init")" /boot/nixos-init
 
       mkdir -p /boot/default
-      if [ -e /boot/default/system ]; then
-        rm /boot/default/system
-      fi
-      ln -sf $(readlink -f $path) /boot/default/system
-      if [ -e /boot/default/init ]; then
-        rm /boot/default/init
-      fi
-      ln -sf $(readlink -f $path/init) /boot/default/init
-      if [ -e /boot/default/initrd ]; then
-        rm /boot/default/initrd
-      fi
-      ln -sf $initrd /boot/default/initrd
-      if [ -e /boot/default/kernel ]; then
-        rm /boot/default/kernel
-      fi
-      ln -sf $kernel /boot/default/kernel
+      # ln -sfT: overrides target even if it exists.
+      ln -sfT $(readlink -f $path) /boot/default/system
+      ln -sfT $(readlink -f $path/init) /boot/default/init
+      ln -sfT $initrd /boot/default/initrd
+      ln -sfT $kernel /boot/default/kernel
     fi
 }
 
