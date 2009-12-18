@@ -561,6 +561,13 @@ in {
     kernel = linux;
   };
 
+  kernelPackages_2_6_32 = {
+    aufs = linux;
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
