@@ -5365,18 +5365,6 @@ let
     inherit fetchurl stdenv unifdef;
   };
 
-  kernelHeaders_2_6_23 = import ../os-specific/linux/kernel-headers/2.6.23.16.nix {
-    inherit fetchurl stdenv;
-  };
-
-  kernelHeaders_2_6_26 = import ../os-specific/linux/kernel-headers/2.6.26.2.nix {
-    inherit fetchurl stdenv;
-  };
-
-  kernelHeaders_2_6_27 = import ../os-specific/linux/kernel-headers/2.6.27.8.nix {
-    inherit fetchurl stdenv;
-  };
-
   kernelHeaders_2_6_28 = import ../os-specific/linux/kernel-headers/2.6.28.nix {
     inherit fetchurl stdenv perl;
   };
@@ -5396,114 +5384,41 @@ let
     cross = "sparc-linux";
   };
 
-  kernel_2_6_25 = import ../os-specific/linux/kernel/linux-2.6.25.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.4-2.6.25-rc6";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
-          sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      { name = "sec_perm-2.6.24";
-        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
-        features = { secPermPatch = true; };
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "timer_stats"] false) "CONFIG_TIMER_STATS=y" ++
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
+  kernelPatches = import ../os-specific/linux/kernel/patches.nix {
+    inherit fetchurl;
   };
 
-  kernel_2_6_26 = import ../os-specific/linux/kernel/linux-2.6.26.nix {
+  kernel_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.4-2.6.25-rc6";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
-          sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      { name = "sec_perm-2.6.24";
-        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
-        features = { secPermPatch = true; };
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_25
+        kernelPatches.sec_perm_2_6_24
+      ];
   };
 
-  kernel_2_6_27 = import ../os-specific/linux/kernel/linux-2.6.27.nix {
+  kernel_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.4-2.6.27";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.27.patch;
-          sha256 = "170l9l5fvbgjrr4klqcwbgjg4kwvrrhjpmgbfpqj0scq0s4q4vk6";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      { name = "sec_perm-2.6.24";
-        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
-        features = { secPermPatch = true; };
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_27
+        kernelPatches.sec_perm_2_6_24
+      ];
   };
 
   kernel_2_6_28 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.28.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.5-2.6.28";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.5-2.6.28.patch;
-          sha256 = "105q2dwrwi863r7nhlrvljim37aqv67mjc3lgg529jzqgny3fjds";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      { name = "sec_perm-2.6.24";
-        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
-        features = { secPermPatch = true; };
-      }
-      { # http://patchwork.kernel.org/patch/19495/
-        name = "ext4-softlockups-fix";
-        patch = fetchurl {
-          url = http://patchwork.kernel.org/patch/19495/raw;
-          sha256 = "0vqcj9qs7jajlvmwm97z8cljr4vb277aqhsjqrakbxfdiwlhrzzf";
-        };
-      }
-    ];
-    extraConfig =
-      lib.optional (getConfig ["kernel" "no_irqbalance"] false) "# CONFIG_IRQBALANCE is not set" ++
-      [(getConfig ["kernel" "addConfig"] "")];
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_28
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.ext4_softlockups_2_6_28
+      ];
   };
 
   kernel_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches = [
-      { name = "fbcondecor-0.9.5-2.6.28";
-        patch = fetchurl {
-          url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.29.2.patch;
-          sha256 = "1yppvji13sgnql62h4wmskzl9l198pp1pbixpbymji7mr4a0ylx1";
-        };
-        extraConfig = "CONFIG_FB_CON_DECOR=y";
-        features = { fbConDecor = true; };
-      }
-      { name = "sec_perm-2.6.24";
-        patch = ../os-specific/linux/kernel/sec_perm-2.6.24.patch;
-        features = { secPermPatch = true; };
-      }
-    ];
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_29
+        kernelPatches.sec_perm_2_6_24
+      ];
   };
 
   kernel_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
@@ -5531,6 +5446,14 @@ let
 
   kernel_2_6_31_zen = kernel_2_6_31_zen7;
   kernel_2_6_31_zen_bfs = kernel_2_6_31_zen7_bfs;
+
+  kernel_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_31
+        kernelPatches.sec_perm_2_6_24
+      ];
+  };
 
   /* Kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -5655,7 +5578,6 @@ let
 
   # Build the kernel modules for the some of the kernels.
   kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
-  kernelPackages_2_6_26 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_26);
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
@@ -5663,6 +5585,7 @@ let
   kernelPackages_2_6_31_zen = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen);
   kernelPackages_2_6_31_zen_bfs = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen_bfs);
   kernelPackages_2_6_31 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
+  kernelPackages_2_6_32 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_32);
 
   # The current default kernel / kernel modules.
   kernelPackages = kernelPackages_2_6_28;
@@ -5938,7 +5861,7 @@ let
     inherit fetchurl stdenv gperf pkgconfig acl libusb usbutils pciutils glib;
   };
 
-  uml = import ../os-specific/linux/kernel/linux-2.6.20.nix {
+  uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     userModeLinux = true;
   };

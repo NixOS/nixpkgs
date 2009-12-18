@@ -31,13 +31,8 @@
   # "-my-kernel").
   localVersion ? ""
 
-, # A list of additional statements to be appended to the
-  # configuration file.
-  extraConfig ? []
-
 , preConfigure ? ""
 , extraMeta ? {}
-, ...
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -59,19 +54,22 @@ stdenv.mkDerivation {
   
   builder = ./builder.sh;
 
-  inherit preConfigure;
+  generateConfig = ./generate-config.pl;
 
-  inherit src config;
-  
+  inherit preConfigure src module_init_tools localVersion;
+
   patches = map (p: p.patch) kernelPatches;
-  
-  extraConfig =
-    let addNewlines = map (s: "\n" + s + "\n");
-        configFromPatches =
-          map (p: if p ? extraConfig then p.extraConfig else "") kernelPatches;
-    in lib.concatStrings (addNewlines (configFromPatches ++ extraConfig));
 
-  buildInputs = [perl mktemp];
+  kernelConfig =
+    let
+      configFromPatches =
+        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
+    in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
+
+  # For UML, just ignore all options that don't apply (I'm lazy).
+  ignoreConfigErrors = userModeLinux;
+
+  buildInputs = [ perl mktemp ];
   
   arch =
     if xen then "xen" else
@@ -79,13 +77,6 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     abort "Platform ${stdenv.system} is not supported.";
-
-  makeFlags = if userModeLinux then "ARCH=um SHELL=bash" else "";
-
-  inherit module_init_tools;
-
-  allowLocalVersion = false; # don't allow patches to set a suffix
-  inherit localVersion; # but do allow the user to set one.
 
   meta = {
     description =
