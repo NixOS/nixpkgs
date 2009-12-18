@@ -968,9 +968,7 @@ let
       readline nettools lsof procps;
   };
 
-  lzma = makeOverridable (import ../tools/compression/lzma) {
-    inherit fetchurl stdenv;
-  };
+  lzma = xz;
 
   xz = import ../tools/compression/xz {
     inherit fetchurl stdenv lib;
