@@ -132,7 +132,6 @@ in {
   dico = linux;
   dietlibc = linux;
   diffutils = all;
-  dmtx = all;
   docbook5 = all;
   docbook5_xsl = all;
   docbook_xml_dtd_42 = all;
@@ -275,6 +274,7 @@ in {
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
+  mysql51 = linux;
   namazu = all;
   nano = allBut "i686-cygwin";
   ncat = linux;
@@ -528,11 +528,6 @@ in {
     kernel = linux;
   };
 
-  kernelPackages_2_6_26 = {
-    aufs = linux;
-    kernel = linux;
-  };
-  
   kernelPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
@@ -564,6 +559,13 @@ in {
 
   kernelPackages_2_6_31_zen_bfs = {
     kernel = linux;
+  };
+
+  kernelPackages_2_6_32 = {
+    aufs = linux;
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
   };
 
   strategoPackages = {

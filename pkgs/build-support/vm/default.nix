@@ -5,7 +5,7 @@ with pkgs;
 rec {
 
 
-  inherit (kernelPackages_2_6_29) kernel;
+  inherit (kernelPackages_2_6_32) kernel;
 
   klibcShrunk = pkgs.klibcShrunk.override { klibc = klibc_15; };
 
@@ -14,7 +14,7 @@ rec {
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
-    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"];
+    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "unix"];
   };
 
 
@@ -38,7 +38,8 @@ rec {
       mknod ${dev}/null c 1 3
       mknod ${dev}/zero c 1 5
       mknod ${dev}/tty  c 5 0
-      mknod ${dev}/vda  b 253 0
+      . /sys/class/block/vda/uevent
+      mknod ${dev}/vda  b $MAJOR $MINOR
     '';
 
   
@@ -52,6 +53,7 @@ rec {
     echo -n > /etc/fstab
 
     mount -t proc none /proc
+    mount -t sysfs none /sys
 
     for o in $(cat /proc/cmdline); do
       case $o in
@@ -123,6 +125,9 @@ rec {
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
+
+    mkdir -p /fs/sys
+    mount -t sysfs none /fs/sys
 
     mkdir -p /fs/etc
     ln -sf /proc/mounts /fs/etc/mtab

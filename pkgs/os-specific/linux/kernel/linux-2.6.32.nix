@@ -3,11 +3,11 @@ args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? "", ... }:
 import ./generic.nix (
 
   rec {
-    version = "2.6.28.10";
+    version = "2.6.32.1";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "10vryshzpgk7vqmb3f0z981r5nci722kfqbjd274qwjyanxlj60b";
+      sha256 = "1kjmvbjrfygy2lpxs7cqcg4q690swa67r70kv9nypkn5vb2s0vpm";
     };
 
     features.iwlwifi = true;
@@ -31,6 +31,7 @@ import ./generic.nix (
         KVM_CLOCK y
         KVM_GUEST y
         XEN y
+        KSM y
 
         # We need 64 GB (PAE) support for Xen guest support.
         HIGHMEM64G? y
@@ -43,7 +44,7 @@ import ./generic.nix (
         IOSCHED_CFQ y
 
         # Disable some expensive (?) features.
-        MARKERS n
+        FTRACE n
         KPROBES n
         NUMA? n
         PM_TRACE_RTC n
@@ -77,13 +78,10 @@ import ./generic.nix (
         IPW2100_MONITOR y # support promiscuous mode
         IPW2200_MONITOR y # support promiscuous mode
         IWLWIFI_LEDS? y
-        IWLWIFI_RFKILL y
-        IWLAGN_SPECTRUM_MEASUREMENT y
-        IWLAGN_LEDS y
+        IWLWIFI_SPECTRUM_MEASUREMENT y
+        IWL3945_SPECTRUM_MEASUREMENT y
         IWL4965 y # Intel Wireless WiFi 4965AGN
         IWL5000 y # Intel Wireless WiFi 5000AGN
-        IWL3945_RFKILL y
-        IWL3945_LEDS y
         HOSTAP_FIRMWARE y # Support downloading firmware images with Host AP driver
         HOSTAP_FIRMWARE_NVRAM y
 
@@ -91,6 +89,7 @@ import ./generic.nix (
         # disable tileblitting and the drivers that need it.
 
         # Enable various FB devices.
+        FB y
         FB_EFI y
         FB_NVIDIA_I2C y # Enable DDC Support
         FB_RIVA_I2C y
@@ -101,7 +100,6 @@ import ./generic.nix (
         FB_SIS_300 y
         FB_SIS_315 y
         FB_3DFX_ACCEL y
-        FB_TRIDENT_ACCEL y
         FB_GEODE y
 
         # Sound.
@@ -109,18 +107,6 @@ import ./generic.nix (
         SND_HDA_INPUT_BEEP y # Support digital beep via input layer
         SND_USB_CAIAQ_INPUT y
         PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
-
-        # Enable a bunch of USB storage devices.
-        USB_STORAGE_DATAFAB y
-        USB_STORAGE_FREECOM y
-        USB_STORAGE_ISD200 y
-        USB_STORAGE_USBAT y
-        USB_STORAGE_SDDR09 y
-        USB_STORAGE_SDDR55 y
-        USB_STORAGE_JUMPSHOT y
-        USB_STORAGE_ONETOUCH y
-        USB_STORAGE_KARMA y
-        USB_STORAGE_CYPRESS_ATACB y
 
         # USB serial devices.
         USB_SERIAL_GENERIC y # USB Generic Serial Driver
@@ -154,6 +140,8 @@ import ./generic.nix (
         XFS_POSIX_ACL y
         XFS_RT y # XFS Realtime subvolume support
         OCFS2_DEBUG_MASKLOG n
+        OCFS2_FS_POSIX_ACL y
+        BTRFS_FS_POSIX_ACL y
         UBIFS_FS_XATTR y
         UBIFS_FS_ADVANCED_COMPR y
         NFSD_V2_ACL y
@@ -178,7 +166,6 @@ import ./generic.nix (
         BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
         BLK_DEV_IDEACPI y # IDE ACPI support
         BLK_DEV_INTEGRITY y
-        BLK_DEV_IO_TRACE n
         BSD_PROCESS_ACCT_V3 y
         BT_HCIUART_BCSP y
         BT_HCIUART_H4 y # UART (H4) protocol support
@@ -187,6 +174,7 @@ import ./generic.nix (
         CPU_FREQ_DEBUG n
         CRASH_DUMP n
         DMAR? n # experimental
+        DVB_DYNAMIC_MINORS y # we use udev
         FUSION y # Fusion MPT device support
         IDE_GD_ATAPI y # ATAPI floppy support
         IRDA_ULTRA y # Ultra (connectionless) protocol

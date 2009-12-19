@@ -1,6 +1,9 @@
 source $stdenv/setup
 
 
+makeFlags="ARCH=$arch SHELL=/bin/sh"
+
+
 configurePhase() {
     if test -n "$preConfigure"; then 
         eval "$preConfigure"; 
@@ -10,48 +13,21 @@ configurePhase() {
     export INSTALL_MOD_PATH=$out
 
 
-    # Get rid of any "localversion" files installed by patches.
-    if test -z "$allowLocalVersion"; then
-        rm -f localversion*
-    fi
-
     # Set our own localversion, if specified.
+    rm -f localversion*
     if test -n "$localVersion"; then
         echo "$localVersion" > localversion-nix
     fi
 
 
+    # Patch kconfig to print "###" after every question so that
+    # generate-config.pl can answer them.
+    sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
+
     # Create the config file.
-    cp $config .config
-    chmod u+w .config
-
-    echo --extraConfig--;
-    echo "${extraConfig}";
-
-    echo "$extraConfig" | while read; do
-	optionName=$( echo "$REPLY" | sed -e 's/[^A-Z_]//g' );
-	echo --optionName--;
-	echo "$REPLY";
-	echo ${optionName};
-	if [ -n "${optionName}" ]; then 
-	    sed -e s/.'*'${optionName}.'*'/"$REPLY/" -i .config
-	fi;
-    done;
-
-    echo "$extraConfig" >> .config
-
-    #substituteInPlace scripts/kconfig/lxdialog/check-lxdialog.sh \
-    #    --replace /usr /no-such-path
-
-    # Necessary until NIXPKGS-38 is fixed:
-    echo "#! $SHELL" > scripts/kconfig/lxdialog/check-lxdialog.sh
-    chmod +x scripts/kconfig/lxdialog/check-lxdialog.sh
-    
-    make oldconfig \
-        $makeFlags "${makeFlagsArray[@]}"
-
-    echo --finalConfig--
-    cat .config
+    echo "generating kernel configuration..."
+    echo "$kernelConfig" > kernel-config
+    DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config perl -w $generateConfig
 }
 
 postBuild() {
@@ -118,6 +94,7 @@ installPhase() {
 
     # copy config
     cp .config $out/lib/modules/$version/build/.config
+    ln -s $out/lib/modules/$version/build/.config $out/config
 
     if test "$arch" != um; then
         # copy all Makefiles and Kconfig files
