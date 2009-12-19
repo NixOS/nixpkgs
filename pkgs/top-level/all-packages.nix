@@ -310,23 +310,11 @@ let
     inherit pkgs lib;
   };
 
-
-  platformPC = assert system == "i686-linux" || system == "x86_64-linux"; {
-    name = "pc";
-    uboot = null;
+  platforms = import ./platforms.nix {
+    inherit system pkgs;
   };
 
-  platformSheevaplug = assert system == "armv5tel-linux"; {
-    name = "sheevaplug";
-    inherit uboot;
-  };
-
-  platformVersatileARM = assert system == "armv5tel-linux"; {
-    name = "versatileARM";
-    uboot = null;
-  };
-
-  platform = platformPC;
+  platform = platforms.pc;
 
   ### TOOLS
 
@@ -5579,7 +5567,7 @@ let
   kernel_2_6_31_zen_bfs = kernel_2_6_31_zen7_bfs;
 
   kernel_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
+    inherit fetchurl stdenv perl mktemp module_init_tools platform;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24

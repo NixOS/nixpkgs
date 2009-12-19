@@ -24,6 +24,9 @@ configurePhase() {
     # generate-config.pl can answer them.
     sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
 
+    # Get a basic config file for later refinement with $generateConfig
+    make $kernelBaseConfig ARCH=$arch
+
     # Create the config file.
     echo "generating kernel configuration..."
     echo "$kernelConfig" > kernel-config

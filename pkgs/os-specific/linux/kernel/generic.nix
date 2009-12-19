@@ -33,7 +33,7 @@
 
 , preConfigure ? ""
 , extraMeta ? {}
-, platform ? { name = "pc"; uboot = null; }
+, platform ? { name = "pc"; uboot = null; kernelBaseConfig = "defconfig"; }
 , ...
 }:
 
@@ -80,13 +80,14 @@ stdenv.mkDerivation {
     ++ lib.optional (platform.uboot != null) [platform.uboot];
 
   platformName = platform.name;
+  kernelBaseConfig = platform.kernelBaseConfig;
   
   arch =
     if xen then "xen" else
     if userModeLinux then "um" else
+    if platform ? kernelArch then platform.kernelArch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
-    if stdenv.system == "armv5tel-linux" then "arm" else
     abort "Platform ${stdenv.system} is not supported.";
 
   meta = {
