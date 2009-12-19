@@ -3269,8 +3269,7 @@ let
   };
 
   cyrus_sasl = import ../development/libraries/cyrus-sasl {
-    inherit fetchurl openssl db4 gettext;
-    stdenv = overrideGCC stdenv gcc43;
+    inherit stdenv fetchurl openssl db4 gettext;
   };
 
   db4 = db45;

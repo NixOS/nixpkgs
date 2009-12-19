@@ -1,0 +1,21 @@
+diff -up cyrus-sasl-2.1.22/plugins/digestmd5.c.elif cyrus-sasl-2.1.22/plugins/digestmd5.c
+--- cyrus-sasl-2.1.22/plugins/digestmd5.c.elif	2009-01-23 09:40:31.000000000 +0100
++++ cyrus-sasl-2.1.22/plugins/digestmd5.c	2009-02-06 15:20:15.000000000 +0100
+@@ -2743,7 +2743,7 @@ static sasl_server_plug_t digestmd5_serv
+ 	"DIGEST-MD5",			/* mech_name */
+ #ifdef WITH_RC4
+ 	128,				/* max_ssf */
+-#elif WITH_DES
++#elif defined(WITH_DES)
+ 	112,
+ #else 
+ 	1,
+@@ -4071,7 +4071,7 @@ static sasl_client_plug_t digestmd5_clie
+ 	"DIGEST-MD5",
+ #ifdef WITH_RC4				/* mech_name */
+ 	128,				/* max ssf */
+-#elif WITH_DES
++#elif defined(WITH_DES)
+ 	112,
+ #else
+ 	1,
