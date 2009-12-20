@@ -7112,8 +7112,9 @@ let
   };
 
   kbasket = import ../applications/misc/kbasket {
-    inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg
+    inherit fetchurl kdelibs x11 zlib libpng libjpeg
       perl qt3 gpgme libgpgerror;
+    stdenv = overrideGCC stdenv gcc43;
   };
 
   kermit = import ../tools/misc/kermit {
