@@ -56,8 +56,7 @@ in
 
         exec =
           "${pkgs.wpa_supplicant}/sbin/wpa_supplicant " +
-          "-s -C /var/run/wpa_supplicant " +
-          "-c ${configFile} -i${config.networking.WLANInterface}";
+          "-C /var/run/wpa_supplicant -c ${configFile} -i${config.networking.WLANInterface}";
       };
   
   };
