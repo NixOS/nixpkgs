@@ -8155,6 +8155,10 @@ let
     inherit fetchurl stdenv readline;
   };
 
+  gtkwave = import ../applications/science/electronics/gtkwave {
+    inherit fetchurl stdenv gperf pkgconfig bzip2;
+    inherit (gtkLibs) gtk;
+  };
 
   ### SCIENCE / MATH
 
