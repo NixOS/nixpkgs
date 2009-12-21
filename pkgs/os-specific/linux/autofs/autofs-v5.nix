@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [flex bison kernelHeaders];
+  buildInputs = [flex bison linuxHeaders];
 
   meta = { 
     description="Kernel based automounter";

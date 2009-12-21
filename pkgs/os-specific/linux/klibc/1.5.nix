@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, bison, mktemp, kernelHeaders}:
+{stdenv, fetchurl, perl, bison, mktemp, linuxHeaders}:
 
 assert stdenv.isLinux;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     makeFlags=$(eval "echo $makeFlags")
 
     mkdir linux
-    cp -prsd ${kernelHeaders}/include linux/
+    cp -prsd ${linuxHeaders}/include linux/
     chmod -R u+w linux/include/
   ''; # */
   

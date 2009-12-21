@@ -3502,48 +3502,53 @@ let
         glibc211);
 
   glibc25 = import ../development/libraries/glibc-2.5 {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv;
+    kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
   glibc27 = import ../development/libraries/glibc-2.7 {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv;
+    kernelHeaders = linuxHeaders;
     #installLocales = false;
   };
 
   glibc29 = makeOverridable (import ../development/libraries/glibc-2.9) {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv;
+    kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
   glibc29Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
-    kernelHeaders = kernelHeadersCross cross;
+    kernelHeaders = linuxHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
   glibc210 = makeOverridable (import ../development/libraries/glibc-2.10) {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv;
+    kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
   glibc210Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.10) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
-    kernelHeaders = kernelHeadersCross cross;
+    kernelHeaders = linuxHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
   glibc211 = makeOverridable (import ../development/libraries/glibc-2.11) {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv;
+    kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
   glibc211Cross = cross : forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
-    kernelHeaders = kernelHeadersCross cross;
+    kernelHeaders = linuxHeadersCross cross;
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
@@ -3552,7 +3557,8 @@ let
   # libcCross = cross: uclibcCross cross;
 
   eglibc = import ../development/libraries/eglibc {
-    inherit fetchsvn stdenv kernelHeaders;
+    inherit fetchsvn stdenv;
+    kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
@@ -5296,7 +5302,7 @@ let
   };
 
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
-    inherit sourceFromHead fetchurl stdenv flex bison kernelHeaders;
+    inherit sourceFromHead fetchurl stdenv flex bison linuxHeaders;
   };
 
   _915resolution = import ../os-specific/linux/915resolution {
@@ -5346,7 +5352,7 @@ let
     import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
     glibc = stdenv.gcc.libc;
-    kernelHeaders = stdenv.gcc.libc.kernelHeaders;
+    linuxHeaders = stdenv.gcc.libc.kernelHeaders;
   });
 
   cryopid = import ../os-specific/linux/cryopid {
@@ -5466,7 +5472,7 @@ let
     import ../os-specific/linux/iputils {
     inherit fetchurl stdenv;
     glibc = stdenv.gcc.libc;
-    kernelHeaders = stdenv.gcc.libc.kernelHeaders;
+    linuxHeaders = stdenv.gcc.libc.kernelHeaders;
   });
 
   iptables = import ../os-specific/linux/iptables {
@@ -5497,31 +5503,31 @@ let
     inherit fetchurl stdenv bison flex;
   };
 
-  kernelHeaders = kernelHeaders_2_6_28;
+  linuxHeaders = linuxHeaders_2_6_28;
 
-  kernelHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.28.nix {
+  linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.28.nix {
     inherit stdenv fetchurl cross perl;
   });
 
-  kernelHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
+  linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
     inherit fetchurl stdenv unifdef;
   };
 
-  kernelHeaders_2_6_28 = import ../os-specific/linux/kernel-headers/2.6.28.nix {
+  linuxHeaders_2_6_28 = import ../os-specific/linux/kernel-headers/2.6.28.nix {
     inherit fetchurl stdenv perl;
   };
 
-  kernelHeadersArm = import ../os-specific/linux/kernel-headers-cross {
+  linuxHeadersArm = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "arm-linux";
   };
 
-  kernelHeadersMips = import ../os-specific/linux/kernel-headers-cross {
+  linuxHeadersMips = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "mips-linux";
   };
 
-  kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
+  linuxHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
     cross = "sparc-linux";
   };
@@ -5766,14 +5772,14 @@ let
 
   klibc = makeOverridable (import ../os-specific/linux/klibc) {
     inherit fetchurl stdenv perl bison mktemp;
-    kernelHeaders = glibc.kernelHeaders;
+    linuxHeaders = glibc.kernelHeaders;
   };
 
   # Old version; needed in vmtools for insmod.  Should use
   # module_init_tools instead.
   klibc_15 = makeOverridable (import ../os-specific/linux/klibc/1.5.nix) {
     inherit fetchurl stdenv perl bison mktemp;
-    kernelHeaders = glibc.kernelHeaders;
+    linuxHeaders = glibc.kernelHeaders;
   };
 
   klibcShrunk = makeOverridable (import ../os-specific/linux/klibc/shrunk.nix) {
@@ -5784,17 +5790,17 @@ let
 
   kvm76 = import ../os-specific/linux/kvm/76.nix {
     inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    inherit (glibc) kernelHeaders;
+    linuxHeaders = glibc.kernelHeaders;
   };
 
   kvm86 = import ../os-specific/linux/kvm/86.nix {
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
-    inherit (glibc) kernelHeaders;
+    linuxHeaders = glibc.kernelHeaders;
   };
 
   kvm88 = import ../os-specific/linux/kvm/88.nix {
     inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
-    inherit (glibc) kernelHeaders;
+    linuxHeaders = glibc.kernelHeaders;
   };
 
   libcap = import ../os-specific/linux/libcap {
@@ -6005,12 +6011,12 @@ let
   };
 
   uclibc = import ../os-specific/linux/uclibc {
-    inherit fetchurl stdenv kernelHeaders;
+    inherit fetchurl stdenv linuxHeaders;
   };
 
   uclibcCross = target: import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv;
-    kernelHeaders = kernelHeadersCross target;
+    linuxHeaders = linuxHeadersCross target;
     gccCross = gccCrossStageStatic target;
   };
 
@@ -6024,7 +6030,7 @@ let
   };
 
   umlutilities = import ../os-specific/linux/uml-utilities {
-    inherit fetchurl kernelHeaders stdenv readline lib;
+    inherit fetchurl linuxHeaders stdenv readline lib;
     tunctl = true; mconsole = true;
   };
 

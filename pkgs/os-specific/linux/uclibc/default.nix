@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelHeaders, gccCross ? null}:
+{stdenv, fetchurl, linuxHeaders, gccCross ? null}:
 
 assert stdenv.isLinux;
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     make defconfig ${archMakeFlag}
-    sed -e s@/usr/include@${kernelHeaders}/include@ \
+    sed -e s@/usr/include@${linuxHeaders}/include@ \
       -e 's@^RUNTIME_PREFIX.*@RUNTIME_PREFIX="/"@' \
       -e 's@^DEVEL_PREFIX.*@DEVEL_PREFIX="/"@' \
       -e 's@.*UCLIBC_HAS_WCHAR.*@UCLIBC_HAS_WCHAR=y@' \
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
-    (cd $out/include && ln -s ${kernelHeaders}/include/* .) || exit 1
+    (cd $out/include && ln -s ${linuxHeaders}/include/* .) || exit 1
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so
   '';
   

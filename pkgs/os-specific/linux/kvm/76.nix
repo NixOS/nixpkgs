@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelHeaders, zlib, e2fsprogs, SDL, alsaLib, pkgconfig, rsync}:
+{stdenv, fetchurl, linuxHeaders, zlib, e2fsprogs, SDL, alsaLib, pkgconfig, rsync}:
    
 assert stdenv.isLinux;
    
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     ./readonly-kernel-r2.patch
   ];
 
-  configureFlags = "--with-patched-kernel --kerneldir=${kernelHeaders}";
+  configureFlags = "--with-patched-kernel --kerneldir=${linuxHeaders}";
 
   # e2fsprogs is needed for libuuid.
   # rsync is a weird dependency used for copying kernel header files.
