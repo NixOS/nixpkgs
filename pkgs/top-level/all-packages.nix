@@ -7440,7 +7440,7 @@ let
 
   # linux only by now
   synergy = import ../applications/misc/synergy {
-    inherit fetchurl sourceFromHead stdenv x11;
+    inherit fetchurl sourceFromHead stdenv x11 automake autoconf;
     inherit (xlibs) xextproto libXtst inputproto libXi;
   };
 

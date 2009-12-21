@@ -2,24 +2,21 @@ args: with args;
 stdenv.mkDerivation {
   name = "synergy-cvs";
 
-  # REGION AUTO UPDATE:          { name="synergy"; type = "cvs"; cvsRoot = ":pserver:anonymous@synergy2.cvs.sourceforge.net:/cvsroot/synergy2"; module="syngery"; }
-  src = sourceFromHead "synergy-F_09-55-29.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/synergy-F_09-55-28.tar.gz"; sha256 = "443bb8cf8d4e365b2adaadd8770096fcafa0c54532e83f6a267eb3b05042b84c"; });
-  # END
-  /*
-  fetchcvs {
-    cvsRoot = ":pserver:anonymous@synergy2.cvs.sourceforge.net:/cvsroot/synergy2";
-    module = "synergy";
-    date = "NOW";
-    sha256 = "0a52b3adaae5f41cf16c5911c9037c5f2ee704a27bcaa9f874e3a4ff58d773c1";
-  };
-  */
+  # note: There is a fork:
+  # http://code.google.com/p/synergy-plus
 
-  buildInputs = [x11 xextproto libXtst inputproto libXi];
+  # REGION AUTO UPDATE:            { name="synergy"; type = "cvs"; cvsRoot = ":pserver:anonymous@synergy2.cvs.sourceforge.net:/cvsroot/synergy2"; module="syngery"; }
+  src= sourceFromHead "synergy-F_23-55-02.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/synergy-F_23-55-02.tar.gz"; sha256 = "ae16a9b59039a32e383e71397405d7b610de6c6902c03177c2496bac440d3e28"; });
+  # END
+
+  buildInputs = [x11 xextproto libXtst inputproto libXi automake autoconf autoconf];
+
+  preConfigure = "autoreconf; ";
 
   patches = [ (fetchurl {
-    url = http://mawercer.de/~nix/syncergy-gcc43.patch.gz;
-    sha256 = "12kla0nii6qc9fy5x4dc4qisfcyl9dqnrj5y911davnvwkwlj18h";
+    url = http://mawercer.de/~nix/synergy-gcc43-r2.patch.gz;
+    sha256 = "0wnj5k93ybj7jg8ml1i1brwsnszfh41117q2qh7r8xr9m37997b7";
   }) ];
 
   meta= { 

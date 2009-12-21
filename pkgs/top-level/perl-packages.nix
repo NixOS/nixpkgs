@@ -2430,10 +2430,10 @@ rec {
   };
 
   URI = buildPerlPackage rec {
-    name = "URI-1.37";
+    name = "URI-1.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
-      sha256 = "0amwbss2gz00fkdfnfixf1afmqal1246xhmj27g5c0ny7ahcid0j";
+      sha256 = "0gfdphz0yhm62vn9cbw720i6pm1gingcir15dq8ppbnk6cylnyal";
     };
   };
 
