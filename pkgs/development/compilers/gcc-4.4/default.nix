@@ -1,6 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
 , langJava ? false
+, langAda ? false
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
@@ -13,6 +14,7 @@
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
+, gnatboot ? null
 , enableMultilib ? false
 , name ? "gcc"
 , cross ? null
@@ -24,6 +26,7 @@
 assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null;
+assert langAda      -> gnatboot != null;
 
 with stdenv.lib;
 
@@ -83,7 +86,7 @@ stdenv.mkDerivation ({
 
   src = (import ./sources.nix) {
     inherit fetchurl optional version;
-    inherit langC langCC langFortran langJava;
+    inherit langC langCC langFortran langJava langAda;
   };
 
   patches =
@@ -97,7 +100,10 @@ stdenv.mkDerivation ({
      # (fixed in gcc 4.4.3) bad mixture of build/target flags
      ./libstdc++-target.patch
      ]
-    ++ optional noSysDirs ./no-sys-dirs.patch;
+    ++ optional noSysDirs ./no-sys-dirs.patch
+    # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
+    # target libraries and tools.
+    ++ optional langAda ./gnat-cflags.patch;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross;
@@ -111,6 +117,7 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [zip unzip])
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
     ++ (optionals (cross != null) [binutilsCross])
+    ++ (optionals langAda [gnatboot])
     ;
 
   configureFlags = "
@@ -133,9 +140,11 @@ stdenv.mkDerivation ({
         ++ optional langFortran  "fortran"
         ++ optional langJava     "java"
         ++ optional langTreelang "treelang"
+        ++ optional langAda      "ada"
         )
       )
     }
+    ${if langAda then " --enable-libada" else ""}
     ${if stdenv.isi686 then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
   ";
@@ -169,7 +178,7 @@ stdenv.mkDerivation ({
                                           ++ optionals javaAwtGtk [ gmp mpfr ])));
 
 
-  passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
+  passthru = { inherit langC langCC langAda langFortran langTreelang enableMultilib; };
 
   meta = {
     homepage = http://gcc.gnu.org/;

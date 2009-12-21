@@ -1852,6 +1852,13 @@ let
     profiledCompiler = true;
   }));
 
+  gcc44_real2 = lowPrio (wrapGCC (makeOverridable (import
+  ../development/compilers/gcc-4.4-copy) {
+    inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
+      gettext which noSysDirs;
+    profiledCompiler = true;
+  }));
+
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;
@@ -1918,6 +1925,25 @@ let
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
+  });
+
+  gnat = gnat44;
+
+  gnat44 = wrapGNAT (gcc44_real2.gcc.override {
+    name = "gnat";
+    langCC = false;
+    langC = true;
+    langAda = true;
+    profiledCompiler = false;
+    inherit gnatboot;
+    # We can't use the ppl stuff, because we would have
+    # libstdc++ problems.
+    cloogppl = null;
+    ppl = null;
+  });
+
+  gnatboot = wrapGNAT (import ../development/compilers/gnatboot {
+    inherit fetchurl stdenv;
   });
 
   /*
@@ -2272,6 +2298,7 @@ let
   };
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
+  wrapGNAT = wrapGCCWith (import ../build-support/gnat-wrapper) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
@@ -8282,6 +8309,10 @@ let
     inherit fetchurl stdenv readline;
   };
 
+  ghdl = import ../applications/science/electronics/ghdl {
+    inherit fetchurl stdenv;
+    gnat = gnatboot;
+  };
 
   ### SCIENCE / MATH
 
