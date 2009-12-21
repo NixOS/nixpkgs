@@ -46,9 +46,9 @@ rec {
 
   topGit = stdenv.mkDerivation {
     name = "TopGit-git"; # official release 0.8
-    # REGION AUTO UPDATE:    { name = "topGit"; type="git"; url="http://repo.or.cz/w/topgit.git"; }
-    src = sourceFromHead "topGit-f59e4f9e87e5f485fdaee0af002edd2105fa298a.tar.gz"
-                 (fetchurl { url = "http://mawercer.de/~nix/repos/topGit-f59e4f9e87e5f485fdaee0af002edd2105fa298a.tar.gz"; sha256 = "12aa6d34c82d505066b851e24069fe9d6930d70913b7d94a0cc6e8f06f127170"; });
+    # REGION AUTO UPDATE:     { name = "topGit"; type="git"; url="http://repo.or.cz/w/topgit.git"; }
+    src= sourceFromHead "topGit-341a3713f5c399f97c5c68a74772b12bb3d2ca57.tar.gz"
+                 (fetchurl { url = "http://mawercer.de/~nix/repos/topGit-341a3713f5c399f97c5c68a74772b12bb3d2ca57.tar.gz"; sha256 = "4d53343ed9ba735fb598d6576b20f2641d5a8374a5a11b21fcbcdc6da885e872"; });
     # END
     phases="unpackPhase patchPhase installPhase";
     installPhase = ''

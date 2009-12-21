@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     substituteInPlace configure --replace /bin/stty "$(type -tP stty)"
     sed -e '1i\#include <tclInt.h>' -i exp_inter.c
+    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
   '';
   
   configureFlags = ["--with-tcl=${tcl}/lib" 
@@ -31,4 +32,5 @@ stdenv.mkDerivation {
     description = "A tool for automating interactive applications";
     homepage = http://expect.nist.gov/;
   };
+  postInstall="cp expect{,k} $out/bin; ensureDir $out/lib; cp *.so $out/lib";
 }

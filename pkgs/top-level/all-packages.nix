@@ -5291,6 +5291,10 @@ let
 
   ### OS-SPECIFIC
 
+  afuse = import ../os-specific/linux/afuse {
+    inherit fetchurl stdenv lib pkgconfig fuse;
+  };
+
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
     inherit sourceFromHead fetchurl stdenv flex bison kernelHeaders;
   };
@@ -7585,7 +7589,7 @@ let
 
   # linux only by now
   synergy = import ../applications/misc/synergy {
-    inherit fetchurl sourceFromHead stdenv x11;
+    inherit fetchurl sourceFromHead stdenv x11 automake autoconf;
     inherit (xlibs) xextproto libXtst inputproto libXi;
   };
 
@@ -8305,6 +8309,11 @@ let
   ghdl = import ../applications/science/electronics/ghdl {
     inherit fetchurl stdenv gnat;
     gccSrc = gcc43.gcc.src;
+  };
+
+  gtkwave = import ../applications/science/electronics/gtkwave {
+    inherit fetchurl stdenv gperf pkgconfig bzip2;
+    inherit (gtkLibs) gtk;
   };
 
   ### SCIENCE / MATH
