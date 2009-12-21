@@ -1,6 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
 , langJava ? false
+, langVhdl ? false
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
@@ -14,6 +15,7 @@
 , binutilsCross ? null
 , libcCross ? null
 , crossStageStatic ? true
+, gnat ? null
 }:
 
 assert langTreelang -> bison != null && flex != null;
@@ -21,6 +23,8 @@ assert langTreelang -> bison != null && flex != null;
 assert cross != null -> profiledCompiler == false && enableMultilib == true;
 assert (cross != null && crossStageStatic) -> (langCC == false && langFortran
 == false && langTreelang == false);
+
+assert langVhdl -> gnat != null;
 
 with stdenv.lib;
 
@@ -46,6 +50,10 @@ let
     "-stage-final";
   crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
 
+  ghdlSrc = fetchurl {
+    url = "http://ghdl.free.fr/ghdl-0.28.tar.bz2";
+    sha256 = "0l3ah3zw2yhr9rv9d5ck1cinsf11r28m6bzl2sdibngl2bgc2jsf";
+  };
 in
 
 stdenv.mkDerivation ({
@@ -75,7 +83,8 @@ stdenv.mkDerivation ({
     [./pass-cxxcpp.patch ./libmudflap-cpp.patch]
     ++ optional noSysDirs ./no-sys-dirs.patch
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
-    ++ optional langJava ./java-jvgenmain-link.patch;
+    ++ optional langJava ./java-jvgenmain-link.patch
+    ++ optional langVhdl ./ghdl-ortho-cflags.patch;
     
   inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
     binutilsCross libcCross;
@@ -86,6 +95,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals (cross != null) [binutilsCross])
+    ++ (optionals (langVhdl != null) [gnat])
     ;
 
   configureFlags = "
@@ -100,6 +110,7 @@ stdenv.mkDerivation ({
         ++ optional langFortran  "fortran"
         ++ optional langJava     "java"
         ++ optional langTreelang "treelang"
+        ++ optional langVhdl     "vhdl"
         )
       )
     }
@@ -107,6 +118,23 @@ stdenv.mkDerivation ({
     ${if cross != null then crossConfigureFlags else ""}
   ";
   #Above I added a hack on making the build different than the host.
+
+  postUnpack = if langVhdl then ''
+    tar xvf ${ghdlSrc}
+    mv ghdl-*/vhdl gcc*/gcc
+    rm -Rf ghdl-*
+  '' else "";
+
+  # Ghdl has some timestamps checks, storing file timestamps in '.cf' files.
+  # As we will change the timestamps to 1970-01-01 00:00:01, we also set the
+  # content of that .cf to that value. This way ghdl does not complain on
+  # the installed object files from the basic libraries (ieee, ...)
+  postInstallGhdl = if langVhdl then ''
+    pushd $out
+    find . -name "*.cf" -exec \
+        sed 's/[0-9]*\.000" /19700101000001.000" /g' -i {} \;
+    popd
+  '' else "";
 
   # Needed for the cross compilation to work
   AR = "ar";

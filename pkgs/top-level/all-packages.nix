@@ -1939,6 +1939,16 @@ let
     inherit fetchurl stdenv;
   });
 
+  ghdl = wrapGHDL (import ../development/compilers/gcc-4.3 {
+    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
+    name = "ghdl-0.28";
+    langVhdl = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+    enableMultilib = false;
+  });
+
   /*
   Broken; fails because of unability to find its own symbols during linking
 
@@ -2281,6 +2291,8 @@ let
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
+  # All these wrappers: GCC, GNAT, GHDL, should be once merged into
+  # only one.
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
@@ -2292,6 +2304,17 @@ let
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
   wrapGNAT = wrapGCCWith (import ../build-support/gnat-wrapper) glibc;
+
+  wrapGHDLWith = gccWrapper: glibc: baseGCC: gccWrapper {
+    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
+    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
+    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
+    gcc = baseGCC;
+    libc = glibc;
+    inherit stdenv binutils coreutils zlib;
+  };
+
+  wrapGHDL = wrapGHDLWith (import ../build-support/ghdl-wrapper) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
@@ -8310,11 +8333,6 @@ let
 
   ngspice = import ../applications/science/electronics/ngspice {
     inherit fetchurl stdenv readline;
-  };
-
-  ghdl = import ../applications/science/electronics/ghdl {
-    inherit fetchurl stdenv gnat;
-    gccSrc = gcc43.gcc.src;
   };
 
   gtkwave = import ../applications/science/electronics/gtkwave {
