@@ -1491,7 +1491,7 @@ let
 
   tcng = import ../tools/networking/tcng {
     inherit fetchurl stdenv iproute bison flex db4 perl;
-    kernel = kernel_2_6_28;
+    kernel = linux_2_6_28;
   };
 
   telnet = import ../tools/networking/telnet {
@@ -2922,7 +2922,7 @@ let
 
   openafsClient = import ../servers/openafs-client {
     inherit stdenv fetchurl autoconf automake flex yacc;
-    inherit kernel_2_6_28 glibc ncurses perl krb5;
+    inherit linux_2_6_28 glibc ncurses perl krb5;
   };
 
   openocd = import ../development/tools/misc/openocd {
@@ -5536,7 +5536,7 @@ let
     inherit fetchurl;
   };
 
-  kernel_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
+  linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_25
@@ -5544,7 +5544,7 @@ let
       ];
   };
 
-  kernel_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
+  linux_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_27
@@ -5552,7 +5552,7 @@ let
       ];
   };
 
-  kernel_2_6_28 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.28.nix) {
+  linux_2_6_28 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.28.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_28
@@ -5561,7 +5561,7 @@ let
       ];
   };
 
-  kernel_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
+  linux_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_29
@@ -5569,34 +5569,34 @@ let
       ];
   };
 
-  kernel_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
+  linux_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools platform;
     kernelPatches = [];
   };
 
-  kernel_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen5.nix) {
+  linux_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen5.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
     inherit platform;
   };
 
-  kernel_2_6_31_zen5_bfs = kernel_2_6_31_zen5.override {
+  linux_2_6_31_zen5_bfs = linux_2_6_31_zen5.override {
     ckSched = true;
   };
 
-  kernel_2_6_31_zen7 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
+  linux_2_6_31_zen7 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools
       lib builderDefs;
   };
 
-  kernel_2_6_31_zen7_bfs = kernel_2_6_31_zen7.override {
+  linux_2_6_31_zen7_bfs = linux_2_6_31_zen7.override {
     ckSched = true;
   };
 
-  kernel_2_6_31_zen = kernel_2_6_31_zen7;
-  kernel_2_6_31_zen_bfs = kernel_2_6_31_zen7_bfs;
+  linux_2_6_31_zen = linux_2_6_31_zen7;
+  linux_2_6_31_zen_bfs = linux_2_6_31_zen7_bfs;
 
-  kernel_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
+  linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools platform;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
@@ -5604,13 +5604,13 @@ let
       ];
   };
 
-  /* Kernel modules are inherently tied to a specific kernel.  So
+  /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  kernelPackagesFor = kernel: rec {
+  linuxPackagesFor = kernel: rec {
 
     inherit kernel;
 
@@ -5726,18 +5726,18 @@ let
   };
 
   # Build the kernel modules for the some of the kernels.
-  kernelPackages_2_6_25 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_25);
-  kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
-  kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
-  kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
-  kernelPackages_2_6_31_zen5 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen5);
-  kernelPackages_2_6_31_zen = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen);
-  kernelPackages_2_6_31_zen_bfs = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen_bfs);
-  kernelPackages_2_6_31 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
-  kernelPackages_2_6_32 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_32);
+  linuxPackages_2_6_25 = recurseIntoAttrs (linuxPackagesFor linux_2_6_25);
+  linuxPackages_2_6_27 = recurseIntoAttrs (linuxPackagesFor linux_2_6_27);
+  linuxPackages_2_6_28 = recurseIntoAttrs (linuxPackagesFor linux_2_6_28);
+  linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29);
+  linuxPackages_2_6_31_zen5 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31_zen5);
+  linuxPackages_2_6_31_zen = recurseIntoAttrs (linuxPackagesFor linux_2_6_31_zen);
+  linuxPackages_2_6_31_zen_bfs = recurseIntoAttrs (linuxPackagesFor linux_2_6_31_zen_bfs);
+  linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31);
+  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
 
-  # The current default kernel / kernel modules.
-  kernelPackages = kernelPackages_2_6_28;
+  # The current default Linux kernel & modules.
+  linuxPackages = linuxPackages_2_6_28;
 
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;

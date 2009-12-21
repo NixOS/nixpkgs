@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, flex, yacc,
-  kernel_2_6_28, glibc, ncurses, perl, krb5 }:
+  linux_2_6_28, glibc, ncurses, perl, krb5 }:
 
 assert stdenv.isLinux;
 
@@ -8,7 +8,7 @@ let
   version = "1.4.11";
   name = "${pname}-${version}";
   webpage = http://www.openafs.org;
-  kernel = kernel_2_6_28;
+  kernel = linux_2_6_28;
 in
 
 stdenv.mkDerivation rec {
