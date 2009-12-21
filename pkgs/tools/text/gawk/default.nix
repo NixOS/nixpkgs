@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # The libsigsegv provided with gawk has failing tests:
+  # I did like in Fedora:
+  # http://rpmfind.net//linux/RPM/fedora/devel/i386/gawk-3.1.7-2.fc13.i686.html
+  configureFlags = "--disable-libsigsegv";
+
   meta = {
     homepage = http://www.gnu.org/software/gawk/;
     description = "GNU implementation of the Awk programming language";
