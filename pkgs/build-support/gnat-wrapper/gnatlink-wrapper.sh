@@ -1,7 +1,7 @@
 #! @shell@ -e
 
 # Add the flags for the GNAT compiler proper.
-extraAfter="--GCC=@out@/bin/gnatgcc"
+extraAfter="--GCC=@out@/bin/gcc"
 extraBefore=()
 
 # Add the flags that should be passed to the linker (and prevent

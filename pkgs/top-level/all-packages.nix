@@ -1852,13 +1852,6 @@ let
     profiledCompiler = true;
   }));
 
-  gcc44_real2 = lowPrio (wrapGCC (makeOverridable (import
-  ../development/compilers/gcc-4.4-copy) {
-    inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
-      gettext which noSysDirs;
-    profiledCompiler = true;
-  }));
-
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;
@@ -1929,7 +1922,7 @@ let
 
   gnat = gnat44;
 
-  gnat44 = wrapGNAT (gcc44_real2.gcc.override {
+  gnat44 = wrapGNAT (gcc44_real.gcc.override {
     name = "gnat";
     langCC = false;
     langC = true;
@@ -8310,8 +8303,8 @@ let
   };
 
   ghdl = import ../applications/science/electronics/ghdl {
-    inherit fetchurl stdenv;
-    gnat = gnatboot;
+    inherit fetchurl stdenv gnat;
+    gccSrc = gcc43.gcc.src;
   };
 
   ### SCIENCE / MATH

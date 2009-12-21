@@ -51,10 +51,11 @@ else
     if test -e "$gcc/lib64"; then
         gccCFlags="$gccCFlags -B$gcc/lib64"
     fi
-    gccCFlags="$gccCFlags -B$gcc/lib/gnatgcc/x86_64-pc-linux-gnu/4.1/ -I$gcc/lib/gnatgcc/x86_64-pc-linux-gnu/4.1/adainclude"
+    basePath=`echo $gcc/lib/*/*/*`
+    gccCFlags="$gccCFlags -B$basePath -I$basePath/adainclude"
     echo "$gccCFlags" > $out/nix-support/gcc-cflags
 
-    gnatCFlags="-aI$gcc/lib/gnatgcc/x86_64-pc-linux-gnu/4.1/adainclude -aO$gcc/lib/gnatgcc/x86_64-pc-linux-gnu/4.1/adalib"
+    gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
     echo "$gnatCFlags" > $out/nix-support/gnat-cflags
     
     gccPath="$gcc/bin"
