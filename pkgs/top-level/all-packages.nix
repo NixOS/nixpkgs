@@ -5157,6 +5157,10 @@ let
 
   ### OS-SPECIFIC
 
+  afuse = import ../os-specific/linux/afuse {
+    inherit fetchurl stdenv lib pkgconfig fuse;
+  };
+
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
     inherit sourceFromHead fetchurl stdenv flex bison kernelHeaders;
   };
