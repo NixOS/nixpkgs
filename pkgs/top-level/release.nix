@@ -173,6 +173,7 @@ in {
   gcc43_multi = ["x86_64-linux"];
   gcc44 = linux;
   gcj44 = linux;
+  ghdl = linux;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;
@@ -181,6 +182,7 @@ in {
   glibcLocales = linux;
   glxinfo = linux;
   gnash = linux;
+  gnat44 = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
