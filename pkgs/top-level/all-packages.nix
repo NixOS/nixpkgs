@@ -7980,6 +7980,10 @@ let
     python24 = python;
   };*/
 
+  ultimatestunts = import ../games/ultimatestunts {
+    inherit stdenv fetchurl SDL mesa SDL_image freealut;
+  };
+
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
   };
