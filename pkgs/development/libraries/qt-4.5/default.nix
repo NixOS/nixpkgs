@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.qtsoftware.com/downloads/opensource/appdev/linux-x11-cpp;
     description = "A cross-platform application framework for C++";
-    license = "QPL/GPL/LGPL";
+    license = "GPL/LGPL";
     maintainers = [ lib.maintainers.sander ];
   };
 }
