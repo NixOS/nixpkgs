@@ -23,6 +23,7 @@ rec {
     description = "X-Moto - obstacled race game";
     maintainers = [
       a.lib.maintainers.raskin
+      a.lib.maintainers.viric
     ];
     platforms = with a.lib.platforms; 
       linux ++ freebsd;
