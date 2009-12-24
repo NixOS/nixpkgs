@@ -6731,6 +6731,12 @@ let
     inherit (xlibs) libX11 libXxf86vm;
   };
 
+  xfontsel = import ../applications/misc/xfontsel {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11 libXi imake libXau libXaw;
+    inherit (xorg) xauth;
+  };
+
   fspot = import ../applications/graphics/f-spot {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
             libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
