@@ -4384,6 +4384,14 @@ let
     inherit (gnome) glib;
   };
 
+  qt46 = import ../development/libraries/qt-4.6 {
+    inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
+      fontconfig freetype pkgconfig libtiff;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor libXext
+      inputproto fixesproto libXfixes;
+    inherit (gnome) glib;
+  };
   qtscriptgenerator = import ../development/libraries/qtscriptgenerator {
     inherit stdenv fetchurl;
     qt4 = qt45;
