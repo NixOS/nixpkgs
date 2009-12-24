@@ -1,13 +1,15 @@
 {stdenv, fetchurl, zlib}:
 
 stdenv.mkDerivation {
-  name = "taglib-1.5";
+  name = "taglib-1.6.1";
   
   src = fetchurl {
-    url = http://developer.kde.org/~wheeler/files/src/taglib-1.5.tar.gz;
-    sha256 = "1hhfap06zqrn17zh1cl3qlh3i598jw3qs01y2dc4i7akxhb0fqds";
+    url = http://developer.kde.org/~wheeler/files/src/taglib-1.6.1.tar.gz;
+    sha256 = "0i5s3n6i8ac5q7gqdnynrmi75as24nhy76y0q0v764llw82jlxcf";
   };
   
+  configureFlags = "--enable-asf --enable-mp4";
+
   buildInputs = [zlib];
 
   meta = {
