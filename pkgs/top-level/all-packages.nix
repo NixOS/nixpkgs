@@ -6733,8 +6733,7 @@ let
 
   xfontsel = import ../applications/misc/xfontsel {
     inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXi imake libXau libXaw;
-    inherit (xorg) xauth;
+    inherit (xlibs) libX11 libXaw;
   };
 
   fspot = import ../applications/graphics/f-spot {
