@@ -26,5 +26,5 @@ stdenv.mkDerivation rec {
     licesnse = "free";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-  }
+  };
 }
