@@ -71,6 +71,11 @@ in
 
   config = mkIf config.services.nfsKernel.enable {
 
+    assertions = singleton
+      { assertion = config.services.portmap.enable;
+        message = "Please enable portmap (services.portmap.enable) to use nfs-kernel.";
+      };
+
     environment.etc = singleton
       { source = exports;
         target = "exports";
@@ -111,7 +116,7 @@ in
 
         description = "Kernel NFS server";
 
-        startOn = "started nfs-kernel-exports";
+        startOn = "started nfs-kernel-exports and started portmap";
         stopOn = "stopping nfs-kernel-exports";
 
         exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} ${builtins.toString cfg.nproc}";
@@ -122,7 +127,7 @@ in
 
         description = "Kernel NFS server - mount daemon";
 
-        startOn = "started nfs-kernel-nfsd";
+        startOn = "started nfs-kernel-nfsd and started portmap";
         stopOn = "stopping nfs-kernel-exports";
 
         exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}";
@@ -133,8 +138,8 @@ in
       
         description = "Kernel NFS server - Network Status Monitor";
       
-        startOn = "started nfs-kernel-nfsd";
-	stopOn = "stopping nfs-kernel-exports";
+        startOn = "started nfs-kernel-nfsd and started portmap";
+        stopOn = "stopping nfs-kernel-exports";
 
         preStart =
           ''	
