@@ -19,5 +19,12 @@ stdenv.mkDerivation rec {
   preInstall = ''
     installFlags="appdefaultdir=$out/share/X11/app-defaults"
   '';
-}
 
+  meta = {
+    homepage = http://www.x.org/;
+    description = "Allows testing the fonts available in an X server";
+    licesnse = "free";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
+  }
+}

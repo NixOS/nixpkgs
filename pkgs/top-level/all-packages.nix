@@ -6735,6 +6735,10 @@ let
     inherit fetchurl stdenv pkgconfig;
     inherit (xlibs) libX11 libXaw;
   };
+  xlsfonts = import ../applications/misc/xlsfonts {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11;
+  };
 
   fspot = import ../applications/graphics/f-spot {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
