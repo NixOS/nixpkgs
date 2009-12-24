@@ -215,7 +215,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 qtscriptgenerator perl gettext;
     inherit (pkgs) curl mysql libxml2 taglib taglib_extras loudmouth;
     inherit kdelibs;
-    inherit automoc4 phonon strigi soprano;
+    inherit automoc4 phonon strigi soprano qca2;
   };
 
   filelight = import ./extragear/filelight {
