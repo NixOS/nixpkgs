@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An IRC client for KDE";
-    homepage = http://www.konversation.org;
+    homepage = http://konversation.kde.org/;
     license = "GPLv2";
   };
 }
