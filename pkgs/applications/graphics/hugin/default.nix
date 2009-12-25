@@ -3,11 +3,11 @@
  glew, libXmu, libXi }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2009.2.0";
+  name = "hugin-2009.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.gz";
-    sha256 = "1z5hb1sfkpk6d1xnzqh8vy6rs7fhfjs5196pz98hwnx6wfi8w3k2";
+    sha256 = "1xa7rnpwlv68wfkikmlrs74hqylpkh837p3narqljr2a7fxf04r9";
   };
 
 #   patches = [ ./levmar-64-bit-alignment.patch ];
