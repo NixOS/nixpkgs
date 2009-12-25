@@ -6,6 +6,10 @@ let
 
   cfg = config.services.autofs;
 
+  mount = config.system.sbin.mount;
+
+  autoMaster = pkgs.writeText "auto.master" cfg.autoMaster;
+
 in
 
 {
@@ -19,7 +23,8 @@ in
       enable = mkOption {
         default = false;
         description = "
-          automatically mount and unmount filesystems
+          Mount filesystems on demand. Unmount them automatically.
+          You may also be interested in afuese.
         ";
       };
 
@@ -43,9 +48,13 @@ in
         '';
         description = "
           file contents of /etc/auto.master. See man auto.master
-          see 
-          man auto.master and man 5 autofs
+          See man 5 auto.master and man 5 autofs.
         ";
+      };
+
+      kernelModules = mkOption {
+        default = ["fuse"];
+        description="kernel modules to load";
       };
 
       timeout = mkOption {
@@ -55,9 +64,11 @@ in
 
       debug = mkOption {
         default = false;
-        description = "pass -d to automount and write log to /var/log/autofs";
+        description = "
+        pass -d and -7 to automount and write log to /var/log/autofs
+        ";
       };
-      
+
     };
 
   };
@@ -83,14 +94,35 @@ in
           };
 
         preStart =
+          pkgs.lib.concatMapStrings (module : "modprobe ${module} || true\n")
+                                    (["autofs4"] ++ cfg.kernelModules);
+
+        preStop = 
           ''
-            modprobe autofs4 || true
+            set -e; while :; do pkill -TERM automount; sleep 1; done
+          '';
+
+        # automount doesn't clean up when receiving SIGKILL.
+        # umount -l should unmount the directories recursively when they are no longer used
+        # It does, but traces are left in /etc/mtab. So unmount recursively..
+        postStop =
+          ''
+          PATH=${pkgs.gnused}/bin:${pkgs.coreutils}/bin
+          exec &> /tmp/logss
+          # double quote for sed:
+          escapeSpaces(){ sed 's/ /\\\\040/g'; }
+          unescapeSpaces(){ sed 's/\\040/ /g'; }
+          sed -n 's@^\s*\(\([^\\ ]\|\\ \)*\)\s.*@\1@p' ${autoMaster} | sed 's/[\\]//' | while read mountPoint; do
+            sed -n "s@[^ ]\+\s\+\($(echo "$mountPoint"| escapeSpaces)[^ ]*\).*@\1@p" /proc/mounts | sort -r | unescapeSpaces| while read smountP; do
+              ${mount}/bin/umount -l "$smountP" || true
+            done
+          done
           '';
 
         script =
           ''
             ${if cfg.debug then "exec &> /var/log/autofs" else ""}
-            ${pkgs.autofs5}/sbin/automount -f -t ${builtins.toString cfg.timeout} ${if cfg.debug then "-d" else ""} "${pkgs.writeText "auto.master" cfg.autoMaster}"
+            exec ${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} "${autoMaster}" ${if cfg.debug then "-l7" else ""}
           '';
       };
           
