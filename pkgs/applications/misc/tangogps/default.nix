@@ -1,15 +1,15 @@
 { fetchurl, stdenv, pkgconfig, gettext, gtk, gconf
-, curl, libexif, sqlite }:
+, curl, libexif, sqlite, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "tangogps-0.9.6";
+  name = "tangogps-0.99.2";
 
   src = fetchurl {
     url = "http://www.tangogps.org/downloads/${name}.tar.gz";
-    sha256 = "04vfbr7skjcfadv9206q2pxbm74i8yypkjwzldsc5a6ybhr7fsp5";
+    sha256 = "15q2kkrv4mfsivfdzjgpxr7s2amw7d501q2ayjl3ff4vmvfn5516";
   };
 
-  buildInputs = [ pkgconfig gettext gtk gconf curl libexif sqlite ];
+  buildInputs = [ pkgconfig gettext gtk gconf curl libexif sqlite libxml2 ];
 
   meta = {
     description = "tangoGPS, a user friendly map and GPS user interface";

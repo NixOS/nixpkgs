@@ -7474,7 +7474,7 @@ let
   };
 
   tangogps = import ../applications/misc/tangogps {
-    inherit fetchurl stdenv pkgconfig gettext curl libexif sqlite;
+    inherit fetchurl stdenv pkgconfig gettext curl libexif sqlite libxml2;
     inherit (gtkLibs) gtk;
     gconf = gnome.GConf;
   };
