@@ -6137,9 +6137,9 @@ let
   };
 
   abiword = import ../applications/office/abiword {
-    inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv;
+    inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv librsvg bzip2;
     inherit (gtkLibs) gtk;
-    inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
+    inherit (gnome) libglade libgnomecanvas;
   };
 
   adobeReader = import ../applications/misc/adobe-reader {

@@ -1,16 +1,15 @@
-{stdenv, fetchurl, pkgconfig, gtk, libglade, libgnomeprint,
-libgnomeprintui, libgnomecanvas, fribidi, libpng, popt, libgsf,
-enchant, wv
+{stdenv, fetchurl, pkgconfig, gtk, libglade, libgnomecanvas, fribidi, libpng, popt, libgsf,
+enchant, wv, librsvg, bzip2
 }:
 
 stdenv.mkDerivation {
-  name = "abiword-2.6.8";
+  name = "abiword-2.8.1";
   src = fetchurl {
-    url = http://www.abisource.org/downloads/abiword/2.6.8/source/abiword-2.6.8.tar.gz;
-    sha256 = "14vfp668srjgy6wd22h4a93safp1iyfwhdr6y0sb751xl46nlrdn";
+    url = http://www.abisource.org/downloads/abiword/2.8.1/source/abiword-2.8.1.tar.gz;
+    sha256 = "1v6jkjd5ivaarhv41nkniqycx3k33p9r7q7dyyjn7kq2295n26zm";
   };
 
-  buildInputs = [pkgconfig gtk libglade libgnomeprint libgnomeprintui
+  buildInputs = [pkgconfig gtk libglade librsvg bzip2
                  libgnomecanvas fribidi libpng popt libgsf enchant wv
                 ];
 }
