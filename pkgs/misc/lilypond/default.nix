@@ -2,7 +2,7 @@
 args: with args;
 
 stdenv.mkDerivation {
-  name = "lilypond-2.13.3";
+  name = "lilypond-2.13.9";
 
   /*
   # REGION AUTO UPDATE:    { name="lilypond"; type = "git"; url = "git://git.sv.gnu.org/lilypond.git"; }
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   */
 
   src = fetchurl {
-    url = http://download.linuxaudio.org/lilypond/sources/v2.13/lilypond-2.13.3.tar.gz;
-    sha256 = "1ihnkgpd19q3sns7k6wvx4x1ccb1cw9ins3qasfs5n7srhc3cvac";
+    url = http://download.linuxaudio.org/lilypond/sources/v2.13/lilypond-2.13.9.tar.gz;
+    sha256 = "1x3jz0zbhly4rc07nry3ia3ydd6vislz81gg0ivwfm6f6q0ssk57";
   };
 
   configureFlags = [ "--disable-documentation" "--with-ncsb-dir=${ghostscript}/share/ghostscript/fonts"];
