@@ -5912,7 +5912,9 @@ let
   };
 
   wesnoth = import ../games/wesnoth {
-    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net gettext zlib boost freetype;
+    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net SDL_ttf
+      gettext zlib boost freetype libpng pkgconfig;
+    inherit (gtkLibs) pango;
   };
 
   wirelesstools = import ../os-specific/linux/wireless-tools {
