@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iptables-1.4.4";
+  name = "iptables-1.4.6";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    sha256 = "0vsv3011cssra1cj9rag3z6m9ca7jaikphr26hvj0qnijbcp90pk";
+    sha256 = "193jdplnkzikrmk0y313d9alc4kp5gi55aikw3b668fnrac2fwvf";
   };
 
   meta = {
