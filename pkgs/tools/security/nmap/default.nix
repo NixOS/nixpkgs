@@ -4,11 +4,11 @@
 }:
   
 stdenv.mkDerivation (rec {
-  name = "nmap-4.75";
+  name = "nmap-5.00";
 
   src = fetchurl {
     url = "http://nmap.org/dist/${name}.tar.bz2";
-    sha256 = "0k4ylwlkn06zl6pfr2ig8340qrmfsbdh5rqqlnhpj55likbgrl37";
+    sha256 = "0k91x31js5kzfxhil3m53k2ylks1pvbccllc99n31vc1dryri2xq";
   };
 
   postInstall =''
