@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, which
+{ stdenv, fetchurl, ncurses, which, perl
 , sslSupport ? true
 , imapSupport ? true
 , headerCache ? true
@@ -10,13 +10,13 @@ assert headerCache -> gdbm != null;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation {
-  name = "mutt-1.5.16";
+  name = "mutt-1.5.20";
   src = fetchurl {
-    url = ftp://ftp.mutt.org/mutt/devel/mutt-1.5.16.tar.gz;
-    sha256 = "825e920b394db6f56fa8deb45977c061331f59d953944e27ff595625bbad3e83";
+    url = ftp://ftp.mutt.org/mutt/devel/mutt-1.5.20.tar.gz;
+    sha256 = "15m7m419r82awx4mr4nam25m0kpg0bs9vw1z4a4mrzvlkl3zqycm";
   };
   buildInputs = [
-    ncurses which
+    ncurses which perl
     (if headerCache then gdbm else null)
     (if sslSupport then openssl else null)
   ];
