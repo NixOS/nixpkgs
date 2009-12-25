@@ -6425,7 +6425,7 @@ let
   dia = import ../applications/graphics/dia {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser
       libxml2 gettext python libxml2Python docbook5 docbook_xsl
-      libxslt;
+      libxslt intltool;
     inherit (gtkLibs) gtk glib;
   };
 
