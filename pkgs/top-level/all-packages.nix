@@ -5351,6 +5351,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  iwlwifi1000ucode = import ../os-specific/linux/firmware/iwlwifi-1000-ucode {
+    inherit fetchurl stdenv;
+  };
+
   iwlwifi3945ucode = import ../os-specific/linux/firmware/iwlwifi-3945-ucode {
     inherit fetchurl stdenv;
   };
