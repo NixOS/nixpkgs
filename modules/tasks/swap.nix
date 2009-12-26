@@ -4,10 +4,8 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) utillinux;
+  inherit (pkgs) cryptsetup utillinux;
 
-  toPath = x: if x.device != null then x.device else "/dev/disk/by-label/${x.label}";
-  
 in
 
 {
@@ -35,24 +33,65 @@ in
 
       type = types.list types.optionSet;
 
-      options = {
+      options = {config, options, ...}: {
 
-        device = mkOption {
-          default = null;
-          example = "/dev/sda3";
-          type = types.nullOr types.string;
-          description = ''
-            Path of the device.
-          '';
+        options = {
+          device = mkOption {
+            example = "/dev/sda3";
+            type = types.string;
+            description = ''
+              Path of the device.
+            '';
+          };
+
+          label = mkOption {
+            example = "swap";
+            type = types.string;
+            description = "
+              Label of the device.  Can be used instead of <varname>device</varname>.
+            ";
+          };
+
+          cipher = mkOption {
+            default = false;
+            example = true;
+            type = types.bool;
+            description = "
+              Cipher the swap device to protect swapped data.
+            ";
+          };
+
+          command = mkOption {
+            description = "
+              Command used to activate the swap device.
+            ";
+          };
         };
 
-        label = mkOption {
-          default = null;
-          example = "swap";
-          type = types.nullOr types.string;
-          description = "
-            Label of the device.  Can be used instead of <varname>device</varname>.
-          ";
+        config = {
+          device =
+            if options.label.isDefined then
+              "/dev/disk/by-label/${config.label}"
+            else
+              mkNotdef;
+
+          command = ''
+            if test -e "${config.device}"; then
+              ${if config.cipher then ''
+                # swap labels could be preserved by using --skip (PAGE_SIZE / key size)
+                # The current settings won't work on system with a PAGE_SIZE != 4096.
+                oldDevice="${config.device}"
+                device="crypt$(echo "$oldDevice" | sed -e 's,/,.,')"
+                ${cryptsetup}/sbin/cryptsetup --skip 16 -c blowfish -s 256 -d /dev/urandom create "$device" "$oldDevice"
+                ${utillinux}/sbin/swapon "/dev/mapper/$newDevice" || true
+              ''
+              else ''
+                device="${config.device}"
+                ${utillinux}/sbin/swapon "${config.device}" || true
+              ''}
+              swapDevices="$swapDevices $device"
+            fi
+          '';
         };
 
       };
@@ -72,12 +111,8 @@ in
         startOn = ["startup" "new-devices"];
 
         script =
-          ''        
-            swapDevices=${toString (map toPath config.swapDevices)}
-          
-            for device in $swapDevices; do
-                ${utillinux}/sbin/swapon "$device" || true
-            done
+          ''
+            ${toString (map (x: x.command) config.swapDevices)}
 
             # Remove swap devices not listed in swapDevices.
             for used in $(cat /proc/swaps | grep '^/' | sed 's/ .*//'); do
