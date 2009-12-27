@@ -1,0 +1,37 @@
+diff -ru farsight2-0.0.16/gst/rtcpfilter/Makefile.am farsight2-0.0.16.new/gst/rtcpfilter/Makefile.am
+--- farsight2-0.0.16/gst/rtcpfilter/Makefile.am	2009-05-08 23:34:14.000000000 +0200
++++ farsight2-0.0.16.new/gst/rtcpfilter/Makefile.am	2009-12-27 16:17:32.000000000 +0100
+@@ -7,12 +7,14 @@
+ libfsrtcpfilter_la_CFLAGS = \
+ 	$(FS2_CFLAGS) \
+ 	$(GST_BASE_CFLAGS) \
++	$(GST_PLUGINS_BASE_CFLAGS) \
+ 	$(GST_CFLAGS)
+ libfsrtcpfilter_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
+ libfsrtcpfilter_la_LIBADD = \
+ 	$(FS2_LIBS) \
+ 	-lgstrtp-@GST_MAJORMINOR@ \
+ 	$(GST_BASE_LIBS) \
++	$(GST_PLUGINS_BASE_LIBS) \
+ 	$(GST_LIBS)
+ 
+ 
+diff -ru farsight2-0.0.16/gst/rtcpfilter/Makefile.in farsight2-0.0.16.new/gst/rtcpfilter/Makefile.in
+--- farsight2-0.0.16/gst/rtcpfilter/Makefile.in	2009-10-06 20:24:00.000000000 +0200
++++ farsight2-0.0.16.new/gst/rtcpfilter/Makefile.in	2009-12-27 16:23:36.000000000 +0100
+@@ -314,13 +314,14 @@
+ libfsrtcpfilter_la_CFLAGS = \
+ 	$(FS2_CFLAGS) \
+ 	$(GST_BASE_CFLAGS) \
++	$(GST_PLUGINS_BASE_CFLAGS) \
+ 	$(GST_CFLAGS)
+ 
+ libfsrtcpfilter_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
+ libfsrtcpfilter_la_LIBADD = \
+ 	$(FS2_LIBS) \
+ 	-lgstrtp-@GST_MAJORMINOR@ \
+-	$(GST_BASE_LIBS) \
++	$(GST_PLUGINS_BASE_LIBS) \
+ 	$(GST_LIBS)
+ 
+ glib_enum_define = FS_RTCP_FILTER

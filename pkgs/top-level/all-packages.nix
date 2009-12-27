@@ -3259,6 +3259,12 @@ let
     inherit fetchurl stdenv;
   };
 
+  farsight2 = import ../development/libraries/farsight2 {
+    inherit fetchurl stdenv libnice pkgconfig python;
+    inherit (gnome) glib;
+    inherit (gst_all) gstreamer gstPluginsBase;
+  };
+
   fcgi = import ../development/libraries/fcgi {
       inherit fetchurl stdenv;
   };
