@@ -11,12 +11,13 @@
  * - doxygen
  */
 { stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell,
-  GStreamer, startupnotification, gettext,
-  perl, perlXMLParser, libxml2, nss, nspr,
+  GStreamer, gstPluginsBase, startupnotification, gettext,
+  perl, perlXMLParser, libxml2, nss, nspr, farsight2,
   libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
   , lib
   , openssl ? null
   , gnutls ? null
+  , voice ? null
 } :
 
 stdenv.mkDerivation {
@@ -29,12 +30,12 @@ stdenv.mkDerivation {
   inherit nss ncurses;
   buildInputs = [
     gtkspell aspell
-    GStreamer startupnotification
+    GStreamer gstPluginsBase startupnotification
     libxml2] 
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
   ++
-  [nss nspr
+  [nss nspr farsight2
     libXScrnSaver ncurses
     avahi dbus dbus_glib intltool libidn
   ]
@@ -44,7 +45,9 @@ stdenv.mkDerivation {
     pkgconfig gtk perl perlXMLParser gettext
   ];
 
-  configureFlags="--with-nspr-includes=${nspr}/include/nspr --with-nspr-libs=${nspr}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl --disable-vv"
+  patches = [./pidgin-makefile.patch];
+
+  configureFlags="--with-nspr-includes=${nspr}/include/nspr --with-nspr-libs=${nspr}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl"
   + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")
   ;
   meta = {

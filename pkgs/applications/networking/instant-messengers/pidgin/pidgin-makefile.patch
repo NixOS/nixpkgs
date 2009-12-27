@@ -1,0 +1,60 @@
+diff -ru pidgin-2.6.4/pidgin/Makefile.am pidgin-2.6.4.new/pidgin/Makefile.am
+--- pidgin-2.6.4/pidgin/Makefile.am	2009-11-30 04:13:54.000000000 +0100
++++ pidgin-2.6.4.new/pidgin/Makefile.am	2009-12-27 17:30:58.000000000 +0100
+@@ -200,6 +200,7 @@
+ 	$(GLIB_LIBS) \
+ 	$(DBUS_LIBS) \
+ 	$(GSTREAMER_LIBS) \
++	$(GSTINTERFACES_LIBS) \
+ 	$(XSS_LIBS) \
+ 	$(SM_LIBS) \
+ 	$(INTLLIBS) \
+@@ -224,6 +225,7 @@
+ 	-I$(top_srcdir) \
+ 	$(GLIB_CFLAGS) \
+ 	$(GSTREAMER_CFLAGS) \
++	$(GSTINTERFACES_CFLAGS) \
+ 	$(DEBUG_CFLAGS) \
+ 	$(GTK_CFLAGS) \
+ 	$(DBUS_CFLAGS) \
+diff -ru pidgin-2.6.4/pidgin/Makefile.in pidgin-2.6.4.new/pidgin/Makefile.in
+--- pidgin-2.6.4/pidgin/Makefile.in	2009-11-30 05:12:21.000000000 +0100
++++ pidgin-2.6.4.new/pidgin/Makefile.in	2009-12-27 17:30:36.000000000 +0100
+@@ -645,6 +645,7 @@
+ @ENABLE_GTK_TRUE@	$(GLIB_LIBS) \
+ @ENABLE_GTK_TRUE@	$(DBUS_LIBS) \
+ @ENABLE_GTK_TRUE@	$(GSTREAMER_LIBS) \
++@ENABLE_GTK_TRUE@	$(GSTINTERFACES_LIBS) \
+ @ENABLE_GTK_TRUE@	$(XSS_LIBS) \
+ @ENABLE_GTK_TRUE@	$(SM_LIBS) \
+ @ENABLE_GTK_TRUE@	$(INTLLIBS) \
+@@ -666,6 +667,7 @@
+ @ENABLE_GTK_TRUE@	-I$(top_srcdir) \
+ @ENABLE_GTK_TRUE@	$(GLIB_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(GSTREAMER_CFLAGS) \
++@ENABLE_GTK_TRUE@	$(GSTINTERFACES_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(DEBUG_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(GTK_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(DBUS_CFLAGS) \
+diff -ru pidgin-2.6.4/pidgin/plugins/Makefile.am pidgin-2.6.4.new/pidgin/plugins/Makefile.am
+--- pidgin-2.6.4/pidgin/plugins/Makefile.am	2009-11-30 04:13:57.000000000 +0100
++++ pidgin-2.6.4.new/pidgin/plugins/Makefile.am	2009-12-27 16:58:50.000000000 +0100
+@@ -137,6 +137,7 @@
+ 	$(DEBUG_CFLAGS) \
+ 	$(GTK_CFLAGS) \
+ 	$(GSTREAMER_CFLAGS) \
++	$(GSTINTERFACES_CFLAGS) \
+ 	$(PLUGIN_CFLAGS)
+ 
+ #
+diff -ru pidgin-2.6.4/pidgin/plugins/Makefile.in pidgin-2.6.4.new/pidgin/plugins/Makefile.in
+--- pidgin-2.6.4/pidgin/plugins/Makefile.in	2009-11-30 05:12:22.000000000 +0100
++++ pidgin-2.6.4.new/pidgin/plugins/Makefile.in	2009-12-27 16:59:13.000000000 +0100
+@@ -644,6 +644,7 @@
+ 	$(DEBUG_CFLAGS) \
+ 	$(GTK_CFLAGS) \
+ 	$(GSTREAMER_CFLAGS) \
++	$(GSTINTERFACES_CFLAGS) \
+ 	$(PLUGIN_CFLAGS)
+ 
+ 
