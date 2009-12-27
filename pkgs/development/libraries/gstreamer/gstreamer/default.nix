@@ -2,14 +2,14 @@
 , which, gtkdoc, glib, libxml2, ... }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-0.10.22";
+  name = "gstreamer-0.10.25";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gstreamer/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "17iqgsnh1v43ai9m9iyqv6dds7iwqw2445b0qxnjwdmij80rwj31";
+    sha256 = "0y35a9b2m66rsxlkksakdbimfxy2j5q1wim9k3czd3gs7dxvmcir";
   };
 
   buildInputs = [perl bison flex pkgconfig python which  gtkdoc ];
