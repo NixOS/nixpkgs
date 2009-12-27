@@ -3886,6 +3886,11 @@ let
     inherit stdenv fetchurl perl;
   };
 
+  libnice = import ../development/libraries/libnice {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (gnome) glib;
+  };
+
   libQGLViewer = import ../development/libraries/libqglviewer {
     inherit fetchurl stdenv;
     inherit qt4;
