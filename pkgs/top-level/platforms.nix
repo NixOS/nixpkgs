@@ -25,6 +25,9 @@ with pkgs;
     kernelArch = "arm";
     kernelExtraConfig =
       ''
+        BLK_DEV_RAM y
+        BLK_DEV_INITRD y
+
         # Fail to build
         DRM n
         SCSI_ADVANSYS n
