@@ -73,8 +73,8 @@ stdenv.mkDerivation {
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
 
-  # For UML, just ignore all options that don't apply (I'm lazy).
-  ignoreConfigErrors = (userModeLinux || stdenv.system = "armv5tel-linux");
+  # For UML and non-PC, just ignore all options that don't apply (We are lazy).
+  ignoreConfigErrors = (userModeLinux || stdenv.system == "armv5tel-linux");
 
   buildInputs = [ perl mktemp ]
     ++ lib.optional (platform.uboot != null) [platform.uboot];
