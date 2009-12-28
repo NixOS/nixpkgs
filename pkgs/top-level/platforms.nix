@@ -27,6 +27,7 @@ with pkgs;
       ''
         BLK_DEV_RAM y
         BLK_DEV_INITRD y
+        MD y
 
         # Fail to build
         DRM n
