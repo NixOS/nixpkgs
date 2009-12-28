@@ -15,12 +15,15 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = [ "doPatch" "doConfigure" "doMakeInstall"];
+
+  patches = [ ./64bit-ftbs.patch ];
       
   meta = {
     description = "X-Moto - obstacled race game";
     maintainers = [
       a.lib.maintainers.raskin
+      a.lib.maintainers.viric
     ];
     platforms = with a.lib.platforms; 
       linux ++ freebsd;

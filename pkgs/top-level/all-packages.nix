@@ -3376,6 +3376,12 @@ let
     inherit fetchurl stdenv;
   };
 
+  farsight2 = import ../development/libraries/farsight2 {
+    inherit fetchurl stdenv libnice pkgconfig python;
+    inherit (gnome) glib;
+    inherit (gst_all) gstreamer gstPluginsBase;
+  };
+
   fcgi = import ../development/libraries/fcgi {
       inherit fetchurl stdenv;
   };
@@ -4048,6 +4054,11 @@ let
     inherit stdenv fetchurl perl;
   };
 
+  libnice = import ../development/libraries/libnice {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (gnome) glib;
+  };
+
   libQGLViewer = import ../development/libraries/libqglviewer {
     inherit fetchurl stdenv;
     inherit qt4;
@@ -4547,6 +4558,14 @@ let
     inherit (gnome) glib;
   };
 
+  qt46 = import ../development/libraries/qt-4.6 {
+    inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
+      fontconfig freetype pkgconfig libtiff;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor libXext
+      inputproto fixesproto libXfixes;
+    inherit (gnome) glib;
+  };
   qtscriptgenerator = import ../development/libraries/qtscriptgenerator {
     inherit stdenv fetchurl;
     qt4 = qt45;
@@ -5506,6 +5525,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  iwlwifi1000ucode = import ../os-specific/linux/firmware/iwlwifi-1000-ucode {
+    inherit fetchurl stdenv;
+  };
+
   iwlwifi3945ucode = import ../os-specific/linux/firmware/iwlwifi-3945-ucode {
     inherit fetchurl stdenv;
   };
@@ -6086,7 +6109,9 @@ let
   };
 
   wesnoth = import ../games/wesnoth {
-    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net gettext zlib boost freetype;
+    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net SDL_ttf
+      gettext zlib boost freetype libpng pkgconfig;
+    inherit (gtkLibs) pango;
   };
 
   wirelesstools = import ../os-specific/linux/wireless-tools {
@@ -6311,9 +6336,9 @@ let
   };
 
   abiword = import ../applications/office/abiword {
-    inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv;
+    inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv librsvg bzip2;
     inherit (gtkLibs) gtk;
-    inherit (gnome) libglade libgnomeprint libgnomeprintui libgnomecanvas;
+    inherit (gnome) libglade libgnomecanvas;
   };
 
   adobeReader = import ../applications/misc/adobe-reader {
@@ -6597,7 +6622,7 @@ let
   dia = import ../applications/graphics/dia {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser
       libxml2 gettext python libxml2Python docbook5 docbook_xsl
-      libxslt;
+      libxslt intltool;
     inherit (gtkLibs) gtk glib;
   };
 
@@ -6900,6 +6925,15 @@ let
   freepv = import ../applications/graphics/freepv {
     inherit fetchurl stdenv mesa freeglut libjpeg zlib cmake libxml2 libpng;
     inherit (xlibs) libX11 libXxf86vm;
+  };
+
+  xfontsel = import ../applications/misc/xfontsel {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11 libXaw;
+  };
+  xlsfonts = import ../applications/misc/xlsfonts {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11;
   };
 
   fspot = import ../applications/graphics/f-spot {
@@ -7353,7 +7387,7 @@ let
   };
 
   mutt = import ../applications/networking/mailreaders/mutt {
-    inherit fetchurl stdenv ncurses which openssl gdbm;
+    inherit fetchurl stdenv ncurses which openssl gdbm perl;
   };
 
   msmtp = import ../applications/networking/msmtp {
@@ -7427,14 +7461,15 @@ let
   };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr
-      gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool;
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr farsight2
+      gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool libidn;
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;
     GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
     inherit (xlibs) libXScrnSaver;
+    inherit (gst_all) gstPluginsBase;
   };
 
   pidginlatex = composedArgsAndFun (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
@@ -7633,7 +7668,7 @@ let
   };
 
   tangogps = import ../applications/misc/tangogps {
-    inherit fetchurl stdenv pkgconfig gettext curl libexif sqlite;
+    inherit fetchurl stdenv pkgconfig gettext curl libexif sqlite libxml2;
     inherit (gtkLibs) gtk;
     gconf = gnome.GConf;
   };
@@ -8157,6 +8192,10 @@ let
     inherit stdenv fetchurl pil pygame SDL;
     python24 = python;
   };*/
+
+  ultimatestunts = import ../games/ultimatestunts {
+    inherit stdenv fetchurl SDL mesa SDL_image freealut;
+  };
 
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;

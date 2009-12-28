@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.6c9" a; 
+  version = a.lib.attrByPath ["version"] "0.6c11" a; 
   buildInputs = with a; [
     python makeWrapper
   ];
@@ -12,7 +12,7 @@ rec {
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${name}.tar.gz";
-    sha256 = "1n5k6hf9nn69fnprgsnr9hdxzj2j6ir76qcy9d4b2v0v62bh86g6";
+    sha256 = "1lx1hwxkhipyh206bgl90ddnfcnb68bzcvyawczbf833fadyl3v3";
   };
 
   inherit buildInputs;

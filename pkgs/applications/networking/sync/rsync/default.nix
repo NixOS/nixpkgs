@@ -5,11 +5,11 @@
 assert enableACLs -> acl != null;
 
 stdenv.mkDerivation {
-  name = "rsync-3.0.5";
+  name = "rsync-3.0.6";
   
   src = fetchurl {
-    url = http://rsync.samba.org/ftp/rsync/src/rsync-3.0.5.tar.gz;
-    sha256 = "1js36yv5s9dic524s7jczqk5myzp67bp24rqhbnikg6lh6pj1b20";
+    url = http://rsync.samba.org/ftp/rsync/src/rsync-3.0.6.tar.gz;
+    sha256 = "1cz1adlshjwwi41yqhw7wph7vq58a73b4zgs8piv6rnbcj9rdk1k";
   };
 
   buildInputs = stdenv.lib.optional enableACLs acl;

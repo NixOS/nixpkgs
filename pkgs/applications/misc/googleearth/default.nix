@@ -6,11 +6,11 @@ zlib, patchelf05 }:
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "googleearth-5.1.3509.4636";
+  name = "googleearth-5.1.3533.1731";
 
   src = fetchurl {
     url = http://dl.google.com/earth/client/current/GoogleEarthLinux.bin;
-    sha256 = "6c948c64eed5f30adb67019c0d26c148b9ad7a821891018548da650fe812dca8";
+    sha256 = "1sxs1nwb2zh2j8dbwm65r04byn66yn79kpzhilhswly6r8d7yivg";
   };
 
   buildInputs = [
@@ -65,8 +65,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      description = "A world sphere viewer";
-      homepage = http://earth.google.com;
-      license = "unfree";
+    description = "A world sphere viewer";
+    homepage = http://earth.google.com;
+    license = "unfree";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

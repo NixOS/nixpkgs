@@ -325,6 +325,7 @@ in {
   qt3 = allBut "i686-cygwin";
   qt4 = linux;
   qt45 = linux;
+  qt46 = linux;
   quake3demo = linux;
   readline = all;
   reiserfsprogs = linux;

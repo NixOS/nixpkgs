@@ -12,6 +12,7 @@
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
 assert !nativeLibc -> libc != null;
+assert gcc != null;
 
 let
 
