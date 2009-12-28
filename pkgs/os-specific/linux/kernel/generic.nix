@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
 
   # For UML, just ignore all options that don't apply (I'm lazy).
-  ignoreConfigErrors = userModeLinux;
+  ignoreConfigErrors = (userModeLinux || stdenv.system = "armv5tel-linux");
 
   buildInputs = [ perl mktemp ]
     ++ lib.optional (platform.uboot != null) [platform.uboot];

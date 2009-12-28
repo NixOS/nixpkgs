@@ -21,11 +21,32 @@ with pkgs;
 
   sheevaplug = assert system == "armv5tel-linux"; {
     name = "sheevaplug";
+    kernelBaseConfig = "kirkwood_defconfig";
+    kernelArch = "arm";
+    kernelExtraConfig =
+      ''
+        # Fail to build
+        DRM n
+        SCSI_ADVANSYS n
+        USB_ISP1362_HCD n
+        SND_SOC n
+        SND_ALI5451 n
+        FB_SAVAGE n
+        SCSI_NSP32 n
+        ATA_SFF n
+        SUNGEM n
+        IRDA n
+        ATM_HE n
+        SCSI_ACARD n
+        BLK_DEV_CMD640_ENHANCED n
+      '';
     inherit uboot;
   };
 
-  platformVersatileARM = assert system == "armv5tel-linux"; {
+  versatileARM = assert system == "armv5tel-linux"; {
     name = "versatileARM";
+    kernelBaseConfig = "versatile_defconfig";
+    kernelArch = "arm";
     uboot = null;
   };
 }
