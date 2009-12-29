@@ -5,15 +5,28 @@
 let
 
   tempConf = "/var/run/mdadm.conf";
+  logFile = "/var/log/mdadmEvents.log";
   modprobe = config.system.sbin.modprobe;
   inherit (pkgs) mdadm;
+
+  mdadmEventHandler = pkgs.writeScript "mdadmEventHandler.sh" ''
+    #!/bin/sh
+
+    echo "$@" >> ${logFile}
+    case $1 in
+      (NewArray)
+        initctl emit -n new-devices
+        ;;
+      (*) ;;
+    esac
+  '';
 
 in
   
 {
 
   jobs.swraid =
-    { startOn = "started udev or new-devices";
+    { startOn = [ "startup" "new-devices" ];
       
       script =
         ''
@@ -30,11 +43,16 @@ in
       
           # Activate each device found.
           ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
-      
-          initctl emit -n new-devices
         '';
 
-      task = true;        
+      task = true;
     };
+
+  jobs.swraidEvents = {
+    name = "swraid-events";
+    description = "Watch mdadm events.";
+    startOn = [ "startup" ];
+    exec = "${mdadm}/sbin/mdadm --monitor --scan --program ${mdadmEventHandler}";
+  };
 
 }
