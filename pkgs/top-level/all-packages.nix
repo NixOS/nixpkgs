@@ -2096,6 +2096,10 @@ let
     inherit stdenv perl;
   };
 
+  mozart = import ../development/compilers/mozart {
+    inherit fetchurl stdenv flex bison perl gmp zlib tcl tk gdbm m4 x11 emacs;
+  };
+
   neko = import ../development/compilers/neko {
     inherit sourceFromHead fetchurl stdenv lib pkgconfig composableDerivation
       boehmgc apacheHttpd mysql zlib sqlite pcre apr makeWrapper;
