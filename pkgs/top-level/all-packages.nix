@@ -2096,23 +2096,6 @@ let
     inherit stdenv perl;
   };
 
-  monotone = import ../applications/version-management/monotone {
-    inherit stdenv fetchurl boost zlib botan libidn pcre
-      sqlite lib perl;
-    lua = lua5;
-  };
-
-  monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
-    inherit ocaml lablgtk graphviz pkgconfig autoconf automake libtool;
-    inherit (gnome) gtk libgnomecanvas glib;
-  };
-
-  viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
-  {
-    inherit monotone flup cheetahTemplate highlight ctags
-      makeWrapper graphviz which python;
-  };
-
   neko = import ../development/compilers/neko {
     inherit sourceFromHead fetchurl stdenv lib pkgconfig composableDerivation
       boehmgc apacheHttpd mysql zlib sqlite pcre apr makeWrapper;
@@ -7145,6 +7128,17 @@ let
     gtksharp = gtksharp1;
   };
 
+  monotone = import ../applications/version-management/monotone {
+    inherit stdenv fetchurl boost zlib botan libidn pcre
+      sqlite lib perl;
+    lua = lua5;
+  };
+
+  monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
+    inherit ocaml lablgtk graphviz pkgconfig autoconf automake libtool;
+    inherit (gnome) gtk libgnomecanvas glib;
+  };
+
   mozilla = import ../applications/networking/browsers/mozilla {
     inherit fetchurl pkgconfig stdenv perl zip;
     inherit (gtkLibs) gtk;
@@ -7585,6 +7579,12 @@ let
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
     qt = qt3;
+  };
+
+  viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
+  {
+    inherit monotone flup cheetahTemplate highlight ctags
+      makeWrapper graphviz which python;
   };
 
   vim = import ../applications/editors/vim {
