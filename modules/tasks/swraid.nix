@@ -7,7 +7,7 @@ let
   tempConf = "/var/run/mdadm.conf";
   logFile = "/var/log/mdadmEvents.log";
   modprobe = config.system.sbin.modprobe;
-  inherit (pkgs) mdadm;
+  inherit (pkgs) mdadm diffutils;
 
   mdadmEventHandler = pkgs.writeScript "mdadmEventHandler.sh" ''
     #!/bin/sh
@@ -42,7 +42,7 @@ in
       # Scan /proc/partitions for RAID devices.
       ${mdadm}/sbin/mdadm --examine --brief --scan -c partitions > ${tempConf}
 
-      if ! diff ${tempConf} ${tempConf}.old > /dev/null; then
+      if ! ${diffutils}/bin/diff ${tempConf} ${tempConf}.old > /dev/null; then
         # Activate each device found.
         ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
 
