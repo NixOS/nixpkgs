@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     else
       fetchurl {
         url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
-        sha256 = "1nnswpivn8ymbvqywdw39xf26mn2i65hyqw8lcl77qsv7kbsbbl8";
+        sha256 = "04ppx812dz4d93pkyx412z3jslkw8nsqw5gni467ipahqz6lifhi";
       };
 
   inherit zlib alsaLib;
