@@ -57,7 +57,8 @@ in
             example = true;
             type = types.bool;
             description = "
-              Cipher the swap device to protect swapped data.
+              Cipher the swap device to protect swapped data.  This option
+              does not work with labels.
             ";
           };
 
@@ -78,18 +79,24 @@ in
           command = ''
             if test -e "${config.device}"; then
               ${if config.cipher then ''
-                # swap labels could be preserved by using --skip (PAGE_SIZE / key size)
-                # The current settings won't work on system with a PAGE_SIZE != 4096.
-                oldDevice="${config.device}"
-                device="crypt$(echo "$oldDevice" | sed -e 's,/,.,')"
-                ${cryptsetup}/sbin/cryptsetup --skip 16 -c blowfish -s 256 -d /dev/urandom create "$device" "$oldDevice"
-                ${utillinux}/sbin/swapon "/dev/mapper/$newDevice" || true
-              ''
-              else ''
-                device="${config.device}"
-                ${utillinux}/sbin/swapon "${config.device}" || true
-              ''}
-              swapDevices="$swapDevices $device"
+                  plainDevice="${config.device}"
+                  name="crypt$(echo "$plainDevice" | sed -e 's,/,.,g')"
+                  device="/dev/mapper/$name"
+                  if ! test -e "$device"; then
+                    ${cryptsetup}/sbin/cryptsetup -c aes -s 128 -d /dev/urandom create "$name" "$plainDevice"
+                    ${utillinux}/sbin/mkswap -f "$device" || true
+                  fi
+                ''
+                else ''
+                  device="${config.device}"
+                ''
+              }
+              # Add new swap devices.
+              if echo $unused | grep -q "^$device\$"; then
+                unused="$(echo $unused | grep -v "^$device\$")"
+              else
+                ${utillinux}/sbin/swapon "$device" || true
+              fi
             fi
           '';
         };
@@ -99,7 +106,6 @@ in
     };
 
   };
-  
 
   ###### implementation
 
@@ -107,24 +113,17 @@ in
 
     jobs.swap =
       { task = true;
-        
+
         startOn = ["startup" "new-devices"];
 
         script =
           ''
+            unused="$(sed '1d; s/ .*//' /proc/swaps)"
+
             ${toString (map (x: x.command) config.swapDevices)}
 
-            # Remove swap devices not listed in swapDevices.
-            for used in $(cat /proc/swaps | grep '^/' | sed 's/ .*//'); do
-                found=
-                for device in $swapDevices; do
-                    device=$(readlink -f $device)
-                    if test "$used" = "$device"; then found=1; fi
-                done
-                if test -z "$found"; then
-                    ${utillinux}/sbin/swapoff "$used" || true
-                fi
-            done
+            # Remove remaining swap devices.
+            test -n "$unused" && ${utillinux}/sbin/swapoff $unused || true
           '';
       };
 
