@@ -7516,7 +7516,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  thunderbird = import ../applications/networking/mailreaders/thunderbird-2.x {
+  thunderbird = import ../applications/networking/mailreaders/thunderbird/2.x.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
@@ -7527,7 +7527,7 @@ let
   /*
   Despaired. Looks like ThunderBird-on-Firefox's-Xulrunner is non-trivial
 
-  thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird-3.x {
+  thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird/3.x.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 libpng alsaLib sqlite
       patchelf nspr;
