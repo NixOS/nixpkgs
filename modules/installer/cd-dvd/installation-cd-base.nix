@@ -84,8 +84,8 @@ in
     
   isoImage.volumeID = "NIXOS_INSTALL_CD_${config.system.nixosVersion}";
   
-  # Use Linux 2.6.29.
-  boot.kernelPackages = pkgs.kernelPackages_2_6_29;
+  # Use Linux 2.6.32.
+  boot.kernelPackages = pkgs.kernelPackages_2_6_32;
 
   # Show the manual.
   services.nixosManual.showManual = true;
