@@ -7516,27 +7516,20 @@ let
     inherit fetchurl stdenv;
   };
 
-  thunderbird = import ../applications/networking/mailreaders/thunderbird/2.x.nix {
+  thunderbird = thunderbird2;
+
+  thunderbird2 = import ../applications/networking/mailreaders/thunderbird/2.x.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
     inherit (xlibs) libXi;
-    #enableOfficialBranding = true;
   };
 
-  /*
-  Despaired. Looks like ThunderBird-on-Firefox's-Xulrunner is non-trivial
-
   thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird/3.x.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 libpng alsaLib sqlite
-      patchelf nspr;
-    inherit (gtkLibs) gtk pango;
+    inherit fetchurl stdenv pkgconfig perl python dbus_glib zip bzip2 alsaLib nspr;
+    inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
-    #enableOfficialBranding = true;
-    xulrunner = xulrunner35;
-    autoconf = autoconf213;
-  });*/
+  });
 
   timidity = import ../tools/misc/timidity {
     inherit fetchurl stdenv lib alsaLib composableDerivation jackaudio ncurses;

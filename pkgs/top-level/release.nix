@@ -373,7 +373,8 @@ in {
   texLiveBeamer = linux;
   texLiveExtra = linux;
   texinfo = all;
-  thunderbird = linux;
+  thunderbird2 = linux;
+  thunderbird3 = linux;
   tightvnc = linux;
   time = linux;
   tinycc = ["i686-linux"];
