@@ -3197,6 +3197,10 @@ let
     inherit fetchurl stdenv pkgconfig gettext dbus expat glib;
   };
 
+  dbus_java = import ../development/libraries/java/dbus-java {
+    inherit stdenv fetchurl gettext jdk libmatthew_java;
+  };
+
   dclib = import ../development/libraries/dclib {
     inherit fetchurl stdenv libxml2 openssl bzip2;
   };
@@ -3939,6 +3943,10 @@ let
 
   libmad = import ../development/libraries/libmad {
     inherit fetchurl stdenv;
+  };
+
+  libmatthew_java = import ../development/libraries/java/libmatthew-java {
+    inherit stdenv fetchurl jdk;
   };
 
   libmcs = import ../development/libraries/libmcs {
