@@ -9,10 +9,11 @@ with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
 let
 
   # Build some packages with coverage instrumentation.
-  overrides = pkgs:  
+  overrides = pkgs:
+    with pkgs.stdenvAdapters;
     let
       do = pkg: pkg.override (args: {
-        stdenv = pkgs.addCoverageInstrumentation args.stdenv;
+        stdenv = addCoverageInstrumentation args.stdenv;
       });
     in
       rec {
@@ -24,22 +25,9 @@ let
 
         # To build the kernel with coverage instrumentation, we need a
         # special patch to make coverage data available under /proc.
-        kernel_2_6_28 = pkgs.kernel_2_6_28.override (orig: {
-          stdenv = pkgs.cleanupBuildTree (pkgs.keepBuildTree orig.stdenv);
-          kernelPatches = orig.kernelPatches ++ pkgs.lib.singleton
-            { name = "gcov";
-              patch = pkgs.fetchurl {
-                url = http://buildfarm.st.ewi.tudelft.nl/~eelco/dist/linux-2.6.28-gcov.patch;
-                sha256 = "0ck9misa3pgh3vzyb7714ibf7ix7piyg5dvfa9r42v15scjqiyny";
-              };
-              extraConfig =
-                ''
-                  CONFIG_GCOV_PROFILE=y
-                  CONFIG_GCOV_ALL=y
-                  CONFIG_GCOV_PROC=m
-                  CONFIG_GCOV_HAMMER=n
-                '';
-            };
+        kernel = pkgs.kernel.override (orig: {
+          stdenv = cleanupBuildTree (keepBuildTree orig.stdenv);
+          kernelPatches = orig.kernelPatches ++ pkgs.lib.singleton pkgs.kernelPatches.gcov_2_6_28;
         });
       };
 
