@@ -59,33 +59,42 @@ rollback=
 
 while test "$#" -gt 0; do
     i="$1"; shift 1
-    if test "$i" = "--help"; then
+    case "$i" in
+      --help)
         showSyntax
-    elif test "$i" = switch -o "$i" = boot -o "$i" = test -o "$i" = build \
-        -o "$i" = dry-run -o "$i" = build-vm; then
+      ;;
+      switch|boot|test|build|dry-run|build-vm)
         action="$i"
-    elif test "$i" = --install-grub; then
+      ;;
+      --install-grub)
         export NIXOS_INSTALL_GRUB=1
-    elif test "$i" = --no-pull; then
+      ;;
+      --no-pull)
         pullManifest=
-    elif test "$i" = --no-build-nix; then
+      ;;
+      --no-build-nix)
         buildNix=
-    elif test "$i" = --rollback; then
+      ;;
+      --rollback)
         rollback=1
-    elif test "$i" = --show-trace -o "$i" = --no-build-hook -o "$i" = --keep-failed -o "$i" = -K \
-        -o "$i" = --keep-going -o "$i" = -k -o "$i" = --verbose -o "$i" = -v; then
+      ;;
+      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
         extraBuildFlags="$extraBuildFlags $i"
-    elif test "$i" = --max-jobs -o "$i" = -j; then
+      ;;
+      --max-jobs|-j)
         j="$1"; shift 1
         extraBuildFlags="$extraBuildFlags $i $j"
-    elif test "$i" = --fast; then
+      ;;
+      --fast)
         buildNix=
         pullManifest=
         extraBuildFlags="$extraBuildFlags --show-trace"
-    else
+      ;;
+      *)
         echo "$0: unknown option \`$i'"
         exit 1
-    fi
+      ;;
+    esac
 done
 
 if test -z "$action"; then showSyntax; fi
