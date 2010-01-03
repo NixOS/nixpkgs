@@ -73,4 +73,29 @@ rec {
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
     (stdenv.lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
+  # Search in the environment if the same program exists with a set uid or
+  # set gid bit.  If it exists, run the first program found, otherwise run
+  # the default binary.
+  useSetUID = drv: path:
+    let
+      name = stdenv.lib.basename path;
+      bin = "${drv}${path}";
+    in assert name != "";
+      writeScript "setUID-${name}" ''
+        #!${stdenv.shell}
+        inode=$(stat -Lc %i ${bin})
+        for file in $(type -ap ${name}); do
+          case $(stat -Lc %a $file) in
+            ([2-7][0-7][0-7][0-7])
+              if test -r "$file".real; then
+                orig=$(cat "$file".real)
+                if test $inode = $(stat -Lc %i "$orig"); then
+                  exec "$file" "$@"
+                fi
+              fi;;
+          esac
+        done
+        exec ${bin} "$@"
+      '';
+
 }
