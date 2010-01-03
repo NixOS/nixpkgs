@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--enable-libdevmapper" ];
 
   patchPhase = ''
-    sed -i -e 's@/sbin/udevsettle@${udev}/sbin/udevsettle@' lib/libdevmapper.c
+    sed -i -e 's@/sbin/udevsettle@${udev}/sbin/udevadm settle@' lib/libdevmapper.c
   '';
 
   buildInputs = [ libuuid popt devicemapper ];
