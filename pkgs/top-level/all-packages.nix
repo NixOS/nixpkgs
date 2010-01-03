@@ -77,8 +77,11 @@ let
 
   # Helper functions that are exported through `pkgs'.
   helperFunctions =
-    (import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; }) //
+    stdenvAdapters //
     (import ../build-support/trivial-builders.nix { inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
+
+  stdenvAdapters =
+    import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; };
 
 
   # Allow packages to be overriden globally via the `packageOverrides'
@@ -123,7 +126,7 @@ let
   ### Helper functions.
 
 
-  inherit lib config getConfig;
+  inherit lib config getConfig stdenvAdapters;
 
   inherit (lib) lowPrio appendToName makeOverridable;
 
@@ -5610,7 +5613,8 @@ let
   kernelPackages_2_6_32 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_32);
 
   # The current default kernel / kernel modules.
-  kernelPackages = kernelPackages_2_6_28;
+  kernel = kernel_2_6_28;
+  kernelPackages = kernelPackagesFor kernel;
 
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
