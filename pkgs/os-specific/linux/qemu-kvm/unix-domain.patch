@@ -1,9 +1,9 @@
-diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-rc1/slirp/socket.c
-*** qemu-kvm-0.11.0-rc1-orig/slirp/socket.c	2009-08-02 15:38:42.000000000 +0200
---- qemu-kvm-0.11.0-rc1/slirp/socket.c	2009-08-21 17:11:21.000000000 +0200
+diff -rc --exclude '*~' qemu-kvm-0.12.1.2-orig/slirp/socket.c qemu-kvm-0.12.1.2/slirp/socket.c
+*** qemu-kvm-0.12.1.2-orig/slirp/socket.c	2009-12-29 21:46:34.000000000 +0100
+--- qemu-kvm-0.12.1.2/slirp/socket.c	2010-01-03 20:24:11.000000000 +0100
 ***************
-*** 587,592 ****
---- 587,593 ----
+*** 588,593 ****
+--- 588,594 ----
              u_int lport, int flags)
   {
   	struct sockaddr_in addr;
@@ -12,7 +12,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-
   	int s, opt = 1;
   	socklen_t addrlen = sizeof(addr);
 ***************
-*** 621,633 ****
+*** 622,634 ****
   	so->so_lport = lport; /* Kept in network format */
   	so->so_laddr.s_addr = laddr; /* Ditto */
   
@@ -20,37 +20,37 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-
 ! 	addr.sin_addr.s_addr = haddr;
 ! 	addr.sin_port = hport;
   
-! 	if (((s = socket(AF_INET,SOCK_STREAM,0)) < 0) ||
+! 	if (((s = qemu_socket(AF_INET,SOCK_STREAM,0)) < 0) ||
   	    (setsockopt(s,SOL_SOCKET,SO_REUSEADDR,(char *)&opt,sizeof(int)) < 0) ||
 ! 	    (bind(s,(struct sockaddr *)&addr, sizeof(addr)) < 0) ||
   	    (listen(s,1) < 0)) {
   		int tmperrno = errno; /* Don't clobber the real reason we failed */
   
---- 622,643 ----
+--- 623,644 ----
   	so->so_lport = lport; /* Kept in network format */
   	so->so_laddr.s_addr = laddr; /* Ditto */
   
-!         so->so_uds = ntohs(hport) >= 0xff00;
+! 	so->so_uds = ntohs(hport) >= 0xff00;
+! 	
+! 	if (so->so_uds) {
+! 	    addr_un.sun_family = AF_UNIX;
+! 	    sprintf(addr_un.sun_path, "./%d.socket", ntohs(hport));
+! 	    unlink(addr_un.sun_path);
+! 	} else {
+! 	    addr.sin_family = AF_INET;
+! 	    addr.sin_addr.s_addr = haddr;
+! 	    addr.sin_port = hport;
+! 	}
   
-!         if (so->so_uds) {
-!             addr_un.sun_family = AF_UNIX;
-!             sprintf(addr_un.sun_path, "./%d.socket", ntohs(hport));
-!             unlink(addr_un.sun_path);
-!         } else {
-!             addr.sin_family = AF_INET;
-!             addr.sin_addr.s_addr = haddr;
-!             addr.sin_port = hport;
-!         }
-! 
-! 	if (((s = socket(so->so_uds ? PF_UNIX : AF_INET, SOCK_STREAM, 0)) < 0) ||
+!  	if (((s = qemu_socket(so->so_uds ? PF_UNIX : AF_INET, SOCK_STREAM, 0)) < 0) ||
   	    (setsockopt(s,SOL_SOCKET,SO_REUSEADDR,(char *)&opt,sizeof(int)) < 0) ||
-!             (bind(s, so->so_uds ? (struct sockaddr *) &addr_un : (struct sockaddr *) &addr,
-!                 so->so_uds ? sizeof(addr_un) : sizeof(addr)) < 0) ||
+! 	    (bind(s, so->so_uds ? (struct sockaddr *) &addr_un : (struct sockaddr *) &addr,
+! 		so->so_uds ? sizeof(addr_un) : sizeof(addr)) < 0) ||
   	    (listen(s,1) < 0)) {
   		int tmperrno = errno; /* Don't clobber the real reason we failed */
   
 ***************
-*** 643,654 ****
+*** 644,655 ****
   	}
   	setsockopt(s,SOL_SOCKET,SO_OOBINLINE,(char *)&opt,sizeof(int));
   
@@ -63,7 +63,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-
   
   	so->s = s;
   	return so;
---- 653,669 ----
+--- 654,670 ----
   	}
   	setsockopt(s,SOL_SOCKET,SO_OOBINLINE,(char *)&opt,sizeof(int));
   
@@ -81,9 +81,9 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.c qemu-kvm-0.11.0-
   
   	so->s = s;
   	return so;
-diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.h qemu-kvm-0.11.0-rc1/slirp/socket.h
-*** qemu-kvm-0.11.0-rc1-orig/slirp/socket.h	2009-08-02 15:38:42.000000000 +0200
---- qemu-kvm-0.11.0-rc1/slirp/socket.h	2009-08-21 17:02:36.000000000 +0200
+diff -rc --exclude '*~' qemu-kvm-0.12.1.2-orig/slirp/socket.h qemu-kvm-0.12.1.2/slirp/socket.h
+*** qemu-kvm-0.12.1.2-orig/slirp/socket.h	2009-12-29 21:46:34.000000000 +0100
+--- qemu-kvm-0.12.1.2/slirp/socket.h	2010-01-03 20:20:50.000000000 +0100
 ***************
 *** 33,39 ****
     struct in_addr so_laddr;	   /* local host table entry */
@@ -102,11 +102,11 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/socket.h qemu-kvm-0.11.0-
     u_int8_t	so_iptos;	/* Type of service */
     u_int8_t	so_emu;		/* Is the socket emulated? */
   
-diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c qemu-kvm-0.11.0-rc1/slirp/tcp_subr.c
-*** qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c	2009-08-02 15:38:42.000000000 +0200
---- qemu-kvm-0.11.0-rc1/slirp/tcp_subr.c	2009-08-21 17:21:37.000000000 +0200
+diff -rc --exclude '*~' qemu-kvm-0.12.1.2-orig/slirp/tcp_subr.c qemu-kvm-0.12.1.2/slirp/tcp_subr.c
+*** qemu-kvm-0.12.1.2-orig/slirp/tcp_subr.c	2009-12-29 21:46:34.000000000 +0100
+--- qemu-kvm-0.12.1.2/slirp/tcp_subr.c	2010-01-03 20:20:50.000000000 +0100
 ***************
-*** 382,388 ****
+*** 383,389 ****
   	Slirp *slirp = inso->slirp;
   	struct socket *so;
   	struct sockaddr_in addr;
@@ -114,7 +114,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c qemu-kvm-0.11.
   	struct tcpcb *tp;
   	int s, opt;
   
---- 382,389 ----
+--- 383,390 ----
   	Slirp *slirp = inso->slirp;
   	struct socket *so;
   	struct sockaddr_in addr;
@@ -124,7 +124,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c qemu-kvm-0.11.
   	int s, opt;
   
 ***************
-*** 412,418 ****
+*** 413,419 ****
   
   	(void) tcp_mss(sototcpcb(so), 0);
   
@@ -132,7 +132,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c qemu-kvm-0.11.
   		tcp_close(sototcpcb(so)); /* This will sofree() as well */
   		return;
   	}
---- 413,422 ----
+--- 414,423 ----
   
   	(void) tcp_mss(sototcpcb(so), 0);
   
@@ -144,7 +144,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c qemu-kvm-0.11.
   		return;
   	}
 ***************
-*** 424,434 ****
+*** 425,435 ****
   	opt = 1;
   	setsockopt(s,IPPROTO_TCP,TCP_NODELAY,(char *)&opt,sizeof(int));
   
@@ -156,7 +156,7 @@ diff -rc --exclude '*~' qemu-kvm-0.11.0-rc1-orig/slirp/tcp_subr.c qemu-kvm-0.11.
   
   	/* Close the accept() socket, set right state */
   	if (inso->so_state & SS_FACCEPTONCE) {
---- 428,443 ----
+--- 429,444 ----
   	opt = 1;
   	setsockopt(s,IPPROTO_TCP,TCP_NODELAY,(char *)&opt,sizeof(int));
   
