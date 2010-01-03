@@ -13,6 +13,7 @@ rec {
 
     { services.xserver.enable = true;
       services.xserver.driSupport = true;
+      services.xserver.defaultDepth = pkgs.lib.mkOverride 0 {} 16;
       environment.systemPackages = [ pkgs.scrot pkgs.icewm pkgs.quake3demo ];
     };
 
