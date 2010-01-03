@@ -5748,6 +5748,8 @@ let
     inherit stdenv fetchurl cracklib flex;
   };
 
+  # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
+
   pam_console = import ../os-specific/linux/pam_console {
     inherit stdenv fetchurl pam autoconf automake pkgconfig bison glib;
     libtool = libtool_1_5;
@@ -5770,6 +5772,10 @@ let
     inherit stdenv fetchurl pam libxcrypt;
   };
 
+  pam_usb = import ../os-specific/linux/pam_usb {
+    inherit stdenv fetchurl makeWrapper useSetUID dbus libxml2 pam hal pkgconfig pmount python pythonDBus;
+  };
+
   pcmciaUtils = composedArgsAndFun (import ../os-specific/linux/pcmciautils) {
     inherit stdenv fetchurl udev yacc flex;
     inherit sysfsutils module_init_tools;
@@ -5777,6 +5783,10 @@ let
     firmware = getConfig ["pcmciaUtils" "firmware"] [];
     config = getConfig ["pcmciaUtils" "config"] null;
     inherit lib;
+  };
+
+  pmount = import ../os-specific/linux/pmount {
+    inherit fetchurl stdenv cryptsetup dbus dbus_glib hal intltool ntfs3g utillinuxng;
   };
 
   pmutils = import ../os-specific/linux/pm-utils {
