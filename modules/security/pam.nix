@@ -7,7 +7,7 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) pam_unix2 pam_ldap;
+  inherit (pkgs) pam_unix2 pam_usb pam_ldap;
 
   otherService = pkgs.writeText "other.pam"
     ''
@@ -26,6 +26,9 @@ let
     , # If set, root doesn't need to authenticate (e.g. for the "chsh"
       # service).
       rootOK ? false
+    , # If set, user listed in /etc/pamusb.conf are able to log in with
+      # the associated usb key.
+      usbAuth ? config.security.pam.usb.enable
     , # If set, use ConsoleKit's PAM connector module to claim
       # ownership of audio devices etc.
       ownDevices ? false
@@ -55,6 +58,8 @@ let
           # Authentication management.
           ${optionalString rootOK
               "auth sufficient pam_rootok.so"}
+          ${optionalString usbAuth
+              "auth sufficient ${pam_usb}/lib/security/pam_usb.so"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           auth sufficient ${pam_unix2}/lib/security/pam_unix2.so ${
