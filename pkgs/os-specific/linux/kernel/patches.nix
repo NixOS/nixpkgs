@@ -89,4 +89,19 @@ in
       };
     };
 
+  gcov_2_6_28 = 
+    { name = "gcov";
+      patch = fetchurl {
+        url = http://buildfarm.st.ewi.tudelft.nl/~eelco/dist/linux-2.6.28-gcov.patch;
+        sha256 = "0ck9misa3pgh3vzyb7714ibf7ix7piyg5dvfa9r42v15scjqiyny";
+      };
+      extraConfig =
+        ''
+          GCOV_PROFILE y
+          GCOV_ALL y
+          GCOV_PROC m
+          GCOV_HAMMER n
+        '';
+    };
+
 }
