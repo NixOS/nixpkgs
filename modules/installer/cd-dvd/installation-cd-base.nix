@@ -73,8 +73,8 @@ in
 {
   require =
     [ options
-      ./iso-image.nix
       ./memtest.nix
+      ./iso-image.nix
       ../../hardware/network/intel-3945abg.nix
       ../../hardware/network/rt73.nix
     ];
@@ -107,9 +107,40 @@ in
       pkgs.w3m # needed for the manual anyway
       pkgs.testdisk # useful for repairing boot problems
       pkgs.mssys # for writing Microsoft boot sectors / MBRs
-      pkgs.ntfsprogs # for resizing NTFS partitions
       pkgs.parted
+      pkgs.ddrescue
+      pkgs.ccrypt
+      pkgs.cryptsetup # needed for dm-crypt volumes
+
+      # Some networking tools.
       pkgs.sshfsFuse
+      pkgs.socat
+      pkgs.screen
+      pkgs.wpa_supplicant # !!! should use the wpa module
+
+      # Hardware-related tools.
+      pkgs.sdparm
+      pkgs.hdparm
+      pkgs.dmraid
+
+      # Tools to create / manipulate filesystems.
+      pkgs.ntfsprogs # for resizing NTFS partitions
+      pkgs.btrfsProgs
+      pkgs.xfsprogs
+      pkgs.jfsutils
+      pkgs.jfsrec
+
+      # Some compression/archiver tools.
+      pkgs.unrar
+      pkgs.unzip
+      pkgs.zip
+      pkgs.xz
+      pkgs.dar # disk archiver
+      
+      # Some editors.
+      pkgs.nvi
+      pkgs.bvi # binary editor
+      pkgs.joe
     ];
 
   # The initrd has to contain any module that might be necessary for
@@ -204,4 +235,10 @@ in
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
   isoImage.storeContents = [pkgs.stdenv];
+
+  # Allow sshd to be started manually through "start sshd".  It should
+  # not be started by default on the installation CD because the
+  # default root password is empty.
+  services.sshd.enable = true;
+  jobs.sshd.startOn = pkgs.lib.mkOverride 50 {} "";
 }
