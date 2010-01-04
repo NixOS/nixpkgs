@@ -103,6 +103,14 @@ let
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = __overrides: with helperFunctions; rec {
 
+  # override system. This is useful to build i686 packages on x86_64-linux
+  forceSystem = system: (import ./all-packages.nix) {
+    inherit system;
+    inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
+  };
+
+  # used by wine, firefox with debugging version of Flash, ..
+  pkgsi686Linux = forceSystem "i686-linux";
 
   inherit __overrides;
 
@@ -8557,7 +8565,7 @@ let
   wine =
     if system == "x86_64-linux" then
       # Can't build this in 64-bit; use a 32-bit build instead.
-      (import ./all-packages.nix {system = "i686-linux";}).wine
+      pkgsi686Linux.wine
       # some hackery to make nix-env show this package on x86_64...
       // {system = "x86_64-linux";}
     else
