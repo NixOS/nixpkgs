@@ -3944,6 +3944,11 @@ let
     libtool = libtool_1_5;
   };
 
+  libjpeg62 = makeOverridable (import ../development/libraries/libjpeg/62.nix) {
+    inherit fetchurl stdenv;
+    libtool = libtool_1_5;
+  };
+
   libjpegStatic = lowPrio (appendToName "static" (libjpeg.override {
     static = true;
   }));
@@ -6340,10 +6345,11 @@ let
     };
 
   chrome = import ../applications/networking/browsers/chromium {
-    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib;
+    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng;
     inherit (xlibs) libX11 libXext libXrender libXt ;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
+    libjpeg = libjpeg62;
   };
 
   chromeWrapper = wrapFirefox chrome "chrome" "";
