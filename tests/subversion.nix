@@ -27,7 +27,11 @@ let
         # special patch to make coverage data available under /proc.
         kernel = pkgs.kernel.override (orig: {
           stdenv = cleanupBuildTree (keepBuildTree orig.stdenv);
-          kernelPatches = orig.kernelPatches ++ pkgs.lib.singleton pkgs.kernelPatches.gcov_2_6_28;
+          extraConfig =
+            ''
+              GCOV_KERNEL y
+              GCOV_PROFILE_ALL y
+            '';
         });
       };
 

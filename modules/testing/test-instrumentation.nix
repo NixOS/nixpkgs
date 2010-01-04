@@ -36,6 +36,10 @@ with pkgs.lib;
           mkdir /hostfs/$hostTmpDir/coverage-data
           ln -s /hostfs/$hostTmpDir/coverage-data /tmp/coverage-data
         )
+
+        # Mount debugfs to gain access to the kernel coverage data (if
+        # available).
+        mount -t debugfs none /sys/kernel/debug || true
       '';
 
     # If the kernel has been built with coverage instrumentation, make
