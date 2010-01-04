@@ -23,7 +23,7 @@ stdenv.mkDerivation (
     showBuildStats = true;
 
     postPhases =
-      (optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
+      (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
 
     finalPhase =
       ''
