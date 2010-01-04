@@ -211,5 +211,5 @@ import ./generic.nix (
       '';
   }
 
-  // args
+  // removeAttrs args ["extraConfig"]
 )
