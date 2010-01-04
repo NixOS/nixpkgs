@@ -20,8 +20,15 @@ sub startAll {
 
 
 sub runTests {
-    eval "$context $ENV{tests}";
-    die $@ if $@;
+    if (defined $ENV{tests}) {
+        eval "$context $ENV{tests}";
+        die $@ if $@;
+    } else {
+        while (<STDIN>) {
+            eval "$context $_\n";
+            warn $@ if $@;
+        }
+    }
 
     # Copy the kernel coverage data for each machine, if the kernel
     # has been compiled with coverage instrumentation.

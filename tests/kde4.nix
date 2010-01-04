@@ -62,7 +62,7 @@ rec {
 
       sleep 10;
       
-      print STDERR $client->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen.png");
+      print STDERR $client->mustSucceed("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen.png");
     '';
   
 }
