@@ -1921,7 +1921,7 @@ let
   # For several compiler versions, we export a large set of Haskell-related
   # packages.
 
-  haskellPackages = haskellPackages_ghc6104;
+  haskellPackages = haskellPackages_ghc6121;
 
   /*
   haskellPackages_ghc642 = import ./haskell-packages.nix {

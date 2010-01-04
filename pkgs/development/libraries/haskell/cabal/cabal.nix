@@ -37,7 +37,7 @@ attrs :
             propagatedBuildInputs = [];
 
             # library directories that have to be added to the Cabal files
-            extraLibDirs = attrs.lib.lists.concatMap (x : [ (x + "/lib64") (x + "/lib") ]) self.propagatedBuildInputs;
+            extraLibDirs = [];
 
             # compiles Setup and configures
             configurePhase = ''
@@ -46,7 +46,16 @@ attrs :
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
-              ./Setup configure --verbose --prefix="$out" ${toString (map (x : "--extra-lib-dir=" + x) self.extraLibDirs)} $configureFlags
+
+              for p in $propagatedBuildInputs; do
+                for d in lib{,64}; do
+                  if [ -e "$p/$d" ]; then
+                    extraLibDirs="$extraLibDirs --extra-lib-dir=$p/$d"
+                  fi
+                done
+              done
+
+              ./Setup configure --verbose --prefix="$out" $extraLibDirs $configureFlags
 
               eval "$postConfigure"
             '';
