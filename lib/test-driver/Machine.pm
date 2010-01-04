@@ -1,9 +1,12 @@
 package Machine;
 
 use strict;
+use threads;
+use Thread::Queue;
 use Socket;
 use IO::Handle;
 use POSIX qw(dup2);
+use FileHandle;
 
 
 # Stuff our PID in the multicast address/port to prevent collissions
@@ -26,6 +29,7 @@ sub new {
         booted => 0,
         pid => 0,
         connected => 0,
+        connectedQueue => Thread::Queue->new(),
         socket => undef,
         stateDir => "$tmpDir/$name",
     };
@@ -62,14 +66,15 @@ sub start {
 
     $self->log("starting vm");
 
+    my ($read, $write) = FileHandle::pipe;
+
     my $pid = fork();
     die if $pid == -1;
 
     if ($pid == 0) {
-        my $name = $self->{name};
-        open LOG, "| sed --unbuffered 's|^|$name console: |'" or die;
-        dup2(fileno(LOG), fileno(STDOUT));
-        dup2(fileno(LOG), fileno(STDERR));
+        close $read;
+        dup2(fileno($write), fileno(STDOUT));
+        dup2(fileno($write), fileno(STDERR));
         open NUL, "</dev/null" or die;
         dup2(fileno(NUL), fileno(STDIN));
         $ENV{TMPDIR} = $self->{stateDir};
@@ -79,7 +84,22 @@ sub start {
         exec $self->{script};
         die;
     }
-    
+
+    close $write;
+
+    threads->create(\&processQemuOutput)->detach;
+
+    sub processQemuOutput {
+        $/ = "\r\n";
+        while (<$read>) {
+            chomp;
+            print STDERR $self->name, "# $_\n";
+            $self->{connectedQueue}->enqueue(1) if $_ eq "===UP===";
+        }
+        # If the child dies, wake up connect().
+        $self->{connectedQueue}->enqueue(1);
+    }
+
     $self->log("vm running as pid $pid");
     $self->{pid} = $pid;
     $self->{booted} = 1;
@@ -92,12 +112,9 @@ sub connect {
 
     $self->start;
 
-    my $try = 0;
-    while (1) {
-        last if -e ($self->{stateDir} . "/running");
-        sleep 1;
-        die ("VM " . $self->{name} . " timed out") if $try++ > 300;
-    }
+    # Wait until the processQemuOutput thread signals that the machine
+    # is up.
+    $self->{connectedQueue}->dequeue();
 
     while (1) {
         $self->log("trying to connect");

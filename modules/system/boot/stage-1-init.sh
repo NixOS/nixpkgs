@@ -7,13 +7,15 @@ export PATH=@extraUtils@/bin:@klibc@/bin
 
 
 fail() {
+    if [ -n "$panicOnFail" ]; then exit 1; fi
+    
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
     cat <<EOF
 
 An error occured in stage 1 of the boot process, which must mount the
 root filesystem on \`$targetRoot' and then start stage 2.  Press one
-of the following keys within $timeout seconds:
+of the following keys:
 
   i) to launch an interactive shell;
   f) to start an interactive shell having pid 1 (needed if you want to
@@ -73,6 +75,9 @@ for o in $(cat /proc/cmdline); do
             ;;
         debug1mounts) # stop after mounting file systems
             debug1mounts=1
+            ;;
+        stage1panic)
+            panicOnFail=1
             ;;
     esac
 done

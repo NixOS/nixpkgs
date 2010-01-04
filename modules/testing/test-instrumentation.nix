@@ -14,9 +14,8 @@ with pkgs.lib;
         
         preStart =
           ''
-            eval $(cat /proc/cmdline)
-            echo "guest running, will write in $hostTmpDir on host" > /dev/ttyS0
-            touch /hostfs/$hostTmpDir/running
+            echo "guest running" > /dev/ttyS0
+            echo "===UP===" > dev/ttyS0
           '';
           
         exec = "${pkgs.socat}/bin/socat tcp-listen:514,fork exec:/bin/sh,stderr";
@@ -45,6 +44,10 @@ with pkgs.lib;
     # If the kernel has been built with coverage instrumentation, make
     # it available under /proc/gcov.
     boot.kernelModules = [ "gcov-proc" ];
+
+    # Panic if an error occurs in stage 1 (rather than waiting for
+    # user intervention). 
+    boot.kernelParams = [ "stage1panic" ];
       
   };
 
