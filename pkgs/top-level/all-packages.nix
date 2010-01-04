@@ -6739,6 +6739,7 @@ let
       inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat;
       inherit (xlibs) libX11 libXext libXrender libXt ;
       inherit (gtkLibs) gtk glib pango atk;
+      debug = getConfig ["flashplayer" "debug"] false;
     });
 
   flite = import ../applications/misc/flite {
