@@ -22,7 +22,8 @@ stdenv.mkDerivation (
 
     showBuildStats = true;
 
-    phases = "unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase fixupPhase distPhase ${if doCoverageAnalysis then "coverageReportPhase" else ""} finalPhase";
+    postPhases =
+      (optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
 
     finalPhase =
       ''
