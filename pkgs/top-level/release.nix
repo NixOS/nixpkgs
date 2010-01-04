@@ -223,6 +223,7 @@ in {
   inkscape = linux;
   iputils = linux;
   iproute = linux;
+  iptables = linux;
   irssi = linux;
   jfsutils = linux;
   jfsrec = linux;
