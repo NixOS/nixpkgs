@@ -70,6 +70,8 @@ sub start {
         open LOG, "| sed --unbuffered 's|^|$name console: |'" or die;
         dup2(fileno(LOG), fileno(STDOUT));
         dup2(fileno(LOG), fileno(STDERR));
+        open NUL, "</dev/null" or die;
+        dup2(fileno(NUL), fileno(STDIN));
         $ENV{TMPDIR} = $self->{stateDir};
         $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1 -net socket,vlan=1,mcast=$mcastAddr";
         $ENV{QEMU_KERNEL_PARAMS} = "console=ttyS0 panic=1 hostTmpDir=$ENV{TMPDIR}";
