@@ -16,6 +16,7 @@ let
   vmName = config.networking.hostName;
 
   options = {
+  
     virtualisation.memorySize = 
       mkOption {
         default = 384;
@@ -24,6 +25,7 @@ let
             Memory size (M) of virtual machine.
           '';
       };
+      
     virtualisation.diskImage =
       mkOption {
         default = "./${vmName}.qcow2";
@@ -34,6 +36,7 @@ let
             exist.
           '';
       };
+      
     virtualisation.graphics =
       mkOption {
         default = true;
@@ -48,8 +51,8 @@ let
 
   cfg = config.virtualisation;
 
-  qemuGraphics = if (cfg.graphics) then "" else "-nographic";
-  kernelConsole = if (cfg.graphics) then "" else "console=ttyS0";
+  qemuGraphics = if cfg.graphics then "" else "-nographic";
+  kernelConsole = if cfg.graphics then "" else "console=ttyS0";
   ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
   # Shell script to start the VM.

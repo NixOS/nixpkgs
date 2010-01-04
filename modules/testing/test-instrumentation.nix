@@ -24,6 +24,14 @@ with pkgs.lib;
   
     boot.postBootCommands =
       ''
+        # Panic on out-of-memory conditions rather than letting the
+        # OOM killer randomly get rid of processes, since this leads
+        # to failures that are hard to diagnose.
+        echo 2 > /proc/sys/vm/panic_on_oom
+
+        # Coverage data is written into /tmp/coverage-data.  Symlink
+        # it to the host filesystem so that we don't need to copy it
+        # on shutdown.
         ( eval $(cat /proc/cmdline)
           mkdir /hostfs/$hostTmpDir/coverage-data
           ln -s /hostfs/$hostTmpDir/coverage-data /tmp/coverage-data
