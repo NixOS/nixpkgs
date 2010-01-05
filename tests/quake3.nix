@@ -5,7 +5,7 @@ rec {
   client = 
     { config, pkgs, ... }:
 
-    { services.xserver.enable = true;
+    { require = [ ./common/x11.nix ];
       services.xserver.driSupport = true;
       services.xserver.defaultDepth = pkgs.lib.mkOverride 0 {} 16;
       environment.systemPackages = [ pkgs.icewm pkgs.quake3demo ];
@@ -38,10 +38,8 @@ rec {
 
       sleep 20;
 
-      $client1->execute("DISPLAY=:0.0 icewm &");
       $client1->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
  
-      $client2->execute("DISPLAY=:0.0 icewm &");
       $client2->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
  
       sleep 40;

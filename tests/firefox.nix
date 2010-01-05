@@ -5,15 +5,7 @@
   machine = 
     { config, pkgs, ... }:
 
-    { services.xserver.enable = true;
-      services.xserver.displayManager.slim.enable = false;
-      services.xserver.displayManager.auto.enable = true;
-
-      services.xserver.windowManager.default = "icewm";
-      services.xserver.windowManager.icewm.enable = true;
-
-      services.xserver.desktopManager.default = "none";
-            
+    { require = [ ./common/x11.nix ];
       environment.systemPackages = [ pkgs.firefox ];
     };
 

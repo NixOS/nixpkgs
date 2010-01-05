@@ -54,21 +54,11 @@ rec {
     import ./eval-config.nix {
       inherit nixpkgs services system;
       modules = configurations ++
-        [ ../modules/virtualisation/qemu-vm.nix # !!!
+        [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
+          { key = "no-manual"; services.nixosManual.enable = false; }
         ];
       extraArgs = { inherit nodes; };
-      /* !!! bug in the module/option handling: this ignores the
-         config from assignIPAddresses.  Too much magic. 
-      configuration = {
-        imports = [configuration "${nixos}/modules/virtualisation/qemu-vm.nix"];
-        config = {
-          # We don't need the manual in a test VM, and leaving it out
-          # speeds up evaluation quite a bit.
-          services.nixosManual.enable = false;
-        };
-      };
-      */
     };
 
 
@@ -88,7 +78,8 @@ rec {
       hosts = lib.concatMapStrings (m: "${m.second} ${m.first}\n") machinesWithIP;
 
       nodes_ = map (m: lib.nameValuePair m.first [
-          { config =
+          { key = "ip-address";
+            config =
               { networking.hostName = m.first;
                 networking.interfaces =
                   [ { name = "eth1";
@@ -96,7 +87,6 @@ rec {
                     }
                   ];
                 networking.extraHosts = hosts;
-                services.nixosManual.enable = false; # !!!
               };
           }
           (lib.getAttr m.first nodes)
