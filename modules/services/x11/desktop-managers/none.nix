@@ -1,14 +1,7 @@
 {
-  services = {
-    xserver = {
-
-      desktopManager = {
-        session = [{
-          name = "none";
-          start = "";
-        }];
-      };
-
-    };
-  };
+  services.xserver.desktopManager.session =
+    [ { name = "none";
+        start = "";
+      }
+    ];
 }

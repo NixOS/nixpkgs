@@ -72,7 +72,7 @@ in
       enableXDMCP = mkOption {
         default = false;
 	description = ''
-	  Whether to enable XDMCP, which allows remote logins";
+	  Whether to enable XDMCP, which allows remote logins.
 	'';
       };
 
