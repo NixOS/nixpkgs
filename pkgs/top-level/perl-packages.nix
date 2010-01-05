@@ -2471,6 +2471,17 @@ rec {
     doCheck = false;
   };
 
+  X11GUITest = buildPerlPackage rec {
+    name = "X11-GUITest-0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CT/CTRONDLP/${name}.tar.gz";
+      sha256 = "0akjk2x2d3j1f95wn93mh6nvq8p6c9jcqmvkh1mli5jxr1rmhjx8";
+    };
+    buildInputs = [pkgs.x11 pkgs.xorg.libXtst pkgs.xorg.libXi];
+    NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
+    doCheck = false; # requires an X server
+  };
+
   XMLDOM = buildPerlPackage {
     name = "XML-DOM-1.44";
     src = fetchurl {

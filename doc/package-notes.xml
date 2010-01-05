@@ -181,7 +181,7 @@ generator.</para>
 
 <screen>
 $ cd pkgs/servers/x11/xorg
-$ cat tarballs-7.4.list extra.list old.list \
+$ cat tarballs-7.5.list extra.list old.list \
   | perl ./generate-expr-from-tarballs.pl
 </screen>
 
