@@ -3854,8 +3854,11 @@ let
     inherit fetchurl stdenv gettext;
   };
 
-  libextractor = composedArgsAndFun (import ../development/libraries/libextractor/0.5.18.nix) {
-    inherit fetchurl stdenv builderDefs zlib;
+  libextractor = import ../development/libraries/libextractor {
+    inherit fetchurl stdenv libtool gettext zlib bzip2 flac libvorbis
+     exiv2 ffmpeg libgsf glib rpm pkgconfig;
+    inherit (gnome) gtk;
+    libmpeg2 = mpeg2dec;
   };
 
   libffcall = builderDefsPackage (import ../development/libraries/libffcall) {
