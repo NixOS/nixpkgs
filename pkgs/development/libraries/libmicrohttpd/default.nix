@@ -1,14 +1,22 @@
 {stdenv, fetchurl, curl}:
 
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.3.1";
+  name = "libmicrohttpd-0.4.4";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "1zv8a7lwypwbwzam5jvr35wvxb13chyh0ir18k82nzm9q5s3v3n3";
+    sha256 = "1w486b4hpwnzpc4zdywm3f1q5zs7j4yh7xibbsig6b8cv1npn0rz";
   };
 
   buildInputs = [ curl ];
+
+  preCheck =
+    # Since `localhost' can't be resolved in a chroot, work around it.
+    '' for i in "src/test"*"/"*.[ch]
+       do
+         sed -i "$i" -es/localhost/127.0.0.1/g
+       done
+    '';
 
   doCheck = true;
 
@@ -23,5 +31,7 @@ stdenv.mkDerivation rec {
     license = "LGPLv2+";
 
     homepage = http://www.gnu.org/software/libmicrohttpd/;
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
