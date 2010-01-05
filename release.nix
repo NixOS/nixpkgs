@@ -119,9 +119,10 @@ let
           system = "i686-linux";
         };
       in {
-        subversion = t.subversion.report;
         kde4 = t.kde4.test;
         quake3 = t.quake3.test;
+        subversion = t.subversion.report;
+        trac = t.trac.test;
       };
 
     /*
