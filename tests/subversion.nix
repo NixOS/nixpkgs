@@ -1,10 +1,4 @@
-{ nixos ? ./..
-, nixpkgs ? ../../nixpkgs
-, services ? ../../services
-, system ? builtins.currentSystem
-}:
-
-with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
+{ pkgs, ... }:
 
 let
 
@@ -37,7 +31,7 @@ let
 
 in
       
-rec {
+{
 
   nodes =
     { webserver =
@@ -66,9 +60,7 @@ rec {
 
     };
 
-  vms = buildVirtualNetwork { inherit nodes; };
-
-  test = runTests vms
+  testScript =
     ''
       startAll;
 
@@ -125,6 +117,4 @@ rec {
       $webserver->execute("sleep 10"); # !!!
     '';
 
-  report = makeReport test;
-    
 }

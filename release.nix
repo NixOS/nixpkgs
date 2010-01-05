@@ -111,30 +111,20 @@ let
     minimal_install_archive = {system ? "i686-linux"}: (iso_minimal {inherit system;})
       .config.system.build.minimalInstallArchive;
 
-    tests.subversion =
+    tests = 
       { services ? ../services }:
+      let
+        t = import ./tests { 
+          inherit nixpkgs services;
+          system = "i686-linux";
+        };
+      in {
+        subversion = t.subversion.report;
+        kde4 = t.kde4.test;
+        quake3 = t.quake3.test;
+      };
 
-      (import ./tests/subversion.nix {
-        inherit nixpkgs services;
-        system = "i686-linux";
-      }).report;
-    
-    tests.kde4 =
-      { services ? ../services }:
-
-      (import ./tests/kde4.nix {
-        inherit nixpkgs services;
-        system = "i686-linux";
-      }).test;
-
-    tests.quake3 =
-      { services ? ../services }:
-
-      (import ./tests/quake3.nix {
-        inherit nixpkgs services;
-        system = "i686-linux";
-      }).test;
-
+    /*
     ### tests about installing NixOS
 
     # installs NixOs in a qemu_kvm instance using a tweaked iso.
@@ -142,6 +132,7 @@ let
       (import ./tests/test-nixos-install-from-cd/test.nix {
         inherit nixpkgs;
       }).test;
+    */
 
     # the archive installer can't be tested without chroot which requires being root
     # options: run in kvm or uml ?

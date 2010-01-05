@@ -1,10 +1,4 @@
-{ nixos ? ./..
-, nixpkgs ? /etc/nixos/nixpkgs
-, services ? /etc/nixos/services
-, system ? builtins.currentSystem
-}:
-
-with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
+{ pkgs, ... }:
 
 rec {
 
@@ -34,9 +28,7 @@ rec {
       client2 = client;
     };
 
-  vms = buildVirtualNetwork { inherit nodes; };
-
-  test = runTests vms
+  testScript =
     ''
       startAll;
 
@@ -57,8 +49,8 @@ rec {
       $server->mustSucceed("grep -q 'Foo.*entered the game' /tmp/log");
       $server->mustSucceed("grep -q 'Bar.*entered the game' /tmp/log");
       
-      print STDERR $client1->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen1.png");
-      print STDERR $client2->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen2.png");
+      print STDERR $client1->mustSucceed("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen1.png");
+      print STDERR $client2->mustSucceed("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen2.png");
     '';
   
 }
