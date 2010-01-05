@@ -3,6 +3,8 @@ use Machine;
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
+STDERR->autoflush(1);
+
 my %vms;
 my $context = "";
 
