@@ -1,13 +1,16 @@
-args: with args;
+{ stdenv, fetchurl, gettext, libjpeg, libtiff, libungif, libpng, imlib, xlibs }:
 
-stdenv.mkDerivation {
-  name = "icewm-1.2.32";
+stdenv.mkDerivation rec {
+  name = "icewm-1.2.37";
 
-  buildInputs = [ gettext libX11 libXft libXext libXinerama libXrandr libjpeg libtiff libungif libpng imlib ];
+  buildInputs =
+    [ gettext libjpeg libtiff libungif libpng imlib
+      xlibs.libX11 xlibs.libXft xlibs.libXext xlibs.libXinerama xlibs.libXrandr
+    ];
 
   src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/sourceforge/icewm/icewm-1.2.32.tar.gz;
-    sha256 = "c2fe6ef0bdc0a9f841ae6fe214c06a15d666f90df027d105305f3e0dc109a667";
+    url = "mirror://sourceforge/icewm/${name}.tar.gz";
+    sha256 = "15852k96z2w19v3d02jynxyf6ld378hbkd6lpy64byysrmjh3dmz";
   };
 
   meta = {

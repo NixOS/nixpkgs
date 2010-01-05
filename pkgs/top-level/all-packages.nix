@@ -6966,8 +6966,7 @@ let
   icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
 
   icewm = import ../applications/window-managers/icewm {
-    inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib;
-    inherit (xlibs) libX11 libXft libXext libXinerama libXrandr;
+    inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib xlibs;
   };
 
   ikiwiki = makeOverridable (import ../applications/misc/ikiwiki) {
