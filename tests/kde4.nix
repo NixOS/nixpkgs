@@ -36,18 +36,16 @@
 
   testScript =
     ''
-      $machine->waitForFile("/tmp/.X11-unix/X0");
-
-      sleep 70;
+      $machine->waitForWindow(qr/plasma-desktop/);
 
       $machine->execute("su - alice -c 'DISPLAY=:0.0 kwrite /var/log/messages &'");
-
-      sleep 10;
-      
       $machine->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");
 
-      sleep 10;
+      $machine->waitForWindow(qr/messages.*KWrite/);
+      $machine->waitForWindow(qr/Valgrind.*Konqueror/);
 
+      sleep 5;
+      
       $machine->screenshot("screen");
     '';
   

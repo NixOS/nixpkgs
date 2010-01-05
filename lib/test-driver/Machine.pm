@@ -287,4 +287,24 @@ sub screenshot {
 }
 
 
+sub getWindowNames {
+    my ($self) = @_;
+    my $res = $self->mustSucceed(
+        q{DISPLAY=:0.0 xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'});
+    return split /\n/, $res;
+}
+
+
+sub waitForWindow {
+    my ($self, $regexp) = @_;
+    while (1) {
+        my @names = $self->getWindowNames;
+        foreach my $n (@names) {
+            return if $n =~ /$regexp/;
+        }
+        sleep 2;
+    }
+};
+
+
 1;
