@@ -26,4 +26,5 @@ in
   kde4 = apply (import ./kde4.nix);
   quake3 = apply (import ./quake3.nix);
   subversion = apply (import ./subversion.nix);
+  trac = apply (import ./trac.nix);
 }

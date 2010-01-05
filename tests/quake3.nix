@@ -38,11 +38,11 @@ rec {
 
       sleep 20;
 
-      print STDERR $client1->execute("DISPLAY=:0.0 icewm &");
-      print STDERR $client1->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
+      $client1->execute("DISPLAY=:0.0 icewm &");
+      $client1->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
  
-      print STDERR $client2->execute("DISPLAY=:0.0 icewm &");
-      print STDERR $client2->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
+      $client2->execute("DISPLAY=:0.0 icewm &");
+      $client2->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
  
       sleep 40;
 

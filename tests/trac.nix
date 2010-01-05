@@ -1,12 +1,6 @@
-{ nixos ? ./..
-, nixpkgs ? /etc/nixos/nixpkgs
-, services ? /etc/nixos/services
-, system ? builtins.currentSystem
-}:
+{ pkgs, ... }:
 
-with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
-
-rec {
+{
   nodes = {
     storage = 
       {pkgs, config, ...}:
@@ -77,13 +71,11 @@ rec {
       };
   };
     
-  vms = buildVirtualNetwork { inherit nodes; };
-
-  test = runTests vms
+  testScript =
     ''
       startAll;
       
-      $postgresql->waitForFile("/tmp/.s.PGSQL.5432");
+      $postgresql->waitForJob("postgresql");
       $postgresql->mustSucceed("createdb trac");
       
       $webserver->mustSucceed("mkdir -p /repos/trac");
@@ -96,9 +88,9 @@ rec {
       $client->waitForFile("/tmp/.X11-unix/X0");
       sleep 60;
       
-      print STDERR $client->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://webserver/projects/test &'");
+      $client->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://webserver/projects/test &'");
       sleep 120;
       
-      print STDERR $client->execute("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen1.png");
+      $client->screenshot("screen");
     '';
 }

@@ -40,11 +40,11 @@
 
       sleep 70;
 
-      print STDERR $machine->execute("su - alice -c 'DISPLAY=:0.0 kwrite /var/log/messages &'");
+      $machine->execute("su - alice -c 'DISPLAY=:0.0 kwrite /var/log/messages &'");
 
       sleep 10;
       
-      print STDERR $machine->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");
+      $machine->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");
 
       sleep 10;
 

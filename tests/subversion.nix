@@ -66,11 +66,9 @@ in
 
       $webserver->waitForOpenPort(80);
 
-      my $out = $client->mustSucceed("svn --version");
-      print STDERR "GOT: $out";
+      print STDERR $client->mustSucceed("svn --version");
 
-      my $out = $client->mustSucceed("curl --fail http://webserver/");
-      print STDERR "GOT: $out";
+      print STDERR $client->mustSucceed("curl --fail http://webserver/");
 
       # Create a new user through the web interface.
       $client->mustSucceed("curl --fail -F username=alice -F fullname='Alice Lastname' -F address=alice\@example.org -F password=foobar -F password_again=foobar http://webserver/repoman/adduser");
