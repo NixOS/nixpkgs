@@ -248,21 +248,20 @@ rec {
     };
   });
 
-  psycopg2 = buildPythonPackage {
-    name = "psycopg2-r407";
+  psycopg2 = buildPythonPackage rec {
+    name = "psycopg2-2.0.13";
 
     doCheck = false;
     
     src = fetchurl {
-      url = http://initd.org/pub/software/psycopg/psycopg2-r407.tar.gz;
-      sha256 = "b80bf2f106fc6dbd3d3c512e61baca0b44fa80b975e554982cc9e793c085cc86";
+      url = "http://initd.org/pub/software/psycopg/PSYCOPG-2-0/${name}.tar.gz";
+      sha256 = "0arkaa1nbbd3pyn4l1bc75wi7nff3vxxh4s8sj5al5hv20p64pm1";
     };
     
     propagatedBuildInputs = [ pkgs.postgresql ];
     
     meta = {
-      description = "PostgreSQL database adapter for the Python programming language.";
-      
+      description = "PostgreSQL database adapter for the Python programming language";
       license = "GPLv2/ZPL";
     };
   };
