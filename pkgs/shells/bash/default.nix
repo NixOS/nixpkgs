@@ -3,11 +3,11 @@
 assert interactive -> readline != null;
 
 stdenv.mkDerivation rec {
-  name = "bash-4.0-p28";
+  name = "bash-4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/bash-4.0.tar.gz";
-    sha256 = "0605ql0ih55gpi0vfvcm45likzjafa4wjnkxqwq51aa0ysad74wp";
+    url = "mirror://gnu/bash/${name}.tar.gz";
+    sha256 = "1np1ggp1lv8idwfx3mcxl9rhadqdf4h3x4isa3dk8v9wm0j72qiz";
   };
 
   NIX_CFLAGS_COMPILE = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     let
       patch = nr: sha256:
         fetchurl {
-          url = "mirror://gnu/bash/bash-4.0-patches/bash40-${nr}";
+          url = "mirror://gnu/bash/bash-4.1-patches/bash41-${nr}";
           inherit sha256;
         };
     in
