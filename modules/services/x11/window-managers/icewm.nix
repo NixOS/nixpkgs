@@ -4,7 +4,7 @@ with pkgs.lib;
 
 let
 
-  cfg = config.services.xserver.windowManager.twm;
+  cfg = config.services.xserver.windowManager.icewm;
 
 in
 
@@ -14,9 +14,9 @@ in
 
   options = {
   
-    services.xserver.windowManager.twm.enable = mkOption {
+    services.xserver.windowManager.icewm.enable = mkOption {
       default = false;
-      description = "Enable the twm window manager.";
+      description = "Enable the IceWM window manager.";
     };
 
   };
@@ -27,15 +27,15 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.windowManager.session = singleton
-      { name = "twm";
+      { name = "icewm";
         start =
           ''
-            ${pkgs.xorg.twm}/bin/twm &
+            ${pkgs.icewm}/bin/icewm &
             waitPID=$!
           '';
       };
 
-    environment.x11Packages = [ pkgs.xorg.twm ];
+    environment.x11Packages = [ pkgs.icewm ];
     
   };
 
