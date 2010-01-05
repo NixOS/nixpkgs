@@ -87,9 +87,10 @@ sub start {
 
     close $write;
 
-    threads->create(\&processQemuOutput)->detach;
+    threads->create(\&processQemuOutput, $self, $read)->detach;
 
     sub processQemuOutput {
+        my ($self, $read) = @_;
         $/ = "\r\n";
         while (<$read>) {
             chomp;
