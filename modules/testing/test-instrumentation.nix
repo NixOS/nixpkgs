@@ -18,7 +18,7 @@ with pkgs.lib;
             echo "===UP===" > dev/ttyS0
           '';
           
-        exec = "${pkgs.socat}/bin/socat tcp-listen:514,fork exec:/bin/sh,stderr";
+        exec = "${pkgs.socat}/bin/socat tcp-listen:514,fork exec:/bin/sh 2> /dev/ttyS0";
       };
   
     boot.postBootCommands =
