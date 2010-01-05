@@ -7413,7 +7413,7 @@ let
     });
 
   rsync = import ../applications/networking/sync/rsync {
-    inherit fetchurl stdenv acl;
+    inherit fetchurl stdenv acl perl;
     enableACLs = !stdenv.isDarwin;
   };
 
