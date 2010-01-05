@@ -1887,6 +1887,16 @@ let
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
     
+  xinit = (stdenv.mkDerivation ((if overrides ? xinit then overrides.xinit else x: x) {
+    name = "xinit-1.2.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xinit-1.2.0.tar.bz2;
+      sha256 = "0zq8cpxm1ws81xj39d0wfv29f1nj7s3pmjdashr32x918hx6cqdb";
+    };
+    buildInputs = [pkgconfig libX11 ];
+  })) // {inherit libX11 ;};
+    
   xinput = (stdenv.mkDerivation ((if overrides ? xinput then overrides.xinput else x: x) {
     name = "xinput-1.5.0";
     builder = ./builder.sh;
