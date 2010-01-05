@@ -28,14 +28,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     };
 
     boot.kernelParams = mkOption {
-      default = [
-        "selinux=0"
-        "apm=on"
-        "acpi=on"
-        "console=tty1"
-        "splash=verbose"
-        "vga=0x317"
-      ];
+      default = [ ];
       description = ''
         The kernel parameters.  If you want to add additional
         parameters, it's best to set
@@ -116,6 +109,11 @@ let kernel = config.boot.kernelPackages.kernel; in
     
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
+    boot.kernelParams =
+      [ "splash=verbose"
+        "vga=0x317"
+      ];
+      
     boot.kernelModules = [ "loop" ];
 
     boot.initrd.availableKernelModules =

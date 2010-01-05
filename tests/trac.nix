@@ -67,7 +67,6 @@
           useDefaultShell = true;
           password = "foobar";
         };
-        environment.systemPackages = [ pkgs.scrot ];
       };
   };
     
