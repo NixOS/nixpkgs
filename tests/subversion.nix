@@ -114,7 +114,6 @@ in
 
       # Stop Apache to gather all the coverage data.
       $webserver->stopJob("httpd");
-      $webserver->execute("sleep 10"); # !!!
     '';
 
 }
