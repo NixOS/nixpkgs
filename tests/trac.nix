@@ -65,11 +65,10 @@
       $webserver->mustSucceed("mkdir -p /var/trac/projects/test");
       $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/python2.5/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
       
-      $client->waitForFile("/tmp/.X11-unix/X0");
-      sleep 20;
-      
-      $client->execute("su - root -c 'DISPLAY=:0.0 konqueror http://webserver/projects/test &'");
-      sleep 90;
+      $client->waitForX;
+      $client->execute("konqueror http://webserver/projects/test &");
+      $client->waitForWindow(qr/Test.*Konqueror/);
+      sleep 30; # loading takes a long time
       
       $client->screenshot("screen");
     '';

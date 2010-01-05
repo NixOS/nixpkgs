@@ -11,14 +11,10 @@
 
   testScript =
     ''
-      $machine->waitForFile("/tmp/.X11-unix/X0");
-
-      sleep 10;
-
-      $machine->execute("DISPLAY=:0.0 HOME=/root firefox file://${pkgs.valgrind}/share/doc/valgrind/html/index.html &");
-
-      sleep 30;
-
+      $machine->waitForX;
+      $machine->execute("firefox file://${pkgs.valgrind}/share/doc/valgrind/html/index.html &");
+      $machine->waitForWindow(/Valgrind.*Shiretoko/);
+      sleep 30; # wait until Firefox has finished loading the page
       $machine->screenshot("screen");
     '';
   

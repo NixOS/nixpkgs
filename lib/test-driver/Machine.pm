@@ -134,11 +134,6 @@ sub connect {
 
     $self->log("connected");
     $self->{connected} = 1;
-    
-    print { $self->{socket} } "PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin:\$PATH\n";
-    print { $self->{socket} } "export GCOV_PREFIX=/tmp/coverage-data\n";
-    print { $self->{socket} } "cd /tmp\n";
-    # !!! Should make sure the commands above don't produce output, otherwise we're out of sync.
 }
 
 
@@ -283,14 +278,26 @@ sub unblock {
 sub screenshot {
     my ($self, $filename) = @_;
     my $scrot = $ENV{'scrot'} or die;
-    $self->mustSucceed("DISPLAY=:0.0 $scrot /hostfs/$ENV{out}/${filename}.png");
+    $self->mustSucceed("$scrot /hostfs/$ENV{out}/${filename}.png");
 }
+
+
+# Wait until it is possible to connect to the X server.  Note that
+# testing the existence of /tmp/.X11-unix/X0 is insufficient.
+sub waitForX {
+    my ($self, $regexp) = @_;
+    while (1) {
+        my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
+        return if $status == 0;
+        sleep 1;
+    }
+};
 
 
 sub getWindowNames {
     my ($self) = @_;
     my $res = $self->mustSucceed(
-        q{DISPLAY=:0.0 xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'});
+        q{xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'});
     return split /\n/, $res;
 }
 

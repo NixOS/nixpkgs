@@ -33,14 +33,11 @@ rec {
       startAll;
 
       $server->waitForJob("quake3-server");
-      $client1->waitForFile("/tmp/.X11-unix/X0");
-      $client2->waitForFile("/tmp/.X11-unix/X0");
+      $client1->waitForX;
+      $client2->waitForX;
 
-      sleep 20;
-
-      $client1->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
- 
-      $client2->execute("DISPLAY=:0.0 quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
+      $client1->execute("quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
+      $client2->execute("quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
  
       sleep 40;
 
