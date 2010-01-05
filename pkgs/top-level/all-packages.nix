@@ -6463,7 +6463,7 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  darcs = haskellPackages.darcs;
+  darcs = haskellPackages_ghc6104.darcs;
 
   dia = import ../applications/graphics/dia {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser
