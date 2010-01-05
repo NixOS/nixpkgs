@@ -32,10 +32,9 @@
       {config, pkgs, ...}:
       {
         fileSystems = pkgs.lib.mkOverride 50 {} 
-        [ 
-          { mountPoint = "/repos";
-            device = "storage:/repos"; } 
-        ];
+          [ { mountPoint = "/repos";
+              device = "storage:/repos"; } 
+          ];
       
         services.portmap.enable = true;
         services.httpd.enable = true;
@@ -47,26 +46,8 @@
     client = 
       {config, pkgs, ...}:
       {
-        services.xserver.enable = true;
-        services.xserver.displayManager.slim.enable = false;
-        services.xserver.displayManager.kdm.enable = true;
-        services.xserver.displayManager.kdm.extraConfig =
-          ''
-            [X-:0-Core]
-            AutoLoginEnable=true
-            AutoLoginUser=alice
-            AutoLoginPass=foobar
-          '';
-        services.xserver.desktopManager.default = "kde4";
+        require = [ ./common/x11.nix ];
         services.xserver.desktopManager.kde4.enable = true;
-        users.extraUsers = pkgs.lib.singleton { 
-          name = "alice";
-          description = "Alice Foobar";
-          home = "/home/alice";
-          createHome = true;
-          useDefaultShell = true;
-          password = "foobar";
-        };
       };
   };
     
@@ -85,10 +66,10 @@
       $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/python2.5/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
       
       $client->waitForFile("/tmp/.X11-unix/X0");
-      sleep 60;
+      sleep 20;
       
-      $client->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://webserver/projects/test &'");
-      sleep 120;
+      $client->execute("su - root -c 'DISPLAY=:0.0 konqueror http://webserver/projects/test &'");
+      sleep 90;
       
       $client->screenshot("screen");
     '';
