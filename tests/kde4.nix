@@ -32,8 +32,6 @@
           useDefaultShell = true;
           password = "foobar";
         };
-
-      environment.systemPackages = [ pkgs.scrot ];
     };
 
   testScript =
@@ -49,8 +47,8 @@
       print STDERR $machine->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");
 
       sleep 10;
-      
-      print STDERR $machine->mustSucceed("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen.png");
+
+      $machine->screenshot("screen");
     '';
   
 }

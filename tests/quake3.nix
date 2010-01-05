@@ -8,7 +8,7 @@ rec {
     { services.xserver.enable = true;
       services.xserver.driSupport = true;
       services.xserver.defaultDepth = pkgs.lib.mkOverride 0 {} 16;
-      environment.systemPackages = [ pkgs.scrot pkgs.icewm pkgs.quake3demo ];
+      environment.systemPackages = [ pkgs.icewm pkgs.quake3demo ];
     };
 
   nodes =
@@ -48,9 +48,9 @@ rec {
 
       $server->mustSucceed("grep -q 'Foo.*entered the game' /tmp/log");
       $server->mustSucceed("grep -q 'Bar.*entered the game' /tmp/log");
-      
-      print STDERR $client1->mustSucceed("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen1.png");
-      print STDERR $client2->mustSucceed("DISPLAY=:0.0 scrot /hostfs/$ENV{out}/screen2.png");
+
+      $client1->screenshot("screen1");
+      $client2->screenshot("screen2");
     '';
   
 }

@@ -279,4 +279,12 @@ sub unblock {
 }
 
 
+# Take a screenshot of the X server on :0.0.
+sub screenshot {
+    my ($self, $filename) = @_;
+    my $scrot = $ENV{'scrot'} or die;
+    $self->mustSucceed("DISPLAY=:0.0 $scrot /hostfs/$ENV{out}/${filename}.png");
+}
+
+
 1;

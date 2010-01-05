@@ -14,6 +14,7 @@ rec {
     stdenv.mkDerivation {
       name = "vm-test-run";
       inherit tests;
+      scrot = "${pkgs.scrot}/bin/scrot";
       buildCommand =
         ''
           mkdir $out
