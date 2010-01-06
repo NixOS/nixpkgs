@@ -96,7 +96,7 @@ sub start {
         dup2(fileno(NUL), fileno(STDIN));
         $ENV{TMPDIR} = $self->{stateDir};
         $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1 -net socket,vlan=1,mcast=$mcastAddr";
-        $ENV{QEMU_KERNEL_PARAMS} = "console=tty1 console=ttyS0 panic=1 hostTmpDir=$ENV{TMPDIR}";
+        $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
         die;

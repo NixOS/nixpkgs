@@ -120,6 +120,7 @@ let
         };
       in {
         firefox = t.firefox.test;
+        installer = t.installer.test;
         kde4 = t.kde4.test;
         quake3 = t.quake3.test;
         subversion = t.subversion.report;

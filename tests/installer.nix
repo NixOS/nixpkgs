@@ -11,7 +11,6 @@ rec {
         [ ../modules/installer/cd-dvd/installation-cd-graphical.nix
           ../modules/testing/test-instrumentation.nix
           { key = "serial"; 
-            boot.kernelParams = [ "console=tty1" "console=ttyS0" "panic=1" ];
             boot.loader.grub.timeout = pkgs.lib.mkOverride 0 {} 0;
             
             # The test cannot access the network, so any sources we
@@ -39,7 +38,6 @@ rec {
         boot.loader.grub.version = 2;
         boot.loader.grub.device = "/dev/vda";
         boot.initrd.kernelModules = [ "ext3" ];
-        boot.kernelParams = [ "console=tty1" "console=ttyS0" "panic=1" ];
       
         fileSystems =
           [ { mountPoint = "/";
@@ -115,7 +113,7 @@ rec {
       $machine->mustSucceed("type -tP ls") =~ /profiles/
           or die "nix-env failed";
 
-      #$machine->mustSucceed("nixos-rebuild switch");
+      #$machine->mustSucceed("nixos-rebuild switch >&2");
 
       $machine->shutdown;
     '';
