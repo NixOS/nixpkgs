@@ -200,8 +200,17 @@ mountFS() {
     checkFS "$device"
 
     mkdir -p "/mnt-root$mountPoint" || true
-    
-    mount -t "$fsType" -o "$options" "$device" /mnt-root$mountPoint || fail
+
+    # For CIFS mounts, retry a few times before giving up.
+    local n=0
+    while true; do
+        if mount -t "$fsType" -o "$options" "$device" /mnt-root$mountPoint; then
+            break
+        fi
+        if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
+        echo "retrying..."
+        n=$((n + 1))
+    done
 }
 
 
