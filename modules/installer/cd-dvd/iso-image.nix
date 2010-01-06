@@ -194,14 +194,14 @@ in
   # The Grub menu.
   boot.loader.grub.extraEntries =
     ''
-      menuentry "Boot from hard disk" {
-        set root=(hd0)
-        chainloader +1
-      }
-    
       menuentry "NixOS Installer / Rescue" {
         linux /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${toString config.boot.kernelParams}
         initrd /boot/initrd
+      }
+
+      menuentry "Boot from hard disk" {
+        set root=(hd0)
+        chainloader +1
       }
     '';
   boot.loader.grub.timeout = 10;
