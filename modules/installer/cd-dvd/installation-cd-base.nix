@@ -234,7 +234,7 @@ in
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
-  isoImage.storeContents = [pkgs.stdenv];
+  isoImage.storeContents = [ pkgs.stdenv pkgs.klibc pkgs.klibcShrunk ];
 
   # Allow sshd to be started manually through "start sshd".  It should
   # not be started by default on the installation CD because the
