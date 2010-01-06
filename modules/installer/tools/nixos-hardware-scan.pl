@@ -176,6 +176,19 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
 }
 
 
+# Add the modules for all block devices.
+
+foreach my $path (glob "/sys/class/block/*") {
+    my $module;
+    print STDERR "$path\n";
+    if (-e "$path/device/driver/module") {
+        $module = basename `readlink -f $path/device/driver/module`;
+        chomp $module;
+        push @initrdKernelModules, $module;
+    }
+}
+
+
 # Generate the configuration file.
 
 sub removeDups {
