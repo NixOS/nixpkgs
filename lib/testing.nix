@@ -14,7 +14,11 @@ rec {
     stdenv.mkDerivation {
       name = "vm-test-run";
       inherit tests;
+      
       scrot = "${pkgs.scrot}/bin/scrot";
+
+      buildInputs = [ pkgs.qemu_kvm ];
+      
       buildCommand =
         ''
           mkdir $out

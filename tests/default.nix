@@ -12,9 +12,12 @@ let
   apply = testFun:
     with testLib;
     let
-      t = testFun { inherit pkgs testLib; };
+      t = testFun { inherit pkgs nixpkgs system testLib; };
     in t // rec {
-      nodes = if t ? nodes then t.nodes else { machine = t.machine; };
+      nodes =
+        if t ? nodes then t.nodes else
+        if t ? machine then { machine = t.machine; }
+        else { };
       vms = buildVirtualNetwork { inherit nodes; };
       test = runTests vms t.testScript;
       report = makeReport test;
@@ -24,6 +27,7 @@ in
 
 {
   firefox = apply (import ./firefox.nix);
+  installer = apply (import ./installer.nix);
   kde4 = apply (import ./kde4.nix);
   quake3 = apply (import ./quake3.nix);
   subversion = apply (import ./subversion.nix);

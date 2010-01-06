@@ -16,15 +16,29 @@ print STDERR "using multicast address $mcastAddr\n";
 
 
 sub new {
-    my ($class, $vmScript) = @_;
+    my ($class, $args) = @_;
 
-    $vmScript =~ /run-(.*)-vm$/ or die;
-    my $name = $1;
+    my $startCommand = $args->{startCommand};
+    if (!$startCommand) {
+        # !!! merge with qemu-vm.nix.
+        $startCommand =
+            "qemu-system-x86_64 -m 384 -no-kvm-irqchip " .
+            "-net nic,model=virtio -net user \$QEMU_OPTS ";
+        $startCommand .= "-cdrom $args->{cdrom} "
+            if defined $args->{cdrom};
+        #-drive file=$NIX_DISK_IMAGE,if=virtio,boot=on
+    }
+
+    my $name = $args->{name};
+    if (!$name) {
+        $startCommand =~ /run-(.*)-vm$/;
+        $name = $1 || "machine";
+    }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
     
     my $self = {
-        script => $vmScript,
+        startCommand => $startCommand,
         name => $name,
         booted => 0,
         pid => 0,
@@ -79,9 +93,9 @@ sub start {
         dup2(fileno(NUL), fileno(STDIN));
         $ENV{TMPDIR} = $self->{stateDir};
         $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1 -net socket,vlan=1,mcast=$mcastAddr";
-        $ENV{QEMU_KERNEL_PARAMS} = "console=ttyS0 panic=1 hostTmpDir=$ENV{TMPDIR}";
+        $ENV{QEMU_KERNEL_PARAMS} = "console=tty1 console=ttyS0 panic=1 hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
-        exec $self->{script};
+        exec $self->{startCommand};
         die;
     }
 

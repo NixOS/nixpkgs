@@ -10,7 +10,7 @@ my $context = "";
 
 
 foreach my $vmScript (@ARGV) {
-    my $vm = Machine->new($vmScript);
+    my $vm = Machine->new({startCommand => $vmScript});
     $vms{$vm->name} = $vm;
     $context .= "my \$" . $vm->name . " = \$vms{'" . $vm->name . "'}; ";
 }
