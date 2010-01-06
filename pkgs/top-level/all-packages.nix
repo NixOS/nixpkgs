@@ -2339,11 +2339,19 @@ let
       if stdenv.isDarwin then null else unixODBC;
   };
 
-  php = import ../development/interpreters/php_configurable {
+  php = makeOverridable (import ../development/interpreters/php_configurable) {
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
       flex bison apacheHttpd mysql libxml2 # gettext
       zlib curl gd postgresql openssl pkgconfig sqlite getConfig;
+  };
+
+  phpXdebug = import ../development/interpreters/php-xdebug {
+    inherit stdenv fetchurl php autoconf automake;
+  };
+
+  phpIniBuilder = makeOverridable (import ../development/interpreters/php/ini-bulider.nix) {
+    inherit php runCommand;
   };
 
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
