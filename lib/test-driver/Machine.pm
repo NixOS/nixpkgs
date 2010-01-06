@@ -124,6 +124,19 @@ sub start {
 }
 
 
+# Call the given code reference repeatedly, with 1 second intervals,
+# until it returns 1 or a timeout is reached.
+sub retry {
+    my ($coderef) = @_;
+    my $n;
+    for ($n = 0; $n < 300; $n++) {
+        return if &$coderef;
+        sleep 1;
+    }
+    die "action timed out after $n seconds";
+}
+
+
 sub connect {
     my ($self) = @_;
     return if $self->{connected};
@@ -132,9 +145,11 @@ sub connect {
 
     # Wait until the processQemuOutput thread signals that the machine
     # is up.
-    $self->{connectedQueue}->dequeue();
+    retry sub {
+        return 1 if $self->{connectedQueue}->dequeue_nb();
+    };
 
-    while (1) {
+    retry sub {
         $self->log("trying to connect");
         my $socket = new IO::Handle;
         $self->{socket} = $socket;
@@ -145,9 +160,8 @@ sub connect {
         flush $socket;
         my $line = readline($socket);
         chomp $line;
-        last if $line eq "hello";
-        sleep 1;
-    }    
+        return 1 if $line eq "hello";
+    };
 
     $self->log("connected");
     $self->{connected} = 1;
@@ -214,23 +228,19 @@ sub mustFail {
 # Wait for an Upstart job to reach the "running" state.
 sub waitForJob {
     my ($self, $jobName) = @_;
-    while (1) {
+    retry sub {
         my ($status, $out) = $self->execute("initctl status $jobName");
-        return if $out =~ /start\/running/;
-        sleep 1;
-        # !!! need a timeout
-    }
+        return 1 if $out =~ /start\/running/;
+    };
 }
 
 
 # Wait until the specified file exists.
 sub waitForFile {
     my ($self, $fileName) = @_;
-    while (1) {
+    retry sub {
         my ($status, $out) = $self->execute("test -e $fileName");
-        return if $status == 0;
-        sleep 1;
-        # !!! need a timeout
+        return 1 if $status == 0;
     }
 }
 
@@ -238,22 +248,17 @@ sub waitForFile {
 sub stopJob {
     my ($self, $jobName) = @_;
     $self->execute("initctl stop $jobName");
-    while (1) {
-        my ($status, $out) = $self->execute("initctl status $jobName");
-        return if $out =~ /stop\/waiting/;
-        sleep 1;
-        # !!! need a timeout
-    }
+    my ($status, $out) = $self->execute("initctl status $jobName");
+    die "failed to stop $jobName" unless $out =~ /stop\/waiting/;
 }
 
 
 # Wait until the machine is listening on the given TCP port.
 sub waitForOpenPort {
     my ($self, $port) = @_;
-    while (1) {
+    retry sub {
         my ($status, $out) = $self->execute("nc -z localhost $port");
-        return if $status == 0;
-        sleep 1;
+        return 1 if $status == 0;
     }
 }
 
@@ -261,10 +266,9 @@ sub waitForOpenPort {
 # Wait until the machine is not listening on the given TCP port.
 sub waitForClosedPort {
     my ($self, $port) = @_;
-    while (1) {
+    retry sub {
         my ($status, $out) = $self->execute("nc -z localhost $port");
-        return if $status != 0;
-        sleep 1;
+        return 1 if $status != 0;
     }
 }
 
@@ -307,10 +311,9 @@ sub screenshot {
 # testing the existence of /tmp/.X11-unix/X0 is insufficient.
 sub waitForX {
     my ($self, $regexp) = @_;
-    while (1) {
+    retry sub {
         my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
-        return if $status == 0;
-        sleep 1;
+        return 1 if $status == 0;
     }
 };
 
@@ -325,12 +328,11 @@ sub getWindowNames {
 
 sub waitForWindow {
     my ($self, $regexp) = @_;
-    while (1) {
+    retry sub {
         my @names = $self->getWindowNames;
         foreach my $n (@names) {
-            return if $n =~ /$regexp/;
+            return 1 if $n =~ /$regexp/;
         }
-        sleep 2;
     }
 };
 

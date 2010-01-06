@@ -44,5 +44,10 @@ rec {
       );
 
       $machine->shutdown;
-    '';   
+
+      # Now see if we can boot the installation.
+      my $machine = Machine->new({ hda => "harddisk" });
+      $machine->mustSucceed("echo hello");
+      $machine->shutdown;
+    '';
 }
