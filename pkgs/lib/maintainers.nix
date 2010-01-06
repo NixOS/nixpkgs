@@ -5,6 +5,7 @@
      alphabetically sorted.  */
 
   andres = "Andres Loeh <andres@cs.uu.nl>";
+  astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
