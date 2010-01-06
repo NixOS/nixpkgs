@@ -91,6 +91,7 @@ in
                   device="${config.device}"
                 ''
               }
+              device=$(readlink -f "$device")
               # Add new swap devices.
               if echo $unused | grep -q "^$device\$"; then
                 unused="$(echo $unused | grep -v "^$device\$")"
