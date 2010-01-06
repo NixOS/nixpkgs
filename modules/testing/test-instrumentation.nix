@@ -5,6 +5,19 @@
 
 with pkgs.lib;
 
+let
+
+  # Urgh, `socat' sets the SIGCHLD to ignore.  This wreaks havoc with
+  # some programs.
+  rootShell = pkgs.writeScript "shell.pl"
+    ''
+      #! ${pkgs.perl}/bin/perl
+      $SIG{CHLD} = 'DEFAULT';
+      exec "/bin/sh";
+    '';
+
+in
+    
 {
 
   config = {
@@ -20,12 +33,13 @@ with pkgs.lib;
           
         script =
           ''
+            export USER=root
             export HOME=/root
             export DISPLAY=:0.0
             export GCOV_PREFIX=/tmp/coverage-data
-            source /etc/bashrc
+            source /etc/profile
             cd /tmp
-            exec ${pkgs.socat}/bin/socat tcp-listen:514,fork exec:/bin/sh 2> /dev/ttyS0
+            exec ${pkgs.socat}/bin/socat tcp-listen:514,fork exec:${rootShell} 2> /dev/ttyS0
           '';
       };
   
