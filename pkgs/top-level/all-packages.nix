@@ -7760,6 +7760,11 @@ let
     inherit fetchurl stdenv chmlib wxGTK;
   };
 
+  xcompmgr = import ../applications/window-managers/xcompmgr {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (xlibs) libXcomposite libXfixes libXdamage libXrender;
+  };
+
   /* Doesn't work yet
 
   xen = builderDefsPackage (import ../applications/virtualization/xen) {
