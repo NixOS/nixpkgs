@@ -464,37 +464,6 @@ in
         '';
       };
 
-      phpIni = mkOption {
-        default = ''
-           ; Needed for PHP's mail() function.
-           sendmail_path = sendmail -t -i
-         '';
-
-        /*
-         phpIni =  pkgs.phpIniBuilder.override {
-            appendLines = ''
-             sendmail_path = sendmail -t -i
-
-             zend_extension="${pkgs.phpXdebug}/lib/xdebug.so"
-             zend_extension_ts="${pkgs.phpXdebug}/lib/xdebug.so"
-             zend_extension_debug="${pkgs.phpXdebug}/lib/xdebug.so"
-             xdebug.remote_enable=true
-             xdebug.remote_host=127.0.0.1
-             xdebug.remote_port=9000
-             xdebug.remote_handler=dbgp
-             xdebug.profiler_enable=0
-             xdebug.profiler_output_dir="/tmp/xdebug"
-             xdebug.remote_mode=req
-            '';
-          };
-
-        */
-        description = ''
-          You can override php default settings by using a customized php.ini file.
-          Have a look at teh comment above this description to see how to enable Xdebug
-        '';
-      };
-
     }
 
     # Include the options shared between the main server and virtual hosts.
@@ -551,8 +520,11 @@ in
                 optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
              ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
 
-           # only php is using PHPRC. When PHP isn't enabled it doesn't hurt much
-           PHPRC = mainCfg.phpIni;
+           PHPRC = pkgs.writeText "php.ini"
+             ''
+               ; Needed for PHP's mail() function.
+               sendmail_path = sendmail -t -i
+             '';
            
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
