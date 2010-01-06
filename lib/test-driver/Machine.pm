@@ -337,4 +337,11 @@ sub waitForWindow {
 };
 
 
+sub copyFileFromHost {
+    my ($self, $from, $to) = @_;
+    my $s = `cat $from` or die;
+    $self->mustSucceed("echo '$s' > $to"); # !!! escaping
+}
+
+
 1;
