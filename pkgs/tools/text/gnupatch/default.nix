@@ -1,15 +1,35 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation ( {
-  name = "gnupatch-2.5.4";
+stdenv.mkDerivation rec {
+  name = "patch-2.6.1";
+
   src = fetchurl {
-    url = mirror://gnu/patch/patch-2.5.4.tar.gz;
-    md5 = "ee5ae84d115f051d87fcaaef3b4ae782";
+    url = "mirror://gnu/patch/${name}.tar.gz";
+    sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
   };
 
-  # Hack around ancient configure script: doesn't build on many newer
-  # platforms unless a platform is specified.
-  configureFlags = "dummy";
+  doCheck = true;
 
-  patches = if stdenv.isDarwin then [./setmode.patch] else [];
-} // (if stdenv.isDarwin then { ac_cv_exeext = "" ; } else {} ) )
+  meta = {
+    description = "GNU Patch, a program to apply differences to files";
+
+    longDescription =
+      '' GNU Patch takes a patch file containing a difference listing
+         produced by the diff program and applies those differences to one or
+         more original files, producing patched versions.
+      '';
+
+    homepage = http://savannah.gnu.org/projects/patch;
+
+    license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
+  };
+}
+
+# XXX: These Darwin hacks were useful with 2.5.4; assuming they're no
+#  longer useful.
+#
+#  patches = if stdenv.isDarwin then [./setmode.patch] else [];
+#} // (if stdenv.isDarwin then { ac_cv_exeext = "" ; } else {} ) )
