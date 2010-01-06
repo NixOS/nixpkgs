@@ -7,6 +7,7 @@ use Socket;
 use IO::Handle;
 use POSIX qw(dup2);
 use FileHandle;
+use Cwd;
 
 
 # Stuff our PID in the multicast address/port to prevent collissions
@@ -24,6 +25,8 @@ sub new {
         $startCommand =
             "qemu-system-x86_64 -m 384 -no-kvm-irqchip " .
             "-net nic,model=virtio -net user \$QEMU_OPTS ";
+        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=virtio,boot=on "
+            if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         #-drive file=$NIX_DISK_IMAGE,if=virtio,boot=on
@@ -186,13 +189,17 @@ sub execute {
 
 
 sub mustSucceed {
-    my ($self, $command) = @_;
-    my ($status, $out) = $self->execute($command);
-    if ($status != 0) {
-        $self->log("output: $out");
-        die "command `$command' did not succeed (exit code $status)";
+    my ($self, @commands) = @_;
+    my $res;
+    foreach my $command (@commands) {
+        my ($status, $out) = $self->execute($command);
+        if ($status != 0) {
+            $self->log("output: $out");
+            die "command `$command' did not succeed (exit code $status)";
+        }
+        $res .= $out;
     }
-    return $out;
+    return $res;
 }
 
 
@@ -266,7 +273,7 @@ sub shutdown {
     my ($self) = @_;
     return unless $self->{booted};
 
-    $self->execute("poweroff -f &");
+    $self->execute("poweroff");
 
     $self->waitForShutdown;
 }

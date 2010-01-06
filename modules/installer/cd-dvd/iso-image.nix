@@ -204,6 +204,7 @@ in
         chainloader +1
       }
     '';
+    
   boot.loader.grub.timeout = 10;
 
   # Create the ISO image.
