@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ocaml, perl, python, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "coccinelle-0.1.11rc1";
+  name = "coccinelle-0.2.0rc1";
 
   src = fetchurl {
     url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
-    sha256 = "1rdsv3qcl6zcx3d3zd4cl9d79hdgaw19llxbflkfxipvkg3vk59x";
+    sha256 = "06mfxhgqh52ak7bm3bj0nvi56k6gjqlf1iv00jci6nw3d083pw3j";
   };
 
   buildInputs = [ ocaml perl python ncurses makeWrapper ];
