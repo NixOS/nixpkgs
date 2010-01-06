@@ -18,3 +18,4 @@ for p in $PATH; do
     test -f $i && echo -n " $prefix$i"
   done
 done
+test -f "$2/../lib/ghc-$version/package.conf" && echo -n " $prefix$2/../lib/ghc-$version/package.conf"
