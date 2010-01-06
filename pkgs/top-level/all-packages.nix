@@ -4378,7 +4378,7 @@ let
     inherit fetchurl stdenv;
     # The "! (stdenv ? cross)" is for the cross-built arm ncurses, which
     # don't build for me in unicode.
-    unicode = (system != "i686-cygwin" && ! (crossSystem == null));
+    unicode = (system != "i686-cygwin" && crossSystem == null);
   };
 
   neon = neon026;
