@@ -17,8 +17,8 @@ rec {
   propagatedBuildInputs = [ gmp boehmgc ];
 
   patches =
-    stdenv.lib.optional (coverageAnalysis != null)
-      ./disable-gc-sensitive-tests.patch;
+    stdenv.lib.optionals (coverageAnalysis != null)
+      [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
