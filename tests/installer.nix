@@ -109,12 +109,18 @@ rec {
       
       $machine->mustSucceed("echo hello");
 
-      $machine->mustSucceed("nix-env -i coreutils");
+      $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls") =~ /profiles/
           or die "nix-env failed";
 
-      #$machine->mustSucceed("nixos-rebuild switch >&2");
+      $machine->mustSucceed("nixos-rebuild switch >&2");
 
+      $machine->shutdown;
+
+      # And just to be sure, check that the machine still boots after
+      # "nixos-rebuild switch".
+      my $machine = Machine->new({ hda => "harddisk" });
+      $machine->mustSucceed("echo hello");
       $machine->shutdown;
     '';
 
