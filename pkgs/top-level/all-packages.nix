@@ -1632,6 +1632,11 @@ let
     inherit fetchurl stdenv readline;
   };
 
+  wicd = import ../tools/networking/wicd {
+    inherit stdenv fetchurl python pygobject pycairo pyGtkGlade pythonDBus 
+            wpa_supplicant dhcp wirelesstools nettools iproute;
+  };
+
   wv = import ../tools/misc/wv {
     inherit fetchurl stdenv libpng zlib imagemagick
       pkgconfig libgsf libxml2 bzip2 glib;
