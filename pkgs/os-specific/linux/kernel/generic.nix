@@ -88,5 +88,8 @@ stdenv.mkDerivation {
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
+    license = "GPLv2";
+    homepage = http://www.kernel.org/;
+    maintainers = [ lib.maintainers.eelco ];
   } // extraMeta;
 }
