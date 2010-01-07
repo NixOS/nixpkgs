@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
   };
 
-  doCheck = true;
+  # Fails on armv5tel-linux at least, maybe on more platforms
+  # Some tests require 'ed', additionally.
+  doCheck = false;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
