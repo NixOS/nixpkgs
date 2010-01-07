@@ -124,8 +124,9 @@ let
         };
       in {
         firefox = t.firefox.test;
-        installer.simple = t.installer.simple.test;
+        installer.lvm = t.installer.lvm.test;
         installer.separateBoot = t.installer.separateBoot.test;
+        installer.simple = t.installer.simple.test;
         kde4 = t.kde4.test;
         quake3 = t.quake3.test;
         subversion = t.subversion.report;
