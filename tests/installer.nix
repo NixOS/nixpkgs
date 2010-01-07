@@ -1,6 +1,6 @@
 { pkgs, nixpkgs, system, ... }:
 
-rec {
+let
 
   # Build the ISO.  This is the regular installation CD but with test
   # instrumentation.
@@ -26,7 +26,7 @@ rec {
     }).config.system.build.isoImage;
 
   # The configuration to install.
-  config = pkgs.writeText "configuration.nix"
+  config = { fileSystems }: pkgs.writeText "configuration.nix"
     ''
       { config, pkgs, modulesPath, ... }:
 
@@ -40,9 +40,7 @@ rec {
         boot.initrd.kernelModules = [ "ext3" ];
       
         fileSystems =
-          [ { mountPoint = "/";
-              device = "/dev/disk/by-label/nixos";
-            }
+          [ ${fileSystems}
           ];
           
         swapDevices =
@@ -50,9 +48,23 @@ rec {
       }
     '';
 
+  rootFS =
+    ''
+      { mountPoint = "/";
+        device = "/dev/disk/by-label/nixos";
+      }
+    '';
+    
+  bootFS =
+    ''
+      { mountPoint = "/boot";
+        device = "/dev/disk/by-label/boot";
+      }
+    '';
+
   # The test script boots the CD, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.
-  testScript =
+  testScriptFun = { createPartitions, fileSystems }:
     ''
       createDisk("harddisk", 4 * 1024);
 
@@ -76,17 +88,7 @@ rec {
           or die "bad `hello' output";
 
       # Partition the disk.
-      $machine->mustSucceed(
-          "parted /dev/vda mklabel msdos",
-          "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
-          "parted /dev/vda -- mkpart primary ext2 1024M -1s",
-          # It can take udev a moment to create /dev/vda*.
-          "udevadm settle",
-          "mkswap /dev/vda1 -L swap",
-          "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda2",
-          "mount LABEL=nixos /mnt",
-      );
+      ${createPartitions}
 
       # Create the NixOS configuration.
       $machine->mustSucceed(
@@ -97,10 +99,14 @@ rec {
       my $cfg = $machine->mustSucceed("cat /mnt/etc/nixos/hardware.nix");
       print STDERR "Result of the hardware scan:\n$cfg\n";
 
-      $machine->copyFileFromHost("${config}", "/mnt/etc/nixos/configuration.nix");
+      $machine->copyFileFromHost(
+          "${ config { inherit fileSystems; } }",
+          "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
       $machine->mustSucceed("nixos-install >&2");
+      
+      $machine->mustSucceed("cat /boot/grub/grub.cfg >&2");
       
       $machine->shutdown;
 
@@ -109,12 +115,18 @@ rec {
       
       $machine->mustSucceed("echo hello");
 
+      # Did /boot get mounted, if appropriate?
+      $machine->mustSucceed("initctl start filesystems");
+      $machine->mustSucceed("test -e /boot/grub/grub.cfg");
+      
       $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls") =~ /profiles/
           or die "nix-env failed";
 
       $machine->mustSucceed("nixos-rebuild switch >&2");
 
+      $machine->mustSucceed("cat /boot/grub/grub.cfg >&2");
+      
       $machine->shutdown;
 
       # And just to be sure, check that the machine still boots after
@@ -124,4 +136,54 @@ rec {
       $machine->shutdown;
     '';
 
+  makeTest = { createPartitions, fileSystems }:
+    { inherit iso;
+      testScript = testScriptFun { inherit createPartitions fileSystems; };
+    };
+    
+
+in {
+
+  # The (almost) simplest partitioning scheme: a swap partition and
+  # one big filesystem partition.
+  simple = makeTest
+    { createPartitions = 
+        ''
+          $machine->mustSucceed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
+              "parted /dev/vda -- mkpart primary ext2 1024M -1s",
+              # It can take udev a moment to create /dev/vda*.
+              "udevadm settle",
+              "mkswap /dev/vda1 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda2",
+              "mount LABEL=nixos /mnt",
+          );
+        '';
+      fileSystems = rootFS;
+    };
+      
+  # Same as the previous, but now with a separate /boot partition.
+  separateBoot = makeTest
+    { createPartitions =
+        ''
+          $machine->mustSucceed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+              "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
+              "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.ext3 -L boot /dev/vda1",
+              "mkdir /mnt/boot",
+              "mount LABEL=boot /mnt/boot",
+          );
+        '';
+      fileSystems = rootFS + bootFS;
+    };
+  
 }

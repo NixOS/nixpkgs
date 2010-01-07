@@ -111,6 +111,10 @@ let
     minimal_install_archive = {system ? "i686-linux"}: (iso_minimal {inherit system;})
       .config.system.build.minimalInstallArchive;
 
+    # the archive installer can't be tested without chroot which requires being root
+    # options: run in kvm or uml ?
+    # TODO
+
     tests = 
       { services ? ../services }:
       let
@@ -120,26 +124,13 @@ let
         };
       in {
         firefox = t.firefox.test;
-        installer = t.installer.test;
+        installer.simple = t.installer.simple.test;
+        installer.separateBoot = t.installer.separateBoot.test;
         kde4 = t.kde4.test;
         quake3 = t.quake3.test;
         subversion = t.subversion.report;
         trac = t.trac.test;
       };
-
-    /*
-    ### tests about installing NixOS
-
-    # installs NixOs in a qemu_kvm instance using a tweaked iso.
-    tests.nixosInstallation = 
-      (import ./tests/test-nixos-install-from-cd/test.nix {
-        inherit nixpkgs;
-      }).test;
-    */
-
-    # the archive installer can't be tested without chroot which requires being root
-    # options: run in kvm or uml ?
-    # TODO
 
   };
   
