@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "php debugger and profiler extension";
     homepage = http://xdebug.org/;
     license = "xdebug"; # based on PHP-3
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
