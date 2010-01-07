@@ -1,21 +1,20 @@
-{stdenv, fetchurl, devicemapper, enableStatic ? true}:
-
-assert enableStatic -> devicemapper.enableStatic;
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "lvm2-2.02.39";
+  name = "lvm2-2.02.56";
   
   src = fetchurl {
-    url = ftp://sources.redhat.com/pub/lvm2/LVM2.2.02.39.tgz;
-    sha256 = "18nfy7lj9fjjqjjd9dmb4v8away7cpi51ss1k8gd0yrh77dbsyyh";
+    url = ftp://sources.redhat.com/pub/lvm2/LVM2.2.02.56.tgz;
+    sha256 = "0hrgca93jnc3k05cgc3rc5klvc03anxmqydgljv6qq59nhnfz5lw";
   };
   
-  buildInputs = [devicemapper];
-
-  inherit enableStatic;
-  
-  configureFlags = "--disable-readline ${if enableStatic then "--enable-static_link" else ""}";
+  configureFlags = "--disable-readline --enable-udev_rules --enable-udev_sync";
   
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
+
+  meta = {
+    homepage = http://sourceware.org/lvm2/;
+    descriptions = "Tools to support Logical Volume Management (LVM) on Linux";
+  };
 }

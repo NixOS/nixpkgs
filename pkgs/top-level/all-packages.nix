@@ -5276,9 +5276,7 @@ let
     inherit stdenv;
   };
 
-  devicemapper = import ../os-specific/linux/device-mapper {
-    inherit fetchurl stdenv;
-  };
+  devicemapper = lvm2;
 
   dmidecode = import ../os-specific/linux/dmidecode {
     inherit fetchurl stdenv;
@@ -5722,7 +5720,7 @@ let
   };
 
   lvm2 = import ../os-specific/linux/lvm2 {
-    inherit fetchurl stdenv devicemapper;
+    inherit fetchurl stdenv;
   };
 
   mdadm = import ../os-specific/linux/mdadm {
