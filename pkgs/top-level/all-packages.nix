@@ -2373,6 +2373,7 @@ let
 
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
+  python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
   pythonBase = python25Base;
   pythonFull = python25Full;
 
@@ -4353,6 +4354,11 @@ let
     inherit (xlibs) libXi libSM libXmu libXext libX11;
   };
 
+  podofo = import ../development/libraries/podofo {
+    inherit fetchurl stdenv cmake zlib freetype libjpeg libtiff
+      fontconfig openssl;
+  };
+
   polkit = import ../development/libraries/polkit {
     inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext glib;
   };
@@ -4831,8 +4837,21 @@ let
       inherit python setuptools makeWrapper lib;
     };
 
+  buildPython26Package =
+    import ../development/python-modules/generic {
+      inherit makeWrapper lib;
+      python = python26;
+      setuptools = setuptools_python26;
+    };
+
   pythonPackages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs python buildPythonPackage;
+  });
+
+  python26Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
+    python = python26;
+    buildPythonPackage = buildPython26Package;
   });
 
   foursuite = import ../development/python-modules/4suite {
@@ -4855,6 +4874,11 @@ let
 
   pil = import ../development/python-modules/pil {
     inherit fetchurl stdenv python zlib libjpeg freetype;
+  };
+
+  pil_python26 = import ../development/python-modules/pil {
+    inherit fetchurl stdenv zlib libjpeg freetype;
+    python = python26;
   };
 
   psyco = import ../development/python-modules/psyco {
@@ -4913,6 +4937,11 @@ let
     inherit stdenv fetchurl lib python;
   };
 
+  sip_python26 = import ../development/python-modules/python-sip {
+    inherit stdenv fetchurl lib;
+    python = python26;
+  };
+
   pyqt = builderDefsPackage (import ../development/python-modules/pyqt/4.3.3.nix) {
     inherit pkgconfig python pythonSip glib;
     inherit (xlibs) libX11 libXext;
@@ -4922,6 +4951,13 @@ let
   pyqt4 = import ../development/python-modules/pyqt {
     inherit stdenv fetchurl lib python sip;
     qt4 = qt45;
+  };
+
+  pyqt4_python26 = import ../development/python-modules/pyqt {
+    inherit stdenv fetchurl lib;
+    qt4 = qt45;
+    python = python26;
+    sip = sip_python26;
   };
 
   pyx = import ../development/python-modules/pyx {
@@ -4934,6 +4970,11 @@ let
 
   setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
     inherit python makeWrapper;
+  };
+
+  setuptools_python26 = builderDefsPackage (import ../development/python-modules/setuptools) {
+    inherit makeWrapper;
+    python = python26;
   };
 
   wxPython = wxPython26;
@@ -6323,6 +6364,17 @@ let
 
   bvi = import ../applications/editors/bvi {
     inherit fetchurl stdenv ncurses;
+  };
+
+  calibre = import ../applications/misc/calibre {
+    inherit stdenv fetchurl libpng imagemagick pkgconfig libjpeg fontconfig podofo
+      qt4 makeWrapper unrar;
+    python = python26Full;
+    pyqt4 = pyqt4_python26;
+    sip = sip_python26;
+    pil = pil_python26;
+    popplerQt4 = popplerQt45;
+    inherit (python26Packages) mechanize lxml dateutil;
   };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
