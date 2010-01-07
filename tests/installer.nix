@@ -117,8 +117,15 @@ let
       my $machine = Machine->new({ hda => "harddisk" });
       
       # Did /boot get mounted, if appropriate?
+      # !!! There is currently no good way to wait for the
+      # `filesystems' tash to finish.
       #$machine->mustSucceed("initctl start filesystems");
       #$machine->mustSucceed("test -e /boot/grub/grub.cfg");
+
+      # Did the swap device get activated?
+      # !!! Idem.
+      # $machine->waitForJob("swap");
+      #$machine->mustSucceed("cat /proc/swaps | grep -q /dev");
       
       $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls") =~ /profiles/
@@ -194,24 +201,20 @@ in {
         ''
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted /dev/vda -- mkpart primary 1024M 2048M", # first PV
-              "parted /dev/vda -- set 2 lvm on",
+              "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
+              "parted /dev/vda -- set 1 lvm on",
               "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
-              "parted /dev/vda -- set 3 lvm on",
+              "parted /dev/vda -- set 2 lvm on",
               "fdisk -l /dev/vda >&2",
               "udevadm settle",
-              "pvcreate /dev/vda2 /dev/vda3",
-              "vgcreate MyVolGroup /dev/vda2 /dev/vda3",
+              "pvcreate /dev/vda1 /dev/vda2",
+              "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
               "lvcreate --size 1G --name swap MyVolGroup",
               "lvcreate --size 2G --name nixos MyVolGroup",
               "mkswap -f /dev/MyVolGroup/swap -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/MyVolGroup/nixos",
               "mount LABEL=nixos /mnt",
-              "mkfs.ext3 -L boot /dev/vda1",
-              "mkdir /mnt/boot",
-              "mount LABEL=boot /mnt/boot",
           );
         '';
       fileSystems =
@@ -219,7 +222,7 @@ in {
           { mountPoint = "/";
             device = " /dev/MyVolGroup/nixos";
           }
-        '' + bootFS;
+        '';
     };
   
 }
