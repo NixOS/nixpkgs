@@ -63,7 +63,10 @@ let
     '';
 
   # The test script boots the CD, installs NixOS on an empty hard
-  # disk, and then reboot from the hard disk.
+  # disk, and then reboot from the hard disk.  It's parameterized with
+  # a test script fragment `createPartitions', which must create
+  # partitions and filesystems, and a configuration.nix fragment
+  # `fileSystems'.
   testScriptFun = { createPartitions, fileSystems }:
     ''
       createDisk("harddisk", 4 * 1024);
@@ -106,18 +109,16 @@ let
       # Perform the installation.
       $machine->mustSucceed("nixos-install >&2");
       
-      $machine->mustSucceed("cat /boot/grub/grub.cfg >&2");
+      $machine->mustSucceed("cat /mnt/boot/grub/grub.cfg >&2");
       
       $machine->shutdown;
 
       # Now see if we can boot the installation.
       my $machine = Machine->new({ hda => "harddisk" });
       
-      $machine->mustSucceed("echo hello");
-
       # Did /boot get mounted, if appropriate?
-      $machine->mustSucceed("initctl start filesystems");
-      $machine->mustSucceed("test -e /boot/grub/grub.cfg");
+      #$machine->mustSucceed("initctl start filesystems");
+      #$machine->mustSucceed("test -e /boot/grub/grub.cfg");
       
       $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls") =~ /profiles/
@@ -184,6 +185,41 @@ in {
           );
         '';
       fileSystems = rootFS + bootFS;
+    };
+  
+  # Create two physical LVM partitions combined into one volume group
+  # that contains the logical swap and root partitions.
+  lvm = makeTest
+    { createPartitions =
+        ''
+          $machine->mustSucceed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+              "parted /dev/vda -- mkpart primary 1024M 2048M", # first PV
+              "parted /dev/vda -- set 2 lvm on",
+              "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
+              "parted /dev/vda -- set 3 lvm on",
+              "fdisk -l /dev/vda >&2",
+              "udevadm settle",
+              "pvcreate /dev/vda2 /dev/vda3",
+              "vgcreate MyVolGroup /dev/vda2 /dev/vda3",
+              "lvcreate --size 1G --name swap MyVolGroup",
+              "lvcreate --size 2G --name nixos MyVolGroup",
+              "mkswap -f /dev/MyVolGroup/swap -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/MyVolGroup/nixos",
+              "mount LABEL=nixos /mnt",
+              "mkfs.ext3 -L boot /dev/vda1",
+              "mkdir /mnt/boot",
+              "mount LABEL=boot /mnt/boot",
+          );
+        '';
+      fileSystems =
+        ''
+          { mountPoint = "/";
+            device = " /dev/MyVolGroup/nixos";
+          }
+        '' + bootFS;
     };
   
 }
