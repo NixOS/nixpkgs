@@ -32,7 +32,6 @@ let
       pkgs.gzip
       pkgs.less
       pkgs.libcap
-      pkgs.lvm2
       pkgs.man
       pkgs.mdadm
       pkgs.module_init_tools

@@ -15,6 +15,7 @@
             ${config.system.sbin.modprobe}/sbin/modprobe dm_mod || true
 
             ${pkgs.devicemapper}/sbin/dmsetup mknodes
+            
             # Scan for block devices that might contain LVM physical volumes
             # and volume groups.
             ${pkgs.lvm2}/sbin/vgscan --mknodes
@@ -28,6 +29,8 @@
 
         task = true;
       };
+
+    environment.systemPackages = [ pkgs.devicemapper pkgs.lvm2 ];
 
   };
   
