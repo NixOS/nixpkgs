@@ -44,25 +44,27 @@ let
       # called by 50-firmware.rules works properly.
       echo 'ENV{FIRMWARE_DIRS}="${toString config.hardware.firmware}"' >> $out/00-path.rules
       
-      # Fix some paths in the standard udev rules.
-      for i in $out/*.rules; do
-        substituteInPlace $i \
-          --replace /sbin/modprobe ${modprobe}/sbin/modprobe \
-          --replace /sbin/blkid ${pkgs.utillinux}/sbin/blkid \
-          --replace /sbin/mdadm ${pkgs.mdadm}/sbin/madm
-      done
-
-      # If auto-configuration is disabled, then remove
-      # udev's 80-drivers.rules file, which contains rules for
-      # automatically calling modprobe.
-      ${if !config.boot.hardwareScan then "rm $out/80-drivers.rules" else ""}
-
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
         for j in $i/*/udev/rules.d/*; do
           ln -s $j $out/$(basename $j)
         done
       done
+
+      # Fix some paths in the standard udev rules.  Hacky.
+      for i in $out/*.rules; do
+        substituteInPlace $i \
+          --replace /sbin/modprobe ${modprobe}/sbin/modprobe \
+          --replace /sbin/blkid ${pkgs.utillinux}/sbin/blkid \
+          --replace /sbin/mdadm ${pkgs.mdadm}/sbin/madm \
+          --replace '$env{DM_SBIN_PATH}/blkid' ${pkgs.utillinux}/sbin/blkid \
+          --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"'
+      done
+
+      # If auto-configuration is disabled, then remove
+      # udev's 80-drivers.rules file, which contains rules for
+      # automatically calling modprobe.
+      ${if !config.boot.hardwareScan then "rm $out/80-drivers.rules" else ""}
 
       # Use the persistent device rules (naming for CD/DVD and
       # network devices) stored in 
@@ -186,8 +188,12 @@ in
           ''
             # Let udev create device nodes for all modules that have already
             # been loaded into the kernel (or for which support is built into
-            # the kernel).
+            # the kernel).  The `STARTUP' variable is needed to force
+            # the LVM rules to create device nodes.  See
+            # http://www.mail-archive.com/fedora-devel-list@redhat.com/msg10261.html
+            ${udev}/sbin/udevadm control --env=STARTUP=1
             ${udev}/sbin/udevadm trigger
+            ${udev}/sbin/udevadm control --env=STARTUP=
             ${udev}/sbin/udevadm settle # wait for udev to finish
 
             initctl emit -n new-devices
