@@ -32,6 +32,8 @@ rec {
             mv $i $out/coverage-data/$(dirname $i)
           done
 
+          touch $out/nix-support/hydra-build-products
+
           for i in $out/*.png; do
             echo "report screenshot $i" >> $out/nix-support/hydra-build-products
           done
