@@ -90,6 +90,7 @@
   ./services/networking/ssh/sshd.nix
   ./services/networking/tftpd.nix
   ./services/networking/vsftpd.nix
+  ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
   ./services/printing/cupsd.nix
