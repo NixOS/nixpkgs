@@ -464,6 +464,56 @@ in
         '';
       };
 
+      phpIni = mkOption {
+        default = pkgs.writeText "php.ini" ''
+           ; Needed for PHP's mail() function.
+           sendmail_path = sendmail -t -i
+         '';
+
+        example = ''
+        Example code (copy & paste):
+
+         most simple:
+         phpIni pkgs.writeText "php.ini" '''
+           ; Needed for PHP's mail() function.
+           sendmail_path = sendmail -t -i
+         ''';
+
+         using recommended settings and enabling Xdebug:
+         phpIni =  pkgs.phpIniBuilder.override {
+            appendLines = '''
+             sendmail_path = sendmail -t -i
+             zend_extension="''\${pkgs.phpXdebug}/lib/xdebug.so"
+             zend_extension_ts="''\${pkgs.phpXdebug}/lib/xdebug.so"
+             zend_extension_debug="''\${pkgs.phpXdebug}/lib/xdebug.so"
+             xdebug.remote_enable=true
+             xdebug.remote_host=127.0.0.1
+             xdebug.remote_port=9000
+             xdebug.remote_handler=dbgp
+             xdebug.profiler_enable=0
+             xdebug.profiler_output_dir="/tmp/xdebug"
+             xdebug.remote_mode=req
+            ''';
+          };
+        '';
+
+
+        description = ''
+          The contents of this option are used as global php.ini file by the
+          PHP interpreter used by Apache. You have to enable PHP explicitly.
+          See extraModules options.
+
+          This file defaults to defining sendmail_path only.
+
+          Note: Depending on your configuration you can set PHP ini values using .htaccess files and the
+          php_value option.
+
+          The example shows how to enable Xdebug and use the recommended
+          php.ini values which are contained in the PHP distribution.
+          I don't know whether they are equal to defaults
+        '';
+      };
+
     }
 
     # Include the options shared between the main server and virtual hosts.
@@ -520,12 +570,8 @@ in
                 optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
              ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
 
-           PHPRC = pkgs.writeText "php.ini"
-             ''
-               ; Needed for PHP's mail() function.
-               sendmail_path = sendmail -t -i
-             '';
-           
+           PHPRC = mainCfg.phpIni;
+
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =
