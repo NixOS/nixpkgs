@@ -180,7 +180,6 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
 
 foreach my $path (glob "/sys/class/block/*") {
     my $module;
-    print STDERR "$path\n";
     if (-e "$path/device/driver/module") {
         $module = basename `readlink -f $path/device/driver/module`;
         chomp $module;
