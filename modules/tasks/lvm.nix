@@ -14,7 +14,7 @@
             # Load the device mapper.
             ${config.system.sbin.modprobe}/sbin/modprobe dm_mod || true
 
-            ${pkgs.devicemapper}/sbin/dmsetup mknodes
+            ${pkgs.lvm2}/sbin/dmsetup mknodes
             
             # Scan for block devices that might contain LVM physical volumes
             # and volume groups.
@@ -30,7 +30,7 @@
         task = true;
       };
 
-    environment.systemPackages = [ pkgs.devicemapper pkgs.lvm2 ];
+    environment.systemPackages = [ pkgs.lvm2 ];
 
   };
   

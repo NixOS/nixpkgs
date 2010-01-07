@@ -115,7 +115,6 @@ let
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
-      devicemapper = if config.boot.initrd.lvm then pkgs.devicemapper else null;
       lvm2 = if config.boot.initrd.lvm then pkgs.lvm2 else null;
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
       doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
@@ -153,11 +152,11 @@ let
 
       cp -pd ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
 
-      # Copy devicemapper and lvm, if we need it.
-      if test -n "$devicemapper"; then
-        cp $devicemapper/sbin/dmsetup $out/bin/dmsetup
-        cp $devicemapper/lib/libdevmapper.so.*.* $out/lib
+      # Copy dmsetup and lvm, if we need it.
+      if test -n "$lvm2"; then
+        cp $lvm2/sbin/dmsetup $out/bin/dmsetup
         cp $lvm2/sbin/lvm $out/bin/lvm
+        cp $lvm2/lib/libdevmapper.so.*.* $out/lib
       fi
 
       # Add RAID mdadm tool.
@@ -208,8 +207,8 @@ let
       $out/bin/fsck -N
       $out/bin/udevadm --version
       $out/bin/blkid -v 2>&1 | grep "blkid from util-linux-ng"
-      if test -n "$devicemapper"; then
-          $out/bin/dmsetup --version | grep "version:"
+      if test -n "$lvm2"; then
+          $out/bin/dmsetup --version 2>&1 | grep "version:"
           LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
       fi
       $out/bin/reiserfsck -V
