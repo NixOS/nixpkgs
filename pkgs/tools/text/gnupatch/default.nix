@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, ed }:
 
 stdenv.mkDerivation rec {
   name = "patch-2.6.1";
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
   };
 
-  # Fails on armv5tel-linux at least, maybe on more platforms
-  # Some tests require 'ed', additionally.
-  doCheck = false;
+  buildInputs = (stdenv.lib.optional doCheck ed);
+
+  doCheck = true;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
@@ -29,9 +29,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-# XXX: These Darwin hacks were useful with 2.5.4; assuming they're no
-#  longer useful.
-#
-#  patches = if stdenv.isDarwin then [./setmode.patch] else [];
-#} // (if stdenv.isDarwin then { ac_cv_exeext = "" ; } else {} ) )

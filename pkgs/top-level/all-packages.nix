@@ -737,7 +737,7 @@ let
     });
 
   gnupatch = useFromStdenv "patch" (import ../tools/text/gnupatch {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv ed;
   });
 
   gnupg = import ../tools/security/gnupg {
