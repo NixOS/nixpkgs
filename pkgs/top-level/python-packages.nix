@@ -164,7 +164,7 @@ rec {
     name = "mechanize-0.1.11";
 
     src = fetchurl {
-      url = "mirror://sourceforge/wwwsearch/${name}.tar.gz";
+      url = "http://wwwsearch.sourceforge.net/mechanize/src/${name}.tar.gz";
       sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
     };
 
