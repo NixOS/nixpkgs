@@ -1183,7 +1183,8 @@ let
   };
 
   parted = import ../tools/misc/parted {
-    inherit fetchurl stdenv devicemapper libuuid gettext readline;
+    inherit fetchurl stdenv devicemapper libuuid gettext readline
+      utillinuxng;
   };
 
   patch = gnupatch;
