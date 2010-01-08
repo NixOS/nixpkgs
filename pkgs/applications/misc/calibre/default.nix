@@ -3,11 +3,11 @@ imagemagick, libjpeg, fontconfig, podofo, qt4, mechanize, lxml, dateutil,
 pil, makeWrapper, unrar}:
 
 stdenv.mkDerivation rec {
-  name = "calibre-0.6.29";
+  name = "calibre-0.6.32";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.gz";
-    sha256 = "1k3ady2ichig6x3k6w0fhvpbklk6jfzpmqn2wv8d8dqkkpm5vrvm";
+    sha256 = "0r646k5yig9y139jpajsr5scwsqjbgyq94klj7f2b8wjw79qpsmz";
   };
 
   inherit python;
@@ -40,5 +40,7 @@ stdenv.mkDerivation rec {
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
     license = "GPLv3";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
