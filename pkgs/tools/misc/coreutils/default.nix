@@ -1,20 +1,18 @@
 {stdenv, fetchurl, aclSupport ? false, acl, perl, gmp}:
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.2";
+  name = "coreutils-8.3";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "0hagmpqm3wyx0hhw7i0mswary5w8flrk2vxhqfgfskam2rfhbhyk";
+    sha256 = "0lghmjm6mmzxha7hdn2zz2dg6gsd4gqydp720p0gagr21q7lz9hh";
   };
 
   buildInputs = [ perl gmp ] ++ stdenv.lib.optional aclSupport acl;
 
   # The tests are known broken on Cygwin
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025).
-  # For the rest, wait for upstream reply at:
-  # http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19024 .
-  doCheck = false;
+  doCheck = (stdenv.system != "i686-cygwin");
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
