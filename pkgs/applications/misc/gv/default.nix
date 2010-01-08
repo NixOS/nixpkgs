@@ -1,18 +1,18 @@
 { stdenv, fetchurl, Xaw3d, ghostscriptX }:
 
 stdenv.mkDerivation rec {
-  name = "gv-3.6.7";
+  name = "gv-3.6.8";
 
   src = fetchurl {
     url = "mirror://gnu/gv/${name}.tar.gz";
-    sha256 = "1cdkkxamsicpk0jdbrkjpxhcsrx0b82kqgrc4j407q2gc3qs8wgf";
+    sha256 = "1i86a4wfswp908gp4i0f6jbksn8bqqzkfy58r9ishspzkp2fb510";
   };
 
   buildInputs = [ Xaw3d ghostscriptX ];
-  
+
   patchPhase = ''
-    sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i src/*.in
-    sed 's|"gs"|"${ghostscriptX}/bin/gs"|g' -i src/*.c
+    sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in
+    sed 's|"gs"|"${ghostscriptX}/bin/gs"|g' -i "src/"*.c
   '';
 
   doCheck = true;
@@ -28,5 +28,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "GPLv3+";
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
