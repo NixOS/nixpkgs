@@ -1,13 +1,22 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "unrar-3.7.6";
+  name = "unrar-3.9.7";
 
   src = fetchurl {
-    url = http://www.rarlab.com/rar/unrarsrc-3.7.6.tar.gz;
-    sha256 = "0inzy0jlwqm18i6lq17aq4n2baqqlbjyr6incw4s9cxrvmjq51ls";
+    url = http://www.rarlab.com/rar/unrarsrc-3.9.7.tar.gz;
+    sha256 = "101w7fgfr5biyic8gj0km5aqi4xj8dikh4aa0rx0qvg8bjp19wb4";
   };
 
-  buildPhase = "make -f makefile.unix unrar lib CXXFLAGS=\"-fPIC -O2\"";
+  # Add a missing objects to the library
+  #patchPhase = ''
+  #  sed -i 's/^\(LIB_OBJ=.*\)/\1 recvol.o rs.o/' makefile.unix
+  #'';
+
+  buildPhase = ''
+    make -f makefile.unix unrar
+    rm *.o
+    make -f makefile.unix lib CXXFLAGS="-fPIC -O2 -DSILENT";
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
