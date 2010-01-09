@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zr04qadk9gsabmhnwmk27kb4zgfpy988nwa9s1k3hc3hn3gls3a";
   };
 
-  configureFlags = [ "--enable-pcsc" "--enable-nsplugin" ];
+  configureFlags = [ "--enable-pcsc" "--enable-nsplugin"
+    "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so.1" ];
   buildInputs = [ libtool readline zlib openssl pcsclite libassuan pkgconfig
     libXt ] ++
     stdenv.lib.optional (! stdenv.isLinux) libiconv;
