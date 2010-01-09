@@ -3265,6 +3265,10 @@ let
     inherit (gnome) glib;
   };
 
+  enginepkcs11 = import ../development/libraries/enginepkcs11 {
+    inherit fetchurl stdenv libp11 pkgconfig openssl;
+  };
+
   exiv2 = import ../development/libraries/exiv2 {
     inherit fetchurl stdenv zlib;
   };
@@ -4055,6 +4059,10 @@ let
 
   libotr = import ../development/libraries/libotr {
     inherit fetchurl stdenv libgcrypt;
+  };
+
+  libp11 = import ../development/libraries/libp11 {
+    inherit fetchurl stdenv libtool openssl pkgconfig;
   };
 
   libpcap = import ../development/libraries/libpcap {
