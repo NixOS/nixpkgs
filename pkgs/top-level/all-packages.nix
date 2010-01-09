@@ -1162,6 +1162,12 @@ let
     inherit fetchurl stdenv pkgconfig bluez libusb;
   };
 
+  opensc = import ../tools/security/opensc {
+    inherit fetchurl stdenv libtool readline zlib openssl libiconv pcsclite
+      libassuan pkgconfig;
+    inherit (xlibs) libXt;
+  };
+
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
