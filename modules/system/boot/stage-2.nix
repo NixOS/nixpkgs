@@ -23,6 +23,7 @@ let
     src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel activateConfiguration;
+    ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
     path =
       [ coreutils

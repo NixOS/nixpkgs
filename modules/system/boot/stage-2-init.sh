@@ -74,7 +74,7 @@ mount -t tmpfs -o "mode=0755" none /dev
 mkdir -m 0777 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
-mount -t devpts -o mode=0600 none /dev/pts 
+mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts 
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # uml doesn't have usb by default
 mkdir -m 01777 -p /tmp 
 mkdir -m 0755 -p /var
