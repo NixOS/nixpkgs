@@ -447,6 +447,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ccid = import ../tools/security/ccid {
+    inherit fetchurl stdenv pcsclite libusb pkgconfig perl;
+  };
+
   ccrypt = import ../tools/security/ccrypt {
     inherit fetchurl stdenv;
   };
@@ -1195,6 +1199,10 @@ let
 
   pciutils = import ../tools/system/pciutils {
     inherit fetchurl stdenv zlib;
+  };
+
+  pcsclite = import ../tools/security/pcsclite {
+    inherit fetchurl stdenv hal pkgconfig dbus;
   };
 
   pdf2djvu = import ../tools/typesetting/pdf2djvu {
