@@ -1065,6 +1065,14 @@ let
       };
     });
 
+  muscleframework = import ../tools/security/muscleframework {
+    inherit fetchurl stdenv libmusclecard pkgconfig pcsclite;
+  };
+
+  muscletool = import ../tools/security/muscletool {
+    inherit fetchurl stdenv pkgconfig libmusclecard pcsclite;
+  };
+
   mysql2pgsql = import ../tools/misc/mysql2pgsql {
     inherit fetchurl stdenv perl shebangfix;
   };
@@ -4017,6 +4025,10 @@ let
 
   libmspack = import ../development/libraries/libmspack {
     inherit fetchurl stdenv;
+  };
+
+  libmusclecard = import ../development/libraries/libmusclecard {
+    inherit fetchurl stdenv pkgconfig pcsclite;
   };
 
   libnova = import ../development/libraries/libnova {
