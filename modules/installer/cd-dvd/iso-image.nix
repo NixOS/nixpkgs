@@ -131,11 +131,22 @@ in
   boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
 
   boot.initrd.kernelModules = [ "loop" ];
-  
-  # Tell stage 1 of the boot to mount a tmpfs on top of the CD using
-  # AUFS.  !!! It would be nicer to make the stage 1 init pluggable
-  # and move that bit of code here.
-  boot.isLiveCD = true;
+
+  # In stage 1, mount a tmpfs on top of / (the ISO image) and
+  # /nix/store (the squashfs image) to make this a live CD.
+  boot.initrd.postMountCommands =
+    ''
+      mkdir /mnt-root-tmpfs
+      mount -t tmpfs -o "mode=755" none /mnt-root-tmpfs
+      mkdir /mnt-root-union
+      mount -t aufs -o dirs=/mnt-root-tmpfs=rw:$targetRoot=ro none /mnt-root-union
+      targetRoot=/mnt-root-union
+
+      mkdir /mnt-store-tmpfs
+      mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
+      mkdir -p $targetRoot/nix/store
+      mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
+    '';
 
   # AUFS 2 support (currently unused).
   /*

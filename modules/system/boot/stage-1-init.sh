@@ -272,22 +272,6 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
 done
 
 
-# If this is a live-CD/DVD, then union-mount a tmpfs on top of the
-# original root.
-if test -n "@isLiveCD@"; then
-    mkdir /mnt-root-tmpfs
-    mount -t tmpfs -o "mode=755" none /mnt-root-tmpfs
-    mkdir /mnt-root-union
-    mount -t aufs -o dirs=/mnt-root-tmpfs=rw:$targetRoot=ro none /mnt-root-union
-    targetRoot=/mnt-root-union
-
-    mkdir /mnt-store-tmpfs
-    mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-    mkdir -p $targetRoot/nix/store
-    mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
-fi
-
-
 @postMountCommands@
 
 

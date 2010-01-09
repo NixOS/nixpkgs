@@ -11,16 +11,6 @@ let
 
   options = {
 
-    boot.isLiveCD = mkOption {
-      default = false;
-      description = "
-        If set to true, the root device will be mounted read-only and
-        a ramdisk will be mounted on top of it using unionfs to
-        provide a writable root.  This is used for the NixOS
-        Live-CD/DVD.
-      ";
-    };
-
     boot.resumeDevice = mkOption {
       default = "";
       example = "0:0";
@@ -277,7 +267,7 @@ let
 
     inherit udevConf extraUtils;
 
-    inherit (config.boot) isLiveCD resumeDevice;
+    inherit (config.boot) resumeDevice;
 
     inherit (config.boot.initrd) checkJournalingFS
       postDeviceCommands postMountCommands kernelModules;
