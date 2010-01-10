@@ -1,5 +1,7 @@
 { pkgs, nixpkgs, system, ... }:
 
+with pkgs.lib;
+
 let
 
   # Build the ISO.  This is the regular installation CD but with test
@@ -11,13 +13,12 @@ let
         [ ../modules/installer/cd-dvd/installation-cd-graphical.nix
           ../modules/testing/test-instrumentation.nix
           { key = "serial"; 
-            boot.loader.grub.timeout = pkgs.lib.mkOverride 0 {} 0;
+            boot.loader.grub.timeout = mkOverride 0 {} 0;
             
             # The test cannot access the network, so any sources we
             # need must be included in the ISO.
             isoImage.storeContents =
-              [ pkgs.hello.src
-                pkgs.glibcLocales
+              [ pkgs.glibcLocales
                 pkgs.sudo
                 pkgs.docbook5
               ];
@@ -25,8 +26,9 @@ let
         ];
     }).config.system.build.isoImage;
 
+    
   # The configuration to install.
-  config = { fileSystems }: pkgs.writeText "configuration.nix"
+  config = { fileSystems, testChannel }: pkgs.writeText "configuration.nix"
     ''
       { config, pkgs, modulesPath, ... }:
 
@@ -39,12 +41,10 @@ let
         boot.loader.grub.device = "/dev/vda";
         boot.initrd.kernelModules = [ "ext3" ];
       
-        fileSystems =
-          [ ${fileSystems}
-          ];
-          
-        swapDevices =
-          [ { label = "swap"; } ];
+        fileSystems = [ ${fileSystems} ];
+        swapDevices = [ { label = "swap"; } ];
+
+        environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
     '';
 
@@ -62,20 +62,65 @@ let
       }
     '';
 
+    
+  # Configuration of a web server that simulates the Nixpkgs channel
+  # distribution server.
+  webserver = 
+    { config, pkgs, ... }:
+
+    { services.httpd.enable = true;
+      services.httpd.adminAddr = "foo@example.org";
+      services.httpd.servedDirs = singleton
+        { urlPath = "/releases/nixpkgs/channels/nixpkgs-unstable";
+          dir = "/tmp/channel";
+        };
+
+      # Make the Nix store in this VM writable using AUFS.  Use Linux
+      # 2.6.27 because 2.6.32 doesn't work (probably we need AUFS2).
+      # This should probably be moved to qemu-vm.nix.
+      boot.kernelPackages = pkgs.kernelPackages_2_6_27;
+      boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
+      boot.initrd.availableKernelModules = [ "aufs" ];
+
+      boot.initrd.postMountCommands =
+        ''
+          mkdir /mnt-store-tmpfs
+          mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
+          mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
+        '';
+
+      virtualisation.pathsInNixDB = channelContents;
+    };
+
+  channelContents = [ pkgs.hello.src pkgs.rlwrap ];
+  
+
   # The test script boots the CD, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems, and a configuration.nix fragment
   # `fileSystems'.
-  testScriptFun = { createPartitions, fileSystems }:
+  testScriptFun = { createPartitions, fileSystems, testChannel }:
     ''
       createDisk("harddisk", 4 * 1024);
 
       my $machine = Machine->new({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso") });
+      $machine->start;
 
-      $machine->mustSucceed("echo hello");
-
+      ${optionalString testChannel ''
+        # Create a channel on the web server containing a few packages
+        # to simulate the Nixpkgs channel.
+        $webserver->start;
+        $webserver->waitForJob("httpd");
+        $webserver->mustSucceed("mkdir /tmp/channel");
+        $webserver->mustSucceed(
+            "nix-push file:///tmp/channel " .
+            "http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable " .
+            "file:///tmp/channel/MANIFEST ${toString channelContents} >&2");
+      ''}
+      
       # Make sure that we get a login prompt etc.
+      $machine->mustSucceed("echo hello");
       $machine->waitForJob("tty1");
       $machine->waitForJob("rogue");
       $machine->waitForJob("nixos-manual");
@@ -84,11 +129,20 @@ let
       $machine->stopJob("dhclient");
       $machine->mustSucceed("rm /etc/resolv.conf");
 
-      # Test nix-env.
-      $machine->mustFail("hello");
-      $machine->mustSucceed("nix-env -i hello");
-      $machine->mustSucceed("hello") =~ /Hello, world/
-          or die "bad `hello' output";
+      ${optionalString testChannel ''
+        # Allow the machine to talk to the fake nixos.org.
+        $machine->mustSucceed(
+            "echo 192.168.1.1 nixos.org >> /etc/hosts",
+            "ifconfig eth1 up 192.168.1.2",
+            "nix-pull http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST",
+        );
+
+        # Test nix-env.
+        $machine->mustFail("hello");
+        $machine->mustSucceed("nix-env -i hello");
+        $machine->mustSucceed("hello") =~ /Hello, world/
+            or die "bad `hello' output";
+      ''}
 
       # Partition the disk.
       ${createPartitions}
@@ -103,7 +157,7 @@ let
       print STDERR "Result of the hardware scan:\n$cfg\n";
 
       $machine->copyFileFromHost(
-          "${ config { inherit fileSystems; } }",
+          "${ config { inherit fileSystems testChannel; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -144,9 +198,13 @@ let
       $machine->shutdown;
     '';
 
-  makeTest = { createPartitions, fileSystems }:
+    
+  makeTest = { createPartitions, fileSystems, testChannel ? false }:
     { inherit iso;
-      testScript = testScriptFun { inherit createPartitions fileSystems; };
+      nodes = if testChannel then { inherit webserver; } else { };
+      testScript = testScriptFun {
+        inherit createPartitions fileSystems testChannel;
+      };
     };
     
 
@@ -170,6 +228,7 @@ in {
           );
         '';
       fileSystems = rootFS;
+      testChannel = true;
     };
       
   # Same as the previous, but now with a separate /boot partition.

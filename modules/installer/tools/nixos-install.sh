@@ -52,6 +52,7 @@ NIXOS=$(readlink -f "$NIXOS")
 mkdir -m 0755 -p $mountPoint/etc
 touch /etc/resolv.conf 
 cp /etc/resolv.conf $mountPoint/etc/
+cp /etc/hosts $mountPoint/etc/
 
 # Mount some stuff in the target root directory.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
