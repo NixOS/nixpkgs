@@ -1,8 +1,9 @@
 {stdenv, fetchurl, python, pygobject, pycairo, pyGtkGlade, pythonDBus, 
  wpa_supplicant, dhcp, wirelesstools, nettools, iproute,
- locale ? "\\\"C\\\"" }:
+ locale ? "C" }:
 
-# wicd has a ncurses interface that we do not build because it depends on urwid which has not been packaged at this time (2009-12-27)
+# Wicd has a ncurses interface that we do not build because it depends
+# on urwid which has not been packaged at this time (2009-12-27).
 
 stdenv.mkDerivation rec {
   name = "wicd-1.6.2.2";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${iproute}/sbin" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pythonDBus})" in/scripts=wicd.in
-    sed -i "4iexport LC_ALL=${locale}" in/scripts=wicd.in
+    sed -i "4iexport LC_ALL=\\\"${locale}\\\"" in/scripts=wicd.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-client.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})" in/scripts=wicd-client.in
   '';
@@ -64,15 +65,15 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://wicd.net/;
     description = "A wiredless and wired network manager";
-    long_description=''
-A complete network connection manager
-Wicd supports wired and wireless networks, and capable of
-creating and tracking profiles for both.  It has a
-template-based wireless encryption system, which allows the user
-to easily add encryption methods used.  It ships with some common
-encryption types, such as WPA and WEP. Wicd will automatically
-connect at startup to any preferred network within range.
-'';
-    license="GPL";
+    longDescription=''
+      A complete network connection manager
+      Wicd supports wired and wireless networks, and capable of
+      creating and tracking profiles for both.  It has a
+      template-based wireless encryption system, which allows the user
+      to easily add encryption methods used.  It ships with some common
+      encryption types, such as WPA and WEP. Wicd will automatically
+      connect at startup to any preferred network within range.
+    '';
+    license="GPLv2";
   };
 }
