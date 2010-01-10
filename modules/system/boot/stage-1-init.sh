@@ -117,12 +117,10 @@ udevd --daemon
 udevadm trigger
 udevadm settle
 
-if type -p dmsetup > /dev/null; then
-    echo "starting device mapper and LVM..."
-    dmsetup mknodes
-    lvm vgscan --ignorelockingfailure
-    lvm vgchange -ay --ignorelockingfailure
-fi
+echo "starting device mapper and LVM..."
+dmsetup mknodes
+lvm vgscan --ignorelockingfailure
+lvm vgchange -ay --ignorelockingfailure
 
 if test -n "$debug1devices"; then fail; fi
 

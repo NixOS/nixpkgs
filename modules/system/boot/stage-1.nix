@@ -20,14 +20,6 @@ let
       ";
     };
 
-    boot.initrd.lvm = mkOption {
-      default = true;
-      description = "
-        Whether to include lvm in the initial ramdisk. You should use this option
-        if your ROOT device is on lvm volume.
-      ";
-    };
-
     boot.initrd.enableSplashScreen = mkOption {
       default = true;
       description = "
@@ -105,7 +97,6 @@ let
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
-      lvm2 = if config.boot.initrd.lvm then pkgs.lvm2 else null;
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
       doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
     }
@@ -143,11 +134,9 @@ let
       cp -pd ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
 
       # Copy dmsetup and lvm, if we need it.
-      if test -n "$lvm2"; then
-        cp $lvm2/sbin/dmsetup $out/bin/dmsetup
-        cp $lvm2/sbin/lvm $out/bin/lvm
-        cp $lvm2/lib/libdevmapper.so.*.* $out/lib
-      fi
+      cp ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
+      cp ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
+      cp ${pkgs.lvm2}/lib/libdevmapper.so.*.* $out/lib
 
       # Add RAID mdadm tool.
       cp ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
@@ -197,10 +186,8 @@ let
       $out/bin/fsck -N
       $out/bin/udevadm --version
       $out/bin/blkid -v 2>&1 | grep "blkid from util-linux-ng"
-      if test -n "$lvm2"; then
-          $out/bin/dmsetup --version 2>&1 | grep "version:"
-          LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
-      fi
+      $out/bin/dmsetup --version 2>&1 | grep "version:"
+      LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
       $out/bin/reiserfsck -V
       $out/bin/mdadm --version
       $out/bin/basename --version
