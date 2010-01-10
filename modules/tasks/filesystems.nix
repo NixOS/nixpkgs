@@ -224,7 +224,7 @@ in
     environment.systemPackages = [pkgs.ntfs3g pkgs.mount_cifs pkgs.nfsUtils];
     
     jobs.filesystems =
-      { startOn = [ "startup" "new-devices" "ip-up" ];
+      { startOn = [ "new-devices" "ip-up" ];
 
         script = task;
 
