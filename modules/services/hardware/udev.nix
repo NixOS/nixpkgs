@@ -193,8 +193,8 @@ in
             # http://www.mail-archive.com/fedora-devel-list@redhat.com/msg10261.html
             ${udev}/sbin/udevadm control --env=STARTUP=1
             ${udev}/sbin/udevadm trigger
-            ${udev}/sbin/udevadm control --env=STARTUP=
             ${udev}/sbin/udevadm settle # wait for udev to finish
+            ${udev}/sbin/udevadm control --env=STARTUP=
 
             initctl emit -n new-devices
           '';

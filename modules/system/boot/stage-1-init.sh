@@ -116,8 +116,8 @@ mkdir -p /dev/.udev # !!! bug in udev?
 udevd --daemon
 udevadm control --env=STARTUP=1
 udevadm trigger
-udevadm control --env=STARTUP=
 udevadm settle
+udevadm control --env=STARTUP=
 
 echo "starting device mapper and LVM..."
 lvm vgscan
