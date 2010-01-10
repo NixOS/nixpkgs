@@ -54,7 +54,7 @@ rec {
   });
 
   dateutil = buildPythonPackage (rec {
-    name = "python-dateutil-1.4.1";
+    name = "dateutil-1.4.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/${name}.tar.gz";
