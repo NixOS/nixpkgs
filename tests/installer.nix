@@ -261,11 +261,11 @@ in {
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
+              "udevadm settle",
               "parted /dev/vda -- set 1 lvm on",
               "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
-              "parted /dev/vda -- set 2 lvm on",
-              "fdisk -l /dev/vda >&2",
               "udevadm settle",
+              "parted /dev/vda -- set 2 lvm on",
               "pvcreate /dev/vda1 /dev/vda2",
               "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
               "lvcreate --size 1G --name swap MyVolGroup",
