@@ -42,11 +42,24 @@ let
         default = true;
         description =
           ''
-            Whether to run qemu with a graphics window, or access
+            Whether to run QEMU with a graphics window, or access
             the guest computer serial port through the host tty.
           '';
       };
 
+    virtualisation.pathsInNixDB =
+      mkOption {
+        default = [];
+        description =
+          ''
+            The list of paths whose closure is registered in the Nix
+            database in the VM.  All other paths in the host Nix store
+            appear in the guest Nix store as well, but are considered
+            garbage (because they are not registered in the Nix
+            database in the guest).
+          '';
+      };
+      
   };
 
   cfg = config.virtualisation;
@@ -78,7 +91,17 @@ let
           -initrd ${config.system.build.toplevel}/initrd \
           ${qemuGraphics} \
           $QEMU_OPTS \
-          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${kernelConsole} $QEMU_KERNEL_PARAMS"
+          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS"
+    '';
+
+    
+  regInfo = pkgs.runCommand "reginfo"
+    { exportReferencesGraph =
+        map (x: [("closure-" + baseNameOf x) x]) config.virtualisation.pathsInNixDB;
+      buildInputs = [ pkgs.perl ];
+    }
+    ''
+      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
     '';
 
 in
@@ -111,6 +134,22 @@ in
       fi
     '';
 
+  # After booting, register the closure of the paths in
+  # `virtualisation.pathsInNixDB' in the Nix database in the VM.  This
+  # allows Nix operations to work in the VM.  The path to the
+  # registration file is passed through the kernel command line to
+  # allow `system.build.toplevel' to be included.  (If we had a direct
+  # reference to ${regInfo} here, then we would get a cyclic
+  # dependency.)
+  boot.postBootCommands =
+    ''
+      ( source /proc/cmdline
+        ${config.environment.nix}/bin/nix-store --load-db < $regInfo
+      )
+    '';
+      
+  virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
+  
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
   # of the host into our own filesystem.  We use mkOverride to allow
   # this module to be applied to "normal" NixOS system configuration,
@@ -131,12 +170,6 @@ in
         device = "/hostfs/nix/store";
         options = "bind";
         neededForBoot = true;
-      }
-      # Mount the host's Nix database.  This allows read-only Nix
-      # operations in the guest to work properly.
-      { mountPoint = "/nix/var/nix/db";
-        device = "/hostfs/nix/var/nix/db";
-        options = "bind";
       }
     ];
 
