@@ -114,14 +114,15 @@ echo "running udev..."
 export UDEV_CONFIG_FILE=@udevConf@
 mkdir -p /dev/.udev # !!! bug in udev?
 udevd --daemon
+udevadm control --env=STARTUP=1
 udevadm trigger
+udevadm control --env=STARTUP=
 udevadm settle
 
 echo "starting device mapper and LVM..."
-dmsetup mknodes
-lvm vgscan --ignorelockingfailure
-lvm vgchange -ay --ignorelockingfailure
-
+lvm vgscan
+lvm vgchange -ay
+                                                                        
 if test -n "$debug1devices"; then fail; fi
 
 

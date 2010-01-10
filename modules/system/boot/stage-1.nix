@@ -133,7 +133,7 @@ let
 
       cp -pd ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
 
-      # Copy dmsetup and lvm, if we need it.
+      # Copy dmsetup and lvm.
       cp ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
       cp ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
       cp ${pkgs.lvm2}/lib/libdevmapper.so.*.* $out/lib
@@ -211,6 +211,7 @@ let
       cp ${pkgs.udev}/libexec/rules.d/60-cdrom_id.rules $out/
       cp ${pkgs.udev}/libexec/rules.d/60-persistent-storage.rules $out/
       cp ${pkgs.udev}/libexec/rules.d/80-drivers.rules $out/
+      cp ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -221,7 +222,9 @@ let
             --replace vol_id ${extraUtils}/bin/vol_id \
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
-            --replace /sbin/modprobe ${extraUtils}/bin/modprobe
+            --replace /sbin/modprobe ${extraUtils}/bin/modprobe \
+            --replace '$env{DM_SBIN_PATH}/blkid' ${extraUtils}/bin/blkid \
+            --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"'
       done
 
       # Remove rule preventing creation of a by-label symlink
