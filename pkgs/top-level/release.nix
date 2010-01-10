@@ -402,6 +402,7 @@ in {
   webkit = linux;
   wget = all;
   which = all;
+  wicd = linux;
   wine = ["i686-linux"];
   wireshark = linux;
   wirelesstools = linux;
