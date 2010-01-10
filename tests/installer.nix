@@ -270,6 +270,7 @@ in {
               "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
               "udevadm settle",
               "parted /dev/vda -- set 2 lvm on",
+              "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
               "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
               "lvcreate --size 1G --name swap MyVolGroup",
