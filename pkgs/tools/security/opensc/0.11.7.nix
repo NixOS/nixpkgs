@@ -1,15 +1,17 @@
 {stdenv, fetchurl, libtool, readline, zlib, openssl, libiconv, pcsclite, libassuan, pkgconfig,
-libXt }:
+libXt}:
+
 stdenv.mkDerivation rec {
-  name = "opensc-0.11.12";
+  name = "opensc-0.11.7";
 
   src = fetchurl {
     url = "http://www.opensc-project.org/files/opensc/${name}.tar.gz";
-    sha256 = "0zr04qadk9gsabmhnwmk27kb4zgfpy988nwa9s1k3hc3hn3gls3a";
+    sha256 = "0781qi0bsm01wdhkb1vd3ra9wkwgyjcm2w87jb2r53msply2gavd";
   };
 
   configureFlags = [ "--enable-pcsc" "--enable-nsplugin"
     "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so.1" ];
+
   buildInputs = [ libtool readline zlib openssl pcsclite libassuan pkgconfig
     libXt ] ++
     stdenv.lib.optional (! stdenv.isLinux) libiconv;

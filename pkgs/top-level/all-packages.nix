@@ -1162,11 +1162,13 @@ let
     inherit fetchurl stdenv pkgconfig bluez libusb;
   };
 
-  opensc = import ../tools/security/opensc {
+  opensc_0_11_7 = import ../tools/security/opensc/0.11.7.nix {
     inherit fetchurl stdenv libtool readline zlib openssl libiconv pcsclite
       libassuan pkgconfig;
     inherit (xlibs) libXt;
   };
+
+  opensc = opensc_0_11_7;
 
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
@@ -4331,6 +4333,10 @@ let
     inherit fetchurl stdenv mesa qt4 tcl tk;
   };
 
+  openct = import ../development/libraries/openct {
+    inherit fetchurl stdenv libtool pcsclite libusb pkgconfig;
+  };
+
   # this ctl version is needed by openexr_viewers
   openexr_ctl = import ../development/libraries/openexr_ctl {
     inherit fetchurl stdenv ilmbase ctl;
@@ -4358,6 +4364,13 @@ let
     inherit (xlibs) libX11 xproto;
     inherit gd SDL SDL_image SDL_mixer zlib libxml2
       pkgconfig;
+  };
+
+  opensc_dnie = import ../development/libraries/opensc-dnie {
+    inherit fetchurl stdenv patchelf writeScript openssl openct
+      libtool pcsclite zlib;
+    inherit (gtkLibs) glib;
+    opensc = opensc_0_11_7;
   };
 
   openssl = import ../development/libraries/openssl {
