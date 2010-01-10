@@ -13,7 +13,7 @@
           ''
             # Scan for block devices that might contain LVM physical volumes
             # and volume groups.
-            ${pkgs.lvm2}/sbin/vgscan --mknodes
+            ${pkgs.lvm2}/sbin/vgscan
 
             # Make all logical volumes on all volume groups available, i.e.,
             # make them appear in /dev.
