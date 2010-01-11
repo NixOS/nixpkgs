@@ -47,6 +47,7 @@
   ./services/databases/postgresql.nix
   ./services/hardware/acpid.nix
   ./services/hardware/hal.nix
+  ./services/hardware/pcscd.nix
   ./services/hardware/udev.nix
   ./services/logging/klogd.nix
   ./services/logging/syslogd.nix
