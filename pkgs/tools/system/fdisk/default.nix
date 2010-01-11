@@ -1,11 +1,11 @@
 { fetchurl, stdenv, parted, libuuid, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "fdisk-1.2.3";
+  name = "fdisk-1.2.4";
 
   src = fetchurl {
     url = "mirror://gnu/fdisk/${name}.tar.bz2";
-    sha256 = "04nsa0xf1m5zy45wqv88ksk3xxc86r9n8f4mj3r6gm7rz0sfiqil";
+    sha256 = "17xl8xa1cwaxcdw49m1kqwralhac2y2z8nbx7mwlf28dpplvd9p0";
   };
 
   buildInputs = [ parted libuuid gettext ];
