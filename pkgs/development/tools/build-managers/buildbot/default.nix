@@ -1,21 +1,58 @@
-{stdenv, fetchurl, python, twisted, makeWrapper}:
+{ fetchurl, stdenv, buildPythonPackage, twisted, texinfo }:
 
-stdenv.mkDerivation rec {
-  name = "buildbot-${version}";
-  version = "0.7.8";
-  meta = {
-    homepage = "http://buildbot.net/";
-    description = "A system to automate the compile/test cycle to validate code changes.";
-  };
+buildPythonPackage (rec {
+  name = "buildbot-0.7.11p3";
+  namePrefix = "";
+
   src = fetchurl {
-    url = "mirror://sourceforge/buildbot/buildbot-${version}.tar.gz";
-    sha256 = "0f3qkbs1y4a1djxbfkvsr1639qkc7bzzsz2wpas2mk1zg8zrci2v";
+    url = "mirror://sourceforge/buildbot/${name}.tar.gz";
+    sha256 = "0h77ijf5iqvc8bnfxpsh3hvpr7wj23pkcywd3hcyphv1wwlhmhjv";
   };
-  propagatedBuildInputs = [python twisted makeWrapper];
-  buildPhase = "true";
-  installPhase =
-  ''
-     python setup.py install --prefix=$out --install-lib=$(toPythonPath $out) -O1
-     for n in $out/bin/*; do wrapProgram $n --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH"; done
-  '';
-}
+
+  buildInputs = [ texinfo ];
+  propagatedBuildInputs = [ twisted ];
+
+  # FIXME: Some tests fail.
+  doCheck = false;
+
+  postInstall =
+    '' ensureDir "$out/share/info"
+       make -C docs buildbot.info
+       cp -v "docs/buildbot.info"* "$out/share/info"
+    '';
+
+  meta = {
+    homepage = http://buildbot.net/;
+
+    license = "GPLv2+";
+
+    # Of course, we don't really need that on NixOS.  :-)
+    description = "BuildBot, a system to automate the software compile/test cycle";
+
+    longDescription =
+      '' The BuildBot is a system to automate the compile/test cycle
+         required by most software projects to validate code changes.  By
+         automatically rebuilding and testing the tree each time something
+         has changed, build problems are pinpointed quickly, before other
+         developers are inconvenienced by the failure.  The guilty
+         developer can be identified and harassed without human
+         intervention.  By running the builds on a variety of platforms,
+         developers who do not have the facilities to test their changes
+         everywhere before checkin will at least know shortly afterwards
+         whether they have broken the build or not.  Warning counts, lint
+         checks, image size, compile time, and other build parameters can
+         be tracked over time, are more visible, and are therefore easier
+         to improve.
+
+         The overall goal is to reduce tree breakage and provide a platform
+         to run tests or code-quality checks that are too annoying or
+         pedantic for any human to waste their time with.  Developers get
+         immediate (and potentially public) feedback about their changes,
+         encouraging them to be more careful about testing before checking
+         in code.
+      '';
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
+  };
+})

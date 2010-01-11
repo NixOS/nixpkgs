@@ -2661,7 +2661,8 @@ let
   };
 
   buildbot = import ../development/tools/build-managers/buildbot {
-    inherit fetchurl stdenv python twisted makeWrapper;
+    inherit fetchurl stdenv buildPythonPackage texinfo;
+    inherit (pythonPackages) twisted;
   };
 
   byacc = import ../development/tools/parsing/byacc {
