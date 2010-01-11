@@ -8231,7 +8231,7 @@ let
 
   kde4 = kde43;
 
-  kde43 = import ../desktops/kde-4.3 (pkgs // {
+  kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt45;
     popplerQt4 = popplerQt45;
