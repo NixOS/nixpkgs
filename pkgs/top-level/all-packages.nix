@@ -7431,7 +7431,7 @@ let
   };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr farsight2
+    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr farsight2 python
       gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool libidn;
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;

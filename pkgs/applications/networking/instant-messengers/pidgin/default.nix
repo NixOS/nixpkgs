@@ -14,17 +14,17 @@
   GStreamer, gstPluginsBase, startupnotification, gettext,
   perl, perlXMLParser, libxml2, nss, nspr, farsight2,
   libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
-  , lib
+  , lib, python
   , openssl ? null
   , gnutls ? null
   , voice ? null
 } :
 
 stdenv.mkDerivation {
-  name = "pidgin-2.6.4";
+  name = "pidgin-2.6.5";
   src = fetchurl {
-    url = mirror://sourceforge/pidgin/pidgin-2.6.4.tar.bz2;
-    sha256 = "04dyr2g45i3wr67zsn04pjl6vyvic8dchb73pajf823pa377m47s";
+    url = mirror://sourceforge/pidgin/pidgin-2.6.5.tar.bz2;
+    sha256 = "03ix5w1dr1hl98qh1jmp5dgv2i8f9bd39sim3rcpk9pwjd09wi9w";
   };
 
   inherit nss ncurses;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   ++ (lib.optional (gnutls != null) gnutls)
   ++
   [nss nspr farsight2
-    libXScrnSaver ncurses
+    libXScrnSaver ncurses python
     avahi dbus dbus_glib intltool libidn
   ]
   ;
