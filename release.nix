@@ -128,6 +128,7 @@ let
         installer.separateBoot = t.installer.separateBoot.test;
         installer.simple = t.installer.simple.test;
         kde4 = t.kde4.test;
+        proxy = t.proxy.test;
         quake3 = t.quake3.test;
         subversion = t.subversion.report;
         trac = t.trac.test;
