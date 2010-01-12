@@ -179,8 +179,8 @@ in
             # Run any user-specified commands.
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands} || true
 
-            # Emit the ip-up event (e.g. to start ntpd).
-            ${optionalString (cfg.interfaces != []) ''
+            ${optionalString (cfg.interfaces != [] && cfg.localCommands != "") ''
+              # Emit the ip-up event (e.g. to start ntpd).
               initctl emit -n ip-up
             ''}
           '';
