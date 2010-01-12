@@ -3150,6 +3150,10 @@ let
     inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype libsigcxx;
   };
 
+  scmccid = import ../development/libraries/scmccid {
+    inherit fetchurl stdenv libusb patchelf;
+  };
+
   ccrtp = import ../development/libraries/ccrtp {
     inherit fetchurl stdenv lib pkgconfig openssl libgcrypt commoncpp2;
   };
