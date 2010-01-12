@@ -239,6 +239,7 @@ in {
   ktorrent = linux;
   kvm = linux;
   qemu = linux;
+  qemu_kvm = linux;
   less = all;
   lftp = all;
   libarchive = linux;
