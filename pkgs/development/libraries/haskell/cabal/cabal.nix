@@ -97,6 +97,10 @@ attrs :
 
               eval "$postInstall"
             '';
+
+            # We inherit stdenv and ghc so that they can be used
+            # in Cabal derivations.
+            inherit (attrs) stdenv ghc;
           };
     in  attrs.stdenv.mkDerivation ((rec { f = dtransform f // transform f; }).f);
 }

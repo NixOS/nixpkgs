@@ -27,11 +27,10 @@ rec {
 
   # Haskell libraries.
 
-  # Agda depends on a specific version of QuickCheck
   Agda = import ../development/libraries/haskell/Agda {
     inherit cabal binary haskeline haskellSrc mtl utf8String xhtml zlib
       happy alex;
-    QuickCheck = QuickCheck2101;
+    QuickCheck = QuickCheck2;
   };
 
   ansiTerminal = import ../development/libraries/haskell/ansi-terminal {
@@ -403,14 +402,12 @@ rec {
   };
 
   QuickCheck  = QuickCheck1;
-  QuickCheck1 = QuickCheck1200;
-  QuickCheck2 = QuickCheck2101;
 
-  QuickCheck1200 = import ../development/libraries/haskell/QuickCheck {
+  QuickCheck1 = import ../development/libraries/haskell/QuickCheck {
     inherit cabal;
   };
 
-  QuickCheck2101 = import ../development/libraries/haskell/QuickCheck/2.1.0.1.nix {
+  QuickCheck2 = import ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {
     inherit cabal mtl;
   };
 

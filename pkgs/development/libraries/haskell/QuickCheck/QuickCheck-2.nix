@@ -2,12 +2,13 @@
 
 cabal.mkDerivation (self : {
   pname = "QuickCheck";
-  version = "2.1.0.1";
-  sha256 = "f99edf1a45315e90c9ec672d5d959d5878dcc1de65678c6aed85829a896b75f1";
+  version = "2.1.0.2";
+  sha256 = "1adeea5aa52cba7b8bcd27f9cdd9fe944e9a4a22d22fdf0570b526f580981e58";
   propagatedBuildInputs = [mtl];
-  configureFlags = ''--constraint=base<4'';
   meta = {
     description = "Automatic testing of Haskell programs";
+    license = "BSD";
+    maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })  
 
