@@ -485,6 +485,10 @@ in {
     xmonad = linux;
   };
 
+  haskellPackages_ghc6121 = {
+    ghc = ghcSupported;
+  };
+
   kde3 = {
     kdebase = linux;
     kdelibs = linux;
