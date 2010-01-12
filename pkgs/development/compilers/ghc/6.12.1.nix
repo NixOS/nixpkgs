@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     corePackages = [
-       [ "Cabal" "1.8.0" ]
+       [ "Cabal" "1.8.0.2" ]
        [ "array" "0.3.0.0" ]
        [ "base" "3.0.3.2" ]
        [ "base" "4.2.0.0" ]
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
        [ "extensible-exceptions" "0.1.1.1" ]
        [ "ffi" "1.0" ]
        [ "filepath" "1.1.0.3" ]
-       [ "ghc" "6.12.0.20091010" ]
+       [ "ghc" "6.12.1" ]
        [ "ghc-binary" "0.5.0.2" ]
        [ "ghc-prim" "0.2.0.0" ]
        [ "haskell98" "1.0.1.1" ]
