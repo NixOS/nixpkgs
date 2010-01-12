@@ -1951,7 +1951,7 @@ let
   # For several compiler versions, we export a large set of Haskell-related
   # packages.
 
-  haskellPackages = haskellPackages_ghc6121;
+  haskellPackages = haskellPackages_ghc6104;
 
   /*
   haskellPackages_ghc642 = import ./haskell-packages.nix {
@@ -2027,13 +2027,14 @@ let
     };
   });
 
-  haskellPackages_ghc6121 = import ./haskell-packages.nix {
+  # make this ghc default when it's supported by the Haskell Platform
+  haskellPackages_ghc6121 = lowPrio (import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.12.1.nix {
       inherit fetchurl stdenv perl ncurses gmp;
       ghc = ghc6101Binary;
     };
-  };
+  });
 
   haskellPackages_ghcHEAD = import ./haskell-packages.nix {
     inherit pkgs;
