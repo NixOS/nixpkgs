@@ -21,6 +21,14 @@ let
       session  required pam_deny.so
     '';
 
+  # Create a limits.conf(5) file.
+  makeLimitsConf = limits:
+    pkgs.writeText "limits.conf"
+      (concatStringsSep "\n"
+           (map ({ domain, type, item, value }:
+                 concatStringsSep " " [ domain type item value ])
+                limits));
+
   makePAMService =
     { name
     , # If set, root doesn't need to authenticate (e.g. for the "chsh"
@@ -43,6 +51,8 @@ let
       # accounts with hashed empty passwords are always allowed to log
       # in.
       allowNullPassword ? false
+    , # The limits, as per limits.conf(5).
+      limits ? []
     }:
 
     { source = pkgs.writeText "${name}.pam"
@@ -81,6 +91,8 @@ let
               "session optional ${pkgs.consolekit}/lib/security/pam_ck_connector.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
+          ${optionalString (limits != [])
+              "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf limits}"}
         '';
       target = "pam.d/${name}";
     };
@@ -93,9 +105,47 @@ in
 
   options = {
 
+    security.pam.loginLimits = mkOption {
+      default = [];
+      example =
+        [ { domain = "ftp";
+            type   = "hard";
+            item   = "nproc";
+            value  = "0";
+          }
+          { domain = "@student";
+            type   = "-";
+            item   = "maxlogins";
+            value  = "4";
+          }
+       ];
+
+     description =
+       '' Define resource limits that should apply to users or groups for the
+          <command>login</command> service.  Each item in the list should be
+          an attribute set with a <varname>domain</varname>,
+          <varname>type</varname>, <varname>item</varname>, and
+          <varname>value</varname> attribute.  The syntax and semantics of
+          these attributes must be that described in the limits.conf(5) man
+          page.
+       '';
+    };
+
     security.pam.services = mkOption {
       default = [];
-      example = [ { name = "chsh"; rootOK = true; } ];
+      example = [
+        { name = "chsh"; rootOK = true; }
+        { name = "login"; ownDevices = true; allowNullPassword = true;
+          limits = [
+            { domain = "ftp";
+              type   = "hard";
+              item   = "nproc";
+              value  = "0";
+            }
+          ];
+        }
+      ];
+
       description =
         ''
           This option defines the PAM services.  A service typically
@@ -113,6 +163,14 @@ in
           whether X authentication keys should be passed from the
           calling user to the target user (e.g. for
           <command>su</command>).
+
+          The attribute <varname>limits</varname> defines resource limits
+          that should apply to users or groups for the service.  Each item in
+          the list should be an attribute set with a
+          <varname>domain</varname>, <varname>type</varname>,
+          <varname>item</varname>, and <varname>value</varname> attribute.
+          The syntax and semantics of these attributes must be that described
+          in the limits.conf(5) man page.
         '';
     };
 
@@ -153,7 +211,9 @@ in
         { name = "useradd"; rootOK = true; }
         # Used by groupadd etc.
         { name = "shadow"; rootOK = true; }
-        { name = "login"; ownDevices = true; allowNullPassword = true; }
+        { name = "login"; ownDevices = true; allowNullPassword = true;
+          limits = config.security.pam.loginLimits;
+        }
       ];
 
   };
