@@ -1941,7 +1941,7 @@ let
 
   ghdl = wrapGHDL (import ../development/compilers/gcc-4.3 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
-    name = "ghdl-0.28";
+    name = "ghdl-0.29";
     langVhdl = true;
     langCC = false;
     langC = false;

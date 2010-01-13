@@ -51,8 +51,8 @@ let
   crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
 
   ghdlSrc = fetchurl {
-    url = "http://ghdl.free.fr/ghdl-0.28.tar.bz2";
-    sha256 = "0l3ah3zw2yhr9rv9d5ck1cinsf11r28m6bzl2sdibngl2bgc2jsf";
+    url = "http://ghdl.free.fr/ghdl-0.29.tar.bz2";
+    sha256 = "15mlinr1lwljwll9ampzcfcrk9bk0qpdks1kxlvb70xf9zhh2jva";
   };
 in
 
