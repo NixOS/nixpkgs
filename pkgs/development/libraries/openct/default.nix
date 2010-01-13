@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y4jlr877g3lziq7i3p6pdkscqpkn1lld874q6r2hsvc39n7c88z";
   };
   
-  configureFlags = [ "--enable-usb" "--enable-pcsc" ];
+  configureFlags = [ "--enable-usb" "--enable-pcsc" "--localstatedir=/var" ];
   buildInputs = [ libtool pcsclite libusb pkgconfig ];
 
   meta = {
