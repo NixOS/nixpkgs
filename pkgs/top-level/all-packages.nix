@@ -5572,33 +5572,28 @@ let
     kernelPatches = [];
   };
 
-  kernel_2_6_31_zen5 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.31-zen5.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools
-      lib builderDefs;
-  };
-
-  kernel_2_6_31_zen5_bfs = kernel_2_6_31_zen5.override {
-    ckSched = true;
-  };
-
-  kernel_2_6_31_zen7 = makeOverridable (import ../os-specific/linux/zen-kernel/zen-stable.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools
-      lib builderDefs;
-  };
-
-  kernel_2_6_31_zen7_bfs = kernel_2_6_31_zen7.override {
-    ckSched = true;
-  };
-
-  kernel_2_6_31_zen = kernel_2_6_31_zen7;
-  kernel_2_6_31_zen_bfs = kernel_2_6_31_zen7_bfs;
-
   kernel_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
       ];
+  };
+
+  kernel_2_6_32_zen4 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.32-zen4.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
+  };
+
+  kernel_2_6_32_zen4_oldi686 = kernel_2_6_32_zen4.override {
+    features = {
+      oldI686 = true;
+    };
+  };
+
+  kernel_2_6_32_zen4_bfs = kernel_2_6_32_zen4.override {
+    features = {
+      ckSched = true;
+    };
   };
 
   /* Kernel modules are inherently tied to a specific kernel.  So
@@ -5727,9 +5722,6 @@ let
   kernelPackages_2_6_27 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_27);
   kernelPackages_2_6_28 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_28);
   kernelPackages_2_6_29 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_29);
-  kernelPackages_2_6_31_zen5 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen5);
-  kernelPackages_2_6_31_zen = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen);
-  kernelPackages_2_6_31_zen_bfs = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31_zen_bfs);
   kernelPackages_2_6_31 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_31);
   kernelPackages_2_6_32 = recurseIntoAttrs (kernelPackagesFor kernel_2_6_32);
 
