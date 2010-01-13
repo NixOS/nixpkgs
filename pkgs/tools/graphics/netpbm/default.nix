@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   configurePhase = "cp config.mk.in config.mk";
 
+  makeFlags = "LDFLAGS=-lz";
+
   installPhase = ''
     make package pkgdir=$PWD/netpbmpkg
     # Pass answers to the script questions
