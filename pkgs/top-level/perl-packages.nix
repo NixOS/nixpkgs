@@ -2438,10 +2438,10 @@ rec {
   };
 
   VariableMagic = buildPerlPackage rec {
-    name = "Variable-Magic-0.35";
+    name = "Variable-Magic-0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "0p6f593bh8zyg4qlxpa3hmdp56saghcgx7r0p46gxscxyf3k0bdc";
+      sha256 = "15305b54e948f74a0cf77c1c6bd8aa399caac12d6b1dee8cc4a69ff7d1421db6";
     };
   };
 
