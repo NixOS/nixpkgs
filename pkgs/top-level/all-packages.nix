@@ -3336,14 +3336,14 @@ let
 
   fltk11 = (import ../development/libraries/fltk/fltk11.nix) {
     inherit composableDerivation x11 lib pkgconfig freeglut;
-    inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
+    inherit fetchurl stdenv mesa libpng libjpeg zlib ;
     inherit (xlibs) inputproto libXi libXinerama libXft;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 
   fltk20 = (import ../development/libraries/fltk) {
     inherit composableDerivation x11 lib pkgconfig freeglut;
-    inherit fetchurl stdenv mesa mesaHeaders libpng libjpeg zlib ;
+    inherit fetchurl stdenv mesa libpng libjpeg zlib ;
     inherit (xlibs) inputproto libXi libXinerama libXft;
     flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
@@ -4256,11 +4256,6 @@ let
 
   mesa = import ../development/libraries/mesa {
     inherit fetchurl stdenv pkgconfig expat x11 xlibs libdrm;
-  };
-
-  mesaHeaders = import ../development/libraries/mesa/headers.nix {
-    inherit stdenv;
-    mesaSrc = mesa.src;
   };
 
   ming = import ../development/libraries/ming {
@@ -5263,7 +5258,7 @@ let
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
-      libxslt expat libdrm libpng zlib perl mesa mesaHeaders
+      libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus hal libuuid openssl gperf m4
       automake autoconf libtool;
 

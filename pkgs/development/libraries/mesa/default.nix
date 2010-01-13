@@ -5,12 +5,14 @@ if stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux" && stdenv.sy
 else
 
 stdenv.mkDerivation {
-  name = "mesa-7.5.2";
+  name = "mesa-7.6.1";
   
   src = fetchurl {
-    url = ftp://ftp.freedesktop.org/pub/mesa/7.5.2/MesaLib-7.5.2.tar.bz2;
-    md5 = "94e47a499f1226803869c2e37a6a8e3a";
+    url = ftp://ftp.freedesktop.org/pub/mesa/7.6.1/MesaLib-7.6.1.tar.bz2;
+    md5 = "7db4617e9e10ad3aca1b64339fd71b7d";
   };
+
+  configureFlags = "--disable-gallium";
   
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.glproto
