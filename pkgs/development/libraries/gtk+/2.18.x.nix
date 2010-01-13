@@ -8,11 +8,11 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.18.3";
+  name = "gtk+-2.18.6";
   
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.18/${name}.tar.bz2";
-    sha256 = "1gv8lx7a00yp95ss0vzvmda4nv213m8adjdkx18hhmhaavz6a1hw";
+    sha256 = "0k9mz46q97537kdpmz8j5bhrzpn3zjp7k4mni4niafdp2x4r8aan";
   };
   
   buildInputs = [ pkgconfig perl jasper ];
