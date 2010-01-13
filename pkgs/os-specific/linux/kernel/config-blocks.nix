@@ -32,7 +32,7 @@ rec {
 
       noPAE = ''
         HIGHMEM64G? n
-	PAE n
+        PAE n
       '';
 
       usefulSubsystems = ''
@@ -117,19 +117,19 @@ rec {
       '';
 
       fbNoTileBlit = ''
-	# Disable tileblitting
-	FB_TILEBLITTING n
-	FB_S3 n
-	FB_VT8623 n
-	FB_ARK n
+        # Disable tileblitting
+        FB_TILEBLITTING n
+        FB_S3 n
+        FB_VT8623 n
+        FB_ARK n
       '';
 
       fbConDecor = ''
         ${fb}
         ${fbNoTileBlit}
         FRAMEBUFFER_CONSOLE y
-	FB_VESA y
-	FB_CON_DECOR y
+        FB_VESA y
+        FB_CON_DECOR y
       '';
 
       sound = ''
@@ -249,10 +249,10 @@ rec {
 
       bfsched = ''
         CPU_BFS y
-	CPU_CFS n
-	NO_HZ n
-	HZ_1000 n
-	HZ_300 y
-	HZ 300
+        CPU_CFS n
+        NO_HZ n
+        HZ_1000 n
+        HZ_300 y
+        HZ 300
       '';
 }
