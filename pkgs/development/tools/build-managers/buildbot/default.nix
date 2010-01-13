@@ -9,6 +9,16 @@ buildPythonPackage (rec {
     sha256 = "0h77ijf5iqvc8bnfxpsh3hvpr7wj23pkcywd3hcyphv1wwlhmhjv";
   };
 
+  patchPhase =
+    # The code insists on /usr/bin/tail, /usr/bin/make, etc.
+    '' echo "patching erroneous absolute path references..."
+       for i in $(find -name \*.py)
+       do
+         sed -i "$i" \
+             -e "s|/usr/bin/python|$(type -P python)|g ; s|/usr/bin/||g"
+       done
+    '';
+
   buildInputs = [ texinfo ];
   propagatedBuildInputs = [ twisted ];
 
