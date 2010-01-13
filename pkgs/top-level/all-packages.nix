@@ -1122,7 +1122,7 @@ let
   };
 
   netpbm = import ../tools/graphics/netpbm {
-    inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2;
+    inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2 makeWrapper;
   };
 
   netselect = import ../tools/networking/netselect {
