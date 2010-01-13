@@ -34,14 +34,14 @@ import ../kernel/generic.nix (
       zen = true;
       fbConDecor = true;
       aufs = true;
-    } // args.features;
+    } // (stdenv.lib.attrByPath ["features"] {} args);
 
     config = with conf;
     ''
       ${generalOptions}
       ${noDebug}
       ${virtualisation}
-      ${if stdenv.lib.attrByPath ["oldI686"] false args.features then noPAE else ""}
+      ${if stdenv.lib.attrByPath ["features" "oldI686"] false args then noPAE else ""}
       ${usefulSubsystems}
       ${cfq}
       ${noNUMA}
@@ -56,7 +56,7 @@ import ../kernel/generic.nix (
       ${blockDevices}
       ${bluetooth}
       ${misc}
-      ${if stdenv.lib.attrByPath ["ckSched"] false args.features then bfsched else ""}
+      ${if stdenv.lib.attrByPath ["features" "ckSched"] false args then bfsched else ""}
     '';
 
     preConfigure = ''
