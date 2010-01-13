@@ -333,6 +333,10 @@ let
     inherit stdenv fetchurl unzip makeWrapper jre;
   };
 
+  ec2amitools = import ../tools/virtualization/amazon-ec2-ami-tools {
+    inherit stdenv fetchurl unzip makeWrapper ruby;
+  };
+
   amule = import ../tools/networking/p2p/amule {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
     inherit wxGTK;
