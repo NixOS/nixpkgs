@@ -1,0 +1,15 @@
+diff -up dos2unix-3.1/dos2unix.c.missing-proto dos2unix-3.1/dos2unix.c
+--- dos2unix-3.1/dos2unix.c.missing-proto	2008-04-14 17:11:58.000000000 +0100
++++ dos2unix-3.1/dos2unix.c	2008-04-14 17:12:42.000000000 +0100
+@@ -75,6 +75,11 @@ static int macmode = 0;
+ #include <string.h>
+ #include <utime.h>
+ #include <sys/stat.h>
++#if defined(__MSDOS__) || defined(__WIN32__) || defined(_WIN32)
++#  include <io.h>
++#else
++#  include <unistd.h>
++#endif
+ #include "dos2unix.h"
+ 
+ 

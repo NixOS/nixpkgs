@@ -1,0 +1,29 @@
+diff -up unix2dos-2.2/unix2dos.c~ unix2dos-2.2/unix2dos.c
+--- unix2dos-2.2/unix2dos.c~	2008-03-03 13:16:34.000000000 +0000
++++ unix2dos-2.2/unix2dos.c	2008-03-03 13:22:10.000000000 +0000
+@@ -244,10 +244,11 @@ int ConvertUnixToDosNewFile(char *ipInFN
+   char *TempPath;
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
++  mode_t mask;
+   int fd;
+ 
+   /* retrieve ipInFN file date stamp */
+-  if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
++  if (stat(ipInFN, &StatBuf))
+     RetVal = -1;
+ 
+   if((fd = MakeTempFileFrom (ipOutFN, &TempPath)) < 0) {
+@@ -271,6 +272,12 @@ int ConvertUnixToDosNewFile(char *ipInFN
+     RetVal = -1;
+   }
+ 
++  /* preserve original mode as modified by umask */
++  mask = umask(0);
++  umask(mask);
++  if (!RetVal && fchmod(fd, StatBuf.st_mode & ~mask))
++      RetVal = -1;
++
+   /* conversion sucessful? */
+   if ((!RetVal) && (ConvertUnixToDos(InF, TempF, ipFlag)))
+     RetVal = -1;

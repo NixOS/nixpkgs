@@ -1,0 +1,141 @@
+--- dos2unix-3.1/dos2unix.c.tmppath	2004-10-20 16:00:00.342561008 +0200
++++ dos2unix-3.1/dos2unix.c	2004-10-20 16:01:42.210074792 +0200
+@@ -69,6 +69,7 @@
+ #ifdef __MSDOS__
+ #  include <dir.h>
+ #endif __MSDOS__
++#include <libgen.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -267,6 +268,39 @@
+     return RetVal;
+ }
+ 
++static int MakeTempFileFrom(const char *OutFN, char **fname_ret)
++{
++  char *cpy = strdup(OutFN);
++  char *dir = NULL;
++  size_t fname_len = 0;
++  char  *fname_str = NULL;
++  int fd = -1;
++  
++  *fname_ret = NULL;
++  
++  if (!cpy)
++    goto make_failed;
++  
++  dir = dirname(cpy);
++  
++  fname_len = strlen(dir) + strlen("/d2utmpXXXXXX") + sizeof (char);
++  if (!(fname_str = malloc(fname_len)))
++    goto make_failed;
++  sprintf(fname_str, "%s%s", dir, "/d2utmpXXXXXX");
++  *fname_ret = fname_str;
++  
++  free(cpy);
++  
++  if ((fd = mkstemp(fname_str)) == -1)
++    goto make_failed;
++  
++  return (fd);
++  
++ make_failed:
++  free(*fname_ret);
++  *fname_ret = NULL;
++  return (-1);
++}
+ 
+ /* convert file ipInFN to UNIX format text and write to file ipOutFN
+  * RetVal: 0 if success
+@@ -277,7 +311,7 @@
+   int RetVal = 0;
+   FILE *InF = NULL;
+   FILE *TempF = NULL;
+-  char TempPath[16];
++  char *TempPath;
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
+   int fd;
+@@ -286,8 +320,7 @@
+   if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
+     RetVal = -1;
+ 
+-  strcpy (TempPath, "./d2utmpXXXXXX");
+-  if((fd=mkstemp (TempPath))<0) {
++  if((fd = MakeTempFileFrom(ipOutFN, &TempPath))<0) {
+ 	  perror("Failed to open output temp file");
+ 	  RetVal = -1;
+   }
+@@ -304,6 +337,7 @@
+   if ((!RetVal) && (InF) && ((TempF=OpenOutFile(fd)) == NULL))
+   {
+     fclose (InF);
++    InF = NULL;
+     RetVal = -1;
+   }
+ 
+@@ -337,9 +371,6 @@
+   /* can rename temp file to out file? */
+   if (!RetVal)
+   {
+-    if (stat(ipOutFN, &StatBuf) == 0)
+-      unlink(ipOutFN);
+-
+     if ((rename(TempPath, ipOutFN) == -1) && (!ipFlag->Quiet))
+     {
+       fprintf(stderr, "dos2unix: problems renaming '%s' to '%s'\n", TempPath, ipOutFN);
+@@ -347,6 +378,7 @@
+       RetVal = -1;
+     }
+   }
++  free(TempPath);
+   return RetVal;
+ }
+ 
+@@ -362,7 +394,7 @@
+   int RetVal = 0;
+   FILE *InF = NULL;
+   FILE *TempF = NULL;
+-  char TempPath[16];
++  char *TempPath;
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
+   mode_t mode = S_IRUSR | S_IWUSR;
+@@ -374,8 +406,7 @@
+   else
+     mode = StatBuf.st_mode;
+ 
+-  strcpy (TempPath, "./u2dtmpXXXXXX");
+-  if((fd=mkstemp (TempPath))<0) {
++  if((fd = MakeTempFileFrom(ipInFN, &TempPath))<0) {
+ 	  perror("Failed to open output temp file");
+ 	  RetVal = -1;
+   }
+@@ -395,6 +426,7 @@
+   if ((!RetVal) && (InF) && ((TempF=OpenOutFile(fd)) == NULL))
+   {
+     fclose (InF);
++    InF = NULL;
+     RetVal = -1;
+   }
+ 
+@@ -422,10 +454,6 @@
+       RetVal = -1;
+   }
+ 
+-  /* can delete in file? */
+-  if ((!RetVal) && (unlink(ipInFN) == -1))
+-    RetVal = -1;
+-
+   /* any error? */
+   if ((RetVal) && (unlink(TempPath)))
+     RetVal = -1;
+@@ -440,6 +468,7 @@
+     }
+     RetVal = -1;
+   }
++  free(TempPath);
+   return RetVal;
+ }
+ 

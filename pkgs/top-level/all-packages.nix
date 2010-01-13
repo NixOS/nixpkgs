@@ -693,6 +693,14 @@ let
     inherit (xlibs) libX11 xproto libXt;
   };
 
+  dos2unix = import ../tools/text/dos2unix {
+      inherit fetchurl stdenv;
+  };
+
+  unix2dos = import ../tools/text/unix2dos {
+      inherit fetchurl stdenv;
+  };
+
   gawk = useFromStdenv "gawk"
     (import ../tools/text/gawk {
       inherit fetchurl stdenv;

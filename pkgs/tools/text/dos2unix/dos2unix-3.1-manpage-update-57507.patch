@@ -1,0 +1,238 @@
+Patch by Bill Anderson, to fix bug:
+	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=57507
+
+
+
+Description of Problem:
+
+The dos2unix man page examples are confusing.
+For instance, one piece of text mentions "c.txt", but that file
+isn't used in the following example.
+
+
+
+--- dos2unix-3.1/dos2unix.1	2004-09-28 03:17:29.000000000 -0600
++++ dos2unix-3.1/dos2unix.1-new	2004-09-28 03:16:32.000000000 -0600
+@@ -1,123 +1,126 @@
+ .\" $$Id: dos2unix.1 2.2 1995/03/31 01:50:45 blin Exp blin $$
+-.TH dos2unix 1 "dos2unix v3.0" "1995.03.31"
+-
+-.SH NAME
+-
++.\" 
++.TH "dos2unix" "1" "dos2unix v3.0" "1995.03.31" ""
++.SH "NAME"
+ dos2unix \- DOS/MAC to UNIX text file format converter
+ 
+-.SH SYNOPSYS
+-
+-dos2unix [options] [-c convmode] [-o file ...] [-n infile outfile ...]
+-.PP
++.SH "SYNOPSYS"
++dos2unix [options] [\-c convmode] [\-o file ...] [\-n infile outfile ...]
++.PP 
+ Options:
+-.PP
+-[-hkqV] [--help] [--keepdate] [--quiet] [--version]
+-
+-.SH DESCRIPTION
++.PP 
++[\-hkqV] [\-\-help] [\-\-keepdate] [\-\-quiet] [\-\-version]
+ 
+-.PP
++.SH "DESCRIPTION"
++.PP 
+ This manual page documents dos2unix, the program that converts plain text
+ files in DOS/MAC format to UNIX format.
+ 
+-.SH OPTIONS
+-
++.SH "OPTIONS"
+ The following options are available:
+-.TP
+-.B \-h --help
++.TP 
++.B \-h \-\-help
+ Print online help.
+ 
+-.TP
+-.B \-k --keepdate
++.TP 
++.B \-k \-\-keepdate
+ Keep the date stamp of output file same as input file.
+ 
+-.TP
+-.B \-q --quiet
++.TP 
++.B \-q \-\-quiet
+ Quiet mode. Suppress all warning and messages.
+ 
+-.TP
+-.B \-V --version
++.TP 
++.B \-V \-\-version
+ Prints version information.
+ 
+-.TP
+-.B \-c --convmode convmode
+-Sets conversion mode. Simulates dos2unix under SunOS.
++.TP 
++.B \-c \-\-convmode convmode
++Sets conversion mode. Where convmode is one of:
++.B ASCII, 7bit, ISO, Mac
++with ASCII being the default.
++Simulates dos2unix under SunOS.
++
++
+ 
+-.TP
+-.B \-o --oldfile file ...
++.TP 
++.B \-o \-\-oldfile file ...
+ Old file mode. Convert the file and write output to it. The program 
+ default to run in this mode. Wildcard names may be used.
+ 
+-.TP
+-.B \-n --newfile infile outfile ...
++.TP 
++.B \-n \-\-newfile infile outfile ...
+ New file mode. Convert the infile and write output to outfile. File names
+ must be given in pairs and wildcard names should NOT be used or you WILL 
+ lost your files. 
+ 
+-.SH EXAMPLES
+-
+-.LP
++.SH "EXAMPLES"
++.LP 
+ Get input from stdin and write output to stdout.
+-.IP
++.IP 
+ .B dos2unix
+ 
+-.LP
++.LP 
+ Convert and replace a.txt. Convert and replace b.txt.
+-.IP
++.IP 
+ .B dos2unix a.txt b.txt
+-.IP
+-.B dos2unix -o a.txt b.txt
++.IP 
++.B dos2unix \-o a.txt b.txt
+ 
+-.LP
++.LP 
+ Convert and replace a.txt in ASCII conversion mode. 
++.IP 
++.B dos2unix a.txt \-c iso b.txt
++
++.LP 
+ Convert and replace b.txt in ISO conversion mode.
++.IP 
++.B dos2unix \-c ascii a.txt \-c iso b.txt
++
++.LP 
+ Convert c.txt from Mac to Unix ascii format.
+-.IP
+-.B dos2unix a.txt -c iso b.txt
+-.IP
+-.B dos2unix -c ascii a.txt -c iso b.txt
+-.IP
+-.B dos2unix -c mac a.txt  b.txt
+ 
+-.LP
++.IP 
++.B dos2unix \-c mac c.txt  b.txt
++
++.LP 
+ Convert and replace a.txt while keeping original date stamp.
+-.IP
+-.B dos2unix -k a.txt
+-.IP
+-.B dos2unix -k -o a.txt
++.IP 
++.B dos2unix \-k a.txt
++.IP 
++.B dos2unix \-k \-o a.txt
+ 
+-.LP
++.LP 
+ Convert a.txt and write to e.txt.
+-.IP
+-.B dos2unix -n a.txt e.txt
++.IP 
++.B dos2unix \-n a.txt e.txt
+ 
+-.LP
++.LP 
+ Convert a.txt and write to e.txt, keep date stamp of e.txt same as a.txt.
+-.IP
+-.B dos2unix -k -n a.txt e.txt 
++.IP 
++.B dos2unix \-k \-n a.txt e.txt 
+ 
+-.LP
++.LP 
+ Convert and replace a.txt. Convert b.txt and write to e.txt.
+-.IP
+-.B dos2unix a.txt -n b.txt e.txt
+-.IP
+-.B dos2unix -o a.txt -n b.txt e.txt
++.IP 
++.B dos2unix a.txt \-n b.txt e.txt
++.IP 
++.B dos2unix \-o a.txt \-n b.txt e.txt
+ 
+-.LP
++.LP 
+ Convert c.txt and write to e.txt. Convert and replace a.txt.
+ Convert and replace b.txt. Convert d.txt and write to f.txt.
+-.IP
+-.B dos2unix -n c.txt e.txt -o a.txt b.txt -n d.txt f.txt
++.IP 
++.B dos2unix \-n c.txt e.txt \-o a.txt b.txt \-n d.txt f.txt
+ 
+-.SH DIAGNOSTICS
+-
+-.SH BUGS
++.SH "DIAGNOSTICS"
+ 
++.SH "BUGS"
+ The program does not work properly under MSDOS in stdio processing mode. 
+ If you know why is that so, please tell me.
+ 
+-.SH AUTHORS
+-
+-Benjamin Lin -
++.SH "AUTHORS"
++Benjamin Lin \-
+ .B <blin@socs.uts.edu.au>
+ 
+ 
+@@ -125,18 +128,17 @@
+ .B <wuebben@kde.org>
+ 
+ 
+-.SH MISCELLANY
+-
++.SH "MISCELLANY"
+ Tested environment:
+-.IP
++.IP 
+ Linux 1.2.0 with GNU C 2.5.8
+-.IP
++.IP 
+ SunOS 4.1.3 with GNU C 2.6.3
+-.IP
+-MS-DOS 6.20 with Borland C++ 4.02
+-.PP
++.IP 
++MS\-DOS 6.20 with Borland C++ 4.02
++.PP 
+ Suggestions and bug reports are welcome.
+ 
+-.SH SEE ALSO
++.SH "SEE ALSO"
+ unix2dos(1) mac2unix(1)
+ 

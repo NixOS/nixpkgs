@@ -1,0 +1,28 @@
+diff -up dos2unix-3.1/dos2unix.c.preserve-file-modes dos2unix-3.1/dos2unix.c
+--- dos2unix-3.1/dos2unix.c.preserve-file-modes	2008-09-08 09:58:05.000000000 +0100
++++ dos2unix-3.1/dos2unix.c	2008-09-08 10:16:04.000000000 +0100
+@@ -320,9 +320,10 @@ int ConvertDosToUnixNewFile(char *ipInFN
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
+   int fd;
++  mode_t mask;
+ 
+   /* retrieve ipInFN file date stamp */
+-  if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
++  if (stat(ipInFN, &StatBuf))
+     RetVal = -1;
+ 
+   if((fd = MakeTempFileFrom(ipOutFN, &TempPath))<0) {
+@@ -346,6 +347,12 @@ int ConvertDosToUnixNewFile(char *ipInFN
+     RetVal = -1;
+   }
+ 
++  /* preserve original mode as modified by umask */
++  mask = umask(0);
++  umask(mask);
++  if (!RetVal && fchmod(fd, StatBuf.st_mode & ~mask))
++    RetVal = -1;
++
+   /* conversion sucessful? */
+   if ((!RetVal) && (ConvertDosToUnix(InF, TempF, ipFlag)))
+     RetVal = -1;
