@@ -442,6 +442,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ncompress = import ../tools/compression/ncompress {
+    inherit fetchurl stdenv;
+  };
+
   bzip2 = useFromStdenv "bzip2"
     (import ../tools/compression/bzip2 {
       inherit fetchurl stdenv;
