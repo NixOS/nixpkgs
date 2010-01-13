@@ -330,7 +330,7 @@ let
   };
 
   ec2apitools = import ../tools/virtualization/amazon-ec2-api-tools {
-    inherit stdenv fetchurl unzip ;
+    inherit stdenv fetchurl unzip makeWrapper jre;
   };
 
   amule = import ../tools/networking/p2p/amule {
