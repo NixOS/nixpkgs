@@ -248,8 +248,7 @@ rec {
       '';
 
       bfsched = ''
-        CPU_BFS y
-        CPU_CFS n
+        SCHED_BFS y
         NO_HZ n
         HZ_1000 n
         HZ_300 y
