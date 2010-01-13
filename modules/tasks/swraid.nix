@@ -5,7 +5,6 @@
 let
 
   tempConf = "/var/run/mdadm.conf";
-  tempStatus = "/var/run/mdadm.status";
   logFile = "/var/log/mdadmEvents.log";
   modprobe = config.system.sbin.modprobe;
   inherit (pkgs) mdadm diffutils;
@@ -43,21 +42,9 @@ in
       # Scan /proc/partitions for RAID devices.
       ${mdadm}/sbin/mdadm --examine --brief --scan -c partitions > ${tempConf}
 
-      if ! -q ${diffutils}/bin/diff ${tempConf} ${tempConf}.old > /dev/null; then
-        
-        try=0
-        while ! test -e /proc/mdstat || ! ${diffutils}/bin/diff -q /proc/mdstat ${tempStatus} > /dev/null; do
-          test $try -gt 6 && break
-          test $try -neq 0 && sleep 10
-
-          # Activate each device found.
-          ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
-
-          try=$(($try + 1))
-        done
-
-        # Register the new status
-        cp /proc/mdstat ${tempStatus}
+      if ! ${diffutils}/bin/diff ${tempConf} ${tempConf}.old > /dev/null; then
+        # Activate each device found.
+        ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
 
         # Send notifications.
         initctl emit -n new-devices
@@ -77,7 +64,6 @@ in
 
     postStart = ''
       echo > ${tempConf}
-      echo > ${tempStatus}
 
       # Assemble early raid devices.
       initctl emit -n new-raid-array
