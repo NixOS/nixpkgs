@@ -6,19 +6,15 @@
 
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
-let version = "0.8.0b";
+let version = "0.8.1";
 in
   stdenv.mkDerivation {
     name = "gnunet-${version}";
 
     src = fetchurl {
-      url = "http://gnunet.org/download/GNUnet-${version}.tar.bz2";
-      sha256 = "1d1abnfqbd1f8pjzq9p0za7jyy2lay7k8l09xadk83k8d96abwcs";
+      url = "mirror://gnu/gnunet/GNUnet-${version}.tar.gz";
+      sha256 = "0makh52fsrsxg2qgfi1n68sh2hllqxj453g335m05wk05d7minl4";
     };
-
-    configureFlags = ''
-      --without-included-ltdl --disable-ltdl-install --with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib
-    '';
 
     buildInputs = [
       libextractor libmicrohttpd libgcrypt gmp curl libtool
@@ -27,14 +23,19 @@ in
       makeWrapper
     ] ++ (if gtkSupport then [ gtk libglade ] else []);
 
-    patches = [
-      ./tmpdir.patch
-      ./disable-http-tests.patch
-    ];
-
     preConfigure = ''
-      # Brute force: make sure the tests don't rely on `/tmp', for
-      # the sake of chroot builds.
+      # Brute force: since nix-worker chroots don't provide
+      # /etc/{resolv.conf,hosts}, replace all references to `localhost'
+      # by their IPv4 equivalent.
+      for i in $(find . \( -name \*.c -or -name \*.conf \) \
+                      -exec grep -l localhost {} \;)
+      do
+        echo "$i: substituting \`127.0.0.1' to \`localhost'..."
+        substituteInPlace "$i" --replace "localhost" "127.0.0.1"
+      done
+
+      # Make sure the tests don't rely on `/tmp', for the sake of chroot
+      # builds.
       for i in $(find . \( -iname \*test\*.c -or -name \*.conf \) \
                       -exec grep -l /tmp {} \;)
       do
@@ -43,16 +44,15 @@ in
       done
     '';
 
-    # Tests have to be run xonce it's installed.
-    # FIXME: Re-enable tests when they are less broken.
-    #postInstall = ''
-    #  GNUNET_PREFIX="$out" make check
-    #'';
-
     doCheck = false;
 
-    # Help programs find the numerous modules that sit under `$out/lib/GNUnet'.
+    # 1. Run tests have once GNUnet is installed.
+    # 2. Help programs find the numerous modules that sit under
+    #    `$out/lib/GNUnet'.
+
+    # FIXME: `src/transports/test_udp' hangs forever.
     postInstall = ''
+      #GNUNET_PREFIX="$out" make check
       wrapProgram "$out/bin/gnunetd" \
         --prefix LTDL_LIBRARY_PATH ":" "$out/lib/GNUnet"
     '';
@@ -78,5 +78,8 @@ in
       homepage = http://gnunet.org/;
 
       license = "GPLv2+";
+
+      maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = stdenv.lib.platforms.gnu;
     };
   }

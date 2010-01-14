@@ -1,7 +1,7 @@
-{ pkgs }:
+{ pkgs, python, buildPythonPackage }:
 
 rec {
-  inherit (pkgs) buildPythonPackage fetchurl fetchsvn stdenv python;
+  inherit (pkgs) fetchurl fetchsvn stdenv;
 
   argparse = buildPythonPackage (rec {
     name = "argparse-0.9.1";
@@ -48,6 +48,23 @@ rec {
       description = "Darcsver, generate a version number from Darcs history";
 
       homepage = http://pypi.python.org/pypi/darcsver;
+
+      license = "BSD-style";
+    };
+  });
+
+  dateutil = buildPythonPackage (rec {
+    name = "dateutil-1.4.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-dateutil/${name}.tar.gz";
+      sha256 = "0mrkh932k8s74h4rpgksvpmwbrrkq8zn78gbgwc22i2vlp31bdkl";
+    };
+
+    meta = {
+      description = "Powerful extensions to the standard datetime module";
+
+      homepage = http://pypi.python.org/pypi/python-dateutil;
 
       license = "BSD-style";
     };
@@ -140,6 +157,23 @@ rec {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = http://codespeak.net/lxml/index.html;
       license = "BSD";
+    };
+  });
+
+  mechanize = buildPythonPackage (rec {
+    name = "mechanize-0.1.11";
+
+    src = fetchurl {
+      url = "http://wwwsearch.sourceforge.net/mechanize/src/${name}.tar.gz";
+      sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
+    };
+
+    meta = {
+      description = "Stateful programmatic web browsing in Python";
+
+      homepage = http://wwwsearch.sourceforge.net/;
+
+      license = "BSD-style";
     };
   });
 
@@ -248,21 +282,20 @@ rec {
     };
   });
 
-  psycopg2 = buildPythonPackage {
-    name = "psycopg2-r407";
+  psycopg2 = buildPythonPackage rec {
+    name = "psycopg2-2.0.13";
 
     doCheck = false;
     
     src = fetchurl {
-      url = http://initd.org/pub/software/psycopg/psycopg2-r407.tar.gz;
-      sha256 = "b80bf2f106fc6dbd3d3c512e61baca0b44fa80b975e554982cc9e793c085cc86";
+      url = "http://initd.org/pub/software/psycopg/PSYCOPG-2-0/${name}.tar.gz";
+      sha256 = "0arkaa1nbbd3pyn4l1bc75wi7nff3vxxh4s8sj5al5hv20p64pm1";
     };
     
     propagatedBuildInputs = [ pkgs.postgresql ];
     
     meta = {
-      description = "PostgreSQL database adapter for the Python programming language.";
-      
+      description = "PostgreSQL database adapter for the Python programming language";
       license = "GPLv2/ZPL";
     };
   };

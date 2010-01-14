@@ -141,4 +141,6 @@ rec {
       else
         s;
 
+  basename = s: lib.last (splitString "/" s);
+
 }

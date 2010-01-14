@@ -4,11 +4,11 @@ args @ { stdenv, fetchurl, platform, userModeLinux ? false, extraConfig ? ""
 import ./generic.nix (
 
   rec {
-    version = "2.6.32.2";
+    version = "2.6.32.3";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "16fyfcj6cgd5b1n0qnf2lgx5v806xycr3w1nhyys1qc0ffy2iccj";
+      sha256 = "09zg9xk67vjpfrrb3m4rzql4nd7bz64i9sng5sbdpfgs7d4pi1cp";
     };
 
     features.iwlwifi = true;
@@ -203,5 +203,5 @@ import ./generic.nix (
       '';
   }
 
-  // args
+  // removeAttrs args ["extraConfig"]
 )

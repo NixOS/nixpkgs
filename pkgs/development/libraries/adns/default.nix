@@ -11,7 +11,11 @@ stdenv.mkDerivation
   };
   src = fetchurl
   {
-    url = "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz";
+    urls =
+      [ "http://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
+        "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz"
+        "mirror://gnu/adns/adns-${version}.tar.gz"
+      ];
     sha256 = "${versionHash}";
   };
   configureFlags = if static then "--disable-dynamic" else "--enable-dynamic";

@@ -16,7 +16,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison ncurses libusb freetype ];
 
-  patchPhase =
+  patches =
+    [ # The udev rules for LVM create symlinks in /dev/mapper rathe
+      # than device nodes, causing GRUB to fail to recognize LVM
+      # volumes. See
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=550704
+      # This ugly workaround makes `find_root_device' use stat() on
+      # files in /dev/mapper instead of lstat().
+      ./device-mapper-symlinks.patch
+    ];
+
+  postPatch =
     '' gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"

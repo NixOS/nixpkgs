@@ -5,12 +5,12 @@ if args ? startFPC && args.startFPC != null then
 with args;
 
 stdenv.mkDerivation rec {
-  version = "2.2.4";
+  version = "2.4.0";
   name = "fpc-${version}";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/sourceforge/freepascal/fpcbuild-${version}.tar.gz";
-    sha256 = "1kxljnivww4riqff8vxann7s135cv634ly3i61rfs1wzwc4lz9bp";
+    sha256 = "1m2g2bafjixbwl5b9lna5h7r56y1rcayfnbp8kyjfd1c1ymbxaxk";
   };
 
   buildInputs = [startFPC gawk];

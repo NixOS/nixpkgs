@@ -1,0 +1,49 @@
+--- dos2unix-3.1/Makefile.orig	Thu Nov 19 07:09:38 1998
++++ dos2unix-3.1/Makefile	Fri Nov 17 13:25:35 2000
+@@ -1,10 +1,12 @@
++CFLAGS=
++
+ default: dos2unix
+ 
+ all:	dos2unix link install
+ 
+ 
+ dos2unix:
+-	gcc -O dos2unix.c -o dos2unix
++	gcc $(CFLAGS) dos2unix.c -o dos2unix
+ 
+ 
+ link:	
+@@ -12,11 +14,10 @@
+ 	ln -s dos2unix.1 mac2unix.1		
+ 
+ clean:
+-	rm dos2unix
++	rm -f dos2unix mac2unix mac2unix.1 *~ *.orig core
+ 
+ install:
+ 	install -m 755 dos2unix /usr/local/bin
+ 	install -m 644 dos2unix.1 /usr/local/man/man1
+ 	install -m 755 mac2unix /usr/local/bin
+ 	install -m 644 mac2unix.1 /usr/local/man/man1
+-
+--- dos2unix-3.1/dos2unix.c.orig	Thu Nov 19 07:19:25 1998
++++ dos2unix-3.1/dos2unix.c	Fri Nov 17 13:25:25 2000
+@@ -267,7 +267,7 @@
+ 
+   strcpy (TempPath, "./d2utmp");
+   strcat (TempPath, "XXXXXX");
+-  mktemp (TempPath);
++  mkstemp (TempPath);
+ 
+ #ifdef DEBUG
+   fprintf(stderr, "dos2unix: using %s as temp file\n", TempPath);
+@@ -347,7 +347,7 @@
+ 
+   strcpy (TempPath, "./u2dtmp");
+   strcat (TempPath, "XXXXXX");
+-  mktemp (TempPath);
++  mkstemp (TempPath);
+ 
+ #ifdef DEBUG
+   fprintf(stderr, "dos2unix: using %s as temp file\n", TempPath);

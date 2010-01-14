@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ocaml, perl, python, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "coccinelle-0.1.11rc1";
+  name = "coccinelle-0.2.0";
 
   src = fetchurl {
     url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
-    sha256 = "1rdsv3qcl6zcx3d3zd4cl9d79hdgaw19llxbflkfxipvkg3vk59x";
+    sha256 = "1mg6r92h8j3kqgy9iv6kk0g96m84wcj71iavgvv9qdbk3qwim8i4";
   };
 
   buildInputs = [ ocaml perl python ncurses makeWrapper ];
@@ -18,14 +18,16 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make depend && make all";
 
-  # Most of the test suite seems to fail (?!).
+  # Note: The tests want $out/share/coccinelle/standard.h so they must be run
+  # after "make install".
   doCheck = false;
-  checkPhase = "make test";
 
   postInstall =
     '' wrapProgram "$out/bin/spatch"                                    \
          --prefix "LD_LIBRARY_PATH" ":" "$out/lib"                      \
          --prefix "PYTHONPATH" ":" "$out/share/coccinelle/python"
+
+       make test
     '';
 
   meta = {

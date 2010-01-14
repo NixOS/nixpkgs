@@ -1,0 +1,42 @@
+diff -up unix2dos-2.2/unix2dos.1.man unix2dos-2.2/unix2dos.1
+--- unix2dos-2.2/unix2dos.1.man	1995-03-30 17:03:22.000000000 +0100
++++ unix2dos-2.2/unix2dos.1	2008-09-08 09:49:19.000000000 +0100
+@@ -16,7 +16,7 @@ Options:
+ .SH DESCRIPTION
+ 
+ .PP
+-This manual page documents dos2unix, the program that converts text 
++This manual page documents unix2dos, the program that converts text 
+ files in UNIX format to DOS format.
+ 
+ .SH OPTIONS
+@@ -40,7 +40,7 @@ Prints version information.
+ 
+ .TP
+ .B \-c --convmode convmode
+-Sets conversion mode. Simulates dos2unix under SunOS.
++Sets conversion mode. Simulates unix2dos under SunOS.
+ 
+ .TP
+ .B \-o --oldfile file ...
+@@ -51,7 +51,7 @@ default to run in this mode. Wildcard na
+ .B \-n --newfile infile outfile ...
+ New file mode. Convert the infile and write output to outfile. File names
+ must be given in pairs and wildcard names should NOT be used or you WILL 
+-lost your files. 
++lose your files. 
+ 
+ .SH EXAMPLES
+ 
+@@ -71,9 +71,9 @@ Convert and replace a.txt. Convert and r
+ Convert and replace a.txt in ASCII conversion mode.
+ Convert and replace b.txt in ISO conversion mode.
+ .IP
+-.B dos2unix a.txt -c iso b.txt
++.B unix2dos a.txt -c iso b.txt
+ .IP
+-.B dos2unix -c ascii a.txt -c iso b.txt
++.B unix2dos -c ascii a.txt -c iso b.txt
+ 
+ .LP
+ Convert and replace a.txt while keeping original date stamp.

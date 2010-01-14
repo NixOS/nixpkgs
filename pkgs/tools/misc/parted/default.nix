@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline }:
+{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, utillinuxng }:
 
 stdenv.mkDerivation rec {
-  name = "parted-1.9.0";
+  name = "parted-2.1";
 
   src = fetchurl {
     url = "mirror://gnu/parted/${name}.tar.gz";
-    sha256 = "02amqpzl8lgk247cjsbaz1nsiz9i1pbj0adx0z109h94p90i48sk";
+    sha256 = "1jc49lv0mglqdvrrh06vfqqmpa0cxczzmd2by6mlpxpblpgrb22a";
   };
 
   buildInputs = [ libuuid gettext readline libuuid devicemapper ];
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  patches = [ ./t7000-scripting.patch ];
+  # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
+  preCheck = "export PATH=\"${utillinuxng}/sbin:$PATH\"";
 
   meta = {
     description = "GNU Parted, a tool to create, destroy, resize, check, and copy partitions";

@@ -1,0 +1,146 @@
+diff -up unix2dos-2.2/unix2dos.c.tmppath unix2dos-2.2/unix2dos.c
+--- unix2dos-2.2/unix2dos.c.tmppath	2008-09-08 10:14:30.000000000 +0100
++++ unix2dos-2.2/unix2dos.c	2008-09-08 10:14:30.000000000 +0100
+@@ -57,7 +57,10 @@
+ 
+ #ifdef __MSDOS__
+ #  include <dir.h>
++#else
++#  include <unistd.h>
+ #endif __MSDOS
++#include <libgen.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -195,6 +198,40 @@ int ConvertUnixToDos(FILE* ipInF, FILE* 
+ }
+ 
+ 
++static int MakeTempFileFrom(const char *OutFN, char **fname_ret)
++{
++  char *cpy = strdup(OutFN);
++  char *dir = NULL;
++  size_t fname_len = 0;
++  char  *fname_str = NULL;
++  int fd = -1;
++  
++  *fname_ret = NULL;
++ 
++  if (!cpy)
++    goto make_failed;
++  
++  dir = dirname(cpy);
++  
++  fname_len = strlen(dir) + strlen("/u2dtmpXXXXXX") + sizeof (char);
++  if (!(fname_str = malloc(fname_len)))
++    goto make_failed;
++  sprintf(fname_str, "%s%s", dir, "/u2dtmpXXXXXX");
++  *fname_ret = fname_str;
++
++  free(cpy);
++
++  if ((fd = mkstemp(fname_str)) == -1)
++    goto make_failed;
++  
++  return (fd);
++  
++ make_failed:
++  free(*fname_ret);
++  *fname_ret = NULL;
++  return (-1);
++}
++
+ /* convert file ipInFN to DOS format text and write to file ipOutFN
+  * RetVal: 0 if success
+  *         -1 otherwise
+@@ -204,7 +241,7 @@ int ConvertUnixToDosNewFile(char *ipInFN
+   int RetVal = 0;
+   FILE *InF = NULL;
+   FILE *TempF = NULL;
+-  char TempPath[16];
++  char *TempPath;
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
+   int fd;
+@@ -213,8 +250,7 @@ int ConvertUnixToDosNewFile(char *ipInFN
+   if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
+     RetVal = -1;
+ 
+-  strcpy (TempPath, "./u2dtmpXXXXXX");
+-  if((fd=mkstemp (TempPath)) < 0) {
++  if((fd = MakeTempFileFrom (ipOutFN, &TempPath)) < 0) {
+ 	  perror("Can't open output temp file");
+ 	  RetVal = -1;
+   }
+@@ -231,6 +267,7 @@ int ConvertUnixToDosNewFile(char *ipInFN
+   if ((!RetVal) && (InF) && ((TempF=OpenOutFile(fd)) == NULL))
+   {
+     fclose (InF);
++    InF = NULL;
+     RetVal = -1;
+   }
+ 
+@@ -265,9 +302,6 @@ int ConvertUnixToDosNewFile(char *ipInFN
+   /* can rename temp file to out file? */
+   if (!RetVal)
+   {
+-    if (stat(ipOutFN, &StatBuf) == 0)
+-      unlink(ipOutFN);
+-
+     if ((rename(TempPath, ipOutFN) == -1) && (!ipFlag->Quiet))
+     {
+       fprintf(stderr, "unix2dos: problems renaming '%s' to '%s'\n", TempPath, ipOutFN);
+@@ -275,6 +309,7 @@ int ConvertUnixToDosNewFile(char *ipInFN
+       RetVal = -1;
+     }
+   }
++  free(TempPath);
+ 
+   return RetVal;
+ }
+@@ -289,7 +324,7 @@ int ConvertUnixToDosOldFile(char* ipInFN
+   int RetVal = 0;
+   FILE *InF = NULL;
+   FILE *TempF = NULL;
+-  char TempPath[16];
++  char *TempPath;
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
+   mode_t mode = S_IRUSR | S_IWUSR;
+@@ -301,8 +336,7 @@ int ConvertUnixToDosOldFile(char* ipInFN
+   else
+     mode = StatBuf.st_mode;
+ 
+-  strcpy (TempPath, "./u2dtmpXXXXXX");
+-  if((fd=mkstemp (TempPath)) < 0) {
++  if((fd = MakeTempFileFrom(ipInFN, &TempPath)) < 0) {
+       perror("Can't open output temp file");
+       RetVal = -1;
+   }
+@@ -322,6 +356,7 @@ int ConvertUnixToDosOldFile(char* ipInFN
+   if ((!RetVal) && (InF) && ((TempF=OpenOutFile(fd)) == NULL))
+   {
+     fclose (InF);
++    InF = NULL;
+     RetVal = -1;
+   }
+ 
+@@ -349,10 +384,6 @@ int ConvertUnixToDosOldFile(char* ipInFN
+       RetVal = -1;
+   }
+ 
+-  /* can delete in file? */
+-  if ((!RetVal) && (unlink(ipInFN) == -1))
+-    RetVal = -1;
+-
+   /* any error? */
+   if ((RetVal) && (unlink(TempPath)))
+     RetVal = -1;
+@@ -367,6 +398,7 @@ int ConvertUnixToDosOldFile(char* ipInFN
+     }
+     RetVal = -1;
+   }
++  free(TempPath);
+   return RetVal;
+ }
+ 

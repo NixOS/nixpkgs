@@ -1,0 +1,28 @@
+--- dos2unix-3.1/dos2unix.c.mode	2003-05-21 08:09:08.000000000 -0700
++++ dos2unix-3.1/dos2unix.c	2003-05-21 08:09:56.000000000 -0700
+@@ -345,11 +345,14 @@ int ConvertDosToUnixOldFile(char* ipInFN
+   char TempPath[16];
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
++  mode_t mode = S_IRUSR | S_IWUSR;
+   int fd;
+ 
+   /* retrieve ipInFN file date stamp */
+-  if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
++  if (stat(ipInFN, &StatBuf))
+     RetVal = -1;
++  else
++    mode = StatBuf.st_mode;
+ 
+   strcpy (TempPath, "./u2dtmpXXXXXX");
+   if((fd=mkstemp (TempPath))<0) {
+@@ -357,6 +360,9 @@ int ConvertDosToUnixOldFile(char* ipInFN
+ 	  RetVal = -1;
+   }
+ 
++  if (!RetVal && fchmod (fd, mode) && fchmod (fd, S_IRUSR | S_IWUSR))
++    RetVal = -1;
++
+ #ifdef DEBUG
+   fprintf(stderr, "dos2unix: using %s as temp file\n", TempPath);
+ #endif DEBUG

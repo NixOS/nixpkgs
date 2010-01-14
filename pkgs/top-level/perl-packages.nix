@@ -2438,10 +2438,10 @@ rec {
   };
 
   VariableMagic = buildPerlPackage rec {
-    name = "Variable-Magic-0.35";
+    name = "Variable-Magic-0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "0p6f593bh8zyg4qlxpa3hmdp56saghcgx7r0p46gxscxyf3k0bdc";
+      sha256 = "15305b54e948f74a0cf77c1c6bd8aa399caac12d6b1dee8cc4a69ff7d1421db6";
     };
   };
 
@@ -2469,6 +2469,17 @@ rec {
     };
     propagatedBuildInputs = [LWP HTTPResponseEncoding HTTPServerSimple];
     doCheck = false;
+  };
+
+  X11GUITest = buildPerlPackage rec {
+    name = "X11-GUITest-0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CT/CTRONDLP/${name}.tar.gz";
+      sha256 = "0akjk2x2d3j1f95wn93mh6nvq8p6c9jcqmvkh1mli5jxr1rmhjx8";
+    };
+    buildInputs = [pkgs.x11 pkgs.xorg.libXtst pkgs.xorg.libXi];
+    NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
+    doCheck = false; # requires an X server
   };
 
   XMLDOM = buildPerlPackage {

@@ -1,0 +1,29 @@
+diff -up unix2dos-2.2/unix2dos.c.mode unix2dos-2.2/unix2dos.c
+--- unix2dos-2.2/unix2dos.c.mode	2008-09-08 10:13:39.000000000 +0100
++++ unix2dos-2.2/unix2dos.c	2008-09-08 10:13:39.000000000 +0100
+@@ -292,11 +292,14 @@ int ConvertUnixToDosOldFile(char* ipInFN
+   char TempPath[16];
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
++  mode_t mode = S_IRUSR | S_IWUSR;
+   int fd;
+ 
+   /* retrieve ipInFN file date stamp */
+-  if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
++  if (stat(ipInFN, &StatBuf))
+     RetVal = -1;
++  else
++    mode = StatBuf.st_mode;
+ 
+   strcpy (TempPath, "./u2dtmpXXXXXX");
+   if((fd=mkstemp (TempPath)) < 0) {
+@@ -304,6 +307,9 @@ int ConvertUnixToDosOldFile(char* ipInFN
+       RetVal = -1;
+   }
+ 
++  if (!RetVal && fchmod (fd, mode) && fchmod (fd, S_IRUSR | S_IWUSR))
++    RetVal = -1;
++
+ #ifdef DEBUG
+   fprintf(stderr, "unix2dos: using %s as temp file\n", TempPath);
+ #endif DEBUG    

@@ -225,6 +225,7 @@ in {
   inkscape = linux;
   iputils = linux;
   iproute = linux;
+  iptables = linux;
   irssi = linux;
   jfsutils = linux;
   jfsrec = linux;
@@ -240,6 +241,7 @@ in {
   ktorrent = linux;
   kvm = linux;
   qemu = linux;
+  qemu_kvm = linux;
   less = all;
   lftp = all;
   libarchive = linux;
@@ -375,7 +377,8 @@ in {
   texLiveBeamer = linux;
   texLiveExtra = linux;
   texinfo = all;
-  thunderbird = linux;
+  thunderbird2 = linux;
+  thunderbird3 = linux;
   tightvnc = linux;
   time = linux;
   tinycc = ["i686-linux"];
@@ -402,6 +405,7 @@ in {
   webkit = linux;
   wget = all;
   which = all;
+  wicd = linux;
   wine = ["i686-linux"];
   wireshark = linux;
   wirelesstools = linux;
@@ -482,6 +486,10 @@ in {
     lhs2tex = ghcSupported;
     haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
     xmonad = linux;
+  };
+
+  haskellPackages_ghc6121 = {
+    ghc = ghcSupported;
   };
 
   kde3 = {

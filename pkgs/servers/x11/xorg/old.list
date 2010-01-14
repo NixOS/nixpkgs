@@ -1,7 +1,8 @@
 mirror://xorg/individual/app/twm-1.0.4.tar.bz2
 mirror://xorg/individual/app/xclock-1.0.4.tar.bz2
-mirror://xorg/individual/app/xeyes-1.0.991.tar.bz2
+mirror://xorg/individual/app/xeyes-1.1.0.tar.bz2
 mirror://xorg/individual/app/xfs-1.1.0.tar.bz2
+mirror://xorg/individual/app/xinit-1.2.0.tar.bz2
 mirror://xorg/individual/app/xmessage-1.0.2.tar.bz2
 mirror://xorg/individual/lib/libXp-1.0.0.tar.bz2
 mirror://xorg/individual/lib/libXxf86misc-1.0.2.tar.bz2

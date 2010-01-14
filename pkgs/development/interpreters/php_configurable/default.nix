@@ -106,13 +106,6 @@ composableDerivation {} ( fixed : {
                 license = "based on the PHP license - as is";
                 };
       */
-      xdebug = {
-        buildInputs = [ automake autoconf ];
-        xdebug_src = args.fetchurl {
-          url = "http://xdebug.org/files/xdebug-2.0.5.tgz";
-          sha256 = "1cmq7c36gj8n41mfq1wba5rij8j77yqhydpcsbcysk1zchg68f26";
-        };
-      };
     };
 
   cfg = {
@@ -130,14 +123,13 @@ composableDerivation {} ( fixed : {
     soapSupport = getConfig ["php" "soap"] true;
     zlibSupport = getConfig ["php" "zlib"] true;
     opensslSupport = getConfig ["php" "openssl"] true;
-    xdebugSupport = getConfig ["php" "xdebug"] false;
     mbstringSupport = getConfig ["php" "mbstring"] true;
     gdSupport = getConfig ["php" "gd"] true;
   };
 
   # only -O1
   configurePhase = ''
-    iniFile=$out/etc/$name.ini
+    iniFile=$out/etc/php-recommended.ini
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
     ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out  $configureFlags
     echo configurePhase end
@@ -147,32 +139,6 @@ composableDerivation {} ( fixed : {
   installPhase = ''
     unset installPhase; installPhase;
     cp php.ini-recommended $iniFile
-
-    # Now Let's build xdebug if flag has been given
-    # TODO I think there are better paths than the given below
-    if [ -n "$xdebug_src" ]; then
-      PATH=$PATH:$out/bin
-      tar xfz $xdebug_src;
-      cd xdebug*
-      phpize
-      ./configure --prefix=$out
-      make
-      ensureDir $out/lib; cp modules/xdebug.so $out/lib
-      cat >> $out/etc/php.ini << EOF
-        zend_extension="$out/lib/xdebug.so"
-        zend_extension_ts="$out/lib/xdebug.so"
-        zend_extension_debug="$out/lib/xdebug.so"
-        xdebug.remote_enable=true
-        xdebug.remote_host=127.0.0.1
-        xdebug.remote_port=9000
-        xdebug.remote_handler=dbgp
-        xdebug.profiler_enable=0
-        xdebug.profiler_output_dir="/tmp/xdebug"
-        xdebug.remote_mode=req
-        max_execution_time = 300
-        date.timezone = UTC
-  EOF
-    fi
   '';
 
   src = args.fetchurl {

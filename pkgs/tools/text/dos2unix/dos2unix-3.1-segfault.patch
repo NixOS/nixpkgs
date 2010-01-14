@@ -1,0 +1,93 @@
+--- dos2unix-3.1/dos2unix.c.segf	Thu Jan 17 17:27:42 2002
++++ dos2unix-3.1/dos2unix.c	Thu Jan 17 17:28:07 2002
+@@ -147,9 +147,9 @@
+  * RetVal: NULL if failure
+  *         file stream otherwise
+  */
+-FILE* OpenOutFile(char *ipFN)
++FILE* OpenOutFile(int fd)
+ {
+-  return (fopen(ipFN, W_CNTRL));
++  return (fdopen(fd, W_CNTRL));
+ }
+ 
+ 
+@@ -260,14 +260,17 @@
+   char TempPath[16];
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
++  int fd;
+ 
+   /* retrieve ipInFN file date stamp */
+   if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
+     RetVal = -1;
+ 
+-  strcpy (TempPath, "./d2utmp");
+-  strcat (TempPath, "XXXXXX");
+-  mkstemp (TempPath);
++  strcpy (TempPath, "./d2utmpXXXXXX");
++  if((fd=mkstemp (TempPath))<0) {
++	  perror("Failed to open output temp file");
++	  RetVal = -1;
++  }
+ 
+ #ifdef DEBUG
+   fprintf(stderr, "dos2unix: using %s as temp file\n", TempPath);
+@@ -278,7 +281,7 @@
+     RetVal = -1;
+ 
+   /* can open out file? */
+-  if ((!RetVal) && (InF) && ((TempF=OpenOutFile(TempPath)) == NULL))
++  if ((!RetVal) && (InF) && ((TempF=OpenOutFile(fd)) == NULL))
+   {
+     fclose (InF);
+     RetVal = -1;
+@@ -295,6 +298,8 @@
+   /* can close out file? */
+   if ((TempF) && (fclose(TempF) == EOF))
+     RetVal = -1;
++  if(fd>=0)
++	  close(fd);
+ 
+   if ((!RetVal) && (ipFlag->KeepDate))
+   {
+@@ -340,14 +345,17 @@
+   char TempPath[16];
+   struct stat StatBuf;
+   struct utimbuf UTimeBuf;
++  int fd;
+ 
+   /* retrieve ipInFN file date stamp */
+   if ((ipFlag->KeepDate) && stat(ipInFN, &StatBuf))
+     RetVal = -1;
+ 
+-  strcpy (TempPath, "./u2dtmp");
+-  strcat (TempPath, "XXXXXX");
+-  mkstemp (TempPath);
++  strcpy (TempPath, "./u2dtmpXXXXXX");
++  if((fd=mkstemp (TempPath))<0) {
++	  perror("Failed to open output temp file");
++	  RetVal = -1;
++  }
+ 
+ #ifdef DEBUG
+   fprintf(stderr, "dos2unix: using %s as temp file\n", TempPath);
+@@ -358,7 +366,7 @@
+     RetVal = -1;
+ 
+   /* can open out file? */
+-  if ((!RetVal) && (InF) && ((TempF=OpenOutFile(TempPath)) == NULL))
++  if ((!RetVal) && (InF) && ((TempF=OpenOutFile(fd)) == NULL))
+   {
+     fclose (InF);
+     RetVal = -1;
+@@ -376,6 +384,9 @@
+   if ((TempF) && (fclose(TempF) == EOF))
+     RetVal = -1;
+ 
++  if(fd>=0)
++	  close(fd);
++
+   if ((!RetVal) && (ipFlag->KeepDate))
+   {
+     UTimeBuf.actime = StatBuf.st_atime;

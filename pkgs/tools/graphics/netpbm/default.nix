@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, libjpeg, libpng, flex, zlib, perl, libxml2 }:
+{stdenv, fetchsvn, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "netpbm-advanced-844";
@@ -9,11 +9,21 @@ stdenv.mkDerivation {
     sha256 = "8729e63bb5cc9fd500a68d5aed91fa4b973ebc068e3014b47390ba7b4d85968e";
   };
 
+  patches = [ ./rgbpaths.patch ];
+
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
 
-  buildInputs = [ flex zlib perl libpng libjpeg libxml2 ];
+  buildInputs = [ flex zlib perl libpng libjpeg libxml2 makeWrapper ];
 
   configurePhase = "cp config.mk.in config.mk";
+
+  preBuild = ''
+    export LDFLAGS=-lz
+    substituteInPlace "pm_config.in.h" \
+        --subst-var-by "rgbPath1" "$out/lib/rgb.txt" \
+        --subst-var-by "rgbPath2" "/var/empty/rgb.txt" \
+        --subst-var-by "rgbPath3" "/var/empty/rgb.txt"
+  '';
 
   installPhase = ''
     make package pkgdir=$PWD/netpbmpkg
@@ -31,6 +41,11 @@ stdenv.mkDerivation {
     $out/man
     N
     EOF
+
+    # wrap any scripts that expect other programs in the package to be in their PATH
+    for prog in ppmquant; do
+        wrapProgram "$out/bin/$prog" --prefix PATH : "$out/bin"
+    done
   '';
 
   meta = {

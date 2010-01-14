@@ -1,15 +1,15 @@
 {stdenv, fetchurl, ghc, perl, gmp, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "6.12.0.20091010";
+  version = "6.12.1";
   
   name = "ghc-${version}";
   
   homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
-    url = "http://darcs.haskell.org/~ghc/dist/6.12.1rc1/${name}-src.tar.bz2";
-    sha256 = "903552917778329fc79cc273ece81030324006f47157ddd4278cb08c1c637fd3";
+    url = http://haskell.org/ghc/dist/6.12.1/ghc-6.12.1-src.tar.bz2;
+    sha256 = "0ajm4sypk4zgjp0m6i03fadyv5dm9vlqfnvsx1g94yk7vnd9zyfd";
   };
 
   buildInputs = [ghc perl gmp ncurses];
@@ -34,12 +34,14 @@ stdenv.mkDerivation rec {
   meta = {
     inherit homepage;
     description = "The Glasgow Haskell Compiler";
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.platforms.linux;
   };
 
 
   passthru = {
     corePackages = [
-       [ "Cabal" "1.8.0" ]
+       [ "Cabal" "1.8.0.2" ]
        [ "array" "0.3.0.0" ]
        [ "base" "3.0.3.2" ]
        [ "base" "4.2.0.0" ]
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
        [ "extensible-exceptions" "0.1.1.1" ]
        [ "ffi" "1.0" ]
        [ "filepath" "1.1.0.3" ]
-       [ "ghc" "6.12.0.20091010" ]
+       [ "ghc" "6.12.1" ]
        [ "ghc-binary" "0.5.0.2" ]
        [ "ghc-prim" "0.2.0.0" ]
        [ "haskell98" "1.0.1.1" ]

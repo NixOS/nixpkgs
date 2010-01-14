@@ -29,16 +29,16 @@ rec {
   '') ["addInputs" "doUnpack"];
 
   doInstall = a.fullDepEntry(''
-    ensureDir "$out/lib/python2.5/site-packages"
+    ensureDir "$out/lib/${a.python.libPrefix}/site-packages"
 
-    PYTHONPATH="$out/lib/python2.5/site-packages:$PYTHONPATH" \
+    PYTHONPATH="$out/lib/${a.python.libPrefix}/site-packages:$PYTHONPATH" \
     python setup.py install --prefix="$out"
 
     for i in "$out/bin/"*
     do
       wrapProgram "$i"                          \
         --prefix PYTHONPATH ":"			\
-          "$out/lib/python2.5/site-packages"
+          "$out/lib/${a.python.libPrefix}/site-packages"
     done
   '') ["doBuild"];
 

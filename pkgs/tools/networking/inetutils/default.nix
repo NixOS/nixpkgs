@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # XXX: These programs are normally installed setuid but since it
     # fails, they end up being non-executable, hence this hack.
-    chmod +x $out/bin/{ping,ping6,rcp,rlogin,rsh}
+    chmod +x $out/bin/{ping,ping6,rcp,rlogin,rsh,traceroute}
   '';
 
   meta = {

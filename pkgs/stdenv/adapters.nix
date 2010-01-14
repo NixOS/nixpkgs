@@ -200,12 +200,17 @@ rec {
         # Get rid of everything that isn't a gcno file or a C source
         # file.  This also includes the gcda files; we're not
         # interested in coverage resulting from the package's own test
-        # suite.
+        # suite.  Also strip the `.tmp_' prefix from gcno files.  (The
+        # Linux kernel creates these.)
         cleanupBuildDir =
           ''
             find $out/.build/ -type f -a ! \
               \( -name "*.c" -o -name "*.h" -o -name "*.gcno" \) \
               | xargs rm -f --
+
+            for i in $(find $out/.build/ -name ".tmp_*.gcno"); do 
+                mv "$i" "$(echo $i | sed s/.tmp_//)"
+            done
           '';
       } stdenv;          
       

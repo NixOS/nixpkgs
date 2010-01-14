@@ -51,7 +51,7 @@ rec {
       getImportedSets = m: filter (x: !isPath x) (getImports m);
 
       getConfig = m:
-        removeAttrs (delayProperties m) ["require"];
+        removeAttrs (delayProperties m) ["require" "key"];
     in
       if isModule m then
         { key = "<unknown location>"; } // m
@@ -81,18 +81,19 @@ rec {
   moduleClosure = initModules: args:
     let
       moduleImport = m:
-        (unifyModuleSyntax (applyIfFunction (importIfPath m) args)) // {
+        let m' = applyIfFunction (importIfPath m) args;
+        in (unifyModuleSyntax m') // {
           # used by generic closure to avoid duplicated imports.
-          key = if isPath m then m else "<unknown location>";
+          key = if isPath m then m else if m' ? key then m'.key else "<unknown location>";
         };
 
       getImports = m: attrByPath ["imports"] [] m;
 
     in
       (lazyGenericClosure {
-        startSet = map moduleImport (filter isPath initModules);
+        startSet = map moduleImport initModules;
         operator = m: map moduleImport (getImports m);
-      }) ++ (map moduleImport (filter (m: ! isPath m) initModules));
+      });
 
   selectDeclsAndDefs = modules:
     lib.concatMap (m:

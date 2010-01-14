@@ -2,14 +2,14 @@
 
 let
     name    = "maxima";
-    version = "5.19.2";
+    version = "5.20.1";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "4b9d592cb5c5b49acf10c894aa4e899bd47f079b315ee22542122a2e64589072";
+    sha256 = "cc2430ad6b895fb730ee2a7b8df4852c2b6d09a5a8bb715bdba783982c470bd9";
   };
 
   buildInputs = [clisp];

@@ -1,0 +1,21 @@
+The install tries to create files in /var.  This patch removes those steps.
+
+--- wicd-1.6.2.2/setup.py	2009-09-01 11:05:31.000000000 -0400
++++ wicd-1.6.2.2/setup.py	2009-12-27 21:27:57.000000000 -0500
+@@ -464,8 +464,6 @@
+     data = [
+     (wpath.dbus, ['other/wicd.conf']),
+     (wpath.desktop, ['other/wicd.desktop']),
+-    (wpath.log, []), 
+-    (wpath.etc, []),
+     (wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-client.svg']),
+     (wpath.icons + '192x192/apps/', ['icons/192px/wicd-client.png']),
+     (wpath.icons + '128x128/apps/', ['icons/128px/wicd-client.png']),
+@@ -481,7 +479,6 @@
+     (wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]),
+     (wpath.encryption, [('encryption/templates/' + b) for b in 
+                         os.listdir('encryption/templates') if not b.startswith('.')]),
+-    (wpath.networks, []),
+     (wpath.bin, ['scripts/wicd-client', ]), 
+     (wpath.sbin,  ['scripts/wicd', ]),  
+     (wpath.share, ['data/wicd.glade', ]),

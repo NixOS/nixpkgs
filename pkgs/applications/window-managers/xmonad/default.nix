@@ -3,8 +3,8 @@
 cabal.mkDerivation (self : {
   pname = "xmonad";
   name = "${self.fname}";
-  version = "0.9";
-  sha256 = "51670f83de211a8ea24ce2724c71ac5c3e4782f25422319d8b5e43f3ae7bf9e8";
+  version = "0.9.1";
+  sha256 = "014201200e8a521ee3a0d8c0727392916a7549207b91064fb456f8c660609927";
   propagatedBuildInputs = [X11 mtl];
   meta = {
     description = "xmonad is a tiling window manager for X";

@@ -9,15 +9,15 @@ attrs :
 
             # pname should be defined by the client to be the package basename
             # version should be defined by the client to be the package version
- 
+
             # fname is the internal full name of the package
             fname = "${self.pname}-${self.version}";
 
-	    # name is the external full name of the package; usually we prefix
-	    # all packages with haskell- to avoid name clashes for libraries;
-	    # if that is not desired (for applications), name can be set to
-	    # fname.
-            name = "haskell-${self.pname}-ghc${attrs.ghc.ghc.version}-${self.version}"; 
+            # name is the external full name of the package; usually we prefix
+            # all packages with haskell- to avoid name clashes for libraries;
+            # if that is not desired (for applications), name can be set to
+            # fname.
+            name = "haskell-${self.pname}-ghc${attrs.ghc.ghc.version}-${self.version}";
 
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
@@ -37,7 +37,7 @@ attrs :
             propagatedBuildInputs = [];
 
             # library directories that have to be added to the Cabal files
-            extraLibDirs = attrs.lib.lists.concatMap (x : [ (x + "/lib64") (x + "/lib") ]) self.propagatedBuildInputs;
+            extraLibDirs = [];
 
             # compiles Setup and configures
             configurePhase = ''
@@ -46,7 +46,16 @@ attrs :
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
-              ./Setup configure --verbose --prefix="$out" ${toString (map (x : "--extra-lib-dir=" + x) self.extraLibDirs)} $configureFlags
+
+              for p in $propagatedBuildInputs; do
+                for d in lib{,64}; do
+                  if [ -e "$p/$d" ]; then
+                    extraLibDirs="$extraLibDirs --extra-lib-dir=$p/$d"
+                  fi
+                done
+              done
+
+              ./Setup configure --verbose --prefix="$out" $extraLibDirs $configureFlags
 
               eval "$postConfigure"
             '';
@@ -57,12 +66,15 @@ attrs :
 
               ./Setup build
 
+              export GHC_PACKAGE_PATH=$(ghc-packages)
+              ./Setup haddock
+
               eval "$postBuild"
             '';
 
-	    # installs via Cabal; creates a registration file for nix-support
-	    # so that the package can be used in other Haskell-builds; also
-	    # adds all propagated build inputs to the user environment packages
+            # installs via Cabal; creates a registration file for nix-support
+            # so that the package can be used in other Haskell-builds; also
+            # adds all propagated build inputs to the user environment packages
             installPhase = ''
               eval "$preInstall"
 
@@ -82,9 +94,13 @@ attrs :
 
               ensureDir $out/nix-support
               ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-              
+
               eval "$postInstall"
             '';
+
+            # We inherit stdenv and ghc so that they can be used
+            # in Cabal derivations.
+            inherit (attrs) stdenv ghc;
           };
     in  attrs.stdenv.mkDerivation ((rec { f = dtransform f // transform f; }).f);
-} 
+}

@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libidn-1.13";
+  name = "libidn-1.16";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/${name}.tar.gz";
-    sha256 = "07p7cnmfnq7ds8a56iqmxps46bzznn92xxpdlnnp3n6pwcnidmn7";
+    sha256 = "1zywwhqg7i44qg0sj2wpwprxif7723sp3if7vhvgy8mdzfn0zn7p";
   };
 
   doCheck = true;
@@ -31,5 +31,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "LGPLv2+";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
