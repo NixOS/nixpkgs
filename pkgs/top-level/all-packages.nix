@@ -4501,7 +4501,8 @@ let
       inputproto fixesproto libXfixes;
     inherit (gnome) glib;
   };
-  qtscriptgenerator = import ../development/libraries/qtscriptgenerator {
+
+  qtscriptgenerator = makeOverridable (import ../development/libraries/qtscriptgenerator) {
     inherit stdenv fetchurl;
     qt4 = qt45;
   };
