@@ -2,8 +2,8 @@ args : with args;
 rec {
   version = "0.9.26.2-0";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/lazarus/lazarus-${version}.tgz";
-    sha256 = "5b582685c0447034580fe17c60b8fc84a8b097b6f31ff9b4583cf0eb741297cc";
+    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%200.9.28.2/lazarus-0.9.28.2-src.tar.bz2";
+    sha256 = "1zad1sylgvhpb210zxypdyng72fpjz1zdf3cpqj9dl94cwn3f4ap";
   };
 
   buildInputs = [fpc gtk glib libXi inputproto 
