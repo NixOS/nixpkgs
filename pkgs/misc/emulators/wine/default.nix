@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.winehq.org/";
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = [ "i686-linux" ];
   };
 }

@@ -8703,9 +8703,10 @@ let
       // {system = "x86_64-linux";}
     else
       import ../misc/emulators/wine {
-        inherit fetchurl stdenv flex bison mesa ncurses
+        inherit fetchurl stdenv bison mesa ncurses
           libpng libjpeg alsaLib lcms xlibs freetype
           fontconfig fontforge libxml2 libxslt openssl;
+	flex = flex2535;
       };
 
   xosd = import ../misc/xosd {
