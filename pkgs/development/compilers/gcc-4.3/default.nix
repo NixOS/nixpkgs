@@ -30,6 +30,7 @@ with stdenv.lib;
 
 let
   version = "4.3.4";
+
   crossConfigureFlags =
     "--target=${cross.config}" +
     (if crossStageStatic then
@@ -49,11 +50,6 @@ let
   stageNameAddon = if (crossStageStatic) then "-stage-static" else
     "-stage-final";
   crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
-
-  ghdlSrc = fetchurl {
-    url = "http://ghdl.free.fr/ghdl-0.29.tar.bz2";
-    sha256 = "15mlinr1lwljwll9ampzcfcrk9bk0qpdks1kxlvb70xf9zhh2jva";
-  };
 in
 
 stdenv.mkDerivation ({
@@ -119,23 +115,6 @@ stdenv.mkDerivation ({
   ";
   #Above I added a hack on making the build different than the host.
 
-  postUnpack = if langVhdl then ''
-    tar xvf ${ghdlSrc}
-    mv ghdl-*/vhdl gcc*/gcc
-    rm -Rf ghdl-*
-  '' else "";
-
-  # Ghdl has some timestamps checks, storing file timestamps in '.cf' files.
-  # As we will change the timestamps to 1970-01-01 00:00:01, we also set the
-  # content of that .cf to that value. This way ghdl does not complain on
-  # the installed object files from the basic libraries (ieee, ...)
-  postInstallGhdl = if langVhdl then ''
-    pushd $out
-    find . -name "*.cf" -exec \
-        sed 's/[0-9]*\.000" /19700101000001.000" /g' -i {} \;
-    popd
-  '' else "";
-
   # Needed for the cross compilation to work
   AR = "ar";
   LD = "ld";
@@ -152,10 +131,43 @@ stdenv.mkDerivation ({
     license = "GPL/LGPL";
     description = "GNU Compiler Collection, 4.3.x";
   };
+
 } // (if langJava then {
   postConfigure = ''
     make configure-gcc
     sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${zlib}/include@ ; s@^LDFLAGS = .*@& -L${zlib}/lib@'
     sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${boehmgc}/include@ ; s@^LDFLAGS = .*@& -L${boehmgc}/lib -lgc@'
   '';
+} else {})
+// (if langVhdl then rec {
+  name = "ghdl-0.29";
+
+  ghdlSrc = fetchurl {
+    url = "http://ghdl.free.fr/ghdl-0.29.tar.bz2";
+    sha256 = "15mlinr1lwljwll9ampzcfcrk9bk0qpdks1kxlvb70xf9zhh2jva";
+  };
+
+  # Ghdl has some timestamps checks, storing file timestamps in '.cf' files.
+  # As we will change the timestamps to 1970-01-01 00:00:01, we also set the
+  # content of that .cf to that value. This way ghdl does not complain on
+  # the installed object files from the basic libraries (ieee, ...)
+  postInstallGhdl = ''
+    pushd $out
+    find . -name "*.cf" -exec \
+        sed 's/[0-9]*\.000" /19700101000001.000" /g' -i {} \;
+    popd
+  '';
+
+  postUnpack = ''
+    tar xvf ${ghdlSrc}
+    mv ghdl-*/vhdl gcc*/gcc
+    rm -Rf ghdl-*
+  '';
+
+  meta = {
+    homepage = "http://ghdl.free.fr/";
+    license = "GPLv2+";
+    description = "Complete VHDL simulator, using the GCC technology";
+  };
+
 } else {}))

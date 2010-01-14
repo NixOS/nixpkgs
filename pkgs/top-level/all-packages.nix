@@ -1923,7 +1923,6 @@ let
   gfortran = gfortran43;
 
   gfortran40 = wrapGCC (gcc40.gcc.override {
-    name = "gfortran";
     langFortran = true;
     langCC = false;
     inherit gmp mpfr;
@@ -1998,7 +1997,7 @@ let
 
   ghdl = wrapGHDL (import ../development/compilers/gcc-4.3 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
-    name = "ghdl-0.29";
+    name = "ghdl";
     langVhdl = true;
     langCC = false;
     langC = false;
