@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       sha256 = "95440f09f8dce616178b86b26af8e543c869d01579207aa68e8474019b59caca";
     };
 
-  patches = [ ./oo.patch ];
+  patches = [ ./oo.patch ./OOo-3.1.1-HEADERFIX-1.patch ];
 
   src_system = fetchurl {
       url = "http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=src_bzip&lang=system&version=${version}";
