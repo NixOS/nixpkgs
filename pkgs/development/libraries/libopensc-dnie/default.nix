@@ -5,7 +5,7 @@ zlib}:
 assert opensc.name == "opensc-0.11.7";
 
 stdenv.mkDerivation rec {
-  name = "opensc-dnie-1.4.6-2";
+  name = "libopensc-dnie-1.4.6-2";
   
   src = if (stdenv.system == "i686-linux") then (fetchurl {
       url = http://www.dnielectronico.es/descargas/PKCS11_para_Sistemas_Unix/1.4.6.Ubuntu_Jaunty_32/Ubuntu_Jaunty_opensc-dnie_1.4.6-2_i386.deb.tar;

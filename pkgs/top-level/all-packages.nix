@@ -4383,7 +4383,7 @@ let
       pkgconfig;
   };
 
-  opensc_dnie = import ../development/libraries/opensc-dnie {
+  libopensc_dnie = import ../development/libraries/libopensc-dnie {
     inherit fetchurl stdenv patchelf writeScript openssl openct
       libtool pcsclite zlib;
     inherit (gtkLibs) glib;
