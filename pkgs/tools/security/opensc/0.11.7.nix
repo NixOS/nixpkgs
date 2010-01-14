@@ -1,5 +1,5 @@
 {stdenv, fetchurl, libtool, readline, zlib, openssl, libiconv, pcsclite, libassuan, pkgconfig,
-libXt}:
+libXt, pinentry}:
 
 stdenv.mkDerivation rec {
   name = "opensc-0.11.7";
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--enable-pcsc" "--enable-nsplugin"
-    "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so.1" ];
+    "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so.1"
+    "--with-pinentry=${pinentry}/bin/pinentry" ];
 
   buildInputs = [ libtool readline zlib openssl pcsclite libassuan pkgconfig
     libXt ] ++

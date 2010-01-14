@@ -1180,7 +1180,7 @@ let
 
   opensc_0_11_7 = import ../tools/security/opensc/0.11.7.nix {
     inherit fetchurl stdenv libtool readline zlib openssl libiconv pcsclite
-      libassuan pkgconfig;
+      libassuan pkgconfig pinentry;
     inherit (xlibs) libXt;
   };
 
