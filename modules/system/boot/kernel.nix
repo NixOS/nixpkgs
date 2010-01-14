@@ -11,7 +11,8 @@ let kernel = config.boot.kernelPackages.kernel; in
   options = {
   
     boot.kernelPackages = mkOption {
-      default = pkgs.kernelPackages;
+      default = (if pkgs ? linuxPackages then pkgs.linuxPackages
+        else pkgs.kernelPackages);
       example = ''
         Example code (copy & paste):
         pkgs.kernelPackages_2_6_25
