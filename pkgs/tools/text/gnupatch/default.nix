@@ -3,10 +3,17 @@
 stdenv.mkDerivation rec {
   name = "patch-2.6.1";
 
-  src = fetchurl {
-    url = "mirror://gnu/patch/${name}.tar.gz";
-    sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
-  };
+  src =
+    if stdenv.isDarwin
+    then fetchurl {
+      # Temporary fix for
+      # http://lists.gnu.org/archive/html/bug-patch/2010-01/msg00004.html .
+      url = "ftp://alpha.gnu.org/patch/patch-2.6.1-2-g2c4e3ec.tar.gz";
+      sha256 = "1rspyzrik5cnav3m2fxr8146bsq4mc0yw4x0r8nkl2x7i052yr2c";
+    } else fetchurl {
+      url = "mirror://gnu/patch/${name}.tar.gz";
+      sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
+    };
 
   buildInputs = (stdenv.lib.optional doCheck ed);
 
