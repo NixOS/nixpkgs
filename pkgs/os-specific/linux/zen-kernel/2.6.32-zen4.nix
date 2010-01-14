@@ -67,7 +67,7 @@ import ../kernel/generic.nix (
       maintainers = [stdenv.lib.maintainers.raskin];
       platforms = with stdenv.lib.platforms;
         linux;
-    } // args.extraMeta;
+    } // stdenv.lib.attrByPath ["extraMeta"] {} args;
   } 
   // removeAttrs args ["extraConfig" "extraMeta" "features" "kernelPatches" 
                         "xz" "runCommand" "preConfigure"]
