@@ -334,7 +334,7 @@ let
   };
 
   ec2amitools = import ../tools/virtualization/amazon-ec2-ami-tools {
-    inherit stdenv fetchurl unzip makeWrapper ruby;
+    inherit stdenv fetchurl unzip makeWrapper ruby openssl;
   };
 
   amule = import ../tools/networking/p2p/amule {

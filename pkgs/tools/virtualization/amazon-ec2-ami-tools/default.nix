@@ -1,8 +1,10 @@
-{stdenv, fetchurl, unzip, ruby, makeWrapper}:
+{ stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "ec2-ami-tools";
+  
   buildInputs = [unzip makeWrapper];
+  
   src = fetchurl {
     url = http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip;
     sha256 = "2a7c848abea286234adcbb08938cfad50b844ecdfc7770e781289d9d396a1972";
@@ -17,10 +19,10 @@ stdenv.mkDerivation {
       for i in $out/bin/*; do
           wrapProgram $i \
             --set EC2_HOME $out \
-            --set PATH '$PATH:${ruby}/bin'
+            --prefix PATH : ${ruby}/bin:${openssl}/bin
       done
       
-      sed -i 's|/bin/bash|${stdenv.shell}/bin/bash|' $out/lib/ec2/platform/base/pipeline.rb
+      sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
     ''; 
 
   meta = {
