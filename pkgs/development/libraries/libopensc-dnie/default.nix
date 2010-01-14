@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
     cp -R usr/share $out
   '';
 
+  passthru = {
+    # This will help keeping the proper opensc version when using this libopensc-dnie library
+    inherit opensc;
+  };
+
   meta = {
     homepage = http://www.dnielectronico.es/descargas/;
     description = "Opensc plugin to access the Spanish national ID smartcard";

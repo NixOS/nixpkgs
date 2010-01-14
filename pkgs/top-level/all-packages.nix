@@ -1186,6 +1186,10 @@ let
 
   opensc = opensc_0_11_7;
 
+  opensc_dnie_wrapper = import ../tools/security/opensc-dnie-wrapper {
+    inherit stdenv makeWrapper ed libopensc_dnie;
+  };
+
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
