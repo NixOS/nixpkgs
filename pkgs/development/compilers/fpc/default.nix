@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
   installFlags = "INSTALL_PREFIX=\${out}";
   
   postInstall = ''
-    ln -fs $out/lib/fpc/*/ppc386 $out/bin
+    for i in $out/lib/fpc/*/ppc*; do
+      ln -fs $i $out/bin/$(basename $i)
+    done
     mkdir -p $out/lib/fpc/etc/
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/lib/fpc/etc/
   '';
