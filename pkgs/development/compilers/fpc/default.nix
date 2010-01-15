@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
       sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
     '' else "";
 
+  preBuild = ''
+    fpcmake
+  '';
+
   makeFlags = "NOGDB=1";
 
   installFlags = "INSTALL_PREFIX=\${out}";
