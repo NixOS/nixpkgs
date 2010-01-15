@@ -2859,6 +2859,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  inotifyTools = import ../development/tools/misc/inotify-tools {
+    inherit fetchurl stdenv;
+  };
+
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
   };
