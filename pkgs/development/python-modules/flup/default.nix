@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, setuptools, ... }:
 
 stdenv.mkDerivation rec {
-  name = "flup-r2311";
+  name = "flup-1.0.2";
 
   src = fetchurl {
     url = "http://www.saddi.com/software/flup/dist/${name}.tar.gz";
-    sha256 = "15wyn6d6wla1ag91yxmlh9b4m0w1i0c2lm8ka4qfv4ijqcqakdx3";
+    sha256 = "1nbx174g40l1z3a8arw72qz05a1qxi3didp9wm7kvkn1bxx33bab";
   };
 
   buildInputs = [ python setuptools ];
