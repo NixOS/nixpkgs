@@ -57,7 +57,7 @@ rec {
     name = "dateutil-1.4.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-dateutil/${name}.tar.gz";
+      url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
       sha256 = "0mrkh932k8s74h4rpgksvpmwbrrkq8zn78gbgwc22i2vlp31bdkl";
     };
 
