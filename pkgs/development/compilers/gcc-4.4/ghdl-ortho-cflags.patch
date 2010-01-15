@@ -96,3 +96,16 @@ index 84aeb92..8eddd42 100644
        layout_type (res);
        return res;
      }
+diff --git a/gcc/vhdl/Make-lang.in b/gcc/vhdl/Make-lang.in
+index e201f64..f36fb97 100644
+--- a/gcc/vhdl/Make-lang.in
++++ b/gcc/vhdl/Make-lang.in
+@@ -132,7 +132,7 @@ ghdl1$(exeext): $(AGCC_OBJS) $(AGCC_DEPS) force
+ 	 -cargs $(CFLAGS) $(GHDL_ADAFLAGS)
+ 	$(GNATMAKE) -o $@ -aI$(srcdir)/vhdl -aOvhdl ortho_gcc-main \
+ 	 -bargs -E -cargs $(CFLAGS) $(GHDL_ADAFLAGS) \
+-	 -largs $(AGCC_OBJS) $(LIBS) $(GMPLIBS)
++	 -largs $(AGCC_OBJS) $(LIBS) $(GMPLIBS) $(CLOOGLIBS) $(PPLLIBS)
+ 
+ # The driver for ghdl.
+ ghdl$(exeext): force
