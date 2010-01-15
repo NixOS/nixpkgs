@@ -47,6 +47,14 @@ let kernel = config.boot.kernelPackages.kernel; in
       description = "Additional user-defined kernel parameters.";
     };
 
+    boot.vesa = mkOption {
+      default = true;
+      example = false;
+      description = ''
+        Whether to activate VESA video mode on boot
+      '';
+    };
+
     boot.extraModulePackages = mkOption {
       default = [];
       # !!! example = [pkgs.aufs pkgs.nvidia_x11];
@@ -115,9 +123,8 @@ let kernel = config.boot.kernelPackages.kernel; in
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
     boot.kernelParams =
-      [ "splash=verbose"
-        "vga=0x317"
-      ];
+      [ "splash=verbose"] ++ 
+      optional config.boot.vesa "vga=0x317";
       
     boot.kernelModules = [ "loop" ];
 
