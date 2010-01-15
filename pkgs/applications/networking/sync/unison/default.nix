@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-2.27.57";
+  name = "unison-2.32.52";
   src = fetchurl {
-    url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/unison-2.27.57/unison-2.27.57.tar.gz";
-    sha256 = "49299ec14216a8467b2c6ba148f8145bec31fa787433f9ce3851c2d62f0035ae";
+    url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/${name}/${name}.tar.gz";
+    sha256 = "11844yh1gpjjapn8pvc14hla7g70spwqy6h61qk2is83mpafahhm";
   };
 
   buildInputs = [ocaml makeWrapper];
@@ -21,5 +21,13 @@ stdenv.mkDerivation (rec {
         --run "${xset}/bin/xset q | grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\""
     done
   '';
+
+  meta = {
+    homepage = http://www.cis.upenn.edu/~bcpierce/unison/;
+    description = "Bidirectional file synchronizer";
+    license = "GPLv3+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
+  };
 
 })
