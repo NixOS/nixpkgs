@@ -7,6 +7,7 @@ echo "Deploying binaries.."
 mkdir $out
 cd $out
 for i in $tarballdir/*.gz; do tar xvf $i; done
-echo "Creating ppc386 symlink.."
-ln -fs $out/lib/fpc/*/ppc386 $out/bin/ppc386
-
+echo 'Creating ppc* symlink..'
+for i in $out/lib/fpc/*/ppc*; do
+  ln -fs $i $out/bin/$(basename $i)
+done
