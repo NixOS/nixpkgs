@@ -155,6 +155,8 @@ postInstall() {
             ln -sfn g++ $i
         fi
     done
+
+    eval "$postInstallGhdl"
 }
 
 

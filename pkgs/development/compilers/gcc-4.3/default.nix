@@ -91,7 +91,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals (cross != null) [binutilsCross])
-    ++ (optionals (langVhdl != null) [gnat])
+    ++ (optionals langVhdl [gnat])
     ;
 
   configureFlags = "
@@ -130,6 +130,8 @@ stdenv.mkDerivation ({
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
     description = "GNU Compiler Collection, 4.3.x";
+    maintainers = with stdenv.lib.maintainers; [viric ludo];
+    platforms = with stdenv.lib.platforms; linux;
   };
 
 } // (if langJava then {
@@ -168,6 +170,8 @@ stdenv.mkDerivation ({
     homepage = "http://ghdl.free.fr/";
     license = "GPLv2+";
     description = "Complete VHDL simulator, using the GCC technology";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 
 } else {}))

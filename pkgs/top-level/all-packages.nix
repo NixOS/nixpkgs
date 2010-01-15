@@ -2005,6 +2005,18 @@ let
     enableMultilib = false;
   });
 
+  # Not officially supported version for ghdl
+  ghdl_gcc44 = lowPrio (wrapGHDL (import ../development/compilers/gcc-4.4 {
+    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
+      ppl cloogppl;
+    name = "ghdl";
+    langVhdl = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+    enableMultilib = false;
+  }));
+
   /*
   Broken; fails because of unability to find its own symbols during linking
 
