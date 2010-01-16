@@ -1,17 +1,18 @@
 a :  
 let 
-  fetchurl = a.fetchurl;
+  fetchsvn = a.fetchsvn;
 
   version = a.lib.attrByPath ["version"] "r8541" a; 
   buildInputs = with a; [
-    gtk glib pkgconfig libX11 
+    gtk glib pkgconfig libX11 perl
   ];
 in
 rec {
-  src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    sha256 = "1m6fybbvlx33786hmgraqxgm1hakfj9bqqszzzpi2ka4spfzj3xl";
-  };
+  src = fetchsvn {
+   url = svn://svn.tartarus.org/sgt/puzzles;
+   rev = "8842";
+   sha256 = "0rx3pxd1ci9x1mlw1jfmwd0fpcyv76vv6jraxfrxcykxx62qg479";
+  } + "/";
 
   inherit buildInputs;
   configureFlags = [];
@@ -20,8 +21,12 @@ rec {
   neededDirs = ["$out/bin" "$out/share" ""];
   extraDoc = ["puzzles.txt"];
 
+  mkMakefiles = a.fullDepEntry ''
+    perl mkfiles.pl
+  '' ["minInit" "doUnpack" "addInputs"];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["addInputs" "doExport" "doMakeInstall"];
+  phaseNames = ["addInputs" "doExport" "mkMakefiles" "doMakeInstall"];
 
   doExport = a.noDepEntry ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L${a.libX11}/lib -lX11"

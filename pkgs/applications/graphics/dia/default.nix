@@ -3,7 +3,7 @@ stdenv.mkDerivation {
   name = "dia-0.97";
 
   src = fetchurl {
-    url = mirror://gnome/pub/gnome/sources/dia/0.97/dia-0.97.tar.bz2;
+    url = mirror://gnome/sources/dia/0.97/dia-0.97.tar.bz2;
     sha256 = "0nngdjklap3x1b7cxnwawh29axbwk8siyq7w4iinsns3slmki0wh";
   };
 
@@ -11,6 +11,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Gnome Diagram drawing software.";
-    homepage = http://www.gnome.org/projects/dia;
+    homepage = http://live.gnome.org/Dia;
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = with stdenv.lib.platforms;
+      linux;
   };
 }

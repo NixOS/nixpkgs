@@ -54,7 +54,7 @@ args: with args; {
                  # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
                  # *.*hs.* to catch gtk2hs .hs.pp files
                  tagCmd = "
-                   srcs=\"`find . -type f -name \"*.*hs\"; find . -type f -name \"*.*hs.*\";`\"
+                   srcs=\"`find . -type f -name \"*.*hs\"; find . -type f -name \"*.*hs*\";`\"
                    [ -z \"$srcs\" ] || {
                     ${toString hasktags}/bin/hasktags-modified --ignore-close-implementation --ctags $srcs
                     sort tags > \$TAG_FILE

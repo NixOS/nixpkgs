@@ -5,7 +5,7 @@ zlib}:
 assert opensc.name == "opensc-0.11.7";
 
 stdenv.mkDerivation rec {
-  name = "opensc-dnie-1.4.6-2";
+  name = "libopensc-dnie-1.4.6-2";
   
   src = if (stdenv.system == "i686-linux") then (fetchurl {
       url = http://www.dnielectronico.es/descargas/PKCS11_para_Sistemas_Unix/1.4.6.Ubuntu_Jaunty_32/Ubuntu_Jaunty_opensc-dnie_1.4.6-2_i386.deb.tar;
@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     cp -R usr/lib $out
     cp -R usr/share $out
   '';
+
+  passthru = {
+    # This will help keeping the proper opensc version when using this libopensc-dnie library
+    inherit opensc;
+  };
 
   meta = {
     homepage = http://www.dnielectronico.es/descargas/;

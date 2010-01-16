@@ -1191,11 +1191,15 @@ let
 
   opensc_0_11_7 = import ../tools/security/opensc/0.11.7.nix {
     inherit fetchurl stdenv libtool readline zlib openssl libiconv pcsclite
-      libassuan pkgconfig;
+      libassuan pkgconfig pinentry;
     inherit (xlibs) libXt;
   };
 
   opensc = opensc_0_11_7;
+
+  opensc_dnie_wrapper = import ../tools/security/opensc-dnie-wrapper {
+    inherit stdenv makeWrapper ed libopensc_dnie;
+  };
 
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
@@ -2969,6 +2973,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  inotifyTools = import ../development/tools/misc/inotify-tools {
+    inherit fetchurl stdenv lib;
+  };
+
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
   };
@@ -4396,6 +4404,10 @@ let
     inherit fetchurl stdenv;
   });
 
+  libyaml = import ../development/libraries/libyaml {
+    inherit fetchurl stdenv;
+  };
+
   libzip = import ../development/libraries/libzip {
     inherit fetchurl stdenv zlib;
   };
@@ -4557,7 +4569,7 @@ let
       pkgconfig;
   };
 
-  opensc_dnie = import ../development/libraries/opensc-dnie {
+  libopensc_dnie = import ../development/libraries/libopensc-dnie {
     inherit fetchurl stdenv patchelf writeScript openssl openct
       libtool pcsclite zlib;
     inherit (gtkLibs) glib;
@@ -4675,7 +4687,8 @@ let
       inputproto fixesproto libXfixes;
     inherit (gnome) glib;
   };
-  qtscriptgenerator = import ../development/libraries/qtscriptgenerator {
+
+  qtscriptgenerator = makeOverridable (import ../development/libraries/qtscriptgenerator) {
     inherit stdenv fetchurl;
     qt4 = qt45;
   };
@@ -8339,7 +8352,7 @@ let
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
     inherit (gtkLibs) gtk glib;
-    inherit pkgconfig;
+    inherit pkgconfig fetchsvn perl;
     inherit (xlibs) libX11;
   };
 

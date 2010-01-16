@@ -8,6 +8,10 @@ stdenv.mkDerivation {
     md5 = "c63bf7b0bb5f530cf3c08715db721cd3";
   };
 
+  preConfigure = ''
+    sed -e '/SANE_CAP_ALWAYS_SETTABLE/d' -i src/gtkglue.c
+  '';
+
   buildInputs = [saneBackends libX11 gtk pkgconfig] ++ 
 	(if (libusb != null) then [libusb] else []);
 }

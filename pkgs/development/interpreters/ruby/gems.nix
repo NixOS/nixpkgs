@@ -4,11 +4,12 @@ rec {
   # some packages (eg ruby-debug) still require 1.8. So let's stick to that for
   # now if nobody has different requirements
 
-  version = "1.3.4";
+  version = "1.3.5";
   src = fetchurl {
-    url = "http://rubyforge.org/frs/download.php/57643/rubygems-1.3.4.tgz";
-    sha256 = "1z5vvwdf7cwiq669amfxzqd88bn576yq6d9c5c6c92fm9sib1d0y";
+    url = "http://rubyforge.org/frs/download.php/60718/rubygems-1.3.5.tgz";
+    sha256 = "1b26fn9kmyd6394m1gqppi10xyf1hac85lvsynsxzpjlmv0qr4n0";
   };
+
 
   buildInputs = [ruby makeWrapper];
   configureFlags = [];
@@ -16,10 +17,11 @@ rec {
   doInstall = fullDepEntry (''
     ruby setup.rb --prefix=$out/
     wrapProgram $out/bin/gem --prefix RUBYLIB : $out/lib:$out/lib
+    find $out -type f -name "*.rb" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doInstall"];
+  phaseNames = ["doPatch" "doInstall"];
       
   name = "rubygems-" + version;
   meta = {

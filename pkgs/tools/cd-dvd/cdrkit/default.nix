@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, libcap, zlib, bzip2}:
 
 stdenv.mkDerivation rec {
-  name = "cdrkit-1.1.9";
+  name = "cdrkit-1.1.10";
 
   src = fetchurl {
     url = "http://cdrkit.org/releases/${name}.tar.gz";
-    sha256 = "18pgak1qh2xsb3sjikfh1hqn27v2ax72nx7r7sjkdw5yqys8mmfm";
+    sha256 = "1r87n4293lk2xgik9x1lvjr86rdsbaldf0d5flx6zb4c0ss90vlb";
   };
 
   buildInputs = [cmake libcap zlib bzip2];

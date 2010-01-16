@@ -57,7 +57,7 @@ rec {
     name = "dateutil-1.4.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-dateutil/${name}.tar.gz";
+      url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
       sha256 = "0mrkh932k8s74h4rpgksvpmwbrrkq8zn78gbgwc22i2vlp31bdkl";
     };
 
@@ -406,6 +406,24 @@ rec {
       homepage = http://allmydata.org/trac/pyutil;
 
       license = "GPLv2+";
+    };
+  });
+
+  pyyaml = buildPythonPackage (rec {
+    name = "PyYAML-3.09";
+
+    src = fetchurl {
+      url = "http://pyyaml.org/download/pyyaml/PyYAML-3.09.zip";
+      sha256 = "204aca8b42dbe90e460794d743dd16182011da85507bfd4f092f9f76e0688040";
+    };
+
+    buildInputs = [ pkgs.unzip pkgs.pyrex ];
+    propagatedBuildInputs = [ pkgs.libyaml ];
+
+    meta = {
+      description = "The next generation YAML parser and emitter for Python";
+      homepage = http://pyyaml.org;
+      license = "free"; # !?
     };
   });
 

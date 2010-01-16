@@ -19,6 +19,7 @@ import ../kernel/generic.nix (
 
     kernelPatches = [
       {
+         name = "zen4"; 
          patch = runCommand "2.6.32-zen4.patch" {} "${xz}/bin/lzma -d < ${ fetchurl {
 	   name = "2.6.32-zen4";
            url = "http://downloads.zen-kernel.org/2.6.32/2.6.32-zen4.patch.lzma";

@@ -1,5 +1,5 @@
 diff --git a/lib/rubygems/command_manager.rb b/lib/rubygems/command_manager.rb
-index 0a19016..ef66d30 100644
+index 0a19016..ef66d30 100755
 --- a/lib/rubygems/command_manager.rb
 +++ b/lib/rubygems/command_manager.rb
 @@ -70,6 +70,7 @@ class Gem::CommandManager
@@ -10,12 +10,13 @@ index 0a19016..ef66d30 100644
    end
  
    ##
+
 diff --git a/lib/rubygems/commands/nix_command.rb b/lib/rubygems/commands/nix_command.rb
 new file mode 100644
-index 0000000..005d5a9
+index 0000000..24f3479
 --- /dev/null
 +++ b/lib/rubygems/commands/nix_command.rb
-@@ -0,0 +1,226 @@
+@@ -0,0 +1,229 @@
 +require 'net/http'
 +require 'rubygems/command'
 +require 'rubygems/doc_manager'
@@ -102,7 +103,7 @@ index 0000000..005d5a9
 +          raise Gem::CommandLineError, "could'nt parse arg. expected: name or name-version"
 +        end
 +
-+        print "adding gem_name\n"
++        puts "adding #{gem_name}\n"
 +
 +        adddep(Gem::Dependency.new gem_name, version)
 +      }
@@ -183,8 +184,8 @@ index 0000000..005d5a9
 +    return if @seen[full_name]
 +    @seen[full_name] = true # there maybe circular dependencies. thus mark this gem seen as early as possible
 +
-+    # distinguish runtime / buildtime deps? (TODO)
-+    deps = gem[0].dependencies
++    # development deps can't be found. Some are old. Thus only add rutime dependencies
++    deps = gem[0].dependencies.find_all { |d| d.type == :runtime }
 +
 +    print " total deps of #{full_name}: #{deps.length}\n"
 +
@@ -227,13 +228,16 @@ index 0000000..005d5a9
 +
 +    if cash[src].nil? then
 +      tmp="/tmp/ruby-gems-nix-tmp-file"
-+      raise Gem::DependencyError("could'nt nix-prefetch  #{src}") \
-+	if (not system("nix-prefetch-url #{src.gsub(/([:= `$;])/,'\\\\\1')} > #{tmp} 2>/dev/null")) || $? != 0
-+      file = File.new(tmp)
-+      hash = file.readlines().first().split("\n")[0] # remove trailing \n
-+      file.close()
-+      File.delete(tmp)
-+      cash[src] = hash
++      system("nix-prefetch-url #{src.gsub(/([:= `$;])/,'\\\\\1')} > #{tmp} 2>/dev/null")
++      if $? == 0
++        file = File.new(tmp)
++        hash = file.readlines().first().split("\n")[0] # remove trailing \n
++        file.close()
++        File.delete(tmp)
++        cash[src] = hash
++      else
++        cash[src] = "no hash"
++      end
 +
 +      File.open(cashfile, "w+") do |f| Marshal.dump(cash, f) end
 +    end
@@ -242,3 +246,22 @@ index 0000000..005d5a9
 +  end
 +
 +end
+
+diff --git a/lib/rubygems/installer.rb b/lib/rubygems/installer.rb
+index d1ef3cb..bf15652 100755
+--- a/lib/rubygems/installer.rb
++++ b/lib/rubygems/installer.rb
+@@ -545,6 +545,13 @@ Results logged to #{File.join(Dir.pwd, 'gem_make.out')}
+ 
+       say path if Gem.configuration.really_verbose
+     end
++
++    if !ENV['NIX_POST_EXTRACT_FILES_HOOK'].nil?
++      print "\nrunning NIX_POST_EXTRACT_FILES_HOOK #{ENV['NIX_POST_EXTRACT_FILES_HOOK']} #{@gem_dir}\n"
++      print `#{ENV['NIX_POST_EXTRACT_FILES_HOOK']} #{@gem_dir}`
++      print "\nrunning NIX_POST_EXTRACT_FILES_HOOK done\n"
++    end
++
+   end
+ 
+   ##

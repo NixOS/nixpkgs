@@ -32,7 +32,7 @@ rec {
 
       noPAE = ''
         HIGHMEM64G? n
-        PAE n
+        PAE? n
       '';
 
       usefulSubsystems = ''
