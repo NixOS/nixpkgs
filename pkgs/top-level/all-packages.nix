@@ -1032,7 +1032,7 @@ let
   };
 
   mldonkey = import ../applications/networking/p2p/mldonkey {
-    inherit fetchurl stdenv ocaml zlib ncurses;
+    inherit fetchurl stdenv ocaml zlib bzip2 ncurses file gd libpng;
   };
 
   monit = builderDefsPackage ../tools/system/monit {
