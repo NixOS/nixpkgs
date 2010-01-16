@@ -30,6 +30,10 @@ for i in "$@"; do
         dontLink=1
     elif test "$i" = "-MM"; then
         dontLink=1
+    elif test "$i" = "-x"; then
+        # At least for the cases c-header or c++-header we should set dontLink.
+        # I expect no one use -x other than making precompiled headers.
+        dontLink=1
     elif test "${i:0:1}" != "-"; then
         nonFlagArgs=1
     elif test "$i" = "-m32"; then

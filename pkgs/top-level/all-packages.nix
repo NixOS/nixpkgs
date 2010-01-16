@@ -4540,6 +4540,13 @@ let
     inherit fetchurl stdenv libtool pcsclite libusb pkgconfig;
   };
 
+  opencv = import ../development/libraries/opencv {
+      inherit fetchurl stdenv cmake libjpeg libpng libtiff jasper ffmpeg
+          pkgconfig xineLib;
+      inherit (gtkLibs) gtk glib;
+      inherit (gst_all) gstreamer;
+  };
+
   # this ctl version is needed by openexr_viewers
   openexr_ctl = import ../development/libraries/openexr_ctl {
     inherit fetchurl stdenv ilmbase ctl;
