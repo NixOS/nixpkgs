@@ -2860,7 +2860,7 @@ let
   };
 
   inotifyTools = import ../development/tools/misc/inotify-tools {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv lib;
   };
 
   jikespg = import ../development/tools/parsing/jikespg {
