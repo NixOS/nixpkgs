@@ -42,6 +42,9 @@ else
         gccLDFlags="$gccLDFlags -L$gcc/lib64"
     fi
     gccLDFlags="$gccLDFlags -L$gcc/lib"
+    if [ -n "$langVhdl" ]; then
+        gccLDFlags="$gccLDFlags -L$zlib/lib"
+    fi
     echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
 
     # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
@@ -153,6 +156,11 @@ mkGccWrapper $out/bin/gnatgcc $gccPath/gnatgcc || true
 mkGnatWrapper $out/bin/gnatmake $gccPath/gnatmake || true
 mkGnatWrapper $out/bin/gnatbind $gccPath/gnatbind || true
 mkGnatLinkWrapper $out/bin/gnatlink $gccPath/gnatlink || true
+
+if [ -f $gccPath/ghdl ]; then
+    ln -sf $gccPath/ghdl $out/bin/ghdl
+fi
+
 
 # Create a symlink to as (the assembler).  This is useful when a
 # gcc-wrapper is installed in a user environment, as it ensures that

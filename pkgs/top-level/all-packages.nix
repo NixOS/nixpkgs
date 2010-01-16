@@ -1999,7 +1999,7 @@ let
     inherit fetchurl stdenv;
   });
 
-  ghdl = wrapGHDL (import ../development/compilers/gcc-4.3 {
+  ghdl = wrapGCC (import ../development/compilers/gcc-4.3 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
     name = "ghdl";
     langVhdl = true;
@@ -2010,7 +2010,7 @@ let
   });
 
   # Not officially supported version for ghdl
-  ghdl_gcc44 = lowPrio (wrapGHDL (import ../development/compilers/gcc-4.4 {
+  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.4 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
       ppl cloogppl;
     name = "ghdl";
@@ -2351,20 +2351,7 @@ let
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
-  # All these wrappers: GCC, GHDL, should be once merged into
-  # only one.
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
-    gcc = baseGCC;
-    libc = glibc;
-    inherit stdenv binutils coreutils;
-  };
-
-  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
-
-  wrapGHDLWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
     nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
@@ -2373,7 +2360,7 @@ let
     inherit stdenv binutils coreutils zlib;
   };
 
-  wrapGHDL = wrapGHDLWith (import ../build-support/ghdl-wrapper) glibc;
+  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:

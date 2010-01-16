@@ -6,12 +6,16 @@
 # variables so that the compiler and the linker just "work".
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
-, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
+, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? "",
+zlib ? null
 }:
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null && coreutils != null;
 assert !nativeLibc -> libc != null;
+
+# For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper
+assert (gcc != null && gcc ? langVhdl) -> zlib != null;
 
 let
 
@@ -44,6 +48,8 @@ stdenv.mkDerivation {
   langCC = if nativeTools then true else gcc.langCC;
   langFortran = if nativeTools then false else gcc ? langFortran;
   langAda = if nativeTools then false else gcc ? langAda;
+  langVhdl = if nativeTools then false else gcc ? langVhdl;
+  zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
   shell = if shell == "" then stdenv.shell else shell;
   
   meta =
