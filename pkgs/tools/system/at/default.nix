@@ -1,12 +1,12 @@
 { fetchurl, stdenv, bison, flex, pam, ssmtp }:
 
 stdenv.mkDerivation {
-  name = "at-3.1.11";
+  name = "at-3.1.12";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.11.orig.tar.gz;
-    sha256 = "0n995h57x87xg10n8rkq06lynnb3syynfngwspfg91cp22cphycb";
+    url = mirror://debian/pool/main/a/at/at_3.1.12.orig.tar.gz;
+    sha256 = "1wqqrj4lg2ix79ib5kz7lk4hbs1zpw72n6zkd2gdv2my9ymwcmbw";
   };
 
   patches = [ ./install.patch ];
