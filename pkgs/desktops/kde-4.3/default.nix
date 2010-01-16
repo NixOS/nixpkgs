@@ -218,6 +218,12 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon strigi soprano qca2;
   };
 
+  digikam = import ./extragear/digikam {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 lcms jasper libgphoto2 gettext;
+    inherit kdelibs kdepimlibs kdegraphics;
+    inherit automoc4 phonon qimageblitz qca2 eigen;
+  };
+
   filelight = import ./extragear/filelight {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
     inherit kdelibs kdebase_workspace;
@@ -228,6 +234,12 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
     inherit automoc4 phonon;
+  };
+
+  kipiplugins = import ./extragear/kipi-plugins {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 libxml2 libxslt gettext;
+    inherit kdelibs kdepimlibs kdegraphics;
+    inherit automoc4 phonon qimageblitz qca2;
   };
   
   kmplayer = import ./extragear/kmplayer {

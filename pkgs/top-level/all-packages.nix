@@ -6605,6 +6605,12 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
+  digikam = import ../applications/graphics/digikam {
+    inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3 cmake;
+    inherit (kde3) kdelibs;
+    inherit (xlibs) libXt libXext;
+  };
+
   djvulibre = import ../applications/misc/djvulibre {
     inherit stdenv fetchurl libjpeg libtiff libungif zlib
       ghostscript libpng x11 mesa;
