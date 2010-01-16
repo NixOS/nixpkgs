@@ -28,6 +28,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
+  gnatWrapper = ./gnat-wrapper.sh;
+  gnatlinkWrapper = ./gnatlink-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
@@ -41,6 +43,7 @@ stdenv.mkDerivation {
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langFortran = if nativeTools then false else gcc ? langFortran;
+  langAda = if nativeTools then false else gcc ? langAda;
   shell = if shell == "" then stdenv.shell else shell;
   
   meta =

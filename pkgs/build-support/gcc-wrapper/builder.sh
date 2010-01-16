@@ -51,6 +51,15 @@ else
     if test -e "$gcc/lib64"; then
         gccCFlags="$gccCFlags -B$gcc/lib64"
     fi
+
+    # Find the gcc libraries path (may work only without multilib)
+    if [ -n "$langAda" ]; then
+        basePath=`echo $gcc/lib/*/*/*`
+        gccCFlags="$gccCFlags -B$basePath -I$basePath/adainclude"
+
+        gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
+        echo "$gnatCFlags" > $out/nix-support/gnat-cflags
+    fi
     echo "$gccCFlags" > $out/nix-support/gcc-cflags
     
     gccPath="$gcc/bin"
@@ -68,6 +77,8 @@ doSubstitute() {
         -e "s^@shell@^$shell^g" \
         -e "s^@gcc@^$gcc^g" \
         -e "s^@gccProg@^$gccProg^g" \
+        -e "s^@gnatProg@^$gnatProg^g" \
+        -e "s^@gnatlinkProg@^$gnatlinkProg^g" \
         -e "s^@binutils@^$binutils^g" \
         -e "s^@coreutils@^$coreutils^g" \
         -e "s^@libc@^$libc^g" \
@@ -92,6 +103,34 @@ mkGccWrapper() {
     chmod +x "$dst"
 }
 
+mkGnatWrapper() {
+    local dst=$1
+    local src=$2
+
+    if ! test -f "$src"; then
+        echo "$src does not exist (skipping)"
+        return 1
+    fi
+
+    gnatProg="$src"
+    doSubstitute "$gnatWrapper" "$dst"
+    chmod +x "$dst"
+}
+
+mkGnatLinkWrapper() {
+    local dst=$1
+    local src=$2
+
+    if ! test -f "$src"; then
+        echo "$src does not exist (skipping)"
+        return 1
+    fi
+
+    gnatlinkProg="$src"
+    doSubstitute "$gnatlinkWrapper" "$dst"
+    chmod +x "$dst"
+}
+
 if mkGccWrapper $out/bin/gcc $gccPath/gcc
 then
     ln -sv gcc $out/bin/cc
@@ -110,6 +149,10 @@ fi
 
 mkGccWrapper $out/bin/gcj $gccPath/gcj || true
 
+mkGccWrapper $out/bin/gnatgcc $gccPath/gnatgcc || true
+mkGnatWrapper $out/bin/gnatmake $gccPath/gnatmake || true
+mkGnatWrapper $out/bin/gnatbind $gccPath/gnatbind || true
+mkGnatLinkWrapper $out/bin/gnatlink $gccPath/gnatlink || true
 
 # Create a symlink to as (the assembler).  This is useful when a
 # gcc-wrapper is installed in a user environment, as it ensures that

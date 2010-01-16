@@ -1982,7 +1982,7 @@ let
 
   gnat = gnat44;
 
-  gnat44 = wrapGNAT (gcc44_real.gcc.override {
+  gnat44 = wrapGCC (gcc44_real.gcc.override {
     name = "gnat";
     langCC = false;
     langC = true;
@@ -1995,7 +1995,7 @@ let
     ppl = null;
   });
 
-  gnatboot = wrapGNAT (import ../development/compilers/gnatboot {
+  gnatboot = wrapGCC (import ../development/compilers/gnatboot {
     inherit fetchurl stdenv;
   });
 
@@ -2351,7 +2351,7 @@ let
     inherit fetchurl stdenv visualcpp windowssdk;
   };
 
-  # All these wrappers: GCC, GNAT, GHDL, should be once merged into
+  # All these wrappers: GCC, GHDL, should be once merged into
   # only one.
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
@@ -2363,7 +2363,6 @@ let
   };
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
-  wrapGNAT = wrapGCCWith (import ../build-support/gnat-wrapper) glibc;
 
   wrapGHDLWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
