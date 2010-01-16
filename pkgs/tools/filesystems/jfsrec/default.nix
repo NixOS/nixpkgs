@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     sha256 = "163z6ljr05vw2k5mj4fim2nlg4khjyibrii95370pvn474mg28vg";
   };
 
+  patches = [ ./jfsrec-gcc-4.3.patch ];
   buildInputs = [ boost ];
 
   preConfigure =
