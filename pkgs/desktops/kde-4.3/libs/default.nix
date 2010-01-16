@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, lib, perl
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
-, xz, flex, bison, openexr, aspell, avahi
+, xz, flex, bison, openexr, aspell, avahi, kerberos
 , automoc4, phonon, strigi, soprano
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cmake perl qt4 stdenv.gcc.libc xz flex bison bzip2 pcre fam libxml2 libxslt
-    shared_mime_info giflib jasper /* openexr */ aspell avahi
+    shared_mime_info giflib jasper /* openexr */ aspell avahi kerberos
     automoc4 phonon strigi soprano
   ];
   
