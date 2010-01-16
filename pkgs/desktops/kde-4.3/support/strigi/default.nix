@@ -2,12 +2,12 @@
 , cluceneCore
 }:
 
-stdenv.mkDerivation {
-  name = "strigi-0.6.4";
+stdenv.mkDerivation rec {
+  name = "strigi-0.7.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/strigi/strigi-0.6.4.tar.bz2;
-    md5 = "324fd9606ac77765501717ff92c04f9a";
+    url = "http://www.vandenoever.info/software/strigi/${name}.tar.bz2";
+    sha256 = "1cra4jlpd7cdvckwalfjrf2224qvhbkmxdd3sn02q9jhv830b0yi";
   };
 
   includeAllQtDirs = true;
