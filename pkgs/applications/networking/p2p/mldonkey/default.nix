@@ -1,11 +1,11 @@
-{stdenv, fetchurl, ocaml, zlib, ncurses, gd, libpng}:
+{stdenv, fetchurl, ocaml, zlib, bzip2, ncurses, file, gd, libpng }:
 
-stdenv.mkDerivation {
-  name = "mldonkey-3.0.0";
+stdenv.mkDerivation (rec {
+  name = "mldonkey-3.0.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/mldonkey/mldonkey-3.0.0.tar.bz2;
-    sha256 = "0zzvcfnbhxk8axfch5fbkd9j2ks67nbb1ndjjarxvrza78g5y8r7";
+    url = "mirror://sourceforge/mldonkey/${name}.tar.bz2";
+    sha256 = "09zk53rfdkjipf5sl37rypzi2mx0a5v57vsndj22zajkqr4l0zds";
   };
   
   meta = {
@@ -13,9 +13,10 @@ stdenv.mkDerivation {
     homepage = http://mldonkey.sourceforge.net/;
   };
 
-  buildInputs = [ ocaml zlib ncurses gd libpng ];
-  configureFlags = [ "--disable-gui" "--enable-ocamlver=3.11.1" ];
-
+  buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng ];
+  configureFlags = [ "--disable-gui" ];
+} // (if (stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux") then
+{
   # Byte code compilation (the ocaml opt compiler is not supported in many platforms)
   buildPhase = "make mlnet.byte";
   installPhase = ''
@@ -25,4 +26,4 @@ stdenv.mkDerivation {
 
   # ocaml bytecode selfcontained binaries loose the bytecode if stripped
   dontStrip = true;
-}
+} else {}))
