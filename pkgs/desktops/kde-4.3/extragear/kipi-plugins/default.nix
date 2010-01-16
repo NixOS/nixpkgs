@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     license = "GPL";
     homepage = http://www.koffice.org;
     maintainers = [ lib.maintainers.viric ];
+    platforms = with lib.platforms; linux;
   };
 }
