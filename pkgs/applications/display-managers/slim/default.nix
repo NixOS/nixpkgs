@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     # Don't set PAM_RHOST to "localhost", it confuses ConsoleKit
     # (which assumes that a non-empty string means a remote session).
     ./pam2.patch
+    
+    ./slim-1.3.1-gcc4.4.patch
   ];
 
   buildInputs = [x11 libjpeg libpng libXmu freetype pam];
