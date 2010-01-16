@@ -4231,6 +4231,10 @@ let
     inherit fetchurl stdenv;
   });
 
+  libyaml = import ../development/libraries/libyaml {
+    inherit fetchurl stdenv;
+  };
+
   libzip = import ../development/libraries/libzip {
     inherit fetchurl stdenv zlib;
   };
