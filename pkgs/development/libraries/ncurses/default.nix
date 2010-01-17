@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postInstall = if unicode then ''
-    chmod -v 644 $out/lib/libncurses++w.a
+    chmod 644 $out/lib/libncurses++w.a
     for lib in curses ncurses form panel menu; do
       if test -e $out/lib/lib''${lib}w.a; then
         rm -vf $out/lib/lib$lib.so
