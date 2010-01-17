@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     chmod 644 $out/lib/libncurses++w.a
     for lib in curses ncurses form panel menu; do
       if test -e $out/lib/lib''${lib}w.a; then
-        rm -vf $out/lib/lib$lib.so
+        rm -f $out/lib/lib$lib.so
         echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
         ln -svf lib''${lib}w.a $out/lib/lib$lib.a
         ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
