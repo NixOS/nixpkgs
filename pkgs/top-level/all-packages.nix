@@ -6786,6 +6786,11 @@ let
   emacs22Packages = emacsPackages emacs22;
   emacs23Packages = emacsPackages emacs23;
 
+  epdfview = import ../applications/misc/epdfview {
+    inherit stdenv fetchurl pkgconfig poppler;
+    inherit (gtkLibs) gtk;
+  };
+
   evince = makeOverridable (import ../applications/misc/evince) {
     inherit fetchurl stdenv perl perlXMLParser gettext intltool
       pkgconfig poppler libspectre djvulibre libxslt
