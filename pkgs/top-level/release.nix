@@ -534,45 +534,45 @@ in {
     l10n.ru = linux;
   };
 
-  kernelPackages_2_6_25 = {
+  linuxPackages_2_6_25 = {
     aufs = linux;
     kernel = linux;
   };
 
-  kernelPackages_2_6_27 = {
+  linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
   
-  kernelPackages_2_6_28 = {
+  linuxPackages_2_6_28 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
-  kernelPackages_2_6_29 = {
+  linuxPackages_2_6_29 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
-  kernelPackages_2_6_31 = {
+  linuxPackages_2_6_31 = {
     kernel = linux;
   };
 
-  kernelPackages_2_6_31_zen = {
+  linuxPackages_2_6_31_zen = {
     kernel = linux;
   };
 
-  kernelPackages_2_6_31_zen_bfs = {
+  linuxPackages_2_6_31_zen_bfs = {
     kernel = linux;
   };
 
-  kernelPackages_2_6_32 = {
+  linuxPackages_2_6_32 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
