@@ -57,7 +57,7 @@ pkgs.recurseIntoAttrs (rec {
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
     inherit (pkgs) xz flex bison giflib jasper openexr aspell avahi shared_mime_info
-      kerberos;
+      kerberos acl attr;
     inherit automoc4 phonon strigi soprano;
   };
 
