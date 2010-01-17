@@ -44,6 +44,11 @@ stdenv.mkDerivation {
     libtiff
   ];
   
+  # libQtNetwork will call libQtCore for it to dlopen openssl.
+  NIX_LDFLAGS = "-rpath ${openssl}/lib";
+  # Don't shrink the rpath, to keep ${openssl} in it.
+  dontPatchELF = 1;
+
   prefixKey = "-prefix ";
 
   configureFlags = ''
