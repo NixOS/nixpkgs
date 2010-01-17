@@ -7542,6 +7542,13 @@ let
       libXtst xextproto libXi;
   };
 
+  rawtherapee = import ../applications/graphics/rawtherapee {
+    inherit fetchsvn pkgconfig cmake lcms libiptcdata;
+    inherit (gtkLibs) gtk gtkmm;
+    inherit (xlibs) libXau libXdmcp pixman libpthreadstubs;
+    stdenv = overrideGCC stdenv gcc43_wrapper2;
+  };
+
   rcs = import ../applications/version-management/rcs {
     inherit fetchurl stdenv;
   };
