@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     sha256 = "0h8zjh38n2wfz7jld0jz6a09y66dbsd2jhm4f2024qfgcmxcabj6";
   };
   buildInputs = [ qt4 ];
+
+  patches = [./qtscriptgenerator.gcc-4.4.patch];
   
   # Why isn't the author providing proper Makefile or a CMakeLists.txt ?
   buildPhase = ''
