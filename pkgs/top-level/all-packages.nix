@@ -4011,6 +4011,10 @@ let
     inherit fetchurl stdenv pkgconfig libraw1394;
   };
 
+  libiptcdata = import ../development/libraries/libiptcdata {
+    inherit fetchurl stdenv;
+  };
+
   libjingle = import ../development/libraries/libjingle/0.3.11.nix {
     inherit fetchurl stdenv mediastreamer;
   };
