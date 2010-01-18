@@ -15,7 +15,7 @@ let version = "0.10.2"; in
     # Beware!  It took ~6 hours to compile PPL and run its tests on a 1.2 GHz
     # x86_64 box.  Nevertheless, being a dependency of GCC, it probably ought
     # to be tested.
-    doCheck = true;
+    doCheck = false;
 
     meta = {
       description = "PPL: The Parma Polyhedra Library";
