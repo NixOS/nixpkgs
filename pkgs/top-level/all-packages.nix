@@ -5531,7 +5531,7 @@ let
   };
 
   kbd = import ../os-specific/linux/kbd {
-    inherit fetchurl stdenv bison flex;
+    inherit fetchurl stdenv bison flex autoconf automake;
   };
 
   kernelHeaders = kernelHeaders_2_6_28;
