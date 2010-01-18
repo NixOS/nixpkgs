@@ -6952,6 +6952,7 @@ let
     inherit pkgs;
   });
   git = gitAndTools.git;
+  gitFull = gitAndTools.gitFull;
 
   gnucash = import ../applications/office/gnucash {
     inherit fetchurl stdenv pkgconfig libxml2 goffice enchant
