@@ -3,18 +3,21 @@
 }:
 
 let
-  preBuildNoNative = ''
+
+  preBuildNoNative = 
+    ''
       # Make Cwd work on NixOS (where we don't have a /bin/pwd).
       substituteInPlace lib/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
     '';
-  preBuildNative = "";
+
 in
-stdenv.mkDerivation {
-  name = "perl-5.10.0";
+
+stdenv.mkDerivation rec {
+  name = "perl-5.10.1";
 
   src = fetchurl {
-    url = mirror://cpan/src/perl-5.10.0.tar.gz;
-    sha256 = "0bivbz15x02m02gqs6hs77cgjr2msfrhnvp5xqk359jg6w6llill";
+    url = "mirror://cpan/src/${name}.tar.gz";
+    sha256 = "0dagnhjgmslfx1jawz986nvc3jh1klk7mn2l8djdca1b9gm2czyb";
   };
 
   patches = [
@@ -57,8 +60,7 @@ stdenv.mkDerivation {
       ${if stdenv.system == "armv5tel-linux" then "-Dldflags=\"-lm -lrt\"" else ""};
     '';
 
-  preBuild = if (stdenv ? gcc && stdenv.gcc.nativeTools) then
-    preBuildNative else preBuildNoNative;
+  preBuild = stdenv.lib.optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools)) preBuildNoNative;
 
   setupHook = ./setup-hook.sh;
 }
