@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl gmp ] ++ stdenv.lib.optional aclSupport acl;
 
   # The tests are known broken on Cygwin
-  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025).
-  doCheck = (stdenv.system != "i686-cygwin");
+  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # and {Open,Free}BSD.
+  doCheck = (stdenv ? glibc);
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
