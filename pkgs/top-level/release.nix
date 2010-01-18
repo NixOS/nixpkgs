@@ -177,6 +177,7 @@ in {
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
+  gitFull = linux;
   glibc = linux;
   glibcLocales = linux;
   glxinfo = linux;
