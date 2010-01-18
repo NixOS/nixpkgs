@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = "GPLv2";
-    homepage = http://git.or.cz;
+    homepage = http://git-scm.com/;
     description = "Git, a popular distributed version control system";
 
     longDescription = ''
@@ -110,5 +110,13 @@ stdenv.mkDerivation rec {
       handle very large projects with speed and efficiency.
     '';
 
+    license = "GPLv2";
+
+    maintainers =
+      [ # Add your name here!
+        stdenv.lib.maintainers.ludo
+      ];
+
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
