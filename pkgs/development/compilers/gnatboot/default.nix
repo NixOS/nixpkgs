@@ -19,12 +19,10 @@ stdenv.mkDerivation {
   installPhase = ''
     ensureDir $out
     cp -R * $out
-    cd $out/bin
     set +e
-    for a in *; do
+    for a in $out/bin/* ; do
       patchelf --interpreter $(cat $NIX_GCC/nix-support/dynamic-linker) \
-        --set-rpath $(cat $NIX_GCC/nix-support/orig-libc)/lib:$(cat
-        $NIX_GCC/nix-support/orig-gcc) $a
+        --set-rpath $(cat $NIX_GCC/nix-support/orig-libc)/lib:$(cat $NIX_GCC/nix-support/orig-gcc)/lib64:$(cat $NIX_GCC/nix-support/orig-gcc)/lib $a
     done
     set -e
     mv $out/bin/gnatgcc_2wrap $out/bin/gnatgcc
