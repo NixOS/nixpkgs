@@ -24,6 +24,96 @@ if test -n "$expHash"; then
     hash=$expHash
 fi
 
+init_remote(){
+    local url=$1;
+    git init;
+    git remote add origin $url;
+}
+
+# Return the reference of an hash if it exists on the remote repository.
+ref_from_hash(){
+    local hash=$1;
+    git ls-remote origin | sed -n "\,$hash\t, { s,\(.*\)\t\(.*\),\2,; p; q}"
+}
+
+# Return the hash of a reference if it exists on the remote repository.
+hash_from_ref(){
+    local ref=$1
+    git ls-remote origin | sed -n "\,\t$ref, { s,\(.*\)\t\(.*\),\1,; p; q}"
+}
+
+# Fetch everything and checkout the right sha1
+checkout_hash(){
+    local hash="$1";
+    local ref="$2";
+
+    if test -z "$hash"; then
+        hash=$(hash_from_ref $ref);
+    fi;
+
+    git fetch origin || return 1
+    git checkout $hash || return 1
+}
+
+# Fetch only a branch/tag and checkout it.
+checkout_ref(){
+    local hash="$1";
+    local ref="$2";
+
+    if test -z "$ref"; then
+        ref=$(ref_from_hash $hash);
+    fi;
+
+    if test -n "$ref"; then
+        # --depth option is ignored on http repository.
+        git fetch --depth 1 origin +"$ref" || return 1
+        git checkout FETCH_HEAD || return 1
+    else
+        return 1;
+    fi;
+}
+
+# Update submodules
+init_submodules(){
+    # Add urls into .git/config file
+    git submodule init
+
+    # list submodule directories and their hashes
+    git submodule status |
+    while read l; do
+        # checkout each submodule
+        local hash=$(echo $l | sed 's,^-\([0-9a-f]*\) \(.*\)$,\1,');
+        local dir=$(echo $l | sed 's,^-\([0-9a-f]*\) \(.*\)$,\2,');
+        local url=$(sed -n "\,$dir, { :loop; n; s,^.*url = ,,; T loop; p; q }" .git/config);
+
+        clone "$dir" "$url" "$hash" "";
+    done;
+}
+
+clone(){
+    local top=$(pwd)
+    local dir="$1"
+    local url="$2"
+    local hash="$3"
+    local ref="$4"
+
+    cd $dir;
+
+    # Initialize the repository.
+    init_remote "$url";
+
+    # Download data from the repository.
+    checkout_ref "$hash" "$ref" ||
+    checkout_hash "$hash" "$ref" || (
+        echo 1>&2 "Unable to checkout $hash$ref from $url.";
+        exit 1;
+    )
+
+    # Checkout linked sources.
+    init_submodules;
+
+    cd $top;
+}
 
 # If we don't know the hash or a path with that hash doesn't exist,
 # download the file and add it to the store.
@@ -31,23 +121,31 @@ if test -z "$finalPath"; then
 
     tmpPath=/tmp/git-checkout-tmp-$$
     tmpFile=$tmpPath/git-export
-    mkdir $tmpPath
+    mkdir $tmpPath $tmpFile
 
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    git clone "$url" $tmpFile 1>&2
-    if test -n "$rev"; then
-      cd $tmpFile
-      echo $tmpFile >&2
-      git checkout $rev 1>&2
-    fi
+    case "$rev" in
+        HEAD|refs/*)
+            clone "$tmpFile" "$url" "" "$rev" 1>&2;;
+        [0-9a-f]*)
+            if test -z "$(echo $rev | tr -d 0123456789abcdef)"; then
+                clone "$tmpFile" "$url" "$rev" "" 1>&2;
+            else
+                echo 1>&2 "Bad commit hash or bad reference.";
+                exit 1;
+            fi;;
+        "")
+            clone "$tmpFile" "$url" "" "HEAD" 1>&2;;
+    esac
+
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test "$NIX_PREFETCH_GIT_LEAVE_DOT_GIT" != 1
     then
 	echo "removing \`.git'..." >&2
-	rm -rf .git
+	rm -rf $tmpFile/.git
     fi
 
     # Compute the hash.
