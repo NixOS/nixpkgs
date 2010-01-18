@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "patch-2.6.1";
 
   src =
-    if stdenv.isDarwin
+    if !(stdenv ? glibc)
     then fetchurl {
       # Temporary fix for
       # http://lists.gnu.org/archive/html/bug-patch/2010-01/msg00004.html .
