@@ -110,8 +110,6 @@ stdenv.mkDerivation rec {
       handle very large projects with speed and efficiency.
     '';
 
-    license = "GPLv2";
-
     maintainers =
       [ # Add your name here!
         stdenv.lib.maintainers.ludo
