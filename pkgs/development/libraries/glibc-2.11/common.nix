@@ -68,11 +68,11 @@ stdenv.mkDerivation ({
     "--enable-kernel=2.6.0"
     "--without-fp"
     "--with-__thread"
-  ] ++ (if (stdenv.system == "armv5tel-linux") then [
+  ] ++ stdenv.lib.optionals (stdenv.system == "armv5tel-linux") [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
-  ] else []);
+  ];
 
   buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
 

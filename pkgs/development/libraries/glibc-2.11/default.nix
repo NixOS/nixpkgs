@@ -21,10 +21,6 @@ in
       ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
     '';
 
-    postInstall = ''
-      rm $out/lib/libgcc_s.so.1
-    '';
-
     meta.description = "The GNU C Library";
   }
 
@@ -36,10 +32,10 @@ in
         sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
         cat > config.cache << "EOF"
-libc_cv_forced_unwind=yes
-libc_cv_c_cleanup=yes
-libc_cv_gnu89_inline=yes
-EOF
+        libc_cv_forced_unwind=yes
+        libc_cv_c_cleanup=yes
+        libc_cv_gnu89_inline=yes
+        EOF
         export BUILD_CC=gcc
         export CC="$crossConfig-gcc"
         export AR="$crossConfig-ar"

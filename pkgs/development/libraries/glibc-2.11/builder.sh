@@ -27,6 +27,8 @@ postInstall() {
     if test -n "$is64bit"; then
         ln -s lib $out/lib64
     fi
+
+    rm $out/lib/libgcc_s.so.1
 }
 
 

@@ -16,7 +16,7 @@ in
     inherit fetchurl stdenv;
     installLocales = true;
 
-    builder = ./localesbuilder.sh;
+    builder = ./locales-builder.sh;
 
     # Awful hack: `localedef' doesn't allow the path to `locale-archive'
     # to be overriden, but you *can* specify a prefix, i.e. it will use
