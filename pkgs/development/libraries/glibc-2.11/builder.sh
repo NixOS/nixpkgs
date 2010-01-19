@@ -19,8 +19,12 @@ postInstall() {
     if test -n "$installLocales"; then
         make localedata/install-locales
     fi
+    
     test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
-    (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
+
+    # Include the Linux kernel headers in Glibc, except the `scsi'
+    # subdirectory, which Glibc provides itself. 
+    (cd $out/include && ln -s $(ls -d $kernelHeaders/include/* | grep -v 'scsi$') .)
 
     # Fix for NIXOS-54 (ldd not working on x86_64).  Make a symlink
     # "lib64" to "lib".
