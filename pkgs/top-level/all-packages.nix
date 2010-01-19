@@ -903,6 +903,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ipmitool = import ../tools/system/ipmitool {
+    inherit fetchurl stdenv;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
@@ -1678,7 +1682,7 @@ let
   };
 
   wicd = import ../tools/networking/wicd {
-    inherit stdenv fetchurl python pygobject pycairo pyGtkGlade pythonDBus 
+    inherit stdenv fetchurl python pygobject pycairo pyGtkGlade pythonDBus
             wpa_supplicant dhcp wirelesstools nettools iproute;
   };
 
@@ -4253,7 +4257,7 @@ let
 
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
-    inherit gmp guile mesa libjpeg libpng 
+    inherit gmp guile mesa libjpeg libpng
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
@@ -8331,7 +8335,7 @@ let
 
   ncbiCTools = builderDefsPackage ../development/libraries/ncbi {
     inherit tcsh mesa lesstif;
-    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
+    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
       libXmu libXext;
   };
 
@@ -8360,7 +8364,7 @@ let
 
   content = builderDefsPackage ../applications/science/math/content {
     inherit mesa lesstif;
-    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
+    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
       libXmu libXext libXcursor;
   };
 
