@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, openssl }:
 
 let
   pkgname = "ipmitool";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1d6bf2595d1fd0dbef206c300cc666d3d079548ba97f727077d61c4736a7e63a";
   };
 
-  buildInputs = [];
+  buildInputs = [ openssl ];
 
   meta = {
     description = ''Command-line interface to IPMI-enabled devices'';

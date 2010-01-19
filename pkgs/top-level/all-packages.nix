@@ -904,7 +904,7 @@ let
   };
 
   ipmitool = import ../tools/system/ipmitool {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv openssl;
   };
 
   jdiskreport = import ../tools/misc/jdiskreport {
