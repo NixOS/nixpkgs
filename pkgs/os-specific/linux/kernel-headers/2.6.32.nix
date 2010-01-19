@@ -2,14 +2,14 @@
 
 assert stdenv.isLinux;
 
-let version = "2.6.28.5"; in
+let version = "2.6.32.4"; in
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
+    sha256 = "1n8pj05sazxv1dgi68q61lrvrnzvvx61qqw6kx80vqizqanz97z1";
   };
 
   targetConfig = if (cross != null) then cross.config else null;
@@ -28,11 +28,6 @@ stdenv.mkDerivation {
     if cross != null then
 	(if cross.arch == "powerpc" then ["ppc"] else [])
     else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
-
-  patchPhase = ''
-    patch --verbose -p1 < "${./unifdef-getline.patch}"
-    sed -i '/scsi/d' include/Kbuild
-  '';
 
   buildPhase = ''
     if test -n "$targetConfig"; then
