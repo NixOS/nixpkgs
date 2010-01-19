@@ -3023,10 +3023,6 @@ let
       inherit fetchurl stdenv;
     });
 
-  patchelf05 = import ../development/tools/misc/patchelf/0.5.nix {
-    inherit fetchurl stdenv;
-  };
-
   pmccabe = import ../development/tools/misc/pmccabe {
     inherit fetchurl stdenv;
   };
@@ -7215,7 +7211,6 @@ let
       inherit stdenv fetchurl glibc mesa freetype zlib glib;
       inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
         libXcursor libXinerama libXext libX11;
-      inherit patchelf05;
     };
 
   gpsbabel = import ../applications/misc/gpsbabel {

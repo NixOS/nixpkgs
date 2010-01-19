@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv,
 libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11,
-zlib, patchelf05 }:
+zlib }:
 
 /* I haven't found any x86_64 package from them */
 assert stdenv.system == "i686-linux";
@@ -55,12 +55,12 @@ stdenv.mkDerivation {
       fullPath=$fullPath:$i/lib
     done
           
-    ${patchelf05}/bin/patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       --set-rpath $fullPath \
       $out/opt/googleearth/googleearth-bin
 
     for a in $out/opt/googleearth/*.so* ; do
-      ${patchelf05}/bin/patchelf --set-rpath $fullPath $a
+      patchelf --set-rpath $fullPath $a
     done
   '';
 
