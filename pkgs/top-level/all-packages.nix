@@ -3698,12 +3698,12 @@ let
     inherit fetchurl stdenv;
   };
 
-  gmp = import ../development/libraries/gmp {
+  gmp = makeOverridable (import ../development/libraries/gmp) {
     inherit stdenv fetchurl m4;
     cxx = false;
   };
 
-  gmpxx = gmp;
+  gmpxx = gmp.override { cxx = true; };
 
   goffice = import ../development/libraries/goffice {
     inherit fetchurl stdenv pkgconfig libgsf libxml2 cairo
