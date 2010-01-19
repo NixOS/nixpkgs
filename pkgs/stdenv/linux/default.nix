@@ -137,8 +137,11 @@ rec {
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
   # configure script happy.
   stdenvLinuxBoot1 = stdenvBootFun {
-    gcc = wrapGCC {libc = bootstrapGlibc; binutils = bootstrapTools;
-      coreutils = bootstrapTools; };
+    gcc = wrapGCC {
+      libc = bootstrapGlibc;
+      binutils = bootstrapTools;
+      coreutils = bootstrapTools;
+    };
     inherit fetchurl;
   };
   
@@ -160,9 +163,15 @@ rec {
   #    this one uses the Glibc built in step 3.  It still uses
   #    the rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
-    gcc = wrapGCC {binutils = bootstrapTools; coreutils = bootstrapTools;
-      libc = stdenvLinuxGlibc;};
-    extraAttrs = {glibc = stdenvLinuxGlibc;};
+    gcc = wrapGCC {
+      binutils = bootstrapTools;
+      coreutils = bootstrapTools;
+      libc = stdenvLinuxGlibc;
+    };
+    extraAttrs = {
+      glibc = stdenvLinuxGlibc;
+      inherit (stdenvLinuxBoot1Pkgs) perl;
+    };
     inherit fetchurl;
   }) ["gcc" "binutils"];
 
@@ -186,6 +195,9 @@ rec {
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       name = "";
     };
+    extraAttrs = {
+      inherit (stdenvLinuxBoot1Pkgs) perl;
+    };
     inherit fetchurl;
   };
 
@@ -196,6 +208,7 @@ rec {
     bootStdenv = stdenvLinuxBoot3;
   };
 
+  
   # 8) Construct the final stdenv.  It uses the Glibc, GCC and
   #    Binutils built above, and adds in dynamically linked versions
   #    of all other tools.

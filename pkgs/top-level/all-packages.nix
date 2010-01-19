@@ -2476,7 +2476,8 @@ let
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
-  perl = if system != "i686-cygwin" then perl510 else sysPerl;
+  perl = useFromStdenv "perl"
+    (if system != "i686-cygwin" then perl510 else sysPerl);
 
   # FIXME: unixODBC needs patching on Darwin (see darwinports)
   phpOld = import ../development/interpreters/php {
