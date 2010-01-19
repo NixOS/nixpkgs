@@ -3132,7 +3132,7 @@ let
   };
 
   valgrind = import ../development/tools/analysis/valgrind {
-    inherit fetchurl stdenv perl gdb;
+    inherit fetchurl stdenv perl gdb autoconf automake;
   };
 
   xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
