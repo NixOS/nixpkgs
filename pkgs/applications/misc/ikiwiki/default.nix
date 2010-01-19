@@ -6,12 +6,12 @@
   , extraUtils ? []
   }:
 
-stdenv.mkDerivation {
-  name = "ikiwiki_3.20091009";
+stdenv.mkDerivation rec {
+  name = "ikiwiki_3.20100102.3";
 
   src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/ikiwiki_3.20091009.tar.gz;
-    sha256 = "1iznyiypsnhga71s31782j3rf52fyvxrcys3nfpcr8yg1a5zadpn";
+    url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}.tar.gz";
+    sha256 = "0vb54z7hwb6iwd0j96vhr8ypzwc8l4hd98wbp5wsxkx5bgc38nsp";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
