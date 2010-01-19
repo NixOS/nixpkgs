@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     if test "$noSysDirs" = "1"; then
 	echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
     fi
+
+    # Use symlinks instead of hard links to save space ("strip" in the
+    # fixup phase strips each hard link separately).
+    for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in; do
+        substituteInPlace $i --replace 'ln ' 'ln -s '
+    done
   '';
 
   configureFlags = "--disable-werror" # needed for dietlibc build
