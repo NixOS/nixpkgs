@@ -1908,7 +1908,7 @@ let
   }));
 
   gcc44_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
-    inherit fetchurl stdenv texinfo gmp mpfr ppl cloogppl
+    inherit fetchurl stdenv texinfo gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
     profiledCompiler = true;
   }));
@@ -3704,10 +3704,9 @@ let
 
   gmp = import ../development/libraries/gmp {
     inherit stdenv fetchurl m4;
+    cxx = false;
   };
 
-  # `gmpxx' used to mean "GMP with C++ bindings".  Now `gmp' has C++ bindings
-  # by default, so that distinction is obsolete.
   gmpxx = gmp;
 
   goffice = import ../development/libraries/goffice {
