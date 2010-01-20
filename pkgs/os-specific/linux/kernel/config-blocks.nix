@@ -257,7 +257,7 @@ rec {
 
       forceCFSched = ''
         SCHED_CFS? y
-        SCHED_BFS? y
+        SCHED_BFS? n
         NO_HZ? y
       '';
 }
