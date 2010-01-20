@@ -25,9 +25,9 @@ rec {
       services.mingetty.ttys = [ ];
     };
 
-  config = (import ./lib/eval-config.nix {
+  config = (import ../lib/eval-config.nix {
     system = "i686-linux";
-    modules = [ machine ./modules/virtualisation/amazon-image.nix ];
+    modules = [ machine ../modules/virtualisation/amazon-image.nix ];
   }).config;
 
 }
