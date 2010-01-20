@@ -200,6 +200,7 @@ in {
   gqview = gtkSupported;
   graphviz = all;
   grub = linux;
+  grub2 = linux;
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
   guileLib = linux;
