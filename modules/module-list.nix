@@ -31,6 +31,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./rename.nix
+  ./security/ca.nix
   ./security/consolekit.nix
   ./security/pam.nix
   ./security/pam_usb.nix
