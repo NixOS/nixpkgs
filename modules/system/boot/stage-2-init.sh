@@ -3,6 +3,11 @@
 # !!! copied from stage 1; remove duplication
 
 
+# If no `systemConfig' parameter is specified on the kernel command
+# line, use `/system' as a fallback.
+systemConfig=/system
+
+
 # Print a greeting.
 echo
 echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
@@ -22,6 +27,13 @@ setPath() {
 }
 
 setPath "@path@"
+
+
+# Normally, stage 1 mounts the root filesystem read/writable.
+# However, in some environments (such as Amazon EC2), stage 2 is
+# executed directly, and the root is read-only.  So make it writable
+# here.
+mount -n -o remount,rw none /
 
 
 # Mount special file systems.
