@@ -254,4 +254,10 @@ rec {
         HZ_300 y
         HZ 300
       '';
+
+      forceCFSched = ''
+        SCHED_CFS? y
+        SCHED_BFS? y
+        NO_HZ? y
+      '';
 }
