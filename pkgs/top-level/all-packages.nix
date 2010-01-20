@@ -1806,6 +1806,10 @@ let
       };
   };
 
+  ecl = builderDefsPackage ../development/compilers/ecl {
+    inherit gmp mpfr;
+  };
+
   adobeFlexSDK33 = import ../development/compilers/adobe-flex-sdk {
     inherit fetchurl stdenv unzip jre;
   };
