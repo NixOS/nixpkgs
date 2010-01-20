@@ -16,9 +16,18 @@ in
 
     builder = ./builder.sh;
 
+    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
+    # any program we run, because the gcc will have been placed at a new
+    # store path than that determined when built (as a source for the
+    # bootstrap-tools tarball)
+    # Building from a proper gcc staying in the path where it was installed,
+    # libgcc_s will not be at {gcc}/lib, and gcc's libgcc will be found without
+    # any special hack.
     preInstall = ''
-      ensureDir $out/lib
-      ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+      if [ -f ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 ]; then
+          ensureDir $out/lib
+          ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+      fi
     '';
 
     meta.description = "The GNU C Library";
