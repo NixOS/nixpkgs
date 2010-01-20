@@ -6126,6 +6126,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  cacert = import ../data/misc/cacert {
+    inherit fetchurl stdenv;
+  };
+
   corefonts = import ../data/fonts/corefonts {
     inherit fetchurl stdenv cabextract;
   };
