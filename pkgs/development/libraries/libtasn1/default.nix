@@ -1,15 +1,26 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "libtasn1-1.5";
-  
+stdenv.mkDerivation rec {
+  name = "libtasn1-2.4";
+
   src = fetchurl {
-    url = mirror://gnu/gnutls/libtasn1-1.5.tar.gz;
-    sha256 = "1p4m9in144ypk6ndqw46sfz0njx6wccp0zlxjvigxry8034zbn6s";
+    url = "mirror://gnu/libtasn1/${name}.tar.gz";
+    sha256 = "03qz9wnx3643wvy10603syx97mi634z6bhdwznzmqcsq6hwg5g69";
   };
 
   meta = {
-    homepage = http://josefsson.org/libtasn1/;
-    description = "An ASN.1 library";
+    homepage = http://www.gnu.org/software/libtasn1/;
+    description = "GNU Libtasn1, an ASN.1 library";
+
+    longDescription =
+      '' Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
+         other packages.  The goal of this implementation is to be highly
+         portable, and only require an ANSI C89 platform.
+      '';
+
+    license = "LGPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
