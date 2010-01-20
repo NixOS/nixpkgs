@@ -7,10 +7,11 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-1.9.6";  # This is an alpha release!
+  name = "guile-1.9.7";  # This is a beta release!
+
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
-    sha256 = "1cfhzm9az1wbq0741v98af09v7f3094ym727qjfgj8n9jyxvpxnw";
+    sha256 = "1jyvckid3wjx82717fy1018qpdnglawv29r4wbv239cva8gv5nbr";
   };
 
   buildInputs = [ makeWrapper gawk readline libtool libunistring pkgconfig ];
