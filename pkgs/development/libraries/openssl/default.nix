@@ -1,14 +1,16 @@
-{stdenv, fetchurl, perl}:
+{ stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation (rec {
-  name = "openssl-0.9.8k";
+stdenv.mkDerivation rec {
+  name = "openssl-0.9.8l";
   
   src = fetchurl {
-    url = http://www.openssl.org/source/openssl-0.9.8k.tar.gz;
-    sha1 = "3ba079f91d3c1ec90a36dcd1d43857165035703f";
+    url = "http://www.openssl.org/source/${name}.tar.gz";
+    sha1 = "d3fb6ec89532ab40646b65af179bb1770f7ca28f";
   };
+
+  patches = [ ./darwin-arch.patch ];
   
-  buildInputs = [perl];
+  buildInputs = [ perl ];
 
   configureScript = "./config";
   
@@ -18,4 +20,4 @@ stdenv.mkDerivation (rec {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
   };
-} // (if stdenv.isDarwin then { patches = [ ./darwin-arch.patch ]; } else {}))
+}
