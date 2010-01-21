@@ -23,6 +23,7 @@ stdenv.mkDerivation {
                           --enable-rfc2553
                          )
   '';
+  patches = [ ./20-minute-io-timeout.patch ];
 
   # The test suite fails because it uses hard-coded paths, i.e. /usr/bin/gcc.
   doCheck = false;

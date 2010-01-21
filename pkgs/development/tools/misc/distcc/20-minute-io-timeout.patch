@@ -1,0 +1,12 @@
+diff -ubr distcc-3.1-orig/src/io.c distcc-3.1-patched/src/io.c
+--- distcc-3.1-orig/src/io.c	2008-12-02 22:50:25.000000000 +0100
++++ distcc-3.1-patched/src/io.c	2010-01-07 15:07:18.000000000 +0100
+@@ -64,7 +64,7 @@
+ 
+ /** Timeout for all IO other than opening connections.  Much longer, because
+  * compiling files can take a long time. **/
+-const int dcc_io_timeout = 300; /* seconds */
++const int dcc_io_timeout = 1200; /* seconds */
+ 
+ 
+ /**
