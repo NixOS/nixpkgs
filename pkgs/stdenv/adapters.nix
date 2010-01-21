@@ -107,6 +107,19 @@ rec {
       isStatic = true;
     } // {inherit fetchurl;};
 
+    
+  # Return a modified stdenv that disables building shared libraries.
+  # However, executables will still be dynamically linked.
+  disableSharedLibraries = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        dontDisableStatic = true;
+        configureFlags =
+          (if args ? configureFlags then args.configureFlags else "")
+          + " --disable-shared"; # brrr...
+      });
+    } // {inherit fetchurl;};
+
+    
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
@@ -164,6 +177,7 @@ rec {
         };
     } // { inherit cross; };
 
+    
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
 
@@ -267,7 +281,6 @@ rec {
 
   /* Use the trace output to report all processed derivations with their
      license name.
- 
   */
   traceDrvLicenses = stdenv: stdenv //
     { mkDerivation = args:
@@ -289,6 +302,7 @@ rec {
         };
     };
 
+    
   /* Abort if the license predicate is not verified for a derivation
      declared with mkDerivation.
 

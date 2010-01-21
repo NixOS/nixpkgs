@@ -4172,7 +4172,6 @@ let
 
   libjpeg = makeOverridable (import ../development/libraries/libjpeg) {
     inherit fetchurl stdenv;
-    libtool = libtool_1_5;
   };
 
   libjpeg62 = makeOverridable (import ../development/libraries/libjpeg/62.nix) {
@@ -4181,7 +4180,7 @@ let
   };
 
   libjpegStatic = lowPrio (appendToName "static" (libjpeg.override {
-    static = true;
+    stdenv = disableSharedLibraries stdenv;
   }));
 
   libksba = import ../development/libraries/libksba {
