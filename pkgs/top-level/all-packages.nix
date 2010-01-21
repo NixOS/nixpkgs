@@ -3820,6 +3820,10 @@ let
     inherit (xlibs) libXp libXau;
   };
 
+  levmar = import ../development/libraries/levmar {
+    inherit fetchurl stdenv;
+  };
+
   lib3ds = import ../development/libraries/lib3ds {
     inherit fetchurl stdenv unzip;
   };
@@ -7304,7 +7308,7 @@ let
   };
 
   meshlab = import ../applications/graphics/meshlab {
-    inherit fetchurl stdenv bzip2;
+    inherit fetchurl stdenv bzip2 lib3ds levmar muparser unzip;
     qt = qt4;
   };
 
