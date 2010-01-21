@@ -1,4 +1,4 @@
-{stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk}:
+{stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk, static ? false}:
 
 let name        = "distcc";
     version     = "3.1";
@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   ''
     configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                           CXXFLAGS="-O2 -fno-strict-aliasing"
-                          --with${if popt == null then "" else "out"}-included-popt
+                          ${if static then "LDFLAGS=-static" else ""}
+                          --with${if static == true || popt == null then "" else "out"}-included-popt
                           --with${if avahi != null then "" else "out"}-avahi
                           --with${if gtk != null then "" else "out"}-gtk
                           --without-gnome
