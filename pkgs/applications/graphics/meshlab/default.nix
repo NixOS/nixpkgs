@@ -1,11 +1,11 @@
 {stdenv, fetchurl, qt, bzip2}:
 
 stdenv.mkDerivation {
-  name = "meshlab-1.2.0";
+  name = "meshlab-1.2.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/meshlab/MeshLabSrc_v120.tgz;
-    sha256 = "0iidp2pzwq96v8zbm8gc67wi1f41anpkncp17ajkv1rrh653nila";
+    url = mirror://sourceforge/meshlab/MeshLabSrc_v122.tar.gz;
+    sha256 = "166a8mx72wf3r84pnpr0ssqkd2xw6y5brviywlj8rjk6w9cy8fdc";
   };
 
 
@@ -34,5 +34,7 @@ stdenv.mkDerivation {
     description = "System for the processing and editing of unstructured 3D triangular meshes";
     homepage = http://meshlab.sourceforge.net/;
     license = "GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
