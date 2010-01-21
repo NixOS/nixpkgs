@@ -1031,6 +1031,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  mkisofs = import ../tools/cd-dvd/mkisofs {
+    inherit fetchurl stdenv gettext;
+  };
+
   mktemp = import ../tools/security/mktemp {
     inherit fetchurl stdenv;
   };
