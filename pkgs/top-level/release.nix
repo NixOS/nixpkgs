@@ -156,7 +156,6 @@ in {
   feh = linux;
   file = all;
   findutils = all;
-  firefox35 = prio 150 linux;
   flex = all;
   flex2535 = all;
   fontforge = linux;
@@ -455,6 +454,14 @@ in {
     jdee = linux;
   };
 
+  firefox35Pkgs = {
+    firefox = prio 150 linux;
+  };
+  
+  firefox36Pkgs = {
+    firefox = linux;
+  };
+  
   gnome = {
     gnome_panel = linux;
     metacity = linux;

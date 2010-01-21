@@ -6876,18 +6876,28 @@ let
 
   firefoxWrapper = firefox35Wrapper;
 
-  firefox35Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
+  firefox35Pkgs = import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
       nspr nss;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
-  });
+  };
 
   firefox35 = firefox35Pkgs.firefox;
   xulrunner35 = firefox35Pkgs.xulrunner;
   firefox35Wrapper = wrapFirefox firefox35 "firefox" "";
 
+  firefox36Pkgs = import ../applications/networking/browsers/firefox/3.6.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
+      nspr nss libnotify;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
+  firefox36Wrapper = lowPrio (wrapFirefox firefox36Pkgs.firefox "firefox" "");
+  
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
@@ -6897,7 +6907,7 @@ let
   flashplayer9 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
       inherit fetchurl stdenv zlib alsaLib nss nspr fontconfig freetype expat;
-      inherit (xlibs) libX11 libXext libXrender libXt ;
+      inherit (xlibs) libX11 libXext libXrender libXt;
       inherit (gtkLibs) gtk glib pango atk;
     });
 
