@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "glew-1.5.0";
+  name = "glew-1.5.2";
 
   src = fetchurl {
-    url = http://dfn.dl.sourceforge.net/sourceforge/glew/glew-1.5.0-src.tgz;
-    sha256 = "1kjr1fchnl785wsg11vzc03q3pm12lh20n1i593zr1xqfjgx2b4h";
+    url = http://dfn.dl.sourceforge.net/sourceforge/glew/glew-1.5.2.tgz;
+    sha256 = "0dh5wpfq7aaldkiwcqmm9w59c2qcglkjv8zazmnm8n5771n3caj8";
   };
 
   buildInputs = [mesa x11 libXmu libXi];
