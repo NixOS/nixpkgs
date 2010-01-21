@@ -184,7 +184,7 @@ let
   stdenvCross = makeStdenvCross defaultStdenv crossSystem (binutilsCross crossSystem)
     (gccCrossStageFinal crossSystem);
 
-  stdenv = 
+  stdenv =
     if bootStdenv != null then bootStdenv else
       let changer = getConfig ["replaceStdenv"] null;
       in if changer != null then
@@ -1689,7 +1689,7 @@ let
   };
 
   wicd = import ../tools/networking/wicd {
-    inherit stdenv fetchurl python pygobject pycairo pyGtkGlade pythonDBus 
+    inherit stdenv fetchurl python pygobject pycairo pyGtkGlade pythonDBus
             wpa_supplicant dhcp wirelesstools nettools iproute;
   };
 
@@ -2364,7 +2364,7 @@ let
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
-    
+
     forceBuildDrv (import ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
@@ -2516,8 +2516,8 @@ let
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  pythonBase = python25Base;
-  pythonFull = python25Full;
+  pythonBase = if stdenv.isDarwin then python25Base else python26Base;
+  pythonFull = if stdenv.isDarwin then python25Full else python26Full;
 
   python24 = import ../development/interpreters/python/2.4 {
     inherit fetchurl stdenv zlib bzip2;
@@ -4404,7 +4404,7 @@ let
 
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
-    inherit gmp guile mesa libjpeg libpng 
+    inherit gmp guile mesa libjpeg libpng
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
@@ -8491,7 +8491,7 @@ let
 
   ncbiCTools = builderDefsPackage ../development/libraries/ncbi {
     inherit tcsh mesa lesstif;
-    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
+    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
       libXmu libXext;
   };
 
@@ -8520,7 +8520,7 @@ let
 
   content = builderDefsPackage ../applications/science/math/content {
     inherit mesa lesstif;
-    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE 
+    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
       libXmu libXext libXcursor;
   };
 
