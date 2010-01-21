@@ -87,6 +87,6 @@ stdenv.mkDerivation ( {
   };
 
   meta = {
-    platforms = stdenv.lib.platforms;
+    platforms = stdenv.lib.platforms.all;
   };
 } // (if stdenv.isDarwin then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
