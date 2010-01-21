@@ -35,7 +35,11 @@ rec {
   name = "acl2-" + version;
   meta = {
     description = "An interpreter and a prover for a Lisp dialect";
-    maintainers = [
+    maintainers = with a.lib.maintainers; 
+    [
+      raskin
     ];
+    platforms = with a.lib.platforms;
+      linux;
   };
 }
