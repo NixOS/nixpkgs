@@ -156,9 +156,7 @@ in {
   feh = linux;
   file = all;
   findutils = all;
-  firefox2 = linux;
-  firefox3 = prio 150 linux;
-  firefox35 = linux;
+  firefox35 = prio 150 linux;
   flex = all;
   flex2535 = all;
   fontforge = linux;

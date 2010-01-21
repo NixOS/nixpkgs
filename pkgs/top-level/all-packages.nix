@@ -6876,26 +6876,6 @@ let
 
   firefoxWrapper = firefox35Wrapper;
 
-  firefox2 = lowPrio (import ../applications/networking/browsers/firefox/2.0.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
-  });
-
-  firefox2Wrapper = wrapFirefox firefox2 "firefox" "";
-
-  firefox3Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.0.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  });
-
-  firefox3 = firefox3Pkgs.firefox;
-  xulrunner3 = firefox3Pkgs.xulrunner;
-  firefox3Wrapper = wrapFirefox firefox3 "firefox" "";
-
   firefox35Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
