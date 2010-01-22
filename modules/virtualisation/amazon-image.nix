@@ -23,6 +23,9 @@ with pkgs.lib;
           mkdir /mnt
           mount /dev/vda /mnt
 
+          # The initrd expects these directories to exist.
+          mkdir /mnt/dev /mnt/proc /mnt/sys
+
           # Copy all paths in the closure to the filesystem.
           storePaths=$(perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure)
 
@@ -41,10 +44,13 @@ with pkgs.lib;
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
                     
-          # Amazon assumes that there is a /sbin/init, so symlink it
-          # to the stage 2 init script.
+          # Amazon assumes that there is a /sbin/init, so create one.
+          # Note that simply creating /sbin/init as a symlink breaks
+          # some EC2 initrds (like Ubuntu's) because they do a "test
+          # -x $mountPoint/sbin/init".
           mkdir -p /mnt/sbin
-          ln -s /nix/var/nix/profiles/system/init /mnt/sbin/init
+          echo "#! /nix/var/nix/profiles/system/init" > /mnt/sbin/init
+          chmod +x /mnt/sbin/init
 
           umount /mnt
         ''
