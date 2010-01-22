@@ -69,8 +69,9 @@ with pkgs.lib;
     [ { mountPoint = "/";
         device = "/dev/disk/by-label/nixos";
       }
-      { mountPoint = "/mnt";
+      { mountPoint = "/data";
         device = "/dev/sda2";
+        autocreate = true;
       }
     ];
 
