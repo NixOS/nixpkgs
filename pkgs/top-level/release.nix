@@ -4,6 +4,15 @@ let
 
   pkgs = allPackages {};
 
+  pkgsSheevaplug = allPackages {
+    crossSystem = {
+      config = "armv5tel-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "soft";
+    };
+  };
+
   /* Set the Hydra scheduling priority for a job.  The default
      priority (100) should be used for most jobs.  A different
      priority should only be used for a few particularly interesting
@@ -77,6 +86,12 @@ let
 in {
 
   tarball = import ./make-tarball.nix;
+
+  bisonSheevaplug = let
+    system = builtins.currentSystem;
+    in
+    assert (system == "i686-linux" || system == "x86_64-linux");
+    pkgsSheevaplug.bison.hostDrv;
 
 } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
 
