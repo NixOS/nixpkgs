@@ -4,8 +4,8 @@
 
 
 # If no `systemConfig' parameter is specified on the kernel command
-# line, use `/system' as a fallback.
-systemConfig=/system
+# line, use a fallback.
+systemConfig=/nix/var/nix/profiles/system
 
 
 # Print a greeting.

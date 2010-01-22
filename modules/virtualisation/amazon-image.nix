@@ -18,7 +18,8 @@ with pkgs.lib;
         }
         ''
           # Create an empty filesysten and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 /dev/vda
+          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda
+          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda
           mkdir /mnt
           mount /dev/vda /mnt
 
@@ -28,35 +29,47 @@ with pkgs.lib;
           mkdir -p /mnt/nix/store
           cp -prvd $storePaths /mnt/nix/store/
 
-          # Amazon assumes that there is a /sbin/init, so symlink it
-          # to the stage 2 init script.  Since we cannot set the path
-          # to the system configuration via the systemConfig kernel
-          # parameter, use a /system symlink.
-          mkdir -p /mnt/sbin
-          ln -s ${config.system.build.bootStage2} /mnt/sbin/init
-          ln -s ${config.system.build.toplevel} /mnt/system
+          # Register the paths in the Nix database.
+          printRegistration=1 perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure | \
+              chroot /mnt ${config.environment.nix}/bin/nix-store --load-db
 
-          set -x
-          sync
+          # Create the system profile to allow nixos-rebuild to work.
+          chroot /mnt ${config.environment.nix}/bin/nix-env \
+              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
+
+          # `nixos-rebuild' requires an /etc/NIXOS.
+          mkdir -p /mnt/etc
+          touch /mnt/etc/NIXOS
+                    
+          # Amazon assumes that there is a /sbin/init, so symlink it
+          # to the stage 2 init script.
+          mkdir -p /mnt/sbin
+          ln -s /nix/var/nix/profiles/system/init /mnt/sbin/init
+
           umount /mnt
-          sync
         ''
     );
 
   # On EC2 we don't get to supply our own kernel, so we can't load any
   # modules.  However, dhclient fails if the ipv6 module isn't loaded,
   # unless it's compiled without IPv6 support.  So do that.
-  nixpkgs.config.packageOverrides = pkgsOld:
-    { dhcp = pkgs.lib.overrideDerivation pkgsOld.dhcp (oldAttrs:
-        { configureFlags = "--disable-dhcpv6";
-        });
-    };
+  nixpkgs.config.packageOverrides = pkgsOld:                                        
+    { dhcp = pkgs.lib.overrideDerivation pkgsOld.dhcp (oldAttrs:                    
+        { configureFlags = "--disable-dhcpv6";                                      
+        });                                                                         
+    };                                                                              
 
-  # The root filesystem is mounted by Amazon's kernel/initrd.
-  fileSystems = [ ];
+  fileSystems =
+    [ { mountPoint = "/";
+        device = "/dev/disk/by-label/nixos";
+      }
+      { mountPoint = "/mnt";
+        device = "/dev/sda2";
+      }
+    ];
 
   swapDevices =
-    [ { device = "/dev/sda2"; } ];
+    [ { device = "/dev/sda3"; } ];
 
   # There are no virtual consoles.
   services.mingetty.ttys = [ ];
@@ -64,17 +77,11 @@ with pkgs.lib;
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
   services.sshd.enable = true;
-  #services.sshd.permitRootLogin = "without-password";
+  services.sshd.permitRootLogin = "without-password";
 
-  boot.postBootCommands =
-    ''
-      echo xyzzy_foobar | ${pkgs.pwdutils}/bin/passwd --stdin
-    '';
-
-  # Obtain the SSH key at startup time.
-  /*
-  jobs.fetchSSHKey =
-    { name = "fetch-ssh-key";
+  # Obtain the SSH key and host name at startup time.
+  jobs.fetchEC2Data =
+    { name = "fetch-ec2-data";
 
       startOn = "ip-up";
 
@@ -82,7 +89,6 @@ with pkgs.lib;
 
       script =
         ''
-          set -x
           echo "obtaining SSH key..."
           mkdir -p /root/.ssh
           ${pkgs.curl}/bin/curl --retry 3 --retry-delay 0 --fail \
@@ -96,7 +102,9 @@ with pkgs.lib;
               chmod 600 /root/.ssh/authorized_keys
               rm -f /root/key.pub
           fi
+
+          echo "setting host name..."
+          ${pkgs.nettools}/bin/hostname $(${pkgs.curl}/bin/curl http://169.254.169.254/1.0/meta-data/hostname)
         '';
     };
-  */
 }
