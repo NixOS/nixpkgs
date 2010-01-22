@@ -42,6 +42,11 @@ in
     buildNativeInputs = [ args.python ];
   };
 
+  pixman = attrs : attrs // {
+    buildInputs = [ args.pkgconfig ];
+    buildNativeInputs = [ args.perl ];
+  };
+
   libX11 = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
