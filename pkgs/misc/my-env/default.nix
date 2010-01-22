@@ -41,7 +41,9 @@
 
 { mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? ""} :
 mkDerivation {
-  buildInputs = [ ] ++ buildInputs ;
+  # The setup.sh script from stdenv will expect the native build inputs in
+  # the buildNativeInputs environment variable.
+  buildNativeInputs = [ ] ++ buildInputs ;
   name = "env-${name}";
   phases = "buildPhase";
   setupNew = substituteAll {
@@ -62,7 +64,7 @@ mkDerivation {
         -e 's@trap.*@@' \
         -i "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
-      buildInputs="$buildNativeInputs"
+      buildNativeInputs="$buildNativeInputs"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"
