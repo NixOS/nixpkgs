@@ -720,6 +720,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  gengetopt = import ../development/tools/misc/gengetopt {
+    inherit fetchurl stdenv;
+  };
+
   getopt = import ../tools/misc/getopt {
     inherit fetchurl stdenv;
   };
