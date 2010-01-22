@@ -7,7 +7,7 @@ let
   inherit (pkgs) nettools dhcp lib;
 
   # Don't start dhclient on explicitly configured interfaces.
-  ignoredInterfaces = ["lo" "wmaster0"] ++
+  ignoredInterfaces = 
     map (i: i.name) (lib.filter (i: i ? ipAddress) config.networking.interfaces);
 
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
@@ -77,9 +77,13 @@ in
             interfaces=
 
             for i in $(cd /sys/class/net && ls -d *); do
-                if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i"; then
-                    echo "Running dhclient on $i"
-                    interfaces="$interfaces $i"
+                # Only run dhclient on interfaces of type ARPHRD_ETHER
+                # (1), i.e. Ethernet.
+                if [ "$(cat /sys/class/net/$i/type)" = 1 ]; then 
+                    if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i"; then
+                        echo "Running dhclient on $i"
+                        interfaces="$interfaces $i"
+                    fi
                 fi
             done
 
