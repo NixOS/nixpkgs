@@ -4,14 +4,10 @@ let
 
   pkgs = allPackages {};
 
-  pkgsSheevaplug = allPackages {
-    crossSystem = {
-      config = "armv5tel-unknown-linux-gnueabi";  
-      bigEndian = false;
-      arch = "arm";
-      float = "soft";
-    };
-  };
+  /* The working or failing letters for cross builds will be sent only to
+     the following maintainers, as most package maintainers will not be
+     interested in the result of cross building a package. */
+  crossMaintainers = with pkgs.lib.maintainers; [ viric ];
 
   /* Set the Hydra scheduling priority for a job.  The default
      priority (100) should be used for most jobs.  A different
@@ -30,6 +26,12 @@ let
   testOn = systems: f: {system ? builtins.currentSystem}:
     if pkgs.lib.elem system systems then f (allPackages {inherit system;}) else {};
 
+  /* Similar to the testOn function, but with an additional 'crossSystem'
+   * parameter for allPackages, defining the target platform for cross builds */
+  testOnCross = crossSystem: systems: f: {system ? builtins.currentSystem}:
+    if pkgs.lib.elem system systems then f (allPackages {inherit system
+                crossSystem;}) else {};
+
   /* Map an attribute of the form `foo = [platforms...]'  to `testOn
      [platforms...] (pkgs: pkgs.foo)'. */
   mapTestOn = pkgs.lib.mapAttrsRecursiveCond
@@ -41,6 +43,22 @@ let
           pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
           (pkgs.lib.getAttrFromPath path pkgs);
       in testOn job.systems getPkg);
+
+
+  /* Similar to the testOn function, but with an additional 'crossSystem'
+   * parameter for allPackages, defining the target platform for cross builds,
+   * and triggering the build of the host derivation (cross built - hostDrv). */
+  mapTestOnCross = crossSystem: pkgs.lib.mapAttrsRecursiveCond
+    (as: !(as ? type && as.type == "job"))
+    (path: value:
+      let
+        job = toJob value;
+        getPkg = pkgs: setCrossMaintainers
+          (pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
+          (pkgs.lib.getAttrFromPath (path ++ ["hostDrv"]) pkgs));
+      in testOnCross crossSystem job.systems getPkg);
+
+  setCrossMaintainers = pkg: pkg // { meta.maintainers = crossMaintainers; };
 
   /* Find all packages that have a meta.platforms field listing the
      supported platforms. */
@@ -86,12 +104,6 @@ let
 in {
 
   tarball = import ./make-tarball.nix;
-
-  bisonSheevaplug = let
-    system = builtins.currentSystem;
-    in
-    assert (system == "i686-linux" || system == "x86_64-linux");
-    pkgsSheevaplug.bison.hostDrv;
 
 } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
 
@@ -652,4 +664,54 @@ in {
     xset = linux;
   };
 
-} ))
+} )) // (
+/* Test some cross builds to the Sheevaplug */
+let
+  crossSystem = {
+      config = "armv5tel-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "soft";
+  };
+  nativePlatforms = linux;
+in {
+  crossArmLinux = mapTestOnCross crossSystem (rec {
+    bison = nativePlatforms;
+    uboot = nativePlatforms;
+    uclibc = nativePlatforms;
+    xorg = {
+      fontadobe100dpi = nativePlatforms;
+      fontadobe75dpi = nativePlatforms;
+      fontbh100dpi = nativePlatforms;
+      fontbhlucidatypewriter100dpi = nativePlatforms;
+      fontbhlucidatypewriter75dpi = nativePlatforms;
+      fontbhttf = nativePlatforms;
+      fontcursormisc = nativePlatforms;
+      fontmiscmisc = nativePlatforms;
+      iceauth = nativePlatforms;
+      libX11 = nativePlatforms;
+      lndir = all;
+      setxkbmap = nativePlatforms;
+      xauth = nativePlatforms;
+      xev = nativePlatforms;
+      xf86inputkeyboard = nativePlatforms;
+      xf86inputmouse = nativePlatforms;
+      xf86inputevdev = nativePlatforms;
+      xf86inputsynaptics = nativePlatforms;
+      xf86videoati = nativePlatforms;
+      xf86videointel = nativePlatforms;
+      xf86videonv = nativePlatforms;
+      xf86videovesa = nativePlatforms;
+      xfs = nativePlatforms;
+      xkbcomp = nativePlatforms;
+      xmessage = nativePlatforms;
+      xorgserver = nativePlatforms;
+      xrandr = nativePlatforms;
+      xrdb = nativePlatforms;
+      xset = nativePlatforms;
+    };
+  gtkLibs = {
+    gtk = nativePlatforms;
+  };
+  });
+})
