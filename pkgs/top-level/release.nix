@@ -678,40 +678,12 @@ in {
   crossArmLinux = mapTestOnCross crossSystem (rec {
     bison = nativePlatforms;
     uboot = nativePlatforms;
-    uclibc = nativePlatforms;
+    tightvnc = nativePlatforms;
+    openoffice = nativePlatforms;
+    wxGTK = nativePlatforms;
+    firefox = nativePlatforms;
     xorg = {
-      fontadobe100dpi = nativePlatforms;
-      fontadobe75dpi = nativePlatforms;
-      fontbh100dpi = nativePlatforms;
-      fontbhlucidatypewriter100dpi = nativePlatforms;
-      fontbhlucidatypewriter75dpi = nativePlatforms;
-      fontbhttf = nativePlatforms;
-      fontcursormisc = nativePlatforms;
-      fontmiscmisc = nativePlatforms;
-      iceauth = nativePlatforms;
-      libX11 = nativePlatforms;
-      lndir = all;
-      setxkbmap = nativePlatforms;
-      xauth = nativePlatforms;
-      xev = nativePlatforms;
-      xf86inputkeyboard = nativePlatforms;
-      xf86inputmouse = nativePlatforms;
-      xf86inputevdev = nativePlatforms;
-      xf86inputsynaptics = nativePlatforms;
-      xf86videoati = nativePlatforms;
-      xf86videointel = nativePlatforms;
-      xf86videonv = nativePlatforms;
-      xf86videovesa = nativePlatforms;
-      xfs = nativePlatforms;
-      xkbcomp = nativePlatforms;
-      xmessage = nativePlatforms;
       xorgserver = nativePlatforms;
-      xrandr = nativePlatforms;
-      xrdb = nativePlatforms;
-      xset = nativePlatforms;
     };
-  gtkLibs = {
-    gtk = nativePlatforms;
-  };
   });
 })

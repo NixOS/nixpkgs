@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, cross ? null}:
 
-assert stdenv.isLinux;
+assert cross == null -> stdenv.isLinux;
 
 let version = "2.6.28.5"; in
 
