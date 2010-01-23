@@ -673,7 +673,7 @@ let
       arch = "arm";
       float = "soft";
   };
-  nativePlatforms = linux;
+  nativePlatforms = all;
 in {
   crossArmLinux = mapTestOnCross crossSystem (rec {
     bison = nativePlatforms;
