@@ -40,7 +40,7 @@ let
           ${optionalString (job.stopOn != "") "stop on ${job.stopOn}"}
 
           env PATH=${makeSearchPath "bin" upstartPath}:${makeSearchPath "sbin" upstartPath}
-          ${concatMapStrings (n: "env ${n}=${getAttr n job.environment}\n") (attrNames job.environment)}
+          ${concatMapStrings (n: "env ${n}=\"${getAttr n job.environment}\"\n") (attrNames job.environment)}
           
           ${optionalString (job.preStart != "") ''
             pre-start script
