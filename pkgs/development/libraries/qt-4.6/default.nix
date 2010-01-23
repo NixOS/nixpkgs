@@ -5,11 +5,11 @@
 , buildDemos ? false, buildExamples ? false, keepDocumentation ? false}:
 
 stdenv.mkDerivation {
-  name = "qt-4.6.0";
+  name = "qt-4.6.1";
   
   src = fetchurl {
-    url = ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.6.0.tar.gz;
-    sha256 = "12c5s9am0wd7a9fkpgizssv21hq17vra46j4ply3ixi46f0rq9am";
+    url = ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.6.1.tar.gz;
+    sha256 = "1id05qfxn5rxds3yngn3nbd7dnjmvmhzgjf0x568aii5iadv712c";
   };
   
   setupHook = ./setup-hook.sh;
