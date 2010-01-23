@@ -12,20 +12,26 @@ let
       GNUNETD_HOME = ${home}
 
       [GNUNETD]
-      HOSTLISTURL = ${lib.concatStringsSep " " hostLists}
-      APPLICATIONS = ${lib.concatStringsSep " " applications}
-      TRANSPORTS = ${lib.concatStringsSep " " transports}
+      HOSTLISTURL = ${concatStringsSep " " hostLists}
+      APPLICATIONS = ${concatStringsSep " " applications}
+      TRANSPORTS = ${concatStringsSep " " transports}
 
       [LOAD]
       MAXNETDOWNBPSTOTAL = ${toString load.maxNetDownBandwidth}
       MAXNETUPBPSTOTAL = ${toString load.maxNetUpBandwidth}
       HARDUPLIMIT = ${toString load.hardNetUpBandwidth}
       MAXCPULOAD = ${toString load.maxCPULoad}
-      INTERFACES = ${lib.concatStringsSep " " load.interfaces}
+      INTERFACES = ${concatStringsSep " " load.interfaces}
 
       [FS]
       QUOTA = ${toString fileSharing.quota}
       ACTIVEMIGRATION = ${if fileSharing.activeMigration then "YES" else "NO"}
+
+      [UDP]
+      PORT = ${toString udp.port}
+
+      [TCP]
+      PORT = ${toString tcp.port}
 
       [MODULES]
       sqstore = sqstore_sqlite
@@ -122,6 +128,24 @@ in
         };
       };
 
+      udp = {
+        port = mkOption {
+          default = 2086;  # assigned by IANA
+          description = ''
+            The UDP port for use by GNUnet.
+          '';
+        };
+      };
+
+      tcp = {
+        port = mkOption {
+          default = 2086;  # assigned by IANA
+          description = ''
+            The TCP port for use by GNUnet.
+          '';
+        };
+      };
+
       load = {
         maxNetDownBandwidth = mkOption {
           default = 50000;
@@ -191,6 +215,17 @@ in
         home = "/var/empty";
       };
 
+    # The user tools that talk to `gnunetd' should come from the same source,
+    # so install them globally.
+    environment.systemPackages = [ pkgs.gnunet ];
+
+    environment.etc = [
+      # Tools such as `gnunet-transport-check' expect /etc/gnunetd.conf.
+      { source = configFile;
+        target = "gnunetd.conf";
+      }
+    ];
+
     jobs.gnunetd =
       { description = "The GNUnet Daemon";
 
@@ -205,10 +240,10 @@ in
 
         exec =
           ''
-            ${pkgs.gnunet}/bin/gnunetd              \
-              ${if debug then "--debug" else "" }           \
-              --user="gnunetd"                              \
-              --config="${configFile}"                      \
+            ${pkgs.gnunet}/bin/gnunetd                  \
+              ${if cfg.debug then "--debug" else "" }   \
+              --user="gnunetd"                          \
+              --config="${configFile}"                  \
               --log="${cfg.logLevel}"
           '';
       };
