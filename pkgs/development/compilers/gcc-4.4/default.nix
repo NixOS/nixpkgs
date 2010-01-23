@@ -151,7 +151,7 @@ stdenv.mkDerivation ({
       )
     }
     ${if langAda then " --enable-libada" else ""}
-    ${if stdenv.isi686 then "--with-arch=i686" else ""}
+    ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
   ";
 
