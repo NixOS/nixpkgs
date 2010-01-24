@@ -141,6 +141,13 @@ rec {
 
   # What name should we use??
   gtkdoc = gtk_doc; 
+
+  gtkhtml = import ./platform/gtkhtml {
+    inherit (pkgs.gtkLibs) gtk;
+    inherit (pkgs) fetchurl stdenv pkgconfig intltool enchant isocodes;
+    inherit GConf gnome_icon_theme;
+  };
+
   
   # Freedesktop library
   startup_notification = import ./platform/startup-notification {

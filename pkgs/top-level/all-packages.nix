@@ -6983,7 +6983,7 @@ let
   gnucash = import ../applications/office/gnucash {
     inherit fetchurl stdenv pkgconfig libxml2 goffice enchant
       gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper;
-    inherit (gnome) gtk glib libglade libgnomeui libgtkhtml
+    inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml
       libgnomeprint;
     gconf = gnome.GConf;
   };
