@@ -11,8 +11,6 @@ rec {
   gnomeicontheme = gnome_icon_theme;
 
   # !!! Missing! Need to add these.
-  libgnomeprint = throw "libgnomeprint not implemented";
-  libgtkhtml = throw "libgtkhtml not implemented";
   vte = throw "vte not implemented";
   gtksourceview_24 = gtksourceview;
 
@@ -45,6 +43,23 @@ rec {
   
   libglade = import ./platform/libglade {
     inherit (pkgs) stdenv fetchurl pkgconfig libxml2 python gettext;
+    inherit (pkgs.gtkLibs) gtk;
+  };
+
+  libgnomeprint = import ./platform/libgnomeprint {
+    inherit intltool libart_lgpl libgnomecups;
+    inherit (pkgs) stdenv fetchurl pkgconfig gettext libxml2 bison flex;
+    inherit (pkgs.gtkLibs) gtk;
+  };
+
+  libgnomecups = import ./platform/libgnomecups {
+    inherit intltool libart_lgpl;
+    inherit (pkgs) stdenv fetchurl pkgconfig gettext libxml2;
+    inherit (pkgs.gtkLibs) gtk;
+  };
+
+  libgtkhtml = import ./platform/libgtkhtml {
+    inherit (pkgs) stdenv fetchurl pkgconfig gettext libxml2;
     inherit (pkgs.gtkLibs) gtk;
   };
   

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk
-, libglade, libgnomeui, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant
+, libglade, libgnomeui, libgtkhtml, libgnomeprint, goffice, enchant
 , gettext, intltool, perl, guile, slibGuile, swig, isocodes, bzip2
 , makeWrapper }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libxml2 gconf glib gtk
-    libglade libgnomeui libgtkhtml gtkhtml libgnomeprint goffice enchant
+    libglade libgnomeui libgtkhtml libgnomeprint goffice enchant
     gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper
   ];
 
