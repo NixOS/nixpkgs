@@ -1530,6 +1530,11 @@ let
     inherit fetchurl stdenv pam;
   };
 
+  swec = import ../tools/networking/swec {
+    inherit fetchurl stdenv makeWrapper perl;
+    inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
+  };
+
   system_config_printer = import ../tools/misc/system-config-printer {
     inherit stdenv fetchurl perl perlXMLParser desktop_file_utils;
   };
