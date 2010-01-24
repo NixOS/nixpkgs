@@ -1678,7 +1678,7 @@ let
   };
 
   w3cCSSValidator = import ../tools/misc/w3c-css-validator {
-    inherit fetchurl stdenv apacheAnt jre sourceFromHead;
+    inherit fetchurl stdenv apacheAnt jre sourceFromHead lib;
     tomcat = tomcat6;
   };
 
