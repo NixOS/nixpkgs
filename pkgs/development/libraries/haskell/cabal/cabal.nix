@@ -67,7 +67,7 @@ attrs :
               ./Setup build
 
               export GHC_PACKAGE_PATH=$(ghc-packages)
-              ./Setup haddock
+              [ -n "$noHadock" ] || ./Setup haddock
 
               eval "$postBuild"
             '';
