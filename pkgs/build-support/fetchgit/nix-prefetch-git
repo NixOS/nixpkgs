@@ -60,6 +60,14 @@ checkout_ref(){
     local hash="$1";
     local ref="$2";
 
+    if test -n "$NIX_PREFETCH_GIT_DEEP_CLONE"; then
+	# The caller explicitly asked for a deep clone.  Deep clones
+	# allow "git describe" and similar tools to work.  See
+	# http://thread.gmane.org/gmane.linux.distributions.nixos/3569
+	# for a discussion.
+	return 1
+    fi
+
     if test -z "$ref"; then
         ref=$(ref_from_hash $hash);
     fi;
