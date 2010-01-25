@@ -10,7 +10,7 @@ with pkgs.lib;
             ''
               mkdir $out
               diskImage=$out/nixos.img
-              qemu-img create -f raw $diskImage "1024M"
+              qemu-img create -f raw $diskImage "4G"
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph = 
