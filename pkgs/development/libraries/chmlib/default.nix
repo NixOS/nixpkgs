@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "chmlib-0.39";
+  name = "chmlib-0.40";
   
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "0hgzw121ffmk79wbpkd0394y5ah99c3i85z6scp958mmkr25sc6j";
+    sha256 = "18zzb4x3z0d7fjh1x5439bs62dmgsi4c1pg3qyr7h5gp1i5xcj9l";
   };
 
   meta = {
