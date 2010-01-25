@@ -1,0 +1,83 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,7 @@
+ cmake_minimum_required(VERSION 2.6)
+ 
++option (WITH_RAWZOR "Build with Rawzor support" ON)
++
+ add_subdirectory (rtexif)
+ add_subdirectory (rtengine)
+ add_subdirectory (rtgui)
+--- a/rtengine/CMakeLists.txt
++++ b/rtengine/CMakeLists.txt
+@@ -9,9 +9,13 @@
+ IF (WIN32)
+     SET (EXTRA_LIBDIR "${CMAKE_CURRENT_SOURCE_DIR}/../lib; ${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_win")
+     SET (EXTRA_INCDIR "${CMAKE_CURRENT_SOURCE_DIR}/../winclude; ${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_win")
+-    SET (EXTRA_LIB "ws2_32 ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libiptcdata.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libjpeg.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libpng.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libtiff.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libz.a ${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_win/rwz_sdk_s.a")
++    SET (EXTRA_LIB "ws2_32 ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libiptcdata.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libjpeg.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libpng.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libtiff.a ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libz.a")
++    if (WITH_RAWZOR)
+     ADD_DEFINITIONS (-DRAWZOR_SUPPORT)
++    SET (EXTRA_LIB "${EXTRA_LIB} ${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_win/rwz_sdk_s.a")
++    endif (WITH_RAWZOR)
+ ELSE (WIN32)
++    if (WITH_RAWZOR)
+     IF (CMAKE_SIZEOF_VOID_P EQUAL 4)
+         SET (EXTRA_INCDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin32")
+ 	SET (EXTRA_LIBDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin32")
+@@ -19,10 +23,11 @@
+         SET (EXTRA_INCDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin64")
+ 	SET (EXTRA_LIBDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin64")
+     ENDIF (CMAKE_SIZEOF_VOID_P EQUAL 4)
+-    pkg_check_modules (IPTCDATA REQUIRED libiptcdata)
+-    pkg_check_modules (LCMS REQUIRED lcms)
+     SET (EXTRA_LIB "-lrwz_sdk")
+     ADD_DEFINITIONS (-DRAWZOR_SUPPORT)
++    endif (WITH_RAWZOR)
++    pkg_check_modules (IPTCDATA REQUIRED libiptcdata)
++    pkg_check_modules (LCMS REQUIRED lcms)
+ ENDIF (WIN32)
+ 
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../rtexif ${EXTRA_INCDIR} ${GTHREAD_INCLUDE_DIRS} ${GOBJECT_INCLUDE_DIRS} ${GLIB2_INCLUDE_DIRS} ${GLIBMM_INCLUDE_DIRS} ${IPTCDATA_INCLUDE_DIRS} ${LCMS_INCLUDE_DIRS})
+--- a/rtengine/imagedata.cc
++++ b/rtengine/imagedata.cc
+@@ -19,7 +19,9 @@
+ #include <imagedata.h>
+ #include <iptcpairs.h>
+ #include <glib/gstdio.h>
++#ifdef RAWZOR_SUPPORT
+ #include <rwz_sdk.h>
++#endif
+ 
+ using namespace rtengine;
+ 
+--- a/rtengine/myfile.cc
++++ b/rtengine/myfile.cc
+@@ -19,7 +19,9 @@
+ #include <myfile.h>
+ #include <cstdarg>
+ #include <glibmm.h>
++#ifdef RAWZOR_SUPPORT
+ #include <rwz_sdk.h>
++#endif
+ 
+ IMFILE* fopen (const char* fname) {
+ 
+--- a/rtgui/CMakeLists.txt
++++ b/rtgui/CMakeLists.txt
+@@ -75,6 +75,7 @@
+     if (NOT ZLIB_LIBRARIES)
+         message(SEND_ERROR "libz was not found!")
+     endif (NOT ZLIB_LIBRARIES)
++    if (WITH_RAWZOR)
+     IF (CMAKE_SIZEOF_VOID_P EQUAL 4)
+         SET (EXTRA_INCDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin32")
+ 	    SET (EXTRA_LIBDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin32")
+@@ -82,6 +83,7 @@
+         SET (EXTRA_INCDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin64")
+ 	    SET (EXTRA_LIBDIR "${CMAKE_CURRENT_SOURCE_DIR}/../rawzor_lin64")
+     ENDIF (CMAKE_SIZEOF_VOID_P EQUAL 4)
++    endif (WITH_RAWZOR)
+ 
+ include_directories (/usr/local/lib ${CMAKE_CURRENT_SOURCE_DIR}/../rtengine . ${CMAKE_CURRENT_SOURCE_DIR}/../rtexif ${EXTRA_INCDIR} ${GLIB2_INCLUDE_DIRS} ${GLIBMM_INCLUDE_DIRS}
+     ${GTK_INCLUDE_DIRS} ${GTKMM_INCLUDE_DIRS} ${GIO_INCLUDE_DIRS} ${GIOMM_INCLUDE_DIRS} ${IPTCDATA_INCLUDE_DIRS} ${LCMS_INCLUDE_DIRS} ${GTHREAD_INCLUDE_DIRS} ${GOBJECT_INCLUDE_DIRS} )

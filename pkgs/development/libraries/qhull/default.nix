@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "qhull-2003.1";
+  name = "qhull-2010.1";
   src = fetchurl {
-    url = http://www.qhull.org/download/qhull-2003.1-src.tgz;
-    sha256 = "1ah6yhh8qxqmvjcpmijibxcw8gjwvdcrb9g7j2rkawazq95a2j0s";
+    url = http://www.qhull.org/download/qhull-2010.1-src.tgz;
+    sha256 = "1ghnwci1s56yzzwg8gmlzhsd5v3imsqxf24yb0j5m6qv8kxqaw2m";
   };
 
   NIX_CFLAGS_COMPILE = "-fno-strict-aliasing " +

@@ -1,0 +1,37 @@
+diff --git a/Makefile b/Makefile
+index af70b4c..53c6fab 100644
+--- a/Makefile
++++ b/Makefile
+@@ -15,11 +15,11 @@ DEMOBJS=lmdemo.o
+ DEMOSRCS=lmdemo.c
+ AR=ar
+ RANLIB=ranlib
+-LAPACKLIBS=-llapack -lblas -lf2c # comment this line if you are not using LAPACK.
++#LAPACKLIBS=-llapack -lblas -lf2c # comment this line if you are not using LAPACK.
+                                  # On systems with a FORTRAN (not f2c'ed) version of LAPACK, -lf2c is
+                                  # not necessary; on others, -lf2c is equivalent to -lF77 -lI77
+ 
+-#LAPACKLIBS=-L/usr/local/atlas/lib -llapack -lcblas -lf77blas -latlas -lf2c # This works with the ATLAS updated lapack and Linux_P4SSE2
++LAPACKLIBS=-llapack -lcblas -lf77blas -latlas -lgfortran # This works with the ATLAS updated lapack and Linux_P4SSE2
+                                                                             # from http://www.netlib.org/atlas/archives/linux/
+ 
+ #LAPACKLIBS=-llapack -lgoto2 -lpthread -lf2c # This works with GotoBLAS
+diff --git a/misc.h b/misc.h
+index e32f18d..827507e 100644
+--- a/misc.h
++++ b/misc.h
+@@ -30,11 +30,11 @@
+ /* f2c'd BLAS */
+ //#define LM_BLAS_PREFIX f2c_
+ /* C BLAS */
+-//#define LM_BLAS_PREFIX cblas_
++#define LM_BLAS_PREFIX cblas_
+ 
+ /* common suffix for BLAS subroutines */
+-//#define LM_BLAS_SUFFIX  // define empty if a f2c_ or cblas_ prefix was defined for LM_BLAS_PREFIX above
+-#define LM_BLAS_SUFFIX _ // use this in case of no BLAS prefix
++#define LM_BLAS_SUFFIX  // define empty if a f2c_ or cblas_ prefix was defined for LM_BLAS_PREFIX above
++//#define LM_BLAS_SUFFIX _ // use this in case of no BLAS prefix
+ 
+ 
+ #define LCAT_(a, b)    #a b

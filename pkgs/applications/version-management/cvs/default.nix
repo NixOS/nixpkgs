@@ -8,5 +8,16 @@ stdenv.mkDerivation {
     sha256 = "0pjir8cwn0087mxszzbsi1gyfc6373vif96cw4q3m1x6p49kd1bq";
   };
 
+  patches = [ ./getcwd-chroot.patch ];
+
+  preConfigure =
+    # Apply the Debian patches.
+    '' for p in "debian/patches/"*
+       do
+         echo "applying \`$p'..."
+         patch --verbose -p1 < "$p"
+       done
+    '';
+
   buildInputs = [ nano ];
 }

@@ -1852,6 +1852,14 @@ rec {
     propagatedBuildInputs = [UNIVERSALrequire];
   };
 
+  PadWalker = buildPerlPackage rec {
+    name = "PadWalker-1.9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
+      sha256 = "0lvh0qlyrpnkssqkhfxhbjpb5lyr4fp6d1p7la8k6w3wv1qmbl1s";
+    };
+  };
+
   Perl6Junction = buildPerlPackage rec {
     name = "Perl6-Junction-1.40000";
     src = fetchurl {

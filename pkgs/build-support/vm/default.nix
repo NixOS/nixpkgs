@@ -14,7 +14,7 @@ rec {
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
-    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "unix"];
+    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix"];
   };
 
 

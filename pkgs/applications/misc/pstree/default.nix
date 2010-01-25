@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation rec {
-  name = "pstree-2.32";
+  name = "pstree-2.33";
 
   src = fetchurl {
-    url = "http://fresh.t-systems-sfr.com/unix/src/misc/${name}.tar.gz";
-    sha256 = "0k5r6alnc0ch3frvl5bhh2vi91m6aik10pnjfl86qwkdwsr303az";
+    url = "http://www.sfr-fresh.com/unix/misc/${name}.tar.gz";
+    sha256 = "1469lrhpy6wghlvbjx6lmvh27rakq00x11cpz4n965fg11i121hg";
   };
 
   unpackPhase="unpackFile \$src; sourceRoot=.";

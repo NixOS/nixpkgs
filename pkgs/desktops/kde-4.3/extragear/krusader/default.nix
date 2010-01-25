@@ -8,6 +8,7 @@ stdenv.mkDerivation {
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl gettext kdelibs automoc4 phonon ];
+  patches = [./krusader-gcc44.patch];
   meta = {
     description = "Norton/Total Commander clone for KDE";
     license = "GPL";

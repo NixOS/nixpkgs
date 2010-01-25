@@ -17,6 +17,17 @@ rec {
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
+  # The full-featured Git.
+  gitFull = import ./git {
+    inherit fetchurl stdenv curl openssl zlib expat perl gettext
+      asciidoc texinfo xmlto docbook2x
+      docbook_xsl docbook_xml_dtd_45 libxslt
+      cpio tcl tk makeWrapper subversion;
+    svnSupport = true;
+    guiSupport = true;
+    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
+  };
+
   gitGit = import ./git/git-git.nix {
     inherit fetchurl sourceFromHead stdenv curl openssl zlib expat perl gettext
       asciidoc texinfo xmlto docbook2x

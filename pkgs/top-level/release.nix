@@ -183,9 +183,6 @@ in {
   feh = linux;
   file = all;
   findutils = all;
-  firefox2 = linux;
-  firefox3 = prio 150 linux;
-  firefox35 = linux;
   flex = all;
   flex2535 = all;
   fontforge = linux;
@@ -205,6 +202,7 @@ in {
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
+  gitFull = linux;
   glibc = linux;
   glibcLocales = linux;
   glxinfo = linux;
@@ -228,6 +226,7 @@ in {
   gqview = gtkSupported;
   graphviz = all;
   grub = linux;
+  grub2 = linux;
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
   guileLib = linux;
@@ -244,6 +243,7 @@ in {
   hugin = linux;
   iana_etc = linux;
   icecat3Xul = linux;
+  icewm = linux;
   idutils = all;
   ifplugd = linux;
   imagemagick = allBut "i686-cygwin";
@@ -483,6 +483,14 @@ in {
     jdee = linux;
   };
 
+  firefox35Pkgs = {
+    firefox = prio 150 linux;
+  };
+  
+  firefox36Pkgs = {
+    firefox = linux;
+  };
+  
   gnome = {
     gnome_panel = linux;
     metacity = linux;

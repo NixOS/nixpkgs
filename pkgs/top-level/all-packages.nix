@@ -625,6 +625,10 @@ let
     inherit fetchurl stdenv pkgconfig libuuid;
   };
 
+  ecryptfs = import ../tools/security/ecryptfs {
+    inherit fetchurl stdenv fuse python perl keyutils pam nss nspr;
+  };
+
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
     inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
   };
@@ -730,6 +734,10 @@ let
   };
 
   genext2fs = import ../tools/filesystems/genext2fs {
+    inherit fetchurl stdenv;
+  };
+
+  gengetopt = import ../development/tools/misc/gengetopt {
     inherit fetchurl stdenv;
   };
 
@@ -916,6 +924,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  ipmitool = import ../tools/system/ipmitool {
+    inherit fetchurl stdenv openssl;
+  };
+
   jdiskreport = import ../tools/misc/jdiskreport {
     inherit fetchurl stdenv unzip jdk;
   };
@@ -1036,6 +1048,10 @@ let
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
+  };
+
+  mkisofs = import ../tools/cd-dvd/mkisofs {
+    inherit fetchurl stdenv gettext;
   };
 
   mktemp = import ../tools/security/mktemp {
@@ -1529,6 +1545,11 @@ let
     inherit fetchurl stdenv pam;
   };
 
+  swec = import ../tools/networking/swec {
+    inherit fetchurl stdenv makeWrapper perl;
+    inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
+  };
+
   system_config_printer = import ../tools/misc/system-config-printer {
     inherit stdenv fetchurl perl perlXMLParser desktop_file_utils;
   };
@@ -1671,6 +1692,11 @@ let
     inherit fetchurl stdenv automake autoconf libtool;
   };
 
+  w3cCSSValidator = import ../tools/misc/w3c-css-validator {
+    inherit fetchurl stdenv apacheAnt jre sourceFromHead lib;
+    tomcat = tomcat6;
+  };
+
   wdfs = import ../tools/filesystems/wdfs {
     inherit stdenv fetchurl neon fuse pkgconfig glib;
   };
@@ -1811,6 +1837,10 @@ let
       import ../development/compilers/gwydion-dylan/binary.nix {
         inherit fetchurl stdenv;
       };
+  };
+
+  ecl = builderDefsPackage ../development/compilers/ecl {
+    inherit gmp mpfr;
   };
 
   adobeFlexSDK33 = import ../development/compilers/adobe-flex-sdk {
@@ -2842,10 +2872,12 @@ let
   };
 
   distcc = import ../development/tools/misc/distcc {
-    inherit fetchurl stdenv popt python;
+    inherit fetchurl stdenv popt;
+    python = if getPkgConfig "distcc" "python" true then python else null;
     avahi = if getPkgConfig "distcc" "avahi" false then avahi else null;
     pkgconfig = if getPkgConfig "distcc" "gtk" false then pkgconfig else null;
     gtk = if getPkgConfig "distcc" "gtk" false then gtkLibs.gtk else null;
+    static = getPkgConfig "distcc" "static" false;
   };
 
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
@@ -3967,6 +3999,10 @@ let
     inherit (xlibs) libXp libXau;
   };
 
+  levmar = import ../development/libraries/levmar {
+    inherit fetchurl stdenv;
+  };
+
   lib3ds = import ../development/libraries/lib3ds {
     inherit fetchurl stdenv unzip;
   };
@@ -4164,6 +4200,10 @@ let
 
   libiec61883 = import ../development/libraries/libiec61883 {
     inherit fetchurl stdenv pkgconfig libraw1394;
+  };
+
+  libiptcdata = import ../development/libraries/libiptcdata {
+    inherit fetchurl stdenv;
   };
 
   libjingle = import ../development/libraries/libjingle/0.3.11.nix {
@@ -5689,7 +5729,7 @@ let
   };
 
   kbd = import ../os-specific/linux/kbd {
-    inherit fetchurl stdenv bison flex;
+    inherit fetchurl stdenv bison flex autoconf automake;
   };
 
   linuxHeaders = linuxHeaders_2_6_28;
@@ -5928,6 +5968,10 @@ let
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
   });
+
+  keyutils = import ../os-specific/linux/keyutils {
+    inherit fetchurl stdenv;
+  };
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
@@ -6296,6 +6340,10 @@ let
   };
 
   bakoma_ttf = import ../data/fonts/bakoma-ttf {
+    inherit fetchurl stdenv;
+  };
+
+  cacert = import ../data/misc/cacert {
     inherit fetchurl stdenv;
   };
 
@@ -6788,6 +6836,12 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
+  digikam = import ../applications/graphics/digikam {
+    inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3 cmake;
+    inherit (kde3) kdelibs;
+    inherit (xlibs) libXt libXext;
+  };
+
   djvulibre = import ../applications/misc/djvulibre {
     inherit stdenv fetchurl libjpeg libtiff libungif zlib
       ghostscript libpng x11 mesa;
@@ -6959,6 +7013,11 @@ let
   emacs22Packages = emacsPackages emacs22;
   emacs23Packages = emacsPackages emacs23;
 
+  epdfview = import ../applications/misc/epdfview {
+    inherit stdenv fetchurl pkgconfig poppler;
+    inherit (gtkLibs) gtk;
+  };
+
   evince = makeOverridable (import ../applications/misc/evince) {
     inherit fetchurl stdenv perl perlXMLParser gettext intltool
       pkgconfig poppler libspectre djvulibre libxslt
@@ -7022,38 +7081,28 @@ let
 
   firefoxWrapper = firefox35Wrapper;
 
-  firefox2 = lowPrio (import ../applications/networking/browsers/firefox/2.0.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
-  });
-
-  firefox2Wrapper = wrapFirefox firefox2 "firefox" "";
-
-  firefox3Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.0.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file;
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  });
-
-  firefox3 = firefox3Pkgs.firefox;
-  xulrunner3 = firefox3Pkgs.xulrunner;
-  firefox3Wrapper = wrapFirefox firefox3 "firefox" "";
-
-  firefox35Pkgs = lowPrio (import ../applications/networking/browsers/firefox/3.5.nix {
+  firefox35Pkgs = import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
       nspr nss;
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
-  });
+  };
 
   firefox35 = firefox35Pkgs.firefox;
   xulrunner35 = firefox35Pkgs.xulrunner;
   firefox35Wrapper = wrapFirefox firefox35 "firefox" "";
 
+  firefox36Pkgs = import ../applications/networking/browsers/firefox/3.6.nix {
+    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
+      nspr nss libnotify;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
+  firefox36Wrapper = lowPrio (wrapFirefox firefox36Pkgs.firefox "firefox" "");
+  
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
@@ -7063,7 +7112,7 @@ let
   flashplayer9 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
       inherit fetchurl stdenv zlib alsaLib nss nspr fontconfig freetype expat;
-      inherit (xlibs) libX11 libXext libXrender libXt ;
+      inherit (xlibs) libX11 libXext libXrender libXt;
       inherit (gtkLibs) gtk glib pango atk;
     });
 
@@ -7119,6 +7168,7 @@ let
     inherit pkgs;
   });
   git = gitAndTools.git;
+  gitFull = gitAndTools.gitFull;
 
   gnucash = import ../applications/office/gnucash {
     inherit fetchurl stdenv pkgconfig libxml2 goffice enchant
@@ -7457,7 +7507,7 @@ let
   };
 
   meshlab = import ../applications/graphics/meshlab {
-    inherit fetchurl stdenv bzip2;
+    inherit fetchurl stdenv bzip2 lib3ds levmar muparser unzip;
     qt = qt4;
   };
 
@@ -7705,6 +7755,12 @@ let
     inherit fetchurl stdenv fontconfig readline;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
       libXtst xextproto libXi;
+  };
+
+  rawtherapee = import ../applications/graphics/rawtherapee {
+    inherit fetchsvn stdenv pkgconfig cmake lcms libiptcdata;
+    inherit (gtkLibs) gtk gtkmm;
+    inherit (xlibs) libXau libXdmcp pixman libpthreadstubs;
   };
 
   rcs = import ../applications/version-management/rcs {

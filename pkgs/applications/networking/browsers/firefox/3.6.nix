@@ -1,24 +1,25 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
-, freetype, fontconfig, file
+, freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 
 , # If you want the resulting program to call itself "Firefox" instead
-  # of "Deer Park", enable this option.  However, those binaries may
-  # not be distributed without permission from the Mozilla Foundation,
-  # see http://www.mozilla.org/foundation/trademarks/.
+  # of "Shiretoko" or whatever, enable this option.  However, those
+  # binaries may not be distributed without permission from the
+  # Mozilla Foundation, see
+  # http://www.mozilla.org/foundation/trademarks/.
   enableOfficialBranding ? false
 }:
 
 rec {
 
-  firefoxVersion = "3.0.17";
+  firefoxVersion = "3.6";
   
-  xulVersion = "1.9.0.17"; # this attribute is used by other packages
+  xulVersion = "1.9.2"; # this attribute is used by other packages
 
   
   src = fetchurl {
-    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}-source.tar.bz2";
-    sha1 = "e4bb7daae1699f3493936ca6739512d28c7f150f";
+    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha1 = "33226b45a0bcd795545a980cab475c5492f0ea69";
   };
 
 
@@ -29,10 +30,14 @@ rec {
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
+      "--with-system-nspr"
+      #"--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
       "--enable-system-cairo"
       #"--enable-system-sqlite" # <-- this seems to be discouraged
       "--disable-crashreporter"
+      "--disable-tests"
+      "--disable-necko-wifi" # maybe we want to enable this at some point
     ];
 
 
@@ -45,6 +50,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
+        alsaLib nspr /* nss */ libnotify
       ];
 
     configureFlags =
@@ -52,11 +58,14 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
+    # !!! Temporary hack.
+    preBuild = ''
+     export NIX_ENFORCE_PURITY=
+    '';
+
     installFlags = "SKIP_GRE_REGISTRATION=1";
 
     postInstall = ''
-      export dontPatchELF=1
-
       # Fix some references to /bin paths in the Xulrunner shell script.
       substituteInPlace $out/bin/xulrunner \
           --replace /bin/pwd "$(type -tP pwd)" \
@@ -75,7 +84,7 @@ rec {
               ln -s $i $out/bin
           fi;
       done;
-      rm $out/bin/run-mozilla.sh || true
+      rm -f $out/bin/run-mozilla.sh
     ''; # */
 
     meta = {
@@ -88,13 +97,13 @@ rec {
 
 
   firefox = stdenv.mkDerivation rec {
-    name = "firefox-3.0.11";
+    name = "firefox-${firefoxVersion}";
 
     inherit src;
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
-        dbus dbus_glib pango freetype fontconfig
+        dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
       ];
 
     propagatedBuildInputs = [xulrunner];
@@ -123,7 +132,7 @@ rec {
     };
 
     passthru = {
-      inherit gtk;
+      inherit gtk xulrunner nspr;
       isFirefox3Like = true;
     };
   };

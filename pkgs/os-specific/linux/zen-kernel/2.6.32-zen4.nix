@@ -57,7 +57,7 @@ import ../kernel/generic.nix (
       ${blockDevices}
       ${bluetooth}
       ${misc}
-      ${if stdenv.lib.attrByPath ["features" "ckSched"] false args then bfsched else ""}
+      ${if stdenv.lib.attrByPath ["features" "ckSched"] false args then bfsched else forceCFSched}
     '';
 
     preConfigure = ''
