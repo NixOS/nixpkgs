@@ -612,6 +612,10 @@ let
     inherit fetchurl stdenv pkgconfig libuuid;
   };
 
+  ecryptfs = import ../tools/security/ecryptfs {
+    inherit fetchurl stdenv fuse python perl keyutils pam nss nspr;
+  };
+
   enblendenfuse = import ../tools/graphics/enblend-enfuse {
     inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
   };
@@ -5793,6 +5797,10 @@ let
   customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
   });
+
+  keyutils = import ../os-specific/linux/keyutils {
+    inherit fetchurl stdenv;
+  };
 
   libselinux = import ../os-specific/linux/libselinux {
     inherit fetchurl stdenv libsepol;
