@@ -7341,6 +7341,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  mmex = import ../applications/office/mmex {
+    inherit fetchsvn stdenv wxGTK;
+  };
+
   monodevelop = import ../applications/editors/monodevelop {
     inherit fetchurl stdenv file mono gtksourceviewsharp
             gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
