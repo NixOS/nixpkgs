@@ -7,11 +7,11 @@ let unifont_bdf = fetchurl {
 in
 
 stdenv.mkDerivation rec {
-  name = "grub-1.97.1";
+  name = "grub-1.97.2";
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/grub/${name}.tar.gz";
-    sha256 = "1grpz4jphrhlmjr0ai4vi5rs1xknwfqgb376cq7hlwzblcblbw2i";
+    sha256 = "0j8wdaq9r0ayfsz25lbq2k3q0iasq5cyldlip8jyq2g87iid5hcq";
   };
 
   buildInputs = [ bison ncurses libusb freetype ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
          Unified Bootloader, which was originally designed and implemented by
          Erich Stefan Boleyn.
 
-         Briefly, boot loader is the first software program that runs when a
+         Briefly, the boot loader is the first software program that runs when a
          computer starts.  It is responsible for loading and transferring
          control to the operating system kernel software (such as the Hurd or
          the Linux).  The kernel, in turn, initializes the rest of the
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;
   };
 }
