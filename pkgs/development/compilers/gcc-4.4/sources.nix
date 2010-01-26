@@ -2,25 +2,25 @@
    For GCC 4.4.2.  */
 { fetchurl, optional, version, langC, langCC, langFortran, langJava, langAda }:
 
-assert version == "4.4.2";
+assert version == "4.4.3";
 optional /* langC */ true (fetchurl {
   url = "mirror://gcc/releases/gcc-${version}/gcc-core-${version}.tar.bz2";
-  sha256 = "03cgv3b9bqhap4bks5wfg7nyj64l5c3qyn1igpqc6gk60bxm9wym";
+  sha256 = "0ml360nwkf95w0ykn19zlyxmdvvzpmrbxj2vfrn0k8i2pvk13wwj";
 }) ++
 optional langCC (fetchurl {
   url = "mirror://gcc/releases/gcc-${version}/gcc-g++-${version}.tar.bz2";
-  sha256 = "0al23gnx4v50j1y6xb23by34m2qhavm2xxn3f1v8kis7ajlbm1j1";
+  sha256 = "1s5zy8pfn4rgfm2l1dpfzrrdhi2l5zhphqk0h3gsbn1pdw751kkv";
 }) ++
 optional langFortran (fetchurl {
   url = "mirror://gcc/releases/gcc-${version}/gcc-fortran-${version}.tar.bz2";
-  sha256 = "0zk3j5r1cc5ahm0njxba1xfvv2h39d17aqakgg354pig4hpjkidc";
+  sha256 = "0iivw5kgwxdlqamwgaw5zhw48jajsmg09fgynyxkrxsa702s74sw";
 }) ++
 optional langJava (fetchurl {
   url = "mirror://gcc/releases/gcc-${version}/gcc-java-${version}.tar.bz2";
-  sha256 = "0ydk0qyhi1fdyz2xvj6m6l7cav4wg3962a1jxpf2j3nppm0p1dvp";
+  sha256 = "13r0yxz6sif3i6sxh7b3fa5m1ygynvsg1bf6ssq6njp1fzp9a2kq";
 }) ++
 optional langAda (fetchurl {
   url = "mirror://gcc/releases/gcc-${version}/gcc-ada-${version}.tar.bz2";
-  sha256 = "1isz90b772j7ar5d4265fxzwiwgljssi0kpmrkybsj545615s0wi";
+  sha256 = "146jfkwgg7gdgfqnrm04133amk8k9vr51wc01rwp2bcjai9c3kk7";
 }) ++
 []
