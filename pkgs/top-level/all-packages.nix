@@ -6919,7 +6919,7 @@ let
   };
 
   firefox36Wrapper = lowPrio (wrapFirefox firefox36Pkgs.firefox "firefox" "");
-  
+
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
   };
