@@ -64,7 +64,9 @@ rec {
       sha256 = "0bz3anrzjcnywslh9679mhg7n5bdr1dmsbb5x3ywvkp3mma9b4xk";
     };
 
-    installPhase = ''
+    configurePhase = "export prefix=$out";
+
+    postInstall = ''
       mkdir -p "$out/share/doc/${name}"
       cp -v README "$out/share/doc/${name}"
 
