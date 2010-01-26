@@ -105,23 +105,23 @@ rec {
 
   genshi = buildPythonPackage {
     name = "genshi-0.5.1";
-    
+
     src = fetchurl {
       url = http://ftp.edgewall.com/pub/genshi/Genshi-0.5.1.tar.bz2;
       sha256 = "1g2xw3zvgz59ilv7mrdlnvfl6ph8lwflwd4jr6zwrca2zhj7d8rs";
     };
-    
+
     buildInputs = [ pkgs.setuptools ];
-    
+
     meta = {
       description = "Python components for parsing HTML, XML and other textual content";
-      
+
       longDescription = ''
         Python library that provides an integrated set of
         components for parsing, generating, and processing HTML, XML or other
         textual content for output generation on the web.
       '';
-      
+
       license = "BSD";
     };
   };
@@ -156,7 +156,7 @@ rec {
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
 
-    meta = { 
+    meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = http://codespeak.net/lxml/index.html;
       license = "BSD";
@@ -289,20 +289,20 @@ rec {
     name = "psycopg2-2.0.13";
 
     doCheck = false;
-    
+
     src = fetchurl {
       url = "http://initd.org/pub/software/psycopg/PSYCOPG-2-0/${name}.tar.gz";
       sha256 = "0arkaa1nbbd3pyn4l1bc75wi7nff3vxxh4s8sj5al5hv20p64pm1";
     };
-    
+
     propagatedBuildInputs = [ pkgs.postgresql ];
-    
+
     meta = {
       description = "PostgreSQL database adapter for the Python programming language";
       license = "GPLv2/ZPL";
     };
   };
-  
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.15";
 
@@ -477,21 +477,21 @@ rec {
 
   trac = buildPythonPackage {
     name = "trac-0.11.5";
-    
+
     src = fetchurl {
       url = http://ftp.edgewall.com/pub/trac/Trac-0.11.5.tar.gz;
       sha256 = "cc3362ecc533abc1755dd78e2d096d1413bc975abc3185318f4821458cd6a8ac";
     };
-    
+
     doCheck = false;
-    
+
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-    
+
     propagatedBuildInputs = [ genshi pkgs.setuptools ];
-    
+
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
-      
+
       license = "BSD";
     };
   };
