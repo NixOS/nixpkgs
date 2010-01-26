@@ -94,7 +94,7 @@ in
               device=$(readlink -f "$device")
               # Add new swap devices.
               if echo $unused | grep -q "^$device\$"; then
-                unused="$(echo $unused | grep -v "^$device\$")"
+                unused="$(echo $unused | grep -v "^$device\$" || true)"
               else
                 ${utillinux}/sbin/swapon "$device" || true
               fi
