@@ -8189,14 +8189,8 @@ let
     pyrex = pyrex095;
   };
 
-  xscreensaverBase = composedArgsAndFun (import ../applications/graphics/xscreensaver) {
-    inherit stdenv fetchurl builderDefs lib pkgconfig bc perl intltool;
-    inherit (xlibs) libX11 libXmu;
-  };
-
-  xscreensaver = xscreensaverBase.passthru.function {
-    flags = ["GL" "gdkpixbuf" "DPMS" "gui" "jpeg"];
-    inherit mesa libxml2 libjpeg;
+  xscreensaver = makeOverridable (import ../applications/graphics/xscreensaver) {
+    inherit stdenv fetchurl pkgconfig bc perl xlibs libjpeg mesa libxml2;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
   };
