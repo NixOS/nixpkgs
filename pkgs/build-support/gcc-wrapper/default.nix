@@ -6,8 +6,8 @@
 # variables so that the compiler and the linker just "work".
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
-, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? "",
-zlib ? null
+, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
+, zlib ? null
 }:
 
 assert nativeTools -> nativePrefix != "";

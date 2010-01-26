@@ -1,8 +1,8 @@
-diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
-*** perl-5.10.0-orig/Configure	2007-12-18 11:47:07.000000000 +0100
---- perl-5.10.0/Configure	2008-02-21 17:00:40.000000000 +0100
+diff -rc -x '*~' perl-5.10.1-orig/Configure perl-5.10.1/Configure
+*** perl-5.10.1-orig/Configure	2009-08-18 21:03:53.000000000 +0200
+--- perl-5.10.1/Configure	2010-01-26 19:08:32.933792254 +0100
 ***************
-*** 104,118 ****
+*** 103,117 ****
   fi
   
   : Proper PATH setting
@@ -18,7 +18,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   
   for p in $paths
   do
---- 104,110 ----
+--- 103,109 ----
   fi
   
   : Proper PATH setting
@@ -27,8 +27,8 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   for p in $paths
   do
 ***************
-*** 1271,1287 ****
-  groupstype=''
+*** 1301,1317 ****
+  archname=''
   libnames=''
   : change the next line if compiling for Xenix/286 on Xenix/386
 ! xlibpth='/usr/lib/386 /lib/386'
@@ -45,8 +45,8 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   
   : Private path used by Configure to find libraries.  Its value
   : is prepended to libpth. This variable takes care of special
---- 1263,1274 ----
-  groupstype=''
+--- 1293,1304 ----
+  archname=''
   libnames=''
   : change the next line if compiling for Xenix/286 on Xenix/386
 ! xlibpth=''
@@ -59,7 +59,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   : Private path used by Configure to find libraries.  Its value
   : is prepended to libpth. This variable takes care of special
 ***************
-*** 1302,1309 ****
+*** 1329,1336 ****
   
   : Possible local include directories to search.
   : Set locincpth to "" in a hint file to defeat local include searches.
@@ -68,7 +68,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   :
   : no include file wanted by default
   inclwanted=''
---- 1289,1295 ----
+--- 1316,1322 ----
   
   : Possible local include directories to search.
   : Set locincpth to "" in a hint file to defeat local include searches.
@@ -77,7 +77,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   : no include file wanted by default
   inclwanted=''
 ***************
-*** 1331,1338 ****
+*** 1358,1365 ****
   libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
   : We probably want to search /usr/shlib before most other libraries.
   : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
@@ -86,9 +86,9 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   : Do not use vfork unless overridden by a hint file.
   usevfork=false
   
---- 1317,1322 ----
+--- 1344,1349 ----
 ***************
-*** 2340,2346 ****
+*** 2366,2372 ****
   zip
   "
   pth=`echo $PATH | sed -e "s/$p_/ /g"`
@@ -96,9 +96,9 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   for file in $loclist; do
   	eval xxx=\$$file
   	case "$xxx" in
---- 2324,2329 ----
+--- 2350,2355 ----
 ***************
-*** 8155,8167 ****
+*** 8361,8373 ****
   echo " "
   case "$sysman" in
   '') 
@@ -112,7 +112,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   	;;
   esac
   if $test -d "$sysman"; then
---- 8138,8145 ----
+--- 8344,8351 ----
   echo " "
   case "$sysman" in
   '') 
@@ -122,7 +122,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   esac
   if $test -d "$sysman"; then
 ***************
-*** 19005,19013 ****
+*** 19476,19484 ****
   case "$full_ar" in
   '') full_ar=$ar ;;
   esac
@@ -132,7 +132,7 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   
   : see what type gids are declared as in the kernel
   echo " "
---- 18983,18992 ----
+--- 19454,19463 ----
   case "$full_ar" in
   '') full_ar=$ar ;;
   esac
@@ -143,11 +143,11 @@ diff -rc perl-5.10.0-orig/Configure perl-5.10.0/Configure
   
   : see what type gids are declared as in the kernel
   echo " "
-diff -rc perl-5.10.0-orig/ext/Errno/Errno_pm.PL perl-5.10.0/ext/Errno/Errno_pm.PL
-*** perl-5.10.0-orig/ext/Errno/Errno_pm.PL	2007-12-18 11:47:07.000000000 +0100
---- perl-5.10.0/ext/Errno/Errno_pm.PL	2008-02-21 17:00:02.000000000 +0100
+diff -rc -x '*~' perl-5.10.1-orig/ext/Errno/Errno_pm.PL perl-5.10.1/ext/Errno/Errno_pm.PL
+*** perl-5.10.1-orig/ext/Errno/Errno_pm.PL	2009-06-27 18:09:45.000000000 +0200
+--- perl-5.10.1/ext/Errno/Errno_pm.PL	2010-01-26 18:08:09.552792021 +0100
 ***************
-*** 140,150 ****
+*** 144,154 ****
   	if ($dep =~ /(\S+errno\.h)/) {
   	     $file{$1} = 1;
   	}
@@ -159,7 +159,7 @@ diff -rc perl-5.10.0-orig/ext/Errno/Errno_pm.PL perl-5.10.0/ext/Errno/Errno_pm.P
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
   	my $linux_errno_h = -e '/usr/include/errno.h' ?
---- 140,146 ----
+--- 144,150 ----
   	if ($dep =~ /(\S+errno\.h)/) {
   	     $file{$1} = 1;
   	}
@@ -167,3 +167,35 @@ diff -rc perl-5.10.0-orig/ext/Errno/Errno_pm.PL perl-5.10.0/ext/Errno/Errno_pm.P
   	# Some Linuxes have weird errno.hs which generate
   	# no #file or #line directives
   	my $linux_errno_h = -e '/usr/include/errno.h' ?
+diff -rc -x '*~' perl-5.10.1-orig/hints/freebsd.sh perl-5.10.1/hints/freebsd.sh
+*** perl-5.10.1-orig/hints/freebsd.sh	2009-02-12 23:58:12.000000000 +0100
+--- perl-5.10.1/hints/freebsd.sh	2010-01-26 18:30:01.181854620 +0100
+***************
+*** 118,130 ****
+          objformat=`/usr/bin/objformat`
+          if [ x$objformat = xaout ]; then
+              if [ -e /usr/lib/aout ]; then
+!                 libpth="/usr/lib/aout /usr/local/lib /usr/lib"
+!                 glibpth="/usr/lib/aout /usr/local/lib /usr/lib"
+              fi
+              lddlflags='-Bshareable'
+          else
+!             libpth="/usr/lib /usr/local/lib"
+!             glibpth="/usr/lib /usr/local/lib"
+              ldflags="-Wl,-E "
+              lddlflags="-shared "
+          fi
+--- 118,130 ----
+          objformat=`/usr/bin/objformat`
+          if [ x$objformat = xaout ]; then
+              if [ -e /usr/lib/aout ]; then
+!                 libpth=""
+!                 glibpth=""
+              fi
+              lddlflags='-Bshareable'
+          else
+!             libpth=""
+!             glibpth=""
+              ldflags="-Wl,-E "
+              lddlflags="-shared "
+          fi

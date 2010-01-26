@@ -33,6 +33,7 @@
   # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
   # ~/.nixpkgs/config.nix.
   config ? null
+
 , crossSystem ? null
 }:
 
@@ -2496,14 +2497,13 @@ let
   };
 
   perl58 = import ../development/interpreters/perl-5.8 {
-      inherit fetchurl stdenv;
-      impureLibcPath = if stdenv.isLinux then null else "/usr";
-    };
+    inherit fetchurl stdenv;
+    impureLibcPath = if stdenv.isLinux then null else "/usr";
+  };
 
   perl510 = makeOverridable (import ../development/interpreters/perl-5.10) {
     inherit stdenv;
     fetchurl = fetchurlBoot;
-    impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
   perl = useFromStdenv "perl"
