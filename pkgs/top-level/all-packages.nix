@@ -1214,8 +1214,8 @@ let
   };
 
   opensp = import ../tools/text/sgml/opensp {
-    inherit fetchurl;
-    stdenv = overrideGCC stdenv gcc33;
+    inherit fetchurl xmlto docbook_xml_dtd_412 libxslt docbook_xsl;
+    inherit stdenv;
   };
 
   openvpn = import ../tools/networking/openvpn {
@@ -4115,6 +4115,10 @@ let
 
   libnova = import ../development/libraries/libnova {
     inherit fetchurl stdenv;
+  };
+
+  libofx = import ../development/libraries/libofx {
+    inherit fetchurl stdenv opensp pkgconfig libxml2 curl;
   };
 
   libogg = import ../development/libraries/libogg {
