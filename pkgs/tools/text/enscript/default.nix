@@ -1,9 +1,36 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, gettext }:
 
-stdenv.mkDerivation {
-  name = "enscript-1.6.4";
+stdenv.mkDerivation rec {
+  name = "enscript-1.6.5";
+
   src = fetchurl {
-    url = http://www.iki.fi/mtr/genscript/enscript-1.6.4.tar.gz;
-    md5 = "b5174b59e4a050fb462af5dbf28ebba3";
+    url = "mirror://gnu/enscript/${name}.tar.gz";
+    sha256 = "1sq4ng7z34qhx6cavnzndgkjpjr9lbvpxgd5a3ajgif3n57fjki2";
+  };
+
+  buildInputs = [ gettext ];
+
+  doCheck = true;
+
+  meta = {
+    description = "GNU Enscript, a converter from ASCII to PostScript, HTML, or RTF";
+
+    longDescription =
+      '' GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+         stores generated output to a file or sends it directly to the
+         printer.  It includes features for `pretty-printing'
+         (language-sensitive code highlighting) in several programming
+         languages.
+
+         Enscript can be easily extended to handle different output media and
+         it has many options that can be used to customize printouts.
+      '';
+
+    license = "GPLv3+";
+
+    homepage = http://www.gnu.org/software/enscript/;
+
+    maintainer = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

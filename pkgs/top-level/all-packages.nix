@@ -621,7 +621,7 @@ let
   };
 
   enscript = import ../tools/text/enscript {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gettext;
   };
 
   eprover = composedArgsAndFun (import ../tools/misc/eProver) {
