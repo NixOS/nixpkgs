@@ -8406,9 +8406,9 @@ let
       libXmu libXext libXcursor;
   };
 
-  /* liblapack = import ../development/libraries/science/math/liblapack {
-    inherit fetchurl stdenv gfortran;
-  }; */
+  liblapack = import ../development/libraries/science/math/liblapack {
+    inherit fetchurl stdenv gfortran blas;
+  };
 
 
   ### SCIENCE/LOGIC
