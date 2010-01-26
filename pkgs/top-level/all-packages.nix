@@ -8396,6 +8396,10 @@ let
     inherit fetchurl stdenv gfortran;
   };
 
+  blas = import ../development/libraries/science/math/blas {
+    inherit fetchurl stdenv gfortran;
+  };
+
   content = builderDefsPackage ../applications/science/math/content {
     inherit mesa lesstif;
     inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
