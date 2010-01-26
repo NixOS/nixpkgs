@@ -7116,6 +7116,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  homebank = import ../applications/office/homebank {
+    inherit fetchurl stdenv pkgconfig libofx intltool;
+    inherit (gtkLibs) gtk;
+  };
+
   hugin = import ../applications/graphics/hugin {
     inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc mesa freeglut
