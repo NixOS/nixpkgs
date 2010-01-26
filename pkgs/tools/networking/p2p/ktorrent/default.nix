@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "ktorrent-2.2.7";
+  name = "ktorrent-2.2.8";
   
   src = fetchurl {
-    url = http://ktorrent.org/downloads/2.2.7/ktorrent-2.2.7.tar.bz2;
-    sha256 = "0wvv294grv07zwdsycfsyhq5fllqyljrcg5g9iwgn84fk3nszlbi";
+    url = http://ktorrent.org/downloads/2.2.8/ktorrent-2.2.8.tar.bz2;
+    sha256 = "10zpc50sggg8h1g6vgcv12mm4sw4d6jvzvnghdplqs86m5bwpg9k";
   };
   
   buildInputs = [
