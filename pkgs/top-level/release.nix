@@ -146,7 +146,7 @@ in {
   cksfv = all;
   classpath = linux;
   cmake = all;
-  compiz = linux;
+  #compiz = linux;
   consolekit = linux;
   coreutils = all;
   cpio = all;
@@ -351,7 +351,7 @@ in {
   python = allBut "i686-cygwin";
   pythonFull = linux;
   sbcl = all;
-  qt3 = allBut "i686-cygwin";
+  qt3 = linux;
   qt4 = linux;
   qt45 = linux;
   qt46 = linux;
@@ -437,7 +437,7 @@ in {
   wireshark = linux;
   wirelesstools = linux;
   wpa_supplicant = linux;
-  wxGTK = all;
+  wxGTK = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;
@@ -595,18 +595,6 @@ in {
     virtualboxGuestAdditions = linux;
   };
 
-  linuxPackages_2_6_31 = {
-    kernel = linux;
-  };
-
-  linuxPackages_2_6_31_zen = {
-    kernel = linux;
-  };
-
-  linuxPackages_2_6_31_zen_bfs = {
-    kernel = linux;
-  };
-
   linuxPackages_2_6_32 = {
     aufs = linux;
     kernel = linux;
@@ -673,6 +661,7 @@ in {
   };
 
 } )) // (
+
 /* Test some cross builds to the Sheevaplug */
 let
   crossSystem = {
@@ -681,17 +670,17 @@ let
       arch = "arm";
       float = "soft";
   };
-  nativePlatforms = all;
+  nativePlatforms = linux;
 in {
   crossArmLinux = mapTestOnCross crossSystem (rec {
     bison = nativePlatforms;
     uboot = nativePlatforms;
     tightvnc = nativePlatforms;
-    openoffice = nativePlatforms;
+    #openoffice = nativePlatforms;
     wxGTK = nativePlatforms;
-    firefox = nativePlatforms;
+    #firefox = nativePlatforms;
     xorg = {
-      xorgserver = nativePlatforms;
+      #xorgserver = nativePlatforms;
     };
   });
 })
