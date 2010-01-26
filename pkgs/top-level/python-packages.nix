@@ -251,6 +251,31 @@ rec {
     };
   });
 
+  numpy = buildPythonPackage ( rec {
+    name = "numpy-1.3.0";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/numpy/${name}.tar.gz";
+      sha256 = "7524687cce85aa78103046db5e617c626b0ef871a203a049159f88f35647c90d";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.liblapack pkgs.blas /* pkgs.gfortran */ ];
+
+    # The build should be run as follows:
+    #
+    #   python setup.py config_fc --fcompiler=gnu95 build
+    #   python setup.py config_fc --fcompiler=gnu95 install
+    #
+    # But I con't figure out how to pass the extra flags to setuptools.
+
+    meta = {
+      description = "Scientific tools for Python";
+      homepage = "http://numpy.scipy.org/";
+    };
+  });
+
   ply = buildPythonPackage (rec {
     name = "ply-3.2";
 
