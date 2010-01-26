@@ -163,6 +163,24 @@ rec {
     };
   });
 
+  matplotlib = buildPythonPackage ( rec {
+    name = "matplotlib-0.99.1.2";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
+      sha256 = "12lhwgkahck795946hb8wp605c912zq9ds8067ybbifqs56q24b9";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+
+    meta = {
+      description = "python plotting library, making publication quality plots";
+      homepage = "http://matplotlib.sourceforge.net/";
+    };
+  });
+
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.1.11";
 
