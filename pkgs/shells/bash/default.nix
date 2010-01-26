@@ -2,8 +2,8 @@
 
 assert interactive -> readline != null;
 
-stdenv.mkDerivation (rec {
-  name = "bash-4.1";
+stdenv.mkDerivation rec {
+  name = "bash-4.1-p2";
 
   src = fetchurl {
     url = "mirror://gnu/bash/${name}.tar.gz";
@@ -36,8 +36,8 @@ stdenv.mkDerivation (rec {
   buildInputs = stdenv.lib.optional (texinfo != null) texinfo
     ++ stdenv.lib.optional interactive readline;
 
-  configureFlags = "--with-installed-readline";
-
+  configureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
+   
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
@@ -71,5 +71,4 @@ stdenv.mkDerivation (rec {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
-} // (if stdenv.isDarwin then { configureFlags = if interactive then "--with-installed-readline" else "--disable-readline"; } else {}) )
-
+}
