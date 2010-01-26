@@ -53,8 +53,6 @@ fi
 # Add all used dynamic libraries to the rpath.
 if test "$NIX_DONT_SET_RPATH" != "1"; then
 
-    # First, find all -L... switches.
-    allParams=("${params[@]}" ${extra[@]})
     libPath=""
     addToLibPath() {
         local path="$1"
@@ -72,26 +70,6 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         esac
         libPath="$libPath $path "
     }
-    n=0
-    while test $n -lt ${#allParams[*]}; do
-        p=${allParams[n]}
-        p2=${allParams[$((n+1))]}
-        if test "${p:0:3}" = "-L/"; then
-            addToLibPath ${p:2}
-        elif test "$p" = "-L"; then
-            addToLibPath ${p2}
-            n=$((n + 1))
-        elif $(echo "$p" | grep -q '^[^-].*\.so\($\|\.\)'); then
-            path="$(dirname "$p")";
-            addToLibPath "${path}"
-        fi
-        n=$((n + 1))
-    done
-
-    # Second, for each directory in the library search path (-L...),
-    # see if it contains a dynamic library used by a -l... flag.  If
-    # so, add the directory to the rpath.
-    rpath=""
     
     addToRPath() {
         # If the path is not in the store, don't add it to the rpath.
@@ -104,6 +82,31 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         rpath="$rpath $1 "
     }
 
+    # First, find all -L... switches.
+    allParams=("${params[@]}" ${extra[@]})
+    n=0
+    while test $n -lt ${#allParams[*]}; do
+        p=${allParams[n]}
+        p2=${allParams[$((n+1))]}
+        if test "${p:0:3}" = "-L/"; then
+            addToLibPath ${p:2}
+        elif test "$p" = "-L"; then
+            addToLibPath ${p2}
+            n=$((n + 1))
+        elif [[ "$p" =~ ^[^-].*\.so($|\.) ]]; then
+            # This is a direct reference to a shared library, so add
+            # its directory to the rpath.
+            path="$(dirname "$p")";
+            addToRPath "${path}"
+        fi
+        n=$((n + 1))
+    done
+
+    # Second, for each directory in the library search path (-L...),
+    # see if it contains a dynamic library used by a -l... flag.  If
+    # so, add the directory to the rpath.
+    rpath=""
+    
     for i in $libPath; do
         n=0
         while test $n -lt ${#allParams[*]}; do
@@ -116,12 +119,6 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
                 # I haven't seen `-l foo', but you never know...
                 addToRPath $i
                 break
-            elif $(echo "$p" | grep -q '^[^-].*\.so\($\|\.\)'); then
-                path="$(dirname "$p")";
-                if test "$path" == "$i"; then
-                  addToRPath $i
-                  break;
-                fi
             fi
             n=$((n + 1))
         done
