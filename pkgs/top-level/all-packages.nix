@@ -4220,7 +4220,7 @@ let
   };
 
   libjpegStatic = lowPrio (appendToName "static" (libjpeg.override {
-    stdenv = disableSharedLibraries stdenv;
+    stdenv = enableStaticLibraries stdenv;
   }));
 
   libksba = import ../development/libraries/libksba {

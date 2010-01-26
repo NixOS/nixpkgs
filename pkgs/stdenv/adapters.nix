@@ -108,14 +108,13 @@ rec {
     } // {inherit fetchurl;};
 
     
-  # Return a modified stdenv that disables building shared libraries.
-  # However, executables will still be dynamically linked.
-  disableSharedLibraries = stdenv: stdenv //
+  # Return a modified stdenv that enables building static libraries.
+  enableStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
         configureFlags =
           (if args ? configureFlags then args.configureFlags else "")
-          + " --disable-shared"; # brrr...
+          + " --enable-static";
       });
     } // {inherit fetchurl;};
 
