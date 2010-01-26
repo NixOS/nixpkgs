@@ -638,11 +638,11 @@ rec {
     ];
   };
 
-  ConfigAny = buildPerlPackage {
-    name = "Config-Any-0.14";
+  ConfigAny = buildPerlPackage rec {
+    name = "Config-Any-0.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BR/BRICAS/Config-Any-0.14.tar.gz;
-      sha256 = "1vlr4w2m88figac5pblg6ppzrm11x2pm7r05n48s84cp4mizhim1";
+      url = "mirror://cpan/authors/id/B/BR/BRICAS/${name}.tar.gz";
+      sha256 = "0hjfvbbhi8r52ycpw507y6d4cway5x5z9pij117q04r1xmwf0qnj";
     };
   };
 
@@ -712,6 +712,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.11.tar.gz;
       sha256 = "0h5y40b6drgsf87nhwhqx1dprq70f98ibm03l9al4ndq7mrx97dd";
+    };
+  };
+
+  DataDumperConcise = buildPerlPackage rec {
+    name = "Data-Dumper-Concise-1.100";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
+      sha256 = "123iy2nnf41sq3sk4plrmqlbwsciir6ww31frrm7vzg388zziz7x";
     };
   };
 
@@ -863,17 +871,16 @@ rec {
   };
 
   DBIxClass = buildPerlPackage rec {
-    name = "DBIx-Class-0.08112";
+    name = "DBIx-Class-0.08115";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
-      sha256 = "167fmz4pdlis7k3fj20gngihjgs48smijcxhwh6ywsrv6v3vxd57";
+      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
+      sha256 = "1addd0763q2jyvh9hdi0ayppqk0bmypw48s1xcwfximbnja8z9mw";
     };
     propagatedBuildInputs = [
-      TestNoWarnings TestException DBI ScopeGuard
-      PathClass ClassInspector ClassAccessorGrouped
-      CarpClan TestWarn DataPage SQLAbstract
-      SQLAbstractLimit ClassC3 ClassC3Componentised
-      ModuleFind DBDSQLite JSONAny SubName
+      TestNoWarnings TestException DBI ScopeGuard PathClass
+      ClassInspector ClassAccessorGrouped CarpClan TestWarn DataPage
+      SQLAbstract SQLAbstractLimit ClassC3 ClassC3Componentised
+      ModuleFind DBDSQLite JSONAny SubName DataDumperConcise
     ];
     buildInputs = [TestPod TestPodCoverage];
   };
@@ -888,10 +895,10 @@ rec {
   };
 
   DBIxClassSchemaLoader = buildPerlPackage rec {
-    name = "DBIx-Class-Schema-Loader-0.04999_09";
+    name = "DBIx-Class-Schema-Loader-0.04999_14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "1v4lqhjh9b6wwd8rayxmvr4nq44z5yffl5jkfccyhcp8lp84ysmf";
+      sha256 = "0xswxcc31g6clwxc1d7skpjfpf5i0sw5y7d16n9v4x5vb8hd55dc";
     };
     propagatedBuildInputs = [
       DBI DBDSQLite DataDump UNIVERSALrequire
@@ -1935,10 +1942,10 @@ rec {
   };
 
   ScopeUpper = buildPerlPackage rec {
-    name = "Scope-Upper-0.06";
+    name = "Scope-Upper-0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "1qaf310wbfpjb0lmg3fpmhbfnjxqw3j47rj0w0f0cy4bgihi8l43";
+      sha256 = "0llscmwyw657pzid2lpc3q8zz3jj28aa66bdpmldv6gfa2a5ny1v";
     };
   };
 
@@ -2147,11 +2154,11 @@ rec {
     };
   };
 
-  TestDeep = buildPerlPackage {
-    name = "Test-Deep-0.103";
+  TestDeep = buildPerlPackage rec {
+    name = "Test-Deep-0.106";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FD/FDALY/Test-Deep-0.103.tar.gz;
-      sha256 = "0cdl08k5v0wc9w20va5qw98ynlbs9ifwndgsix8qhi7h15sj8a5j";
+      url = "mirror://cpan/authors/id/F/FD/FDALY/${name}.tar.gz";
+      sha256 = "1ix4jc5k696sjhv01mvypmmf7a6kpm5wmgq01j644zjkaxh1minz";
     };
     propagatedBuildInputs = [TestTester TestNoWarnings];
   };
