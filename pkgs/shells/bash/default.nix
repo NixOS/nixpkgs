@@ -3,8 +3,9 @@
 assert interactive -> readline != null;
 
 let realName = "bash-4.1"; in
+
 stdenv.mkDerivation rec {
-  name = "${realName}-p${builtins.length patches}";
+  name = "${realName}-p${toString (builtins.length patches)}";
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
