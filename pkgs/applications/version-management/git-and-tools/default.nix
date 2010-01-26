@@ -55,22 +55,28 @@ rec {
         inherit fetchurl stdenv python git;
   };
 
-  topGit = stdenv.mkDerivation {
-    name = "TopGit-git"; # official release 0.8
-    # REGION AUTO UPDATE:     { name = "topGit"; type="git"; url="http://repo.or.cz/w/topgit.git"; }
-    src= sourceFromHead "topGit-341a3713f5c399f97c5c68a74772b12bb3d2ca57.tar.gz"
-                 (fetchurl { url = "http://mawercer.de/~nix/repos/topGit-341a3713f5c399f97c5c68a74772b12bb3d2ca57.tar.gz"; sha256 = "4d53343ed9ba735fb598d6576b20f2641d5a8374a5a11b21fcbcdc6da885e872"; });
-    # END
-    phases="unpackPhase patchPhase installPhase";
+  topGit = stdenv.mkDerivation rec {
+    name = "topgit-0.8";
+
+    src = fetchurl {
+      # Snapshot for the `topgit-0.8' tag.
+      url = "http://repo.or.cz/w/topgit.git/snapshot/f59e4f9e87e5f485fdaee0af002edd2105fa298a.tar.gz";
+      sha256 = "0bz3anrzjcnywslh9679mhg7n5bdr1dmsbb5x3ywvkp3mma9b4xk";
+    };
+
     installPhase = ''
+      mkdir -p "$out/share/doc/${name}"
+      cp -v README "$out/share/doc/${name}"
+
       mkdir -p $out/etc/bash_completion.d
       make prefix=$out \
         install
       mv contrib/tg-completion.bash $out/etc/bash_completion.d
     '';
+
     meta = {
       description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-      maintainers = [lib.maintainers.marcweber];
+      maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo ];
       homepage = http://repo.or.cz/w/topgit.git; # maybe there is also another one, I haven't checked
       license = "GPLv2";
     };
