@@ -69,6 +69,7 @@ let
         false
       fi
       ln -s ${kernelPath} $out/kernel
+      ln -s ${config.system.modulesTree} $out/kernel-modules
       if [ -n "$grub" ]; then 
         ln -s $grub $out/grub
       fi

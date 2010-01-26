@@ -19,6 +19,14 @@ with pkgs.lib;
           ''
             #! ${pkgs.stdenv.shell}
             export MODULE_DIR=${config.system.modulesTree}/lib/modules
+            
+            # Fall back to the kernel modules used at boot time if the
+            # modules in the current configuration don't match the
+            # running kernel.
+            if [ ! -d "$MODULE_DIR/$(${pkgs.coreutils}/bin/uname -r)" ]; then
+                MODULE_DIR=/var/run/booted-system/kernel-modules/lib/modules
+            fi
+            
             exec ${pkgs.module_init_tools}/sbin/modprobe "$@"
           '';
       };
