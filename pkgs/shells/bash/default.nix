@@ -2,11 +2,12 @@
 
 assert interactive -> readline != null;
 
+let realName = "bash-4.1"; in
 stdenv.mkDerivation rec {
-  name = "bash-4.1-p2";
+  name = "${realName}-p${builtins.length patches}";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/${name}.tar.gz";
+    url = "mirror://gnu/bash/${realName}.tar.gz";
     sha256 = "1np1ggp1lv8idwfx3mcxl9rhadqdf4h3x4isa3dk8v9wm0j72qiz";
   };
 
