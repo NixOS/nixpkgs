@@ -2,7 +2,7 @@
 
 assert interactive -> readline != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "bash-4.1";
 
   src = fetchurl {
@@ -71,4 +71,5 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
-}
+} // (if stdenv.isDarwin then { configureFlags = if interactive then "--with-installed-readline" else "--disable-readline"; } else {}) )
+
