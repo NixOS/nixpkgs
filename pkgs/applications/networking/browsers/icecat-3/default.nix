@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xz, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
+{ fetchurl, stdenv, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
 , gnomevfs, libgnomeui
 , freetype, fontconfig
@@ -9,12 +9,11 @@ stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.xz";
-    sha256 = "149l00a9q3dnkdsc2spcfpx9fch4xhxnikbzgfiqxjsr3py07y41";
+    url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.bz2";
+    sha256 = "0fsf8zd8nncg1w1gg2jhlxwkbljvrx4mm9pywasklyi0gvi939ds";
   };
 
   buildInputs = [
-    xz
     libgnomeui gnomevfs alsaLib
     pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
     python ply dbus dbus_glib pango freetype fontconfig
