@@ -5896,10 +5896,7 @@ let
     };
 
     splashutils =
-      # Splashutils 1.3 is broken, so disable splash on older kernels.
-      if kernel.features ? fbSplash then /* splashutils_13 */ null else
-      if kernel.features ? fbConDecor then splashutils_15 else
-      null;
+      if kernel.features ? fbConDecor then pkgs.splashutils else null;
 
     ext3cowtools = import ../os-specific/linux/ext3cow-tools {
       inherit stdenv fetchurl;
@@ -6183,13 +6180,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  splashutils_13 = import ../os-specific/linux/splashutils/1.3.nix {
-    inherit fetchurl stdenv klibc;
-    zlib = zlibStatic;
-    libjpeg = libjpegStatic;
-  };
-
-  splashutils_15 = import ../os-specific/linux/splashutils/1.5.nix {
+  splashutils = import ../os-specific/linux/splashutils/default.nix {
     inherit fetchurl stdenv klibc;
     zlib = zlibStatic;
     libjpeg = libjpegStatic;
