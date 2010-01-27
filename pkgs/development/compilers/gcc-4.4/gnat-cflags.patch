@@ -19,9 +19,9 @@ index f5057a0..337e0c6 100644
  GNATLIBFLAGS = -gnatpg -nostdinc
 -GNATLIBCFLAGS = -g -O2
 +GNATLIBCFLAGS = -g -O2 $(CFLAGS_FOR_TARGET)
- GNATLIBCFLAGS_FOR_C = $(GNATLIBCFLAGS) $(TARGET_LIBGCC2_CFLAGS) -fexceptions \
- 	-DIN_RTS
- ALL_ADAFLAGS = $(CFLAGS) $(ADA_CFLAGS) $(ADAFLAGS)
+ # Pretend that _Unwind_GetIPInfo is available for the target by default.  This
+ # should be autodetected during the configuration of libada and passed down to
+ # here, but we need something for --disable-libada and hope for the best.
 @@ -1838,7 +1838,7 @@ ADA_INCLUDE_SRCS =\
  
  LIBGNAT=../$(RTSDIR)/libgnat.a
