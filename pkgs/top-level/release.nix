@@ -377,8 +377,7 @@ in {
   smbfsFuse = linux;
   socat = linux;
   spidermonkey = linux;
-  splashutils_13 = linux;
-  splashutils_15 = linux;
+  splashutils = linux;
   sqlite = allBut "i686-cygwin";
   squid = linux;
   ssmtp = linux;
