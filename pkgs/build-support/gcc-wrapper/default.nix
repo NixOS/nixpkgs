@@ -15,7 +15,7 @@ assert !nativeTools -> gcc != null && binutils != null && coreutils != null;
 assert !nativeLibc -> libc != null;
 
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper
-assert (gcc != null && gcc ? langVhdl) -> zlib != null;
+assert (gcc != null && gcc ? langVhdl && gcc.langVhdl) -> zlib != null;
 
 let
 
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langFortran = if nativeTools then false else gcc ? langFortran;
-  langAda = if nativeTools then false else gcc ? langAda;
-  langVhdl = if nativeTools then false else gcc ? langVhdl;
+  langAda = if nativeTools then false else gcc ? langAda && gcc.langAda;
+  langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
   zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
   shell = if shell == "" then stdenv.shell else shell;
   

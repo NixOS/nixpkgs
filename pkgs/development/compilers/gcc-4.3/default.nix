@@ -124,7 +124,8 @@ stdenv.mkDerivation ({
 
   inherit gmp mpfr;
   
-  passthru = { inherit langC langCC langFortran langTreelang enableMultilib; };
+  passthru = { inherit langC langCC langFortran langVhdl langTreelang
+      enableMultilib; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";

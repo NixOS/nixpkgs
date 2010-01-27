@@ -184,7 +184,8 @@ stdenv.mkDerivation ({
                                           ++ optionals javaAwtGtk [ gmp mpfr ])));
 
 
-  passthru = { inherit langC langCC langAda langFortran langTreelang enableMultilib; };
+  passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
+      enableMultilib; };
 
   meta = {
     homepage = http://gcc.gnu.org/;
