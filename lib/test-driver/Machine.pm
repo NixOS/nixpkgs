@@ -29,7 +29,6 @@ sub new {
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
-        #-drive file=$NIX_DISK_IMAGE,if=virtio,boot=on
     }
 
     my $name = $args->{name};
@@ -129,7 +128,7 @@ sub start {
 sub retry {
     my ($coderef) = @_;
     my $n;
-    for ($n = 0; $n < 300; $n++) {
+    for ($n = 0; $n < 900; $n++) {
         return if &$coderef;
         sleep 1;
     }
