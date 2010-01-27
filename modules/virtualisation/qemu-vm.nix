@@ -86,7 +86,7 @@ let
       exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 -m ${toString config.virtualisation.memorySize} \
           -no-kvm-irqchip \
           -net nic,model=virtio -net user -smb / \
-          -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on \
+          -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,werror=report \
           -kernel ${config.system.build.toplevel}/kernel \
           -initrd ${config.system.build.toplevel}/initrd \
           ${qemuGraphics} \

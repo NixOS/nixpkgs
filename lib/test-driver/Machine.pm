@@ -25,7 +25,7 @@ sub new {
         $startCommand =
             "qemu-system-x86_64 -m 384 -no-kvm-irqchip " .
             "-net nic,model=virtio -net user \$QEMU_OPTS ";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=virtio,boot=on "
+        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=virtio,boot=on,werror=report "
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
