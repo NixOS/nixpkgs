@@ -8,9 +8,9 @@ index f5057a0..337e0c6 100644
  TARGET_LIBGCC2_CFLAGS=
 -GNATLIBCFLAGS= -g -O2
 +GNATLIBCFLAGS= -g -O2 $(CFLAGS)
+ GNATLIBCFLAGS_FOR_C = $(GNATLIBCFLAGS) $(TARGET_LIBGCC2_CFLAGS) -fexceptions \
+ 	-DIN_RTS @have_getipinfo@
  
- # Get target-specific overrides for TARGET_LIBGCC2_CFLAGS.
- host_subdir = @host_subdir@
 --- a/gcc/ada/gcc-interface/Makefile.in
 +++ b/gcc/ada/gcc-interface/Makefile.in
 @@ -105,7 +105,7 @@ ADAFLAGS = -W -Wall -gnatpg -gnata
