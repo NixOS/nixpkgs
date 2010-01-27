@@ -4355,7 +4355,7 @@ let
   };
 
   mpich2 = import ../development/libraries/mpich2 {
-    inherit fetchurl stdenv python;
+    inherit fetchurl stdenv python perl;
   };
 
   muparser = import ../development/libraries/muparser {
