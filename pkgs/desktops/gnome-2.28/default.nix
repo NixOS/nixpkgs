@@ -12,6 +12,7 @@ rec {
 
   # !!! Missing! Need to add these.
   vte = throw "vte not implemented";
+  libgnomeprintui = throw "libgnomeprintui not implemented";
   gtksourceview_24 = gtksourceview;
 
 
