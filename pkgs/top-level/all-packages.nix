@@ -8279,6 +8279,12 @@ let
     inherit fetchurl stdenv xlibs mesa;
   };
 
+  warsow = import ../games/warsow {
+    inherit stdenv fetchurl unzip pkgconfig zlib curl libjpeg libvorbis SDL
+            mesa openal;
+    inherit (xlibs) libXxf86dga libXxf86vm libXinerama;
+  };
+
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
       libICE libXmu libXext libXpm;
