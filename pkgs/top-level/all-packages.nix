@@ -442,10 +442,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  ncompress = import ../tools/compression/ncompress {
-    inherit fetchurl stdenv;
-  };
-
   bzip2 = useFromStdenv "bzip2"
     (import ../tools/compression/bzip2 {
       inherit fetchurl stdenv;
@@ -1129,6 +1125,10 @@ let
     inherit fetchurl stdenv ncurses coreutils;
   };
 
+  ncompress = import ../tools/compression/ncompress {
+    inherit fetchurl stdenv;
+  };
+
   netcat = import ../tools/networking/netcat {
     inherit fetchurl stdenv;
   };
@@ -1137,11 +1137,9 @@ let
     inherit fetchurl stdenv;
   };
 
-  /*
   netpbm = import ../tools/graphics/netpbm {
     inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2 makeWrapper;
   };
-  */
 
   netselect = import ../tools/networking/netselect {
     inherit fetchurl stdenv;
@@ -3239,6 +3237,10 @@ let
     inherit (xlibs) libX11 xf86vidmodeproto libXmu libXxf86vm;
   };
 
+  classads = import ../development/libraries/classads {
+    inherit fetchurl stdenv;
+  };
+
   classpath = import ../development/libraries/java/classpath {
     javac = gcj;
     jvm = gcj;
@@ -3631,6 +3633,10 @@ let
 
   gsl = import ../development/libraries/gsl {
     inherit fetchurl stdenv;
+  };
+
+  gsoap = import ../development/libraries/gsoap {
+    inherit fetchurl stdenv m4 bison flex openssl zlib;
   };
 
   gtkimageview = import ../development/libraries/gtkimageview {
@@ -4214,6 +4220,10 @@ let
 
   libunwind = import ../development/libraries/libunwind {
     inherit fetchurl stdenv;
+  };
+
+  libvirt = import ../development/libraries/libvirt {
+    inherit stdenv fetchurl libxml2 gnutls devicemapper perl;
   };
 
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
@@ -8645,6 +8655,11 @@ let
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
     inherit stdenv fetchsvn apacheAnt jdk axis2 shebangfix;
+  };
+
+  latex2html = import ../misc/tex/latex2html/default.nix {
+    inherit fetchurl stdenv perl ghostscript netpbm;
+    tex = tetex;
   };
 
   pgadmin = import ../applications/misc/pgadmin {
