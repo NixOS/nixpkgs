@@ -24,7 +24,7 @@ configurePhase() {
     # generate-config.pl can answer them.
     sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
 
-    # Get a basic config file for later refinement with $generateConfig
+    # Get a basic config file for later refinement with $generateConfig.
     make $kernelBaseConfig ARCH=$arch
 
     # Create the config file.
@@ -33,11 +33,13 @@ configurePhase() {
     DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config perl -w $generateConfig
 }
 
+
 postBuild() {
    if [ "$platformName" == "sheevaplug" ]; then
        make uImage
    fi
 }
+
 
 installPhase() {
 

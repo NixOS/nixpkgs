@@ -94,7 +94,8 @@ sub runConfig {
             }
             
             else {
-                die "don't know how to answer this question: $line\n";
+                warn "don't know how to answer this question: $line\n";
+                print OUT "\n";
             }
         
             $line = "";
