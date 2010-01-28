@@ -7402,6 +7402,10 @@ let
     inherit (xlibs) libX11 xproto;
   };
 
+  mpc123 = import ../applications/audio/mpc123 {
+    inherit stdenv fetchurl gettext libao libmpcdec;
+  };
+
   mpg321 = import ../applications/audio/mpg321 {
     inherit stdenv fetchurl libao libmad libid3tag zlib;
   };
