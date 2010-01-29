@@ -1,5 +1,7 @@
 {stdenv, fetchurl, patchelf, libusb}:
 
+assert stdenv ? gcc;
+
 stdenv.mkDerivation rec {
   name = "scmccid-5.0.11";
   

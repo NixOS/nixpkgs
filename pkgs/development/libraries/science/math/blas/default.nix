@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [gfortran];
 
   configurePhase = ''
-    echo >make.inc  "SHELL = ${stdenv.bash}/bin/bash"
+    echo >make.inc  "SHELL = ${stdenv.shell}"
     echo >>make.inc "PLAT = _LINUX"
     echo >>make.inc "FORTRAN = gfortran"
     echo >>make.inc "OPTS = -O2 -fPIC"

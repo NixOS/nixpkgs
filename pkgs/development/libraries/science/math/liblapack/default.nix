@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./blas-link.patch ];
 
   configurePhase = ''
-    echo >make.inc  "SHELL = ${stdenv.bash}/bin/bash"
+    echo >make.inc  "SHELL = ${stdenv.shell}"
     echo >>make.inc "PLAT ="
     echo >>make.inc "FORTRAN = gfortran"
     echo >>make.inc "OPTS = -O2 -fPIC"
