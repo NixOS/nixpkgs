@@ -80,6 +80,6 @@ releaseTools.makeSourceTarball {
   '';
 
   meta = {
-    maintainers = [lib.maintainers.eelco];
+    maintainers = [ lib.maintainers.all ];
   };
 }
