@@ -1,15 +1,15 @@
 {stdenv, fetchurl, patchelf, libusb}:
 
-assert stdenv ? gcc;
+assert stdenv ? gcc && stdenv.gcc.libc != null;
 
 stdenv.mkDerivation rec {
   name = "scmccid-5.0.11";
   
-  src = if (stdenv.system == "i686-linux") then (fetchurl {
+  src = if stdenv.system == "i686-linux" then (fetchurl {
       url = "http://www.scmmicro.com/support/download/scmccid_5.0.11_linux.tar.gz";
       sha256 = "1r5wkarhzl09ncgj55baizf573czw0nplh1pgddzx9xck66kh5bm";
     })
-    else if (stdenv.system == "x86_64-linux") then (fetchurl {
+    else if stdenv.system == "x86_64-linux" then (fetchurl {
         url = "http://www.scmmicro.com/support/download/scmccid_5.0.11_linux_x64.tar.gz";
         sha256 = "0k9lzlk01sl4ycfqgrqqy3bildz0mcr1r0kkicgjz96l4s0jgz0i";
     })
