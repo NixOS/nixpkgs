@@ -953,8 +953,9 @@ let
   };
 
   ktorrent = import ../tools/networking/p2p/ktorrent {
-    inherit fetchurl stdenv pkgconfig kdelibs
-      xlibs zlib libpng libjpeg perl gmp;
+    inherit fetchurl stdenv pkgconfig boost
+      xlibs zlib libpng libjpeg perl gmp cmake gettext;
+    kde = kde43;
   };
 
   less = import ../tools/misc/less {
