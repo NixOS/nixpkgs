@@ -8740,6 +8740,10 @@ let
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
 
+  tex4ht = import ../misc/tex/tex4ht {
+    inherit fetchurl stdenv tetex;
+  };
+
   texFunctions = import ../misc/tex/nix {
     inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick runCommand lib;
     inherit (haskellPackages) lhs2tex;
