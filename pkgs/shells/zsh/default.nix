@@ -2,11 +2,11 @@
 
 let
 
-  version = "4.3.9";
+  version = "4.3.10";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.bz2";
-    sha256 = "0rc19q5r8x2yln7synpqzxngm7g4g6idrpgc1i0jsawc48m7dbhm";
+    sha256 = "f53d5c434fdb26fc79755279175514507eb1d11cf793ac57270d053ee61f37f9";
   };
   
 in
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.bz2";
-    sha256 = "1aw28c5w83vl2ckbvf6ljj00s36icyrnxcm1r6q63863dmn6vpcg";
+    sha256 = "63fdc0273eadbb42d164f38b0b79922c0b3df0e97084e746a318276d935a4f7c";
   };
   
   configureFlags = "--with-tcsetpgrp --enable-maildir-support --enable-multibyte";
