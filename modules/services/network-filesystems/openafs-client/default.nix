@@ -16,6 +16,8 @@ let
     cp ${cellServDB} $out/CellServDB
     echo "/afs:${cfg.cacheDirectory}:${cfg.cacheSize}" > $out/cacheinfo
   '';
+
+  openafsPkgs = config.boot.kernelPackages.openafsClient;
 in
 {
   ###### interface
@@ -52,7 +54,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [pkgs.openafsClient];
+    environment.systemPackages = [ openafsPkgs ];
 
     environment.etc = [
       { source = afsConfig;
@@ -71,13 +73,13 @@ in
 	preStart = ''
 	  mkdir -m 0755 /afs || true
 	  mkdir -m 0755 -p ${cfg.cacheDirectory} || true
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.openafsClient}/lib/openafs/libafs-*.ko || true
-          ${pkgs.openafsClient}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} -dynroot -fakestat
+          ${pkgs.module_init_tools}/sbin/insmod ${openafsPkgs}/lib/openafs/libafs-*.ko || true
+          ${openafsPkgs}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} -dynroot -fakestat
 	'';
 
 	postStop = ''
 	  umount /afs
-          ${pkgs.openafsClient}/sbin/afsd -shutdown
+          ${openafsPkgs}/sbin/afsd -shutdown
 	  rmmod libafs
 	'';
 
