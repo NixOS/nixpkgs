@@ -6009,7 +6009,7 @@ let
   };
 
   qemu_kvm = import ../os-specific/linux/qemu-kvm {
-    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
+    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils libuuid;
   };
 
   radeontools = import ../os-specific/linux/radeontools {
