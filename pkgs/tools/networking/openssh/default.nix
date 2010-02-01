@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
       cp contrib/ssh-copy-id $out/bin/
       chmod +x $out/bin/ssh-copy-id
       cp contrib/ssh-copy-id.1 $out/share/man/man1/
+
+      ensureDir $out/etc/ssh
+      cp moduli $out/etc/ssh/
     '';
 
   installTargets = "install-nosysconf";
