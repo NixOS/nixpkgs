@@ -2936,11 +2936,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  openafsClient = import ../servers/openafs-client {
-    inherit stdenv fetchurl autoconf automake flex yacc;
-    inherit kernel_2_6_28 glibc ncurses perl krb5;
-  };
-
   openocd = import ../development/tools/misc/openocd {
     inherit fetchurl stdenv libftdi;
   };
@@ -5731,6 +5726,11 @@ let
 
     nvidia_x11_legacy = import ../os-specific/linux/nvidia-x11/legacy.nix {
       inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
+    };
+
+    openafsClient = import ../servers/openafs-client {
+      inherit stdenv fetchurl autoconf automake flex yacc;
+      inherit kernel glibc ncurses perl krb5;
     };
 
     wis_go7007 = import ../os-specific/linux/wis-go7007 {
