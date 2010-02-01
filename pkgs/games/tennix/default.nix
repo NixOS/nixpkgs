@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL SDL_mixer SDL_image SDL_ttf ];
 
   meta = {
-    homepage = http://icculus.org/tennix/
+    homepage = http://icculus.org/tennix/;
     description = "Tennix 2009 World Tennis Championship Tour";
     license = "GPLv2+";
   };
