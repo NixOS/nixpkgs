@@ -6,47 +6,58 @@
 
 assert pamSupport -> pam != null;
 
-stdenv.mkDerivation (rec {
-  name = "openssh-5.2p1";
+let
+
+  hpnSrc = fetchurl {
+    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.3p1-hpn13v7.diff.gz;
+    sha256 = "1kqir6v14z77l0wn9j4jzdqsip5s1ky34w749psvbshbp9dzizn8";
+  };
+
+in
+
+stdenv.mkDerivation rec {
+  name = "openssh-5.3p1";
 
   src = fetchurl {
     url = "ftp://ftp.nluug.nl/pub/security/OpenSSH/${name}.tar.gz";
-    sha256 = "1bpc6i07hlakb9vrxr8zb1yxnc9avsv7kjwrcagdgcyh6w6728s0";
+    sha256 = "04pgqmb43p5lr5wrfnvyys8r504brghshm24n60495wn5131gjfh";
   };
 
-  buildInputs = [zlib openssl perl
-    (if pamSupport then pam else null)
-  ];
+  patchPhase = stdenv.lib.optionalString hpnSupport
+    ''
+      gunzip -c ${hpnSrc} | patch -p1
+    '';
+  
+  buildInputs =
+    [ zlib openssl perl ]
+    ++ stdenv.lib.optional pamSupport pam;
 
-  configureFlags = "
-    --with-mantype=man
-    ${if pamSupport then "--with-pam" else "--without-pam"}
-    ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
-  ";
+  configureFlags =
+    ''
+      --with-mantype=man
+      ${if pamSupport then "--with-pam" else "--without-pam"}
+      ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
+    '';
 
-  preConfigure = "
-    configureFlags=\"$configureFlags --with-privsep-path=$out/empty\"
-    ensureDir $out/empty
-  ";
+  preConfigure =
+    ''
+      configureFlags="$configureFlags --with-privsep-path=$out/empty"
+      ensureDir $out/empty
+    '';
 
-  postInstall = "
-    # Install ssh-copy-id, it's very useful.
-    cp contrib/ssh-copy-id $out/bin/
-    chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/man1/
-  ";
+  postInstall =
+    ''
+      # Install ssh-copy-id, it's very useful.
+      cp contrib/ssh-copy-id $out/bin/
+      chmod +x $out/bin/ssh-copy-id
+      cp contrib/ssh-copy-id.1 $out/share/man/man1/
+    '';
 
   installTargets = "install-nosysconf";
-} //
-(if hpnSupport then
-rec {
-   hpnSrc = fetchurl {
-     url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.2p1-hpn13v6.diff.gz;
-     sha256 = "1g91xl1vfg772072qcbcfzyqj7yfvm38xgk8zyy8wsl2g81rb8wh";
-   };
 
-   patchPhase = ''
-     gunzip -c ${hpnSrc} | patch -p1
-   '';
+  meta = {
+    homepage = http://www.openssh.org/;
+    description = "An implementation of the SSH protocol";
+    license = "bsd";
+  };
 }
-else {}))
