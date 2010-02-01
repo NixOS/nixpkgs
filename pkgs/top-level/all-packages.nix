@@ -8273,6 +8273,10 @@ let
     inherit (xlibs) libX11;
   };
 
+  tennix = import ../games/tennix {
+    inherit stdenv fetchurl SDL SDL_mixer SDL_image SDL_ttf;
+  };
+
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL;
     python24 = python;
