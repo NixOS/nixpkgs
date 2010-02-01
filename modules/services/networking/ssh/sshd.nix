@@ -1,8 +1,9 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf;
   inherit (pkgs) openssh;
 
   cfg = config.services.sshd;
@@ -15,7 +16,7 @@ let
 
       UsePAM yes
 
-      ${ pkgs.lib.concatMapStrings (port : ''Port ${toString port}
+      ${ concatMapStrings (port : ''Port ${toString port}
                                            '') cfg.ports}
 
       ${if cfg.forwardX11 then "
@@ -112,11 +113,16 @@ in
 
   config = mkIf config.services.sshd.enable {
 
-    users.extraUsers = pkgs.lib.singleton
+    users.extraUsers = singleton
       { name = "sshd";
         uid = config.ids.uids.sshd;
         description = "SSH privilege separation user";
         home = "/var/empty";
+      };
+
+    environment.etc = singleton
+      { source = "${openssh}/etc/ssh/moduli";
+        target = "ssh/moduli";
       };
 
     jobs.sshd = {
@@ -141,7 +147,7 @@ in
         exec = "${openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports ;
+    networking.firewall.allowedTCPPorts = cfg.ports;
           
   };
 
