@@ -1,12 +1,15 @@
 /* Build configuration used to build glibc, Info files, and locale
    information.  */
 
-cross : { name, fetchurl, stdenv, installLocales ? false
-, gccCross ? null, kernelHeaders ? null
-, profilingLibraries ? false, meta, ... }@args :
+cross :
 
-let version = "2.11";
-in
+{ name, fetchurl, stdenv, installLocales ? false
+, gccCross ? null, kernelHeaders ? null
+, profilingLibraries ? false, meta
+, preConfigure ? "", ... }@args :
+
+let version = "2.11.1"; in
+
 assert (cross != null) -> (gccCross != null);
 
 stdenv.mkDerivation ({
@@ -80,38 +83,28 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
+
+  # Workaround for this bug:
+  #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
+  # I.e. when gcc is compiled with --with-arch=i686, then the
+  # preprocessor symbol `__i686' will be defined to `1'.  This causes
+  # the symbol __i686.get_pc_thunk.dx to be mangled.
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.system == "i686-linux") "-U__i686";
 }
 
-//
-
-(if (stdenv.system == "i686-linux")
- then {
-   # Workaround for this bug:
-   #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
-   # I.e. when gcc is compiled with --with-arch=i686, then the
-   # preprocessor symbol `__i686' will be defined to `1'.  This causes
-   # the symbol __i686.get_pc_thunk.dx to be mangled.
-   NIX_CFLAGS_COMPILE = "-U__i686";
- }
- else {})
-
- //
-
- args
-
- //
+// args //
 
 {
-  name = args.name + "-${version}" +
+  name = name + "-${version}" +
     stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
-    sha256 = "0b6nbr89qmqcvzz26ggnw7gcxhvnzbc8z299h12wqjmcix4hxwcy";
+    sha256 = "18azb6518ryqhkfmddr25p0h1s2msrmx7dblij58sjlnzh61vq34";
   };
 
   srcPorts = fetchurl {
-    url = "mirror://gnu/glibc/glibc-ports-${version}.tar.bz2";
+    url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2";
     sha256 = "12b53f5k4gcr8rr1kg2ycf2701rygqsyf9r8gz4j3l9flaqi5liq";
   };
 
@@ -135,30 +128,25 @@ stdenv.mkDerivation ({
 
     configureScript="../$sourceRoot/configure"
 
-    ${if args ? preConfigure
-      then args.preConfigure
-      else ""}
+    ${preConfigure}
   '';
 
-  meta = ({
-      homepage = http://www.gnu.org/software/libc/;
-      description = "The GNU C Library";
+  meta = {
+    homepage = http://www.gnu.org/software/libc/;
+    description = "The GNU C Library";
 
-      longDescription =
-        '' Any Unix-like operating system needs a C library: the library which
-           defines the "system calls" and other basic facilities such as
-           open, malloc, printf, exit...
+    longDescription =
+      '' Any Unix-like operating system needs a C library: the library which
+         defines the "system calls" and other basic facilities such as
+         open, malloc, printf, exit...
 
-           The GNU C library is used as the C library in the GNU system and
-           most systems with the Linux kernel.
-        '';
+         The GNU C library is used as the C library in the GNU system and
+         most systems with the Linux kernel.
+      '';
 
-      license = "LGPLv2+";
+    license = "LGPLv2+";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = stdenv.lib.platforms.linux;
-    }
-    //
-    args.meta
-  );
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.linux;
+  } // meta;
 })
