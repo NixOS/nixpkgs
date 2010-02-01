@@ -1,0 +1,25 @@
+Honour $TMPDIR for the qemu-smb temporary directory.
+
+diff -rc -x '*~' qemu-kvm-0.12.2-orig/net/slirp.c qemu-kvm-0.12.2/net/slirp.c
+*** qemu-kvm-0.12.2-orig/net/slirp.c	2010-01-18 19:48:25.000000000 +0100
+--- qemu-kvm-0.12.2/net/slirp.c	2010-02-01 15:56:43.000000000 +0100
+***************
+*** 480,486 ****
+      char smb_cmdline[128];
+      FILE *f;
+  
+!     snprintf(s->smb_dir, sizeof(s->smb_dir), "/tmp/qemu-smb.%ld-%d",
+               (long)getpid(), instance++);
+      if (mkdir(s->smb_dir, 0700) < 0) {
+          qemu_error("could not create samba server dir '%s'\n", s->smb_dir);
+--- 480,489 ----
+      char smb_cmdline[128];
+      FILE *f;
+  
+!     char *tmpdir = getenv("TMPDIR");
+! 
+!     snprintf(s->smb_dir, sizeof(s->smb_dir), "%s/qemu-smb.%ld-%d",
+!              tmpdir ? tmpdir : "/tmp",
+               (long)getpid(), instance++);
+      if (mkdir(s->smb_dir, 0700) < 0) {
+          qemu_error("could not create samba server dir '%s'\n", s->smb_dir);

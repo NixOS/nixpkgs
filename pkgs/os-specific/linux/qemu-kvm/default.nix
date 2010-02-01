@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nmg9dp3h040dkxq5vv4i7ip76v98rnhzqwy4pd88zznawc2k9l2";
   };
 
-  patches = [ ./unix-domain.patch ];
+  patches = [ ./unix-domain.patch ./smb-tmpdir.patch ];
 
   buildInputs = [zlib SDL alsaLib pkgconfig pciutils];
 
