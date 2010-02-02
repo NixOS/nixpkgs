@@ -59,6 +59,8 @@ releaseTools.makeSourceTarball {
   '';
 
   distPhase = ''
+    find . -name "\.svn" -exec rm -rvf {} \; -prune
+  
     ensureDir $out/tarballs
     mkdir ../$releaseName
     cp -prd . ../$releaseName
