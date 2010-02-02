@@ -4674,7 +4674,7 @@ let
   };
 
   sqlite = import ../development/libraries/sqlite {
-    inherit fetchurl stdenv readline tcl;
+    inherit fetchurl stdenv;
   };
 
   stlport =  import ../development/libraries/stlport {
