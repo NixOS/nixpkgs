@@ -494,6 +494,25 @@ rec {
     };
   };
 
+  setuptoolsTrial = buildPythonPackage {
+    name = "setuptools-trial-0.5.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.3.tar.gz";
+      sha256 = "0h3mgjsz3z1sjl9j0b6bv4bss8d0przamj4gnjmpyazc633hhlyi";
+    };
+
+    propagatedBuildInputs = [ twisted ];
+
+    meta = {
+      description = "setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
+
+      homepage = http://allmydata.org/trac/setuptools_trial;
+
+      license = "unspecified"; # !
+    };
+  };
+
   simplejson = buildPythonPackage (rec {
     name = "simplejson-2.0.9";
 
