@@ -1,13 +1,14 @@
 { fetchurl, lib, unzip, buildPythonPackage, twisted, foolscap, nevow
-, simplejson, zfec, pycryptopp, pysqlite, nettools }:
+, simplejson, zfec, pycryptopp, pysqlite, darcsver, setuptoolsTrial
+, setuptoolsDarcs, numpy, nettools }:
 
 buildPythonPackage (rec {
-  name = "tahoe-lafs-1.5.0";
+  name = "tahoe-lafs-1.6.0";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.5.0.zip";
-    sha256 = "1cgwm7v49mlfsq47k8gw2bz14d6lnls0mr6dc18815pf24z4f00n";
+    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.6.0.zip";
+    sha256 = "10j6s4wqqxb0x6plwvfnabxxl0k8jy1g1dfsrhpfgdi42f25dain";
   };
 
   patchPhase = ''
@@ -26,18 +27,25 @@ buildPythonPackage (rec {
 
     sed -i "src/allmydata/util/iputil.py" \
         -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/sbin/ifconfig'|g"
+
+    # Chroots don't have /etc/hosts and /etc/resolv.conf, so work around
+    # that.
+    for i in $(find src/allmydata/test -type f)
+    do
+      sed -i "$i" -e"s/localhost/127.0.0.1/g"
+    done
   '';
 
-  buildInputs = [ unzip ];
+  buildInputs = [ unzip ]
+    ++ [ numpy ]; # Some tests want this
 
-  # The `backup' command works best with `pysqlite'.
-  propagatedBuildInputs = [
-    twisted foolscap nevow simplejson zfec pycryptopp pysqlite
-  ];
+  # The `backup' command requires `pysqlite'.
+  propagatedBuildInputs =
+    [ twisted foolscap nevow simplejson zfec pycryptopp pysqlite
+      darcsver setuptoolsTrial
+    ];
 
-  # FIXME: Many tests try to write to the Nix store or to $HOME, which
-  # fails.  Disable tests until we have a reasonable hack to allow
-  # them to run.
+  # The test suite is run in `postInstall'.
   doCheck = false;
 
   postInstall = ''
@@ -50,6 +58,12 @@ buildPythonPackage (rec {
     ensureDir "$out/share/doc/${name}"
     cp -rv "docs/"* "$out/share/doc/${name}"
     find "$out/share/doc/${name}" -name Makefile -exec rm -v {} \;
+
+    # Run the tests once everything is installed.
+    # FIXME: Some of the tests want to run $out/bin/tahoe, which isn't usable
+    # yet because it gets wrapped later on, in `postFixup'.
+    export PYTHON_EGG_CACHE="$TMPDIR"
+    python setup.py trial
   '';
 
   meta = {

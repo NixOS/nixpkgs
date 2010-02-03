@@ -7742,7 +7742,8 @@ let
   tahoelafs = import ../tools/networking/p2p/tahoe-lafs {
     inherit fetchurl lib unzip nettools buildPythonPackage;
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
-      pycryptopp pysqlite;
+      pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
+      numpy;
   };
 
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {
