@@ -8291,6 +8291,10 @@ let
     inherit stdenv fetchurl SDL mesa SDL_image freealut;
   };
 
+  urbanterror = import ../games/urbanterror {
+    inherit fetchurl stdenv unzip SDL mesa curl openal;
+  };
+
   ut2004demo = import ../games/ut2004demo {
     inherit fetchurl stdenv xlibs mesa;
   };
