@@ -242,6 +242,8 @@ rec {
 
     propagatedBuildInputs = [ twisted ];
 
+    postInstall = "twistd --help > /dev/null";
+
     meta = {
       description = "Nevow, a web application construction kit for Python";
 
@@ -548,6 +550,12 @@ rec {
     };
 
     propagatedBuildInputs = [ pkgs.ZopeInterface ];
+
+    # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
+    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
+    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
+    # details.
+    postInstall = "$out/bin/twistd --help > /dev/null";
 
     meta = {
       homepage = http://twistedmatrix.com/;
