@@ -11,7 +11,9 @@ buildPythonPackage (rec {
     sha256 = "10j6s4wqqxb0x6plwvfnabxxl0k8jy1g1dfsrhpfgdi42f25dain";
   };
 
-  patchPhase = ''
+  patches = [ ./fix-test-copy-using-filecap.patch ];
+
+  postPatch = ''
     echo "forcing the use of \`setuptools' 0.6c9 rather than an unreleased version"
     for i in *setup.py
     do
