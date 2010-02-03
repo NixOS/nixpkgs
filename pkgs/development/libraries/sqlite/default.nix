@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k5qyl0v2y4fpkh7vvxvb0irpnl71g0ffhfc3ksm40mrhcdq9qk8";
   };
 
+  configureFlags = "--enable-threadsafe";
+
   NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1";
 
   meta = {
