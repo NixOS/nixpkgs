@@ -3849,6 +3849,7 @@ let
 
     glib = import ../development/libraries/glib/2.22.x.nix {
       inherit fetchurl stdenv pkgconfig gettext perl;
+      libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
     };
 
     glibmm = import ../development/libraries/glibmm/2.22.x.nix {
