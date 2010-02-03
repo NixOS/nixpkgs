@@ -3419,6 +3419,7 @@ let
 
   dbus_glib = makeOverridable (import ../development/libraries/dbus-glib) {
     inherit fetchurl stdenv pkgconfig gettext dbus expat glib;
+    libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
   };
 
   dbus_java = import ../development/libraries/java/dbus-java {
