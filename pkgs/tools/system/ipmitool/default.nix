@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, openssl }:
+{ fetchurl, stdenv, openssl, static ? false }:
 
 let
   pkgname = "ipmitool";
@@ -13,6 +13,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ openssl ];
+  dontDisableStatic = static;
+  configureFlags = if static then "LDFLAGS=-static --enable-static --disable-shared" else "--enable-shared";
+  makeFlags = if static then "AM_LDFLAGS=-all-static" else "";
 
   meta = {
     description = ''Command-line interface to IPMI-enabled devices'';
