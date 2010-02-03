@@ -1,10 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libffi-3.0.5";
+  name = "libffi-3.0.9";
+
   src = fetchurl {
     url = "ftp://sourceware.org/pub/libffi/${name}.tar.gz";
-    sha256 = "1i0ms6ilhjzz0691nymnvs5a3b5lf95n6p99l65z2zn83rd7pahf";
+    sha256 = "0ln4jbpb6clcsdpb9niqk0frgx4k0xki96wiv067ig0q4cajb7aq";
   };
 
   doCheck = true;
@@ -34,8 +35,10 @@ stdenv.mkDerivation rec {
 
     homepage = http://sources.redhat.com/libffi/;
 
-    license = "http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/libffi/LICENSE?rev=1.6&content-type=text/plain&cvsroot=libffi&only_with_tag=MAIN";
+    # See http://github.com/atgreen/libffi/blob/master/LICENSE .
+    license = "free, non-copyleft";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

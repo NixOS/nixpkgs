@@ -4,6 +4,7 @@
   /* Add your name and email address here.  Keep the list
      alphabetically sorted.  */
 
+  all = "Nix Committers <nix-commits@cs.uu.nl>";
   andres = "Andres Loeh <andres@cs.uu.nl>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";

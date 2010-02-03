@@ -1,31 +1,16 @@
-{stdenv, fetchurl, readline, tcl, static ? false}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "sqlite-3.6.22";
 
-  # Note: don't use the "amalgamation" source release, since it
-  # doesn't install sqlite3.pc.
   src = fetchurl {
-    url = "http://www.sqlite.org/${name}.tar.gz";
-    sha256 = "1xjpryhrk6b3h2y0hwrzaa1vj44pbhgm65f8fj73kd5fbj4ikk68";
+    url = "http://www.sqlite.org/sqlite-amalgamation-3.6.22.tar.gz";
+    sha256 = "1k5qyl0v2y4fpkh7vvxvb0irpnl71g0ffhfc3ksm40mrhcdq9qk8";
   };
 
-  buildInputs = [readline tcl];
-
-  configureFlags = ''
-    CFLAGS=-O3
-    --enable-load-extension
-    ${if static then "--disable-shared --enable-static" else ""}
-    --enable-amalgamation
-    --enable-threadsafe
-    --disable-cross-thread-connections
-    --disable-tcl
-    --disable-tempstore
-    --with-readline-inc=-I${readline}/include
-  '';
+  configureFlags = "--enable-threadsafe";
 
   NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1";
-  NIX_CFLAGS_LINK = "-ldl"; # needed for --enable-load-extension
 
   meta = {
     homepage = http://www.sqlite.org/;

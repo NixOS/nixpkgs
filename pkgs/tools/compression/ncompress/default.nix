@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = http://sourceforge.net/projects/ncompress/files/ncompress%20%28bugfixes%29/ncompress-4.2.4.2/ncompress-4.2.4.2.tar.gz/download;
+    homepage = http://ncompress.sourceforge.net/;
+    license = "free-non-copyleft";
+    description = "A fast, simple LZW file compressor";
   };
 }

@@ -1,11 +1,11 @@
 { fetchurl, stdenv, python, alsaLib, libX11, mesa, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.5.1";
+  name = "teeworlds-0.5.2";
 
   src = fetchurl {
     url = "http://www.teeworlds.com/files/${name}-src.tar.gz";
-    sha256 = "0y7yfb1n8rrcz8vcng9jch05sc5vl57nvjvd1x0mkm74ki1y6wpc";
+    sha256 = "1h7likcqbyr3q8djzlgxmr8fiwwj8is3b01hd5x0qix1z4dsf48q";
   };
 
   # Note: Teeworlds requires Python 2.x to compile.  Python 3.0 will
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       mv -v "$out/bin/$program" "$out/bin/.wrapped-$program"
       cat > "$out/bin/$program" <<EOF
 #!/bin/sh
-cd "$out/share/${name}" && exec "$out/bin/.wrapped-$program"
+cd "$out/share/${name}" && exec "$out/bin/.wrapped-$program" "\$@"
 EOF
       chmod -v +x "$out/bin/$program"
     done

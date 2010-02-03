@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, libX11, xineLib, libjpeg, libpng, libtiff }:
 
 stdenv.mkDerivation {
-  name = "eaglemode-0.75";
+  name = "eaglemode-0.76.0";
  
   src = fetchurl {
-    url = mirror://sourceforge/eaglemode/eaglemode-0.75.0.tar.bz2;
-    sha256 = "0iqdf55ff0il5frkl3yq3r27yk9xl30b9ygf3fvrv78a5bzpq8r7";
+    url = mirror://sourceforge/eaglemode/eaglemode-0.76.0.tar.bz2;
+    sha256 = "152v7p9dicm8shwncpcifg4b2l4c61c1qn00469cz38vja67npww";
   };
  
   buildInputs = [ perl libX11 xineLib libjpeg libpng libtiff ];

@@ -1,18 +1,18 @@
-{stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils}:
+{ stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid }:
    
 assert stdenv.isLinux;
    
 stdenv.mkDerivation rec {
-  name = "qemu-kvm-0.12.1.2";
+  name = "qemu-kvm-0.12.2";
    
   src = fetchurl {
     url = "mirror://sourceforge/kvm/${name}.tar.gz";
-    sha256 = "1k5xx9rn0n311bgvl6g9c8h1bxj2nhjpjpzbngy0sf9hdjidnba7";
+    sha256 = "0nmg9dp3h040dkxq5vv4i7ip76v98rnhzqwy4pd88zznawc2k9l2";
   };
 
-  patches = [ ./unix-domain.patch ];
+  patches = [ ./unix-domain.patch ./smb-tmpdir.patch ];
 
-  buildInputs = [zlib SDL alsaLib pkgconfig pciutils];
+  buildInputs = [ zlib SDL alsaLib pkgconfig pciutils libuuid ];
 
   preBuild =
     ''

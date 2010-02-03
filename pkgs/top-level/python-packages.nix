@@ -105,23 +105,23 @@ rec {
 
   genshi = buildPythonPackage {
     name = "genshi-0.5.1";
-    
+
     src = fetchurl {
       url = http://ftp.edgewall.com/pub/genshi/Genshi-0.5.1.tar.bz2;
       sha256 = "1g2xw3zvgz59ilv7mrdlnvfl6ph8lwflwd4jr6zwrca2zhj7d8rs";
     };
-    
+
     buildInputs = [ pkgs.setuptools ];
-    
+
     meta = {
       description = "Python components for parsing HTML, XML and other textual content";
-      
+
       longDescription = ''
         Python library that provides an integrated set of
         components for parsing, generating, and processing HTML, XML or other
         textual content for output generation on the web.
       '';
-      
+
       license = "BSD";
     };
   };
@@ -156,10 +156,28 @@ rec {
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
 
-    meta = { 
+    meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = http://codespeak.net/lxml/index.html;
       license = "BSD";
+    };
+  });
+
+  matplotlib = buildPythonPackage ( rec {
+    name = "matplotlib-0.99.1.2";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
+      sha256 = "12lhwgkahck795946hb8wp605c912zq9ds8067ybbifqs56q24b9";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+
+    meta = {
+      description = "python plotting library, making publication quality plots";
+      homepage = "http://matplotlib.sourceforge.net/";
     };
   });
 
@@ -224,6 +242,8 @@ rec {
 
     propagatedBuildInputs = [ twisted ];
 
+    postInstall = "twistd --help > /dev/null";
+
     meta = {
       description = "Nevow, a web application construction kit for Python";
 
@@ -248,6 +268,31 @@ rec {
       homepage = http://divmod.org/trac/wiki/DivmodNevow;
 
       license = "BSD-style";
+    };
+  });
+
+  numpy = buildPythonPackage ( rec {
+    name = "numpy-1.3.0";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/numpy/${name}.tar.gz";
+      sha256 = "7524687cce85aa78103046db5e617c626b0ef871a203a049159f88f35647c90d";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.liblapack pkgs.blas /* pkgs.gfortran */ ];
+
+    # The build should be run as follows:
+    #
+    #   python setup.py config_fc --fcompiler=gnu95 build
+    #   python setup.py config_fc --fcompiler=gnu95 install
+    #
+    # But I con't figure out how to pass the extra flags to setuptools.
+
+    meta = {
+      description = "Scientific tools for Python";
+      homepage = "http://numpy.scipy.org/";
     };
   });
 
@@ -289,20 +334,20 @@ rec {
     name = "psycopg2-2.0.13";
 
     doCheck = false;
-    
+
     src = fetchurl {
       url = "http://initd.org/pub/software/psycopg/PSYCOPG-2-0/${name}.tar.gz";
       sha256 = "0arkaa1nbbd3pyn4l1bc75wi7nff3vxxh4s8sj5al5hv20p64pm1";
     };
-    
+
     propagatedBuildInputs = [ pkgs.postgresql ];
-    
+
     meta = {
       description = "PostgreSQL database adapter for the Python programming language";
       license = "GPLv2/ZPL";
     };
   };
-  
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.15";
 
@@ -449,6 +494,25 @@ rec {
     };
   };
 
+  setuptoolsTrial = buildPythonPackage {
+    name = "setuptools-trial-0.5.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.3.tar.gz";
+      sha256 = "0h3mgjsz3z1sjl9j0b6bv4bss8d0przamj4gnjmpyazc633hhlyi";
+    };
+
+    propagatedBuildInputs = [ twisted ];
+
+    meta = {
+      description = "setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
+
+      homepage = http://allmydata.org/trac/setuptools_trial;
+
+      license = "unspecified"; # !
+    };
+  };
+
   simplejson = buildPythonPackage (rec {
     name = "simplejson-2.0.9";
 
@@ -477,21 +541,21 @@ rec {
 
   trac = buildPythonPackage {
     name = "trac-0.11.5";
-    
+
     src = fetchurl {
       url = http://ftp.edgewall.com/pub/trac/Trac-0.11.5.tar.gz;
       sha256 = "cc3362ecc533abc1755dd78e2d096d1413bc975abc3185318f4821458cd6a8ac";
     };
-    
+
     doCheck = false;
-    
+
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-    
+
     propagatedBuildInputs = [ genshi pkgs.setuptools ];
-    
+
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
-      
+
       license = "BSD";
     };
   };
@@ -505,6 +569,12 @@ rec {
     };
 
     propagatedBuildInputs = [ pkgs.ZopeInterface ];
+
+    # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
+    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
+    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
+    # details.
+    postInstall = "$out/bin/twistd --help > /dev/null";
 
     meta = {
       homepage = http://twistedmatrix.com/;

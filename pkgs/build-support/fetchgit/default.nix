@@ -1,5 +1,5 @@
 {stdenv, git}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false }:
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev;
+  inherit url rev leaveDotGit;
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow

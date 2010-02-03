@@ -1,0 +1,16 @@
+diff -Naur advanced.orig/pm_config.in.h advanced/pm_config.in.h
+--- advanced.orig/pm_config.in.h	2010-01-12 22:04:07.000000000 +0100
++++ advanced/pm_config.in.h	2010-01-12 22:05:56.000000000 +0100
+@@ -67,9 +67,9 @@
+ #define RGB_DB2 "PBMplus_Dir:RGB.TXT"
+ #define RGB_DB3 "PBMplus_Dir:RGB.TXT"
+ #else
+-#define RGB_DB1 "/usr/lib/X11/rgb.txt"
+-#define RGB_DB2 "/usr/share/X11/rgb.txt"
+-#define RGB_DB3 "/usr/X11R6/lib/X11/rgb.txt"
++#define RGB_DB1 "@rgbPath1@"
++#define RGB_DB2 "@rgbPath2@"
++#define RGB_DB3 "@rgbPath3@"
+ #endif
+ 
+ /* CONFIGURE: This is the name of an environment variable that tells

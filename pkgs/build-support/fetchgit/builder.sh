@@ -7,7 +7,9 @@ if test -n "$rev"; then
   cd $out
   git checkout $rev
 fi
-find $out -name .git\* | xargs rm -rf
+
+if test -z "$leaveDotGit"; then
+    find $out -name .git\* | xargs rm -rf
+fi
 
 stopNest
-

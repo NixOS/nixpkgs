@@ -1,6 +1,6 @@
 {stdenv, fetchurl, mesa, qt4, tcl, tk}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "opencascade-6.3.0";
   src = fetchurl {
     url = http://files.opencascade.com/OCC_6.3_release/OpenCASCADE_src.tgz;
@@ -10,6 +10,12 @@ stdenv.mkDerivation {
   buildInputs = [ mesa qt4 tcl tk];
 
   preConfigure = "cd ros";
+
+  postInstall = ''
+    mv $out/inc $out/include
+    ensureDir $out/share/doc/${name}
+    cp -R ../doc $out/share/doc/${name}
+  '';
 
   meta = {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";

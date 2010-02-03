@@ -1,15 +1,19 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, xmlto, docbook_xml_dtd_412, libxslt, docbook_xsl}:
 
 stdenv.mkDerivation {
-  # OpenSP-1.5.1 requires gcc 3.3 to build.
-  # The next release is likely to be compatible with newer gccs.
-  # If so the overrideGCC in top-level/all-packages should be removed.
-  name = "OpenSP-1.5.1";
+  name = "opensp-1.5.2";
 
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/openjade/OpenSP-1.5.1.tar.gz";
-    sha256 = "0svkgk85m6f848fi3nxnrkzg62422wxr739w5r1yrmn31n24j1iz";
+    url = mirror://sourceforge/openjade/OpenSP-1.5.2.tar.gz;
+    sha256 = "1khpasr6l0a8nfz6kcf3s81vgdab8fm2dj291n5r2s53k228kx2p";
   };
+
+  patchPhase = ''
+    sed -i s,/usr/share/sgml/docbook/xml-dtd-4.1.2/,${docbook_xml_dtd_412}/xml/dtd/docbook/, \
+      docsrc/*.xml
+  '';
+
+  buildInputs = [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl ];
 
   meta = {
     description = "A suite of SGML/XML processing tools";

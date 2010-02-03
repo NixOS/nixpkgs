@@ -5,6 +5,7 @@
 , enableMultiThreaded ? true
 , enableShared ? true
 , enableStatic ? false
+, enablePIC ? false
 }:
 
 let
@@ -27,6 +28,8 @@ let
     (enableShared && enableStatic)) then
     "tagged" else "system";
 
+  cflags = if (enablePIC) then "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC" else "";
+
 in
 
 stdenv.mkDerivation {
@@ -48,7 +51,7 @@ stdenv.mkDerivation {
   configureScript = "./bootstrap.sh";
   configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python";
 
-  buildPhase = "./bjam -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} install";
+  buildPhase = "./bjam -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
 
   installPhase = ":";
 }

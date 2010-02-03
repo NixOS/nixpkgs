@@ -970,21 +970,21 @@ rec {
     } // args);
 
     debian50i386 = args: makeImageFromDebDist ({
-      name = "debian-5.0.3-lenny-i386";
-      fullName = "Debian 5.0.3 Lenny (i386)";
+      name = "debian-5.0.4-lenny-i386";
+      fullName = "Debian 5.0.4 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "87886ed314c53a57c6689022c0043c25c3c96c643e3034fc51acae0572b5ff1f";
+        sha256 = "6c5ca67fb401a5d29f02557c290bbaee35c457172d548583b510d49eadd0f9ff";
       };
       urlPrefix = mirror://debian;
     } // args);
         
     debian50x86_64 = args: makeImageFromDebDist ({
-      name = "debian-5.0.3-lenny-amd64";
-      fullName = "Debian 5.0.3 Lenny (amd64)";
+      name = "debian-5.0.4-lenny-amd64";
+      fullName = "Debian 5.0.4 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "c51dc5b87d7cd12bd3537bb905428a49869a0f4e0e7cb3546dd8a00fb32db380";
+        sha256 = "c3b660b861ed257e82293a350ab868c2ce566bc084d35cc66b7388a881eaf3c5";
       };
       urlPrefix = mirror://debian;
     } // args);

@@ -1,47 +1,52 @@
-{ stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
+{ fetchurl, stdenv, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
-, gnomevfs, libgnomeui
-, freetype, fontconfig
+, libnotify, gnomevfs, libgnomeui
+, freetype, fontconfig, wirelesstools ? null
 , application ? "browser" }:
 
-let version = "3.5.7"; in
+# Build the WiFi stuff on Linux-based systems.
+# FIXME: Disable for now until it can actually be built:
+# http://thread.gmane.org/gmane.comp.gnu.gnuzilla/1376 .
+#assert stdenv.isLinux -> (wirelesstools != null);
+
+let version = "3.6"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.bz2";
-    sha256 = "0pz48rz9rpig3xdvs6jkjc4azhwxabn81bz7c0alkfkdzjmcl8ym";
+    sha256 = "0fsf8zd8nncg1w1gg2jhlxwkbljvrx4mm9pywasklyi0gvi939ds";
   };
 
-  buildInputs = [
-    libgnomeui gnomevfs alsaLib
-    pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
-    python ply dbus dbus_glib pango freetype fontconfig
-    xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
-  ];
+  buildInputs =
+    [ libgnomeui libnotify gnomevfs alsaLib
+      pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+      python ply dbus dbus_glib pango freetype fontconfig
+      xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
+    ]
+    ++ (stdenv.lib.optional false /* stdenv.isLinux */ wirelesstools);
 
   patches = [
     ./skip-gre-registration.patch ./rpath-link.patch
   ];
 
-  configureFlags = [
-    "--enable-application=${application}"
-    "--enable-libxul"
-    "--disable-javaxpcom"
+  configureFlags =
+    [ "--enable-application=${application}"
+      "--enable-libxul"
+      "--disable-javaxpcom"
 
-    "--enable-optimize"
-    "--disable-debug"
-    "--enable-strip"
-    "--with-system-jpeg"
-    "--with-system-zlib"
-    "--with-system-bz2"
-    # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-    "--enable-system-cairo"
-    #"--enable-system-sqlite" # <-- this seems to be discouraged
-    "--disable-crashreporter"
-  ];
-
-  preConfigure = ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"'';
+      "--enable-optimize"
+      "--disable-debug"
+      "--enable-strip"
+      "--with-system-jpeg"
+      "--with-system-zlib"
+      "--with-system-bz2"
+      # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
+      "--enable-system-cairo"
+      #"--enable-system-sqlite" # <-- this seems to be discouraged
+      "--disable-crashreporter"
+    ]
+    ++ (stdenv.lib.optional true /* (!stdenv.isLinux) */ "--disable-necko-wifi");
 
   postInstall = ''
     export dontPatchELF=1;
@@ -79,8 +84,8 @@ stdenv.mkDerivation {
     fi
 
     # Put the GNU IceCat icon in the right place.
-    ensureDir $out/lib/$libDir/chrome/icons/default
-    ln -s ../../../icons/default.xpm  $out/lib/$libDir/chrome/icons/default/
+    ensureDir "$out/lib/$libDir/chrome/icons/default"
+    ln -s ../../../icons/default.xpm  "$out/lib/$libDir/chrome/icons/default/"
   '';
 
   meta = {

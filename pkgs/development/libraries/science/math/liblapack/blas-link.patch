@@ -1,0 +1,24 @@
+diff -Naur lapack-3.2.old/SRC/Makefile lapack-3.2/SRC/Makefile
+--- lapack-3.2.old/SRC/Makefile	2009-02-04 11:33:35.006839507 +0100
++++ lapack-3.2/SRC/Makefile	2009-02-04 11:33:51.987551506 +0100
+@@ -367,7 +367,7 @@
+ 	$(ALLAUX)
+ 
+ ../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ)
+-	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ)
++	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ) -lblas
+ 	$(RANLIB) $@
+ 
+ single: $(SLASRC) $(ALLAUX) $(SCLAUX) 
+diff -Naur lapack-3.2.old/TESTING/MATGEN/Makefile lapack-3.2/TESTING/MATGEN/Makefile
+--- lapack-3.2.old/TESTING/MATGEN/Makefile	2009-02-04 11:35:10.426806473 +0100
++++ lapack-3.2/TESTING/MATGEN/Makefile	2009-02-04 11:34:42.850565181 +0100
+@@ -60,7 +60,7 @@
+ 
+ ../../$(TMGLIB): $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN)	\
+ 		$(ZMATGEN) $(DZATGEN)
+-	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
++	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) -lblas
+ 	$(RANLIB) $@
+ 
+ single: $(SMATGEN) $(SCATGEN)
