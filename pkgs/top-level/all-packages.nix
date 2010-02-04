@@ -600,6 +600,10 @@ let
     inherit builderDefs;
   };
 
+  duplicity = import ../tools/backup/duplicity {
+    inherit fetchurl stdenv librsync makeWrapper python;
+  };
+
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
     inherit fetchurl stdenv cdrkit m4;
   };
@@ -4160,6 +4164,10 @@ let
 
   libpseudo = import ../development/libraries/libpseudo {
     inherit fetchurl stdenv pkgconfig ncurses glib;
+  };
+
+  librsync = import ../development/libraries/librsync {
+    inherit stdenv fetchurl;
   };
 
   libsigcxx = import ../development/libraries/libsigcxx {
