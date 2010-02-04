@@ -4682,9 +4682,13 @@ let
     inherit fetchurl stdenv libogg;
   };
 
-  sqlite = import ../development/libraries/sqlite {
+  sqlite = lowPrio (import ../development/libraries/sqlite {
     inherit fetchurl stdenv;
-  };
+  });
+
+  sqliteInteractive = appendToName "interactive" (import ../development/libraries/sqlite {
+    inherit fetchurl stdenv readline ncurses;
+  });
 
   stlport =  import ../development/libraries/stlport {
     inherit fetchurl stdenv;
