@@ -614,6 +614,10 @@ let
     inherit builderDefs;
   };
 
+  duplicity = import ../tools/backup/duplicity {
+    inherit fetchurl stdenv librsync makeWrapper python;
+  };
+
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
     inherit fetchurl stdenv cdrkit m4;
   };
@@ -923,7 +927,7 @@ let
 
   ipmitool = import ../tools/system/ipmitool {
     inherit fetchurl stdenv openssl;
-    static = getPkgConfig "ipmitool" "static" false;
+    static = !stdenv.isDarwin && getPkgConfig "ipmitool" "static" false;
   };
 
   jdiskreport = import ../tools/misc/jdiskreport {
@@ -1223,7 +1227,7 @@ let
   openssh = import ../tools/networking/openssh {
     inherit fetchurl stdenv zlib openssl pam perl;
     pamSupport = getPkgConfig "openssh" "pam" true;
-    hpnSupport = getPkgConfig "openssh" "hpn" true;
+    hpnSupport = getPkgConfig "openssh" "hpn" false;
     etcDir = getPkgConfig "openssh" "etcDir" "/etc/ssh";
   };
 
@@ -4318,6 +4322,10 @@ let
     inherit fetchurl stdenv pkgconfig ncurses glib;
   };
 
+  librsync = import ../development/libraries/librsync {
+    inherit stdenv fetchurl;
+  };
+
   libsigcxx = import ../development/libraries/libsigcxx {
     inherit fetchurl stdenv pkgconfig;
   };
@@ -4838,9 +4846,13 @@ let
     inherit fetchurl stdenv libogg;
   };
 
-  sqlite = import ../development/libraries/sqlite {
+  sqlite = lowPrio (import ../development/libraries/sqlite {
     inherit fetchurl stdenv;
-  };
+  });
+
+  sqliteInteractive = appendToName "interactive" (import ../development/libraries/sqlite {
+    inherit fetchurl stdenv readline ncurses;
+  });
 
   stlport =  import ../development/libraries/stlport {
     inherit fetchurl stdenv;
@@ -5621,6 +5633,10 @@ let
 
   dmidecode = import ../os-specific/linux/dmidecode {
     inherit fetchurl stdenv;
+  };
+
+  dmtcp = import ../os-specific/linux/dmtcp {
+    inherit fetchurl stdenv perl python;
   };
 
   dietlibc = import ../os-specific/linux/dietlibc {

@@ -1,6 +1,8 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, readline ? null, ncurses ? null }:
 
-stdenv.mkDerivation rec {
+assert readline != null -> ncurses != null;
+
+stdenv.mkDerivation {
   name = "sqlite-3.6.22";
 
   src = fetchurl {
@@ -8,9 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1k5qyl0v2y4fpkh7vvxvb0irpnl71g0ffhfc3ksm40mrhcdq9qk8";
   };
 
+  buildInputs = [readline ncurses];
   configureFlags = "--enable-threadsafe";
 
   NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1";
+  NIX_CFLAGS_LINK = if readline != null then "-lncurses" else "";
 
   meta = {
     homepage = http://www.sqlite.org/;
