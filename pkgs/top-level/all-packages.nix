@@ -909,7 +909,7 @@ let
 
   ipmitool = import ../tools/system/ipmitool {
     inherit fetchurl stdenv openssl;
-    static = getPkgConfig "ipmitool" "static" false;
+    static = !stdenv.isDarwin && getPkgConfig "ipmitool" "static" false;
   };
 
   jdiskreport = import ../tools/misc/jdiskreport {
