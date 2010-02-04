@@ -6143,7 +6143,7 @@ let
   };
 
   pam_unix2 = import ../os-specific/linux/pam_unix2 {
-    inherit stdenv fetchurl pam;
+    inherit stdenv fetchurl pam libxcrypt;
   };
 
   pam_usb = import ../os-specific/linux/pam_usb {
