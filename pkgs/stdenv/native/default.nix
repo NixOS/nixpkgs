@@ -34,8 +34,6 @@ rec {
    * gmake
    * gsed
    * gtar
-   * gsed
-   * gtar
    * gzip
    *
    * The aliases are derived by using the derivealiases-freebsd.sh script
@@ -179,15 +177,77 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
+  /* OpenBSD needs the following packages installed from the OpenBSD packages
+   * collection (pkg_add -r ...):
+   *
+   * bash
+   * fileutils (there is no coreutils package)
+   * gdiff
+   * findutils
+   * gawk
+   * ggrep
+   * gmake
+   * gsed
+   * gtar
+   *
+   * The aliases are derived by using the derivealiases-openbsd.sh script
+   *
+   * The following packages seem to be fine in the default install:
+   *
+   * gcc (included with OpenBSD)
+   * binutils (OpenBSD uses GNU binutils)
+   * bzip2 (included with openBSD)
+   * patch (included with OpenBSD) 
+   * gzip (included with OpenBSD
+   *
+   * Moreover a symlink to /bin/bash is required and /bin/sh has to be a symlink to /bin/bash
+   */
+
   prehookOpenBSD = builtins.toFile "prehook-openbsd.sh" ''
     source ${prehookBase}
     
-    alias make=gmake
-    alias grep=ggrep
-    alias mv=gmv
-    alias ln=gln
-    alias sed=gsed
-    alias tar=gtar
+    alias chgrp='gchgrp'
+    alias chmod='gchmod'
+    alias chown='gchown'
+    alias cp='gcp'
+    alias dd='gdd'
+    alias df='gdf'
+    alias dir='gdir'
+    alias dircolors='gdircolors'
+    alias du='gdu'
+    alias install='ginstall'
+    alias ln='gln'
+    alias ls='gls'
+    alias mkdir='gmkdir'
+    alias mkfifo='gmkfifo'
+    alias mknod='gmknod'
+    alias mv='gmv'
+    alias rm='grm'
+    alias rmdir='grmdir'
+    alias shred='gshred'
+    alias sync='gsync'
+    alias touch='gtouch'
+    alias vdir='gvdir'
+
+    alias find='gfind'
+    alias locate='glocate'
+    alias updatedb='gupdatedb'
+    alias xargs='gxargs'
+
+    alias cmp='gcmp'
+    alias diff='gdiff'
+    alias diff3='gdiff3'
+    alias sdiff='gsdiff'
+
+    alias egrep='gegrep'
+    alias fgrep='gfgrep'
+    alias grep='ggrep'
+
+    alias make='gmake'
+
+    alias sed='gsed'
+
+    alias tar='gtar'
     
     export MAKE=gmake
     shopt -s expand_aliases
