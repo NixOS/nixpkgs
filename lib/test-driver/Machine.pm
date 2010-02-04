@@ -216,6 +216,15 @@ sub mustSucceed {
 }
 
 
+sub waitUntilSucceeds {
+    my ($self, $command) = @_;
+    retry sub {
+        my ($status, $out) = $self->execute($command);
+        return 1 if $status == 0;
+    };
+}
+
+
 sub mustFail {
     my ($self, $command) = @_;
     my ($status, $out) = $self->execute($command);

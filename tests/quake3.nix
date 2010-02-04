@@ -39,10 +39,10 @@ rec {
       $client1->execute("quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
       $client2->execute("quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
  
-      sleep 40;
+      $server->waitUntilSucceeds("grep -q 'Foo.*entered the game' /tmp/log");
+      $server->waitUntilSucceeds("grep -q 'Bar.*entered the game' /tmp/log");
 
-      $server->mustSucceed("grep -q 'Foo.*entered the game' /tmp/log");
-      $server->mustSucceed("grep -q 'Bar.*entered the game' /tmp/log");
+      sleep 30; # wait for a while to get a nice screenshot
 
       $client1->screenshot("screen1");
       $client2->screenshot("screen2");
