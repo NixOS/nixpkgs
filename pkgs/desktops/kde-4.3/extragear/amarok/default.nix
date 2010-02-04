@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon, strigi, soprano, qca2}:
 
 stdenv.mkDerivation {
-  name = "amarok-2.2.1";
+  name = "amarok-2.2.2";
   src = fetchurl {
-    url = mirror://kde/stable/amarok/2.2.1/src/amarok-2.2.1.tar.bz2;
-    sha256 = "020srkfhly2nz3vp2xb5cd02j27r16ygm46z05vpil2csrbv5nzk";
+    url = mirror://kde/stable/amarok/2.2.2/src/amarok-2.2.2.tar.bz2;
+    sha256 = "0kg67b9wz2wi1gyn229vzbib4s0wpgqrjyfqy0032yl9fa2k13bn";
   };
   includeAllQtDirs=true;
   inherit mysql loudmouth;
