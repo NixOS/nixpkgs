@@ -5467,6 +5467,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  dmtcp = import ../os-specific/linux/dmtcp {
+    inherit fetchurl stdenv perl python;
+  };
+
   dietlibc = import ../os-specific/linux/dietlibc {
     inherit fetchurl glibc;
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
