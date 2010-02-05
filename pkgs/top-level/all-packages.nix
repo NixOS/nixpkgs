@@ -8665,19 +8665,20 @@ let
   nix = makeOverridable (import ../tools/package-management/nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
-    db4 = db45;
-    supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
   # The bleeding edge.
+  nixUnstable = nix;
+  /*
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
+  */
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
