@@ -888,10 +888,10 @@ rec {
   };
 
   DBIxClassSchemaLoader = buildPerlPackage rec {
-    name = "DBIx-Class-Schema-Loader-0.04999_09";
+    name = "DBIx-Class-Schema-Loader-0.05000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "1v4lqhjh9b6wwd8rayxmvr4nq44z5yffl5jkfccyhcp8lp84ysmf";
+      sha256 = "00lwggmwfwi3qbsx9jl5kdi5aszflpiggvksinmsam6sfyfpz2rq";
     };
     propagatedBuildInputs = [
       DBI DBDSQLite DataDump UNIVERSALrequire
