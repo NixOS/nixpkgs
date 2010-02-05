@@ -48,6 +48,7 @@ sub new {
         connectedQueue => Thread::Queue->new(),
         socket => undef,
         stateDir => "$tmpDir/$name",
+        monitor => undef,
     };
 
     mkdir $self->{stateDir}, 0700;
@@ -82,33 +83,50 @@ sub start {
 
     $self->log("starting vm");
 
-    my ($read, $write) = FileHandle::pipe;
+    # Create a socket pair for the serial line input/output of the VM.
+    my ($serialP, $serialC);
+    socketpair($serialP, $serialC, PF_UNIX, SOCK_STREAM, 0) or die;
 
+    # Create a Unix domain socket to which QEMU's monitor will connect.
+    my $monitorPath = $self->{stateDir} . "/monitor";
+    unlink $monitorPath;
+    my $monitorS;
+    socket($monitorS, PF_UNIX, SOCK_STREAM, 0) or die;
+    bind($monitorS, sockaddr_un($monitorPath)) or die "cannot bind monitor socket: $!";
+    listen($monitorS, 1) or die;
+
+    # Start the VM.
     my $pid = fork();
     die if $pid == -1;
 
     if ($pid == 0) {
-        close $read;
-        dup2(fileno($write), fileno(STDOUT));
-        dup2(fileno($write), fileno(STDERR));
+        close $serialP;
+        close $monitorS;
         open NUL, "</dev/null" or die;
         dup2(fileno(NUL), fileno(STDIN));
+        dup2(fileno($serialC), fileno(STDOUT));
+        dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
-        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1 -net socket,vlan=1,mcast=$mcastAddr";
+        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1 -net socket,vlan=1,mcast=$mcastAddr -monitor unix:./monitor";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
         die;
     }
 
-    close $write;
+    # Wait until QEMU connects to the monitor.
+    accept($self->{monitor}, $monitorS) or die;
+    $self->waitForMonitorPrompt;
 
-    threads->create(\&processQemuOutput, $self, $read)->detach;
+    # Process serial line output.
+    close $serialC;
 
-    sub processQemuOutput {
-        my ($self, $read) = @_;
+    threads->create(\&processSerialOutput, $self, $serialP)->detach;
+
+    sub processSerialOutput {
+        my ($self, $serialP) = @_;
         $/ = "\r\n";
-        while (<$read>) {
+        while (<$serialP>) {
             chomp;
             print STDERR $self->name, "# $_\n";
             $self->{connectedQueue}->enqueue(1) if $_ eq "===UP===";
@@ -120,6 +138,29 @@ sub start {
     $self->log("vm running as pid $pid");
     $self->{pid} = $pid;
     $self->{booted} = 1;
+}
+
+
+# Send a command to the monitor and wait for it to finish.  TODO: QEMU
+# also has a JSON-based monitor interface now, but it doesn't support
+# all commands yet.  We should use it once it does.
+sub sendMonitorCommand {
+    my ($self, $command) = @_;
+    syswrite $self->{monitor}, "$command\n";
+    return $self->waitForMonitorPrompt;
+}
+
+
+# Wait until the monitor sends "(qemu) ".
+sub waitForMonitorPrompt {
+    my ($self) = @_;
+    my $res = "";
+    my $s;
+    while (sysread($self->{monitor}, $s, 1024)) {
+        $res .= $s;
+        last if $res =~ s/\(qemu\) $//;
+    }
+    return $res;
 }
 
 
@@ -310,8 +351,12 @@ sub unblock {
 # Take a screenshot of the X server on :0.0.
 sub screenshot {
     my ($self, $filename) = @_;
-    my $scrot = $ENV{'scrot'} or die;
-    $self->mustSucceed("$scrot /hostfs/$ENV{out}/${filename}.png");
+    $filename = "$ENV{'out'}/${filename}.png" if $filename =~ /^\w+$/;
+    my $tmp = "${filename}.ppm";
+    $self->sendMonitorCommand("screendump $tmp");
+    system("convert $tmp ${filename}") == 0
+        or die "cannot convert screenshot";
+    unlink $tmp;
 }
 
 

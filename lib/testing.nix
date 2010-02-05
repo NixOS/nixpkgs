@@ -15,9 +15,7 @@ rec {
       name = "vm-test-run";
       inherit tests;
       
-      scrot = "${pkgs.scrot}/bin/scrot";
-
-      buildInputs = [ pkgs.qemu_kvm ];
+      buildInputs = [ pkgs.qemu_kvm pkgs.imagemagick ];
       
       buildCommand =
         ''
