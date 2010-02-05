@@ -67,7 +67,7 @@ let
         else [];
 
   /* Common platform groups on which to test packages. */
-  inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
+  inherit (pkgs.lib.platforms) linux darwin cygwin allBut all mesaPlatforms;
 
   /* Platform groups for specific kinds of applications. */
   x11Supported = linux;
@@ -119,7 +119,7 @@ in {
   cksfv = all;
   classpath = linux;
   cmake = all;
-  compiz = linux;
+  #compiz = linux;
   consolekit = linux;
   coreutils = all;
   cpio = all;
@@ -174,7 +174,7 @@ in {
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
-  gitFull = linux;
+  #gitFull = linux;
   glibc = linux;
   glibcLocales = linux;
   glxinfo = linux;
@@ -264,7 +264,7 @@ in {
   mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
-  mesa = linux ++ darwin;
+  mesa = mesaPlatforms;
   midori = linux;
   mingetty = linux;
   mk = linux;
@@ -322,7 +322,7 @@ in {
   python = allBut "i686-cygwin";
   pythonFull = linux;
   sbcl = all;
-  qt3 = allBut "i686-cygwin";
+  qt3 = linux;
   qt4 = linux;
   qt45 = linux;
   qt46 = linux;
@@ -408,7 +408,7 @@ in {
   wireshark = linux;
   wirelesstools = linux;
   wpa_supplicant = linux;
-  wxGTK = all;
+  wxGTK = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
   xfig = x11Supported;
@@ -470,10 +470,6 @@ in {
 
   gtkLibs = {
     gtk = linux;
-  };
-
-  haskellPackages_ghc683 = {
-    ghc = ghcSupported;
   };
 
   haskellPackages_ghc6102 = {
@@ -567,14 +563,6 @@ in {
   };
 
   kernelPackages_2_6_31 = {
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_31_zen = {
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_31_zen_bfs = {
     kernel = linux;
   };
 
