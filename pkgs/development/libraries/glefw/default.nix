@@ -1,9 +1,10 @@
 args: with args;
+
 stdenv.mkDerivation {
   name = "glefw-2.6";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/glfw/glfw-2.6.tar.bz2;
+    url = mirror://sourceforge/glfw/glfw-2.6.tar.bz2;
     sha256 = "1jnz7szax7410qrkiwkvq34sxy11w46ybyqbkaczdyvqas6cm1hv";
   };
 
@@ -13,6 +14,7 @@ stdenv.mkDerivation {
     ensureDir $out
     make x11-install PREFIX=$out
   '';
+  
   installPhase=":";
 
   meta = { 

@@ -4727,7 +4727,7 @@ let
     inherit stdenv fetchurl cmake qt4;
   };
 
-  tk = import ../development/libraries/tk/8.5.7.nix {
+  tk = import ../development/libraries/tk {
     inherit fetchurl stdenv tcl x11;
   };
 
@@ -8579,8 +8579,8 @@ let
   };
 
   foldingathome = import ../misc/foldingathome {
-      inherit fetchurl stdenv;
-    };
+    inherit fetchurl stdenv;
+  };
 
   freestyle = import ../misc/freestyle {
     inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
