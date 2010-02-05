@@ -12,12 +12,15 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{stdenv, perl, cpio, contents}:
+{stdenv, perl, cpio, contents, platform}:
 
 stdenv.mkDerivation {
   name = "initrd";
   builder = ./make-initrd.sh;
-  buildInputs = [perl cpio];
+  buildInputs = [perl cpio]
+    ++ stdenv.lib.optional (platform.uboot != null) [ platform.uboot ];
+
+  makeUInitrd = if (platform.uboot != null) then true else false;
 
   # !!! should use XML.
   objects = map (x: x.object) contents;

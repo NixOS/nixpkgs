@@ -26,11 +26,32 @@ preConfigure() {
     # don't want as a dependency in the Nixpkgs bootstrap.  So force
     # the output file to be newer.
     touch locale/C-translit.h
+
+    tar xvjf "$srcPorts"
     
-    mkdir ../build
-    cd ../build
+    if test -n "$crossConfig"; then
+        sed -i s/-lgcc_eh//g Makeconfig
+    fi
+
+    mkdir build
+    cd build
     
-    configureScript=../$sourceRoot/configure
+    configureScript=../configure
+    if test -n "$crossConfig"; then
+        cat > config.cache << "EOF"
+libc_cv_forced_unwind=yes
+libc_cv_c_cleanup=yes
+libc_cv_gnu89_inline=yes
+EOF
+        export BUILD_CC=gcc
+        export CC="${crossConfig}-gcc"
+        export AR="${crossConfig}-ar"
+        export RANLIB="${crossConfig}-ranlib"
+        configureFlags="${configureFlags} --cache-file=config.cache"
+
+        # Disable the native stripping, because it breaks libc_nonshared.a
+        dontStrip=1
+    fi
 }
 
 
@@ -42,6 +63,7 @@ postConfigure() {
     export NIX_LDFLAGS_BEFORE=
 
     export NIX_DONT_SET_RPATH=1
+    unset CFLAGS
 }
 
 
@@ -49,7 +71,7 @@ postInstall() {
     if test -n "$installLocales"; then
         make localedata/install-locales
     fi
-    rm $out/etc/ld.so.cache
+    test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
     (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1
 
     # Fix for NIXOS-54 (ldd not working on x86_64).  Make a symlink

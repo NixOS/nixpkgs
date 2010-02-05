@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ndgshcqzpj3piwmag3vrsv3rg4pnr12y70knl7z0k2i03cy5bav";
   };
 
-  buildInputs = [pkgconfig gettext perl];
+  buildNativeInputs = [perl];
+  buildInputs = [pkgconfig gettext];
 
   # The nbd package depends on a static version of this library; hence
   # the default configure flag --disable-static is switched off.

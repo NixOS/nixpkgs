@@ -15,14 +15,16 @@ let
   misc = import ./misc.nix;
   maintainers = import ./maintainers.nix;
   platforms = import ./platforms.nix;
+  systems = import ./systems.nix;
   customisation = import ./customisation.nix;
 
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
-      properties modules types meta debug maintainers platforms;
+      properties modules types meta debug maintainers platforms systems;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
   // trivial // lists // strings // stringsWithDeps // attrsets // sources
   // properties // options // types // meta // debug // misc // modules
+  // systems
   // customisation

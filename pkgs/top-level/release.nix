@@ -4,6 +4,11 @@ let
 
   pkgs = allPackages {};
 
+  /* The working or failing letters for cross builds will be sent only to
+     the following maintainers, as most package maintainers will not be
+     interested in the result of cross building a package. */
+  crossMaintainers = with pkgs.lib.maintainers; [ viric ];
+
   /* Set the Hydra scheduling priority for a job.  The default
      priority (100) should be used for most jobs.  A different
      priority should only be used for a few particularly interesting
@@ -12,7 +17,7 @@ let
   prio = level: job: toJob job // { schedulingPriority = level; };
 
   toJob = x: if builtins.isAttrs x then x else
-    { type = "job"; systems = x; schedulingPriority = 10; };
+    { type = "job"; systems = x; schedulingPriority = 5; };
 
   /* Perform a job on the given set of platforms.  The function `f' is
      called by Hydra for each platform, and should return some job
@@ -20,6 +25,12 @@ let
      for the platform in question. */
   testOn = systems: f: {system ? builtins.currentSystem}:
     if pkgs.lib.elem system systems then f (allPackages {inherit system;}) else {};
+
+  /* Similar to the testOn function, but with an additional 'crossSystem'
+   * parameter for allPackages, defining the target platform for cross builds */
+  testOnCross = crossSystem: systems: f: {system ? builtins.currentSystem}:
+    if pkgs.lib.elem system systems then f (allPackages {inherit system
+                crossSystem;}) else {};
 
   /* Map an attribute of the form `foo = [platforms...]'  to `testOn
      [platforms...] (pkgs: pkgs.foo)'. */
@@ -32,6 +43,22 @@ let
           pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
           (pkgs.lib.getAttrFromPath path pkgs);
       in testOn job.systems getPkg);
+
+
+  /* Similar to the testOn function, but with an additional 'crossSystem'
+   * parameter for allPackages, defining the target platform for cross builds,
+   * and triggering the build of the host derivation (cross built - hostDrv). */
+  mapTestOnCross = crossSystem: pkgs.lib.mapAttrsRecursiveCond
+    (as: !(as ? type && as.type == "job"))
+    (path: value:
+      let
+        job = toJob value;
+        getPkg = pkgs: setCrossMaintainers
+          (pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
+          (pkgs.lib.getAttrFromPath (path ++ ["hostDrv"]) pkgs));
+      in testOnCross crossSystem job.systems getPkg);
+
+  setCrossMaintainers = pkg: pkg // { meta.maintainers = crossMaintainers; };
 
   /* Find all packages that have a meta.platforms field listing the
      supported platforms. */
@@ -170,6 +197,7 @@ in {
   gcc43_multi = ["x86_64-linux"];
   gcc44 = linux;
   gcj44 = linux;
+  ghdl = linux;
   ghostscript = linux;
   ghostscriptX = linux;
   gimp = linux;
@@ -179,6 +207,7 @@ in {
   glibcLocales = linux;
   glxinfo = linux;
   gnash = linux;
+  gnat44 = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
@@ -348,8 +377,7 @@ in {
   smbfsFuse = linux;
   socat = linux;
   spidermonkey = linux;
-  splashutils_13 = linux;
-  splashutils_15 = linux;
+  splashutils = linux;
   sqlite = allBut "i686-cygwin";
   squid = linux;
   ssmtp = linux;
@@ -536,37 +564,33 @@ in {
     l10n.ru = linux;
   };
 
-  kernelPackages_2_6_25 = {
+  linuxPackages_2_6_25 = {
     aufs = linux;
     kernel = linux;
   };
 
-  kernelPackages_2_6_27 = {
+  linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
   
-  kernelPackages_2_6_28 = {
+  linuxPackages_2_6_28 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
-  kernelPackages_2_6_29 = {
+  linuxPackages_2_6_29 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
-  kernelPackages_2_6_31 = {
-    kernel = linux;
-  };
-
-  kernelPackages_2_6_32 = {
+  linuxPackages_2_6_32 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
@@ -631,4 +655,27 @@ in {
     xset = linux;
   };
 
-} ))
+} )) // (
+
+/* Test some cross builds to the Sheevaplug */
+let
+  crossSystem = {
+      config = "armv5tel-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "soft";
+  };
+  nativePlatforms = linux;
+in {
+  crossArmLinux = mapTestOnCross crossSystem (rec {
+    bison = nativePlatforms;
+    uboot = nativePlatforms;
+    tightvnc = nativePlatforms;
+    #openoffice = nativePlatforms;
+    wxGTK = nativePlatforms;
+    #firefox = nativePlatforms;
+    xorg = {
+      #xorgserver = nativePlatforms;
+    };
+  });
+})

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gdb }:
+{ stdenv, fetchurl, perl, gdb, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   name = "valgrind-3.5.0";
@@ -8,9 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "105s4y6h5rsfvml1dfhsjvqgsxvnclbnxbpgk8b4ghpbpcr52fkl";
   };
 
+  # Make Valgrind compile with Glibc 2.11.
+  patches = [ ./glibc-2.11.patch ];
+  patchFlags = "-p0";
+  preConfigure = "autoreconf";
+
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  buildInputs = [ perl autoconf automake ] ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =
     if stdenv.system == "x86_64-linux" then ["--enable-only64bit"] else [];

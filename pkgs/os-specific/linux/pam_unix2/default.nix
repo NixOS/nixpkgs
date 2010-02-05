@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, libxcrypt}:
+{ stdenv, fetchurl, pam, libxcrypt }:
    
 stdenv.mkDerivation {
   name = "pam_unix2-2.6";
@@ -8,5 +8,9 @@ stdenv.mkDerivation {
     sha256 = "067xnyd3q8ik73glxwyx1lydk4bgl78lzq44mnqqp4jrpnpd04ml";
   };
 
-  buildInputs = [pam libxcrypt];
+  buildInputs = [ pam ] ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") libxcrypt;
+
+  meta = {
+    homepage = ftp://ftp.suse.com/pub/people/kukuk/pam/pam_unix2;
+  };
 }

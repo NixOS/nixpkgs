@@ -8,5 +8,11 @@ stdenv.mkDerivation {
     sha256 = "1w2hpwjhmwjhf8rg789xpl0hibahqlr3ccivfy3m4kgrm5gf04kv";
   };
 
+  # To overcome a gcc 4.4 warning:
+  # "#ident is a deprecated GCC extension"
+  patchPhase = ''
+    sed -i s/-Werror// configure
+  '';
+
   buildInputs = [pam];
 }

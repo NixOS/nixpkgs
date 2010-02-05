@@ -33,9 +33,16 @@
 
 , preConfigure ? ""
 , extraMeta ? {}
+, platform ? { name = "pc"; uboot = null; kernelBaseConfig = "defconfig"; }
+, ...
 }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+  || stdenv.system == "armv5tel-linux";
+
+assert platform.name == "sheevaplug" -> platform.uboot != null;
+assert (platform.name == "sheevaplug" || platform.name == "versatileARM") ->
+  stdenv.system == "armv5tel-linux";
 
 let
 
@@ -66,14 +73,19 @@ stdenv.mkDerivation {
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
 
-  # For UML, just ignore all options that don't apply (I'm lazy).
-  ignoreConfigErrors = userModeLinux;
+  # For UML and non-PC, just ignore all options that don't apply (We are lazy).
+  ignoreConfigErrors = (userModeLinux || stdenv.system == "armv5tel-linux");
 
-  buildInputs = [ perl mktemp ];
+  buildInputs = [ perl mktemp ]
+    ++ lib.optional (platform.uboot != null) [platform.uboot];
+
+  platformName = platform.name;
+  kernelBaseConfig = platform.kernelBaseConfig;
   
   arch =
     if xen then "xen" else
     if userModeLinux then "um" else
+    if platform ? kernelArch then platform.kernelArch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     abort "Platform ${stdenv.system} is not supported.";

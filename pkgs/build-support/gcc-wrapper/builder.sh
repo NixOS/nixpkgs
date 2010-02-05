@@ -42,6 +42,9 @@ else
         gccLDFlags="$gccLDFlags -L$gcc/lib64"
     fi
     gccLDFlags="$gccLDFlags -L$gcc/lib"
+    if [ -n "$langVhdl" ]; then
+        gccLDFlags="$gccLDFlags -L$zlib/lib"
+    fi
     echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
 
     # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
@@ -50,6 +53,15 @@ else
     # path explicitly.
     if test -e "$gcc/lib64"; then
         gccCFlags="$gccCFlags -B$gcc/lib64"
+    fi
+
+    # Find the gcc libraries path (may work only without multilib)
+    if [ -n "$langAda" ]; then
+        basePath=`echo $gcc/lib/*/*/*`
+        gccCFlags="$gccCFlags -B$basePath -I$basePath/adainclude"
+
+        gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
+        echo "$gnatCFlags" > $out/nix-support/gnat-cflags
     fi
     echo "$gccCFlags" > $out/nix-support/gcc-cflags
     
@@ -68,7 +80,10 @@ doSubstitute() {
         -e "s^@shell@^$shell^g" \
         -e "s^@gcc@^$gcc^g" \
         -e "s^@gccProg@^$gccProg^g" \
+        -e "s^@gnatProg@^$gnatProg^g" \
+        -e "s^@gnatlinkProg@^$gnatlinkProg^g" \
         -e "s^@binutils@^$binutils^g" \
+        -e "s^@coreutils@^$coreutils^g" \
         -e "s^@libc@^$libc^g" \
         -e "s^@ld@^$ldPath/ld^g" \
         < "$src" > "$dst" 
@@ -83,7 +98,7 @@ mkGccWrapper() {
 
     if ! test -f "$src"; then
         echo "$src does not exist (skipping)"
-        return
+        return 1
     fi
 
     gccProg="$src"
@@ -91,16 +106,59 @@ mkGccWrapper() {
     chmod +x "$dst"
 }
 
-mkGccWrapper $out/bin/gcc $gccPath/gcc
-ln -s gcc $out/bin/cc
+mkGnatWrapper() {
+    local dst=$1
+    local src=$2
 
-mkGccWrapper $out/bin/g++ $gccPath/g++
-ln -s g++ $out/bin/c++
+    if ! test -f "$src"; then
+        echo "$src does not exist (skipping)"
+        return 1
+    fi
 
-if test -e $gccPath/gfortran; then
-    mkGccWrapper $out/bin/gfortran $gccPath/gfortran
-    ln -s gfortran $out/bin/g77
-    ln -s gfortran $out/bin/f77
+    gnatProg="$src"
+    doSubstitute "$gnatWrapper" "$dst"
+    chmod +x "$dst"
+}
+
+mkGnatLinkWrapper() {
+    local dst=$1
+    local src=$2
+
+    if ! test -f "$src"; then
+        echo "$src does not exist (skipping)"
+        return 1
+    fi
+
+    gnatlinkProg="$src"
+    doSubstitute "$gnatlinkWrapper" "$dst"
+    chmod +x "$dst"
+}
+
+if mkGccWrapper $out/bin/gcc $gccPath/gcc
+then
+    ln -sv gcc $out/bin/cc
+fi
+
+if mkGccWrapper $out/bin/g++ $gccPath/g++
+then
+    ln -sv g++ $out/bin/c++
+fi
+
+if mkGccWrapper $out/bin/gfortran $gccPath/gfortran
+then
+    ln -sv gfortran $out/bin/g77
+    ln -sv gfortran $out/bin/f77
+fi
+
+mkGccWrapper $out/bin/gcj $gccPath/gcj || true
+
+mkGccWrapper $out/bin/gnatgcc $gccPath/gnatgcc || true
+mkGnatWrapper $out/bin/gnatmake $gccPath/gnatmake || true
+mkGnatWrapper $out/bin/gnatbind $gccPath/gnatbind || true
+mkGnatLinkWrapper $out/bin/gnatlink $gccPath/gnatlink || true
+
+if [ -f $gccPath/ghdl ]; then
+    ln -sf $gccPath/ghdl $out/bin/ghdl
 fi
 
 

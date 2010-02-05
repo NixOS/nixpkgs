@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, bison, mktemp, kernelHeaders}:
+{stdenv, fetchurl, perl, bison, mktemp, linuxHeaders}:
 
 assert stdenv.isLinux;
 
@@ -15,10 +15,12 @@ stdenv.mkDerivation {
   makeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
   
   preBuild = ''
+    sed -i /CONFIG_AEABI/d defconfig
+    echo "CONFIG_AEABI=y" >> defconfig
     makeFlags=$(eval "echo $makeFlags")
 
     mkdir linux
-    cp -prsd ${kernelHeaders}/include linux/
+    cp -prsd ${linuxHeaders}/include linux/
     chmod -R u+w linux/include/
   ''; # */
   

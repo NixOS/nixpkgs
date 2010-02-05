@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flex autoconf automake  ];
 
+  # We get a warning in armv5tel-linux, so we disable -Werror in it
+  patchPhase = if (stdenv.system == "armv5tel-linux") then ''
+    sed -i s/-Werror// src/Makefile.am
+  '' else "";
+
   # Grrr, kbd 1.15.1 doesn't include a configure script.
   preConfigure = "autoreconf";
 

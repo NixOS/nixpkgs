@@ -5,7 +5,7 @@ with pkgs;
 rec {
 
 
-  inherit (kernelPackages_2_6_32) kernel;
+  inherit (linuxPackages_2_6_32) kernel;
 
   klibcShrunk = pkgs.klibcShrunk.override { klibc = klibc_15; };
 

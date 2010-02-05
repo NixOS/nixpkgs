@@ -1,14 +1,57 @@
-addCVars () {
+NIX_CROSS_CFLAGS_COMPILE=""
+NIX_CROSS_LDFLAGS=""
+
+crossAddCVars () {
     if test -d $1/include; then
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$1/include"
+        export NIX_CROSS_CFLAGS_COMPILE="$NIX_CROSS_CFLAGS_COMPILE -I$1/include"
     fi
 
     if test -d $1/lib; then
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib"
+        export NIX_CROSS_LDFLAGS="$NIX_CROSS_LDFLAGS -L$1/lib -rpath-link $1/lib"
     fi
 }
 
-envHooks=(${envHooks[@]} addCVars)
+crossEnvHooks=(${crossEnvHooks[@]} crossAddCVars)
+
+crossStripDirs() {
+    local dirs="$1"
+    local stripFlags="$2"
+    local dirsNew=
+
+    for d in ${dirs}; do
+        if test -d "$prefix/$d"; then
+            dirsNew="${dirsNew} $prefix/$d "
+        fi
+    done
+    dirs=${dirsNew}
+
+    if test -n "${dirs}"; then
+        header "stripping (with flags $stripFlags) in $dirs"
+        # libc_nonshared.a should never be stripped, or builds will break.
+        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} $crossConfig-strip $stripFlags || true
+        stopNest
+    fi
+}
+
+crossStrip () {
+    # In cross_renaming we may rename dontCrossStrip to dontStrip, and
+    # dontStrip to dontNativeStrip.
+    # TODO: strip _only_ ELF executables, and return || fail here...
+    if test -z "$dontCrossStrip"; then
+        stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
+        if test -n "$stripDebugList"; then
+            crossStripDirs "$stripDebugList" "${stripDebugFlags:--S}"
+        fi
+        
+        stripAllList=${stripAllList:-}
+        if test -n "$stripAllList"; then
+            crossStripDirs "$stripAllList" "${stripAllFlags:--s}"
+        fi
+    fi
+}
+
+preDistPhases=(${preDistPhases[@]} crossStrip)
+
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 
@@ -20,6 +63,20 @@ if test -n "@binutils@"; then
     PATH=$PATH:@binutils@/bin
 fi
 
-if test -n "@glibc@"; then
-    PATH=$PATH:@glibc@/bin
+if test -n "@libc@"; then
+    PATH=$PATH:@libc@/bin
+    crossAddCVars @libc@
+fi
+
+configureFlags="$configureFlags --build=$system --host=$crossConfig"
+# Disabling the tests when cross compiling, as usually the tests are meant for
+# native compilations.
+doCheck=""
+
+# Add the output as an rpath.
+if test "$NIX_NO_SELF_RPATH" != "1"; then
+    export NIX_CROSS_LDFLAGS="-rpath $out/lib -rpath-link $out/lib $NIX_CROSS_LDFLAGS"
+    if test -n "$NIX_LIB64_IN_SELF_RPATH"; then
+        export NIX_CROSS_LDFLAGS="-rpath $out/lib64 -rpath-link $out/lib $NIX_CROSS_LDFLAGS"
+    fi
 fi

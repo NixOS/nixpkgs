@@ -1,0 +1,54 @@
+See http://lists.gnu.org/archive/html/bug-gnulib/2009-10/msg00089.html .
+
+From dd0ebefe4fe761f6f422a400430db53c64dbffd7 Mon Sep 17 00:00:00 2001
+From: Eric Blake <ebb9@byu.net>
+Date: Tue, 6 Oct 2009 20:44:13 -0600
+Subject: [PATCH] getopt: fix compilation on darwin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+* lib/getopt.in.h (includes): Leave breadcrumbs during system
+include.
+* lib/unistd.in.h (getopt): Use them to avoid recursive include.
+Reported by Ludovic Courtès.
+
+Signed-off-by: Eric Blake <ebb9@byu.net>
+---
+ ChangeLog       |    5 +++++
+ lib/getopt.in.h |    6 +++++-
+ lib/unistd.in.h |    2 +-
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/lib/getopt.in.h b/lib/getopt.in.h
+index 9de467a..7377f3c 100644
+--- a/lib/getopt.in.h
++++ b/lib/getopt.in.h
+@@ -22,9 +22,13 @@
+ @PRAGMA_SYSTEM_HEADER@
+ #endif
+
+-/* The include_next requires a split double-inclusion guard.  */
++/* The include_next requires a split double-inclusion guard.  We must
++   also inform the replacement unistd.h to not recursively use
++   <getopt.h>; our definitions will be present soon enough.  */
+ #if @HAVE_GETOPT_H@
++# define _GL_SYSTEM_GETOPT
+ # @INCLUDE_NEXT@ @NEXT_GETOPT_H@
++# undef _GL_SYSTEM_GETOPT
+ #endif
+
+ #ifndef _GL_GETOPT_H
+diff --git a/lib/unistd.in.h b/lib/unistd.in.h
+index 38e2e13..b6ea889 100644
+--- a/lib/unistd.in.h
++++ b/lib/unistd.in.h
+@@ -49,7 +49,7 @@
+ #endif
+
+ /* Get getopt(), optarg, optind, opterr, optopt.  */
+-#if @GNULIB_UNISTD_H_GETOPT@
++#if @GNULIB_UNISTD_H_GETOPT@ && !defined _GL_SYSTEM_GETOPT
+ # include <getopt.h>
+ #endif
+

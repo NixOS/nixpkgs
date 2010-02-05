@@ -1,15 +1,21 @@
-{stdenv, fetchurl, aclSupport ? false, acl}:
+{stdenv, fetchurl, aclSupport ? false, acl, perl, gmp}:
 
 stdenv.mkDerivation rec {
-  name = "coreutils-7.2";
-  
+  name = "coreutils-8.4";
+
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "1cpx66kwcg5w78by8i27wb24j0flz2ivv9fqmd4av8z5jbnbyxyx";
+    sha256 = "0zq11lykc7hfs9nsdnb8gqk354l82hswqj38607mvwj3b0zqvc4b";
   };
 
-  buildInputs = stdenv.lib.optional aclSupport acl;
-  
+  buildInputs = [ perl gmp ] ++ stdenv.lib.optional aclSupport acl;
+
+  # The tests are known broken on Cygwin
+  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # and {Open,Free}BSD.
+  doCheck = (stdenv ? glibc);
+
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
@@ -22,5 +28,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

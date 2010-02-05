@@ -32,6 +32,13 @@ cmakeConfigurePhase()
         cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
 
+    if test -n "$crossConfig"; then
+        # By now it supports linux builds only. We should set the proper
+        # CMAKE_SYSTEM_NAME otherwise.
+        # http://www.cmake.org/Wiki/CMake_Cross_Compiling
+        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ -DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
+    fi
+
     # Avoid cmake resetting the rpath of binaries, on make install
     cmakeFlags="-DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
 
@@ -46,4 +53,8 @@ if test -z "$dontUseCmakeConfigure"; then
     configurePhase=cmakeConfigurePhase
 fi
 
-envHooks=(${envHooks[@]} addCMakeParams)
+if test -n "$crossConfig"; then
+    crossEnvHooks=(${crossEnvHooks[@]} addCMakeParams)
+else
+    envHooks=(${envHooks[@]} addCMakeParams)
+fi

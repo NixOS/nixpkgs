@@ -107,7 +107,76 @@ rec {
       isStatic = true;
     } // {inherit fetchurl;};
 
+    
+  # Return a modified stdenv that enables building static libraries.
+  enableStaticLibraries = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        dontDisableStatic = true;
+        configureFlags =
+          (if args ? configureFlags then args.configureFlags else "")
+          + " --enable-static";
+      });
+    } // {inherit fetchurl;};
 
+    
+  # Return a modified stdenv that adds a cross compiler to the
+  # builds.
+  makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
+    { mkDerivation = {name ? "", buildInputs ? [], buildNativeInputs ? [],
+            propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [],
+            selfBuildNativeInput ? false, ...}@args: let
+
+            # *BuildInputs exists temporarily as another name for
+            # *HostInputs.
+
+            getBuildDrv = drv : if (drv ? buildDrv) then drv.buildDrv else drv;
+            buildNativeInputsDrvs = map (getBuildDrv) buildNativeInputs;
+            buildInputsDrvs = map (drv: drv.hostDrv) buildInputs;
+            buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
+            propagatedBuildInputsDrvs = map (drv: drv.hostDrv) (propagatedBuildInputs);
+            propagatedBuildNativeInputsDrvs = map (drv: drv.buildDrv)
+                (propagatedBuildNativeInputs);
+
+            # The base stdenv already knows that buildNativeInputs and
+            # buildInputs should be built with the usual gcc-wrapper
+            # And the same for propagatedBuildInputs.
+            buildDrv = stdenv.mkDerivation args;
+
+            # Temporary expression until the cross_renaming, to handle the
+            # case of pkgconfig given as buildInput, but to be used as
+            # buildNativeInput.
+            hostAsBuildDrv = drv: builtins.unsafeDiscardStringContext
+                drv.buildDrv.drvPath == builtins.unsafeDiscardStringContext
+                drv.hostDrv.drvPath;
+            nativeInputsFromBuildInputs = stdenv.lib.filter (hostAsBuildDrv) buildInputs;
+
+            # We should overwrite the input attributes in hostDrv, to overwrite
+            # the defaults for only-native builds in the base stdenv
+            hostDrv = if (cross == null) then buildDrv else
+                stdenv.mkDerivation (args // {
+                    name = name + "-" + cross.config;
+                    buildNativeInputs = buildNativeInputsDrvs
+                      ++ nativeInputsFromBuildInputs
+                      ++ [ gccCross binutilsCross ] ++
+                      stdenv.lib.optional selfBuildNativeInput buildDrv;
+
+                    # Cross-linking dynamic libraries, every buildInput should
+                    # be propagated because ld needs the -rpath-link to find
+                    # any library needed to link the program dynamically at
+                    # loader time. ld(1) explains it.
+                    buildInputs = [];
+                    propagatedBuildInputs = propagatedBuildInputsDrvs ++
+                      buildInputsDrvs;
+                    propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
+
+                    crossConfig = cross.config;
+                });
+        in buildDrv // {
+            inherit hostDrv buildDrv;
+        };
+    } // { inherit cross; };
+
+    
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
 
@@ -211,7 +280,6 @@ rec {
 
   /* Use the trace output to report all processed derivations with their
      license name.
- 
   */
   traceDrvLicenses = stdenv: stdenv //
     { mkDerivation = args:
@@ -233,6 +301,7 @@ rec {
         };
     };
 
+    
   /* Abort if the license predicate is not verified for a derivation
      declared with mkDerivation.
 

@@ -31,6 +31,7 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
+
     extraCFlags="-g0 -I$gmp/include -I$mpfr/include $extraCFlags"
     extraLDFlags="--strip-debug $extraLDFlags"
 
@@ -39,17 +40,56 @@ if test "$noSysDirs" = "1"; then
         export NIX_EXTRA_LDFLAGS="$NIX_EXTRA_LDFLAGS -Wl,$i"
     done
 
-    makeFlagsArray=( \
-        "${makeFlagsArray[@]}" \
-        NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        LIMITS_H_TEST=true \
-        X_CFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
-        )
+    if test -n "$targetConfig"; then
+        if test -z "$crossStageStatic"; then
+            extraXCFlags="-B${libcCross}/lib -idirafter ${libcCross}/include"
+            extraXLDFlags="-L${libcCross}/lib"
+            export NIX_EXTRA_CFLAGS_TARGET=$extraXCFlags
+            for i in $extraXLDFlags; do
+                export NIX_EXTRA_LDFLAGS_TARGET="$NIX_EXTRA_LDFLAGS_TARGET -Wl,$i"
+            done
+        fi
+
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            CFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+            LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET" \
+            )
+    else
+        export NIX_EXTRA_CFLAGS_TARGET=$NIX_EXTRA_CFLAGS
+        export NIX_EXTRA_LDFLAGS_TARGET=$NIX_EXTRA_LDFLAGS
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
+            CFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            CFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            LDFLAGS_FOR_BUILD="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            LDFLAGS_FOR_TARGET="$NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS" \
+            )
+    fi
+
+    if test -n "$targetConfig" -a "$crossStageStatic" == 1; then
+        # We don't want the gcc build to assume there will be a libc providing
+        # limits.h in this stagae
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            LIMITS_H_TEST=false \
+            )
+    else
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            LIMITS_H_TEST=true \
+            )
+    fi
 fi
 
+if test -n "$targetConfig"; then
+    # The host strip will destroy everything in the target binaries otherwise
+    dontStrip=1
+fi
 
 preConfigure() {
     # Perform the build in a different directory.
@@ -84,13 +124,21 @@ postInstall() {
             ln -sfn g++ $i
         fi
     done
+
+    eval "$postInstallGhdl"
 }
 
 
-if test -z "$profiledCompiler"; then
-    buildFlags="bootstrap $buildFlags"
-else    
-    buildFlags="profiledbootstrap $buildFlags"
+if test -z "$targetConfig"; then
+    if test -z "$profiledCompiler"; then
+        buildFlags="bootstrap $buildFlags"
+    else    
+        buildFlags="profiledbootstrap $buildFlags"
+    fi
+else
+:
+#    buildFlags="all-gcc all-target-libgcc $buildFlags"
+#    installTargets="install-gcc install-target-libgcc"
 fi
 
 genericBuild

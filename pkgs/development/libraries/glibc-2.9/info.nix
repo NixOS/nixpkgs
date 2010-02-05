@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0zhxbgcsl97pf349m0lz8d5ljvvzrcqc23yf08d888xlk4ms8m3h";
   };
 
+  patches = [
+    /* Support GNU Binutils 2.20 and above.  */
+    ./binutils-2.20.patch
+  ];
+
   preConfigure = ''
     export PWD_P=$(type -tP pwd)
     for i in configure io/ftwtest-sh; do

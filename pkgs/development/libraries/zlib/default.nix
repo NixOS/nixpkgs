@@ -8,6 +8,13 @@ stdenv.mkDerivation {
   };
   configureFlags = if static then "" else "--shared";
 
+  preConfigure = ''
+    if test -n "$crossConfig"; then
+      export CC=$crossConfig-gcc
+      configureFlags=${if static then "" else "--shared"}
+    fi
+  '';
+
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
 }

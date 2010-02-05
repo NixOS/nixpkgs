@@ -4,7 +4,7 @@ if test -n "$NIX_GCC_WRAPPER_START_HOOK"; then
     source "$NIX_GCC_WRAPPER_START_HOOK"
 fi
 
-if test -z "$NIX_GLIBC_FLAGS_SET"; then
+if test -z "$NIX_CROSS_GLIBC_FLAGS_SET"; then
     source @out@/nix-support/add-flags
 fi
 
@@ -63,28 +63,28 @@ fi
 
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_CFLAGS_COMPILE)
+extraAfter=($NIX_CROSS_CFLAGS_COMPILE)
 extraBefore=()
 
 if test "$dontLink" != "1"; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter=(${extraAfter[@]} $NIX_CFLAGS_LINK)
+    extraAfter=(${extraAfter[@]} $NIX_CROSS_CFLAGS_LINK)
 
     # Add the flags that should be passed to the linker (and prevent
-    # `ld-wrapper' from adding NIX_LDFLAGS again).
-    for i in $NIX_LDFLAGS_BEFORE; do
+    # `ld-wrapper' from adding NIX_CROSS_LDFLAGS again).
+    for i in $NIX_CROSS_LDFLAGS_BEFORE; do
         extraBefore=(${extraBefore[@]} "-Wl,$i")
     done
-    for i in $NIX_LDFLAGS; do
+    for i in $NIX_CROSS_LDFLAGS; do
 	if test "${i:0:3}" = "-L/"; then
 	    extraAfter=(${extraAfter[@]} "$i")
 	else
 	    extraAfter=(${extraAfter[@]} "-Wl,$i")
 	fi
     done
-    export NIX_LDFLAGS_SET=1
+    export NIX_CROSS_LDFLAGS_SET=1
 
     if test "$NIX_STRIP_DEBUG" = "1"; then
         # Add executable-stripping flags.
@@ -112,6 +112,8 @@ if test -n "$NIX_GCC_WRAPPER_EXEC_HOOK"; then
     source "$NIX_GCC_WRAPPER_EXEC_HOOK"
 fi
 
+# We want gcc to call the wrapper linker, not that of binutils.
+export PATH="@ldPath@:$PATH"
 
 # Call the real `gcc'.  Filter out warnings from stderr about unused
 # `-B' flags, since they confuse some programs.  Deep bash magic to

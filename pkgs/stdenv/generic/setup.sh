@@ -4,11 +4,12 @@
 # environment variables) and from shell scripts (as functions). 
 runHook() {
     local hookName="$1"
-    if test "$(type -t $hookName)" = function; then
-        $hookName
-    else
-        eval "${!hookName}"
-    fi
+    case "$(type -t $hookName)" in
+        (function|alias|builtin) $hookName;;
+        (file) source $hookName;;
+        (keyword) :;;
+        (*) eval "${!hookName}";;
+    esac
 }
 
 
@@ -78,6 +79,10 @@ addToSearchPath() {
 
 set -e
 
+# Check that the directory pointed by HOME, usually '/homeless-shelter',
+# does not exist, as it may be a good source for impurities.
+! test -e $HOME
+
 test -z $NIX_GCC && NIX_GCC=@gcc@
 
 
@@ -119,6 +124,7 @@ if test -z "$SHELL"; then echo "SHELL not set"; exit 1; fi
 
 # Hack: run gcc's setup hook.
 envHooks=()
+crossEnvHooks=()
 if test -f $NIX_GCC/nix-support/setup-hook; then
     source $NIX_GCC/nix-support/setup-hook
 fi
@@ -147,35 +153,41 @@ runHook addInputsHook
 # Recursively find all build inputs.
 findInputs() {
     local pkg=$1
+    local var=$2
+    local propagatedBuildInputsFile=$3
 
-    case $pkgs in
+    case ${!var} in
         *\ $pkg\ *)
             return 0
             ;;
     esac
 
-    pkgs="$pkgs $pkg "
+    eval $var="'${!var} $pkg '"
 
     if test -f $pkg/nix-support/setup-hook; then
         source $pkg/nix-support/setup-hook
     fi
 
-    if test -f $pkg/nix-support/propagated-build-inputs; then
-        for i in $(cat $pkg/nix-support/propagated-build-inputs); do
-            findInputs $i
+    if test -f $pkg/nix-support/$propagatedBuildInputsFile; then
+        for i in $(cat $pkg/nix-support/$propagatedBuildInputsFile); do
+            findInputs $i $var $propagatedBuildInputsFile
         done
     fi
 }
 
-pkgs=""
+crossPkgs=""
 for i in $buildInputs $propagatedBuildInputs; do
-    findInputs $i
+    findInputs $i crossPkgs propagated-build-inputs
 done
 
+nativePkgs=""
+for i in $buildNativeInputs $propagatedBuildNativeInputs; do
+    findInputs $i nativePkgs propagated-build-native-inputs
+done
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
-addToEnv() {
+addToNativeEnv() {
     local pkg=$1
 
     if test -d $1/bin; then
@@ -188,8 +200,28 @@ addToEnv() {
     done
 }
 
-for i in $pkgs; do
-    addToEnv $i
+for i in $nativePkgs; do
+    addToNativeEnv $i
+done
+
+addToCrossEnv() {
+    local pkg=$1
+
+    # Some programs put important build scripts (freetype-config and similar)
+    # into their hostDrv bin path. Intentionally these should go after
+    # the nativePkgs in PATH.
+    if test -d $1/bin; then
+        addToSearchPath _PATH $1/bin
+    fi
+
+    # Run the package-specific hooks set by the setup-hook scripts.
+    for i in "${crossEnvHooks[@]}"; do
+        $i $pkg
+    done
+}
+
+for i in $crossPkgs; do
+    addToCrossEnv $i
 done
 
 
@@ -393,14 +425,10 @@ unpackFile() {
     header "unpacking source archive $curSrc" 3
 
     case "$curSrc" in
-        *.tar)
+        *.tar | *.tar.* | *.tgz | *.tbz2)
+	    # GNU tar can automatically select the decompression method
+	    # (info "(tar) gzip").
             tar xvf $curSrc
-            ;;
-        *.tar.gz | *.tgz | *.tar.Z)
-            gzip -d < $curSrc | tar xvf -
-            ;;
-        *.tar.bz2 | *.tbz2)
-            bzip2 -d < $curSrc | tar xvf -
             ;;
         *.zip)
             unzip $curSrc
@@ -504,6 +532,9 @@ patchPhase() {
                 ;;
             *.bz2)
                 uncompress="bzip2 -d"
+                ;;
+            *.lzma)
+                uncompress="lzma -d"
                 ;;
         esac
         $uncompress < $i | patch ${patchFlags:--p1}
@@ -690,6 +721,11 @@ fixupPhase() {
     if test -n "$propagatedBuildInputs"; then
         ensureDir "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+    fi
+
+    if test -n "$propagatedBuildNativeInputs"; then
+        ensureDir "$out/nix-support"
+        echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
     fi
 
     if test -n "$setupHook"; then

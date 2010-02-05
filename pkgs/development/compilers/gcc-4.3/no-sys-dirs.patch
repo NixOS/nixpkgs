@@ -74,7 +74,7 @@ diff -ru gcc-4.3.1-orig/libgomp/configure gcc-4.3.1/libgomp/configure
 +# Ugly hack to get libmudflap (and possibly other libraries) to build.
 +# Libtool filters out \`-B' flags when linking (why?), so the \`-B' flag
 +# to Glibc gets lost.  Here we forcibly add it to any invocation.
-+CC="\$CC $NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS"
++CC="\$CC $NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET"
 +
  # Is the compiler the GNU compiler?
  with_gcc=$GCC
@@ -90,7 +90,7 @@ diff -ru gcc-4.3.1-orig/libmudflap/configure gcc-4.3.1/libmudflap/configure
 +# Ugly hack to get libmudflap (and possibly other libraries) to build.
 +# Libtool filters out \`-B' flags when linking (why?), so the \`-B' flag
 +# to Glibc gets lost.  Here we forcibly add it to any invocation.
-+CC="\$CC $NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS"
++CC="\$CC $NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET"
 +
  # Is the compiler the GNU compiler?
  with_gcc=$GCC
@@ -106,7 +106,7 @@ diff -ru gcc-4.3.1-orig/libssp/configure gcc-4.3.1/libssp/configure
 +# Ugly hack to get libmudflap (and possibly other libraries) to build.
 +# Libtool filters out \`-B' flags when linking (why?), so the \`-B' flag
 +# to Glibc gets lost.  Here we forcibly add it to any invocation.
-+CC="\$CC $NIX_EXTRA_CFLAGS $NIX_EXTRA_LDFLAGS"
++CC="\$CC $NIX_EXTRA_CFLAGS_TARGET $NIX_EXTRA_LDFLAGS_TARGET"
 +
  # Is the compiler the GNU compiler?
  with_gcc=$GCC
@@ -120,10 +120,10 @@ diff -ru gcc-4.3.1-orig/Makefile.in gcc-4.3.1/Makefile.in
  ###
  
 +CFLAGS += $(NIX_EXTRA_CFLAGS)
-+CPPFLAGS_FOR_TARGET += $(NIX_EXTRA_CFLAGS)
++CPPFLAGS_FOR_TARGET += $(NIX_EXTRA_CFLAGS_TARGET)
 +CXXFLAGS += $(NIX_EXTRA_CFLAGS)
 +LDFLAGS += $(NIX_EXTRA_LDFLAGS)
-+LDFLAGS_FOR_TARGET += $(NIX_EXTRA_LDFLAGS)
++LDFLAGS_FOR_TARGET += $(NIX_EXTRA_LDFLAGS_TARGET)
 +BOOT_CFLAGS += $(NIX_EXTRA_CFLAGS)
 +BOOT_LDFLAGS += $(NIX_EXTRA_LDFLAGS)
 +

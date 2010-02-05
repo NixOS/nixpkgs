@@ -37,3 +37,8 @@ storePaths=$(perl $pathsFromGraph closure-*)
 # Put the closure in a gzipped cpio archive.
 ensureDir $out
 (cd root && find * -print0 | cpio -ov -H newc --null | gzip -9 > $out/initrd)
+
+if [ -n "$makeUInitrd" ]; then
+    mv $out/initrd $out/initrd.gz
+    mkimage -A arm -O linux -T ramdisk -C gzip -d $out/initrd.gz $out/initrd
+fi

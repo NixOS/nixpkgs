@@ -1,5 +1,4 @@
 { stdenv, fetchurl
-
 , # FreeType supports hinting using a TrueType bytecode interpreter,
   # as well as sub-pixel rendering.  These are patented by Apple and
   # Microsoft, respectively, so they are disabled by default.  This
@@ -8,7 +7,7 @@
   useEncumberedCode ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "freetype-2.3.11";
   
   src = fetchurl {
@@ -26,4 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.freetype.org/;
     license = "GPLv2+"; # or the FreeType License (BSD + advertising clause)
   };
-}
+} //
+# The asm for armel is written with the 'asm' keyword.
+(if (stdenv.system == "armv5tel-linux") then 
+    {CFLAGS = "-std=gnu99";} else {}))

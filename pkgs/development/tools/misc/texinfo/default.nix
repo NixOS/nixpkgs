@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses lzma ];
 
-  unpackCmd = "lzma -d < $src | tar xv";
-
   # Disabled because we don't have zdiff in the stdenv bootstrap.
   #doCheck = true;
 

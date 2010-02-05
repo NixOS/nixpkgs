@@ -13,6 +13,7 @@ rec {
     if system == "i686-linux" then import ./bootstrap/i686
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
+    else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
     else abort "unsupported platform for the pure Linux stdenv";
 
 
@@ -50,7 +51,10 @@ rec {
     
     builder = bootstrapFiles.sh;
     
-    args = [ ./scripts/unpack-bootstrap-tools.sh ];
+    args = if (system == "armv5tel-linux") then
+      ([ ./scripts/unpack-bootstrap-tools-arm.sh ])
+      else 
+      ([ ./scripts/unpack-bootstrap-tools.sh ]);
     
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
     
@@ -89,7 +93,6 @@ rec {
       extraAttrs = extraAttrs // {inherit fetchurl;};
     };
 
-
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   stdenvLinuxBoot0 = stdenvBootFun {
@@ -120,12 +123,12 @@ rec {
 
   # A helper function to call gcc-wrapper.
   wrapGCC =
-    {gcc ? bootstrapTools, libc, binutils, shell ? "", name ? "bootstrap-gcc"}:
+    {gcc ? bootstrapTools, libc, binutils, coreutils, shell ? "", name ? "bootstrap-gcc-wrapper"}:
     
     import ../../build-support/gcc-wrapper {
       nativeTools = false;
       nativeLibc = false;
-      inherit gcc binutils libc shell name;
+      inherit gcc binutils coreutils libc shell name;
       stdenv = stdenvLinuxBoot0;
     };
 
@@ -134,7 +137,11 @@ rec {
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
   # configure script happy.
   stdenvLinuxBoot1 = stdenvBootFun {
-    gcc = wrapGCC {libc = bootstrapGlibc; binutils = bootstrapTools;};
+    gcc = wrapGCC {
+      libc = bootstrapGlibc;
+      binutils = bootstrapTools;
+      coreutils = bootstrapTools;
+    };
     inherit fetchurl;
   };
   
@@ -156,8 +163,15 @@ rec {
   #    this one uses the Glibc built in step 3.  It still uses
   #    the rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
-    gcc = wrapGCC {binutils = bootstrapTools; libc = stdenvLinuxGlibc;};
-    extraAttrs = {glibc = stdenvLinuxGlibc;};
+    gcc = wrapGCC {
+      binutils = bootstrapTools;
+      coreutils = bootstrapTools;
+      libc = stdenvLinuxGlibc;
+    };
+    extraAttrs = {
+      glibc = stdenvLinuxGlibc;
+      inherit (stdenvLinuxBoot1Pkgs) perl;
+    };
     inherit fetchurl;
   }) ["gcc" "binutils"];
 
@@ -176,9 +190,13 @@ rec {
   stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
+      coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       name = "";
+    };
+    extraAttrs = {
+      inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
   };
@@ -210,6 +228,7 @@ rec {
 
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
+      inherit (stdenvLinuxBoot3Pkgs) coreutils;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";

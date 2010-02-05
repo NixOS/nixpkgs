@@ -4,7 +4,7 @@ if test -n "$NIX_LD_WRAPPER_START_HOOK"; then
     source "$NIX_LD_WRAPPER_START_HOOK"
 fi
 
-if test -z "$NIX_GLIBC_FLAGS_SET"; then
+if test -z "$NIX_CROSS_GLIBC_FLAGS_SET"; then
     source @out@/nix-support/add-flags
 fi
 
@@ -14,7 +14,7 @@ source @out@/nix-support/utils
 # Optionally filter out paths not refering to the store.
 params=("$@")
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE" \
-        -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_LDFLAGS_SET" \); then
+        -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_CROSS_LDFLAGS_SET" \); then
     rest=()
     n=0
     while test $n -lt ${#params[*]}; do
@@ -44,9 +44,9 @@ fi
 extra=()
 extraBefore=()
 
-if test -z "$NIX_LDFLAGS_SET"; then
-    extra=(${extra[@]} $NIX_LDFLAGS)
-    extraBefore=(${extraBefore[@]} $NIX_LDFLAGS_BEFORE)
+if test -z "$NIX_CROSS_LDFLAGS_SET"; then
+    extra=(${extra[@]} $NIX_CROSS_LDFLAGS)
+    extraBefore=(${extraBefore[@]} $NIX_CROSS_LDFLAGS_BEFORE)
 fi
 
 
@@ -121,7 +121,7 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
 
     # Finally, add `-rpath' switches.
     for i in $rpath; do
-        extra=(${extra[@]} -rpath $i)
+        extra=(${extra[@]} -rpath $i -rpath-link $i)
     done
 fi
 

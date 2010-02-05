@@ -1,5 +1,11 @@
 {args, xorg}:
-
+let
+   setMalloc0ReturnsNullCrossCompiling = ''
+      if test -n "$crossConfig"; then
+        configureFlags="$configureFlags --enable-malloc0returnsnull";
+      fi
+    '';
+in
 {
 
   fontmiscmisc = attrs: attrs // {
@@ -21,8 +27,55 @@
     preBuild = "substituteInPlace mkfontdir.cpp --replace BINDIR ${xorg.mkfontscale}/bin";
   };
 
+  libxcb = attrs : attrs // {
+    # I only remove python from the original, and add xproto. I don't know how
+    # to achieve that referring to attrs.buildInputs.
+    # I should use: builtins.unsafeDiscardStringContext
+    buildInputs = [args.pkgconfig args.libxslt xorg.libpthreadstubs /*xorg.python*/
+        xorg.libXau xorg.xcbproto xorg.libXdmcp ] ++ [ xorg.xproto ];
+    buildNativeInputs = [ args.python ];
+  };
+
+  xcbproto = attrs : attrs // {
+    # I only remove python from the original.
+    buildInputs = [args.pkgconfig  /*xorg.python*/ ];
+    buildNativeInputs = [ args.python ];
+  };
+
+  pixman = attrs : attrs // {
+    buildInputs = [ args.pkgconfig ];
+    buildNativeInputs = [ args.perl ];
+  };
+
+  libX11 = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXrender = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXxf86vm = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXrandr = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXt = attrs: attrs // {
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
+  libXft = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.libX11
+        xorg.renderproto ];
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+  };
+
   libXext = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXau];
+    preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXpm = attrs: attrs // {

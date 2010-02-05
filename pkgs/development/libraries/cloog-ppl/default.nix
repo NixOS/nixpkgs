@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ppl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-ppl-0.15.4";
+  name = "cloog-ppl-0.15.7";
 
   src = fetchurl {
     url = "mirror://gcc/infrastructure/${name}.tar.gz";
-    sha256 = "133b6ayi6wmvbmvd4y1w1xh01qy38kp59n87j7apkm2ig8avfnmm";
+    sha256 = "0zb96524jk2l78gr5gw0wq3dnvdsmyr2av59v89zv5xcps417q55";
   };
 
   propagatedBuildInputs = [ ppl ];

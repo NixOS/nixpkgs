@@ -45,14 +45,36 @@ let
         mkDerivation = attrs:
           (derivation (
             (removeAttrs attrs ["meta" "passthru"])
-            //
+            // (let
+                buildInputs = if attrs ? buildInputs then attrs.buildInputs
+                    else [];
+                buildNativeInputs = if attrs ? buildNativeInputs then
+                    attrs.buildNativeInputs else [];
+                propagatedBuildInputs = if attrs ? propagatedBuildInputs then
+                    attrs.propagatedBuildInputs else [];
+                propagatedBuildNativeInputs = if attrs ?
+                    propagatedBuildNativeInputs then
+                    attrs.propagatedBuildNativeInputs else [];
+                crossConfig = if (attrs ? crossConfig) then attrs.crossConfig else
+                   null;
+            in
             {
               builder = if attrs ? realBuilder then attrs.realBuilder else shell;
               args = if attrs ? args then attrs.args else
                 ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
               stdenv = result;
               system = result.system;
-            })
+
+              # That build by the cross compiler
+              buildInputs = lib.optionals (crossConfig != null) buildInputs;
+              propagatedBuildInputs = lib.optionals (crossConfig != null)
+                  propagatedBuildInputs;
+              # That build by the usual native compiler
+              buildNativeInputs = buildNativeInputs ++ lib.optionals
+                (crossConfig == null) buildInputs;
+              propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
+                lib.optionals (crossConfig == null) propagatedBuildInputs;
+            }))
           )
           # The meta attribute is passed in the resulting attribute set,
           # but it's not part of the actual derivation, i.e., it's not
@@ -71,7 +93,8 @@ let
         isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin" || result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
-               || result.system == "powerpc-linux";
+               || result.system == "powerpc-linux"
+               || result.system == "armv5tel-linux";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd"

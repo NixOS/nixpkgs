@@ -21,7 +21,7 @@ if test "$noSysDirs" = "1"; then
 
         # Figure out what extra flags to pass to the gcc compilers
         # being generated to make sure that they use our glibc.
-        extraCFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
+        extraFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
         extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
 
         # Use *real* header files, otherwise a limits.h is generated
@@ -29,48 +29,100 @@ if test "$noSysDirs" = "1"; then
         # SSIZE_MAX, which breaks the build).
         export NIX_FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
 
-	# The path to the Glibc binaries such as `crti.o'.
-	glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
+        # The path to the Glibc binaries such as `crti.o'.
+        glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
         
     else
         # Hack: support impure environments.
-        extraCFlags="-isystem /usr/include"
+        extraFlags="-isystem /usr/include"
         extraLDFlags="-L/usr/lib64 -L/usr/lib"
-	glibc_libdir="/usr/lib"
+        glibc_libdir="/usr/lib"
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
-    # Setting $CPATH makes sure both `gcc' and `xgcc' find the C
-    # library headers, regarless of the language being compiled.
-    export CPATH="$NIX_FIXINC_DUMMY${CPATH:+:}$CPATH"
+    extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY $extraFlags"
+    extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
-    # Likewise, to help it find `crti.o' and similar files.
-    export LIBRARY_PATH="$glibc_libdir${LIBRARY_PATH:+:}$LIBRARY_PATH"
-
-    echo "setting \$CPATH to \`$CPATH'"
-    echo "setting \$LIBRARY_PATH to \`$LIBRARY_PATH'"
-
-
-    extraCFlags="-g0 $extraCFlags"
-    extraLDFlags="--strip-debug $extraLDFlags"
-
+    EXTRA_FLAGS="$extraFlags"
     for i in $extraLDFlags; do
-        export EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
+        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
     done
 
+    if test -n "$targetConfig"; then
+        # Cross-compiling, we need gcc not to read ./specs in order to build
+        # the g++ compiler (after the specs for the cross-gcc are created).
+        # Having LIBRARY_PATH= makes gcc read the specs from ., and the build
+        # breaks. Having this variable comes from the default.nix code to bring
+        # gcj in.
+        unset LIBRARY_PATH
+        unset CPATH
+        if test -z "$crossStageStatic"; then
+            EXTRA_FLAGS_TARGET="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
+            EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
+        fi
+    else
+        EXTRA_FLAGS_TARGET="$EXTRA_FLAGS"
+        EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS"
+    fi
+
+    # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
+    # the startfiles.
+    # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
+    # for the startfiles.
     makeFlagsArray=( \
         "${makeFlagsArray[@]}" \
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
-        LIMITS_H_TEST=true \
-        X_CFLAGS="$extraCflags $EXTRA_LDFLAGS" \
-        LDFLAGS="$extraCflags $EXTRA_LDFLAGS" \
-        LDFLAGS_FOR_TARGET="$extraCflags $EXTRA_LDFLAGS" \
+        CFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
+        CFLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+        FLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+        LDFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
+        LDFLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
         )
+
+    if test -z "$targetConfig"; then
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            BOOT_CFLAGS="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
+            BOOT_LDFLAGS="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+            )
+    fi
+
+    if test -n "$targetConfig" -a "$crossStageStatic" == 1; then
+        # We don't want the gcc build to assume there will be a libc providing
+        # limits.h in this stagae
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            LIMITS_H_TEST=false \
+            )
+    else
+        makeFlagsArray=( \
+            "${makeFlagsArray[@]}" \
+            LIMITS_H_TEST=true \
+            )
+    fi
 fi
 
+if test -n "$targetConfig"; then
+    # The host strip will destroy some important details of the objects
+    dontStrip=1
+fi
 
 preConfigure() {
+    if test -n "$newlibSrc"; then
+        tar xvf "$newlibSrc" -C ..
+        ln -s ../newlib-*/newlib newlib
+        # Patch to get armvt5el working:
+        sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
+    fi
+    # Bug - they packaged zlib
+    if test -d "zlib"; then
+        # This breaks the build without-headers, which should build only
+        # the target libgcc as target libraries.
+        # See 'configure:5370'
+        rm -Rf zlib
+    fi
+
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
@@ -103,13 +155,17 @@ postInstall() {
             ln -sfn g++ $i
         fi
     done
+
+    eval "$postInstallGhdl"
 }
 
 
-if test -z "$profiledCompiler"; then
-    buildFlags="bootstrap $buildFlags"
-else    
-    buildFlags="profiledbootstrap $buildFlags"
+if test -z "$targetConfig"; then
+    if test -z "$profiledCompiler"; then
+        buildFlags="bootstrap $buildFlags"
+    else    
+        buildFlags="profiledbootstrap $buildFlags"
+    fi
 fi
 
 genericBuild

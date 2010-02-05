@@ -62,3 +62,49 @@ index 74d1d1a..17ffb12 100644
  		}
  	}
  #ifndef PIC
+
+
+diff --git a/src/control/control.c b/src/control/control.c
+index c090797..137fe57 100644
+--- a/src/control/control.c
++++ b/src/control/control.c
+@@ -854,8 +854,38 @@ static int snd_ctl_open_conf(snd_ctl_t **ctlp, const char *name,
+ 				err = -ENOMEM;
+ 				goto _err;
+ 			}
++			sprintf(buf1, "%s/libasound_module_pcm_%s.so", ALSA_PLUGIN_DIR, str);
++			if (!file_exists(buf1)){
++				// try to locate plugin in one of ALSA_PLUGIN_DIRS which is colon separated list of paths
++				char * pdirs = getenv("ALSA_PLUGIN_DIRS");
++
++				if (pdirs){ // env var set?
++					char * saveptr;
++					while (1) {
++						char * dir_tok = strtok_r(pdirs, "::::", &saveptr); // "::::" to work around bug in glibc and -O2 ? ":" seems to cause a segfault
++						if (dir_tok == NULL)
++                            break;
++						char * so_file = malloc(strlen(str) + strlen(dir_tok) + 32);
++						if (so_file == NULL) {
++							err = -ENOMEM;
++							goto _err;
++						}
++
++						sprintf(so_file, "%s/libasound_module_ctl_%s.so", dir_tok, str);
++
++						if (file_exists(so_file)){
++
++							free(buf1);
++							buf1 = so_file;
++							break;
++						} else {
++							free (so_file);
++						}
++						pdirs = NULL;
++					}
++				}
++			}
+ 			lib = buf1;
+-			sprintf(buf1, "%s/libasound_module_ctl_%s.so", ALSA_PLUGIN_DIR, str);
+ 		}
+ 	}
+ #ifndef PIC

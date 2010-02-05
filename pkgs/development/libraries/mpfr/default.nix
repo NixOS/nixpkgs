@@ -1,14 +1,16 @@
 {stdenv, fetchurl, gmp}:
 
-stdenv.mkDerivation {
-  name = "mpfr-2.4.1";
+stdenv.mkDerivation rec {
+  name = "mpfr-2.4.2";
 
   src = fetchurl {
-    url = http://www.mpfr.org/mpfr-2.4.1/mpfr-2.4.1.tar.bz2;
-    sha256 = "0pj879vbwbik8xkgnxy2ll32ljq3bgqjsqapqasq9rkfbkl90a34";
+    url = "mirror://gnu/mpfr/${name}.tar.bz2";
+    sha256 = "1fpjphja2ridy1wfc53mcbavj4axl28ibvnawj1217flm045mry7";
   };
 
-  buildInputs = [gmp];
+  buildInputs = [ gmp ];
+
+  doCheck = true;
 
   meta = {
     homepage = http://www.mpfr.org/;

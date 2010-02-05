@@ -1,4 +1,7 @@
 {stdenv, fetchurl}:
+
+# I could not build it in armv5tel-linux
+assert stdenv.system != "armv5tel-linux";
    
 stdenv.mkDerivation {
   name = "libxcrypt-3.0.2";

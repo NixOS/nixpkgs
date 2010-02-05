@@ -1,0 +1,24 @@
+Taken from Archlinux, although this solves the build in gcc 4.4, not 4.3.
+http://aur.archlinux.org/packages/jfsrec-svn/jfsrec-svn/jfsrec-gcc-4.3.patch
+diff -uBdr jfsrec/src/device.cpp jfsrec-build/src/device.cpp
+--- jfsrec/src/device.cpp	2009-12-01 18:34:03.860437077 +0100
++++ jfsrec-build/src/device.cpp	2009-12-01 18:39:48.297067088 +0100
+@@ -20,6 +20,7 @@
+ //Parts of the code in this file was originally taken from JFS's xpeek (debugfs_jfs)
+ 
+ #include "device.h"
++#include <stdio.h>
+ #ifdef __linux__
+  #include <linux/fs.h>
+  #include <sys/ioctl.h>
+diff -uBdr jfsrec/src/unicode_to_utf8.cpp jfsrec-build/src/unicode_to_utf8.cpp
+--- jfsrec/src/unicode_to_utf8.cpp	2009-12-01 18:34:03.860437077 +0100
++++ jfsrec-build/src/unicode_to_utf8.cpp	2009-12-01 18:39:43.501626737 +0100
+@@ -8,6 +8,7 @@
+  */
+ #include <config.h>
+ #include "unicode_to_utf8.h"
++#include <string.h>
+ #define JFS_PATH_MAX 4096
+ 
+ /*

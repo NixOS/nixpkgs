@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses ? null, ... }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-ng-2.16";
+  name = "util-linux-ng-2.16.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux-ng/v2.16/${name}.tar.bz2";
-    sha256 = "08i7qv1rvq3rgi49q64aiy0vdhl6h00ilkhnaam9yhrl5g5mydm6";
+    sha256 = "1sx3z64z8z95v93k0c9lczcp04zw4nm3d2rkhczkyxcpdfcgbhxi";
   };
 
   configureFlags = ''

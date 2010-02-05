@@ -5,17 +5,10 @@ source $stdenv/setup
 cflagsCompile="-B$out/bin/"
 
 if test -z "$nativeLibc"; then
-    # The "-B$glibc/lib/" flag is a quick hack to force gcc to link
-    # against the crt1.o from our own glibc, rather than the one in
-    # /usr/lib.  The real solution is of course to prevent those paths
-    # from being used by gcc in the first place.
-    # The dynamic linker is passed in `ldflagsBefore' to allow
-    # explicit overrides of the dynamic linker by callers to gcc/ld
-    # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$libc/usr/lib/ -isystem $libc/usr/include"
-    ldflags="$ldflags -L$libc/usr/lib"
-    #ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.2"
-    ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
+    cflagsCompile="$cflagsCompile -B$libc/lib/ -isystem $libc/include"
+    ldflags="$ldflags -L$libc/lib"
+    ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.?"
+    #ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
 fi
 
 if test -n "$nativeTools"; then
@@ -24,7 +17,7 @@ if test -n "$nativeTools"; then
 else
     ldflags="$ldflags -L$gcc/lib"
     gccPath="$gcc/bin"
-    ldPath="$binutils/bin"
+    ldPath="$binutils/$crossConfig/bin"
 fi
 
 
@@ -47,6 +40,7 @@ doSubstitute() {
         --subst-var "cflagsLink" \
         --subst-var "ldflags" \
         --subst-var "ldflagsBefore" \
+        --subst-var "ldPath" \
         --subst-var-by "ld" "$ldPath/ld"
 }
 
@@ -67,24 +61,24 @@ mkGccWrapper() {
     chmod +x "$dst"
 }
 
-mkGccWrapper $out/bin/$cross-gcc $gccPath/$cross-gcc
+mkGccWrapper $out/bin/$crossConfig-gcc $gccPath/$crossConfig-gcc
 #ln -s gcc $out/bin/cc
 
-mkGccWrapper $out/bin/g++ $gccPath/g++
-ln -s g++ $out/bin/c++
+mkGccWrapper $out/bin/$crossConfig-g++ $gccPath/$crossConfig-g++
+ln -s $crossConfig-g++ $out/bin/$crossConfig-c++
 
-mkGccWrapper $out/bin/g77 $gccPath/g77
-ln -s g77 $out/bin/f77
+mkGccWrapper $out/bin/$crossConfig-g77 $gccPath/$crossConfig-g77
+ln -s $crossConfig-g77 $out/bin/$crossConfig-f77
 
-ln -s $binutils/bin/$cross-ar $out/bin/$cross-ar
-ln -s $binutils/bin/$cross-as $out/bin/$cross-as
-ln -s $binutils/bin/$cross-nm $out/bin/$cross-nm
-ln -s $binutils/bin/$cross-strip $out/bin/$cross-strip
+ln -s $binutils/bin/$crossConfig-ar $out/bin/$crossConfig-ar
+ln -s $binutils/bin/$crossConfig-as $out/bin/$crossConfig-as
+ln -s $binutils/bin/$crossConfig-nm $out/bin/$crossConfig-nm
+ln -s $binutils/bin/$crossConfig-strip $out/bin/$crossConfig-strip
 
 
 # Make a wrapper around the linker.
-doSubstitute "$ldWrapper" "$out/bin/$cross-ld"
-chmod +x "$out/bin/$cross-ld"
+doSubstitute "$ldWrapper" "$out/bin/$crossConfig-ld"
+chmod +x "$out/bin/$crossConfig-ld"
 
 
 # Emit a setup hook.  Also store the path to the original GCC and

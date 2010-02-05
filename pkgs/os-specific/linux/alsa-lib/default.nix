@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     /* allow specifying alternatives alsa plugin locations using
-       export ALSA_PLUGIN_DIRS=$(nix-build -A alsaPlugins)/lib/alsa-lib */
+       export ALSA_PLUGIN_DIRS=$(nix-build -A alsaPlugins)/lib/alsa-lib
+       This patch should be improved:
+       See http://thread.gmane.org/gmane.linux.distributions.nixos/3435
+    */
     ./alsa-plugin-dirs.patch
   ];
 }

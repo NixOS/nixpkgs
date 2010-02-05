@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl }:
+{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv ? null}:
 
 stdenv.mkDerivation rec {
   name = "glib-2.22.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "055dv2hymbyzwpcd39r97x747vsvlkyywa826zr75dzambw6n7qd";
   };
 
-  buildInputs = [pkgconfig gettext perl];
+  buildInputs = [pkgconfig gettext perl libiconv];
 
   # The nbd package depends on a static version of this library; hence
   # the default configure flag --disable-static is switched off.

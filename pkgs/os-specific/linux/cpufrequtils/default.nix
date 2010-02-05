@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelHeaders, glibc, libtool, gettext}:
+{stdenv, fetchurl, linuxHeaders, glibc, libtool, gettext}:
 
 assert stdenv.isLinux && stdenv.system != "powerpc-linux";
 
@@ -16,5 +16,5 @@ stdenv.mkDerivation {
       -i Makefile
   '';
 
-  buildInputs = [ kernelHeaders glibc libtool gettext ];
+  buildInputs = [ linuxHeaders glibc libtool gettext ];
 }

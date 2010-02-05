@@ -9,6 +9,10 @@ if test -e @out@/nix-support/gcc-cflags; then
     export NIX_CFLAGS_COMPILE="$(cat @out@/nix-support/gcc-cflags) $NIX_CFLAGS_COMPILE"
 fi
 
+if test -e @out@/nix-support/gnat-cflags; then
+    export NIX_GNATFLAGS_COMPILE="$(cat @out@/nix-support/gnat-cflags) $NIX_GNATFLAGS_COMPILE"
+fi
+
 if test -e @out@/nix-support/libc-ldflags; then
     export NIX_LDFLAGS="$NIX_LDFLAGS $(cat @out@/nix-support/libc-ldflags)"
 fi

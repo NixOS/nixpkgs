@@ -1,11 +1,14 @@
-{stdenv, fetchurl, noSysDirs}:
+{stdenv, fetchurl, noSysDirs, cross ? null}:
 
+let
+    basename = "binutils-2.20";
+in
 stdenv.mkDerivation rec {
-  name = "binutils-2.19.1";
-  
+  name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
+
   src = fetchurl {
-    url = "mirror://gnu/binutils/${name}.tar.bz2";
-    sha256 = "1xirhxwc94bk6hn2k6i5ly4knbcjsqgy2lp7kl1s5q5csys2b0iy";
+    url = "mirror://gnu/binutils/${basename}.tar.bz2";
+    sha256 = "1c3m789p5rwmmnck5ms4zcnc40axss3gxzivz571al1vmbq0kpz1";
   };
 
   patches = [
@@ -13,18 +16,27 @@ stdenv.mkDerivation rec {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
+
+    ./as-pr10856.patch
   ];
-  
+
   inherit noSysDirs;
 
   preConfigure = ''
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then
-        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+	echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
     fi
+
+    # Use symlinks instead of hard links to save space ("strip" in the
+    # fixup phase strips each hard link separately).
+    for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in; do
+        substituteInPlace $i --replace 'ln ' 'ln -s '
+    done
   '';
-  
-  configureFlags = "--disable-werror"; # needed for dietlibc build
+
+  configureFlags = "--disable-werror" # needed for dietlibc build
+      + stdenv.lib.optionalString (cross != null) " --target=${cross.config}";
 
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";

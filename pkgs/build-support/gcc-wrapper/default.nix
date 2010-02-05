@@ -6,12 +6,16 @@
 # variables so that the compiler and the linker just "work".
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
-, gcc ? null, libc ? null, binutils ? null, shell ? ""
+, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
+, zlib ? null
 }:
 
 assert nativeTools -> nativePrefix != "";
-assert !nativeTools -> gcc != null && binutils != null;
+assert !nativeTools -> gcc != null && binutils != null && coreutils != null;
 assert !nativeLibc -> libc != null;
+
+# For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper
+assert (gcc != null && gcc ? langVhdl && gcc.langVhdl) -> zlib != null;
 
 let
 
@@ -28,6 +32,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
+  gnatWrapper = ./gnat-wrapper.sh;
+  gnatlinkWrapper = ./gnatlink-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
@@ -35,10 +41,15 @@ stdenv.mkDerivation {
   inherit nativeTools nativeLibc nativePrefix gcc;
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;
+  # The wrapper scripts use 'cat', so we may need coreutils
+  coreutils = if nativeTools then null else coreutils;
   
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langFortran = if nativeTools then false else gcc ? langFortran;
+  langAda = if nativeTools then false else gcc ? langAda && gcc.langAda;
+  langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
+  zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
   shell = if shell == "" then stdenv.shell else shell;
   
   meta =
@@ -54,6 +65,7 @@ stdenv.mkDerivation {
     if !nativeLibc then
       (if stdenv.system == "i686-linux" then "ld-linux.so.2" else
        if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2" else
+       if stdenv.system == "armv5tel-linux" then "ld-linux.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
     else "";

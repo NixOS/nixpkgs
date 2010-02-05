@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   # http://www.mail-archive.com/blfs-book@linuxfromscratch.org/msg13013.html
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
+  # It would automatically add -Werror, which disables build in gcc 4.4
+  # due to an uninitialized variable.
+  CFLAGS = "-g -O2 -Wall";
+
   buildInputs = [makeWrapper];
 
   postInstall =

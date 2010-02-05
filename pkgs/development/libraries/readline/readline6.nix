@@ -1,15 +1,28 @@
 { fetchurl, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "readline-6.0";
+  name = "readline-6.1";
 
   src = fetchurl {
     url = "mirror://gnu/readline/${name}.tar.gz";
-    sha256 = "1pn13j6f9376kwki69050x3zh62yb1w31l37rws5nwr5q02xk68i";
+    sha256 = "0sd97zqdh4fc0zzgzpskkczwa2fmb0s89qdyndb6vkbcq04gdjph";
   };
 
   propagatedBuildInputs = [ncurses];
-  
+
+  patchFlags = "-p0";
+  patches =
+    [ ./link-against-ncurses.patch ]
+    ++
+    (let
+       patch = nr: sha256:
+         fetchurl {
+           url = "mirror://gnu/readline/${name}-patches/readline61-${nr}";
+           inherit sha256;
+         };
+     in
+       import ./readline-patches.nix patch);
+
   meta = {
     description = "GNU Readline, a library for interactive line editing";
 
@@ -31,5 +44,7 @@ stdenv.mkDerivation rec {
     homepage = http://savannah.gnu.org/projects/readline/;
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

@@ -9,4 +9,5 @@ stdenv.mkDerivation {
   };
   configureFlags="--with-openssl=${openssl} --with-plugindir=\${out}/lib/sasl2 --with-configdir=\${out}/lib/sasl2";
   buildInputs = [ openssl db4 gettext ];
+  patches = [ ./cyrus-sasl-2.1.22-bad-elif.patch ];
 }

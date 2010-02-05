@@ -1,4 +1,5 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? "", ... }:
+args @ { stdenv, fetchurl, platform, userModeLinux ? false, extraConfig ? ""
+, ... }:
 
 import ./generic.nix (
 
@@ -11,7 +12,7 @@ import ./generic.nix (
     };
 
     features.iwlwifi = true;
- 
+
     config =
       ''
         # Don't include any debug features.
@@ -25,16 +26,6 @@ import ./generic.nix (
 
         # Optimize with -O2, not -Os.
         CC_OPTIMIZE_FOR_SIZE n
-
-        # Virtualisation (KVM, Xen...).
-        PARAVIRT_GUEST y
-        KVM_CLOCK y
-        KVM_GUEST y
-        XEN y
-        KSM y
-
-        # We need 64 GB (PAE) support for Xen guest support.
-        HIGHMEM64G? y
 
         # Enable the kernel's built-in memory tester.
         MEMTEST y
@@ -207,6 +198,7 @@ import ./generic.nix (
         X86_CHECK_BIOS_CORRUPTION y
         X86_MCE y
 
+        ${if platform ? kernelExtraConfig then platform.kernelExtraConfig else ""}
         ${extraConfig}
       '';
   }

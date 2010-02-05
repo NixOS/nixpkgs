@@ -24,10 +24,20 @@ configurePhase() {
     # generate-config.pl can answer them.
     sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
 
+    # Get a basic config file for later refinement with $generateConfig.
+    make $kernelBaseConfig ARCH=$arch
+
     # Create the config file.
     echo "generating kernel configuration..."
     echo "$kernelConfig" > kernel-config
     DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config perl -w $generateConfig
+}
+
+
+postBuild() {
+   if [ "$platformName" == "sheevaplug" ]; then
+       make uImage
+   fi
 }
 
 
@@ -41,14 +51,27 @@ installPhase() {
         archDir=x86
     fi
 
+
     # Copy the bzImage and System.map.
     cp System.map $out
     if test "$arch" = um; then
         ensureDir $out/bin
         cp linux $out/bin
     else
-        cp arch/$archDir/boot/bzImage $out/vmlinuz
+       case $platformName in
+         sheevaplug)
+           cp arch/$archDir/boot/uImage $out
+           ;;
+         versatileARM)
+           cp arch/$archDir/boot/zImage $out
+           ;;
+         *)
+           cp arch/$archDir/boot/bzImage $out/vmlinuz
+           ;;
+       esac
     fi
+
+    cp vmlinux $out
 
     # Install the modules in $out/lib/modules with matching paths
     # in modules.dep (i.e., refererring to $out/lib/modules, not

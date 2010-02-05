@@ -1,8 +1,7 @@
-{stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed}:
+{ stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed }:
 
 stdenv.mkDerivation {
   name = "tetex-3.0";
-  builder = ./builder.sh;
   
   src = fetchurl {
     url = ftp://cam.ctan.org/tex-archive/systems/unix/teTeX/current/distrib/tetex-src-3.0.tar.gz;
@@ -14,11 +13,30 @@ stdenv.mkDerivation {
     md5 = "11aa15c8d3e28ee7815e0d5fcdf43fd4";
   };
 
-  buildInputs = [flex bison zlib libpng ncurses ed];
+  buildInputs = [ flex bison zlib libpng ncurses ed ];
 
-  patches = [./environment.patch];
+  patches = [ ./environment.patch ./getline.patch ];
 
   setupHook = ./setup-hook.sh;
+
+  configureFlags =
+    [ "--disable-multiplatform"
+      "--without-x11"
+      "--without-xdvik"
+      "--without-oxdvik"
+      "--without-texinfo"
+      "--without-texi2html"
+      "--with-system-zlib"
+      "--with-system-pnglib"
+      "--with-system-ncurses"
+    ];
+
+  postUnpack =
+    ''
+      ensureDir $out/share/texmf
+      ensureDir $out/share/texmf-dist
+      gunzip < $texmf | (cd $out/share/texmf-dist && tar xvf -)
+    '';
 
   meta = {
     description = "A full-featured (La)TeX distribution";

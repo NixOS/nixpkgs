@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     --with-shared --includedir=''${out}/include --without-debug
     ${if unicode then "--enable-widec" else ""}
   '';
+
+  selfBuildNativeInput = true;
     
   preBuild = ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
 
@@ -19,10 +21,10 @@ stdenv.mkDerivation rec {
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postInstall = if unicode then ''
-    chmod -v 644 $out/lib/libncurses++w.a
+    chmod 644 $out/lib/libncurses++w.a
     for lib in curses ncurses form panel menu; do
       if test -e $out/lib/lib''${lib}w.a; then
-        rm -vf $out/lib/lib$lib.so
+        rm -f $out/lib/lib$lib.so
         echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
         ln -svf lib''${lib}w.a $out/lib/lib$lib.a
         ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5

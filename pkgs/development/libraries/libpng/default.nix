@@ -3,11 +3,11 @@
 assert zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.2.40";
+  name = "libpng-1.2.42";
   
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.gz";
-    md5 = "a2f6808735bf404967f81519a967fb2a";
+    md5 = "562066eb8557db91156eaeb309458488";
   };
   
   propagatedBuildInputs = [zlib];
@@ -20,3 +20,4 @@ stdenv.mkDerivation rec {
     license = "free-non-copyleft"; # http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
   };
 }
+

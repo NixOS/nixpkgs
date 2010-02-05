@@ -10,6 +10,9 @@ stdenv.mkDerivation {
 
   patchFlags = "-p0";
 
+  CFLAGS = "-O0";
+  CXXFLAGS = "-O0";
+
   patches = [
     (fetchurl {
       url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/dev-libs/icu/files/icu-3.8-setBreakType-public.diff?rev=1.1";

@@ -1,14 +1,14 @@
-{stdenv, fetchurl, zlibSupport ? false, zlib ? null, sslSupport ? false, openssl ? null}:
+{stdenv, fetchurl, zlibSupport ? false, zlib ? null, sslSupport ? false, openssl ? null, linkStatic ? false}:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.19.4";
+  name = "curl-7.19.7";
   
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "11myjjvx1bjl709bgibv8pb1sjf4cicim16k860qzg7d1ll3cd7v";
+    sha256 = "0w2aqlms289jzpkymg14k00iay2pq9al3rlc43b3n7j0wd5gj58s";
   };
   
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
     
   configureFlags = ''
     ${if sslSupport then "--with-ssl=${openssl}" else "--without-ssl"}
+    ${if linkStatic then "--enable-static --disable-shared" else ""}
   '';
+
+  dontDisableStatic = if linkStatic then true else false;
   
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
+  LDFLAGS = if linkStatic then "-static" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";
+
+  # libtool hack to get a static binary. Notice that to 'configure' I passed
+  # other LDFLAGS, because it doesn't use libtool for linking in the tests.
+  makeFlags = if linkStatic then "LDFLAGS=-all-static" else "";
 
   passthru = {
     inherit sslSupport openssl;

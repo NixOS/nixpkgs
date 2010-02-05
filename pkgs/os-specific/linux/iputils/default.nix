@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelHeaders, glibc}:
+{stdenv, fetchurl, linuxHeaders, glibc}:
 
 assert stdenv.isLinux && stdenv.system != "powerpc-linux";
 
@@ -10,6 +10,6 @@ stdenv.mkDerivation {
     md5 = "b5493f7a2997130a4f86c486c9993b86";
   };
 
-  inherit kernelHeaders glibc;
+  inherit linuxHeaders glibc;
   patches = [ ./open-max.patch ];
 }

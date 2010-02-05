@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mjxliarzcy7iksh6v1npxsqdpc9sjj3q4wcl567asbdzdpbd803";
   };
 
-  buildInputs = [pkgconfig perl];
+  buildNativeInputs = [perl];
+  buildInputs = [pkgconfig];
   propagatedBuildInputs = [glib];
 
   meta = {

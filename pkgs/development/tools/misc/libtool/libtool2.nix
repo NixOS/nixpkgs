@@ -1,20 +1,22 @@
 { stdenv, fetchurl, m4, perl, lzma }:
 
 stdenv.mkDerivation rec {
-  name = "libtool-2.2.6a";
-  
+  name = "libtool-2.2.6b";
+
   src = fetchurl {
     url = "mirror://gnu/libtool/${name}.tar.lzma";
-    sha256 = "12k3m7d0ngcwwahicncxbyd1155ij63ylr8372f0q8xbzq59c8hx";
+    sha256 = "1bmpp31sfjl3nzj8psvnsqrrv4gwnqzii8dxpxr6djz508yavsv6";
   };
-  
-  buildInputs = [ lzma m4 perl ];
 
-  unpackCmd = "lzma -d < $src | tar xv";
+  buildNativeInputs = [ lzma m4 perl ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
+
+  # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
+  # leads to the failure of a number of tests.
+  doCheck = false;
 
   meta = {
     description = "GNU Libtool, a generic library support script";
@@ -32,5 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/libtool/;
 
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

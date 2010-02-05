@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0k9mz46q97537kdpmz8j5bhrzpn3zjp7k4mni4niafdp2x4r8aan";
   };
   
-  buildInputs = [ pkgconfig perl jasper ];
+  buildNativeInputs = [ perl ];
+  buildInputs = [ pkgconfig jasper ];
   
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr ]

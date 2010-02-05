@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelHeaders, zlib, SDL, alsaLib, pkgconfig, pciutils}:
+{stdenv, fetchurl, linuxHeaders, zlib, SDL, alsaLib, pkgconfig, pciutils}:
    
 assert stdenv.isLinux;
    
