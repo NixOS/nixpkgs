@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     homepage = http://nostatic.org/grip;
     license = "GPLv2";
     maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    #platforms = args.lib.platforms.linux;
   };
 }

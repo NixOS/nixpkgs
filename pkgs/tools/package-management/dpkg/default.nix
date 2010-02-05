@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl, zlib, bzip2}:
 
 stdenv.mkDerivation {
-  name = "dpkg-1.14.25";
+  name = "dpkg-1.14.28";
   
   src = fetchurl {
-    url = mirror://debian/pool/main/d/dpkg/dpkg_1.14.25.tar.gz;
-    sha256 = "1111r1ijyh149h7vby9vc8137hl9778ja3dln7ilkxhc1y1yjp2l";
+    url = mirror://debian/pool/main/d/dpkg/dpkg_1.14.28.tar.gz;
+    sha256 = "1k3h1rv2qd6ha6mpifhjkpasd4dzr8l45jvc49p7fldqm4nzyixc";
   };
 
   configureFlags = "--without-dselect --with-admindir=/var/lib/dpkg";

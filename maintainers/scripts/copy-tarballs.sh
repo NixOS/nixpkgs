@@ -2,7 +2,7 @@
 
 distDir=/data/webserver/tarballs
 
-urls=$(nix-instantiate --eval-only --xml --strict pkgs/top-level/build-for-release.nix \
+urls=$(nix-instantiate --eval-only --xml --strict ./eval-release.nix \
     | grep -A2 'name="urls"' \
     | grep '<string value=' \
     | sed 's/.*"\(.*\)".*/\1/' \

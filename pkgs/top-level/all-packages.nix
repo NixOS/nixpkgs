@@ -4891,7 +4891,7 @@ let
     inherit stdenv fetchurl cmake qt4;
   };
 
-  tk = import ../development/libraries/tk/8.5.7.nix {
+  tk = import ../development/libraries/tk {
     inherit fetchurl stdenv tcl x11;
   };
 
@@ -7288,10 +7288,10 @@ let
   };
 
   googleearth = import ../applications/misc/googleearth {
-      inherit stdenv fetchurl glibc mesa freetype zlib glib;
-      inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
-        libXcursor libXinerama libXext libX11;
-    };
+    inherit stdenv fetchurl glibc mesa freetype zlib glib;
+    inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
+      libXcursor libXinerama libXext libX11;
+  };
 
   gpsbabel = import ../applications/misc/gpsbabel {
     inherit fetchurl stdenv zlib expat;
@@ -8747,8 +8747,8 @@ let
   };
 
   foldingathome = import ../misc/foldingathome {
-      inherit fetchurl stdenv;
-    };
+    inherit fetchurl stdenv;
+  };
 
   freestyle = import ../misc/freestyle {
     inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
@@ -8833,19 +8833,20 @@ let
   nix = makeOverridable (import ../tools/package-management/nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
-    db4 = db45;
-    supportOldDBs = getPkgConfig "nix" "OldDBSupport" true;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
   # The bleeding edge.
+  nixUnstable = nix;
+  /*
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl;
     aterm = aterm242fixes;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
+  */
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {

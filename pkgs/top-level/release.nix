@@ -94,7 +94,7 @@ let
         else [];
 
   /* Common platform groups on which to test packages. */
-  inherit (pkgs.lib.platforms) linux darwin cygwin allBut all;
+  inherit (pkgs.lib.platforms) linux darwin cygwin allBut all mesaPlatforms;
 
   /* Platform groups for specific kinds of applications. */
   x11Supported = linux;
@@ -202,7 +202,7 @@ in {
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
-  gitFull = linux;
+  #gitFull = linux;
   glibc = linux;
   glibcLocales = linux;
   glxinfo = linux;
@@ -293,7 +293,7 @@ in {
   mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
-  mesa = linux ++ darwin;
+  mesa = mesaPlatforms;
   midori = linux;
   mingetty = linux;
   mk = linux;
@@ -498,10 +498,6 @@ in {
 
   gtkLibs = {
     gtk = linux;
-  };
-
-  haskellPackages_ghc683 = {
-    ghc = ghcSupported;
   };
 
   haskellPackages_ghc6102 = {

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     inherit homepage;
     description = "The Glasgow Haskell Compiler";
     maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 
 

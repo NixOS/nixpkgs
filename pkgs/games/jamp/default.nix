@@ -24,10 +24,7 @@ rec {
       
   meta = {
     description = "A physics-based game";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms; 
-      linux ++ darwin;
+    maintainers = [ a.lib.maintainers.raskin ];
+    platforms = a.lib.platforms.linux;
   };
 }

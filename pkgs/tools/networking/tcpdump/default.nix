@@ -1,14 +1,14 @@
-{stdenv, fetchurl, libpcap}:
+{ stdenv, fetchurl, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "tcpdump-3.9.4";
+  name = "tcpdump-4.0.0";
 
   src = fetchurl {
-    url = "mirror://tcpdump/release/${name}.tar.gz";
-    sha256 = "1dbknf6ys7n3mmlb6klr0jh0jgnnq3zd9y44kjdxcbmbdjhp1rvy";
+    url = "http://www.tcpdump.org/release/${name}.tar.gz";
+    sha256 = "112j0d12l5zsq56akn4n23i98pwblfb7qhblk567ddbl0bz9xsaz";
   };
 
-  buildInputs = [libpcap];
+  buildInputs = [ libpcap ];
 
   meta = {
     description = "tcpdump, a famous network sniffer";

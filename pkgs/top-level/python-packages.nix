@@ -369,7 +369,7 @@ rec {
       license = "GPLv2+";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
+      platforms = stdenv.lib.platforms.linux;
     };
   });
 
