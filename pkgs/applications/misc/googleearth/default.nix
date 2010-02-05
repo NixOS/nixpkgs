@@ -68,7 +68,6 @@ stdenv.mkDerivation {
     description = "A world sphere viewer";
     homepage = http://earth.google.com;
     license = "unfree";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ stdenv.lib.maintainers.viric ];
   };
 }

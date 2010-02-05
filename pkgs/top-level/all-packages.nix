@@ -7113,11 +7113,11 @@ let
   };
 
   googleearth = import ../applications/misc/googleearth {
-      inherit stdenv fetchurl glibc mesa freetype zlib glib;
-      inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
-        libXcursor libXinerama libXext libX11;
-      inherit patchelf05;
-    };
+    inherit stdenv fetchurl glibc mesa freetype zlib glib;
+    inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
+      libXcursor libXinerama libXext libX11;
+    inherit patchelf05;
+  };
 
   gpsbabel = import ../applications/misc/gpsbabel {
     inherit fetchurl stdenv zlib expat;
