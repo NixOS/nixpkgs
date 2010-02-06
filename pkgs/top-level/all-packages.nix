@@ -6503,6 +6503,11 @@ let
     inherit fetchurl;
   };
 
+  terminus_font = import ../data/fonts/terminus-font {
+    inherit fetchurl stdenv perl;
+    inherit (xorg) mkfontdir mkfontscale bdftopcf;
+  };
+
   ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
     inherit fetchurl stdenv;
   };
