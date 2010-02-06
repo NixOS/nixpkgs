@@ -107,7 +107,7 @@ sub start {
         dup2(fileno($serialC), fileno(STDOUT));
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
-        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1 -net socket,vlan=1,mcast=$mcastAddr -monitor unix:./monitor";
+        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1,model=virtio -net socket,vlan=1,mcast=$mcastAddr -monitor unix:./monitor";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
@@ -146,6 +146,7 @@ sub start {
 # all commands yet.  We should use it once it does.
 sub sendMonitorCommand {
     my ($self, $command) = @_;
+    $self->log("sending monitor command: $command");
     syswrite $self->{monitor}, "$command\n";
     return $self->waitForMonitorPrompt;
 }
@@ -215,6 +216,13 @@ sub waitForShutdown {
     waitpid $self->{pid}, 0;
     $self->{pid} = 0;
     $self->{booted} = 0;
+    $self->{connected} = 0;
+}
+
+
+sub isUp {
+    my ($self) = @_;
+    return $self->{booted} && $self->{connected};
 }
 
 
@@ -262,6 +270,15 @@ sub waitUntilSucceeds {
     retry sub {
         my ($status, $out) = $self->execute($command);
         return 1 if $status == 0;
+    };
+}
+
+
+sub waitUntilFails {
+    my ($self, $command) = @_;
+    retry sub {
+        my ($status, $out) = $self->execute($command);
+        return 1 if $status != 0;
     };
 }
 
@@ -337,14 +354,14 @@ sub shutdown {
 # the test driver can continue to talk to the machine.
 sub block {
     my ($self) = @_;
-    $self->mustSucceed("ifconfig eth1 down");
+    $self->sendMonitorCommand("set_link virtio-net-pci.1 down");
 }
 
 
 # Make the machine reachable.
 sub unblock {
     my ($self) = @_;
-    $self->mustSucceed("ifconfig eth1 up");
+    $self->sendMonitorCommand("set_link virtio-net-pci.1 up");
 }
 
 
@@ -368,7 +385,7 @@ sub waitForX {
         my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
         return 1 if $status == 0;
     }
-};
+}
 
 
 sub getWindowNames {
@@ -387,13 +404,29 @@ sub waitForWindow {
             return 1 if $n =~ /$regexp/;
         }
     }
-};
+}
 
 
 sub copyFileFromHost {
     my ($self, $from, $to) = @_;
     my $s = `cat $from` or die;
     $self->mustSucceed("echo '$s' > $to"); # !!! escaping
+}
+
+
+sub sendKeys {
+    my ($self, @keys) = @_;
+    foreach my $key (@keys) {
+        $key = "spc" if $key eq " ";
+        $key = "ret" if $key eq "\n";
+        $self->sendMonitorCommand("sendkey $key");
+    }
+}
+
+
+sub sendChars {
+    my ($self, $chars) = @_;
+    $self->sendKeys(split //, $chars);
 }
 
 

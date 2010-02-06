@@ -40,7 +40,7 @@ rec {
           for i in $out/vms/*; do
             port2=\$((port++))
             echo "forwarding localhost:\$port2 to \$(basename \$i):80"
-            QEMU_OPTS="-redir tcp:\$port2::80 -net nic,vlan=1 -net socket,vlan=1,mcast=232.0.1.1:1234" \$i/bin/run-*-vm &
+            QEMU_OPTS="-redir tcp:\$port2::80 -net nic,vlan=1,model=virtio -net socket,vlan=1,mcast=232.0.1.1:1234" \$i/bin/run-*-vm &
           done
           EOF
           chmod +x $out/bin/run-vms

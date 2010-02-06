@@ -37,6 +37,8 @@ sub runTests {
     foreach my $vm (values %vms) {
         my $gcovDir = "/sys/kernel/debug/gcov";
 
+        next unless $vm->isUp();
+
         my ($status, $out) = $vm->execute("test -e $gcovDir");
         next if $status != 0;
 
