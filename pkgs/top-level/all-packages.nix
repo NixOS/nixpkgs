@@ -7811,7 +7811,7 @@ let
   };
 
   ratpoison = import ../applications/window-managers/ratpoison {
-    inherit fetchurl stdenv fontconfig readline;
+    inherit fetchurl stdenv fontconfig readline pkgconfig autoconf automake;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
       libXtst xextproto libXi;
   };
