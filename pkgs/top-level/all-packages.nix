@@ -193,7 +193,10 @@ let
           stdenv = stdenvCross;
           overrideSetup = overrideSetup;
         }
-      else stdenvCross;
+      else if crossSystem != null then
+        stdenvCross
+      else
+        defaultStdenv;
 
   forceBuildDrv = drv : drv // { hostDrv = drv.buildDrv; };
 
