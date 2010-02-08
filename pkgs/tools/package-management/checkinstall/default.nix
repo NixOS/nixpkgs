@@ -3,11 +3,11 @@
 assert stdenv.isLinux && stdenv ? glibc;
 
 stdenv.mkDerivation {
-  name = "checkinstall-1.6.2pre20081116";
+  name = "checkinstall-1.6.2";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/checkinstall-1.6.2pre20081116.tar.bz2;
-    sha256 = "0k8i551rcn2g0jxskq2sgy4m85irdf5zsl2q4w9b7npgnybkzsmb";
+    url = http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz;
+    sha256 = "1x4kslyvfd6lm6zd1ylbq2pjxrafb77ydfjaqi16sa5qywn1jqfw";
   };
 
   patches = [
@@ -26,6 +26,9 @@ stdenv.mkDerivation {
 
     # Support Glibc >= 2.8.
     ./glibc-check.patch
+
+    # Fix a `conflicting types for 'scandir'' error on Glibc 2.11.
+    ./scandir.patch
   ];
 
   buildInputs = [gettext];
