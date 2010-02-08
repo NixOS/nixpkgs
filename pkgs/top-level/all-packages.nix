@@ -3736,10 +3736,17 @@ let
     inherit fetchurl stdenv;
   };
 
-  gmp = makeOverridable (import ../development/libraries/gmp) {
-    inherit stdenv fetchurl m4;
-    cxx = false;
-  };
+  gmp = 
+    if stdenv.system == "i686-darwin" then
+      makeOverridable (import ../development/libraries/gmp/4.3.2.nix) {
+        inherit stdenv fetchurl m4;
+        cxx = false;
+      }
+    else 
+      makeOverridable (import ../development/libraries/gmp) {
+        inherit stdenv fetchurl m4;
+        cxx = false;
+      };
 
   gmpxx = gmp.override { cxx = true; };
 
