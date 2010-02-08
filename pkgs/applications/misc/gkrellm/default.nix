@@ -1,10 +1,10 @@
-args: with args;
+{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk, libX11, libSM, libICE }:
 
-stdenv.mkDerivation {
-  name = "gkrellm-2.3.1";
+stdenv.mkDerivation rec {
+  name = "gkrellm-2.3.4";
   src = fetchurl {
-    url = http://members.dslextreme.com/users/billw/gkrellm/gkrellm-2.3.1.tar.bz2;
-    sha256 = "1a2a7e3ee9d1f2d7305da0d33d9be71ffe5d1903ed6a9c69cf77ffe10fc95b4d";
+    url = "http://members.dslextreme.com/users/billw/gkrellm/${name}.tar.bz2";
+    sha256 = "0mjg2pxpiqms7d6dvxzxvpa420cakhpjxvrclhq0y8jd2dlv2irl";
   };
 
   buildInputs = [gettext pkgconfig glib gtk libX11 libSM libICE];
@@ -15,9 +15,7 @@ stdenv.mkDerivation {
      echo "patching makefiles..."
      for i in Makefile src/Makefile server/Makefile
      do
-       cat "$i" | sed -e "s|/usr/X11R6|${libX11}|g ;
-                          s|-lICE|-lX11 -lICE|g" > ",,tmp" &&	\
-       mv ",,tmp" "$i"
+       sed -i "$i" -e "s|/usr/X11R6|${libX11}|g ; s|-lICE|-lX11 -lICE|g"
      done '';
 
   buildPhase = ''
@@ -27,7 +25,16 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GKrellM, a themeable process stack of system monitors.";
+    longDescription =
+      '' GKrellM is a single process stack of system monitors which supports
+         applying themes to match its appearance to your window manager, Gtk,
+         or any other theme.
+      '';
+
     homepage = http://members.dslextreme.com/users/billw/gkrellm/gkrellm.html;
-    license = "GPL";
+    license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
