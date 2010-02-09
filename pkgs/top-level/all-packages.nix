@@ -198,7 +198,8 @@ let
       else
         defaultStdenv;
 
-  forceBuildDrv = drv : drv // { hostDrv = drv.buildDrv; };
+  forceBuildDrv = drv : if (crossSystem == null) then drv else
+    (drv // { hostDrv = drv.buildDrv; });
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
