@@ -8523,9 +8523,10 @@ let
   };
 
   warsow = import ../games/warsow {
-    inherit stdenv fetchurl unzip pkgconfig zlib curl libjpeg libvorbis SDL
+    inherit stdenv fetchurl unzip pkgconfig zlib curl libvorbis SDL
             mesa openal;
     inherit (xlibs) libXxf86dga libXxf86vm libXinerama;
+    libjpeg = libjpeg62;
   };
 
   xboard = builderDefsPackage (import ../games/xboard) {
