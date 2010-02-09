@@ -1211,6 +1211,10 @@ let
     inherit fetchurl stdenv readline mysql postgresql sqlite;
   };
 
+  opendkim = import ../development/libraries/opendkim {
+    inherit fetchurl stdenv openssl libmilter;
+  };
+
   openjade = import ../tools/text/sgml/openjade {
     inherit fetchurl opensp perl;
     stdenv = overrideGCC stdenv gcc33;
@@ -4276,6 +4280,10 @@ let
 
   libmicrohttpd = import ../development/libraries/libmicrohttpd {
     inherit fetchurl stdenv curl;
+  };
+
+  libmilter = import ../development/libraries/libmilter {
+    inherit fetchurl stdenv m4;
   };
 
   libmowgli = import ../development/libraries/libmowgli {
