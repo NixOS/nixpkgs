@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "hello-2.3x26";
+stdenv.mkDerivation rec {
+  name = "hello-2.5";
   
   src = fetchurl {
-    url = mirror://gnu/hello/hello-2.3.tar.bz2;
-    sha256 = "0c7vijq8y68bpr7g6dh1gny0bff8qq81vnp4ch8pjzvg56wb3js1";
+    url = "mirror://gnu/hello/${name}.tar.gz";
+    sha256 = "0in467phypnis2ify1gkmvc5l2fxyz3s4xss7g74gwk279ylm4r2";
   };
 
   meta = {
