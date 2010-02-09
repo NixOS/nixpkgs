@@ -1207,6 +1207,10 @@ let
     inherit fetchurl stdenv pkgconfig openobex bluez;
   };
 
+  opendbx = import ../development/libraries/opendbx {
+    inherit fetchurl stdenv readline mysql postgresql sqlite;
+  };
+
   openjade = import ../tools/text/sgml/openjade {
     inherit fetchurl opensp perl;
     stdenv = overrideGCC stdenv gcc33;
