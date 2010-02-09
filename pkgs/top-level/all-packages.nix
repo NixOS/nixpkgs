@@ -1660,6 +1660,10 @@ let
     inherit fetchurl stdenv unzip jre;
   };
 
+  tre = import ../development/libraries/tre {
+    inherit fetchurl stdenv;
+  };
+
   ts = import ../tools/system/ts {
     inherit fetchurl stdenv;
   };
