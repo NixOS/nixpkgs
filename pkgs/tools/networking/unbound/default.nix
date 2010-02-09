@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Unbound, a validating, recursive, and caching DNS resolver.";
     license = "BSD";
-    homepage = http://www.gnu.org/software/wget/;
+    homepage = http://www.unbound.net;
   };
 }
