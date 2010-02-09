@@ -10,7 +10,10 @@ rec {
 
   inherit (s) name;
   inherit buildInputs;
-  configureFlags = [];
+  configureFlags = [
+    "--enable-threads"
+    "--enable-unicode"
+    ];
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
