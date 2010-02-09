@@ -7,10 +7,10 @@ stdenv.mkDerivation rec {
     sha256 = "1pc70l54kkdakdw8njr2pnbcghq7fn2bnk97wzhac2adwdkjp7vs";
   };
 
-  configurePhase = ''
+  preConfigure = ''
     export CPPFLAGS="-I${mysql}/include/mysql" 
     export LDFLAGS="-L${mysql}/lib/mysql" 
-    ./configure --prefix=$prefix --with-backends="mysql pgsql sqlite3" --disable-dependency-tracking --disable-static
+    configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
   buildInputs = [readline mysql postgresql sqlite];
