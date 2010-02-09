@@ -29,8 +29,6 @@ preConfigure() {
 }
 
 postFixup() {
-    echo FIXUP
-    
     # If a user installs a Perl package, she probably also wants its
     # dependencies in the user environment (since Perl modules don't
     # have something like an RPATH, so the only way to find the
