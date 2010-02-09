@@ -1675,6 +1675,10 @@ let
     flex = flex2534;
   };
 
+  unbound = import ../tools/networking/unbound {
+    inherit fetchurl stdenv openssl;
+  };
+
   units = import ../tools/misc/units {
     inherit fetchurl stdenv;
   };
