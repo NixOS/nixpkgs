@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ];
+  patches = [ ./install.patch ./sharedlib.patch];
   
   buildInputs = [m4];
 }
