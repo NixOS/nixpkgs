@@ -372,8 +372,11 @@ in
         xorg.xrdb
         xorg.setxkbmap
         xorg.iceauth # required for KDE applications (it's called by dcopserver)
+        xorg.xlsclients
+        xorg.xset
         xorg.xsetroot
         xorg.xprop
+        pkgs.xterm
       ]
       ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
       ++ optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy
