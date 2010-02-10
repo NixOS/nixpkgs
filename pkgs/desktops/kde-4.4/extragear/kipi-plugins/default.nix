@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lib, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2,
 kdegraphics, kdepimlibs, libxml2, libxslt, gettext}:
 
-stdenv.mkDerivation {
-  name = "kipi-plugins-0.9.0";
+stdenv.mkDerivation rec {
+  name = "kipi-plugins-1.0.0";
 
   src = fetchurl { 
-    url = mirror://sourceforge/kipi/kipi-plugins-0.9.0.tar.bz2;
-    sha256 = "0wx1r607q8i4v55k8qjzz7wn8rfd86nniq3h3s7dgnddq7x17fqn";
+    url = "mirror://sourceforge/kipi/${name}.tar.bz2";
+    sha256 = "1fmjxl41lvyb6zv8wrg8sz0hb1jjynj2pwisynpbffglnxd09fwf";
   };
 
   includeAllQtDirs=true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Photo Management Program";
     license = "GPL";
-    homepage = http://www.koffice.org;
+    homepage = http://www.kipi-plugins.org;
     maintainers = [ lib.maintainers.viric ];
     platforms = with lib.platforms; linux;
   };
