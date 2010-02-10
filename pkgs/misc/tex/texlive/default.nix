@@ -25,11 +25,11 @@ rec {
     tar xf ${texmfSrc} -C $out/share --strip-components=1
     tar xf ${langTexmfSrc} -C $out/share --strip-components=1
 
-    sed -e s@/usr/bin/g@@ -i $(grep /usr/bin/ -rl . )
+    sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
 
-    sed -e 's@^#! ?env ruby@#! ${ruby}/bin/ruby@' -i $(grep 'env ruby' -rl . )
-    sed -e 's@^#! ?env perl@#! ${perl}/bin/perl@' -i $(grep 'env perl' -rl . )
-    sed -e 's@^#! ?env python@#! ${python}/bin/perl@' -i $(grep 'env python' -rl . )
+    sed -e 's@\<env ruby@${ruby}/bin/ruby@' -i $(grep 'env ruby' -rl . )
+    sed -e 's@\<env perl@${perl}/bin/perl@' -i $(grep 'env perl' -rl . )
+    sed -e 's@\<env python@${python}/bin/python@' -i $(grep 'env python' -rl . )
 
     sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
     sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . ) 
@@ -38,7 +38,9 @@ rec {
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
 
-    ./Build
+    ./Build --prefix="$out" --datadir="$out/share" --mandir "$out/share/man" --infodir "$out/share/info" \
+      ${args.lib.concatStringsSep " " configureFlags}
+    cd Work
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
   doPostInstall = fullDepEntry(''
@@ -49,6 +51,7 @@ rec {
         chmod a+x $out/bin/$(basename $i)
     done
     ln -s $out/share/texmf $out/share/texmf-config
+    ln -s $out/share/*texmf* $out/
     
     sed -e 's/.*pyhyph.*/=&/' -i $out/share/texmf-config/tex/generic/config/language.dat
 
@@ -63,7 +66,7 @@ rec {
     zlib bzip2 ncurses libpng flex bison libX11 libICE
     xproto freetype t1lib gd libXaw icu ghostscript ed 
     libXt libXpm libXmu libXext xextproto perl libSM 
-    ruby expat curl libjpeg python
+    ruby expat curl libjpeg python fontconfig
   ];
 
   configureFlags = [ "--with-x11" 
@@ -81,4 +84,3 @@ rec {
     platforms = args.lib.platforms.linux ++ args.lib.platforms.freebsd ;
   };
 }
-
