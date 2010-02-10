@@ -786,7 +786,7 @@ let
   });
 
   gnupg = import ../tools/security/gnupg {
-    inherit fetchurl stdenv readline;
+    inherit fetchurl stdenv readline bzip2;
     ideaSupport = getPkgConfig "gnupg" "idea" false; # enable for IDEA crypto support
   };
 
