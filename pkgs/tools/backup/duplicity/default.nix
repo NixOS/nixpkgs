@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, librsync, gnupg, makeWrapper }:
+{ stdenv, fetchurl, python, librsync, gnupg, boto, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "duplicity-0.6.06";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   installPhase = ''
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
-      --prefix PYTHONPATH : "$(toPythonPath $out)" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
       --prefix PATH : "${gnupg}/bin"
   '';
 

@@ -34,6 +34,29 @@ rec {
     };
   });
 
+  boto = buildPythonPackage (rec {
+    name = "boto-1.9b";
+
+    src = fetchurl {
+      url = "http://boto.googlecode.com/files/${name}.tar.gz";
+      sha256 = "0kir3ddm79rxdf7wb5czmxpbnqzgj3j966q4mach29kkb98p48wz";
+    };
+
+    meta = {
+      homepage = http://code.google.com/p/boto/;
+
+      license = "bsd";
+
+      description = "Python interface to Amazon Web Services";
+
+      longDescription = ''
+        The boto module is an integrated interface to current and
+        future infrastructural services offered by Amazon Web
+        Services.  This includes S3, SQS, EC2, among others.
+      '';
+    };
+  });
+
   darcsver = buildPythonPackage (rec {
     name = "darcsver-1.3.1";
 
