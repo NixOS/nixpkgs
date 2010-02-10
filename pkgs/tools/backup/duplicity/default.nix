@@ -1,4 +1,5 @@
-{stdenv, fetchurl, python, librsync, makeWrapper}:
+{ stdenv, fetchurl, python, librsync, gnupg, makeWrapper }:
+
 stdenv.mkDerivation {
   name = "duplicity-0.6.06";
 
@@ -9,10 +10,12 @@ stdenv.mkDerivation {
 
   installPhase = ''
     python setup.py install --prefix=$out
-    wrapProgram $out/bin/duplicity --prefix PYTHONPATH : "$(toPythonPath $out)"
+    wrapProgram $out/bin/duplicity \
+      --prefix PYTHONPATH : "$(toPythonPath $out)" \
+      --prefix PATH : "${gnupg}/bin"
   '';
 
-  buildInputs = [python librsync makeWrapper];
+  buildInputs = [ python librsync makeWrapper ];
 
   meta = {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";

@@ -619,7 +619,7 @@ let
   };
 
   duplicity = import ../tools/backup/duplicity {
-    inherit fetchurl stdenv librsync makeWrapper python;
+    inherit fetchurl stdenv librsync gnupg makeWrapper python;
   };
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
