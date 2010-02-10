@@ -64,7 +64,7 @@
       
       $webserver->waitForFile("/var/trac");      
       $webserver->mustSucceed("mkdir -p /var/trac/projects/test");
-      $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/python2.5/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
+      $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/${pkgs.python.libPrefix}/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
       
       $client->waitForX;
       $client->execute("konqueror http://webserver/projects/test &");

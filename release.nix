@@ -109,10 +109,6 @@ let
     minimal_install_archive = {system ? "i686-linux"}: (iso_minimal {inherit system;})
       .config.system.build.minimalInstallArchive;
 
-    # the archive installer can't be tested without chroot which requires being root
-    # options: run in kvm or uml ?
-    # TODO
-
     tests = 
       { services ? ../services }:
       let

@@ -137,7 +137,7 @@ let
     <Location ${urlPrefix}/viewvc>
         AddHandler python-program .py
         # Note: we write \" instead of ' to work around a lexer bug in Nix 0.11.
-        PythonPath "[\"${viewvc}/viewvc/bin/mod_python\", \"${subversion}/lib/python2.5/site-packages\"] + sys.path"
+        PythonPath "[\"${viewvc}/viewvc/bin/mod_python\", \"${subversion}/lib/${pkgs.python.libPrefix}/site-packages\"] + sys.path"
         PythonHandler handler
         ${viewerConfig "viewvc"}
     </Location>
@@ -333,7 +333,7 @@ in {
   # mod_python's own Python modules must be in the initial Python
   # path, they cannot be set through the PythonPath directive.
   globalEnvVars = [
-    { name = "PYTHONPATH"; value = "${pkgs.mod_python}/lib/python2.5/site-packages"; }
+    { name = "PYTHONPATH"; value = "${pkgs.mod_python}/lib/${pkgs.python.libPrefix}/site-packages"; }
   ];
 
   
