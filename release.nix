@@ -43,8 +43,6 @@ let
 
   jobs = rec {
 
-    inherit makeIso; # used by tests/test-nixos-install-from-cd/
-
 
     tarball =
       { nixosSrc ? {outPath = ./.; rev = 1234;}
