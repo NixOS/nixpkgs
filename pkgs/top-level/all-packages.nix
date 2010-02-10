@@ -5318,6 +5318,12 @@ let
     sip = sip_python26;
   };
 
+  pyqt47 = import ../development/python-modules/pyqt/4.7.nix {
+    inherit stdenv fetchurl lib python;
+    qt4 = qt46;
+    sip = sip410;
+  };
+
   pyx = import ../development/python-modules/pyx {
     inherit fetchurl stdenv python makeWrapper;
   };
