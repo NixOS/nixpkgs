@@ -51,8 +51,11 @@ NIXOS=$(readlink -f "$NIXOS")
 # Enable networking in the chroot.
 mkdir -m 0755 -p $mountPoint/etc
 touch /etc/resolv.conf 
-cp /etc/resolv.conf $mountPoint/etc/
-cp /etc/hosts $mountPoint/etc/
+cp -f /etc/resolv.conf $mountPoint/etc/
+rm -f $mountPoint/etc/hosts
+cat /etc/hosts > $mountPoint/etc/hosts
+rm -f $mountPoint/etc/nsswitch.conf
+cat /etc/nsswitch.conf > $mountPoint/etc/nsswitch.conf
 
 # Mount some stuff in the target root directory.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt

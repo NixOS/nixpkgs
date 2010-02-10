@@ -133,7 +133,8 @@ let
       ${optionalString testChannel ''
         # Allow the machine to talk to the fake nixos.org.
         $machine->mustSucceed(
-            "echo 192.168.1.1 nixos.org >> /etc/hosts",
+            "rm /etc/hosts",
+            "echo 192.168.1.1 nixos.org > /etc/hosts",
             "ifconfig eth1 up 192.168.1.2",
             "nix-pull http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST",
         );
@@ -174,13 +175,11 @@ let
       # Did /boot get mounted, if appropriate?
       # !!! There is currently no good way to wait for the
       # `filesystems' tash to finish.
-      #$machine->mustSucceed("initctl start filesystems");
-      #$machine->mustSucceed("test -e /boot/grub/grub.cfg");
+      $machine->waitForFile("/boot/grub/grub.cfg");
 
       # Did the swap device get activated?
       # !!! Idem.
-      # $machine->waitForJob("swap");
-      #$machine->mustSucceed("cat /proc/swaps | grep -q /dev");
+      $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
       
       $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls") =~ /profiles/
