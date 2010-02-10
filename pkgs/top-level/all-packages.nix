@@ -4718,6 +4718,11 @@ let
     qt4 = qt45;
   };
 
+  popplerQt46 = poppler.override {
+    qt4Support = true;
+    qt4 = qt46;
+  };
+
   popt = import ../development/libraries/popt {
     inherit fetchurl stdenv;
   };
@@ -4808,6 +4813,12 @@ let
   };
 
   redland_1_0_8 = composedArgsAndFun (import ../development/libraries/redland/1.0.8.nix) {
+    inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
+      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
+    bdb = db4;
+  };
+
+  redland_1_0_10 = composedArgsAndFun (import ../development/libraries/redland/1.0.10.nix) {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
       mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
@@ -8596,6 +8607,13 @@ let
     qt4 = qt45;
     popplerQt4 = popplerQt45;
   });
+  
+  kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
+    openexr = openexr_1_6_1;
+    qt4 = qt46;
+    popplerQt4 = popplerQt46;
+  });
+  
 
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;
