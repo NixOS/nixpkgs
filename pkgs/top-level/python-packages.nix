@@ -111,6 +111,14 @@ rec {
       sha256 = "1g2xw3zvgz59ilv7mrdlnvfl6ph8lwflwd4jr6zwrca2zhj7d8rs";
     };
 
+    patches =
+      [ # Fix `make check' (http://bugs.gentoo.org/276299)
+        (fetchurl {
+          url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/dev-python/genshi/files/genshi-0.5.1_test_fix.patch?rev=1.1";
+          sha256 = "019skkas07lc2kjy5br5jhhf9dqfy4fs389m5f4ws3fc62fklwhk";
+        })
+      ];
+
     buildInputs = [ pkgs.setuptools ];
 
     meta = {
