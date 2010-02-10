@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lib, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
 kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext}:
 
-stdenv.mkDerivation {
-  name = "digikam-1.0.0";
+stdenv.mkDerivation rec {
+  name = "digikam-1.1.0";
 
   src = fetchurl { 
-    url = mirror://sourceforge/digikam/digikam-1.0.0.tar.bz2;
-    sha256 = "0qblqyjn0vas8hyqn5s9rr401d93cagk53y3j8kch0mr0bk706bk";
+    url = "mirror://sourceforge/digikam/${name}.tar.bz2";
+    sha256 = "13zs5gwrzmqcx29r4vn96csz5hivycczjpa5l1157f5xhcg949kd";
   };
 
   includeAllQtDirs=true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Photo Management Program";
     license = "GPL";
-    homepage = http://www.koffice.org;
+    homepage = http://www.digikam.org;
     maintainers = [ lib.maintainers.viric ];
     platforms = with lib.platforms; linux;
   };
