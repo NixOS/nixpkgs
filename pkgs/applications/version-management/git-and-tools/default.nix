@@ -58,10 +58,10 @@ rec {
   topGit = stdenv.mkDerivation rec {
     name = "topgit-0.8";
 
-    src = fetchurl {
-      # Snapshot for the `topgit-0.8' tag.
-      url = "http://repo.or.cz/w/topgit.git/snapshot/f59e4f9e87e5f485fdaee0af002edd2105fa298a.tar.gz";
-      sha256 = "0bz3anrzjcnywslh9679mhg7n5bdr1dmsbb5x3ywvkp3mma9b4xk";
+    src = fetchgit {
+      url = "http://repo.or.cz/r/topgit.git";
+      rev = name;
+      sha256 = "14g233hk70xs51h4jqyivjfqnwmjjpc95fjb7wdny64i9ddz03aj";
     };
 
     configurePhase = "export prefix=$out";
@@ -81,6 +81,7 @@ rec {
       maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo ];
       homepage = http://repo.or.cz/w/topgit.git; # maybe there is also another one, I haven't checked
       license = "GPLv2";
+      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     };
   };
 
