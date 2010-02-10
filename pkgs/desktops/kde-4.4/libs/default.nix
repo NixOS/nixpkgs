@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, lib, perl
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
-, xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, libXScrnSaver
-, automoc4, phonon, strigi, soprano, qca2, attica
+, xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
+, automoc4, phonon, strigi, soprano, qca2, attica, polkit_qt
 }:
 
 stdenv.mkDerivation {
@@ -17,9 +17,11 @@ stdenv.mkDerivation {
   buildInputs = [
     cmake perl qt4 stdenv.gcc.libc xz flex bison bzip2 pcre fam libxml2 libxslt
     shared_mime_info giflib jasper openexr aspell avahi kerberos acl attr
-    libXScrnSaver
-    automoc4 phonon strigi soprano qca2 attica
+    shared_desktop_ontologies libXScrnSaver
+    automoc4 phonon strigi soprano qca2 attica polkit_qt
   ];
+
+  CMAKE_PREFIX_PATH=shared_desktop_ontologies;
 
   # I don't know why cmake does not find the acl files (but finds attr files)
   cmakeFlags = [ "-DHAVE_ACL_LIBACL_H=ON" "-DHAVE_SYS_ACL_H=ON" ];

@@ -61,15 +61,12 @@ pkgs.recurseIntoAttrs (rec {
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
     inherit (pkgs) xz flex bison giflib jasper openexr aspell avahi shared_mime_info
-      kerberos acl attr;
+      kerberos acl attr shared_desktop_ontologies;
     inherit (pkgs.xlibs) libXScrnSaver;
-    inherit automoc4 phonon strigi soprano qca2 attica;
+    inherit automoc4 phonon strigi soprano qca2 attica polkit_qt;
   };
 
-  kdelibs_experimental = import ./libs-experimental {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
-    inherit automoc4 kdelibs phonon;
-  };
+  kdelibs_experimental = null;
   
 ### BASE  
   kdebase_workspace = import ./base-workspace {

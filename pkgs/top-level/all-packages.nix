@@ -5291,6 +5291,10 @@ let
     inherit stdenv fetchurl lib python;
   };
 
+  sip410 = import ../development/python-modules/python-sip/4.10.nix {
+    inherit stdenv fetchurl lib python;
+  };
+
   sip_python26 = import ../development/python-modules/python-sip {
     inherit stdenv fetchurl lib;
     python = python26;
@@ -6520,6 +6524,10 @@ let
   shared_mime_info = import ../data/misc/shared-mime-info {
     inherit fetchurl stdenv pkgconfig gettext
       intltool perl perlXMLParser libxml2 glib;
+  };
+  
+  shared_desktop_ontologies = import ../data/misc/shared-desktop-ontologies {
+    inherit stdenv fetchurl cmake;
   };
 
   stdmanpages = import ../data/documentation/std-man-pages {
