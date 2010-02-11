@@ -8405,7 +8405,7 @@ let
   };
 
   eduke32 = import ../games/eduke32 {
-    inherit stdenv fetchurl SDL SDL_mixer unzip libvorbis mesa pkgconfig nasm makeDesktopItem;
+    inherit stdenv fetchsvn SDL SDL_mixer unzip libvorbis mesa pkgconfig nasm makeDesktopItem;
     inherit (gtkLibs) gtk;
   };
 
@@ -8627,6 +8627,8 @@ let
     openexr = openexr_1_6_1;
     qt4 = qt46;
     popplerQt4 = popplerQt46;
+    sip = sip410;
+    pyqt4 = pyqt47;
   });
   
 

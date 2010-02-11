@@ -1,17 +1,19 @@
-{stdenv, fetchurl, SDL, SDL_mixer, unzip, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
+{stdenv, fetchsvn, SDL, SDL_mixer, unzip, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
 
 stdenv.mkDerivation rec {
   name = "eduke32";
   
-  src = fetchurl {
-    url = http://wiki.eduke32.com/stuff/source_code/eduke32_src_20090131.zip;
-    sha256 = "e6b8cc2c7e0c32a6aa5a64359be8b8c494dcae08dda87e1de718c030426ef74d";
+  src = fetchsvn {
+    url = https://eduke32.svn.sourceforge.net/svnroot/eduke32/polymer/eduke32;
+    rev = 1597;
+    sha256 = "be917420d628584e1b950570f67332f66cee0d24edfcee39c7bd62e6b9456436";
   };
   
   buildInputs = [ unzip SDL SDL_mixer libvorbis mesa gtk pkgconfig ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
   
   NIX_LDFLAGS = "-lgcc_s";
+  NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
   
   desktopItem = makeDesktopItem {
     name = "eduke32";
@@ -21,7 +23,11 @@ stdenv.mkDerivation rec {
     genericName = "Duke Nukem 3D port";
     categories = "Application;Game;";
   };
-    
+
+  buildPhase = ''
+    make OPTLEVEL=0
+  '';
+
   installPhase = ''
     # Install binaries
     ensureDir $out/bin
@@ -49,4 +55,10 @@ stdenv.mkDerivation rec {
     ensureDir $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
+  
+  meta = {
+    description = "Enhanched port of Duke Nukem 3D for various platforms";
+    license = "GPL";
+    maintainers = [ stdenv.lib.maintainers.sander ];
+  };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cmake perl qt4 stdenv.gcc.libc xz flex bison bzip2 pcre fam libxml2 libxslt
-    shared_mime_info giflib jasper openexr aspell avahi kerberos acl attr
+    shared_mime_info giflib jasper /*openexr*/ aspell avahi kerberos acl attr
     shared_desktop_ontologies libXScrnSaver
     automoc4 phonon strigi soprano qca2 attica polkit_qt
   ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "kdebindings-4.4.0";
   src = fetchurl {
     url = mirror://kde/stable/4.4.0/src/kdebindings-4.4.0.tar.bz2;
-    sha1 = "1yn0wynnigbp288j9pqfd5cppc6mja9z9pcfz7g789pmyig42jvd";
+    sha256 = "1yn0wynnigbp288j9pqfd5cppc6mja9z9pcfz7g789pmyig42jvd";
   };
   builder = ./builder.sh;
   includeAllQtDirs=true;
