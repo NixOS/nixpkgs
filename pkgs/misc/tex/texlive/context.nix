@@ -1,9 +1,9 @@
 args: with args;
 rec {
-  name = "context-2008.01.28";
+  name = "context-2009.11.26";
   src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/c/context/context_2008.01.28.orig.tar.gz;
-    sha256 = "0infkn73v3kwqgg6b7rqnr28i5z5dbdfapy6ppzlcnr19yj4nh9y";
+    url = mirror://debian/pool/main/c/context/context_2009.11.26.orig.tar.gz;
+    sha256 = "1qv3h97cyhjyvivs30fz9bqr77j348azagm7ijiyfrclvjjlwav9";
   };
 
   buildInputs = [texLive];

@@ -9,7 +9,7 @@ rec {
 
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
-        find $currentPath/share ! -type d | while read; do
+        find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*) ! -type d | while read; do
             REPLY="''${REPLY#$currentPath}"
 	    ensureDir $out/"$(dirname "$REPLY")"
 	    ln -fs $currentPath/"$REPLY" $out/"$REPLY"
@@ -20,10 +20,12 @@ rec {
 	cp -Trfp $currentPath/libexec $out/libexec || true
     done
 
-    rm -r $out/share/texmf-config
-    find $out/share/texmf -type d | while read; do
-      REPLY="''${REPLY#$out/share/texmf}"
-      ensureDir $out/share/texmf-config/"$REPLY"
+    ln -s $out/texmf* $out/share/
+
+    rm -r $out/texmf-config
+    find $out/texmf/ -type d | while read; do
+      REPLY="''${REPLY#$out/texmf}"
+      ensureDir $out/texmf-config/"$REPLY"
     done
 
     ensureDir $out/bin
@@ -32,15 +34,15 @@ rec {
         chmod a+x $out/bin/$(basename $i)
     done
 
-    rm $out/share/texmf*/ls-R
+    rm $out/texmf*/ls-R
     for i in web2c texconfig fonts/map; do
-        cp -r $out/share/texmf/$i/* $out/share/texmf-config/$i || true
+        cp -r $out/texmf/$i/* $out/texmf-config/$i || true
     done
 
-    TEXMFCONFIG=$out/share/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
-    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
-    TEXMFCONFIG=$out/share/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
-    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
+    TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
+    PATH=$PATH:$out/bin mktexlsr $out/texmf*
+    TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
+    PATH=$PATH:$out/bin mktexlsr $out/texmf*
   '') ["minInit" "defEnsureDir" "addInputs"];
 
   meta = {
