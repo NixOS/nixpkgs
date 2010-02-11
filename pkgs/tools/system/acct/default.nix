@@ -1,12 +1,14 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "acct-6.5";
+  name = "acct-6.5.3";
 
   src = fetchurl {
     url = "mirror://gnu/acct/${name}.tar.gz";
-    sha256 = "0cw0id32mw9sy6950g38yi34wn1bryrdsklh23djlqmb1imbqlji";
+    sha256 = "0a48z9wb1cfb7nnmr0y4pbyqbx6qim2hqwl9bm4iyfy1p2r06mml";
   };
+
+  doCheck = true;
 
   meta = {
     description = "GNU Accounting Utilities, login and process accounting utilities";
