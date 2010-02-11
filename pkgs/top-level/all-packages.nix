@@ -4799,28 +4799,25 @@ let
   librdf_raptor = import ../development/libraries/librdf/raptor.nix {
     inherit fetchurl stdenv lib libxml2 curl;
   };
+  
   librdf_rasqal = import ../development/libraries/librdf/rasqal.nix {
     inherit fetchurl stdenv lib pcre libxml2 gmp librdf_raptor;
   };
+  
   librdf = import ../development/libraries/librdf {
     inherit fetchurl stdenv lib pkgconfig librdf_raptor ladspaH openssl zlib;
   };
 
-  # Also known as librdf, includes raptor and rasqal
-  redland = composedArgsAndFun (import ../development/libraries/redland/1.0.9.nix) {
-    inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
-      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
+  redland = redland_1_0_10;
+  
+  redland_1_0_8 = makeOverridable (import ../development/libraries/redland/1.0.8.nix) {
+    inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
+      libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
   };
 
-  redland_1_0_8 = composedArgsAndFun (import ../development/libraries/redland/1.0.8.nix) {
-    inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
-      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
-    bdb = db4;
-  };
-
-  redland_1_0_10 = composedArgsAndFun (import ../development/libraries/redland/1.0.10.nix) {
-    inherit fetchurl stdenv openssl libxml2 pkgconfig perl postgresql sqlite
+  redland_1_0_10 = makeOverridable (import ../development/libraries/redland/1.0.10.nix) {
+    inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
       mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
   };

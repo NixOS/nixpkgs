@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     scons boost
-    pkgconfig fftw redland librdf_raptor librdf_rasqal jackaudio flac
+    pkgconfig fftw librdf_raptor librdf_rasqal jackaudio flac
     libsamplerate alsaLib libxml2 libxslt libsndfile libsigcxx libusb cairomm
     glib pango gtk glibmm gtkmm libgnomecanvas fftw librdf liblo aubio
     fftw fftwSinglePrec libmad
@@ -25,12 +25,13 @@ stdenv.mkDerivation {
     export CXX=g++
     scons PREFIX=$out install
   '';
+  
   installPhase = ":";
 
   meta = { 
-    description = "multi-track hard disk recording software";
+    description = "Multi-track hard disk recording software";
     longDescription = ''
-      Also read "the importance of Paying Something on their homepage, pelase!"
+      Also read "The importance of Paying Something" on their homepage, please!
     '';
     homepage = http://ardour.org/;
     license = "GPLv2";
