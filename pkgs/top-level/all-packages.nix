@@ -7255,7 +7255,9 @@ let
     inherit (gnome) gtk libart_lgpl;
   };
 
-  gimpPlugins = import ../applications/graphics/gimp/plugins { inherit pkgs gimp; };
+  gimpPlugins = recurseIntoAttrs (import ../applications/graphics/gimp/plugins {
+    inherit pkgs gimp;
+  });
 
   gitAndTools = recurseIntoAttrs (import ../applications/version-management/git-and-tools {
     inherit pkgs;

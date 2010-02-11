@@ -46,6 +46,29 @@ let
 
 in
 rec {
+  gap = pluginDerivation {
+    /* menu:
+       Video
+    */
+    name = "gap-2.6.0";
+    buildInputs = [ gimp pkgconfig glib pkgs.intltool gimp.gtk ] ++ gimp.buildInputs;
+    src = fetchurl {
+      url = ftp://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
+      sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
+    };
+    patchPhase = ''
+      sed -e 's,^\(GIMP_PLUGIN_DIR=\).*,\1'"$out/${gimp.name}-plugins", \
+       -e 's,^\(GIMP_DATA_DIR=\).*,\1'"$out/share/${gimp.name}", -i configure
+    '';
+    meta = { 
+      description = "The GIMP Animation Package";
+      homepage = http://www.gimp.org;
+      # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
+      # falls inside "free".
+      license = [ "GPLv3" "free" ];
+    };
+  };
+
   fourier = pluginDerivation {
     /* menu:
        Filters/Generic/FFT Forward
