@@ -22,8 +22,8 @@ rec {
     ensureDir $out/nix-support 
     cp ${setupHook} $out/nix-support/setup-hook.sh
     ensureDir $out/share
-    tar xf ${texmfSrc} -C $out/share --strip-components=1
-    tar xf ${langTexmfSrc} -C $out/share --strip-components=1
+    tar xf ${texmfSrc} -C $out --strip-components=1
+    tar xf ${langTexmfSrc} -C $out --strip-components=1
 
     sed -e s@/usr/bin/@@g -i $(grep /usr/bin/ -rl . )
 
@@ -50,16 +50,16 @@ rec {
         echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
         chmod a+x $out/bin/$(basename $i)
     done
-    ln -s $out/share/texmf $out/share/texmf-config
-    ln -s $out/share/*texmf* $out/
+    [ -d $out/texmf-config ] || ln -s $out/texmf $out/texmf-config
+    ln -s $out/*texmf* $out/share/
     
-    sed -e 's/.*pyhyph.*/=&/' -i $out/share/texmf-config/tex/generic/config/language.dat
+    sed -e 's/.*pyhyph.*/=&/' -i $out/texmf-config/tex/generic/config/language.dat
 
-    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
+    PATH=$PATH:$out/bin mktexlsr $out/texmf*
 
     HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
     
-    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
+    PATH=$PATH:$out/bin mktexlsr $out/texmf*
  '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];
 
   buildInputs = [
