@@ -31,7 +31,9 @@ in rec {
   tools = stdenv.mkDerivation {
     name = "dbus-tools-" + version;
 
-    inherit src configureFlags;
+    inherit src;
+
+    configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
     
     buildInputs = [pkgconfig expat libs]
       ++ stdenv.lib.optionals useX11 [libX11 libICE libSM];
@@ -39,8 +41,6 @@ in rec {
     postConfigure = "cd tools";
 
     NIX_LDFLAGS = "-ldbus-1";
-    
-    makeFlags = "DBUS_DAEMONDIR=${daemon}/bin";
 
     patchPhase =
       ''
