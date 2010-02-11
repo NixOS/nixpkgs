@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [zlib ncurses readline];
 
-  LC_ALL = "en_US";
+  LC_ALL = "C";
 
   passthru = { inherit readline; };
 
