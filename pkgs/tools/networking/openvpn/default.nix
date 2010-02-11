@@ -1,10 +1,11 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "OpenVPN-2.1_rc15";
+{stdenv, fetchurl, iproute, lzo, openssl, nettools}:
+
+stdenv.mkDerivation rec {
+  name = "openvpn-2.1.1";
 
   src = fetchurl {
-    url = http://openvpn.net/release/openvpn-2.1_rc15.tar.gz;
-    sha256 = "198k5lbw0bnx67hgflzlzncmdnww0wa7fll0kkirmckav93y7kv6";
+    url = "http://openvpn.net/release/${name}.tar.gz";
+    sha256 = "0hj8cdwgdxfsvjxnw4byys3ij719cg9bl9iadcchayzzymx0s653";
   };
 
   buildInputs = [ iproute lzo openssl ];
@@ -19,5 +20,7 @@ stdenv.mkDerivation {
       description="OpenVPN is a robust and highly flexible tunneling application compatible with many OSes.";
       homepage="http://openvpn.net/";
       license = "GPLv2";
+      maintainers = with stdenv.lib.maintainers; [viric];
+      platforms = with stdenv.lib.platforms; linux;
   };
 }
