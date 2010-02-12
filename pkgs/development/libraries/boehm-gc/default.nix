@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     license = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/license.txt";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
