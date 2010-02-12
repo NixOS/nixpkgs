@@ -1,64 +1,61 @@
-args: with args;
-stdenv.mkDerivation ( rec {
-  pname = "skype";
-  version = "2.0.0.72";
-  name = "skype-2.0";
+{stdenv, fetchurl, alsaLib, libXv, libXi, libXrender, libXrandr, zlib, glib
+, libXext, libX11, libXScrnSaver, libSM, qt, libICE, freetype, fontconfig}:
+
+assert stdenv.system == "i686-linux";
+
+stdenv.mkDerivation rec {
+  name = "skype-2.1.0.81";
 
   src = fetchurl {
-    url = http://download.skype.com/linux/skype_static-2.0.0.72.tar.bz2;
-    sha256 = "2f37963e8f19c0ec5efd8631abe9633b6551f09dee024460c40fad10728bc580";
-    name = "${pname}_static-${version}.tar.bz2";
+    url = "http://download.skype.com/linux/${name}.tar.bz2";
+    sha256 = "1x18m4900c0ssaq95wv8mhhgwvw9fh66dszx7zq24zgvb2v1h4jz";
   };
 
   buildInputs = [
     alsaLib 
-    glibc 
-    gcc.gcc
-    libSM 
-    libICE 
-    libXi 
+    stdenv.glibc 
+    stdenv.gcc.gcc
     libXv
-    libXScrnSaver
-    libXrender 
-    libXrandr 
-    libXfixes 
-    libXcursor 
-    libXinerama 
-    freetype 
-    fontconfig 
     libXext 
     libX11 
-    fontconfig 
-    libsigcxx 
+    qt
+    libXScrnSaver
+    libSM
+    libICE
+    libXi
+    libXrender
+    libXrandr
+    freetype
+    fontconfig
+    zlib
+    glib
   ];
 
   phases = "unpackPhase installPhase";
-  installPhase ="
 
-    ensureDir \$out/{opt/skype/,bin};
-    cp -r * \$out/opt/skype/;
-    cat >\$out/bin/skype << EOF
-#!/bin/sh
-      \$out/opt/skype/skype --resources=\$out/opt/skype \\$@
-EOF
-    chmod +x \$out/bin/skype
+  installPhase = ''
+    ensureDir $out/{opt/skype/,bin}
+    cp -r * $out/opt/skype/
 
-fullPath=
-for i in \$buildInputs; do
-    fullPath=\$fullPath\${fullPath:+:}\$i/lib
-done
+    fullPath=
+    for i in $buildNativeInputs; do
+      fullPath=$fullPath''${fullPath:+:}$i/lib
+    done
+
+    dynlinker="$(cat $NIX_GCC/nix-support/dynamic-linker)"
           
-    echo patchelf --interpreter \"\$(cat \$NIX_GCC/nix-support/dynamic-linker)\" \\
-    --set-rpath \$fullPath \\
-    \$out/opt/skype/skype
-    patchelf --interpreter \"\$(cat \$NIX_GCC/nix-support/dynamic-linker)\" \\
-    --set-rpath \$fullPath \\
-    \$out/opt/skype/skype
-  ";
+    cat > $out/bin/skype << EOF
+    #!${stdenv.shell}
+    export LD_LIBRARY_PATH=$fullPath:$LD_LIBRARY_PATH
+    $dynlinker $out/opt/skype/skype --resources=$out/opt/skype "\$@"
+    EOF
+
+    chmod +x $out/bin/skype
+  '';
 
   meta = {
       description = "A P2P-VoiceIP client";
       homepage = http://www.skype.com;
       license = "skype-eula";
   };
-})
+}

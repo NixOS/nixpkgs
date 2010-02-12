@@ -7921,9 +7921,11 @@ let
 
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
-    inherit glibc alsaLib freetype fontconfig libsigcxx gcc;
-    inherit (xlibs) libSM libICE libXi libXrender libXrandr libXfixes libXcursor
-                    libXinerama libXext libX11 libXv libXScrnSaver;
+    inherit alsaLib freetype fontconfig zlib;
+    qt = qt46;
+    inherit (xlibs) libXext libX11 libXv libXScrnSaver libSM libICE
+      libXi libXrender libXrandr;
+    inherit (gtkLibs) glib;
   };
 
   slim = import ../applications/display-managers/slim {
