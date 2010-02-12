@@ -4,11 +4,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ stdenv.gcc.libc ];
 
+  # getline is defined differently in glibc now. So rename it.
   installPhase = "
     ensureDir \$out/bin
     sed -e \"s%^RM.*$%RM=`type -f rm | awk '{print $3;}'` -f%\" -i Makefile
     sed -e \"s%^BASENAME.*%\BASENAME=$out%\" -i Makefile
     sed -e \"s%^LIBS=.*%LIBS=-lm%\" -i Makefile
+    sed -e \"s%getline%thisgetline%g\" -i src/*.c src/*.h
     make DESTDIR=\$out install
    ";
 
