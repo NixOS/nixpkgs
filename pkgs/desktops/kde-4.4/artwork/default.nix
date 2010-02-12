@@ -7,7 +7,6 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.3.4/src/kdeartwork-4.3.4.tar.bz2;
     sha1 = "7a095932bad297f22b23765ce6ee17bfd2438bf2";
   };
-  includeAllQtDirs=true;
   buildInputs = [ cmake qt4 perl xscreensaver
                   kdelibs kdebase_workspace automoc4 phonon strigi eigen ];
   meta = {

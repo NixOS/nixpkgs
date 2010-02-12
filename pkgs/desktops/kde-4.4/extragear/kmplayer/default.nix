@@ -6,7 +6,6 @@ stdenv.mkDerivation {
     url = http://kmplayer.kde.org/pkgs/kmplayer-0.11.1b.tar.bz2;
     sha256 = "04wzxxa83kxfzpsrllbdgl0kd6jj13kzhdkm2w66s7mpylr88lfi";
   };
-  includeAllQtDirs=true;
   builder = ./builder.sh;
   buildInputs = [ cmake qt4 perl gettext stdenv.gcc.libc pango gtk dbus_glib kdelibs automoc4 phonon ];
   meta = {

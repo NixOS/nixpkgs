@@ -68,7 +68,6 @@ let
       url = attr.url;
       sha256 = attr.sha256;
     };
-    includeAllQtDirs=true;
     buildInputs = [ cmake qt4 perl gettext kdelibs automoc4 phonon ];
     cmakeFlagsArray = [ "-DGETTEXT_INCLUDE_DIR=\${gettext}/include" ];
     meta = {

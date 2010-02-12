@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "1fmjxl41lvyb6zv8wrg8sz0hb1jjynj2pwisynpbffglnxd09fwf";
   };
 
-  includeAllQtDirs=true;
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 kdepimlibs 
     libxml2 libxslt gettext ];
   CMAKE_PREFIX_PATH = kdepimlibs;

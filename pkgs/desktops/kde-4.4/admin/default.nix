@@ -14,7 +14,6 @@ stdenv.mkDerivation {
   
   inherit system_config_printer;
   
-  includeAllQtDirs=true;
   
   CMAKE_PREFIX_PATH=kdepimlibs;
   

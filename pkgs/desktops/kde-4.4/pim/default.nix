@@ -8,7 +8,6 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.3.4/src/kdepim-4.3.4.tar.bz2;
     sha1 = "3ddc34c2b0c96c0273431631ccf47a8b9b4289b3";
   };
-  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   builder = ./builder.sh;  
   buildInputs = [ cmake qt4 perl boost gpgme stdenv.gcc.libc libassuan libgpgerror libxslt

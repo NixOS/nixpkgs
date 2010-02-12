@@ -7,7 +7,6 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/amarok/2.2.2/src/amarok-2.2.2.tar.bz2;
     sha256 = "0kg67b9wz2wi1gyn229vzbib4s0wpgqrjyfqy0032yl9fa2k13bn";
   };
-  includeAllQtDirs=true;
   inherit mysql loudmouth;
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
   builder = ./builder.sh;

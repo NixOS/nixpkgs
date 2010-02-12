@@ -8,7 +8,6 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/koffice-2.1.0/koffice-2.1.0.tar.bz2;
     sha256 = "1jdc2rvj5xqd66d152zmjz2psq44kbraqpl0fq05yjg2wz8kdsln";
   }; 
-  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl lcms exiv2 libxml2 libxslt boost glew shared_mime_info 
                   poppler gsl gmm wv2 libwpd

@@ -12,7 +12,9 @@ stdenv.mkDerivation {
     sha256 = "1nf829k9mcnqf1jfsfjgb1dw6s0kh02sixxjcgmapccmmqx1p5ak";
   };
   
-  includeAllQtDirs = true;
+  # The same way as cmake needed a patch for findqt4 to work properly under nix, 
+  # also KDE, because they have their own copy of cmake's findqt4.
+  patches = [ ./findqt4.patch ];
 
   buildInputs = [
     cmake perl qt4 stdenv.gcc.libc xz flex bison bzip2 pcre fam libxml2 libxslt

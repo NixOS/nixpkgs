@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.3.4/src/kdenetwork-4.3.4.tar.bz2;
     sha1 = "e066c3642d254e1e8213ef511546e960c5658596";
   };
-  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
                   libvncserver tapioca_qt libmsn

@@ -11,7 +11,6 @@ stdenv.mkDerivation {
     sha256 = "1yn0wynnigbp288j9pqfd5cppc6mja9z9pcfz7g789pmyig42jvd";
   };
   builder = ./builder.sh;
-  includeAllQtDirs=true;
   buildInputs = [ python sip pyqt4 zlib libpng freetype fontconfig qt4
                   libSM libXrender libXrandr libXfixes libXcursor libXinerama libXext kdelibs ];
   meta = {

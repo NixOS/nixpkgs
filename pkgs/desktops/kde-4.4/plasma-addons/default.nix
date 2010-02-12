@@ -10,7 +10,6 @@ stdenv.mkDerivation {
   };
   inherit kdebase_workspace;
   builder = ./builder.sh;
-  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   KDEDIRS="${kdeedu}";
   buildInputs = [ cmake qt4 perl python shared_mime_info

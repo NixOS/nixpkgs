@@ -7,7 +7,6 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/konversation/1.2.1/src/konversation-1.2.1.tar.bz2;
     sha256 = "1rx4xgw14cfzkxghgn80np8i2ndq26sbdvv96g46r0s14qkdyq8w";
   };
-  includeAllQtDirs=true;
   CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl gettext stdenv.gcc.libc libXScrnSaver kdelibs kdepimlibs automoc4 phonon qca2 ];
   patchPhase = ''
