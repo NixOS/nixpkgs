@@ -19,9 +19,11 @@ stdenv.mkDerivation {
   buildInputs = [
     cmake perl qt4 stdenv.gcc.libc xz flex bison bzip2 pcre fam libxml2 libxslt
     shared_mime_info giflib jasper /*openexr*/ aspell avahi kerberos acl attr
-    shared_desktop_ontologies libXScrnSaver
+    libXScrnSaver
     automoc4 phonon strigi soprano qca2 attica polkit_qt
   ];
+
+  propagatedBuildInputs = [ shared_desktop_ontologies ];
 
   CMAKE_PREFIX_PATH=shared_desktop_ontologies;
 
