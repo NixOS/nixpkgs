@@ -8,9 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1mj1pj99mgf1a59q9f2mxjli2fzxpnf55233pc1klxk2arhf8cv6";
   };
 
-  # To allow x86_64 linking to the static lib to make a shared object
-  # like for the package 'duplicity'
-  CFLAGS="-fPIC";
+  configureFlags = "--enable-shared";
 
   meta = {
     homepage = http://librsync.sourceforge.net/;
