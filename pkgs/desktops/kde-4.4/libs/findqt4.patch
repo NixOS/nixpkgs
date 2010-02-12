@@ -1,0 +1,13 @@
+diff --git a/cmake/modules/FindQt4.cmake b/cmake/modules/FindQt4.cmake
+index 86622fd..e15b3fa 100644
+--- a/cmake/modules/FindQt4.cmake
++++ b/cmake/modules/FindQt4.cmake
+@@ -727,6 +727,8 @@ IF (QT4_QMAKE_FOUND)
+   FOREACH(QT_MODULE ${QT_MODULES})
+     STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
+     FIND_PATH(QT_${_upper_qt_module}_INCLUDE_DIR ${QT_MODULE}
++              NO_CMAKE_PATH
++              NO_CMAKE_ENVIRONMENT_PATH
+               PATHS
+               ${QT_HEADERS_DIR}/${QT_MODULE}
+               ${QT_LIBRARY_DIR}/${QT_MODULE}.framework/Headers
