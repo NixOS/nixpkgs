@@ -18,7 +18,6 @@ stdenv.mkDerivation {
     kde.qt4 kde.automoc4 kde.kdelibs kde.phonon kde.qca2 kde.kdepimlibs
   ];
 
-  CMAKE_PREFIX_PATH=kde.kdepimlibs;
   cmakeFlags = [ "-DGETTEXT_INCLUDE_DIR=${gettext}/include" ];
   includeAllQtDirs=true;
   
