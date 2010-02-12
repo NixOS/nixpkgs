@@ -1,10 +1,10 @@
 {stdenv, fetchurl, cmake, openssl}:
 
-stdenv.mkDerivation {
-  name = "libmsn-4.0beta4";
+stdenv.mkDerivation rec {
+  name = "libmsn-4.1";
   src = fetchurl {
-    url = mirror://sourceforge/libmsn/libmsn-4.0-beta4.tar.bz2;
-    md5 = "b0155f01443644d7c4a60269e44d8dac";
+    url = "mirror://sourceforge/libmsn/${name}.tar.bz2";
+    sha256 = "0p3c3gidnq4ai697dgg930hm7aap4176sbq7w7nn0mxg4rg5gwfx";
   };
   buildInputs = [ cmake openssl ];
 }
