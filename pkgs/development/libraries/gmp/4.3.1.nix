@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "A free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating point numbers";
     homepage = http://gmplib.org/;
     license = "LGPL";
+    platforms = stdenv.lib.platforms.all;
   };
 }
