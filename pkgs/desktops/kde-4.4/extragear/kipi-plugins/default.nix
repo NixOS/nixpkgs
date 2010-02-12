@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 kdepimlibs 
     libxml2 libxslt gettext ];
-  CMAKE_PREFIX_PATH = kdepimlibs;
   cmakeFlags = [ "-DGETTEXT_INCLUDE_DIR=${gettext}/include" ];
   meta = {
     description = "Photo Management Program";

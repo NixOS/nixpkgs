@@ -2,10 +2,10 @@
 , kdelibs, kdebase_workspace, automoc4, phonon, strigi, eigen}:
 
 stdenv.mkDerivation {
-  name = "kdeartwork-4.3.4";
+  name = "kdeartwork-4.4.0";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdeartwork-4.3.4.tar.bz2;
-    sha1 = "7a095932bad297f22b23765ce6ee17bfd2438bf2";
+    url = mirror://kde/stable/4.4.0/src/kdeartwork-4.4.0.tar.bz2;
+    sha1 = "08djygxycrpgn09506lmkm86d1jbl8m0bbi79jdd4q3c1w76dbi4";
   };
   buildInputs = [ cmake qt4 perl xscreensaver
                   kdelibs kdebase_workspace automoc4 phonon strigi eigen ];

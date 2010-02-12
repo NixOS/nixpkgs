@@ -12,7 +12,6 @@ stdenv.mkDerivation {
     sha1 = "5b43447139d22247d5bc2deee8e3a944447f0bbf";
   };
   includeAllQtDirs=true;
-  CMAKE_PREFIX_PATH=kdepimlibs;
   inherit kdelibs_experimental;
   builder = ./builder.sh;
   buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdelibs_experimental kdepimlibs /*kdebindings*/ libpthreadstubs boost libusb stdenv.gcc.libc

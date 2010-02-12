@@ -25,7 +25,6 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ shared_desktop_ontologies ];
 
-  CMAKE_PREFIX_PATH=shared_desktop_ontologies;
 
   # I don't know why cmake does not find the acl files (but finds attr files)
   cmakeFlags = [ "-DHAVE_ACL_LIBACL_H=ON" "-DHAVE_SYS_ACL_H=ON" ];

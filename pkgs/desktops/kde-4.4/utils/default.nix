@@ -3,19 +3,16 @@
 , kdelibs, kdelibs_experimental, kdepimlibs, kdebase, kdebindings, automoc4, phonon, qimageblitz, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdeutils-4.3.4";
+  name = "kdeutils-4.4.0";
   
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdeutils-4.3.4.tar.bz2;
-    sha1 = "2d5e26055e364af2df7459cdbc3aebdc3a8abdea";
+    url = mirror://kde/stable/4.4.0/src/kdeutils-4.4.0.tar.bz2;
+    sha256 = "0js3gylqrwphk1jbaiak4r8l4ak5nrzrvis6kdxxllqr65bmqkxn";
   };
   
   builder = ./builder.sh;
   
   inherit system_config_printer;
-  
-  
-  CMAKE_PREFIX_PATH=kdepimlibs;
   
   buildInputs = [ cmake qt4 perl gmp python libzip libarchive xz sip pyqt4 pycups system_config_printer
                   kdelibs kdelibs_experimental kdepimlibs kdebase kdebindings automoc4 phonon qimageblitz qca2 ];

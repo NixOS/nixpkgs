@@ -8,7 +8,6 @@ stdenv.mkDerivation {
     sha1 = "42b6209908f8baadc0add46153649ebdfa9a977a";
   };
   includeAllQtDirs=true;
-  CMAKE_PREFIX_PATH=kdepimlibs;
   builder=./builder.sh;
   inherit aprutil;
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost subversion apr aprutil

@@ -3,10 +3,10 @@
 , kdelibs, automoc4, phonon, eigen}:
 
 stdenv.mkDerivation {
-  name = "kdeedu-4.3.4";
+  name = "kdeedu-4.4.0";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdeedu-4.3.4.tar.bz2;
-    sha1 = "ee646d57db11b761d8da33fc03c596c8f531eb9d";
+    url = mirror://kde/stable/4.4.0/src/kdeedu-4.4.0.tar.bz2;
+    sha256 = "0qc7y361ndpmvjpkdxa7psvx9brx3lhwp5fmm94j6gva7kvyad9d";
   };
   buildInputs = [ cmake qt4 perl libxml2 libxslt openbabel boost readline gmm gsl facile ocaml xplanet
                   kdelibs automoc4 phonon eigen ];

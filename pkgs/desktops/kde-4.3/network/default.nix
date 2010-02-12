@@ -10,7 +10,6 @@ stdenv.mkDerivation {
     sha1 = "e066c3642d254e1e8213ef511546e960c5658596";
   };
   includeAllQtDirs=true;
-  CMAKE_PREFIX_PATH=kdepimlibs;
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
                   libvncserver tapioca_qt libmsn
 		  libXi libXtst libXdamage libXxf86vm

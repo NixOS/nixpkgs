@@ -11,7 +11,6 @@ stdenv.mkDerivation {
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost shared_mime_info
                   kdelibs kdelibs_experimental kdepimlibs
 		  automoc4 phonon akonadi soprano strigi ];
-  CMAKE_PREFIX_PATH=kdepimlibs;
   includeAllQtDirs=true;
   builder = ./builder.sh;
   meta = {

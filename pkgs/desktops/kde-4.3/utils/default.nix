@@ -16,7 +16,6 @@ stdenv.mkDerivation {
   
   includeAllQtDirs=true;
   
-  CMAKE_PREFIX_PATH=kdepimlibs;
   
   buildInputs = [ cmake qt4 perl gmp python libzip libarchive xz sip pyqt4 pycups system_config_printer
                   kdelibs kdelibs_experimental kdepimlibs kdebase kdebindings automoc4 phonon qimageblitz qca2 ];

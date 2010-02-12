@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://www.vandenoever.info/software/strigi/${name}.tar.bz2";
     sha256 = "1cra4jlpd7cdvckwalfjrf2224qvhbkmxdd3sn02q9jhv830b0yi";
   };
-
+  includeAllQtDirs=true;
   
   CLUCENE_HOME = cluceneCore;
   

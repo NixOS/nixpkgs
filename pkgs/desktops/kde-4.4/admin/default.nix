@@ -3,11 +3,11 @@
 , kdelibs, kdepimlibs, kdebindings, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdeadmin-4.3.4";
+  name = "kdeadmin-4.4.0";
   
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdeadmin-4.3.4.tar.bz2;
-    sha1 = "8f61aeb2ff9d51712d72cd77dad837c8902b6a5d";
+    url = mirror://kde/stable/4.4.0/src/kdeadmin-4.4.0.tar.bz2;
+    sha256 = "10gafh9qdi3v2iinbd7a2x28fcz86sd3lyym8gd64q6qq8phgxqy";
   };
   
   builder = ./builder.sh;
@@ -15,7 +15,6 @@ stdenv.mkDerivation {
   inherit system_config_printer;
   
   
-  CMAKE_PREFIX_PATH=kdepimlibs;
   
   buildInputs = [ cmake qt4 pkgconfig perl python sip pyqt4 pycups system_config_printer
                   kdelibs kdepimlibs kdebindings automoc4 phonon ];

@@ -1,7 +1,6 @@
 addCMakeParams()
 {
-    addToSearchPath CMAKE_INCLUDE_PATH $1/include
-    addToSearchPath CMAKE_LIBRARY_PATH $1/lib
+    addToSearchPath CMAKE_PREFIX_PATH $1
     addToSearchPath CMAKE_MODULE_PATH $1/share/cmake-@majorVersion@/Modules
 }
 
