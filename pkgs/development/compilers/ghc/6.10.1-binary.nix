@@ -1,5 +1,7 @@
 {stdenv, fetchurl, perl, libedit, ncurses, gmp}:
 
+assert stdenv.system == "i686-darwin" || stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+
 stdenv.mkDerivation rec {
   version = "6.10.1";
 

@@ -1,5 +1,7 @@
 {stdenv, fetchurl, perl, readline, ncurses, gmp}:
 
+assert stdenv.system == "i686-darwin" || stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+
 stdenv.mkDerivation {
   name = if stdenv.system == "i686-darwin" then "ghc-6.6.1-binary" else "ghc-6.4.2-binary";
 
