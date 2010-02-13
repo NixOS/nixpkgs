@@ -15,6 +15,10 @@ stdenv.mkDerivation {
   
   # Disable smoke because I don't need it and gives us an error
   cmakeFlags = [ "-DENABLE_SMOKE=OFF" ];
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags -DPYTHON_SITE_PACKAGES_DIR=$out/lib/${python.libPrefix}/site-packages"
+    cmakeFlags="$cmakeFlags -DSIP_DEFAULT_SIP_DIR=$out/share/sip"
+  '';
   
   # Okular seems also an optional depenedency which I left out
   buildInputs = [ cmake perl python sip pyqt4 zlib libpng freetype fontconfig qt4 boost

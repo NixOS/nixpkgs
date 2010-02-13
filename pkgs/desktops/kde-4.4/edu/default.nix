@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, libxml2, libxslt, openbabel, boost, readline, gmm, gsl
 , facile, ocaml, xplanet
-, kdelibs, automoc4, phonon, eigen}:
+, kdelibs, automoc4, phonon, eigen, attica}:
 
 stdenv.mkDerivation {
   name = "kdeedu-4.4.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0qc7y361ndpmvjpkdxa7psvx9brx3lhwp5fmm94j6gva7kvyad9d";
   };
   buildInputs = [ cmake qt4 perl libxml2 libxslt openbabel boost readline gmm gsl facile ocaml xplanet
-                  kdelibs automoc4 phonon eigen ];
+                  kdelibs automoc4 phonon eigen attica ];
   meta = {
     description = "KDE Educative software";
     license = "GPL";
