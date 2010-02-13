@@ -3,7 +3,7 @@ args: with args;
 # see man urxvtperl for details
 let 
   name = "rxvt-unicode";
-  version = "9.06";
+  version = "9.07";
   n = "${name}-${version}";
 in
 stdenv.mkDerivation (rec {
@@ -11,8 +11,8 @@ stdenv.mkDerivation (rec {
   name = "${n}${if perlSupport then "-with-perl" else ""}";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/rxvt-unicode/Attic/${n}.tar.bz2";
-    sha256 = "8ef9359c01059efd330626c6cd7b082be9bf10587f2b9fe84caa43a84aa576d1";
+    url = "http://dist.schmorp.de/rxvt-unicode/rxvt-unicode-9.07.tar.bz2";
+    sha256 = "18y5mb3cm1gawjm723q5r7yk37s9drzg39kna036i694m2667865";
   };
 
   buildInputs = [ libX11 libXt libXft ncurses /* required to build the terminfo file */ ]
