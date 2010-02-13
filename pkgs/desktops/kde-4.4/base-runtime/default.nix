@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, perl, bzip2, xz, qt4, alsaLib, xineLib, samba, shared_mime_info
-, kdelibs, automoc4, phonon, strigi, soprano, cluceneCore}:
+, kdelibs, automoc4, phonon, strigi, soprano, cluceneCore, attica}:
 
 stdenv.mkDerivation {
   name = "kdebase-runtime-4.4.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 /*  CLUCENE_HOME=cluceneCore;*/
   buildInputs = [ cmake perl bzip2 xz qt4 alsaLib xineLib samba stdenv.gcc.libc shared_mime_info
-                  kdelibs automoc4 phonon strigi soprano cluceneCore ];
+                  kdelibs automoc4 phonon strigi soprano cluceneCore attica ];
   meta = {
     description = "KDE runtime";
     longDescription = "Libraries and tools which supports running KDE desktop applications";
