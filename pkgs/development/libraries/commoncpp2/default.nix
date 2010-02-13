@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "commoncpp2-1.7.3";
+  name = "commoncpp2-2.0.8";
 
   src = fetchurl {
-    url = http://ftp.gnu.org/pub/gnu/commoncpp/commoncpp2-1.7.3.tar.gz;
-    sha256 = "11akz0gwr4xq5wbgbrb8ixkqmn8pmrwc19b9yw8lydvd3rh5gamk";
+    url = http://ftp.gnu.org/pub/gnu/commoncpp/ucommon-2.0.8.tar.gz;
+    sha256 = "09mk70kqwr1pmxa35x0is16g2sa60b3z8p4p5yccw59pp1hpxpq3";
   };
 
   buildInputs = [];
