@@ -195,9 +195,8 @@ pkgs.recurseIntoAttrs (rec {
 ### DEVELOPMENT
 
   kdebindings = import ./bindings {
-    inherit (pkgs) stdenv fetchurl lib python sip zlib libpng pyqt4 freetype fontconfig qt4;
-    inherit (pkgs.xlibs) libSM libXrender libXrandr libXfixes libXcursor libXinerama libXext;
-    inherit kdelibs;
+    inherit (pkgs) stdenv fetchurl cmake perl lib python sip zlib libpng pyqt4 freetype fontconfig qt4 boost;
+    inherit kdelibs kdepimlibs automoc4 phonon soprano akonadi qimageblitz attica polkit_qt;
   };
   
   kdesdk = import ./sdk {
