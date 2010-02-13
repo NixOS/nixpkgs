@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, perl, python, pam, ConsoleKit
-, qt4, sip, pyqt4, kdelibs, kdepimlibs,
+, qt4, sip, pyqt4, kdelibs, kdepimlibs, kdebindings
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
 , lm_sensors, libxklavier, libusb, libpthreadstubs, boost
 , automoc4, phonon, strigi, soprano, qimageblitz, akonadi, polkit_qt
