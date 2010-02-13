@@ -61,11 +61,15 @@ alias ll="ls -l"
 alias l="ls -alh"
 alias which="type -p"
 
-# Completion.
-#if [ -d "@bash@/etc/bash_completion.d" ]; then
-#    export BASH_COMPLETION_DIR="@bash@/etc/bash_completion.d"
-#fi
-#if [ -f "@bash@/etc/bash_completion" ]; then
-#    export BASH_COMPLETION="@bash@/etc/bash_completion"
-#    source "$BASH_COMPLETION"
-#fi
+# The "non-interactive" Bash build does not support programmable
+# completion so check whether it's available.
+if shopt -q progcomp 2> /dev/null; then
+    # Completion.
+    if [ -z "$BASH_COMPLETION_DIR" -a -d "@bash@/etc/bash_completion.d" ]; then
+	BASH_COMPLETION_DIR="@bash@/etc/bash_completion.d"
+    fi
+    if [ -z "$BASH_COMPLETION" -a -f "@bash@/etc/bash_completion" ]; then
+	BASH_COMPLETION="@bash@/etc/bash_completion"
+	source "$BASH_COMPLETION"
+    fi
+fi
