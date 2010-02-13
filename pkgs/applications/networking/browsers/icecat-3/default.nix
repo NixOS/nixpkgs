@@ -30,6 +30,18 @@ stdenv.mkDerivation {
     ./skip-gre-registration.patch ./rpath-link.patch
   ];
 
+  postPatch =
+    # Work around the broken `firefox.js' in 3.6.  See
+    # http://news.gmane.org/gmane.comp.gnu.gnuzilla/1419 for details.
+    let firefox_js = fetchurl {
+          url = "http://svn.savannah.gnu.org/viewvc/*checkout*/trunk/icecat/browser/app/profile/firefox.js?revision=94&root=gnuzilla"
+          sha256 = "1pab9nlf6yykxmq6ky79vrdraqf49ww2whnfymq5r7gs75s46frl";
+          name = "firefox.js";
+        };
+    in
+      '' cp -v "${firefox_js}" "browser/app/profile/"
+      '';
+
   configureFlags =
     [ "--enable-application=${application}"
       "--enable-libxul"
