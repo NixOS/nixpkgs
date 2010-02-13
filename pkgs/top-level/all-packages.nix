@@ -1595,6 +1595,11 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  texmacs = import ../applications/office/texmacs {
+    inherit fetchurl stdenv texLive guile;
+    inherit (xlibs) libX11 libXext;
+  };
+
   ttf2pt1 = import ../tools/misc/ttf2pt1 {
     inherit fetchurl stdenv perl freetype;
   };

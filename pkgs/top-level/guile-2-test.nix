@@ -45,9 +45,9 @@ let
 in (mapTestOn {
   /* The package list below was obtained with:
 
-     cat top-level/all-packages.nix				\
-     | grep -B3 'guile[^=]*$'					\
-     | grep '^[[:blank:]]*[a-zA-Z0-9_]\+[[:blank:]]*='		\
+     cat top-level/all-packages.nix                             \
+     | grep -B3 'guile[^=]*$'                                   \
+     | grep '^[[:blank:]]*[a-zA-Z0-9_]\+[[:blank:]]*='          \
      | sed -es'/^[[:blank:]]*\(.\+\)[[:blank:]]*=.*$/\1= linux;/g'
 
      with some minor edits.
@@ -60,6 +60,7 @@ in (mapTestOn {
   lsh = linux;
   mailutils = linux;
   mcron = linux;
+  texmacs = linux;
   guileCairo = linux;
   guileGnome = linux;
   guileLib = linux;
