@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, perl, python, pam, ConsoleKit
-, qt4, sip, pyqt4, kdelibs, kdelibs_experimental, kdepimlibs, kdebindings
+, qt4, sip, pyqt4, kdelibs, kdepimlibs,
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
 , lm_sensors, libxklavier, libusb, libpthreadstubs, boost
 , automoc4, phonon, strigi, soprano, qimageblitz, akonadi, polkit_qt
@@ -11,9 +11,7 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.4.0/src/kdebase-workspace-4.4.0.tar.bz2;
     sha256 = "16rc4cpq97bfcvj0bmq9k3kv48gjbx8569m7lg3qm91xg8nz79hn";
   };
-  inherit kdelibs_experimental;
-  builder = ./builder.sh;
-  buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdelibs_experimental kdepimlibs /*kdebindings*/ libpthreadstubs boost libusb stdenv.gcc.libc
+  buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdepimlibs /*kdebindings*/ libpthreadstubs boost libusb stdenv.gcc.libc
                   libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver
                   lm_sensors libxklavier automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt ];
   meta = {

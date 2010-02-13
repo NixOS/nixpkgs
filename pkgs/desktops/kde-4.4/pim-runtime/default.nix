@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, libxml2, libxslt, boost, shared_mime_info
-, kdelibs, kdelibs_experimental, kdepimlibs
+, kdelibs, kdepimlibs
 , automoc4, phonon, akonadi, soprano, strigi}:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1nfzxhc2la8p4nhgbrngqz3a5ymz9783nqpl82y7dsawbn7il2z1";
   };
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost shared_mime_info
-                  kdelibs kdelibs_experimental kdepimlibs
+                  kdelibs kdepimlibs
 		  automoc4 phonon akonadi soprano strigi ];
   builder = ./builder.sh;
   meta = {

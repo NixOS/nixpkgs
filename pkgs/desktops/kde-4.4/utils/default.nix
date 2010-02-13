@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, gmp, python, libzip, libarchive, xz
 , sip, pyqt4, pycups, system_config_printer
-, kdelibs, kdelibs_experimental, kdepimlibs, kdebase, kdebindings, automoc4, phonon, qimageblitz, qca2}:
+, kdelibs, kdepimlibs, kdebase, kdebindings, automoc4, phonon, qimageblitz, qca2}:
 
 stdenv.mkDerivation {
   name = "kdeutils-4.4.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit system_config_printer;
   
   buildInputs = [ cmake qt4 perl gmp python libzip libarchive xz sip pyqt4 pycups system_config_printer
-                  kdelibs kdelibs_experimental kdepimlibs kdebase kdebindings automoc4 phonon qimageblitz qca2 ];
+                  kdelibs kdepimlibs kdebase kdebindings automoc4 phonon qimageblitz qca2 ];
                   
   meta = {
     description = "KDE Utilities";

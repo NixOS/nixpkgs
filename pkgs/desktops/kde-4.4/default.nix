@@ -65,15 +65,13 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs.xlibs) libXScrnSaver;
     inherit automoc4 phonon strigi soprano qca2 attica polkit_qt;
   };
-
-  kdelibs_experimental = null;
   
 ### BASE  
   kdebase_workspace = import ./base-workspace {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python pam sip pyqt4;
     inherit (pkgs) lm_sensors libxklavier libusb boost ConsoleKit;
     inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver libpthreadstubs;
-    inherit kdelibs kdelibs_experimental kdepimlibs kdebindings;
+    inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt;
   };
   
@@ -141,7 +139,7 @@ pkgs.recurseIntoAttrs (rec {
   kdemultimedia = import ./multimedia {
     inherit (pkgs) stdenv fetchurl lib cmake perl qt4;
     inherit (pkgs) alsaLib xineLib libvorbis flac taglib cdparanoia lame;
-    inherit kdelibs kdelibs_experimental;
+    inherit kdelibs;
     inherit automoc4 phonon;
   };
   
@@ -157,14 +155,14 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl boost gpgme libassuan libgpgerror libxslt;
     inherit (pkgs) shared_mime_info;
     inherit (pkgs.xlibs) libXScrnSaver;
-    inherit kdelibs kdelibs_experimental kdepimlibs;
+    inherit kdelibs kdepimlibs;
     inherit automoc4 phonon akonadi strigi soprano qca2;
   };
   
   kdepim_runtime = import ./pim-runtime {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt boost;
     inherit (pkgs) shared_mime_info;
-    inherit kdelibs kdelibs_experimental kdepimlibs;
+    inherit kdelibs kdepimlibs;
     inherit automoc4 phonon akonadi soprano strigi;
   };
   
@@ -188,7 +186,7 @@ pkgs.recurseIntoAttrs (rec {
     
   kdeutils = import ./utils {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python gmp libzip libarchive xz sip pyqt4 pycups system_config_printer;
-    inherit kdelibs kdelibs_experimental kdepimlibs kdebase kdebindings;
+    inherit kdelibs kdepimlibs kdebase kdebindings;
     inherit automoc4 phonon qimageblitz qca2;
   };
   
