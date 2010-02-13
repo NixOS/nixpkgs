@@ -27,4 +27,7 @@ rec {
   gnonlin = makeOverridable (import ./gnonlin) {
     inherit fetchurl stdenv pkgconfig gstreamer gstPluginsBase;
   };
+
+  # Header files are in include/${prefix}/
+  prefix = "gstreamer-0.10";
 }
