@@ -39,7 +39,7 @@ stdenv.mkDerivation {
           name = "firefox.js";
         };
     in
-      '' cp -v "${firefox_js}" "browser/app/profile/"
+      '' cp -v "${firefox_js}" "browser/app/profile/firefox.js"
       '';
 
   configureFlags =
