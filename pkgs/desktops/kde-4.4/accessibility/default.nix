@@ -6,6 +6,7 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.4.0/src/kdeaccessibility-4.4.0.tar.bz2;
     sha256 = "0dkka6rzjd96i7mn8yia6d2mbgnl73jswm2xdnm2d2x9la6hpff3";
   };
+  # Missing: speechd, I was too lazy to implement this
   buildInputs = [ cmake qt4 perl alsaLib libXi libXtst kdelibs automoc4 phonon ];
   meta = {
     description = "KDE accessibility tools";
