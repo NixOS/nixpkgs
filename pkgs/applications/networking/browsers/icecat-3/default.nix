@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     # Work around the broken `firefox.js' in 3.6.  See
     # http://news.gmane.org/gmane.comp.gnu.gnuzilla/1419 for details.
     let firefox_js = fetchurl {
-          url = "http://svn.savannah.gnu.org/viewvc/*checkout*/trunk/icecat/browser/app/profile/firefox.js?revision=98&root=gnuzilla"
+          url = "http://svn.savannah.gnu.org/viewvc/*checkout*/trunk/icecat/browser/app/profile/firefox.js?revision=98&root=gnuzilla";
           sha256 = "1jf86wa7r7pf4f3ixrnsslv0i35ypm8hrzlw14hcm5wjcwidzq0f";
           name = "firefox.js";
         };
