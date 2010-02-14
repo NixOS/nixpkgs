@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake, qt4, perl, python, shared_mime_info
+{ stdenv, fetchurl, lib, cmake, qt4, perl, python, shared_mime_info, libXtst
 , kdelibs, kdebase_workspace, kdepimlibs, kdebase, kdegraphics, kdeedu
 , automoc4, phonon, soprano, eigen, qimageblitz, attica}:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   inherit kdebase_workspace;
   builder = ./builder.sh;
   KDEDIRS="${kdeedu}";
-  buildInputs = [ cmake qt4 perl python shared_mime_info
+  buildInputs = [ cmake qt4 perl python shared_mime_info libXtst
                   kdelibs kdebase_workspace kdepimlibs kdebase kdegraphics kdeedu
 		  automoc4 phonon soprano eigen qimageblitz attica ];
   meta = {
