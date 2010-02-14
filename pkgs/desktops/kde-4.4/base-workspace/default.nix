@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake, perl, python, pam, ConsoleKit
+{ stdenv, fetchurl, lib, cmake, perl, python, pam, consolekit
 , qt4, sip, pyqt4, kdelibs, kdepimlibs, kdebindings
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
 , lm_sensors, libxklavier, libusb, libpthreadstubs, boost
@@ -11,9 +11,10 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.4.0/src/kdebase-workspace-4.4.0.tar.bz2;
     sha256 = "16rc4cpq97bfcvj0bmq9k3kv48gjbx8569m7lg3qm91xg8nz79hn";
   };
-  buildInputs = [ cmake perl python qt4 pam /*ConsoleKit sip pyqt4*/ kdelibs kdepimlibs /*kdebindings*/ libpthreadstubs boost libusb stdenv.gcc.libc
+  buildInputs = [ cmake perl python qt4 pam consolekit sip pyqt4 kdelibs kdepimlibs kdebindings libpthreadstubs boost libusb stdenv.gcc.libc
                   libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver
                   lm_sensors libxklavier automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt ];
+  builder = ./builder.sh;
   meta = {
     description = "KDE Workspace";
     longDescription = "KDE base components that are only required to work with X11 such KDM and KWin";
