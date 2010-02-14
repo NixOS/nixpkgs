@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake, perl, bzip2, xz, qt4, alsaLib, xineLib, samba, shared_mime_info
+{ stdenv, fetchurl, lib, cmake, perl, bzip2, xz, qt4, alsaLib, xineLib, samba, shared_mime_info, exiv2, libssh
 , kdelibs, automoc4, phonon, strigi, soprano, cluceneCore, attica}:
 
 stdenv.mkDerivation {
@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1zrwkf2l7nq0z4a9pm2plkynys65h77ai4s3cqlvzwlwhf4l3f1z";
   };
 /*  CLUCENE_HOME=cluceneCore;*/
-  buildInputs = [ cmake perl bzip2 xz qt4 alsaLib xineLib samba stdenv.gcc.libc shared_mime_info
+  # Still have to look into Soprano Virtuoso
+  buildInputs = [ cmake perl bzip2 xz qt4 alsaLib xineLib samba stdenv.gcc.libc shared_mime_info exiv2 libssh
                   kdelibs automoc4 phonon strigi soprano cluceneCore attica ];
   meta = {
     description = "KDE runtime";

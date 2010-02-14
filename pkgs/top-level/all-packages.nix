@@ -4381,6 +4381,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  libssh = import ../development/libraries/libssh {
+    inherit stdenv fetchurl cmake zlib openssl;
+  };
+  
   libtasn1 = import ../development/libraries/libtasn1 {
     inherit fetchurl stdenv;
   };
