@@ -1,4 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, libxml2, libxslt, boost, subversion, apr, aprutil
+, shared_mime_info
 , kdelibs, kdepimlibs, automoc4, phonon, strigi}:
 
 stdenv.mkDerivation {
@@ -9,7 +10,7 @@ stdenv.mkDerivation {
   };
   builder=./builder.sh;
   inherit aprutil;
-  buildInputs = [ cmake qt4 perl libxml2 libxslt boost subversion apr aprutil
+  buildInputs = [ cmake qt4 perl libxml2 libxslt boost subversion apr aprutil shared_mime_info
                   kdelibs kdepimlibs automoc4 phonon strigi ];
   meta = {
     description = "KDE SDK";
