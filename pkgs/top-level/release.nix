@@ -358,6 +358,7 @@ in {
   quake3demo = linux;
   readline = all;
   reiserfsprogs = linux;
+  rlwrap = all;
   rogue = all;
   rpm = linux;
   rsync = linux;

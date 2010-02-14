@@ -4896,9 +4896,9 @@ let
     inherit fetchurl stdenv;
   });
 
-  sqliteInteractive = appendToName "interactive" (import ../development/libraries/sqlite {
+  sqliteInteractive = lowPrio (appendToName "interactive" (import ../development/libraries/sqlite {
     inherit fetchurl stdenv readline ncurses;
-  });
+  }));
 
   stlport =  import ../development/libraries/stlport {
     inherit fetchurl stdenv;
