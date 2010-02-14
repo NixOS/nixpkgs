@@ -1,10 +1,10 @@
 {stdenv, fetchurl, python, cups}:
 
 stdenv.mkDerivation {
-  name = "pycups-1.9.46";
+  name = "pycups-1.9.48";
   src = fetchurl {
-    url = http://cyberelk.net/tim/data/pycups/pycups-1.9.46.tar.bz2;
-    sha256 = "1zn85gkpdzvkiwbmn466cc5yzz2810030dyg5hns5f55n7bd3avl";
+    url = http://cyberelk.net/tim/data/pycups/pycups-1.9.48.tar.bz2;
+    sha256 = "11cz6pqp18wxrzpix55pin97mfcmdc4g13zpr739glb6c9mnj7qp";
   };
   installPhase = "python ./setup.py install --prefix $out";
   buildInputs = [ python cups ];
