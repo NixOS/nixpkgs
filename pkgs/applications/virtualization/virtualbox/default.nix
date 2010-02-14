@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   name = "virtualbox-3.1.2-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.1.2/VirtualBox-3.1.2-OSE.tar.bz2;
-    sha256 = "1cgj696lyrklddjjhmrgb5j1jvj43d46hr1wnpyrx8pd6wp5hgr9";
+    url = http://download.virtualbox.org/virtualbox/3.1.4/VirtualBox-3.1.4-OSE.tar.bz2;
+    sha256 = "0w6vijjpnww33xahzfzljxfzwcz0d0flmv36dwv7g1vbx2x0m8bf";
   };
 
   buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl];
