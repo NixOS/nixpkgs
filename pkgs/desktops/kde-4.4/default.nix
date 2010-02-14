@@ -173,7 +173,7 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdegames = import ./games {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl shared_mime_info;
     inherit kdelibs;
     inherit automoc4 phonon qca2;
   };
