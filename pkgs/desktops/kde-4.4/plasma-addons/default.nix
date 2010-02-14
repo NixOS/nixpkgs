@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, python, shared_mime_info
 , kdelibs, kdebase_workspace, kdepimlibs, kdebase, kdegraphics, kdeedu
-, automoc4, phonon, soprano, eigen, qimageblitz}:
+, automoc4, phonon, soprano, eigen, qimageblitz, attica}:
 
 stdenv.mkDerivation {
   name = "kdeplasma-addons-4.4.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   KDEDIRS="${kdeedu}";
   buildInputs = [ cmake qt4 perl python shared_mime_info
                   kdelibs kdebase_workspace kdepimlibs kdebase kdegraphics kdeedu
-		  automoc4 phonon soprano eigen qimageblitz ];
+		  automoc4 phonon soprano eigen qimageblitz attica ];
   meta = {
     description = "KDE Plasma Addons";
     license = "GPL";

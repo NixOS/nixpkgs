@@ -169,7 +169,7 @@ pkgs.recurseIntoAttrs (rec {
   kdeplasma_addons = import ./plasma-addons {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python shared_mime_info;
     inherit kdelibs kdebase_workspace kdepimlibs kdebase kdegraphics kdeedu;
-    inherit automoc4 phonon soprano eigen qimageblitz;
+    inherit automoc4 phonon soprano eigen qimageblitz attica;
   };
   
   kdegames = import ./games {
