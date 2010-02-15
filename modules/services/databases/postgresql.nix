@@ -150,8 +150,10 @@ in
             # database is running.
             ${run} -c '${postgresql}/bin/pg_ctl start -o "${toString flags}"'
 
-            # So wait until the server is running.
-            while ! ${run} -c '${postgresql}/bin/pg_ctl status'; do
+            # So wait until the server is up.  `pg_ctl status' doesn't
+            # work (apparently, it just checks whether the server is
+            # running), so try to connect with psql.
+            while ! ${postgresql}/bin/psql postgres -c ""; do
                 sleep 1
             done
           ''; # */
