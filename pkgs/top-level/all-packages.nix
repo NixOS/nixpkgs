@@ -2560,10 +2560,6 @@ let
     inherit stdenv fetchurl php autoconf automake;
   };
 
-  phpIniBuilder = makeOverridable (import ../development/interpreters/php/ini-bulider.nix) {
-    inherit php runCommand;
-  };
-
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
     inherit cairo fontconfig freetype libjpeg libpng openssl
       perl mesa zlib which;
