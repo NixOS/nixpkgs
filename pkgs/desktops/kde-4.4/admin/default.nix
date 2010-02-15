@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, pkgconfig, perl, python
-, sip, pyqt4, pycups, system_config_printer
+, sip, pyqt4, pycups, rhpl, system_config_printer
 , kdelibs, kdepimlibs, kdebindings, automoc4, phonon}:
 
 stdenv.mkDerivation {
@@ -14,9 +14,9 @@ stdenv.mkDerivation {
   
   inherit system_config_printer;
   
+  PYTHONPATH = "${pycups}/lib/python2.6/site-packages";
   
-  
-  buildInputs = [ cmake qt4 pkgconfig perl python sip pyqt4 pycups system_config_printer
+  buildInputs = [ cmake qt4 pkgconfig perl python sip pyqt4 pycups rhpl system_config_printer
                   kdelibs kdepimlibs kdebindings automoc4 phonon ];
                   
   meta = {
