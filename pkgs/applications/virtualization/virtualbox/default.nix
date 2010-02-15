@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-3.1.2-${kernel.version}";
+  name = "virtualbox-3.1.4-${kernel.version}";
 
   src = fetchurl {
     url = http://download.virtualbox.org/virtualbox/3.1.4/VirtualBox-3.1.4-OSE.tar.bz2;
