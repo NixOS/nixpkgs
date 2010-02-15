@@ -9,7 +9,7 @@ rec {
     sha256 = s.hash;
   };
 
-  buildNativeInputs = [gtk atk cairo curl fontconfig freetype
+  buildInputs = [gtk glib atk cairo curl fontconfig freetype
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
