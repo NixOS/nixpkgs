@@ -21,7 +21,7 @@ let
   
       PidFile = ${pidFile}
 
-      StartAgents = 5
+      StartAgents = 1
     '';
 
 in
@@ -65,7 +65,7 @@ in
       };
 
     jobs.zabbix_agent =
-      { #name = "zabbix-agent"; !!! mkIf bug
+      { name = "zabbix-agent";
 
         description = "Zabbix agent daemon";
 
@@ -76,23 +76,26 @@ in
           ''
             mkdir -m 0755 -p ${stateDir} ${logDir}
             chown zabbix ${stateDir} ${logDir}
-        
+
+            # Grrr, zabbix_agentd cannot be properly monitored by
+            # Upstart.  Upstart's "expect fork/daemon" feature doesn't
+            # work because zabbix_agentd runs some programs on
+            # startup, and zabbix_agentd doesn't have a flag to
+            # prevent daemonizing.
             export PATH=${pkgs.nettools}/bin:$PATH
-            ${pkgs.zabbixAgent}/sbin/zabbix_agentd --config ${configFile}
+            ${pkgs.zabbix.agent}/sbin/zabbix_agentd --config ${configFile}
           '';
 
         postStop =
-          ''      
-            # !!! this seems to leave processes behind.
-            #pid=$(cat ${pidFile})
-            #if test -n "$pid"; then
-            #  kill $pid 
-            #fi
-
-            # So instead kill the agent in a brutal fashion.
-            while ${pkgs.procps}/bin/pkill -u zabbix zabbix_agentd; do true; done
+          ''
+            pid=$(cat ${pidFile})
+            test -n "$pid" && kill "$pid"
+            # Wait until they're really gone.
+            while ${pkgs.procps}/bin/pgrep -u zabbix zabbix_agentd > /dev/null; do sleep 1; done
           '';
       };
+
+    environment.systemPackages = [ pkgs.zabbix.agent ];
 
   };
 
