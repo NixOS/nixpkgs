@@ -40,6 +40,35 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''; # */
 
+  makeSystemTarball =
+    { module, maintainers ? ["viric"]}:
+    { nixosSrc ? {outPath = ./.; rev = 1234;}
+    , officialRelease ? false
+    , system ? "i686-linux"
+    }:
+
+    with import nixpkgs {inherit system;};
+
+    let
+
+      version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
+
+      versionModule = { system.nixosVersion = version; };
+
+      config = (import lib/eval-config.nix {
+        inherit system nixpkgs;
+        modules = [ module versionModule ];
+      }).config;
+      
+      tarball = config.system.build.tarball;
+    in
+      tarball //
+        { meta = {
+            description = "NixOS system tarball for ${system} - ${platform.name}";
+            maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
+          };
+        };
+
 
   jobs = rec {
 
@@ -103,6 +132,14 @@ let
     iso_graphical = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
       description = "graphical";
+    };
+
+    # Provide a tarball that can be unpacked into an SD card, and easily
+    # boot that system from uboot (like for the sheevaplug).
+    # The pc variant helps preparing the expression for the system tarball
+    # in a machine faster than the sheevpalug
+    system_tarball_pc = makeSystemTarball {
+      module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     };
 
     # Hacky: doesn't depend on configuration. Yet configuration is evaluated (TODO)
