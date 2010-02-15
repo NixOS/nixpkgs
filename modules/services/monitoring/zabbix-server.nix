@@ -45,6 +45,8 @@ in
 
   config = mkIf config.services.zabbixServer.enable {
 
+    services.postgresql.enable = true;
+
     users.extraUsers = singleton
       { name = "zabbix";
         uid = config.ids.uids.zabbix;
@@ -52,7 +54,7 @@ in
       };
 
     jobs.zabbix_server =
-      { #name = "zabbix-server"; !!! mkIf bug
+      { name = "zabbix-server";
 
         description = "Zabbix server daemon";
 
@@ -67,18 +69,21 @@ in
             if ! test -e "${libDir}/db-created"; then
                 ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix || true
                 ${pkgs.postgresql}/bin/createdb --owner zabbix zabbix || true
-                cat ${pkgs.zabbixServer}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
-                cat ${pkgs.zabbixServer}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
-                cat ${pkgs.zabbixServer}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c 'psql zabbix'
+                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
                 touch "${libDir}/db-created"
             fi
 
             export PATH=${pkgs.nettools}/bin:$PATH
-            ${pkgs.zabbixServer}/sbin/zabbix_server --config ${configFile}
+            ${pkgs.zabbix.server}/sbin/zabbix_server --config ${configFile}
           '';
 
         postStop =
           ''
+            pid=$(cat ${pidFile})
+            test -n "$pid" && kill "$pid"
+            # Wait until they're really gone.
             while ${pkgs.procps}/bin/pkill -u zabbix zabbix_server; do true; done
           '';
       };

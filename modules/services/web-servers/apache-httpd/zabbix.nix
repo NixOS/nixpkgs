@@ -9,23 +9,27 @@ let
   # Note that different instances of the frontend will therefore end
   # up with their own copies of the PHP sources.  !!! Alternatively,
   # we could generate zabbix.conf.php declaratively.
-  zabbixPHP = pkgs.runCommand "${pkgs.zabbixServer.name}-php" {} ''
-    cp -rs ${pkgs.zabbixServer}/share/zabbix/php $out
-    chmod -R u+w $out
-    #rm -rf $out/conf
-    ln -s ${config.stateDir}/zabbix.conf.php $out/conf/zabbix.conf.php
-  '';
+  zabbixPHP = pkgs.runCommand "${pkgs.zabbix.server.name}-php" {}
+    ''
+      cp -rs ${pkgs.zabbix.server}/share/zabbix/php $out
+      chmod -R u+w $out
+      #rm -rf $out/conf
+      ln -s ${config.stateDir}/zabbix.conf.php $out/conf/zabbix.conf.php
+    '';
 
 in
 
 {
 
-  extraModules = [
-    { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
-  ];
+  extraModules =
+    [ { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
 
-  # !!! should also declare PHP options that Zabbix needs like the
-  # timezone and timeout.
+  phpOptions =
+    ''
+      post_max_size = 32M
+      max_execution_time = 300
+      mbstring.func_overload = 2
+    '';
   
   extraConfig = ''
     Alias ${config.urlPrefix}/ ${zabbixPHP}/

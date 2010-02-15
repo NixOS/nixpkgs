@@ -68,6 +68,7 @@ let
           globalEnvVars = [];
           robotsEntries = "";
           startupScript = "";
+          phpOptions = "";
           options = {};
         };
         res = defaults // svcFunction {inherit config pkgs serverInfo servicesPath;};
@@ -358,7 +359,18 @@ let
     }
   '';
 
-    
+
+  # Generate the PHP configuration file.  Should probably be factored
+  # out into a separate module.
+  phpIni = pkgs.runCommand "php.ini"
+    { options = concatStringsSep "\n"
+        ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
+    }
+    ''
+      cat ${pkgs.php}/etc/php-recommended.ini > $out
+      echo "$options" >> $out
+    '';
+
 in
 
 
@@ -464,54 +476,14 @@ in
         '';
       };
 
-      phpIni = mkOption {
-        default = pkgs.writeText "php.ini" ''
-           ; Needed for PHP's mail() function.
-           sendmail_path = sendmail -t -i
-         '';
-
-        example = ''
-        Example code (copy & paste):
-
-         most simple:
-         phpIni pkgs.writeText "php.ini" '''
-           ; Needed for PHP's mail() function.
-           sendmail_path = sendmail -t -i
-         ''';
-
-         using recommended settings and enabling Xdebug:
-         phpIni =  pkgs.phpIniBuilder.override {
-            appendLines = '''
-             sendmail_path = sendmail -t -i
-             zend_extension="''\${pkgs.phpXdebug}/lib/xdebug.so"
-             zend_extension_ts="''\${pkgs.phpXdebug}/lib/xdebug.so"
-             zend_extension_debug="''\${pkgs.phpXdebug}/lib/xdebug.so"
-             xdebug.remote_enable=true
-             xdebug.remote_host=127.0.0.1
-             xdebug.remote_port=9000
-             xdebug.remote_handler=dbgp
-             xdebug.profiler_enable=0
-             xdebug.profiler_output_dir="/tmp/xdebug"
-             xdebug.remote_mode=req
-            ''';
-          };
-        '';
-
-
-        description = ''
-          The contents of this option are used as global php.ini file by the
-          PHP interpreter used by Apache. You have to enable PHP explicitly.
-          See extraModules options.
-
-          This file defaults to defining sendmail_path only.
-
-          Note: Depending on your configuration you can set PHP ini values using .htaccess files and the
-          php_value option.
-
-          The example shows how to enable Xdebug and use the recommended
-          php.ini values which are contained in the PHP distribution.
-          I don't know whether they are equal to defaults
-        '';
+      phpOptions = mkOption {
+        default = "";
+        example =
+          ''
+            date.timezone = "CET"
+          '';
+        description =
+          "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
     }
@@ -539,6 +511,15 @@ in
       };
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
+
+    services.httpd.phpOptions =
+      ''
+        ; Needed for PHP's mail() function.
+        sendmail_path = sendmail -t -i
+
+        ; Apparently PHP doesn't use $TZ.
+        date.timezone = "${config.time.timeZone}"
+      '';
 
     jobs.httpd =
       { # Statically verify the syntactic correctness of the generated
@@ -570,7 +551,9 @@ in
                 optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
              ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
 
-           PHPRC = mainCfg.phpIni;
+           PHPRC = phpIni;
+
+           TZ = config.time.timeZone;
 
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
@@ -606,4 +589,3 @@ in
   };
   
 }
-
