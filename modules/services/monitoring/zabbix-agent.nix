@@ -69,7 +69,7 @@ in
 
         description = "Zabbix agent daemon";
 
-        startOn = "started network-interfaces";
+        startOn = "ip-up";
         stopOn = "stopping network-interfaces";
 
         preStart =
