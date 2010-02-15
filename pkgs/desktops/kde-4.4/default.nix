@@ -186,7 +186,7 @@ pkgs.recurseIntoAttrs (rec {
   };
     
   kdeutils = import ./utils {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python gmp libzip libarchive xz sip pyqt4 pycups system_config_printer;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python gmp libzip libarchive xz sip pyqt4 pycups rhpl system_config_printer;
     inherit kdelibs kdepimlibs kdebase kdebindings;
     inherit automoc4 phonon qimageblitz qca2;
   };

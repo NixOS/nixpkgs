@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, gmp, python, libzip, libarchive, xz
-, sip, pyqt4, pycups, system_config_printer
+, sip, pyqt4, pycups, rhpl, system_config_printer
 , kdelibs, kdepimlibs, kdebase, kdebindings, automoc4, phonon, qimageblitz, qca2}:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   
   inherit system_config_printer;
   
-  buildInputs = [ cmake qt4 perl gmp python libzip libarchive xz sip pyqt4 pycups system_config_printer
+  buildInputs = [ cmake qt4 perl gmp python libzip libarchive xz sip pyqt4 pycups rhpl system_config_printer
                   kdelibs kdepimlibs kdebase kdebindings automoc4 phonon qimageblitz qca2 ];
                   
   meta = {
