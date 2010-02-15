@@ -44,18 +44,18 @@ stdenv.mkDerivation ({
           throw "no x86_64 debugging version available"
         else {
           # -> http://labs.adobe.com/downloads/flashplayer10_64bit.html
-          url = http://download.macromedia.com/pub/labs/flashplayer10/libflashplayer-10.0.32.18.linux-x86_64.so.tar.gz;
-          sha256 = "006k3jvahlq2v34q5mf2y7ghczhy6spsdd69fj120i9yz9zklhpw";
+          url = http://download.macromedia.com/pub/labs/flashplayer10/libflashplayer-10.0.45.2.linux-x86_64.so.tar.gz;
+          sha256 = "1mkl02cplcl9dygmgzzwic0r7kkdgfkmpfzvk76l665pgf5bbazf";
         }
       )
     else
       fetchurl ( if debug then {
         # The debug version also contains a player
-        url = http://download.macromedia.com/pub/flashplayer/updaters/10/flash_player_10_linux_dev.tar.gz;
-        sha256 = "0j3i4sbry9xdln23892hbkfbznqg2wzrakpfv4g5g6y7r2nchkfj";
+        url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer10_1_p2_debug_linux_121709.tar.gz;
+        sha256 = "162cnzn8sfdvr8mwyggsxi2bcl7zzi1nrl61bw481hhhpwnrjdx4";
       } else {
-        url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
-        sha256 = "04ppx812dz4d93pkyx412z3jslkw8nsqw5gni467ipahqz6lifhi";
+        url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer10_1_p2_linux_121709.tar.gz;
+        sha256 = "1mzxcp7y5zxjnjdqmzq9dzg1jqs9lwb4j2njfhwiw2jifffjw2fw";
       });
 
   inherit zlib alsaLib;
