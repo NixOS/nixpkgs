@@ -5602,15 +5602,9 @@ let
       libXext utilmacros;
   };
 
-  zabbixAgent = import ../servers/monitoring/zabbix {
-    inherit fetchurl stdenv;
-    enableServer = false;
-  };
-
-  zabbixServer = import ../servers/monitoring/zabbix {
-    inherit fetchurl stdenv postgresql curl;
-    enableServer = true;
-  };
+  zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
+    inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
+  });
 
 
   ### OS-SPECIFIC
