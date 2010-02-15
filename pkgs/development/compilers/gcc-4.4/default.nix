@@ -207,8 +207,8 @@ stdenv.mkDerivation ({
       stdenv.lib.maintainers.viric
     ];
 
-    # Volunteers needed for the {Cyg,Dar}win ports.
-    platforms = stdenv.lib.platforms.linux;
+    # Volunteers needed for the {Cyg,Dar}win ports of *PPL.
+    platforms = stdenv.lib.platforms.linux ++ [ "i686-darwin" ];
   };
 }
 // (if langVhdl then rec {
