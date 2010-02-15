@@ -4059,6 +4059,7 @@ let
 
   libao = import ../development/libraries/libao {
     inherit stdenv fetchurl pkgconfig pulseaudio;
+    usePulseAudio = getConfig [ "pulseaudio" ] true;
   };
 
   libarchive = import ../development/libraries/libarchive {
