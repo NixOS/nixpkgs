@@ -7083,6 +7083,10 @@ let
       inherit fetchurl stdenv emacs;
     };
 
+    hol_light_mode = import ../applications/editors/emacs-modes/hol_light {
+      inherit fetchsvn stdenv;
+    };
+
     magit = import ../applications/editors/emacs-modes/magit {
       inherit fetchurl stdenv emacs texinfo;
     };
@@ -8742,6 +8746,24 @@ let
   coq = import ../applications/science/logic/coq {
     inherit stdenv fetchurl ocaml lablgtk ncurses;
     camlp5 = camlp5_transitional;
+  };
+
+  hol_light = import ../applications/science/logic/hol_light {
+    inherit stdenv fetchurl ocaml_with_sources;
+  };
+
+  hol_light_binaries =
+  import ../applications/science/logic/hol_light/binaries.nix {
+    inherit stdenv ocaml_with_sources hol_light nettools openssh;
+    dmtcp = dmtcp_devel;
+  };
+
+  # This is a special version of OCaml handcrafted especially for
+  # hol_light it should be merged with the current expresion for ocaml
+  # one day.
+  ocaml_with_sources =
+  import ../applications/science/logic/hol_light/ocaml-with-sources.nix {
+    inherit stdenv fetchurl;
   };
 
   isabelle = import ../applications/science/logic/isabelle {
