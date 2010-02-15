@@ -3,10 +3,10 @@
 , kdelibs, kdelibs_experimental, kdepimlibs, automoc4, phonon, akonadi, strigi, soprano, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdepim-4.3.4";
+  name = "kdepim-4.3.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdepim-4.3.4.tar.bz2;
-    sha1 = "3ddc34c2b0c96c0273431631ccf47a8b9b4289b3";
+    url = mirror://kde/stable/4.3.5/src/kdepim-4.3.5.tar.bz2;
+    sha256 = "1lcgaak0avqjjpa9sh8pf8d9rksh7cvd3p42ia60rc72zp6yzy3n";
   };
   includeAllQtDirs=true;
   builder = ./builder.sh;  

@@ -2,10 +2,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdesdk-4.3.4";
+  name = "kdesdk-4.3.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdesdk-4.3.4.tar.bz2;
-    sha1 = "42b6209908f8baadc0add46153649ebdfa9a977a";
+    url = mirror://kde/stable/4.3.5/src/kdesdk-4.3.5.tar.bz2;
+    sha256 = "1sbzk7x1lqwp8jdzy2b6v7pw561fdrvpb4yfw4axa84f0d4cal5h";
   };
   includeAllQtDirs=true;
   builder=./builder.sh;

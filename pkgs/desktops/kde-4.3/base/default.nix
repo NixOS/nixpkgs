@@ -3,10 +3,10 @@
 , automoc4, phonon, strigi, qimageblitz, soprano}:
 
 stdenv.mkDerivation {
-  name = "kdebase-4.3.4";
+  name = "kdebase-4.3.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdebase-4.3.4.tar.bz2;
-    sha1 = "7f8637367177c93916dfc2e6a2f6323a5e91c6ce";
+    url = mirror://kde/stable/4.3.5/src/kdebase-4.3.5.tar.bz2;
+    sha256 = "04qm3gfz51iwwl8819fzyyjwyf6lk9nim13cp2l5abnfza0lhb9g";
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake perl qt4 kdelibs pciutils stdenv.gcc.libc libraw1394

@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon, strigi, soprano, cluceneCore}:
 
 stdenv.mkDerivation {
-  name = "kdebase-runtime-4.3.4";
+  name = "kdebase-runtime-4.3.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdebase-runtime-4.3.4.tar.bz2;
-    sha1 = "871d23457c4a2676704722e2e3b7194d447904ee";
+    url = mirror://kde/stable/4.3.5/src/kdebase-runtime-4.3.5.tar.bz2;
+    sha256 = "0d73ryfw7pi69mzxaj8jgb3pxgc6ibz79bkr9b5dgg9n1zvadylx";
   };
 /*  CLUCENE_HOME=cluceneCore;*/
   includeAllQtDirs=true;

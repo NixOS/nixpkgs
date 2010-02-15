@@ -6,10 +6,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "kdebase-workspace-4.3.4";
+  name = "kdebase-workspace-4.3.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdebase-workspace-4.3.4.tar.bz2;
-    sha1 = "5b43447139d22247d5bc2deee8e3a944447f0bbf";
+    url = mirror://kde/stable/4.3.5/src/kdebase-workspace-4.3.5.tar.bz2;
+    sha256 = "16qlrsbb3bxjdyz9by3v051g8v8r4w8z8gk1ssy8jy7qs57671br";
   };
   includeAllQtDirs=true;
   inherit kdelibs_experimental;

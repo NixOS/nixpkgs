@@ -3,10 +3,10 @@
 , kdelibs, automoc4, phonon, strigi, qimageblitz, soprano, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdegraphics-4.3.4";
+  name = "kdegraphics-4.3.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.3.4/src/kdegraphics-4.3.4.tar.bz2;
-    sha1 = "bb32171b0d562d5698d4f0526be2b069e99f7448";
+    url = mirror://kde/stable/4.3.5/src/kdegraphics-4.3.5.tar.bz2;
+    sha256 = "1n0gf6hvrd30rjnmk5m5rmyv35n1zp97ys04jrbc81k9yn1qfnma";
   };
   includeAllQtDirs=true;
   buildInputs = [ cmake perl qt4 exiv2 lcms saneBackends libgphoto2 libspectre poppler chmlib
