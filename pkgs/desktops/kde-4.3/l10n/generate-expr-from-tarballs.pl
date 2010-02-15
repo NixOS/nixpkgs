@@ -63,7 +63,7 @@ print OUT <<EOF;
 let
 
   deriv = attr : stdenv.mkDerivation {
-    name = "kde-l10n-\${attr.lang}-4.3.4";
+    name = "kde-l10n-\${attr.lang}-4.3.5";
     src = fetchurl {
       url = attr.url;
       sha256 = attr.sha256;
