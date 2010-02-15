@@ -4,7 +4,7 @@ with pkgs.lib;
 
 let
 
-  upstart = pkgs.upstart06;
+  upstart = pkgs.upstart;
 
 
   # Path for Upstart jobs.  Should be quite minimal.
