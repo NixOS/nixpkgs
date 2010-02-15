@@ -2517,6 +2517,7 @@ let
 
   octave = import ../development/interpreters/octave {
     inherit stdenv fetchurl gfortran readline ncurses perl flex qhull texinfo;
+    inherit (xlibs) libX11;
   };
 
   # mercurial (hg) bleeding edge version
