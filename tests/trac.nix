@@ -56,7 +56,6 @@
       startAll;
       
       $postgresql->waitForJob("postgresql");
-      sleep 10; # !!! should not be needed
       $postgresql->mustSucceed("createdb trac");
       
       $webserver->mustSucceed("mkdir -p /repos/trac");
