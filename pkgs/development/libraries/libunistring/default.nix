@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     stdenv.lib.optional (! (stdenv ? glibc)) libiconv;
 
-  doCheck = true;
+  # XXX: There are test failures on non-GNU systems, see
+  # http://lists.gnu.org/archive/html/bug-libunistring/2010-02/msg00004.html .
+  doCheck = (stdenv ? glibc);
 
   meta = {
     homepage = http://www.gnu.org/software/libunistring/;
