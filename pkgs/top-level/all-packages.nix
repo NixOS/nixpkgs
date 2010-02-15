@@ -4316,6 +4316,10 @@ let
     inherit fetchurl stdenv pkgconfig pcsclite;
   };
 
+  libnih = import ../development/libraries/libnih {
+    inherit fetchurl stdenv pkgconfig dbus expat;
+  };
+
   libnova = import ../development/libraries/libnova {
     inherit fetchurl stdenv;
   };
@@ -6366,11 +6370,7 @@ let
   };
 
   upstart = import ../os-specific/linux/upstart {
-    inherit fetchurl stdenv;
-  };
-
-  upstart06 = import ../os-specific/linux/upstart/0.6.nix {
-    inherit fetchurl stdenv pkgconfig dbus expat;
+    inherit fetchurl stdenv pkgconfig dbus libnih;
   };
 
   upstartJobControl = import ../os-specific/linux/upstart/jobcontrol.nix {
