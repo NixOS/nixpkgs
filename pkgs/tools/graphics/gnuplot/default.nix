@@ -19,10 +19,10 @@ assert x11Support -> ((libX11 != null) &&
 assert (wxGTK != null) -> x11Support;
 
 stdenv.mkDerivation {
-  name = "gnuplot-4.2.5";
+  name = "gnuplot-4.2.6";
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/gnuplot-4.2.5.tar.gz";
-    sha256 = "1y0imxy9bflzny98n1wvv19bqxfsvsxbl8z12k46qnna0vg7wiw9";
+    url = "mirror://sourceforge/gnuplot/gnuplot-4.2.6.tar.gz";
+    sha256 = "10lfmbib3wrzfhvjqk7ffc29fb2aw6m84p4cx6znmgbpc3mw5yw1";
   };
 
   configureFlags = if x11Support then ["--with-x"] else ["--without-x"];
