@@ -565,6 +565,42 @@ in {
     l10n.ru = linux;
   };
 
+  kde44 = {
+    kdelibs = linux;
+    kdebase_workspace = linux;
+    kdebase = linux;
+    kdebase_runtime = linux;
+    oxygen_icons = linux;
+    kdepimlibs = linux;
+    kdeadmin = linux;
+    kdeartwork = linux;
+    kdeaccessibility = linux;
+    kdeedu = linux;
+    kdegraphics = linux;
+    kdemultimedia = linux;
+    kdenetwork = linux;
+    kdepim = linux;
+    kdepim_runtime = linux;
+    kdeplasma_addons = linux;
+    kdegames = linux;
+    kdetoys = linux;
+    kdeutils = linux;
+    kdesdk = linux;
+    kdewebdev = linux;
+    krusader = linux;
+    kmplayer = linux;
+    ktorrent = linux;
+    koffice = linux;
+    konversation = linux;
+    kdesvn = linux;
+    amarok = linux;
+    l10n.ca = linux;
+    l10n.de = linux;
+    l10n.fr = linux;
+    l10n.nl = linux;
+    l10n.ru = linux;
+  };
+
   linuxPackages_2_6_25 = {
     aufs = linux;
     kernel = linux;
