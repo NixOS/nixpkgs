@@ -22,6 +22,8 @@ let
       PidFile = ${pidFile}
 
       StartAgents = 1
+
+      ${config.services.zabbixAgent.extraConfig}
     '';
 
 in
@@ -46,6 +48,13 @@ in
         default = "127.0.0.1";
         description = ''
           The IP address or hostname of the Zabbix server to connect to.
+        '';
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = ''
+          Configuration that is injected verbatim into the configuration file.
         '';
       };
 
