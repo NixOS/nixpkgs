@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdesvn-1.4.1";
+  name = "kdesvn-1.5.2";
   src = fetchurl {
-    url = http://kdesvn.alwins-world.de/downloads/kdesvn-1.4.1.tar.bz2;
-    sha256 = "1xaankj3zl1wxm1zf9dayb9qwnp9s5xx964p83w7pcsir4h5959z";
+    url = http://kdesvn.alwins-world.de/downloads/kdesvn-1.5.2.tar.bz2;
+    sha256 = "1svblxi70ks816zj1w4cc87x72b628g7xjx4hvx57zw8d9hr463h";
   };
   builder = ./builder.sh;
   inherit subversion;
