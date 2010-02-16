@@ -5456,7 +5456,7 @@ let
 
   myserver = import ../servers/http/myserver {
     inherit fetchurl stdenv libgcrypt libevent libidn gnutls libxml2
-      zlib texinfo cppunit;
+      zlib texinfo cppunit xz;
   };
 
   nginx = builderDefsPackage (import ../servers/http/nginx) {

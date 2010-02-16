@@ -1,0 +1,35 @@
+Some of the tests can't be run in a chroot:
+
+  - `test_homedir' wants to access /etc/passwd.
+  - `test_socket' would want /etc/hosts.
+
+--- myserver-0.9.2/tests/test_homedir.cpp	2010-02-14 21:04:14.000000000 +0100
++++ myserver-0.9.2/tests/test_homedir.cpp	2010-02-16 11:22:23.000000000 +0100
+@@ -58,6 +58,7 @@ public:
+      * if it doesn't handle this differently.  */
+     username.assign ("root");
+ #endif
++#if 0
+     string dir;
+ 
+     CPPUNIT_ASSERT_EQUAL (homeDir->getHomeDir (username, dir), 0);
+@@ -65,6 +66,7 @@ public:
+     CPPUNIT_ASSERT (dir.length ());
+ 
+     homeDir->clear ();
++#endif
+   }
+ 
+ };
+
+--- myserver-0.9.2/tests/test_socket.cpp	2010-02-14 21:04:14.000000000 +0100
++++ myserver-0.9.2/tests/test_socket.cpp	2010-02-16 11:31:00.000000000 +0100
+@@ -178,7 +178,7 @@ static DEFINE_THREAD (testRecvClient, pP
+     {
+       int ret;
+       Socket *obj2 = new Socket;
+-      char host[] = "localhost";
++      char host[] = "127.0.0.1";
+ 
+       ret = obj2->socket (AF_INET, SOCK_STREAM, 0);
+       CPPUNIT_ASSERT (ret != -1);
