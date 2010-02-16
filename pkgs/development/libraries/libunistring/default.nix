@@ -1,6 +1,6 @@
 { fetchurl, stdenv, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libunistring-0.9.2.1";
 
   src = fetchurl {
@@ -47,3 +47,12 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+# On Cygwin Libtool is unable to find `libiconv.dll' if there's no explicit
+# `-L/path/to/libiconv' argument on the linker's command line; and since it
+# can't find the dll, it will only create a static library.
+(if (stdenv ? glibc)
+ then {}
+ else { configureFlags = "--with-libiconv-prefix=${libiconv}"; }))
