@@ -2,7 +2,7 @@
 
 let
    download_root = "http://homebank.free.fr/public/";
-   name = "homebank-4.1";
+   name = "homebank-4.2.1";
    lastrelease = download_root + name + ".tar.gz";
    oldrelease = download_root + "old/" + name + ".tar.gz";
 in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [ lastrelease oldrelease ];
-    sha256 = "0nv69rmcvywgks58w20qgbw8v0ir57gys4zd2gcys6knj6q323b8";
+    sha256 = "13xz9k55mw14fnp8cf3ypnl6im5dyfbial75wr6i7ikxxpahd00g";
   };
 
   buildInputs = [ pkgconfig gtk libofx intltool ];
