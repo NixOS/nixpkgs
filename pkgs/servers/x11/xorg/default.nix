@@ -2008,11 +2008,11 @@ let
   })) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.7.4";
+    name = "xorg-server-1.7.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.7.4.tar.bz2;
-      sha256 = "1y1k7qjyl1bjjkfmhgci7vd7zqm65dkh966dx0hlry66yari3v5q";
+      url = mirror://xorg/individual/xserver/xorg-server-1.7.5.tar.bz2;
+      sha256 = "1ampdfdijwafzlpq9jwxaxwwq40j0ymvcd922bs70wiybk8g7rci";
     };
     buildInputs = [pkgconfig bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ];
   })) // {inherit bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ;};
