@@ -1,15 +1,20 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "freemind-0.9.0_Beta_20";
+  name = "freemind-0.9.0_RC_6";
 
   src = fetchurl {
-    url = mirror://sourceforge/freemind/freemind-src-0.9.0_Beta_20.tar.gz;
-    sha256 = "1ja573n0g9zpdrljabgps20njg1p76hvsv8xjb56cii2dr77yspv";
+    url = mirror://sourceforge/freemind/freemind-src-0.9.0_RC_6.tar.gz;
+    sha256 = "0qxpwqmb4xd8c83zh76gczmx0hsx5m209k7p60kh7c4f25snhngf";
   };
 
   buildInputs = [jdk ant];
 
-  phases="unpackPhase buildPhase installPhase";
+  phases="unpackPhase patchPhase buildPhase installPhase";
+
+  patchPhase=''
+    # There is a complain about this. I don't understand it.
+    mkdir plugins/plugins
+  '';
 
   buildPhase="ant dist";
 # LIBXCB_ALLOW_SLOPPY_LOCK=true :
