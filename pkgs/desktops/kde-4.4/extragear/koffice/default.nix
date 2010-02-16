@@ -3,10 +3,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, qimageblitz, qca2, eigen}:
 
 stdenv.mkDerivation {
-  name = "koffice-2.1.0";
+  name = "koffice-2.1.1";
   src = fetchurl {
-    url = mirror://kde/stable/koffice-2.1.0/koffice-2.1.0.tar.bz2;
-    sha256 = "1jdc2rvj5xqd66d152zmjz2psq44kbraqpl0fq05yjg2wz8kdsln";
+    url = mirror://kde/stable/koffice-2.1.1/koffice-2.1.1.tar.bz2;
+    sha256 = "00dcdb68ykcf7yblq68rxh1ldi70irsxzbcgh36aadzgk0k8r4pz";
   }; 
   buildInputs = [ cmake qt4 perl lcms exiv2 libxml2 libxslt boost glew shared_mime_info 
                   poppler gsl gmm wv2 libwpd
