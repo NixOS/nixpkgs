@@ -74,15 +74,29 @@ in
                 cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
                 touch "${libDir}/db-created"
             fi
+          '';
 
+        # Zabbix doesn't have an option not to daemonize, and doesn't
+        # daemonize in a way that allows Upstart to track it.  So to
+        # make sure that we notice when it goes down, we start Zabbix
+        # with an open connection to a fifo, with a `cat' on the other
+        # side.  If Zabbix dies, then `cat' will exit as well, so we
+        # just monitor `cat'.
+        script =
+          ''
             export PATH=${pkgs.nettools}/bin:$PATH
-            ${pkgs.zabbix.server}/sbin/zabbix_server --config ${configFile}
+            rm -f ${stateDir}/dummy
+            mkfifo ${stateDir}/dummy
+            cat ${stateDir}/dummy &
+            pid=$!
+            ${pkgs.zabbix.server}/sbin/zabbix_server --config ${configFile} 100>${stateDir}/dummy
+            wait "$pid"
           '';
 
         postStop =
           ''
-            pid=$(cat ${pidFile})
-            test -n "$pid" && kill "$pid"
+            pid=$(cat ${pidFile} 2> /dev/null || true)
+            (test -n "$pid" && kill "$pid") || true
             # Wait until they're really gone.
             while ${pkgs.procps}/bin/pkill -u zabbix zabbix_server; do true; done
           '';
