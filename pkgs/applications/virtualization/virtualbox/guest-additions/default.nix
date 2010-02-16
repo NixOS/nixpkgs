@@ -2,10 +2,10 @@
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes}:
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-3.0.10";
+  name = "VirtualBox-GuestAdditions-3.1.4";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.0.10/VBoxGuestAdditions_3.0.10.iso;
-    sha256 = "08m7n3127nwcla1ws744n1d2i2mz4s1k4460i2h6qyvgnrgz32yv";
+    url = http://download.virtualbox.org/virtualbox/3.1.4/VBoxGuestAdditions_3.1.4.iso;
+    sha256 = "1x976h3vvhmhkyci9125w8v1xvlnrc7l4hgq0ghsn5bx67k5pwx6";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit ];
@@ -23,19 +23,24 @@ stdenv.mkDerivation {
       else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
     }
     
-    cd linux
+    # Unpack files
+    cd install
+    tar xfvj VBoxGuestAdditions.tar.bz2
+    
+    # Build kernel modules    
+    cd src        
 
-    # Build kernel modules
-    cd module
-    for i in `find . -name Makefile`
+    for i in *
     do
-        sed -i -e "s/depmod/echo/g" $i
+	cd $i
+	sed -i -e "s/depmod/echo/g" Makefile
+	make
+	cd ..
     done
-    make
     cd ..
-
+    
     # Change the interpreter for various binaries
-    for i in ./{mount.vboxsf,vboxadd-service,VBoxClient,VBoxControl}
+    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl}
     do
         ${if stdenv.system == "i686-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $i
@@ -48,57 +53,58 @@ stdenv.mkDerivation {
     done
 
     # Change rpath for various binaries and libraries
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib ./VBoxClient
+    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib bin/VBoxClient
 
-    for i in ./VBoxOGL{arrayspu,errorspu,feedbackspu,packspu,passthroughspu}.so
+    for i in lib/VBoxOGL*.so
     do
         patchelf --set-rpath $out/lib $i
     done
-
-    patchelf --set-rpath $out/lib:${libXcomposite}/lib ./VBoxOGL.so
-
+    
     # Remove references to /usr from various scripts and files
-    sed -i -e "s|/usr/bin|$out/bin|" vboxclient.desktop
-    sed -i -e "s|/usr/bin|$out/bin|" 98vboxadd-xclient
-
+    sed -i -e "s|/usr/bin|$out/bin|" share/VBoxGuestAdditions/vboxclient.desktop
+    sed -i -e "s|/usr/bin|$out/bin|" bin/VBoxClient-all
+    
     # Install binaries
     ensureDir $out/sbin
-    install -m 4755 mount.vboxsf $out/sbin/mount.vboxsf
-    install -m 755 vboxadd-service $out/sbin/vboxadd-service
+    install -m 755 sbin/VBoxService $out/sbin
 
     ensureDir $out/bin
-    install -m 755 VBoxControl $out/bin/VBoxControl
-    install -m 755 VBoxClient $out/bin/VBoxClient
-    install -m 755 VBoxRandR.sh $out/bin/VBoxRandR
-    install -m 755 98vboxadd-xclient $out/bin/VBoxClient-all
+    install -m 755 bin/VBoxClient $out/bin
+    install -m 755 bin/VBoxControl $out/bin
+    install -m 755 bin/VBoxRandR $out/bin
+    install -m 755 bin/VBoxClient-all $out/bin
 
     # Install OpenGL libraries
     ensureDir $out/lib
-    cp -v VBoxOGL*.so $out/lib
+    cp -v lib/VBoxOGL*.so $out/lib
     ensureDir $out/lib/dri
     ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
     
     # Install desktop file
     ensureDir $out/share/autostart
-    cp -v vboxclient.desktop $out/share/autostart
+    cp -v share/VBoxGuestAdditions/vboxclient.desktop $out/share/autostart
     
     # Install HAL FDI file
     ensureDir $out/share/hal/fdi/policy
-    install -m 644 90-vboxguest.fdi $out/share/hal/fdi/policy
+    install -m 644 share/VBoxGuestAdditions/90-vboxguest.fdi $out/share/hal/fdi/policy
     
     # Install Xorg drivers
     ensureDir $out/lib/xorg/modules/{drivers,input}
-    install -m 644 vboxvideo_drv_17.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
-    install -m 644 vboxmouse_drv_17.so $out/lib/xorg/modules/input/vboxmouse_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_17.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_17.so $out/lib/xorg/modules/input/vboxmouse_drv.so
     
     # Install kernel modules
-    cd module
-    kernelVersion=$(cd ${kernel}/lib/modules; ls)
-    export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-    ensureDir $MODULE_DIR    
-    make install
-    cd vboxvideo_drm
-    make install
+    cd src
+    
+    for i in *
+    do
+        cd $i
+	kernelVersion=$(cd ${kernel}/lib/modules; ls)
+	export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
+	ensureDir $MODULE_DIR    
+	make install
+	cd ..
+    done
   '';
   
   meta = {
