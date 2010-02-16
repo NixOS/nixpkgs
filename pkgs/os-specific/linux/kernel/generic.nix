@@ -33,7 +33,12 @@
 
 , preConfigure ? ""
 , extraMeta ? {}
-, platform ? { name = "pc"; uboot = null; kernelBaseConfig = "defconfig"; }
+, platform ? {
+    name = "pc";
+    uboot = null;
+    kernelBaseConfig = "defconfig";
+    kernelAutoModules = true;
+  }
 , ...
 }:
 
@@ -64,6 +69,7 @@ stdenv.mkDerivation {
   generateConfig = ./generate-config.pl;
 
   inherit preConfigure src module_init_tools localVersion;
+  autoModules = platform.kernelAutoModules;
 
   patches = map (p: p.patch) kernelPatches;
 

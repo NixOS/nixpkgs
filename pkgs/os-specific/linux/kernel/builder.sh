@@ -30,7 +30,8 @@ configurePhase() {
     # Create the config file.
     echo "generating kernel configuration..."
     echo "$kernelConfig" > kernel-config
-    DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config perl -w $generateConfig
+    DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
+        perl -w $generateConfig
 }
 
 

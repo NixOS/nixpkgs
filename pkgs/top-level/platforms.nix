@@ -5,6 +5,8 @@ with pkgs;
     name = "pc";
     uboot = null;
     kernelBaseConfig = "defconfig";
+    # Build whatever possible as a module, if not stated in the extra config.
+    kernelAutoModules = true;
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).
@@ -23,6 +25,7 @@ with pkgs;
     name = "sheevaplug";
     kernelBaseConfig = "kirkwood_defconfig";
     kernelArch = "arm";
+    kernelAutoModules = false;
     kernelExtraConfig =
       ''
         BLK_DEV_RAM y
@@ -51,6 +54,7 @@ with pkgs;
     name = "versatileARM";
     kernelBaseConfig = "versatile_defconfig";
     kernelArch = "arm";
+    kernelAutoModules = false;
     uboot = null;
   };
 }
