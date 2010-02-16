@@ -2,10 +2,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, qca2}:
 
 stdenv.mkDerivation {
-  name = "konversation-1.2.1";
+  name = "konversation-1.2.3";
   src = fetchurl {
-    url = mirror://kde/stable/konversation/1.2.1/src/konversation-1.2.1.tar.bz2;
-    sha256 = "1rx4xgw14cfzkxghgn80np8i2ndq26sbdvv96g46r0s14qkdyq8w";
+    url = mirror://kde/stable/konversation/1.2.3/src/konversation-1.2.3.tar.bz2;
+    sha256 = "06h0j6clgb7b208i7y9n93zfqajgd7y0wf853r535rd1ysi3kjmg";
   };
   buildInputs = [ cmake qt4 perl gettext stdenv.gcc.libc libXScrnSaver kdelibs kdepimlibs automoc4 phonon qca2 ];
   patchPhase = ''
