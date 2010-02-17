@@ -38,6 +38,7 @@
     uboot = null;
     kernelBaseConfig = "defconfig";
     kernelAutoModules = true;
+    kernelTarget = "bzImage";
   }
 , ...
 }:
@@ -80,13 +81,14 @@ stdenv.mkDerivation {
     in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
 
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
-  ignoreConfigErrors = (userModeLinux || stdenv.system == "armv5tel-linux");
+  ignoreConfigErrors = (userModeLinux || platform.name != "pc");
 
-  buildInputs = [ perl mktemp ]
-    ++ lib.optional (platform.uboot != null) [platform.uboot];
+  buildNativeInputs = [ perl mktemp ];
+  buildInputs = lib.optional (platform.uboot != null) platform.uboot;
 
   platformName = platform.name;
   kernelBaseConfig = platform.kernelBaseConfig;
+  kernelTarget = platform.kernelTarget;
   
   arch =
     if xen then "xen" else

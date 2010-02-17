@@ -2,7 +2,9 @@ source $stdenv/setup
 
 
 makeFlags="ARCH=$arch SHELL=/bin/sh"
-
+if [ -n "$crossConfig" ]; then
+  makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
+fi
 
 configurePhase() {
     if test -n "$preConfigure"; then 
@@ -36,11 +38,10 @@ configurePhase() {
 
 
 postBuild() {
-   if [ "$platformName" == "sheevaplug" ]; then
-       make uImage
-   fi
+    # After the builder did a 'make all' (kernel + modules)
+    # we force building the target asked: bzImage/zImage/uImage/...
+    make $kernelTarget
 }
-
 
 installPhase() {
 
@@ -59,17 +60,7 @@ installPhase() {
         ensureDir $out/bin
         cp linux $out/bin
     else
-       case $platformName in
-         sheevaplug)
-           cp arch/$archDir/boot/uImage $out
-           ;;
-         versatileARM)
-           cp arch/$archDir/boot/zImage $out
-           ;;
-         *)
-           cp arch/$archDir/boot/bzImage $out/vmlinuz
-           ;;
-       esac
+        cp arch/$archDir/boot/$kernelTarget $out
     fi
 
     cp vmlinux $out
@@ -87,7 +78,7 @@ installPhase() {
 
     # Strip the kernel modules.
     echo "Stripping kernel modules..."
-    find $out -name "*.ko" -print0 | xargs -0 strip -S
+    find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
 
     # move this to install later on
     # largely copied from early FC3 kernel spec files

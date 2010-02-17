@@ -7,6 +7,7 @@ with pkgs;
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
+    kernelTarget = "bzImage";
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).
@@ -21,7 +22,7 @@ with pkgs;
       '';
   };
 
-  sheevaplug = assert system == "armv5tel-linux"; {
+  sheevaplug = {
     name = "sheevaplug";
     kernelBaseConfig = "kirkwood_defconfig";
     kernelArch = "arm";
@@ -47,16 +48,18 @@ with pkgs;
         SCSI_ACARD n
         BLK_DEV_CMD640_ENHANCED n
       '';
+    kernelTarget = "uImage";
     uboot = ubootSheevaplug;
     # Only for uboot = uboot :
     ubootConfig = "sheevaplug_config";
   };
 
-  versatileARM = assert system == "armv5tel-linux"; {
+  versatileARM = {
     name = "versatileARM";
     kernelBaseConfig = "versatile_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
+    kernelTarget = "zImage";
     uboot = null;
   };
 
@@ -65,7 +68,8 @@ with pkgs;
     kernelBaseConfig = "integrator_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
-    uboot = null;
+    kernelTarget = "uImage";
+    uboot = uboot;
     ubootConfig = "integratorcp_config";
   };
 }
