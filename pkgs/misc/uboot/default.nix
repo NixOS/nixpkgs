@@ -1,10 +1,5 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchurl, unzip, platform}:
 
-# We should enable this check once we have the cross target system information
-# assert stdenv.system == "armv5tel-linux" || crossConfig == "armv5tel-linux";
-
-# All this file is made for the Marvell Sheevaplug
-   
 stdenv.mkDerivation {
   name = "uboot-2009.11";
    
@@ -18,7 +13,7 @@ stdenv.mkDerivation {
   # Remove the cross compiler prefix, and add reiserfs support
   configurePhase = ''
     make mrproper
-    make sheevaplug_config NBOOT=1 LE=1
+    make ${platform.ubootConfig} NBOOT=1 LE=1
     sed -i /CROSS_COMPILE/d include/config.mk
   '';
 
@@ -27,7 +22,7 @@ stdenv.mkDerivation {
     if test -z "$crossConfig"; then
         make clean all
     else
-        make clean all ARCH=arm CROSS_COMPILE=$crossConfig-
+        make clean all ARCH=${platform.kernelArch} CROSS_COMPILE=$crossConfig-
     fi
   '';
 

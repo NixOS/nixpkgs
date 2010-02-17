@@ -47,7 +47,9 @@ with pkgs;
         SCSI_ACARD n
         BLK_DEV_CMD640_ENHANCED n
       '';
-    inherit uboot;
+    uboot = ubootSheevaplug;
+    # Only for uboot = uboot :
+    ubootConfig = "sheevaplug_config";
   };
 
   versatileARM = assert system == "armv5tel-linux"; {
@@ -56,5 +58,14 @@ with pkgs;
     kernelArch = "arm";
     kernelAutoModules = false;
     uboot = null;
+  };
+
+  integratorCP = {
+    name = "integratorCP";
+    kernelBaseConfig = "integrator_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    uboot = null;
+    ubootConfig = "integratorcp_config";
   };
 }

@@ -6337,10 +6337,10 @@ let
   };*/
 
   uboot = makeOverridable (import ../misc/uboot) {
-    inherit fetchurl stdenv unzip;
+    inherit fetchurl stdenv unzip platform;
   };
 
-  ubootSheevaplug = makeOverridable (import ../misc/uboot) {
+  ubootSheevaplug = makeOverridable (import ../misc/uboot/sheevaplug.nix) {
     inherit fetchurl stdenv unzip;
   };
 
