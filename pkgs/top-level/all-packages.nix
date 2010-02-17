@@ -6340,6 +6340,10 @@ let
     inherit fetchurl stdenv unzip;
   };
 
+  ubootSheevaplug = makeOverridable (import ../misc/uboot) {
+    inherit fetchurl stdenv unzip;
+  };
+
 /*
   uclibc = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv linuxHeaders;

@@ -6,19 +6,30 @@
 # All this file is made for the Marvell Sheevaplug
    
 stdenv.mkDerivation {
-  name = "uboot-2009.11";
+  name = "uboot-sheevaplug-3.4.19";
    
   src = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-2009.11.tar.bz2";
-    sha256 = "1rld7q3ww89si84g80hqskd1z995lni5r5xc4d4322n99wqiarh6";
+    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-1.1.4.tar.bz2";
+    sha256 = "19vp4rlikz7h72pqsjhgz7nmgjy4c6vabvxkw67wni70vy5ddy8s";
   };
 
-  # patches = [ ./gas220.patch ];
+  srcAddon = fetchurl {
+    url = "http://www.plugcomputer.org/data/uboot/u-boot-3.4.19.zip";
+    sha256 = "1wag1l6agr8dbnnfaw6bgcrwynwwgry4ihb3gp438699wmkmy91k";
+  };
+
+  postUnpack = ''
+    mv u-boot-1.1.4 u-boot-3.4.19
+    unzip -o $srcAddon
+    sourceRoot=u-boot-3.4.19
+  '';
+
+  patches = [ ./gas220.patch ];
 
   # Remove the cross compiler prefix, and add reiserfs support
   configurePhase = ''
     make mrproper
-    make sheevaplug_config NBOOT=1 LE=1
+    make rd88f6281Sheevaplug_config NBOOT=1 LE=1
     sed -i /CROSS_COMPILE/d include/config.mk
   '';
 
@@ -38,7 +49,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     ensureDir $out
-    cp u-boot.bin $out
+    cp u-boot-rd88f6281Sheevaplug_400db_nand.bin $out
     cp u-boot u-boot.map $out
 
     ensureDir $out/bin
