@@ -66,6 +66,11 @@ in
         description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
+      logPerVirtualHost = mkOption {
+        default = false; 
+        description = "Whether to enable logging per virtual host.";
+      }; 
+
       axis2 = {
       
         enable = mkOption {
@@ -125,6 +130,9 @@ in
 	        ln -sfn ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
 	    done
 	    
+            # Create subdirectory for virtual hosts
+            mkdir -p ${cfg.baseDir}/virtualhosts
+ 
 	    # Create a modified catalina.properties file 
 	    # Change all references from CATALINA_HOME to CATALINA_BASE and add support for shared libraries
 	    sed -e 's|''${catalina.home}|''${catalina.base}|g' \
@@ -132,7 +140,8 @@ in
 		${pkgs.tomcat6}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
 	    
 	    # Create a modified server.xml which also includes all virtual hosts
-	    sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" />'' ) cfg.virtualHosts)}" \
+	    sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${
+                         toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
 	        ${pkgs.tomcat6}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
 	    
 	    # Create a logs/ directory
@@ -231,7 +240,7 @@ in
 	      
 	      # Symlink all the given web applications files or paths into the webapps/ directory
 	      # of this virtual host
-	      for i in ${toString virtualHost.webapps}
+	      for i in "${if virtualHost ? webapps then toString virtualHost.webapps else ""}"
 	      do
 		  if [ -f $i ]
 		  then
