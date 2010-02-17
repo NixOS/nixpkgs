@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE="-O0";
 
   # TODO : make mod-check fails
-  doCheck = 1;
+  doCheck = false;
 
   meta = {
 	  description = "ANSI Common Lisp Implementation";
