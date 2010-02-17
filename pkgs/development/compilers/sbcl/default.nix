@@ -58,6 +58,9 @@ rec {
     sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
     sed -e '/deftest .*ent.non-existing/,+5d' -i contrib/sb-posix/posix-tests.lisp
     sed -e '/deftest \(pw\|gr\)ent/,+3d' -i contrib/sb-posix/posix-tests.lisp
+
+    sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
+    sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
   '') ["minInit" "doUnpack"];
 
   doBuild = a.fullDepEntry (''
