@@ -54,7 +54,10 @@ rec {
   '') ["minInit" "addInputs"];
 
   doFixTests = a.fullDepEntry (''
-    sed -e 's/"sys"/"wheel"/' -i contrib/sb-posix/posix-tests.lisp
+    sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
+    sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
+    sed -e '/deftest .*ent.non-existing/,+5d' -i contrib/sb-posix/posix-tests.lisp
+    sed -e '/deftest \(pw\|gr\)ent/,+3d' -i contrib/sb-posix/posix-tests.lisp
   '') ["minInit" "doUnpack"];
 
   doBuild = a.fullDepEntry (''
