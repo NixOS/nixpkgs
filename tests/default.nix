@@ -9,23 +9,7 @@ let
     (import ../lib/build-vms.nix { inherit nixpkgs services system; }) //
     (import ../lib/testing.nix { inherit nixpkgs services system; });
 
-in with testLib; let 
-
-  call = f: f { inherit pkgs nixpkgs system testLib; };
-    
-  apply = testFun: complete (call testFun);
-
-  complete = t: t // rec {
-    nodes =
-      if t ? nodes then t.nodes else
-      if t ? machine then { machine = t.machine; }
-      else { };
-    vms = buildVirtualNetwork { inherit nodes; };
-    test = runTests vms t.testScript;
-    report = makeReport test;
-  };
-
-in
+in with testLib;
 
 {
   firefox = apply (import ./firefox.nix);

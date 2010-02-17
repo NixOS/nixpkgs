@@ -80,5 +80,19 @@ rec {
       ensureDir $out/nix-support
       echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
     ''; # */
-    
+
+  call = f: f { inherit pkgs nixpkgs system; };
+
+  apply = testFun: complete (call testFun);
+
+  complete = t: t // rec {
+    nodes =
+      if t ? nodes then t.nodes else
+      if t ? machine then { machine = t.machine; }
+      else { };
+    vms = buildVirtualNetwork { inherit nodes; };
+    test = runTests vms t.testScript;
+    report = makeReport test;
+  };
+   
 }
