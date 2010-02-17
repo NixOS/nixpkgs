@@ -40,7 +40,7 @@ configurePhase() {
 postBuild() {
     # After the builder did a 'make all' (kernel + modules)
     # we force building the target asked: bzImage/zImage/uImage/...
-    make $kernelTarget
+    make $makeFlags $kernelTarget
 }
 
 installPhase() {
