@@ -52,7 +52,7 @@ in
 
   # !!! Hack - attributes expected by other modules.
   system.build.menuBuilder = "true";
-  system.boot.loader.kernelFile = "vmlinuz";
+  system.boot.loader.kernelFile = "bzImage";
   environment.systemPackages = [ pkgs.grub2 ];
 
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
@@ -83,8 +83,8 @@ in
   # Individual files to be included on the CD, outside of the Nix
   # store on the CD.
   tarball.contents =
-    [ { source = config.boot.kernelPackages.kernel + "/vmlinuz";
-        target = "/boot/vmlinuz";
+    [ { source = config.boot.kernelPackages.kernel + "/bzImage";
+        target = "/boot/bzImage";
       }
       { source = config.system.build.initialRamdisk + "/initrd";
         target = "/boot/initrd";

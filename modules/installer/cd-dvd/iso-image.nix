@@ -104,7 +104,7 @@ in
 
   # !!! Hack - attributes expected by other modules.
   system.build.menuBuilder = "true";
-  system.boot.loader.kernelFile = "vmlinuz";
+  system.boot.loader.kernelFile = "bzImage";
   environment.systemPackages = [ pkgs.grub2 ];
 
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
@@ -181,8 +181,8 @@ in
       { source = pkgs.writeText "grub.cfg" grubCfg;
         target = "/boot/grub/grub.cfg";
       }
-      { source = config.boot.kernelPackages.kernel + "/vmlinuz";
-        target = "/boot/vmlinuz";
+      { source = config.boot.kernelPackages.kernel + "/bzImage";
+        target = "/boot/bzImage";
       }
       { source = config.system.build.initialRamdisk + "/initrd";
         target = "/boot/initrd";
@@ -206,7 +206,7 @@ in
   boot.loader.grub.extraEntries =
     ''
       menuentry "NixOS Installer / Rescue" {
-        linux /boot/vmlinuz init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${toString config.boot.kernelParams}
+        linux /boot/bzImage init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${toString config.boot.kernelParams}
         initrd /boot/initrd
       }
 

@@ -61,6 +61,6 @@ in
     boot.loader.kernelFile = (
        if (platform.name == "sheevaplug") then "uImage"
        else if (platform.name == "versatileARM") then "zImage"
-       else "vmlinuz");
+       else "bzImage");
   };
 }

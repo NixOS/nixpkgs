@@ -334,7 +334,7 @@ boot correctly is to use QEMU’s <option>-kernel</option> and
 <screen>
 $ nix-build /etc/nixos/nixos -A config.system.build.initialRamdisk -o initrd
 $ nix-build /etc/nixos/nixos -A config.system.build.kernel -o kernel
-$ qemu-system-x86_64 -kernel ./kernel/vmlinuz -initrd ./initrd/initrd -hda /dev/null
+$ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/null
 </screen>
 
 </para>
