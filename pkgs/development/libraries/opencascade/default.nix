@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mesa, qt4, tcl, tk}:
+{stdenv, fetchurl, mesa, qt4, tcl, tk, file}:
 
 stdenv.mkDerivation rec {
   name = "opencascade-6.3.0";
@@ -7,10 +7,9 @@ stdenv.mkDerivation rec {
     md5 = "52778127974cb3141c2827f9d40d1f11";
   };
 
-  buildInputs = [ mesa qt4 tcl tk];
+  buildInputs = [ mesa qt4 tcl tk file ];
 
   preConfigure = ''
-    export LDFLAGS=-L$out/lib
     cd ros
   '';
 

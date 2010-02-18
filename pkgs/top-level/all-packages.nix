@@ -4620,7 +4620,7 @@ let
   };
 
   opencascade = import ../development/libraries/opencascade {
-    inherit fetchurl stdenv mesa qt4 tcl tk;
+    inherit fetchurl stdenv mesa qt4 tcl tk file;
   };
 
   openct = import ../development/libraries/openct {
