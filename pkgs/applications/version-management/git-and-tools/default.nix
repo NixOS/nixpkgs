@@ -19,7 +19,7 @@ rec {
 
   # The full-featured Git.
   gitFull = import ./git {
-    inherit fetchurl stdenv curl openssl zlib expat perl gettext
+    inherit fetchurl stdenv curl openssl zlib expat perl python gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
