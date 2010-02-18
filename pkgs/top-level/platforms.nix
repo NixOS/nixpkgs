@@ -7,7 +7,7 @@ with pkgs;
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
-    kernelTarget = "bzImage";
+    kernelTarget = "vmlinuz";
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).
