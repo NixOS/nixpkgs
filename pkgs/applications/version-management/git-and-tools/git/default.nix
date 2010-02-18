@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
     maintainers =
       [ # Add your name here!
         stdenv.lib.maintainers.ludo
+        stdenv.lib.maintainers.simons
       ];
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
