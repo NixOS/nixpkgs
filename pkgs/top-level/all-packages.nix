@@ -7856,7 +7856,7 @@ let
     inherit fetchurl stdenv pkgconfig imagemagick boost python;
   };
 
-  qemu = import ../applications/virtualization/qemu/0.12.1.nix {
+  qemu = import ../applications/virtualization/qemu/0.12.2.nix {
     inherit stdenv fetchurl SDL zlib which;
   };
 
