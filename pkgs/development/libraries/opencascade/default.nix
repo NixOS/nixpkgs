@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mesa qt4 tcl tk];
 
-  preConfigure = "cd ros";
+  preConfigure = ''
+    export LDFLAGS=-L$out/lib
+    cd ros
+  '';
 
   postInstall = ''
     mv $out/inc $out/include
