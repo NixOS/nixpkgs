@@ -73,5 +73,6 @@ with pkgs.stdenv.lib;
   rubyLang = [
     "--langmap=RUBY:.rb"
     "--regex-RUBY=/class ([^ ]*)/\\1/c/"
+    "--regex-RUBY=/^[ ]*module[ ]*([^ ]*)/\\1/m/"
   ];
 }
