@@ -47,8 +47,6 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
   || stdenv.system == "armv5tel-linux";
 
 assert platform.name == "sheevaplug" -> platform.uboot != null;
-assert (platform.name == "sheevaplug" || platform.name == "versatileARM") ->
-  stdenv.system == "armv5tel-linux";
 
 let
 
