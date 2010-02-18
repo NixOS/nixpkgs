@@ -192,7 +192,7 @@ rec {
       -nographic -no-reboot \
       -net nic,model=virtio -net user -smb / \
       -drive file=$diskImage,if=virtio,boot=on \
-      -kernel ${kernel}/vmlinuz \
+      -kernel ${kernel}/bzImage \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
