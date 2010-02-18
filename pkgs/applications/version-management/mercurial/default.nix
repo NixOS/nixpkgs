@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       cp contrib/hgk $out/bin
       cat >> $out/etc/mercurial/hgrc << EOF
       [extensions]
-      hgk=$out/lib/python2.5/site-packages/hgext/hgk.py
+      hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
       WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/tk8.4\"
