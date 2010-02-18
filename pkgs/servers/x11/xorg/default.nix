@@ -704,7 +704,7 @@ let
       url = mirror://xorg/X11R7.5/src/everything/libXi-1.3.tar.bz2;
       sha256 = "0jwl19w8ry30v4wyar3fv9xbhzp3fbx1mq6p7c342s1qc068qarn";
     };
-    buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto ];
+    buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto xmlto asciidoc ];
   })) // {inherit inputproto libX11 libXext xextproto xproto ;};
     
   libXinerama = (stdenv.mkDerivation ((if overrides ? libXinerama then overrides.libXinerama else x: x) {
