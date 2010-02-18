@@ -25,8 +25,12 @@ rec {
     perl mkfiles.pl
   '' ["minInit" "doUnpack" "addInputs"];
 
+  setVars = a.noDepEntry ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lX11"
+  '';
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["addInputs" "mkMakefiles" "doMakeInstall"];
+  phaseNames = ["addInputs" "setVars" "mkMakefiles" "doMakeInstall"];
 
   name = "sgt-puzzles-" + version;
   meta = {
