@@ -101,10 +101,11 @@ stdenv.mkDerivation {
         cd $i
 	kernelVersion=$(cd ${kernel}/lib/modules; ls)
 	export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-	ensureDir $MODULE_DIR    
+	sed -i -e "s|-o root||g" \
+	       -e "s|-g root||g" Makefile
 	make install
 	cd ..
-    done
+    done    
   '';
   
   meta = {
