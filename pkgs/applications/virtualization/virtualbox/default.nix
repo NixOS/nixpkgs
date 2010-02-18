@@ -54,9 +54,16 @@ stdenv.mkDerivation {
     # Install kernel module
     cd src
     kernelVersion=$(cd ${kernel}/lib/modules; ls)
-    ensureDir $out/lib/modules/$kernelVersion/misc
     export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-    ensureDir $MODULE_DIR    
+    
+    # Remove root ownership stuff, since this does not work in a chroot environment
+    for i in `find . -name Makefile`
+    do
+	sed -i -e "s|-o root||g" \
+               -e "s|-g root||g" $i
+    done
+    
+    # Install kernel modules
     make install
     
     # Create wrapper script
