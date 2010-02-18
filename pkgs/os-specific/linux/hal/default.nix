@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ libusb ]
-    ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") [ libsmbios ];
+    ++ stdenv.lib.optionals (stdenv.system != "armv5tel-linux") [ libsmbios ];
 
   preConfigure = ''
     for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
