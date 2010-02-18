@@ -78,7 +78,11 @@ installPhase() {
 
     # Strip the kernel modules.
     echo "Stripping kernel modules..."
-    find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
+    if [ -z "$crossConfig" ]; then
+        find $out -name "*.ko" -print0 | xargs -0 strip -S
+    else
+        find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
+    fi
 
     # move this to install later on
     # largely copied from early FC3 kernel spec files
