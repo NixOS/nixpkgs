@@ -68,7 +68,33 @@ with pkgs;
     kernelBaseConfig = "integrator_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
+    kernelTarget = "zImage";
+    kernelExtraConfig =
+      ''
+        # needed for qemu integrator/cp
+        SERIAL_AMBA_PL011 y
+        SERIAL_AMBA_PL011_CONSOLE y
+        SERIAL_AMBA_PL010 n
+        SERIAL_AMBA_PL010_CONSOLE n
+      '';
+    uboot = null;
+    ubootConfig = "integratorcp_config";
+  };
+
+  integratorCPuboot = {
+    name = "integratorCP";
+    kernelBaseConfig = "integrator_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
     kernelTarget = "uImage";
+    kernelExtraConfig =
+      ''
+        # needed for qemu integrator/cp
+        SERIAL_AMBA_PL011 y
+        SERIAL_AMBA_PL011_CONSOLE y
+        SERIAL_AMBA_PL010 n
+        SERIAL_AMBA_PL010_CONSOLE n
+      '';
     uboot = uboot;
     ubootConfig = "integratorcp_config";
   };
