@@ -47,7 +47,7 @@ attrs :
                 test -f $i && ghc --make $i
               done
 
-              for p in $propagatedBuildInputs; do
+              for p in $propagatedBuildNativeInputs; do
                 for d in lib{,64}; do
                   if [ -e "$p/$d" ]; then
                     extraLibDirs="$extraLibDirs --extra-lib-dir=$p/$d"
