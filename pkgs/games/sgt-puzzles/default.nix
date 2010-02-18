@@ -2,16 +2,16 @@ a :
 let 
   fetchsvn = a.fetchsvn;
 
-  version = a.lib.attrByPath ["version"] "r8541" a; 
+  version = a.lib.attrByPath ["version"] "r8541" a;
   buildInputs = with a; [
-    gtk glib pkgconfig libX11 perl
+    gtk pkgconfig libX11 perl
   ];
 in
 rec {
   src = fetchsvn {
    url = svn://svn.tartarus.org/sgt/puzzles;
-   rev = "8842";
-   sha256 = "0rx3pxd1ci9x1mlw1jfmwd0fpcyv76vv6jraxfrxcykxx62qg479";
+   rev = "8872";
+   sha256 = "16hcrhkl6plzdhw60g7i4vgkxcc4mw4h4bzg2myy5cfhpx7y0m9s";
   } + "/";
 
   inherit buildInputs;
@@ -26,11 +26,7 @@ rec {
   '' ["minInit" "doUnpack" "addInputs"];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["addInputs" "doExport" "mkMakefiles" "doMakeInstall"];
-
-  doExport = a.noDepEntry ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -L${a.libX11}/lib -lX11"
-  '';
+  phaseNames = ["addInputs" "mkMakefiles" "doMakeInstall"];
 
   name = "sgt-puzzles-" + version;
   meta = {

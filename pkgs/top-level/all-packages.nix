@@ -8522,7 +8522,7 @@ let
   };
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
-    inherit (gtkLibs) gtk glib;
+    inherit (gtkLibs) gtk;
     inherit pkgconfig fetchsvn perl;
     inherit (xlibs) libX11;
   };

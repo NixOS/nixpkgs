@@ -319,6 +319,10 @@ let inherit (builtins) head tail trace; in
 
         doDump = n: noDepEntry "echo Dump number ${n}; set";
 
+	doDumpBuildInputs = noDepEntry (''
+	  echo "${toString realBuildInputs}"
+	'');
+
         patchFlags = if args ? patchFlags then args.patchFlags else "-p1";
 
         patches = attrByPath ["patches"] [] args;

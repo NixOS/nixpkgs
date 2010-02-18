@@ -196,10 +196,11 @@ rec {
 
 
   innerClosePropagation = ready: list: if list == [] then ready else
-    if (head list) ? propagatedBuildInputs then 
-      innerClosePropagation (ready ++ [(head list)]) 
-        ((head list).propagatedBuildInputs ++ (tail list)) else
-      innerClosePropagation (ready ++ [(head list)]) (tail list);
+    innerClosePropagation 
+      (ready ++ [(head list)])
+      ((tail list) 
+         ++ (maybeAttr "propagatedBuildInputs" [] (head list))
+	 ++ (maybeAttr "propagatedBuildNativeInputs" [] (head list)));
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
