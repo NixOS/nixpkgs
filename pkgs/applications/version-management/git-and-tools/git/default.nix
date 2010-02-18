@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, gettext, cpio
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell}";
+  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} PYTHON_PATH=${python}/bin/python";
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
