@@ -93,6 +93,10 @@ import ./generic.nix (
         FB_3DFX_ACCEL y
         FB_GEODE y
 
+        # Video configuration
+        # The intel drivers already require KMS
+        DRM_I915_KMS y
+
         # Sound.
         SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
         SND_HDA_INPUT_BEEP y # Support digital beep via input layer
