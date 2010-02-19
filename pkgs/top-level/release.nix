@@ -705,7 +705,6 @@ let
 in {
   crossArmLinux = mapTestOnCross crossSystem (rec {
     bison = nativePlatforms;
-    uboot = nativePlatforms;
     tightvnc = nativePlatforms;
     #openoffice = nativePlatforms;
     wxGTK = nativePlatforms;
