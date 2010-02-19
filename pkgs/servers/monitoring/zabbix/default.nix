@@ -1,5 +1,7 @@
 { stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib }:
 
+assert stdenv.gcc.libc != null;
+
 let
 
   version = "1.8.1";

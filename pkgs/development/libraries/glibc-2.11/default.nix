@@ -4,6 +4,8 @@
 , gccCross ? null
 }:
 
+assert stdenv.gcc.gcc != null;
+
 let
   build = import ./common.nix;
   cross = if gccCross != null then gccCross.target else null;

@@ -2019,7 +2019,7 @@ let
     profiledCompiler = false;
   });
 
-  gfortran44 = wrapGCC (gcc44.gcc.override {
+  gfortran44 = wrapGCC (gcc44_real.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -2029,7 +2029,7 @@ let
 
   gcj = gcj44;
 
-  gcj44 = wrapGCC (gcc44.gcc.override {
+  gcj44 = wrapGCC (gcc44_real.gcc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -3678,19 +3678,6 @@ let
   };
 
   glibc29Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
-    inherit stdenv fetchurl;
-    gccCross = gccCrossStageStatic cross;
-    kernelHeaders = linuxHeadersCross cross;
-    installLocales = getPkgConfig "glibc" "locales" false;
-  });
-
-  glibc210 = makeOverridable (import ../development/libraries/glibc-2.10) {
-    inherit fetchurl stdenv;
-    kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
-  };
-
-  glibc210Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.10) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic cross;
     kernelHeaders = linuxHeadersCross cross;
