@@ -8,8 +8,6 @@ with pkgs;
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
     kernelTarget = "bzImage";
-    # This next line makes uboot happy, more than being ever used in the kernel build.
-    kernelArch = if (system == "i686-linux") then "x86" else "x86_64";
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).

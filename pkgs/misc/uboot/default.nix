@@ -1,5 +1,8 @@
 {stdenv, fetchurl, unzip, platform}:
 
+assert (stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux")
+  || (stdenv ? cross);
+
 stdenv.mkDerivation {
   name = "uboot-2009.11";
    
