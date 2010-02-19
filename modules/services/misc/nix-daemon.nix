@@ -66,6 +66,14 @@ in
         ";
       };
 
+      manualNixMachines = mkOption {
+        default = false;
+        description = "
+          Whether to manually manage the list of buildmachines used in distributed 
+          builds in /etc/nix.machines. 
+        ";
+      };
+
       daemonNiceLevel = mkOption {
         default = 10;
         description = "
@@ -182,7 +190,7 @@ in
         }
       ]
 
-      ++ optional config.nix.distributedBuilds
+      ++ optional (config.nix.distributedBuilds && !config.nix.manualNixMachines)
         { # List of machines for distributed Nix builds in the format expected
           # by build-remote.pl.
           source = pkgs.writeText "nix.machines"
@@ -205,6 +213,9 @@ in
           ''
             export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
             ${config.nix.envVars}
+            # To reduce the load on Hydra, don't start all those
+            # unnecessary substituter processes.
+            export NIX_SUBSTITUTERS=
             exec \
               nice -n ${builtins.toString config.nix.daemonNiceLevel} \
               ${pkgs.utillinux}/bin/ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
