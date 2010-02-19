@@ -15,6 +15,10 @@ stdenv.mkDerivation (rec {
     sed -i -e 's|$(tempfile -s.*)|temp.c|' -e 's|tempfile|mktemp|' configure
   '';
 
+  unpackCmd = ''
+    tar -xf ${src}
+  '';
+
   meta = {
     description = "Rewrite of qiv (quick image viewer)";
     homepage = http://www.pberndt.com/Programme/Linux/pqiv;
