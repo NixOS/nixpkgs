@@ -11,7 +11,6 @@ rec {
   gnomeicontheme = gnome_icon_theme;
 
   # !!! Missing! Need to add these.
-  vte = throw "vte not implemented";
   libgnomeprintui = throw "libgnomeprintui not implemented";
   gtksourceview_24 = gtksourceview;
 
@@ -304,6 +303,11 @@ rec {
 
   gnome_icon_theme = import ./desktop/gnome-icon-theme {
     inherit (pkgs) stdenv fetchurl pkgconfig intltool iconnamingutils;
+  };
+
+  vte = import ./desktop/vte {
+    inherit (pkgs) stdenv fetchurl pkgconfig ncurses python;
+    inherit intltool glib gtk;
   };
   
 #### BINDINGS
