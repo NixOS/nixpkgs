@@ -3,16 +3,17 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.attrByPath ["version"] "0.7.0" args; 
+  version = lib.attrByPath ["version"] "0.7.2" args; 
   buildInputs = with args; [
     libpng libtiff libjpeg librsvg imagemagick pkgconfig
-    zlib libX11 bzip2 libtool
+    zlib libX11 bzip2 libtool freetype fontconfig 
+    ghostscript
   ];
 in
 rec {
   src = fetchurl {
     url = "http://prdownloads.sourceforge.net/libdmtx/libdmtx-${version}.tar.bz2";
-    sha256 = "00w0pvpbwqqa1c8s85v8vf8w1x116yh7qg5fplxj5jhmfizcama2";
+    sha256 = "0iin2j3ad7ldj32dwc04g28k54iv3lrc5121rgyphm7l9hvigbvk";
   };
 
   inherit buildInputs;
