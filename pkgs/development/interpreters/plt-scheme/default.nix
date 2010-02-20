@@ -1,9 +1,9 @@
 args: with args; 
-let version = lib.attrByPath ["version"] "4.0.1" args; in
+let version = lib.attrByPath ["version"] "4.2.4" args; in
 rec {
   src = fetchurl {
     url = "ftp://infogroep.be/pub/plt/bundles/${version}/plt/plt-${version}-src-unix.tgz";
-    sha256 = "0qykfsh87gz50szcini0wyl25iqd6d2mhp6f20qkid9392bnv4c8";
+    sha256 = "05azb9k0m1sp3qm3all4s39m97xwrbnqcys2vgc888nhxbff4d6g";
   };
 
   buildInputs = [cairo fontconfig freetype libjpeg libpng openssl 
