@@ -2483,12 +2483,12 @@ let
 
   guile_1_9 = import ../development/interpreters/guile/1.9.nix {
     inherit fetchurl stdenv readline libtool gmp gawk makeWrapper
-      libunistring pkgconfig boehmgc;
+      libunistring pkgconfig boehmgc libffi;
   };
 
   guile_1_9_coverage = import ../development/interpreters/guile/1.9.nix {
     inherit fetchurl stdenv readline libtool gmp gawk makeWrapper
-      libunistring pkgconfig boehmgc;
+      libunistring pkgconfig boehmgc libffi;
     inherit (releaseTools) coverageAnalysis;
   };
 

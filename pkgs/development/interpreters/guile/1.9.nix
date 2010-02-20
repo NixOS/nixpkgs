@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, gawk, makeWrapper, coverageAnalysis ? null }:
+, libffi, gawk, makeWrapper, coverageAnalysis ? null }:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -7,14 +7,17 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-1.9.7";  # This is a beta release!
+  name = "guile-1.9.8";  # This is a beta release!
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
-    sha256 = "1jyvckid3wjx82717fy1018qpdnglawv29r4wbv239cva8gv5nbr";
+    sha256 = "1b8n1dma3fbxf2j3hprl43xnwfs4knqp2g85s5gsq2j1grlmrb5g";
   };
 
-  buildInputs = [ makeWrapper gawk readline libtool libunistring pkgconfig ];
+  buildInputs =
+    [ makeWrapper gawk readline libtool libunistring
+      libffi pkgconfig
+    ];
   propagatedBuildInputs = [ gmp boehmgc ];
 
   patches =
