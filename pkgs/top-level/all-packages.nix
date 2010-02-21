@@ -7907,6 +7907,13 @@ let
     perlSupport = false;
   };
 
+  sakura = import ../applications/misc/sakura {
+    inherit stdenv fetchurl cmake pkgconfig gettext;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) vte;
+    inherit (xlibs) pixman;
+  };
+
   sbagen = import ../applications/misc/sbagen {
     inherit fetchurl stdenv;
   };
