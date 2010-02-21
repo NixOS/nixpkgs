@@ -17,11 +17,11 @@ rec {
     cp *.sty *.def $out/share/texmf/tex/latex/xcolor
     cp *.pro $out/share/texmf/dvips/xcolor
 
-    latex xcolor.dtx
-    latex xcolor.dtx
-    makeindex -s gind.ist xcolor.idx
-    latex xcolor.dtx
-    latex xcolor.dtx
+    #latex xcolor.dtx
+    #latex xcolor.dtx
+    #makeindex -s gind.ist xcolor.idx
+    #latex xcolor.dtx
+    #latex xcolor.dtx
 
     rm *.sty *.pro *.ins *.def *.dtx
     ensureDir $out/share/texmf/doc/latex-xcolor
