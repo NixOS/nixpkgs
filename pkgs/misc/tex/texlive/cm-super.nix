@@ -8,18 +8,20 @@ rec {
 
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    ensureDir $out/share/texmf/fonts/enc
-    ensureDir $out/share/texmf/fonts/map
-    ensureDir $out/share/texmf/fonts/type1/public/cm-super
-    cp pfb/*.pfb $out/share/texmf/fonts/type1/public/cm-super
-    ensureDir $out/share/texmf/dvips/cm-super
-    cp dvips/*.{map,enc}  $out/share/texmf/dvips/cm-super
-    cp dvips/*.enc  $out/share/texmf/fonts/enc
-    cp dvips/*.map  $out/share/texmf/fonts/map
-    ensureDir $out/share/texmf/dvipdfm/config
-    cp dvipdfm/*.map  $out/share/texmf/dvipdfm/config
+    ensureDir $out/share/
 
-    ln -s $out/share/texmf* $out/
+    ensureDir $out/texmf/fonts/enc
+    ensureDir $out/texmf/fonts/map
+    ensureDir $out/texmf/fonts/type1/public/cm-super
+    cp pfb/*.pfb $out/texmf/fonts/type1/public/cm-super
+    ensureDir $out/texmf/dvips/cm-super
+    cp dvips/*.{map,enc}  $out/texmf/dvips/cm-super
+    cp dvips/*.enc  $out/texmf/fonts/enc
+    cp dvips/*.map  $out/texmf/fonts/map
+    ensureDir $out/texmf/dvipdfm/config
+    cp dvipdfm/*.map  $out/texmf/dvipdfm/config
+
+    ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
   buildInputs = [texLive];
 

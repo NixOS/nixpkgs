@@ -10,12 +10,13 @@ rec {
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     export HOME=$PWD
+    ensureDir $out/share/
 
-    ensureDir $out/share/texmf/tex/latex/xcolor
-    ensureDir $out/share/texmf/dvips/xcolor
+    ensureDir $out/texmf/tex/latex/xcolor
+    ensureDir $out/texmf/dvips/xcolor
     latex xcolor.ins 
-    cp *.sty *.def $out/share/texmf/tex/latex/xcolor
-    cp *.pro $out/share/texmf/dvips/xcolor
+    cp *.sty *.def $out/texmf/tex/latex/xcolor
+    cp *.pro $out/texmf/dvips/xcolor
 
     #latex xcolor.dtx
     #latex xcolor.dtx
@@ -24,8 +25,10 @@ rec {
     #latex xcolor.dtx
 
     rm *.sty *.pro *.ins *.def *.dtx
-    ensureDir $out/share/texmf/doc/latex-xcolor
-    cp *  $out/share/texmf/doc/latex-xcolor
+    ensureDir $out/texmf/doc/latex-xcolor
+    cp *  $out/texmf/doc/latex-xcolor
+
+    ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
 
   meta = {

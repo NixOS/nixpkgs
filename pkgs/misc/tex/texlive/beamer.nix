@@ -10,8 +10,12 @@ rec {
   propagatedBuildInputs = [texLiveLatexXColor texLivePGF];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    ensureDir $out/share/texmf-dist/tex/latex/beamer
-    cp -r * $out/share/texmf-dist/tex/latex/beamer 
+    ensureDir $out/share/
+
+    ensureDir $out/texmf-dist/tex/latex/beamer
+    cp -r * $out/texmf-dist/tex/latex/beamer 
+
+    ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
 
   meta = {

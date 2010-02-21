@@ -12,8 +12,10 @@ rec {
 
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    ensureDir $out/share/texmf/tex/generic/pgf
-    cp -r * $out/share/texmf/tex/generic/pgf
+    ensureDir $out/share/
+    ensureDir $out/texmf/tex/generic/pgf
+    cp -r * $out/texmf/tex/generic/pgf
+    ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
 
   meta = {
