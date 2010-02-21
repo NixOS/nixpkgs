@@ -600,6 +600,12 @@ rec {
     xineramaSupport = true;
   };
 
+  X11_xft = import ../development/libraries/haskell/X11-xft {
+    inherit ghc cabal X11 utf8String;
+    inherit (pkgs) pkgconfig;
+    inherit (pkgs.xlibs) libXft;
+  };
+
   xhtml = import ../development/libraries/haskell/xhtml {
     inherit cabal;
   };
