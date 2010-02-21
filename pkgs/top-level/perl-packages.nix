@@ -1050,10 +1050,10 @@ rec {
   };
 
   ExtUtilsMakeMaker = buildPerlPackage {
-    name = "ExtUtils-MakeMaker-6.44";
+    name = "ExtUtils-MakeMaker-6.56";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/ExtUtils-MakeMaker-6.44.tar.gz;
-      sha256 = "0zyypnlmmyp06qbfdpc14rp5rj63066mjammn6rlcqz2iil9mpcj";
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz;
+      sha256 = "1i24ljkwv4b2nr18a8rr82250wgr3c95pxalzgvfa132w08skd4b";
     };
   };
 
