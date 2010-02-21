@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     bsd_games_cfg_no_build_dirs="dab hack phantasia sail"
     bsd_games_cfg_dictionary_src=${miscfiles}/share/dict/words
     EOF
+
+    sed -e s/getline/sdgames_local_getline/g -i $(grep getline -rl .)
   '';
 
   postConfigure = ''
