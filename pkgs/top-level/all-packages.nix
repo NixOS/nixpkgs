@@ -346,6 +346,17 @@ let
     inherit fetchurl stdenv libpcap openssl zlib wirelesstools;
   };
 
+  asymptote = builderDefsPackage ../tools/graphics/asymptote {
+    inherit freeglut ghostscriptX imagemagick fftw boehmgc
+      mesa ncurses readline gsl libsigsegv python zlib perl
+      texinfo lzma;
+    texLive = texLiveAggregationFun {
+      paths = [
+        texLive texLiveExtra
+      ];
+    };
+  };
+
   ec2apitools = import ../tools/virtualization/amazon-ec2-api-tools {
     inherit stdenv fetchurl unzip makeWrapper jre;
   };
