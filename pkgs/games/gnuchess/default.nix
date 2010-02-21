@@ -22,6 +22,9 @@ rec {
   preBuild = a.fullDepEntry (''
     sed -i src/input.c -e 's/static pthread_t/pthread_t/'
     sed -i "s@gnuchess@$out/bin/gnuchess@" -i src/gnuchessx
+
+
+    sed -e s/getline/gnuchess_local_getline/g -i $(grep getline -rl .)
   '') ["minInit" "doUnpack"];
       
   name = "gnuchess-" + version;
