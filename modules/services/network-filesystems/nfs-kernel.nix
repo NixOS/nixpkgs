@@ -8,11 +8,6 @@ let
 
   cfg = config.services.nfsKernel;
 
-  exports =
-    if builtins.pathExists cfg.exports
-    then cfg.exports
-    else pkgs.writeText "exports" cfg.exports;
-
 in
 
 {
@@ -23,43 +18,51 @@ in
   
     services.nfsKernel = {
 
-      enable = mkOption {
+      client.enable = mkOption {
         default = false;
         description = ''
-          Whether to enable the kernel's NFS server.
+          Whether to enable the kernel's NFS client daemons.
         '';
       };
 
-      # !!! Why is this a file?  Why not a list of export entries?
-      exports = mkOption {
-        check = v: v != "/etc/exports"; # this won't work
-        description = ''
-          The file listing the directories to be exported.  See
-          <citerefentry><refentrytitle>exports</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for the format.
-        '';
-      };
+      server = {
+        enable = mkOption {
+          default = false;
+          description = ''
+            Whether to enable the kernel's NFS server.
+          '';
+        };
 
-      hostName = mkOption {
-        default = null;
-        description = ''
-          Hostname or address on which NFS requests will be accepted.
-          Default is all.  See the <option>-H</option> option in
-          <citerefentry><refentrytitle>nfsd</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>.
-        '';
-      };
+        exports = mkOption {
+          default = "";
+          description = ''
+            Contents of the /etc/exports file.  See
+            <citerefentry><refentrytitle>exports</refentrytitle>
+            <manvolnum>5</manvolnum></citerefentry> for the format.
+          '';
+        };
+
+        hostName = mkOption {
+          default = null;
+          description = ''
+            Hostname or address on which NFS requests will be accepted.
+            Default is all.  See the <option>-H</option> option in
+            <citerefentry><refentrytitle>nfsd</refentrytitle>
+            <manvolnum>8</manvolnum></citerefentry>.
+          '';
+        };
       
-      nproc = mkOption {
-        default = 8;
-        description = ''
-          Number of NFS server threads.  Defaults to the recommended value of 8.
-        '';
-      };
+        nproc = mkOption {
+          default = 8;
+          description = ''
+            Number of NFS server threads.  Defaults to the recommended value of 8.
+          '';
+        };
 
-      createMountPoints = mkOption {
-        default = false;
-        description = "Whether to create the mount points in the exports file at startup time.";
+        createMountPoints = mkOption {
+          default = false;
+          description = "Whether to create the mount points in the exports file at startup time.";
+        };
       };
       
     };
@@ -69,19 +72,19 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.nfsKernel.enable {
+  config = {
 
-    assertions = singleton
+    assertions = mkIf (cfg.client.enable || cfg.server.enable) (singleton
       { assertion = config.services.portmap.enable;
         message = "Please enable portmap (services.portmap.enable) to use nfs-kernel.";
-      };
+      });
 
-    environment.etc = singleton
-      { source = exports;
+    environment.etc = mkIf cfg.server.enable (singleton
+      { source = cfg.server.exports;
         target = "exports";
-      };
+      });
 
-    jobs.nfs_kernel_exports =
+    jobs.nfs_kernel_exports = mkIf cfg.server.enable 
       { name = "nfs-kernel-exports";
       
         description = "Kernel NFS server";
@@ -95,23 +98,23 @@ in
             mkdir -p /var/lib/nfs
             ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
-            ${optionalString cfg.createMountPoints
+            ${optionalString cfg.server.createMountPoints
               ''
                 # create export directories:
                 # skip comments, take first col which may either be a quoted
                 # "foo bar" or just foo (-> man export)
-                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${cfg.server.exports} \
                 | xargs -d '\n' mkdir -p
 	      ''
             }
 	    	  
-            # exports file is ${exports}
+            # exports file is ${cfg.server.exports}
             # keep this comment so that this job is restarted whenever exports changes!
             exportfs -ra
           '';
       };
 
-    jobs.nfs_kernel_nfsd =
+    jobs.nfs_kernel_nfsd = mkIf cfg.server.enable 
       { name = "nfs-kernel-nfsd";
 
         description = "Kernel NFS server";
@@ -119,10 +122,10 @@ in
         startOn = "started nfs-kernel-exports and started portmap";
         stopOn = "stopping nfs-kernel-exports";
 
-        exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} ${builtins.toString cfg.nproc}";
+        exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
       };
 
-    jobs.nfs_kernel_mountd =
+    jobs.nfs_kernel_mountd = mkIf cfg.server.enable 
       { name = "nfs-kernel-mountd";
 
         description = "Kernel NFS server - mount daemon";
@@ -130,10 +133,10 @@ in
         startOn = "started nfs-kernel-nfsd and started portmap";
         stopOn = "stopping nfs-kernel-exports";
 
-        exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${exports}";
+        exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${cfg.server.exports}";
       };
 
-    jobs.nfs_kernel_statd =
+    jobs.nfs_kernel_statd = mkIf (cfg.client.enable || cfg.server.enable)
       { name = "nfs-kernel-statd";
       
         description = "Kernel NFS server - Network Status Monitor";

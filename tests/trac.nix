@@ -6,11 +6,11 @@
       {pkgs, config, ...}:
       {
         services.portmap.enable = true;
-        services.nfsKernel.enable = true;
-        services.nfsKernel.exports = ''
+        services.nfsKernel.server.enable = true;
+        services.nfsKernel.server.exports = ''
           /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
         '';
-        services.nfsKernel.createMountPoints = true;
+        services.nfsKernel.server.createMountPoints = true;
       };
 
     postgresql =
@@ -37,6 +37,7 @@
           ];
       
         services.portmap.enable = true;
+        services.nfsKernel.client.enable = true;
         services.httpd.enable = true;
         services.httpd.adminAddr = "root@localhost";
         services.httpd.extraSubservices = [ { serviceType = "trac"; } ];
