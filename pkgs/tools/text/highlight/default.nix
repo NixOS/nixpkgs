@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [getopt];
 
+  preBuild = ''
+    sed -e '/#include <map>/i#include <stdio.h>' -i src/re/Pattern.h
+  '';
+
   makeFlags = ["PREFIX=$out"];
 
   meta = {
