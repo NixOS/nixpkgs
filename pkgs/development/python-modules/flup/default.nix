@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, setuptools, ... }:
 
-stdenv.mkDerivation rec {
+rec {
   name = "flup-1.0.2";
 
   src = fetchurl {
