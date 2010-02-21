@@ -60,6 +60,12 @@ with pkgs;
     kernelArch = "arm";
     kernelAutoModules = false;
     kernelTarget = "zImage";
+    kernelExtraConfig =
+      ''
+        MMC_ARMMMCI y
+        MMC_SDHCI y
+        SERIO_AMBAKMI y
+      '';
     uboot = null;
   };
 
@@ -76,6 +82,12 @@ with pkgs;
         SERIAL_AMBA_PL011_CONSOLE y
         SERIAL_AMBA_PL010 n
         SERIAL_AMBA_PL010_CONSOLE n
+
+        MMC_ARMMMCI y
+        MMC_SDHCI y
+        SERIO_AMBAKMI y
+
+        CPU_ARM926T y
       '';
     uboot = null;
     ubootConfig = "integratorcp_config";
@@ -94,6 +106,12 @@ with pkgs;
         SERIAL_AMBA_PL011_CONSOLE y
         SERIAL_AMBA_PL010 n
         SERIAL_AMBA_PL010_CONSOLE n
+
+        MMC_ARMMMCI y
+        MMC_SDHCI y
+        SERIO_AMBAKMI y
+
+        CPU_ARM926T y
       '';
     uboot = uboot;
     ubootConfig = "integratorcp_config";
