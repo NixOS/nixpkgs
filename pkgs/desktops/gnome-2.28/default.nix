@@ -236,7 +236,7 @@ rec {
   };
   
   metacity = import ./desktop/metacity {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit (pkgs) stdenv fetchurl pkgconfig libcanberra;
     inherit (pkgs.gtkLibs) glib gtk;
     inherit (pkgs.xlibs) libXcomposite libXcursor libXdamage;
     inherit intltool GConf startup_notification zenity gnome_doc_utils;
@@ -279,10 +279,10 @@ rec {
   };
   
   gnome_control_center = import ./desktop/gnome-control-center {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxklavier hal;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib libxklavier hal libtool bzip2;
     inherit (pkgs) cairo popt which python libxslt shared_mime_info desktop_file_utils;
     inherit (pkgs.gtkLibs) glib gtk pango atk;
-    inherit gnome_doc_utils intltool GConf libglade libgnome libgnomeui libgnomekbd;
+    inherit gnome_doc_utils intltool GConf libglade libgnome libgnomeui libgnomekbd libunique;
     inherit librsvg gnome_menus gnome_desktop gnome_panel metacity gnome_settings_daemon;
     inherit libbonobo libbonoboui libgnomecanvas libart_lgpl gnome_vfs ORBit2;
     libxml2 = pkgs.libxml2Python;

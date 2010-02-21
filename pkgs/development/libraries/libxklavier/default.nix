@@ -1,11 +1,11 @@
 args: with args;
 
 stdenv.mkDerivation rec {
-  name = "libxklavier-3.9";
+  name = "libxklavier-4.0";
 
   src = fetchurl {
     url = "mirror://sf/gswitchit/${name}.tar.bz2";
-    sha256 = "462a4e427f201a23de194f824dce70c84867464956f2f6c8dd4a5e07f1f4a554";
+    sha256 = "210ed5803109a8cef3b2ab1195bc73fe3385a97a8749d01673e020642d8e5a71";
   };
 
 # TODO: enable xmodmap support, needs xmodmap DB

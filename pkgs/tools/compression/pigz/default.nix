@@ -1,14 +1,14 @@
 {stdenv, fetchurl, zlib}:
 
 let name = "pigz";
-    version = "2.1.5";
+    version = "2.1.6";
 in
 stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
     url = "http://www.zlib.net/${name}/${name}-${version}.tar.gz";
-    sha256 = "0fz533wb45r9cx3iaaary2azsvvpd9kmnkx22bskv5jcz3qic7xf";
+    sha256 = "2ff1ba812407848787fe6719fde4436cb7c490e6d8c6e721f4e4309caa5f3640";
   };
 
   buildInputs = [zlib];
