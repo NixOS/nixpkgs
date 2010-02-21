@@ -724,7 +724,7 @@ rec {
   };
   
   xmobar = import ../applications/misc/xmobar {
-    inherit cabal X11 mtl parsec stm;
+    inherit cabal X11 mtl parsec stm utf8String X11_xft;
   };
 
   xmonad = import ../applications/window-managers/xmonad {
