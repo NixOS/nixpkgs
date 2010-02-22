@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   srcGlew151 = fetchurl {
-    url = http://dfn.dl.sourceforge.net/sourceforge/glew/glew-1.5.1-src.tgz;
+    url = mirror://sourceforge/glew/glew-1.5.1-src.tgz;
     sha256 = "02n1p6s6sia92fgng9iq0kqq890rga8d8g0y34mc6qxmbh43vrl9";
   };
 
