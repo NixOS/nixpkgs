@@ -1,13 +1,15 @@
 {stdenv, fetchurl, lesstif, ncurses, libX11, libXt}:
 
 stdenv.mkDerivation rec {
-  name = "ddd-3.3.11";
+  name = "ddd-3.3.12";
   src = fetchurl {
     url = "mirror://gnu/ddd/${name}.tar.gz";
-    sha256 = "a555d76e1d4d5fa092b190ffb99cdde8880131c063e4b53435df3a022ed4d3da";
+    sha256 = "0p5nx387857w3v2jbgvps2p6mlm0chajcdw5sfrddcglsxkwvmis";
   };
   buildInputs = [lesstif ncurses libX11 libXt];
 	configureFlags = "--with-x";
+
+  patches = [ ./gcc44.patch ];
 	meta = {
 	  homepage = http://www.gnu.org/software/ddd;
 		description = "Graphical front-end for command-line debuggers";
