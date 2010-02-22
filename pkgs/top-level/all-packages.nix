@@ -499,6 +499,10 @@ let
     inherit fetchurl stdenv cmake libcap zlib bzip2;
   };
 
+  cfdg = builderDefsPackage ../tools/graphics/cfdg {
+    inherit libpng bison flex;
+  };
+
   checkinstall = import ../tools/package-management/checkinstall {
     inherit fetchurl stdenv gettext;
   };
