@@ -5846,21 +5846,6 @@ let
     inherit fetchurl stdenv perl;
   };
 
-  linuxHeadersArm = import ../os-specific/linux/kernel-headers-cross {
-    inherit fetchurl stdenv;
-    cross = "arm-linux";
-  };
-
-  linuxHeadersMips = import ../os-specific/linux/kernel-headers-cross {
-    inherit fetchurl stdenv;
-    cross = "mips-linux";
-  };
-
-  linuxHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
-    inherit fetchurl stdenv;
-    cross = "sparc-linux";
-  };
-
   kernelPatches = import ../os-specific/linux/kernel/patches.nix {
     inherit fetchurl;
   };
