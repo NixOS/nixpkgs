@@ -74,8 +74,10 @@ in
 
   config = {
 
+    services.portmap.enable = cfg.client.enable || cfg.server.enable;
+    
     assertions = mkIf (cfg.client.enable || cfg.server.enable) (singleton
-      { assertion = config.services.portmap.enable;
+      { assertion = cfg.client.enable || cfg.server.enable;
         message = "Please enable portmap (services.portmap.enable) to use nfs-kernel.";
       });
 
@@ -84,73 +86,82 @@ in
         target = "exports";
       });
 
-    jobs.nfs_kernel_exports = mkIf cfg.server.enable 
-      { name = "nfs-kernel-exports";
+    jobs =
+      optionalAttrs cfg.server.enable
+        { nfs_kernel_exports = 
+          { name = "nfs-kernel-exports";
       
-        description = "Kernel NFS server";
+            description = "Kernel NFS server";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+            startOn = "started network-interfaces";
+            stopOn = "stopping network-interfaces";
 
-        preStart =
-          ''
-            export PATH=${pkgs.nfsUtils}/sbin:$PATH
-            mkdir -p /var/lib/nfs
-            ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
-
-            ${optionalString cfg.server.createMountPoints
+            preStart =
               ''
-                # create export directories:
-                # skip comments, take first col which may either be a quoted
-                # "foo bar" or just foo (-> man export)
-                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${cfg.server.exports} \
-                | xargs -d '\n' mkdir -p
-	      ''
-            }
-	    	  
-            # exports file is ${cfg.server.exports}
-            # keep this comment so that this job is restarted whenever exports changes!
-            exportfs -ra
-          '';
-      };
+                export PATH=${pkgs.nfsUtils}/sbin:$PATH
+                mkdir -p /var/lib/nfs
+                ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
-    jobs.nfs_kernel_nfsd = mkIf cfg.server.enable 
-      { name = "nfs-kernel-nfsd";
+                ${optionalString cfg.server.createMountPoints
+                  ''
+                    # create export directories:
+                    # skip comments, take first col which may either be a quoted
+                    # "foo bar" or just foo (-> man export)
+                    sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${cfg.server.exports} \
+                    | xargs -d '\n' mkdir -p
+                  ''
+                }
 
-        description = "Kernel NFS server";
+                # exports file is ${cfg.server.exports}
+                # keep this comment so that this job is restarted whenever exports changes!
+                exportfs -ra
+              '';
+          };
+        }
+    
+      // optionalAttrs cfg.server.enable
+        { nfs_kernel_nfsd = 
+          { name = "nfs-kernel-nfsd";
 
-        startOn = "started nfs-kernel-exports and started portmap";
-        stopOn = "stopping nfs-kernel-exports";
+            description = "Kernel NFS server";
 
-        exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
-      };
+            startOn = "started nfs-kernel-exports and started portmap";
+            stopOn = "stopping nfs-kernel-exports";
 
-    jobs.nfs_kernel_mountd = mkIf cfg.server.enable 
-      { name = "nfs-kernel-mountd";
+            exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
+          };
+        }
 
-        description = "Kernel NFS server - mount daemon";
+      // optionalAttrs cfg.server.enable
+        { nfs_kernel_mountd =
+          { name = "nfs-kernel-mountd";
 
-        startOn = "started nfs-kernel-nfsd and started portmap";
-        stopOn = "stopping nfs-kernel-exports";
+            description = "Kernel NFS server - mount daemon";
 
-        exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${cfg.server.exports}";
-      };
+            startOn = "started nfs-kernel-nfsd and started portmap";
+            stopOn = "stopping nfs-kernel-exports";
 
-    jobs.nfs_kernel_statd = mkIf (cfg.client.enable || cfg.server.enable)
-      { name = "nfs-kernel-statd";
-      
-        description = "Kernel NFS server - Network Status Monitor";
-      
-        startOn = "started nfs-kernel-nfsd and started portmap";
-        stopOn = "stopping nfs-kernel-exports";
+            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${cfg.server.exports}";
+          };
+        }
 
-        preStart =
-          ''	
-            mkdir -p /var/lib/nfs
-          '';
+      // optionalAttrs (cfg.client.enable || cfg.server.enable)
+        { nfs_kernel_statd = 
+          { name = "nfs-kernel-statd";
 
-        exec = "${pkgs.nfsUtils}/sbin/rpc.statd -F";
-      };
+            description = "Kernel NFS server - Network Status Monitor";
+
+            startOn = "started nfs-kernel-nfsd and started portmap";
+            stopOn = "stopping nfs-kernel-exports";
+
+            preStart =
+              ''	
+                mkdir -p /var/lib/nfs
+              '';
+
+            exec = "${pkgs.nfsUtils}/sbin/rpc.statd -F";
+          };
+        };
       
   };
   
