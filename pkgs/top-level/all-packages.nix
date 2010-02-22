@@ -1507,7 +1507,7 @@ let
   };
 
   sharutils = import ../tools/archivers/sharutils {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gettext;
   };
 
   shebangfix = import ../tools/misc/shebangfix {

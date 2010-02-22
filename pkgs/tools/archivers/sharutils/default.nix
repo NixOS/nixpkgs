@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   name = "sharutils-4.8";
@@ -7,6 +7,11 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/sharutils/${name}.tar.bz2";
     sha256 = "19nlbzwlr93f7bam51rsqyj3z3sd65x32zhwxc9dgdgzcbggncnm";
   };
+
+  # GNU Gettext is needed on non-GNU platforms.
+  buildInputs = [ gettext ];
+
+  doCheck = true;
 
   meta = {
     description = "GNU Sharutils, tools for remote synchronization and `shell archives'";
