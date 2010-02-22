@@ -63,7 +63,8 @@ alias which="type -p"
 
 # The "non-interactive" Bash build does not support programmable
 # completion so check whether it's available.
-if shopt -q progcomp 2> /dev/null; then
+if false; then
+#if shopt -q progcomp 2> /dev/null; then
     # Completion.
     if [ -z "$BASH_COMPLETION_DIR" -a -d "@bash@/etc/bash_completion.d" ]; then
 	BASH_COMPLETION_DIR="@bash@/etc/bash_completion.d"
