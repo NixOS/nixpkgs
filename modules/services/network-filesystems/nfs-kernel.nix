@@ -82,7 +82,7 @@ in
       });
 
     environment.etc = mkIf cfg.server.enable (singleton
-      { source = cfg.server.exports;
+      { source = pkgs.writeText "exports" cfg.server.exports;
         target = "exports";
       });
 
