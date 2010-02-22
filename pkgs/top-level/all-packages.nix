@@ -1506,7 +1506,7 @@ let
     inherit groff;
   };
 
-  sharutils = import ../tools/archivers/sharutils/4.6.3.nix {
+  sharutils = import ../tools/archivers/sharutils {
     inherit fetchurl stdenv;
   };
 
