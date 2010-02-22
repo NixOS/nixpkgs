@@ -62,6 +62,12 @@ rec {
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
  '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];
 
+ doFixPathsBin = (doPatchShebangs "$out/bin");
+ doPreparePathsLibexec = args.fullDepEntry ''
+   for i in $out/libexec/*/*; do sed -r -e '1s/^#! *([a-z])/#! \/\1/' -i $i || true; done
+ '' ["minInit" "addInputs"];
+ doFixPathsLibexec = (doPatchShebangs "$(echo $out/libexec/*)");
+
   buildInputs = [
     zlib bzip2 ncurses libpng flex bison libX11 libICE
     xproto freetype t1lib gd libXaw icu ghostscript ed 
@@ -73,9 +79,9 @@ rec {
     "--enable-ipc" "--with-mktexfmt"
   ];
 
-  phaseNames = ["addInputs" (doDump "0") "doMainBuild" 
-    (doDump "1")
-    "doMakeInstall" "doPostInstall"];
+  phaseNames = ["addInputs" "doMainBuild" "doMakeInstall" 
+    "doPostInstall" "doFixPathsBin" "doPreparePathsLibexec"
+    "doFixPathsLibexec"];
 
   name = "texlive-core-2009";
   meta = {
