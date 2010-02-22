@@ -1,6 +1,6 @@
 { system, pkgs}:
 with pkgs;
-{
+rec {
   pc = assert system == "i686-linux" || system == "x86_64-linux"; {
     name = "pc";
     uboot = null;
@@ -65,6 +65,8 @@ with pkgs;
         MMC_ARMMMCI y
         MMC_SDHCI y
         SERIO_AMBAKMI y
+
+        AEABI y
       '';
     uboot = null;
   };
@@ -88,31 +90,17 @@ with pkgs;
         SERIO_AMBAKMI y
 
         CPU_ARM926T y
+        ARCH_INTEGRATOR_CP y
+        VGA_CONSOLE n
+        AEABI y
       '';
     uboot = null;
     ubootConfig = "integratorcp_config";
   };
 
-  integratorCPuboot = {
-    name = "integratorCP";
-    kernelBaseConfig = "integrator_defconfig";
-    kernelArch = "arm";
-    kernelAutoModules = false;
+  integratorCPuboot = integratorCP // {
+    name = "integratorCPuboot";
     kernelTarget = "uImage";
-    kernelExtraConfig =
-      ''
-        # needed for qemu integrator/cp
-        SERIAL_AMBA_PL011 y
-        SERIAL_AMBA_PL011_CONSOLE y
-        SERIAL_AMBA_PL010 n
-        SERIAL_AMBA_PL010_CONSOLE n
-
-        MMC_ARMMMCI y
-        MMC_SDHCI y
-        SERIO_AMBAKMI y
-
-        CPU_ARM926T y
-      '';
     uboot = uboot;
     ubootConfig = "integratorcp_config";
   };
