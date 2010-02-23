@@ -8937,8 +8937,7 @@ let
   };
 
   nix = makeOverridable (import ../tools/package-management/nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl;
-    aterm = aterm242fixes;
+    inherit fetchurl stdenv perl curl bzip2 openssl aterm;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
@@ -8947,8 +8946,7 @@ let
   nixUnstable = nix;
   /*
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl;
-    aterm = aterm242fixes;
+    inherit fetchurl stdenv perl curl bzip2 openssl aterm;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
