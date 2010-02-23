@@ -15,7 +15,18 @@ rec {
     cp -r * $out/texmf
 
     ln -s $out/texmf* $out/share/
+
+    sysName=$(ls -d ${args.texLive}/libexec/*/ | head -1)
+    sysName=''${sysName%%/}
+    sysName=''${sysName##*/}
+
+    ensureDir $out/libexec/$sysName
+    for i in $out/texmf/scripts/*/*/*; do
+      ln -s $i $out/libexec/$sysName/$(basename $i)
+    done
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
+
+  
 
   meta = {
     description = "ConTEXt TeX wrapper";

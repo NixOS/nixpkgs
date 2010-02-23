@@ -7,6 +7,8 @@ rec {
 
   doAggregate = fullDepEntry (''
 
+  ensureDir $out/libexec
+
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
         find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*) ! -type d | while read; do
@@ -17,7 +19,18 @@ rec {
         done | while read; do head -n 99 >/dev/null; echo -n .; done
 	echo
 
-	cp -Trfp $currentPath/libexec $out/libexec || true
+        find "$currentPath/libexec" -type d | while read; do
+            REPLY="''${REPLY#$currentPath}"
+	    ensureDir $out/"$REPLY"
+	done
+        find "$currentPath/libexec" -type f | while read; do
+            REPLY="''${REPLY#$currentPath}"
+	    ln -s "$currentPath"/"$REPLY" $out/"$REPLY"
+	done
+        find "$currentPath/libexec" -type l | while read; do
+            REPLY="''${REPLY#$currentPath}"
+	    ln -s "$currentPath"/"$REPLY" $out/"$REPLY"
+	done
     done
 
     ln -s $out/texmf* $out/share/
@@ -30,8 +43,10 @@ rec {
 
     ensureDir $out/bin
     for i in $out/libexec/*/*; do
-        echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
-        chmod a+x $out/bin/$(basename $i)
+        if [ -x $(readlink -f $i) ]; then
+            echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
+            chmod a+x $out/bin/$(basename $i)
+        fi;
     done
 
     rm $out/texmf*/ls-R
