@@ -8113,12 +8113,12 @@ let
       makeWrapper graphviz which python;
   };
 
-  vim = import ../applications/editors/vim {
+  vim = makeOverridable (import ../applications/editors/vim) {
     inherit fetchurl stdenv ncurses lib;
   };
 
-  vimHugeX = import ../applications/editors/vim {
-    inherit fetchurl stdenv lib ncurses pkgconfig
+  vimHugeX = vim.override {
+    inherit pkgconfig
       perl python tcl;
     inherit (xlibs) libX11 libXext libSM libXpm
       libXt libXaw libXau;
