@@ -2,6 +2,8 @@ a :
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
+  ];
+  propagatedBuildInputs = with a; [
     gmp mpfr
   ];
 in
@@ -9,14 +11,18 @@ rec {
   src = a.fetchUrlFromSrcInfo s;
 
   inherit (s) name;
-  inherit buildInputs;
+  inherit buildInputs propagatedBuildInputs;
   configureFlags = [
     "--enable-threads"
     "--enable-unicode"
     ];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["doConfigure" "doMakeInstall" "fixEclConfig"];
+
+  fixEclConfig = a.fullDepEntry ''
+    sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
+  '' ["minInit"];
       
   meta = {
     description = "A Lisp implementation aiming to be small and fast";
