@@ -4,7 +4,7 @@
 
 let
   pname = "dmtcp";
-  version = "1.1.3";
+  version = "1.1.4";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}_${version}.tar.gz";
-    sha256 = "0lx455hvxqa9rj83nms9mi6v5klswsrgj8hxhidhi9i2qkx88158";
+    sha256 = "0asqzndy4is285rmd1dw406ar3wkfaaw9ivyrmhx2w5lwf4gl7sk";
   };
 
   buildInputs = [ perl python ];

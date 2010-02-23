@@ -3,7 +3,7 @@
 # Perl and python are needed in order to run the test suite.
 
 let
-  revision = "495";
+  revision = "512";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = https://dmtcp.svn.sourceforge.net/svnroot/dmtcp/trunk;
     rev = revision;
-    sha256 = "25991cc079942c51fc3cf279b24ef481810cfa0305c8a92f215711d4308a40f7";
+    sha256 = "77d8fe7f39d661669a58c6bf789886a8b6c8186d68d2b95d8a8791efab2c03b7";
   };
 
   buildInputs = [ perl python ];
