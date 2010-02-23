@@ -11,6 +11,10 @@ stdenv.mkDerivation {
   patches = [
     # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
     ./max-long.patch
+
+    # Patch the ATerm header files so that they don't rely on
+    # SIZEOF_LONG, SIZEOF_INT and SIZEOF_VOID_P being set.
+    ./sizeof.patch
   ];
   
   doCheck = true;
