@@ -1,7 +1,5 @@
 { stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib }:
 
-assert stdenv.gcc.libc != null;
-
 let
 
   version = "1.8.1";
@@ -11,6 +9,15 @@ let
     sha256 = "0z4a5lbpgszc2vfg2hc30c1l3l1lbihinqx2sygxf9r5y9k7fj7g";
   };
 
+  preConfigure =
+    ''
+      substituteInPlace ./configure \
+        --replace " -static" "" \
+        ${stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
+          --replace /usr/include/iconv.h ${stdenv.gcc.libc}/include/iconv.h
+        ''}
+    '';
+
 in
 
 {
@@ -18,16 +25,9 @@ in
   server = stdenv.mkDerivation {
     name = "zabbix-${version}";
 
-    inherit src;
+    inherit src preConfigure;
 
     configureFlags = "--enable-agent --enable-server --with-pgsql --with-libcurl";
-
-    preConfigure =
-      ''
-        substituteInPlace ./configure \
-          --replace " -static" "" \
-          --replace /usr/include/iconv.h ${stdenv.gcc.libc}/include/iconv.h
-      '';
 
     buildInputs = [ pkgconfig postgresql curl openssl zlib ];
 
@@ -53,15 +53,9 @@ in
   agent = stdenv.mkDerivation {
     name = "zabbix-agent-${version}";
 
-    inherit src;
+    inherit src preConfigure;
 
     configureFlags = "--enable-agent";
-
-    preConfigure =
-      ''
-        substituteInPlace ./configure \
-          --replace /usr/include/iconv.h ${stdenv.gcc.libc}/include/iconv.h
-      '';
 
     meta = {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
