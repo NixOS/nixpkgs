@@ -12,6 +12,7 @@ let
 	["pythonSupport" "python"]
 	["perlSupport" "perl"]
 	["tclSupport" "tcl"]
+	["eclSupport" "ecl" "gmp" "mpfr"]
 	["true" "ncurses"]
 	["false" "libSM"]
 	];
@@ -22,6 +23,7 @@ let
 	"perlSupport" "-perl"
 	"tclSupport" "-tcl"
 	"ximSupport" "-xim"
+	"eclSupport" "-ecl"
 	];
 	configFlags = [
 	"true" " --enable-multibyte "
@@ -31,6 +33,7 @@ let
 	"perlSupport" " --enable-perlinterp "
 	"tclSupport" " --enable-tclinterp "
 	"ximSupport" " --enable-xim "
+	"eclSupport" " --enable-eclinterp "
 	];
 	buildInputsNames = args.lib.filter (x: (null!=getVal x)) 
 		(args.lib.uniqList {inputList = 
@@ -42,10 +45,10 @@ in
 args.stdenv.mkDerivation {
   name = args.lib.condConcat "vim-7.2" nameSuffixes check;
  
-  src = args.fetchurl {
+  src = args.lib.attrByPath ["src"] (args.fetchurl {
     url = ftp://ftp.vim.org/pub/vim/unix/vim-7.2.tar.bz2;
     sha256 = "11hxkb6r2550c4n13nwr0d8afvh30qjyr5c2hw16zgay43rb0kci";
-  };
+  }) args;
  
   inherit (args) ncurses;
 
