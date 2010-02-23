@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "aterm-2.5";
+  name = "aterm-2.5-r21238";
 
   src = fetchurl {
     url = http://buildfarm.st.ewi.tudelft.nl/releases/meta-environment/aterm-2.5pre21238-l2q7rg38/aterm-2.5.tar.gz;
