@@ -63,10 +63,19 @@ rec {
     kernelExtraConfig =
       ''
         MMC_ARMMMCI y
-        MMC_SDHCI y
+        #MMC_SDHCI y
         SERIO_AMBAKMI y
 
         AEABI y
+        RTC_CLASS y
+        RTC_DRV_PL031 y
+        PCI y
+        SCSI y
+        SCSI_DMA y
+        SCSI_ATA y
+        BLK_DEV_SD y
+        BLK_DEV_SR y
+        SCSI_SYM53C8XX_2 y
       '';
     uboot = null;
   };
