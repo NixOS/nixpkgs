@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mesa, tcl, tk, file}:
+{stdenv, fetchurl, mesa, tcl, tk, file, libXmu}:
 
 stdenv.mkDerivation rec {
   name = "opencascade-6.3.0";
@@ -7,11 +7,13 @@ stdenv.mkDerivation rec {
     md5 = "52778127974cb3141c2827f9d40d1f11";
   };
 
-  buildInputs = [ mesa tcl tk file ];
+  buildInputs = [ mesa tcl tk file libXmu ];
 
   preConfigure = ''
     cd ros
   '';
+
+  configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" ];
 
   postInstall = ''
     mv $out/inc $out/include

@@ -4623,6 +4623,7 @@ let
 
   opencascade = import ../development/libraries/opencascade {
     inherit fetchurl stdenv mesa tcl tk file;
+    inherit (xlibs) libXmu;
   };
 
   openct = import ../development/libraries/openct {
