@@ -1879,6 +1879,8 @@ let
     inherit fetchurl stdenv;
   };
 
+  ccl = builderDefsPackage ../development/compilers/ccl {};
+
   dylan = import ../development/compilers/gwydion-dylan {
     inherit fetchurl stdenv perl boehmgc yacc flex readline;
     dylan =
