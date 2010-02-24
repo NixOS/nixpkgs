@@ -867,6 +867,10 @@ let
     inherit (gnome) libsoup;
   };
 
+  gt5 = import ../tools/system/gt5 {
+    inherit fetchurl stdenv;
+  };
+
   gtkgnutella = import ../tools/networking/p2p/gtk-gnutella {
     inherit fetchurl stdenv pkgconfig libxml2;
     inherit (gtkLibs) glib gtk;
