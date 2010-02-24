@@ -31,7 +31,15 @@ rec {
       ''
         BLK_DEV_RAM y
         BLK_DEV_INITRD y
+        BLK_DEV_DM m
         MD y
+        REISERFS_FS m
+        EXT4_FS m
+        USB_STORAGE_CYPRESS_ATACB m
+
+        CONFIG_IP_PNP y
+        CONFIG_NFS_FS y
+        CONFIG_ROOT_NFS y
 
         # Fail to build
         DRM n
@@ -78,6 +86,11 @@ rec {
         BLK_DEV_SD y
         BLK_DEV_SR y
         SCSI_SYM53C8XX_2 y
+
+        TMPFS y
+        IPV6 m
+        REISERFS_FS m
+        EXT4_FS m
 
         IP_PNP y
         IP_PNP_DHCP y
