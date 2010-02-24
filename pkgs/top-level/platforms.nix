@@ -47,6 +47,8 @@ rec {
         ATM_HE n
         SCSI_ACARD n
         BLK_DEV_CMD640_ENHANCED n
+
+        IP_PNP y
       '';
     kernelTarget = "uImage";
     uboot = ubootSheevaplug;
@@ -76,6 +78,11 @@ rec {
         BLK_DEV_SD y
         BLK_DEV_SR y
         SCSI_SYM53C8XX_2 y
+
+        IP_PNP y
+        IP_PNP_DHCP y
+        IP_PNP_BOOTP y
+        ROOT_NFS y
       '';
     uboot = null;
   };
