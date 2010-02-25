@@ -1,9 +1,9 @@
 rec {
-   version="9.12.3";
-   name="ecl-9.12.3";
-   hash="10p6qncsx8jh3dwfv5l0rbqx1ib7mmvac2dxc6xvj38khkaykwpl";
-   url="http://downloads.sourceforge.net/ecls/files/ecls/9.12/ecl-${version}.tgz";
-   advertisedUrl="http://downloads.sourceforge.net/ecls/files/ecls/9.12/ecl-9.12.3.tgz";
+   version="10.2.1";
+   name="ecl-10.2.1";
+   hash="1y917ql2dlcg8di1bwhph7zmqaj3c9ywv1iwkdkkfq1ylbn939bj";
+   url="http://downloads.sourceforge.net/ecls/files/ecls/10.2/ecl-${version}.tgz";
+   advertisedUrl="http://downloads.sourceforge.net/ecls/files/ecls/10.2/ecl-10.2.1.tgz";
   
   
 }
