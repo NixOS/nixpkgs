@@ -60,7 +60,7 @@
   
   gpl2Plus = {
     shortName = "GPLv2+";
-    fullName = "GNU General Public License version 2 or higher";
+    fullName = "GNU General Public License version 2 or later";
     url = http://www.gnu.org/licenses/old-licenses/gpl-2.0.html;
   };
 
@@ -92,6 +92,18 @@
     shortName = "libtiff";
     fullName = "libtiff license";
     url = https://fedoraproject.org/wiki/Licensing/libtiff;
+  };
+  
+  lgpl2 = {
+    shortName = "LGPLv2";
+    fullName = "GNU Library General Public License version 2";
+    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html;
+  };
+  
+  lgpl2Plus = {
+    shortName = "LGPLv2+";
+    fullName = "GNU Library General Public License version 2 or later";
+    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html;
   };
   
   lgpl21 = {
