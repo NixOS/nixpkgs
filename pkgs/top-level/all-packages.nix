@@ -5927,7 +5927,7 @@ let
   linux_2_6_33 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.33.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_31
+      [ kernelPatches.fbcondecor_2_6_33
         kernelPatches.sec_perm_2_6_24
       ];
     inherit platform;
