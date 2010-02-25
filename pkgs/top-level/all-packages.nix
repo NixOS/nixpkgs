@@ -1498,10 +1498,6 @@ let
     inherit fetchurl stdenv expat;
   };
 
-  sawmill = import ../tools/networking/sawmill {
-    inherit fetchurl stdenv mysql zlib openssl;
-  };
-
   screen = import ../tools/misc/screen {
     inherit fetchurl stdenv ncurses;
   };
