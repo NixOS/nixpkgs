@@ -17,6 +17,7 @@ let
   platforms = import ./platforms.nix;
   systems = import ./systems.nix;
   customisation = import ./customisation.nix;
+  licenses = import ./licenses.nix;
 
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
