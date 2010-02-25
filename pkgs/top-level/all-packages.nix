@@ -1498,6 +1498,10 @@ let
     inherit fetchurl stdenv expat;
   };
 
+  sawmill = import ../tools/networking/sawmill {
+    inherit fetchurl stdenv mysql zlib openssl;
+  };
+
   screen = import ../tools/misc/screen {
     inherit fetchurl stdenv ncurses;
   };
@@ -1751,6 +1755,10 @@ let
 
   wdfs = import ../tools/filesystems/wdfs {
     inherit stdenv fetchurl neon fuse pkgconfig glib;
+  };
+
+  webalizer = import ../tools/networking/webalizer {
+    inherit stdenv fetchurl zlib libpng gd db4 geoip;
   };
 
   webdruid = builderDefsPackage ../tools/admin/webdruid {
@@ -6808,7 +6816,7 @@ let
 
   chrome = import ../applications/networking/browsers/chromium {
     inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng;
-    inherit (xlibs) libX11 libXext libXrender libXt ;
+    inherit (xlibs) libX11 libXext libXrender libXt libXScrnSaver;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
     libjpeg = libjpeg62;
@@ -8949,14 +8957,11 @@ let
   };
 
   # The bleeding edge.
-  nixUnstable = nix;
-  /*
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl aterm;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
-  */
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
