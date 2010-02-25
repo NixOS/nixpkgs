@@ -6,14 +6,14 @@
 
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
-let version = "0.8.1";
+let version = "0.8.1b";
 in
   stdenv.mkDerivation {
     name = "gnunet-${version}";
 
     src = fetchurl {
       url = "mirror://gnu/gnunet/GNUnet-${version}.tar.gz";
-      sha256 = "0makh52fsrsxg2qgfi1n68sh2hllqxj453g335m05wk05d7minl4";
+      sha256 = "0k6nrsxz5s52z6hlahb7d3sj1z0gidm79n04pf9j2ngfylp4v1bw";
     };
 
     buildInputs = [
