@@ -634,6 +634,13 @@ in {
     virtualboxGuestAdditions = linux;
   };
 
+  linuxPackages_2_6_33 = {
+    aufs = linux;
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;

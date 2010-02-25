@@ -5928,6 +5928,15 @@ let
     };
   };
 
+  linux_2_6_33 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.33.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools;
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_31
+        kernelPatches.sec_perm_2_6_24
+      ];
+    inherit platform;
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -6058,6 +6067,7 @@ let
   linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29);
   linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31);
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
+  linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33);
 
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
