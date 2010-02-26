@@ -221,7 +221,7 @@ pkgs.recurseIntoAttrs (rec {
 
   digikam = import ./extragear/digikam {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 lcms jasper libgphoto2 gettext;
-    inherit kdelibs kdepimlibs kdegraphics;
+    inherit kdelibs kdepimlibs kdegraphics kdeedu;
     inherit automoc4 phonon qimageblitz qca2 eigen;
   };
 
