@@ -14,8 +14,10 @@ rec {
   inherit buildInputs propagatedBuildInputs;
   configureFlags = [
     "--enable-threads"
-    "--enable-unicode"
-    ];
+    ]
+    ++
+    (a.lib.optional (! a.noUnicode) "--enable-unicode")
+    ;
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall" "fixEclConfig"];
