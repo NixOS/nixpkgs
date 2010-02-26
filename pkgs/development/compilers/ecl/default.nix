@@ -16,7 +16,8 @@ rec {
     "--enable-threads"
     ]
     ++
-    (a.lib.optional (! a.noUnicode) "--enable-unicode")
+    (a.lib.optional (! (a.lib.attrByPath ["noUnicode"] false a)) 
+      "--enable-unicode")
     ;
 
   /* doConfigure should be removed if not needed */
