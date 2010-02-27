@@ -13,5 +13,12 @@
       '';
     };
 
+    nixpkgs.platform = pkgs.lib.mkOption {
+      default = pkgs.platforms.pc;
+      description = ''
+        The platform for the Nix Packages collection.
+      '';
+    };
+
   };
 }

@@ -47,17 +47,20 @@ rec {
   pkgs =
     if pkgs_ != null
     then pkgs_
-    else import nixpkgs {
-      inherit system;
-      config =
-        (import ./eval-config.nix {
+    else import nixpkgs (
+      let
+        nixpkgsOptions = (import ./eval-config.nix {
           inherit system nixpkgs services extraArgs modules;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
           pkgs = import nixpkgs { inherit system; config = {}; };
-        }).optionDefinitions.nixpkgs.config;
-    };
+        }).optionDefinitions.nixpkgs;
+      in
+      {
+        inherit system;
+        inherit (nixpkgsOptions) config platform;
+      });
 
   # Optionally check wether all config values have corresponding
   # option declarations.
