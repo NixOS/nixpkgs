@@ -170,7 +170,7 @@ rec {
                     propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
 
                     crossConfig = cross.config;
-                });
+                } // (if args ? crossAttrs then args.crossAttrs else {}));
         in buildDrv // {
             inherit hostDrv buildDrv;
         };

@@ -44,7 +44,7 @@ let
         # stdenv and its shell.
         mkDerivation = attrs:
           (derivation (
-            (removeAttrs attrs ["meta" "passthru"])
+            (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
             // (let
                 buildInputs = if attrs ? buildInputs then attrs.buildInputs
                     else [];

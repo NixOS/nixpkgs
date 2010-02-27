@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses lzma ];
 
+  # !!! This should be set as usual attributes - we set them as
+  # crossAttrs only not to change the usual stdenv hash
+  # (in the normal stdenv, these get mapped all to buildNativeInputs,
+  #  but unfortunately in the opposite order, thus getting a new hash)
+  crossAttrs = {
+    buildNativeInputs = [ lzma ];
+    buildInputs = [ ncurses ];
+  };
+
   # Disabled because we don't have zdiff in the stdenv bootstrap.
   #doCheck = true;
 
