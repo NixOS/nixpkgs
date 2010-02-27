@@ -4,7 +4,7 @@ assert cross == null -> stdenv.isLinux;
 
 let
   version = "2.6.32.9";
-  kernelHeadersBaseConfig = if (cross != null) then
+  kernelHeadersBaseConfig = if (cross == null) then
       stdenv.platform.kernelHeadersBaseConfig
     else
       cross.platform.kernelHeadersBaseConfig;

@@ -1967,7 +1967,7 @@ let
     enableMultilib = false;
     # cross-building for ultrasparc in 4.4.3 will require disabling shared due to a gcc bug.
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41818
-    enableShared = if (crossSystem.platform.arch == "sparc64") then false else true;
+    enableShared = if (crossSystem.arch == "sparc64") then false else true;
     crossStageStatic = false;
   };
 
@@ -5844,7 +5844,6 @@ let
 
   linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl cross perl;
-    platform = cross.platform;
   });
 
   linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
