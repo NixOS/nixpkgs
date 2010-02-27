@@ -16,7 +16,7 @@
 
 let
   inputsFun = ubootName : [perl cpio]
-    ++ stdenv.lib.optional (ubootName != null) [ ubootChooser ubootName ];
+    ++ stdenv.lib.optional (ubootName != null) [ (ubootChooser ubootName) ];
   makeUInitrdFun = ubootName : (ubootName != null);
 in
 stdenv.mkDerivation {

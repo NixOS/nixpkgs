@@ -40,6 +40,7 @@
     kernelAutoModules = true;
     kernelTarget = "bzImage";
   }
+, ubootChooser ? null
 , ...
 }:
 
@@ -82,7 +83,7 @@ stdenv.mkDerivation {
   ignoreConfigErrors = (userModeLinux || platform.name != "pc");
 
   buildNativeInputs = [ perl mktemp ];
-  buildInputs = lib.optional (platform.uboot != null) platform.uboot;
+  buildInputs = lib.optional (platform.uboot != null) (ubootChooser platform.uboot);
 
   platformName = platform.name;
   kernelBaseConfig = platform.kernelBaseConfig;
