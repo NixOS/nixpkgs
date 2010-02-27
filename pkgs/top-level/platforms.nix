@@ -24,6 +24,7 @@ rec {
 
   sheevaplug = {
     name = "sheevaplug";
+    kernelHeadersBaseConfig = "kirkwood_defconfig";
     kernelBaseConfig = "kirkwood_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -66,6 +67,7 @@ rec {
 
   versatileARM = {
     name = "versatileARM";
+    kernelHeadersBaseConfig = "versatile_defconfig";
     kernelBaseConfig = "versatile_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -102,6 +104,7 @@ rec {
 
   integratorCP = {
     name = "integratorCP";
+    kernelHeadersBaseConfig = "integrator_defconfig";
     kernelBaseConfig = "integrator_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
