@@ -35,6 +35,7 @@
   config ? null
 
 , crossSystem ? null
+, platform ? (import ./platforms.nix).pc
 }:
 
 
@@ -180,7 +181,7 @@ let
     allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
   };
 
-  defaultStdenv = allStdenvs.stdenv;
+  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
 
   stdenvCross = makeStdenvCross defaultStdenv crossSystem (binutilsCross crossSystem)
     (gccCrossStageFinal crossSystem);
@@ -291,7 +292,7 @@ let
   };
 
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
-    inherit stdenv perl cpio contents platform;
+    inherit stdenv perl cpio contents ubootChooser;
   };
 
   makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
@@ -326,11 +327,7 @@ let
     inherit pkgs lib;
   };
 
-  platforms = import ./platforms.nix {
-    inherit system pkgs;
-  };
-
-  platform = platforms.pc;
+  platforms = import ./platforms.nix;
 
   ### TOOLS
 
@@ -5845,7 +5842,8 @@ let
   linuxHeaders = linuxHeaders_2_6_28;
 
   linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
-    inherit stdenv fetchurl cross perl platform;
+    inherit stdenv fetchurl cross perl;
+    platform = cross.platform;
   });
 
   linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
@@ -5903,12 +5901,11 @@ let
   };
 
   linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
       ];
-    inherit platform;
   };
 
   linux_2_6_32_zen4 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.32-zen4.nix) {
@@ -5928,12 +5925,11 @@ let
   };
 
   linux_2_6_33 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.33.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_33
         kernelPatches.sec_perm_2_6_24
       ];
-    inherit platform;
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
@@ -6347,7 +6343,11 @@ let
     inherit (xlibs) libX11 xproto;
   };*/
 
-  uboot = makeOverridable (import ../misc/uboot) {
+  ubootChooser = name : if (name == "upstream") then ubootUpstream
+    else if (name == "sheevaplug") then ubootSheevaplug
+    else throw "Unknown uboot";
+
+  ubootUpstream  = makeOverridable (import ../misc/uboot) {
     inherit fetchurl stdenv unzip platform;
   };
 

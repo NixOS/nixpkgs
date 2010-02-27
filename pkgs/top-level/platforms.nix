@@ -1,7 +1,5 @@
-{ system, pkgs}:
-with pkgs;
 rec {
-  pc = assert system == "i686-linux" || system == "x86_64-linux"; {
+  pc = {
     name = "pc";
     uboot = null;
     kernelBaseConfig = "defconfig";
@@ -60,7 +58,7 @@ rec {
         IP_PNP y
       '';
     kernelTarget = "uImage";
-    uboot = ubootSheevaplug;
+    uboot = "sheevaplug";
     # Only for uboot = uboot :
     ubootConfig = "sheevaplug_config";
   };
@@ -133,7 +131,7 @@ rec {
   integratorCPuboot = integratorCP // {
     name = "integratorCPuboot";
     kernelTarget = "uImage";
-    uboot = uboot;
+    uboot = "upstream";
     ubootConfig = "integratorcp_config";
   };
 }
