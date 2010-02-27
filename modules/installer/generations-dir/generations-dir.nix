@@ -42,8 +42,7 @@ let
   };
 
   # Temporary check, for nixos to cope both with nixpkgs stdenv-updates and trunk
-  platform = (if pkgs ? platform then pkgs.platform else
-    { name = "pc"; uboot = null; });
+  platform = pkgs.stdenv.platform;
 in
 {
   require = [
@@ -58,9 +57,6 @@ in
       menuBuilder = generationsDirBuilder;
     };
     boot.loader.id = "generationsDir";
-    boot.loader.kernelFile = (
-       if (platform.name == "sheevaplug") then "uImage"
-       else if (platform.name == "versatileARM") then "zImage"
-       else "bzImage");
+    boot.loader.kernelFile = platform.kernelTarget;
   };
 }

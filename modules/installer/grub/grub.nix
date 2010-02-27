@@ -149,7 +149,7 @@ in
     # Common attribute for boot loaders so only one of them can be
     # set at once.
     system.boot.loader.id = "grub";
-    system.boot.loader.kernelFile = "bzImage";
+    system.boot.loader.kernelFile = pkgs.stdenv.platform.kernelTarget;
 
     environment.systemPackages = mkIf config.boot.loader.grub.enable [ grub ];
 
