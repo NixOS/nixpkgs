@@ -1,8 +1,14 @@
-{stdenv, fetchurl, perl, cross ? null, platform}:
+{stdenv, fetchurl, perl, cross ? null}:
 
 assert cross == null -> stdenv.isLinux;
 
-let version = "2.6.32.9"; in
+let
+  version = "2.6.32.9";
+  kernelHeadersBaseConfig = if (cross != null) then
+      stdenv.platform.kernelHeadersBaseConfig
+    else
+      cross.platform.kernelHeadersBaseConfig;
+in
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
@@ -15,7 +21,7 @@ stdenv.mkDerivation {
   targetConfig = if (cross != null) then cross.config else null;
 
   platform =
-    if cross != null then platform.kernelArch else
+    if cross != null then cross.platform.kernelArch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
@@ -33,7 +39,7 @@ stdenv.mkDerivation {
     if test -n "$targetConfig"; then
        export ARCH=$platform
     fi
-    make ${platform.kernelHeadersBaseConfig}
+    make ${kernelHeadersBaseConfig}
     make mrproper headers_check
   '';
 
