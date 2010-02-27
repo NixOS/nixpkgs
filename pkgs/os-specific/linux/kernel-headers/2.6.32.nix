@@ -1,21 +1,21 @@
-{stdenv, fetchurl, perl, cross ? null}:
+{stdenv, fetchurl, perl, cross ? null, platform}:
 
-assert stdenv.isLinux;
+assert cross == null -> stdenv.isLinux;
 
-let version = "2.6.32.4"; in
+let version = "2.6.32.9"; in
 
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-    sha256 = "1n8pj05sazxv1dgi68q61lrvrnzvvx61qqw6kx80vqizqanz97z1";
+    sha256 = "1g6hs7j5kmifb3phbnckdmrnxd0cpqrijnnbry86z26npsh9my7l";
   };
 
   targetConfig = if (cross != null) then cross.config else null;
 
   platform =
-    if cross != null then cross.arch else
+    if cross != null then platform.kernelArch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
@@ -33,6 +33,7 @@ stdenv.mkDerivation {
     if test -n "$targetConfig"; then
        export ARCH=$platform
     fi
+    make ${platform.kernelHeadersBaseConfig}
     make mrproper headers_check
   '';
 

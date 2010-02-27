@@ -57,8 +57,11 @@ let version = "4.4.3";
 
     javaAwtGtk = langJava && gtk != null;
 
+    withCPU = if cross ? cpu then " --with-cpu=${cross.cpu}" else "";
+
     crossConfigureFlags =
       "--target=${cross.config}" +
+      withCPU +
       (if crossStageStatic then
         " --disable-libssp --disable-nls" +
         " --without-headers" +

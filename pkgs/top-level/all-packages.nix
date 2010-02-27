@@ -1967,7 +1967,9 @@ let
     binutilsCross = binutilsCross cross;
     libcCross = libcCross cross;
     profiledCompiler = false;
-    enableMultilib = true;
+    enableMultilib = false;
+    # cross-building for ultrasparc in 4.4.3 will require disabling shared due to a gcc bug.
+    # enableShared = false;
     crossStageStatic = false;
   };
 
@@ -1976,6 +1978,7 @@ let
         crossStageStatic = true;
         langCC = false;
         libcCross = null;
+        enableShared = true;
     });
     libc = null;
     binutils = binutilsCross cross;
@@ -5841,8 +5844,8 @@ let
 
   linuxHeaders = linuxHeaders_2_6_28;
 
-  linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.28.nix {
-    inherit stdenv fetchurl cross perl;
+  linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
+    inherit stdenv fetchurl cross perl platform;
   });
 
   linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {

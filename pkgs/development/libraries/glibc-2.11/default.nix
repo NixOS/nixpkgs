@@ -46,6 +46,8 @@ in
         libc_cv_forced_unwind=yes
         libc_cv_c_cleanup=yes
         libc_cv_gnu89_inline=yes
+        # Only due to a problem in gcc configure scripts:
+        libc_cv_sparc64_tls=${if cross.withTLS then "yes" else "no"}
         EOF
         export BUILD_CC=gcc
         export CC="$crossConfig-gcc"

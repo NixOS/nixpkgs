@@ -67,9 +67,9 @@ stdenv.mkDerivation ({
      then "--enable-profile"
      else "--disable-profile")
   ] ++ stdenv.lib.optionals (cross != null) [
-    "--with-tls"
+    (if cross.withTLS then "--with-tls" else "--without-tls")
+    (if cross.float == "float" then "--without-fp" else "--with-fp")
     "--enable-kernel=2.6.0"
-    "--without-fp"
     "--with-__thread"
   ] ++ stdenv.lib.optionals (stdenv.system == "armv5tel-linux") [
     "--host=arm-linux-gnueabi"

@@ -708,6 +708,7 @@ let
       bigEndian = false;
       arch = "arm";
       float = "soft";
+      withTLS = true;
   };
   nativePlatforms = linux;
 in {
