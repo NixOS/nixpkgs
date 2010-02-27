@@ -709,7 +709,7 @@ let
       arch = "arm";
       float = "soft";
       withTLS = true;
-      platform = pkgs.sheevaplug;
+      platform = pkgs.platforms.sheevaplug;
   };
   nativePlatforms = linux;
 in {
