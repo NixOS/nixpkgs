@@ -205,13 +205,7 @@ import ./generic.nix (
     };
 
     config = configWithPlatform stdenv.platform;
-
-    platform = stdenv.platform;
-
-    crossAttrs = {
-      config = configWithPlatform stdenv.cross.platform;
-      platform = stdenv.cross.platform;
-    };
+    configCross = configWithPlatform stdenv.cross.platform;
 
     features.iwlwifi = true;
   }

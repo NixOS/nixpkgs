@@ -9,6 +9,9 @@
 , # The kernel configuration.
   config
 
+, # The kernel configuration when cross building.
+  configCross ? {}
+
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
   # indicates a kernel that provides Intel wireless support.  Used in
@@ -33,13 +36,6 @@
 
 , preConfigure ? ""
 , extraMeta ? {}
-, platform ? {
-    name = "pc";
-    uboot = null;
-    kernelBaseConfig = "defconfig";
-    kernelAutoModules = true;
-    kernelTarget = "bzImage";
-  }
 , ubootChooser ? null
 , ...
 }:
@@ -47,11 +43,17 @@
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
   || stdenv.system == "armv5tel-linux";
 
-assert platform.name == "sheevaplug" -> platform.uboot != null;
+assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 
 let
 
   lib = stdenv.lib;
+
+  kernelConfigFun = baseConfig:
+    let
+      configFromPatches =
+        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
+    in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
 in
 
@@ -69,33 +71,48 @@ stdenv.mkDerivation {
   generateConfig = ./generate-config.pl;
 
   inherit preConfigure src module_init_tools localVersion;
-  autoModules = platform.kernelAutoModules;
 
   patches = map (p: p.patch) kernelPatches;
 
-  kernelConfig =
-    let
-      configFromPatches =
-        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
-    in lib.concatStringsSep "\n" ([config] ++ configFromPatches);
+  kernelConfig = kernelConfigFun config;
 
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
-  ignoreConfigErrors = (userModeLinux || platform.name != "pc");
+  ignoreConfigErrors = (userModeLinux || stdenv.platform.name != "pc");
 
   buildNativeInputs = [ perl mktemp ];
-  buildInputs = lib.optional (platform.uboot != null) (ubootChooser platform.uboot);
+  buildInputs = lib.optional (stdenv.platform.uboot != null)
+    (ubootChooser stdenv.platform.uboot);
 
-  platformName = platform.name;
-  kernelBaseConfig = platform.kernelBaseConfig;
-  kernelTarget = platform.kernelTarget;
+  platformName = stdenv.platform.name;
+  kernelBaseConfig = stdenv.platform.kernelBaseConfig;
+  kernelTarget = stdenv.platform.kernelTarget;
+  autoModules = stdenv.platform.kernelAutoModules;
   
   arch =
     if xen then "xen" else
     if userModeLinux then "um" else
-    if platform ? kernelArch then platform.kernelArch else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     abort "Platform ${stdenv.system} is not supported.";
+
+  crossAttrs = let
+      cp = stdenv.cross.platform;
+    in
+      assert cp.name == "sheevaplug" -> cp.uboot != null;
+    {
+      arch = cp.kernelArch;
+      platformName = cp.name;
+      kernelBaseConfig = cp.kernelBaseConfig;
+      kernelTarget = cp.kernelTarget;
+      autoModules = cp.kernelAutoModules;
+
+      # Just ignore all options that don't apply (We are lazy).
+      ignoreConfigErrors = true;
+
+      kernelConfig = kernelConfigFun configCross;
+
+      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot);
+    };
 
   meta = {
     description =
