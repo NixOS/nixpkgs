@@ -709,10 +709,11 @@ let
       arch = "arm";
       float = "soft";
       withTLS = true;
+      platform = pkgs.sheevaplug;
   };
   nativePlatforms = linux;
 in {
-  crossArmLinux = mapTestOnCross crossSystem (rec {
+  crossSheevaplugLinux = mapTestOnCross crossSystem (rec {
     bison = nativePlatforms;
     tightvnc = nativePlatforms;
     #openoffice = nativePlatforms;
@@ -721,5 +722,79 @@ in {
     xorg = {
       #xorgserver = nativePlatforms;
     };
+    linuxPackages_2_6_32.kernel = linux;
+    linuxPackages_2_6_33.kernel = linux;
+    gdbCross = nativePlatforms;
+  });
+}) // (
+
+/* Test some cross builds to the mipsel */
+let
+  crossSystem = {
+    config = "mipsel-unknown-linux";  
+    bigEndian = false;
+    arch = "mips";
+    float = "soft";
+    withTLS = true;
+    platform = {
+      name = "malta";
+      kernelBaseConfig = "malta_defconfig";
+      kernelHeadersBaseConfig = "malta_defconfig";
+      uboot = null;
+      kernelArch = "mips";
+      kernelAutoModules = false;
+      kernelTarget = "vmlinux.bin";
+    };
+  };
+  nativePlatforms = linux;
+in {
+  crossMipselLinux = mapTestOnCross crossSystem (rec {
+    bison = nativePlatforms;
+    tightvnc = nativePlatforms;
+    #openoffice = nativePlatforms;
+    wxGTK = nativePlatforms;
+    #firefox = nativePlatforms;
+    xorg = {
+      #xorgserver = nativePlatforms;
+    };
+    linuxPackages_2_6_32.kernel = linux;
+    linuxPackages_2_6_33.kernel = linux;
+    gdbCross = nativePlatforms;
+  });
+}) // (
+
+/* Test some cross builds to the ultrasparc */
+let
+  crossSystem = {
+    config = "sparc64-unknown-linux";  
+    bigEndian = true;
+    arch = "sparc64";
+    float = "hard";
+    withTLS = true;
+    cpu = "ultrasparc";
+    platform = {
+        name = "ultrasparc";
+        kernelHeadersBaseConfig = "sparc64_defconfig";
+        kernelBaseConfig = "sparc64_defconfig";
+        kernelArch = "sparc";
+        kernelAutoModules = false;
+        kernelTarget = "zImage";
+        uboot = null;
+    };
+  };
+  nativePlatforms = linux;
+in {
+  crossUltraSparcLinux = mapTestOnCross crossSystem (rec {
+    bison = nativePlatforms;
+    tightvnc = nativePlatforms;
+    #openoffice = nativePlatforms;
+    wxGTK = nativePlatforms;
+    #firefox = nativePlatforms;
+    xorg = {
+      #xorgserver = nativePlatforms;
+    };
+    linuxPackages_2_6_32.kernel = linux;
+    linuxPackages_2_6_33.kernel = linux;
+    gdbCross = nativePlatforms;
   });
 })
