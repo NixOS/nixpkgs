@@ -6787,7 +6787,7 @@ let
     sip = sip_python26;
     pil = pil_python26;
     popplerQt4 = popplerQt45;
-    inherit (python26Packages) mechanize lxml dateutil;
+    inherit (python26Packages) mechanize lxml dateutil cssutils;
   };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {

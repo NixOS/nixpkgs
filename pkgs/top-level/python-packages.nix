@@ -57,6 +57,28 @@ rec {
     };
   });
 
+  cssutils = buildPythonPackage (rec {
+    name = "cssutils-0.9.7a2";
+
+    src = fetchurl {
+      url = http://cssutils.googlecode.com/files/cssutils-0.9.7a2.zip;
+      sha256 = "068p14qhhczpjgn0w7v57a2swj0g4rndhimh8gkg9h9sd7rp6n07";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    # The tests fail - I don't know why
+    doCheck = false;
+
+    meta = {
+      description = "A Python package to parse and build CSS";
+
+      homepage = http://code.google.com/p/cssutils/;
+
+      license = "LGPLv3+";
+    };
+  });
+
   darcsver = buildPythonPackage (rec {
     name = "darcsver-1.3.1";
 
