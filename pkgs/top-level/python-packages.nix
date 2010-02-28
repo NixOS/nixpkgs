@@ -34,6 +34,26 @@ rec {
     };
   });
 
+  beautifulsoap = buildPythonPackage (rec {
+    name = "beautifulsoap-3.0.8";
+
+    src = fetchurl {
+      url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.tar.gz";
+      sha256 = "1gasiy5lwbhsxw27g36d88n36xbj52434klisvqhljgckd4xqcy7";
+    };
+
+    # No tests implemented
+    doCheck = false;
+
+    meta = {
+      homepage = http://www.crummy.com/software/BeautifulSoup/;
+
+      license = "bsd";
+
+      description = "Undemanding HTML/XML parser";
+    };
+  });
+
   boto = buildPythonPackage (rec {
     name = "boto-1.9b";
 
