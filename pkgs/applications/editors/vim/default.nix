@@ -13,6 +13,16 @@ let
 	["perlSupport" "perl"]
 	["tclSupport" "tcl"]
 	["eclSupport" "ecl" "gmp" "mpfr"]
+	["luaSupport" "lua"]
+
+	# Currently causes problems
+	["mzSchemeSupport" "pltScheme"]
+
+	["perlSupport" "perl"]
+	["rubySupport" "ruby"]
+	["hangulSupport"]
+	["sniffSupport"]
+	["gettextSupport" "gettext"]
 	["true" "ncurses"]
 	["false" "libSM"]
 	];
@@ -24,6 +34,10 @@ let
 	"tclSupport" "-tcl"
 	"ximSupport" "-xim"
 	"eclSupport" "-ecl"
+	"luaSupport" "-lua"
+	"perlSupport" "-perl"
+	"rubySupport" "-ruby"
+	"mzSchemeSupport" "-mzscheme"
 	];
 	configFlags = [
 	"true" " --enable-multibyte "
@@ -34,6 +48,13 @@ let
 	"tclSupport" " --enable-tclinterp "
 	"ximSupport" " --enable-xim "
 	"eclSupport" " --enable-eclinterp "
+	"hangulSupport" " --enable-hangulinput "
+	"perlSupport" " --enable-perlinterp "
+	"luaSupport" " --enable-luainterp --with-lua-prefix=${args.lua} "
+	"rubySupport" " --enable-rubyinterp "
+	"sniffSupport" " --enable-sniff "
+	"mzSchemeSupport" " --enable-mzschemeinterp "
+	"gettextSupport" " --enable-nls "
 	];
 	buildInputsNames = args.lib.filter (x: (null!=getVal x)) 
 		(args.lib.uniqList {inputList = 
