@@ -88,11 +88,14 @@ stdenv.mkDerivation {
   kernelTarget = stdenv.platform.kernelTarget;
   autoModules = stdenv.platform.kernelAutoModules;
   
+  # Should we trust platform.kernelArch? We can only do
+  # that once we differentiate i686/x86_64 in platforms.
   arch =
     if xen then "xen" else
     if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
+    if stdenv.system == "armv5tel-linux" then "arm" else
     abort "Platform ${stdenv.system} is not supported.";
 
   crossAttrs = let
