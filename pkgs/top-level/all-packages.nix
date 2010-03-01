@@ -5295,10 +5295,6 @@ let
     inherit (gnome) libglade;
   };
 
-  pyopengl = import ../development/python-modules/pyopengl {
-    inherit fetchurl stdenv setuptools mesa freeglut pil python;
-  };
-
   pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
     inherit python openssl;
   };
@@ -7481,10 +7477,12 @@ let
 
   # Impressive, formerly known as "KeyJNote".
   impressive = import ../applications/office/impressive {
-    inherit fetchurl stdenv xpdf pil pyopengl pygame makeWrapper lib python;
+    inherit fetchurl stdenv xpdf pil pygame makeWrapper lib python;
 
     # XXX These are the PyOpenGL dependencies, which we need here.
     inherit setuptools mesa freeglut;
+
+    inherit (pythonPackages) pyopengl;
   };
 
   inkscape = import ../applications/graphics/inkscape {
