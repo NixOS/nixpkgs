@@ -3,6 +3,9 @@
 let
   version = "3.5.1";
   date    = "200909170800";
+  isGCJ   = stdenv.lib.strings.substring 0 3 gcj.name == "gcj";
+  javaExec  = if isGCJ then "gij" else "java";
+  javaFlags = if isGCJ then "--cp" else "-cp";
 in
   stdenv.mkDerivation rec {
     name = "ecj-${version}";
@@ -30,7 +33,7 @@ in
       mkdir -pv "$out/bin"
       cat > "$out/bin/ecj" <<EOF
 #! /bin/sh
-exec "$(type -P gij)" --cp "$out/lib/java/ecj.jar" org.eclipse.jdt.internal.compiler.batch.Main \$@
+exec "$(type -P ${javaExec})" ${javaFlags} "$out/lib/java/ecj.jar" org.eclipse.jdt.internal.compiler.batch.Main \$@
 EOF
 
       chmod u+x "$out/bin/ecj"
