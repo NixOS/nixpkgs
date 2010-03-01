@@ -1,22 +1,16 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, utillinuxng }:
+{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline
+, utillinuxng, xz }:
 
 stdenv.mkDerivation rec {
-  name = "parted-2.1";
+  name = "parted-2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/parted/${name}.tar.gz";
-    sha256 = "1jc49lv0mglqdvrrh06vfqqmpa0cxczzmd2by6mlpxpblpgrb22a";
+    url = "mirror://gnu/parted/${name}.tar.xz";
+    sha256 = "13gxq542lsm5jfq0kmrwgk4h61pcxy8s6rkqlw9qirqazsk9q9ik";
   };
 
-  buildInputs = [ libuuid gettext readline libuuid devicemapper ];
+  buildInputs = [ xz libuuid gettext readline libuuid devicemapper ];
 
-  # XXX: For some reason our libreadline.so doesn't have libncurses as
-  # NEEDED and `configure' links with `-Wl,--as-needed' so when
-  # `AC_CHECK_LIB' tries to link with `-lreadline -lncurses' the latter is
-  # removed, leaving `libreadline' with unresolved references.
-  #
-  # Remove the `preConfigure' hack below when Readline is fixed.
-  preConfigure = ''export gl_cv_ignore_unused_libraries=""'';
   configureFlags = "--with-readline";
 
   doCheck = true;
@@ -45,7 +39,7 @@ stdenv.mkDerivation rec {
       stdenv.lib.maintainers.ludo
     ];
 
-    # GNU Parted requires libuuid, which is part of e2fsprogs.
+    # GNU Parted requires libuuid, which is part of util-linux-ng.
     platforms = stdenv.lib.platforms.linux;
   };
 }
