@@ -5377,9 +5377,7 @@ let
 
   twisted = pythonPackages.twisted;
 
-  ZopeInterface = import ../development/python-modules/ZopeInterface {
-    inherit fetchurl stdenv python;
-  };
+  ZopeInterface = pythonPackages.zopeInterface;
 
   zope = import ../development/python-modules/zope {
     inherit fetchurl stdenv;

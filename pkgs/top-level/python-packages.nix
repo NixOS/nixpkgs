@@ -641,7 +641,7 @@ rec {
       sha256 = "1c6zplisjdnjzkfs0ld3a0f7m7xbjgx5rcwsdw5i1xiibsq2nq70";
     };
 
-    propagatedBuildInputs = [ pkgs.ZopeInterface ];
+    propagatedBuildInputs = [ zopeInterface ];
 
     # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
@@ -717,4 +717,19 @@ rec {
     };
   });
 
+  zopeInterface = buildPythonPackage {
+    name = "zope-interface-3.3.0";
+    src = fetchurl {
+      url = http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-3.3.0.tar.gz;
+      sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Zope.Interface";
+      homepage = http://zope.org/Products/ZopeInterface;
+      license = "ZPL";
+    };
+  };
 }
