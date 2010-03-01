@@ -43,8 +43,7 @@ in
          --prefix PYTHONPATH ":" \
                   ${lib.concatStringsSep ":"
                      (map (path:
-                            path + "/lib/python2.5/site-packages:" +
-                            path + "/lib/python2.4/site-packages")
+                            path + "/lib/${python.libPrefix}/site-packages")
                           [ pil pyopengl pygame setuptools ])} \
          --prefix LIBRARY_PATH ":" "${mesa}/lib:${freeglut}/lib"
     '';
@@ -73,5 +72,8 @@ in
       homepage = http://impressive.sourceforge.net/;
 
       license = "GPLv2";
+
+      maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = stdenv.lib.platforms.mesaPlatforms;
     };
   }
