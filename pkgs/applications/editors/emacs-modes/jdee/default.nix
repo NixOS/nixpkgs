@@ -9,11 +9,12 @@ in
     # Last release is too old, so use SVN.
     # See http://www.emacswiki.org/emacs/JavaDevelopmentEnvironment .
     src = fetchsvn {
-      # Looks like they're not sure whether to put one or two `e'...
-      url = "https://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jde";
+      url = "https://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jdee";
       rev = revision;
-      sha256 = "0pjkbr1srx2m428xkky1csf97fr5219prs4dif7njlydyrwp0gnn";
+      sha256 = "1qj5cv74dp6nf6060jyvnlcbmc4sz8a09806gwa1zfiwz6mm9zrs";
     };
+
+    patchFlags = "-p1 --ignore-whitespace";
 
     patches = [
       ./build-properties.patch
@@ -91,5 +92,6 @@ in
       license = "GPLv2+";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     };
   }
