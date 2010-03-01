@@ -1,5 +1,7 @@
 {stdenv, fetchurl, unzip, platform}:
 
+# This does not cover the case for cross-building, but we need some filtering
+# for the normal stdenv, in order to build the nixpkgs tarball
 assert (stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux")
   || (stdenv ? cross);
 
@@ -14,20 +16,22 @@ stdenv.mkDerivation {
   # patches = [ ./gas220.patch ];
 
   # Remove the cross compiler prefix, and add reiserfs support
-  configurePhase = ''
-    make mrproper
-    make ${platform.ubootConfig} NBOOT=1 LE=1
-    sed -i /CROSS_COMPILE/d include/config.mk
-  '';
+  configurePhase = assert (platform ? ubootConfig);
+    ''
+      make mrproper
+      make ${platform.ubootConfig} NBOOT=1 LE=1
+      sed -i /CROSS_COMPILE/d include/config.mk
+    '';
 
-  buildPhase = ''
-    unset src
-    if test -z "$crossConfig"; then
-        make clean all
-    else
-        make clean all ARCH=${platform.kernelArch} CROSS_COMPILE=$crossConfig-
-    fi
-  '';
+  buildPhase = assert (platform ? kernelArch);
+    ''
+      unset src
+      if test -z "$crossConfig"; then
+          make clean all
+      else
+          make clean all ARCH=${platform.kernelArch} CROSS_COMPILE=$crossConfig-
+      fi
+    '';
 
   buildNativeInputs = [ unzip ];
 
