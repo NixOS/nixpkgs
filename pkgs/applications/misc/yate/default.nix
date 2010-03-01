@@ -8,7 +8,7 @@ composableDerivation {} ( fixed : {
 
   src = fetchurl {
     url = http://yate.null.ro/tarballs/yate2/yate2.tar.gz;
-    sha256 = "0nniicfal3nqkz9swzrxsmyq04cy6xd2dwrngwbjzv0ra5x2p415";
+    sha256 = "1z1rvzcw6449cvczig1dkh6rlp6f8zv649sk0ldz38mwkyd07257";
   };
 
   # TODO zaptel ? postgres ?
