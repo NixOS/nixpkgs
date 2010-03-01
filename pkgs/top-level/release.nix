@@ -99,7 +99,7 @@ let
   /* Platform groups for specific kinds of applications. */
   x11Supported = linux;
   gtkSupported = linux;
-  ghcSupported = linux ++ darwin;
+  ghcSupported = linux ++ ["i686-darwin"] ;
 
 in {
 
