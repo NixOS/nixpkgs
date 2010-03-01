@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, expat }:
 
-if stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux" && stdenv.system != "i686-darwin" && stdenv.system != "i686-freebsd" then
+if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
