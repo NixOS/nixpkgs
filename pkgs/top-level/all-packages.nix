@@ -6344,7 +6344,7 @@ let
     else throw "Unknown uboot";
 
   ubootUpstream  = makeOverridable (import ../misc/uboot) {
-    inherit fetchurl stdenv unzip platform;
+    inherit fetchurl stdenv unzip;
   };
 
   ubootSheevaplug = makeOverridable (import ../misc/uboot/sheevaplug.nix) {
