@@ -4015,6 +4015,11 @@ let
     inherit stdenv fetchurl gettext python;
   };
 
+  itk = import ../development/libraries/itk {
+    inherit stdenv fetchurl cmake libuuid;
+    inherit (xlibs) libX11;
+  };
+
   jamp = builderDefsPackage ../games/jamp {
     inherit mesa SDL SDL_image SDL_mixer;
   };
@@ -7946,6 +7951,11 @@ let
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     qt = qt3;
+  };
+
+  seg3d = import ../applications/graphics/seg3d {
+    inherit fetchurl stdenv cmake wxGTK itk mesa zlib;
+    inherit (xlibs) libXft libXext libXi libXmu;
   };
 
   skype_linux = import ../applications/networking/skype {
