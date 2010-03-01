@@ -1349,15 +1349,16 @@ rec {
   };
 
   ImageExifTool = buildPerlPackage rec {
-      name = "Image-ExifTool-7.83";
+      name = "Image-ExifTool-8.12";
 
       src = fetchurl {
         url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-        sha256 = "1g3ah646w242649sy77wjff3ykjclihv8zvbs0ch1nwfbqprrbl2";
+        sha256 = "1s95f6cyl4cwyymmzsn49llza2hggh9lb3fqdpa83k6vbrzs86dh";
       };
 
       meta = {
         description = "ExifTool, a tool to read, write and edit EXIF meta information";
+        homepage = http://www.sno.phy.queensu.ca/~phil/exiftool/;
 
         longDescription = ''
           ExifTool is a platform-independent Perl library plus a command-line
@@ -1371,7 +1372,7 @@ rec {
           Sigma/Foveon and Sony.
         '';
 
-        licenses = [ "GPLv1+" "Artistic" ];
+        licenses = [ "GPLv1+" /* or */ "Artistic" ];
 
         maintainers = [ stdenv.lib.maintainers.ludo ];
       };
