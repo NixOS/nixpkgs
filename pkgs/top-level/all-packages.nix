@@ -2743,9 +2743,11 @@ let
     inherit getConfig;
   };
 
-  ecj = import ../development/eclipse/ecj {
+  ecj = makeOverridable (import ../development/eclipse/ecj) {
     inherit fetchurl stdenv unzip ant gcj;
   };
+
+  ecjDarwin = ecj.override { gcj = openjdkDarwin; ant = antDarwin; };
 
   jdtsdk = import ../development/eclipse/jdt-sdk {
     inherit fetchurl stdenv unzip;
