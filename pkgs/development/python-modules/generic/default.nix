@@ -15,9 +15,9 @@ let
     recursiveBuildInputs =
       pkg:
         [ pkg ] ++
-        (if pkg ? propagatedBuildInputs
+        (if pkg ? propagatedBuildNativeInputs
          then lib.concatLists (map recursiveBuildInputs
-                                   pkg.propagatedBuildInputs)
+                                   pkg.propagatedBuildNativeInputs)
          else []);
 
 in
