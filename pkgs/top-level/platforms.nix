@@ -7,6 +7,9 @@ rec {
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
     kernelTarget = "bzImage";
+    # Currently ignored - it should be set according to 'system' once it is
+    # not ignored. This is for stdenv-updates.
+    kernelArch = "i386";
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).
