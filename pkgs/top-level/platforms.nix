@@ -2,6 +2,7 @@ rec {
   pc = {
     name = "pc";
     uboot = null;
+    kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
