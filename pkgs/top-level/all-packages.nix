@@ -3976,6 +3976,10 @@ let
     inherit fetchurl stdenv pkgconfig cairo expat;
   };
 
+  hydraAntLogger = import ../development/libraries/java/hydra-ant-logger {
+    inherit fetchsvn stdenv ant;
+  };
+
   icu = import ../development/libraries/icu {
     inherit fetchurl stdenv;
   };
