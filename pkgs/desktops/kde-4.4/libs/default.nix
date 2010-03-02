@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "kdelibs-4.4.0";
+  name = "kdelibs-4.4.1";
   
   src = fetchurl {
-    url = mirror://kde/stable/4.4.0/src/kdelibs-4.4.0.tar.bz2;
-    sha256 = "1nf829k9mcnqf1jfsfjgb1dw6s0kh02sixxjcgmapccmmqx1p5ak";
+    url = mirror://kde/stable/4.4.1/src/kdelibs-4.4.1.tar.bz2;
+    sha256 = "1gw6xyfbq1scwxh4xk0k16rs24gs9067f8nnkgw4f7a1aq3xjvlv";
   };
   
   # The same way as cmake needed a patch for findqt4 to work properly under nix, 

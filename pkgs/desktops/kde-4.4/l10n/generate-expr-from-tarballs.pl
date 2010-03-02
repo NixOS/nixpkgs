@@ -2,7 +2,7 @@
 
 # Typical command to generate the list of tarballs:
 
-# export i="mirror://kde/stable/4.4.0/src/kde-l10n/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs.list
+# export i="mirror://kde/stable/4.4.1/src/kde-l10n/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs.list
 # manually update extra.list
 # then run: cat tarballs-7.4.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
 
@@ -63,7 +63,7 @@ print OUT <<EOF;
 let
 
   deriv = attr : stdenv.mkDerivation {
-    name = "kde-l10n-\${attr.lang}-4.4.0";
+    name = "kde-l10n-\${attr.lang}-4.4.1";
     src = fetchurl {
       url = attr.url;
       sha256 = attr.sha256;

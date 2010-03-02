@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdemultimedia-4.4.0";
+  name = "kdemultimedia-4.4.1";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.0/src/kdemultimedia-4.4.0.tar.bz2;
-    sha256 = "0zvllvwj2nj7qh9jq5048d37jj55cml7d0y1k4rk1ba31mmp7vrn";
+    url = mirror://kde/stable/4.4.1/src/kdemultimedia-4.4.1.tar.bz2;
+    sha256 = "1ahm16y65m9k5g1mzrzy26hdyb8zrn8jwfkq4p3s9vixr02fijkg";
   };
   buildInputs = [ cmake perl qt4 alsaLib libvorbis xineLib flac taglib cdparanoia lame
                   kdelibs automoc4 phonon ];

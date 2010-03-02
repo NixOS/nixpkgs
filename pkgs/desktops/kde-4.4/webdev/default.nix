@@ -2,10 +2,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdewebdev-4.4.0";
+  name = "kdewebdev-4.4.1";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.0/src/kdewebdev-4.4.0.tar.bz2;
-    sha256 = "04ikga4nwzajdq8b1hv7kkf3lg7yn1klq51q00q869yh60wdi9i2";
+    url = mirror://kde/stable/4.4.1/src/kdewebdev-4.4.1.tar.bz2;
+    sha256 = "1c7dqvnd0q4n1ci128iqf83b7hvcz9n0m3djkdcid3q8b0maish0";
   };
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost kdelibs kdepimlibs automoc4 phonon ];
   meta = {

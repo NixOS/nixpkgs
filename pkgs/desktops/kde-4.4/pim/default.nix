@@ -3,10 +3,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, akonadi, strigi, soprano, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdepim-4.4.0";
+  name = "kdepim-4.4.1";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.0/src/kdepim-4.4.0.tar.bz2;
-    sha256 = "1508c7nsdcp0q7xwsw915kpz7isa37n1v2ahvc4wvxlpn2xrw406";
+    url = mirror://kde/stable/4.4.1/src/kdepim-4.4.1.tar.bz2;
+    sha256 = "10xk86dd99bzwgxcj7cqz399h312f8by6c8md4lkqp38pi6nicdz";
   };
   builder = ./builder.sh;  
   buildInputs = [ cmake qt4 perl boost gpgme stdenv.gcc.libc libassuan libgpgerror libxslt
