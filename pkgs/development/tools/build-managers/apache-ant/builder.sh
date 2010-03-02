@@ -40,9 +40,9 @@ else
 fi
 
 if [ -n "\$JIKESPATH" ]; then
-  exec "\$JAVACMD" \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" -Djikes.class.path="\$JIKESPATH" org.apache.tools.ant.launch.Launcher \$ANT_ARGS -lib "$CLASSPATH" "\$@"
+  exec "\$JAVACMD" \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" -Djikes.class.path="\$JIKESPATH" org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS -lib "$CLASSPATH" "\$@"
 else
-  exec "\$JAVACMD" \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" org.apache.tools.ant.launch.Launcher \$ANT_ARGS -lib "$CLASSPATH" "\$@"
+  exec "\$JAVACMD" \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" -Dant.home="\${ANT_HOME}" org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS -lib "$CLASSPATH" "\$@"
   fi
 fi
 EOF
