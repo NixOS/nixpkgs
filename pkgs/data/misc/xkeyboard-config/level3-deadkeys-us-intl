@@ -43,7 +43,7 @@ xkb_symbols "altgr-intl-rich" {
     key <AE02> { [	  2,	at,		twosuperior,	dead_doubleacute] };
     key <AE03> { [	  3,	numbersign,	threesuperior,	dead_macron	] };
     key <AE04> { [	  4,	dollar,		currency,	sterling	] };
-    key <AE05> { [	  5,	percent,		EuroSign		] };
+    key <AE05> { [	  5,	percent,	EuroSign,	approxeq	] };
     key <AE06> { [	  6,	asciicircum,	dead_circumflex, dead_stroke	] };
     key <AE07> { [	  7,	ampersand,		dead_horn		] };
     key <AE08> { [	  8,	asterisk,		dead_ogonek		] };
@@ -82,7 +82,7 @@ xkb_symbols "altgr-intl-rich" {
     key <AB03> { [	  c,	C,		copyright,	cent		] };
     key <AB04> { [	  v,	V,		registered,	registered	] };
     key <AB05> { [	  b,	B,		emdash,		endash		] };
-    key <AB06> { [	  n,	N,		ntilde,		Ntilde		] };
+    key <AB06> { [	  n,	N,		nu,		numerosign	] };
     key <AB07> { [	  m,	M,		mu,		plusminus	] };
     key <AB08> { [    comma,	less,		ccedilla,	Ccedilla	] };
     key <AB09> { [   period,	greater,	dead_abovedot,	dead_caron	] };
