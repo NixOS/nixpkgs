@@ -3,17 +3,17 @@
 , setuptoolsDarcs, numpy, nettools }:
 
 buildPythonPackage (rec {
-  name = "tahoe-lafs-1.6.0";
+  name = "tahoe-lafs-1.6.1";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.6.0.zip";
-    sha256 = "10j6s4wqqxb0x6plwvfnabxxl0k8jy1g1dfsrhpfgdi42f25dain";
+    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.6.1.zip";
+    sha256 = "1b0m1fj1lrd9kvlavd6303jjgvzasj6rnlwhdysn4i2zqriv8d9f";
   };
 
-  patches = [ ./fix-test-copy-using-filecap.patch ];
+  patches = [ ./test-timeout.patch ];
 
-  postPatch = ''
+  configurePhase = ''
     echo "forcing the use of \`setuptools' 0.6c9 rather than an unreleased version"
     for i in *setup.py
     do
@@ -83,5 +83,6 @@ buildPythonPackage (rec {
     license = [ "GPLv2+" /* or */ "TGPPLv1+" ];
 
     maintainers = [ lib.maintainers.ludo ];
+    platforms = lib.platforms.gnu;  # arbitrary choice
   };
 })
