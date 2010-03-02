@@ -1,5 +1,7 @@
 { fetchurl, stdenv, cmake, wxGTK, itk, mesa, libXft, libXext, libXi, zlib, libXmu }:
 
+assert (stdenv ? glibc);
+
 stdenv.mkDerivation {
   name = "seg3d-1.12";
   src = fetchurl {
