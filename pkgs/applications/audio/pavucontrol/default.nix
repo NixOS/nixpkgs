@@ -2,11 +2,11 @@
 , libglademm, libcanberra, intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "pavucontrol-0.9.7";
+  name = "pavucontrol-0.9.10";
 
   src = fetchurl {
     url = "http://0pointer.de/lennart/projects/pavucontrol/${name}.tar.gz";
-    sha256 = "1a1v06hbl1j78ryqy5aiccg6w5hf1yzday2b9h31kx7vr42ir1w0";
+    sha256 = "0g2sd9smwwpnyq8yc65dl9z0iafj2rrimi8v58wkxx98vhnnvsby";
   };
 
   buildInputs = [ pkgconfig pulseaudio gtkmm libsigcxx libglademm libcanberra
@@ -26,5 +26,8 @@ stdenv.mkDerivation rec {
     homepage = http://0pointer.de/lennart/projects/pavucontrol/;
 
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
