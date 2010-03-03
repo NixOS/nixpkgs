@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, speex, gmp, libxml2, libxslt, sqlite, alsaLib, libidn
-, libvncserver, tapioca_qt, libmsn, giflib, gpgme, boost
+, libvncserver, tapioca_qt, libmsn, giflib, gpgme, boost, libv4l
 , libXi, libXtst, libXdamage, libXxf86vm
 , kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz, strigi}:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1h19pp8i009aahli2sn8qzz8i49lq80v6bxwbgw2qxpqpz1s2h7r";
   };
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
-                  libvncserver tapioca_qt libmsn giflib gpgme boost stdenv.gcc.libc
+                  libvncserver tapioca_qt libmsn giflib gpgme boost stdenv.gcc.libc libv4l
 		  libXi libXtst libXdamage libXxf86vm
                   kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz strigi ];
   meta = {

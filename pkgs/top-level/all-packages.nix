@@ -4450,6 +4450,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  libv4l = import ../development/libraries/libv4l {
+    inherit stdenv fetchurl;
+  };
+
   libvirt = import ../development/libraries/libvirt {
     inherit stdenv fetchurl libxml2 gnutls devicemapper perl;
   };
@@ -8660,7 +8664,7 @@ let
   };
 
   kde4 = kde43;
-
+  
   kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt45;
