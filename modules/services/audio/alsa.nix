@@ -26,6 +26,13 @@ in
         '';
         merge = mergeEnableOption;
       };
+      
+      enableOSSEmulation = mkOption {
+        default = true;
+	description = ''
+	  Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
+	'';
+      };
 
     };
     
@@ -53,9 +60,14 @@ in
             mkdir -m 0755 -p $(dirname ${soundState})
 
             # Load some additional modules.
-            for mod in snd_pcm_oss; do
-                ${config.system.sbin.modprobe}/sbin/modprobe $mod || true
-            done
+	    
+	    ${optionalString config.sound.enableOSSEmulation
+	      ''
+                for mod in snd_pcm_oss; do
+                  ${config.system.sbin.modprobe}/sbin/modprobe $mod || true
+                done
+	      ''
+	    }
 
             # Restore the sound state.
             ${alsaUtils}/sbin/alsactl -f ${soundState} restore
