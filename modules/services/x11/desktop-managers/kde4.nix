@@ -52,6 +52,9 @@ in
         pkgs.kde4.kdebase_runtime
         pkgs.kde4.kdebase_workspace
         pkgs.shared_mime_info
+	pkgs.gst_all.gstreamer
+	pkgs.gst_all.gstPluginsBase
+	pkgs.gst_all.gstPluginsGood
       ] ++ optional (pkgs.kde4 ? oxygen_icons) pkgs.kde4.oxygen_icons;
 
     environment.x11Packages =

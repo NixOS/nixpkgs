@@ -11,6 +11,7 @@ export NIXPKGS_ALL=/etc/nixos/nixpkgs
 export PAGER="less -R"
 export EDITOR=nano
 export LOCATE_PATH=/var/cache/locatedb
+export GST_PLUGIN_PATH=/var/run/current-system/sw/lib/gstreamer-0.10
 @shellInit@
 
 
