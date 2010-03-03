@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, libtool, gtk, gthread
-, alsaLib, pulseaudio, gstreamer, libvorbis }:
+, alsaLib, pulseaudio, gstreamer, libvorbis, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "libcanberra-0.10";
+  name = "libcanberra-0.23";
 
   src = fetchurl {
     url = "http://0pointer.de/lennart/projects/libcanberra/${name}.tar.gz";
-    sha256 = "0wl2hd8zqwzbbp4icng6siim85jb6hvczy9c6m92lh85wrcwpqxh";
+    sha256 = "0q09gasvm5dc9d4640lzb5nnmy2cpyi74aq83kjd3j4z58lczl57";
   };
 
-  buildInputs = [ pkgconfig libtool alsaLib pulseaudio gstreamer libvorbis ];
+  buildInputs =
+    [ pkgconfig libtool alsaLib pulseaudio gstreamer libvorbis libcap ];
   propagatedBuildInputs = [ gtk ];
 
   configureFlags = "--disable-oss";
@@ -28,5 +29,8 @@ stdenv.mkDerivation rec {
     homepage = http://0pointer.de/lennart/projects/libcanberra/;
 
     license = "LGPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
