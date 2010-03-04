@@ -2541,9 +2541,12 @@ let
   };
 
   octave = import ../development/interpreters/octave {
-    inherit stdenv fetchurl gfortran readline ncurses perl flex qhull texinfo
-      graphicsmagick;
+    inherit stdenv fetchurl gfortran readline ncurses perl flex qhull texinfo;
     inherit (xlibs) libX11;
+    # Needed because later gm versions require an initialization the actual octave is not
+    # doing.
+    # http://www-old.cae.wisc.edu/pipermail/octave-maintainers/2010-February/015295.html
+    graphicsmagick = graphicsmagick137;
   };
 
   # mercurial (hg) bleeding edge version
@@ -7382,6 +7385,12 @@ let
   };
 
   graphicsmagick = import ../applications/graphics/graphicsmagick {
+    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
+      libjpeg libpng libtiff libxml2 zlib libtool;
+    inherit (xlibs) libX11;
+  };
+
+  graphicsmagick137 = import ../applications/graphics/graphicsmagick/1.3.7.nix {
     inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
       libjpeg libpng libtiff libxml2 zlib libtool;
     inherit (xlibs) libX11;
