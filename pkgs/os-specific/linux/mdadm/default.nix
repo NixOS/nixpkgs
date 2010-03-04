@@ -7,11 +7,14 @@ stdenv.mkDerivation {
     md5 = "15019078eacc8c21eac7b0b7faf86129";
   };
 
-  buildInputs = [groff];
+  buildNativeInputs = [groff];
 
-  preBuild = "
-    makeFlags=\"INSTALL=install BINDIR=$out/sbin MANDIR=$out/share/man\"
-  ";
+  preBuild = ''
+    makeFlags="INSTALL=install BINDIR=$out/sbin MANDIR=$out/share/man"
+    if [ -n "$crossConfig" ]; then
+      makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
+    fi
+  '';
 
   meta = {
     description = "Programs for managing RAID arrays under Linux";
