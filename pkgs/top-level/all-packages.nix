@@ -7967,8 +7967,11 @@ let
   };
 
   seg3d = import ../applications/graphics/seg3d {
-    inherit fetchurl stdenv cmake wxGTK itk mesa zlib;
+    inherit fetchurl stdenv cmake itk mesa zlib libuuid;
     inherit (xlibs) libXft libXext libXi libXmu;
+    wxGTK = wxGTK28.override {
+      unicode = false;
+    };
   };
 
   skype_linux = import ../applications/networking/skype {
