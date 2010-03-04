@@ -129,12 +129,15 @@ rec {
             # *BuildInputs exists temporarily as another name for
             # *HostInputs.
 
-            getBuildDrv = drv : if (drv ? buildDrv) then drv.buildDrv else drv;
+            # In nixpkgs, sometimes 'null' gets in as a buildInputs element,
+            # and we handle that through isAttrs.
+            getBuildDrv = drv : if (builtins.isAttrs drv && drv ? buildDrv) then drv.buildDrv else drv;
+            getHostDrv = drv : if (builtins.isAttrs drv && drv ? hostDrv) then drv.hostDrv else drv;
             buildNativeInputsDrvs = map (getBuildDrv) buildNativeInputs;
-            buildInputsDrvs = map (drv: drv.hostDrv) buildInputs;
+            buildInputsDrvs = map (getHostDrv) buildInputs;
             buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
-            propagatedBuildInputsDrvs = map (drv: drv.hostDrv) (propagatedBuildInputs);
-            propagatedBuildNativeInputsDrvs = map (drv: drv.buildDrv)
+            propagatedBuildInputsDrvs = map (getHostDrv) (propagatedBuildInputs);
+            propagatedBuildNativeInputsDrvs = map (getBuildDrv)
                 (propagatedBuildNativeInputs);
 
             # The base stdenv already knows that buildNativeInputs and
@@ -148,7 +151,9 @@ rec {
             hostAsBuildDrv = drv: builtins.unsafeDiscardStringContext
                 drv.buildDrv.drvPath == builtins.unsafeDiscardStringContext
                 drv.hostDrv.drvPath;
-            nativeInputsFromBuildInputs = stdenv.lib.filter (hostAsBuildDrv) buildInputs;
+            buildInputsNotNull = stdenv.lib.filter
+                (drv: builtins.isAttrs drv && drv ? buildDrv) buildInputs;
+            nativeInputsFromBuildInputs = stdenv.lib.filter (hostAsBuildDrv) buildInputsNotNull;
 
             # We should overwrite the input attributes in hostDrv, to overwrite
             # the defaults for only-native builds in the base stdenv
