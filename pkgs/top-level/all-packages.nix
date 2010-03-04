@@ -8993,6 +8993,13 @@ let
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
+  # The SQLite branch.
+  nixSqlite = makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
+    inherit fetchurl stdenv perl curl bzip2 openssl aterm sqlite;
+    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
+    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
+  };
+
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
