@@ -107,7 +107,10 @@ rec {
       sha256 = "1a5cl2yhnd88a4vkc9r381cbjkcvga87dp9zx5av68857q1nvvvq";
     };
 
-    buildInputs = [ pkgs.darcs ];
+    # Note: We don't actually need to provide Darcs as a build input.
+    # Darcsver will DTRT when Darcs isn't available.  See news.gmane.org
+    # http://thread.gmane.org/gmane.comp.file-systems.tahoe.devel/3200 for a
+    # discussion.
 
     meta = {
       description = "Darcsver, generate a version number from Darcs history";
