@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     sha256 = "184grcvxa5w0ghiv8zf2vdva0kgp3njf20k3h6lbylspjgd3zhxg";
   };
 
+  configureFlags = "--enable-shared";
+
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
       zlib libtool
