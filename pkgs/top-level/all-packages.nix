@@ -2906,6 +2906,10 @@ let
     inherit fetchurl stdenv perl python ocaml ncurses makeWrapper;
   };
 
+  cppi = import ../development/tools/misc/cppi {
+    inherit fetchurl stdenv xz;
+  };
+
   cproto = import ../development/tools/misc/cproto {
     inherit fetchurl stdenv flex bison;
   };
