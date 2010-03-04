@@ -2541,7 +2541,8 @@ let
   };
 
   octave = import ../development/interpreters/octave {
-    inherit stdenv fetchurl gfortran readline ncurses perl flex qhull texinfo;
+    inherit stdenv fetchurl gfortran readline ncurses perl flex qhull texinfo
+      graphicsmagick;
     inherit (xlibs) libX11;
   };
 

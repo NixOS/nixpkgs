@@ -19,6 +19,10 @@ stdenv.mkDerivation {
       zlib libtool
     ];
 
+  postInstall = ''
+    sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
+  '';
+
   meta = {
     homepage = http://www.graphicsmagick.org;
     description = "Swiss army knife of image processing";
