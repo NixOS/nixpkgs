@@ -7362,6 +7362,12 @@ let
     inherit libgphoto2 fuse pkgconfig glib;
   };
 
+  graphicsmagick = import ../applications/graphics/graphicsmagick {
+    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
+      libjpeg libpng libtiff libxml2 zlib libtool;
+    inherit (xlibs) libX11;
+  };
+
   gtkpod = import ../applications/audio/gtkpod {
     inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag libvorbis;
     inherit (gtkLibs) gtk glib;
