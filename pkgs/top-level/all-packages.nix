@@ -3363,7 +3363,7 @@ let
     inherit fetchurl stdenv bison;
   };
 
-  cairo = import ../development/libraries/cairo {
+  cairo = makeOverridable (import ../development/libraries/cairo) {
     inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
     inherit (xlibs) pixman libxcb xcbutil;
   };
@@ -4414,6 +4414,11 @@ let
   libssh = import ../development/libraries/libssh {
     inherit stdenv fetchurl cmake zlib openssl;
   };
+
+  libstartup_notification = import ../development/libraries/startup-notification {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xlibs) libX11 libxcb xcbutil;
+  };
   
   libtasn1 = import ../development/libraries/libtasn1 {
     inherit fetchurl stdenv;
@@ -4495,6 +4500,10 @@ let
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
 
   libxcrypt = import ../development/libraries/libxcrypt {
+    inherit fetchurl stdenv;
+  };
+
+  libxdg_basedir = import ../development/libraries/libxdg-basedir {
     inherit fetchurl stdenv;
   };
 
@@ -6719,6 +6728,15 @@ let
       alsaLib lame faac faad2 libvorbis;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
+  };
+
+  awesome = import ../applications/window-managers/awesome {
+    inherit fetchurl stdenv xz cmake gperf imagemagick pkgconfig imlib2 libxdg_basedir
+      libstartup_notification libev;
+    inherit (gtkLibs) glib pango;
+    inherit (xorg) libxcb xcbutil;
+    lua = lua5;
+    cairo = cairo.override { xcbSupport = true; };
   };
 
   batik = import ../applications/graphics/batik {
