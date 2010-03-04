@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "sharutils-4.8";
+  name = "sharutils-4.9";
 
   src = fetchurl {
     url = "mirror://gnu/sharutils/${name}.tar.bz2";
-    sha256 = "19nlbzwlr93f7bam51rsqyj3z3sd65x32zhwxc9dgdgzcbggncnm";
+    sha256 = "0rmnx4xi6nkifb3pgn769yg5ffdk51hw52xmc51xjdfnpm5byqfm";
   };
 
   # GNU Gettext is needed on non-GNU platforms.
