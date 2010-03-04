@@ -142,8 +142,10 @@ fi
 # more conservative.
 if test -n "$buildNix"; then
     echo "building Nix..." >&2
-    if ! nix-build $NIXOS -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-        nix-build $NIXPKGS -A nixUnstable -o $tmpDir/nix $extraBuildFlags > /dev/null
+    if ! nix-build $NIXOS -A config.environment.nix -o $tmpDir/nix $extraBuildFlags > /dev/null; then
+        if ! nix-build $NIXOS -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
+            nix-build $NIXPKGS -A nixUnstable -o $tmpDir/nix $extraBuildFlags > /dev/null
+        fi
     fi
     PATH=$tmpDir/nix/bin:$PATH
 fi
