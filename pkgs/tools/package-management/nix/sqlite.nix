@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "http://hydra.nixos.org/build/310943/download/4/${name}.tar.bz2";
-    sha256 = "3d6fa8e43d820bc22fd799547a8e976451768642461bcb905333c79e1e5052e1";
+    sha256 = "f94d95981db9093604c843225aa9f9dfe82d3352cb1ecba92de03d117d9bb4b9";
   };
 
   buildInputs = [perl curl openssl];
