@@ -18,6 +18,15 @@ stdenv.mkDerivation (
     postPhases =
       ["generateWrappersPhase" "finalPhase"];
 
+    prePhases = 
+      ["antSetupPhase"];
+
+    antSetupPhase = ''
+      if test "$hydraAntLogger" != "" ; then
+        export ANT_ARGS="-logger org.hydra.ant.HydraLogger -lib `ls $hydraAntLogger/lib/java/*.jar | head -1`"
+      fi
+    '';
+
     installPhase = ''
       ensureDir $out/lib/java
       ${ if jars == [] then '' 
