@@ -1,10 +1,11 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "dmenu-3.9";
+{stdenv, fetchurl, libX11, libXinerama}:
+
+stdenv.mkDerivation rec {
+  name = "dmenu-4.0";
 
   src = fetchurl {
-    url = http://code.suckless.org/dl/tools/dmenu-3.9.tar.gz;
-    sha256 = "2370111e02c6a3863ea04376795fa72f9e41cdd2650b12f90e6a0c7d096e4b22";
+    url = "http://dl.suckless.org/tools/${name}.tar.gz";
+    sha256 = "0qp8n9hz15lzqp5dnq6lqknxhmlrgv20x2bnbc2zr891bql0hif0";
   };
 
   buildInputs = [ libX11 libXinerama ];
@@ -15,5 +16,7 @@ stdenv.mkDerivation {
       description = "a generic, highly customizable, and efficient menu for the X Window System";
       homepage = http://tools.suckless.org/dmenu;
       license = "MIT";
+      maintainers = with stdenv.lib.maintainers; [viric];
+      platforms = with stdenv.lib.platforms; all;
   };
 }

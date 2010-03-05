@@ -7002,7 +7002,7 @@ let
   };
 
   dmenu = import ../applications/misc/dmenu {
-    inherit lib fetchurl stdenv;
+    inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXinerama;
   };
 
