@@ -14,6 +14,10 @@ rec {
     { inherit stdenv;
     } // args);
 
+  antBuild = args: import ./ant-build.nix (
+    { inherit stdenv;
+    } // args);
+
   nixBuild = args: import ./nix-build.nix (
     { inherit stdenv;
     } // args);
