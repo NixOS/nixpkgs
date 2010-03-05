@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     description = "terminal mixer - multiplexer for the i/o of terminal applications";
     license="GPLv2";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; all;
   };
 
 }
