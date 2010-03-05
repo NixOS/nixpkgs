@@ -704,12 +704,13 @@ in {
 /* Test some cross builds to the Sheevaplug */
 let
   crossSystem = {
-      config = "armv5tel-unknown-linux-gnueabi";  
-      bigEndian = false;
-      arch = "arm";
-      float = "soft";
-      withTLS = true;
-      platform = pkgs.platforms.sheevaplug;
+    config = "armv5tel-unknown-linux-gnueabi";  
+    bigEndian = false;
+    arch = "arm";
+    float = "soft";
+    withTLS = true;
+    platform = pkgs.platforms.sheevaplug;
+    openssl.system = "linux-generic32";
   };
   nativePlatforms = linux;
 in {
@@ -722,6 +723,7 @@ in {
     xorg = {
       #xorgserver = nativePlatforms;
     };
+    nixUnstable = linux;
     linuxPackages_2_6_32.kernel = linux;
     linuxPackages_2_6_33.kernel = linux;
     gdbCross = nativePlatforms;
@@ -745,6 +747,7 @@ let
       kernelAutoModules = false;
       kernelTarget = "vmlinux.bin";
     };
+    openssl.system = "linux-generic32";
   };
   nativePlatforms = linux;
 in {
@@ -757,6 +760,7 @@ in {
     xorg = {
       #xorgserver = nativePlatforms;
     };
+    nixUnstable = linux;
     linuxPackages_2_6_32.kernel = linux;
     linuxPackages_2_6_33.kernel = linux;
     gdbCross = nativePlatforms;
@@ -781,6 +785,7 @@ let
         kernelTarget = "zImage";
         uboot = null;
     };
+    openssl.system = "linux64-sparcv9";
   };
   nativePlatforms = linux;
 in {
@@ -793,6 +798,7 @@ in {
     xorg = {
       #xorgserver = nativePlatforms;
     };
+    nixUnstable = linux;
     linuxPackages_2_6_32.kernel = linux;
     linuxPackages_2_6_33.kernel = linux;
     gdbCross = nativePlatforms;

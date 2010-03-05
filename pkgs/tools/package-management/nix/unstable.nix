@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "844e5878d55a68ae2aac657718a1960dcfc943f6738ebdfb2bc93e8c462d0ad7";
   };
 
-  buildInputs = [perl curl openssl];
+  buildNativeInputs = [perl];
+  buildInputs = [curl openssl];
 
   configureFlags = ''
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
