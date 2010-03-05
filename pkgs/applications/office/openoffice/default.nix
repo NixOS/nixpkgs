@@ -6,23 +6,21 @@
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2
 }:
 
-let version = "3.2.0"; in
+let version = "3.1.1"; in
 stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
 
   src = fetchurl {
-      url = "http://download.services.openoffice.org/files/stable/${version}/OOo_${version}_src_core.tar.bz2";
-      name = "OOo_${version}_src_core.tar.bz2";
-      sha256 = "0jl14rxmvhz86jlhhwqlbr9nfi9p271aknqxada9775qfm6bjjml";
+      url = "http://mirror.kernelerror.net/openoffice/stable/${version}/OOo_${version}_src_core.tar.bz2";
+      sha256 = "95440f09f8dce616178b86b26af8e543c869d01579207aa68e8474019b59caca";
     };
 
-  patches = [ ./oo.patch /*./OOo-3.1.1-HEADERFIX-1.patch*/ ./root-required.patch ];
+  patches = [ ./oo.patch ./OOo-3.1.1-HEADERFIX-1.patch ./root-required.patch ];
 
   src_system = fetchurl {
-      url = "http://download.services.openoffice.org/files/stable/${version}/OOo_${version}_src_system.tar.bz2";
-      name = "OOo_${version}_src_system.tar.bz2";
-      sha256 = "0nihw4iyh9qc188dkyfjr3zvp6ym6i1spm16j0cyh5rgxcrn6ycp";
+      url = "http://mirror.kernelerror.net/openoffice/stable/${version}/OOo_${version}_src_system.tar.bz2";
+      sha256 = "bb4a440ca91a40cd2b5692abbc19e8fbd3d311525edb266dc5cd9ebc324f2b4a";
     };
 
   configureFlags = "
