@@ -151,7 +151,7 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "started nfs-kernel-nfsd and started portmap";
+            startOn = "started ${if cfg.server.enable then "nfs-kernel-nfsd and " else ""} started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
             preStart =
