@@ -7020,6 +7020,7 @@ let
   dwm = import ../applications/window-managers/dwm {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXinerama;
+    patches = getConfig [ "dwm" "patches" ] [];
   };
 
   eaglemode = import ../applications/misc/eaglemode {

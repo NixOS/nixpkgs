@@ -1,18 +1,27 @@
-args: with args; stdenv.mkDerivation {
-  name = "dwm-5.1";
+{stdenv, fetchurl, libX11, libXinerama, patches ? []}:
+
+stdenv.mkDerivation rec {
+  name = "dwm-5.7.2";
  
   src = fetchurl {
-    url = http://code.suckless.org/dl/dwm/dwm-5.1.tar.gz;
-    sha256 = "d8dca894c4805a845baca1c3f9b16299e1eaeab661fd3827b374e57b4c603bf8";
+    url = "http://dl.suckless.org/dwm/${name}.tar.gz";
+    sha256 = "1q6dpyi3fx09wxrclfmr4k6516gzd1aj2svyvrayr76sslrzxgrj";
   };
  
   buildInputs = [ libX11 libXinerama ];
  
-  patchPhase = ''sed -i "s@/usr/local@$out@" config.mk'';
+  postPatch = ''sed -i "s@/usr/local@$out@" config.mk'';
+
+  # Allow users set their own list of patches
+  inherit patches;
+
   buildPhase = " make ";
  
-  meta = { homepage = "www.suckless.org";
-           description = "dynamic window manager for X";
-           license="MIT";
-         };
+  meta = {
+    homepage = "www.suckless.org";
+    description = "dynamic window manager for X";
+    license="MIT";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; all;
+  };
 }
