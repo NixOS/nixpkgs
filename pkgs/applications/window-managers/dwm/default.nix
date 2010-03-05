@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
  
   buildInputs = [ libX11 libXinerama ];
  
-  postPatch = ''sed -i "s@/usr/local@$out@" config.mk'';
+  prePatch = ''set -x; sed -i "s@/usr/local@$out@" config.mk'';
 
   # Allow users set their own list of patches
   inherit patches;
