@@ -6736,7 +6736,8 @@ let
 
   awesome = import ../applications/window-managers/awesome {
     inherit fetchurl stdenv xz cmake gperf imagemagick pkgconfig imlib2 libxdg_basedir
-      libstartup_notification libev;
+      libstartup_notification libev asciidoc libxslt xmlto dbus docbook_xsl
+      docbook_xml_dtd_45;
     inherit (gtkLibs) glib pango;
     inherit (xorg) libxcb xcbutil;
     lua = lua5;

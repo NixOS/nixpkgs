@@ -1,6 +1,7 @@
 {stdenv, fetchurl, xz, cmake, gperf, imagemagick, pkgconfig, lua
-, glib, cairo, pango, imlib2, libxcb, libxdg_basedir, xcbutil,
-libstartup_notification, libev}:
+, glib, cairo, pango, imlib2, libxcb, libxdg_basedir, xcbutil
+, libstartup_notification, libev, asciidoc, xmlto, dbus, docbook_xsl
+, docbook_xml_dtd_45, libxslt}:
 
 stdenv.mkDerivation rec {
   name = "awesome-3.4.4";
@@ -11,7 +12,8 @@ stdenv.mkDerivation rec {
   };
  
   buildInputs = [ xz cmake gperf imagemagick pkgconfig lua glib cairo pango
-    imlib2 libxcb libxdg_basedir xcbutil libstartup_notification libev ];
+    imlib2 libxcb libxdg_basedir xcbutil libstartup_notification libev
+    asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt ];
 
   # Somehow libev does not get into the rpath, although it should.
   # Something may be wrong in the gcc wrapper.
