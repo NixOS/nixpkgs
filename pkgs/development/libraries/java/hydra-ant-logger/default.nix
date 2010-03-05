@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hydra-ant-logger-${version}";
-  version = "2010.1";
+  version = "2010.2";
 
   src = fetchsvn {
     url = https://svn.nixos.org/repos/nix/hydra-ant-logger/trunk;
-    rev = 20331;
-    sha256 = "1plpdca9izf95kq2v0wh56ddk9bdwxk940nf9z32rhc1633wpk8c";
+    rev = 20396;
+    sha256 = "1lp5zy80m4y2kq222q2x052ys5mlhgc7y4kxh2bl48744f1fkgyr";
   };
 
   buildInputs = [ ant ];
