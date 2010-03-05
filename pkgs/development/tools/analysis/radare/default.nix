@@ -11,13 +11,12 @@ assert pythonBindings -> python != null;
 let 
   optional = stdenv.lib.optional;
 in
-stdenv.mkDerivation 
-{
-  name = "radare-1.4.2";
+stdenv.mkDerivation rec {
+  name = "radare-1.5";
 
   src = fetchurl {
-    url = http://radare.org/get/radare-1.4.2.tar.gz;
-    sha256 = "09pai3k4x3kzq7zjfd8425jjb16fpximrhp5wyy6pwgdc82q30sd";
+    url = "http://radare.org/get/${name}.tar.gz";
+    sha256 = "1r0c9cc7z9likma8zicp2pbv2y85vjjmnk0k45wdhbvhgqh6il1h";
   };
 
 
@@ -32,6 +31,6 @@ stdenv.mkDerivation
     homepage = http://radare.org/;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; all;
   };
 }
