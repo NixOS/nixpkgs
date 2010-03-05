@@ -995,7 +995,7 @@ let
   ktorrent = import ../tools/networking/p2p/ktorrent {
     inherit fetchurl stdenv pkgconfig boost
       xlibs zlib libpng libjpeg perl gmp cmake gettext;
-    kde = kde43;
+    kde = kde44;
   };
 
   less = import ../tools/misc/less {
@@ -4805,7 +4805,7 @@ let
     mysqlSupport = true;
   };
 
-  qt4 = qt44;
+  qt4 = qt46;
 
   qt44 = import ../development/libraries/qt-4.4 {
     inherit fetchurl stdenv fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
@@ -4836,7 +4836,7 @@ let
 
   qtscriptgenerator = makeOverridable (import ../development/libraries/qtscriptgenerator) {
     inherit stdenv fetchurl;
-    qt4 = qt45;
+    qt4 = qt46;
   };
 
   readline = readline6;
@@ -6070,8 +6070,7 @@ let
     virtualbox = import ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit fetchurl lib iasl dev86 libxslt libxml2 SDL hal
-          libcap libpng zlib kernel python which alsaLib curl glib;
-      qt4 = qt45;
+          libcap libpng zlib kernel python which alsaLib curl glib qt4;
       inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;
     };
@@ -7863,7 +7862,7 @@ let
 
   partitionManager = import ../tools/misc/partition-manager {
     inherit fetchurl stdenv lib cmake pkgconfig gettext parted libuuid perl;
-    kde = kde43;
+    kde = kde44;
     qt = qt4;
   };
 
@@ -8706,7 +8705,7 @@ let
 
   };
 
-  kde4 = kde43;
+  kde4 = kde44;
   
   kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
@@ -9087,10 +9086,9 @@ let
   };
 
   psi = (import ../applications/networking/instant-messengers/psi) {
-    inherit stdenv fetchurl zlib aspell sox pkgconfig;
+    inherit stdenv fetchurl zlib aspell sox pkgconfig qt4;
     inherit (xlibs) xproto libX11 libSM libICE;
     qca2 = kde4.qca2;
-    qt4 = qt46;
   };
 
   putty = import ../applications/networking/remote/putty {
