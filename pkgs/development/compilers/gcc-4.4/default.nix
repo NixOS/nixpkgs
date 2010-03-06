@@ -115,7 +115,9 @@ stdenv.mkDerivation ({
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross;
 
-  buildInputs = [ texinfo gmp mpfr gettext which ]
+  buildNativeInputs = [ texinfo which ];
+
+  buildInputs = [ gmp mpfr gettext ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optionals langTreelang [bison flex])
@@ -164,6 +166,50 @@ stdenv.mkDerivation ({
   AR = "ar";
   LD = "ld";
   CC = "gcc";
+
+  crossAttrs = {
+    AR = "${stdenv.cross.config}-ar";
+    LD = "${stdenv.cross.config}-ld";
+    CC = "${stdenv.cross.config}-gcc";
+    CXX = "${stdenv.cross.config}-gcc";
+    AR_FOR_TARGET = "${stdenv.cross.config}-ar";
+    LD_FOR_TARGET = "${stdenv.cross.config}-ld";
+    CC_FOR_TARGET = "${stdenv.cross.config}-gcc";
+    NM_FOR_TARGET = "${stdenv.cross.config}-nm";
+    CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
+    # If we are making a cross compiler, cross != null
+    NIX_GCC_CROSS = if cross == null then "${stdenv.gccCross}" else "";
+    configureFlags = "
+      ${if enableMultilib then "" else "--disable-multilib"}
+      ${if enableShared then "" else "--disable-shared"}
+      ${if ppl != null then "--with-ppl=${ppl.hostDrv}" else ""}
+      ${if cloogppl != null then "--with-cloog=${cloogppl.hostDrv}" else ""}
+      ${if langJava then "--with-ecj-jar=${javaEcj.hostDrv}" else ""}
+      ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
+      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.hostDrv}" else ""}
+      --with-gmp=${gmp.hostDrv}
+      --with-mpfr=${mpfr.hostDrv}
+      --disable-libstdcxx-pch
+      --without-included-gettext
+      --with-system-zlib
+      --enable-languages=${
+        concatStrings (intersperse ","
+          (  optional langC        "c"
+          ++ optional langCC       "c++"
+          ++ optional langFortran  "fortran"
+          ++ optional langJava     "java"
+          ++ optional langTreelang "treelang"
+          ++ optional langAda      "ada"
+          ++ optional langVhdl     "vhdl"
+          )
+        )
+      }
+      ${if langAda then " --enable-libada" else ""}
+      ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
+      ${if cross != null then crossConfigureFlags else ""}
+      --target=${stdenv.cross.config}
+    ";
+  };
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find
   # the library headers and binaries, regarless of the language being

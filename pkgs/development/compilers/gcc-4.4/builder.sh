@@ -61,9 +61,38 @@ if test "$noSysDirs" = "1"; then
             EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
         fi
     else
-        EXTRA_FLAGS_TARGET="$EXTRA_FLAGS"
-        EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS"
+        if test -z "$NIX_GCC_CROSS"; then
+            EXTRA_FLAGS_TARGET="$EXTRA_FLAGS"
+            EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS"
+        else
+            # This the case of cross-building the gcc.
+            # We need special flags for the target, different than those of the build
+            # Assertion:
+            test -e $NIX_GCC_CROSS/nix-support/orig-libc
+
+            # Figure out what extra flags to pass to the gcc compilers
+            # being generated to make sure that they use our glibc.
+            extraFlags="$(cat $NIX_GCC_CROSS/nix-support/libc-cflags)"
+            extraLDFlags="$(cat $NIX_GCC_CROSS/nix-support/libc-ldflags) $(cat $NIX_GCC_CROSS/nix-support/libc-ldflags-before)"
+
+            # Use *real* header files, otherwise a limits.h is generated
+            # that does not include Glibc's limits.h (notably missing
+            # SSIZE_MAX, which breaks the build).
+            NIX_FIXINC_DUMMY_CROSS=$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/include
+
+            # The path to the Glibc binaries such as `crti.o'.
+            glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
+
+            extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
+            extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
+
+            EXTRA_FLAGS_TARGET="$extraFlags"
+            for i in $extraLDFlags; do
+                EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS_TARGET -Wl,$i"
+            done
+        fi
     fi
+
 
     # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
     # the startfiles.
@@ -160,7 +189,7 @@ postInstall() {
 }
 
 
-if test -z "$targetConfig"; then
+if test -z "$targetConfig" && test -z "$crossConfig"; then
     if test -z "$profiledCompiler"; then
         buildFlags="bootstrap $buildFlags"
     else    

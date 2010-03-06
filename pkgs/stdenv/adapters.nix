@@ -179,7 +179,9 @@ rec {
         in buildDrv // {
             inherit hostDrv buildDrv;
         };
-    } // { inherit cross; };
+    } // {
+      inherit cross gccCross binutilsCross;
+    };
 
     
   /* Modify a stdenv so that the specified attributes are added to

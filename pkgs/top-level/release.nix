@@ -725,6 +725,7 @@ in {
     linuxPackages_2_6_32.kernel = linux;
     linuxPackages_2_6_33.kernel = linux;
     gdbCross = nativePlatforms;
+    gcc44_real.gcc = linux;
   });
 }) // (
 
@@ -760,6 +761,7 @@ in {
     linuxPackages_2_6_32.kernel = linux;
     linuxPackages_2_6_33.kernel = linux;
     gdbCross = nativePlatforms;
+    gcc44_real.gcc = linux;
   });
 }) // (
 
@@ -796,5 +798,6 @@ in {
     linuxPackages_2_6_32.kernel = linux;
     linuxPackages_2_6_33.kernel = linux;
     gdbCross = nativePlatforms;
+    gcc44_real.gcc = linux;
   });
 })

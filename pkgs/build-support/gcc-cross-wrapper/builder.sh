@@ -1,5 +1,8 @@
 source $stdenv/setup
 
+mkdir $out
+mkdir $out/bin
+mkdir $out/nix-support
 
 # Force gcc to use ld-wrapper.sh when calling ld.
 cflagsCompile="-B$out/bin/"
@@ -9,6 +12,23 @@ if test -z "$nativeLibc"; then
     ldflags="$ldflags -L$libc/lib"
     ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.?"
     #ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
+
+    # The same as above, but put into files, useful for the gcc builder.
+    dynamicLinker="$libc/lib/$dynamicLinker"
+    echo $dynamicLinker > $out/nix-support/dynamic-linker
+
+    if test -e $libc/lib/32/ld-linux.so.2; then
+        echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+    fi
+
+    echo "$cflagsCompile -B$libc/lib/ -idirafter $libc/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+
+    echo "-L$libc/lib" > $out/nix-support/libc-ldflags
+
+    # The dynamic linker is passed in `ldflagsBefore' to allow
+    # explicit overrides of the dynamic linker by callers to gcc/ld
+    # (the *last* value counts, so ours should come first).
+    echo "-dynamic-linker $dynamicLinker" > $out/nix-support/libc-ldflags-before
 fi
 
 if test -n "$nativeTools"; then
@@ -19,11 +39,6 @@ else
     gccPath="$gcc/bin"
     ldPath="$binutils/$crossConfig/bin"
 fi
-
-
-mkdir $out
-mkdir $out/bin
-mkdir $out/nix-support
 
 
 doSubstitute() {
