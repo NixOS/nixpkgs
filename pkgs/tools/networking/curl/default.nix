@@ -34,6 +34,16 @@ stdenv.mkDerivation rec {
   # other LDFLAGS, because it doesn't use libtool for linking in the tests.
   makeFlags = if linkStatic then "LDFLAGS=-all-static" else "";
 
+  crossAttrs = {
+    # We should refer to the cross built openssl
+    # For the 'urandom', maybe it should be a cross-system option
+    configureFlags = ''
+      ${if sslSupport then "--with-ssl=${openssl.hostDrv}" else "--without-ssl"}
+      ${if linkStatic then "--enable-static --disable-shared" else ""}
+      --with-random /dev/urandom
+    '';
+  };
+
   passthru = {
     inherit sslSupport openssl;
   };
