@@ -1956,7 +1956,7 @@ let
     profiledCompiler = false;
     enableMultilib = true;
     crossStageStatic = false;
-    cross = crossSystem;
+    cross = assert crossSystem != null; crossSystem;
   };
 
   gcc44_realCross = makeOverridable (import ../development/compilers/gcc-4.4) {
@@ -1970,7 +1970,7 @@ let
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41818
     enableShared = if (crossSystem.arch == "sparc64") then false else true;
     crossStageStatic = false;
-    cross = crossSystem;
+    cross = assert crossSystem != null; crossSystem;
   };
 
   gccCrossStageStatic = wrapGCCCross {
@@ -1982,14 +1982,14 @@ let
     });
     libc = null;
     binutils = binutilsCross;
-    cross = crossSystem;
+    cross = assert crossSystem != null; crossSystem;
   };
 
   gccCrossStageFinal = wrapGCCCross {
     gcc = forceBuildDrv gcc44_realCross;
     libc = libcCross;
     binutils = binutilsCross;
-    cross = crossSystem;
+    cross = assert crossSystem != null; crossSystem;
   };
 
   gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43.gcc.override {
@@ -2858,7 +2858,7 @@ let
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl;
       noSysDirs = true;
-      cross = crossSystem;
+      cross = assert crossSystem != null; crossSystem;
   });
 
   bison = bison23;
@@ -5874,7 +5874,7 @@ let
 
   linuxHeadersCross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
-    cross = crossSystem;
+    cross = assert crossSystem != null; crossSystem;
   });
 
   linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
