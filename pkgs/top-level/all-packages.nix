@@ -1015,7 +1015,7 @@ let
   };
 
   lrzip = import ../tools/compression/lrzip {
-    inherit fetchurl stdenv zlib lzo bzip2;
+    inherit fetchurl stdenv zlib lzo bzip2 nasm;
   };
 
   lsh = import ../tools/networking/lsh {

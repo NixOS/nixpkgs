@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, lzo, bzip2}:
+{stdenv, fetchurl, zlib, lzo, bzip2, nasm}:
 
 stdenv.mkDerivation rec {
   name = "lrzip-0.44";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-isystem ${zlib}/include";
 
-  buildInputs = [ zlib lzo bzip2 ];
+  buildInputs = [ zlib lzo bzip2 nasm ];
 
   meta = {
     homepage = http://ck.kolivas.org/apps/lrzip/;
