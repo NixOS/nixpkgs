@@ -13,8 +13,11 @@ stdenv.mkDerivation {
   installPhase = "python setup.py install --prefix=$out ;"+
 	" echo 'export PYTHONPATH=$PYTHONPATH:'$out'/lib/python2.4/site-packages:"+
 	wxPython26+"/lib/python2.4/site-packages:"+
+	wxPython26+"/lib/python2.6/site-packages:"+
 	"'$out'/lib/python2.5/site-packages:"+
+	"'$out'/lib/python2.6/site-packages:"+
 	wxPython26+"/lib/python2.4/site-packages/wx-2.6-gtk2-unicode:"+
+	wxPython26+"/lib/python2.6/site-packages/wx-2.6-gtk2-unicode:"+
 	wxPython26+"/lib/python2.5/site-packages/wx-2.6-gtk2-unicode; "+
 	"python `which btdownloadgui.py` --ipv6_enabled 1 --ipv6_binds_v4 0 \"$@\";' >"+
 	"$out/bin/bittornado ; chmod a+rx $out/bin/bittornado;";
