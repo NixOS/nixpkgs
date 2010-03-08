@@ -55,14 +55,14 @@ rec {
     
     sed -e 's/.*pyhyph.*/=&/' -i $out/texmf-config/tex/generic/config/language.dat
 
+    PATH=$PATH:$out/bin mktexlsr $out/texmf*
+
+    HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
+
     # Prebuild the format files, as it used to be done with TeXLive 2007.
     ensureDir "$out/texmf-var/web2c"
     PATH="$PATH:$out/bin" mktexfmt --fmtdir="$out/texmf-var/web2c" --all
 
-    PATH=$PATH:$out/bin mktexlsr $out/texmf*
-
-    HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
-    
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
  '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];
 
