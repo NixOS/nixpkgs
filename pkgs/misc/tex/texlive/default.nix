@@ -46,14 +46,18 @@ rec {
   doPostInstall = fullDepEntry(''
     mv $out/bin $out/libexec
     ensureDir $out/bin
-    for i in $out/libexec/*/*; do
+    for i in "$out/libexec/"*"/"*; do
         echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
         chmod a+x $out/bin/$(basename $i)
     done
     [ -d $out/texmf-config ] || ln -s $out/texmf $out/texmf-config
-    ln -s $out/*texmf* $out/share/
+    ln -s "$out/"*texmf* "$out/share/"
     
     sed -e 's/.*pyhyph.*/=&/' -i $out/texmf-config/tex/generic/config/language.dat
+
+    # Prebuild the format files, as it used to be done with TeXLive 2007.
+    ensureDir "$out/texmf-var/web2c"
+    PATH="$PATH:$out/bin" mktexfmt --fmtdir="$out/texmf-var/web2c" --all
 
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
 
