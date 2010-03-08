@@ -60,8 +60,11 @@ rec {
     HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
 
     # Prebuild the format files, as it used to be done with TeXLive 2007.
+    # Note the funny argument parser of `mktexfmt', which wants something
+    # ending in `.fmt' as its first argument.
     ensureDir "$out/texmf-var/web2c"
-    PATH="$PATH:$out/bin" mktexfmt --fmtdir="$out/texmf-var/web2c" --all
+    PATH="$PATH:$out/bin" mktexfmt does-not-matter.fmt \
+                             --fmtdir="$out/texmf-var/web2c" --all
 
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
  '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];
