@@ -23,12 +23,12 @@ let
     crossMakeFlag = if (cross != null) then "CROSS=${cross.config}-" else "";
 in
 stdenv.mkDerivation {
-  name = "uclibc-0.9.30.1" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.30.2" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/uClibc-0.9.30.1.tar.bz2;
-    sha256 = "132cf27hkgi0q4qlwbiyj4ffj76sja0jcxm0aqzzgks65jh6k5rd";
+    url = http://www.uclibc.org/downloads/uClibc-0.9.30.2.tar.bz2;
+    sha256 = "0wr4hlybssiyswdc73wdcxr31xfbss3lnqiv5lcav3rg3v4r4vmb";
   };
 
   configurePhase = ''
@@ -51,11 +51,6 @@ stdenv.mkDerivation {
   makeFlags = [ crossMakeFlag "VERBOSE=1" ];
 
   buildInputs = stdenv.lib.optional (gccCross != null) gccCross;
-
-  patches = [ ./unifdef-getline.patch ];
-
-#  # This will allow the usual gcc-cross-wrapper strip phase work as usual
-#  crossConfig = if (cross != null) then cross.config else null;
 
   installPhase = ''
     mkdir -p $out
