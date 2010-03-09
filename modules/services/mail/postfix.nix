@@ -283,7 +283,9 @@ in
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
-        startOn = "started ${startingDependency}";
+        startOn = "started ${startingDependency} and filesystems";
+
+        daemonType = "fork";
 
         script =
           ''
@@ -304,7 +306,7 @@ in
 
             ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
             
-            ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
+            exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
           ''; # */
 
       };

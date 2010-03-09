@@ -65,7 +65,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
           };
         };
