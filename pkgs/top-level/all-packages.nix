@@ -1491,6 +1491,10 @@ let
     inherit fetchurl stdenv pkgconfig fuse curl expat;
   };
 
+  s3sync = import ../tools/networking/s3sync {
+    inherit fetchurl stdenv ruby makeWrapper;
+  };
+
   sablotron = import ../tools/text/xml/sablotron {
     inherit fetchurl stdenv expat;
   };
