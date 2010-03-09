@@ -74,7 +74,12 @@ in
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
-      
+
+    # Send all of /var/log/messages to the serial port (except for
+    # kernel messages through klogd, which already appear on the
+    # serial port).
+    services.syslogd.extraConfig = "*.*,kern.none /dev/ttyS0";
+
   };
 
 }

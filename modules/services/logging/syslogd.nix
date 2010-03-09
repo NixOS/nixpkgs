@@ -19,6 +19,8 @@ let
     *.crit                        /var/log/warn
 
     *.*;mail.none;local1.none    -/var/log/messages
+
+    ${config.services.syslogd.extraConfig}
   '';
 
 in
@@ -35,6 +37,14 @@ in
         description = ''
           The tty device on which syslogd will print important log
           messages.
+        '';
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        example = "news.* -/var/log/news";
+        description = ''
+          Additional text appended to <filename>syslog.conf</filename>.
         '';
       };
       
