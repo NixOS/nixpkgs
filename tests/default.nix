@@ -7,6 +7,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
 
 {
   firefox = apply (import ./firefox.nix);
+  gnuIntegration = apply (import ./gnu-integration.nix);
   installer = pkgs.lib.mapAttrs (name: complete) (call (import ./installer.nix));
   kde4 = apply (import ./kde4.nix);
   login = apply (import ./login.nix);
