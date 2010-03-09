@@ -5,6 +5,7 @@ let
   /* Basic list of packages to cross-build */
   basicHostDrv = {
     bison.hostDrv = nativePlatforms;
+    busybox.hostDrv = nativePlatforms;
     tightvnc.hostDrv = nativePlatforms;
     #openoffice.hostDrv = nativePlatforms;
     wxGTK.hostDrv = nativePlatforms;

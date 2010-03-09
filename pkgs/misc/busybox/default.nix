@@ -1,11 +1,14 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, enableStatic ? false}:
 
 let
   basicConfigure = ''
     make defconfig
     sed -i 's,.*CONFIG_PREFIX.*,CONFIG_PREFIX="'$out'",' .config
     sed -i 's,.*CONFIG_INSTALL_NO_USR.*,CONFIG_INSTALL_NO_USR=y,' .config
-  '';
+  '' +
+    (if enableStatic then ''
+      sed -i 's,.*CONFIG_STATIC.*,CONFIG_STATIC=y,' .config
+    '' else "");
 
 in
 

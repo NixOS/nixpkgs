@@ -8915,8 +8915,9 @@ let
     inherit stdenv fetchurl emacs texLive;
   };
 
-  busybox = import ../misc/busybox {
+  busybox = makeOverridable (import ../misc/busybox) {
     inherit fetchurl stdenv;
+    enableStatic = true;
   };
 
   cups = import ../misc/cups {
