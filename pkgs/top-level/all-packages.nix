@@ -630,6 +630,12 @@ let
     inherit builderDefs;
   };
 
+  dropbear = makeOverridable (import ../tools/networking/dropbear) {
+    inherit fetchurl stdenv;
+    enableStatic = true;
+    zlib = zlibStatic;
+  };
+
   duplicity = import ../tools/backup/duplicity {
     inherit fetchurl stdenv librsync gnupg makeWrapper python;
     inherit (pythonPackages) boto;

@@ -6,6 +6,7 @@ let
   basicHostDrv = {
     bison.hostDrv = nativePlatforms;
     busybox.hostDrv = nativePlatforms;
+    dropbear.hostDrv = nativePlatforms;
     tightvnc.hostDrv = nativePlatforms;
     #openoffice.hostDrv = nativePlatforms;
     wxGTK.hostDrv = nativePlatforms;
