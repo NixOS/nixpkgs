@@ -5,6 +5,8 @@ with pkgs;
 
 rec {
 
+  inherit pkgs;
+
 
   # Run an automated test suite in the given virtual network.
   # `network' must be the result of a call to the

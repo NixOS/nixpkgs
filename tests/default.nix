@@ -3,13 +3,7 @@
 , system ? builtins.currentSystem
 }:
 
-let
-
-  testLib = 
-    (import ../lib/build-vms.nix { inherit nixpkgs services system; }) //
-    (import ../lib/testing.nix { inherit nixpkgs services system; });
-
-in with testLib;
+with import ../lib/testing.nix { inherit nixpkgs services system; };
 
 {
   firefox = apply (import ./firefox.nix);
