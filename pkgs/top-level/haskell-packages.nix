@@ -81,6 +81,10 @@ rec {
     json = json_036;
   };
 
+  csv = import ../development/libraries/haskell/csv {
+    inherit cabal parsec;
+  };
+
   dataenc = import ../development/libraries/haskell/dataenc {
     inherit cabal;
   };

@@ -183,8 +183,8 @@ let
 
   defaultStdenv = allStdenvs.stdenv // { inherit platform; };
 
-  stdenvCross = makeStdenvCross defaultStdenv crossSystem (binutilsCross crossSystem)
-    (gccCrossStageFinal crossSystem);
+  stdenvCross = makeStdenvCross defaultStdenv crossSystem binutilsCross
+    gccCrossStageFinal;
 
   stdenv =
     if bootStdenv != null then bootStdenv else
@@ -1949,45 +1949,47 @@ let
     profiledCompiler = true;
   }));
 
-  gcc43_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.3) {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs cross;
-    binutilsCross = binutilsCross cross;
-    libcCross = libcCross cross;
+  gcc43_realCross = makeOverridable (import ../development/compilers/gcc-4.3) {
+    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
+    binutilsCross = binutilsCross;
+    libcCross = libcCross;
     profiledCompiler = false;
     enableMultilib = true;
     crossStageStatic = false;
+    cross = assert crossSystem != null; crossSystem;
   };
 
-  gcc44_realCross = cross : makeOverridable (import ../development/compilers/gcc-4.4) {
-    inherit stdenv fetchurl texinfo gmp mpfr ppl cloogppl noSysDirs cross
+  gcc44_realCross = makeOverridable (import ../development/compilers/gcc-4.4) {
+    inherit stdenv fetchurl texinfo gmp mpfr ppl cloogppl noSysDirs
         gettext which;
-    binutilsCross = binutilsCross cross;
-    libcCross = libcCross cross;
+    binutilsCross = binutilsCross;
+    libcCross = libcCross;
     profiledCompiler = false;
     enableMultilib = false;
     # cross-building for ultrasparc in 4.4.3 will require disabling shared due to a gcc bug.
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41818
     enableShared = if (crossSystem.arch == "sparc64") then false else true;
     crossStageStatic = false;
+    cross = assert crossSystem != null; crossSystem;
   };
 
-  gccCrossStageStatic = cross: wrapGCCCross {
-    gcc = forceBuildDrv ((gcc44_realCross cross).override {
+  gccCrossStageStatic = wrapGCCCross {
+    gcc = forceBuildDrv (gcc44_realCross.override {
         crossStageStatic = true;
         langCC = false;
         libcCross = null;
         enableShared = true;
     });
     libc = null;
-    binutils = binutilsCross cross;
-    inherit cross;
+    binutils = binutilsCross;
+    cross = assert crossSystem != null; crossSystem;
   };
 
-  gccCrossStageFinal = cross: wrapGCCCross {
-    gcc = forceBuildDrv (gcc44_realCross cross);
-    libc = libcCross cross;
-    binutils = binutilsCross cross;
-    inherit cross;
+  gccCrossStageFinal = wrapGCCCross {
+    gcc = forceBuildDrv gcc44_realCross;
+    libc = libcCross;
+    binutils = binutilsCross;
+    cross = assert crossSystem != null; crossSystem;
   };
 
   gcc43_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc43.gcc.override {
@@ -2853,9 +2855,10 @@ let
       inherit fetchurl stdenv noSysDirs;
     });
 
-  binutilsCross = cross : forceBuildDrv (import ../development/tools/misc/binutils {
-      inherit stdenv fetchurl cross;
+  binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
+      inherit stdenv fetchurl;
       noSysDirs = true;
+      cross = assert crossSystem != null; crossSystem;
   });
 
   bison = bison23;
@@ -3713,10 +3716,10 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc29Cross = cross: forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
+  glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit stdenv fetchurl;
-    gccCross = gccCrossStageStatic cross;
-    kernelHeaders = linuxHeadersCross cross;
+    gccCross = gccCrossStageStatic;
+    kernelHeaders = linuxHeadersCross;
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
@@ -3726,16 +3729,16 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc211Cross = cross : forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
+  glibc211Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
     inherit stdenv fetchurl;
-    gccCross = gccCrossStageStatic cross;
-    kernelHeaders = linuxHeadersCross cross;
+    gccCross = gccCrossStageStatic;
+    kernelHeaders = linuxHeadersCross;
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
   # We can choose:
-  libcCross = cross: glibc211Cross cross;
-  # libcCross = cross: uclibcCross cross;
+  libcCross = glibc211Cross;
+  # libcCross = uclibcCross;
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv;
@@ -5869,8 +5872,9 @@ let
 
   linuxHeaders = linuxHeaders_2_6_28;
 
-  linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
-    inherit stdenv fetchurl cross perl;
+  linuxHeadersCross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
+    inherit stdenv fetchurl perl;
+    cross = assert crossSystem != null; crossSystem;
   });
 
   linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
@@ -7919,7 +7923,7 @@ let
     inherit fetchurl stdenv pkgconfig imagemagick boost python;
   };
 
-  qemu = import ../applications/virtualization/qemu/0.12.2.nix {
+  qemu = import ../applications/virtualization/qemu/0.12.3.nix {
     inherit stdenv fetchurl SDL zlib which;
   };
 
@@ -8706,7 +8710,7 @@ let
 
   };
 
-  kde4 = kde44;
+  kde4 = kde43;
   
   kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
@@ -9032,11 +9036,11 @@ let
   };
 
   # The SQLite branch.
-  nixSqlite = makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
+  nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
     inherit fetchurl stdenv perl curl bzip2 openssl aterm sqlite;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
-  };
+  });
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {

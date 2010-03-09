@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib, lzo, bzip2, nasm}:
 
-stdenv.mkDerivation {
-  name = "lrzip-0.23";
+stdenv.mkDerivation rec {
+  name = "lrzip-0.44";
 
   src = fetchurl {
-    url = http://ck.kolivas.org/apps/lrzip/lrzip-0.23.tar.bz2;
-    sha256 = "52514a46228266230760fe8f7da9dd669b4c82160e9c238f029cd535d0988065";
+    url = "http://ck.kolivas.org/apps/lrzip/${name}.tar.bz2";
+    sha256 = "1ncr6igs8v6yxp60sgb9h4ra8wb7jzbxiyj4a9m4nrxyw8fwm2iv";
   };
 
   NIX_CFLAGS_COMPILE = "-isystem ${zlib}/include";

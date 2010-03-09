@@ -114,7 +114,10 @@ stdenv.mkDerivation {
 
       kernelConfig = kernelConfigFun configCross;
 
-      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot);
+      # The substitution of crossAttrs happens *after* the stdenv cross adapter sets
+      # the parameters for the usual stdenv. Thus, we need to specify
+      # the ".hostDrv" in the buildInputs here.
+      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot).hostDrv;
     };
 
   meta = {
