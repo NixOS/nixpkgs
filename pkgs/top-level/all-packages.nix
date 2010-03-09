@@ -3067,6 +3067,10 @@ let
     inherit fetchurl stdenv lib;
   };
 
+  ired = import ../development/tools/analysis/radare/ired.nix {
+    inherit fetchurl stdenv;
+  };
+
   jikespg = import ../development/tools/parsing/jikespg {
     inherit fetchurl stdenv;
   };
