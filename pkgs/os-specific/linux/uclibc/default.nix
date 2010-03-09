@@ -31,12 +31,14 @@ stdenv.mkDerivation {
     sha256 = "0wr4hlybssiyswdc73wdcxr31xfbss3lnqiv5lcav3rg3v4r4vmb";
   };
 
+  # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
     make defconfig ${archMakeFlag}
     sed -e s@/usr/include@${linuxHeaders}/include@ \
       -e 's@^RUNTIME_PREFIX.*@RUNTIME_PREFIX="/"@' \
       -e 's@^DEVEL_PREFIX.*@DEVEL_PREFIX="/"@' \
       -e 's@.*UCLIBC_HAS_WCHAR.*@UCLIBC_HAS_WCHAR=y@' \
+      -e 's@.*UCLIBC_HAS_FTW.*@UCLIBC_HAS_FTW=y@' \
       -e 's@.*DO_C99_MATH.*@DO_C99_MATH=y@' \
       -e 's@.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*@UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y@' \
       ${configArmEABI} \
