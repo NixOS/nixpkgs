@@ -3747,7 +3747,7 @@ let
     else if (name == "uclibc") then uclibcCross
     else throw "Unknown libc";
 
-  libcCross = libcCrossChooser crossSystem.libc;
+  libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv;
