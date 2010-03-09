@@ -1,5 +1,31 @@
 with (import ./release-lib.nix);
+let
+  nativePlatforms = linux;
 
+  /* Basic list of packages to cross-build */
+  basicHostDrv = {
+    bison.hostDrv = nativePlatforms;
+    tightvnc.hostDrv = nativePlatforms;
+    #openoffice.hostDrv = nativePlatforms;
+    wxGTK.hostDrv = nativePlatforms;
+    #firefox = nativePlatforms;
+    xorg = {
+      #xorgserver.hostDrv = nativePlatforms;
+    };
+    nixUnstable.hostDrv = nativePlatforms;
+    linuxPackages_2_6_32.kernel.hostDrv = linux;
+    linuxPackages_2_6_33.kernel.hostDrv = linux;
+  };
+
+  /* Basic list of packages to be natively built,
+     but need a crossSystem defined to get meaning */
+  basicBuildDrv = {
+    gdbCross = nativePlatforms;
+  };
+
+  basic = basicHostDrv // basicBuildDrv;
+
+in
 (
 
 /* Test some cross builds to the Sheevaplug */
@@ -13,22 +39,13 @@ let
     platform = pkgs.platforms.sheevaplug;
     openssl.system = "linux-generic32";
   };
-  nativePlatforms = linux;
+
 in {
-  crossSheevaplugLinux = mapTestOnCross crossSystem (rec {
-    bison = nativePlatforms;
-    tightvnc = nativePlatforms;
-    #openoffice = nativePlatforms;
-    wxGTK = nativePlatforms;
-    #firefox = nativePlatforms;
-    xorg = {
-      #xorgserver = nativePlatforms;
-    };
-    nixUnstable = linux;
-    linuxPackages_2_6_32.kernel = linux;
-    linuxPackages_2_6_33.kernel = linux;
-    gdbCross = nativePlatforms;
-  });
+  crossSheevaplugLinux = mapTestOnCross crossSystem (
+    basic //
+    {
+      ubootSheevaplug.hostDrv = nativePlatforms;
+    });
 }) // (
 
 /* Test some cross builds to the mipsel */
@@ -50,22 +67,8 @@ let
     };
     openssl.system = "linux-generic32";
   };
-  nativePlatforms = linux;
 in {
-  crossMipselLinux = mapTestOnCross crossSystem (rec {
-    bison = nativePlatforms;
-    tightvnc = nativePlatforms;
-    #openoffice = nativePlatforms;
-    wxGTK = nativePlatforms;
-    #firefox = nativePlatforms;
-    xorg = {
-      #xorgserver = nativePlatforms;
-    };
-    nixUnstable = linux;
-    linuxPackages_2_6_32.kernel = linux;
-    linuxPackages_2_6_33.kernel = linux;
-    gdbCross = nativePlatforms;
-  });
+  crossMipselLinux = mapTestOnCross crossSystem basic;
 }) // (
 
 /* Test some cross builds to the ultrasparc */
@@ -88,20 +91,6 @@ let
     };
     openssl.system = "linux64-sparcv9";
   };
-  nativePlatforms = linux;
 in {
-  crossUltraSparcLinux = mapTestOnCross crossSystem (rec {
-    bison = nativePlatforms;
-    tightvnc = nativePlatforms;
-    #openoffice = nativePlatforms;
-    wxGTK = nativePlatforms;
-    #firefox = nativePlatforms;
-    xorg = {
-      #xorgserver = nativePlatforms;
-    };
-    nixUnstable = linux;
-    linuxPackages_2_6_32.kernel = linux;
-    linuxPackages_2_6_33.kernel = linux;
-    gdbCross = nativePlatforms;
-  });
+  crossUltraSparcLinux = mapTestOnCross crossSystem basic;
 })

@@ -54,7 +54,7 @@ rec {
         job = toJob value;
         getPkg = pkgs: setCrossMaintainers
           (pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
-          (pkgs.lib.getAttrFromPath (path ++ ["hostDrv"]) pkgs));
+          (pkgs.lib.getAttrFromPath path pkgs));
       in testOnCross crossSystem job.systems getPkg);
 
   setCrossMaintainers = pkg: pkg // { meta.maintainers = crossMaintainers; };
