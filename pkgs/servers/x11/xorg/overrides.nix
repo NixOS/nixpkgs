@@ -144,7 +144,7 @@ in
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto ];
     postInstall =
       ''
-        rm -rf $out/share/X11/xkb/compiled
+        rm -fr $out/share/X11/xkb/compiled
         ln -s /var/tmp $out/share/X11/xkb/compiled
       '';
   };
