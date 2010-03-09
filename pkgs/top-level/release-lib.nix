@@ -57,7 +57,12 @@ rec {
           (pkgs.lib.getAttrFromPath path pkgs));
       in testOnCross crossSystem job.systems getPkg);
 
-  setCrossMaintainers = pkg: pkg // { meta.maintainers = crossMaintainers; };
+  setCrossMaintainers = pkg:
+    pkg //
+    {
+      meta = (if pkg ? meta then pkg.meta else {})
+        // { maintainers = crossMaintainers; };
+    };
 
   /* Find all packages that have a meta.platforms field listing the
      supported platforms. */
