@@ -21,6 +21,11 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
+  crossAttrs = {
+    buildInputs = stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
+      stdenv.gccCross.libc.libiconv.hostDrv;
+  };
+
   meta = {
     description = "GNU gettext, a well integrated set of translation tools and documentation";
 

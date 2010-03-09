@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1j39g62fki0iyji9s62slgwdfskpkqy7rmjlqcnmsvsnxbxhc294";
   };
 
-  buildInputs = [gettext attr libtool];
+  buildNativeInputs = [gettext];
+  buildInputs = [attr libtool];
 
   configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
 

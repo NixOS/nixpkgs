@@ -8,7 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0zq11lykc7hfs9nsdnb8gqk354l82hswqj38607mvwj3b0zqvc4b";
   };
 
-  buildInputs = [ perl gmp ] ++ stdenv.lib.optional aclSupport acl;
+  buildNativeInputs = [ perl ];
+  buildInputs = [ gmp ] ++ stdenv.lib.optional aclSupport acl;
+
+  crossAttrs = {
+    buildInputs = [ gmp ]
+      ++ stdenv.lib.optional aclSupport acl.hostDrv
+      ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
+        stdenv.gccCross.libc.libiconv.hostDrv;
+  };
 
   # The tests are known broken on Cygwin
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),

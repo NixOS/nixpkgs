@@ -6401,7 +6401,7 @@ let
 */
 
   uclibcCross = import ../os-specific/linux/uclibc {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libiconv;
     linuxHeaders = linuxHeadersCross;
     gccCross = gccCrossStageStatic;
     cross = assert crossSystem != null; crossSystem;
