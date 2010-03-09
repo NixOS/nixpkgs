@@ -3740,9 +3740,14 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
+  glibcCross = glibc211Cross;
+
   # We can choose:
-  libcCross = glibc211Cross;
-  # libcCross = uclibcCross;
+  libcCrossChooser = name : if (name == "glibc") then glibcCross
+    else if (name == "uclibc") then uclibcCross
+    else throw "Unknown libc";
+
+  libcCross = libcCrossChooser crossSystem.libc;
 
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv;
@@ -6395,10 +6400,11 @@ let
   };
 */
 
-  uclibcCross = target: import ../os-specific/linux/uclibc {
+  uclibcCross = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv;
-    linuxHeaders = linuxHeadersCross target;
-    gccCross = gccCrossStageStatic target;
+    linuxHeaders = linuxHeadersCross;
+    gccCross = gccCrossStageStatic;
+    cross = assert crossSystem != null; crossSystem;
   };
 
   udev = makeOverridable (import ../os-specific/linux/udev) {

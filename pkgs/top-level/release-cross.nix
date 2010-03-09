@@ -37,11 +37,33 @@ let
     float = "soft";
     withTLS = true;
     platform = pkgs.platforms.sheevaplug;
+    libc = "glibc";
     openssl.system = "linux-generic32";
   };
 
 in {
   crossSheevaplugLinux = mapTestOnCross crossSystem (
+    basic //
+    {
+      ubootSheevaplug.hostDrv = nativePlatforms;
+    });
+}) // (
+
+/* Test some cross builds to the Sheevaplug - uclibc*/
+let
+  crossSystem = {
+    config = "armv5tel-unknown-linux-gnueabi";  
+    bigEndian = false;
+    arch = "arm";
+    float = "soft";
+    withTLS = true;
+    platform = pkgs.platforms.sheevaplug;
+    libc = "uclibc";
+    openssl.system = "linux-generic32";
+  };
+
+in {
+  crossSheevaplugLinuxUclibc = mapTestOnCross crossSystem (
     basic //
     {
       ubootSheevaplug.hostDrv = nativePlatforms;
@@ -56,6 +78,7 @@ let
     arch = "mips";
     float = "soft";
     withTLS = true;
+    libc = "glibc";
     platform = {
       name = "malta";
       kernelBaseConfig = "malta_defconfig";
@@ -80,6 +103,7 @@ let
     float = "hard";
     withTLS = true;
     cpu = "ultrasparc";
+    libc = "glibc";
     platform = {
         name = "ultrasparc";
         kernelHeadersBaseConfig = "sparc64_defconfig";

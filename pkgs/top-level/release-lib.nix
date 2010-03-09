@@ -52,17 +52,12 @@ rec {
     (path: value:
       let
         job = toJob value;
-        getPkg = pkgs: setCrossMaintainers
-          (pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
+        getPkg = pkgs: (pkgs.lib.addMetaAttrs {
+            schedulingPriority = toString job.schedulingPriority;
+            maintainers = crossMaintainers; 
+          }
           (pkgs.lib.getAttrFromPath path pkgs));
       in testOnCross crossSystem job.systems getPkg);
-
-  setCrossMaintainers = pkg:
-    pkg //
-    {
-      meta = (if pkg ? meta then pkg.meta else {})
-        // { maintainers = crossMaintainers; };
-    };
 
   /* Find all packages that have a meta.platforms field listing the
      supported platforms. */

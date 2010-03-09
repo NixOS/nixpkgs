@@ -1,17 +1,17 @@
-{stdenv, fetchurl, linuxHeaders, gccCross ? null}:
+{stdenv, fetchurl, linuxHeaders, cross ? null, gccCross ? null}:
 
 assert stdenv.isLinux;
+assert cross != null -> gccCross != null;
 
 let
-    target = if (gccCross != null) then gccCross.target else null;
-    enableArmEABI = (target == null && stdenv.system "armv5tel-linux")
-      || (target != null && target.arch == "arm");
+    enableArmEABI = (cross == null && stdenv.platform.kernelArch == "arm")
+      || (cross != null && cross.arch == "arm");
 
     configArmEABI = if enableArmEABI then
         ''-e 's/.*CONFIG_ARM_OABI.*//' \
         -e 's/.*CONFIG_ARM_EABI.*/CONFIG_ARM_EABI=y/' '' else "";
 
-    enableBigEndian = (target != null && target.bigEndian);
+    enableBigEndian = (cross != null && cross.bigEndian);
     
     configBigEndian = if enableBigEndian then ""
       else
@@ -19,12 +19,12 @@ let
         -e 's/.*ARCH_WANTS_BIG_ENDIAN.*/#ARCH_WANTS_BIG_ENDIAN=y/' \
         -e 's/.*ARCH_WANTS_LITTLE_ENDIAN.*/ARCH_WANTS_LITTLE_ENDIAN=y/' '';
 
-    archMakeFlag = if (target != null) then "ARCH=${target.arch}" else "";
-    crossMakeFlag = if (target != null) then "CROSS=${target.config}-" else "";
+    archMakeFlag = if (cross != null) then "ARCH=${cross.arch}" else "";
+    crossMakeFlag = if (cross != null) then "CROSS=${cross.config}-" else "";
 in
 stdenv.mkDerivation {
-  name = "uclibc-0.9.30.1" + stdenv.lib.optionalString (target != null)
-    ("-" + target.config);
+  name = "uclibc-0.9.30.1" + stdenv.lib.optionalString (cross != null)
+    ("-" + cross.config);
 
   src = fetchurl {
     url = http://www.uclibc.org/downloads/uClibc-0.9.30.1.tar.bz2;
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   '';
 
   # Cross stripping hurts.
-  dontStrip = if (target != null) then true else false;
+  dontStrip = if (cross != null) then true else false;
 
   makeFlags = [ crossMakeFlag "VERBOSE=1" ];
 
@@ -54,13 +54,13 @@ stdenv.mkDerivation {
 
   patches = [ ./unifdef-getline.patch ];
 
-  # This will allow the usual gcc-cross-wrapper strip phase work as usual
-  crossConfig = if (target != null) then target.config else null;
+#  # This will allow the usual gcc-cross-wrapper strip phase work as usual
+#  crossConfig = if (cross != null) then cross.config else null;
 
   installPhase = ''
     mkdir -p $out
     make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
-    (cd $out/include && ln -s ${linuxHeaders}/include/* .) || exit 1
+    (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so
   '';
   
