@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
    
 stdenv.mkDerivation rec {
-  name = "qemu-kvm-0.12.2";
+  name = "qemu-kvm-0.12.3";
    
   src = fetchurl {
     url = "mirror://sourceforge/kvm/${name}.tar.gz";
-    sha256 = "0nmg9dp3h040dkxq5vv4i7ip76v98rnhzqwy4pd88zznawc2k9l2";
+    sha256 = "1cn20jsmf27h23ynm804bz41i2fmmbg02gbnfknz6cwbjg4cvk3p";
   };
 
   patches = [ ./unix-domain.patch ./smb-tmpdir.patch ];
