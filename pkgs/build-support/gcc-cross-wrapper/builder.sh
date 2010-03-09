@@ -7,8 +7,8 @@ cflagsCompile="-B$out/bin/"
 if test -z "$nativeLibc"; then
     cflagsCompile="$cflagsCompile -B$libc/lib/ -isystem $libc/include"
     ldflags="$ldflags -L$libc/lib"
-    ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.?"
-    #ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
+    dlinker=`eval 'echo $libc/lib/ld-*.so.?'`
+    ldflagsBefore="-dynamic-linker $dlinker"
 fi
 
 if test -n "$nativeTools"; then
