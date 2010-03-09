@@ -9,14 +9,14 @@ rec {
   crossMaintainers = with pkgs.lib.maintainers; [ viric ];
 
   /* Set the Hydra scheduling priority for a job.  The default
-     priority (100) should be used for most jobs.  A different
+     priority (10) should be used for most jobs.  A different
      priority should only be used for a few particularly interesting
      jobs (in terms of giving feedback to developers), such as stdenv.
   */
   prio = level: job: toJob job // { schedulingPriority = level; };
 
   toJob = x: if builtins.isAttrs x then x else
-    { type = "job"; systems = x; schedulingPriority = 10; };
+    { type = "job"; systems = x; schedulingPriority = 5; };
 
   /* Perform a job on the given set of platforms.  The function `f' is
      called by Hydra for each platform, and should return some job
