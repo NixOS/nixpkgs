@@ -25,6 +25,9 @@ stdenv.mkDerivation {
   crossAttrs = {
     configurePhase = basicConfigure + ''
       sed -i 's,.*CONFIG_CROSS_COMPILER_PREFIX.*,CONFIG_CROSS_COMPILER_PREFIX="'$crossConfig-'",' .config
-    '';
+    '' +
+      (if (stdenv.cross.platform.kernelMajor == "2.4") then ''
+        sed -i 's,.*CONFIG_IONICE.*,CONFIG_IONICE=n,' .config
+      '' else "");
   };
 }
