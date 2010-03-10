@@ -80,20 +80,21 @@ let
     arch = "mips";
     float = "soft";
     withTLS = true;
-    libc = "glibc";
+    libc = "uclibc";
     platform = {
       name = "malta";
+      kernelMajor = "2.4";
       kernelBaseConfig = "malta_defconfig";
-      kernelHeadersBaseConfig = "malta_defconfig";
+      kernelHeadersBaseConfig = "defconfig-malta";
       uboot = null;
       kernelArch = "mips";
       kernelAutoModules = false;
-      kernelTarget = "vmlinux.bin";
+      kernelTarget = "vmlinux";
     };
     openssl.system = "linux-generic32";
   };
 in {
-  crossMipselLinux = mapTestOnCross crossSystem basic;
+  crossMipselLinux24 = mapTestOnCross crossSystem basic;
 }) // (
 
 /* Test some cross builds to the ultrasparc */
@@ -108,6 +109,7 @@ let
     libc = "glibc";
     platform = {
         name = "ultrasparc";
+        kernelMajor = "2.6";
         kernelHeadersBaseConfig = "sparc64_defconfig";
         kernelBaseConfig = "sparc64_defconfig";
         kernelArch = "sparc";

@@ -5891,10 +5891,23 @@ let
 
   linuxHeaders = linuxHeaders_2_6_28;
 
-  linuxHeadersCross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
+  linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
+
+  linuxHeaders24Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
+    inherit stdenv fetchurl perl;
+    cross = assert crossSystem != null; crossSystem;
+  });
+
+  # We can choose:
+  linuxHeadersCrossChooser = ver : if (ver == "2.4") then linuxHeaders24Cross
+    else if (ver == "2.6") then linuxHeaders26Cross
+    else throw "Unknown linux kernel version";
+
+  linuxHeadersCross = assert crossSystem != null;
+    linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
 
   linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
     inherit fetchurl stdenv unifdef;
