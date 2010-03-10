@@ -83,6 +83,8 @@ rec {
       echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
     ''; # */
 
+
+  # !!! Rename these functions to something more sensible.    
   call = f: f { inherit pkgs nixpkgs system; };
 
   apply = testFun: complete (call testFun);
@@ -96,5 +98,7 @@ rec {
     test = runTests vms t.testScript;
     report = makeReport test;
   };
-   
+
+  simpleTest = as: (apply ({ ... }: as)).test;
+
 }
