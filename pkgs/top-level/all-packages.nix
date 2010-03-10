@@ -7960,6 +7960,10 @@ let
     openexr = openexr_1_6_1;
   };
 
+  rapidsvn = import ../applications/version-management/rapidsvn {
+    inherit fetchurl stdenv wxGTK subversion apr aprutil python;
+  };
+
   ratpoison = import ../applications/window-managers/ratpoison {
     inherit fetchurl stdenv fontconfig readline pkgconfig autoconf automake;
     inherit (xlibs) libX11 inputproto libXt libXpm libXft
