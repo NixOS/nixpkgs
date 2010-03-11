@@ -3793,8 +3793,8 @@ let
     inherit fetchurl stdenv;
   };
 
-  gmp = 
-    if stdenv.system == "i686-darwin" then
+  gmp =
+    if false then # XXX: stdenv.system == "i686-darwin" then
       # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
       makeOverridable (import ../development/libraries/gmp/4.3.1.nix) {
         inherit stdenv fetchurl m4;
