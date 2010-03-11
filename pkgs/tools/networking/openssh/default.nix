@@ -16,11 +16,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-5.3p1";
+  name = "openssh-5.4p1";
 
   src = fetchurl {
     url = "ftp://ftp.nluug.nl/pub/security/OpenSSH/${name}.tar.gz";
-    sha256 = "04pgqmb43p5lr5wrfnvyys8r504brghshm24n60495wn5131gjfh";
+    sha256 = "0kj0qp43dn2pnkcgrbbhm2r9db448ppsmmzh22mj8j0h0h6yg5mf";
   };
 
   patchPhase = stdenv.lib.optionalString hpnSupport
