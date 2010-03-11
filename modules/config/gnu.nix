@@ -14,12 +14,6 @@ with pkgs.lib;
     };
   };
 
-  require =
-    [ ../installer/grub/grub.nix
-      ../services/networking/ssh/sshd.nix
-      ../services/networking/ssh/lshd.nix
-    ];
-
   config = mkIf config.gnu {
 
     environment.systemPackages = with pkgs;
