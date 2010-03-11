@@ -112,7 +112,7 @@ rec {
       buildrunner = writeText "vm-build" ''
         source $1
         ${coreutils}/bin/mkdir -p $TMPDIR
-        exec $origBuilder $origArgs &> /hostfs/$TMPDIR/logzzzz
+        exec $origBuilder $origArgs 
       '';
 
       testscript = ''
