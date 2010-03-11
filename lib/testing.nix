@@ -99,6 +99,46 @@ rec {
     report = makeReport test;
   };
 
+  runInMachine = {
+    drv
+  , machine
+  , preBuild ? ""
+  , postBuild ? ""
+  }:
+    let
+      vms =
+        buildVirtualNetwork { nodes = { client = machine; } ; };
+
+      buildrunner = writeText "vm-build" ''
+        source $1
+        ${coreutils}/bin/mkdir -p $TMPDIR
+        exec $origBuilder $origArgs &> /hostfs/$TMPDIR/logzzzz
+      '';
+
+      testscript = ''
+        startAll;
+        ${preBuild}
+        print STDERR $client->mustSucceed("source ${buildrunner} /hostfs".$client->stateDir."/saved-env");
+        ${postBuild}
+      '';
+
+      vmRunCommand = writeText "vm-run" ''
+        ${coreutils}/bin/mkdir -p client
+        export > client/saved-env
+        export PATH=${qemu_kvm}/bin:${coreutils}/bin
+        cp ${./test-driver/Machine.pm} Machine.pm
+        export tests='${testscript}'
+        ${perl}/bin/perl ${./test-driver/test-driver.pl} ${vms}/vms/*/bin/run-*-vm
+      '';
+
+    in
+      lib.overrideDerivation drv (attrs: {
+        builder = "${bash}/bin/sh";
+        args = ["-e" vmRunCommand];
+        origArgs = attrs.args;
+        origBuilder = attrs.builder;
+      });
+   
   simpleTest = as: (apply ({ ... }: as)).test;
 
 }
