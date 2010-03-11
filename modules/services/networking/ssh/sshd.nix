@@ -4,9 +4,7 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) openssh;
-
-  cfg = config.services.sshd;
+  cfg = config.services.openssh;
 
   nssModulesPath = config.system.nssModules.path;
 
@@ -27,7 +25,7 @@ let
       "}
 
       ${if cfg.allowSFTP then "
-        Subsystem sftp ${openssh}/libexec/sftp-server
+        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
       " else "
       "}
 
@@ -49,13 +47,13 @@ in
   
   options = {
   
-    services.sshd = {
+    services.openssh = {
 
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable the Secure Shell daemon, which allows secure
-          remote logins.
+          Whether to enable the OpenSSH secure shell daemon, which
+          allows secure remote logins.
         '';
       };
 
@@ -111,21 +109,21 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.sshd.enable {
+  config = mkIf config.services.openssh.enable {
 
     users.extraUsers = singleton
-      { name = "sshd";
+      { name = "opensshd";
         uid = config.ids.uids.sshd;
         description = "SSH privilege separation user";
         home = "/var/empty";
       };
 
     environment.etc = singleton
-      { source = "${openssh}/etc/ssh/moduli";
+      { source = "${pkgs.openssh}/etc/ssh/moduli";
         target = "ssh/moduli";
       };
 
-    jobs.sshd = {
+    jobs.openssh = {
 
         description = "OpenSSH server";
 
@@ -138,17 +136,16 @@ in
             mkdir -m 0755 -p /etc/ssh
 
             if ! test -f /etc/ssh/ssh_host_dsa_key; then
-                ${openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ""
+                ${pkgs.openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ""
             fi
           '';
 
         daemonType = "fork";
 
-        exec = "${openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
+        exec = "${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
       };
 
     networking.firewall.allowedTCPPorts = cfg.ports;
-          
   };
 
 }

@@ -73,7 +73,13 @@ in zipModules ([]
 
 ++ rename obsolete "boot.initrd.extraKernelModules" to "boot.initrd.kernelModules"
 
-# X11
+# OpenSSH
+++ rename obsolete "services.sshd.ports" to "services.openssh.ports"
+++ rename obsolete "services.sshd.enable" to "services.openssh.enable"
+++ rename obsolete "services.sshd.allowSFTP" to "services.openssh.allowSFTP"
+++ rename obsolete "services.sshd.forwardX11" to "services.openssh.forwardX11"
+++ rename obsolete "services.sshd.gatewayPorts" to "services.openssh.gatewayPorts"
+++ rename obsolete "services.sshd.permitRootLogin" to "services.openssh.permitRootLogin"
 ++ rename obsolete "services.xserver.startSSHAgent" to "services.xserver.startOpenSSHAgent"
 
 # KDE
