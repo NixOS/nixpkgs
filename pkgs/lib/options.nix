@@ -193,8 +193,8 @@ rec {
     else if all builtins.isFunction list then x: mergeDefaultOption (map (f: f x) list)
     else if all isList list then concatLists list
     else if all isAttrs list then fold lib.mergeAttrs {} list
-    else if all (x: true == x || false == x) list then fold lib.or false list
-    else if all (x: x == toString x) list then lib.concatStrings list
+    else if all builtins.isBool list then fold lib.or false list
+    else if all builtins.isString list then lib.concatStrings list
     else throw "Cannot merge values.";
 
   mergeTypedOption = typeName: predicate: merge: list:
