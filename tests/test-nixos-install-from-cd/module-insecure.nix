@@ -11,7 +11,7 @@ in
 
 {
 
-  services.sshd = {
+  services.openssh = {
     enable = true;
     permitRootLogin = "yes";
   };

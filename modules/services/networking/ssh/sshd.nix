@@ -123,7 +123,7 @@ in
         target = "ssh/moduli";
       };
 
-    jobs.openssh = {
+    jobs.sshd = {
 
         description = "OpenSSH server";
 

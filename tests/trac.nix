@@ -16,7 +16,7 @@
     postgresql =
       {config, pkgs, ...}:
       {
-        services.sshd.enable = true;
+        services.openssh.enable = true;
         services.postgresql.enable = true;
         services.postgresql.enableTCPIP = true;
         services.postgresql.authentication = ''

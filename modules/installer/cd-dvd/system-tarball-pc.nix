@@ -22,7 +22,7 @@ let
 
         # Add your own options below and run "nixos-rebuild switch".
         # E.g.,
-        #   services.sshd.enable = true;
+        #   services.openssh.enable = true;
       }
     '';
   
@@ -173,6 +173,6 @@ in
   # Allow sshd to be started manually through "start sshd".  It should
   # not be started by default on the installation CD because the
   # default root password is empty.
-  services.sshd.enable = true;
+  services.openssh.enable = true;
   jobs.sshd.startOn = pkgs.lib.mkOverride 50 {} "";
 }

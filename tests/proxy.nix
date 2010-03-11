@@ -6,7 +6,7 @@ let
     { config, pkgs, ... }:
 
     {
-      services.sshd.enable = true;
+      services.openssh.enable = true;
 
       services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";

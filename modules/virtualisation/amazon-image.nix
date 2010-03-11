@@ -83,8 +83,8 @@ with pkgs.lib;
 
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
-  services.sshd.enable = true;
-  services.sshd.permitRootLogin = "without-password";
+  services.openssh.enable = true;
+  services.openssh.permitRootLogin = "without-password";
 
   # Obtain the SSH key and host name at startup time.
   jobs.fetchEC2Data =
