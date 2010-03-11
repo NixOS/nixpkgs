@@ -138,7 +138,28 @@ rec {
         origArgs = attrs.args;
         origBuilder = attrs.builder;
       });
-   
+
+  runInMachineWithX = args :
+    let
+      client =
+        { config, pkgs, ... }:
+        {
+          virtualisation.memorySize = 1024;
+          services.xserver.enable = true;
+          services.xserver.displayManager.slim.enable = false;
+          services.xserver.displayManager.auto.enable = true;
+          services.xserver.windowManager.default = "icewm";
+          services.xserver.windowManager.icewm.enable = true;
+          services.xserver.desktopManager.default = "none";
+        };
+    in
+      runInMachine ({
+            machine = client;
+            preBuild = ''
+              $client->waitForX ;
+            '' ;
+          } // args );   
+
   simpleTest = as: (apply ({ ... }: as)).test;
 
 }
