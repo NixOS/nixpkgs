@@ -195,6 +195,8 @@ rec {
     else if all isAttrs list then fold lib.mergeAttrs {} list
     else if all builtins.isBool list then fold lib.or false list
     else if all builtins.isString list then lib.concatStrings list
+    else if all builtins.isInt list && all (x: x == head list) list
+         then head list
     else throw "Cannot merge values.";
 
   mergeTypedOption = typeName: predicate: merge: list:
