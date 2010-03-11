@@ -1,4 +1,5 @@
 [ ./config/fonts.nix
+  ./config/gnu.nix
   ./config/i18n.nix
   ./config/krb5.nix
   ./config/ldap.nix
