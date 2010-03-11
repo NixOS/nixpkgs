@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-0.15pre20427";
-  
+  name = "nix-0.15pre20548";
+
   src = fetchurl {
     url = "http://hydra.nixos.org/build/311195/download/4/${name}.tar.bz2";
-    sha256 = "844e5878d55a68ae2aac657718a1960dcfc943f6738ebdfb2bc93e8c462d0ad7";
+    sha256 = "1fiixfs53f8d54jadzzx2akqkdpz6ncbhixb6bkrnrgxbfjdydrr";
   };
 
   buildNativeInputs = [perl];
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Nix Deployment System";
     homepage = http://nixos.org/;
-    license = "LGPL";
+    license = "LGPLv2+";
   };
 }
