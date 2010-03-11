@@ -18,6 +18,10 @@ rec {
     { inherit stdenv;
     } // args);
 
+  mvnBuild = args: import ./maven-build.nix (
+    { inherit stdenv;
+    } // args);
+
   nixBuild = args: import ./nix-build.nix (
     { inherit stdenv;
     } // args);
