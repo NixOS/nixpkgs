@@ -24,7 +24,56 @@ let
         in live CDs.
       '';
     };
-  
+
+    installer.basePackages = mkOption {
+      description = ''
+        The list of base packages available in the system profile of the
+        installation CD.  Note that modules such as
+        <literal>installation-cd-graphical.nix</literal> add
+        packages to this list.
+      '';
+
+      default =
+        [ pkgs.subversion # for nixos-checkout
+          pkgs.w3m # needed for the manual anyway
+          pkgs.testdisk # useful for repairing boot problems
+          pkgs.mssys # for writing Microsoft boot sectors / MBRs
+          pkgs.parted
+          pkgs.ddrescue
+          pkgs.ccrypt
+          pkgs.cryptsetup # needed for dm-crypt volumes
+
+          # Some networking tools.
+          pkgs.sshfsFuse
+          pkgs.socat
+          pkgs.screen
+          pkgs.wpa_supplicant # !!! should use the wpa module
+
+          # Hardware-related tools.
+          pkgs.sdparm
+          pkgs.hdparm
+          pkgs.dmraid
+
+          # Tools to create / manipulate filesystems.
+          pkgs.ntfsprogs # for resizing NTFS partitions
+          pkgs.btrfsProgs
+          pkgs.xfsprogs
+          pkgs.jfsutils
+          pkgs.jfsrec
+
+          # Some compression/archiver tools.
+          pkgs.unrar
+          pkgs.unzip
+          pkgs.zip
+          pkgs.xz
+          pkgs.dar # disk archiver
+
+          # Some editors.
+          pkgs.nvi
+          pkgs.bvi # binary editor
+          pkgs.joe
+        ];
+     };
   };
 
 
@@ -99,46 +148,7 @@ in
 
   # Include some utilities that are useful for installing or repairing
   # the system.
-  environment.systemPackages =
-    [ pkgs.subversion # for nixos-checkout
-      pkgs.w3m # needed for the manual anyway
-      pkgs.testdisk # useful for repairing boot problems
-      pkgs.mssys # for writing Microsoft boot sectors / MBRs
-      pkgs.parted
-      pkgs.ddrescue
-      pkgs.ccrypt
-      pkgs.cryptsetup # needed for dm-crypt volumes
-
-      # Some networking tools.
-      pkgs.sshfsFuse
-      pkgs.socat
-      pkgs.screen
-      pkgs.wpa_supplicant # !!! should use the wpa module
-
-      # Hardware-related tools.
-      pkgs.sdparm
-      pkgs.hdparm
-      pkgs.dmraid
-
-      # Tools to create / manipulate filesystems.
-      pkgs.ntfsprogs # for resizing NTFS partitions
-      pkgs.btrfsProgs
-      pkgs.xfsprogs
-      pkgs.jfsutils
-      pkgs.jfsrec
-
-      # Some compression/archiver tools.
-      pkgs.unrar
-      pkgs.unzip
-      pkgs.zip
-      pkgs.xz
-      pkgs.dar # disk archiver
-      
-      # Some editors.
-      pkgs.nvi
-      pkgs.bvi # binary editor
-      pkgs.joe
-    ];
+  environment.systemPackages = config.installer.basePackages;
 
   # The initrd has to contain any module that might be necessary for
   # mounting the CD/DVD.
