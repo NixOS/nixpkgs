@@ -24,20 +24,6 @@ let
           }
         ];
 
-      makeNixBuildUser = nr:
-        { name = "nixbld${toString nr}";
-          description = "Nix build user ${toString nr}";
-
-          /* For consistency with the setgid(2), setuid(2), and setgroups(2)
-             calls in `libstore/build.cc', don't add any supplementary group
-             here.  */
-          uid = builtins.add ids.uids.nixbld nr;
-          group = "nixbld";
-          extraGroups = [];
-        };
-
-      nixBuildUsers = map makeNixBuildUser (pkgs.lib.range 1 10);
-      
       addAttrs =
         { name
         , description
@@ -52,7 +38,7 @@ let
         }:
         { inherit name description uid group extraGroups home shell createHome password; };
 
-    in map addAttrs (defaultUsers ++ nixBuildUsers ++ config.users.extraUsers);
+    in map addAttrs (defaultUsers ++ config.users.extraUsers);
 
 
   # Groups to be created/updated by NixOS.

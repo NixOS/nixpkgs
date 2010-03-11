@@ -5,6 +5,18 @@ with pkgs.lib;
 let
 
   inherit (config.environment) nix;
+  
+  makeNixBuildUser = nr:
+    { name = "nixbld${toString nr}";
+      description = "Nix build user ${toString nr}";
+
+      /* For consistency with the setgid(2), setuid(2), and setgroups(2)
+         calls in `libstore/build.cc', don't add any supplementary group
+         here.  */
+      uid = builtins.add config.ids.uids.nixbld nr;
+      group = "nixbld";
+      extraGroups = [];
+    };
 
 in
 
@@ -148,6 +160,17 @@ in
           Environment variables used by Nix.
         ";
       };
+
+      nrBuildUsers = mkOption {
+        default = 10;
+        description = ''
+          Number of <literal>nixbld</literal> user accounts created to
+          perform secure concurrent builds.  If you receive an error
+          message saying that “all build users are currently in use”,
+          you should increase this value.
+        '';
+      };
+      
     };
   };
 
@@ -213,6 +236,9 @@ in
           ''
             export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
             ${config.nix.envVars}
+            # To reduce the load on Hydra, don't start all those
+            # unnecessary substituter processes.
+            export NIX_SUBSTITUTERS=
             exec \
               nice -n ${builtins.toString config.nix.daemonNiceLevel} \
               ${pkgs.utillinux}/bin/ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
@@ -260,6 +286,8 @@ in
         export https_proxy=${config.nix.proxy}
         export ftp_proxy=${config.nix.proxy}
       '';
+
+    users.extraUsers = map makeNixBuildUser (pkgs.lib.range 1 config.nix.nrBuildUsers);
 
   };
 
