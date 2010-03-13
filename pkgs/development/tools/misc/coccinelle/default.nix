@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
          --prefix "LD_LIBRARY_PATH" ":" "$out/lib"                      \
          --prefix "PYTHONPATH" ":" "$out/share/coccinelle/python"
 
-       make test
+       yes | make test
     '';
 
   meta = {
