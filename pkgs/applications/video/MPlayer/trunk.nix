@@ -35,9 +35,9 @@ stdenv.mkDerivation {
 
   name = "mplayer-trunk";
 
-  # REGION AUTO UPDATE:     { name="MPlayer"; type = "svn"; url="svn://svn.mplayerhq.hu/mplayer/trunk"; }
-  src= sourceFromHead "MPlayer-29990.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/MPlayer-29990.tar.gz"; sha256 = "8d9ac59e7cc3e2bc9ca46281ac2c268d460e041aceac056b600205c8c5235169"; });
+  # REGION AUTO UPDATE:       { name="MPlayer"; type = "svn"; url="svn://svn.mplayerhq.hu/mplayer/trunk"; }
+  src = sourceFromHead "MPlayer-30676.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/MPlayer-30676.tar.gz"; sha256 = "3d5fc038d34dfc5af15f1510f06920710d083f61f29fe31f2dfa3cdcac2a4424"; });
   # END
 
   buildInputs =
