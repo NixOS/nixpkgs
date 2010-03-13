@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   # fix rpath which is removed by cmake..
   postFixup = ''
-    for i in $buildInputs ${stdenv.gcc.gcc}; do
+    for i in $buildNativeInputs ${stdenv.gcc.gcc}; do
       [ -d "$i/lib" ] && RPATH="$RPATH:$i/lib"
       [ -d "$i/lib64" ] && RPATH="$RPATH:$i/lib64"
     done
