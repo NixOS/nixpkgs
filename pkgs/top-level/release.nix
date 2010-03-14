@@ -102,7 +102,7 @@ with (import ./release-lib.nix);
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
-  #gitFull = linux;
+  gitFull = linux;
   glibc = linux;
   glibcLocales = linux;
   glxinfo = linux;
