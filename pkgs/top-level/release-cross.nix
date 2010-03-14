@@ -105,7 +105,6 @@ let
     arch = "sparc64";
     float = "hard";
     withTLS = true;
-    cpu = "ultrasparc";
     libc = "glibc";
     platform = {
         name = "ultrasparc";
@@ -118,6 +117,7 @@ let
         uboot = null;
     };
     openssl.system = "linux64-sparcv9";
+    gcc.cpu = "ultrasparc";
   };
 in {
   crossUltraSparcLinux = mapTestOnCross crossSystem basic;
