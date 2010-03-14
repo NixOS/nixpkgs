@@ -35,7 +35,9 @@ rec {
       ''
         BLK_DEV_RAM y
         BLK_DEV_INITRD y
+        BLK_DEV_CRYPTOLOOP m
         BLK_DEV_DM m
+        DM_CRYPT m
         MD y
         REISERFS_FS m
         EXT4_FS m
