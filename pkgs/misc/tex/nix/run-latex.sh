@@ -2,6 +2,9 @@ source $stdenv/setup
 
 ensureDir $out
 
+export TEXMFCNF=$TMPDIR:
+echo 'max_print_line = 8192' >> $TMPDIR/texmf.cnf
+
 mkdir root
 cd root
 
@@ -125,6 +128,10 @@ else
 fi
 
 
+echo "WARNINGS:"
+cat $tmpFile | grep "Warning:" | grep -v "Citation.*undefined" || true
+
+echo
 echo "OVERFULL/UNDERFULL:"
 cat $tmpFile | egrep "Overfull|Underfull" || true
 
