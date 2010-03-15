@@ -265,6 +265,7 @@ let
 
   
   upstartJob = {name, config, ...}: {
+  
     options = {
       jobDrv = mkOption {
         default = makeJob config;
@@ -282,6 +283,7 @@ let
         replaceChars ["<" ">" "*"] ["_" "_" "_name_"] name
       );
     };
+    
   };
 
 in
@@ -331,15 +333,6 @@ in
     # do status queries.
     services.dbus.packages = [ upstart ];
 
-    # !!! fix this
-    /*
-    tests.upstartJobs = { recurseForDerivations = true; } //
-      builtins.listToAttrs (map (job: {
-        name = removePrefix "upstart-" job.name;
-        value = job;
-      }) jobs);
-    */
-  
   };
 
 }
