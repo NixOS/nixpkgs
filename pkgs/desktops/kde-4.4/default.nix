@@ -237,6 +237,12 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
+  kdiff3 = import ./extragear/kdiff3 {
+    inherit (pkgs) stdenv fetchurl cmake qt4 gettext perl;
+    inherit kdelibs kdebase;
+    inherit automoc4 phonon;
+  };
+
   kipiplugins = import ./extragear/kipi-plugins {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 libxml2 libxslt gettext;
     inherit kdelibs kdepimlibs kdegraphics;
