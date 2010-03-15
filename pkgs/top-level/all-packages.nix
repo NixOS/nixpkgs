@@ -1422,6 +1422,11 @@ let
     inherit stdenv fetchurl;
   };
 
+  qshowdiff = import ../tools/text/qshowdiff {
+    inherit fetchurl stdenv perl;
+    qt = qt4;
+  };
+
   reiser4progs = import ../tools/filesystems/reiser4progs {
     inherit fetchurl stdenv libaal;
   };
