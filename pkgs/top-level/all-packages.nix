@@ -2466,6 +2466,12 @@ let
   };
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
+  # To be removed on stdenv-updates
+  # By now this has at least the fix of setting the proper rpath when a file "libbla.so"
+  # is passed directly to the linker.
+  # This is of interest to programs built by cmake, because this is a common practice
+  # in cmake builds.
+  wrapGCC2 = wrapGCCWith (import ../build-support/gcc-wrapper/default2.nix) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
@@ -6769,10 +6775,11 @@ let
   };
 
   avidemux = import ../applications/video/avidemux {
-    inherit fetchurl stdenv cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
+    inherit fetchurl cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
       alsaLib lame faac faad2 libvorbis;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
+    stdenv = overrideGCC stdenv (wrapGCC2 gcc.gcc);
   };
 
   awesome = import ../applications/window-managers/awesome {
@@ -7900,7 +7907,8 @@ let
   };
 
   paraview = import ../applications/graphics/paraview {
-    inherit fetchurl stdenv cmake qt4;
+    inherit fetchurl cmake qt4;
+    stdenv = overrideGCC stdenv (wrapGCC2 gcc.gcc);
   };
 
   partitionManager = import ../tools/misc/partition-manager {
