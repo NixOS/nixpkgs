@@ -49,6 +49,13 @@ let
       private dir = ${privateDir}
       ${optionalString cfg.syncPasswordsByPam "pam password change = true"}
 
+      ${if cfg.defaultShare.enable then ''
+      [default]
+      path = /home/smbd
+      read only = ${if cfg.defaultShare.writeable then "no" else "yes"}
+      guest ok = ${if cfg.defaultShare.guest then "yes" else "no"}
+      ''else ""}
+
       ${cfg.extraConfig}
     '';
 
@@ -136,6 +143,22 @@ in
           internal use to pass filepath to samba pam module
         ";
       };
+
+      defaultShare = {
+        enable = mkOption {
+	  description = "Whether to share /home/smbd as 'default'";
+	  default = false;
+	};
+        writeable = mkOption {
+	  description = "Whether to allow write access to default share";
+	  default = false;
+	};
+        guest = mkOption {
+	  description = "Whether to allow guest access to default share";
+	  default = true;
+	};
+      };
+
     };
 
   };
