@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "magit-0.7-94-gbf42bf8";
 
   src = fetchurl {
-    url = "http://gitorious.org/magit/mainline/archive-tarball/magit_0.7-94-gbf42bf8";
-    sha256 = "6543a4e312d1a4249ff1edd192914d02f1a9016c321c8fdd0f015074e522759a";
+    url = "http://cryp.to/magit-mainline-0.7-94-gbf42bf8.tar.gz";
+    sha256 = "16km4bjp8l011zfqy71jdh0skw829n8r5lgdy6gj996i2bis8hv5";
   };
   unpackCmd = "tar xf $src";
   preConfigure = "./autogen.sh";
