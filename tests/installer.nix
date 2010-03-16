@@ -78,8 +78,7 @@ let
       # Make the Nix store in this VM writable using AUFS.  Use Linux
       # 2.6.27 because 2.6.32 doesn't work (probably we need AUFS2).
       # This should probably be moved to qemu-vm.nix.
-      boot.kernelPackages = (if pkgs ? linuxPackages then
-        pkgs.linuxPackages_2_6_27 else pkgs.kernelPackages_2_6_27);
+      boot.kernelPackages = pkgs.linuxPackages_2_6_27;
       boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
       boot.initrd.availableKernelModules = [ "aufs" ];
 

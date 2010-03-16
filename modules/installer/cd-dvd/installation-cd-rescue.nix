@@ -33,8 +33,7 @@
     lsof
   ];
 
-  boot.kernelPackages = (if (nixpkgs ? linuxlPackages then
-    pkgs.linuxPackages_2_6_32 else pkgs.kernelPackages_2_6_32);
+  boot.kernelPackages = pkgs.linuxPackages_2_6_32;
   boot.initrd.kernelModules = ["evdev" "i8042" "pcips2" "serio"
     "sd_mod" "libata" "unix" "usbhid" "uhci_hcd" "atkbd" "xtkbd" "fbdev"
     "iso9660" "udf" "loop"];

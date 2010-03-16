@@ -11,13 +11,8 @@ let kernel = config.boot.kernelPackages.kernel; in
   options = {
   
     boot.kernelPackages = mkOption {
-      default = (if pkgs ? linuxPackages then pkgs.linuxPackages
-        else pkgs.kernelPackages);
-      example = ''
-        Example code (copy & paste):
-        pkgs.kernelPackages_2_6_25
-      '';
-
+      default = pkgs.linuxPackages;
+      example = "pkgs.linuxPackages_2_6_25";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are

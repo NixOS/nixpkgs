@@ -123,13 +123,6 @@ let
       description = "minimal";
     };
 
-    /*    
-    iso_rescue = makeIso {
-      module = ./modules/installer/cd-dvd/installation-cd-rescue.nix;
-      description = "rescue";
-    };
-    */
-    
     iso_graphical = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
       description = "graphical";
