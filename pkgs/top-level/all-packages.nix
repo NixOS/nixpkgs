@@ -2257,9 +2257,11 @@ let
     };
   };
 
-  haxe = import ../development/compilers/haxe {
-    inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper;
+  haxeDist = import ../development/compilers/haxe {
+    inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
   };
+  haxe = haxeDist.haxe;
+  haxelib = haxeDist.haxelib;
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;

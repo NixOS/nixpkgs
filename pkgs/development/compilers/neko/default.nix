@@ -28,8 +28,12 @@ composableDerivation {} ( fixed : {
     sed -i \
       -e 's@"/usr/include",@${includes}@' \
       src/tools/install.neko
-    sed -i "s@/usr/local@$out@" Makefile
+    sed -i "s@/usr/local@$out@" Makefile vm/load.c
+    # make sure that nekotools boot finds the neko executable and not our wrapper:
     ensureDir $out/{bin,lib}
+
+    sed -i "s@\"neko\"@\".neko-wrapped\"@" src/tools/nekoboot.neko
+    ln -s ./neko bin/.neko-wrapped
   '';
 
   inherit zlib;
@@ -45,12 +49,18 @@ composableDerivation {} ( fixed : {
   # if stripping was done neko and nekoc would be the same. ?!
   dontStrip = 1;
 
+  # neko-wrapped: nekotools boot has to find it. So don't prefix wrapped executable by "."
   postInstall = ''
-    wrapProgram "$out/bin/nekoc" \
-      --set "LD_LIBRARY_PATH" $out/lib/neko \
+    for prog in nekotools nekoc; do
+      wrapProgram "$out/bin/$prog" \
+        --prefix "LD_LIBRARY_PATH" $out/lib/neko
+    done
   
     wrapProgram "$out/bin/neko" \
-      --set "LD_LIBRARY_PATH" $out/lib/neko \
+      --prefix "LD_LIBRARY_PATH" $out/lib/neko
+
+    # create symlink so that nekotools boot finds not wrapped neko-wrapped executable
+    ln -s  ln -s ../../bin/.neko-wrapped $out/lib/neko
   '';
 
   # TODO make them optional and make them work 
