@@ -8752,7 +8752,7 @@ let
 
   };
 
-  kde4 = kde43;
+  kde4 = kde44;
 
   kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
