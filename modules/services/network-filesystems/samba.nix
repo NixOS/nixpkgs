@@ -124,7 +124,7 @@ in
             log file = /var/log/samba/log.%m
             log level = 10
             max log size = 50000
-            security = user
+            security = ${cfg.securityType}
 
             client lanman auth = Yes
             dns proxy = no
@@ -157,6 +157,12 @@ in
 	  description = "Whether to allow guest access to default share";
 	  default = true;
 	};
+      };
+
+      securityType = mkOption {
+        description = "Samba security type";
+	default = "user";
+	example = "share";
       };
 
     };
