@@ -236,9 +236,6 @@ in
           ''
             export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
             ${config.nix.envVars}
-            # To reduce the load on Hydra, don't start all those
-            # unnecessary substituter processes.
-            export NIX_SUBSTITUTERS=
             exec \
               nice -n ${builtins.toString config.nix.daemonNiceLevel} \
               ${pkgs.utillinux}/bin/ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
