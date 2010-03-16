@@ -3808,14 +3808,14 @@ let
     inherit fetchurl stdenv;
   };
 
-  gmp = 
+  gmp =
     if stdenv.system == "i686-darwin" then
       # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
       makeOverridable (import ../development/libraries/gmp/4.3.1.nix) {
         inherit stdenv fetchurl m4;
         cxx = false;
       }
-    else 
+    else
       makeOverridable (import ../development/libraries/gmp) {
         inherit stdenv fetchurl m4;
         cxx = false;
@@ -4450,7 +4450,7 @@ let
     inherit fetchurl stdenv pkgconfig;
     inherit (xlibs) libX11 libxcb xcbutil;
   };
-  
+
   libtasn1 = import ../development/libraries/libtasn1 {
     inherit fetchurl stdenv;
   };
@@ -4883,17 +4883,17 @@ let
   librdf_raptor = import ../development/libraries/librdf/raptor.nix {
     inherit fetchurl stdenv lib libxml2 curl;
   };
-  
+
   librdf_rasqal = import ../development/libraries/librdf/rasqal.nix {
     inherit fetchurl stdenv lib pcre libxml2 gmp librdf_raptor;
   };
-  
+
   librdf = import ../development/libraries/librdf {
     inherit fetchurl stdenv lib pkgconfig librdf_raptor ladspaH openssl zlib;
   };
 
   redland = redland_1_0_10;
-  
+
   redland_1_0_8 = makeOverridable (import ../development/libraries/redland/1.0.8.nix) {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
       libxslt curl pcre librdf_rasqal librdf_raptor;
@@ -6616,7 +6616,7 @@ let
     inherit fetchurl stdenv pkgconfig gettext
       intltool perl perlXMLParser libxml2 glib;
   };
-  
+
   shared_desktop_ontologies = import ../data/misc/shared-desktop-ontologies {
     inherit stdenv fetchurl cmake;
   };
@@ -7050,7 +7050,7 @@ let
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
-      pkgconfig bzip2 zlib libtool freetype fontconfig 
+      pkgconfig bzip2 zlib libtool freetype fontconfig
       ghostscript;
     inherit (xlibs) libX11;
   };
@@ -7174,7 +7174,7 @@ let
     };
 
     magit = import ../applications/editors/emacs-modes/magit {
-      inherit fetchurl stdenv emacs texinfo;
+      inherit fetchurl stdenv emacs texinfo autoconf automake;
     };
 
     maudeMode = import ../applications/editors/emacs-modes/maude {
@@ -8753,13 +8753,13 @@ let
   };
 
   kde4 = kde43;
-  
+
   kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt45;
     popplerQt4 = popplerQt45;
   });
-  
+
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
     openexr = openexr_1_6_1;
     qt4 = qt46;
@@ -8767,7 +8767,7 @@ let
     sip = sip410;
     pyqt4 = pyqt47;
   });
-  
+
 
   kdelibs = kde3.kdelibs;
   kdebase = kde3.kdebase;

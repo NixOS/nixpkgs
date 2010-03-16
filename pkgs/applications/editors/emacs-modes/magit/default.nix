@@ -1,14 +1,16 @@
-{stdenv, fetchurl, emacs, texinfo}:
+{stdenv, fetchurl, emacs, texinfo, autoconf, automake}:
 
 stdenv.mkDerivation {
-  name = "magit-0.7";
+  name = "magit-0.7-94-gbf42bf8";
 
   src = fetchurl {
-    url = "http://zagadka.vm.bytemark.co.uk/magit/magit-0.7.tar.gz";
-    sha256 = "0qry1vj41pycwkf71sqrz3zgzh85zdg5acq26asscq4s7jksrjiz";
+    url = "http://gitorious.org/magit/mainline/archive-tarball/magit_0.7-94-gbf42bf8";
+    sha256 = "6543a4e312d1a4249ff1edd192914d02f1a9016c321c8fdd0f015074e522759a";
   };
+  unpackCmd = "tar xf $src";
+  preConfigure = "./autogen.sh";
 
-  buildInputs = [emacs texinfo];
+  buildInputs = [emacs texinfo autoconf automake];
 
   meta = {
     description = "An an interface to Git, implemented as an extension to Emacs.";
