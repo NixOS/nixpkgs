@@ -4,21 +4,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-0.15pre20560";
+  name = "nix-0.15pre20612";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/322259/download/4/${name}.tar.bz2";
-    sha256 = "16sjb8bdknzjqwhwlcxx1jwq3lij2lvz6vda3w1b6pjhhhclj58f";
+    url = "http://hydra.nixos.org/build/325045/download/4/${name}.tar.bz2";
+    sha256 = "a0fecb2d9cced473880649d7ee6448688d63416fb2e26bdbadec069e5b619bce";
   };
 
-  buildNativeInputs = [perl];
-  buildInputs = [curl openssl];
+  buildNativeInputs = [ perl ];
+  buildInputs = [ curl openssl ];
 
-  configureFlags = ''
-    --with-store-dir=${storeDir} --localstatedir=${stateDir}
-    --with-aterm=${aterm} --with-bzip2=${bzip2}
-    --disable-init-state
-  '';
+  configureFlags =
+    ''
+      --with-store-dir=${storeDir} --localstatedir=${stateDir}
+      --with-aterm=${aterm} --with-bzip2=${bzip2}
+      --disable-init-state
+    '';
 
   doCheck = true;
 
