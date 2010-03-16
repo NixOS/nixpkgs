@@ -2621,8 +2621,8 @@ let
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  pythonBase = if stdenv.isDarwin then python25Base else python26Base;
-  pythonFull = if stdenv.isDarwin then python25Full else python26Full;
+  pythonBase = python26Base;
+  pythonFull = python26Full;
 
   python24 = import ../development/interpreters/python/2.4 {
     inherit fetchurl stdenv zlib bzip2;
