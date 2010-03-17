@@ -22,10 +22,14 @@ rec {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversion;
+      cpio tcl tk makeWrapper;
     svnSupport = true;
     guiSupport = true;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
+    # gitFull requires subversion with perlBindings enabled at least
+    subversion = subversion.override {
+      perlBindings = true;
+    };
   };
 
   gitGit = import ./git/git-git.nix {
