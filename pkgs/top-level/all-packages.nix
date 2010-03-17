@@ -2414,7 +2414,7 @@ let
   };
 
   stalin = import ../development/compilers/stalin {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl ncompress;
     inherit (xlibs) libX11;
   };
 
