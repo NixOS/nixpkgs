@@ -2346,6 +2346,10 @@ let
     inherit llvm perl libtool bison;
   };
 
+  mitscheme = import ../development/compilers/mit-scheme {
+    inherit fetchurl stdenv;
+  };
+
   mono = import ../development/compilers/mono {
     inherit fetchurl stdenv bison pkgconfig gettext perl glib;
   };
