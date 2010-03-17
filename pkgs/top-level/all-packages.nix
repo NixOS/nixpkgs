@@ -6010,6 +6010,22 @@ let
       ];
   };
 
+  linux_2_6_33_zen1 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.33-zen1.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
+  };
+
+  linux_2_6_33_zen1_oldi686 = linux_2_6_33_zen1.override {
+    features = {
+      oldI686 = true;
+    };
+  };
+
+  linux_2_6_33_zen1_bfs = linux_2_6_33_zen1.override {
+    features = {
+      ckSched = true;
+    };
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
