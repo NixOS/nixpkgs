@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl, gettext, LocaleGettext}:
 
 stdenv.mkDerivation {
-  name = "help2man-1.37.1";
+  name = "help2man-1.36.1";
 
   src = fetchurl {
-    url = http://ftp.gnu.org/gnu/help2man/help2man-1.37.1.tar.gz;
-    sha256 = "0q8msq7b71rdg73r49ibvljsr6i4rpqy7l52l9qca8p7z0gaji1v";
+    url = http://ftp.gnu.org/gnu/help2man/help2man-1.36.1.tar.gz;
+    sha256 = "13w20lfvggzhvzs9dinxbhwdd61svsacfv9d78zfl9lf1syb5i1f";
   };
 
   buildInputs = [
