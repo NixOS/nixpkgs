@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp README "$out/doc/${name}"
 
     ensureDir "$out/share/${name}/include"
-    cp include/* "$out/share/${name}/include"
+    cp "include/"* "$out/share/${name}/include"
 
     substituteInPlace "$out/bin/stalin" \
       --replace "$PWD/include/stalin" "$out/share/${name}/include/stalin"
@@ -38,5 +38,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.ece.purdue.edu/~qobi/software.html;
     license = "GPLv2+";
     description = "Stalin, an optimizing Scheme compiler";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
