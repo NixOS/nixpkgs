@@ -221,7 +221,9 @@ stdenv.mkDerivation ({
     ];
 
     # Volunteers needed for the {Cyg,Dar}win ports of *PPL.
-    platforms = stdenv.lib.platforms.linux ++ [ "i686-darwin" ];
+    # gnatboot is not available out of linux platforms, so we disable the darwin build
+    # for the gnat (ada compiler).
+    platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false) [ "i686-darwin" ];
   };
 }
 // (if langVhdl then rec {
