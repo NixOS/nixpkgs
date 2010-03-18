@@ -154,6 +154,7 @@ let
         installer.simple = t.installer.simple.test;
         kde4 = t.kde4.test;
         login = t.login.test;
+	openssh = t.openssh.test;
         proxy = t.proxy.test;
         quake3 = t.quake3.test;
         subversion = t.subversion.report;
