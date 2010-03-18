@@ -6,23 +6,26 @@ args @ {stdenv, fetchurl, xz, runCommand, userModeLinux ? false, extraConfig ? "
 let 
   conf = import ../kernel/config-blocks.nix; 
 
+  baseKernelVersion = "2.6.33";
+  ZenSuffix = "zen1";
+
 in
 
 import ../kernel/generic.nix (
   rec {
-    version = "2.6.32-zen4";
+    version = "${baseKernelVersion}-${ZenSuffix}";
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v2.6/linux-2.6.33.tar.bz2";
+      url = "mirror://kernel/linux/kernel/v2.6/linux-${baseKernelVersion}.tar.bz2";
       sha256 = "1inmam21w13nyf5imgdb5palhiap41zcxf9k32i4ck1w7gg3gqk3";
     };
 
     kernelPatches = [
       {
-         name = "zen4"; 
-         patch = runCommand "2.6.33-zen1.patch" {} "${xz}/bin/lzma -d < ${ fetchurl {
-	   name = "2.6.33-zen1";
-           url = "http://downloads.zen-kernel.org/2.6.33/2.6.33-zen1.patch.lzma";
+         name = "${ZenSuffix}"; 
+         patch = runCommand "${baseKernelVersion}-${ZenSuffix}.patch" {} "${xz}/bin/lzma -d < ${ fetchurl {
+	   name = "${baseKernelVersion}-${ZenSuffix}.patch.lzma";
+           url = "http://downloads.zen-kernel.org/${baseKernelVersion}/${baseKernelVersion}-${ZenSuffix}.patch.lzma";
            sha256 = "0a72d8allr4qi4p6hbbjh33kmcgbg84as0dfb50gsffvaj2d3kwf";
          } } > $out";
       }
