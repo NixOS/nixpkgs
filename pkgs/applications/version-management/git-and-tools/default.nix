@@ -18,7 +18,7 @@ rec {
   };
 
   # The full-featured Git.
-  gitFull = import ./git {
+  gitFull = import ./git rec {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
@@ -27,7 +27,7 @@ rec {
     guiSupport = true;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
     # gitFull requires subversion with perlBindings enabled at least
-    subversion = subversion.override {
+    subversion = pkgs.subversion.override {
       perlBindings = true;
     };
   };
