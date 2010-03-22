@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "unrar-3.9.7";
+  name = "unrar-3.9.10";
 
   src = fetchurl {
-    url = http://www.rarlab.com/rar/unrarsrc-3.9.7.tar.gz;
-    sha256 = "101w7fgfr5biyic8gj0km5aqi4xj8dikh4aa0rx0qvg8bjp19wb4";
+    url = http://www.rarlab.com/rar/unrarsrc-3.9.10.tar.gz;
+    sha256 = "0yi0i2j4srca8cag96ajc80m5xb5328ydzjab6y8h1bhypc2fiiv";
   };
 
   # Add a missing objects to the library
