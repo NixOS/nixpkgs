@@ -1,12 +1,12 @@
 args: with args;
 let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {} {
+composableDerivation {} rec {
 
-  name = "fltk-2.0.x-r6483";
+  name = "fltk-2.0.x-r6970";
 
   src = args.fetchurl {
-    url = ftp://ftp.easysw.com/pub/fltk/snapshots/fltk-2.0.x-r6483.tar.bz2;
-    sha256 = "1n8b53r5p0zb4sbvr6pj8aasls4zjwksv1sdc3r3pzb20fikp5jb";
+    url = "ftp://ftp.easysw.com/pub/fltk/snapshots/${name}.tar.bz2";
+    sha256 = "0d88c16967ca40b26a70736b0d6874046c31a9e74816806816252e4eb72a84a3";
   };
 
   propagatedBuildInputs=[x11 inputproto libXi freeglut];
