@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qt4, mechanize, lxml, dateutil
-, pil, cssutils, beautifulsoap, makeWrapper, unrar
+, pil, cssutils, beautifulsoap, makeWrapper, unrar, chmlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-0.6.43";
+  name = "calibre-0.6.45";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.gz";
-    sha256 = "1fqrishm5na2h0jh46w1gj7gvav335fixwrk6y7l7l4a6argjslr";
+    sha256 = "167qmhj4cp5z3skmhkip7axajqha13qnmxk0rgc8mwvc7kr5q98h";
   };
 
   inherit python;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ python pyqt4 sip popplerQt4 pkgconfig libpng imagemagick libjpeg
       fontconfig podofo qt4 mechanize lxml dateutil pil makeWrapper
-      cssutils beautifulsoap
+      cssutils beautifulsoap chmlib
     ];
 
   installPhase = ''

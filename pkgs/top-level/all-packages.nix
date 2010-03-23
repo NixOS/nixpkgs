@@ -6869,7 +6869,7 @@ let
 
   calibre = import ../applications/misc/calibre {
     inherit stdenv fetchurl libpng imagemagick pkgconfig libjpeg fontconfig podofo
-      qt4 makeWrapper unrar sip pyqt4 pil;
+      qt4 makeWrapper unrar sip pyqt4 pil chmlib;
     python = python26Full;
     popplerQt4 = popplerQt45;
     inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
