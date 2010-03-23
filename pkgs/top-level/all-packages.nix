@@ -1356,6 +1356,10 @@ let
     inherit fetchurl stdenv libpng;
   };
 
+  pngnq = import ../tools/graphics/pngnq {
+    inherit fetchurl stdenv libpng;
+  };
+
   povray = import ../tools/graphics/povray {
     inherit fetchurl stdenv;
   };
