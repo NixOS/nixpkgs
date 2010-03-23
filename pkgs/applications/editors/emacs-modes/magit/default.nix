@@ -1,11 +1,11 @@
 {stdenv, fetchurl, emacs, texinfo, autoconf, automake}:
 
 stdenv.mkDerivation {
-  name = "magit-0.7-94-gbf42bf8";
+  name = "magit-0.7-109-g0fc3980.tar.gz";
 
   src = fetchurl {
-    url = "http://cryp.to/magit-mainline-0.7-94-gbf42bf8.tar.gz";
-    sha256 = "16km4bjp8l011zfqy71jdh0skw829n8r5lgdy6gj996i2bis8hv5";
+    url = "http://cryp.to/magit-mainline-0.7-109-g0fc3980.tar.gz";
+    sha256 = "0jyx57znvn49xm0h92kh8iywn44ip130dpflzq2ns2k6gspg36b6";
   };
   unpackCmd = "tar xf $src";
   preConfigure = "./autogen.sh";
