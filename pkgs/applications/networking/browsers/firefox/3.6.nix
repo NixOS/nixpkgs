@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.6";
+  firefoxVersion = "3.6.2";
   
-  xulVersion = "1.9.2"; # this attribute is used by other packages
+  xulVersion = "1.9.2.2"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "33226b45a0bcd795545a980cab475c5492f0ea69";
+    sha1 = "7befdbcc2bd658c136bdce1c1bd8b54201c1d1d1";
   };
 
 
