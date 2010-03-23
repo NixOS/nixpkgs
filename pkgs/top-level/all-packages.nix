@@ -1275,6 +1275,10 @@ let
     inherit fetchurl stdenv iproute lzo openssl nettools;
   };
 
+  optipng = import ../tools/graphics/optipng {
+    inherit fetchurl stdenv;
+  };
+
   p7zip = import ../tools/archivers/p7zip {
     inherit fetchurl stdenv;
   };
@@ -1316,6 +1320,11 @@ let
 
   pdfjam = import ../tools/typesetting/pdfjam {
     inherit fetchurl stdenv;
+  };
+
+  pdfread = import ../tools/graphics/pdfread {
+    inherit stdenv fetchurl unzip python makeWrapper ghostscript pngnq pil
+      djvulibre unrar optipng;
   };
 
   pg_top = import ../tools/misc/pg_top {
