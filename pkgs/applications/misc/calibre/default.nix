@@ -1,6 +1,7 @@
-{stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng,
-imagemagick, libjpeg, fontconfig, podofo, qt4, mechanize, lxml, dateutil,
-pil, cssutils, beautifulsoap, makeWrapper, unrar}:
+{ stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng
+, imagemagick, libjpeg, fontconfig, podofo, qt4, mechanize, lxml, dateutil
+, pil, cssutils, beautifulsoap, makeWrapper, unrar
+}:
 
 stdenv.mkDerivation rec {
   name = "calibre-0.6.43";
@@ -12,9 +13,11 @@ stdenv.mkDerivation rec {
 
   inherit python;
 
-  buildInputs = [ python pyqt4 sip popplerQt4 pkgconfig libpng imagemagick
-    libjpeg fontconfig podofo qt4 mechanize lxml dateutil pil makeWrapper cssutils
-    beautifulsoap ];
+  buildInputs =
+    [ python pyqt4 sip popplerQt4 pkgconfig libpng imagemagick libjpeg
+      fontconfig podofo qt4 mechanize lxml dateutil pil makeWrapper
+      cssutils beautifulsoap
+    ];
 
   installPhase = ''
     export HOME=$TMPDIR/fakehome

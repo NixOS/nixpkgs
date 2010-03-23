@@ -5328,14 +5328,9 @@ let
     inherit fetchurl stdenv python zlib libjpeg freetype;
   };
 
-  pil_python26 = import ../development/python-modules/pil {
-    inherit fetchurl stdenv zlib libjpeg freetype;
-    python = python26;
-  };
-
   psyco = import ../development/python-modules/psyco {
-      inherit fetchurl stdenv python;
-    };
+    inherit fetchurl stdenv python;
+  };
 
   pycairo = import ../development/python-modules/pycairo {
     inherit fetchurl stdenv python pkgconfig cairo x11;
@@ -5373,47 +5368,29 @@ let
     inherit python openssl;
   };
 
-  pythonSip = builderDefsPackage (import ../development/python-modules/python-sip/4.7.4.nix) {
-    inherit python;
-  };
-
   rhpl = import ../development/python-modules/rhpl {
     inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
   };
 
-  sip = import ../development/python-modules/python-sip {
-    inherit stdenv fetchurl lib python;
+  sip = sip48;
+
+  sip48 = import ../development/python-modules/python-sip {
+    inherit stdenv fetchurl python;
   };
 
   sip410 = import ../development/python-modules/python-sip/4.10.nix {
-    inherit stdenv fetchurl lib python;
+    inherit stdenv fetchurl python;
   };
 
-  sip_python26 = import ../development/python-modules/python-sip {
-    inherit stdenv fetchurl lib;
-    python = python26;
-  };
-
-  pyqt = builderDefsPackage (import ../development/python-modules/pyqt/4.3.3.nix) {
-    inherit pkgconfig python pythonSip glib;
-    inherit (xlibs) libX11 libXext;
-    qt = qt4;
-  };
-
-  pyqt4 = import ../development/python-modules/pyqt {
-    inherit stdenv fetchurl lib python sip;
+  pyqt4 = pyqt45;
+  
+  pyqt45 = import ../development/python-modules/pyqt {
+    inherit stdenv fetchurl python sip;
     qt4 = qt45;
-  };
-
-  pyqt4_python26 = import ../development/python-modules/pyqt {
-    inherit stdenv fetchurl lib;
-    qt4 = qt45;
-    python = python26;
-    sip = sip_python26;
   };
 
   pyqt47 = import ../development/python-modules/pyqt/4.7.nix {
-    inherit stdenv fetchurl lib python;
+    inherit stdenv fetchurl python;
     qt4 = qt46;
     sip = sip410;
   };
@@ -6892,11 +6869,8 @@ let
 
   calibre = import ../applications/misc/calibre {
     inherit stdenv fetchurl libpng imagemagick pkgconfig libjpeg fontconfig podofo
-      qt4 makeWrapper unrar;
+      qt4 makeWrapper unrar sip pyqt4 pil;
     python = python26Full;
-    pyqt4 = pyqt4_python26;
-    sip = sip_python26;
-    pil = pil_python26;
     popplerQt4 = popplerQt45;
     inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
   };
@@ -6943,7 +6917,6 @@ let
   };
 
   chromeWrapper = wrapFirefox chrome "chrome" "";
-
 
   cinelerra = import ../applications/video/cinelerra {
     inherit lib fetchurl sourceFromHead stdenv

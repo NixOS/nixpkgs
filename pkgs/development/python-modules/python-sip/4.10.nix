@@ -1,16 +1,20 @@
-{stdenv, fetchurl, lib, python}:
+{ stdenv, fetchurl, python }:
 
-stdenv.mkDerivation {
-  name = "sip-4.10";
+stdenv.mkDerivation rec {
+  name = "sip-4.10.1";
+  
   src = fetchurl {
-    url = http://www.riverbankcomputing.co.uk/static/Downloads/sip4/sip-4.10.tar.gz;
-    sha256 = "15nnwn0x92iz5vh5d16dlqvxl56i8y4n4va53gc3f7z4d557d2nh";
+    url = "http://www.riverbankcomputing.co.uk/static/Downloads/sip4/${name}.tar.gz";
+    sha256 = "16pdk86amcl4hnc9vv2y1ihl8ym9hjkh49andm4jahv4630qhc9h";
   };
+  
   configurePhase = "python ./configure.py -d $out/lib/${python.libPrefix}/site-packages -b $out/bin -e $out/include";
+  
   buildInputs = [ python ];
+  
   meta = {
     description = "Creates C++ bindings for Python modules";
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }
