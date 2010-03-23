@@ -282,7 +282,7 @@ rec {
       sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
     };
 
-    buildInputs = [ clientform ];
+    propagatedBuildInputs = [ clientform ];
 
     meta = {
       description = "Stateful programmatic web browsing in Python";
