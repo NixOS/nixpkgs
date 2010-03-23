@@ -41,7 +41,7 @@ stdenv.mkDerivation (
       header "Generating jar wrappers"
     '' + (stdenv.lib.concatMapStrings (w: ''
 
-      cat >> $out/bin/jclasslib <<EOF
+      cat >> $out/bin/${w.name} <<EOF
       #! /bin/sh
       export JAVA_HOME=$jre
       $jre/bin/java ${if w ? mainClass then "-cp $out/lib/java/${w.jar} ${w.mainClass}" else "-jar $out/lib/java/${w.jar}"} \$@
