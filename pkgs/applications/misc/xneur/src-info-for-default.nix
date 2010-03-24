@@ -1,5 +1,5 @@
 {
-  downloadPage = "http://xneur.ru/wiki/Downloads";
+  downloadPage = "http://xneur.ru/downloads";
   baseName = "xneur";
   versionReferenceCreator = "$(replaceAllVersionOccurences)";
 }
