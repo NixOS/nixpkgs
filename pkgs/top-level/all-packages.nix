@@ -43,7 +43,7 @@ let config_ = config; in # rename the function argument
 
 let
 
-  lib = import ../lib; # see also libTests below
+  lib = import ../lib;
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
@@ -106,13 +106,13 @@ let
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = __overrides: with helperFunctions; rec {
 
-  # override system. This is useful to build i686 packages on x86_64-linux
+  # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
     inherit system;
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
   };
 
-  # used by wine, firefox with debugging version of Flash, ..
+  # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux";
 
   inherit __overrides;
@@ -6715,23 +6715,28 @@ let
 
 
   aangifte2005 = import ../applications/taxes/aangifte-2005 {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11 libXext;
+    inherit (pkgsi686Linux) stdenv fetchurl;
+    inherit (pkgsi686Linux.xlibs) libX11 libXext;
   };
 
   aangifte2006 = import ../applications/taxes/aangifte-2006 {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11 libXext;
+    inherit (pkgsi686Linux) stdenv fetchurl;
+    inherit (pkgsi686Linux.xlibs) libX11 libXext;
   };
 
   aangifte2007 = import ../applications/taxes/aangifte-2007 {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11 libXext libSM;
+    inherit (pkgsi686Linux) stdenv fetchurl;
+    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
   };
 
   aangifte2008 = import ../applications/taxes/aangifte-2008 {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11 libXext libSM;
+    inherit (pkgsi686Linux) stdenv fetchurl;
+    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
+  };
+
+  aangifte2009 = import ../applications/taxes/aangifte-2009 {
+    inherit (pkgsi686Linux) stdenv fetchurl;
+    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
   };
 
   abcde = import ../applications/audio/abcde {
@@ -9274,25 +9279,20 @@ let
     inherit (pythonPackages) pysqlite;
   };
 
-   vice = import ../misc/emulators/vice {
-     inherit stdenv fetchurl lib perl gettext libpng giflib libjpeg alsaLib readline mesa;
-     inherit pkgconfig SDL makeDesktopItem autoconf automake;
-     inherit (gtkLibs) gtk;
-   };
+  vice = import ../misc/emulators/vice {
+    inherit stdenv fetchurl lib perl gettext libpng giflib libjpeg alsaLib readline mesa;
+    inherit pkgconfig SDL makeDesktopItem autoconf automake;
+    inherit (gtkLibs) gtk;
+  };
 
   wine =
-    if system == "x86_64-linux" then
-      # Can't build this in 64-bit; use a 32-bit build instead.
-      pkgsi686Linux.wine
-      # some hackery to make nix-env show this package on x86_64...
-      // {system = "x86_64-linux";}
-    else
-      import ../misc/emulators/wine {
-        inherit fetchurl stdenv bison mesa ncurses
-          libpng libjpeg alsaLib lcms xlibs freetype
-          fontconfig fontforge libxml2 libxslt openssl;
-	flex = flex2535;
-      };
+    # Wine cannot be built in 64-bit; use a 32-bit build instead.
+    import ../misc/emulators/wine {
+      inherit (pkgsi686Linux) fetchurl stdenv bison mesa ncurses
+        libpng libjpeg alsaLib lcms xlibs freetype
+        fontconfig fontforge libxml2 libxslt openssl;
+      flex = pkgsi686Linux.flex2535;
+    };
 
   xosd = import ../misc/xosd {
     inherit fetchurl stdenv;
