@@ -6735,7 +6735,7 @@ let
   };
 
   aangifte2009 = import ../applications/taxes/aangifte-2009 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
+    inherit (pkgsi686Linux) stdenv fetchurl makeWrapper xdg_utils;
     inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXext, libSM }:
+{ stdenv, fetchurl, makeWrapper, xdg_utils, libX11, libXext, libSM }:
 
 stdenv.mkDerivation {
   name = "aangifte2009-1";
@@ -9,6 +9,9 @@ stdenv.mkDerivation {
   };
 
   dontStrip = true;
+  dontPatchELF = true;
+
+  buildInputs = [ makeWrapper ];
 
   buildPhase =
     ''
@@ -24,6 +27,7 @@ stdenv.mkDerivation {
     ''
       ensureDir $out
       cp -prvd * $out/
+      wrapProgram $out/bin/ib2009ux --prefix PATH : ${xdg_utils}/bin
     '';
 
   meta = {
