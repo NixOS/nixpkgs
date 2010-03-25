@@ -1778,6 +1778,10 @@ let
     inherit stdenv fetchurl neon fuse pkgconfig glib;
   };
 
+  wdiff = import ../tools/text/wdiff {
+    inherit fetchurl stdenv;
+  };
+
   webalizer = import ../tools/networking/webalizer {
     inherit stdenv fetchurl zlib libpng gd db4 geoip;
   };
