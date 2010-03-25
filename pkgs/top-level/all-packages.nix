@@ -8925,7 +8925,7 @@ let
   };
 
   gtkwave = import ../applications/science/electronics/gtkwave {
-    inherit fetchurl stdenv gperf pkgconfig bzip2;
+    inherit fetchurl stdenv gperf pkgconfig bzip2 xz;
     inherit (gtkLibs) gtk;
   };
 
