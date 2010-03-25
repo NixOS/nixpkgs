@@ -8404,6 +8404,10 @@ let
     inherit (xlibs) libXcomposite libXfixes libXdamage libXrender;
   };
 
+  xdg_utils = import ../tools/X11/xdg-utils {
+    inherit stdenv fetchurl;
+  };
+
   /* Doesn't work yet
 
   xen = builderDefsPackage (import ../applications/virtualization/xen) {
