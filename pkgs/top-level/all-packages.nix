@@ -2327,7 +2327,7 @@ let
       inherit fetchurl stdenv unzip;
     });
 
-  jdk       = jdkdistro true  false;
+  jdk       = if stdenv.isDarwin then openjdkDarwin else jdkdistro true  false;
   jre       = jdkdistro false false;
 
   jdkPlugin = jdkdistro true true;
