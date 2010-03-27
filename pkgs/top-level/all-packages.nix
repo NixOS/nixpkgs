@@ -1964,7 +1964,7 @@ let
   };
 
   gcc44_realCross = makeOverridable (import ../development/compilers/gcc-4.4) {
-    inherit stdenv fetchurl texinfo gmp mpfr ppl cloogppl noSysDirs
+    inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
         gettext which;
     binutilsCross = binutilsCross;
     libcCross = libcCross;
