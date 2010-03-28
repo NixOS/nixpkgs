@@ -7,11 +7,11 @@
   }:
 
 stdenv.mkDerivation rec {
-  name = "ikiwiki_3.20100102.3";
+  name = "ikiwiki_3.20100312";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}.tar.gz";
-    sha256 = "0vb54z7hwb6iwd0j96vhr8ypzwc8l4hd98wbp5wsxkx5bgc38nsp";
+    sha256 = "1pzjl4iplizzspsl237996j1ma6yp9jagbqf3d43kbhv1ai0v3ci";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
