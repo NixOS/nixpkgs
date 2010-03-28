@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, gettext, makeWrapper, lib,
   TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate,
-  CGISession, CGIFormBuilder, DBFile
+  CGISession, CGIFormBuilder, DBFile, LocaleGettext
   , git ? null
   , monotone ? null
   , extraUtils ? []
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-    TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder ]
+    TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext ]
     ++
     (lib.optional (monotone != null) monotone)
     ;

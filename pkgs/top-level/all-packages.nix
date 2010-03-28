@@ -7580,7 +7580,7 @@ let
   ikiwiki = makeOverridable (import ../applications/misc/ikiwiki) {
     inherit fetchurl stdenv perl gettext makeWrapper lib;
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
-      HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder;
+      HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext;
     inherit git; # The RCS should be optional
     monotone = null;
     extraUtils = [];
