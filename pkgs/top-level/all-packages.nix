@@ -8229,6 +8229,11 @@ let
     inherit fetchurl stdenv diffutils gnutar gnupatch which;
   };
 
+  transmission = import ../applications/networking/p2p/transmission {
+    inherit stdenv fetchurl pkgconfig openssl curl intltool;
+    inherit (gtkLibs) gtk;
+  };
+
   twinkle = import ../applications/networking/twinkle {
     inherit fetchurl stdenv lib pkgconfig commoncpp2 ccrtp openssl speex libjpeg perl
       libzrtpcpp libsndfile libxml2 file readline alsaLib;
