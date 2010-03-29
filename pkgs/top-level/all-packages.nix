@@ -5306,6 +5306,7 @@ let
 
   perlXMLParser = perlPackages.XMLParser;
 
+  ack = perlPackages.ack;
 
   ### DEVELOPMENT / PYTHON MODULES
 

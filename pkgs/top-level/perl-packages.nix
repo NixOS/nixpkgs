@@ -11,6 +11,23 @@ rec {
 
   inherit (pkgs) buildPerlPackage fetchurl stdenv perl;
 
+  ack = buildPerlPackage rec {
+    name = "ack-1.92";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
+      sha256 = "8689156cb0639ff60adee47fc4b77e656cf0fc58e6c123ee6c481d9d48e99b88";
+    };
+    propagatedBuildInputs = [ FileNext ];
+    meta = {
+      description = "grep-like text finder";
+      longDescription = ''
+        ack is a grep-like tool tailored to working with large trees of source code.
+      '';
+      homepage = http://betterthangrep.com/;
+      license = "free";  # Artistic 2.0
+    };
+  };
+
   AlgorithmAnnotate = buildPerlPackage {
     name = "Algorithm-Annotate-0.10";
     src = fetchurl {
@@ -1097,6 +1114,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CO/CORION/File-Modified-0.07.tar.gz;
       sha256 = "11zkg171fa5vdbyrbfcay134hhgyf4yaincjxwspwznrfmkpi49h";
+    };
+  };
+
+  FileNext = buildPerlPackage rec {
+    name = "File-Next-1.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
+      sha256 = "36cc0a4e5e4e44e04f7bea6f7453db517acc1a1b35a2b5fe5bc14cea0f560662";
     };
   };
 
