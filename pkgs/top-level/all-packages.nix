@@ -2553,6 +2553,10 @@ let
     inherit fetchurl stdenv perl gnum4 ncurses openssl;
   };
 
+  groovy = import ../development/interpreters/groovy {
+    inherit stdenv fetchurl unzip;
+  };
+
   guile = import ../development/interpreters/guile {
     inherit fetchurl stdenv readline libtool gmp gawk makeWrapper;
   };
