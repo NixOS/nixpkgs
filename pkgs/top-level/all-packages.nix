@@ -5308,6 +5308,8 @@ let
 
   ack = perlPackages.ack;
 
+  perlcritic = perlPackages.PerlCritic;
+
   ### DEVELOPMENT / PYTHON MODULES
 
   buildPythonPackage =
