@@ -3080,6 +3080,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  gradle = import ../development/tools/build-managers/gradle {
+    inherit stdenv fetchurl unzip;
+  };
+
   gperf = import ../development/tools/misc/gperf {
     inherit fetchurl stdenv;
   };
