@@ -363,8 +363,8 @@ let
   };
 
   amule = import ../tools/networking/p2p/amule {
-    inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper;
-    inherit wxGTK;
+    inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper
+      wxGTK pkgconfig;
   };
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
