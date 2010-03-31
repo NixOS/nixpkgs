@@ -3,10 +3,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdesdk-4.4.1";
+  name = "kdesdk-4.4.2";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.1/src/kdesdk-4.4.1.tar.bz2;
-    sha256 = "0y7m65shqyl25q9x407wiyszqsalsl4zacdvl124i44m6lkqy8ss";
+    url = mirror://kde/stable/4.4.2/src/kdesdk-4.4.2.tar.bz2;
+    sha256 = "1cjbk35cqjif1ng8mlb5lcsilcxy9j62iviz8mzrwivdf9sixa1r";
   };
   builder=./builder.sh;
   inherit aprutil;

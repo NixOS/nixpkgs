@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon, strigi, soprano, cluceneCore, attica}:
 
 stdenv.mkDerivation {
-  name = "kdebase-runtime-4.4.1";
+  name = "kdebase-runtime-4.4.2";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.1/src/kdebase-runtime-4.4.1.tar.bz2;
-    sha256 = "03yj9frnm138c6pwig9r4rw1bka05hwcrp3y90gsrrsjqakwgs4w";
+    url = mirror://kde/stable/4.4.2/src/kdebase-runtime-4.4.2.tar.bz2;
+    sha256 = "087g05k2zrlwk4n7n14nblflxxm3g28nzyyyx18jr4r2xq9x64b5";
   };
 /*  CLUCENE_HOME=cluceneCore;*/
   # Still have to look into Soprano Virtuoso
