@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "virtualbox-3.1.6-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.1.4/VirtualBox-3.1.6-OSE.tar.bz2;
+    url = http://download.virtualbox.org/virtualbox/3.1.6/VirtualBox-3.1.6-OSE.tar.bz2;
     sha256 = "05m0gsihvg0fs73a9bcivvlqkwrxvzfnyn2l59nixvy8g7w4h0c4";
   };
 
