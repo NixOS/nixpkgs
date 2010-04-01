@@ -1,6 +1,6 @@
 {stdenv, fetchurl, lib}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "xz-4.999.9beta";
   
   src = fetchurl {
@@ -15,3 +15,11 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.sander ];
   };
 }
+
+//
+
+(if stdenv.system == "x86_64-darwin"
+ # Work around assembler misconfiguration as `x86'.  This appears to be fixed
+ # by commit b9b5c54cd438b3ae47b44cc211b71f3bc53e35ef (Nov 22 12:00:30 2009 # +0200).
+ then { configureFlags = "--enable-assembler=x86_64"; }
+ else {}))
