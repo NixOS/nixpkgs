@@ -703,11 +703,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  filelight = import ../tools/system/filelight {
-    inherit fetchurl stdenv kdelibs x11 zlib perl libpng;
-    qt = qt3;
-  };
-
   findutils = useFromStdenv "findutils"
     (if stdenv.isDarwin then findutils4227 else
       import ../tools/misc/findutils {
@@ -1580,12 +1575,6 @@ let
   };
 
   suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) {
-  };
-
-  superkaramba = import ../desktops/superkaramba {
-    inherit stdenv fetchurl kdebase kdelibs zlib libjpeg
-      perl qt3 python libpng freetype expat;
-    inherit (xlibs) libX11 libXext libXt libXaw libXpm;
   };
 
   ssmtp = import ../tools/networking/ssmtp {
@@ -3127,12 +3116,6 @@ let
     inherit fetchurl stdenv;
   };
 
-  kcachegrind = import ../development/tools/misc/kcachegrind {
-    inherit fetchurl stdenv kdelibs zlib perl expat libpng libjpeg;
-    inherit (xlibs) libX11 libXext libSM;
-    qt = qt3;
-  };
-
   lcov = import ../development/tools/analysis/lcov {
     inherit fetchurl stdenv perl;
   };
@@ -3345,14 +3328,6 @@ let
   aprutil = makeOverridable (import ../development/libraries/apr-util) {
     inherit (pkgsOverriden) fetchurl stdenv apr expat db4;
     bdbSupport = true;
-  };
-
-  arts = import ../development/libraries/arts {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXext;
-    inherit kdelibs zlib libjpeg libpng perl;
-    qt = qt3;
-    inherit (gnome) glib;
   };
 
   aspell = import ../development/libraries/aspell {
@@ -7065,12 +7040,6 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  digikam = import ../applications/graphics/digikam {
-    inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3 cmake;
-    inherit (kde3) kdelibs;
-    inherit (xlibs) libXt libXext;
-  };
-
   djvulibre = import ../applications/misc/djvulibre {
     inherit stdenv fetchurl lib libjpeg libtiff libungif qt3 zlib
       ghostscript libpng mesa x11;
@@ -7281,12 +7250,6 @@ let
     inherit fetchurl stdenv lib grip pkgconfig curl cdparanoia libid3tag;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnome libgnomeui vte;
-  };
-
-  gwenview = import ../applications/graphics/gwenview {
-    inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3;
-    inherit (kde3) kdelibs;
-    inherit (xlibs) libXt libXext;
   };
 
   wavesurfer = import ../applications/misc/audio/wavesurfer {
@@ -7663,16 +7626,6 @@ let
     inherit (xlibs) libX11 libXext libXinerama libXpm libXft;
   };
 
-  k3b = import ../applications/misc/k3b {
-    inherit stdenv fetchurl kdelibs x11 zlib libpng libjpeg perl qt3;
-  };
-
-  kbasket = import ../applications/misc/kbasket {
-    inherit fetchurl kdelibs x11 zlib libpng libjpeg
-      perl qt3 gpgme libgpgerror;
-    stdenv = overrideGCC stdenv gcc43;
-  };
-
   kermit = import ../tools/misc/kermit {
     inherit fetchurl stdenv ncurses;
   };
@@ -7686,31 +7639,6 @@ let
     inherit (gtkLibs) pango;
     # #  optional
     #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
-  };
-
-  kile = import ../applications/editors/kile {
-    inherit stdenv fetchurl perl arts kdelibs zlib libpng libjpeg freetype expat;
-    inherit (xlibs) libX11 libXt libXext libXrender libXft;
-    qt = qt3;
-  };
-
-  konversation = import ../applications/networking/irc/konversation {
-    inherit fetchurl stdenv perl arts kdelibs zlib libpng libjpeg expat;
-    inherit (xlibs) libX11 libXt libXext libXrender libXft;
-    qt = qt3;
-  };
-
-  kphone = import ../applications/networking/kphone {
-    inherit fetchurl lib autoconf automake libtool pkgconfig openssl libpng alsaLib;
-    qt = qt3;
-    inherit (xlibs) libX11 libXext libXt libICE libSM;
-    stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
-  };
-
-  kuickshow = import ../applications/graphics/kuickshow {
-    inherit fetchurl stdenv kdelibs arts libpng libjpeg libtiff libungif imlib expat perl;
-    inherit (xlibs) libX11 libXext libSM;
-    qt = qt3;
   };
 
   lame = import ../applications/audio/lame {
@@ -8205,8 +8133,8 @@ let
     inherit (xlibs) libX11 libXext libSM libICE;
 
     # KDE support is not working yet.
-    inherit kdelibs kdebase;
-    withKde = pkgs.getConfig ["taskJuggler" "kde"] false;
+    inherit (kde3) kdelibs kdebase;
+    withKde = getPkgConfig "taskJuggler" "kde" false;
   };
 
   thinkingRock = import ../applications/misc/thinking-rock {
@@ -8794,9 +8722,91 @@ let
     kdebase = import ../desktops/kde-3/kdebase {
       inherit
         fetchurl pkgconfig x11 xlibs zlib libpng libjpeg perl
-        kdelibs openssl bzip2 fontconfig pam hal dbus glib;
+        openssl bzip2 fontconfig pam hal dbus glib;
       stdenv = overrideGCC stdenv gcc43;
+      inherit (kde3) kdelibs;
       qt = qt3;
+    };
+
+    arts = import ../development/libraries/arts {
+      inherit fetchurl stdenv pkgconfig;
+      inherit (xlibs) libX11 libXext;
+      inherit zlib libjpeg libpng perl;
+      qt = qt3;
+      inherit (gnome) glib;
+      inherit (kde3) kdelibs;
+    };
+
+    gwenview = import ../applications/graphics/gwenview {
+      inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3;
+      inherit (kde3) kdelibs;
+      inherit (xlibs) libXt libXext;
+    };
+
+    digikam = import ../applications/graphics/digikam {
+      inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3 cmake;
+      inherit (kde3) kdelibs;
+      inherit (xlibs) libXt libXext;
+    };
+
+    k3b = import ../applications/misc/k3b {
+      inherit stdenv fetchurl x11 zlib libpng libjpeg perl qt3;
+      inherit (kde3) kdelibs;
+    };
+
+    kbasket = import ../applications/misc/kbasket {
+      inherit fetchurl x11 zlib libpng libjpeg
+        perl qt3 gpgme libgpgerror;
+      stdenv = overrideGCC stdenv gcc43;
+      inherit (kde3) kdelibs;
+    };
+
+    kile = import ../applications/editors/kile {
+      inherit stdenv fetchurl perl zlib libpng libjpeg freetype expat;
+      inherit (xlibs) libX11 libXt libXext libXrender libXft;
+      inherit (kde3) arts kdelibs;
+      qt = qt3;
+    };
+
+    konversation = import ../applications/networking/irc/konversation {
+      inherit fetchurl stdenv perl zlib libpng libjpeg expat;
+      inherit (xlibs) libX11 libXt libXext libXrender libXft;
+      inherit (kde3) arts kdelibs;
+      qt = qt3;
+    };
+
+    kphone = import ../applications/networking/kphone {
+      inherit fetchurl lib autoconf automake libtool pkgconfig openssl libpng alsaLib;
+      qt = qt3;
+      inherit (xlibs) libX11 libXext libXt libICE libSM;
+      stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
+    };
+
+    kuickshow = import ../applications/graphics/kuickshow {
+      inherit fetchurl stdenv libpng libjpeg libtiff libungif imlib expat perl;
+      inherit (xlibs) libX11 libXext libSM;
+      inherit (kde3) arts kdelibs;
+      qt = qt3;
+    };
+
+    kcachegrind = import ../development/tools/misc/kcachegrind {
+      inherit fetchurl stdenv zlib perl expat libpng libjpeg;
+      inherit (xlibs) libX11 libXext libSM;
+      inherit (kde3) kdelibs;
+      qt = qt3;
+    };
+
+    filelight = import ../tools/system/filelight {
+      inherit fetchurl stdenv x11 zlib perl libpng;
+      inherit (kde3) kdelibs;
+      qt = qt3;
+    };
+
+    superkaramba = import ../desktops/superkaramba {
+      inherit stdenv fetchurl zlib libjpeg
+        perl qt3 python libpng freetype expat;
+      inherit (xlibs) libX11 libXext libXt libXaw libXpm;
+      inherit (kde3) kdelibs kdebase;
     };
 
   };
@@ -8816,10 +8826,6 @@ let
     sip = sip410;
     pyqt4 = pyqt47;
   });
-
-
-  kdelibs = kde3.kdelibs;
-  kdebase = kde3.kdebase;
 
   ### SCIENCE
 
