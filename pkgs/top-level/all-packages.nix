@@ -4133,7 +4133,8 @@ let
   };
 
   libarchive = import ../development/libraries/libarchive {
-    inherit fetchurl stdenv zlib bzip2 e2fsprogs sharutils;
+    inherit fetchurl stdenv acl zlib bzip2 e2fsprogs xz sharutils libxml2
+      openssl attr;
   };
 
   libassuan = import ../development/libraries/libassuan {
