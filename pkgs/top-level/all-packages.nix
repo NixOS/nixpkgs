@@ -7072,9 +7072,9 @@ let
   };
 
   djvulibre = import ../applications/misc/djvulibre {
-    inherit stdenv fetchurl libjpeg libtiff libungif zlib
-      ghostscript libpng x11 mesa;
-    qt = if (getConfig ["djvulibre" "qt3Frontend"] true) then qt3 else null;
+    inherit stdenv fetchurl lib libjpeg libtiff libungif qt3 zlib
+      ghostscript libpng mesa x11;
+    config = getPkgConfig "djvulibre";
     inherit (xlibs) libX11;
   };
 
