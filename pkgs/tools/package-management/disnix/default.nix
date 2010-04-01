@@ -1,12 +1,10 @@
-{stdenv, fetchsvn, autoconf, automake, libtool, pkgconfig, dbus_glib, openssl, libxml2}:
+{stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable}:
 
 stdenv.mkDerivation {
-  name = "disnix";
-  src = fetchsvn {
-    url = https://svn.nixos.org/repos/nix/disnix/disnix/trunk;
-    sha256 = "4397dc0bf4b4ecca795784d0011eb631538b17bd81e77b84bf15d89bf85e94bb";
-    rev = 16924;
+  name = "disnix-0.1";
+  src = fetchurl {
+    url = http://hydra.nixos.org/build/334661/download/1/disnix-0.1.tar.gz;
+    sha256 = "0qiskbgn49dihhicczsbjandwjnz04yhnlxgwjinkcyfzsh4yqdp";
   };
-  buildInputs = [ autoconf automake libtool pkgconfig dbus_glib openssl libxml2 ];
-  preConfigure = "./bootstrap";
+  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable ];
 }

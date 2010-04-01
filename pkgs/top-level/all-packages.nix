@@ -9159,15 +9159,15 @@ let
     };
 
   disnix = import ../tools/package-management/disnix {
-    inherit stdenv fetchsvn openssl autoconf automake libtool pkgconfig dbus_glib libxml2;
+    inherit stdenv fetchurl pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable;
   };
 
   disnix_activation_scripts = import ../tools/package-management/disnix/activation-scripts {
-    inherit stdenv fetchsvn autoconf automake;
+    inherit stdenv fetchurl;
   };
 
   DisnixService = import ../tools/package-management/disnix/DisnixService {
-    inherit stdenv fetchsvn apacheAnt jdk axis2 shebangfix;
+    inherit stdenv fetchurl apacheAnt jdk axis2 dbus_java;
   };
 
   latex2html = import ../misc/tex/latex2html/default.nix {

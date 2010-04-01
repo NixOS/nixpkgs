@@ -1,11 +1,9 @@
-{stdenv, fetchsvn, autoconf, automake}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "disnix-activation-scripts-nixos";
-  src = fetchsvn {
-    url = https://svn.nixos.org/repos/nix/disnix/disnix-activation-scripts-nixos/trunk;
-    sha256 = "3ba44fbd2c00da6dd1926513184db89c1f3557c55af5c3a4041e85fb6d1a5758";
+  name = "disnix-activation-scripts-test";
+  src = fetchurl {
+    url = http://hydra.nixos.org/build/333630/download/1/disnix-activation-scripts-nixos-0.1.tar.gz;
+    sha256 = "0izkkdw9r2gff03mq973ah5b9b0a4b07l8ac0406yv8ss9vaaclm";
   };
-  buildInputs = [ autoconf automake ];
-  preConfigure = "./bootstrap";
 }
