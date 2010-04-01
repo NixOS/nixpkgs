@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 let version = "7.1"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "boehm-gc-${version}";
 
   src = fetchurl {
@@ -50,4 +50,4 @@ stdenv.mkDerivation {
 (if stdenv.system == "x86_64-darwin"
  # Fix "#error ucontext routines are deprecated, and require _XOPEN_SOURCE to be defined".
  then { configureFlags = "CPPFLAGS=-D_XOPEN_SOURCE"; }
- else {})
+ else {}))
