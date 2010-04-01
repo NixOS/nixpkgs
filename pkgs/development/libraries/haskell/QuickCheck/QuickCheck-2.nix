@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "QuickCheck";
-  version = "2.1.0.2";
-  sha256 = "1adeea5aa52cba7b8bcd27f9cdd9fe944e9a4a22d22fdf0570b526f580981e58";
+  version = "2.1.0.3"; # Haskell Platform 2010.1.0.0
+  sha256 = "91a861233fe0a37a032d092dd5e8ec40c2c99fbbf0701081394eb244f23757b1";
   propagatedBuildInputs = [mtl];
   meta = {
     description = "Automatic testing of Haskell programs";
