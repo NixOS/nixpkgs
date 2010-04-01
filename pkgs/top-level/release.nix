@@ -158,13 +158,9 @@ with (import ./release-lib.nix);
   jfsrec = linux;
   jnettop = linux;
   jwhois = linux;
-  k3b = linux;
   kbd = linux;
-  kcachegrind = linux;
   keen4 = ["i686-linux"];
-  kile = linux;
   klibc = linux;
-  konversation = linux;
   ktorrent = linux;
   kvm = linux;
   qemu = linux;
@@ -425,6 +421,10 @@ with (import ./release-lib.nix);
   kde3 = {
     kdebase = linux;
     kdelibs = linux;
+    k3b = linux;
+    kcachegrind = linux;
+    kile = linux;
+    konversation = linux;
   };
 
   kde43 = {
