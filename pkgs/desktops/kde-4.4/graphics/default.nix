@@ -10,7 +10,8 @@ stdenv.mkDerivation {
   };
   buildInputs = [ cmake perl qt4 exiv2 lcms saneBackends libgphoto2 libspectre poppler chmlib
                   shared_mime_info stdenv.gcc.libc libXxf86vm
-                  kdelibs automoc4 phonon strigi qimageblitz soprano qca2 ];
+                  kdelibs automoc4 phonon strigi qimageblitz soprano qca2
+                  djvulibre];
   meta = {
     description = "KDE graphics utilities";
     longDescription = ''
