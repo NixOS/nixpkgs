@@ -93,7 +93,7 @@ attrs :
               fi
 
               ensureDir $out/nix-support
-              ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+              ln -s $out/nix-support/propagated-build-native-inputs $out/nix-support/propagated-user-env-packages
 
               eval "$postInstall"
             '';
