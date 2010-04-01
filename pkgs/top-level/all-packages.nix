@@ -8811,7 +8811,12 @@ let
 
   };
 
-  kde4 = kde44;
+  kde4 = recurseIntoAttrs (
+    if (getPkgConfig "kde" "version" "4.4") == "4.4" then
+      kde44
+    else
+      kde43
+  );
 
   kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
     openexr = openexr_1_6_1;
