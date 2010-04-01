@@ -44,3 +44,10 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(if stdenv.system == "x86_64-darwin"
+ # Fix "#error ucontext routines are deprecated, and require _XOPEN_SOURCE to be defined".
+ then { configureFlags = "CPPFLAGS=-D_XOPEN_SOURCE"; }
+ else {})
