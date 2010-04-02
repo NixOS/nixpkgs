@@ -6,8 +6,9 @@
 , pythonSupport ? true
 }:
 
-# `git-svn' support requires Subversion and various Perl libraries.
-assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBindings);
+let
+  svn = subversion.override { perlBindings = true; };
+in
 
 stdenv.mkDerivation rec {
   name = "git-1.7.0.3";
@@ -49,12 +50,12 @@ stdenv.mkDerivation rec {
 
       ''# wrap git-svn
         gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString perlLibs}; do
+        for i in ${builtins.toString perlLibs} ${svn}; do
           gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
         wrapProgram "$out/libexec/git-core/git-svn"     \
                      --set GITPERLLIB "$gitperllib"     \
-                     --prefix PATH : "${subversion}/bin" ''
+                     --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
        '')

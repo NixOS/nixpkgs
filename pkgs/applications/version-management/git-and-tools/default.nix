@@ -3,7 +3,8 @@
 */
 args: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchurl getConfig subversion;
+  inherit (pkgs) stdenv fetchurl subversion;
+  config = getPkgConfig "git";
 in
 rec {
 
@@ -12,9 +13,9 @@ rec {
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
+    svnSupport = config "svnSupport" false; # for git-svn support
+    guiSupport = config "guiSupport" false;
+    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
   };
 
   # The full-featured Git.
@@ -25,11 +26,7 @@ rec {
       cpio tcl tk makeWrapper;
     svnSupport = true;
     guiSupport = true;
-    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
-    # gitFull requires subversion with perlBindings enabled at least
-    subversion = pkgs.subversion.override {
-      perlBindings = true;
-    };
+    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
   };
 
   gitGit = import ./git/git-git.nix {
@@ -37,8 +34,8 @@ rec {
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion autoconf;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
+    svnSupport = config "svnSupport" false; # for git-svn support
+    guiSupport = config "guiSupport" false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
