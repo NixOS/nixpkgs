@@ -8,7 +8,7 @@ let
 in
 rec {
 
-  git = import ./git {
+  git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
@@ -19,14 +19,9 @@ rec {
   };
 
   # The full-featured Git.
-  gitFull = import ./git rec {
-    inherit fetchurl stdenv curl openssl zlib expat perl python gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversion;
+  gitFull = git.override {
     svnSupport = true;
     guiSupport = true;
-    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
   };
 
   gitGit = import ./git/git-git.nix {
