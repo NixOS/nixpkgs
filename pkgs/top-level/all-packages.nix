@@ -990,7 +990,7 @@ let
   };
 
   kismet = import ../applications/networking/sniffers/kismet {
-    inherit fetchurl stdenv libpcap ncurses expat;
+    inherit fetchurl stdenv libpcap ncurses expat pcre;
   };
 
   ktorrent = import ../tools/networking/p2p/ktorrent {

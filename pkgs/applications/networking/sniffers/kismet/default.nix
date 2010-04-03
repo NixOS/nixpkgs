@@ -1,14 +1,14 @@
-{stdenv, fetchurl, libpcap, ncurses, expat}:
+{stdenv, fetchurl, libpcap, ncurses, expat, pcre}:
 
 stdenv.mkDerivation {
-  name = "kismet-2008-05-r1";
+  name = "kismet-2010-01-r1";
 
   src = fetchurl {
-    url = http://www.kismetwireless.net/code/kismet-2008-05-R1.tar.gz;
-    sha256 = "a298d44f8a6ec977021cd492a720987ded81b5c4baf5f68b36f1282a23c9f7d3";
+    url = http://www.kismetwireless.net/code/kismet-2010-01-R1.tar.gz;
+    sha256 = "106qird64x1v29nz6k5zs9dxxdq6q7fb7d6np0pnwm3dd2p1w7cx";
   };
 
-  buildInputs = [libpcap ncurses expat];
+  buildInputs = [libpcap ncurses expat pcre];
   postConfigure =
     "sed -e 's@-o \$(INSTUSR)@@' \\
         -e 's@-g \$(INSTGRP)@@' \\
