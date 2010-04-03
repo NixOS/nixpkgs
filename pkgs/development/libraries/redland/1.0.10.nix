@@ -22,14 +22,5 @@ stdenv.mkDerivation rec {
     [ "--with-threads" ]
     ++ stdenv.lib.optional (bdb != null) "--with-bdb=${bdb}";
   
-  patchPhase =
-    ''
-      sed -e 1s@/usr@${perl}@ -i utils/touch-mtime.pl
-
-      # Redland 1.0.9 uses an internal pre-processor symbol SQLITE_API
-      # that collides with a symbol of the same name in sqlite 3.6.19.
-      # This is a quick fix for the problem. A real solution needs to be
-      # implemented upstream, though.
-      find . -type f -exec sed -i -e 's/SQLITE_API/REDLAND_SQLITE_API/g' {} \;
-    '';
+  patchPhase ="sed -e 1s@/usr@${perl}@ -i utils/touch-mtime.pl";
 }

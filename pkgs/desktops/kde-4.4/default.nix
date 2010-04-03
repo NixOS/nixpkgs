@@ -23,8 +23,7 @@ pkgs.recurseIntoAttrs (rec {
   
   soprano = import ./support/soprano {
     inherit (pkgs) stdenv fetchurl lib cmake;
-    inherit (pkgs) qt4 cluceneCore;
-    redland = pkgs.redland_1_0_8;
+    inherit (pkgs) qt4 cluceneCore redland;
   };
   
   qimageblitz = import ./support/qimageblitz {

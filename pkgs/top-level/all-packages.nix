@@ -4912,15 +4912,7 @@ let
     inherit fetchurl stdenv lib pkgconfig librdf_raptor ladspaH openssl zlib;
   };
 
-  redland = redland_1_0_10;
-
-  redland_1_0_8 = makeOverridable (import ../development/libraries/redland/1.0.8.nix) {
-    inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
-      libxslt curl pcre librdf_rasqal librdf_raptor;
-    bdb = db4;
-  };
-
-  redland_1_0_10 = makeOverridable (import ../development/libraries/redland/1.0.10.nix) {
+  redland = makeOverridable (import ../development/libraries/redland/1.0.10.nix) {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
       mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
