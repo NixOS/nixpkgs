@@ -19,10 +19,9 @@ stdenv.mkDerivation rec {
     cd source
     unzip $src2 'basewsw/*' -d release
   '';
-  inherit openal;
   patchPhase = ''
-    substituteInPlace Makefile --replace "openal-config" "pkg-config openal"
-    substituteInPlace snd_openal/snd_main.c --replace libopenal.so.0 $openal/lib/libopenal.so
+    substituteInPlace Makefile --replace openal-config 'pkg-config openal'
+    substituteInPlace snd_openal/snd_main.c --replace libopenal.so.0 ${openal}/lib/libopenal.so
   '';
   buildInputs = [ unzip pkgconfig zlib curl libjpeg libvorbis libXxf86dga
                   libXxf86vm libXinerama SDL mesa openal ];
@@ -37,6 +36,11 @@ stdenv.mkDerivation rec {
     cp -v {warsow,wsw_server,wswtv_server}.* $dest
     cp -rv basewsw libs $dest
     cp -v warsow wsw_server wswtv_server $out/bin
+  '';
+  postFixup = ''
+    p=$out/opt/warsow/warsow.*
+    cur_rpath=$(patchelf --print-rpath $p)
+    patchelf --set-rpath $cur_rpath:${mesa}/lib $p
   '';
   meta = {
     description = "A multiplayer FPS designed for competitive gaming.";
