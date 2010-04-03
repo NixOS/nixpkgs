@@ -8704,7 +8704,7 @@ let
 
   gnome = gnome28;
 
-  kde3 = {
+  kde3 = recurseIntoAttrs {
 
     kdelibs = import ../desktops/kde-3/kdelibs {
       inherit
