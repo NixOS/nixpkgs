@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   
   /* If no explicit coreutils is given, use the one from stdenv. */
-  buildInputs = [coreutils];
+  buildNativeInputs = [coreutils];
 
   meta = {
     homepage = http://www.gnu.org/software/diffutils/diffutils.html;

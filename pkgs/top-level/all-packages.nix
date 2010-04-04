@@ -6143,7 +6143,7 @@ let
   };
 
   klibc = makeOverridable (import ../os-specific/linux/klibc) {
-    inherit fetchurl stdenv perl bison mktemp;
+    inherit fetchurl stdenv perl bison mktemp linuxHeadersCross;
     linuxHeaders = glibc.kernelHeaders;
   };
 

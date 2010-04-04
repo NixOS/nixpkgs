@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  crossAttrs = {
+    compileFlags = [ "CC=${stdenv.cross.config}-gcc" ];
+  };
+
   meta = {
     description = "GNU ed, an implementation of the standard Unix editor";
 

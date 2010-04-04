@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional aclSupport acl.hostDrv
       ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
         stdenv.gccCross.libc.libiconv.hostDrv;
+
+    # Needed for fstatfs()
+    # I don't know why it is not properly detected cross building with glibc.
+    configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ];
   };
 
   # The tests are known broken on Cygwin

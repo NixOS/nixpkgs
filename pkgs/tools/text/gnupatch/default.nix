@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = (stdenv.lib.optional doCheck ed);
 
+  crossAttrs = {
+    configureFlags = [ "ac_cv_func_strnlen_working=yes" ];
+  };
+
   doCheck = true;
 
   meta = {

@@ -10,6 +10,10 @@ stdenv.mkDerivation {
 
   makeFlags = ["TREE=\$(out)"];
 
+  crossAttrs = {
+    makeFlags = [ "TREE=\$(out)" "CC=${stdenv.cross.config}-gcc" ];
+  };
+
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 
   patches = [./malloc.patch];
