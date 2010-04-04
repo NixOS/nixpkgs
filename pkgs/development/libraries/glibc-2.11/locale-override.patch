@@ -11,7 +11,7 @@ diff -rc glibc-2.9-20081208-orig/locale/loadarchive.c glibc-2.9-20081208/locale/
 + open_locale_archive ()
 + {
 +   int fd = -1;
-+   char *path = getenv ("LOCALE_ARCHIVE");
++   char *path = getenv ("LOCALE_ARCHIVE_2_11");
 +   if (path)
 +     fd = open_not_cancel_2 (path, O_RDONLY|O_LARGEFILE);
 +   if (fd < 0)
@@ -66,7 +66,7 @@ diff -rc glibc-2.9-20081208-orig/sysdeps/generic/unsecvars.h glibc-2.9-20081208/
     "LD_SHOW_AUXV\0"							      \
     "LD_USE_LOAD_BIAS\0"							      \
     "LOCALDOMAIN\0"							      \
-+   "LOCALE_ARCHIVE\0"							      \
++   "LOCALE_ARCHIVE_2_11\0"							      \
     "LOCPATH\0"								      \
     "MALLOC_TRACE\0"							      \
     "NIS_PATH\0"								      \
