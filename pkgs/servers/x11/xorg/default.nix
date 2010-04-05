@@ -1206,6 +1206,16 @@ let
     };
     buildInputs = [pkgconfig libXcursor ];
   })) // {inherit libXcursor ;};
+
+  xdm = (stdenv.mkDerivation ((if overrides ? xdm then overrides.xdm else x: x) {
+    name = "xdm-1.1.9";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xdm-1.1.9.tar.bz2;
+      sha256 = "0d5i25mn6vzhkh5ga5b403hgfmaf66q40knr06ii608d3c7dpcg7";
+    };
+    buildInputs = [pkgconfig libXmu libX11 libXau libXinerama libXft libXpm libXaw libXdmcp libXt libXext];
+  })) // {inherit libXmu libX11 libXau libXinerama libXft libXpm libXaw libXdmcp libXt libXext;};
     
   xdpyinfo = (stdenv.mkDerivation ((if overrides ? xdpyinfo then overrides.xdpyinfo else x: x) {
     name = "xdpyinfo-1.1.0";
