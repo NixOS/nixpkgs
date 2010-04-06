@@ -67,6 +67,11 @@ in
 
       cupsdConf = mkOption {
         default = "";
+        example =
+          ''
+            BrowsePoll cups.example.com
+            LogLevel debug
+          '';
         description = ''
           The contents of the configuration file of the CUPS daemon
           (<filename>cupsd.conf</filename>).
@@ -117,7 +122,7 @@ in
 
     services.printing.cupsdConf = 
       ''
-        LogLevel debug
+        LogLevel info
 
         SystemGroup root
 
