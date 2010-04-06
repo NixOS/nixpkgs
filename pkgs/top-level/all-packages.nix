@@ -4280,8 +4280,11 @@ let
     inherit stdenv fetchurl perl;
   };
 
-  libiodbc = makeOverridable (import ../development/libraries/libiodbc)
-    (pkgs // { cg = getPkgConfig "libiodbc"; });
+  libiodbc = makeOverridable (import ../development/libraries/libiodbc) {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (gtkLibs) gtk;
+    useGTK = getPkgConfig "libiodbc" "gtk" false;
+  };
 
   libnice = import ../development/libraries/libnice {
     inherit stdenv fetchurl pkgconfig;
