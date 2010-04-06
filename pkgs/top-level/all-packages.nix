@@ -7686,6 +7686,12 @@ let
    qt = qt4;
   };
 
+  meld = import ../applications/version-management/meld {
+    inherit fetchurl stdenv python intltool makeWrapper;
+    inherit (gnome) scrollkeeper;
+    pygtk = pyGtkGlade;
+  };
+
   mercurial = import ../applications/version-management/mercurial {
     inherit fetchurl stdenv makeWrapper getConfig tk;
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
