@@ -1,15 +1,13 @@
 {stdenv, fetchsvn, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "netpbm-advanced-844";
+  name = "netpbm-advanced-1177";
 
   src = fetchsvn {
     url = https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced;
-    rev = 844;
-    sha256 = "8729e63bb5cc9fd500a68d5aed91fa4b973ebc068e3014b47390ba7b4d85968e";
+    rev = 1177;
+    sha256 = "d8893599fcb7839025e7fbe24120928b4bbcd70f0e1034a21d91885c40a5c39f";
   };
-
-  patches = [ ./rgbpaths.patch ];
 
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
 
