@@ -10,6 +10,8 @@ postUnpack() {
 }
 
 preConfigure() {
+    ./configure --help
+
     for i in sysui/desktop/share/makefile.mk; do 
 	substituteInPlace $i --replace /bin/bash $shell
     done

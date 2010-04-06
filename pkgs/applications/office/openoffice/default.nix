@@ -6,7 +6,7 @@
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2
 }:
 
-let version = "3.2.0"; in
+let version = "3.1.1"; in
 stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       sha256 = "b44ab94c75b89c9354531ddba9c211374567535e147308a934e8c35d7b26814a";
     };
 
-  patches = [ /* ./oo.patch ./OOo-3.1.1-HEADERFIX-1.patch */ ./root-required.patch ];
+  patches = [ ./oo.patch ./OOo-3.1.1-HEADERFIX-1.patch ./root-required.patch ];
 
   src_system = fetchurl {
       url = "${downloadRoot}/${version}/OOo_${version}_src_system.tar.bz2";
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     --without-system-hunspell
     --without-system-altlinuxhyph
     --without-system-lpsolve
+    --without-system-graphite
   ";
 
   LD_LIBRARY_PATH = "${libXext}/lib:${libX11}/lib:${libXtst}/lib:${libXi}/lib:${libjpeg}/lib";
@@ -77,5 +78,6 @@ stdenv.mkDerivation rec {
     description = "OpenOffice.org is a multiplatform and multilingual office suite";
     homepage = http://www.openoffice.org/;
     license = "LGPL";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }
