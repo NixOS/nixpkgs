@@ -1,7 +1,4 @@
-a:
-let
-  inherit (a) stdenv fetchurl libxml2 openssl readline;
-in
+{ stdenv, fetchurl, libxml2, openssl, readline }:
 
 stdenv.mkDerivation rec {
   name = "virtuoso-opensource-6.1.0";

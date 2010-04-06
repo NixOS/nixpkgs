@@ -5634,7 +5634,9 @@ let
     inherit fetchurl stdenv jdk apacheAnt unzip;
   };
 
-  virtuoso = makeOverridable (import ../servers/sql/virtuoso) pkgs;
+  virtuoso = makeOverridable (import ../servers/sql/virtuoso) {
+    inherit stdenv fetchurl libxml2 openssl readline;
+  };
 
   vsftpd = import ../servers/ftp/vsftpd {
     inherit fetchurl openssl stdenv libcap pam;
