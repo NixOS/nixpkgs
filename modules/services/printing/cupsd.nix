@@ -39,75 +39,6 @@ let
       ln -s ${pkgs.ghostscript}/lib/cups/filter/* $out/lib/cups/filter/
       ${cfg.bindirCmds}
     ''; # */
-  
-
-  cupsdConfig = pkgs.writeText "cupsd.conf"
-    ''
-      LogLevel debug
-
-      SystemGroup root
-
-      Listen localhost:631
-      Listen /var/run/cups/cups.sock
-
-      # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
-      # CUPS will write in the ServerRoot when e.g. adding new printers
-      # through the web interface.
-      ServerRoot /etc/cups
-
-      ServerBin ${bindir}/lib/cups
-
-      AccessLog ${logDir}/access_log
-      ErrorLog ${logDir}/access_log
-      PageLog ${logDir}/page_log
-
-      TempDir /tmp
-
-      Browsing On
-      BrowseOrder allow,deny
-      BrowseAllow @LOCAL
-
-      DefaultAuthType Basic
-
-      <Location />
-        Order allow,deny
-        Allow localhost
-      </Location>
-
-      <Location /admin>
-        Order allow,deny
-        Allow localhost
-      </Location>
-
-      <Location /admin/conf>
-        AuthType Basic
-        Require user @SYSTEM
-        Order allow,deny
-        Allow localhost
-      </Location>
-
-      <Policy default>
-        <Limit Send-Document Send-URI Hold-Job Release-Job Restart-Job Purge-Jobs Set-Job-Attributes Create-Job-Subscription Renew-Subscription Cancel-Subscription Get-Notifications Reprocess-Job Cancel-Current-Job Suspend-Current-Job Resume-Job CUPS-Move-Job>
-          Require user @OWNER @SYSTEM
-          Order deny,allow
-        </Limit>
-
-        <Limit Pause-Printer Resume-Printer Set-Printer-Attributes Enable-Printer Disable-Printer Pause-Printer-After-Current-Job Hold-New-Jobs Release-Held-New-Jobs Deactivate-Printer Activate-Printer Restart-Printer Shutdown-Printer Startup-Printer Promote-Job Schedule-Job-After CUPS-Add-Printer CUPS-Delete-Printer CUPS-Add-Class CUPS-Delete-Class CUPS-Accept-Jobs CUPS-Reject-Jobs CUPS-Set-Default>
-          AuthType Basic
-          Require user @SYSTEM
-          Order deny,allow
-        </Limit>
-
-        <Limit Cancel-Job CUPS-Authenticate-Job>
-          Require user @OWNER @SYSTEM
-          Order deny,allow
-        </Limit>
-
-        <Limit All>
-          Order deny,allow
-        </Limit>
-      </Policy>
-    '';
 
 in
 
@@ -131,6 +62,14 @@ in
         description = ''
           Additional commands executed while creating the directory
           containing the CUPS server binaries.
+        '';
+      };
+
+      cupsdConf = mkOption {
+        default = "";
+        description = ''
+          The contents of the configuration file of the CUPS daemon
+          (<filename>cupsd.conf</filename>).
         '';
       };
 
@@ -173,8 +112,76 @@ in
             ${modprobe}/sbin/modprobe usblp || true
           '';
 
-        exec = "${cups}/sbin/cupsd -c ${cupsdConfig} -F";
+        exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
+
+    services.printing.cupsdConf = 
+      ''
+        LogLevel debug
+
+        SystemGroup root
+
+        Listen localhost:631
+        Listen /var/run/cups/cups.sock
+
+        # Note: we can't use ${cups}/etc/cups as the ServerRoot, since
+        # CUPS will write in the ServerRoot when e.g. adding new printers
+        # through the web interface.
+        ServerRoot /etc/cups
+
+        ServerBin ${bindir}/lib/cups
+
+        AccessLog ${logDir}/access_log
+        ErrorLog ${logDir}/error_log
+        PageLog ${logDir}/page_log
+
+        TempDir /tmp
+
+        Browsing On
+        BrowseOrder allow,deny
+        BrowseAllow @LOCAL
+
+        DefaultAuthType Basic
+
+        <Location />
+          Order allow,deny
+          Allow localhost
+        </Location>
+
+        <Location /admin>
+          Order allow,deny
+          Allow localhost
+        </Location>
+
+        <Location /admin/conf>
+          AuthType Basic
+          Require user @SYSTEM
+          Order allow,deny
+          Allow localhost
+        </Location>
+
+        <Policy default>
+          <Limit Send-Document Send-URI Hold-Job Release-Job Restart-Job Purge-Jobs Set-Job-Attributes Create-Job-Subscription Renew-Subscription Cancel-Subscription Get-Notifications Reprocess-Job Cancel-Current-Job Suspend-Current-Job Resume-Job CUPS-Move-Job>
+            Require user @OWNER @SYSTEM
+            Order deny,allow
+          </Limit>
+
+          <Limit Pause-Printer Resume-Printer Set-Printer-Attributes Enable-Printer Disable-Printer Pause-Printer-After-Current-Job Hold-New-Jobs Release-Held-New-Jobs Deactivate-Printer Activate-Printer Restart-Printer Shutdown-Printer Startup-Printer Promote-Job Schedule-Job-After CUPS-Add-Printer CUPS-Delete-Printer CUPS-Add-Class CUPS-Delete-Class CUPS-Accept-Jobs CUPS-Reject-Jobs CUPS-Set-Default>
+            AuthType Basic
+            Require user @SYSTEM
+            Order deny,allow
+          </Limit>
+
+          <Limit Cancel-Job CUPS-Authenticate-Job>
+            Require user @OWNER @SYSTEM
+            Order deny,allow
+          </Limit>
+
+          <Limit All>
+            Order deny,allow
+          </Limit>
+        </Policy>
+      '';
 
   };
   
