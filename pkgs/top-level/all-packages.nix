@@ -1988,9 +1988,6 @@ let
       libcCross = libcCross;
       profiledCompiler = false;
       enableMultilib = false;
-      # cross-building for ultrasparc in 4.4.3 will require disabling shared due to a gcc bug.
-      # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41818
-      enableShared = if (crossSystem.arch == "sparc64") then false else true;
       crossStageStatic = false;
       cross = assert crossSystem != null; crossSystem;
     });
