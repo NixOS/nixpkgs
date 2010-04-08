@@ -29,6 +29,7 @@ let
       action = 
         ''
           #! ${pkgs.bash}/bin/sh
+          ${config.services.acpid.powerEventCommands}
         '';
     };
   
@@ -39,6 +40,7 @@ let
       action =
         ''
           #! ${pkgs.bash}/bin/sh
+          ${config.services.acpid.lidEventCommands}
         '';
     };
   
@@ -49,6 +51,7 @@ let
       action = 
         ''
           #! ${pkgs.bash}/bin/sh
+          ${config.services.acpid.acEventCommands}
         '';
     };
 
@@ -66,7 +69,22 @@ in
         default = false;
         description = "Whether to enable the ACPI daemon.";
       };
-      
+
+      powerEventCommands = mkOption {
+        default = "";
+        description = "Shell commands to execute on a button/power.* event.";
+      };
+
+      lidEventCommands = mkOption {
+        default = "";
+        description = "Shell commands to execute on a button/lid.* event.";
+      };
+
+      acEventCommands = mkOption {
+        default = "";
+        description = "Shell commands to execute on a ac_adapter.* event.";
+      };
+
     };
     
   };
