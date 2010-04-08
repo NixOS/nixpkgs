@@ -1,6 +1,6 @@
 {
   boot = {
-    grubDevice = "/dev/sda";
+    loader.grub.device = "/dev/sda";
   };
 
   fileSystems = [
@@ -14,7 +14,7 @@
   ];
   
   services = {
-    sshd = {
+    openssh = {
       enable = true;
     };
   };
