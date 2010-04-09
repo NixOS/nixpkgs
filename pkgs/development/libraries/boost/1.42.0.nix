@@ -33,7 +33,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "boost-1.41.0";
+  name = "boost-1.42.0";
 
   meta = {
     homepage = "http://boost.org/";
@@ -42,8 +42,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_41_0.tar.bz2";
-    sha256 = "09n7bjac2nlp7c8khpml2mq4qm33w2dn4ksb50c37wga95klxy8y";
+    url = "mirror://sourceforge/boost/boost_1_42_0.tar.bz2";
+    sha256 = "02g6m6f7m11ig93p5sx7sfq75c15y9kn2pa3csn1bkjhs9dvj7jb";
   };
 
   buildInputs = [icu expat zlib bzip2 python];
