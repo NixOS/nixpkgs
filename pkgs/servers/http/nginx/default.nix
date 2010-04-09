@@ -3,7 +3,6 @@ let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     openssl zlib pcre libxml2 libxslt
-    perl ? null
   ];
 in
 rec {
