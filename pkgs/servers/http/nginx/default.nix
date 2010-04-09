@@ -3,6 +3,7 @@ let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     openssl zlib pcre libxml2 libxslt
+    perl ? null
   ];
 in
 rec {
@@ -17,6 +18,8 @@ rec {
     "--with-http_dav_module"
     "--with-http_gzip_static_module"
     "--with-http_secure_link_module"
+    # Install destination problems
+    # "--with-http_perl_module" 
   ];
 
   preConfigure = a.fullDepEntry ''
