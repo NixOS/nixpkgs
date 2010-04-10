@@ -9119,7 +9119,14 @@ let
     flex = flex2535;
   };
 
-  linuxwacom = import ../misc/linuxwacom {
+  linuxwacom = linuxwacom_0_8_5;
+
+  linuxwacom_0_8_5 = import ../misc/linuxwacom/0.8.5.x.nix {
+    inherit fetchurl stdenv ncurses pkgconfig;
+    inherit (xorg) libX11 libXi xproto inputproto xorgserver;
+  };
+
+  linuxwacom_0_8_4 = import ../misc/linuxwacom/0.8.4.x.nix {
     inherit fetchurl stdenv ncurses pkgconfig;
     inherit (xorg) libX11 libXi xproto inputproto xorgserver;
   };

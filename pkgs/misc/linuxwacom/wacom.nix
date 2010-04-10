@@ -1,14 +1,12 @@
 { stdenv, fetchurl, libX11, libXi, inputproto
-, xproto, ncurses, pkgconfig, xorgserver }:
-
-let s = import ./src-for-default.nix; in
+, xproto, ncurses, pkgconfig, xorgserver, version, hash }:
 
 stdenv.mkDerivation rec {
-  inherit (s) name;
+  name = "linuxwacom-${version}";
   
   src = fetchurl {
-    url = s.url;
-    sha256 = s.hash;
+    url = "mirror://sourceforge/linuxwacom/${name}.tar.bz2";
+    sha256 = hash;
   };
   
   buildInputs = [ libX11 libXi inputproto xproto ncurses pkgconfig xorgserver ];
@@ -27,8 +25,8 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin urkud];
     description = "Wacom digitizer driver for X11";
-    homepage = http://linuxwacom.sf.net;
+    homepage = http://linuxwacom.sourceforge.net;
   };
 }
