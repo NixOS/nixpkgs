@@ -1542,6 +1542,11 @@ let
     inherit stdenv perl;
   };
 
+  slimrat = import ../tools/networking/slimrat {
+    inherit fetchurl stdenv perl makeWrapper;
+    inherit (perlPackages) WWWMechanize LWP;
+  };
+
   slsnif = import ../tools/misc/slsnif {
     inherit fetchurl stdenv;
   };
