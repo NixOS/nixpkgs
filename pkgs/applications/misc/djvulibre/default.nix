@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, config, libjpeg, libtiff, libpng, ghostscript
+{ stdenv, fetchurl, lib, useQt3 ? true, libjpeg, libtiff, libpng, ghostscript
 , libungif, zlib, x11, libX11, mesa, qt3 }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libjpeg libtiff libpng ghostscript zlib libungif ] ++
-    (if config "qt3" true then [qt3 libX11 x11 mesa] else []);
+    stdenv.lib.optionals useQt3 [qt3 libX11 x11 mesa];
 
   meta = {
     description = "A library and viewer for the DJVU file format for scanned images";

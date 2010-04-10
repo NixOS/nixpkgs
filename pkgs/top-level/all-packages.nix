@@ -7045,10 +7045,9 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  djvulibre = import ../applications/misc/djvulibre {
+  djvulibre = makeOverridable (import ../applications/misc/djvulibre) {
     inherit stdenv fetchurl lib libjpeg libtiff libungif qt3 zlib
       ghostscript libpng mesa x11;
-    config = getPkgConfig "djvulibre";
     inherit (xlibs) libX11;
   };
 
