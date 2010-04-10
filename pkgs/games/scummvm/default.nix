@@ -1,11 +1,11 @@
 {stdenv, fetchurl, SDL, zlib, mpeg2dec}:
 
 stdenv.mkDerivation {
-  name = "scummvm-1.0.0";
+  name = "scummvm-1.1.0";
   
   src = fetchurl {
-    url = mirror://sourceforge/scummvm/scummvm-1.0.0.tar.bz2;
-    sha256 = "1v00ikxn9j7vid0jrf7hh7wvk8scv69isif26ngh3jngs2wk42cj";
+    url = mirror://sourceforge/scummvm/scummvm-1.1.0.tar.bz2;
+    sha256 = "0fdqc98jib6593cpjc1jhklp9y0c1mlk0lrn9d6r9ax159x53h2k";
   };
   
   buildInputs = [SDL zlib mpeg2dec];
