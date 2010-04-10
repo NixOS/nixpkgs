@@ -55,14 +55,14 @@ sub createLinks {
         my $relName2 = "$relName/$baseName";
 
         # Urgh, hacky...
-	if ($srcFile =~ /\/propagated-build-inputs$/ ||
+        if ($srcFile =~ /\/propagated-build-inputs$/ ||
             $srcFile =~ /\/nix-support$/ ||
             $srcFile =~ /\/perllocal.pod$/ ||
             $srcFile =~ /\/info\/dir$/ ||
             $srcFile =~ /\/log$/)
         {
             # Do nothing.
-	}
+        }
 
         elsif (-d $srcFile) {
 
