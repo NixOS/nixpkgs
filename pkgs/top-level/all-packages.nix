@@ -7096,7 +7096,7 @@ let
 
   elinks = import ../applications/networking/browsers/elinks {
     inherit stdenv fetchurl python perl ncurses x11 zlib openssl spidermonkey
-      guile bzip2;
+      guile bzip2 gpm;
   };
 
   elvis = import ../applications/editors/elvis {
