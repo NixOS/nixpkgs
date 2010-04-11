@@ -8747,18 +8747,6 @@ let
       inherit (kde3) kdelibs;
     };
 
-    gwenview = import ../applications/graphics/gwenview {
-      inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3;
-      inherit (kde3) kdelibs;
-      inherit (xlibs) libXt libXext;
-    };
-
-    digikam = import ../applications/graphics/digikam {
-      inherit stdenv fetchurl exiv2 zlib libjpeg perl libpng expat qt3 cmake;
-      inherit (kde3) kdelibs;
-      inherit (xlibs) libXt libXext;
-    };
-
     k3b = import ../applications/misc/k3b {
       inherit stdenv fetchurl x11 zlib libpng libjpeg perl qt3;
       inherit (kde3) kdelibs;
@@ -8773,13 +8761,6 @@ let
 
     kile = import ../applications/editors/kile {
       inherit stdenv fetchurl perl zlib libpng libjpeg freetype expat;
-      inherit (xlibs) libX11 libXt libXext libXrender libXft;
-      inherit (kde3) arts kdelibs;
-      qt = qt3;
-    };
-
-    konversation = import ../applications/networking/irc/konversation {
-      inherit fetchurl stdenv perl zlib libpng libjpeg expat;
       inherit (xlibs) libX11 libXt libXext libXrender libXft;
       inherit (kde3) arts kdelibs;
       qt = qt3;
@@ -8806,33 +8787,9 @@ let
       qt = qt3;
     };
 
-    filelight = import ../tools/system/filelight {
-      inherit fetchurl stdenv x11 zlib perl libpng;
-      inherit (kde3) kdelibs;
-      qt = qt3;
-    };
-
-    superkaramba = import ../desktops/superkaramba {
-      inherit stdenv fetchurl zlib libjpeg
-        perl qt3 python libpng freetype expat;
-      inherit (xlibs) libX11 libXext libXt libXaw libXpm;
-      inherit (kde3) kdelibs kdebase;
-    };
-
   };
 
-  kde4 = recurseIntoAttrs (
-    if (getPkgConfig "kde" "version" "4.4") == "4.4" then
-      kde44
-    else
-      kde43
-  );
-
-  kde43 = makeOverridable (import ../desktops/kde-4.3) (pkgs // {
-    openexr = openexr_1_6_1;
-    qt4 = qt45;
-    popplerQt4 = popplerQt45;
-  });
+  kde4 = kde44;
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
     openexr = openexr_1_6_1;
