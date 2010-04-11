@@ -4818,11 +4818,6 @@ let
     qt4Support = false;
   };
 
-  popplerQt44 = poppler.override {
-    qt4Support = true;
-    qt4 = qt44;
-  };
-
   popplerQt45 = poppler.override {
     qt4Support = true;
     qt4 = qt45;
@@ -4858,15 +4853,6 @@ let
   };
 
   qt4 = qt46;
-
-  qt44 = import ../development/libraries/qt-4.4 {
-    inherit fetchurl stdenv fetchsvn zlib libjpeg libpng which mysql mesa openssl cups dbus
-      fontconfig freetype pkgconfig libtiff;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor libICE libSM libX11 libXext
-      inputproto fixesproto libXfixes;
-    inherit (gnome) glib;
-  };
 
   qt45 = import ../development/libraries/qt-4.5 {
     inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
