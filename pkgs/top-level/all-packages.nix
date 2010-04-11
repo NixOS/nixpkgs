@@ -4818,14 +4818,9 @@ let
     qt4Support = false;
   };
 
-  popplerQt45 = poppler.override {
+  popplerQt4 = poppler.override {
+    inherit qt4;
     qt4Support = true;
-    qt4 = qt45;
-  };
-
-  popplerQt46 = poppler.override {
-    qt4Support = true;
-    qt4 = qt46;
   };
 
   popt = import ../development/libraries/popt {
@@ -5362,24 +5357,12 @@ let
     inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
   };
 
-  sip48 = import ../development/python-modules/python-sip {
+  sip = import ../development/python-modules/python-sip {
     inherit stdenv fetchurl python;
   };
 
-  sip410 = import ../development/python-modules/python-sip/4.10.nix {
-    inherit stdenv fetchurl python;
-  };
-
-  pyqt45 = import ../development/python-modules/pyqt {
-    inherit stdenv fetchurl python;
-    qt4 = qt45;
-    sip = sip48;
-  };
-
-  pyqt47 = import ../development/python-modules/pyqt/4.7.nix {
-    inherit stdenv fetchurl python;
-    qt4 = qt46;
-    sip = sip410;
+  pyqt4 = import ../development/python-modules/pyqt {
+    inherit stdenv fetchurl python qt4 sip;
   };
 
   pyx = import ../development/python-modules/pyx {
@@ -6865,18 +6848,9 @@ let
 
   calibre = makeOverridable (import ../applications/misc/calibre) {
     inherit stdenv fetchurl libpng imagemagick pkgconfig libjpeg fontconfig podofo
-      qt4 makeWrapper unrar pil chmlib;
+      qt4 makeWrapper unrar pil chmlib popplerQt4 pyqt4 sip;
     python = python26Full;
-    popplerQt4 = popplerQt45;
-    pyqt4 = pyqt45;
-    sip = sip48;
     inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
-  };
-
-  calibreQt46 = calibre.override {
-    popplerQt4 = popplerQt46;
-    pyqt4 = pyqt47;
-    sip = sip410;
   };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
@@ -8784,10 +8758,6 @@ let
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
     openexr = openexr_1_6_1;
-    qt4 = qt46;
-    popplerQt4 = popplerQt46;
-    sip = sip410;
-    pyqt4 = pyqt47;
   });
 
   ### SCIENCE

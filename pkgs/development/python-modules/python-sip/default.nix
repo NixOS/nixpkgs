@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python }:
 
-stdenv.mkDerivation {
-  name = "sip-4.8.2";
+stdenv.mkDerivation rec {
+  name = "sip-4.10.1";
   
   src = fetchurl {
-    url = http://pyqwt.sourceforge.net/support/sip-4.8.2.tar.gz; # Not downloading from riverbank, since they remove older releases
-    sha256 = "1afr2qaibzgf8fq4fmc31jz9hvbwxbg5jvl68ygvkkdvnbg2kfrf";
+    url = "http://www.riverbankcomputing.co.uk/static/Downloads/sip4/${name}.tar.gz";
+    sha256 = "16pdk86amcl4hnc9vv2y1ihl8ym9hjkh49andm4jahv4630qhc9h";
   };
   
   configurePhase = "python ./configure.py -d $out/lib/${python.libPrefix}/site-packages -b $out/bin -e $out/include";
