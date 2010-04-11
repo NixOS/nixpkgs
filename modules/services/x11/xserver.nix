@@ -155,7 +155,7 @@ in
 
       modules = mkOption {
         default = [];
-        example = [ pkgs.linuxwacom ];
+        example = [ pkgs.synaptics ];
         description = "Packages to be added to the module search path of the X server.";
       };
 
