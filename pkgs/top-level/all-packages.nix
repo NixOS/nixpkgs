@@ -5362,8 +5362,6 @@ let
     inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
   };
 
-  sip = sip48;
-
   sip48 = import ../development/python-modules/python-sip {
     inherit stdenv fetchurl python;
   };
@@ -5372,11 +5370,10 @@ let
     inherit stdenv fetchurl python;
   };
 
-  pyqt4 = pyqt45;
-  
   pyqt45 = import ../development/python-modules/pyqt {
-    inherit stdenv fetchurl python sip;
+    inherit stdenv fetchurl python;
     qt4 = qt45;
+    sip = sip48;
   };
 
   pyqt47 = import ../development/python-modules/pyqt/4.7.nix {
@@ -6866,12 +6863,20 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
-  calibre = import ../applications/misc/calibre {
+  calibre = makeOverridable (import ../applications/misc/calibre) {
     inherit stdenv fetchurl libpng imagemagick pkgconfig libjpeg fontconfig podofo
-      qt4 makeWrapper unrar sip pyqt4 pil chmlib;
+      qt4 makeWrapper unrar pil chmlib;
     python = python26Full;
     popplerQt4 = popplerQt45;
+    pyqt4 = pyqt45;
+    sip = sip48;
     inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
+  };
+
+  calibreQt46 = calibre.override {
+    popplerQt4 = popplerQt46;
+    pyqt4 = pyqt47;
+    sip = sip410;
   };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
