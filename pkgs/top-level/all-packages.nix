@@ -3558,9 +3558,9 @@ let
 
   extremetuxracer = builderDefsPackage (import ../games/extremetuxracer) {
     inherit mesa tcl freeglut SDL SDL_mixer pkgconfig
-    	libpng gettext intltool;
+      libpng gettext intltool;
     inherit (xlibs) libX11 xproto libXi inputproto
-    	libXmu libXext xextproto libXt libSM libICE;
+      libXmu libXext xextproto libXt libSM libICE;
   };
 
   eventlog = import ../development/libraries/eventlog {
@@ -3870,7 +3870,7 @@ let
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
              it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc
-	     libsoup;
+      libsoup;
   });
 
   gnet = import ../development/libraries/gnet {
