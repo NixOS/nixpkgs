@@ -6474,6 +6474,11 @@ let
     inherit fetchurl stdenv qt4 imagemagick inkscape;
   };
 
+  xf86_input_wacom = import ../os-specific/linux/xf86-input-wacom {
+    inherit stdenv fetchurl ncurses pkgconfig file;
+    inherit (xorg) libX11 libXi inputproto xproto xorgserver;
+  };
+
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
       freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
