@@ -173,7 +173,6 @@ with (import ./release-lib.nix);
   libtool_2 = all;
   libxml2 = all;
   libxslt = all;
-  linuxwacom = linux;
   lout = linux;
   lsh = linux;
   lsof = linux;

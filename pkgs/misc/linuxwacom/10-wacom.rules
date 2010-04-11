@@ -1,3 +1,0 @@
-# udev rule to create /dev/input/wacomN for wacom tablets
-
-KERNEL="event*", SYSFS{manufacturer}="WACOM", NAME="input/%k", SYMLINK="input/wacom%e"
