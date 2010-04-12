@@ -11,11 +11,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "git-1.7.0.3";
+  name = "git-1.7.0.4";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "f68774019b52ac462da48a5315ce1f4dcd64a2327de4a14d13014bdc0c50f841";
+    sha256 = "ff283c3799c3f9719d0512bb23cf8854e1934f1ed36f2058b931d8f1c0b63430";
   };
 
   patches = [ ./docbook2texi.patch ];
