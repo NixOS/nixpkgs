@@ -39,4 +39,6 @@ stdenv.mkDerivation rec {
                  + " --disable-dependency-tracking"
                  + " --disable-debug"
                  ;
+
+  maintainers = [ stdenv.lib.maintainers.simons ];
 }
