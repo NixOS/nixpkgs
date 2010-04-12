@@ -36,7 +36,7 @@ let libs =
         buildInputs = [ pkgs.ncurses pkgs.xapianBindings libs.ncursesw ];
       };
       ncurses = { buildInputs = [ pkgs.ncurses ]; };
-      ncurses = { buildInputs = [ pkgs.ncurses ]; };
+      ncursesw = { buildInputs = [ pkgs.ncurses ]; };
       nokogiri = {
         buildFlags=["--with-xml2-dir=${pkgs.libxml2} --with-xml2-include=${pkgs.libxml2}/include/libxml2"
                     "--with-xslt-dir=${pkgs.libxslt}" ];
