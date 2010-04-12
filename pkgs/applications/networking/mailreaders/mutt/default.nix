@@ -21,7 +21,11 @@ stdenv.mkDerivation {
     (if sslSupport then openssl else null)
   ];
   configureFlags = [
-    "--with-mailpath="
+    "--with-mailpath=" "--enable-smtp"
+    # The next allows building mutt without having anything setgid
+    # set by the installer, and removing the need for the group 'mail'
+    # I set the value 'mailbox' because it is a default in the configure script
+    "--with-homespool=mailbox"
     (if headerCache then "--enable-hcache" else "--disable-hcache")
     (if sslSupport then "--with-ssl" else "--without-ssl")
     (if imapSupport then "--enable-imap" else "--disable-imap")
