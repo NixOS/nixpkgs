@@ -18,4 +18,6 @@ stdenv.mkDerivation {
     description = "Maxima computer algebra system";
     homepage = http://maxima.sourceforge.net;
   };
+
+  maintainers = [ stdenv.lib.maintainers.simons ];
 }
