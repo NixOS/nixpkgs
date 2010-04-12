@@ -1,11 +1,11 @@
 args: with args;
 
-stdenv.mkDerivation {
-  name = "elinks-0.11.3";
+stdenv.mkDerivation rec {
+  name = "elinks-0.12pre5";
 
   src = fetchurl {
-    url = http://elinks.or.cz/download/elinks-0.11.3.tar.bz2;
-    sha256 = "c10e657fbd884eae4f01b91b32407bbfcbcae0ad5017fb24ea365aebc71d2af1";
+    url = http://elinks.or.cz/download/elinks-0.12pre5.tar.bz2;
+    sha256 = "1li4vlbq8wvnigxlkzb15490y90jg6y9yzzrqpqcz2h965w5869d";
   };
 
   buildInputs = [python perl ncurses x11 bzip2 zlib openssl spidermonkey guile gpm];
