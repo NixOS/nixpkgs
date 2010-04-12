@@ -1225,6 +1225,21 @@ let
     inherit fetchurl stdenv pkgconfig openobex bluez;
   };
 
+  offlineimap = import ../tools/networking/offlineimap {
+    inherit fetchurl;
+    # I did not find any better way of reusing buildPythonPackage+setuptools
+    # for a python with openssl support
+    buildPythonPackage = assert pythonFull.opensslSupport;
+      import ../development/python-modules/generic {
+        inherit makeWrapper lib;
+        python = pythonFull;
+        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
+          inherit makeWrapper;
+          python = pythonFull;
+        };
+      };
+  };
+
   opendbx = import ../development/libraries/opendbx {
     inherit fetchurl stdenv readline mysql postgresql sqlite;
   };
