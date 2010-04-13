@@ -283,11 +283,13 @@ in
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
-        startOn = "started ${startingDependency} and filesystems";
+        startOn = "started ${startingDependency}";
 
-        daemonType = "fork";
+        daemonType = "none";
 
-        script =
+        respawn = false;
+
+        preStart =
           ''
             if ! [ -d /var/spool/postfix ]; then
               ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
@@ -308,6 +310,10 @@ in
             
             exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
           ''; # */
+
+        preStop = ''
+            exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop
+        '';
 
       };
 
