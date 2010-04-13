@@ -3486,7 +3486,7 @@ let
   };
 
   commoncpp2 = import ../development/libraries/commoncpp2 {
-    inherit stdenv fetchurl lib;
+    inherit stdenv fetchurl;
   };
 
   consolekit = makeOverridable (import ../development/libraries/consolekit) {
