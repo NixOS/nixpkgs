@@ -1,14 +1,14 @@
 {stdenv, fetchurl, noSysDirs, cross ? null}:
 
 let
-    basename = "binutils-2.20";
+    basename = "binutils-2.20.1";
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1c3m789p5rwmmnck5ms4zcnc40axss3gxzivz571al1vmbq0kpz1";
+    sha256 = "1y7nwsprhr4hvx9ps2l0l0ivb6k41rcrx1invmzqxs475mr892r2";
   };
 
   patches = [
@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
-
-    ./as-pr10856.patch
   ];
 
   inherit noSysDirs;

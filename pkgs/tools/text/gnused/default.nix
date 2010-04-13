@@ -1,15 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnused-4.1.5";
-  
+  name = "gnused-4.2.1";
+
   src = fetchurl {
-    url = mirror://gnu/sed/sed-4.1.5.tar.gz;
-    md5 = "7a1cbbbb3341287308e140bd4834c3ba";
+    url = mirror://gnu/sed/sed-4.2.1.tar.gz;
+    md5 = "0q1hzjvr6pzhaagidg7pj76k1fzz5nl15np7p72w9zcpw0f58ww7";
   };
-  
-  # !!! hack: this should go away in gnused > 4.1.5
-  patches = [./gettext-fix.patch];
 
   meta = {
     homepage = http://www.gnu.org/software/sed/;
@@ -24,6 +21,9 @@ stdenv.mkDerivation {
       multiple occurrences of a string within a file.
     '';
 
-    license = "GPLv2+";
+    license = "GPLv3+";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

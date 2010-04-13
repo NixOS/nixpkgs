@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-1.22";
+  name = "gnutar-1.23";
   
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-1.22.tar.bz2";
-    sha256 = "0kdaadflxa6wznbbrp0xlxk9926hrr4yg7wr6m98ygvs35zvdvrw";
+    url = "mirror://gnu/tar/tar-1.23.tar.bz2";
+    sha256 = "0dmyxsh0171m6nv8aw74dps1l4b1r7pkqkly9kcv3yv2vdr86cn9";
   };
   
   patches = [./implausible.patch];
