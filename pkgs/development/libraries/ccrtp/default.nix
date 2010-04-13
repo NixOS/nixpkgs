@@ -1,10 +1,10 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "ccrtp-1.7.0";
+  name = "ccrtp-1.7.1";
 
   src = fetchurl {
-    url = mirror://gnu/ccrtp/ccrtp-1.7.0.tar.gz;
-    sha256 = "1bjn5l476nk34gipz4jl2p83m735gzanzr046zrkx423zipx4g4j";
+    url = mirror://gnu/ccrtp/ccrtp-1.7.1.tar.gz;
+    sha256 = "0psi91r0fgawpa5x4jiq7lkr180agdi25gi0mfriqcmykxg7r1jn";
   };
 
   buildInputs = [openssl pkgconfig libgcrypt commoncpp2];
