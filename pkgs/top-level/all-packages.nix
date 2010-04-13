@@ -1802,6 +1802,7 @@ let
 
   wget = import ../tools/networking/wget {
     inherit fetchurl stdenv gettext gnutls perl;
+    inherit (perlPackages) LWP;
   };
 
   which = import ../tools/system/which {

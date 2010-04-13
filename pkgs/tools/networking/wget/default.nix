@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, perl, gnutls ? null }:
+{ stdenv, fetchurl, gettext, perl, LWP, gnutls ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.12";
@@ -15,9 +15,16 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
        done
+
+       # Work around lack of DNS resolution in chroots.
+       for i in "tests/"*.pm "tests/"*.px
+       do
+         sed -i "$i" -e's/localhost/127.0.0.1/g'
+       done
     '';
 
   buildInputs = [ gettext perl ]
+    ++ stdenv.lib.optional doCheck LWP
     ++ stdenv.lib.optional (gnutls != null) gnutls;
 
   configureFlags =
@@ -42,5 +49,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/wget/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
