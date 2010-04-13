@@ -33,6 +33,11 @@ pkgs.recurseIntoAttrs (rec {
   qca2 = import ./support/qca2 {
     inherit (pkgs) stdenv fetchurl lib which qt4;
   };
+
+  qca2_ossl = import ./support/qca2/ossl.nix {
+    inherit (pkgs) stdenv fetchurl lib qt4 openssl;
+    inherit qca2;
+  };
   
   akonadi = import ./support/akonadi {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 shared_mime_info libxslt boost mysql;
