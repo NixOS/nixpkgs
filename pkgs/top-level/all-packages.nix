@@ -9164,6 +9164,10 @@ let
     hasktags = haskellPackages.myhasktags;
   };
 
+  splix = import ../misc/cups/drivers/splix {
+    inherit stdenv fetchurl cups zlib;
+  };
+
   synaptics = import ../misc/synaptics {
     inherit fetchurl stdenv pkgconfig;
     inherit (xlibs) libX11 libXi libXext pixman xf86inputevdev;
