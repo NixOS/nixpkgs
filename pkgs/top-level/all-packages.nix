@@ -5439,9 +5439,8 @@ let
     inherit fetchurl stdenv libtool gettext zlib readline guile python;
   };
 
-  dict = composedArgsAndFun (import ../servers/dict/1.9.15.nix) {
-    inherit builderDefs which bison;
-    flex=flex2534;
+  dict = makeOverridable (import ../servers/dict) {
+    inherit fetchurl stdenv which bison flex;
   };
 
   dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
