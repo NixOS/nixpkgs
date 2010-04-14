@@ -112,6 +112,8 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
+        environment = { TZ = config.time.timeZone; };
+
         preStart =
           ''        
 	    # Create the base directory
@@ -141,12 +143,17 @@ in
 	    
 	    # Create a modified server.xml which also includes all virtual hosts
 	    sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${
-                         toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
+                         toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
 	        ${pkgs.tomcat6}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
 	    
 	    # Create a logs/ directory
 	    mkdir -p ${cfg.baseDir}/logs
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs
+            ${if cfg.logPerVirtualHost then 
+               toString (map (h: ''
+                                    mkdir -p ${cfg.baseDir}/logs/${h.name}
+                                    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/${h.name}
+                                 '') cfg.virtualHosts) else ''''}
 	    
 	    # Create a temp/ directory
 	    mkdir -p ${cfg.baseDir}/temp
