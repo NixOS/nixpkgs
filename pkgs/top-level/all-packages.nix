@@ -8958,7 +8958,7 @@ let
     inherit fetchurl stdenv rpm cpio zlib;
   };
 
-  cupsBjnp = import ../misc/cups/drivers/cups-bnjp {
+  cupsBjnp = import ../misc/cups/drivers/cups-bjnp {
     inherit fetchurl stdenv cups;
   };
 

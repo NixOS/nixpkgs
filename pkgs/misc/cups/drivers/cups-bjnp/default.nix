@@ -1,9 +1,10 @@
-args: with args;
-stdenv.mkDerivation {
-  name = "cups-bjnp";
+{stdenv, fetchurl, cups}:
+
+stdenv.mkDerivation rec {
+  name = "cups-bjnp-0.5.4";
 
   src = fetchurl {
-    url = mirror://sourceforge/project/cups-bjnp/cups-bjnp/0.5.4/cups-bjnp-0.5.4.tar.gz;
+    url = "mirror://sourceforge/cups-bjnp/${name}.tar.gz";
     sha256 = "1q5npis0jgs44yvczrr6pz87glk1d9lv3vr2s4nqrk3l0q4xplf6";
   };
 
@@ -11,5 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [cups];
 
-  meta = { };
+  meta = {
+    homepage = http://cups-bjnp.sourceforge.net;
+  };
 }
