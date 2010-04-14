@@ -59,6 +59,7 @@ sub createLinks {
             $srcFile =~ /\/nix-support$/ ||
             $srcFile =~ /\/perllocal.pod$/ ||
             $srcFile =~ /\/info\/dir$/ ||
+            ( $relName2 =~ /^\/share\/mime\// && !( $relName2 =~ /^\/share\/mime\/packages/ ) ) ||
             $srcFile =~ /\/log$/)
         {
             # Do nothing.
@@ -164,6 +165,11 @@ while (scalar(keys %postponed) > 0) {
     foreach my $pkgDir (sort @pkgDirs) {
         addPkg($pkgDir, 1);
     }
+}
+
+if (-x "$out/bin/update-mime-database" && -d "$out/share/mime/packages") {
+    system("$out/bin/update-mime-database -V $out/share/mime") == 0
+        or die "Can't update mime-database";
 }
 
 
