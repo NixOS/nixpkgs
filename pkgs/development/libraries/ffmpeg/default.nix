@@ -1,11 +1,11 @@
 {stdenv, fetchurl, faad2}:
 
 stdenv.mkDerivation {
-  name = "ffmpeg-0.5";
+  name = "ffmpeg-0.5.1";
   
   src = fetchurl {
-    url = http://www.ffmpeg.org/releases/ffmpeg-0.5.tar.bz2;
-    sha1 = "f930971bc0ac3d11a4ffbb1af439425c24f6f5b1";
+    url = http://www.ffmpeg.org/releases/ffmpeg-0.5.1.tar.bz2;
+    sha256 = "0n68lihyy3jk4q7f22kv6nranfbafyl41hnzpa6cm0r0vf473gn2";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
