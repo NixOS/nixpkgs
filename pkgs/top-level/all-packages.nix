@@ -3608,7 +3608,7 @@ let
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
-    inherit fetchurl stdenv faad2;
+    inherit fetchurl stdenv faad2 libvorbis speex libtheora;
   };
 
   fftw = import ../development/libraries/fftw {
@@ -8007,7 +8007,8 @@ let
     inherit fetchurl stdenv lib cmake pkgconfig freetype lcms libtiff libxml2
       cairo python cups fontconfig zlib libjpeg libpng;
     inherit (gnome) libart_lgpl;
-    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
+    inherit (xlibs) libXau libXaw libXdmcp libXext libX11 libXtst libXi libXinerama libXrender;
+    inherit (xorg) pixman libpthreadstubs;
     qt = qt3;
   };
 
