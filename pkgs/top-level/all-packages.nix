@@ -6026,6 +6026,10 @@ let
       }
     else null;
 
+    blcr = import ../os-specific/linux/blcr/0.8.2.nix {
+      inherit fetchurl stdenv kernel perl makeWrapper;
+    };
+
     exmap = import ../os-specific/linux/exmap {
       inherit fetchurl stdenv kernel boost pcre pkgconfig;
       inherit (gtkLibs) gtkmm;
