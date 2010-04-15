@@ -41,6 +41,10 @@ rec {
     inherit cabal ansiTerminal;
   };
 
+  AspectAG = import ../development/libraries/haskell/AspectAG {
+    inherit cabal HList mtl;
+  };
+
   benchpress = import ../development/libraries/haskell/benchpress {
     inherit cabal;
   };
