@@ -83,10 +83,10 @@ in
     ${concatMapStrings (project:
       ''
         if [ ! -d /var/trac/${project.identifier} ]
-	then
-	    export PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/${pkgs.python.libPrefix}/site-packages
-	    ${pkgs.pythonPackages.trac}/bin/trac-admin /var/trac/${project.identifier} initenv "${project.name}" "${project.databaseURL}" svn "${project.subversionRepository}"
-	fi
+        then
+            export PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/${pkgs.python.libPrefix}/site-packages
+            ${pkgs.pythonPackages.trac}/bin/trac-admin /var/trac/${project.identifier} initenv "${project.name}" "${project.databaseURL}" svn "${project.subversionRepository}"
+        fi
       '' ) (config.projects)}
   '';
   

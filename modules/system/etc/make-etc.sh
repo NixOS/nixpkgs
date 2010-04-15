@@ -13,7 +13,7 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
         echo "Duplicate entry ${targets_[$i]} -> ${sources_[$i]}"
         if test "$(readlink $out/etc/${targets_[$i]})" != "${sources_[$i]}"; then
             echo "Mismatched duplicate entry $(readlink $out/etc/${targets_[$i]}) <-> ${sources_[$i]}"
-	    exit 1
+            exit 1
         fi
     fi;
     if test "${modes_[$i]}" != symlink; then

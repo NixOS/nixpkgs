@@ -136,7 +136,7 @@ in
       default = ""; # use a Unix domain socket
       example = "10.0.2.2";
       description = ''
-	The location of the database server.  Leave empty to use a
+        The location of the database server.  Leave empty to use a
         database server running on the same machine through a Unix
         domain socket.
       '';

@@ -7,8 +7,8 @@
       example = true;
       description = ''
         Switch off the options in the default configuration that require X libraries.
-	Currently this includes: openssh.forwardX11, dbus, hal, fonts.enableCoreFonts,
-	fonts.enableFontConfig
+        Currently this includes: openssh.forwardX11, dbus, hal, fonts.enableCoreFonts,
+        fonts.enableFontConfig
       '';
     };
   };

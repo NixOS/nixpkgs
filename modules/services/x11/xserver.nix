@@ -409,7 +409,7 @@ in
               if elem "nvidia" driverNames then ''
                 ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
               ''
-	      else if elem "nvidiaLegacy" driverNames then ''
+        else if elem "nvidiaLegacy" driverNames then ''
                 ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver
               ''
               else if cfg.driSupport then

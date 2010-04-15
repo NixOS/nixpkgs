@@ -81,14 +81,14 @@ in
         (allowdeny "deny" cfg.deny)
         # see man 5 fcron.conf
         { source = pkgs.writeText "fcon.conf" ''
-            fcrontabs	=	/var/spool/fcron
-            pidfile	=	/var/run/fcron.pid
-            fifofile	=	/var/run/fcron.fifo
-            fcronallow	=	/etc/fcron.allow
-            fcrondeny	=	/etc/fcron.deny
-            shell	=	/bin/sh
-            sendmail	=	/var/setuid-wrappers/sendmail
-            editor	=	/var/run/current-system/sw/bin/vi
+            fcrontabs   =       /var/spool/fcron
+            pidfile     =       /var/run/fcron.pid
+            fifofile    =       /var/run/fcron.fifo
+            fcronallow  =       /etc/fcron.allow
+            fcrondeny   =       /etc/fcron.deny
+            shell       =       /bin/sh
+            sendmail    =       /var/setuid-wrappers/sendmail
+            editor      =       /var/run/current-system/sw/bin/vi
           '';
           target = "fcron.conf";
           mode = "0600"; # max allowed is 644
