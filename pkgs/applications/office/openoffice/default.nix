@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [ ./oo.patch ./OOo-3.1.1-HEADERFIX-1.patch ./root-required.patch ];
 
   src_system = fetchurl {
-      url = "${downloadRoot}/${version}/OOo_${version}_src_system.tar.bz2";
+      url = "${downloadRoot}/${if versionDirs then version + "/" else ""}OOo_${version}_src_system.tar.bz2";
       sha256 = "bb4a440ca91a40cd2b5692abbc19e8fbd3d311525edb266dc5cd9ebc324f2b4a";
     };
 
