@@ -3,7 +3,6 @@ if [ -n "$NOSYSBASHRC" ]; then
 fi
 
 # Initialise a bunch of environment variables.
-export PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
 export LD_LIBRARY_PATH=/var/run/opengl-driver/lib
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
@@ -11,14 +10,15 @@ export NIXPKGS_ALL=/etc/nixos/nixpkgs
 export PAGER="less -R"
 export EDITOR=nano
 export LOCATE_PATH=/var/cache/locatedb
-export GST_PLUGIN_PATH=/var/run/current-system/sw/lib/gstreamer-0.10
-@shellInit@
 
 
 # Include the various profiles in the appropriate environment variables.
 NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
 
-NIX_PROFILES="/nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
+NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
+
+unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB GST_PLUGIN_PATH KDEDIRS
+unset XDG_CONFIG_DIRS XDG_DATA_DIRS
 
 for i in $NIX_PROFILES; do # !!! reverse
     export PATH=$i/bin:$i/sbin:$PATH
@@ -37,6 +37,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     export XDG_CONFIG_DIRS=$i/etc/xdg:$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share:$XDG_DATA_DIRS
 done
+@shellInit@
 
 
 # Search directory for Aspell dictionaries.

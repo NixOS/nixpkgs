@@ -15,6 +15,8 @@ let
         description = ''
           Additional KDE packages to be used when you use KDE as a desktop
           manager.  By default, you only get the KDE base packages.
+          Just adds packages to systemPackages and x11Packages. Will be removed
+          in the future.
         '';
       };
 
@@ -27,11 +29,6 @@ mkIf (kdePackages != [] && config.services.xserver.enable) {
 
   environment = {
     x11Packages = kdePackages;
-
-    shellInit = ''
-      export KDEDIRS="${pkgs.lib.concatStringsSep ":" kdePackages}"
-      export XDG_CONFIG_DIRS="${pkgs.lib.makeSearchPath "etc/xdg" kdePackages}"
-      export XDG_DATA_DIRS="${pkgs.lib.makeSearchPath "share" kdePackages}"
-    '';
+    systemPackages = kdePackages;
   };
 }
