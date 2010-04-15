@@ -140,6 +140,10 @@ rec {
     inherit cabal;
   };
 
+  fclabels = import ../development/libraries/haskell/fclabels {
+    inherit cabal monadsFd;
+  };
+
   filestore = import ../development/libraries/haskell/filestore {
     inherit cabal datetime parsec regexPosix split time utf8String xml Diff;
   };
@@ -386,6 +390,10 @@ rec {
 
   MonadRandom = import ../development/libraries/haskell/MonadRandom {
     inherit cabal mtl;
+  };
+
+  monadsFd = import ../development/libraries/haskell/monads-fd {
+    inherit cabal transformers;
   };
 
   mpppc = import ../development/libraries/haskell/mpppc {
