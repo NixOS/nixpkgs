@@ -38,7 +38,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ blcrPkg ];
 
-    jobs.openafsClient = {
+    jobs.blcr = {
         name        = "blcr";
         description = "Loads BLCR kernel modules";
 	task        = true;
