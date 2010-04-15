@@ -49,6 +49,10 @@ rec {
     inherit cabal;
   };
 
+  bimap = import ../development/libraries/haskell/bimap {
+    inherit cabal;
+  };
+
   binary = import ../development/libraries/haskell/binary {
     inherit cabal;
   };
@@ -380,6 +384,10 @@ rec {
     inherit cabal benchpress;
   };
 
+  MaybeTTransformers = import ../development/libraries/haskell/MaybeT-transformers {
+    inherit cabal transformers monadsFd;
+  };
+
   mmap = import ../development/libraries/haskell/mmap {
     inherit cabal;
   };
@@ -482,6 +490,10 @@ rec {
     inherit cabal;
   };
 
+  pureMD5 = import ../development/libraries/haskell/pureMD5 {
+    inherit cabal binary;
+  };
+
   QuickCheck  = QuickCheck1;
 
   QuickCheck1 = import ../development/libraries/haskell/QuickCheck {
@@ -530,6 +542,21 @@ rec {
 
   regular = import ../development/libraries/haskell/regular {
     inherit cabal;
+  };
+
+  safe = import ../development/libraries/haskell/safe {
+    inherit cabal;
+  };
+
+  salvia = import ../development/libraries/haskell/salvia {
+    inherit cabal fclabels MaybeTTransformers monadsFd pureMD5
+      safe salviaProtocol split text threadmanager transformers
+      utf8String stm time;
+    network = network2217;
+  };
+
+  salviaProtocol = import ../development/libraries/haskell/salvia-protocol {
+    inherit cabal fclabels parsec safe split utf8String bimap;
   };
 
   scion = import ../development/libraries/haskell/scion {
@@ -606,6 +633,10 @@ rec {
   };
 
   text = import ../development/libraries/haskell/text {
+    inherit cabal deepseq;
+  };
+
+  threadmanager = import ../development/libraries/haskell/threadmanager {
     inherit cabal;
   };
 

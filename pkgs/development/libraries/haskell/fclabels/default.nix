@@ -7,6 +7,8 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [monadsFd];
   meta = {
     description = "First class accessor labels";
+    license = "BSD";
+    maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })  
 
