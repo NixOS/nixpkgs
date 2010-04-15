@@ -17,28 +17,20 @@ let
   # we can't update ${cups}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
   # cupsd.conf tells cupsd to use this tree.
-  bindir = pkgs.runCommand "cups-progs" {}
-    ''
-      ensureDir $out/lib/cups
-      ln -s ${cups}/lib/cups/* $out/lib/cups/
-
-      # Provide support for printing via SMB.    
-      rm $out/lib/cups/backend
-      ensureDir $out/lib/cups/backend
-      ln -s ${cups}/lib/cups/backend/* $out/lib/cups/backend/
-      ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+  bindir = pkgs.buildEnv {
+    name = "cups-progs";
+    paths = cfg.drivers;
+    pathsToLink = [ "/lib/cups" "/share/cups" ];
+    postBuild =  ''
+      ${pkgs.coreutils}/bin/mkdir -p $out/lib/cups/backend
+      ${pkgs.coreutils}/bin/ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
 
       # Provide support for printing via HTTPS.
-      ln -s ipp $out/lib/cups/backend/https
+      ${pkgs.coreutils}/bin/ln -s ipp $out/lib/cups/backend/https
 
-      # Provide Ghostscript rasterisation, necessary for non-Postscript
-      # printers.
-      rm $out/lib/cups/filter
-      ensureDir $out/lib/cups/filter
-      ln -s ${cups}/lib/cups/filter/* $out/lib/cups/filter/
-      ln -s ${pkgs.ghostscript}/lib/cups/filter/* $out/lib/cups/filter/
       ${cfg.bindirCmds}
-    ''; # */
+    '';
+  };
 
 in
 
@@ -75,6 +67,13 @@ in
         description = ''
           The contents of the configuration file of the CUPS daemon
           (<filename>cupsd.conf</filename>).
+        '';
+      };
+
+      drivers = mkOption {
+        example = [ pkgs.splix ];
+        description = ''
+          CUPS drivers (CUPS, gs and samba are added unconditionally).
         '';
       };
 
@@ -120,6 +119,7 @@ in
         exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
 
+    services.printing.drivers = [ pkgs.cups pkgs.ghostscript ];
     services.printing.cupsdConf = 
       ''
         LogLevel info
@@ -135,6 +135,7 @@ in
         ServerRoot /etc/cups
 
         ServerBin ${bindir}/lib/cups
+        DataDir ${bindir}/share/cups
 
         AccessLog ${logDir}/access_log
         ErrorLog ${logDir}/error_log
