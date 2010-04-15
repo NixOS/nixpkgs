@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
 
-  downloadRoot = "http://download.services.openoffice.org/files/stable";
+  #downloadRoot = "http://download.services.openoffice.org/files/stable";
+  downloadRoot = "http://www-openoffice.com/source/";
 
   src = fetchurl {
       url = "${downloadRoot}/${version}/OOo_${version}_src_core.tar.bz2";
