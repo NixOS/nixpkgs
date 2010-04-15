@@ -697,7 +697,8 @@ rec {
   };
 
   texmath = import ../development/libraries/haskell/texmath {
-    inherit cabal cgi json parsec xml;
+    inherit cabal json parsec xml;
+    cgi = cgi3001172;
   };
 
   text = import ../development/libraries/haskell/text {
