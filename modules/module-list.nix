@@ -27,6 +27,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./programs/bash/bash.nix
+  ./programs/blcr.nix
   ./programs/info.nix
   ./programs/pwdutils/pwdutils.nix
   ./programs/ssh.nix
