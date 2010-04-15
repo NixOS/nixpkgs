@@ -30,5 +30,6 @@ mkIf (kdePackages != [] && config.services.xserver.enable) {
   environment = {
     x11Packages = kdePackages;
     systemPackages = kdePackages;
+    extraLinkPaths = [ "/share" "/plugins" ];
   };
 }
