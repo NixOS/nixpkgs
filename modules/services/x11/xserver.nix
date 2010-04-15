@@ -155,7 +155,7 @@ in
 
       modules = mkOption {
         default = [];
-        example = [ pkgs.synaptics ];
+        example = [ pkgs.xf86_input_wacom ];
         description = "Packages to be added to the module search path of the X server.";
       };
 
