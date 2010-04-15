@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "filestore";
-  version = "0.3.1";
-  sha256 = "f18baafb50367d8d0a0e8da2873fd97033bb763d8776473e594c84c079017aa0";
+  version = "0.3.4.1";
+  sha256 = "ad04333fae938ae7de747457a6bdee30c6e4b700733265dbd1f4f8ee363c8230";
   propagatedBuildInputs = [datetime parsec regexPosix split time utf8String xml Diff];
   meta = {
     description = "Interface for versioning file stores";

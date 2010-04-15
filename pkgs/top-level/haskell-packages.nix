@@ -65,6 +65,10 @@ rec {
     inherit cabal bytestring network;
   };
 
+  cautiousFile = import ../development/libraries/haskell/cautious-file {
+    inherit cabal;
+  };
+
   cgi3001172 = import ../development/libraries/haskell/cgi/3001.1.7.2.nix {
     inherit cabal mtl parsec xhtml;
     network = network2217;
@@ -76,6 +80,10 @@ rec {
 
   colorizeHaskell = import ../development/libraries/haskell/colorize-haskell {
     inherit cabal ansiTerminal haskellLexer;
+  };
+
+  ConfigFile = import ../development/libraries/haskell/ConfigFile {
+    inherit cabal mtl parsec MissingH;
   };
 
   convertible = import ../development/libraries/haskell/convertible {
@@ -148,6 +156,10 @@ rec {
     inherit cabal monadsFd;
   };
 
+  feed = import ../development/libraries/haskell/feed {
+    inherit cabal utf8String xml;
+  };
+
   filestore = import ../development/libraries/haskell/filestore {
     inherit cabal datetime parsec regexPosix split time utf8String xml Diff;
   };
@@ -179,9 +191,15 @@ rec {
   };
 
   gitit = import ../development/libraries/haskell/gitit {
-    inherit cabal HAppSServer HStringTemplate HTTP SHA cgi datetime
-      filestore highlightingKate mtl network pandoc parsec recaptcha
-      utf8String xhtml zlib;
+    inherit cabal happstackServer happstackUtil
+      HStringTemplate SHA datetime
+      filestore highlightingKate safe
+      mtl pandoc parsec recaptcha
+      utf8String xhtml zlib ConfigFile url
+      cautiousFile feed;
+    cgi = cgi3001172;
+    HTTP = HTTP400009;
+    network = network2217;
   };
 
   GLUT2121 = import ../development/libraries/haskell/GLUT/2.1.2.1.nix {
@@ -359,7 +377,7 @@ rec {
   };
 
   HStringTemplate = import ../development/libraries/haskell/HStringTemplate {
-    inherit cabal parsec time;
+    inherit cabal parsec time text utf8String parallel;
   };
 
   hspread = import ../development/libraries/haskell/hspread {
@@ -412,6 +430,11 @@ rec {
 
   MaybeTTransformers = import ../development/libraries/haskell/MaybeT-transformers {
     inherit cabal transformers monadsFd;
+  };
+
+  MissingH = import ../development/libraries/haskell/MissingH {
+    inherit cabal HUnit hslogger parsec regexCompat;
+    network = network2217;
   };
 
   mmap = import ../development/libraries/haskell/mmap {
@@ -480,7 +503,10 @@ rec {
   };
 
   pandoc = import ../development/libraries/haskell/pandoc {
-    inherit cabal mtl network parsec utf8String xhtml zipArchive;
+    inherit cabal mtl parsec utf8String xhtml zipArchive
+      xml texmath;
+    HTTP = HTTP400009;
+    network = network2217;
   };
 
   parallel2201 = import ../development/libraries/haskell/parallel/2.2.0.1.nix {
@@ -536,7 +562,9 @@ rec {
   };
 
   recaptcha = import ../development/libraries/haskell/recaptcha {
-    inherit cabal HTTP network xhtml;
+    inherit cabal xhtml;
+    HTTP = HTTP400009;
+    network = network2217;
   };
 
   regexBase0931 = import ../development/libraries/haskell/regex-base/0.93.1.nix {
@@ -668,6 +696,10 @@ rec {
     inherit cabal HUnit QuickCheck mtl;
   };
 
+  texmath = import ../development/libraries/haskell/texmath {
+    inherit cabal cgi json parsec xml;
+  };
+
   text = import ../development/libraries/haskell/text {
     inherit cabal deepseq;
   };
@@ -699,6 +731,10 @@ rec {
 
   unixCompat = import ../development/libraries/haskell/unix-compat {
     inherit cabal;
+  };
+
+  url = import ../development/libraries/haskell/url {
+    inherit cabal utf8String;
   };
 
   utf8String = import ../development/libraries/haskell/utf8-string {
