@@ -372,6 +372,10 @@ rec {
     inherit cabal mtl parsec;
   };
 
+  jpeg = import ../development/libraries/haskell/jpeg {
+    inherit cabal mtl;
+  };
+
   json = import ../development/libraries/haskell/json {
     inherit cabal mtl;
   };
