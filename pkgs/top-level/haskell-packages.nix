@@ -224,6 +224,20 @@ rec {
     inherit cabal HaXml mtl network stm hslogger HAppSUtil HAppSData bytestring binary hspread;
   };
 
+  /* cannot yet get this to work with 6.12.1 */
+  happstackData = import ../development/libraries/haskell/happstack/happstack-data.nix {
+    inherit cabal mtl sybWithClass HaXml happstackUtil binary;
+  };
+
+  happstackUtil = import ../development/libraries/haskell/happstack/happstack-util.nix {
+    inherit cabal mtl hslogger QuickCheck HUnit strictConcurrency unixCompat SMTPClient;
+  };
+
+  happstackServer = import ../development/libraries/haskell/happstack/happstack-server.nix {
+    inherit cabal HUnit HaXml MaybeT parsec sendfile utf8String mtl hslogger happstackData happstackUtil xhtml html zlib;
+    network = network2217;
+  };
+
   hashedStorage = import ../development/libraries/haskell/hashed-storage {
     inherit cabal mtl zlib mmap;
   };
@@ -340,6 +354,10 @@ rec {
     inherit cabal;
   };
 
+  hsemail = import ../development/libraries/haskell/hsemail {
+    inherit cabal mtl parsec;
+  };
+
   HStringTemplate = import ../development/libraries/haskell/HStringTemplate {
     inherit cabal parsec time;
   };
@@ -386,6 +404,10 @@ rec {
 
   maybench = import ../development/libraries/haskell/maybench {
     inherit cabal benchpress;
+  };
+
+  MaybeT = import ../development/libraries/haskell/MaybeT {
+    inherit cabal mtl;
   };
 
   MaybeTTransformers = import ../development/libraries/haskell/MaybeT-transformers {
@@ -567,6 +589,11 @@ rec {
     inherit cabal ghcPaths ghcSyb hslogger json multiset time uniplate;
   };
 
+  sendfile = import ../development/libraries/haskell/sendfile {
+    inherit cabal;
+    network = network2217;
+  };
+
   syb = import ../development/libraries/haskell/syb {
     inherit cabal;
   };
@@ -609,6 +636,11 @@ rec {
 
   ShellacReadline = import ../development/libraries/haskell/Shellac/Shellac-readline.nix {
     inherit cabal Shellac readline;
+  };
+
+  SMTPClient = import ../development/libraries/haskell/SMTPClient {
+    inherit cabal hsemail;
+    network = network2217;
   };
 
   split = import ../development/libraries/haskell/split {
@@ -662,6 +694,10 @@ rec {
   };
 
   uniqueid = import ../development/libraries/haskell/uniqueid {
+    inherit cabal;
+  };
+
+  unixCompat = import ../development/libraries/haskell/unix-compat {
     inherit cabal;
   };
 
@@ -843,7 +879,8 @@ rec {
   };
 
   hslogger = import ../development/tools/haskell/hslogger {
-    inherit cabal mtl network time;
+    inherit cabal mtl time;
+    network = network2217;
   };
 
   mkcabal = import ../development/tools/haskell/mkcabal {
