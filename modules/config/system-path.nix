@@ -77,13 +77,23 @@ let
       };
 
       pathsToLink = mkOption {
+        # Note: We need `/lib' to be among `pathsToLink' for NSS modules
+        # to work.
         default = ["/bin" "/sbin" "/lib" "/share/man" "/share/info" "/man" "/info"];
         example = ["/"];
         description = "
           Lists directories to be symlinked in `/var/run/current-system/sw'.
+          Use extraLinkPaths if you want just to add some additional paths.
         ";
       };
 
+      extraLinkPaths = mkOption {
+          default = [];
+          example = ["/"];
+          description = "
+            Extra directories to be symlinked in /var/run/current-system/sw.
+          ";
+      };
     };
 
     system = {
@@ -97,9 +107,7 @@ let
           name = "system-path";
           paths = list;
 
-          # Note: We need `/lib' to be among `pathsToLink' for NSS modules
-          # to work.
-          inherit (config.environment) pathsToLink;
+          pathsToLink = with config.environment; pathsToLink ++ extraLinkPaths;
 
           ignoreCollisions = true;
         };
