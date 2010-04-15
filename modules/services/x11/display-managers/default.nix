@@ -21,9 +21,6 @@ let
     ''
       #! /bin/sh
 
-      # Handle being called by kdm.
-      if test "''${1:0:1}" = /; then eval exec "$1"; fi
-
       # The first argument of this script is the session type.
       sessionType="$1"
       if test "$sessionType" = default; then sessionType=""; fi
@@ -59,6 +56,9 @@ let
       if test -z "$XDG_SESSION_COOKIE"; then
           exec ${pkgs.consolekit}/bin/ck-launch-session "$0" "$sessionType"
       fi
+
+      # Handle being called by kdm.
+      if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
       # Load X defaults.
       if test -e ~/.Xdefaults; then
