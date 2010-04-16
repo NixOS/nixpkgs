@@ -524,6 +524,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  usb_modeswitch = import ../development/tools/misc/usb-modeswitch {
+    inherit stdenv fetchurl libusb;
+  };
+
   cloogppl = import ../development/libraries/cloog-ppl {
     inherit fetchurl stdenv ppl;
   };
@@ -5067,6 +5071,10 @@ let
     inherit (xlibs) libXt;
   };
 
+  wvstreams = import ../development/libraries/wvstreams {
+    inherit stdenv fetchurl qt4 dbus zlib openssl readline perl;
+  };
+
   wxGTK = wxGTK28;
 
   wxGTK26 = import ../development/libraries/wxGTK-2.6 {
@@ -7248,6 +7256,10 @@ let
   wireshark = import ../applications/networking/sniffers/wireshark {
     inherit fetchurl stdenv perl pkgconfig libpcap flex bison;
     inherit (gtkLibs) gtk;
+  };
+  
+  wvdial = import ../os-specific/linux/wvdial {
+    inherit stdenv fetchurl wvstreams pkgconfig;
   };
 
   fbida = builderDefsPackage ../applications/graphics/fbida {
