@@ -1627,6 +1627,10 @@ let
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
 
+  svnFS = import ../tools/filesystems/svnfs {
+    inherit fetchurl stdenv automake autoconf perl fuse subversion apr;
+  };
+
   system_config_printer = import ../tools/misc/system-config-printer {
     inherit stdenv fetchurl perl perlXMLParser desktop_file_utils;
   };
