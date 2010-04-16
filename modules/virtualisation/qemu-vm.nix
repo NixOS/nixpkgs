@@ -60,6 +60,15 @@ let
           '';
       };
       
+    virtualisation.readonlyHostFS =
+      mkOption {
+        default = true;
+        description =
+          ''
+            Whether to mount the hostfs read-only.
+          '';
+      };
+      
   };
 
   cfg = config.virtualisation;
@@ -163,7 +172,7 @@ in
       { mountPoint = "/hostfs";
         device = "//10.0.2.4/qemu";
         fsType = "cifs";
-        options = "guest,username=nobody,noperm";
+        options = "guest,username=nobody${if config.virtualisation.readonlyHostFS then ",noperm" else ""}";
         neededForBoot = true;
       }
       { mountPoint = "/nix/store";

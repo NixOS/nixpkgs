@@ -145,6 +145,7 @@ rec {
         { config, pkgs, ... }:
         {
           virtualisation.memorySize = 1024;
+          virtualisation.readonlyHostFS = false;
           services.xserver.enable = true;
           services.xserver.displayManager.slim.enable = false;
           services.xserver.displayManager.auto.enable = true;
