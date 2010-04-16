@@ -6762,7 +6762,7 @@ let
   audacious = import ../applications/audio/audacious {
     inherit fetchurl stdenv gettext pkgconfig libmowgli libmcs
       dbus_glib libxml2 libmad xlibs alsaLib libogg libvorbis libcdio
-      libcddb flac;
+      libcddb flac ffmpeg;
     inherit (gtkLibs) glib gtk;
   };
 

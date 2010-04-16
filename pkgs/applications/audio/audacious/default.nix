@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk, libmowgli, libmcs
 , gettext, dbus_glib, libxml2, libmad, xlibs, alsaLib, libogg
-, libvorbis, libcdio, libcddb, flac 
+, libvorbis, libcdio, libcddb, flac, ffmpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ gettext pkgconfig glib gtk libmowgli libmcs libxml2 dbus_glib
       libmad xlibs.libXcomposite libogg libvorbis flac alsaLib libcdio
-      libcddb
+      libcddb ffmpeg
     ];
 
   # Here we build bouth audacious and audacious-plugins in one
