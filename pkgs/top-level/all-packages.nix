@@ -5291,7 +5291,9 @@ let
       setuptools = setuptools_python26;
     };
 
-  pythonPackages = recurseIntoAttrs (import ./python-packages.nix {
+  pythonPackages = python26Packages;
+
+  python25Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs python buildPythonPackage;
   });
 
