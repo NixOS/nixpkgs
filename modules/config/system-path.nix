@@ -7,6 +7,7 @@ with pkgs.lib;
 
 let
 
+  cfg = config.environment;
   requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
       config.system.sbin.mount # must take precedence over util-linux
@@ -79,27 +80,18 @@ let
       pathsToLink = mkOption {
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
-        default = ["/bin" "/sbin" "/lib" "/share/man" "/share/info" "/man" "/info"];
+        default = [];
         example = ["/"];
         description = "
           Lists directories to be symlinked in `/var/run/current-system/sw'.
-          Use extraLinkPaths if you want just to add some additional paths.
         ";
-      };
-
-      extraLinkPaths = mkOption {
-          default = [];
-          example = ["/"];
-          description = "
-            Extra directories to be symlinked in /var/run/current-system/sw.
-          ";
       };
     };
 
     system = {
 
       path = mkOption {
-        default = config.environment.systemPackages;
+        default = cfg.systemPackages;
         description = ''
           The packages you want in the boot environment.
         '';
@@ -107,7 +99,7 @@ let
           name = "system-path";
           paths = list;
 
-          pathsToLink = with config.environment; pathsToLink ++ extraLinkPaths;
+          inherit (cfg) pathsToLink;
 
           ignoreCollisions = true;
         };
@@ -124,4 +116,5 @@ in
   require = [options];
 
   environment.systemPackages = requiredPackages;
+  environment.pathsToLink = ["/bin" "/sbin" "/lib" "/share/man" "/share/info" "/man" "/info"];
 }

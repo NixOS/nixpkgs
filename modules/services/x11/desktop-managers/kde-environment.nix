@@ -1,7 +1,7 @@
 {pkgs, config, ...}:
 
 let
-  inherit (pkgs.lib) mkOption mkIf types;
+  inherit (pkgs.lib) mkDefaultValue mkOption mkIf types;
   kdePackages = config.environment.kdePackages;
 
   options = {
@@ -30,6 +30,6 @@ mkIf (kdePackages != [] && config.services.xserver.enable) {
   environment = {
     x11Packages = kdePackages;
     systemPackages = kdePackages;
-    extraLinkPaths = [ "/share" "/plugins" ];
+    pathsToLink = [ "/share" "/plugins" ];
   };
 }
