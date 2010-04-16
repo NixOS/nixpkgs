@@ -1,5 +1,7 @@
 {stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup}:
 
+assert stdenv ? glibc;
+
 stdenv.mkDerivation {
   name = "libgweather-2.28.0";
   src = fetchurl {
