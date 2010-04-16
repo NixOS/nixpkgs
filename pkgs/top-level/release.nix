@@ -16,7 +16,6 @@ with (import ./release-lib.nix);
   aterm25 = all;
   aterm28 = all;
   audacious = linux;
-  audacious_plugins = linux;
   autoconf = all;
   automake110x = all;
   automake111x = all;

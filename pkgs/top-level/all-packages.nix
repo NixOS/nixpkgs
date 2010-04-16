@@ -6759,16 +6759,11 @@ let
     inherit (gnome) libgnomecanvas;
   };
 
-  audacious = import ../applications/audio/audacious/player.nix {
-    inherit fetchurl stdenv pkgconfig libmowgli libmcs gettext xlibs dbus_glib;
-    inherit (gnome) libglade;
+  audacious = import ../applications/audio/audacious {
+    inherit fetchurl stdenv gettext pkgconfig libmowgli libmcs
+      dbus_glib libxml2 libmad xlibs alsaLib libogg libvorbis libcdio
+      libcddb flac;
     inherit (gtkLibs) glib gtk;
-  };
-
-  audacious_plugins = import ../applications/audio/audacious/plugins.nix {
-    inherit fetchurl stdenv pkgconfig audacious dbus_glib gettext
-      libmad xlibs alsaLib taglib libmpcdec libogg libvorbis
-      libcdio libcddb libxml2;
   };
 
   audacity = import ../applications/audio/audacity {
