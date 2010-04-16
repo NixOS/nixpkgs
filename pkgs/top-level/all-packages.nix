@@ -2573,12 +2573,6 @@ let
       libunistring pkgconfig boehmgc libffi;
   };
 
-  guile_1_9_coverage = import ../development/interpreters/guile/1.9.nix {
-    inherit fetchurl stdenv readline libtool gmp gawk makeWrapper
-      libunistring pkgconfig boehmgc libffi;
-    inherit (releaseTools) coverageAnalysis;
-  };
-
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
       libpng libtiff libjpeg readline libsndfile libxml2
