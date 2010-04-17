@@ -4,13 +4,34 @@ let
 
   options = {
 
-    boot.postBootCommands = pkgs.lib.mkOption {
-      default = "";
-      example = "rm -f /var/log/messages";
-      merge = pkgs.lib.mergeStringOption;
-      description = ''
-        Shell commands to be executed just before Upstart is started.
-      '';
+    boot = {
+      postBootCommands = pkgs.lib.mkOption {
+        default = "";
+        example = "rm -f /var/log/messages";
+        merge = pkgs.lib.mergeStringOption;
+        description = ''
+          Shell commands to be executed just before Upstart is started.
+        '';
+      };
+
+      devSize = pkgs.lib.mkOption {
+        default = "50%";
+        example = "32m";
+        description = ''
+          Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+          for the accepted syntax.
+        '';
+      };
+
+      devShmSize = pkgs.lib.mkOption {
+        default = "50%";
+        example = "256m";
+        description = ''
+          Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+          for the accepted syntax.
+        '';
+      };
+
     };
 
   };
@@ -23,6 +44,7 @@ let
     src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel activateConfiguration;
+    inherit (config.boot) devSize devShmSize;
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
     path =
