@@ -4369,6 +4369,10 @@ let
     inherit fetchurl stdenv curl;
   };
 
+  libmikmod = import ../development/libraries/libmikmod {
+    inherit stdenv fetchurl texinfo;
+  };
+
   libmilter = import ../development/libraries/libmilter {
     inherit fetchurl stdenv m4;
   };
