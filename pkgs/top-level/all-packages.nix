@@ -5401,6 +5401,11 @@ let
     inherit (pkgsOverriden) fetchurl stdenv apacheHttpd python;
   };
 
+  mpd = import ../servers/mpd {
+    inherit stdenv fetchurl pkgconfig glib alsaLib flac libvorbis libmad
+            libid3tag libmikmod libcue;
+  };
+
   myserver = import ../servers/http/myserver {
     inherit fetchurl stdenv libgcrypt libevent libidn gnutls libxml2
       zlib texinfo cppunit xz;
