@@ -4173,6 +4173,10 @@ let
     inherit fetchurl stdenv pkgconfig xlibs mesa glib;
   };
 
+  libcue = import ../development/libraries/libcue {
+    inherit stdenv fetchurl;
+  };
+
   libcv = builderDefsPackage (import ../development/libraries/libcv) {
     inherit libtiff libjpeg libpng pkgconfig;
     inherit (gtkLibs) gtk glib;
