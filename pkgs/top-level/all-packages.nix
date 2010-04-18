@@ -4354,7 +4354,7 @@ let
   };
 
   libmad = import ../development/libraries/libmad {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv autoconf;
   };
 
   libmatthew_java = import ../development/libraries/java/libmatthew-java {
