@@ -1,145 +1,84 @@
-diff --exclude '*~' -rc lcov-1.7-orig/bin/geninfo lcov-1.7/bin/geninfo
-*** lcov-1.7-orig/bin/geninfo	2008-11-17 14:50:26.000000000 +0100
---- lcov-1.7/bin/geninfo	2009-09-02 10:55:25.000000000 +0200
-***************
-*** 51,56 ****
---- 51,57 ----
-  
-  use strict;
-  use File::Basename; 
-+ use Cwd qw(abs_path);
-  use Getopt::Long;
-  use Digest::MD5 qw(md5_base64);
-  
-***************
-*** 81,86 ****
---- 82,88 ----
-  sub solve_ambiguous_match($$$);
-  sub split_filename($);
-  sub solve_relative_path($$);
-+ sub find_source_file($$);
-  sub get_dir($);
-  sub read_gcov_header($);
-  sub read_gcov_file($);
-***************
-*** 724,730 ****
-  
-  		if (defined($source))
-  		{
-! 			$source = solve_relative_path($base_dir, $source);
-  		}
-  
-  		# gcov will happily create output even if there's no source code
---- 726,732 ----
-  
-  		if (defined($source))
-  		{
-! 			$source = find_source_file($base_dir, $source);
-  		}
-  
-  		# gcov will happily create output even if there's no source code
-***************
-*** 741,758 ****
-  			die("ERROR: could not read source file $source\n");
-  		}
-  
-! 		@matches = match_filename(defined($source) ? $source :
-! 					  $gcov_file, keys(%bb_content));
-  
-  		# Skip files that are not mentioned in the graph file
-! 		if (!@matches)
-! 		{
-! 			warn("WARNING: cannot find an entry for ".$gcov_file.
-! 			     " in $graph_file_extension file, skipping ".
-! 			     "file!\n");
-! 			unlink($gcov_file);
-! 			next;
-! 		}
-  
-  		# Read in contents of gcov file
-  		@result = read_gcov_file($gcov_file);
---- 743,764 ----
-  			die("ERROR: could not read source file $source\n");
-  		}
-  
-!                 next if ! -r $source;
-! 
-! 		#@matches = match_filename(defined($source) ? $source :
-! 		#			  $gcov_file, keys(%bb_content));
-  
-  		# Skip files that are not mentioned in the graph file
-! 		#if (!@matches)
-! 		#{
-! 		#	warn("WARNING: cannot find an entry for ".$gcov_file.
-! 		#	     " in $graph_file_extension file, skipping ".
-! 		#	     "file!\n");
-! 		#	unlink($gcov_file);
-! 		#	next;
-! 		#}
-!                 
-!                 @matches = ($source);
-  
-  		# Read in contents of gcov file
-  		@result = read_gcov_file($gcov_file);
-***************
-*** 949,954 ****
---- 955,979 ----
-  }
-  
-  
-+ sub find_source_file($$)
-+ {
-+         my ($base_dir, $source) = @_;
-+         my $dir = $base_dir;
-+ 
-+         # Hack to make absolute paths work on Nixpkgs coverage
-+         # reports.  The source is in /nix/store/<bla>/.build/<bla>.
-+         $source = $1 if $source =~ /^\/.*\/\.build\/(.*)$/;
-+         
-+         while (!-e "$dir/$source") {
-+                 $dir = $dir . "/..";
-+                 if (length $dir > 1000) {
-+                         return "$base_dir/$source";
-+                 }
-+         }
-+         return abs_path("$dir/$source");
-+ }
-+ 
-+ 
-  #
-  # match_filename(gcov_filename, list)
-  #
-***************
-*** 1478,1484 ****
-  			$function_name =~ s/\W/_/g;
-  			(undef, $filename) =
-  				read_gcno_string(*INPUT, $endianness);
-! 			$filename = solve_relative_path($base_dir, $filename);
-  
-  			read(INPUT, $packed_word, 4);
-  			$lineno = unpack_int32($packed_word, $endianness);
---- 1503,1509 ----
-  			$function_name =~ s/\W/_/g;
-  			(undef, $filename) =
-  				read_gcno_string(*INPUT, $endianness);
-! 			$filename = find_source_file($base_dir, $filename);
-  
-  			read(INPUT, $packed_word, 4);
-  			$lineno = unpack_int32($packed_word, $endianness);
-***************
-*** 1530,1536 ****
-  				}
-  				if ($blocks > 1)
-  				{
-! 					$filename = solve_relative_path(
-  							$base_dir, $filename);
-  					if (!defined($result{$filename}))
-  					{
---- 1555,1561 ----
-  				}
-  				if ($blocks > 1)
-  				{
-! 					$filename = find_source_file(
-  							$base_dir, $filename);
-  					if (!defined($result{$filename}))
-  					{
+--- lcov-1.8/bin/geninfo	2010-01-29 11:14:46.000000000 +0100
++++ lcov-1.8/bin/geninfo	2010-04-18 23:33:43.000000000 +0200
+@@ -51,6 +51,7 @@
+ 
+ use strict;
+ use File::Basename; 
++use Cwd qw(abs_path);
+ use File::Spec::Functions qw /abs2rel catdir file_name_is_absolute splitdir
+ 			      splitpath rel2abs/;
+ use Getopt::Long;
+@@ -95,6 +96,7 @@ sub match_filename($@);
+ sub solve_ambiguous_match($$$);
+ sub split_filename($);
+ sub solve_relative_path($$);
++sub find_source_file($$);
+ sub read_gcov_header($);
+ sub read_gcov_file($);
+ sub info(@);
+@@ -964,7 +966,7 @@ sub process_dafile($$)
+ 
+ 		if (defined($source))
+ 		{
+-			$source = solve_relative_path($base_dir, $source);
++ 			$source = find_source_file($base_dir, $source);
+ 		}
+ 
+ 		# gcov will happily create output even if there's no source code
+@@ -981,18 +983,9 @@ sub process_dafile($$)
+ 			die("ERROR: could not read source file $source\n");
+ 		}
+ 
+-		@matches = match_filename(defined($source) ? $source :
+-					  $gcov_file, keys(%{$instr}));
++		next if ! -r $source;
+ 
+-		# Skip files that are not mentioned in the graph file
+-		if (!@matches)
+-		{
+-			warn("WARNING: cannot find an entry for ".$gcov_file.
+-			     " in $graph_file_extension file, skipping ".
+-			     "file!\n");
+-			unlink($gcov_file);
+-			next;
+-		}
++		@matches = ($source);
+ 
+ 		# Read in contents of gcov file
+ 		@result = read_gcov_file($gcov_file);
+@@ -1242,6 +1235,25 @@ sub solve_relative_path($$)
+ }
+ 
+ 
++sub find_source_file($$)
++{
++        my ($base_dir, $source) = @_;
++        my $dir = $base_dir;
++
++        # Hack to make absolute paths work on Nixpkgs coverage
++        # reports.  The source is in /nix/store/<bla>/.build/<bla>.
++        $source = $1 if $source =~ /^\/.*\/\.build\/(.*)$/;
++        
++        while (!-e "$dir/$source") {
++                $dir = $dir . "/..";
++                if (length $dir > 1000) {
++                        return "$base_dir/$source";
++                }
++        }
++        return abs_path("$dir/$source");
++}
++
++
+ #
+ # match_filename(gcov_filename, list)
+ #
+@@ -1918,7 +1930,7 @@ sub process_graphfile($$)
+ 
+ 	# Get path to data file in absolute and normalized form (begins with /,
+ 	# contains no more ../ or ./)
+-	$graph_filename = solve_relative_path($cwd, $graph_filename);
++	$graph_filename = find_source_file($cwd, $graph_filename);
+ 
+ 	# Get directory and basename of data file
+ 	($graph_dir, $graph_basename) = split_filename($graph_filename);
+
