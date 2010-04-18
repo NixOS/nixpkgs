@@ -3,44 +3,44 @@ args: with args;
 let
 
     src_haxe_swflib = {
-      # REGION AUTO UPDATE:                          { name = "haxe_swflib"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/swflib"; groups = "haxe_group"; }
-      src= sourceFromHead "haxe_swflib-F_01-25-00.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_swflib-F_01-25-00.tar.gz"; sha256 = "ddea39427de23ff58d3b942bbcce2aac7a25dc11ae06ef983653c82614eba9cd"; });
+      # REGION AUTO UPDATE:                             { name = "haxe_swflib"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/swflib"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_swflib-F_23-45-43.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_swflib-F_23-45-43.tar.gz"; sha256 = "a77ce2dda48d28f82b48b96f71404edbf7f58e4c3058b425a473c08d260e0816"; });
       # END
     }.src;
 
     src_haxe_extc = { 
-      # REGION AUTO UPDATE:                          { name = "haxe_extc"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extc"; groups = "haxe_group"; }
-      src= sourceFromHead "haxe_extc-F_01-25-08.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extc-F_01-25-08.tar.gz"; sha256 = "ab2100391735d39c93c72b236ec6e9c5cf09461311a7e3a714d867861926ae37"; });
+      # REGION AUTO UPDATE:                             { name = "haxe_extc"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extc"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_extc-F_23-45-44.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extc-F_23-45-44.tar.gz"; sha256 = "dd49eb771d52f4d67ca1ebdab1ced9a251dc5799f91896c33bd234690997820f"; });
       # END
     }.src;
 
     src_haxe_extlib_dev = { 
-      # REGION AUTO UPDATE:                          { name = "haxe_extlib_dev"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extlib-dev"; groups = "haxe_group"; }
-      src= sourceFromHead "haxe_extlib_dev-F_01-25-17.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extlib_dev-F_01-25-17.tar.gz"; sha256 = "01c3c8afdf47a98320e65c0652492508854ea28ead0437abd17a4228b33c8066"; });
+      # REGION AUTO UPDATE:                             { name = "haxe_extlib_dev"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extlib-dev"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_extlib_dev-F_23-45-46.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extlib_dev-F_23-45-46.tar.gz"; sha256 = "0a3566b6119de9063441cecd553248f3bfc00360edd7143f13b3ab0dbc57b310"; });
       # END
     }.src;
 
     src_haxe_xml_light = { 
-      # REGION AUTO UPDATE:                          { name = "haxe_xml_light"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/xml-light"; groups = "haxe_group"; }
-      src= sourceFromHead "haxe_xml_light-F_01-25-24.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_xml_light-F_01-25-24.tar.gz"; sha256 = "7fe244681698995af54085bb2ab873d3dd1ff2fac33aa8e7b00fcbbc50249334"; });
+      # REGION AUTO UPDATE:                             { name = "haxe_xml_light"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/xml-light"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_xml_light-F_23-45-47.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_xml_light-F_23-45-47.tar.gz"; sha256 = "8e1b5a7f1afcb7a6cd8bcac794c3714305ce94a98e989ccf23a38defb6205ed2"; });
       # END
     }.src;
 
     src_haxe_neko_include = { 
-      # REGION AUTO UPDATE:                          { name = "haxe_neko_include"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko/libs/include/ocaml"; groups = "haxe_group"; }
-      src= sourceFromHead "haxe_neko_include-F_01-25-28.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_neko_include-F_01-25-28.tar.gz"; sha256 = "8b642598889cf2fd1f99dfa037eef09b2511d30a8f5a6a75ee02b2e98fa4c6b7"; });
+      # REGION AUTO UPDATE:                             { name = "haxe_neko_include"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko/libs/include/ocaml"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_neko_include-F_23-45-48.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_neko_include-F_23-45-48.tar.gz"; sha256 = "78441ec5a20f25c751afeb46e0ea61db6350794f6c5959264059914682c521a9"; });
       # END
     }.src;
 
     src_haxe = {
-      # REGION AUTO UPDATE:                             { name="haxe"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "haxe"; groups = "haxe_group"; }
-      src= sourceFromHead "haxe-F_01-25-35.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe-F_01-25-35.tar.gz"; sha256 = "8e5e5330e2fd7ffbbfe48d40bda03256aefbe30cf1be1d9c9065117b2b179f24"; });
+      # REGION AUTO UPDATE:    { name="haxe-read-only"; type="svn"; url="http://haxe.googlecode.com/svn/trunk"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe-read-only-3207.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe-read-only-3207.tar.gz"; sha256 = "2d315ca69fac69674eb562e1349fdebefb0dca4a91eb4ee28371230aaaf60df1"; });
       # END
     }.src;
 
