@@ -10,12 +10,20 @@ rec {
   # only keep packages being known to build with this python version
   b = builtins.removeAttrs allPythonPackages
           ([ "setuptoolsTrial"
-             "simplejson"
            ]
            # these packages don't build with specific python versions..
-           ++ (pkgs.lib.optionals (python.libPrefix == "python2.6") [])
+           ++ (pkgs.lib.optionals (python.libPrefix == "python2.6")
+             [
+             # pythonSexy fails with: /nix/store/8ls1xar0wsxmczas4sr76n1dwpccram9-pygtk-2.16.0/bin/pygtk-codegen-2.0: line 10: exec: /nix/store/8ls1xar0wsxmczas4sr76n1dwpccram9-pygtk-2.16.0/bin/pygobject-codegen-2.0: cannot execute: No such file or directory
+             "pythonSexy" 
+             ])
            ++ (pkgs.lib.optionals (python.libPrefix == "python2.5")
-             ["pycairo" "pygtk" "pyGtkGlade" "rhpl" "pygobject" "pythonSexy"])
+             [
+             # pygtk requires at least python-2.6. The other packages in this line depend on pygtk
+             "pygobject" "pycairo" "pygtk" "pyGtkGlade" "pythonSexy"
+             # rhpl fails with: diskutil.c:24:20: error: Python.h: No such file or directory
+             "rhpl"
+             ])
           );
 
   result = b // {
@@ -245,10 +253,6 @@ rec {
       inherit fetchurl stdenv python;
       inherit (pkgs) pkgconfig;
       inherit (pkgs) wxGTK;
-    };
-
-    ZopeInterface = import ./ZopeInterface {
-      inherit fetchurl stdenv python;
     };
 
     argparse = b.buildPythonPackage (rec {
@@ -792,7 +796,7 @@ rec {
       };
     };
 
-    simplejson = b.b.buildPythonPackage (rec {
+    simplejson = b.buildPythonPackage (rec {
       name = "simplejson-2.0.9";
 
       src = fetchsvn {
@@ -934,8 +938,6 @@ rec {
         url = http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-3.3.0.tar.gz;
         sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
       };
-
-      doCheck = false;
 
       meta = {
         description = "Zope.Interface";
