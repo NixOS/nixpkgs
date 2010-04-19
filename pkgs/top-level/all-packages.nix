@@ -4025,7 +4025,8 @@ let
   };
 
   hwloc = import ../development/libraries/hwloc {
-    inherit fetchurl stdenv pkgconfig cairo expat;
+    inherit fetchurl stdenv pkgconfig cairo expat ncurses
+      autoconf automake libtool;
   };
 
   hydraAntLogger = import ../development/libraries/java/hydra-ant-logger {
