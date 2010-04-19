@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake, qt4, perl, gettext, curl, libxml2, mysql, taglib, taglib_extras, loudmouth
+{ stdenv, fetchurl, lib, cmake, qt4, qtscriptgenerator, perl, gettext, curl, libxml2, mysql, taglib, taglib_extras, loudmouth
 , kdelibs, automoc4, phonon, strigi, soprano, qca2}:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   inherit mysql loudmouth;
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
   builder = ./builder.sh;
-  buildInputs = [ cmake qt4  perl stdenv.gcc.libc gettext curl libxml2 mysql taglib taglib_extras loudmouth
+  buildInputs = [ cmake qt4 qtscriptgenerator perl stdenv.gcc.libc gettext curl libxml2 mysql taglib taglib_extras loudmouth
                   kdelibs automoc4 phonon strigi soprano qca2];
   meta = {
     description = "Popular music player for KDE";
