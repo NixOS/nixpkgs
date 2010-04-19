@@ -36,6 +36,11 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ pkgs.disnix ];
 
+    users.extraGroups = singleton
+      { name = "disnix";
+        gid = config.ids.gids.disnix;
+      };
+      
     jobs.disnix =
       { description = "Disnix server";
 
