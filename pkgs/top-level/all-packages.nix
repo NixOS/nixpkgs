@@ -1237,7 +1237,7 @@ let
       import ../development/python2-packages/generic {
         inherit makeWrapper lib;
         python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
+        setuptools = builderDefsPackage (import ../development/python2-packages/setuptools) {
           inherit makeWrapper;
           python = pythonFull;
         };
@@ -5317,6 +5317,9 @@ let
   wxPython = wxPython26;
   sip = pythonPackages.sip;
   xmpppy = pythonPackages.xmpppy;
+  pycups = pythonPackages.pycups;
+  rhpl = pythonPackages.rhpl;
+  nevow = pythonPackages.nevow;
 
   # 2.6 aliases
   wxPython26 = python26Packages.wxPython;

@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, automake, autoconf, subversion, fuse, apr, perl }: 
+
 stdenv.mkDerivation {
   name = "svnfs";
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
     description = "SvnFs is a filesystem written using FUSE for accessing Subversion repositories";
     homepage = http://www.jmadden.eu/index.php/svnfs/;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

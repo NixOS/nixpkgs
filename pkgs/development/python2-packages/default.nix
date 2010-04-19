@@ -9,10 +9,8 @@ rec {
   # pythonPackages
   # only keep packages being known to build with this python version
   b = builtins.removeAttrs allPythonPackages
-          (["foolscap"
-            "nevow"
-            "setuptoolsTrial"
-            "simplejson"
+          ([ "setuptoolsTrial"
+             "simplejson"
            ]
            # these packages don't build with specific python versions..
            ++ (pkgs.lib.optionals (python.libPrefix == "python2.6") [])
@@ -38,6 +36,65 @@ rec {
         inherit python makeWrapper lib;
         inherit (b) setuptools;
       };
+
+    beautifulsoap = b.buildPythonPackage (rec {
+      name = "beautifulsoap-3.0.8";
+
+      src = fetchurl {
+        url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.tar.gz";
+        sha256 = "1gasiy5lwbhsxw27g36d88n36xbj52434klisvqhljgckd4xqcy7";
+      };
+
+      # No tests implemented
+      doCheck = false;
+
+      meta = {
+        homepage = http://www.crummy.com/software/BeautifulSoup/;
+
+        license = "bsd";
+
+        description = "Undemanding HTML/XML parser";
+      };
+    }); 
+
+    clientform = b.buildPythonPackage (rec {
+      name = "clientform-0.2.10";
+
+      src = fetchurl {
+        url = "http://pypi.python.org/packages/source/C/ClientForm/ClientForm-0.2.10.tar.gz";
+        sha256 = "0dydh3i1sx7rrj6d0gj375wkjpiivm7jjlsimw6hmwv4ck7yf1wm";
+      };
+
+      meta = {
+        homepage = http://wwwsearch.sourceforge.net/ClientForm/;
+
+        license = "bsd";
+
+        description = "Python module for handling HTML forms on the client side";
+      };
+    });
+
+    cssutils = b.buildPythonPackage (rec {
+      name = "cssutils-0.9.7a2";
+
+      src = fetchurl {
+        url = http://cssutils.googlecode.com/files/cssutils-0.9.7a2.zip;
+        sha256 = "068p14qhhczpjgn0w7v57a2swj0g4rndhimh8gkg9h9sd7rp6n07";
+      };
+
+      buildInputs = [ pkgs.unzip ];
+
+      # The tests fail - I don't know why
+      doCheck = false;
+
+      meta = {
+        description = "A Python package to parse and build CSS";
+
+        homepage = http://code.google.com/p/cssutils/;
+
+        license = "LGPLv3+";
+      };
+    });
 
     foursuite = import ./4suite {
       inherit fetchurl stdenv python;
@@ -110,7 +167,7 @@ rec {
 
     pyopengl = import ./pyopengl {
       inherit fetchurl stdenv python;
-      inherit (b) setuptools;
+      inherit (b) buildPythonPackage;
       inherit (pkgs)  mesa freeglut pil;
     };
 
@@ -869,6 +926,22 @@ rec {
     xmpppy = builderDefsPackage (import ./xmpppy) {
       inherit python;
       inherit (b) setuptools;
+    };
+
+    zopeInterface = b.buildPythonPackage {
+      name = "zope-interface-3.3.0";
+      src = fetchurl {
+        url = http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-3.3.0.tar.gz;
+        sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
+      };
+
+      doCheck = false;
+
+      meta = {
+        description = "Zope.Interface";
+        homepage = http://zope.org/Products/ZopeInterface;
+        license = "ZPL";
+      };
     };
 
   };
