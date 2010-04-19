@@ -12,6 +12,17 @@ let
 
   cfg = config.services.printing;
 
+  additionalBackends = pkgs.stdenv.mkDerivation {
+    name = "additional-cups-backends";
+    builder = pkgs.writeScript "additional-backends-builder.sh" ''
+      ${pkgs.coreutils}/bin/mkdir -p $out/lib/cups/backend
+      ${pkgs.coreutils}/bin/ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+
+      # Provide support for printing via HTTPS.
+      ${pkgs.coreutils}/bin/ln -s ipp $out/lib/cups/backend/https
+    '';
+  };
+
   # Here we can enable additional backends, filters, etc. that are not
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
   # we can't update ${cups}/lib/cups itself, we create a symlink tree
@@ -19,15 +30,9 @@ let
   # cupsd.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
-    paths = cfg.drivers;
+    paths =  cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" ];
     postBuild =  ''
-      ${pkgs.coreutils}/bin/mkdir -p $out/lib/cups/backend
-      ${pkgs.coreutils}/bin/ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
-
-      # Provide support for printing via HTTPS.
-      ${pkgs.coreutils}/bin/ln -s ipp $out/lib/cups/backend/https
-
       ${cfg.bindirCmds}
     '';
   };
@@ -119,7 +124,7 @@ in
         exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
 
-    services.printing.drivers = [ pkgs.cups pkgs.ghostscript ];
+    services.printing.drivers = [ pkgs.cups pkgs.ghostscript additionalBackends ];
     services.printing.cupsdConf = 
       ''
         LogLevel info
