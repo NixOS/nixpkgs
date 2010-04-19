@@ -2,15 +2,13 @@ args: with args;
 
 stdenv.mkDerivation {
 
-  name = "usb-modeswitch-1.1.1";
+  name = "usb-modeswitch-1.1.2";
 
-  src = /tmp/marc/usb-modeswitch-1.1.1.tar.bz2;
-    /*
+  src =
     fetchurl {
-    url = 
-    sha256 = "0f7da588yvb1d3l3gk5m0hrqlhg8m4gw93aip3dwkmnawz9r0qca";
+    url = "http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-1.1.2.tar.bz2";
+    sha256 = "1wzhd0r49nh5y43qrvsi3c7a29206zwd6v8xlpb8dqm40xg3j9nz";
   };
-  */
 
   # make clean: we always build from source. It should be necessary on x86_64 only
   preConfigure = ''
