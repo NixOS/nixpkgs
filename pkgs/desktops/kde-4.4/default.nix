@@ -106,7 +106,8 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdeadmin = import ./admin {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 pkgconfig perl python sip pyqt4 pycups rhpl system_config_printer;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 pkgconfig perl python sip pyqt4 rhpl system_config_printer;
+    inherit (pkgs.pythonPackages) pycups;
     inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon;
   };
@@ -190,7 +191,8 @@ pkgs.recurseIntoAttrs (rec {
   };
     
   kdeutils = import ./utils {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python gmp libzip libarchive xz sip pyqt4 pycups rhpl system_config_printer;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python gmp libzip libarchive xz sip pyqt4 system_config_printer;
+    inherit (pkgs.pythonPackages) pycups rhpl;
     inherit kdelibs kdepimlibs kdebase kdebindings;
     inherit automoc4 phonon qimageblitz qca2;
   };
