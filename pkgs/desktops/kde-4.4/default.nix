@@ -106,8 +106,8 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdeadmin = import ./admin {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 pkgconfig perl python sip pyqt4 rhpl system_config_printer;
-    inherit (pkgs.pythonPackages) pycups;
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 pkgconfig perl python sip pyqt4 system_config_printer;
+    inherit (pkgs.pythonPackages) pycups rhpl;
     inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon;
   };
