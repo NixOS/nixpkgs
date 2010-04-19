@@ -7579,7 +7579,8 @@ let
   };
 
   lyx = import ../applications/misc/lyx {
-   inherit fetchurl stdenv texLive python;
+   inherit fetchurl stdenv texLive python makeWrapper;
+   inherit (xlibs) libX11;
    qt = qt4;
   };
 
