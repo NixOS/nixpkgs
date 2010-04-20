@@ -44,10 +44,6 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 soprano;
   };
   
-  decibel = import ./support/decibel {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 tapioca_qt telepathy_qt;
-  };
-  
   eigen = import ./support/eigen {
     inherit (pkgs) stdenv fetchurl lib cmake;
   };
@@ -150,7 +146,7 @@ pkgs.recurseIntoAttrs (rec {
   
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
-    inherit (pkgs) libidn libvncserver tapioca_qt libmsn giflib gpgme boost libv4l;
+    inherit (pkgs) libidn libvncserver libmsn giflib gpgme boost libv4l;
     inherit (pkgs.xlibs) libXi libXtst libXdamage libXxf86vm;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qca2 soprano qimageblitz strigi;

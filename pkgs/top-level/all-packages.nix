@@ -5003,10 +5003,6 @@ let
     inherit stdenv fetchurl cmake taglib;
   };
 
-  tapioca_qt = import ../development/libraries/tapioca-qt {
-    inherit stdenv fetchurl cmake qt4 telepathy_qt;
-  };
-
   tdb = import ../development/libraries/tdb {
     inherit fetchurl stdenv libxslt libxml2 docbook_xsl;
   };
