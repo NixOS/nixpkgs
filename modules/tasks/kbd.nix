@@ -88,7 +88,10 @@ in
             done
 
             # Set the keyboard driver in UTF-8 mode.
-            ${pkgs.kbd}/bin/kbd_mode -u
+            # !!! Commented out because it running this while the X
+            # server is running kicks the X server out of raw mode.
+            # UTF-8 mode is the default nowadays anyway.
+            # ${pkgs.kbd}/bin/kbd_mode -u
 
           else
 
