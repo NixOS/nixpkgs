@@ -7,12 +7,12 @@
 , doCheckstyle ? false
 , doRelease ? false
 , includeTestClasses ? true
-
+, extraMvnFlags ? ""
 , ...
 } @ args :
 
 let 
-  mvnFlags = "-Dmaven.repo.local=$M2_REPO ${if doTest then "" else "-Dmaven.test.skip.exec=true"}";
+  mvnFlags = "-Dmaven.repo.local=$M2_REPO ${if doTest then "" else "-Dmaven.test.skip.exec=true"} ${extraMvnFlags}";
 in
 
 stdenv.mkDerivation ( rec {
