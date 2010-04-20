@@ -213,7 +213,8 @@ rec {
       inherit (pkgs) rpm cpio wirelesstools gettext;
     };
 
-    sip = b.sip48;
+    sip = b.sip410;
+    
     sip48 = import ./python-sip {
       inherit stdenv fetchurl python;
     };
@@ -222,7 +223,7 @@ rec {
       inherit stdenv fetchurl python;
     };
 
-    pyqt4 = b.pyqt45;
+    pyqt4 = b.pyqt47;
 
     pyqt45 = import ./pyqt/4.5.nix {
       inherit stdenv fetchurl python;
