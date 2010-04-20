@@ -28,6 +28,9 @@ rec {
 
   result = b // {
     all = builtins.removeAttrs b ["buildPythonPackage"];
+    # also pass this python version so that you can do:
+    # inherit (pythonXYPackages) python libA libB;
+    inherit python;
   };
 
   # intentionally not using rec. Using b so that if a depedency doesn't build
@@ -777,7 +780,7 @@ rec {
       };
     };
 
-    setuptoolsTrial = b.b.buildPythonPackage {
+    setuptoolsTrial = b.buildPythonPackage {
       name = "setuptools-trial-0.5.3";
 
       src = fetchurl {
