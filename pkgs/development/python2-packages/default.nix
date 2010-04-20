@@ -477,6 +477,8 @@ rec {
         sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
       };
 
+      propagatedBuildInputs = [ b.clientform ];
+
       meta = {
         description = "Stateful programmatic web browsing in Python";
 
@@ -856,7 +858,7 @@ rec {
         sha256 = "1c6zplisjdnjzkfs0ld3a0f7m7xbjgx5rcwsdw5i1xiibsq2nq70";
       };
 
-      propagatedBuildInputs = [ b.ZopeInterface ];
+      propagatedBuildInputs = [ b.zopeInterface ];
 
       # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
       # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
