@@ -15,7 +15,8 @@ rec {
            ++ (pkgs.lib.optionals (python.libPrefix == "python2.6")
              [
              # pythonSexy fails with: /nix/store/8ls1xar0wsxmczas4sr76n1dwpccram9-pygtk-2.16.0/bin/pygtk-codegen-2.0: line 10: exec: /nix/store/8ls1xar0wsxmczas4sr76n1dwpccram9-pygtk-2.16.0/bin/pygobject-codegen-2.0: cannot execute: No such file or directory
-             "pythonSexy" 
+             # Don't disable it even if it fails. Disabling breaks nixpkgs tarball
+             #"pythonSexy"
              ])
            ++ (pkgs.lib.optionals (python.libPrefix == "python2.5")
              [
