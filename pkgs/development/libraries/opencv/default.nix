@@ -2,11 +2,11 @@
   xineLib, gstreamer }:
 
 stdenv.mkDerivation rec {
-  name = "opencv-2.0.0";
+  name = "opencv-2.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opencvlibrary/OpenCV-2.0.0.tar.bz2";
-    sha256 = "08h03qzawj6zwifrh8rq66y4cya1kxx9ixrbq7phlac79nbvjzf1";
+    url = "mirror://sourceforge/opencvlibrary/OpenCV-2.1.0.tar.bz2";
+    sha256 = "0zrr24hr64gz35qb95nsvvbmdf89biglpy9z14y5kaxh5baiy1i6";
   };
 
   buildInputs = [ cmake gtk glib libjpeg libpng libtiff jasper ffmpeg pkgconfig
