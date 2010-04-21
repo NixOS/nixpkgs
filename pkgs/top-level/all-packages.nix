@@ -6358,6 +6358,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  rfkill = import ../os-specific/linux/rfkill {
+    inherit fetchurl stdenv;
+  };
+
   rt73fw = import ../os-specific/linux/firmware/rt73 {
     inherit fetchurl stdenv unzip;
   };
