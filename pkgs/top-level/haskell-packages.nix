@@ -168,6 +168,10 @@ rec {
     inherit cabal mtl;
   };
 
+  gdiff = import ../development/libraries/haskell/gdiff {
+    inherit cabal;
+  };
+
   getOptions = import ../development/libraries/haskell/get-options {
     inherit (pkgs) fetchurl sourceFromHead;
     inherit cabal mtl;
