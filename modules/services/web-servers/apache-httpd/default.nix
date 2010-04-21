@@ -283,8 +283,8 @@ let
     PidFile ${mainCfg.stateDir}/httpd.pid
 
     <IfModule prefork.c>
-        MaxClients           150
-        MaxRequestsPerChild  0
+        MaxClients           ${toString mainCfg.maxClients}
+        MaxRequestsPerChild  ${toString mainCfg.maxRequestsPerChild}
     </IfModule>
 
     ${let
@@ -486,6 +486,18 @@ in
           "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
+      maxClients = mkOption {
+        default = 150;
+        example = 8;
+        description = "Maximum number of httpd processes (prefork)";
+      };
+
+      maxRequestsPerChild = mkOption {
+        default = 0;
+        example = 500;
+        description =
+          "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
+      };
     }
 
     # Include the options shared between the main server and virtual hosts.
