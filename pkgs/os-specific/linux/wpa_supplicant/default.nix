@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openssl, qt4 ? null}:
 
 stdenv.mkDerivation rec {
-  name = "wpa_supplicant-0.7.0";
+  name = "wpa_supplicant-0.7.2";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "08aynxk842vg4if28ydza3mwkx2nvk9gw2vkbdlfn88vi1wgcd4x";
+    sha256 = "1gnwhnczli50gidsq22ya68hixmdrhd1sxw202ygihvg6xsjl06z";
   };
 
   preBuild = ''
