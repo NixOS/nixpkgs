@@ -130,6 +130,7 @@ in
         pkgs.iputils
         pkgs.nettools
         pkgs.wirelesstools
+        pkgs.rfkill
       ];
     
     jobs.networkInterfaces = 

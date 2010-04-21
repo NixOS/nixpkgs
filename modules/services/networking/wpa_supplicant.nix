@@ -42,7 +42,7 @@ in
   
   config = mkIf config.networking.enableWLAN {
 
-    environment.systemPackages = [pkgs.wpa_supplicant];
+    environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     jobs.wpa_supplicant = 
       { startOn = "started network-interfaces";
