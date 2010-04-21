@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     ''
       --with-store-dir=${storeDir} --localstatedir=${stateDir}
       --with-aterm=${aterm} --with-bzip2=${bzip2}
+      ${stdenv.lib.optionalString (openssl != null) "--with-openssl=${openssl}"}
       --disable-init-state
     '';
 
