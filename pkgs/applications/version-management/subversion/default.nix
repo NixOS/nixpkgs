@@ -19,20 +19,19 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.9";
+  version = "1.6.11";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "http://subversion.tigris.org/downloads/${name}.tar.bz2";
-    sha1 = "477aa89e60de7974ac0aa921cc369b4c2907693c";
+    sha256 = "177565kvn9kq3i8xrvh86cwl7098v2ymhmvjq11x6w04wc501gb4";
   };
 
-  buildInputs = [zlib apr aprutil sqlite]
+  buildInputs = [ zlib apr aprutil sqlite ]
     ++ stdenv.lib.optional httpSupport neon
     ++ stdenv.lib.optional pythonBindings python
-    ++ stdenv.lib.optional perlBindings perl
-    ;
+    ++ stdenv.lib.optional perlBindings perl;
 
   configureFlags = ''
     --disable-keychain
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
-    homepage = http://subversion.tigris.org/;
+    homepage = http://subversion.apache.org/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
