@@ -1234,10 +1234,10 @@ let
     # I did not find any better way of reusing buildPythonPackage+setuptools
     # for a python with openssl support
     buildPythonPackage = assert pythonFull.opensslSupport;
-      import ../development/python2-packages/generic {
+      import ../development/python-modules/generic {
         inherit makeWrapper lib;
         python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python2-packages/setuptools) {
+        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
           inherit makeWrapper;
           python = pythonFull;
         };
@@ -1421,6 +1421,24 @@ let
 
   pydb = import ../tools/pydb {
     inherit fetchurl stdenv python emacs;
+  };
+
+  pystringtemplate = import ../development/python-modules/stringtemplate {
+    inherit stdenv fetchurl python antlr;
+  };
+
+  pythonDBus = builderDefsPackage (import ../development/python-modules/dbus) {
+    inherit python pkgconfig dbus_glib;
+    dbus = dbus.libs;
+  };
+
+  pythonIRClib = builderDefsPackage (import ../development/python-modules/irclib) {
+    inherit python;
+  };
+
+  pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
+    inherit python libsexy pkgconfig libxml2 pygtk;
+    inherit (gtkLibs) pango gtk glib;
   };
 
   openmpi = import ../development/libraries/openmpi {
@@ -1842,6 +1860,10 @@ let
 
   xmltv = import ../tools/misc/xmltv {
     inherit fetchurl perl perlPackages;
+  };
+
+  xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
+    inherit python setuptools;
   };
 
   xpf = import ../tools/text/xml/xpf {
@@ -2642,6 +2664,16 @@ let
     inherit stdenv fetchurl;
   };
 
+  python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
+  python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
+  python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
+  pythonBase = python26Base;
+  pythonFull = python26Full;
+
+  python24 = import ../development/interpreters/python/2.4 {
+    inherit fetchurl stdenv zlib bzip2;
+  };
+
   python25Base = composedArgsAndFun (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
@@ -2676,19 +2708,6 @@ let
     xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
   };
 
-
-  python31Base = composedArgsAndFun (import ../development/interpreters/python/3.1) {
-    inherit fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  };
-
-  python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
-  python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
-  python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  pythonBase = python26Base;
-  pythonFull = python26Full;
-
   # new python and lib proposal
   # - adding a python lib to buildinputs should be enough
   #   (handles .pth files by patching site.py
@@ -2699,6 +2718,12 @@ let
   python25New = recurseIntoAttrs ((import ../development/interpreters/python-new/2.5) pkgs);
   pythonNew = python25New; # the default python
 
+  python31Base = composedArgsAndFun (import ../development/interpreters/python/3.1) {
+    inherit fetchurl stdenv zlib bzip2 gdbm;
+    arch = if stdenv.isDarwin then darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
+  };
+  
   pyrex = pyrex095;
 
   pyrex095 = import ../development/interpreters/pyrex/0.9.5.nix {
@@ -5278,50 +5303,142 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  python25Packages = recurseIntoAttrs( import ../development/python2-packages {
-    inherit pkgs makeWrapper;
-    python = python25;
-  });
+  buildPythonPackage =
+    import ../development/python-modules/generic {
+      inherit python setuptools makeWrapper lib;
+    };
 
-  python26Packages = recurseIntoAttrs( import ../development/python2-packages {
-    inherit pkgs makeWrapper;
-    python = python26;
-  });
+  buildPython26Package =
+    import ../development/python-modules/generic {
+      inherit makeWrapper lib;
+      python = python26;
+      setuptools = setuptools_python26;
+    };
 
   pythonPackages = python26Packages;
-  buildPythonPackage = pythonPackages.buildPythonPackage;
 
-  # global python library aliases:
-  pycrypto = pythonPackages.pycrypto;
-  twisted = pythonPackages.twisted;
-  pygtk = pythonPackages.pygtk;
-  pygobject = pythonPackages.pygobject;
-  pycairo = pythonPackages.pycairo;
-  pyGtkGlade = pythonPackages.pyGtkGlade;
-  pythonDBus = pythonPackages.pythonDBus;
-  setuptools = pythonPackages.setuptools;
-  pil = pythonPackages.pil;
-  pythonIRClib = pythonPackages.pythonIRClib;
-  pyxml = pythonPackages.pyxml;
-  pyopengl = pythonPackages.pyopengl;
-  pygame = pythonPackages.pygame;
-  flup = pythonPackages.flup;
-  numeric = pythonPackages.numeric;
-  pyqt4 = pythonPackages.pyqt4;
-  sip410 = pythonPackages.sip410;
-  pyopenssl = pythonPackages.pyopenssl;
-  pythonSexy = pythonPackages.pythonSexy;
+  python25Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs python buildPythonPackage;
+  });
+
+  python26Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+    python = python26;
+    buildPythonPackage = buildPython26Package;
+  });
+
+  foursuite = import ../development/python-modules/4suite {
+    inherit fetchurl stdenv python;
+  };
+
+  bsddb3 = import ../development/python-modules/bsddb3 {
+    inherit fetchurl stdenv python db4;
+  };
+
+  flup = builderDefsPackage ../development/python-modules/flup {
+    inherit fetchurl stdenv;
+    python = python25;
+    setuptools = setuptools.passthru.function {python = python25;};
+  };
+
+  numeric = import ../development/python-modules/numeric {
+    inherit fetchurl stdenv python;
+  };
+
+  pil = import ../development/python-modules/pil {
+    inherit fetchurl stdenv python zlib libjpeg freetype;
+  };
+
+  psyco = import ../development/python-modules/psyco {
+    inherit fetchurl stdenv python;
+  };
+
+  pycairo = import ../development/python-modules/pycairo {
+    inherit fetchurl stdenv python pkgconfig cairo x11;
+  };
+
+  pycrypto = import ../development/python-modules/pycrypto {
+    inherit fetchurl stdenv python gmp;
+  };
+
+  pycups = import ../development/python-modules/pycups {
+    inherit stdenv fetchurl python cups;
+  };
+
+  pygame = import ../development/python-modules/pygame {
+    inherit fetchurl stdenv python pkgconfig SDL SDL_image
+      SDL_mixer SDL_ttf numeric;
+  };
+
+  pygobject = import ../development/python-modules/pygobject {
+    inherit fetchurl stdenv python pkgconfig glib;
+  };
+
+  pygtk = import ../development/python-modules/pygtk {
+    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
+    inherit (gtkLibs) glib gtk;
+  };
+
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
+    inherit (gtkLibs) glib gtk;
+    inherit (gnome) libglade;
+  };
+
+  pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
+    inherit python openssl;
+  };
+
+  rhpl = import ../development/python-modules/rhpl {
+    inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
+  };
+
+  sip = import ../development/python-modules/python-sip {
+    inherit stdenv fetchurl python;
+  };
+
+  pyqt4 = import ../development/python-modules/pyqt {
+    inherit stdenv fetchurl python qt4 sip;
+  };
+
+  pyx = import ../development/python-modules/pyx {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
+  pyxml = import ../development/python-modules/pyxml {
+    inherit fetchurl stdenv python makeWrapper;
+  };
+
+  setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
+    inherit python makeWrapper;
+  };
+
+  setuptools_python26 = builderDefsPackage (import ../development/python-modules/setuptools) {
+    inherit makeWrapper;
+    python = python26;
+  };
+
   wxPython = wxPython26;
-  sip = pythonPackages.sip;
-  xmpppy = pythonPackages.xmpppy;
-  pycups = pythonPackages.pycups;
-  rhpl = pythonPackages.rhpl;
-  nevow = pythonPackages.nevow;
 
-  # 2.6 aliases
-  wxPython26 = python26Packages.wxPython;
-  pil_python26 = python26Packages.pil;
- 
+  wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
+    inherit fetchurl stdenv pkgconfig python;
+    wxGTK = wxGTK26;
+  };
+
+  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
+    inherit fetchurl stdenv pkgconfig python;
+    inherit wxGTK;
+  };
+
+  twisted = pythonPackages.twisted;
+
+  ZopeInterface = pythonPackages.zopeInterface;
+
+  zope = import ../development/python-modules/zope {
+    inherit fetchurl stdenv;
+    python = python24;
+  };
+
   ### SERVERS
 
 
