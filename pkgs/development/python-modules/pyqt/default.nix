@@ -1,11 +1,11 @@
 {stdenv, fetchurl, python, sip, qt4}:
 
 stdenv.mkDerivation {
-  name = "pyqt-x11-gpl-4.7.2";
+  name = "pyqt-x11-gpl-4.7.3";
   
   src = fetchurl {
-    url = http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/PyQt-x11-gpl-4.7.2.tar.gz;
-    sha256 = "097gxdr7jqv5a58z89djylm2b21x83crqn2fjsr5zmwhc0zwj5yv";
+    url = http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/PyQt-x11-gpl-4.7.3.tar.gz;
+    sha256 = "0p12m2rjsm3igpqqmgn79my2h16vhxq8dma9ih1744hpnirdcjjp";
   };
   
   configurePhase = "python ./configure.py --confirm-license -b $out/bin -d $out/lib/${python.libPrefix}/site-packages -v $out/share/sip -p $out/plugins";
