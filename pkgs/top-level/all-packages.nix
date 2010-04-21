@@ -2708,16 +2708,6 @@ let
     xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
   };
 
-  # new python and lib proposal
-  # - adding a python lib to buildinputs should be enough
-  #   (handles .pth files by patching site.py
-  #    while introducing NIX_PYTHON_SITES describing list of modules)
-  # - adding pyCheck = "import foo" test scripts to ensure libraries can be imported
-  # - providing pythonWrapper so that you can run python and import the selected libraries
-  # feel free to comment on this (experimental)
-  python25New = recurseIntoAttrs ((import ../development/interpreters/python-new/2.5) pkgs);
-  pythonNew = python25New; # the default python
-
   python31Base = composedArgsAndFun (import ../development/interpreters/python/3.1) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
