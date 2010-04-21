@@ -1,11 +1,11 @@
 { stdenv, fetchurl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "libpcap-1.1.0";
+  name = "libpcap-1.1.1";
   
   src = fetchurl {
     url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "073hy17pvm203c0z3zpkp1b37sblcgf49c6a03az7kbniizbc07b";
+    sha256 = "11asds0r0vd9skbwfbgb1d2hqxr1d92kif4qhhqx2mbyahawm32h";
   };
   
   buildNativeInputs = [ flex bison ];
