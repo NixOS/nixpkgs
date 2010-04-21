@@ -1,6 +1,7 @@
-args: with args;
+{ stdenv, fetchurl, automake, autoconf, subversion, fuse, apr, perl }: 
+
 stdenv.mkDerivation {
-  name = "svnfs";
+  name = "svnfs-0.4";
 
   src = fetchurl {
     url = http://www.jmadden.eu/wp-content/uploads/svnfs/svnfs-0.4.tgz;
@@ -14,7 +15,6 @@ stdenv.mkDerivation {
     export LD_LIBRARY_PATH=${subversion}/lib
   '';
 
-
   NIX_CFLAGS_COMPILE="-I ${subversion}/include/subversion-1";
   NIX_LDFLAGS="-lsvn_client-1";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "SvnFs is a filesystem written using FUSE for accessing Subversion repositories";
     homepage = http://www.jmadden.eu/index.php/svnfs/;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
