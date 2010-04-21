@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     --disable-use-tty-group
+    --enable-write
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
