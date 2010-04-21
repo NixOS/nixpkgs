@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "iwlwifi-3945-ucode-15.28.1.8";
+stdenv.mkDerivation rec {
+  name = "iwlwifi-3945-ucode-15.32.2.9";
   
   src = fetchurl {
-    url = http://www.intellinuxwireless.org/iwlwifi/downloads/iwlwifi-3945-ucode-15.28.1.8.tgz;
-    sha256 = "0pwilsk8m9f5ihlp3wlam485a52lkbj2di5990bnz2m6ina9j8v2";
+    url = "http://www.intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    sha256 = "0baf07lblwsq841zdcj9hicf11jiq06sz041qcybc6l8yyhhcqjk";
   };
   
   buildPhase = "true";
