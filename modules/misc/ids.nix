@@ -87,6 +87,7 @@ in
     video = 26;
     dialout = 27;
     polkituser = 28;
+    utmp = 29;
     davfs2 = 31;
     privoxy = 32;
     disnix = 33;

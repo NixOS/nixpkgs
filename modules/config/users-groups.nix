@@ -90,6 +90,9 @@ let
           { name = "nixbld";
             gid = ids.gids.nixbld;
           }
+          { name = "utmp";
+            gid = ids.gids.utmp;
+          }
         ];
 
       addAttrs =
