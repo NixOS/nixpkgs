@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   name = "openssh-5.5p1";
 
   src = fetchurl {
-    url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/${name}.tar.gz";
+    url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
     sha256 = "12kywhjnz6w6kx5fk526fhs2xc7rf234hwrms9p1hqv6zrpdvvin";
   };
 
