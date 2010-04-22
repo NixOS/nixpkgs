@@ -44,9 +44,6 @@ stdenv.mkDerivation ({
        failure to find mdns4_minimal. */
     ./nss-skip-unavail.patch
 
-    /* Make it possible to override the locale-archive in NixOS. */
-    ./locale-override.patch
-
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
 
@@ -60,6 +57,7 @@ stdenv.mkDerivation ({
   configureFlags = [
     "-C"
     "--enable-add-ons"
+    "--localedir=/var/run/current-system/sw/lib/locale"
     (if kernelHeaders != null
      then "--with-headers=${kernelHeaders}/include"
      else "--without-headers")
