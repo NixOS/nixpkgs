@@ -52,6 +52,7 @@ in
     ddclient = 30;
     davfs2 = 31;
     privoxy = 32;    
+    osgi = 34;
     # When adding a uid, make sure it doesn't match an existing gid.
 
     nixbld = 30000; # start of range of uids
@@ -91,6 +92,7 @@ in
     davfs2 = 31;
     privoxy = 32;
     disnix = 33;
+    osgi = 34;
     # When adding a gid, make sure it doesn't match an existing uid.
 
     users = 100;
