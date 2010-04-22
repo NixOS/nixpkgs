@@ -9,3 +9,6 @@ SYSTEM_GID_MIN            100
 SYSTEM_GID_MAX            499
 GID_MIN                  1000
 GID_MAX                 29999
+
+TTYGROUP  tty
+TTYPERM   0620
