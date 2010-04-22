@@ -1,10 +1,10 @@
 {stdenv, fetchurl, python, pkgconfig, glib}:
 
 stdenv.mkDerivation {
-  name = "pygobject-2.12.3";
+  name = "pygobject-2.20.0";
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.12/pygobject-2.12.3.tar.bz2;
-    sha256 = "0hfsd7ln7j67w0vyrszic9b3d97gddad1y9arjw8i2b6h411xa7g";
+    url = http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.20/pygobject-2.20.0.tar.bz2;
+    sha256 = "10gsf3i2q9y659hayxyaxyfz7inswcjc8m6iyqckwsj2yjij7sa1";
   };
 
   buildInputs = [python pkgconfig glib];

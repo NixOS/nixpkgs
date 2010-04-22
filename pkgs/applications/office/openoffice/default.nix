@@ -11,15 +11,19 @@ stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
 
+  #downloadRoot = "http://download.services.openoffice.org/files/stable";
+  downloadRoot = "http://www-openoffice.com/source/";
+  versionDirs = false;
+
   src = fetchurl {
-      url = "http://mirror.kernelerror.net/openoffice/stable/${version}/OOo_${version}_src_core.tar.bz2";
+      url = "${downloadRoot}/${if versionDirs then version + "/" else ""}OOo_${version}_src_core.tar.bz2";
       sha256 = "95440f09f8dce616178b86b26af8e543c869d01579207aa68e8474019b59caca";
     };
 
   patches = [ ./oo.patch ./OOo-3.1.1-HEADERFIX-1.patch ./root-required.patch ];
 
   src_system = fetchurl {
-      url = "http://mirror.kernelerror.net/openoffice/stable/${version}/OOo_${version}_src_system.tar.bz2";
+      url = "${downloadRoot}/${if versionDirs then version + "/" else ""}OOo_${version}_src_system.tar.bz2";
       sha256 = "bb4a440ca91a40cd2b5692abbc19e8fbd3d311525edb266dc5cd9ebc324f2b4a";
     };
 
@@ -57,6 +61,7 @@ stdenv.mkDerivation rec {
     --without-system-hunspell
     --without-system-altlinuxhyph
     --without-system-lpsolve
+    --without-system-graphite
   ";
 
   LD_LIBRARY_PATH = "${libXext}/lib:${libX11}/lib:${libXtst}/lib:${libXi}/lib:${libjpeg}/lib";
@@ -75,5 +80,6 @@ stdenv.mkDerivation rec {
     description = "OpenOffice.org is a multiplatform and multilingual office suite";
     homepage = http://www.openoffice.org/;
     license = "LGPL";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }

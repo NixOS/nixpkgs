@@ -1,7 +1,7 @@
 {fetchurl, stdenv, replace, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "cmake-2.8.0";
+  name = "cmake-2.8.1";
 
   # We look for cmake modules in .../share/cmake-${majorVersion}/Modules.
   majorVersion = "2.8";
@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.cmake.org/files/v${majorVersion}/${name}.tar.gz";
-    sha256 = "0va7kxczqb920n61xnyhr99ajs4v05mssk4n0p6z55yvr9g62zc4";
+    sha256 = "0hi28blqxvir0dkhln90sgr0m3ri9n2i3hlmwdl4m5vkfsmp9bky";
   };
-
-  patches = [ ./findqt4.patch ];
 
   postUnpack = ''
     dontUseCmakeConfigure=1

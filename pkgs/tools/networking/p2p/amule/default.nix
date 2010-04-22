@@ -1,15 +1,16 @@
 { fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext
-, makeWrapper }:
+, pkgconfig, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "aMule-2.2.2";
+  name = "aMule-2.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/amule/${name}.tar.bz2";
-    sha256 = "0yrp3vk1gqfajgldfs4an5rd1l4i69icsrzcqmfxsny6qbcrv5hv";
+    sha256 = "08l1931hcg1ia8yvhgx70hx64mknjnfn6l78m0ja44w13mgjpqvc";
   };
 
-  buildInputs = [ zlib wxGTK perl cryptopp libupnp gettext makeWrapper ];
+  buildInputs =
+    [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ];
 
   configureFlags = "--with-crypto-prefix=${cryptopp}";
 
@@ -40,6 +41,9 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    license = "GPLv2+";    
+    license = "GPLv2+";
+
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

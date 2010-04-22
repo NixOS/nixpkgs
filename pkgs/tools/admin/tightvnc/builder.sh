@@ -34,6 +34,12 @@ installPhase() {
     ensureDir $out/bin
     ensureDir $out/man/man1
     ./vncinstall $out/bin $out/man
+
+    # fix HTTP client:
+    t=$out/vnc
+    ensureDir $t
+    sed -i "s@/usr/local/vnc/classes@$out/vnc/classes@g" $out/bin/vncserver
+    cp -r classes $t
 }
 
 genericBuild

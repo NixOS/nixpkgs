@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat }:
+{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses
+, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-0.9.2";
+  name = "hwloc-1.0rc1";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v0.9/downloads/${name}.tar.bz2";
-    sha256 = "1smxvz2g05kci1ra78iqmgk02rym3qwh1mrm68rxv70fhqhvq741";
+    url = "http://www.open-mpi.org/software/hwloc/v1.0/downloads/${name}.tar.bz2";
+    sha256 = "0mgjlyfwp1pbl2312l9diwjw53yb9hb62slmvcb3xvhqdwvj0d7s";
   };
 
-  buildInputs = [ pkgconfig cairo expat ];
+  patches = [ ./ncurses.patch ];
+
+  preConfigure = "autoreconf -vfi";
+
+  buildInputs = [ autoconf automake libtool pkgconfig cairo expat ncurses ];
 
   doCheck = true;
 
@@ -37,11 +42,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.open-mpi.org/projects/hwloc/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-
-    # It doesn't support the BSDs.
-    platforms = stdenv.lib.platforms.linux
-             ++ stdenv.lib.platforms.darwin
-             ++ stdenv.lib.platforms.cygwin
-             /* ++ opensolaris */;
+    platforms = stdenv.lib.platforms.all;
   };
 }

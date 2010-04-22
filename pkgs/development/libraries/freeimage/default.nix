@@ -1,9 +1,9 @@
 {stdenv, fetchurl, unzip}:
 stdenv.mkDerivation {
-  name = "freeimage-3.13.0";
+  name = "freeimage-3.13.1";
   src = fetchurl {
-    url = mirror://sourceforge/freeimage/FreeImage3130.zip;
-    sha256 = "0hf642cb1bai1j4izvjnmili9ic335awa4jnn6nxa0bv6wfaa9x2";
+    url = mirror://sourceforge/freeimage/FreeImage3131.zip;
+    sha256 = "1ilpfgyi3qhjra5hxvjcrq3bna909bgdl7rgmhkybmcpdq1x56rj";
   };
   buildInputs = [ unzip ];
   patchPhase = ''

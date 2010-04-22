@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "strict-concurrency";
-  version = "0.2.1";
-  sha256 = "8838600033bde2ce7ca6bd95a3815412da67244b57dfc0e2246a8f2469f5fd9c";
+  version = "0.2.3";
+  sha256 = "21641b983b226e47727ff565184a5f2b312c7979ff487a5e478f5cfc82f78f18";
   propagatedBuildInputs = [parallel];
   meta = {
     description = "Strict concurrency abstractions";

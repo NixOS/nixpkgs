@@ -77,6 +77,23 @@ rec {
     };
   });
 
+  clientform = buildPythonPackage (rec {
+    name = "clientform-0.2.10";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/C/ClientForm/ClientForm-0.2.10.tar.gz";
+      sha256 = "0dydh3i1sx7rrj6d0gj375wkjpiivm7jjlsimw6hmwv4ck7yf1wm";
+    };
+
+    meta = {
+      homepage = http://wwwsearch.sourceforge.net/ClientForm/;
+
+      license = "bsd";
+
+      description = "Python module for handling HTML forms on the client side";
+    };
+  });
+
   cssutils = buildPythonPackage (rec {
     name = "cssutils-0.9.7a2";
 
@@ -264,6 +281,8 @@ rec {
       url = "http://wwwsearch.sourceforge.net/mechanize/src/${name}.tar.gz";
       sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
     };
+
+    propagatedBuildInputs = [ clientform ];
 
     meta = {
       description = "Stateful programmatic web browsing in Python";

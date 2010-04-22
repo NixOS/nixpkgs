@@ -3,17 +3,19 @@
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs
 , guiSupport
+, pythonSupport ? true
 }:
 
-# `git-svn' support requires Subversion and various Perl libraries.
-assert svnSupport -> (subversion != null && perlLibs != [] && subversion.perlBindings);
+let
+  svn = subversion.override { perlBindings = true; };
+in
 
 stdenv.mkDerivation rec {
-  name = "git-1.7.0";
+  name = "git-1.7.0.5";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "a61e863944381c4f8231841f678f41f56b634bebca486a61005b35e5bcbb7c79";
+    sha256 = "96b44fcd8652db8a7a30d87096a17200457d3fbcc91aa334cb7644a6da898d53";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -24,7 +26,8 @@ stdenv.mkDerivation rec {
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} PYTHON_PATH=${python}/bin/python";
+  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
+      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1");
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
@@ -47,12 +50,12 @@ stdenv.mkDerivation rec {
 
       ''# wrap git-svn
         gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString perlLibs}; do
+        for i in ${builtins.toString perlLibs} ${svn}; do
           gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
         wrapProgram "$out/libexec/git-core/git-svn"     \
                      --set GITPERLLIB "$gitperllib"     \
-                     --prefix PATH : "${subversion}/bin" ''
+                     --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
        '')

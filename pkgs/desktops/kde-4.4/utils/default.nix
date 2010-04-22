@@ -3,11 +3,11 @@
 , kdelibs, kdepimlibs, kdebase, kdebindings, automoc4, phonon, qimageblitz, qca2}:
 
 stdenv.mkDerivation {
-  name = "kdeutils-4.4.1";
+  name = "kdeutils-4.4.2";
   
   src = fetchurl {
-    url = mirror://kde/stable/4.4.1/src/kdeutils-4.4.1.tar.bz2;
-    sha256 = "04kcacj2b8k9vzs526kg6azhab44mgr4kwafl2pjnf7rf3hlpndv";
+    url = mirror://kde/stable/4.4.2/src/kdeutils-4.4.2.tar.bz2;
+    sha256 = "13b8ygyaz61h1lq55fa2a4x88439rbaqqagw0syqqr9lmx63xc2j";
   };
   
   builder = ./builder.sh;

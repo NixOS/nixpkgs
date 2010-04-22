@@ -23,12 +23,12 @@ let
     crossMakeFlag = if (cross != null) then "CROSS=${cross.config}-" else "";
 in
 stdenv.mkDerivation {
-  name = "uclibc-0.9.30.2" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.30.3" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/uClibc-0.9.30.2.tar.bz2;
-    sha256 = "0wr4hlybssiyswdc73wdcxr31xfbss3lnqiv5lcav3rg3v4r4vmb";
+    url = http://www.uclibc.org/downloads/uClibc-0.9.30.3.tar.bz2;
+    sha256 = "0f1fpdwampbw7pf79i64ipj0azk4kbc9wl81ynlp19p92k4klz0h";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
       -e 's@^DEVEL_PREFIX.*@DEVEL_PREFIX="/"@' \
       -e 's@.*UCLIBC_HAS_WCHAR.*@UCLIBC_HAS_WCHAR=y@' \
       -e 's@.*UCLIBC_HAS_FTW.*@UCLIBC_HAS_FTW=y@' \
+      -e 's@.*UCLIBC_HAS_RPC.*@UCLIBC_HAS_RPC=y@' \
       -e 's@.*DO_C99_MATH.*@DO_C99_MATH=y@' \
       -e 's@.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*@UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y@' \
       ${configArmEABI} \

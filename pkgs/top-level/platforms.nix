@@ -26,6 +26,7 @@ rec {
 
   sheevaplug = {
     name = "sheevaplug";
+    kernelMajor = "2.6";
     kernelHeadersBaseConfig = "kirkwood_defconfig";
     kernelBaseConfig = "kirkwood_defconfig";
     kernelArch = "arm";
@@ -34,15 +35,18 @@ rec {
       ''
         BLK_DEV_RAM y
         BLK_DEV_INITRD y
+        BLK_DEV_CRYPTOLOOP m
         BLK_DEV_DM m
+        DM_CRYPT m
         MD y
         REISERFS_FS m
         EXT4_FS m
         USB_STORAGE_CYPRESS_ATACB m
 
-        CONFIG_IP_PNP y
-        CONFIG_NFS_FS y
-        CONFIG_ROOT_NFS y
+        IP_PNP y
+        NFS_FS y
+        ROOT_NFS y
+        TUN m
 
         # Fail to build
         DRM n
@@ -58,8 +62,6 @@ rec {
         ATM_HE n
         SCSI_ACARD n
         BLK_DEV_CMD640_ENHANCED n
-
-        IP_PNP y
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";
@@ -69,6 +71,7 @@ rec {
 
   versatileARM = {
     name = "versatileARM";
+    kernelMajor = "2.6";
     kernelHeadersBaseConfig = "versatile_defconfig";
     kernelBaseConfig = "versatile_defconfig";
     kernelArch = "arm";
@@ -106,6 +109,7 @@ rec {
 
   integratorCP = {
     name = "integratorCP";
+    kernelMajor = "2.6";
     kernelHeadersBaseConfig = "integrator_defconfig";
     kernelBaseConfig = "integrator_defconfig";
     kernelArch = "arm";

@@ -175,7 +175,7 @@ rec {
         XFS_POSIX_ACL y
         XFS_RT y # XFS Realtime subvolume support
         OCFS2_DEBUG_MASKLOG n
-        OCFS2_FS_POSIX_ACL y
+        OCFS2_FS_POSIX_ACL? y
         BTRFS_FS_POSIX_ACL y
         UBIFS_FS_XATTR y
         UBIFS_FS_ADVANCED_COMPR y

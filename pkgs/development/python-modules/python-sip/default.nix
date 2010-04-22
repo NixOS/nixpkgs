@@ -1,16 +1,20 @@
-{stdenv, fetchurl, lib, python}:
+{ stdenv, fetchurl, python }:
 
-stdenv.mkDerivation {
-  name = "sip-4.8.2";
+stdenv.mkDerivation rec {
+  name = "sip-4.10.2";
+  
   src = fetchurl {
-    url = http://pyqwt.sourceforge.net/support/sip-4.8.2.tar.gz; # Not downloading from riverbank, since they remove older releases
-    sha256 = "1afr2qaibzgf8fq4fmc31jz9hvbwxbg5jvl68ygvkkdvnbg2kfrf";
+    url = "http://www.riverbankcomputing.co.uk/static/Downloads/sip4/${name}.tar.gz";
+    sha256 = "1vw810fa3g59r3cnfizxykq7dg84zcgs278cwrksk7rsgz8gdn9q";
   };
+  
   configurePhase = "python ./configure.py -d $out/lib/${python.libPrefix}/site-packages -b $out/bin -e $out/include";
+  
   buildInputs = [ python ];
+  
   meta = {
     description = "Creates C++ bindings for Python modules";
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

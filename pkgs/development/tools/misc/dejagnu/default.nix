@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "13841q6pfwd9d1sdw48yxdyb4xhiccii0mb0ilql627v43pyvyyh";
   };
 
+  patches = [ ./wrapped-runtest-program-name.patch ];
+
   buildInputs = [ expect makeWrapper ];
 
   # FIXME: Enable when the "spawn id" problem is fixed.

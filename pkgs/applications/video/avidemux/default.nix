@@ -5,11 +5,11 @@ alsaLib, lame, faac, faad2, libvorbis }:
 assert stdenv ? glibc;
 
 stdenv.mkDerivation {
-  name = "avidemux-2.5.1";
+  name = "avidemux-2.5.2";
   
   src = fetchurl {
-    url = mirror://sourceforge/avidemux/avidemux_2.5.1.tar.gz;
-    sha256 = "14jwrblbli7bswx4i7b85l0s1msx8rxrqb908df3z8jxm6w4cm9g";
+    url = mirror://sourceforge/avidemux/avidemux_2.5.2.tar.gz;
+    sha256 = "1apq5s79ik562xmhyvg6nvkmk2bhm5fcjwsrwrpxwipn6swkfpk8";
   };
   
   buildInputs = [ cmake pkgconfig libxml2 qt4 gtk gettext SDL libXv

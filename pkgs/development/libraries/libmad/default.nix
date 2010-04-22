@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, autoconf}:
 
 stdenv.mkDerivation {
   name = "libmad-0.15.1b";
@@ -8,8 +8,11 @@ stdenv.mkDerivation {
     sha256 = "bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690";
   };
 
+  patches = [ ./pkgconfig.patch ];
+
   # The -fforce-mem flag has been removed in GCC 4.3.
   preConfigure = ''
+    ${autoconf}/bin/autoconf
     substituteInPlace configure --replace "-fforce-mem" ""
   '';
 

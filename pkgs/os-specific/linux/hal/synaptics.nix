@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 <?xml version="1.0" encoding="UTF-8"?>
        <deviceinfo version="0.2">
            <device>
-               <match key="info.product" contains="Synaptics TouchPad">
+               <match key="info.capabilities" contains="input.touchpad">
                    <merge key="input.x11_driver" type="string">synaptics</merge>
                    <merge key="input.x11_options.AlwaysCore" type="string">true</merge>
                    <merge key="input.x11_options.Protocol" type="string">event</merge>

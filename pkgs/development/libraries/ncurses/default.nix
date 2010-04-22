@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unicode ? true}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation ( rec {
   name = "ncurses-5.7";
   
   src = fetchurl {
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
 
     license = "X11";
   };
-}
+} // ( if stdenv.isDarwin then { postFixup = "rm $out/lib/*.so"; } else { } ) )

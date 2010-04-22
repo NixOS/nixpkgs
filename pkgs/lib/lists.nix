@@ -167,6 +167,11 @@ rec {
     if list == [] || count == 0 then []
     else [ (head list) ] ++ take (builtins.sub count 1) (tail list);
 
+  # haskell's drop. drop count elements from head of list
+  drop = count: list:
+    if count == 0 then list
+    else drop (builtins.sub count 1) (tail list);
+
   last = list:
     assert list != [];
     let loop = l: if tail l == [] then head l else loop (tail l); in

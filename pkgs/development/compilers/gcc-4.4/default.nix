@@ -57,24 +57,34 @@ let version = "4.4.3";
 
     javaAwtGtk = langJava && gtk != null;
 
-    withCPU = if cross ? cpu then " --with-cpu=${cross.cpu}" else "";
+    /* Cross-gcc settings */
+    gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
+    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
+    gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
+    withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
+    withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
+    withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
 
     crossConfigureFlags =
       "--target=${cross.config}" +
-      withCPU +
+      withArch +
+      withCpu +
+      withAbi +
       (if crossStageStatic then
         " --disable-libssp --disable-nls" +
         " --without-headers" +
         " --disable-threads " +
         " --disable-libmudflap " +
         " --disable-libgomp " +
-        " --disable-shared"
+        " --disable-shared" +
+        " --disable-decimal-float" # libdecnumber requires libc
         else
         " --with-headers=${libcCross}/include" +
         " --enable-__cxa_atexit" +
         " --enable-long-long" +
         " --enable-threads=posix" +
-        " --enable-nls"
+        " --enable-nls" +
+        " --disable-decimal-float" # No final libdecnumber (it may work only in 386)
         );
     stageNameAddon = if (crossStageStatic) then "-stage-static" else
       "-stage-final";
@@ -110,7 +120,8 @@ stdenv.mkDerivation ({
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
     # target libraries and tools.
     ++ optional langAda ./gnat-cflags.patch
-    ++ optional langVhdl ./ghdl-ortho-cflags.patch;
+    ++ optional langVhdl ./ghdl-ortho-cflags.patch
+    ++ optional (cross != null && cross.arch == "sparc64") ./pr41818.patch;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross;
@@ -257,7 +268,9 @@ stdenv.mkDerivation ({
     ];
 
     # Volunteers needed for the {Cyg,Dar}win ports of *PPL.
-    platforms = stdenv.lib.platforms.linux ++ [ "i686-darwin" ];
+    # gnatboot is not available out of linux platforms, so we disable the darwin build
+    # for the gnat (ada compiler).
+    platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false) [ "i686-darwin" ];
   };
 }
 // (if langVhdl then rec {

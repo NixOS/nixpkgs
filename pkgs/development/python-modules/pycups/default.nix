@@ -1,11 +1,17 @@
 {stdenv, fetchurl, python, cups}:
 
+let
+  version = "1.9.49";
+in
 stdenv.mkDerivation {
-  name = "pycups-1.9.48";
+  name = "pycups-${version}";
   src = fetchurl {
-    url = http://cyberelk.net/tim/data/pycups/pycups-1.9.48.tar.bz2;
-    sha256 = "11cz6pqp18wxrzpix55pin97mfcmdc4g13zpr739glb6c9mnj7qp";
+    url = "http://cyberelk.net/tim/data/pycups/pycups-${version}.tar.bz2";
+    sha256 = "1gpp28sknjw5z4mzhaifc6hkfrlbm2y6w870q47ia8amnm05d3pk";
   };
-  installPhase = "python ./setup.py install --prefix $out";
+  buildPhase = "";
+  installPhase = ''
+    CFLAGS=-DVERSION=\\\"${version}\\\" python ./setup.py install --prefix $out
+  '';
   buildInputs = [ python cups ];
 }

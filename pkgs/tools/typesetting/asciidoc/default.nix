@@ -8,11 +8,14 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    for n in asciidoc.py a2x.py; do
+    for n in `find . -name \*.py `; do
       sed -i -e "s,^#!/usr/bin/env python,#!${python}/bin/python,g" "$n"
       chmod +x "$n"
     done
+    sed -i -e "s,/etc/vim,,g" Makefile.in
   '';
+
+  preInstall = "ensureDir $out/etc/vim";
 
   buildInputs = [ python ];
 

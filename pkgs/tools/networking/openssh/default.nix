@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, openssl, perl
+{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig
 , pamSupport ? false, pam ? null
 , etcDir ? null
 , hpnSupport ? false
@@ -16,11 +16,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-5.3p1";
+  name = "openssh-5.5p1";
 
   src = fetchurl {
-    url = "ftp://ftp.nluug.nl/pub/security/OpenSSH/${name}.tar.gz";
-    sha256 = "04pgqmb43p5lr5wrfnvyys8r504brghshm24n60495wn5131gjfh";
+    url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
+    sha256 = "12kywhjnz6w6kx5fk526fhs2xc7rf234hwrms9p1hqv6zrpdvvin";
   };
 
   patchPhase = stdenv.lib.optionalString hpnSupport
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     '';
   
   buildInputs =
-    [ zlib openssl perl ]
+    [ zlib openssl perl libedit pkgconfig ]
     ++ stdenv.lib.optional pamSupport pam;
 
   configureFlags =
     ''
       --with-mantype=man
+      --with-libedit=yes
       ${if pamSupport then "--with-pam" else "--without-pam"}
       ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
     '';

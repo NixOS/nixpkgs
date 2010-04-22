@@ -1206,6 +1206,16 @@ let
     };
     buildInputs = [pkgconfig libXcursor ];
   })) // {inherit libXcursor ;};
+
+  xdm = (stdenv.mkDerivation ((if overrides ? xdm then overrides.xdm else x: x) {
+    name = "xdm-1.1.9";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xdm-1.1.9.tar.bz2;
+      sha256 = "0d5i25mn6vzhkh5ga5b403hgfmaf66q40knr06ii608d3c7dpcg7";
+    };
+    buildInputs = [pkgconfig libXmu libX11 libXau libXinerama libXft libXpm libXaw libXdmcp libXt libXext];
+  })) // {inherit libXmu libX11 libXau libXinerama libXft libXpm libXaw libXdmcp libXt libXext;};
     
   xdpyinfo = (stdenv.mkDerivation ((if overrides ? xdpyinfo then overrides.xdpyinfo else x: x) {
     name = "xdpyinfo-1.1.0";
@@ -1518,11 +1528,11 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
-    name = "xf86-video-intel-2.10.0";
+    name = "xf86-video-intel-2.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.10.0.tar.bz2;
-      sha256 = "1as8zk6b74q9d3ynq0i89z9vzx79lzz88azjypb7rnwkvj8xcvg4";
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.11.0.tar.bz2;
+      sha256 = "0kss9xpk160j13yvcb0s0k5hhvzcqmhplscmfwsk5cgk4ny2qafv";
     };
     buildInputs = [pkgconfig dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libXext xextproto xf86driproto libXfixes xineramaproto xorgserver xproto libXvMC ];
   })) // {inherit dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libXext xextproto xf86driproto libXfixes xineramaproto xorgserver xproto libXvMC ;};

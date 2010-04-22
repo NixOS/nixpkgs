@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
   name = "libedit-20090923-3.0";
@@ -7,6 +7,10 @@ stdenv.mkDerivation rec {
     url = "http://www.thrysoee.dk/editline/${name}.tar.gz";
     sha256 = "02j66qbd1c9wfghpjb8dzshkcj4i0n9xanxy81552j3is9ilxjka";
   };
+
+  postInstall = ''
+    sed -i s/-lcurses/-lncurses/g $out/lib/pkgconfig/libedit.pc
+  '';
 
   propagatedBuildInputs = [ ncurses ];
 

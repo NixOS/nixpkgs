@@ -1,7 +1,7 @@
 #! @perl@ -w
 
 use strict;
-use Cwd;
+use Cwd 'abs_path';
 use IO::Handle;
 use File::Path;
 use File::Basename;
@@ -55,14 +55,15 @@ sub createLinks {
         my $relName2 = "$relName/$baseName";
 
         # Urgh, hacky...
-	if ($srcFile =~ /\/propagated-build-inputs$/ ||
+        if ($srcFile =~ /\/propagated-build-inputs$/ ||
             $srcFile =~ /\/nix-support$/ ||
             $srcFile =~ /\/perllocal.pod$/ ||
             $srcFile =~ /\/info\/dir$/ ||
+            ( $relName2 =~ /^\/share\/mime\// && !( $relName2 =~ /^\/share\/mime\/packages/ ) ) ||
             $srcFile =~ /\/log$/)
         {
             # Do nothing.
-	}
+        }
 
         elsif (-d $srcFile) {
 
@@ -96,9 +97,17 @@ sub createLinks {
         }
 
         elsif (-l $dstFile) {
-            if (!$ignoreCollisions) {
-                my $target = readlink $dstFile;
-                die "collission between `$srcFile' and `$target'";
+            my $oldTarget = readlink $dstFile;
+            my $oldTargetReal = abs_path $oldTarget;
+            my $newTarget = $srcFile;
+            my $newTargetReal = abs_path $newTarget;
+            unless ($newTargetReal eq $oldTargetReal) {
+                if ($ignoreCollisions) {
+                    warn "collision between `$newTarget' and `$oldTarget'\n";
+                }
+                else {
+                    die "collision between `$newTarget' and `$oldTarget'";
+                }
             }
         }
 
@@ -114,7 +123,7 @@ my %done;
 my %postponed;
 
 sub addPkg;
-sub addPkg {
+sub addPkg($;$) {
     my $pkgDir = shift;
     my $ignoreCollisions = shift;
 
@@ -131,6 +140,7 @@ sub addPkg {
         close PROP;
         my @propagated = split ' ', $propagated;
         foreach my $p (@propagated) {
+            print "$pkgDir propagates $p\n";
             $postponed{$p} = 1 unless defined $done{$p};
         }
     }
@@ -155,6 +165,11 @@ while (scalar(keys %postponed) > 0) {
     foreach my $pkgDir (sort @pkgDirs) {
         addPkg($pkgDir, 1);
     }
+}
+
+if (-x "$out/bin/update-mime-database" && -d "$out/share/mime/packages") {
+    system("$out/bin/update-mime-database -V $out/share/mime") == 0
+        or die "Can't update mime-database";
 }
 
 

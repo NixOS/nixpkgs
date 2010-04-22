@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-lgcc_s" ;
 
+  # Attempt to fix this error when running "mcs --version":
+  # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
+  dontStrip = true;
+
   preBuild = "
     makeFlagsArray=(INSTALL=`type -tp install`)
     patchShebangs ./

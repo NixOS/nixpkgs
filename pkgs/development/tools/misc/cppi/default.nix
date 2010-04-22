@@ -1,11 +1,11 @@
 { fetchurl, xz, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "cppi-1.14";
+  name = "cppi-1.15";
 
   src = fetchurl {
     url = "mirror://gnu/cppi/${name}.tar.xz";
-    sha256 = "0n7388f5z4nnyh17rnj7h0kvml3x2mba6a5km87k2bvm5v4mcrfc";
+    sha256 = "1avwwpcwx6rvk9j4id8jq58n5kk756dwnd0wqw4a4p3smvby7gw2";
   };
 
   buildInputs = [ xz ];

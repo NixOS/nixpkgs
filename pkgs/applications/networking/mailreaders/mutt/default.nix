@@ -2,12 +2,15 @@
 , sslSupport ? true
 , imapSupport ? true
 , headerCache ? true
+, saslSupport ? true
 , gdbm ? null
 , openssl ? null
+, cyrus_sasl ? null
 }:
 
 assert headerCache -> gdbm != null;
 assert sslSupport -> openssl != null;
+assert saslSupport -> cyrus_sasl != null;
 
 stdenv.mkDerivation {
   name = "mutt-1.5.20";
@@ -19,12 +22,18 @@ stdenv.mkDerivation {
     ncurses which perl
     (if headerCache then gdbm else null)
     (if sslSupport then openssl else null)
+    (if saslSupport then cyrus_sasl else null)
   ];
   configureFlags = [
-    "--with-mailpath="
+    "--with-mailpath=" "--enable-smtp"
+    # The next allows building mutt without having anything setgid
+    # set by the installer, and removing the need for the group 'mail'
+    # I set the value 'mailbox' because it is a default in the configure script
+    "--with-homespool=mailbox"
     (if headerCache then "--enable-hcache" else "--disable-hcache")
     (if sslSupport then "--with-ssl" else "--without-ssl")
     (if imapSupport then "--enable-imap" else "--disable-imap")
+    (if saslSupport then "--with-sasl" else "--without-imap")
   ];
 
   meta = {

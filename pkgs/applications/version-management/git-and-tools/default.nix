@@ -3,29 +3,25 @@
 */
 args: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchurl getConfig subversion;
+  inherit (pkgs) stdenv fetchurl subversion;
+  config = getPkgConfig "git";
 in
 rec {
 
-  git = import ./git {
+  git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
-    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
+    svnSupport = config "svnSupport" false; # for git-svn support
+    guiSupport = config "guiSupport" false;
+    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
   };
 
   # The full-featured Git.
-  gitFull = import ./git {
-    inherit fetchurl stdenv curl openssl zlib expat perl python gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversion;
+  gitFull = git.override {
     svnSupport = true;
     guiSupport = true;
-    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
   gitGit = import ./git/git-git.nix {
@@ -33,8 +29,8 @@ rec {
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion autoconf;
-    svnSupport = getConfig ["git" "svnSupport"] false; # for git-svn support
-    guiSupport = getConfig ["git" "guiSupport"] false;
+    svnSupport = config "svnSupport" false; # for git-svn support
+    guiSupport = config "guiSupport" false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 

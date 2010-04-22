@@ -15,6 +15,10 @@ stdenv.mkDerivation {
     fi
   '';
 
+  crossAttrs = {
+    dontStrip = if static then true else false;
+  };
+
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
 }

@@ -60,9 +60,16 @@ rec {
     HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
 
     # Prebuild the format files, as it used to be done with TeXLive 2007.
+    # Luatex currently fails this way:
+    #
+    #   This is a summary of all `failed' messages:
+    #   `luatex -ini  -jobname=luatex -progname=luatex luatex.ini' failed
+    #   `luatex -ini  -jobname=dviluatex -progname=dviluatex dviluatex.ini' failed
+    #
+    # I find it acceptable, hence the "|| true".
     echo "building format files..."
     ensureDir "$out/texmf-var/web2c"
-    PATH="$PATH:$out/bin" fmtutil-sys --all
+    PATH="$PATH:$out/bin" fmtutil-sys --all || true
 
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
  '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];

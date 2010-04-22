@@ -1,22 +1,34 @@
 args: with args;
 
+# at runtime, need jre or jdk
+
 stdenv.mkDerivation rec {
-  name = "scala-2.7.1";
+  name = "scala-2.7.7";
 
   src = fetchurl {
-    url = "http://www.scala-lang.org/downloads/distrib/files/${name}.final.tar.gz";
-    sha256 = "3cad113ed7b84f4f009897f6066bee28459e63a1cf1a6d5d56f10f4d1f9819ec";
+    url = "http://www.scala-lang.org/downloads/distrib/files/${name}.final.tgz";
+    md5 = "5d2294d5aab72fec869c0ba666d28b7e";
   };
 
   installPhase = ''
-    mkdir -p $out
+    ensureDir $out
+    rm bin/*.bat
     mv * $out
-    rm -f $out/bin/*.bat
   '';
 
   phases = "unpackPhase installPhase";
 
   meta = {
     description = "Scala is a general purpose programming language";
+    longDescription = ''
+      Scala is a general purpose programming language designed to express
+      common programming patterns in a concise, elegant, and type-safe way.
+      It smoothly integrates features of object-oriented and functional
+      languages, enabling Java and other programmers to be more productive.
+      Code sizes are typically reduced by a factor of two to three when 
+      compared to an equivalent Java application.
+    '';
+    homepage = http://www.scala-lang.org/;
+    license = "BSD";
   };
 }

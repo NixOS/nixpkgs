@@ -1,12 +1,12 @@
 {stdenv, fetchurl, python, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
+  version = "1.3.0";
   name = "scons-" + version;
 
   src = fetchurl {
     url = "mirror://sourceforge/scons/${name}.tar.gz";
-    sha256 = "2806451e02a42789decb6d08098b798b6b81a0a39d8d3b2fbdd3fe84ebd8a246";
+    sha256 = "4bde47b9a40fe767f089f5996d56b6e85a2d4929309b9c07a2dff363a78b0002";
   };
 
   propagatedBuildInputs = [python makeWrapper];
@@ -25,4 +25,6 @@ stdenv.mkDerivation rec {
        software.
     '';
   };
+
+  maintainers = [ stdenv.lib.maintainers.simons ];
 }

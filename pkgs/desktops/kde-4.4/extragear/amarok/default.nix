@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon, strigi, soprano, qca2}:
 
 stdenv.mkDerivation {
-  name = "amarok-2.2.2";
+  name = "amarok-2.3.0";
   src = fetchurl {
-    url = mirror://kde/stable/amarok/2.2.2/src/amarok-2.2.2.tar.bz2;
-    sha256 = "0kg67b9wz2wi1gyn229vzbib4s0wpgqrjyfqy0032yl9fa2k13bn";
+    url = mirror://kde/stable/amarok/2.3.0/src/amarok-2.3.0.tar.bz2;
+    sha256 = "1a2c6qy2ik9l7r1lxm82h49acvzxsxxlnlgzwhlrhi27p3sk0xpw";
   };
   inherit mysql loudmouth;
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";

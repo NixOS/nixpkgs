@@ -1,15 +1,16 @@
 { stdenv, fetchurl, ncurses ? null, ... }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-ng-2.17.1";
+  name = "util-linux-ng-2.17.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux-ng/v2.17/${name}.tar.bz2";
-    sha256 = "140k32jqg9192vskdb3p98q99qgr14029h975nw21p426zm1kh79";
+    sha256 = "13qifk3i1x59q45fpdz8qnnm7vrhd2zshy5295vhpcjsd8dq1bn9";
   };
 
   configureFlags = ''
     --disable-use-tty-group
+    --enable-write
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 

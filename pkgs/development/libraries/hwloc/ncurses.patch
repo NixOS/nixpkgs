@@ -1,0 +1,13 @@
+Help `configure' find `tparm' in libncurses.
+
+--- a/config/hwloc.m4	2010-04-19 14:25:53.000000000 +0200
++++ b/config/hwloc.m4	2010-04-19 14:24:23.000000000 +0200
+@@ -285,7 +285,7 @@ EOF])
+     LIBS=
+     AC_CHECK_HEADERS([curses.h], [
+       AC_CHECK_HEADERS([term.h], [
+-        AC_SEARCH_LIBS([tparm], [termcap curses], [
++        AC_SEARCH_LIBS([tparm], [ncurses termcap curses], [
+             AC_SUBST([HWLOC_TERMCAP_LIBS], ["$LIBS"])
+             AC_DEFINE([HWLOC_HAVE_LIBTERMCAP], [1],
+                       [Define to 1 if you have a library providing the termcap interface])

@@ -9,7 +9,6 @@ fixCmakeFiles()
     local replaceArgs
     echo "fixing cmake files"
     replaceArgs="-e -f -L -T /usr /FOO"
-    replaceArgs="$replaceArgs -a NO_DEFAULT_PATH \"\" -a NO_SYSTEM_PATH \"\""
     find $1 -type f -name "*.cmake" -print0 | xargs -0 replace-literal ${replaceArgs}
 }
 

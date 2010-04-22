@@ -8,17 +8,18 @@ assert stdenv.gcc.gcc != null;
 # will be released with the next version of scribus - So don't miss them
 # when upgrading this package
 
-let useCairo = true;
+#let useCairo = true;
+let useCairo = false;
 
 in
 
 stdenv.mkDerivation {
 
-  name = "scribus-1.3.3.13";
+  name = "scribus-1.3.3.14";
 
   src = fetchurl {
-    url = mirror://sourceforge/scribus/scribus/1.3.3.13/scribus-1.3.3.13.tar.bz2;
-    sha256 = "06l4ndfsw7ss7mdr6a6km9fbr9p2m3b5idm3n8lpgwk2ss0mw9as";
+    url = mirror://sourceforge/scribus/scribus/1.3.3.14/scribus-1.3.3.14.tar.bz2;
+    sha256 = "1ig7x6vxhqgjlpnv6hkzpb6gj4yvxsrx7rw900zlp7g6zxl01iyy";
   };
 
   cmakeFlags = if useCairo then "-DWANT_CAIRO=1" else "";
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
 
   # fix rpath which is removed by cmake..
   postFixup = ''
-    for i in $buildInputs ${stdenv.gcc.gcc}; do
+    for i in $buildNativeInputs ${stdenv.gcc.gcc}; do
       [ -d "$i/lib" ] && RPATH="$RPATH:$i/lib"
       [ -d "$i/lib64" ] && RPATH="$RPATH:$i/lib64"
     done

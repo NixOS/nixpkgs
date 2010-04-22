@@ -1,13 +1,13 @@
 args: with args;
 stdenv.mkDerivation (rec {
   pname = "nano";
-  version = "2.2.1";
+  version = "2.2.3";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.gz";
-    sha256 = "1xqldl7ipsmz5x8q3fw9s6yshxfp39kly96kb15l1kawng1wfcfq";
+    sha256 = "1vpl993xrpj8bqi1ayga8fc0j2jag90xp6rqakzwm3bxw71hmwi2";
   };
   buildInputs = [ncurses gettext];
 #  configureFlags = "--enable-tiny";

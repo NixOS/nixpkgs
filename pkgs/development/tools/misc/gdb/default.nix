@@ -2,7 +2,7 @@
 , target ? null }:
 
 let
-    basename = "gdb-7.0.1";
+    basename = "gdb-7.1";
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (target != null)
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.bz2";
-    sha256 = "06rw3qqilq5dpc0y8d9vny6vizl20bvlbl0vwx4nbpis0p83y32n";
+    sha256 = "0ljkv3xkpqg4x38mrmzx4b7h1bkpfy41vmi5q8nnakhajzbjfb0l";
   };
 
   # TODO: Add optional support for Python scripting.

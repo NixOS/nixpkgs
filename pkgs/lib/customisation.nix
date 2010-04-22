@@ -31,7 +31,7 @@ rec {
   overrideDerivation = drv: f:
     let
       # Filter out special attributes.
-      attrs = removeAttrs drv ["meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type"];
+      attrs = removeAttrs drv ["meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type" "override" "deepOverride" "origArgs"];
       newDrv = derivation (attrs // (f drv));
     in newDrv //
       { meta = if drv ? meta then drv.meta else {};

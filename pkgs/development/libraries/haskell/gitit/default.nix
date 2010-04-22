@@ -1,17 +1,23 @@
-{cabal, HAppSServer, HStringTemplate, HTTP, SHA, cgi, datetime,
- filestore, highlightingKate, mtl, network, pandoc, parsec,
- recaptcha, utf8String, xhtml, zlib}:
+{cabal, happstackServer, happstackUtil, HStringTemplate, HTTP,
+ SHA, cgi, datetime,
+ filestore, highlightingKate, safe, mtl, network, pandoc, parsec,
+ recaptcha, utf8String, xhtml, zlib, ConfigFile, url,
+ cautiousFile, feed}:
 
 cabal.mkDerivation (self : {
   pname = "gitit";
-  version = "0.5.3";
-  sha256 = "d8e1c319e52edc6f2e92d1d22b8995f38b31f6aa0b6649aa73877e889ff45851";
-  propagatedBuildInputs =
-    [HAppSServer HStringTemplate HTTP SHA cgi datetime filestore
-     highlightingKate mtl network pandoc parsec recaptcha utf8String
-     xhtml zlib];
+  version = "0.7.3.5";
+  sha256 = "50cf6b853d439904e54884660eba6ffdc31b938e077fd0d9457fba972d4bde9f";
+  propagatedBuildInputs = [
+    HStringTemplate happstackServer happstackUtil HTTP SHA cgi datetime
+    filestore highlightingKate safe
+    mtl network pandoc parsec recaptcha utf8String xhtml zlib ConfigFile
+    url cautiousFile feed
+  ];
   meta = {
     description = "Wiki using HAppS, git or darcs, and pandoc";
+    license = "GPL";
+    maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })  
 

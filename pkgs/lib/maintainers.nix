@@ -14,5 +14,6 @@
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   simons = "Peter Simons <simons@cryp.to>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
+  urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viriketo@gmail.com>";
 }

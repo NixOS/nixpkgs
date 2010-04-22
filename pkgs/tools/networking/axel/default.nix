@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "axel-1.0b";
+  name = "axel-2.4";
   src = fetchurl {
-    url = http://wilmer.gaast.net/downloads/axel-1.0b.tar.gz;
-    sha256 = "1m3s3nviqi6n6iy7nzrdp31zn8pp6g923clsxf6m7yi1jfa1bifa";
+    url = https://alioth.debian.org/frs/download.php/3016/axel-2.4.tar.bz2;
+    sha256 = "ebc7d40e989c680d2afa632a17e5208101608924cf446da20814a6f3c3338612";
   };
 
   meta = {

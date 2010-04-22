@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
 
-  name = "apache-tomcat-6.0.20";
+  name = "apache-tomcat-6.0.26";
 
   builder = ./builder-6.0.sh;
 
   src = fetchurl {
-    url = http://apache.mirrors.webazilla.nl/tomcat/tomcat-6/v6.0.20/bin/apache-tomcat-6.0.20.tar.gz;
-    sha256 = "0vh48rvbynawivqm3hs7453527g8qns9kcj7vmihjpf21mrc2hx4";
+    url = http://apache.proserve.nl/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz;
+    sha256 = "0rxaz7wkw6xas9f2jslb6kp1prllhpqmq7c3h0ig19j146mrjbls";
   };
 
   inherit jdk;

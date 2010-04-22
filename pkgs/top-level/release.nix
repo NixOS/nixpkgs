@@ -1,3 +1,12 @@
+/*
+  This file will be evaluated by hydra with a call like this:
+  hydra_eval_jobs --gc-roots-dir \
+    /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
+    system i686-linux --argstr system x86_64-linux --arg \
+    nixpkgs "{outPath = ./}" .... release.nix
+    
+  Hydra can be installed with "nix-env -i hydra".
+*/
 with (import ./release-lib.nix);
 
 {
@@ -16,7 +25,6 @@ with (import ./release-lib.nix);
   aterm25 = all;
   aterm28 = all;
   audacious = linux;
-  audacious_plugins = linux;
   autoconf = all;
   automake110x = all;
   automake111x = all;
@@ -102,7 +110,7 @@ with (import ./release-lib.nix);
   ghostscriptX = linux;
   gimp = linux;
   git = linux;
-  #gitFull = linux;
+  gitFull = linux;
   glibc = linux;
   glibcLocales = linux;
   glxinfo = linux;
@@ -158,13 +166,9 @@ with (import ./release-lib.nix);
   jfsrec = linux;
   jnettop = linux;
   jwhois = linux;
-  k3b = linux;
   kbd = linux;
-  kcachegrind = linux;
   keen4 = ["i686-linux"];
-  kile = linux;
   klibc = linux;
-  konversation = linux;
   ktorrent = linux;
   kvm = linux;
   qemu = linux;
@@ -177,7 +181,6 @@ with (import ./release-lib.nix);
   libtool_2 = all;
   libxml2 = all;
   libxslt = all;
-  linuxwacom = linux;
   lout = linux;
   lsh = linux;
   lsof = linux;
@@ -425,43 +428,9 @@ with (import ./release-lib.nix);
   kde3 = {
     kdebase = linux;
     kdelibs = linux;
-  };
-
-  kde43 = {
-    kdelibs = linux;
-    kdelibs_experimental = linux;
-    kdebase_workspace = linux;
-    kdebase = linux;
-    kdebase_runtime = linux;
-    oxygen_icons = linux;
-    kdepimlibs = linux;
-    kdeadmin = linux;
-    kdeartwork = linux;
-    kdeaccessibility = linux;
-    kdeedu = linux;
-    kdegraphics = linux;
-    kdemultimedia = linux;
-    kdenetwork = linux;
-    kdepim = linux;
-    kdepim_runtime = linux;
-    kdeplasma_addons = linux;
-    kdegames = linux;
-    kdetoys = linux;
-    kdeutils = linux;
-    kdesdk = linux;
-    kdewebdev = linux;
-    krusader = linux;
-    kmplayer = linux;
-    ktorrent = linux;
-    koffice = linux;
-    konversation = linux;
-    kdesvn = linux;
-    amarok = linux;
-    l10n.ca = linux;
-    l10n.de = linux;
-    l10n.fr = linux;
-    l10n.nl = linux;
-    l10n.ru = linux;
+    k3b = linux;
+    kcachegrind = linux;
+    kile = linux;
   };
 
   kde44 = {

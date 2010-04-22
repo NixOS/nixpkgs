@@ -5,6 +5,8 @@ let
   /* Basic list of packages to cross-build */
   basicHostDrv = {
     bison.hostDrv = nativePlatforms;
+    busybox.hostDrv = nativePlatforms;
+    dropbear.hostDrv = nativePlatforms;
     tightvnc.hostDrv = nativePlatforms;
     #openoffice.hostDrv = nativePlatforms;
     wxGTK.hostDrv = nativePlatforms;
@@ -78,20 +80,21 @@ let
     arch = "mips";
     float = "soft";
     withTLS = true;
-    libc = "glibc";
+    libc = "uclibc";
     platform = {
       name = "malta";
+      kernelMajor = "2.4";
       kernelBaseConfig = "malta_defconfig";
-      kernelHeadersBaseConfig = "malta_defconfig";
+      kernelHeadersBaseConfig = "defconfig-malta";
       uboot = null;
       kernelArch = "mips";
       kernelAutoModules = false;
-      kernelTarget = "vmlinux.bin";
+      kernelTarget = "vmlinux";
     };
     openssl.system = "linux-generic32";
   };
 in {
-  crossMipselLinux = mapTestOnCross crossSystem basic;
+  crossMipselLinux24 = mapTestOnCross crossSystem basic;
 }) // (
 
 /* Test some cross builds to the ultrasparc */
@@ -102,10 +105,10 @@ let
     arch = "sparc64";
     float = "hard";
     withTLS = true;
-    cpu = "ultrasparc";
     libc = "glibc";
     platform = {
         name = "ultrasparc";
+        kernelMajor = "2.6";
         kernelHeadersBaseConfig = "sparc64_defconfig";
         kernelBaseConfig = "sparc64_defconfig";
         kernelArch = "sparc";
@@ -114,6 +117,7 @@ let
         uboot = null;
     };
     openssl.system = "linux64-sparcv9";
+    gcc.cpu = "ultrasparc";
   };
 in {
   crossUltraSparcLinux = mapTestOnCross crossSystem basic;

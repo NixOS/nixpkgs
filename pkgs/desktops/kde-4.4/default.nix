@@ -23,8 +23,7 @@ pkgs.recurseIntoAttrs (rec {
   
   soprano = import ./support/soprano {
     inherit (pkgs) stdenv fetchurl lib cmake;
-    inherit (pkgs) qt4 cluceneCore;
-    redland = pkgs.redland_1_0_8;
+    inherit (pkgs) qt4 cluceneCore redland libiodbc;
   };
   
   qimageblitz = import ./support/qimageblitz {
@@ -34,14 +33,15 @@ pkgs.recurseIntoAttrs (rec {
   qca2 = import ./support/qca2 {
     inherit (pkgs) stdenv fetchurl lib which qt4;
   };
+
+  qca2_ossl = import ./support/qca2/ossl.nix {
+    inherit (pkgs) stdenv fetchurl lib qt4 openssl;
+    inherit qca2;
+  };
   
   akonadi = import ./support/akonadi {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 shared_mime_info libxslt boost mysql;
     inherit automoc4 soprano;
-  };
-  
-  decibel = import ./support/decibel {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 tapioca_qt telepathy_qt;
   };
   
   eigen = import ./support/eigen {
@@ -145,7 +145,7 @@ pkgs.recurseIntoAttrs (rec {
   
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
-    inherit (pkgs) libidn libvncserver tapioca_qt libmsn giflib gpgme boost libv4l;
+    inherit (pkgs) libidn libvncserver libmsn giflib gpgme boost libv4l;
     inherit (pkgs.xlibs) libXi libXtst libXdamage libXxf86vm;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qca2 soprano qimageblitz strigi;
@@ -234,6 +234,12 @@ pkgs.recurseIntoAttrs (rec {
   kdesvn = import ./extragear/kdesvn {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
+    inherit automoc4 phonon;
+  };
+
+  kdiff3 = import ./extragear/kdiff3 {
+    inherit (pkgs) stdenv fetchurl cmake qt4 gettext perl;
+    inherit kdelibs kdebase;
     inherit automoc4 phonon;
   };
 
