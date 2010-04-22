@@ -5476,6 +5476,14 @@ let
     inherit fetchurl stdenv erlang spidermonkey icu getopt
       curl;
   };
+  
+  felix = import ../servers/felix {
+    inherit stdenv fetchurl;
+  };
+  
+  felix_remoteshell = import ../servers/felix/remoteshell.nix {
+    inherit stdenv fetchurl;
+  };
 
   fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
     inherit fetchurl stdenv;
