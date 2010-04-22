@@ -79,7 +79,7 @@ let
       mkdir -m 0755 -p /var/run/console # for pam_console
 
       touch /var/run/utmp # must exist
-      chgrp ${config.ids.gids.utmp} /var/run/utmp
+      chgrp ${toString config.ids.gids.utmp} /var/run/utmp
       chmod 664 /var/run/utmp
 
       mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
