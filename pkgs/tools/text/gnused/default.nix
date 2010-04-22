@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = mirror://gnu/sed/sed-4.2.1.tar.gz;
-    md5 = "0q1hzjvr6pzhaagidg7pj76k1fzz5nl15np7p72w9zcpw0f58ww7";
+    sha256 = "0q1hzjvr6pzhaagidg7pj76k1fzz5nl15np7p72w9zcpw0f58ww7";
   };
 
   meta = {
