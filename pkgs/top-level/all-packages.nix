@@ -9199,12 +9199,6 @@ let
     inherit stdenv fetchurl cups zlib;
   };
 
-  synaptics = import ../misc/synaptics {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXi libXext pixman xf86inputevdev;
-    inherit (xorg) xorgserver;
-  };
-
   tetex = import ../misc/tex/tetex {
     inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
   };
