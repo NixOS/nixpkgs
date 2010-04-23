@@ -2,13 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnutar-1.23";
-  
+
   src = fetchurl {
     url = "mirror://gnu/tar/tar-1.23.tar.bz2";
     sha256 = "0dmyxsh0171m6nv8aw74dps1l4b1r7pkqkly9kcv3yv2vdr86cn9";
   };
-  
-  patches = [./implausible.patch];
 
   meta = {
     homepage = http://www.gnu.org/software/tar/;
@@ -30,5 +28,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
