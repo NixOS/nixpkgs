@@ -12,8 +12,9 @@
 , sw_vers ? null
 }:
 
-# I haven't spend much time on this derivation. So some of these settings may not apply to python-3.1
-# 
+# This derivation is mostly identical to the one that builds Python 2.x.
+# Some of these settings may not apply to the latest version. A general
+# cleanup might be worthwile.
 
 assert zlibSupport -> zlib != null;
 assert gdbmSupport -> gdbm != null;
@@ -47,7 +48,7 @@ let
 in
 
 stdenv.mkDerivation ( {
-  name = "python-${version}";
+  name = "python3-${version}";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
