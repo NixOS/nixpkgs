@@ -3832,6 +3832,10 @@ let
         '' # */
         ;
 
+  glpk = import ../development/libraries/glpk {
+    inherit fetchurl stdenv;
+  };
+
   gmime = import ../development/libraries/gmime {
     inherit fetchurl stdenv pkgconfig zlib glib;
   };

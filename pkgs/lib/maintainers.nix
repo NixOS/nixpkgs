@@ -7,6 +7,7 @@
   all = "Nix Committers <nix-commits@cs.uu.nl>";
   andres = "Andres Loeh <andres@cs.uu.nl>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
+  bjg = "Brian Gough <bjg@gnu.org>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
