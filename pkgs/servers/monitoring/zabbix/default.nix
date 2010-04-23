@@ -2,11 +2,11 @@
 
 let
 
-  version = "1.8.1";
+  version = "1.8.2";
   
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "0z4a5lbpgszc2vfg2hc30c1l3l1lbihinqx2sygxf9r5y9k7fj7g";
+    sha256 = "10gx47kckjrwl6ssq8ky896gbscwnqc6gxvhsbqcdhai8m2h07ds";
   };
 
   preConfigure =
