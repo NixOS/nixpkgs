@@ -100,6 +100,10 @@ let
                || result.system == "i686-freebsd"
                || result.system == "i686-openbsd"
                || result.system == "i386-sunos";
+        isx86_64 = result.system == "x86_64-linux"
+               || result.system == "x86_64-darwin"
+               || result.system == "x86_64-freebsd"
+               || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
                 || result.system == "x86_64-darwin";
 
