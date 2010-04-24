@@ -8678,7 +8678,7 @@ let
   };
 
   urbanterror = import ../games/urbanterror {
-    inherit fetchurl stdenv unzip SDL mesa curl openal;
+    inherit fetchurl stdenv unzip SDL mesa openal curl;
   };
 
   ut2004demo = import ../games/ut2004demo {

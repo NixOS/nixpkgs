@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, SDL, mesa, curl, openal }:
+{ stdenv, fetchurl, unzip, SDL, mesa, openal, curl }:
 stdenv.mkDerivation rec {
   name = "urbanterror-${version}";
   version = "4.1";
@@ -16,16 +16,15 @@ stdenv.mkDerivation rec {
     unzip $src1
     unzip $src2
   '';
-  # FIXME
-  #patchPhase = ''
-  #  cd ioUrbanTerrorClientSource
-  #  substituteInPlace code/client/snd_openal.c \
-  #                    --replace libopenal.so.0 ${openal}/lib/libopenal.so
-  #  substituteInPlace code/client/cl_curl.h \
-  #                    --replace libcurl.so.3 ${curl}/lib/libcurl.so
-  #  cd ..
-  #'';
-  buildInputs = [ unzip SDL mesa ];
+  configurePhase = ''
+    cd ioUrbanTerrorClientSource
+    echo "USE_OPENAL = 1" > Makefile.local
+    echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local
+    echo "USE_CURL = 1" >> Makefile.local
+    echo "USE_CURL_DLOPEN = 0" >> Makefile.local
+    cd ..
+  '';
+  buildInputs = [ unzip SDL mesa openal curl ];
   buildPhase = ''
     for d in ioUrbanTerrorClientSource ioUrbanTerrorServerSource
     do
@@ -44,17 +43,22 @@ stdenv.mkDerivation rec {
           "$destDir/ioUrTded"
     cp -rv UrbanTerror/q3ut4 "$destDir"
     cat << EOF > "$out/bin/urbanterror"
-#!/bin/sh
-cd "$destDir"
-exec ./ioUrbanTerror "\$@"
-EOF
+    #!/bin/sh
+    cd "$destDir"
+    exec ./ioUrbanTerror "\$@"
+    EOF
     chmod +x "$out/bin/urbanterror"
     cat << EOF > "$out/bin/urbanterror-ded"
-#!/bin/sh
-cd "$destDir"
-exec ./ioUrTded "\$@"
-EOF
+    #!/bin/sh
+    cd "$destDir"
+    exec ./ioUrTded "\$@"
+    EOF
     chmod +x "$out/bin/urbanterror-ded"
+  '';
+  postFixup = ''
+    p=$out/opt/urbanterror/ioUrbanTerror
+    cur_rpath=$(patchelf --print-rpath $p)
+    patchelf --set-rpath $cur_rpath:${mesa}/lib $p
   '';
   meta = {
     description = "A multiplayer tactical FPS on top of Quake 3 engine";
