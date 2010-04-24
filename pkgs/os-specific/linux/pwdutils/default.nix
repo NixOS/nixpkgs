@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, openssl, libnscd}:
+{ stdenv, fetchurl, pam, gnutls, libnscd }:
 
 stdenv.mkDerivation rec {
   name = "pwdutils-3.2.6";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pyawvv9x0hiachn1mb257s6hm92dh1ykczgp7ik8z6jl020z3n7";
   };
 
-  buildInputs = [pam openssl libnscd];
+  buildInputs = [ pam gnutls libnscd ];
 
   patchPhase =
     '' for i in src/tst-*
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configurePhase =
     '' ./configure --prefix="$out" --exec-prefix="$out/bin" \
                    --libdir="$out/lib" --disable-static     \
-                   --disable-ldap
+                   --disable-ldap --enable-gnutls
     '';
 
   # FIXME: The test suite seems to make assumptions that don't hold in Nix

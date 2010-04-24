@@ -6358,7 +6358,7 @@ let
   };
 
   pwdutils = import ../os-specific/linux/pwdutils {
-    inherit fetchurl stdenv pam openssl libnscd;
+    inherit fetchurl stdenv pam gnutls libnscd;
   };
 
   qemu_kvm = import ../os-specific/linux/qemu-kvm {
