@@ -8014,7 +8014,7 @@ let
   };
 
   sakura = import ../applications/misc/sakura {
-    inherit stdenv fetchurl cmake pkgconfig gettext;
+    inherit stdenv fetchurl cmake pkgconfig gettext perl;
     inherit (gtkLibs) gtk;
     inherit (gnome) vte;
     inherit (xlibs) pixman;
