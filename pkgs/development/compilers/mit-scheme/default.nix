@@ -33,6 +33,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ gnum4 ];
 
+  patches =
+    stdenv.lib.optional (stdenv.system == "i686-cygwin") ./ucontext-cygwin.patch;
+
   # XXX: The `check' target doesn't exist.
   doCheck = false;
 

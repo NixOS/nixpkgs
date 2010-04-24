@@ -1,0 +1,13 @@
+Make `ucontext_t' definition visible on Cygwin.  See
+<http://thread.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
+
+--- mit-scheme-9.0.1/src/microcode/uxtrap.h	2010-02-09 01:09:53.000000000 +0100
++++ mit-scheme-9.0.1/src/microcode/uxtrap.h	2010-04-24 17:55:01.000000000 +0200
+@@ -27,6 +27,7 @@ USA.
+ #define SCM_UXTRAP_H
+ 
+ #include "os.h"
++#include <ucontext.h>
+ 
+ /* Machine/OS-dependent section (long) */
+ 
