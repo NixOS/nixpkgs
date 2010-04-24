@@ -52,6 +52,9 @@ stdenv.mkDerivation {
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.all;
+
+    # Build fails on Cygwin and Darwin:
+    # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
   };
 }
