@@ -19,7 +19,8 @@ stdenv.mkDerivation {
     cd generator
     qmake
     make
-    ./generator
+    # Set QTDIR, see http://code.google.com/p/qtscriptgenerator/issues/detail?id=38
+    QTDIR=${qt4} ./generator
     cd ../qtbindings
     qmake
     make
