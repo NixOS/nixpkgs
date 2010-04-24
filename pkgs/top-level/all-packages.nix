@@ -7029,6 +7029,13 @@ let
     wxGTK = wxGTK26;
   };
 
+  conkeror = xulrunnerWrapper {
+    launcher = "conkeror";
+    application = import ../applications/networking/browsers/conkeror {
+      inherit stdenv fetchurl;
+    };
+  };
+
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
     imagemagick=imagemagick;
