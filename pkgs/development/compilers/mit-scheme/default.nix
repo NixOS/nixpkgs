@@ -1,16 +1,37 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, gnum4 }:
 
-let version = "9.0.1"; in
+let
+  version = "9.0.1";
+  bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
+in
 stdenv.mkDerivation {
   name = "mit-scheme-${version}";
 
-  src = fetchurl {
-    url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
-    sha256 = "1g2mifrx0bvag0hlrbk81rkrlm1pbn688zw8b9d2i0sl5g2p1ril";
-  };
+  # MIT/GNU Scheme is not bootstrappable, so it's recommended to compile from
+  # the platform-specific tarballs, which contain pre-built binaries.  It
+  # leads to more efficient code than when building the tarball that contains
+  # generated C code instead of those binaries.
+  src =
+    if stdenv.isi686
+    then fetchurl {
+      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
+      sha256 = "0cfj3bawjdnpa7cbqh2f23hfpjpmryypmzkhndvdbi79a65fl0n2";
+    } else if stdenv.isx86_64
+    then fetchurl {
+      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
+      sha256 = "0p188d7n0iqdgvra6qv5apvcsv0z2p97ry7xz5216zkc364i6mmr";
+    } else fetchurl {
+      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
+      sha256 = "1g2mifrx0bvag0hlrbk81rkrlm1pbn688zw8b9d2i0sl5g2p1ril";
+    };
 
   preConfigure = "cd src";
-  buildPhase = "./etc/make-liarc.sh --prefix=$out";
+  buildPhase =
+    if bootstrapFromC
+    then "./etc/make-liarc.sh --prefix=$out"
+    else "make compile-microcode";
+
+  buildInputs = [ gnum4 ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;
@@ -31,6 +52,6 @@ stdenv.mkDerivation {
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.all;
   };
 }

@@ -2379,7 +2379,7 @@ let
   };
 
   mitscheme = import ../development/compilers/mit-scheme {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gnum4;
   };
 
   mono = import ../development/compilers/mono {
