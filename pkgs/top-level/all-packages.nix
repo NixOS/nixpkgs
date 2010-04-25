@@ -2257,13 +2257,13 @@ let
     };
   };
 
-  haskellPackages_ghc6103 = recurseIntoAttrs (import ./haskell-packages.nix {
+  haskellPackages_ghc6103 = import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.10.3.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
     };
-  });
+  };
 
   haskellPackages_ghc6104 = recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
@@ -2282,14 +2282,25 @@ let
     };
   });
 
-  haskellPackages_ghcHEAD = import ./haskell-packages.nix {
+  haskellPackages_ghc6122 = lowPrio (import ./haskell-packages.nix {
+    inherit pkgs;
+    ghc = import ../development/compilers/ghc/6.12.2.nix {
+      inherit fetchurl stdenv perl ncurses gmp;
+      ghc = ghc6101Binary;
+    };
+  });
+
+  # currently not pointing to the actual HEAD, so disabled
+  /*
+  haskellPackages_ghcHEAD = lowPrio (import ./haskell-packages.nix {
     inherit pkgs;
     ghc = import ../development/compilers/ghc/6.11.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       inherit (haskellPackages) happy alex; # hope these aren't required for the final version
       ghc = ghc6101Binary;
     };
-  };
+  });
+  */
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;

@@ -418,11 +418,18 @@ with (import ./release-lib.nix);
     leksah = linux;
     lhs2tex = ghcSupported;
     haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
+    haskellPlatform2010100 = linux;
     xmonad = linux;
   };
 
   haskellPackages_ghc6121 = {
     ghc = ghcSupported;
+    haskellPlatform2010100 = linux;
+  };
+
+  haskellPackages_ghc6122 = {
+    ghc = ghcSupported;
+    haskellPlatform2010100 = linux;
   };
 
   kde3 = {
