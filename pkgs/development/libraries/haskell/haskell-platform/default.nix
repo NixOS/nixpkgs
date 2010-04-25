@@ -16,6 +16,7 @@ cabal.mkDerivation (self : {
   ];
   meta = {
     description = "Haskell Platform meta package";
+    maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })  
 
