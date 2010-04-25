@@ -79,6 +79,7 @@ let
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
       ln -s ${config.system.build.upstart} $out/upstart
+      ln -s ${config.hardware.firmware} $out/firmware
 
       echo "$kernelParams" > $out/kernel-params
       echo "$configurationName" > $out/configuration-name

@@ -134,7 +134,7 @@ in
     
     hardware.firmware = mkOption {
       default = [];
-      example = ["/root/my-firmware"];
+      example = [/root/my-firmware];
       merge = mergeListOption; 
       description = ''
         List of directories containing firmware files.  Such files
@@ -142,6 +142,11 @@ in
         (i.e., when it has detected specific hardware that requires
         firmware to function).
       '';
+      apply = list: pkgs.buildEnv {
+        name = "firmware";
+        paths = list;
+        pathsToLink = [ "/" ];
+      };
     };
     
   };
@@ -157,7 +162,8 @@ in
 
     # As a fallback, allow firmware to be placed in
     # /root/test-firmware (primarily for testing).
-    hardware.firmware = [ "/root/test-firmware" ];
+    hardware.firmware = pkgs.lib.optional
+      (builtins.pathExists /root/test-firmware) /root/test-firmware;
 
     jobs.udev =
       { startOn = "startup";
