@@ -15,11 +15,18 @@ let
   additionalBackends = pkgs.stdenv.mkDerivation {
     name = "additional-cups-backends";
     builder = pkgs.writeScript "additional-backends-builder.sh" ''
-      ${pkgs.coreutils}/bin/mkdir -p $out/lib/cups/backend
-      ${pkgs.coreutils}/bin/ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+      PATH=${pkgs.coreutils}/bin
+      mkdir -p $out
+      if [[ ! -e ${pkgs.samba}/lib/cups/backend/smb ]]; then
+        mkdir -p $out/lib/cups/backend
+        ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+      fi
 
       # Provide support for printing via HTTPS.
-      ${pkgs.coreutils}/bin/ln -s ipp $out/lib/cups/backend/https
+      if [[ ! -e ${pkgs.cups}/lib/cups/backend/https ]]; then
+        mkdir -p $out/lib/cups/backend
+        ln -s ipp $out/lib/cups/backend/https
+      fi
     '';
   };
 
@@ -30,11 +37,9 @@ let
   # cupsd.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
-    paths =  cfg.drivers;
+    paths = cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" ];
-    postBuild =  ''
-      ${cfg.bindirCmds}
-    '';
+    postBuild = cfg.bindirCmds;
   };
 
 in
@@ -44,7 +49,6 @@ in
   ###### interface
 
   options = {
-  
     services.printing = {
 
       enable = mkOption {
@@ -82,11 +86,18 @@ in
         '';
       };
 
+      tempDir = mkOption {
+        default = "/tmp";
+        example = "/tmp/cups";
+        description = ''
+          CUPSd temporary directory.
+        '';
+      };
     };
 
   };
 
-    
+
   ###### implementation
 
   config = mkIf config.services.printing.enable {
@@ -116,6 +127,7 @@ in
             mkdir -m 0755 -p ${logDir}
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
+            mkdir -m 0755 -p ${cfg.tempDir}
 
             # Make USB printers show up.
             ${modprobe}/sbin/modprobe usblp || true
@@ -125,7 +137,7 @@ in
       };
 
     services.printing.drivers = [ pkgs.cups pkgs.ghostscript additionalBackends ];
-    services.printing.cupsdConf = 
+    services.printing.cupsdConf =
       ''
         LogLevel info
 
@@ -146,7 +158,7 @@ in
         ErrorLog ${logDir}/error_log
         PageLog ${logDir}/page_log
 
-        TempDir /tmp
+        TempDir ${cfg.tempDir}
 
         Browsing On
         BrowseOrder allow,deny
@@ -195,5 +207,4 @@ in
       '';
 
   };
-  
 }
