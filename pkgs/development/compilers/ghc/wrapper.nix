@@ -45,5 +45,6 @@ stdenv.mkDerivation {
   GHCGetPackages = ./ghc-get-packages.sh;
 
   inherit ghc;
+  inherit (ghc) meta;
   ghcVersion = ghc.version;
 }
