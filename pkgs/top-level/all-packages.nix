@@ -1906,6 +1906,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  rush = import ../shells/rush {
+    inherit fetchurl stdenv;
+  };
+
   zsh = import ../shells/zsh {
     inherit fetchurl stdenv ncurses coreutils;
   };
@@ -3915,12 +3919,20 @@ let
     inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2 glib;
   };
 
+  gsasl = import ../development/libraries/gsasl {
+    inherit stdenv fetchurl;
+  };
+
   gsl = import ../development/libraries/gsl {
     inherit fetchurl stdenv;
   };
 
   gsoap = import ../development/libraries/gsoap {
     inherit fetchurl stdenv m4 bison flex openssl zlib;
+  };
+
+  gss = import ../development/libraries/gss {
+    inherit stdenv fetchurl;
   };
 
   gtkimageview = import ../development/libraries/gtkimageview {
