@@ -419,6 +419,7 @@ with (import ./release-lib.nix);
     lhs2tex = ghcSupported;
     haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
     xmonad = linux;
+    gitit = linux;
   };
 
   haskellPackages_ghc6121 = {
