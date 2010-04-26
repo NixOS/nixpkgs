@@ -5629,9 +5629,17 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
+  radius = import ../servers/radius {
+    inherit fetchurl stdenv m4 groff readline;
+  };
+
   samba = makeOverridable (import ../servers/samba) {
     inherit stdenv fetchurl readline openldap pam kerberos popt iniparser
   libunwind acl fam;
+  };
+
+  shishi = import ../servers/shishi {
+    inherit fetchurl stdenv libtasn1 libgcrypt gnutls;
   };
 
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
