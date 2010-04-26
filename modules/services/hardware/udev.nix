@@ -42,7 +42,7 @@ let
 
       # Set the firmware search path so that the firmware.sh helper
       # called by 50-firmware.rules works properly.
-      echo 'ENV{FIRMWARE_DIRS}="${toString config.hardware.firmware}"' >> $out/00-path.rules
+      echo 'ENV{FIRMWARE_DIRS}="/root/test-firmware ${toString config.hardware.firmware}"' >> $out/00-path.rules
       
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
