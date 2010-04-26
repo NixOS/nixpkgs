@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam gnutls libnscd ];
 
-  patchPhase =
+  patches = [ ./sys-stat-h.patch ];
+
+  postPatch =
     '' for i in src/tst-*
        do
          sed -i "$i" -e's|/bin/bash|/bin/sh|g'
@@ -38,6 +40,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv2";
 
+    maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,0 +1,37 @@
+Fix builds with current glibc git, which appears to be stricter
+about <sys/stat.h>.
+
+--- pwdutils-3.2.6/src/useradd.c~	2008-10-16 13:46:07.000000000 +0200
++++ pwdutils-3.2.6/src/useradd.c	2010-04-26 11:24:43.000000000 +0200
+@@ -18,6 +18,7 @@
+ #include "config.h"
+ #endif
+ 
++#include <sys/stat.h>
+ #include <time.h>
+ #include <utmp.h>
+ #include <fcntl.h>
+
+--- pwdutils-3.2.6/src/userdel.c~	2006-11-29 14:20:39.000000000 +0100
++++ pwdutils-3.2.6/src/userdel.c	2010-04-26 11:26:08.000000000 +0200
+@@ -18,6 +18,7 @@
+ #include "config.h"
+ #endif
+ 
++#include <sys/stat.h>
+ #include <time.h>
+ #include <utmp.h>
+ #include <fcntl.h>
+
+diff -ubB --show-c-function pwdutils-3.2.6/src/usermod.c\~ pwdutils-3.2.6/src/usermod.c
+--- pwdutils-3.2.6/src/usermod.c~	2006-11-29 14:20:41.000000000 +0100
++++ pwdutils-3.2.6/src/usermod.c	2010-04-26 11:27:41.000000000 +0200
+@@ -18,6 +18,7 @@
+ #include "config.h"
+ #endif
+ 
++#include <sys/stat.h>
+ #include <time.h>
+ #include <utmp.h>
+ #include <fcntl.h>
+
