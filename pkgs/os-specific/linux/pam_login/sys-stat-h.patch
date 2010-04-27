@@ -1,0 +1,12 @@
+Include the needed <sys/stat.h> since recent glibc is stricter about that.
+
+--- pam_login-3.35/src/login.c~	2007-05-04 14:07:49.000000000 +0200
++++ pam_login-3.35/src/login.c	2010-04-27 11:38:13.000000000 +0200
+@@ -47,6 +47,7 @@
+ #include <signal.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <sys/stat.h>
+ #include <sys/ioctl.h>
+ #include <sys/param.h>
+ #include <sys/resource.h>
