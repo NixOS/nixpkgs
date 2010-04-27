@@ -7,15 +7,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssl-0.9.8l";
+  name = "openssl-1.0.0";
   
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
-    sha1 = "d3fb6ec89532ab40646b65af179bb1770f7ca28f";
+    sha1 = "3f800ea9fa3da1c0f576d689be7dca3d55a4cb62";
   };
 
-  patches = [ ./darwin-arch.patch ];
-  
   buildNativeInputs = [ perl ];
 
   configureScript = "./config";
