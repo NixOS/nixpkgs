@@ -1,4 +1,4 @@
-{pkgs, ghc}:
+{pkgs, ghc, enableLibraryProfiling ? false}:
 
 let ghcReal = pkgs.lowPrio ghc; in
 
@@ -21,7 +21,7 @@ rec {
 
   cabal = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit (pkgs) stdenv fetchurl lib;
-    inherit ghc;
+    inherit ghc enableLibraryProfiling;
   };
 
 

@@ -2247,6 +2247,7 @@ let
 
   haskellPackages_ghc6101 = import ./haskell-packages.nix {
     inherit pkgs;
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
     ghc = import ../development/compilers/ghc/6.10.1.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
@@ -2255,6 +2256,7 @@ let
 
   haskellPackages_ghc6102 = import ./haskell-packages.nix {
     inherit pkgs;
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
     ghc = import ../development/compilers/ghc/6.10.2.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
@@ -2263,6 +2265,7 @@ let
 
   haskellPackages_ghc6103 = import ./haskell-packages.nix {
     inherit pkgs;
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
     ghc = import ../development/compilers/ghc/6.10.3.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
@@ -2271,6 +2274,7 @@ let
 
   haskellPackages_ghc6104 = recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
     ghc = import ../development/compilers/ghc/6.10.4.nix {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
@@ -2280,6 +2284,7 @@ let
   # make this ghc default when it's supported by the Haskell Platform
   haskellPackages_ghc6121 = lowPrio (import ./haskell-packages.nix {
     inherit pkgs;
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
     ghc = import ../development/compilers/ghc/6.12.1.nix {
       inherit fetchurl stdenv perl ncurses gmp;
       ghc = ghc6101Binary;
@@ -2288,6 +2293,7 @@ let
 
   haskellPackages_ghc6122 = lowPrio (import ./haskell-packages.nix {
     inherit pkgs;
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
     ghc = import ../development/compilers/ghc/6.12.2.nix {
       inherit fetchurl stdenv perl ncurses gmp;
       ghc = ghc6101Binary;

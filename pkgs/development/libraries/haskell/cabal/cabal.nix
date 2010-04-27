@@ -17,7 +17,10 @@
             # all packages with haskell- to avoid name clashes for libraries;
             # if that is not desired (for applications), name can be set to
             # fname.
-            name = "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}";
+            name = if enableLibraryProfiling then
+                     "haskell-${self.pname}-ghc${ghc.ghc.version}-profiling-${self.version}"
+                   else
+                     "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}";
 
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
