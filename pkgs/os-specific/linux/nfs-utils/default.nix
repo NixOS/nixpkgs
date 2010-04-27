@@ -1,18 +1,29 @@
-{ fetchurl, stdenv, tcpWrapper, libuuid }:
+{ fetchurl, stdenv, tcpWrapper, utillinuxng, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-1.2.0";
+  name = "nfs-utils-1.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "1ld1f6wcm53pza3zy768y1y8xa01zq3bnjyy1j3z62yd7a5lcffb";
+    sha256 = "07nhr7ds5ic4x81l9qphrlmi4ifxl28xzr1zpzvg334ncrv2fizx";
   };
 
   # Needs `libblkid' and `libcomerr' from `e2fsprogs' or `util-linux-ng'.
-  buildInputs = [ tcpWrapper libuuid ];
+  buildInputs = [ tcpWrapper utillinuxng libcap ];
 
-  # FIXME: Currently too lazy to build the dependencies needed for NFSv4.
-  configureFlags = "--disable-gss --disable-nfsv4 --with-statedir=/var/lib/nfs";
+  # FIXME: Add the dependencies needed for NFSv4 and TI-RPC.
+  configureFlags =
+    [ "--disable-gss" "--disable-nfsv4" "--disable-nfsv41" "--disable-tirpc"
+      "--with-statedir=/var/lib/nfs"
+    ];
+
+  patchPhase =
+    '' for i in "tests/"*.sh
+       do
+         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         chmod +x "$i"
+       done
+    '';
 
   preBuild =
     ''
@@ -20,7 +31,9 @@ stdenv.mkDerivation rec {
       installFlags="statedir=$TMPDIR" # hack to make `make install' work
     '';
 
-  meta = { 
+  doCheck = true;
+
+  meta = {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -31,5 +44,8 @@ stdenv.mkDerivation rec {
 
     homepage = http://nfs.sourceforge.net/;
     license = "GPLv2";
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

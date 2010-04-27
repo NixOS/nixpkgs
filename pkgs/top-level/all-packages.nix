@@ -5731,7 +5731,7 @@ let
   };
 
   nfsUtils = import ../os-specific/linux/nfs-utils {
-    inherit fetchurl stdenv tcpWrapper libuuid;
+    inherit fetchurl stdenv tcpWrapper utillinuxng libcap;
   };
 
   acpi = import ../os-specific/linux/acpi {
