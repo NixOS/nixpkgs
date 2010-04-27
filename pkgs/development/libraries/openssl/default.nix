@@ -6,7 +6,7 @@ let
     stdenv.cross;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "openssl-1.0.0";
   
   src = fetchurl {
@@ -37,3 +37,9 @@ stdenv.mkDerivation rec {
     description = "A cryptographic library that implements the SSL and TLS protocols";
   };
 }
+//
+(if stdenv.isDarwin then {
+  patches = ./darwin-arch.patch;
+}
+else { })
+)

@@ -1,6 +1,4 @@
-This patch was originally added by rob.
-urkud have ported this patch to openssl-1.0.0 without diving into details (what
-does it fix etc.)
+The patch is specific to nix: MacOS gcc supports -arch.
 --- a/Configure
 +++ b/Configure
 @@ -549,9 +549,9 @@ my %table=(
