@@ -261,7 +261,7 @@ rec {
   };
 
   hashedStorage = import ../development/libraries/haskell/hashed-storage {
-    inherit cabal mtl zlib mmap;
+    inherit cabal mtl zlib mmap binary dataenc;
   };
 
   haskeline = import ../development/libraries/haskell/haskeline {
@@ -940,6 +940,7 @@ rec {
 
   darcs = import ../applications/version-management/darcs/darcs-2.nix {
     inherit cabal html mtl parsec regexCompat haskeline hashedStorage;
+    zlib = zlib0520;
     inherit (pkgs) curl;
   };
 
