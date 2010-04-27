@@ -1,6 +1,6 @@
 # generic builder for Cabal packages
 
-attrs :
+{stdenv, fetchurl, lib, ghc, enableLibraryProfiling ? false, ...} :
 {
   mkDerivation =
     transform :
@@ -17,11 +17,11 @@ attrs :
             # all packages with haskell- to avoid name clashes for libraries;
             # if that is not desired (for applications), name can be set to
             # fname.
-            name = "haskell-${self.pname}-ghc${attrs.ghc.ghc.version}-${self.version}";
+            name = "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}";
 
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
-            src = attrs.fetchurl {
+            src = fetchurl {
               url = "http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz";
               inherit (self) sha256;
             };
@@ -29,7 +29,7 @@ attrs :
             # default buildInputs are just ghc, if more buildInputs are required
             # buildInputs can be extended by the client by using extraBuildInputs,
             # but often propagatedBuildInputs is preferable anyway
-            buildInputs = [attrs.ghc] ++ self.extraBuildInputs;
+            buildInputs = [ghc] ++ self.extraBuildInputs;
             extraBuildInputs = [];
 
             # we make sure that propagatedBuildInputs is defined, so that we don't
@@ -38,6 +38,10 @@ attrs :
 
             # library directories that have to be added to the Cabal files
             extraLibDirs = [];
+
+            libraryProfiling =
+              if enableLibraryProfiling then ["--enable-library-profiling"]
+                                        else ["--disable-library-profiling"];
 
             # compiles Setup and configures
             configurePhase = ''
@@ -55,7 +59,7 @@ attrs :
                 done
               done
 
-              ./Setup configure --verbose --prefix="$out" $extraLibDirs $configureFlags
+              ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
 
               eval "$postConfigure"
             '';
@@ -82,7 +86,7 @@ attrs :
 
               ensureDir $out/bin # necessary to get it added to PATH
 
-              local confDir=$out/lib/ghc-pkgs/ghc-${attrs.ghc.ghc.version}
+              local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
               local installedPkgConf=$confDir/${self.fname}.installedconf
               local pkgConf=$confDir/${self.fname}.conf
               ensureDir $confDir
@@ -100,7 +104,7 @@ attrs :
 
             # We inherit stdenv and ghc so that they can be used
             # in Cabal derivations.
-            inherit (attrs) stdenv ghc;
+            inherit stdenv ghc;
           };
-    in  attrs.stdenv.mkDerivation ((rec { f = dtransform f // transform f; }).f);
+    in  stdenv.mkDerivation ((rec { f = dtransform f // transform f; }).f);
 }
