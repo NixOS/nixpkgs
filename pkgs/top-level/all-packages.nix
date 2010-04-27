@@ -2180,8 +2180,8 @@ let
 
   # GHC binaries are around for bootstrapping purposes
 
-  #ghc = haskellPackages.ghc;
-
+  # If we'd want to reactivate the 6.6 and 6.8 series of ghc, we'd
+  # need to reenable an old binary such as this.
   /*
   ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
     inherit fetchurl stdenv ncurses gmp;
@@ -2201,8 +2201,11 @@ let
   # For several compiler versions, we export a large set of Haskell-related
   # packages.
 
+  # This should point to the current default version.
   haskellPackages = haskellPackages_ghc6104;
 
+  # Old versions of ghc that currently don't build because the binary
+  # is broken.
   /*
   haskellPackages_ghc642 = import ./haskell-packages.nix {
     inherit pkgs;
@@ -2245,62 +2248,46 @@ let
   });
   */
 
-  haskellPackages_ghc6101 = import ./haskell-packages.nix {
+  # Helper functions to abstract away from repetitive instantiations.
+  haskellPackagesFun610 = ghcPath : profDefault : import ./haskell-packages.nix {
     inherit pkgs;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
-    ghc = import ../development/compilers/ghc/6.10.1.nix {
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
+    ghc = import ghcPath {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
     };
   };
 
-  haskellPackages_ghc6102 = import ./haskell-packages.nix {
+  haskellPackagesFun612 = ghcPath : profDefault : import ./haskell-packages.nix {
     inherit pkgs;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
-    ghc = import ../development/compilers/ghc/6.10.2.nix {
-      inherit fetchurl stdenv perl ncurses gmp libedit;
-      ghc = ghc6101Binary;
-    };
-  };
-
-  haskellPackages_ghc6103 = import ./haskell-packages.nix {
-    inherit pkgs;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
-    ghc = import ../development/compilers/ghc/6.10.3.nix {
-      inherit fetchurl stdenv perl ncurses gmp libedit;
-      ghc = ghc6101Binary;
-    };
-  };
-
-  haskellPackages_ghc6104 = recurseIntoAttrs (import ./haskell-packages.nix {
-    inherit pkgs;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
-    ghc = import ../development/compilers/ghc/6.10.4.nix {
-      inherit fetchurl stdenv perl ncurses gmp libedit;
-      ghc = ghc6101Binary;
-    };
-  });
-
-  # make this ghc default when it's supported by the Haskell Platform
-  haskellPackages_ghc6121 = lowPrio (import ./haskell-packages.nix {
-    inherit pkgs;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
-    ghc = import ../development/compilers/ghc/6.12.1.nix {
+    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
+    ghc = import ghcPath {
       inherit fetchurl stdenv perl ncurses gmp;
       ghc = ghc6101Binary;
     };
-  });
+  };
 
-  haskellPackages_ghc6122 = lowPrio (import ./haskell-packages.nix {
-    inherit pkgs;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] false;
-    ghc = import ../development/compilers/ghc/6.12.2.nix {
-      inherit fetchurl stdenv perl ncurses gmp;
-      ghc = ghc6101Binary;
-    };
-  });
+  # Currently active GHC versions.
+  haskellPackages_ghc6101 =
+    haskellPackagesFun610 ../development/compilers/ghc/6.10.1.nix false;
 
-  # currently not pointing to the actual HEAD, so disabled
+  haskellPackages_ghc6102 =
+    haskellPackagesFun610 ../development/compilers/ghc/6.10.2.nix false;
+
+  haskellPackages_ghc6103 =
+    haskellPackagesFun610 ../development/compilers/ghc/6.10.3.nix false;
+
+  haskellPackages_ghc6104 = recurseIntoAttrs
+    (haskellPackagesFun610 ../development/compilers/ghc/6.10.4.nix false);
+
+  # We will soon switch to either ghc-6.12.1 or ghc-6.12.2 as default.
+  haskellPackages_ghc6121 = lowPrio
+    (haskellPackagesFun612 ../development/compilers/ghc/6.12.1.nix false);
+
+  haskellPackages_ghc6122 = lowPrio
+    (haskellPackagesFun612 ../development/compilers/ghc/6.12.2.nix false);
+
+  # Currently not pointing to the actual HEAD, therefore disabled
   /*
   haskellPackages_ghcHEAD = lowPrio (import ./haskell-packages.nix {
     inherit pkgs;

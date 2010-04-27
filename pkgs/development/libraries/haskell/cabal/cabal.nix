@@ -1,6 +1,6 @@
 # generic builder for Cabal packages
 
-{stdenv, fetchurl, lib, ghc, enableLibraryProfiling ? false, ...} :
+{stdenv, fetchurl, lib, ghc, enableLibraryProfiling ? false} :
 {
   mkDerivation =
     transform :
@@ -18,7 +18,7 @@
             # if that is not desired (for applications), name can be set to
             # fname.
             name = if enableLibraryProfiling then
-                     "haskell-${self.pname}-ghc${ghc.ghc.version}-profiling-${self.version}"
+                     "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling"
                    else
                      "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}";
 
