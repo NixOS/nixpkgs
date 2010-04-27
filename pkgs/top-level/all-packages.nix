@@ -4723,7 +4723,7 @@ let
   };
 
   neon028 = import ../development/libraries/neon/0.28.nix {
-    inherit fetchurl stdenv libxml2 zlib openssl;
+    inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
     compressionSupport = true;
     sslSupport = true;
   };
