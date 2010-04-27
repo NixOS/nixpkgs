@@ -19,11 +19,7 @@ stdenv.mkDerivation rec {
        done
     '';
 
-  configurePhase =
-    '' ./configure --prefix="$out" --exec-prefix="$out/bin" \
-                   --libdir="$out/lib" --disable-static     \
-                   --disable-ldap --enable-gnutls
-    '';
+  configureFlags = "--disable-ldap --enable-gnutls --exec-prefix=$(out)";
 
   # FIXME: The test suite seems to make assumptions that don't hold in Nix
   # chroots.
