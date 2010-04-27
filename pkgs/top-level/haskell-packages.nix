@@ -288,7 +288,7 @@ rec {
     inherit cabal haskellSrcExts;
   };
   
-  haskellPlatform2010100 = import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
+  haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
       haskellSrc html
       stm xhtml happy;
@@ -308,7 +308,7 @@ rec {
     regexPosix = regexPosix0941;
     haddock = haddock272;
     inherit (pkgs) fetchurl;
-  };
+  });
 
   haskellPlatform = import ../development/libraries/haskell/haskell-platform {
     inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
@@ -887,7 +887,7 @@ rec {
   };
 
   # does not compile with ghc-6.8.3
-  haddock210 = pkgs.stdenv.lib.lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
+  haddock210 = pkgs.lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
     inherit cabal;
   });
 
