@@ -18,13 +18,13 @@ stdenv.mkDerivation (rec {
 
   configureScript = "./config";
   
-  configureFlags = "shared";
+  configureFlags="--libdir=lib shared";
 
   crossAttrs = {
-    configurePhase = ''
+    preConfigure=''
       export cross=$crossSystem-
-      ./Configure --prefix=$out ${opensslCrossSystem} shared
     '';
+    configureFlags="--libdir=lib ${opensslCrossSystem} shared";
     buildPhase = ''
       make CC=$crossConfig-gcc \
         AR="$crossConfig-ar r" \
