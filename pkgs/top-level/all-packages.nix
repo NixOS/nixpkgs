@@ -4701,6 +4701,10 @@ let
     inherit fetchurl stdenv ilbc mediastreamer pkgconfig;
   };
 
+  mpc = import ../development/libraries/mpc {
+    inherit fetchurl stdenv gmp mpfr;
+  };
+
   mpich2 = import ../development/libraries/mpich2 {
     inherit fetchurl stdenv python perl;
   };
