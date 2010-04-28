@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
-    --disable-neon-version-check
   '';
 
   preBuild = ''
