@@ -55,5 +55,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.eclipse.org/;
     description = "A extensible multi-language software development environment";
+    longDescription = ''
+    '';
   };
 }
