@@ -1,0 +1,26 @@
+From <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41818>.  This fixes compilation
+of the sparc64-linux-gnu cross-compiler with shared libraries.
+
+--- trunk/Makefile.in	2010/01/07 19:21:46	155705
++++ trunk/Makefile.in	2010/01/07 19:53:50	155706
+@@ -259,7 +259,7 @@
+ # directories built for the target.
+ TARGET_CONFIGARGS = @target_configargs@ --with-target-subdir="$(TARGET_SUBDIR)"
+ # This is the list of variables to export in the environment when
+-# configuring subdirectories for the host system.
++# configuring subdirectories for the target system.
+ BASE_TARGET_EXPORTS = \
+ 	$(BASE_EXPORTS) \
+ 	AR="$(AR_FOR_TARGET)"; export AR; \
+@@ -281,7 +281,10 @@
+ 	STRIP="$(STRIP_FOR_TARGET)"; export STRIP; \
+ 	WINDRES="$(WINDRES_FOR_TARGET)"; export WINDRES; \
+ 	WINDMC="$(WINDMC_FOR_TARGET)"; export WINDMC; \
+-	$(RPATH_ENVVAR)=`echo "$(HOST_LIB_PATH)$(TARGET_LIB_PATH)$$$(RPATH_ENVVAR)" | sed 's,::*,:,g;s,^:*,,;s,:*$$,,'`; export $(RPATH_ENVVAR);
++@if gcc-bootstrap
++	$(RPATH_ENVVAR)=`echo "$(TARGET_LIB_PATH)$$$(RPATH_ENVVAR)" | sed 's,::*,:,g;s,^:*,,;s,:*$$,,'`; export $(RPATH_ENVVAR); \
++@endif gcc-bootstrap
++	$(RPATH_ENVVAR)=`echo "$(HOST_LIB_PATH)$$$(RPATH_ENVVAR)" | sed 's,::*,:,g;s,^:*,,;s,:*$$,,'`; export $(RPATH_ENVVAR);
+ 
+ RAW_CXX_TARGET_EXPORTS = \
+ 	$(BASE_TARGET_EXPORTS) \

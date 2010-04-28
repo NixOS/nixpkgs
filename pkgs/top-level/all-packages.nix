@@ -2059,6 +2059,13 @@ let
     profiledCompiler = true;
   }));
 
+  gcc45 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
+    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+      ppl cloogppl
+      gettext which noSysDirs;
+    profiledCompiler = true;
+  }));
+
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;
@@ -2113,6 +2120,20 @@ let
   gcj = gcj44;
 
   gcj44 = wrapGCC (gcc44_real.gcc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = true;
+    langC = false;
+    profiledCompiler = false;
+    inherit zip unzip zlib boehmgc gettext pkgconfig;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libart_lgpl;
+    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+      libXrandr xproto renderproto xextproto inputproto randrproto;
+  });
+
+  gcj45 = wrapGCC (gcc45.gcc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
