@@ -31,6 +31,36 @@ let
         Name of the kernel file to be passed to the bootloader.
       '';
     };
+
+    system.copySystemConfiguration = pkgs.lib.mkOption {
+      default = true;
+      description = ''
+        Unless set to false copies the nixos configuration file
+        <literal>$NIXOS_CONFIG</literal> defaulting to
+        <filename>/etc/nixos/configuration.nix</filename>
+        to the system store path.
+        See <option>extraSystemBuilderCmds</option>
+        if you want to do add more customized info
+        to your system storepath.
+      '';
+    };
+
+    system.extraSystemBuilderCmds = pkgs.lib.mkOption {
+      default = "";
+      merge = pkgs.lib.concatStringsSep "\n";
+      description = ''
+        This code will be added to the builder creating the system store path.
+        This use case copies your configuration file into the system derivation:
+        <command>
+        cp ${pkgs.lib.maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out
+        </command>
+        Of course you could add code saving a svn diff or svn revision number
+        of both nixos and nixpkgs repositories as well. Keep in mind that when
+        you build in chroots that you have do either copy sources to store or
+        add them to the chroot somehow.
+        You still should consider putting your configuration into a VCS.
+      '';
+    };
     
   };
 
@@ -95,6 +125,8 @@ let
       ensureDir $out/bin
       substituteAll ${./switch-to-configuration.sh} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
+
+      ${config.system.extraSystemBuilderCmds}
     '';
 
   
@@ -139,5 +171,9 @@ let
 in {
   require = [options];
 
+  system.extraSystemBuilderCmds =
+      pkgs.lib.optionalString
+          config.system.copySystemConfiguration
+          "cp ${pkgs.lib.maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
   system.build.toplevel = system;
 }
