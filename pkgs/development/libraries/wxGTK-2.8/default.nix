@@ -9,11 +9,11 @@ assert gtk.libpng != null;
 assert gtk.libpng.zlib != null;
 
 stdenv.mkDerivation {
-  name = "wxGTK-2.8.10";
+  name = "wxGTK-2.8.11";
 
   src = fetchurl {
-    url = mirror://sourceforge/wxwindows/wxGTK-2.8.10.tar.gz;
-    sha256 = "1hygkrwa71kzdbz029igkxsqyb14y6vsllqafjgm9b7v91nq49r8";
+    url = mirror://sourceforge/wxwindows/wxGTK-2.8.11.tar.gz;
+    sha256 = "149waiwwzw238avkhj8vmm1394nw45fa02b7cf1mqwc3jdd1pfz6";
   };
 
   buildInputs = [
