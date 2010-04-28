@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   # To overcome a gcc 4.4 warning:
   # "#ident is a deprecated GCC extension"
-  patchPhase = ''
+  postPatch = ''
     sed -i s/-Werror// configure
   '';
 
