@@ -1636,7 +1636,8 @@ let
   };
 
   sitecopy = import ../tools/networking/sitecopy {
-    inherit fetchurl stdenv neon openssl;
+    inherit fetchurl stdenv openssl;
+    neon = neon026;
   };
 
   privoxy = import ../tools/networking/privoxy {
@@ -1792,7 +1793,8 @@ let
   };
 
   wdfs = import ../tools/filesystems/wdfs {
-    inherit stdenv fetchurl neon fuse pkgconfig glib;
+    inherit stdenv fetchurl fuse pkgconfig glib;
+    neon = neon026;
   };
 
   wdiff = import ../tools/text/wdiff {
@@ -4714,7 +4716,7 @@ let
     unicode = (system != "i686-cygwin" && crossSystem == null);
   };
 
-  neon = neon026;
+  neon = neon029;
 
   neon026 = import ../development/libraries/neon/0.26.nix {
     inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
@@ -4723,6 +4725,12 @@ let
   };
 
   neon028 = import ../development/libraries/neon/0.28.nix {
+    inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
+    compressionSupport = true;
+    sslSupport = true;
+  };
+
+  neon029 = import ../development/libraries/neon/0.29.nix {
     inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
     compressionSupport = true;
     sslSupport = true;
@@ -7890,12 +7898,13 @@ let
   openoffice = import ../applications/office/openoffice {
     inherit fetchurl stdenv pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
-      curl libsndfile flex zip unzip libmspack getopt file neon cairo
+      curl libsndfile flex zip unzip libmspack getopt file cairo
       which icu jdk ant cups openssl bison boost gperf cppunit;
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
+    neon = neon026;
   };
 
   opera = import ../applications/networking/browsers/opera {
@@ -8130,7 +8139,7 @@ let
 
   subversion = makeOverridable (import ../applications/version-management/subversion/default.nix) {
     inherit (pkgsOverriden) fetchurl stdenv apr aprutil expat swig zlib jdk python perl sqlite;
-    neon = neon028;
+    neon = neon029;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
     httpServer = getConfig ["subversion" "httpServer"] false;
     httpSupport = getConfig ["subversion" "httpSupport"] true;
