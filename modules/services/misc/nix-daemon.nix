@@ -75,6 +75,12 @@ in
         description = "
           Whether to distribute builds to the machines listed in
           <option>nix.buildMachines</option>.
+          If you know that the <option>buildMachines</buildMachines> are not
+          always available either use nixos
+          <command>nixos-rebuild --no-build-hook</command>
+          or consider managing <filename>/etc/nix.machines</filename> manually
+          by setting <option>manualNixMachines</option>. Then you can comment
+          unavailable buildmachines.
         ";
       };
 
