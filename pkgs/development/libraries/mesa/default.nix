@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     md5 = "7db4617e9e10ad3aca1b64339fd71b7d";
   };
 
-  configureFlags = "--disable-gallium";
+  configureFlags = "--disable-gallium"
+                 + (if stdenv.isDarwin then " --disable-egl" else "");
 
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.glproto
