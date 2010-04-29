@@ -7653,8 +7653,8 @@ let
     inherit fetchurl stdenv perl gettext makeWrapper lib;
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext;
-    inherit git; # The RCS should be optional
-    monotone = null;
+    git = if getPkgConfig "ikiwiki" "git" true then git else null;
+    monotone = if getPkgConfig "ikiwiki" "monotone" false then monotone else null;
     extraUtils = [];
   };
 
