@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (monotone != null)
         ''--prefix PATH : ${monotone}/bin \''}
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
-
     done
   '';
 
