@@ -843,8 +843,8 @@ rec {
   # Compilers.
 
   ehc = import ../development/compilers/ehc {
-    inherit ghc uulib uuagc;
-    inherit (pkgs) fetchsvn stdenv coreutils m4 libtool llvm;
+    inherit ghc uulib uuagc mtl network binary fgl;
+    inherit (pkgs) fetchsvn stdenv coreutils glibc m4 libtool llvm;
   };
 
   helium = import ../development/compilers/helium {
