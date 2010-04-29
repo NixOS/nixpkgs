@@ -26,6 +26,15 @@ let
           '';
       };
       
+    virtualisation.diskSize = 
+      mkOption {
+        default = 512;
+        description =
+          ''
+            Disk size (M) of virtual machine.
+          '';
+      };
+      
     virtualisation.diskImage =
       mkOption {
         default = "./${vmName}.qcow2";
@@ -78,7 +87,7 @@ let
       NIX_DISK_IMAGE=''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}
 
       if ! test -e "$NIX_DISK_IMAGE"; then
-          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" 512M || exit 1
+          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" ${toString config.virtualisation.diskSize}M || exit 1
       fi
       
       # -no-kvm-irqchip is needed to prevent the CIFS mount from
