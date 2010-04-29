@@ -641,7 +641,7 @@ rec {
       sha256 = "0fazl71hrc0r56gnc7vzwz9283p7h62gc8wsna7zgyfvrajjnhwl";
     };
   };
-  
+
   CompressRawBzip2 = import ../development/perl-modules/Compress-Raw-Bzip2 {
     inherit fetchurl buildPerlPackage;
     inherit (pkgs) bzip2;
@@ -1718,7 +1718,7 @@ rec {
     };
     propagatedBuildInputs = [Moose MooseXTypes TestException];
   };
-  
+
   MooseXParamsValidate = buildPerlPackage rec {
     name = "MooseX-Params-Validate-0.10";
     src = fetchurl {
@@ -1727,7 +1727,7 @@ rec {
     };
     propagatedBuildInputs = [Moose ParamsValidate SubExporter TestException];
   };
-  
+
   MooseXSemiAffordanceAccessor = buildPerlPackage rec {
     name = "MooseX-SemiAffordanceAccessor-0.03";
     src = fetchurl {
@@ -1736,7 +1736,7 @@ rec {
     };
     propagatedBuildInputs = [Moose];
   };
-  
+
   MooseXTraits = buildPerlPackage rec {
     name = "MooseX-Traits-0.06";
     src = fetchurl {
@@ -1747,7 +1747,7 @@ rec {
       ClassMOP Moose TestException TestUseOk
     ];
   };
-  
+
   MooseXTraitsPluggable = buildPerlPackage rec {
     name = "MooseX-Traits-Pluggable-0.04";
     src = fetchurl {
@@ -1759,7 +1759,7 @@ rec {
       MooseXTraits MooseAutobox
     ];
   };
-  
+
   MooseXTypes = buildPerlPackage rec {
     name = "MooseX-Types-0.16";
     src = fetchurl {
@@ -1768,7 +1768,7 @@ rec {
     };
     propagatedBuildInputs = [Moose CarpClan NamespaceClean];
   };
-  
+
   Mouse = buildPerlPackage rec {
     name = "Mouse-0.26";
     src = fetchurl {
@@ -1949,7 +1949,7 @@ rec {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
       sha256 = "6c851e86475242fa0def2f02565743d41ab703ff6df3e826166ee9df5b961c7a";
     };
-    propagatedBuildInputs = [ 
+    propagatedBuildInputs = [
       ClassInspector
       Clone
       FileRemove
