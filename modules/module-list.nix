@@ -53,6 +53,7 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/udev.nix
   ./services/logging/klogd.nix
+  ./services/logging/logrotate.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
   ./services/mail/postfix.nix
