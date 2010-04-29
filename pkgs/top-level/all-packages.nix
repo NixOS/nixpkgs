@@ -1109,6 +1109,10 @@ let
     inherit fetchurl stdenv gettext;
   };
 
+  mtdutils = import ../tools/filesystems/mtdutils {
+    inherit stdenv fetchgit libuuid lzo zlib acl;
+  };
+
   multitran = recurseIntoAttrs (let
       inherit fetchurl stdenv help2man;
     in rec {
