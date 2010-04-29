@@ -213,14 +213,14 @@ rec {
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
-  
+
   GLUT = import ../development/libraries/haskell/GLUT {
     inherit cabal OpenGL;
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
-  
+
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit ghc mtl;
     inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
@@ -287,7 +287,7 @@ rec {
   haskellSrcMeta = import ../development/libraries/haskell/haskell-src-meta {
     inherit cabal haskellSrcExts;
   };
-  
+
   haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
       haskellSrc html
@@ -948,7 +948,7 @@ rec {
     inherit cabal gtk2hs binary parsec regexPosix regexCompat utf8String;
     inherit (pkgs) libedit makeWrapper;
   };
-  
+
   xmobar = import ../applications/misc/xmobar {
     inherit cabal X11 mtl parsec stm utf8String X11_xft;
   };
