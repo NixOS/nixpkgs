@@ -104,15 +104,29 @@ rec {
   , machine
   , preBuild ? ""
   , postBuild ? ""
+  , ...
   }:
     let
       vms =
         buildVirtualNetwork { nodes = { client = machine; } ; };
 
+      # ugly workaround, until we figure out why some fs actions work properly inside 
+      # the vm. (e.g. unlink gives access denied over smb in qemu). note that the function
+      # now only works for derivations that lead to a directory in the store, not a file. 
       buildrunner = writeText "vm-build" ''
         source $1
+        oldout=$out
+        out=$TMPDIR$out
+        ${coreutils}/bin/mkdir -p $out
+        ${coreutils}/bin/mkdir -p $oldout
+        ${coreutils}/bin/ln -s $out $oldout
+
         ${coreutils}/bin/mkdir -p $TMPDIR
         exec $origBuilder $origArgs 
+
+        ${coreutils}/bin/rm -v $oldout
+        ${coreutils}/bin/cp -Rv $out/* $oldout/
+        out=$oldout 
       '';
 
       testscript = ''
@@ -139,11 +153,12 @@ rec {
         origBuilder = attrs.builder;
       });
 
-  runInMachineWithX = args :
+  runInMachineWithX = { require ? [], ...}@args :
     let
       client =
         { config, pkgs, ... }:
         {
+          inherit require;
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
           services.xserver.displayManager.slim.enable = false;
