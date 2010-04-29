@@ -6,11 +6,15 @@
   , extraUtils ? []
   }:
 
-stdenv.mkDerivation rec {
-  name = "ikiwiki_3.20100427";
+let
+  name = "ikiwiki";
+  version = "3.20100427";
+in
+stdenv.mkDerivation {
+  name = "${name}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}.tar.gz";
+    url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
     sha256 = "b00567628657c52ed5a5388e47af370b0f2cdfa82d3eaf1b0020f0e07d218b8f";
   };
 
