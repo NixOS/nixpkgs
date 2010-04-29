@@ -417,7 +417,7 @@ with (import ./release-lib.nix);
     gtk2hs = linux;
     leksah = linux;
     lhs2tex = ghcSupported;
-    haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
+    haskellPlatform = ghcSupported;
     xmonad = linux;
     gitit = linux;
   };
