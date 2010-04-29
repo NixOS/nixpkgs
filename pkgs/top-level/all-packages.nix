@@ -7652,7 +7652,8 @@ let
   ikiwiki = makeOverridable (import ../applications/misc/ikiwiki) {
     inherit fetchurl stdenv perl gettext makeWrapper lib;
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
-      HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext;
+      HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
+      RpcXML XMLSimple;
     git = if getPkgConfig "ikiwiki" "git" true then git else null;
     monotone = if getPkgConfig "ikiwiki" "monotone" false then monotone else null;
     extraUtils = [];
