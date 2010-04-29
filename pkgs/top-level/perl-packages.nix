@@ -2089,6 +2089,15 @@ rec {
     };
   };
 
+  RpcXML = buildPerlPackage {
+    name = "RPC-XML-0.73";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.73.tar.gz;
+      sha256 = "a023649603240e7a19fc52a8316a41c854639c0600058ea4d1e436fe1b1b7734";
+    };
+    propagatedBuildInputs = [LWP XMLLibXML XMLParser];
+  };
+
   ReturnValue = buildPerlPackage {
     name = "Return-Value-1.302";
     src = fetchurl {
