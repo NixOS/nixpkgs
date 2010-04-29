@@ -4261,10 +4261,10 @@ let
     inherit fetchurl stdenv lib composableDerivation;
   };
 
-  libdrm = import ../development/libraries/libdrm {
+  libdrm = if stdenv.isDarwin then null else (import ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
-  };
+  });
 
   libdvdcss = import ../development/libraries/libdvdcss {
     inherit fetchurl stdenv;
