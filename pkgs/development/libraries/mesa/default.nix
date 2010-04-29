@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, expat }:
+{ stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, expat, lipo ? null }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.glproto
       xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
+      lipo
     ];
   
   passthru = { inherit libdrm; };

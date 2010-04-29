@@ -4712,6 +4712,7 @@ let
 
   mesa = import ../development/libraries/mesa {
     inherit fetchurl stdenv pkgconfig expat x11 xlibs libdrm;
+    lipo = if stdenv.isDarwin then darwinLipoUtility else null;
   };
 
   ming = import ../development/libraries/ming {
