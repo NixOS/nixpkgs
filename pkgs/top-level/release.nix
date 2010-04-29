@@ -425,13 +425,13 @@ with (import ./release-lib.nix);
   haskellPackages_ghc6121 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    haskellPlatform2010100 = linux;
+    haskellPlatform2010100 = ghcSupported;
   };
 
   haskellPackages_ghc6122 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    haskellPlatform2010100 = linux;
+    haskellPlatform2010100 = ghcSupported;
   };
 
   kde3 = {
