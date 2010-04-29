@@ -33,9 +33,4 @@ in
 
 {
   environment.systemPackages = [infoWrapper];
-  
-  environment.shellInit =
-    ''
-      export INFOPATH=/var/run/current-system/sw/info:/var/run/current-system/sw/share/info  
-    '';
 }
