@@ -34,16 +34,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for a in $out/bin/*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin \
-      ${lib.optionalString (git != null) 
+      ${lib.optionalString (git != null)
         ''--prefix PATH : ${git}/bin \''}
-      ${lib.optionalString (monotone != null) 
+      ${lib.optionalString (monotone != null)
         ''--prefix PATH : ${monotone}/bin \''}
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
 
     done
   '';
 
-  meta = { 
+  meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = http://ikiwiki.info/;
     license = "GPLv2+";
