@@ -33,7 +33,7 @@ let
     };
 
     system.copySystemConfiguration = pkgs.lib.mkOption {
-      default = true;
+      default = false;
       description = ''
         Unless set to false copies the nixos configuration file
         <literal>$NIXOS_CONFIG</literal> defaulting to
