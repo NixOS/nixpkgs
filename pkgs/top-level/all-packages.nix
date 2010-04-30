@@ -4892,6 +4892,11 @@ let
     inherit stdenv perl;
   };
 
+  openssl1 = makeOverridable (import ../development/libraries/openssl/1.x.nix) {
+    fetchurl = fetchurlBoot;
+    inherit stdenv perl;
+  };
+
   ortp = import ../development/libraries/ortp {
     inherit fetchurl stdenv;
   };
