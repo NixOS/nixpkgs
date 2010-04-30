@@ -4735,6 +4735,11 @@ let
     inherit fetchurl stdenv flex bison freetype zlib libpng perl;
   };
 
+  mlt = import ../development/libraries/mlt {
+    inherit fetchurl stdenv pkgconfig SDL ffmpeg libdv;
+    qt = qt4;
+  };
+
   mpeg2dec = import ../development/libraries/mpeg2dec {
     inherit fetchurl stdenv;
   };

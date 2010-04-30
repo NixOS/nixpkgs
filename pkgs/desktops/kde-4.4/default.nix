@@ -231,6 +231,12 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon qimageblitz;
   };
 
+  kdenlive = import ./extragear/kdenlive {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl mlt gettext shared_mime_info;
+    inherit kdelibs soprano;
+    inherit automoc4 phonon;
+  };
+
   kdesvn = import ./extragear/kdesvn {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
