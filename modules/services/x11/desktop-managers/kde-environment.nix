@@ -30,6 +30,6 @@ mkIf (kdePackages != [] && config.services.xserver.enable) {
   environment = {
     x11Packages = kdePackages;
     systemPackages = kdePackages;
-    pathsToLink = [ "/share" "/plugins" ];
+    pathsToLink = [ "/etc/xdg" "/etc/dbus-1" "/share" "/plugins" ];
   };
 }
