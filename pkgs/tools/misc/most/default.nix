@@ -25,5 +25,6 @@ stdenv.mkDerivation {
       windows and can scroll left and right. Why settle for less?
     '';
     homepage = http://www.jedsoft.org/most/index.html;
+    license = "GPLv2";
   };
 }
