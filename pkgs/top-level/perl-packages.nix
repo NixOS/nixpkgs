@@ -1372,6 +1372,20 @@ rec {
     };
   };
 
+  PerlMagick = buildPerlPackage {
+    name = "PerlMagick-6.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.59.tar.gz;
+      sha256 = "a87999b322460f7ba964eed81f91f400fba4ba6ff88e3f9e2b216d4d8ecf638d";
+    };
+    buildInputs = [pkgs.imagemagick];
+    preConfigure =
+      ''
+        sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick}/include/ImageMagick";|' Makefile.PL
+      '';
+    doCheck = false;
+  };
+
   IOCompressBase = buildPerlPackage rec {
     name = "IO-Compress-Base-2.015";
     src = fetchurl {
