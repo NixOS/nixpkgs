@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, nasm}:
 
 stdenv.mkDerivation rec {
   name = "xvidcore-1.2.2";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cd build/generic
   '';
+
+  buildInputs = [ nasm ];
   
   meta = {
     description = "MPEG-4 video codec for PC";

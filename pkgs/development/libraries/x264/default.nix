@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{stdenv, fetchurl, yasm}:
 
 stdenv.mkDerivation rec {
   version = "snapshot-20100429-2245";
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
   '';
 
-  configureFlags = [ "--disable-asm" "--enable-shared" ];
+  configureFlags = [ "--enable-shared" ];
+
+  buildInputs = [ yasm ];
 
   meta = { 
       description = "library for encoding H264/AVC video streams";
