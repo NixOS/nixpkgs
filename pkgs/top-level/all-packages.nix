@@ -2043,9 +2043,23 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
+  gcc45_realCross = lib.addMetaAttrs { platforms = []; }
+    (makeOverridable (import ../development/compilers/gcc-4.5) {
+      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+        ppl cloogppl gettext which noSysDirs;
+      binutilsCross = binutilsCross;
+      libcCross = libcCross;
+      profiledCompiler = false;
+      enableMultilib = false;
+      crossStageStatic = false;
+      cross = assert crossSystem != null; crossSystem;
+    });
+
+  gcc_realCross = gcc44_realCross;
+
   gccCrossStageStatic = wrapGCCCross {
     gcc = forceBuildDrv (lib.addMetaAttrs { platforms = []; } (
-      gcc44_realCross.override {
+      gcc_realCross.override {
         crossStageStatic = true;
         langCC = false;
         libcCross = null;
@@ -2057,7 +2071,7 @@ let
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceBuildDrv gcc44_realCross;
+    gcc = forceBuildDrv gcc_realCross;
     libc = libcCross;
     binutils = binutilsCross;
     cross = assert crossSystem != null; crossSystem;

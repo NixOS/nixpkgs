@@ -81,7 +81,7 @@ let version = "4.5.0";
         " --disable-libmudflap " +
         " --disable-libgomp " +
         " --disable-shared" +
-        " --disable-decimal-float" # libdecnumber requires libc
+        " --disable-decimal-float" + # libdecnumber requires libc
         " --disable-multilib"
         else
         " --with-headers=${libcCross}/include" +
