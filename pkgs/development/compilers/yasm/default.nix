@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "yasm-2.05.01";
+  name = "yasm-1.0.0";
   
   src = fetchurl {
     url = http://www.tortall.net/projects/yasm/releases/yasm-1.0.0.tar.gz;
