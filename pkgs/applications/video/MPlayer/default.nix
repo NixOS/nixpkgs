@@ -7,6 +7,7 @@
 , amrnb ? null, amrwb ? null, amrSupport ? false
 , jackaudioSupport ? false, jackaudio ? null
 , x264Support ? false, x264 ? null
+, xvidSupport ? false, xvidcore ? null
 , mesa, pkgconfig, unzip
 }:
 
@@ -63,7 +64,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional cddaSupport cdparanoia
     ++ stdenv.lib.optional jackaudioSupport jackaudio
     ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ]
-    ++ stdenv.lib.optional x264Support x264;
+    ++ stdenv.lib.optional x264Support x264
+    ++ stdenv.lib.optional xvidSupport xvidcore;
 
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
