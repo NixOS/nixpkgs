@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, gettext, makeWrapper, lib,
+{ stdenv, fetchurl, perl, gettext, makeWrapper, lib, PerlMagick,
   TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate,
   CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
   , git ? null
@@ -20,10 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
     TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple ]
-    ++
-    (lib.optional (monotone != null) monotone)
-    ;
+    RpcXML XMLSimple PerlMagick git monotone];
 
   patchPhase = ''
     sed -i s@/usr/bin/perl@${perl}/bin/perl@ pm_filter mdwn2man
