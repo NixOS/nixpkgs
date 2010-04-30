@@ -1465,6 +1465,10 @@ let
     qt = qt4;
   };
 
+  rtmpdump = import ../tools/video/rtmpdump {
+    inherit fetchurl stdenv zlib gnutls;
+  };
+
   reiser4progs = import ../tools/filesystems/reiser4progs {
     inherit fetchurl stdenv libaal;
   };
