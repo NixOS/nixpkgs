@@ -4736,7 +4736,8 @@ let
   };
 
   mlt = import ../development/libraries/mlt {
-    inherit fetchurl stdenv pkgconfig SDL ffmpeg libdv;
+    inherit fetchurl stdenv pkgconfig SDL ffmpeg libdv libxml2 libsamplerate
+      libvorbis sox;
     qt = qt4;
   };
 
