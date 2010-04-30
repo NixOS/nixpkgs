@@ -6,6 +6,7 @@
 , cdparanoia ? null, cddaSupport ? true
 , amrnb ? null, amrwb ? null, amrSupport ? false
 , jackaudioSupport ? false, jackaudio ? null
+, x264Support ? false, x264 ? null
 , mesa, pkgconfig, unzip
 }:
 
@@ -61,11 +62,13 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ stdenv.lib.optional cddaSupport cdparanoia
     ++ stdenv.lib.optional jackaudioSupport jackaudio
-    ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ];
+    ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ]
+    ++ stdenv.lib.optional x264Support x264;
 
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
+    ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
     --codecsdir=${codecs}
     --enable-runtime-cpudetection
     --enable-x11
