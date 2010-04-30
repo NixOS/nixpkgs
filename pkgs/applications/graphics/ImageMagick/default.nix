@@ -1,8 +1,25 @@
-args: with args;
+{ stdenv
+, fetchurl
+, bzip2
+, freetype
+, graphviz
+, ghostscript
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, zlib
+, libtool
+, jasper
+, libX11
+, tetex ? null
+, librsvg ? null
+}:
 
-let version = "6.5.9-1"; in
-
-stdenv.mkDerivation (rec {
+let
+  version = "6.5.9-1";
+in
+stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
@@ -13,22 +30,20 @@ stdenv.mkDerivation (rec {
   configureFlags = ''
     --with-gs-font-dir=${ghostscript}/share/ghostscript/fonts
     --with-gslib
-    ${if args ? tetex then "--with-frozenpaths" else ""}
+    ${if tetex != null then "--with-frozenpaths" else ""}
   '';
 
   buildInputs =
-    [ bzip2 freetype ghostscript graphviz libjpeg libpng
-      libtiff libX11 libxml2 zlib libtool
-    ]
-    ++ stdenv.lib.optional (args ? tetex) args.tetex
-    ++ stdenv.lib.optional (args ? librsvg) args.librsvg;
+    [ bzip2 freetype graphviz ghostscript libjpeg libpng
+      libtiff libxml2 zlib tetex librsvg libtool jasper libX11
+    ];
 
-  preConfigure = if args ? tetex then
+  preConfigure = if tetex != null then
     ''
-      export DVIDecodeDelegate=${args.tetex}/bin/dvips
+      export DVIDecodeDelegate=${tetex}/bin/dvips
     '' else "";
 
   meta = {
     homepage = http://www.imagemagick.org;
   };
-})
+}

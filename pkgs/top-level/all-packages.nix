@@ -7678,13 +7678,14 @@ let
 
   imagemagick = import ../applications/graphics/ImageMagick {
     inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
-      libjpeg libpng libtiff libxml2 zlib libtool;
+      libjpeg libpng libtiff libxml2 zlib libtool jasper;
     inherit (xlibs) libX11;
   };
 
   imagemagickBig = import ../applications/graphics/ImageMagick {
     inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
-      libjpeg libpng libtiff libxml2 zlib tetex librsvg libtool;
+      libjpeg libpng libtiff libxml2 zlib tetex librsvg libtool
+      jasper;
     inherit (xlibs) libX11;
   };
 
