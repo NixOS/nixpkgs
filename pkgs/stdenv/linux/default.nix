@@ -104,6 +104,7 @@ rec {
   fetchurl = import ../../build-support/fetchurl {
     stdenv = stdenvLinuxBoot0;
     curl = bootstrapTools;
+    inherit (allPackages) writeScript;
   };
 
 

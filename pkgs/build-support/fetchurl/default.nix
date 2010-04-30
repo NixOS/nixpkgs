@@ -1,4 +1,4 @@
-{stdenv, curl}: # Note that `curl' may be `null', in case of the native stdenv.
+{stdenv, curl, writeScript}: # Note that `curl' may be `null', in case of the native stdenv.
 
 let
 
@@ -23,7 +23,7 @@ let
     else [] /* backwards compatibility */;
 
 in
-      
+
 { # URL to fetch.
   url ? ""
 
@@ -45,6 +45,12 @@ in
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
+
+, # If set, down't download file but tell user how to download it.
+  restricted ? false
+
+, # Used only if restricted. Should contain instructions how to fetch the file.
+  message ? ""
 }:
 
 assert urls != [] -> url == "";
@@ -56,34 +62,51 @@ assert showURLs || (outputHash != "" && outputHashAlgo != "")
 let
 
   urls_ = if urls != [] then urls else [url];
-
-in
-
-stdenv.mkDerivation {
-  name =
-    if showURLs then "urls"
+  name_ = if showURLs then "urls"
     else if name != "" then name
     else baseNameOf (toString (builtins.head urls_));
-    
+  hashAlgo_ = if outputHashAlgo != "" then outputHashAlgo else
+    if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
+  hash_ = if outputHash != "" then outputHash else
+    if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
+in
+
+stdenv.mkDerivation ({
+  name = name_;
+  outputHashAlgo = hashAlgo_;
+  outputHash = hash_;
+  urls = urls_;
+
+  # Compatibility with Nix <= 0.7.
+  id = md5;
+
+  inherit showURLs mirrorsFile;
+}
+// (if (!showURLs && restricted) then rec {
+  builder = writeScript "restrict-message" ''
+source ${stdenv}/setup
+cat <<_EOF_
+${message_}
+_EOF_
+  '';
+  message_ = if message != "" then message else ''
+  You have to download ${name_} from ${stdenv.lib.concatStringsSep " " urls_} yourself,
+  and add it to the store using "nix-store --add-fixed ${hashAlgo_} ${name_}".
+  '';
+}
+else {
   builder = ./builder.sh;
-  
+
   buildInputs = [curl];
 
-  urls = urls_;
 
   # If set, prefer the content-addressable mirrors
   # (http://nixos.org/tarballs) over the original URLs.
   preferHashedMirrors = true;
 
-  # Compatibility with Nix <= 0.7.
-  id = md5;
 
   # New-style output content requirements.
-  outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
-      if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
-  outputHash = if outputHash != "" then outputHash else
-      if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
-  
+
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow
     # easy proxy configuration.  This is impure, but a fixed-output
@@ -95,6 +118,5 @@ stdenv.mkDerivation {
     # command-line.
     "NIX_HASHED_MIRRORS"
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
-
-  inherit showURLs mirrorsFile;
-}
+})
+)
