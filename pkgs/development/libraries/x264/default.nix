@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    sed -i s,/bin/bash,${stdenv.bash}/bin/bash, configure version.sh
+    sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
   '';
 
   configureFlags = [ "--disable-asm" "--enable-shared" ];
