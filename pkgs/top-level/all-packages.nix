@@ -2305,23 +2305,23 @@ let
   */
 
   # Helper functions to abstract away from repetitive instantiations.
-  haskellPackagesFun610 = ghcPath : profDefault : import ./haskell-packages.nix {
+  haskellPackagesFun610 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
     ghc = import ghcPath {
       inherit fetchurl stdenv perl ncurses gmp libedit;
       ghc = ghc6101Binary;
     };
-  };
+  });
 
-  haskellPackagesFun612 = ghcPath : profDefault : import ./haskell-packages.nix {
+  haskellPackagesFun612 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
     ghc = import ghcPath {
       inherit fetchurl stdenv perl ncurses gmp;
       ghc = ghc6101Binary;
     };
-  };
+  });
 
   # Currently active GHC versions.
   haskellPackages_ghc6101 =
