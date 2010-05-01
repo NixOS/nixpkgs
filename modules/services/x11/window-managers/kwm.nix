@@ -28,7 +28,7 @@ mkIf cfg.enable {
         session = [{
           name = "kwm";
           start = "
-            ${pkgs.kdebase}/bin/kwin &
+            ${pkgs.kde3.kdebase}/bin/kwin &
             waitPID=$!
           ";
         }];
@@ -39,8 +39,8 @@ mkIf cfg.enable {
 
   environment = {
     x11Packages = [
-      pkgs.kdelibs
-      pkgs.kdebase
+      pkgs.kde3.kdelibs
+      pkgs.kde3.kdebase
     ];
   };
 }
