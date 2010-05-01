@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, ncurses, glib, openssl}:
 
 stdenv.mkDerivation rec {
-  name = "irssi-0.8.14";
+  name = "irssi-0.8.15";
   
   src = fetchurl {
     url = "http://irssi.org/files/${name}.tar.bz2";
-    sha256 = "0a6zizpqb4yyk7c9sxvqcj8jx20qrnfr2kwqbsckryz63kmp1sk3";
+    sha256 = "19m0aah9bhc70dnhh7kpydbsz5n35l0l9knxav1df0sic3xicbf1";
   };
   
   buildInputs = [pkgconfig ncurses glib openssl];
