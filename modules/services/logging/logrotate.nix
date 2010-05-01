@@ -9,7 +9,7 @@ let
     cfg.config;
 
   cronJob = ''
-    5 * * * * ${pkgs.logrotate}/sbin/logrotate ${configFile}
+    5 * * * * root ${pkgs.logrotate}/sbin/logrotate ${configFile}
   '';
 
 in
