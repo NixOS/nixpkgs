@@ -2304,6 +2304,12 @@ let
   });
   */
 
+  # NOTE: After discussion, we decided to enable recurseIntoAttrs for all
+  # currently available ghc versions. (Before, it used to be enabled only
+  # for a selected few versions.) If someone complains about nix-env -qa
+  # output being spammed by lots of Haskell packages, we can talk about
+  # reducing the number or "enabled" versions again.
+
   # Helper functions to abstract away from repetitive instantiations.
   haskellPackagesFun610 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
@@ -2333,8 +2339,9 @@ let
   haskellPackages_ghc6103 =
     haskellPackagesFun610 ../development/compilers/ghc/6.10.3.nix false;
 
-  haskellPackages_ghc6104 = recurseIntoAttrs
-    (haskellPackagesFun610 ../development/compilers/ghc/6.10.4.nix false);
+  # Current default version.
+  haskellPackages_ghc6104 =
+    haskellPackagesFun610 ../development/compilers/ghc/6.10.4.nix false;
 
   # We will soon switch to either ghc-6.12.1 or ghc-6.12.2 as default.
   haskellPackages_ghc6121 = lowPrio
