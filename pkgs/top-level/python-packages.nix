@@ -606,7 +606,8 @@ rec {
       sha256 = "0jg9q9mhsky444mm7lpmmlxai8hmjg4pc71viv4kni8gls0gk9n8";
     };
 
-    propagatedBuildInputs = [ pkgs.darcs ];
+    # In order to break the dependency on darcs -> ghc, we don't add
+    # darcs as a propagated build input.
 
     meta = {
       description = "setuptools plugin for the Darcs version control system";
