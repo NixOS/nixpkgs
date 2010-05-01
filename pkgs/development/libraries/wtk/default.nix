@@ -2,11 +2,15 @@
 
 assert stdenv.system == "i686-linux";
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "sun-java-wtk-2.5.2_01";
 
-  pathname = "/tmp/sun_java_wireless_toolkit-2.5.2_01-linuxi486.bin.sh";
-  md5 = "6b70b6e6d426eac121db8a087991589f";
+  src = fetchurl {
+    url = meta.homepage;
+    name = "sun_java_wireless_toolkit-2.5.2_01-linuxi486.bin.sh";
+    restricted = true;
+    md5 = "6b70b6e6d426eac121db8a087991589f";
+  };
 
   builder = ./builder.sh;
 
