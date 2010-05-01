@@ -91,7 +91,11 @@ _EOF_
   '';
   message_ = if message != "" then message else ''
   You have to download ${name_} from ${stdenv.lib.concatStringsSep " " urls_} yourself,
-  and add it to the store using "nix-store --add-fixed ${hashAlgo_} ${name_}".
+  and add it to the store using either
+    nix-store --add-fixed ${hashAlgo_} ${name_}
+  or
+    ${if hashAlgo_ != "sha256" then "NIX_HASH_ALGO=${hashAlgo_} " else
+      ""}nix-prefetch-url file://path/to/${name_}
   '';
 }
 else {
