@@ -8705,6 +8705,11 @@ let
   });
   */
 
+  freedink = import ../games/freedink {
+    inherit stdenv fetchurl SDL SDL_mixer SDL_image SDL_ttf SDL_gfx
+      pkgconfig fontconfig libzip zip zlib;
+  };
+
   fsg = import ../games/fsg {
     inherit stdenv fetchurl pkgconfig mesa;
     inherit (gtkLibs) glib gtk;
