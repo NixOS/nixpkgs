@@ -12,7 +12,7 @@ let
 
   modprobe = config.system.sbin.modprobe;
 
-  privoxyFlags = "--no-daemon ${privoxyCfg}";
+  privoxyFlags = "--no-daemon --user ${privoxyUser} ${privoxyCfg}";
 
   privoxyCfg = pkgs.writeText "privoxy.conf" ''
     listen-address  ${config.services.privoxy.listenAddress}
