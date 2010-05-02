@@ -5073,6 +5073,10 @@ let
     pulseaudioSupport = false; # better go through ALSA
   };
 
+  SDL_gfx = import ../development/libraries/SDL_gfx {
+    inherit fetchurl stdenv SDL;
+  };
+
   SDL_image = import ../development/libraries/SDL_image {
     inherit fetchurl stdenv SDL libjpeg libungif libtiff libpng;
     inherit (xlibs) libXpm;
