@@ -1316,6 +1316,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  parallel = import ../tools/misc/parallel {
+    inherit fetchurl stdenv perl;
+  };
+
   patchutils = import ../tools/text/patchutils {
     inherit fetchurl stdenv;
   };
