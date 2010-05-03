@@ -8868,6 +8868,12 @@ let
     libjpeg = libjpeg62;
   };
 
+  warzone2100 = import ../games/warzone2100 {
+    inherit stdenv fetchurl bison gettext pkgconfig SDL libpng libtheora
+            openal popt physfs mesa quesoglc zip unzip which;
+    flex = flex2535;
+  };
+
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
       libICE libXmu libXext libXpm;
