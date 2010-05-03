@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [gettext];
   buildInputs = [attr libtool];
 
+  # Upstream use C++-style comments in C code. Remove them.
+  # This comment breaks compilation if too strict gcc flags are used.
+  patchPhase = ''
+    echo "Removing C++-style comments from include/acl.h"
+    sed -e '/^\/\//d' -i include/acl.h
+  '';
+
   configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
 
   installTargets = "install install-lib install-dev";
