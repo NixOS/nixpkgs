@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gettext, attr, libtool}:
 
-stdenv.mkDerivation {
-  name = "acl-2.2.47";
+stdenv.mkDerivation rec {
+  name = "acl-2.2.49";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/acl_2.2.47-1.tar.gz;
-    sha256 = "1j39g62fki0iyji9s62slgwdfskpkqy7rmjlqcnmsvsnxbxhc294";
+    url = "mirror://savannah/acl/${name}.src.tar.gz";
+    sha256 = "1mg5nxr0r9y08lmyxmm2lfss5jz1xzbs0npsc8597x2f5rsz9ixr";
   };
 
   buildNativeInputs = [gettext];
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   installTargets = "install install-lib install-dev";
 
   meta = {
-    homepage = ftp://oss.sgi.com/projects/xfs/cmd_tars/;
+    homepage = http://savannah.nongnu.org/projects/acl;
     description = "Library and tools for manipulating access control lists";
   };
 }
