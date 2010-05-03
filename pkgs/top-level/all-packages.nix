@@ -5027,6 +5027,11 @@ let
     qt4 = qt46;
   };
 
+  quesoglc = import ../development/libraries/quesoglc {
+    inherit stdenv fetchurl mesa glew freetype fontconfig fribidi;
+    inherit (xlibs) libX11;
+  };
+
   readline = readline6;
 
   readline4 = import ../development/libraries/readline/readline4.nix {
