@@ -4216,6 +4216,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  lensfun = import ../development/libraries/lensfun {
+    inherit fetchurl stdenv libpng python zlib pkgconfig;
+    inherit (gnome) glib;
+  };
+
   lesstif = import ../development/libraries/lesstif {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXp libXau;
