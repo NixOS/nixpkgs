@@ -4405,6 +4405,11 @@ let
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
 
+  liblqr1 = makeOverridable (import ../development/libraries/liblqr-1) {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (gnome) glib;
+  };
+
   libnice = import ../development/libraries/libnice {
     inherit stdenv fetchurl pkgconfig;
     inherit (gnome) glib;
