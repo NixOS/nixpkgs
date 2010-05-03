@@ -416,6 +416,10 @@ let
     inherit libuuid zlib acl;
   };
 
+  catdoc = import ../tools/text/catdoc {
+    inherit fetchurl stdenv;
+  };
+
   eggdrop = import ../tools/networking/eggdrop {
     inherit fetchurl stdenv tcl;
   };
