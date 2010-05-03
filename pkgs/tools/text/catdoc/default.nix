@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-wordview";
 
   meta = with stdenv.lib; {
-    platforms = all;
+    platforms = platforms.all;
     license = "GPL2";
-    maintainers = [ urkud ];
+    maintainers = [ maintainers.urkud ];
   };
 }
