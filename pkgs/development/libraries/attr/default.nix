@@ -1,12 +1,11 @@
 {stdenv, fetchurl, libtool, gettext}:
 
-stdenv.mkDerivation {
-  name = "attr-2.4.43";
+stdenv.mkDerivation rec {
+  name = "attr-2.4.44";
 
   src = fetchurl {
-    # The SGI site throws away old versions, so don't use it.
-    url = mirror://gentoo/distfiles/attr_2.4.43-1.tar.gz;
-    sha256 = "1gy5zspj8ynxv6q29r24d18cfvq06zirg1pxcdg27bg2ncrv4n6k";
+    url = "mirror://savannah/attr/${name}.src.tar.gz";
+    sha256 = "16244r2vrd57i5fnf7dz3yi2mcckc47jr9y539jvljrzwnw18qlz";
   };
 
   buildNativeInputs = [gettext];
@@ -17,7 +16,7 @@ stdenv.mkDerivation {
   installTargets = "install install-lib install-dev";
 
   meta = {
-    homepage = ftp://oss.sgi.com/projects/xfs/cmd_tars/;
+    homepage = http://savannah.nongnu.org/projects/attr/;
     description = "Library and tools for manipulating extended attributes";
   };
 }
