@@ -82,6 +82,11 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         rpath="$rpath $1 "
     }
 
+    libs=""
+    addToLibs() {
+        libs="$libs $1"
+    }
+
     rpath=""
 
     # First, find all -L... switches.
@@ -95,6 +100,11 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         elif test "$p" = "-L"; then
             addToLibPath ${p2}
             n=$((n + 1))
+        elif test "$p" = "-l"; then
+            addToLibs ${p2}
+            n=$((n + 1))
+        elif test "${p:0:2}" = "-l"; then
+            addToLibs ${p:2}
         elif [[ "$p" =~ ^[^-].*\.so($|\.) ]]; then
             # This is a direct reference to a shared library, so add
             # its directory to the rpath.
@@ -103,27 +113,18 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         fi
         n=$((n + 1))
     done
-    
+
     # Second, for each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
-
-    for i in $libPath; do
-        n=0
-        while test $n -lt ${#allParams[*]}; do
-            p=${allParams[n]}
-            p2=${allParams[$((n+1))]}
-            if test "${p:0:2}" = "-l" -a -f "$i/lib${p:2}.so"; then
-                addToRPath $i
-                break
-            elif test "$p" = "-l" -a -f "$i/lib${p2}"; then
-                # I haven't seen `-l foo', but you never know...
-                addToRPath $i
+    
+    for i in $libs; do
+        for j in $libPath; do
+            if test -f "$j/lib$i.so"; then
+                addToRPath $j
                 break
             fi
-            n=$((n + 1))
         done
-            
     done
     
 
