@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, unzip, xlibs }:
+{ stdenv, requireFile, unzip, xlibs }:
 
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
   name = "sun-java-wtk-2.5.2_01";
 
-  src = fetchurl {
+  src = requireFile {
     url = meta.homepage;
     name = "sun_java_wireless_toolkit-2.5.2_01-linuxi486.bin.sh";
-    restricted = true;
-    md5 = "6b70b6e6d426eac121db8a087991589f";
+    sha256 = "1cjb9c27847wv0hq3j645ckn4di4vsfvp29fr4zmdqsnvk4ahvj1";
   };
 
   builder = ./builder.sh;

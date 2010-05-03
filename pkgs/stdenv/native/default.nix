@@ -119,7 +119,6 @@ rec {
     stdenv = stdenvBoot0;
     # Curl should be in /usr/bin or so.
     curl = null;
-    inherit (allPackages) writeScript;
   };
   
     

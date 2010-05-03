@@ -271,7 +271,8 @@ let
   # from being built.
   fetchurl = useFromStdenv "fetchurl"
     (import ../build-support/fetchurl {
-      inherit stdenv curl writeScript;
+      curl = curl;
+      stdenv = stdenv;
     });
 
   # fetchurlBoot is used for curl and its dependencies in order to
@@ -5230,8 +5231,8 @@ let
   };
 
   wtk = import ../development/libraries/wtk {
-      inherit fetchurl stdenv unzip xlibs;
-    };
+    inherit requireFile stdenv unzip xlibs;
+  };
 
   x264 = import ../development/libraries/x264 {
     inherit fetchurl stdenv yasm;
