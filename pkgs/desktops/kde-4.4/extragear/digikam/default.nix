@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
-kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu }:
+kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu,
+liblqr1, lensfun }:
 
 stdenv.mkDerivation rec {
   name = "digikam-1.2.0";
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 eigen
-    lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu ];
+    lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu liblqr1 lensfun ];
   cmakeFlags = [ "-DGETTEXT_INCLUDE_DIR=${gettext}/include" ];
   meta = {
     description = "Photo Management Program";
