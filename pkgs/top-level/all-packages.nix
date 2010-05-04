@@ -6288,6 +6288,14 @@ let
       inherit (gnome) gtk glib pango libglade;
     };
 
+    systemtap = import ../development/tools/profiling/systemtap {
+      inherit fetchurl stdenv elfutils latex2html xmlto pkgconfig boost
+        texLive texLiveExtra ghostscript perl docbook_xml_dtd_412 libxml2
+        docbook_xsl libxslt sqlite;
+      linux = kernel;
+      inherit (gnome) gtkmm libglademm;
+    };
+
     virtualbox = import ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit fetchurl lib iasl dev86 libxslt libxml2 SDL hal
