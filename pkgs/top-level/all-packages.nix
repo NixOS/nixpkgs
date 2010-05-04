@@ -1884,8 +1884,7 @@ let
 
   xmlto = import ../tools/typesetting/xmlto {
     inherit fetchurl stdenv flex libxml2 libxslt
-            docbook_xml_dtd_42 docbook_xsl w3m
-            bash getopt mktemp findutils makeWrapper;
+      docbook_xml_dtd_42 docbook_xsl w3m bash getopt makeWrapper;
   };
 
   xmltv = import ../tools/misc/xmltv {
