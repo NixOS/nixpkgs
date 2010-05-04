@@ -104,4 +104,7 @@ rec {
       subversion;
   };
 
+  git2cl = import ./git2cl {
+    inherit fetchgit stdenv perl;
+  };
 }
