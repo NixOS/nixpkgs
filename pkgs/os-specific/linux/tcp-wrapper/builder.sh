@@ -11,7 +11,7 @@ patchPhase
 for patch in debian/patches/*
 do
   echo "applying Debian patch \`$(basename $patch)'..."
-  patch -p1 < $patch
+  patch --batch -p1 < $patch
 done
 
 substituteInPlace "Makefile" --replace				\
