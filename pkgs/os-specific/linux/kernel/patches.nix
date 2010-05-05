@@ -114,4 +114,26 @@ in
         '';
     };
 
+  tracehook_2_6_32 =
+    { # From <http://people.redhat.com/roland/utrace/>.
+      name = "tracehook";
+      patch = fetchurl {
+        url = http://people.redhat.com/roland/utrace/2.6.32/tracehook.patch;
+        sha256 = "1y009p8dyqknbjm8ryb495jqmvl372gfhswdn167xh2g1f24xqv8";
+      };
+    };
+
+  utrace_2_6_32 =
+    { # From <http://people.redhat.com/roland/utrace/>, depends on the
+      # `tracehook' patch above.
+      # See also <http://sourceware.org/systemtap/wiki/utrace>.
+      name = "utrace";
+      patch = fetchurl {
+        url = http://people.redhat.com/roland/utrace/2.6.32/utrace.patch;
+        sha256 = "1951mwc8jfiwrl0d2bb1zk9yrl7n7kadc00ymjsxrg2irda1b89r";
+      };
+      extraConfig =
+        '' UTRACE y
+        '';
+    };
 }

@@ -6143,6 +6143,17 @@ let
       ];
   };
 
+  linux_2_6_32_systemtap = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    systemtap = true;
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_31
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.tracehook_2_6_32
+        kernelPatches.utrace_2_6_32
+      ];
+  };
+
   linux_2_6_32_zen4 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.32-zen4.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
   };
@@ -6324,6 +6335,8 @@ let
   linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29);
   linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31);
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
+  linuxPackages_2_6_32_systemtap =
+    recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap);
   linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33);
 
   # The current default kernel / kernel modules.
