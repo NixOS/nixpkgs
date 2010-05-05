@@ -8992,6 +8992,7 @@ let
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
     openexr = openexr_1_6_1;
+    stdenv = stdenv2;
   });
 
   ### SCIENCE
