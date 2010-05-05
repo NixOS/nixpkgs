@@ -2,7 +2,7 @@
 , qt4, sip, pyqt4, kdelibs, kdepimlibs, kdebindings
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
 , lm_sensors, libxklavier, libusb, libpthreadstubs, boost
-, automoc4, phonon, strigi, soprano, qimageblitz, akonadi, polkit_qt, policykit
+, automoc4, phonon, strigi, soprano, qimageblitz, akonadi, polkit_qt
 }:
 
 stdenv.mkDerivation {
@@ -14,8 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ cmake perl python qt4 pam consolekit sip pyqt4 kdelibs libXtst
     kdepimlibs kdebindings boost libusb stdenv.gcc.libc libXi libXau libXdmcp
     libXcomposite libXdamage libXScrnSaver lm_sensors libxklavier automoc4
-    phonon strigi soprano qimageblitz akonadi polkit_qt libpthreadstubs
-    policykit ];
+    phonon strigi soprano qimageblitz akonadi polkit_qt libpthreadstubs ];
   patchPhase=''
     sed -i -e 's|''${PYTHON_SITE_PACKAGES_DIR}|''${CMAKE_INSTALL_PREFIX}/lib/python2.6/site-packages|' \
       plasma/generic/scriptengines/python/CMakeLists.txt
