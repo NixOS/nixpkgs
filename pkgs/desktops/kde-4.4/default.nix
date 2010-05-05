@@ -122,7 +122,7 @@ pkgs.recurseIntoAttrs (rec {
   
   kdeedu = import ./edu {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt openbabel boost;
-    inherit (pkgs) readline gmm gsl facile ocaml xplanet;
+    inherit (pkgs) readline gmm gsl xplanet libspectre;
     inherit kdelibs attica;
     inherit automoc4 phonon eigen;
   };
