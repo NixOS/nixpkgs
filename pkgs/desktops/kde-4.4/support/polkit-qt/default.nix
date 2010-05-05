@@ -6,7 +6,8 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/apps/KDE4.x/admin/polkit-qt-0.9.3.tar.bz2;
     sha256 = "08mz8p98nlxnxy1l751jg1010vgjq2f2d6n4cj27jvihqkpbaixn";
   };
-  buildInputs = [ cmake qt4 policykit automoc4 ];
+  buildInputs = [ cmake automoc4 ];
+  propagatedBuildInputs = [ qt4 policykit ];
   meta = {
     description = "Qt PolicyKit bindings";
     license = "LGPL";
