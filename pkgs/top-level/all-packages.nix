@@ -7861,7 +7861,7 @@ let
   };
 
   lame = import ../applications/audio/lame {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv nasm;
   };
 
   ladspaH = import ../applications/audio/ladspa-plugins/ladspah.nix {
