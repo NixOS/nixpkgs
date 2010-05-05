@@ -238,6 +238,11 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
+  kdevelop = import ./extragear/kdevelop {
+    inherit (pkgs) stdenv fetchurl cmake pkgconfig shared_mime_info gettext perl;
+    inherit kdevplatform automoc4 kdebase_workspace;
+  };
+
   kdevplatform = import ./extragear/kdevplatform {
     inherit (pkgs) stdenv fetchurl cmake subversion qt4 perl gettext pkgconfig
       apr aprutil boost;
