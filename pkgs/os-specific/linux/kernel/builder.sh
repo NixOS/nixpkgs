@@ -76,12 +76,14 @@ installPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $installFlags "${installFlagsArray[@]}"
 
-    # Strip the kernel modules.
-    echo "Stripping kernel modules..."
-    if [ -z "$crossConfig" ]; then
-        find $out -name "*.ko" -print0 | xargs -0 strip -S
-    else
-        find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
+    if test -z "$dontStrip"; then
+        # Strip the kernel modules.
+	echo "Stripping kernel modules..."
+	if [ -z "$crossConfig" ]; then
+            find $out -name "*.ko" -print0 | xargs -0 strip -S
+	else
+            find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
+	fi
     fi
 
     # move this to install later on

@@ -6146,6 +6146,7 @@ let
   linux_2_6_32_systemtap = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     systemtap = true;
+    dontStrip = true;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
