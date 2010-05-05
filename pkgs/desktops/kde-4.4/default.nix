@@ -238,6 +238,12 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
+  kdevplatform = import ./extragear/kdevplatform {
+    inherit (pkgs) stdenv fetchurl cmake subversion qt4 perl gettext pkgconfig
+      apr aprutil boost;
+    inherit kdelibs automoc4 phonon;
+  };
+
   kdesvn = import ./extragear/kdesvn {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
