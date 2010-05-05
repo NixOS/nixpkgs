@@ -6,14 +6,14 @@
 
 let
     name    = "wxmaxima";
-    version = "0.8.3";
+    version = "0.8.5";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/wxMaxima-${version}.tar.gz";
-    sha256 = "829e732e668f13c3153cc2fb67c7678973bf1bc468fb1b9f437fd0c24f59507a";
+    sha256 = "794317fa2a8d0c2e88c3e5d238c5b81a3e11783ec4a692468b51f15bf5d294f2";
   };
 
   buildInputs = [maxima wxGTK];
