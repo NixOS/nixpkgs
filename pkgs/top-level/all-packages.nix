@@ -5012,11 +5012,12 @@ let
     inherit (gnome) glib;
   };
 
-  qt46 = import ../development/libraries/qt-4.6 {
+  qt46 = makeOverridable (import ../development/libraries/qt-4.6) {
     inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
-      fontconfig freetype pkgconfig libtiff;
+      fontconfig freetype pkgconfig libtiff perl coreutils sqlite alsaLib
+      postgresql;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor libXext
+      libXmu libXinerama xineramaproto libXcursor libXext libXi
       inputproto fixesproto libXfixes;
     inherit (gnome) glib;
   };
