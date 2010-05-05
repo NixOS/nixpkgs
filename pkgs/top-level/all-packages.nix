@@ -3249,8 +3249,14 @@ let
   };
 
   oprofile = import ../development/tools/profiling/oprofile {
-    inherit fetchurl stdenv binutils popt;
-    inherit makeWrapper gawk which gnugrep;
+    inherit fetchurl stdenv binutils popt makeWrapper gawk which gnugrep;
+
+    # Optional build inputs for the (useless) GUI.
+    /*
+    qt = qt3;
+    inherit (xlibs) libX11 libXext;
+    inherit libpng;
+     */
   };
 
   patchelf = useFromStdenv "patchelf"

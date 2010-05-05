@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, binutils, popt
-, makeWrapper, gawk, which, gnugrep }:
+{ stdenv, fetchurl, binutils, popt, makeWrapper, gawk, which, gnugrep
+, qt ? null, libX11 ? null, libXext ? null, libpng ? null }:
+
+# libX11 is needed because the Qt build stuff automatically adds `-lX11'.
+assert (qt != null) -> ((libX11 != null) && (libXext != null)
+                        && (libpng != null));
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.4";
+  name = "oprofile-0.9.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "1pna65lpdxzbg4lcmpvayw1ibinbizrzwpdp0cq7vfinj0am456b";
+    sha256 = "103q0w4wr5lnhg1yfdhc67dvdwzqpzml57fp4l6nbz29fw5d839z";
   };
 
   patchPhase = ''
@@ -16,10 +20,14 @@ stdenv.mkDerivation rec {
             s|^PATH=.*$||g"
   '';
 
-  # FIXME: Add optional Qt support.
-  buildInputs = [ binutils popt makeWrapper gawk which gnugrep ];
+  buildInputs = [ binutils popt makeWrapper gawk which gnugrep ]
+    ++ stdenv.lib.optionals (qt != null) [ qt libX11 libXext libpng ];
 
-  configureFlags = "--with-kernel-support --disable-shared";
+  configureFlags =
+    [ "--with-kernel-support"
+      "--disable-shared"   # needed because only the static libbfd is available
+    ]
+    ++ stdenv.lib.optional (qt != null) "--with-qt-dir=${qt}";
 
   postInstall = ''
     wrapProgram "$out/bin/opcontrol"					\
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Oprofile, a system-wide profiler for Linux";
+    description = "OProfile, a system-wide profiler for Linux";
     longDescription = ''
       OProfile is a system-wide profiler for Linux systems, capable of
       profiling all running code at low overhead.  It consists of a
@@ -42,5 +50,8 @@ stdenv.mkDerivation rec {
     '';
     license = "GPLv2";
     homepage = http://oprofile.sourceforge.net/;
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
