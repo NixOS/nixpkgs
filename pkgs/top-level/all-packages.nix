@@ -2070,7 +2070,7 @@ let
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
-      libcCross1 = if isMingw then mingw_headers1 else null;
+      libcCross1 = if isMingw then windows.mingw_headers1 else null;
     in
       wrapGCCCross {
       gcc = forceBuildDrv (lib.addMetaAttrs { platforms = []; } (
@@ -2088,7 +2088,7 @@ let
   # Only needed for mingw builds
   gccCrossMingw2 = wrapGCCCross {
     gcc = gccCrossStageStatic.gcc;
-    libc = mingw_headers2;
+    libc = windows.mingw_headers2;
     binutils = binutilsCross;
     cross = assert crossSystem != null; crossSystem;
   };
@@ -3896,7 +3896,7 @@ let
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross
     else if (name == "uclibc") then uclibcCross
-    else if (name == "msvcrt") then mingw_headers3
+    else if (name == "msvcrt") then windows.mingw_headers3
     else throw "Unknown libc";
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
@@ -6703,39 +6703,45 @@ let
     inherit ncurses;
   };
 
-  w32api = makeOverridable (import ../os-specific/windows/w32api) {
-    inherit fetchurl stdenv;
-    gccCross = gccCrossStageStatic;
-    binutilsCross = binutilsCross;
-  };
+  windows = rec {
+    w32api = makeOverridable (import ../os-specific/windows/w32api) {
+      inherit fetchurl stdenv;
+      gccCross = gccCrossStageStatic;
+      binutilsCross = binutilsCross;
+    };
 
-  w32api_headers = w32api.override {
-    onlyHeaders = true;
-  };
+    w32api_headers = w32api.override {
+      onlyHeaders = true;
+    };
 
-  mingw_runtime = makeOverridable (import ../os-specific/windows/mingwrt) {
-    inherit fetchurl stdenv;
-    gccCross = gccCrossMingw2;
-    binutilsCross = binutilsCross;
-  };
+    mingw_runtime = makeOverridable (import ../os-specific/windows/mingwrt) {
+      inherit fetchurl stdenv;
+      gccCross = gccCrossMingw2;
+      binutilsCross = binutilsCross;
+    };
 
-  mingw_runtime_headers = mingw_runtime.override {
-    onlyHeaders = true;
-  };
+    mingw_runtime_headers = mingw_runtime.override {
+      onlyHeaders = true;
+    };
 
-  mingw_headers1 = buildEnv {
-    name = "mingw-headers-1";
-    paths = [ w32api_headers mingw_runtime_headers ];
-  };
+    mingw_headers1 = buildEnv {
+      name = "mingw-headers-1";
+      paths = [ w32api_headers mingw_runtime_headers ];
+    };
 
-  mingw_headers2 = buildEnv {
-    name = "mingw-headers-2";
-    paths = [ w32api mingw_runtime_headers ];
-  };
+    mingw_headers2 = buildEnv {
+      name = "mingw-headers-2";
+      paths = [ w32api mingw_runtime_headers ];
+    };
 
-  mingw_headers3 = buildEnv {
-    name = "mingw-headers-3";
-    paths = [ w32api mingw_runtime ];
+    mingw_headers3 = buildEnv {
+      name = "mingw-headers-3";
+      paths = [ w32api mingw_runtime ];
+    };
+
+    wxMSW = makeOverridable (import ../os-specific/windows/wxMSW-2.8) {
+      inherit fetchurl stdenv;
+    };
   };
 
   wesnoth = import ../games/wesnoth {

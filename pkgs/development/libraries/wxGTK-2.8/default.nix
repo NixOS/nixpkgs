@@ -30,21 +30,6 @@ stdenv.mkDerivation {
     "--with-opengl"
   ];
 
-  # Cross build only tested for mingw32
-  # Additionally, this should not be called wxGTK anymore, if built for
-  # mingw32. But before placing this in a better place, it helps as a test for
-  # mingw32.
-  crossAttrs = assert stdenv.cross.libc == "msvcrt"; {
-    src = fetchurl {
-      url = mirror://sourceforge/wxwindows/wxWidgets-2.8.11.tar.gz;
-      sha256 = "0icxd21g18d42n1ygshkpw0jnflm03iqki6r623pb5hhd7fm2ksj";
-    };
-    buildInputs = [];
-    propagatedBuildInputs = [];
-    SEARCH_INCLUDE="";
-    SEARCH_LIB="";
-  };
-
   # This variable is used by configure to find some dependencies.
   SEARCH_INCLUDE =
     "${libXinerama}/include ${libSM}/include ${libXxf86vm}/include";
