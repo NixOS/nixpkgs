@@ -114,6 +114,12 @@ installPhase() {
         cp --parents `find  -type f -name Makefile -o -name "Kconfig*"` $out/lib/modules/$version/build
         cp Module.symvers $out/lib/modules/$version/build
 
+	if test "$dontStrip" = "1"; then
+	    # copy any debugging info that can be found
+	    cp --parents -rv `find -name \*.debug -o -name debug.a`	\
+	       "$out/lib/modules/$version/build"
+	fi
+
         # weed out unneeded stuff
         rm -rf $out/lib/modules/$version/build/Documentation
         rm -rf $out/lib/modules/$version/build/scripts
