@@ -132,13 +132,14 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [ ./libstdc++-target.patch ]
+    [ ]
+    ++ optional (cross != null) ./libstdc++-target.patch
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
     # target libraries and tools.
     ++ optional langAda ./gnat-cflags.patch
     ++ optional langVhdl ./ghdl-ortho-cflags.patch
-    ++ optional (cross != null && cross.arch == "sparc64") ./pr41818.patch;
+    ;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross crossMingw;
