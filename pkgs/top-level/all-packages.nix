@@ -3794,6 +3794,10 @@ let
     inherit zlib;
   };
 
+  geoipjava = import ../development/libraries/java/geoipjava {
+    inherit stdenv fetchurl jdk unzip;
+  };
+
   geos = import ../development/libraries/geos {
     inherit fetchurl fetchsvn stdenv autoconf
       automake libtool swig which lib composableDerivation python ruby;
