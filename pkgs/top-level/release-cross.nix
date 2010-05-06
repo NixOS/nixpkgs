@@ -133,7 +133,7 @@ let
   };
 in {
   crossMingw32 = mapTestOnCross crossSystem {
-    wxGTK.hostDrv = nativePlatforms;
+    windows.wxMSW.hostDrv = nativePlatforms;
     gccCrossStageFinal = nativePlatforms;
   };
 })
