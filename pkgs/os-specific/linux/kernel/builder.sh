@@ -6,6 +6,15 @@ if [ -n "$crossConfig" ]; then
   makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
 fi
 
+postPatch() {
+    # Makefiles are full of /bin/pwd, /bin/false, /bin/bash, etc.
+    # Patch these away, assuming the tools are in $PATH.
+    for mf in $(find -name Makefile); do
+	echo "stripping FHS paths in \`$mf'..."
+	sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
+    done
+}
+
 configurePhase() {
     if test -n "$preConfigure"; then 
         eval "$preConfigure"; 
