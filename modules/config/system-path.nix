@@ -65,7 +65,7 @@ let
 
       systemPackages = mkOption {
         default = [];
-        example = [pkgs.firefox pkgs.thunderbird];
+        example = [pkgs.icecat3 pkgs.thunderbird];
         description = ''
           The set of packages that appear in
           /var/run/current-system/sw.  These packages are
