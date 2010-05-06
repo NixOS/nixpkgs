@@ -56,7 +56,7 @@ if test "$noSysDirs" = "1"; then
         # gcj in.
         unset LIBRARY_PATH
         unset CPATH
-        if test -z "$crossStageStatic"; then
+        if test -z "$crossStageStatic" -o -n "$crossMingw"; then
             EXTRA_FLAGS_TARGET="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
             EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
         fi
@@ -121,6 +121,13 @@ preConfigure() {
         # the target libgcc as target libraries.
         # See 'configure:5370'
         rm -Rf zlib
+    fi
+
+    if test -n "$crossMingw" -a -n "$crossStageStatic"; then
+        mkdir -p ../mingw
+        # --with-build-sysroot expects that:
+        cp -R $libcCross/include ../mingw
+        configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
     fi
 
     # Perform the build in a different directory.

@@ -68,13 +68,26 @@ let version = "4.5.0";
     withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
     withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+    crossMingw = (cross != null && cross.libc == "msvcrt");
 
     crossConfigureFlags =
       "--target=${cross.config}" +
       withArch +
       withCpu +
       withAbi +
-      (if crossStageStatic then
+      (if (crossMingw && crossStageStatic) then
+        " --with-headers=${libcCross}/include" +
+        " --with-gcc" +
+        " --with-gnu-as" +
+        " --with-gnu-ld" +
+        " --with-gnu-ld" +
+        " --disable-shared" +
+        " --disable-nls" +
+        " --disable-debug" +
+        " --enable-sjlj-exceptions" +
+        " --enable-threads=win32" +
+        " --disable-win32-registry"
+        else if crossStageStatic then
         " --disable-libssp --disable-nls" +
         " --without-headers" +
         " --disable-threads " +
@@ -86,9 +99,18 @@ let version = "4.5.0";
         " --with-headers=${libcCross}/include" +
         " --enable-__cxa_atexit" +
         " --enable-long-long" +
-        " --enable-threads=posix" +
-        " --enable-nls" +
-        " --disable-decimal-float" # No final libdecnumber (it may work only in 386)
+        (if crossMingw then
+          " --enable-threads=win32" +
+          " --enable-sjlj-exceptions" +
+          " --enable-hash-synchronization" +
+          " --enable-version-specific-runtime-libs" +
+          " --disable-libssp" +
+          " --disable-nls" +
+          " --with-dwarf2"
+          else
+          " --enable-threads=posix" +
+          " --enable-nls" +
+          " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
         );
     stageNameAddon = if (crossStageStatic) then "-stage-static" else
       "-stage-final";
@@ -110,7 +132,7 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [ ]
+    [ ./libstdc++-target.patch ]
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
     # target libraries and tools.
@@ -119,7 +141,7 @@ stdenv.mkDerivation ({
     ++ optional (cross != null && cross.arch == "sparc64") ./pr41818.patch;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
-    libcCross;
+    libcCross crossMingw;
 
   buildInputs = [ texinfo gmp mpfr mpc libelf gettext which ]
     ++ (optional (ppl != null) ppl)
@@ -227,6 +249,10 @@ stdenv.mkDerivation ({
     platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false) [ "i686-darwin" ];
   };
 }
+// (if cross != null && cross.libc == "msvcrt" && crossStageStatic then rec {
+  makeFlags = [ "all-gcc" "all-target-libgcc" ];
+  installTargets = "install-gcc install-target-libgcc";
+} else {})
 // (if langVhdl then rec {
   name = "ghdl-0.29";
 
