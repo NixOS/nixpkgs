@@ -121,4 +121,19 @@ let
   };
 in {
   crossUltraSparcLinux = mapTestOnCross crossSystem basic;
+}) // (
+
+/* Test some cross builds on mingw32 */
+let
+  crossSystem = {
+      config = "i686-pc-mingw32";
+      arch = "x86";
+      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+      platform = {};
+  };
+in {
+  crossMingw32 = mapTestOnCross crossSystem {
+    wxGTK.hostDrv = nativePlatforms;
+    gccCrossStageFinal = nativePlatforms;
+  };
 })
