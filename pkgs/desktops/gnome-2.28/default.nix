@@ -11,7 +11,6 @@ rec {
   gnomeicontheme = gnome_icon_theme;
 
   # !!! Missing! Need to add these.
-  libgnomeprintui = throw "libgnomeprintui not implemented";
   gnomepanel = throw "gnomepanel not implemented";
   gtksourceview_24 = gtksourceview;
 
@@ -50,6 +49,12 @@ rec {
   libgnomeprint = import ./platform/libgnomeprint {
     inherit intltool libart_lgpl libgnomecups;
     inherit (pkgs) stdenv fetchurl pkgconfig gettext libxml2 bison flex;
+    inherit (pkgs.gtkLibs) gtk;
+  };
+
+  libgnomeprintui = import ./platform/libgnomeprintui {
+    inherit intltool libgnomecanvas libgnomeprint gnomeicontheme;
+    inherit (pkgs) stdenv fetchurl pkgconfig gettext;
     inherit (pkgs.gtkLibs) gtk;
   };
 
