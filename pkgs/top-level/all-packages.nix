@@ -9433,8 +9433,8 @@ let
   };
 
   putty = import ../applications/networking/remote/putty {
-    inherit stdenv fetchurl ncurses;
-    inherit (gtkLibs1x) gtk;
+    inherit stdenv fetchsvn ncurses pkgconfig autoconf automake perl halibut;
+    inherit (gtkLibs) gtk;
   };
 
   rssglx = import ../misc/screensavers/rss-glx {
