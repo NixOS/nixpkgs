@@ -107,4 +107,25 @@ rec {
   git2cl = import ./git2cl {
     inherit fetchgit stdenv perl;
   };
+
+  gitSubtree = stdenv.mkDerivation {
+    name = "git-subtree-0.3";
+    src = fetchurl {
+      url = "http://github.com/apenwarr/git-subtree/tarball/v0.3";
+#      sha256 = "0y57lpbcc2142jgrr4lflyb9xgzs9x33r7g4b919ncn3alb95vdr";
+      sha256 = "f2ccac1e9cff4c35d989dc2a5581133c96b72d96c6a5ed89e51b6446dadac03f";
+    };
+    unpackCmd = "gzip -d < $curSrc | tar xvf -";
+    buildInputs = [ git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];
+    configurePhase = "export prefix=$out";
+    buildPhase = "true";
+    installPhase = ''
+      make install prefix=$out gitdir=$out/bin #work around to deal with a wrong makefile
+    '';
+    meta= {
+      description = "An experimental alternative to the git-submodule command";
+      homepage = http://github.com/apenwarr/git-subtree;
+      license = "GPLv2";
+    };
+  };
 }
