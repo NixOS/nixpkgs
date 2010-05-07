@@ -5041,6 +5041,17 @@ let
     inherit (gnome) glib;
   };
 
+  qt47 = makeOverridable (import ../development/libraries/qt-4.x/4.7) {
+    inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
+      fontconfig freetype pkgconfig libtiff perl coreutils sqlite alsaLib
+      postgresql pulseaudio;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
+      libXmu libXinerama xineramaproto libXcursor libXext libXi
+      inputproto fixesproto libXfixes libXv;
+    inherit (gnome) glib;
+  };
+
   qtscriptgenerator = makeOverridable (import ../development/libraries/qtscriptgenerator) {
     inherit stdenv fetchurl;
     qt4 = qt46;
