@@ -13,17 +13,17 @@ let
   obsolete = from: to: {
     name = "Obsolete name";
     msg.use = x:
-      builtins.trace "Option '${from}' is used instead of '${to}'." x;
+      builtins.trace "Obsolete option `${from}' is used instead of `${to}'." x;
     msg.define = x:
-      builtins.trace "Option '${from}' is defined instead of '${to}'." x;
+      builtins.trace "Obsolete option `${from}' is defined instead of `${to}'." x;
   };
 
   deprecated = from: to: {
     name = "Deprecated name";
     msg.use = x:
-      abort "Option '${from}' is used instead of '${to}'.";
+      abort "Deprecated option `${from}' is used instead of `${to}'.";
     msg.define = x:
-      abort "Option '${from}' is defined instead of '${to}'.";
+      abort "Deprecated option `${from}' is defined instead of `${to}'.";
   };
 
 
@@ -38,9 +38,9 @@ let
       setTo = setAttrByPath (splitString "." to);
       setFrom = setAttrByPath (splitString "." from);
       toOf = attrByPath (splitString "." to)
-        (abort "Renaming Error: option '${to}' does not exists.");
+        (abort "Renaming error: option `${to}' does not exists.");
       fromOf = attrByPath (splitString "." from)
-        (abort "Internal Error: option '${from}' should be declared.");
+        (abort "Internal error: option `${from}' should be declared.");
     in
       [{
         options = setFrom (mkOption {
