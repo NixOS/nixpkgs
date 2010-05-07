@@ -11,4 +11,15 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ kdelibs subversion qt4 phonon ];
   buildInputs = [ cmake automoc4 perl gettext pkgconfig apr aprutil boost stdenv.gcc.libc ];
+
+  meta = with stdenv.lib; {
+    maintainers = [ maintainers.urkud ];
+    platforms = [ platforms.linux ];
+    description = "KDE libraries for IDE-like programs";
+    longDescription = ''
+      A free, opensource set of libraries that can be used as a foundation for
+      IDE-like programs. It is programing-language independent, and is planned
+      to be used by programs like: KDevelop, Quanta, Kile, KTechLab ... etc."
+    '';
+  };
 }
