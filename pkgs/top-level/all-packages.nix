@@ -3502,7 +3502,7 @@ let
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
 
-  boost = makeOverridable (import ../development/libraries/boost/1.42.0.nix) {
+  boost = makeOverridable (import ../development/libraries/boost/1.43.0.nix) {
     inherit fetchurl stdenv icu expat zlib bzip2 python;
   };
 
