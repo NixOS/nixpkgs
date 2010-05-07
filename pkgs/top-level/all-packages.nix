@@ -5022,7 +5022,7 @@ let
 
   qt4 = qt46;
 
-  qt45 = import ../development/libraries/qt-4.5 {
+  qt45 = import ../development/libraries/qt-4.x/4.5 {
     inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
       fontconfig freetype pkgconfig libtiff;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
@@ -5031,7 +5031,7 @@ let
     inherit (gnome) glib;
   };
 
-  qt46 = makeOverridable (import ../development/libraries/qt-4.6) {
+  qt46 = makeOverridable (import ../development/libraries/qt-4.x/4.6) {
     inherit fetchurl stdenv lib zlib libjpeg libpng which mysql mesa openssl cups dbus
       fontconfig freetype pkgconfig libtiff perl coreutils sqlite alsaLib
       postgresql;
