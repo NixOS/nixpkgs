@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.urkud ];
-    platforms = [ platforms.linux ];
+    platforms = platforms.linux;
     description = "KDE libraries for IDE-like programs";
     longDescription = ''
       A free, opensource set of libraries that can be used as a foundation for
