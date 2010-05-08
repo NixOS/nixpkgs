@@ -4920,6 +4920,8 @@ let
     version = "1.4.0";
   };
 
+  openexr = openexr_1_6_1;
+
   openldap = import ../development/libraries/openldap {
     inherit fetchurl stdenv openssl cyrus_sasl db4 groff;
   };
@@ -7119,15 +7121,11 @@ let
   };
 
   blender = import ../applications/misc/blender {
-    inherit cmake mesa gettext freetype SDL libtiff fetchurl glibc scons x11 lib
-      libjpeg libpng zlib /* smpeg sdl */ python;
-    inherit (xlibs) inputproto libXi;
-    freealut = freealut_soft;
-    openal = openalSoft;
-    openexr = openexr_1_4_0;
-    # using gcc43 makes blender segfault when pressing p then esc.
-    # is this related to the PHP bug? I'm to lazy to try recompilng it without optimizations
-    stdenv = overrideGCC stdenv gcc42;
+    inherit fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
+      libsamplerate libtiff ilmbase;
+    inherit (xlibs) libXi;
+    python = python31Base;
+    stdenv = stdenv2;
   };
 
   bmp = import ../applications/audio/bmp {

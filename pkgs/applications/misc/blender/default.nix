@@ -1,50 +1,29 @@
-args: with args;
+{stdenv, fetchurl, cmake, mesa, gettext, python, libjpeg, libpng, zlib, openal, SDL
+, openexr, libsamplerate, libXi, libtiff, ilmbase }:
+
 stdenv.mkDerivation {
-  name = "blender-2.48";
+  name = "blender-2.50a";
 
   src = fetchurl {
-    url = http://download.blender.org/source/blender-2.48a.tar.gz;
-    sha256 = "0ijfpy510ls8xq1i8fb6j6wd0vac1jvnzmpiga4g7x1j4fg4s7bq";
+    url = http://download.blender.org/source/blender-2.50a1.tar.gz;
+    sha256 = "1cik05fmf9b8z3qpwsm6q9h1ia87w1piz87hxhfs24jw6l5pyiwr";
   };
 
-  phases="unpackPhase buildPhase";
+  buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal SDL openexr libsamplerate
+    libXi libtiff ilmbase ];
 
-  inherit scons SDL freetype openal python openexr mesa;
+  cmakeFlags = [ "-DOPENEXR_INC=${openexr}/include/OpenEXR" "-DWITH_OPENCOLLADA=OFF"
+    "-DPYTHON_LIBPATH=${python}/lib" ];
 
-  buildInputs = [python scons
-         gettext libjpeg libpng zlib freetype /* fmod smpeg */ freealut openal x11 mesa inputproto libtiff libXi 
-         ];
+  NIX_CFLAGS_COMPILE = "-iquote ${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
-  # patch SConstruct so that we can pass on additional include.  Either blender
-  # or openEXR is broken. I think OpenEXR should use include "" isntead of <> to
-  # include files beeing in the same directory
-  buildPhase = "
-cat >> user-config.py << EOF
-WITH_BF_OPENAL = 'true'
-WITH_BF_GAMEENGINE='true'
-WITH_BF_BULLET = 'true'
-WITH_BF_INTERNATIONAL = 'true'
-WITH_BF_OPENEXR = 'true'
-EOF
-
-    sed -i -e \"s=##### END SETUP ##########=env['CPPFLAGS'].append(os.getenv('CPPFLAGS').split(':'))\\n##### END SETUP ##########=\" SConstruct\n"
-    + " CPPFLAGS=-I$openexr/include/OpenEXR"
-    + " scons PREFIX=\$out/nix-support"
-    + " BF_SDL=\$SDL"
-    + " BF_SDL_LIBPATH=\$SDL/lib"
-    + " BF_FREETYPE=\$freetype"
-    + " BF_OPENAL=\$openal"
-    + " BF_PYTHON=\$python"
-    + " BF_OPENEXR_INC=\$openexr/include"
-    + " BF_OPENEXR_LIBPATH=\$openexr/lib"
-    + " BF_INSTALLDIR=\$out/nix-support/dontLinkThatMuch \n"
-    + " ensureDir \$out/bin\n"
-    + " ln -s \$out/nix-support/dontLinkThatMuch/blender \$out/bin/blender"
-    ;
+  patches = [ ./python-chmod.patch ];
 
   meta = { 
-      description = "3D Creation/Animation/Publishing System";
-      homepage = http://www.blender.org;
-      license = "GPL-2 BL";
-    };
+    description = "3D Creation/Animation/Publishing System";
+    homepage = http://www.blender.org;
+    # They comment two licenses: GPLv2 and Blender License, but they
+    # say: "We've decided to cancel the BL offering for an indefinite period."
+    license = "GPLv2+";
+  };
 }
