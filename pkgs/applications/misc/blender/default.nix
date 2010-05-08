@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, mesa, gettext, python, libjpeg, libpng, zlib, openal, SDL
 , openexr, libsamplerate, libXi, libtiff, ilmbase }:
 
-stdenv.mkDerivation {
-  name = "blender-2.50a";
+stdenv.mkDerivation rec {
+  name = "blender-2.50a1";
 
   src = fetchurl {
-    url = http://download.blender.org/source/blender-2.50a1.tar.gz;
+    url = "http://download.blender.org/source/${name}.tar.gz";
     sha256 = "1cik05fmf9b8z3qpwsm6q9h1ia87w1piz87hxhfs24jw6l5pyiwr";
   };
 
