@@ -141,7 +141,7 @@ in
             startOn = "started nfs-kernel-nfsd and started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f ${cfg.server.exports}";
+            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f /etc/exports";
           };
         }
 
