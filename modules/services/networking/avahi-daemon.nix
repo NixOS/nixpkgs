@@ -129,6 +129,8 @@ in
             # return a sensible value.
             export LD_LIBRARY_PATH="${config.system.nssModules.path}"
 
+            mkdir -p /var/run/avahi-daemon
+
             exec ${avahi}/sbin/avahi-daemon --daemonize -f "${avahiDaemonConf}"
           '';
       };
