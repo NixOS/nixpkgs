@@ -254,6 +254,14 @@ in
         description = "Contents of the first Device section of the X server configuration file.";
       };
 
+      screenSection = mkOption {
+        default = "";
+        example = ''
+          Option "RandRRotation" "on"
+        '';
+        description = "Contents of the first Screen section of the X server configuration file.";
+      };
+
       monitorSection = mkOption {
         default = "";
         example = "HorizSync 28-49";
@@ -484,6 +492,8 @@ in
           Section "Screen"
             Identifier "Screen-${driver.name}[0]"
             Device "Device-${driver.name}[0]"
+
+            ${cfg.screenSection}
 
             ${optionalString (cfg.defaultDepth != 0) ''
               DefaultDepth ${toString cfg.defaultDepth}
