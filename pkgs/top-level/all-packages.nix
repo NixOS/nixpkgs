@@ -3327,6 +3327,10 @@ let
     inherit fetchurl stdenv python makeWrapper;
   };
 
+  simpleBuildTool = import ../development/tools/build-managers/simple-build-tool {
+    inherit fetchurl stdenv;
+  };
+
   sloccount = import ../development/tools/misc/sloccount {
     inherit fetchurl stdenv perl;
   };
