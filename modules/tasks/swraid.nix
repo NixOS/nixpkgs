@@ -5,6 +5,7 @@
 let
 
   tempConf = "/var/run/mdadm.conf";
+  tempStatus = "/var/run/mdadm.status";
   logFile = "/var/log/mdadmEvents.log";
   modprobe = config.system.sbin.modprobe;
   inherit (pkgs) mdadm diffutils;
@@ -36,22 +37,43 @@ in
         ${modprobe}/sbin/modprobe $mod || true
       done
 
-      # Save previous probe
-      mv ${tempConf} ${tempConf}.old
+      # Wait until we can fetch the status of mdadm devices.
+      while ! test -e /proc/mdstat; do
+        sleep 10
+      done
 
       # Scan /proc/partitions for RAID devices.
       ${mdadm}/sbin/mdadm --examine --brief --scan -c partitions > ${tempConf}
 
-      if ! ${diffutils}/bin/diff ${tempConf} ${tempConf}.old > /dev/null; then
-        # Activate each device found.
-        ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
+      # If the status has changed.
+      if ! ${diffutils}/bin/diff -q /proc/mdstat ${tempStatus} > /dev/null; then
 
-        # Send notifications.
-        initctl emit -n new-devices
+        # Keep the previous status to watch changes.
+        cp ${tempStatus} ${tempStatus}.old
+
+        try=0
+        # Loop until the status change.
+        while ${diffutils}/bin/diff -q ${tempStatus} ${tempStatus}.old > /dev/null; do
+          test "$try" -gt 12 && break
+          test "$try" -ne 0 && sleep 10
+
+          # Activate each device found.
+          ${mdadm}/sbin/mdadm --assemble -c ${tempConf} --scan
+
+          # Register the new status
+          cp /proc/mdstat ${tempStatus}
+
+          try=$(($try + 1))
+        done
+
+        if test "$try" -le 6; then
+          # Send notifications.
+          initctl emit -n new-devices
+        fi
+
+        # Remove previous status.
+        rm ${tempStatus}.old
       fi
-
-      # Remove previous configuration.
-      rm ${tempConf}.old
     '';
 
     task = true;
@@ -64,6 +86,7 @@ in
 
     postStart = ''
       echo > ${tempConf}
+      echo > ${tempStatus}
 
       # Assemble early raid devices.
       initctl emit -n new-raid-array
