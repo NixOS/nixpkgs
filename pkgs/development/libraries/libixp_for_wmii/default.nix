@@ -14,7 +14,7 @@ stdenv.mkDerivation {
      cp -r lib \$out
   ";
   src = fetchurl {
-    url = http://code.suckless.org/dl/libs/libixp-0.4.tar.gz;
+    url = http://dl.suckless.org/libs/libixp-0.4.tar.gz;
     sha256 = "0b44p9wvmzxpyf2xd86rxyr49bmfh9cd5hj3d234gkvynvgph60p";
   };
 
