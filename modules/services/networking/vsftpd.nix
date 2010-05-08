@@ -123,8 +123,11 @@ in
             secure_chroot_dir=/var/ftp/empty
             EOF
 
-            mkdir -p ${cfg.anonymousUserHome}
-            chown -R ftp:ftp ${cfg.anonymousUserHome}
+            ${if cfg.anonymousUser then ''
+              mkdir -p ${cfg.anonymousUserHome}
+              chown -R ftp:ftp ${cfg.anonymousUserHome}
+            '' else ""}
+            }
           '';
 
         exec = "${vsftpd}/sbin/vsftpd /etc/vsftpd.conf";
