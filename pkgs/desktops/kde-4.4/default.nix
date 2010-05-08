@@ -10,8 +10,9 @@ pkgs.recurseIntoAttrs (rec {
   };
 
   phonon = import ./support/phonon {
-    inherit (pkgs) stdenv fetchurl lib cmake;
-    inherit (pkgs) qt4 gst_all xineLib;
+    inherit (pkgs) stdenv fetchurl cmake pkgconfig;
+    inherit (pkgs) qt4 xineLib pulseaudio;
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
     inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
     inherit automoc4;
   };
