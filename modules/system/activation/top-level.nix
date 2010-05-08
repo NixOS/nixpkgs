@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{pkgs, config, modules, baseModules, ...}:
 
 let
 
@@ -15,6 +15,14 @@ let
       default = [];
       description = ''
         Additional configurations to build.
+      '';
+    };
+
+    nesting.clone = pkgs.lib.mkOption {
+      default = [];
+      description = ''
+        Additional configurations to build based on the current
+        configuration which is has a lower priority.
       '';
     };
 
@@ -71,18 +79,20 @@ let
   # you can provide an easy way to boot the same configuration 
   # as you use, but with another kernel
   # !!! fix this
-  children = with pkgs.lib;
+  cloner = inheritParent: list: with pkgs.lib;
     map (childConfig:
       (import ../../../lib/eval-config.nix {
-        modules = [
-          (recursiveUpdate childConfig {
-            boot.loader.grub.device = "";
-            # undefined the obsolete name of the previous option.
-            boot.grubDevice = pkgs.lib.mkNotdef;
-          })
-        ] ++ attrByPath ["require"] [] childConfig;
+        inherit baseModules;
+        modules =
+           (optionals inheritParent modules)
+        ++ [ ./no-clone.nix ]
+        ++ [ childConfig ];
       }).config.system.build.toplevel
-    ) config.nesting.children;
+    ) list;
+
+  children =
+     cloner false config.nesting.children
+  ++ cloner true config.nesting.clone;
 
 
   systemBuilder =

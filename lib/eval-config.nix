@@ -30,7 +30,7 @@ rec {
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
   extraArgs = extraArgs_ // {
-    inherit pkgs;
+    inherit pkgs modules baseModules;
     modulesPath = ../modules;
     servicesPath = services;
   };
