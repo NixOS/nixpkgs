@@ -116,5 +116,5 @@ in
   require = [options];
 
   environment.systemPackages = requiredPackages;
-  environment.pathsToLink = ["/bin" "/sbin" "/lib" "/share/man" "/share/info" "/man" "/info"];
+  environment.pathsToLink = ["/bin" "/sbin" "/lib" "/share/man" "/share/info" "/man" "/info" "/etc/xdg"];
 }
