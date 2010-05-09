@@ -6,7 +6,27 @@ let
 
   cfg = config.services.postgresql;
 
-  postgresql = pkgs.postgresql;
+  # see description of extraPlugins
+  postgresqlAndPlugins = pg:
+    if cfg.extraPlugins == [] then pg
+    else pkgs.runCommand "postgresql-and-plugins" {
+      inherit (pkgs) perl;
+      inherit pg;
+      # used by env builder:
+      paths = [ pg ] ++ cfg.extraPlugins;
+      pathsToLink = "/";
+      ignoreCollisions = 0;
+      manifest = null;
+    }
+      ''
+        perlScript=${pkgs.buildEnvScript}
+        mkdir -p $out/bin
+        $perl/bin/perl $perlScript
+        rm $out/bin/{pg_config,postgres,pg_ctl}
+        cp --target-directory=$out/bin $pg/bin/{postgres,pg_config,pg_ctl}
+      '';
+
+  postgresql = postgresqlAndPlugins pkgs.postgresql;
 
   startDependency = if config.services.gw6c.enable then 
     "gw6c" else "network-interfaces";
@@ -94,6 +114,21 @@ in
         description = ''
           Whether to run PostgreSQL with -i flag to enable TCP/IP connections.
         '';
+      };
+
+      extraPlugins = mkOption {
+        default = [];
+        example = "pkgs.postgis"; # of course don't use a string here!
+        description = ''
+          When this list contains elemnts a new store path is created.
+          Postgresql and the elments are symlinked into it. Then pg_config,
+          postgres and pc_ctl are copied to make them use the new
+          $out/lib directory as pkglibdir. This make it possible to use postgis
+          without patching the .sql files which reference $libdir/postgis-1.5.
+        '';
+        # Note: the duplication of executables is about 4MB size.
+        # So a nicer solution was patching postgresql to allow setting the
+        # libdir explicitely.
       };
       
     };
