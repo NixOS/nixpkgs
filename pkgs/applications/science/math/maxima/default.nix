@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Maxima computer algebra system";
     homepage = http://maxima.sourceforge.net;
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
-
-  maintainers = [ stdenv.lib.maintainers.simons ];
 }

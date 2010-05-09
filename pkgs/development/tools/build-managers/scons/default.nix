@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
        SCons is an easier, more reliable and faster way to build
        software.
     '';
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
-
-  maintainers = [ stdenv.lib.maintainers.simons ];
 }
