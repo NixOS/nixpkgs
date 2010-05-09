@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
     ];
 
   patchPhase =
-    '' for i in "tests/"*.sh
-       do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
-         chmod +x "$i"
-       done
+    ''
+      for i in "tests/"*.sh
+      do
+        sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+        chmod +x "$i"
+      done
+      sed -i s,/usr/sbin,$out/sbin, utils/statd/statd.c
     '';
 
   preBuild =
