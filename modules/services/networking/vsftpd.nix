@@ -127,7 +127,6 @@ in
               mkdir -p ${cfg.anonymousUserHome}
               chown -R ftp:ftp ${cfg.anonymousUserHome}
             '' else ""}
-            }
           '';
 
         exec = "${vsftpd}/sbin/vsftpd /etc/vsftpd.conf";
