@@ -218,6 +218,7 @@ let
     theAttrSet = arg;
   };
 
+  buildEnvScript = ../build-support/buildenv/builder.pl;
   buildEnv = import ../build-support/buildenv {
     inherit stdenv perl;
   };
@@ -5010,6 +5011,10 @@ let
 
   proj = import ../development/libraries/proj.4 {
     inherit fetchurl stdenv;
+  };
+
+  postgis = import ../development/libraries/postgis {
+    inherit stdenv fetchurl libxml2 postgresql geos proj perl;
   };
 
   pth = import ../development/libraries/pth {
