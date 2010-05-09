@@ -10,6 +10,7 @@
 , xproto ? null
 , arch ? null
 , sw_vers ? null
+, ncurses ? null
 }:
 
 assert zlibSupport -> zlib != null;
@@ -39,6 +40,7 @@ let
     ++ optional (xproto != null) xproto
     ++ optional (arch != null) arch
     ++ optional (sw_vers != null) sw_vers
+    ++ optional (ncurses != null) ncurses
     ;
 
 in

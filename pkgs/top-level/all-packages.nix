@@ -2768,11 +2768,11 @@ let
     inherit fetchurl stdenv zlib bzip2;
   };
 
-  python25Base = composedArgsAndFun (import ../development/interpreters/python/2.5) {
+  python25Base = makeOverridable (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
   };
 
-  python25Full = lowPrio (python25Base.passthru.function {
+  python25Full = lowPrio (python25Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
     db4 = if getConfig ["python" "db4Support"] true then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
@@ -2782,15 +2782,16 @@ let
     tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
     libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
     xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
+    ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
-  python26Base = composedArgsAndFun (import ../development/interpreters/python/2.6) {
+  python26Base = makeOverridable (import ../development/interpreters/python/2.6) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   };
 
-  python26Full = lowPrio (python26Base.passthru.function {
+  python26Full = lowPrio (python26Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
     db4 = if getConfig ["python" "db4Support"] true then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
@@ -2800,9 +2801,10 @@ let
     tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
     libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
     xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
+    ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
-  python31Base = lowPrio (composedArgsAndFun (import ../development/interpreters/python/3.1) {
+  python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;

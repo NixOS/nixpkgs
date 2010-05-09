@@ -8,6 +8,7 @@
 , tcl ? null
 , libX11 ? null
 , xproto ? null
+, ncurses ? null
 }:
 
 assert zlibSupport -> zlib != null;
@@ -30,6 +31,8 @@ let
     ++ optional (tcl != null) tcl
     ++ optional (libX11 != null) libX11
     ++ optional (xproto != null) xproto
+    ++ optional (xproto != null) xproto
+    ++ optional (ncurses != null) ncurses
     ;
 
 in
