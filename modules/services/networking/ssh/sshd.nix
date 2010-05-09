@@ -129,7 +129,11 @@ in
 
         startOn = "started network-interfaces";
 
-        environment = { LD_LIBRARY_PATH = nssModulesPath; };
+        environment = {
+          LD_LIBRARY_PATH = nssModulesPath;
+          # Duplicated from bashrc. OpenSSH needs a patch for this.
+          LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
+        };
 
         preStart =
           ''
