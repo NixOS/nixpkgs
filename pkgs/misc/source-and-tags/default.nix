@@ -48,7 +48,7 @@ args: with args; {
         sourceWithTags = {
          inherit (deriv) src;
          srcDir = if deriv ? srcDir then deriv.srcDir else ".";
-         name = deriv.name + "-src-with-tags";
+         name = deriv.name;
          createTagFiles = [
                { name = "${deriv.name}_haskell";
                  # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
