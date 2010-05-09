@@ -466,7 +466,8 @@
 
 (define (ftp-server/directory project)
   (define quirks
-    '(("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
+    '(("commoncpp2"   "ftp.gnu.org"   "/gnu/commoncpp" #f)
+      ("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
       ("libgpg-error" "ftp.gnupg.org" "/gcrypt" #t)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/ghostscript" #f)
