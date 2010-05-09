@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "12kywhjnz6w6kx5fk526fhs2xc7rf234hwrms9p1hqv6zrpdvvin";
   };
 
-  patchPhase = stdenv.lib.optionalString hpnSupport
+  prePatch = stdenv.lib.optionalString hpnSupport
     ''
       gunzip -c ${hpnSrc} | patch -p1
     '';
+  patches = [ ./locale_archive.patch ];
   
   buildInputs =
     [ zlib openssl perl libedit pkgconfig ]
