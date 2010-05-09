@@ -7399,9 +7399,10 @@ let
 
   emacs23 = import ../applications/editors/emacs-23 {
     inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
-      libpng libjpeg libungif libtiff texinfo dbus;
+      libpng libjpeg libungif libtiff librsvg texinfo dbus;
     inherit (xlibs) libXaw libXpm libXft;
     inherit (gtkLibs) gtk;
+    gconf = gnome.GConf;  # optional GConf support.
     xawSupport = stdenv.isDarwin || getPkgConfig "emacs" "xawSupport" false;
     xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;

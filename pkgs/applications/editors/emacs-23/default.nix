@@ -6,7 +6,8 @@
 , xftSupport ? false
 , stdenv, fetchurl, ncurses, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
 , pkgconfig ? null, gtk ? null, libXft ? null, dbus ? null
-, libpng, libjpeg, libungif, libtiff, texinfo
+, libpng, libjpeg, libungif, libtiff, librsvg, texinfo
+, gconf ? null
 }:
 
 assert xawSupport -> libXaw != null;
@@ -33,14 +34,14 @@ stdenv.mkDerivation rec {
     (if xpmSupport then libXpm else null)
     (if dbusSupport then dbus else null)
     (if xaw3dSupport then Xaw3d else null)
-    libpng libjpeg libungif libtiff # maybe not strictly required?
+    libpng libjpeg libungif libtiff librsvg
   ]
   ++ (if gtkGUI then [pkgconfig gtk] else [])
-  ++ (if xftSupport then [libXft] else []);
+  ++ (if xftSupport then [libXft] else [])
+  ++ stdenv.lib.optional (gconf != null) gconf;
 
-  configureFlags = "
-    ${if gtkGUI then "--with-x-toolkit=gtk --enable-font-backend --with-xft" else ""}
-  ";
+  configureFlags =
+    stdenv.lib.optionals gtkGUI [ "--with-x-toolkit=gtk" "--with-xft" ];
 
   doCheck = true;
 
