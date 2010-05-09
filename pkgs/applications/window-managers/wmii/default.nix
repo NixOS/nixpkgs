@@ -1,12 +1,14 @@
 args: with args; stdenv.mkDerivation {
-  name = "wmii-20071116";
+  name = "wmii-3.9b1";
 
   src = fetchurl {
-    url = http://dl.suckless.org/wmii/wmii-3.6.tar.gz;
-    sha256 = "46f39b788c5ef4695040b36cc7d9c539db0306bafc4d8cefdc5980ed4331b216";
+    url = http://dl.suckless.org/wmii/wmii+ixp-3.9b1.tbz;
+    name = "wmii+ixp-3.9b1.tar.bz2"; # srcUnpack does not know about tbz
+    sha256 = "0i04mf5cl4m6mn5kcy913mmrnd2ir0ardmskswchnr6fxpbcyvml";
   };
 
-  buildInputs = [ libX11 libixp xextproto libXt libXext ];
+  buildInputs = [ libX11 libixp xextproto libXt libXext libXft
+    freetype libXrandr libXinerama pkgconfig];
   inherit libixp;
 
   phases = "unpackPhase installPhase";
