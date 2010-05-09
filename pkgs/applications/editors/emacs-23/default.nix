@@ -18,13 +18,13 @@ assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
 assert stdenv.system == "i686-darwin" -> xawSupport; # fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-23.1";
+  name = "emacs-23.2";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.bz2";
-    sha256 = "076b4ixdp29l4c02bwic26d14gxlj0lcqyam33wyj3ksgi2z8d9b";
+    sha256 = "1i96hp91s86jawrqjhfxm5y2sjxizv99009128b4bh06bgx6dm7z";
   };
 
   buildInputs = [
