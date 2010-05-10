@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.17";
+  name = "gettext-0.18";
   
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "1fipjpaxxwifdw6cbr7mkxp1yvy643i38nhlh7124bqnisxki5i0";
+    sha256 = "1rbgm6sxgq218pridn2vji5nlj3hdf4vs75rz00wc0wcw4fjqd02";
   };
 
   configureFlags = "--disable-csharp";
@@ -51,6 +51,7 @@ stdenv.mkDerivation (rec {
     homepage = http://www.gnu.org/software/gettext/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
 
