@@ -7131,13 +7131,21 @@ let
     openal = openalSoft;
   };
 
-  blender = import ../applications/misc/blender {
+  blender = import ../applications/misc/blender/2.49.nix {
+    inherit fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
+      libsamplerate libtiff ilmbase freetype;
+    inherit (xlibs) libXi;
+    python = python26Base;
+    stdenv = stdenv2;
+  };
+
+  blender_2_50 = lowPrio (import ../applications/misc/blender {
     inherit fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
       libsamplerate libtiff ilmbase;
     inherit (xlibs) libXi;
     python = python31Base;
     stdenv = stdenv2;
-  };
+  });
 
   bmp = import ../applications/audio/bmp {
     inherit fetchurl stdenv pkgconfig libogg libvorbis alsaLib id3lib;
