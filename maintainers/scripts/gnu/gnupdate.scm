@@ -658,9 +658,13 @@
                   (format #t "~%")
                   (format #t "  -x, --xml=FILE      Read XML output of `nix-instantiate'~%")
                   (format #t "                      from FILE.~%")
+                  (format #t "  -d, --dry-run       Don't actually update Nix expressions~%")
                   (format #t "  -h, --help          Give this help list.~%~%")
                   (format #t "Report bugs to <ludo@gnu.org>~%")
                   (exit 0)))
+        (option '(#\d "dry-run") #f #f
+                (lambda (opt name arg result)
+                  (alist-cons 'dry-run #t result)))
 
         (option '(#\x "xml") #t #f
                 (lambda (opt name arg result)
@@ -695,8 +699,13 @@
                     old-version old-hash
                     new-version new-hash
                     location)
-                   (update-nix-expression (location-file location)
-                                          old-version old-hash
-                                          new-version new-hash))
+                   (if (assoc-ref opts 'dry-run)
+                       (format #t "`~a' would be updated from ~a to ~a (~a -> ~a)~%"
+                               name old-version new-version
+                               old-hash new-hash)
+                       (update-nix-expression (location-file location)
+                                              old-version old-hash
+                                              new-version new-hash)))
                   (_ #f)))
-              updates)))
+              updates)
+    #t))
