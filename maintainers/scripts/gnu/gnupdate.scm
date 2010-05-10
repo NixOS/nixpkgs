@@ -472,6 +472,7 @@
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/ghostscript" #f)
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
+      ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg")
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
       ("TeXmacs"      "ftp.texmacs.org" "/TeXmacs/targz" #f)))
 
@@ -493,6 +494,7 @@
       ("gnused"      . "sed")
       ("gnutar"      . "tar")
       ("gnunet"      . "GNUnet") ;; ftp.gnu.org/gnu/gnunet/GNUnet-x.y.tar.gz
+      ("mitscheme"   . "mit-scheme")
       ("texmacs"     . "TeXmacs")))
 
   (or (assoc-ref quirks project) project))
