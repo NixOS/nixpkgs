@@ -3823,6 +3823,11 @@ let
     inherit fetchurl stdenv libiconv;
   };
 
+  # XXX: Remove me when `stdenv-updates' is merged.
+  gettext_0_18 = import ../development/libraries/gettext/0.18.nix {
+    inherit fetchurl stdenv libiconv;
+  };
+
   gd = import ../development/libraries/gd {
     inherit fetchurl stdenv zlib libpng freetype libjpeg fontconfig;
   };
