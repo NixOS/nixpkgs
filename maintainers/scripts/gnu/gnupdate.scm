@@ -360,7 +360,7 @@
            (throw 'ftp-error conn "PASV" 227 message)))))
 
 
-(define (ftp-list conn)
+(define* (ftp-list conn #:optional directory)
   (define (address-with-port sa port)
     (let ((fam  (sockaddr:fam sa))
           (addr (sockaddr:addr sa)))
@@ -371,6 +371,9 @@
                                   (sockaddr:flowinfo sa)
                                   (sockaddr:scopeid sa)))
             (else #f))))
+
+  (if directory
+      (ftp-chdir conn directory))
 
   (let* ((port (ftp-pasv conn))
          (ai   (ftp-connection-addrinfo conn))
@@ -514,21 +517,20 @@
   (catch #t
     (lambda ()
       (let-values (((server directory) (ftp-server/directory project)))
-        (let ((conn (ftp-open server)))
-          (ftp-chdir conn directory)
-          (let ((files (ftp-list conn)))
-            (ftp-close conn)
-            (map (lambda (tarball)
-                   (let ((end (string-contains tarball ".tar")))
-                     (substring tarball 0 end)))
+        (let* ((conn  (ftp-open server))
+               (files (ftp-list conn directory)))
+          (ftp-close conn)
+          (map (lambda (tarball)
+                 (let ((end (string-contains tarball ".tar")))
+                   (substring tarball 0 end)))
 
-                 ;; Filter out signatures, deltas, and files which are potentially
-                 ;; not releases of PROJECT (e.g., in /gnu/guile, filter out
-                 ;; guile-oops and guile-www).
-                 (filter (lambda (file)
-                           (and (not (string-suffix? ".sig" file))
-                                (regexp-exec release-rx file)))
-                         files))))))
+               ;; Filter out signatures, deltas, and files which are potentially
+               ;; not releases of PROJECT (e.g., in /gnu/guile, filter out
+               ;; guile-oops and guile-www).
+               (filter (lambda (file)
+                         (and (not (string-suffix? ".sig" file))
+                              (regexp-exec release-rx file)))
+                       files)))))
     (lambda (key subr message . args)
       (format (current-error-port)
               "failed to get release list for `~A': ~A ~A~%"
