@@ -1,4 +1,4 @@
 #!/bin/sh
 
 exec "${GUILE:-guile}" $GUILE_FLAGS -L . -l gnupdate.scm \
-  -c '(apply main (cdr (command-line)))' -- "$@"
+  -e '(apply main (cdr (command-line)))' -- "$@"
