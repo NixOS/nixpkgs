@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   name = "wdiff-0.6.1";
-  
+
   src = fetchurl {
-    url = "http://alpha.gnu.org/gnu/wdiff/${name}.tar.gz";
+    url = "mirror://gnu/wdiff/${name}.tar.gz";
     sha256 = "0cgmx9k8sj0l79kp4m2lmn4ifx55ah68q4qk7xsanx69m1061ghf";
   };
 
