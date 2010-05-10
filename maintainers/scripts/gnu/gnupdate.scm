@@ -440,7 +440,7 @@
                       (match attr
                         (('attribute _ "description" value)
                          (string-prefix? "GNU" value))
-                        (('attribute "homepage" value)
+                        (('attribute _ "homepage" value)
                          (string-contains value "www.gnu.org"))
                         (_ #f)))
                     metas))
