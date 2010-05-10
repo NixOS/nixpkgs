@@ -307,6 +307,14 @@
         message
         (throw 'ftp-error port command code message))))
 
+(define (%ftp-login user pass port)
+  (display (string-append "USER " user (string #\newline)) port)
+  (let-values (((code message) (%ftp-listen port)))
+    (case code
+      ((230)  #t)
+      ((331) (%ftp-command (string-append "PASS " pass) 230 port))
+      (else  (throw 'ftp-error port command code message)))))
+
 (define (ftp-open host)
   (catch 'getaddrinfo-error
     (lambda ()
@@ -319,8 +327,7 @@
           (if (eqv? code 220)
               (begin
                 ;(%ftp-command "OPTS UTF8 ON" 200 s)
-                ;; FIXME: When `USER' returns 331, we should do a `PASS email'.
-                (%ftp-command "USER anonymous" 230 s)
+                (%ftp-login "anonymous" "ludo@example.com" s)
                 (%make-ftp-connection s ai))
               (begin
                 (format (current-error-port) "FTP to `~a' failed: ~A: ~A~%"
