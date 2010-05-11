@@ -57,6 +57,10 @@ rec {
     inherit cabal;
   };
 
+  bitmap = import ../development/libraries/haskell/bitmap {
+    inherit cabal;
+  };
+
   bytestring = import ../development/libraries/haskell/bytestring {
     inherit cabal;
   };
@@ -76,6 +80,10 @@ rec {
 
   cgi = import ../development/libraries/haskell/cgi {
     inherit cabal mtl network parsec xhtml;
+  };
+
+  cmdargs = import ../development/libraries/haskell/cmdargs {
+    inherit cabal filepath mtl;
   };
 
   colorizeHaskell = import ../development/libraries/haskell/colorize-haskell {
@@ -204,6 +212,10 @@ rec {
     cgi = cgi3001172;
     HTTP = HTTP400009;
     network = network2217;
+  };
+
+  GlomeVec = import ../development/libraries/haskell/GlomeVec {
+    inherit cabal;
   };
 
   GLUT2121 = import ../development/libraries/haskell/GLUT/2.1.2.1.nix {
@@ -677,6 +689,10 @@ rec {
 
   split = import ../development/libraries/haskell/split {
     inherit cabal;
+  };
+
+  stbImage = import ../development/libraries/haskell/stb-image {
+    inherit cabal bitmap;
   };
 
   stm = import ../development/libraries/haskell/stm {
