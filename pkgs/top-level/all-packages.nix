@@ -8141,6 +8141,10 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  openjump = import ../applications/misc/openjump {
+    inherit stdenv fetchurl unzip;
+  };
+
   openoffice = import ../applications/office/openoffice {
     inherit fetchurl stdenv pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
