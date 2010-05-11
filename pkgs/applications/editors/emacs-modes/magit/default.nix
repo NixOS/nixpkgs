@@ -1,14 +1,15 @@
-{stdenv, fetchurl, emacs, texinfo, autoconf, automake}:
+{ stdenv, fetchgit, emacs, texinfo, autoconf, automake }:
 
 let
-    version = "0.7-109-g0fc3980";
+  version = "0.7-180-gcb458d5";
 in
 stdenv.mkDerivation {
   name = "magit-${version}";
 
-  src = fetchurl {
-    url = "http://cryp.to/magit-mainline-${version}.tar.gz";
-    sha256 = "0jyx57znvn49xm0h92kh8iywn44ip130dpflzq2ns2k6gspg36b6";
+  src = fetchgit {
+    url = "http://git.gitorious.org/magit/mainline.git";
+    rev = "cb458d59182a4497b3435090ae71357b6b8c385d";
+    sha256 = "1vbafn0drkzhrr6yrgvf62aa9bnk785vavdgsmngjfxql1ngaq2x";
   };
   unpackCmd = "tar xf $src";
   preConfigure = "./autogen.sh";

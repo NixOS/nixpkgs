@@ -7484,7 +7484,8 @@ let
     };
 
     magit = import ../applications/editors/emacs-modes/magit {
-      inherit fetchurl stdenv emacs texinfo autoconf automake;
+      inherit fetchgit stdenv emacs texinfo autoconf;
+      automake = automake111x;
     };
 
     maudeMode = import ../applications/editors/emacs-modes/maude {
