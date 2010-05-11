@@ -9209,6 +9209,11 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  coq_beta = import ../applications/science/logic/coq/beta.nix {
+    inherit stdenv fetchurl ocaml lablgtk ncurses;
+    camlp5 = camlp5_transitional;
+  };
+
   hol_light = import ../applications/science/logic/hol_light {
     inherit stdenv fetchurl ocaml_with_sources;
   };
