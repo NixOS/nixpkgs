@@ -1386,6 +1386,10 @@ let
     inherit (gnome) glib gtk;
   };
 
+  pk2cmd = import ../tools/misc/pk2cmd {
+    inherit fetchurl stdenv libusb makeWrapper;
+  };
+
   plan9port = import ../tools/system/plan9port {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 xproto libXt xextproto;
