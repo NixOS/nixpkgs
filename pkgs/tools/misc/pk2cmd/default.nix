@@ -1,5 +1,7 @@
 {stdenv, fetchurl, libusb, makeWrapper}:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation {
   name = "pk2cmd-1.20";
   src = fetchurl {
