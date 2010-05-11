@@ -8216,6 +8216,10 @@ let
     inherit fetchurl stdenv libotr pidgin;
   };
 
+  pidginsipe = import ../applications/networking/instant-messengers/pidgin-plugins/sipe {
+    inherit fetchurl stdenv pidgin intltool libxml2;
+  };
+
   pinfo = import ../applications/misc/pinfo {
     inherit fetchurl stdenv ncurses readline;
   };
