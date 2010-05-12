@@ -7556,6 +7556,10 @@ let
     inherit stdenv fetchurl openssl;
   };
 
+  fossil = import ../applications/version-management/fossil {
+    inherit stdenv fetchurl zlib openssl;
+  };
+
   grip = import ../applications/misc/grip {
     inherit fetchurl stdenv lib grip pkgconfig curl cdparanoia libid3tag;
     inherit (gtkLibs) gtk glib;
