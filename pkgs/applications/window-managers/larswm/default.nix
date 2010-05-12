@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     xmkmf
-    makeFlags="DESTDIR=$out"
+    makeFlags="BINDIR=$out/bin"
   '';
 
   meta = {
