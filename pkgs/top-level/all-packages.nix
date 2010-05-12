@@ -6065,6 +6065,13 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  hurdHeaders = import ../os-specific/gnu/hurd {
+    inherit fetchgit stdenv autoconf libtool texinfo machHeaders;
+    mig = migCross;
+    automake = automake111x;
+    headersOnly = true;
+  };
+
   hwdata = import ../os-specific/linux/hwdata {
     inherit fetchurl stdenv;
   };
