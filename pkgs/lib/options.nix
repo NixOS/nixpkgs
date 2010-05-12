@@ -262,8 +262,8 @@ rec {
             declarations = map (x: toString x.source) opt.declarations;
             definitions = map (x: toString x.source) opt.definitions;
           }
-          // optionalAttrs (opt ? example) { example = opt.example; }
-          // optionalAttrs (opt ? default) { default = opt.default; };
+          // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
+          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; };
 
           subOptions =
             if opt ? options then
@@ -275,4 +275,16 @@ rec {
       ) [] options;
 
 
+  /* This function recursively removes all derivation attributes from
+     `x' except for the `name' attribute.  This is to make the
+     generation of `options.xml' much more efficient: the XML
+     representation of derivations is very large (on the order of
+     megabytes) and is not actually used by the manual generator. */
+  scrubOptionValue = x: 
+    if isDerivation x then { type = "derivation"; drvPath = x.name; name = x.name; }
+    else if isList x then map scrubOptionValue x
+    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) x
+    else x;
+
+    
 }
