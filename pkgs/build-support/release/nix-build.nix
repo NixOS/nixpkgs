@@ -7,6 +7,7 @@
 
 { doCoverageAnalysis ? false
 , lcovFilter ? []
+, lcovExtraTraceFiles ? []
 , src, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , ... } @ args:
@@ -73,8 +74,9 @@ stdenv.mkDerivation (
       ${args.lcov}/bin/lcov --remove app.info $lcovFilter > app2.info
       set +o noglob
       mv app2.info app.info
+
       mkdir $out/coverage
-      ${args.lcov}/bin/genhtml app.info -o $out/coverage > log
+      ${args.lcov}/bin/genhtml app.info $lcovExtraTraceFiles -o $out/coverage > log
 
       # Grab the overall coverage percentage for use in release overviews.
       grep "Overall coverage rate" log | sed 's/^.*(\(.*\)%).*$/\1/' > $out/nix-support/coverage-rate
@@ -85,6 +87,7 @@ stdenv.mkDerivation (
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 
+    inherit lcovExtraTraceFiles;
 
     meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
