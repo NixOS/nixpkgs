@@ -136,4 +136,21 @@ in {
     windows.wxMSW.hostDrv = nativePlatforms;
     gccCrossStageFinal = nativePlatforms;
   };
+}) // (
+
+/* GNU aka. GNU/Hurd.  */
+let
+  crossSystem = {
+    config = "i586-pc-gnu";
+    bigEndian = false;
+    arch = "i586";
+    float = "hard";
+    withTLS = true;
+    platform = pkgs.platforms.pc;
+    libc = "glibc";
+  };
+in {
+  crossGNU = mapTestOnCross crossSystem {
+    gccCrossStageFinal = nativePlatforms;
+  };
 })
