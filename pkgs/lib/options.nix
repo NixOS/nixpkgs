@@ -281,7 +281,7 @@ rec {
      representation of derivations is very large (on the order of
      megabytes) and is not actually used by the manual generator. */
   scrubOptionValue = x: 
-    if isDerivation x then { type = "derivation"; drvPath = x.name; name = x.name; }
+    if isDerivation x then { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) x
     else x;
