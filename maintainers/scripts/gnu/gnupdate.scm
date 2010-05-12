@@ -308,12 +308,13 @@
         (throw 'ftp-error port command code message))))
 
 (define (%ftp-login user pass port)
-  (display (string-append "USER " user (string #\newline)) port)
-  (let-values (((code message) (%ftp-listen port)))
-    (case code
-      ((230)  #t)
-      ((331) (%ftp-command (string-append "PASS " pass) 230 port))
-      (else  (throw 'ftp-error port command code message)))))
+  (let ((command (string-append "USER " user (string #\newline))))
+    (display command port)
+    (let-values (((code message) (%ftp-listen port)))
+      (case code
+        ((230)  #t)
+        ((331) (%ftp-command (string-append "PASS " pass) 230 port))
+        (else  (throw 'ftp-error port command code message))))))
 
 (define (ftp-open host)
   (catch 'getaddrinfo-error
