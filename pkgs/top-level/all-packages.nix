@@ -7991,6 +7991,11 @@ let
     inherit fetchurl stdenv nasm;
   };
 
+  larswm = import ../applications/window-managers/larswm {
+    inherit fetchurl stdenv;
+    inherit (xlibs) imake libX11 libXext libXmu;
+  };
+
   ladspaH = import ../applications/audio/ladspa-plugins/ladspah.nix {
     inherit fetchurl stdenv builderDefs stringsWithDeps;
   };

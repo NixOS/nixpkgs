@@ -2,7 +2,8 @@
 
 let build = import ./common.nix;
 in
-  build {
+  /* null cross builder */
+  build null {
     name = "glibc-info";
 
     inherit fetchurl stdenv;
