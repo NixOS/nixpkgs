@@ -6483,6 +6483,12 @@ let
     inherit fetchurl stdenv;
   };
 
+  machHeaders = import ../os-specific/gnu/mach {
+    inherit fetchgit stdenv autoconf texinfo;
+    automake = automake111x;
+    headersOnly = true;
+  };
+
   mdadm = import ../os-specific/linux/mdadm {
     inherit fetchurl stdenv groff;
   };
