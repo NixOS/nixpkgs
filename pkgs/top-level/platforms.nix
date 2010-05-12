@@ -62,6 +62,8 @@ rec {
         ATM_HE n
         SCSI_ACARD n
         BLK_DEV_CMD640_ENHANCED n
+
+        FUSE_FS m
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";
