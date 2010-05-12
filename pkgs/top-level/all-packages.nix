@@ -3902,7 +3902,7 @@ let
   };
 
   glibc211Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11)
-    (let crossGNU = (crossSystem.config == "i586-pc-gnu");
+    (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
      in ({
        inherit stdenv fetchurl;
        gccCross = gccCrossStageStatic;
