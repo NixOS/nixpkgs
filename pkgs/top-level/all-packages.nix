@@ -3913,6 +3913,10 @@ let
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
 
+  libdwg = import ../development/libraries/libdwg {
+    inherit stdenv fetchurl;
+  };
+
   eglibc = import ../development/libraries/eglibc {
     inherit fetchsvn stdenv;
     kernelHeaders = linuxHeaders;
