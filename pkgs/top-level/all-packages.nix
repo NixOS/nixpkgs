@@ -3901,12 +3901,20 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibc211Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11) {
-    inherit stdenv fetchurl;
-    gccCross = gccCrossStageStatic;
-    kernelHeaders = linuxHeadersCross;
-    installLocales = getPkgConfig "glibc" "locales" false;
-  });
+  glibc211Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11)
+    (let crossGNU = (crossSystem.config == "i586-pc-gnu");
+     in ({
+       inherit stdenv fetchurl;
+       gccCross = gccCrossStageStatic;
+       kernelHeaders = if crossGNU then hurdHeaders else linuxHeadersCross;
+       installLocales = getPkgConfig "glibc" "locales" false;
+     }
+
+     //
+
+     (if crossGNU
+      then { inherit machHeaders hurdHeaders; mig = migCross; }
+      else { }))));
 
   glibcCross = glibc211Cross;
 

@@ -1,10 +1,14 @@
 { stdenv, fetchurl, kernelHeaders
+, machHeaders ? null, hurdHeaders ? null
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
+, mig ? null
 }:
 
 assert stdenv.gcc.gcc != null;
+assert (mig != null) -> (machHeaders != null);
+assert (machHeaders != null) -> (hurdHeaders != null);
 
 let
   build = import ./common.nix;
@@ -34,6 +38,12 @@ in
 
     meta.description = "The GNU C Library";
   }
+
+  //
+
+  (if hurdHeaders != null
+   then { inherit machHeaders hurdHeaders mig; }
+   else { })
 
   //
 

@@ -5,6 +5,7 @@ cross :
 
 { name, fetchurl, stdenv, installLocales ? false
 , gccCross ? null, kernelHeaders ? null
+, machHeaders ? null, hurdHeaders ? null, mig ? null
 , profilingLibraries ? false, meta
 , preConfigure ? "", ... }@args :
 
@@ -77,7 +78,8 @@ stdenv.mkDerivation ({
     "--without-fp"
   ];
 
-  buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
+  buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ]
+    ++ stdenv.lib.optional (mig != null) mig;
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
@@ -149,4 +151,15 @@ stdenv.mkDerivation ({
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.linux;
   } // meta;
-})
+}
+
+//
+
+(if (cross != null && cross.config == "i586-pc-gnu")
+ then {
+   # Work around the fact that the configure snippet that looks for
+   # <hurd/version.h> does not honor `--with-headers=$sysheaders' and that
+   # glibc expects both Mach and Hurd headers to be in the same place.
+   CPATH = "${hurdHeaders}/include:${machHeaders}/include";
+ }
+ else { }))
