@@ -3913,7 +3913,10 @@ let
      //
 
      (if crossGNU
-      then { inherit machHeaders hurdHeaders; mig = migCross; }
+      then {
+        inherit machHeaders hurdHeaders fetchgit;
+        mig = migCross;
+      }
       else { }))));
 
   glibcCross = glibc211Cross;

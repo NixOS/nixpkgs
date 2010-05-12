@@ -1,14 +1,11 @@
 { stdenv, fetchurl, kernelHeaders
-, machHeaders ? null, hurdHeaders ? null
+, machHeaders ? null, hurdHeaders ? null, mig ? null, fetchgit ? null
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
-, mig ? null
 }:
 
 assert stdenv.gcc.gcc != null;
-assert (mig != null) -> (machHeaders != null);
-assert (machHeaders != null) -> (hurdHeaders != null);
 
 let
   build = import ./common.nix;
@@ -42,7 +39,7 @@ in
   //
 
   (if hurdHeaders != null
-   then { inherit machHeaders hurdHeaders mig; }
+   then { inherit machHeaders hurdHeaders mig fetchgit; }
    else { })
 
   //
