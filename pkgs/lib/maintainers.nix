@@ -17,4 +17,5 @@
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viriketo@gmail.com>";
+  z77z = "Marco Maggesi <maggesi@math.unifi.it>";
 }
