@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, speex, gmp, libxml2, libxslt, sqlite, alsaLib, libidn
-, libvncserver, libmsn, giflib, gpgme, boost, libv4l
+, libvncserver, libmsn, giflib, gpgme, boost, libv4l, libotr
 , libXi, libXtst, libXdamage, libXxf86vm
 , kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz, strigi}:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
                   libvncserver libmsn giflib gpgme boost stdenv.gcc.libc libv4l
-                  libXi libXtst libXdamage libXxf86vm
+                  libotr libXi libXtst libXdamage libXxf86vm
                   kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz strigi ];
   patches = [ ./kget-cve.patch ];
   meta = {
