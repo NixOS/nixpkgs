@@ -562,6 +562,10 @@ rec {
     inherit cabal binary;
   };
 
+  primitive = import ../development/libraries/haskell/primitive {
+    inherit cabal;
+  };
+
   QuickCheck  = QuickCheck1;
 
   QuickCheck1 = import ../development/libraries/haskell/QuickCheck {
@@ -780,6 +784,10 @@ rec {
 
   vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {
     inherit cabal vacuum gtk2hs parallel strictConcurrency;
+  };
+
+  vector = import ../development/libraries/haskell/vector {
+    inherit cabal primitive;
   };
 
   vty = import ../development/libraries/haskell/vty {
