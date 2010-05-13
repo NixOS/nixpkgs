@@ -11,8 +11,9 @@ stdenv.mkDerivation {
   };
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
                   libvncserver libmsn giflib gpgme boost stdenv.gcc.libc libv4l
-		  libXi libXtst libXdamage libXxf86vm
+                  libXi libXtst libXdamage libXxf86vm
                   kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz strigi ];
+  patches = [ ./kget-cve.patch ];
   meta = {
     description = "KDE network utilities";
     longDescription = "Various network utilities for KDE such as a messenger client and network configuration interface";
