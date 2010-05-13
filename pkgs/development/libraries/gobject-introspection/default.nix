@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.urkud ];
-    platforms = [ platforms.linux ];
+    platforms = platforms.linux;
     homepage = http://live.gnome.org/GObjectIntrospection;
   };
 }
