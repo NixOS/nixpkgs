@@ -3996,6 +3996,10 @@ let
 
   gmpxx = gmp.override { cxx = true; };
 
+  gobjectIntrospection = makeOverridable (import ../development/libraries/gobject-introspection) {
+    inherit fetchurl stdenv pkgconfig flex bison glib libffi python cairo;
+  };
+
   goffice = import ../development/libraries/goffice {
     inherit fetchurl stdenv pkgconfig libgsf libxml2 cairo
       intltool gettext bzip2;
