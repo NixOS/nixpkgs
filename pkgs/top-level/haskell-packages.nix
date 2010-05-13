@@ -576,6 +576,10 @@ rec {
     inherit cabal mtl;
   };
 
+  RangedSets = import ../development/libraries/haskell/Ranged-sets {
+    inherit cabal HUnit QuickCheck;
+  };
+
   readline = import ../development/libraries/haskell/readline {
     inherit cabal;
     inherit (pkgs) readline ncurses;
@@ -784,6 +788,10 @@ rec {
 
   vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {
     inherit cabal vacuum gtk2hs parallel strictConcurrency;
+  };
+
+  Vec = import ../development/libraries/haskell/Vec {
+    inherit cabal QuickCheck;
   };
 
   vector = import ../development/libraries/haskell/vector {
