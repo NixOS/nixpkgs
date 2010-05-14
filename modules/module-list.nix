@@ -38,7 +38,7 @@
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/policykit.nix
-  #./security/polkit.nix # Currently disabled; using the old policykit.
+  ./security/polkit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
   ./services/audio/alsa.nix
