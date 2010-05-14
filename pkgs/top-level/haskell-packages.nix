@@ -558,6 +558,10 @@ rec {
     inherit cabal;
   };
 
+  ppm = import ../development/libraries/haskell/ppm {
+    inherit cabal mtl;
+  };
+
   pureMD5 = import ../development/libraries/haskell/pureMD5 {
     inherit cabal binary;
   };
