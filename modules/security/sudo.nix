@@ -51,7 +51,7 @@ in
 
   config = mkIf cfg.enable {
 
-    security.extraSetuidPrograms = [ "sudo" ];
+    security.setuidPrograms = [ "sudo" ];
 
     environment.systemPackages = [ sudo ];
 

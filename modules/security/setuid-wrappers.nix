@@ -32,13 +32,12 @@ in
       '';
     };
 
-    # !!! obsolete
     security.extraSetuidPrograms = mkOption {
       default = [];
       example = ["fusermount"];
       description = ''
         This option lists additional programs that must be made setuid
-        root.
+        root. Obsolete, use setuidPrograms instead.
       '';
     };
 

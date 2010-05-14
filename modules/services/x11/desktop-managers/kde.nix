@@ -52,11 +52,7 @@ mkIf (xcfg.enable && cfg.enable) {
     };
   };
 
-  security = {
-    extraSetuidPrograms = [
-      "kcheckpass"
-    ];
-  };
+  security.setuidPrograms = [ "kcheckpass" ];
 
   environment = {
     kdePackages = [
