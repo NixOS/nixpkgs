@@ -743,11 +743,11 @@ let
   };
 
   dos2unix = import ../tools/text/dos2unix {
-      inherit fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   unix2dos = import ../tools/text/unix2dos {
-      inherit fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   gawk = useFromStdenv "gawk"
@@ -9465,14 +9465,14 @@ let
   };
 
   nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl aterm;
+    inherit fetchurl stdenv perl curl bzip2 openssl;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
   # The SQLite branch.
   nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl aterm sqlite;
+    inherit fetchurl stdenv perl curl bzip2 openssl sqlite;
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   });
