@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.linux;  # GTK & co. are needed.
+    platforms = stdenv.lib.platforms.all;
   };
 }
