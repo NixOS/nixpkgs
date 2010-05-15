@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, glib, eggdbus, expat, pam, intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "policy-kit-0.92";
+  name = "polkit-0.92";
   
   src = fetchurl {
-    url = http://hal.freedesktop.org/releases/polkit-0.92.tar.gz;
+    url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "18x4xp4m14fm4aayra4njh82g2jzf6ccln40yybmhxqpb5a3nii8";
   };
   
@@ -25,8 +25,10 @@ stdenv.mkDerivation rec {
           --replace /usr/bin/pk-example-frobnicate $out/bin/pk-example-frobnicate
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.urkud ];
   };
 }
