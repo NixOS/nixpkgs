@@ -15,13 +15,21 @@ rec {
       cpio tcl tk makeWrapper subversion;
     svnSupport = config "svnSupport" false; # for git-svn support
     guiSupport = config "guiSupport" false;
+    sendEmailSupport = config "sendEmailSupport" false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
+    smtpPerlLibs = [
+      perlPackages.NetSMTP perlPackages.NetSMTPSSL
+      perlPackages.IOSocketSSL perlPackages.NetSSLeay
+      perlPackages.MIMEBase64 perlPackages.AuthenSASL
+      perlPackages.DigestHMAC
+    ];
   };
 
   # The full-featured Git.
   gitFull = git.override {
     svnSupport = true;
     guiSupport = true;
+    sendEmailSupport = true;
   };
 
   gitGit = import ./git/git-git.nix {

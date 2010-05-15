@@ -88,6 +88,15 @@ rec {
     };
   };
 
+  AuthenSASL = buildPerlPackage rec {
+    name = "Authen-SASL-2.1401";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GB/GBARR/${name}.tar.gz";
+      sha256 = "1vx97xnqj5jqlh767l04jbqmsiqd5qcbw2jnbd3qh7fhh0slff6d";
+    };
+    propagatedBuildInputs = [DigestHMAC];
+  };
+
   Autobox = buildPerlPackage rec {
     name = "autobox-2.55";
     src = fetchurl {
@@ -1429,6 +1438,16 @@ rec {
     };
   };
 
+  IOSocketSSL = buildPerlPackage {
+    name = "IO-Socket-SSL-1.33";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-1.33.tar.gz;
+      sha256 = "1lpp2cs794d989b9gfhssjv1bkcs9lmrkjcpnxsavj7822izs4xj";
+    };
+    propagatedBuildInputs = [NetSSLeay];
+    # TODO: IOSocketINET6
+  };
+
   IOString = buildPerlPackage rec {
     name = "IO-String-1.08";
     src = fetchurl {
@@ -1668,6 +1687,14 @@ rec {
     propagatedBuildInputs = [TimeDate TestPod];
   };
 
+  MIMEBase64 = buildPerlPackage rec {
+    name = "MIME-Base64-3.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "1gi2zyxwkkmyng8jawfnbxpsybvybz6h6ryq0wfdljmmjpjbmzzc";
+    };
+  };
+
   MIMETypes = buildPerlPackage rec {
     name = "MIME-Types-1.27";
     src = fetchurl {
@@ -1844,6 +1871,33 @@ rec {
       sha256 = "13vhv13w06g6h6iqx440q1h6hwj0kpjdxcc3fl9crkwg5glygg2f";
     };
     doCheck = false; # seems to hang waiting for connections
+  };
+
+  NetSMTP = buildPerlPackage {
+    name = "Net-SMTP-1.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GB/GBARR/libnet-1.22.tar.gz;
+      sha256 = "113c36qilbvd69yhkm2i2ba20ajff7cdpgvlqx96j9bb1hfmhb1p";
+    };
+  };
+
+  NetSMTPSSL = buildPerlPackage {
+    name = "Net-SMTP-SSL-1.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CW/CWEST/Net-SMTP-SSL-1.01.tar.gz;
+      sha256 = "12b2xvrd253ngvzwf81s9han4jr94l39vs5ca70pzr3wpi39qn8k";
+    };
+    propagatedBuildInputs = [IOSocketSSL];
+  };
+
+  NetSSLeay = buildPerlPackage {
+    name = "Net-SSLeay-1.36";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/Net-SSLeay-1.36.tar.gz;
+      sha256 = "1kjk5kdwsklchxrv21m4ii80akbxrg3i6y4zwfb91an5cdr8jqp2";
+    };
+    buildInputs = [pkgs.openssl];
+    OPENSSL_PREFIX = pkgs.openssl;
   };
 
   NetTwitterLite = buildPerlPackage {

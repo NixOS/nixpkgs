@@ -1,9 +1,10 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
-, svnSupport, subversion, perlLibs
+, svnSupport, subversion, perlLibs, smtpPerlLibs
 , guiSupport
 , pythonSupport ? true
+, sendEmailSupport
 }:
 
 let
@@ -58,6 +59,18 @@ stdenv.mkDerivation rec {
                      --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
+       '')
+
+   + (if sendEmailSupport then
+      ''# wrap git-send-email
+        gitperllib=$out/lib/perl5/site_perl
+        for i in ${builtins.toString smtpPerlLibs}; do
+          gitperllib=$gitperllib:$i/lib/perl5/site_perl
+        done
+        wrapProgram "$out/libexec/git-core/git-send-email"     \
+                     --set GITPERLLIB "$gitperllib" ''
+       else '' # replace git-send-email by notification script
+        notSupported $out/bin/git-send-email "reinstall with config git = { sendEmailSupport = true } set"
        '')
 
    + ''# Install man pages and Info manual
