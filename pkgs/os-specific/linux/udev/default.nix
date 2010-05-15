@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-pci-ids-path=${pciutils}/share/pci.ids
     --disable-introspection
-    --with-firmware-path=/etc/firmware:/root/test-firmware";
+    --with-firmware-path=/root/test-firmware:/var/run/current-system/firmware";
 
   postInstall =
     ''
