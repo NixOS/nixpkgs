@@ -6508,7 +6508,7 @@ let
   };
 
   lvm2 = import ../os-specific/linux/lvm2 {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv udev;
   };
 
   machHeaders = import ../os-specific/gnu/mach {
