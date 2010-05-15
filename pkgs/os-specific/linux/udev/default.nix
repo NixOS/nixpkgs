@@ -4,11 +4,11 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "udev-153";
+  name = "udev-154";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/hotplug/${name}.tar.bz2";
-    sha256 = "0i3ns4qhfbnci284k8zri0rfxw88ccajdynb5djh6k182a6nn3la";
+    sha256 = "1aw5vn96gasvkjh6nfivaf68l6ph33y63zf7gnp3mc7c7zfncm0c";
   };
 
   buildInputs = [gperf pkgconfig glib acl libusb usbutils];
