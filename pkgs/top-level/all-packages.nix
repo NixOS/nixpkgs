@@ -5019,7 +5019,8 @@ let
   };
 
   polkit = import ../development/libraries/polkit {
-    inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext glib;
+    inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext glib
+      gobjectIntrospection;
   };
 
   policykit = makeOverridable (import ../development/libraries/policykit) {

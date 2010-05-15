@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, glib, eggdbus, expat, pam, intltool, gettext }:
+{ stdenv, fetchurl, pkgconfig, glib, eggdbus, expat, pam, intltool, gettext,
+  gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.92";
+  name = "polkit-0.96";
   
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "18x4xp4m14fm4aayra4njh82g2jzf6ccln40yybmhxqpb5a3nii8";
+    sha256 = "0jh5v0dhf9msvmfmr9d67563m64gq5l96m9jax9abchhfa8wl9il";
   };
   
-  buildInputs = [ pkgconfig glib eggdbus expat pam intltool gettext ];
+  buildInputs = [ pkgconfig glib eggdbus expat pam intltool gettext
+    gobjectIntrospection ];
 
-  configureFlags = "--localstatedir=/var";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc";
+# TODO: PACKAGE_DATA_DIR, PACKAGE_LIBEXEC_DIR, PACKAGE_LIB_DIR
 
   installFlags = "localstatedir=$(TMPDIR)/var"; # keep `make install' happy
   
@@ -19,10 +22,6 @@ stdenv.mkDerivation rec {
       # Allow some files with paranoid permissions to be stripped in
       # the fixup phase.
       chmod a+rX -R $out
-
-      # Fix the pathname in the frobnicate example.
-      substituteInPlace $out/share/polkit-1/actions/org.freedesktop.policykit.examples.pkexec.policy \
-          --replace /usr/bin/pk-example-frobnicate $out/bin/pk-example-frobnicate
     '';
 
   meta = with stdenv.lib; {
