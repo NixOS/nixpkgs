@@ -8342,6 +8342,13 @@ let
       libstdcpp5 = gcc33.gcc;
     });
 
+  rekonq = makeOverridable (import ../applications/networking/browsers/rekonq) {
+    inherit fetchurl fetchgit stdenv cmake perl;
+    inherit (kde4) qt4 kdelibs automoc4 phonon;
+  };
+
+  rekonqScm = rekonq.override { v = "scm"; };
+
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv acl perl;
     enableACLs = !stdenv.isDarwin;
