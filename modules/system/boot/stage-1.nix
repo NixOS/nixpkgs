@@ -105,52 +105,53 @@ let
       ensureDir $out/lib
       
       # Copy what we need from Glibc.
-      cp -p ${pkgs.glibc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.glibc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.glibc}/lib/libpthread.so.* $out/lib
-      cp -p ${pkgs.glibc}/lib/librt.so.* $out/lib
-      cp -p ${pkgs.glibc}/lib/libdl.so.* $out/lib
-      cp -p ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
+      cp -pv ${pkgs.glibc}/lib/ld-linux*.so.? $out/lib
+      cp -pv ${pkgs.glibc}/lib/libc.so.* $out/lib
+      cp -pv ${pkgs.glibc}/lib/libpthread.so.* $out/lib
+      cp -pv ${pkgs.glibc}/lib/librt.so.* $out/lib
+      cp -pv ${pkgs.glibc}/lib/libdl.so.* $out/lib
+      cp -pv ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
 
       # Copy some utillinux stuff.
-      cp ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
+      cp -v ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
          ${pkgs.utillinux}/sbin/fsck ${pkgs.utillinux}/sbin/pivot_root \
          ${pkgs.utillinux}/sbin/blkid $out/bin
-      cp -pd ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
-      cp -pd ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
+      cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
+      cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 
       # Copy some coreutils.
-      cp ${pkgs.coreutils}/bin/basename $out/bin
+      cp -v ${pkgs.coreutils}/bin/basename $out/bin
 
       # Copy e2fsck and friends.      
-      cp ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
-      cp ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
-      cp ${pkgs.reiserfsprogs}/sbin/reiserfsck $out/bin
-      ln -s e2fsck $out/bin/fsck.ext2
-      ln -s e2fsck $out/bin/fsck.ext3
-      ln -s e2fsck $out/bin/fsck.ext4
-      ln -s reiserfsck $out/bin/fsck.reiserfs
+      cp -v ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
+      cp -v ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
+      cp -v ${pkgs.reiserfsprogs}/sbin/reiserfsck $out/bin
+      ln -sv e2fsck $out/bin/fsck.ext2
+      ln -sv e2fsck $out/bin/fsck.ext3
+      ln -sv e2fsck $out/bin/fsck.ext4
+      ln -sv reiserfsck $out/bin/fsck.reiserfs
 
-      cp -pd ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
+      cp -pdv ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
 
       # Copy dmsetup and lvm.
-      cp ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
-      cp ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
-      cp ${pkgs.lvm2}/lib/libdevmapper.so.*.* $out/lib
+      cp -v ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
+      cp -v ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
+      cp -v ${pkgs.lvm2}/lib/libdevmapper.so.*.* $out/lib
 
       # Add RAID mdadm tool.
-      cp ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
+      cp -v ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
 
       # Copy udev.
-      cp ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
-      cp ${pkgs.udev}/libexec/*_id $out/bin
+      cp -v ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
+      cp -v ${pkgs.udev}/libexec/*_id $out/bin
+      cp -pdv ${pkgs.udev}/lib/libudev.so.* $out/lib
       
       # Copy bash.
-      cp ${pkgs.bash}/bin/bash $out/bin
-      ln -s bash $out/bin/sh
+      cp -v ${pkgs.bash}/bin/bash $out/bin
+      ln -sv bash $out/bin/sh
 
       # Copy modprobe.
-      cp ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe.real
+      cp -v ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe.real
 
       ${config.boot.initrd.extraUtilsCommands}
 
@@ -177,17 +178,17 @@ let
       
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
-      $out/bin/bash --version
+      $out/bin/bash --version | grep "bash, version"
       export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --version
-      $out/bin/umount --version
-      $out/bin/e2fsck -V
+      $out/bin/mount --version | grep "mount from"
+      $out/bin/umount --version | grep "umount "
+      $out/bin/e2fsck -V 2>&1 | grep "e2fsck "
       $out/bin/tune2fs 2> /dev/null | grep "tune2fs "
-      $out/bin/fsck -N
+      $out/bin/fsck -N | grep "fsck from"
       $out/bin/udevadm --version
-      $out/bin/blkid -v 2>&1 | grep "blkid from util-linux-ng"
-      $out/bin/dmsetup --version 2>&1 | grep "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | grep "LVM"
+      $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux-ng"
+      $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"
+      LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | tee -a $out/log | grep "LVM"
       $out/bin/reiserfsck -V
       $out/bin/mdadm --version
       $out/bin/basename --version
