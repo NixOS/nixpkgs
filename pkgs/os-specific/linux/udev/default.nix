@@ -4,29 +4,23 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "udev-145";
+  name = "udev-153";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/hotplug/${name}.tar.bz2";
-    sha256 = "1zmibp6n7d582fqx8vmg9vb2a1435hghfpz36056bc25ccwf7yiv";
+    sha256 = "0i3ns4qhfbnci284k8zri0rfxw88ccajdynb5djh6k182a6nn3la";
   };
 
   buildInputs = [gperf pkgconfig glib acl libusb usbutils];
 
-  configureFlags = "--with-pci-ids-path=${pciutils}/share/pci.ids";
-
-  preConfigure =
-    ''
-      substituteInPlace extras/keymap/Makefile.in \
-        --replace /usr/include ${stdenv.glibc}/include
-    '';
+  configureFlags = "--with-pci-ids-path=${pciutils}/share/pci.ids
+    --disable-introspection
+    --with-firmware-path=/etc/firmware:/root/test-firmware";
 
   postInstall =
     ''
       # Install some rules that really should be installed by default.
-      for i in 40-alsa.rules 40-infiniband.rules 40-isdn.rules 40-pilot-links.rules 64-device-mapper.rules 64-md-raid.rules; do
-        cp rules/packages/$i $out/libexec/rules.d/
-      done
+      cp rules/packages/40-pilot-links.rules $out/libexec/rules.d/
 
       # The path to rule_generator.functions in write_cd_rules and
       # write_net_rules is broken.  Also, don't store the mutable
@@ -39,12 +33,7 @@ stdenv.mkDerivation rec {
       done
 
       # Don't set PATH to /bin:/sbin; won't work in NixOS.
-      substituteInPlace $out/libexec/rule_generator.functions \
-        --replace 'PATH=' '#PATH='
-
-      # Don't hardcore the FIRMWARE_DIRS variable; obtain it from the
-      # environment of the caller.
-      sed '3,4d' -i $out/libexec/firmware.sh
+      sed -e '/PATH=/d' -i $out/libexec/rule_generator.functions
 
       ln -s $out/lib/ConsoleKit $out/etc/ConsoleKit
     '';
