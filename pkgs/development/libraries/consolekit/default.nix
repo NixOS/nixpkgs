@@ -1,20 +1,17 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, 
-  libX11, policykit, expat, ... }:
+  libX11, polkit, expat }:
 
 stdenv.mkDerivation rec {
-  name = "consolekit-0.2.10";
+  name = "consolekit-0.4.1";
   
   src = fetchurl {
-    url = http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-0.2.10.tar.gz;
-    sha256 = "1jrv33shrmc1klwpgp02pycmbk9lfaxkd5q7bqxb6v95cl7m3f82";
+    url = http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-0.4.1.tar.bz2;
+    sha256 = "0gj0airrgyi14a06w3d4407g62bs5a1cam2h64s50x3d2k3ascph";
   };
   
-  buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 policykit expat ];
+  buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 polkit expat ];
 
   configureFlags = "--enable-pam-module --with-pam-module-dir=$(out)/lib/security --localstatedir=/var --sysconfdir=/etc";
-
-  # Needed for pthread_cancel().
-  NIX_LDFLAGS = "-lgcc_s";
 
   installFlags = "sysconfdir=$(out)/etc DBUS_SYS_DIR=$(out)/etc/dbus-1/system.d"; # keep `make install' happy
   

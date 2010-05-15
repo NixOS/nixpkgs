@@ -3601,7 +3601,7 @@ let
   };
 
   consolekit = makeOverridable (import ../development/libraries/consolekit) {
-    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam policykit expat glib;
+    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam polkit expat glib;
     inherit (xlibs) libX11;
   };
 
