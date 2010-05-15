@@ -3778,7 +3778,7 @@ let
     inherit fetchurl stdenv x11 mesa;
   };
 
-  freetype = import ../development/libraries/freetype {
+  freetype = makeOverridable (import ../development/libraries/freetype) {
     inherit fetchurl stdenv;
   };
 
