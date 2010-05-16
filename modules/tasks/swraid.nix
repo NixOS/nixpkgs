@@ -45,8 +45,9 @@ in
       # Scan /proc/partitions for RAID devices.
       ${mdadm}/sbin/mdadm --examine --brief --scan -c partitions > ${tempConf}
 
-      # If the status has changed.
-      if ! ${diffutils}/bin/diff -q /proc/mdstat ${tempStatus} > /dev/null; then
+      # If there is some array to assemble and if the status has changed.
+      if test -e /proc/mdstat -a -s ${tempConf} &&
+         ! ${diffutils}/bin/diff -q /proc/mdstat ${tempStatus} > /dev/null; then
 
         # Keep the previous status to watch changes.
         cp ${tempStatus} ${tempStatus}.old
