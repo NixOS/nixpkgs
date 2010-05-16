@@ -1695,6 +1695,10 @@ let
     inherit (xlibs) libX11 libXext;
   };
 
+  tor = import ../tools/security/tor {
+    inherit fetchurl stdenv libevent openssl zlib;
+  };
+
   ttf2pt1 = import ../tools/misc/ttf2pt1 {
     inherit fetchurl stdenv perl freetype;
   };
