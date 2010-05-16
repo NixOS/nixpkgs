@@ -101,7 +101,7 @@ in
       };
 
     jobs.tor =
-      { name = "Tor";
+      { name = "tor";
 
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
@@ -115,10 +115,10 @@ in
       };
 
     jobs.torPrivoxy = mkIf config.services.tor.enablePrivoxy 
-      { name = "Tor-privoxy";
+      { name = "tor-privoxy";
 
-        startOn = "starting Tor";
-        stopOn = "stopping Tor"; 
+        startOn = "starting tor";
+        stopOn = "stopping tor"; 
 
         preStart =
           ''
