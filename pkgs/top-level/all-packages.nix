@@ -9660,6 +9660,11 @@ let
       flex = pkgsi686Linux.flex2535;
     };
 
+  x2x = import ../tools/X11/x2x {
+    inherit stdenv fetchurl;
+    inherit (xlibs) imake libX11 libXtst libXext;
+  };
+
   xosd = import ../misc/xosd {
     inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXext libXt xextproto xproto;
