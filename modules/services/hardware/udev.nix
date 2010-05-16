@@ -56,7 +56,7 @@ let
         substituteInPlace $i \
           --replace /sbin/modprobe ${modprobe}/sbin/modprobe \
           --replace /sbin/blkid ${pkgs.utillinux}/sbin/blkid \
-          --replace /sbin/mdadm ${pkgs.mdadm}/sbin/madm \
+          --replace /sbin/mdadm ${pkgs.mdadm}/sbin/mdadm \
           --replace '$env{DM_SBIN_PATH}/blkid' ${pkgs.utillinux}/sbin/blkid \
           --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"'
       done
