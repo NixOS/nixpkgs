@@ -7499,6 +7499,10 @@ let
       inherit fetchurl stdenv emacs cedet jdee texinfo;
     };
 
+    jabber = import ../applications/editors/emacs-modes/jabber {
+      inherit stdenv fetchurl emacs;
+    };
+
     emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
       inherit fetchurl stdenv emacs;
     };
