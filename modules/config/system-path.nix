@@ -34,7 +34,6 @@ let
       pkgs.less
       pkgs.libcap
       pkgs.man
-      pkgs.mdadm
       pkgs.module_init_tools
       pkgs.nano
       pkgs.ncurses

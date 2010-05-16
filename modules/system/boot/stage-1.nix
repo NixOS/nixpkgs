@@ -213,6 +213,7 @@ let
       cp ${pkgs.udev}/libexec/rules.d/60-persistent-storage.rules $out/
       cp ${pkgs.udev}/libexec/rules.d/80-drivers.rules $out/
       cp ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
+      cp ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -225,7 +226,8 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/modprobe ${extraUtils}/bin/modprobe \
             --replace '$env{DM_SBIN_PATH}/blkid' ${extraUtils}/bin/blkid \
-            --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"'
+            --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"' \
+            --replace /sbin/mdadm ${extraUtils}/bin/mdadm
       done
 
       # Remove rule preventing creation of a by-label symlink

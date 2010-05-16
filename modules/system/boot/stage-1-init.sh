@@ -113,6 +113,7 @@ fi
 echo "running udev..."
 export UDEV_CONFIG_FILE=@udevConf@
 mkdir -p /dev/.udev # !!! bug in udev?
+mkdir -p /dev/.mdadm
 udevd --daemon
 udevadm control --env=STARTUP=1
 udevadm trigger --action=add
