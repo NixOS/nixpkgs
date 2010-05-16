@@ -103,6 +103,7 @@
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/security/tor.nix
   ./services/system/dbus.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
