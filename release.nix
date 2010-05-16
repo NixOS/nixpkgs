@@ -152,6 +152,7 @@ let
         installer.lvm = t.installer.lvm.test;
         installer.separateBoot = t.installer.separateBoot.test;
         installer.simple = t.installer.simple.test;
+        installer.swraid = t.installer.swraid.test;
         kde4 = t.kde4.test;
         login = t.login.test;
 	openssh = t.openssh.test;
