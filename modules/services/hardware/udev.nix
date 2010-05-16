@@ -193,7 +193,7 @@ in
             # the LVM rules to create device nodes.  See
             # http://www.mail-archive.com/fedora-devel-list@redhat.com/msg10261.html
             ${udev}/sbin/udevadm control --env=STARTUP=1
-            ${udev}/sbin/udevadm trigger
+            ${udev}/sbin/udevadm trigger --action=add
             ${udev}/sbin/udevadm settle # wait for udev to finish
             ${udev}/sbin/udevadm control --env=STARTUP=
 

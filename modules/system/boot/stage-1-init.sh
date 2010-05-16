@@ -115,7 +115,7 @@ export UDEV_CONFIG_FILE=@udevConf@
 mkdir -p /dev/.udev # !!! bug in udev?
 udevd --daemon
 udevadm control --env=STARTUP=1
-udevadm trigger
+udevadm trigger --action=add
 udevadm settle
 udevadm control --env=STARTUP=
 
