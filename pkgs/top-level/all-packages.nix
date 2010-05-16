@@ -1674,7 +1674,7 @@ let
   };
 
   privoxy = import ../tools/networking/privoxy {
-    inherit fetchurl stdenv autoconf automake ;
+    inherit fetchurl stdenv autoconf automake zlib pcre w3m;
   };
 
   tcpdump = import ../tools/networking/tcpdump {
