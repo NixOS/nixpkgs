@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
   postInstall = ''
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
-        --run "${xset}/bin/xset q | grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\""
+        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
     done
   '';
 
