@@ -73,8 +73,9 @@ let
 
       extraFonts = mkOption {
         default = [];
+        example = [ pkgs.dejavu_fonts ];
         description = ''
-          List of additional fonts.
+          List of packages with additional fonts.
         '';
       };
 
