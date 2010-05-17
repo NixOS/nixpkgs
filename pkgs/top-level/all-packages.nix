@@ -8660,9 +8660,8 @@ let
 
   wmiiSnap = import ../applications/window-managers/wmii {
     libixp = libixp_for_wmii;
-    inherit fetchurl /* fetchhg */ stdenv gawk
-      freetype pkgconfig;
-    inherit (xlibs) libX11 xextproto libXt libXext libXft libXrandr libXinerama;
+    inherit fetchurl /* fetchhg */ stdenv gawk;
+    inherit (xlibs) libX11 xextproto libXt libXext;
     includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 

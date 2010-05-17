@@ -7,15 +7,15 @@ stdenv.mkDerivation {
      sed -i -e \"s%^PREFIX.*%PREFIX=\$out%\" \\
             -e \"s%^\\(INCLUDE.*\\)%\\1 \$NIX_CFLAGS_COMPILE%\" \\
             -e \"s%^\\(LIBS.*\\)%\\1 \$LDFLAGS%\" \\
-              config.mk
+            config.mk
      make
      mkdir -p \$out/include
      cp -r include/*.h \$out/include
      cp -r lib \$out
   ";
   src = fetchurl {
-    url = http://dl.suckless.org/libs/libixp-0.5.tar.gz;
-    sha256 = "0jqyw8xzih7x7apdp2s9w8agjry890kf55zj2habsg78cyxz1x35";
+    url = http://dl.suckless.org/libs/libixp-0.4.tar.gz;
+    sha256 = "0b44p9wvmzxpyf2xd86rxyr49bmfh9cd5hj3d234gkvynvgph60p";
   };
 
   meta = {
