@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   
   NIX_LDFLAGS = "-lncurses";
   
-  configureFlags = "--with-proxy --with-ncurses --enable-ssl";
+  configureFlags = "--with-proxy --with-ncurses --enable-ssl --with-perl=yes";
 
   meta = {
     homepage = http://irssi.org;
