@@ -1,0 +1,13 @@
+diff --git a/src/menu.h b/src/menu.h
+index 3c67c45..7c7ab8e 100644
+--- a/src/menu.h
++++ b/src/menu.h
+@@ -207,7 +207,7 @@ public:
+
+   bool isToggled(int id);
+
+-  void Menu::get_controlfield_key_into_input(MenuItem *item);
++  void get_controlfield_key_into_input(MenuItem *item);
+
+   void draw   ();
+   void draw_item(int index, int menu_width, int menu_height);

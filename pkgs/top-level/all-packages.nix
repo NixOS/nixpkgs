@@ -7963,7 +7963,7 @@ let
   };
 
   irssi = import ../applications/networking/irc/irssi {
-    inherit stdenv fetchurl pkgconfig ncurses openssl glib;
+    inherit stdenv fetchurl pkgconfig ncurses openssl glib perl;
   };
 
   jackmeter = import ../applications/audio/jackmeter {
@@ -8944,6 +8944,10 @@ let
     flex = flex2535;
   };
 
+  gnugo = import ../games/gnugo {
+    inherit stdenv fetchurl;
+  };
+
   gparted = import ../tools/misc/gparted {
     inherit fetchurl stdenv parted intltool gettext libuuid pkgconfig libxml2;
     inherit (gtkLibs) gtk glib gtkmm;
@@ -9015,11 +9019,22 @@ let
     inherit (xlibs) libX11;
   };
 
+  six = import ../games/six {
+    inherit stdenv fetchurl;
+    inherit perl zlib qt3;
+    inherit (kde3) arts kdelibs;
+    inherit (xlibs) libX11 libXt libXext;
+  };
+
   # You still can override by passing more arguments.
   spaceOrbit = composedArgsAndFun (import ../games/orbit/1.01.nix) {
     inherit fetchurl stdenv builderDefs mesa freeglut;
     inherit (gnome) esound;
     inherit (xlibs) libXt libX11 libXmu libXi libXext;
+  };
+
+  superTux = import ../games/super-tux {
+    inherit fetchurl stdenv SDL SDL_image SDL_mixer curl gettext libogg libvorbis mesa openal;
   };
 
   superTuxKart = import ../games/super-tux-kart {

@@ -1,0 +1,38 @@
+This patch makes six compile with gcc 4.3 by including more header files.  It
+is based on the advice at <http://gcc.gnu.org/gcc-4.3/porting_to.html>.
+
+--- a/six/carrier.h
++++ b/six/carrier.h
+@@ -2,6 +2,7 @@
+ #ifndef CARRIER_H
+ #define CARRIER_H
+
++#include <cstring>
+ #include <iostream>
+ #include <vector>
+
+diff --git a/six/hexgame.cpp b/six/hexgame.cpp
+index 720e977..5d0dafe 100644
+--- a/six/hexgame.cpp
++++ b/six/hexgame.cpp
+@@ -3,6 +3,7 @@
+ #include <cassert>
+ #include <cctype>
+ #include <cstdio>
++#include <cstdlib>
+
+ #include <string>
+
+diff --git a/six/main.cpp b/six/main.cpp
+index 7fb5c21..b925a0c 100644
+--- a/six/main.cpp
++++ b/six/main.cpp
+@@ -4,6 +4,8 @@
+ #include "carrier.h"
+ #include "misc.h"
+
++#include <cstdlib>
++
+ #include <kapp.h>
+ #include <dcopclient.h>
+ #include <kaboutdata.h>
