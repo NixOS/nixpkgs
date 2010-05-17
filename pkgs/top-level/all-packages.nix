@@ -9193,6 +9193,9 @@ let
     stdenv = stdenv2;
   });
 
+  xfce = xfce4;
+  xfce4 = recurseIntoAttrs (import ../desktops/xfce-4 pkgs);
+
   ### SCIENCE
 
   xplanet = import ../applications/science/xplanet {
