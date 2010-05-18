@@ -997,10 +997,10 @@ rec {
   };
 
   DigestSHA1 = buildPerlPackage {
-    name = "Digest-SHA1-2.11";
+    name = "Digest-SHA1-2.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.11.tar.gz;
-      md5 = "2449bfe21d6589c96eebf94dae24df6b";
+      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.12.tar.gz;
+      sha256 = "19gmbb3yb9pr0y02c6rf99zh14a7a67l4frl7cs0lzpxb41484xa";
     };
   };
 
