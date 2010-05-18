@@ -5,19 +5,17 @@ with pkgs.lib;
 let
   pkWrapper = pkgs.stdenv.mkDerivation {
     name = "polkit-wrapper";
-    helper = "polkit-agent-helper-1";
+    helper = "libexec/polkit-1/polkit-agent-helper-1";
     buildInputs = [ pkgs.xorg.lndir ];
 
     builder = pkgs.writeScript "pkwrap-builder" ''
       source $stdenv/setup
 
-      mkdir -p $out
+      mkdir -pv $out
       lndir ${pkgs.polkit} $out
-      new=$out/libexec/$helper
 
-      mv $new $out/libexec/.$helper.orig
-      echo "exec ${config.security.wrapperDir}/$helper \"\$@\"" > $new
-      chmod +x $new
+      rm $out/$helper
+      ln -sv ${config.security.wrapperDir}/polkit-agent-helper-1 $out/$helper
       '';
   };
 in
@@ -45,19 +43,19 @@ in
 
       setuidOwners = [
         {
-          program = pkWrapper.helper;
+          program = "polkit-agent-helper-1";
           owner = "root";
           group = "root";
           setuid = true;
-          source = pkWrapper + "/libexec/." + pkWrapper.helper + ".orig";
+          source = pkgs.polkit + "/" + pkWrapper.helper;
         }
       ];
     };
 
-    system.activationScripts.policyKit = pkgs.stringsWithDeps.noDepEntry
+    system.activationScripts.polikit = pkgs.stringsWithDeps.noDepEntry
       ''
-        mkdir -p /var/lib/polkit-1
-        chmod 700 /var/lib/polkit-1
+        mkdir -p /var/lib/polkit-1/localauthority
+        chmod 700 /var/lib/polkit-1{/localauthority,}
       '';
   };
 
