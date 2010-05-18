@@ -132,6 +132,6 @@ stdenv.mkDerivation rec {
         stdenv.lib.maintainers.simons
       ];
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.all;
   };
 }
