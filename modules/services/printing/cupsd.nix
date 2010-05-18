@@ -17,15 +17,15 @@ let
     builder = pkgs.writeScript "additional-backends-builder.sh" ''
       PATH=${pkgs.coreutils}/bin
       mkdir -p $out
-      if [[ ! -e ${pkgs.samba}/lib/cups/backend/smb ]]; then
+      if [ ! -e ${pkgs.samba}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
         ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
-      if [[ ! -e ${pkgs.cups}/lib/cups/backend/https ]]; then
+      if [ ! -e ${pkgs.cups}/lib/cups/backend/https ]; then
         mkdir -p $out/lib/cups/backend
-        ln -s ipp $out/lib/cups/backend/https
+        ln -s ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
     '';
   };
