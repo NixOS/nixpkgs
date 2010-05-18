@@ -1,4 +1,8 @@
-{stdenv, browser, browserName ? "firefox", nameSuffix ? "", makeDesktopItem, makeWrapper, plugins}:
+{ stdenv, browser, makeDesktopItem, makeWrapper, plugins
+, browserName ? "firefox"
+, desktopName ? "Firefox"
+, nameSuffix ? ""
+}:
 
 stdenv.mkDerivation {
   name = browser.name + "-with-plugins";
@@ -8,7 +12,7 @@ stdenv.mkDerivation {
     exec = browserName;
     icon = "${browser}/lib/${browser.name}/icons/mozicon128.png";
     comment = "";
-    desktopName = browserName;
+    desktopName = desktopName;
     genericName = "Web Browser";
     categories = "Application;Network;";
   };
