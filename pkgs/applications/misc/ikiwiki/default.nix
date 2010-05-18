@@ -8,14 +8,14 @@
 
 let
   name = "ikiwiki";
-  version = "3.20100427";
+  version = "3.20100515";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "b00567628657c52ed5a5388e47af370b0f2cdfa82d3eaf1b0020f0e07d218b8f";
+    sha256 = "143f245196d98ab037a097402420208da14506d6a65793d042daef5dd765ddd7";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
