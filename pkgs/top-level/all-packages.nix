@@ -8211,7 +8211,7 @@ let
   };
 
   openoffice = import ../applications/office/openoffice {
-    inherit fetchurl stdenv pam python tcsh libxslt perl zlib libjpeg
+    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
       curl libsndfile flex zip unzip libmspack getopt file cairo
       which icu jdk ant cups openssl bison boost gperf cppunit;
@@ -8220,6 +8220,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon026;
+    stdenv = stdenv2;
   };
 
   opera = import ../applications/networking/browsers/opera {
