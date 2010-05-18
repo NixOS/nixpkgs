@@ -45,11 +45,11 @@ let
 in  
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0-pre-rc4-20100213";
+  name = "MPlayer-1.0-pre-rc4-20100506";
 
   src = fetchurl {
-    url = mirror://gentoo/distfiles/mplayer-1.0_rc4_p20100213.tbz2;
-    sha256 = "1c5w49vqavs9pnc5av89v502wfa5g7hfn65ffhpx25ddi1irzh2r";
+    url = mirror://gentoo/distfiles/mplayer-1.0_rc4_p20100506.tar.bz2;
+    sha256 = "0rhs0mv216iir8cz13xdq0rs88lc48ciiyn0wqzxjrnjb17yajy6";
   };
 
   buildInputs =
