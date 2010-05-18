@@ -3292,6 +3292,10 @@ let
       inherit fetchurl stdenv;
     });
 
+  patchelf06 = import ../development/tools/misc/patchelf/0.6.nix {
+    inherit fetchurl stdenv;
+  };
+
   pmccabe = import ../development/tools/misc/pmccabe {
     inherit fetchurl stdenv;
   };
@@ -7257,10 +7261,11 @@ let
     };
 
   chrome = import ../applications/networking/browsers/chromium {
-    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng;
+    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng dbus dbus_glib;
     inherit (xlibs) libX11 libXext libXrender libXt libXScrnSaver;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
+    patchelf = patchelf06;
     libjpeg = libjpeg62;
   };
 
