@@ -14,6 +14,7 @@ let
   # Map video driver names to driver packages.
   knownVideoDrivers = {
     ati          = { modules = [ xorg.xf86videoati ]; };
+    ati_unfree   = { modules = [ kernelPackages.ati_drivers_x11 ]; driverName = "fglrx"; };
     cirrus       = { modules = [ xorg.xf86videocirrus ]; };
     i810         = { modules = [ xorg.xf86videoi810 ]; };
     intel        = { modules = [ xorg.xf86videointel ]; };
@@ -362,7 +363,8 @@ in
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
       optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy ++
-      optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
+      optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions ++
+      optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
 
     environment.etc = optionals cfg.exportConfiguration
       [ { source = "${configFile}";
@@ -388,7 +390,8 @@ in
       ]
       ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
       ++ optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy
-      ++ optional (elem "virtualbox" driverNames) xorg.xrefresh;
+      ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
+      ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
       
     environment.systemPackages = config.environment.x11Packages;
     
@@ -408,6 +411,9 @@ in
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
           } // optionalAttrs (elem "nvidiaLegacy" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy}/lib";
+          } // optionalAttrs (elem "ati_unfree" driverNames) {
+            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.ati_drivers_x11}/lib:${kernelPackages.ati_drivers_x11}/X11R6/lib64/modules/linux";
+            XORG_DRI_DRIVER_PATH = "${kernelPackages.ati_drivers_x11}/lib/dri"; # is ignored because ati drivers ship their own unpatched libglx.so !
           } // cfg.displayManager.job.environment;
 
         preStart =
