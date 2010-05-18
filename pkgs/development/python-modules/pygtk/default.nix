@@ -14,4 +14,9 @@ stdenv.mkDerivation {
   ;
 
   propagatedBuildInputs = [pygobject pycairo];
+
+  postInstall = ''
+    rm $out/bin/pygtk-codegen-2.0
+    ln -s ${pygobject}/bin/pygobject-codegen-2.0  $out/bin/pygtk-codegen-2.0
+  '';
 }
