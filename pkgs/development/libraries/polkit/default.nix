@@ -6,7 +6,7 @@ let
   foolVars = {
     LOCALSTATE = "/var";
     SYSCONF = "/etc";
-    LIBEXEC = "${system}/libexec";
+    LIBEXEC = "${system}/libexec/polkit-1";
     LIB = "${system}/lib";
     DATA = "${system}/share";
   };
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib eggdbus expat pam intltool gettext
     gobjectIntrospection ];
+
+  preConfigure=''
+    configureFlags="--libexecdir=$out/libexec/polkit-1"
+  '';
 
   # Ugly hack to overwrite hardcoded directories
   # TODO: investigate a proper patch which will be accepted upstream
