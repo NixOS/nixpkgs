@@ -6291,6 +6291,12 @@ let
 
     inherit kernel;
 
+    ati_drivers_x11  = import ../os-specific/linux/ati-drivers {
+      inherit stdenv fetchurl kernel xlibs which mesa xorg makeWrapper
+        patchelf glibc;
+      inherit (xorg) imake libXxf86vm xf86vidmodeproto;
+    };
+
     aufs = import ../os-specific/linux/aufs {
       inherit fetchurl stdenv kernel;
     };
