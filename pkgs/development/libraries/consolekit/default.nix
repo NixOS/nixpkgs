@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 polkit expat ];
 
+  # For console-kit to get the rpath to libgcc_s, needed for pthread_cancel to work
+  NIX_LDFLAGS = "-lgcc_s";
+
   configureFlags = "--enable-pam-module --with-pam-module-dir=$(out)/lib/security --localstatedir=/var --sysconfdir=/etc";
 
   installFlags = "sysconfdir=$(out)/etc DBUS_SYS_DIR=$(out)/etc/dbus-1/system.d"; # keep `make install' happy
