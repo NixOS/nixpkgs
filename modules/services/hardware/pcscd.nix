@@ -29,7 +29,7 @@ with pkgs.lib;
 
         startOn = "started udev";
 
-        daemonType = "daemon";
+        daemonType = "fork";
 
         # Add to the drivers directory the only drivers we have by now: ccid
         preStart = ''
