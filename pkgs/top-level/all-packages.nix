@@ -6085,6 +6085,24 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  hurdCrossIntermediate = forceBuildDrv(import ../os-specific/gnu/hurd {
+    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
+      mig glibcCross;
+    automake = automake111x;
+    headersOnly = false;
+    cross = assert crossSystem != null; crossSystem;
+
+    # The "final" GCC needs glibc and the Hurd libraries (libpthread in
+    # particular) so we first need an intermediate Hurd built with the
+    # intermediate GCC.
+    gccCross = gccCrossStageStatic;
+
+    # This intermediate Hurd is only needed to build libpthread, which really
+    # only needs libihash.
+    buildTarget = "libihash";
+    installTarget = "libihash-install";
+  });
+
   hurdHeaders = import ../os-specific/gnu/hurd {
     inherit fetchgit stdenv autoconf libtool texinfo machHeaders;
     mig = migCross;

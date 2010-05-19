@@ -1,14 +1,21 @@
 { fetchgit, stdenv, autoconf, automake, libtool, texinfo
-, machHeaders, mig, headersOnly ? true }:
+, machHeaders, mig, headersOnly ? true
+, cross ? null, gccCross ? null, glibcCross ? null
+, buildTarget ? "all", installTarget ? "install" }:
 
 assert (cross != null) -> (gccCross != null);
 
 let
-  date = "2010-05-12";
-  rev  = "master@{${date}}";
+  date   = "2010-05-12";
+  rev    = "master@{${date}}";
+  suffix = if headersOnly
+           then "-headers"
+           else (if buildTarget != "all"
+                 then "-minimal"
+                 else "");
 in
 stdenv.mkDerivation ({
-  name = "hurd${if headersOnly then "-headers" else ""}-${date}";
+  name = "hurd${suffix}-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/hurd.git";
@@ -16,12 +23,18 @@ stdenv.mkDerivation ({
     inherit rev;
   };
 
-  buildInputs = [ autoconf automake libtool texinfo mig ];
+  buildInputs = [ autoconf automake libtool texinfo mig ]
+    ++ stdenv.lib.optional (gccCross != null) gccCross
+    ++ stdenv.lib.optional (glibcCross != null) glibcCross;
+
   propagatedBuildInputs = [ machHeaders ];
 
-  configureFlags = "--build=i586-pc-gnu";
+  configureFlags = stdenv.lib.optionals headersOnly [ "--build=i586-pc-gnu" ];
 
   preConfigure = "autoreconf -vfi";
+
+  buildPhase = "make ${buildTarget}";
+  installPhase = "make ${installTarget}";
 
   meta = {
     description = "The GNU Hurd, GNU project's replacement for the Unix kernel";
@@ -46,4 +59,12 @@ stdenv.mkDerivation ({
 
 (if headersOnly
  then { buildPhase = ":"; installPhase = "make install-headers"; }
- else {}))
+ else (if (cross != null)
+       then {
+         crossConfig = cross.config;
+
+         # The `configure' script wants to build executables so tell it where
+         # to find `crt1.o' et al.
+         LDFLAGS = "-B${glibcCross}/lib";
+       }
+       else { })))
