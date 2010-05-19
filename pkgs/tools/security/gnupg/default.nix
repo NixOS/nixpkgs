@@ -31,11 +31,6 @@ stdenv.mkDerivation rec {
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 
-  postInstall = ''
-    ln -s gpg2 $out/bin/gpg
-    ln -s gpgv2 $out/bin/gpgv
-  '';
-
   doCheck = true;
 
   meta = {
