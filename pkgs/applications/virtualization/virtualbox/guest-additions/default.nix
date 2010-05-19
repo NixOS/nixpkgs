@@ -71,7 +71,6 @@ stdenv.mkDerivation {
     ensureDir $out/bin
     install -m 755 bin/VBoxClient $out/bin
     install -m 755 bin/VBoxControl $out/bin
-    install -m 755 bin/VBoxRandR $out/bin
     install -m 755 bin/VBoxClient-all $out/bin
 
     # Install OpenGL libraries
