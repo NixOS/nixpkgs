@@ -9,7 +9,6 @@ export HOME=$TMP
 
 
 buildPhase() {
-    #substituteInPlace BitTorrent/GUI_wx/__init__.py --replace "'2.6'" "'2.8'"
     python setup.py build
 }
 
