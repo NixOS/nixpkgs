@@ -8042,7 +8042,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  ledger = import ../applications/office/ledger {
+  ledger = makeOverridable (import ../applications/office/ledger) {
     inherit stdenv fetchurl emacs gmp pcre;
   };
 
