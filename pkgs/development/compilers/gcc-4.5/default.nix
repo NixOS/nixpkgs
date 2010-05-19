@@ -37,6 +37,7 @@ assert langVhdl     -> gnat != null;
 assert libelf != null -> zlib != null;
 
 with stdenv.lib;
+with builtins;
 
 let version = "4.5.0";
     javaEcj = fetchurl {
@@ -215,7 +216,13 @@ stdenv.mkDerivation ({
                                    ++ optionals javaAwtGtk xlibs
                                    ++ optionals javaAwtGtk [ gmp mpfr ]
                                    ++ optional (libpthread != null) libpthread
-                                   ++ optional (libpthreadCross != null) libpthreadCross)));
+                                   ++ optional (libpthreadCross != null) libpthreadCross
+
+                                   # On GNU/Hurd glibc refers to Mach & Hurd
+                                   # headers.
+                                   ++ optionals (libcCross != null &&
+                                                 hasAttr "propagatedBuildInputs" libcCross)
+                                        libcCross.propagatedBuildInputs)));
 
   LIBRARY_PATH = concatStrings
                    (intersperse ":" (map (x: x + "/lib")
