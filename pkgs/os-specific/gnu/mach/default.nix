@@ -3,10 +3,12 @@
 
 assert (!headersOnly) -> (mig != null);
 
-let rev = "7987a711e8f13c0543e87a0211981f4b40ef6d94";
+let
+  date = "2010-05-12";
+  rev = "master@{${date}}";
 in
-stdenv.mkDerivation (rec {
-  name = "gnumach-1.4-${rev}";
+stdenv.mkDerivation ({
+  name = "gnumach-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/gnumach.git";
