@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "1by8z7vy1c1m3iyh57rlqx6rah5gj6kx3ba30s9305bnffij5kzb";
   };
-  
+
   buildInputs = [
     pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
     libuuid perl perlXMLParser gettext zlib gperf
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") [ libsmbios ];
 
   # !!! Hm, maybe the pci/usb.ids location should be in /etc, so that
-  # we don't have to rebuild HAL when we update the PCI/USB IDs.  
+  # we don't have to rebuild HAL when we update the PCI/USB IDs.
   configureFlags = ''
     --with-pci-ids=${pciutils}/share
     --with-usb-ids=${usbutils}/share
