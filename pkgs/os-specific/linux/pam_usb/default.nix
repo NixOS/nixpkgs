@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "pam_usb-0.4.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/pamusb/files/pam_usb/pam_usb-0.4.2/pam_usb-0.4.2.tar.gz;
+    url = mirror://sourceforge/pamusb/pam_usb/pam_usb-0.4.2/pam_usb-0.4.2.tar.gz;
     sha256 = "736afced7482c7c5d47127285f7defe0a304a6136a0090588fa8698d385ba202";
   };
 

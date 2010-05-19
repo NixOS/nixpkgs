@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ emacs gmp pcre ];
 
+  patches = [ ./const.patch ];
+
   # Something goes wrong with pathelf...
   # this is a small workaround: adds a small shell script for
   # setting LD_LIBRARY_PATH

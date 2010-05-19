@@ -3,7 +3,7 @@ args.stdenv.mkDerivation {
   name = "thinkingrock-2.2.1-binary";
 
   src = args.fetchurl {
-    url = mirror://sourceforge/thinkingrock/files/ThinkingRock/TR%202.2.1/tr-2.2.1.tar.gz;
+    url = mirror://sourceforge/thinkingrock/ThinkingRock/TR%202.2.1/tr-2.2.1.tar.gz;
     sha256 = "0hnwvvyc8miiz8w2g4iy7s4rgfy0kfbncgbgfzpsq6nrzq334kgm";
   };
 

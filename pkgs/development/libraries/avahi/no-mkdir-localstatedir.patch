@@ -1,0 +1,14 @@
+Don't "mkdir $(localstatedir)" since we can't do it (/var).
+
+--- avahi-0.6.25/avahi-daemon/Makefile.in	2009-04-14 03:57:14.000000000 +0200
++++ avahi-0.6.25/avahi-daemon/Makefile.in	2010-05-09 00:12:35.000000000 +0200
+@@ -1310,7 +1310,7 @@ xmllint:
+ 	done
+ 
+ install-data-local:
+-	test -z "$(localstatedir)/run" || $(mkdir_p) "$(DESTDIR)$(localstatedir)/run"
++
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+

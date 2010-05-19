@@ -1,0 +1,47 @@
+This patch makes stap(1) know about the kernel store path on NixOS.
+
+--- systemtap-1.2/main.cxx	2010-03-22 22:51:49.000000000 +0100
++++ systemtap-1.2/main.cxx	2010-05-04 14:56:19.000000000 +0200
+@@ -528,6 +528,32 @@ getmemusage ()
+   return oss.str();
+ }
+ 
++/* Read `/proc/cmdline' and extract the store path.  The assumption is that
++   `/proc/cmdline' looks like this:
++
++   BOOT_IMAGE=/nix/store/sxjd69wfcr6w8jlbcc5bc20nwjliq872-linux-2.6.32.8/bzImage systemConfig=/nix/store/kiicqkjwgfvkwrg4fp3dnhwldh7dq7is-system init=/nix/store/czgncihjwx3n58xij6i1rlnz8wv6ym4j-stage-2-init.sh splash=verbose vga=0x317
++
++   This is the case on NixOS GNU/Linux.  */
++static string
++kernel_store_path (void)
++{
++  ifstream proc_cmdline ("/proc/cmdline");
++  string variable_name, store_path;
++
++  getline (proc_cmdline, variable_name, '=');
++  if (variable_name == "BOOT_IMAGE")
++    {
++      string boot_image_path;
++      size_t slash_pos;
++
++      getline (proc_cmdline, boot_image_path, ' ');
++      slash_pos = boot_image_path.find_last_of ('/');
++      store_path = boot_image_path.substr (0, slash_pos);
++    }
++
++  return store_path;
++}
++
+ int
+ main (int argc, char * const argv [])
+ {
+@@ -541,7 +567,8 @@ main (int argc, char * const argv [])
+   struct utsname buf;
+   (void) uname (& buf);
+   s.kernel_release = string (buf.release);
+-  s.kernel_build_tree = "/lib/modules/" + s.kernel_release + "/build";
++  s.kernel_build_tree =
++    kernel_store_path () + "/lib/modules/" + s.kernel_release + "/build";
+ 
+   // PR4186: Copy logic from coreutils uname (uname -i) to squash
+   // i?86->i386.  Actually, copy logic from linux top-level Makefile

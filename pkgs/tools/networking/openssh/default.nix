@@ -1,10 +1,7 @@
-{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig
-, pamSupport ? false, pam ? null
+{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
 , etcDir ? null
 , hpnSupport ? false
 }:
-
-assert pamSupport -> pam != null;
 
 let
 
@@ -23,20 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "12kywhjnz6w6kx5fk526fhs2xc7rf234hwrms9p1hqv6zrpdvvin";
   };
 
-  patchPhase = stdenv.lib.optionalString hpnSupport
+  prePatch = stdenv.lib.optionalString hpnSupport
     ''
       gunzip -c ${hpnSrc} | patch -p1
     '';
-  
-  buildInputs =
-    [ zlib openssl perl libedit pkgconfig ]
-    ++ stdenv.lib.optional pamSupport pam;
+  patches = [ ./locale_archive.patch ];
+
+  buildInputs = [ zlib openssl perl libedit pkgconfig pam ];
 
   configureFlags =
     ''
       --with-mantype=man
       --with-libedit=yes
-      ${if pamSupport then "--with-pam" else "--without-pam"}
+      ${if pam != null then "--with-pam" else "--without-pam"}
       ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
     '';
 

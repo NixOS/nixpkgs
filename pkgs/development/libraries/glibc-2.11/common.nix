@@ -5,12 +5,20 @@ cross :
 
 { name, fetchurl, stdenv, installLocales ? false
 , gccCross ? null, kernelHeaders ? null
+, machHeaders ? null, hurdHeaders ? null, mig ? null, fetchgit ? null
 , profilingLibraries ? false, meta
 , preConfigure ? "", ... }@args :
 
-let version = "2.11.1"; in
+let
+  rev = "df4c3faf0ccc848b5a8086c222bdb42679a9798f";
+  version = if hurdHeaders != null then "0.0-pre" + rev else "2.11.1";
+in
 
 assert (cross != null) -> (gccCross != null);
+
+assert (mig != null) -> (machHeaders != null);
+assert (machHeaders != null) -> (hurdHeaders != null);
+assert (hurdHeaders != null) -> (fetchgit != null);
 
 stdenv.mkDerivation ({
   inherit kernelHeaders installLocales;
@@ -20,7 +28,8 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
-  patches = [
+  patches =
+    stdenv.lib.optional (fetchgit == null)
     /* Fix for NIXPKGS-79: when doing host name lookups, when
        nsswitch.conf contains a line like
 
@@ -49,10 +58,11 @@ stdenv.mkDerivation ({
 
     /* Make sure `nscd' et al. are linked against `libssp'.  */
     ./stack-protector-link.patch
+  ]
 
+  ++ stdenv.lib.optional (fetchgit == null)
     /* MOD_NANO definition, for ntp (taken from glibc upstream) */
-    ./mod_nano.patch
-  ];
+    ./mod_nano.patch;
 
   configureFlags = [
     "-C"
@@ -75,7 +85,8 @@ stdenv.mkDerivation ({
     "--without-fp"
   ];
 
-  buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
+  buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ]
+    ++ stdenv.lib.optional (mig != null) mig;
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
@@ -96,10 +107,20 @@ stdenv.mkDerivation ({
   name = name + "-${version}" +
     stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
-  src = fetchurl {
-    url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
-    sha256 = "18azb6518ryqhkfmddr25p0h1s2msrmx7dblij58sjlnzh61vq34";
-  };
+  src =
+    if hurdHeaders != null
+    then fetchgit {
+      # Shamefully the "official" glibc won't build on GNU, so use the one
+      # maintained by the Hurd folks, `tschwinge/Roger_Whittaker' branch.
+      # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
+      url = "git://git.sv.gnu.org/hurd/glibc.git";
+      sha256 = "f3590a54a9d897d121f91113949edbaaf3e30cdeacbb8d0a44de7b6564f6643e";
+      inherit rev;
+    }
+    else fetchurl {
+      url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
+      sha256 = "18azb6518ryqhkfmddr25p0h1s2msrmx7dblij58sjlnzh61vq34";
+    };
 
   srcPorts = fetchurl {
     url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2";
@@ -147,4 +168,19 @@ stdenv.mkDerivation ({
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.linux;
   } // meta;
-})
+}
+
+//
+
+(if hurdHeaders != null
+ then {
+   # Work around the fact that the configure snippet that looks for
+   # <hurd/version.h> does not honor `--with-headers=$sysheaders' and that
+   # glibc expects both Mach and Hurd headers to be in the same place.
+   CPATH = "${hurdHeaders}/include:${machHeaders}/include";
+
+   # `fetchgit' is a function and thus should not be passed to the
+   # `derivation' primitive.
+   fetchgit = null;
+ }
+ else { }))

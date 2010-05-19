@@ -1,46 +1,29 @@
-{ xawSupport ? true
-, xpmSupport ? true
-, dbusSupport ? true
-, xaw3dSupport ? false
-, gtkGUI ? false
-, xftSupport ? false
-, stdenv, fetchurl, ncurses, x11, libXaw ? null, libXpm ? null, Xaw3d ? null
-, pkgconfig ? null, gtk ? null, libXft ? null, dbus ? null
-, libpng, libjpeg, libungif, libtiff, texinfo
+{ stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
+, pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
+, libtiff, librsvg, texinfo, gconf
 }:
 
-assert xawSupport -> libXaw != null;
-assert xpmSupport -> libXpm != null;
-assert dbusSupport -> dbus != null;
-assert xaw3dSupport -> Xaw3d != null;
-assert gtkGUI -> pkgconfig != null && gtk != null;
-assert xftSupport -> libXft != null && libpng != null; # libpng = probably a bug
-assert stdenv.system == "i686-darwin" -> xawSupport; # fails to link otherwise
+assert (gtk != null) -> (pkgconfig != null);
+assert (libXft != null) -> libpng != null;	# probably a bug
+assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-23.1";
+  name = "emacs-23.2";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.bz2";
-    sha256 = "076b4ixdp29l4c02bwic26d14gxlj0lcqyam33wyj3ksgi2z8d9b";
+    sha256 = "1i96hp91s86jawrqjhfxm5y2sjxizv99009128b4bh06bgx6dm7z";
   };
 
   buildInputs = [
-    ncurses x11 texinfo
-    (if xawSupport then libXaw else null)
-    (if xpmSupport then libXpm else null)
-    (if dbusSupport then dbus else null)
-    (if xaw3dSupport then Xaw3d else null)
-    libpng libjpeg libungif libtiff # maybe not strictly required?
-  ]
-  ++ (if gtkGUI then [pkgconfig gtk] else [])
-  ++ (if xftSupport then [libXft] else []);
+    ncurses x11 texinfo libXaw Xaw3d libXpm dbus libpng libjpeg libungif
+    libtiff librsvg gtk (if gtk != null then pkgconfig else null) libXft gconf
+  ];
 
-  configureFlags = "
-    ${if gtkGUI then "--with-x-toolkit=gtk --enable-font-backend --with-xft" else ""}
-  ";
+  configureFlags =
+    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft" ];
 
   doCheck = true;
 
@@ -67,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/emacs/;
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.linux;  # GTK & co. are needed.
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

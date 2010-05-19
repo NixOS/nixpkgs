@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ automake autoconf ];
+
+  # don't use $T(E)MP which is set to the build directory
+  configureFlags="--enable-tmpdir=/tmp";
+
   meta = {
     description = "Exuberant Ctags, a tool for fast source code browsing";
 
@@ -29,4 +33,5 @@ stdenv.mkDerivation rec {
 
     license = "GPLv2+";
   };
+
 }

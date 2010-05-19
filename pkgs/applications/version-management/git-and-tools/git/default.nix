@@ -1,9 +1,10 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
-, svnSupport, subversion, perlLibs
+, svnSupport, subversion, perlLibs, smtpPerlLibs
 , guiSupport
 , pythonSupport ? true
+, sendEmailSupport
 }:
 
 let
@@ -11,11 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "git-1.7.0.5";
+  name = "git-1.7.1";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "96b44fcd8652db8a7a30d87096a17200457d3fbcc91aa334cb7644a6da898d53";
+    sha256 = "bcf008ec9639480a3ebfdc4708743b6c0978a8bd3103a2dda587ea9473b9dde2";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -58,6 +59,18 @@ stdenv.mkDerivation rec {
                      --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
+       '')
+
+   + (if sendEmailSupport then
+      ''# wrap git-send-email
+        gitperllib=$out/lib/perl5/site_perl
+        for i in ${builtins.toString smtpPerlLibs}; do
+          gitperllib=$gitperllib:$i/lib/perl5/site_perl
+        done
+        wrapProgram "$out/libexec/git-core/git-send-email"     \
+                     --set GITPERLLIB "$gitperllib" ''
+       else '' # replace git-send-email by notification script
+        notSupported $out/bin/git-send-email "reinstall with config git = { sendEmailSupport = true } set"
        '')
 
    + ''# Install man pages and Info manual
@@ -119,6 +132,6 @@ stdenv.mkDerivation rec {
         stdenv.lib.maintainers.simons
       ];
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.all;
   };
 }

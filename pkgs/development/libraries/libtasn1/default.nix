@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libtasn1-2.5";
+  name = "libtasn1-2.6";
 
   src = fetchurl {
     url = "mirror://gnu/libtasn1/${name}.tar.gz";
-    sha256 = "0xr4hsrs7cjx5zy7nkm6a93gkx7dkynyycgk2ayhscf5n5z96pyz";
+    sha256 = "1izrmbmrj29822qbp2dlsjkdck0hnjilplcq2i23cwgdqk79rsvs";
   };
 
   doCheck = true;

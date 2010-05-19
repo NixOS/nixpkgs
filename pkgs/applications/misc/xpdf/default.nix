@@ -8,7 +8,7 @@ assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
 stdenv.mkDerivation {
-  name = "xpdf-3.02pl3";
+  name = "xpdf-3.02pl4";
 
   src = fetchurl {
     url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02.tar.gz;
@@ -31,6 +31,10 @@ stdenv.mkDerivation {
     (fetchurl {
       url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl3.patch;
       sha256 = "0jskkv8x6dqr9zj4azaglas8cziwqqrkbbnzrpm2kzrvsbxyhk2r";
+    })
+    (fetchurl {
+      url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl4.patch;
+      sha256 = "1c48h7aizx0ngmzlzw0mpja1w8vqyy3pg62hyxp7c60k86al715h";
     })
     ./xpdf-3.02-protection.patch
   ];

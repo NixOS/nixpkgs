@@ -1,4 +1,4 @@
-{pkgs, ghc}:
+{pkgs, ghc, enableLibraryProfiling ? false}:
 
 let ghcReal = pkgs.lowPrio ghc; in
 
@@ -21,7 +21,7 @@ rec {
 
   cabal = import ../development/libraries/haskell/cabal/cabal.nix {
     inherit (pkgs) stdenv fetchurl lib;
-    inherit ghc;
+    inherit ghc enableLibraryProfiling;
   };
 
 
@@ -57,6 +57,10 @@ rec {
     inherit cabal;
   };
 
+  bitmap = import ../development/libraries/haskell/bitmap {
+    inherit cabal;
+  };
+
   bytestring = import ../development/libraries/haskell/bytestring {
     inherit cabal;
   };
@@ -76,6 +80,10 @@ rec {
 
   cgi = import ../development/libraries/haskell/cgi {
     inherit cabal mtl network parsec xhtml;
+  };
+
+  cmdargs = import ../development/libraries/haskell/cmdargs {
+    inherit cabal filepath mtl;
   };
 
   colorizeHaskell = import ../development/libraries/haskell/colorize-haskell {
@@ -206,6 +214,10 @@ rec {
     network = network2217;
   };
 
+  GlomeVec = import ../development/libraries/haskell/GlomeVec {
+    inherit cabal;
+  };
+
   GLUT2121 = import ../development/libraries/haskell/GLUT/2.1.2.1.nix {
     inherit cabal;
     OpenGL = OpenGL2230;
@@ -213,14 +225,14 @@ rec {
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
-  
+
   GLUT = import ../development/libraries/haskell/GLUT {
     inherit cabal OpenGL;
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
-  
+
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit ghc mtl;
     inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
@@ -261,7 +273,7 @@ rec {
   };
 
   hashedStorage = import ../development/libraries/haskell/hashed-storage {
-    inherit cabal mtl zlib mmap;
+    inherit cabal mtl zlib mmap binary dataenc;
   };
 
   haskeline = import ../development/libraries/haskell/haskeline {
@@ -287,8 +299,8 @@ rec {
   haskellSrcMeta = import ../development/libraries/haskell/haskell-src-meta {
     inherit cabal haskellSrcExts;
   };
-  
-  haskellPlatform2010100 = import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
+
+  haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
       haskellSrc html
       stm xhtml happy;
@@ -308,7 +320,7 @@ rec {
     regexPosix = regexPosix0941;
     haddock = haddock272;
     inherit (pkgs) fetchurl;
-  };
+  });
 
   haskellPlatform = import ../development/libraries/haskell/haskell-platform {
     inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
@@ -546,8 +558,16 @@ rec {
     inherit cabal;
   };
 
+  ppm = import ../development/libraries/haskell/ppm {
+    inherit cabal mtl;
+  };
+
   pureMD5 = import ../development/libraries/haskell/pureMD5 {
     inherit cabal binary;
+  };
+
+  primitive = import ../development/libraries/haskell/primitive {
+    inherit cabal;
   };
 
   QuickCheck  = QuickCheck1;
@@ -558,6 +578,10 @@ rec {
 
   QuickCheck2 = import ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {
     inherit cabal mtl;
+  };
+
+  RangedSets = import ../development/libraries/haskell/Ranged-sets {
+    inherit cabal HUnit QuickCheck;
   };
 
   readline = import ../development/libraries/haskell/readline {
@@ -679,6 +703,10 @@ rec {
     inherit cabal;
   };
 
+  stbImage = import ../development/libraries/haskell/stb-image {
+    inherit cabal bitmap;
+  };
+
   stm = import ../development/libraries/haskell/stm {
     inherit cabal;
   };
@@ -766,6 +794,14 @@ rec {
     inherit cabal vacuum gtk2hs parallel strictConcurrency;
   };
 
+  Vec = import ../development/libraries/haskell/Vec {
+    inherit cabal QuickCheck;
+  };
+
+  vector = import ../development/libraries/haskell/vector {
+    inherit cabal primitive;
+  };
+
   vty = import ../development/libraries/haskell/vty {
     inherit cabal utf8String terminfo;
   };
@@ -843,8 +879,8 @@ rec {
   # Compilers.
 
   ehc = import ../development/compilers/ehc {
-    inherit ghc uulib uuagc;
-    inherit (pkgs) fetchsvn stdenv coreutils m4 libtool llvm;
+    inherit ghc uulib uuagc mtl network binary fgl;
+    inherit (pkgs) fetchsvn stdenv coreutils glibc m4 libtool llvm;
   };
 
   helium = import ../development/compilers/helium {
@@ -887,7 +923,7 @@ rec {
   };
 
   # does not compile with ghc-6.8.3
-  haddock210 = pkgs.stdenv.lib.lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
+  haddock210 = pkgs.lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
     inherit cabal;
   });
 
@@ -940,6 +976,7 @@ rec {
 
   darcs = import ../applications/version-management/darcs/darcs-2.nix {
     inherit cabal html mtl parsec regexCompat haskeline hashedStorage;
+    zlib = zlib0520;
     inherit (pkgs) curl;
   };
 
@@ -947,7 +984,7 @@ rec {
     inherit cabal gtk2hs binary parsec regexPosix regexCompat utf8String;
     inherit (pkgs) libedit makeWrapper;
   };
-  
+
   xmobar = import ../applications/misc/xmobar {
     inherit cabal X11 mtl parsec stm utf8String X11_xft;
   };

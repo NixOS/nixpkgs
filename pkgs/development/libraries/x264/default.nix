@@ -1,16 +1,21 @@
-args:
-args.stdenv.mkDerivation rec {
-  version = "snapshot-20080521-2245";
+{stdenv, fetchurl, yasm}:
+
+stdenv.mkDerivation rec {
+  version = "snapshot-20100429-2245";
   name = "x264-${version}";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-${version}.tar.bz2";
-    sha256 = "07khxih1lmhvrzlaksqmaghbi8w2yyjrjcw867gi2y4z1h0ndhks";
+    sha256 = "16b24mc63zyp4h4fqyvgzbdclnhpay4l72yfqzwnzsnlby94zwcj";
   };
 
-  configureFlags= if args.stdenv.system == "x86_64-linux" then ["--enable-pic"] else [];
+  patchPhase = ''
+    sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
+  '';
 
-  buildInputs =(with args; []);
+  configureFlags = [ "--enable-shared" ];
+
+  buildInputs = [ yasm ];
 
   meta = { 
       description = "library for encoding H264/AVC video streams";

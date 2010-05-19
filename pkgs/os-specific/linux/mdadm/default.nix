@@ -1,22 +1,32 @@
-{stdenv, fetchurl, groff}:
+{ stdenv, fetchurl, groff }:
 
-stdenv.mkDerivation {
-  name = "mdadm-2.6";
+stdenv.mkDerivation rec {
+  name = "mdadm-3.1.2";
+  
   src = fetchurl {
-    url = http://www.cse.unsw.edu.au/~neilb/source/mdadm/mdadm-2.6.tgz;
-    md5 = "15019078eacc8c21eac7b0b7faf86129";
+    url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.bz2";
+    sha256 = "0s2d2a01j8cizxqvbgd0sn5bpa1j46q8976078b3jq1q7i1ir0zz";
   };
 
-  buildNativeInputs = [groff];
+  # Enable incremental activation of swraid arrays from udev.
+  patches = [ ./udev.patch ];
 
-  preBuild = ''
-    makeFlags="INSTALL=install BINDIR=$out/sbin MANDIR=$out/share/man"
-    if [ -n "$crossConfig" ]; then
-      makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
-    fi
-  '';
+  buildNativeInputs = [ groff ];
+
+  preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -i Makefile";
+
+  # Force mdadm to use /var/run/mdadm.map for its map file (or
+  # /dev/.mdadm/map as a fallback).
+  preBuild =
+    ''
+      makeFlagsArray=(INSTALL=install BINDIR=$out/sbin MANDIR=$out/share/man VAR_RUN=/var/run/mdadm ALT_RUN=/dev/.mdadm)
+      if [[ -n "$crossConfig" ]]; then
+        makeFlagsArray+=(CROSS_COMPILE=$crossConfig-)
+      fi
+    '';
 
   meta = {
     description = "Programs for managing RAID arrays under Linux";
+    homepage = http://neil.brown.name/blog/mdadm;
   };
 }

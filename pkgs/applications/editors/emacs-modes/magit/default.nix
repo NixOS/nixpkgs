@@ -1,19 +1,17 @@
-{stdenv, fetchurl, emacs, texinfo, autoconf, automake}:
+{ stdenv, fetchurl, emacs, texinfo }:
 
 let
-    version = "0.7-109-g0fc3980";
+  version = "0.8";
 in
 stdenv.mkDerivation {
   name = "magit-${version}";
 
   src = fetchurl {
-    url = "http://cryp.to/magit-mainline-${version}.tar.gz";
-    sha256 = "0jyx57znvn49xm0h92kh8iywn44ip130dpflzq2ns2k6gspg36b6";
+    url = "http://github.com/downloads/philjackson/magit/magit-${version}.tar.gz";
+    sha256 = "4d1b55dcb118e506c6b8838acd4a50dbdd5348b1d12edd9789a3109a582e2954";
   };
-  unpackCmd = "tar xf $src";
-  preConfigure = "./autogen.sh";
 
-  buildInputs = [emacs texinfo autoconf automake];
+  buildInputs = [emacs texinfo];
 
   meta = {
     description = "An an interface to Git, implemented as an extension to Emacs.";
@@ -31,6 +29,8 @@ stdenv.mkDerivation {
     '';
 
     license = "GPLv3+";
-    homepage = "http://zagadka.vm.bytemark.co.uk/magit/";
+    homepage = "http://github.com/philjackson/magit";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

@@ -2,10 +2,10 @@
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes}:
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-3.1.6";
+  name = "VirtualBox-GuestAdditions-3.1.8";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.1.6/VBoxGuestAdditions_3.1.6.iso;
-    sha256 = "07vylsjs960yqgz2cn57sdhrhs0i3mkb286vnl7p86i7dfl0r08s";
+    url = http://download.virtualbox.org/virtualbox/3.1.8/VBoxGuestAdditions_3.1.8.iso;
+    sha256 = "11fn49zxmd7nxmqn9pcakmzj6j9f8kfb38czpl8fhbnl2k4ggj5q";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit ];
@@ -71,7 +71,6 @@ stdenv.mkDerivation {
     ensureDir $out/bin
     install -m 755 bin/VBoxClient $out/bin
     install -m 755 bin/VBoxControl $out/bin
-    install -m 755 bin/VBoxRandR $out/bin
     install -m 755 bin/VBoxClient-all $out/bin
 
     # Install OpenGL libraries

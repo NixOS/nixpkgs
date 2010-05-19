@@ -73,6 +73,36 @@ rec {
   linkFarm = name: entries: runCommand name {} ("mkdir -p $out; cd $out; \n" +
     (stdenv.lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
+  # Require file
+  requireFile = {name, sha256, url ? null, message ? null} :
+    assert (message != null) || (url != null);
+    let msg =
+      if message != null then message
+      else ''
+        Unfortunately, we may not download file ${name} automatically.
+        Please, go to ${url}, download it yourself, and add it to the Nix store
+        using either
+          nix-store --add-fixed sha256 ${name}
+        or
+          nix-prefetch-url file://path/to/${name}
+      '';
+    in
+    stdenv.mkDerivation {
+      inherit name;
+      outputHashAlgo = "sha256";
+      outputHash = sha256;
+      builder = writeScript "restrict-message" ''
+source ${stdenv}/setup
+cat <<_EOF_
+
+***
+${msg}
+***
+
+_EOF_
+      '';
+    };
+
   # Search in the environment if the same program exists with a set uid or
   # set gid bit.  If it exists, run the first program found, otherwise run
   # the default binary.

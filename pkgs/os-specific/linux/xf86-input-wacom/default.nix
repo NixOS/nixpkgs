@@ -25,9 +25,10 @@ stdenv.mkDerivation rec {
       cp ${./10-wacom.rules} $out/etc/udev/rules.d/10-wacom.rules
     '';
 
-  meta = {
-    maintainers = with stdenv.lib.maintainers; [urkud];
+  meta = with stdenv.lib; {
+    maintainers = [ maintainers.urkud ];
     description = "Wacom digitizer driver for X11";
     homepage = http://linuxwacom.sourceforge.net;
+    platforms = platforms.linux; # Probably, works with other unices as well
   };
 }

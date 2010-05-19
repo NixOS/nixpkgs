@@ -1,15 +1,11 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk, vte, pixman, gettext }:
+{ stdenv, fetchurl, cmake, pkgconfig, gtk, vte, pixman, gettext, perl }:
 stdenv.mkDerivation rec {
-  name = "sakura-2.3.6";
+  name = "sakura-2.3.8";
   src = fetchurl {
     url = "http://www.pleyades.net/david/projects/sakura/${name}.tar.bz2";
-    sha256 = "0g6v1filixy4zcz1fabjz0zpdicgzxkc8rh06jxfch5pk9dq4x5j";
+    sha256 = "1gfjh1xxqgna0njh0pd4srnbmj67ir4b13slrdri6bm80shfbz8l";
   };
-  # FIXME
-  patchPhase = ''
-    sed -i "s:INSTALL (FILES sakura.1:#INSTALL (FILES sakura.1:" CMakeLists.txt
-  '';
-  buildInputs = [ cmake pkgconfig gtk vte pixman gettext ];
+  buildInputs = [ cmake pkgconfig gtk vte pixman gettext perl ];
   meta = {
     homepage = "http://www.pleyades.net/david/sakura.php";
     description = "A terminal emulator based on GTK and VTE";

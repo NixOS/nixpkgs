@@ -2,11 +2,6 @@
 
 stdenv.mkDerivation rec {
   name = "pdsh-2.18";
-  meta = {
-    homepage = "https://computing.llnl.gov/linux/pdsh.html";
-    description = "A high-performance, parallel remote shell utility.";
-    license = "GPLv2";
-  };
   src = fetchurl {
     url = "mirror://sourceforge/pdsh/${name}.tar.bz2";
     sha256 = "8c94acb17b4af8a9f553db180b4d5745c9c98844a5dc070e2ce80590e8e8a539";
@@ -40,5 +35,11 @@ stdenv.mkDerivation rec {
                  + " --disable-debug"
                  ;
 
-  maintainers = [ stdenv.lib.maintainers.simons ];
+  meta = {
+    homepage = "https://computing.llnl.gov/linux/pdsh.html";
+    description = "A high-performance, parallel remote shell utility.";
+    license = "GPLv2";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }

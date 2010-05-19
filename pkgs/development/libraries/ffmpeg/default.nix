@@ -1,4 +1,4 @@
-{stdenv, fetchurl, faad2, libtheora, speex, libvorbis}:
+{stdenv, fetchurl, faad2, libtheora, speex, libvorbis, x264, pkgconfig, xvidcore}:
 
 stdenv.mkDerivation {
   name = "ffmpeg-0.5.1";
@@ -22,9 +22,11 @@ stdenv.mkDerivation {
     --enable-libtheora
     --enable-libvorbis
     --enable-libspeex
+    --enable-libx264
+    --enable-libxvid
   '';
 
-  buildInputs = [faad2 libtheora speex libvorbis];
+  buildInputs = [faad2 libtheora speex libvorbis x264 pkgconfig xvidcore];
 
   meta = {
     homepage = http://www.ffmpeg.org/;

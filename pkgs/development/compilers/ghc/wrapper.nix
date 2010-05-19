@@ -20,6 +20,9 @@ stdenv.mkDerivation {
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
       makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" --package-conf=)"
     done
+    for prg in hp2ps hpc hasktags hsc2hs; do
+      test -x $ghc/bin/$prg && ln -s $ghc/bin/$prg $out/bin/$prg
+    done
     cat >> $out/bin/ghc-packages << EOF
     #! /bin/bash -e
     declare -A GHC_PACKAGES_HASH # using bash4 hashs to get uniq paths
@@ -45,5 +48,6 @@ stdenv.mkDerivation {
   GHCGetPackages = ./ghc-get-packages.sh;
 
   inherit ghc;
+  inherit (ghc) meta;
   ghcVersion = ghc.version;
 }

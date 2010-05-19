@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2
+{ stdenv, fetchurl, libxml2, pkgconfig
 , compressionSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
 }:
@@ -14,11 +14,13 @@ stdenv.mkDerivation {
     sha256 = "1pjrn5wb18gy419293hmwd02blmh36aaxsrgajm9nkkkjzqakncj";
   };
    
-  buildInputs = [libxml2] ++ stdenv.lib.optional compressionSupport zlib;
+  buildInputs = [libxml2]
+    ++ stdenv.lib.optional compressionSupport zlib
+    ++ (if sslSupport then [ openssl pkgconfig ] else []);
 
   configureFlags = ''
     ${if compressionSupport then "--with-zlib" else "--without-zlib"}
-    ${if sslSupport then "--with-ssl --with-libs=${openssl}" else "--without-ssl"}
+    ${if sslSupport then "--with-ssl" else "--without-ssl"}
     --enable-shared
   '';
 

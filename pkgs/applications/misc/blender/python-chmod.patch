@@ -1,0 +1,14 @@
+As the code copied from the nix store, the files there do not have the 'writeable' permission.
+Hence this fix, needed on nix but not on usual LSB linuces.
+diff --git a/source/creator/CMakeLists.txt b/source/creator/CMakeLists.txt
+index 386ef1b..6a180fa 100644
+--- a/source/creator/CMakeLists.txt
++++ b/source/creator/CMakeLists.txt
+@@ -152,6 +152,7 @@ IF(WITH_INSTALL)
+ 				COMMAND mkdir ${TARGETDIR}/.blender/python # PYTHONPATH and PYTHONHOME is set here
+ 				COMMAND mkdir ${TARGETDIR}/.blender/python/lib/
+ 				COMMAND cp -R ${PYTHON_LIBPATH}/python${PYTHON_VERSION} ${TARGETDIR}/.blender/python/lib/
++        COMMAND chmod -R +w ${TARGETDIR}/.blender/python/lib/
+         
+ 				COMMAND rm -rf ${TARGETDIR}/.blender/python/lib/python${PYTHON_VERSION}/distutils
+ 				COMMAND rm -rf ${TARGETDIR}/.blender/python/lib/python${PYTHON_VERSION}/lib2to3

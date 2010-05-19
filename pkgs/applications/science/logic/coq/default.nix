@@ -1,6 +1,5 @@
 # TODO:
 # - coqide compilation should be optional or (better) separate;
-# - coqide libraries are not installed;
 
 {stdenv, fetchurl, ocaml, camlp5, lablgtk, ncurses}:
 
@@ -50,6 +49,10 @@ stdenv.mkDerivation {
     substituteInPlace scripts/coqmktop.ml --replace \
       "\"-I\"; \"+lablgtk2\"" \
       "\"-I\"; \"${lablgtk}/lib/ocaml/lablgtk2\"; \"-I\"; \"${lablgtk}/lib/ocaml/stublibs\""
+  '';
+
+  postInstall = ''
+   cp ide/*.cmi ide/ide.*a $out/lib/coq/ide/
   '';
 
   meta = {

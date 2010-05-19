@@ -16,17 +16,17 @@ stdenv.mkDerivation rec {
   name = "emacs-22.3";
 
   builder = ./builder.sh;
-  
+
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.gz";
     sha256 = "05hd89bchcpwzcx5la0alcp0wb7xywvnf98dxrshrqlfvccvgnbv";
   };
-  
+
   buildInputs = [ncurses x11]
     ++ stdenv.lib.optional xawSupport (if xaw3dSupport then Xaw3d else libXaw)
     ++ stdenv.lib.optional xpmSupport libXpm
     ++ stdenv.lib.optionals gtkGUI [pkgconfig gtk];
-  
+
   configureFlags =
     stdenv.lib.optional gtkGUI "--with-x-toolkit=gtk";
 
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/emacs/;
     license = "GPLv3+";
 
-    platforms = stdenv.lib.platforms.linux;  # GTK & co. are needed.
+    platforms = stdenv.lib.platforms.all;
   };
 }

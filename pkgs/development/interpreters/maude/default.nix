@@ -3,12 +3,6 @@
 stdenv.mkDerivation rec {
   name = "maude-2.4";
 
-  meta = {
-    homepage = "http://maude.cs.uiuc.edu/";
-    description = "Maude -- a high-level specification language";
-    license = "GPLv2";
-  };
-
   src = fetchurl {
     url = "http://maude.cs.uiuc.edu/download/current/Maude-2.4.tar.gz";
     sha256 = "0bydkf8fd5v267bfak4mm5lmm3vvnr6ir1jr7gimgyzqygdk0in2";
@@ -43,5 +37,11 @@ stdenv.mkDerivation rec {
     mv maude-2.3.0-extras/* $out/share/doc/maude/
   '';
 
-  maintainers = [ stdenv.lib.maintainers.simons ];
+  meta = {
+    homepage = "http://maude.cs.uiuc.edu/";
+    description = "Maude -- a high-level specification language";
+    license = "GPLv2";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "inetutils-1.7";
+  name = "inetutils-1.8";
 
   src = fetchurl {
     url = "mirror://gnu/inetutils/${name}.tar.gz";
-    sha256 = "09v9nycqpc3j7bsi5aj4hm8gxw1xgxr4lz14brnzv0i80qqxjb7p";
+    sha256 = "1iqihfv54nzjmclivys2dpcyfhavgynj8pp6r44a97jbw2p0nl68";
   };
 
   buildInputs = [ ncurses /* for `talk' */ ];

@@ -1,12 +1,14 @@
-{cabal,mtl}:
+{cabal, mtl}:
 
 cabal.mkDerivation (self : {
   pname = "parsec";
-  version = "3.0.1";
-  sha256 = "619d0c2eb093cfe6d6caab2ff94f31a6208720b4bcc85b9f98600253bb505542";
+  version = "3.1.0";
+  sha256 = "962d39944bae18b0fea60961c77513f455f95c0f67ae4b10ab15484a27b6fb98";
   propagatedBuildInputs = [mtl];
   meta = {
+    license = "BSD";
     description = "Monadic parser combinators";
+    maintainer = [self.stdenv.lib.maintainers.andres];
   };
-})  
+})
 

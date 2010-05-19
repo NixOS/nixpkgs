@@ -367,11 +367,11 @@ rec {
   });
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.3.0";
+    name = "numpy-1.4.1";
 
     src = fetchurl {
-      url = "http://downloads.sourceforge.net/numpy/${name}.tar.gz";
-      sha256 = "7524687cce85aa78103046db5e617c626b0ef871a203a049159f88f35647c90d";
+      url = "mirror://sourceforge/numpy/${name}.tar.gz";
+      sha256 = "01lf3nc2lp1qkrqnnar50vb7i6y07d1zs6f9yc3kw4p5fd2vhyrf";
     };
 
     doCheck = false;
@@ -606,7 +606,8 @@ rec {
       sha256 = "0jg9q9mhsky444mm7lpmmlxai8hmjg4pc71viv4kni8gls0gk9n8";
     };
 
-    propagatedBuildInputs = [ pkgs.darcs ];
+    # In order to break the dependency on darcs -> ghc, we don't add
+    # darcs as a propagated build input.
 
     meta = {
       description = "setuptools plugin for the Darcs version control system";

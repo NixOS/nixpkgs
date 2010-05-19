@@ -11,17 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "0ndsrd357igp0m2cd8vwr16gmh6axlndf34hlg7qqnsiymsdj84j";
   };
 
+  patches = [ ./no-mkdir-localstatedir.patch ];
+
   buildInputs = [
       pkgconfig libdaemon dbus perl perlXMLParser glib expat
       gettext intltool
     ]
     ++ lib.optional qt4Support qt4;
 
-  configureFlags = ''
-    --disable-qt3 --disable-gdbm --disable-gtk --disable-mono
-    --${if qt4Support then "enable" else "disable"}-qt4
-    --with-distro=none --disable-python
-  '';
+  configureFlags =
+    [ "--disable-qt3" "--disable-gdbm" "--disable-gtk" "--disable-mono"
+      "--${if qt4Support then "enable" else "disable"}-qt4" "--disable-python"
+      "--with-distro=none" "--localstatedir=/var"
+    ];
 
   meta = {
     description = "Avahi, an mDNS/DNS-SD implementation";
@@ -34,5 +36,8 @@ stdenv.mkDerivation rec {
 
     homepage = http://avahi.org;
     license = "LGPLv2+";
+
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

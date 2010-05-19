@@ -74,6 +74,11 @@ installPhase() {
     
     # Header files etc.
     cp -prd usr/include usr/share $out
+
+    # Patch the `nvidia-settings.desktop' file.
+    substituteInPlace $out/share/applications/nvidia-settings.desktop \
+        --replace '__UTILS_PATH__' $out/bin \
+        --replace '__PIXMAP_PATH__' $out/share/pixmaps
 }
 
 

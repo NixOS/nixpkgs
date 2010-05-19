@@ -14,5 +14,6 @@ stdenv.mkDerivation {
     license = "GPL";
     homepage = http://www.methylblue.com/filelight/;
     maintainers = [ lib.maintainers.viric ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

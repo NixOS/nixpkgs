@@ -1,23 +1,8 @@
 source $stdenv/setup
 
-if ! test -e "$pathname"; then
-    echo ""
-    echo "SORRY!"
-    echo "You should download \`$(basename $pathname)' from Sun and place it in $(dirname $pathname)."
-    echo "Blame Sun, not us."
-    echo ""
-    exit 1
-fi
-
-actual=$(md5sum -b $pathname | cut -c1-32)
-if test "$actual" != "$md5"; then
-    echo "hash is $actual, expected $md5"
-    exit 1
-fi
-
 mkdir unzipped
 pushd unzipped
-unzip $pathname || true
+unzip $src || true
 popd
 
 ensureDir $out

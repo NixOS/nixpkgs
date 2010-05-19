@@ -6,6 +6,8 @@
 , cdparanoia ? null, cddaSupport ? true
 , amrnb ? null, amrwb ? null, amrSupport ? false
 , jackaudioSupport ? false, jackaudio ? null
+, x264Support ? false, x264 ? null
+, xvidSupport ? false, xvidcore ? null
 , mesa, pkgconfig, unzip
 }:
 
@@ -43,11 +45,11 @@ let
 in  
 
 stdenv.mkDerivation {
-  name = "MPlayer-1.0-pre-rc4-20100213";
+  name = "MPlayer-1.0-pre-rc4-20100506";
 
   src = fetchurl {
-    url = mirror://gentoo/distfiles/mplayer-1.0_rc4_p20100213.tbz2;
-    sha256 = "1c5w49vqavs9pnc5av89v502wfa5g7hfn65ffhpx25ddi1irzh2r";
+    url = mirror://gentoo/distfiles/mplayer-1.0_rc4_p20100506.tar.bz2;
+    sha256 = "0rhs0mv216iir8cz13xdq0rs88lc48ciiyn0wqzxjrnjb17yajy6";
   };
 
   buildInputs =
@@ -61,11 +63,14 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
     ++ stdenv.lib.optional cddaSupport cdparanoia
     ++ stdenv.lib.optional jackaudioSupport jackaudio
-    ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ];
+    ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ]
+    ++ stdenv.lib.optional x264Support x264
+    ++ stdenv.lib.optional xvidSupport xvidcore;
 
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
+    ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
     --codecsdir=${codecs}
     --enable-runtime-cpudetection
     --enable-x11

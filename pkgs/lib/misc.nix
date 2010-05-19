@@ -9,6 +9,11 @@ with import ./strings.nix;
 
 rec {
 
+  # returns default if env var is not set
+  maybeEnv = name: default:
+    let value = builtins.getEnv name; in
+    if value == "" then default else value;
+
   defaultMergeArg = x : y: if builtins.isAttrs y then
     y
   else 

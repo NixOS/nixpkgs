@@ -5,6 +5,7 @@ stdenv.mkDerivation rec {
   
   name = "ghc-${version}";
   
+  # TODO: Does this have to be here, or can it go to meta?
   homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
@@ -34,11 +35,14 @@ stdenv.mkDerivation rec {
   meta = {
     inherit homepage;
     description = "The Glasgow Haskell Compiler";
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    maintainers = [
+      stdenv.lib.maintainers.marcweber
+      stdenv.lib.maintainers.andres
+    ];
     platforms = stdenv.lib.platforms.linux;
   };
 
-
+  # TODO: requires a comment as to what it does and why it is needed.
   passthru = {
     corePackages = [
        [ "Cabal" "1.8.0.2" ]

@@ -3,10 +3,10 @@
 , automoc4, phonon, soprano, eigen, qimageblitz, attica}:
 
 stdenv.mkDerivation {
-  name = "kdeplasma-addons-4.4.2";
+  name = "kdeplasma-addons-4.4.3";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.2/src/kdeplasma-addons-4.4.2.tar.bz2;
-    sha256 = "044xfs4j98wgc0zjfxsml7wlydna3h31zdpxnkv178sq592m1pid";
+    url = mirror://kde/stable/4.4.3/src/kdeplasma-addons-4.4.3.tar.bz2;
+    sha256 = "00pr74x0q88wn7a4v6m35djcd29yw870fd6dgklqp1zs5yrn0p97";
   };
   inherit kdebase_workspace;
   builder = ./builder.sh;

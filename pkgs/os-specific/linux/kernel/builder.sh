@@ -6,6 +6,15 @@ if [ -n "$crossConfig" ]; then
   makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
 fi
 
+postPatch() {
+    # Makefiles are full of /bin/pwd, /bin/false, /bin/bash, etc.
+    # Patch these away, assuming the tools are in $PATH.
+    for mf in $(find -name Makefile); do
+	echo "stripping FHS paths in \`$mf'..."
+	sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
+    done
+}
+
 configurePhase() {
     if test -n "$preConfigure"; then 
         eval "$preConfigure"; 
@@ -76,12 +85,14 @@ installPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $installFlags "${installFlagsArray[@]}"
 
-    # Strip the kernel modules.
-    echo "Stripping kernel modules..."
-    if [ -z "$crossConfig" ]; then
-        find $out -name "*.ko" -print0 | xargs -0 strip -S
-    else
-        find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
+    if test -z "$dontStrip"; then
+        # Strip the kernel modules.
+	echo "Stripping kernel modules..."
+	if [ -z "$crossConfig" ]; then
+            find $out -name "*.ko" -print0 | xargs -0 strip -S
+	else
+            find $out -name "*.ko" -print0 | xargs -0 $crossConfig-strip -S
+	fi
     fi
 
     # move this to install later on
@@ -102,6 +113,12 @@ installPhase() {
         ln -s $out/lib/modules/$version/build $out/lib/modules/$version/source
         cp --parents `find  -type f -name Makefile -o -name "Kconfig*"` $out/lib/modules/$version/build
         cp Module.symvers $out/lib/modules/$version/build
+
+	if test "$dontStrip" = "1"; then
+	    # copy any debugging info that can be found
+	    cp --parents -rv `find -name \*.debug -o -name debug.a`	\
+	       "$out/lib/modules/$version/build"
+	fi
 
         # weed out unneeded stuff
         rm -rf $out/lib/modules/$version/build/Documentation

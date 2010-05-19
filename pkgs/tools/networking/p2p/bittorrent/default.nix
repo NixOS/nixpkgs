@@ -6,16 +6,16 @@
 assert gui -> wxPython != null;
 
 stdenv.mkDerivation {
-  name = "bittorrent-5.2.0";
+  name = "bittorrent-5.2.2";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://download.bittorrent.com/dl/BitTorrent-5.2.0.tar.gz;
-    sha256 = "0lg54x5y2k1cb7vpj7hanlnvzqa2k3v24qq0g6fsycjk4n8dky02";
+    url = http://download.bittorrent.com/dl/archive/BitTorrent-5.2.2.tar.gz;
+    sha256 = "05k803hbwsyn51j4aibzdsnqxz24kw4rvr60v2c0wji8gcvy3kx9";
   };
   
-  buildInputs = [python pycrypto twisted makeWrapper]
+  buildInputs = [ python pycrypto twisted makeWrapper ]
     ++ stdenv.lib.optional gui wxPython;
 
   meta = {

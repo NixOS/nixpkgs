@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib }:
 
 stdenv.mkDerivation rec {
-  name = "eggdbus-0.5";
+  name = "eggdbus-0.6";
   
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0g1s9nzfyjyhnmv4hzll3izayh4c4pjy3i51ihwgkz3wmd1xaq9j";
+    sha256 = "118hj63ac65zlg71kydv4607qcg1qpdlql4kvhnwnnhar421jnq4";
   };
   
   buildInputs = [ pkgconfig glib dbus.libs dbus_glib ];

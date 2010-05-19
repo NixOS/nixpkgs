@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "strace-4.5.19";
+  name = "strace-4.5.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/strace/${name}.tar.bz2";
-    sha256 = "021x06jyvpg156kf6ndbd370nz4w3xp6q06pbk20w6wpks8wx5w9";
+    sha256 = "1gfakika8833373p09pfzn5y83kx4jmlxws6na8av9gad69hb37a";
   };
 
   meta = {

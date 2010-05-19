@@ -4,7 +4,7 @@
     /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
     system i686-linux --argstr system x86_64-linux --arg \
     nixpkgs "{outPath = ./}" .... release.nix
-    
+
   Hydra can be installed with "nix-env -i hydra".
 */
 with (import ./release-lib.nix);
@@ -38,7 +38,7 @@ with (import ./release-lib.nix);
   bind = linux;
   bison23 = all;
   bison24 = all;
-  bitlbee = linux; 
+  bitlbee = linux;
   bittorrent = linux;
   blender = linux;
   boost = all;
@@ -388,11 +388,11 @@ with (import ./release-lib.nix);
   firefox35Pkgs = {
     firefox = prio 150 linux;
   };
-  
+
   firefox36Pkgs = {
     firefox = linux;
   };
-  
+
   gnome = {
     gnome_panel = linux;
     metacity = linux;
@@ -417,12 +417,21 @@ with (import ./release-lib.nix);
     gtk2hs = linux;
     leksah = linux;
     lhs2tex = ghcSupported;
-    haskellPlatform = linux; /* OpenGL/mesa seems to fail on darwin */
+    haskellPlatform = ghcSupported;
     xmonad = linux;
+    gitit = linux;
   };
 
   haskellPackages_ghc6121 = {
+    darcs = ghcSupported;
     ghc = ghcSupported;
+    haskellPlatform2010100 = ghcSupported;
+  };
+
+  haskellPackages_ghc6122 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    haskellPlatform2010100 = ghcSupported;
   };
 
   kde3 = {
@@ -480,7 +489,7 @@ with (import ./release-lib.nix);
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
-  
+
   linuxPackages_2_6_28 = {
     aufs = linux;
     kernel = linux;
@@ -534,7 +543,7 @@ with (import ./release-lib.nix);
   pythonPackages = {
     zfec = linux;
   };
-  
+
   xorg = {
     fontadobe100dpi = linux;
     fontadobe75dpi = linux;
@@ -567,5 +576,5 @@ with (import ./release-lib.nix);
     xset = linux;
   };
 
-} )) 
+} ))
 

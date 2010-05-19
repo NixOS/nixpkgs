@@ -1,4 +1,5 @@
 { stdenv, fetchurl, kernelHeaders
+, machHeaders ? null, hurdHeaders ? null, mig ? null, fetchgit ? null
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
@@ -34,6 +35,12 @@ in
 
     meta.description = "The GNU C Library";
   }
+
+  //
+
+  (if hurdHeaders != null
+   then { inherit machHeaders hurdHeaders mig fetchgit; }
+   else { })
 
   //
 

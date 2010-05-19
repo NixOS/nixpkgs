@@ -77,10 +77,7 @@ stdenv.mkDerivation {
       libXext libXrender libXt gtk glib pango atk
     ];
 
-  buildPhase = stdenv.lib.optionalString debug
-    ''
-      tar xfz plugin/debugger/libflashplayer.so.tar.gz
-    '';
+  buildPhase = ":";
 
   meta = {
     description = "Adobe Flash Player browser plugin";

@@ -73,7 +73,7 @@ rec {
     let cleanAttrs = rmProperties attrs; in
     if isProperty attrs then
       iter (a: v:
-        lib.addErrorContext "while moving properties on the attribute `${a}'." (
+        lib.addErrorContext "while moving properties on the attribute `${a}':" (
           triggerPropertiesGlobalDelay a (
             triggerPropertiesDelay a (
               copyProperties attrs v
@@ -88,7 +88,7 @@ rec {
   triggerPropertiesDelay = name: attrs:
     let
       callOnDelay = p@{property, ...}:
-        lib.addErrorContext "while calling a onDelay function." (
+        lib.addErrorContext "while calling an `onDelay' function:" (
           if property ? onDelay then
             property.onDelay name p
           else
@@ -111,7 +111,7 @@ rec {
       };
 
       callOnGlobalDelay = property: content:
-        lib.addErrorContext "while calling a onGlobalDelay function." (
+        lib.addErrorContext "while calling an `onGlobalDelay' function:" (
           property.onGlobalDelay name content
         );
     in
@@ -124,7 +124,7 @@ rec {
   evalProperties = valList:
     if valList != [] then
       filter (x: !isNotdef x) (
-        lib.addErrorContext "while evaluating properties." (
+        lib.addErrorContext "while evaluating properties:" (
           triggerPropertiesGlobalEval (
             evalLocalProperties valList
       )))
@@ -133,14 +133,14 @@ rec {
 
   evalLocalProperties = valList:
     filter (x: !isNotdef x) (
-      lib.addErrorContext "while evaluating local properties." (
+      lib.addErrorContext "while evaluating local properties:" (
         map triggerPropertiesEval valList
     ));
 
   # Call onEval function
   triggerPropertiesEval = val:
     foldProperty (p@{property, ...}:
-      lib.addErrorContext "while calling a onEval function." (
+      lib.addErrorContext "while calling an `onEval' function:" (
         if property ? onEval then
           property.onEval p
         else
@@ -165,7 +165,7 @@ rec {
       };
 
       callOnGlobalEval = property: valList:
-        lib.addErrorContext "while calling a onGlobalEval function." (
+        lib.addErrorContext "while calling an `onGlobalEval' function:" (
           property.onGlobalEval valList
         );
     in

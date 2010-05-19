@@ -1,5 +1,5 @@
 diff --git a/libtextcat/makefile.mk b/libtextcat/makefile.mk
-index 602b9b1..6be8427 100644
+index 74c64bf..fbf8d21 100644
 --- a/libtextcat/makefile.mk
 +++ b/libtextcat/makefile.mk
 @@ -57,7 +57,7 @@ ADDITIONAL_FILES= \
@@ -8,46 +8,46 @@ index 602b9b1..6be8427 100644
  #relative to CONFIGURE_DIR
 -CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 +CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" --prefix=$(TMPDIR)
- CONFIGURE_FLAGS=
+ CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
  
  BUILD_ACTION=make
 diff --git a/redland/raptor/makefile.mk b/redland/raptor/makefile.mk
-index 0e64d50..547d66b 100644
+index 0d92de9..aae3b4f 100644
 --- a/redland/raptor/makefile.mk
 +++ b/redland/raptor/makefile.mk
-@@ -104,7 +104,7 @@ XSLTLIB:=$(XSLTLIB)
- 
+@@ -130,7 +130,7 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
  CONFIGURE_DIR=
  CONFIGURE_ACTION=.$/configure
--CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
-+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
+ # do not enable grddl parser (#i93768#)
+-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
++CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
  BUILD_ACTION=$(GNUMAKE)
  BUILD_FLAGS+= -j$(EXTMAXPROCESS)
  BUILD_DIR=$(CONFIGURE_DIR)
 diff --git a/redland/rasqal/makefile.mk b/redland/rasqal/makefile.mk
-index 850ee9c..3293a79 100644
+index fba6460..fc70419 100644
 --- a/redland/rasqal/makefile.mk
 +++ b/redland/rasqal/makefile.mk
-@@ -104,7 +104,7 @@ XSLTLIB:=$(XSLTLIB)
+@@ -126,7 +126,7 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
  
  CONFIGURE_DIR=
  CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
 -CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 +CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
- BUILD_ACTION=$(GNUMAKE)
+ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
  BUILD_FLAGS+= -j$(EXTMAXPROCESS)
  BUILD_DIR=$(CONFIGURE_DIR)
 diff --git a/redland/redland/makefile.mk b/redland/redland/makefile.mk
-index 5719272..75c31b7 100644
+index 710d7d6..dd60f0d 100644
 --- a/redland/redland/makefile.mk
 +++ b/redland/redland/makefile.mk
-@@ -108,7 +108,7 @@ XSLTLIB:=$(XSLTLIB)
+@@ -132,7 +132,7 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
  
  CONFIGURE_DIR=
  CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
 -CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 +CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --prefix=$(TMPDIR)
- BUILD_ACTION=$(GNUMAKE)
+ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
  BUILD_FLAGS+= -j$(EXTMAXPROCESS)
  BUILD_DIR=$(CONFIGURE_DIR)
 diff --git a/hunspell/hunspell-1.2.8.patch b/hunspell/hunspell-1.2.8.patch

@@ -7,7 +7,7 @@ let
   buildInputs = with args; [
     libpng libtiff libjpeg librsvg imagemagick pkgconfig
     zlib libX11 bzip2 libtool freetype fontconfig 
-    ghostscript
+    ghostscript jasper
   ];
 in
 rec {

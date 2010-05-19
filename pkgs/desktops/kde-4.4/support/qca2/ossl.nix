@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   configureFlags="--no-separate-debug-info --with-qca=${qca2}
     --with-openssl-inc=${openssl}/include --with-openssl-lib=${openssl}/lib";
   preConfigure=''
-    configureFlags="$configureFlags --plugins-path=$out/plugins"
+    configureFlags="$configureFlags --plugins-path=$out/lib/qt4/plugins"
   '';
   patches = [ ./ossl-remove-whirlpool.patch ];
   meta = {

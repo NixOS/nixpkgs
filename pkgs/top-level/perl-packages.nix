@@ -88,6 +88,15 @@ rec {
     };
   };
 
+  AuthenSASL = buildPerlPackage rec {
+    name = "Authen-SASL-2.1401";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GB/GBARR/${name}.tar.gz";
+      sha256 = "1vx97xnqj5jqlh767l04jbqmsiqd5qcbw2jnbd3qh7fhh0slff6d";
+    };
+    propagatedBuildInputs = [DigestHMAC];
+  };
+
   Autobox = buildPerlPackage rec {
     name = "autobox-2.55";
     src = fetchurl {
@@ -641,7 +650,7 @@ rec {
       sha256 = "0fazl71hrc0r56gnc7vzwz9283p7h62gc8wsna7zgyfvrajjnhwl";
     };
   };
-  
+
   CompressRawBzip2 = import ../development/perl-modules/Compress-Raw-Bzip2 {
     inherit fetchurl buildPerlPackage;
     inherit (pkgs) bzip2;
@@ -988,10 +997,10 @@ rec {
   };
 
   DigestSHA1 = buildPerlPackage {
-    name = "Digest-SHA1-2.11";
+    name = "Digest-SHA1-2.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.11.tar.gz;
-      md5 = "2449bfe21d6589c96eebf94dae24df6b";
+      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.12.tar.gz;
+      sha256 = "19gmbb3yb9pr0y02c6rf99zh14a7a67l4frl7cs0lzpxb41484xa";
     };
   };
 
@@ -1372,6 +1381,20 @@ rec {
     };
   };
 
+  PerlMagick = buildPerlPackage {
+    name = "PerlMagick-6.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.59.tar.gz;
+      sha256 = "a87999b322460f7ba964eed81f91f400fba4ba6ff88e3f9e2b216d4d8ecf638d";
+    };
+    buildInputs = [pkgs.imagemagick];
+    preConfigure =
+      ''
+        sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick}/include/ImageMagick";|' Makefile.PL
+      '';
+    doCheck = false;
+  };
+
   IOCompressBase = buildPerlPackage rec {
     name = "IO-Compress-Base-2.015";
     src = fetchurl {
@@ -1413,6 +1436,16 @@ rec {
       url = mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-0.06.tgz;
       sha256 = "0r3af4gyjpy0f7bhs7hy5s7900w0yhbckb2dl3a1x5wpv7hcbkjb";
     };
+  };
+
+  IOSocketSSL = buildPerlPackage {
+    name = "IO-Socket-SSL-1.33";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-1.33.tar.gz;
+      sha256 = "1lpp2cs794d989b9gfhssjv1bkcs9lmrkjcpnxsavj7822izs4xj";
+    };
+    propagatedBuildInputs = [NetSSLeay];
+    # TODO: IOSocketINET6
   };
 
   IOString = buildPerlPackage rec {
@@ -1654,6 +1687,14 @@ rec {
     propagatedBuildInputs = [TimeDate TestPod];
   };
 
+  MIMEBase64 = buildPerlPackage rec {
+    name = "MIME-Base64-3.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "1gi2zyxwkkmyng8jawfnbxpsybvybz6h6ryq0wfdljmmjpjbmzzc";
+    };
+  };
+
   MIMETypes = buildPerlPackage rec {
     name = "MIME-Types-1.27";
     src = fetchurl {
@@ -1718,7 +1759,7 @@ rec {
     };
     propagatedBuildInputs = [Moose MooseXTypes TestException];
   };
-  
+
   MooseXParamsValidate = buildPerlPackage rec {
     name = "MooseX-Params-Validate-0.10";
     src = fetchurl {
@@ -1727,7 +1768,7 @@ rec {
     };
     propagatedBuildInputs = [Moose ParamsValidate SubExporter TestException];
   };
-  
+
   MooseXSemiAffordanceAccessor = buildPerlPackage rec {
     name = "MooseX-SemiAffordanceAccessor-0.03";
     src = fetchurl {
@@ -1736,7 +1777,7 @@ rec {
     };
     propagatedBuildInputs = [Moose];
   };
-  
+
   MooseXTraits = buildPerlPackage rec {
     name = "MooseX-Traits-0.06";
     src = fetchurl {
@@ -1747,7 +1788,7 @@ rec {
       ClassMOP Moose TestException TestUseOk
     ];
   };
-  
+
   MooseXTraitsPluggable = buildPerlPackage rec {
     name = "MooseX-Traits-Pluggable-0.04";
     src = fetchurl {
@@ -1759,7 +1800,7 @@ rec {
       MooseXTraits MooseAutobox
     ];
   };
-  
+
   MooseXTypes = buildPerlPackage rec {
     name = "MooseX-Types-0.16";
     src = fetchurl {
@@ -1768,7 +1809,7 @@ rec {
     };
     propagatedBuildInputs = [Moose CarpClan NamespaceClean];
   };
-  
+
   Mouse = buildPerlPackage rec {
     name = "Mouse-0.26";
     src = fetchurl {
@@ -1830,6 +1871,37 @@ rec {
       sha256 = "13vhv13w06g6h6iqx440q1h6hwj0kpjdxcc3fl9crkwg5glygg2f";
     };
     doCheck = false; # seems to hang waiting for connections
+  };
+
+  NetSMTP = buildPerlPackage {
+    name = "Net-SMTP-1.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GB/GBARR/libnet-1.22.tar.gz;
+      sha256 = "113c36qilbvd69yhkm2i2ba20ajff7cdpgvlqx96j9bb1hfmhb1p";
+    };
+    # Test perform network access
+    doCheck = false;
+  };
+
+  NetSMTPSSL = buildPerlPackage {
+    name = "Net-SMTP-SSL-1.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CW/CWEST/Net-SMTP-SSL-1.01.tar.gz;
+      sha256 = "12b2xvrd253ngvzwf81s9han4jr94l39vs5ca70pzr3wpi39qn8k";
+    };
+    propagatedBuildInputs = [IOSocketSSL];
+  };
+
+  NetSSLeay = buildPerlPackage {
+    name = "Net-SSLeay-1.36";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/Net-SSLeay-1.36.tar.gz;
+      sha256 = "1kjk5kdwsklchxrv21m4ii80akbxrg3i6y4zwfb91an5cdr8jqp2";
+    };
+    buildInputs = [pkgs.openssl];
+    OPENSSL_PREFIX = pkgs.openssl;
+    # Test perform network access
+    doCheck = false;
   };
 
   NetTwitterLite = buildPerlPackage {
@@ -1949,7 +2021,7 @@ rec {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
       sha256 = "6c851e86475242fa0def2f02565743d41ab703ff6df3e826166ee9df5b961c7a";
     };
-    propagatedBuildInputs = [ 
+    propagatedBuildInputs = [
       ClassInspector
       Clone
       FileRemove
@@ -2087,6 +2159,15 @@ rec {
       url = "mirror://cpan/authors/id/P/PI/PINYAN/${name}.tar.gz";
       sha256 = "0dfdbe060724396697303c5522e697679ab6e74151f3c3ef8df49f3bda30a2a5";
     };
+  };
+
+  RpcXML = buildPerlPackage {
+    name = "RPC-XML-0.73";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.73.tar.gz;
+      sha256 = "a023649603240e7a19fc52a8316a41c854639c0600058ea4d1e436fe1b1b7734";
+    };
+    propagatedBuildInputs = [LWP XMLLibXML XMLParser];
   };
 
   ReturnValue = buildPerlPackage {

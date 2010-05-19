@@ -10,8 +10,9 @@ pkgs.recurseIntoAttrs (rec {
   };
 
   phonon = import ./support/phonon {
-    inherit (pkgs) stdenv fetchurl lib cmake;
-    inherit (pkgs) qt4 gst_all xineLib;
+    inherit (pkgs) stdenv fetchurl cmake pkgconfig;
+    inherit (pkgs) qt4 xineLib pulseaudio;
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
     inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
     inherit automoc4;
   };
@@ -61,7 +62,7 @@ pkgs.recurseIntoAttrs (rec {
   kdelibs = import ./libs {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
     inherit (pkgs) xz flex bison giflib jasper openexr aspell avahi shared_mime_info
-      kerberos acl attr shared_desktop_ontologies;
+      kerberos acl attr shared_desktop_ontologies enchant;
     inherit (pkgs.xlibs) libXScrnSaver;
     inherit automoc4 phonon strigi soprano qca2 attica polkit_qt;
   };
@@ -122,7 +123,7 @@ pkgs.recurseIntoAttrs (rec {
   
   kdeedu = import ./edu {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt openbabel boost;
-    inherit (pkgs) readline gmm gsl facile ocaml xplanet;
+    inherit (pkgs) readline gmm gsl xplanet libspectre;
     inherit kdelibs attica;
     inherit automoc4 phonon eigen;
   };
@@ -145,7 +146,7 @@ pkgs.recurseIntoAttrs (rec {
   
   kdenetwork = import ./network {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gmp speex libxml2 libxslt sqlite alsaLib;
-    inherit (pkgs) libidn libvncserver libmsn giflib gpgme boost libv4l;
+    inherit (pkgs) libidn libvncserver libmsn giflib gpgme boost libv4l libotr;
     inherit (pkgs.xlibs) libXi libXtst libXdamage libXxf86vm;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qca2 soprano qimageblitz strigi;
@@ -220,15 +221,33 @@ pkgs.recurseIntoAttrs (rec {
   };
 
   digikam = import ./extragear/digikam {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 lcms jasper libgphoto2 gettext;
-    inherit kdelibs kdepimlibs kdegraphics;
-    inherit automoc4 phonon qimageblitz qca2 eigen;
+    inherit (pkgs) stdenv fetchurl cmake qt4 lcms jasper libgphoto2 gettext
+      liblqr1 lensfun;
+    inherit kdelibs kdepimlibs kdegraphics kdeedu;
+    inherit automoc4 phonon qimageblitz qca2 eigen soprano;
   };
 
   filelight = import ./extragear/filelight {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
     inherit kdelibs kdebase_workspace;
     inherit automoc4 phonon qimageblitz;
+  };
+
+  kdenlive = import ./extragear/kdenlive {
+    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl mlt gettext shared_mime_info;
+    inherit kdelibs soprano;
+    inherit automoc4 phonon;
+  };
+
+  kdevelop = import ./extragear/kdevelop {
+    inherit (pkgs) stdenv fetchurl cmake pkgconfig shared_mime_info gettext perl;
+    inherit kdevplatform automoc4 kdebase_workspace;
+  };
+
+  kdevplatform = import ./extragear/kdevplatform {
+    inherit (pkgs) stdenv fetchurl cmake subversion qt4 perl gettext pkgconfig
+      apr aprutil boost;
+    inherit kdelibs automoc4 phonon;
   };
 
   kdesvn = import ./extragear/kdesvn {

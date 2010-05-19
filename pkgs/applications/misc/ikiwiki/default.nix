@@ -1,24 +1,26 @@
-{stdenv, fetchurl, perl, gettext, makeWrapper, lib,
+{ stdenv, fetchurl, perl, gettext, makeWrapper, lib, PerlMagick,
   TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate,
-  CGISession, CGIFormBuilder, DBFile, LocaleGettext
+  CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
   , git ? null
   , monotone ? null
   , extraUtils ? []
   }:
 
-stdenv.mkDerivation rec {
-  name = "ikiwiki_3.20100312";
+let
+  name = "ikiwiki";
+  version = "3.20100515";
+in
+stdenv.mkDerivation {
+  name = "${name}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}.tar.gz";
-    sha256 = "1pzjl4iplizzspsl237996j1ma6yp9jagbqf3d43kbhv1ai0v3ci";
+    url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
+    sha256 = "143f245196d98ab037a097402420208da14506d6a65793d042daef5dd765ddd7";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-    TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext ]
-    ++
-    (lib.optional (monotone != null) monotone)
-    ;
+    TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
+    RpcXML XMLSimple PerlMagick git monotone];
 
   patchPhase = ''
     sed -i s@/usr/bin/perl@${perl}/bin/perl@ pm_filter mdwn2man
@@ -34,16 +36,15 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for a in $out/bin/*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin \
-      ${lib.optionalString (git != null) 
+      ${lib.optionalString (git != null)
         ''--prefix PATH : ${git}/bin \''}
-      ${lib.optionalString (monotone != null) 
+      ${lib.optionalString (monotone != null)
         ''--prefix PATH : ${monotone}/bin \''}
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
-
     done
   '';
 
-  meta = { 
+  meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = http://ikiwiki.info/;
     license = "GPLv2+";

@@ -219,7 +219,7 @@ rec {
 
           decl =
             lib.addErrorContext "${eol
-              }while enhancing option '${addName name}'.${eol
+              }while enhancing option `${addName name}':${eol
               }${errorSource declarations}${eol
             }" (
               addOptionMakeUp
@@ -270,7 +270,7 @@ rec {
 
           value =
             lib.addErrorContext "${eol
-              }while evaluating the option '${addName name}'.${eol
+              }while evaluating the option `${addName name}':${eol
               }${errorSource (modulesOf name)}${eol
             }" (
               let opt = option.decl; in

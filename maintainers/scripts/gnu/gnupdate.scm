@@ -17,13 +17,12 @@
 (cond-expand (guile-2 #t)
              (else (error "GNU Guile 2.0 is required")))
 
-(use-modules (sxml simple)
+(use-modules (sxml ssax)
              (ice-9 popen)
              (ice-9 match)
              (ice-9 rdelim)
              (ice-9 regex)
              (ice-9 vlist)
-             (sxml-match)
              (srfi srfi-1)
              (srfi srfi-9)
              (srfi srfi-11)
@@ -47,6 +46,13 @@
   (and line column path
        (make-location path (string->number line) (string->number column))))
 
+;; XXX: Hack to add missing exports from `(sxml ssax)' as of 1.9.10.
+(let ((ssax (resolve-module '(sxml ssax))))
+  (for-each (lambda (sym)
+              (module-add! (current-module) sym
+                           (module-variable ssax sym)))
+            '(ssax:warn ssax:skip-pi nl)))
+
 ;; Nix object types visible in the XML output of `nix-instantiate' and
 ;; mapping to S-expressions (we map to sexps, not records, so that we
 ;; can do pattern matching):
@@ -58,7 +64,7 @@
 ;;   bool             #f|#t
 ;;   derivation       (derivation drv-path out-path attributes)
 ;;   ellipsis         '...
-;;   expr             (expr loc body ...)
+;;   expr             (snix loc body ...)
 ;;   function         (function loc at|attrspat|varpat)
 ;;   int              int
 ;;   list             list
@@ -73,118 +79,100 @@
 ;; lazily because the whole SXML tree has to be traversed to maintain the
 ;; list of known derivations.
 
-(define (sxml->snix tree)
+(define (xml-element->snix elem attributes body derivations)
+  ;; Return an SNix element corresponding to XML element ELEM.
+
+  (define (loc)
+    (->loc (assq-ref attributes 'line)
+           (assq-ref attributes 'column)
+           (assq-ref attributes 'path)))
+
+  (case elem
+    ((at)
+     (values `(at ,(car body) ,(cadr body)) derivations))
+    ((attr)
+     (let ((name (assq-ref attributes 'name)))
+       (cond ((null? body)
+              (values `(attribute-pattern ,name) derivations))
+             ((and (pair? body) (null? (cdr body)))
+              (values `(attribute ,(loc) ,name ,(car body))
+                      derivations))
+             (else
+              (error "invalid attribute body" name (loc) body)))))
+    ((attrs)
+     (values `(attribute-set ,(reverse body)) derivations))
+    ((attrspat)
+     (values `(attribute-set-pattern ,body) derivations))
+    ((bool)
+     (values (string-ci=? "true" (assq-ref attributes 'value))
+             derivations))
+    ((derivation)
+     (let ((drv-path (assq-ref attributes 'drvPath))
+           (out-path (assq-ref attributes 'outPath)))
+       (if (equal? body '(repeated))
+           (let ((body (vhash-assoc drv-path derivations)))
+             (if (pair? body)
+                 (values `(derivation ,drv-path ,out-path ,(cdr body))
+                         derivations)
+                 (error "no previous occurrence of derivation"
+                        drv-path)))
+           (values `(derivation ,drv-path ,out-path ,body)
+                   (vhash-cons drv-path body derivations)))))
+    ((ellipsis)
+     (values '... derivations))
+    ((expr)
+     (values `(snix ,(loc) ,@body) derivations))
+    ((function)
+     (values `(function ,(loc) ,body) derivations))
+    ((int)
+     (values (string->number (assq-ref attributes 'value))
+             derivations))
+    ((list)
+     (values body derivations))
+    ((null)
+     (values 'null derivations))
+    ((path)
+     (values (assq-ref attributes 'value) derivations))
+    ((repeated)
+     (values 'repeated derivations))
+    ((string)
+     (values (assq-ref attributes 'value) derivations))
+    ((unevaluated)
+     (values 'unevaluated derivations))
+    ((varpat)
+     (values `(varpat ,(assq-ref attributes 'name)) derivations))
+    (else (error "unhandled Nix XML element" elem))))
+
+(define xml->snix
   ;; Return the SNix represention of TREE, an SXML tree as returned by
   ;; parsing the XML output of `nix-instantiate' on Nixpkgs.
+  (let ((parse
+         (ssax:make-parser NEW-LEVEL-SEED
+                           (lambda (elem-gi attributes namespaces expected-content
+                                    seed)
+                             (cons '() (cdr seed)))
 
-  ;; FIXME: We should use SSAX to avoid the SXML step otherwise we end up
-  ;; eating memory up to the point where fork(2) returns ENOMEM!
+                           FINISH-ELEMENT
+                           (lambda (elem-gi attributes namespaces parent-seed
+                                            seed)
+                             (let ((snix        (car seed))
+                                   (derivations (cdr seed)))
+                               (let-values (((snix derivations)
+                                             (xml-element->snix elem-gi
+                                                                attributes
+                                                                snix
+                                                                derivations)))
+                                 (cons (cons snix (car parent-seed))
+                                       derivations))))
 
-  (define whitespace
-    ;; The whitespace marker.
-    (cons 'white 'space))
-
-  (let loop ((node        tree)
-             (derivations vlist-null))
-    (define (process-body body)
-      (let ((result+derivations
-             (fold (lambda (node result)
-                     (let-values (((out derivations)
-                                   (loop node (cdr result))))
-                       (if (eq? out whitespace)
-                           result
-                           (cons (cons out (car result))
-                                 derivations))))
-                   (cons '() derivations)
-                   body)))
-        (values (reverse (car result+derivations))
-                (cdr result+derivations))))
-
-    (sxml-match node
-      (,x
-       (guard (and (string? x) (string=? (string-trim-both x) "")))
-       (values whitespace derivations))
-      ((*TOP* (*PI* ,_ ...) (expr ,body ...))
-       ;; The entry/exit point.  Of the two values returned, the second one
-       ;; is likely to be discarded by the caller (thanks to multiple-value
-       ;; truncation).
-       (let-values (((body derivations) (process-body body)))
-         (values (cons* 'snix #f body)
-                 derivations)))
-      ((at ,body ...)
-       (let-values (((body derivations) (process-body body)))
-         (values (list 'at body) derivations)))
-      ((attr (@ (name ,name)
-                (line (,line #f)) (column (,column #f)) (path (,path #f)))
-             ,body ...)
-       (let-values (((body derivations) (process-body body)))
-         (values (cons* 'attribute
-                        (->loc line column path)
-                        name
-                        (if (or (null? body)
-                                (and (pair? body) (null? (cdr body))))
-                            body
-                            (error 'sxml->snix "invalid attribute body"
-                                   body)))
-                 derivations)))
-      ((attrs ,body ...)
-       (let-values (((body derivations) (process-body body)))
-         (values (list 'attribute-set body)
-                 derivations)))
-      ((attrspat ,body ...)
-       (let-values (((body derivations) (process-body body)))
-         (values (cons 'attribute-set-pattern body)
-                 derivations)))
-      ((bool (@ (value ,value)))
-       (values (string-ci=? value "true") derivations))
-      ((derivation (@ (drvPath ,drv-path) (outPath ,out-path)) ,body ...)
-       (let-values (((body derivations) (process-body body)))
-         (let ((repeated? (equal? body '(repeated))))
-           (values (list 'derivation drv-path out-path
-                         (if repeated?
-                             (let ((body (vhash-assoc drv-path derivations)))
-                               (if (pair? body)
-                                   (cdr body)
-                                   (error "no previous occurrence of derivation"
-                                          drv-path)))
-                             body))
-                   (if repeated?
-                       derivations
-                       (vhash-cons drv-path body derivations))))))
-      ((ellipsis)
-       (values '... derivations))
-      ((function (@ (line (,line #f)) (column (,column #f)) (path (,path #f)))
-                 ,body ...)
-       (let-values (((body derivations) (process-body body)))
-         (values (cons* 'function
-                        (->loc line column path)
-                        (if (and (pair? body) (null? (cdr body)))
-                            body
-                            (error 'sxml->snix "invalid function body"
-                                   body)))
-                 derivations)))
-      ((int (@ (value ,value)))
-       (values (string->number value) derivations))
-      (,x
-       ;; We can't use `(list ,body ...)', which has a different meaning,
-       ;; hence the guard hack.
-       (guard (and (pair? x) (eq? (car x) 'list)))
-       (process-body (cdr x)))
-      ((null)
-       (values 'null derivations))
-      ((path (@ (value ,value)))
-       (values value derivations))
-      ((repeated)
-       ;; This is then handled in `derivation' above.
-       (values 'repeated derivations))
-      ((string (@ (value ,value)))
-       (values value derivations))
-      ((unevaluated)
-       (values 'unevaluated derivations))
-      ((varpat (@ (name ,name)))
-       (values (list 'varpat name) derivations))
-      (,x
-       (error 'sxml->snix "unmatched sxml form" x)))))
+                           CHAR-DATA-HANDLER
+                           (lambda (string1 string2 seed)
+                             ;; Discard inter-node strings, which are blanks.
+                             seed))))
+    (lambda (port)
+      ;; Discard the second value returned by the parser (the derivation
+      ;; vhash).
+      (caar (parse port (cons '() vlist-null))))))
 
 (define (call-with-package snix proc)
   (match snix
@@ -319,6 +307,15 @@
         message
         (throw 'ftp-error port command code message))))
 
+(define (%ftp-login user pass port)
+  (let ((command (string-append "USER " user (string #\newline))))
+    (display command port)
+    (let-values (((code message) (%ftp-listen port)))
+      (case code
+        ((230)  #t)
+        ((331) (%ftp-command (string-append "PASS " pass) 230 port))
+        (else  (throw 'ftp-error port command code message))))))
+
 (define (ftp-open host)
   (catch 'getaddrinfo-error
     (lambda ()
@@ -331,8 +328,7 @@
           (if (eqv? code 220)
               (begin
                 ;(%ftp-command "OPTS UTF8 ON" 200 s)
-                ;; FIXME: When `USER' returns 331, we should do a `PASS email'.
-                (%ftp-command "USER anonymous" 230 s)
+                (%ftp-login "anonymous" "ludo@example.com" s)
                 (%make-ftp-connection s ai))
               (begin
                 (format (current-error-port) "FTP to `~a' failed: ~A: ~A~%"
@@ -365,7 +361,7 @@
            (throw 'ftp-error conn "PASV" 227 message)))))
 
 
-(define (ftp-list conn)
+(define* (ftp-list conn #:optional directory)
   (define (address-with-port sa port)
     (let ((fam  (sockaddr:fam sa))
           (addr (sockaddr:addr sa)))
@@ -376,6 +372,9 @@
                                   (sockaddr:flowinfo sa)
                                   (sockaddr:scopeid sa)))
             (else #f))))
+
+  (if directory
+      (ftp-chdir conn directory))
 
   (let* ((port (ftp-pasv conn))
          (ai   (ftp-connection-addrinfo conn))
@@ -452,7 +451,7 @@
                       (match attr
                         (('attribute _ "description" value)
                          (string-prefix? "GNU" value))
-                        (('attribute "homepage" value)
+                        (('attribute _ "homepage" value)
                          (string-contains value "www.gnu.org"))
                         (_ #f)))
                     metas))
@@ -478,11 +477,13 @@
 
 (define (ftp-server/directory project)
   (define quirks
-    '(("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
+    '(("commoncpp2"   "ftp.gnu.org"   "/gnu/commoncpp" #f)
+      ("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
       ("libgpg-error" "ftp.gnupg.org" "/gcrypt" #t)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/ghostscript" #f)
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
+      ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg")
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
       ("TeXmacs"      "ftp.texmacs.org" "/TeXmacs/targz" #f)))
 
@@ -504,6 +505,7 @@
       ("gnused"      . "sed")
       ("gnutar"      . "tar")
       ("gnunet"      . "GNUnet") ;; ftp.gnu.org/gnu/gnunet/GNUnet-x.y.tar.gz
+      ("mitscheme"   . "mit-scheme")
       ("texmacs"     . "TeXmacs")))
 
   (or (assoc-ref quirks project) project))
@@ -516,21 +518,20 @@
   (catch #t
     (lambda ()
       (let-values (((server directory) (ftp-server/directory project)))
-        (let ((conn (ftp-open server)))
-          (ftp-chdir conn directory)
-          (let ((files (ftp-list conn)))
-            (ftp-close conn)
-            (map (lambda (tarball)
-                   (let ((end (string-contains tarball ".tar")))
-                     (substring tarball 0 end)))
+        (let* ((conn  (ftp-open server))
+               (files (ftp-list conn directory)))
+          (ftp-close conn)
+          (map (lambda (tarball)
+                 (let ((end (string-contains tarball ".tar")))
+                   (substring tarball 0 end)))
 
-                 ;; Filter out signatures, deltas, and files which are potentially
-                 ;; not releases of PROJECT (e.g., in /gnu/guile, filter out
-                 ;; guile-oops and guile-www).
-                 (filter (lambda (file)
-                           (and (not (string-suffix? ".sig" file))
-                                (regexp-exec release-rx file)))
-                         files))))))
+               ;; Filter out signatures, deltas, and files which are potentially
+               ;; not releases of PROJECT (e.g., in /gnu/guile, filter out
+               ;; guile-oops and guile-www).
+               (filter (lambda (file)
+                         (and (not (string-suffix? ".sig" file))
+                              (regexp-exec release-rx file)))
+                       files)))))
     (lambda (key subr message . args)
       (format (current-error-port)
               "failed to get release list for `~A': ~A ~A~%"
@@ -658,20 +659,19 @@
                   (format #t "~%")
                   (format #t "  -x, --xml=FILE      Read XML output of `nix-instantiate'~%")
                   (format #t "                      from FILE.~%")
-                  (format #t "  -s, --sxml=FILE     Read SXML output of `nix-instantiate'~%")
-                  (format #t "                      from FILE.~%")
+                  (format #t "  -d, --dry-run       Don't actually update Nix expressions~%")
                   (format #t "  -h, --help          Give this help list.~%~%")
                   (format #t "Report bugs to <ludo@gnu.org>~%")
                   (exit 0)))
+        (option '(#\d "dry-run") #f #f
+                (lambda (opt name arg result)
+                  (alist-cons 'dry-run #t result)))
 
         (option '(#\x "xml") #t #f
                 (lambda (opt name arg result)
-                  (alist-cons 'xml-file arg result)))
-        (option '(#\s "sxml") #t #f
-                (lambda (opt name arg result)
-                  (alist-cons 'sxml-file arg result)))))
+                  (alist-cons 'xml-file arg result)))))
 
-(define (main . args)
+(define-public (main . args)
   ;; Assume Nixpkgs is under $NIXPKGS or ~/src/nixpkgs.
   (let* ((opts      (args-fold args %options
                                (lambda (opt name arg result)
@@ -682,24 +682,11 @@
          (home      (getenv "HOME"))
          (path      (or (getenv "NIXPKGS")
                         (string-append home "/src/nixpkgs")))
-         (sxml      (or (and=> (assoc-ref opts 'sxml-file)
-                               (lambda (input)
-                                 (format (current-error-port)
-                                         "reading SXML...~%")
-                                 (read-disable 'positions) ;; reduce memory usage
-                                 (with-input-from-file input read)))
-                        (begin
-                          (format (current-error-port) "parsing XML...~%")
-                          (xml->sxml
-                           (or (and=> (assoc-ref opts 'xml-file)
-                                      open-input-file)
-                               (open-nixpkgs path))))))
-         (snix      (let ((s (begin
-                               (format (current-error-port)
-                                       "producing SNix tree...~%")
-                               (sxml->snix sxml))))
-                      (set! sxml #f) (gc)
-                      s))
+         (snix      (begin
+                      (format (current-error-port) "parsing XML...~%")
+                      (xml->snix
+                       (or (and=> (assoc-ref opts 'xml-file) open-input-file)
+                           (open-nixpkgs path)))))
          (packages  (match snix
                       (('snix _ ('attribute-set attributes))
                        attributes)
@@ -713,8 +700,13 @@
                     old-version old-hash
                     new-version new-hash
                     location)
-                   (update-nix-expression (location-file location)
-                                          old-version old-hash
-                                          new-version new-hash))
+                   (if (assoc-ref opts 'dry-run)
+                       (format #t "`~a' would be updated from ~a to ~a (~a -> ~a)~%"
+                               name old-version new-version
+                               old-hash new-hash)
+                       (update-nix-expression (location-file location)
+                                              old-version old-hash
+                                              new-version new-hash)))
                   (_ #f)))
-              updates)))
+              updates)
+    #t))
