@@ -22,6 +22,17 @@ stdenv.mkDerivation rec {
       CFLAGS=-O3 CXXFLAGS=-O3
     '';
 
+  crossAttrs = {
+    configureFlags =
+      ''
+        --with-store-dir=${storeDir} --localstatedir=${stateDir}
+        --with-bzip2=${bzip2.hostDrv}
+        --disable-init-state
+        CFLAGS=-O3 CXXFLAGS=-O3
+      '';
+    doCheck = false;
+  };
+
   doCheck = true;
 
   meta = {
