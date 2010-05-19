@@ -24,6 +24,7 @@
 , libcCross ? null
 , crossStageStatic ? true
 , gnat ? null
+, libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 }:
 
 assert langTreelang -> bison != null && flex != null;
@@ -212,15 +213,29 @@ stdenv.mkDerivation ({
                                   (optionals (zlib != null) [ zlib ]
                                    ++ optionals langJava [ boehmgc ]
                                    ++ optionals javaAwtGtk xlibs
-                                   ++ optionals javaAwtGtk [ gmp mpfr ])));
+                                   ++ optionals javaAwtGtk [ gmp mpfr ]
+                                   ++ optional (libpthread != null) libpthread
+                                   ++ optional (libpthreadCross != null) libpthreadCross)));
 
   LIBRARY_PATH = concatStrings
                    (intersperse ":" (map (x: x + "/lib")
                                          (optionals (zlib != null) [ zlib ]
                                           ++ optionals langJava [ boehmgc ]
                                           ++ optionals javaAwtGtk xlibs
-                                          ++ optionals javaAwtGtk [ gmp mpfr ])));
+                                          ++ optionals javaAwtGtk [ gmp mpfr ]
+                                          ++ optional (libpthread != null) libpthread)));
 
+  EXTRA_TARGET_CFLAGS =
+    if cross != null && libcCross != null
+    then "-g0 -O2 -idirafter ${libcCross}/include"
+    else null;
+
+  EXTRA_TARGET_LDFLAGS =
+    if cross != null && libcCross != null
+    then "-B${libcCross}/lib -Wl,-L${libcCross}/lib" +
+         (optionalString (libpthreadCross != null)
+           " -L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}")
+    else null;
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
       enableMultilib; };

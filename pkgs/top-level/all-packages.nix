@@ -2103,7 +2103,13 @@ let
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceBuildDrv gcc_realCross;
+    gcc = forceBuildDrv (gcc_realCross.override {
+      libpthreadCross =
+        # FIXME: Don't explicitly refer to `i586-pc-gnu'.
+        if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+        then hurdLibpthreadCross
+        else null;
+     });
     libc = libcCross;
     binutils = binutilsCross;
     cross = assert crossSystem != null; crossSystem;

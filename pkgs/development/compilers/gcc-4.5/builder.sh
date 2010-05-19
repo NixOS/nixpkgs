@@ -54,14 +54,9 @@ if test "$noSysDirs" = "1"; then
         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
     done
 
-    if test -n "$targetConfig"; then
-        if test -z "$crossStageStatic" -o -n "$crossMingw"; then
-            EXTRA_FLAGS_TARGET="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
-            EXTRA_LDFLAGS_TARGET="-Wl,-L${libcCross}/lib"
-        fi
-    else
-        EXTRA_FLAGS_TARGET="$EXTRA_FLAGS"
-        EXTRA_LDFLAGS_TARGET="$EXTRA_LDFLAGS"
+    if test -z "$targetConfig"; then
+        EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
+        EXTRA_TARGET_LDFLAGS="$EXTRA_LDFLAGS"
     fi
 
     # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
@@ -73,17 +68,17 @@ if test "$noSysDirs" = "1"; then
         NATIVE_SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         SYSTEM_HEADER_DIR="$NIX_FIXINC_DUMMY" \
         CFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
-        CFLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
-        FLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+        CFLAGS_FOR_TARGET="$EXTRA_TARGET_CFLAGS" \
+        FLAGS_FOR_TARGET="$EXTRA_TARGET_CFLAGS $EXTRA_TARGET_LDFLAGS" \
         LDFLAGS_FOR_BUILD="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
-        LDFLAGS_FOR_TARGET="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+        LDFLAGS_FOR_TARGET="$EXTRA_TARGET_LDFLAGS" \
         )
 
     if test -z "$targetConfig"; then
         makeFlagsArray=( \
             "${makeFlagsArray[@]}" \
             BOOT_CFLAGS="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
-            BOOT_LDFLAGS="$EXTRA_FLAGS_TARGET $EXTRA_LDFLAGS_TARGET" \
+            BOOT_LDFLAGS="$EXTRA_FLAGS $EXTRA_LDFLAGS" \
             )
     fi
 
