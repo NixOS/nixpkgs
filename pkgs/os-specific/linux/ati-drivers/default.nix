@@ -12,9 +12,6 @@
 # See http://thread.gmane.org/gmane.linux.distributions.nixos/4145 for a
 # workaround (TODO)
 
-assert xorg.xorgserver.name == "xorg-server-1.7.5";
-assert stdenv.system == "x86_64-linux"; # i686-linux should work as well - however I didn't test it.
-
 # The gentoo ebuild contains much more magic..
 
 let lib = stdenv.lib;
@@ -58,4 +55,12 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
   };
+
+  # moved assertions here because the name is evaluated when the NixOS manual is generated
+  # Don't make that fail - fail lazily when a users tries to build this derivation only
+  dummy =
+    assert xorg.xorgserver.name == "xorg-server-1.7.5";
+    assert stdenv.system == "x86_64-linux"; # i686-linux should work as well - however I didn't test it.
+    null;
+
 }
