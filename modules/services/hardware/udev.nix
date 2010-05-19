@@ -35,7 +35,7 @@ let
       shopt -s nullglob
 
       # Use all the default udev rules.
-      cp ${udev}/libexec/rules.d/*.rules $out/
+      cp -v ${udev}/libexec/rules.d/*.rules $out/
 
       # Set a reasonable $PATH for programs called by udev rules.
       echo 'ENV{PATH}="${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.utillinux}/bin"' > $out/00-path.rules
@@ -46,8 +46,9 @@ let
       
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
+        echo "Add rules for package $i"
         for j in $i/*/udev/rules.d/*; do
-          ln -s $j $out/$(basename $j)
+          ln -sv $j $out/$(basename $j)
         done
       done
 
@@ -72,8 +73,8 @@ let
       # modified by the write_{cd,net}_rules helpers called from
       # 75-cd-aliases-generator.rules and
       # 75-persistent-net-generator.rules.
-      ln -s /var/lib/udev/rules.d/70-persistent-cd.rules $out/
-      ln -s /var/lib/udev/rules.d/70-persistent-net.rules $out/
+      ln -sv /var/lib/udev/rules.d/70-persistent-cd.rules $out/
+      ln -sv /var/lib/udev/rules.d/70-persistent-net.rules $out/
     ''; # */
   };
 
@@ -169,7 +170,7 @@ in
           ''
             echo "" > /proc/sys/kernel/hotplug
 
-            mkdir -p /var/lib/udev/rules.d
+            mkdir -pv /var/lib/udev/rules.d
 
             # Do the loading of additional stage 2 kernel modules.
             # Maybe this isn't the best place...
@@ -178,7 +179,7 @@ in
                 ${modprobe}/sbin/modprobe $i || true
             done
 
-            mkdir -p /dev/.udev # !!! bug in udev?
+            mkdir -pv /dev/.udev # !!! bug in udev?
           '';
 
         daemonType = "fork";
