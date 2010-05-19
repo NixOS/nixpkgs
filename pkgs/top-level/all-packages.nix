@@ -1285,11 +1285,10 @@ let
     inherit stdenv makeWrapper ed libopensc_dnie;
   };
 
-  openssh = import ../tools/networking/openssh {
+  openssh = makeOverridable (import ../tools/networking/openssh) {
     inherit fetchurl stdenv zlib openssl pam perl libedit pkgconfig;
-    pamSupport = getPkgConfig "openssh" "pam" true;
-    hpnSupport = getPkgConfig "openssh" "hpn" false;
-    etcDir = getPkgConfig "openssh" "etcDir" "/etc/ssh";
+    hpnSupport = false;
+    etcDir = "/etc/ssh";
   };
 
   opensp = import ../tools/text/sgml/opensp {
