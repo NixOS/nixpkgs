@@ -807,12 +807,12 @@ let
     inherit fetchurl stdenv ed;
   });
 
-  gnupg = makeOverridable (import ../tools/security/gnupg) {
+  gnupg1 = makeOverridable (import ../tools/security/gnupg1) {
     inherit fetchurl stdenv readline bzip2;
     ideaSupport = false;
   };
 
-  gnupg2 = makeOverridable (import ../tools/security/gnupg2) {
+  gnupg = makeOverridable (import ../tools/security/gnupg) {
     inherit fetchurl stdenv readline libgpgerror libgcrypt libassuan pth libksba zlib
       openldap bzip2 libusb curl;
   };
@@ -4030,7 +4030,7 @@ let
   };
 
   gpgme = import ../development/libraries/gpgme {
-    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2 glib;
+    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg glib;
   };
 
   gsasl = import ../development/libraries/gsasl {

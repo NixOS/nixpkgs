@@ -1,36 +1,58 @@
-{ # Support for the IDEA cipher (used by the old PGP) should only be
-  # enabled if it is legal for you to do so.
-  ideaSupport ? false
+# Remember to install Pinentry and
+# 'echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf'.
 
-, stdenv, fetchurl, readline, bzip2
+{ fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan, libksba
+, useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null, useUsb ? true, libusb ? null
+, useCurl ? true, curl ? null
 }:
 
-let
-
-  idea = fetchurl {
-    url = http://nixos.org/tarballs/idea.c.gz;
-    md5 = "9dc3bc086824a8c7a331f35e09a3e57f";
-  };
-
-in
+assert useLdap -> (openldap != null);
+assert useBzip2 -> (bzip2 != null);
+assert useUsb -> (libusb != null);
+assert useCurl -> (curl != null);
 
 stdenv.mkDerivation rec {
-  name = "gnupg-1.4.10";
+  name = "gnupg-2.0.15";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0f5v8c8fkxcnrlmnijaq2sqfqq6xhmbyi2p44pj98y6n6927z452";
+    sha256 = "070diybdiwf45d8xqbb5lwf3jjvhja1lcr6sf4fcw8519lpqi0aq";
   };
 
-  buildInputs = [ readline bzip2 ];
+  buildInputs = [ readline zlib libgpgerror pth libgcrypt libassuan libksba ]
+    ++ stdenv.lib.optional useLdap openldap
+    ++ stdenv.lib.optional useBzip2 bzip2
+    ++ stdenv.lib.optional useUsb libusb
+    ++ stdenv.lib.optional useCurl curl;
 
-  preConfigure = stdenv.lib.optionalString ideaSupport
-    ''
-      gunzip < ${idea} > ./cipher/idea.c
-    '';
-  
+  patchPhase = "sed -e 's@/bin/pwd@pwd@g' -i tests/pkits/*";
+
+  postInstall = ''
+    ln -s gpg2 $out/bin/gpg
+    ln -s gpgv2 $out/bin/gpgv
+  '';
+
+  doCheck = true;
+
   meta = {
-    description = "A free implementation of the OpenPGP standard for encrypting and signing data";
-    homepage = http://www.gnupg.org/;
+    description = "GNU Privacy Guard (GnuPG), GNU Project's implementation of the OpenPGP standard";
+
+    longDescription = ''
+      GnuPG is the GNU project's complete and free implementation of
+      the OpenPGP standard as defined by RFC4880.  GnuPG allows to
+      encrypt and sign your data and communication, features a
+      versatile key managment system as well as access modules for all
+      kind of public key directories.  GnuPG, also known as GPG, is a
+      command line tool with features for easy integration with other
+      applications.  A wealth of frontend applications and libraries
+      are available.  Version 2 of GnuPG also provides support for
+      S/MIME.
+    '';
+
+    homepage = http://gnupg.org/;
+
+    license = "GPLv3+";
+
+    maintainers = with stdenv.lib.maintainers; [ ludo urkud ];
   };
 }

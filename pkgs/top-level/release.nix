@@ -120,7 +120,7 @@ with (import ./release-lib.nix);
   gnum4 = all;
   gnumake = all;
   gnupatch = all;
-  gnupg2 = linux;
+  gnupg = linux;
   gnuplot = allBut "i686-cygwin";
   gnused = all;
   gnutar = all;
