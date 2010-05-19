@@ -39,8 +39,17 @@ in
   //
 
   (if hurdHeaders != null
-   then {
+   then rec {
      inherit machHeaders hurdHeaders mig fetchgit;
+
+     propagatedBuildInputs = [ machHeaders hurdHeaders ];
+
+     passthru = {
+       # When building GCC itself `propagatedBuildInputs' above is not
+       # honored, so we pass it here so that the GCC builder can do the right
+       # thing.
+       inherit propagatedBuildInputs;
+     };
 
      # XXX: Remove this hack in `stdenv-updates'.
      builder = ./builder2.sh;
