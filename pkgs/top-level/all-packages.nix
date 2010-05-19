@@ -953,9 +953,9 @@ let
     inherit fetchurl stdenv;
   };
 
-  ipmitool = import ../tools/system/ipmitool {
+  ipmitool = makeOverridable (import ../tools/system/ipmitool) {
     inherit fetchurl stdenv openssl;
-    static = !stdenv.isDarwin && getPkgConfig "ipmitool" "static" false;
+    static = false;
   };
 
   jdiskreport = import ../tools/misc/jdiskreport {
