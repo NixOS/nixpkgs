@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     do
       substituteInPlace $i \
         --replace /usr/sbin/dmidecode ${dmidecode}/sbin/dmidecode \
-        --replace /sbin/udevadm ${udev}/sbin/udevadm \
+        ${if udev != null then "--replace /sbin/udevadm ${udev}/sbin/udevadm" else ""} \
         --replace /bin/mount ${utillinuxng}/bin/mount \
         --replace /bin/umount ${utillinuxng}/bin/umount \
         --replace /usr/bin/pm-is-supported ${pmutils}/bin/pm-is-supported \
