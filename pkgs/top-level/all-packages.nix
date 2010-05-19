@@ -817,11 +817,9 @@ let
       openldap bzip2 libusb curl;
   };
 
-  gnuplot = import ../tools/graphics/gnuplot {
-    inherit fetchurl stdenv zlib gd texinfo readline emacs;
+  gnuplot = makeOverridable (import ../tools/graphics/gnuplot) {
+    inherit fetchurl stdenv zlib gd texinfo readline emacs wxGTK;
     inherit (xlibs) libX11 libXt libXaw libXpm;
-    x11Support = getPkgConfig "gnuplot" "x11" false;
-    wxGTK = if getPkgConfig "gnuplot" "wxGtk" false then wxGTK else null;
     inherit (gtkLibs) pango;
     inherit cairo pkgconfig;
   };
