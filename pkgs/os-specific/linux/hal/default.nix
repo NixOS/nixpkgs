@@ -1,4 +1,9 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, python, pciutils, expat
+, libusb, dbus, dbus_glib, glib, libuuid, perl
+, perlXMLParser, gettext, zlib, gperf, consolekit, policykit
+, libsmbios, dmidecode, udev, utillinuxng, pmutils, usbutils
+, eject
+}:
 
 assert stdenv ? glibc;
 
