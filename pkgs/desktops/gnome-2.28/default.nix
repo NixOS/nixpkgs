@@ -29,6 +29,7 @@ rec {
   libIDL = import ./platform/libIDL {
     inherit (pkgs) stdenv fetchurl flex bison pkgconfig;
     inherit (pkgs.gtkLibs) glib;
+    gettext = if pkgs.stdenv.isDarwin then pkgs.gettext else null;
   };
   
   ORBit2 = import ./platform/ORBit2 {
