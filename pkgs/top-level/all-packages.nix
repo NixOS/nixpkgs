@@ -1369,8 +1369,8 @@ let
     inherit (xlibs) libX11;
   };
 
-  pinentry = import ../tools/misc/pinentry {
-    inherit fetchurl stdenv pkgconfig ncurses;
+  pinentry = makeOverridable (import ../tools/misc/pinentry) {
+    inherit fetchurl stdenv pkgconfig ncurses qt4;
     inherit (gnome) glib gtk;
   };
 
