@@ -1,5 +1,5 @@
-{stdenv, fetchurl, libtool, readline, zlib, openssl, libiconv, pcsclite, libassuan, pkgconfig,
-libXt, pinentry}:
+{stdenv, fetchurl, libtool, readline, zlib, openssl, libiconv, pcsclite,
+  libassuan1, pkgconfig, libXt, pinentry}:
 
 stdenv.mkDerivation rec {
   name = "opensc-0.11.7";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so.1"
     "--with-pinentry=${pinentry}/bin/pinentry" ];
 
-  buildInputs = [ libtool readline zlib openssl pcsclite libassuan pkgconfig
+  buildInputs = [ libtool readline zlib openssl pcsclite libassuan1 pkgconfig
     libXt ] ++
     stdenv.lib.optional (! stdenv.isLinux) libiconv;
 
