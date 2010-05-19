@@ -1,9 +1,14 @@
 { fetchgit, stdenv, autoconf, automake, libtool, texinfo
 , machHeaders, mig, headersOnly ? true }:
 
-let rev = "7913beaef3e6a2c4f7f315a8db7a31dbe1f713e0"; in
-stdenv.mkDerivation (rec {
-  name = "hurd-0.4-${rev}";
+assert (cross != null) -> (gccCross != null);
+
+let
+  date = "2010-05-12";
+  rev  = "master@{${date}}";
+in
+stdenv.mkDerivation ({
+  name = "hurd-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/hurd.git";
