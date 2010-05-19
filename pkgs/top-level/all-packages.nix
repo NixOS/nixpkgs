@@ -997,11 +997,7 @@ let
     inherit fetchurl stdenv libpcap ncurses expat pcre;
   };
 
-  ktorrent = import ../tools/networking/p2p/ktorrent {
-    inherit fetchurl stdenv pkgconfig boost
-      xlibs zlib libpng libjpeg perl gmp cmake gettext;
-    kde = kde44;
-  };
+  ktorrent = kde4.ktorrent;
 
   less = import ../tools/misc/less {
     inherit fetchurl stdenv ncurses;
