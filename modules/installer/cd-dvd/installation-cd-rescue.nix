@@ -24,7 +24,7 @@
     fuse ntfs3g smbfsFuse sshfsFuse
     manpages irssi elinks mcabber mutt openssh lftp 
     openssl ncat socat
-    gnupg gnupg2
+    gnupg1 gnupg
     patch which diffutils gcc binutils bc file
     screen
     bvi joe nvi 

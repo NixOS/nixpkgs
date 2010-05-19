@@ -43,7 +43,7 @@ let
       ${optionalString cfg.startGnuPGAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
             # Restart this script as a child of the GnuPG agent.
-            exec "${if pkgs ? gnupg2 then pkgs.gnupg2 else pkgs.gnupg}/bin/gpg-agent"                         \
+            exec "${pkgs.gnupg}/bin/gpg-agent"                         \
               --enable-ssh-support --daemon                             \
               --pinentry-program "${pkgs.pinentry}/bin/pinentry-gtk-2"  \
               --write-env-file "$HOME/.gpg-agent-info"                  \
