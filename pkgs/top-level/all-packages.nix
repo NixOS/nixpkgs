@@ -7451,17 +7451,17 @@ let
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
   };
 
-  emacs23 = import ../applications/editors/emacs-23 {
-    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d
-      libpng libjpeg libungif libtiff librsvg texinfo dbus;
-    inherit (xlibs) libXaw libXpm libXft;
-    inherit (gtkLibs) gtk;
-    gconf = gnome.GConf;  # optional GConf support.
-    xawSupport = stdenv.isDarwin || getPkgConfig "emacs" "xawSupport" false;
-    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
-    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
-    xftSupport = getPkgConfig "emacs" "xftSupport" true;
-    dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
+  emacs23 = makeOverridable (import ../applications/editors/emacs-23) {
+    inherit fetchurl stdenv ncurses pkgconfig x11 libpng libjpeg
+      libungif libtiff texinfo dbus;
+    inherit (xlibs) libXpm libXft;
+    # use override to select the appropriate gui toolkit
+    libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
+    Xaw3d = null;
+    gtk = if stdenv.isDarwin then gtkLibs.gtk else null;
+    # TODO: these packages don't build on Darwin.
+    gconf = if stdenv.isDarwin then null else gnome.GConf;
+    librsvg = if stdenv.isDarwin then null else librsvg;
   };
 
   emacsSnapshot = lowPrio (import ../applications/editors/emacs-snapshot {
