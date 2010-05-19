@@ -8,7 +8,7 @@ let
   rev = "master@{${date}}";
 in
 stdenv.mkDerivation ({
-  name = "gnumach-${date}";
+  name = "gnumach${if headersOnly then "-headers" else ""}-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/gnumach.git";

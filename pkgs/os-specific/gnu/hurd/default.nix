@@ -8,7 +8,7 @@ let
   rev  = "master@{${date}}";
 in
 stdenv.mkDerivation ({
-  name = "hurd-${date}";
+  name = "hurd${if headersOnly then "-headers" else ""}-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/hurd.git";
