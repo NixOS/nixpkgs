@@ -3256,7 +3256,7 @@ let
     inherit fetchurl stdenv builderDefs stringsWithDeps lib elfutils;
   };
 
-  mig = import ../development/tools/misc/mig {
+  mig = import ../os-specific/gnu/mig {
     inherit fetchgit stdenv autoconf automake flex bison machHeaders;
   };
   migCross = mig;  # FIXME: Remove me.
