@@ -650,8 +650,9 @@ let
   };
 
   duplicity = import ../tools/backup/duplicity {
-    inherit fetchurl stdenv librsync gnupg makeWrapper python;
+    inherit fetchurl stdenv librsync makeWrapper python;
     inherit (pythonPackages) boto;
+    gnupg = gnupg1;
   };
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
@@ -811,10 +812,17 @@ let
     inherit fetchurl stdenv ed;
   });
 
-  gnupg1 = makeOverridable (import ../tools/security/gnupg1) {
+  gnupg1orig = makeOverridable (import ../tools/security/gnupg1) {
     inherit fetchurl stdenv readline bzip2;
     ideaSupport = false;
   };
+
+  gnupg1compat = import ../tools/security/gnupg1compat {
+    inherit stdenv gnupg writeScript coreutils;
+  };
+
+  # use config.packageOverrides if you prefer original gnupg1
+  gnupg1 = gnupg1compat;
 
   gnupg = makeOverridable (import ../tools/security/gnupg) {
     inherit fetchurl stdenv readline libgpgerror libgcrypt libassuan pth libksba zlib
