@@ -29,7 +29,7 @@ rec {
   gitFull = git.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = true;
+    sendEmailSupport = stdenv.isDarwin == false;
   };
 
   gitGit = import ./git/git-git.nix {
