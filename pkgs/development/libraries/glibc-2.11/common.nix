@@ -104,6 +104,8 @@ stdenv.mkDerivation ({
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.system == "i686-linux") "-U__i686";
 }
 
+# FIXME: This is way too broad and causes the *native* glibc to have a
+# different store path dependending on whether `cross' is null or not.
 // args //
 
 {
