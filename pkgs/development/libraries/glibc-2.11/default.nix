@@ -39,7 +39,12 @@ in
   //
 
   (if hurdHeaders != null
-   then { inherit machHeaders hurdHeaders mig fetchgit; }
+   then {
+     inherit machHeaders hurdHeaders mig fetchgit;
+
+     # XXX: Remove this hack in `stdenv-updates'.
+     builder = ./builder2.sh;
+   }
    else { })
 
   //
