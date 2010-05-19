@@ -628,6 +628,10 @@ let
       inherit fetchurl stdenv coreutils;
     });
 
+  dirmngr = import ../tools/security/dirmngr {
+    inherit stdenv fetchurl libgpgerror libgcrypt libassuan libksba openldap;
+  };
+
   docbook2x = import ../tools/typesetting/docbook2x {
     inherit fetchurl stdenv texinfo perl
             gnused groff libxml2 libxslt makeWrapper;
@@ -4301,7 +4305,7 @@ let
   };
 
   libassuan = import ../development/libraries/libassuan {
-    inherit fetchurl stdenv pth;
+    inherit fetchurl stdenv pth libgpgerror;
   };
 
   libavc1394 = import ../development/libraries/libavc1394 {

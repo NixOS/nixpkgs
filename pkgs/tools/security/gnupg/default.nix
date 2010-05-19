@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional useUsb libusb
     ++ stdenv.lib.optional useCurl curl;
 
-  patchPhase = "sed -e 's@/bin/pwd@pwd@g' -i tests/pkits/*";
+  patchPhase = ''
+    find tests -type f | xargs sed -e 's@/bin/pwd@${stdenv.coreutils}&@g' -i
+  '';
+
+  checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 
   postInstall = ''
     ln -s gpg2 $out/bin/gpg
