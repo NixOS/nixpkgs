@@ -3256,10 +3256,10 @@ let
     inherit fetchurl stdenv builderDefs stringsWithDeps lib elfutils;
   };
 
-  migCross = forceBuildDrv (import ../development/tools/misc/mig {
+  mig = import ../development/tools/misc/mig {
     inherit fetchgit stdenv autoconf automake flex bison machHeaders;
-    cross = assert crossSystem != null; crossSystem;
-  });
+  };
+  migCross = mig;  # FIXME: Remove me.
 
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
