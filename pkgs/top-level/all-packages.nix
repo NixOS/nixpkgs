@@ -6110,6 +6110,14 @@ let
     headersOnly = true;
   };
 
+  hurdLibpthreadCross = forceBuildDrv(import ../os-specific/gnu/libpthread {
+    inherit fetchgit stdenv autoconf automake libtool
+      machHeaders hurdHeaders glibcCross;
+    hurd = hurdCrossIntermediate;
+    gccCross = gccCrossStageStatic;
+    cross = assert crossSystem != null; crossSystem;
+  });
+
   hwdata = import ../os-specific/linux/hwdata {
     inherit fetchurl stdenv;
   };
