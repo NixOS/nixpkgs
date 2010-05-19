@@ -1,8 +1,9 @@
 # Remember to install Pinentry and
 # 'echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf'.
 
-{ fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan, libksba
-, useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null, useUsb ? true, libusb ? null
+{ fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
+, libksba, coreutils, useLdap ? true, openldap ? null
+, useBzip2 ? true, bzip2 ? null, useUsb ? true, libusb ? null
 , useCurl ? true, curl ? null
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional useCurl curl;
 
   patchPhase = ''
-    find tests -type f | xargs sed -e 's@/bin/pwd@${stdenv.coreutils}&@g' -i
+    find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
   '';
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";

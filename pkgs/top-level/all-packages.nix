@@ -818,7 +818,7 @@ let
 
   gnupg = makeOverridable (import ../tools/security/gnupg) {
     inherit fetchurl stdenv readline libgpgerror libgcrypt libassuan pth libksba zlib
-      openldap bzip2 libusb curl;
+      openldap bzip2 libusb curl coreutils;
   };
 
   gnuplot = makeOverridable (import ../tools/graphics/gnuplot) {
