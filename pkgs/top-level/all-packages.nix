@@ -3866,17 +3866,12 @@ let
     inherit (xlibs) libX11 libXext xextproto;
   };
 
-  glibc =
-    let haveRedHatKernel       = system == "i686-linux" || system == "x86_64-linux";
-        haveBrokenRedHatKernel = haveRedHatKernel && getConfig ["brokenRedHatKernel"] false;
-    in
-    useFromStdenv "glibc" (if haveBrokenRedHatKernel then glibc25 else
-        glibc211);
+  glibc = useFromStdenv "glibc" glibc211;
 
-  glibc25 = import ../development/libraries/glibc-2.5 {
+  glibc25 = makeOverridable (import ../development/libraries/glibc-2.5) {
     inherit fetchurl stdenv;
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = false;
   };
 
   glibc27 = import ../development/libraries/glibc-2.7 {
