@@ -6090,6 +6090,15 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  hurdCross = forceBuildDrv(import ../os-specific/gnu/hurd {
+    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
+      mig glibcCross;
+    automake = automake111x;
+    headersOnly = false;
+    cross = assert crossSystem != null; crossSystem;
+    gccCross = gccCrossStageFinal;
+  });
+
   hurdCrossIntermediate = forceBuildDrv(import ../os-specific/gnu/hurd {
     inherit fetchgit stdenv autoconf libtool texinfo machHeaders
       mig glibcCross;
