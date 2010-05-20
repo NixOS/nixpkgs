@@ -152,5 +152,6 @@ let
 in {
   crossGNU = mapTestOnCross crossSystem {
     gccCrossStageFinal = nativePlatforms;
+    hurdCross = nativePlatforms;
   };
 })
