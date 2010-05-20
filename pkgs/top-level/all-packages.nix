@@ -4064,7 +4064,7 @@ let
   };
 
   gss = import ../development/libraries/gss {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl shishi;
   };
 
   gtkimageview = import ../development/libraries/gtkimageview {
