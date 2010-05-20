@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
 
   installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
 
+  postInstall =
+    ''
+      ensureDir $out/share/man/man1
+      cp miniupnpd.1 $out/share/man/man1/
+    '';
+
   meta = {
     homepage = http://miniupnp.free.fr/;
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
