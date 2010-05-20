@@ -371,6 +371,10 @@ let
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
 
+  aria2 = import ../tools/networking/aria2 {
+    inherit fetchurl stdenv openssl libxml2 zlib;
+  };
+
   at = import ../tools/system/at {
     inherit fetchurl stdenv bison flex pam ssmtp;
   };
