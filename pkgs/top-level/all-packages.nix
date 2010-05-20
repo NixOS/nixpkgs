@@ -1094,6 +1094,10 @@ let
     flex = flex2535;
   };
 
+  miniupnpd = import ../tools/networking/miniupnpd {
+    inherit fetchurl stdenv iptables;
+  };
+
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
