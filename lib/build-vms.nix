@@ -40,7 +40,7 @@ rec {
           for i in $out/vms/*; do
             port2=\$((port++))
             echo "forwarding localhost:\$port2 to \$(basename \$i):80"
-            QEMU_OPTS="-redir tcp:\$port2::80 -net nic,vlan=1,model=virtio -net socket,vlan=1,mcast=232.0.1.1:1234" \$i/bin/run-*-vm &
+            QEMU_OPTS="-redir tcp:\$port2::80" \$i/bin/run-*-vm &
           done
           EOF
           chmod +x $out/bin/run-vms
@@ -71,26 +71,57 @@ rec {
     
       machines = lib.attrNames nodes;
 
-      machinesWithIP = zip machines
-        (map (n: "192.168.1.${toString n}") (lib.range 1 254));
+      machinesNumbered = zip machines (lib.range 1 254);
 
-      # Generate a /etc/hosts file.
-      hosts = lib.concatMapStrings (m: "${m.second} ${m.first}\n") machinesWithIP;
+      nodes_ = lib.flip map machinesNumbered (m: lib.nameValuePair m.first
+        [ ( { config, pkgs, nodes, ... }:
+            let
+              interfacesNumbered = zip config.virtualisation.vlans (lib.range 1 255);
+              interfaces = 
+                lib.flip map interfacesNumbered ({ first, second }:
+                  { name = "eth${toString second}";
+                    ipAddress = "192.168.${toString first}.${toString m.second}";
+                  }
+                );
+            in
+            { key = "ip-address";
+              config =
+                { networking.hostName = m.first;
+                
+                  networking.interfaces = interfaces;
+                    
+                  networking.primaryIPAddress =
+                    lib.optionalString (interfaces != []) (lib.head interfaces).ipAddress;
+                  
+                  # Put the IP addresses of all VMs in this machine's
+                  # /etc/hosts file.  If a machine has multiple
+                  # interfaces, use the IP address corresponding to
+                  # the first interface (i.e. the first network in its
+                  # virtualisation.vlans option).
+                  networking.extraHosts = lib.flip lib.concatMapStrings machines
+                    (m: let config = (lib.getAttr m nodes).config; in
+                      lib.optionalString (config.networking.primaryIPAddress != "")
+                        ("${config.networking.primaryIPAddress} " +
+                         "${config.networking.hostName}\n"));
+                  
+                  virtualisation.qemu.options =
+                    lib.flip lib.concatMapStrings interfacesNumbered ({ first, second }:
+                      "-net nic,vlan=${toString second},model=virtio " +
+                      # Use 232.0.1.<vlan> as the multicast address to
+                      # connect VMs on the same vlan, but allow it to
+                      # be overriden using the $QEMU_MCAST_ADDR_<vlan>
+                      # environment variable.  The test driver sets
+                      # this variable to prevent collisions between
+                      # parallel builds.
+                      "-net socket,vlan=${toString second},mcast=" +
+                      "\${QEMU_MCAST_ADDR_${toString first}:-232.0.1.${toString first}:1234} "
+                    );
 
-      nodes_ = map (m: lib.nameValuePair m.first [
-          { key = "ip-address";
-            config =
-              { networking.hostName = m.first;
-                networking.interfaces =
-                  [ { name = "eth1";
-                      ipAddress = m.second;
-                    }
-                  ];
-                networking.extraHosts = hosts;
-              };
-          }
+                };
+            }
+          )
           (lib.getAttr m.first nodes)
-        ]) machinesWithIP;
+        ] );
 
     in lib.listToAttrs nodes_;
 

@@ -11,9 +11,14 @@ use Cwd;
 
 
 # Stuff our PID in the multicast address/port to prevent collissions
-# with other NixOS VM networks.
-my $mcastAddr = "232.18.1." . ($$ >> 8) . ":" . (64000 + ($$ & 0xff));
-print STDERR "using multicast address $mcastAddr\n";
+# with other NixOS VM networks.  See
+# http://www.iana.org/assignments/multicast-addresses/.
+my $mcastPrefix = "232.18";
+my $mcastSuffix = ($$ >> 8) . ":" . (64000 + ($$ & 0xff));
+print STDERR "using multicast addresses $mcastPrefix.<vlan>.$mcastSuffix\n";
+for (my $n = 0; $n < 256; $n++) {
+    $ENV{"QEMU_MCAST_ADDR_$n"} = "$mcastPrefix.$n.$mcastSuffix";
+}
 
 
 sub new {
@@ -107,7 +112,7 @@ sub start {
         dup2(fileno($serialC), fileno(STDOUT));
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
-        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -net nic,vlan=1,model=virtio -net socket,vlan=1,mcast=$mcastAddr -monitor unix:./monitor";
+        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -monitor unix:./monitor";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};

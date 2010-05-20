@@ -11,6 +11,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   installer = pkgs.lib.mapAttrs (name: complete) (call (import ./installer.nix));
   kde4 = apply (import ./kde4.nix);
   login = apply (import ./login.nix);
+  nat = apply (import ./nat.nix);
   openssh = apply (import ./openssh.nix);
   portmap = apply (import ./portmap.nix);
   proxy = apply (import ./proxy.nix);

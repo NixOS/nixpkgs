@@ -68,6 +68,37 @@ let
             database in the guest).
           '';
       };
+
+    virtualisation.vlans = 
+      mkOption {
+        default = [ 1 ];
+        example = [ 1 2 ];
+        description =
+          ''
+            Virtual networks to which the VM is connected.  Each
+            number <replaceable>N</replaceable> in this list causes
+            the VM to have a virtual Ethernet interface attached to a
+            separate virtual network on which it will be assigned IP
+            address
+            <literal>192.168.<replaceable>N</replaceable>.<replaceable>M</replaceable></literal>,
+            where <replaceable>M</replaceable> is the index of this VM
+            in the list of VMs.
+          '';
+      };
+
+    networking.primaryIPAddress =
+      mkOption {
+        default = "";
+        internal = true;
+        description = "Primary IP address used in /etc/hosts.";
+      };
+
+    virtualisation.qemu.options =
+      mkOption {
+        default = "";
+        example = "-vga std";
+        description = "Options passed to QEMU.";
+      };
       
   };
 
@@ -94,13 +125,14 @@ let
       # hanging the VM on x86_64.
       exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 -m ${toString config.virtualisation.memorySize} \
           -no-kvm-irqchip \
-          -net nic,model=virtio -net user -smb / \
+          -net nic,vlan=0,model=virtio -net user,vlan=0 -smb / \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,werror=report \
           -kernel ${config.system.build.toplevel}/kernel \
           -initrd ${config.system.build.toplevel}/initrd \
           ${qemuGraphics} \
           $QEMU_OPTS \
-          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS"
+          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+          ${config.virtualisation.qemu.options}
     '';
 
     
@@ -186,7 +218,7 @@ in
   # host filesystem and thus deadlocks the system.
   networking.useDHCP = false;
 
-  networking.defaultGateway = "10.0.2.2";
+  networking.defaultGateway = mkOverride 200 {} "10.0.2.2";
 
   networking.nameservers = [ "10.0.2.3" ];
 
