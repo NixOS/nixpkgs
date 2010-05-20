@@ -33,6 +33,14 @@ stdenv.mkDerivation ({
 
   preConfigure = "autoreconf -vfi";
 
+  patchPhase =
+    '' echo "removing \`-o root' from makefiles..."
+       for mf in {utils,daemons}/Makefile
+       do
+         sed -i "$mf" -e's/-o root//g'
+       done
+    '';
+
   buildPhase = "make ${buildTarget}";
   installPhase = "make ${installTarget}";
 
