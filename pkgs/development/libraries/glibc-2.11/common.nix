@@ -28,7 +28,7 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
-  patches =
+  patches = 
     stdenv.lib.optional (fetchgit == null)
     /* Fix for NIXPKGS-79: when doing host name lookups, when
        nsswitch.conf contains a line like
@@ -52,14 +52,13 @@ stdenv.mkDerivation ({
        does work because "status" will contain UNAVAIL after the
        failure to find mdns4_minimal. */
     ./nss-skip-unavail.patch
-
+  ++ [
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
 
     /* Make sure `nscd' et al. are linked against `libssp'.  */
     ./stack-protector-link.patch
   ]
-
   ++ stdenv.lib.optional (fetchgit == null)
     /* MOD_NANO definition, for ntp (taken from glibc upstream) */
     ./mod_nano.patch;
