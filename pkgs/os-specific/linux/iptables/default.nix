@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
       mkdir $out/include/net
       cp -prd include/net/netfilter $out/include/net/netfilter
       mkdir $out/include/linux
-      ln -s $out/include/net/netfilter $out/include/linux/netfilter
     '';
 
   meta = {
