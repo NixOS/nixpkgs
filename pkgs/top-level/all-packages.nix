@@ -3269,7 +3269,6 @@ let
   mig = import ../os-specific/gnu/mig {
     inherit fetchgit stdenv autoconf automake flex bison machHeaders;
   };
-  migCross = mig;  # FIXME: Remove me.
 
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
@@ -3923,10 +3922,7 @@ let
      //
 
      (if crossGNU
-      then {
-        inherit machHeaders hurdHeaders fetchgit;
-        mig = migCross;
-      }
+      then { inherit machHeaders hurdHeaders mig fetchgit; }
       else { }))));
 
   glibcCross = glibc211Cross;
@@ -6113,8 +6109,7 @@ let
   });
 
   hurdHeaders = import ../os-specific/gnu/hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo machHeaders;
-    mig = migCross;
+    inherit fetchgit stdenv autoconf libtool texinfo mig machHeaders;
     automake = automake111x;
     headersOnly = true;
   };
