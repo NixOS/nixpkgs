@@ -195,6 +195,9 @@ in
       ipAddress = "10.0.2.15";
     };
 
+  # Don't run ntpd in the guest.  It should get the correct time from KVM.
+  services.ntp.enable = false;
+    
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
       ensureDir $out/bin
