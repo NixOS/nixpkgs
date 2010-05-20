@@ -1,15 +1,26 @@
-{stdenv, fetchurl, python, gmp}:
+{ stdenv, fetchurl, python, gmp }:
 
-stdenv.mkDerivation {
-  name = "pycrypto-2.0.1";
+stdenv.mkDerivation rec {
+  name = "pycrypto-2.1.0";
+  
   src = fetchurl {
-    url = http://www.amk.ca/files/python/crypto/pycrypto-2.0.1.tar.gz;
-    md5 = "4d5674f3898a573691ffb335e8d749cd";
+    url = "http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/${name}.tar.gz";
+    sha256 = "18nq49l8wplg54hz9h26n61rq49vjzmy5xzlkm1g0j82x8i1qgi5";
   };
-  buildInputs = [python gmp];
+  
+  buildInputs = [ python gmp ];
+  
   buildPhase = "true";
-  installPhase = "
-    python ./setup.py build_ext --library-dirs=${gmp}/lib
-    python ./setup.py install --prefix=$out
-  ";
+  
+  installPhase =
+    ''
+      python ./setup.py build_ext --library-dirs=${gmp}/lib
+      python ./setup.py install --prefix=$out
+    '';
+
+  meta = {
+    homepage = http://www.dlitz.net/software/pycrypto/;
+    description = "Python Cryptography Toolkit";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
