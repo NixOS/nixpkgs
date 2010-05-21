@@ -117,6 +117,16 @@ in
       
     };
 
+    networking.ifaces = mkOption {
+      default = listToAttrs
+        (map (iface: { name = iface.name; value = iface; }) config.networking.interfaces);
+      internal = true;
+      description = ''
+        The network interfaces in <option>networking.interfaces</option>
+        as an attribute set keyed on the interface name.
+      '';
+    };
+    
   };
 
 

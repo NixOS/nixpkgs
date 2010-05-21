@@ -10,9 +10,10 @@
 
   nodes =
     { client = 
-        { config, pkgs, ... }:
+        { config, pkgs, nodes, ... }:
         { virtualisation.vlans = [ 1 ];
-          networking.defaultGateway = "192.168.1.2"; # !!! ugly
+          networking.defaultGateway =
+            nodes.router.config.networking.ifaces.eth2.ipAddress;
         };
 
       router = 

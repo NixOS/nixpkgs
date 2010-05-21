@@ -42,10 +42,11 @@ in
         };
 
       client1 = 
-        { config, pkgs, ... }:
+        { config, pkgs, nodes, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
           virtualisation.vlans = [ 2 ];
-          networking.defaultGateway = "192.168.2.3"; # !!! ugly
+          networking.defaultGateway =
+            nodes.router.config.networking.ifaces.eth2.ipAddress;
         };
 
       client2 = 
