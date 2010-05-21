@@ -151,8 +151,10 @@ let
     libc = "glibc";
   };
 in {
-  crossGNU = mapTestOnCross crossSystem {
-    gccCrossStageFinal = nativePlatforms;
-    hurdCross = nativePlatforms;
-  };
+  crossGNU = mapTestOnCross crossSystem ({
+      gccCrossStageFinal = nativePlatforms;
+      hurdCross = nativePlatforms;
+    }
+    //
+    basic);
 })
