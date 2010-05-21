@@ -13,10 +13,10 @@ let
   # Some random file to serve.
   file = pkgs.nixUnstable.src;
 
-  miniupnpdConf = pkgs.writeText "miniupnpd.conf"
+  miniupnpdConf = nodes: pkgs.writeText "miniupnpd.conf"
     ''
       ext_ifname=eth1
-      listening_ip=192.168.2.3/24
+      listening_ip=${nodes.router.config.networking.ifaces.eth2.ipAddress}/24
       allow 1024-65535 192.168.2.0/24 1024-65535
     '';
   
@@ -56,6 +56,7 @@ in
     };
 
   testScript =
+    { nodes, ... }:
     ''
       startAll;
 
@@ -63,11 +64,12 @@ in
       $router->mustSucceed(
           "iptables -t nat -F",
           "iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -d 192.168.2.0/24 -j ACCEPT",
-          "iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -j SNAT --to-source 192.168.1.3", # !!! ugly
+          "iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -j SNAT "
+          . "--to-source ${nodes.router.config.networking.ifaces.eth1.ipAddress}",
           "iptables -t nat -N MINIUPNPD",
           "iptables -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
           "echo 1 > /proc/sys/net/ipv4/ip_forward",
-          "miniupnpd -f ${miniupnpdConf}"
+          "miniupnpd -f ${miniupnpdConf nodes}"
       );
 
       # Create the torrent.

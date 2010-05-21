@@ -45,6 +45,7 @@ rec {
           EOF
           chmod +x $out/bin/run-vms
         ''; # */
+      passthru = { nodes = nodes_; };
     };
 
 

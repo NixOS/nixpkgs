@@ -95,17 +95,19 @@ rec {
       if t ? machine then { machine = t.machine; }
       else { };
     vms = buildVirtualNetwork { inherit nodes; };
-    test = runTests vms t.testScript;
+    test = runTests vms
+      # Call the test script with the computed nodes.
+      (if builtins.isFunction t.testScript then t.testScript { inherit (vms) nodes; } else t.testScript);
     report = makeReport test;
   };
 
-  runInMachine = {
-    drv
-  , machine
-  , preBuild ? ""
-  , postBuild ? ""
-  , ...
-  }:
+  runInMachine =
+    { drv
+    , machine
+    , preBuild ? ""
+    , postBuild ? ""
+    , ...
+    }:
     let
       vms =
         buildVirtualNetwork { nodes = { client = machine; } ; };

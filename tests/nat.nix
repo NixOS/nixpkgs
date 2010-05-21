@@ -31,6 +31,7 @@
     };
 
   testScript =
+    { nodes, ... }:
     ''
       startAll;
 
@@ -45,7 +46,8 @@
       $router->mustSucceed(
           "iptables -t nat -F",
           "iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -d 192.168.1.0/24 -j ACCEPT",
-          "iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -j SNAT --to-source 192.168.2.2", # !!! ugly
+          "iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -j SNAT "
+          . "--to-source ${nodes.router.config.networking.ifaces.eth1.ipAddress}",
           "echo 1 > /proc/sys/net/ipv4/ip_forward"
       );
 
