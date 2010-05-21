@@ -1,6 +1,10 @@
-{stdenv, fetchurl, aclSupport ? false, acl, perl, gmp}:
+{ stdenv, fetchurl, aclSupport ? false, acl ? null, perl, gmp ? null
+, cross ? null, gccCross ? null }:
 
-stdenv.mkDerivation rec {
+assert aclSupport -> acl != null;
+assert cross != null -> gccCross != null;
+
+stdenv.mkDerivation (rec {
   name = "coreutils-8.4";
 
   src = fetchurl {
@@ -8,13 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "0zq11lykc7hfs9nsdnb8gqk354l82hswqj38607mvwj3b0zqvc4b";
   };
 
-  buildInputs = [ perl gmp ] ++ stdenv.lib.optional aclSupport acl;
+  buildNativeInputs = [ perl ];
+  buildInputs =
+       stdenv.lib.optional (gmp != null) gmp
+    ++ stdenv.lib.optional aclSupport acl
+    ++ stdenv.lib.optional (gccCross != null) gccCross;
 
   # The tests are known broken on Cygwin
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc);
+  doCheck = (stdenv ? glibc) && (cross == null);
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
@@ -32,3 +40,9 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(if cross != null
+ then { crossConfig = cross.config; }
+ else { }))

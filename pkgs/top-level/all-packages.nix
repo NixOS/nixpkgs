@@ -546,7 +546,9 @@ let
       else import ../tools/misc/coreutils)
     {
       inherit fetchurl stdenv acl perl gmp;
-      aclSupport = stdenv.isLinux;
+
+      # TODO: Add ACL support for cross-Linux.
+      aclSupport = (crossSystem == null) && stdenv.isLinux;
     };
 
   coreutils = useFromStdenv "coreutils" coreutils_real;
