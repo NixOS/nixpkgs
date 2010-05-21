@@ -151,10 +151,16 @@ let
     libc = "glibc";
   };
 in {
-  crossGNU = mapTestOnCross crossSystem ({
-      gccCrossStageFinal = nativePlatforms;
-      hurdCross = nativePlatforms;
-    }
-    //
-    basic);
+  crossGNU = mapTestOnCross crossSystem {
+    gccCrossStageFinal = nativePlatforms;
+    hurdCross = nativePlatforms;
+
+    coreutils_real.hostDrv = nativePlatforms;
+    ed.hostDrv = nativePlatforms;
+    grub2.hostDrv = nativePlatforms;
+    inetutils.hostDrv = nativePlatforms;
+    nixUnstable.hostDrv = nativePlatforms;
+    patch.hostDrv = nativePlatforms;
+    zile.hostDrv = nativePlatforms;
+  };
 })
