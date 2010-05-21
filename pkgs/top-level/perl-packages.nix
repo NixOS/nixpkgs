@@ -1879,8 +1879,8 @@ rec {
       url = mirror://cpan/authors/id/G/GB/GBARR/libnet-1.22.tar.gz;
       sha256 = "113c36qilbvd69yhkm2i2ba20ajff7cdpgvlqx96j9bb1hfmhb1p";
     };
-    # Test perform network access
-    doCheck = false;
+    patchPhase = "chmod a-x Configure";
+    doCheck = false; # The test suite fails, because it requires network access.
   };
 
   NetSMTPSSL = buildPerlPackage {
