@@ -255,7 +255,7 @@ sub execute {
 }
 
 
-sub mustSucceed {
+sub succeed {
     my ($self, @commands) = @_;
     my $res;
     foreach my $command (@commands) {
@@ -267,6 +267,11 @@ sub mustSucceed {
         $res .= $out;
     }
     return $res;
+}
+
+
+sub mustSucceed {
+    succeed @_;
 }
 
 
