@@ -72,6 +72,15 @@ in {
     };
   };
     
+  it = buildDict {
+    shortName = "it-0.53-0";
+    fullName = "Italian";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/it/aspell-it-0.53-0.tar.bz2;
+      sha256 = "0vzs2mk0h2znx0jjs5lqiwdrc4nf6v3f8xbrsni8pfnxhh5ik1rv";
+    };
+  };
+    
   la = buildDict {
     shortName = "la-20020503-0";
     fullName = "Latin";
