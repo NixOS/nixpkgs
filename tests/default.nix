@@ -6,16 +6,16 @@
 with import ../lib/testing.nix { inherit nixpkgs services system; };
 
 {
-  bittorrent = apply (import ./bittorrent.nix);
-  firefox = apply (import ./firefox.nix);
-  installer = pkgs.lib.mapAttrs (name: complete) (call (import ./installer.nix));
-  kde4 = apply (import ./kde4.nix);
-  login = apply (import ./login.nix);
-  nat = apply (import ./nat.nix);
-  openssh = apply (import ./openssh.nix);
-  portmap = apply (import ./portmap.nix);
-  proxy = apply (import ./proxy.nix);
-  quake3 = apply (import ./quake3.nix);
-  subversion = apply (import ./subversion.nix);
-  trac = apply (import ./trac.nix);
+  bittorrent = makeTest (import ./bittorrent.nix);
+  firefox = makeTest (import ./firefox.nix);
+  installer = makeTests (import ./installer.nix);
+  kde4 = makeTest (import ./kde4.nix);
+  login = makeTest (import ./login.nix);
+  nat = makeTest (import ./nat.nix);
+  openssh = makeTest (import ./openssh.nix);
+  portmap = makeTest (import ./portmap.nix);
+  proxy = makeTest (import ./proxy.nix);
+  quake3 = makeTest (import ./quake3.nix);
+  subversion = makeTest (import ./subversion.nix);
+  trac = makeTest (import ./trac.nix);
 }

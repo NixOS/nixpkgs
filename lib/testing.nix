@@ -84,10 +84,11 @@ rec {
     ''; # */
 
 
-  # !!! Rename these functions to something more sensible.    
-  call = f: f { inherit pkgs nixpkgs system; };
+  makeTest = testFun: complete (call testFun);
+  makeTests = testsFun: lib.mapAttrs (name: complete) (call testsFun);
 
-  apply = testFun: complete (call testFun);
+  apply = makeTest; # compatibility
+  call = f: f { inherit pkgs nixpkgs system; };
 
   complete = t: t // rec {
     nodes =
@@ -173,10 +174,10 @@ rec {
       runInMachine ({
             machine = client;
             preBuild = ''
-              $client->waitForX ;
+              $client->waitForX;
             '' ;
           } // args );   
 
-  simpleTest = as: (apply ({ ... }: as)).test;
+  simpleTest = as: (makeTest ({ ... }: as)).test;
 
 }
