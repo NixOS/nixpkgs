@@ -1,6 +1,6 @@
 { pkgs, stdenv } :
 
-let inherit (pkgs) stdenv runCommand perl;
+let inherit (pkgs) stdenv runCommand perl lib;
 
 in
 
@@ -106,4 +106,30 @@ in
       echo "''${PATH}" > $target/PATH
     '';
   };
+
+
+  # build a debug version of a package
+  debugVersion = pkg: lib.overrideDerivation pkg (attrs: {
+
+    prePhases = ["preHook"] ++ lib.optionals (pkgs ? prePhases) pkgs.prePhases;
+
+    dontStrip = true;
+
+    NIX_STRIP_DEBUG=0;
+    CFLAGS="-ggdb -O0";
+    CXXFLAGS="-ggdb -O0";
+
+    preHook = ''
+      s=$out/src
+      mkdir -p $s; cd $s;
+      export TMP=$s
+      export TEMP=$s
+
+      for var in CFLAGS CXXFLAGS NIX_CFLAGS_COMPILE; do
+        declare -x "$var=''${!var} -ggdb -O0"
+      done
+      echo "file should tell that executable has not been strippee"
+    '';
+
+  });
 }
