@@ -8,8 +8,13 @@ stdenv.mkDerivation {
     sha256 = "18kz1hs6lvckkddy4y36gi7ly03ar2il2xzkrf8bfgif1gnn1p3c";
   };
 
+  patchPhase =
+    # DNS lookups fail in chroots.
+    '' sed -i "src/or/test.c" -es/localhost/127.0.0.1/g
+    '';
+
   buildInputs = [libevent openssl zlib];
- 
+
   doCheck = true;
 
   meta = {
