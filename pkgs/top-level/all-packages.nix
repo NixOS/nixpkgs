@@ -4740,6 +4740,10 @@ let
     inherit fetchurl stdenv pkgconfig ncurses gpm glib;
   };
 
+  libvpx = import ../development/libraries/libvpx {
+    inherit fetchurl stdenv bash;
+  };
+
   libvterm = import ../development/libraries/libvterm {
     inherit fetchurl stdenv pkgconfig ncurses glib;
   };
