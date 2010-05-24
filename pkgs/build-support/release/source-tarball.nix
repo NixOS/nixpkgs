@@ -78,7 +78,7 @@ stdenv.mkDerivation (
   {
     name = name + "-" + version + versionSuffix;
 
-    buildNativeInputs = bootstrapBuildInputs ++ buildNativeInputs;
+    buildNativeInputs = buildNativeInputs ++ bootstrapBuildInputs;
 
     postHook = ''
       ensureDir $out/nix-support
