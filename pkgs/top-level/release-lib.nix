@@ -3,7 +3,26 @@ rec {
 
   pkgs = allPackages {};
 
-  /* The working or failing letters for cross builds will be sent only to
+  /* !!! Hack: poor man's memoisation function.  Necessary for prevent
+     Nixpkgs from being evaluated again and again for every
+     job/platform pair. */
+  pkgsFor = system:
+    if system == "x86_64-linux" then pkgs_x86_64_linux
+    else if system == "i686-linux" then pkgs_i686_linux
+    else if system == "x86_64-darwin" then pkgs_x86_64_darwin
+    else if system == "i686-darwin" then pkgs_i686_darwin
+    else if system == "i686-freebsd" then pkgs_i686_freebsd
+    else if system == "i686-cygwin" then pkgs_i686_cygwin
+    else abort "unsupported system type: ${system}";
+
+  pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
+  pkgs_i686_linux = allPackages { system = "i686-linux"; };
+  pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
+  pkgs_i686_darwin = allPackages { system = "i686-darwin"; };
+  pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };
+  pkgs_i686_cygwin = allPackages { system = "i686-cygwin"; };
+
+  /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */
   crossMaintainers = with pkgs.lib.maintainers; [ viric ];
@@ -23,7 +42,7 @@ rec {
      to build on that platform.  `f' is passed the Nixpkgs collection
      for the platform in question. */
   testOn = systems: f: {system ? builtins.currentSystem}:
-    if pkgs.lib.elem system systems then f (allPackages {inherit system;}) else {};
+    if pkgs.lib.elem system systems then f (pkgsFor system) else {};
 
   /* Similar to the testOn function, but with an additional 'crossSystem'
    * parameter for allPackages, defining the target platform for cross builds */
