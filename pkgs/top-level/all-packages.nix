@@ -2623,14 +2623,6 @@ let
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
 
-  # To be removed on stdenv-updates
-  # By now this has at least the fix of setting the proper rpath when a file "libbla.so"
-  # is passed directly to the linker.
-  # This is of interest to programs built by cmake, because this is a common practice
-  # in cmake builds.
-  wrapGCC2 = wrapGCCWith (import ../build-support/gcc-wrapper/default2.nix) glibc;
-  stdenv2 = if (gcc.nativeTools) then stdenv else (overrideGCC stdenv (wrapGCC2 gcc.gcc));
-
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
 
@@ -4954,11 +4946,10 @@ let
   };
 
   opencv = import ../development/libraries/opencv {
-      inherit fetchurl cmake libjpeg libpng libtiff jasper ffmpeg
+      inherit stdenv fetchurl cmake libjpeg libpng libtiff jasper ffmpeg
           pkgconfig xineLib;
       inherit (gtkLibs) gtk glib;
       inherit (gst_all) gstreamer;
-      stdenv = stdenv2;
   };
 
   # this ctl version is needed by openexr_viewers
@@ -7179,11 +7170,10 @@ let
   };
 
   avidemux = import ../applications/video/avidemux {
-    inherit fetchurl cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
+    inherit stdenv fetchurl cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
       alsaLib lame faac faad2 libvorbis;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
-    stdenv = stdenv2;
   };
 
   awesome = import ../applications/window-managers/awesome {
@@ -7239,19 +7229,17 @@ let
   };
 
   blender = import ../applications/misc/blender/2.49.nix {
-    inherit fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
+    inherit stdenv fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
       libsamplerate libtiff ilmbase freetype;
     inherit (xlibs) libXi;
     python = python26Base;
-    stdenv = stdenv2;
   };
 
   blender_2_50 = lowPrio (import ../applications/misc/blender {
-    inherit fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
+    inherit stdenv fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
       libsamplerate libtiff ilmbase;
     inherit (xlibs) libXi;
     python = python31Base;
-    stdenv = stdenv2;
   });
 
   bmp = import ../applications/audio/bmp {
@@ -8257,7 +8245,7 @@ let
   };
 
   openoffice = import ../applications/office/openoffice {
-    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
+    inherit stdenv fetchurl pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
       curl libsndfile flex zip unzip libmspack getopt file cairo
       which icu jdk ant cups openssl bison boost gperf cppunit;
@@ -8266,11 +8254,10 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon026;
-    stdenv = stdenv2;
   };
 
   go_oo = import ../applications/office/openoffice/go-oo.nix {
-    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
+    inherit stdenv fetchurl pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
       curl libsndfile flex zip unzip libmspack getopt file cairo
       which icu jdk ant cups openssl bison boost gperf cppunit;
@@ -8279,7 +8266,6 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon026;
-    stdenv = stdenv2;
 
     inherit autoconf openldap postgresql;
   };
@@ -8308,8 +8294,7 @@ let
   };
 
   paraview = import ../applications/graphics/paraview {
-    inherit fetchurl cmake qt4;
-    stdenv = stdenv2;
+    inherit stdenv fetchurl cmake qt4;
   };
 
   partitionManager = import ../tools/misc/partition-manager {
@@ -9263,7 +9248,7 @@ let
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
     openexr = openexr_1_6_1;
-    stdenv = stdenv2;
+    inherit stdenv;
   });
 
   xfce = xfce4;
