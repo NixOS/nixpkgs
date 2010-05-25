@@ -2,7 +2,7 @@
 
 assert aclSupport -> acl != null;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "coreutils-8.4";
 
   src = fetchurl {
@@ -22,13 +22,14 @@ stdenv.mkDerivation (rec {
     # Needed for fstatfs()
     # I don't know why it is not properly detected cross building with glibc.
     configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ];
+    doCheck = false;
   };
 
   # The tests are known broken on Cygwin
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc) && (cross == null);
+  doCheck = (stdenv ? glibc);
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
