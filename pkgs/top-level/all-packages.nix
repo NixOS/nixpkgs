@@ -2138,7 +2138,7 @@ let
   }));
 
   gcc45 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
-    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
     profiledCompiler = true;
