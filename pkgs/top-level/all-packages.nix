@@ -8268,6 +8268,21 @@ let
     stdenv = stdenv2;
   };
 
+  go_oo = import ../applications/office/openoffice/go-oo.nix {
+    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
+      expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
+      curl libsndfile flex zip unzip libmspack getopt file cairo
+      which icu jdk ant cups openssl bison boost gperf cppunit;
+    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
+    inherit (gtkLibs) gtk;
+    inherit (perlPackages) ArchiveZip CompressZlib;
+    inherit (gnome) GConf ORBit2;
+    neon = neon026;
+    stdenv = stdenv2;
+
+    inherit autoconf openldap postgresql;
+  };
+
   opera = import ../applications/networking/browsers/opera {
     inherit fetchurl zlib glibc stdenv makeDesktopItem;
     inherit (xlibs) libX11 libSM libICE libXt libXext;
