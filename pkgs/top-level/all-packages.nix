@@ -3738,7 +3738,8 @@ let
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
-    inherit fetchurl stdenv faad2 libvorbis speex libtheora x264 pkgconfig xvidcore;
+    inherit fetchurl stdenv faad2 libvorbis speex libtheora x264 pkgconfig xvidcore
+      lame yasm;
   };
 
   fftw = import ../development/libraries/fftw {
