@@ -2218,7 +2218,7 @@ let
     langCC = true;
     langC = false;
     profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
     inherit (gtkLibs) gtk;
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender

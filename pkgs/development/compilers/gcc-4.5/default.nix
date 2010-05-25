@@ -7,6 +7,7 @@
 , staticCompiler ? false
 , enableShared ? true
 , texinfo ? null
+, perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, mpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
 , ppl ? null, cloogppl ? null # optional, for the Graphite optimization framework
@@ -29,7 +30,8 @@
 
 assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
-                       && zlib != null && boehmgc != null;
+                       && zlib != null && boehmgc != null
+                       && perl != null;  # for `--enable-java-home'
 assert langAda      -> gnatboot != null;
 assert langVhdl     -> gnat != null;
 
@@ -168,6 +170,7 @@ stdenv.mkDerivation ({
     libcCross crossMingw;
 
   buildInputs = [ texinfo gmp mpfr mpc libelf gettext which ]
+    ++ (optional (perl != null) perl)
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optionals langTreelang [bison flex])
@@ -185,7 +188,11 @@ stdenv.mkDerivation ({
     ${if enableShared then "" else "--disable-shared"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
-    ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
+    ${if langJava then
+      "--with-ecj-jar=${javaEcj} " +
+      "--enable-java-home --with-java-home=\${prefix} " +
+      "--with-jvm-root-dir=\${prefix}/jdk"
+      else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
     --with-gmp=${gmp}
