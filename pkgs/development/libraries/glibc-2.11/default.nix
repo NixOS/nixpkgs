@@ -50,9 +50,6 @@ in
        # thing.
        inherit propagatedBuildInputs;
      };
-
-     # XXX: Remove this hack in `stdenv-updates'.
-     builder = ./builder2.sh;
    }
    else { })
 
