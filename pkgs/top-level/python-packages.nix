@@ -685,11 +685,11 @@ rec {
   };
 
   twisted = buildPythonPackage {
-    name = "twisted-8.2.0";
+    name = "twisted-10.0.0";
 
     src = fetchurl {
-      url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.2/Twisted-8.2.0.tar.bz2;
-      sha256 = "1c6zplisjdnjzkfs0ld3a0f7m7xbjgx5rcwsdw5i1xiibsq2nq70";
+      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.0/Twisted-10.0.0.tar.bz2;
+      sha256 = "1cbqpvwdwsc2av43fyqqdyyxs2j3drbagnl9m5vk7fl9k5q8q4fv";
     };
 
     propagatedBuildInputs = [ zopeInterface ];

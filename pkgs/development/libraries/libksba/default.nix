@@ -1,11 +1,11 @@
-args: with args;
+{ stdenv, fetchurl, libgpgerror }:
 
 stdenv.mkDerivation rec {
-  name = "libksba-1.0.2";
+  name = "libksba-1.0.7";
 
   src = fetchurl {
-    url = "ftp://ftp.gnupg.org/gcrypt/libksba/${name}.tar.bz2";
-    sha256 = "1jkjh1daaykkrfq0s4vv8ddf0w8agdvspg9qm0ghjidlrfnsfiwh";
+    url = "mirror://gnupg/libksba/${name}.tar.bz2";
+    sha256 = "1biabl4ijaf0jyl4zf3qrhcs0iaq9pypjibp8wgnim3n3kg0bdda";
   };
 
   propagatedBuildInputs = [libgpgerror];

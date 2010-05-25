@@ -371,6 +371,10 @@ let
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
 
+  aria2 = import ../tools/networking/aria2 {
+    inherit fetchurl stdenv openssl libxml2 zlib;
+  };
+
   at = import ../tools/system/at {
     inherit fetchurl stdenv bison flex pam ssmtp;
   };
@@ -542,7 +546,9 @@ let
       else import ../tools/misc/coreutils)
     {
       inherit fetchurl stdenv acl perl gmp;
-      aclSupport = stdenv.isLinux;
+
+      # TODO: Add ACL support for cross-Linux.
+      aclSupport = (crossSystem == null) && stdenv.isLinux;
     };
 
   coreutils = useFromStdenv "coreutils" coreutils_real;
@@ -628,6 +634,10 @@ let
       inherit fetchurl stdenv coreutils;
     });
 
+  dirmngr = import ../tools/security/dirmngr {
+    inherit stdenv fetchurl libgpgerror libgcrypt libassuan libksba openldap;
+  };
+
   docbook2x = import ../tools/typesetting/docbook2x {
     inherit fetchurl stdenv texinfo perl
             gnused groff libxml2 libxslt makeWrapper;
@@ -646,8 +656,9 @@ let
   };
 
   duplicity = import ../tools/backup/duplicity {
-    inherit fetchurl stdenv librsync gnupg makeWrapper python;
+    inherit fetchurl stdenv librsync makeWrapper python;
     inherit (pythonPackages) boto;
+    gnupg = gnupg1;
   };
 
   dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
@@ -807,14 +818,21 @@ let
     inherit fetchurl stdenv ed;
   });
 
-  gnupg = makeOverridable (import ../tools/security/gnupg) {
+  gnupg1orig = makeOverridable (import ../tools/security/gnupg1) {
     inherit fetchurl stdenv readline bzip2;
     ideaSupport = false;
   };
 
-  gnupg2 = makeOverridable (import ../tools/security/gnupg2) {
+  gnupg1compat = import ../tools/security/gnupg1compat {
+    inherit stdenv gnupg writeScript coreutils;
+  };
+
+  # use config.packageOverrides if you prefer original gnupg1
+  gnupg1 = gnupg1compat;
+
+  gnupg = makeOverridable (import ../tools/security/gnupg) {
     inherit fetchurl stdenv readline libgpgerror libgcrypt libassuan pth libksba zlib
-      openldap bzip2 libusb curl;
+      openldap bzip2 libusb curl coreutils;
   };
 
   gnuplot = makeOverridable (import ../tools/graphics/gnuplot) {
@@ -1078,6 +1096,10 @@ let
     flex = flex2535;
   };
 
+  miniupnpd = import ../tools/networking/miniupnpd {
+    inherit fetchurl stdenv iptables;
+  };
+
   mjpegtools = import ../tools/video/mjpegtools {
     inherit fetchurl stdenv libjpeg;
     inherit (xlibs) libX11;
@@ -1271,7 +1293,7 @@ let
 
   opensc_0_11_7 = import ../tools/security/opensc/0.11.7.nix {
     inherit fetchurl stdenv libtool readline zlib openssl libiconv pcsclite
-      libassuan pkgconfig pinentry;
+      libassuan1 pkgconfig pinentry;
     inherit (xlibs) libXt;
   };
 
@@ -1369,8 +1391,8 @@ let
     inherit (xlibs) libX11;
   };
 
-  pinentry = import ../tools/misc/pinentry {
-    inherit fetchurl stdenv pkgconfig ncurses;
+  pinentry = makeOverridable (import ../tools/misc/pinentry) {
+    inherit fetchurl stdenv pkgconfig ncurses qt4;
     inherit (gnome) glib gtk;
   };
 
@@ -2091,7 +2113,13 @@ let
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceBuildDrv gcc_realCross;
+    gcc = forceBuildDrv (gcc_realCross.override {
+      libpthreadCross =
+        # FIXME: Don't explicitly refer to `i586-pc-gnu'.
+        if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+        then hurdLibpthreadCross
+        else null;
+     });
     libc = libcCross;
     binutils = binutilsCross;
     cross = assert crossSystem != null; crossSystem;
@@ -2110,7 +2138,7 @@ let
   }));
 
   gcc45 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
-    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
     profiledCompiler = true;
@@ -2190,7 +2218,7 @@ let
     langCC = true;
     langC = false;
     profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
     inherit (gtkLibs) gtk;
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
@@ -3244,10 +3272,9 @@ let
     inherit fetchurl stdenv builderDefs stringsWithDeps lib elfutils;
   };
 
-  migCross = forceBuildDrv (import ../development/tools/misc/mig {
+  mig = import ../os-specific/gnu/mig {
     inherit fetchgit stdenv autoconf automake flex bison machHeaders;
-    cross = assert crossSystem != null; crossSystem;
-  });
+  };
 
   mk = import ../development/tools/build-managers/mk {
     inherit fetchurl stdenv;
@@ -3711,7 +3738,8 @@ let
   };
 
   ffmpeg = import ../development/libraries/ffmpeg {
-    inherit fetchurl stdenv faad2 libvorbis speex libtheora x264 pkgconfig xvidcore;
+    inherit fetchurl stdenv faad2 libvorbis speex libtheora x264 pkgconfig xvidcore
+      lame yasm;
   };
 
   fftw = import ../development/libraries/fftw {
@@ -3901,10 +3929,7 @@ let
      //
 
      (if crossGNU
-      then {
-        inherit machHeaders hurdHeaders fetchgit;
-        mig = migCross;
-      }
+      then { inherit machHeaders hurdHeaders mig fetchgit; }
       else { }))));
 
   glibcCross = glibc211Cross;
@@ -4030,7 +4055,7 @@ let
   };
 
   gpgme = import ../development/libraries/gpgme {
-    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg gnupg2 glib;
+    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg glib libassuan;
   };
 
   gsasl = import ../development/libraries/gsasl {
@@ -4046,7 +4071,7 @@ let
   };
 
   gss = import ../development/libraries/gss {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl shishi;
   };
 
   gtkimageview = import ../development/libraries/gtkimageview {
@@ -4181,8 +4206,7 @@ let
   };
 
   hwloc = import ../development/libraries/hwloc {
-    inherit fetchurl stdenv pkgconfig cairo expat ncurses
-      autoconf automake libtool;
+    inherit fetchurl stdenv pkgconfig cairo expat ncurses;
   };
 
   hydraAntLogger = import ../development/libraries/java/hydra-ant-logger {
@@ -4300,8 +4324,12 @@ let
       openssl attr;
   };
 
-  libassuan = import ../development/libraries/libassuan {
+  libassuan1 = import ../development/libraries/libassuan1 {
     inherit fetchurl stdenv pth;
+  };
+
+  libassuan = import ../development/libraries/libassuan {
+    inherit fetchurl stdenv pth libgpgerror;
   };
 
   libavc1394 = import ../development/libraries/libavc1394 {
@@ -4711,6 +4739,10 @@ let
 
   libviper = import ../development/libraries/libviper {
     inherit fetchurl stdenv pkgconfig ncurses gpm glib;
+  };
+
+  libvpx = import ../development/libraries/libvpx {
+    inherit fetchurl stdenv bash;
   };
 
   libvterm = import ../development/libraries/libvterm {
@@ -6069,12 +6101,46 @@ let
     inherit fetchurl stdenv ncurses;
   };
 
+  hurdCross = forceBuildDrv(import ../os-specific/gnu/hurd {
+    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
+      mig glibcCross;
+    automake = automake111x;
+    headersOnly = false;
+    cross = assert crossSystem != null; crossSystem;
+    gccCross = gccCrossStageFinal;
+  });
+
+  hurdCrossIntermediate = forceBuildDrv(import ../os-specific/gnu/hurd {
+    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
+      mig glibcCross;
+    automake = automake111x;
+    headersOnly = false;
+    cross = assert crossSystem != null; crossSystem;
+
+    # The "final" GCC needs glibc and the Hurd libraries (libpthread in
+    # particular) so we first need an intermediate Hurd built with the
+    # intermediate GCC.
+    gccCross = gccCrossStageStatic;
+
+    # This intermediate Hurd is only needed to build libpthread, which really
+    # only needs libihash.
+    buildTarget = "libihash";
+    installTarget = "libihash-install";
+  });
+
   hurdHeaders = import ../os-specific/gnu/hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo machHeaders;
-    mig = migCross;
+    inherit fetchgit stdenv autoconf libtool texinfo mig machHeaders;
     automake = automake111x;
     headersOnly = true;
   };
+
+  hurdLibpthreadCross = forceBuildDrv(import ../os-specific/gnu/libpthread {
+    inherit fetchgit stdenv autoconf automake libtool
+      machHeaders hurdHeaders glibcCross;
+    hurd = hurdCrossIntermediate;
+    gccCross = gccCrossStageStatic;
+    cross = assert crossSystem != null; crossSystem;
+  });
 
   hwdata = import ../os-specific/linux/hwdata {
     inherit fetchurl stdenv;
@@ -8123,7 +8189,7 @@ let
 
   MPlayer = import ../applications/video/MPlayer {
     inherit fetchurl stdenv freetype fontconfig x11 zlib libtheora libcaca libdvdnav
-      cdparanoia mesa pkgconfig unzip amrnb amrwb jackaudio x264 xvidcore;
+      cdparanoia mesa pkgconfig unzip amrnb amrwb jackaudio x264 xvidcore lame yasm;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;
@@ -8201,6 +8267,21 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon026;
     stdenv = stdenv2;
+  };
+
+  go_oo = import ../applications/office/openoffice/go-oo.nix {
+    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
+      expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
+      curl libsndfile flex zip unzip libmspack getopt file cairo
+      which icu jdk ant cups openssl bison boost gperf cppunit;
+    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
+    inherit (gtkLibs) gtk;
+    inherit (perlPackages) ArchiveZip CompressZlib;
+    inherit (gnome) GConf ORBit2;
+    neon = neon026;
+    stdenv = stdenv2;
+
+    inherit autoconf openldap postgresql;
   };
 
   opera = import ../applications/networking/browsers/opera {

@@ -10,8 +10,9 @@ cross :
 , preConfigure ? "", ... }@args :
 
 let
-  rev = "df4c3faf0ccc848b5a8086c222bdb42679a9798f";
-  version = if hurdHeaders != null then "0.0-pre" + rev else "2.11.1";
+  date = "2010-05-12";
+  rev = "tschwinge/Roger_Whittaker@{${date}}";
+  version = if hurdHeaders != null then date else "2.11.1";
 in
 
 assert (cross != null) -> (gccCross != null);
@@ -100,6 +101,8 @@ stdenv.mkDerivation ({
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.system == "i686-linux") "-U__i686";
 }
 
+# FIXME: This is way too broad and causes the *native* glibc to have a
+# different store path dependending on whether `cross' is null or not.
 // args //
 
 {

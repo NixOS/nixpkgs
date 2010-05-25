@@ -1,16 +1,21 @@
-{ fetchurl, stdenv, glib, pkgconfig, gtk, ncurses }:
+{ fetchurl, stdenv, pkgconfig, glib
+, useGtk ? true, gtk ? null
+, useNcurses ? true, ncurses ? null
+, useQt4 ? false, qt4 ? null }:
+
+assert useGtk -> (gtk != null);
+assert useNcurses -> (ncurses != null);
+assert useQt4 -> (qt4 != null);
 
 stdenv.mkDerivation rec {
-  name = "pinentry-0.7.5";
+  name = "pinentry-0.8.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.gz";
-    sha256 = "cb269ac058793b2df343a12a65e3402abc4b68503e105b12e4ca903d8d8e3172";
+    sha256 = "06phs3gbs6gf0z9g28z3jgsw312dhhpdgzrx4hhps53xrbwpyv22";
   };
 
-  patches = [ ./duplicate-glib-defs.patch ];
-
-  buildInputs = [ glib pkgconfig gtk ncurses ];
+  buildInputs = [ glib pkgconfig gtk ncurses ] ++ stdenv.lib.optional useQt4 qt4;
 
   meta = { 
     description = "GnuPG's interface to passphrase input";

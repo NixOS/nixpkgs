@@ -1,19 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses
-, autoconf, automake, libtool }:
+{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.0rc1";
+  name = "hwloc-1.0";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.0/downloads/${name}.tar.bz2";
-    sha256 = "0mgjlyfwp1pbl2312l9diwjw53yb9hb62slmvcb3xvhqdwvj0d7s";
+    sha256 = "1s64w026idxrkf0y56q4cybapz7yldn1xycnfh1d5bj7v7ncds21";
   };
 
-  patches = [ ./ncurses.patch ];
-
-  preConfigure = "autoreconf -vfi";
-
-  buildInputs = [ autoconf automake libtool pkgconfig cairo expat ncurses ];
+  buildInputs = [ pkgconfig cairo expat ncurses ];
 
   doCheck = true;
 

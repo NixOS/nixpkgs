@@ -1,9 +1,11 @@
-{ fetchgit, stdenv, autoconf, automake, flex, bison, machHeaders
-, cross ? null }:
+{ fetchgit, stdenv, autoconf, automake, flex, bison, machHeaders }:
 
-let rev = "4fee6a5652f609cb68cdbd9049d4da7a194f15f8"; in
-stdenv.mkDerivation rec {
-  name = "mig-1.4-${rev}";
+let
+  date = "2010-05-12";
+  rev = "master@{${date}}";
+in
+stdenv.mkDerivation {
+  name = "mig-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/mig.git";
@@ -15,8 +17,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vfi";
 
-  configureFlags =
-    stdenv.lib.optionalString (cross != null) "--build=${cross.config}";
+  configureFlags = [ "--build=i586-pc-gnu" ];
+
+  doCheck = true;
 
   meta = {
     description = "GNU MIG, the Mach interface generator";

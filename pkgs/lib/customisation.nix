@@ -1,4 +1,7 @@
-let lib = import ./default.nix; in
+let lib = import ./default.nix;
+    inherit (builtins) getAttr attrNames isFunction;
+
+in
 
 rec {
 
@@ -31,7 +34,10 @@ rec {
   overrideDerivation = drv: f:
     let
       # Filter out special attributes.
-      attrs = removeAttrs drv ["meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type" "override" "deepOverride" "origArgs"];
+      drop = ["meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type" "override" "deepOverride" "origArgs"]
+              # also drop functions such as .merge .override etc
+             ++ lib.filter (n: isFunction (getAttr n drv)) (attrNames drv);
+      attrs = removeAttrs drv drop;
       newDrv = derivation (attrs // (f drv));
     in newDrv //
       { meta = if drv ? meta then drv.meta else {};

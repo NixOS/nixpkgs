@@ -1,0 +1,28 @@
+Upstream patch
+
+From fc2870a65f6b3ed3b71bcac69c5faf3a9c759c64 Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Mon, 21 Dec 2009 11:13:23 -0500
+Subject: [PATCH 1/2] Don't daemonize when activated
+
+It confuses some versions of D-Bus and isn't needed
+(or wanted it).
+
+http://bugs.freedesktop.org/show_bug.cgi?id=25642
+---
+ data/org.freedesktop.ConsoleKit.service.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/data/org.freedesktop.ConsoleKit.service.in b/data/org.freedesktop.ConsoleKit.service.in
+index ec2128c..d716a36 100644
+--- a/data/org.freedesktop.ConsoleKit.service.in
++++ b/data/org.freedesktop.ConsoleKit.service.in
+@@ -1,4 +1,4 @@
+ [D-BUS Service]
+ Name=org.freedesktop.ConsoleKit
+-Exec=@sbindir@/console-kit-daemon
++Exec=@sbindir@/console-kit-daemon --no-daemon
+ User=root
+-- 
+1.7.1
+

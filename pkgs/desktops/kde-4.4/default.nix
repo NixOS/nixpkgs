@@ -311,6 +311,11 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
+  yakuake = import ./extragear/yakuake {
+    inherit (pkgs) stdenv fetchurl cmake perl gettext;
+    inherit kdelibs automoc4 qt4 phonon;
+  };
+
 ### LOCALIZATION
 
   l10n = pkgs.recurseIntoAttrs (import ./l10n {

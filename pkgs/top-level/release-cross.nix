@@ -6,6 +6,7 @@ let
   basicHostDrv = {
     bison.hostDrv = nativePlatforms;
     busybox.hostDrv = nativePlatforms;
+    coreutils_real.hostDrv = nativePlatforms;
     dropbear.hostDrv = nativePlatforms;
     tightvnc.hostDrv = nativePlatforms;
     #openoffice.hostDrv = nativePlatforms;
@@ -152,5 +153,14 @@ let
 in {
   crossGNU = mapTestOnCross crossSystem {
     gccCrossStageFinal = nativePlatforms;
+    hurdCross = nativePlatforms;
+
+    coreutils_real.hostDrv = nativePlatforms;
+    ed.hostDrv = nativePlatforms;
+    grub2.hostDrv = nativePlatforms;
+    inetutils.hostDrv = nativePlatforms;
+    nixUnstable.hostDrv = nativePlatforms;
+    patch.hostDrv = nativePlatforms;
+    zile.hostDrv = nativePlatforms;
   };
 })

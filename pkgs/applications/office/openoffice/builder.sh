@@ -33,7 +33,8 @@ postConfigure() {
 buildPhase() {
     source LinuxX86*Env.Set.sh
     ./bootstrap
-    dmake # wait a few hours...
+    # bootstrap defines the alias 'build', that mostly runs this perl script:
+    (cd instsetoo_native; perl ../solenv/bin/build.pl --all) # wait a few hours... add -P4 for quadcores
 }
 
 wrapSOffice() {
@@ -57,6 +58,7 @@ installPhase() {
     ooFiles=$out/lib/openoffice
 
     # This was all borrowed from ooo-build-2.2.1's bin/ooinstall.
+    # This needs the ./bootstrap having run in the buildPhase to get some env vars.
     eval $(grep 'BUILD\|LAST_MINOR' $SOLARENV/inc/minor.mk)
     export PYTHONPATH=$SOLARVERSION/$INPATH/lib:$SRC_ROOT/instsetoo_native/$INPATH/bin:$PYTHONPATH 
     export OUT=../$INPATH

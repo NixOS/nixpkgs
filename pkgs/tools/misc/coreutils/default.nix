@@ -1,6 +1,8 @@
-{stdenv, fetchurl, aclSupport ? false, acl, perl, gmp}:
+{ stdenv, fetchurl, aclSupport ? false, acl ? null, perl, gmp ? null}:
 
-stdenv.mkDerivation rec {
+assert aclSupport -> acl != null;
+
+stdenv.mkDerivation (rec {
   name = "coreutils-8.4";
 
   src = fetchurl {
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc);
+  doCheck = (stdenv ? glibc) && (cross == null);
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;

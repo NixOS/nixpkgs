@@ -67,11 +67,6 @@ stdenv.mkDerivation rec {
     --without-system-graphite
   ";
 
-  # Double make - I don't know why a single make reports error, and two, do not.
-  buildPhase = ''
-    make || make
-  '';
-
   LD_LIBRARY_PATH = "${libXext}/lib:${libX11}/lib:${libXtst}/lib:${libXi}/lib:${libjpeg}/lib";
 
   buildInputs = [

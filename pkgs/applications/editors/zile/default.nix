@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lm24sw2ziqsib11sddz7gcqzw5iwfnsx65m1i461kxq218xl59h";
   };
 
-  buildInputs = [ ncurses help2man ];
+  buildInputs = [ ncurses ];
+  buildNativeInputs = [ help2man ];
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.

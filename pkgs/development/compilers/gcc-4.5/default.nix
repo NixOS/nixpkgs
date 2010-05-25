@@ -7,6 +7,7 @@
 , staticCompiler ? false
 , enableShared ? true
 , texinfo ? null
+, perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, mpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
 , ppl ? null, cloogppl ? null # optional, for the Graphite optimization framework
@@ -24,11 +25,13 @@
 , libcCross ? null
 , crossStageStatic ? true
 , gnat ? null
+, libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 }:
 
 assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
-                       && zlib != null && boehmgc != null;
+                       && zlib != null && boehmgc != null
+                       && perl != null;  # for `--enable-java-home'
 assert langAda      -> gnatboot != null;
 assert langVhdl     -> gnat != null;
 
@@ -36,6 +39,7 @@ assert langVhdl     -> gnat != null;
 assert libelf != null -> zlib != null;
 
 with stdenv.lib;
+with builtins;
 
 let version = "4.5.0";
     javaEcj = fetchurl {
@@ -132,7 +136,7 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [ ]
+    [ ./softfp-hurd.patch ]
     ++ optional (cross != null) ./libstdc++-target.patch
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
@@ -141,10 +145,32 @@ stdenv.mkDerivation ({
     ++ optional langVhdl ./ghdl-ortho-cflags.patch
     ;
 
+  postPatch =
+    if (stdenv.system == "i586-pc-gnu"
+        || (cross != null && cross.config == "i586-pc-gnu"
+            && libcCross != null))
+    then
+      # On GNU/Hurd glibc refers to Hurd & Mach headers so add the right `-I'
+      # flags to the default spec string.
+      let
+        libc = if cross != null then libcCross else stdenv.glibc;
+        config_h = "gcc/config/i386/gnu.h";
+        extraCPPSpec =
+          concatStrings (intersperse " "
+                          (map (x: "-I${x}/include")
+                               libc.propagatedBuildInputs));
+      in
+        '' echo "augmenting \`CPP_SPEC' in \`${config_h}' with \`${extraCPPSpec}'..."
+           sed -i "${config_h}" \
+               -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
+        ''
+    else null;
+
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
   buildInputs = [ texinfo gmp mpfr mpc libelf gettext which ]
+    ++ (optional (perl != null) perl)
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optionals langTreelang [bison flex])
@@ -162,7 +188,11 @@ stdenv.mkDerivation ({
     ${if enableShared then "" else "--disable-shared"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
-    ${if langJava then "--with-ecj-jar=${javaEcj}" else ""}
+    ${if langJava then
+      "--with-ecj-jar=${javaEcj} " +
+      "--enable-java-home --with-java-home=\${prefix} " +
+      "--with-jvm-root-dir=\${prefix}/jdk"
+      else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
     --with-gmp=${gmp}
@@ -212,15 +242,35 @@ stdenv.mkDerivation ({
                                   (optionals (zlib != null) [ zlib ]
                                    ++ optionals langJava [ boehmgc ]
                                    ++ optionals javaAwtGtk xlibs
-                                   ++ optionals javaAwtGtk [ gmp mpfr ])));
+                                   ++ optionals javaAwtGtk [ gmp mpfr ]
+                                   ++ optional (libpthread != null) libpthread
+                                   ++ optional (libpthreadCross != null) libpthreadCross
+
+                                   # On GNU/Hurd glibc refers to Mach & Hurd
+                                   # headers.
+                                   ++ optionals (libcCross != null &&
+                                                 hasAttr "propagatedBuildInputs" libcCross)
+                                        libcCross.propagatedBuildInputs)));
 
   LIBRARY_PATH = concatStrings
                    (intersperse ":" (map (x: x + "/lib")
                                          (optionals (zlib != null) [ zlib ]
                                           ++ optionals langJava [ boehmgc ]
                                           ++ optionals javaAwtGtk xlibs
-                                          ++ optionals javaAwtGtk [ gmp mpfr ])));
+                                          ++ optionals javaAwtGtk [ gmp mpfr ]
+                                          ++ optional (libpthread != null) libpthread)));
 
+  EXTRA_TARGET_CFLAGS =
+    if cross != null && libcCross != null
+    then "-g0 -O2 -idirafter ${libcCross}/include"
+    else null;
+
+  EXTRA_TARGET_LDFLAGS =
+    if cross != null && libcCross != null
+    then "-B${libcCross}/lib -Wl,-L${libcCross}/lib" +
+         (optionalString (libpthreadCross != null)
+           " -L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}")
+    else null;
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
       enableMultilib; };
