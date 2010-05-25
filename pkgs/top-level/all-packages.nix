@@ -8189,7 +8189,7 @@ let
 
   MPlayer = import ../applications/video/MPlayer {
     inherit fetchurl stdenv freetype fontconfig x11 zlib libtheora libcaca libdvdnav
-      cdparanoia mesa pkgconfig unzip amrnb amrwb jackaudio x264 xvidcore;
+      cdparanoia mesa pkgconfig unzip amrnb amrwb jackaudio x264 xvidcore lame yasm;
     inherit (xlibs) libX11 libXv libXinerama libXrandr;
     alsaSupport = true;
     alsa = alsaLib;

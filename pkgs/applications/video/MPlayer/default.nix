@@ -8,7 +8,8 @@
 , jackaudioSupport ? false, jackaudio ? null
 , x264Support ? false, x264 ? null
 , xvidSupport ? false, xvidcore ? null
-, mesa, pkgconfig, unzip
+, lameSupport ? true, lame ? null
+, mesa, pkgconfig, unzip, yasm
 }:
 
 assert alsaSupport -> alsa != null;
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ x11 libXv freetype zlib mesa pkgconfig ]
+    [ x11 libXv freetype zlib mesa pkgconfig yasm ]
     ++ stdenv.lib.optional alsaSupport alsa
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -65,7 +66,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional jackaudioSupport jackaudio
     ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ]
     ++ stdenv.lib.optional x264Support x264
-    ++ stdenv.lib.optional xvidSupport xvidcore;
+    ++ stdenv.lib.optional xvidSupport xvidcore
+    ++ stdenv.lib.optional lameSupport lame;
 
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
