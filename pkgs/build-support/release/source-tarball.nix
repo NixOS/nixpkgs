@@ -4,7 +4,6 @@
 
 { officialRelease ? false
 , buildInputs ? []
-, buildNativeInputs ? []
 , name ? "source-tarball"
 , version ? "0"
 , src, stdenv, autoconf, automake, libtool
@@ -78,8 +77,8 @@ stdenv.mkDerivation (
   {
     name = name + "-" + version + versionSuffix;
 
-    buildNativeInputs = buildNativeInputs ++ bootstrapBuildInputs;
-
+    buildInputs = buildInputs ++ bootstrapBuildInputs;
+    
     postHook = ''
       ensureDir $out/nix-support
     '';  
