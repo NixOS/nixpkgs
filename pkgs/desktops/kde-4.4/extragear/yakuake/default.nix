@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://yakuake.kde.org;
     description = "Quad-style terminal emulator for KDE";
     maintainers = [ maintainers.urkud ];
-    platforms = linux;
+    platforms = platforms.linux;
   };
 }
