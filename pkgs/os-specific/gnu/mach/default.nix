@@ -16,7 +16,12 @@ stdenv.mkDerivation ({
     inherit rev;
   };
 
-  configureFlags = "--build=i586-pc-gnu";
+  configureFlags =
+       stdenv.lib.optional headersOnly "--build=i586-pc-gnu"  # cheat
+
+    # Always enable dependency tracking.  See
+    # <http://lists.gnu.org/archive/html/bug-hurd/2010-05/msg00137.html>.
+    ++ [ "--enable-dependency-tracking" ];
 
   buildNativeInputs = [ autoconf automake texinfo ]
     ++ stdenv.lib.optional (mig != null) mig;
