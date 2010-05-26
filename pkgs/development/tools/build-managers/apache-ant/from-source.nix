@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, javac, jvm, junit }:
+{ stdenv, fetchurl, gcj, junit }:
 
 let version = "1.7.1"; in
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   patches = [ ./use-gcj.patch ];
 
-  buildInputs = [ javac jvm junit ];
+  buildInputs = [ gcj junit ];
 
   configurePhase = ''
     mkdir -p "tool-aliases/bin"
@@ -52,7 +52,7 @@ EOF
     mv -v "$out/lib/"*.jar "$out/lib/java"
     sed -i "$out/bin/ant" \
         -e "s|^ANT_LIB=.*$|ANT_LIB=$out/lib/java|g ;
-            s|JAVACMD=java.*$|JAVACMD=$(type -P gij)|g ;
+            s|JAVACMD=java.*$|JAVACMD=${gcj}/lib/jvm/bin/java|g ;
             /^ant_exec_command/i export ANT_HOME=$out"
   '';
 
@@ -82,8 +82,9 @@ EOF
 
     homepage = http://ant.apache.org/;
 
-    license = "Apache-2.0";
+    license = "APLv2";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = [ stdenv.lib.platforms.gnu ];  # arbitrary choice
   };
 }

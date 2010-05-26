@@ -2990,8 +2990,7 @@ let
   apacheAntGcj = import ../development/tools/build-managers/apache-ant/from-source.nix {
     inherit fetchurl stdenv;
     inherit junit; # must be either pre-built or built with GCJ *alone*
-    javac = gcj;
-    jvm = gcj;
+    gcj = gcj.gcc; # use the raw GCJ, which has ${gcj}/lib/jvm
   };
 
   autobuild = import ../development/tools/misc/autobuild {
