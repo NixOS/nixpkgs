@@ -85,6 +85,6 @@ EOF
     license = "APLv2";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = [ stdenv.lib.platforms.gnu ];  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
