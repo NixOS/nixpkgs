@@ -190,8 +190,7 @@ stdenv.mkDerivation ({
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then
       "--with-ecj-jar=${javaEcj} " +
-      "--enable-java-home --with-java-home=\${prefix} " +
-      "--with-jvm-root-dir=\${prefix}/jdk"
+      "--enable-java-home --with-java-home=\${prefix}/lib/jvm "
       else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
