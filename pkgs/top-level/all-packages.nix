@@ -5067,7 +5067,8 @@ let
   };
 
   postgis = import ../development/libraries/postgis {
-    inherit stdenv fetchurl libxml2 postgresql geos proj perl;
+    inherit stdenv fetchurl libxml2 postgresql geos proj perl flex
+      composableDerivation;
   };
 
   pth = import ../development/libraries/pth {
