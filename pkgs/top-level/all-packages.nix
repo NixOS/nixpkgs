@@ -8260,7 +8260,7 @@ let
     inherit stdenv fetchurl pam python tcsh libxslt perl zlib libjpeg
       expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
       curl libsndfile flex zip unzip libmspack getopt file cairo
-      which icu jdk ant cups openssl bison boost gperf cppunit;
+      which icu jdk ant cups openssl bison boost gperf cppunit bash;
     inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;

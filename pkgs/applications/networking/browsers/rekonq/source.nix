@@ -3,12 +3,13 @@
 builtins.listToAttrs
 [
   {
-    name = "0.4.0";
+    name = "0.4.90";
     value = rec {
-      name = "rekonq-0.4.0";
+      name = "rekonq-0.4.90";
       src = fetchurl {
-        url = "mirror://sourceforge/rekonq/${name}.tar.bz2";
-        sha256 = "1dxpzkifqy85kwj94mhazan6f9glxvl7i02c50n3f0a12wiywwvy";
+        url = "http://kde-apps.org/CONTENT/content-files/94258-${name}.tar.bz2";
+        name = "${name}.tar.bz2";
+        sha256 = "1dmdx54asv0b4xzc8p5nadn92l8pks9cl1y9j8a46lsslwsjw3ws";
       };
     };
   }

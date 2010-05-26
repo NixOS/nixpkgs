@@ -4,17 +4,18 @@
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2
-, autoconf, openldap, postgresql
+, autoconf, openldap, postgresql, bash
 , langs ? [ "en-US" "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
 }:
 
-let version = "3.2.0"; in
+let
+  langsSpaces = stdenv.lib.concatStringsSep " " langs;
+in
 stdenv.mkDerivation rec {
   name = "go-oo-3.2.0.10";
   # builder = ./builder.sh;
 
   downloadRoot = "http://download.services.openoffice.org/files/stable";
-  versionDirs = true;
 
   src = fetchurl {
       url = "http://download.go-oo.org/OOO320/ooo-build-3.2.0.10.tar.gz";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # Multi-CPU: --with-num-cpus=4 
   configurePhase = ''
-    sed -i -e '1s,/bin/bash,${stdenv.bash}/bin/bash,' $(find bin -type f)
+    sed -i -e '1s,/bin/bash,${bash}/bin/bash,' $(find bin -type f)
     sed -i -e '1s,/usr/bin/perl,${perl}/bin/perl,' download.in bin/ooinstall bin/generate-bash-completion
     echo "$distroFlags" > distro-configs/SUSE-11.1.conf.in
 
@@ -128,13 +129,11 @@ stdenv.mkDerivation rec {
     ant autoconf openldap postgresql
   ];
 
-  langsSpaces = stdenv.lib.concatStringsSep " " langs;
-
   meta = {
     description = "Go-oo - Novell variant of OpenOffice.org";
     homepage = http://go-oo.org/;
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = [ stdenv.lib.platforms.linux ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
