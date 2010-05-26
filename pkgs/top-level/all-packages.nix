@@ -6571,6 +6571,14 @@ let
     inherit fetchurl stdenv udev;
   };
 
+  # In theory GNU Mach doesn't have to be cross-compiled.  However, since it
+  # has to be built for i586 (it doesn't work on x86_64), one needs a cross
+  # compiler for that host.
+  mach = import ../os-specific/gnu/mach {
+    inherit fetchgit stdenv autoconf texinfo mig;
+    automake = automake111x;
+  };
+
   machHeaders = import ../os-specific/gnu/mach {
     inherit fetchgit stdenv autoconf texinfo;
     automake = automake111x;

@@ -1,5 +1,5 @@
 { fetchgit, stdenv, mig ? null, autoconf, automake, texinfo
-, headersOnly ? true }:
+, headersOnly ? false }:
 
 assert (!headersOnly) -> (mig != null);
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation ({
 
   configureFlags = "--build=i586-pc-gnu";
 
-  buildInputs = [ autoconf automake texinfo ]
+  buildNativeInputs = [ autoconf automake texinfo ]
     ++ stdenv.lib.optional (mig != null) mig;
 
   preConfigure = "autoreconf -vfi";
@@ -41,6 +41,7 @@ stdenv.mkDerivation ({
     homepage = http://www.gnu.org/software/hurd/microkernel/mach/gnumach.html;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = [ "i586-gnu" ];
   };
 }
 
