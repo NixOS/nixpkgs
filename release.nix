@@ -148,6 +148,7 @@ let
           system = "i686-linux";
         };
       in {
+        bittorrent = t.bittorrent.test;
         firefox = t.firefox.test;
         installer.lvm = t.installer.lvm.test;
         installer.separateBoot = t.installer.separateBoot.test;
@@ -155,7 +156,7 @@ let
         installer.swraid = t.installer.swraid.test;
         kde4 = t.kde4.test;
         login = t.login.test;
-	openssh = t.openssh.test;
+        openssh = t.openssh.test;
         proxy = t.proxy.test;
         quake3 = t.quake3.test;
         subversion = t.subversion.report;
