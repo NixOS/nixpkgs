@@ -3,6 +3,7 @@
 let pkgs = import nixpkgs { config = {}; inherit system; }; in
 
 with pkgs;
+with import ../lib/qemu-flags.nix;
 
 rec {
 
@@ -106,18 +107,8 @@ rec {
                          "${config.networking.hostName}\n"));
                   
                   virtualisation.qemu.options =
-                    lib.flip lib.concatMapStrings interfacesNumbered ({ first, second }:
-                      "-net nic,vlan=${toString second},model=virtio " +
-                      # Use 232.0.1.<vlan> as the multicast address to
-                      # connect VMs on the same vlan, but allow it to
-                      # be overriden using the $QEMU_MCAST_ADDR_<vlan>
-                      # environment variable.  The test driver sets
-                      # this variable to prevent collisions between
-                      # parallel builds.
-                      "-net socket,vlan=${toString second},mcast=" +
-                      "\${QEMU_MCAST_ADDR_${toString first}:-232.0.1.${toString first}:1234} "
-                    );
-
+                    lib.flip lib.concatMapStrings interfacesNumbered
+                      ({ first, second }: qemuNICFlags second first );
                 };
             }
           )
@@ -126,7 +117,7 @@ rec {
 
     in lib.listToAttrs nodes_;
 
-    
+
   # Zip two lists together.  Should be moved to pkgs.lib.
   zip = xs: ys:
     if xs != [] && ys != [] then
