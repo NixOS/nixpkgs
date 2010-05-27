@@ -2,11 +2,11 @@
 , pkgconfig, gtk, glib, pango, libglade }:
 
 stdenv.mkDerivation rec {
-  name = "sysprof-1.0.10-${kernel.version}";
+  name = "sysprof-1.0.12-${kernel.version}";
 
   src = fetchurl {
-    url = "http://www.daimi.au.dk/~sandmann/sysprof/${name}.tar.gz";
-    sha256 = "1cdjnymd9nz72vcw6j0bbhb2ka19rjqd3scgx810a4m3qcai7irs";
+    url = "http://www.daimi.au.dk/~sandmann/sysprof/sysprof-1.0.12.tar.gz";
+    sha256 = "0f0z1dh97swlrkw3cbv5k2jhy5rk7wxv55hp7yhysw3idgp8wbmz";
   };
 
   buildInputs = [ binutils pkgconfig gtk glib pango libglade ];
