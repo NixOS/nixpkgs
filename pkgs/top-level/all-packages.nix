@@ -3288,6 +3288,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  omake = import ../development/tools/ocaml/omake {
+    inherit stdenv fetchurl ocaml makeWrapper ncurses;
+  };
+
+
   openocd = import ../development/tools/misc/openocd {
     inherit fetchurl stdenv libftdi;
   };
