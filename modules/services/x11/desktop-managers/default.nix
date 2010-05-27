@@ -12,7 +12,6 @@ in
 
 {
   imports = [
-    ./kde.nix
     ./kde4.nix
     ./gnome.nix
     ./xterm.nix

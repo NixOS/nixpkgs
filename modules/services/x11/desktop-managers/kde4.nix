@@ -11,16 +11,20 @@ let
 in
 
 {
-
-  imports = [ ./kde-environment.nix ];
-
-    
   options = {
 
     services.xserver.desktopManager.kde4.enable = mkOption {
       default = false;
       example = true;
       description = "Enable the KDE 4 desktop environment.";
+    };
+
+    environment.kdePackages = mkOption {
+      default = [];
+      example = [ pkgs.kde4.digikam ];
+      type = types.list types.package;
+      description = "Additional KDE 4 programs. Only minimal set is installed by
+        default.";
     };
 
   };
@@ -46,28 +50,31 @@ in
 
     security.setuidPrograms = [ "kcheckpass" ];
 
-    environment.kdePackages =
-      [ pkgs.kde4.kdelibs
+    environment = {
+      kdePackages = [
+        pkgs.kde4.kdelibs
         pkgs.kde4.kdebase
         pkgs.kde4.kdebase_runtime
         pkgs.kde4.kdebase_workspace
+        pkgs.kde4.oxygen_icons
+        pkgs.kde4.qt4 # needed for qdbus
         pkgs.shared_mime_info
         pkgs.gst_all.gstreamer
         pkgs.gst_all.gstPluginsBase
         pkgs.gst_all.gstPluginsGood
-      ] ++ optional (pkgs.kde4 ? oxygen_icons) pkgs.kde4.oxygen_icons;
-
-    environment.x11Packages =
-      [ xorg.xmessage # so that startkde can show error messages
-        pkgs.kde4.qt4 # needed for qdbus
+        xorg.xmessage # so that startkde can show error messages
         xorg.xset # used by startkde, non-essential
       ];
 
-    environment.etc = singleton
+      x11Packages = config.environment.kdePackages;
+
+      pathsToLink = [ "/etc/xdg" "/etc/dbus-1" "/share" ];
+
+      etc = singleton
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";
       };
-
+    };
   };
 
 }

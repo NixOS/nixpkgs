@@ -114,8 +114,6 @@
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/desktop-managers/gnome.nix
-  ./services/x11/desktop-managers/kde-environment.nix
-  ./services/x11/desktop-managers/kde.nix
   ./services/x11/desktop-managers/kde4.nix
   ./services/x11/desktop-managers/none.nix
   ./services/x11/desktop-managers/xterm.nix
