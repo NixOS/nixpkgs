@@ -3872,10 +3872,10 @@ let
   };
 
   gdal = stdenv.mkDerivation {
-    name = "gdal-1.6.1-rc1";
+    name = "gdal-1.7.1";
     src = fetchurl {
-      url = ftp://ftp.remotesensing.org/gdal/gdal-1.6.1-RC1.tar.gz;
-      sha256 = "0f7da588yvb1d3l3gk5m0hrqlhg8m4gw93aip3dwkmnawz9r0qcw";
+      url = ftp://ftp.remotesensing.org/gdal/gdal-1.7.1.tar.gz;
+      md5 = "5a90be385613730cc12fcf3f59b89de6";
     };
   };
 
