@@ -5992,6 +5992,11 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
+  conky = import ../os-specific/linux/conky {
+    inherit stdenv fetchurl pkgconfig libxml2 curl wirelesstools openssl;
+    inherit (gtkLibs) glib;
+  };
+
   cpufrequtils = (
     import ../os-specific/linux/cpufrequtils {
     inherit fetchurl stdenv libtool gettext;
