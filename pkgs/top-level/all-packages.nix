@@ -8244,7 +8244,7 @@ let
   };
 
   msmtp = import ../applications/networking/msmtp {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv openssl;
   };
 
   mythtv = import ../applications/video/mythtv {
