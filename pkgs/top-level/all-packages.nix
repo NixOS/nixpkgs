@@ -8883,7 +8883,8 @@ let
     inherit (xlibs) libX11 libXpm libXt libXext;
   };
 
-  xournal = builderDefsPackage (import ../applications/graphics/xournal) {
+  xournal = import ../applications/graphics/xournal {
+    inherit stdenv fetchurl;
     inherit ghostscript fontconfig freetype zlib
       poppler popplerData autoconf automake
       libtool pkgconfig;
