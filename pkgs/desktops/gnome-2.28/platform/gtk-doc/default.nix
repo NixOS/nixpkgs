@@ -1,12 +1,14 @@
-{stdenv, fetchurl, pkgconfig, perl, python, libxml2, libxslt, docbook_xml_dtd_43, docbook_xsl, gnome_doc_utils}:
+{ stdenv, fetchurl, pkgconfig, perl, python, libxml2, libxslt
+, docbook_xml_dtd_43, docbook_xsl, gnome_doc_utils, dblatex }:
 
+let version = "1.15"; in
 stdenv.mkDerivation {
-  name = "gtk-doc-1.11";
+  name = "gtk-doc-${version}";
   src = fetchurl {
-    url = mirror://gnome/sources/gtk-doc/1.11/gtk-doc-1.11.tar.bz2;
-    sha256 = "08zz6gn90aqps84hfhdgarsilbdj0bbnj3wjm2x552n4i7gmq4wj";
+    url = "mirror://gnome/sources/gtk-doc/${version}/gtk-doc-${version}.tar.bz2";
+    sha256 = "0ca8wh67nyh574ahlfkx8k9w2bm4ji9yzxvi3afsicqdpyx77k2r";
   };
-  
+
   # maybe there is a better way to pass the needed dtd and xsl files
   # "-//OASIS//DTD DocBook XML V4.1.2//EN" and "http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
   preConfigure = ''
@@ -23,5 +25,8 @@ stdenv.mkDerivation {
     configureFlags="--with-xml-catalog=$out/nix-support/catalog.xml --disable-scrollkeeper";
   '';
 
-  buildInputs = [ pkgconfig perl python libxml2 libxslt docbook_xml_dtd_43 gnome_doc_utils ];
+  buildInputs =
+   [ pkgconfig perl python libxml2 libxslt docbook_xml_dtd_43 docbook_xsl
+     gnome_doc_utils dblatex
+   ];
 }

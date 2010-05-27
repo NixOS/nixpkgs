@@ -142,7 +142,7 @@ rec {
 
   gtk_doc = import ./platform/gtk-doc {
     inherit (pkgs) stdenv fetchurl pkgconfig perl python libxml2 libxslt;
-    inherit (pkgs) docbook_xml_dtd_43 docbook_xsl;
+    inherit (pkgs) docbook_xml_dtd_43 docbook_xsl dblatex;
     inherit gnome_doc_utils;
   };
 
