@@ -448,6 +448,10 @@ let
     inherit fetchurl stdenv python;
   };
 
+  autossh = import ../tools/networking/autossh {
+    inherit stdenv fetchurl openssh;
+  };
+
   bibtextools = import ../tools/typesetting/bibtex-tools {
     inherit fetchurl stdenv aterm tetex hevea;
     inherit (strategoPackages016) strategoxt sdf;
