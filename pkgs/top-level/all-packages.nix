@@ -2467,12 +2467,13 @@ let
   supportsJDK =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
+    system == "i686-cygwin" ||
     system == "powerpc-linux";
 
   jdkdistro = installjdk: pluginSupport:
        (assert supportsJDK;
     (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
-      inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper;
+      inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper cabextract;
     }));
 
   jikes = import ../development/compilers/jikes {
