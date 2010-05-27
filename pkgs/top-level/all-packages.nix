@@ -1484,6 +1484,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  qdu = import ../tools/misc/qdu {
+      inherit stdenv fetchurl qt3;
+      inherit (xlibs) libX11 libXext;
+  };
+
   qhull = import ../development/libraries/qhull {
     inherit stdenv fetchurl;
   };
