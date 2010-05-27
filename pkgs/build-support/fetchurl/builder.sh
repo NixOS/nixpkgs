@@ -13,9 +13,11 @@ fi
 # cryptographic hash of the output anyway). 
 curl="curl \
  --location --max-redirs 20 \
+ --retry 3
  --disable-epsv \
  --cookie-jar cookies \
- --insecure"
+ --insecure \
+ $NIX_CURL_OPTIONS"
 
 
 tryDownload() {

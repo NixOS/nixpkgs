@@ -91,6 +91,9 @@ stdenv.mkDerivation {
     # by definition pure.
     "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
 
+    # This variable allows the user to pass additional options to curl
+    "NIX_CURL_FLAGS"
+
     # This variable allows the user to override hashedMirrors from the
     # command-line.
     "NIX_HASHED_MIRRORS"
