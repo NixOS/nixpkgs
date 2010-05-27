@@ -34,6 +34,7 @@ sub new {
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
+        $startCommand .= $args->{qemuFlags} || "";
     }
 
     my $name = $args->{name};
