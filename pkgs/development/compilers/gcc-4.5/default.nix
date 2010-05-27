@@ -190,7 +190,10 @@ stdenv.mkDerivation ({
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then
       "--with-ecj-jar=${javaEcj} " +
-      "--enable-java-home --with-java-home=\${prefix}/lib/jvm "
+
+      # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
+      # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
+      "--enable-java-home --with-java-home=\${prefix}/lib/jvm/jre "
       else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
