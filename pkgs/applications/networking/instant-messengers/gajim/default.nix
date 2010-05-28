@@ -13,7 +13,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://www.gajim.org/downloads/gajim-${version}.tar.gz";
+    url = "http://www.gajim.org/downloads/0.13/gajim-${version}.tar.gz";
     sha256 = "0w7ddimwbapz51k76agqac5lwaqrsacl01zgq3jngrkgpfjlvxym";
   };
 
