@@ -6392,7 +6392,7 @@ let
       inherit fetchurl stdenv kernel perl;
     };
 
-    aufs2Utils = import ../os-specific/linux/aufs2-utils {
+    aufs2_util = import ../os-specific/linux/aufs2-util {
       inherit fetchurl stdenv kernel aufs2;
     };
 
