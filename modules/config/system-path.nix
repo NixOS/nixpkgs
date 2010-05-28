@@ -8,6 +8,7 @@ with pkgs.lib;
 let
 
   cfg = config.environment;
+  
   requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
       config.system.sbin.mount # must take precedence over util-linux
@@ -64,7 +65,7 @@ let
 
       systemPackages = mkOption {
         default = [];
-        example = [pkgs.icecat3 pkgs.thunderbird];
+        example = "[ pkgs.icecat3 pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
           /var/run/current-system/sw.  These packages are
