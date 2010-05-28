@@ -1,14 +1,14 @@
-{stdenv, fetchurl, SDL, makeDesktopItem}:
+{ stdenv, fetchurl, SDL, makeDesktopItem }:
 
 stdenv.mkDerivation rec { 
-  name = "dosbox-0.73";
+  name = "dosbox-0.74";
   
   src = fetchurl {
     url = "mirror://sourceforge/dosbox/${name}.tar.gz";
-    sha256 = "b0a94c46164391a9c32d9571e4d0b61ff238908ff0b77e09157c22dc98a93765";
+    sha256 = "01cfjc5bs08m4w79nbxyv7rnvzq2yckmgrbq36njn06lw8b4kxqk";
   };
   
-  buildInputs = [SDL];    
+  buildInputs = [ SDL ];
     
   desktopItem = makeDesktopItem {
     name = "dosbox";
