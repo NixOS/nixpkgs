@@ -143,6 +143,7 @@ in
       # standalone package.
       name = "aufs2";
       patch = ./aufs2.patch;
-    };  
-      
+      features.aufsBase = true;
+    };
+
 }

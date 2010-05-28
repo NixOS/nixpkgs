@@ -1,5 +1,7 @@
 { stdenv, fetchurl, kernel, perl }:
 
+assert kernel.features ? aufsBase;
+
 let version = "20100522"; in
 
 stdenv.mkDerivation {
