@@ -126,7 +126,7 @@ in
   boot.extraModulePackages =
     optional 
       (! config.boot.kernelPackages.kernel.features ? aufs) 
-      config.boot.kernelPackages.aufs;
+      config.boot.kernelPackages.aufs2;
       
   boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
 
