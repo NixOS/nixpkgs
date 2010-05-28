@@ -1,0 +1,57 @@
+From http://ltp.cvs.sourceforge.net/viewvc/ltp/utils/analysis/lcov/bin/geninfo?revision=1.72&view=markup
+
+Fixes "reached unexpected end of file" errors processing gcno files.
+
+
+--- a/bin/geninfo	2010/01/29 11:07:25	1.71
++++ b/bin/geninfo	2010/02/21 14:56:46	1.72
+@@ -2857,6 +2857,9 @@
+ 	# Skip version and stamp
+ 	graph_skip(*HANDLE, 8, "version and stamp") or goto incomplete;
+ 	while (!eof(HANDLE)) {
++		my $next_pos;
++		my $curr_pos;
++
+ 		# Read record tag
+ 		$tag = read_gcno_value(*HANDLE, $big_endian, "record tag");
+ 		goto incomplete if (!defined($tag));
+@@ -2866,6 +2869,11 @@
+ 		goto incomplete if (!defined($length));
+ 		# Convert length to bytes
+ 		$length *= 4;
++		# Calculate start of next record
++		$next_pos = tell(HANDLE);
++		goto tell_error if ($next_pos == -1);
++		$next_pos += $length;
++		# Process record
+ 		if ($tag == $tag_function) {
+ 			($filename, $function) = read_gcno_function_record(
+ 				*HANDLE, $bb, $fileorder, $base, $big_endian);
+@@ -2882,6 +2890,14 @@
+ 			graph_skip(*HANDLE, $length, "unhandled record")
+ 				or goto incomplete;
+ 		}
++		# Ensure that we are at the start of the next record
++		$curr_pos = tell(HANDLE);
++		goto tell_error if ($curr_pos == -1);
++		next if ($curr_pos == $next_pos);
++		goto record_error if ($curr_pos > $next_pos);
++		graph_skip(*HANDLE, $next_pos - $curr_pos,
++			   "unhandled record content")
++			or goto incomplete;
+ 	}
+ 	close(HANDLE);
+ 	($instr, $graph) = graph_from_bb($bb, $fileorder, $gcno_filename);
+@@ -2898,6 +2914,12 @@
+ magic_error:
+ 	graph_error($gcno_filename, "found unrecognized gcno file magic");
+ 	return undef;
++tell_error:
++	graph_error($gcno_filename, "could not determine file position");
++	return undef;
++record_error:
++	graph_error($gcno_filename, "found unrecognized record format");
++	return undef;
+ }
+ 
+ sub debug($)
