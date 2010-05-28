@@ -17,7 +17,7 @@ curl="curl \
  --disable-epsv \
  --cookie-jar cookies \
  --insecure \
- $NIX_CURL_OPTIONS"
+ $NIX_CURL_FLAGS"
 
 
 tryDownload() {
