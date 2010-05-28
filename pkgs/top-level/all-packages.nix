@@ -7564,7 +7564,7 @@ let
     # use override to select the appropriate gui toolkit
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
-    gtk = if stdenv.isDarwin then gtkLibs.gtk else null;
+    gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
     # TODO: these packages don't build on Darwin.
     gconf = if stdenv.isDarwin then null else gnome.GConf;
     librsvg = if stdenv.isDarwin then null else librsvg;
