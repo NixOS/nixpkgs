@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
-      WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/tk8.4\"
+      WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/${tk.libPrefix}\"
                 --set HG \"$out/bin/hg\"
                 --prefix PATH : \"${tk}/bin\" "
     ''

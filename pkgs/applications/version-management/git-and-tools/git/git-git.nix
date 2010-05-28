@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-         wrapArgs="$wrapArgs --set TK_LIBRARY ${tk}/lib/tk8.4"
+         wrapArgs="$wrapArgs --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}"
          wrapArgs="$wrapArgs --prefix PATH : ${tk}/bin"
      '' else "")
 

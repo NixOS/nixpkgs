@@ -19,4 +19,8 @@ stdenv.mkDerivation {
   buildInputs = [tcl x11];
   
   inherit tcl;
+
+  passthru = {
+    libPrefix = "tk8.5";
+  };
 }

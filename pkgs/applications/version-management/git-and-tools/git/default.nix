@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
        for prog in bin/gitk libexec/git-core/git-gui
        do
          wrapProgram "$out/$prog"                       \
-                     --set TK_LIBRARY "${tk}/lib/tk8.4" \
+                     --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
                      --prefix PATH : "${tk}/bin"
        done
      '' else ''
