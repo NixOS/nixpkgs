@@ -263,7 +263,8 @@ rec {
             definitions = map (x: toString x.source) opt.definitions;
           }
           // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; };
+          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
+          // optionalAttrs (opt ? defaultText) { default = opt.defaultText; };
 
           subOptions =
             if opt ? options then
