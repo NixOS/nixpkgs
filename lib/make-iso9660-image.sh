@@ -54,8 +54,10 @@ done
 
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.
-printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
-echo "nix-path-registration=nix-path-registration" >> pathlist
+if [ -n "$object"; ]; then
+    printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
+    echo "nix-path-registration=nix-path-registration" >> pathlist
+fi
 
 
 # Add symlinks to the top-level store objects.
