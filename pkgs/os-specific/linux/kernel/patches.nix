@@ -136,4 +136,13 @@ in
         '' UTRACE y
         '';
     };
+
+  aufs2_2_6_32 =
+    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-32;hb=aufs2-32
+      # Note that this merely the patch needed to build AUFS2 as a
+      # standalone package.
+      name = "aufs2";
+      patch = ./aufs2.patch;
+    };  
+      
 }

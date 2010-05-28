@@ -1,5 +1,5 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, systemtap ? false
-, extraConfig ? "", ... }:
+{ stdenv, fetchurl, userModeLinux ? false, systemtap ? false
+, extraConfig ? "", ... } @ args:
 
 let
   configWithPlatform = kernelPlatform :

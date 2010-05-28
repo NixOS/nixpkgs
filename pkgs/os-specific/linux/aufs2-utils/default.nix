@@ -1,35 +1,39 @@
-a :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-  ];
-in
-rec {
-  src = (a.fetchGitFromSrcInfo s) + "/";
+{ stdenv, fetchurl, kernel, aufs2 }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = [];
+let version = "20100506"; in
 
-  preBuild = a.fullDepEntry (''
-    sed -e "s@/usr@@g; s@-o root@@g; s@-g root@@g" -i Makefile 
-  '') ["doUnpack" "minInit"];
-  postInstall = a.fullDepEntry (''
-    sed -e "s@/etc/default@$out&@; s@/sbin/mount@$out&@" -i "$out/bin/"*
-  '') ["minInit"];
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preBuild" "doMakeInstall" "postInstall"];
-  makeFlags = [
-    ''KDIR="${a.kernel}/lib/modules/${a.kernel.version}/build"''
-    ''DESTDIR="$out"''
+stdenv.mkDerivation {
+  name = "aufs2-util-${version}";
+
+  src = fetchurl {
+    url = "http://nixos.org/tarballs/aufs2-util-git-${version}.tar.bz2";
+    sha256 = "0ly0c3p8fjxqbk8k5rmm1a91wg8wcrvhi1lv4aawalkkk8rqbnwk";
+  };
+
+  buildInputs = [ aufs2 ];
+
+  makeFlags =
+    [ "KDIR=${kernel}/lib/modules/${kernel.version}/build"
+      "Install=install"
+      "DESTDIR=$(out)"
     ];
-      
+
+  postInstall =
+    ''
+      mv $out/usr/* $out
+      rmdir $out/usr
+
+      cp aufs.shlib $out/lib/
+
+      substituteInPlace $out/bin/aubrsync \
+        --replace /sbin/mount $out/sbin/mount \
+        --replace /usr/lib/aufs.shlib $out/lib/aufs.shlib
+    '';
+
   meta = {
-    description = "AUFS2 utilities";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms; 
-      linux;
+    description = "Utilities for AUFS2";
+    homepage = http://aufs.sourceforge.net/;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

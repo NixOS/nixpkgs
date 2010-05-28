@@ -6304,6 +6304,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.aufs2_2_6_32
       ];
   };
 
@@ -6387,19 +6388,13 @@ let
       inherit fetchurl stdenv kernel;
     };
 
-    # Currently it is broken
-    # Build requires exporting some symbols from kernel
-    # Go to package homepage to learn about the needed
-    # patch. Feel free to take over the package.
     aufs2 = import ../os-specific/linux/aufs2 {
-      inherit fetchgit stdenv kernel perl;
+      inherit fetchurl stdenv kernel perl;
     };
 
-    aufs2Utils = if lib.attrByPath ["features" "aufs"] false kernel then
-      builderDefsPackage ../os-specific/linux/aufs2-utils {
-        inherit kernel;
-      }
-    else null;
+    aufs2Utils = import ../os-specific/linux/aufs2-utils {
+      inherit fetchurl stdenv kernel aufs2;
+    };
 
     blcr = import ../os-specific/linux/blcr/0.8.2.nix {
       inherit fetchurl stdenv kernel perl makeWrapper;
