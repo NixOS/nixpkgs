@@ -2017,6 +2017,10 @@ let
     inherit fetchurl stdenv gawk system;
   };
 
+  gambit = import ../development/compilers/gambit {
+    inherit fetchurl stdenv builderDefsPackage;
+  };
+
   gcc = gcc44;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
