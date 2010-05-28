@@ -76,11 +76,9 @@ let
           dir = "/tmp/channel";
         };
 
-      # Make the Nix store in this VM writable using AUFS.  Use Linux
-      # 2.6.27 because 2.6.32 doesn't work (probably we need AUFS2).
-      # This should probably be moved to qemu-vm.nix.
-      boot.kernelPackages = pkgs.linuxPackages_2_6_27;
-      boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
+      # Make the Nix store in this VM writable using AUFS.  This
+      # should probably be moved to qemu-vm.nix.
+      boot.extraModulePackages = [ config.boot.kernelPackages.aufs2 ];
       boot.initrd.availableKernelModules = [ "aufs" ];
 
       boot.initrd.postMountCommands =
