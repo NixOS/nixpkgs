@@ -204,6 +204,7 @@ in
         { name = "sshd"; }
         { name = "xlock"; }
         { name = "chsh"; rootOK = true; }
+        { name = "chfn"; rootOK = true; }
         { name = "su"; rootOK = true; forwardXAuth = true; }
         # Note: useradd, groupadd etc. aren't setuid root, so it
         # doesn't really matter what the PAM config says as long as it

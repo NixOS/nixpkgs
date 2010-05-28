@@ -74,7 +74,7 @@ in
   config = {
 
     security.setuidPrograms =
-      [ "passwd" "su" "crontab" "ping" "ping6"
+      [ "passwd" "chfn" "su" "crontab" "ping" "ping6"
         "fusermount" "wodim" "cdrdao" "growisofs"
       ];
 
