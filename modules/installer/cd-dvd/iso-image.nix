@@ -148,17 +148,6 @@ in
       mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
     '';
 
-  # AUFS 2 support (currently unused).
-  /*
-  boot.initrd.extraUtilsCommands =
-    ''
-      cp ${config.boot.kernelPackages.aufs2Utils}/sbin/mount.aufs $out/bin
-      cp ${config.boot.kernelPackages.aufs2Utils}/sbin/umount.aufs $out/bin
-      mkdir -p $out/var/run/current-system/sw
-      ln -s /bin "$out/var/run/current-system/sw/sbin"
-    '';
-  */
-
   # Closures to be copied to the Nix store on the CD, namely the init
   # script and the top-level system configuration directory.
   isoImage.storeContents =
