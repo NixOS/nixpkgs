@@ -12,6 +12,9 @@ let kernel = config.boot.kernelPackages.kernel; in
   
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
+      # We don't want to evaluate all of linuxPackages for the manual
+      # - some of it might not even evaluate correctly.
+      defaultText = "pkgs.linuxPackages";
       example = "pkgs.linuxPackages_2_6_25";
       description = ''
         This option allows you to override the Linux kernel used by
