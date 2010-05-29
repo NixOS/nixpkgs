@@ -95,11 +95,11 @@ rec {
   });
 
   cssutils = buildPythonPackage (rec {
-    name = "cssutils-0.9.7a2";
+    name = "cssutils-0.9.7a6";
 
     src = fetchurl {
-      url = http://cssutils.googlecode.com/files/cssutils-0.9.7a2.zip;
-      sha256 = "068p14qhhczpjgn0w7v57a2swj0g4rndhimh8gkg9h9sd7rp6n07";
+      url = http://cssutils.googlecode.com/files/cssutils-0.9.7a6.zip;
+      sha256 = "1i5n97l20kn2w9v6x8ybcdnl323vy8lcc5qlxz5l89di36a2skgw";
     };
 
     buildInputs = [ pkgs.unzip ];
