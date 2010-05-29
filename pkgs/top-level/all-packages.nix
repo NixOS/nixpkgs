@@ -8992,6 +8992,10 @@ let
     recordingSupport = true;
   };
 
+  zathura = import ../applications/misc/zathura {
+    inherit stdenv fetchurl pkgconfig poppler;
+    inherit (gtkLibs) gtk;
+  };
 
   ### GAMES
 
