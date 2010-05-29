@@ -3,44 +3,44 @@ args: with args;
 let
 
     src_haxe_swflib = {
-      # REGION AUTO UPDATE:                             { name = "haxe_swflib"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/swflib"; groups = "haxe_group"; }
-      src = sourceFromHead "haxe_swflib-F_23-45-43.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_swflib-F_23-45-43.tar.gz"; sha256 = "a77ce2dda48d28f82b48b96f71404edbf7f58e4c3058b425a473c08d260e0816"; });
+      # REGION AUTO UPDATE:                                { name = "haxe_swflib"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/swflib"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_swflib-F_10-43-46.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_swflib-F_10-43-46.tar.gz"; sha256 = "a63de75e48bf500ef0e8ef715d178d32f0ef113ded8c21bbca698a8cc70e7b58"; });
       # END
     }.src;
 
     src_haxe_extc = { 
-      # REGION AUTO UPDATE:                             { name = "haxe_extc"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extc"; groups = "haxe_group"; }
-      src = sourceFromHead "haxe_extc-F_23-45-44.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extc-F_23-45-44.tar.gz"; sha256 = "dd49eb771d52f4d67ca1ebdab1ced9a251dc5799f91896c33bd234690997820f"; });
+      # REGION AUTO UPDATE:                                { name = "haxe_extc"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extc"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_extc-F_10-43-47.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extc-F_10-43-47.tar.gz"; sha256 = "d0a9980527d62ac6cfe27925ddb0964d334ec382f813fdfb8bd6c59fbbede730"; });
       # END
     }.src;
 
     src_haxe_extlib_dev = { 
-      # REGION AUTO UPDATE:                             { name = "haxe_extlib_dev"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extlib-dev"; groups = "haxe_group"; }
-      src = sourceFromHead "haxe_extlib_dev-F_23-45-46.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extlib_dev-F_23-45-46.tar.gz"; sha256 = "0a3566b6119de9063441cecd553248f3bfc00360edd7143f13b3ab0dbc57b310"; });
+      # REGION AUTO UPDATE:                                { name = "haxe_extlib_dev"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/extlib-dev"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_extlib_dev-F_10-43-48.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_extlib_dev-F_10-43-48.tar.gz"; sha256 = "6b9037230e2615dd5e22f4e7f4165c84f2816bc526957683afc945394fcdf67e"; });
       # END
     }.src;
 
     src_haxe_xml_light = { 
-      # REGION AUTO UPDATE:                             { name = "haxe_xml_light"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/xml-light"; groups = "haxe_group"; }
-      src = sourceFromHead "haxe_xml_light-F_23-45-47.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_xml_light-F_23-45-47.tar.gz"; sha256 = "8e1b5a7f1afcb7a6cd8bcac794c3714305ce94a98e989ccf23a38defb6205ed2"; });
+      # REGION AUTO UPDATE:                                { name = "haxe_xml_light"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "ocaml/xml-light"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_xml_light-F_10-43-48.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_xml_light-F_10-43-48.tar.gz"; sha256 = "be29d9e22ad0dbcb3d447cbbc14907aff5f89bb562b8db369659d299f3a5b44f"; });
       # END
     }.src;
 
     src_haxe_neko_include = { 
-      # REGION AUTO UPDATE:                             { name = "haxe_neko_include"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko/libs/include/ocaml"; groups = "haxe_group"; }
-      src = sourceFromHead "haxe_neko_include-F_23-45-48.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_neko_include-F_23-45-48.tar.gz"; sha256 = "78441ec5a20f25c751afeb46e0ea61db6350794f6c5959264059914682c521a9"; });
+      # REGION AUTO UPDATE:                                { name = "haxe_neko_include"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko/libs/include/ocaml"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe_neko_include-F_10-43-49.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe_neko_include-F_10-43-49.tar.gz"; sha256 = "e49efc1b348fa6e0f6fb40079a2d380b947d9ebda31843bc293f3cc77f8453db"; });
       # END
     }.src;
 
     src_haxe = {
-      # REGION AUTO UPDATE:    { name="haxe-read-only"; type="svn"; url="http://haxe.googlecode.com/svn/trunk"; groups = "haxe_group"; }
-      src = sourceFromHead "haxe-read-only-3207.tar.gz"
-                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe-read-only-3207.tar.gz"; sha256 = "2d315ca69fac69674eb562e1349fdebefb0dca4a91eb4ee28371230aaaf60df1"; });
+      # REGION AUTO UPDATE:       { name="haxe-read-only"; type="svn"; url="http://haxe.googlecode.com/svn/trunk"; groups = "haxe_group"; }
+      src = sourceFromHead "haxe-read-only-3220.tar.gz"
+                   (fetchurl { url = "http://mawercer.de/~nix/repos/haxe-read-only-3220.tar.gz"; sha256 = "2b6702dca95d0829e539cea07b8224e3848e584a425ce8f8e0984a7a2bf7b1f8"; });
       # END
     }.src;
 
@@ -56,9 +56,11 @@ let
       inherit zlib;
 
       buildPhase = ''
+        set -x
         mkdir -p ocaml/{swflib,extc,extlib-dev,xml-light} neko/libs
 
         # strange setup. install.ml seems to co the same repo again into haxe directory!
+        mkdir haxe
         tar xfz $src --strip-components=1 -C haxe
 
         t(){ tar xfz $1 -C $2 --strip-components=2; }

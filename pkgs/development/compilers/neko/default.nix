@@ -14,10 +14,15 @@ composableDerivation {} ( fixed : {
 
   name = "neko-cvs";
 
-  # REGION AUTO UPDATE:              { name="neko"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko"; groups = "haxe_group"; }
-  src = sourceFromHead "neko-F_23-45-39.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/neko-F_23-45-39.tar.gz"; sha256 = "fc74720da7a80cc6f0f9ea9842df8a5fa78858f742171365fae66f0b9975d228"; });
+  # REGION AUTO UPDATE:                        { name="neko"; type="cvs"; cvsRoot = ":pserver:anonymous@cvs.motion-twin.com:/cvsroot"; module = "neko"; groups = "haxe_group"; }
+  src = sourceFromHead "neko-F_16-06-48.tar.gz"
+               (fetchurl { url = "http://mawercer.de/~nix/repos/neko-F_16-06-48.tar.gz"; sha256 = "e952582a26099b7a5568d0798839a6d349331510ffe6d7936b4537d60b6ccf26"; });
   # END
+
+  # # REGION AUTO UPDATE:           { name="neko_git"; type="git"; url=""; }
+  # src = sourceFromHead "neko_git-3abfb2f6d68cc301f9795e10c75734e293b4cfa9.tar.gz"
+  #              (throw "source not not published yet: neko_git");
+  # # END
 
   # optionally remove apache mysql like gentoo does?
   # they just remove libs/{apache,mod_neko}
