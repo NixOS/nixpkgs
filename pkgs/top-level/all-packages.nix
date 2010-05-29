@@ -2778,7 +2778,7 @@ let
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
       flex bison apacheHttpd mysql libxml2 # gettext
-      zlib curl gd postgresql openssl pkgconfig sqlite getConfig;
+      zlib curl gd postgresql openssl pkgconfig sqlite getConfig libiconv libjpeg libpng;
   };
 
   phpXdebug = import ../development/interpreters/php-xdebug {
