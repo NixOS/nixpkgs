@@ -33,6 +33,7 @@ rec {
     inherit pkgs modules baseModules;
     modulesPath = ../modules;
     servicesPath = services;
+    pkgs_i686 = import nixpkgs { system = "i686-linux"; };
   };
 
   # Import Nixpkgs, allowing the NixOS option nixpkgs.config to

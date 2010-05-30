@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs_i686, ... }:
 
 with pkgs.lib;
 
@@ -196,6 +196,15 @@ in
         description = ''
           Whether to enable accelerated OpenGL rendering through the
           Direct Rendering Interface (DRI).
+        '';
+      };
+
+      driSupport32Bit = mkOption {
+        default = false;
+        description = ''
+          On 64-bit systems, whether to support Direct Rendering for
+          32-bit applications (such as Wine).  This is currently only
+          supported for the <literal>nvidia</literal> driver.
         '';
       };
 
@@ -420,16 +429,18 @@ in
           ''
             rm -f /var/run/opengl-driver
             ${# !!! The OpenGL driver depends on what's detected at runtime.
-              if elem "nvidia" driverNames then ''
-                ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
-              ''
-        else if elem "nvidiaLegacy" driverNames then ''
-                ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver
-              ''
+              if elem "nvidia" driverNames then
+                ''
+                  ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
+                  ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
+                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /var/run/opengl-driver-32"}
+                ''
+              else if elem "nvidiaLegacy" driverNames then
+                "ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver"
               else if cfg.driSupport then
                 "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
               else ""
-             }
+            }
 
             ${cfg.displayManager.job.preStart}
 

@@ -3,7 +3,7 @@ if [ -n "$NOSYSBASHRC" ]; then
 fi
 
 # Initialise a bunch of environment variables.
-export LD_LIBRARY_PATH=/var/run/opengl-driver/lib
+export LD_LIBRARY_PATH=/var/run/opengl-driver/lib:/var/run/opengl-driver-32/lib # !!! only set if needed
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export NIXPKGS_ALL=/etc/nixos/nixpkgs
