@@ -7,7 +7,6 @@ assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 let 
-  lib = import ../../../lib/default.nix; 
   s = import ./src-for-default.nix;
 in
 
