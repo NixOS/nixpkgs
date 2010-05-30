@@ -6419,7 +6419,7 @@ let
       inherit fetchurl stdenv builderDefs kernel lib;
     };
 
-    nvidia_x11 = import ../os-specific/linux/nvidia-x11 {
+    nvidia_x11 = makeOverridable (import ../os-specific/linux/nvidia-x11) {
       inherit stdenv fetchurl kernel xlibs gtkLibs zlib perl;
     };
 

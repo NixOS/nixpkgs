@@ -1,13 +1,16 @@
-{stdenv, fetchurl, kernel, xlibs, gtkLibs, zlib, perl}:
+{ stdenv, fetchurl, kernel ? null, xlibs, gtkLibs, zlib, perl
+, # Whether to build the libraries only (i.e. not the kernel module or
+  # nvidia-settings).  Used to support 32-bit binaries on 64-bit
+  # Linux.
+  libsOnly ? false
+}:
 
-let 
+with stdenv.lib;
 
-  versionNumber = "195.36.24";
-
-in
+let versionNumber = "195.36.24"; in
 
 stdenv.mkDerivation {
-  name = "nvidia-x11-${versionNumber}-${kernel.version}";
+  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
   
   builder = ./builder.sh;
   
@@ -24,7 +27,9 @@ stdenv.mkDerivation {
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
-  inherit versionNumber kernel;
+  inherit versionNumber libsOnly;
+
+  kernel = if libsOnly then null else kernel;
 
   dontStrip = true;
 
@@ -32,10 +37,8 @@ stdenv.mkDerivation {
 
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
 
-  programPath = stdenv.lib.makeLibraryPath [
-    gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib
-    xlibs.libXv
-  ];
+  programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
+    [ gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib xlibs.libXv ] );
 
   buildInputs = [ perl ];
 
