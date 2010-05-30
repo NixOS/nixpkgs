@@ -7934,9 +7934,9 @@ let
   };
 
   googleearth = import ../applications/misc/googleearth {
-    inherit stdenv fetchurl glibc mesa freetype zlib glib;
-    inherit (xlibs) libSM libICE libXi libXv libXrender libXrandr libXfixes
-      libXcursor libXinerama libXext libX11;
+    inherit (pkgsi686Linux) stdenv fetchurl glibc mesa freetype zlib glib;
+    inherit (pkgsi686Linux.xlibs) libSM libICE libXi libXv libXrender
+      libXrandr libXfixes libXcursor libXinerama libXext libX11;
   };
 
   gpsbabel = import ../applications/misc/gpsbabel {

@@ -6,11 +6,11 @@ zlib }:
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "googleearth-5.1.3533.1731";
+  name = "googleearth-5.1.3535.3218";
 
   src = fetchurl {
     url = http://dl.google.com/earth/client/current/GoogleEarthLinux.bin;
-    sha256 = "1sxs1nwb2zh2j8dbwm65r04byn66yn79kpzhilhswly6r8d7yivg";
+    sha256 = "f721e4e8db3a7351c77a8aea425ec334ff01e163481cbcf6cdda9dbb0ad422ac";
   };
 
   buildNativeInputs = [
@@ -34,10 +34,12 @@ stdenv.mkDerivation {
   ];
 
   phases = "unpackPhase installPhase";
+  
   unpackPhase = ''
     bash $src --noexec --target unpacked
     cd unpacked
   '';
+  
   installPhase =''
     ensureDir $out/{opt/googleearth/,bin};
     tar xf googleearth-data.tar -C $out/opt/googleearth
