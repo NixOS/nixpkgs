@@ -26,8 +26,19 @@ rec {
     sed -e '/-L[$]x_libraries/d' -i configure
   '') ["addInputs" "doUnpack"];
 
+  fixScriptNames = a.fullDepEntry (''
+    mkdir "$out"/bin-wrapped
+    for i in "$out"/bin/.*-wrapped; do
+      name="$i"
+      name="''${name%-wrapped}"
+      name="''${name##*/.}"
+      mv "$i" "$out/bin-wrapped/$name"
+      sed -e 's^'"$i"'^'"$out/bin-wrapped/$name"'^' -i "$out/bin/$name"
+    done
+  '') ["wrapBinContentsPython"];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" "wrapBinContentsPython"];
+  phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" "wrapBinContentsPython" "fixScriptNames"];
 
   name = "gajim-" + version;
   meta = {
