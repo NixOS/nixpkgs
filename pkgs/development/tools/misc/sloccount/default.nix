@@ -10,10 +10,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
+  # Make sure the Flex-generated files are newer than the `.l' files, so that
+  # Flex isn't needed to recompile them.
   patchPhase = ''
     for file in *
     do
-      substituteInPlace "$file" --replace "/usr/bin/perl" "${perl}/bin/perl"
+      if grep -q /usr/bin/perl "$file"
+      then
+          echo "patching \`$file'..."
+          substituteInPlace "$file" --replace \
+            "/usr/bin/perl" "${perl}/bin/perl"
+      fi
+    done
+
+    for file in *.l
+    do
+      touch "$(echo $file | sed -es'/\.l$/.c/g')"
     done
   '';
 
@@ -47,5 +59,8 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
 
     homepage = http://www.dwheeler.com/sloccount/;
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
