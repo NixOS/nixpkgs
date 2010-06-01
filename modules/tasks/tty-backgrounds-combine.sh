@@ -5,27 +5,23 @@ themes=($themes)
 
 ensureDir $out
 
-default=
+defaultName=$(cd $default && ls | grep -v default)
+echo $defaultName
+ln -s $default/default $out/default
+ln -s $defaultName $out/$defaultName
 
 for ((n = 0; n < ${#ttys[*]}; n++)); do
     tty=${ttys[$n]}
     theme=${themes[$n]}
 
-    if test "$theme" = "default"; then
-        if test -z "$default"; then
-            echo "No default theme!"
-            exit 1
-        fi
-        theme=$default
-    fi
-        
-    if test -z "$default"; then default=$theme; fi
-
     echo "TTY $tty -> $theme"
 
-    themeName=$(cd $theme && ls | grep -v default)
-
-    ln -sfn $theme/$themeName $out/$themeName
+    if [ "$theme" != default ]; then
+        themeName=$(cd $theme && ls | grep -v default)
+        ln -sfn $theme/$themeName $out/$themeName
+    else
+        themeName=default
+    fi
 
     if test -e $out/$tty; then
         echo "Multiple themes defined for the same TTY!"
@@ -33,5 +29,4 @@ for ((n = 0; n < ${#ttys[*]}; n++)); do
     fi
 
     ln -sfn $themeName $out/$tty
-    
 done

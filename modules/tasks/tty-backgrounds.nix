@@ -24,18 +24,15 @@ let
         filter (x: !(elem x overridenTTYs)) requiredTTYs;
 
     in      
-      (map (tty: {
-        inherit tty;
-        theme = config.services.ttyBackgrounds.defaultTheme;
-      }) defaultTTYs)
-      ++ specificThemes;
+      (map (tty: { inherit tty; }) defaultTTYs) ++ specificThemes;
 
   themesUnpacked = stdenv.mkDerivation {
     name = "splash-themes";
     builder = ./tty-backgrounds-combine.sh;
+    default = unpackTheme config.services.ttyBackgrounds.defaultTheme;
     # !!! Should use XML here.
     ttys = map (x: x.tty) backgrounds;
-    themes = map (x: if x ? theme then (unpackTheme x.theme) else "default") backgrounds;
+    themes = map (x: if x ? theme then unpackTheme x.theme else "default") backgrounds;
   };
 
   unpackTheme = theme: import ../../lib/unpack-theme.nix {
@@ -124,7 +121,12 @@ in
                 # above.  Note that splashutils needs a TTY number
                 # instead of a device name, hence the ''${tty:3}.
                 theme=$(readlink ${themesUnpacked}/$tty)
-                ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c setcfg -t $theme || true
+                prevTheme=$(${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c getcfg |
+                    sed 's/theme: *\(.*\)/\1/;t;d' || true)
+                echo $tty $theme $prevTheme
+                if [ "$theme" != "$prevTheme" ]; then
+                    ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c setcfg -t $theme || true
+                fi
                 ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c setpic -t $theme || true
                 ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c on || true
             done
