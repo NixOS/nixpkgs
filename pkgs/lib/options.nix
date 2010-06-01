@@ -284,7 +284,7 @@ rec {
   scrubOptionValue = x: 
     if isDerivation x then { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
     else if isList x then map scrubOptionValue x
-    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) x
+    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
 
     
