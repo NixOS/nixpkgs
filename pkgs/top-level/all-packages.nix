@@ -1959,6 +1959,10 @@ let
     interactive = true;
   });
 
+  dash = import ../shells/dash {
+    inherit fetchurl stdenv;
+  };
+
   tcsh = import ../shells/tcsh {
     inherit fetchurl stdenv ncurses;
   };
