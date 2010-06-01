@@ -44,7 +44,7 @@ in
     services.xserver.displayManager.job =
       { execCmd =
           ''
-            ${pkgs.xorg.xinit}/bin/xinit \
+            exec ${pkgs.xorg.xinit}/bin/xinit \
               ${pkgs.su}/bin/su -c ${dmcfg.session.script} ${cfg.user} \
               -- ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
           '';

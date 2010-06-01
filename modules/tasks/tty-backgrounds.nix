@@ -123,7 +123,6 @@ in
                 theme=$(readlink ${themesUnpacked}/$tty)
                 prevTheme=$(${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c getcfg |
                     sed 's/theme: *\(.*\)/\1/;t;d' || true)
-                echo $tty $theme $prevTheme
                 if [ "$theme" != "$prevTheme" ]; then
                     ${splashutils}/${splashutils.controlName} --tty ''${tty:3} -c setcfg -t $theme || true
                 fi

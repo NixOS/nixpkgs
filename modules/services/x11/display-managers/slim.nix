@@ -101,7 +101,7 @@ in
           { SLIM_CFGFILE = slimConfig;
             SLIM_THEMESDIR = slimThemesDir;
           };
-        execCmd = "${pkgs.slim}/bin/slim";
+        execCmd = "exec ${pkgs.slim}/bin/slim";
       };
 
     # Allow null passwords so that the user can login as root on the

@@ -71,9 +71,9 @@ in
 
       enableXDMCP = mkOption {
         default = false;
-  description = ''
-    Whether to enable XDMCP, which allows remote logins.
-  '';
+        description = ''
+          Whether to enable XDMCP, which allows remote logins.
+        '';
       };
 
       extraConfig = mkOption {
@@ -94,7 +94,7 @@ in
   config = mkIf cfg.enable {
   
     services.xserver.displayManager.job =
-      { execCmd = "PATH=${pkgs.grub}/sbin:$PATH ${kdebase_workspace}/bin/kdm -config ${kdmrc}";
+      { execCmd = "PATH=${pkgs.grub}/sbin:$PATH exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon";
         logsXsession = true;
       };
 

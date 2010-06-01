@@ -66,7 +66,7 @@ in
     jobs.atd =
       { description = "at daemon (atd)";
 
-        startOn = "startup";
+        startOn = "started udev";
 
         preStart =
           ''

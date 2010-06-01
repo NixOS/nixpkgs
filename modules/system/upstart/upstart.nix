@@ -23,12 +23,11 @@ let
     let
 
       jobText =
+        let log = "/var/log/upstart/${job.name}"; in
         ''
           # Upstart job `${job.name}'.  This is a generated file.  Do not edit.
         
           description "${job.description}"
-
-          console output
 
           ${if isList job.startOn then
               "start on ${concatStringsSep " or " job.startOn}"
@@ -44,6 +43,7 @@ let
           
           ${optionalString (job.preStart != "") ''
             pre-start script
+              exec >> ${log} 2>&1
               ${job.preStart}
             end script
           ''}
@@ -53,18 +53,20 @@ let
             else if job.script != "" then
               ''
                 script
+                  exec >> ${log} 2>&1
                   ${job.script}
                 end script
               ''
             else if job.exec != "" then
               ''
-                exec ${job.exec}
+                exec ${job.exec} >> ${log} 2>&1
               ''
             else ""
           }
 
           ${optionalString (job.postStart != "") ''
             post-start script
+              exec >> ${log} 2>&1
               ${job.postStart}
             end script
           ''}
@@ -74,12 +76,14 @@ let
 
           ${optionalString (job.preStop != "") ''
             pre-stop script
+              exec >> ${log} 2>&1
               ${job.preStop}
             end script
           ''}
 
           ${optionalString (job.postStop != "") ''
             post-stop script
+              exec >> ${log} 2>&1
               ${job.postStop}
             end script
           ''}

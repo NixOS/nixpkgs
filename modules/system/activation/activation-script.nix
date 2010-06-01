@@ -96,6 +96,7 @@ let
       fi
 
       mkdir -m 0755 -p /var/log
+      mkdir -m 0755 -p /var/log/upstart
 
       touch /var/log/wtmp # must exist
       chmod 644 /var/log/wtmp
