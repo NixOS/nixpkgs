@@ -43,9 +43,8 @@ stdenv.mkDerivation rec {
       sha256 = "0nihw4iyh9qc188dkyfjr3zvp6ym6i1spm16j0cyh5rgxcrn6ycp";
     })
     (fetchurl {
-      url = fileUrl "l10n_rev2";
-      sha256 = "1nh17ns31b44a293zvq13m68qrjngy14gqrlnsxdlmsnhibkaqry";
-      name = "OOo_3.2.0_src_l10n.tar.bz2";
+      url = fileUrl "l10n";
+      sha256 = "1sp4b9r6qiczw875swk7p8r8bdxdyrwr841xn53xxxfglc4njba9";
     })
   ] ++ (import ./go-srcs.nix { inherit fetchurl; });
 
