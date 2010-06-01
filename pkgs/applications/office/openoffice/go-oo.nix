@@ -10,6 +10,9 @@
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
+  downloadRoot = "http://download.services.openoffice.org/files/stable/";
+  fileUrl = part: "${downloadRoot}3.2.0/OOo_3.2.0_src_${part}.tar.bz2";
+  tag = "OOO320_m12";
 in
 stdenv.mkDerivation rec {
   name = "go-oo-3.2.0.10";
@@ -22,16 +25,41 @@ stdenv.mkDerivation rec {
       sha256 = "0g6n0m9pibn6cx12zslmknzy1p764nqj8vdf45l5flyls9aj3x21";
     };
 
-  srcs_download = (import ./src.nix) fetchurl;
+  srcs_download = [
+    (fetchurl {
+      url = fileUrl "binfilter";
+      sha256 = "1jl3a3zyb03wzi297llr69qpnimdc99iv82yvgxy145hz21xbjra";
+    })
+    (fetchurl {
+      url = fileUrl "core";
+      sha256 = "0jl14rxmvhz86jlhhwqlbr9nfi9p271aknqxada9775qfm6bjjml";
+    })
+    (fetchurl {
+      url = fileUrl "extensions";
+      sha256 = "1l2xby47pflcqbv3m6ihjsv89ax96lvpl76wklwlcn8vzclbfqk8";
+    })
+    (fetchurl {
+      url = fileUrl "system";
+      sha256 = "0nihw4iyh9qc188dkyfjr3zvp6ym6i1spm16j0cyh5rgxcrn6ycp";
+    })
+    (fetchurl {
+      url = fileUrl "l10n_rev2";
+      sha256 = "1sp4b9r6qiczw875swk7p8r8bdxdyrwr841xn53xxxfglc4njba9";
+      name = "OOo_3.2.0_src_l10n.tar.bz2";
+    })
+  ] ++ (import ./go-srcs.nix { inherit fetchurl; });
 
   # Multi-CPU: --with-num-cpus=4 
+  # The '--with-tag=XXXX' string I took from their 'configure' script. I write it so it matches the
+  # logic in the script for "upstream version for X.X.X". Look for that string in the script.
+  # We need '--without-split' when downloading directly usptream openoffice src tarballs.
   configurePhase = ''
     sed -i -e '1s,/bin/bash,${bash}/bin/bash,' $(find bin -type f)
     sed -i -e '1s,/usr/bin/perl,${perl}/bin/perl,' download.in bin/ooinstall bin/generate-bash-completion
     echo "$distroFlags" > distro-configs/SUSE-11.1.conf.in
 
     ./configure --with-distro=SUSE-11.1 --with-system-libwpd --without-git --with-system-cairo \
-      --with-lang="${langsSpaces}"
+      --with-lang="${langsSpaces}" --with-tag=${tag} --without-split
   '';
 
   buildPhase = ''
@@ -45,10 +73,13 @@ stdenv.mkDerivation rec {
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
 
+    # Take away a patch, that upstream already applied (3.2.0 specific)
+    sed -i -e 's,^connectivity-build-fix-mac.diff,#,' patches/dev300/apply
+
     make build.prepare
 
     set -x
-    pushd build/ooo3*-*/
+    pushd build/${tag}
     # Fix svtools: hardcoded jpeg path
     sed -i -e 's,^JPEG3RDLIB=.*,JPEG3RDLIB=${libjpeg}/lib/libjpeg.so,' solenv/inc/libs.mk
     # Fix sysui: wants to create a tar for root
@@ -61,6 +92,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,^CONFIGURE_FLAGS.*,& --prefix='$TMPDIR, redland/redland/makefile.mk \
       redland/raptor/makefile.mk redland/rasqal/makefile.mk
     popd
+
     set +x
     make
   '';
