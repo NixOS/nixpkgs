@@ -5,9 +5,9 @@
 
 { config, pkgs, ... }:
 
-let
+with pkgs.lib;
 
-  inherit (pkgs.lib) mkOption types;
+let
 
   options = {
 
@@ -37,7 +37,7 @@ let
 
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
-      merge = pkgs.lib.mergeStringOption;
+      merge = mergeStringOption;
       description = ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
@@ -47,7 +47,7 @@ let
 
     boot.initrd.postMountCommands = mkOption {
       default = "";
-      merge = pkgs.lib.mergeStringOption;
+      merge = mergeStringOption;
       description = ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
@@ -57,7 +57,7 @@ let
     boot.initrd.extraUtilsCommands = mkOption {
       internal = true;
       default = "";
-      merge = pkgs.lib.mergeStringOption;
+      merge = mergeStringOption;
       description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
@@ -88,6 +88,10 @@ let
     kernel = modulesTree;
     allowMissing = true;
   };
+
+
+  enableSplashScreen =
+    config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null;
 
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
@@ -157,6 +161,11 @@ let
       # Copy modprobe.
       cp -v ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe.real
 
+      # Maybe copy splashutils.
+      ${optionalString enableSplashScreen ''
+        cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
+      ''}
+
       ${config.boot.initrd.extraUtilsCommands}
 
       # Run patchelf to make the programs refer to the copied libraries.
@@ -203,7 +212,7 @@ let
   # The initrd only has to mount / or any FS marked as necessary for
   # booting (such as the FS containing /nix/store, or an FS needed for
   # mounting /, like / on a loopback).
-  fileSystems = pkgs.lib.filter
+  fileSystems = filter
     (fs: fs.mountPoint == "/" || fs.neededForBoot)
     config.fileSystems;
 
@@ -281,22 +290,15 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
-    contents = [
-      { object = bootStage1;
-        symlink = "/init";
-      }
-    ] ++
-      pkgs.lib.optionals
-        (config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null)
-        [
-          { object = pkgs.runCommand "splashutils" {allowedReferences = []; buildInputs = [pkgs.nukeReferences];} ''
-              ensureDir $out/bin
-              cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
-              nuke-refs $out/bin/*
-            '';
+    contents =
+      [ { object = bootStage1;
+          symlink = "/init";
+        }
+      ] ++ optionals enableSplashScreen
+        [ { object = extraUtils;
             suffix = "/bin/splash_helper";
             symlink = "/${kernelPackages.splashutils.helperName}";
-          } # */
+          }
           { object = import ../../../lib/unpack-theme.nix {
               inherit (pkgs) stdenv;
               theme = config.services.ttyBackgrounds.defaultTheme;
