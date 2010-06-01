@@ -4566,10 +4566,6 @@ let
     libtool = libtool_1_5;
   };
 
-  libjpegStatic = lowPrio (appendToName "static" (libjpeg.override {
-    stdenv = enableStaticLibraries stdenv;
-  }));
-
   libksba = import ../development/libraries/libksba {
     inherit fetchurl stdenv libgpgerror;
   };
@@ -6755,9 +6751,7 @@ let
   };
 
   splashutils = import ../os-specific/linux/splashutils/default.nix {
-    inherit fetchurl stdenv klibc;
-    zlib = zlibStatic;
-    libjpeg = libjpegStatic;
+    inherit fetchurl stdenv zlib libjpeg;
   };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) {
