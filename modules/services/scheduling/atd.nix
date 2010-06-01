@@ -101,11 +101,6 @@ in
         daemonType = "fork";
 
         exec = "${at}/sbin/atd";
-
-        postStop =
-          ''
-            test -e /var/run/atd.pid && kill $(cat /var/run/atd.pid)
-          '';
       };
 
   };
