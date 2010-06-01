@@ -8520,6 +8520,11 @@ let
     };
   };
 
+  simgrid = import ../applications/misc/simgrid {
+    inherit fetchurl cmake ruby;
+    stdenv = stdenv2;
+  };
+
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
     inherit alsaLib freetype fontconfig zlib;
