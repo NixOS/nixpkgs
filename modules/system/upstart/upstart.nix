@@ -59,7 +59,10 @@ let
               ''
             else if job.exec != "" then
               ''
-                exec ${job.exec} >> ${log} 2>&1
+                script
+                  exec >> ${log} 2>&1
+                  exec ${job.exec}
+                end script
               ''
             else ""
           }
