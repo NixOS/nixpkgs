@@ -114,13 +114,17 @@ let
 
       # Copy some utillinux stuff.
       cp -v ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
-         ${pkgs.utillinux}/sbin/fsck ${pkgs.utillinux}/sbin/pivot_root \
+         ${pkgs.utillinux}/sbin/fsck ${pkgs.utillinux}/sbin/switch_root \
          ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
 
       # Copy some coreutils.
       cp -v ${pkgs.coreutils}/bin/basename $out/bin
+      cp -v ${pkgs.coreutils}/bin/mkdir $out/bin
+      cp -v ${pkgs.coreutils}/bin/mknod $out/bin
+      cp -v ${pkgs.coreutils}/bin/cat $out/bin
+      cp -v ${pkgs.coreutils}/bin/chroot $out/bin
 
       # Copy e2fsck and friends.      
       cp -v ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
@@ -256,11 +260,9 @@ let
 
     isExecutable = true;
 
-    klibc = pkgs.klibcShrunk;
-
     inherit udevConf extraUtils;
 
-    inherit (config.boot) resumeDevice;
+    inherit (config.boot) resumeDevice devSize;
 
     inherit (config.boot.initrd) checkJournalingFS
       postDeviceCommands postMountCommands kernelModules;

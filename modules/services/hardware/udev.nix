@@ -170,7 +170,7 @@ in
           ''
             echo "" > /proc/sys/kernel/hotplug
 
-            mkdir -pv /var/lib/udev/rules.d
+            mkdir -p /var/lib/udev/rules.d
 
             # Do the loading of additional stage 2 kernel modules.
             # Maybe this isn't the best place...
@@ -179,7 +179,7 @@ in
                 ${modprobe}/sbin/modprobe $i || true
             done
 
-            mkdir -pv /dev/.udev # !!! bug in udev?
+            mkdir -p /dev/.udev # !!! bug in udev?
           '';
 
         daemonType = "fork";

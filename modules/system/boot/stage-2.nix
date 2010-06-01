@@ -44,7 +44,7 @@ let
     src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel activateConfiguration;
-    inherit (config.boot) devSize devShmSize;
+    inherit (config.boot) devShmSize;
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
     path =

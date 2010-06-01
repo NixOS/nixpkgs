@@ -3,7 +3,7 @@
 targetRoot=/mnt-root
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
-export PATH=@extraUtils@/bin:@klibc@/bin
+export PATH=@extraUtils@/bin
 
 
 fail() {
@@ -53,6 +53,7 @@ mkdir -p /proc
 mount -t proc none /proc
 mkdir -p /sys
 mount -t sysfs none /sys
+mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
 
 
 # Process the kernel command line.
@@ -144,7 +145,7 @@ checkFS() {
     # Only check block devices.
     if ! test -b "$device"; then return 0; fi
 
-    eval $(fstype "$device")
+    FSTYPE=$(blkid -o value -s TYPE "$device" || true)
 
     # Don't check ROM filesystems.
     if test "$FSTYPE" = iso9660 -o "$FSTYPE" = udf; then return 0; fi
@@ -276,33 +277,27 @@ done
 
 
 # Stop udevd.
-kill $(minips -C udevd -o pid=) 2> /dev/null
+kill -- -1
 
 
 if test -n "$debug1mounts"; then fail; fi
-
-
-# `run-init' needs a /dev/console on the target FS.
-if ! test -e $targetRoot/dev/console; then
-    mkdir -p $targetRoot/dev
-    mknod $targetRoot/dev/console c 5 1
-fi
 
 
 # Restore /proc/sys/kernel/modprobe to its original value.
 echo /sbin/modprobe > /proc/sys/kernel/modprobe
 
 
-# Start stage 2.  `run-init' deletes all files in the ramfs on the
-# current /.  Note that $stage2Init might be an absolute symlink, in
-# which case "-e" won't work because we're not in the chroot yet.
+# Start stage 2.  `switch_root' deletes all files in the ramfs on the
+# current root.  It also moves the /proc, /sys and /dev mounts over to
+# the new root.  Note that $stage2Init might be an absolute symlink,
+# in which case "-e" won't work because we're not in the chroot yet.
 if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
     echo "stage 2 init script not found"
     fail
 fi
 
-umount /sys
-umount /proc
-exec run-init "$targetRoot" "$stage2Init"
+mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev
+
+exec switch_root "$targetRoot" "$stage2Init"
 
 fail # should never be reached

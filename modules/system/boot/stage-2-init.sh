@@ -36,13 +36,12 @@ setPath "@path@"
 mount -n -o remount,rw none /
 
 
-# Mount special file systems.
+# Mount special file systems.  Note that /dev, /proc and /sys are
+# already mounted by `switch_root' in the initrd.
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 test -s /etc/mtab && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
 rm -f /etc/mtab* # not that we care about stale locks
-mkdir -m 0755 -p /proc
-mount -n -t proc none /proc
 
 rm -f /etc/mtab
 cat /proc/mounts > /etc/mtab
@@ -79,15 +78,11 @@ done
 
 
 # More special file systems, initialise required directories.
-mkdir -m 0755 -p /sys 
-mount -t sysfs none /sys
-mkdir -m 0755 -p /dev
-mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
 mkdir -m 0777 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
 mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts 
-[ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # uml doesn't have usb by default
+[ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp 
 mkdir -m 0755 -p /var
 mkdir -m 0755 -p /nix/var
@@ -113,22 +108,15 @@ rm -rf /var/lock
 rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 
 
-# Create the minimal device nodes needed for the activation scripts
-# and Upstart.
-mknod -m 0666 /dev/null c 1 3
-mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
-mknod -m 0644 /dev/console c 5 1
-
-
 # Clear the resume device.
 if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
 fi
 
-echo "running activation script..."
 
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
+echo "running activation script..."
 @activateConfiguration@ "$systemConfig"
 
 
