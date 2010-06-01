@@ -7969,6 +7969,11 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  htmldoc = import ../applications/misc/htmldoc {
+    inherit fetchurl stdenv openssl libpng libjpeg;
+    fltk = fltk11;
+  };
+
   hugin = import ../applications/graphics/hugin {
     inherit fetchurl stdenv cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc mesa freeglut
