@@ -75,7 +75,7 @@ let
           ''}
           
           ${optionalString job.task "task"}
-          ${optionalString job.respawn "respawn"}
+          ${optionalString (!job.task && job.respawn) "respawn"}
 
           ${optionalString (job.preStop != "") ''
             pre-stop script
@@ -153,7 +153,7 @@ let
 
     stopOn = mkOption {
       type = types.string;
-      default = "shutdown";
+      default = "starting shutdown";
       description = ''
         The Upstart event that triggers this job to be stopped.
       '';

@@ -9,7 +9,11 @@ with pkgs.lib;
 
       task = true;
 
+      stopOn = ""; # must override the default ("starting shutdown")
+
       environment = { MODE = "poweroff"; };
+
+      extraConfig = "console owner";
 
       script =
         ''
@@ -29,24 +33,10 @@ with pkgs.lib;
           export PATH=${pkgs.utillinux}/bin:${pkgs.utillinux}/sbin:$PATH
       
 
-          # Set the hardware clock to the system time.
-          echo "setting the hardware clock..."
-          hwclock --systohc --utc
-      
-      
           # Do an initial sync just in case.
           sync
 
 
-          # Stop all Upstart jobs.
-          initctl list | while IFS=", " read jobName status rest; do
-              if test "$jobName" != shutdown -a "$status" != "stop/waiting"; then
-                  echo "stopping $jobName..."
-                  stop "$jobName"
-              fi
-          done
-      
-      
           # Kill all remaining processes except init and this one.
           echo "sending the TERM signal to all processes..."
           kill -TERM -1
@@ -64,11 +54,16 @@ with pkgs.lib;
               echo ""
               echo "[1;32m<<< Maintenance shell >>>[0m"
               echo ""
-              while ! ${pkgs.bash}/bin/bash --login; do true; done
+              ${pkgs.pam_login}/bin/login root
               initctl emit -n startup
               exit 0
           fi
                 
+      
+          # Set the hardware clock to the system time.
+          echo "setting the hardware clock..."
+          hwclock --systohc --utc
+      
       
           # Unmount helper functions.
           getMountPoints() {

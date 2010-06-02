@@ -14,9 +14,9 @@ with pkgs.lib;
       script =
         ''
           case "$RUNLEVEL" in
-              0) initctl start shutdown MODE=poweroff;;
-              1) initctl start shutdown MODE=maintenance;;
-              6) initctl start shutdown MODE=reboot;;
+              0) initctl start shutdown --no-wait MODE=poweroff;;
+              1) initctl start shutdown --no-wait MODE=maintenance;;
+              6) initctl start shutdown --no-wait MODE=reboot;;
               *) echo "Unsupported runlevel: $RUNLEVEL";;
           esac
         '';
