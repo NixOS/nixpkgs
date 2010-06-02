@@ -76,7 +76,6 @@ let
     var = fullDepEntry ''
       # Various log/runtime directories.
       mkdir -m 0755 -p /var/run
-      mkdir -m 0755 -p /var/run/console # for pam_console
 
       touch /var/run/utmp # must exist
       chgrp ${toString config.ids.gids.utmp} /var/run/utmp
