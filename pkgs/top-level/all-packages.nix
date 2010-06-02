@@ -8365,6 +8365,10 @@ let
     qt = qt4;
   };
 
+  pdftk = import ../tools/typesetting/pdftk {
+    inherit fetchurl stdenv gcj;
+  };
+
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr farsight2 python
       gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool libidn;
