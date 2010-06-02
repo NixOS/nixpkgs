@@ -142,6 +142,8 @@ in
         pkgs.wirelesstools
         pkgs.rfkill
       ];
+
+    security.setuidPrograms = [ "ping" "ping6" ];
     
     jobs.networkInterfaces = 
       { name = "network-interfaces";

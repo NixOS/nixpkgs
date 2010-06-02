@@ -44,12 +44,10 @@ let
       pkgs.pciutils
       pkgs.perl
       pkgs.procps
-      pkgs.pwdutils
       pkgs.reiserfsprogs
       pkgs.rsync
       pkgs.seccure
       pkgs.strace
-      pkgs.su
       pkgs.sysklogd
       pkgs.sysvtools
       pkgs.time

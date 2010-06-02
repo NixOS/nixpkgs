@@ -28,7 +28,7 @@ let
       let path = [
         pkgs.coreutils pkgs.gnugrep pkgs.findutils
         pkgs.glibc # needed for getent
-        pkgs.pwdutils
+        pkgs.shadow
         pkgs.nettools # needed for hostname
       ]; in noDepEntry ''
         export PATH=/empty

@@ -57,7 +57,7 @@ with pkgs.lib;
     
       startOn = "started udev";
 
-      exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.pam_login}/bin/login --noclear ${tty}";
+      exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
       
     }) config.services.mingetty.ttys);
 

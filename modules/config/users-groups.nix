@@ -173,16 +173,16 @@ in
 
             if ! curEnt=$(getent passwd "$name"); then
                 useradd --system \
-                    "$name" \
                     --comment "$description" \
                     ''${uid:+--uid $uid} \
                     --gid "$group" \
                     --groups "$extraGroups" \
                     --home "$home" \
                     --shell "$shell" \
-                    ''${createHome:+--create-home}
+                    ''${createHome:+--create-home} \
+                    "$name"
                 if test "''${password:0:1}" = 'X'; then
-                    echo "''${password:1}" | ${pkgs.pwdutils}/bin/passwd --stdin "$name"
+                    echo "''${password:1}" | ${pkgs.shadow}/bin/passwd --stdin "$name"
                 fi
             else
                 #echo "updating user $name..."
@@ -196,22 +196,13 @@ in
                 # unnecessary warnings about logged in users.
                 if test "$prevHome" = "$home"; then unset home; fi
                 usermod \
-                    "$name" \
                     --comment "$description" \
                     ''${uid:+--uid $uid} \
                     --gid "$group" \
                     --groups "$extraGroups" \
                     ''${home:+--home "$home"} \
-                    --shell "$shell"
-            fi
-
-            if test "$group" = nixbld; then
-                # As a special hack, add users that have nixbld as the
-                # primary group to the /etc/group entry for the nixbld
-                # group.  `nix-store' currently expects this in order
-                # to get the UIDs of all the build users by doing a
-                # getprnam("nixbld") call.
-                groupmod "$group" -A "$name"
+                    --shell "$shell" \
+                    "$name"
             fi
 
         done
@@ -227,14 +218,14 @@ in
 
             if ! curEnt=$(getent group "$name"); then
                 groupadd --system \
-                    "$name" \
-                    ''${gid:+--gid $gid}
+                    ''${gid:+--gid $gid} \
+                    "$name"
             else
                 #echo "updating group $name..."
                 oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
                 prevGid=$3
                 if test -n "$gid" -a "$prevGid" != "$gid"; then
-                    groupmod "$name" --gid $gid
+                    groupmod --gid $gid "$name"
                 fi
             fi
         done <<EndOfGroupList

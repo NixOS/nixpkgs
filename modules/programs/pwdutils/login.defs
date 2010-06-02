@@ -1,12 +1,12 @@
 DEFAULT_HOME            yes
 
-SYSTEM_UID_MIN            100
-SYSTEM_UID_MAX            499
+SYS_UID_MIN               100
+SYS_UID_MAX               499
 UID_MIN                  1000
 UID_MAX                 29999
 
-SYSTEM_GID_MIN            100
-SYSTEM_GID_MAX            499
+SYS_GID_MIN               100
+SYS_GID_MAX               499
 GID_MIN                  1000
 GID_MAX                 29999
 

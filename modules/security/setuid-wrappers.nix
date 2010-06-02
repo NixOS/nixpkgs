@@ -74,9 +74,7 @@ in
   config = {
 
     security.setuidPrograms =
-      [ "passwd" "chfn" "su" "crontab" "ping" "ping6"
-        "fusermount" "wodim" "cdrdao" "growisofs"
-      ];
+      [ "crontab" "fusermount" "wodim" "cdrdao" "growisofs" ];
 
     system.activationScripts.setuid =
       let

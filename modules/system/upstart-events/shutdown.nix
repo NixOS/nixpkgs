@@ -54,7 +54,7 @@ with pkgs.lib;
               echo ""
               echo "[1;32m<<< Maintenance shell >>>[0m"
               echo ""
-              ${pkgs.pam_login}/bin/login root
+              ${pkgs.shadow}/bin/login root
               initctl emit -n startup
               exit 0
           fi

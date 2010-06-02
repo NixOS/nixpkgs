@@ -4,6 +4,12 @@
 
 let
 
+in
+
+{
+
+  ###### interface
+  
   options = {
 
     users.defaultUserShell = pkgs.lib.mkOption {
@@ -19,39 +25,53 @@ let
   
   };
 
-in
+  
+  ###### implementation
 
-{
-  require = [options];
+  config = {
 
-  environment.etc =
-    [ { # /etc/login.defs: global configuration for pwdutils.  You
-        # cannot login without it! 
-        source = ./login.defs;
-        target = "login.defs";
-      } 
+    environment.systemPackages = [ pkgs.shadow ];
 
-      { # /etc/default/passwd: configuration for passwd and friends
-        # (e.g., hash algorithm for /etc/passwd).
-        source = pkgs.substituteAll {
-          src = ./passwd.conf;
-          # This depends on pam_unix2 being built with libxcrypt or libc's libcrypt.
-          # Only in the first case it will understand 'blowfish'. And pam_unix2
-          # is not built with libxcrypt at the time of writing (it did not build)
-          filesCipher = if (pkgs.stdenv.system == "armv5tel-linux") then
-            "des" else "blowfish";
-        };
-        target = "default/passwd";
-      }
+    environment.etc =
+      [ { # /etc/login.defs: global configuration for pwdutils.  You
+          # cannot login without it! 
+          source = ./login.defs;
+          target = "login.defs";
+        } 
 
-      { # /etc/default/useradd: configuration for useradd.
-        source = pkgs.writeText "useradd"
-          ''
-            GROUP=100
-            HOME=/home
-            SHELL=${config.users.defaultUserShell}
-          '';
-        target = "default/useradd";
-      }
-    ];
+        { # /etc/default/useradd: configuration for useradd.
+          source = pkgs.writeText "useradd"
+            ''
+              GROUP=100
+              HOME=/home
+              SHELL=${config.users.defaultUserShell}
+            '';
+          target = "default/useradd";
+        }
+      ];
+
+    security.pam.services =
+      [ { name = "chsh"; rootOK = true; }
+        { name = "chfn"; rootOK = true; }
+        { name = "su"; rootOK = true; forwardXAuth = true; }
+        { name = "passwd"; }
+        # Note: useradd, groupadd etc. aren't setuid root, so it
+        # doesn't really matter what the PAM config says as long as it
+        # lets root in.
+        { name = "useradd"; rootOK = true; }
+        { name = "usermod"; rootOK = true; }
+        { name = "userdel"; rootOK = true; }
+        { name = "groupadd"; rootOK = true; }
+        { name = "groupmod"; rootOK = true; } 
+        { name = "groupmems"; rootOK = true; }
+        { name = "groupdel"; rootOK = true; }
+        { name = "login"; ownDevices = true; allowNullPassword = true;
+          limits = config.security.pam.loginLimits;
+        }
+      ];
+      
+    security.setuidPrograms = [ "passwd" "chfn" "su" ];
+    
+  };
+  
 }
