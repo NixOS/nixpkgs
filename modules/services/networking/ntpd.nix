@@ -74,7 +74,6 @@ in
       { description = "NTP daemon";
 
         startOn = "ip-up";
-        stopOn = "ip-down";
 
         preStart =
           ''

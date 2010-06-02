@@ -119,7 +119,6 @@ in
       { name = "avahi-daemon";
 
         startOn = "ip-up";
-        stopOn = "ip-down";
 
         script =
           ''

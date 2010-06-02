@@ -68,7 +68,6 @@ in
       { description = "BitlBee IRC to other chat networks gateway";
 
         startOn = "ip-up";
-        stopOn = "ip-down";
 
         preStart =
           ''

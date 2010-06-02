@@ -67,7 +67,6 @@ in
       { description = "ONC RPC portmap";
 
         startOn = "ip-up";
-        stopOn = "ip-down";
 
         exec =
           ''
