@@ -4,6 +4,28 @@
 
 let
 
+  loginDefs =
+    ''
+      DEFAULT_HOME yes
+
+      SYS_UID_MIN  100
+      SYS_UID_MAX  499
+      UID_MIN      1000
+      UID_MAX      29999
+
+      SYS_GID_MIN  100
+      SYS_GID_MAX  499
+      GID_MIN      1000
+      GID_MAX      29999
+
+      TTYGROUP     tty
+      TTYPERM      0620
+
+      # Uncomment this to allow non-root users to change their account
+      #information.  This should be made configurable.
+      #CHFN_RESTRICT frwh
+    '';
+
 in
 
 {
@@ -35,7 +57,7 @@ in
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
           # cannot login without it! 
-          source = ./login.defs;
+          source = pkgs.writeText "login.defs" loginDefs;
           target = "login.defs";
         } 
 
