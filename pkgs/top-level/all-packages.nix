@@ -6750,8 +6750,8 @@ let
     inherit fetchurl stdenv;
   };
 
-  shadowutils = import ../os-specific/linux/shadow {
-    inherit fetchurl stdenv;
+  shadow = import ../os-specific/linux/shadow {
+    inherit fetchurl stdenv pam;
   };
 
   splashutils = import ../os-specific/linux/splashutils/default.nix {
