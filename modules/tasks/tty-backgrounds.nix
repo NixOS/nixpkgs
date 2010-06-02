@@ -104,6 +104,10 @@ in
 
         startOn = "started udev";
 
+        # Don't stop tty-backgrounds during shutdown; it's not needed,
+        # and it just causes intrusive blanking of the screen.
+        stopOn = "";
+
         preStart =
           ''
             # Critical: tell the kernel where to find splash_helper.  It calls
