@@ -27,6 +27,7 @@ in
   };
   
   config = mkIf config.services.monit.enable {
+  
     environment.etc = [
       {
         source = pkgs.writeTextFile {
@@ -37,11 +38,11 @@ in
         mode = "0400";
       }
     ];
+    
     jobs.monit = {
       description = "Monit system watcher";
       
       startOn = config.services.monit.startOn;
-      stopOn = "shutdown";
 
       exec = "${pkgs.monit}/bin/monit -I -c /etc/monit.conf";
 

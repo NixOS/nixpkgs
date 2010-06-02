@@ -22,7 +22,7 @@ in
     environment.blcr.enable = mkOption {
       default = false;
       description =
-        "Wheter to enable support for the BLCR checkpoingint tool.";
+        "Wheter to enable support for the BLCR checkpointing tool.";
     };
 
     environment.blcr.autorun = mkOption {
@@ -44,7 +44,6 @@ in
 	task        = true;
 
         startOn = if cfg.autorun then "started udev" else null;
-        stopOn  = "shutdown";
 
 	preStart = ''
           ${insmod} ${blcr_imports_ko}
