@@ -182,7 +182,7 @@ in
                     ''${createHome:+--create-home} \
                     "$name"
                 if test "''${password:0:1}" = 'X'; then
-                    echo "''${password:1}" | ${pkgs.shadow}/bin/passwd --stdin "$name"
+                    (echo "''${password:1}"; echo "''${password:1}") | ${pkgs.shadow}/bin/passwd "$name"
                 fi
             else
                 #echo "updating user $name..."
