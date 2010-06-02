@@ -7,7 +7,7 @@
   testScript =
     ''
       $machine->mustSucceed("useradd -m alice");
-      $machine->mustSucceed("echo foobar | passwd --stdin alice");
+      $machine->mustSucceed("(echo foobar; echo foobar) | passwd alice");
 
       # Log in as alice on a virtual console.      
       $machine->waitForJob("tty1");
