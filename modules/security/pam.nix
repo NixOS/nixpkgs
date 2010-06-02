@@ -7,7 +7,7 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) pam_unix2 pam_usb pam_ldap;
+  inherit (pkgs) pam_usb pam_ldap;
 
   otherService = pkgs.writeText "other.pam"
     ''
@@ -47,7 +47,7 @@ let
       # set (i.e., have an empty password field in /etc/passwd or
       # /etc/group).  This does not enable logging into disabled
       # accounts (i.e., that have the password field set to `!').
-      # Note that regardless of what the pam_unix2 documentation says,
+      # Note that regardless of what the pam_unix documentation says,
       # accounts with hashed empty passwords are always allowed to log
       # in.
       allowNullPassword ? false
@@ -63,7 +63,7 @@ let
           # Account management.
           ${optionalString config.users.ldap.enable
               "account optional ${pam_ldap}/lib/security/pam_ldap.so"}
-          account required ${pam_unix2}/lib/security/pam_unix2.so
+          account required pam_unix.so
 
           # Authentication management.
           ${optionalString rootOK
@@ -72,21 +72,21 @@ let
               "auth sufficient ${pam_usb}/lib/security/pam_usb.so"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
-          auth sufficient ${pam_unix2}/lib/security/pam_unix2.so ${
+          auth sufficient pam_unix.so ${
             optionalString allowNullPassword "nullok"}
           auth required   pam_deny.so
 
           # Password management.
           ${optionalString config.users.ldap.enable
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
-          password requisite ${pam_unix2}/lib/security/pam_unix2.so nullok
+          password requisite pam_unix.so nullok sha512
           ${optionalString config.services.samba.syncPasswordsByPam
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
 
           # Session management.
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
-          session required ${pam_unix2}/lib/security/pam_unix2.so
+          session required pam_unix.so
           ${optionalString ownDevices
               "session optional ${pkgs.consolekit}/lib/security/pam_ck_connector.so"}
           ${optionalString forwardXAuth
@@ -183,7 +183,7 @@ in
   
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
-      [ pkgs.pam pam_unix2 ]
+      [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap;
 
     environment.etc =
