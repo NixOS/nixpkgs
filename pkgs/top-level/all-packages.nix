@@ -1670,9 +1670,7 @@ let
     inherit fetchurl stdenv openssl;
   };
 
-  su = import ../tools/misc/su {
-    inherit fetchurl stdenv pam;
-  };
+  su = shadow;
 
   swec = import ../tools/networking/swec {
     inherit fetchurl stdenv makeWrapper perl;
