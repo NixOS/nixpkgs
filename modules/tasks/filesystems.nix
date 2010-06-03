@@ -221,7 +221,7 @@ in
   config = {
 
     # Add the mount helpers to the system path so that `mount' can find them.
-    environment.systemPackages = [pkgs.ntfs3g pkgs.mount_cifs pkgs.nfsUtils];
+    environment.systemPackages = [pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils];
     
     jobs.filesystems =
       { startOn = [ "new-devices" "ip-up" ];

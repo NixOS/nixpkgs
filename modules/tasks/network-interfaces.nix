@@ -137,7 +137,7 @@ in
     environment.systemPackages =
       [ pkgs.host
         pkgs.iproute
-        pkgs.iputils
+        pkgs.inetutils
         pkgs.nettools
         pkgs.wirelesstools
         pkgs.rfkill
