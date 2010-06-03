@@ -3882,12 +3882,9 @@ let
     inherit fetchurl stdenv zlib libpng freetype libjpeg fontconfig;
   };
 
-  gdal = stdenv.mkDerivation {
-    name = "gdal-1.7.1";
-    src = fetchurl {
-      url = ftp://ftp.remotesensing.org/gdal/gdal-1.7.1.tar.gz;
-      md5 = "5a90be385613730cc12fcf3f59b89de6";
-    };
+  gdal = import ../development/libraries/gdal {
+    inherit stdenv fetchurl unzip composableDerivation libtiff zlib postgresql
+      mysql libjpeg libgeotiff;
   };
 
   giblib = import ../development/libraries/giblib {
