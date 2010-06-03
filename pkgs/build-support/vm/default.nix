@@ -18,10 +18,12 @@ rec {
   };
 
 
-  # !!! should use the mount_cifs package in all-packages.nix here.
   mountCifs = (makeStaticBinaries stdenv).mkDerivation {
     name = "mount.cifs";
-    src = mount_cifs.src;
+    src = fetchurl {
+      url = http://nixos.org/tarballs/mount_cifs-20090330.c;
+      sha256 = "1d9v3qzic3d12vna8g7d1zsl1piwm20f6xhck319rbfkrdg0smnl";
+    };
     buildInputs = [nukeReferences];
     buildCommand = ''
       ensureDir $out/bin
