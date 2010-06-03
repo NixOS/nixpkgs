@@ -4290,6 +4290,10 @@ let
     inherit stdenv fetchurl;
   };
 
+  judy = import ../development/libraries/judy {
+    inherit fetchurl stdenv;
+  };
+
   krb5 = import ../development/libraries/kerberos/krb5.nix {
     inherit stdenv fetchurl perl ncurses yacc;
   };
@@ -9490,7 +9494,7 @@ let
   };
 
   gtkwave = import ../applications/science/electronics/gtkwave {
-    inherit fetchurl stdenv gperf pkgconfig bzip2 xz;
+    inherit fetchurl stdenv gperf pkgconfig bzip2 xz tcl tk judy;
     inherit (gtkLibs) gtk;
   };
 
