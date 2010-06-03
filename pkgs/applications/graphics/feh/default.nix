@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, x11, imlib2, libjpeg, libpng, giblib }:
+{ stdenv, fetchurl, x11, imlib2, libjpeg, libpng, giblib
+, libXinerama }:
 
 stdenv.mkDerivation {
-  name = "feh-1.3.4";
+  name = "feh-1.6";
 
   src = fetchurl {
-    url = http://linuxbrit.co.uk/downloads/feh-1.3.4.tar.gz;
-    sha256 = "091iz2id5z80vn2qxg0ipwncv5bv8i9ifw2q15ja9zazq6xz5fc1";
+    url = https://derf.homelinux.org/projects/feh/feh-1.6.tar.bz2;
+    sha256 = "0wkgdxvl0kdcwab815gw0xk3iniain6l3b1x4d4kclf170wcnjqi";
   };
 
-  buildInputs = [x11 imlib2 giblib libjpeg libpng];
+  buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama];
+
+  preBuild = ''
+    makeFlags="PREFIX=$out"
+  '';
 
   meta = {
     description = "A light-weight image viewer";
-    homepage = http://linuxbrit.co.uk/feh/;
+    homepage = https://derf.homelinux.org/projects/feh/;
+    license = "BSD";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

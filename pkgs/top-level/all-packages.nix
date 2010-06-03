@@ -7731,6 +7731,7 @@ let
 
   feh = import ../applications/graphics/feh {
     inherit fetchurl stdenv x11 imlib2 libjpeg libpng giblib;
+    inherit (xlibs) libXinerama;
   };
 
   firefox = firefox35;
