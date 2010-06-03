@@ -5756,6 +5756,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  firebird = import ../servers/firebird {
+    inherit stdenv fetchurl icu libedit;
+  };
+
   ircdHybrid = import ../servers/irc/ircd-hybrid {
     inherit fetchurl stdenv openssl zlib;
   };
