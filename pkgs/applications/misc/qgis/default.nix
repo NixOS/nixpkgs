@@ -6,19 +6,19 @@ let inherit (builtins) getAttr;
 in
 composableDerivation.composableDerivation {} {
 
-  buildInputs = [ gdal cmake qt flex bison proj geos x11 sqlite gsl];
+  buildInputs = [ gdal cmake qt flex bison proj geos x11 sqlite gsl pyqt4];
     cfgOption = [
                   # without this option it can't find sqlite libs yet (missing symbols..) (TODO)
                   "-DWITH_INTERNAL_SQLITE3=TRUE"
                 ];
 
-  name = "qgis-1.0.1-2";
+  name = "qgis-1.4.0";
 
   # src = args.fetchsvn { url=https://svn.qgis.org/repos/qgis/trunk/qgis;
   #                md5="ac0560e0a2d4e6258c8639f1e9b56df3"; rev="7704"; };
   src = fetchurl {
-    url = "http://download.osgeo.org/qgis/src/qgis_1.0.1-2.tar.gz";
-    sha256 = "07yyic9sn1pz20wjk7k560jwqz6b19rhf2gawybz38xq1f8rjwd4";
+    url = http://download.osgeo.org/qgis/src/qgis_1.4.0.tar.gz;
+    sha256 = "1nn71j9pnkqcprwvzqnybh6ybl0zp50jj04lm769bnjbxknpxq5v";
   };
 
   meta = {
