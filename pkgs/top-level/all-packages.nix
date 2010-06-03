@@ -7704,6 +7704,20 @@ let
     inherit stdenv fetchurl zlib openssl;
   };
 
+  grass = import ../applications/misc/grass {
+    inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
+      libXaw libXrender;
+    inherit getConfig composableDerivation stdenv fetchurl
+      lib flex bison cairo fontconfig
+      gdal zlib ncurses gdbm proj pkgconfig swig
+      blas liblapack libjpeg libpng mysql unixODBC mesa postgresql python
+      readline sqlite tcl tk libtiff freetype ffmpeg makeWrapper wxGTK;
+    fftw = fftwSinglePrec;
+    motif = lesstif;
+    opendwg = libdwg;
+    wxPython = wxPython28;
+  };
+
   grip = import ../applications/misc/grip {
     inherit fetchurl stdenv lib grip pkgconfig curl cdparanoia libid3tag;
     inherit (gtkLibs) gtk glib;
