@@ -6009,6 +6009,10 @@ let
     inherit fetchurl stdenv autoconf automake;
   };
 
+  cifs_utils = import ../os-specific/linux/cifs-utils {
+    inherit fetchurl stdenv;
+  };
+
   conky = import ../os-specific/linux/conky {
     inherit stdenv fetchurl pkgconfig libxml2 curl wirelesstools openssl;
     inherit (gtkLibs) glib;
@@ -6629,10 +6633,6 @@ let
   };
 
   module_init_tools = import ../os-specific/linux/module-init-tools {
-    inherit fetchurl stdenv;
-  };
-
-  mount_cifs = import ../os-specific/linux/mount-cifs {
     inherit fetchurl stdenv;
   };
 
