@@ -4714,6 +4714,10 @@ let
     inherit fetchurl stdenv libtool;
   };
 
+  libgeotiff = import ../development/libraries/libgeotiff {
+    inherit stdenv fetchurl libtiff;
+  };
+
   libunistring = import ../development/libraries/libunistring {
     inherit fetchurl stdenv libiconv;
   };
