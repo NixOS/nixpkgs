@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "015r3xdkjpqwcv4lvxavq0nybdpxhfjycqpzbx8agqd5sywkx3b0";
   };
 
-  buildInputs = [ flex cracklib libxcrypt ];
+  buildInputs = [ flex cracklib ]
+    ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") libxcrypt;
 
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
