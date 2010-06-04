@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pam ];
+
+  patches = [ ./no-sanitize-env.patch ./su-name.patch ./keep-path.patch ];
   
   meta = {
     homepage = http://pkg-shadow.alioth.debian.org/;

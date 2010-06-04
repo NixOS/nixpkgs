@@ -1,0 +1,16 @@
+Don't remove environment variables such as PATH or SHELL.
+
+http://bugs.gentoo.org/show_bug.cgi?id=301957
+https://alioth.debian.org/scm/browser.php?group_id=30580
+
+--- a/src/su.c
++++ b/src/su.c
+@@ -342,7 +342,7 @@
+ #endif
+ #endif				/* !USE_PAM */
+ 
+-	sanitize_env ();
++	/* sanitize_env (); */
+ 
+ 	(void) setlocale (LC_ALL, "");
+ 	(void) bindtextdomain (PACKAGE, LOCALEDIR);
