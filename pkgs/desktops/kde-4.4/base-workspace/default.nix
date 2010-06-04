@@ -6,10 +6,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "kdebase-workspace-4.4.3";
+  name = "kdebase-workspace-4.4.4";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.3/src/kdebase-workspace-4.4.3.tar.bz2;
-    sha256 = "0fcjk6bmswal02lwsywvv44x8qi8vr3vr08rlgp8v9rc5yqv4mkz";
+    url = mirror://kde/stable/4.4.4/src/kdebase-workspace-4.4.4.tar.bz2;
+    sha256 = "1ryy9bmghr8c9hc87i1scmxaw3zdy3gndwwp7qyn5zqzh0jg0b8k";
   };
   buildInputs = [ cmake perl python qt4 pam consolekit sip pyqt4 kdelibs libXtst
     kdepimlibs kdebindings boost libusb stdenv.gcc.libc libXi libXau libXdmcp
