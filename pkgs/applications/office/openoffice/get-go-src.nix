@@ -11,6 +11,7 @@
 let
   pkgsFun = import /etc/nixos/nixpkgs;
   pkgs = pkgsFun {};
+  downloadRoot = "http://download.services.openoffice.org/files/stable/";
 in
 with pkgs;
 
@@ -30,7 +31,9 @@ lib.overrideDerivation go_oo (attrs: {
     ensureDir $out
 
     set +e
-    ./download --all | grep XXX | grep -v openoffice.bouncer | awk '
+    ./download --all | grep XXX | 
+      sed '/bouncer/s,\(.*\)http.*version=\([0-9.]\+\).*lang=\([a-z0-9]\+\).*\( .*\),\1${downloadRoot}\2/OOo_\2_src_\3.tar.bz2\4,' |
+      awk '
       BEGIN {
         print "#!/bin/sh"
         print "echo \"{fetchurl} : [\" > go-srcs.nix"

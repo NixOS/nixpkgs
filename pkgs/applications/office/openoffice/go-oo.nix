@@ -10,43 +10,19 @@
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
-  downloadRoot = "http://download.services.openoffice.org/files/stable/";
-  fileUrl = part: "${downloadRoot}3.2.0/OOo_3.2.0_src_${part}.tar.bz2";
-  tag = "OOO320_m12";
+  tag = "OOO320_m19";
+  version = "3.2.1.3";
 in
 stdenv.mkDerivation rec {
-  name = "go-oo-3.2.0.10";
+  name = "go-oo-${version}";
   # builder = ./builder.sh;
 
-  downloadRoot = "http://download.services.openoffice.org/files/stable";
-
   src = fetchurl {
-      url = "http://download.go-oo.org/OOO320/ooo-build-3.2.0.10.tar.gz";
-      sha256 = "0g6n0m9pibn6cx12zslmknzy1p764nqj8vdf45l5flyls9aj3x21";
+      url = "http://download.go-oo.org/OOO320/ooo-build-${version}.tar.gz";
+      sha256 = "0c8y66ca9nsfbznjazblpszpvg20mgic2bnpffgqb6qlpji6iwd1";
     };
 
-  srcs_download = [
-    (fetchurl {
-      url = fileUrl "binfilter";
-      sha256 = "1jl3a3zyb03wzi297llr69qpnimdc99iv82yvgxy145hz21xbjra";
-    })
-    (fetchurl {
-      url = fileUrl "core";
-      sha256 = "0jl14rxmvhz86jlhhwqlbr9nfi9p271aknqxada9775qfm6bjjml";
-    })
-    (fetchurl {
-      url = fileUrl "extensions";
-      sha256 = "1l2xby47pflcqbv3m6ihjsv89ax96lvpl76wklwlcn8vzclbfqk8";
-    })
-    (fetchurl {
-      url = fileUrl "system";
-      sha256 = "0nihw4iyh9qc188dkyfjr3zvp6ym6i1spm16j0cyh5rgxcrn6ycp";
-    })
-    (fetchurl {
-      url = fileUrl "l10n";
-      sha256 = "1sp4b9r6qiczw875swk7p8r8bdxdyrwr841xn53xxxfglc4njba9";
-    })
-  ] ++ (import ./go-srcs.nix { inherit fetchurl; });
+  srcs_download = import ./go-srcs.nix { inherit fetchurl; };
 
   # Multi-CPU: --with-num-cpus=4 
   # The '--with-tag=XXXX' string I took from their 'configure' script. I write it so it matches the
@@ -54,7 +30,8 @@ stdenv.mkDerivation rec {
   # We need '--without-split' when downloading directly usptream openoffice src tarballs.
   configurePhase = ''
     sed -i -e '1s,/bin/bash,${bash}/bin/bash,' $(find bin -type f)
-    sed -i -e '1s,/usr/bin/perl,${perl}/bin/perl,' download.in bin/ooinstall bin/generate-bash-completion
+    sed -i -e '1s,/usr/bin/perl,${perl}/bin/perl,' download.in $(find bin -type f)
+    sed -i -e '1s,/usr/bin/python,${python}/bin/python,' bin/*.py
     echo "$distroFlags" > distro-configs/SUSE-11.1.conf.in
 
     ./configure --with-distro=SUSE-11.1 --with-system-libwpd --without-git --with-system-cairo \
@@ -71,9 +48,6 @@ stdenv.mkDerivation rec {
     ./download
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
-
-    # Take away a patch, that upstream already applied (3.2.0 specific)
-    sed -i -e 's,^connectivity-build-fix-mac.diff,#,' patches/dev300/apply
 
     make build.prepare
 
@@ -148,6 +122,7 @@ stdenv.mkDerivation rec {
     --without-system-mozilla
     --without-system-libwps
     --without-system-libwpg
+    --without-system-redland
   '';
 
   buildInputs = [
