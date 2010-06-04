@@ -494,7 +494,7 @@ let
   };
 
   ccrypt = import ../tools/security/ccrypt {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv perl;
   };
 
   cdecl = import ../development/tools/cdecl {
