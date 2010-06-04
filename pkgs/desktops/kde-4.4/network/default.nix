@@ -13,7 +13,6 @@ stdenv.mkDerivation {
                   libvncserver libmsn giflib gpgme boost stdenv.gcc.libc libv4l
                   libotr libXi libXtst libXdamage libXxf86vm
                   kdelibs kdepimlibs automoc4 phonon qca2 soprano qimageblitz strigi ];
-  patches = [ ./kget-cve.patch ];
   meta = {
     description = "KDE network utilities";
     longDescription = "Various network utilities for KDE such as a messenger client and network configuration interface";
