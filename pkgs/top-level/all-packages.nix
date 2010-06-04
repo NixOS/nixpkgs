@@ -6644,6 +6644,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  mountall = import ../os-specific/linux/mountall {
+    inherit fetchurl stdenv pkgconfig libnih dbus udev autoconf libtool;
+    automake = automake111x;
+  };
+
   aggregateModules = modules:
     import ../os-specific/linux/module-init-tools/aggregator.nix {
       inherit stdenv module_init_tools modules buildEnv;
