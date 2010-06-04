@@ -55,7 +55,7 @@ with pkgs.lib;
     # Generate a separate job for each tty.  
     jobs = listToAttrs (map (tty: nameValuePair tty {
     
-      startOn = "started udev";
+      startOn = "started udev and local-filesystems";
 
       exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
       
