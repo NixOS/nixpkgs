@@ -118,18 +118,44 @@ rec {
       # now only works for derivations that lead to a directory in the store, not a file. 
       buildrunner = writeText "vm-build" ''
         source $1
-        oldout=$out
+        origout=$out
         out=$TMPDIR$out
+
+        echo "--------------------------------"
+        echo "Creating $out"
+        echo "--------------------------------"
         ${coreutils}/bin/mkdir -p $out
-        ${coreutils}/bin/mkdir -p $oldout
-        ${coreutils}/bin/ln -s $out $oldout
 
+        echo "--------------------------------"
+        echo "Linking $origout to $out "
+        echo "--------------------------------"
+        ${coreutils}/bin/ln -s $out $origout
+
+        echo "--------------------------------"
+        echo "Creating $TMPDIR"
+        echo "--------------------------------"
         ${coreutils}/bin/mkdir -p $TMPDIR
-        exec $origBuilder $origArgs 
 
-        ${coreutils}/bin/rm -v $oldout
-        ${coreutils}/bin/cp -Rv $out/* $oldout/
-        out=$oldout 
+        echo "--------------------------------"
+        echo "Running builder"
+        echo "--------------------------------"
+        $origBuilder $origArgs 
+
+        echo "--------------------------------"
+        echo "Removing link $origout"
+        echo "--------------------------------"
+        ${coreutils}/bin/rm -vf $origout
+
+        echo "--------------------------------"
+        echo "Creating $origout"
+        echo "--------------------------------"
+        ${coreutils}/bin/mkdir -p $origout
+
+        echo "--------------------------------"
+        echo "Copying $out/* to $origout/"
+        echo "--------------------------------"
+        ${coreutils}/bin/cp -Rv $out/* $origout/
+        out=$origout 
       '';
 
       testscript = ''
