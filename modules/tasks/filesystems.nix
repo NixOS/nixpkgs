@@ -2,6 +2,13 @@
 
 with pkgs.lib;
 
+let
+
+  # Packages that provide fsck backends.
+  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs ];
+
+in
+
 {
 
   ###### interface
@@ -119,7 +126,9 @@ with pkgs.lib;
   config = {
 
     # Add the mount helpers to the system path so that `mount' can find them.
-    environment.systemPackages = [ pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils pkgs.mountall ];
+    environment.systemPackages =
+      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils pkgs.mountall ]
+      ++ fsPackages;
     
     environment.etc = singleton
       { source = pkgs.writeText "fstab"
@@ -151,7 +160,7 @@ with pkgs.lib;
         script =
           ''
             exec > /dev/console 2>&1
-            export PATH=${config.system.sbin.mount}/bin:${pkgs.utillinux}/sbin:$PATH
+            export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
             ${pkgs.mountall}/sbin/mountall --verbose --debug
             echo DONE
           '';
