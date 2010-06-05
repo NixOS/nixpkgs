@@ -6,6 +6,11 @@ own_dir="$(cd "$(dirname "$0")"; sh -c pwd)"
 
 source "$own_dir/snippets.sh"
 
+[ -z "$1" ] && {
+  echo "Specify main expression filename."
+  exit 1;
+}
+
 main_file="$1"
 main_dir="$(cd "$(dirname "$main_file")" ; sh -c pwd)"
 file_name="$(basename "$main_file")"
