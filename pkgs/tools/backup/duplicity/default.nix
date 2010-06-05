@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/duplicity \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
       --prefix PATH : "${gnupg}/bin"
+    wrapProgram $out/bin/rdiffdir \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
   '';
 
   buildInputs = [ python librsync makeWrapper ];
