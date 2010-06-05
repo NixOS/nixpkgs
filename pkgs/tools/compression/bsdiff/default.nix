@@ -1,11 +1,14 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, bzip2}:
 
 stdenv.mkDerivation {
-  name = "bsdiff-4.2";
+  name = "bsdiff-4.3";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.daemonology.net/bsdiff/bsdiff-4.2.tar.gz;
-    md5 = "9f582a77eb76d116d82d1ad268ef48fa";
+    url = http://www.daemonology.net/bsdiff/bsdiff-4.3.tar.gz;
+    sha256 = "0j2zm3z271x5aw63mwhr3vymzn45p2vvrlrpm9cz2nywna41b0hq";
   };
-  patches = [./makefile.patch];
+  buildInputs = [ bzip2 ];
+  patchPhase = ''
+    sed 's/^\.//g' -i Makefile
+  '';
 }

@@ -477,7 +477,7 @@ let
   };
 
   bsdiff = import ../tools/compression/bsdiff {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv bzip2;
   };
 
   bzip2 = useFromStdenv "bzip2"
