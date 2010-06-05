@@ -1942,6 +1942,9 @@ let
     inherit fetchurl stdenv;
   };
 
+  zsync = import ../tools/compression/zsync {
+    inherit fetchurl stdenv;
+  };
 
   ### SHELLS
 
