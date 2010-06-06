@@ -7665,7 +7665,7 @@ let
     };
 
     proofgeneral = import ../applications/editors/emacs-modes/proofgeneral {
-       inherit stdenv fetchurl emacs perl;
+      inherit stdenv fetchurl emacs texinfo texLive perl which automake;
     };
 
     quack = import ../applications/editors/emacs-modes/quack {
