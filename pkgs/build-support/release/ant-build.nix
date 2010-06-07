@@ -39,8 +39,8 @@ stdenv.mkDerivation (
          '' else stdenv.lib.concatMapStrings (j: ''
            cp -v ${j} $out/lib/java
          '') jars }
-      for j in $out/lib/java ; do
-        echo file jar $out/lib/java/$j >> $out/nix-support/hydra-build-products
+      for j in $out/lib/java/*.jar ; do
+        echo file jar $j >> $out/nix-support/hydra-build-products
       done
     '';
 
