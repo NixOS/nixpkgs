@@ -129,7 +129,7 @@ in
 
         environment = {
           # Cups scripts for printing (psto...) require awk, sed, grep, ...
-          PATH = config.system.path;
+          PATH = "${config.system.path}/bin";
         };
 
         preStart =
