@@ -212,6 +212,7 @@ in
       }
       { mountPoint = "/nix/store";
         device = "/hostfs/nix/store";
+        fsType = "none";
         options = "bind";
         neededForBoot = true;
       }
