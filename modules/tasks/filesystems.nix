@@ -157,17 +157,67 @@ in
     jobs.mountall =
       { startOn = "started udev";
 
+        task = true;
+        
         script =
           ''
             exec > /dev/console 2>&1
+            echo "mounting filesystems..."
             export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
-            ${pkgs.mountall}/sbin/mountall --verbose --debug
-            echo DONE
+            ${pkgs.mountall}/sbin/mountall
           '';
+      };
+
+    # The `mount-failed' event is emitted synchronously, but we don't
+    # want `mountall' to wait for the emergency shell.  So use this
+    # intermediate job to make the event asynchronous.
+    jobs.mountFailed =
+      { name = "mount-failed";
+        task = true;
+        startOn = "mount-failed";
+        script =
+          ''
+            start --no-wait emergency-shell \
+              DEVICE="$DEVICE" MOUNTPOINT="$MOUNTPOINT"
+          '';
+      };
+
+    jobs.emergencyShell =
+      { name = "emergency-shell";
+
+        task = true;
+
+        stopOn = "filesystem";
 
         extraConfig = "console owner";
 
-        task = true;
+        script =
+          ''
+            exec < /dev/console > /dev/console 2>&1
+
+            cat <<EOF
+
+            [1;31m<<< Emergency shell >>>[0m
+
+            The filesystem \`$DEVICE' could not be mounted on \`$MOUNTPOINT'.
+
+            Please do one of the following:
+
+            - Repair the filesystem (\`fsck $DEVICE') and exit the emergency
+              shell to resume booting.
+
+            - Ignore any failed filesystems and continue booting by running
+              \`initctl emit filesystem'.
+
+            - Remove the failed filesystem from the system configuration in
+              /etc/nixos/configuration.nix and run \`nixos-rebuild switch'.
+            
+            EOF
+
+            ${pkgs.shadow}/bin/login root || false
+
+            initctl start --no-wait mountall
+          '';
       };
 
   };
