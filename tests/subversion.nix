@@ -19,7 +19,7 @@ let
 
         # To build the kernel with coverage instrumentation, we need a
         # special patch to make coverage data available under /proc.
-        kernel = pkgs.kernel.override (orig: {
+        linux = pkgs.linux.override (orig: {
           stdenv = cleanupBuildTree (keepBuildTree orig.stdenv);
           extraConfig =
             ''
