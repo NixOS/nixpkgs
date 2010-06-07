@@ -408,7 +408,7 @@ in
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
-      { startOn = if cfg.autorun then "started udev and started hal" else "";
+      { startOn = if cfg.autorun then "filesystem and stopped udevtrigger and started hal" else "";
  
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
