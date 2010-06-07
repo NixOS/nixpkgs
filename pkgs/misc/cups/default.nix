@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl, dbus }:
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
+, dbus, libusb }:
 
 let version = "1.4.1"; in
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
       })
     ];
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus ];
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus libusb ];
 
   propagatedBuildInputs = [ openssl ];
 
