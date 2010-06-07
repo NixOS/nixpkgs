@@ -5,10 +5,12 @@
 , jars ? []
 , jarWrappers ? []
 , antProperties ? []
+, antBuildInputs ? []
+, buildfile ? "build.xml"
 , ... } @ args:
 
 let
-  antFlags = stdenv.lib.concatMapStrings ({name, value}: "-D${name}=${value}" ) antProperties ;
+  antFlags = "-f ${buildfile} " + stdenv.lib.concatMapStrings ({name, value}: "-D${name}=${value}" ) antProperties ;
 in
 stdenv.mkDerivation (
 
@@ -21,10 +23,13 @@ stdenv.mkDerivation (
     prePhases = 
       ["antSetupPhase"];
 
-    antSetupPhase = ''
+    antSetupPhase = with stdenv.lib; ''
       if test "$hydraAntLogger" != "" ; then
         export ANT_ARGS="-logger org.hydra.ant.HydraLogger -lib `ls $hydraAntLogger/lib/java/*.jar | head -1`"
       fi
+      for abi in ${concatStringsSep " " (map (f: "`find ${f} -name '*.jar'`") antBuildInputs)}; do
+        export ANT_ARGS="$ANT_ARGS -lib $abi"
+      done
     '';
 
     installPhase = ''
@@ -33,8 +38,10 @@ stdenv.mkDerivation (
            find . -name "*.jar" | xargs -I{} cp -v {} $out/lib/java
          '' else stdenv.lib.concatMapStrings (j: ''
            cp -v ${j} $out/lib/java
-           echo file jar $out/lib/java/${j} >> $out/nix-support/hydra-build-products
          '') jars }
+      for j in $out/lib/java ; do
+        echo file jar $out/lib/java/$j >> $out/nix-support/hydra-build-products
+      done
     '';
 
     generateWrappersPhase = '' 
