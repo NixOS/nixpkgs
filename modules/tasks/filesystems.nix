@@ -142,7 +142,7 @@ in
                 + " " + fs.fsType
                 + " " + fs.options
                 + " 0"
-                + " " + (if fs.mountPoint == "/" then "1" else "2")
+                + " " + (if fs.fsType == "none" then "0" else if fs.mountPoint == "/" then "1" else "2")
                 + "\n"
             )}
 
@@ -186,8 +186,6 @@ in
       { name = "emergency-shell";
 
         task = true;
-
-        stopOn = "filesystem";
 
         extraConfig = "console owner";
 

@@ -8,6 +8,8 @@ let
 
   cfg = config.services.nfsKernel;
 
+  exports = pkgs.writeText "exports" cfg.server.exports;
+
 in
 
 {
@@ -82,7 +84,7 @@ in
       });
 
     environment.etc = mkIf cfg.server.enable (singleton
-      { source = pkgs.writeText "exports" cfg.server.exports;
+      { source = exports;
         target = "exports";
       });
 
@@ -100,19 +102,23 @@ in
               ''
                 export PATH=${pkgs.nfsUtils}/sbin:$PATH
                 mkdir -p /var/lib/nfs
+                
                 ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
+
+                ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
+                || ${config.system.sbin.mount}/bin/mount -t nfsd none /proc/fs/nfsd
 
                 ${optionalString cfg.server.createMountPoints
                   ''
                     # create export directories:
                     # skip comments, take first col which may either be a quoted
                     # "foo bar" or just foo (-> man export)
-                    sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${cfg.server.exports} \
+                    sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
                     | xargs -d '\n' mkdir -p
                   ''
                 }
 
-                # exports file is ${cfg.server.exports}
+                # exports file is ${exports}
                 # keep this comment so that this job is restarted whenever exports changes!
                 exportfs -ra
               '';
@@ -128,7 +134,9 @@ in
             startOn = "started nfs-kernel-exports and started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
+            preStart = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
+
+            postStop = "${pkgs.nfsUtils}/sbin/rpc.nfsd 0";
           };
         }
 
