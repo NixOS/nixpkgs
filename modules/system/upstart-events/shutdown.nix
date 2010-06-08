@@ -69,31 +69,19 @@ with pkgs.lib;
           swapoff -a
       
       
-          # Unmount helper functions.
-          getMountPoints() {
-              cat /proc/mounts \
-              | grep -v '^rootfs' \
-              | sed 's|^[^ ]\+ \+\([^ ]\+\).*|\1|' \
-              | grep -v '/proc\|/sys\|/dev'
-          }
-      
-          getDevice() {
-              local mountPoint=$1
-              cat /proc/mounts \
-              | grep -v '^rootfs' \
-              | grep "^[^ ]\+ \+$mountPoint \+" \
-              | sed 's|^\([^ ]\+\).*|\1|'
-          }
-      
           # Unmount file systems.  We repeat this until no more file systems
           # can be unmounted.  This is to handle loopback devices, file
           # systems  mounted on other file systems and so on.
           tryAgain=1
           while test -n "$tryAgain"; do
               tryAgain=
-      
-              for mp in $(getMountPoints); do
-                  device=$(getDevice $mp)
+              failed= # list of mount points that couldn't be unmounted/remounted
+
+              cp /proc/mounts /dev/.mounts # don't read /proc/mounts while it's changing
+              exec 4< /dev/.mounts
+              while read -u 4 device mp fstype options rest; do
+                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /var/run/nscd ]; then continue; fi
+              
                   echo "unmounting $mp..."
 
                   # We need to remount,ro before attempting any
@@ -103,25 +91,29 @@ with pkgs.lib;
                   # `-i' is to workaround a bug in mount.cifs (it
                   # doesn't recognise the `remount' option, and
                   # instead mounts the FS again).
-                  mount -t none -n -i -o remount,ro none "$mp"
+                  success=
+                  if mount -t "$fstype" -n -i -o remount,ro "device" "$mp"; then success=1; fi
 
                   # Note: don't use `umount -f'; it's very buggy.
                   # (For instance, when applied to a bind-mount it
                   # unmounts the target of the bind-mount.)  !!! But
                   # we should use `-f' for NFS.
-                  if umount -n "$mp"; then
-                      if test "$mp" != /; then tryAgain=1; fi
+                  if [ "$mp" != / -a "$mp" != /nix/store ]; then
+                      if umount -n "$mp"; then success=1; tryAgain=1; fi
                   fi
-      
-                  # Hack: work around a bug in mount (mount -o remount on a
-                  # loop device forgets the loop=/dev/loopN entry in
-                  # /etc/mtab).
-                  if echo "$device" | grep -q '/dev/loop'; then
-                      echo "removing loop device $device..."
-                      losetup -d "$device"
-                  fi
+
+                  if [ -z "$success" ]; then failed="$failed $mp"; fi
               done
           done
+
+
+          # Warn about filesystems that could not be unmounted or
+          # remounted read-only.
+          if [ -n "$failed" ]; then
+              echo "[1;31mwarning:[0m the following filesystems could not be unmounted:"
+              for mp in $failed; do echo "  $mp"; done
+              sleep 5
+          fi
 
 
           # Final sync.
