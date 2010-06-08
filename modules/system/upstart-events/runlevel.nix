@@ -4,6 +4,15 @@ with pkgs.lib;
 
 {
 
+  # After booting, go to runlevel 2.  (NixOS doesn't really use
+  # runlevels, but this keeps wtmp happy.)
+  jobs.boot =
+    { name = "boot";
+      startOn = "startup";
+      task = true;
+      script = "telinit 2";
+    };
+
   jobs.runlevel =
     { name = "runlevel";
 

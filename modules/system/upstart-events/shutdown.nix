@@ -58,8 +58,12 @@ with pkgs.lib;
               initctl emit -n startup
               exit 0
           fi
-                
-      
+
+
+          # Write a shutdown record to wtmp while /var/log is still writable.
+          reboot --wtmp-only
+
+
           # Set the hardware clock to the system time.
           echo "setting the hardware clock..."
           hwclock --systohc --utc

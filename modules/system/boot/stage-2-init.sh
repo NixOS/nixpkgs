@@ -134,8 +134,10 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @postBootCommands@
 
+
 # For debugging Upstart.
 #@shell@ --login < /dev/console > /dev/console 2>&1 &
+
 
 # Start Upstart's init.
 echo "starting Upstart..."
