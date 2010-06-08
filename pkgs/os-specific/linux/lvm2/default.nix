@@ -1,7 +1,7 @@
 { stdenv, fetchurl, udev }:
 
 let
-  v = "2.02.64";
+  v = "2.02.65";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/LVM2.${v}.tgz";
-    sha256 = "130yg8a9l0266hraklalm2k26n25a8kb2nvhj13cnczfxbz5a4m0";
+    sha256 =  "2a4157b91b7ad5ea84359e8548b64947611beea01862e010be71f54b649e7ad1";
   };
   
   configureFlags = "--disable-readline --enable-udev_rules --enable-udev_sync";
