@@ -63,6 +63,10 @@ with pkgs.lib;
           # Set the hardware clock to the system time.
           echo "setting the hardware clock..."
           hwclock --systohc --utc
+
+
+          # Stop all swap devices.
+          swapoff -a
       
       
           # Unmount helper functions.
@@ -99,7 +103,7 @@ with pkgs.lib;
                   # `-i' is to workaround a bug in mount.cifs (it
                   # doesn't recognise the `remount' option, and
                   # instead mounts the FS again).
-                  mount -n -i -o remount,ro "$mp"
+                  mount -t none -n -i -o remount,ro none "$mp"
 
                   # Note: don't use `umount -f'; it's very buggy.
                   # (For instance, when applied to a bind-mount it
@@ -118,8 +122,8 @@ with pkgs.lib;
                   fi
               done
           done
-      
-      
+
+
           # Final sync.
           sync
       
