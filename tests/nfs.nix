@@ -5,8 +5,7 @@
   nodes =
     { client = 
         { config, pkgs, ... }:
-        { services.nfsKernel.client.enable = true;
-          fileSystems = pkgs.lib.mkOverride 50 {} 
+        { fileSystems = pkgs.lib.mkOverride 50 {} 
             [ { mountPoint = "/data";
                 device = "server:/data";
                 fsType = "nfs";

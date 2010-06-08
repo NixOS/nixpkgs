@@ -21,7 +21,7 @@ in
     services.nfsKernel = {
 
       client.enable = mkOption {
-        default = false;
+        default = any (fs: fs.fsType == "nfs" || fs.fsType == "nfs4") config.fileSystems;
         description = ''
           Whether to enable the kernel's NFS client daemons.
         '';
