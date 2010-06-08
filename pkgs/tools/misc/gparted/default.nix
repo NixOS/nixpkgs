@@ -3,7 +3,7 @@ stdenv.mkDerivation {
   name = "gparted-0.5.1";
 
   src = fetchurl {
-    url = mirror://sourceforge.net/gparted/gparted/gparted-0.5.1/gparted-0.5.1.tar.bz2;
+    url = mirror://sourceforge/gparted/gparted-0.5.1/gparted-0.5.1.tar.bz2;
     sha256 = "1mqi1hxv6bahp771bqld0a6wx7khdxvz353n47q1wmqykmn4wbp0";
   };
 
