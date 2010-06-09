@@ -2,11 +2,11 @@
 , libXinerama }:
 
 stdenv.mkDerivation {
-  name = "feh-1.6";
+  name = "feh-1.6.1";
 
   src = fetchurl {
-    url = https://derf.homelinux.org/projects/feh/feh-1.6.tar.bz2;
-    sha256 = "0wkgdxvl0kdcwab815gw0xk3iniain6l3b1x4d4kclf170wcnjqi";
+    url = http://www.chaosdorf.de/~derf/feh/feh-1.6.1.tar.bz2;
+    sha256 = "1mv09b34ar0dx4wl22xak2g554xgpylicqy5zbnk3bh66vn9pxz2";
   };
 
   buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama];
