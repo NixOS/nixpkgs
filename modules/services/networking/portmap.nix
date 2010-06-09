@@ -54,7 +54,7 @@ in
     users.extraUsers = singleton
       { name = "portmap";
         inherit uid;
-        description = "portmap daemon user";
+        description = "Portmap daemon user";
         home = "/var/empty";
       };
 
@@ -66,14 +66,15 @@ in
     jobs.portmap =
       { description = "ONC RPC portmap";
 
-        startOn = "ip-up";
+        startOn = "started network-interfaces";
+
+        daemonType = "fork";
 
         exec =
           ''
-            ${portmap}/sbin/portmap -f \
-              ${if config.services.portmap.chroot == ""
-                then ""
-                else "-t \"${config.services.portmap.chroot}\""} \
+            ${portmap}/sbin/portmap \
+              ${optionalString (config.services.portmap.chroot != "")
+                "-t '${config.services.portmap.chroot}'"} \
               ${if config.services.portmap.verbose then "-v" else ""}
           '';
       };
