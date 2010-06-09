@@ -162,7 +162,7 @@ in
             description = "Kernel NFS server - Network Status Monitor";
 
             startOn = "${if cfg.server.enable then "starting nfs-kernel-nfsd and " else ""} started portmap";
-            stopOn = if cfg.server.enable then "stopped nfs-kernel-nfsd" else "starting shutdown";
+            stopOn = "never";
 
             preStart =
               ''	

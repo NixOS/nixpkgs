@@ -67,6 +67,7 @@ in
       { description = "ONC RPC portmap";
 
         startOn = "started network-interfaces";
+        stopOn = "never";
 
         daemonType = "fork";
 

@@ -37,14 +37,19 @@ with pkgs.lib;
           sync
 
 
-          # Kill all remaining processes except init and this one.
+          # Kill all remaining processes except init, this one and any
+          # Upstart jobs that don't stop on the "starting shutdown"
+          # event, as these are necessary to complete the shutdown.
+          omittedPids=$(initctl list | sed -e 's/.*process \([0-9]\+\)/-o \1/;t;d')
+          #echo "saved PIDs: $omittedPids"
+          
           echo "sending the TERM signal to all processes..."
-          kill -TERM -1
+          ${pkgs.sysvtools}/bin/killall5 -15 $job $omittedPids
       
           sleep 1 # wait briefly
 
           echo "sending the KILL signal to all processes..."
-          kill -KILL -1
+          ${pkgs.sysvtools}/bin/killall5 -9 $job $omittedPids
 
 
           # If maintenance mode is requested, start a root shell, and
@@ -71,8 +76,8 @@ with pkgs.lib;
 
           # Stop all swap devices.
           swapoff -a
-      
-      
+
+
           # Unmount file systems.  We repeat this until no more file systems
           # can be unmounted.  This is to handle loopback devices, file
           # systems  mounted on other file systems and so on.
@@ -84,7 +89,7 @@ with pkgs.lib;
               cp /proc/mounts /dev/.mounts # don't read /proc/mounts while it's changing
               exec 4< /dev/.mounts
               while read -u 4 device mp fstype options rest; do
-                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /var/run/nscd ]; then continue; fi
+                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /var/run ]; then continue; fi
               
                   echo "unmounting $mp..."
 

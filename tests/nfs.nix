@@ -71,6 +71,14 @@ in
       $server->start;
       $client1->succeed("touch /data/xyzzy");
       $client1->fail("time flock -n -s /data/lock true");
+
+      # Test whether unmounting during shutdown happens quickly.  This
+      # requires portmap and statd to keep running during the
+      # shutdown.
+      my $t1 = time;
+      $client1->shutdown;
+      my $duration = time - $t1;
+      die "shutdown took too long ($duration seconds)" if $duration > 30;
     '';
 
 }
