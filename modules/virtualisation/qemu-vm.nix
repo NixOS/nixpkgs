@@ -123,7 +123,9 @@ let
       
       # -no-kvm-irqchip is needed to prevent the CIFS mount from
       # hanging the VM on x86_64.
-      exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 -m ${toString config.virtualisation.memorySize} \
+      exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 \
+          -name ${vmName} \
+          -m ${toString config.virtualisation.memorySize} \
           -no-kvm-irqchip \
           -net nic,vlan=0,model=virtio -net user,vlan=0 -smb / \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,werror=report \
