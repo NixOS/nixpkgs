@@ -149,7 +149,9 @@ in
             startOn = "starting nfs-kernel-nfsd and started portmap";
             stopOn = "stopped nfs-kernel-nfsd";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f /etc/exports";
+            daemonType = "fork";
+
+            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -f /etc/exports";
           };
         }
 
@@ -169,7 +171,9 @@ in
                 mkdir -p /var/lib/nfs/sm.bak
               '';
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.statd --foreground --no-notify";
+            daemonType = "fork";
+
+            exec = "${pkgs.nfsUtils}/sbin/rpc.statd --no-notify";
           };
         }
       
