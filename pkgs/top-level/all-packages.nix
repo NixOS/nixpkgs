@@ -9733,9 +9733,11 @@ let
   };
 
   psi = (import ../applications/networking/instant-messengers/psi) {
-    inherit stdenv fetchurl zlib aspell sox pkgconfig qt4;
+    inherit stdenv fetchurl zlib aspell sox pkgconfig qt4
+    	liboil speex gst_all;
     inherit (xlibs) xproto libX11 libSM libICE;
     qca2 = kde4.qca2;
+    qca2_ossl = kde4.qca2_ossl;
   };
 
   putty = import ../applications/networking/remote/putty {
