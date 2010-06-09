@@ -146,8 +146,8 @@ in
 
             description = "Kernel NFS server - mount daemon";
 
-            startOn = "started nfs-kernel-nfsd and started portmap";
-            stopOn = "stopping nfs-kernel-exports";
+            startOn = "starting nfs-kernel-nfsd and started portmap";
+            stopOn = "stopped nfs-kernel-nfsd";
 
             exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f /etc/exports";
           };
@@ -159,15 +159,32 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "${if cfg.server.enable then "started nfs-kernel-nfsd and " else ""} started portmap";
-            stopOn = "stopping nfs-kernel-exports";
+            startOn = "${if cfg.server.enable then "starting nfs-kernel-nfsd and " else ""} started portmap";
+            stopOn = if cfg.server.enable then "stopped nfs-kernel-nfsd" else "starting shutdown";
 
             preStart =
               ''	
                 mkdir -p /var/lib/nfs
+                mkdir -p /var/lib/nfs/sm
+                mkdir -p /var/lib/nfs/sm.bak
               '';
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.statd -F";
+            exec = "${pkgs.nfsUtils}/sbin/rpc.statd --foreground --no-notify";
+          };
+        }
+      
+      // optionalAttrs (cfg.client.enable || cfg.server.enable)
+        { nfs_kernel_sm_notify = 
+          { name = "nfs-kernel-sm-notify";
+
+            description = "Kernel NFS server - Reboot notification";
+
+            startOn = "started nfs-kernel-statd"
+              + (if cfg.client.enable then " and starting mountall" else "");
+
+            task = true;
+
+            exec = "${pkgs.nfsUtils}/sbin/sm-notify -d";
           };
         };
       
