@@ -294,11 +294,16 @@ sub waitUntilFails {
 }
 
 
-sub mustFail {
+sub fail {
     my ($self, $command) = @_;
     my ($status, $out) = $self->execute($command);
     die "command `$command' unexpectedly succeeded"
         if $status == 0;
+}
+
+
+sub mustFail {
+    fail @_;
 }
 
 
@@ -355,6 +360,16 @@ sub shutdown {
     return unless $self->{booted};
 
     $self->execute("poweroff");
+
+    $self->waitForShutdown;
+}
+
+
+sub crash {
+    my ($self) = @_;
+    return unless $self->{booted};
+
+    $self->sendMonitorCommand("quit");
 
     $self->waitForShutdown;
 }
