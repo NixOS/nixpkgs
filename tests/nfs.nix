@@ -58,6 +58,12 @@ in
       $client1->succeed("flock -x /data/lock -c 'touch locked; sleep 100000' &");
       $client1->waitForFile("locked");
       $client2->fail("flock -n -s /data/lock true");
+
+      # Test whether client 2 obtains the lock if we reset client 1.
+      $client2->succeed("flock -s /data/lock -c 'echo acquired; touch locked' >&2 &");
+      $client1->crash;
+      $client1->start;
+      $client2->waitForFile("locked");
     '';
 
 }
