@@ -1,18 +1,25 @@
 { pkgs, ... }:
 
+let
+
+  client = 
+    { config, pkgs, ... }:
+    { fileSystems = pkgs.lib.mkOverride 50 {} 
+        [ { mountPoint = "/data";
+            device = "server:/data";
+            fsType = "nfs";
+            options = "bootwait";
+          } 
+        ];
+    };
+
+in
+
 {
 
   nodes =
-    { client = 
-        { config, pkgs, ... }:
-        { fileSystems = pkgs.lib.mkOverride 50 {} 
-            [ { mountPoint = "/data";
-                device = "server:/data";
-                fsType = "nfs";
-                options = "bootwait";
-              } 
-            ];
-        };
+    { client1 = client;
+      client2 = client;
 
       server = 
         { config, pkgs, ... }:
@@ -33,14 +40,24 @@
       $server->waitForJob("nfs-kernel-mountd");
       $server->waitForJob("nfs-kernel-statd");
 
-      $client->waitForJob("nfs-kernel-statd");
-
-      $client->waitForJob("tty1"); # depends on filesystems
-
-      $client->succeed("echo bar > /data/foo");
+      $client1->waitForJob("tty1"); # depends on filesystems
+      $client1->succeed("echo bla > /data/foo");
       $server->succeed("test -e /data/foo");
 
-      $client->shutdown;
+      $client2->waitForJob("tty1"); # depends on filesystems
+      $client2->succeed("echo bla > /data/bar");
+      $server->succeed("test -e /data/bar");
+
+      # Test whether we can get a lock.  !!! This step takes about 90
+      # seconds because the NFS server waits that long after booting
+      # before accepting new locks.
+      $client2->succeed("time flock -n -s /data/lock true >&2");
+      
+      # Test locking: client 1 acquires an exclusive lock, so client 2
+      # should then fail to acquire a shared lock.
+      $client1->succeed("flock -x /data/lock -c 'touch locked; sleep 100000' &");
+      $client1->waitForFile("locked");
+      $client2->fail("flock -n -s /data/lock true");
     '';
 
 }
