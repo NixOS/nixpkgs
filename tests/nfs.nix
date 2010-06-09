@@ -51,7 +51,7 @@ in
       # Test whether we can get a lock.  !!! This step takes about 90
       # seconds because the NFS server waits that long after booting
       # before accepting new locks.
-      $client2->succeed("time flock -n -s /data/lock true >&2");
+      $client2->succeed("time flock -n -s /data/lock true");
       
       # Test locking: client 1 acquires an exclusive lock, so client 2
       # should then fail to acquire a shared lock.
@@ -60,10 +60,17 @@ in
       $client2->fail("flock -n -s /data/lock true");
 
       # Test whether client 2 obtains the lock if we reset client 1.
-      $client2->succeed("flock -s /data/lock -c 'echo acquired; touch locked' >&2 &");
+      $client2->succeed("flock -x /data/lock -c 'echo acquired; touch locked; sleep 100000' >&2 &");
       $client1->crash;
       $client1->start;
       $client2->waitForFile("locked");
+
+      # Test whether locks survive a reboot of the server.
+      $client1->waitForJob("tty1"); # depends on filesystems
+      $server->shutdown;
+      $server->start;
+      $client1->succeed("touch /data/xyzzy");
+      $client1->fail("time flock -n -s /data/lock true");
     '';
 
 }
