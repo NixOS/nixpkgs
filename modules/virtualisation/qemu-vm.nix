@@ -169,6 +169,9 @@ in
       
   boot.initrd.postDeviceCommands =
     ''
+      # Workaround for massive clock drift with the "kvm-clock" clock source.
+      echo hpet > /sys/devices/system/clocksource/clocksource0/current_clocksource
+    
       # Set up networking.  Needed for CIFS mounting.
       ifconfig eth0 up 10.0.2.15
 
