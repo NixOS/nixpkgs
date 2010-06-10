@@ -1253,7 +1253,7 @@ let
   };
 
   obexd = import ../tools/bluetooth/obexd {
-    inherit fetchurl stdenv pkgconfig dbus openobex bluez glib;
+    inherit fetchurl stdenv pkgconfig dbus openobex bluez glib libical;
   };
 
   obexfs = import ../tools/bluetooth/obexfs {
