@@ -7,8 +7,6 @@ rec {
 
   inherit (linuxPackages_2_6_32) kernel;
 
-  klibcShrunk = pkgs.klibcShrunk.override { klibc = klibc_15; };
-
   kvm = pkgs.kvm76;
 
 
@@ -18,23 +16,50 @@ rec {
   };
 
 
-  mountCifs = (makeStaticBinaries stdenv).mkDerivation {
-    name = "mount.cifs";
-    src = fetchurl {
-      url = http://nixos.org/tarballs/mount_cifs-20090330.c;
-      sha256 = "1d9v3qzic3d12vna8g7d1zsl1piwm20f6xhck319rbfkrdg0smnl";
-    };
-    buildInputs = [nukeReferences];
-    buildCommand = ''
+  initrdUtils = runCommand "initrd-utils"
+    { buildInputs = [ nukeReferences ];
+      allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
+    }
+    ''
       ensureDir $out/bin
-      gcc -Wall $src -o $out/bin/mount.cifs
-      strip $out/bin/mount.cifs
-      nuke-refs $out/bin/mount.cifs
-    '';
-    allowedReferences = []; # prevent accidents like glibc being included in the initrd
-  };
+      ensureDir $out/lib
+      
+      # Copy what we need from Glibc.
+      cp -p ${glibc}/lib/ld-linux*.so.? $out/lib
+      cp -p ${glibc}/lib/libc.so.* $out/lib
+      cp -p ${glibc}/lib/librt.so.* $out/lib
+      cp -p ${glibc}/lib/libdl.so.* $out/lib
 
+      # Copy some utillinux stuff.
+      cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
+      cp -pd ${utillinux}/lib/libblkid*.so.* $out/lib
+      cp -pd ${utillinux}/lib/libuuid*.so.* $out/lib
 
+      # Copy some coreutils.
+      cp ${coreutils}/bin/basename $out/bin
+      cp ${coreutils}/bin/mkdir $out/bin
+      cp ${coreutils}/bin/mknod $out/bin
+      cp ${coreutils}/bin/cat $out/bin
+      cp ${coreutils}/bin/chroot $out/bin
+      cp ${coreutils}/bin/sleep $out/bin
+      cp ${coreutils}/bin/ln $out/bin
+
+      # Copy some other tools.
+      cp ${bash}/bin/bash $out/bin
+      cp ${module_init_tools}/sbin/insmod $out/bin/insmod
+      cp ${pkgs.nettools}/sbin/ifconfig $out/bin
+      cp ${pkgs.sysvinit}/sbin/halt $out/bin
+            
+      # Run patchelf to make the programs refer to the copied libraries.
+      for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
+
+      for i in $out/bin/*; do
+          echo "patching $i..."
+          patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+      done
+    ''; # */
+
+    
   createDeviceNodes = dev:
     ''
       mknod ${dev}/null c 1 3
@@ -46,10 +71,10 @@ rec {
 
   
   stage1Init = writeScript "vm-run-stage1" ''
-    #! ${klibcShrunk}/bin/sh.shared -e
+    #! ${initrdUtils}/bin/bash -e
     echo START
 
-    export PATH=${klibcShrunk}/bin:${mountCifs}/bin
+    export PATH=${initrdUtils}/bin
 
     mkdir /etc
     echo -n > /etc/fstab
@@ -84,14 +109,14 @@ rec {
           args="CIFSMaxBufSize=4194304"
           ;;
       esac
-      echo "loading module $i with args $args"
+      echo "loading module $(basename $i .ko)"
       insmod $i $args
     done
 
     mount -t tmpfs none /dev
     ${createDeviceNodes "/dev"}
     
-    ipconfig 10.0.2.15:::::eth0:none
+    ifconfig eth0 up 10.0.2.15
 
     mkdir /fs
 
@@ -109,7 +134,7 @@ rec {
     n=.
     echo "mounting host filesystem..."
     while true; do
-      if mount.cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody; then
+      if mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody; then
         break
       else
         n=".$n"
@@ -144,7 +169,7 @@ rec {
     mount -o remount,ro dummy /fs
 
     echo DONE
-    reboot
+    halt -d -p -f
   '';
 
   
@@ -247,7 +272,7 @@ rec {
   createRootFS = ''
     mkdir /mnt
     ${e2fsprogs}/sbin/mke2fs -F /dev/vda
-    ${klibcShrunk}/bin/mount -t ext2 /dev/vda /mnt
+    ${utillinux}/bin/mount -t ext2 /dev/vda /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh
@@ -403,7 +428,7 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt/nix/store
-        ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/nix/store
+        ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
         
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
@@ -414,8 +439,8 @@ rec {
         
         rm /mnt/.debug
         
-        ${klibcShrunk}/bin/umount /mnt/nix/store
-        ${klibcShrunk}/bin/umount /mnt
+        ${utillinux}/bin/umount /mnt/nix/store
+        ${utillinux}/bin/umount /mnt
       '';
 
       passthru = {inherit fullName;};
@@ -543,9 +568,9 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the .debs live.
         mkdir -p /mnt/inst/nix/store
-        ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/inst/nix/store
-        ${klibcShrunk}/bin/mount -o bind /proc /mnt/proc
-        ${klibcShrunk}/bin/mount -o bind /dev /mnt/dev
+        ${utillinux}/bin/mount -o bind /nix/store /mnt/inst/nix/store
+        ${utillinux}/bin/mount -o bind /proc /mnt/proc
+        ${utillinux}/bin/mount -o bind /dev /mnt/dev
         
         # Misc. files/directories assumed by various packages.
         echo "initialising Dpkg DB..."
@@ -582,10 +607,10 @@ rec {
 
         rm /mnt/.debug
         
-        ${klibcShrunk}/bin/umount /mnt/inst/nix/store
-        ${klibcShrunk}/bin/umount /mnt/proc
-        ${klibcShrunk}/bin/umount /mnt/dev
-        ${klibcShrunk}/bin/umount /mnt
+        ${utillinux}/bin/umount /mnt/inst/nix/store
+        ${utillinux}/bin/umount /mnt/proc
+        ${utillinux}/bin/umount /mnt/dev
+        ${utillinux}/bin/umount /mnt
       '';
 
       passthru = {inherit fullName;};

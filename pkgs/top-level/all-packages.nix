@@ -6574,13 +6574,6 @@ let
     linuxHeaders = glibc.kernelHeaders;
   };
 
-  # Old version; needed in vmtools for insmod.  Should use
-  # module_init_tools instead.
-  klibc_15 = makeOverridable (import ../os-specific/linux/klibc/1.5.nix) {
-    inherit fetchurl stdenv perl bison mktemp;
-    linuxHeaders = glibc.kernelHeaders;
-  };
-
   klibcShrunk = makeOverridable (import ../os-specific/linux/klibc/shrunk.nix) {
     inherit stdenv klibc;
   };
