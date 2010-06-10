@@ -7982,7 +7982,7 @@ let
   };
 
   gv = import ../applications/misc/gv {
-    inherit fetchurl stdenv Xaw3d ghostscriptX;
+    inherit fetchurl stdenv Xaw3d ghostscriptX perl;
   };
 
   hello = makeOverridable (import ../applications/misc/hello/ex-2) {
