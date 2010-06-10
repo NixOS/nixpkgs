@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-1.9.10";  # This is a beta release!
+  name = "guile-1.9.11";  # This is a beta release!
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
-    sha256 = "0vdvxkwm0xi65cw77a3yzjvwp3s66p2cpgqgqvp8w46r4amv1zpy";
+    sha256 = "13wff9944brzhi2afs4pzwndqcwhi4gg61qwahycr1d72v0wzmjp";
   };
 
   buildInputs =
