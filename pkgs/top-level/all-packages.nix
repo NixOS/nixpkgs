@@ -7962,6 +7962,11 @@ let
       libXrandr libXfixes libXcursor libXinerama libXext libX11;
   };
 
+  gosmore = builderDefsPackage ../applications/misc/gosmore {
+    inherit fetchsvn curl pkgconfig libxml2;
+    inherit (gtkLibs) gtk;
+  };
+
   gpsbabel = import ../applications/misc/gpsbabel {
     inherit fetchurl stdenv zlib expat;
   };
