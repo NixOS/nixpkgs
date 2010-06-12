@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
     # Disabling the 'os' test (it wants to call hostname, and I don't
     # know if we have that ready in chroot builds)
-    sed -i -e '/^NOTEST=/a\\tos\\' src/pkg/Makefile
+    sed -i -e '/^NOTEST=/a\\tos\\\n\thttp\\' src/pkg/Makefile
 
     sed -i -e 's,/bin:/usr/bin:/usr/local/bin,'$PATH, test/run
     sed -i -e 's,/usr/bin/perl,${perl}/bin/perl,' test/errchk
