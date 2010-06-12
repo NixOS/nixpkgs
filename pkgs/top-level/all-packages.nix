@@ -2437,7 +2437,7 @@ let
   };
 
   go = import ../development/compilers/go {
-    inherit stdenv fetchhg glibc bison ed which bash makeWrapper;
+    inherit stdenv fetchhg glibc bison ed which bash makeWrapper perl;
   };
 
   gprolog = import ../development/compilers/gprolog {
