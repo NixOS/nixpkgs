@@ -21,7 +21,9 @@ stdenv.mkDerivation ({
 }
 //
 (if buildClang then 
-
+  # I write the assert because 'gcc.libc' will be evaluated although 'triplet' would not
+  # evaluate properly (in the preConfigure below)
+  assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
   let
     triplet = if (stdenv.system == "i686-linux") then "i686-unknown-linux-gnu"
               else if (stdenv.system == "x86_64-linux") then "x86_64-unknown-linux-gnu"
@@ -30,7 +32,7 @@ stdenv.mkDerivation ({
     srcClang = fetchsvn {
       url = http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_27;
       rev = 105900;
-      sha256 = "0sfj9glc5yi5fb23h1xihs11l420wzghkm5pk4kwg6pw4w19xg00";
+      sha256 = "fe79988950319b62d3bca34848424f20a3f33c8182507df222f2ac93fbacf671";
     };
 
     prePatch = ''
