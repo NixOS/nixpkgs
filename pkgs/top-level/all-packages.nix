@@ -2506,7 +2506,7 @@ let
   };
 
   llvm = import ../development/compilers/llvm {
-    inherit fetchurl stdenv gcc flex perl libtool;
+    inherit fetchurl stdenv gcc flex perl libtool groff;
   };
 
   llvmGCC = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
@@ -3707,6 +3707,11 @@ let
       SDL libpng giflib;
     inherit (xlibs) libX11 libXext xproto xextproto renderproto
       libXrender;
+  };
+
+  dragonegg = import ../development/libraries/dragonegg {
+    inherit fetchsvn llvm;
+    stdenv = overrideGCC stdenv gcc45;
   };
 
   enchant = makeOverridable (import ../development/libraries/enchant) {

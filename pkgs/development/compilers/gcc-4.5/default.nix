@@ -136,7 +136,7 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [ ./softfp-hurd.patch ]
+    [ ./softfp-hurd.patch ./dragonegg-2.7.patch ]
     ++ optional (cross != null) ./libstdc++-target.patch
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
@@ -204,6 +204,8 @@ stdenv.mkDerivation ({
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
+    --enable-lto
+    --enable-plugin
     --enable-languages=${
       concatStrings (intersperse ","
         (  optional langC        "c"
