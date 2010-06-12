@@ -2513,11 +2513,6 @@ let
     inherit fetchurl fetchsvn stdenv gcc flex perl libtool groff;
   };
 
-  llvmGCC = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
-    flex=flex2535;
-    inherit llvm perl libtool bison;
-  };
-
   mitscheme = import ../development/compilers/mit-scheme {
     inherit fetchurl stdenv gnum4;
   };
