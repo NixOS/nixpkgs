@@ -3708,7 +3708,7 @@ let
       libXrender;
   };
 
-  dragonegg = import ../development/libraries/dragonegg {
+  dragonegg = import ../development/compilers/llvm/dragonegg.nix {
     inherit fetchsvn llvm gmp mpfr mpc;
     stdenv = overrideGCC stdenv gcc45;
   };
