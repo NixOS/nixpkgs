@@ -3710,7 +3710,7 @@ let
   };
 
   dragonegg = import ../development/libraries/dragonegg {
-    inherit fetchsvn llvm;
+    inherit fetchsvn llvm gmp mpfr mpc;
     stdenv = overrideGCC stdenv gcc45;
   };
 

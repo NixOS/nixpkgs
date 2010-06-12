@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gcc, flex, perl, libtool, groff }:
+{stdenv, fetchurl, gcc, flex, perl, libtool, groff}:
 
 stdenv.mkDerivation {
   name = "llvm-2.7";
@@ -8,4 +8,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ gcc flex perl libtool groff ];
+
+  meta = {
+    homepage = http://llvm.org/;
+    description = "Collection of modular and reusable compiler and toolchain technologies";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; all;
+  };
 }
