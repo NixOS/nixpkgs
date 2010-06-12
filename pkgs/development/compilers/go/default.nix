@@ -33,9 +33,9 @@ stdenv.mkDerivation {
       -e 's,/bin/echo,${stdenv.coreutils}/bin/echo,' \
       src/pkg/exec/exec_test.go
 
-    # Disabling the 'os' test (it wants to call hostname, and I don't
-    # know if we have that ready in chroot builds)
-    sed -i -e '/^NOTEST=/a\\tos\\\n\thttp\\' src/pkg/Makefile
+    # Disabling the 'os/http/net' tests (they want files not available in
+    # chroot builds)
+    sed -i -e '/^NOTEST=/a\\tos\\\n\thttp\\\n\tnet\\' src/pkg/Makefile
 
     sed -i -e 's,/bin:/usr/bin:/usr/local/bin,'$PATH, test/run
     sed -i -e 's,/usr/bin/perl,${perl}/bin/perl,' test/errchk
