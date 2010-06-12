@@ -1,21 +1,17 @@
-args: with args;
+{stdenv, fetchurl, flex, bison, linuxHeaders}:
+
 let
   baseURL = mirror://kernel/linux/daemons/autofs/v5;
-
 in
 stdenv.mkDerivation {
-  name = "autofs-5.0.4";
+  name = "autofs-5.0.5";
 
-  # It's too tiresome to apply all patches which are availible (see previous rev).
-  # Using git repo which seems to be the same anyway..
-  # REGION AUTO UPDATE:    { name="autofs"; type="git"; url="http://ftp.riken.go.jp/Linux/kernel.org/scm/linux/storage/autofs/autofs.git"; }
-  src= sourceFromHead "autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/autofs-9a77464b8a661d33a6205756955e0047727d5c1f.tar.gz"; sha256 = "6764390e1f202eaef2f800146c8ccef616d502cec9471b006abde0781a62237f"; });
-  # END
-  /*fetchurl {
-    url = "${baseURL}/autofs-5.0.4.tar.bz2";
-    sha256 = "06ysv24jwhwvl8vbafy4jxcg9ps1iq5nrz2nyfm6c761rniy27v3";
-  };*/
+  src = fetchurl {
+    url = "${baseURL}/autofs-5.0.5.tar.bz2";
+    sha256 = "00k0k3jkbr29gn1wnzqjyc9iqq5bwjyip1isc79wf51wph0kxiv8";
+  };
+
+  patches = import ./patches-v5.nix fetchurl;
 
   preConfigure = ''
     configureFlags="--with-path=$PATH"

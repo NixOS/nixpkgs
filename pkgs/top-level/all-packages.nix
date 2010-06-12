@@ -5975,7 +5975,7 @@ let
   };
 
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
-    inherit sourceFromHead fetchurl stdenv flex bison linuxHeaders;
+    inherit fetchurl stdenv flex bison linuxHeaders;
   };
 
   _915resolution = import ../os-specific/linux/915resolution {
