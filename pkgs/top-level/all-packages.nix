@@ -2003,6 +2003,10 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
+  clang = llvm.override {
+    buildClang = true;
+  };
+
   dylan = import ../development/compilers/gwydion-dylan {
     inherit fetchurl stdenv perl boehmgc yacc flex readline;
     dylan =
@@ -2505,8 +2509,8 @@ let
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
   };
 
-  llvm = import ../development/compilers/llvm {
-    inherit fetchurl stdenv gcc flex perl libtool groff;
+  llvm = makeOverridable (import ../development/compilers/llvm) {
+    inherit fetchurl fetchsvn stdenv gcc flex perl libtool groff;
   };
 
   llvmGCC = builderDefsPackage (import ../development/compilers/llvm/llvm-gcc.nix) {
