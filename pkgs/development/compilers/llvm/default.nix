@@ -29,6 +29,8 @@ stdenv.mkDerivation ({
               else if (stdenv.system == "x86_64-linux") then "x86_64-unknown-linux-gnu"
               else throw "System not supported";
   in {
+    name = "clang-2.7";
+
     srcClang = fetchsvn {
       url = http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_27;
       rev = 105900;
