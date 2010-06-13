@@ -8204,6 +8204,11 @@ let
       else pythonBase;
   };
 
+  merkaartor = import ../applications/misc/merkaartor {
+    inherit fetchurl stdenv boost;
+    qt = qt4;
+  };
+
   meshlab = import ../applications/graphics/meshlab {
     inherit fetchurl stdenv bzip2 lib3ds levmar muparser unzip;
     qt = qt4;
