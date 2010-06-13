@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk pkgconfig ];
 
   meta = {
-    description = "Oscilloscope trough the sound card";
+    description = "Oscilloscope through the sound card";
     homepage = http://xoscope.sourceforge.net;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
