@@ -28,9 +28,6 @@ let
 
   postgresql = postgresqlAndPlugins pkgs.postgresql;
 
-  startDependency = if config.services.gw6c.enable then 
-    "gw6c" else "network-interfaces";
-
   run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} postgres";
 
   flags = optional cfg.enableTCPIP "-i";
@@ -120,10 +117,10 @@ in
         default = [];
         example = "pkgs.postgis"; # of course don't use a string here!
         description = ''
-          When this list contains elemnts a new store path is created.
-          Postgresql and the elments are symlinked into it. Then pg_config,
+          When this list contains elements a new store path is created.
+          PostgreSQL and the elments are symlinked into it. Then pg_config,
           postgres and pc_ctl are copied to make them use the new
-          $out/lib directory as pkglibdir. This make it possible to use postgis
+          $out/lib directory as pkglibdir. This makes it possible to use postgis
           without patching the .sql files which reference $libdir/postgis-1.5.
         '';
         # Note: the duplication of executables is about 4MB size.
@@ -160,7 +157,7 @@ in
     jobs.postgresql =
       { description = "PostgreSQL server";
 
-        startOn = "started ${startDependency}";
+        startOn = "filesystem";
 
         environment =
           { TZ = config.time.timeZone;
