@@ -128,7 +128,7 @@ let
           -m ${toString config.virtualisation.memorySize} \
           -no-kvm-irqchip \
           -net nic,vlan=0,model=virtio -net user,vlan=0 -smb / \
-          -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,werror=report \
+          -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,cache=writeback,werror=report \
           -kernel ${config.system.build.toplevel}/kernel \
           -initrd ${config.system.build.toplevel}/initrd \
           ${qemuGraphics} \
