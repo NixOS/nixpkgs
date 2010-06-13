@@ -9510,6 +9510,12 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  xoscope = import ../applications/science/electronics/xoscope {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (gtkLibs) gtk;
+  };
+
+
   ### SCIENCE / MATH
 
   maxima = import ../applications/science/math/maxima {
