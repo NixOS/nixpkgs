@@ -1,4 +1,4 @@
-{pkgs}:
+{ pkgs }:
 
 with pkgs;
 
@@ -7,13 +7,16 @@ rec {
 
   inherit (linuxPackages_2_6_32) kernel;
 
-  kvm = pkgs.kvm76;
+  kvm = pkgs.qemu_kvm;
 
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
-    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix"];
+    rootModules = [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix" "sd_mod" "ata_piix" ];
   };
+
+
+  hd = "vda"; # either "sda" or "vda"
 
 
   initrdUtils = runCommand "initrd-utils"
@@ -47,8 +50,8 @@ rec {
       # Copy some other tools.
       cp ${bash}/bin/bash $out/bin
       cp ${module_init_tools}/sbin/insmod $out/bin/insmod
-      cp ${pkgs.nettools}/sbin/ifconfig $out/bin
-      cp ${pkgs.sysvinit}/sbin/halt $out/bin
+      cp ${nettools}/sbin/ifconfig $out/bin
+      cp ${sysvinit}/sbin/halt $out/bin
             
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -65,8 +68,8 @@ rec {
       mknod ${dev}/null c 1 3
       mknod ${dev}/zero c 1 5
       mknod ${dev}/tty  c 5 0
-      . /sys/class/block/vda/uevent
-      mknod ${dev}/vda  b $MAJOR $MINOR
+      . /sys/class/block/${hd}/uevent
+      mknod ${dev}/${hd} b $MAJOR $MINOR
     '';
 
   
@@ -123,25 +126,17 @@ rec {
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
     else
-      mount -t ext2 /dev/vda /fs
+      mount -t ext2 /dev/${hd} /fs
     fi
-    
+
     mkdir -p /fs/hostfs
     
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    n=.
-    echo "mounting host filesystem..."
-    while true; do
-      if mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody; then
-        break
-      else
-        n=".$n"
-        test ''${#n} -le 10 || exit 1
-        sleep 1
-        echo "retrying..."
-      fi
+    for ((n = 0; n < 10; n++)); do
+      echo "mounting host filesystem, attempt $n..."
+      mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody && break
     done
 
     mkdir -p /fs/nix/store
@@ -215,10 +210,10 @@ rec {
 
 
   qemuCommandLinux = ''
-    qemu-system-x86_64 -no-kvm-irqchip \
+    qemu-system-x86_64 \
       -nographic -no-reboot \
-      -net nic,model=virtio -net user -smb / \
-      -drive file=$diskImage,if=virtio,boot=on \
+      -net nic,model=virtio -chardev socket,id=samba,path=$TMPDIR/samba -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
+      -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
       -kernel ${kernel}/bzImage \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
@@ -229,11 +224,27 @@ rec {
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
-    PATH=${coreutils}/bin:${kvm}/bin:${samba}/sbin
+    PATH=${coreutils}/bin:${kvm}/bin
 
     diskImage=''${diskImage:-/dev/null}
 
     eval "$preVM"
+
+    cat > smb.conf <<EOF
+      [global]
+        private dir=$TMPDIR
+        smb ports=0
+        socket address=127.0.0.1
+        pid directory=$TMPDIR
+        lock directory=$TMPDIR
+        log file=$TMPDIR/log.smbd
+        smb passwd file=$TMPDIR/smbpasswd
+        security = share
+      [qemu]
+        path=/
+        read only=no
+        guest ok=yes
+    EOF
 
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
@@ -242,6 +253,8 @@ rec {
     #! ${bash}/bin/sh
     diskImage=$diskImage
     TMPDIR=$TMPDIR
+    ${socat}/bin/socat unix-listen:$TMPDIR/samba exec:'${samba}/sbin/smbd -s $TMPDIR/smb.conf' &
+    while [ ! -e $TMPDIR/samba ]; do sleep 0.1; done # ugly
     ${qemuCommand}
     EOF
 
@@ -271,8 +284,8 @@ rec {
 
   createRootFS = ''
     mkdir /mnt
-    ${e2fsprogs}/sbin/mke2fs -F /dev/vda
-    ${utillinux}/bin/mount -t ext2 /dev/vda /mnt
+    ${e2fsprogs}/sbin/mke2fs -F /dev/${hd}
+    ${utillinux}/bin/mount -t ext2 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh
@@ -429,6 +442,7 @@ rec {
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt/nix/store
         ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
+        ${utillinux}/bin/mount -o bind /tmp /mnt/tmp
         
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
@@ -440,6 +454,7 @@ rec {
         rm /mnt/.debug
         
         ${utillinux}/bin/umount /mnt/nix/store
+        ${utillinux}/bin/umount /mnt/tmp
         ${utillinux}/bin/umount /mnt
       '';
 
