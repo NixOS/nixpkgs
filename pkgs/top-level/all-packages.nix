@@ -2031,7 +2031,7 @@ let
     inherit fetchurl stdenv builderDefsPackage;
   };
 
-  gcc = gcc44;
+  gcc = gcc45;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
