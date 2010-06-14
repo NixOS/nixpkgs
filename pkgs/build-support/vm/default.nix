@@ -212,7 +212,7 @@ rec {
   qemuCommandLinux = ''
     qemu-system-x86_64 \
       -nographic -no-reboot \
-      -net nic,model=virtio -chardev socket,id=samba,path=$TMPDIR/samba -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
+      -net nic,model=virtio -chardev socket,id=samba,path=./samba -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
       -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
       -kernel ${kernel}/bzImage \
       -initrd ${initrd}/initrd \
@@ -253,8 +253,9 @@ rec {
     #! ${bash}/bin/sh
     diskImage=$diskImage
     TMPDIR=$TMPDIR
-    ${socat}/bin/socat unix-listen:$TMPDIR/samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' > /dev/null 2>&1 &
-    while [ ! -e $TMPDIR/samba ]; do sleep 0.1; done # ugly
+    cd $TMPDIR
+    ${socat}/bin/socat unix-listen:./samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' > /dev/null 2>&1 &
+    while [ ! -e ./samba ]; do sleep 0.1; done # ugly
     ${qemuCommand}
     EOF
 
