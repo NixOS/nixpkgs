@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pm-utils-1.2.5";
+  name = "pm-utils-1.3.0";
 
   src = fetchurl {
     url = "http://pm-utils.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1kp4l21786kbvnzlf3n9svl4m93nzi1hr9pknv0r3zhzfz3hgkw4";
+    md5 = "37d71f8adbb409442212a85a080d324d";
   };
 
   configureFlags = "--sysconfdir=/etc";

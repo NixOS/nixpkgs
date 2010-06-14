@@ -1,14 +1,14 @@
 { fetchurl, stdenv, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "paraview-3.6.2";
+  name = "paraview-3.8.0";
   src = fetchurl {
-    url = "http://www.paraview.org/files/v3.6/${name}.tar.gz";
-    sha256 = "017axalkiaqd13jfbb4awcxvpndnzaq35ys7svm5rnizdwd5hbq6";
+    url = "http://www.paraview.org/files/v3.8/ParaView-3.8.0.tar.gz";
+    sha256 = "0y20daf59hn9dmbp1cmx0085z34qccwps04hv2lh9s15namca9py";
   };
 
   preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/paraview-3.6"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/paraview-3.8"
   '';
 
   buildInputs = [ cmake qt4 ];

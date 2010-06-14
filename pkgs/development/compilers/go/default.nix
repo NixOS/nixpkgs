@@ -1,37 +1,50 @@
-{stdenv, fetchhg, bison, glibc, ed, which, bash, makeWrapper, ...}:
+{stdenv, fetchhg, bison, glibc, ed, which, bash, makeWrapper, perl, ...}:
 
 let
-  version = "2009-11-12";
-  md5 = "66e5803c8dc2855b339151918b6b0de5";
+  version = "2010-06-09";
+  sha256 = "b607879b333ef100466c726a13cc69ed143566a3c1af59f6d33a6e90b9d0c917";
+
+  loader386 = "${glibc}/lib/ld-linux.so.2";
+  loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
 in
 
 stdenv.mkDerivation {
-  name = "Go-" + version;
+  name = "go-" + version;
 
   # No tarball yet.
   src = fetchhg {
     url = https://go.googlecode.com/hg/;
     tag = "release." + version;
-    inherit md5;
+    inherit sha256;
   };
 
   buildInputs = [ bison glibc ed which bash makeWrapper ];
-
-  patches = [
-    ./disable-system-dependent-tests.patch
-    ./cgo-set-local-to-match-gcc-error-messages.patch
-  ];
 
   prePatch = ''
     patchShebangs ./ # replace /bin/bash
     # only for 386 build
     # !!! substituteInPlace does not seems to be effective.
-    sed -i 's,/lib/ld-linux.so.2,${glibc}/lib/ld-linux.so.2,' src/cmd/8l/asm.c
+    sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
+    sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
     sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo.go
+    sed -i 's,/bin/ed,${ed}/bin/ed,' src/cmd/6l/mkenam
+
+    sed -i -e 's,/bin/cat,${stdenv.coreutils}/bin/cat,' \
+      -e 's,/bin/echo,${stdenv.coreutils}/bin/echo,' \
+      src/pkg/exec/exec_test.go
+
+    # Disabling the 'os/http/net' tests (they want files not available in
+    # chroot builds)
+    sed -i -e '/^NOTEST=/a\\tos\\\n\thttp\\\n\tnet\\' src/pkg/Makefile
+
+    sed -i -e 's,/bin:/usr/bin:/usr/local/bin,'$PATH, test/run
+    sed -i -e 's,/usr/bin/perl,${perl}/bin/perl,' test/errchk
   '';
 
   GOOS = "linux";
-  GOARCH = "386";
+  GOARCH = if (stdenv.system == "i686-linux") then "386"
+          else if (stdenv.system == "x86_64-linux") then "amd64"
+          else throw "Unsupported system";
 
   installPhase = ''
     ensureDir "$out/bin"
@@ -64,13 +77,13 @@ stdenv.mkDerivation {
     # Copy the emacs configuration for Go files.
     ensureDir "$out/share/emacs/site-lisp"
     cp ./misc/emacs/* $out/share/emacs/site-lisp/ # */
-
   '';
 
   meta = {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ pierron ];
+    maintainers = with stdenv.lib.maintainers; [ pierron viric ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

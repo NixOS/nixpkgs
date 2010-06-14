@@ -5,20 +5,20 @@
 assert stdenv.isLinux && stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  name = "opera-10.00";
+  name = "opera-10.10";
 
   builder = ./builder.sh;
   
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/i386/shared/${name}.gcc4-shared-qt3.i386.tar.gz";
-        sha256 = "1l87rxdzq2mb92jbwj4gg79j177yzyfbkqb52gcdwicw8jcmhsad";
+        url = "http://mirror.liteserver.nl/pub/opera/linux/1010/final/en/i386/shared/opera-10.10.gcc4-shared-qt3.i386.tar.bz2";
+        sha256 = "0y8xahwgx5jw83ky4zkw8ixyfgnd2xg9k0zq15yivhimi60fsppc";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://mirror.liteserver.nl/pub/opera/linux/1000/final/en/x86_64/${name}.gcc4-shared-qt3.x86_64.tar.gz";
-        sha256 = "0w9a56j3jz0bjdj98k6n4xmrjnkvlxm32cfvh2c0f5pvgwcr642i";
+        url = "http://mirror.liteserver.nl/pub/opera/linux/1010/final/en/x86_64/opera-10.10.gcc4-shared-qt3.x86_64.tar.bz2";
+        sha256 = "1z0zgalqv9lnf1jsg3zg9diqfyszh75r7m1dbkifkdawn4zv4q3s";
       }
     else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 

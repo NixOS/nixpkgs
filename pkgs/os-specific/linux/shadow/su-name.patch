@@ -1,0 +1,20 @@
+When su is invoked with command line arguments for the shell (e.g. "su
+- -c 'cmd'"), set argv[0] in the shell to "-su" or "-<basename>" (as
+determined by the SU_NAME option in /etc/login.defs).  This is
+necessary to make Bash compiled with the NON_INTERACTIVE_LOGIN_SHELLS
+option to read startup files.  It is also consistent with the
+behaviour of `su' in coreutils, and with the case where there are no
+arguments ("su -").
+
+diff -ru -x '*~' shadow-4.1.4.2-orig/src/su.c shadow-4.1.4.2/src/su.c
+--- shadow-4.1.4.2-orig/src/su.c	2009-07-23 22:38:56.000000000 +0200
++++ shadow-4.1.4.2/src/su.c	2010-06-04 13:02:24.000000000 +0200
+@@ -983,7 +983,7 @@
+ 		 * Use the shell and create an argv
+ 		 * with the rest of the command line included.
+ 		 */
+-		argv[-1] = shellstr;
++		argv[-1] = cp;
+ #ifndef USE_PAM
+ 		execve_shell (shellstr, &argv[-1], environ);
+ 		err = errno;

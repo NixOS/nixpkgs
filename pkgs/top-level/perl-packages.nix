@@ -184,6 +184,16 @@ rec {
     doCheck = false;
   };
 
+  cam_pdf = buildPerlPackage rec {
+    name = "CAM-PDF-1.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CD/CDOLAN/${name}.tar.gz";
+      sha256 = "1lamnx0vcqzzcxdmj5038gvyn6z5xcy9756jhndgpggjfkzilwkh";
+    };
+    propagatedBuildInputs = [ CryptRC4 TextPDF ];
+    buildInputs = [ TestMore ];
+  };
+
   CaptchaReCAPTCHA = buildPerlPackage rec {
     name = "Captcha-reCAPTCHA-0.92";
     src = fetchurl {
@@ -737,6 +747,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
       sha256 = "13j0v6ihgx80q8jhyas4k48b64gnzf202qajyn097vj8v48khk54";
+    };
+  };
+
+  CryptRC4 = buildPerlPackage rec {
+    name = "Crypt-RC4-2.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIFUKURT/${name}.tar.gz";
+      sha256 = "1sp099cws0q225h6j4y68hmfd1lnv5877gihjs40f8n2ddf45i2y";
     };
   };
 
@@ -2606,6 +2624,15 @@ rec {
     };
     buildInputs = [ FileSlurp ListMoreUtils Encode
       ExtUtilsMakeMaker TestException ];
+  };
+
+  TextPDF = buildPerlPackage rec {
+    name = "Text-PDF-0.29a";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MH/MHOSKEN/${name}.tar.gz";
+      sha256 = "11jig38vps957zyc9372q2g0jcabxgkql3b5vazc1if1ajhlvc4s";
+    };
+    propagatedBuildInputs = [ CompressZlib ];
   };
 
   TextSimpleTable = buildPerlPackage {

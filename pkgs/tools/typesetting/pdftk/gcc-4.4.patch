@@ -1,0 +1,18 @@
+Taken from gentoo portage.
+
+diff -NrU5 pdftk-1.41.orig/java_libs/com/lowagie/text/pdf/PdfDate.java pdftk-1.41/java_libs/com/lowagie/text/pdf/PdfDate.java
+--- pdftk-1.41.orig/java_libs/com/lowagie/text/pdf/PdfDate.java	2009-05-18 20:49:13.000000000 -0600
++++ pdftk-1.41/java_libs/com/lowagie/text/pdf/PdfDate.java	2009-05-18 20:51:36.000000000 -0600
+@@ -74,11 +74,11 @@
+ public class PdfDate extends PdfString {
+     
+     // ssteward; static builds of pdftk (Windows, gcc 3.3.1) would
+     // omit this class because of its reference by reflection;
+     // this treatment ensures that ld will include it
+-    private static Class c1= gnu.java.locale.Calendar.class;
++    private static Class c1= java.util.Calendar.class;
+ 
+     private static final int dateSpace[] = {Calendar.YEAR, 4, 0, Calendar.MONTH, 2, -1, Calendar.DAY_OF_MONTH, 2, 0,
+         Calendar.HOUR_OF_DAY, 2, 0, Calendar.MINUTE, 2, 0, Calendar.SECOND, 2, 0};
+     
+     // constructors

@@ -3,11 +3,11 @@
 , kdelibs, kdepimlibs, kdebindings, automoc4, phonon}:
 
 stdenv.mkDerivation {
-  name = "kdeadmin-4.4.3";
+  name = "kdeadmin-4.4.4";
   
   src = fetchurl {
-    url = mirror://kde/stable/4.4.3/src/kdeadmin-4.4.3.tar.bz2;
-    sha256 = "08s0fagxgdk6p00qxzizrhs9010f6s9rlz7w07ri86m9ps9yd6am";
+    url = mirror://kde/stable/4.4.4/src/kdeadmin-4.4.4.tar.bz2;
+    sha256 = "04jyvnwv8xwzchvzgns2db4bhr0fxis98am58icz6qva9nsgr6zh";
   };
   
   builder = ./builder.sh;

@@ -10,28 +10,32 @@
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
+  tag = "OOO320_m19";
+  version = "3.2.1.3";
 in
 stdenv.mkDerivation rec {
-  name = "go-oo-3.2.0.10";
+  name = "go-oo-${version}";
   # builder = ./builder.sh;
 
-  downloadRoot = "http://download.services.openoffice.org/files/stable";
-
   src = fetchurl {
-      url = "http://download.go-oo.org/OOO320/ooo-build-3.2.0.10.tar.gz";
-      sha256 = "0g6n0m9pibn6cx12zslmknzy1p764nqj8vdf45l5flyls9aj3x21";
+      url = "http://download.go-oo.org/OOO320/ooo-build-${version}.tar.gz";
+      sha256 = "0c8y66ca9nsfbznjazblpszpvg20mgic2bnpffgqb6qlpji6iwd1";
     };
 
-  srcs_download = (import ./src.nix) fetchurl;
+  srcs_download = import ./go-srcs.nix { inherit fetchurl; };
 
   # Multi-CPU: --with-num-cpus=4 
+  # The '--with-tag=XXXX' string I took from their 'configure' script. I write it so it matches the
+  # logic in the script for "upstream version for X.X.X". Look for that string in the script.
+  # We need '--without-split' when downloading directly usptream openoffice src tarballs.
   configurePhase = ''
     sed -i -e '1s,/bin/bash,${bash}/bin/bash,' $(find bin -type f)
-    sed -i -e '1s,/usr/bin/perl,${perl}/bin/perl,' download.in bin/ooinstall bin/generate-bash-completion
+    sed -i -e '1s,/usr/bin/perl,${perl}/bin/perl,' download.in $(find bin -type f)
+    sed -i -e '1s,/usr/bin/python,${python}/bin/python,' bin/*.py
     echo "$distroFlags" > distro-configs/SUSE-11.1.conf.in
 
     ./configure --with-distro=SUSE-11.1 --with-system-libwpd --without-git --with-system-cairo \
-      --with-lang="${langsSpaces}"
+      --with-lang="${langsSpaces}" --with-tag=${tag} --without-split
   '';
 
   buildPhase = ''
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
     make build.prepare
 
     set -x
-    pushd build/ooo3*-*/
+    pushd build/${tag}
     # Fix svtools: hardcoded jpeg path
     sed -i -e 's,^JPEG3RDLIB=.*,JPEG3RDLIB=${libjpeg}/lib/libjpeg.so,' solenv/inc/libs.mk
     # Fix sysui: wants to create a tar for root
@@ -61,6 +65,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,^CONFIGURE_FLAGS.*,& --prefix='$TMPDIR, redland/redland/makefile.mk \
       redland/raptor/makefile.mk redland/rasqal/makefile.mk
     popd
+
     set +x
     make
   '';
@@ -117,6 +122,7 @@ stdenv.mkDerivation rec {
     --without-system-mozilla
     --without-system-libwps
     --without-system-libwpg
+    --without-system-redland
   '';
 
   buildInputs = [

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   name = "klibc-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/klibc/Testing/klibc-${version}.tar.bz2";
+    url = "mirror://kernel/linux/libs/klibc/klibc-${version}.tar.bz2";
     sha256 = "1x401wmjca6zkyikf9xz45b3wb1hnj0m2s9in1sg6xdhi3pk8lwb";
   };
   

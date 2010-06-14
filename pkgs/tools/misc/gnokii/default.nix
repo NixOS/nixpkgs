@@ -5,6 +5,7 @@ let
   s = import ./src-for-default.nix; 
   buildInputs = with a; [
     perl intltool gettext libusb
+    glib pkgconfig
   ];
 in
 rec {

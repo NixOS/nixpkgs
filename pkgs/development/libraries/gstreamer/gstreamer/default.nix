@@ -3,6 +3,7 @@
 
 stdenv.mkDerivation rec {
   name = "gstreamer-0.10.26";
+  # TODO: Remove gtkdoc dependency on next upgrade
 
   src = fetchurl {
     urls = [

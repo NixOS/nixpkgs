@@ -42,11 +42,13 @@ let inherit (lib) nv nvs; in
   # W ith or W ithout F eature
   wwf = {name, feat ? name, enable ? {}, disable ? {}, value ? ""}:
     nvs name {
-    set = {
-      configureFlags = ["--with-${feat}${if value == "" then "" else "="}${value}"];
-    } // enable;
-    unset = {
-      configureFlags = ["--without-${feat}"];
-    } // disable;
+    set = enable // {
+      configureFlags = ["--with-${feat}${if value == "" then "" else "="}${value}"]
+                       ++ lib.maybeAttr "configureFlags" [] enable;
+    };
+    unset = disable // {
+      configureFlags = ["--without-${feat}"]
+                       ++ lib.maybeAttr "configureFlags" [] disable;
+    };
   };
 }

@@ -1,10 +1,16 @@
-let version = "5.2.11"; in
-
 args: with args;
 
-let inherit (args.composableDerivation) composableDerivation edf wwf; in
+let
 
-composableDerivation {} ( fixed : {
+  inherit (args.composableDerivation) composableDerivation edf wwf;
+
+in
+
+composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
+
+  # choose a different version this way:
+  # php.merge { version = "5.3.2"; }
+  version = "5.2.11";
 
   name = "php_configurable-${version}";
 
@@ -34,7 +40,10 @@ composableDerivation {} ( fixed : {
       };
 
       libxml2 = {
-        configureFlags = ["--with-libxml-dir=${libxml2}"];
+        configureFlags = [
+          "--with-libxml-dir=${libxml2}"
+          "--with-iconv-dir=${libiconv}"
+          ];
         buildInputs = [ libxml2 ];
       };
     
@@ -75,7 +84,7 @@ composableDerivation {} ( fixed : {
 
       gd = {
         configureFlags = ["--with-gd=${args.gd}"];
-        buildInputs = [gd];
+        buildInputs = [gd libpng libjpeg ];
       };
 
       soap = {
@@ -138,12 +147,17 @@ composableDerivation {} ( fixed : {
 
   installPhase = ''
     unset installPhase; installPhase;
-    cp php.ini-recommended $iniFile
+    cp php.ini-${ if builtins.lessThan (builtins.compareVersions version "5.3") 0
+        then "recommended" /* < PHP 5.3 */
+        else "production" /* >= PHP 5.3 */
+    } $iniFile
   '';
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    md5 = "286bf34630f5643c25ebcedfec5e0a09";
+    md5 = if version == "5.3.2" then "46f500816125202c48a458d0133254a4"
+          else if version == "5.2.11" then "286bf34630f5643c25ebcedfec5e0a09"
+          else throw "set md5 sum of php source file" ;
     name = "php-${version}.tar.bz2";
   };
 

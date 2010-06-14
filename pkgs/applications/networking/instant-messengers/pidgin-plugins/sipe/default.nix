@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "11d85qxix1dmwvzs3lx0sycsx1d5sy67r9y78fs7z716py4mg9np";
   };
 
+  patches = [ ./fix-2.7.0.patch ];
+
   meta = {
     description = "SIPE plugin for Pidgin IM.";
     homepage = http://sipe.sourceforge.net/;

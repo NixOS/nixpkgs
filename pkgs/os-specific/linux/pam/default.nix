@@ -1,16 +1,15 @@
-{stdenv, fetchurl, cracklib, flex}:
+{ stdenv, fetchurl, flex, cracklib, libxcrypt }:
 
 stdenv.mkDerivation {
-  name = "linux-pam-1.0.3";
+  name = "linux-pam-1.1.1";
 
   src = fetchurl {
-    url = mirror://kernel/linux/libs/pam/library/Linux-PAM-1.0.3.tar.bz2;
-    sha256 = "1xqj4ibnid5w3pi629vj7jiddf192kzm8rbm3vy90diqpl1k5h6n";
+    url = mirror://kernel/linux/libs/pam/library/Linux-PAM-1.1.1.tar.bz2;
+    sha256 = "015r3xdkjpqwcv4lvxavq0nybdpxhfjycqpzbx8agqd5sywkx3b0";
   };
 
-  buildInputs = [flex cracklib];
-
-  CRACKLIB_DICTPATH = "${cracklib}/lib";
+  buildInputs = [ flex cracklib ]
+    ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") libxcrypt;
 
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"

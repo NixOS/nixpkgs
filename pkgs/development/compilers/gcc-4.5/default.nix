@@ -136,7 +136,7 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [ ./softfp-hurd.patch ]
+    [ ./softfp-hurd.patch ./dragonegg-2.7.patch ]
     ++ optional (cross != null) ./libstdc++-target.patch
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
@@ -190,8 +190,10 @@ stdenv.mkDerivation ({
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
     ${if langJava then
       "--with-ecj-jar=${javaEcj} " +
-      "--enable-java-home --with-java-home=\${prefix} " +
-      "--with-jvm-root-dir=\${prefix}/jdk"
+
+      # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
+      # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
+      "--enable-java-home --with-java-home=\${prefix}/lib/jvm/jre "
       else ""}
     ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
@@ -202,6 +204,8 @@ stdenv.mkDerivation ({
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
+    --enable-lto
+    --enable-plugin
     --enable-languages=${
       concatStrings (intersperse ","
         (  optional langC        "c"
@@ -273,7 +277,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
-      enableMultilib; };
+      enableMultilib version; };
 
   meta = {
     homepage = http://gcc.gnu.org/;

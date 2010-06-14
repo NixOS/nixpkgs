@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, librsync, gnupg, boto, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "duplicity-0.6.06";
+  name = "duplicity-0.6.08b";
 
   src = fetchurl {
-    url = http://code.launchpad.net/duplicity/0.6-series/0.6.06/+download/duplicity-0.6.06.tar.gz;
-    sha256 = "1g284y24061krigs386x5s7vs7cnwhah7g1mfk9jfn3gzsidv70g";
+    url = http://code.launchpad.net/duplicity/0.6-series/0.6.08b/+download/duplicity-0.6.08b.tar.gz;
+    sha256 = "03bahzdq2dqngiqadfy1jwzn8an1fm46nl9frd0v6a4c52mr1g8i";
   };
 
   installPhase = ''
@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/duplicity \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
       --prefix PATH : "${gnupg}/bin"
+    wrapProgram $out/bin/rdiffdir \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
   '';
 
   buildInputs = [ python librsync makeWrapper ];

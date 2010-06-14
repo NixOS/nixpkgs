@@ -263,7 +263,8 @@ rec {
             definitions = map (x: toString x.source) opt.definitions;
           }
           // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; };
+          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
+          // optionalAttrs (opt ? defaultText) { default = opt.defaultText; };
 
           subOptions =
             if opt ? options then
@@ -283,7 +284,7 @@ rec {
   scrubOptionValue = x: 
     if isDerivation x then { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
     else if isList x then map scrubOptionValue x
-    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) x
+    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
 
     

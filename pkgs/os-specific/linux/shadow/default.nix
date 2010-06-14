@@ -1,14 +1,19 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, pam }:
    
-stdenv.mkDerivation {
-  name = "shadow-4.0.16";
+stdenv.mkDerivation rec {
+  name = "shadow-4.1.4.2";
    
   src = fetchurl {
-    url = http://losser.labs.cs.uu.nl/~armijn/.nix/shadow-4.0.16.tar.bz2;
-    md5 = "1d91f7479143d1d705b94180c0d4874b";
+    url = "ftp://pkg-shadow.alioth.debian.org/pub/pkg-shadow/${name}.tar.bz2";
+    sha256 = "1449ny7pdnwkavg92wvibapnkgdq5pas38nvl1m5xa37g5m7z64p";
   };
-  
-  configureFlags = "--with-selinux=no";
 
-  postInstall = "rm $out/bin/groups"; # coreutils provides `groups'
+  buildInputs = [ pam ];
+
+  patches = [ ./no-sanitize-env.patch ./su-name.patch ./keep-path.patch ];
+  
+  meta = {
+    homepage = http://pkg-shadow.alioth.debian.org/;
+    description = "Suite containing authentication-related tools such as passwd and su";
+  };
 }

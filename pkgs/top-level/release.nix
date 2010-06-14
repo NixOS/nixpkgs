@@ -491,28 +491,24 @@ with (import ./release-lib.nix);
   };
 
   linuxPackages_2_6_28 = {
-    aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
   linuxPackages_2_6_29 = {
-    aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
   linuxPackages_2_6_32 = {
-    aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
   linuxPackages_2_6_33 = {
-    aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;

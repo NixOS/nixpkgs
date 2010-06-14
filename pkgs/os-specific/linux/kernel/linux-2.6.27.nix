@@ -3,11 +3,11 @@ args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? "", ... }:
 import ./generic.nix (
 
   rec {
-    version = "2.6.27.46";
+    version = "2.6.27.47";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "185pniphacd1vfam9qianrw8ibjw1rjlds7hikxxmimfn029q3nv";
+      sha256 = "1bwyj2cykybi23c005mcqn13gjc4bd1hhg3qc3iab3zw04iy08ir";
     };
 
     features.iwlwifi = true;

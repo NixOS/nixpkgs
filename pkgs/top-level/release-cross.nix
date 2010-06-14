@@ -154,6 +154,7 @@ in {
   crossGNU = mapTestOnCross crossSystem {
     gccCrossStageFinal = nativePlatforms;
     hurdCross = nativePlatforms;
+    mach.hostDrv = nativePlatforms;
 
     coreutils_real.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;

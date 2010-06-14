@@ -1,20 +1,16 @@
 { fetchurl, stdenv, shishi }:
 
 stdenv.mkDerivation rec {
-  name = "gss-1.0.0";
+  name = "gss-1.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/gss/${name}.tar.gz";
-    sha256 = "0rcbzg19m7bddvbhjqv1iwyydkj61czb0xr691mkj0i5p4d4bakk";
+    sha256 = "05g9p45gmd0332ly19g13rbi0wdx447imw42f22482rdr8vpy9m0";
   };
 
   buildInputs = [ shishi ];
 
   doCheck = true;
-
-  # Work around the lack of `-lshishi' for `krb5context'.  See
-  # <http://lists.gnu.org/archive/html/help-gsasl/2010-05/msg00005.html>.
-  checkPhase = "make check LDFLAGS=-lshishi";
 
   meta = {
     description = "GNU GSS Generic Security Service";

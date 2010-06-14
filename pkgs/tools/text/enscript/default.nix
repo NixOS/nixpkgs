@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "enscript-1.6.5.1";
+  name = "enscript-1.6.5.2";
 
   src = fetchurl {
     url = "mirror://gnu/enscript/${name}.tar.gz";
-    sha256 = "12zmd3iibpdwpgk10pwd71111dfh31x37xy6cllb1g243in3bgsp";
+    sha256 = "0xfblj3liwf1zxpx8bdcl2dwqi2lkfm1zsl6ld9757kgnfyk6gnv";
   };
 
   buildInputs = [ gettext ];

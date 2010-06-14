@@ -1,5 +1,5 @@
 { fetchgit, stdenv, mig ? null, autoconf, automake, texinfo
-, headersOnly ? true }:
+, headersOnly ? false }:
 
 assert (!headersOnly) -> (mig != null);
 
@@ -16,9 +16,14 @@ stdenv.mkDerivation ({
     inherit rev;
   };
 
-  configureFlags = "--build=i586-pc-gnu";
+  configureFlags =
+       stdenv.lib.optional headersOnly "--build=i586-pc-gnu"  # cheat
 
-  buildInputs = [ autoconf automake texinfo ]
+    # Always enable dependency tracking.  See
+    # <http://lists.gnu.org/archive/html/bug-hurd/2010-05/msg00137.html>.
+    ++ [ "--enable-dependency-tracking" ];
+
+  buildNativeInputs = [ autoconf automake texinfo ]
     ++ stdenv.lib.optional (mig != null) mig;
 
   preConfigure = "autoreconf -vfi";
@@ -41,6 +46,7 @@ stdenv.mkDerivation ({
     homepage = http://www.gnu.org/software/hurd/microkernel/mach/gnumach.html;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = [ "i586-gnu" ];
   };
 }
 

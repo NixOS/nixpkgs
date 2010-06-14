@@ -245,7 +245,7 @@ stdenv.mkDerivation ({
 
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
-      enableMultilib; };
+      enableMultilib version; };
 
   meta = {
     homepage = http://gcc.gnu.org/;

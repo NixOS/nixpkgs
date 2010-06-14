@@ -1,0 +1,46 @@
+Index: mainline/gcc/config/i386/i386.c
+===================================================================
+--- mainline.orig/gcc/config/i386/i386.c	2010-04-02 09:11:58.733574308 +0200
++++ mainline/gcc/config/i386/i386.c	2010-04-02 09:29:11.276111437 +0200
+@@ -4992,7 +4992,8 @@
+    case, we return the original mode and warn ABI change if CUM isn't
+    NULL.  */
+ 
+-static enum machine_mode
++extern enum machine_mode type_natural_mode (const_tree, CUMULATIVE_ARGS *);
++enum machine_mode
+ type_natural_mode (const_tree type, CUMULATIVE_ARGS *cum)
+ {
+   enum machine_mode mode = TYPE_MODE (type);
+@@ -5123,7 +5124,9 @@
+    See the x86-64 PS ABI for details.
+ */
+ 
+-static int
++extern int classify_argument (enum machine_mode, const_tree,
++                              enum x86_64_reg_class [MAX_CLASSES], int);
++int
+ classify_argument (enum machine_mode mode, const_tree type,
+ 		   enum x86_64_reg_class classes[MAX_CLASSES], int bit_offset)
+ {
+@@ -5504,7 +5507,9 @@
+ 
+ /* Examine the argument and return set number of register required in each
+    class.  Return 0 iff parameter should be passed in memory.  */
+-static int
++extern int examine_argument (enum machine_mode, const_tree, int,
++                             int *, int *);
++int
+ examine_argument (enum machine_mode mode, const_tree type, int in_return,
+ 		  int *int_nregs, int *sse_nregs)
+ {
+@@ -6186,7 +6191,8 @@
+ 
+ /* Return true when TYPE should be 128bit aligned for 32bit argument passing
+    ABI.  */
+-static bool
++extern bool contains_aligned_value_p (tree);
++bool
+ contains_aligned_value_p (tree type)
+ {
+   enum machine_mode mode = TYPE_MODE (type);

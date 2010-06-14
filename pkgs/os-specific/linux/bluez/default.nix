@@ -1,16 +1,16 @@
-{stdenv, fetchurl, pkgconfig, dbus, glib, libusb, alsaLib}:
-   
+{ stdenv, fetchurl, pkgconfig, dbus, glib, libusb, alsaLib }:
+
 assert stdenv.isLinux;
    
 stdenv.mkDerivation rec {
-  name = "bluez-4.54";
+  name = "bluez-4.65";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.gz";
-    sha256 = "1ykhyin06gzim4496sgr89x2yaqh4nrwmnfzrp20kiqfslw6fzlp";
+    sha256 = "08j9h2cm0d4ifq8jna9lgfg37b3bncmjgxm9nirdrsr6505542sz";
   };
 
-  buildInputs = [pkgconfig dbus.libs glib libusb alsaLib];
+  buildInputs = [ pkgconfig dbus.libs glib libusb alsaLib ];
 
   configureFlags = "--localstatedir=/var";
 

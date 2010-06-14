@@ -1,0 +1,22 @@
+Don't reset $PATH to /bin:/usr/bin.  This is consistent with `su' in
+coreutils and important on NixOS.
+
+diff -ru -x '*~' shadow-4.1.4.2-orig/src/su.c shadow-4.1.4.2/src/su.c
+--- shadow-4.1.4.2-orig/src/su.c	2009-07-23 22:38:56.000000000 +0200
++++ shadow-4.1.4.2/src/su.c	2010-06-04 13:23:11.000000000 +0200
+@@ -827,6 +827,7 @@
+ 	(void) signal (SIGINT, SIG_DFL);
+ 	(void) signal (SIGQUIT, SIG_DFL);
+ 
++#if 0
+ 	cp = getdef_str ((pwent.pw_uid == 0) ? "ENV_SUPATH" : "ENV_PATH");
+ 	if (NULL == cp) {
+ 		addenv ("PATH=/bin:/usr/bin", NULL);
+@@ -835,6 +836,7 @@
+ 	} else {
+ 		addenv ("PATH", cp);
+ 	}
++#endif
+ 
+ 	if (getenv ("IFS") != NULL) {	/* don't export user IFS ... */
+ 		addenv ("IFS= \t\n", NULL);	/* ... instead, set a safe IFS */

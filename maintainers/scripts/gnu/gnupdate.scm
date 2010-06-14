@@ -28,7 +28,7 @@
              (srfi srfi-11)
              (srfi srfi-37)
              (system foreign)
-             (rnrs bytevector))
+             (rnrs bytevectors))
 
 
 ;;;

@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.0.21a";
+  name = "alsa-lib-1.0.23";
   
   src = fetchurl {
     url = "ftp://ftp.alsa-project.org/pub/lib/${name}.tar.bz2";
-    sha256 = "0x00sxvf1271vfg829yabaj0xkm4xgvk5vvwcq4qnhn5mnphkkm6";
+    sha256 = "08zl1yvva6xsdl9pghbvyjdrzwkyll8hc606my1i6jjypb58w8xl";
   };
   
   configureFlags = "--disable-xmlto";

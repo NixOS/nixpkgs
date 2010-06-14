@@ -47,6 +47,14 @@ rec {
         NFS_FS y
         ROOT_NFS y
         TUN m
+        NFS_V4 y
+        NFS_V4_1 y
+        NFS_FSCACHE y
+        NFSD m
+        NFSD_V2_ACL y
+        NFSD_V3 y
+        NFSD_V3_ACL y
+        NFSD_V4 y
 
         # Fail to build
         DRM n

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
-  name = "procps-3.2.7";
+  name = "procps-3.2.8";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://procps.sourceforge.net/procps-3.2.7.tar.gz;
-    md5 = "f490bca772b16472962c7b9f23b1e97d";
+    url = http://procps.sourceforge.net/procps-3.2.8.tar.gz;
+    sha256 = "0d8mki0q4yamnkk4533kx8mc0jd879573srxhg6r2fs3lkc6iv8i";
   };
   patches = [./makefile.patch ./procps-build.patch];
   buildInputs = [ncurses];

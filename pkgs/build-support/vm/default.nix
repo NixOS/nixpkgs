@@ -1,4 +1,4 @@
-{pkgs}:
+{ pkgs }:
 
 with pkgs;
 
@@ -7,47 +7,77 @@ rec {
 
   inherit (linuxPackages_2_6_32) kernel;
 
-  klibcShrunk = pkgs.klibcShrunk.override { klibc = klibc_15; };
-
-  kvm = pkgs.kvm76;
+  kvm = pkgs.qemu_kvm;
 
 
   modulesClosure = makeModulesClosure {
     inherit kernel;
-    rootModules = ["cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix"];
+    rootModules = [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix" "sd_mod" "ata_piix" ];
   };
 
 
-  # !!! should use the mount_cifs package in all-packages.nix here.
-  mountCifs = (makeStaticBinaries stdenv).mkDerivation {
-    name = "mount.cifs";
-    src = mount_cifs.src;
-    buildInputs = [nukeReferences];
-    buildCommand = ''
+  hd = "vda"; # either "sda" or "vda"
+
+
+  initrdUtils = runCommand "initrd-utils"
+    { buildInputs = [ nukeReferences ];
+      allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
+    }
+    ''
       ensureDir $out/bin
-      gcc -Wall $src -o $out/bin/mount.cifs
-      strip $out/bin/mount.cifs
-      nuke-refs $out/bin/mount.cifs
-    '';
-    allowedReferences = []; # prevent accidents like glibc being included in the initrd
-  };
+      ensureDir $out/lib
+      
+      # Copy what we need from Glibc.
+      cp -p ${glibc}/lib/ld-linux*.so.? $out/lib
+      cp -p ${glibc}/lib/libc.so.* $out/lib
+      cp -p ${glibc}/lib/librt.so.* $out/lib
+      cp -p ${glibc}/lib/libdl.so.* $out/lib
 
+      # Copy some utillinux stuff.
+      cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
+      cp -pd ${utillinux}/lib/libblkid*.so.* $out/lib
+      cp -pd ${utillinux}/lib/libuuid*.so.* $out/lib
 
+      # Copy some coreutils.
+      cp ${coreutils}/bin/basename $out/bin
+      cp ${coreutils}/bin/mkdir $out/bin
+      cp ${coreutils}/bin/mknod $out/bin
+      cp ${coreutils}/bin/cat $out/bin
+      cp ${coreutils}/bin/chroot $out/bin
+      cp ${coreutils}/bin/sleep $out/bin
+      cp ${coreutils}/bin/ln $out/bin
+
+      # Copy some other tools.
+      cp ${bash}/bin/bash $out/bin
+      cp ${module_init_tools}/sbin/insmod $out/bin/insmod
+      cp ${nettools}/sbin/ifconfig $out/bin
+      cp ${sysvinit}/sbin/halt $out/bin
+            
+      # Run patchelf to make the programs refer to the copied libraries.
+      for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
+
+      for i in $out/bin/*; do
+          echo "patching $i..."
+          patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+      done
+    ''; # */
+
+    
   createDeviceNodes = dev:
     ''
       mknod ${dev}/null c 1 3
       mknod ${dev}/zero c 1 5
       mknod ${dev}/tty  c 5 0
-      . /sys/class/block/vda/uevent
-      mknod ${dev}/vda  b $MAJOR $MINOR
+      . /sys/class/block/${hd}/uevent
+      mknod ${dev}/${hd} b $MAJOR $MINOR
     '';
 
   
   stage1Init = writeScript "vm-run-stage1" ''
-    #! ${klibcShrunk}/bin/sh.shared -e
+    #! ${initrdUtils}/bin/bash -e
     echo START
 
-    export PATH=${klibcShrunk}/bin:${mountCifs}/bin
+    export PATH=${initrdUtils}/bin
 
     mkdir /etc
     echo -n > /etc/fstab
@@ -82,39 +112,31 @@ rec {
           args="CIFSMaxBufSize=4194304"
           ;;
       esac
-      echo "loading module $i with args $args"
+      echo "loading module $(basename $i .ko)"
       insmod $i $args
     done
 
     mount -t tmpfs none /dev
     ${createDeviceNodes "/dev"}
     
-    ipconfig 10.0.2.15:::::eth0:none
+    ifconfig eth0 up 10.0.2.15
 
     mkdir /fs
 
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
     else
-      mount -t ext2 /dev/vda /fs
+      mount -t ext2 /dev/${hd} /fs
     fi
-    
+
     mkdir -p /fs/hostfs
     
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    n=.
-    echo "mounting host filesystem..."
-    while true; do
-      if mount.cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody; then
-        break
-      else
-        n=".$n"
-        test ''${#n} -le 10 || exit 1
-        sleep 1
-        echo "retrying..."
-      fi
+    for ((n = 0; n < 10; n++)); do
+      echo "mounting host filesystem, attempt $n..."
+      mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody && break
     done
 
     mkdir -p /fs/nix/store
@@ -142,7 +164,7 @@ rec {
     mount -o remount,ro dummy /fs
 
     echo DONE
-    reboot
+    halt -d -p -f
   '';
 
   
@@ -188,25 +210,41 @@ rec {
 
 
   qemuCommandLinux = ''
-    qemu-system-x86_64 -no-kvm-irqchip \
+    qemu-system-x86_64 \
       -nographic -no-reboot \
-      -net nic,model=virtio -net user -smb / \
-      -drive file=$diskImage,if=virtio,boot=on \
+      -net nic,model=virtio -chardev socket,id=samba,path=$TMPDIR/samba -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
+      -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
       -kernel ${kernel}/bzImage \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
   '';
 
-  
+
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
-    PATH=${coreutils}/bin:${kvm}/bin:${samba}/sbin
+    PATH=${coreutils}/bin:${kvm}/bin
 
     diskImage=''${diskImage:-/dev/null}
 
     eval "$preVM"
+
+    cat > smb.conf <<EOF
+      [global]
+        private dir=$TMPDIR
+        smb ports=0
+        socket address=127.0.0.1
+        pid directory=$TMPDIR
+        lock directory=$TMPDIR
+        log file=$TMPDIR/log.smbd
+        smb passwd file=$TMPDIR/smbpasswd
+        security = share
+      [qemu]
+        path=/
+        read only=no
+        guest ok=yes
+    EOF
 
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
@@ -215,6 +253,8 @@ rec {
     #! ${bash}/bin/sh
     diskImage=$diskImage
     TMPDIR=$TMPDIR
+    ${socat}/bin/socat unix-listen:$TMPDIR/samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' > /dev/null 2>&1 &
+    while [ ! -e $TMPDIR/samba ]; do sleep 0.1; done # ugly
     ${qemuCommand}
     EOF
 
@@ -244,8 +284,8 @@ rec {
 
   createRootFS = ''
     mkdir /mnt
-    ${e2fsprogs}/sbin/mke2fs -F /dev/vda
-    ${klibcShrunk}/bin/mount -t ext2 /dev/vda /mnt
+    ${e2fsprogs}/sbin/mke2fs -F /dev/${hd}
+    ${utillinux}/bin/mount -t ext2 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh
@@ -401,7 +441,8 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt/nix/store
-        ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/nix/store
+        ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
+        ${utillinux}/bin/mount -o bind /tmp /mnt/tmp
         
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
@@ -412,8 +453,9 @@ rec {
         
         rm /mnt/.debug
         
-        ${klibcShrunk}/bin/umount /mnt/nix/store
-        ${klibcShrunk}/bin/umount /mnt
+        ${utillinux}/bin/umount /mnt/nix/store
+        ${utillinux}/bin/umount /mnt/tmp
+        ${utillinux}/bin/umount /mnt
       '';
 
       passthru = {inherit fullName;};
@@ -541,9 +583,9 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the .debs live.
         mkdir -p /mnt/inst/nix/store
-        ${klibcShrunk}/bin/mount -o bind /nix/store /mnt/inst/nix/store
-        ${klibcShrunk}/bin/mount -o bind /proc /mnt/proc
-        ${klibcShrunk}/bin/mount -o bind /dev /mnt/dev
+        ${utillinux}/bin/mount -o bind /nix/store /mnt/inst/nix/store
+        ${utillinux}/bin/mount -o bind /proc /mnt/proc
+        ${utillinux}/bin/mount -o bind /dev /mnt/dev
         
         # Misc. files/directories assumed by various packages.
         echo "initialising Dpkg DB..."
@@ -580,10 +622,10 @@ rec {
 
         rm /mnt/.debug
         
-        ${klibcShrunk}/bin/umount /mnt/inst/nix/store
-        ${klibcShrunk}/bin/umount /mnt/proc
-        ${klibcShrunk}/bin/umount /mnt/dev
-        ${klibcShrunk}/bin/umount /mnt
+        ${utillinux}/bin/umount /mnt/inst/nix/store
+        ${utillinux}/bin/umount /mnt/proc
+        ${utillinux}/bin/umount /mnt/dev
+        ${utillinux}/bin/umount /mnt
       '';
 
       passthru = {inherit fullName;};
@@ -950,21 +992,21 @@ rec {
     } // args);
 
     debian40i386 = args: makeImageFromDebDist ({
-      name = "debian-4.0r8-etch-i386";
-      fullName = "Debian 4.0r8 Etch (i386)";
+      name = "debian-4.0r9-etch-i386";
+      fullName = "Debian 4.0r9 Etch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-i386/Packages.bz2;
-        sha256 = "80ea57a7f106086c74470229998b07885d185dc62fe4a3200d2fffc5b2371f3d";
+        sha256 = "40eeeecc35e6895b6eb0bc601e38fe53fc985d1b1f3fea3766f34763d21f206f";
       };
       urlPrefix = mirror://debian;
     } // args);
         
     debian40x86_64 = args: makeImageFromDebDist ({
-      name = "debian-4.0r8-etch-amd64";
-      fullName = "Debian 4.0r8 Etch (amd64)";
+      name = "debian-4.0r9-etch-amd64";
+      fullName = "Debian 4.0r9 Etch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/etch/main/binary-amd64/Packages.bz2;
-        sha256 = "d00114ef5e0c287273eebff7e7c4ca1aa0388a56c7d980a0a031e7782741e5ba";
+        sha256 = "cf1c4c7d72e0da45797b046011254d2bd83f5ecb7389c7f30d2561be3f5b2e49";
       };
       urlPrefix = mirror://debian;
     } // args);

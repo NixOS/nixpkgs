@@ -384,6 +384,11 @@ rec {
     inherit cabal ;
   };
 
+  hmatrix = import ../development/libraries/haskell/hmatrix {
+    inherit cabal QuickCheck HUnit storableComplex vector;
+    inherit (pkgs) gsl liblapack/* lapack library */ blas;
+  };
+
   hscolour = import ../development/libraries/haskell/hscolour {
     inherit cabal;
   };

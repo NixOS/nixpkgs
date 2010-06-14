@@ -294,7 +294,7 @@ rec {
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
     listToAttrs (map (n : nameValuePair n lib.concat) [ "buildNativeInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
     // listToAttrs (map (n : nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
-    // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" ])
+    // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;
 
   # returns atribute values as a list 
