@@ -220,7 +220,7 @@ rec {
       $QEMU_OPTS
   '';
 
-  
+
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
@@ -253,7 +253,7 @@ rec {
     #! ${bash}/bin/sh
     diskImage=$diskImage
     TMPDIR=$TMPDIR
-    ${socat}/bin/socat unix-listen:$TMPDIR/samba exec:'${samba}/sbin/smbd -s $TMPDIR/smb.conf' &
+    ${socat}/bin/socat unix-listen:$TMPDIR/samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' &
     while [ ! -e $TMPDIR/samba ]; do sleep 0.1; done # ugly
     ${qemuCommand}
     EOF
