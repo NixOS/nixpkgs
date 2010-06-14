@@ -1014,6 +1014,26 @@ rec {
       urlPrefix = mirror://ubuntu;
     } // args);
 
+    ubuntu1004i386 = args: makeImageFromDebDist ({
+      name = "ubuntu-10.04-lucid-i386";
+      fullName = "Ubuntu 10.04 Lucid (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/lucid/main/binary-i386/Packages.bz2;
+        sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+ 
+    ubuntu1004x86_64 = args: makeImageFromDebDist ({
+      name = "ubuntu-10.04-lucid-amd64";
+      fullName = "Ubuntu 10.04 Lucid (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
+        sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
+      };
+      urlPrefix = mirror://ubuntu;
+    } // args);
+
     debian40i386 = args: makeImageFromDebDist ({
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1140,6 +1160,8 @@ rec {
   # Ubuntu 9.10 no longer has sysvinit.
   karmicPackages = lib.filter (x: x != "sysvinit") commonDebianPackages;
 
+  lucidPackages = (lib.filter (x: x != "sysvinit" && x != "diff") commonDebianPackages) ++ [ "diffutils" ];
+  
 
   /* A bunch of disk images. */
 
@@ -1202,6 +1224,8 @@ rec {
     ubuntu904x86_64 = diskImageExtraFuns.ubuntu904x86_64 [];
     ubuntu910i386 = diskImageExtraFuns.ubuntu910i386 [];
     ubuntu910x86_64 = diskImageExtraFuns.ubuntu910x86_64 [];
+    ubuntu1004i386 = diskImageExtraFuns.ubuntu1004i386 [];
+    ubuntu1004x86_64 = diskImageExtraFuns.ubuntu1004x86_64 [];
     debian40i386 = diskImageExtraFuns.debian40i386 [];
     debian40x86_64 = diskImageExtraFuns.debian40x86_64 [];
     debian50i386 = diskImageExtraFuns.debian50i386 [];
@@ -1239,6 +1263,8 @@ rec {
     ubuntu904x86_64 = extraVirtualPackages : diskImageFuns.ubuntu904x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
     ubuntu910i386 = extraVirtualPackages : diskImageFuns.ubuntu910i386 { packages = karmicPackages ++ extraVirtualPackages; };
     ubuntu910x86_64 = extraVirtualPackages : diskImageFuns.ubuntu910x86_64 { packages = karmicPackages ++ extraVirtualPackages; };
+    ubuntu1004i386 = extraVirtualPackages : diskImageFuns.ubuntu1004i386 { packages = lucidPackages ++ extraVirtualPackages; };
+    ubuntu1004x86_64 = extraVirtualPackages : diskImageFuns.ubuntu1004x86_64 { packages = lucidPackages ++ extraVirtualPackages; };
     debian40i386 = extraVirtualPackages : diskImageFuns.debian40i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
     debian40x86_64 = extraVirtualPackages : diskImageFuns.debian40x86_64 { packages = commonDebianPackages ++ extraVirtualPackages; };
     debian50i386 = extraVirtualPackages : diskImageFuns.debian50i386 { packages = commonDebianPackages ++ extraVirtualPackages; };
