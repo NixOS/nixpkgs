@@ -253,7 +253,7 @@ rec {
     #! ${bash}/bin/sh
     diskImage=$diskImage
     TMPDIR=$TMPDIR
-    ${socat}/bin/socat unix-listen:$TMPDIR/samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' &
+    ${socat}/bin/socat unix-listen:$TMPDIR/samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' > /dev/null 2>&1 &
     while [ ! -e $TMPDIR/samba ]; do sleep 0.1; done # ugly
     ${qemuCommand}
     EOF
