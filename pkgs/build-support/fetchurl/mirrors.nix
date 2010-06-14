@@ -174,6 +174,7 @@ rec {
     http://nl.archive.ubuntu.com/ubuntu/
     http://de.archive.ubuntu.com/ubuntu/
     http://archive.ubuntu.com/ubuntu/
+    http://old-releases.ubuntu.com/ubuntu/
   ];
 
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
