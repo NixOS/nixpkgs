@@ -1,12 +1,12 @@
 { fetchurl, stdenv, gmpxx, perl, gnum4 }:
 
-let version = "0.10.2"; in
+let version = "0.11pre24"; in
   stdenv.mkDerivation rec {
     name = "ppl-${version}";
 
     src = fetchurl {
-      url = "ftp://ftp.cs.unipr.it/pub/ppl/releases/${version}/${name}.tar.bz2";
-      sha256 = "0xz2f3lny4l9ji1ilg6pxv34sh4cbh535cnm68smynzp01wgnh7y";
+      url = "ftp://ftp.cs.unipr.it/pub/ppl/snapshots/${version}/${name}.tar.bz2";
+      sha256 = "1w6v5wxj13mnp311aaglhdyzxlx13g84054bsp7sym3ryjjyg0gx";
     };
 
     buildInputs = [ perl gnum4 ];
