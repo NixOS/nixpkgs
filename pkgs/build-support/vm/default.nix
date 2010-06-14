@@ -1165,72 +1165,37 @@ rec {
 
   /* A bunch of disk images. */
 
-  diskImages = {
+  diskImages =
 
-    redhat9i386 = fillDiskWithRPMs {
-      name = "redhat-9-i386";
-      fullName = "Red Hat Linux 9 (i386)";
-      size = 1024;
-      rpms = import ./rpm/redhat-9-i386.nix {inherit fetchurl;};
-    };
+    { redhat9i386 = fillDiskWithRPMs {
+        name = "redhat-9-i386";
+        fullName = "Red Hat Linux 9 (i386)";
+        size = 1024;
+        rpms = import ./rpm/redhat-9-i386.nix {inherit fetchurl;};
+     };
     
-    suse90i386 = fillDiskWithRPMs {
-      name = "suse-9.0-i386";
-      fullName = "SUSE Linux 9.0 (i386)";
-      size = 1024;
-      rpms = import ./rpm/suse-9-i386.nix {inherit fetchurl;};
-      # Urgh.  The /etc/group entries are installed by aaa_base (or
-      # something) but due to dependency ordering, that package isn't
-      # installed yet by the time some other packages refer to these
-      # entries.
-      preInstall = ''
-        echo 'bin:x:1:daemon' >> /mnt/etc/group
-        echo 'tty:x:5:' >> /mnt/etc/group
-        echo 'disk:x:6:' >> /mnt/etc/group
-        echo 'lp:x:7:' >> /mnt/etc/group
-        echo 'uucp:x:14:' >> /mnt/etc/group
-        echo 'audio:x:17:' >> /mnt/etc/group
-        echo 'video:x:33:' >> /mnt/etc/group
-      '';
-    };
+      suse90i386 = fillDiskWithRPMs {
+        name = "suse-9.0-i386";
+        fullName = "SUSE Linux 9.0 (i386)";
+        size = 1024;
+        rpms = import ./rpm/suse-9-i386.nix {inherit fetchurl;};
+        # Urgh.  The /etc/group entries are installed by aaa_base (or
+        # something) but due to dependency ordering, that package isn't
+        # installed yet by the time some other packages refer to these
+        # entries.
+        preInstall = ''
+          echo 'bin:x:1:daemon' >> /mnt/etc/group
+          echo 'tty:x:5:' >> /mnt/etc/group
+          echo 'disk:x:6:' >> /mnt/etc/group
+          echo 'lp:x:7:' >> /mnt/etc/group
+          echo 'uucp:x:14:' >> /mnt/etc/group
+          echo 'audio:x:17:' >> /mnt/etc/group
+          echo 'video:x:33:' >> /mnt/etc/group
+        '';
+      };
+
+    } // lib.mapAttrs (name: f: f []) diskImageExtraFuns;
     
-    fedora2i386 = diskImageExtraFuns.fedora2i386 [];
-    fedora3i386 = diskImageExtraFuns.fedora3i386 [];
-    fedora5i386 = diskImageExtraFuns.fedora5i386 [];
-    fedora7i386 = diskImageExtraFuns.fedora7i386 [];
-    fedora8i386 = diskImageExtraFuns.fedora8i386 [];
-    fedora9i386 = diskImageExtraFuns.fedora9i386 [];
-    fedora9x86_64 = diskImageExtraFuns.fedora9x86_64 [];
-    fedora10i386 = diskImageExtraFuns.fedora10i386 [];
-    fedora10x86_64 = diskImageExtraFuns.fedora10x86_64 [];
-    fedora11i386 = diskImageExtraFuns.fedora11i386 [];
-    fedora11x86_64 = diskImageExtraFuns.fedora11x86_64 [];
-    fedora12i386 = diskImageExtraFuns.fedora12i386 [];
-    fedora12x86_64 = diskImageExtraFuns.fedora12x86_64 [];
-    fedora13i386 = diskImageExtraFuns.fedora13i386 [];
-    fedora13x86_64 = diskImageExtraFuns.fedora13x86_64 [];
-    opensuse103i386 = diskImageExtraFuns.opensuse103i386 [];
-    opensuse110i386 = diskImageExtraFuns.opensuse110i386 [];
-    opensuse110x86_64 = diskImageExtraFuns.opensuse110x86_64 [];
-    opensuse111i386 = diskImageExtraFuns.opensuse111i386 [];
-    opensuse111x86_64 = diskImageExtraFuns.opensuse111x86_64 [];
-    
-    ubuntu710i386 = diskImageExtraFuns.ubuntu710i386 [];
-    ubuntu804i386 = diskImageExtraFuns.ubuntu804i386 [];
-    ubuntu804x86_64 = diskImageExtraFuns.ubuntu804x86_64 [];
-    ubuntu810i386 = diskImageExtraFuns.ubuntu810i386 [];
-    ubuntu810x86_64 = diskImageExtraFuns.ubuntu810x86_64 [];
-    ubuntu904i386 = diskImageExtraFuns.ubuntu904i386 [];
-    ubuntu904x86_64 = diskImageExtraFuns.ubuntu904x86_64 [];
-    ubuntu910i386 = diskImageExtraFuns.ubuntu910i386 [];
-    ubuntu910x86_64 = diskImageExtraFuns.ubuntu910x86_64 [];
-    ubuntu1004i386 = diskImageExtraFuns.ubuntu1004i386 [];
-    ubuntu1004x86_64 = diskImageExtraFuns.ubuntu1004x86_64 [];
-    debian40i386 = diskImageExtraFuns.debian40i386 [];
-    debian40x86_64 = diskImageExtraFuns.debian40x86_64 [];
-    debian50i386 = diskImageExtraFuns.debian50i386 [];
-    debian50x86_64 = diskImageExtraFuns.debian50x86_64 [];
-  };
 
   diskImageExtraFuns = {
     fedora2i386 = extraVirtualPackages : diskImageFuns.fedora2i386 { packages = commonFedoraPackages ++ extraVirtualPackages; };
