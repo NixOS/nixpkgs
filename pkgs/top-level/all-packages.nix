@@ -8552,8 +8552,7 @@ let
   };
 
   simgrid = import ../applications/misc/simgrid {
-    inherit fetchurl cmake ruby;
-    stdenv = stdenv2;
+    inherit fetchurl stdenv cmake ruby;
   };
 
   skype_linux = import ../applications/networking/skype {
