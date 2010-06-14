@@ -9544,6 +9544,13 @@ let
     withX = true;
   };
 
+  ### SCIENCE / MISC
+
+  tulip = import ../applications/science/misc/tulip {
+    inherit fetchurl stdenv libxml2 freetype mesa glew
+      autoconf automake libtool;
+    qt = qt4;
+  };
 
   ### MISC
 

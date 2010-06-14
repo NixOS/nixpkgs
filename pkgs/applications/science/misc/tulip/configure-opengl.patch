@@ -1,0 +1,75 @@
+Remove broken detection of OpenGL and GLEW.  See
+<http://sourceforge.net/tracker/?func=detail&aid=3015936&group_id=61223&atid=496518>.
+
+--- tulip-3.3.1/acinclude.m4	2010-01-18 20:34:02.000000000 +0100
++++ tulip-3.3.1/acinclude.m4	2010-06-14 16:25:25.000000000 +0200
+@@ -353,68 +353,8 @@ AC_ARG_WITH(gl-libraries,
+     [  ac_gl_libraries="$withval"
+     ])
+ 
+-AC_CACHE_VAL(ac_cv_have_gl,
+-[
+-if test ${VAR_WIN32} = 1
+-then
+-gl_incdirs=" /mingw/include $ac_gl_includes $GLDIR/include /usr/include /usr/X11R6/include/X11 /usr/X11R6/include $x_includes "
+-else
+-gl_incdirs=" $ac_gl_includes $GLDIR/include /usr/include /usr/X11R6/include/X11 /usr/X11R6/include $x_includes "
+-fi
+-AC_FIND_FILE(GL/gl.h, $gl_incdirs, gl_incdir)
+-ac_gl_includes="$gl_incdir"
+-
+-if test ${VAR_WIN32} = 1
+-then
+-gl_libdirs="$GLDIR $ac_gl_libraries $GLLIB /usr/X11R6/lib /usr/lib /usr/local/lib $x_libraries "
+-else
+-gl_libdirs="$ac_gl_libraries $GLLIB /usr/X11R6/lib64 /usr/lib64 /usr/local/lib64/usr/X11R6/lib /usr/lib /usr/local/lib $x_libraries "
+-fi
+-
+-test -n "$GLDIR" && gl_libdirs="$GLDIR/lib64 $GLDIR/lib $GLDIR $gl_libdirs"
+-test=NONE
+-gl_libdir=NONE
+-for dir in $gl_libdirs; do
+-if test ${VAR_WIN32} = 1
+-then
+-  try="ls -1 $dir/*opengl*"
+-else
+-  try="ls -1 $dir/libGL*"
+-fi
+-  if test=`eval $try 2> /dev/null`; then 
+-    gl_libdir=$dir
+-    if test ${VAR_WIN32} = 0 ; then 	 
+-      try="ls -1 $gl_libdir/libGLEW.*" 	 
+-      if test=`eval $try 2> /dev/null`; then break; else AC_MSG_ERROR([ libGLEW not found , please install it in $gl_libdir ]); fi 	 
+-    else 	 
+-      break 	 
+-    fi
+-  else 
+-    echo "tried $dir" >&AC_FD_CC
+-  fi
+-done
+-ac_gl_libraries="$gl_libdir"
+ ])
+ 
+-eval "$ac_cv_have_gl"
+-if test "$ac_gl_libraries" = NONE; then
+-  AC_MSG_ERROR([ Not found , put your GLDIR environnement variable to the OpenGL directory ]);
+-else
+-  ac_cv_have_gl="have_gl=yes \
+-  ac_gl_includes=$ac_gl_includes ac_gl_libraries=$ac_gl_libraries"
+-  AC_MSG_RESULT([ libraries $ac_gl_libraries, headers $ac_gl_includes ])  
+-  gl_libraries="$ac_gl_libraries"
+-  gl_includes="$ac_gl_includes"
+-if test ${VAR_MACOSX} = 1
+-then
+-  GL_INCLUDES="-I$ac_gl_includes"
+-  GL_LDFLAGS=""
+-else
+-  GL_INCLUDES="-I$ac_gl_includes"	
+-  GL_LDFLAGS="-L$ac_gl_libraries"
+-fi
+-fi
+-
+ dnl MAC PORT
+ if test ${VAR_MACOSX} = 1
+ then
+
