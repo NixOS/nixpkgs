@@ -132,11 +132,6 @@ rec {
       stdenv = stdenvLinuxBoot0;
     };
 
-  # Helper function to override the compiler in stdenv for specific packages.
-  overrideGCC = stdenv: gcc: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // { NIX_GCC = gcc; });
-    };
-
 
   # Create the first "real" standard environment.  This one consists
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
@@ -185,17 +180,6 @@ rec {
   stdenvLinuxBoot2Pkgs = allPackages {
     inherit system;
     bootStdenv = stdenvLinuxBoot2;
-    config = {
-      packageOverrides = pkgs : {
-        # The stdenv's gcc will not be built with 'ppl'
-        # but the resulting 'gcc' attribute of these pkgs will.
-        # (that allows bootstrapping from bootstrapTools with old gmp)
-        stdenv = overrideGCC pkgs.stdenv (pkgs.wrapGCC (pkgs.gcc.gcc.override {
-          ppl = null;
-          cloogppl = null;
-        }));
-      };
-    };
   };
 
 
