@@ -2019,7 +2019,7 @@ let
     inherit gmp mpfr;
   };
 
-  adobeFlexSDK = import ../development/compilers/adobe-flex-sdk {
+  adobe_flex_sdk = import ../development/compilers/adobe-flex-sdk {
     inherit fetchurl stdenv unzip jre;
   };
 
