@@ -13,7 +13,7 @@ rec {
     inherit kernel;
     rootModules =
       [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
-        "nls_utf8" "ext2" "ext3" "unix" "sd_mod" "ata_piix" ];
+        "nls_utf8" "ext2" "ext3" "unix" ];
   };
 
 
