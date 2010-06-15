@@ -113,6 +113,7 @@ sub start {
         dup2(fileno($serialC), fileno(STDOUT));
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
+        $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -monitor unix:./monitor";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;

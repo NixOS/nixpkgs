@@ -113,21 +113,28 @@ let
     ''
       #! ${pkgs.stdenv.shell}
       
-      export PATH=${pkgs.samba}/sbin:$PATH
-
-      NIX_DISK_IMAGE=''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}
+      NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
 
       if ! test -e "$NIX_DISK_IMAGE"; then
-          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" ${toString config.virtualisation.diskSize}M || exit 1
+          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
+            ${toString config.virtualisation.diskSize}M || exit 1
       fi
-      
-      # -no-kvm-irqchip is needed to prevent the CIFS mount from
-      # hanging the VM on x86_64.
+
+      # Start Samba (which wants to put its socket and config files in TMPDIR).
+      if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
+          TMPDIR=$(mktemp -d nix-vm-smbd.XXXXXXXXXX --tmpdir)
+      fi
+      cd $TMPDIR
+
+      ${pkgs.vmTools.startSamba}
+
+      # Start QEMU.
       exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
-          -no-kvm-irqchip \
-          -net nic,vlan=0,model=virtio -net user,vlan=0 -smb / \
+          -net nic,vlan=0,model=virtio \
+          -chardev socket,id=samba,path=./samba \
+          -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,cache=writeback,werror=report \
           -kernel ${config.system.build.toplevel}/kernel \
           -initrd ${config.system.build.toplevel}/initrd \
