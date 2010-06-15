@@ -2178,7 +2178,7 @@ let
     texinfo = texinfo49;
   });
 
-  gfortran = gfortran43;
+  gfortran = gfortran45;
 
   gfortran40 = wrapGCC (gcc40.gcc.override {
     langFortran = true;
@@ -2210,7 +2210,15 @@ let
     profiledCompiler = false;
   });
 
-  gfortran44 = wrapGCC (gcc44_real.gcc.override {
+  gfortran44 = wrapGCC (gcc44.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran45 = wrapGCC (gcc45_real.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -2220,7 +2228,7 @@ let
 
   gcj = gcj45;
 
-  gcj44 = wrapGCC (gcc44_real.gcc.override {
+  gcj44 = wrapGCC (gcc44.gcc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -2248,9 +2256,22 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
-  gnat = gnat44;
+  gnat = gnat45;
 
-  gnat44 = wrapGCC (gcc44_real.gcc.override {
+  gnat44 = wrapGCC (gcc44.gcc.override {
+    name = "gnat";
+    langCC = false;
+    langC = true;
+    langAda = true;
+    profiledCompiler = false;
+    inherit gnatboot;
+    # We can't use the ppl stuff, because we would have
+    # libstdc++ problems.
+    cloogppl = null;
+    ppl = null;
+  });
+
+  gnat45 = wrapGCC (gcc45_real.gcc.override {
     name = "gnat";
     langCC = false;
     langC = true;
