@@ -2067,8 +2067,6 @@ let
     profiledCompiler = false;
   });
 
-  gcc44 = useFromStdenv "gcc" gcc44_real;
-
   gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
@@ -2095,6 +2093,8 @@ let
       crossStageStatic = false;
       cross = assert crossSystem != null; crossSystem;
     });
+
+  gcc45 = useFromStdenv "gcc" gcc45_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc-4.5) {
@@ -2154,13 +2154,13 @@ let
     enableMultilib = true;
   }));
 
-  gcc44_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
+  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
     inherit fetchurl stdenv texinfo gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
     profiledCompiler = true;
   }));
 
-  gcc45 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
+  gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
     inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
