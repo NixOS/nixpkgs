@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   buildInputs = [nspr perl zlib];
 
+  NO_PARALLEL_BUILD_buildPhase = 1;
+
   # Based on the build instructions at
   # http://www.mozilla.org/projects/security/pki/nss/nss-3.11.4/nss-3.11.4-build.html
   

@@ -17,4 +17,6 @@ stdenv.mkDerivation {
     platforms = args.lib.platforms.linux;
   };
 
+  NUM_CORES = 1;
+
 }

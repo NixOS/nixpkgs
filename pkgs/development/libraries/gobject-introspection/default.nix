@@ -8,6 +8,8 @@ in
 stdenv.mkDerivation rec {
   name = "${baseName}-${v}";
 
+  NO_PARALLEL_BUILD_buildPhase = 1;
+
   buildInputs = [ flex bison glib pkgconfig python cairo ];
   propagatedBuildInputs = [ libffi ];
   configureFlags = "--enable-gcov";

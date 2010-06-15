@@ -55,6 +55,8 @@ let
 
       inherit zlib;
 
+      NUM_CORES = 1;
+
       buildPhase = ''
         set -x
         mkdir -p ocaml/{swflib,extc,extlib-dev,xml-light} neko/libs

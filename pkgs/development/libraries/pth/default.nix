@@ -11,4 +11,7 @@ stdenv.mkDerivation rec {
 		description = "The GNU Portable Threads";
 		homepage = http://www.gnu.org/software/pth;
 	};
+
+        NO_PARALLEL_BUILD_buildPhase = 1;
+        NO_PARALLEL_BUILD_installPhase = 1;
 }

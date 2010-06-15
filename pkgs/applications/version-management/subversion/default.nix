@@ -74,4 +74,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
+
+  NO_PARALLEL_BUILD_installPhase = 1;
 }

@@ -2858,6 +2858,7 @@ rec {
   };
 
   XMLSAX = buildPerlPackage {
+    NUM_CORES=1;
     name = "XML-SAX-0.96";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-0.96.tar.gz;

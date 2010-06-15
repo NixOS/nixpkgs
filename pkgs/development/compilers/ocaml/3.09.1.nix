@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     url = http://caml.inria.fr/pub/distrib/ocaml-3.09/ocaml-3.09.1.tar.gz;
     md5 = "c73f4b093e27ba5bf13d62923f89befc";
   };
+  NUM_CORES = 1; # both fail: build and install
   configureScript = ./configure-3.09.1;
   dontAddPrefix = "True";
   configureFlags = ["-no-tk" "-x11lib" x11];

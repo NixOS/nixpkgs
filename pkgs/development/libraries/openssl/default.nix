@@ -14,6 +14,8 @@ stdenv.mkDerivation ( rec {
     sha256 = "008z1h09pa6dfxs4wgbqj5i1clw4v82b1waqvwanb1kb6wlbq6mh";
   };
 
+  NO_PARALLEL_BUILD_buildPhase = 1;
+
   buildNativeInputs = [ perl ];
 
   configureScript = "./config";

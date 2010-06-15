@@ -14,6 +14,8 @@ stdenv.mkDerivation (rec {
     sha1 = "3f800ea9fa3da1c0f576d689be7dca3d55a4cb62";
   };
 
+  NO_PARALLEL_BUILD_buildPhase = 1;
+
   buildNativeInputs = [ perl ];
 
   configureScript = "./config";
