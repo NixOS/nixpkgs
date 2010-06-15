@@ -79,9 +79,19 @@ cmd(){
 }
 
 runMake(){
-  cmd make ${makefile:+-f $makefile} "$@"
+  local optout=NO_PARALLEL_BUILD_${curPhase}
+  [ -n "${!optout}" ] || \
+    local j="$makeFlagsParallelBuild"
+  cmd make ${makefile:+-f $makefile} "$@" $j
 }
 
+######################################################################
+# parallel builds: opt-out
+# - in a phase:     set NO_PARALLEL_BUILD_${PHASE_NAME}
+# - for this build: pass NUM_CORES=1 to the builder
+if [ "$NUM_CORES" != 1 ]; then
+  makeFlagsParallelBuild="-j $NIX_MAX_PARALLELIZATION -l $NIX_TARGET_LOAD"
+fi
 
 ######################################################################
 # Initialisation.
