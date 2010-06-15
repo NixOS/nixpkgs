@@ -4,8 +4,8 @@
 assert (!headersOnly) -> (mig != null);
 
 let
-  date = "2010-05-12";
-  rev = "master@{${date}}";
+  date = "20100512";
+  rev = "7987a711e8f13c0543e87a0211981f4b40ef6d94";
 in
 stdenv.mkDerivation ({
   name = "gnumach${if headersOnly then "-headers" else ""}-${date}";

@@ -5,11 +5,11 @@
 assert (cross != null) -> (gccCross != null) && (glibcCross != null);
 
 let
-  date = "2010-05-12";
+  date = "20100512";
 
-  # Use the weird branch prescribed in
+  # Use the `tschwinge/Peter_Herbolzheimer' branch as prescribed in
   # <http://www.gnu.org/software/hurd/hurd/building/cross-compiling.html>.
-  rev = "tschwinge/Peter_Herbolzheimer@{${date}}";
+  rev = "c4bb52770f0b6703bef76c5abdd08663b46b4dc9";
 in
 stdenv.mkDerivation ({
   name = "libpthread-hurd-${date}";
