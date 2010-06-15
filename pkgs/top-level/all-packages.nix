@@ -4019,7 +4019,9 @@ let
         cxx = false;
       }
     else
-      makeOverridable (import ../development/libraries/gmp) {
+      # We temporarily leave gmp 4 here, waiting for a new ppl/cloog-ppl that
+      # would build well with gmp 5.
+      makeOverridable (import ../development/libraries/gmp/4.nix) {
         inherit stdenv fetchurl m4;
         cxx = false;
       };
