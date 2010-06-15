@@ -211,9 +211,11 @@ rec {
 
 
   qemuCommandLinux = ''
-    qemu-system-x86_64 \
+    ${kvm}/bin/qemu-system-x86_64 \
       -nographic -no-reboot \
-      -net nic,model=virtio -chardev socket,id=samba,path=./samba -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
+      -net nic,model=virtio \
+      -chardev socket,id=samba,path=./samba \
+      -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
       -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
       -kernel ${kernel}/bzImage \
       -initrd ${initrd}/initrd \
@@ -222,30 +224,38 @@ rec {
   '';
 
 
+  startSamba =
+    let sambaScript = writeScript "run-smbd" "while ${samba}/sbin/smbd -s $TMPDIR/smb.conf; do true; done"; in
+    ''
+      cat > $TMPDIR/smb.conf <<SMB
+      [global]
+        private dir = $TMPDIR
+        smb ports = 0
+        socket address = 127.0.0.1
+        pid directory = $TMPDIR
+        lock directory = $TMPDIR
+        log file = $TMPDIR/log.smbd
+        smb passwd file = $TMPDIR/smbpasswd
+        security = share
+      [qemu]
+        path = /
+        read only = no
+        guest ok = yes
+      SMB
+
+      ${socat}/bin/socat unix-listen:./samba exec:'/bin/sh -c ${sambaScript}',nofork > /dev/null 2>&1 &
+      while [ ! -e ./samba ]; do sleep 0.1; done # ugly
+    '';
+
+
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     export > saved-env
 
-    PATH=${coreutils}/bin:${kvm}/bin
+    PATH=${coreutils}/bin
 
     diskImage=''${diskImage:-/dev/null}
 
     eval "$preVM"
-
-    cat > smb.conf <<EOF
-      [global]
-        private dir=$TMPDIR
-        smb ports=0
-        socket address=127.0.0.1
-        pid directory=$TMPDIR
-        lock directory=$TMPDIR
-        log file=$TMPDIR/log.smbd
-        smb passwd file=$TMPDIR/smbpasswd
-        security = share
-      [qemu]
-        path=/
-        read only=no
-        guest ok=yes
-    EOF
 
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
@@ -255,8 +265,7 @@ rec {
     diskImage=$diskImage
     TMPDIR=$TMPDIR
     cd $TMPDIR
-    ${socat}/bin/socat unix-listen:./samba system:'while true; do ${samba}/sbin/smbd -s $TMPDIR/smb.conf; done' > /dev/null 2>&1 &
-    while [ ! -e ./samba ]; do sleep 0.1; done # ugly
+    ${startSamba}
     ${qemuCommand}
     EOF
 
@@ -330,7 +339,7 @@ rec {
 
 
   qemuCommandGeneric = ''
-    qemu-system-x86_64 \
+    ${kvm}/bin/qemu-system-x86_64 \
       -nographic -no-reboot \
       -smb $(pwd) -hda $diskImage \
       $QEMU_OPTS
