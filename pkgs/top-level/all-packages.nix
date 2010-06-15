@@ -235,6 +235,11 @@ let
     dotnetfx = dotnetfx35;
   };
 
+  vsenv = import ../build-support/vsenv {
+    inherit stdenv;
+    vs = vs90wrapper;
+  };
+
   fetchbzr = import ../build-support/fetchbzr {
     inherit stdenv bazaar;
   };
@@ -2631,6 +2636,10 @@ let
   visualcpp = (import ../development/compilers/visual-c++ {
     inherit fetchurl stdenv cabextract;
   });
+
+  vs90wrapper = import ../development/compilers/vs90wrapper {
+    inherit stdenv;
+  };
 
   webdsl = import ../development/compilers/webdsl {
     inherit stdenv fetchurl pkgconfig strategoPackages;
