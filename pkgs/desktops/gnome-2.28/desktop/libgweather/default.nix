@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup}:
+{stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup, libtasn1}:
 
 assert stdenv ? glibc;
 
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
     sha256 = "0m4ncqzf13037zvyihydif1asgp6pnzdkmx5qnmffzb1gd6qxzb5";
   };
   configureFlags = "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo";
-  buildInputs = [ pkgconfig libxml2 gtk intltool GConf libsoup ];
+  buildInputs = [ pkgconfig libxml2 gtk intltool GConf libsoup libtasn1 ];
 }

@@ -8463,6 +8463,11 @@ let
     inherit fetchurl stdenv ncurses readline;
   };
 
+  pinta = import ../applications/graphics/pinta {
+    inherit fetchurl stdenv mono pkgconfig;
+    gtksharp = gtksharp2;
+  };
+
   pqiv = import ../applications/graphics/pqiv {
     inherit fetchurl stdenv getopt which pkgconfig;
     inherit (gtkLibs) gtk;
