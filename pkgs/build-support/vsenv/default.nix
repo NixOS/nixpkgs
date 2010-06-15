@@ -1,7 +1,7 @@
 {stdenv, vs}:
 
 {
-  buildSolution = import ./buildSolution.nix {
+  buildSolution = import ./build-solution.nix {
     inherit stdenv vs;
   };  
 }

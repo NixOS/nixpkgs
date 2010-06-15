@@ -1,7 +1,7 @@
 {stdenv, dotnetfx}:
 
 {
-  buildSolution = import ./buildSolution.nix {
+  buildSolution = import ./build-solution.nix {
     inherit stdenv;
     dotnetfx = dotnetfx.pkg;
   };
