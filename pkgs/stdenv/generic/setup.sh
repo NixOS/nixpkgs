@@ -73,6 +73,15 @@ addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
+cmd(){
+  echo "cmd: $@"
+  "$@"
+}
+
+runMake(){
+  cmd make ${makefile:+-f $makefile} "$@"
+}
+
 
 ######################################################################
 # Initialisation.
@@ -601,9 +610,7 @@ buildPhase() {
         return
     fi
 
-    echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
-    make ${makefile:+-f $makefile} \
-        $makeFlags "${makeFlagsArray[@]}" \
+    runMake $makeFlags "${makeFlagsArray[@]}" \
         $buildFlags "${buildFlagsArray[@]}"
 
     runHook postBuild
@@ -613,9 +620,7 @@ buildPhase() {
 checkPhase() {
     runHook preCheck
 
-    echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
-    make ${makefile:+-f $makefile} \
-        $makeFlags "${makeFlagsArray[@]}" \
+    runMake $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
 
     runHook postCheck
@@ -663,8 +668,7 @@ installPhase() {
     ensureDir "$prefix"
 
     installTargets=${installTargets:-install}
-    echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $installTargets \
+    runMake $installTargets \
         $makeFlags "${makeFlagsArray[@]}" \
         $installFlags "${installFlagsArray[@]}"
 
@@ -740,8 +744,7 @@ fixupPhase() {
 distPhase() {
     runHook preDist
 
-    echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
+    runMake $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"
