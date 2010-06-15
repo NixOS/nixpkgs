@@ -230,6 +230,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  dotnetenv = import ../build-support/dotnetenv {
+    inherit stdenv;
+    dotnetfx = dotnetfx35;
+  };
+
   fetchbzr = import ../build-support/fetchbzr {
     inherit stdenv bazaar;
   };
@@ -651,6 +656,10 @@ let
 
   dosfstools = composedArgsAndFun (import ../tools/filesystems/dosfstools) {
     inherit builderDefs;
+  };
+
+  dotnetfx35 = import ../development/libraries/dotnetfx35 {
+    inherit stdenv;
   };
 
   dropbear = makeOverridable (import ../tools/networking/dropbear) {
