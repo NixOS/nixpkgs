@@ -90,7 +90,7 @@ runMake(){
 # - in a phase:     set NO_PARALLEL_BUILD_${PHASE_NAME}
 # - for this build: pass NUM_CORES=1 to the builder
 if [ "$NUM_CORES" != 1 ]; then
-  makeFlagsParallelBuild="-j $NIX_MAX_PARALLELIZATION -l $NIX_TARGET_LOAD"
+  makeFlagsParallelBuild="-j ${NIX_MAX_PARALLELIZATION:-1} ${NIX_TARGET_LOAD:+-l} $NIX_TARGET_LOAD"
 fi
 
 ######################################################################
