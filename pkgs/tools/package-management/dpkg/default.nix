@@ -1,11 +1,13 @@
 {stdenv, fetchurl, perl, zlib, bzip2}:
 
+let version = "1.14.29"; in
+
 stdenv.mkDerivation {
-  name = "dpkg-1.14.28";
-  
+  name = "dpkg-${version}";
+
   src = fetchurl {
-    url = mirror://debian/pool/main/d/dpkg/dpkg_1.14.28.tar.gz;
-    sha256 = "1k3h1rv2qd6ha6mpifhjkpasd4dzr8l45jvc49p7fldqm4nzyixc";
+    url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.gz";
+    sha256 = "0cynms4vziy957r4zskybbid87sz99vrfy8d999vlhxgc74c2zpa";
   };
 
   configureFlags = "--without-dselect --with-admindir=/var/lib/dpkg";
@@ -26,7 +28,7 @@ stdenv.mkDerivation {
     substituteInPlace dpkg-split/Makefile.in --replace "install-data-local:" "disabled:"
   '';
 
-  buildInputs = [perl zlib bzip2];
+  buildInputs = [ perl zlib bzip2 ];
 
   meta = {
     description = "The Debian package manager";
