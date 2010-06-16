@@ -40,6 +40,7 @@ let
 
         boot.loader.grub.version = 2;
         boot.loader.grub.device = "/dev/vda";
+        boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" ];
       
         fileSystems = [ ${fileSystems} ];
