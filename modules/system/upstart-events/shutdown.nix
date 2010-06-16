@@ -89,7 +89,10 @@ with pkgs.lib;
               cp /proc/mounts /dev/.mounts # don't read /proc/mounts while it's changing
               exec 4< /dev/.mounts
               while read -u 4 device mp fstype options rest; do
-                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /var/run ]; then continue; fi
+                  # Skip various special filesystems.  Non-existent
+                  # mount points are typically tmpfs/aufs mounts from
+                  # the initrd.
+                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /var/run -o ! -e "$mp" ]; then continue; fi
               
                   echo "unmounting $mp..."
 
