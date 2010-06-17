@@ -8595,11 +8595,6 @@ let
     };
   };
 
-  simgrid = import ../applications/misc/simgrid {
-    inherit fetchurl cmake ruby;
-    stdenv = stdenv2;
-  };
-
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
     inherit alsaLib freetype fontconfig zlib;
@@ -9568,6 +9563,11 @@ let
   };
 
   ### SCIENCE / MISC
+
+  simgrid = import ../applications/science/misc/simgrid {
+    inherit fetchurl cmake ruby;
+    stdenv = stdenv2;
+  };
 
   tulip = import ../applications/science/misc/tulip {
     inherit fetchurl stdenv libxml2 freetype mesa glew
