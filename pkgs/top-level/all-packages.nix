@@ -8770,6 +8770,7 @@ let
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk glib;
+    inherit (xlibs) libX11;
     libsoup = gnome28.libsoup;
   };
 

@@ -19,6 +19,7 @@ rec {
   phaseNames = ["addInputs" "setVars" "doMakeInstall" "doWrap"];
 
   setVars = a.noDepEntry (''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L${a.libX11}/lib -lX11"
   '');
 
   doWrap = a.makeManyWrappers "$out/bin/uzbl-core" 
