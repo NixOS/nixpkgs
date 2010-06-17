@@ -5363,7 +5363,8 @@ let
     inherit freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
-      pkgconfig autoconf bison libproxy enchant;
+      pkgconfig autoconf bison libproxy enchant
+      python ruby;
     inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
     flex = flex2535;

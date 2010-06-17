@@ -13,7 +13,7 @@ rec {
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant 
+    enchant python ruby
     ];
 
   propagatedBuildInputs = [
@@ -23,10 +23,15 @@ rec {
   configureCommand = "./autogen.sh ";
   configureFlags = [
     "--enable-3D-transforms"
-    "--enable-filters"
     "--enable-web-sockets"
-    # WML fails recent builds..
-    # "--enable-wml"
+    "--enable-indexeddb"
+    "--enable-image-resizer"
+    "--enable-xhtmlmp"
+    "--enable-mathml"
+    "--enable-wml"
+    "--enable-blob-slice"
+    "--enable-file-reader"
+    "--enable-file-writer"
     ];
 
   /* doConfigure should be specified separately */
