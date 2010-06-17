@@ -9575,6 +9575,12 @@ let
     qt = qt4;
   };
 
+  vite = import ../applications/science/misc/vite {
+    inherit fetchurl cmake mesa;
+    qt = qt4;
+    stdenv = stdenv2;
+  };
+
   ### MISC
 
   atari800 = import ../misc/emulators/atari800 {
