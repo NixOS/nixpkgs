@@ -12,6 +12,7 @@
   guibert = "David Guibert <david.guibert@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
