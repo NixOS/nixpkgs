@@ -8767,13 +8767,6 @@ let
     libsoup = gnome28.libsoup;
   };
 
-  uzblExperimental = builderDefsPackage
-        (import ../applications/networking/browsers/uzbl/experimental.nix) {
-    inherit pkgconfig webkit makeWrapper;
-    inherit (gtkLibs) gtk glib;
-    libsoup = gnome28.libsoup;
-  };
-
   valknut = import ../applications/networking/p2p/valknut {
     inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
     qt = qt3;
