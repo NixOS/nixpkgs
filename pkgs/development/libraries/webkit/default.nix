@@ -28,10 +28,11 @@ rec {
     "--enable-image-resizer"
     "--enable-xhtmlmp"
     "--enable-mathml"
-    "--enable-wml"
     "--enable-blob-slice"
     "--enable-file-reader"
     "--enable-file-writer"
+    # https://bugs.webkit.org/show_bug.cgi?id=40765
+    # "--enable-wml"
     ];
 
   /* doConfigure should be specified separately */
