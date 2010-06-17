@@ -959,6 +959,11 @@ let
     inherit fetchurl stdenv;
   };
 
+  httpfs2 = import ../tools/filesystems/httpfs {
+    inherit fetchurl stdenv pkgconfig fuse openssl
+      asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt;
+  };
+
   iasl = import ../development/compilers/iasl {
     inherit fetchurl stdenv bison flex;
   };
