@@ -2,11 +2,13 @@
 , libxml2, libglade }:                                                                 
 
 stdenv.mkDerivation rec {
-  name = "xscreensaver-5.10";
+  version = "5.11";
+  name = "xscreensaver-${version}";
+  url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
 
   src = fetchurl {
-    url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256 = "07zy157wqwgcapqycyv89yabxa8byk4p8jn3zlvhf7lx5w1xmval";
+    inherit url;
+    sha256="0w47s0qd8ab6ywhhhkqjx0grb2b28bh2flnkdpj3yaind202l0s7";
   };
 
   buildInputs =
