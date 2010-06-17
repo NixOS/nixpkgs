@@ -26,7 +26,9 @@ rec {
     "--enable-web-sockets"
     "--enable-indexeddb"
     "--enable-image-resizer"
-    "--enable-mathml"
+    
+    # https://bugs.webkit.org/show_bug.cgi?id=40773
+    # "--enable-mathml"
 
     # "--enable-blob-slice"
     
