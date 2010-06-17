@@ -204,8 +204,6 @@ stdenv.mkDerivation ({
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
-    --enable-lto
-    --enable-plugin
     --enable-languages=${
       concatStrings (intersperse ","
         (  optional langC        "c"
