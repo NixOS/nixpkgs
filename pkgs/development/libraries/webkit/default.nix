@@ -26,13 +26,18 @@ rec {
     "--enable-web-sockets"
     "--enable-indexeddb"
     "--enable-image-resizer"
-    "--enable-xhtmlmp"
     "--enable-mathml"
-    "--enable-blob-slice"
-    "--enable-file-reader"
-    "--enable-file-writer"
+
+    # "--enable-blob-slice"
+    
+    # Seem incomplete as of now
+    # "--enable-file-reader"
+    # "--enable-file-writer"
+
     # https://bugs.webkit.org/show_bug.cgi?id=40765
     # "--enable-wml"
+
+    # "--enable-xhtmlmp"
     ];
 
   /* doConfigure should be specified separately */
