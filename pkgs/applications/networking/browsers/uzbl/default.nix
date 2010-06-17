@@ -9,7 +9,7 @@ let
   ];
 in
 rec {
-  src = (a.fetchGitFromSrcInfo s) + "/";
+  src = (a.fetchUrlFromSrcInfo s);
   inherit (s) name;
 
   inherit buildInputs;
@@ -21,7 +21,7 @@ rec {
   setVars = a.noDepEntry (''
   '');
 
-  doWrap = a.makeManyWrappers "$out/bin/uzbl" 
+  doWrap = a.makeManyWrappers "$out/bin/uzbl-core" 
     ''
       --prefix GST_PLUGIN_PATH : ${a.webkit.gstreamer}/lib/gstreamer-* \
       --prefix GST_PLUGIN_PATH : ${a.webkit.gstPluginsBase}/lib/gstreamer-* \

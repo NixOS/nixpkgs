@@ -1,9 +1,10 @@
 rec {
-   version="d2d73ad463f3d9f1c673d37457af159947b3faac";
-   name="uzbl-stable-d2d73ad463f3d9f1c673d37457af159947b3faac";
-   hash="7b162ad46445b4080c0cf2ac57c777186d4a9a58979499fe5556e6e855d4e53c";
-   rev="d2d73ad463f3d9f1c673d37457af159947b3faac";
-   url="git://github.com/Dieterbe/uzbl.git";
+   version="2010.04.03";
+   name="uzbl-stable-2010.04.03";
+   hash="1jxs9agk4jd09v73vl69k3mil4jfr5rhfb0v4sq8sfh1p8nl389s";
+   url="http://github.com/Dieterbe/uzbl/tarball/${version}";
+   advertisedUrl="http://github.com/Dieterbe/uzbl/tarball/2010.04.03";
   
+   downloadName="2010.04.03.tar.gz";
   
 }
