@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     # the build dir.
     '' export LD_LIBRARY_PATH="$PWD/src/.libs"
        export cmakeFlags="-Dprefix=$out"
+
+       # Enable tracing.
+       export cmakeFlags="$cmakeFlags -Denable_tracing=on"
     '';
 
   makeFlags = "VERBOSE=1";
