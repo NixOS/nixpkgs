@@ -9676,6 +9676,11 @@ let
     inherit (xlibs) libX11;
   };
 
+  hplip = import ../misc/drivers/hplip {
+    inherit stdenv fetchurl cups zlib libjpeg libusb python saneBackends dbus pkgconfig qt4;
+    qtSupport = true;
+  };
+
   # using the new configuration style proposal which is unstable
   jackaudio = import ../misc/jackaudio {
     inherit composableDerivation
