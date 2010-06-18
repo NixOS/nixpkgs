@@ -243,6 +243,7 @@ rec {
         guest ok = yes
       SMB
 
+      rm -f ./samba
       ${socat}/bin/socat unix-listen:./samba exec:'/bin/sh -c ${sambaScript}',nofork > /dev/null 2>&1 &
       while [ ! -e ./samba ]; do sleep 0.1; done # ugly
     '';
