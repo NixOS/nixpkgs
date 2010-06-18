@@ -13,6 +13,7 @@ let
     ''
       #! ${pkgs.perl}/bin/perl
       $SIG{CHLD} = 'DEFAULT';
+      print "\n";
       exec "/bin/sh";
     '';
 
@@ -25,12 +26,6 @@ in
     jobs.backdoor =
       { startOn = "started network-interfaces";
         
-        preStart =
-          ''
-            echo "guest running" > /dev/ttyS0
-            echo "===UP===" > dev/ttyS0
-          '';
-          
         script =
           ''
             export USER=root
@@ -39,7 +34,8 @@ in
             export GCOV_PREFIX=/tmp/coverage-data
             source /etc/profile
             cd /tmp
-            exec ${pkgs.socat}/bin/socat tcp-listen:514,fork exec:${rootShell} 2> /dev/ttyS0
+            echo "connecting to host..." > /dev/ttyS0
+            exec ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0
           '';
       };
   

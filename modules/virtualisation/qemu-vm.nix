@@ -134,7 +134,7 @@ let
           -m ${toString config.virtualisation.memorySize} \
           -net nic,vlan=0,model=virtio \
           -chardev socket,id=samba,path=./samba \
-          -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba \
+          -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
           -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,cache=writeback,werror=report \
           -kernel ${config.system.build.toplevel}/kernel \
           -initrd ${config.system.build.toplevel}/initrd \
