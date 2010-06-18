@@ -1,10 +1,10 @@
 {stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl}:
 
 stdenv.mkDerivation {
-  name = "mono-2.4.2.1";
+  name = "mono-2.6.4";
   src = fetchurl {
-    url = http://ftp.novell.com/pub/mono/sources/mono/mono-2.4.2.1.tar.bz2;
-    sha256 = "0cbg29fz5xnyjmznwzsmaxrr0cxqisyxk7jx7m56p3zzr379f0f5";
+    url = http://ftp.novell.com/pub/mono/sources/mono/mono-2.6.4.tar.bz2;
+    sha256 = "08krrl9zdigzxxa10c9scy518301l20xmw6dc2w8s0rvrhxryny0";
   };
 
   buildInputs = [bison pkgconfig glib gettext perl];

@@ -8470,7 +8470,7 @@ let
   };
 
   pinta = import ../applications/graphics/pinta {
-    inherit fetchurl stdenv mono pkgconfig;
+    inherit fetchgit stdenv mono pkgconfig automake autoconf;
     gtksharp = gtksharp2;
   };
 
