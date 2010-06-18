@@ -8983,8 +8983,9 @@ let
     pyrex = pyrex095;
   };
 
-  xscreensaver = makeOverridable (import ../applications/graphics/xscreensaver) {
-    inherit stdenv fetchurl pkgconfig bc perl xlibs libjpeg mesa libxml2;
+  xscreensaver =  (import ../applications/graphics/xscreensaver) {
+    inherit pkgconfig bc perl xlibs libjpeg mesa libxml2
+      builderDefsPackage;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
   };

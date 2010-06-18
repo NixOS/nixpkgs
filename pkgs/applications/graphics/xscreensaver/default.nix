@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, bc, perl, xlibs, libjpeg, mesa, gtk                     
-, libxml2, libglade }:                                                                 
+x@{ pkgconfig, bc, perl, xlibs, libjpeg, mesa, gtk
+, libxml2, libglade, builderDefsPackage, ... }:                                                                 
 
-stdenv.mkDerivation rec {
+builderDefsPackage 
+(a: rec {
   version = "5.11";
   name = "xscreensaver-${version}";
   url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
 
-  src = fetchurl {
+  src = a.fetchurl {
     inherit url;
     sha256="0w47s0qd8ab6ywhhhkqjx0grb2b28bh2flnkdpj3yaind202l0s7";
   };
 
-  buildInputs =
+  buildInputs = with a;
     [ pkgconfig bc perl libjpeg mesa gtk libxml2 libglade
       xlibs.xlibs xlibs.libXmu
     ];
@@ -20,19 +21,21 @@ stdenv.mkDerivation rec {
     [ "--with-gl"
       "--with-dpms"
       "--with-pixbuf"
-      "--with-x-app-defaults=\$out/share/xscreensaver/app-defaults"
-      "--with-hackdir=\$out/share/xscreensaver-hacks"
+      "--with-x-app-defaults=\${out}/share/xscreensaver/app-defaults"
+      "--with-hackdir=\${out}/share/xscreensaver-hacks"
     ];
 
-  preConfigure =
+  preConfigure = a.fullDepEntry
     ''
       sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
         -i driver/Makefile.in po/Makefile.in.in
-    '';
+    '' ["minInit" "doUnpack"];
+
+  phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
 
   meta = {
     description = "A set of screensavers";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
+    maintainers = [ a.lib.maintainers.raskin ];
+    platforms = a.lib.platforms.allBut "i686-cygwin";
   };
-}
+}) x
