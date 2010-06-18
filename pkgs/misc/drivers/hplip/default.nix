@@ -42,6 +42,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
-    license = "free" # MIT/BSD/GPL
+    license = "free"; # MIT/BSD/GPL
   };
 }
