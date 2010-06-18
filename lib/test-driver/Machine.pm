@@ -121,10 +121,6 @@ sub start {
         die;
     }
 
-    # Wait until QEMU connects to the monitor.
-    accept($self->{monitor}, $monitorS) or die;
-    $self->waitForMonitorPrompt;
-
     # Process serial line output.
     close $serialC;
 
@@ -132,9 +128,9 @@ sub start {
 
     sub processSerialOutput {
         my ($self, $serialP) = @_;
-        $/ = "\r\n";
         while (<$serialP>) {
             chomp;
+            s/\r$//;
             print STDERR $self->name, "# $_\n";
             $self->{connectedQueue}->enqueue(1) if $_ eq "===UP===";
         }
@@ -142,7 +138,17 @@ sub start {
         $self->{connectedQueue}->enqueue(1);
     }
 
-    $self->log("vm running as pid $pid");
+    # Wait until QEMU connects to the monitor.
+    eval {
+        local $SIG{CHLD} = sub { die "QEMU died prematurely\n"; };
+        accept($self->{monitor}, $monitorS) or die;
+    };
+    die "$@" if $@;
+    
+    $self->waitForMonitorPrompt;
+
+    $self->log("QEMU running (pid $pid)");
+    
     $self->{pid} = $pid;
     $self->{booted} = 1;
 }
