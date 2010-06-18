@@ -81,8 +81,8 @@ in
     services.syslogd.extraConfig = "*.*,kern.none /dev/ttyS0";
 
     # Prevent tests from accessing the Internet.
-    networking.defaultGateway = mkOverride 50 {} "";
-    networking.nameservers = mkOverride 50 {} [ ];
+    networking.defaultGateway = mkOverride 200 {} "";
+    networking.nameservers = mkOverride 200 {} [ ];
 
   };
 
