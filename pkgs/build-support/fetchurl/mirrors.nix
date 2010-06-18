@@ -195,11 +195,10 @@ rec {
 
   # openSUSE.
   opensuse = [
-    http://opensuse.hro.nl/opensuse/
-    http://ftp.funet.fi/pub/linux/mirrors/opensuse/
-    http://ftp5.gwdg.de/pub/opensuse/
-    http://ftp.opensuse.org/pub/opensuse/
-    http://ftp5.gwdg.de/pub/opensuse/discontinued/
+    http://opensuse.hro.nl/opensuse/distribution/
+    http://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/
+    http://ftp.opensuse.org/pub/opensuse/distribution/
+    http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/
   ];
 
   # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).

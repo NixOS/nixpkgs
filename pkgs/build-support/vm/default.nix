@@ -896,10 +896,10 @@ rec {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
       packagesList = fetchurl {
-        url = mirror://opensuse/distribution/10.3/repo/oss/suse/repodata/primary.xml.gz;
+        url = mirror://opensuse/10.3/repo/oss/suse/repodata/primary.xml.gz;
         sha256 = "0zb5kxsb755nqq9i8jdclmanacyf551ncx6a011v9jqphsvyfvd7";
       };
-      urlPrefix = mirror://opensuse/distribution/10.3/repo/oss/suse/;
+      urlPrefix = mirror://opensuse/10.3/repo/oss/suse/;
       archs = ["noarch" "i586"];
       packages = commonOpenSUSEPackages ++ [ "devs" ];
     };
@@ -908,10 +908,10 @@ rec {
       name = "opensuse-11.0-i586";
       fullName = "openSUSE 11.0 (i586)";
       packagesList = fetchurl {
-        url = mirror://opensuse/distribution/11.0/repo/oss/suse/repodata/primary.xml.gz;
+        url = mirror://opensuse/11.0/repo/oss/suse/repodata/primary.xml.gz;
         sha256 = "13rv855aj8p3h1zpsji5xa1wpkhgq94gcxzvg05l2b68b15q3mwn";
       };
-      urlPrefix = mirror://opensuse/distribution/11.0/repo/oss/suse/;
+      urlPrefix = mirror://opensuse/11.0/repo/oss/suse/;
       archs = ["noarch" "i586"];
       packages = commonOpenSUSEPackages;
     };
@@ -920,10 +920,10 @@ rec {
       name = "opensuse-11.0-x86_64";
       fullName = "openSUSE 11.0 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://opensuse/distribution/11.0/repo/oss/suse/repodata/primary.xml.gz;
+        url = mirror://opensuse/11.0/repo/oss/suse/repodata/primary.xml.gz;
         sha256 = "13rv855aj8p3h1zpsji5xa1wpkhgq94gcxzvg05l2b68b15q3mwn";
       };
-      urlPrefix = mirror://opensuse/distribution/11.0/repo/oss/suse/;
+      urlPrefix = mirror://opensuse/11.0/repo/oss/suse/;
       archs = ["noarch" "x86_64"];
       packages = commonOpenSUSEPackages;
     };
@@ -932,10 +932,10 @@ rec {
       name = "opensuse-11.1-i586";
       fullName = "openSUSE 11.1 (i586)";
       packagesList = fetchurl {
-        url = mirror://opensuse/distribution/11.1/repo/oss/suse/repodata/primary.xml.gz;
+        url = mirror://opensuse/11.1/repo/oss/suse/repodata/primary.xml.gz;
         sha256 = "1mfmp9afikj0hci1s8cpwjdr0ycbpfym9gdhci590r9fa75w221j";
       };
-      urlPrefix = mirror://opensuse/distribution/11.1/repo/oss/suse/;
+      urlPrefix = mirror://opensuse/11.1/repo/oss/suse/;
       archs = ["noarch" "i586"];
       packages = commonOpenSUSEPackages;
     };
@@ -944,10 +944,10 @@ rec {
       name = "opensuse-11.1-x86_64";
       fullName = "openSUSE 11.1 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://opensuse/distribution/11.1/repo/oss/suse/repodata/primary.xml.gz;
+        url = mirror://opensuse/11.1/repo/oss/suse/repodata/primary.xml.gz;
         sha256 = "1mfmp9afikj0hci1s8cpwjdr0ycbpfym9gdhci590r9fa75w221j";
       };
-      urlPrefix = mirror://opensuse/distribution/11.1/repo/oss/suse/;
+      urlPrefix = mirror://opensuse/11.1/repo/oss/suse/;
       archs = ["noarch" "x86_64"];
       packages = commonOpenSUSEPackages;
     };
