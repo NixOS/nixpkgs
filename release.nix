@@ -156,6 +156,8 @@ let
         installer.swraid = t.installer.swraid.test;
         kde4 = t.kde4.test;
         login = t.login.test;
+        nat = t.nat.test;
+        nfs = t.nfs.test;
         openssh = t.openssh.test;
         proxy = t.proxy.test;
         quake3 = t.quake3.test;
