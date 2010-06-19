@@ -209,9 +209,12 @@ sub connect {
 
     $self->start;
 
-    my $line = readline $self->{socket} or die;
+    local $SIG{ALRM} = sub { die "timed out waiting for the guest to connect\n"; };
+    alarm 300;
+    readline $self->{socket} or die;
+    alarm 0;
+        
     $self->log("connected to guest root shell");
-    
     $self->{connected} = 1;
 }
 
