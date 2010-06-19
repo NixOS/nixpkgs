@@ -83,8 +83,8 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdebase_runtime = import ./base-runtime {
-    inherit (pkgs) stdenv fetchurl lib cmake perl bzip2 xz qt4 exiv2 libssh;
-    inherit (pkgs) shared_mime_info xineLib alsaLib samba cluceneCore;
+    inherit (pkgs) stdenv fetchurl lib cmake perl bzip2 xz qt4 exiv2 libssh makeWrapper;
+    inherit (pkgs) shared_mime_info xineLib alsaLib samba cluceneCore virtuoso;
     inherit kdelibs attica;
     inherit automoc4 phonon strigi soprano;
   };
