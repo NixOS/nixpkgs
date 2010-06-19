@@ -40,6 +40,4 @@ stdenv.mkDerivation rec {
     homepage = http://nixos.org/;
     license = "LGPLv2+";
   };
-
-  patches = [ ./num-cores.patch ];
 }

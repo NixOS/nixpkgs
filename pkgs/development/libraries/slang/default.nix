@@ -14,5 +14,4 @@ stdenv.mkDerivation {
   '';
   configureFlags = "--with-png=${libpng} --with-z=${zlib} --with-pcre=${pcre} --with-readline=${readline}";
   buildInputs = [ncurses pcre libpng zlib readline];
-  NO_PARALLEL_BUILD_installPhase = 1;
 }

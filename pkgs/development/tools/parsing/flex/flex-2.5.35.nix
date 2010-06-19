@@ -16,5 +16,4 @@ stdenv.mkDerivation {
   meta = {
     description = "A fast lexical analyser generator";
   };
-  NO_PARALLEL_BUILD_installPhase = 1;
 }

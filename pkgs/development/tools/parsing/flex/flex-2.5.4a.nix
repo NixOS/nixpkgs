@@ -9,5 +9,4 @@ stdenv.mkDerivation {
     md5 = "bd8753d0b22e1f4ec87a553a73021adf";
   };
   buildInputs = [yacc];
-  NO_PARALLEL_BUILD_installPhase = 1;
 }

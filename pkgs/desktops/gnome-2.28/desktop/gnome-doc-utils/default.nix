@@ -14,6 +14,4 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/xml2po --prefix PYTHONPATH : $(toPythonPath $out) \
       ''${PYTHONPATH:+ --prefix PYTHONPATH : $PYTHONPATH} \
   '';
-
-  NO_PARALLEL_BUILD_buildPhase = 1;
 }

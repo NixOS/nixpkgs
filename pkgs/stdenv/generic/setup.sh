@@ -73,25 +73,6 @@ addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
-cmd(){
-  echo "cmd: $@"
-  "$@"
-}
-
-runMake(){
-  local optout=NO_PARALLEL_BUILD_${curPhase}
-  [ -n "${!optout}" ] || \
-    local j="$makeFlagsParallelBuild"
-  cmd make ${makefile:+-f $makefile} "$@" $j
-}
-
-######################################################################
-# parallel builds: opt-out
-# - in a phase:     set NO_PARALLEL_BUILD_${PHASE_NAME}
-# - for this build: pass NUM_CORES=1 to the builder
-if [ "$NUM_CORES" != 1 ]; then
-  makeFlagsParallelBuild="-j ${NIX_MAX_PARALLELIZATION:-1} ${NIX_TARGET_LOAD:+-l} $NIX_TARGET_LOAD"
-fi
 
 ######################################################################
 # Initialisation.
@@ -620,7 +601,9 @@ buildPhase() {
         return
     fi
 
-    runMake $makeFlags "${makeFlagsArray[@]}" \
+    echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
+    make ${makefile:+-f $makefile} \
+        $makeFlags "${makeFlagsArray[@]}" \
         $buildFlags "${buildFlagsArray[@]}"
 
     runHook postBuild
@@ -630,7 +613,9 @@ buildPhase() {
 checkPhase() {
     runHook preCheck
 
-    runMake $makeFlags "${makeFlagsArray[@]}" \
+    echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
+    make ${makefile:+-f $makefile} \
+        $makeFlags "${makeFlagsArray[@]}" \
         $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
 
     runHook postCheck
@@ -678,7 +663,8 @@ installPhase() {
     ensureDir "$prefix"
 
     installTargets=${installTargets:-install}
-    runMake $installTargets \
+    echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
+    make ${makefile:+-f $makefile} $installTargets \
         $makeFlags "${makeFlagsArray[@]}" \
         $installFlags "${installFlagsArray[@]}"
 
@@ -754,7 +740,8 @@ fixupPhase() {
 distPhase() {
     runHook preDist
 
-    runMake $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
+    echo "dist flags: $distFlags ${distFlagsArray[@]}"
+    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
         ensureDir "$out/tarballs"

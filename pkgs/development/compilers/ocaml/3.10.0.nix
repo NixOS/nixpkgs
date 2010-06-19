@@ -9,8 +9,6 @@ stdenv.mkDerivation (rec {
     sha256 = "1ihmx1civ78s7k2hfc05z1s9vbyx2qw7fg8lnbxnfd6zxkk8878d";
   };
 
-  NUM_CORES = 1; # both fail: build and install
-
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk" "-x11lib" x11];
   buildFlags = "world bootstrap world.opt";

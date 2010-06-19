@@ -70,7 +70,4 @@ composableDerivation {} ( fixed : {
 
   # TODO make them optional and make them work 
   patches = [ ./disable-modules.patch ];
-
-  NUM_CORES = 1;
-
 })
