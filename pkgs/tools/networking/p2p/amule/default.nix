@@ -1,7 +1,17 @@
-{ fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext
+{ monolithic ? true # build monolithic amule
+, daemon ? false # build amule daemon
+, httpServer ? false # build web interface for the daemon
+, client ? false # build amule remote gui 
+, fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
 , pkgconfig, makeWrapper }:
 
-stdenv.mkDerivation rec {
+assert httpServer -> libpng != null;
+with stdenv;
+let
+  # Enable/Disable Feature
+  edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
+in 
+mkDerivation rec {
   name = "aMule-2.2.6";
 
   src = fetchurl {
@@ -10,9 +20,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ];
+    [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ]
+    ++ lib.optional httpServer libpng;
 
-  configureFlags = "--with-crypto-prefix=${cryptopp}";
+  configureFlags = ''
+    --with-crypto-prefix=${cryptopp}
+    --disable-debug
+    --enable-optimize
+    ${edf monolithic "monolithic"}
+    ${edf daemon "amule-daemon"}
+    ${edf client "amule-gui"}
+    ${edf httpServer "webserver"}
+  '';
 
   postConfigure = ''
     sed -i "src/libs/ec/file_generator.pl"     \
@@ -21,9 +40,8 @@ stdenv.mkDerivation rec {
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
-  postInstall = ''
-    wrapProgram "$out/bin/amule" \
-      --prefix LD_LIBRARY_PATH ":" "${libupnp}/lib"
+  postInstall = lib.optionalString monolithic ''
+    wrapProgram "$out/bin/amule" --prefix LD_LIBRARY_PATH ":" "${libupnp}/lib"
   '';
 
   meta = {
@@ -44,6 +62,6 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.phreedom ];
   };
 }
