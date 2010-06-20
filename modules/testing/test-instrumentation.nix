@@ -24,7 +24,8 @@ in
   config = {
 
     jobs.backdoor =
-      { startOn = "started network-interfaces";
+      { startOn = "ip-up";
+        stopOn = "never";
         
         script =
           ''
@@ -35,10 +36,12 @@ in
             source /etc/profile
             cd /tmp
             echo "connecting to host..." > /dev/ttyS0
-            exec ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0
+            ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0 || poweroff -f
           '';
+
+        respawn = false;
       };
-  
+
     boot.postBootCommands =
       ''
         # Panic on out-of-memory conditions rather than letting the
