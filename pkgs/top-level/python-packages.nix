@@ -293,6 +293,35 @@ rec {
     };
   });
 
+  mock = buildPythonPackage (rec {
+    name = "mock-0.1.0";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/python-mock/pythonmock-0.1.0.zip";
+      sha256 = "0r17f8sjq6pjlfh2sq2x80bd5r6y9sb3n5l05x5sf25iaba7sg9z";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    phases = "unpackPhase";
+
+    unpackPhase =
+      '' mkdir "${name}"
+         unzip "$src"
+
+         ensureDir "$out/lib/${python.libPrefix}/site-packages"
+         cp -v mock.py "$out/lib/${python.libPrefix}/site-packages"
+      '';
+
+    meta = {
+      description = "Mock objects for Python";
+
+      homepage = http://python-mock.sourceforge.net/;
+
+      license = "mBSD";
+    };
+  });
+
   namebench = buildPythonPackage (rec {
     name = "namebench-1.0.5";
 
