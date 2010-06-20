@@ -219,9 +219,7 @@ in {
         ''
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/vda1 -L swap",
@@ -241,9 +239,7 @@ in {
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
@@ -266,11 +262,8 @@ in {
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
-              "udevadm settle",
               "parted /dev/vda -- set 1 lvm on",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
-              "udevadm settle",
               "parted /dev/vda -- set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
