@@ -74,10 +74,8 @@ in
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
 
-    # Send all of /var/log/messages to the serial port (except for
-    # kernel messages through klogd, which already appear on the
-    # serial port).
-    services.syslogd.extraConfig = "*.*,kern.none /dev/ttyS0";
+    # Send all of /var/log/messages to the serial port.
+    services.syslogd.extraConfig = "*.* /dev/ttyS0";
 
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 200 {} "";
