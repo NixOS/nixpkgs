@@ -373,7 +373,7 @@ let
     inherit stdenv fetchurl unzip makeWrapper ruby openssl;
   };
 
-  amule = import ../tools/networking/p2p/amule {
+  amule = makeOverridable (import ../tools/networking/p2p/amule) {
     inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper
       wxGTK pkgconfig libpng;
   };
