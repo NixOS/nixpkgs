@@ -5177,6 +5177,11 @@ let
     qt4 = qt46;
   };
 
+  quassel = makeOverridable (import ../applications/networking/irc/quassel) {
+    inherit stdenv fetchurl cmake;
+    inherit (kde4) qt4 kdelibs phonon automoc4;
+  };
+  
   quesoglc = import ../development/libraries/quesoglc {
     inherit stdenv fetchurl mesa glew freetype fontconfig fribidi;
     inherit (xlibs) libX11;
