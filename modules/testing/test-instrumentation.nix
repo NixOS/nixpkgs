@@ -81,6 +81,13 @@ in
     networking.defaultGateway = mkOverride 200 {} "";
     networking.nameservers = mkOverride 200 {} [ ];
 
+    # Apply a patch to the kernel to increase the 15s CIFS timeout.
+    nixpkgs.config.packageOverrides = pkgs: {
+      linux = pkgs.linux.override (orig: {
+        kernelPatches = orig.kernelPatches ++ [ pkgs.kernelPatches.cifs_timeout ];
+      });
+    };
+
   };
 
 }
