@@ -287,7 +287,15 @@ in
 
         daemonType = "none";
 
-        respawn = false;
+        respawn = true;
+
+        script = ''
+          while ${pkgs.procps}/bin/ps `${pkgs.coreutils}/bin/cat /var/postfix/queue/pid/master.pid` |
+            grep -q postfix
+          do
+            ${pkgs.coreutils}/bin/sleep 1m
+          done
+        '';
 
         preStart =
           ''

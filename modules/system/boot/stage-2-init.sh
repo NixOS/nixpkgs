@@ -131,9 +131,15 @@ echo "running activation script..."
 @activateConfiguration@ "$systemConfig"
 
 
-# Record the boot configuration.  !!! Should this be a GC root?
+# Record the boot configuration.
 if test -n "$systemConfig"; then
     ln -sfn "$systemConfig" /var/run/booted-system
+
+    # Prevent the booted system form being garbage-collected
+    # If it weren't a gcroot, if we were running a different kernel,
+    # switched system, and garbage collected all, we could not load
+    # kernel modules anymore.
+    ln -sfn /var/run/booted-system /nix/var/nix/gcroots/booted-system
 fi
 
 

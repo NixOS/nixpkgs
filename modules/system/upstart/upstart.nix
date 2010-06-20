@@ -21,6 +21,7 @@ let
   makeJob = job:
 
     let
+      hasMain = job.script != "" || job.exec != "";
 
       jobText =
         let log = "/var/log/upstart/${job.name}"; in
@@ -77,12 +78,14 @@ let
           ${optionalString job.task "task"}
           ${optionalString (!job.task && job.respawn) "respawn"}
 
-          ${optionalString (job.preStop != "") ''
+          ${ # preStop is run only if there is exec or script.
+             # (upstart 0.6.5, job.c:562)
+            optionalString (job.preStop != "") (assert hasMain; ''
             pre-stop script
               exec >> ${log} 2>&1
               ${job.preStop}
             end script
-          ''}
+          '')}
 
           ${optionalString (job.postStop != "") ''
             post-stop script

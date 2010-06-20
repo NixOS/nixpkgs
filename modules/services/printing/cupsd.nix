@@ -106,6 +106,11 @@ in
 
     services.dbus.packages = [cups];
 
+    # cups uses libusb to talk to printers, and does not use the
+    # linux kernel driver. If the driver is not in a black list, it
+    # gets loaded, and then cups cannot access the printers.
+    boot.blacklistedKernelModules = [ "usblp" ];
+
     environment.etc =
       [ # CUPS expects the following files in its ServerRoot.
         { source = "${cups}/etc/cups/mime.convs";
@@ -122,15 +127,17 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
+        environment = {
+          # Cups scripts for printing (psto...) require awk, sed, grep, ...
+          PATH = "${config.system.path}/bin";
+        };
+
         preStart =
           ''
             mkdir -m 0755 -p ${logDir}
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
-
-            # Make USB printers show up.
-            ${modprobe}/sbin/modprobe usblp || true
           '';
 
         exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";

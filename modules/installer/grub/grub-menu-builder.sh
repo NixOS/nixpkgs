@@ -30,7 +30,7 @@ esac
 # the GRUB config file must be relative to the root of the /boot
 # filesystem.  `$bootRoot' is the path to be prepended to paths under
 # /boot.
-if [ "$(stat -f -c '%i' /)" = "$(stat -f -c '%i' /boot)" ]; then
+if [ "$(stat -c '%D' /.)" = "$(stat -c '%D' /boot/.)" ]; then
     bootRoot=/boot
     copyKernels="@copyKernels@" # user can override in the NixOS config
 else
