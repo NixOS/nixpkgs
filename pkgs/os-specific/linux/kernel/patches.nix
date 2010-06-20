@@ -155,4 +155,11 @@ in
       features.aufsBase = true;
     };
 
+  # Increase the timeout on CIFS requests from 15 to 120 seconds to
+  # make CIFS more resilient to high load on the CIFS server.
+  cifs_timeout =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout.patch;
+    };
+  
 }

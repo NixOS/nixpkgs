@@ -4,7 +4,12 @@ with pkgs;
 
 rec {
 
-  inherit (linuxPackages_2_6_32) kernel;
+  # The 15 second CIFS timeout is too short if the host if heavily
+  # loaded (e.g., in the Hydra build farm when it's running many jobs
+  # in parallel).  So apply a patch to increase the timeout to 120s.
+  kernel = pkgs.linux.override (orig: {
+    kernelPatches = orig.kernelPatches ++ [ kernelPatches.cifs_timeout ];
+  });
 
   kvm = pkgs.qemu_kvm;
 
@@ -135,10 +140,8 @@ rec {
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    for ((n = 0; n < 10; n++)); do
-      echo "mounting host filesystem, attempt $n..."
-      mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody && break
-    done
+    echo "mounting host filesystem..."
+    mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody
 
     mkdir -p /fs/nix/store
     mount -o bind /fs/hostfs/nix/store /fs/nix/store
@@ -225,7 +228,6 @@ rec {
 
 
   startSamba =
-    let sambaScript = writeScript "run-smbd" "while ${samba}/sbin/smbd -s $TMPDIR/smb.conf; do true; done"; in
     ''
       cat > $TMPDIR/smb.conf <<SMB
       [global]
@@ -244,7 +246,7 @@ rec {
       SMB
 
       rm -f ./samba
-      ${socat}/bin/socat unix-listen:./samba exec:'/bin/sh -c ${sambaScript}',nofork > /dev/null 2>&1 &
+      ${socat}/bin/socat unix-listen:./samba exec:'${samba}/sbin/smbd -s $TMPDIR/smb.conf',nofork > /dev/null 2>&1 &
       while [ ! -e ./samba ]; do sleep 0.1; done # ugly
     '';
 
