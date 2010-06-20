@@ -443,6 +443,25 @@ rec {
     };
   };
 
+  pyasn1 = buildPythonPackage ({
+    name = "pyasn1-0.0.11a";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/pyasn1/pyasn1-devel/0.0.11a/pyasn1-0.0.11a.tar.gz";
+      sha256 = "0b7q67ygdk48zn07pyhyg7r0b74gds50652ndpzfw4vs8l3vjg0b";
+    };
+
+    meta = {
+      description = "ASN.1 tools for Python";
+
+      homepage = http://pyasn1.sourceforge.net/;
+
+      license = "mBSD";
+
+      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    };
+  });
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.15";
 
