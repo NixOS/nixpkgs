@@ -8595,6 +8595,11 @@ let
     };
   };
 
+  semnotes = import ../applications/misc/semnotes {
+    inherit stdenv fetchurl cmake;
+    inherit (kde4) qt4 kdelibs automoc4 phonon soprano;
+  };
+
   skype_linux = import ../applications/networking/skype {
     inherit fetchurl stdenv;
     inherit alsaLib freetype fontconfig zlib;
