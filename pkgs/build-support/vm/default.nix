@@ -246,7 +246,7 @@ rec {
       SMB
 
       rm -f ./samba
-      ${socat}/bin/socat unix-listen:./samba exec:'${samba}/sbin/smbd -s $TMPDIR/smb.conf',nofork > /dev/null 2>&1 &
+      ${socat}/bin/socat unix-listen:./samba exec:"${samba}/sbin/smbd -s $TMPDIR/smb.conf",nofork > /dev/null 2>&1 &
       while [ ! -e ./samba ]; do sleep 0.1; done # ugly
     '';
 
