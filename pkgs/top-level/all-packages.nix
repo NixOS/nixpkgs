@@ -6444,14 +6444,6 @@ let
       inherit fetchurl stdenv kernel;
     };
 
-    aufs2 = import ../os-specific/linux/aufs2 {
-      inherit fetchurl stdenv kernel perl;
-    };
-
-    aufs2_util = import ../os-specific/linux/aufs2-util {
-      inherit fetchurl stdenv kernel aufs2;
-    };
-
     blcr = import ../os-specific/linux/blcr/0.8.2.nix {
       inherit fetchurl stdenv kernel perl makeWrapper;
     };
@@ -6556,7 +6548,15 @@ let
       inherit stdenv fetchurl lib patchelf cdrkit kernel;
       inherit (xlibs) libX11 libXt libXext libXmu libXcomposite libXfixes;
     };
-  };
+  } // (if kernel.features ? aufsBase then rec {
+      aufs2 = import ../os-specific/linux/aufs2 {
+        inherit fetchurl stdenv kernel perl;
+      };
+
+      aufs2_util = import ../os-specific/linux/aufs2-util {
+        inherit fetchurl stdenv kernel aufs2;
+      };
+    } else {});
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_2_6_25 = recurseIntoAttrs (linuxPackagesFor linux_2_6_25);
@@ -8482,7 +8482,7 @@ let
   };
 
   pinta = import ../applications/graphics/pinta {
-    inherit fetchgit stdenv mono pkgconfig automake autoconf;
+    inherit fetchgit stdenv mono pkgconfig;
     gtksharp = gtksharp2;
   };
 
