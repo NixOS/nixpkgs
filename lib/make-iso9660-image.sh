@@ -54,7 +54,7 @@ done
 
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.
-if [ -n "$object"; ]; then
+if [ -n "$object" ]; then
     printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
     echo "nix-path-registration=nix-path-registration" >> pathlist
 fi
