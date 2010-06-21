@@ -1,4 +1,4 @@
-{stdenv, fetchgit, mono, gtksharp, pkgconfig, automake, autoconf}:
+{stdenv, fetchgit, mono, gtksharp, pkgconfig}:
 
 stdenv.mkDerivation {
   name = "pinta-20100617";
@@ -7,15 +7,11 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = http://github.com/jpobst/Pinta.git;
-    rev = "c8ce06fc14a42083749b6400ed57d3883820d368";
-    sha256 = "9df96b69b08567045e9100e228047d7711db28705bd2badc0afc316e63c15505";
+    tag = "0.3";
+    sha256 = "0qvpz9602igjmv8ba6vc4kg9jj3yyw0frl7wgz62hdxiizdfhm2f";
   };
 
   makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
-
-  configurePhase = ''
-    sh ./autogen.sh --prefix=$out
-  '';
 
   makePhase = ''
     HOME=`pwd`/tmphome
@@ -23,7 +19,7 @@ stdenv.mkDerivation {
     xbuild Pinta.Core/Pinta.Core.csproj /v:diag
   '';
 
-  buildInputs = [mono gtksharp pkgconfig automake autoconf];
+  buildInputs = [mono gtksharp pkgconfig];
 
   inherit gtksharp;
 }
