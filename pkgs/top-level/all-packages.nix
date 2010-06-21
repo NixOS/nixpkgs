@@ -4583,6 +4583,13 @@ let
     inherit fetchurl stdenv pkgconfig libraw1394;
   };
 
+  libinfinity = makeOverridable (import ../development/libraries/libinfinity) {
+    inherit stdenv fetchurl pkgconfig;
+    inherit (gtkLibs) gtk glib;
+    inherit (gnome) gtkdoc;
+    inherit libxml2 gnutls gsasl avahi libdaemon;
+  };
+  
   libiptcdata = import ../development/libraries/libiptcdata {
     inherit fetchurl stdenv;
   };
