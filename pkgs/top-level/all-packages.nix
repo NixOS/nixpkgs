@@ -9543,7 +9543,8 @@ let
   ### SCIENCE / ELECTRONICS
 
   ngspice = import ../applications/science/electronics/ngspice {
-    inherit fetchurl stdenv readline;
+    inherit fetchurl stdenv readline bison;
+    inherit (xlibs) libX11 libICE libXaw libXext;
   };
 
   gtkwave = import ../applications/science/electronics/gtkwave {
