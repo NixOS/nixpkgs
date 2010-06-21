@@ -167,6 +167,7 @@ rec {
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
+    http://archive.debian.org/debian-archive/debian/
   ];
 
   # Ubuntu.
