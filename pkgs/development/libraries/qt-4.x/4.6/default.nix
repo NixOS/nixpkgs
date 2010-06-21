@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib
+{ stdenv, fetchurl
 , libXft, libXrender, randrproto, xextproto, libXinerama, xineramaproto, libXcursor, libXmu
 , libXext, libXfixes, inputproto, fixesproto, libXrandr, freetype, fontconfig
 , zlib, libjpeg, libpng, which, mesa, openssl, dbus, cups, pkgconfig, libtiff, glib
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
     homepage = http://qt.nokia.com/products;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = with lib.maintainers; [ sander urkud ];
+    maintainers = with stdenv.lib.maintainers; [ sander urkud ];
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

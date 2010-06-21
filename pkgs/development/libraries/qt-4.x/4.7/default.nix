@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib
+{ stdenv, fetchurl
 , alsaLib, gstreamer, gstPluginsBase, pulseaudio
 , libXft, libXrender, randrproto, xextproto, libXinerama, xineramaproto, libXcursor, libXmu
 , libXv, libXext, libXfixes, inputproto, fixesproto, libXrandr, freetype, fontconfig
@@ -100,8 +100,8 @@ stdenv.mkDerivation rec {
     homepage = http://qt.nokia.com/products;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = with lib.maintainers; [ urkud sander ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ urkud sander ];
+    platforms = stdenv.lib.platforms.mesaPlatforms;
     priority = 10;
   };
 }
