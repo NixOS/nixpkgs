@@ -3,7 +3,7 @@
 , gstreamer, gstPluginsBase, xineLib, pulseaudio}:
 
 let
-  v = "4.4.1";
+  v = "4.4.2";
   stable = true;
 in
 
@@ -11,9 +11,8 @@ stdenv.mkDerivation rec {
   name = "phonon-${v}";
   src = fetchurl {
     url = "mirror://kde/${if stable then "" else "un"}stable/phonon/${v}/${name}.tar.bz2";
-    sha256 = "0xsjbvpiqrsmqvxmhmjkwyhcxkajf1f78pg67kfwidaz9kkv0lla";
+    sha256 = "11ilv692yqzvk93y3n2zp9qvqc2xi0npz8vbqa1b60b268zlqh7i";
   };
-  patches = [ ./phonon-4.4.1-gst-plugins-include.patch ];
   buildInputs = [ cmake qt4 libXau libXdmcp libpthreadstubs gstreamer
     gstPluginsBase xineLib automoc4 pulseaudio pkgconfig ];
   meta = with stdenv.lib; {
