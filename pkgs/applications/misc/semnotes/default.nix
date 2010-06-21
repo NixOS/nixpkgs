@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     license = "GPL";
     homepage = http://smile.deri.ie/projects/semn;
     maintainers = [ maintainers.phreedom ];
+    platforms = platforms.linux;
   };
 }
