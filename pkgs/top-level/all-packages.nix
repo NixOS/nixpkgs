@@ -3322,7 +3322,7 @@ let
   };
 
   noweb = import ../development/tools/literate-programming/noweb {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gawk;
   };
 
   omake = import ../development/tools/ocaml/omake {
