@@ -1,11 +1,11 @@
 {fetchurl, buildPythonPackage}:
 
 buildPythonPackage {
-  name = "offlineimap-6.2.0";
+  name = "offlineimap-6.2.0.1";
 
   src = fetchurl {
-    url = "http://software.complete.org/software/attachments/download/413/offlineimap_6.2.0.orig.tar.gz";
-    sha256 = "057pcz2291mdpkjyrwdzxfg831337sg7bbqyxmwfy42k7np5bdi4";
+    url = "http://ftp.de.debian.org/debian/pool/main/o/offlineimap/offlineimap_6.2.0.1.tar.gz";
+    sha256 = "16s7whlw7vix54dil2ri871vyggr742agykk950lnlixcv66gyhn";
   };
 
   doCheck = false;
