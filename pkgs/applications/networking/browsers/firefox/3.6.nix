@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.6.3";
+  firefoxVersion = "3.6.4";
   
-  xulVersion = "1.9.2.3"; # this attribute is used by other packages
+  xulVersion = "1.9.2.4"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1l5290l1jrglvih0957iv8xn5sxmqklx67kqqnv059dsg5fv781m";
+    sha1 = "c73e4cf4a8e55b5a192fe59d38bef1d06f43e842";
   };
 
 
@@ -50,7 +50,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib nspr /* nss */ libnotify
+        alsaLib nspr /* nss */ libnotify xlibs.pixman
       ];
 
     configureFlags =
@@ -104,6 +104,7 @@ rec {
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
+        xlibs.pixman
       ];
 
     propagatedBuildInputs = [xulrunner];
