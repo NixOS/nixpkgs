@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ perl ];
   buildInputs = [ curl openssl ];
+  patches = [ ./0001-Added-support-for-passing-an-impure-NIX_BUILD_CORES-.patch ];
 
   configureFlags =
     ''

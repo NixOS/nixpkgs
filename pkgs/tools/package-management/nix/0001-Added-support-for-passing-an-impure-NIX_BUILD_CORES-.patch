@@ -1,0 +1,126 @@
+From 9c655f52be055d06cbeb3144e14d6135a8d408e0 Mon Sep 17 00:00:00 2001
+From: Peter Simons <simons@cryp.to>
+Date: Tue, 22 Jun 2010 16:59:03 +0200
+Subject: [PATCH] Added support for passing an (impure) NIX_BUILD_CORES variable to build expressions.
+
+This patch adds the configuration file variable "build-cores" and the
+command line argument "--cores". These settings specify the number of
+CPU cores to utilize for parallel building within a job, i.e. by passing
+an appropriate "-j" flag to GNU Make. The default value is 1, which
+means that parallel building is *disabled*. If the number of build cores
+is specified as 0 (synonymously: "guess" or "auto"), then the actual
+value is supposed to be auto-detected by builders at run-time, i.e by
+calling the nproc(1) utility from coreutils.
+
+The environment variable $NIX_BUILD_CORES is available to builders, but
+the contents of that variable does *not* influence the hash that goes
+into the $out store path, i.e. the number of build cores to be utilized
+can be changed at will without requiring any re-builds.
+---
+ nix.conf.example        |   12 ++++++++++++
+ src/libmain/shared.cc   |   14 ++++++++++++++
+ src/libstore/build.cc   |    3 +++
+ src/libstore/globals.cc |    1 +
+ src/libstore/globals.hh |    5 +++++
+ 5 files changed, 35 insertions(+), 0 deletions(-)
+
+diff --git a/nix.conf.example b/nix.conf.example
+index e17cf3c..6175d86 100644
+--- a/nix.conf.example
++++ b/nix.conf.example
+@@ -59,6 +59,18 @@
+ #build-max-jobs = 1
+ 
+ 
++### Option `build-cores'
++#
++# This option defines the number of CPU cores to utilize in parallel
++# within a build job, i.e. by passing an appropriate `-jN' flag to
++# GNU make. The default is 1, meaning that parallel building within
++# jobs is disabled. Passing the special values `0', `auto', or
++# `guess' causes Nix to try and auto-detect the number of available
++# cores on the local host. This setting can be overridden using the
++# `--cores' command line switch.
++#build-cores = 1
++
++
+ ### Option `build-max-silent-time'
+ #
+ # This option defines the maximum number of seconds that a builder can
+diff --git a/src/libmain/shared.cc b/src/libmain/shared.cc
+index 3fbec4b..19aa1e7 100644
+--- a/src/libmain/shared.cc
++++ b/src/libmain/shared.cc
+@@ -135,6 +135,12 @@ static void initAndRun(int argc, char * * argv)
+     /* Get some settings from the configuration file. */
+     thisSystem = querySetting("system", SYSTEM);
+     maxBuildJobs = queryIntSetting("build-max-jobs", 1);
++    string tmp = querySetting("build-cores", "/UNDEFINED");
++    std::transform(tmp.begin(), tmp.end(), tmp.begin(), tolower);
++    if (tmp == "auto" || tmp == "guess")
++      buildCores = 0;
++    else
++      buildCores = queryIntSetting("build-cores", 1);
+     maxSilentTime = queryIntSetting("build-max-silent-time", 0);
+ 
+     /* Catch SIGINT. */
+@@ -226,6 +232,14 @@ static void initAndRun(int argc, char * * argv)
+             tryFallback = true;
+         else if (arg == "--max-jobs" || arg == "-j")
+             maxBuildJobs = getIntArg<unsigned int>(arg, i, args.end());
++        else if (arg == "--cores") {
++            string tmp = *(++i);
++            std::transform(tmp.begin(), tmp.end(), tmp.begin(), tolower);
++            if (tmp == "auto" || tmp == "guess")
++              buildCores = 0u;
++            else
++              buildCores = getIntArg<unsigned int>(arg, --i, args.end());
++        }
+         else if (arg == "--readonly-mode")
+             readOnlyMode = true;
+         else if (arg == "--max-silent-time")
+diff --git a/src/libstore/build.cc b/src/libstore/build.cc
+index f901c1f..a53c23b 100644
+--- a/src/libstore/build.cc
++++ b/src/libstore/build.cc
+@@ -1411,6 +1411,9 @@ void DerivationGoal::startBuilder()
+        in the store or in the build directory). */
+     env["NIX_STORE"] = nixStore;
+ 
++    /* The maximum number of cores to utilize for parallel building. */
++    env["NIX_BUILD_CORES"] = (format("%d") % buildCores).str();
++
+     /* Add all bindings specified in the derivation. */
+     foreach (StringPairs::iterator, i, drv.env)
+         env[i->first] = i->second;
+diff --git a/src/libstore/globals.cc b/src/libstore/globals.cc
+index cc0e44e..75d2f69 100644
+--- a/src/libstore/globals.cc
++++ b/src/libstore/globals.cc
+@@ -22,6 +22,7 @@ bool keepGoing = false;
+ bool tryFallback = false;
+ Verbosity buildVerbosity = lvlInfo;
+ unsigned int maxBuildJobs = 1;
++unsigned int buildCores = 1;
+ bool readOnlyMode = false;
+ string thisSystem = "unset";
+ time_t maxSilentTime = 0;
+diff --git a/src/libstore/globals.hh b/src/libstore/globals.hh
+index d3388e3..a74a741 100644
+--- a/src/libstore/globals.hh
++++ b/src/libstore/globals.hh
+@@ -55,6 +55,11 @@ extern Verbosity buildVerbosity;
+ /* Maximum number of parallel build jobs.  0 means unlimited. */
+ extern unsigned int maxBuildJobs;
+ 
++/* Number of CPU cores to utilize in parallel within a build, i.e. by passing
++   this number to Make via '-j'. 0 means that the number of actual CPU cores on
++   the local host ought to be auto-detected. */
++extern unsigned int buildCores;
++
+ /* Read-only mode.  Don't copy stuff to the store, don't change the
+    database. */
+ extern bool readOnlyMode;
+-- 
+1.7.1
+
