@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "GMP, the GNU multiple precision arithmetic library";
 

@@ -116,6 +116,8 @@ stdenv.mkDerivation rec {
 
      '';
 
+  enableParallelBuilding = true;
+
   meta = {
     license = "GPLv2";
     homepage = http://git-scm.com/;

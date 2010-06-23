@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   # and {Open,Free}BSD.
   doCheck = (stdenv ? glibc);
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";

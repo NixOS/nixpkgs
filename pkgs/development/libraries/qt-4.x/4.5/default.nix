@@ -74,6 +74,8 @@ stdenv.mkDerivation {
     ${if keepDocumentation == false then "rm -rf $out/doc" else ""}
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.qtsoftware.com/downloads/opensource/appdev/linux-x11-cpp;
     description = "A cross-platform application framework for C++";

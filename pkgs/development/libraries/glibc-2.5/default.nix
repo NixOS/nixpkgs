@@ -30,6 +30,8 @@ stdenv.mkDerivation {
   # the symbol __i686.get_pc_thunk.dx to be mangled.
   NIX_CFLAGS_COMPILE = "-U__i686";
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.gnu.org/software/libc/;
     description = "The GNU C Library";

@@ -38,7 +38,7 @@ postConfigure() {
 
 postInstall() {
     if test -n "$installLocales"; then
-        make localedata/install-locales
+        make -j${NIX_BUILD_CORES:-1} -l${NIX_BUILD_CORES:-1} localedata/install-locales
     fi
     rm $out/etc/ld.so.cache
     (cd $out/include && ln -s $kernelHeaders/include/* .) || exit 1

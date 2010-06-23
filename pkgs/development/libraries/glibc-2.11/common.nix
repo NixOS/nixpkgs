@@ -29,7 +29,9 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
-  patches = 
+  enableParallelBuilding = true;
+
+  patches =
     stdenv.lib.optional (fetchgit == null)
     /* Fix for NIXPKGS-79: when doing host name lookups, when
        nsswitch.conf contains a line like
