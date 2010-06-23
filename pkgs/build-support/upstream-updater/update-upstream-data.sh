@@ -56,8 +56,8 @@ prefetchClause=""
     echo "Sourceforge-corrected URL: $freshUrl" >&2
     
     version="$(echo "$freshUrl" | 
-      sed -re "$extractReleaseSF")"
-    baseName="$(getAttr baseName "$(echo "$freshUrl" | sed -re 's@.*/projects/([^/]+)/.*@\1@')")"
+      sed -re "$extractVersionSF")"
+    baseName="$(getAttr baseName "$(echo "$freshUrl" | sed -re 's@.*/project/([^/]+)/.*@\1@')")"
     url="$freshUrl"
     name="$baseName-$version"
     advertisedUrl="$freshUrl"
