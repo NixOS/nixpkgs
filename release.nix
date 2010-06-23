@@ -113,8 +113,8 @@ let
             inherit nixpkgs;
             modules = [ { fileSystems = []; } ];
           }).options;
-        revision = with nixosSrc;
-          if rev == 1234 then "HEAD" else toString rev;
+        revision = 
+          if nixosSrc.rev == 1234 then "HEAD" else toString nixosSrc.rev;
       };
 
 
