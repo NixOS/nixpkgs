@@ -9583,6 +9583,11 @@ let
 
   ### SCIENCE / MISC
 
+  golly = import ../applications/science/misc/golly {
+    inherit builderDefsPackage wxGTK perl zlib
+      python;
+  };
+
   simgrid = import ../applications/science/misc/simgrid {
     inherit fetchurl cmake ruby;
     stdenv = stdenv2;
