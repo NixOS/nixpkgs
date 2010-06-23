@@ -9,7 +9,7 @@
 
 own_dir="$(cd "$(dirname "$0")"; sh -c pwd)"
 
-cp "$own_dir/../builder-defs/template-bdp-uud.nix" "$1.nix" 
+cp "$own_dir/../builder-defs/template-auto-callable.nix" "$1.nix" 
 sed -e "s@src-for-default.nix@src-for-$1.nix@g" -i "$1.nix"
 echo '{}' > "src-for-$1.nix"
 cat << EOF > src-info-for-$1.nix

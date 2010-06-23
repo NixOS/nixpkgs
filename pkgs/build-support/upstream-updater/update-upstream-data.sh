@@ -57,7 +57,7 @@ prefetchClause=""
     
     version="$(echo "$freshUrl" | 
       sed -re "$extractReleaseSF")"
-    baseName="$(getAttr baseName "$(echo "freshUrl" | sed -re 's@.*/projects/([^/]+)/.*@\1@')")"
+    baseName="$(getAttr baseName "$(echo "$freshUrl" | sed -re 's@.*/projects/([^/]+)/.*@\1@')")"
     url="$freshUrl"
     name="$baseName-$version"
     advertisedUrl="$freshUrl"
