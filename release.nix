@@ -111,7 +111,7 @@ let
         options =
           (import lib/eval-config.nix {
             inherit nixpkgs;
-            modules = [ ];
+            modules = [ { fileSystems = []; } ];
           }).options;
         revision = with nixosSrc;
           if rev == 1234 then "HEAD" else toString rev;
