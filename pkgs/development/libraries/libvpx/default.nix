@@ -1,11 +1,11 @@
-{stdenv, fetchurl, bash}:
+{stdenv, fetchurl, bash, yasm}:
 
 stdenv.mkDerivation rec {
-  name = "libvpx-0.9.0";
+  name = "libvpx-0.9.1";
   
   src = fetchurl {
-    url = http://webm.googlecode.com/files/libvpx-0.9.0.tar.bz2;
-    sha256 = "1p5rl7r8zpw43n8i38wv73na8crkkakw16yx0v7n3ywwhp36l2d0";
+    url = http://webm.googlecode.com/files/libvpx-0.9.1.tar.bz2;
+    sha256 = "0ngc8y12np2q6yhrrn6cbmlbzwbk10fnldj8d5dxxzvrw1iy9s64";
   };
 
   patchPhase = ''
@@ -16,12 +16,14 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     mkdir -p build
     cd build
-    ../configure --disable-install-srcs --disable-examples --enable-vp8 --enable-runtime-cpu-detect
+    ../configure --disable-install-srcs --disable-examples --enable-vp8 --enable-runtime-cpu-detect --enable-shared --enable-pic
   '';
 
   installPhase = ''
     make quiet=false DIST_DIR=$out install
   '';
+
+  buildInputs = [ yasm ];
 
   meta = {
     description = "VP8 video encoder";

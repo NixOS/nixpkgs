@@ -1,11 +1,12 @@
-{stdenv, fetchurl, faad2, libtheora, speex, libvorbis, x264, pkgconfig, xvidcore, lame, yasm}:
+{stdenv, fetchurl, faad2, libtheora, speex, libvorbis, x264, pkgconfig, xvidcore, lame, yasm
+, libvpx}:
 
 stdenv.mkDerivation {
-  name = "ffmpeg-0.5.1";
+  name = "ffmpeg-0.6";
   
   src = fetchurl {
-    url = http://www.ffmpeg.org/releases/ffmpeg-0.5.1.tar.bz2;
-    sha256 = "0n68lihyy3jk4q7f22kv6nranfbafyl41hnzpa6cm0r0vf473gn2";
+    url = http://www.ffmpeg.org/releases/ffmpeg-0.6.tar.bz2;
+    sha256 = "08419kg2i8j7x4mb3vm6a73fdszivj6lzh7lypxby30gfnkblc37";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -26,9 +27,10 @@ stdenv.mkDerivation {
     --enable-libxvid
     --enable-libmp3lame
     --enable-runtime-cpudetect
+    --enable-libvpx
   '';
 
-  buildInputs = [faad2 libtheora speex libvorbis x264 pkgconfig xvidcore lame yasm];
+  buildInputs = [faad2 libtheora speex libvorbis x264 pkgconfig xvidcore lame yasm libvpx];
 
   meta = {
     homepage = http://www.ffmpeg.org/;

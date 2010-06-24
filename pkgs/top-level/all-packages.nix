@@ -3790,7 +3790,7 @@ let
 
   ffmpeg = import ../development/libraries/ffmpeg {
     inherit fetchurl stdenv faad2 libvorbis speex libtheora x264 pkgconfig xvidcore
-      lame yasm;
+      lame yasm libvpx;
   };
 
   fftw = import ../development/libraries/fftw {
@@ -4801,7 +4801,7 @@ let
   };
 
   libvpx = import ../development/libraries/libvpx {
-    inherit fetchurl stdenv bash;
+    inherit fetchurl stdenv bash yasm;
   };
 
   libvterm = import ../development/libraries/libvterm {
@@ -8831,9 +8831,10 @@ let
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl xlibs zlib a52dec libmad faad2
       ffmpeg libdvdnav pkgconfig hal fribidi qt4 freefont_ttf
-      libvorbis libtheora speex;
+      libvorbis libtheora speex libgcrypt;
     dbus = dbus.libs;
     alsa = alsaLib;
+    lua = lua5;
   };
 
   vnstat = import ../applications/networking/vnstat {
