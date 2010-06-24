@@ -1,0 +1,139 @@
+The firefox people has not applied this patch along all the 3.6 releases so in 3.6.4 it is still not there.
+https://bugzilla.mozilla.org/show_bug.cgi?id=551152
+https://bugzilla.mozilla.org/attachment.cgi?id=431403
+
+diff --git a/xpcom/reflect/xptinfo/src/xptiInterfaceInfoManager.cpp b/xpcom/reflect/xptinfo/src/xptiInterfaceInfoManager.cpp
+index 57f6df9..e9909a7 100644
+--- a/xpcom/reflect/xptinfo/src/xptiInterfaceInfoManager.cpp
++++ b/xpcom/reflect/xptinfo/src/xptiInterfaceInfoManager.cpp
+@@ -633,10 +633,6 @@ IndexOfDirectoryOfFile(nsISupportsArray* aSearchPath, nsILocalFile* aFile)
+             aSearchPath->QueryElementAt(i, NS_GET_IID(nsIFile), 
+                                         getter_AddRefs(current));
+             NS_ASSERTION(current, "broken search path! bad element");
+-            // nsIFile::Equals basically compares path strings so normalize
+-            // before the comparison.
+-            parent->Normalize();
+-            current->Normalize();
+             PRBool same;
+             if (NS_SUCCEEDED(parent->Equals(current, &same)) && same)
+                 return (int) i;
+diff --git a/xpcom/tests/unit/test_file_equality.js b/xpcom/tests/unit/test_file_equality.js
+index 4f424fe..14ba5a8 100644
+--- a/xpcom/tests/unit/test_file_equality.js
++++ b/xpcom/tests/unit/test_file_equality.js
+@@ -63,7 +63,7 @@ function test_normalized_vs_non_normalized()
+ 
+   // this is a non-normalized version of tmp1, it should not equal tmp1
+   tmp2.appendRelativePath(".");
+-  do_check_false(tmp1.equals(tmp2));
++  do_check_true(tmp1.equals(tmp2));
+ 
+   // normalize and make sure they are equivalent again
+   tmp2.normalize();
+diff --git a/xulrunner/stub/nsXULStub.cpp b/xulrunner/stub/nsXULStub.cpp
+index dc3a592..b270175 100644
+--- a/xulrunner/stub/nsXULStub.cpp
++++ b/xulrunner/stub/nsXULStub.cpp
+@@ -490,14 +490,6 @@ main(int argc, char **argv)
+              range.lower, range.upper);
+       return 1;
+     }
+-#ifdef XP_UNIX
+-    // Using a symlinked greDir will fail during startup. Not sure why, but if
+-    // we resolve the symlink, everything works as expected.
+-    char resolved_greDir[MAXPATHLEN] = "";  
+-    if (realpath(greDir, resolved_greDir) && *resolved_greDir) {
+-      strncpy(greDir, resolved_greDir, MAXPATHLEN);
+-    }
+-#endif
+   }
+ 
+ #ifdef XP_OS2
+diff --git a/xpcom/io/nsLocalFileOSX.mm b/xpcom/io/nsLocalFileOSX.mm
+index bbe2b26..6f51638 100644
+--- a/xpcom/io/nsLocalFileOSX.mm
++++ b/xpcom/io/nsLocalFileOSX.mm
+@@ -1068,6 +1068,9 @@ NS_IMETHODIMP nsLocalFile::Clone(nsIFile **_retval)
+ 
+ NS_IMETHODIMP nsLocalFile::Equals(nsIFile *inFile, PRBool *_retval)
+ {
++  struct STAT st, inst;
++  PRBool exists = PR_TRUE;
++
+   NS_ENSURE_ARG(inFile);
+   NS_ENSURE_ARG_POINTER(_retval);
+   *_retval = PR_FALSE;
+@@ -1077,7 +1080,27 @@ NS_IMETHODIMP nsLocalFile::Equals(nsIFile *inFile, PRBool *_retval)
+   if (NS_FAILED(rv))
+     return rv;
+ 
+-  *_retval = !strcmp(mPath, inPath.get());
++  if (STAT(mPath.get(), &st) == -1) {
++    // try lstat it may be a symlink
++    if (LSTAT(mPath.get(), &st) == -1)
++      exists = PR_FALSE;
++  }
++
++  if (exists && (STAT(inPath.get(), &inst) == -1)) {
++    // try lstat it may be a symlink
++    if (LSTAT(inPath.get(), &inst) == -1)
++      exists = PR_FALSE;
++  }
++
++  if (!exists) {
++    // We don't need to worry about "/foo/" vs. "/foo" here
++    // because trailing slashes are stripped on init.
++    *_retval = !strcmp(inPath.get(), mPath.get());
++    return NS_OK;
++  }
++
++  *_retval = (st.st_ino == inst.st_ino) &&
++             (st.st_dev == inst.st_dev);
+   return NS_OK;
+ }
+ 
+diff --git a/xpcom/io/nsLocalFileUnix.cpp b/xpcom/io/nsLocalFileUnix.cpp
+index 289600a..bdf0f81 100644
+--- a/xpcom/io/nsLocalFileUnix.cpp
++++ b/xpcom/io/nsLocalFileUnix.cpp
+@@ -1400,6 +1400,9 @@ nsLocalFile::IsSpecial(PRBool *_retval)
+ NS_IMETHODIMP
+ nsLocalFile::Equals(nsIFile *inFile, PRBool *_retval)
+ {
++    struct STAT st, inst;
++    PRBool exists = PR_TRUE;
++
+     NS_ENSURE_ARG(inFile);
+     NS_ENSURE_ARG_POINTER(_retval);
+     *_retval = PR_FALSE;
+@@ -1409,9 +1412,27 @@ nsLocalFile::Equals(nsIFile *inFile, PRBool *_retval)
+     if (NS_FAILED(rv))
+         return rv;
+ 
+-    // We don't need to worry about "/foo/" vs. "/foo" here
+-    // because trailing slashes are stripped on init.
+-    *_retval = !strcmp(inPath.get(), mPath.get());
++    if (STAT(mPath.get(), &st) == -1) {
++        // try lstat it may be a symlink
++        if (LSTAT(mPath.get(), &st) == -1)
++            exists = PR_FALSE;
++    }
++
++    if (exists && (STAT(inPath.get(), &inst) == -1)) {
++        // try lstat it may be a symlink
++        if (LSTAT(inPath.get(), &inst) == -1)
++            exists = PR_FALSE;
++    }
++
++    if (!exists) {
++        // We don't need to worry about "/foo/" vs. "/foo" here
++        // because trailing slashes are stripped on init.
++        *_retval = !strcmp(inPath.get(), mPath.get());
++        return NS_OK;
++    }
++
++    *_retval = (st.st_ino == inst.st_ino) &&
++               (st.st_dev == inst.st_dev);
+     return NS_OK;
+ }
+ 

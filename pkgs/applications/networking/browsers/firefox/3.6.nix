@@ -46,6 +46,10 @@ rec {
     
     inherit src;
 
+    # To be removed when the change gets upstream. I don't know if the patch
+    # affects xulrunner or firefox.
+    patches = [ ./symlinks-bug551152.patch ];
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
@@ -100,6 +104,10 @@ rec {
     name = "firefox-${firefoxVersion}";
 
     inherit src;
+
+    # To be removed when the change gets upstream. I don't know if the patch
+    # affects xulrunner or firefox.
+    patches = [ ./symlinks-bug551152.patch ];
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
