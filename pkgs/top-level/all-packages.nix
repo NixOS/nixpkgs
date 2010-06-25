@@ -9273,6 +9273,11 @@ let
     python24 = python;
   };*/
 
+  tremulous = import ../games/tremulous {
+    inherit stdenv fetchurl unzip mesa SDL openal;
+    inherit (xlibs) libX11;
+  };
+
   ultimatestunts = import ../games/ultimatestunts {
     inherit stdenv fetchurl SDL mesa SDL_image freealut;
   };
