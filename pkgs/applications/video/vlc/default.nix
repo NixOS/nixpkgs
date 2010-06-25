@@ -18,7 +18,16 @@ stdenv.mkDerivation {
     libvorbis libtheora speex lua libgcrypt
   ];
 
-  configureFlags = "--enable-alsa --disable-glx --disable-remoteosd --enable-faad --enable-theora --enable-vorbis --enable-speex";
+  configureFlags = [ "--enable-alsa"
+    "--disable-glx"
+    "--disable-remoteosd"
+    "--enable-faad"
+    "--enable-theora"
+    "--enable-vorbis"
+    "--enable-speex"
+    "--disable-dbus"
+    "--disable-dbus-control"
+  ];
 
   preBuild = ''
     substituteInPlace modules/misc/freetype.c --replace \
