@@ -8191,7 +8191,8 @@ let
   };
 
   ladspaPlugins = import ../applications/audio/ladspa-plugins {
-    inherit fetchurl stdenv builderDefs stringsWithDeps fftw ladspaH pkgconfig;
+    inherit fetchurl stdenv builderDefs stringsWithDeps ladspaH pkgconfig;
+    fftw = fftwSinglePrec;
   };
 
   ldcpp = composedArgsAndFun (import ../applications/networking/p2p/ldcpp/1.0.3.nix) {
