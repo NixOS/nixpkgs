@@ -4850,6 +4850,12 @@ let
     pythonSupport = true;
   };
 
+  libxmlxx = import ../development/libraries/libxmlxx {
+    inherit stdenv fetchurl;
+    inherit pkgconfig libxml2 perl;
+    inherit (gtkLibs) glibmm;
+  };
+
   libxslt = makeOverridable (import ../development/libraries/libxslt) {
     inherit fetchurl stdenv libxml2;
   };
