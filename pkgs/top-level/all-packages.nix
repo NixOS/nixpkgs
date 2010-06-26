@@ -8747,7 +8747,8 @@ let
   };
 
   thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird/3.x.nix {
-    inherit fetchurl stdenv pkgconfig perl python dbus_glib zip bzip2 alsaLib nspr;
+    inherit fetchurl stdenv pkgconfig perl python dbus_glib zip bzip2 alsaLib nspr libnotify cairo fontconfig;
+    inherit (xorg) pixman;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
   });
