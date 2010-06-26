@@ -3,10 +3,10 @@ enchant, wv, librsvg, bzip2
 }:
 
 stdenv.mkDerivation {
-  name = "abiword-2.8.5";
+  name = "abiword-2.8.6";
   src = fetchurl {
-    url = http://www.abisource.org/downloads/abiword/2.8.5/source/abiword-2.8.5.tar.gz;
-    sha256 = "0k82y1wd2lx4ifk8rbifbr301zqnrbx61b7x78b14n4k8x13srxa";
+    url = http://www.abisource.org/downloads/abiword/2.8.6/source/abiword-2.8.6.tar.gz;
+    sha256 = "059sd2apxdmcacc4pll880i7vm18h0kyjsq299m1mz3c7ak8k46r";
   };
 
   buildInputs = [pkgconfig gtk libglade librsvg bzip2
