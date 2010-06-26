@@ -7294,6 +7294,12 @@ let
     cairo = cairo.override { xcbSupport = true; };
   };
 
+  bangarang = import ../applications/video/bangarang {
+    inherit stdenv fetchurl cmake;
+    inherit (kde4) qt4 kdelibs automoc4 phonon soprano kdemultimedia;
+    inherit taglib glibc gettext;
+  };
+
   batik = import ../applications/graphics/batik {
     inherit fetchurl stdenv unzip;
   };
