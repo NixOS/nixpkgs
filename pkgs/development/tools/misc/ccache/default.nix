@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "ccache-2.4";
+  name = "ccache-3.0";
   src = fetchurl {
-    url = http://samba.org/ftp/ccache/ccache-2.4.tar.gz;
-    sha256 = "435f862ca5168c346f5aa9e242174bbf19a5abcaeecfceeac2f194558827aaa0";
+    url = http://samba.org/ftp/ccache/ccache-3.0.tar.gz;
+    sha256 = "0mi8sfnlcp2pmp7nzb7894rv85v13zxrj0v3qgnwhny3gx2p5pgk";
   };
 
   meta = {
