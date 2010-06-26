@@ -38,7 +38,7 @@ in with stdenv; mkDerivation rec {
     ++ edf ssl "WITH_OPENSSL"
     ++ edf previews "WITH_WEBKIT"  ;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
     description = "Qt4/KDE4 distributed IRC client suppporting a remote daemon";
     longDescription = ''
@@ -49,8 +49,8 @@ in with stdenv; mkDerivation rec {
       as WeeChat, but graphical(based on Qt4/KDE4).
     '';
     license = "GPLv3";
-    maintainers = [ stdenv.lib.maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom ];
+    platforms = platforms.all;
   };
-
 }
 
