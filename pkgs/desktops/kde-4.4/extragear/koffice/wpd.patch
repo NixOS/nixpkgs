@@ -1,0 +1,24 @@
+diff --git a/cmake/modules/FindWPD.cmake b/cmake/modules/FindWPD.cmake
+index 9bd788c..927785a 100644
+--- a/cmake/modules/FindWPD.cmake
++++ b/cmake/modules/FindWPD.cmake
+@@ -19,14 +19,17 @@ if (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
+ else (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
+ if(NOT WIN32)
+   INCLUDE(FindPkgConfig)
+-  pkg_check_modules(WPD libwpd-0.8)
++  pkg_check_modules(PKG_WPD libwpd-0.8)
+ endif(NOT WIN32)
+ 
+   FIND_PATH(WPD_INCLUDE_DIR libwpd/libwpd.h
+-    ${WPD_INCLUDE_DIR}
++    ${PKG_WPD_INCLUDE_DIRS}
+     /usr/include/libwpd-0.8
+   )
+ 
++  FIND_LIBRARY(WPD_LIBRARIES wpd-0.8
++    ${PKG_WPD_LIBRARY_DIRS}
++  )
+ 
+   include(FindPackageHandleStandardArgs)
+   FIND_PACKAGE_HANDLE_STANDARD_ARGS(WPD DEFAULT_MSG WPD_INCLUDE_DIR WPD_LIBRARIES )

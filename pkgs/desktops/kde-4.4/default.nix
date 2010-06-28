@@ -283,7 +283,7 @@ pkgs.recurseIntoAttrs (rec {
   
   koffice = import ./extragear/koffice {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl lcms exiv2 giflib libxml2 libxslt boost glew;
-    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd libgsf;
+    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd libgsf fftw;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qimageblitz qca2 eigen soprano;
     poppler = pkgs.popplerQt4;
