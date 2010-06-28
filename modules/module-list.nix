@@ -92,6 +92,7 @@
   ./services/networking/openvpn.nix
   ./services/networking/portmap.nix
   ./services/networking/privoxy.nix
+  ./services/networking/quassel.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/tftpd.nix
