@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
     librdf_raptor librdf_rasqal
   ];
 
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lrasqal -lraptor" 
-  '';
-
   configureFlags =
     [ "--with-threads" ]
     ++ stdenv.lib.optional (bdb != null) "--with-bdb=${bdb}";

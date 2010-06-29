@@ -5943,6 +5943,10 @@ let
     inherit fetchurl stdenv m4 groff readline;
   };
 
+  redstore = import ../servers/http/redstore {
+    inherit builderDefsPackage redland pkgconfig gmp;
+  };
+
   samba = makeOverridable (import ../servers/samba) {
     inherit stdenv fetchurl readline openldap pam kerberos popt iniparser
       libunwind acl fam;

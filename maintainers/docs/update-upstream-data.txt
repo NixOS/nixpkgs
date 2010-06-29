@@ -12,4 +12,3 @@ src-for-default.nix will contain advertisedUrl (raw URL chosen on the site; its 
 
 nixpkgs/pkgs/build-support/upstream-updater directory contains some scripts. The worker script is called update-upstream-data.sh. This script requires main expression name (e.g. default.nix). It can optionally accpet a second parameter, URL which will be used instead of getting one by parsing the downloadPage (version extraction, mirror URL creation etc. will still be run). After running the script, check src-for-default.nix (or replace default.nix with expression name, if there are seceral expressions in the directory) for new version information.
 
-

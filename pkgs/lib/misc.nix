@@ -95,6 +95,11 @@ rec {
 
   
   # shortcut for attrByPath ["name"] default attrs
+  maybeAttrNullable = name: default: attrs:
+    if attrs == null then default else 
+    if (__hasAttr name attrs) then (__getAttr name attrs) else default;
+
+  # shortcut for attrByPath ["name"] default attrs
   maybeAttr = name: default: attrs:
     if (__hasAttr name attrs) then (__getAttr name attrs) else default;
 
@@ -204,8 +209,8 @@ rec {
     innerClosePropagation 
       (ready ++ [(head list)])
       ((tail list) 
-         ++ (maybeAttr "propagatedBuildInputs" [] (head list))
-	 ++ (maybeAttr "propagatedBuildNativeInputs" [] (head list)));
+         ++ (maybeAttrNullable "propagatedBuildInputs" [] (head list))
+	 ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] (head list)));
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
