@@ -14,6 +14,10 @@ stdenv.mkDerivation {
     pcre libxml2 
     ];
 
+  preConfigure = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lraptor"
+  '';
+
   meta = { 
     description = "library that handles Resource Description Framework (RDF)";
     homepage = "http://librdf.org/rasqal";
