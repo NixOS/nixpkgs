@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, lib, cmake, qt4, perl, libxml2, libxslt, boost, subversion, apr, aprutil
-, shared_mime_info
+{ stdenv, fetchurl, cmake, qt4, perl, libxml2, libxslt, boost, subversion, apr, aprutil
+, shared_mime_info, hunspell
 , kdelibs, kdepimlibs, automoc4, phonon, strigi}:
 
 stdenv.mkDerivation {
@@ -11,12 +11,13 @@ stdenv.mkDerivation {
   builder=./builder.sh;
   inherit aprutil;
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost subversion apr aprutil shared_mime_info
-                  kdelibs kdepimlibs automoc4 phonon strigi ];
-  meta = {
+                  kdelibs kdepimlibs automoc4 phonon strigi hunspell];
+  meta = with stdenv.lib; {
     description = "KDE SDK";
     longDescription = "Contains various development utilities such as the Umbrello UML modeler and Cerivisia CVS front-end";
     license = "GPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ maintainers.sander maintainers.urkud ];
+    platforms = platforms.linux;
   };
 }

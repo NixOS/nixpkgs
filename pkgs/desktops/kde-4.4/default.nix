@@ -200,7 +200,8 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdesdk = import ./sdk {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt boost subversion apr aprutil shared_mime_info;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost
+      subversion apr aprutil shared_mime_info hunspell;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon strigi;
   };
