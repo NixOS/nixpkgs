@@ -4253,6 +4253,10 @@ let
     inherit stdenv fetchurl unzip;
   };
 
+  hunspell = makeOverridable (import ../development/libraries/hunspell) {
+    inherit fetchurl stdenv ncurses readline;
+  };
+
   hwloc = import ../development/libraries/hwloc {
     inherit fetchurl stdenv pkgconfig cairo expat ncurses;
   };
