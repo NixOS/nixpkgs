@@ -5223,7 +5223,7 @@ let
   };
 
   librdf_rasqal = import ../development/libraries/librdf/rasqal.nix {
-    inherit fetchurl stdenv lib pcre libxml2 gmp librdf_raptor;
+    inherit fetchurl stdenv lib pcre libxml2 gmp librdf_raptor pkgconfig;
   };
 
   librdf = import ../development/libraries/librdf {
@@ -5756,6 +5756,11 @@ let
 
   ### SERVERS
 
+  rdf4store = import ../servers/http/4store {
+    inherit builderDefsPackage librdf_raptor librdf_rasqal libxml2
+      pcre avahi readline ncurses expat zlib pkgconfig which;
+    inherit (gtkLibs) glib;
+  };
 
   apacheHttpd = makeOverridable (import ../servers/http/apache-httpd) {
     inherit (pkgsOverriden) fetchurl stdenv perl openssl zlib apr aprutil pcre;
