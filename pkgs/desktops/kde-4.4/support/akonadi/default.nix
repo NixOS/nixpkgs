@@ -1,17 +1,17 @@
-{stdenv, fetchurl, lib, cmake, qt4, shared_mime_info, libxslt, boost, mysql, automoc4, soprano}:
+{stdenv, fetchurl, cmake, qt4, shared_mime_info, libxslt, boost, mysql, automoc4, soprano}:
 
-stdenv.mkDerivation {
-  name = "akonadi-1.3.1";
+stdenv.mkDerivation rec {
+  name = "akonadi-1.3.85";
   src = fetchurl {
-    url = http://download.akonadi-project.org/akonadi-1.3.1.tar.bz2;
-    sha256 = "1pbn6sviipxxpx80cspncfc3nlz047nryfbv8xzfz5811p19k7jb";
+    url = "http://download.akonadi-project.org/${name}.tar.bz2";
+    sha256 = "1d2ancspavp4qg717hj56j1likb0ifdr65q1awbc2ghqqgd9znck";
   };
-  includeAllQtDirs=true;
   buildInputs = [ cmake qt4 shared_mime_info libxslt boost mysql automoc4 soprano ];
-  meta = {
+  meta = with stdenv.lib; {
     description = "KDE PIM Storage Service";
     license = "LGPL";
     homepage = http://pim.kde.org/akonadi;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ maintainers.sander maintainers.urkud ];
+    platforms = platforms.linux;
   };
 }

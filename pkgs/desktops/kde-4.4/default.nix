@@ -41,7 +41,7 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   akonadi = import ./support/akonadi {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 shared_mime_info libxslt boost mysql;
+    inherit (pkgs) stdenv fetchurl cmake qt4 shared_mime_info libxslt boost mysql;
     inherit automoc4 soprano;
   };
   
