@@ -17,4 +17,6 @@ runCommand "nixos-bootstrap-archive" { } ''
       $(s ${nixosBootstrap}/bin/nixos-bootstrap )
       
   cat tmp.tar | bzip2 > $out/nixos-install-archive.tar.bz2
+  ensureDir $out/nix-support
+  echo "file tarball" $out/nixos-install-archive.tar.bz2 > $out/nix-support/hydra-build-products
 ''
