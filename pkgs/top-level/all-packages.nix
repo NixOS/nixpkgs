@@ -6632,6 +6632,10 @@ let
     inherit fetchurl stdenv bison flex perl;
   };
 
+  lsiutil = import ../os-specific/linux/lsiutil {
+    inherit fetchurl stdenv unzip;
+  };
+
   klibc = makeOverridable (import ../os-specific/linux/klibc) {
     inherit fetchurl stdenv perl bison mktemp;
     linuxHeaders = glibc.kernelHeaders;
