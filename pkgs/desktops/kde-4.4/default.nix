@@ -316,6 +316,13 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl cmake perl gettext;
     inherit kdelibs automoc4 qt4 phonon;
   };
+  
+  k3b = import ./extragear/k3b {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl shared_mime_info libvorbis taglib gettext;
+    inherit (pkgs) ffmpeg flac libsamplerate libdvdread lame libsndfile libmad;
+    inherit kdelibs kdemultimedia;
+    inherit automoc4 phonon;
+  };
 
 ### LOCALIZATION
 

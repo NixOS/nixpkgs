@@ -468,6 +468,7 @@ with (import ./release-lib.nix);
     konversation = linux;
     kdesvn = linux;
     amarok = linux;
+    k3b = linux;
     l10n.ca = linux;
     l10n.de = linux;
     l10n.fr = linux;
