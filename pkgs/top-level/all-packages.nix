@@ -5758,7 +5758,7 @@ let
 
   rdf4store = import ../servers/http/4store {
     inherit builderDefsPackage librdf_raptor librdf_rasqal libxml2
-      pcre avahi readline ncurses expat zlib pkgconfig which;
+      pcre avahi readline ncurses expat zlib pkgconfig which perl;
     inherit (gtkLibs) glib;
   };
 

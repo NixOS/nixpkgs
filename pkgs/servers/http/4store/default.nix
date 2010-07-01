@@ -3,6 +3,7 @@ x@{builderDefsPackage
   glib, libxml2, pcre, avahi,
   readline, ncurses, expat,
   zlib, pkgconfig, which,
+  perl,
   db_dir ? "/var/lib/4store"
   , ...}:
 builderDefsPackage
@@ -21,7 +22,8 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doFixConfigure" "doConfigure" "doMakeInstall"];
+  phaseNames = ["doFixConfigure" "doConfigure" "doMakeInstall"
+    "fixInterpreter"];
 
   doFixConfigure = a.fullDepEntry ''
     sed -e 's@#! */bin/bash@#! ${a.stdenv.shell}@' -i configure
@@ -30,6 +32,8 @@ rec {
     
     sed -e 's@/var/lib/4store@${db_dir}@g' -i src/common/params.h src/utilities/*
   '' ["minInit" "doUnpack"];
+
+  fixInterpreter = (a.doPatchShebangs "$out/bin");
       
   meta = {
     description = "SparQL query server (RDF storage)";
