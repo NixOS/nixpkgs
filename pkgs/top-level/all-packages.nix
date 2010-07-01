@@ -3745,6 +3745,10 @@ let
     inherit fetchurl stdenv libp11 pkgconfig openssl;
   };
 
+  esdl = import ../development/libraries/esdl {
+    inherit stdenv fetchurl erlang SDL mesa;
+  };
+
   exiv2 = import ../development/libraries/exiv2 {
     inherit fetchurl stdenv zlib;
   };
@@ -8880,6 +8884,10 @@ let
   w3m = import ../applications/networking/browsers/w3m {
     inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib imlib2 x11;
     graphicsSupport = false;
+  };
+
+  wings = import ../applications/graphics/wings {
+    inherit stdenv fetchurl erlang esdl;
   };
 
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
