@@ -2484,6 +2484,11 @@ let
     inherit lib fetchurl stdenv composableDerivation;
   };
 
+  path64 = import ../development/compilers/path64 {
+    inherit fetchgit perl flex bison gmp mpfr cmake;
+    stdenv = stdenv2;
+  };
+
   openjdkDarwin = import ../development/compilers/openjdk-darwin {
     inherit fetchurl stdenv;
   };
