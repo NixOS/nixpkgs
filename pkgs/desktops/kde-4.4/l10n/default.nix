@@ -4,7 +4,7 @@
 let
 
   deriv = attr : stdenv.mkDerivation {
-    name = "kde-l10n-${attr.lang}-4.4.4";
+    name = "kde-l10n-${attr.lang}-4.4.5";
     src = fetchurl {
       url = attr.url;
       sha256 = attr.sha256;
@@ -23,344 +23,344 @@ in
 
   ar = deriv {
     lang = "ar";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ar-4.4.4.tar.bz2";
-    sha256 = "0x5ravkd2pba64vc0ss0r98plmxan07pkvqv1nc0h3bkrkv6bcm0";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ar-4.4.5.tar.bz2";
+    sha256 = "1nc5kpy4cq7cjck6dfzql9djmnimz0khngscdrl8yhahg78sndq7";
   };
 
   bg = deriv {
     lang = "bg";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-bg-4.4.4.tar.bz2";
-    sha256 = "1xvx4c3v3pifpqq3qd3xkrhrc9xnkg5hhczd30akrphq8551z2sc";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-bg-4.4.5.tar.bz2";
+    sha256 = "136llbcv3955ih33ih0j2ccbnj4whc9jidf9flr7kpkz5pin4k11";
   };
 
   ca = deriv {
     lang = "ca";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ca-4.4.4.tar.bz2";
-    sha256 = "0klixkxm1kgynpnzp8glxpj236x5n9p0nbd8ml3xzbk2pfamyay4";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ca-4.4.5.tar.bz2";
+    sha256 = "1qc9ka78qcmy0pq9q7xa61lmcfz77picxlzs0g46npv073kyn4xp";
   };
 
   cs = deriv {
     lang = "cs";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-cs-4.4.4.tar.bz2";
-    sha256 = "0lzsddqwr3wr0fa33rfcqim3p708c5hbwlazzs1xckwgl4ww97ri";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-cs-4.4.5.tar.bz2";
+    sha256 = "0q9cay61sv6rrsim3v91n8xbpsc0qm97sbhgaa6p5s63xpvpjzp8";
   };
 
   csb = deriv {
     lang = "csb";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-csb-4.4.4.tar.bz2";
-    sha256 = "0qr1l01xvjgvg1qjm8j01vpaiz61md9d78qmz3384f72q9iz6jbk";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-csb-4.4.5.tar.bz2";
+    sha256 = "1yy1jdjskz96nha1lmxy4yjl8wfljp4qgzydxw2pcac54hr6wgxr";
   };
 
   da = deriv {
     lang = "da";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-da-4.4.4.tar.bz2";
-    sha256 = "0rvsap9y23mi16mfjq46dhw0628mia8k7criywdhkxhhv4dkmm1w";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-da-4.4.5.tar.bz2";
+    sha256 = "0qdqa31i0vyg95dqbwg3zyprzdgq7xmvk3iax5dsi9q2bms1cxq5";
   };
 
   de = deriv {
     lang = "de";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-de-4.4.4.tar.bz2";
-    sha256 = "0n9mlkvpl0xyyaxc4sjcrkj9x6n08qiljv01xh8mwwzd2v7pyprh";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-de-4.4.5.tar.bz2";
+    sha256 = "0562srr33k648q8xc3865j9clrwqj8ihv7n6f7dmnbkcn93jcp5x";
   };
 
   el = deriv {
     lang = "el";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-el-4.4.4.tar.bz2";
-    sha256 = "08w17ym9gfbfxavhnd4l2cvlkz0n93d842a5q2nddgd5fx74572w";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-el-4.4.5.tar.bz2";
+    sha256 = "1rc7cap8xb28bv7f1fk3m1mbylixy246zq4srws0pawdfdm9k5nj";
   };
 
   en_GB = deriv {
     lang = "en_GB";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-en_GB-4.4.4.tar.bz2";
-    sha256 = "042mcshf5829vc6ix4rng0vkfl0y36yq4zyamnrawzp6b23y5i5m";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-en_GB-4.4.5.tar.bz2";
+    sha256 = "0zpj06jx77fviv90k56br94fn28bimfhva3r12idr6fli5il99y5";
   };
 
   eo = deriv {
     lang = "eo";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-eo-4.4.4.tar.bz2";
-    sha256 = "0dsl6aqawyyv4fhr88cj9gmmccppyrwch4vggdnsj9hm7mq8lvcb";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-eo-4.4.5.tar.bz2";
+    sha256 = "1mwmlg4dxk1alzq768j07ccyflil60dm63d6008s2hg4jw0pgpkr";
   };
 
   es = deriv {
     lang = "es";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-es-4.4.4.tar.bz2";
-    sha256 = "0yd0cabrbbhmj8p0w9x38aii1w9xhxx08bp2vi0hdk9fw83pa298";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-es-4.4.5.tar.bz2";
+    sha256 = "0flddrdkys6p7cd5vfakdl2g7vpc6h277a4phszmlnssfr2jlhib";
   };
 
   et = deriv {
     lang = "et";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-et-4.4.4.tar.bz2";
-    sha256 = "175731akqds7z2mx9lscy56da2pbwqj4abk6i41l5hs3dfwlcgs8";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-et-4.4.5.tar.bz2";
+    sha256 = "0vpn8ylr336i9hax24jvxxy284gaw7jcxwqxgkqc3c7fl9nji7xz";
   };
 
   eu = deriv {
     lang = "eu";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-eu-4.4.4.tar.bz2";
-    sha256 = "1783nw4hyxzs3sn1dgnqj7krp35ffzfqnw9jyn5hxrz0filzw4cm";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-eu-4.4.5.tar.bz2";
+    sha256 = "0q0h2q73jha1vgk60b1ycfh2ci5vavscva9a1xl42rzkxrqzp7bw";
   };
 
   fi = deriv {
     lang = "fi";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-fi-4.4.4.tar.bz2";
-    sha256 = "066hc5p8vka8kl7ascb9vwvxjspxnysjhj4v3brs070prakv63d8";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-fi-4.4.5.tar.bz2";
+    sha256 = "19anfv3jxlnzs6mx5qlfj9v6nxxpbn2g5vppj771y7ir2wgx79gx";
   };
 
   fr = deriv {
     lang = "fr";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-fr-4.4.4.tar.bz2";
-    sha256 = "1b9w0hicgg3rxfgwf11rajcjml5h181llks8p7blasmbcsvccrri";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-fr-4.4.5.tar.bz2";
+    sha256 = "09qzm6zr8rjsr50bxr3cnsfj4l4qpzf1dmkx3qk0vvvmagry23vy";
   };
 
   fy = deriv {
     lang = "fy";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-fy-4.4.4.tar.bz2";
-    sha256 = "1iwnmpv2dpvmmp5a8iwc07ag8ry3sjdmcx2w87la3drwmbx319gq";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-fy-4.4.5.tar.bz2";
+    sha256 = "01pa23gxy0a3jsnsdvsbgsfdfvwiancyx3w4fw3gx4b4j9y9gfry";
   };
 
   ga = deriv {
     lang = "ga";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ga-4.4.4.tar.bz2";
-    sha256 = "1lvnimdndh9zqq69a6s8pyszrw5x08p4qikrq7mhgjh4v44crk3q";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ga-4.4.5.tar.bz2";
+    sha256 = "0dfq497v8shzr2r1nqs093nyd32ka74wznp20z2wgsw8yfylgbhs";
   };
 
   gl = deriv {
     lang = "gl";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-gl-4.4.4.tar.bz2";
-    sha256 = "1n7y15fgi940r07vm26h30ijhq50w6l8a12a3mbsc1fyz8lnkf1k";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-gl-4.4.5.tar.bz2";
+    sha256 = "0lp443wpi7gj7i078mxbxswk4niziqc5iyw4mx94cm4g0h2k3cba";
   };
 
   gu = deriv {
     lang = "gu";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-gu-4.4.4.tar.bz2";
-    sha256 = "1594rdmk2b59zah8s8v7g1d5r761cqk7ynxs7mi7lf644xy03b2p";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-gu-4.4.5.tar.bz2";
+    sha256 = "0s959r1c5klh0cr6mczmmfzsgvzyihpacia46q8ckvjddx7zmb0b";
   };
 
   he = deriv {
     lang = "he";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-he-4.4.4.tar.bz2";
-    sha256 = "091c56g2h2hbxhpd0l9xsbbs2pdmsy4a8bisii7vm943q158pc23";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-he-4.4.5.tar.bz2";
+    sha256 = "090s786g9f1jas8dqsh7hqx5idzckd0lg5gz1v7fx254qnfmj6rx";
   };
 
   hi = deriv {
     lang = "hi";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-hi-4.4.4.tar.bz2";
-    sha256 = "17095ija6vnx70cpahpw2ynpp2jb4jrr4dfpx7yp68lnqwyaqa8b";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-hi-4.4.5.tar.bz2";
+    sha256 = "1ysw8h7v0a2idf13jxi46k1b28vg8yl11hfzin4ihfbr5q03fqck";
   };
 
   hr = deriv {
     lang = "hr";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-hr-4.4.4.tar.bz2";
-    sha256 = "1bpzsm10shippwj0w01y6jjf38bl97kmbbj06h6dzd7p4dk0km5b";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-hr-4.4.5.tar.bz2";
+    sha256 = "0fh7mfzy41mx0c3mvrv2rdwmk82mrlb84azzvfsanznzk74pnbgr";
   };
 
   hu = deriv {
     lang = "hu";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-hu-4.4.4.tar.bz2";
-    sha256 = "1032m9a5g4y9x7lfhbnm1zl63m10vcikykza2ix5ks2q8ca9123h";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-hu-4.4.5.tar.bz2";
+    sha256 = "1yw91mzc4mcjzqk7syxkxybby6ay02z8ssbhbjm8vb52mh1a9js7";
   };
 
   id = deriv {
     lang = "id";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-id-4.4.4.tar.bz2";
-    sha256 = "1rrqzgz58hshf7s01xp335bxpc28vsgkd18wcl0v69hf4gh36fa3";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-id-4.4.5.tar.bz2";
+    sha256 = "1ds4ncfb4xp0bd0dijichgp289abhm10f285bwnanzzjn442i4x6";
   };
 
   is = deriv {
     lang = "is";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-is-4.4.4.tar.bz2";
-    sha256 = "01lkvaffpxv8ba8z6csxqb1kqxqj5r1idxw4qxbqw7dj8cjqj3d2";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-is-4.4.5.tar.bz2";
+    sha256 = "07xx45wy1n5kqg6fwdl27w1kpvqs6djj6yv6lxq2vbh5di3h5zpj";
   };
 
   it = deriv {
     lang = "it";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-it-4.4.4.tar.bz2";
-    sha256 = "0bfjk9lhwls9gyiy0ify3hr5jqjy5wcnlbh44mzf78c3y8snngga";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-it-4.4.5.tar.bz2";
+    sha256 = "1agl195pkxh55669gmcnd97z3bd9ff1c448d8rnq2rqr0xysj1mr";
   };
 
   ja = deriv {
     lang = "ja";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ja-4.4.4.tar.bz2";
-    sha256 = "06j5ksv1660hd7bp9q942igi6wm47a4w6grx2q6lbvxc41ms5wk4";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ja-4.4.5.tar.bz2";
+    sha256 = "0axra17rpv5hdr83yvd0n3kgp51frkf5b5kfg1bg7sf44kn9fhv5";
   };
 
   kk = deriv {
     lang = "kk";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-kk-4.4.4.tar.bz2";
-    sha256 = "0vm5l5xrs1x9jy9zkjf43xfnxi2wc366j9y797pp04mh5rgdd2vv";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-kk-4.4.5.tar.bz2";
+    sha256 = "1gkli53ryfbb64b9x2fl76cid98m99lxszn0cczfmfdvjlc0vgxr";
   };
 
   km = deriv {
     lang = "km";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-km-4.4.4.tar.bz2";
-    sha256 = "0ihzc62wkhindzl2fawcmvk87wbnbdm4f09pr092n6w2l8k8wz9b";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-km-4.4.5.tar.bz2";
+    sha256 = "0113z5560zsjr9jrgh58nch9h4xlqclld2zqc8yah90i7jpas3aq";
   };
 
   kn = deriv {
     lang = "kn";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-kn-4.4.4.tar.bz2";
-    sha256 = "15xxpb6c6g1v9girss9aimcbszdbq4ccsbq396hfn46kzxybzhjh";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-kn-4.4.5.tar.bz2";
+    sha256 = "0m6gz9sl21hfnpk3z8y33aqfv17z1x1b8j24jf88qvl01nsk4889";
   };
 
   ko = deriv {
     lang = "ko";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ko-4.4.4.tar.bz2";
-    sha256 = "0fzgyqajhjmlr9ibbd4jri00ccjji7m9bg02dw739w4rkvn5k6j1";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ko-4.4.5.tar.bz2";
+    sha256 = "0j30rj155fcd0wmbkbbwm2vybb9x3g6dq3mipmf1zipm1nm7m64l";
   };
 
   lt = deriv {
     lang = "lt";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-lt-4.4.4.tar.bz2";
-    sha256 = "126nnk3c1rkfhpy1nbsxkhad6bazbv6x9bh6kpqd9clwh8k35ya4";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-lt-4.4.5.tar.bz2";
+    sha256 = "10swp16mab3kh393dcwn1k9qm5jrcqigixrw39hlbsyaw9jf9j37";
   };
 
   lv = deriv {
     lang = "lv";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-lv-4.4.4.tar.bz2";
-    sha256 = "1n4szkfmyrzh6x3a85byzpn53lp8d4m0abp8k5kn2iksxh9z5mkl";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-lv-4.4.5.tar.bz2";
+    sha256 = "0niyc9awcdfnx3gi63vw83ni1nb870384f4wyhmms8zdkvca5hjc";
   };
 
   mai = deriv {
     lang = "mai";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-mai-4.4.4.tar.bz2";
-    sha256 = "0r65y0vxjbl9ghl7mg4dg58w0rbrlbhrllc6cyvv32xwjbi0qc3c";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-mai-4.4.5.tar.bz2";
+    sha256 = "1clmcpqj4m7mwf2v62500jqjb94gpmlzxjp3cflraf9w4nmvv66a";
   };
 
   mk = deriv {
     lang = "mk";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-mk-4.4.4.tar.bz2";
-    sha256 = "05whf03nlklz63qkgzmg6f7phj128q0lxyqbwvdnrv20v5pbld65";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-mk-4.4.5.tar.bz2";
+    sha256 = "09gbk50bw7d8hpj0jwyz0wzd34fq7h9r35vj6750vpv7pbyz4l7q";
   };
 
   ml = deriv {
     lang = "ml";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ml-4.4.4.tar.bz2";
-    sha256 = "1c572ygyhdnb3dl464v9zg6nb3l533qpkv4a54v7afswy6n61cil";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ml-4.4.5.tar.bz2";
+    sha256 = "1bsr4civp003wgnpl790z5cfh1rayn7xc6lvvrpk4hrcr2b5skj9";
   };
 
   nb = deriv {
     lang = "nb";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-nb-4.4.4.tar.bz2";
-    sha256 = "0zl9m90arm5dn1nmapm5ignrx4pm46vyiid0p100id59yjwpk3a9";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-nb-4.4.5.tar.bz2";
+    sha256 = "1i9chazhp0s22rva0swkvd7zpl5my6pbgckn5fj924fkbs6336jl";
   };
 
   nds = deriv {
     lang = "nds";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-nds-4.4.4.tar.bz2";
-    sha256 = "1cx54i2xl3zwlkq83xs1q0siap0hddqd4c4s0nqwgwp78vg9x0mw";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-nds-4.4.5.tar.bz2";
+    sha256 = "0kyn8mn8jm03sd56q6hm884ywshl5i6wy9vmskaqpclp9y6xbwlc";
   };
 
   nl = deriv {
     lang = "nl";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-nl-4.4.4.tar.bz2";
-    sha256 = "0ydkr8ywkkndaik1l6v860zq6mfgdw8l8n0rgjkhs6ikvyd4gk5d";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-nl-4.4.5.tar.bz2";
+    sha256 = "0fnssviivx8xdg9vq5iy44al6dz82mg3p41ngkyghh25xfm0iswr";
   };
 
   nn = deriv {
     lang = "nn";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-nn-4.4.4.tar.bz2";
-    sha256 = "0vb5fgjkn0jcwsb173gwrr5kr5ihi885g09fb7j92dbpdp1fk4gc";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-nn-4.4.5.tar.bz2";
+    sha256 = "0mfr3jqx1nrd3gf4319c29f3hhks9b2hn7r6bidwsmipar8b3pgd";
   };
 
   pa = deriv {
     lang = "pa";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-pa-4.4.4.tar.bz2";
-    sha256 = "0jn94b9f3bb7gv5anprcghmhn1wj6vzv8biflqzqk7bx6q07k70d";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-pa-4.4.5.tar.bz2";
+    sha256 = "0aciihaprzndn5j4d8dsc2b13sq1xac89j6r0assbvhgmix06844";
   };
 
   pl = deriv {
     lang = "pl";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-pl-4.4.4.tar.bz2";
-    sha256 = "0p4hd5g2wkqahg79l9n2x7xy647kbf14jz00p8wpbxnbd2hvp333";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-pl-4.4.5.tar.bz2";
+    sha256 = "1xq63d020k8fyqc0akpm3kvqrvg2g91r679ny51n13xmdcq59y1f";
   };
 
   pt = deriv {
     lang = "pt";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-pt-4.4.4.tar.bz2";
-    sha256 = "0b0hk7sps0967dn4ryj43ihmbg3glspxd88f77z8ydccxi9zma2k";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-pt-4.4.5.tar.bz2";
+    sha256 = "0bkmw9rs7wzlycvih0ma97a3n1ly4x8cyv5c682rf3ykvnmkv1n1";
   };
 
   pt_BR = deriv {
     lang = "pt_BR";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-pt_BR-4.4.4.tar.bz2";
-    sha256 = "1b9iy2mcm3l825kclrbs7sdsvgg5phi37aby3az8f25vh6mk80w9";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-pt_BR-4.4.5.tar.bz2";
+    sha256 = "1c4y5d7s2yvydnr0dmgnr0g871mblvkx0higzwivknd54nzf6fba";
   };
 
   ro = deriv {
     lang = "ro";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ro-4.4.4.tar.bz2";
-    sha256 = "0da5awwls7h3pngq66gab420wlvmjj20pa5zhlmk2y1xdv917ysd";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ro-4.4.5.tar.bz2";
+    sha256 = "1lmz85a011m0f0cq7pj4ni2q3p3dzqqbgmii63hrn29ss4kvvkyw";
   };
 
   ru = deriv {
     lang = "ru";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-ru-4.4.4.tar.bz2";
-    sha256 = "0dxs3dzg80vw5gqs8gfj9hkrvh10qm55gjzxj12ks1nwlq5j39wp";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-ru-4.4.5.tar.bz2";
+    sha256 = "09ywm943k2v0cj3a82wrayi05m4gx2vvjff37v5hj4fxxw8785sv";
   };
 
   si = deriv {
     lang = "si";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-si-4.4.4.tar.bz2";
-    sha256 = "14qppy24c4h7d96b0pc3m1jahkzpd1gxidrpi3cnvniw3qidr88n";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-si-4.4.5.tar.bz2";
+    sha256 = "0x3c9qp2crfghws0dckhjgjs3znvbj1pzllipj587snj2m43a1m8";
   };
 
   sk = deriv {
     lang = "sk";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-sk-4.4.4.tar.bz2";
-    sha256 = "1vf5dz45nqzg3cdwny9v59nwx0ja25bvwcrhrlqm7q4xl7g8iz8p";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-sk-4.4.5.tar.bz2";
+    sha256 = "11dl6g4gyf62sxgxa1mpd6j78alkavsvqbjs46pv4jzl0c6z586z";
   };
 
   sl = deriv {
     lang = "sl";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-sl-4.4.4.tar.bz2";
-    sha256 = "0nvp20hwdpci4gfdgag6j32dvm7a9j21x3kcvs4saals7gfqy1bh";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-sl-4.4.5.tar.bz2";
+    sha256 = "1p73g5bgyfzkfk8z6fi3kp2zs9hax4hwsf526hzs73v3z9prki9d";
   };
 
   sr = deriv {
     lang = "sr";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-sr-4.4.4.tar.bz2";
-    sha256 = "0mw9b6bvgp6mfgzcjx9ircqajna7zf1k2wrp61l0v2cipj4apj5b";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-sr-4.4.5.tar.bz2";
+    sha256 = "1db60arnzpn9ca3zjnvfgx2sr5dw49w6z7ff6knpi88kzalv1w1i";
   };
 
   sv = deriv {
     lang = "sv";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-sv-4.4.4.tar.bz2";
-    sha256 = "1sp500d8r7zxql4k0jbavxng6vhwcplvkzfwcvrgvq9326mn5x29";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-sv-4.4.5.tar.bz2";
+    sha256 = "1ilpfca451xy6ls86l1pvd7srs3075h70kysyn1q4h9j18gfy03q";
   };
 
   tg = deriv {
     lang = "tg";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-tg-4.4.4.tar.bz2";
-    sha256 = "0abfl8y4m2y8nk46445376g55xsb51rzjg4jsqzzz6xqmxnhkz79";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-tg-4.4.5.tar.bz2";
+    sha256 = "0a0rvjqlvlzd99k1c04qmhkwg5814qcnjanx4dryqj5ridv2l2k1";
   };
 
   tr = deriv {
     lang = "tr";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-tr-4.4.4.tar.bz2";
-    sha256 = "00kgm1a9q5jx6cq3flvrnasj1lwgcqf2kac6wa7qlqpy4nqw2vfm";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-tr-4.4.5.tar.bz2";
+    sha256 = "1im41dvwrf9bhk3yqprxbzjz7ark1kpc3bbix49c6fbmgkvfn2h5";
   };
 
   uk = deriv {
     lang = "uk";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-uk-4.4.4.tar.bz2";
-    sha256 = "0l1r2xphq8rlnjf0hqdplsk47a35p6sxvdp9g9vg26gfhd7156zq";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-uk-4.4.5.tar.bz2";
+    sha256 = "1ik51g3bgj4vvy3wzdnm7p2liwrkk3nrszydl7j2024fzj2vfyd2";
   };
 
   wa = deriv {
     lang = "wa";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-wa-4.4.4.tar.bz2";
-    sha256 = "17yijs2mk7sr87lms7wajvxxrf888gbz75z9fza6kp6mlvbjc1a0";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-wa-4.4.5.tar.bz2";
+    sha256 = "0mcv8rf54vxfq8ql4h8b573xdlw9x6j740zq7ki1qscvgrcj03g0";
   };
 
   zh_CN = deriv {
     lang = "zh_CN";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-zh_CN-4.4.4.tar.bz2";
-    sha256 = "1qjr3jlr539lm2mkgn2bma98zdy91frih2bfzl1jxrdp0swnkzh5";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-zh_CN-4.4.5.tar.bz2";
+    sha256 = "0w42x6dwnhz8668smgk3ld8bb7dvx60py4q7fj50qmipkb8vwh20";
   };
 
   zh_TW = deriv {
     lang = "zh_TW";
-    url = "mirror://kde/stable/4.4.4/src/kde-l10n/kde-l10n-zh_TW-4.4.4.tar.bz2";
-    sha256 = "1s6dg6imqjb4wxljd1jblwp6kqkzcnybhndfbzhsb691ivi42mh5";
+    url = "mirror://kde/stable/4.4.5/src/kde-l10n/kde-l10n-zh_TW-4.4.5.tar.bz2";
+    sha256 = "19hvc57s37kpby1hjy6w5xi37a9n23rfxb53aj2lvdbar8ac9lci";
   };
 
 }
