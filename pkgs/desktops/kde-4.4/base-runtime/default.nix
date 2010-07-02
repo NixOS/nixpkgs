@@ -2,10 +2,10 @@
 , kdelibs, automoc4, phonon, strigi, soprano, cluceneCore, attica, virtuoso, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "kdebase-runtime-4.4.4";
+  name = "kdebase-runtime-4.4.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.4/src/kdebase-runtime-4.4.4.tar.bz2;
-    sha256 = "1gxa05i6zvklxng6ak5vak05dyay8j8g2hmdhma2290lwgf8gbx8";
+    url = mirror://kde/stable/4.4.5/src/kdebase-runtime-4.4.5.tar.bz2;
+    sha256 = "0a0lg0vkdq8v3rydg6n6nk3gqc3vn3sz2rn5gzm0vd2k5wyy8frx";
   };
 
 /*  CLUCENE_HOME=cluceneCore;*/

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, lib, cmake}:
 
 stdenv.mkDerivation {
-  name = "oxygen-icons-4.4.4";
+  name = "oxygen-icons-4.4.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.4/src/oxygen-icons-4.4.4.tar.bz2;
-    sha256 = "103001rxixpm4gb0bwdqvm9j1ygfjm25r11gz73hvyqss2v22zh4";
+    url = mirror://kde/stable/4.4.5/src/oxygen-icons-4.4.5.tar.bz2;
+    sha256 = "15nfh8zl54a7b3pyqjiabv82srkp7c8gl9fpsy9ydw742lvs0pr7";
   };
   buildInputs = [ cmake ];
   meta = {
