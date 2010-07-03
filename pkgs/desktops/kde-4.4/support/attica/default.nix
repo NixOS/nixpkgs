@@ -1,15 +1,16 @@
 {stdenv, fetchurl, cmake, qt4}:
 
-stdenv.mkDerivation {
-  name = "attica-0.1.2";
+stdenv.mkDerivation rec {
+  name = "attica-0.1.4";
   src = fetchurl {
-    url = mirror://kde/stable/attica/attica-0.1.2.tar.bz2;
-    sha256 = "09k7ghphqzfdlnsj61396sgmyzjqz9l6a8703y29292yc4h7qmxh";
+    url = "mirror://kde/stable/attica/${name}.tar.bz2";
+    sha256 = "0frarnrnbli3f5ji90swgw05g88w1f5777ais345wc8lkvqg9ix1";
   };
   buildInputs = [ cmake qt4 ];
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library to access Open Collaboration Service providers";
     license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    maintainers = [ maintainers.sander maintainers.urkud ];
+    platforms = qt4.meta.platforms;
   };
 }
