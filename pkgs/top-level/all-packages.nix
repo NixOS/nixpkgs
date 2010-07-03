@@ -555,6 +555,10 @@ let
     inherit fetchurl stdenv ppl;
   };
 
+  convmv = import ../tools/misc/convmv {
+    inherit stdenv fetchurl perl;
+  };
+
   coreutils_real = makeOverridable (if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
       else import ../tools/misc/coreutils)
