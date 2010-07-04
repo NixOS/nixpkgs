@@ -1,9 +1,9 @@
 args: with args;
-stdenv.mkDerivation {
-  name = "wvdial-1.16";
+stdenv.mkDerivation rec {
+  name = "wvdial-1.61";
 
   src = fetchurl {
-    url = http://wvstreams.googlecode.com/files/wvdial-1.61.tar.gz;
+    url = "http://wvstreams.googlecode.com/files/${name}.tar.gz";
     sha256 = "0mzcrv8mc60gbdrixc9k8ammbslvjb9x2cs50yf1jq67aabapzsg";
   };
 
