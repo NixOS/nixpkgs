@@ -433,6 +433,8 @@
     "gcc41"
     "gcc42"
     "gcc43"
+    "gcc44"
+    "gcc45"
     "glibc25"
     "glibc27"
     "glibc29"
