@@ -1,16 +1,18 @@
 { fetchurl, stdenv, guile, which, ed }:
 
 stdenv.mkDerivation rec {
-  name = "mcron-1.0.4";
+  name = "mcron-1.0.6";
 
   src = fetchurl {
     url = "mirror://gnu/mcron/${name}.tar.gz";
-    sha256 = "0wrpi9qj50a8wfslapnkmsr6d3qx40hfw57a022m1z1syiljq4xl";
+    sha256 = "0yvrfzzdy2m7fbqkr61fw01wd9r2jpnbyabxhcsfivgxywknl0fy";
   };
 
   patches = [ ./install-vixie-programs.patch ];
 
   buildInputs = [ guile which ed ];
+
+  doCheck = true;
 
   meta = {
     description = "GNU mcron, a flexible implementation of `cron' in Guile";
