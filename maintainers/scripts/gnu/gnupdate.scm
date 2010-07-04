@@ -522,7 +522,7 @@
   ;; Return true if PACKAGE (a snix expression) is a GNU package (according
   ;; to a simple heuristic.)  Otherwise return #f.
   (match package
-    (('attribute _ attribute-name ('derivation _ _ body))
+    (('attribute _ _ ('derivation _ _ body))
      (any (lambda (attr)
             (match attr
               (('attribute _ "meta" ('attribute-set metas))
@@ -572,7 +572,7 @@
        (values server (if (not subdir?)
                           directory
                           (string-append directory "/" project))))
-      (else
+      (_
        (values "ftp.gnu.org" (string-append "/gnu/" project))))))
 
 (define (nixpkgs->gnu-name project)
