@@ -55,13 +55,6 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
   (and line column path
        (make-location path (string->number line) (string->number column))))
 
-;; XXX: Hack to add missing exports from `(sxml ssax)' as of 1.9.10.
-(let ((ssax (resolve-module '(sxml ssax))))
-  (for-each (lambda (sym)
-              (module-add! (current-module) sym
-                           (module-variable ssax sym)))
-            '(ssax:warn ssax:skip-pi nl)))
-
 ;; Nix object types visible in the XML output of `nix-instantiate' and
 ;; mapping to S-expressions (we map to sexps, not records, so that we
 ;; can do pattern matching):
