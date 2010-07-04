@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bison, ncurses, libusb, freetype }:
+{ fetchurl, stdenv, bison, gettext, ncurses, libusb, freetype, qemu }:
 
 let unifont_bdf = fetchurl {
       url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -7,14 +7,34 @@ let unifont_bdf = fetchurl {
 in
 
 stdenv.mkDerivation rec {
-  name = "grub-1.97.2";
+  name = "grub-1.98";
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/grub/${name}.tar.gz";
-    sha256 = "0j8wdaq9r0ayfsz25lbq2k3q0iasq5cyldlip8jyq2g87iid5hcq";
+    sha256 = "05660x82y2rwrzm0d1c4z07fbh02qwmacsmbbav6fa855s4w3wmy";
   };
 
-  buildInputs = [ bison ncurses libusb freetype ];
+  buildInputs = [ bison ncurses libusb freetype gettext ]
+    ++ stdenv.lib.optional doCheck qemu;
+
+  preConfigure =
+    '' for i in "tests/util/"*.in
+       do
+         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+       done
+
+       # Apparently, the QEMU executable is no longer called
+       # `qemu-system-i386', even on i386.
+       #
+       # In addition, use `-nodefaults' to avoid errors like:
+       #
+       #  chardev: opening backend "stdio" failed
+       #  qemu: could not open serial device 'stdio': Invalid argument
+       #
+       # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
+       sed -i "tests/util/grub-shell.in" \
+           -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+    '';
 
   patches =
     [ # The udev rules for LVM create symlinks in /dev/mapper rathe

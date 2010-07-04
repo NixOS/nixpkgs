@@ -902,7 +902,7 @@ let
   };
 
   grub2 = import ../tools/misc/grub/1.9x.nix {
-    inherit stdenv fetchurl bison ncurses libusb freetype;
+    inherit stdenv fetchurl bison gettext ncurses libusb freetype qemu;
   };
 
   gssdp = import ../development/libraries/gssdp {
