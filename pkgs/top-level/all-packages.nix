@@ -4003,6 +4003,10 @@ let
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
 
+  libdbusmenu_qt = makeOverridable (import ../development/libraries/libdbusmenu-qt) {
+    inherit stdenv fetchurl qt4 cmake;
+  };
+
   libdwg = import ../development/libraries/libdwg {
     inherit stdenv fetchurl;
   };
