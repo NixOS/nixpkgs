@@ -26,6 +26,7 @@
              (srfi srfi-1)
              (srfi srfi-9)
              (srfi srfi-11)
+             (srfi srfi-26)
              (srfi srfi-37)
              (system foreign)
              (rnrs bytevectors))
@@ -241,6 +242,33 @@
 (define (src->values snix)
   (call-with-src snix values))
 
+(define (attribute-value attribute)
+  ;; Return the value of ATTRIBUTE.
+  (match attribute
+    (('attribute _ _ value) value)))
+
+(define (derivation-source derivation)
+  ;; Return the "src" attribute of DERIVATION or #f if not found.
+  (match derivation
+    (('derivation _ _ (attributes ...))
+     (find-attribute-by-name "src" attributes))))
+
+(define (derivation-output-path derivation)
+  ;; Return the output path of DERIVATION.
+  (match derivation
+    (('derivation _ out-path _)
+     out-path)
+    (_ #f)))
+
+(define (source-output-path src)
+  ;; Return the output path of SRC, the "src" attribute of a derivation.
+  (derivation-output-path (attribute-value src)))
+
+(define (derivation-source-output-path derivation)
+  ;; Return the output path of the "src" attribute of DERIVATION or #f if
+  ;; DERIVATION lacks an "src" attribute.
+  (and=> (derivation-source derivation) source-output-path))
+
 (define (open-nixpkgs nixpkgs)
   (let ((script  (string-append nixpkgs
                                 "/maintainers/scripts/eval-release.nix")))
@@ -274,6 +302,55 @@
                      (or new-hash "new hash not available, check the log"))))
     (format #t "running `~A'...~%" cmd)
     (system cmd)))
+
+(define (find-attribute-by-name name attributes)
+  ;; Return attribute NAME in ATTRIBUTES, a list of SNix attributes, or #f if
+  ;; NAME cannot be found.
+  (find (lambda (a)
+          (match a
+            (('attribute _ (? (cut string=? <> name)) _)
+             a)
+            (_ #f)))
+        attributes))
+
+(define (find-package-by-attribute-name name packages)
+  ;; Return the package bound to attribute NAME in PACKAGES, a list of
+  ;; packages (SNix attributes), or #f if NAME cannot be found.
+  (find (lambda (package)
+          (match package
+            (('attribute _ (? (cut string=? <> name))
+                         ('derivation _ _ _))
+             package)
+            (_ #f)))
+        packages))
+
+(define (stdenv-package packages)
+  ;; Return the `stdenv' package from PACKAGES, a list of SNix attributes.
+  (find-package-by-attribute-name "stdenv" packages))
+
+(define (package-requisites package)
+  ;; Return the list of derivations required to build PACKAGE (including that
+  ;; of PACKAGE) by recurring into its derivation attributes.
+  (let loop ((snix   package)
+             (result '()))
+    (match snix
+      (('attribute _ _ body)
+       (loop body result))
+      (('derivation _ out-path body)
+       (if (any (lambda (d)
+                  (match d
+                    (('derivation _ (? (cut string=? out-path <>)) _) #t)
+                    (_ #f)))
+                result)
+           result
+           (loop body (cons snix result))))
+      ((things ...)
+       (fold loop result things))
+      (_ result))))
+
+(define (package-source-output-path package)
+  ;; Return the output path of the "src" derivation of PACKAGE.
+  (derivation-source-output-path (attribute-value package)))
 
 
 ;;;
@@ -661,10 +738,26 @@
                   (format #t "~%")
                   (format #t "  -x, --xml=FILE      Read XML output of `nix-instantiate'~%")
                   (format #t "                      from FILE.~%")
+                  (format #t "  -s, --select=SET    Update only packages from SET, which may~%")
+                  (format #t "                      be either `all',`stdenv', or `non-stdenv'.~%")
                   (format #t "  -d, --dry-run       Don't actually update Nix expressions~%")
                   (format #t "  -h, --help          Give this help list.~%~%")
                   (format #t "Report bugs to <ludo@gnu.org>~%")
                   (exit 0)))
+        (option '(#\s "select") #t #f
+                (lambda (opt name arg result)
+                  (cond ((string-ci=? arg "stdenv")
+                         (alist-cons 'filter 'stdenv result))
+                        ((string-ci=? arg "non-stdenv")
+                         (alist-cons 'filter 'non-stdenv result))
+                        ((string-ci=? arg "all")
+                         (alist-cons 'filter #f result))
+                        (else
+                         (format (current-error-port)
+                                 "~A: unrecognized selection type~%"
+                                 arg)
+                         (exit 1)))))
+
         (option '(#\d "dry-run") #f #f
                 (lambda (opt name arg result)
                   (alist-cons 'dry-run #t result)))
@@ -692,9 +785,29 @@
          (packages  (match snix
                       (('snix _ ('attribute-set attributes))
                        attributes)
-                      (else #f)))
+                      (_ #f)))
+         (stdenv    (delay
+                      ;; The source tarballs that make up stdenv.
+                      (filter-map derivation-source-output-path
+                                  (package-requisites (stdenv-package packages)))))
          (gnu       (gnu-packages packages))
-         (updates   (packages-to-update gnu)))
+         (gnu*      (case (assoc-ref opts 'filter)
+                      ;; Filter out packages that are/aren't in `stdenv'.  To
+                      ;; do that reliably, we check whether their "src"
+                      ;; derivation is a requisite of stdenv.
+                      ((stdenv)
+                       (filter (lambda (p)
+                                 (member (package-source-output-path p)
+                                         (force stdenv)))
+                               gnu))
+                      ((non-stdenv)
+                       (filter (lambda (p)
+                                 (not (member (package-source-output-path p)
+                                              (force stdenv))))
+                               gnu))
+                      (else gnu)))
+         (updates   (packages-to-update gnu*)))
+
     (format #t "~%~A packages to update...~%" (length updates))
     (for-each (lambda (update)
                 (match update
