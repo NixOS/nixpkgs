@@ -1,11 +1,11 @@
 { fetchurl, stdenv, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "idutils-4.2";
+  name = "idutils-4.5";
   
   src = fetchurl {
     url = "mirror://gnu/idutils/${name}.tar.gz";
-    sha256 = "16gsy7vrjax2zl4galwq03l0y97d18p0pyd5cccyc4i8y3mhwx65";
+    sha256 = "0j92k2dwg381kx2z556v9162l16mfra3xqbfcjrkdd2fw5jsgn2q";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isLinux emacs;
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/idutils/;
-    license = "GPLv2+";
+    license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
