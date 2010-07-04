@@ -561,6 +561,7 @@
       ("libgpg-error" "ftp.gnupg.org" "/gcrypt" #t)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/ghostscript" #f)
+      ("grub"         "alpha.gnu.org" "/gnu" #t)
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
       ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg")
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
