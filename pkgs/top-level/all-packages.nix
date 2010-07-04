@@ -5162,6 +5162,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  qjson = makeOverridable (import ../development/libraries/qjson) {
+    inherit stdenv fetchurl qt4 cmake;
+  };
+
   qt3 = makeOverridable (import ../development/libraries/qt-3) {
     inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
