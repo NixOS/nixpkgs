@@ -2,11 +2,11 @@
 , utillinuxng, xz }:
 
 stdenv.mkDerivation rec {
-  name = "parted-2.2";
+  name = "parted-2.3";
 
   src = fetchurl {
     url = "mirror://gnu/parted/${name}.tar.xz";
-    sha256 = "13gxq542lsm5jfq0kmrwgk4h61pcxy8s6rkqlw9qirqazsk9q9ik";
+    sha256 = "0sabj81nawcjm8ww34lxg65ka8crv3w2ab4crh8ypw5agg681836";
   };
 
   buildInputs = [ xz libuuid gettext readline libuuid devicemapper ];
