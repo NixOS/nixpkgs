@@ -741,7 +741,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
                   (format #t "  -x, --xml=FILE      Read XML output of `nix-instantiate'~%")
                   (format #t "                      from FILE.~%")
                   (format #t "  -s, --select=SET    Update only packages from SET, which may~%")
-                  (format #t "                      be either `all',`stdenv', or `non-stdenv'.~%")
+                  (format #t "                      be either `all', `stdenv', or `non-stdenv'.~%")
                   (format #t "  -d, --dry-run       Don't actually update Nix expressions~%")
                   (format #t "  -h, --help          Give this help list.~%~%")
                   (format #t "Report bugs to <ludo@gnu.org>~%")
