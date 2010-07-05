@@ -2738,6 +2738,10 @@ let
     inherit fetchurl stdenv perl gnum4 ncurses openssl;
   };
 
+  erlangR13B = import ../development/interpreters/erlang/R13B.nix {
+    inherit fetchurl stdenv perl gnum4 ncurses openssl;
+  };
+
   groovy = import ../development/interpreters/groovy {
     inherit stdenv fetchurl unzip;
   };
@@ -5820,7 +5824,8 @@ let
   };
 
   ejabberd = import ../servers/xmpp/ejabberd {
-    inherit fetchurl stdenv expat erlang zlib openssl pam lib;
+    inherit fetchurl stdenv expat zlib openssl pam lib;
+    erlang = erlangR13B ;
   };
 
   couchdb = import ../servers/http/couchdb {
