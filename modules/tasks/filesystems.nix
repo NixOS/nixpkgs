@@ -177,6 +177,7 @@ in
         startOn = "mount-failed";
         script =
           ''
+            [ -n "$MOUNTPOINT" ] || exit 0
             start --no-wait emergency-shell \
               DEVICE="$DEVICE" MOUNTPOINT="$MOUNTPOINT"
           '';
@@ -191,6 +192,8 @@ in
 
         script =
           ''
+            [ -n "$MOUNTPOINT" ] || exit 0
+            
             exec < /dev/console > /dev/console 2>&1
 
             cat <<EOF
