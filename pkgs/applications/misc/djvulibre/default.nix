@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, useQt3 ? true, libjpeg, libtiff, libpng, ghostscript
+{ stdenv, fetchurl, lib, useQt3 ? false, libjpeg, libtiff, libpng, ghostscript
 , libungif, zlib, x11, libX11, mesa, qt3 }:
 
 stdenv.mkDerivation {

@@ -1,4 +1,4 @@
-args: with args;
+{stdenv, fetchurl, djvulibre, qt4 }:
 
 stdenv.mkDerivation {
 	name = "djview4-4.1-2";
@@ -13,5 +13,7 @@ stdenv.mkDerivation {
 		homepage = http://djvu.sourceforge.net/djview4.html;
 		description = "A new portable DjVu viewer and browser plugin";
 		license = "GPL2";
+    inherit (qt4.meta) platforms;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
 	};
 }
