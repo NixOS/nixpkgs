@@ -1,10 +1,11 @@
 {stdenv, fetchurl, expat, erlang, zlib, openssl, pam, lib}:
 
 stdenv.mkDerivation rec {
-  name = "ejabberd-2.1.0";
+  version = "2.1.4";
+  name = "ejabberd-2.1.4";
   src = fetchurl {
-    url = http://www.process-one.net/downloads/ejabberd/2.1.0/ejabberd-2.1.0.tar.gz;
-    sha256 = "16gn5ag3zyv578bqbz134l13cy1gl1xfa5y7dnqxgpr9gkdyrp5q";
+    url = http://www.process-one.net/downloads/ejabberd/2.1.4/ejabberd-2.1.4.tar.gz;
+    sha256 = "205ee09e38c57527cfa1a4be6ca664cec2e8c6b40eeffaac008735fcdc5e7527";
   };
   buildInputs = [ expat erlang zlib openssl pam ];
   patchPhase = ''
