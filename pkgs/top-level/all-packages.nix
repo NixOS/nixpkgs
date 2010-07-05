@@ -890,6 +890,17 @@ let
     inherit (gtkLibs) pango;
   };
 
+  /* Readded by Michael Raskin. There are programs in the wild 
+   * that do want 2.0 but not 2.22. Please give a day's notice for
+   * objections before removal.
+   */
+  graphviz_2_0 = import ../tools/graphics/graphviz/2.0.nix {
+    inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
+      libtool fontconfig gd;
+    inherit (xlibs) libXaw;
+    inherit (gtkLibs) pango;
+  };
+
   groff = import ../tools/text/groff {
     inherit fetchurl stdenv perl;
     ghostscript = null;
