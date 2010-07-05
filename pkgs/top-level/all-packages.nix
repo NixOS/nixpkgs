@@ -3076,7 +3076,6 @@ let
 
   automake111x = import ../development/tools/misc/automake/automake-1.11.x.nix {
     inherit fetchurl stdenv perl autoconf makeWrapper;
-    doCheck = false;
   };
 
   avrdude = import ../development/tools/misc/avrdude {
