@@ -18,7 +18,10 @@ rec {
 
   name = "gcl-2.6.8pre";
   inherit buildInputs;
-  configureFlags = [];
+  configureFlags = [
+    "--enable-xgcl=yes"
+    "--enable-ansi"
+  ];
 
   # Upstream bug submitted - http://savannah.gnu.org/bugs/index.php?30371
   # $TMPDIR must have no extension
@@ -33,10 +36,8 @@ rec {
     sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.gcc.gcc}/include -I${a.stdenv.gcc.libc}/include ^g' -i makefile
   '') ["minInit" "doUnpack"];
 
-  fixConfigure = a.doPatchShebangs ".";
-
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doUnpack" "fixConfigure" "preBuild" 
+  phaseNames = ["setVars" "doUnpack" "preBuild" 
     "doConfigure" "doMakeInstall"];
       
   meta = {
