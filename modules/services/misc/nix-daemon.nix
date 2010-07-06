@@ -162,10 +162,6 @@ in
         internal = true;
         default = "";
         merge = mergeStringOption;
-        example = ''
-          export NIX_TARGET_LOAD=$(( 3 * $(${pkgs.coreutils}/bin/nproc) / 2 ))
-          export NIX_MAX_PARALLELIZATION=$NIX_TARGET_LOAD
-        '';
         description = "
           Environment variables used by Nix.
         ";
