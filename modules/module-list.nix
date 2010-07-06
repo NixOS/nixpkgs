@@ -7,6 +7,7 @@
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
+  ./config/swap.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
@@ -152,7 +153,6 @@
   ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
-  ./tasks/swap.nix
   ./tasks/swraid.nix
   ./tasks/tty-backgrounds.nix
 ]
