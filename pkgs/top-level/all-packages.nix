@@ -7471,7 +7471,7 @@ let
     };
 
   chrome = import ../applications/networking/browsers/chromium {
-    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng dbus dbus_glib;
+    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng dbus dbus_glib cups libgcrypt;
     inherit (xlibs) libX11 libXext libXrender libXt libXScrnSaver;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
