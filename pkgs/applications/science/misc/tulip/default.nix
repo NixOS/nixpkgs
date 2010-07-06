@@ -1,13 +1,13 @@
 { fetchurl, stdenv, libxml2, freetype, mesa, glew, qt
 , autoconf, automake, libtool }:
 
-let version = "3.3.1"; in
+let version = "3.4.0"; in
 stdenv.mkDerivation rec {
   name = "tulip-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/auber/tulip/tulip-${version}/${name}.tar.bz2";
-    sha256 = "1c9c2brs1n2kvpih1jrq69vkqqnglacs5x5zlzj9cxbn70crw874";
+    sha256 = "2889113f773ba539472d501fb4f45dbf5eb76e02c949dfa74c63f6f815a2baab";
   };
 
   patches = [ ./configure-opengl.patch ];
