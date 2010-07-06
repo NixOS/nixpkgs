@@ -20,6 +20,13 @@ rec {
   inherit buildInputs;
   configureFlags = [];
 
+  # Upstream bug submitted - http://savannah.gnu.org/bugs/index.php?30371
+  # $TMPDIR must have no extension
+  setVars = a.noDepEntry ''
+    export TMPDIR="''${TMPDIR:-''${TMP:-''${TEMP}}}/tmp-for-gcl"
+    mkdir -p "$TMPDIR"
+  '';
+
   preBuild = a.fullDepEntry (''
     sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
     sed -re "s@if test -d /proc/self @if false @" -i configure
@@ -29,7 +36,7 @@ rec {
   fixConfigure = a.doPatchShebangs ".";
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doUnpack" "fixConfigure" "preBuild" 
+  phaseNames = ["setVars" "doUnpack" "fixConfigure" "preBuild" 
     "doConfigure" "doMakeInstall"];
       
   meta = {
