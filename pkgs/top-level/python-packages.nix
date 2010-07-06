@@ -395,6 +395,22 @@ rec {
     };
   });
 
+  notify = pkgs.stdenv.mkDerivation (rec {
+    name = "python-notify-0.1.1";
+
+    src = fetchurl {
+      url = http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2;
+      sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
+    };
+
+    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.gtkLibs.glib pkgs.gtkLibs.gtk pkgs.dbus_glib ];
+
+    meta = {
+      description = "Python bindings for libnotify";
+      homepage = http://www.galago-project.org/;
+    };
+  });
+
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.4.1";
 

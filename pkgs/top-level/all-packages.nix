@@ -477,6 +477,14 @@ let
     inherit fetchurl stdenv python wxPython26;
   };
 
+  blueman = import ../tools/bluetooth/blueman {
+    inherit fetchurl stdenv pkgconfig intltool python pyrex
+      pygobject pygtk pythonDBus bluez libstartup_notification
+      makeWrapper xdg_utils;
+    inherit (pythonPackages) notify;
+    inherit (gtkLibs) glib gtk;
+  };
+
   bmrsa = builderDefsPackage (import ../tools/security/bmrsa/11.nix) {
     inherit unzip;
   };
@@ -1284,6 +1292,11 @@ let
 
   nylon = import ../tools/networking/nylon {
     inherit fetchurl stdenv libevent;
+  };
+
+  obex_data_server = import ../tools/bluetooth/obex-data-server {
+    inherit fetchurl stdenv pkgconfig libusb dbus_glib bluez openobex;
+    inherit (gtkLibs) glib;
   };
 
   obexd = import ../tools/bluetooth/obexd {
