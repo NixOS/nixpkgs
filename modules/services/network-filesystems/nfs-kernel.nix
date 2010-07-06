@@ -8,6 +8,8 @@ let
 
   cfg = config.services.nfsKernel;
 
+  exports = pkgs.writeText "exports" cfg.server.exports;
+
 in
 
 {
@@ -19,7 +21,7 @@ in
     services.nfsKernel = {
 
       client.enable = mkOption {
-        default = false;
+        default = any (fs: fs.fsType == "nfs" || fs.fsType == "nfs4") config.fileSystems;
         description = ''
           Whether to enable the kernel's NFS client daemons.
         '';
@@ -82,7 +84,7 @@ in
       });
 
     environment.etc = mkIf cfg.server.enable (singleton
-      { source = pkgs.writeText "exports" cfg.server.exports;
+      { source = exports;
         target = "exports";
       });
 
@@ -100,19 +102,23 @@ in
               ''
                 export PATH=${pkgs.nfsUtils}/sbin:$PATH
                 mkdir -p /var/lib/nfs
+                
                 ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
+
+                ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
+                || ${config.system.sbin.mount}/bin/mount -t nfsd none /proc/fs/nfsd
 
                 ${optionalString cfg.server.createMountPoints
                   ''
                     # create export directories:
                     # skip comments, take first col which may either be a quoted
                     # "foo bar" or just foo (-> man export)
-                    sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${cfg.server.exports} \
+                    sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
                     | xargs -d '\n' mkdir -p
                   ''
                 }
 
-                # exports file is ${cfg.server.exports}
+                # exports file is ${exports}
                 # keep this comment so that this job is restarted whenever exports changes!
                 exportfs -ra
               '';
@@ -128,7 +134,9 @@ in
             startOn = "started nfs-kernel-exports and started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
+            preStart = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
+
+            postStop = "${pkgs.nfsUtils}/sbin/rpc.nfsd 0";
           };
         }
 
@@ -138,10 +146,12 @@ in
 
             description = "Kernel NFS server - mount daemon";
 
-            startOn = "started nfs-kernel-nfsd and started portmap";
-            stopOn = "stopping nfs-kernel-exports";
+            startOn = "starting nfs-kernel-nfsd and started portmap";
+            stopOn = "stopped nfs-kernel-nfsd";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -F -f /etc/exports";
+            daemonType = "fork";
+
+            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -f /etc/exports";
           };
         }
 
@@ -151,15 +161,34 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "${if cfg.server.enable then "started nfs-kernel-nfsd and " else ""} started portmap";
-            stopOn = "stopping nfs-kernel-exports";
+            startOn = "${if cfg.server.enable then "starting nfs-kernel-nfsd and " else ""} started portmap";
+            stopOn = "never";
 
             preStart =
               ''	
                 mkdir -p /var/lib/nfs
+                mkdir -p /var/lib/nfs/sm
+                mkdir -p /var/lib/nfs/sm.bak
               '';
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.statd -F";
+            daemonType = "fork";
+
+            exec = "${pkgs.nfsUtils}/sbin/rpc.statd --no-notify";
+          };
+        }
+      
+      // optionalAttrs (cfg.client.enable || cfg.server.enable)
+        { nfs_kernel_sm_notify = 
+          { name = "nfs-kernel-sm-notify";
+
+            description = "Kernel NFS server - Reboot notification";
+
+            startOn = "started nfs-kernel-statd"
+              + (if cfg.client.enable then " and starting mountall" else "");
+
+            task = true;
+
+            exec = "${pkgs.nfsUtils}/sbin/sm-notify -d";
           };
         };
       

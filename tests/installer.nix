@@ -40,6 +40,7 @@ let
 
         boot.loader.grub.version = 2;
         boot.loader.grub.device = "/dev/vda";
+        boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" ];
       
         fileSystems = [ ${fileSystems} ];
@@ -218,9 +219,7 @@ in {
         ''
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/vda1 -L swap",
@@ -240,9 +239,7 @@ in {
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
@@ -265,11 +262,8 @@ in {
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
-              "udevadm settle",
               "parted /dev/vda -- set 1 lvm on",
-              "udevadm settle",
               "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
-              "udevadm settle",
               "parted /dev/vda -- set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
@@ -290,21 +284,25 @@ in {
         ''
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary 1M 1000M", # md0 (root), first device
-              "parted /dev/vda -- mkpart primary 1024M 2024M", # md0 (root), second device
-              "parted /dev/vda -- mkpart primary 2048M 2548M", # md1 (swap), first device
-              "parted /dev/vda -- mkpart primary 2560M 3060M", # md1 (swap), second device
+              "parted /dev/vda -- mkpart primary ext2 1M 30MB", # /boot
+              "parted /dev/vda -- mkpart extended 30M -1s", # extended partition
+              "parted /dev/vda -- mkpart logical 30M 1000M", # md0 (root), first device
+              "parted /dev/vda -- mkpart logical 1024M 2000M", # md0 (root), second device
+              "parted /dev/vda -- mkpart logical 2048M 2548M", # md1 (swap), first device
+              "parted /dev/vda -- mkpart logical 2560M 3060M", # md1 (swap), second device
               "udevadm settle",
-              # Note that GRUB2 doesn't work with version 1.2 metadata.
-              "mdadm --create --force /dev/md0 --metadata 0.90 --level=raid1 --raid-devices=2 /dev/vda1 /dev/vda2",
-              "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda3 /dev/vda4",
+              "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda5 /dev/vda6",
+              "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda7 /dev/vda8",
               "mkswap -f /dev/md1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/md0",
               "mount LABEL=nixos /mnt",
+              "mkfs.ext3 -L boot /dev/vda1",
+              "mkdir /mnt/boot",
+              "mount LABEL=boot /mnt/boot",
           );
         '';
-      fileSystems = rootFS;
+      fileSystems = rootFS + bootFS;
     };
       
 }

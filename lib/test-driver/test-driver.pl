@@ -74,6 +74,3 @@ END {
 
 
 runTests;
-
-
-print STDERR "DONE\n";

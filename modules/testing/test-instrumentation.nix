@@ -13,6 +13,7 @@ let
     ''
       #! ${pkgs.perl}/bin/perl
       $SIG{CHLD} = 'DEFAULT';
+      print "\n";
       exec "/bin/sh";
     '';
 
@@ -23,14 +24,9 @@ in
   config = {
 
     jobs.backdoor =
-      { startOn = "started network-interfaces";
+      { startOn = "ip-up";
+        stopOn = "never";
         
-        preStart =
-          ''
-            echo "guest running" > /dev/ttyS0
-            echo "===UP===" > dev/ttyS0
-          '';
-          
         script =
           ''
             export USER=root
@@ -39,10 +35,13 @@ in
             export GCOV_PREFIX=/tmp/coverage-data
             source /etc/profile
             cd /tmp
-            exec ${pkgs.socat}/bin/socat tcp-listen:514,fork exec:${rootShell} 2> /dev/ttyS0
+            echo "connecting to host..." > /dev/ttyS0
+            ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0 || poweroff -f
           '';
+
+        respawn = false;
       };
-  
+
     boot.postBootCommands =
       ''
         # Panic on out-of-memory conditions rather than letting the
@@ -75,10 +74,19 @@ in
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
 
-    # Send all of /var/log/messages to the serial port (except for
-    # kernel messages through klogd, which already appear on the
-    # serial port).
-    services.syslogd.extraConfig = "*.*,kern.none /dev/ttyS0";
+    # Send all of /var/log/messages to the serial port.
+    services.syslogd.extraConfig = "*.* /dev/ttyS0";
+
+    # Prevent tests from accessing the Internet.
+    networking.defaultGateway = mkOverride 200 {} "";
+    networking.nameservers = mkOverride 200 {} [ ];
+
+    # Apply a patch to the kernel to increase the 15s CIFS timeout.
+    nixpkgs.config.packageOverrides = pkgs: {
+      linux = pkgs.linux.override (orig: {
+        kernelPatches = orig.kernelPatches ++ [ pkgs.kernelPatches.cifs_timeout ];
+      });
+    };
 
   };
 

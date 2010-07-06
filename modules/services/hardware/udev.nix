@@ -185,8 +185,14 @@ in
         daemonType = "fork";
 
         exec = "${udev}/sbin/udevd --daemon";
+      };
 
-        postStart =
+    jobs.udevtrigger =
+      { startOn = "started udev";
+
+        task = true;
+
+        script =
           ''
             # Let udev create device nodes for all modules that have already
             # been loaded into the kernel (or for which support is built into
@@ -200,9 +206,8 @@ in
 
             initctl emit -n new-devices
           '';
-        
       };
-
+      
   };
 
 }

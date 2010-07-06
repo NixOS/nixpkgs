@@ -109,6 +109,16 @@ rm -rf /var/log/upstart
 rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 
 
+# Use a tmpfs for /var/run to ensure that / or /var can be unmounted
+# or at least remounted read-only during shutdown.  (Upstart 0.6
+# apparently uses nscd to do some name lookups, resulting in it
+# holding some mmap mapping to deleted files in /var/run/nscd.
+# Similarly, portmap and statd have open files in /var/run and are
+# needed during shutdown to unmount NFS volumes.)
+mkdir -m 0755 -p /var/run
+mount -t tmpfs -o "mode=755" none /var/run
+
+
 # Clear the resume device.
 if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
@@ -140,8 +150,10 @@ export MODULE_DIR=@kernel@/lib/modules/
 # Run any user-specified commands.
 @shell@ @postBootCommands@
 
+
 # For debugging Upstart.
 #@shell@ --login < /dev/console > /dev/console 2>&1 &
+
 
 # Start Upstart's init.
 echo "starting Upstart..."

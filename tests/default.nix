@@ -12,6 +12,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   kde4 = makeTest (import ./kde4.nix);
   login = makeTest (import ./login.nix);
   nat = makeTest (import ./nat.nix);
+  nfs = makeTest (import ./nfs.nix);
   openssh = makeTest (import ./openssh.nix);
   portmap = makeTest (import ./portmap.nix);
   proxy = makeTest (import ./proxy.nix);

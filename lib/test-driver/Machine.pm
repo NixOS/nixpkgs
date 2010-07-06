@@ -2,7 +2,6 @@ package Machine;
 
 use strict;
 use threads;
-use Thread::Queue;
 use Socket;
 use IO::Handle;
 use POSIX qw(dup2);
@@ -28,8 +27,8 @@ sub new {
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
         $startCommand =
-            "qemu-system-x86_64 -m 384 -no-kvm-irqchip " .
-            "-net nic,model=virtio -net user \$QEMU_OPTS ";
+            "qemu-system-x86_64 -m 384 " .
+            "-net nic,model=virtio -net user,\$QEMU_NET_OPTS \$QEMU_OPTS ";
         $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=virtio,boot=on,werror=report "
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
@@ -51,7 +50,6 @@ sub new {
         booted => 0,
         pid => 0,
         connected => 0,
-        connectedQueue => Thread::Queue->new(),
         socket => undef,
         stateDir => "$tmpDir/$name",
         monitor => undef,
@@ -101,6 +99,14 @@ sub start {
     bind($monitorS, sockaddr_un($monitorPath)) or die "cannot bind monitor socket: $!";
     listen($monitorS, 1) or die;
 
+    # Create a Unix domain socket to which the root shell in the guest will connect.
+    my $shellPath = $self->{stateDir} . "/shell";
+    unlink $shellPath;
+    my $shellS;
+    socket($shellS, PF_UNIX, SOCK_STREAM, 0) or die;
+    bind($shellS, sockaddr_un($shellPath)) or die "cannot bind shell socket: $!";
+    listen($shellS, 1) or die;
+
     # Start the VM.
     my $pid = fork();
     die if $pid == -1;
@@ -108,21 +114,20 @@ sub start {
     if ($pid == 0) {
         close $serialP;
         close $monitorS;
+        close $shellS;
         open NUL, "</dev/null" or die;
         dup2(fileno(NUL), fileno(STDIN));
         dup2(fileno($serialC), fileno(STDOUT));
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
-        $ENV{QEMU_OPTS} = "-nographic -no-reboot -redir tcp:65535::514 -monitor unix:./monitor";
+        $ENV{USE_TMPDIR} = 1;
+        $ENV{QEMU_OPTS} = "-nographic -no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell";
+        $ENV{QEMU_NET_OPTS} = "guestfwd=tcp:10.0.2.6:23-chardev:shell";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
         die;
     }
-
-    # Wait until QEMU connects to the monitor.
-    accept($self->{monitor}, $monitorS) or die;
-    $self->waitForMonitorPrompt;
 
     # Process serial line output.
     close $serialC;
@@ -131,17 +136,31 @@ sub start {
 
     sub processSerialOutput {
         my ($self, $serialP) = @_;
-        $/ = "\r\n";
         while (<$serialP>) {
             chomp;
+            s/\r$//;
             print STDERR $self->name, "# $_\n";
-            $self->{connectedQueue}->enqueue(1) if $_ eq "===UP===";
         }
-        # If the child dies, wake up connect().
-        $self->{connectedQueue}->enqueue(1);
     }
 
-    $self->log("vm running as pid $pid");
+    eval {
+        local $SIG{CHLD} = sub { die "QEMU died prematurely\n"; };
+        
+        # Wait until QEMU connects to the monitor.
+        accept($self->{monitor}, $monitorS) or die;
+
+        # Wait until QEMU connects to the root shell socket.  QEMU
+        # does so immediately; this doesn't mean that the root shell
+        # has connected yet inside the guest.
+        accept($self->{socket}, $shellS) or die;
+        $self->{socket}->autoflush(1);
+    };
+    die "$@" if $@;
+    
+    $self->waitForMonitorPrompt;
+
+    $self->log("QEMU running (pid $pid)");
+    
     $self->{pid} = $pid;
     $self->{booted} = 1;
 }
@@ -190,27 +209,12 @@ sub connect {
 
     $self->start;
 
-    # Wait until the processQemuOutput thread signals that the machine
-    # is up.
-    retry sub {
-        return 1 if $self->{connectedQueue}->dequeue_nb();
-    };
-
-    retry sub {
-        $self->log("trying to connect");
-        my $socket = new IO::Handle;
-        $self->{socket} = $socket;
-        socket($socket, PF_UNIX, SOCK_STREAM, 0) or die;
-        connect($socket, sockaddr_un($self->{stateDir} . "/65535.socket")) or die;
-        $socket->autoflush(1);
-        print $socket "echo hello\n" or next;
-        flush $socket;
-        my $line = readline($socket);
-        chomp $line;
-        return 1 if $line eq "hello";
-    };
-
-    $self->log("connected");
+    local $SIG{ALRM} = sub { die "timed out waiting for the guest to connect\n"; };
+    alarm 300;
+    readline $self->{socket} or die;
+    alarm 0;
+        
+    $self->log("connected to guest root shell");
     $self->{connected} = 1;
 }
 
@@ -294,11 +298,16 @@ sub waitUntilFails {
 }
 
 
-sub mustFail {
+sub fail {
     my ($self, $command) = @_;
     my ($status, $out) = $self->execute($command);
     die "command `$command' unexpectedly succeeded"
         if $status == 0;
+}
+
+
+sub mustFail {
+    fail @_;
 }
 
 
@@ -355,6 +364,16 @@ sub shutdown {
     return unless $self->{booted};
 
     $self->execute("poweroff");
+
+    $self->waitForShutdown;
+}
+
+
+sub crash {
+    my ($self) = @_;
+    return unless $self->{booted};
+
+    $self->sendMonitorCommand("quit");
 
     $self->waitForShutdown;
 }

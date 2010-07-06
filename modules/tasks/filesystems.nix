@@ -4,103 +4,8 @@ with pkgs.lib;
 
 let
 
-  fileSystems = config.fileSystems;
-  mount = config.system.sbin.mount;
-
-  task =
-    ''
-      PATH=${pkgs.e2fsprogs}/sbin:${pkgs.utillinuxng}/sbin:$PATH
-
-      newDevices=1
-
-      # If we mount any file system, we repeat this loop, because new
-      # mount opportunities may have become available (such as images
-      # for loopback mounts).
-
-      while test -n "$newDevices"; do
-        newDevices=
-
-        ${flip concatMapStrings fileSystems (fs: ''
-          for dummy in x; do # make `continue' work
-            mountPoint='${fs.mountPoint}'
-            device='${if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}"}'
-            fsType='${fs.fsType}'
-          
-            # A device is a pseudo-device (i.e. not an actual device
-            # node) if it's not an absolute path (e.g. an NFS server
-            # such as machine:/path), if it starts with // (a CIFS FS),
-            # a known pseudo filesystem (such as tmpfs), or the device
-            # is a directory (e.g. a bind mount).
-            isPseudo=
-            test "''${device:0:1}" != / -o "''${device:0:2}" = // -o "$fsType" = "tmpfs" \
-                -o -d "$device" && isPseudo=1
-
-            if ! test -n "$isPseudo" -o -e "$device"; then
-                echo "skipping $device, doesn't exist (yet)"
-                continue
-            fi
-
-            # !!! quick hack: if the mount point is already mounted, try
-            # a remount to change the options but nothing else.
-            if cat /proc/mounts | grep -F -q " $mountPoint "; then
-                if test "''${device:0:2}" != //; then
-                    echo "remounting $device on $mountPoint"
-                    ${mount}/bin/mount -t "$fsType" \
-                        -o remount,"${fs.options}" \
-                        "$device" "$mountPoint" || true
-                fi
-                continue
-            fi
-
-            # If $device is already mounted somewhere else, unmount it first.
-            # !!! Note: we use /etc/mtab, not /proc/mounts, because mtab
-            # contains more accurate info when using loop devices.
-
-            if test -z "$isPseudo"; then
-
-              device=$(readlink -f "$device")
-
-              prevMountPoint=$(
-                  cat /etc/mtab \
-                  | grep "^$device " \
-                  | sed 's|^[^ ]\+ \+\([^ ]\+\).*|\1|' \
-              )
-
-              if test "$prevMountPoint" = "$mountPoint"; then
-                  echo "remounting $device on $mountPoint"
-                  ${mount}/bin/mount -t "$fsType" \
-                      -o remount,"${fs.options}" \
-                      "$device" "$mountPoint" || true
-                  continue
-              fi
-
-              if test -n "$prevMountPoint"; then
-                  echo "unmount $device from $prevMountPoint"
-                  ${mount}/bin/umount "$prevMountPoint" || true
-              fi
-
-            fi
-
-            echo "mounting $device on $mountPoint"
-
-            # !!! should do something with the result; also prevent repeated fscks.
-            if test -z "$isPseudo"; then
-                fsck -a "$device" || true
-            fi
-
-            ${optionalString fs.autocreate
-              ''
-                mkdir -p "$mountPoint"
-              ''
-            }
-
-            if ${mount}/bin/mount -t "$fsType" -o "${fs.options}" "$device" "$mountPoint"; then
-                newDevices=1
-            fi
-          done
-        '')}
-      done
-    '';
+  # Packages that provide fsck backends.
+  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs ];
 
 in
 
@@ -221,14 +126,99 @@ in
   config = {
 
     # Add the mount helpers to the system path so that `mount' can find them.
-    environment.systemPackages = [pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils];
+    environment.systemPackages =
+      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils pkgs.mountall ]
+      ++ fsPackages;
     
-    jobs.filesystems =
-      { startOn = [ "new-devices" "ip-up" ];
+    environment.etc = singleton
+      { source = pkgs.writeText "fstab"
+          ''
+            # This is a generated file.  Do not edit!
 
-        script = task;
+            # Filesystems.
+            ${flip concatMapStrings config.fileSystems (fs:
+                (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
+                + " " + fs.mountPoint
+                + " " + fs.fsType
+                + " " + fs.options
+                + " 0"
+                + " " + (if fs.fsType == "none" then "0" else if fs.mountPoint == "/" then "1" else "2")
+                + "\n"
+            )}
+
+            # Swap devices.
+            ${flip concatMapStrings config.swapDevices (sw:
+                 "${sw.device} none swap\n"
+            )}
+          '';
+        target = "fstab";
+      };
+
+    jobs.mountall =
+      { startOn = "started udev";
 
         task = true;
+        
+        script =
+          ''
+            exec > /dev/console 2>&1
+            echo "mounting filesystems..."
+            export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
+            ${pkgs.mountall}/sbin/mountall
+          '';
+      };
+
+    # The `mount-failed' event is emitted synchronously, but we don't
+    # want `mountall' to wait for the emergency shell.  So use this
+    # intermediate job to make the event asynchronous.
+    jobs.mountFailed =
+      { name = "mount-failed";
+        task = true;
+        startOn = "mount-failed";
+        script =
+          ''
+            [ -n "$MOUNTPOINT" ] || exit 0
+            start --no-wait emergency-shell \
+              DEVICE="$DEVICE" MOUNTPOINT="$MOUNTPOINT"
+          '';
+      };
+
+    jobs.emergencyShell =
+      { name = "emergency-shell";
+
+        task = true;
+
+        extraConfig = "console owner";
+
+        script =
+          ''
+            [ -n "$MOUNTPOINT" ] || exit 0
+            
+            exec < /dev/console > /dev/console 2>&1
+
+            cat <<EOF
+
+            [1;31m<<< Emergency shell >>>[0m
+
+            The filesystem \`$DEVICE' could not be mounted on \`$MOUNTPOINT'.
+
+            Please do one of the following:
+
+            - Repair the filesystem (\`fsck $DEVICE') and exit the emergency
+              shell to resume booting.
+
+            - Ignore any failed filesystems and continue booting by running
+              \`initctl emit filesystem'.
+
+            - Remove the failed filesystem from the system configuration in
+              /etc/nixos/configuration.nix and run \`nixos-rebuild switch'.
+            
+            EOF
+
+            ${pkgs.shadow}/bin/login root || false
+
+            initctl start --no-wait mountall
+          '';
       };
 
   };

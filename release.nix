@@ -111,10 +111,10 @@ let
         options =
           (import lib/eval-config.nix {
             inherit nixpkgs;
-            modules = [ ];
+            modules = [ { fileSystems = []; } ];
           }).options;
-        revision = with nixosSrc;
-          if rev == 1234 then "HEAD" else toString rev;
+        revision = 
+          if nixosSrc.rev == 1234 then "HEAD" else toString nixosSrc.rev;
       };
 
 
@@ -156,6 +156,8 @@ let
         installer.swraid = t.installer.swraid.test;
         kde4 = t.kde4.test;
         login = t.login.test;
+        nat = t.nat.test;
+        nfs = t.nfs.test;
         openssh = t.openssh.test;
         proxy = t.proxy.test;
         quake3 = t.quake3.test;

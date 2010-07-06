@@ -216,6 +216,10 @@ extraEntries=`cat <<EOF
 EOF`
 
 
+cat >> $tmp <<EOF
+@extraConfig@
+EOF
+
 if test -n "@extraEntriesBeforeNixOS@"; then 
     echo "$extraEntries" >> $tmp
 fi

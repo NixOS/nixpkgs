@@ -22,7 +22,6 @@ let
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils
-      pkgs.e2fsprogs
       pkgs.eject # HAL depends on it anyway
       pkgs.findutils
       pkgs.gawk
@@ -44,7 +43,6 @@ let
       pkgs.pciutils
       pkgs.perl
       pkgs.procps
-      pkgs.reiserfsprogs
       pkgs.rsync
       pkgs.seccure
       pkgs.strace
