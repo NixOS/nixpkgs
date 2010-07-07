@@ -1,49 +1,37 @@
 {stdenv, fetchurl, qt, bzip2, lib3ds, levmar, muparser, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "meshlab-1.2.2";
+  name = "meshlab-1.2.3a";
 
   src = fetchurl {
-    url = mirror://sourceforge/meshlab/MeshLabSrc_v122.tar.gz;
-    sha256 = "166a8mx72wf3r84pnpr0ssqkd2xw6y5brviywlj8rjk6w9cy8fdc";
+    url = mirror://sourceforge/meshlab/MeshLabSrc_AllInc_v123a.tgz;
+    sha256 = "09w42q0x1yjr7l9ng952lic7vkb1arsvqg1fld5s297zwzfmsl9v";
   };
 
-  srcGlew151 = fetchurl {
-    url = mirror://sourceforge/glew/glew-1.5.1-src.tgz;
-    sha256 = "02n1p6s6sia92fgng9iq0kqq890rga8d8g0y34mc6qxmbh43vrl9";
-  };
-
-  srcQHull20031 = fetchurl {
-    url = http://www.qhull.org/download/qhull-2003.1.zip;
-    sha256 = "07mh371i6xs691qz6wwzkqk9h0d2dkih2q818is2b041w1l79b46";
-  };
-
-
-  patchPhase = ''
-    cd meshlab/src
-    mkdir external
-    pushd external
-    tar xf ${srcGlew151}
-    mv glew glew-1.5.1
-    unzip ${srcQHull20031}
-    popd
-  '';
+  # I don't know why I need this; without this, the rpath set at the beginning of the
+  # buildPhase gets removed from the 'meshlab' binary
+  dontPatchELF = true;
 
   buildPhase = ''
-    pwd
+    export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
+    cd meshlab/src
+    pushd external
+    qmake -recursive external.pro
+    make
+    popd
     qmake -recursive meshlabv12.pro
     make
   '';
 
   installPhase = ''
-    ensureDir $out/opt/meshlab $out/bin
-    pushd meshlab
-    cp -R meshlab plugins shaders* textures images $out/opt/meshlab
+    ensureDir $out/opt/meshlab $out/bin $out/lib
+    pushd distrib
+    cp -R * $out/opt/meshlab
     popd
     ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
   '';
 
-  buildInputs = [ qt bzip2 lib3ds levmar muparser unzip ];
+  buildInputs = [ qt unzip ];
 
   meta = {
     description = "System for the processing and editing of unstructured 3D triangular meshes";
