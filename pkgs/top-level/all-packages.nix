@@ -3674,6 +3674,11 @@ let
     inherit (xlibs) libX11 xf86vidmodeproto libXmu libXxf86vm;
   };
 
+  clapack = import ../development/libraries/clapack {
+    inherit fetchurl cmake;
+    stdenv = stdenv2;
+  };
+
   classads = import ../development/libraries/classads {
     inherit fetchurl stdenv;
   };
