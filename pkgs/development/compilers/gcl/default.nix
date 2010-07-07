@@ -12,7 +12,7 @@ assert a.stdenv ? gcc ;
 assert a.stdenv.gcc ? gcc ;
 assert a.stdenv.gcc ? libc ;
 assert a.stdenv.gcc.gcc != null ;
-assert a.stdenv.gcc.glibc != null ;
+assert a.stdenv.gcc.libc != null ;
 
 rec {
   src = a.fetchcvs {
