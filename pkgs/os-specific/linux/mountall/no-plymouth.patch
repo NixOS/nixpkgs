@@ -12,7 +12,7 @@ diff -ru -x '*~' mountall-2.15-orig/configure.ac mountall-2.15/configure.ac
  
 diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
 --- mountall-2.15-orig/src/mountall.c	2010-05-09 01:42:24.000000000 +0200
-+++ mountall-2.15/src/mountall.c	2010-06-07 13:04:19.000000000 +0200
++++ mountall-2.15/src/mountall.c	2010-07-07 14:40:47.000000000 +0200
 @@ -64,8 +64,10 @@
  #include <nih-dbus/dbus_proxy.h>
  #include <nih-dbus/errors.h>
@@ -80,7 +80,22 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  /**
   * plymouth_error:
-@@ -1475,7 +1485,8 @@
+@@ -1208,11 +1218,12 @@
+ 			nih_debug ("%s is root filesystem", MOUNT_NAME (mnt));
+ 			tag = TAG_LOCAL;
+ 		} else if (is_remote (mnt)) {
+-			if ((! strcmp (mnt->mountpoint, "/usr"))
++			if ((! has_option (mnt, "nobootwait", FALSE)) && (
++                            (! strcmp (mnt->mountpoint, "/usr"))
+ 			    || (! strcmp (mnt->mountpoint, "/var"))
+ 			    || (! strncmp (mnt->mountpoint, "/usr/", 5))
+ 			    || (! strncmp (mnt->mountpoint, "/var/", 5))
+-			    || (has_option (mnt, "bootwait", FALSE)))
++			    || (has_option (mnt, "bootwait", FALSE))))
+ 			{
+ 				tag = TAG_REMOTE;
+ 			} else {
+@@ -1475,7 +1486,8 @@
  	/* Enforce local only after virtual filesystems triggered */
  	if ((! local_triggered)
  	    && virtual_triggered
@@ -90,7 +105,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		nih_info (_("%s finished"), "local");
  		emit_event ("local-filesystems", NULL);
  		local_triggered = TRUE;
-@@ -1484,7 +1495,8 @@
+@@ -1484,7 +1496,8 @@
  	/* Enforce remote only after virtual filesystems triggrered */
  	if ((! remote_triggered)
  	    && virtual_triggered
@@ -100,7 +115,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		nih_info (_("%s finished"), "remote");
  		emit_event ("remote-filesystems", NULL);
  		remote_triggered = TRUE;
-@@ -1494,7 +1506,9 @@
+@@ -1494,7 +1507,9 @@
  	if ((! filesystem_triggered)
  	    && virtual_triggered
  	    && local_triggered
@@ -111,7 +126,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		nih_info (_("All filesystems mounted"));
  		emit_event ("filesystem", NULL);
  		filesystem_triggered = TRUE;
-@@ -1508,9 +1522,9 @@
+@@ -1508,9 +1523,9 @@
  		swap_triggered = TRUE;
  	}
  
@@ -124,7 +139,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		   num_virtual_mounted, num_virtual,
  		   num_swap_mounted, num_swap);
  }
-@@ -2203,12 +2217,14 @@
+@@ -2203,12 +2218,14 @@
  	if (no_events)
  		return;
  
@@ -140,7 +155,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	env = NIH_MUST (nih_str_array_new (NULL));
  
  	if (mnt) {
-@@ -2787,6 +2803,7 @@
+@@ -2787,6 +2804,7 @@
  int
  plymouth_connect (void)
  {
@@ -148,7 +163,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* If we were already connected, just re-use that connection */
  	if (ply_boot_client)
  		return TRUE;
-@@ -2813,8 +2830,13 @@
+@@ -2813,8 +2831,13 @@
  	nih_info (_("Connected to Plymouth"));
  
  	return TRUE;
@@ -162,7 +177,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  void
  plymouth_disconnected (void *             user_data,
  		       ply_boot_client_t *client)
-@@ -2827,6 +2849,7 @@
+@@ -2827,6 +2850,7 @@
  	ply_boot_client_free (ply_boot_client);
  	ply_boot_client = NULL;
  }
@@ -170,7 +185,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  
  void
-@@ -2837,6 +2860,7 @@
+@@ -2837,6 +2861,7 @@
  
  	nih_assert (mnt != NULL);
  
@@ -178,7 +193,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* No Plymouth => no progress information */
  	if (! plymouth_connect ())
  		return;
-@@ -2866,6 +2890,7 @@
+@@ -2866,6 +2891,7 @@
  				       plymouth_response,
  				       plymouth_failed,
  				       NULL);
@@ -186,7 +201,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  }
  
  void
-@@ -2881,20 +2906,31 @@
+@@ -2881,20 +2907,31 @@
  		NIH_LIST_FOREACH (mounts, iter) {
  			Mount *mnt = (Mount *)iter;
  
@@ -220,7 +235,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* If we're already displaying messages, don't change them unless
  	 * the message is no longer valid for that mount point; otherwise
  	 * clear the message.
-@@ -3005,8 +3041,10 @@
+@@ -3005,8 +3042,10 @@
  							   plymouth_answer,
  							   plymouth_failed,
  							   NULL);
@@ -231,7 +246,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  void
  plymouth_response (void *             user_data,
  		   ply_boot_client_t *client)
-@@ -3125,7 +3163,7 @@
+@@ -3125,7 +3164,7 @@
  		break;
  	}
  }
@@ -240,7 +255,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  
  /**
-@@ -3211,6 +3249,7 @@
+@@ -3211,6 +3250,7 @@
  				    (NihIoWatcher)udev_monitor_watcher,
  				    udev_monitor));
  
@@ -248,7 +263,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* Initialise a Plymouth event loop; this is an epoll instance that
  	 * we can poll within our own main loop and call out to when needs
  	 * be.
-@@ -3224,6 +3263,7 @@
+@@ -3224,6 +3264,7 @@
  
  	/* Attempt an early connection to Plymouth */
  	plymouth_connect ();
@@ -256,7 +271,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  	mounts = NIH_MUST (nih_list_new (NULL));
  
-@@ -3236,7 +3276,9 @@
+@@ -3236,7 +3277,9 @@
  	 * from /etc/fstab and /proc/self/mountinfo to find out what else
  	 * we need to do.
  	 */
@@ -266,7 +281,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	parse_fstab (_PATH_MNTTAB);
  	parse_mountinfo ();
  
-@@ -3338,10 +3380,12 @@
+@@ -3338,10 +3381,12 @@
  	/* Flush the D-Bus connection to ensure all messages are sent */
  	dbus_connection_flush (connection);
  
