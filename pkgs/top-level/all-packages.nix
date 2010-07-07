@@ -5334,6 +5334,10 @@ let
     inherit fetchurl stdenv SDL;
   };
 
+  SDL_sound = import ../development/libraries/SDL_sound {
+    inherit fetchurl stdenv SDL libvorbis flac libmikmod;
+  };
+
   SDL_ttf = import ../development/libraries/SDL_ttf {
     inherit fetchurl stdenv SDL freetype;
   };
@@ -9243,6 +9247,10 @@ let
 
   gemrb = import ../games/gemrb {
     inherit fetchurl stdenv SDL openal freealut zlib libpng python;
+  };
+
+  gltron = import ../games/gltron {
+    inherit fetchurl stdenv mesa SDL zlib libpng libmikmod libvorbis SDL_sound;
   };
 
   gnuchess = builderDefsPackage (import ../games/gnuchess) {
