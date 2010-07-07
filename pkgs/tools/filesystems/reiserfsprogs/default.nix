@@ -1,18 +1,24 @@
-args: with args;
+{ stdenv, fetchurl, libuuid }:
 
-stdenv.mkDerivation {
-  name = "reiserfsprogs-3.6.19-patched";
+stdenv.mkDerivation rec {
+  name = "reiserfsprogs-3.6.21";
 
   src = fetchurl {
-    url = http://chichkin_i.zelnet.ru/namesys/reiserfsprogs-3.6.19.tar.gz;
-    sha256 = "1gv8gr0l5l2j52540y2wj9c9h7fn0r3vabykf95748ydmr9jr1n0";
+    url = "http://www.kernel.org/pub/linux/utils/fs/reiserfs/${name}.tar.bz2";
+    sha256 = "19mqzhh6jsf2gh8zr5scqi9pyk1fwivrxncd11rqnp2148c58jam";
   };
 
-  patches = [./headers-fix.patch ./verbose-flag-ignore-for-compatibility.patch ];
+  buildInputs = [ libuuid ];
+
+  postInstall =
+    ''
+      ln -s reiserfsck $out/sbin/fsck.reiserfs
+      ln -s mkreiserfs $out/sbin/mkfs.reiserfs
+    '';
 
   meta = {
     homepage = http://www.namesys.com/;
-    description = "Reiserfs utilities";
+    description = "ReiserFS utilities";
     license = "GPL-2";
   };
 }

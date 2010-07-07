@@ -1555,7 +1555,7 @@ let
   };
 
   reiserfsprogs = import ../tools/filesystems/reiserfsprogs {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libuuid;
   };
 
   relfs = composedArgsAndFun (import ../tools/filesystems/relfs) {
