@@ -168,7 +168,7 @@ checkFS() {
         return 0
     fi
 
-    FSTAB_FILE="/etc/mtab" fsck -V -v -C -a "$device"
+    FSTAB_FILE="/etc/mtab" fsck -V -C -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then
