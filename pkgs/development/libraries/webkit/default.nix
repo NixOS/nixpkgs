@@ -26,9 +26,7 @@ rec {
     "--enable-web-sockets"
     "--enable-indexeddb"
     "--enable-image-resizer"
-    
-    # https://bugs.webkit.org/show_bug.cgi?id=40773
-    # "--enable-mathml"
+    "--enable-mathml"
 
     # "--enable-blob-slice"
     
@@ -43,7 +41,7 @@ rec {
     ];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["setVars" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   setVars = fullDepEntry (''
