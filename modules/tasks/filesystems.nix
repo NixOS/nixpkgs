@@ -155,7 +155,13 @@ in
       };
 
     jobs.mountall =
-      { startOn = "started udev";
+      { startOn = "started udev"
+          # !!! The `started nfs-kernel-statd' condition shouldn't be
+          # here.  The `nfs-kernel-statd' job should have a `starting
+          # mountall' condition.  However, that doesn't work if
+          # `mountall' is restarted due to an apparent bug in Upstart:
+          # `mountall' hangs forever in the `start/starting' state.
+          + optionalString config.services.nfsKernel.client.enable " and started nfs-kernel-statd";
 
         task = true;
         

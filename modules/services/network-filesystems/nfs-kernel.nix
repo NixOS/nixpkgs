@@ -161,7 +161,7 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "${if cfg.server.enable then "starting nfs-kernel-nfsd and " else ""} started portmap";
+            startOn = "started portmap" + optionalString cfg.server.enable " and starting nfs-kernel-nfsd";
             stopOn = "never";
 
             preStart =
@@ -174,21 +174,9 @@ in
             daemonType = "fork";
 
             exec = "${pkgs.nfsUtils}/sbin/rpc.statd --no-notify";
-          };
-        }
-      
-      // optionalAttrs (cfg.client.enable || cfg.server.enable)
-        { nfs_kernel_sm_notify = 
-          { name = "nfs-kernel-sm-notify";
 
-            description = "Kernel NFS server - Reboot notification";
-
-            startOn = "started nfs-kernel-statd"
-              + (if cfg.client.enable then " and starting mountall" else "");
-
-            task = true;
-
-            exec = "${pkgs.nfsUtils}/sbin/sm-notify -d";
+            postStart = optionalString cfg.client.enable
+              "${pkgs.nfsUtils}/sbin/sm-notify -d";
           };
         };
       
