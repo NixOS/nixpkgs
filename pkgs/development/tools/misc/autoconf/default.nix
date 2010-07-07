@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.66";
+  name = "autoconf-2.65";
 
   src = fetchurl {
     url = "mirror://gnu/autoconf/${name}.tar.bz2";
-    sha256 = "167k2x5j2f5dh808ywdf2f4kcvic8za62wklpqb2y59f355wpw17";
+    sha256 = "0sqkh2xirg3yq7774aqmbi2nbx8rv3yf6v2xzwlz5ypkax0984fv";
   };
 
   buildInputs = [ m4 perl ];
@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.all;
   };
 }
