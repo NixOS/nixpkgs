@@ -64,7 +64,7 @@ let
       description = "Samba Service daemon ${appName}";
 
       startOn = "started samba";
-      stopOn = "stopping samba-control";
+      stopOn = "stopping samba";
 
       exec = "${samba}/sbin/${appName} ${args}";
     };
@@ -84,9 +84,8 @@ in
       enable = mkOption {
         default = false;
         description = "
-          Whether to enable the samba server. (to communicate with, and provide windows shares)
-          use start / stop samba-control to start/stop all daemons.
-          smbd and nmbd are not shutdown correctly yet. so just pkill them and restart those jobs.
+          Whether to enable Samba, which provides file and print
+          services to Windows clients through the SMB/CIFS protocol.
         ";
       };
 
@@ -146,15 +145,15 @@ in
 
       defaultShare = {
         enable = mkOption {
-	  description = "Whether to share /home/smbd as 'default'";
+	  description = "Whether to share /home/smbd as 'default'.";
 	  default = false;
 	};
         writeable = mkOption {
-	  description = "Whether to allow write access to default share";
+	  description = "Whether to allow write access to default share.";
 	  default = false;
 	};
         guest = mkOption {
-	  description = "Whether to allow guest access to default share";
+	  description = "Whether to allow guest access to default share.";
 	  default = true;
 	};
       };
