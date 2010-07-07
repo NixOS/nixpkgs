@@ -7,6 +7,13 @@ let
     zlib which
   ]; 
 in
+
+assert a.stdenv ? gcc ;
+assert a.stdenv.gcc ? gcc ;
+assert a.stdenv.gcc ? libc ;
+assert a.stdenv.gcc.gcc != null ;
+assert a.stdenv.gcc.glibc != null ;
+
 rec {
   src = a.fetchcvs {
     cvsRoot = ":pserver:anonymous@cvs.sv.gnu.org:/sources/gcl";
@@ -19,7 +26,6 @@ rec {
   name = "gcl-2.6.8pre";
   inherit buildInputs;
   configureFlags = [
-    "--enable-xgcl=yes"
     "--enable-ansi"
   ];
 
