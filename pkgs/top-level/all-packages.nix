@@ -9191,6 +9191,10 @@ let
     inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_ttf guile gettext;
   };
 
+  blackshades = import ../games/blackshades {
+    inherit fetchsvn stdenv libvorbis SDL mesa openal freealut SDL_image;
+  };
+
   bsdgames = import ../games/bsdgames {
     inherit fetchurl stdenv ncurses openssl flex bison miscfiles;
   };
