@@ -36,7 +36,7 @@ let
     # The variables to substitute:
     
     inherit reposDir dbDir logDir distsDir backupsDir tmpDir
-      urlPrefix adminAddr fsType subversion postCommitHook;
+      urlPrefix adminAddr fsType subversion postCommitHook mailer;
     inherit (config) notificationSender userCreationDomain;
     orgUrl = config.organisation.url;
     orgLogoUrl = config.organisation.logo;
@@ -46,7 +46,7 @@ let
 
     sendmail = "${pkgs.ssmtp}/sbin/sendmail";
     
-    inherit (pkgs) libxslt enscript db4 coreutils bzip2;
+    inherit (pkgs) libxslt enscript db4 coreutils diffutils bzip2 python;
 
     inherit (serverInfo) canonicalName;
 
@@ -61,6 +61,8 @@ let
       pkgs.perlPackages.StringMkPasswd
     ];
 
+    pythonPath = "${subversion}/lib/${pkgs.python.libPrefix}/site-packages";
+
     # Do a syntax check on the generated file.
     postInstall = ''
       $perl -c -T $out/cgi-bin/repoman.pl
@@ -72,6 +74,14 @@ let
       fi
     '';
   };
+
+
+  # Extract the mailer script from the Subversion source distribution.
+  mailer = pkgs.runCommand "svn-mailer.py" { inherit (subversion) src; }
+    ''
+      unpackFile $src
+      cp subversion-*/tools/hook-scripts/mailer/mailer.py $out
+    '';
 
   
   # Build our custom authentication modules.
