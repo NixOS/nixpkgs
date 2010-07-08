@@ -91,14 +91,20 @@ let
         description = ''
           The packages you want in the boot environment.
         '';
+        
         apply = list: pkgs.buildEnv {
           name = "system-path";
           paths = list;
-
           inherit (cfg) pathsToLink;
-
           ignoreCollisions = true;
+          postBuild =
+            ''
+              if [ -x $out/bin/update-mime-database -a -d $out/share/mime/packages ]; then
+                  $out/bin/update-mime-database -V $out/share/mime
+              fi
+            '';
         };
+        
       };
 
     };
