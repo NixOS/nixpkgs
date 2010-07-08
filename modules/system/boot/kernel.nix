@@ -121,7 +121,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
     boot.kernelParams =
-      [ "splash=verbose"] ++ 
+      [ "splash=verbose" ] ++ 
       optional config.boot.vesa "vga=0x317";
       
     boot.kernelModules = [ "loop" ];

@@ -31,7 +31,7 @@ in
     networking.WLANInterface = mkOption {
       default = "wlan0";
       description = ''
-        The interface wpa_supplicant will use, if enableWLAN is enabled.
+        The interface wpa_supplicant will use, if enableWLAN is set.
       '';
     };
 
