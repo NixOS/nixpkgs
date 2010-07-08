@@ -9198,6 +9198,10 @@ let
     inherit fetchsvn stdenv libvorbis SDL mesa openal freealut SDL_image;
   };
 
+  blackshadeselite = import ../games/blackshadeselite {
+    inherit fetchsvn stdenv libvorbis SDL mesa openal freealut SDL_image popt;
+  };
+
   bsdgames = import ../games/bsdgames {
     inherit fetchurl stdenv ncurses openssl flex bison miscfiles;
   };
