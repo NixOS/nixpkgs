@@ -143,12 +143,6 @@ foreach my $relName (sort keys %symlinks) {
 }
 
 
-if (-x "$out/bin/update-mime-database" && -d "$out/share/mime/packages") {
-    system("$out/bin/update-mime-database -V $out/share/mime") == 0
-        or die "Can't update mime-database";
-}
-
-
 print STDERR "created $nrLinks symlinks in user environment\n";
 
 
