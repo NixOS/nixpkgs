@@ -5,6 +5,7 @@
   # option allows them to be enabled.  See
   # http://www.freetype.org/patents.html.
   useEncumberedCode ? false
+  , ...
 }:
 
 stdenv.mkDerivation (rec {

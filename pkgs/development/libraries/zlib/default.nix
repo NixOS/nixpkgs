@@ -1,4 +1,4 @@
-{stdenv, fetchurl, static ? false}:
+{stdenv, fetchurl, static ? false, ...}:
 
 stdenv.mkDerivation {
   name = "zlib-1.2.3";

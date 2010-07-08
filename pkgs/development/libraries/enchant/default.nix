@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, aspell, pkgconfig, glib }:
+{ stdenv, fetchurl, aspell, pkgconfig, glib,
+  ...}:
 
 stdenv.mkDerivation rec {
   name = "enchant-1.3.0";

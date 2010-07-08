@@ -3,6 +3,7 @@
 , perlXMLParser, gettext, zlib, gperf, consolekit, policykit
 , libsmbios, dmidecode, udev, utillinuxng, pmutils, usbutils
 , eject
+, ...
 }:
 
 assert stdenv ? glibc;

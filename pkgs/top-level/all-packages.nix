@@ -5443,7 +5443,7 @@ let
    inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
   };
 
-  webkit = builderDefsPackage (import ../development/libraries/webkit) {
+  webkit = ((builderDefsPackage ../development/libraries/webkit {
     inherit (gnome28) gtkdoc libsoup;
     inherit (gtkLibs) gtk atk pango glib;
     inherit freetype fontconfig gettext gperf curl
@@ -5455,7 +5455,7 @@ let
       gstPluginsGood;
     flex = flex2535;
     inherit (xlibs) libXt;
-  };
+  }).deepOverride {libsoup = gnome28.libsoup_2_31;});
 
   wvstreams = import ../development/libraries/wvstreams {
     inherit stdenv fetchurl qt4 dbus zlib openssl readline perl;
@@ -8874,7 +8874,7 @@ let
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libX11;
-    libsoup = gnome28.libsoup;
+    libsoup = gnome28.libsoup_2_31;
   };
 
   valknut = import ../applications/networking/p2p/valknut {

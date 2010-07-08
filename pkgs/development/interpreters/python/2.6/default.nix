@@ -11,6 +11,7 @@
 , arch ? null
 , sw_vers ? null
 , ncurses ? null
+, ...
 }:
 
 assert zlibSupport -> zlib != null;

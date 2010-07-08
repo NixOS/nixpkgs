@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       pkgconfig libdaemon dbus perl perlXMLParser glib expat
       gettext intltool
     ]
-    ++ lib.optional qt4Support qt4;
+    ++ (lib.optional qt4Support qt4);
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-gtk" "--disable-mono"

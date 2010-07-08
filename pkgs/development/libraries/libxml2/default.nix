@@ -1,4 +1,5 @@
-{stdenv, fetchurl, zlib, python ? null, pythonSupport ? true}:
+{stdenv, fetchurl, zlib, python ? null, pythonSupport ? true
+  , ...}:
 
 assert pythonSupport -> python != null;
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, ...}:
 
 stdenv.mkDerivation {
   name = "gnum4-1.4.13";

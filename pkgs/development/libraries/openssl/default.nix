@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, ...}:
 
 let
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]

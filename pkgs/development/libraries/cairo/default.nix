@@ -4,6 +4,7 @@
 , xcbSupport ? false
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype
 , zlib, libpng, pixman, libxcb ? null, xcbutil ? null
+, ...
 }:
 
 assert postscriptSupport -> zlib != null;

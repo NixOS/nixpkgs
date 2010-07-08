@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, 
-  libX11, polkit, expat }:
+  libX11, polkit, expat
+  , ...}:
 
 stdenv.mkDerivation rec {
   name = "consolekit-0.4.1";

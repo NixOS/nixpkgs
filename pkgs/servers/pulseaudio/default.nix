@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, hal, avahi
 , gconf, liboil, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
-, libcap, alsaLib, libsamplerate, libsndfile, speex }:
+, libcap, alsaLib, libsamplerate, libsndfile, speex
+, ...}:
 
 stdenv.mkDerivation rec {
   name = "pulseaudio-0.9.21";
