@@ -53,10 +53,9 @@ rec {
     { override = newArgs:
         makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
       deepOverride = newArgs:
-        makeOverridable f ((lib.mapAttrs (deepOverrider newArgs) origArgs) // newArgs);
+        makeOverridable f (lib.overrideExisting (lib.mapAttrs (deepOverrider newArgs) origArgs) newArgs);
       origArgs = origArgs;
     };
-
 
   deepOverrider = newArgs: name: x: if builtins.isAttrs x then (
     if x ? deepOverride then (x.deepOverride newArgs) else
