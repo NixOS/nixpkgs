@@ -1,0 +1,12 @@
+diff --git a/libsoup/soup-gnutls.c b/libsoup/soup-gnutls.c
+--- a/libsoup/soup-gnutls.c
++++ b/libsoup/soup-gnutls.c
+@@ -477,7 +477,7 @@ soup_ssl_wrap_iochannel (GIOChannel *sock, gboolean non_blocking,
+		goto THROW_CREATE_ERROR;
+
+	/* See http://bugzilla.gnome.org/show_bug.cgi?id=581342 */
+-	if (gnutls_priority_set_direct (session, "NORMAL:!VERS-TLS1.1:!VERS-TLS1.0", NULL) != 0)
++	if (gnutls_priority_set_direct (session, "NORMAL:!VERS-TLS1.2:!VERS-TLS1.1:!VERS-TLS1.0", NULL) != 0)
+		goto THROW_CREATE_ERROR;
+
+	if (gnutls_credentials_set (session, GNUTLS_CRD_CERTIFICATE,
