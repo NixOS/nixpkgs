@@ -1,5 +1,4 @@
-{ stdenv, fetchurl
-  , ...}:
+{ stdenv, fetchurl }:
 
 let 
   

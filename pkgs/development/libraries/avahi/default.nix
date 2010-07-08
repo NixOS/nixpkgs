@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
 , expat, gettext, intltool, glib, gtk, qt4 ? null, lib
-, qt4Support ? false, ...}:
+, qt4Support ? false }:
 
 assert qt4Support -> qt4 != null;
 

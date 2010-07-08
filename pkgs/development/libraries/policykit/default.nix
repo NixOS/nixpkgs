@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, expat, pam
-, intltool, gettext, libxslt, docbook_xsl, ... }:
+, intltool, gettext, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "policykit-0.9";
