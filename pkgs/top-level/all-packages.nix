@@ -2677,6 +2677,10 @@ let
     inherit fetchurl stdenv perl texinfo;
   };
 
+  vala = import ../development/compilers/vala {
+    inherit stdenv fetchurl yacc flex glib pkgconfig;
+  };
+
   visualcpp = (import ../development/compilers/visual-c++ {
     inherit fetchurl stdenv cabextract;
   });
