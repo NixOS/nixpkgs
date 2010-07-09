@@ -6373,6 +6373,10 @@ let
     inherit fetchurl stdenv bison flex autoconf automake;
   };
 
+  libcroup = import ../os-specific/linux/libcg {
+    inherit stdenv fetchurl pam yacc flex;
+  };
+
   linuxHeaders = linuxHeaders_2_6_28;
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
