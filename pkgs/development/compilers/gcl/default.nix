@@ -4,7 +4,7 @@ let
     mpfr m4 binutils emacs gmp
     libX11 xproto inputproto libXi 
     libXext xextproto libXt libXaw libXmu
-    zlib which
+    zlib which texinfo texLive
   ]; 
 in
 
@@ -40,7 +40,7 @@ rec {
     sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
     sed -re "s@if test -d /proc/self @if false @" -i configure
     sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.gcc.gcc}/include -I${a.stdenv.gcc.libc}/include ^g' -i makefile
-  '') ["minInit" "doUnpack"];
+  '') ["minInit" "doUnpack" "addInputs"];
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doUnpack" "preBuild" 
