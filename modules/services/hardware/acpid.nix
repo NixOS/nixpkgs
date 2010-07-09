@@ -97,7 +97,7 @@ in
     jobs.acpid =
       { description = "ACPI daemon";
 
-        startOn = "started udev";
+        startOn = "stopped udevtrigger and started syslogd";
 
         exec = "${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}";
       };
