@@ -2339,10 +2339,15 @@ let
 
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs zlib which 
-      gmp;
+      gmp texinfo;
     inherit (xlibs) libX11 xproto inputproto libXi
       libXext xextproto libXt libXaw libXmu;
     inherit stdenv;
+    texLive = texLiveAggregationFun {
+      paths = [
+        texLive texLiveExtra
+      ];
+    };
   };
 
   # GHC
