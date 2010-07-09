@@ -8197,8 +8197,9 @@ let
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
       RpcXML XMLSimple PerlMagick;
-    git = if getPkgConfig "ikiwiki" "git" true then git else null;
-    monotone = if getPkgConfig "ikiwiki" "monotone" false then monotone else null;
+    gitSupport = getPkgConfig "ikiwiki" "git" false;
+    monotoneSupport = getPkgConfig "ikiwiki" "monotone" false;
+    inherit git monotone;
     extraUtils = [];
   };
 

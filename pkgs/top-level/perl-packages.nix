@@ -2186,6 +2186,7 @@ rec {
       sha256 = "a023649603240e7a19fc52a8316a41c854639c0600058ea4d1e436fe1b1b7734";
     };
     propagatedBuildInputs = [LWP XMLLibXML XMLParser];
+    doCheck = false;
   };
 
   ReturnValue = buildPerlPackage {
@@ -2814,11 +2815,12 @@ rec {
   };
 
   XMLLibXML = buildPerlPackage {
-    name = "XML-LibXML-1.66";
+    name = "XML-LibXML-1.70";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PA/PAJAS/XML-LibXML-1.66.tar.gz;
-      sha256 = "1a0bdiv3px6igxnbbjq10064iahm8f5i310p4y05w6zn5d51awyl";
+      url = mirror://cpan/authors/id/P/PA/PAJAS/XML-LibXML-1.70.tar.gz;
+      sha256 = "181viglnw93kz9w3bvs8dqvx4xnqvf448vnwam8dia9bfw3czrjk";
     };
+    SKIP_SAX_INSTALL=1;
     buildInputs = [pkgs.libxml2];
     propagatedBuildInputs = [XMLLibXMLCommon XMLSAX];
   };
