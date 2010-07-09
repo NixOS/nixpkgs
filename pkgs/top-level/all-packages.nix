@@ -6893,6 +6893,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  rt2870fw = import ../os-specific/linux/firmware/rt2870 {
+    inherit fetchurl stdenv unzip;
+  };
+
   rt73fw = import ../os-specific/linux/firmware/rt73 {
     inherit fetchurl stdenv unzip;
   };
