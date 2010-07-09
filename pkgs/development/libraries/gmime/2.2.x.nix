@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "gmime-2.4.17";
+  name = "gmime-2.2.26";
   
   src = fetchurl {
-    url = "mirror://gnome/sources/gmime/2.4/${name}.tar.gz";
-    sha256 = "1l1pbk0yrr7zwl90aabdhw0f9i4m6ragsfyk5qwg0hzk21abz9wd";
+    url = "mirror://gnome/sources/gmime/2.2/${name}.tar.gz";
+    sha256 = "16inhq6symym9n71kxcndjwrxs2xrz63idvy64yc486wlg54aqfc";
   };
   
   buildInputs = [ pkgconfig glib zlib ];

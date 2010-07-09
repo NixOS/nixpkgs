@@ -4094,6 +4094,10 @@ let
     inherit fetchurl stdenv pkgconfig zlib glib;
   };
 
+  gmime_2_2 = import ../development/libraries/gmime/2.2.x.nix {
+    inherit fetchurl stdenv pkgconfig zlib glib;
+  };
+
   gmm = import ../development/libraries/gmm {
     inherit fetchurl stdenv;
   };
@@ -5680,6 +5684,7 @@ let
 
   perlcritic = perlPackages.PerlCritic;
 
+  
   ### DEVELOPMENT / PYTHON MODULES
 
   buildPythonPackage =
@@ -8508,8 +8513,9 @@ let
   };
 
   pan = import ../applications/networking/newsreaders/pan {
-    inherit fetchurl stdenv pkgconfig perl pcre gmime gettext;
+    inherit fetchurl stdenv pkgconfig perl pcre gettext;
     inherit (gtkLibs) gtk;
+    gmime = gmime_2_2;
     spellChecking = false;
   };
 
