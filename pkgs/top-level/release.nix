@@ -216,6 +216,7 @@ with (import ./release-lib.nix);
   nfsUtils = linux;
   nix = all;
   nixUnstable = all;
+  nixSqlite = all;
   nmap = linux;
   nss_ldap = linux;
   nssmdns = linux;
