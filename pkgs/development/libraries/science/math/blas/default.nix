@@ -24,7 +24,17 @@ stdenv.mkDerivation {
     echo >>make.inc "BLASLIB = libblas.so.3.0.3"
   '';
 
+  buildPhase = ''
+    make
+    echo >>make.inc "ARCHFLAGS = "
+    echo >>make.inc "BLASLIB = libblas.a"
+    echo >>make.inc "ARCH = ar rcs"
+    echo >>make.inc "RANLIB = ranlib"
+    make
+  '';
+ 
   installPhase = ''
+    install -D -m755 libblas.a "$out/lib/libblas.a"
     install -D -m755 libblas.so.3.0.3 "$out/lib/libblas.so.3.0.3"
     ln -s libblas.so.3.0.3 "$out/lib/libblas.so.3"
     ln -s libblas.so.3.0.3 "$out/lib/libblas.so"
