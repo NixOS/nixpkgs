@@ -1529,7 +1529,7 @@ let
   };
 
   openmpi = import ../development/libraries/openmpi {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv gfortran;
   };
 
   qdu = import ../tools/misc/qdu {
