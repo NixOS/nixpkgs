@@ -4670,6 +4670,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  libjpeg_turbo = makeOverridable (import ../development/libraries/libjpeg-turbo) {
+    inherit fetchurl stdenv nasm;
+  };
+
   libjpeg62 = makeOverridable (import ../development/libraries/libjpeg/62.nix) {
     inherit fetchurl stdenv;
     libtool = libtool_1_5;
@@ -8942,6 +8946,11 @@ let
 
     # optional features by flags
     flags = [ "X11" ]; # only flag "X11" by now
+  };
+
+  virtualgl =  import ../tools/X11/virtualgl {
+    inherit stdenv fetchurl mesa openssl libjpeg_turbo;
+    inherit (xlibs) libX11 libXext;
   };
 
   vlc = import ../applications/video/vlc {

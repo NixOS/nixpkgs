@@ -19,10 +19,16 @@ stdenv.mkDerivation {
   cmakeFlags = ''
     -DPATH64_ENABLE_HUGEPAGES=ON 
     -DPATH64_ENABLE_MATHLIBS=ON -DPATH64_ENABLE_OPENMP=ON 
-    -DPATH64_ENABLE_PSCRUNTIME=OFF -DPSC_CRT_PATH=/usr/lib64 
+    -DPATH64_ENABLE_PSCRUNTIME=OFF
     -DPATH64_ENABLE_PROFILING=OFF -DPATH64_ENABLE_TARGETS=x8664 
     -DCMAKE_BUILD_TYPE=Debug -DPATH64_ENABLE_FORTRAN=OFF
     -DPSC_CRT_PATH=${stdenv.glibc}/lib
+  '';
+
+  makeFlags = "-j4";
+
+  installPhase = ''
+    exit 1; 
   '';
 
   buildInputs = [ perl flex bison gmp mpfr cmake ];
