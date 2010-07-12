@@ -36,7 +36,7 @@ in
             source /etc/profile
             cd /tmp
             echo "connecting to host..." > /dev/ttyS0
-            ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0 || poweroff -f
+            ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0 # || poweroff -f
           '';
 
         respawn = false;
