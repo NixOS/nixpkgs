@@ -145,7 +145,7 @@ in
 
             description = "Kernel NFS server - mount daemon";
 
-            startOn = "started portmap";
+            startOn = "started portmap and started nfs-kernel-exports";
             stopOn = "stopped nfs-kernel-nfsd";
 
             daemonType = "fork";
