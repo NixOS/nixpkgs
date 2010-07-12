@@ -170,6 +170,7 @@ in
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
             export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
+            mv /etc/hosts /etc/hosts_
             ${pkgs.mountall}/sbin/mountall
           '';
       };
@@ -177,7 +178,7 @@ in
     # The `mount-failed' event is emitted synchronously, but we don't
     # want `mountall' to wait for the emergency shell.  So use this
     # intermediate job to make the event asynchronous.
-    jobs.mountFailed =
+    jobs.mount_failed =
       { name = "mount-failed";
         task = true;
         startOn = "mount-failed";
@@ -189,7 +190,20 @@ in
           '';
       };
 
-    jobs.emergencyShell =
+    # On an `ip-up' event, notify mountall so that it retries mounting
+    # remote filesystems.
+    jobs.mountall_ip_up =
+      {
+        name = "mountall-ip-up";
+        task = true;
+        startOn = "ip-up";
+        script =
+          ''
+            ${pkgs.procps}/bin/pkill -USR1 -u root mountall || true
+          '';
+      };
+
+    jobs.emergency_shell =
       { name = "emergency-shell";
 
         task = true;
