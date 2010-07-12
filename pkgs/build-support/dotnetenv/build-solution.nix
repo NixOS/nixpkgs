@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     fi
     
     ensureDir $out
-    MSBuild.exe ${slnFile} /nologo /t:${targets} /p:IntermediateOutputPath=$(cygpath --windows $out)\\ /p:OutputPath=$(cygpath --windows $out)\\ /verbosity:${verbosity} ${options}
+    MSBuild.exe ${toString slnFile} /nologo /t:${targets} /p:IntermediateOutputPath=$(cygpath --windows $out)\\ /p:OutputPath=$(cygpath --windows $out)\\ /verbosity:${verbosity} ${options}
     
     # Create references to runtime dependencies
     # !!! Should be more efficient (e.g. symlinking)
