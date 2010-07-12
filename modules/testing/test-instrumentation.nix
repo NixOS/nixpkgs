@@ -78,7 +78,7 @@ in
     services.syslogd.extraConfig = "*.* /dev/ttyS0";
 
     # Prevent tests from accessing the Internet.
-    networking.defaultGatewayte = mkOverride 150 {} "";
+    networking.defaultGateway = mkOverride 150 {} "";
     networking.nameservers = mkOverride 150 {} [ ];
 
     # Apply a patch to the kernel to increase the 15s CIFS timeout.
