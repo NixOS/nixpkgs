@@ -175,8 +175,7 @@ in
 
             exec = "${pkgs.nfsUtils}/sbin/rpc.statd --no-notify";
 
-            postStart = optionalString cfg.client.enable
-              "${pkgs.nfsUtils}/sbin/sm-notify -d";
+            postStart = "${pkgs.nfsUtils}/sbin/sm-notify -d";
           };
         };
       
