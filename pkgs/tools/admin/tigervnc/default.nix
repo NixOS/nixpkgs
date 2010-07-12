@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     sed -i -e 's,$(includedir)/pixman-1,${pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
   '';
 
+  # I don't know why I can't use in the script
+  # this:  ${concatStringsSep " " (map (f: "${f}") xorgserver.patches)}
   xorgPatches = xorgserver.patches;
 
   postBuild = ''
@@ -28,8 +30,6 @@ stdenv.mkDerivation {
     tar xf ${xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    # This below does not work and I don't know why:
-    #for a in ${concatStringsSep " " (map (f: "${f}") xorgserver.patches)}
     for a in $xorgPatches
     do
       patch -p1 < $a
