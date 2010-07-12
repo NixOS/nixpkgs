@@ -170,7 +170,6 @@ in
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
             export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
-            mv /etc/hosts /etc/hosts_
             ${pkgs.mountall}/sbin/mountall
           '';
       };
