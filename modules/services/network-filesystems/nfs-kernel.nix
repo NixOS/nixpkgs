@@ -96,7 +96,6 @@ in
             description = "Kernel NFS server";
 
             startOn = "started network-interfaces";
-            stopOn = "stopping network-interfaces";
 
             preStart =
               ''
@@ -131,7 +130,7 @@ in
 
             description = "Kernel NFS server";
 
-            startOn = "started nfs-kernel-exports and started portmap";
+            startOn = "started nfs-kernel-exports and started nfs-kernel-mountd and started nfs-kernel-statd and started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
             preStart = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
@@ -146,7 +145,7 @@ in
 
             description = "Kernel NFS server - mount daemon";
 
-            startOn = "starting nfs-kernel-nfsd and started portmap";
+            startOn = "started portmap";
             stopOn = "stopped nfs-kernel-nfsd";
 
             daemonType = "fork";
@@ -161,7 +160,7 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "started portmap" + optionalString cfg.server.enable " and starting nfs-kernel-nfsd";
+            startOn = "started portmap";
             stopOn = "never";
 
             preStart =
