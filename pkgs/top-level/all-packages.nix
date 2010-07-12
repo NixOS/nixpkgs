@@ -1817,8 +1817,8 @@ let
   };
 
   tigervnc = import ../tools/admin/tigervnc {
-    inherit fetchurl stdenv gettext;
-    inherit (xlibs) libX11 libXext libICE libXtst libXi libSM;
+    inherit fetchsvn stdenv gettext autoconf automake cvs libtool nasm;
+    inherit (xorg) libX11 libXext libICE libXtst libXi libSM xorgserver utilmacros pixman;
   };
 
   tightvnc = import ../tools/admin/tightvnc {
