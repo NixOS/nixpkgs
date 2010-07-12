@@ -1816,6 +1816,11 @@ let
     inherit fetchcvs stdenv autoconf automake libtool;
   };
 
+  tigervnc = import ../tools/admin/tigervnc {
+    inherit fetchurl stdenv gettext;
+    inherit (xlibs) libX11 libXext libICE libXtst libXi libSM;
+  };
+
   tightvnc = import ../tools/admin/tightvnc {
     inherit fetchurl stdenv x11 zlib libjpeg perl;
     inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth;
