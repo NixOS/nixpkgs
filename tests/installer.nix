@@ -285,10 +285,15 @@ in {
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary ext2 1M 30MB", # /boot
+              "udevadm settle",
               "parted /dev/vda -- mkpart extended 30M -1s", # extended partition
+              "udevadm settle",
               "parted /dev/vda -- mkpart logical 30M 1000M", # md0 (root), first device
+              "udevadm settle",
               "parted /dev/vda -- mkpart logical 1024M 2000M", # md0 (root), second device
+              "udevadm settle",
               "parted /dev/vda -- mkpart logical 2048M 2548M", # md1 (swap), first device
+              "udevadm settle",
               "parted /dev/vda -- mkpart logical 2560M 3060M", # md1 (swap), second device
               "udevadm settle",
               "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda5 /dev/vda6",
