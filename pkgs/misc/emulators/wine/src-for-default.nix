@@ -1,9 +1,9 @@
 rec {
-   version="1.2-rc1";
-   name="wine-1.2-rc1";
-   hash="0d5gn85c277vasm9rsmjdn8x9a8dllbzphf6yhyq1agdc84g291b";
+   version="1.2-rc7";
+   name="wine-1.2-rc7";
+   hash="0z75gndsqfc0qpnamblni56shlv6276mmybkhycix5mm8xvy77jg";
    url="http://prdownloads.sourceforge.net/wine/wine-${version}.tar.bz2";
-   advertisedUrl="http://prdownloads.sourceforge.net/wine/wine-1.2-rc1.tar.bz2";
+   advertisedUrl="http://prdownloads.sourceforge.net/wine/wine-1.2-rc7.tar.bz2";
   
   
 }
