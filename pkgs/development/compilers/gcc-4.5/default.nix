@@ -150,19 +150,28 @@ stdenv.mkDerivation ({
         || (cross != null && cross.config == "i586-pc-gnu"
             && libcCross != null))
     then
-      # On GNU/Hurd glibc refers to Hurd & Mach headers so add the right `-I'
-      # flags to the default spec string.
+      # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
+      # in glibc, so add the right `-I' flags to the default spec string.
       let
         libc = if cross != null then libcCross else stdenv.glibc;
         config_h = "gcc/config/i386/gnu.h";
+        extraCPPDeps =
+             libc.propagatedBuildInputs
+          ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
+          ++ stdenv.lib.optional (libpthread != null) libpthread;
         extraCPPSpec =
           concatStrings (intersperse " "
-                          (map (x: "-I${x}/include")
-                               libc.propagatedBuildInputs));
+                          (map (x: "-I${x}/include") extraCPPDeps));
+        pthreadLib =
+          if libpthreadCross != null then libpthreadCross else libpthread;
       in
         '' echo "augmenting \`CPP_SPEC' in \`${config_h}' with \`${extraCPPSpec}'..."
            sed -i "${config_h}" \
                -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
+
+           echo "augmenting \`LIB_SPEC' in \`${config_h}' for libpthread at \`${pthreadLib}'..."
+           sed -i "${config_h}" \
+               -es'|-lpthread|-L${pthreadLib}/lib -lpthread|g'
         ''
     else null;
 
