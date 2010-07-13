@@ -171,7 +171,7 @@ stdenv.mkDerivation ({
 
            echo "augmenting \`LIB_SPEC' in \`${config_h}' for libpthread at \`${pthreadLib}'..."
            sed -i "${config_h}" \
-               -es'|-lpthread|-L${pthreadLib}/lib -lpthread|g'
+               -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "-L${pthreadLib}/lib \1|g'
         ''
     else null;
 
