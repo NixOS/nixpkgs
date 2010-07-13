@@ -81,19 +81,20 @@ in
 
             for dir in "$spooldir" "$jobdir" "$etcdir"; do
               if [ ! -d "$dir" ]; then
-                  mkdir -p "$dir" && chown atd:atd "$dir"
+                  mkdir -p "$dir"
+                  chown atd:atd "$dir"
               fi
             done
             chmod 1770 "$spooldir" "$jobdir"
             ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
             if [ ! -f "$etcdir"/at.deny ]; then
-                touch "$etcdir"/at.deny && \
-                chown root:atd "$etcdir"/at.deny && \
+                touch "$etcdir"/at.deny
+                chown root:atd "$etcdir"/at.deny
                 chmod 640 "$etcdir"/at.deny
             fi
             if [ ! -f "$jobdir"/.SEQ ]; then
-                touch "$jobdir"/.SEQ && \
-                chown atd:atd "$jobdir"/.SEQ && \
+                touch "$jobdir"/.SEQ
+                chown atd:atd "$jobdir"/.SEQ
                 chmod 600 "$jobdir"/.SEQ
             fi
           '';
