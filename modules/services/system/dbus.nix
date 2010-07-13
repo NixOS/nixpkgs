@@ -1,5 +1,6 @@
-# D-Bus system-wide daemon.
-{pkgs, config, ...}:
+# D-Bus configuration and system bus daemon.
+
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -16,27 +17,33 @@ let
     buildCommand = ''
       ensureDir $out
       
-      ln -s ${dbus}/etc/dbus-1/session.conf $out/session.conf
-      
       cp ${dbus}/etc/dbus-1/system.conf $out/system.conf
+
+      # !!! Hm, these `sed' calls are rather error-prone...
 
       # Tell the daemon where the setuid wrapper around
       # dbus-daemon-launch-helper lives.      
       sed -i $out/system.conf \
           -e 's|<servicehelper>.*/libexec/dbus-daemon-launch-helper|<servicehelper>${config.security.wrapperDir}/dbus-daemon-launch-helper|'
 
-      # Add the system-services directories to the daemon's search path.
+      # Add the system-services and system.d directories to the system
+      # bus search path.
       sed -i $out/system.conf \
           -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|'
-          
-      # Note: system.conf includes ./system.d (i.e. it has a relative,
-      # not absolute path).
+
+      cp ${dbus}/etc/dbus-1/session.conf $out/session.conf
+      
+      # Add the services and session.d directories to the session bus
+      # search path.
+      sed -i $out/session.conf \
+          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}|'
+
       ensureDir $out/session.d
       ensureDir $out/system.d
       
       for i in ${toString cfg.packages}; do
         for j in $i/etc/dbus-1/session.d/*; do
-          ln -s $j  $out/session.d/
+          ln -s $j $out/session.d/
         done
         for j in $i/etc/dbus-1/system.d/*; do
           ln -s $j $out/system.d/
@@ -47,6 +54,10 @@ let
 
   systemServiceDirs = concatMapStrings
     (d: "<servicedir>${d}/share/dbus-1/system-services</servicedir> ")
+    cfg.packages;
+
+  sessionServiceDirs = concatMapStrings
+    (d: "<servicedir>${d}/share/dbus-1/services</servicedir> ")
     cfg.packages;
 
 in
@@ -88,7 +99,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [dbus.daemon dbus.tools];
+    environment.systemPackages = [ dbus.daemon dbus.tools ];
 
     environment.etc = singleton
       # We need /etc/dbus-1/system.conf for now, because
@@ -128,7 +139,7 @@ in
 
         daemonType = "fork";
 
-        exec = "${dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf";
+        exec = "${dbus}/bin/dbus-daemon --system";
 
         postStop =
           ''
