@@ -1,10 +1,23 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "libdaemon-0.12";
+stdenv.mkDerivation rec {
+  name = "libdaemon-0.14";
+
   src = fetchurl {
-    url = http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.12.tar.gz;
-    sha256 = "1l1nhgc3m67bhpyyvrr48wz06h40ck6abhbns08g66jdckwckrrr";
+    url = "${meta.homepage}/${name}.tar.gz";
+    sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
-  configureFlags = "--disable-lynx";
+
+  configureFlags = [ "--disable-lynx" ];
+
+  meta = {
+    description = "libdaemon, a lightweight C library that eases the writing of UNIX daemons";
+
+    homepage = http://0pointer.de/lennart/projects/libdaemon/;
+
+    license = "LGPLv2+";
+
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+  };
 }
