@@ -1,5 +1,8 @@
 {stdenv, fetchurl, mesa, libX11, openssl, libXext, libjpeg_turbo}:
 
+let
+  libDir = if stdenv.is64bit then "lib64" else "lib";
+in
 stdenv.mkDerivation {
   name = "virtualgl-2.1.4";
   src = fetchurl {
@@ -8,6 +11,10 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./xshm.patch ];
+
+  prePatch = ''
+    sed -i s,LD_PRELOAD=lib,LD_PRELOAD=$out/${libDir}/lib, rr/vglrun
+  '';
 
   preInstall =''
     export makeFlags="prefix=$out"
