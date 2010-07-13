@@ -75,7 +75,7 @@ let
         set gfxmode=640x480
         insmod gfxterm
         insmod vbe
-        terminal_output.gfxterm
+        terminal_output gfxterm
 
         insmod png
         if background_image /boot/grub/splash.png; then
