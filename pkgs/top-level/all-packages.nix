@@ -1448,6 +1448,10 @@ let
     inherit (gnome) glib gtk;
   };
 
+  pius = import ../tools/security/pius {
+    inherit fetchurl stdenv python gnupg;
+  };
+
   pk2cmd = import ../tools/misc/pk2cmd {
     inherit fetchurl stdenv libusb makeWrapper;
   };
