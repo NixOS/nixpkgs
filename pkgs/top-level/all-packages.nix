@@ -1821,8 +1821,10 @@ let
   };
 
   tigervnc = import ../tools/admin/tigervnc {
-    inherit fetchsvn stdenv gettext autoconf automake cvs libtool nasm;
-    inherit (xorg) libX11 libXext libICE libXtst libXi libSM xorgserver utilmacros pixman;
+    inherit fetchsvn stdenv gettext autoconf automake cvs libtool nasm xkeyboard_config;
+    inherit (xorg) libX11 libXext libICE libXtst libXi libSM xorgserver utilmacros pixman xkbcomp;
+    fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
+      xorg.fontbhlucidatypewriter75dpi ];
   };
 
   tightvnc = import ../tools/admin/tightvnc {

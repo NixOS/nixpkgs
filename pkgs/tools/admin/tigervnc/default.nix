@@ -1,5 +1,6 @@
 {stdenv, fetchsvn, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver,
-autoconf, automake, cvs, libtool, nasm, utilmacros, pixman }:
+autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config,
+fontDirectories }:
 
 with stdenv.lib;
 
@@ -17,8 +18,21 @@ stdenv.mkDerivation {
 
   configureFlags = "--enable-nls";
 
+  inherit fontDirectories;
+
   patchPhase = ''
     sed -i -e 's,$(includedir)/pixman-1,${pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
+    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${xkbcomp}/bin";' unix/vncserver 
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver 
+
+    fontPath=
+    for i in $fontDirectories; do
+      for j in $(find $i -name fonts.dir); do
+        addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
+      done
+    done
+    
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver 
   '';
 
   # I don't know why I can't use in the script
