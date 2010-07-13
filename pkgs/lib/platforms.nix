@@ -2,7 +2,7 @@ let lists = import ./lists.nix; in
 
 rec {
   gnu = linux; /* ++ hurd ++ kfreebsd ++ ... */
-  linux = ["i686-linux" "x86_64-linux" "powerpc-linux"];
+  linux = ["i686-linux" "x86_64-linux" "powerpc-linux" "armv5tel-linux" ];
   darwin = ["i686-darwin" "powerpc-darwin" "x86_64-darwin"];
   freebsd = ["i686-freebsd" "x86_64-freebsd" "powerpc-freebsd"];
   openbsd = ["i686-openbsd" "x86_64-openbsd"];
