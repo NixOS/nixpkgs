@@ -8,9 +8,7 @@ in
 
 composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  # choose a different version this way:
-  # php.merge { version = "5.3.2"; }
-  version = "5.2.11";
+  version = "5.2.13";
 
   name = "php_configurable-${version}";
 
@@ -155,9 +153,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    md5 = if version == "5.3.2" then "46f500816125202c48a458d0133254a4"
-          else if version == "5.2.11" then "286bf34630f5643c25ebcedfec5e0a09"
-          else throw "set md5 sum of php source file" ;
+    sha256 = "1nzaqwsxah7hc59931dk81n2fxyqaaa3yqyisj6akf9vbr9s4l1b";
     name = "php-${version}.tar.bz2";
   };
 
