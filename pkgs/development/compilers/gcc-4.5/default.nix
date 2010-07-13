@@ -154,7 +154,8 @@ stdenv.mkDerivation ({
       # in glibc, so add the right `-I' flags to the default spec string.
       let
         libc = if cross != null then libcCross else stdenv.glibc;
-        config_h = "gcc/config/i386/gnu.h";
+        gnu_h = "gcc/config/gnu.h";
+        i386_gnu_h = "gcc/config/i386/gnu.h";
         extraCPPDeps =
              libc.propagatedBuildInputs
           ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
@@ -165,12 +166,12 @@ stdenv.mkDerivation ({
         pthreadLib =
           if libpthreadCross != null then libpthreadCross else libpthread;
       in
-        '' echo "augmenting \`CPP_SPEC' in \`${config_h}' with \`${extraCPPSpec}'..."
-           sed -i "${config_h}" \
+        '' echo "augmenting \`CPP_SPEC' in \`${i386_gnu_h}' with \`${extraCPPSpec}'..."
+           sed -i "${i386_gnu_h}" \
                -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
 
-           echo "augmenting \`LIB_SPEC' in \`${config_h}' for libpthread at \`${pthreadLib}'..."
-           sed -i "${config_h}" \
+           echo "augmenting \`LIB_SPEC' in \`${gnu_h}' for libpthread at \`${pthreadLib}'..."
+           sed -i "${gnu_h}" \
                -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "-L${pthreadLib}/lib \1|g'
         ''
     else null;
