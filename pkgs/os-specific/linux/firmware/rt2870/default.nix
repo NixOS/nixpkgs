@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "rt2870-fw-22";
   src = fetchurl {
     url = "http://www.ralinktech.com/download.php?t=U0wyRnpjMlYwY3k4eU1ERXdMekF6THpNeEwyUnZkMjVzYjJGa01UWXpPRGs1T0Rnek5pNTZhWEE5UFQxU1ZESTROekJmUm1seWJYZGhjbVZmVmpJeUM%3D";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   # says: "Your rights to redistribute the Software shall be
   # contingent upon your installation of this Agreement in its
   # entirety in the same directory as the Software."
-  installPhase = "ensureDir $out; cp * $out";
+  installPhase = "ensureDir $out/${name}; cp *.bin $out; cp *.txt $out/${name}";
   
   meta = {
     description = "Firmware for the Ralink RT2870 wireless cards";
