@@ -34,7 +34,7 @@ let
         $wgDiff = "${pkgs.diffutils}/bin/diff";
         $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
 
-        $wgDebugLogFile = "/tmp/mediawiki_debug_log.txt";
+        #$wgDebugLogFile = "/tmp/mediawiki_debug_log.txt";
 
         # Database configuration.
         $wgDBtype = "${config.dbType}";
@@ -63,11 +63,11 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.15.1";
+    name= "mediawiki-1.15.4";
     
     src = pkgs.fetchurl {
       url = "http://download.wikimedia.org/mediawiki/1.15/${name}.tar.gz";
-      sha256 = "0i6sb6p4ng38i8s3az42j6wnw6fpxvv3l9cvraav6wsn2cdj4jh4";
+      sha256 = "1blf79lhnaxixc8z96f9z4xi2jlg906ps3kd4x8b9ipg2dgl3vy9";
     };
 
     buildPhase = "true";
