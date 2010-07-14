@@ -8968,7 +8968,7 @@ let
   vlc = import ../applications/video/vlc {
     inherit fetchurl stdenv perl xlibs zlib a52dec libmad faad2
       ffmpeg libdvdnav pkgconfig hal fribidi qt4 freefont_ttf
-      libvorbis libtheora speex libgcrypt;
+      libvorbis libtheora speex libgcrypt libupnp;
     dbus = dbus.libs;
     alsa = alsaLib;
     lua = lua5;

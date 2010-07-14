@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, xlibs, libdvdnav
 , zlib, a52dec, libmad, faad2, ffmpeg, alsa
 , pkgconfig, dbus, hal, fribidi, qt4, freefont_ttf
-, libvorbis, libtheora, speex, lua, libgcrypt
+, libvorbis, libtheora, speex, lua, libgcrypt, libupnp
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [
     perl xlibs.xlibs xlibs.libXv zlib a52dec libmad faad2 ffmpeg
     alsa libdvdnav libdvdnav.libdvdread pkgconfig dbus hal fribidi qt4
-    libvorbis libtheora speex lua libgcrypt
+    libvorbis libtheora speex lua libgcrypt libupnp
   ];
 
   configureFlags = [ "--enable-alsa"
