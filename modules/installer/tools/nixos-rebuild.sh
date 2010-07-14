@@ -23,6 +23,7 @@ The operation is one of the following:
   build-vm: build a virtual machine containing the configuration
             (useful for testing)
   dry-run:  just show what store paths would be built/downloaded
+  pull:     just pull the Nixpkgs channel manifest and exit
 
 Options:
 
@@ -63,7 +64,7 @@ while test "$#" -gt 0; do
       --help)
         showSyntax
       ;;
-      switch|boot|test|build|dry-run|build-vm)
+      switch|boot|test|build|dry-run|build-vm|pull)
         action="$i"
       ;;
       --install-grub)
@@ -141,6 +142,8 @@ if test -n "$pullManifest"; then
         NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache nix-pull $i || true
     done
 fi
+
+if [ "$action" = pull ]; then exit 0; fi 
 
 
 # First build Nix, since NixOS may require a newer version than the
