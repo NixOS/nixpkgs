@@ -36,14 +36,28 @@ setPath "@path@"
 mount -n -o remount,rw none /
 
 
-# Mount special file systems.  Note that /dev, /proc and /sys are
-# already mounted by `switch_root' in the initrd.
+# Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
+# stage 1, we need to do that here.
+if [ ! -e /proc/1 ]; then
+    mkdir -m 0755 -p /proc
+    mount -n -t proc none /proc
+    mkdir -m 0755 -p /sys 
+    mount -t sysfs none /sys
+    mkdir -m 0755 -p /dev
+    mount -t tmpfs -o "mode=0755" none /dev
+
+    # Create the minimal device nodes needed for the activation scripts
+    # and Upstart.
+    mknod -m 0666 /dev/null c 1 3
+    mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
+    mknod -m 0644 /dev/console c 5 1
+fi
+
+
+# Provide a /etc/mtab.
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
-test -s /etc/mtab && rm /etc/mtab # while installing a symlink is created (see man mount), if it's still there for whateever reason remove it
 rm -f /etc/mtab* # not that we care about stale locks
-
-rm -f /etc/mtab
 cat /proc/mounts > /etc/mtab
 
 
