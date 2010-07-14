@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     done
     patch -p1 < ../xserver17.patch
     autoreconf -vfi
-    ./configure --prefix=$out --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx
+    ./configure --prefix=$out --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';
