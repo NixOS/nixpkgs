@@ -163,16 +163,18 @@ stdenv.mkDerivation ({
         extraCPPSpec =
           concatStrings (intersperse " "
                           (map (x: "-I${x}/include") extraCPPDeps));
-        pthreadLib =
-          if libpthreadCross != null then libpthreadCross else libpthread;
+        extraLibSpec =
+          if libpthreadCross != null
+          then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
+          else "-L${libpthread}/lib";
       in
         '' echo "augmenting \`CPP_SPEC' in \`${i386_gnu_h}' with \`${extraCPPSpec}'..."
            sed -i "${i386_gnu_h}" \
                -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
 
-           echo "augmenting \`LIB_SPEC' in \`${gnu_h}' for libpthread at \`${pthreadLib}'..."
+           echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
            sed -i "${gnu_h}" \
-               -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "-L${pthreadLib}/lib \1|g'
+               -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "${extraLibSpec} \1|g'
         ''
     else null;
 
