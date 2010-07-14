@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam }:
+{ stdenv, fetchurl, pam, glibc }:
    
 stdenv.mkDerivation rec {
   name = "shadow-4.1.4.2";
@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pam ];
 
   patches = [ ./no-sanitize-env.patch ./su-name.patch ./keep-path.patch ];
+
+  preBuild =
+    ''
+      substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc}/sbin/nscd
+    '';
   
   meta = {
     homepage = http://pkg-shadow.alioth.debian.org/;

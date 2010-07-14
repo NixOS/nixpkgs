@@ -6921,7 +6921,7 @@ let
   };
 
   shadow = import ../os-specific/linux/shadow {
-    inherit fetchurl stdenv pam;
+    inherit fetchurl stdenv pam glibc;
   };
 
   splashutils = import ../os-specific/linux/splashutils/default.nix {
