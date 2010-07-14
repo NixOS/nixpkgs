@@ -109,6 +109,8 @@ in
       ''}
     '';
 
+  enablePHP = true;
+
   options = {
 
     id = mkOption {

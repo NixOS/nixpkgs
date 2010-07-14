@@ -68,6 +68,7 @@ let
           globalEnvVars = [];
           robotsEntries = "";
           startupScript = "";
+          enablePHP = false;
           phpOptions = "";
           options = {};
         };
@@ -109,7 +110,9 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
-    ] ++ optional enableSSL "ssl" ++ extraApacheModules;
+    ] 
+    ++ optional enableSSL "ssl"
+    ++ extraApacheModules;
     
 
   loggingConf = ''
@@ -299,9 +302,11 @@ let
     ${let
         load = {name, path}: "LoadModule ${name}_module ${path}\n";
         allModules =
-          concatMap (svc: svc.extraModulesPre) allSubservices ++
-          map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules ++
-          concatMap (svc: svc.extraModules) allSubservices ++ extraForeignModules;
+          concatMap (svc: svc.extraModulesPre) allSubservices
+          ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
+          ++ optional enablePHP { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
+          ++ concatMap (svc: svc.extraModules) allSubservices 
+          ++ extraForeignModules;
       in concatMapStrings load allModules
     }
 
@@ -358,6 +363,9 @@ let
       in concatMapStrings makeVirtualHost vhosts
     }
   '';
+
+
+  enablePHP = any (svc: svc.enablePHP) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -563,7 +571,7 @@ in
                 optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
              ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
 
-           PHPRC = phpIni;
+           PHPRC = if enablePHP then phpIni else "";
 
            TZ = config.time.timeZone;
 

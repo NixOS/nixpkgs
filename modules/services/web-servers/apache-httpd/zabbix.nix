@@ -21,8 +21,7 @@ in
 
 {
 
-  extraModules =
-    [ { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
+  enablePHP = true;
 
   phpOptions =
     ''

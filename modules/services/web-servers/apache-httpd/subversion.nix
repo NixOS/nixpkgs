@@ -296,9 +296,10 @@ in {
 
   extraModules = [
     { name = "python";  path = "${pkgs.mod_python}/modules/mod_python.so"; }
-    { name = "php5";    path = "${pkgs.php}/modules/libphp5.so"; }
     { name = "dav_svn"; path = "${subversion}/modules/mod_dav_svn.so"; }
   ];
+
+  enablePHP = true;
 
   
   extraConfig = ''
