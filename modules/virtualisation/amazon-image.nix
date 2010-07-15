@@ -43,6 +43,10 @@ with pkgs.lib;
           # `nixos-rebuild' requires an /etc/NIXOS.
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
+
+          # Install a configuration.nix.
+          mkdir -p /mnt/etc/nixos
+          cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
                     
           # Amazon assumes that there is a /sbin/init, so create one.
           # Note that simply creating /sbin/init as a symlink breaks
