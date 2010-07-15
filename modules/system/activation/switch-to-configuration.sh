@@ -105,7 +105,9 @@ EOF
         # Another hack: don't restart the X server (that would kill all the clients).
         # And don't restart dbus, since that causes ConsoleKit to
         # forget about current sessions.
-        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$"; then continue; fi
+        # Idem for the emergeny-shell, because its `console owner'
+        # line screws up the X server.
+        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$\|^emergency-shell$"; then continue; fi
 
         if ! test -e "$oldJobs/$job.conf"; then
             echo "starting $job..."
