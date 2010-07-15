@@ -56,10 +56,12 @@ stdenv.mkDerivation ({
    passthru = {
      # Extra target LDFLAGS to allow the cross-linker to find the
      # dependencies of the cross libpthread.so, namely libihash.so.
+     # Note: these are raw `ld' flags, so `-Wl,' must be prepended when using
+     # `gcc'.
      #
      # This is actually only useful while building the final cross-gcc, since
      # afterwards gcc-cross-wrapper should add the relevant flags.
-     TARGET_LDFLAGS = "-Wl,-rpath-link=${hurd}/lib";
+     TARGET_LDFLAGS = "-rpath-link=${hurd}/lib";
    };
  }
  else { }))

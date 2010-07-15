@@ -283,7 +283,7 @@ stdenv.mkDerivation ({
     if cross != null && libcCross != null
     then "-B${libcCross}/lib -Wl,-L${libcCross}/lib" +
          (optionalString (libpthreadCross != null)
-           " -L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}")
+           " -L${libpthreadCross}/lib -Wl,${libpthreadCross.TARGET_LDFLAGS}")
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
