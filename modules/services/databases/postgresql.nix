@@ -157,7 +157,7 @@ in
     jobs.postgresql =
       { description = "PostgreSQL server";
 
-        startOn = "filesystem";
+        startOn = "started network-interfaces and filesystem";
 
         environment =
           { TZ = config.time.timeZone;
