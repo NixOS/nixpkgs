@@ -4,16 +4,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-0.16pre22206";
+  name = "nix-0.16pre22611";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/437136/download/4/${name}.tar.bz2";
-    sha256 = "1gh2bqgllkxnlz8yzrj31z6libwx2whw0b18hvamm3ryg4b5wadj";
+    url = "http://hydra.nixos.org/build/486717/download/4/${name}.tar.bz2";
+    sha256 = "1dazafq1flfyha9j5v31n46wh2bwg0iq59bwwgdk7n2xa8y7dz93";
   };
 
   buildNativeInputs = [ perl ];
   buildInputs = [ curl openssl ];
-  patches = [ ./0001-Added-support-for-passing-an-impure-NIX_BUILD_CORES-.patch ];
 
   configureFlags =
     ''
