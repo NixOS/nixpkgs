@@ -189,6 +189,10 @@ rec {
     inherit cabal pcreLight colorizeHaskell;
   };
 
+  ghcMtl = import ../development/libraries/haskell/ghc-mtl {
+    inherit cabal mtl MonadCatchIOMtl;
+  };
+
   ghcPaths0106 = import ../development/libraries/haskell/ghc-paths/0.1.0.6.nix {
     inherit cabal;
   };
@@ -376,6 +380,12 @@ rec {
     inherit cabal parsec pcreLight xhtml;
   };
 
+  hint = import ../development/libraries/haskell/hint {
+    inherit cabal extensibleExceptions filepath ghcMtl haskellSrc
+      MonadCatchIOMtl mtl utf8String;
+    ghcPaths = ghcPaths0106;
+  };
+
   Hipmunk = import ../development/libraries/haskell/Hipmunk {
     inherit cabal;
   };
@@ -460,6 +470,10 @@ rec {
 
   mmap = import ../development/libraries/haskell/mmap {
     inherit cabal;
+  };
+
+  MonadCatchIOMtl = import ../development/libraries/haskell/MonadCatchIO-mtl {
+    inherit cabal mtl extensibleExceptions;
   };
 
   monadlab = import ../development/libraries/haskell/monadlab {
