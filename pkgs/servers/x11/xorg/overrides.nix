@@ -153,4 +153,11 @@ in
     configureFlags = "LIBUUID_CFLAGS='' LIBUUID_LIBS=''";
   };
 
+  lndir = attrs: attrs // {
+    preConfigure = ''
+      substituteInPlace lndir.c \
+        --replace 'n_dirs--;' ""
+    '';
+  };
+
 }
