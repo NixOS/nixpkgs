@@ -78,6 +78,11 @@ rec {
     network = network2217;
   };
 
+  cgi3001173 = import ../development/libraries/haskell/cgi/3001.1.7.3.nix {
+    inherit cabal mtl parsec xhtml;
+    network = network2217;
+  };
+
   cgi = import ../development/libraries/haskell/cgi {
     inherit cabal mtl network parsec xhtml;
   };
@@ -173,6 +178,10 @@ rec {
   };
 
   fgl = import ../development/libraries/haskell/fgl {
+    inherit cabal mtl;
+  };
+
+  fgl5423 = import ../development/libraries/haskell/fgl/5.4.2.3.nix {
     inherit cabal mtl;
   };
 
@@ -296,6 +305,11 @@ rec {
     inherit cabal happy;
   };
 
+  haskellSrcP = import ../development/libraries/haskell/haskell-src {
+    inherit cabal;
+    happy = happy1185;
+  };
+
   haskellSrcExts = import ../development/libraries/haskell/haskell-src-exts {
     inherit cabal cpphs happy;
   };
@@ -304,17 +318,44 @@ rec {
     inherit cabal haskellSrcExts;
   };
 
+  /*
+  haskellPlatform2010200 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
+    inherit cabal ghc
+      html xhtml;
+    haskellSrc = haskellSrcP;
+    fgl = fgl5423;
+    cabalInstall = cabalInstall082;
+    GLUT = GLUT2121;
+    OpenGL = OpenGL2230;
+    zlib = zlib0520;
+    alex = alex233;
+    cgi = cgi3001173;
+    QuickCheck = QuickCheck2;
+    HTTP = HTTP400009;
+    HUnit = HUnit1221;
+    network = network2217;
+    parallel = parallel2201;
+    regexBase = regexBase0932;
+    regexCompat = regexCompat0931;
+    regexPosix = regexPosix0942;
+    stm = stm2121;
+    haddock = haddock272P;
+    happy = happy1185;
+    inherit (pkgs) fetchurl;
+  });
+  */
+
   haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
       haskellSrc html
-      stm xhtml happy;
+      stm xhtml;
     cabalInstall = cabalInstall080;
     GLUT = GLUT2121;
     OpenGL = OpenGL2230;
     zlib = zlib0520;
     alex = alex232;
     cgi = cgi3001172;
-    QuickCheck = QuickCheck2;
+    QuickCheck = QuickCheck2103;
     HTTP = HTTP400009;
     HUnit = HUnit1221;
     network = network2217;
@@ -323,6 +364,7 @@ rec {
     regexCompat = regexCompat092;
     regexPosix = regexPosix0941;
     haddock = haddock272;
+    happy = happy1184;
     inherit (pkgs) fetchurl;
   });
 
@@ -595,6 +637,10 @@ rec {
     inherit cabal;
   };
 
+  QuickCheck2103 = import ../development/libraries/haskell/QuickCheck/2.1.0.3.nix {
+    inherit cabal mtl;
+  };
+
   QuickCheck2 = import ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {
     inherit cabal mtl;
   };
@@ -618,6 +664,10 @@ rec {
     inherit cabal mtl;
   };
 
+  regexBase0932 = import ../development/libraries/haskell/regex-base/0.93.2.nix {
+    inherit cabal mtl;
+  };
+
   regexBase = import ../development/libraries/haskell/regex-base {
     inherit cabal mtl;
   };
@@ -628,6 +678,12 @@ rec {
     regexPosix = regexPosix0941;
   };
 
+  regexCompat0931 = import ../development/libraries/haskell/regex-compat/0.93.1.nix {
+    inherit cabal;
+    regexBase = regexBase0932;
+    regexPosix = regexPosix0942;
+  };
+
   regexCompat = import ../development/libraries/haskell/regex-compat {
     inherit cabal regexBase regexPosix;
   };
@@ -635,6 +691,11 @@ rec {
   regexPosix0941 = import ../development/libraries/haskell/regex-posix/0.94.1.nix {
     inherit cabal;
     regexBase = regexBase0931;
+  };
+
+  regexPosix0942 = import ../development/libraries/haskell/regex-posix/0.94.2.nix {
+    inherit cabal;
+    regexBase = regexBase0932;
   };
 
   regexPosix = import ../development/libraries/haskell/regex-posix {
@@ -727,6 +788,10 @@ rec {
   };
 
   stm = import ../development/libraries/haskell/stm {
+    inherit cabal;
+  };
+
+  stm2121 = import ../development/libraries/haskell/stm/2.1.2.1.nix {
     inherit cabal;
   };
 
@@ -925,6 +990,11 @@ rec {
     inherit (pkgs) perl;
   };
 
+  alex233 = import ../development/tools/parsing/alex/2.3.3.nix {
+    inherit cabal;
+    inherit (pkgs) perl;
+  };
+
   cpphs = import ../development/tools/misc/cpphs {
     inherit cabal;
   };
@@ -958,6 +1028,13 @@ rec {
     ghcPaths = ghcPaths0106;
   };
 
+  haddock272P = import ../development/tools/documentation/haddock/haddock-2.7.2.nix {
+    inherit cabal;
+    alex = alex233;
+    happy = happy1185;
+    ghcPaths = ghcPaths0106;
+  };
+
   happy = happy1184;
 
   happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
@@ -966,6 +1043,11 @@ rec {
   };
 
   happy1184 = import ../development/tools/parsing/happy/happy-1.18.4.nix {
+    inherit cabal mtl;
+    inherit (pkgs) perl;
+  };
+
+  happy1185 = import ../development/tools/parsing/happy/happy-1.18.5.nix {
     inherit cabal mtl;
     inherit (pkgs) perl;
   };
@@ -1019,6 +1101,13 @@ rec {
 
 
   # Tools.
+
+  cabalInstall082 = import ../tools/package-management/cabal-install/0.8.2.nix {
+    inherit cabal;
+    HTTP = HTTP400009;
+    network = network2217;
+    zlib = zlib0520;
+  };
 
   cabalInstall080 = import ../tools/package-management/cabal-install/0.8.0.nix {
     inherit cabal;
