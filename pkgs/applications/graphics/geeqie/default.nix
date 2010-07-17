@@ -2,11 +2,11 @@
 , intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "geeqie-1.0beta2";
+  name = "geeqie-1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/geeqie/${name}.tar.gz";
-    sha256 = "13h924iykmxwgpx562lrsh2j78fnzyyfmg4w7qgj9vbjq18nq7fd";
+    sha256 = "1p8z47cqdqqkn8b0fr5bqsfinz4dgqk4353s8f8d9ha6cik69bfi";
   };
 
   buildInputs = [ pkgconfig gtk libpng exiv2 lcms intltool gettext ];
