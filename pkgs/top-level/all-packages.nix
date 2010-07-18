@@ -4501,6 +4501,11 @@ let
     inherit fetchurl stdenv libcddb pkgconfig ncurses help2man;
   };
 
+  libchamplain = import ../development/libraries/libchamplain {
+    inherit fetchurl stdenv pkgconfig cairo clutter clutter_gtk sqlite;
+    inherit (gnome) gtk glib libsoup;
+  };
+
   libcm = import ../development/libraries/libcm {
     inherit fetchurl stdenv pkgconfig xlibs mesa glib;
   };
