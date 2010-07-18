@@ -1,11 +1,11 @@
-{stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true}:
+{ stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.2.16";
+  version = "1.2.24";
   
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1j742d22ablcgxfxa3hcwf5bq6bd1pba7fiwc3dvnjvcdb0k32ln";
+    sha256 = "0j2wb79kndq4b1qqr59n1g6s0lm7yp6r9ny3skimadkh9a7p8b7i";
   };
   
   configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
@@ -15,7 +15,7 @@ in rec {
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
     
-    buildInputs = [pkgconfig expat];
+    buildInputs = [ pkgconfig expat ];
     
     inherit src configureFlags;
     
@@ -35,8 +35,8 @@ in rec {
 
     configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
     
-    buildInputs = [pkgconfig expat libs]
-      ++ stdenv.lib.optionals useX11 [libX11 libICE libSM];
+    buildInputs = [ pkgconfig expat libs ]
+      ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
       
     postConfigure = "cd tools";
 
