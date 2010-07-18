@@ -8131,7 +8131,7 @@ let
 
   geeqie = import ../applications/graphics/geeqie {
     inherit fetchurl stdenv pkgconfig libpng lcms exiv2
-      intltool gettext;
+      intltool gettext libchamplain;
     inherit (gtkLibs) gtk;
   };
 
