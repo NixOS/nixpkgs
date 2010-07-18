@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, libpthreadstubs}:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.18";
+  name = "libdrm-2.4.21";
   
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "015nxrb2wvyqlxvwaqq40v46nj96sk71p2n4dh4h5djwzx7v9ign";
+    sha256 = "0jx1idd2ycglx81b0nlawh07lgi8k5h9854c9apdxcdnlcmn26sf";
   };
 
   buildInputs = [ pkgconfig libpthreadstubs ];
