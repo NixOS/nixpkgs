@@ -1,20 +1,16 @@
 {stdenv, fetchurl, perl, perlXMLParser, xkbcomp, gettext, intltool}:
 
-let version = "1.5"; in 
-
-stdenv.mkDerivation {
-  name = "xkeyboard-config-${version}";
+stdenv.mkDerivation rec {
+  name = "xkeyboard-config-1.9";
 
   src = fetchurl {
-    url = "http://xlibs.freedesktop.org/xkbdesc/xkeyboard-config-${version}.tar.bz2";
-    sha256 = "1r276ik3x0jg77zza37ggrnp7zbdvmjyrm9mwxxgzh3bmligy5ff";
+    url = "mirror://xorg/individual/data/xkeyboard-config/${name}.tar.bz2";
+    sha256 = "0df2iad598pxw3fzkx10f7irqah0fgawx262d07s04x0whn9ql9b";
   };
 
   buildInputs = [perl perlXMLParser xkbcomp gettext intltool];
 
   patches = [ ./eo.patch ];
-
-  ICONV = "iconv";
 
   preConfigure = ''
     configureFlags="--with-xkb-base=$out/etc/X11/xkb -with-xkb-rules-symlink=xorg,xfree86"
