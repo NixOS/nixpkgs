@@ -61,14 +61,8 @@ let
       # Allow the kernel to find our wrapped modprobe (which searches
       # in the right location in the Nix store for kernel modules).
       # We need this when the kernel (or some module) auto-loads a
-      # module.  This is only done at boot time to make sure that we
-      # don't use modules that don't match the running kernel.
-      # !!! We should check whether the new kernel modules are
-      # compatible with the running kernel so that we can upgrade
-      # kernel modules (e.g. the NVIDIA driver) in a running system.
-      if [ "$(cat /proc/sys/kernel/modprobe)" = "/sbin/modprobe" ]; then
-        echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
-      fi
+      # module.
+      echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
     '' [
       # ?
     ];
