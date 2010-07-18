@@ -6,13 +6,15 @@ let
     stdenv.cross;
 in
 
-stdenv.mkDerivation ( rec {
-  name = "openssl-0.9.8n";
-  
+stdenv.mkDerivation rec {
+  name = "openssl-1.0.0a";
+
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
-    sha256 = "008z1h09pa6dfxs4wgbqj5i1clw4v82b1waqvwanb1kb6wlbq6mh";
+    sha256 = "0qqgyzfb0alwx329z8bqybzamfl9j2maykykvq6zk3ibq0gvva8q";
   };
+
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
 
@@ -36,4 +38,4 @@ stdenv.mkDerivation ( rec {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
   };
-} // (if stdenv.isDarwin then { patches = [./darwin-arch.patch]; } else {}) )
+}
