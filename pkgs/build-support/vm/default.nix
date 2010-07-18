@@ -7,9 +7,7 @@ rec {
   # The 15 second CIFS timeout is too short if the host if heavily
   # loaded (e.g., in the Hydra build farm when it's running many jobs
   # in parallel).  So apply a patch to increase the timeout to 120s.
-  kernel = pkgs.linux.override (orig: {
-    kernelPatches = orig.kernelPatches ++ [ kernelPatches.cifs_timeout ];
-  });
+  kernel = assert pkgs.linux.features.cifsTimeout; pkgs.linux;
 
   kvm = pkgs.qemu_kvm;
 
