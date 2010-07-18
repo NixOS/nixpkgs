@@ -3725,6 +3725,17 @@ let
     inherit fetchurl stdenv;
   };
 
+  clutter = import ../development/libraries/clutter {
+    inherit fetchurl stdenv pkgconfig mesa cairo;
+    inherit (gnome) glib pango gtk;
+    inherit (xorg) libXi libXfixes libXdamage libXcomposite;
+  };
+
+  clutter_gtk = import ../development/libraries/clutter-gtk {
+    inherit fetchurl stdenv pkgconfig clutter;
+    inherit (gnome) gtk;
+  };
+
   commoncpp2 = import ../development/libraries/commoncpp2 {
     inherit stdenv fetchurl;
   };
