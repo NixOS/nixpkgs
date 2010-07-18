@@ -4202,7 +4202,7 @@ let
     inherit (gnome) gtk;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs218;
+  gtkLibs = recurseIntoAttrs gtkLibs220;
 
   glib = gtkLibs.glib;
 
@@ -4275,6 +4275,40 @@ let
     };
 
     gtk = import ../development/libraries/gtk+/2.18.x.nix {
+      inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
+        libtiff libjpeg libpng cairo xlibs cups;
+    };
+
+    gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
+      inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
+    };
+
+  };
+
+  gtkLibs220 = rec {
+
+    glib = import ../development/libraries/glib/2.24.x.nix {
+      inherit fetchurl stdenv pkgconfig gettext perl zlib;
+      libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
+    };
+
+    glibmm = import ../development/libraries/glibmm/2.22.x.nix {
+      inherit fetchurl stdenv pkgconfig glib libsigcxx;
+    };
+
+    atk = import ../development/libraries/atk/1.30.x.nix {
+      inherit fetchurl stdenv pkgconfig perl glib;
+    };
+
+    pango = import ../development/libraries/pango/1.28.x.nix {
+      inherit fetchurl stdenv pkgconfig gettext x11 glib cairo libpng;
+    };
+
+    pangomm = import ../development/libraries/pangomm/2.26.x.nix {
+      inherit fetchurl stdenv pkgconfig pango glibmm cairomm libpng;
+    };
+
+    gtk = import ../development/libraries/gtk+/2.20.x.nix {
       inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
         libtiff libjpeg libpng cairo xlibs cups;
     };
