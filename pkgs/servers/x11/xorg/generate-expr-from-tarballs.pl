@@ -193,6 +193,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /X11_REQUIRES=\'(.*)\'/g;
     process \@requires, $1 while $file =~ /XDMCP_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;

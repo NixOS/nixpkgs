@@ -68,11 +68,11 @@ let
   })) // {inherit ;};
     
   dri2proto = (stdenv.mkDerivation ((if overrides ? dri2proto then overrides.dri2proto else x: x) {
-    name = "dri2proto-2.2";
+    name = "dri2proto-2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/dri2proto-2.2.tar.bz2;
-      sha256 = "18djh2vy6z67hl1v63wc1kw7q35s92ixj5p2lffpshz4zq7ralpk";
+      url = mirror://xorg/individual/proto/dri2proto-2.3.tar.bz2;
+      sha256 = "0xz6nf5rrn1fvply5mq7dd1w89r73mggylp9lpzzwdfvl291h55j";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -498,11 +498,11 @@ let
   })) // {inherit libICE xproto ;};
     
   imake = (stdenv.mkDerivation ((if overrides ? imake then overrides.imake else x: x) {
-    name = "imake-1.0.2";
+    name = "imake-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/imake-1.0.2.tar.bz2;
-      sha256 = "0yxca3hbz4hfk0fm385lbm89061p2nksr5klx2y3x1knmvsgzklp";
+      url = mirror://xorg/individual/util/imake-1.0.3.tar.bz2;
+      sha256 = "1sjknp0g39r7ywp44drcrb8r92159a9nxgnjc90mjcksvm2540ch";
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
@@ -578,11 +578,11 @@ let
   })) // {inherit windowswmproto libX11 libXext xextproto ;};
     
   libX11 = (stdenv.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
-    name = "libX11-1.3.2";
+    name = "libX11-1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libX11-1.3.2.tar.bz2;
-      sha256 = "1cmwnk3k4dsirg895rrz7pmcsjjrai8ng7gjy68dd1ffkxf4vvsd";
+      url = mirror://xorg/individual/lib/libX11-1.3.4.tar.bz2;
+      sha256 = "0i58i744fh9jp0wdyifc9ip5ahvanniyfzana0s15kgpwn627mw8";
     };
     buildInputs = [pkgconfig bigreqsproto inputproto kbproto libXau libxcb xcmiscproto libXdmcp xextproto xf86bigfontproto xproto xtrans ];
   })) // {inherit bigreqsproto inputproto kbproto libXau libxcb xcmiscproto libXdmcp xextproto xf86bigfontproto xproto xtrans ;};
@@ -618,11 +618,11 @@ let
   })) // {inherit libX11 libXext xextproto libXmu libXpm xproto libXt ;};
     
   libXcomposite = (stdenv.mkDerivation ((if overrides ? libXcomposite then overrides.libXcomposite else x: x) {
-    name = "libXcomposite-0.4.1";
+    name = "libXcomposite-0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXcomposite-0.4.1.tar.bz2;
-      sha256 = "04vs1ml9y60g8046kg79wn71455m2c8xn1c88sq8wb92cmas459p";
+      url = mirror://xorg/individual/lib/libXcomposite-0.4.2.tar.bz2;
+      sha256 = "007qcqhp0dhvq2v7nkpz282rbwa6m9pmmpg4ypb30hv8yw5xwas4";
     };
     buildInputs = [pkgconfig compositeproto fixesproto libX11 libXext libXfixes xproto ];
   })) // {inherit compositeproto fixesproto libX11 libXext libXfixes xproto ;};
@@ -638,11 +638,11 @@ let
   })) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
     
   libXdamage = (stdenv.mkDerivation ((if overrides ? libXdamage then overrides.libXdamage else x: x) {
-    name = "libXdamage-1.1.2";
+    name = "libXdamage-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXdamage-1.1.2.tar.bz2;
-      sha256 = "02kwzk41a2b9wmlvrivz7nhbl15vihrjla7fl38w89s8nfn10sm5";
+      url = mirror://xorg/individual/lib/libXdamage-1.1.3.tar.bz2;
+      sha256 = "1a678bwap74sqczbr2z4y4fvbr35km3inkm8bi1igjyk4v46jqdw";
     };
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
   })) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
@@ -658,31 +658,31 @@ let
   })) // {inherit xproto ;};
     
   libXext = (stdenv.mkDerivation ((if overrides ? libXext then overrides.libXext else x: x) {
-    name = "libXext-1.1.1";
+    name = "libXext-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXext-1.1.1.tar.bz2;
-      sha256 = "1cwv3sllfk1xwc7gkld8ifyxrgkl3j0d1539amcnda5kgyyf630i";
+      url = mirror://xorg/individual/lib/libXext-1.1.2.tar.bz2;
+      sha256 = "0x2gzqrdzdzyrw8h9qz4ml8yyplb5ki78pvf17ibdjajkkv0ysmc";
     };
     buildInputs = [pkgconfig libX11 xextproto xproto ];
   })) // {inherit libX11 xextproto xproto ;};
     
   libXfixes = (stdenv.mkDerivation ((if overrides ? libXfixes then overrides.libXfixes else x: x) {
-    name = "libXfixes-4.0.4";
+    name = "libXfixes-4.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXfixes-4.0.4.tar.bz2;
-      sha256 = "0j1vwd5jwqc6wzv2jz18al2qdzm7k9kgs2x5rcq7r461qpjxfcds";
+      url = mirror://xorg/individual/lib/libXfixes-4.0.5.tar.bz2;
+      sha256 = "0x4drdxrslxf4vgcfyba0f0fbxg98c8x5dfrl7azakhf8qhd0v1f";
     };
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
   })) // {inherit fixesproto libX11 xextproto xproto ;};
     
   libXfont = (stdenv.mkDerivation ((if overrides ? libXfont then overrides.libXfont else x: x) {
-    name = "libXfont-1.4.1";
+    name = "libXfont-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXfont-1.4.1.tar.bz2;
-      sha256 = "0ybndzh6hc9l8arvvc6j5cbbby52b9n5654r9kndx60bh8qgqaqi";
+      url = mirror://xorg/individual/lib/libXfont-1.4.2.tar.bz2;
+      sha256 = "0ns99rhfz29y6bbc8slfaxjr132bb9x072vnhgv2kzfbk62mlpyh";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   })) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
@@ -704,7 +704,7 @@ let
       url = mirror://xorg/X11R7.5/src/everything/libXi-1.3.tar.bz2;
       sha256 = "0jwl19w8ry30v4wyar3fv9xbhzp3fbx1mq6p7c342s1qc068qarn";
     };
-    buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto xmlto asciidoc ];
+    buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto ];
   })) // {inherit inputproto libX11 libXext xextproto xproto ;};
     
   libXinerama = (stdenv.mkDerivation ((if overrides ? libXinerama then overrides.libXinerama else x: x) {
@@ -758,11 +758,11 @@ let
   })) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
     
   libXrender = (stdenv.mkDerivation ((if overrides ? libXrender then overrides.libXrender else x: x) {
-    name = "libXrender-0.9.5";
+    name = "libXrender-0.9.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXrender-0.9.5.tar.bz2;
-      sha256 = "1mfmbvq3xsx81zd1fj595b8ar2asdva4lvxcrdsbdqjbi91r01dw";
+      url = mirror://xorg/individual/lib/libXrender-0.9.6.tar.bz2;
+      sha256 = "0s567qgys8m6782lbrpvpscm8fkk2jm2717g7s3hm7hhcgib2n3z";
     };
     buildInputs = [pkgconfig renderproto libX11 xproto ];
   })) // {inherit renderproto libX11 xproto ;};
@@ -778,11 +778,11 @@ let
   })) // {inherit resourceproto libX11 libXext xextproto xproto ;};
     
   libXt = (stdenv.mkDerivation ((if overrides ? libXt then overrides.libXt else x: x) {
-    name = "libXt-1.0.7";
+    name = "libXt-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXt-1.0.7.tar.bz2;
-      sha256 = "1v59vll1jy4g2c3jpljj1xyw4nggqpn6jlnffiglbj31n1454vbh";
+      url = mirror://xorg/individual/lib/libXt-1.0.8.tar.bz2;
+      sha256 = "0z03nbb0lhxshpnyx2nl9kw0n3civjkag1mfiqf82qc64n0jrxbh";
     };
     buildInputs = [pkgconfig libICE kbproto libSM libX11 xproto ];
   })) // {inherit libICE kbproto libSM libX11 xproto ;};
@@ -888,11 +888,11 @@ let
   })) // {inherit ;};
     
   libxcb = (stdenv.mkDerivation ((if overrides ? libxcb then overrides.libxcb else x: x) {
-    name = "libxcb-1.4";
+    name = "libxcb-1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.4.tar.bz2;
-      sha256 = "17i0sfm66gkqycsyr6iw5q16fbf8qp0sw39ir1nv1gp4vp9y5dh7";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.6.tar.bz2;
+      sha256 = "0di9mm6d8wmscgfaw6sfa8znrk522y8dnl4xhy87wqx4fhbwirhs";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   })) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
@@ -958,11 +958,11 @@ let
   })) // {inherit libfontenc freetype xproto zlib ;};
     
   pixman = (stdenv.mkDerivation ((if overrides ? pixman then overrides.pixman else x: x) {
-    name = "pixman-0.16.4";
+    name = "pixman-0.18.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/pixman-0.16.4.tar.bz2;
-      sha256 = "07ndvwxmkrc4zyxpi8ndjmyj509cm411ajrc6qj6clr5y5c96vi9";
+      url = mirror://xorg/individual/lib/pixman-0.18.2.tar.bz2;
+      sha256 = "08rr88cy33k427vyxryxa9yssfy6j9s9m1vcvqmjl2949qv63818";
     };
     buildInputs = [pkgconfig perl ];
   })) // {inherit perl ;};
@@ -1068,11 +1068,11 @@ let
   })) // {inherit libICE libSM libX11 libXext libXmu libXt ;};
     
   utilmacros = (stdenv.mkDerivation ((if overrides ? utilmacros then overrides.utilmacros else x: x) {
-    name = "util-macros-1.3.0";
+    name = "util-macros-1.10.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/util-macros-1.3.0.tar.bz2;
-      sha256 = "1akibdzirycdz1p2z7awngrqan7cc1waxq497jsgc10zp5ssm6bc";
+      url = mirror://xorg/individual/util/util-macros-1.10.0.tar.bz2;
+      sha256 = "0a8in00qqyksij66wgk1m1cp6n4lii88a0c6g1s7cqshwp5b6lmr";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -1138,11 +1138,11 @@ let
   })) // {inherit ;};
     
   xcbproto = (stdenv.mkDerivation ((if overrides ? xcbproto then overrides.xcbproto else x: x) {
-    name = "xcb-proto-1.5";
+    name = "xcb-proto-1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.5.tar.bz2;
-      sha256 = "0f269j48h545pp99j316ab0wmriyr8xfz5ykrcxpfclgiqjmpwqc";
+      url = http://xcb.freedesktop.org/dist/xcb-proto-1.6.tar.bz2;
+      sha256 = "18jwkgd2ayvd0zzwawnbh86b4xqjq29mgsq44h06yj8jkcaw2azm";
     };
     buildInputs = [pkgconfig python ];
   })) // {inherit python ;};
@@ -1206,16 +1206,16 @@ let
     };
     buildInputs = [pkgconfig libXcursor ];
   })) // {inherit libXcursor ;};
-
+    
   xdm = (stdenv.mkDerivation ((if overrides ? xdm then overrides.xdm else x: x) {
-    name = "xdm-1.1.9";
+    name = "xdm-1.1.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdm-1.1.9.tar.bz2;
-      sha256 = "0d5i25mn6vzhkh5ga5b403hgfmaf66q40knr06ii608d3c7dpcg7";
+      url = mirror://xorg/individual/app/xdm-1.1.10.tar.bz2;
+      sha256 = "0zzrlkmppy6mma49db2x1il47rhjqkg9rs91ryl7xyv5iqbgg1ql";
     };
-    buildInputs = [pkgconfig libXmu libX11 libXau libXinerama libXft libXpm libXaw libXdmcp libXt libXext];
-  })) // {inherit libXmu libX11 libXau libXinerama libXft libXpm libXaw libXdmcp libXt libXext;};
+    buildInputs = [pkgconfig libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ];
+  })) // {inherit libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ;};
     
   xdpyinfo = (stdenv.mkDerivation ((if overrides ? xdpyinfo then overrides.xdpyinfo else x: x) {
     name = "xdpyinfo-1.1.0";
@@ -1318,14 +1318,14 @@ let
   })) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputevdev = (stdenv.mkDerivation ((if overrides ? xf86inputevdev then overrides.xf86inputevdev else x: x) {
-    name = "xf86-input-evdev-2.3.2";
+    name = "xf86-input-evdev-2.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-evdev-2.3.2.tar.bz2;
-      sha256 = "0a2y26fq3h1j5c16r8lhparvkr2rbah9f4jc70zcqfq1pmlz96q2";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.4.0.tar.bz2;
+      sha256 = "0sl02sx755j5kg9sd762sgqk2gnvkhj3pm76l47qhw0a2jvqmx4f";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  })) // {inherit xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto xorgserver xproto ];
+  })) // {inherit inputproto xorgserver xproto ;};
     
   xf86inputjoystick = (stdenv.mkDerivation ((if overrides ? xf86inputjoystick then overrides.xf86inputjoystick else x: x) {
     name = "xf86-input-joystick-1.4.99.2";
@@ -1528,14 +1528,14 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
-    name = "xf86-video-intel-2.11.0";
+    name = "xf86-video-intel-2.12.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.11.0.tar.bz2;
-      sha256 = "0kss9xpk160j13yvcb0s0k5hhvzcqmhplscmfwsk5cgk4ny2qafv";
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.12.0.tar.bz2;
+      sha256 = "1pzzzpw0i55m6s48ac8c3a0453rskqrdb4v6s9dq5bvj3ywpysz1";
     };
-    buildInputs = [pkgconfig dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libXext xextproto xf86driproto libXfixes xineramaproto xorgserver xproto libXvMC ];
-  })) // {inherit dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libXext xextproto xf86driproto libXfixes xineramaproto xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
+  })) // {inherit dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
     
   xf86videomach64 = (stdenv.mkDerivation ((if overrides ? xf86videomach64 then overrides.xf86videomach64 else x: x) {
     name = "xf86-video-mach64-6.8.2";
@@ -1798,14 +1798,14 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videovmware = (stdenv.mkDerivation ((if overrides ? xf86videovmware then overrides.xf86videovmware else x: x) {
-    name = "xf86-video-vmware-10.16.9";
+    name = "xf86-video-vmware-11.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vmware-10.16.9.tar.bz2;
-      sha256 = "1hcbgqb7lfcfwrvdscg9jzh1g5vhvc4vsj1sjsywnds8nm2mwnl3";
+      url = mirror://xorg/individual/driver/xf86-video-vmware-11.0.1.tar.bz2;
+      sha256 = "1gp7gj1a1jdcqr8qa9z57h1zjf0wjhr78b7fyxbl9fl1rdd1sdx6";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ];
-  })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ];
+  })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ;};
     
   xf86videovoodoo = (stdenv.mkDerivation ((if overrides ? xf86videovoodoo then overrides.xf86videovoodoo else x: x) {
     name = "xf86-video-voodoo-1.2.3";
@@ -1898,21 +1898,21 @@ let
   })) // {inherit ;};
     
   xinit = (stdenv.mkDerivation ((if overrides ? xinit then overrides.xinit else x: x) {
-    name = "xinit-1.2.0";
+    name = "xinit-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.2.0.tar.bz2;
-      sha256 = "0zq8cpxm1ws81xj39d0wfv29f1nj7s3pmjdashr32x918hx6cqdb";
+      url = mirror://xorg/individual/app/xinit-1.2.1.tar.bz2;
+      sha256 = "01wvdi69v9yadzavch6l8c80v1rqgxsyl6cl3byq0v8vx0xcgg0n";
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
     
   xinput = (stdenv.mkDerivation ((if overrides ? xinput then overrides.xinput else x: x) {
-    name = "xinput-1.5.0";
+    name = "xinput-1.5.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xinput-1.5.0.tar.bz2;
-      sha256 = "1yfazyhjdy49fwdlzxximbapliniibs8jm0vripd7vdm9gijhix8";
+      url = mirror://xorg/individual/app/xinput-1.5.2.tar.bz2;
+      sha256 = "1433lw6xv59f240rgrpgyf9qrmh9knpx64gg95bm32cjvh0qdrrc";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext libXi ];
   })) // {inherit inputproto libX11 libXext libXi ;};
@@ -1958,31 +1958,31 @@ let
   })) // {inherit libX11 libXmu ;};
     
   xlsatoms = (stdenv.mkDerivation ((if overrides ? xlsatoms then overrides.xlsatoms else x: x) {
-    name = "xlsatoms-1.0.2";
+    name = "xlsatoms-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xlsatoms-1.0.2.tar.bz2;
-      sha256 = "06qjbhph27jwbp7w5iiqk6ka6h2g2nk5x9x8ilpab8jy5rldfv6n";
+      url = mirror://xorg/individual/app/xlsatoms-1.1.0.tar.bz2;
+      sha256 = "03fbknvq7rixfgpv5945s7r82jz2xc06a0n09w1p22hl4pd7l0aa";
     };
-    buildInputs = [pkgconfig libX11 libXmu ];
-  })) // {inherit libX11 libXmu ;};
+    buildInputs = [pkgconfig libxcb ];
+  })) // {inherit libxcb ;};
     
   xlsclients = (stdenv.mkDerivation ((if overrides ? xlsclients then overrides.xlsclients else x: x) {
-    name = "xlsclients-1.0.2";
+    name = "xlsclients-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xlsclients-1.0.2.tar.bz2;
-      sha256 = "163ni1f71gq24gm83pmqha81r44qprqv7j2b07gngk2gkp9cs9w5";
+      url = mirror://xorg/individual/app/xlsclients-1.1.0.tar.bz2;
+      sha256 = "037sph4zyar6061445xmf1bqrmm00k6qr9lpypjnrx4ragsm2nzr";
     };
-    buildInputs = [pkgconfig libX11 libXmu ];
-  })) // {inherit libX11 libXmu ;};
+    buildInputs = [pkgconfig libxcb ];
+  })) // {inherit libxcb ;};
     
   xmessage = (stdenv.mkDerivation ((if overrides ? xmessage then overrides.xmessage else x: x) {
-    name = "xmessage-1.0.2";
+    name = "xmessage-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmessage-1.0.2.tar.bz2;
-      sha256 = "1hy3n227iyrm323hnrdld8knj9h82fz6s7x6bw899axcjdp03d02";
+      url = mirror://xorg/individual/app/xmessage-1.0.3.tar.bz2;
+      sha256 = "0nrxidff0pcd1ampfzj91ai74j6mx613j5kqk3j0c4xdshx5v8yg";
     };
     buildInputs = [pkgconfig libXaw libXt ];
   })) // {inherit libXaw libXt ;};
@@ -2018,11 +2018,11 @@ let
   })) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.7.5";
+    name = "xorg-server-1.7.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.7.5.tar.bz2;
-      sha256 = "1ampdfdijwafzlpq9jwxaxwwq40j0ymvcd922bs70wiybk8g7rci";
+      url = mirror://xorg/individual/xserver/xorg-server-1.7.7.tar.bz2;
+      sha256 = "1zr63701gii6aarxj9016gdymhiv3ycfdnixxbdjm1dqzqmx7i2l";
     };
     buildInputs = [pkgconfig bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ];
   })) // {inherit bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ;};
@@ -2058,11 +2058,11 @@ let
   })) // {inherit libX11 ;};
     
   xproto = (stdenv.mkDerivation ((if overrides ? xproto then overrides.xproto else x: x) {
-    name = "xproto-7.0.16";
+    name = "xproto-7.0.17";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xproto-7.0.16.tar.bz2;
-      sha256 = "0wlnxg51mz9zrdsx2zxr5mw56i5vcbnz69d30x7fs3cww4fdl942";
+      url = mirror://xorg/individual/proto/xproto-7.0.17.tar.bz2;
+      sha256 = "00cxgwaijhz7vp60washz03nvwk42f7sz72xkzfcx01pbgf1yb4v";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
