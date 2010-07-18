@@ -7961,9 +7961,9 @@ let
     inherit (xlibs) libXinerama;
   };
 
-  firefox = firefox35;
+  firefox = firefox36;
 
-  firefoxWrapper = firefox35Wrapper;
+  firefoxWrapper = firefox36Wrapper;
 
   firefox35Pkgs = import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
