@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   };
   
   propagatedBuildInputs = [ zlib ];
+
+  passthru = { inherit zlib; };
   
   meta = {
     description = "The official reference implementation for the PNG file format";

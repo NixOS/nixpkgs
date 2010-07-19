@@ -3004,7 +3004,7 @@ let
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
       inherit stdenv application launcher;
-      xulrunner = xulrunner35;
+      xulrunner = firefox36Pkgs.xulrunner;
     };
 
 
@@ -7964,8 +7964,7 @@ let
     inherit (xlibs) libXinerama;
   };
 
-  firefox = firefox36;
-
+  firefox = firefox36Pkgs.firefox;
   firefoxWrapper = firefox36Wrapper;
 
   firefox35Pkgs = import ../applications/networking/browsers/firefox/3.5.nix {
@@ -7976,9 +7975,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox35 = firefox35Pkgs.firefox;
-  xulrunner35 = firefox35Pkgs.xulrunner;
-  firefox35Wrapper = wrapFirefox firefox35 "firefox" "";
+  firefox35Wrapper = wrapFirefox firefox35Pkgs.firefox "firefox" "";
 
   firefox36Pkgs = import ../applications/networking/browsers/firefox/3.6.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
@@ -7988,7 +7985,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox36Wrapper = lowPrio (wrapFirefox firefox36Pkgs.firefox "firefox" "");
+  firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
 
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
@@ -8147,7 +8144,7 @@ let
   gecko_mediaplayer = import ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
     inherit fetchurl stdenv pkgconfig dbus dbus_glib x11 gnome_mplayer MPlayer glib;
     inherit (gnome) GConf;
-    browser = firefox35;
+    browser = firefox;
   };
 
   geeqie = import ../applications/graphics/geeqie {
