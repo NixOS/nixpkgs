@@ -1231,7 +1231,10 @@ let
   };
 
   nbd = import ../tools/networking/nbd {
-    inherit fetchurl stdenv pkgconfig glib;
+    inherit fetchurl stdenv pkgconfig;
+    glib = gtkLibs.glib.override {
+      stdenv = makeStaticBinaries stdenv;
+    };
   };
 
   nc6 = composedArgsAndFun (import ../tools/networking/nc6/1.0.nix) {
@@ -4287,7 +4290,7 @@ let
 
   gtkLibs220 = rec {
 
-    glib = import ../development/libraries/glib/2.24.x.nix {
+    glib = makeOverridable (import ../development/libraries/glib/2.24.x.nix) {
       inherit fetchurl stdenv pkgconfig gettext perl zlib;
       libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
     };
