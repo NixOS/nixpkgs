@@ -3235,7 +3235,7 @@ let
   };
 
   eggdbus = import ../development/tools/misc/eggdbus {
-    inherit stdenv fetchurl pkgconfig dbus dbus_glib glib;
+    inherit stdenv fetchurl pkgconfig dbus dbus_glib glib zlib;
   };
 
   elfutils = import ../development/tools/misc/elfutils {
