@@ -1534,8 +1534,8 @@ let
       url = mirror://xorg/individual/driver/xf86-video-intel-2.12.0.tar.bz2;
       sha256 = "1pzzzpw0i55m6s48ac8c3a0453rskqrdb4v6s9dq5bvj3ywpysz1";
     };
-    buildInputs = [pkgconfig dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
-  })) // {inherit dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
+  })) // {inherit dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
     
   xf86videomach64 = (stdenv.mkDerivation ((if overrides ? xf86videomach64 then overrides.xf86videomach64 else x: x) {
     name = "xf86-video-mach64-6.8.2";
@@ -1974,8 +1974,8 @@ let
       url = mirror://xorg/individual/app/xlsclients-1.1.0.tar.bz2;
       sha256 = "037sph4zyar6061445xmf1bqrmm00k6qr9lpypjnrx4ragsm2nzr";
     };
-    buildInputs = [pkgconfig libxcb ];
-  })) // {inherit libxcb ;};
+    buildInputs = [pkgconfig libxcb xcbutil ];
+  })) // {inherit libxcb xcbutil ;};
     
   xmessage = (stdenv.mkDerivation ((if overrides ? xmessage then overrides.xmessage else x: x) {
     name = "xmessage-1.0.3";
