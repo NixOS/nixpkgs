@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "014c3da960bf17117371075c16495f05f36501db990851ceea658f15d2ea6d04";
   };
 
-  buildInputs = [ pkgconfig gettext perl libiconv zlib ];
+  buildInputs = [ pkgconfig gettext perl libiconv ];
+
+  propagatedBuildInputs = [ zlib ];
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
