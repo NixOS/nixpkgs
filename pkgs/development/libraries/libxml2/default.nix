@@ -3,11 +3,11 @@
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation {
-  name = "libxml2-2.7.6";
+  name = "libxml2-2.7.7";
 
   src = fetchurl {
-    url = ftp://xmlsoft.org/libxml2/libxml2-sources-2.7.6.tar.gz;
-    sha256 = "0n61rqqfiv0m64p01cwx205i6hb0mmzf7r0ya40s4fiqd2nhkkg0";
+    url = ftp://xmlsoft.org/libxml2/libxml2-sources-2.7.7.tar.gz;
+    sha256 = "03kkknm7xl77qfdig8mzalsi8ljsyblzin18gy3h8zranffrpyzs";
   };
 
   configureFlags = ''                                                  
