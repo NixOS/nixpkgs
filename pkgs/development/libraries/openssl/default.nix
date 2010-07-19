@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "./config";
   
-  configureFlags = "shared";
+  configureFlags = "shared --libdir=lib";
 
   crossAttrs = {
     configurePhase = ''
