@@ -598,11 +598,11 @@ let
   })) // {inherit scrnsaverproto libX11 libXext xextproto ;};
     
   libXau = (stdenv.mkDerivation ((if overrides ? libXau then overrides.libXau else x: x) {
-    name = "libXau-1.0.5";
+    name = "libXau-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/libXau-1.0.5.tar.bz2;
-      sha256 = "1vh8h4fhf6i59qwqqd4i2ki2qv0hajpx3cp1ri2rryi9iplb60x5";
+      url = mirror://xorg/individual/lib/libXau-1.0.6.tar.bz2;
+      sha256 = "1z3h07wj2kg2hnzj4gd9pc3rkj4n0mfw6f9skg9w1hfwzrgl317f";
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};

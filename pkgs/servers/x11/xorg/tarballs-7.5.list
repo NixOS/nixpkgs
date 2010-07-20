@@ -57,7 +57,7 @@ mirror://xorg/individual/lib/libpciaccess-0.11.0.tar.bz2
 mirror://xorg/X11R7.5/src/everything/libSM-1.1.1.tar.bz2
 mirror://xorg/X11R7.5/src/everything/libWindowsWM-1.0.1.tar.bz2
 mirror://xorg/individual/lib/libX11-1.3.4.tar.bz2
-mirror://xorg/X11R7.5/src/everything/libXau-1.0.5.tar.bz2
+mirror://xorg/individual/lib/libXau-1.0.6.tar.bz2
 mirror://xorg/X11R7.5/src/everything/libXaw-1.0.7.tar.bz2
 mirror://xorg/individual/lib/libXcomposite-0.4.2.tar.bz2
 mirror://xorg/X11R7.5/src/everything/libXcursor-1.1.10.tar.bz2
