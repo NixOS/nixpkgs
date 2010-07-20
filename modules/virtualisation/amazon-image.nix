@@ -2,6 +2,20 @@
 
 with pkgs.lib;
 
+let
+
+  grubMenu = pkgs.writeText "pv-grub-menu.lst"
+    ''
+      default 0
+      timeout 0
+      title EC2
+        root (hd0)
+        kernel /nix/var/nix/profiles/system/kernel systemConfig=/nix/var/nix/profiles/system init=/nix/var/nix/profiles/system/init
+        initrd /nix/var/nix/profiles/system/initrd
+    '';
+
+in
+
 {
   system.build.amazonImage =
     pkgs.vmTools.runInLinuxVM (
@@ -47,40 +61,31 @@ with pkgs.lib;
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
           cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
-                    
-          # Amazon assumes that there is a /sbin/init, so create one.
-          # Note that simply creating /sbin/init as a symlink breaks
-          # some EC2 initrds (like Ubuntu's) because they do a "test
-          # -x $mountPoint/sbin/init".
-          mkdir -p /mnt/sbin
-          echo "#! /nix/var/nix/profiles/system/init" > /mnt/sbin/init
-          chmod +x /mnt/sbin/init
+
+          # Amazon uses `pv-grub', which expects a
+          # /boot/grub/menu.lst.
+          mkdir -p /mnt/boot/grub
+          cp ${grubMenu} /mnt/boot/grub/menu.lst
 
           umount /mnt
         ''
     );
-
-  # On EC2 we don't get to supply our own kernel, so we can't load any
-  # modules.  However, dhclient fails if the ipv6 module isn't loaded,
-  # unless it's compiled without IPv6 support.  So do that.
-  nixpkgs.config.packageOverrides = pkgsOld:                                        
-    { dhcp = pkgs.lib.overrideDerivation pkgsOld.dhcp (oldAttrs:                    
-        { configureFlags = "--disable-dhcpv6";                                      
-        });                                                                         
-    };                                                                              
 
   fileSystems =
     [ { mountPoint = "/";
         device = "/dev/disk/by-label/nixos";
       }
       { mountPoint = "/data";
-        device = "/dev/sda2";
+        device = "/dev/xvdc";
         autocreate = true;
       }
     ];
 
   swapDevices =
-    [ { device = "/dev/sda3"; } ];
+    [ { device = "/dev/xvdb"; } ];
+
+  boot.initrd.kernelModules = [ "xen-blkfront" ];
+  boot.kernelModules = [ "xen-netfront" ];
 
   # There are no virtual consoles.
   services.mingetty.ttys = [ ];
