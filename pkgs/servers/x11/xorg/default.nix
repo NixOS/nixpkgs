@@ -2018,14 +2018,14 @@ let
   })) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.7.7";
+    name = "xorg-server-1.8.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.7.7.tar.bz2;
-      sha256 = "1zr63701gii6aarxj9016gdymhiv3ycfdnixxbdjm1dqzqmx7i2l";
+      url = mirror://xorg/individual/xserver/xorg-server-1.8.2.tar.bz2;
+      sha256 = "1qmcmrv26p8645nwdm2q558mpvi75fpn9knkacanzysw5497w5aj";
     };
-    buildInputs = [pkgconfig bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ];
-  })) // {inherit bigreqsproto damageproto dbus fixesproto fontsproto hal inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ;};
+    buildInputs = [pkgconfig bigreqsproto damageproto dbus fixesproto fontsproto inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ];
+  })) // {inherit bigreqsproto damageproto dbus fixesproto fontsproto inputproto kbproto libdrm openssl libpciaccess perl pixman randrproto renderproto libX11 libXau libXaw xcmiscproto libXdmcp xextproto libXfixes libXfont libxkbfile libXmu libXpm xproto libXrender libXres libXt xtrans libXv ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation ((if overrides ? xorgsgmldoctools then overrides.xorgsgmldoctools else x: x) {
     name = "xorg-sgml-doctools-1.3";
