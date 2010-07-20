@@ -3,11 +3,6 @@
 # !!! copied from stage 1; remove duplication
 
 
-# If no `systemConfig' parameter is specified on the kernel command
-# line, use a fallback.
-systemConfig=/nix/var/nix/profiles/system
-
-
 # Print a greeting.
 echo
 echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
@@ -61,6 +56,11 @@ rm -f /etc/mtab* # not that we care about stale locks
 cat /proc/mounts > /etc/mtab
 
 
+# If no `systemConfig' parameter is specified on the kernel command
+# line, use a fallback.
+systemConfig=/nix/var/nix/profiles/system
+
+
 # Process the kernel command line.
 for o in $(cat /proc/cmdline); do
     case $o in
@@ -89,6 +89,8 @@ for o in $(cat /proc/cmdline); do
             ;;
     esac
 done
+
+systemConfig="$(readlink -f "$systemConfig")"
 
 
 # More special file systems, initialise required directories.
