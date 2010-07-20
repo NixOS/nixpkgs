@@ -291,10 +291,10 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 # current root.  It also moves the /proc, /sys and /dev mounts over to
 # the new root.  Note that $stage2Init might be an absolute symlink,
 # in which case "-e" won't work because we're not in the chroot yet.
-if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
-    echo "stage 2 init script not found"
-    fail
-fi
+#if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
+#    echo "stage 2 init script ($targetRoot/$stage2Init) not found"
+#    fail
+#fi
 
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev
 
