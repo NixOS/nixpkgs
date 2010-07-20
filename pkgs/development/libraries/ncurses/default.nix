@@ -14,7 +14,9 @@ stdenv.mkDerivation ( rec {
   '';
 
   selfBuildNativeInput = true;
-    
+
+  enableParallelBuilding = true;
+
   preBuild = ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
 
   # When building a wide-character (Unicode) build, create backward
