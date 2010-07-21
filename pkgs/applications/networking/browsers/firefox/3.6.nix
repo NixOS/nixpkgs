@@ -19,7 +19,7 @@ rec {
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "12c584a63ea6ddbb9253094ad500bc6b046903a6";
+    sha1 = "12c584a63ea6ddbb9253094ad500bc6b046903a6";
   };
 
 
