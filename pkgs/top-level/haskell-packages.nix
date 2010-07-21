@@ -61,6 +61,10 @@ rec {
     inherit cabal;
   };
 
+  blazeHtml = import ../development/libraries/haskell/blaze-html {
+    inherit cabal text;
+  };
+
   bytestring = import ../development/libraries/haskell/bytestring {
     inherit cabal;
   };
@@ -70,6 +74,10 @@ rec {
   };
 
   cautiousFile = import ../development/libraries/haskell/cautious-file {
+    inherit cabal;
+  };
+
+  cereal = import ../development/libraries/haskell/cereal {
     inherit cabal;
   };
 
@@ -249,6 +257,10 @@ rec {
   gtk2hs = import ../development/libraries/haskell/gtk2hs {
     inherit ghc mtl;
     inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
+  };
+
+  hamlet = import ../development/libraries/haskell/hamlet {
+    inherit cabal blazeHtml parsec utf8String;
   };
 
   HAppSData = import ../development/libraries/haskell/HAppS/HAppS-Data.nix {
@@ -518,6 +530,10 @@ rec {
     inherit cabal mtl extensibleExceptions;
   };
 
+  MonadCatchIOTransformers = import ../development/libraries/haskell/MonadCatchIO-transformers {
+    inherit cabal transformers extensibleExceptions;
+  };
+
   monadlab = import ../development/libraries/haskell/monadlab {
     inherit cabal parsec;
   };
@@ -613,6 +629,11 @@ rec {
   pcreLight = import ../development/libraries/haskell/pcre-light {
     inherit cabal;
     inherit (pkgs) pcre;
+  };
+
+  persistent = import ../development/libraries/haskell/persistent {
+    inherit cabal blazeHtml MonadCatchIOTransformers parsec text
+      transformers utf8String webRoutesQuasi;
   };
 
   polyparse = import ../development/libraries/haskell/polyparse {
@@ -888,6 +909,15 @@ rec {
 
   vty = import ../development/libraries/haskell/vty {
     inherit cabal utf8String terminfo;
+  };
+
+  webRoutes = import ../development/libraries/haskell/web-routes {
+    inherit cabal utf8String parsec;
+    network = network2217;
+  };
+
+  webRoutesQuasi = import ../development/libraries/haskell/web-routes-quasi {
+    inherit cabal webRoutes;
   };
 
   WebServer = import ../development/libraries/haskell/WebServer {
