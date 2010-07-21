@@ -868,11 +868,11 @@ let
   })) // {inherit xproto zlib ;};
     
   libpciaccess = (stdenv.mkDerivation ((if overrides ? libpciaccess then overrides.libpciaccess else x: x) {
-    name = "libpciaccess-0.11.0";
+    name = "libpciaccess-0.12.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libpciaccess-0.11.0.tar.bz2;
-      sha256 = "1avx3kn44lk3xs49q8bqh8hqi08x0inab2zxlrk3rj2nnq9bwf3f";
+      url = mirror://xorg/individual/lib/libpciaccess-0.12.0.tar.bz2;
+      sha256 = "0msnx3mcbqgghjscq3z1nh894k71k3bx659iaqlhgaqa3h7c1czn";
     };
     buildInputs = [pkgconfig zlib ];
   })) // {inherit zlib ;};
