@@ -606,7 +606,7 @@ let
   };
 
   dar = import ../tools/archivers/dar {
-    inherit fetchurl stdenv zlib bzip2 openssl;
+    inherit fetchurl stdenv zlib bzip2 openssl attr;
   };
 
   davfs2 = import ../tools/filesystems/davfs2 {
