@@ -287,10 +287,10 @@ in {
               . " mklabel msdos"
               . " mkpart primary ext2 1M 30MB" # /boot
               . " mkpart extended 30M -1s"
-              . " mkpart logical 31M 1000M" # md0 (root), first device
-              . " mkpart logical 1024M 2000M" # md0 (root), second device
-              . " mkpart logical 2048M 2548M" # md1 (swap), first device
-              . " mkpart logical 2560M 3060M", # md1 (swap), second device
+              . " mkpart logical 31M 1531M" # md0 (root), first device
+              . " mkpart logical 1540M 3040M" # md0 (root), second device
+              . " mkpart logical 3050M 3306M" # md1 (swap), first device
+              . " mkpart logical 3320M 3576M", # md1 (swap), second device
               "udevadm settle",
               "ls -l /dev/vda* >&2",
               "cat /proc/partitions >&2",
