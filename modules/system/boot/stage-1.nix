@@ -249,7 +249,20 @@ let
       # Such a link can get obsolete in a running system, but 
       # during boot stage 1 it is unlikely. We need this change
       # to be able to boot on a wider choice of CD drives.
-      sed -e '/^ENV[{]DEVTYPE[}]=="disk", .*GOTO/d' -i $out/60-persistent-storage.rules 
+      sed -e '/^ENV[{]DEVTYPE[}]=="disk", .*GOTO/d' -i $out/60-persistent-storage.rules
+
+      # Work around a bug in QEMU, which doesn't implement the "READ
+      # DISC INFORMATION" SCSI command:
+      #   https://bugzilla.redhat.com/show_bug.cgi?id=609049
+      # As a result, `cdrom_id' doesn't print
+      # ID_CDROM_MEDIA_TRACK_COUNT_DATA, which in turn prevents the
+      # /dev/disk/by-label symlinks from being created.  We need these
+      # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
+      # corresponding udev rules for now.  This was the behaviour in
+      # udev <= 154.  See also
+      #   http://www.spinics.net/lists/hotplug/msg03935.html
+      substituteInPlace $out/60-persistent-storage.rules \
+        --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */
   };
 
