@@ -2,20 +2,6 @@
 
 with pkgs.lib;
 
-let
-
-  grubMenu = pkgs.writeText "pv-grub-menu.lst"
-    ''
-      default 0
-      timeout 0
-      title EC2
-        root (hd0)
-        kernel /nix/var/nix/profiles/system/kernel systemConfig=/nix/var/nix/profiles/system init=/nix/var/nix/profiles/system/init
-        initrd /nix/var/nix/profiles/system/initrd
-    '';
-
-in
-
 {
   system.build.amazonImage =
     pkgs.vmTools.runInLinuxVM (
@@ -62,10 +48,8 @@ in
           mkdir -p /mnt/etc/nixos
           cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
 
-          # Amazon uses `pv-grub', which expects a
-          # /boot/grub/menu.lst.
-          mkdir -p /mnt/boot/grub
-          cp ${grubMenu} /mnt/boot/grub/menu.lst
+          # Generate the GRUB menu.
+          chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
           umount /mnt
         ''
@@ -86,6 +70,11 @@ in
 
   boot.initrd.kernelModules = [ "xen-blkfront" ];
   boot.kernelModules = [ "xen-netfront" ];
+
+  # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
+  boot.loader.grub.device = "nodev";
+  boot.loader.grub.timeout = 0;
+  boot.loader.grub.extraPerEntryConfig = "root (hd0)";
 
   # There are no virtual consoles.
   services.mingetty.ttys = [ ];

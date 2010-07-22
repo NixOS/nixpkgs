@@ -159,17 +159,17 @@ addEntry() {
 	case "$grubVersion" in
 	    1)
 		cat > /boot/nixos-grub-config <<EOF
-	title Emergency boot
-	kernel $bootRoot/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
-	initrd $bootRoot/nixos-initrd
+title Emergency boot
+  kernel $bootRoot/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
+  initrd $bootRoot/nixos-initrd
 EOF
 		;;
 	    2)
 		cat > /boot/nixos-grub-config <<EOF
-        menuentry "Emergency boot" {
-          linux  $bootRoot/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
-          initrd $bootRoot/initrd
-        }
+menuentry "Emergency boot" {
+  linux  $bootRoot/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
+  initrd $bootRoot/initrd
+}
 EOF
 		;;
 	esac
@@ -189,6 +189,7 @@ EOF
 	1)
 	    cat >> "$tmp" << GRUBEND
 title $name
+  @extraPerEntryConfig@
   kernel $kernel systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)
   initrd $initrd
 GRUBEND
@@ -196,6 +197,7 @@ GRUBEND
 	2)
 	    cat >> "$tmp" << GRUBEND
 menuentry "$name" {
+  @extraPerEntryConfig@
   linux  $kernel systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)
   initrd $initrd
 }

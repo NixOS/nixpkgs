@@ -13,7 +13,7 @@ let
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     inherit (config.boot.loader.grub) copyKernels
-      extraConfig extraEntries extraEntriesBeforeNixOS
+      extraConfig extraEntries extraEntriesBeforeNixOS extraPerEntryConfig
       splashImage configurationLimit version default timeout;
   };
   
@@ -48,9 +48,12 @@ in
         example = "/dev/hda";
         type = with pkgs.lib.types; uniq string;
         description = ''
-          The device on which the boot loader, GRUB, will be installed.
-          If empty, GRUB won't be installed and it's your responsibility
-          to make the system bootable.
+          The device on which the boot loader, GRUB, will be
+          installed.  If empty, GRUB won't be installed and it's your
+          responsibility to make the system bootable.  The special
+          value <literal>nodev</literal> means that a GRUB boot menu
+          will be generated, but GRUB itself will not actually be
+          installed.
         '';
       };
 
@@ -74,6 +77,15 @@ in
         description = ''
           Additional GRUB commands inserted in the configuration file
           just before the menu entries.
+        '';
+      };
+
+      extraPerEntryConfig = mkOption {
+        default = "";
+        example = "root (hd0)";
+        description = ''
+          Additional GRUB commands inserted in the configuration file
+          at the start of each NixOS menu entry.
         '';
       };
 
