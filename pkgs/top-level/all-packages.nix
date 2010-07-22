@@ -139,7 +139,7 @@ let
 
   inherit lib config getConfig stdenvAdapters;
 
-  inherit (lib) lowPrio appendToName makeOverridable;
+  inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
@@ -3728,6 +3728,17 @@ let
     inherit fetchurl stdenv;
   };
 
+  clutter = import ../development/libraries/clutter {
+    inherit fetchurl stdenv pkgconfig mesa cairo;
+    inherit (gnome) glib pango gtk;
+    inherit (xorg) libXi libXfixes libXdamage libXcomposite;
+  };
+
+  clutter_gtk = import ../development/libraries/clutter-gtk {
+    inherit fetchurl stdenv pkgconfig clutter;
+    inherit (gnome) gtk;
+  };
+
   commoncpp2 = import ../development/libraries/commoncpp2 {
     inherit stdenv fetchurl;
   };
@@ -4525,6 +4536,11 @@ let
 
   libcdio = import ../development/libraries/libcdio {
     inherit fetchurl stdenv libcddb pkgconfig ncurses help2man;
+  };
+
+  libchamplain = import ../development/libraries/libchamplain {
+    inherit fetchurl stdenv pkgconfig cairo clutter clutter_gtk sqlite;
+    inherit (gnome) gtk glib libsoup;
   };
 
   libcm = import ../development/libraries/libcm {
@@ -5901,7 +5917,8 @@ let
   };
 
   dico = import ../servers/dico {
-    inherit fetchurl stdenv libtool gettext zlib readline guile python;
+    inherit fetchurl stdenv libtool gettext zlib readline guile python
+      gsasl;
   };
 
   dict = makeOverridable (import ../servers/dict) {
@@ -7859,6 +7876,12 @@ let
       inherit fetchurl stdenv;
     };
 
+    # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
+    # we want it to have higher precedence.
+    org = hiPrio (import ../applications/editors/emacs-modes/org {
+      inherit fetchurl stdenv emacs texinfo;
+    });
+
     prologMode = import ../applications/editors/emacs-modes/prolog {
       inherit fetchurl stdenv;
     };
@@ -8149,7 +8172,7 @@ let
 
   geeqie = import ../applications/graphics/geeqie {
     inherit fetchurl stdenv pkgconfig libpng lcms exiv2
-      intltool gettext;
+      intltool gettext libchamplain;
     inherit (gtkLibs) gtk;
   };
 
@@ -8764,6 +8787,11 @@ let
     inherit (xlibs) libXau libXaw libXdmcp libXext libX11 libXtst libXi libXinerama libXrender;
     inherit (xorg) pixman libpthreadstubs;
     qt = qt3;
+  };
+
+  seeks = import ../tools/networking/p2p/seeks {
+    inherit fetchurl stdenv zlib docbook2x pcre curl libxml2 libevent perl
+      autoconf automake libtool;
   };
 
   seg3d = import ../applications/graphics/seg3d {
@@ -9795,7 +9823,7 @@ let
   };
 
   vite = import ../applications/science/misc/vite {
-    inherit fetchurl cmake mesa;
+    inherit fetchsvn cmake mesa;
     qt = qt4;
     stdenv = stdenv2;
   };

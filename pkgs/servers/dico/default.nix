@@ -1,15 +1,16 @@
-{ fetchurl, stdenv, libtool, gettext, zlib, readline, guile, python }:
+{ fetchurl, stdenv, libtool, gettext, zlib, readline, gsasl
+, guile, python }:
 
 stdenv.mkDerivation rec {
-  name = "dico-2.0";
+  name = "dico-2.1";
 
   src = fetchurl {
     url = "mirror://gnu/dico/${name}.tar.gz";
-    sha256 = "03cpg16jbsv5xh9mvyjj7myvpdpb82354a1yjrhcy0k5w8faa9kv";
+    sha256 = "0cs4jxnz6g5xqrhkbnycn7jl9fs8jfjh33vza7i68m8qmjwx2vza";
   };
 
   # XXX: Add support for GNU SASL.
-  buildInputs = [ libtool gettext zlib readline guile python ];
+  buildInputs = [ libtool gettext zlib readline gsasl guile python ];
 
   doCheck = true;
 

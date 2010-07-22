@@ -1,0 +1,15 @@
+Fix Darwin builds.
+
+From <http://git.savannah.gnu.org/cgit/cpio.git/commit/?id=3a7a1820d4cecbd77c7b74c785af5942510bf080>.
+See also <http://lists.gnu.org/archive/html/bug-cpio/2010-07/msg00001.html>.
+
+diff --git a/src/filetypes.h b/src/filetypes.h
+index f80faab..81f0c32 100644
+--- a/src/filetypes.h
++++ b/src/filetypes.h
+@@ -81,5 +81,3 @@
+ #ifndef S_ISLNK
+ #define lstat stat
+ #endif
+-int lstat ();
+-int stat ();
