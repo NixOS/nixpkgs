@@ -202,7 +202,7 @@ let
       $out/bin/udevadm --version
       $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux-ng"
       $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm 2>&1 | tee -a $out/log | grep "LVM"
+      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a $out/log | grep "LVM"
       $out/bin/reiserfsck -V
       $out/bin/mdadm --version
       $out/bin/basename --version
