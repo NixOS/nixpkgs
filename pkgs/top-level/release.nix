@@ -415,7 +415,7 @@ with (import ./release-lib.nix);
     gitit = linux;
     gtk2hs = linux;
     leksah = linux;
-    haskellPlatform = ghcSupported;
+    haskellPlatform2009202 = ghcSupported;
     xmonad = linux;
   };
 
