@@ -7838,6 +7838,10 @@ let
       inherit fetchurl stdenv;
     };
 
+    org = import ../applications/editors/emacs-modes/org {
+      inherit fetchurl stdenv emacs texinfo;
+    };
+
     prologMode = import ../applications/editors/emacs-modes/prolog {
       inherit fetchurl stdenv;
     };
