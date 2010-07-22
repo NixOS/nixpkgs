@@ -5880,7 +5880,8 @@ let
   };
 
   dico = import ../servers/dico {
-    inherit fetchurl stdenv libtool gettext zlib readline guile python;
+    inherit fetchurl stdenv libtool gettext zlib readline guile python
+      gsasl;
   };
 
   dict = makeOverridable (import ../servers/dict) {
