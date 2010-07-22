@@ -8553,7 +8553,7 @@ let
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
-    neon = neon026;
+    neon = neon029;
     stdenv = stdenv2;
   };
 
@@ -8566,7 +8566,7 @@ let
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
-    neon = neon026;
+    neon = neon029;
     stdenv = stdenv2;
 
     inherit autoconf openldap postgresql;
