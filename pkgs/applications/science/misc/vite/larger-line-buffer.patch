@@ -1,0 +1,14 @@
+ViTE has an arbitrary restriction on the length of lines read by the parser.
+Make it larger.
+
+--- a/src/parser/PajeFileManager.hpp
++++ b/src/parser/PajeFileManager.hpp
+@@ -67,7 +67,7 @@
+  
+ #include <string.h>
+ 
+-#define _PAJE_BUFSIZE  256
++#define _PAJE_BUFSIZE  16384
+ #define _PAJE_NBMAXTKS  16
+ 
+ /**

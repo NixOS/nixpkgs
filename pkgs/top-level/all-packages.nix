@@ -9784,7 +9784,7 @@ let
   };
 
   vite = import ../applications/science/misc/vite {
-    inherit fetchurl cmake mesa;
+    inherit fetchsvn cmake mesa;
     qt = qt4;
     stdenv = stdenv2;
   };
