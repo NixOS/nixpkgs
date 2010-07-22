@@ -341,7 +341,9 @@ rec {
     inherit cabal haskellSrcExts;
   };
 
-  haskellPlatform2010200 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
+  haskellPlatform = haskellPlatform2010200;
+
+  haskellPlatform2010200 = import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
     inherit cabal ghc
       html xhtml;
     haskellSrc = haskellSrcP;
@@ -364,7 +366,7 @@ rec {
     haddock = haddock272P;
     happy = happy1185;
     inherit (pkgs) fetchurl;
-  });
+  };
 
   haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
@@ -389,7 +391,7 @@ rec {
     inherit (pkgs) fetchurl;
   });
 
-  haskellPlatform = import ../development/libraries/haskell/haskell-platform {
+  haskellPlatform2009202 = import ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix {
     inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
       haskellSrc html parallel regexBase regexCompat regexPosix
       stm time xhtml zlib cabalInstall alex happy haddock;
@@ -1160,7 +1162,7 @@ rec {
   };
 
   lhs2tex = import ../tools/typesetting/lhs2tex {
-    inherit cabal regexCompat utf8String;
+    inherit cabal regexCompat;
     inherit (pkgs) tetex polytable;
   };
 

@@ -2387,7 +2387,7 @@ let
   # packages.
 
   # This should point to the current default version.
-  haskellPackages = haskellPackages_ghc6104;
+  haskellPackages = haskellPackages_ghc6123;
 
   # Old versions of ghc that currently don't build because the binary
   # is broken.
@@ -2472,15 +2472,14 @@ let
   haskellPackages_ghc6104 =
     haskellPackagesFun610 ../development/compilers/ghc/6.10.4.nix false;
 
-  # We will soon switch to ghc-6.12.* as default.
-  haskellPackages_ghc6121 = lowPrio
-    (haskellPackagesFun612 ../development/compilers/ghc/6.12.1.nix false);
+  haskellPackages_ghc6121 =
+    haskellPackagesFun612 ../development/compilers/ghc/6.12.1.nix false;
 
-  haskellPackages_ghc6122 = lowPrio
-    (haskellPackagesFun612 ../development/compilers/ghc/6.12.2.nix false);
+  haskellPackages_ghc6122 =
+    haskellPackagesFun612 ../development/compilers/ghc/6.12.2.nix false;
 
-  haskellPackages_ghc6123 = lowPrio
-    (haskellPackagesFun612 ../development/compilers/ghc/6.12.3.nix false);
+  haskellPackages_ghc6123 =
+    haskellPackagesFun612 ../development/compilers/ghc/6.12.3.nix false;
 
   # Currently not pointing to the actual HEAD, therefore disabled
   /*
@@ -7672,7 +7671,7 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  darcs = haskellPackages_ghc6104.darcs;
+  darcs = haskellPackages.darcs;
 
   dia = import ../applications/graphics/dia {
     inherit stdenv fetchurl pkgconfig perl perlXMLParser

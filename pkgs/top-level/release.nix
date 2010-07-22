@@ -412,12 +412,11 @@ with (import ./release-lib.nix);
   haskellPackages_ghc6104 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
+    gitit = linux;
     gtk2hs = linux;
     leksah = linux;
-    lhs2tex = ghcSupported;
     haskellPlatform = ghcSupported;
     xmonad = linux;
-    gitit = linux;
   };
 
   haskellPackages_ghc6121 = {
@@ -430,6 +429,14 @@ with (import ./release-lib.nix);
     darcs = ghcSupported;
     ghc = ghcSupported;
     haskellPlatform2010100 = ghcSupported;
+  };
+
+  haskellPackages_ghc6123 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    haskellPlatform2010200 = ghcSupported;
+    lhs2tex = ghcSupported;
+    xmonad = linux;
   };
 
   kde3 = {
