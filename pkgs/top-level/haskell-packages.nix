@@ -73,6 +73,11 @@ rec {
     inherit cabal bytestring network;
   };
 
+  cairo = import ../development/libraries/haskell/cairo {
+    inherit cabal gtk2hsBuildtools mtl;
+    inherit (pkgs) pkgconfig glibc cairo zlib;
+  };
+
   cautiousFile = import ../development/libraries/haskell/cautious-file {
     inherit cabal;
   };
@@ -259,6 +264,12 @@ rec {
     inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
   };
 
+  gtk2hsBuildtools = import ../development/libraries/haskell/gtk2hs-buildtools {
+    inherit cabal;
+    alex = alex233;
+    happy = happy1185;
+  };
+
   hamlet = import ../development/libraries/haskell/hamlet {
     inherit cabal blazeHtml parsec utf8String;
   };
@@ -330,7 +341,6 @@ rec {
     inherit cabal haskellSrcExts;
   };
 
-  /*
   haskellPlatform2010200 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
     inherit cabal ghc
       html xhtml;
@@ -355,7 +365,6 @@ rec {
     happy = happy1185;
     inherit (pkgs) fetchurl;
   });
-  */
 
   haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
