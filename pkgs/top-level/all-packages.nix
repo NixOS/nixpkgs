@@ -139,7 +139,7 @@ let
 
   inherit lib config getConfig stdenvAdapters;
 
-  inherit (lib) lowPrio appendToName makeOverridable;
+  inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
@@ -7838,9 +7838,11 @@ let
       inherit fetchurl stdenv;
     };
 
-    org = import ../applications/editors/emacs-modes/org {
+    # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
+    # we want it to have higher precedence.
+    org = hiPrio (import ../applications/editors/emacs-modes/org {
       inherit fetchurl stdenv emacs texinfo;
-    };
+    });
 
     prologMode = import ../applications/editors/emacs-modes/prolog {
       inherit fetchurl stdenv;
