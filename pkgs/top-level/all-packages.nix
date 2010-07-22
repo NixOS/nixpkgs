@@ -8755,6 +8755,11 @@ let
     qt = qt3;
   };
 
+  seeks = import ../tools/networking/p2p/seeks {
+    inherit fetchurl stdenv zlib docbook2x pcre curl libxml2 libevent perl
+      autoconf automake libtool;
+  };
+
   seg3d = import ../applications/graphics/seg3d {
     inherit fetchurl stdenv cmake itk mesa zlib libuuid;
     inherit (xlibs) libXft libXext libXi libXmu;
