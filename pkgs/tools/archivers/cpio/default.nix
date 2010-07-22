@@ -8,7 +8,10 @@ stdenv.mkDerivation ({
     sha256 = "1gavgpzqwgkpagjxw72xgxz52y1ifgz0ckqh8g7cckz7jvyhp0mv";
   };
 
-  doCheck = true;
+  # Tests fail on Darwin, see
+  # <http://lists.gnu.org/archive/html/bug-cpio/2010-07/msg00012.html> for
+  # details.
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = http://www.gnu.org/software/cpio/;
