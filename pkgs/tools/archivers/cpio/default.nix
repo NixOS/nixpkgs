@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "cpio-2.11";
 
   src = fetchurl {
@@ -34,3 +34,9 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(if stdenv.isLinux
+ then {}
+ else { patches = [ ./darwin-fix.patch ]; }))
