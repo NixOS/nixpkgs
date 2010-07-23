@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qqgyzfb0alwx329z8bqybzamfl9j2maykykvq6zk3ibq0gvva8q";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+  patches = ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
 
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   configureFlags = "shared --libdir=lib";
 
   crossAttrs = {
-    configurePhase = ''
+    preConfigure=''
       export cross=$crossSystem-
-      ./Configure --prefix=$out ${opensslCrossSystem} shared
     '';
+    configureFlags="--libdir=lib ${opensslCrossSystem} shared";
     buildPhase = ''
       make CC=$crossConfig-gcc \
         AR="$crossConfig-ar r" \
