@@ -113,55 +113,21 @@ rec {
       vms =
         buildVirtualNetwork { nodes = { client = machine; } ; };
 
-      # ugly workaround, until we figure out why some fs actions work properly inside 
-      # the vm. (e.g. unlink gives access denied over smb in qemu). note that the function
-      # now only works for derivations that lead to a directory in the store, not a file. 
       buildrunner = writeText "vm-build" ''
         source $1
-        origout=$out
-        out=$TMPDIR$out
-
-        echo "--------------------------------"
-        echo "Creating $out"
-        echo "--------------------------------"
-        ${coreutils}/bin/mkdir -p $out
-
-        echo "--------------------------------"
-        echo "Linking $origout to $out "
-        echo "--------------------------------"
-        ${coreutils}/bin/ln -s $out $origout
-
-        echo "--------------------------------"
-        echo "Creating $TMPDIR"
-        echo "--------------------------------"
+ 
         ${coreutils}/bin/mkdir -p $TMPDIR
-
-        echo "--------------------------------"
-        echo "Running builder"
-        echo "--------------------------------"
-        $origBuilder $origArgs 
-
-        echo "--------------------------------"
-        echo "Removing link $origout"
-        echo "--------------------------------"
-        ${coreutils}/bin/rm -vf $origout
-
-        echo "--------------------------------"
-        echo "Creating $origout"
-        echo "--------------------------------"
-        ${coreutils}/bin/mkdir -p $origout
-
-        echo "--------------------------------"
-        echo "Copying $out/* to $origout/"
-        echo "--------------------------------"
-        ${coreutils}/bin/cp -Rv $out/* $origout/
-        out=$origout 
+        cd $TMPDIR
+        
+        $origBuilder $origArgs
+         
+        echo "Exit code:" $?
       '';
 
       testscript = ''
         startAll;
         ${preBuild}
-        print STDERR $client->mustSucceed("source ${buildrunner} /hostfs".$client->stateDir."/saved-env");
+        print STDERR $client->mustSucceed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /hostfs".$client->stateDir."/saved-env");
         ${postBuild}
       '';
 
@@ -179,7 +145,7 @@ rec {
         builder = "${bash}/bin/sh";
         args = ["-e" vmRunCommand];
         origArgs = attrs.args;
-        origBuilder = attrs.builder;
+        origBuilder = attrs.builder;   
       });
 
   runInMachineWithX = { require ? [], ...}@args :
