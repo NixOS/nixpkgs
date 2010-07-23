@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qqgyzfb0alwx329z8bqybzamfl9j2maykykvq6zk3ibq0gvva8q";
   };
 
-  patches = ./darwin-arch.patch;
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
 
