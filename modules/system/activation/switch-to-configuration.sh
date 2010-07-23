@@ -121,4 +121,9 @@ EOF
             initctl start "$job" || true
         fi
     done
+
+    # Signal dbus to reload its configuration.
+    dbusPid=$(initctl status dbus 2> /dev/null | sed -e 's/.*process \([0-9]\+\)/\1/;t;d')
+    [ -n "$dbusPid" ] && kill -HUP "$dbusPid"
+    
 fi
