@@ -168,7 +168,7 @@ in
 
         preStart =
           ''
-            echo "" > /proc/sys/kernel/hotplug
+            echo "" > /proc/sys/kernel/hotplug || true
 
             mkdir -p /var/lib/udev/rules.d
 
