@@ -6523,6 +6523,7 @@ let
         kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout
         kernelPatches.no_xsave
+        kernelPatches.dell_rfkill
       ];
   };
 
