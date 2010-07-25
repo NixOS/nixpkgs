@@ -2068,11 +2068,11 @@ let
   })) // {inherit ;};
     
   xrandr = (stdenv.mkDerivation ((if overrides ? xrandr then overrides.xrandr else x: x) {
-    name = "xrandr-1.3.2";
+    name = "xrandr-1.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xrandr-1.3.2.tar.bz2;
-      sha256 = "0j92j67067l6nj1nhfwdik7c14cgxdzn9f0v2irlajd68i337m1l";
+      url = mirror://xorg/individual/app/xrandr-1.3.3.tar.bz2;
+      sha256 = "0iiywk10vi56k7bpdlhn4wv0friz8vzz6dbfhy1xrnrvsgkg73wn";
     };
     buildInputs = [pkgconfig libX11 libXrandr libXrender ];
   })) // {inherit libX11 libXrandr libXrender ;};

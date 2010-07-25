@@ -184,7 +184,7 @@ mirror://xorg/X11R7.5/src/everything/xorg-sgml-doctools-1.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xpr-1.0.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xprop-1.1.0.tar.bz2
 mirror://xorg/individual/proto/xproto-7.0.17.tar.bz2
-mirror://xorg/X11R7.5/src/everything/xrandr-1.3.2.tar.bz2
+mirror://xorg/individual/app/xrandr-1.3.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xrdb-1.0.6.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xrefresh-1.0.3.tar.bz2
 mirror://xorg/X11R7.5/src/everything/xset-1.1.0.tar.bz2
