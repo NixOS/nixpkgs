@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
+{ fetchurl, stdenv, xz, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
 , libnotify, gnomevfs, libgnomeui
-, freetype, fontconfig, wirelesstools ? null
+, freetype, fontconfig, wirelesstools ? null, pixman
 , application ? "browser" }:
 
 # Build the WiFi stuff on Linux-based systems.
@@ -9,18 +9,18 @@
 # http://thread.gmane.org/gmane.comp.gnu.gnuzilla/1376 .
 #assert stdenv.isLinux -> (wirelesstools != null);
 
-let version = "3.6"; in
+let version = "3.6.7"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.bz2";
-    sha256 = "0fsf8zd8nncg1w1gg2jhlxwkbljvrx4mm9pywasklyi0gvi939ds";
+    url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.xz";
+    sha256 = "0nm0py3kd55pgyx1yv44v1acq5d1rgka3p6msfbgqx60yd38rwsm";
   };
 
   buildInputs =
-    [ libgnomeui libnotify gnomevfs alsaLib
-      pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+    [ xz libgnomeui libnotify gnomevfs alsaLib
+      pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2 pixman
       python ply dbus dbus_glib pango freetype fontconfig
       xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
     ]
@@ -29,18 +29,6 @@ stdenv.mkDerivation {
   patches = [
     ./skip-gre-registration.patch ./rpath-link.patch
   ];
-
-  postPatch =
-    # Work around the broken `firefox.js' in 3.6.  See
-    # http://news.gmane.org/gmane.comp.gnu.gnuzilla/1419 for details.
-    let firefox_js = fetchurl {
-          url = "http://svn.savannah.gnu.org/viewvc/*checkout*/trunk/icecat/browser/app/profile/firefox.js?revision=98&root=gnuzilla";
-          sha256 = "1jf86wa7r7pf4f3ixrnsslv0i35ypm8hrzlw14hcm5wjcwidzq0f";
-          name = "firefox.js";
-        };
-    in
-      '' cp -v "${firefox_js}" "browser/app/profile/firefox.js"
-      '';
 
   configureFlags =
     [ "--enable-application=${application}"

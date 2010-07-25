@@ -8209,19 +8209,21 @@ let
   };
 
   icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
     inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
 
   icecatXulrunner3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
     application = "xulrunner";
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
+    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
     inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
 
