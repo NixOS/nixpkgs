@@ -413,6 +413,7 @@ in
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
+            TZ = config.time.timeZone;
           } # !!! Depends on the driver selected at runtime.
             // optionalAttrs (!elem "nvidia" driverNames) {
             XORG_DRI_DRIVER_PATH = "${pkgs.mesa}/lib/dri";
