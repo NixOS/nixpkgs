@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
-
-  configureScript = "./config";
+  
+  # On x86_64-darwin, "./config" misdetects the system as
+  # "darwin-i386-cc".  So specify the system type explicitly.
+  configureScript =
+    if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
   
   configureFlags = "shared --libdir=lib";
 
