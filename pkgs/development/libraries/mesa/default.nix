@@ -5,15 +5,16 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
 else
 
 stdenv.mkDerivation {
-  name = "mesa-7.6.1";
+  name = "mesa-7.8.2";
 
   src = fetchurl {
-    url = ftp://ftp.freedesktop.org/pub/mesa/7.6.1/MesaLib-7.6.1.tar.bz2;
-    md5 = "7db4617e9e10ad3aca1b64339fd71b7d";
+    url = ftp://ftp.freedesktop.org/pub/mesa/7.8.2/MesaLib-7.8.2.tar.bz2;
+    md5 = "6be2d343a0089bfd395ce02aaf8adb57";
   };
 
-  configureFlags = "--disable-gallium"
-                 + (if stdenv.isDarwin then " --disable-egl" else "");
+  configureFlags =
+    "--disable-gallium"
+    + (if stdenv.isDarwin then " --disable-egl" else "");
 
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.glproto

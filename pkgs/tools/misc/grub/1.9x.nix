@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
-  doCheck = true;
+  doCheck = false;
 
   meta = {
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x alpha)";

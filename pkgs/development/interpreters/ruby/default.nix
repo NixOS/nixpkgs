@@ -5,13 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.7-p72";
+  version = "1.8.7-p299";
   
   name = "ruby-${version}";
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.8/${name}.tar.gz";
-    sha256 = "e15ca005076f5d6f91fc856fdfbd071698a4cadac3c6e25855899dba1f6fc5ef";
+    sha256 = "0ys2lpri2w3174axhi96vq17lrvk2ngj7f2m42a9008a7n79rj9j";
   };
 
   buildInputs = [ncurses readline]

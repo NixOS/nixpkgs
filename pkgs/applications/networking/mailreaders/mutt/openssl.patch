@@ -1,0 +1,15 @@
+Fixes a compilation problem with OpenSSL 1.0.0.
+From http://www.freebsd.org/cgi/query-pr.cgi?pr=146261
+
+diff -ru -x '*~' mutt-1.5.20-orig/mutt_ssl.c mutt-1.5.20/mutt_ssl.c
+--- mutt-1.5.20-orig/mutt_ssl.c	2009-06-10 07:08:29.000000000 +0200
++++ mutt-1.5.20/mutt_ssl.c	2010-07-24 10:46:08.000000000 +0200
+@@ -652,7 +652,7 @@
+   char *buf = NULL;
+   int bufsize;
+   /* needed to get the DNS subjectAltNames: */
+-  STACK *subj_alt_names;
++  STACK_OF(GENERAL_NAME) *subj_alt_names;
+   int subj_alt_names_count;
+   GENERAL_NAME *subj_alt_name;
+   /* did we find a name matching hostname? */

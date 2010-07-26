@@ -606,7 +606,7 @@ let
   };
 
   dar = import ../tools/archivers/dar {
-    inherit fetchurl stdenv zlib bzip2 openssl;
+    inherit fetchurl stdenv zlib bzip2 openssl attr;
   };
 
   davfs2 = import ../tools/filesystems/davfs2 {
@@ -1231,7 +1231,10 @@ let
   };
 
   nbd = import ../tools/networking/nbd {
-    inherit fetchurl stdenv pkgconfig glib;
+    inherit fetchurl stdenv pkgconfig;
+    glib = gtkLibs.glib.override {
+      stdenv = makeStaticBinaries stdenv;
+    };
   };
 
   nc6 = composedArgsAndFun (import ../tools/networking/nc6/1.0.nix) {
@@ -3000,7 +3003,7 @@ let
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
       inherit stdenv application launcher;
-      xulrunner = xulrunner35;
+      xulrunner = firefox36Pkgs.xulrunner;
     };
 
 
@@ -4212,7 +4215,7 @@ let
     inherit (gnome) gtk;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs218;
+  gtkLibs = recurseIntoAttrs gtkLibs220;
 
   glib = gtkLibs.glib;
 
@@ -4285,6 +4288,40 @@ let
     };
 
     gtk = import ../development/libraries/gtk+/2.18.x.nix {
+      inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
+        libtiff libjpeg libpng cairo xlibs cups;
+    };
+
+    gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
+      inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
+    };
+
+  };
+
+  gtkLibs220 = rec {
+
+    glib = makeOverridable (import ../development/libraries/glib/2.24.x.nix) {
+      inherit fetchurl stdenv pkgconfig gettext perl zlib;
+      libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
+    };
+
+    glibmm = import ../development/libraries/glibmm/2.22.x.nix {
+      inherit fetchurl stdenv pkgconfig glib libsigcxx;
+    };
+
+    atk = import ../development/libraries/atk/1.30.x.nix {
+      inherit fetchurl stdenv pkgconfig perl glib;
+    };
+
+    pango = import ../development/libraries/pango/1.28.x.nix {
+      inherit fetchurl stdenv pkgconfig gettext x11 glib cairo libpng;
+    };
+
+    pangomm = import ../development/libraries/pangomm/2.26.x.nix {
+      inherit fetchurl stdenv pkgconfig pango glibmm cairomm libpng;
+    };
+
+    gtk = import ../development/libraries/gtk+/2.20.x.nix {
       inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
         libtiff libjpeg libpng cairo xlibs cups;
     };
@@ -5163,11 +5200,6 @@ let
   };
 
   openssl = makeOverridable (import ../development/libraries/openssl) {
-    fetchurl = fetchurlBoot;
-    inherit stdenv perl;
-  };
-
-  openssl1 = makeOverridable (import ../development/libraries/openssl/1.x.nix) {
     fetchurl = fetchurlBoot;
     inherit stdenv perl;
   };
@@ -6107,7 +6139,7 @@ let
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus hal libuuid openssl gperf m4
-      automake autoconf libtool xmlto asciidoc;
+      automake autoconf libtool xmlto asciidoc udev;
 
     # !!! pythonBase is use instead of python because this cause an infinite
     # !!! recursion when the flag python.full is set to true.  Packages
@@ -6490,6 +6522,7 @@ let
         kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout
         kernelPatches.no_xsave
+        kernelPatches.dell_rfkill
       ];
   };
 
@@ -7953,9 +7986,8 @@ let
     inherit (xlibs) libXinerama;
   };
 
-  firefox = firefox35;
-
-  firefoxWrapper = firefox35Wrapper;
+  firefox = firefox36Pkgs.firefox;
+  firefoxWrapper = firefox36Wrapper;
 
   firefox35Pkgs = import ../applications/networking/browsers/firefox/3.5.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
@@ -7965,9 +7997,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox35 = firefox35Pkgs.firefox;
-  xulrunner35 = firefox35Pkgs.xulrunner;
-  firefox35Wrapper = wrapFirefox firefox35 "firefox" "";
+  firefox35Wrapper = wrapFirefox firefox35Pkgs.firefox "firefox" "";
 
   firefox36Pkgs = import ../applications/networking/browsers/firefox/3.6.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
@@ -7977,7 +8007,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox36Wrapper = lowPrio (wrapFirefox firefox36Pkgs.firefox "firefox" "");
+  firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
 
   flac = import ../applications/audio/flac {
     inherit fetchurl stdenv libogg;
@@ -8136,7 +8166,7 @@ let
   gecko_mediaplayer = import ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
     inherit fetchurl stdenv pkgconfig dbus dbus_glib x11 gnome_mplayer MPlayer glib;
     inherit (gnome) GConf;
-    browser = firefox35;
+    browser = firefox;
   };
 
   geeqie = import ../applications/graphics/geeqie {
@@ -8547,7 +8577,7 @@ let
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
-    neon = neon026;
+    neon = neon029;
     stdenv = stdenv2;
   };
 
@@ -8560,7 +8590,7 @@ let
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
-    neon = neon026;
+    neon = neon029;
     stdenv = stdenv2;
 
     inherit autoconf openldap postgresql;

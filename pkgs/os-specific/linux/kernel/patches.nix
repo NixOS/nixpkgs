@@ -172,5 +172,10 @@ in
       };
       features.noXsave = true;
     };
+
+  dell_rfkill =
+    { name = "dell-rfkill";
+      patch = ./dell-rfkill.patch;
+    };
   
 }

@@ -14,16 +14,21 @@ assert saslSupport -> cyrus_sasl != null;
 
 stdenv.mkDerivation {
   name = "mutt-1.5.20";
+  
   src = fetchurl {
     url = ftp://ftp.mutt.org/mutt/devel/mutt-1.5.20.tar.gz;
     sha256 = "15m7m419r82awx4mr4nam25m0kpg0bs9vw1z4a4mrzvlkl3zqycm";
   };
+
+  patches = [ ./openssl.patch ];
+  
   buildInputs = [
     ncurses which perl
     (if headerCache then gdbm else null)
     (if sslSupport then openssl else null)
     (if saslSupport then cyrus_sasl else null)
   ];
+  
   configureFlags = [
     "--with-mailpath=" "--enable-smtp"
     # The next allows building mutt without having anything setgid

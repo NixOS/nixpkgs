@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv ? null}:
+{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv ? null, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "glib-2.22.5";
+  name = "glib-2.24.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/2.22/${name}.tar.bz2";
-    sha256 = "802be9c9ffeb631725ffd6ed35af0af309776729a7fab4fcb48f2b0b8fe7245b";
+    url = "mirror://gnome/sources/glib/2.24/${name}.tar.bz2";
+    sha256 = "014c3da960bf17117371075c16495f05f36501db990851ceea658f15d2ea6d04";
   };
 
-  buildInputs = [pkgconfig gettext perl libiconv];
+  buildInputs = [ pkgconfig gettext perl libiconv ];
 
-  # The nbd package depends on a static version of this library; hence
-  # the default configure flag --disable-static is switched off.
-  dontDisableStatic = true;
-  configureFlags = "--enable-static --enable-shared";
+  propagatedBuildInputs = [ zlib ];
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
