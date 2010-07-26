@@ -898,7 +898,7 @@ let
     inherit (gtkLibs) pango;
   };
 
-  /* Readded by Michael Raskin. There are programs in the wild 
+  /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal.
    */
@@ -2349,7 +2349,7 @@ let
   }));
 
   gcl = builderDefsPackage ../development/compilers/gcl {
-    inherit mpfr m4 binutils fetchcvs emacs zlib which 
+    inherit mpfr m4 binutils fetchcvs emacs zlib which
       gmp texinfo;
     inherit (xlibs) libX11 xproto inputproto libXi
       libXext xextproto libXt libXaw libXmu;
@@ -4683,7 +4683,7 @@ let
     inherit (gnome) gtkdoc;
     inherit libxml2 gnutls gsasl avahi libdaemon;
   };
-  
+
   libiptcdata = import ../development/libraries/libiptcdata {
     inherit fetchurl stdenv;
   };
@@ -5296,7 +5296,7 @@ let
     inherit stdenv fetchurl cmake;
     inherit (kde4) qt4 kdelibs phonon automoc4;
   };
-  
+
   quesoglc = import ../development/libraries/quesoglc {
     inherit stdenv fetchurl mesa glew freetype fontconfig fribidi;
     inherit (xlibs) libX11;
@@ -5718,7 +5718,7 @@ let
 
   perlcritic = perlPackages.PerlCritic;
 
-  
+
   ### DEVELOPMENT / PYTHON MODULES
 
   buildPythonPackage =
