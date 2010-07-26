@@ -7860,6 +7860,10 @@ let
       inherit fetchurl stdenv texinfo emacs bbdb;
     };
 
+    rudel = import ../applications/editors/emacs-modes/rudel {
+      inherit fetchurl stdenv;
+    };
+
     scalaMode = import ../applications/editors/emacs-modes/scala-mode {
       inherit fetchsvn stdenv emacs;
     };
