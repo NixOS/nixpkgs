@@ -29,26 +29,16 @@ let
       # Add the system-services and system.d directories to the system
       # bus search path.
       sed -i $out/system.conf \
-          -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|'
+          -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|' \
+          -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
 
       cp ${dbus}/etc/dbus-1/session.conf $out/session.conf
       
       # Add the services and session.d directories to the session bus
       # search path.
       sed -i $out/session.conf \
-          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}|'
-
-      ensureDir $out/session.d
-      ensureDir $out/system.d
-      
-      for i in ${toString cfg.packages}; do
-        for j in $i/etc/dbus-1/session.d/*; do
-          ln -s $j $out/session.d/
-        done
-        for j in $i/etc/dbus-1/system.d/*; do
-          ln -s $j $out/system.d/
-        done
-      done
+          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}|' \
+          -e 's|<includedir>session.d</includedir>|${sessionIncludeDirs}|'
     ''; # */
   };
 
@@ -56,8 +46,16 @@ let
     (d: "<servicedir>${d}/share/dbus-1/system-services</servicedir> ")
     cfg.packages;
 
+  systemIncludeDirs = concatMapStrings
+    (d: "<includedir>${d}/etc/dbus-1/system.d</includedir> ")
+    cfg.packages;
+
   sessionServiceDirs = concatMapStrings
     (d: "<servicedir>${d}/share/dbus-1/services</servicedir> ")
+    cfg.packages;
+
+  sessionIncludeDirs = concatMapStrings
+    (d: "<includedir>${d}/etc/dbus-1/session.d</includedir> ")
     cfg.packages;
 
 in
@@ -102,10 +100,6 @@ in
     environment.systemPackages = [ dbus.daemon dbus.tools ];
 
     environment.etc = singleton
-      # We need /etc/dbus-1/system.conf for now, because
-      # dbus-daemon-launch-helper is called with an empty environment
-      # and no arguments.  So we have no way to tell it the location
-      # of our config file.
       { source = configDir;
         target = "dbus-1";
       };
@@ -161,6 +155,11 @@ in
         setgid = false;
         permissions = "u+rx,g+rx,o-rx";
       };
+
+    services.dbus.packages =
+      [ "/nix/var/nix/profiles/default"
+        config.system.path
+      ];
 
   };
  
