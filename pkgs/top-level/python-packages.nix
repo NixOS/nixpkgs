@@ -663,11 +663,11 @@ rec {
   });
 
   setuptoolsDarcs = buildPythonPackage {
-    name = "setuptools-darcs-1.2.8";
+    name = "setuptools-darcs-1.2.9";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/setuptools_darcs-1.2.8.tar.gz";
-      sha256 = "0jg9q9mhsky444mm7lpmmlxai8hmjg4pc71viv4kni8gls0gk9n8";
+      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/setuptools_darcs-1.2.9.tar.gz";
+      sha256 = "d37ce11030addbd729284c441facd0869cdc6e5c888dc5fa0a6f1edfe3c3e617";
     };
 
     # In order to break the dependency on darcs -> ghc, we don't add
