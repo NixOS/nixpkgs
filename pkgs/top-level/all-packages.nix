@@ -8888,10 +8888,10 @@ let
   };
 
   tahoelafs = import ../tools/networking/p2p/tahoe-lafs {
-    inherit fetchurl lib unzip nettools buildPythonPackage;
+    inherit fetchurl lib unzip nettools buildPythonPackage pycrypto;
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
-      numpy;
+      numpy pyasn1;
   };
 
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {
