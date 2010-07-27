@@ -803,11 +803,11 @@ rec {
   });
 
   zfec = buildPythonPackage (rec {
-    name = "zfec-1.4.4";
+    name = "zfec-1.4.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zfec/${name}.tar.gz";
-      sha256 = "0rgg7nsvbr4f9xmiclzypc39fnivg23kldv5aa8si0bgsxn6mh6w";
+      sha256 = "3335c9054f45e2c59188400e892634b68761b29d06f3cafe525c60484902d379";
     };
 
     buildInputs = [ setuptoolsDarcs ];
