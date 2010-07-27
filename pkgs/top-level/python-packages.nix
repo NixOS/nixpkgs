@@ -615,15 +615,18 @@ rec {
   });
 
   pyutil = buildPythonPackage (rec {
-    name = "pyutil-1.3.30";
+    name = "pyutil-1.7.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyutil/${name}.tar.gz";
-      sha256 = "1ksb4gn8x53wcyddmjv1ma8cvvhjlmfxc6kpszyhb838i7xzla19";
+      sha256 = "c303bb779f96073820e2eb7c9692fe15a57df491eb356839f3cb3377ed03b844";
     };
 
-    buildInputs = [ setuptoolsDarcs ];
-    propagatedBuildInputs = [ zbase32 argparse ];
+    buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
+    propagatedBuildInputs = [ zbase32 argparse twisted ];
+    # Tests fail because they try to write new code into the twisted
+    # package, apparently some kind of plugin.
+    doCheck = false;
 
     meta = {
       description = "Pyutil, a collection of mature utilities for Python programmers";
