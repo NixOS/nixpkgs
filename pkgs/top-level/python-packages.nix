@@ -356,11 +356,12 @@ rec {
   });
 
   nevow = buildPythonPackage (rec {
-    name = "nevow-0.9.33";
+    name = "nevow-${version}";
+    version = "0.10.0";
 
     src = fetchurl {
-      url = "http://divmod.org/trac/attachment/wiki/SoftwareReleases/Nevow-0.9.33.tar.gz?format=raw";
-      sha256 = "1b6zhfxx247b60n1qi2hrawhiaah88v8igg37pf7rjkmvy2z1c6c";
+      url = "http://divmod.org/trac/attachment/wiki/SoftwareReleases/Nevow-${version}.tar.gz?format=raw";
+      sha256 = "90631f68f626c8934984908d3df15e7c198939d36be7ead1305479dfc67ff6d0";
       name = "${name}.tar.gz";
     };
 
