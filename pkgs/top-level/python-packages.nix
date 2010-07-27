@@ -702,12 +702,11 @@ rec {
   };
 
   simplejson = buildPythonPackage (rec {
-    name = "simplejson-2.0.9";
+    name = "simplejson-2.1.1";
 
-    src = fetchsvn {
-      url = "http://simplejson.googlecode.com/svn/tags/${name}";
-      sha256 = "a48d5256fdb4f258c33da3dda110ecf3c786f086dcb08a01309acde6d1ddb921";
-      rev = "172";  # to be on the safe side
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/simplejson/${name}.tar.gz";
+      sha256 = "8c1c833c5b997bf7b75bf9a02a2d2884b8427816228eac0fb84791be44d2f612";
     };
 
     meta = {
@@ -782,11 +781,11 @@ rec {
   };
 
   zbase32 = buildPythonPackage (rec {
-    name = "zbase32-1.1.1";
+    name = "zbase32-1.1.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zbase32/${name}.tar.gz";
-      sha256 = "0n59l4rs26vrhxpsfrwybjjir68aj23f09k1yjnbxqy5n0khp8gm";
+      sha256 = "2f44b338f750bd37b56e7887591bf2f1965bfa79f163b6afcbccf28da642ec56";
     };
 
     # Tests require `pyutil' so disable them to avoid circular references.
