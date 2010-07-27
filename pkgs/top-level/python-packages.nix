@@ -117,11 +117,11 @@ rec {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.3.1";
+    name = "darcsver-1.5.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      sha256 = "1a5cl2yhnd88a4vkc9r381cbjkcvga87dp9zx5av68857q1nvvvq";
+      sha256 = "e643d607f27e4b8cc96565432ff1abdc2af5e9061c70798e2f33e78c07b66b3a";
     };
 
     # Note: We don't actually need to provide Darcs as a build input.
