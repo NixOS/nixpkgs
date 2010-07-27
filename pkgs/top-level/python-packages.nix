@@ -421,7 +421,7 @@ rec {
 
     doCheck = false;
 
-    buildInputs = [ pkgs.liblapack pkgs.blas /* pkgs.gfortran */ ];
+    buildInputs = [ pkgs.liblapack pkgs.blas pkgs.gfortran ];
 
     # The build should be run as follows:
     #
