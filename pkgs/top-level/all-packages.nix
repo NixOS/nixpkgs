@@ -8926,7 +8926,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  thunderbird = thunderbird2;
+  thunderbird = thunderbird3;
 
   thunderbird2 = import ../applications/networking/mailreaders/thunderbird/2.x.nix {
     inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
