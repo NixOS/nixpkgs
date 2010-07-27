@@ -1,10 +1,10 @@
 { stdenv, fetchurl, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
 stdenv.mkDerivation {
-  name = "vxl-1.14.0";
+  name = "vxl-1.13.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/vxl/vxl-1.14.0.zip;
-    sha256 = "0434wxvxyr9baq3q5rhjcqvlaq5p9n5ax400bdrc49ff2jddq0h2";
+    url = mirror://sourceforge/vxl/vxl-1.13.0.zip;
+    sha256 = "05xk9dfkqsznp1dic8rcsdhgdp12bikwx1zpci0w3s20fs8q8nn1";
   };
 
   buildInputs = [ cmake unzip libtiff expat zlib libpng libjpeg ];
@@ -13,6 +13,7 @@ stdenv.mkDerivation {
       "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
     else
       "";
+    
 
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";
