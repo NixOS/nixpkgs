@@ -1,6 +1,6 @@
 {stdenv, fetchurl, static ? false}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "zlib-1.2.5";
   
   src = fetchurl {
@@ -23,4 +23,7 @@ stdenv.mkDerivation rec {
 
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
-}
+  
+} // stdenv.lib.optionalAttrs (stdenv.system == "i686-cygwin") {
+  patches = [ ./no-shared.patch ];
+})
