@@ -509,11 +509,11 @@ rec {
   });
 
   pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.5.15";
+    name = "pycryptopp-0.5.19";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
-      sha256 = "0f8v3cs8vjpj423yx3ikj7qjvljrm86x0qpkckidv69kah8kndxa";
+      sha256 = "6b610b3e5742d366d4fbe96b5f20d8459db9aba4fb802e6e5aab547f22ad04b9";
     };
 
     # Use our own copy of Crypto++.
