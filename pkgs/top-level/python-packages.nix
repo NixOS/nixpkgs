@@ -516,9 +516,9 @@ rec {
     };
 
     # Use our own copy of Crypto++.
-    preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
+    # preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
 
-    buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
+    buildInputs = [ setuptoolsDarcs darcsver /* pkgs.cryptopp */ ];
 
     meta = {
       homepage = http://allmydata.org/trac/pycryptopp;
