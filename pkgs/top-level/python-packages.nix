@@ -833,10 +833,10 @@ rec {
   });
 
   zopeInterface = buildPythonPackage {
-    name = "zope-interface-3.3.0";
+    name = "zope-interface-3.6.1";
     src = fetchurl {
-      url = http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-3.3.0.tar.gz;
-      sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
+      url = "http://pypi.python.org/packages/source/z/zope.interface/zope.interface-3.6.1.tar.gz";
+      sha256 = "294c3c0529e84169177bce78d616c768fa1c028a2fbc1854f615d32ed88dbc6c";
     };
 
     doCheck = false;
