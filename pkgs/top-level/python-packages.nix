@@ -4,11 +4,11 @@ rec {
   inherit (pkgs) fetchurl fetchsvn stdenv;
 
   argparse = buildPythonPackage (rec {
-    name = "argparse-0.9.1";
+    name = "argparse-1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
-      sha256 = "00jw32wwccpf9smraywjk869b93w7f99rw8gi63yfhw6379fnq6m";
+      sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
     };
 
     buildInputs = [ pkgs.unzip ];
