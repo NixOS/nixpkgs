@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "flite-1.3-release";
 
@@ -7,20 +8,22 @@ stdenv.mkDerivation {
     sha256 = "12wanxx57bbqgkag54dlqzv6h2kr9053p0z8mkxs0mqy03vja8lj";
   };
 
-  buildPhase = "
-    unset buildPhase
-    ensureDir \$out/lib
-    buildPhase
-  ";
+  buildPhase =
+    ''
+      unset buildPhase
+      ensureDir $out/lib
+      buildPhase
+    '';
 
-  installPhase = "
-    ensureDir \$out/share/flite
-    cp -r bin \$out
-  ";
+  installPhase =
+    ''
+      ensureDir $out/share/flite
+      cp -r bin $out
+    '';
 
   meta = { 
-      description = "Flite text to speech engine";
-      homepage = http://www.speech.cs.cmu.edu/flite/download.html;
-      license = "BSD as-is";
+    description = "Flite text to speech engine";
+    homepage = http://www.speech.cs.cmu.edu/flite/download.html;
+    license = "BSD as-is";
   };
 }

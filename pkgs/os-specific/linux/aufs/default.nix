@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel}:
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation {
   name = "aufs-20090414-${kernel.version}";

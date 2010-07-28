@@ -1,5 +1,7 @@
-args: with args;
-stdenv.mkDerivation ( rec {
+{ stdenv, fetchurl, libtorrent, ncurses, pkgconfig, libsigcxx, curl
+, zlib, openssl }:
+
+stdenv.mkDerivation rec {
   pname = "rtorrent";
   version = "0.8.6";
 
@@ -15,4 +17,4 @@ stdenv.mkDerivation ( rec {
   meta = {
     description = "An ncurses client for libtorrent, ideal for use with screen or dtach";
   };
-})
+}

@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, libtiff }:
+
 stdenv.mkDerivation {
   name = "libgeotiff-1.2.4";
 
@@ -7,10 +8,10 @@ stdenv.mkDerivation {
     sha256 = "0z2yx77pm0zs81hc0b4lwzdd5s0rxcbylnscgq80b649src1fyzj";
   };
 
-  buildInputs = [libtiff];
+  buildInputs = [ libtiff ];
 
   meta = {
-    description = "library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
+    description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = http://www.remotesensing.org/geotiff/geotiff.html;
     license = "X11";
     maintainers = [stdenv.lib.maintainers.marcweber];

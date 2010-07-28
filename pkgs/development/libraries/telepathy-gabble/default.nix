@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, libxslt, telepathy_glib, loudmouth }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-gabble-0.7.2";

@@ -1,11 +1,9 @@
-args: with args;
+{ stdenv, fetchurl, libusb }:
 
 stdenv.mkDerivation {
-
   name = "usb-modeswitch-1.1.2";
 
-  src =
-    fetchurl {
+  src =fetchurl {
     url = "http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-1.1.2.tar.bz2";
     sha256 = "1wzhd0r49nh5y43qrvsi3c7a29206zwd6v8xlpb8dqm40xg3j9nz";
   };
@@ -18,13 +16,11 @@ stdenv.mkDerivation {
     makeFlags="DESTDIR=$out PREFIX=$out"
   '';
 
-  buildInputs = [libusb];
+  buildInputs = [ libusb ];
 
   meta = {
-    description = "...";
-    homepage = "TODO";
     license = "GPLv2";
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

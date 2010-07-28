@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-glib-0.7.0";

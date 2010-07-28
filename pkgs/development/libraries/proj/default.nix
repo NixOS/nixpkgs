@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "proj-4.5.0";
 
@@ -8,8 +9,8 @@ stdenv.mkDerivation {
   };
 
   meta = { 
-      description = "Cartographic Projections Library";
-      homepage = http://proj.maptools.org;
-      license = "MIT";
+    description = "Cartographic Projections Library";
+    homepage = http://proj.maptools.org;
+    license = "MIT";
   };
 }

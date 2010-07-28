@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, SDL, freetype }:
 
 stdenv.mkDerivation {
   name = "SDL_ttf-2.0.9";

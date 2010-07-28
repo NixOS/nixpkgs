@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl }:
 
 # at runtime, need jre or jdk
 

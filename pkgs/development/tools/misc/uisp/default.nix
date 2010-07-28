@@ -1,8 +1,7 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "uisp-20050207";
-
-  configureFlags="--disable-dependency-tracking";
 
   src = fetchurl {
     url = http://mirror.switch.ch/mirror/gentoo/distfiles/uisp-20050207.tar.gz;
@@ -10,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "tool for AVR microcontrollers which can interface to many hardware in-system programmers";
+    description = "Tool for AVR microcontrollers which can interface to many hardware in-system programmers";
     license = "GPL-2";
     homepage = http://savannah.nongnu.org/projects/uisp;
   };

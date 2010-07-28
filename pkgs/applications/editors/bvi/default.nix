@@ -1,4 +1,5 @@
-args : with args;
+{ stdenv, fetchurl, ncurses }:
+
 stdenv.mkDerivation {
   name = "bvi-1.3.2";
 
@@ -7,11 +8,11 @@ stdenv.mkDerivation {
     sha256 = "110wxqnyianqamxq4y53drqqxb9vp4k2fcvic45qggvlqkqhlfgz";
   };
 
-  buildInputs = [ncurses];
+  buildInputs = [ ncurses ];
 
   meta = { 
-      description = "hex editor with vim style keybindings";
-      homepage = http://bvi.sourceforge.net/download.html;
-      license = "GPL2";
+    description = "Hex editor with vim style keybindings";
+    homepage = http://bvi.sourceforge.net/download.html;
+    license = "GPL2";
   };
 }

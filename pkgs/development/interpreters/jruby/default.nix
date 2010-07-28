@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "jruby-1.1.6";
 
@@ -7,12 +8,11 @@ stdenv.mkDerivation {
     sha256 = "1q3cjshxk484i8gqxm682bxcrps7205nl9vlim4s6z827bjlmc4a";
   };
 
-  buildInputs = [];
   installPhase = '' ensureDir $out; cp -r * $out '';
 
   meta = { 
-      description = "ruby interpreter written in Java";
-      homepage = http://jruby.codehaus.org/;
-      license = "CPL-1.0 GPL-2 LGPL-2.1"; # one of those
+    description = "Ruby interpreter written in Java";
+    homepage = http://jruby.codehaus.org/;
+    license = "CPL-1.0 GPL-2 LGPL-2.1"; # one of those
   };
 }

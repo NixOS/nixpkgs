@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, python, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   name = "gamin-0.1.9";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fgjfyr0nlkpdxj94a4qfm82wypljdyv1b6l56v7i9jdx0hcdqhr";
   };
 
-  buildInputs = [python pkgconfig glib];
+  buildInputs = [ python pkgconfig glib ];
 
   # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
   # <sys/socket.h> with Glibc 2.9.

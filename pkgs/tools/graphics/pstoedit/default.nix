@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, ghostscript, gd, zlib, plotutils }:
+
 stdenv.mkDerivation {
   name = "pstoedit-3.50";
 
@@ -7,14 +8,13 @@ stdenv.mkDerivation {
     sha256 = "04ap21fxj2zn6vj9mv7zknj4svcbkb1gxwfzxkw5i0sksx969c92";
   };
 
-  buildInputs = [pkgconfig ghostscript gd zlib plotutils];
+  buildInputs = [ pkgconfig ghostscript gd zlib plotutils ];
 
   meta = { 
     description = "translates PostScript and PDF graphics into other vector formats";
     homepage = http://www.helga-glunz.homepage.t-online.de/pstoedit;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
-
 }

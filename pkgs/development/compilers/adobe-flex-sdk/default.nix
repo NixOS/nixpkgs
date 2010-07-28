@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, unzip }:
+
 stdenv.mkDerivation rec {
   name = "adobe-flex-sdk-4.0.0.14159-mpl";
 
@@ -8,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x12sji6g42bm1h7jndkda5vpah6vnkpc13qwq0c4xvbsh8757v5";
   };
 
-  phases="installPhase";
+  phases = "installPhase";
 
   buildInputs = [ unzip ];
 
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = { 
-      description = "flex sdk flash / action script developement kit";
-      homepage = "http://www.adobe.com/support/documentation/en/flex/3/releasenotes_flex3_sdk.html#installation";
-      license = "MPLv1.1"; #  Mozilla Public License Version 1.1
+    description = "flex sdk flash / action script developement kit";
+    homepage = "http://www.adobe.com/support/documentation/en/flex/3/releasenotes_flex3_sdk.html#installation";
+    license = "MPLv1.1"; #  Mozilla Public License Version 1.1
   };
 }

@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "inotify-tools-3.13";
 
@@ -7,13 +8,10 @@ stdenv.mkDerivation {
     sha256 = "0icl4bx041axd5dvhg89kilfkysjj86hjakc7bk8n49cxjn4cha6";
   };
 
-  buildInputs = [];
-
   meta = {
-    description = "";
     homepage = http://sourceforge.net/projects/inotify-tools/;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

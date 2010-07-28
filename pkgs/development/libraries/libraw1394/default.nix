@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
   name = "libraw1394-1.3.0";
 
@@ -8,8 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = { 
-      description = "library providing direct access to the IEEE 1394 bus through the Linux 1394 subsystem's raw1394 user space interface";
-      homepage = "http://www.linux1394.org";
-      license = ["GPL" "LGPL"];
+    description = "Library providing direct access to the IEEE 1394 bus through the Linux 1394 subsystem's raw1394 user space interface";
+    homepage = http://www.linux1394.org;
+    license = ["GPL" "LGPL"];
   };
 }

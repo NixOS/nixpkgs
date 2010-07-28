@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, unzip }:
 
 # at runtime, need jdk
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   phases = "unpackPhase installPhase";
 
-  buildInputs = [unzip];
+  buildInputs = [ unzip ];
 
   meta = {
     description = "An agile dynamic language for the Java Platform";

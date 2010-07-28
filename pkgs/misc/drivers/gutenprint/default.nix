@@ -1,12 +1,13 @@
 # this package was called gimp-print in the past
-{ fetchurl, stdenv, lib, pkgconfig, composableDerivation, cups
-, libtiff, libpng, openssl, git, gimp }@args :
+{ fetchurl, stdenv, pkgconfig, composableDerivation, cups
+, libtiff, libpng, openssl, gimp }:
 
 let
    version = "5.2.4";
-   inherit (args.composableDerivation) composableDerivation edf wwf;
+   inherit (composableDerivation) edf wwf;
 in
-composableDerivation {} {
+
+composableDerivation.composableDerivation {} {
   name = "gutenprint-${version}";
 
   src = fetchurl {
@@ -15,12 +16,14 @@ composableDerivation {} {
   };
 
   # gimp, gui is still not working (TODO)
-  buildInputs = [ openssl  pkgconfig];
+  buildInputs = [ openssl pkgconfig ];
 
   configureFlags = ["--enable-static-genppd"];
+  
   #preConfigure = ''
   #  configureFlags="--with-cups=$out/usr-cups $configureFlags"
   #'';
+  
   /*
      is this recommended? without it this warning is printed:
 
@@ -41,7 +44,7 @@ composableDerivation {} {
     license = "GPL";
   };
 
-  mergeAttrBy = { installArgs = lib.concat; };
+  mergeAttrBy = { installArgs = stdenv.lib.concat; };
 
   # most interpreters aren't tested yet.. (see python for example how to do it)
   flags =

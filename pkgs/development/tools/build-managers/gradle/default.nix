@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, unzip }:
 
 # at runtime, need jdk
 

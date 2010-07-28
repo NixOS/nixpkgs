@@ -17,8 +17,6 @@ args.stdenv.mkDerivation {
     sha256 = "058iv3vs6syy01pfkd5894xap9zakjx8ki1bpjdnihn6vk6fr80l";
   };
 
-  buildInputs =(with args; []);
-
   phases = "doAll";
 
   # don't call any wired $buildInputs/nix-support/* scripts or such. This makes the build fail 

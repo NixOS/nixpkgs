@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, python, perl, ncurses, x11, bzip2, zlib, openssl
+, spidermonkey, guile, gpm }:
 
 stdenv.mkDerivation rec {
   name = "elinks-0.12pre5";
@@ -8,13 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "1li4vlbq8wvnigxlkzb15490y90jg6y9yzzrqpqcz2h965w5869d";
   };
 
-  buildInputs = [python perl ncurses x11 bzip2 zlib openssl spidermonkey guile gpm];
-  configureFlags = "--enable-finger --enable-html-highlight --with-guile
-  --with-perl --with-python --enable-gopher --enable-cgi --enable-bittorrent
-  --enable-nntp --with-openssl=${openssl}";
+  buildInputs = [ python perl ncurses x11 bzip2 zlib openssl spidermonkey guile gpm ];
+  
+  configureFlags =
+    ''
+      --enable-finger --enable-html-highlight --with-guile
+      --with-perl --with-python --enable-gopher --enable-cgi --enable-bittorrent
+      --enable-nntp --with-openssl=${openssl}
+    '';
 
   meta = {
-    description = "Full-Featured Text WWW Browser";
+    description = "Full-featured text-mode web browser";
     homepage = http://elinks.or.cz;
   };
 }

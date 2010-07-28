@@ -1,11 +1,12 @@
-args: with args;
+{ stdenv, fetchurl, ncurses, x11 }:
 
 let
-   useX11 = (stdenv.system != "armv5tel-linux");
-   useNativeCompilers = (stdenv.system != "armv5tel-linux");
+   useX11 = stdenv.system != "armv5tel-linux";
+   useNativeCompilers = stdenv.system != "armv5tel-linux";
    inherit (stdenv.lib) optionals optionalString;
 in
-stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation rec {
   
   name = "ocaml-3.11.1";
   
@@ -49,4 +50,4 @@ stdenv.mkDerivation (rec {
        '';
   };
 
-})
+}

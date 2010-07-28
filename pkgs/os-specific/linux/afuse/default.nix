@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, fuse }:
+
 stdenv.mkDerivation {
   name = "afuse-0.2";
 
@@ -7,18 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1lj2jdks0bgwxbjqp5a9f7qdry19kar6pg7dh1ml98gapx9siylj";
   };
 
-  buildInputs = [pkgconfig fuse];
+  buildInputs = [ pkgconfig fuse ];
 
   meta = { 
-    description = "automounting in userspace. Allows easy access to ssh-agent etc";
-    longDesc = ''
-      Example: (automunt using sshfs by accessing ~/sshfs/[user@]domain
-      afuse -o mount_template="sshfs %r:/ %m" -o unmount_template="fusermount -u -z %m" ~/sshfs/
-    '';
+    description = "Automounter in userspace";
     homepage = http://sourceforge.net/projects/afuse;
     license = "GPL-v2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

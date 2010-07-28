@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, zlib, libpng, libjpeg, lcms, automake, autoconf, libtool }:
+
 stdenv.mkDerivation {
   name = "libmng-1.0.10";
 
@@ -7,18 +8,15 @@ stdenv.mkDerivation {
     sha256 = "06415s40gz833s1v1q7c04c0m49p4sc87ich0vpdid2ldj0pf53v";
   };
 
-  preConfigure = "
-    unmaintained/autogen.sh
-    #cp makefiles/makefile.linux Makefile
-  ";
+  preConfigure = "unmaintained/autogen.sh";
 
-  buildInputs = [zlib libpng libjpeg lcms automake autoconf libtool];
+  buildInputs = [ zlib libpng libjpeg lcms automake autoconf libtool ];
 
   meta = { 
-    description = "THE reference library for reading, displaying, writing and examining Multiple-Image Network Graphics";
+    description = "Reference library for reading, displaying, writing and examining Multiple-Image Network Graphics";
     homepage = http://sourceforge.net/projects/libmng;
     license = "zlib/libpng";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

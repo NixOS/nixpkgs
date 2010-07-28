@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, perl }:
+
 stdenv.mkDerivation {
   name = "shebangfix-0.0";
 

@@ -1,6 +1,7 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
-  name="procmail-3.22";
+  name = "procmail-3.22";
 
   buildInputs = [ stdenv.gcc.libc ];
 

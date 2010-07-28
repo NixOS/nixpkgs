@@ -619,7 +619,7 @@ let
   };
 
   debootstrap = import ../tools/misc/debootstrap {
-    inherit fetchurl stdenv lib dpkg gettext gawk wget perl;
+    inherit fetchurl stdenv dpkg gettext gawk wget perl;
   };
 
   ddclient = import ../tools/networking/ddclient {
@@ -1502,7 +1502,7 @@ let
   };
 
   pstoedit = import ../tools/graphics/pstoedit {
-    inherit fetchurl stdenv lib pkgconfig ghostscript gd zlib plotutils;
+    inherit fetchurl stdenv pkgconfig ghostscript gd zlib plotutils;
   };
 
   pv = import ../tools/misc/pv {
@@ -1718,7 +1718,7 @@ let
   };
 
   stun = import ../tools/networking/stun {
-    inherit fetchurl stdenv lib;
+    inherit fetchurl stdenv;
   };
 
   stunnel = import ../tools/networking/stunnel {
@@ -2082,11 +2082,11 @@ let
   };
 
   adobe_flex_sdk = import ../development/compilers/adobe-flex-sdk {
-    inherit fetchurl stdenv unzip jre;
+    inherit fetchurl stdenv unzip;
   };
 
   fpc = import ../development/compilers/fpc {
-    inherit fetchurl stdenv gawk system;
+    inherit fetchurl stdenv gawk;
   };
 
   gambit = import ../development/compilers/gambit {
@@ -2528,7 +2528,7 @@ let
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
   # commented out because it's using the new configuration style proposal which is unstable
   hugs = import ../development/compilers/hugs {
-    inherit lib fetchurl stdenv composableDerivation;
+    inherit fetchurl composableDerivation;
   };
 
   path64 = import ../development/compilers/path64 {
@@ -2613,11 +2613,7 @@ let
   ocaml = ocaml_3_11_1;
 
   ocaml_3_08_0 = import ../development/compilers/ocaml/3.08.0.nix {
-    inherit fetchurl stdenv fetchcvs x11 ncurses;
-  };
-
-  ocaml_3_09_1 = import ../development/compilers/ocaml/3.09.1.nix {
-    inherit fetchurl stdenv x11 ncurses;
+    inherit fetchurl stdenv x11;
   };
 
   ocaml_3_10_0 = import ../development/compilers/ocaml/3.10.0.nix {
@@ -2940,11 +2936,11 @@ let
   pyrex = pyrex095;
 
   pyrex095 = import ../development/interpreters/pyrex/0.9.5.nix {
-    inherit fetchurl stdenv stringsWithDeps lib builderDefs python;
+    inherit fetchurl stdenv builderDefs python;
   };
 
   pyrex096 = import ../development/interpreters/pyrex/0.9.6.nix {
-    inherit fetchurl stdenv stringsWithDeps lib builderDefs python;
+    inherit fetchurl stdenv builderDefs python;
   };
 
   Qi = composedArgsAndFun (import ../development/compilers/qi/9.1.nix) {
@@ -3126,7 +3122,7 @@ let
   };
 
   avrdude = import ../development/tools/misc/avrdude {
-    inherit lib fetchurl stdenv flex yacc composableDerivation texLive;
+    inherit fetchurl flex yacc composableDerivation texLive;
   };
 
   binutils = useFromStdenv "binutils"
@@ -3340,7 +3336,7 @@ let
   };
 
   inotifyTools = import ../development/tools/misc/inotify-tools {
-    inherit fetchurl stdenv lib;
+    inherit fetchurl stdenv;
   };
 
   ired = import ../development/tools/analysis/radare/ired.nix {
@@ -3496,7 +3492,7 @@ let
   swigWithJava = swig;
 
   swftools = import ../tools/video/swftools {
-    inherit fetchurl stdenv x264 zlib libjpeg freetype giflib;
+    inherit fetchurl stdenv zlib;
   };
 
   texinfo49 = import ../development/tools/misc/texinfo/4.9.nix {
@@ -3637,7 +3633,7 @@ let
   };
 
   boolstuff = import ../development/libraries/boolstuff {
-    inherit fetchurl stdenv lib pkgconfig;
+    inherit fetchurl stdenv pkgconfig;
   };
 
   boost = makeOverridable (import ../development/libraries/boost) {
@@ -3673,7 +3669,7 @@ let
   };
 
   ccrtp = import ../development/libraries/ccrtp {
-    inherit fetchurl stdenv lib pkgconfig openssl libgcrypt commoncpp2;
+    inherit fetchurl stdenv pkgconfig openssl libgcrypt commoncpp2;
   };
 
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
@@ -4573,7 +4569,7 @@ let
   };
 
   libdv = import ../development/libraries/libdv {
-    inherit fetchurl stdenv lib composableDerivation;
+    inherit fetchurl composableDerivation;
   };
 
   libdrm = if stdenv.isDarwin then null else (import ../development/libraries/libdrm {
@@ -4656,7 +4652,7 @@ let
   };
 
   libharu = import ../development/libraries/libharu {
-    inherit fetchurl stdenv lib zlib libpng;
+    inherit fetchurl stdenv zlib libpng;
   };
 
   libical = import ../development/libraries/libical {
@@ -4685,7 +4681,7 @@ let
   };
 
   libsamplerate = import ../development/libraries/libsamplerate {
-    inherit fetchurl stdenv pkgconfig lib;
+    inherit fetchurl stdenv;
   };
 
   libspectre = import ../development/libraries/libspectre {
@@ -4776,7 +4772,7 @@ let
   };
 
   libmng = import ../development/libraries/libmng {
-    inherit fetchurl stdenv lib zlib libpng libjpeg lcms automake autoconf libtool;
+    inherit fetchurl stdenv zlib libpng libjpeg lcms automake autoconf libtool;
   };
 
   libmpcdec = import ../development/libraries/libmpcdec {
@@ -4856,7 +4852,7 @@ let
   };
 
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
-  libsigsegv_25 =  import ../development/libraries/libsigsegv/2.5.nix {
+  libsigsegv_25 = import ../development/libraries/libsigsegv/2.5.nix {
     inherit fetchurl stdenv;
   };
 
@@ -5009,7 +5005,7 @@ let
   };
 
   libzrtpcpp = import ../development/libraries/libzrtpcpp {
-    inherit fetchurl stdenv lib commoncpp2 openssl pkgconfig ccrtp;
+    inherit fetchurl stdenv commoncpp2 openssl pkgconfig ccrtp;
   };
 
   lightning = import ../development/libraries/lightning {
@@ -5137,8 +5133,8 @@ let
   };
 
   # added because I hope that it has been easier to compile on x86 (for blender)
-  openalSoft = import ../development/libraries/openalSoft {
-    inherit fetchurl stdenv alsaLib libtool cmake;
+  openalSoft = import ../development/libraries/openal-soft {
+    inherit fetchurl stdenv alsaLib cmake;
   };
 
   openbabel = import ../development/libraries/openbabel {
@@ -5259,7 +5255,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  proj = import ../development/libraries/proj.4 {
+  proj = import ../development/libraries/proj {
     inherit fetchurl stdenv;
   };
 
@@ -5350,15 +5346,15 @@ let
   };
 
   librdf_raptor = import ../development/libraries/librdf/raptor.nix {
-    inherit fetchurl stdenv lib libxml2 curl;
+    inherit fetchurl stdenv libxml2 curl;
   };
 
   librdf_rasqal = import ../development/libraries/librdf/rasqal.nix {
-    inherit fetchurl stdenv lib pcre libxml2 gmp librdf_raptor pkgconfig;
+    inherit fetchurl stdenv pcre libxml2 gmp librdf_raptor pkgconfig;
   };
 
   librdf = import ../development/libraries/librdf {
-    inherit fetchurl stdenv lib pkgconfig librdf_raptor ladspaH openssl zlib;
+    inherit fetchurl stdenv pkgconfig librdf_raptor ladspaH openssl zlib;
   };
 
   redland = makeOverridable (import ../development/libraries/redland/1.0.10.nix) {
@@ -5507,7 +5503,7 @@ let
   });
 
   vamp = import ../development/libraries/audio/vamp {
-    inherit fetchurl stdenv lib pkgconfig libsndfile;
+    inherit fetchurl stdenv pkgconfig libsndfile;
   };
 
   vtk = import ../development/libraries/vtk {
@@ -6026,8 +6022,8 @@ let
   };
 
   monetdb = import ../servers/sql/monetdb {
-    inherit composableDerivation getConfig;
-    inherit fetchurl stdenv pcre openssl readline libxml2 geos apacheAnt jdk5;
+    inherit composableDerivation;
+    inherit fetchurl pcre openssl readline libxml2 geos apacheAnt jdk5;
   };
 
   mysql4 = import ../servers/sql/mysql {
@@ -6168,7 +6164,7 @@ let
   ### OS-SPECIFIC
 
   afuse = import ../os-specific/linux/afuse {
-    inherit fetchurl stdenv lib pkgconfig fuse;
+    inherit fetchurl stdenv pkgconfig fuse;
   };
 
   autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
@@ -6322,7 +6318,7 @@ let
   };
 
   halevt = import ../os-specific/linux/hal/hal-evt.nix {
-    inherit fetchurl stdenv lib libxml2 pkgconfig boolstuff hal dbus_glib;
+    inherit fetchurl stdenv libxml2 pkgconfig boolstuff hal dbus_glib;
   };
 
   hal_info = import ../os-specific/linux/hal/info.nix {
@@ -7072,10 +7068,6 @@ let
 
   upstart = import ../os-specific/linux/upstart {
     inherit fetchurl stdenv pkgconfig dbus libnih;
-  };
-
-  upstartJobControl = import ../os-specific/linux/upstart/jobcontrol.nix {
-    inherit stdenv;
   };
 
   usbutils = import ../os-specific/linux/usbutils {
@@ -8239,7 +8231,7 @@ let
     stdenv = stdenv2;
   };
 
-  i810switch = import ../applications/misc/i810 {
+  i810switch = import ../os-specific/linux/i810switch {
     inherit fetchurl stdenv pciutils;
   };
 
@@ -8330,7 +8322,7 @@ let
   };
 
   jackmeter = import ../applications/audio/jackmeter {
-    inherit fetchurl stdenv lib jackaudio pkgconfig;
+    inherit fetchurl stdenv jackaudio pkgconfig;
   };
 
   jedit = import ../applications/editors/jedit {
@@ -8376,7 +8368,7 @@ let
   };
 
   ladspaH = import ../applications/audio/ladspa-plugins/ladspah.nix {
-    inherit fetchurl stdenv builderDefs stringsWithDeps;
+    inherit fetchurl stdenv builderDefs;
   };
 
   ladspaPlugins = import ../applications/audio/ladspa-plugins {
@@ -8686,7 +8678,7 @@ let
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
   procmail = import ../applications/misc/procmail {
-    inherit fetchurl stdenv autoconf;
+    inherit fetchurl stdenv;
   };
 
   pstree = import ../applications/misc/pstree {
@@ -8944,7 +8936,7 @@ let
   });
 
   timidity = import ../tools/misc/timidity {
-    inherit fetchurl stdenv lib alsaLib composableDerivation jackaudio ncurses;
+    inherit fetchurl stdenv alsaLib composableDerivation jackaudio ncurses;
   };
 
   tkcvs = import ../applications/version-management/tkcvs {
@@ -9670,7 +9662,7 @@ let
   };
 
   biolib = import ../development/libraries/science/biology/biolib {
-    inherit fetchurl stdenv readline perl cmake rLang zlib;
+    inherit fetchurl stdenv cmake rLang zlib;
   };
 
   emboss = import ../applications/science/biology/emboss {
@@ -9854,8 +9846,8 @@ let
   };
 
   gutenprint = import ../misc/drivers/gutenprint {
-    inherit fetchurl stdenv lib pkgconfig composableDerivation cups libtiff libpng
-      openssl git gimp;
+    inherit fetchurl stdenv pkgconfig composableDerivation cups libtiff libpng
+      openssl gimp;
   };
 
   gutenprintBin = import ../misc/drivers/gutenprint/bin.nix {

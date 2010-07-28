@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, x11, ncurses }:
 
 stdenv.mkDerivation (rec {
   

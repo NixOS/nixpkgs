@@ -1,5 +1,6 @@
-args: with args;
-stdenv.mkDerivation ( rec {
+{ stdenv, fetchurl, pkgconfig, openssl, libsigcxx }:
+
+stdenv.mkDerivation rec {
   pname = "libtorrent";
   version = "0.12.6";
 
@@ -15,4 +16,4 @@ stdenv.mkDerivation ( rec {
   meta = {
     description = "A BitTorrent library written in C++ for *nix, with a focus on high performance and good code";
   };
-})
+}

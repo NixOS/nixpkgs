@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, perl, freetype }:
+
 stdenv.mkDerivation {
   name = "ttf2pt1-3.4.4";
 
@@ -17,12 +18,13 @@ stdenv.mkDerivation {
     makeFlags="INSTDIR=$out OWNER=`id -u`"
   '';
 
-  buildInputs = [freetype];
+  buildInputs = [ freetype ];
+  
   patches = ./gentoo-makefile.patch; # also contains the freetype patch
 
   meta = { 
-      description = "True Type to Postscript Type 3 converter, fpdf";
-      homepage = "http://ttf2pt1.sourceforge.net/index.html";
-      license = "ttf2pt1";
+    description = "True Type to Postscript Type 3 converter, fpdf";
+    homepage = "http://ttf2pt1.sourceforge.net/index.html";
+    license = "ttf2pt1";
   };
 }
