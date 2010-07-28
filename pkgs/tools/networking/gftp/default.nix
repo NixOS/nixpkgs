@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, gtk, readline, ncurses, gettext, openssl, pkgconfig }:
+
 stdenv.mkDerivation {
   name = "gftp-2.0.19";
 
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
   buildInputs = [ gtk readline ncurses gettext openssl pkgconfig ];
 
   meta = { 
-      description = "GTK based FTP client";
-      homepage = http://www.gftp.org;
-      license = "GPLv2+";
+    description = "GTK+-based FTP client";
+    homepage = http://www.gftp.org;
+    license = "GPLv2+";
   };
 }

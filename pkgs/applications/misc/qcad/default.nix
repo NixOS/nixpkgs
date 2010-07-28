@@ -1,5 +1,7 @@
 # translations still misssing
-args: with args;
+
+{ stdenv, fetchurl, qt3, libpng, libXext, libX11 }:
+
 stdenv.mkDerivation {
   name = "qcad-2.0.5.0-1-community";
 
@@ -15,7 +17,7 @@ stdenv.mkDerivation {
     cd ..
   '';
 
-  buildInputs = [qt3 libpng libXext libX11];
+  buildInputs = [ qt3 libpng libXext libX11 ];
 
   patchPhase = ''
     sed -i 's/-pedantic//' mkspecs/defs.pro
@@ -35,8 +37,8 @@ stdenv.mkDerivation {
   '';
 
   meta = { 
-      description="A 2D CAD package based upon Qt.";
-      homepage = http://www.ribbonsoft.de/qcad.html;
-      license = "GPLv2"; # community edition
+    description = "A 2D CAD package based upon Qt";
+    homepage = http://www.ribbonsoft.de/qcad.html;
+    license = "GPLv2"; # community edition
   };
 }

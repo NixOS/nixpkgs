@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, x11, libXmu }:
+
 stdenv.mkDerivation {
   name = "xclip-0.11";
 
@@ -7,11 +8,11 @@ stdenv.mkDerivation {
     sha256 = "0ipwxkfqz66fz6jlln1v46sd2kr6bkqzq6j5hkzn6pb3grmzsacg";
   };
 
-  buildInputs = [x11 libXmu];
+  buildInputs = [ x11 libXmu ];
 
   meta = { 
-      description = "access X clipboard from this console application";
-      homepage = http://people.debian.org/~kims/xclip/;
-      license = "GPL-2";
+    description = "Tool to access the X clipboard from a console application";
+    homepage = http://people.debian.org/~kims/xclip/;
+    license = "GPL-2";
   };
 }

@@ -1,12 +1,13 @@
-args: with args;
-stdenv.mkDerivation {
+{ stdenv, fetchurl, libX11, libXft, libXi, inputproto, libSM, libICE
+, freetype, pkgconfig, which }:
 
+stdenv.mkDerivation {
   name = "mrxvt-0.5.4";
 
-  buildInputs = [libX11 libXft libXi inputproto libSM libICE
-    freetype pkgconfig which];
+  buildInputs =
+    [ libX11 libXft libXi inputproto libSM libICE freetype pkgconfig which ];
 
-  configureFlags=[
+  configureFlags = [
     "--with-x"
     "--enable-frills"
     "--enable-xft"
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
     "--with-save-lines=10000"
   ];
 
-  preConfigure=''
+  preConfigure = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2";
   '';
 
@@ -27,10 +28,10 @@ stdenv.mkDerivation {
   };
 
   meta = { 
-    description = "lightweight multitabbed feature-rich X11 terminal emulator";
+    description = "Lightweight multitabbed feature-rich X11 terminal emulator";
     longDescription = "
     	Multitabbed lightweight terminal emulator based on rxvt. 
-	Supports transparency, backgroundimages, freetype fonts,..
+	Supports transparency, backgroundimages, freetype fonts, ...
     ";
     homepage = http://sourceforge.net/projects/materm;
     license = "GPL";

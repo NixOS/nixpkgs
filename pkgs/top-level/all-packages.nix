@@ -223,13 +223,6 @@ let
     inherit stdenv perl;
   };
 
-  debPackage = {
-    debBuild = lib.sumTwoArgs(import ../build-support/deb-package) {
-      inherit builderDefs;
-    };
-    inherit fetchurl stdenv;
-  };
-
   dotnetenv = import ../build-support/dotnetenv {
     inherit stdenv;
     dotnetfx = dotnetfx35;
@@ -815,12 +808,12 @@ let
   };
 
   gftp = import ../tools/networking/gftp {
-    inherit lib fetchurl stdenv;
+    inherit fetchurl stdenv;
     inherit readline ncurses gettext openssl pkgconfig;
-    inherit (gtkLibs) glib gtk;
+    inherit (gtkLibs) gtk;
   };
 
-  gifsicle = import ../tools/graphics/gifscile {
+  gifsicle = import ../tools/graphics/gifsicle {
     inherit fetchurl stdenv;
     inherit (xlibs) xproto libXt libX11;
   };
@@ -871,6 +864,8 @@ let
     inherit (xlibs) libX11 libXt libXaw libXpm;
     inherit (gtkLibs) pango;
     inherit cairo pkgconfig;
+    texLive = null;
+    lua = null;
   };
 
   gnused = useFromStdenv "gnused"
@@ -2602,7 +2597,7 @@ let
   };
 
   neko = import ../development/compilers/neko {
-    inherit sourceFromHead fetchurl stdenv lib pkgconfig composableDerivation
+    inherit sourceFromHead fetchurl lib pkgconfig composableDerivation
       boehmgc apacheHttpd mysql zlib sqlite pcre apr makeWrapper;
     inherit (gtkLibs) gtk;
   };
@@ -4000,13 +3995,13 @@ let
   };
 
   glew = import ../development/libraries/glew {
-    inherit fetchurl stdenv mesa x11 libtool;
+    inherit fetchurl stdenv mesa x11;
     inherit (xlibs) libXmu libXi;
   };
 
-  glefw = import ../development/libraries/glefw {
-    inherit fetchurl stdenv lib mesa;
-    inherit (xlibs) libX11 libXext xextproto;
+  glfw = import ../development/libraries/glfw {
+    inherit fetchurl stdenv mesa;
+    inherit (xlibs) libX11 libXext;
   };
 
   glibc = useFromStdenv "glibc" glibc211;
@@ -6594,7 +6589,7 @@ let
 
     inherit kernel;
 
-    ati_drivers_x11  = import ../os-specific/linux/ati-drivers {
+    ati_drivers_x11 = import ../os-specific/linux/ati-drivers {
       inherit stdenv fetchurl kernel xlibs which mesa xorg makeWrapper
         patchelf glibc;
       inherit (xorg) imake libXxf86vm xf86vidmodeproto;
@@ -7330,7 +7325,7 @@ let
   };
 
   unifont = import ../data/fonts/unifont {
-    inherit debPackage perl;
+    inherit fetchurl stdenv;
     inherit (xorg) mkfontdir mkfontscale bdftopcf fontutil;
   };
 
@@ -7403,7 +7398,7 @@ let
   };
 
   ardour = import ../applications/audio/ardour {
-    inherit fetchurl stdenv lib pkgconfig scons boost redland librdf_raptor
+    inherit fetchurl stdenv pkgconfig scons boost librdf_raptor
       librdf_rasqal jackaudio flac libsamplerate alsaLib libxml2 libxslt
       libsndfile libsigcxx libusb cairomm librdf liblo fftw fftwSinglePrec
       aubio libmad;
@@ -7947,7 +7942,7 @@ let
   };
 
   grip = import ../applications/misc/grip {
-    inherit fetchurl stdenv lib grip pkgconfig curl cdparanoia libid3tag;
+    inherit fetchurl stdenv pkgconfig curl cdparanoia libid3tag;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnome libgnomeui vte;
   };
@@ -8281,6 +8276,8 @@ let
     inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
       libjpeg libpng libtiff libxml2 zlib libtool jasper;
     inherit (xlibs) libX11;
+    tetex = null;
+    librsvg = null;
   };
 
   imagemagickBig = import ../applications/graphics/ImageMagick {
@@ -8303,7 +8300,7 @@ let
   inkscape = import ../applications/graphics/inkscape {
     inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib popt
       libxml2 libxslt libpng boehmgc libsigcxx lcms boost gettext
-      cairomm python pyxml makeWrapper intltool gsl;
+      python pyxml makeWrapper intltool gsl;
     inherit (pythonPackages) lxml;
     inherit (gtkLibs) gtk glib glibmm gtkmm;
     inherit (xlibs) libXft;
@@ -8331,7 +8328,7 @@ let
   };
 
   jigdo = import ../applications/misc/jigdo {
-    inherit fetchurl stdenv db45 libwpd bzip2;
+    inherit fetchurl stdenv db45 bzip2;
     inherit (gtkLibs) gtk;
   };
 
@@ -8518,9 +8515,8 @@ let
     };
 
   mrxvt = import ../applications/misc/mrxvt {
-    inherit lib fetchurl stdenv freetype pkgconfig which;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXft
-      libXi inputproto;
+    inherit fetchurl stdenv freetype pkgconfig which;
+    inherit (xlibs) libX11 libSM libICE libXft libXi inputproto;
   };
 
   multisync = import ../applications/misc/multisync {
@@ -8753,7 +8749,7 @@ let
   };
 
   rxvt = import ../applications/misc/rxvt {
-    inherit lib fetchurl stdenv;
+    inherit fetchurl stdenv;
     inherit (xlibs) libXt libX11;
   };
 
@@ -9200,8 +9196,7 @@ let
   };
 
   xterm = import ../applications/misc/xterm {
-    inherit fetchurl stdenv ncurses freetype pkgconfig;
-    inherit (xlibs) libXaw xproto libXt libX11 libSM libICE libXext libXft luit;
+    inherit fetchurl stdenv ncurses freetype pkgconfig xorg;
   };
 
   xtrace = import ../tools/X11/xtrace {
@@ -9389,9 +9384,9 @@ let
   };
 
   micropolis = import ../games/micropolis {
-    inherit lib fetchurl stdenv;
+    inherit fetchurl stdenv;
     inherit (xlibs) libX11 libXpm libXext xextproto;
-    inherit byacc bash;
+    inherit byacc;
   };
 
   openttd = import ../games/openttd {
