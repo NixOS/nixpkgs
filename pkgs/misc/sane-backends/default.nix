@@ -1,5 +1,5 @@
-{stdenv, fetchurl, hotplugSupport ? false, libusb ? null,
-	gt68xxFirmware ? null}:
+{ stdenv, fetchurl, hotplugSupport ? false, libusb ? null
+, gt68xxFirmware ? null }:
 
 assert hotplugSupport -> stdenv.system == "i686-linux";
 

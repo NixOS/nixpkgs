@@ -1,17 +1,19 @@
-args: with args;
-let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {} {
+{ composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
+, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng }:
 
+let inherit (composableDerivation) edf; in
+
+composableDerivation.composableDerivation {} {
   name = "fltk-1.1.10";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/fltk/1.1.10/fltk-1.1.10-source.tar.bz2;
     sha256 = "16mic69a48y3ybijml754x38djxxb25rn8441p9qsssqy8ms5b9p";
   };
 
-  propagatedBuildInputs=[x11 inputproto libXi freeglut];
+  propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
-  buildInputs = [ args.pkgconfig ];
+  buildInputs = [ pkgconfig ];
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
@@ -28,18 +30,19 @@ composableDerivation {} {
     // edf { name = "xinerama"; enable = { buildInputs = [libXinerama]; }; } #       turn on Xinerama support default=no
     // edf { name = "xft"; enable = { buildInputs=[libXft]; }; } #            turn on Xft support default=no
     // edf { name = "xdbe"; };  #           turn on Xdbe support default=no
+
   cfg = {
-      largefileSupport = true; # is default
-      glSupport = true; # doesn't build without it. Why?
-      localjpegSupport = false;
-      localzlibSupport = false;
-      localpngSupport = false;
-      sharedSupport = true;
-      threadsSupport = true;
+    largefileSupport = true; # is default
+    glSupport = true; # doesn't build without it. Why?
+    localjpegSupport = false;
+    localzlibSupport = false;
+    localpngSupport = false;
+    sharedSupport = true;
+    threadsSupport = true;
   };
 
   meta = {
-      description = "a C++ cross platform lightweight gui library binding";
-      homepage = http://www.fltk.org;
+    description = "A C++ cross-platform light-weight GUI library binding";
+    homepage = http://www.fltk.org;
   };
 }

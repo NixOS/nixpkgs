@@ -1,6 +1,8 @@
-args: with args;
+{ stdenv, fetchurl, jre }:
+
 # let version = "1.0-beta-2";
 let version = "1.0-SNAPSHOT-standalone";
+
 in stdenv.mkDerivation {
     /*
 

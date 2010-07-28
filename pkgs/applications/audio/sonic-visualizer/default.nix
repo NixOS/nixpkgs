@@ -1,11 +1,10 @@
 # TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
 
-args: with args;
+{ stdenv, fetchurl, libsndfile, qt, fftw, librdf, rubberband
+, libsamplerate, vampSDK, alsaLib, librdf_raptor, librdf_rasqal
+, redland, jackaudio, pulseaudio, libmad, libogg, liblo, bzip2 }:
 
 stdenv.mkDerivation {
-
-#TODO add plugins!
-
   name = "sonic-visualizer-1.6";
 
   src = fetchurl {
@@ -13,16 +12,17 @@ stdenv.mkDerivation {
     sha256 = "1dbqqa7anii2jnjpfwm4sr83nn4bwmz68xw4n6clycsz5iqk52f5";
   };
 
-  buildInputs = [libsndfile qt fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
-    libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
-    # optional
-    jackaudio
-    # portaudio
-    pulseaudio
-    libmad
-    libogg # ?
-    # fishsound
-    liblo
+  buildInputs =
+    [ libsndfile qt fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
+      libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
+      # optional
+      jackaudio
+      # portaudio
+      pulseaudio
+      libmad
+      libogg # ?
+      # fishsound
+      liblo
     ];
 
   buildPhase = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     description = "View and analyse contents of music audio files";
     homepage = http://www.sonicvisualiser.org/;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

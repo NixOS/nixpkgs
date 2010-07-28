@@ -1,9 +1,8 @@
-args: with args;
+{ composableDerivation, fetchurl, lib, qt, openssl, autoconf, automake, pkgconfig }:
 
-let inherit (args.composableDerivation) composableDerivation edf wwf; in
+let inherit (composableDerivation) edf wwf; in
 
-composableDerivation {} ( fixed : {
-
+composableDerivation.composableDerivation {} ( fixed : {
   name = "yate2";
 
   src = fetchurl {
@@ -12,28 +11,29 @@ composableDerivation {} ( fixed : {
   };
 
   # TODO zaptel ? postgres ?
-  buildInputs = [qt openssl autoconf automake pkgconfig];
+  buildInputs = [ qt openssl autoconf automake pkgconfig ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
-  preConfigure = "
-  
-  sed -i 's@,/dev/null@@' configure
-  "; 
+  preConfigure =
+    ''
+      sed -i 's@,/dev/null@@' configure
+    ''; 
 
   # --unresolved-symbols=ignore-in-shared-libs makes ld no longer find --library=yate? Why?
-  preBuild = ''
-    export NIX_LDFLAGS="-L$TMP/yate $NIX_LDFLAGS"
-    find . -type f -iname Makefile | xargs sed -i \
-      -e 's@-Wl,--unresolved-symbols=ignore-in-shared-libs@@' \
-      -e 's@-Wl,--retain-symbols-file@@'
-  '';
+  preBuild =
+    ''
+      export NIX_LDFLAGS="-L$TMP/yate $NIX_LDFLAGS"
+      find . -type f -iname Makefile | xargs sed -i \
+        -e 's@-Wl,--unresolved-symbols=ignore-in-shared-libs@@' \
+        -e 's@-Wl,--retain-symbols-file@@'
+    '';
 
   meta = { 
     description = "YATE - Yet Another Telephony Engine";
     homepage = http://yate.null.ro/;
     license = ["GPL" "MPL"]; # Yate's license is GPL with an exception for linking with OpenH323 and PWlib (licensed under MPL).
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
   };
 
 } )

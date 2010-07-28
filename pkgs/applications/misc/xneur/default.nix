@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, xorg, pcre, GStreamer, glib, libxml2
+, aspell, cairo, imlib2, xosd, libnotify, gtk, pango, atk }:
 
 let s = import ./src-for-default.nix; in
 
@@ -9,17 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = s.hash;
   };
 
-  buildInputs = [libX11 pkgconfig pcre GStreamer glib libxml2 aspell
-    libXpm imlib2 xosd libXt libXext libXi libnotify gtk pango
-    cairo];
-
-  inherit aspell imlib2 xosd;
+  buildInputs =
+    [ xorg.libX11 pkgconfig pcre GStreamer glib libxml2 aspell cairo
+      xorg.libXpm imlib2 xosd xorg.libXt xorg.libXext xorg.libXi libnotify
+      gtk pango
+    ];
 
   preConfigure = ''
     sed -e 's/-Werror//' -i configure
-    sed -e 's/for aspell_dir in/for aspell_dir in $aspell /' -i configure
-    sed -e 's/for imlib2_dir in/for imlib2_dir in $imlib2 /' -i configure
-    sed -e 's/for xosd_dir in/for xosd_dir in $xosd /' -i configure
+    sed -e 's/for aspell_dir in/for aspell_dir in ${aspell} /' -i configure
+    sed -e 's/for imlib2_dir in/for imlib2_dir in ${imlib2} /' -i configure
+    sed -e 's/for xosd_dir in/for xosd_dir in ${xosd} /' -i configure
 
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/lib/gtk-2.0/include"
@@ -31,11 +32,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "xneur is the keyboard layout switcher.";
+    description = "Utility for switching between keyboard layouts";
     homepage = http://xneur.ru;
     license = "GPL2+";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
-
 }

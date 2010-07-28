@@ -1,18 +1,19 @@
-args:
-args.stdenv.mkDerivation {
+{ stdenv, fetchurl, writeTextFile, coreutils, gnumake, gcc, gnutar, bzip2, gnugrep, gnused, gawk }:
+
+stdenv.mkDerivation {
   name = "avr-gcc-libc";
 
-  srcBinutils = args.fetchurl {
+  srcBinutils = fetchurl {
     url = ftp://ftp.gnu.org/gnu/binutils/binutils-2.17.tar.bz2;
     sha256 = "0pm20n2l9ddgdpgzk3zhnbb8nbyb4rb2kvcw21pkd6iwybk3rhz2";
   };
 
-  srcGCC = args.fetchurl {
+  srcGCC = fetchurl {
     url = ftp://ftp.gnu.org/gnu/gcc/gcc-4.1.2/gcc-core-4.1.2.tar.bz2;
     sha256 = "07binc1hqlr0g387zrg5sp57i12yzd5ja2lgjb83bbh0h3gwbsbv";
   };
 
-  srcAVRLibc = args.fetchurl {
+  srcAVRLibc = fetchurl {
     url = http://www.very-clever.com/download/nongnu/avr-libc/avr-libc-1.4.5.tar.bz2;
     sha256 = "058iv3vs6syy01pfkd5894xap9zakjx8ki1bpjdnihn6vk6fr80l";
   };
@@ -20,12 +21,12 @@ args.stdenv.mkDerivation {
   phases = "doAll";
 
   # don't call any wired $buildInputs/nix-support/* scripts or such. This makes the build fail 
-  builder = args.writeTextFile {
+  builder = writeTextFile {
     name = "avrbinutilsgccavrlibc-builder-script";
     text =  ''
-    PATH=${args.coreutils}/bin:${args.gnumake}/bin:${args.gcc}/bin:${args.gnutar}/bin:${args.bzip2}/bin:${args.gnugrep}/bin:${args.gnused}/bin:${args.gawk}/bin
+    PATH=${coreutils}/bin:${gnumake}/bin:${gcc}/bin:${gnutar}/bin:${bzip2}/bin:${gnugrep}/bin:${gnused}/bin:${gawk}/bin
     # that's all a bit too hacky...!
-    for i in `cat ${args.gcc}/nix-support/propagated-user-env-packages`; do
+    for i in `cat ${gcc}/nix-support/propagated-user-env-packages`; do
       echo adding $i
       PATH=$PATH:$i/bin
     done

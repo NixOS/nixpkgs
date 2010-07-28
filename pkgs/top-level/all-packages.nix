@@ -1432,8 +1432,7 @@ let
   };
 
   pfstools = import ../tools/graphics/pfstools {
-    inherit fetchurl stdenv imagemagick libjpeg libtiff mesa freeglut bzip2 libpng expat;
-    openexr = openexr_1_6_1;
+    inherit fetchurl stdenv imagemagick libjpeg libtiff mesa freeglut bzip2 libpng expat openexr;
     qt = qt3;
     inherit (xlibs) libX11;
   };
@@ -1897,7 +1896,7 @@ let
   };
 
   w3cCSSValidator = import ../tools/misc/w3c-css-validator {
-    inherit fetchurl stdenv apacheAnt jre sourceFromHead lib;
+    inherit fetchurl stdenv apacheAnt jre sourceFromHead;
     tomcat = tomcat6;
   };
 
@@ -2683,9 +2682,9 @@ let
     inherit stdenv fetchurl yacc flex glib pkgconfig;
   };
 
-  visualcpp = (import ../development/compilers/visual-c++ {
+  visualcpp = import ../development/compilers/visual-c++ {
     inherit fetchurl stdenv cabextract;
-  });
+  };
 
   vs90wrapper = import ../development/compilers/vs90wrapper {
     inherit stdenv;
@@ -3446,7 +3445,7 @@ let
 
   # couldn't find the source yet
   seleniumRCBin = import ../development/tools/selenium/remote-control {
-    inherit fetchurl stdenv unzip;
+    inherit fetchurl stdenv;
     jre = jdk;
   };
 
@@ -3873,17 +3872,15 @@ let
   };
 
   fltk11 = (import ../development/libraries/fltk/fltk11.nix) {
-    inherit composableDerivation x11 lib pkgconfig freeglut;
-    inherit fetchurl stdenv mesa libpng libjpeg zlib ;
+    inherit composableDerivation x11 pkgconfig freeglut;
+    inherit fetchurl mesa libpng libjpeg zlib ;
     inherit (xlibs) inputproto libXi libXinerama libXft;
-    flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 
   fltk20 = (import ../development/libraries/fltk) {
-    inherit composableDerivation x11 lib pkgconfig freeglut;
-    inherit fetchurl stdenv mesa libpng libjpeg zlib ;
+    inherit composableDerivation x11 pkgconfig freeglut;
+    inherit fetchurl mesa libpng libjpeg zlib;
     inherit (xlibs) inputproto libXi libXinerama libXft;
-    flags = [ "useNixLibs" "threads" "shared" "gl" ];
   };
 
   fmod = import ../development/libraries/fmod {
@@ -3948,8 +3945,7 @@ let
   };
 
   gegl = import ../development/libraries/gegl {
-    inherit fetchurl stdenv libpng pkgconfig babl;
-    openexr = openexr_1_6_1;
+    inherit fetchurl stdenv libpng pkgconfig babl openexr;
     #  avocodec avformat librsvg
     inherit cairo libjpeg librsvg;
     inherit (gtkLibs) pango glib gtk;
@@ -3964,9 +3960,7 @@ let
   };
 
   geos = import ../development/libraries/geos {
-    inherit fetchurl fetchsvn stdenv autoconf
-      automake libtool swig which lib composableDerivation python ruby;
-    use_svn = stdenv.system == "x86_64-linux";
+    inherit composableDerivation fetchurl python;
   };
 
   gettext = import ../development/libraries/gettext {
@@ -5152,24 +5146,13 @@ let
 
   # this ctl version is needed by openexr_viewers
   openexr_ctl = import ../development/libraries/openexr_ctl {
-    inherit fetchurl stdenv ilmbase ctl;
-    openexr = openexr_1_6_1;
+    inherit fetchurl stdenv ilmbase ctl openexr;
   };
 
-  openexr_1_6_1 = import ../development/libraries/openexr {
-    inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
-    version = "1.6.1";
-    # optional features:
+  openexr = import ../development/libraries/openexr {
+    inherit fetchurl stdenv ilmbase zlib pkgconfig;
     inherit ctl;
   };
-
-  # This older version is needed by blender (it complains about missing half.h )
-  openexr_1_4_0 = import ../development/libraries/openexr {
-    inherit fetchurl stdenv ilmbase zlib pkgconfig lib;
-    version = "1.4.0";
-  };
-
-  openexr = openexr_1_6_1;
 
   openldap = import ../development/libraries/openldap {
     inherit fetchurl stdenv openssl cyrus_sasl db4 groff;
@@ -5367,7 +5350,7 @@ let
   };
 
   rubberband = import ../development/libraries/rubberband {
-    inherit fetchurl stdenv lib pkgconfig libsamplerate libsndfile ladspaH;
+    inherit fetchurl stdenv pkgconfig libsamplerate libsndfile ladspaH;
     fftw = fftwSinglePrec;
     inherit (vamp) vampSDK;
   };
@@ -6805,6 +6788,7 @@ let
     inherit fetchgit stdenv autoconf texinfo;
     automake = automake111x;
     headersOnly = true;
+    mig = null;
   };
 
   mdadm = import ../os-specific/linux/mdadm {
@@ -7560,13 +7544,12 @@ let
   chromeWrapper = wrapFirefox chrome "chrome" "";
 
   cinelerra = import ../applications/video/cinelerra {
-    inherit lib fetchurl sourceFromHead stdenv
+    inherit fetchurl sourceFromHead stdenv
       automake autoconf libtool
       a52dec alsaLib   lame libavc1394 libiec61883 libraw1394 libsndfile
       libvorbis libogg libjpeg libtiff freetype mjpegtools x264
       gettext faad2 faac libtheora libpng libdv perl nasm e2fsprogs
-      pkgconfig;
-      openexr = openexr_1_6_1;
+      pkgconfig openexr;
     fftw = fftwSinglePrec;
     inherit (xorg) libXxf86vm libXv libXi libX11 xextproto;
     inherit (gnome) esound;
@@ -7624,11 +7607,10 @@ let
   cinepaint = import ../applications/graphics/cinepaint {
     inherit stdenv fetchcvs cmake pkgconfig freetype fontconfig lcms flex libtiff
       libjpeg libpng libexif zlib perl mesa perlXMLParser python pygtk gettext
-      intltool babl gegl automake autoconf libtool;
+      intltool babl gegl automake autoconf libtool openexr;
     inherit (xlibs) makedepend libX11 xf86vidmodeproto xineramaproto libXmu
       libXext libXpm libXxf86vm;
     inherit (gtkLibs) gtk glib;
-    openexr = openexr_1_6_1;
     fltk = fltk11;
   };
 
@@ -7886,9 +7868,8 @@ let
   };
 
   exrdisplay = import ../applications/graphics/exrdisplay {
-    inherit fetchurl stdenv pkgconfig mesa which openexr_ctl;
+    inherit fetchurl stdenv pkgconfig mesa which openexr_ctl openexr;
     fltk = fltk20;
-    openexr = openexr_1_6_1;
   };
 
   fbpanel = composedArgsAndFun (import ../applications/window-managers/fbpanel/4.12.nix) {
@@ -8198,10 +8179,9 @@ let
   hugin = import ../applications/graphics/hugin {
     inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc mesa freeglut
-      glew;
+      glew openexr;
     inherit wxGTK;
     inherit (xlibs) libXi libXmu;
-    openexr = openexr_1_6_1;
     stdenv = stdenv2;
   };
 
@@ -8348,7 +8328,7 @@ let
   };
 
   ladspaPlugins = import ../applications/audio/ladspa-plugins {
-    inherit fetchurl stdenv builderDefs stringsWithDeps ladspaH pkgconfig;
+    inherit fetchurl stdenv ladspaH pkgconfig;
     fftw = fftwSinglePrec;
   };
 
@@ -8594,7 +8574,7 @@ let
   };
 
   partitionManager = import ../tools/misc/partition-manager {
-    inherit fetchurl stdenv lib cmake pkgconfig gettext parted libuuid perl;
+    inherit fetchurl stdenv cmake gettext parted libuuid perl;
     kde = kde44;
     qt = qt4;
   };
@@ -8677,8 +8657,7 @@ let
   };
 
   qtpfsgui = import ../applications/graphics/qtpfsgui {
-    inherit fetchurl stdenv exiv2 libtiff fftw qt4 ilmbase;
-    openexr = openexr_1_6_1;
+    inherit fetchurl stdenv exiv2 libtiff fftw qt4 ilmbase openexr;
   };
 
   rapidsvn = import ../applications/version-management/rapidsvn {
@@ -8707,12 +8686,12 @@ let
   };
 
   RealPlayer =
-    (import ../applications/video/RealPlayer {
+    import ../applications/video/RealPlayer {
       inherit fetchurl stdenv;
       inherit (gtkLibs) glib pango atk gtk;
       inherit (xlibs) libX11;
       libstdcpp5 = gcc33.gcc;
-    });
+    };
 
   rekonq = makeOverridable (import ../applications/networking/browsers/rekonq) {
     inherit fetchurl fetchgit stdenv cmake perl;
@@ -8733,7 +8712,7 @@ let
 
   # = urxvt
   rxvt_unicode = makeOverridable (import ../applications/misc/rxvt_unicode) {
-    inherit lib fetchurl stdenv perl ncurses;
+    inherit fetchurl stdenv perl ncurses;
     inherit (xlibs) libXt libX11 libXft;
     perlSupport = false;
   };
@@ -8750,11 +8729,9 @@ let
   };
 
   scribus = import ../applications/office/scribus {
-    inherit fetchurl stdenv lib cmake pkgconfig freetype lcms libtiff libxml2
-      cairo python cups fontconfig zlib libjpeg libpng;
+    inherit fetchurl stdenv cmake pkgconfig freetype lcms libtiff libxml2
+      cairo python cups fontconfig zlib libjpeg libpng xorg;
     inherit (gnome) libart_lgpl;
-    inherit (xlibs) libXau libXaw libXdmcp libXext libX11 libXtst libXi libXinerama libXrender;
-    inherit (xorg) pixman libpthreadstubs;
     qt = qt3;
   };
 
@@ -8802,7 +8779,7 @@ let
   };
 
   sonicVisualizer = import ../applications/audio/sonic-visualizer {
-    inherit fetchurl stdenv lib libsndfile libsamplerate bzip2 librdf
+    inherit fetchurl stdenv libsndfile libsamplerate bzip2 librdf
       rubberband jackaudio pulseaudio libmad
       libogg liblo alsaLib librdf_raptor librdf_rasqal redland fftw;
     inherit (vamp) vampSDK;
@@ -8929,11 +8906,10 @@ let
   };
 
   twinkle = import ../applications/networking/twinkle {
-    inherit fetchurl stdenv lib pkgconfig commoncpp2 ccrtp openssl speex libjpeg perl
-      libzrtpcpp libsndfile libxml2 file readline alsaLib;
+    inherit fetchurl stdenv pkgconfig commoncpp2 ccrtp openssl speex libjpeg perl
+      libzrtpcpp libsndfile libxml2 file readline alsaLib xorg;
     qt = qt3;
     boost = boostFull;
-    inherit (xlibs) libX11 libXaw libICE libXext;
   };
 
   unison = import ../applications/networking/sync/unison {
@@ -9131,16 +9107,14 @@ let
 
   xneur = import ../applications/misc/xneur {
     inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2
-      xosd libnotify cairo;
+      xosd libnotify cairo xorg;
     GStreamer=gst_all.gstreamer;
-    inherit (xlibs) libX11 libXpm libXt libXext libXi;
     inherit (gtkLibs) glib gtk pango atk;
   };
 
   xneur_0_8 = import ../applications/misc/xneur/0.8.nix {
-    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2 xosd glib;
+    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2 xosd glib xorg;
     GStreamer = gst_all.gstreamer;
-    inherit (xlibs) libX11 libXpm libXt libXext;
   };
 
   xournal = import ../applications/graphics/xournal {
@@ -9213,8 +9187,8 @@ let
   };
 
   yate = import ../applications/misc/yate {
-    inherit sox speex openssl automake autoconf pkgconfig;
-    inherit fetchurl stdenv lib composableDerivation;
+    inherit openssl automake autoconf pkgconfig;
+    inherit fetchurl lib composableDerivation;
     qt = qt4;
   };
 
@@ -9316,13 +9290,6 @@ let
     inherit (gtkLibs) glib gtk;
     inherit (xlibs) libX11 xproto;
     wxGTK = wxGTK28.override {unicode = false;};
-  };
-
-  fsgAltBuild = import ../games/fsg/alt-builder.nix {
-    inherit stdenv fetchurl mesa;
-    wxGTK = wxGTK28.override {unicode = false;};
-    inherit (xlibs) libX11 xproto;
-    inherit stringsWithDeps builderDefs;
   };
 
   gemrb = import ../games/gemrb {
@@ -9588,7 +9555,7 @@ let
   kde4 = kde44;
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
-    openexr = openexr_1_6_1;
+    inherit openexr;
     stdenv = stdenv2;
   });
 
@@ -9619,8 +9586,7 @@ let
   };
 
   arb = import ../applications/science/biology/arb {
-    inherit fetchurl readline libpng zlib x11 lesstif93 freeglut perl;
-    inherit (xlibs) libXpm libXaw libX11 libXext libXt;
+    inherit fetchurl libpng freeglut perl xorg;
     inherit mesa glew libtiff lynx rxp sablotron jdk transfig gv gnuplot;
     lesstif = lesstif93;
     stdenv = overrideGCC stdenv gcc42;
@@ -9878,8 +9844,7 @@ let
   }));
 
   gxemul = (import ../misc/gxemul) {
-    inherit lib stdenv fetchurl composableDerivation;
-    inherit (xlibs) libX11;
+    inherit fetchurl composableDerivation;
   };
 
   hplip = import ../misc/drivers/hplip {
@@ -9890,8 +9855,7 @@ let
   # using the new configuration style proposal which is unstable
   jackaudio = import ../misc/jackaudio {
     inherit composableDerivation
-           ncurses lib stdenv fetchurl alsaLib pkgconfig;
-    flags = [ "posix_shm" "timestamps" "alsa"];
+           fetchurl alsaLib pkgconfig;
   };
 
   keynav = import ../tools/X11/keynav {
@@ -9904,7 +9868,7 @@ let
   };
 
   lilypond = import ../misc/lilypond {
-    inherit fetchurl sourceFromHead stdenv lib automake autoconf
+    inherit fetchurl stdenv 
       ghostscript texinfo imagemagick texi2html guile python gettext
       perl bison pkgconfig texLive fontconfig freetype fontforge help2man;
     inherit (gtkLibs) pango;

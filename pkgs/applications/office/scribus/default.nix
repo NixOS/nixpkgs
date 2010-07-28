@@ -1,4 +1,6 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
+, libart_lgpl, qt, python, cups, fontconfig, libjpeg
+, zlib, libpng, xorg, cairo, cmake }:
 
 assert stdenv.gcc.gcc != null;
 
@@ -8,13 +10,9 @@ assert stdenv.gcc.gcc != null;
 # will be released with the next version of scribus - So don't miss them
 # when upgrading this package
 
-#let useCairo = true;
-let useCairo = false;
-
-in
+let useCairo = false; in
 
 stdenv.mkDerivation {
-
   name = "scribus-1.3.3.14";
 
   src = fetchurl {
@@ -35,9 +33,9 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig /*<- required fro cairo only?*/ cmake freetype lcms libtiff libxml2 libart_lgpl qt
       python cups fontconfig
-      libXaw libXext libX11 libXtst libXi libXinerama
-      libjpeg libtiff zlib libpng
-    ] ++ lib.optional useCairo cairo;
+      xorg.libXaw xorg.libXext xorg.libX11 xorg.libXtst xorg.libXi xorg.libXinerama
+      libjpeg zlib libpng
+    ] ++ stdenv.lib.optional useCairo cairo;
 
   # fix rpath which is removed by cmake..
   postFixup = ''
@@ -49,9 +47,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    maintainers = [lib.maintainers.marcweber];
-    platforms = lib.platforms.linux;
-    description = "Desktop Publishing (DTP) and Layout program for Linux.";
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
+    description = "Desktop Publishing (DTP) and Layout program for Linux";
     homepage = http://www.scribus.net;
     license = "GPLv2";
   };
