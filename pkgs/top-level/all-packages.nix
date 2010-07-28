@@ -2,10 +2,7 @@
    imports the functions that build the various packages, and calls
    them with appropriate arguments.  The result is a set of all the
    packages in the Nix Packages collection for some particular
-   platform.
-
-   You want to get to know where to add a new package ?
-   Have a look at nixpkgs/maintainers/docs/classification.txt */
+   platform. */
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
@@ -6728,10 +6725,6 @@ let
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
   linuxPackages = linuxPackagesFor linux;
-
-  customKernel = composedArgsAndFun (lib.sumTwoArgs (import ../os-specific/linux/kernel/generic.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-  });
 
   keyutils = import ../os-specific/linux/keyutils {
     inherit fetchurl stdenv;

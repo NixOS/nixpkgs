@@ -19,8 +19,6 @@ rec {
   else 
     (y x);
   defaultMerge = x: y: x // (defaultMergeArg x y);
-  sumTwoArgs = f: x: y: 
-    f (defaultMerge x y);
   foldArgs = merger: f: init: x: 
     let arg=(merger init (defaultMergeArg init x));
       # now add the function with composed args already applied to the final attrs
