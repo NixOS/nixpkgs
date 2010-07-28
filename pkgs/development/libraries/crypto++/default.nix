@@ -24,6 +24,17 @@ stdenv.mkDerivation rec {
     sourceRoot="$PWD/${name}"
   '';
 
+  cxxflags = if stdenv.isi686 then "-march=i686" else
+             if stdenv.isx86_64 then "-march=nocona" else
+             "";
+
+  configurePhase = ''
+    sed -i GNUmakefile \
+      -e 's|-march=native|${cxxflags}|g' \
+      -e 's|-mtune=native||g' \
+      -e '/^CXXFLAGS =/s|-g -O2|-O3|'
+  '';
+
   # Deal with one of the crappiest build system around there.
   buildPhase = ''
     # These guys forgot a file or something.

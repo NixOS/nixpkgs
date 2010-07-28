@@ -3761,7 +3761,6 @@ let
   };
 
   cryptopp = import ../development/libraries/crypto++ {
-    # SIDE-EFFECT WARNING: crypto++-5.6.0 is compiled with "-O2 -march=native -mtune=native".
     inherit fetchurl stdenv unzip libtool;
   };
 
