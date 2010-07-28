@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     make PREFIX="$out" all cryptopp.dll
   '';
 
+  # TODO: Installing cryptotest.exe doesn't seem to be necessary. We run
+  # that binary during this build anyway to verify everything works.
   installPhase = ''
     mkdir "$out"
     make install PREFIX="$out"
