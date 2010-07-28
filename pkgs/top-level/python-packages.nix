@@ -322,6 +322,26 @@ rec {
     };
   });
 
+  mock060 = pkgs.lowPrio (buildPythonPackage (rec {
+    # TODO: This appears to be an unofficially hacked version of 'mock'
+    #       from above. This could probably replace the previous
+    #       package, but I don't have time to test that right now.
+    name = "mock-0.6.0";
+
+    src = fetchurl {
+      url = "http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/${name}.tar.bz2";
+      sha256 = "1vwxzr2sjyl3x5jqgz9swpmp6cyhmwmab65akysfglf6acmn3czf";
+    };
+    doCheck = false;            # Package doesn't have any tests.
+
+    meta = {
+      description = "Mock objects for Python, provided by tahoe-lafs.org";
+      homepage = "http://python-mock.sourceforge.net/";
+      license = "mBSD";
+    };
+  }));
+
+
   namebench = buildPythonPackage (rec {
     name = "namebench-1.0.5";
 
