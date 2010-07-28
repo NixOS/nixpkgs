@@ -2016,6 +2016,7 @@ let
 
   bashReal = makeOverridable (import ../shells/bash) {
     inherit fetchurl stdenv bison;
+    texinfo = null;
   };
 
   bashInteractive = appendToName "interactive" (bashReal.override {
@@ -7080,6 +7081,7 @@ let
 
   utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
     inherit fetchurl stdenv;
+    ncurses = null;
   };
 
   utillinuxngCurses = utillinuxng.override {
@@ -8988,20 +8990,10 @@ let
   };
 
   vim = makeOverridable (import ../applications/editors/vim) {
-    inherit fetchurl stdenv ncurses lib;
+    inherit fetchurl stdenv ncurses;
   };
 
-  vimHugeX = vim.override {
-    inherit pkgconfig
-      perl python tcl;
-    inherit (xlibs) libX11 libXext libSM libXpm
-      libXt libXaw libXau;
-    inherit (gtkLibs) glib gtk;
-
-    # Looks like python and perl can conflict
-    flags = ["hugeFeatures" "gtkGUI" "x11Support"
-      /*"perlSupport"*/ "pythonSupport" "tclSupport"];
-  };
+  vimHugeX = vim_configurable;
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
     inherit fetchurl stdenv ncurses pkgconfig composableDerivation lib;
