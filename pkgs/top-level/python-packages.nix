@@ -420,16 +420,16 @@ rec {
       sha256 = "01lf3nc2lp1qkrqnnar50vb7i6y07d1zs6f9yc3kw4p5fd2vhyrf";
     };
 
+    # TODO: add ATLAS=${pkgs.atlas}
+    installCommand = ''
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      python setup.py build --fcompiler="gnu95"
+      python setup.py install --root="$out"
+    '';
     doCheck = false;
 
-    buildInputs = [ pkgs.liblapack pkgs.blas pkgs.gfortran ];
-
-    # The build should be run as follows:
-    #
-    #   python setup.py config_fc --fcompiler=gnu95 build
-    #   python setup.py config_fc --fcompiler=gnu95 install
-    #
-    # But I con't figure out how to pass the extra flags to setuptools.
+    buildInputs = [ pkgs.gfortran ];
+    propagatedBuildInputs = [ pkgs.liblapack pkgs.blas ];
 
     meta = {
       description = "Scientific tools for Python";
