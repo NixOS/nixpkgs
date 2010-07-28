@@ -516,10 +516,11 @@ rec {
       sha256 = "6b610b3e5742d366d4fbe96b5f20d8459db9aba4fb802e6e5aab547f22ad04b9";
     };
 
-    # Use our own copy of Crypto++.
-    # preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
+    # Prefer crypto++ library from the Nix store over the one that's included
+    # in the pycryptopp distribution.
+    preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
 
-    buildInputs = [ setuptoolsDarcs darcsver /* pkgs.cryptopp */ ];
+    buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
 
     meta = {
       homepage = http://allmydata.org/trac/pycryptopp;
