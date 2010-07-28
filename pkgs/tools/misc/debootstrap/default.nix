@@ -7,7 +7,7 @@ let devices = fetchurl {
 in
 
 stdenv.mkDerivation {
-  name = "debotstrap-1.0.10lenny";
+  name = "debootstrap-1.0.10lenny";
 
   src = fetchurl {
     # I'd like to use the source. However it's lacking the lanny script ?
