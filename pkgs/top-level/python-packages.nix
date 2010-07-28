@@ -676,6 +676,7 @@ rec {
 
     # In order to break the dependency on darcs -> ghc, we don't add
     # darcs as a propagated build input.
+    propagatedBuildInputs = [ darcsver ];
 
     meta = {
       description = "setuptools plugin for the Darcs version control system";
