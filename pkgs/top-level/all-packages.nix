@@ -6777,22 +6777,7 @@ let
     inherit stdenv klibc;
   };
 
-  kvm = kvm76;
-
-  kvm76 = import ../os-specific/linux/kvm/76.nix {
-    inherit fetchurl stdenv zlib e2fsprogs SDL alsaLib pkgconfig rsync;
-    linuxHeaders = glibc.kernelHeaders;
-  };
-
-  kvm86 = import ../os-specific/linux/kvm/86.nix {
-    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
-    linuxHeaders = glibc.kernelHeaders;
-  };
-
-  kvm88 = import ../os-specific/linux/kvm/88.nix {
-    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils;
-    linuxHeaders = glibc.kernelHeaders;
-  };
+  kvm = qemu_kvm;
 
   libcap = import ../os-specific/linux/libcap {
     inherit fetchurl stdenv attr;
