@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.gnu;
   };
 }
