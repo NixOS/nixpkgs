@@ -8885,6 +8885,7 @@ let
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
       numpy pyasn1;
+    mock = pythonPackages.mock060;
   };
 
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {

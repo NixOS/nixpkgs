@@ -1,6 +1,6 @@
 { fetchurl, lib, unzip, buildPythonPackage, twisted, foolscap, nevow
 , simplejson, zfec, pycryptopp, pysqlite, darcsver, setuptoolsTrial
-, setuptoolsDarcs, numpy, nettools, pycrypto, pyasn1 }:
+, setuptoolsDarcs, numpy, nettools, pycrypto, pyasn1, mock }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
@@ -49,7 +49,7 @@ buildPythonPackage (rec {
   # The `backup' command requires `pysqlite'.
   propagatedBuildInputs =
     [ twisted foolscap nevow simplejson zfec pycryptopp pysqlite
-      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1
+      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 mock
     ];
 
   # The test suite is run in `postInstall'.
