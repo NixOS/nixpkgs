@@ -158,12 +158,10 @@ let
       abort ("Unknown option specified: " + result))
     else x);
 
-  builderDefs = composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
+  builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
       fetchurl fetchmtn fetchgit;
   };
-
-  composedArgsAndFun = lib.composedArgsAndFun;
 
   builderDefsPackage = builderDefs.builderDefsPackage builderDefs;
 
@@ -661,7 +659,7 @@ let
     libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
-  dosfstools = composedArgsAndFun (import ../tools/filesystems/dosfstools) {
+  dosfstools = makeOverridable (import ../tools/filesystems/dosfstools) {
     inherit builderDefs;
   };
 
@@ -701,7 +699,7 @@ let
     inherit fetchurl stdenv gettext;
   };
 
-  eprover = composedArgsAndFun (import ../tools/misc/eProver) {
+  eprover = makeOverridable (import ../tools/misc/eProver) {
     inherit fetchurl stdenv which;
     texLive = texLiveAggregationFun {
       paths = [
@@ -786,7 +784,7 @@ let
       inherit fetchurl stdenv;
     });
 
-  gdmap = composedArgsAndFun (import ../tools/system/gdmap/0.8.1.nix) {
+  gdmap = makeOverridable (import ../tools/system/gdmap) {
     inherit stdenv fetchurl builderDefs pkgconfig libxml2 intltool
       gettext;
     inherit (gtkLibs) gtk;
@@ -1229,7 +1227,7 @@ let
     };
   };
 
-  nc6 = composedArgsAndFun (import ../tools/networking/nc6/1.0.nix) {
+  nc6 = makeOverridable (import ../tools/networking/nc6) {
     inherit builderDefs;
   };
 
@@ -1556,7 +1554,7 @@ let
     inherit fetchurl stdenv libuuid;
   };
 
-  relfs = composedArgsAndFun (import ../tools/filesystems/relfs) {
+  relfs = makeOverridable (import ../tools/filesystems/relfs) {
     inherit fetchcvs stdenv ocaml postgresql fuse pcre
       builderDefs pkgconfig libuuid;
     inherit (gnome) gnomevfs GConf;
@@ -1585,7 +1583,7 @@ let
     logger = inetutils;
   };
 
-  rlwrap = composedArgsAndFun (import ../tools/misc/rlwrap/0.28.nix) {
+  rlwrap = makeOverridable (import ../tools/misc/rlwrap) {
     inherit builderDefs readline;
   };
 
@@ -1668,7 +1666,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  smbfsFuse = composedArgsAndFun (import ../tools/filesystems/smbfs-fuse) {
+  smbfsFuse = makeOverridable (import ../tools/filesystems/smbfs-fuse) {
     inherit builderDefs samba fuse;
   };
 
@@ -1704,7 +1702,7 @@ let
     tlsSupport = true;
   };
 
-  ssss = composedArgsAndFun (import ../tools/security/ssss/0.5.nix) {
+  ssss = makeOverridable (import ../tools/security/ssss) {
     inherit builderDefs gmp;
   };
 
@@ -2929,7 +2927,7 @@ let
     inherit fetchurl stdenv builderDefs python;
   };
 
-  Qi = composedArgsAndFun (import ../development/compilers/qi/9.1.nix) {
+  qi = makeOverridable (import ../development/compilers/qi) {
     inherit clisp stdenv fetchurl builderDefs unzip;
   };
 
@@ -3351,7 +3349,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  ltrace = composedArgsAndFun (import ../development/tools/misc/ltrace/0.5-3deb.nix) {
+  ltrace = makeOverridable (import ../development/tools/misc/ltrace) {
     inherit fetchurl stdenv builderDefs stringsWithDeps lib elfutils;
   };
 
@@ -4536,15 +4534,15 @@ let
     inherit fetchurl stdenv;
   };
 
-  libdbi = composedArgsAndFun (import ../development/libraries/libdbi/0.8.2.nix) {
+  libdbi = makeOverridable (import ../development/libraries/libdbi) {
     inherit stdenv fetchurl builderDefs;
   };
 
-  libdbiDriversBase = composedArgsAndFun (import ../development/libraries/libdbi-drivers/0.8.2-1.nix) {
+  libdbiDriversBase = makeOverridable (import ../development/libraries/libdbi-drivers) {
     inherit stdenv fetchurl builderDefs libdbi;
   };
 
-  libdbiDrivers = libdbiDriversBase.passthru.function {
+  libdbiDrivers = libdbiDriversBase.override {
     inherit sqlite mysql;
   };
 
@@ -5016,7 +5014,7 @@ let
   };
 
   # failed to build
-  mediastreamer = composedArgsAndFun (import ../development/libraries/mediastreamer/2.2.0-cvs20080207.nix) {
+  mediastreamer = makeOverridable (import ../development/libraries/mediastreamer) {
     inherit fetchurl stdenv automake libtool autoconf alsaLib pkgconfig speex
       ortp ffmpeg;
   };
@@ -5062,7 +5060,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  ncurses = makeOverridable (composedArgsAndFun (import ../development/libraries/ncurses)) {
+  ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     # The "! (stdenv ? cross)" is for the cross-built arm ncurses, which
     # don't build for me in unicode.
@@ -6025,7 +6023,7 @@ let
     inherit fetchurl stdenv openssh;
   };
 
-  openfire = composedArgsAndFun (import ../servers/xmpp/openfire) {
+  openfire = makeOverridable (import ../servers/xmpp/openfire) {
     inherit builderDefs jre;
   };
 
@@ -6114,8 +6112,8 @@ let
     python =  pythonBase;
   });
 
-  xorgReplacements = composedArgsAndFun (import ../servers/x11/xorg/replacements.nix) {
-    inherit fetchurl stdenv automake autoconf libtool xorg composedArgsAndFun;
+  xorgReplacements = makeOverridable (import ../servers/x11/xorg/replacements.nix) {
+    inherit fetchurl stdenv automake autoconf libtool xorg makeOverridable;
   };
 
   xorgVideoUnichrome = import ../servers/x11/xorg/unichrome/default.nix {
@@ -6592,7 +6590,7 @@ let
        then iwlwifi4965ucodeV2
        else iwlwifi4965ucodeV1);
 
-    atheros = composedArgsAndFun (import ../os-specific/linux/atheros/0.9.4.nix) {
+    atheros = makeOverridable (import ../os-specific/linux/atheros/0.9.4.nix) {
       inherit fetchurl stdenv builderDefs kernel lib;
     };
 
@@ -6865,7 +6863,7 @@ let
     inherit stdenv fetchurl makeWrapper useSetUID dbus libxml2 pam hal pkgconfig pmount python pythonDBus;
   };
 
-  pcmciaUtils = composedArgsAndFun (import ../os-specific/linux/pcmciautils) {
+  pcmciaUtils = makeOverridable (import ../os-specific/linux/pcmciautils) {
     inherit stdenv fetchurl udev yacc flex;
     inherit sysfsutils module_init_tools;
 
@@ -7145,7 +7143,7 @@ let
     inherit (xorg) mkfontdir mkfontscale;
   });
 
-  clearlyU = composedArgsAndFun (import ../data/fonts/clearlyU/1.9.nix) {
+  clearlyU = makeOverridable (import ../data/fonts/clearlyU) {
     inherit builderDefs;
     inherit (xorg) mkfontdir mkfontscale;
   };
@@ -7191,7 +7189,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  junicode = composedArgsAndFun (import ../data/fonts/junicode/0.6.15.nix) {
+  junicode = makeOverridable (import ../data/fonts/junicode) {
     inherit builderDefs fontforge unzip;
     inherit (xorg) mkfontdir mkfontscale;
   };
@@ -7289,7 +7287,7 @@ let
     inherit fetchurl stdenv cabextract;
   };
 
-  wqy_zenhei = composedArgsAndFun (import ../data/fonts/wqy_zenhei/0.4.23-1.nix) {
+  wqy_zenhei = makeOverridable (import ../data/fonts/wqy_zenhei) {
     inherit builderDefs;
   };
 
@@ -7866,7 +7864,7 @@ let
     fltk = fltk20;
   };
 
-  fbpanel = composedArgsAndFun (import ../applications/window-managers/fbpanel/4.12.nix) {
+  fbpanel = makeOverridable (import ../applications/window-managers/fbpanel) {
     inherit fetchurl stdenv builderDefs pkgconfig libpng libjpeg libtiff librsvg;
     inherit (gtkLibs) gtk;
     inherit (xlibs) libX11 libXmu libXpm;
@@ -8066,7 +8064,7 @@ let
     gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
   };
 
-  gocr = composedArgsAndFun (import ../applications/graphics/gocr/0.44.nix) {
+  gocr = makeOverridable (import ../applications/graphics/gocr) {
     inherit builderDefs fetchurl stdenv;
   };
 
@@ -8326,7 +8324,7 @@ let
     fftw = fftwSinglePrec;
   };
 
-  ldcpp = composedArgsAndFun (import ../applications/networking/p2p/ldcpp/1.0.3.nix) {
+  ldcpp = makeOverridable (import ../applications/networking/p2p/ldcpp) {
     inherit builderDefs scons pkgconfig bzip2 openssl;
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
@@ -8589,7 +8587,7 @@ let
     inherit (gst_all) gstPluginsBase;
   };
 
-  pidginlatex = composedArgsAndFun (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
+  pidginlatex = makeOverridable (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
     inherit fetchurl stdenv pkgconfig ghostscript pidgin texLive;
     imagemagick = imagemagickBig;
     inherit (gtkLibs) glib gtk;
@@ -8646,7 +8644,7 @@ let
     inherit fetchsvn SDL zlib which stdenv;
   };
 
-  qemuImage = composedArgsAndFun (import ../applications/virtualization/qemu/linux-img/0.2.nix) {
+  qemuImage = makeOverridable (import ../applications/virtualization/qemu/linux-img) {
     inherit builderDefs fetchurl stdenv;
   };
 
@@ -9024,7 +9022,7 @@ let
        );
   };
 
-  x11vnc = composedArgsAndFun (import ../tools/X11/x11vnc/0.9.3.nix) {
+  x11vnc = makeOverridable (import ../tools/X11/x11vnc) {
     inherit builderDefs openssl zlib libjpeg ;
     inherit (xlibs) libXfixes fixesproto libXdamage damageproto
       libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
@@ -9032,7 +9030,7 @@ let
       libXrender;
   };
 
-  x2vnc = composedArgsAndFun (import ../tools/X11/x2vnc/1.7.2.nix) {
+  x2vnc = makeOverridable (import ../tools/X11/x2vnc) {
     inherit builderDefs;
     inherit (xlibs) libX11 xproto xextproto libXext libXrandr randrproto;
   };
@@ -9247,13 +9245,13 @@ let
     inherit fetchurl stdenv python pygame twisted lib numeric makeWrapper;
   };
 
-  construoBase = composedArgsAndFun (import ../games/construo/0.2.2.nix) {
+  construoBase = makeOverridable (import ../games/construo) {
     inherit stdenv fetchurl builderDefs
       zlib;
     inherit (xlibs) libX11 xproto;
   };
 
-  construo = construoBase.passthru.function {
+  construo = construoBase.override {
     inherit mesa freeglut;
   };
 
@@ -9381,7 +9379,7 @@ let
   };
 
   # You still can override by passing more arguments.
-  spaceOrbit = composedArgsAndFun (import ../games/orbit/1.01.nix) {
+  spaceOrbit = makeOverridable (import ../games/orbit) {
     inherit fetchurl stdenv builderDefs mesa freeglut;
     inherit (gnome) esound;
     inherit (xlibs) libXt libX11 libXmu libXi libXext;
