@@ -2843,13 +2843,6 @@ let
   perl = useFromStdenv "perl"
     (if system != "i686-cygwin" then perl510 else sysPerl);
 
-  # FIXME: unixODBC needs patching on Darwin (see darwinports)
-  phpOld = import ../development/interpreters/php {
-    inherit stdenv fetchurl flex bison libxml2 apacheHttpd;
-    unixODBC =
-      if stdenv.isDarwin then null else unixODBC;
-  };
-
   php = makeOverridable (import ../development/interpreters/php_configurable) {
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
