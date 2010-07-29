@@ -1816,7 +1816,8 @@ let
 
   tigervnc = import ../tools/admin/tigervnc {
     inherit fetchsvn stdenv gettext autoconf automake cvs libtool nasm xkeyboard_config;
-    inherit (xorg) libX11 libXext libICE libXtst libXi libSM xorgserver utilmacros pixman xkbcomp;
+    inherit (xorg) libX11 libXext libICE libXtst libXi libSM xorgserver utilmacros pixman xkbcomp
+      fontutil;
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
       xorg.fontbhlucidatypewriter75dpi ];
   };

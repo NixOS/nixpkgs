@@ -1,6 +1,6 @@
 {stdenv, fetchsvn, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver,
 autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config,
-fontDirectories }:
+fontDirectories, fontutil }:
 
 with stdenv.lib;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     do
       patch -p1 < $a
     done
-    patch -p1 < ../xserver17.patch
+    patch -p1 < ../xserver18.patch
     autoreconf -vfi
     ./configure --prefix=$out --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx
     make TIGERVNC_SRCDIR=`pwd`/../..
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ libX11 libXext gettext libICE libXtst libXi libSM autoconf automake cvs
-    libtool nasm utilmacros ] ++ xorgserver.buildNativeInputs;
+    libtool nasm utilmacros fontutil ] ++ xorgserver.buildNativeInputs;
 
   propagatedBuildInputs = xorgserver.propagatedBuildNativeInputs;
 
