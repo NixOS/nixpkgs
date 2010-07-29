@@ -17,6 +17,9 @@ stdenv.mkDerivation {
     # We're not supposed to use linux/inotify.h, use sys/inotify.h instead.
     # Adapted from Gentoo.
     ./inotify.patch
+    
+    # Fixes compilation issues with openssl-1.0.0
+    ./kdelibs-3.5.10-openssl_1.0.0.patch
   ];
 
   passthru = {inherit openssl libjpeg qt; inherit (xlibs) libX11;};
