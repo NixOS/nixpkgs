@@ -2843,10 +2843,10 @@ let
   perl = useFromStdenv "perl"
     (if system != "i686-cygwin" then perl510 else sysPerl);
 
-  php = makeOverridable (import ../development/interpreters/php_configurable) {
+  php = makeOverridable (import ../development/interpreters/php) {
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
-      flex bison apacheHttpd mysql libxml2 # gettext
+      flex bison apacheHttpd mysql libxml2
       zlib curl gd postgresql openssl pkgconfig sqlite getConfig libiconv libjpeg libpng;
   };
 
