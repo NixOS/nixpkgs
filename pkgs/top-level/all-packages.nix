@@ -7002,11 +7002,9 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-/*
   uclibc = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv linuxHeaders;
   };
-*/
 
   uclibcCross = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv;
