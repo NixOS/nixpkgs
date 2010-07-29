@@ -1946,6 +1946,10 @@ let
     inherit (xorg) imake;
   };
 
+  xbursttools = import ../tools/misc/xburst-tools {
+    inherit stdenv fetchgit autoconf automake libusb confuse;
+  };
+
   xclip = import ../tools/misc/xclip {
     inherit fetchurl stdenv x11;
     inherit (xlibs) libXmu;
@@ -3721,6 +3725,10 @@ let
 
   commoncpp2 = import ../development/libraries/commoncpp2 {
     inherit stdenv fetchurl;
+  };
+
+  confuse = import ../development/libraries/confuse {
+    inherit fetchurl stdenv;
   };
 
   consolekit = makeOverridable (import ../development/libraries/consolekit) {
