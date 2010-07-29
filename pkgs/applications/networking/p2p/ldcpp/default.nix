@@ -1,4 +1,6 @@
-args : with args; with builderDefs;
+{ builderDefs, scons, pkgconfig, gtk, bzip2, libglade, openssl, libX11 }:
+
+with builderDefs;
 	let localDefs = builderDefs.passthru.function ((rec {
 		src = /* put a fetchurl here */
 		fetchurl {
@@ -6,7 +8,7 @@ args : with args; with builderDefs;
 			sha256 = "0w9c8k13cl85y4v4av8ic6w4zkdivcj6p5q86llfh3sz077vckiv";
 		};
 
-		buildInputs = [scons pkgconfig gtk bzip2 pkgconfig libglade
+		buildInputs = [scons pkgconfig gtk bzip2 libglade
 			openssl libX11];
 		configureFlags = [];
 		doScons = fullDepEntry (''
@@ -15,7 +17,7 @@ args : with args; with builderDefs;
 			scons PREFIX=$out 
 			scons PREFIX=$out install
 		'') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
-	}) //  args);
+	}));
 	in with localDefs;
 stdenv.mkDerivation rec {
 	name = "ldcpp-1.0.3";

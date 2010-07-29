@@ -785,9 +785,9 @@ let
     });
 
   gdmap = makeOverridable (import ../tools/system/gdmap) {
-    inherit stdenv fetchurl builderDefs pkgconfig libxml2 intltool
+    inherit stdenv fetchurl pkgconfig libxml2 intltool
       gettext;
-    inherit (gtkLibs) gtk;
+    inherit (gtkLibs216) gtk;
   };
 
   genext2fs = import ../tools/filesystems/genext2fs {
@@ -1228,7 +1228,7 @@ let
   };
 
   nc6 = makeOverridable (import ../tools/networking/nc6) {
-    inherit builderDefs;
+    inherit fetchurl stdenv;
   };
 
   ncat = import ../tools/networking/ncat {
@@ -1584,7 +1584,7 @@ let
   };
 
   rlwrap = makeOverridable (import ../tools/misc/rlwrap) {
-    inherit builderDefs readline;
+    inherit fetchurl stdenv readline;
   };
 
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
@@ -1666,8 +1666,8 @@ let
     inherit fetchurl stdenv;
   };
 
-  smbfsFuse = makeOverridable (import ../tools/filesystems/smbfs-fuse) {
-    inherit builderDefs samba fuse;
+  fusesmb = makeOverridable (import ../tools/filesystems/fusesmb) {
+    inherit fetchurl stdenv samba fuse;
   };
 
   socat = import ../tools/networking/socat {
@@ -1703,7 +1703,7 @@ let
   };
 
   ssss = makeOverridable (import ../tools/security/ssss) {
-    inherit builderDefs gmp;
+    inherit fetchurl stdenv gmp;
   };
 
   stun = import ../tools/networking/stun {
@@ -3350,7 +3350,7 @@ let
   };
 
   ltrace = makeOverridable (import ../development/tools/misc/ltrace) {
-    inherit fetchurl stdenv builderDefs stringsWithDeps lib elfutils;
+    inherit fetchurl stdenv elfutils;
   };
 
   mig = import ../os-specific/gnu/mig {
@@ -4018,6 +4018,9 @@ let
     inherit fetchurl stdenv;
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
+    machHeaders = null;
+    hurdHeaders = null;
+    gccCross = null;
   };
 
   glibc211Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.11)
@@ -4535,11 +4538,13 @@ let
   };
 
   libdbi = makeOverridable (import ../development/libraries/libdbi) {
-    inherit stdenv fetchurl builderDefs;
+    inherit stdenv fetchurl;
   };
 
   libdbiDriversBase = makeOverridable (import ../development/libraries/libdbi-drivers) {
-    inherit stdenv fetchurl builderDefs libdbi;
+    inherit stdenv fetchurl libdbi;
+    mysql = null;
+    sqlite = null;
   };
 
   libdbiDrivers = libdbiDriversBase.override {
@@ -5328,6 +5333,7 @@ let
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
       mysql libxslt curl pcre librdf_rasqal librdf_raptor;
     bdb = db4;
+    postgresql = null;
   };
 
   rhino = import ../development/libraries/java/rhino {
@@ -6028,7 +6034,7 @@ let
   };
 
   openfire = makeOverridable (import ../servers/xmpp/openfire) {
-    inherit builderDefs jre;
+    inherit stdenv fetchurl builderDefs jre;
   };
 
   postgresql = postgresql83;
@@ -6343,6 +6349,8 @@ let
     inherit fetchgit stdenv autoconf libtool texinfo mig machHeaders;
     automake = automake111x;
     headersOnly = true;
+    gccCross = null;
+    glibcCross = null;
   };
 
   hurdLibpthreadCross = forceBuildDrv(import ../os-specific/gnu/libpthread {
@@ -6595,7 +6603,7 @@ let
        else iwlwifi4965ucodeV1);
 
     atheros = makeOverridable (import ../os-specific/linux/atheros/0.9.4.nix) {
-      inherit fetchurl stdenv builderDefs kernel lib;
+      inherit fetchurl stdenv builderDefs kernel;
     };
 
     nvidia_x11 = makeOverridable (import ../os-specific/linux/nvidia-x11) {
@@ -7148,7 +7156,7 @@ let
   });
 
   clearlyU = makeOverridable (import ../data/fonts/clearlyU) {
-    inherit builderDefs;
+    inherit fetchurl stdenv;
     inherit (xorg) mkfontdir mkfontscale;
   };
 
@@ -7194,8 +7202,7 @@ let
   };
 
   junicode = makeOverridable (import ../data/fonts/junicode) {
-    inherit builderDefs fontforge unzip;
-    inherit (xorg) mkfontdir mkfontscale;
+    inherit fetchurl stdenv unzip;
   };
 
   freefont_ttf = import ../data/fonts/freefont-ttf {
@@ -7291,8 +7298,8 @@ let
     inherit fetchurl stdenv cabextract;
   };
 
-  wqy_zenhei = makeOverridable (import ../data/fonts/wqy_zenhei) {
-    inherit builderDefs;
+  wqy_zenhei = makeOverridable (import ../data/fonts/wqy-zenhei) {
+    inherit fetchurl stdenv;
   };
 
   xhtml1 = import ../data/sgml+xml/schemas/xml-dtd/xhtml1 {
@@ -8069,7 +8076,7 @@ let
   };
 
   gocr = makeOverridable (import ../applications/graphics/gocr) {
-    inherit builderDefs fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   gphoto2 = import ../applications/misc/gphoto2 {
@@ -8649,7 +8656,7 @@ let
   };
 
   qemuImage = makeOverridable (import ../applications/virtualization/qemu/linux-img) {
-    inherit builderDefs fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   qtpfsgui = import ../applications/graphics/qtpfsgui {
@@ -9027,16 +9034,11 @@ let
   };
 
   x11vnc = makeOverridable (import ../tools/X11/x11vnc) {
-    inherit builderDefs openssl zlib libjpeg ;
-    inherit (xlibs) libXfixes fixesproto libXdamage damageproto
-      libX11 xproto libXtst libXinerama xineramaproto libXrandr randrproto
-      libXext xextproto inputproto recordproto libXi renderproto
-      libXrender;
+    inherit stdenv fetchurl xorg openssl zlib libjpeg;
   };
 
   x2vnc = makeOverridable (import ../tools/X11/x2vnc) {
-    inherit builderDefs;
-    inherit (xlibs) libX11 xproto xextproto libXext libXrandr randrproto;
+    inherit stdenv fetchurl xorg;
   };
 
   xaos = builderDefsPackage (import ../applications/graphics/xaos) {
@@ -9250,9 +9252,10 @@ let
   };
 
   construoBase = makeOverridable (import ../games/construo) {
-    inherit stdenv fetchurl builderDefs
-      zlib;
+    inherit stdenv fetchurl builderDefs zlib;
     inherit (xlibs) libX11 xproto;
+    mesa = null;
+    freeglut = null;
   };
 
   construo = construoBase.override {

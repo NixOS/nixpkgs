@@ -1,4 +1,6 @@
-args : with args; with builderDefs;
+{ stdenv, fetchurl, builderDefs, jre }:
+
+with builderDefs;
   let 
     version="3_6_3";
     localDefs = builderDefs.passthru.function (rec {

@@ -1,8 +1,8 @@
+{ stdenv, fetchcvs, builderDefs, ocaml, fuse, postgresql, pcre
+, libuuid, gnomevfs, pkgconfig, GConf }:
 
-args : with args;
 	let localDefs = builderDefs.passthru.function {
-	src = /* put a fetchurl here */
-	if args ? src then args.src else fetchcvs {
+	src = fetchcvs {
 		cvsRoot = ":pserver:anonymous@relfs.cvs.sourceforge.net:/cvsroot/relfs";
 		module = "relfs";
 		date = "2008-03-05";
@@ -40,7 +40,7 @@ args : with args;
 	};
 	in with localDefs;
 
-assert args.libuuid != null;
+assert libuuid != null;
         
 stdenv.mkDerivation rec {
 	name = "relfs-2008.03.05";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "A relational filesystem on top of FUSE";
 		inherit src;
-    		maintainers = [args.stdenv.lib.maintainers.raskin];
-		platforms = args.stdenv.lib.platforms.linux;
+    		maintainers = [stdenv.lib.maintainers.raskin];
+		platforms = stdenv.lib.platforms.linux;
 	};
 }

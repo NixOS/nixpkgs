@@ -1,22 +1,17 @@
-args : with args; with builderDefs;
-	let localDefs = builderDefs.passthru.function {
-		src = /* put a fetchurl here */
-		fetchurl {
-			url = ftp://ftp.chg.ru/mirrors/ftp.freebsd.org/pub/FreeBSD/ports/distfiles/rlwrap-0.28.tar.gz;
-			sha256 = "07jzhcqzb8jsmsscc28dk4md7swnhn3vyai5fpxwdj6a1kbn4y3p";
-		};
+{ stdenv, fetchurl, readline }:
 
-		buildInputs = [readline ];
-		configureFlags = [];
-	};
-	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "rlwrap-0.28";
-	builder = writeScript (name + "-builder")
-		(textClosure localDefs 
-			[doConfigure doMakeInstall doForceShare doPropagate]);
-	meta = {
-		description = "Readline wrapper for console programs";
-		inherit src;
-	};
+  name = "rlwrap-0.37";
+
+  src = fetchurl {
+    url = "http://utopia.knoware.nl/~hlub/uck/rlwrap/${name}.tar.gz";
+    sha256 = "1gcb95i839pwn9a3phs2wq7bwz9f6v8sydq6lf9y4gm3hk0s40w4";
+  };
+
+  buildInputs = [ readline ];
+
+  meta = {
+    description = "Readline wrapper for console programs";
+    homepage = http://utopia.knoware.nl/~hlub/uck/rlwrap/;
+  };
 }

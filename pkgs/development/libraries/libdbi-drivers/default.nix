@@ -1,39 +1,31 @@
-args : with args;
-	let localDefs = builderDefs.passthru.function {
-		src = /* put a fetchurl here */
-			fetchurl {
-				url = mirror://sourceforge/libdbi-drivers/libdbi-drivers-0.8.2-1.tar.gz;
-				sha256 = "1bflwl1k3rf1h8clx3zv5pxnm5hbhq6izikv0phkss3qxkjm61ap";
-			};
+{ stdenv, fetchurl, libdbi, mysql ? null, sqlite ? null }:
 
-		buildInputs = [libdbi]  
-		++(if args ? mysql then [args.mysql] else [])
-		++(if args ? sqlite then [args.sqlite] else [])
-		;
-		configureFlags = [
-			" --enable-libdbi "
-			" --with-dbi-incdir=${libdbi}/include " 
-			" --with-dbi-libdir=${libdbi}/lib " 
-		]
-		++ (if args ? mysql then [
-			" --with-mysql "
-			" --with-mysql-incdir=${args.mysql}/include/mysql " 
-			" --with-mysql-libdir=${args.mysql}/lib/mysql " 
-		] else [])
-		++ (if args ? sqlite then [
-			" --with-sqlite "
-			" --with-sqlite-incdir=${args.sqlite}/include/sqlite " 
-			" --with-sqlite-libdir=${args.sqlite}/lib/sqlite " 
-		] else [])
-		;
-	};
-	in with localDefs;
 stdenv.mkDerivation rec {
-	name = "libdbi-0.8.2-1";
-	builder = writeScript (name + "-builder")
-		(textClosure localDefs [doConfigure doMakeInstall doForceShare doPropagate]);
-	meta = {
-		description = "DB independent interface to DB; DB drivers (mysql only for now)";
-		inherit src;
-	};
+  name = "libdbi-drivers-0.8.3-1";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/libdbi-drivers/${name}.tar.gz";
+    sha256 = "0wng59xnq8jjyp6f3bfjrhjvqrswamrjykdnxq6rqxnfk11r9faa";
+  };
+
+  buildInputs = [ libdbi mysql sqlite ];
+
+  configureFlags =
+    [ "--disable-docs"
+      "--enable-libdbi"
+      "--with-dbi-incdir=${libdbi}/include"
+      "--with-dbi-libdir=${libdbi}/lib"
+    ] ++ stdenv.lib.optionals (mysql != null)
+    [ "--with-mysql"
+      "--with-mysql-incdir=${mysql}/include/mysql"
+      "--with-mysql-libdir=${mysql}/lib/mysql"
+    ] ++ stdenv.lib.optionals (sqlite != null)
+    [ "--with-sqlite3"
+      "--with-sqlite3-incdir=${sqlite}/include/sqlite"
+      "--with-sqlite3-libdir=${sqlite}/lib/sqlite"
+    ];
+    
+  meta = {
+    description = "Database drivers for libdbi";
+  };
 }

@@ -1,4 +1,7 @@
-args : with args; with builderDefs;
+{ stdenv, fetchurl, builderDefs, mesa, libXi, libXt, libXext, libX11
+, libXmu, freeglut, esound }:
+
+with builderDefs;
 	let localDefs = builderDefs.passthru.function (rec {
 		src = /* put a fetchurl here */
 		fetchurl {

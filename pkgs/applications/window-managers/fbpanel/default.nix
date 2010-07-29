@@ -1,4 +1,6 @@
-args : with args;
+{ stdenv, fetchurl, builderDefs, libX11, gtk, pkgconfig, libXmu
+, libXpm, libpng, libjpeg, libtiff, librsvg }:
+
 	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 	fetchurl {

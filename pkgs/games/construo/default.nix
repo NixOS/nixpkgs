@@ -1,4 +1,5 @@
-args : with args;
+{ stdenv, fetchurl, builderDefs, libX11, zlib, xproto, mesa ? null, freeglut ? null }:
+
 	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
@@ -6,10 +7,7 @@ args : with args;
 			sha256 = "0c661rjasax4ykw77dgqj39jhb4qi48m0bhhdy42vd5a4rfdrcck";
 		};
 
-		buildInputs = [libX11 zlib xproto]
-		++ (if args ? mesa then [args.mesa args.freeglut] else [])
-		;
-		configureFlags = [""];
+		buildInputs = [libX11 zlib xproto mesa freeglut];
 		preConfigure = builderDefs.stringsWithDeps.fullDepEntry (''
 		  sed -e 's/math[.]h/cmath/' -i vector.cxx
 		  sed -e 's/games/bin/' -i Makefile.in

@@ -1,4 +1,4 @@
-args : with args;
+{ stdenv, fetchurl, builderDefs, kernel }:
 	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
