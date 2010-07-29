@@ -5473,6 +5473,10 @@ let
     inherit fetchurl stdenv pkgconfig libsndfile;
   };
 
+  vigra = import ../development/libraries/vigra {
+   inherit fetchurl stdenv cmake libtiff libpng libjpeg doxygen python fftw;
+  };
+
   vtk = import ../development/libraries/vtk {
     inherit stdenv fetchurl cmake mesa;
     inherit (xlibs) libX11 xproto libXt;
