@@ -1948,6 +1948,34 @@ let
 
   xbursttools = import ../tools/misc/xburst-tools {
     inherit stdenv fetchgit autoconf automake libusb confuse;
+    # It needs a cross compiler for mipsel to build the firmware it will
+    # load into the Ben Nanonote
+    gccCross = let
+        pkgsCross = (import ./all-packages.nix) {
+          inherit system;
+          inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
+          # Ben Nanonote system
+          crossSystem = {
+            config = "mipsel-unknown-linux";  
+            bigEndian = true;
+            arch = "mips";
+            float = "soft";
+            withTLS = true;
+            libc = "uclibc";
+            platform = {
+              name = "ben_nanonote";
+              kernelMajor = "2.6";
+              # It's not a bcm47xx processor, but for the headers this should work
+              kernelHeadersBaseConfig = "bcm47xx_defconfig";
+              kernelArch = "mips";
+            };
+            gcc = {
+              arch = "mips32";
+            };
+          };
+        };
+      in 
+        pkgsCross.gccCrossStageStatic;
   };
 
   xclip = import ../tools/misc/xclip {

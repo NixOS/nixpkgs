@@ -1,4 +1,5 @@
-{stdenv, fetchgit, libusb, autoconf, automake, confuse}:
+{stdenv, fetchgit, libusb, autoconf, automake, confuse
+, gccCross ? null}:
 
 let
   version = "2010-07-29";
@@ -6,19 +7,30 @@ in
 stdenv.mkDerivation {
   name = "xburst-tools-${version}";
 
-  patches = [ ./gcc-4.4.patch ];
-
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;
     rev = "00be212db22643ad602eaf60b30eb943f119e78d";
     sha256 = "66ea1a81b71bad599d76691f07a986f9bb2ccecf397e8486b661d8baace3460e";
   };
 
+  prePatch = ''
+    find . -name Makefile* -exec sed -i \
+      -e s/mipsel-openwrt-linux-/mipsel-unknown-linux-/ {} \;
+  '';
+
+  patches = [ ./gcc-4.4.patch ];
+
   preConfigure = ''
     sh autogen.sh
   '';
 
-  buildInputs = [ libusb autoconf automake confuse ];
+  configureFlags = if gccCross != null then "--enable-firmware" else "";
+
+  # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
+  dontCrossStrip = true;
+
+  buildInputs = [ libusb autoconf automake confuse ] ++
+    stdenv.lib.optional (gccCross != null) gccCross;
 
   meta = {
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
