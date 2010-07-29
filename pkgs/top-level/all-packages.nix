@@ -206,6 +206,7 @@ let
     else
       stdenv;
 
+
   ### BUILD SUPPORT
 
   attrSetToDir = arg : import ../build-support/upstream-updater/attrset-to-dir.nix {
@@ -6584,7 +6585,8 @@ let
     };
 
     blcr = import ../os-specific/linux/blcr/0.8.2.nix {
-      inherit fetchurl stdenv kernel perl makeWrapper;
+      inherit fetchurl stdenv kernel perl makeWrapper autoconf automake;
+      libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };
 
     exmap = import ../os-specific/linux/exmap {

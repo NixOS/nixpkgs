@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel, perl, makeWrapper}:
+{ stdenv, fetchurl, kernel, perl, makeWrapper, autoconf, automake, libtool }:
 
 assert stdenv.isLinux;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   patches = [ ./fixes.patch ];
 
-  buildInputs = [ perl makeWrapper ];
+  buildInputs = [ perl makeWrapper autoconf automake libtool ];
 
   # this gives "configure: error: unrecognized option: `-d'"
   /*
@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   */
 
   configurePhase = ''
+    autoreconf
     ./configure --prefix=$out \
     --with-linux=$(ls -d ${kernel}/lib/modules/*/build) \
     --with-kmod-dir=$out/lib/modules/$(cd ${kernel}/lib/modules; ls -d 2.6.*) \
