@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pkgconfig, fftw, libsndfile }:
 
 stdenv.mkDerivation rec {
   name = "libsamplerate-0.1.7";
@@ -8,16 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "1m1iwzpcny42kcqv5as2nyb0ggrb56wzckpximqpp2y74dipdf4q";
   };
 
+  buildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ fftw libsndfile ];
+
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
   #--disable-cpu-clip      disable tricky cpu specific clipper
-
-  configurePhase =
-    ''
-      export LIBSAMPLERATE_CFLAGS="-I $libsamplerate/include"
-      export LIBSAMPLERATE_LIBS="-L $libsamplerate/libs"
-      ./configure --prefix=$out
-    '';
 
   meta = {
     description = "Sample Rate Converter for audio";

@@ -4684,7 +4684,7 @@ let
   };
 
   libsamplerate = import ../development/libraries/libsamplerate {
-    inherit fetchurl stdenv;
+    inherit fetchurl stdenv libsndfile fftw pkgconfig;
   };
 
   libspectre = import ../development/libraries/libspectre {
