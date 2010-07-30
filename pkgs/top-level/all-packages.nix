@@ -8911,12 +8911,12 @@ let
     inherit (xlibs) libXi;
   };
 
-  thunderbird3 = lowPrio (import ../applications/networking/mailreaders/thunderbird/3.x.nix {
+  thunderbird3 = import ../applications/networking/mailreaders/thunderbird/3.x.nix {
     inherit fetchurl stdenv pkgconfig perl python dbus_glib zip bzip2 alsaLib nspr libnotify cairo fontconfig;
     inherit (xorg) pixman;
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
-  });
+  };
 
   timidity = import ../tools/misc/timidity {
     inherit fetchurl stdenv alsaLib composableDerivation jackaudio ncurses;
