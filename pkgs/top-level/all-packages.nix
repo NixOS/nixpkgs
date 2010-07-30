@@ -96,12 +96,11 @@ let
   __overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig;
 
   pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
-  pkgsOverriden = pkgsFun __overrides; # the overriden, final packages
-  pkgs = pkgsOverriden // helperFunctions;
+  pkgs = pkgsFun __overrides; # the overriden, final packages
 
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = __overrides: with helperFunctions; rec {
+  pkgsFun = __overrides: with helperFunctions; helperFunctions // rec {
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
@@ -761,6 +760,7 @@ let
     inherit fetchurl stdenv gettext freetype zlib
       libungif libpng libjpeg libtiff libxml2 lib;
     inherit (xlibs) libX11 xproto libXt;
+    withX11 = true;
   };
 
   dos2unix = import ../tools/text/dos2unix {
@@ -3584,11 +3584,11 @@ let
   };
 
   apr = makeOverridable (import ../development/libraries/apr) {
-    inherit (pkgsOverriden) fetchurl stdenv;
+    inherit fetchurl stdenv;
   };
 
   aprutil = makeOverridable (import ../development/libraries/apr-util) {
-    inherit (pkgsOverriden) fetchurl stdenv apr expat db4;
+    inherit fetchurl stdenv apr expat db4;
     bdbSupport = true;
   };
 
@@ -5900,7 +5900,7 @@ let
   };
 
   apacheHttpd = makeOverridable (import ../servers/http/apache-httpd) {
-    inherit (pkgsOverriden) fetchurl stdenv perl openssl zlib apr aprutil pcre;
+    inherit fetchurl stdenv perl openssl zlib apr aprutil pcre;
     sslSupport = true;
   };
 
@@ -5987,7 +5987,7 @@ let
   };
 
   mod_python = makeOverridable (import ../servers/http/apache-modules/mod_python) {
-    inherit (pkgsOverriden) fetchurl stdenv apacheHttpd python;
+    inherit fetchurl stdenv apacheHttpd python;
   };
 
   mpd = import ../servers/mpd {
@@ -8833,7 +8833,7 @@ let
   };
 
   subversion = makeOverridable (import ../applications/version-management/subversion/default.nix) {
-    inherit (pkgsOverriden) fetchurl stdenv apr aprutil expat swig zlib jdk python perl sqlite;
+    inherit fetchurl stdenv apr aprutil expat swig zlib jdk python perl sqlite;
     neon = neon029;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
     httpServer = getConfig ["subversion" "httpServer"] false;
@@ -8843,7 +8843,7 @@ let
     perlBindings = getConfig ["subversion" "perlBindings"] false;
     javahlBindings = supportsJDK && getConfig ["subversion" "javahlBindings"] false;
     compressionSupport = getConfig ["subversion" "compressionSupport"] true;
-    httpd = pkgsOverriden.apacheHttpd;
+    httpd = apacheHttpd;
   };
 
   svk = perlPackages.SVK;
