@@ -743,10 +743,6 @@ let
     inherit fetchurl stdenv coreutils;
   };
 
-  findutilsWrapper = lowPrio (appendToName "wrapper" (import ../tools/misc/findutils-wrapper {
-    inherit stdenv findutils;
-  }));
-
   finger_bsd = import ../tools/networking/bsd-finger {
     inherit fetchurl stdenv;
   };
@@ -5437,9 +5433,9 @@ let
     inherit fetchurl stdenv libogg;
   };
 
-  sqlite = lowPrio (import ../development/libraries/sqlite {
+  sqlite = import ../development/libraries/sqlite {
     inherit fetchurl stdenv;
-  });
+  };
 
   sqliteInteractive = lowPrio (appendToName "interactive" (import ../development/libraries/sqlite {
     inherit fetchurl stdenv readline ncurses;
@@ -7262,9 +7258,9 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-  pthreadmanpages = lowPrio (import ../data/documentation/pthread-man-pages {
+  pthreadmanpages = import ../data/documentation/pthread-man-pages {
     inherit fetchurl stdenv perl;
-  });
+  };
 
   shared_mime_info = import ../data/misc/shared-mime-info {
     inherit fetchurl stdenv pkgconfig gettext
