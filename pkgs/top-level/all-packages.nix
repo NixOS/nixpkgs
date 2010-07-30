@@ -5298,9 +5298,9 @@ let
   };
 
   qt47 = makeOverridable (import ../development/libraries/qt-4.x/4.7) {
-    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus
-      fontconfig freetype pkgconfig libtiff perl coreutils sqlite alsaLib
-      postgresql pulseaudio;
+    inherit fetchurl stdenv zlib libjpeg libpng libmng which mysql mesa openssl
+      cups dbus fontconfig freetype pkgconfig libtiff perl coreutils sqlite
+      alsaLib postgresql pulseaudio;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
       libXmu libXinerama xineramaproto libXcursor libXext libXi
@@ -9568,7 +9568,7 @@ let
   kde4 = kde44;
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
-    inherit openexr;
+    qt4 = qt46;
     stdenv = stdenv2;
   });
 

@@ -2,17 +2,21 @@
 , alsaLib, gstreamer, gstPluginsBase, pulseaudio
 , libXft, libXrender, randrproto, xextproto, libXinerama, xineramaproto, libXcursor, libXmu
 , libXv, libXext, libXfixes, inputproto, fixesproto, libXrandr, freetype, fontconfig
-, zlib, libjpeg, libpng, which, mesa, openssl, dbus, cups, pkgconfig, libtiff, glib
+, zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig, libtiff, glib
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
 , buildDemos ? false, buildExamples ? false, useDocs ? true}:
 
+let
+  v = "4.7.0-beta2";
+in
+
 stdenv.mkDerivation rec {
-  name = "qt-4.7.0-beta1";
+  name = "qt-${v}";
   
   src = fetchurl {
-    url = ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.7.0-beta1.tar.gz;
-    sha256 = "0ac9dk2xdcbwjmh9hgmnp60df9shv2ss78lls2apgnjddscdw1qi";
+    url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
+    sha256 = "1gxckb5pxybnj5413dxk7dm8hm945ymm4ppqwg14wfk83zhnw6g0";
   };
   
   preConfigure = '' 
@@ -20,6 +24,7 @@ stdenv.mkDerivation rec {
     configureFlags+="
       -docdir $out/share/doc/${name}
       -plugindir $out/lib/qt4/plugins
+      -importdir $out/lib/qt4/imports
       -examplesdir $out/share/doc/${name}/examples
       -demosdir $out/share/doc/${name}/demos
       -datadir $out/share/qt4
@@ -40,6 +45,7 @@ stdenv.mkDerivation rec {
     libXcursor 
     zlib 
     libjpeg 
+    libmng
     mysql 
     postgresql
     libpng 
@@ -75,18 +81,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     -v -no-separate-debug-info -release -fast -confirm-license -opensource
-    -system-zlib -system-libpng -system-libjpeg -qt-gif
+    -system-zlib -system-libpng -system-libjpeg -qt-gif -system-libmng
     -opengl -xrender -xrandr -xinerama -xcursor
     -plugin-sql-mysql -system-sqlite
     -qdbus -cups -glib -xfixes -dbus-linked
     -fontconfig -I${freetype}/include/freetype2
     -exceptions -xmlpatterns
-    -multimedia -mediaservices
+    -multimedia -audio-backend
+    -phonon -phonon-backend -svg
     -javascript-jit
     ${if buildDemos == true then "-make demos" else "-nomake demos"}
     ${if buildExamples == true then "-make examples" else "-nomake examples"}
-    ${if useDocs then "-make docs" else "-nomake docs"}
-  '';
+    ${if useDocs then "-make docs" else "-nomake docs"}'';
     
   patchPhase = ''
     substituteInPlace configure --replace /bin/pwd pwd
