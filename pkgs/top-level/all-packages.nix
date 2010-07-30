@@ -5433,12 +5433,14 @@ let
     inherit fetchurl stdenv libogg;
   };
 
-  sqlite = import ../development/libraries/sqlite {
+  sqlite = makeOverridable (import ../development/libraries/sqlite) {
     inherit fetchurl stdenv;
+    readline = null;
+    ncurses = null;
   };
 
-  sqliteInteractive = lowPrio (appendToName "interactive" (import ../development/libraries/sqlite {
-    inherit fetchurl stdenv readline ncurses;
+  sqliteInteractive = lowPrio (appendToName "interactive" (sqlite.override {
+    inherit readline ncurses;
   }));
 
   stlport =  import ../development/libraries/stlport {
