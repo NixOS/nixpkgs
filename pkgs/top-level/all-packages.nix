@@ -9487,8 +9487,7 @@ let
   };
 
   zoom = import ../games/zoom {
-    inherit fetchurl stdenv perl expat freetype;
-    inherit (xlibs) xlibs;
+    inherit fetchurl stdenv perl expat freetype x11;
   };
 
   keen4 = import ../games/keen4 {
