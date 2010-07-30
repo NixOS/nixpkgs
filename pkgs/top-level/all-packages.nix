@@ -149,15 +149,6 @@ let
   # Return the first available value in the order: pkg.val, val, or default.
   getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
 
-  # Check absence of non-used options
-  checker = x: flag: opts: config:
-    (if flag then let result=(
-      (import ../build-support/checker)
-      opts config); in
-      (if (result=="") then x else
-      abort ("Unknown option specified: " + result))
-    else x);
-
   builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
       fetchurl fetchmtn fetchgit;
