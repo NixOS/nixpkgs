@@ -2647,10 +2647,7 @@ let
   };
 
   roadsend = import ../development/compilers/roadsend {
-    inherit fetchurl stdenv flex bison bigloo lib curl composableDerivation;
-    # optional features
-    # all features pcre, fcgi xml mysql, sqlite3, (not implemented: odbc gtk gtk2)
-    flags = ["pcre" "xml" "mysql"];
+    inherit fetchurl bigloo curl composableDerivation;
     inherit mysql libxml2 fcgi;
   };
 
@@ -2843,10 +2840,9 @@ let
   # mercurial (hg) bleeding edge version
   octaveHG = import ../development/interpreters/octave/hg.nix {
     inherit fetchurl sourceFromHead readline ncurses perl flex atlas getConfig glibc qhull gfortran;
-    inherit automake autoconf bison gperf lib python gnuplot texinfo texLive; # for dev Version
+    inherit automake autoconf bison gperf lib python gnuplot texinfo texLive;
     inherit stdenv;
     inherit (xlibs) libX11;
-    #stdenv = overrideGCC stdenv gcc40;
   };
 
   perl58 = import ../development/interpreters/perl-5.8 {
@@ -3961,7 +3957,7 @@ let
   };
 
   gegl = import ../development/libraries/gegl {
-    inherit fetchurl stdenv libpng pkgconfig babl openexr;
+    inherit fetchurl stdenv libpng pkgconfig babl;
     #  avocodec avformat librsvg
     inherit cairo libjpeg librsvg;
     inherit (gtkLibs) pango glib gtk;
@@ -5426,7 +5422,7 @@ let
   snack = import ../development/libraries/snack {
     inherit fetchurl stdenv tcl tk pkgconfig x11;
         # optional
-    inherit alsaLib vorbisTools python;
+    inherit vorbisTools python;
   };
 
   speex = import ../development/libraries/speex {
@@ -5562,9 +5558,9 @@ let
     inherit fetchurl stdenv zlib;
   };
 
-  xapianBindings = (import ../development/libraries/xapian/bindings/1.0.14.nix) {
-    inherit fetchurl stdenv xapian composableDerivation pkgconfig;
-    inherit ruby perl php tcl python; # TODO perl php Java, tcl, C#, python
+  xapianBindings = (import ../development/libraries/xapian/bindings) {
+    inherit fetchurl xapian composableDerivation pkgconfig;
+    inherit ruby php python; # TODO perl php Java, tcl, C#, python
   };
 
   Xaw3d = import ../development/libraries/Xaw3d {
@@ -7458,11 +7454,10 @@ let
   };
 
   beast = import ../applications/audio/beast {
-# stdenv = overrideGCC stdenv gcc34;
-    inherit stdenv fetchurl zlib guile pkgconfig intltool libogg libvorbis python libxml2 bash perl gettext;
+    # stdenv = overrideGCC stdenv gcc34;
+    inherit stdenv fetchurl zlib guile pkgconfig intltool libogg libvorbis perl gettext;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnomecanvas libart_lgpl;
-    inherit automake autoconf;
   };
 
   bitlbee = import ../applications/networking/instant-messengers/bitlbee {
@@ -8398,7 +8393,7 @@ let
   };
 
   mercurial = import ../applications/version-management/mercurial {
-    inherit fetchurl stdenv makeWrapper getConfig tk;
+    inherit fetchurl stdenv makeWrapper tk;
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
     python = # allow cloning sources from https servers.
       if getConfig ["mercurial" "httpsSupport"] true
@@ -8815,14 +8810,9 @@ let
   };
 
   sox = import ../applications/misc/audio/sox {
-    inherit fetchurl stdenv lib composableDerivation;
-    # optional features
-    inherit alsaLib libao ffmpeg;
-    inherit libsndfile libogg flac libmad lame libsamplerate;
-    # Using the default nix ffmpeg I get this error when linking
-    # .libs/libsox_la-ffmpeg.o: In function `audio_decode_frame':
-    # /tmp/nix-7957-1/sox-14.0.0/src/ffmpeg.c:130: undefined reference to `avcodec_decode_audio2
-    # That's why I'v added ffmpeg_svn
+    inherit fetchurl lib composableDerivation;
+    inherit alsaLib libao;
+    inherit libmad lame;
   };
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
@@ -9553,7 +9543,7 @@ let
     };
 
     kphone = import ../applications/networking/kphone {
-      inherit fetchurl lib autoconf automake libtool pkgconfig openssl libpng alsaLib;
+      inherit fetchurl autoconf automake libtool pkgconfig openssl libpng alsaLib;
       qt = qt3;
       inherit (xlibs) libX11 libXext libXt libICE libSM;
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files

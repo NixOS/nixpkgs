@@ -1,19 +1,21 @@
-args: with args;
+{ composableDerivation, fetchurl, xapian, pkgconfig
+, python ? null, php ? null, ruby ? null }:
 
-let inherit (args.composableDerivation) composableDerivation wwf; in
-composableDerivation {} {
+let inherit (composableDerivation) wwf; in
 
-    name = "xapian-bindings-1.0.14";
+composableDerivation.composableDerivation {} {
 
-    src = fetchurl {
-      url = http://oligarchy.co.uk/xapian/1.0.14/xapian-bindings-1.0.14.tar.gz;
-      sha256 = "060jjwddv6ws8iy3jkpl4zcrzzinkjvdblkl0gcja90qzl2j81q5";
-    };
+  name = "xapian-bindings-1.0.14";
 
-    buildInputs = [xapian pkgconfig];
+  src = fetchurl {
+    url = http://oligarchy.co.uk/xapian/1.0.14/xapian-bindings-1.0.14.tar.gz;
+    sha256 = "060jjwddv6ws8iy3jkpl4zcrzzinkjvdblkl0gcja90qzl2j81q5";
+  };
 
-    # most interpreters aren't tested yet.. (see python for example how to do it)
-    flags =
+  buildInputs = [ xapian pkgconfig ];
+
+  # most interpreters aren't tested yet.. (see python for example how to do it)
+  flags =
          wwf {
            name = "python";
            enable = {
@@ -64,9 +66,8 @@ composableDerivation {} {
   };
 
   meta = { 
-      description = "bindings for the xapian library";
-      homepage = xapian.meta.homepage;
-      license = "GPLv2";
+    description = "Bindings for the Xapian library";
+    homepage = xapian.meta.homepage;
+    license = "GPLv2";
   };
-
 }

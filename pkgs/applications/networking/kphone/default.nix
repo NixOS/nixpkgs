@@ -1,4 +1,6 @@
-args: with args;
+{ stdenv, fetchurl, autoconf, automake, libtool, qt, pkgconfig
+, openssl, libpng, alsaLib, libX11, libXext, libXt, libICE
+, libSM }:
 
 stdenv.mkDerivation {
   name = "kphone-1.2";
@@ -10,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ autoconf automake libtool qt pkgconfig openssl libpng alsaLib
-      libX11 libXext libXt libICE libSM libX11
+      libX11 libXext libXt libICE libSM
     ];
     
   preConfigure = "autoconf";
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
     description = "KPhone is a SIP UA for Linux";
     homepage = http://sourceforge.net/projects/kphone/;
     license = "GPL";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,14 +1,17 @@
-args:
-args.stdenv.mkDerivation {
+{ stdenv, fetchurl, qt4, libpng, lib3ds, freeglut, libXi, libQGLViewer
+, swig, python }:
+
+stdenv.mkDerivation {
   name = "freestyle-2.2.0";
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = mirror://sourceforge/freestyle/freestyle.2.2.0-src.tar.bz2;
     sha256 = "1h4880fijmfy0x6dbl9hfri071rpj3lnwfzkxi1qyqhy7zyxy7ga";
  };
 
-  buildInputs =(with args; [qt4 libpng lib3ds freeglut libXi libQGLViewer swig]);
-  inherit (args) python freeglut libQGLViewer lib3ds; # if you want to use another adopt patch and Config.pri 
+  buildInputs = [ qt4 libpng lib3ds freeglut libXi libQGLViewer swig ];
+  
+  inherit python freeglut libQGLViewer lib3ds; # if you want to use another adopt patch and Config.pri 
 
   buildPhase = ''
     export PYTHON_VERSION=2.5
@@ -36,15 +39,15 @@ args.stdenv.mkDerivation {
       $hide/Freestyle
     EOF
     chmod +x $out/bin/Freestyle
-    '';
+  '';
 
   patches = ./patch;
 
   installPhase = ":";
 
   meta = { 
-      description = "Non-Photorealistic Line Drawing rendering from 3D scenes";
-      homepage = http://freestyle.sourceforge.net;
-      license = "GPL2";
+    description = "Non-Photorealistic Line Drawing rendering from 3D scenes";
+    homepage = http://freestyle.sourceforge.net;
+    license = "GPL2";
   };
 }

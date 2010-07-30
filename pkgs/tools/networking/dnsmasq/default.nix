@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "dnsmasq-2.40";
 
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
   installPhase = "ensureDir \$out/bin; make DESTDIR= BINDIR=\$out/bin MANDIR=\$out/man LOCALEDIR=\$out/share/locale install"; 
 
   meta = { 
-      description = "DNS forwarder and DHCP server";
-      homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
-      license = "GPL";
-    };
+    description = "DNS forwarder and DHCP server";
+    homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
+    license = "GPL";
+  };
 }
