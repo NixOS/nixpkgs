@@ -72,11 +72,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  # libQtNetwork will call libQtCore for it to dlopen openssl.
-  NIX_LDFLAGS = "-rpath ${openssl}/lib";
-  # Don't shrink the rpath, to keep ${openssl} in it.
-  dontPatchELF = 1;
-  
   prefixKey = "-prefix ";
 
   configureFlags = ''
@@ -84,17 +79,18 @@ stdenv.mkDerivation rec {
     -system-zlib -system-libpng -system-libjpeg -qt-gif -system-libmng
     -opengl -xrender -xrandr -xinerama -xcursor
     -plugin-sql-mysql -system-sqlite
-    -qdbus -cups -glib -xfixes -dbus-linked
+    -qdbus -cups -glib -xfixes -dbus-linked -openssl-linked
     -fontconfig -I${freetype}/include/freetype2
     -exceptions -xmlpatterns
-    -multimedia -audio-backend
-    -phonon -phonon-backend -svg
-    -javascript-jit
+    -multimedia -audio-backend -phonon -phonon-backend
+    -webkit -javascript-jit
     ${if buildDemos == true then "-make demos" else "-nomake demos"}
     ${if buildExamples == true then "-make examples" else "-nomake examples"}
     ${if useDocs then "-make docs" else "-nomake docs"}'';
-    
-  patchPhase = ''
+
+  patches = [ ./phonon-4.4.0.patch ];
+
+  postPatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
     sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf
@@ -102,12 +98,12 @@ stdenv.mkDerivation rec {
 
   postInstall = if useDocs then "rm -rf $out/share/doc/${name}/{html,src}" else "";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://qt.nokia.com/products;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = with stdenv.lib.maintainers; [ urkud sander ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = with maintainers; [ urkud sander ];
+    platforms = platforms.mesaPlatforms;
     priority = 10;
   };
 }
