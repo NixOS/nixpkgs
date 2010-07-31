@@ -8723,8 +8723,6 @@ let
     inherit (kde4) qt4 kdelibs automoc4 phonon;
   };
 
-  rekonqScm = rekonq.override { v = "scm"; };
-
   rsync = import ../applications/networking/sync/rsync {
     inherit fetchurl stdenv acl perl;
     enableACLs = !stdenv.isDarwin;
