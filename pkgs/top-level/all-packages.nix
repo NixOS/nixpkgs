@@ -8717,7 +8717,9 @@ let
     };
 
   rekonq = makeOverridable (import ../applications/networking/browsers/rekonq) {
-    inherit fetchurl fetchgit stdenv cmake perl;
+    inherit fetchurl stdenv cmake perl gettext;
+    inherit (gtkLibs) gtk;
+    inherit (xlibs) pixman;
     inherit (kde4) qt4 kdelibs automoc4 phonon;
   };
 
