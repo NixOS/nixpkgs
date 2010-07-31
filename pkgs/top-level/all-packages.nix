@@ -6004,8 +6004,8 @@ let
 
   pulseaudio = makeOverridable (import ../servers/pulseaudio) {
     inherit fetchurl stdenv pkgconfig gnum4 gdbm
-      dbus hal avahi liboil libsamplerate libsndfile speex
-      intltool gettext libtool libcap;
+      dbus avahi liboil libsamplerate libsndfile speex
+      intltool gettext libtool libcap bluez udev;
     inherit (xlibs) libX11 libICE libSM libXtst libXi;
     inherit (gtkLibs) gtk glib;
     inherit alsaLib;    # Needs ALSA >= 1.0.17.
