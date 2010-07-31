@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "qt-${v}";
-  
+
   src = fetchurl {
     url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
     sha256 = "1gxckb5pxybnj5413dxk7dm8hm945ymm4ppqwg14wfk83zhnw6g0";
   };
-  
-  preConfigure = '' 
+
+  preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
     configureFlags+="
       -docdir $out/share/doc/${name}
@@ -30,40 +30,40 @@ stdenv.mkDerivation rec {
       -datadir $out/share/qt4
     "
   '';
-  
+
   propagatedBuildInputs = [
     alsaLib
     sqlite
-    libXft 
-    libXrender 
-    libXrandr 
+    libXft
+    libXrender
+    libXrandr
     libXi
-    randrproto 
+    randrproto
     xextproto
-    libXinerama 
-    xineramaproto 
-    libXcursor 
-    zlib 
-    libjpeg 
+    libXinerama
+    xineramaproto
+    libXcursor
+    zlib
+    libjpeg
     libmng
-    mysql 
+    mysql
     postgresql
-    libpng 
-    which 
+    libpng
+    which
     mesa
-    libXmu 
+    libXmu
     libXv
-    openssl 
-    dbus.libs 
-    cups 
-    pkgconfig 
-    libXext 
-    freetype 
-    fontconfig 
+    openssl
+    dbus.libs
+    cups
+    pkgconfig
+    libXext
+    freetype
+    fontconfig
     inputproto
-    fixesproto 
-    libXfixes 
-    glib 
+    fixesproto
+    libXfixes
+    glib
     libtiff
     gstreamer
     gstPluginsBase
