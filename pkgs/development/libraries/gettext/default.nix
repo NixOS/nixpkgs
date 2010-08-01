@@ -26,6 +26,8 @@ stdenv.mkDerivation (rec {
   crossAttrs = {
     buildInputs = stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
       stdenv.gccCross.libc.libiconv.hostDrv;
+    # Gettext fails to guess the cross compiler
+    configureFlags = "CXX=${stdenv.cross.config}-g++";
   };
 
   meta = {

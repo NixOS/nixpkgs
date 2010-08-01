@@ -3,7 +3,7 @@
 assert stdenv.isLinux;
 
 let
-  version = "1.5.15";
+  version = "1.5.18";
   baseMakeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
 in
 
@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   name = "klibc-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/klibc/klibc-${version}.tar.bz2";
-    sha256 = "1x401wmjca6zkyikf9xz45b3wb1hnj0m2s9in1sg6xdhi3pk8lwb";
+    url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
+    sha256 = "0ik4ddkfzjrrhpb50i31f2zihqlcnm82yqnl5ci59wx56j5ly474";
   };
   
   makeFlags = baseMakeFlags;
@@ -20,17 +20,14 @@ stdenv.mkDerivation {
   inherit linuxHeaders;
 
   crossAttrs = {
-    name = "klibc-1.5.17";
-    src = fetchurl {
-      url = "mirror://kernel/linux/libs/klibc/Testing/klibc-1.5.17.tar.bz2";
-      sha256 = "1jmiszf9pdlzj9f72nkv50d7aqrzz12hrmw792xnd2lmn5nrfyx6";
-    };
-
     makeFlags = baseMakeFlags ++ [ "CROSS_COMPILE=${stdenv.cross.config}-"
         "KLIBCARCH=${stdenv.cross.arch}" ];
 
     patchPhase = ''
+      sed -i 's/-fno-pic -mno-abicalls/& -mabi=32/' usr/klibc/arch/mips/MCONFIG
       sed -i /KLIBCKERNELSRC/d scripts/Kbuild.install
+      # Wrong check for __mips64 in klibc
+      sed -i s/__mips64__/__mips64/ usr/include/fcntl.h
     '';
 
     linuxHeaders = linuxHeadersCross;

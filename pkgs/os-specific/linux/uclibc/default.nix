@@ -42,6 +42,10 @@ stdenv.mkDerivation {
       -e 's@.*UCLIBC_HAS_RPC.*@UCLIBC_HAS_RPC=y@' \
       -e 's@.*DO_C99_MATH.*@DO_C99_MATH=y@' \
       -e 's@.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*@UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y@' \
+      -e 's@.*CONFIG_MIPS_ISA_1.*@#CONFIG_MIPS_ISA_1=y@' \
+      -e 's@.*CONFIG_MIPS_ISA_3.*@CONFIG_MIPS_ISA_3=y@' \
+      -e 's@.*CONFIG_MIPS_O32_ABI.*@#CONFIG_MIPS_O32_ABI=y@' \
+      -e 's@.*CONFIG_MIPS_N32_ABI.*@CONFIG_MIPS_N32_ABI=y@' \
       ${configArmEABI} \
       ${configBigEndian} \
       -i .config

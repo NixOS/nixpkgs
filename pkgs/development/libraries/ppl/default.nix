@@ -9,7 +9,7 @@ let version = "0.10.2"; in
       sha256 = "0lly44sac4jd72klnhhil3wha15vak76r6gy88sh0zjsaww9hf6h";
     };
 
-    buildInputs = [ perl gnum4 ];
+    buildNativeInputs = [ perl gnum4 ];
     propagatedBuildInputs = [ gmpxx ];
 
     # Beware!  It took ~6 hours to compile PPL and run its tests on a 1.2 GHz

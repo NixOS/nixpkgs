@@ -187,7 +187,7 @@ let
     gccCrossStageFinal;
 
   stdenv =
-    if bootStdenv != null then bootStdenv else
+    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
       let changer = getConfig ["replaceStdenv"] null;
       in if changer != null then
         changer {
