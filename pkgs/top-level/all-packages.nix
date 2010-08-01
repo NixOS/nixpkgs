@@ -9307,7 +9307,7 @@ let
   };
 
   gemrb = import ../games/gemrb {
-    inherit fetchurl stdenv SDL openal freealut zlib libpng python;
+    inherit fetchurl stdenv cmake SDL openal zlib libpng python libvorbis;
   };
 
   gltron = import ../games/gltron {
