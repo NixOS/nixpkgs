@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     then fetchurl {
       # Temporary fix for
       # http://lists.gnu.org/archive/html/bug-patch/2010-01/msg00004.html .
-      url = "ftp://alpha.gnu.org/gnu/patch/patch-2.6.1.85-423d.tar.gz";
-      sha256 = "13dddh7m8g48rvxldm9i5xp9m7h76zqp7s327m5k8k39kg146xvw";
+      url = "ftp://alpha.gnu.org/gnu/patch/patch-2.6.1.87-94d8.tar.gz";
+      sha256 = "0jnw8p0nvkmwi1a2z56bssqik8fvkb71zd2cpzl1sklnrg1g3b6p";
     } else fetchurl {
       url = "mirror://gnu/patch/${name}.tar.gz";
       sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
