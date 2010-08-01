@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index ce76653..fba6de2 100755
+--- a/configure
++++ b/configure
+@@ -6891,7 +6891,7 @@ fi
+ $as_echo "$libc_cv_gnu89_inline" >&6; }
+ if test $libc_cv_gnu89_inline = yes; then
+   libc_cv_gnu89_inline=-fgnu89-inline
+-else
++elif test $libc_cv_gnu89_inline = no; then
+   libc_cv_gnu89_inline=
+ fi
+ 
+diff --git a/configure.in b/configure.in
+index 182c683..b867371 100644
+--- a/configure.in
++++ b/configure.in
+@@ -1777,7 +1777,7 @@ fi
+ rm -f conftest*])
+ if test $libc_cv_gnu89_inline = yes; then
+   libc_cv_gnu89_inline=-fgnu89-inline
+-else
++elif test $libc_cv_gnu89_inline = no; then
+   libc_cv_gnu89_inline=
+ fi
+ AC_SUBST(libc_cv_gnu89_inline)
