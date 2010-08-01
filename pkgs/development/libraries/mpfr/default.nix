@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+  patches = [ ./patch01.patch ./patch02.patch ];
+
   doCheck = true;
 
   enableParallelBuilding = true;
