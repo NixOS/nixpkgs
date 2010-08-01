@@ -67,6 +67,7 @@ stdenv.mkDerivation {
        if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2" else
        if stdenv.system == "armv5tel-linux" then "ld-linux.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
+       if stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
     else "";
 }

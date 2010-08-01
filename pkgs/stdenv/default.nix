@@ -55,6 +55,7 @@ rec {
     if stdenvType == "i686-linux" then stdenvLinux else
     if stdenvType == "x86_64-linux" then stdenvLinux else
     if stdenvType == "armv5tel-linux" then stdenvLinux else
+    if stdenvType == "ict_loongson-2_v0.3_fpu_v0.1-linux" then stdenvLinux else
     if stdenvType == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
     if stdenvType == "i686-mingw" then stdenvMinGW else
     if stdenvType == "i686-darwin" then stdenvNix else

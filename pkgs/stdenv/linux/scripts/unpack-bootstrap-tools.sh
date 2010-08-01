@@ -3,31 +3,41 @@ set -e
 # Unpack the bootstrap tools tarball.
 echo Unpacking the bootstrap tools...
 $mkdir $out
-$bzip2 -d < $tarball | (cd $out && $cpio -V -i)
+$bzip2 -d < $tarball | (cd $out && $cpio -i)
 
 # Set the ELF interpreter / RPATH in the bootstrap binaries.
 echo Patching the bootstrap tools...
 
 # On x86_64, ld-linux-x86-64.so.2 barfs on patchelf'ed programs.  So
 # use a copy of patchelf.
-LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? $out/bin/cp $out/bin/patchelf .
+LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? $out/bin/cp $out/bin/patchelf .
 
 for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     echo patching $i
     if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? \
+             $out/bin/patchelf --set-interpreter $out/lib/ld.so.? --set-rpath $out/lib --force-rpath $i
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? \
+             $out/bin/patchelf --set-interpreter $out/lib/ld.so.? --set-rpath $out/lib --force-rpath $i
     fi
 done
 for i in $out/lib/librt* ; do
     echo patching $i
     if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? \
+             $out/bin/patchelf --set-interpreter $out/lib/ld.so.? --set-rpath $out/lib --force-rpath $i
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? \
+             $out/bin/patchelf --set-interpreter $out/lib/ld.so.? --set-rpath $out/lib --force-rpath $i
+    fi
+done
+
+for i in $out/lib/libgmp* $out/lib/libppl* $out/lib/libcloog* $out/lib/libmpc*; do
+    echo patching $i
+    if test -f $i -a ! -L $i; then
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? \
+             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
+         LD_LIBRARY_PATH=$out/lib $out/lib/ld.so.? \
+             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
     fi
 done
 
