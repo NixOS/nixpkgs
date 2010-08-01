@@ -238,6 +238,7 @@ stdenv.mkDerivation ({
      CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
      # If we are making a cross compiler, cross != null
      NIX_GCC_CROSS = if cross == null then "${stdenv.gccCross}" else "";
+     dontStrip = true;
      configureFlags = "
        ${if enableMultilib then "" else "--disable-multilib"}
        ${if enableShared then "" else "--disable-shared"}
