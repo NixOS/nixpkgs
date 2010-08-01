@@ -1,5 +1,7 @@
 { stdenv, fetchurl, cmake, SDL, openal, zlib, libpng, python, libvorbis }:
 
+assert stdenv.gcc.libc != null;
+
 stdenv.mkDerivation rec {
   name = "gemrb-0.6.1";
   
