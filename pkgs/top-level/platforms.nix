@@ -152,4 +152,56 @@ rec {
     uboot = "upstream";
     ubootConfig = "integratorcp_config";
   };
+
+  fuloong2f_n32 = {
+    name = "fuloong2f_n32";
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "fuloong2e_defconfig";
+    kernelBaseConfig = "fuloong2e_defconfig";
+    kernelArch = "mips";
+    kernelAutoModules = false;
+    kernelExtraConfig =
+      ''
+        BLK_DEV_RAM y
+        BLK_DEV_INITRD y
+        BLK_DEV_CRYPTOLOOP m
+        BLK_DEV_DM m
+        DM_CRYPT m
+        MD y
+        REISERFS_FS m
+        EXT4_FS m
+        USB_STORAGE_CYPRESS_ATACB m
+
+        IP_PNP y
+        NFS_FS y
+        ROOT_NFS y
+        TUN m
+        NFS_V4 y
+        NFS_V4_1 y
+        NFS_FSCACHE y
+        NFSD m
+        NFSD_V2_ACL y
+        NFSD_V3 y
+        NFSD_V3_ACL y
+        NFSD_V4 y
+
+        # Fail to build
+        DRM n
+        SCSI_ADVANSYS n
+        USB_ISP1362_HCD n
+        SND_SOC n
+        SND_ALI5451 n
+        FB_SAVAGE n
+        SCSI_NSP32 n
+        ATA_SFF n
+        SUNGEM n
+        IRDA n
+        ATM_HE n
+        SCSI_ACARD n
+        BLK_DEV_CMD640_ENHANCED n
+
+        FUSE_FS m
+      '';
+    kernelTarget = "vmlinux";
+  };
 }

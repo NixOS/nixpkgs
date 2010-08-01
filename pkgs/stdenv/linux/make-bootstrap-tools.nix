@@ -80,7 +80,7 @@ rec {
         cp ${bzip2}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
-        cp ${patchelf05}/bin/* $out/bin
+        cp ${patchelf}/bin/* $out/bin
         cp ${replace}/bin/* $out/bin
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep

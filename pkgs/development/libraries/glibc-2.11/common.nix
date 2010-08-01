@@ -61,6 +61,9 @@ stdenv.mkDerivation ({
 
     /* Make sure `nscd' et al. are linked against `libssp'.  */
     ./stack-protector-link.patch
+
+    /* Fix for the check of -fgnu89-inline compiler flag */
+    ./gnu89-inline.patch
   ]
   ++ stdenv.lib.optional (fetchgit == null)
     /* MOD_NANO definition, for ntp (taken from glibc upstream) */
@@ -86,7 +89,7 @@ stdenv.mkDerivation ({
     "--build=arm-linux-gnueabi"
     "--without-fp"
   ];
-
+  
   buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ]
     ++ stdenv.lib.optional (mig != null) mig;
 
@@ -149,7 +152,7 @@ stdenv.mkDerivation ({
     mkdir ../build
     cd ../build
 
-    configureScript="../$sourceRoot/configure"
+    configureScript="`pwd`/../$sourceRoot/configure"
 
     ${preConfigure}
   '';

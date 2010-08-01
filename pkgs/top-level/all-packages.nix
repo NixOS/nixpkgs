@@ -6258,7 +6258,7 @@ let
     inherit fetchurl stdenv bison flex autoconf automake;
   };
 
-  linuxHeaders = linuxHeaders_2_6_28;
+  linuxHeaders = linuxHeaders_2_6_32;
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
@@ -6849,11 +6849,9 @@ let
     inherit fetchurl stdenv unzip;
   };
 
-/*
   uclibc = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv linuxHeaders;
   };
-*/
 
   uclibcCross = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv libiconv;
