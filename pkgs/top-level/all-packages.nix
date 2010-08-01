@@ -3890,14 +3890,7 @@ let
     use_svn = stdenv.system == "x86_64-linux";
   };
 
-  gettext_0_17 = import ../development/libraries/gettext {
-    inherit fetchurl stdenv libiconv;
-  };
-
-  gettext = gettext_0_18;
-
-  # XXX: Remove me when `stdenv-updates' is merged.
-  gettext_0_18 = import ../development/libraries/gettext/0.18.nix {
+  gettext = import ../development/libraries/gettext/default.nix {
     inherit fetchurl stdenv libiconv;
   };
 

@@ -1,11 +1,13 @@
+# XXX: Remove me when `stdenv-updates' is merged.
+
 { stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.18";
+  name = "gettext-0.18.1.1";
   
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "1rbgm6sxgq218pridn2vji5nlj3hdf4vs75rz00wc0wcw4fjqd02";
+    sha256 = "1sa3ch12qxa4h3ya6hkz119yclcccmincl9j20dhrdx5mykp3b4k";
   };
 
   configureFlags = "--disable-csharp";
