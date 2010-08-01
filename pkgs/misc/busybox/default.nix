@@ -1,24 +1,27 @@
-{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""}:
+{stdenv, fetchurl, enableStatic ? false, extraConfig ? null}:
 
 let
   configParser = ''
     function parseconfig {
         set -x
         while read LINE; do
-            NAME=`cut -d \  -f 1 $LINE`
-            OPTION=`cut -d \  -f 2 $LINE`
+            NAME=`echo "$LINE" | cut -d \  -f 1`
+            OPTION=`echo "$LINE" | cut -d \  -f 2`
 
             if test -z "$NAME"; then
                 continue
             fi
 
             if test "$NAME" == "CLEAR"; then
+                echo "parseconfig: CLEAR"
                 echo > .config
             fi
 
+            echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
             if test "$OPTION" != n; then
+                echo "parseconfig: setting $NAME=$OPTION"
                 echo "$NAME=$OPTION" >> .config
             fi
         done
@@ -32,7 +35,7 @@ let
   '';
 
   staticConfig = (if enableStatic then ''
-      sed -i 's,.*CONFIG_STATIC.*,CONFIG_STATIC=y,' .config
+      CONFIG_STATIC y
     '' else "");
 
 in
@@ -46,20 +49,20 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
-    set -x
     make defconfig
     ${configParser}
     cat << EOF | parseconfig
+    ${staticConfig}
     ${extraConfig}
     ${nixConfig}
     $extraCrossConfig
     EOF
-    set +x
+    make oldconfig
   '';
 
   crossAttrs = {
     extraCrossConfig = ''
-      CONFIG_CROSS_COMPILER_PREFIX "$crossConfig-"
+      CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cross.config}-"
     '' +
       (if (stdenv.cross.platform.kernelMajor == "2.4") then ''
         CONFIG_IONICE n
