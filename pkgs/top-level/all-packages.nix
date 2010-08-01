@@ -6845,7 +6845,7 @@ let
   };
 
   uclibc = import ../os-specific/linux/uclibc {
-    inherit fetchurl stdenv linuxHeaders;
+    inherit fetchurl stdenv linuxHeaders libiconv;
   };
 
   uclibcCross = import ../os-specific/linux/uclibc {
