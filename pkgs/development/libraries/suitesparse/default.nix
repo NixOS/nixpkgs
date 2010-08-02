@@ -18,4 +18,6 @@ stdenv.mkDerivation {
     ensureDir $out/include
   '';
 
+  NIX_CFLAGS = "-fPIC";
+
 }
