@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     -exceptions -xmlpatterns
     -multimedia -audio-backend -phonon -phonon-backend
     -webkit -javascript-jit
+    -make libs -make tools -make translations
     ${if buildDemos == true then "-make demos" else "-nomake demos"}
     ${if buildExamples == true then "-make examples" else "-nomake examples"}
     ${if useDocs then "-make docs" else "-nomake docs"}'';
