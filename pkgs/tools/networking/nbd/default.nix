@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   # machines that have a different setup than the local one.
   configureFlags = "LDFLAGS=-static";
 
+  postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
+
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "map arbitrary files as block devices over the network";
