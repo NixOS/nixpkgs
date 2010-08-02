@@ -6580,7 +6580,7 @@ let
   });
 
   kde45 = makeOverridable (import ../desktops/kde-4.5) (pkgs // {
-    openexr = openexr_1_6_1;
+    shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
     stdenv = stdenv2;
   });
 
