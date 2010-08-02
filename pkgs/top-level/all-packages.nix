@@ -99,6 +99,17 @@ let
   pkgs = pkgsFun __overrides; # the overriden, final packages
 
 
+  # We use `callPackage' to be able to omit function arguments that
+  # can be obtained from `pkgs' or `pkgs.xorg' (i.e. `defaultScope').
+  # Use `newScope' for sets of packages in `pkgs' (see e.g. `gtkLibs'
+  # below).
+  callPackage = newScope {};
+
+  newScope = extra: lib.callPackageWith (defaultScope // extra);
+  
+  defaultScope = pkgs // pkgs.xorg;
+
+
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = __overrides: with helperFunctions; helperFunctions // rec {
 
@@ -1168,33 +1179,31 @@ let
     inherit stdenv fetchgit libuuid lzo zlib acl;
   };
 
-  multitran = recurseIntoAttrs (let
-      inherit fetchurl stdenv help2man;
-    in rec {
-      multitrandata = import ../tools/text/multitran/data {
-        inherit fetchurl stdenv;
-      };
+  multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
+    multitrandata = import ../tools/text/multitran/data {
+      inherit fetchurl stdenv;
+    };
 
-      libbtree = import ../tools/text/multitran/libbtree {
-        inherit fetchurl stdenv;
-      };
+    libbtree = import ../tools/text/multitran/libbtree {
+      inherit fetchurl stdenv;
+    };
 
-      libmtsupport = import ../tools/text/multitran/libmtsupport {
-        inherit fetchurl stdenv;
-      };
+    libmtsupport = import ../tools/text/multitran/libmtsupport {
+      inherit fetchurl stdenv;
+    };
 
-      libfacet = import ../tools/text/multitran/libfacet {
-        inherit fetchurl stdenv libmtsupport;
-      };
+    libfacet = import ../tools/text/multitran/libfacet {
+      inherit fetchurl stdenv libmtsupport;
+    };
 
-      libmtquery = import ../tools/text/multitran/libmtquery {
-        inherit fetchurl stdenv libmtsupport libfacet libbtree multitrandata;
-      };
+    libmtquery = import ../tools/text/multitran/libmtquery {
+      inherit fetchurl stdenv libmtsupport libfacet libbtree multitrandata;
+    };
 
-      mtutils = import ../tools/text/multitran/mtutils {
-        inherit fetchurl stdenv libmtsupport libfacet libbtree libmtquery help2man;
-      };
-    });
+    mtutils = import ../tools/text/multitran/mtutils {
+      inherit fetchurl stdenv libmtsupport libfacet libbtree libmtquery help2man;
+    };
+  });
 
   muscleframework = import ../tools/security/muscleframework {
     inherit fetchurl stdenv libmusclecard pkgconfig pcsclite;
@@ -4217,11 +4226,11 @@ let
     inherit (gnome) gtk;
   };
 
-  gtkLibs = recurseIntoAttrs gtkLibs220;
+  gtkLibs = gtkLibs220;
 
   glib = gtkLibs.glib;
 
-  gtkLibs1x = rec {
+  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in rec {
 
     glib = import ../development/libraries/glib/1.2.x.nix {
       inherit fetchurl stdenv;
@@ -4231,9 +4240,9 @@ let
       inherit fetchurl stdenv x11 glib;
     };
 
-  };
+  });
 
-  gtkLibs216 = rec {
+  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in rec {
 
     glib = import ../development/libraries/glib/2.20.x.nix {
       inherit fetchurl stdenv pkgconfig gettext perl;
@@ -4264,13 +4273,13 @@ let
       inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
     };
 
-  };
+  });
 
-  gtkLibs218 = rec {
+  gtkLibs218 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs218; in rec {
 
     glib = import ../development/libraries/glib/2.22.x.nix {
       inherit fetchurl stdenv pkgconfig gettext perl;
-      libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
+      libiconv = if stdenv.system == "i686-freebsd" then libiconv else null;
     };
 
     glibmm = import ../development/libraries/glibmm/2.22.x.nix {
@@ -4298,13 +4307,13 @@ let
       inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
     };
 
-  };
+  });
 
-  gtkLibs220 = rec {
+  gtkLibs220 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs220; in rec {
 
     glib = makeOverridable (import ../development/libraries/glib/2.24.x.nix) {
       inherit fetchurl stdenv pkgconfig gettext perl zlib;
-      libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
+      libiconv = if stdenv.system == "i686-freebsd" then libiconv else null;
     };
 
     glibmm = import ../development/libraries/glibmm/2.22.x.nix {
@@ -4332,7 +4341,7 @@ let
       inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
     };
 
-  };
+  });
 
   gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
     inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
@@ -6603,7 +6612,7 @@ let
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  linuxPackagesFor = kernel: rec {
+  linuxPackagesFor = kernel: self: let callPackage = newScope self; in rec {
 
     inherit kernel;
 
@@ -6617,6 +6626,14 @@ let
       inherit fetchurl stdenv kernel;
     };
 
+    aufs2 = import ../os-specific/linux/aufs2 {
+      inherit fetchurl stdenv kernel perl;
+    };
+
+    aufs2_util = import ../os-specific/linux/aufs2-util {
+      inherit fetchurl stdenv kernel aufs2;
+    };
+    
     blcr = import ../os-specific/linux/blcr/0.8.2.nix {
       inherit fetchurl stdenv kernel perl makeWrapper autoconf automake;
       libtool = libtool_1_5; # libtool 2 causes a fork bomb
@@ -6722,31 +6739,23 @@ let
       inherit stdenv fetchurl lib patchelf cdrkit kernel;
       inherit (xlibs) libX11 libXt libXext libXmu libXcomposite libXfixes;
     };
-  } // (if kernel.features ? aufsBase then rec {
-      aufs2 = import ../os-specific/linux/aufs2 {
-        inherit fetchurl stdenv kernel perl;
-      };
-
-      aufs2_util = import ../os-specific/linux/aufs2-util {
-        inherit fetchurl stdenv kernel aufs2;
-      };
-    } else {});
+  };
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_2_6_25 = recurseIntoAttrs (linuxPackagesFor linux_2_6_25);
-  linuxPackages_2_6_27 = recurseIntoAttrs (linuxPackagesFor linux_2_6_27);
-  linuxPackages_2_6_28 = recurseIntoAttrs (linuxPackagesFor linux_2_6_28);
-  linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29);
-  linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31);
-  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
+  linuxPackages_2_6_25 = recurseIntoAttrs (linuxPackagesFor linux_2_6_25 pkgs.linuxPackages_2_6_25);
+  linuxPackages_2_6_27 = recurseIntoAttrs (linuxPackagesFor linux_2_6_27 pkgs.linuxPackages_2_6_27);
+  linuxPackages_2_6_28 = recurseIntoAttrs (linuxPackagesFor linux_2_6_28 pkgs.linuxPackages_2_6_28);
+  linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29 pkgs.linuxPackages_2_6_29);
+  linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31 pkgs.linuxPackages_2_6_31);
+  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
   linuxPackages_2_6_32_systemtap =
-    recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap);
-  linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33);
-  linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34);
+    recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
+  linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
+  linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
 
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
-  linuxPackages = linuxPackagesFor linux;
+  linuxPackages = linuxPackages_2_6_32;
 
   keyutils = import ../os-specific/linux/keyutils {
     inherit fetchurl stdenv;
