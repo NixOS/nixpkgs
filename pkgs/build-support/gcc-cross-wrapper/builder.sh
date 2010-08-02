@@ -8,7 +8,7 @@ if test -z "$nativeLibc"; then
     cflagsCompile="$cflagsCompile -B$libc/lib/ -isystem $libc/include"
     ldflags="$ldflags -L$libc/lib"
     # Get the proper dynamic linker for glibc and uclibc. 
-    dlinker=`eval 'echo $libc/lib/ld-*.so.?'`
+    dlinker=`eval 'echo $libc/lib/ld*.so.?'`
     if [ -n "$dlinker" ]; then
       ldflagsBefore="-dynamic-linker $dlinker"
     fi
