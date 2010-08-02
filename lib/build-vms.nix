@@ -73,12 +73,12 @@ rec {
     
       machines = lib.attrNames nodes;
 
-      machinesNumbered = lib.zip machines (lib.range 1 254);
+      machinesNumbered = lib.zipTwoLists machines (lib.range 1 254);
 
       nodes_ = lib.flip map machinesNumbered (m: lib.nameValuePair m.first
         [ ( { config, pkgs, nodes, ... }:
             let
-              interfacesNumbered = lib.zip config.virtualisation.vlans (lib.range 1 255);
+              interfacesNumbered = lib.zipTwoLists config.virtualisation.vlans (lib.range 1 255);
               interfaces = 
                 lib.flip map interfacesNumbered ({ first, second }:
                   { name = "eth${toString second}";
