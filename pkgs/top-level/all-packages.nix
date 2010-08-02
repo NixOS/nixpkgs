@@ -5980,7 +5980,20 @@ let
     inherit (kde4) qt4 kdelibs automoc4 phonon;
   };
 
+<<<<<<< HEAD
   rsync = callPackage ../applications/networking/sync/rsync { 
+||||||| merged common ancestors
+  rsync = import ../applications/networking/sync/rsync {
+    inherit fetchurl stdenv acl perl;
+=======
+  rsibreak = makeOverridable (import ../applications/misc/rsibreak) {
+    inherit fetchurl stdenv cmake;
+    inherit (kde4) kdelibs kdebase_workspace;
+  };
+
+  rsync = import ../applications/networking/sync/rsync {
+    inherit fetchurl stdenv acl perl;
+>>>>>>> Add rsibreak
     enableACLs = !stdenv.isDarwin;
   };
 
@@ -6580,6 +6593,9 @@ let
   });
 
   kde45 = makeOverridable (import ../desktops/kde-4.5) (pkgs // {
+    qt4 = qt47;
+    pyqt4 = pyqt4.override { qt4 = qt47; };
+    libdbusmenu_qt = libdbusmenu_qt.override { qt4 = qt47; };
     shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
     stdenv = stdenv2;
   });
