@@ -66,4 +66,13 @@ pkgs.recurseIntoAttrs (rec {
       openldap shared_mime_info;
     inherit kdelibs automoc4 akonadi soprano;
   };
+
+### DEVELOPMENT
+
+  kdebindings = import ./bindings {
+	inherit (pkgs) stdenv fetchurl cmake perl lib python sip zlib libpng pyqt4
+	  freetype fontconfig qt4 boost ruby;
+    inherit kdelibs kdepimlibs automoc4 soprano akonadi attica polkit_qt_1;
+  };
+  
 })
