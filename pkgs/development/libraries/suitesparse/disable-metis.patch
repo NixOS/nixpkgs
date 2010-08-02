@@ -20,7 +20,24 @@ diff -Nrc SuiteSparse/UFconfig/Makefile SuiteSparse-new/UFconfig/Makefile
   
 diff -Nrc SuiteSparse/UFconfig/UFconfig.mk SuiteSparse-new/UFconfig/UFconfig.mk
 *** SuiteSparse/UFconfig/UFconfig.mk	2010-06-02 17:40:42.000000000 +0200
---- SuiteSparse-new/UFconfig/UFconfig.mk	2010-08-02 13:14:30.000000000 +0200
+--- SuiteSparse-new/UFconfig/UFconfig.mk	2010-08-02 14:55:27.000000000 +0200
+***************
+*** 34,40 ****
+  # performance.  You should select the optimization parameters that are best
+  # for your system.  On Linux, use "CFLAGS = -O3 -fexceptions" for example.
+  CC = cc
+! CFLAGS = -O3 -fexceptions
+  
+  # C++ compiler (also uses CFLAGS)
+  CPLUSPLUS = g++
+--- 34,40 ----
+  # performance.  You should select the optimization parameters that are best
+  # for your system.  On Linux, use "CFLAGS = -O3 -fexceptions" for example.
+  CC = cc
+! CFLAGS = -O3 -fexceptions -fPIC
+  
+  # C++ compiler (also uses CFLAGS)
+  CPLUSPLUS = g++
 ***************
 *** 71,78 ****
   # MAKE = gmake
