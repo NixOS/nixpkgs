@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, cmake, lib, perl
+{ stdenv, fetchurl, cmake, perl
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
 , xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
-, automoc4, phonon, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
+, automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
 }:
 
 stdenv.mkDerivation rec {
-  name = "kdelibs-4.4.92";
+  name = "kdelibs-4.4.95";
 
   src = fetchurl {
-    url = "mirror://kde/unstable/4.4.92/src/${name}.tar.bz2";
-    sha256 = "03hqn50fls3bpd9xls3bga4g1n4gy1hcxs1dk6wlc2dfklyqshz3";
+    url = "mirror://kde/unstable/4.4.95/src/${name}.tar.bz2";
+    sha256 = "1fyjbdbzqxvl7rws4bvra1l4sczc1a72zdin7izif8dyjq6xblj0";
   };
 
   buildInputs = [
     cmake perl qt4 xz flex bison bzip2 pcre fam libxml2 libxslt
     shared_mime_info giflib jasper /*openexr*/ aspell avahi kerberos acl attr
     libXScrnSaver enchant libdbusmenu_qt polkit_qt_1
-    automoc4 phonon strigi soprano qca2 attica
+    automoc4 strigi soprano qca2 attica
   ];
 
   propagatedBuildInputs = [ shared_desktop_ontologies stdenv.gcc.libc ];
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
     ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "KDE libraries";
     license = "LGPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ maintainers.sander maintainers.urkud ];
   };
 }

@@ -21,13 +21,13 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl cmake;
   };
 
-  phonon = import ./support/phonon {
-    inherit (pkgs) stdenv fetchurl cmake pkgconfig qt4 xineLib pulseaudio;
-    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
-    inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
-    inherit automoc4;
-  };
-
+#  phonon = import ./support/phonon {
+#    inherit (pkgs) stdenv fetchurl cmake pkgconfig qt4 xineLib pulseaudio;
+#    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
+#    inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
+#    inherit automoc4;
+#  };
+#
   polkit_qt_1 = import ./support/polkit-qt-1 {
     inherit (pkgs) stdenv fetchurl cmake pkgconfig qt4 glib polkit;
     inherit automoc4;
@@ -53,17 +53,17 @@ pkgs.recurseIntoAttrs (rec {
 
 ### LIBS
   kdelibs = import ./libs {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl bzip2 pcre fam libxml2 libxslt;
     inherit (pkgs) xz flex bison giflib jasper openexr aspell avahi shared_mime_info
       kerberos acl attr shared_desktop_ontologies enchant libdbusmenu_qt;
     inherit (pkgs) docbook_xsl docbook_xml_dtd_42;
     inherit (pkgs.xlibs) libXScrnSaver;
-    inherit automoc4 phonon strigi soprano qca2 attica polkit_qt_1;
+    inherit automoc4 strigi soprano qca2 attica polkit_qt_1;
   };
 
   kdepimlibs = import ./pimlibs {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl boost cyrus_sasl gpgme libical
       openldap shared_mime_info;
-    inherit kdelibs automoc4 phonon akonadi;
+    inherit kdelibs automoc4 akonadi soprano;
   };
 })
