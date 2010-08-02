@@ -948,6 +948,10 @@ let
     inherit fetchurl stdenv;
   };
 
+  hdf5 = import ../tools/misc/hdf5 {
+    inherit fetchurl stdenv;
+  };
+
   hevea = import ../tools/typesetting/hevea {
     inherit fetchurl stdenv ocaml;
   };
