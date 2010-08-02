@@ -225,8 +225,7 @@ let
     dotnetfx = dotnetfx35;
   };
 
-  vsenv = import ../build-support/vsenv {
-    inherit stdenv;
+  vsenv = callPackage ../build-support/vsenv { 
     vs = vs90wrapper;
   };
 
@@ -312,9 +311,7 @@ let
     inherit stdenv;
   };
 
-  nukeReferences = import ../build-support/nuke-references/default.nix {
-    inherit stdenv;
-  };
+  nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
   vmTools = import ../build-support/vm/default.nix {
     inherit pkgs;
@@ -332,17 +329,11 @@ let
 
   ### TOOLS
 
-  acct = import ../tools/system/acct {
-    inherit fetchurl stdenv;
-  };
+  acct = callPackage ../tools/system/acct { };
 
-  aefs = import ../tools/filesystems/aefs {
-    inherit fetchurl stdenv fuse;
-  };
+  aefs = callPackage ../tools/filesystems/aefs { };
 
-  aircrackng = import ../tools/networking/aircrack-ng {
-    inherit fetchurl stdenv libpcap openssl zlib wirelesstools;
-  };
+  aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
@@ -355,37 +346,22 @@ let
     };
   };
 
-  ec2apitools = import ../tools/virtualization/amazon-ec2-api-tools {
-    inherit stdenv fetchurl unzip makeWrapper jre;
-  };
+  ec2apitools = callPackage ../tools/virtualization/amazon-ec2-api-tools { };
 
-  ec2amitools = import ../tools/virtualization/amazon-ec2-ami-tools {
-    inherit stdenv fetchurl unzip makeWrapper ruby openssl;
-  };
+  ec2amitools = callPackage ../tools/virtualization/amazon-ec2-ami-tools { };
 
-  amule = makeOverridable (import ../tools/networking/p2p/amule) {
-    inherit fetchurl stdenv zlib perl cryptopp gettext libupnp makeWrapper
-      wxGTK pkgconfig libpng;
-  };
+  amule = callPackage ../tools/networking/p2p/amule { };
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
 
-  aria2 = import ../tools/networking/aria2 {
-    inherit fetchurl stdenv openssl libxml2 zlib;
-  };
+  aria2 = callPackage ../tools/networking/aria2 { };
 
-  at = import ../tools/system/at {
-    inherit fetchurl stdenv bison flex pam ssmtp;
-  };
+  at = callPackage ../tools/system/at { };
 
-  autogen = import ../development/tools/misc/autogen {
-    inherit fetchurl stdenv guile which;
-  };
+  autogen = callPackage ../development/tools/misc/autogen { };
 
-  autojump = import ../tools/misc/autojump {
-    inherit fetchurl stdenv python;
-  };
+  autojump = callPackage ../tools/misc/autojump { };
 
   avahi =
     let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
@@ -398,79 +374,46 @@ let
         qt4 = if qt4Support then qt4 else null;
       };
 
-  axel = import ../tools/networking/axel {
-    inherit fetchurl stdenv;
-  };
+  axel = callPackage ../tools/networking/axel { };
 
-  azureus = import ../tools/networking/p2p/azureus {
-    inherit fetchurl stdenv jdk swt;
-  };
+  azureus = callPackage ../tools/networking/p2p/azureus { };
 
-  bc = import ../tools/misc/bc {
-    inherit fetchurl stdenv flex readline;
-  };
+  bc = callPackage ../tools/misc/bc { };
 
-  bfr = import ../tools/misc/bfr {
-    inherit fetchurl stdenv perl;
-  };
+  bfr = callPackage ../tools/misc/bfr { };
 
-  bootchart = import ../tools/system/bootchart {
-    inherit fetchurl stdenv gnutar gzip coreutils utillinux gnugrep gnused psmisc nettools;
-  };
+  bootchart = callPackage ../tools/system/bootchart { };
 
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
     inherit libuuid zlib acl;
   };
 
-  catdoc = import ../tools/text/catdoc {
-    inherit fetchurl stdenv;
-  };
+  catdoc = callPackage ../tools/text/catdoc { };
 
-  eggdrop = import ../tools/networking/eggdrop {
-    inherit fetchurl stdenv tcl;
-  };
+  eggdrop = callPackage ../tools/networking/eggdrop { };
 
-  mcrl = import ../tools/misc/mcrl {
-    inherit fetchurl stdenv coreutils;
-  };
+  mcrl = callPackage ../tools/misc/mcrl { };
 
-  mcrl2 = import ../tools/misc/mcrl2 {
-    inherit fetchurl stdenv mesa ;
-    inherit (xorg) libX11;
-    inherit wxGTK;
-  };
+  mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
-  syslogng = import ../tools/misc/syslog-ng {
-    inherit fetchurl stdenv eventlog pkgconfig glib;
-  };
+  syslogng = callPackage ../tools/misc/syslog-ng { };
 
-  asciidoc = import ../tools/typesetting/asciidoc {
-    inherit fetchurl stdenv python;
-  };
+  asciidoc = callPackage ../tools/typesetting/asciidoc { };
 
-  autossh = import ../tools/networking/autossh {
-    inherit stdenv fetchurl openssh;
-  };
+  autossh = callPackage ../tools/networking/autossh { };
 
-  bibtextools = import ../tools/typesetting/bibtex-tools {
-    inherit fetchurl stdenv aterm tetex hevea;
+  bibtextools = callPackage ../tools/typesetting/bibtex-tools { 
     inherit (strategoPackages016) strategoxt sdf;
   };
 
-  bittorrent = import ../tools/networking/p2p/bittorrent {
-    inherit fetchurl stdenv makeWrapper python pycrypto twisted;
+  bittorrent = callPackage ../tools/networking/p2p/bittorrent { 
     wxPython = wxPython26;
     gui = true;
   };
 
-  bittornado = import ../tools/networking/p2p/bit-tornado {
-    inherit fetchurl stdenv python wxPython26;
-  };
+  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
 
-  blueman = import ../tools/bluetooth/blueman {
-    inherit fetchurl stdenv pkgconfig intltool python pyrex
-      pygobject pygtk pythonDBus bluez libstartup_notification
-      makeWrapper xdg_utils;
+  blueman = callPackage ../tools/bluetooth/blueman { 
     inherit (pythonPackages) notify;
     inherit (gtkLibs) glib gtk;
   };
@@ -479,83 +422,52 @@ let
     inherit unzip;
   };
 
-  bogofilter = import ../tools/misc/bogofilter {
-    inherit fetchurl stdenv flex;
+  bogofilter = callPackage ../tools/misc/bogofilter { 
     bdb = db4;
   };
 
-  bsdiff = import ../tools/compression/bsdiff {
-    inherit fetchurl stdenv bzip2;
-  };
+  bsdiff = callPackage ../tools/compression/bsdiff { };
 
   bzip2 = useFromStdenv "bzip2"
     (import ../tools/compression/bzip2 {
       inherit fetchurl stdenv;
     });
 
-  cabextract = import ../tools/archivers/cabextract {
-    inherit fetchurl stdenv;
-  };
+  cabextract = callPackage ../tools/archivers/cabextract { };
 
-  ccid = import ../tools/security/ccid {
-    inherit fetchurl stdenv pcsclite libusb pkgconfig perl;
-  };
+  ccid = callPackage ../tools/security/ccid { };
 
-  ccrypt = import ../tools/security/ccrypt {
-    inherit fetchurl stdenv perl;
-  };
+  ccrypt = callPackage ../tools/security/ccrypt { };
 
-  cdecl = import ../development/tools/cdecl {
-    inherit fetchurl stdenv yacc flex readline ncurses;
-  };
+  cdecl = callPackage ../development/tools/cdecl { };
 
-  cdrdao = import ../tools/cd-dvd/cdrdao {
-    inherit fetchurl stdenv lame libvorbis libmad pkgconfig libao;
-  };
+  cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
 
-  cdrkit = import ../tools/cd-dvd/cdrkit {
-    inherit fetchurl stdenv cmake libcap zlib bzip2;
-  };
+  cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
   };
 
-  checkinstall = import ../tools/package-management/checkinstall {
-    inherit fetchurl stdenv gettext;
-  };
+  checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   cheetahTemplate = builderDefsPackage (import ../tools/text/cheetah-template/2.0.1.nix) {
     inherit makeWrapper python;
   };
 
-  chkrootkit = import ../tools/security/chkrootkit {
-    inherit fetchurl stdenv;
-  };
+  chkrootkit = callPackage ../tools/security/chkrootkit { };
 
-  cksfv = import ../tools/networking/cksfv {
-    inherit fetchurl stdenv;
-  };
+  cksfv = callPackage ../tools/networking/cksfv { };
 
-  convertlit = import ../tools/text/convertlit {
-    inherit fetchurl stdenv unzip libtommath;
-  };
+  convertlit = callPackage ../tools/text/convertlit { };
 
-  unifdef = import ../development/tools/misc/unifdef {
-    inherit fetchurl stdenv;
-  };
+  unifdef = callPackage ../development/tools/misc/unifdef { };
 
-  usb_modeswitch = import ../development/tools/misc/usb-modeswitch {
-    inherit stdenv fetchurl libusb;
-  };
+  usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
-  cloogppl = import ../development/libraries/cloog-ppl {
-    inherit fetchurl stdenv ppl;
-  };
+  cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
-  convmv = import ../tools/misc/convmv {
-    inherit stdenv fetchurl perl;
-  };
+  convmv = callPackage ../tools/misc/convmv { };
 
   coreutils_real = makeOverridable (if stdenv ? isDietLibC
       then import ../tools/misc/coreutils-5
@@ -569,16 +481,11 @@ let
 
   coreutils = useFromStdenv "coreutils" coreutils_real;
 
-  cpio = import ../tools/archivers/cpio {
-    inherit fetchurl stdenv;
-  };
+  cpio = callPackage ../tools/archivers/cpio { };
 
-  cromfs = import ../tools/archivers/cromfs {
-    inherit fetchurl stdenv pkgconfig fuse perl;
-  };
+  cromfs = callPackage ../tools/archivers/cromfs { };
 
-  cron = import ../tools/system/cron { # see also fcron
-    inherit fetchurl stdenv;
+  cron = callPackage ../tools/system/cron {  # see also fcron
   };
 
   curl = makeOverridable (import ../tools/networking/curl) {
@@ -588,160 +495,99 @@ let
     sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
   };
 
-  curlftpfs = import ../tools/filesystems/curlftpfs {
-    inherit fetchurl stdenv fuse curl pkgconfig zlib glib;
-  };
+  curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
 
   dadadodo = builderDefsPackage (import ../tools/text/dadadodo) {
   };
 
-  dar = import ../tools/archivers/dar {
-    inherit fetchurl stdenv zlib bzip2 openssl attr;
-  };
+  dar = callPackage ../tools/archivers/dar { };
 
-  davfs2 = import ../tools/filesystems/davfs2 {
-    inherit fetchurl stdenv zlib;
+  davfs2 = callPackage ../tools/filesystems/davfs2 { 
     neon = neon028;
   };
 
-  dcraw = import ../tools/graphics/dcraw {
-    inherit fetchurl stdenv gettext libjpeg lcms;
-  };
+  dcraw = callPackage ../tools/graphics/dcraw { };
 
-  debootstrap = import ../tools/misc/debootstrap {
-    inherit fetchurl stdenv dpkg gettext gawk wget perl;
-  };
+  debootstrap = callPackage ../tools/misc/debootstrap { };
 
-  ddclient = import ../tools/networking/ddclient {
-    inherit fetchurl buildPerlPackage perl;
-  };
+  ddclient = callPackage ../tools/networking/ddclient { };
 
-  ddrescue = import ../tools/system/ddrescue {
-    inherit fetchurl stdenv;
-  };
+  ddrescue = callPackage ../tools/system/ddrescue { };
 
-  desktop_file_utils = import ../tools/misc/desktop-file-utils {
-    inherit stdenv fetchurl pkgconfig glib;
-  };
+  desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
-  dev86 = import ../development/compilers/dev86 {
-    inherit fetchurl stdenv;
-  };
+  dev86 = callPackage ../development/compilers/dev86 { };
 
-  dnsmasq = import ../tools/networking/dnsmasq {
+  dnsmasq = callPackage ../tools/networking/dnsmasq { 
     # TODO i18n can be installed as well, implement it?
-    inherit fetchurl stdenv;
   };
 
-  dhcp = import ../tools/networking/dhcp {
-    inherit fetchurl stdenv nettools iputils iproute makeWrapper;
-  };
+  dhcp = callPackage ../tools/networking/dhcp { };
 
-  dhcpcd = import ../tools/networking/dhcpcd {
-    inherit fetchurl stdenv;
-  };
+  dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
-  diffstat = import ../tools/text/diffstat {
-    inherit fetchurl stdenv;
-  };
+  diffstat = callPackage ../tools/text/diffstat { };
 
   diffutils = useFromStdenv "diffutils"
     (import ../tools/text/diffutils {
       inherit fetchurl stdenv coreutils;
     });
 
-  dirmngr = import ../tools/security/dirmngr {
-    inherit stdenv fetchurl libgpgerror libgcrypt libassuan libksba openldap;
-  };
+  dirmngr = callPackage ../tools/security/dirmngr { };
 
-  docbook2x = import ../tools/typesetting/docbook2x {
-    inherit fetchurl stdenv texinfo perl
-            gnused groff libxml2 libxslt makeWrapper;
+  docbook2x = callPackage ../tools/typesetting/docbook2x { 
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
     libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
-  dosfstools = makeOverridable (import ../tools/filesystems/dosfstools) {
-    inherit builderDefs;
-  };
+  dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
-  dotnetfx35 = import ../development/libraries/dotnetfx35 {
-    inherit stdenv;
-  };
+  dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
 
-  dropbear = makeOverridable (import ../tools/networking/dropbear) {
-    inherit fetchurl stdenv;
+  dropbear = callPackage ../tools/networking/dropbear { 
     enableStatic = true;
     zlib = zlibStatic;
   };
 
-  duplicity = import ../tools/backup/duplicity {
-    inherit fetchurl stdenv librsync makeWrapper python;
+  duplicity = callPackage ../tools/backup/duplicity { 
     inherit (pythonPackages) boto;
     gnupg = gnupg1;
   };
 
-  dvdplusrwtools = import ../tools/cd-dvd/dvd+rw-tools {
-    inherit fetchurl stdenv cdrkit m4;
-  };
+  dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
-  e2fsprogs = import ../tools/filesystems/e2fsprogs {
-    inherit fetchurl stdenv pkgconfig libuuid;
-  };
+  e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
-  ecryptfs = import ../tools/security/ecryptfs {
-    inherit fetchurl stdenv fuse python perl keyutils pam nss nspr;
-  };
+  ecryptfs = callPackage ../tools/security/ecryptfs { };
 
-  enblendenfuse = import ../tools/graphics/enblend-enfuse {
-    inherit fetchurl stdenv libtiff libpng lcms libxmi boost;
-  };
+  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
-  enscript = import ../tools/text/enscript {
-    inherit fetchurl stdenv gettext;
-  };
+  enscript = callPackage ../tools/text/enscript { };
 
-  eprover = makeOverridable (import ../tools/misc/eProver) {
-    inherit fetchurl stdenv which;
+  eprover = callPackage ../tools/misc/eProver { 
     texLive = texLiveAggregationFun {
       paths = [
         texLive texLiveExtra
       ];
-    };
+  };
   };
 
-  ethtool = import ../tools/misc/ethtool {
-    inherit fetchurl stdenv;
+  ethtool = callPackage ../tools/misc/ethtool { };
+
+  exif = callPackage ../tools/graphics/exif { };
+
+  exiftags = callPackage ../tools/graphics/exiftags { };
+
+  expect = callPackage ../tools/misc/expect { };
+
+  fcron = callPackage ../tools/system/fcron {  # see also cron
   };
 
-  exif = import ../tools/graphics/exif {
-    inherit fetchurl stdenv pkgconfig libexif popt;
-  };
+  fdisk = callPackage ../tools/system/fdisk { };
 
-  exiftags = import ../tools/graphics/exiftags {
-    inherit stdenv fetchurl;
-  };
+  figlet = callPackage ../tools/misc/figlet { };
 
-  expect = import ../tools/misc/expect {
-    inherit fetchurl stdenv tcl tk autoconf;
-    inherit (xorg) xproto libX11;
-  };
-
-  fcron = import ../tools/system/fcron { # see also cron
-    inherit fetchurl stdenv perl;
-  };
-
-  fdisk = import ../tools/system/fdisk {
-    inherit fetchurl stdenv parted libuuid gettext;
-  };
-
-  figlet = import ../tools/misc/figlet {
-    inherit fetchurl stdenv;
-  };
-
-  file = import ../tools/misc/file {
-    inherit fetchurl stdenv;
-  };
+  file = callPackage ../tools/misc/file { };
 
   findutils = useFromStdenv "findutils"
     (if stdenv.isDarwin then findutils4227 else
@@ -750,67 +596,40 @@ let
       }
     );
 
-  findutils4227 = import ../tools/misc/findutils/4.2.27.nix {
-    inherit fetchurl stdenv coreutils;
-  };
+  findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
 
-  finger_bsd = import ../tools/networking/bsd-finger {
-    inherit fetchurl stdenv;
-  };
+  finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
-  fontforge = import ../tools/misc/fontforge {
-    inherit fetchurl stdenv gettext freetype zlib
-      libungif libpng libjpeg libtiff libxml2 lib;
-  };
+  fontforge = callPackage ../tools/misc/fontforge { };
 
-  fontforgeX = import ../tools/misc/fontforge {
-    inherit fetchurl stdenv gettext freetype zlib
-      libungif libpng libjpeg libtiff libxml2 lib;
-    inherit (xlibs) libX11 xproto libXt;
+  fontforgeX = callPackage ../tools/misc/fontforge { 
     withX11 = true;
   };
 
-  dos2unix = import ../tools/text/dos2unix {
-    inherit fetchurl stdenv;
-  };
+  dos2unix = callPackage ../tools/text/dos2unix { };
 
-  unix2dos = import ../tools/text/unix2dos {
-    inherit fetchurl stdenv;
-  };
+  unix2dos = callPackage ../tools/text/unix2dos { };
 
   gawk = useFromStdenv "gawk"
     (import ../tools/text/gawk {
       inherit fetchurl stdenv;
     });
 
-  gdmap = makeOverridable (import ../tools/system/gdmap) {
-    inherit stdenv fetchurl pkgconfig libxml2 intltool
-      gettext;
+  gdmap = callPackage ../tools/system/gdmap { 
     inherit (gtkLibs216) gtk;
   };
 
-  genext2fs = import ../tools/filesystems/genext2fs {
-    inherit fetchurl stdenv;
-  };
+  genext2fs = callPackage ../tools/filesystems/genext2fs { };
 
-  gengetopt = import ../development/tools/misc/gengetopt {
-    inherit fetchurl stdenv;
-  };
+  gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
-  getopt = import ../tools/misc/getopt {
-    inherit fetchurl stdenv;
-  };
+  getopt = callPackage ../tools/misc/getopt { };
 
-  gftp = import ../tools/networking/gftp {
-    inherit fetchurl stdenv;
-    inherit readline ncurses gettext openssl pkgconfig;
+  gftp = callPackage ../tools/networking/gftp { 
     inherit (gtkLibs) gtk;
   };
 
-  gifsicle = import ../tools/graphics/gifsicle {
-    inherit fetchurl stdenv;
-    inherit (xlibs) xproto libXt libX11;
-  };
+  gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   glusterfs = builderDefsPackage ../tools/filesystems/glusterfs {
     inherit fuse;
@@ -818,9 +637,7 @@ let
     flex = flex2535;
   };
 
-  glxinfo = import ../tools/graphics/glxinfo {
-    inherit fetchurl stdenv x11 mesa;
-  };
+  glxinfo = callPackage ../tools/graphics/glxinfo { };
 
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
     inherit intltool perl gettext libusb pkgconfig;
@@ -836,28 +653,19 @@ let
     inherit fetchurl stdenv ed;
   });
 
-  gnupg1orig = makeOverridable (import ../tools/security/gnupg1) {
-    inherit fetchurl stdenv readline bzip2;
+  gnupg1orig = callPackage ../tools/security/gnupg1 { 
     ideaSupport = false;
   };
 
-  gnupg1compat = import ../tools/security/gnupg1compat {
-    inherit stdenv gnupg writeScript coreutils;
-  };
+  gnupg1compat = callPackage ../tools/security/gnupg1compat { };
 
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg = makeOverridable (import ../tools/security/gnupg) {
-    inherit fetchurl stdenv readline libgpgerror libgcrypt libassuan pth libksba zlib
-      openldap bzip2 libusb curl coreutils;
-  };
+  gnupg = callPackage ../tools/security/gnupg { };
 
-  gnuplot = makeOverridable (import ../tools/graphics/gnuplot) {
-    inherit fetchurl stdenv zlib gd texinfo readline emacs wxGTK;
-    inherit (xlibs) libX11 libXt libXaw libXpm;
+  gnuplot = callPackage ../tools/graphics/gnuplot { 
     inherit (gtkLibs) pango;
-    inherit cairo pkgconfig;
     texLive = null;
     lua = null;
   };
@@ -867,23 +675,16 @@ let
       inherit fetchurl stdenv;
     });
 
-  gnused_4_2 = import ../tools/text/gnused/4.2.nix {
-    inherit fetchurl stdenv;
-  };
+  gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
 
   gnutar = useFromStdenv "gnutar"
     (import ../tools/archivers/gnutar {
       inherit fetchurl stdenv;
     });
 
-  gnuvd = import ../tools/misc/gnuvd {
-    inherit fetchurl stdenv;
-  };
+  gnuvd = callPackage ../tools/misc/gnuvd { };
 
-  graphviz = import ../tools/graphics/graphviz {
-    inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
-      libtool fontconfig gd;
-    inherit (xlibs) libXaw;
+  graphviz = callPackage ../tools/graphics/graphviz { 
     inherit (gtkLibs) pango;
   };
 
@@ -891,15 +692,10 @@ let
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal.
    */
-  graphviz_2_0 = import ../tools/graphics/graphviz/2.0.nix {
-    inherit fetchurl stdenv pkgconfig libpng libjpeg expat x11 yacc
-      libtool fontconfig gd;
-    inherit (xlibs) libXaw;
-    inherit (gtkLibs) pango;
-  };
+  graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { 
+    inherit (gtkLibs) pango;  };
 
-  groff = import ../tools/text/groff {
-    inherit fetchurl stdenv perl;
+  groff = callPackage ../tools/text/groff { 
     ghostscript = null;
   };
 
@@ -909,31 +705,23 @@ let
     buggyBiosCDSupport = (getConfig ["grub" "buggyBiosCDSupport"] true);
   };
 
-  grub2 = import ../tools/misc/grub/1.9x.nix {
-    inherit stdenv fetchurl bison gettext ncurses libusb freetype qemu;
-  };
+  grub2 = callPackage ../tools/misc/grub/1.9x.nix { };
 
-  gssdp = import ../development/libraries/gssdp {
-    inherit fetchurl stdenv pkgconfig libxml2 glib;
+  gssdp = callPackage ../development/libraries/gssdp { 
     inherit (gnome) libsoup;
   };
 
-  gt5 = import ../tools/system/gt5 {
-    inherit fetchurl stdenv;
-  };
+  gt5 = callPackage ../tools/system/gt5 { };
 
-  gtkgnutella = import ../tools/networking/p2p/gtk-gnutella {
-    inherit fetchurl stdenv pkgconfig libxml2;
+  gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { 
     inherit (gtkLibs) glib gtk;
   };
 
-  gupnp = import ../development/libraries/gupnp {
-    inherit fetchurl stdenv pkgconfig libxml2 gssdp e2fsprogs glib;
+  gupnp = callPackage ../development/libraries/gupnp { 
     inherit (gnome) libsoup;
   };
 
-  gupnptools = import ../tools/networking/gupnp-tools {
-    inherit fetchurl stdenv gssdp gupnp pkgconfig libxml2 e2fsprogs;
+  gupnptools = callPackage ../tools/networking/gupnp-tools { 
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libsoup libglade gnomeicontheme;
   };
@@ -947,215 +735,115 @@ let
       inherit fetchurl stdenv;
     });
 
-  pigz = import ../tools/compression/pigz {
-    inherit fetchurl stdenv zlib;
-  };
+  pigz = callPackage ../tools/compression/pigz { };
 
-  halibut = import ../tools/typesetting/halibut {
-    inherit fetchurl stdenv perl;
-  };
+  halibut = callPackage ../tools/typesetting/halibut { };
 
-  hddtemp = import ../tools/misc/hddtemp {
-    inherit fetchurl stdenv;
-  };
+  hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf5 = import ../tools/misc/hdf5 {
-    inherit fetchurl stdenv;
-  };
+  hdf5 = callPackage ../tools/misc/hdf5 { };
 
-  hevea = import ../tools/typesetting/hevea {
-    inherit fetchurl stdenv ocaml;
-  };
+  hevea = callPackage ../tools/typesetting/hevea { };
 
-  highlight = import ../tools/text/highlight {
-    inherit fetchurl stdenv getopt;
-  };
+  highlight = callPackage ../tools/text/highlight { };
 
-  host = import ../tools/networking/host {
-    inherit fetchurl stdenv;
-  };
+  host = callPackage ../tools/networking/host { };
 
-  httpfs2 = import ../tools/filesystems/httpfs {
-    inherit fetchurl stdenv pkgconfig fuse openssl
-      asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt;
-  };
+  httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
-  iasl = import ../development/compilers/iasl {
-    inherit fetchurl stdenv bison flex;
-  };
+  iasl = callPackage ../development/compilers/iasl { };
 
-  idutils = import ../tools/misc/idutils {
-    inherit fetchurl stdenv emacs;
-  };
+  idutils = callPackage ../tools/misc/idutils { };
 
-  iftop = import ../tools/networking/iftop {
-    inherit fetchurl stdenv ncurses libpcap;
-  };
+  iftop = callPackage ../tools/networking/iftop { };
 
-  imapsync = import ../tools/networking/imapsync {
-    inherit fetchurl stdenv perl openssl;
+  imapsync = callPackage ../tools/networking/imapsync { 
     inherit (perlPackages) MailIMAPClient;
   };
 
-  inetutils = import ../tools/networking/inetutils {
-    inherit fetchurl stdenv ncurses;
-  };
+  inetutils = callPackage ../tools/networking/inetutils { };
 
-  iodine = import ../tools/networking/iodine {
-    inherit stdenv fetchurl zlib nettools;
-  };
+  iodine = callPackage ../tools/networking/iodine { };
 
-  iperf = import ../tools/networking/iperf {
-    inherit fetchurl stdenv;
-  };
+  iperf = callPackage ../tools/networking/iperf { };
 
-  ipmitool = makeOverridable (import ../tools/system/ipmitool) {
-    inherit fetchurl stdenv openssl;
+  ipmitool = callPackage ../tools/system/ipmitool { 
     static = false;
   };
 
-  jdiskreport = import ../tools/misc/jdiskreport {
-    inherit fetchurl stdenv unzip jdk;
-  };
+  jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
-  jfsrec = import ../tools/filesystems/jfsrec {
-    inherit fetchurl stdenv boost;
-  };
+  jfsrec = callPackage ../tools/filesystems/jfsrec { };
 
-  jfsutils = import ../tools/filesystems/jfsutils {
-    inherit fetchurl stdenv libuuid;
-  };
+  jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
-  jhead = import ../tools/graphics/jhead {
-    inherit stdenv fetchurl;
-  };
+  jhead = callPackage ../tools/graphics/jhead { };
 
-  jing = import ../tools/text/xml/jing {
-    inherit fetchurl stdenv unzip;
-  };
+  jing = callPackage ../tools/text/xml/jing { };
 
-  jing_tools = import ../tools/text/xml/jing/jing-script.nix {
-    inherit fetchurl stdenv unzip jre;
-  };
+  jing_tools = callPackage ../tools/text/xml/jing/jing-script.nix { };
 
-  jnettop = import ../tools/networking/jnettop {
-    inherit fetchurl stdenv autoconf libpcap ncurses pkgconfig;
+  jnettop = callPackage ../tools/networking/jnettop { 
     inherit (gnome) glib;
   };
 
-  jwhois = import ../tools/networking/jwhois {
-    inherit fetchurl stdenv;
-  };
+  jwhois = callPackage ../tools/networking/jwhois { };
 
-  keychain = import ../tools/misc/keychain {
-    inherit fetchurl stdenv;
-  };
+  keychain = callPackage ../tools/misc/keychain { };
 
-  kismet = import ../applications/networking/sniffers/kismet {
-    inherit fetchurl stdenv libpcap ncurses expat pcre;
-  };
+  kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   ktorrent = kde4.ktorrent;
 
-  less = import ../tools/misc/less {
-    inherit fetchurl stdenv ncurses;
-  };
+  less = callPackage ../tools/misc/less { };
 
-  most = import ../tools/misc/most {
-    inherit fetchurl stdenv slang;
-  };
+  most = callPackage ../tools/misc/most { };
 
-  lftp = import ../tools/networking/lftp {
-    inherit fetchurl stdenv readline;
-  };
+  lftp = callPackage ../tools/networking/lftp { };
 
-  libtorrent = import ../tools/networking/p2p/libtorrent {
-    inherit fetchurl stdenv pkgconfig openssl libsigcxx;
-  };
+  libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
-  logrotate = import ../tools/system/logrotate {
-    inherit fetchurl stdenv gzip popt;
-  };
+  logrotate = callPackage ../tools/system/logrotate { };
 
-  lout = import ../tools/typesetting/lout {
-    inherit fetchurl stdenv ghostscript;
-  };
+  lout = callPackage ../tools/typesetting/lout { };
 
-  lrzip = import ../tools/compression/lrzip {
-    inherit fetchurl stdenv zlib lzo bzip2 nasm;
-  };
+  lrzip = callPackage ../tools/compression/lrzip { };
 
-  lsh = import ../tools/networking/lsh {
-    inherit stdenv fetchurl gperf guile gmp zlib liboop gnum4 pam
-      readline nettools lsof procps;
-  };
+  lsh = callPackage ../tools/networking/lsh { };
 
   lzma = xz;
 
-  xz = import ../tools/compression/xz {
-    inherit fetchurl stdenv lib;
-  };
+  xz = callPackage ../tools/compression/xz { };
 
-  lzop = import ../tools/compression/lzop {
-    inherit fetchurl stdenv lzo;
-  };
+  lzop = callPackage ../tools/compression/lzop { };
 
-  mailutils = import ../tools/networking/mailutils {
-    inherit fetchurl stdenv gettext gdbm libtool pam readline ncurses
-      gnutls mysql guile texinfo gnum4;
-  };
+  mailutils = callPackage ../tools/networking/mailutils { };
 
-  man = import ../tools/misc/man {
-    inherit fetchurl stdenv groff less;
-  };
+  man = callPackage ../tools/misc/man { };
 
-  man_db = import ../tools/misc/man-db {
-    inherit fetchurl stdenv db4 groff;
-  };
+  man_db = callPackage ../tools/misc/man-db { };
 
-  memtest86 = import ../tools/misc/memtest86 {
-    inherit fetchurl stdenv;
-  };
+  memtest86 = callPackage ../tools/misc/memtest86 { };
 
-  mc = import ../tools/misc/mc {
-    inherit fetchurl stdenv lib pkgconfig ncurses shebangfix perl zip unzip slang
-      gettext e2fsprogs gpm glib;
-    inherit (xlibs) libX11 libXt;
-  };
+  mc = callPackage ../tools/misc/mc { };
 
-  mcabber = import ../applications/networking/instant-messengers/mcabber {
-    inherit fetchurl stdenv openssl ncurses pkgconfig glib;
-  };
+  mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
-  mcron = import ../tools/system/mcron {
-    inherit fetchurl stdenv guile which ed;
-  };
+  mcron = callPackage ../tools/system/mcron { };
 
-  mdbtools = import ../tools/misc/mdbtools {
-    inherit fetchurl stdenv readline pkgconfig bison glib;
+  mdbtools = callPackage ../tools/misc/mdbtools { 
     flex = flex2535;
   };
 
-  miniupnpd = import ../tools/networking/miniupnpd {
-    inherit fetchurl stdenv iptables;
-  };
+  miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
-  mjpegtools = import ../tools/video/mjpegtools {
-    inherit fetchurl stdenv libjpeg;
-    inherit (xlibs) libX11;
-  };
+  mjpegtools = callPackage ../tools/video/mjpegtools { };
 
-  mkisofs = import ../tools/cd-dvd/mkisofs {
-    inherit fetchurl stdenv gettext;
-  };
+  mkisofs = callPackage ../tools/cd-dvd/mkisofs { };
 
-  mktemp = import ../tools/security/mktemp {
-    inherit fetchurl stdenv;
-  };
+  mktemp = callPackage ../tools/security/mktemp { };
 
-  mldonkey = import ../applications/networking/p2p/mldonkey {
-    inherit fetchurl stdenv ocaml zlib bzip2 ncurses file gd libpng;
-  };
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
   monit = builderDefsPackage ../tools/system/monit {
     flex = flex2535;
@@ -1163,147 +851,84 @@ let
     inherit openssl;
   };
 
-  mpage = import ../tools/text/mpage {
-    inherit fetchurl stdenv;
-  };
+  mpage = callPackage ../tools/text/mpage { };
 
   msf = builderDefsPackage (import ../tools/security/metasploit/3.1.nix) {
     inherit ruby makeWrapper;
   };
 
-  mssys = import ../tools/misc/mssys {
-    inherit fetchurl stdenv gettext;
-  };
+  mssys = callPackage ../tools/misc/mssys { };
 
-  mtdutils = import ../tools/filesystems/mtdutils {
-    inherit stdenv fetchgit libuuid lzo zlib acl;
-  };
+  mtdutils = callPackage ../tools/filesystems/mtdutils { };
 
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
-    multitrandata = import ../tools/text/multitran/data {
-      inherit fetchurl stdenv;
-    };
+    multitrandata = callPackage ../tools/text/multitran/data { };
 
-    libbtree = import ../tools/text/multitran/libbtree {
-      inherit fetchurl stdenv;
-    };
+    libbtree = callPackage ../tools/text/multitran/libbtree { };
 
-    libmtsupport = import ../tools/text/multitran/libmtsupport {
-      inherit fetchurl stdenv;
-    };
+    libmtsupport = callPackage ../tools/text/multitran/libmtsupport { };
 
-    libfacet = import ../tools/text/multitran/libfacet {
-      inherit fetchurl stdenv libmtsupport;
-    };
+    libfacet = callPackage ../tools/text/multitran/libfacet { };
 
-    libmtquery = import ../tools/text/multitran/libmtquery {
-      inherit fetchurl stdenv libmtsupport libfacet libbtree multitrandata;
-    };
+    libmtquery = callPackage ../tools/text/multitran/libmtquery { };
 
-    mtutils = import ../tools/text/multitran/mtutils {
-      inherit fetchurl stdenv libmtsupport libfacet libbtree libmtquery help2man;
-    };
+    mtutils = callPackage ../tools/text/multitran/mtutils { };
   });
 
-  muscleframework = import ../tools/security/muscleframework {
-    inherit fetchurl stdenv libmusclecard pkgconfig pcsclite;
-  };
+  muscleframework = callPackage ../tools/security/muscleframework { };
 
-  muscletool = import ../tools/security/muscletool {
-    inherit fetchurl stdenv pkgconfig libmusclecard pcsclite;
-  };
+  muscletool = callPackage ../tools/security/muscletool { };
 
-  mysql2pgsql = import ../tools/misc/mysql2pgsql {
-    inherit fetchurl stdenv perl shebangfix;
-  };
+  mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
-  namazu = import ../tools/text/namazu {
-    inherit fetchurl stdenv perl;
-  };
+  namazu = callPackage ../tools/text/namazu { };
 
-  nbd = import ../tools/networking/nbd {
-    inherit fetchurl stdenv pkgconfig;
+  nbd = callPackage ../tools/networking/nbd { 
     glib = gtkLibs.glib.override {
       stdenv = makeStaticBinaries stdenv;
-    };
+  };
   };
 
-  nc6 = makeOverridable (import ../tools/networking/nc6) {
-    inherit fetchurl stdenv;
-  };
+  nc6 = callPackage ../tools/networking/nc6 { };
 
-  ncat = import ../tools/networking/ncat {
-    inherit fetchurl stdenv openssl;
-  };
+  ncat = callPackage ../tools/networking/ncat { };
 
-  ncftp = import ../tools/networking/ncftp {
-    inherit fetchurl stdenv ncurses coreutils;
-  };
+  ncftp = callPackage ../tools/networking/ncftp { };
 
-  ncompress = import ../tools/compression/ncompress {
-    inherit fetchurl stdenv;
-  };
+  ncompress = callPackage ../tools/compression/ncompress { };
 
-  netcat = import ../tools/networking/netcat {
-    inherit fetchurl stdenv;
-  };
+  netcat = callPackage ../tools/networking/netcat { };
 
-  netkittftp = import ../tools/networking/netkit/tftp {
-    inherit fetchurl stdenv;
-  };
+  netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
-  netpbm = import ../tools/graphics/netpbm {
-    inherit stdenv fetchsvn libjpeg libpng zlib flex perl libxml2 makeWrapper;
-  };
+  netpbm = callPackage ../tools/graphics/netpbm { };
 
-  netselect = import ../tools/networking/netselect {
-    inherit fetchurl stdenv;
-  };
+  netselect = callPackage ../tools/networking/netselect { };
 
-  nmap = import ../tools/security/nmap {
-    inherit fetchurl stdenv libpcap pkgconfig openssl
-      python pygtk makeWrapper pygobject pycairo;
+  nmap = callPackage ../tools/security/nmap { 
     inherit (pythonPackages) pysqlite;
-    inherit (xlibs) libX11;
     inherit (gtkLibs) gtk;
   };
 
-  ntfs3g = import ../tools/filesystems/ntfs-3g {
-    inherit fetchurl stdenv utillinux;
-  };
+  ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
 
-  ntfsprogs = import ../tools/filesystems/ntfsprogs {
-    inherit fetchurl stdenv libuuid;
-  };
+  ntfsprogs = callPackage ../tools/filesystems/ntfsprogs { };
 
-  ntp = import ../tools/networking/ntp {
-    inherit fetchurl stdenv libcap;
-  };
+  ntp = callPackage ../tools/networking/ntp { };
 
-  nssmdns = import ../tools/networking/nss-mdns {
-    inherit fetchurl stdenv avahi;
-  };
+  nssmdns = callPackage ../tools/networking/nss-mdns { };
 
-  nylon = import ../tools/networking/nylon {
-    inherit fetchurl stdenv libevent;
-  };
+  nylon = callPackage ../tools/networking/nylon { };
 
-  obex_data_server = import ../tools/bluetooth/obex-data-server {
-    inherit fetchurl stdenv pkgconfig libusb dbus_glib bluez openobex;
+  obex_data_server = callPackage ../tools/bluetooth/obex-data-server { 
     inherit (gtkLibs) glib;
   };
 
-  obexd = import ../tools/bluetooth/obexd {
-    inherit fetchurl stdenv pkgconfig dbus openobex bluez glib libical;
-  };
+  obexd = callPackage ../tools/bluetooth/obexd { };
 
-  obexfs = import ../tools/bluetooth/obexfs {
-    inherit fetchurl stdenv pkgconfig fuse obexftp;
-  };
+  obexfs = callPackage ../tools/bluetooth/obexfs { };
 
-  obexftp = import ../tools/bluetooth/obexftp {
-    inherit fetchurl stdenv pkgconfig openobex bluez;
-  };
+  obexftp = callPackage ../tools/bluetooth/obexftp { };
 
   offlineimap = import ../tools/networking/offlineimap {
     inherit fetchurl;
@@ -1320,196 +945,109 @@ let
       };
   };
 
-  opendbx = import ../development/libraries/opendbx {
-    inherit fetchurl stdenv readline mysql postgresql sqlite;
-  };
+  opendbx = callPackage ../development/libraries/opendbx { };
 
-  opendkim = import ../development/libraries/opendkim {
-    inherit fetchurl stdenv openssl libmilter;
-  };
+  opendkim = callPackage ../development/libraries/opendkim { };
 
-  openjade = import ../tools/text/sgml/openjade {
-    inherit fetchurl opensp perl;
+  openjade = callPackage ../tools/text/sgml/openjade { 
     stdenv = overrideGCC stdenv gcc33;
   };
 
-  openobex = import ../tools/bluetooth/openobex {
-    inherit fetchurl stdenv pkgconfig bluez libusb;
-  };
+  openobex = callPackage ../tools/bluetooth/openobex { };
 
-  opensc_0_11_7 = import ../tools/security/opensc/0.11.7.nix {
-    inherit fetchurl stdenv libtool readline zlib openssl libiconv pcsclite
-      libassuan1 pkgconfig pinentry;
-    inherit (xlibs) libXt;
-  };
+  opensc_0_11_7 = callPackage ../tools/security/opensc/0.11.7.nix { };
 
   opensc = opensc_0_11_7;
 
-  opensc_dnie_wrapper = import ../tools/security/opensc-dnie-wrapper {
-    inherit stdenv makeWrapper ed libopensc_dnie;
-  };
+  opensc_dnie_wrapper = callPackage ../tools/security/opensc-dnie-wrapper { };
 
-  openssh = makeOverridable (import ../tools/networking/openssh) {
-    inherit fetchurl stdenv zlib openssl pam perl libedit pkgconfig;
+  openssh = callPackage ../tools/networking/openssh { 
     hpnSupport = false;
     etcDir = "/etc/ssh";
   };
 
-  opensp = import ../tools/text/sgml/opensp {
-    inherit fetchurl xmlto docbook_xml_dtd_412 libxslt docbook_xsl;
-    inherit stdenv;
-  };
+  opensp = callPackage ../tools/text/sgml/opensp { };
 
-  openvpn = import ../tools/networking/openvpn {
-    inherit fetchurl stdenv iproute lzo openssl nettools;
-  };
+  openvpn = callPackage ../tools/networking/openvpn { };
 
-  optipng = import ../tools/graphics/optipng {
-    inherit fetchurl stdenv;
-  };
+  optipng = callPackage ../tools/graphics/optipng { };
 
-  p7zip = import ../tools/archivers/p7zip {
-    inherit fetchurl stdenv;
-  };
+  p7zip = callPackage ../tools/archivers/p7zip { };
 
-  panomatic = import ../tools/graphics/panomatic {
-    inherit fetchurl stdenv boost zlib;
-  };
+  panomatic = callPackage ../tools/graphics/panomatic { };
 
-  par2cmdline = import ../tools/networking/par2cmdline {
-    inherit fetchurl stdenv;
-  };
+  par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
-  parallel = import ../tools/misc/parallel {
-    inherit fetchurl stdenv perl;
-  };
+  parallel = callPackage ../tools/misc/parallel { };
 
-  patchutils = import ../tools/text/patchutils {
-    inherit fetchurl stdenv;
-  };
+  patchutils = callPackage ../tools/text/patchutils { };
 
-  parted = import ../tools/misc/parted {
-    inherit fetchurl stdenv devicemapper libuuid gettext readline
-      utillinuxng xz;
-  };
+  parted = callPackage ../tools/misc/parted { };
 
   patch = gnupatch;
 
-  pbzip2 = import ../tools/compression/pbzip2 {
-    inherit fetchurl stdenv bzip2;
-  };
+  pbzip2 = callPackage ../tools/compression/pbzip2 { };
 
-  pciutils = import ../tools/system/pciutils {
-    inherit fetchurl stdenv zlib;
-  };
+  pciutils = callPackage ../tools/system/pciutils { };
 
-  pcsclite = import ../tools/security/pcsclite {
-    inherit fetchurl stdenv hal pkgconfig dbus;
-  };
+  pcsclite = callPackage ../tools/security/pcsclite { };
 
-  pdf2djvu = import ../tools/typesetting/pdf2djvu {
-    inherit fetchurl stdenv pkgconfig djvulibre poppler fontconfig libjpeg;
-  };
+  pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
-  pdfjam = import ../tools/typesetting/pdfjam {
-    inherit fetchurl stdenv;
-  };
+  pdfjam = callPackage ../tools/typesetting/pdfjam { };
 
-  pdfread = import ../tools/graphics/pdfread {
-    inherit stdenv fetchurl unzip python makeWrapper ghostscript pngnq pil
-      djvulibre unrar optipng;
-  };
+  pdfread = callPackage ../tools/graphics/pdfread { };
 
-  pg_top = import ../tools/misc/pg_top {
-    inherit fetchurl stdenv ncurses postgresql;
-  };
+  pg_top = callPackage ../tools/misc/pg_top { };
 
-  pdsh = makeOverridable (import ../tools/networking/pdsh) {
-    inherit fetchurl stdenv perl readline pam;
+  pdsh = callPackage ../tools/networking/pdsh { 
     rsh = true;			# enable internal rsh implementation
     ssh = openssh;
   };
 
-  pfstools = import ../tools/graphics/pfstools {
-    inherit fetchurl stdenv imagemagick libjpeg libtiff mesa freeglut bzip2 libpng expat openexr;
+  pfstools = callPackage ../tools/graphics/pfstools { 
     qt = qt3;
-    inherit (xlibs) libX11;
   };
 
-  pinentry = makeOverridable (import ../tools/misc/pinentry) {
-    inherit fetchurl stdenv pkgconfig ncurses qt4;
+  pinentry = callPackage ../tools/misc/pinentry { 
     inherit (gnome) glib gtk;
   };
 
-  pius = import ../tools/security/pius {
-    inherit fetchurl stdenv python gnupg;
-  };
+  pius = callPackage ../tools/security/pius { };
 
-  pk2cmd = import ../tools/misc/pk2cmd {
-    inherit fetchurl stdenv libusb makeWrapper;
-  };
+  pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
-  plan9port = import ../tools/system/plan9port {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 xproto libXt xextproto;
-  };
+  plan9port = callPackage ../tools/system/plan9port { };
 
-  ploticus = import ../tools/graphics/ploticus {
-    inherit fetchurl stdenv zlib libpng;
-    inherit (xlibs) libX11;
-  };
+  ploticus = callPackage ../tools/graphics/ploticus { };
 
-  plotutils = import ../tools/graphics/plotutils {
-    inherit fetchurl stdenv libpng;
-  };
+  plotutils = callPackage ../tools/graphics/plotutils { };
 
-  pngnq = import ../tools/graphics/pngnq {
-    inherit fetchurl stdenv libpng;
-  };
+  pngnq = callPackage ../tools/graphics/pngnq { };
 
-  povray = import ../tools/graphics/povray {
-    inherit fetchurl stdenv;
-  };
+  povray = callPackage ../tools/graphics/povray { };
 
-  ppl = import ../development/libraries/ppl {
-    inherit fetchurl stdenv gmpxx perl gnum4;
-  };
+  ppl = callPackage ../development/libraries/ppl { };
 
   /* WARNING: this version is unsuitable for using with a setuid wrapper */
   ppp = builderDefsPackage (import ../tools/networking/ppp) {
   };
 
-  proxychains = import ../tools/networking/proxychains {
-    inherit fetchurl stdenv;
-  };
+  proxychains = callPackage ../tools/networking/proxychains { };
 
-  proxytunnel = import ../tools/misc/proxytunnel {
-    inherit fetchurl stdenv openssl;
-  };
+  proxytunnel = callPackage ../tools/misc/proxytunnel { };
 
-  psmisc = import ../tools/misc/psmisc {
-    inherit stdenv fetchurl ncurses;
-  };
+  psmisc = callPackage ../tools/misc/psmisc { };
 
-  pstoedit = import ../tools/graphics/pstoedit {
-    inherit fetchurl stdenv pkgconfig ghostscript gd zlib plotutils;
-  };
+  pstoedit = callPackage ../tools/graphics/pstoedit { };
 
-  pv = import ../tools/misc/pv {
-    inherit fetchurl stdenv;
-  };
+  pv = callPackage ../tools/misc/pv { };
 
-  pwgen = import ../tools/security/pwgen {
-    inherit stdenv fetchurl;
-  };
+  pwgen = callPackage ../tools/security/pwgen { };
 
-  pydb = import ../tools/pydb {
-    inherit fetchurl stdenv python emacs;
-  };
+  pydb = callPackage ../tools/pydb { };
 
-  pystringtemplate = import ../development/python-modules/stringtemplate {
-    inherit stdenv fetchurl python antlr;
-  };
+  pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pythonDBus = builderDefsPackage (import ../development/python-modules/dbus) {
     inherit python pkgconfig dbus_glib;
@@ -1525,268 +1063,166 @@ let
     inherit (gtkLibs) pango gtk glib;
   };
 
-  openmpi = import ../development/libraries/openmpi {
-    inherit fetchurl stdenv gfortran;
-  };
+  openmpi = callPackage ../development/libraries/openmpi { };
 
-  qdu = import ../tools/misc/qdu {
-      inherit stdenv fetchurl qt3;
-      inherit (xlibs) libX11 libXext;
-  };
+  qdu = callPackage ../tools/misc/qdu { };
 
-  qhull = import ../development/libraries/qhull {
-    inherit stdenv fetchurl;
-  };
+  qhull = callPackage ../development/libraries/qhull { };
 
-  qshowdiff = import ../tools/text/qshowdiff {
-    inherit fetchurl stdenv perl;
+  qshowdiff = callPackage ../tools/text/qshowdiff { 
     qt = qt4;
   };
 
-  rtmpdump = import ../tools/video/rtmpdump {
-    inherit fetchurl stdenv zlib gnutls;
-  };
+  rtmpdump = callPackage ../tools/video/rtmpdump { };
 
-  reiser4progs = import ../tools/filesystems/reiser4progs {
-    inherit fetchurl stdenv libaal;
-  };
+  reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
-  reiserfsprogs = import ../tools/filesystems/reiserfsprogs {
-    inherit fetchurl stdenv libuuid;
-  };
+  reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
-  relfs = makeOverridable (import ../tools/filesystems/relfs) {
-    inherit fetchcvs stdenv ocaml postgresql fuse pcre
-      builderDefs pkgconfig libuuid;
+  relfs = callPackage ../tools/filesystems/relfs { 
     inherit (gnome) gnomevfs GConf;
   };
 
-  remind = import ../tools/misc/remind {
-    inherit fetchurl stdenv;
-  };
+  remind = callPackage ../tools/misc/remind { };
 
-  replace = import ../tools/text/replace {
-    inherit fetchurl stdenv;
-  };
+  replace = callPackage ../tools/text/replace { };
 
   /*
-  rdiff_backup = import ../tools/backup/rdiff-backup {
-    inherit fetchurl stdenv librsync gnused;
-    python=python;
-  };
+  rdiff_backup = callPackage ../tools/backup/rdiff-backup { 
+    python=python;  };
   */
 
-  rsnapshot = import ../tools/backup/rsnapshot {
-    inherit fetchurl stdenv perl openssh rsync;
+  rsnapshot = callPackage ../tools/backup/rsnapshot { 
 
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
     logger = inetutils;
   };
 
-  rlwrap = makeOverridable (import ../tools/misc/rlwrap) {
-    inherit fetchurl stdenv readline;
-  };
+  rlwrap = callPackage ../tools/misc/rlwrap { };
 
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
     inherit ppp;
   };
 
-  rpm = import ../tools/package-management/rpm {
-    inherit fetchurl stdenv cpio zlib bzip2 xz file elfutils nspr nss popt;
+  rpm = callPackage ../tools/package-management/rpm { 
     db4 = db45;
   };
 
-  rrdtool = import ../tools/misc/rrdtool {
-    inherit stdenv fetchurl gettext perl pkgconfig libxml2 cairo;
+  rrdtool = callPackage ../tools/misc/rrdtool { 
     inherit (gtkLibs) pango;
   };
 
-  rtorrent = import ../tools/networking/p2p/rtorrent {
-    inherit fetchurl stdenv libtorrent ncurses pkgconfig libsigcxx curl zlib openssl;
-  };
+  rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
-  rubber = import ../tools/typesetting/rubber {
-    inherit fetchurl stdenv python texinfo;
-  };
+  rubber = callPackage ../tools/typesetting/rubber { };
 
-  rxp = import ../tools/text/xml/rxp {
-    inherit fetchurl stdenv;
-  };
+  rxp = callPackage ../tools/text/xml/rxp { };
 
-  rzip = import ../tools/compression/rzip {
-    inherit fetchurl stdenv bzip2;
-  };
+  rzip = callPackage ../tools/compression/rzip { };
 
-  s3backer = import ../tools/filesystems/s3backer {
-    inherit fetchurl stdenv pkgconfig fuse curl expat;
-  };
+  s3backer = callPackage ../tools/filesystems/s3backer { };
 
-  s3sync = import ../tools/networking/s3sync {
-    inherit fetchurl stdenv ruby makeWrapper;
-  };
+  s3sync = callPackage ../tools/networking/s3sync { };
 
-  sablotron = import ../tools/text/xml/sablotron {
-    inherit fetchurl stdenv expat;
-  };
+  sablotron = callPackage ../tools/text/xml/sablotron { };
 
-  screen = import ../tools/misc/screen {
-    inherit fetchurl stdenv ncurses;
-  };
+  screen = callPackage ../tools/misc/screen { };
 
-  scrot = import ../tools/graphics/scrot {
-    inherit fetchurl stdenv giblib x11;
-  };
+  scrot = callPackage ../tools/graphics/scrot { };
 
-  seccure = import ../tools/security/seccure/0.4.nix {
-    inherit fetchurl stdenv libgcrypt;
-  };
+  seccure = callPackage ../tools/security/seccure/0.4.nix { };
 
   setserial = builderDefsPackage (import ../tools/system/setserial) {
     inherit groff;
   };
 
-  sharutils = import ../tools/archivers/sharutils {
-    inherit fetchurl stdenv gettext;
-  };
+  sharutils = callPackage ../tools/archivers/sharutils { };
 
-  shebangfix = import ../tools/misc/shebangfix {
-    inherit stdenv perl;
-  };
+  shebangfix = callPackage ../tools/misc/shebangfix { };
 
-  slimrat = import ../tools/networking/slimrat {
-    inherit fetchurl stdenv perl makeWrapper;
+  slimrat = callPackage ../tools/networking/slimrat { 
     inherit (perlPackages) WWWMechanize LWP;
   };
 
-  slsnif = import ../tools/misc/slsnif {
-    inherit fetchurl stdenv;
-  };
+  slsnif = callPackage ../tools/misc/slsnif { };
 
-  smartmontools = import ../tools/system/smartmontools {
-    inherit fetchurl stdenv;
-  };
+  smartmontools = callPackage ../tools/system/smartmontools { };
 
-  fusesmb = makeOverridable (import ../tools/filesystems/fusesmb) {
-    inherit fetchurl stdenv samba fuse;
-  };
+  fusesmb = callPackage ../tools/filesystems/fusesmb { };
 
-  socat = import ../tools/networking/socat {
-    inherit fetchurl stdenv openssl;
-  };
+  socat = callPackage ../tools/networking/socat { };
 
-  sourceHighlight = import ../tools/text/source-highlight {
-    inherit fetchurl stdenv boost;
-  };
+  sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
   };
 
-  squashfsTools = import ../tools/filesystems/squashfs {
-    inherit fetchurl stdenv zlib;
-  };
+  squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
-  sshfsFuse = import ../tools/filesystems/sshfs-fuse {
-    inherit fetchurl stdenv pkgconfig fuse glib;
-  };
+  sshfsFuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
-  sudo = import ../tools/security/sudo {
-    inherit fetchurl stdenv coreutils pam groff;
-  };
+  sudo = callPackage ../tools/security/sudo { };
 
   suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) {
   };
 
-  ssmtp = import ../tools/networking/ssmtp {
-    inherit fetchurl stdenv openssl;
+  ssmtp = callPackage ../tools/networking/ssmtp { 
     tlsSupport = true;
   };
 
-  ssss = makeOverridable (import ../tools/security/ssss) {
-    inherit fetchurl stdenv gmp;
-  };
+  ssss = callPackage ../tools/security/ssss { };
 
-  stun = import ../tools/networking/stun {
-    inherit fetchurl stdenv;
-  };
+  stun = callPackage ../tools/networking/stun { };
 
-  stunnel = import ../tools/networking/stunnel {
-    inherit fetchurl stdenv openssl;
-  };
+  stunnel = callPackage ../tools/networking/stunnel { };
 
   su = shadow;
 
-  swec = import ../tools/networking/swec {
-    inherit fetchurl stdenv makeWrapper perl;
+  swec = callPackage ../tools/networking/swec { 
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
 
-  svnfs = import ../tools/filesystems/svnfs {
-    inherit fetchurl stdenv automake autoconf perl fuse subversion apr;
-  };
+  svnfs = callPackage ../tools/filesystems/svnfs { };
 
-  system_config_printer = import ../tools/misc/system-config-printer {
-    inherit stdenv fetchurl perl perlXMLParser desktop_file_utils;
-  };
+  system_config_printer = callPackage ../tools/misc/system-config-printer { };
 
-  sitecopy = import ../tools/networking/sitecopy {
-    inherit fetchurl stdenv openssl;
+  sitecopy = callPackage ../tools/networking/sitecopy { 
     neon = neon026;
   };
 
-  privoxy = import ../tools/networking/privoxy {
-    inherit fetchurl stdenv automake zlib pcre w3m;
+  privoxy = callPackage ../tools/networking/privoxy { 
     autoconf = autoconf213;
   };
 
-  tcpdump = import ../tools/networking/tcpdump {
-    inherit fetchurl stdenv libpcap;
-  };
+  tcpdump = callPackage ../tools/networking/tcpdump { };
 
-  tcng = import ../tools/networking/tcng {
-    inherit fetchurl stdenv iproute bison flex db4 perl;
+  tcng = callPackage ../tools/networking/tcng { 
     kernel = linux_2_6_28;
   };
 
-  telnet = import ../tools/networking/telnet {
-    inherit fetchurl stdenv ncurses;
-  };
+  telnet = callPackage ../tools/networking/telnet { };
 
-  texmacs = import ../applications/office/texmacs {
-    inherit fetchurl stdenv texLive guile;
-    inherit (xlibs) libX11 libXext;
-  };
+  texmacs = callPackage ../applications/office/texmacs { };
 
-  tor = import ../tools/security/tor {
-    inherit fetchurl stdenv libevent openssl zlib;
-  };
+  tor = callPackage ../tools/security/tor { };
 
-  ttf2pt1 = import ../tools/misc/ttf2pt1 {
-    inherit fetchurl stdenv perl freetype;
-  };
+  ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
-  ucl = import ../development/libraries/ucl {
-    inherit fetchurl stdenv;
-  };
+  ucl = callPackage ../development/libraries/ucl { };
 
-  ufraw = import ../applications/graphics/ufraw {
-    inherit fetchurl stdenv pkgconfig gettext bzip2 zlib
-      libjpeg libtiff cfitsio exiv2 lcms gtkimageview;
+  ufraw = callPackage ../applications/graphics/ufraw { 
     inherit (gnome) gtk;
   };
 
-  upx = import ../tools/compression/upx {
-    inherit fetchurl stdenv ucl zlib;
-  };
+  upx = callPackage ../tools/compression/upx { };
 
   vbetool = builderDefsPackage ../tools/system/vbetool {
     inherit pciutils libx86 zlib;
   };
 
-  viking = import ../applications/misc/viking {
-    inherit fetchurl stdenv pkgconfig intltool gettext expat curl
-      gpsd bc file;
+  viking = callPackage ../applications/misc/viking { 
     inherit (gtkLibs) gtk;
   };
 
@@ -1796,155 +1232,91 @@ let
       libXp;
   };
 
-  vpnc = import ../tools/networking/vpnc {
-    inherit fetchurl stdenv libgcrypt perl gawk
-      nettools makeWrapper;
-  };
+  vpnc = callPackage ../tools/networking/vpnc { };
 
-  vtun = import ../tools/networking/vtun {
-    inherit fetchurl stdenv lzo openssl zlib yacc flex;
-  };
+  vtun = callPackage ../tools/networking/vtun { };
 
-  testdisk = import ../tools/misc/testdisk {
-    inherit fetchurl stdenv ncurses libjpeg e2fsprogs zlib openssl;
-  };
+  testdisk = callPackage ../tools/misc/testdisk { };
 
-  htmlTidy = import ../tools/text/html-tidy {
-    inherit fetchcvs stdenv autoconf automake libtool;
-  };
+  htmlTidy = callPackage ../tools/text/html-tidy { };
 
-  tigervnc = import ../tools/admin/tigervnc {
-    inherit fetchsvn stdenv gettext autoconf automake cvs libtool nasm xkeyboard_config;
-    inherit (xorg) libX11 libXext libICE libXtst libXi libSM xorgserver utilmacros pixman xkbcomp
-      fontutil;
+  tigervnc = callPackage ../tools/admin/tigervnc { 
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
       xorg.fontbhlucidatypewriter75dpi ];
   };
 
-  tightvnc = import ../tools/admin/tightvnc {
-    inherit fetchurl stdenv x11 zlib libjpeg perl;
-    inherit (xlibs) imake gccmakedep libXmu libXaw libXpm libXp xauth;
+  tightvnc = callPackage ../tools/admin/tightvnc { 
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
       xorg.fontbhlucidatypewriter75dpi ];
   };
 
-  time = import ../tools/misc/time {
-    inherit fetchurl stdenv;
-  };
+  time = callPackage ../tools/misc/time { };
 
-  tm = import ../tools/system/tm {
-    inherit fetchurl stdenv;
-  };
+  tm = callPackage ../tools/system/tm { };
 
-  trang = import ../tools/text/xml/trang {
-    inherit fetchurl stdenv unzip jre;
-  };
+  trang = callPackage ../tools/text/xml/trang { };
 
-  tre = import ../development/libraries/tre {
-    inherit fetchurl stdenv;
-  };
+  tre = callPackage ../development/libraries/tre { };
 
-  ts = import ../tools/system/ts {
-    inherit fetchurl stdenv;
-  };
+  ts = callPackage ../tools/system/ts { };
 
-  transfig = import ../tools/graphics/transfig {
-    inherit fetchurl stdenv libpng libjpeg zlib;
-    inherit (xlibs) imake;
-  };
+  transfig = callPackage ../tools/graphics/transfig { };
 
-  truecrypt = import ../applications/misc/truecrypt {
-    inherit fetchurl stdenv pkgconfig fuse devicemapper;
-    inherit wxGTK;
+  truecrypt = callPackage ../applications/misc/truecrypt { 
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
   };
 
-  ttmkfdir = import ../tools/misc/ttmkfdir {
-    inherit stdenv fetchurl freetype fontconfig libunwind libtool bison;
+  ttmkfdir = callPackage ../tools/misc/ttmkfdir { 
     flex = flex2534;
   };
 
-  unbound = import ../tools/networking/unbound {
-    inherit fetchurl stdenv openssl;
-  };
+  unbound = callPackage ../tools/networking/unbound { };
 
-  units = import ../tools/misc/units {
-    inherit fetchurl stdenv;
-  };
+  units = callPackage ../tools/misc/units { };
 
-  unrar = import ../tools/archivers/unrar {
-    inherit fetchurl stdenv;
-  };
+  unrar = callPackage ../tools/archivers/unrar { };
 
-  unshield = import ../tools/archivers/unshield {
-    inherit fetchurl stdenv zlib;
-  };
+  unshield = callPackage ../tools/archivers/unshield { };
 
   unzip = unzip552;
 
   # TODO: remove in the next stdenv update.
-  unzip552 = import ../tools/archivers/unzip/5.52.nix {
-    inherit fetchurl stdenv;
-  };
+  unzip552 = callPackage ../tools/archivers/unzip/5.52.nix { };
 
-  unzip60 = import ../tools/archivers/unzip/6.0.nix {
-    inherit fetchurl stdenv bzip2;
-  };
+  unzip60 = callPackage ../tools/archivers/unzip/6.0.nix { };
 
-  uptimed = import ../tools/system/uptimed {
-    inherit fetchurl stdenv automake autoconf libtool;
-  };
+  uptimed = callPackage ../tools/system/uptimed { };
 
-  w3cCSSValidator = import ../tools/misc/w3c-css-validator {
-    inherit fetchurl stdenv apacheAnt jre sourceFromHead;
+  w3cCSSValidator = callPackage ../tools/misc/w3c-css-validator { 
     tomcat = tomcat6;
   };
 
-  wdfs = import ../tools/filesystems/wdfs {
-    inherit stdenv fetchurl fuse pkgconfig glib;
+  wdfs = callPackage ../tools/filesystems/wdfs { 
     neon = neon026;
   };
 
-  wdiff = import ../tools/text/wdiff {
-    inherit fetchurl stdenv;
-  };
+  wdiff = callPackage ../tools/text/wdiff { };
 
-  webalizer = import ../tools/networking/webalizer {
-    inherit stdenv fetchurl zlib libpng gd db4 geoip;
-  };
+  webalizer = callPackage ../tools/networking/webalizer { };
 
   webdruid = builderDefsPackage ../tools/admin/webdruid {
     inherit zlib libpng freetype gd which
       libxml2 geoip;
   };
 
-  wget = import ../tools/networking/wget {
-    inherit fetchurl stdenv gettext gnutls perl;
+  wget = callPackage ../tools/networking/wget { 
     inherit (perlPackages) LWP;
   };
 
-  which = import ../tools/system/which {
-    inherit fetchurl stdenv readline;
-  };
+  which = callPackage ../tools/system/which { };
 
-  wicd = import ../tools/networking/wicd {
-    inherit stdenv fetchurl python pygobject pycairo pyGtkGlade pythonDBus
-            wpa_supplicant dhcp wirelesstools nettools iproute;
-  };
+  wicd = callPackage ../tools/networking/wicd { };
 
-  wv = import ../tools/misc/wv {
-    inherit fetchurl stdenv libpng zlib imagemagick
-      pkgconfig libgsf libxml2 bzip2 glib;
-  };
+  wv = callPackage ../tools/misc/wv { };
 
-  wv2 = import ../tools/misc/wv2 {
-    inherit stdenv fetchurl pkgconfig libgsf libxml2 glib;
-  };
+  wv2 = callPackage ../tools/misc/wv2 { };
 
-  x11_ssh_askpass = import ../tools/networking/x11-ssh-askpass {
-    inherit fetchurl stdenv x11;
-    inherit (xorg) imake;
-  };
+  x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
   xbursttools = import ../tools/misc/xburst-tools {
     inherit stdenv fetchgit autoconf automake libusb confuse;
@@ -1978,67 +1350,43 @@ let
         pkgsCross.gccCrossStageStatic;
   };
 
-  xclip = import ../tools/misc/xclip {
-    inherit fetchurl stdenv x11;
-    inherit (xlibs) libXmu;
-  };
+  xclip = callPackage ../tools/misc/xclip { };
 
-  xfsprogs = import ../tools/filesystems/xfsprogs {
-    inherit fetchurl stdenv libtool gettext libuuid;
-  };
+  xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
-  xmlroff = import ../tools/typesetting/xmlroff {
-    inherit fetchurl stdenv pkgconfig libxml2 libxslt popt;
+  xmlroff = callPackage ../tools/typesetting/xmlroff { 
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) libgnomeprint;
-    inherit pangoxsl;
   };
 
-  xmlto = import ../tools/typesetting/xmlto {
-    inherit fetchurl stdenv flex libxml2 libxslt
-      docbook_xml_dtd_42 docbook_xsl w3m bash getopt makeWrapper;
-  };
+  xmlto = callPackage ../tools/typesetting/xmlto { };
 
-  xmltv = import ../tools/misc/xmltv {
-    inherit fetchurl perl perlPackages;
-  };
+  xmltv = callPackage ../tools/misc/xmltv { };
 
   xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
     inherit python setuptools;
   };
 
-  xpf = import ../tools/text/xml/xpf {
-    inherit fetchurl stdenv python;
+  xpf = callPackage ../tools/text/xml/xpf { 
     libxml2 = libxml2Python;
   };
 
-  xsel = import ../tools/misc/xsel {
-    inherit fetchurl stdenv x11;
-  };
+  xsel = callPackage ../tools/misc/xsel { };
 
-  zdelta = import ../tools/compression/zdelta {
-    inherit fetchurl stdenv;
-  };
+  zdelta = callPackage ../tools/compression/zdelta { };
 
-  zile = import ../applications/editors/zile {
-    inherit fetchurl stdenv ncurses help2man;
-  };
+  zile = callPackage ../applications/editors/zile { };
 
-  zip = import ../tools/archivers/zip {
-    inherit fetchurl stdenv;
-  };
+  zip = callPackage ../tools/archivers/zip { };
 
-  zsync = import ../tools/compression/zsync {
-    inherit fetchurl stdenv;
-  };
+  zsync = callPackage ../tools/compression/zsync { };
 
   ### SHELLS
 
 
   bash = lowPrio (useFromStdenv "bash" bashReal);
 
-  bashReal = makeOverridable (import ../shells/bash) {
-    inherit fetchurl stdenv bison;
+  bashReal = callPackage ../shells/bash { 
     texinfo = null;
   };
 
@@ -2047,21 +1395,13 @@ let
     interactive = true;
   });
 
-  dash = import ../shells/dash {
-    inherit fetchurl stdenv;
-  };
+  dash = callPackage ../shells/dash { };
 
-  tcsh = import ../shells/tcsh {
-    inherit fetchurl stdenv ncurses;
-  };
+  tcsh = callPackage ../shells/tcsh { };
 
-  rush = import ../shells/rush {
-    inherit fetchurl stdenv;
-  };
+  rush = callPackage ../shells/rush { };
 
-  zsh = import ../shells/zsh {
-    inherit fetchurl stdenv ncurses coreutils;
-  };
+  zsh = callPackage ../shells/zsh { };
 
 
   ### DEVELOPMENT / COMPILERS
@@ -2073,19 +1413,12 @@ let
   abcPatchable = patches :
     import ../development/compilers/abc/default.nix {
       inherit stdenv fetchurl patches jre apacheAnt;
-      javaCup = import ../development/libraries/java/cup {
-        inherit stdenv fetchurl jdk;
-      };
+      javaCup = callPackage ../development/libraries/java/cup { };
     };
 
-  aspectj =
-    import ../development/compilers/aspectj {
-      inherit stdenv fetchurl jre;
-    };
+  aspectj = callPackage ../development/compilers/aspectj { };
 
-  bigloo = import ../development/compilers/bigloo {
-    inherit fetchurl stdenv;
-  };
+  bigloo = callPackage ../development/compilers/bigloo { };
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
@@ -2093,29 +1426,22 @@ let
     buildClang = true;
   };
 
-  dylan = import ../development/compilers/gwydion-dylan {
-    inherit fetchurl stdenv perl boehmgc yacc flex readline;
+  dylan = callPackage ../development/compilers/gwydion-dylan { 
     dylan =
       import ../development/compilers/gwydion-dylan/binary.nix {
         inherit fetchurl stdenv;
-      };
+  };
   };
 
   ecl = builderDefsPackage ../development/compilers/ecl {
     inherit gmp mpfr;
   };
 
-  adobe_flex_sdk = import ../development/compilers/adobe-flex-sdk {
-    inherit fetchurl stdenv unzip;
-  };
+  adobe_flex_sdk = callPackage ../development/compilers/adobe-flex-sdk { };
 
-  fpc = import ../development/compilers/fpc {
-    inherit fetchurl stdenv gawk;
-  };
+  fpc = callPackage ../development/compilers/fpc { };
 
-  gambit = import ../development/compilers/gambit {
-    inherit fetchurl stdenv builderDefsPackage;
-  };
+  gambit = callPackage ../development/compilers/gambit { };
 
   gcc = gcc44;
 
@@ -2419,42 +1745,36 @@ let
   # Old versions of ghc that currently don't build because the binary
   # is broken.
   /*
-  haskellPackages_ghc642 = import ./haskell-packages.nix {
-    inherit pkgs;
+  haskellPackages_ghc642 = callPackage ./haskell-packages.nix { 
     ghc = import ../development/compilers/ghc/6.4.2.nix {
       inherit fetchurl stdenv perl ncurses readline m4 gmp;
-      ghc = ghc642Binary;
-    };
+      ghc = ghc642Binary;  };
   };
 
-  haskellPackages_ghc661 = import ./haskell-packages.nix {
-    inherit pkgs;
+  haskellPackages_ghc661 = callPackage ./haskell-packages.nix { 
     ghc = import ../development/compilers/ghc/6.6.1.nix {
       inherit fetchurl stdenv readline perl58 gmp ncurses m4;
       ghc = ghc642Binary;
-    };
+  };
   };
 
-  haskellPackages_ghc682 = import ./haskell-packages.nix {
-    inherit pkgs;
+  haskellPackages_ghc682 = callPackage ./haskell-packages.nix { 
     ghc = import ../development/compilers/ghc/6.8.2.nix {
       inherit fetchurl stdenv perl gmp ncurses m4;
       readline = readline5;
       ghc = ghc642Binary;
-    };
+  };
   };
 
   haskellPackages_ghc683 = recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
-    ghc = import ../development/compilers/ghc/6.8.3.nix {
-      inherit fetchurl stdenv readline perl gmp ncurses m4;
+    ghc = callPackage ../development/compilers/ghc/6.8.3.nix { 
       ghc = ghc642Binary;
       haddock = import ../development/tools/documentation/haddock/boot.nix {
         inherit gmp;
         cabal = import ../development/libraries/haskell/cabal/cabal.nix {
           inherit stdenv fetchurl lib;
-          ghc = ghc642Binary;
-        };
+          ghc = ghc642Binary;    };
       };
     };
   });
@@ -2470,19 +1790,15 @@ let
   haskellPackagesFun610 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
-    ghc = import ghcPath {
-      inherit fetchurl stdenv perl ncurses gmp libedit;
-      ghc = ghc6101Binary;
-    };
+    ghc = callPackage ghcPath { 
+      ghc = ghc6101Binary;    };
   });
 
   haskellPackagesFun612 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
-    ghc = import ghcPath {
-      inherit fetchurl stdenv perl ncurses gmp;
-      ghc = ghc6101Binary;
-    };
+    ghc = callPackage ghcPath { 
+      ghc = ghc6101Binary;    };
   });
 
   # Currently active GHC versions.
@@ -2512,11 +1828,9 @@ let
   /*
   haskellPackages_ghcHEAD = lowPrio (import ./haskell-packages.nix {
     inherit pkgs;
-    ghc = import ../development/compilers/ghc/6.11.nix {
-      inherit fetchurl stdenv perl ncurses gmp libedit;
+    ghc = callPackage ../development/compilers/ghc/6.11.nix { 
       inherit (haskellPackages) happy alex; # hope these aren't required for the final version
-      ghc = ghc6101Binary;
-    };
+      ghc = ghc6101Binary;    };
   });
   */
 
@@ -2530,39 +1844,26 @@ let
     inherit cmake;
   };
 
-  go = import ../development/compilers/go {
-    inherit stdenv fetchhg glibc bison ed which bash makeWrapper perl;
-  };
+  go = callPackage ../development/compilers/go { };
 
-  gprolog = import ../development/compilers/gprolog {
-    inherit fetchurl stdenv;
-  };
+  gprolog = callPackage ../development/compilers/gprolog { };
 
-  gwt = import ../development/compilers/gwt {
-    inherit stdenv fetchurl jdk;
+  gwt = callPackage ../development/compilers/gwt { 
     inherit (gtkLibs) glib gtk pango atk;
-    inherit (xlibs) libX11 libXt;
     libstdcpp5 = gcc33.gcc;
   };
 
-  ikarus = import ../development/compilers/ikarus {
-    inherit stdenv fetchurl gmp;
-  };
+  ikarus = callPackage ../development/compilers/ikarus { };
 
   #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
   # commented out because it's using the new configuration style proposal which is unstable
-  hugs = import ../development/compilers/hugs {
-    inherit fetchurl composableDerivation;
-  };
+  hugs = callPackage ../development/compilers/hugs { };
 
-  path64 = import ../development/compilers/path64 {
-    inherit fetchgit perl flex bison gmp mpfr cmake;
+  path64 = callPackage ../development/compilers/path64 { 
     stdenv = stdenv2;
   };
 
-  openjdkDarwin = import ../development/compilers/openjdk-darwin {
-    inherit fetchurl stdenv;
-  };
+  openjdkDarwin = callPackage ../development/compilers/openjdk-darwin { };
 
   j2sdk14x = (
     assert system == "i686-linux";
@@ -2594,9 +1895,7 @@ let
       inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper cabextract;
     }));
 
-  jikes = import ../development/compilers/jikes {
-    inherit fetchurl stdenv;
-  };
+  jikes = callPackage ../development/compilers/jikes { };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit fpc makeWrapper;
@@ -2604,128 +1903,78 @@ let
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
   };
 
-  llvm = makeOverridable (import ../development/compilers/llvm) {
-    inherit fetchurl fetchsvn stdenv gcc flex perl libtool groff;
-  };
+  llvm = callPackage ../development/compilers/llvm { };
 
-  mitscheme = import ../development/compilers/mit-scheme {
-    inherit fetchurl stdenv gnum4;
-  };
+  mitscheme = callPackage ../development/compilers/mit-scheme { };
 
-  mono = import ../development/compilers/mono {
-    inherit fetchurl stdenv bison pkgconfig gettext perl glib;
-  };
+  mono = callPackage ../development/compilers/mono { };
 
-  monoDLLFixer = import ../build-support/mono-dll-fixer {
-    inherit stdenv perl;
-  };
+  monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
-  mozart = import ../development/compilers/mozart {
-    inherit fetchurl stdenv flex bison perl gmp zlib tcl tk gdbm m4 x11 emacs;
-  };
+  mozart = callPackage ../development/compilers/mozart { };
 
-  neko = import ../development/compilers/neko {
-    inherit sourceFromHead fetchurl lib pkgconfig composableDerivation
-      boehmgc apacheHttpd mysql zlib sqlite pcre apr makeWrapper;
+  neko = callPackage ../development/compilers/neko { 
     inherit (gtkLibs) gtk;
   };
 
-  nasm = import ../development/compilers/nasm {
-    inherit fetchurl stdenv;
-  };
+  nasm = callPackage ../development/compilers/nasm { };
 
   ocaml = ocaml_3_11_1;
 
-  ocaml_3_08_0 = import ../development/compilers/ocaml/3.08.0.nix {
-    inherit fetchurl stdenv x11;
-  };
+  ocaml_3_08_0 = callPackage ../development/compilers/ocaml/3.08.0.nix { };
 
-  ocaml_3_10_0 = import ../development/compilers/ocaml/3.10.0.nix {
-    inherit fetchurl stdenv x11 ncurses;
-  };
+  ocaml_3_10_0 = callPackage ../development/compilers/ocaml/3.10.0.nix { };
 
-  ocaml_3_11_1 = import ../development/compilers/ocaml/3.11.1.nix {
-    inherit fetchurl stdenv x11 ncurses;
-  };
+  ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
-  opencxx = import ../development/compilers/opencxx {
-    inherit fetchurl stdenv libtool;
+  opencxx = callPackage ../development/compilers/opencxx { 
     gcc = gcc33;
   };
 
-  qcmm = import ../development/compilers/qcmm {
+  qcmm = callPackage ../development/compilers/qcmm { 
     lua   = lua4;
     ocaml = ocaml_3_08_0;
-    inherit fetchurl stdenv mk noweb groff;
   };
 
-  roadsend = import ../development/compilers/roadsend {
-    inherit fetchurl bigloo curl composableDerivation;
-    inherit mysql libxml2 fcgi;
-  };
+  roadsend = callPackage ../development/compilers/roadsend { };
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper clisp;
   };
 
-  scala = import ../development/compilers/scala {
-    inherit stdenv fetchurl;
-  };
+  scala = callPackage ../development/compilers/scala { };
 
-  stalin = import ../development/compilers/stalin {
-    inherit stdenv fetchurl ncompress;
-    inherit (xlibs) libX11;
-  };
+  stalin = callPackage ../development/compilers/stalin { };
 
   strategoPackages = strategoPackages017;
 
-  strategoPackages016 = import ../development/compilers/strategoxt/0.16.nix {
-    inherit fetchurl pkgconfig aterm getopt;
+  strategoPackages016 = callPackage ../development/compilers/strategoxt/0.16.nix { 
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  strategoPackages017 = import ../development/compilers/strategoxt/0.17.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk ncurses;
+  strategoPackages017 = callPackage ../development/compilers/strategoxt/0.17.nix { 
     readline = readline5;
   };
 
-  strategoPackages018 = import ../development/compilers/strategoxt/0.18.nix {
-    inherit fetchurl stdenv pkgconfig aterm getopt jdk makeStaticBinaries ncurses;
+  strategoPackages018 = callPackage ../development/compilers/strategoxt/0.18.nix { 
     readline = readline5;
   };
 
-  metaBuildEnv = import ../development/compilers/meta-environment/meta-build-env {
-    inherit fetchurl stdenv;
-  };
+  metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
-  swiProlog = import ../development/compilers/swi-prolog {
-    inherit fetchurl stdenv gmp readline openssl libjpeg unixODBC zlib;
-    inherit (xlibs) libXinerama libXft libXpm libSM libXt;
-  };
+  swiProlog = callPackage ../development/compilers/swi-prolog { };
 
-  tinycc = import ../development/compilers/tinycc {
-    inherit fetchurl stdenv perl texinfo;
-  };
+  tinycc = callPackage ../development/compilers/tinycc { };
 
-  vala = import ../development/compilers/vala {
-    inherit stdenv fetchurl yacc flex glib pkgconfig;
-  };
+  vala = callPackage ../development/compilers/vala { };
 
-  visualcpp = import ../development/compilers/visual-c++ {
-    inherit fetchurl stdenv cabextract;
-  };
+  visualcpp = callPackage ../development/compilers/visual-c++ { };
 
-  vs90wrapper = import ../development/compilers/vs90wrapper {
-    inherit stdenv;
-  };
+  vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
-  webdsl = import ../development/compilers/webdsl {
-    inherit stdenv fetchurl pkgconfig strategoPackages;
-  };
+  webdsl = callPackage ../development/compilers/webdsl { };
 
-  win32hello = import ../development/compilers/visual-c++/test {
-    inherit fetchurl stdenv visualcpp windowssdk;
-  };
+  win32hello = callPackage ../development/compilers/visual-c++/test { };
 
   wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
@@ -2767,13 +2016,9 @@ let
   };
 
   # prolog
-  yap = import ../development/compilers/yap {
-    inherit fetchurl stdenv;
-  };
+  yap = callPackage ../development/compilers/yap { };
 
-  yasm = import ../development/compilers/yasm {
-    inherit fetchurl stdenv;
-  };
+  yasm = callPackage ../development/compilers/yasm { };
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -2781,43 +2026,22 @@ let
     inherit sbcl;
   };
 
-  clisp = import ../development/interpreters/clisp {
-    inherit fetchurl stdenv libsigsegv gettext
-      readline ncurses coreutils pcre zlib libffi libffcall;
-    inherit (xlibs) libX11 libXau libXt xproto
-      libXpm libXext xextproto;
-  };
+  clisp = callPackage ../development/interpreters/clisp { };
 
   # compatibility issues in 2.47 - at list 2.44.1 is known good
   # for sbcl bootstrap
-  clisp_2_44_1 = import ../development/interpreters/clisp/2.44.1.nix {
-    inherit fetchurl stdenv gettext
-      readline ncurses coreutils pcre zlib libffi libffcall;
-    inherit (xlibs) libX11 libXau libXt xproto
-      libXpm libXext xextproto;
-    libsigsegv = libsigsegv_25;
-  };
+  clisp_2_44_1 = callPackage ../development/interpreters/clisp/2.44.1.nix { 
+    libsigsegv = libsigsegv_25;  };
 
-  erlang = import ../development/interpreters/erlang {
-    inherit fetchurl stdenv perl gnum4 ncurses openssl;
-  };
+  erlang = callPackage ../development/interpreters/erlang { };
 
-  erlangR13B = import ../development/interpreters/erlang/R13B.nix {
-    inherit fetchurl stdenv perl gnum4 ncurses openssl;
-  };
+  erlangR13B = callPackage ../development/interpreters/erlang/R13B.nix { };
 
-  groovy = import ../development/interpreters/groovy {
-    inherit stdenv fetchurl unzip;
-  };
+  groovy = callPackage ../development/interpreters/groovy { };
 
-  guile = import ../development/interpreters/guile {
-    inherit fetchurl stdenv readline libtool gmp gawk makeWrapper;
-  };
+  guile = callPackage ../development/interpreters/guile { };
 
-  guile_1_9 = import ../development/interpreters/guile/1.9.nix {
-    inherit fetchurl stdenv readline libtool gmp gawk makeWrapper
-      libunistring pkgconfig boehmgc libffi;
-  };
+  guile_1_9 = callPackage ../development/interpreters/guile/1.9.nix { };
 
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
@@ -2825,25 +2049,15 @@ let
       freeglut e2fsprogs libsamplerate pcre libevent libedit;
   };
 
-  kaffe =  import ../development/interpreters/kaffe {
-    inherit fetchurl stdenv jikes alsaLib xlibs;
-  };
+  kaffe = callPackage ../development/interpreters/kaffe { };
 
-  lua4 = import ../development/interpreters/lua-4 {
-    inherit fetchurl stdenv;
-  };
+  lua4 = callPackage ../development/interpreters/lua-4 { };
 
-  lua5 = import ../development/interpreters/lua-5 {
-    inherit fetchurl stdenv ncurses readline;
-  };
+  lua5 = callPackage ../development/interpreters/lua-5 { };
 
-  maude = import ../development/interpreters/maude {
-    inherit fetchurl stdenv flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper;
-  };
+  maude = callPackage ../development/interpreters/maude { };
 
-  octave = import ../development/interpreters/octave {
-    inherit stdenv fetchurl gfortran readline ncurses perl flex qhull texinfo;
-    inherit (xlibs) libX11;
+  octave = callPackage ../development/interpreters/octave { 
     # Needed because later gm versions require an initialization the actual octave is not
     # doing.
     # http://www-old.cae.wisc.edu/pipermail/octave-maintainers/2010-February/015295.html
@@ -2851,20 +2065,13 @@ let
   };
 
   # mercurial (hg) bleeding edge version
-  octaveHG = import ../development/interpreters/octave/hg.nix {
-    inherit fetchurl sourceFromHead readline ncurses perl flex atlas getConfig glibc qhull gfortran;
-    inherit automake autoconf bison gperf lib python gnuplot texinfo texLive;
-    inherit stdenv;
-    inherit (xlibs) libX11;
-  };
+  octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
 
-  perl58 = import ../development/interpreters/perl-5.8 {
-    inherit fetchurl stdenv;
+  perl58 = callPackage ../development/interpreters/perl-5.8 { 
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
-  perl510 = makeOverridable (import ../development/interpreters/perl-5.10) {
-    inherit stdenv;
+  perl510 = callPackage ../development/interpreters/perl-5.10 { 
     fetchurl = fetchurlBoot;
   };
 
@@ -2878,9 +2085,7 @@ let
       zlib curl gd postgresql openssl pkgconfig sqlite getConfig libiconv libjpeg libpng;
   };
 
-  phpXdebug = import ../development/interpreters/php-xdebug {
-    inherit stdenv fetchurl php autoconf automake;
-  };
+  phpXdebug = callPackage ../development/interpreters/php-xdebug { };
 
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
     inherit cairo fontconfig freetype libjpeg libpng openssl
@@ -2890,9 +2095,7 @@ let
       libXt;
   };
 
-  polyml = import ../development/compilers/polyml {
-    inherit stdenv fetchurl;
-  };
+  polyml = callPackage ../development/compilers/polyml { };
 
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
@@ -2900,9 +2103,7 @@ let
   pythonBase = python26Base;
   pythonFull = python26Full;
 
-  python24 = import ../development/interpreters/python/2.4 {
-    inherit fetchurl stdenv zlib bzip2;
-  };
+  python24 = callPackage ../development/interpreters/python/2.4 { };
 
   python25Base = makeOverridable (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
@@ -2948,21 +2149,13 @@ let
 
   pyrex = pyrex095;
 
-  pyrex095 = import ../development/interpreters/pyrex/0.9.5.nix {
-    inherit fetchurl stdenv builderDefs python;
-  };
+  pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
 
-  pyrex096 = import ../development/interpreters/pyrex/0.9.6.nix {
-    inherit fetchurl stdenv builderDefs python;
-  };
+  pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
-  qi = makeOverridable (import ../development/compilers/qi) {
-    inherit clisp stdenv fetchurl builderDefs unzip;
-  };
+  qi = callPackage ../development/compilers/qi { };
 
-  ruby18 = import ../development/interpreters/ruby {
-    inherit fetchurl stdenv readline ncurses zlib openssl gdbm;
-  };
+  ruby18 = callPackage ../development/interpreters/ruby { };
   #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
   ruby = ruby18;
 
@@ -2970,17 +2163,11 @@ let
     inherit pkgs stdenv;
   });
 
-  rake = import ../development/ruby-modules/rake {
-    inherit fetchurl stdenv ruby ;
-  };
+  rake = callPackage ../development/ruby-modules/rake { };
 
-  rubySqlite3 = import ../development/ruby-modules/sqlite3 {
-    inherit fetchurl stdenv ruby sqlite;
-  };
+  rubySqlite3 = callPackage ../development/ruby-modules/sqlite3 { };
 
-  rLang = import ../development/interpreters/r-lang {
-    inherit fetchurl stdenv readline perl gfortran libpng zlib;
-    inherit (xorg) libX11 libXt;
+  rLang = callPackage ../development/interpreters/r-lang { 
     withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
@@ -2989,25 +2176,15 @@ let
   };
   rubygems = rubygemsFun ruby;
 
-  rq = import ../applications/networking/cluster/rq {
-    inherit fetchurl stdenv sqlite ruby ;
-  };
+  rq = callPackage ../applications/networking/cluster/rq { };
 
-  scsh = import ../development/interpreters/scsh {
-    inherit stdenv fetchurl;
-  };
+  scsh = callPackage ../development/interpreters/scsh { };
 
-  spidermonkey = import ../development/interpreters/spidermonkey {
-    inherit fetchurl stdenv readline;
-  };
+  spidermonkey = callPackage ../development/interpreters/spidermonkey { };
 
-  sysPerl = import ../development/interpreters/sys-perl {
-    inherit stdenv;
-  };
+  sysPerl = callPackage ../development/interpreters/sys-perl { };
 
-  tcl = import ../development/interpreters/tcl {
-    inherit fetchurl stdenv;
-  };
+  tcl = callPackage ../development/interpreters/tcl { };
 
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
@@ -3018,54 +2195,37 @@ let
 
   ### DEVELOPMENT / MISC
 
-  avrgcclibc = import ../development/misc/avr-gcc-with-avr-libc {
-    inherit fetchurl stdenv writeTextFile gnumake coreutils gnutar bzip2
-      gnugrep gnused gawk;
+  avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc { 
     gcc = gcc40;
   };
 
-  avr8burnomat = import ../development/misc/avr8-burn-omat {
-    inherit fetchurl stdenv unzip;
-  };
+  avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
   /*
-  toolbus = import ../development/interpreters/toolbus {
-    inherit stdenv fetchurl atermjava toolbuslib aterm yacc flex;
-  };
+  toolbus = callPackage ../development/interpreters/toolbus { };
   */
 
   sourceFromHead = import ../build-support/source-from-head-fun.nix {
     inherit getConfig;
   };
 
-  ecj = makeOverridable (import ../development/eclipse/ecj) {
-    inherit fetchurl stdenv unzip ant gcj;
-  };
+  ecj = callPackage ../development/eclipse/ecj { };
 
   ecjDarwin = ecj.override { gcj = openjdkDarwin; ant = antDarwin; };
 
-  jdtsdk = import ../development/eclipse/jdt-sdk {
-    inherit fetchurl stdenv unzip;
-  };
+  jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
-  jruby116 = import ../development/interpreters/jruby {
-    inherit fetchurl stdenv;
-  };
+  jruby116 = callPackage ../development/interpreters/jruby { };
 
-  guileCairo = import ../development/guile-modules/guile-cairo {
-    inherit fetchurl stdenv guile pkgconfig cairo guileLib;
-  };
+  guileCairo = callPackage ../development/guile-modules/guile-cairo { };
 
-  guileGnome = import ../development/guile-modules/guile-gnome {
-    inherit fetchurl stdenv guile guileLib gwrap pkgconfig guileCairo;
+  guileGnome = callPackage ../development/guile-modules/guile-gnome { 
     gconf = gnome.GConf;
     inherit (gnome) glib gnomevfs gtk libglade libgnome libgnomecanvas
       libgnomeui pango;
   };
 
-  guileLib = import ../development/guile-modules/guile-lib {
-    inherit fetchurl stdenv guile texinfo;
-  };
+  guileLib = callPackage ../development/guile-modules/guile-lib { };
 
   windowssdk = (
     import ../development/misc/windows-sdk {
@@ -3076,67 +2236,42 @@ let
   ### DEVELOPMENT / TOOLS
 
 
-  antlr = import ../development/tools/parsing/antlr/2.7.7.nix {
-    inherit fetchurl stdenv jdk python;
-  };
+  antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
-  antlr3 = import ../development/tools/parsing/antlr {
-    inherit fetchurl stdenv jre;
-  };
+  antlr3 = callPackage ../development/tools/parsing/antlr { };
 
   antDarwin = apacheAnt.override rec { jdk = openjdkDarwin ; name = "ant-" + jdk.name ; } ;
 
   ant = apacheAnt;
-  apacheAnt = makeOverridable (import ../development/tools/build-managers/apache-ant) {
-    inherit fetchurl stdenv jdk;
-    name = "ant-" + jdk.name;
-  };
+  apacheAnt = callPackage ../development/tools/build-managers/apache-ant { 
+    name = "ant-" + jdk.name;  };
 
-  apacheAnt14 = import ../development/tools/build-managers/apache-ant {
-    inherit fetchurl stdenv;
+  apacheAnt14 = callPackage ../development/tools/build-managers/apache-ant { 
     jdk = j2sdk14x;
     name = "ant-" + j2sdk14x.name;
   };
 
-  apacheAntGcj = import ../development/tools/build-managers/apache-ant/from-source.nix {
-    inherit fetchurl stdenv;
-    inherit junit; # must be either pre-built or built with GCJ *alone*
+  apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {  # must be either pre-built or built with GCJ *alone*
     gcj = gcj.gcc; # use the raw GCJ, which has ${gcj}/lib/jvm
   };
 
-  autobuild = import ../development/tools/misc/autobuild {
-    inherit fetchurl stdenv makeWrapper perl openssh rsync;
-  };
+  autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = import ../development/tools/misc/autoconf {
-    inherit fetchurl stdenv perl m4;
-  };
+  autoconf = callPackage ../development/tools/misc/autoconf { };
 
-  autoconf213 = import ../development/tools/misc/autoconf/2.13.nix {
-    inherit fetchurl stdenv perl m4 lzma;
-  };
+  autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
 
   automake = automake110x;
 
-  automake17x = import ../development/tools/misc/automake/automake-1.7.x.nix {
-    inherit fetchurl stdenv perl autoconf makeWrapper;
-  };
+  automake17x = callPackage ../development/tools/misc/automake/automake-1.7.x.nix { };
 
-  automake19x = import ../development/tools/misc/automake/automake-1.9.x.nix {
-    inherit fetchurl stdenv perl autoconf makeWrapper;
-  };
+  automake19x = callPackage ../development/tools/misc/automake/automake-1.9.x.nix { };
 
-  automake110x = import ../development/tools/misc/automake/automake-1.10.x.nix {
-    inherit fetchurl stdenv perl autoconf makeWrapper;
-  };
+  automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
-  automake111x = import ../development/tools/misc/automake/automake-1.11.x.nix {
-    inherit fetchurl stdenv perl autoconf makeWrapper;
-  };
+  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
-  avrdude = import ../development/tools/misc/avrdude {
-    inherit fetchurl flex yacc composableDerivation texLive;
-  };
+  avrdude = callPackage ../development/tools/misc/avrdude { };
 
   binutils = useFromStdenv "binutils"
     (import ../development/tools/misc/binutils {
@@ -3151,83 +2286,49 @@ let
 
   bison = bison23;
 
-  bison1875 = import ../development/tools/parsing/bison/bison-1.875.nix {
-    inherit fetchurl stdenv m4;
-  };
+  bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
-  bison23 = import ../development/tools/parsing/bison/bison-2.3.nix {
-    inherit fetchurl stdenv m4;
-  };
+  bison23 = callPackage ../development/tools/parsing/bison/bison-2.3.nix { };
 
-  bison24 = import ../development/tools/parsing/bison/bison-2.4.nix {
-    inherit fetchurl stdenv m4;
-  };
+  bison24 = callPackage ../development/tools/parsing/bison/bison-2.4.nix { };
 
-  buildbot = import ../development/tools/build-managers/buildbot {
-    inherit fetchurl stdenv buildPythonPackage texinfo;
+  buildbot = callPackage ../development/tools/build-managers/buildbot { 
     inherit (pythonPackages) twisted;
   };
 
-  byacc = import ../development/tools/parsing/byacc {
-    inherit fetchurl stdenv;
-  };
+  byacc = callPackage ../development/tools/parsing/byacc { };
 
-  camlp5_strict = import ../development/tools/ocaml/camlp5 {
-    inherit stdenv fetchurl ocaml;
-  };
+  camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
 
-  camlp5_transitional = import ../development/tools/ocaml/camlp5 {
-    inherit stdenv fetchurl ocaml;
+  camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 { 
     transitional = true;
   };
 
-  ccache = import ../development/tools/misc/ccache {
-    inherit fetchurl stdenv;
-  };
+  ccache = callPackage ../development/tools/misc/ccache { };
 
-  ctags = import ../development/tools/misc/ctags {
-    inherit fetchurl sourceFromHead stdenv automake autoconf;
-  };
+  ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
     inherit pkgs ctags writeScriptBin;
   };
 
-  cmake = import ../development/tools/build-managers/cmake {
-    inherit fetchurl stdenv replace ncurses;
-  };
+  cmake = callPackage ../development/tools/build-managers/cmake { };
 
-  coccinelle = import ../development/tools/misc/coccinelle {
-    inherit fetchurl stdenv perl python ocaml ncurses makeWrapper;
-  };
+  coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
-  cppi = import ../development/tools/misc/cppi {
-    inherit fetchurl stdenv xz;
-  };
+  cppi = callPackage ../development/tools/misc/cppi { };
 
-  cproto = import ../development/tools/misc/cproto {
-    inherit fetchurl stdenv flex bison;
-  };
+  cproto = callPackage ../development/tools/misc/cproto { };
 
-  cflow = import ../development/tools/misc/cflow {
-    inherit fetchurl stdenv gettext emacs;
-  };
+  cflow = callPackage ../development/tools/misc/cflow { };
 
-  cscope = import ../development/tools/misc/cscope {
-    inherit fetchurl stdenv ncurses pkgconfig emacs;
-  };
+  cscope = callPackage ../development/tools/misc/cscope { };
 
-  dejagnu = import ../development/tools/misc/dejagnu {
-    inherit fetchurl stdenv expect makeWrapper;
-  };
+  dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
-  ddd = import ../development/tools/misc/ddd {
-    inherit fetchurl stdenv lesstif ncurses;
-    inherit (xlibs) libX11 libXt;
-  };
+  ddd = callPackage ../development/tools/misc/ddd { };
 
-  distcc = makeOverridable (import ../development/tools/misc/distcc) {
-    inherit fetchurl stdenv popt python avahi pkgconfig;
+  distcc = callPackage ../development/tools/misc/distcc { 
     inherit (gtkLibs) gtk;
     static = false;
   };
@@ -3236,57 +2337,33 @@ let
     inherit python pil makeWrapper;
   };
 
-  doxygen = import ../development/tools/documentation/doxygen {
-    inherit fetchurl stdenv graphviz perl flex bison gnumake;
-    inherit (xlibs) libX11 libXext;
+  doxygen = callPackage ../development/tools/documentation/doxygen { 
     qt = if getPkgConfig "doxygen" "qt4" true then qt4 else null;
   };
 
-  eggdbus = import ../development/tools/misc/eggdbus {
-    inherit stdenv fetchurl pkgconfig dbus dbus_glib glib;
-  };
+  eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
-  elfutils = import ../development/tools/misc/elfutils {
-    inherit fetchurl stdenv m4;
-  };
+  elfutils = callPackage ../development/tools/misc/elfutils { };
 
-  epm = import ../development/tools/misc/epm {
-    inherit fetchurl stdenv rpm;
-  };
+  epm = callPackage ../development/tools/misc/epm { };
 
-  emma = import ../development/tools/analysis/emma {
-    inherit fetchurl stdenv unzip;
-  };
+  emma = callPackage ../development/tools/analysis/emma { };
 
-  findbugs = import ../development/tools/analysis/findbugs {
-    inherit fetchurl stdenv;
-  };
+  findbugs = callPackage ../development/tools/analysis/findbugs { };
 
-  pmd = import ../development/tools/analysis/pmd {
-    inherit fetchurl stdenv unzip;
-  };
+  pmd = callPackage ../development/tools/analysis/pmd { };
 
-  jdepend = import ../development/tools/analysis/jdepend {
-    inherit fetchurl stdenv unzip;
-  };
+  jdepend = callPackage ../development/tools/analysis/jdepend { };
 
-  checkstyle = import ../development/tools/analysis/checkstyle {
-    inherit fetchurl stdenv unzip;
-  };
+  checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
   flex = flex254a;
 
-  flex2535 = import ../development/tools/parsing/flex/flex-2.5.35.nix {
-    inherit fetchurl stdenv yacc m4;
-  };
+  flex2535 = callPackage ../development/tools/parsing/flex/flex-2.5.35.nix { };
 
-  flex2534 = import ../development/tools/parsing/flex/flex-2.5.34.nix {
-    inherit fetchurl stdenv yacc m4;
-  };
+  flex2534 = callPackage ../development/tools/parsing/flex/flex-2.5.34.nix { };
 
-  flex2533 = import ../development/tools/parsing/flex/flex-2.5.33.nix {
-    inherit fetchurl stdenv yacc m4;
-  };
+  flex2533 = callPackage ../development/tools/parsing/flex/flex-2.5.33.nix { };
 
   # Note: 2.5.4a is much older than 2.5.35 but happens first when sorting
   # alphabetically, hence the low priority.
@@ -3296,112 +2373,67 @@ let
 
   m4 = gnum4;
 
-  global = import ../development/tools/misc/global {
-    inherit fetchurl stdenv;
-  };
+  global = callPackage ../development/tools/misc/global { };
 
-  gnum4 = makeOverridable (import ../development/tools/misc/gnum4) {
-    inherit fetchurl stdenv;
-  };
+  gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake = useFromStdenv "gnumake"
     (import ../development/tools/build-managers/gnumake {
       inherit fetchurl stdenv;
     });
 
-  gnumake380 = import ../development/tools/build-managers/gnumake-3.80 {
-    inherit fetchurl stdenv;
-  };
+  gnumake380 = callPackage ../development/tools/build-managers/gnumake-3.80 { };
 
-  gradle = import ../development/tools/build-managers/gradle {
-    inherit stdenv fetchurl unzip;
-  };
+  gradle = callPackage ../development/tools/build-managers/gradle { };
 
-  gperf = import ../development/tools/misc/gperf {
-    inherit fetchurl stdenv;
-  };
+  gperf = callPackage ../development/tools/misc/gperf { };
 
-  gtkdialog = import ../development/tools/misc/gtkdialog {
-    inherit fetchurl stdenv pkgconfig;
+  gtkdialog = callPackage ../development/tools/misc/gtkdialog { 
     inherit (gtkLibs) gtk;
   };
 
-  guileLint = import ../development/tools/guile/guile-lint {
-    inherit fetchurl stdenv guile;
-  };
+  guileLint = callPackage ../development/tools/guile/guile-lint { };
 
-  gwrap = import ../development/tools/guile/g-wrap {
-    inherit fetchurl stdenv guile libffi pkgconfig guileLib glib;
-  };
+  gwrap = callPackage ../development/tools/guile/g-wrap { };
 
-  help2man = import ../development/tools/misc/help2man {
-    inherit fetchurl stdenv perl gettext;
+  help2man = callPackage ../development/tools/misc/help2man { 
     inherit (perlPackages) LocaleGettext;
   };
 
-  iconnamingutils = import ../development/tools/misc/icon-naming-utils {
-    inherit fetchurl stdenv perl;
+  iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { 
     inherit (perlPackages) XMLSimple;
   };
 
-  indent = import ../development/tools/misc/indent {
-    inherit fetchurl stdenv;
-  };
+  indent = callPackage ../development/tools/misc/indent { };
 
-  inotifyTools = import ../development/tools/misc/inotify-tools {
-    inherit fetchurl stdenv;
-  };
+  inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
-  ired = import ../development/tools/analysis/radare/ired.nix {
-    inherit fetchurl stdenv;
-  };
+  ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
-  jikespg = import ../development/tools/parsing/jikespg {
-    inherit fetchurl stdenv;
-  };
+  jikespg = callPackage ../development/tools/parsing/jikespg { };
 
-  lcov = import ../development/tools/analysis/lcov {
-    inherit fetchurl stdenv perl;
-  };
+  lcov = callPackage ../development/tools/analysis/lcov { };
 
   libtool = libtool_2;
 
-  libtool_1_5 = import ../development/tools/misc/libtool {
-    inherit fetchurl stdenv perl m4;
-  };
+  libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
-  libtool_2 = import ../development/tools/misc/libtool/libtool2.nix {
-    inherit fetchurl stdenv lzma perl m4;
-  };
+  libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
 
-  lsof = import ../development/tools/misc/lsof {
-    inherit fetchurl stdenv;
-  };
+  lsof = callPackage ../development/tools/misc/lsof { };
 
-  ltrace = makeOverridable (import ../development/tools/misc/ltrace) {
-    inherit fetchurl stdenv elfutils;
-  };
+  ltrace = callPackage ../development/tools/misc/ltrace { };
 
-  mig = import ../os-specific/gnu/mig {
-    inherit fetchgit stdenv autoconf automake flex bison machHeaders;
-  };
+  mig = callPackage ../os-specific/gnu/mig { };
 
-  mk = import ../development/tools/build-managers/mk {
-    inherit fetchurl stdenv;
-  };
+  mk = callPackage ../development/tools/build-managers/mk { };
 
-  noweb = import ../development/tools/literate-programming/noweb {
-    inherit fetchurl stdenv gawk;
-  };
+  noweb = callPackage ../development/tools/literate-programming/noweb { };
 
-  omake = import ../development/tools/ocaml/omake {
-    inherit stdenv fetchurl ocaml makeWrapper ncurses;
-  };
+  omake = callPackage ../development/tools/ocaml/omake { };
 
 
-  openocd = import ../development/tools/misc/openocd {
-    inherit fetchurl stdenv libftdi;
-  };
+  openocd = callPackage ../development/tools/misc/openocd { };
 
   oprofile = import ../development/tools/profiling/oprofile {
     inherit fetchurl stdenv binutils popt makeWrapper gawk which gnugrep;
@@ -3419,13 +2451,9 @@ let
       inherit fetchurl stdenv;
     });
 
-  patchelf06 = import ../development/tools/misc/patchelf/0.6.nix {
-    inherit fetchurl stdenv;
-  };
+  patchelf06 = callPackage ../development/tools/misc/patchelf/0.6.nix { };
 
-  pmccabe = import ../development/tools/misc/pmccabe {
-    inherit fetchurl stdenv;
-  };
+  pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   /**
    * pkgconfig is optionally taken from the stdenv to allow bootstrapping
@@ -3444,9 +2472,7 @@ let
      */
   pkgconfig = forceBuildDrv pkgconfigReal;
 
-  radare = import ../development/tools/analysis/radare {
-    inherit stdenv fetchurl pkgconfig libusb readline gtkdialog python
-      ruby libewf perl;
+  radare = callPackage ../development/tools/analysis/radare { 
     inherit (gtkLibs) gtk;
     inherit (gnome) vte;
     lua = lua5;
@@ -3456,88 +2482,52 @@ let
     luaBindings = getConfig ["radare" "luaBindings"] false;
   };
 
-  ragel = import ../development/tools/parsing/ragel {
-    inherit composableDerivation fetchurl transfig texLive;
-  };
+  ragel = callPackage ../development/tools/parsing/ragel { };
 
-  remake = import ../development/tools/build-managers/remake {
-      inherit fetchurl stdenv;
-    };
+  remake = callPackage ../development/tools/build-managers/remake { };
 
   # couldn't find the source yet
-  seleniumRCBin = import ../development/tools/selenium/remote-control {
-    inherit fetchurl stdenv;
-    jre = jdk;
-  };
+  seleniumRCBin = callPackage ../development/tools/selenium/remote-control { 
+    jre = jdk;  };
 
-  scons = import ../development/tools/build-managers/scons {
-    inherit fetchurl stdenv python makeWrapper;
-  };
+  scons = callPackage ../development/tools/build-managers/scons { };
 
-  simpleBuildTool = import ../development/tools/build-managers/simple-build-tool {
-    inherit fetchurl stdenv;
-  };
+  simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
 
-  sloccount = import ../development/tools/misc/sloccount {
-    inherit fetchurl stdenv perl;
-  };
+  sloccount = callPackage ../development/tools/misc/sloccount { };
 
-  sparse = import ../development/tools/analysis/sparse {
-    inherit fetchurl stdenv pkgconfig;
-  };
+  sparse = callPackage ../development/tools/analysis/sparse { };
 
-  spin = import ../development/tools/analysis/spin {
-    inherit fetchurl stdenv flex yacc tk;
-  };
+  spin = callPackage ../development/tools/analysis/spin { };
 
-  splint = import ../development/tools/analysis/splint {
-    inherit fetchurl stdenv flex;
-  };
+  splint = callPackage ../development/tools/analysis/splint { };
 
-  strace = import ../development/tools/misc/strace {
-    inherit fetchurl stdenv;
-  };
+  strace = callPackage ../development/tools/misc/strace { };
 
-  swig = import ../development/tools/misc/swig {
-    inherit fetchurl stdenv boost;
-  };
+  swig = callPackage ../development/tools/misc/swig { };
 
   swigWithJava = swig;
 
-  swftools = import ../tools/video/swftools {
-    inherit fetchurl stdenv zlib;
-  };
+  swftools = callPackage ../tools/video/swftools { };
 
-  texinfo49 = import ../development/tools/misc/texinfo/4.9.nix {
-    inherit fetchurl stdenv ncurses;
-  };
+  texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
 
-  texinfo = makeOverridable (import ../development/tools/misc/texinfo) {
-    inherit fetchurl stdenv ncurses lzma;
-  };
+  texinfo = callPackage ../development/tools/misc/texinfo { };
 
-  texi2html = import ../development/tools/misc/texi2html {
-    inherit fetchurl stdenv perl;
-  };
+  texi2html = callPackage ../development/tools/misc/texi2html { };
 
-  uisp = import ../development/tools/misc/uisp {
-    inherit fetchurl stdenv;
-  };
+  uisp = callPackage ../development/tools/misc/uisp { };
 
-  gdb = import ../development/tools/misc/gdb {
-    inherit fetchurl stdenv ncurses gmp mpfr expat texinfo;
+  gdb = callPackage ../development/tools/misc/gdb { 
     readline = readline5;
   };
 
-  gdbCross = import ../development/tools/misc/gdb {
-    inherit fetchurl stdenv ncurses gmp mpfr expat texinfo;
+  gdbCross = callPackage ../development/tools/misc/gdb { 
     readline = readline5;
     target = crossSystem;
   };
 
-  valgrind = import ../development/tools/analysis/valgrind {
-    inherit fetchurl stdenv perl gdb autoconf automake;
-  };
+  valgrind = callPackage ../development/tools/analysis/valgrind { };
 
   xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
     flex = flex2535;
@@ -3548,21 +2538,15 @@ let
 
   yacc = bison;
 
-  yodl = import ../development/tools/misc/yodl {
-    inherit stdenv fetchurl perl;
-  };
+  yodl = callPackage ../development/tools/misc/yodl { };
 
 
   ### DEVELOPMENT / LIBRARIES
 
 
-  a52dec = import ../development/libraries/a52dec {
-    inherit fetchurl stdenv;
-  };
+  a52dec = callPackage ../development/libraries/a52dec { };
 
-  aalib = import ../development/libraries/aalib {
-    inherit fetchurl stdenv ncurses;
-  };
+  aalib = callPackage ../development/libraries/aalib { };
 
   acl = useFromStdenv "acl"
     (import ../development/libraries/acl {
@@ -3574,32 +2558,19 @@ let
     static = getPkgConfig "adns" "static" (stdenv ? isStatic || stdenv ? isDietLibC);
   };
 
-  agg = import ../development/libraries/agg {
-    inherit fetchurl stdenv autoconf automake libtool pkgconfig
-      freetype SDL;
-    inherit (xlibs) libX11;
-  };
+  agg = callPackage ../development/libraries/agg { };
 
-  amrnb = import ../development/libraries/amrnb {
-    inherit fetchurl stdenv unzip;
-  };
+  amrnb = callPackage ../development/libraries/amrnb { };
 
-  amrwb = import ../development/libraries/amrwb {
-    inherit fetchurl stdenv unzip;
-  };
+  amrwb = callPackage ../development/libraries/amrwb { };
 
-  apr = makeOverridable (import ../development/libraries/apr) {
-    inherit fetchurl stdenv;
-  };
+  apr = callPackage ../development/libraries/apr { };
 
-  aprutil = makeOverridable (import ../development/libraries/apr-util) {
-    inherit fetchurl stdenv apr expat db4;
+  aprutil = callPackage ../development/libraries/apr-util { 
     bdbSupport = true;
   };
 
-  aspell = import ../development/libraries/aspell {
-    inherit fetchurl stdenv perl;
-  };
+  aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (import ../development/libraries/aspell/dictionaries.nix {
     inherit fetchurl stdenv aspell which;
@@ -3611,9 +2582,7 @@ let
     inherit fetchurl stdenv;
   });
 
-  aterm25 = makeOverridable (import ../development/libraries/aterm/2.5.nix) {
-    inherit fetchurl stdenv;
-  };
+  aterm25 = callPackage ../development/libraries/aterm/2.5.nix { };
 
   aterm28 = lowPrio (import ../development/libraries/aterm/2.8.nix {
     inherit fetchurl stdenv;
@@ -3624,34 +2593,19 @@ let
       inherit stdenv fetchurl gettext libtool;
     });
 
-  aubio = import ../development/libraries/aubio {
-    inherit fetchurl stdenv pkgconfig fftw libsndfile libsamplerate python
-      alsaLib jackaudio;
-  };
+  aubio = callPackage ../development/libraries/aubio { };
 
-  axis = import ../development/libraries/axis {
-    inherit fetchurl stdenv;
-  };
+  axis = callPackage ../development/libraries/axis { };
 
-  babl = import ../development/libraries/babl {
-    inherit fetchurl stdenv;
-  };
+  babl = callPackage ../development/libraries/babl { };
 
-  beecrypt = import ../development/libraries/beecrypt {
-    inherit fetchurl stdenv m4;
-  };
+  beecrypt = callPackage ../development/libraries/beecrypt { };
 
-  boehmgc = import ../development/libraries/boehm-gc {
-    inherit fetchurl stdenv;
-  };
+  boehmgc = callPackage ../development/libraries/boehm-gc { };
 
-  boolstuff = import ../development/libraries/boolstuff {
-    inherit fetchurl stdenv pkgconfig;
-  };
+  boolstuff = callPackage ../development/libraries/boolstuff { };
 
-  boost = makeOverridable (import ../development/libraries/boost) {
-    inherit fetchurl stdenv icu expat zlib bzip2 python;
-  };
+  boost = callPackage ../development/libraries/boost { };
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
@@ -3664,139 +2618,84 @@ let
     inherit perl;
   };
 
-  buddy = import ../development/libraries/buddy {
-    inherit fetchurl stdenv bison;
-  };
+  buddy = callPackage ../development/libraries/buddy { };
 
-  cairo = makeOverridable (import ../development/libraries/cairo) {
-    inherit fetchurl stdenv pkgconfig x11 fontconfig freetype zlib libpng;
-    inherit (xlibs) pixman libxcb xcbutil;
-  };
+  cairo = callPackage ../development/libraries/cairo { };
 
-  cairomm = import ../development/libraries/cairomm {
-    inherit fetchurl stdenv pkgconfig cairo x11 fontconfig freetype libsigcxx;
-  };
+  cairomm = callPackage ../development/libraries/cairomm { };
 
-  scmccid = import ../development/libraries/scmccid {
-    inherit fetchurl stdenv libusb patchelf;
-  };
+  scmccid = callPackage ../development/libraries/scmccid { };
 
-  ccrtp = import ../development/libraries/ccrtp {
-    inherit fetchurl stdenv pkgconfig openssl libgcrypt commoncpp2;
-  };
+  ccrtp = callPackage ../development/libraries/ccrtp { };
 
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
     inherit cmake freeglut mesa;
     inherit (xlibs) libX11 xproto inputproto libXi libXmu;
   };
 
-  chmlib = import ../development/libraries/chmlib {
-    inherit fetchurl stdenv;
-  };
+  chmlib = callPackage ../development/libraries/chmlib { };
 
-  cil = import ../development/libraries/cil {
-    inherit stdenv fetchurl ocaml perl;
-  };
+  cil = callPackage ../development/libraries/cil { };
 
-  cilaterm = import ../development/libraries/cil-aterm {
+  cilaterm = callPackage ../development/libraries/cil-aterm { 
     stdenv = overrideInStdenv stdenv [gnumake380];
-    inherit fetchurl perl ocaml;
   };
 
-  clanlib = import ../development/libraries/clanlib {
-    inherit fetchurl stdenv zlib libpng libjpeg libvorbis libogg mesa;
-    inherit (xlibs) libX11 xf86vidmodeproto libXmu libXxf86vm;
-  };
+  clanlib = callPackage ../development/libraries/clanlib { };
 
-  clapack = import ../development/libraries/clapack {
-    inherit fetchurl cmake;
+  clapack = callPackage ../development/libraries/clapack { 
     stdenv = stdenv2;
   };
 
-  classads = import ../development/libraries/classads {
-    inherit fetchurl stdenv;
-  };
+  classads = callPackage ../development/libraries/classads { };
 
-  classpath = import ../development/libraries/java/classpath {
+  classpath = callPackage ../development/libraries/java/classpath { 
     javac = gcj;
     jvm = gcj;
-    inherit fetchurl stdenv pkgconfig antlr;
     inherit (gtkLibs) gtk;
     gconf = gnome.GConf;
   };
 
-  clearsilver = import ../development/libraries/clearsilver {
-    inherit fetchurl stdenv python;
-  };
+  clearsilver = callPackage ../development/libraries/clearsilver { };
 
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
   };
 
-  cluceneCore = (import ../development/libraries/clucene-core) {
-    inherit fetchurl stdenv;
-  };
+  cluceneCore = callPackage ../development/libraries/clucene-core { };
 
-  clutter = import ../development/libraries/clutter {
-    inherit fetchurl stdenv pkgconfig mesa cairo;
+  clutter = callPackage ../development/libraries/clutter { 
     inherit (gnome) glib pango gtk;
-    inherit (xorg) libXi libXfixes libXdamage libXcomposite;
   };
 
-  clutter_gtk = import ../development/libraries/clutter-gtk {
-    inherit fetchurl stdenv pkgconfig clutter;
+  clutter_gtk = callPackage ../development/libraries/clutter-gtk { 
     inherit (gnome) gtk;
   };
 
-  commoncpp2 = import ../development/libraries/commoncpp2 {
-    inherit stdenv fetchurl;
-  };
+  commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
 
-  confuse = import ../development/libraries/confuse {
-    inherit fetchurl stdenv;
-  };
+  confuse = callPackage ../development/libraries/confuse { };
 
-  consolekit = makeOverridable (import ../development/libraries/consolekit) {
-    inherit stdenv fetchurl pkgconfig dbus_glib zlib pam polkit expat glib;
-    inherit (xlibs) libX11;
-  };
+  consolekit = callPackage ../development/libraries/consolekit { };
 
-  coredumper = import ../development/libraries/coredumper {
-    inherit fetchurl stdenv;
-  };
+  coredumper = callPackage ../development/libraries/coredumper { };
 
-  ctl = import ../development/libraries/ctl {
-    inherit fetchurl stdenv ilmbase;
-  };
+  ctl = callPackage ../development/libraries/ctl { };
 
-  cppunit = import ../development/libraries/cppunit {
-    inherit fetchurl stdenv;
-  };
+  cppunit = callPackage ../development/libraries/cppunit { };
 
-  cracklib = import ../development/libraries/cracklib {
-    inherit fetchurl stdenv;
-  };
+  cracklib = callPackage ../development/libraries/cracklib { };
 
-  cryptopp = import ../development/libraries/crypto++ {
-    inherit fetchurl stdenv unzip libtool;
-  };
+  cryptopp = callPackage ../development/libraries/crypto++ { };
 
-  cyrus_sasl = import ../development/libraries/cyrus-sasl {
-    inherit stdenv fetchurl openssl db4 gettext;
-  };
+  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
   db4 = db45;
 
-  db44 = import ../development/libraries/db4/db4-4.4.nix {
-    inherit fetchurl stdenv;
-  };
+  db44 = callPackage ../development/libraries/db4/db4-4.4.nix { };
 
-  db45 = import ../development/libraries/db4/db4-4.5.nix {
-    inherit fetchurl stdenv;
-  };
+  db45 = callPackage ../development/libraries/db4/db4-4.5.nix { };
 
-  dbus = import ../development/libraries/dbus {
-    inherit fetchurl stdenv pkgconfig expat;
-    inherit (xlibs) libX11 libICE libSM;
+  dbus = callPackage ../development/libraries/dbus { 
     useX11 = true; # !!! `false' doesn't build
   };
 
@@ -3805,46 +2704,27 @@ let
     libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
   };
 
-  dbus_java = import ../development/libraries/java/dbus-java {
-    inherit stdenv fetchurl gettext jdk libmatthew_java;
-  };
+  dbus_java = callPackage ../development/libraries/java/dbus-java { };
 
-  dclib = import ../development/libraries/dclib {
-    inherit fetchurl stdenv libxml2 openssl bzip2;
-  };
+  dclib = callPackage ../development/libraries/dclib { };
 
-  directfb = import ../development/libraries/directfb {
-    inherit fetchurl stdenv perl zlib libjpeg freetype
-      SDL libpng giflib;
-    inherit (xlibs) libX11 libXext xproto xextproto renderproto
-      libXrender;
-  };
+  directfb = callPackage ../development/libraries/directfb { };
 
-  dragonegg = import ../development/compilers/llvm/dragonegg.nix {
-    inherit fetchsvn llvm gmp mpfr mpc;
+  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { 
     stdenv = overrideGCC stdenv gcc45;
   };
 
-  enchant = makeOverridable (import ../development/libraries/enchant) {
-    inherit fetchurl stdenv aspell pkgconfig;
+  enchant = callPackage ../development/libraries/enchant { 
     inherit (gnome) glib;
   };
 
-  enginepkcs11 = import ../development/libraries/enginepkcs11 {
-    inherit fetchurl stdenv libp11 pkgconfig openssl;
-  };
+  enginepkcs11 = callPackage ../development/libraries/enginepkcs11 { };
 
-  esdl = import ../development/libraries/esdl {
-    inherit stdenv fetchurl erlang SDL mesa;
-  };
+  esdl = callPackage ../development/libraries/esdl { };
 
-  exiv2 = import ../development/libraries/exiv2 {
-    inherit fetchurl stdenv zlib;
-  };
+  exiv2 = callPackage ../development/libraries/exiv2 { };
 
-  expat = import ../development/libraries/expat {
-    inherit fetchurl stdenv;
-  };
+  expat = callPackage ../development/libraries/expat { };
 
   extremetuxracer = builderDefsPackage (import ../games/extremetuxracer) {
     inherit mesa tcl freeglut SDL SDL_mixer pkgconfig
@@ -3853,126 +2733,77 @@ let
       libXmu libXext xextproto libXt libSM libICE;
   };
 
-  eventlog = import ../development/libraries/eventlog {
-    inherit fetchurl stdenv;
-  };
+  eventlog = callPackage ../development/libraries/eventlog { };
 
-  facile = import ../development/libraries/facile {
-    inherit fetchurl stdenv;
+  facile = callPackage ../development/libraries/facile { 
     # Actually, we don't need this version but we need native-code compilation
     ocaml = ocaml_3_10_0;
   };
 
-  faac = import ../development/libraries/faac {
-    inherit fetchurl stdenv autoconf automake libtool;
-  };
+  faac = callPackage ../development/libraries/faac { };
 
-  faad2 = import ../development/libraries/faad2 {
-    inherit fetchurl stdenv;
-  };
+  faad2 = callPackage ../development/libraries/faad2 { };
 
-  farsight2 = import ../development/libraries/farsight2 {
-    inherit fetchurl stdenv libnice pkgconfig python;
+  farsight2 = callPackage ../development/libraries/farsight2 { 
     inherit (gnome) glib;
     inherit (gst_all) gstreamer gstPluginsBase;
   };
 
-  fcgi = import ../development/libraries/fcgi {
-      inherit fetchurl stdenv;
-  };
+  fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg = import ../development/libraries/ffmpeg {
-    inherit fetchurl stdenv faad2 libvorbis speex libtheora x264 pkgconfig xvidcore
-      lame yasm libvpx;
-  };
+  ffmpeg = callPackage ../development/libraries/ffmpeg { };
 
-  fftw = import ../development/libraries/fftw {
-    inherit fetchurl stdenv builderDefs stringsWithDeps;
+  fftw = callPackage ../development/libraries/fftw { 
     singlePrecision = false;
   };
 
-  fftwSinglePrec = import ../development/libraries/fftw {
-    inherit fetchurl stdenv builderDefs stringsWithDeps;
+  fftwSinglePrec = callPackage ../development/libraries/fftw { 
     singlePrecision = true;
   };
 
-  fltk11 = (import ../development/libraries/fltk/fltk11.nix) {
-    inherit composableDerivation x11 pkgconfig freeglut;
-    inherit fetchurl mesa libpng libjpeg zlib ;
-    inherit (xlibs) inputproto libXi libXinerama libXft;
-  };
+  fltk11 = callPackage ../development/libraries/fltk/fltk11.nix { };
 
-  fltk20 = (import ../development/libraries/fltk) {
-    inherit composableDerivation x11 pkgconfig freeglut;
-    inherit fetchurl mesa libpng libjpeg zlib;
-    inherit (xlibs) inputproto libXi libXinerama libXft;
-  };
+  fltk20 = callPackage ../development/libraries/fltk { };
 
-  fmod = import ../development/libraries/fmod {
-    inherit stdenv fetchurl;
-  };
+  fmod = callPackage ../development/libraries/fmod { };
 
-  freeimage = import ../development/libraries/freeimage {
-    inherit fetchurl stdenv unzip;
-  };
+  freeimage = callPackage ../development/libraries/freeimage { };
 
-  freetts = import ../development/libraries/freetts {
-    inherit stdenv fetchurl apacheAnt unzip sharutils lib;
-  };
+  freetts = callPackage ../development/libraries/freetts { };
 
-  cfitsio = import ../development/libraries/cfitsio {
-    inherit fetchurl stdenv;
-  };
+  cfitsio = callPackage ../development/libraries/cfitsio { };
 
-  fontconfig = import ../development/libraries/fontconfig {
-    inherit fetchurl stdenv freetype expat;
-  };
+  fontconfig = callPackage ../development/libraries/fontconfig { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     import ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit runCommand libxslt fontconfig fontDirectories;
     };
 
-  freealut = import ../development/libraries/freealut {
-    inherit fetchurl stdenv openal;
-  };
+  freealut = callPackage ../development/libraries/freealut { };
 
-  freeglut = import ../development/libraries/freeglut {
-    inherit fetchurl stdenv x11 mesa;
-  };
+  freeglut = callPackage ../development/libraries/freeglut { };
 
-  freetype = makeOverridable (import ../development/libraries/freetype) {
-    inherit fetchurl stdenv;
-  };
+  freetype = callPackage ../development/libraries/freetype { };
 
-  fribidi = import ../development/libraries/fribidi {
-    inherit fetchurl stdenv;
-  };
+  fribidi = callPackage ../development/libraries/fribidi { };
 
   fam = gamin;
 
-  gamin = import ../development/libraries/gamin {
-    inherit fetchurl stdenv python pkgconfig glib;
-  };
+  gamin = callPackage ../development/libraries/gamin { };
 
-  gav = import ../games/gav {
-    inherit fetchurl SDL SDL_image SDL_mixer SDL_net;
+  gav = callPackage ../games/gav { 
     stdenv = overrideGCC stdenv gcc41;
   };
 
-  gdbm = import ../development/libraries/gdbm {
-    inherit fetchurl stdenv;
-  };
+  gdbm = callPackage ../development/libraries/gdbm { };
 
-  gdk_pixbuf = import ../development/libraries/gdk-pixbuf {
-    inherit fetchurl stdenv libtiff libjpeg libpng;
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { 
     inherit (gtkLibs1x) gtk;
   };
 
-  gegl = import ../development/libraries/gegl {
-    inherit fetchurl stdenv libpng pkgconfig babl;
+  gegl = callPackage ../development/libraries/gegl { 
     #  avocodec avformat librsvg
-    inherit cairo libjpeg librsvg;
     inherit (gtkLibs) pango glib gtk;
   };
 
@@ -3980,62 +2811,38 @@ let
     inherit zlib;
   };
 
-  geoipjava = import ../development/libraries/java/geoipjava {
-    inherit stdenv fetchurl jdk unzip;
-  };
+  geoipjava = callPackage ../development/libraries/java/geoipjava { };
 
-  geos = import ../development/libraries/geos {
-    inherit composableDerivation fetchurl python;
-  };
+  geos = callPackage ../development/libraries/geos { };
 
-  gettext = import ../development/libraries/gettext {
-    inherit fetchurl stdenv libiconv;
-  };
+  gettext = callPackage ../development/libraries/gettext { };
 
   # XXX: Remove me when `stdenv-updates' is merged.
-  gettext_0_18 = import ../development/libraries/gettext/0.18.nix {
-    inherit fetchurl stdenv libiconv;
-  };
+  gettext_0_18 = callPackage ../development/libraries/gettext/0.18.nix { };
 
-  gd = import ../development/libraries/gd {
-    inherit fetchurl stdenv zlib libpng freetype libjpeg fontconfig;
-  };
+  gd = callPackage ../development/libraries/gd { };
 
-  gdal = import ../development/libraries/gdal {
-    inherit stdenv fetchurl unzip composableDerivation libtiff zlib postgresql
-      mysql libjpeg libgeotiff;
-  };
+  gdal = callPackage ../development/libraries/gdal { };
 
-  giblib = import ../development/libraries/giblib {
-    inherit fetchurl stdenv x11 imlib2;
-  };
+  giblib = callPackage ../development/libraries/giblib { };
 
-  glew = import ../development/libraries/glew {
-    inherit fetchurl stdenv mesa x11;
-    inherit (xlibs) libXmu libXi;
-  };
+  glew = callPackage ../development/libraries/glew { };
 
-  glfw = import ../development/libraries/glfw {
-    inherit fetchurl stdenv mesa;
-    inherit (xlibs) libX11 libXext;
-  };
+  glfw = callPackage ../development/libraries/glfw { };
 
   glibc = useFromStdenv "glibc" glibc211;
 
-  glibc25 = makeOverridable (import ../development/libraries/glibc-2.5) {
-    inherit fetchurl stdenv;
+  glibc25 = callPackage ../development/libraries/glibc-2.5 { 
     kernelHeaders = linuxHeaders;
     installLocales = false;
   };
 
-  glibc27 = import ../development/libraries/glibc-2.7 {
-    inherit fetchurl stdenv;
+  glibc27 = callPackage ../development/libraries/glibc-2.7 { 
     kernelHeaders = linuxHeaders;
     #installLocales = false;
   };
 
-  glibc29 = makeOverridable (import ../development/libraries/glibc-2.9) {
-    inherit fetchurl stdenv;
+  glibc29 = callPackage ../development/libraries/glibc-2.9 { 
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
@@ -4047,8 +2854,7 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
-  glibc211 = makeOverridable (import ../development/libraries/glibc-2.11) {
-    inherit fetchurl stdenv;
+  glibc211 = callPackage ../development/libraries/glibc-2.11 { 
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
     machHeaders = null;
@@ -4081,27 +2887,18 @@ let
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
 
-  libdbusmenu_qt = makeOverridable (import ../development/libraries/libdbusmenu-qt) {
-    inherit stdenv fetchurl qt4 cmake;
-  };
+  libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
 
-  libdwg = import ../development/libraries/libdwg {
-    inherit stdenv fetchurl;
-  };
+  libdwg = callPackage ../development/libraries/libdwg { };
 
-  eglibc = import ../development/libraries/eglibc {
-    inherit fetchsvn stdenv;
+  eglibc = callPackage ../development/libraries/eglibc { 
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibcLocales = makeOverridable (import ../development/libraries/glibc-2.11/locales.nix) {
-    inherit fetchurl stdenv;
-  };
+  glibcLocales = callPackage ../development/libraries/glibc-2.11/locales.nix { };
 
-  glibcInfo = import ../development/libraries/glibc-2.11/info.nix {
-    inherit fetchurl stdenv texinfo perl;
-  };
+  glibcInfo = callPackage ../development/libraries/glibc-2.11/info.nix { };
 
   glibc_multi =
       runCommand "${glibc.name}-multi"
@@ -4125,21 +2922,13 @@ let
         '' # */
         ;
 
-  glpk = import ../development/libraries/glpk {
-    inherit fetchurl stdenv;
-  };
+  glpk = callPackage ../development/libraries/glpk { };
 
-  gmime = import ../development/libraries/gmime {
-    inherit fetchurl stdenv pkgconfig zlib glib;
-  };
+  gmime = callPackage ../development/libraries/gmime { };
 
-  gmime_2_2 = import ../development/libraries/gmime/2.2.x.nix {
-    inherit fetchurl stdenv pkgconfig zlib glib;
-  };
+  gmime_2_2 = callPackage ../development/libraries/gmime/2.2.x.nix { };
 
-  gmm = import ../development/libraries/gmm {
-    inherit fetchurl stdenv;
-  };
+  gmm = callPackage ../development/libraries/gmm { };
 
   gmp =
     if stdenv.system == "i686-darwin" then
@@ -4156,27 +2945,20 @@ let
 
   gmpxx = gmp.override { cxx = true; };
 
-  gobjectIntrospection = makeOverridable (import ../development/libraries/gobject-introspection) {
-    inherit fetchurl stdenv pkgconfig flex bison glib libffi python cairo;
-  };
+  gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
-  goffice = import ../development/libraries/goffice {
-    inherit fetchurl stdenv pkgconfig libgsf libxml2 cairo
-      intltool gettext bzip2;
+  goffice = callPackage ../development/libraries/goffice { 
     inherit (gnome) glib gtk libglade libgnomeui pango;
     gconf = gnome.GConf;
     libart = gnome.libart_lgpl;
   };
 
-  goocanvas = import ../development/libraries/goocanvas {
-    inherit fetchurl stdenv pkgconfig cairo;
+  goocanvas = callPackage ../development/libraries/goocanvas { 
     inherit (gnome) gtk glib;
   };
 
   #GMP ex-satellite, so better keep it near gmp
-  mpfr = import ../development/libraries/mpfr {
-    inherit stdenv fetchurl gmp;
-  };
+  mpfr = callPackage ../development/libraries/mpfr { };
 
   gst_all = recurseIntoAttrs (import ../development/libraries/gstreamer {
     inherit lib stdenv fetchurl perl bison pkgconfig libxml2
@@ -4192,37 +2974,23 @@ let
       libsoup;
   });
 
-  gnet = import ../development/libraries/gnet {
-    inherit fetchurl stdenv pkgconfig glib;
-  };
+  gnet = callPackage ../development/libraries/gnet { };
 
-  gnutls = import ../development/libraries/gnutls {
-    inherit fetchurl stdenv libgcrypt zlib lzo libtasn1 guile;
+  gnutls = callPackage ../development/libraries/gnutls { 
     guileBindings = getConfig ["gnutls" "guile"] true;
   };
 
-  gpgme = import ../development/libraries/gpgme {
-    inherit fetchurl stdenv libgpgerror pkgconfig pth gnupg glib libassuan;
-  };
+  gpgme = callPackage ../development/libraries/gpgme { };
 
-  gsasl = import ../development/libraries/gsasl {
-    inherit stdenv fetchurl;
-  };
+  gsasl = callPackage ../development/libraries/gsasl { };
 
-  gsl = import ../development/libraries/gsl {
-    inherit fetchurl stdenv;
-  };
+  gsl = callPackage ../development/libraries/gsl { };
 
-  gsoap = import ../development/libraries/gsoap {
-    inherit fetchurl stdenv m4 bison flex openssl zlib;
-  };
+  gsoap = callPackage ../development/libraries/gsoap { };
 
-  gss = import ../development/libraries/gss {
-    inherit stdenv fetchurl shishi;
-  };
+  gss = callPackage ../development/libraries/gss { };
 
-  gtkimageview = import ../development/libraries/gtkimageview {
-    inherit fetchurl stdenv pkgconfig;
+  gtkimageview = callPackage ../development/libraries/gtkimageview { 
     inherit (gnome) gtk;
   };
 
@@ -4232,350 +3000,209 @@ let
 
   gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in rec {
 
-    glib = import ../development/libraries/glib/1.2.x.nix {
-      inherit fetchurl stdenv;
-    };
+    glib = callPackage ../development/libraries/glib/1.2.x.nix { };
 
-    gtk = import ../development/libraries/gtk+/1.2.x.nix {
-      inherit fetchurl stdenv x11 glib;
-    };
+    gtk = callPackage ../development/libraries/gtk+/1.2.x.nix { };
 
   });
 
   gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in rec {
 
-    glib = import ../development/libraries/glib/2.20.x.nix {
-      inherit fetchurl stdenv pkgconfig gettext perl;
-    };
+    glib = callPackage ../development/libraries/glib/2.20.x.nix { };
 
-    glibmm = import ../development/libraries/glibmm/2.18.x.nix {
-      inherit fetchurl stdenv pkgconfig glib libsigcxx;
-    };
+    glibmm = callPackage ../development/libraries/glibmm/2.18.x.nix { };
 
-    atk = import ../development/libraries/atk/1.24.x.nix {
-      inherit fetchurl stdenv pkgconfig perl glib;
-    };
+    atk = callPackage ../development/libraries/atk/1.24.x.nix { };
 
-    pango = import ../development/libraries/pango/1.24.x.nix {
-      inherit fetchurl stdenv pkgconfig gettext x11 glib cairo libpng;
-    };
+    pango = callPackage ../development/libraries/pango/1.24.x.nix { };
 
-    pangomm = import ../development/libraries/pangomm/2.14.x.nix {
-      inherit fetchurl stdenv pkgconfig pango glibmm cairomm libpng;
-    };
+    pangomm = callPackage ../development/libraries/pangomm/2.14.x.nix { };
 
-    gtk = import ../development/libraries/gtk+/2.16.x.nix {
-      inherit fetchurl stdenv pkgconfig perl jasper x11 glib atk pango
-        libtiff libjpeg libpng cairo xlibs;
-    };
+    gtk = callPackage ../development/libraries/gtk+/2.16.x.nix { };
 
-    gtkmm = import ../development/libraries/gtkmm/2.14.x.nix {
-      inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
-    };
+    gtkmm = callPackage ../development/libraries/gtkmm/2.14.x.nix { };
 
   });
 
   gtkLibs218 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs218; in rec {
 
-    glib = import ../development/libraries/glib/2.22.x.nix {
-      inherit fetchurl stdenv pkgconfig gettext perl;
+    glib = callPackage ../development/libraries/glib/2.22.x.nix { 
       libiconv = if stdenv.system == "i686-freebsd" then libiconv else null;
     };
 
-    glibmm = import ../development/libraries/glibmm/2.22.x.nix {
-      inherit fetchurl stdenv pkgconfig glib libsigcxx;
-    };
+    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
 
-    atk = import ../development/libraries/atk/1.28.x.nix {
-      inherit fetchurl stdenv pkgconfig perl glib;
-    };
+    atk = callPackage ../development/libraries/atk/1.28.x.nix { };
 
-    pango = import ../development/libraries/pango/1.26.x.nix {
-      inherit fetchurl stdenv pkgconfig gettext x11 glib cairo libpng;
-    };
+    pango = callPackage ../development/libraries/pango/1.26.x.nix { };
 
-    pangomm = import ../development/libraries/pangomm/2.26.x.nix {
-      inherit fetchurl stdenv pkgconfig pango glibmm cairomm libpng;
-    };
+    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
 
-    gtk = import ../development/libraries/gtk+/2.18.x.nix {
-      inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
-        libtiff libjpeg libpng cairo xlibs cups;
-    };
+    gtk = callPackage ../development/libraries/gtk+/2.18.x.nix { };
 
-    gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
-      inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
-    };
+    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
 
   });
 
   gtkLibs220 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs220; in rec {
 
-    glib = makeOverridable (import ../development/libraries/glib/2.24.x.nix) {
-      inherit fetchurl stdenv pkgconfig gettext perl zlib;
+    glib = callPackage ../development/libraries/glib/2.24.x.nix { 
       libiconv = if stdenv.system == "i686-freebsd" then libiconv else null;
     };
 
-    glibmm = import ../development/libraries/glibmm/2.22.x.nix {
-      inherit fetchurl stdenv pkgconfig glib libsigcxx;
-    };
+    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
 
-    atk = import ../development/libraries/atk/1.30.x.nix {
-      inherit fetchurl stdenv pkgconfig perl glib;
-    };
+    atk = callPackage ../development/libraries/atk/1.30.x.nix { };
 
-    pango = import ../development/libraries/pango/1.28.x.nix {
-      inherit fetchurl stdenv pkgconfig gettext x11 glib cairo libpng;
-    };
+    pango = callPackage ../development/libraries/pango/1.28.x.nix { };
 
-    pangomm = import ../development/libraries/pangomm/2.26.x.nix {
-      inherit fetchurl stdenv pkgconfig pango glibmm cairomm libpng;
-    };
+    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
 
-    gtk = import ../development/libraries/gtk+/2.20.x.nix {
-      inherit fetchurl stdenv pkgconfig perl jasper glib atk pango
-        libtiff libjpeg libpng cairo xlibs cups;
-    };
+    gtk = callPackage ../development/libraries/gtk+/2.20.x.nix { };
 
-    gtkmm = import ../development/libraries/gtkmm/2.18.x.nix {
-      inherit fetchurl stdenv pkgconfig gtk atk glibmm cairomm pangomm;
-    };
+    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
 
   });
 
-  gtkmozembedsharp = import ../development/libraries/gtkmozembed-sharp {
-    inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
+  gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp { 
     inherit (gnome) gtk;
     gtksharp = gtksharp2;
   };
 
-  gtksharp1 = import ../development/libraries/gtk-sharp-1 {
-    inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
+  gtksharp1 = callPackage ../development/libraries/gtk-sharp-1 { 
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf;
   };
 
-  gtksharp2 = import ../development/libraries/gtk-sharp-2 {
-    inherit fetchurl stdenv mono pkgconfig libxml2 monoDLLFixer;
+  gtksharp2 = callPackage ../development/libraries/gtk-sharp-2 { 
     inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf gnomepanel;
   };
 
-  gtksourceviewsharp = import ../development/libraries/gtksourceview-sharp {
-    inherit fetchurl stdenv mono pkgconfig monoDLLFixer;
+  gtksourceviewsharp = callPackage ../development/libraries/gtksourceview-sharp { 
     inherit (gnome) gtksourceview;
     gtksharp = gtksharp2;
   };
 
-  gtkspell = import ../development/libraries/gtkspell {
-    inherit fetchurl stdenv pkgconfig;
+  gtkspell = callPackage ../development/libraries/gtkspell { 
     inherit (gtkLibs) gtk;
-    inherit aspell;
   };
 
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
-  heimdal = import ../development/libraries/kerberos/heimdal.nix {
-    inherit fetchurl stdenv readline db4 openssl openldap cyrus_sasl;
-  };
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  hsqldb = import ../development/libraries/java/hsqldb {
-    inherit stdenv fetchurl unzip;
-  };
+  hsqldb = callPackage ../development/libraries/java/hsqldb { };
 
-  hunspell = makeOverridable (import ../development/libraries/hunspell) {
-    inherit fetchurl stdenv ncurses readline;
-  };
+  hunspell = callPackage ../development/libraries/hunspell { };
 
-  hwloc = import ../development/libraries/hwloc {
-    inherit fetchurl stdenv pkgconfig cairo expat ncurses;
-  };
+  hwloc = callPackage ../development/libraries/hwloc { };
 
-  hydraAntLogger = import ../development/libraries/java/hydra-ant-logger {
-    inherit fetchsvn stdenv ant;
-  };
+  hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
-  icu = import ../development/libraries/icu {
-    inherit fetchurl stdenv;
-  };
+  icu = callPackage ../development/libraries/icu { };
 
-  id3lib = import ../development/libraries/id3lib {
-    inherit fetchurl stdenv;
-  };
+  id3lib = callPackage ../development/libraries/id3lib { };
 
-  ilbc = import ../development/libraries/ilbc {
-    inherit stdenv msilbc;
-  };
+  ilbc = callPackage ../development/libraries/ilbc { };
 
-  ilmbase = import ../development/libraries/ilmbase {
-    inherit fetchurl stdenv;
-  };
+  ilmbase = callPackage ../development/libraries/ilmbase { };
 
-  imlib = import ../development/libraries/imlib {
-    inherit fetchurl stdenv libjpeg libtiff libungif libpng;
-    inherit (xlibs) libX11 libXext xextproto;
-  };
+  imlib = callPackage ../development/libraries/imlib { };
 
-  imlib2 = import ../development/libraries/imlib2 {
-    inherit fetchurl stdenv x11 libjpeg libtiff libungif libpng bzip2;
-  };
+  imlib2 = callPackage ../development/libraries/imlib2 { };
 
-  indilib = import ../development/libraries/indilib {
-    inherit fetchurl stdenv cfitsio libusb zlib;
-  };
+  indilib = callPackage ../development/libraries/indilib { };
 
-  iniparser = import ../development/libraries/iniparser {
-    inherit fetchurl stdenv;
-  };
+  iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = gnome.intltool;
 
-  isocodes = import ../development/libraries/iso-codes {
-    inherit stdenv fetchurl gettext python;
-  };
+  isocodes = callPackage ../development/libraries/iso-codes { };
 
-  itk = import ../development/libraries/itk {
-    inherit stdenv fetchurl cmake libuuid;
-    inherit (xlibs) libX11;
-  };
+  itk = callPackage ../development/libraries/itk { };
 
   jamp = builderDefsPackage ../games/jamp {
     inherit mesa SDL SDL_image SDL_mixer;
   };
 
-  jasper = import ../development/libraries/jasper {
-    inherit fetchurl stdenv unzip xlibs libjpeg;
-  };
+  jasper = callPackage ../development/libraries/jasper { };
 
-  jetty_gwt = import ../development/libraries/java/jetty-gwt {
-    inherit stdenv fetchurl;
-  };
+  jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
 
-  jetty_util = import ../development/libraries/java/jetty-util {
-    inherit stdenv fetchurl;
-  };
+  jetty_util = callPackage ../development/libraries/java/jetty-util { };
 
-  judy = import ../development/libraries/judy {
-    inherit fetchurl stdenv;
-  };
+  judy = callPackage ../development/libraries/judy { };
 
-  krb5 = import ../development/libraries/kerberos/krb5.nix {
-    inherit stdenv fetchurl perl ncurses yacc;
-  };
+  krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
-  lablgtk = import ../development/libraries/lablgtk {
-    inherit fetchurl stdenv ocaml pkgconfig;
+  lablgtk = callPackage ../development/libraries/lablgtk { 
     inherit (gtkLibs) gtk;
     inherit (gnome) libgnomecanvas;
   };
 
-  lcms = import ../development/libraries/lcms {
-    inherit fetchurl stdenv;
-  };
+  lcms = callPackage ../development/libraries/lcms { };
 
-  lensfun = import ../development/libraries/lensfun {
-    inherit fetchurl stdenv libpng python zlib pkgconfig;
+  lensfun = callPackage ../development/libraries/lensfun { 
     inherit (gnome) glib;
   };
 
-  lesstif = import ../development/libraries/lesstif {
-    inherit fetchurl stdenv x11;
-    inherit (xlibs) libXp libXau;
-  };
+  lesstif = callPackage ../development/libraries/lesstif { };
 
-  lesstif93 = import ../development/libraries/lesstif-0.93 {
-    inherit fetchurl stdenv x11;
-    inherit (xlibs) libXp libXau;
-  };
+  lesstif93 = callPackage ../development/libraries/lesstif-0.93 { };
 
-  levmar = import ../development/libraries/levmar {
-    inherit fetchurl stdenv;
-  };
+  levmar = callPackage ../development/libraries/levmar { };
 
-  lib3ds = import ../development/libraries/lib3ds {
-    inherit fetchurl stdenv unzip;
-  };
+  lib3ds = callPackage ../development/libraries/lib3ds { };
 
-  libaal = import ../development/libraries/libaal {
-    inherit fetchurl stdenv;
-  };
+  libaal = callPackage ../development/libraries/libaal { };
 
-  libao = import ../development/libraries/libao {
-    inherit stdenv fetchurl pkgconfig pulseaudio;
+  libao = callPackage ../development/libraries/libao { 
     usePulseAudio = getConfig [ "pulseaudio" ] true;
   };
 
-  libarchive = import ../development/libraries/libarchive {
-    inherit fetchurl stdenv acl zlib bzip2 e2fsprogs xz sharutils libxml2
-      openssl attr;
-  };
+  libarchive = callPackage ../development/libraries/libarchive { };
 
-  libassuan1 = import ../development/libraries/libassuan1 {
-    inherit fetchurl stdenv pth;
-  };
+  libassuan1 = callPackage ../development/libraries/libassuan1 { };
 
-  libassuan = import ../development/libraries/libassuan {
-    inherit fetchurl stdenv pth libgpgerror;
-  };
+  libassuan = callPackage ../development/libraries/libassuan { };
 
-  libavc1394 = import ../development/libraries/libavc1394 {
-    inherit fetchurl stdenv pkgconfig libraw1394;
-  };
+  libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
-  libcaca = import ../development/libraries/libcaca {
-    inherit fetchurl stdenv ncurses;
-  };
+  libcaca = callPackage ../development/libraries/libcaca { };
 
-  libcanberra = import ../development/libraries/libcanberra {
-    inherit fetchurl stdenv pkgconfig libtool alsaLib pulseaudio
-      libvorbis libcap;
+  libcanberra = callPackage ../development/libraries/libcanberra { 
     inherit (gtkLibs) gtk gthread;
     gstreamer = gst_all.gstreamer;
   };
 
-  libcdaudio = import ../development/libraries/libcdaudio {
-    inherit fetchurl stdenv;
-  };
+  libcdaudio = callPackage ../development/libraries/libcdaudio { };
 
-  libcddb = import ../development/libraries/libcddb {
-    inherit fetchurl stdenv;
-  };
+  libcddb = callPackage ../development/libraries/libcddb { };
 
-  libcdio = import ../development/libraries/libcdio {
-    inherit fetchurl stdenv libcddb pkgconfig ncurses help2man;
-  };
+  libcdio = callPackage ../development/libraries/libcdio { };
 
-  libchamplain = import ../development/libraries/libchamplain {
-    inherit fetchurl stdenv pkgconfig cairo clutter clutter_gtk sqlite;
+  libchamplain = callPackage ../development/libraries/libchamplain { 
     inherit (gnome) gtk glib libsoup;
   };
 
-  libcm = import ../development/libraries/libcm {
-    inherit fetchurl stdenv pkgconfig xlibs mesa glib;
-  };
+  libcm = callPackage ../development/libraries/libcm { };
 
-  libcue = import ../development/libraries/libcue {
-    inherit stdenv fetchurl;
-  };
+  libcue = callPackage ../development/libraries/libcue { };
 
   libcv = builderDefsPackage (import ../development/libraries/libcv) {
     inherit libtiff libjpeg libpng pkgconfig;
     inherit (gtkLibs) gtk glib;
   };
 
-  libdaemon = import ../development/libraries/libdaemon {
-    inherit fetchurl stdenv;
-  };
+  libdaemon = callPackage ../development/libraries/libdaemon { };
 
-  libdbi = makeOverridable (import ../development/libraries/libdbi) {
-    inherit stdenv fetchurl;
-  };
+  libdbi = callPackage ../development/libraries/libdbi { };
 
-  libdbiDriversBase = makeOverridable (import ../development/libraries/libdbi-drivers) {
-    inherit stdenv fetchurl libdbi;
+  libdbiDriversBase = callPackage ../development/libraries/libdbi-drivers { 
     mysql = null;
     sqlite = null;
   };
@@ -4584,57 +3211,35 @@ let
     inherit sqlite mysql;
   };
 
-  libdv = import ../development/libraries/libdv {
-    inherit fetchurl composableDerivation;
-  };
+  libdv = callPackage ../development/libraries/libdv { };
 
   libdrm = if stdenv.isDarwin then null else (import ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
   });
 
-  libdvdcss = import ../development/libraries/libdvdcss {
-    inherit fetchurl stdenv;
-  };
+  libdvdcss = callPackage ../development/libraries/libdvdcss { };
 
-  libdvdnav = import ../development/libraries/libdvdnav {
-    inherit fetchurl stdenv libdvdread;
-  };
+  libdvdnav = callPackage ../development/libraries/libdvdnav { };
 
-  libdvdread = import ../development/libraries/libdvdread {
-    inherit fetchurl stdenv libdvdcss;
-  };
+  libdvdread = callPackage ../development/libraries/libdvdread { };
 
-  libedit = import ../development/libraries/libedit {
-    inherit fetchurl stdenv ncurses;
-  };
+  libedit = callPackage ../development/libraries/libedit { };
 
-  libelf = import ../development/libraries/libelf {
-    inherit fetchurl stdenv;
-  };
+  libelf = callPackage ../development/libraries/libelf { };
 
-  liblo = import ../development/libraries/liblo {
-    inherit fetchurl stdenv;
-  };
+  liblo = callPackage ../development/libraries/liblo { };
 
   libev = builderDefsPackage ../development/libraries/libev {
   };
 
-  libevent = import ../development/libraries/libevent {
-    inherit fetchurl stdenv;
-  };
+  libevent = callPackage ../development/libraries/libevent { };
 
-  libewf = import ../development/libraries/libewf {
-    inherit fetchurl stdenv zlib openssl libuuid;
-  };
+  libewf = callPackage ../development/libraries/libewf { };
 
-  libexif = import ../development/libraries/libexif {
-    inherit fetchurl stdenv gettext;
-  };
+  libexif = callPackage ../development/libraries/libexif { };
 
-  libextractor = import ../development/libraries/libextractor {
-    inherit fetchurl stdenv libtool gettext zlib bzip2 flac libvorbis
-     exiv2 ffmpeg libgsf glib rpm pkgconfig;
+  libextractor = callPackage ../development/libraries/libextractor { 
     inherit (gnome) gtk;
     libmpeg2 = mpeg2dec;
   };
@@ -4643,299 +3248,162 @@ let
     inherit fetchcvs;
   };
 
-  libffi = import ../development/libraries/libffi {
-    inherit fetchurl stdenv;
-  };
+  libffi = callPackage ../development/libraries/libffi { };
 
-  libftdi = import ../development/libraries/libftdi {
-    inherit fetchurl stdenv libusb;
-  };
+  libftdi = callPackage ../development/libraries/libftdi { };
 
-  libgcrypt = import ../development/libraries/libgcrypt {
-    inherit fetchurl stdenv libgpgerror;
-  };
+  libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
-  libgpgerror = import ../development/libraries/libgpg-error {
-    inherit fetchurl stdenv;
-  };
+  libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
-  libgphoto2 = import ../development/libraries/libgphoto2 {
-    inherit fetchurl stdenv pkgconfig libusb libtool libexif libjpeg gettext;
-  };
+  libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
 
-  libgpod = import ../development/libraries/libgpod {
-    inherit fetchurl stdenv gettext perl perlXMLParser pkgconfig libxml2 glib;
-  };
+  libgpod = callPackage ../development/libraries/libgpod { };
 
-  libharu = import ../development/libraries/libharu {
-    inherit fetchurl stdenv zlib libpng;
-  };
+  libharu = callPackage ../development/libraries/libharu { };
 
-  libical = import ../development/libraries/libical {
-    inherit stdenv fetchurl perl;
-  };
+  libical = callPackage ../development/libraries/libical { };
 
-  libiodbc = makeOverridable (import ../development/libraries/libiodbc) {
-    inherit stdenv fetchurl pkgconfig;
+  libiodbc = callPackage ../development/libraries/libiodbc { 
     inherit (gtkLibs) gtk;
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
 
-  liblqr1 = makeOverridable (import ../development/libraries/liblqr-1) {
-    inherit stdenv fetchurl pkgconfig;
+  liblqr1 = callPackage ../development/libraries/liblqr-1 { 
     inherit (gnome) glib;
   };
 
-  libnice = import ../development/libraries/libnice {
-    inherit stdenv fetchurl pkgconfig;
+  libnice = callPackage ../development/libraries/libnice { 
     inherit (gnome) glib;
   };
 
-  libQGLViewer = import ../development/libraries/libqglviewer {
-    inherit fetchurl stdenv;
-    inherit qt4;
-  };
+  libQGLViewer = callPackage ../development/libraries/libqglviewer { };
 
-  libsamplerate = import ../development/libraries/libsamplerate {
-    inherit fetchurl stdenv libsndfile fftw pkgconfig;
-  };
+  libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
-  libspectre = import ../development/libraries/libspectre {
-    inherit fetchurl stdenv;
+  libspectre = callPackage ../development/libraries/libspectre { 
     ghostscript = ghostscriptX;
   };
 
-  libgsf = import ../development/libraries/libgsf {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig libxml2
-      intltool gettext bzip2 python;
+  libgsf = callPackage ../development/libraries/libgsf { 
     inherit (gnome) glib gnomevfs libbonobo;
   };
 
-  libiconv = import ../development/libraries/libiconv {
-    inherit fetchurl stdenv;
-  };
+  libiconv = callPackage ../development/libraries/libiconv { };
 
-  libid3tag = import ../development/libraries/libid3tag {
-    inherit fetchurl stdenv zlib;
-  };
+  libid3tag = callPackage ../development/libraries/libid3tag { };
 
-  libidn = import ../development/libraries/libidn {
-    inherit fetchurl stdenv;
-  };
+  libidn = callPackage ../development/libraries/libidn { };
 
-  libiec61883 = import ../development/libraries/libiec61883 {
-    inherit fetchurl stdenv pkgconfig libraw1394;
-  };
+  libiec61883 = callPackage ../development/libraries/libiec61883 { };
 
-  libinfinity = makeOverridable (import ../development/libraries/libinfinity) {
-    inherit stdenv fetchurl pkgconfig;
+  libinfinity = callPackage ../development/libraries/libinfinity { 
     inherit (gtkLibs) gtk glib;
     inherit (gnome) gtkdoc;
-    inherit libxml2 gnutls gsasl avahi libdaemon;
   };
 
-  libiptcdata = import ../development/libraries/libiptcdata {
-    inherit fetchurl stdenv;
-  };
+  libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
-  libjingle = import ../development/libraries/libjingle/0.3.11.nix {
-    inherit fetchurl stdenv mediastreamer;
-  };
+  libjingle = callPackage ../development/libraries/libjingle/0.3.11.nix { };
 
-  libjpeg = makeOverridable (import ../development/libraries/libjpeg) {
-    inherit fetchurl stdenv;
-  };
+  libjpeg = callPackage ../development/libraries/libjpeg { };
 
-  libjpeg_turbo = makeOverridable (import ../development/libraries/libjpeg-turbo) {
-    inherit fetchurl stdenv nasm;
-  };
+  libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
 
-  libjpeg62 = makeOverridable (import ../development/libraries/libjpeg/62.nix) {
-    inherit fetchurl stdenv;
+  libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix { 
     libtool = libtool_1_5;
   };
 
-  libksba = import ../development/libraries/libksba {
-    inherit fetchurl stdenv libgpgerror;
-  };
+  libksba = callPackage ../development/libraries/libksba { };
 
-  libmad = import ../development/libraries/libmad {
-    inherit fetchurl stdenv autoconf;
-  };
+  libmad = callPackage ../development/libraries/libmad { };
 
-  libmatthew_java = import ../development/libraries/java/libmatthew-java {
-    inherit stdenv fetchurl jdk;
-  };
+  libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
-  libmcs = import ../development/libraries/libmcs {
-    inherit fetchurl stdenv pkgconfig libmowgli;
-  };
+  libmcs = callPackage ../development/libraries/libmcs { };
 
-  libmicrohttpd = import ../development/libraries/libmicrohttpd {
-    inherit fetchurl stdenv curl;
-  };
+  libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = import ../development/libraries/libmikmod {
-    inherit stdenv fetchurl texinfo;
-  };
+  libmikmod = callPackage ../development/libraries/libmikmod { };
 
-  libmilter = import ../development/libraries/libmilter {
-    inherit fetchurl stdenv m4;
-  };
+  libmilter = callPackage ../development/libraries/libmilter { };
 
-  libmowgli = import ../development/libraries/libmowgli {
-    inherit fetchurl stdenv;
-  };
+  libmowgli = callPackage ../development/libraries/libmowgli { };
 
-  libmng = import ../development/libraries/libmng {
-    inherit fetchurl stdenv zlib libpng libjpeg lcms automake autoconf libtool;
-  };
+  libmng = callPackage ../development/libraries/libmng { };
 
-  libmpcdec = import ../development/libraries/libmpcdec {
-    inherit fetchurl stdenv;
-  };
+  libmpcdec = callPackage ../development/libraries/libmpcdec { };
 
-  libmsn = import ../development/libraries/libmsn {
-    inherit stdenv fetchurl cmake openssl;
-  };
+  libmsn = callPackage ../development/libraries/libmsn { };
 
-  libmspack = import ../development/libraries/libmspack {
-    inherit fetchurl stdenv;
-  };
+  libmspack = callPackage ../development/libraries/libmspack { };
 
-  libmusclecard = import ../development/libraries/libmusclecard {
-    inherit fetchurl stdenv pkgconfig pcsclite;
-  };
+  libmusclecard = callPackage ../development/libraries/libmusclecard { };
 
-  libnih = import ../development/libraries/libnih {
-    inherit fetchurl stdenv pkgconfig dbus expat;
-  };
+  libnih = callPackage ../development/libraries/libnih { };
 
-  libnova = import ../development/libraries/libnova {
-    inherit fetchurl stdenv;
-  };
+  libnova = callPackage ../development/libraries/libnova { };
 
-  libofx = import ../development/libraries/libofx {
-    inherit fetchurl stdenv opensp pkgconfig libxml2 curl;
-  };
+  libofx = callPackage ../development/libraries/libofx { };
 
-  libogg = import ../development/libraries/libogg {
-    inherit fetchurl stdenv;
-  };
+  libogg = callPackage ../development/libraries/libogg { };
 
-  liboil = makeOverridable (import ../development/libraries/liboil) {
-    inherit fetchurl stdenv pkgconfig glib;
-  };
+  liboil = callPackage ../development/libraries/liboil { };
 
-  liboop = import ../development/libraries/liboop {
-    inherit fetchurl stdenv;
-  };
+  liboop = callPackage ../development/libraries/liboop { };
 
-  libotr = import ../development/libraries/libotr {
-    inherit fetchurl stdenv libgcrypt;
-  };
+  libotr = callPackage ../development/libraries/libotr { };
 
-  libp11 = import ../development/libraries/libp11 {
-    inherit fetchurl stdenv libtool openssl pkgconfig;
-  };
+  libp11 = callPackage ../development/libraries/libp11 { };
 
-  libpcap = import ../development/libraries/libpcap {
-    inherit fetchurl stdenv flex bison;
-  };
+  libpcap = callPackage ../development/libraries/libpcap { };
 
-  libpng = import ../development/libraries/libpng {
-    inherit fetchurl stdenv zlib;
-  };
+  libpng = callPackage ../development/libraries/libpng { };
 
-  libproxy = import ../development/libraries/libproxy {
-    inherit stdenv fetchurl;
-  };
+  libproxy = callPackage ../development/libraries/libproxy { };
 
-  libpseudo = import ../development/libraries/libpseudo {
-    inherit fetchurl stdenv pkgconfig ncurses glib;
-  };
+  libpseudo = callPackage ../development/libraries/libpseudo { };
 
-  librsync = import ../development/libraries/librsync {
-    inherit stdenv fetchurl;
-  };
+  librsync = callPackage ../development/libraries/librsync { };
 
-  libsigcxx = import ../development/libraries/libsigcxx {
-    inherit fetchurl stdenv pkgconfig;
-  };
+  libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
-  libsigsegv = import ../development/libraries/libsigsegv {
-    inherit fetchurl stdenv;
-  };
+  libsigsegv = callPackage ../development/libraries/libsigsegv { };
 
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
-  libsigsegv_25 = import ../development/libraries/libsigsegv/2.5.nix {
-    inherit fetchurl stdenv;
-  };
+  libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
-  libsndfile = import ../development/libraries/libsndfile {
-    inherit fetchurl stdenv;
-  };
+  libsndfile = callPackage ../development/libraries/libsndfile { };
 
-  libssh = import ../development/libraries/libssh {
-    inherit stdenv fetchurl cmake zlib openssl;
-  };
+  libssh = callPackage ../development/libraries/libssh { };
 
-  libstartup_notification = import ../development/libraries/startup-notification {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libxcb xcbutil;
-  };
+  libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
-  libtasn1 = import ../development/libraries/libtasn1 {
-    inherit fetchurl stdenv;
-  };
+  libtasn1 = callPackage ../development/libraries/libtasn1 { };
 
-  libtheora = import ../development/libraries/libtheora {
-    inherit fetchurl stdenv libogg libvorbis;
-  };
+  libtheora = callPackage ../development/libraries/libtheora { };
 
-  libtiff = import ../development/libraries/libtiff {
-    inherit fetchurl stdenv zlib libjpeg;
-  };
+  libtiff = callPackage ../development/libraries/libtiff { };
 
-  libtommath = import ../development/libraries/libtommath {
-    inherit fetchurl stdenv libtool;
-  };
+  libtommath = callPackage ../development/libraries/libtommath { };
 
-  libgeotiff = import ../development/libraries/libgeotiff {
-    inherit stdenv fetchurl libtiff;
-  };
+  libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
-  libunistring = import ../development/libraries/libunistring {
-    inherit fetchurl stdenv libiconv;
-  };
+  libunistring = callPackage ../development/libraries/libunistring { };
 
-  libupnp = import ../development/libraries/pupnp {
-    inherit fetchurl stdenv;
-  };
+  libupnp = callPackage ../development/libraries/pupnp { };
 
-  giflib = import ../development/libraries/giflib {
-    inherit fetchurl stdenv;
-  };
+  giflib = callPackage ../development/libraries/giflib { };
 
-  libungif = import ../development/libraries/giflib/libungif.nix {
-    inherit fetchurl stdenv;
-  };
+  libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
-  libusb = import ../development/libraries/libusb {
-    inherit fetchurl stdenv;
-  };
+  libusb = callPackage ../development/libraries/libusb { };
 
-  libunwind = import ../development/libraries/libunwind {
-    inherit fetchurl stdenv;
-  };
+  libunwind = callPackage ../development/libraries/libunwind { };
 
-  libv4l = import ../development/libraries/libv4l {
-    inherit stdenv fetchurl;
-  };
+  libv4l = callPackage ../development/libraries/libv4l { };
 
-  libvirt = import ../development/libraries/libvirt {
-    inherit stdenv fetchurl libxml2 gnutls devicemapper perl;
-  };
+  libvirt = callPackage ../development/libraries/libvirt { };
 
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
     inherit libtool libjpeg openssl zlib;
@@ -4944,53 +3412,31 @@ let
       libXinerama libXrandr randrproto libXtst;
   };
 
-  libviper = import ../development/libraries/libviper {
-    inherit fetchurl stdenv pkgconfig ncurses gpm glib;
-  };
+  libviper = callPackage ../development/libraries/libviper { };
 
-  libvpx = import ../development/libraries/libvpx {
-    inherit fetchurl stdenv bash yasm;
-  };
+  libvpx = callPackage ../development/libraries/libvpx { };
 
-  libvterm = import ../development/libraries/libvterm {
-    inherit fetchurl stdenv pkgconfig ncurses glib;
-  };
+  libvterm = callPackage ../development/libraries/libvterm { };
 
-  libvorbis = import ../development/libraries/libvorbis {
-    inherit fetchurl stdenv libogg;
-  };
+  libvorbis = callPackage ../development/libraries/libvorbis { };
 
-  libwmf = import ../development/libraries/libwmf {
-    inherit fetchurl stdenv pkgconfig imagemagick
-      zlib libpng freetype libjpeg libxml2 glib;
-  };
+  libwmf = callPackage ../development/libraries/libwmf { };
 
-  libwpd = import ../development/libraries/libwpd {
-    inherit fetchurl stdenv pkgconfig libgsf libxml2 bzip2;
+  libwpd = callPackage ../development/libraries/libwpd { 
     inherit (gnome) glib;
   };
 
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
 
-  libxcrypt = import ../development/libraries/libxcrypt {
-    inherit fetchurl stdenv;
-  };
+  libxcrypt = callPackage ../development/libraries/libxcrypt { };
 
-  libxdg_basedir = import ../development/libraries/libxdg-basedir {
-    inherit fetchurl stdenv;
-  };
+  libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
-  libxklavier = import ../development/libraries/libxklavier {
-    inherit fetchurl stdenv xkeyboard_config pkgconfig libxml2 isocodes glib;
-    inherit (xorg) libX11 libICE libXi libxkbfile;
-  };
+  libxklavier = callPackage ../development/libraries/libxklavier { };
 
-  libxmi = import ../development/libraries/libxmi {
-    inherit fetchurl stdenv libtool;
-  };
+  libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = makeOverridable (import ../development/libraries/libxml2) {
-    inherit fetchurl stdenv zlib python;
+  libxml2 = callPackage ../development/libraries/libxml2 { 
     pythonSupport = false;
   };
 
@@ -4998,35 +3444,23 @@ let
     pythonSupport = true;
   };
 
-  libxmlxx = import ../development/libraries/libxmlxx {
-    inherit stdenv fetchurl;
-    inherit pkgconfig libxml2 perl;
+  libxmlxx = callPackage ../development/libraries/libxmlxx { 
     inherit (gtkLibs) glibmm;
   };
 
-  libxslt = makeOverridable (import ../development/libraries/libxslt) {
-    inherit fetchurl stdenv libxml2;
-  };
+  libxslt = callPackage ../development/libraries/libxslt { };
 
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
   });
 
-  libyaml = import ../development/libraries/libyaml {
-    inherit fetchurl stdenv;
-  };
+  libyaml = callPackage ../development/libraries/libyaml { };
 
-  libzip = import ../development/libraries/libzip {
-    inherit fetchurl stdenv zlib;
-  };
+  libzip = callPackage ../development/libraries/libzip { };
 
-  libzrtpcpp = import ../development/libraries/libzrtpcpp {
-    inherit fetchurl stdenv commoncpp2 openssl pkgconfig ccrtp;
-  };
+  libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
 
-  lightning = import ../development/libraries/lightning {
-    inherit fetchurl stdenv;
-  };
+  lightning = callPackage ../development/libraries/lightning { };
 
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
@@ -5038,24 +3472,14 @@ let
       ;
   };
 
-  log4cxx = import ../development/libraries/log4cxx {
-    inherit fetchurl stdenv automake autoconf libtool cppunit libxml2 boost;
-    inherit apr aprutil db45 expat;
-  };
+  log4cxx = callPackage ../development/libraries/log4cxx { };
 
-  loudmouth = import ../development/libraries/loudmouth {
-    inherit fetchurl stdenv libidn openssl pkgconfig zlib glib;
-  };
+  loudmouth = callPackage ../development/libraries/loudmouth { };
 
-  lzo = import ../development/libraries/lzo {
-    inherit fetchurl stdenv;
-  };
+  lzo = callPackage ../development/libraries/lzo { };
 
   # failed to build
-  mediastreamer = makeOverridable (import ../development/libraries/mediastreamer) {
-    inherit fetchurl stdenv automake libtool autoconf alsaLib pkgconfig speex
-      ortp ffmpeg;
-  };
+  mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
   mesaSupported =
     system == "i686-linux" ||
@@ -5063,40 +3487,25 @@ let
     system == "x86_64-darwin" ||
     system == "i686-darwin";
 
-  mesa = import ../development/libraries/mesa {
-    inherit fetchurl stdenv pkgconfig expat x11 xlibs libdrm;
+  mesa = callPackage ../development/libraries/mesa { 
     lipo = if stdenv.isDarwin then darwinLipoUtility else null;
   };
 
-  ming = import ../development/libraries/ming {
-    inherit fetchurl stdenv flex bison freetype zlib libpng perl;
-  };
+  ming = callPackage ../development/libraries/ming { };
 
-  mlt = import ../development/libraries/mlt {
-    inherit fetchurl stdenv pkgconfig SDL ffmpeg libdv libxml2 libsamplerate
-      libvorbis sox;
+  mlt = callPackage ../development/libraries/mlt { 
     qt = qt4;
   };
 
-  mpeg2dec = import ../development/libraries/mpeg2dec {
-    inherit fetchurl stdenv;
-  };
+  mpeg2dec = callPackage ../development/libraries/mpeg2dec { };
 
-  msilbc = import ../development/libraries/msilbc {
-    inherit fetchurl stdenv ilbc mediastreamer pkgconfig;
-  };
+  msilbc = callPackage ../development/libraries/msilbc { };
 
-  mpc = import ../development/libraries/mpc {
-    inherit fetchurl stdenv gmp mpfr;
-  };
+  mpc = callPackage ../development/libraries/mpc { };
 
-  mpich2 = import ../development/libraries/mpich2 {
-    inherit fetchurl stdenv python perl;
-  };
+  mpich2 = callPackage ../development/libraries/mpich2 { };
 
-  muparser = import ../development/libraries/muparser {
-    inherit fetchurl stdenv;
-  };
+  muparser = callPackage ../development/libraries/muparser { };
 
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
@@ -5107,20 +3516,17 @@ let
 
   neon = neon029;
 
-  neon026 = import ../development/libraries/neon/0.26.nix {
-    inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
+  neon026 = callPackage ../development/libraries/neon/0.26.nix { 
     compressionSupport = true;
     sslSupport = true;
   };
 
-  neon028 = import ../development/libraries/neon/0.28.nix {
-    inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
+  neon028 = callPackage ../development/libraries/neon/0.28.nix { 
     compressionSupport = true;
     sslSupport = true;
   };
 
-  neon029 = import ../development/libraries/neon/0.29.nix {
-    inherit fetchurl stdenv libxml2 zlib openssl pkgconfig;
+  neon029 = callPackage ../development/libraries/neon/0.29.nix { 
     compressionSupport = true;
     sslSupport = true;
   };
@@ -5129,64 +3535,38 @@ let
     inherit ncurses flex bison;
   };
 
-  nettle = import ../development/libraries/nettle {
-    inherit fetchurl stdenv gmp gnum4;
-  };
+  nettle = callPackage ../development/libraries/nettle { };
 
-  nspr = import ../development/libraries/nspr {
-    inherit fetchurl stdenv;
-  };
+  nspr = callPackage ../development/libraries/nspr { };
 
-  nss = import ../development/libraries/nss {
-    inherit fetchurl stdenv nspr perl zlib;
-  };
+  nss = callPackage ../development/libraries/nss { };
 
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
 
-  openal = import ../development/libraries/openal {
-    inherit fetchurl stdenv cmake alsaLib;
-  };
+  openal = callPackage ../development/libraries/openal { };
 
   # added because I hope that it has been easier to compile on x86 (for blender)
-  openalSoft = import ../development/libraries/openal-soft {
-    inherit fetchurl stdenv alsaLib cmake;
-  };
+  openalSoft = callPackage ../development/libraries/openal-soft { };
 
-  openbabel = import ../development/libraries/openbabel {
-    inherit fetchurl stdenv zlib libxml2;
-  };
+  openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = import ../development/libraries/opencascade {
-    inherit fetchurl stdenv mesa tcl tk file;
-    inherit (xlibs) libXmu;
-  };
+  opencascade = callPackage ../development/libraries/opencascade { };
 
-  openct = import ../development/libraries/openct {
-    inherit fetchurl stdenv libtool pcsclite libusb pkgconfig;
-  };
+  openct = callPackage ../development/libraries/openct { };
 
-  opencv = import ../development/libraries/opencv {
-      inherit fetchurl cmake libjpeg libpng libtiff jasper ffmpeg
-          pkgconfig xineLib;
+  opencv = callPackage ../development/libraries/opencv { 
       inherit (gtkLibs) gtk glib;
       inherit (gst_all) gstreamer;
       stdenv = stdenv2;
   };
 
   # this ctl version is needed by openexr_viewers
-  openexr_ctl = import ../development/libraries/openexr_ctl {
-    inherit fetchurl stdenv ilmbase ctl openexr;
-  };
+  openexr_ctl = callPackage ../development/libraries/openexr_ctl { };
 
-  openexr = import ../development/libraries/openexr {
-    inherit fetchurl stdenv ilmbase zlib pkgconfig;
-    inherit ctl;
-  };
+  openexr = callPackage ../development/libraries/openexr { };
 
-  openldap = import ../development/libraries/openldap {
-    inherit fetchurl stdenv openssl cyrus_sasl db4 groff;
-  };
+  openldap = callPackage ../development/libraries/openldap { };
 
   openlierox = builderDefsPackage ../games/openlierox {
     inherit (xlibs) libX11 xproto;
@@ -5194,59 +3574,37 @@ let
       pkgconfig;
   };
 
-  libopensc_dnie = import ../development/libraries/libopensc-dnie {
-    inherit fetchurl stdenv patchelf writeScript openssl openct
-      libtool pcsclite zlib;
+  libopensc_dnie = callPackage ../development/libraries/libopensc-dnie { 
     inherit (gtkLibs) glib;
     opensc = opensc_0_11_7;
   };
 
-  openssl = makeOverridable (import ../development/libraries/openssl) {
+  openssl = callPackage ../development/libraries/openssl { 
     fetchurl = fetchurlBoot;
-    inherit stdenv perl;
   };
 
-  ortp = import ../development/libraries/ortp {
-    inherit fetchurl stdenv;
-  };
+  ortp = callPackage ../development/libraries/ortp { };
 
-  pangoxsl = import ../development/libraries/pangoxsl {
-    inherit fetchurl stdenv pkgconfig;
+  pangoxsl = callPackage ../development/libraries/pangoxsl { 
     inherit (gtkLibs) glib pango;
   };
 
-  pcre = makeOverridable (import ../development/libraries/pcre) {
-    inherit fetchurl stdenv;
+  pcre = callPackage ../development/libraries/pcre { 
     unicodeSupport = getConfig ["pcre" "unicode"] false;
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
-  physfs = import ../development/libraries/physfs {
-    inherit fetchurl stdenv cmake;
-  };
+  physfs = callPackage ../development/libraries/physfs { };
 
-  plib = import ../development/libraries/plib {
-    inherit fetchurl stdenv mesa freeglut SDL;
-    inherit (xlibs) libXi libSM libXmu libXext libX11;
-  };
+  plib = callPackage ../development/libraries/plib { };
 
-  podofo = import ../development/libraries/podofo {
-    inherit fetchurl stdenv cmake zlib freetype libjpeg libtiff
-      fontconfig openssl;
-  };
+  podofo = callPackage ../development/libraries/podofo { };
 
-  polkit = import ../development/libraries/polkit {
-    inherit stdenv fetchurl pkgconfig eggdbus expat pam intltool gettext glib
-      gobjectIntrospection;
-  };
+  polkit = callPackage ../development/libraries/polkit { };
 
-  policykit = makeOverridable (import ../development/libraries/policykit) {
-    inherit stdenv fetchurl pkgconfig dbus dbus_glib expat pam
-      intltool gettext libxslt docbook_xsl glib;
-  };
+  policykit = callPackage ../development/libraries/policykit { };
 
-  poppler = makeOverridable (import ../development/libraries/poppler) {
-    inherit fetchurl stdenv cairo freetype fontconfig zlib libjpeg pkgconfig;
+  poppler = callPackage ../development/libraries/poppler { 
     inherit (gtkLibs) glib gtk;
     qt4Support = false;
   };
@@ -5256,31 +3614,17 @@ let
     qt4Support = true;
   };
 
-  popt = import ../development/libraries/popt {
-    inherit fetchurl stdenv;
-  };
+  popt = callPackage ../development/libraries/popt { };
 
-  proj = import ../development/libraries/proj {
-    inherit fetchurl stdenv;
-  };
+  proj = callPackage ../development/libraries/proj { };
 
-  postgis = import ../development/libraries/postgis {
-    inherit stdenv fetchurl libxml2 postgresql geos proj perl flex
-      composableDerivation;
-  };
+  postgis = callPackage ../development/libraries/postgis { };
 
-  pth = import ../development/libraries/pth {
-    inherit fetchurl stdenv;
-  };
+  pth = callPackage ../development/libraries/pth { };
 
-  qjson = makeOverridable (import ../development/libraries/qjson) {
-    inherit stdenv fetchurl qt4 cmake;
-  };
+  qjson = callPackage ../development/libraries/qjson { };
 
-  qt3 = makeOverridable (import ../development/libraries/qt-3) {
-    inherit fetchurl stdenv x11 zlib libjpeg libpng which mysql mesa;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama libXcursor;
+  qt3 = callPackage ../development/libraries/qt-3 { 
     openglSupport = mesaSupported;
     mysqlSupport = getConfig ["qt" "mysql"] false;
   };
@@ -5291,163 +3635,96 @@ let
 
   qt4 = qt46;
 
-  qt45 = import ../development/libraries/qt-4.x/4.5 {
-    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus
-      fontconfig freetype pkgconfig libtiff;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor libXext
-      inputproto fixesproto libXfixes;
+  qt45 = callPackage ../development/libraries/qt-4.x/4.5 { 
     inherit (gnome) glib;
   };
 
-  qt46 = makeOverridable (import ../development/libraries/qt-4.x/4.6) {
-    inherit fetchurl stdenv zlib libjpeg libpng which mysql mesa openssl cups dbus
-      fontconfig freetype pkgconfig libtiff perl coreutils sqlite alsaLib
-      postgresql;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor libXext libXi
-      inputproto fixesproto libXfixes;
+  qt46 = callPackage ../development/libraries/qt-4.x/4.6 { 
     inherit (gnome) glib;
   };
 
-  qt47 = makeOverridable (import ../development/libraries/qt-4.x/4.7) {
-    inherit fetchurl stdenv zlib libjpeg libpng libmng which mysql mesa openssl
-      cups dbus fontconfig freetype pkgconfig libtiff perl coreutils sqlite
-      alsaLib postgresql pulseaudio;
+  qt47 = callPackage ../development/libraries/qt-4.x/4.7 { 
     inherit (gst_all) gstreamer gstPluginsBase;
-    inherit (xlibs) xextproto libXft libXrender libXrandr randrproto
-      libXmu libXinerama xineramaproto libXcursor libXext libXi
-      inputproto fixesproto libXfixes libXv;
     inherit (gnome) glib;
   };
 
-  qtscriptgenerator = makeOverridable (import ../development/libraries/qtscriptgenerator) {
-    inherit stdenv fetchurl;
+  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { 
     qt4 = qt46;
   };
 
-  quassel = makeOverridable (import ../applications/networking/irc/quassel) {
-    inherit stdenv fetchurl cmake;
+  quassel = callPackage ../applications/networking/irc/quassel { 
     inherit (kde4) qt4 kdelibs phonon automoc4;
   };
 
-  quesoglc = import ../development/libraries/quesoglc {
-    inherit stdenv fetchurl mesa glew freetype fontconfig fribidi;
-    inherit (xlibs) libX11;
-  };
+  quesoglc = callPackage ../development/libraries/quesoglc { };
 
   readline = readline6;
 
-  readline4 = import ../development/libraries/readline/readline4.nix {
-    inherit fetchurl stdenv ncurses;
-  };
+  readline4 = callPackage ../development/libraries/readline/readline4.nix { };
 
-  readline5 = import ../development/libraries/readline/readline5.nix {
-    inherit fetchurl stdenv ncurses;
-  };
+  readline5 = callPackage ../development/libraries/readline/readline5.nix { };
 
-  readline6 = import ../development/libraries/readline/readline6.nix {
-    inherit fetchurl stdenv ncurses;
-  };
+  readline6 = callPackage ../development/libraries/readline/readline6.nix { };
 
-  librdf_raptor = import ../development/libraries/librdf/raptor.nix {
-    inherit fetchurl stdenv libxml2 curl;
-  };
+  librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
-  librdf_rasqal = import ../development/libraries/librdf/rasqal.nix {
-    inherit fetchurl stdenv pcre libxml2 gmp librdf_raptor pkgconfig;
-  };
+  librdf_rasqal = callPackage ../development/libraries/librdf/rasqal.nix { };
 
-  librdf = import ../development/libraries/librdf {
-    inherit fetchurl stdenv pkgconfig librdf_raptor ladspaH openssl zlib;
-  };
+  librdf = callPackage ../development/libraries/librdf { };
 
-  qrupdate = import ../development/libraries/qrupdate { 
-      inherit stdenv fetchurl gfortran blas liblapack;
-  };
+  qrupdate = callPackage ../development/libraries/qrupdate { };
 
-  redland = makeOverridable (import ../development/libraries/redland/1.0.10.nix) {
-    inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
-      mysql libxslt curl pcre librdf_rasqal librdf_raptor;
+  redland = callPackage ../development/libraries/redland/1.0.10.nix { 
     bdb = db4;
     postgresql = null;
   };
 
-  rhino = import ../development/libraries/java/rhino {
-    inherit fetchurl stdenv unzip;
+  rhino = callPackage ../development/libraries/java/rhino { 
     ant = apacheAntGcj;
     javac = gcj;
     jvm = gcj;
   };
 
-  rte = import ../development/libraries/rte {
-    inherit fetchurl stdenv;
-  };
+  rte = callPackage ../development/libraries/rte { };
 
-  rubberband = import ../development/libraries/rubberband {
-    inherit fetchurl stdenv pkgconfig libsamplerate libsndfile ladspaH;
+  rubberband = callPackage ../development/libraries/rubberband { 
     fftw = fftwSinglePrec;
     inherit (vamp) vampSDK;
   };
 
-  schroedinger = import ../development/libraries/schroedinger {
-    inherit fetchurl stdenv liboil pkgconfig;
-  };
+  schroedinger = callPackage ../development/libraries/schroedinger { };
 
-  SDL = makeOverridable (import ../development/libraries/SDL) {
-    inherit fetchurl stdenv pkgconfig x11 mesa alsaLib pulseaudio;
-    inherit (xlibs) libXrandr;
+  SDL = callPackage ../development/libraries/SDL { 
     openglSupport = mesaSupported;
     alsaSupport = true;
     pulseaudioSupport = false; # better go through ALSA
   };
 
-  SDL_gfx = import ../development/libraries/SDL_gfx {
-    inherit fetchurl stdenv SDL;
-  };
+  SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
 
-  SDL_image = import ../development/libraries/SDL_image {
-    inherit fetchurl stdenv SDL libjpeg libungif libtiff libpng;
-    inherit (xlibs) libXpm;
-  };
+  SDL_image = callPackage ../development/libraries/SDL_image { };
 
-  SDL_mixer = import ../development/libraries/SDL_mixer {
-    inherit fetchurl stdenv SDL libogg libvorbis;
-  };
+  SDL_mixer = callPackage ../development/libraries/SDL_mixer { };
 
-  SDL_net = import ../development/libraries/SDL_net {
-    inherit fetchurl stdenv SDL;
-  };
+  SDL_net = callPackage ../development/libraries/SDL_net { };
 
-  SDL_sound = import ../development/libraries/SDL_sound {
-    inherit fetchurl stdenv SDL libvorbis flac libmikmod;
-  };
+  SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
-  SDL_ttf = import ../development/libraries/SDL_ttf {
-    inherit fetchurl stdenv SDL freetype;
-  };
+  SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
-  slang = import ../development/libraries/slang {
-    inherit fetchurl stdenv ncurses pcre libpng zlib readline;
-  };
+  slang = callPackage ../development/libraries/slang { };
 
-  slibGuile = import ../development/libraries/slib {
-    inherit fetchurl stdenv unzip texinfo;
+  slibGuile = callPackage ../development/libraries/slib { 
     scheme = guile;
   };
 
-  snack = import ../development/libraries/snack {
-    inherit fetchurl stdenv tcl tk pkgconfig x11;
+  snack = callPackage ../development/libraries/snack { 
         # optional
-    inherit vorbisTools python;
   };
 
-  speex = import ../development/libraries/speex {
-    inherit fetchurl stdenv libogg;
-  };
+  speex = callPackage ../development/libraries/speex { };
 
-  sqlite = makeOverridable (import ../development/libraries/sqlite) {
-    inherit fetchurl stdenv;
+  sqlite = callPackage ../development/libraries/sqlite { 
     readline = null;
     ncurses = null;
   };
@@ -5456,84 +3733,48 @@ let
     inherit readline ncurses;
   }));
 
-  stlport =  import ../development/libraries/stlport {
-    inherit fetchurl stdenv;
-  };
+  stlport = callPackage ../development/libraries/stlport { };
 
-  suitesparse = import ../development/libraries/suitesparse {
-    inherit fetchurl stdenv blas liblapack;  	
-  };
+  suitesparse = callPackage ../development/libraries/suitesparse { };
 
-  t1lib = import ../development/libraries/t1lib {
-    inherit fetchurl stdenv x11;
-    inherit (xlibs) libXaw libXpm;
-  };
+  t1lib = callPackage ../development/libraries/t1lib { };
 
-  taglib = import ../development/libraries/taglib {
-    inherit fetchurl stdenv zlib;
-  };
+  taglib = callPackage ../development/libraries/taglib { };
 
-  taglib_extras = import ../development/libraries/taglib-extras {
-    inherit stdenv fetchurl cmake taglib;
-  };
+  taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
-  talloc = import ../development/libraries/talloc {
-    inherit fetchurl stdenv;
-  };
+  talloc = callPackage ../development/libraries/talloc { };
 
 ##  tapioca_qt = import ../development/libraries/tapioca-qt {
 ##    inherit stdenv fetchurl cmake qt4 telepathy_qt;
 ##  };
 
-  tdb = import ../development/libraries/tdb {
-    inherit fetchurl stdenv libxslt libxml2 docbook_xsl;
-  };
+  tdb = callPackage ../development/libraries/tdb { };
 
-  tecla = import ../development/libraries/tecla {
-    inherit fetchurl stdenv;
-  };
+  tecla = callPackage ../development/libraries/tecla { };
 
-  telepathy_gabble = import ../development/libraries/telepathy-gabble {
-    inherit fetchurl stdenv pkgconfig libxslt telepathy_glib loudmouth;
-  };
+  telepathy_gabble = callPackage ../development/libraries/telepathy-gabble { };
 
-  telepathy_glib = import ../development/libraries/telepathy-glib {
-    inherit fetchurl stdenv dbus_glib pkgconfig libxslt python glib;
-  };
+  telepathy_glib = callPackage ../development/libraries/telepathy-glib { };
 
-  telepathy_qt = import ../development/libraries/telepathy-qt {
-    inherit stdenv fetchurl cmake qt4;
-  };
+  telepathy_qt = callPackage ../development/libraries/telepathy-qt { };
 
-  tk = import ../development/libraries/tk {
-    inherit fetchurl stdenv tcl x11;
-  };
+  tk = callPackage ../development/libraries/tk { };
 
-  unixODBC = import ../development/libraries/unixODBC {
-    inherit fetchurl stdenv;
-  };
+  unixODBC = callPackage ../development/libraries/unixODBC { };
 
   unixODBCDrivers = recurseIntoAttrs (import ../development/libraries/unixODBCDrivers {
     inherit fetchurl stdenv unixODBC glibc libtool openssl zlib;
     inherit postgresql mysql sqlite;
   });
 
-  vamp = import ../development/libraries/audio/vamp {
-    inherit fetchurl stdenv pkgconfig libsndfile;
-  };
+  vamp = callPackage ../development/libraries/audio/vamp { };
 
-  vigra = import ../development/libraries/vigra {
-   inherit fetchurl stdenv cmake libtiff libpng libjpeg doxygen python fftw;
-  };
+  vigra = callPackage ../development/libraries/vigra { };
 
-  vtk = import ../development/libraries/vtk {
-    inherit stdenv fetchurl cmake mesa;
-    inherit (xlibs) libX11 xproto libXt;
-  };
+  vtk = callPackage ../development/libraries/vtk { };
 
-  vxl = import ../development/libraries/vxl {
-   inherit fetchurl stdenv cmake unzip libtiff expat zlib libpng libjpeg;
-  };
+  vxl = callPackage ../development/libraries/vxl { };
 
   webkit = ((builderDefsPackage ../development/libraries/webkit {
     inherit (gnome28) gtkdoc libsoup;
@@ -5549,67 +3790,42 @@ let
     inherit (xlibs) libXt;
   }).deepOverride {libsoup = gnome28.libsoup_2_31;});
 
-  wvstreams = import ../development/libraries/wvstreams {
-    inherit stdenv fetchurl qt4 dbus zlib openssl readline perl;
-  };
+  wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
 
-  wxGTK26 = import ../development/libraries/wxGTK-2.6 {
-    inherit fetchurl stdenv pkgconfig;
+  wxGTK26 = callPackage ../development/libraries/wxGTK-2.6 { 
     inherit (gtkLibs216) gtk;
-    inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
-  wxGTK28 = makeOverridable (import ../development/libraries/wxGTK-2.8) {
-    inherit fetchurl stdenv pkgconfig mesa;
+  wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 { 
     inherit (gtkLibs216) gtk;
-    inherit (xlibs) libXinerama libSM libXxf86vm xf86vidmodeproto;
   };
 
-  wtk = import ../development/libraries/wtk {
-    inherit requireFile stdenv unzip xlibs;
+  wtk = callPackage ../development/libraries/wtk { };
+
+  x264 = callPackage ../development/libraries/x264 { };
+
+  xapian = callPackage ../development/libraries/xapian { };
+
+  xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
   };
 
-  x264 = import ../development/libraries/x264 {
-    inherit fetchurl stdenv yasm;
-  };
-
-  xapian = makeOverridable (import ../development/libraries/xapian) {
-    inherit fetchurl stdenv zlib;
-  };
-
-  xapianBindings = (import ../development/libraries/xapian/bindings) {
-    inherit fetchurl xapian composableDerivation pkgconfig;
-    inherit ruby php python; # TODO perl php Java, tcl, C#, python
-  };
-
-  Xaw3d = import ../development/libraries/Xaw3d {
-    inherit fetchurl stdenv x11 bison;
+  Xaw3d = callPackage ../development/libraries/Xaw3d { 
     flex = flex2533;
-    inherit (xlibs) imake gccmakedep libXmu libXpm libXp;
   };
 
-  xineLib = import ../development/libraries/xine-lib {
-    inherit fetchurl stdenv zlib libdvdcss alsaLib pkgconfig mesa aalib
-      libvorbis libtheora speex xlibs perl ffmpeg;
-  };
+  xineLib = callPackage ../development/libraries/xine-lib { };
 
-  xautolock = import ../misc/screensavers/xautolock {
-    inherit fetchurl stdenv x11;
-    inherit (xorg) imake;
-    inherit (xlibs) libXScrnSaver scrnsaverproto;
-  };
+  xautolock = callPackage ../misc/screensavers/xautolock { };
 
-  xercesJava = import ../development/libraries/java/xerces {
-    inherit fetchurl stdenv;
+  xercesJava = callPackage ../development/libraries/java/xerces { 
     ant   = apacheAntGcj;  # for bootstrap purposes
     javac = gcj;
     jvm   = gcj;
   };
 
-  xlibsWrapper = import ../development/libraries/xlibs-wrapper {
-    inherit stdenv;
+  xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper { 
     packages = [
       freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
       xlibs.libXft xlibs.libXext xlibs.libSM xlibs.libICE
@@ -5617,17 +3833,14 @@ let
     ];
   };
 
-  xvidcore = import ../development/libraries/xvidcore {
-    inherit fetchurl stdenv nasm;
-  };
+  xvidcore = callPackage ../development/libraries/xvidcore { };
 
   zangband = builderDefsPackage (import ../games/zangband) {
     inherit ncurses flex bison autoconf automake m4 coreutils;
   };
 
-  zlib = makeOverridable (import ../development/libraries/zlib) {
+  zlib = callPackage ../development/libraries/zlib { 
     fetchurl = fetchurlBoot;
-    inherit stdenv;
   };
 
   zlibStatic = lowPrio (appendToName "static" (import ../development/libraries/zlib {
@@ -5635,8 +3848,7 @@ let
     static = true;
   }));
 
-  zvbi = import ../development/libraries/zvbi {
-    inherit fetchurl stdenv libpng x11;
+  zvbi = callPackage ../development/libraries/zvbi { 
     pngSupport = true;
   };
 
@@ -5644,113 +3856,71 @@ let
   ### DEVELOPMENT / LIBRARIES / JAVA
 
 
-  atermjava = import ../development/libraries/java/aterm {
-    inherit fetchurl sharedobjects jjtraveler jdk;
+  atermjava = callPackage ../development/libraries/java/aterm { 
     stdenv = overrideInStdenv stdenv [gnumake380];
+
   };
 
-  commonsFileUpload = import ../development/libraries/java/jakarta-commons/file-upload {
-    inherit stdenv fetchurl;
-  };
+  commonsFileUpload = callPackage ../development/libraries/java/jakarta-commons/file-upload { };
 
-  fastjar = import ../development/tools/java/fastjar {
-    inherit fetchurl stdenv zlib;
-  };
+  fastjar = callPackage ../development/tools/java/fastjar { };
 
-  httpunit = import ../development/libraries/java/httpunit {
-    inherit stdenv fetchurl unzip;
-  };
+  httpunit = callPackage ../development/libraries/java/httpunit { };
 
-  gwtdragdrop = import ../development/libraries/java/gwt-dragdrop {
-    inherit stdenv fetchurl;
-  };
+  gwtdragdrop = callPackage ../development/libraries/java/gwt-dragdrop { };
 
-  gwtwidgets = import ../development/libraries/java/gwt-widgets {
-    inherit stdenv fetchurl;
-  };
+  gwtwidgets = callPackage ../development/libraries/java/gwt-widgets { };
 
-  jakartabcel = import ../development/libraries/java/jakarta-bcel {
+  jakartabcel = callPackage ../development/libraries/java/jakarta-bcel { 
     regexp = jakartaregexp;
-    inherit fetchurl stdenv;
   };
 
-  jakartaregexp = import ../development/libraries/java/jakarta-regexp {
-    inherit fetchurl stdenv;
-  };
+  jakartaregexp = callPackage ../development/libraries/java/jakarta-regexp { };
 
-  javaCup = import ../development/libraries/java/cup {
-    inherit stdenv fetchurl jdk;
-  };
+  javaCup = callPackage ../development/libraries/java/cup { };
 
-  javasvn = import ../development/libraries/java/javasvn {
-    inherit stdenv fetchurl unzip;
-  };
+  javasvn = callPackage ../development/libraries/java/javasvn { };
 
-  jclasslib = import ../development/tools/java/jclasslib {
-    inherit fetchurl stdenv xpf jre;
+  jclasslib = callPackage ../development/tools/java/jclasslib { 
     ant = apacheAnt14;
   };
 
-  jdom = import ../development/libraries/java/jdom {
-    inherit stdenv fetchurl;
-  };
+  jdom = callPackage ../development/libraries/java/jdom { };
 
-  jflex = import ../development/libraries/java/jflex {
-    inherit stdenv fetchurl;
-  };
+  jflex = callPackage ../development/libraries/java/jflex { };
 
-  jjtraveler = import ../development/libraries/java/jjtraveler {
-    inherit fetchurl jdk;
+  jjtraveler = callPackage ../development/libraries/java/jjtraveler { 
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  junit = import ../development/libraries/java/junit {
-    inherit stdenv fetchurl unzip;
-  };
+  junit = callPackage ../development/libraries/java/junit { };
 
-  lucene = import ../development/libraries/java/lucene {
-    inherit stdenv fetchurl;
-  };
+  lucene = callPackage ../development/libraries/java/lucene { };
 
-  mockobjects = import ../development/libraries/java/mockobjects {
-    inherit stdenv fetchurl;
-  };
+  mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
-  saxon = import ../development/libraries/java/saxon {
-    inherit fetchurl stdenv unzip;
-  };
+  saxon = callPackage ../development/libraries/java/saxon { };
 
-  saxonb = import ../development/libraries/java/saxon/default8.nix {
-    inherit fetchurl stdenv unzip jre;
-  };
+  saxonb = callPackage ../development/libraries/java/saxon/default8.nix { };
 
-  sharedobjects = import ../development/libraries/java/shared-objects {
-    inherit fetchurl jdk;
+  sharedobjects = callPackage ../development/libraries/java/shared-objects { 
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
-  smack = import ../development/libraries/java/smack {
-    inherit stdenv fetchurl;
-  };
+  smack = callPackage ../development/libraries/java/smack { };
 
-  swt = import ../development/libraries/java/swt {
-    inherit stdenv fetchurl unzip jdk pkgconfig;
+  swt = callPackage ../development/libraries/java/swt { 
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libXtst;
   };
 
   xalanj = xalanJava;
-  xalanJava = import ../development/libraries/java/xalanj {
-    inherit fetchurl stdenv;
+  xalanJava = callPackage ../development/libraries/java/xalanj { 
     ant    = apacheAntGcj;  # for bootstrap purposes
     javac  = gcj;
     jvm    = gcj;
-    xerces = xercesJava;
-  };
+    xerces = xercesJava;  };
 
-  zziplib = import ../development/libraries/zziplib {
-    inherit fetchurl stdenv perl python zip xmlto zlib;
-  };
+  zziplib = callPackage ../development/libraries/zziplib { };
 
 
   ### DEVELOPMENT / PERL MODULES
@@ -5794,13 +3964,9 @@ let
     buildPythonPackage = buildPython26Package;
   });
 
-  foursuite = import ../development/python-modules/4suite {
-    inherit fetchurl stdenv python;
-  };
+  foursuite = callPackage ../development/python-modules/4suite { };
 
-  bsddb3 = import ../development/python-modules/bsddb3 {
-    inherit fetchurl stdenv python db4;
-  };
+  bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
   flup = builderDefsPackage ../development/python-modules/flup {
     inherit fetchurl stdenv;
@@ -5808,46 +3974,27 @@ let
     setuptools = setuptools.passthru.function {python = python25;};
   };
 
-  numeric = import ../development/python-modules/numeric {
-    inherit fetchurl stdenv python;
-  };
+  numeric = callPackage ../development/python-modules/numeric { };
 
-  pil = import ../development/python-modules/pil {
-    inherit fetchurl stdenv python zlib libjpeg freetype;
-  };
+  pil = callPackage ../development/python-modules/pil { };
 
-  psyco = import ../development/python-modules/psyco {
-    inherit fetchurl stdenv python;
-  };
+  psyco = callPackage ../development/python-modules/psyco { };
 
-  pycairo = import ../development/python-modules/pycairo {
-    inherit fetchurl stdenv python pkgconfig cairo x11;
-  };
+  pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycrypto = import ../development/python-modules/pycrypto {
-    inherit fetchurl stdenv python gmp;
-  };
+  pycrypto = callPackage ../development/python-modules/pycrypto { };
 
-  pycups = import ../development/python-modules/pycups {
-    inherit stdenv fetchurl python cups;
-  };
+  pycups = callPackage ../development/python-modules/pycups { };
 
-  pygame = import ../development/python-modules/pygame {
-    inherit fetchurl stdenv python pkgconfig SDL SDL_image
-      SDL_mixer SDL_ttf numeric;
-  };
+  pygame = callPackage ../development/python-modules/pygame { };
 
-  pygobject = import ../development/python-modules/pygobject {
-    inherit fetchurl stdenv python pkgconfig glib;
-  };
+  pygobject = callPackage ../development/python-modules/pygobject { };
 
-  pygtk = import ../development/python-modules/pygtk {
-    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
+  pygtk = callPackage ../development/python-modules/pygtk { 
     inherit (gtkLibs) glib gtk;
   };
 
-  pyGtkGlade = import ../development/python-modules/pygtk {
-    inherit fetchurl stdenv python pkgconfig pygobject pycairo;
+  pyGtkGlade = callPackage ../development/python-modules/pygtk { 
     inherit (gtkLibs) glib gtk;
     inherit (gnome) libglade;
   };
@@ -5856,25 +4003,15 @@ let
     inherit python openssl;
   };
 
-  rhpl = import ../development/python-modules/rhpl {
-    inherit stdenv fetchurl rpm cpio python wirelesstools gettext;
-  };
+  rhpl = callPackage ../development/python-modules/rhpl { };
 
-  sip = import ../development/python-modules/python-sip {
-    inherit stdenv fetchurl python;
-  };
+  sip = callPackage ../development/python-modules/python-sip { };
 
-  pyqt4 = import ../development/python-modules/pyqt {
-    inherit stdenv fetchurl python qt4 sip;
-  };
+  pyqt4 = callPackage ../development/python-modules/pyqt { };
 
-  pyx = import ../development/python-modules/pyx {
-    inherit fetchurl stdenv python makeWrapper;
-  };
+  pyx = callPackage ../development/python-modules/pyx { };
 
-  pyxml = import ../development/python-modules/pyxml {
-    inherit fetchurl stdenv python makeWrapper;
-  };
+  pyxml = callPackage ../development/python-modules/pyxml { };
 
   setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
     inherit python makeWrapper;
@@ -5887,54 +4024,39 @@ let
 
   wxPython = wxPython26;
 
-  wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
-    inherit fetchurl stdenv pkgconfig python;
+  wxPython26 = callPackage ../development/python-modules/wxPython/2.6.nix { 
     wxGTK = wxGTK26;
   };
 
-  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
-    inherit fetchurl stdenv pkgconfig python;
-    inherit wxGTK;
-  };
+  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix { };
 
   twisted = pythonPackages.twisted;
 
   ZopeInterface = pythonPackages.zopeInterface;
 
-  zope = import ../development/python-modules/zope {
-    inherit fetchurl stdenv;
+  zope = callPackage ../development/python-modules/zope { 
     python = python24;
   };
 
   ### SERVERS
 
-  rdf4store = import ../servers/http/4store {
-    inherit builderDefsPackage librdf_raptor librdf_rasqal libxml2
-      pcre avahi readline ncurses expat zlib pkgconfig which perl;
+  rdf4store = callPackage ../servers/http/4store { 
     inherit (gtkLibs) glib;
   };
 
-  apacheHttpd = makeOverridable (import ../servers/http/apache-httpd) {
-    inherit fetchurl stdenv perl openssl zlib apr aprutil pcre;
+  apacheHttpd = callPackage ../servers/http/apache-httpd { 
     sslSupport = true;
   };
 
-  sabnzbd = import ../servers/sabnzbd {
-    inherit fetchurl stdenv python cheetahTemplate makeWrapper par2cmdline unzip unrar;
-  };
+  sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = builderDefsPackage (import ../servers/dns/bind/9.5.0.nix) {
     inherit openssl libtool;
   };
 
-  dico = import ../servers/dico {
-    inherit fetchurl stdenv libtool gettext zlib readline guile python
-      gsasl;
-  };
+  dico = callPackage ../servers/dico { };
 
-  dict = makeOverridable (import ../servers/dict) {
-    inherit fetchurl stdenv which bison flex;
-  };
+  dict = callPackage ../servers/dict { };
 
   dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
     inherit builderDefs;
@@ -5944,107 +4066,57 @@ let
     inherit stdenv lib dict;
   };
 
-  dovecot = import ../servers/mail/dovecot {
-    inherit fetchurl stdenv openssl pam;
-  };
-  dovecot_1_1_1 = import ../servers/mail/dovecot/1.1.1.nix {
-    inherit fetchurl stdenv openssl pam;
-  };
+  dovecot = callPackage ../servers/mail/dovecot { };
+  dovecot_1_1_1 = callPackage ../servers/mail/dovecot/1.1.1.nix { };
 
-  ejabberd = import ../servers/xmpp/ejabberd {
-    inherit fetchurl stdenv expat zlib openssl pam lib;
+  ejabberd = callPackage ../servers/xmpp/ejabberd { 
     erlang = erlangR13B ;
   };
 
-  couchdb = import ../servers/http/couchdb {
-    inherit fetchurl stdenv erlang spidermonkey icu getopt
-      curl;
-  };
+  couchdb = callPackage ../servers/http/couchdb { };
 
-  felix = import ../servers/felix {
-    inherit stdenv fetchurl;
-  };
+  felix = callPackage ../servers/felix { };
 
-  felix_remoteshell = import ../servers/felix/remoteshell.nix {
-    inherit stdenv fetchurl;
-  };
+  felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
-  fingerd_bsd = import ../servers/fingerd/bsd-fingerd {
-    inherit fetchurl stdenv;
-  };
+  fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
-  firebird = import ../servers/firebird {
-    inherit stdenv fetchurl icu libedit;
-  };
+  firebird = callPackage ../servers/firebird { };
 
-  ircdHybrid = import ../servers/irc/ircd-hybrid {
-    inherit fetchurl stdenv openssl zlib;
-  };
+  ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
-  jboss = import ../servers/http/jboss {
-    inherit fetchurl stdenv unzip jdk lib;
-  };
+  jboss = callPackage ../servers/http/jboss { };
 
-  jboss_mysql_jdbc = import ../servers/http/jboss/jdbc/mysql {
-    inherit stdenv jboss mysql_jdbc;
-  };
+  jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
 
-  jetty = import ../servers/http/jetty {
-    inherit fetchurl stdenv unzip;
-  };
+  jetty = callPackage ../servers/http/jetty { };
 
-  jetty61 = import ../servers/http/jetty/6.1 {
-    inherit fetchurl stdenv unzip;
-  };
+  jetty61 = callPackage ../servers/http/jetty/6.1 { };
 
-  lighttpd = import ../servers/http/lighttpd {
-    inherit fetchurl stdenv pcre libxml2 zlib attr bzip2;
-  };
+  lighttpd = callPackage ../servers/http/lighttpd { };
 
-  mod_python = makeOverridable (import ../servers/http/apache-modules/mod_python) {
-    inherit fetchurl stdenv apacheHttpd python;
-  };
+  mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
-  mpd = import ../servers/mpd {
-    inherit stdenv fetchurl pkgconfig glib alsaLib flac libvorbis libmad
-            libid3tag libmikmod libcue;
-  };
+  mpd = callPackage ../servers/mpd { };
 
-  myserver = import ../servers/http/myserver {
-    inherit fetchurl stdenv libgcrypt libevent libidn gnutls libxml2
-      zlib texinfo cppunit xz;
-  };
+  myserver = callPackage ../servers/http/myserver { };
 
   nginx = builderDefsPackage (import ../servers/http/nginx) {
     inherit openssl pcre zlib libxml2 libxslt;
   };
 
-  postfix = import ../servers/mail/postfix {
-    inherit fetchurl stdenv db4 openssl cyrus_sasl glibc;
-  };
+  postfix = callPackage ../servers/mail/postfix { };
 
-  pulseaudio = makeOverridable (import ../servers/pulseaudio) {
-    inherit fetchurl stdenv pkgconfig gnum4 gdbm
-      dbus avahi liboil libsamplerate libsndfile speex
-      intltool gettext libtool libcap bluez udev;
-    inherit (xlibs) libX11 libICE libSM libXtst libXi;
-    inherit (gtkLibs) gtk glib;
-    inherit alsaLib;    # Needs ALSA >= 1.0.17.
+  pulseaudio = callPackage ../servers/pulseaudio { 
+    inherit (gtkLibs) gtk glib;    # Needs ALSA >= 1.0.17.
     gconf = gnome.GConf;
   };
 
-  tomcat_connectors = import ../servers/http/apache-modules/tomcat-connectors {
-    inherit fetchurl stdenv apacheHttpd jdk;
-  };
+  tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
-  portmap = makeOverridable (import ../servers/portmap) {
-    inherit fetchurl stdenv lib tcpWrapper;
-  };
+  portmap = callPackage ../servers/portmap { };
 
-  monetdb = import ../servers/sql/monetdb {
-    inherit composableDerivation;
-    inherit fetchurl pcre openssl readline libxml2 geos apacheAnt jdk5;
-  };
+  monetdb = callPackage ../servers/sql/monetdb { };
 
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
@@ -6063,36 +4135,23 @@ let
 
   mysql = mysql5;
 
-  mysql_jdbc = import ../servers/sql/mysql/jdbc {
-    inherit fetchurl stdenv ant;
-  };
+  mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
-  nagios = import ../servers/monitoring/nagios {
-    inherit fetchurl stdenv perl gd libpng zlib;
+  nagios = callPackage ../servers/monitoring/nagios { 
     gdSupport = true;
   };
 
-  nagiosPluginsOfficial = import ../servers/monitoring/nagios/plugins/official {
-    inherit fetchurl stdenv openssh;
-  };
+  nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official { };
 
-  openfire = makeOverridable (import ../servers/xmpp/openfire) {
-    inherit stdenv fetchurl builderDefs jre;
-  };
+  openfire = callPackage ../servers/xmpp/openfire { };
 
   postgresql = postgresql83;
 
-  postgresql83 = import ../servers/sql/postgresql/8.3.x.nix {
-    inherit fetchurl stdenv readline ncurses zlib;
-  };
+  postgresql83 = callPackage ../servers/sql/postgresql/8.3.x.nix { };
 
-  postgresql84 = import ../servers/sql/postgresql/8.4.x.nix {
-    inherit fetchurl stdenv readline ncurses zlib;
-  };
+  postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
 
-  postgresql_jdbc = import ../servers/sql/postgresql/jdbc {
-    inherit fetchurl stdenv ant;
-  };
+  postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
@@ -6102,55 +4161,32 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
-  radius = import ../servers/radius {
-    inherit fetchurl stdenv m4 groff readline;
-  };
+  radius = callPackage ../servers/radius { };
 
-  redstore = import ../servers/http/redstore {
-    inherit builderDefsPackage redland pkgconfig gmp;
-  };
+  redstore = callPackage ../servers/http/redstore { };
 
-  samba = makeOverridable (import ../servers/samba) {
-    inherit stdenv fetchurl readline openldap pam kerberos popt iniparser
-      libunwind acl fam;
-  };
+  samba = callPackage ../servers/samba { };
 
-  shishi = import ../servers/shishi {
-    inherit fetchurl stdenv libtasn1 libgcrypt gnutls;
-  };
+  shishi = callPackage ../servers/shishi { };
 
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
     inherit fetchurl stdenv perl lib composableDerivation;
   });
   squid = squids.squid3Beta; # has ipv6 support
 
-  tomcat5 = import ../servers/http/tomcat {
-    inherit fetchurl stdenv jdk;
-  };
+  tomcat5 = callPackage ../servers/http/tomcat { };
 
-  tomcat6 = import ../servers/http/tomcat/6.0.nix {
-    inherit fetchurl stdenv jdk;
-  };
+  tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
 
-  tomcat_mysql_jdbc = import ../servers/http/tomcat/jdbc/mysql {
-    inherit stdenv tomcat6 mysql_jdbc;
-  };
+  tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
-  axis2 = import ../servers/http/tomcat/axis2 {
-    inherit fetchurl stdenv jdk apacheAnt unzip;
-  };
+  axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
-  virtuoso = makeOverridable (import ../servers/sql/virtuoso) {
-    inherit stdenv fetchurl libxml2 openssl readline gawk;
-  };
+  virtuoso = callPackage ../servers/sql/virtuoso { };
 
-  vsftpd = import ../servers/ftp/vsftpd {
-    inherit fetchurl openssl stdenv libcap pam;
-  };
+  vsftpd = callPackage ../servers/ftp/vsftpd { };
 
-  xinetd = import ../servers/xinetd {
-    inherit fetchurl stdenv;
-  };
+  xinetd = callPackage ../servers/xinetd { };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
@@ -6165,16 +4201,9 @@ let
     python =  pythonBase;
   });
 
-  xorgReplacements = makeOverridable (import ../servers/x11/xorg/replacements.nix) {
-    inherit fetchurl stdenv automake autoconf libtool xorg makeOverridable;
-  };
+  xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
 
-  xorgVideoUnichrome = import ../servers/x11/xorg/unichrome/default.nix {
-    inherit stdenv fetchgit pkgconfig libdrm mesa automake autoconf libtool;
-    inherit (xorg) fontsproto libpciaccess randrproto renderproto videoproto
-      libX11 xextproto xf86driproto xorgserver xproto libXvMC glproto
-      libXext utilmacros;
-  };
+  xorgVideoUnichrome = callPackage ../servers/x11/xorg/unichrome/default.nix { };
 
   zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
@@ -6183,63 +4212,34 @@ let
 
   ### OS-SPECIFIC
 
-  afuse = import ../os-specific/linux/afuse {
-    inherit fetchurl stdenv pkgconfig fuse;
-  };
+  afuse = callPackage ../os-specific/linux/afuse { };
 
-  autofs5 = import ../os-specific/linux/autofs/autofs-v5.nix {
-    inherit fetchurl stdenv flex bison linuxHeaders;
-  };
+  autofs5 = callPackage ../os-specific/linux/autofs/autofs-v5.nix { };
 
-  _915resolution = import ../os-specific/linux/915resolution {
-    inherit fetchurl stdenv;
-  };
+  _915resolution = callPackage ../os-specific/linux/915resolution { };
 
-  nfsUtils = import ../os-specific/linux/nfs-utils {
-    inherit fetchurl stdenv tcpWrapper utillinuxng libcap;
-  };
+  nfsUtils = callPackage ../os-specific/linux/nfs-utils { };
 
-  acpi = import ../os-specific/linux/acpi {
-    inherit fetchurl stdenv;
-  };
+  acpi = callPackage ../os-specific/linux/acpi { };
 
-  acpid = import ../os-specific/linux/acpid {
-    inherit fetchurl stdenv;
-  };
+  acpid = callPackage ../os-specific/linux/acpid { };
 
-  acpitool = import ../os-specific/linux/acpitool {
-    inherit fetchurl stdenv;
-  };
+  acpitool = callPackage ../os-specific/linux/acpitool { };
 
-  alsaLib = import ../os-specific/linux/alsa-lib {
-    inherit stdenv fetchurl;
-  };
+  alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
-  alsaPlugins = import ../os-specific/linux/alsa-plugins {
-    inherit fetchurl stdenv lib pkgconfig alsaLib pulseaudio jackaudio;
-  };
-  alsaPluginWrapper = import ../os-specific/linux/alsa-plugins/wrapper.nix {
-    inherit stdenv alsaPlugins writeScriptBin;
-  };
+  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
+  alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
 
-  alsaUtils = import ../os-specific/linux/alsa-utils {
-    inherit stdenv fetchurl alsaLib gettext ncurses;
-  };
+  alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
 
-  bluez = import ../os-specific/linux/bluez {
-    inherit fetchurl stdenv pkgconfig dbus libusb alsaLib glib;
-  };
+  bluez = callPackage ../os-specific/linux/bluez { };
 
-  bridge_utils = import ../os-specific/linux/bridge_utils {
-    inherit fetchurl stdenv autoconf automake;
-  };
+  bridge_utils = callPackage ../os-specific/linux/bridge_utils { };
 
-  cifs_utils = import ../os-specific/linux/cifs-utils {
-    inherit fetchurl stdenv;
-  };
+  cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  conky = import ../os-specific/linux/conky {
-    inherit stdenv fetchurl pkgconfig libxml2 curl wirelesstools openssl;
+  conky = callPackage ../os-specific/linux/conky { 
     inherit (gtkLibs) glib;
   };
 
@@ -6250,46 +4250,27 @@ let
     linuxHeaders = stdenv.gcc.libc.kernelHeaders;
   });
 
-  cryopid = import ../os-specific/linux/cryopid {
-    inherit fetchurl stdenv zlibStatic;
-  };
+  cryopid = callPackage ../os-specific/linux/cryopid { };
 
-  cryptsetup = import ../os-specific/linux/cryptsetup {
-    inherit stdenv fetchurl libuuid popt devicemapper udev;
-  };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
-  cramfsswap = import ../os-specific/linux/cramfsswap {
-    inherit fetchurl stdenv zlib;
-  };
+  cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
-  darwinArchUtility = import ../os-specific/darwin/arch {
-    inherit stdenv;
-  };
+  darwinArchUtility = callPackage ../os-specific/darwin/arch { };
 
-  darwinSwVersUtility = import ../os-specific/darwin/sw_vers {
-    inherit stdenv;
-  };
+  darwinSwVersUtility = callPackage ../os-specific/darwin/sw_vers { };
 
-  darwinLipoUtility = import ../os-specific/darwin/lipo {
-    inherit stdenv;
-  };
+  darwinLipoUtility = callPackage ../os-specific/darwin/lipo { };
 
   devicemapper = lvm2;
 
-  dmidecode = import ../os-specific/linux/dmidecode {
-    inherit fetchurl stdenv;
-  };
+  dmidecode = callPackage ../os-specific/linux/dmidecode { };
 
-  dmtcp = import ../os-specific/linux/dmtcp {
-    inherit fetchurl stdenv perl python;
-  };
+  dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dmtcp_devel = import ../os-specific/linux/dmtcp/devel.nix {
-    inherit fetchsvn stdenv perl python;
-  };
+  dmtcp_devel = callPackage ../os-specific/linux/dmtcp/devel.nix { };
 
-  dietlibc = import ../os-specific/linux/dietlibc {
-    inherit fetchurl glibc;
+  dietlibc = callPackage ../os-specific/linux/dietlibc { 
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
   };
@@ -6305,61 +4286,35 @@ let
 
   libuuid = if ! stdenv.isDarwin then utillinuxng else null;
 
-  e3cfsprogs = import ../os-specific/linux/e3cfsprogs {
-    inherit stdenv fetchurl gettext;
-  };
+  e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
-  eject = import ../os-specific/linux/eject {
-    inherit fetchurl stdenv gettext;
-  };
+  eject = callPackage ../os-specific/linux/eject { };
 
   fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
     inherit fontconfig gpm freetype pkgconfig ncurses;
   };
 
-  fuse = import ../os-specific/linux/fuse {
-    inherit fetchurl stdenv utillinux;
-  };
+  fuse = callPackage ../os-specific/linux/fuse { };
 
-  fxload = import ../os-specific/linux/fxload {
-    inherit fetchurl stdenv;
-  };
+  fxload = callPackage ../os-specific/linux/fxload { };
 
-  gpm = import ../servers/gpm {
-    inherit fetchurl stdenv ncurses bison;
+  gpm = callPackage ../servers/gpm { 
     flex = flex2535;
   };
 
-  hal = makeOverridable (import ../os-specific/linux/hal) {
-    inherit fetchurl stdenv pkgconfig python pciutils usbutils expat
-      libusb dbus dbus_glib libuuid perl perlXMLParser
-      gettext zlib eject libsmbios udev gperf dmidecode utillinuxng
-      consolekit policykit pmutils glib;
-  };
+  hal = callPackage ../os-specific/linux/hal { };
 
-  halevt = import ../os-specific/linux/hal/hal-evt.nix {
-    inherit fetchurl stdenv libxml2 pkgconfig boolstuff hal dbus_glib;
-  };
+  halevt = callPackage ../os-specific/linux/hal/hal-evt.nix { };
 
-  hal_info = import ../os-specific/linux/hal/info.nix {
-    inherit fetchurl stdenv pkgconfig;
-  };
+  hal_info = callPackage ../os-specific/linux/hal/info.nix { };
 
-  hal_info_synaptics = import ../os-specific/linux/hal/synaptics.nix {
-    inherit stdenv;
-  };
+  hal_info_synaptics = callPackage ../os-specific/linux/hal/synaptics.nix { };
 
-  hdparm = import ../os-specific/linux/hdparm {
-    inherit fetchurl stdenv;
-  };
+  hdparm = callPackage ../os-specific/linux/hdparm { };
 
-  hibernate = import ../os-specific/linux/hibernate {
-    inherit fetchurl stdenv gawk;
-  };
+  hibernate = callPackage ../os-specific/linux/hibernate { };
 
-  htop = import ../os-specific/linux/htop {
-    inherit fetchurl stdenv ncurses;
-  };
+  htop = callPackage ../os-specific/linux/htop { };
 
   hurdCross = forceBuildDrv(import ../os-specific/gnu/hurd {
     inherit fetchgit stdenv autoconf libtool texinfo machHeaders
@@ -6388,8 +4343,7 @@ let
     installTarget = "libihash-install";
   });
 
-  hurdHeaders = import ../os-specific/gnu/hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo mig machHeaders;
+  hurdHeaders = callPackage ../os-specific/gnu/hurd { 
     automake = automake111x;
     headersOnly = true;
     gccCross = null;
@@ -6404,17 +4358,11 @@ let
     cross = assert crossSystem != null; crossSystem;
   });
 
-  hwdata = import ../os-specific/linux/hwdata {
-    inherit fetchurl stdenv;
-  };
+  hwdata = callPackage ../os-specific/linux/hwdata { };
 
-  ifplugd = import ../os-specific/linux/ifplugd {
-    inherit fetchurl stdenv pkgconfig libdaemon;
-  };
+  ifplugd = callPackage ../os-specific/linux/ifplugd { };
 
-  iproute = import ../os-specific/linux/iproute {
-    inherit fetchurl stdenv flex bison db4;
-  };
+  iproute = callPackage ../os-specific/linux/iproute { };
 
   iputils = (
     import ../os-specific/linux/iputils {
@@ -6423,41 +4371,23 @@ let
     linuxHeaders = stdenv.gcc.libc.kernelHeaders;
   });
 
-  iptables = import ../os-specific/linux/iptables {
-    inherit fetchurl stdenv;
-  };
+  iptables = callPackage ../os-specific/linux/iptables { };
 
-  ipw2200fw = import ../os-specific/linux/firmware/ipw2200 {
-    inherit fetchurl stdenv;
-  };
+  ipw2200fw = callPackage ../os-specific/linux/firmware/ipw2200 { };
 
-  iwlwifi1000ucode = import ../os-specific/linux/firmware/iwlwifi-1000-ucode {
-    inherit fetchurl stdenv;
-  };
+  iwlwifi1000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-1000-ucode { };
 
-  iwlwifi3945ucode = import ../os-specific/linux/firmware/iwlwifi-3945-ucode {
-    inherit fetchurl stdenv;
-  };
+  iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
 
-  iwlwifi4965ucodeV1 = import ../os-specific/linux/firmware/iwlwifi-4965-ucode {
-    inherit fetchurl stdenv;
-  };
+  iwlwifi4965ucodeV1 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode { };
 
-  iwlwifi4965ucodeV2 = import ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix {
-    inherit fetchurl stdenv;
-  };
+  iwlwifi4965ucodeV2 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix { };
 
-  iwlwifi5000ucode = import ../os-specific/linux/firmware/iwlwifi-5000-ucode {
-    inherit fetchurl stdenv;
-  };
+  iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
 
-  kbd = import ../os-specific/linux/kbd {
-    inherit fetchurl stdenv bison flex autoconf automake;
-  };
+  kbd = callPackage ../os-specific/linux/kbd { };
 
-  libcroup = import ../os-specific/linux/libcg {
-    inherit stdenv fetchurl pam yacc flex;
-  };
+  libcroup = callPackage ../os-specific/linux/libcg { };
 
   linuxHeaders = linuxHeaders_2_6_28;
 
@@ -6479,21 +4409,13 @@ let
   linuxHeadersCross = assert crossSystem != null;
     linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
 
-  linuxHeaders_2_6_18 = import ../os-specific/linux/kernel-headers/2.6.18.5.nix {
-    inherit fetchurl stdenv unifdef;
-  };
+  linuxHeaders_2_6_18 = callPackage ../os-specific/linux/kernel-headers/2.6.18.5.nix { };
 
-  linuxHeaders_2_6_28 = import ../os-specific/linux/kernel-headers/2.6.28.nix {
-    inherit fetchurl stdenv perl;
-  };
+  linuxHeaders_2_6_28 = callPackage ../os-specific/linux/kernel-headers/2.6.28.nix { };
 
-  linuxHeaders_2_6_32 = import ../os-specific/linux/kernel-headers/2.6.32.nix {
-    inherit fetchurl stdenv perl;
-  };
+  linuxHeaders_2_6_32 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
 
-  kernelPatches = import ../os-specific/linux/kernel/patches.nix {
-    inherit fetchurl;
-  };
+  kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -6616,37 +4538,23 @@ let
 
     inherit kernel;
 
-    ati_drivers_x11 = import ../os-specific/linux/ati-drivers {
-      inherit stdenv fetchurl kernel xlibs which mesa xorg makeWrapper
-        patchelf glibc;
-      inherit (xorg) imake libXxf86vm xf86vidmodeproto;
-    };
+    ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs = import ../os-specific/linux/aufs {
-      inherit fetchurl stdenv kernel;
-    };
+    aufs = callPackage ../os-specific/linux/aufs { };
 
-    aufs2 = import ../os-specific/linux/aufs2 {
-      inherit fetchurl stdenv kernel perl;
-    };
+    aufs2 = callPackage ../os-specific/linux/aufs2 { };
 
-    aufs2_util = import ../os-specific/linux/aufs2-util {
-      inherit fetchurl stdenv kernel aufs2;
-    };
+    aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
     
-    blcr = import ../os-specific/linux/blcr/0.8.2.nix {
-      inherit fetchurl stdenv kernel perl makeWrapper autoconf automake;
-      libtool = libtool_1_5; # libtool 2 causes a fork bomb
+    blcr = callPackage ../os-specific/linux/blcr/0.8.2.nix { 
+      libtool = libtool_1_5; # libtool 2 causes a fork bomb    
     };
 
-    exmap = import ../os-specific/linux/exmap {
-      inherit fetchurl stdenv kernel boost pcre pkgconfig;
+    exmap = callPackage ../os-specific/linux/exmap { 
       inherit (gtkLibs) gtkmm;
     };
 
-    iwlwifi = import ../os-specific/linux/iwlwifi {
-      inherit fetchurl stdenv kernel;
-    };
+    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     iwlwifi4965ucode =
       (if (builtins.compareVersions kernel.version "2.6.27" == 0)
@@ -6654,26 +4562,15 @@ let
        then iwlwifi4965ucodeV2
        else iwlwifi4965ucodeV1);
 
-    atheros = makeOverridable (import ../os-specific/linux/atheros/0.9.4.nix) {
-      inherit fetchurl stdenv builderDefs kernel;
-    };
+    atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
-    nvidia_x11 = makeOverridable (import ../os-specific/linux/nvidia-x11) {
-      inherit stdenv fetchurl kernel xlibs gtkLibs zlib perl;
-    };
+    nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_legacy = import ../os-specific/linux/nvidia-x11/legacy.nix {
-      inherit stdenv fetchurl kernel xlibs gtkLibs zlib;
-    };
+    nvidia_x11_legacy = callPackage ../os-specific/linux/nvidia-x11/legacy.nix { };
 
-    openafsClient = import ../servers/openafs-client {
-      inherit stdenv fetchurl autoconf automake flex yacc;
-      inherit kernel glibc ncurses perl krb5;
-    };
+    openafsClient = callPackage ../servers/openafs-client { };
 
-    wis_go7007 = import ../os-specific/linux/wis-go7007 {
-      inherit fetchurl stdenv kernel ncurses fxload;
-    };
+    wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
     kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
       inherit kernel perl;
@@ -6682,63 +4579,43 @@ let
     splashutils =
       if kernel.features ? fbConDecor then pkgs.splashutils else null;
 
-    ext3cowtools = import ../os-specific/linux/ext3cow-tools {
-      inherit stdenv fetchurl;
+    ext3cowtools = callPackage ../os-specific/linux/ext3cow-tools { 
       kernel_ext3cowpatched = kernel;
     };
 
     /* compiles but has to be integrated into the kernel somehow
       Let's have it uncommented and finish it..
     */
-    ndiswrapper = import ../os-specific/linux/ndiswrapper {
-      inherit fetchurl stdenv;
-      inherit kernel perl;
-    };
+    ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
 
-    ov511 = import ../os-specific/linux/ov511 {
-      inherit fetchurl kernel;
+    ov511 = callPackage ../os-specific/linux/ov511 { 
       stdenv = overrideGCC stdenv gcc34;
     };
 
     # State Nix
-    snix = import ../tools/package-management/snix {
-      inherit fetchurl stdenv perl curl bzip2 openssl bison;
-      inherit libtool automake autoconf docbook5 docbook5_xsl libxslt docbook_xml_dtd_43 w3m;
+    snix = callPackage ../tools/package-management/snix { 
 
       aterm = aterm25;
       db4 = db45;
 
       flex = flex2533;
+      ext3cow_kernel = kernel;    };
 
-      inherit ext3cowtools e3cfsprogs rsync;
-      ext3cow_kernel = kernel;
-    };
-
-    sysprof = import ../development/tools/profiling/sysprof {
-      inherit fetchurl stdenv binutils pkgconfig kernel;
+    sysprof = callPackage ../development/tools/profiling/sysprof { 
       inherit (gnome) gtk glib pango libglade;
     };
 
-    systemtap = import ../development/tools/profiling/systemtap {
-      inherit fetchurl stdenv elfutils latex2html xmlto pkgconfig boost
-        texLive texLiveExtra ghostscript perl docbook_xml_dtd_412 libxml2
-        docbook_xsl libxslt sqlite;
+    systemtap = callPackage ../development/tools/profiling/systemtap { 
       linux = kernel;
       inherit (gnome) gtkmm libglademm;
     };
 
-    virtualbox = import ../applications/virtualization/virtualbox {
+    virtualbox = callPackage ../applications/virtualization/virtualbox { 
       stdenv = stdenv_32bit;
-      inherit fetchurl lib iasl dev86 libxslt libxml2 SDL hal
-          libcap libpng zlib kernel python which alsaLib curl glib qt4;
-      inherit (xlibs) xproto libX11 libXext libXcursor;
       inherit (gnome) libIDL;
     };
 
-    virtualboxGuestAdditions = import ../applications/virtualization/virtualbox/guest-additions {
-      inherit stdenv fetchurl lib patchelf cdrkit kernel;
-      inherit (xlibs) libX11 libXt libXext libXmu libXcomposite libXfixes;
-    };
+    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
   };
 
   # Build the kernel modules for the some of the kernels.
@@ -6757,102 +4634,65 @@ let
   linux = linux_2_6_32;
   linuxPackages = linuxPackages_2_6_32;
 
-  keyutils = import ../os-specific/linux/keyutils {
-    inherit fetchurl stdenv;
-  };
+  keyutils = callPackage ../os-specific/linux/keyutils { };
 
-  libselinux = import ../os-specific/linux/libselinux {
-    inherit fetchurl stdenv libsepol;
-  };
+  libselinux = callPackage ../os-specific/linux/libselinux { };
 
-  libraw1394 = import ../development/libraries/libraw1394 {
-    inherit fetchurl stdenv;
-  };
+  libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
-  libsexy = import ../development/libraries/libsexy {
-    inherit stdenv fetchurl pkgconfig libxml2;
+  libsexy = callPackage ../development/libraries/libsexy { 
     inherit (gtkLibs) glib gtk pango;
   };
 
   librsvg = gnome.librsvg;
 
-  libsepol = import ../os-specific/linux/libsepol {
-    inherit fetchurl stdenv;
-  };
+  libsepol = callPackage ../os-specific/linux/libsepol { };
 
-  libsmbios = import ../os-specific/linux/libsmbios {
-    inherit fetchurl stdenv pkgconfig libxml2 perl;
-  };
+  libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
-  lm_sensors = import ../os-specific/linux/lm_sensors {
-    inherit fetchurl stdenv bison flex perl;
-  };
+  lm_sensors = callPackage ../os-specific/linux/lm_sensors { };
 
-  lsiutil = import ../os-specific/linux/lsiutil {
-    inherit fetchurl stdenv unzip;
-  };
+  lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
-  klibc = makeOverridable (import ../os-specific/linux/klibc) {
-    inherit fetchurl stdenv perl bison mktemp;
+  klibc = callPackage ../os-specific/linux/klibc { 
     linuxHeaders = glibc.kernelHeaders;
   };
 
-  klibcShrunk = makeOverridable (import ../os-specific/linux/klibc/shrunk.nix) {
-    inherit stdenv klibc;
-  };
+  klibcShrunk = callPackage ../os-specific/linux/klibc/shrunk.nix { };
 
   kvm = qemu_kvm;
 
-  libcap = import ../os-specific/linux/libcap {
-    inherit fetchurl stdenv attr;
-  };
+  libcap = callPackage ../os-specific/linux/libcap { };
 
-  libnscd = import ../os-specific/linux/libnscd {
-    inherit fetchurl stdenv;
-  };
+  libnscd = callPackage ../os-specific/linux/libnscd { };
 
-  libnotify = import ../development/libraries/libnotify {
-    inherit stdenv fetchurl pkgconfig dbus dbus_glib;
+  libnotify = callPackage ../development/libraries/libnotify { 
     inherit (gtkLibs) gtk glib;
   };
 
-  libvolume_id = import ../os-specific/linux/libvolume_id {
-    inherit fetchurl stdenv;
-  };
+  libvolume_id = callPackage ../os-specific/linux/libvolume_id { };
 
-  lvm2 = import ../os-specific/linux/lvm2 {
-    inherit fetchurl stdenv udev;
-  };
+  lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
   # In theory GNU Mach doesn't have to be cross-compiled.  However, since it
   # has to be built for i586 (it doesn't work on x86_64), one needs a cross
   # compiler for that host.
-  mach = import ../os-specific/gnu/mach {
-    inherit fetchgit stdenv autoconf texinfo mig;
-    automake = automake111x;
-  };
+  mach = callPackage ../os-specific/gnu/mach { 
+    automake = automake111x;  };
 
-  machHeaders = import ../os-specific/gnu/mach {
-    inherit fetchgit stdenv autoconf texinfo;
+  machHeaders = callPackage ../os-specific/gnu/mach { 
     automake = automake111x;
     headersOnly = true;
     mig = null;
   };
 
-  mdadm = import ../os-specific/linux/mdadm {
-    inherit fetchurl stdenv groff;
-  };
+  mdadm = callPackage ../os-specific/linux/mdadm { };
 
-  mingetty = import ../os-specific/linux/mingetty {
-    inherit fetchurl stdenv;
-  };
+  mingetty = callPackage ../os-specific/linux/mingetty { };
 
-  module_init_tools = import ../os-specific/linux/module-init-tools {
-    inherit fetchurl stdenv;
-  };
+  module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
-  mountall = import ../os-specific/linux/mountall {
-    inherit fetchurl stdenv pkgconfig libnih dbus udev autoconf libtool;
+  mountall = callPackage ../os-specific/linux/mountall { 
     automake = automake111x;
   };
 
@@ -6861,171 +4701,102 @@ let
       inherit stdenv module_init_tools modules buildEnv;
     };
 
-  modutils = import ../os-specific/linux/modutils {
-    inherit fetchurl bison flex;
+  modutils = callPackage ../os-specific/linux/modutils { 
     stdenv = overrideGCC stdenv gcc34;
   };
 
-  nettools = import ../os-specific/linux/net-tools {
-    inherit fetchurl stdenv;
-  };
+  nettools = callPackage ../os-specific/linux/net-tools { };
 
-  neverball = import ../games/neverball {
-    inherit stdenv fetchurl SDL mesa libpng libjpeg SDL_ttf libvorbis
-      gettext physfs;
-  };
+  neverball = callPackage ../games/neverball { };
 
-  numactl = import ../os-specific/linux/numactl {
-    inherit fetchurl stdenv;
-  };
+  numactl = callPackage ../os-specific/linux/numactl { };
 
   gw6c = builderDefsPackage (import ../os-specific/linux/gw6c) {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
 
-  nss_ldap = import ../os-specific/linux/nss_ldap {
-    inherit fetchurl stdenv openldap;
-  };
+  nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
-  pam = import ../os-specific/linux/pam {
-    inherit stdenv fetchurl flex cracklib libxcrypt;
-  };
+  pam = callPackage ../os-specific/linux/pam { };
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
-  pam_console = import ../os-specific/linux/pam_console {
-    inherit stdenv fetchurl pam autoconf automake pkgconfig bison glib;
+  pam_console = callPackage ../os-specific/linux/pam_console { 
     libtool = libtool_1_5;
     flex = if stdenv.system == "i686-linux" then flex else flex2533;
   };
 
-  pam_devperm = import ../os-specific/linux/pam_devperm {
-    inherit stdenv fetchurl pam;
-  };
+  pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
 
-  pam_ldap = import ../os-specific/linux/pam_ldap {
-    inherit stdenv fetchurl pam openldap;
-  };
+  pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
-  pam_login = import ../os-specific/linux/pam_login {
-    inherit stdenv fetchurl pam;
-  };
+  pam_login = callPackage ../os-specific/linux/pam_login { };
 
-  pam_unix2 = import ../os-specific/linux/pam_unix2 {
-    inherit stdenv fetchurl pam libxcrypt;
-  };
+  pam_unix2 = callPackage ../os-specific/linux/pam_unix2 { };
 
-  pam_usb = import ../os-specific/linux/pam_usb {
-    inherit stdenv fetchurl makeWrapper useSetUID dbus libxml2 pam hal pkgconfig pmount python pythonDBus;
-  };
+  pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
-  pcmciaUtils = makeOverridable (import ../os-specific/linux/pcmciautils) {
-    inherit stdenv fetchurl udev yacc flex;
-    inherit sysfsutils module_init_tools;
+  pcmciaUtils = callPackage ../os-specific/linux/pcmciautils { 
 
     firmware = getConfig ["pcmciaUtils" "firmware"] [];
     config = getConfig ["pcmciaUtils" "config"] null;
-    inherit lib;
   };
 
-  pmount = import ../os-specific/linux/pmount {
-    inherit fetchurl stdenv cryptsetup dbus dbus_glib hal intltool ntfs3g utillinuxng;
-  };
+  pmount = callPackage ../os-specific/linux/pmount { };
 
-  pmutils = import ../os-specific/linux/pm-utils {
-    inherit fetchurl stdenv;
-  };
+  pmutils = callPackage ../os-specific/linux/pm-utils { };
 
-  powertop = import ../os-specific/linux/powertop {
-    inherit fetchurl stdenv ncurses gettext;
-  };
+  powertop = callPackage ../os-specific/linux/powertop { };
 
-  procps = import ../os-specific/linux/procps {
-    inherit fetchurl stdenv ncurses;
-  };
+  procps = callPackage ../os-specific/linux/procps { };
 
-  pwdutils = import ../os-specific/linux/pwdutils {
-    inherit fetchurl stdenv pam gnutls libnscd;
-  };
+  pwdutils = callPackage ../os-specific/linux/pwdutils { };
 
-  qemu_kvm = import ../os-specific/linux/qemu-kvm {
-    inherit fetchurl stdenv zlib SDL alsaLib pkgconfig pciutils libuuid;
-  };
+  qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
-  radeontools = import ../os-specific/linux/radeontools {
-    inherit pciutils;
-    inherit fetchurl stdenv;
-  };
+  radeontools = callPackage ../os-specific/linux/radeontools { };
 
-  rfkill = import ../os-specific/linux/rfkill {
-    inherit fetchurl stdenv;
-  };
+  rfkill = callPackage ../os-specific/linux/rfkill { };
 
-  rt2870fw = import ../os-specific/linux/firmware/rt2870 {
-    inherit fetchurl stdenv unzip;
-  };
+  rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
 
-  rt73fw = import ../os-specific/linux/firmware/rt73 {
-    inherit fetchurl stdenv unzip;
-  };
+  rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
-  sdparm = import ../os-specific/linux/sdparm {
-    inherit fetchurl stdenv;
-  };
+  sdparm = callPackage ../os-specific/linux/sdparm { };
 
-  shadow = import ../os-specific/linux/shadow {
-    inherit fetchurl stdenv pam glibc;
-  };
+  shadow = callPackage ../os-specific/linux/shadow { };
 
-  splashutils = import ../os-specific/linux/splashutils/default.nix {
-    inherit fetchurl stdenv zlib libjpeg;
-  };
+  splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) {
   };
 
-  sysfsutils = import ../os-specific/linux/sysfsutils {
-    inherit fetchurl stdenv;
-  };
+  sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
   # Provided with sysfsutils.
   libsysfs = sysfsutils;
   systool = sysfsutils;
 
-  sysklogd = import ../os-specific/linux/sysklogd {
-    inherit fetchurl stdenv;
-  };
+  sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
-  syslinux = import ../os-specific/linux/syslinux {
-    inherit fetchurl stdenv nasm perl;
-  };
+  syslinux = callPackage ../os-specific/linux/syslinux { };
 
-  sysstat = import ../os-specific/linux/sysstat {
-    inherit fetchurl stdenv gettext;
-  };
+  sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  sysvinit = import ../os-specific/linux/sysvinit {
-    inherit fetchurl stdenv;
-  };
+  sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
-  sysvtools = import ../os-specific/linux/sysvinit {
-    inherit fetchurl stdenv;
+  sysvtools = callPackage ../os-specific/linux/sysvinit { 
     withoutInitTools = true;
   };
 
   # FIXME: `tcp-wrapper' is actually not OS-specific.
-  tcpWrapper = import ../os-specific/linux/tcp-wrapper {
-    inherit fetchurl stdenv;
-  };
+  tcpWrapper = callPackage ../os-specific/linux/tcp-wrapper { };
 
-  trackballs = import ../games/trackballs {
-    inherit stdenv fetchurl SDL mesa SDL_ttf gettext zlib SDL_mixer SDL_image guile;
+  trackballs = callPackage ../games/trackballs { 
     debug = false;
   };
 
-  tunctl = import ../os-specific/linux/tunctl {
-    inherit stdenv fetchurl;
-  };
+  tunctl = callPackage ../os-specific/linux/tunctl { };
 
   /*tuxracer = builderDefsPackage (import ../games/tuxracer) {
     inherit mesa tcl freeglut;
@@ -7036,17 +4807,11 @@ let
     else if (name == "sheevaplug") then ubootSheevaplug
     else throw "Unknown uboot";
 
-  ubootUpstream  = makeOverridable (import ../misc/uboot) {
-    inherit fetchurl stdenv unzip;
-  };
+  ubootUpstream = callPackage ../misc/uboot { };
 
-  ubootSheevaplug = makeOverridable (import ../misc/uboot/sheevaplug.nix) {
-    inherit fetchurl stdenv unzip;
-  };
+  ubootSheevaplug = callPackage ../misc/uboot/sheevaplug.nix { };
 
-  uclibc = import ../os-specific/linux/uclibc {
-    inherit fetchurl stdenv linuxHeaders;
-  };
+  uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = import ../os-specific/linux/uclibc {
     inherit fetchurl stdenv;
@@ -7055,34 +4820,26 @@ let
     cross = assert crossSystem != null; crossSystem;
   };
 
-  udev = makeOverridable (import ../os-specific/linux/udev) {
-    inherit fetchurl stdenv gperf pkgconfig acl libusb usbutils pciutils glib;
-  };
+  udev = callPackage ../os-specific/linux/udev { };
 
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     userModeLinux = true;
   };
 
-  umlutilities = import ../os-specific/linux/uml-utilities {
-    inherit fetchurl linuxHeaders stdenv readline lib;
+  umlutilities = callPackage ../os-specific/linux/uml-utilities { 
     tunctl = true; mconsole = true;
   };
 
-  upstart = import ../os-specific/linux/upstart {
-    inherit fetchurl stdenv pkgconfig dbus libnih;
-  };
+  upstart = callPackage ../os-specific/linux/upstart { };
 
-  usbutils = import ../os-specific/linux/usbutils {
-    inherit fetchurl stdenv pkgconfig libusb;
-  };
+  usbutils = callPackage ../os-specific/linux/usbutils { };
 
   utillinux = utillinuxng;
 
   utillinuxCurses = utillinuxngCurses;
 
-  utillinuxng = makeOverridable (import ../os-specific/linux/util-linux-ng) {
-    inherit fetchurl stdenv;
+  utillinuxng = callPackage ../os-specific/linux/util-linux-ng { 
     ncurses = null;
   };
 
@@ -7091,18 +4848,15 @@ let
   };
 
   windows = rec {
-    w32api = makeOverridable (import ../os-specific/windows/w32api) {
-      inherit fetchurl stdenv;
+    w32api = callPackage ../os-specific/windows/w32api { 
       gccCross = gccCrossStageStatic;
-      binutilsCross = binutilsCross;
-    };
+      binutilsCross = binutilsCross;    };
 
     w32api_headers = w32api.override {
       onlyHeaders = true;
     };
 
-    mingw_runtime = makeOverridable (import ../os-specific/windows/mingwrt) {
-      inherit fetchurl stdenv;
+    mingw_runtime = callPackage ../os-specific/windows/mingwrt { 
       gccCross = gccCrossMingw2;
       binutilsCross = binutilsCross;
     };
@@ -7126,24 +4880,16 @@ let
       paths = [ w32api mingw_runtime ];
     };
 
-    wxMSW = makeOverridable (import ../os-specific/windows/wxMSW-2.8) {
-      inherit fetchurl stdenv;
-    };
+    wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
   };
 
-  wesnoth = import ../games/wesnoth {
-    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_net SDL_ttf
-      gettext zlib boost freetype libpng pkgconfig;
+  wesnoth = callPackage ../games/wesnoth { 
     inherit (gtkLibs) pango;
   };
 
-  wirelesstools = import ../os-specific/linux/wireless-tools {
-    inherit fetchurl stdenv;
-  };
+  wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
-  wpa_supplicant = makeOverridable (import ../os-specific/linux/wpa_supplicant) {
-    inherit fetchurl stdenv openssl;
-    inherit qt4;
+  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { 
     guiSupport = false;
   };
   # prebuild binaries:
@@ -7151,15 +4897,10 @@ let
 
   # deprecated, but contains icon ? Does no longer build
   /* didn't build Sun Apr 25 20:34:18 CEST 2010
-  wpa_supplicant_gui_qt4_old = import ../os-specific/linux/wpa_supplicant/gui-qt4.nix {
-    inherit fetchurl stdenv qt4 imagemagick inkscape;
-  };
+  wpa_supplicant_gui_qt4_old = callPackage ../os-specific/linux/wpa_supplicant/gui-qt4.nix { };
   */
 
-  xf86_input_wacom = import ../os-specific/linux/xf86-input-wacom {
-    inherit stdenv fetchurl ncurses pkgconfig file;
-    inherit (xorg) libX11 libXi inputproto xproto xorgserver;
-  };
+  xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
@@ -7167,93 +4908,57 @@ let
       lua5 ode;
   };
 
-  xorg_sys_opengl = import ../os-specific/linux/opengl/xorg-sys {
-    inherit stdenv xlibs expat libdrm;
-  };
+  xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
-  zd1211fw = import ../os-specific/linux/firmware/zd1211 {
-    inherit stdenv fetchurl;
-  };
+  zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
   ### DATA
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
   };
 
-  bakoma_ttf = import ../data/fonts/bakoma-ttf {
-    inherit fetchurl stdenv;
-  };
+  bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
-  cacert = import ../data/misc/cacert {
-    inherit fetchurl stdenv;
-  };
+  cacert = callPackage ../data/misc/cacert { };
 
-  corefonts = import ../data/fonts/corefonts {
-    inherit fetchurl stdenv cabextract;
-  };
+  corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
     inherit fetchurl stdenv builderDefs paths ttmkfdir;
     inherit (xorg) mkfontdir mkfontscale;
   });
 
-  clearlyU = makeOverridable (import ../data/fonts/clearlyU) {
-    inherit fetchurl stdenv;
-    inherit (xorg) mkfontdir mkfontscale;
-  };
+  clearlyU = callPackage ../data/fonts/clearlyU { };
 
-  dejavu_fonts = import ../data/fonts/dejavu-fonts {
-    inherit fetchurl stdenv fontforge perl fontconfig;
+  dejavu_fonts = callPackage ../data/fonts/dejavu-fonts { 
     inherit (perlPackages) FontTTF;
   };
 
-  docbook5 = import ../data/sgml+xml/schemas/docbook-5.0 {
-    inherit fetchurl stdenv unzip;
-  };
+  docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
 
-  docbook_xml_dtd_412 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix {
-    inherit fetchurl stdenv unzip;
-  };
+  docbook_xml_dtd_412 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix { };
 
-  docbook_xml_dtd_42 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix {
-    inherit fetchurl stdenv unzip;
-  };
+  docbook_xml_dtd_42 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix { };
 
-  docbook_xml_dtd_43 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.3.nix {
-    inherit fetchurl stdenv unzip;
-  };
+  docbook_xml_dtd_43 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.3.nix { };
 
-  docbook_xml_dtd_45 = import ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix {
-    inherit fetchurl stdenv unzip;
-  };
+  docbook_xml_dtd_45 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix { };
 
-  docbook_xml_ebnf_dtd = import ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf {
-    inherit fetchurl stdenv unzip;
-  };
+  docbook_xml_ebnf_dtd = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf { };
 
   docbook_xml_xslt = docbook_xsl;
 
-  docbook_xsl = import ../data/sgml+xml/stylesheets/xslt/docbook-xsl {
-    inherit fetchurl stdenv;
-  };
+  docbook_xsl = callPackage ../data/sgml+xml/stylesheets/xslt/docbook-xsl { };
 
   docbook5_xsl = docbook_xsl_ns;
 
-  docbook_xsl_ns = import ../data/sgml+xml/stylesheets/xslt/docbook-xsl-ns {
-    inherit fetchurl stdenv;
-  };
+  docbook_xsl_ns = callPackage ../data/sgml+xml/stylesheets/xslt/docbook-xsl-ns { };
 
-  junicode = makeOverridable (import ../data/fonts/junicode) {
-    inherit fetchurl stdenv unzip;
-  };
+  junicode = callPackage ../data/fonts/junicode { };
 
-  freefont_ttf = import ../data/fonts/freefont-ttf {
-    inherit fetchurl stdenv;
-  };
+  freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
-  liberation_ttf = import ../data/fonts/redhat-liberation-fonts {
-    inherit fetchurl stdenv;
-  };
+  liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine/2.7.nix) {
     inherit fontforge;
@@ -7261,97 +4966,51 @@ let
   libertineBin = builderDefsPackage (import ../data/fonts/libertine/2.7.bin.nix) {
   };
 
-  lmodern = import ../data/fonts/lmodern {
-    inherit fetchurl stdenv;
-  };
+  lmodern = callPackage ../data/fonts/lmodern { };
 
-  manpages = import ../data/documentation/man-pages {
-    inherit fetchurl stdenv;
-  };
+  manpages = callPackage ../data/documentation/man-pages { };
 
-  miscfiles = import ../data/misc/miscfiles {
-    inherit fetchurl stdenv;
-  };
+  miscfiles = callPackage ../data/misc/miscfiles { };
 
-  mph_2b_damase = import ../data/fonts/mph-2b-damase {
-    inherit fetchurl stdenv unzip;
-  };
+  mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
-  pthreadmanpages = import ../data/documentation/pthread-man-pages {
-    inherit fetchurl stdenv perl;
-  };
+  pthreadmanpages = callPackage ../data/documentation/pthread-man-pages { };
 
-  shared_mime_info = import ../data/misc/shared-mime-info {
-    inherit fetchurl stdenv pkgconfig gettext
-      intltool perl perlXMLParser libxml2 glib;
-  };
+  shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
-  shared_desktop_ontologies = import ../data/misc/shared-desktop-ontologies {
-    inherit stdenv fetchurl cmake;
-  };
+  shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
-  stdmanpages = import ../data/documentation/std-man-pages {
-    inherit fetchurl stdenv;
-  };
+  stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
-  iana_etc = import ../data/misc/iana-etc {
-    inherit fetchurl stdenv;
-  };
+  iana_etc = callPackage ../data/misc/iana-etc { };
 
-  popplerData = import ../data/misc/poppler-data {
-    inherit fetchurl stdenv;
-  };
+  popplerData = callPackage ../data/misc/poppler-data { };
 
-  r3rs = import ../data/documentation/rnrs/r3rs.nix {
-    inherit fetchurl stdenv texinfo;
-  };
+  r3rs = callPackage ../data/documentation/rnrs/r3rs.nix { };
 
-  r4rs = import ../data/documentation/rnrs/r4rs.nix {
-    inherit fetchurl stdenv texinfo;
-  };
+  r4rs = callPackage ../data/documentation/rnrs/r4rs.nix { };
 
-  r5rs = import ../data/documentation/rnrs/r5rs.nix {
-    inherit fetchurl stdenv texinfo;
-  };
+  r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
   themes = name: import (../data/misc/themes + ("/" + name + ".nix")) {
     inherit fetchurl;
   };
 
-  terminus_font = import ../data/fonts/terminus-font {
-    inherit fetchurl stdenv perl;
-    inherit (xorg) mkfontdir mkfontscale bdftopcf;
-  };
+  terminus_font = callPackage ../data/fonts/terminus-font { };
 
-  ttf_bitstream_vera = import ../data/fonts/ttf-bitstream-vera {
-    inherit fetchurl stdenv;
-  };
+  ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
-  ucsFonts = import ../data/fonts/ucs-fonts {
-    inherit fetchurl stdenv wrapFonts;
-  };
+  ucsFonts = callPackage ../data/fonts/ucs-fonts { };
 
-  unifont = import ../data/fonts/unifont {
-    inherit fetchurl stdenv;
-    inherit (xorg) mkfontdir mkfontscale bdftopcf fontutil;
-  };
+  unifont = callPackage ../data/fonts/unifont { };
 
-  vistafonts = import ../data/fonts/vista-fonts {
-    inherit fetchurl stdenv cabextract;
-  };
+  vistafonts = callPackage ../data/fonts/vista-fonts { };
 
-  wqy_zenhei = makeOverridable (import ../data/fonts/wqy-zenhei) {
-    inherit fetchurl stdenv;
-  };
+  wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
 
-  xhtml1 = import ../data/sgml+xml/schemas/xml-dtd/xhtml1 {
-    inherit fetchurl stdenv libxml2;
-  };
+  xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
 
-  xkeyboard_config = import ../data/misc/xkeyboard-config {
-    inherit fetchurl stdenv perl perlXMLParser gettext intltool;
-    inherit (xlibs) xkbcomp;
-  };
+  xkeyboard_config = callPackage ../data/misc/xkeyboard-config { };
 
 
   ### APPLICATIONS
@@ -7382,91 +5041,60 @@ let
     inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
   };
 
-  abcde = import ../applications/audio/abcde {
-    inherit fetchurl stdenv libcdio cddiscid wget bash vorbisTools
-            makeWrapper;
-  };
+  abcde = callPackage ../applications/audio/abcde { };
 
-  abiword = import ../applications/office/abiword {
-    inherit fetchurl stdenv pkgconfig fribidi libpng popt libgsf enchant wv librsvg bzip2;
+  abiword = callPackage ../applications/office/abiword { 
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade libgnomecanvas;
   };
 
-  adobeReader = import ../applications/misc/adobe-reader {
-    inherit fetchurl stdenv zlib libxml2 cups;
-    inherit (xlibs) libX11;
+  adobeReader = callPackage ../applications/misc/adobe-reader { 
     inherit (gtkLibs) glib pango atk gtk;
   };
 
-  amsn = import ../applications/networking/instant-messengers/amsn {
-    inherit fetchurl stdenv which tcl tk x11;
+  amsn = callPackage ../applications/networking/instant-messengers/amsn { 
     libstdcpp = gcc33.gcc;
   };
 
-  ardour = import ../applications/audio/ardour {
-    inherit fetchurl stdenv pkgconfig scons boost librdf_raptor
-      librdf_rasqal jackaudio flac libsamplerate alsaLib libxml2 libxslt
-      libsndfile libsigcxx libusb cairomm librdf liblo fftw fftwSinglePrec
-      aubio libmad;
+  ardour = callPackage ../applications/audio/ardour { 
     inherit (gtkLibs) glib pango gtk glibmm gtkmm;
     inherit (gnome) libgnomecanvas;
   };
 
-  audacious = import ../applications/audio/audacious {
-    inherit fetchurl stdenv gettext pkgconfig libmowgli libmcs
-      dbus_glib libxml2 libmad xlibs alsaLib libogg libvorbis libcdio
-      libcddb flac ffmpeg;
+  audacious = callPackage ../applications/audio/audacious { 
     inherit (gtkLibs) glib gtk;
   };
 
-  audacity = import ../applications/audio/audacity {
-    inherit fetchurl stdenv gettext pkgconfig zlib perl intltool libogg
-      libvorbis libmad;
+  audacity = callPackage ../applications/audio/audacity { 
     inherit (gtkLibs) gtk glib;
-    inherit wxGTK;
   };
 
-  aumix = import ../applications/audio/aumix {
-    inherit fetchurl stdenv ncurses pkgconfig gettext;
+  aumix = callPackage ../applications/audio/aumix { 
     inherit (gtkLibs) gtk;
     gtkGUI = false;
   };
 
-  autopanosiftc = import ../applications/graphics/autopanosiftc {
-    inherit fetchurl stdenv cmake libpng libtiff libjpeg panotools libxml2;
-  };
+  autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux = import ../applications/video/avidemux {
-    inherit fetchurl cmake pkgconfig libxml2 qt4 gettext SDL libxslt x264
-      alsaLib lame faac faad2 libvorbis;
+  avidemux = callPackage ../applications/video/avidemux { 
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libXv pixman libpthreadstubs libXau libXdmcp;
     stdenv = stdenv2;
   };
 
-  awesome = import ../applications/window-managers/awesome {
-    inherit fetchurl stdenv xz cmake gperf imagemagick pkgconfig imlib2 libxdg_basedir
-      libstartup_notification libev asciidoc libxslt xmlto dbus docbook_xsl
-      docbook_xml_dtd_45 coreutils;
+  awesome = callPackage ../applications/window-managers/awesome { 
     inherit (gtkLibs) glib pango;
-    inherit (xorg) libxcb xcbutil;
     lua = lua5;
-    cairo = cairo.override { xcbSupport = true; };
+    cairo = cairo.override { xcbSupport = true;
+  };
   };
 
-  bangarang = import ../applications/video/bangarang {
-    inherit stdenv fetchurl cmake;
+  bangarang = callPackage ../applications/video/bangarang { 
     inherit (kde4) qt4 kdelibs automoc4 phonon soprano kdemultimedia;
-    inherit taglib glibc gettext;
   };
 
-  batik = import ../applications/graphics/batik {
-    inherit fetchurl stdenv unzip;
-  };
+  batik = callPackage ../applications/graphics/batik { };
 
-  bazaar = import ../applications/version-management/bazaar {
-    inherit fetchurl stdenv makeWrapper;
+  bazaar = callPackage ../applications/version-management/bazaar { 
     python = pythonFull;
   };
 
@@ -7474,21 +5102,15 @@ let
     inherit bazaar;
   };
 
-  beast = import ../applications/audio/beast {
+  beast = callPackage ../applications/audio/beast { 
     # stdenv = overrideGCC stdenv gcc34;
-    inherit stdenv fetchurl zlib guile pkgconfig intltool libogg libvorbis perl gettext;
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnomecanvas libart_lgpl;
   };
 
-  bitlbee = import ../applications/networking/instant-messengers/bitlbee {
-    inherit fetchurl stdenv gnutls pkgconfig glib;
-  };
+  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
-  bitlbeeOtr = import ../applications/networking/instant-messengers/bitlbee-otr {
-    inherit fetchbzr stdenv gnutls pkgconfig libotr libgcrypt
-      libxslt xmlto docbook_xsl docbook_xml_dtd_42 perl glib;
-  };
+  bitlbeeOtr = callPackage ../applications/networking/instant-messengers/bitlbee-otr { };
 
   # commented out because it's using the new configuration style proposal which is unstable
   #biew = import ../applications/misc/biew {
@@ -7497,15 +5119,10 @@ let
 
   # only to be able to compile blender - I couldn't compile the default openal software
   # Perhaps this can be removed - don't know which one openal{,soft} is better
-  freealut_soft = import ../development/libraries/freealut {
-    inherit fetchurl stdenv;
-    openal = openalSoft;
-  };
+  freealut_soft = callPackage ../development/libraries/freealut { 
+    openal = openalSoft;  };
 
-  blender = import ../applications/misc/blender/2.49.nix {
-    inherit fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
-      libsamplerate libtiff ilmbase freetype;
-    inherit (xlibs) libXi;
+  blender = callPackage ../applications/misc/blender/2.49.nix { 
     python = python26Base;
     stdenv = stdenv2;
   };
@@ -7518,27 +5135,18 @@ let
     stdenv = stdenv2;
   });
 
-  bmp = import ../applications/audio/bmp {
-    inherit fetchurl stdenv pkgconfig libogg libvorbis alsaLib id3lib;
+  bmp = callPackage ../applications/audio/bmp { 
     inherit (gnome) esound libglade;
     inherit (gtkLibs) glib gtk;
   };
 
-  bmp_plugin_musepack = import ../applications/audio/bmp-plugins/musepack {
-    inherit fetchurl stdenv pkgconfig bmp libmpcdec taglib;
-  };
+  bmp_plugin_musepack = callPackage ../applications/audio/bmp-plugins/musepack { };
 
-  bmp_plugin_wma = import ../applications/audio/bmp-plugins/wma {
-    inherit fetchurl stdenv pkgconfig bmp;
-  };
+  bmp_plugin_wma = callPackage ../applications/audio/bmp-plugins/wma { };
 
-  bvi = import ../applications/editors/bvi {
-    inherit fetchurl stdenv ncurses;
-  };
+  bvi = callPackage ../applications/editors/bvi { };
 
-  calibre = makeOverridable (import ../applications/misc/calibre) {
-    inherit stdenv fetchurl libpng imagemagick pkgconfig libjpeg fontconfig podofo
-      qt4 makeWrapper unrar pil chmlib popplerQt4 pyqt4 sip;
+  calibre = callPackage ../applications/misc/calibre { 
     python = python26Full;
     inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
   };
@@ -7554,31 +5162,21 @@ let
   };
   funpidgin = carrier;
 
-  cddiscid = import ../applications/audio/cd-discid {
-    inherit fetchurl stdenv;
-  };
+  cddiscid = callPackage ../applications/audio/cd-discid { };
 
   cdparanoia = cdparanoiaIII;
 
-  cdparanoiaIII = import ../applications/audio/cdparanoia {
-    inherit fetchurl stdenv;
-  };
+  cdparanoiaIII = callPackage ../applications/audio/cdparanoia { };
 
-  cdrtools = import ../applications/misc/cdrtools {
-    inherit fetchurl stdenv;
-  };
+  cdrtools = callPackage ../applications/misc/cdrtools { };
 
   chatzilla =
     xulrunnerWrapper {
       launcher = "chatzilla";
-      application = import ../applications/networking/irc/chatzilla {
-        inherit fetchurl stdenv unzip;
-      };
+      application = callPackage ../applications/networking/irc/chatzilla { };
     };
 
-  chrome = import ../applications/networking/browsers/chromium {
-    inherit stdenv fetchurl ffmpeg cairo nspr nss fontconfig freetype alsaLib makeWrapper unzip expat zlib bzip2 libpng dbus dbus_glib cups libgcrypt;
-    inherit (xlibs) libX11 libXext libXrender libXt libXScrnSaver;
+  chrome = callPackage ../applications/networking/browsers/chromium { 
     inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
     patchelf = patchelf06;
@@ -7587,15 +5185,8 @@ let
 
   chromeWrapper = wrapFirefox chrome "chrome" "";
 
-  cinelerra = import ../applications/video/cinelerra {
-    inherit fetchurl sourceFromHead stdenv
-      automake autoconf libtool
-      a52dec alsaLib   lame libavc1394 libiec61883 libraw1394 libsndfile
-      libvorbis libogg libjpeg libtiff freetype mjpegtools x264
-      gettext faad2 faac libtheora libpng libdv perl nasm e2fsprogs
-      pkgconfig openexr;
+  cinelerra = callPackage ../applications/video/cinelerra { 
     fftw = fftwSinglePrec;
-    inherit (xorg) libXxf86vm libXv libXi libX11 xextproto;
     inherit (gnome) esound;
   };
 
@@ -7622,13 +5213,8 @@ let
     extraConfigureFlags = getConfig ["compiz" "extraConfigureFlags"] [];
   });
 
-  compizFusion = import ../applications/window-managers/compiz-fusion {
+  compizFusion = callPackage ../applications/window-managers/compiz-fusion { 
     version = getConfig ["compizFusion" "version"] "0.7.8";
-    inherit compiz;
-    inherit stringsWithDeps lib builderDefs;
-    inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt libxml2;
-    inherit (xorg) libXcomposite libXfixes libXdamage libXrandr
-      libXinerama libICE libSM libXrender xextproto;
     inherit (gnome) startupnotification libwnck GConf;
     inherit (gtkLibs) gtk;
     inherit (gnome) libgnome libgnomeui metacity
@@ -7636,24 +5222,14 @@ let
       libgnomecanvas libgnomeprint
       libgnomeprintui gnomepanel gnomedesktop;
     gnomegtk = gnome.gtk;
-    inherit librsvg fuse dbus dbus_glib git;
-    inherit automake autoconf libtool intltool python pyrex gettext;
-    inherit pygtk pycairo getopt libjpeg glxinfo;
-    inherit (xorg) xvinfo xdpyinfo;
   };
 
-  compizExtra = import ../applications/window-managers/compiz/extra.nix {
-    inherit fetchurl stdenv pkgconfig compiz perl perlXMLParser dbus;
+  compizExtra = callPackage ../applications/window-managers/compiz/extra.nix { 
     inherit (gnome) GConf;
     inherit (gtkLibs) gtk;
   };
 
-  cinepaint = import ../applications/graphics/cinepaint {
-    inherit stdenv fetchcvs cmake pkgconfig freetype fontconfig lcms flex libtiff
-      libjpeg libpng libexif zlib perl mesa perlXMLParser python pygtk gettext
-      intltool babl gegl automake autoconf libtool openexr;
-    inherit (xlibs) makedepend libX11 xf86vidmodeproto xineramaproto libXmu
-      libXext libXpm libXxf86vm;
+  cinepaint = callPackage ../applications/graphics/cinepaint { 
     inherit (gtkLibs) gtk glib;
     fltk = fltk11;
   };
@@ -7663,16 +5239,13 @@ let
     python = pythonFull;
   };
 
-  comical = import ../applications/graphics/comical {
-    inherit stdenv fetchurl utillinux zlib;
+  comical = callPackage ../applications/graphics/comical { 
     wxGTK = wxGTK26;
   };
 
   conkeror = xulrunnerWrapper {
     launcher = "conkeror";
-    application = import ../applications/networking/browsers/conkeror {
-      inherit stdenv fetchurl unzip;
-    };
+    application = callPackage ../applications/networking/browsers/conkeror { };
   };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
@@ -7680,46 +5253,27 @@ let
     imagemagick=imagemagick;
   };
 
-  cvs = import ../applications/version-management/cvs {
-    inherit fetchurl stdenv nano;
-  };
+  cvs = callPackage ../applications/version-management/cvs { };
 
-  cvsps = import ../applications/version-management/cvsps {
-    inherit fetchurl stdenv cvs zlib;
-  };
+  cvsps = callPackage ../applications/version-management/cvsps { };
 
-  cvs2svn = import ../applications/version-management/cvs2svn {
-    inherit fetchurl stdenv python makeWrapper;
-  };
+  cvs2svn = callPackage ../applications/version-management/cvs2svn { };
 
-  d4x = import ../applications/misc/d4x {
-    inherit fetchurl stdenv pkgconfig openssl boost;
+  d4x = callPackage ../applications/misc/d4x { 
     inherit (gtkLibs) gtk glib;
   };
 
   darcs = haskellPackages.darcs;
 
-  dia = import ../applications/graphics/dia {
-    inherit stdenv fetchurl pkgconfig perl perlXMLParser
-      libxml2 gettext python libxml2Python docbook5 docbook_xsl
-      libxslt intltool;
+  dia = callPackage ../applications/graphics/dia { 
     inherit (gtkLibs) gtk glib;
   };
 
-  djvulibre = makeOverridable (import ../applications/misc/djvulibre) {
-    inherit stdenv fetchurl lib libjpeg libtiff libungif qt3 zlib
-      ghostscript libpng mesa x11;
-    inherit (xlibs) libX11;
-  };
+  djvulibre = callPackage ../applications/misc/djvulibre { };
 
-  djview4 = import ../applications/graphics/djview {
-    inherit fetchurl stdenv qt4 djvulibre;
-  };
+  djview4 = callPackage ../applications/graphics/djview { };
 
-  dmenu = import ../applications/misc/dmenu {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXinerama;
-  };
+  dmenu = callPackage ../applications/misc/dmenu { };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
@@ -7728,57 +5282,36 @@ let
     inherit (xlibs) libX11;
   };
 
-  dvdauthor = import ../applications/video/dvdauthor {
-    inherit fetchurl stdenv freetype libpng fribidi libxml2 libdvdread imagemagick;
-  };
+  dvdauthor = callPackage ../applications/video/dvdauthor { };
 
-  dwm = import ../applications/window-managers/dwm {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXinerama;
+  dwm = callPackage ../applications/window-managers/dwm { 
     patches = getConfig [ "dwm" "patches" ] [];
   };
 
-  eaglemode = import ../applications/misc/eaglemode {
-    inherit fetchurl stdenv perl xineLib libjpeg libpng libtiff;
-    inherit (xlibs) libX11;
-  };
+  eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipse = makeOverridable (import ../applications/editors/eclipse) {
-    inherit stdenv fetchurl patchelf makeDesktopItem makeWrapper freetype fontconfig jre zlib;
+  eclipse = callPackage ../applications/editors/eclipse { 
     # GTK 2.18 gives glitches such as mouse clicks on buttons not
     # working correctly.
     inherit (gtkLibs216) glib gtk;
-    inherit (xlibs) libX11 libXext libXrender libXtst;
   };
   eclipseLatest = eclipse.override { version = "latest"; };
 
-  ed = import ../applications/editors/ed {
-    inherit fetchurl stdenv;
-  };
+  ed = callPackage ../applications/editors/ed { };
 
-  elinks = import ../applications/networking/browsers/elinks {
-    inherit stdenv fetchurl python perl ncurses x11 zlib openssl spidermonkey
-      guile bzip2 gpm;
-  };
+  elinks = callPackage ../applications/networking/browsers/elinks { };
 
-  elvis = import ../applications/editors/elvis {
-    inherit fetchurl stdenv ncurses;
-  };
+  elvis = callPackage ../applications/editors/elvis { };
 
   emacs = emacs23;
 
-  emacs22 = import ../applications/editors/emacs-22 {
-    inherit fetchurl stdenv ncurses pkgconfig x11 Xaw3d;
-    inherit (xlibs) libXaw libXpm;
+  emacs22 = callPackage ../applications/editors/emacs-22 { 
     inherit (gtkLibs) gtk;
     xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
     gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
   };
 
-  emacs23 = makeOverridable (import ../applications/editors/emacs-23) {
-    inherit fetchurl stdenv ncurses pkgconfig x11 libpng libjpeg
-      libungif libtiff texinfo dbus;
-    inherit (xlibs) libXpm libXft;
+  emacs23 = callPackage ../applications/editors/emacs-23 { 
     # use override to select the appropriate gui toolkit
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
@@ -7802,67 +5335,37 @@ let
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
-    bbdb = import ../applications/editors/emacs-modes/bbdb {
-      inherit fetchurl stdenv emacs texinfo ctags;
-    };
+    bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
-    cedet = import ../applications/editors/emacs-modes/cedet {
-      inherit fetchurl stdenv emacs;
-    };
+    cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
-    cua = import ../applications/editors/emacs-modes/cua {
-      inherit fetchurl stdenv;
-    };
+    cua = callPackage ../applications/editors/emacs-modes/cua { };
 
-    ecb = import ../applications/editors/emacs-modes/ecb {
-      inherit fetchurl stdenv emacs cedet jdee texinfo;
-    };
+    ecb = callPackage ../applications/editors/emacs-modes/ecb { };
 
-    jabber = import ../applications/editors/emacs-modes/jabber {
-      inherit stdenv fetchurl emacs;
-    };
+    jabber = callPackage ../applications/editors/emacs-modes/jabber { };
 
-    emacsSessionManagement = import ../applications/editors/emacs-modes/session-management-for-emacs {
-      inherit fetchurl stdenv emacs;
-    };
+    emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
 
-    emacsw3m = import ../applications/editors/emacs-modes/emacs-w3m {
-      inherit fetchcvs stdenv emacs w3m imagemagick texinfo autoconf;
-    };
+    emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
 
-    emms = import ../applications/editors/emacs-modes/emms {
-      inherit fetchurl stdenv emacs texinfo mpg321 vorbisTools taglib
-        alsaUtils;
-    };
+    emms = callPackage ../applications/editors/emacs-modes/emms { };
 
-    jdee = import ../applications/editors/emacs-modes/jdee {
+    jdee = callPackage ../applications/editors/emacs-modes/jdee { 
       # Requires Emacs 23, for `avl-tree'.
-      inherit fetchsvn stdenv cedet ant emacs;
     };
 
-    stratego = import ../applications/editors/emacs-modes/stratego {
-      inherit fetchsvn stdenv;
-    };
+    stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
-    haskellMode = import ../applications/editors/emacs-modes/haskell {
-      inherit fetchurl stdenv emacs;
-    };
+    haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
-    hol_light_mode = import ../applications/editors/emacs-modes/hol_light {
-      inherit fetchsvn stdenv;
-    };
+    hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
-    magit = import ../applications/editors/emacs-modes/magit {
-      inherit fetchurl stdenv emacs texinfo;
-    };
+    magit = callPackage ../applications/editors/emacs-modes/magit { };
 
-    maudeMode = import ../applications/editors/emacs-modes/maude {
-      inherit fetchurl stdenv emacs;
-    };
+    maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
-    nxml = import ../applications/editors/emacs-modes/nxml {
-      inherit fetchurl stdenv;
-    };
+    nxml = callPackage ../applications/editors/emacs-modes/nxml { };
 
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
@@ -7870,65 +5373,44 @@ let
       inherit fetchurl stdenv emacs texinfo;
     });
 
-    prologMode = import ../applications/editors/emacs-modes/prolog {
-      inherit fetchurl stdenv;
-    };
+    prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
-    proofgeneral = import ../applications/editors/emacs-modes/proofgeneral {
-      inherit stdenv fetchurl emacs texinfo texLive perl which automake;
-    };
+    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral { };
 
-    quack = import ../applications/editors/emacs-modes/quack {
-      inherit fetchurl stdenv emacs;
-    };
+    quack = callPackage ../applications/editors/emacs-modes/quack { };
 
-    remember = import ../applications/editors/emacs-modes/remember {
-      inherit fetchurl stdenv texinfo emacs bbdb;
-    };
+    remember = callPackage ../applications/editors/emacs-modes/remember { };
 
-    rudel = import ../applications/editors/emacs-modes/rudel {
-      inherit fetchurl stdenv;
-    };
+    rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
-    scalaMode = import ../applications/editors/emacs-modes/scala-mode {
-      inherit fetchsvn stdenv emacs;
-    };
+    scalaMode = callPackage ../applications/editors/emacs-modes/scala-mode { };
   };
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
   emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
 
-  epdfview = import ../applications/misc/epdfview {
-    inherit stdenv fetchurl pkgconfig poppler;
+  epdfview = callPackage ../applications/misc/epdfview { 
     inherit (gtkLibs) gtk;
   };
 
-  evince = makeOverridable (import ../applications/misc/evince) {
-    inherit fetchurl stdenv perl perlXMLParser gettext intltool
-      pkgconfig poppler libspectre djvulibre libxslt
-      dbus dbus_glib shared_mime_info which makeWrapper;
+  evince = callPackage ../applications/misc/evince { 
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
       libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
   };
 
-  exrdisplay = import ../applications/graphics/exrdisplay {
-    inherit fetchurl stdenv pkgconfig mesa which openexr_ctl openexr;
+  exrdisplay = callPackage ../applications/graphics/exrdisplay { 
     fltk = fltk20;
   };
 
-  fbpanel = makeOverridable (import ../applications/window-managers/fbpanel) {
-    inherit fetchurl stdenv builderDefs pkgconfig libpng libjpeg libtiff librsvg;
+  fbpanel = callPackage ../applications/window-managers/fbpanel { 
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libX11 libXmu libXpm;
   };
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
   };
 
-  fossil = import ../applications/version-management/fossil {
-    inherit stdenv fetchurl zlib openssl;
-  };
+  fossil = callPackage ../applications/version-management/fossil { };
 
   grass = import ../applications/misc/grass {
     inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
@@ -7944,24 +5426,18 @@ let
     wxPython = wxPython28;
   };
 
-  grip = import ../applications/misc/grip {
-    inherit fetchurl stdenv pkgconfig curl cdparanoia libid3tag;
+  grip = callPackage ../applications/misc/grip { 
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libgnome libgnomeui vte;
   };
 
-  wavesurfer = import ../applications/misc/audio/wavesurfer {
-    inherit fetchurl stdenv tcl tk snack makeWrapper;
-  };
+  wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
-  wireshark = import ../applications/networking/sniffers/wireshark {
-    inherit fetchurl stdenv perl pkgconfig libpcap flex bison;
+  wireshark = callPackage ../applications/networking/sniffers/wireshark { 
     inherit (gtkLibs) gtk;
   };
 
-  wvdial = import ../os-specific/linux/wvdial {
-    inherit stdenv fetchurl wvstreams pkgconfig;
-  };
+  wvdial = callPackage ../os-specific/linux/wvdial { };
 
   fbida = builderDefsPackage ../applications/graphics/fbida {
     inherit libjpeg libexif giflib libtiff libpng
@@ -7969,41 +5445,28 @@ let
       freetype fontconfig;
   };
 
-  fdupes = import ../tools/misc/fdupes {
-    inherit fetchurl stdenv;
-  };
+  fdupes = callPackage ../tools/misc/fdupes { };
 
-  feh = import ../applications/graphics/feh {
-    inherit fetchurl stdenv x11 imlib2 libjpeg libpng giblib;
-    inherit (xlibs) libXinerama;
-  };
+  feh = callPackage ../applications/graphics/feh { };
 
   firefox = firefox36Pkgs.firefox;
   firefoxWrapper = firefox36Wrapper;
 
-  firefox35Pkgs = import ../applications/networking/browsers/firefox/3.5.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
-      nspr nss;
+  firefox35Pkgs = callPackage ../applications/networking/browsers/firefox/3.5.nix { 
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
   firefox35Wrapper = wrapFirefox firefox35Pkgs.firefox "firefox" "";
 
-  firefox36Pkgs = import ../applications/networking/browsers/firefox/3.6.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs file alsaLib
-      nspr nss libnotify;
+  firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix { 
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
   firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
 
-  flac = import ../applications/audio/flac {
-    inherit fetchurl stdenv libogg;
-  };
+  flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer10;
 
@@ -8022,41 +5485,24 @@ let
       debug = getConfig ["flashplayer" "debug"] false;
     });
 
-  flite = import ../applications/misc/flite {
-    inherit fetchurl stdenv;
-  };
+  flite = callPackage ../applications/misc/flite { };
 
-  freemind = import ../applications/misc/freemind {
-    inherit fetchurl stdenv ant coreutils gnugrep;
+  freemind = callPackage ../applications/misc/freemind { 
     jdk = jdk;
     jre = jdk;
   };
 
-  freepv = import ../applications/graphics/freepv {
-    inherit fetchurl stdenv mesa freeglut libjpeg zlib cmake libxml2 libpng;
-    inherit (xlibs) libX11 libXxf86vm;
-  };
+  freepv = callPackage ../applications/graphics/freepv { };
 
-  xfontsel = import ../applications/misc/xfontsel {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11 libXaw;
-  };
-  xlsfonts = import ../applications/misc/xlsfonts {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xlibs) libX11;
-  };
+  xfontsel = callPackage ../applications/misc/xfontsel { };
+  xlsfonts = callPackage ../applications/misc/xlsfonts { };
 
-  fspot = import ../applications/graphics/f-spot {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig mono
-            libexif libjpeg sqlite lcms libgphoto2 monoDLLFixer;
+  fspot = callPackage ../applications/graphics/f-spot { 
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
 
-  gimp = import ../applications/graphics/gimp {
-    inherit fetchurl stdenv pkgconfig freetype fontconfig
-      libtiff libjpeg libpng libexif zlib perl perlXMLParser
-      python pygtk gettext xlibs intltool babl gegl;
+  gimp = callPackage ../applications/graphics/gimp { 
     inherit (gnome) gtk libart_lgpl;
   };
 
@@ -8070,79 +5516,50 @@ let
   git = gitAndTools.git;
   gitFull = gitAndTools.gitFull;
 
-  gnucash = import ../applications/office/gnucash {
-    inherit fetchurl stdenv pkgconfig libxml2 goffice enchant
-      gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper;
+  gnucash = callPackage ../applications/office/gnucash { 
     inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml
       libgnomeprint;
     gconf = gnome.GConf;
   };
 
-  qcad = import ../applications/misc/qcad {
-    inherit fetchurl stdenv qt3 libpng;
-    inherit (xlibs) libXext libX11;
-  };
+  qcad = callPackage ../applications/misc/qcad { };
 
-  qjackctl = import ../applications/audio/qjackctl {
-    inherit fetchurl stdenv alsaLib jackaudio;
+  qjackctl = callPackage ../applications/audio/qjackctl { 
     qt4 = qt4;
   };
 
-  gkrellm = import ../applications/misc/gkrellm {
-    inherit fetchurl stdenv gettext pkgconfig;
+  gkrellm = callPackage ../applications/misc/gkrellm { 
     inherit (gtkLibs) glib gtk;
-    inherit (xlibs) libX11 libICE libSM;
   };
 
-  gnash = import ../applications/video/gnash {
-    inherit fetchurl stdenv SDL SDL_mixer libogg libxml2 libjpeg mesa libpng
-            boost freetype agg dbus curl pkgconfig x11 libtool lib libungif
-            gettext makeWrapper ming dejagnu python;
+  gnash = callPackage ../applications/video/gnash { 
     inherit (gtkLibs) glib gtk;
     inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg;
   };
 
-  gnome_mplayer = import ../applications/video/gnome-mplayer {
-    inherit fetchurl stdenv pkgconfig dbus dbus_glib;
+  gnome_mplayer = callPackage ../applications/video/gnome-mplayer { 
     inherit (gtkLibs) glib gtk;
     inherit (gnome) GConf;
   };
 
-  gnunet = import ../applications/networking/p2p/gnunet {
-    inherit fetchurl stdenv libextractor libmicrohttpd libgcrypt
-      gmp curl libtool guile adns sqlite gettext zlib pkgconfig
-      libxml2 ncurses findutils makeWrapper;
+  gnunet = callPackage ../applications/networking/p2p/gnunet { 
     inherit (gnome) gtk libglade;
     gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
   };
 
-  gocr = makeOverridable (import ../applications/graphics/gocr) {
-    inherit fetchurl stdenv;
-  };
+  gocr = callPackage ../applications/graphics/gocr { };
 
-  gphoto2 = import ../applications/misc/gphoto2 {
-    inherit fetchurl stdenv pkgconfig libgphoto2 libexif popt gettext
-      libjpeg readline libtool;
-  };
+  gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
     inherit libgphoto2 fuse pkgconfig glib;
   };
 
-  graphicsmagick = import ../applications/graphics/graphicsmagick {
-    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
-      libjpeg libpng libtiff libxml2 zlib libtool;
-    inherit (xlibs) libX11;
-  };
+  graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
 
-  graphicsmagick137 = import ../applications/graphics/graphicsmagick/1.3.7.nix {
-    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
-      libjpeg libpng libtiff libxml2 zlib libtool;
-    inherit (xlibs) libX11;
-  };
+  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix { };
 
-  gtkpod = import ../applications/audio/gtkpod {
-    inherit stdenv fetchurl pkgconfig libgpod gettext perl perlXMLParser flex libid3tag libvorbis;
+  gtkpod = callPackage ../applications/audio/gtkpod { 
     inherit (gtkLibs) gtk glib;
     inherit (gnome) libglade;
   };
@@ -8155,20 +5572,16 @@ let
     inherit libpng pkgconfig;
   };
 
-  gecko_mediaplayer = import ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
-    inherit fetchurl stdenv pkgconfig dbus dbus_glib x11 gnome_mplayer MPlayer glib;
+  gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer { 
     inherit (gnome) GConf;
     browser = firefox;
   };
 
-  geeqie = import ../applications/graphics/geeqie {
-    inherit fetchurl stdenv pkgconfig libpng lcms exiv2
-      intltool gettext libchamplain;
+  geeqie = callPackage ../applications/graphics/geeqie { 
     inherit (gtkLibs) gtk;
   };
 
-  gqview = import ../applications/graphics/gqview {
-    inherit fetchurl stdenv pkgconfig libpng;
+  gqview = callPackage ../applications/graphics/gqview { 
     inherit (gtkLibs) gtk;
   };
 
@@ -8183,55 +5596,35 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  gpsbabel = import ../applications/misc/gpsbabel {
-    inherit fetchurl stdenv zlib expat;
-  };
+  gpsbabel = callPackage ../applications/misc/gpsbabel { };
 
-  gpscorrelate = import ../applications/misc/gpscorrelate {
-    inherit fetchurl stdenv pkgconfig exiv2 libxml2
-      libxslt docbook_xsl docbook_xml_dtd_42;
+  gpscorrelate = callPackage ../applications/misc/gpscorrelate { 
     inherit (gtkLibs) gtk;
   };
 
-  gpsd = import ../servers/gpsd {
-    inherit fetchurl stdenv pkgconfig dbus dbus_glib
-      ncurses makeWrapper libxslt xmlto;
-    inherit (xlibs) libX11 libXt libXpm libXaw libXext;
+  gpsd = callPackage ../servers/gpsd { 
 
     # We need a Python with NCurses bindings.
     python = pythonFull;
   };
 
-  gv = import ../applications/misc/gv {
-    inherit fetchurl stdenv Xaw3d ghostscriptX perl;
-  };
+  gv = callPackage ../applications/misc/gv { };
 
-  hello = makeOverridable (import ../applications/misc/hello/ex-2) {
-    inherit fetchurl stdenv;
-  };
+  hello = callPackage ../applications/misc/hello/ex-2 { };
 
-  homebank = import ../applications/office/homebank {
-    inherit fetchurl stdenv pkgconfig libofx intltool;
+  homebank = callPackage ../applications/office/homebank { 
     inherit (gtkLibs) gtk;
   };
 
-  htmldoc = import ../applications/misc/htmldoc {
-    inherit fetchurl stdenv openssl libpng libjpeg;
+  htmldoc = callPackage ../applications/misc/htmldoc { 
     fltk = fltk11;
   };
 
-  hugin = import ../applications/graphics/hugin {
-    inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
-      exiv2 gettext ilmbase enblendenfuse autopanosiftc mesa freeglut
-      glew openexr;
-    inherit wxGTK;
-    inherit (xlibs) libXi libXmu;
+  hugin = callPackage ../applications/graphics/hugin { 
     stdenv = stdenv2;
   };
 
-  i810switch = import ../os-specific/linux/i810switch {
-    inherit fetchurl stdenv pciutils;
-  };
+  i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
@@ -8259,93 +5652,57 @@ let
 
   icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
 
-  icewm = import ../applications/window-managers/icewm {
-    inherit fetchurl stdenv gettext libjpeg libtiff libungif libpng imlib xlibs;
-  };
+  icewm = callPackage ../applications/window-managers/icewm { };
 
-  ikiwiki = makeOverridable (import ../applications/misc/ikiwiki) {
-    inherit fetchurl stdenv perl gettext makeWrapper lib;
+  ikiwiki = callPackage ../applications/misc/ikiwiki { 
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
       RpcXML XMLSimple PerlMagick;
     gitSupport = getPkgConfig "ikiwiki" "git" false;
     monotoneSupport = getPkgConfig "ikiwiki" "monotone" false;
-    inherit git monotone;
     extraUtils = [];
   };
 
-  imagemagick = import ../applications/graphics/ImageMagick {
-    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
-      libjpeg libpng libtiff libxml2 zlib libtool jasper;
-    inherit (xlibs) libX11;
+  imagemagick = callPackage ../applications/graphics/ImageMagick { 
     tetex = null;
     librsvg = null;
   };
 
-  imagemagickBig = import ../applications/graphics/ImageMagick {
-    inherit stdenv fetchurl bzip2 freetype graphviz ghostscript
-      libjpeg libpng libtiff libxml2 zlib tetex librsvg libtool
-      jasper;
-    inherit (xlibs) libX11;
-  };
+  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
   # Impressive, formerly known as "KeyJNote".
-  impressive = import ../applications/office/impressive {
-    inherit fetchurl stdenv xpdf pil pygame makeWrapper lib python;
+  impressive = callPackage ../applications/office/impressive { 
 
     # XXX These are the PyOpenGL dependencies, which we need here.
-    inherit setuptools mesa freeglut;
 
-    inherit (pythonPackages) pyopengl;
-  };
+    inherit (pythonPackages) pyopengl;  };
 
-  inkscape = import ../applications/graphics/inkscape {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig zlib popt
-      libxml2 libxslt libpng boehmgc libsigcxx lcms boost gettext
-      python pyxml makeWrapper intltool gsl;
+  inkscape = callPackage ../applications/graphics/inkscape { 
     inherit (pythonPackages) lxml;
     inherit (gtkLibs) gtk glib glibmm gtkmm;
-    inherit (xlibs) libXft;
   };
 
-  ion3 = import ../applications/window-managers/ion-3 {
-    inherit fetchurl stdenv x11 gettext groff;
+  ion3 = callPackage ../applications/window-managers/ion-3 { 
     lua = lua5;
   };
 
-  iptraf = import ../applications/networking/iptraf {
-    inherit fetchurl stdenv ncurses;
-  };
+  iptraf = callPackage ../applications/networking/iptraf { };
 
-  irssi = import ../applications/networking/irc/irssi {
-    inherit stdenv fetchurl pkgconfig ncurses openssl glib perl;
-  };
+  irssi = callPackage ../applications/networking/irc/irssi { };
 
-  jackmeter = import ../applications/audio/jackmeter {
-    inherit fetchurl stdenv jackaudio pkgconfig;
-  };
+  jackmeter = callPackage ../applications/audio/jackmeter { };
 
-  jedit = import ../applications/editors/jedit {
-    inherit fetchurl stdenv ant;
-  };
+  jedit = callPackage ../applications/editors/jedit { };
 
-  jigdo = import ../applications/misc/jigdo {
-    inherit fetchurl stdenv db45 bzip2;
+  jigdo = callPackage ../applications/misc/jigdo { 
     inherit (gtkLibs) gtk;
   };
 
-  joe = import ../applications/editors/joe {
-    inherit stdenv fetchurl;
-  };
+  joe = callPackage ../applications/editors/joe { };
 
-  jwm = import ../applications/window-managers/jwm {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXext libXinerama libXpm libXft;
-  };
+  jwm = callPackage ../applications/window-managers/jwm { };
 
-  kermit = import ../tools/misc/kermit {
-    inherit fetchurl stdenv ncurses;
-  };
+  kermit = callPackage ../tools/misc/kermit { };
 
   kino = import ../applications/video/kino {
     inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser
@@ -8358,38 +5715,24 @@ let
     #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
   };
 
-  lame = import ../applications/audio/lame {
-    inherit fetchurl stdenv nasm;
-  };
+  lame = callPackage ../applications/audio/lame { };
 
-  larswm = import ../applications/window-managers/larswm {
-    inherit fetchurl stdenv;
-    inherit (xlibs) imake libX11 libXext libXmu;
-  };
+  larswm = callPackage ../applications/window-managers/larswm { };
 
-  ladspaH = import ../applications/audio/ladspa-plugins/ladspah.nix {
-    inherit fetchurl stdenv builderDefs;
-  };
+  ladspaH = callPackage ../applications/audio/ladspa-plugins/ladspah.nix { };
 
-  ladspaPlugins = import ../applications/audio/ladspa-plugins {
-    inherit fetchurl stdenv ladspaH pkgconfig;
+  ladspaPlugins = callPackage ../applications/audio/ladspa-plugins { 
     fftw = fftwSinglePrec;
   };
 
-  ldcpp = makeOverridable (import ../applications/networking/p2p/ldcpp) {
-    inherit builderDefs scons pkgconfig bzip2 openssl;
+  ldcpp = callPackage ../applications/networking/p2p/ldcpp { 
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
-    inherit (xlibs) libX11;
   };
 
-  links = import ../applications/networking/browsers/links {
-    inherit fetchurl stdenv;
-  };
+  links = callPackage ../applications/networking/browsers/links { };
 
-  ledger = makeOverridable (import ../applications/office/ledger) {
-    inherit stdenv fetchurl emacs gmp pcre;
-  };
+  ledger = callPackage ../applications/office/ledger { };
 
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
     inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
@@ -8397,24 +5740,18 @@ let
     inherit (xlibs) libX11 libXau xproto libXt;
   };
 
-  lynx = import ../applications/networking/browsers/lynx {
-    inherit fetchurl stdenv ncurses openssl;
-  };
+  lynx = callPackage ../applications/networking/browsers/lynx { };
 
-  lyx = import ../applications/misc/lyx {
-   inherit fetchurl stdenv texLive python makeWrapper;
-   inherit (xlibs) libX11;
+  lyx = callPackage ../applications/misc/lyx { 
    qt = qt4;
   };
 
-  meld = import ../applications/version-management/meld {
-    inherit fetchurl stdenv python intltool makeWrapper;
+  meld = callPackage ../applications/version-management/meld { 
     inherit (gnome) scrollkeeper;
     pygtk = pyGtkGlade;
   };
 
-  mercurial = import ../applications/version-management/mercurial {
-    inherit fetchurl stdenv makeWrapper tk;
+  mercurial = callPackage ../applications/version-management/mercurial { 
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
     python = # allow cloning sources from https servers.
       if getConfig ["mercurial" "httpsSupport"] true
@@ -8422,13 +5759,11 @@ let
       else pythonBase;
   };
 
-  merkaartor = import ../applications/misc/merkaartor {
-    inherit fetchurl stdenv boost;
+  merkaartor = callPackage ../applications/misc/merkaartor { 
     qt = qt4;
   };
 
-  meshlab = import ../applications/graphics/meshlab {
-    inherit fetchurl stdenv bzip2 lib3ds levmar muparser unzip;
+  meshlab = callPackage ../applications/graphics/meshlab { 
     qt = qt4;
   };
 
@@ -8440,30 +5775,21 @@ let
     inherit (webkit.passthru.args) libsoup;
   };
 
-  minicom = import ../tools/misc/minicom {
-    inherit fetchurl stdenv ncurses;
-  };
+  minicom = callPackage ../tools/misc/minicom { };
 
-  mmex = import ../applications/office/mmex {
-    inherit fetchsvn stdenv wxGTK;
-  };
+  mmex = callPackage ../applications/office/mmex { };
 
-  monodevelop = import ../applications/editors/monodevelop {
-    inherit fetchurl stdenv file mono gtksourceviewsharp
-            gtkmozembedsharp monodoc perl perlXMLParser pkgconfig;
+  monodevelop = callPackage ../applications/editors/monodevelop { 
     inherit (gnome) gnomevfs libbonobo libglade libgnome GConf glib gtk;
     mozilla = firefox;
     gtksharp = gtksharp2;
   };
 
-  monodoc = import ../applications/editors/monodoc {
-    inherit fetchurl stdenv mono pkgconfig;
+  monodoc = callPackage ../applications/editors/monodoc { 
     gtksharp = gtksharp1;
   };
 
-  monotone = import ../applications/version-management/monotone {
-    inherit stdenv fetchurl boost zlib botan libidn pcre
-      sqlite lib perl;
+  monotone = callPackage ../applications/version-management/monotone { 
     lua = lua5;
   };
 
@@ -8472,11 +5798,9 @@ let
     inherit (gnome) gtk libgnomecanvas glib;
   };
 
-  mozilla = import ../applications/networking/browsers/mozilla {
-    inherit fetchurl pkgconfig stdenv perl zip;
+  mozilla = callPackage ../applications/networking/browsers/mozilla { 
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
   };
 
   mozplugger = builderDefsPackage (import ../applications/networking/browsers/mozilla-plugins/mozplugger) {
@@ -8484,18 +5808,11 @@ let
     inherit (xlibs) libX11 xproto;
   };
 
-  mpc123 = import ../applications/audio/mpc123 {
-    inherit stdenv fetchurl gettext libao libmpcdec;
-  };
+  mpc123 = callPackage ../applications/audio/mpc123 { };
 
-  mpg321 = import ../applications/audio/mpg321 {
-    inherit stdenv fetchurl libao libmad libid3tag zlib;
-  };
+  mpg321 = callPackage ../applications/audio/mpg321 { };
 
-  MPlayer = import ../applications/video/MPlayer {
-    inherit fetchurl stdenv freetype fontconfig x11 zlib libtheora libcaca libdvdnav
-      cdparanoia mesa pkgconfig unzip amrnb amrwb jackaudio x264 xvidcore lame yasm;
-    inherit (xlibs) libX11 libXv libXinerama libXrandr;
+  MPlayer = callPackage ../applications/video/MPlayer { 
     alsaSupport = true;
     alsa = alsaLib;
     theoraSupport = true;
@@ -8516,56 +5833,34 @@ let
       # !!! should depend on MPlayer
     };
 
-  mrxvt = import ../applications/misc/mrxvt {
-    inherit fetchurl stdenv freetype pkgconfig which;
-    inherit (xlibs) libX11 libSM libICE libXft libXi inputproto;
-  };
+  mrxvt = callPackage ../applications/misc/mrxvt { };
 
-  multisync = import ../applications/misc/multisync {
-    inherit fetchurl stdenv autoconf automake libtool pkgconfig;
+  multisync = callPackage ../applications/misc/multisync { 
     inherit (gnome) gtk glib ORBit2 libbonobo libgnomeui GConf;
   };
 
-  mutt = import ../applications/networking/mailreaders/mutt {
-    inherit fetchurl stdenv ncurses which openssl gdbm perl cyrus_sasl;
-  };
+  mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
-  msmtp = import ../applications/networking/msmtp {
-    inherit fetchurl stdenv openssl;
-  };
+  msmtp = callPackage ../applications/networking/msmtp { };
 
-  mythtv = import ../applications/video/mythtv {
-    inherit fetchurl stdenv which x11 xlibs lame zlib mesa freetype perl alsaLib;
+  mythtv = callPackage ../applications/video/mythtv { 
     qt3 = qt3mysql;
   };
 
-  nano = import ../applications/editors/nano {
-    inherit fetchurl stdenv ncurses gettext;
-  };
+  nano = callPackage ../applications/editors/nano { };
 
-  nedit = import ../applications/editors/nedit {
-      inherit fetchurl stdenv x11;
-      inherit (xlibs) libXpm;
+  nedit = callPackage ../applications/editors/nedit { 
       motif = lesstif;
-    };
+  };
 
   netsurfBrowser = netsurf.browser;
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
-  nvi = import ../applications/editors/nvi {
-    inherit fetchurl stdenv ncurses;
-  };
+  nvi = callPackage ../applications/editors/nvi { };
 
-  openjump = import ../applications/misc/openjump {
-    inherit stdenv fetchurl unzip;
-  };
+  openjump = callPackage ../applications/misc/openjump { };
 
-  openoffice = import ../applications/office/openoffice {
-    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
-      expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
-      curl libsndfile flex zip unzip libmspack getopt file cairo
-      which icu jdk ant cups openssl bison boost gperf cppunit;
-    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
+  openoffice = callPackage ../applications/office/openoffice { 
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
@@ -8573,59 +5868,41 @@ let
     stdenv = stdenv2;
   };
 
-  go_oo = import ../applications/office/openoffice/go-oo.nix {
-    inherit fetchurl pam python tcsh libxslt perl zlib libjpeg
-      expat pkgconfig freetype fontconfig libwpd libxml2 db4 sablotron
-      curl libsndfile flex zip unzip libmspack getopt file cairo
-      which icu jdk ant cups openssl bison boost gperf cppunit bash;
-    inherit (xlibs) libXaw libXext libX11 libXtst libXi libXinerama;
+  go_oo = callPackage ../applications/office/openoffice/go-oo.nix { 
     inherit (gtkLibs) gtk;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
     stdenv = stdenv2;
-
-    inherit autoconf openldap postgresql;
   };
 
-  opera = import ../applications/networking/browsers/opera {
-    inherit fetchurl zlib glibc stdenv makeDesktopItem;
-    inherit (xlibs) libX11 libSM libICE libXt libXext;
+  opera = callPackage ../applications/networking/browsers/opera { 
     qt = qt3;
   };
 
-  pan = import ../applications/networking/newsreaders/pan {
-    inherit fetchurl stdenv pkgconfig perl pcre gettext;
+  pan = callPackage ../applications/networking/newsreaders/pan { 
     inherit (gtkLibs) gtk;
     gmime = gmime_2_2;
     spellChecking = false;
   };
 
-  panotools = import ../applications/graphics/panotools {
-    inherit stdenv fetchsvn libpng libjpeg libtiff automake libtool autoconf;
-  };
+  panotools = callPackage ../applications/graphics/panotools { };
 
-  pavucontrol = import ../applications/audio/pavucontrol {
-    inherit fetchurl stdenv pkgconfig pulseaudio libsigcxx
-      libcanberra intltool gettext;
+  pavucontrol = callPackage ../applications/audio/pavucontrol { 
     inherit (gtkLibs) gtkmm;
     inherit (gnome) libglademm;
   };
 
-  paraview = import ../applications/graphics/paraview {
-    inherit fetchurl cmake qt4;
+  paraview = callPackage ../applications/graphics/paraview { 
     stdenv = stdenv2;
   };
 
-  partitionManager = import ../tools/misc/partition-manager {
-    inherit fetchurl stdenv cmake gettext parted libuuid perl;
+  partitionManager = callPackage ../tools/misc/partition-manager { 
     kde = kde44;
     qt = qt4;
   };
 
-  pdftk = import ../tools/typesetting/pdftk {
-    inherit fetchurl stdenv gcj;
-  };
+  pdftk = callPackage ../tools/typesetting/pdftk { };
 
   pidgin = import ../applications/networking/instant-messengers/pidgin {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr farsight2 python
@@ -8639,8 +5916,7 @@ let
     inherit (gst_all) gstPluginsBase;
   };
 
-  pidginlatex = makeOverridable (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex) {
-    inherit fetchurl stdenv pkgconfig ghostscript pidgin texLive;
+  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex { 
     imagemagick = imagemagickBig;
     inherit (gtkLibs) glib gtk;
   };
@@ -8652,164 +5928,98 @@ let
       inherit (gtkLibs) glib gtk;
     };
 
-  pidginotr = import ../applications/networking/instant-messengers/pidgin-plugins/otr {
-    inherit fetchurl stdenv libotr pidgin;
-  };
+  pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
-  pidginsipe = import ../applications/networking/instant-messengers/pidgin-plugins/sipe {
-    inherit fetchurl stdenv pidgin intltool libxml2;
-  };
+  pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
-  pinfo = import ../applications/misc/pinfo {
-    inherit fetchurl stdenv ncurses readline;
-  };
+  pinfo = callPackage ../applications/misc/pinfo { };
 
-  pinta = import ../applications/graphics/pinta {
-    inherit fetchgit stdenv mono pkgconfig;
+  pinta = callPackage ../applications/graphics/pinta { 
     gtksharp = gtksharp2;
   };
 
-  pqiv = import ../applications/graphics/pqiv {
-    inherit fetchurl stdenv getopt which pkgconfig;
+  pqiv = callPackage ../applications/graphics/pqiv { 
     inherit (gtkLibs) gtk;
   };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
-  procmail = import ../applications/misc/procmail {
-    inherit fetchurl stdenv;
-  };
+  procmail = callPackage ../applications/misc/procmail { };
 
-  pstree = import ../applications/misc/pstree {
-    inherit stdenv fetchurl;
-  };
+  pstree = callPackage ../applications/misc/pstree { };
 
-  pythonmagick = import ../applications/graphics/PythonMagick {
-    inherit fetchurl stdenv pkgconfig imagemagick boost python;
-  };
+  pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qemu = import ../applications/virtualization/qemu/0.12.3.nix {
-    inherit stdenv fetchurl SDL zlib which;
-  };
+  qemu = callPackage ../applications/virtualization/qemu/0.12.3.nix { };
 
-  qemuSVN = import ../applications/virtualization/qemu/svn-6642.nix {
-    inherit fetchsvn SDL zlib which stdenv;
-  };
+  qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
-  qemuImage = makeOverridable (import ../applications/virtualization/qemu/linux-img) {
-    inherit fetchurl stdenv;
-  };
+  qemuImage = callPackage ../applications/virtualization/qemu/linux-img { };
 
-  qtpfsgui = import ../applications/graphics/qtpfsgui {
-    inherit fetchurl stdenv exiv2 libtiff fftw qt4 ilmbase openexr;
-  };
+  qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
-  rapidsvn = import ../applications/version-management/rapidsvn {
-    inherit fetchurl stdenv wxGTK subversion apr aprutil python;
-  };
+  rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
-  ratpoison = import ../applications/window-managers/ratpoison {
-    inherit fetchurl stdenv fontconfig readline pkgconfig autoconf automake;
-    inherit (xlibs) libX11 inputproto libXt libXpm libXft
-      libXtst xextproto libXi;
-  };
+  ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
-  rawtherapee = import ../applications/graphics/rawtherapee {
-    inherit fetchsvn stdenv pkgconfig cmake lcms libiptcdata;
+  rawtherapee = callPackage ../applications/graphics/rawtherapee { 
     inherit (gtkLibs) gtk gtkmm;
-    inherit (xlibs) libXau libXdmcp pixman libpthreadstubs;
   };
 
-  rcs = import ../applications/version-management/rcs {
-    inherit fetchurl stdenv;
-  };
+  rcs = callPackage ../applications/version-management/rcs { };
 
-  rdesktop = import ../applications/networking/remote/rdesktop {
-    inherit fetchurl stdenv openssl;
-    inherit (xlibs) libX11;
-  };
+  rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
-  RealPlayer =
-    import ../applications/video/RealPlayer {
-      inherit fetchurl stdenv;
+  RealPlayer = callPackage ../applications/video/RealPlayer { 
       inherit (gtkLibs) glib pango atk gtk;
-      inherit (xlibs) libX11;
       libstdcpp5 = gcc33.gcc;
-    };
+  };
 
-  rekonq = makeOverridable (import ../applications/networking/browsers/rekonq) {
-    inherit fetchurl stdenv cmake perl gettext;
+  rekonq = callPackage ../applications/networking/browsers/rekonq { 
     inherit (gtkLibs) gtk;
-    inherit (xlibs) pixman;
     inherit (kde4) qt4 kdelibs automoc4 phonon;
   };
 
-  rsync = import ../applications/networking/sync/rsync {
-    inherit fetchurl stdenv acl perl;
+  rsync = callPackage ../applications/networking/sync/rsync { 
     enableACLs = !stdenv.isDarwin;
   };
 
-  rxvt = import ../applications/misc/rxvt {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libXt libX11;
-  };
+  rxvt = callPackage ../applications/misc/rxvt { };
 
   # = urxvt
-  rxvt_unicode = makeOverridable (import ../applications/misc/rxvt_unicode) {
-    inherit fetchurl stdenv perl ncurses;
-    inherit (xlibs) libXt libX11 libXft;
-    perlSupport = false;
-  };
+  rxvt_unicode = callPackage ../applications/misc/rxvt_unicode { 
+    perlSupport = false;  };
 
-  sakura = import ../applications/misc/sakura {
-    inherit stdenv fetchurl cmake pkgconfig gettext perl;
+  sakura = callPackage ../applications/misc/sakura { 
     inherit (gtkLibs) gtk;
     inherit (gnome) vte;
-    inherit (xlibs) pixman;
   };
 
-  sbagen = import ../applications/misc/sbagen {
-    inherit fetchurl stdenv;
-  };
+  sbagen = callPackage ../applications/misc/sbagen { };
 
-  scribus = import ../applications/office/scribus {
-    inherit fetchurl stdenv cmake pkgconfig freetype lcms libtiff libxml2
-      cairo python cups fontconfig zlib libjpeg libpng xorg;
+  scribus = callPackage ../applications/office/scribus { 
     inherit (gnome) libart_lgpl;
     qt = qt3;
   };
 
-  seeks = import ../tools/networking/p2p/seeks {
-    inherit fetchurl stdenv zlib docbook2x pcre curl libxml2 libevent perl
-      autoconf automake libtool;
-  };
+  seeks = callPackage ../tools/networking/p2p/seeks { };
 
-  seg3d = import ../applications/graphics/seg3d {
-    inherit fetchurl stdenv cmake itk mesa zlib libuuid;
-    inherit (xlibs) libXft libXext libXi libXmu;
+  seg3d = callPackage ../applications/graphics/seg3d { 
     wxGTK = wxGTK28.override {
       unicode = false;
-    };
+  };
   };
 
-  semnotes = import ../applications/misc/semnotes {
-    inherit stdenv fetchurl cmake;
+  semnotes = callPackage ../applications/misc/semnotes { 
     inherit (kde4) qt4 kdelibs automoc4 phonon soprano;
   };
 
-  skype_linux = import ../applications/networking/skype {
-    inherit fetchurl stdenv;
-    inherit alsaLib freetype fontconfig zlib;
+  skype_linux = callPackage ../applications/networking/skype { 
     qt = qt46;
-    inherit (xlibs) libXext libX11 libXv libXScrnSaver libSM libICE
-      libXi libXrender libXrandr;
     inherit (gtkLibs) glib;
   };
 
-  slim = import ../applications/display-managers/slim {
-    inherit fetchurl stdenv x11 libjpeg libpng freetype pam;
-    inherit (xlibs) libXmu;
-  };
+  slim = callPackage ../applications/display-managers/slim { };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
@@ -8822,27 +6032,19 @@ let
     inherit guile mesa libtool jackaudio alsaLib;
   };
 
-  sonicVisualizer = import ../applications/audio/sonic-visualizer {
-    inherit fetchurl stdenv libsndfile libsamplerate bzip2 librdf
-      rubberband jackaudio pulseaudio libmad
-      libogg liblo alsaLib librdf_raptor librdf_rasqal redland fftw;
+  sonicVisualizer = callPackage ../applications/audio/sonic-visualizer { 
     inherit (vamp) vampSDK;
     qt = qt4;
   };
 
-  sox = import ../applications/misc/audio/sox {
-    inherit fetchurl lib composableDerivation;
-    inherit alsaLib libao;
-    inherit libmad lame;
-  };
+  sox = callPackage ../applications/misc/audio/sox { };
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
     inherit texinfo;
     clisp = clisp_2_44_1;
   };
 
-  subversion = makeOverridable (import ../applications/version-management/subversion/default.nix) {
-    inherit fetchurl stdenv apr aprutil expat swig zlib jdk python perl sqlite;
+  subversion = callPackage ../applications/version-management/subversion/default.nix { 
     neon = neon029;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
     httpServer = getConfig ["subversion" "httpServer"] false;
@@ -8857,21 +6059,16 @@ let
 
   svk = perlPackages.SVK;
 
-  sylpheed = import ../applications/networking/mailreaders/sylpheed {
-    inherit fetchurl stdenv pkgconfig openssl gpgme;
+  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { 
     inherit (gtkLibs) gtk;
     sslSupport = true;
     gpgSupport = true;
   };
 
   # linux only by now
-  synergy = import ../applications/misc/synergy {
-    inherit fetchurl sourceFromHead stdenv x11 automake autoconf;
-    inherit (xlibs) xextproto libXtst inputproto libXi;
-  };
+  synergy = callPackage ../applications/misc/synergy { };
 
-  tahoelafs = import ../tools/networking/p2p/tahoe-lafs {
-    inherit fetchurl lib unzip nettools buildPythonPackage pycrypto;
+  tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs { 
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
       numpy pyasn1;
@@ -8882,83 +6079,55 @@ let
     inherit makeWrapper python;
   };
 
-  tangogps = import ../applications/misc/tangogps {
-    inherit fetchurl stdenv pkgconfig gettext curl libexif sqlite libxml2;
+  tangogps = callPackage ../applications/misc/tangogps { 
     inherit (gtkLibs) gtk;
     gconf = gnome.GConf;
   };
 
   /* does'nt work yet i686-linux only (32bit version)
-  teamspeak_client = import ../applications/networking/instant-messengers/teamspeak/client.nix {
-    inherit fetchurl stdenv;
-    inherit glibc x11;
-  };
+  teamspeak_client = callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   */
 
-  taskJuggler = import ../applications/misc/taskjuggler {
-    inherit stdenv fetchurl;
-    inherit zlib libpng perl expat;
+  taskJuggler = callPackage ../applications/misc/taskjuggler { 
     qt = qt3;
-
-    inherit (xlibs) libX11 libXext libSM libICE;
 
     # KDE support is not working yet.
     inherit (kde3) kdelibs kdebase;
     withKde = getPkgConfig "taskJuggler" "kde" false;
   };
 
-  thinkingRock = import ../applications/misc/thinking-rock {
-    inherit fetchurl stdenv;
-  };
+  thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
   thunderbird = thunderbird3;
 
-  thunderbird2 = import ../applications/networking/mailreaders/thunderbird/2.x.nix {
-    inherit fetchurl stdenv pkgconfig perl zip libjpeg libpng zlib cairo;
-    inherit (gtkLibs) gtk;
-    inherit (gnome) libIDL;
-    inherit (xlibs) libXi;
-  };
-
-  thunderbird3 = import ../applications/networking/mailreaders/thunderbird/3.x.nix {
-    inherit fetchurl stdenv pkgconfig perl python dbus_glib zip bzip2 alsaLib nspr libnotify cairo fontconfig;
-    inherit (xorg) pixman;
+  thunderbird2 = callPackage ../applications/networking/mailreaders/thunderbird/2.x.nix { 
     inherit (gtkLibs) gtk;
     inherit (gnome) libIDL;
   };
 
-  timidity = import ../tools/misc/timidity {
-    inherit fetchurl stdenv alsaLib composableDerivation jackaudio ncurses;
+  thunderbird3 = callPackage ../applications/networking/mailreaders/thunderbird/3.x.nix { 
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libIDL;
   };
 
-  tkcvs = import ../applications/version-management/tkcvs {
-    inherit stdenv fetchurl tcl tk;
-  };
+  timidity = callPackage ../tools/misc/timidity { };
 
-  tla = import ../applications/version-management/arch {
-    inherit fetchurl stdenv diffutils gnutar gnupatch which;
-  };
+  tkcvs = callPackage ../applications/version-management/tkcvs { };
 
-  transmission = import ../applications/networking/p2p/transmission {
-    inherit stdenv fetchurl pkgconfig openssl curl intltool;
+  tla = callPackage ../applications/version-management/arch { };
+
+  transmission = callPackage ../applications/networking/p2p/transmission { 
     inherit (gtkLibs) gtk;
   };
 
-  twinkle = import ../applications/networking/twinkle {
-    inherit fetchurl stdenv pkgconfig commoncpp2 ccrtp openssl speex libjpeg perl
-      libzrtpcpp libsndfile libxml2 file readline alsaLib xorg;
+  twinkle = callPackage ../applications/networking/twinkle { 
     qt = qt3;
     boost = boostFull;
   };
 
-  unison = import ../applications/networking/sync/unison {
-    inherit fetchurl stdenv ocaml lablgtk makeWrapper;
-    inherit (xorg) xset fontschumachermisc;
-  };
+  unison = callPackage ../applications/networking/sync/unison { };
 
-  uucp = import ../tools/misc/uucp {
-    inherit fetchurl stdenv;
-  };
+  uucp = callPackage ../tools/misc/uucp { };
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
@@ -8967,8 +6136,7 @@ let
     libsoup = gnome28.libsoup_2_31;
   };
 
-  valknut = import ../applications/networking/p2p/valknut {
-    inherit fetchurl stdenv perl x11 libxml2 libjpeg libpng openssl dclib;
+  valknut = callPackage ../applications/networking/p2p/valknut { 
     qt = qt3;
   };
 
@@ -8978,9 +6146,7 @@ let
       makeWrapper graphviz which python;
   };
 
-  vim = makeOverridable (import ../applications/editors/vim) {
-    inherit fetchurl stdenv ncurses;
-  };
+  vim = callPackage ../applications/editors/vim { };
 
   vimHugeX = vim_configurable;
 
@@ -8999,41 +6165,25 @@ let
     flags = [ "X11" ]; # only flag "X11" by now
   };
 
-  virtualgl =  import ../tools/X11/virtualgl {
-    inherit stdenv fetchurl mesa openssl libjpeg_turbo;
-    inherit (xlibs) libX11 libXext;
-  };
+  virtualgl = callPackage ../tools/X11/virtualgl { };
 
-  vlc = import ../applications/video/vlc {
-    inherit fetchurl stdenv perl xlibs zlib a52dec libmad faad2
-      ffmpeg libdvdnav pkgconfig hal fribidi qt4 freefont_ttf
-      libvorbis libtheora speex libgcrypt libupnp;
+  vlc = callPackage ../applications/video/vlc { 
     dbus = dbus.libs;
     alsa = alsaLib;
     lua = lua5;
   };
 
-  vnstat = import ../applications/networking/vnstat {
-    inherit fetchurl stdenv ncurses;
-  };
+  vnstat = callPackage ../applications/networking/vnstat { };
 
-  vorbisTools = import ../applications/audio/vorbis-tools {
-    inherit fetchurl stdenv libogg libvorbis libao pkgconfig curl glibc
-      speex flac;
-  };
+  vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
-  vwm = import ../applications/window-managers/vwm {
-    inherit fetchurl stdenv ncurses pkgconfig libviper libpseudo gpm glib libvterm;
-  };
+  vwm = callPackage ../applications/window-managers/vwm { };
 
-  w3m = import ../applications/networking/browsers/w3m {
-    inherit fetchurl stdenv ncurses openssl boehmgc gettext zlib imlib2 x11;
+  w3m = callPackage ../applications/networking/browsers/w3m { 
     graphicsSupport = false;
   };
 
-  wings = import ../applications/graphics/wings {
-    inherit stdenv fetchurl erlang esdl;
-  };
+  wings = callPackage ../applications/graphics/wings { };
 
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
   wmiimenu = import ../applications/window-managers/wmii31 {
@@ -9049,9 +6199,7 @@ let
     includeUnpack = getConfig ["stdenv" "includeUnpack"] false;
   };
 
-  wordnet = import ../applications/misc/wordnet {
-    inherit stdenv fetchurl tcl tk x11 makeWrapper;
-  };
+  wordnet = callPackage ../applications/misc/wordnet { };
 
   wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox/wrapper.nix {
     inherit stdenv nameSuffix makeWrapper makeDesktopItem browser browserName;
@@ -9069,48 +6217,31 @@ let
        );
   };
 
-  x11vnc = makeOverridable (import ../tools/X11/x11vnc) {
-    inherit stdenv fetchurl xorg openssl zlib libjpeg;
-  };
+  x11vnc = callPackage ../tools/X11/x11vnc { };
 
-  x2vnc = makeOverridable (import ../tools/X11/x2vnc) {
-    inherit stdenv fetchurl xorg;
-  };
+  x2vnc = callPackage ../tools/X11/x2vnc { };
 
   xaos = builderDefsPackage (import ../applications/graphics/xaos) {
     inherit (xlibs) libXt libX11 libXext xextproto xproto;
     inherit gsl aalib zlib libpng intltool gettext perl;
   };
 
-  xara = import ../applications/graphics/xara {
-    inherit fetchurl stdenv autoconf automake libtool gettext cvs
-      pkgconfig libxml2 zip libpng libjpeg shebangfix perl freetype;
+  xara = callPackage ../applications/graphics/xara { 
     inherit (gtkLibs) gtk;
     wxGTK = wxGTK26;
   };
 
-  xawtv = import ../applications/video/xawtv {
-    inherit fetchurl stdenv ncurses libjpeg perl;
-    inherit (xlibs) libX11 libXt libXft xproto libFS fontsproto libXaw libXpm libXext libSM libICE xextproto;
-  };
+  xawtv = callPackage ../applications/video/xawtv { };
 
-  xchat = import ../applications/networking/irc/xchat {
-    inherit fetchurl stdenv pkgconfig tcl;
+  xchat = callPackage ../applications/networking/irc/xchat { 
     inherit (gtkLibs) gtk;
   };
 
-  xchm = import ../applications/misc/xchm {
-    inherit fetchurl stdenv chmlib wxGTK;
-  };
+  xchm = callPackage ../applications/misc/xchm { };
 
-  xcompmgr = import ../applications/window-managers/xcompmgr {
-    inherit stdenv fetchurl pkgconfig;
-    inherit (xlibs) libXcomposite libXfixes libXdamage libXrender;
-  };
+  xcompmgr = callPackage ../applications/window-managers/xcompmgr { };
 
-  xdg_utils = import ../tools/X11/xdg-utils {
-    inherit stdenv fetchurl;
-  };
+  xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
   /* Doesn't work yet
 
@@ -9122,89 +6253,57 @@ let
     ghostscript = if (getConfig ["xen" "ghostscript"] false) then ghostscript else null;
   }; */
 
-  xfig = import ../applications/graphics/xfig {
+  xfig = callPackage ../applications/graphics/xfig { 
     stdenv = overrideGCC stdenv gcc34;
-    inherit fetchurl makeWrapper x11 Xaw3d libpng libjpeg;
-    inherit (xlibs) imake libXpm libXmu libXi libXp;
   };
 
-  xineUI = import ../applications/video/xine-ui {
-    inherit fetchurl stdenv pkgconfig xlibs xineLib libpng readline ncurses curl;
-  };
+  xineUI = callPackage ../applications/video/xine-ui { };
 
-  xmms = import ../applications/audio/xmms {
-    inherit fetchurl libogg libvorbis alsaLib;
+  xmms = callPackage ../applications/audio/xmms { 
     inherit (gnome) esound;
     inherit (gtkLibs1x) glib gtk;
     stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
   };
 
-  xneur = import ../applications/misc/xneur {
-    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2
-      xosd libnotify cairo xorg;
+  xneur = callPackage ../applications/misc/xneur { 
     GStreamer=gst_all.gstreamer;
     inherit (gtkLibs) glib gtk pango atk;
   };
 
-  xneur_0_8 = import ../applications/misc/xneur/0.8.nix {
-    inherit fetchurl stdenv pkgconfig pcre libxml2 aspell imlib2 xosd glib xorg;
+  xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix { 
     GStreamer = gst_all.gstreamer;
   };
 
-  xournal = import ../applications/graphics/xournal {
-    inherit stdenv fetchurl;
-    inherit ghostscript fontconfig freetype zlib
-      poppler popplerData autoconf automake
-      libtool pkgconfig;
-    inherit (xlibs) xproto libX11;
+  xournal = callPackage ../applications/graphics/xournal { 
     inherit (gtkLibs) gtk atk pango glib;
     inherit (gnome) libgnomeprint libgnomeprintui
       libgnomecanvas;
   };
 
-  xpdf = import ../applications/misc/xpdf {
-    inherit fetchurl stdenv x11 freetype t1lib;
+  xpdf = callPackage ../applications/misc/xpdf { 
     motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
-  xpra = import ../tools/X11/xpra {
-    inherit stdenv fetchurl pkgconfig python pygtk xlibs makeWrapper;
+  xpra = callPackage ../tools/X11/xpra { 
     inherit (gtkLibs) gtk;
     pyrex = pyrex095;
   };
 
-  xscreensaver =  (import ../applications/graphics/xscreensaver) {
-    inherit pkgconfig bc perl xlibs libjpeg mesa libxml2
-      builderDefsPackage;
+  xscreensaver = callPackage ../applications/graphics/xscreensaver { 
     inherit (gtkLibs) gtk;
     inherit (gnome) libglade;
   };
 
-  xterm = import ../applications/misc/xterm {
-    inherit fetchurl stdenv ncurses freetype pkgconfig xorg;
-  };
+  xterm = callPackage ../applications/misc/xterm { };
 
-  xtrace = import ../tools/X11/xtrace {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11;
-  };
+  xtrace = callPackage ../tools/X11/xtrace { };
 
-  xlaunch = import ../tools/X11/xlaunch {
-    inherit stdenv;
-    inherit (xorg) xorgserver;
-  };
+  xlaunch = callPackage ../tools/X11/xlaunch { };
 
-  xmacro = import ../tools/X11/xmacro {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXi libXtst xextproto inputproto;
-  };
+  xmacro = callPackage ../tools/X11/xmacro { };
 
-  xmove = import ../applications/misc/xmove {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXi imake libXau;
-    inherit (xorg) xauth;
-  };
+  xmove = callPackage ../applications/misc/xmove { };
 
   xnee = builderDefsPackage (import ../tools/X11/xnee) {
     inherit (gtkLibs) gtk;
@@ -9213,16 +6312,12 @@ let
     inherit pkgconfig;
   };
 
-  xvidcap = import ../applications/video/xvidcap {
-    inherit fetchurl stdenv perl perlXMLParser pkgconfig gettext lame;
+  xvidcap = callPackage ../applications/video/xvidcap { 
     inherit (gtkLibs) gtk;
     inherit (gnome) scrollkeeper libglade;
-    inherit (xlibs) libXmu libXext libXfixes libXdamage libX11;
   };
 
-  yate = import ../applications/misc/yate {
-    inherit openssl automake autoconf pkgconfig;
-    inherit fetchurl lib composableDerivation;
+  yate = callPackage ../applications/misc/yate { 
     qt = qt4;
   };
 
@@ -9243,53 +6338,35 @@ let
     # grass = "not yet supported" # cmake -D WITH_GRASS=TRUE  and GRASS_PREFX=..
   };
 
-  qgisTrunk = (import ../applications/misc/qgis/trunk.nix) {
-    inherit fetchurl sourceFromHead python sip;
+  qgisTrunk = callPackage ../applications/misc/qgis/trunk.nix { 
     qgis = qgisReleased;
   };
 
-  zapping = import ../applications/video/zapping {
-    inherit fetchurl stdenv pkgconfig perl python
-            gettext zvbi libjpeg libpng x11
-            rte perlXMLParser;
+  zapping = callPackage ../applications/video/zapping { 
     inherit (gnome) scrollkeeper libgnomeui libglade esound;
-    inherit (xlibs) libXv libXmu libXext;
     teletextSupport = true;
     jpegSupport = true;
     pngSupport = true;
     recordingSupport = true;
   };
 
-  zathura = import ../applications/misc/zathura {
-    inherit stdenv fetchurl pkgconfig poppler;
+  zathura = callPackage ../applications/misc/zathura { 
     inherit (gtkLibs) gtk;
   };
 
   ### GAMES
 
-  ballAndPaddle = import ../games/ball-and-paddle {
-    inherit fetchurl stdenv SDL SDL_image SDL_mixer SDL_ttf guile gettext;
-  };
+  ballAndPaddle = callPackage ../games/ball-and-paddle { };
 
-  blackshades = import ../games/blackshades {
-    inherit fetchsvn stdenv libvorbis SDL mesa openal freealut SDL_image;
-  };
+  blackshades = callPackage ../games/blackshades { };
 
-  blackshadeselite = import ../games/blackshadeselite {
-    inherit fetchsvn stdenv libvorbis SDL mesa openal freealut SDL_image popt;
-  };
+  blackshadeselite = callPackage ../games/blackshadeselite { };
 
-  bsdgames = import ../games/bsdgames {
-    inherit fetchurl stdenv ncurses openssl flex bison miscfiles;
-  };
+  bsdgames = callPackage ../games/bsdgames { };
 
-  castleCombat = import ../games/castle-combat {
-    inherit fetchurl stdenv python pygame twisted lib numeric makeWrapper;
-  };
+  castleCombat = callPackage ../games/castle-combat { };
 
-  construoBase = makeOverridable (import ../games/construo) {
-    inherit stdenv fetchurl builderDefs zlib;
-    inherit (xlibs) libX11 xproto;
+  construoBase = callPackage ../games/construo { 
     mesa = null;
     freeglut = null;
   };
@@ -9298,13 +6375,11 @@ let
     inherit mesa freeglut;
   };
 
-  eduke32 = import ../games/eduke32 {
-    inherit stdenv fetchsvn SDL SDL_mixer unzip libvorbis mesa pkgconfig nasm makeDesktopItem;
+  eduke32 = callPackage ../games/eduke32 { 
     inherit (gtkLibs) gtk;
   };
 
-  exult = import ../games/exult {
-    inherit fetchurl SDL SDL_mixer zlib libpng unzip;
+  exult = callPackage ../games/exult { 
     stdenv = overrideGCC stdenv gcc42;
   };
 
@@ -9315,47 +6390,32 @@ let
   });
   */
 
-  freedink = import ../games/freedink {
-    inherit stdenv fetchurl SDL SDL_mixer SDL_image SDL_ttf SDL_gfx
-      pkgconfig fontconfig libzip zip zlib;
-  };
+  freedink = callPackage ../games/freedink { };
 
-  fsg = import ../games/fsg {
-    inherit stdenv fetchurl pkgconfig mesa;
+  fsg = callPackage ../games/fsg { 
     inherit (gtkLibs) glib gtk;
-    inherit (xlibs) libX11 xproto;
-    wxGTK = wxGTK28.override {unicode = false;};
+    wxGTK = wxGTK28.override {unicode = false;
+  };
   };
 
-  gemrb = import ../games/gemrb {
-    inherit fetchurl stdenv cmake SDL openal zlib libpng python libvorbis;
-  };
+  gemrb = callPackage ../games/gemrb { };
 
-  gltron = import ../games/gltron {
-    inherit fetchurl stdenv mesa SDL zlib libpng libmikmod libvorbis SDL_sound;
-  };
+  gltron = callPackage ../games/gltron { };
 
   gnuchess = builderDefsPackage (import ../games/gnuchess) {
     flex = flex2535;
   };
 
-  gnugo = import ../games/gnugo {
-    inherit stdenv fetchurl;
-  };
+  gnugo = callPackage ../games/gnugo { };
 
-  gparted = import ../tools/misc/gparted {
-    inherit fetchurl stdenv parted intltool gettext libuuid pkgconfig libxml2;
+  gparted = callPackage ../tools/misc/gparted { 
     inherit (gtkLibs) gtk glib gtkmm;
     inherit (gnome) gnomedocutils;
   };
 
-  hexen = import ../games/hexen {
-    inherit stdenv fetchurl SDL;
-  };
+  hexen = callPackage ../games/hexen { };
 
-  kobodeluxe = import ../games/kobodeluxe {
-    inherit stdenv fetchurl SDL SDL_image;
-  };
+  kobodeluxe = callPackage ../games/kobodeluxe { };
 
   lincity = builderDefsPackage (import ../games/lincity) {
     inherit (xlibs) libX11 libXext xextproto
@@ -9363,14 +6423,9 @@ let
     inherit libpng zlib;
   };
 
-  micropolis = import ../games/micropolis {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXpm libXext xextproto;
-    inherit byacc;
-  };
+  micropolis = callPackage ../games/micropolis { };
 
-  openttd = import ../games/openttd {
-    inherit fetchurl stdenv SDL libpng;
+  openttd = callPackage ../games/openttd { 
     zlib = zlibStatic;
   };
 
@@ -9379,32 +6434,22 @@ let
     inherit (gtkLibs) gtk /*glib gtkmm*/;
   };
 
-  quake3demo = import ../games/quake3/wrapper {
+  quake3demo = callPackage ../games/quake3/wrapper { 
     name = "quake3-demo-${quake3game.name}";
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
-    inherit fetchurl stdenv mesa makeWrapper;
     game = quake3game;
     paks = [quake3demodata];
   };
 
-  quake3demodata = import ../games/quake3/demo {
-    inherit fetchurl stdenv;
-  };
+  quake3demodata = callPackage ../games/quake3/demo { };
 
-  quake3game = import ../games/quake3/game {
-    inherit fetchurl stdenv x11 SDL mesa openal;
-  };
+  quake3game = callPackage ../games/quake3/game { };
 
-  rogue = import ../games/rogue {
-    inherit fetchurl stdenv ncurses;
-  };
+  rogue = callPackage ../games/rogue { };
 
-  scummvm = import ../games/scummvm {
-    inherit fetchurl stdenv SDL zlib mpeg2dec;
-  };
+  scummvm = callPackage ../games/scummvm { };
 
-  scorched3d = import ../games/scorched3d {
-    inherit stdenv fetchurl mesa openal autoconf automake libtool freealut freetype fftw SDL SDL_net zlib libpng libjpeg;
+  scorched3d = callPackage ../games/scorched3d { 
     wxGTK = wxGTK26;
   };
 
@@ -9414,70 +6459,40 @@ let
     inherit (xlibs) libX11;
   };
 
-  six = import ../games/six {
-    inherit stdenv fetchurl;
-    inherit perl zlib qt3;
+  six = callPackage ../games/six { 
     inherit (kde3) arts kdelibs;
-    inherit (xlibs) libX11 libXt libXext;
   };
 
   # You still can override by passing more arguments.
-  spaceOrbit = makeOverridable (import ../games/orbit) {
-    inherit fetchurl stdenv builderDefs mesa freeglut;
-    inherit (gnome) esound;
-    inherit (xlibs) libXt libX11 libXmu libXi libXext;
-  };
+  spaceOrbit = callPackage ../games/orbit { 
+    inherit (gnome) esound;  };
 
-  superTux = import ../games/super-tux {
-    inherit fetchurl stdenv SDL SDL_image SDL_mixer curl gettext libogg libvorbis mesa openal;
-  };
+  superTux = callPackage ../games/super-tux { };
 
-  superTuxKart = import ../games/super-tux-kart {
-    inherit fetchurl stdenv plib SDL openal freealut mesa
-      libvorbis libogg gettext;
-  };
+  superTuxKart = callPackage ../games/super-tux-kart { };
 
-  teeworlds = import ../games/teeworlds {
-    inherit fetchurl stdenv python alsaLib mesa SDL;
-    inherit (xlibs) libX11;
-  };
+  teeworlds = callPackage ../games/teeworlds { };
 
-  tennix = import ../games/tennix {
-    inherit stdenv fetchurl SDL SDL_mixer SDL_image SDL_ttf;
-  };
+  tennix = callPackage ../games/tennix { };
 
   /*tpm = import ../games/thePenguinMachine {
     inherit stdenv fetchurl pil pygame SDL;
     python24 = python;
   };*/
 
-  tremulous = import ../games/tremulous {
-    inherit stdenv fetchurl unzip mesa SDL openal;
-    inherit (xlibs) libX11;
-  };
+  tremulous = callPackage ../games/tremulous { };
 
-  ultimatestunts = import ../games/ultimatestunts {
-    inherit stdenv fetchurl SDL mesa SDL_image freealut;
-  };
+  ultimatestunts = callPackage ../games/ultimatestunts { };
 
-  urbanterror = import ../games/urbanterror {
-    inherit fetchurl stdenv unzip SDL mesa openal curl;
-  };
+  urbanterror = callPackage ../games/urbanterror { };
 
-  ut2004demo = import ../games/ut2004demo {
-    inherit fetchurl stdenv xlibs mesa;
-  };
+  ut2004demo = callPackage ../games/ut2004demo { };
 
-  warsow = import ../games/warsow {
-    inherit stdenv fetchurl unzip pkgconfig zlib curl libvorbis SDL
-            mesa openal;
-    inherit (xlibs) libXxf86dga libXxf86vm libXinerama;
+  warsow = callPackage ../games/warsow { 
     libjpeg = libjpeg62;
   };
 
-  warzone2100 = import ../games/warzone2100 {
-    inherit stdenv fetchurl bison gettext pkgconfig SDL libpng libtheora
-            openal popt physfs mesa quesoglc zip unzip which;
+  warzone2100 = callPackage ../games/warzone2100 { 
     flex = flex2535;
   };
 
@@ -9491,25 +6506,17 @@ let
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
 
-  zdoom = import ../games/zdoom {
-    inherit cmake stdenv fetchsvn SDL nasm p7zip zlib flac fmod libjpeg;
-  };
+  zdoom = callPackage ../games/zdoom { };
 
-  zoom = import ../games/zoom {
-    inherit fetchurl stdenv perl expat freetype x11;
-  };
+  zoom = callPackage ../games/zoom { };
 
-  keen4 = import ../games/keen4 {
-    inherit fetchurl stdenv dosbox unzip;
-  };
+  keen4 = callPackage ../games/keen4 { };
 
 
   ### DESKTOP ENVIRONMENTS
 
 
-  enlightenment = import ../desktops/enlightenment {
-    inherit stdenv fetchurl pkgconfig x11 xlibs dbus imlib2 freetype;
-  };
+  enlightenment = callPackage ../desktops/enlightenment { };
 
   gnome28 = recurseIntoAttrs (import ../desktops/gnome-2.28 pkgs);
 
@@ -9517,69 +6524,48 @@ let
 
   kde3 = recurseIntoAttrs {
 
-    kdelibs = import ../desktops/kde-3/kdelibs {
-      inherit
-        fetchurl xlibs zlib perl openssl pcre pkgconfig
-        libjpeg libpng libtiff libxml2 libxslt libtool
-        expat freetype bzip2 cups attr acl;
+    kdelibs = callPackage ../desktops/kde-3/kdelibs { 
       stdenv = overrideGCC stdenv gcc43;
       qt = qt3;
     };
 
-    kdebase = import ../desktops/kde-3/kdebase {
-      inherit
-        fetchurl pkgconfig x11 xlibs zlib libpng libjpeg perl
-        openssl bzip2 fontconfig pam hal dbus glib;
+    kdebase = callPackage ../desktops/kde-3/kdebase { 
       stdenv = overrideGCC stdenv gcc43;
       inherit (kde3) kdelibs;
       qt = qt3;
     };
 
-    arts = import ../development/libraries/arts {
-      inherit fetchurl stdenv pkgconfig;
-      inherit (xlibs) libX11 libXext;
-      inherit zlib libjpeg libpng perl;
+    arts = callPackage ../development/libraries/arts { 
       qt = qt3;
       inherit (gnome) glib;
       inherit (kde3) kdelibs;
     };
 
-    k3b = import ../applications/misc/k3b {
-      inherit stdenv fetchurl x11 zlib libpng libjpeg perl qt3;
+    k3b = callPackage ../applications/misc/k3b { 
       inherit (kde3) kdelibs;
     };
 
-    kbasket = import ../applications/misc/kbasket {
-      inherit fetchurl x11 zlib libpng libjpeg
-        perl qt3 gpgme libgpgerror;
+    kbasket = callPackage ../applications/misc/kbasket { 
       stdenv = overrideGCC stdenv gcc43;
       inherit (kde3) kdelibs;
     };
 
-    kile = import ../applications/editors/kile {
-      inherit stdenv fetchurl perl zlib libpng libjpeg freetype expat;
-      inherit (xlibs) libX11 libXt libXext libXrender libXft;
+    kile = callPackage ../applications/editors/kile { 
       inherit (kde3) arts kdelibs;
       qt = qt3;
     };
 
-    kphone = import ../applications/networking/kphone {
-      inherit fetchurl autoconf automake libtool pkgconfig openssl libpng alsaLib;
+    kphone = callPackage ../applications/networking/kphone { 
       qt = qt3;
-      inherit (xlibs) libX11 libXext libXt libICE libSM;
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
 
-    kuickshow = import ../applications/graphics/kuickshow {
-      inherit fetchurl stdenv libpng libjpeg libtiff libungif imlib expat perl;
-      inherit (xlibs) libX11 libXext libSM;
+    kuickshow = callPackage ../applications/graphics/kuickshow { 
       inherit (kde3) arts kdelibs;
       qt = qt3;
     };
 
-    kcachegrind = import ../development/tools/misc/kcachegrind {
-      inherit fetchurl stdenv zlib perl expat libpng libjpeg;
-      inherit (xlibs) libX11 libXext libSM;
+    kcachegrind = callPackage ../development/tools/misc/kcachegrind { 
       inherit (kde3) kdelibs;
       qt = qt3;
     };
@@ -9598,8 +6584,7 @@ let
 
   ### SCIENCE
 
-  xplanet = import ../applications/science/xplanet {
-    inherit stdenv fetchurl lib pkgconfig freetype libpng libjpeg giflib libtiff;
+  xplanet = callPackage ../applications/science/xplanet { 
     inherit (gtkLibs) pango;
   };
 
@@ -9613,31 +6598,20 @@ let
 
   ### SCIENCE/BIOLOGY
 
-  alliance = import ../applications/science/electronics/alliance {
-    inherit fetchurl stdenv bison flex;
-    inherit (xlibs) xproto libX11 libXt libXpm;
+  alliance = callPackage ../applications/science/electronics/alliance { 
     motif = lesstif;
   };
 
-  arb = import ../applications/science/biology/arb {
-    inherit fetchurl libpng freeglut perl xorg;
-    inherit mesa glew libtiff lynx rxp sablotron jdk transfig gv gnuplot;
+  arb = callPackage ../applications/science/biology/arb { 
     lesstif = lesstif93;
     stdenv = overrideGCC stdenv gcc42;
   };
 
-  biolib = import ../development/libraries/science/biology/biolib {
-    inherit fetchurl stdenv cmake rLang zlib;
-  };
+  biolib = callPackage ../development/libraries/science/biology/biolib { };
 
-  emboss = import ../applications/science/biology/emboss {
-    inherit fetchurl stdenv readline perl libpng zlib;
-    inherit (xorg) libX11 libXt;
-  };
+  emboss = callPackage ../applications/science/biology/emboss { };
 
-  mrbayes = import ../applications/science/biology/mrbayes {
-    inherit fetchurl stdenv readline;
-  };
+  mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
   ncbiCTools = builderDefsPackage ../development/libraries/ncbi {
     inherit tcsh mesa lesstif;
@@ -9645,32 +6619,22 @@ let
       libXmu libXext;
   };
 
-  ncbi_tools = import ../applications/science/biology/ncbi-tools {
-    inherit fetchurl stdenv cpio;
-  };
+  ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
-  paml = import ../applications/science/biology/paml {
-    inherit fetchurl stdenv;
-  };
+  paml = callPackage ../applications/science/biology/paml { };
 
   /* slr = import ../applications/science/biology/slr {
     inherit fetchurl stdenv liblapack;
   }; */
 
-  pal2nal = import ../applications/science/biology/pal2nal {
-    inherit fetchurl stdenv perl paml;
-  };
+  pal2nal = callPackage ../applications/science/biology/pal2nal { };
 
 
   ### SCIENCE/MATH
 
-  atlas = import ../development/libraries/science/math/atlas {
-    inherit fetchurl stdenv gfortran;
-  };
+  atlas = callPackage ../development/libraries/science/math/atlas { };
 
-  blas = import ../development/libraries/science/math/blas {
-    inherit fetchurl stdenv gfortran;
-  };
+  blas = callPackage ../development/libraries/science/math/blas { };
 
   content = builderDefsPackage ../applications/science/math/content {
     inherit mesa lesstif;
@@ -9678,84 +6642,60 @@ let
       libXmu libXext libXcursor;
   };
 
-  liblapack = import ../development/libraries/science/math/liblapack {
-    inherit fetchurl stdenv gfortran blas;
-  };
+  liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
 
   ### SCIENCE/LOGIC
 
-  coq = import ../applications/science/logic/coq {
-    inherit stdenv fetchurl ocaml lablgtk ncurses;
+  coq = callPackage ../applications/science/logic/coq { 
     camlp5 = camlp5_transitional;
   };
 
-  coq_beta = import ../applications/science/logic/coq/beta.nix {
-    inherit stdenv fetchurl ocaml lablgtk ncurses;
+  coq_beta = callPackage ../applications/science/logic/coq/beta.nix { 
     camlp5 = camlp5_transitional;
   };
 
-  hol_light = import ../applications/science/logic/hol_light {
-    inherit stdenv fetchurl ocaml_with_sources;
-  };
+  hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  hol_light_binaries =
-  import ../applications/science/logic/hol_light/binaries.nix {
-    inherit stdenv ocaml_with_sources hol_light nettools openssh;
+  hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix { 
     dmtcp = dmtcp_devel;
   };
 
   # This is a special version of OCaml handcrafted especially for
   # hol_light it should be merged with the current expresion for ocaml
   # one day.
-  ocaml_with_sources =
-  import ../applications/science/logic/hol_light/ocaml-with-sources.nix {
-    inherit stdenv fetchurl;
-  };
+  ocaml_with_sources = callPackage ../applications/science/logic/hol_light/ocaml-with-sources.nix { };
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
     inherit (pkgs.emacs23Packages) proofgeneral;
   };
 
-  ssreflect = import ../applications/science/logic/ssreflect {
-    inherit stdenv fetchurl ocaml coq;
+  ssreflect = callPackage ../applications/science/logic/ssreflect { 
     camlp5 = camlp5_transitional;
   };
 
   ### SCIENCE / ELECTRONICS
 
-  ngspice = import ../applications/science/electronics/ngspice {
-    inherit fetchurl stdenv readline bison;
-    inherit (xlibs) libX11 libICE libXaw libXext;
-  };
+  ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  gtkwave = import ../applications/science/electronics/gtkwave {
-    inherit fetchurl stdenv gperf pkgconfig bzip2 xz tcl tk judy;
+  gtkwave = callPackage ../applications/science/electronics/gtkwave { 
     inherit (gtkLibs) gtk;
   };
 
-  xoscope = import ../applications/science/electronics/xoscope {
-    inherit fetchurl stdenv pkgconfig;
+  xoscope = callPackage ../applications/science/electronics/xoscope { 
     inherit (gtkLibs) gtk;
   };
 
 
   ### SCIENCE / MATH
 
-  maxima = import ../applications/science/math/maxima {
-    inherit fetchurl stdenv clisp;
-  };
+  maxima = callPackage ../applications/science/math/maxima { };
 
-  wxmaxima = import ../applications/science/math/wxmaxima {
-    inherit fetchurl stdenv maxima;
-    inherit wxGTK;
-  };
+  wxmaxima = callPackage ../applications/science/math/wxmaxima { };
 
-  scilab = (import ../applications/science/math/scilab) {
-    inherit stdenv fetchurl lib gfortran;
+  scilab = callPackage ../applications/science/math/scilab { 
     inherit (gtkLibs) gtk;
-    inherit ncurses Xaw3d tcl tk ocaml x11;
 
     withXaw3d = false;
     withTk = true;
@@ -9766,89 +6706,53 @@ let
 
   ### SCIENCE / MISC
 
-  golly = import ../applications/science/misc/golly {
-    inherit builderDefsPackage wxGTK perl zlib
-      python;
-  };
+  golly = callPackage ../applications/science/misc/golly { };
 
-  simgrid = import ../applications/science/misc/simgrid {
-    inherit fetchurl cmake ruby;
+  simgrid = callPackage ../applications/science/misc/simgrid { 
     stdenv = stdenv2;
   };
 
-  tulip = import ../applications/science/misc/tulip {
-    inherit fetchurl stdenv libxml2 freetype mesa glew
-      autoconf automake libtool;
+  tulip = callPackage ../applications/science/misc/tulip { 
     qt = qt4;
   };
 
-  vite = import ../applications/science/misc/vite {
-    inherit fetchsvn cmake mesa;
+  vite = callPackage ../applications/science/misc/vite { 
     qt = qt4;
     stdenv = stdenv2;
   };
 
   ### MISC
 
-  atari800 = import ../misc/emulators/atari800 {
-    inherit fetchurl stdenv unzip zlib SDL;
-  };
+  atari800 = callPackage ../misc/emulators/atari800 { };
 
-  ataripp = import ../misc/emulators/atari++ {
-    inherit fetchurl stdenv x11 SDL;
-  };
+  ataripp = callPackage ../misc/emulators/atari++ { };
 
-  auctex = import ../misc/tex/auctex {
-    inherit stdenv fetchurl emacs texLive;
-  };
+  auctex = callPackage ../misc/tex/auctex { };
 
-  busybox = makeOverridable (import ../misc/busybox) {
-    inherit fetchurl stdenv;
+  busybox = callPackage ../misc/busybox { 
     enableStatic = true;
   };
 
-  cups = import ../misc/cups {
-    inherit fetchurl stdenv pkgconfig zlib libjpeg libpng libtiff pam openssl dbus libusb;
-  };
+  cups = callPackage ../misc/cups { };
 
-  gutenprint = import ../misc/drivers/gutenprint {
-    inherit fetchurl stdenv pkgconfig composableDerivation cups libtiff libpng
-      openssl gimp;
-  };
+  gutenprint = callPackage ../misc/drivers/gutenprint { };
 
-  gutenprintBin = import ../misc/drivers/gutenprint/bin.nix {
-    inherit fetchurl stdenv rpm cpio zlib;
-  };
+  gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
 
-  cupsBjnp = import ../misc/cups/drivers/cups-bjnp {
-    inherit fetchurl stdenv cups;
-  };
+  cupsBjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
-  dblatex = import ../misc/tex/dblatex {
-    inherit fetchurl stdenv python libxslt tetex;
-  };
+  dblatex = callPackage ../misc/tex/dblatex { };
 
-  dosbox = import ../misc/emulators/dosbox {
-    inherit fetchurl stdenv SDL makeDesktopItem;
-  };
+  dosbox = callPackage ../misc/emulators/dosbox { };
 
-  dpkg = import ../tools/package-management/dpkg {
-    inherit fetchurl stdenv perl zlib bzip2;
-  };
+  dpkg = callPackage ../tools/package-management/dpkg { };
 
-  electricsheep = import ../misc/screensavers/electricsheep {
-    inherit fetchurl stdenv pkgconfig expat zlib libpng libjpeg xlibs;
-  };
+  electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
-  foldingathome = import ../misc/foldingathome {
-    inherit fetchurl stdenv;
-  };
+  foldingathome = callPackage ../misc/foldingathome { };
 
-  freestyle = import ../misc/freestyle {
-    inherit fetchurl freeglut qt4 libpng lib3ds libQGLViewer swig;
-    inherit (xlibs) libXi;
+  freestyle = callPackage ../misc/freestyle { 
     #stdenv = overrideGCC stdenv gcc41;
-    inherit stdenv python;
   };
 
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
@@ -9862,14 +6766,11 @@ let
     python = pythonFull;
   };
 
-  generator = import ../misc/emulators/generator {
-    inherit fetchurl stdenv SDL nasm zlib bzip2 libjpeg;
+  generator = callPackage ../misc/emulators/generator { 
     inherit (gtkLibs1x) gtk;
   };
 
-  ghostscript = makeOverridable (import ../misc/ghostscript) {
-    inherit fetchurl stdenv libjpeg libpng libtiff zlib x11 pkgconfig
-      fontconfig cups openssl;
+  ghostscript = callPackage ../misc/ghostscript { 
     x11Support = false;
     cupsSupport = getPkgConfig "ghostscript" "cups" true;
   };
@@ -9878,60 +6779,38 @@ let
     x11Support = true;
   }));
 
-  gxemul = (import ../misc/gxemul) {
-    inherit fetchurl composableDerivation;
-  };
+  gxemul = callPackage ../misc/gxemul { };
 
-  hplip = import ../misc/drivers/hplip {
-    inherit stdenv fetchurl cups zlib libjpeg libusb python saneBackends dbus pkgconfig qt4;
+  hplip = callPackage ../misc/drivers/hplip { 
     qtSupport = true;
   };
 
   # using the new configuration style proposal which is unstable
-  jackaudio = import ../misc/jackaudio {
-    inherit composableDerivation
-           fetchurl alsaLib pkgconfig;
-  };
+  jackaudio = callPackage ../misc/jackaudio { };
 
-  keynav = import ../tools/X11/keynav {
-    inherit stdenv fetchurl;
-    inherit (xlibs) libX11 xextproto libXtst imake libXi libXext;
-  };
+  keynav = callPackage ../tools/X11/keynav { };
 
-  lazylist = import ../misc/tex/lazylist {
-    inherit fetchurl stdenv tetex;
-  };
+  lazylist = callPackage ../misc/tex/lazylist { };
 
-  lilypond = import ../misc/lilypond {
-    inherit fetchurl stdenv 
-      ghostscript texinfo imagemagick texi2html guile python gettext
-      perl bison pkgconfig texLive fontconfig freetype fontforge help2man;
+  lilypond = callPackage ../misc/lilypond { 
     inherit (gtkLibs) pango;
     flex = flex2535;
   };
 
-  martyr = import ../development/libraries/martyr {
-    inherit stdenv fetchurl apacheAnt;
-  };
+  martyr = callPackage ../development/libraries/martyr { };
 
-  maven = import ../misc/maven/maven-1.0.nix {
-    inherit stdenv fetchurl jdk;
-  };
+  maven = callPackage ../misc/maven/maven-1.0.nix { };
 
-  maven2 = import ../misc/maven {
-    inherit stdenv fetchurl jdk makeWrapper;
-  };
+  maven2 = callPackage ../misc/maven { };
 
   nix = nixUnstable;
 
-  nixStable = makeOverridable (import ../tools/package-management/nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl aterm;
+  nixStable = callPackage ../tools/package-management/nix { 
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
-  nixUnstable = makeOverridable (import ../tools/package-management/nix/unstable.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl;
+  nixUnstable = callPackage ../tools/package-management/nix/unstable.nix { 
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
@@ -9953,75 +6832,49 @@ let
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
     };
 
-  disnix = import ../tools/package-management/disnix {
-    inherit stdenv fetchurl pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable;
-  };
+  disnix = callPackage ../tools/package-management/disnix { };
 
-  disnix_activation_scripts = import ../tools/package-management/disnix/activation-scripts {
-    inherit stdenv fetchurl;
-  };
+  disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts { };
 
-  DisnixService = import ../tools/package-management/disnix/DisnixService {
-    inherit stdenv fetchurl apacheAnt jdk axis2 dbus_java;
-  };
+  DisnixService = callPackage ../tools/package-management/disnix/DisnixService { };
 
-  latex2html = import ../misc/tex/latex2html/default.nix {
-    inherit fetchurl stdenv perl ghostscript netpbm;
+  latex2html = callPackage ../misc/tex/latex2html/default.nix { 
     tex = tetex;
   };
 
-  pgadmin = import ../applications/misc/pgadmin {
-    inherit fetchurl stdenv postgresql libxml2 libxslt openssl;
-    inherit wxGTK;
-  };
+  pgadmin = callPackage ../applications/misc/pgadmin { };
 
   pgf = pgf2;
 
   # Keep the old PGF since some documents don't render properly with
   # the new one.
-  pgf1 = import ../misc/tex/pgf/1.x.nix {
-    inherit fetchurl stdenv;
-  };
+  pgf1 = callPackage ../misc/tex/pgf/1.x.nix { };
 
-  pgf2 = import ../misc/tex/pgf/2.x.nix {
-    inherit fetchurl stdenv;
-  };
+  pgf2 = callPackage ../misc/tex/pgf/2.x.nix { };
 
-  polytable = import ../misc/tex/polytable {
-    inherit fetchurl stdenv tetex lazylist;
-  };
+  polytable = callPackage ../misc/tex/polytable { };
 
-  psi = (import ../applications/networking/instant-messengers/psi) {
-    inherit stdenv fetchurl zlib aspell sox pkgconfig qt4
-    	liboil speex gst_all;
-    inherit (xlibs) xproto libX11 libSM libICE;
+  psi = callPackage ../applications/networking/instant-messengers/psi { 
     qca2 = kde4.qca2;
     qca2_ossl = kde4.qca2_ossl;
   };
 
-  putty = import ../applications/networking/remote/putty {
-    inherit stdenv fetchsvn ncurses pkgconfig autoconf automake perl halibut;
+  putty = callPackage ../applications/networking/remote/putty { 
     inherit (gtkLibs) gtk;
   };
 
-  rssglx = import ../misc/screensavers/rss-glx {
-    inherit fetchurl stdenv x11 mesa pkgconfig imagemagick libtiff bzip2;
-  };
+  rssglx = callPackage ../misc/screensavers/rss-glx { };
 
-  xlockmore = import ../misc/screensavers/xlockmore {
-    inherit fetchurl stdenv x11 freetype;
+  xlockmore = callPackage ../misc/screensavers/xlockmore { 
     pam = if getPkgConfig "xlockmore" "pam" true then pam else null;
   };
 
-  saneBackends = import ../misc/sane-backends {
-    inherit fetchurl stdenv libusb;
+  saneBackends = callPackage ../misc/sane-backends { 
     gt68xxFirmware = getConfig ["sane" "gt68xxFirmware"] null;
   };
 
-  saneFrontends = import ../misc/sane-front {
-    inherit fetchurl stdenv pkgconfig libusb saneBackends;
+  saneFrontends = callPackage ../misc/sane-front { 
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libX11;
   };
 
   sourceAndTags = import ../misc/source-and-tags {
@@ -10029,20 +6882,13 @@ let
     hasktags = haskellPackages.myhasktags;
   };
 
-  splix = import ../misc/cups/drivers/splix {
-    inherit stdenv fetchurl cups zlib;
-  };
+  splix = callPackage ../misc/cups/drivers/splix { };
 
-  tetex = import ../misc/tex/tetex {
-    inherit fetchurl stdenv flex bison zlib libpng ncurses ed;
-  };
+  tetex = callPackage ../misc/tex/tetex { };
 
-  tex4ht = import ../misc/tex/tex4ht {
-    inherit fetchurl stdenv tetex;
-  };
+  tex4ht = callPackage ../misc/tex/tex4ht { };
 
-  texFunctions = import ../misc/tex/nix {
-    inherit stdenv perl tetex graphviz ghostscript makeFontsConf imagemagick runCommand lib;
+  texFunctions = callPackage ../misc/tex/nix { 
     inherit (haskellPackages) lhs2tex;
   };
 
@@ -10095,19 +6941,13 @@ let
     inherit texLiveLatexXColor texLivePGF texLive;
   };
 
-  toolbuslib = import ../development/libraries/toolbuslib {
-    inherit stdenv fetchurl aterm;
-  };
+  toolbuslib = callPackage ../development/libraries/toolbuslib { };
 
-  trac = import ../misc/trac {
-    inherit stdenv fetchurl python clearsilver makeWrapper
-      sqlite subversion;
+  trac = callPackage ../misc/trac { 
     inherit (pythonPackages) pysqlite;
   };
 
-  vice = import ../misc/emulators/vice {
-    inherit stdenv fetchurl lib perl gettext libpng giflib libjpeg alsaLib readline mesa;
-    inherit pkgconfig SDL makeDesktopItem autoconf automake;
+  vice = callPackage ../misc/emulators/vice { 
     inherit (gtkLibs) gtk;
   };
 
@@ -10120,26 +6960,15 @@ let
       flex = pkgsi686Linux.flex2535;
     };
 
-  x2x = import ../tools/X11/x2x {
-    inherit stdenv fetchurl;
-    inherit (xlibs) imake libX11 libXtst libXext;
-  };
+  x2x = callPackage ../tools/X11/x2x { };
 
-  xosd = import ../misc/xosd {
-    inherit fetchurl stdenv;
-    inherit (xlibs) libX11 libXext libXt xextproto xproto;
-  };
+  xosd = callPackage ../misc/xosd { };
 
-  xsane = import ../misc/xsane {
-    inherit fetchurl stdenv pkgconfig libusb
-      saneBackends saneFrontends;
+  xsane = callPackage ../misc/xsane { 
     inherit (gtkLibs) gtk;
-    inherit (xlibs) libX11;
   };
 
-  yafc = import ../applications/networking/yafc {
-    inherit fetchurl stdenv readline openssh;
-  };
+  yafc = callPackage ../applications/networking/yafc { };
 
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;
