@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, qt4, qca2, openssl}:
+{stdenv, fetchurl, qt4, qca2, openssl}:
 
 stdenv.mkDerivation rec {
   name = "qca-ossl-2.0.0-beta3";
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --plugins-path=$out/lib/qt4/plugins"
   '';
   patches = [ ./ossl-remove-whirlpool.patch ];
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture OpenSSL plugin";
     license = "LGPL";
     homepage = http://delta.affinix.com/qca;
-    maintainers = [ lib.maintainers.urkud ];
+    maintainers = [ maintainers.urkud ];
   };
 }

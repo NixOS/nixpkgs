@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, which, qt4}:
+{stdenv, fetchurl, which, qt4}:
 
 stdenv.mkDerivation {
   name = "qca-2.0.2";
@@ -7,10 +7,10 @@ stdenv.mkDerivation {
     sha256 = "49b5474450104a2298747c243de1451ab7a6aeed4bf7df43ffa4b7128a2837b8";
   };
   buildInputs = [ which qt4 ];
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
     homepage = http://delta.affinix.com/qca;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ maintainers.sander maintainers.urkud ];
   };
 }

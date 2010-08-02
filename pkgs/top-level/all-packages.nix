@@ -6579,6 +6579,11 @@ let
     stdenv = stdenv2;
   });
 
+  kde45 = makeOverridable (import ../desktops/kde-4.5) (pkgs // {
+    openexr = openexr_1_6_1;
+    stdenv = stdenv2;
+  });
+
   xfce = xfce4;
   xfce4 = recurseIntoAttrs (import ../desktops/xfce-4 pkgs);
 
