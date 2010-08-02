@@ -178,9 +178,9 @@ rec {
     loop list;
 
   # Zip two lists together.
-  zip = xs: ys:
+  zipTwoLists = xs: ys:
     if xs != [] && ys != [] then
       [ {first = head xs; second = head ys;} ]
-      ++ zip (tail xs) (tail ys)
+      ++ zipTwoLists (tail xs) (tail ys)
     else [];
 }
