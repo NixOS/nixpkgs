@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     automoc4 strigi soprano qca2 attica
   ];
 
+  patches = [ ./python-site-packages-install-dir.diff ];
+
   propagatedBuildInputs = [ shared_desktop_ontologies stdenv.gcc.libc ];
 
   # cmake fails to find acl.h because of C++-style comment
