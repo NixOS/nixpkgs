@@ -21,6 +21,5 @@ stdenv.mkDerivation {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     homepage = http://www.hdfgroup.org/HDF5/;
-    # license = "GPLv2";
   };
 }
