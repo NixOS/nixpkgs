@@ -41,7 +41,7 @@ assert libelf != null -> zlib != null;
 with stdenv.lib;
 with builtins;
 
-let version = "4.5.0";
+let version = "4.5.1";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -136,7 +136,7 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [ ./softfp-hurd.patch ./dragonegg-2.7.patch ]
+    [ ]
     ++ optional (cross != null) ./libstdc++-target.patch
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
