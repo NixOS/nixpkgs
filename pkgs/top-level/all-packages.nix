@@ -5353,6 +5353,10 @@ let
     inherit fetchurl stdenv pkgconfig librdf_raptor ladspaH openssl zlib;
   };
 
+  qrupdate = import ../development/libraries/qrupdate { 
+      inherit stdenv fetchurl gfortran blas liblapack;
+  };
+
   redland = makeOverridable (import ../development/libraries/redland/1.0.10.nix) {
     inherit fetchurl stdenv openssl libxml2 pkgconfig perl sqlite
       mysql libxslt curl pcre librdf_rasqal librdf_raptor;
@@ -5445,6 +5449,10 @@ let
 
   stlport =  import ../development/libraries/stlport {
     inherit fetchurl stdenv;
+  };
+
+  suitesparse = import ../development/libraries/suitesparse {
+    inherit fetchurl stdenv blas liblapack;  	
   };
 
   t1lib = import ../development/libraries/t1lib {
