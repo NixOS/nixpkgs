@@ -4,6 +4,7 @@
 #http://downloads.sourceforge.net/webdruid/files/webdruid/0.6.0-alpha5/webdruid-0.6.0-alpha5.tar.gz
 skipRedirectSF='s@sourceforge.net/projects@downloads.sourceforge.net/project@; s@/files@@; s@/download$@@;'
 extractReleaseSF='s@.*/([^/]+)/[^/]+@\1@'
+extractVersionSF='s@.*/[^/0-9]*([0-9].*)[.](tar|tgz|tbz2|zip).*@\1@'
 apacheMirror='s@http://www.apache.org/dist/@mirror://apache/@'
 skipRedirectApache='s@/dyn/closer.cgi[?]path=@/dist@'
 

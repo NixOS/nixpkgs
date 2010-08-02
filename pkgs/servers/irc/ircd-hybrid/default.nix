@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, openssl, zlib }:
 
 stdenv.mkDerivation {
   name = "ircd-hybrid-7.2.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1xn4dfbgx019mhismfnr2idhslvarlajyahj7c6bqzmarcwwrvck";
   };
 
-  buildInputs = [openssl zlib];
+  buildInputs = [ openssl zlib ];
 
   configureFlags =
     "--with-nicklen=100 --with-topiclen=360 --enable-openssl=${openssl}";

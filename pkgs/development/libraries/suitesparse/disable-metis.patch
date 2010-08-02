@@ -1,0 +1,140 @@
+diff -Nrc SuiteSparse/UFconfig/Makefile SuiteSparse-new/UFconfig/Makefile
+*** SuiteSparse/UFconfig/Makefile	2009-11-11 20:59:08.000000000 +0100
+--- SuiteSparse-new/UFconfig/Makefile	2010-08-02 13:14:04.000000000 +0200
+***************
+*** 25,31 ****
+  
+  # install UFconfig
+  install:
+! 	$(CP) Lib/libufconfig.a $(INSTALL_LIB)/libufconfig.$(VERSION).a
+  	( cd $(INSTALL_LIB) ; ln -s libufconfig.$(VERSION).a libufconfig.a )
+  	$(CP) UFconfig.h $(INSTALL_INCLUDE)
+  
+--- 25,31 ----
+  
+  # install UFconfig
+  install:
+! 	$(CP) libufconfig.a $(INSTALL_LIB)/libufconfig.$(VERSION).a
+  	( cd $(INSTALL_LIB) ; ln -s libufconfig.$(VERSION).a libufconfig.a )
+  	$(CP) UFconfig.h $(INSTALL_INCLUDE)
+  
+diff -Nrc SuiteSparse/UFconfig/UFconfig.mk SuiteSparse-new/UFconfig/UFconfig.mk
+*** SuiteSparse/UFconfig/UFconfig.mk	2010-06-02 17:40:42.000000000 +0200
+--- SuiteSparse-new/UFconfig/UFconfig.mk	2010-08-02 14:55:27.000000000 +0200
+***************
+*** 34,40 ****
+  # performance.  You should select the optimization parameters that are best
+  # for your system.  On Linux, use "CFLAGS = -O3 -fexceptions" for example.
+  CC = cc
+! CFLAGS = -O3 -fexceptions
+  
+  # C++ compiler (also uses CFLAGS)
+  CPLUSPLUS = g++
+--- 34,40 ----
+  # performance.  You should select the optimization parameters that are best
+  # for your system.  On Linux, use "CFLAGS = -O3 -fexceptions" for example.
+  CC = cc
+! CFLAGS = -O3 -fexceptions -fPIC
+  
+  # C++ compiler (also uses CFLAGS)
+  CPLUSPLUS = g++
+***************
+*** 71,78 ****
+  # MAKE = gmake
+  
+  # For "make install"
+! INSTALL_LIB = /usr/local/lib
+! INSTALL_INCLUDE = /usr/local/include
+  
+  #------------------------------------------------------------------------------
+  # BLAS and LAPACK configuration:
+--- 71,78 ----
+  # MAKE = gmake
+  
+  # For "make install"
+! INSTALL_LIB = $(out)/lib
+! INSTALL_INCLUDE = $(out)/include
+  
+  #------------------------------------------------------------------------------
+  # BLAS and LAPACK configuration:
+***************
+*** 127,134 ****
+  # The path is relative to where it is used, in CHOLMOD/Lib, CHOLMOD/MATLAB, etc.
+  # You may wish to use an absolute path.  METIS is optional.  Compile
+  # CHOLMOD with -DNPARTITION if you do not wish to use METIS.
+! METIS_PATH = ../../metis-4.0
+! METIS = ../../metis-4.0/libmetis.a
+  
+  # If you use CHOLMOD_CONFIG = -DNPARTITION then you must use the following
+  # options:
+--- 127,134 ----
+  # The path is relative to where it is used, in CHOLMOD/Lib, CHOLMOD/MATLAB, etc.
+  # You may wish to use an absolute path.  METIS is optional.  Compile
+  # CHOLMOD with -DNPARTITION if you do not wish to use METIS.
+! #METIS_PATH = ../../metis-4.0
+! #METIS = 
+  
+  # If you use CHOLMOD_CONFIG = -DNPARTITION then you must use the following
+  # options:
+***************
+*** 189,195 ****
+  # -DNSUNPERF	    for Solaris only.  If defined, do not use the Sun
+  #			Performance Library
+  
+! CHOLMOD_CONFIG =
+  
+  #------------------------------------------------------------------------------
+  # SuiteSparseQR configuration:
+--- 189,195 ----
+  # -DNSUNPERF	    for Solaris only.  If defined, do not use the Sun
+  #			Performance Library
+  
+! CHOLMOD_CONFIG = -DNPARTITION
+  
+  #------------------------------------------------------------------------------
+  # SuiteSparseQR configuration:
+***************
+*** 203,209 ****
+  # -DHAVE_TBB        enable the use of Intel's Threading Building Blocks (TBB)
+  
+  # default, without timing, without TBB:
+! SPQR_CONFIG =
+  # with timing and TBB:
+  # SPQR_CONFIG = -DTIMING -DHAVE_TBB
+  # with timing
+--- 203,209 ----
+  # -DHAVE_TBB        enable the use of Intel's Threading Building Blocks (TBB)
+  
+  # default, without timing, without TBB:
+! SPQR_CONFIG = -DNPARTITION
+  # with timing and TBB:
+  # SPQR_CONFIG = -DTIMING -DHAVE_TBB
+  # with timing
+diff -Nrc SuiteSparse/UMFPACK/Demo/Makefile SuiteSparse-new/UMFPACK/Demo/Makefile
+*** SuiteSparse/UMFPACK/Demo/Makefile	2009-11-11 21:09:45.000000000 +0100
+--- SuiteSparse-new/UMFPACK/Demo/Makefile	2010-08-02 12:53:16.000000000 +0200
+***************
+*** 40,51 ****
+  ../../CAMD/Lib/libcamd.a:
+  	( cd ../../CAMD ; $(MAKE) library )
+  
+- ../../metis-4.0/libmetis.a:
+- 	( cd ../../metis-4.0/Lib ; $(MAKE) )
+  
+  UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+      ../../CHOLMOD/Lib/libcholmod.a ../../COLAMD/Lib/libcolamd.a \
+!     ../../CAMD/Lib/libcamd.a ../../metis-4.0/libmetis.a \
+      ../../CCOLAMD/Lib/libccolamd.a
+  
+  libs: $(UMFPACK)
+--- 40,49 ----
+  ../../CAMD/Lib/libcamd.a:
+  	( cd ../../CAMD ; $(MAKE) library )
+  
+  
+  UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+      ../../CHOLMOD/Lib/libcholmod.a ../../COLAMD/Lib/libcolamd.a \
+!     ../../CAMD/Lib/libcamd.a \
+      ../../CCOLAMD/Lib/libccolamd.a
+  
+  libs: $(UMFPACK)

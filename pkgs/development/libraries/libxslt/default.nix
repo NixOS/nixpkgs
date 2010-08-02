@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libxml2, ...}:
+{stdenv, fetchurl, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "libxslt-1.1.26";

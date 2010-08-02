@@ -1,7 +1,9 @@
 {
-  repoUrl = "git://github.com/Dieterbe/uzbl.git";
   baseName = "uzbl-stable";
-  method = "fetchgit";
-  rev = "origin/master";
+  downloadPage = "http://github.com/Dieterbe/uzbl/downloads";
+  sourceRegexp = "/tarball/";
+  versionExtractorSedScript = ''s@.*[/]@@'';
+  versionReferenceCreator = ''$(replaceAllVersionOccurences)'';
+  extraVars = "downloadName";
+  eval_downloadName = ''downloadName=$version.tar.gz'';
 }
-

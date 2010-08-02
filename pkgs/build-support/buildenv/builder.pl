@@ -9,10 +9,6 @@ use File::Basename;
 STDOUT->autoflush(1);
 
 my $out = $ENV{"out"};
-mkdir "$out", 0755 || die "error creating $out";
-
-
-my $symlinks = 0;
 
 
 my @pathsToLink = split ' ', $ENV{"pathsToLink"};
@@ -27,95 +23,58 @@ sub isInPathsToLink {
 }
 
 
-sub symLinkMkdir {
-    my $src = shift;
-    my $dst = shift;
-    my $dir = dirname $dst;
-    mkpath $dir;
-    symlink($src, $dst) ||
-        die "error creating link `$dst': $!";
-    $symlinks++;
+# For each activated package, determine what symlinks to create.
+
+my %symlinks;
+$symlinks{""} = ""; # create root directory
+
+sub findFiles;
+
+sub findFilesInDir {
+    my ($relName, $target, $ignoreCollisions) = @_;
+
+    opendir DIR, "$target" or die "cannot open `$target': $!";
+    my @names = readdir DIR or die;
+    closedir DIR;
+    
+    foreach my $name (@names) {
+        next if $name eq "." || $name eq "..";
+        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions);
+    }
 }
+    
+sub findFiles {
+    my ($relName, $target, $baseName, $ignoreCollisions) = @_;
 
+    # Urgh, hacky...
+    return if
+        $relName eq "/propagated-build-inputs" ||
+        $relName eq "/nix-support" ||
+        $relName =~ /info\/dir/ ||
+        ( $relName =~ /^\/share\/mime\// && !( $relName =~ /^\/share\/mime\/packages/ ) ) ||
+        $baseName eq "perllocal.pod" ||
+        $baseName eq "log";
 
-# For each activated package, create symlinks.
+    my $oldTarget = $symlinks{$relName};
 
-sub createLinks {
-    my $relName = shift;
-    my $srcDir = shift;
-    my $dstDir = shift;
-    my $ignoreCollisions = shift;
+    if (!defined $oldTarget) {
+        $symlinks{$relName} = $target;
+        return;
+    }
 
-    my @srcFiles = glob("$srcDir/*");
-
-    foreach my $srcFile (@srcFiles) {
-        my $baseName = $srcFile;
-        $baseName =~ s/^.*\///g; # strip directory
-        my $dstFile = "$dstDir/$baseName";
-        my $relName2 = "$relName/$baseName";
-
-        # Urgh, hacky...
-        if ($srcFile =~ /\/propagated-build-inputs$/ ||
-            $srcFile =~ /\/nix-support$/ ||
-            $srcFile =~ /\/perllocal.pod$/ ||
-            $srcFile =~ /\/info\/dir$/ ||
-            ( $relName2 =~ /^\/share\/mime\// && !( $relName2 =~ /^\/share\/mime\/packages/ ) ) ||
-            $srcFile =~ /\/log$/)
-        {
-            # Do nothing.
-        }
-
-        elsif (-d $srcFile) {
-
-            if (!isInPathsToLink($relName2)) {
-                # This path is not in the list of paths to link, but
-                # some of its children may be.
-                createLinks($relName2, $srcFile, $dstFile, $ignoreCollisions);
-                next;
-            }
-            
-            lstat $dstFile;
-
-            if (-d _) {
-                createLinks($relName2, $srcFile, $dstFile, $ignoreCollisions);
-            }
-
-            elsif (-l _) {
-                my $target = readlink $dstFile or die;
-                if (!-d $target) {
-                    die "collission between directory `$srcFile' and non-directory `$target'";
-                }
-                unlink $dstFile or die "error unlinking `$dstFile': $!";
-                mkpath $dstFile;
-                createLinks($relName2, $target, $dstFile, $ignoreCollisions);
-                createLinks($relName2, $srcFile, $dstFile, $ignoreCollisions);
-            }
-
-            else {
-                symLinkMkdir $srcFile, $dstFile;
-            }
-        }
-
-        elsif (-l $dstFile) {
-            my $oldTarget = readlink $dstFile;
-            my $oldTargetReal = abs_path $oldTarget;
-            my $newTarget = $srcFile;
-            my $newTargetReal = abs_path $newTarget;
-            unless ($newTargetReal eq $oldTargetReal) {
-                if ($ignoreCollisions) {
-                    warn "collision between `$newTarget' and `$oldTarget'\n";
-                }
-                else {
-                    die "collision between `$newTarget' and `$oldTarget'";
-                }
-            }
-        }
-
-        else {
-            next unless isInPathsToLink($relName2);
-            symLinkMkdir $srcFile, $dstFile;
+    unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
+        if ($ignoreCollisions) {
+            warn "collision between `$target' and `$oldTarget'";
+            return;
+        } else {
+            die "collision between `$target' and `$oldTarget'";
         }
     }
+
+    findFilesInDir($relName, $oldTarget, $ignoreCollisions) unless $oldTarget eq "";
+    findFilesInDir($relName, $target, $ignoreCollisions);
+    
+    $symlinks{$relName} = ""; # denotes directory
 }
 
 
@@ -130,8 +89,7 @@ sub addPkg($;$) {
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
-#    print "symlinking $pkgDir\n";
-    createLinks("", "$pkgDir", "$out", $ignoreCollisions);
+    findFiles("", "$pkgDir", "", $ignoreCollisions);
 
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
@@ -140,7 +98,6 @@ sub addPkg($;$) {
         close PROP;
         my @propagated = split ' ', $propagated;
         foreach my $p (@propagated) {
-            print "$pkgDir propagates $p\n";
             $postponed{$p} = 1 unless defined $done{$p};
         }
     }
@@ -167,17 +124,30 @@ while (scalar(keys %postponed) > 0) {
     }
 }
 
-if (-x "$out/bin/update-mime-database" && -d "$out/share/mime/packages") {
-    system("$out/bin/update-mime-database -V $out/share/mime") == 0
-        or die "Can't update mime-database";
+
+# Create the symlinks.
+my $nrLinks = 0;
+foreach my $relName (sort keys %symlinks) {
+    my $target = $symlinks{$relName};
+    my $abs = "$out/$relName";
+    next unless isInPathsToLink $relName;
+    if ($target eq "") {
+        #print "creating directory $relName\n";
+        mkpath $abs or die "cannot create directory `$abs': $!";
+    } else {
+        #print "creating symlink $relName to $target\n";
+        symlink $target, $abs ||
+            die "error creating link `$abs': $!";
+        $nrLinks++;
+    }
 }
 
 
-print STDERR "created $symlinks symlinks in user environment\n";
+print STDERR "created $nrLinks symlinks in user environment\n";
 
 
 my $manifest = $ENV{"manifest"};
-if ($manifest ne "") {
+if ($manifest) {
     symlink($manifest, "$out/manifest") or die "cannot create manifest";
 }
 

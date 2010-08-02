@@ -27,23 +27,25 @@
 , dbus
 , dbus_glib
 , patchelf
+, cups
+, libgcrypt
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
   name = "chrome-${version}";
-  version = "47504";
+  version = "51653";
   src = 
     if stdenv.system == "x86_64-linux" then 
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/${version}/chrome-linux.zip";
-        sha256 = "06cwfr02acv9b0sbc14irqx099p4mgyjl9w58g1vja6r7jbb234c";
+        sha256 = "1d8q4ac8s3b1bncli537phzxshfr50j69y49409g5p64v7iya9kw";
       } 
     else if stdenv.system == "i686-linux" then 
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/${version}/chrome-linux.zip";
-        sha256 = "1g9m2d5x415gybjd6kvnhbj2sbfcaszv3dzvdwncsrcviic6w634";
+        sha256 = "1kdhwkl7xxssmkrkkgrdwrwvbah97va7rxbwrfhlcnjgw60ppf9v";
       } 
     else null;
 
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
 
   libPath = 
     stdenv.lib.makeLibraryPath
-       [ stdenv.glibc stdenv.gcc.gcc ffmpeg cairo pango glib libXrender gtk nspr nss fontconfig freetype alsaLib libX11 GConf libXext atk libXt expat zlib libjpeg bzip2 libpng libXScrnSaver dbus dbus_glib] ;
+       [ stdenv.glibc stdenv.gcc.gcc ffmpeg cairo pango glib libXrender gtk nspr nss fontconfig freetype alsaLib libX11 GConf libXext atk libXt expat zlib libjpeg bzip2 libpng libXScrnSaver dbus dbus_glib cups libgcrypt] ;
 
   installPhase = ''
     ensureDir $out/bin

@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "kdelibs-4.4.4";
+  name = "kdelibs-4.4.5";
 
   src = fetchurl {
-    url = mirror://kde/stable/4.4.4/src/kdelibs-4.4.4.tar.bz2;
-    sha256 = "1jwvdzgmb3kjb57yqxn8iybm5ywfb4qzf8l7fpnab2xyn73a023g";
+    url = mirror://kde/stable/4.4.5/src/kdelibs-4.4.5.tar.bz2;
+    sha256 = "11b0iif35bn8izr94590bgxkyy8ri572mjqlajzh988bww1r5mqi";
   };
 
   buildInputs = [

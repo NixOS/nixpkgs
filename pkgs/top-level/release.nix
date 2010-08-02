@@ -216,6 +216,7 @@ with (import ./release-lib.nix);
   nfsUtils = linux;
   nix = all;
   nixUnstable = all;
+  nixSqlite = all;
   nmap = linux;
   nss_ldap = linux;
   nssmdns = linux;
@@ -255,9 +256,6 @@ with (import ./release-lib.nix);
   pythonFull = linux;
   sbcl = all;
   qt3 = linux;
-  qt4 = linux;
-  qt45 = linux;
-  qt46 = linux;
   quake3demo = linux;
   readline = all;
   reiserfsprogs = linux;
@@ -414,12 +412,11 @@ with (import ./release-lib.nix);
   haskellPackages_ghc6104 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
+    gitit = linux;
     gtk2hs = linux;
     leksah = linux;
-    lhs2tex = ghcSupported;
-    haskellPlatform = ghcSupported;
+    haskellPlatform2009202 = ghcSupported;
     xmonad = linux;
-    gitit = linux;
   };
 
   haskellPackages_ghc6121 = {
@@ -432,6 +429,14 @@ with (import ./release-lib.nix);
     darcs = ghcSupported;
     ghc = ghcSupported;
     haskellPlatform2010100 = ghcSupported;
+  };
+
+  haskellPackages_ghc6123 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    haskellPlatform2010200 = ghcSupported;
+    lhs2tex = ghcSupported;
+    xmonad = linux;
   };
 
   kde3 = {
@@ -471,6 +476,7 @@ with (import ./release-lib.nix);
     konversation = linux;
     kdesvn = linux;
     amarok = linux;
+    k3b = linux;
     l10n.ca = linux;
     l10n.de = linux;
     l10n.fr = linux;

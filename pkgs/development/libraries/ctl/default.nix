@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, ilmbase }:
+
 stdenv.mkDerivation {
   name = "ctl-1.4.1";
 
@@ -7,8 +8,12 @@ stdenv.mkDerivation {
     sha256 = "16lzgbpxdyhykdwndj1i9vx3h4bfkxqqcrvasvgg70gb5raxj0mj";
   };
 
-  propagatedBuildInputs =  [ilmbase];
-  configureFlags="--with-ilmbase-prefix=${ilmbase}";
+  patches = [ ./patch.patch ];
+  
+  propagatedBuildInputs = [ ilmbase ];
+  
+  configureFlags = "--with-ilmbase-prefix=${ilmbase}";
+  
   #configurePhase = "
     #export CXXFLAGS=\"-I${ilmbase}/include -L${ilmbase}/lib\"
     #echo $CXXFLAGS
@@ -16,10 +21,9 @@ stdenv.mkDerivation {
   #";
 
   meta = {
-      description = "Color Transformation Language";
-      homepage = http://ampasctl.sourceforge.net;
-      license = "SOME OPEN SOURCE LICENSE"; # TODO which exactly is this?
+    description = "Color Transformation Language";
+    homepage = http://ampasctl.sourceforge.net;
+    license = "SOME OPEN SOURCE LICENSE"; # TODO which exactly is this?
   };
 
-  patches = [ ./patch.patch ];
 }

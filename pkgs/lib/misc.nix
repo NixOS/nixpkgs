@@ -19,12 +19,21 @@ rec {
   else 
     (y x);
   defaultMerge = x: y: x // (defaultMergeArg x y);
-  sumTwoArgs = f: x: y: 
-    f (defaultMerge x y);
   foldArgs = merger: f: init: x: 
-    let arg=(merger init (defaultMergeArg init x)); in  
+    let arg=(merger init (defaultMergeArg init x));
       # now add the function with composed args already applied to the final attrs
-    setAttrMerge "passthru" {} (f arg) ( x : x // { function = foldArgs merger f arg; } );
+        base = (setAttrMerge "passthru" {} (f arg) 
+                        ( z : z // rec { 
+                          function = foldArgs merger f arg; 
+			  args = (lib.attrByPath ["passthru" "args"] {} z) // x;
+                          } ));
+	withStdOverrides = base // {
+	   override = base.passthru.function;
+	   deepOverride = a : (base.passthru.function ((lib.mapAttrs (lib.deepOverrider a) base.passthru.args) // a));
+	   } ;
+        in
+	withStdOverrides;
+    
 
   # predecessors: proposed replacement for applyAndFun (which has a bug cause it merges twice)
   # the naming "overridableDelayableArgs" tries to express that you can
@@ -95,6 +104,11 @@ rec {
 
   
   # shortcut for attrByPath ["name"] default attrs
+  maybeAttrNullable = name: default: attrs:
+    if attrs == null then default else 
+    if (__hasAttr name attrs) then (__getAttr name attrs) else default;
+
+  # shortcut for attrByPath ["name"] default attrs
   maybeAttr = name: default: attrs:
     if (__hasAttr name attrs) then (__getAttr name attrs) else default;
 
@@ -112,22 +126,22 @@ rec {
     
   # Return true only if there is an attribute and it is true.
   checkFlag = attrSet: name:
-	if (name == "true") then true else
-	if (name == "false") then false else
-	if (elem name (attrByPath ["flags"] [] attrSet)) then true else
-	attrByPath [name] false attrSet ;
+        if (name == "true") then true else
+        if (name == "false") then false else
+        if (elem name (attrByPath ["flags"] [] attrSet)) then true else
+        attrByPath [name] false attrSet ;
 
 
   # Input : attrSet, [ [name default] ... ], name
   # Output : its value or default.
   getValue = attrSet: argList: name:
   ( attrByPath [name] (if checkFlag attrSet name then true else
-	if argList == [] then null else
-	let x = builtins.head argList; in
-		if (head x) == name then 
-			(head (tail x))
-		else (getValue attrSet 
-			(tail argList) name)) attrSet );
+        if argList == [] then null else
+        let x = builtins.head argList; in
+                if (head x) == name then 
+                        (head (tail x))
+                else (getValue attrSet 
+                        (tail argList) name)) attrSet );
 
                         
   # Input : attrSet, [[name default] ...], [ [flagname reqs..] ... ]
@@ -136,46 +150,46 @@ rec {
   (
     fold lib.and true 
       (map (x: let name = (head x) ; in
-	
-	((checkFlag attrSet name) -> 
-	(fold lib.and true
-	(map (y: let val=(getValue attrSet argList y); in
-		(val!=null) && (val!=false)) 
-	(tail x))))) condList)) ;
-	
+        
+        ((checkFlag attrSet name) -> 
+        (fold lib.and true
+        (map (y: let val=(getValue attrSet argList y); in
+                (val!=null) && (val!=false)) 
+        (tail x))))) condList)) ;
+        
 
   # !!! This function has O(n^2) performance, so you probably don't want to use it!
   uniqList = {inputList, outputList ? []}:
-	if (inputList == []) then outputList else
-	let x=head inputList; 
-	newOutputList = outputList ++
-	 (if elem x outputList then [] else [x]);
-	in uniqList {outputList=newOutputList; 
-		inputList = (tail inputList);};
+        if (inputList == []) then outputList else
+        let x=head inputList; 
+        newOutputList = outputList ++
+         (if elem x outputList then [] else [x]);
+        in uniqList {outputList=newOutputList; 
+                inputList = (tail inputList);};
 
   uniqListExt = {inputList, outputList ? [],
     getter ? (x : x), compare ? (x: y: x==y)}:
-	if (inputList == []) then outputList else
-	let x=head inputList; 
-	isX = y: (compare (getter y) (getter x));
-	newOutputList = outputList ++
-	 (if any isX outputList then [] else [x]);
-	in uniqListExt {outputList=newOutputList; 
-		inputList = (tail inputList);
-		inherit getter compare;
-		};
+        if (inputList == []) then outputList else
+        let x=head inputList; 
+        isX = y: (compare (getter y) (getter x));
+        newOutputList = outputList ++
+         (if any isX outputList then [] else [x]);
+        in uniqListExt {outputList=newOutputList; 
+                inputList = (tail inputList);
+                inherit getter compare;
+                };
 
 
                 
   condConcat = name: list: checker:
-	if list == [] then name else
-	if checker (head list) then 
-		condConcat 
-			(name + (head (tail list))) 
-			(tail (tail list)) 
-			checker
-	else condConcat
-		name (tail (tail list)) checker;
+        if list == [] then name else
+        if checker (head list) then 
+                condConcat 
+                        (name + (head (tail list))) 
+                        (tail (tail list)) 
+                        checker
+        else condConcat
+                name (tail (tail list)) checker;
 
   lazyGenericClosure = {startSet, operator}:
     let
@@ -196,7 +210,7 @@ rec {
     else lazyGenericClosure;
 
   innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else 
-	innerModifySumArgs f x (a // b);
+        innerModifySumArgs f x (a // b);
   modifySumArgs = f: x: innerModifySumArgs f x {};
 
 
@@ -204,8 +218,8 @@ rec {
     innerClosePropagation 
       (ready ++ [(head list)])
       ((tail list) 
-         ++ (maybeAttr "propagatedBuildInputs" [] (head list))
-	 ++ (maybeAttr "propagatedBuildNativeInputs" [] (head list)));
+         ++ (maybeAttrNullable "propagatedBuildInputs" [] (head list))
+         ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] (head list)));
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
@@ -378,4 +392,16 @@ rec {
           (eqListStrict (attrNames a) (attrNames b))
           && (eqListStrict (lib.attrValues a) (lib.attrValues b))
         else a == b; # FIXME !
+
+
+  # Check absence of non-used options
+  # Obsolete?
+  checker = x: flag: opts: config:
+    (if flag then let result=(
+      (import ../build-support/checker)
+      opts config); in
+      (if (result=="") then x else
+      abort ("Unknown option specified: " + result))
+    else x);
+
 }

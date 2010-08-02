@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libsigsegv-2.5";

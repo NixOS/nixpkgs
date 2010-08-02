@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, gssdp, libsoup, e2fsprogs }:
  
 stdenv.mkDerivation {
   name = "gupnp-0.12";
@@ -8,10 +8,5 @@ stdenv.mkDerivation {
     sha256 = "1sm1rqvx752nb3j1yl7h30kx2ymndkji8m73fxshjssmc6z40ayg";
   };
 
-  buildInputs = [
-    pkgconfig glib libxml2 gssdp libsoup e2fsprogs
- #dbus.libs dbus_glib gtk glib
-  ];
-
-  #configureFlags="";
+  buildInputs = [ pkgconfig glib libxml2 gssdp libsoup e2fsprogs ];
 }

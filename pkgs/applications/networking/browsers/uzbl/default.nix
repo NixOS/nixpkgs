@@ -9,7 +9,7 @@ let
   ];
 in
 rec {
-  src = (a.fetchGitFromSrcInfo s) + "/";
+  src = (a.fetchUrlFromSrcInfo s);
   inherit (s) name;
 
   inherit buildInputs;
@@ -19,9 +19,10 @@ rec {
   phaseNames = ["addInputs" "setVars" "doMakeInstall" "doWrap"];
 
   setVars = a.noDepEntry (''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L${a.libX11}/lib -lX11"
   '');
 
-  doWrap = a.makeManyWrappers "$out/bin/uzbl" 
+  doWrap = a.makeManyWrappers "$out/bin/uzbl-core" 
     ''
       --prefix GST_PLUGIN_PATH : ${a.webkit.gstreamer}/lib/gstreamer-* \
       --prefix GST_PLUGIN_PATH : ${a.webkit.gstPluginsBase}/lib/gstreamer-* \

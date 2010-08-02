@@ -3,14 +3,12 @@
  glew, libXmu, libXi }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2009.4.0";
+  name = "hugin-2010.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.gz";
-    sha256 = "1xa7rnpwlv68wfkikmlrs74hqylpkh837p3narqljr2a7fxf04r9";
+    sha256 = "08xm7ggfrh536lqvdzw7zg09p2awbclw5r7i8c59gf092w1cac7d";
   };
-
-#   patches = [ ./levmar-64-bit-alignment.patch ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 

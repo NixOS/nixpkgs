@@ -1,4 +1,4 @@
-args: with args; with kde;
+{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt, kde, perl }:
 
 stdenv.mkDerivation {
   name = "partitionmanager-1.0.0";
@@ -8,8 +8,8 @@ stdenv.mkDerivation {
     sha256 = "03ibn4vns7pa0ygkp2jh6zcdy106as5cc7p6rv1f5c15wxx0zsk1";
   };
 
-  buildInputs = [cmake gettext parted libuuid
-      qt kdelibs kdebase automoc4 perl phonon];
+  buildInputs =
+    [ cmake gettext parted libuuid qt kde.kdelibs kde.kdebase kde.automoc4 perl kde.phonon ];
 
   preConfigure = ''
     export VERBOSE=1
@@ -25,10 +25,9 @@ stdenv.mkDerivation {
   '';
 
   meta = { 
-    description = "utility program to help you manage the disk devices";
+    description = "Utility program to help you manage the disk devices";
     homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
     license = "GPL";
-    #maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

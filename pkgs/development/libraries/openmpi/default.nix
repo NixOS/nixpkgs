@@ -1,10 +1,11 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, gfortran}:
 
 stdenv.mkDerivation {
-  name = "openmpi-1.3.2";
+  name = "openmpi-1.4.2";
   src = fetchurl {
-    url = http://www.open-mpi.org/software/ompi/v1.3/downloads/openmpi-1.3.2.tar.gz ;
-    sha256 = "1n7c0y4nidm0ha23ic7f872qh3296rh2177r1wqqs83k2ma7xxxb";
+    url = http://www.open-mpi.org/software/ompi/v1.4/downloads/openmpi-1.4.2.tar.bz2 ;
+    sha1 = "3e85092433d0e399cc7a51c018f9d13562f78b80";
   };
+  buildInputs = [ gfortran ];
 }
 

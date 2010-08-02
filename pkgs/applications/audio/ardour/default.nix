@@ -1,7 +1,10 @@
-args: with args;
+{ stdenv, fetchurl, scons, boost, pkgconfig, fftw, librdf_raptor
+, librdf_rasqal, jackaudio, flac, libsamplerate, alsaLib, libxml2
+, libxslt, libsndfile, libsigcxx, libusb, cairomm, glib, pango
+, gtk, glibmm, gtkmm, libgnomecanvas, librdf, liblo, aubio
+, fftwSinglePrec, libmad }:
 
 stdenv.mkDerivation {
-
   name = "ardour-2.8.2";
 
   # svn is the source to get official releases from their site?
@@ -13,11 +16,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    scons boost
-    pkgconfig fftw librdf_raptor librdf_rasqal jackaudio flac
-    libsamplerate alsaLib libxml2 libxslt libsndfile libsigcxx libusb cairomm
-    glib pango gtk glibmm gtkmm libgnomecanvas fftw librdf liblo aubio
-    fftw fftwSinglePrec libmad
+    scons boost pkgconfig fftw librdf_raptor librdf_rasqal jackaudio
+    flac libsamplerate alsaLib libxml2 libxslt libsndfile libsigcxx
+    libusb cairomm glib pango gtk glibmm gtkmm libgnomecanvas librdf
+    liblo aubio fftwSinglePrec libmad
   ];
 
   buildPhase = ''
@@ -35,7 +37,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://ardour.org/;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,88 +1,37 @@
-diff -rc imake-orig/imake.c imake-X11R7.0-1.0.1/imake.c
-*** imake-orig/imake.c	2005-11-08 07:33:24.000000000 +0100
---- imake-X11R7.0-1.0.1/imake.c	2006-01-11 01:12:57.000000000 +0100
-***************
-*** 1056,1061 ****
---- 1056,1062 ----
-  static void
-  get_distrib(FILE *inFile)
-  {
-+ #if 0
-    struct stat sb;
-  
-    static char* suse = "/etc/SuSE-release";
-***************
-*** 1101,1106 ****
---- 1102,1108 ----
-       * at the content of /etc/debian_version */
-      return;
-    }
-+ #endif  
-    /* what's the definitive way to tell what any particular distribution is? */
-  
-    fprintf (inFile, "%s\n", "#define DefaultLinuxDistribution LinuxUnknown");
-***************
-*** 1349,1402 ****
-  static boolean
-  get_gcc(char *cmd)
-  {
-!   struct stat sb;
-!     static char* gcc_path[] = {
-! # if defined(linux) || \
-!      defined(__NetBSD__) || \
-!      defined(__OpenBSD__) || \
-!      defined(__FreeBSD__) || \
-!      defined(__DragonFly__) || \
-!      defined(__APPLE__) || \
-!      defined(__CYGWIN__) || \
-!      defined(__MINGW32__) || \
-!      defined(__GNU__) || \
-!      defined(__GLIBC__)
-! 	"/usr/bin/cc",	/* for Linux PostIncDir */
-! # endif
-! 	"/usr/local/bin/gcc",
-! 	"/opt/gnu/bin/gcc",
-! 	"/usr/pkg/bin/gcc"
-!     };
-! 
-! #ifdef CROSSCOMPILE
-!     static char* cross_cc_name[] = {
-! 	"cc",
-! 	"gcc"
-!     };
-! 
-!     if (CrossCompiling) {
-! 	int i;
-! 	for (i = 0; i < sizeof (cross_cc_name) / sizeof cross_cc_name[0]; i++){
-! 	    strcpy (cmd, CrossCompileDir);
-! 	    strcat (cmd, "/");
-! 	    strcat (cmd, cross_cc_name[i]);
-! 	    if (lstat (cmd, &sb) == 0) {
-! 		return TRUE;
-! 		break;
-! 	    }
-! 	}
-!     } else
-! #endif
-!       {
-! 	int i;
-! 	for (i = 0; i < sizeof (gcc_path) / sizeof gcc_path[0]; i++) {
-! 	    if (lstat (gcc_path[i], &sb) == 0) {
-! 		strcpy (cmd, gcc_path[i]);
-! 		return TRUE;
-! 	    }
-! 	}
-!       }
-!     return FALSE;
-  }
-  
-  #if defined CROSSCOMPILE || !defined __UNIXOS2__
---- 1351,1358 ----
-  static boolean
-  get_gcc(char *cmd)
-  {
-!     strcpy (cmd, "gcc");
-!     return TRUE;
-  }
-  
-  #if defined CROSSCOMPILE || !defined __UNIXOS2__
+diff -ru -x '*~' imake-1.0.3-orig/imake.c imake-1.0.3/imake.c
+--- imake-1.0.3-orig/imake.c	2009-10-16 23:45:43.000000000 +0200
++++ imake-1.0.3/imake.c	2010-07-19 12:17:12.000000000 +0200
+@@ -1035,6 +1035,7 @@
+ static void
+ get_distrib(FILE *inFile)
+ {
++#if 0
+   struct stat sb;
+ 
+   static char* suse = "/etc/SuSE-release";
+@@ -1080,6 +1081,7 @@
+      * at the content of /etc/debian_version */
+     return;
+   }
++#endif  
+   /* what's the definitive way to tell what any particular distribution is? */
+ 
+   fprintf (inFile, "%s\n", "#define DefaultLinuxDistribution LinuxUnknown");
+@@ -1328,6 +1330,7 @@
+ static boolean
+ get_gcc(char *cmd)
+ {
++#if 0
+   struct stat sb;
+     static char* gcc_path[] = {
+ #if defined(linux) || \
+@@ -1376,6 +1379,9 @@
+ 	}
+       }
+     return FALSE;
++#endif
++    strcpy (cmd, "gcc");
++    return TRUE;
+ }
+ 
+ #if defined CROSSCOMPILE || !defined __UNIXOS2__

@@ -6,12 +6,19 @@
 # some bindings are even broken.
 
 stdenv.mkDerivation {
-  name = "kdebindings-4.4.4";
+  name = "kdebindings-4.4.5";
+  
   src = fetchurl {
-    url = mirror://kde/stable/4.4.4/src/kdebindings-4.4.4.tar.bz2;
-    sha256 = "1wn5hxv1sc0qywgq2bx2brzljlmw7kybbf2hcyiz322air753zdw";
+    url = mirror://kde/stable/4.4.5/src/kdebindings-4.4.5.tar.bz2;
+    sha256 = "0l8lk8vl68jc82lai4ljlm9ph53q4fn0ki0jq45lizdmqjgvahy4";
   };
-  #builder = ./builder.sh;
+
+  patches =
+    [ (fetchurl {
+        url = "http://bugs.gentoo.org/attachment.cgi?id=238975";
+        sha256 = "0vng8j8fhbq5ys8hy0bcvi6x2bym9j65dh61m2c1dr3z7rsx2bqb";
+      })
+    ];
   
   # Disable smoke because I don't need it and gives us an error
   cmakeFlags = [ "-DENABLE_SMOKE=OFF" ];

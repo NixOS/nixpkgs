@@ -6,25 +6,30 @@ let
     stdenv.cross;
 in
 
-stdenv.mkDerivation ( rec {
-  name = "openssl-0.9.8n";
-  
+stdenv.mkDerivation rec {
+  name = "openssl-1.0.0a";
+
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
-    sha256 = "008z1h09pa6dfxs4wgbqj5i1clw4v82b1waqvwanb1kb6wlbq6mh";
+    sha256 = "0qqgyzfb0alwx329z8bqybzamfl9j2maykykvq6zk3ibq0gvva8q";
   };
 
-  buildNativeInputs = [ perl ];
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
-  configureScript = "./config";
+  buildNativeInputs = [ perl ];
   
-  configureFlags = "shared";
+  # On x86_64-darwin, "./config" misdetects the system as
+  # "darwin-i386-cc".  So specify the system type explicitly.
+  configureScript =
+    if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
+  
+  configureFlags = "shared --libdir=lib";
 
   crossAttrs = {
-    configurePhase = ''
+    preConfigure=''
       export cross=$crossSystem-
-      ./Configure --prefix=$out ${opensslCrossSystem} shared
     '';
+    configureFlags="--libdir=lib ${opensslCrossSystem} shared";
     buildPhase = ''
       make CC=$crossConfig-gcc \
         AR="$crossConfig-ar r" \
@@ -36,4 +41,4 @@ stdenv.mkDerivation ( rec {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
   };
-} // (if stdenv.isDarwin then { patches = [./darwin-arch.patch]; } else {}) )
+}

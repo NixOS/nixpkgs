@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, kernel, perl }:
+
 stdenv.mkDerivation {
   name = "ndiswrapper-1.53-stable";
 
@@ -21,19 +22,19 @@ stdenv.mkDerivation {
   '';
 
   # should we use unstable? 
-  src = args.fetchurl {
+  src = fetchurl {
     url = http://downloads.sourceforge.net/ndiswrapper/ndiswrapper-1.53.tar.gz;
     sha256 = "00622nxa3q9n8v7qdz274d0nzz9r13lx77xi27s5bnk0mkila03q";
   };
 
-  buildInputs =[kernel perl];
+  buildInputs = [ kernel perl ];
 
   # this is a patch against svn head, not stable version
   patches = [./prefix.patch];
 
   meta = { 
-      description = "Ndis driver wrapper for the Linux kernel";
-      homepage = http://sourceforge.net/projects/ndiswrapper;
-      license = "GPL";
+    description = "Ndis driver wrapper for the Linux kernel";
+    homepage = http://sourceforge.net/projects/ndiswrapper;
+    license = "GPL";
   };
 }

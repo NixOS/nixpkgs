@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, ant }:
+
 stdenv.mkDerivation {
   name = "jedit-4.2";
 
@@ -18,11 +19,11 @@ stdenv.mkDerivation {
     cp modes/catalog \$out/lib/modes
   ";
 
-  buildInputs = [ant];
+  buildInputs = [ ant ];
 
   meta = { 
-      description = "really nice programmers editor written in Java. Give it a try";
-      homepage = http://www.jedit.org;
-      license = "GPL";
+    description = "really nice programmers editor written in Java. Give it a try";
+    homepage = http://www.jedit.org;
+    license = "GPL";
   };
 }

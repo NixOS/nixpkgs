@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patches = [ ./tmake.patch ];
 
   buildInputs = [ graphviz perl flex bison libX11 libXext ]
-    ++ (if qt != null then [ qt ] else []);
+    ++ (if (qt != null) then [ qt ] else []);
 
   prefixKey = "--prefix ";
   configureFlags = "--release"
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 		 ;
 
   preConfigure =
-   (if qt == null
+   (if (qt == null)
     then ""
     else ''
       echo "using QTDIR=${qt}..."
       export QTDIR=${qt}
-    '');
+    ''); 
       # export CPLUS_INCLUDE_PATH="${qt}/include:$CPLUS_INCLUDE_PATH"
       # export LIBRARY_PATH="${qt}/lib:$LIBRARY_PATH"
 

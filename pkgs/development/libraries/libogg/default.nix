@@ -1,9 +1,14 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "libogg-1.1.4";
+stdenv.mkDerivation rec {
+  name = "libogg-1.2.0";
+  
   src = fetchurl {
-    url = http://downloads.xiph.org/releases/ogg/libogg-1.1.4.tar.gz;
-    sha256 = "00z15ha73yfv7zn9z2z5yvc8g53ci6vn12vpc0l7qhc8zn1w2m4k";
+    url = "http://downloads.xiph.org/releases/ogg/${name}.tar.gz";
+    sha256 = "0sgbb7n8zwmycj2iid3h0hrxqg7ql9z34lg51bl99kca4cz9h3gk";
+  };
+
+  meta = {
+    homepage = http://xiph.org/ogg/;
   };
 }

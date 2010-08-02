@@ -1,14 +1,14 @@
 { fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
 , expat, gettext, intltool, glib, gtk, qt4 ? null, lib
-, qt4Support ? false, ...}:
+, qt4Support ? false }:
 
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-0.6.25";
+  name = "avahi-0.6.27";
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "0ndsrd357igp0m2cd8vwr16gmh6axlndf34hlg7qqnsiymsdj84j";
+    sha256 = "112yqh5k4ph5f1fsd98q1035477wmzq5nm2jrkivz5fnn3hgabf2";
   };
 
   patches = [ ./no-mkdir-localstatedir.patch ];
@@ -17,11 +17,13 @@ stdenv.mkDerivation rec {
       pkgconfig libdaemon dbus perl perlXMLParser glib expat
       gettext intltool
     ]
-    ++ lib.optional qt4Support qt4;
+    ++ (lib.optional qt4Support qt4);
 
   configureFlags =
-    [ "--disable-qt3" "--disable-gdbm" "--disable-gtk" "--disable-mono"
-      "--${if qt4Support then "enable" else "disable"}-qt4" "--disable-python"
+    [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
+      "--disable-gtk" "--disable-gtk3"
+      "--${if qt4Support then "enable" else "disable"}-qt4"
+      "--disable-python"
       "--with-distro=none" "--localstatedir=/var"
     ];
 

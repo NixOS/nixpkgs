@@ -1,16 +1,17 @@
-args: with args;
+{ composableDerivation, lib, fetchurl, mysql, apacheHttpd, zlib, sqlite
+, pcre, apr, gtk, boehmgc, pkgconfig, makeWrapper, sourceFromHead }:
 
 let
 
-  inherit (args.composableDerivation) composableDerivation edf wwf;
+  inherit (composableDerivation) edf wwf;
 
-  libs = [ mysql apacheHttpd zlib sqlite pcre apr gtk];
+  libs = [ mysql apacheHttpd zlib sqlite pcre apr gtk ];
 
   includes = lib.concatMapStrings (x: ''"${x}/include",'' ) libs + ''"{gkt}/include/gtk-2.0",'';
   
 in
 
-composableDerivation {} ( fixed : {
+composableDerivation.composableDerivation {} ( fixed : {
 
   name = "neko-cvs";
 
@@ -18,11 +19,6 @@ composableDerivation {} ( fixed : {
   src = sourceFromHead "neko-F_16-06-48.tar.gz"
                (fetchurl { url = "http://mawercer.de/~nix/repos/neko-F_16-06-48.tar.gz"; sha256 = "e952582a26099b7a5568d0798839a6d349331510ffe6d7936b4537d60b6ccf26"; });
   # END
-
-  # # REGION AUTO UPDATE:           { name="neko_git"; type="git"; url=""; }
-  # src = sourceFromHead "neko_git-3abfb2f6d68cc301f9795e10c75734e293b4cfa9.tar.gz"
-  #              (throw "source not not published yet: neko_git");
-  # # END
 
   # optionally remove apache mysql like gentoo does?
   # they just remove libs/{apache,mod_neko}
@@ -47,8 +43,8 @@ composableDerivation {} ( fixed : {
     description = "Neko is an high-level dynamicly typed programming language";
     homepage = http://nekovm.org;
     license = ["GPLv2" ];  # -> docs/license.txt
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
   };
 
   # if stripping was done neko and nekoc would be the same. ?!

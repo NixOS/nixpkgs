@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, gtk, glib, pkgconfig, libgnome, libgnomeui, vte
+, curl, cdparanoia, libid3tag }:
 
 stdenv.mkDerivation {
   name = "grip-3.2.0";
@@ -8,13 +9,13 @@ stdenv.mkDerivation {
     sha256 = "1jh5x35rq15n8ivlp9wbdx8x9mj6agf5rfdv8sd6gai851zsclas";
   };
 
-  buildInputs = [gtk glib pkgconfig libgnome libgnomeui vte curl cdparanoia libid3tag];
+  buildInputs = [ gtk glib pkgconfig libgnome libgnomeui vte curl cdparanoia libid3tag ];
 
   meta = { 
-    description = "GTK+ based Audio CD Player/Ripper";
+    description = "GTK+-based audio CD player/ripper";
     homepage = http://nostatic.org/grip;
     license = "GPLv2";
-    maintainers = [args.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     #platforms = args.lib.platforms.linux;
   };
 }

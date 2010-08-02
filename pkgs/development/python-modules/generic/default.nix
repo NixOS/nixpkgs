@@ -6,11 +6,14 @@
 { python, setuptools, makeWrapper, lib }:
 
 { name, namePrefix ? "python-", src, meta, patches ? []
+, installCommand ? ""
 , doCheck ? true, checkPhase ? "python setup.py test"
 , postInstall ? ""
 , ... } @ attrs:
 
 let
+    defaultInstallCommand = ''easy_install --prefix="$out" .'';
+
     # Return the list of recursively propagated build inputs of PKG.
     recursiveBuildInputs =
       pkg:
@@ -50,7 +53,7 @@ python.stdenv.mkDerivation (
 
     echo "installing \`${name}' with \`easy_install'..."
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-    easy_install --prefix="$out" .
+    ${if installCommand == "" then defaultInstallCommand else installCommand}
 
     ${postInstall}
   '';

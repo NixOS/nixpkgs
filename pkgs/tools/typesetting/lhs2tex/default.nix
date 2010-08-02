@@ -1,13 +1,13 @@
-{cabal, tetex, polytable, regexCompat, utf8String}:
+{cabal, tetex, polytable, regexCompat}:
 
 #assert tetex == polytable.tetex;
 
 cabal.mkDerivation (self : {
   pname = "lhs2tex";
-  version = "1.15";
+  version = "1.16";
   name = self.fname;
-  sha256 = "77f25c1f22823587ceca6eead133a403540319a0ae3bf03a369b3e8c86baf124";
-  extraBuildInputs = [tetex regexCompat utf8String];
+  sha256 = "aa43ec92e8d7c94213365a7211d605314476977155e36420caa3cfb394f7c76f";
+  extraBuildInputs = [tetex regexCompat];
   propagatedBuildInputs = [polytable]; # automatically in user-env now with cabal
 
   postInstall = ''

@@ -1,14 +1,19 @@
 { fetchurl, lib, unzip, buildPythonPackage, twisted, foolscap, nevow
 , simplejson, zfec, pycryptopp, pysqlite, darcsver, setuptoolsTrial
-, setuptoolsDarcs, numpy, nettools }:
+, setuptoolsDarcs, numpy, nettools, pycrypto, pyasn1, mock }:
+
+# FAILURES: The "running build_ext" phase fails to compile Twisted
+# plugins, because it tries to write them into Twisted's (immutable)
+# store path. The problem appears to be non-fatal, but there's probably
+# some loss of functionality because of it.
 
 buildPythonPackage (rec {
-  name = "tahoe-lafs-1.6.1";
+  name = "tahoe-lafs-1.7.1";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.6.1.zip";
-    sha256 = "1b0m1fj1lrd9kvlavd6303jjgvzasj6rnlwhdysn4i2zqriv8d9f";
+    url = "http://allmydata.org/source/tahoe/releases/allmydata-tahoe-1.7.1.zip";
+    sha256 = "7e676e1ea517b3f6f6f76d56f712e72a5c2d4287fdd474abc9523aa533fd9038";
   };
 
   patches = [ ./test-timeout.patch ];
@@ -39,12 +44,12 @@ buildPythonPackage (rec {
   '';
 
   buildInputs = [ unzip ]
-    ++ [ numpy ]; # Some tests want this
+    ++ [ numpy ]; # Some tests want this + http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/mock-0.6.0.tar.bz2
 
   # The `backup' command requires `pysqlite'.
   propagatedBuildInputs =
     [ twisted foolscap nevow simplejson zfec pycryptopp pysqlite
-      darcsver setuptoolsTrial
+      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 mock
     ];
 
   # The test suite is run in `postInstall'.
@@ -82,7 +87,7 @@ buildPythonPackage (rec {
 
     license = [ "GPLv2+" /* or */ "TGPPLv1+" ];
 
-    maintainers = [ lib.maintainers.ludo ];
+    maintainers = [ lib.maintainers.ludo lib.maintainers.simons  ];
     platforms = lib.platforms.gnu;  # arbitrary choice
   };
 })

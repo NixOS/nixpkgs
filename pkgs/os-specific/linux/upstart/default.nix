@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, dbus, libnih }:
 
 stdenv.mkDerivation rec {
-  name = "upstart-0.6.5";
+  name = "upstart-0.6.6";
   
   src = fetchurl {
     url = "http://upstart.ubuntu.com/download/0.6/${name}.tar.gz";
-    sha256 = "1kyj2xqvcn9pww3cm5i18svl7ark4a4dbqnm3hiclp4z1jwr01lw";
+    sha256 = "1cy962n4ljjxfxaigcnqsl9gq8j09j28g5jg19zk4lc7h1503d3s";
   };
 
   buildInputs = [ pkgconfig dbus libnih ];

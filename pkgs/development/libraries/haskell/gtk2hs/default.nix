@@ -1,7 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome, cairo, ghc, mtl }:
 
-let gtksourceview = gnome.gtksourceview_24; in
-
 stdenv.mkDerivation rec {
   pname = "gtk2hs";
   version = "0.10.0";
@@ -17,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig cairo ghc gnome.glib gnome.gtk gnome.libglade
-    gnome.GConf gtksourceview gnome.librsvg
+    gnome.GConf gnome.gtksourceview gnome.librsvg
   ];
 
   preConfigure =
@@ -42,5 +40,5 @@ stdenv.mkDerivation rec {
       done
     ''; # */
 
-  passthru = { inherit gtksourceview; };
+  passthru = { inherit (gnome) gtksourceview; };
 }

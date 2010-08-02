@@ -1,24 +1,29 @@
-args: with args;
+{ stdenv, fetchurl, dpkg, gettext, gawk, perl, wget }:
 
-let devices = fetchurl {
+let
+
+  devices = fetchurl {
     url = mirror://gentoo/distfiles/devices.tar.gz;
     sha256 = "0j4yhajmlgvbksr2ij0dm7jy3q52j3wzhx2fs5lh05i1icygk4qd";
   };
+  
 in
 
 stdenv.mkDerivation {
-  name = "debotstrap-1.0.10lenny";
+  name = "debootstrap-1.0.10lenny";
 
   src = fetchurl {
     # I'd like to use the source. However it's lacking the lanny script ?
     url = mirror://debian/pool/main/d/debootstrap/debootstrap_1.0.10lenny1_all.deb;
     sha256 = "a70af8e3369408ce9d6314fb5219de73f9523b347b75a3b07ee17ea92c445051";
   };
-  buildInputs = [dpkg gettext gawk perl];
+  
+  buildInputs = [ dpkg gettext gawk perl ];
 
   unpackPhase = ''
     dpkg-deb --extract "$src" .
   '';
+  
   buildPhase = ":";
 
   patches = [
@@ -80,12 +85,10 @@ stdenv.mkDerivation {
   */
 
   meta = { 
-    description = "create a debian system in a chroot easily.";
-    longDescription = "this way you can use debian packages we don't have in nixpkgs yet.
-      ";
+    description = "Tool to create a Debian system in a chroot";
     homepage = http://packages.debian.org/de/lenny/debootstrap; # http://code.erisian.com.au/Wiki/debootstrap
     license = "GPL-2"; # gentoo says so.. ?
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

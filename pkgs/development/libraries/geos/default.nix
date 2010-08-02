@@ -1,8 +1,8 @@
-args: with args;
-let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {} {
+{ composableDerivation, fetchurl, python }:
 
-  buildInputs = [ "which" ]; # which is needed for the autogen.sh
+let inherit (composableDerivation) edf; in
+
+composableDerivation.composableDerivation {} {
 
   flags =
   # python and ruby untested 
@@ -13,8 +13,8 @@ composableDerivation {} {
   name = "geos-3.2.2";
 
   src = fetchurl {
-      url = http://download.osgeo.org/geos/geos-3.2.2.tar.bz2;
-      sha256 = "0711wcq46h7zgvp0bk4m60vmx1wal9db1q36mayf0vwk34hprpr4";
+    url = http://download.osgeo.org/geos/geos-3.2.2.tar.bz2;
+    sha256 = "0711wcq46h7zgvp0bk4m60vmx1wal9db1q36mayf0vwk34hprpr4";
   };
 
   # for development version. can be removed ?
@@ -26,10 +26,8 @@ composableDerivation {} {
   #";
 
   meta = {
-      description = "C++ port of the Java Topology Suite (JTS)"
-        + "- all the OpenGIS \"Simple Features for SQL\" spatial predicate functions and spatial operators,"
-        + " as well as specific JTS topology functions such as IsValid";
-      homepage = http://geos.refractions.net/;
-      license = "GPL";
+    description = "C++ port of the Java Topology Suite (JTS)";
+    homepage = http://geos.refractions.net/;
+    license = "GPL";
   };
 }

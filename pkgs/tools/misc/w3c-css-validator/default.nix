@@ -1,11 +1,9 @@
-args: with args;
+{ stdenv, fetchurl, sourceFromHead, apacheAnt, tomcat, jre }:
 
 let 
 
-    inherit (args.stdenv) lib;
-
-    sources = [
-      (fetchurl {
+  sources =
+    [ (fetchurl {
         name = "jigsaw_2.2.6.tar.gz";
         url="http://jigsaw.w3.org/Distrib/jigsaw_2.2.6.tar.gz";
         sha256 = "01cjpqjcs8gbvvzy0f488cb552f9b38hvwr97wydglrzndmcwypd";
@@ -20,7 +18,6 @@ let
         url="http://www.apache.org/dist/commons/lang/binaries/commons-lang-2.4-bin.tar.gz";
         sha256 = "0phwlgnvwj3n3j1aka2pkm0biacvgs72qc0ldir6s69i9qbv7rh0";
       })
-
       (fetchurl {
         name = "velocity-1.6.1.tar.gz";
         url="http://www.apache.org/dist/velocity/engine/1.6.1/velocity-1.6.1.tar.gz";
@@ -35,7 +32,7 @@ let
 
 in
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   name = "w3c-css-validator";
 
   # REGION AUTO UPDATE:       { name="w3c-css-validator"; type="cvs"; cvsRoot=":pserver:anonymous:anonymous@dev.w3.org:/sources/public"; module="2002/css-validator"; }
@@ -43,14 +40,14 @@ stdenv.mkDerivation  {
                (fetchurl { url = "http://mawercer.de/~nix/repos/w3c-css-validator-F_17-52-37.tar.gz"; sha256 = "b6f05d4812eaa464906d101242689effa8b5516d32d6420315740a77d8ee11fd"; });
   # END
 
-  buildInputs = [apacheAnt];
+  buildInputs = [ apacheAnt ];
 
   # prepare target downloads dependency .tar.gz into tmp
   # note: There is a .war as well which could be deployed to tomcat
   installPhase = ''
     cd css-validator
     mkdir tmp
-    ${ lib.concatStringsSep "\n" (map (src: "tar xfz ${src} -C tmp") sources) }
+    ${ stdenv.lib.concatStringsSep "\n" (map (src: "tar xfz ${src} -C tmp") sources) }
     sed -i -e 's@<property name="servlet.lib" value=".*"/>@<property name="servlet.lib" value="${tomcat}/lib/servlet-api.jar"/>@' \
           -e '/dest="tmp\//d' \
           -e '/untar/d' \
@@ -68,12 +65,12 @@ stdenv.mkDerivation  {
   '';
 
   meta = {
-      description = "w3c CSS validator";
-      homepage = http://dev.w3.org/cvsweb/2002/css-validator/;
-      # dependencies ship their own license files
-      # I think all .java files are covered by this license (?)
-      license = "w3c"; # http://www.w3.org/Consortium/Legal/ 
-      maintainers = [args.lib.maintainers.marcweber];
-      platforms = args.lib.platforms.linux;
+    description = "W3C CSS validator";
+    homepage = http://dev.w3.org/cvsweb/2002/css-validator/;
+    # dependencies ship their own license files
+    # I think all .java files are covered by this license (?)
+    license = "w3c"; # http://www.w3.org/Consortium/Legal/ 
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

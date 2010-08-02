@@ -1,22 +1,23 @@
 This patch allows us to install the Vixie-compatible binaries as
-non-root.
+non-root without creating /var/run, etc.
 
---- mcron-1.0.4/makefile.in	2008-02-21 20:55:24.000000000 +0100
-+++ mcron-1.0.4/makefile.in	2009-04-03 20:18:44.000000000 +0200
-@@ -872,15 +872,11 @@ mcron.c : main.scm crontab.scm makefile.
+--- mcron-1.0.6/makefile.in	2010-06-19 20:44:17.000000000 +0200
++++ mcron-1.0.6/makefile.in	2010-07-04 16:16:25.000000000 +0200
+@@ -1004,15 +1004,11 @@ mcron.c : main.scm crontab.scm makefile.
  	@rm -f mcron.escaped.scm > /dev/null 2>&1
  
  install-exec-hook:
--	@if [ "`id -u`" -eq "0" ]; then \
-+	@if true; then \
- 	   rm -f $(fpp)cron$(EXEEXT) > /dev/null 2>&1; \
- 	   $(INSTALL) --mode='u=rwx' mcron$(EXEEXT) $(fpp)cron$(EXEEXT); \
- 	   rm -f $(fpp)crontab$(EXEEXT) > /dev/null 2>&1; \
- 	   $(INSTALL) --mode='u=rwxs,og=rx' mcron$(EXEEXT) $(fpp)crontab$(EXEEXT); \
--	   ./mkinstalldirs -m 'u=rwx' /var/cron; \
--	   ./mkinstalldirs -m 'u=rwx,og=rx' /var/run; \
--	   ./mkinstalldirs -m 'u=rwx,og=rx' @GUILE_SITE@; \
--	   ./mkinstalldirs -m 'u=rwx,og=rx' @GUILE_SITE@/mcron; \
+-	@if [ "x@NO_VIXIE_CLOBBER@" != "xyes"   -a   "`id -u`" -eq "0" ]; then \
++	@if [ "x@NO_VIXIE_CLOBBER@" != "xyes" ]; then \
+        rm -f $(fpp)cron$(EXEEXT) > /dev/null 2>&1; \
+        $(INSTALL) --mode='u=rwx' mcron$(EXEEXT) $(fpp)cron$(EXEEXT); \
+        rm -f $(fpp)crontab$(EXEEXT) > /dev/null 2>&1; \
+        $(INSTALL) --mode='u=rwxs,og=rx' mcron$(EXEEXT) $(fpp)crontab$(EXEEXT); \
+-       $(INSTALL) -d --mode='u=rwx' $(DESTDIR)/var/cron; \
+-       $(INSTALL) -d --mode='u=rwx,og=rx' $(DESTDIR)/var/run; \
+-       $(INSTALL) -d --mode='u=rwx,og=rx' $(DESTDIR)@GUILE_SITE@; \
+-       $(INSTALL) -d --mode='u=rwx,og=rx' $(DESTDIR)@GUILE_SITE@/mcron; \
+     elif [ "x@NO_VIXIE_CLOBBER@" = "xyes" ]; then \
+        echo "Not installing Vixie-style programs"; \
      else \
-        echo "+++ WARNING: NON-ROOT INSTALL: ONLY mcron WILL BE INSTALLED, NOT ANY OF THE VIXIE REPLACEMENT PROGRAMS"; \
- 	fi
+

@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, which, texLive }:
 
 stdenv.mkDerivation {
   name = "EProver-0.999";

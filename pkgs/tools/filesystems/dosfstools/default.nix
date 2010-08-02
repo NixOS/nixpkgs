@@ -1,4 +1,4 @@
-args : with args; with builderDefs;
+{builderDefs}: with builderDefs;
        let localDefs = builderDefs.passthru.function (rec {
          src = /* put a fetchurl here */
            fetchurl {

@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   # "fixed" path in generated files!
   dontPatchShebangs = true;
 
+  patches = [ ./more-robust-silent-tests.patch ];
+
   meta = {
     homepage = http://www.gnu.org/software/automake/;
     description = "GNU Automake, a GNU standard-compliant makefile generator";

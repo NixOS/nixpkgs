@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kdelibs, cmake, gettext, perl, automoc4, qt4, phonon }:
 
 stdenv.mkDerivation rec {
-  name = "yakuake-2.9.6";
+  name = "yakuake-2.9.7";
 
   src = fetchurl {
     url = "http://download.berlios.de/yakuake/${name}.tar.bz2";
-    sha256 = "08n6kdzk205rq1bs4yx5f2qawz6xigdhn9air0pbjsi1j630yfzq";
+    sha256 = "0azzvbh3jwz8yhn6gqd46ya7589sadfjyysw230vlf0zlfipdlvd";
   };
 
   buildInputs = [ kdelibs cmake gettext perl automoc4 qt4 phonon stdenv.gcc.libc ];

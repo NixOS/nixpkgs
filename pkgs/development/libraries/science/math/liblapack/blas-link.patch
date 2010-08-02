@@ -6,7 +6,7 @@ diff -Naur lapack-3.2.old/SRC/Makefile lapack-3.2/SRC/Makefile
  
  ../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ)
 -	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ)
-+	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ) -lblas
++	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ) ${BLASLIB}
  	$(RANLIB) $@
  
  single: $(SLASRC) $(ALLAUX) $(SCLAUX) 
@@ -18,7 +18,7 @@ diff -Naur lapack-3.2.old/TESTING/MATGEN/Makefile lapack-3.2/TESTING/MATGEN/Make
  ../../$(TMGLIB): $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN)	\
  		$(ZMATGEN) $(DZATGEN)
 -	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
-+	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) -lblas
++	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) ${BLASLIB}
  	$(RANLIB) $@
  
  single: $(SMATGEN) $(SCATGEN)

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
-  doCheck = (builtins.currentSystem != "i686-cygwin");
+  doCheck = (stdenv.system != "i686-cygwin");
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!

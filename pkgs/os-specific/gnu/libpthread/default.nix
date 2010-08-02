@@ -5,11 +5,11 @@
 assert (cross != null) -> (gccCross != null) && (glibcCross != null);
 
 let
-  date = "2010-05-12";
+  date = "20100512";
 
-  # Use the weird branch prescribed in
+  # Use the `tschwinge/Peter_Herbolzheimer' branch as prescribed in
   # <http://www.gnu.org/software/hurd/hurd/building/cross-compiling.html>.
-  rev = "tschwinge/Peter_Herbolzheimer@{${date}}";
+  rev = "c4bb52770f0b6703bef76c5abdd08663b46b4dc9";
 in
 stdenv.mkDerivation ({
   name = "libpthread-hurd-${date}";
@@ -56,10 +56,12 @@ stdenv.mkDerivation ({
    passthru = {
      # Extra target LDFLAGS to allow the cross-linker to find the
      # dependencies of the cross libpthread.so, namely libihash.so.
+     # Note: these are raw `ld' flags, so `-Wl,' must be prepended when using
+     # `gcc'.
      #
      # This is actually only useful while building the final cross-gcc, since
      # afterwards gcc-cross-wrapper should add the relevant flags.
-     TARGET_LDFLAGS = "-Wl,-rpath-link=${hurd}/lib";
+     TARGET_LDFLAGS = "-rpath-link=${hurd}/lib";
    };
  }
  else { }))

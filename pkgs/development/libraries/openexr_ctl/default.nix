@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, openexr, ilmbase, ctl }:
+
 stdenv.mkDerivation {
   name = "openexr_ctl-1.0.1";
 
@@ -7,18 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1jg9smpaplal8l14djp184wzk11nwd3dvm4lhkp69kjgw8jdd21d";
   };
 
-  propagatedBuildInputs = [ilmbase];
-  buildInputs = [openexr ctl];
-  configureFlags="--with-ilmbase-prefix=${ilmbase}";
-  #configurePhase = "
-    #export CXXFLAGS=\"-I${ilmbase}/include -L${ilmbase}/lib\"
-    #echo $CXXFLAGS
-    #unset configurePhase; configurePhase
-  #";
+  propagatedBuildInputs = [ ilmbase ];
+  
+  buildInputs = [ openexr ctl ];
+  
+  configureFlags = "--with-ilmbase-prefix=${ilmbase}";
 
   meta = {
-      description = "Color Transformation Language";
-      homepage = http://ampasctl.sourceforge.net;
-      license = "SOME OPEN SOURCE LICENSE"; # TODO which exactly is this?
+    description = "Color Transformation Language";
+    homepage = http://ampasctl.sourceforge.net;
   };
 }

@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, pango
+, gettext, zlib, boost, freetype, libpng, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mrhgwp8iw27ifpavnf4y69zf9fqfy7j4sfwkfzsay226sp4gw3y";
   };
 
-  buildInputs = [SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib boost freetype libpng pkgconfig];
+  buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib boost freetype libpng pkgconfig ];
 
   configureFlags = "--with-preferences-dir=.${name} --program-suffix=-${version} --with-datadir-name=${name} --with-boost=${boost}/include --disable-python";
 

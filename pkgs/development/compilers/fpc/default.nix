@@ -1,8 +1,6 @@
-args:
+{ stdenv, fetchurl, gawk }:
 
-if args ? startFPC && args.startFPC != null then
-
-with args;
+let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
 
 stdenv.mkDerivation rec {
   version = "2.4.0";
@@ -13,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1m2g2bafjixbwl5b9lna5h7r56y1rcayfnbp8kyjfd1c1ymbxaxk";
   };
 
-  buildInputs = [startFPC gawk];
+  buildInputs = [ startFPC gawk ];
 
   preConfigure =
-    if system == "i686-linux" || system == "x86_64-linux" then ''
+    if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
       sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
     '' else "";
 
@@ -38,5 +36,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-
-else (import ./default.nix (args // {startFPC = (import ./binary.nix args);}))

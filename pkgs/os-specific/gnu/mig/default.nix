@@ -1,8 +1,8 @@
 { fetchgit, stdenv, autoconf, automake, flex, bison, machHeaders }:
 
 let
-  date = "2010-05-12";
-  rev = "master@{${date}}";
+  date = "20100512";
+  rev = "4fee6a5652f609cb68cdbd9049d4da7a194f15f8";
 in
 stdenv.mkDerivation {
   name = "mig-${date}";

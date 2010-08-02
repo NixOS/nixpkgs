@@ -33,10 +33,30 @@ stdenv.mkDerivation {
   buildPhase = ''
     make clean
     make lib
+    echo >make.inc  "SHELL = ${stdenv.shell}"
+    echo >>make.inc "PLAT ="
+    echo >>make.inc "FORTRAN = gfortran"
+    echo >>make.inc "OPTS = -O2 -fPIC"
+    echo >>make.inc "DRVOPTS = \$(OPTS)"
+    echo >>make.inc "NOOPT = -O0 -fPIC"
+    echo >>make.inc "LOADER = gfortran"
+    echo >>make.inc "LOADOPTS = "
+    echo >>make.inc "TIMER = INT_ETIME"
+    echo >>make.inc "ARCH = ar rcs"
+    echo >>make.inc "RANLIB = ranlib"
+    echo >>make.inc "BLASLIB = "
+    echo >>make.inc "ARCHFLAGS ="
+    echo >>make.inc "LAPACKLIB    = liblapack.a"
+    echo >>make.inc "TMGLIB       = tmglib.a"
+    echo >>make.inc "EIGSRCLIB    = eigsrc.a"
+    echo >>make.inc "LINSRCLIB    = linsrc.a"
+    make clean
+    make lib
   '';
 
   installPhase = ''
     ensureDir "$out/lib"
+    install -m755 *.a* "$out/lib"
     install -m755 *.so* "$out/lib"
     ln -sf liblapack.so.3 "$out/lib/liblapack.so"
     ln -sf libtmglib.so.3 "$out/lib/libtmglib.so"

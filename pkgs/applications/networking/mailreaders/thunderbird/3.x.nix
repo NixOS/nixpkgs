@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, perl, python, zip, libIDL
 , dbus_glib, bzip2, alsaLib, nspr
+, libnotify, cairo, pixman, fontconfig
 
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Shredder", enable this option.  However, those
@@ -10,18 +11,21 @@
     
 }:
 
-let version = "3.0.4"; in
+let version = "3.1.1"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "5a6e89096da61a520e5cecb61f8afeb981f90412";
+    sha1 = "8e25fd786fbe094c3f4d9bc4e18285701bd42279";
   };
 
   buildInputs =
-    [ pkgconfig perl python zip bzip2 gtk dbus_glib alsaLib libIDL nspr ];
+    [ pkgconfig perl python zip bzip2 gtk dbus_glib alsaLib libIDL nspr libnotify
+      libnotify cairo pixman fontconfig ];
+
+  NIX_LDFLAGS = "-lpixman-1";
 
   configureFlags =
     [ "--enable-application=mail"
@@ -34,6 +38,7 @@ stdenv.mkDerivation {
       "--with-system-nspr"
       "--enable-system-cairo"
       "--disable-crashreporter"
+      "--disable-necko-wifi"
       "--disable-tests"
       "--enable-static" # required by `make install'
     ]

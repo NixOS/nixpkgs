@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "rt73-fw-1.8";
   src = fetchurl {
     url = "http://www.ralinktech.com/download.php?t=U0wyRnpjMlYwY3k4eU1EQTVMekF6THpNeEwyUnZkMjVzYjJGa056YzVPVE13TmpZMk9TNTZhWEE5UFQxU1ZEY3hWMTlHYVhKdGQyRnlaVjlXTVM0NEM%3D";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   # says: "Your rights to redistribute the Software shall be
   # contingent upon your installation of this Agreement in its
   # entirety in the same directory as the Software."
-  installPhase = "ensureDir $out; cp * $out";
+  installPhase = "ensureDir $out/${name}; cp *.bin $out; cp *.txt $out/${name}";
   
   meta = {
     description = "Firmware for the Ralink RT73 wireless card";

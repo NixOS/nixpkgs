@@ -1,19 +1,19 @@
-{stdenv, fetchurl, zlib}:
+{ stdenv, fetchurl, zlib }:
 
-stdenv.mkDerivation {
-  name = "pciutils-3.1.2";
+stdenv.mkDerivation rec {
+  name = "pciutils-3.1.7";
   
   src = fetchurl {
-    url = mirror://kernel/software/utils/pciutils/pciutils-3.1.2.tar.bz2;
-    sha256 = "15wksvqcgdj0hvsp5irc1igiqid69rrzpc33qj9nlyssvyw40vpn";
+    url = "mirror://kernel/software/utils/pciutils/${name}.tar.bz2";
+    sha256 = "0i7mqf1fkmdqsawdk2badv6k3xrkryq0i2xknclvy6kcjsv27znq";
   };
   
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   pciids = fetchurl {
     # Obtained from http://pciids.sourceforge.net/v2.2/pci.ids.bz2.
-    url = http://nixos.org/tarballs/pci.ids.20090727.bz2;
-    sha256 = "0q7fs5ww92a6v5dc514ff4vy7v9hzpdqbd1agbafc2wk2zgi10mk";
+    url = http://nixos.org/tarballs/pci.ids.20100714.bz2;
+    sha256 = "0vll4svr60l6217yna7bfhcjm3prxr2b62ynq4jaagdp1rilfbap";
   };
 
   # Override broken auto-detect logic.

@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "stun-0.96.dfsg-5";
 
@@ -26,11 +27,10 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "stun server and test client";
-    longDescription = "eg useful to debug voip trouble";
+    description = "Stun server and test client";
     homepage = http://sourceforge.net/projects/stun/;
     license = "Vovida 1.0"; # See any header file.
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, autoconf, automake }:
+
 stdenv.mkDerivation {
   name = "bridge-utils-1.2";
 
@@ -7,13 +8,13 @@ stdenv.mkDerivation {
     sha256 = "0jg3z51c2c34byg4zi39j9g4b66js5kanjhid77hpa0jdfmryfy9";
   };
 
-  buildInputs = [autoconf automake];
+  buildInputs = [ autoconf automake ];
 
-  preConfigure="autoreconf";
+  preConfigure = "autoreconf";
 
   meta = { 
-      description = "http://sourceforge.net/projects/bridge/";
-      homepage = [ "http://www.linux-foundation.org/en/Net:Bridge/" "http://sourceforge.net/projects/bridge/" ];
-      license = "GPL";
+    description = "http://sourceforge.net/projects/bridge/";
+    homepage = [ "http://www.linux-foundation.org/en/Net:Bridge/" "http://sourceforge.net/projects/bridge/" ];
+    license = "GPL";
   };
 }

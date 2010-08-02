@@ -1,12 +1,13 @@
 { stdenv, fetchurl, gettext, freetype, zlib
 , libungif, libpng, libjpeg, libtiff, libxml2
+, withX11 ? false
 , libX11 ? null, lib, xproto ? null, libXt ? null
 }:
 
 let 
   version = "20090408";
   name = "fontforge-${version}";
-  in
+in
 
 stdenv.mkDerivation {
   inherit name;
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "1s9a1mgbr5sv5jx6rdj2v3p6s52hgjr9wqd1aq57kn9whc8ny8y4";
   };
     
-  configureFlags = if libX11 != null then "--with-gui=gdraw" else "";
+  configureFlags = lib.optionalString withX11 "--with-gui=gdraw";
   
   preConfigure = ''
     unpackFile ${freetype.src}
@@ -30,9 +31,6 @@ stdenv.mkDerivation {
   '';
 
   buildInputs =
-    [gettext freetype zlib libungif libpng libjpeg libtiff libxml2]
-    ++ lib.optional (libX11 != null) libX11
-    ++ lib.optional (xproto != null) xproto
-    ++ lib.optional (libXt != null) libXt
-    ;
+    [ gettext freetype zlib libungif libpng libjpeg libtiff libxml2 ]
+    ++ lib.optionals withX11 [ libX11 xproto libXt ];
 }

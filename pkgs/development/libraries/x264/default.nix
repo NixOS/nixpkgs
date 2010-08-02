@@ -1,12 +1,12 @@
 {stdenv, fetchurl, yasm}:
 
 stdenv.mkDerivation rec {
-  version = "snapshot-20100429-2245";
+  version = "snapshot-20100624-2245";
   name = "x264-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-${version}.tar.bz2";
-    sha256 = "16b24mc63zyp4h4fqyvgzbdclnhpay4l72yfqzwnzsnlby94zwcj";
+    sha256 = "0hva3j7h99hl3l1p32a1j6p35s5aakkg3plp8xx1wk6qplxhkqsq";
   };
 
   patchPhase = ''

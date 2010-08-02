@@ -14,7 +14,7 @@ rec {
   buildPatchelfRPM = buildRPM {
     name = "patchelf-rpm";
     src = patchelf.src;
-    diskImage = diskImages.fedora12i386;
+    diskImage = diskImages.fedora13i386;
   };
 
   

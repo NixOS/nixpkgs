@@ -8,11 +8,11 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "hal-0.5.13";
+  name = "hal-0.5.14";
 
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1by8z7vy1c1m3iyh57rlqx6rah5gj6kx3ba30s9305bnffij5kzb";
+    sha256 = "00ld3afcbh4ckb8sli63mm2w69zh6ip4axhy1lxyybgiabxaqfij";
   };
 
   buildInputs = [

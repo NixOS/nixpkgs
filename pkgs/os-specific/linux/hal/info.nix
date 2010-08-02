@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "hal-info-20090716";
+  name = "hal-info-20091130";
   
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "179m2ip79jpr1mrmbcm2nx7l1mjlwcfmlw4ycd4dh0jrib64m3sp";
+    sha256 = "092jhzpxa2h8djf8pijql92m70q87yds22686ryrfna3xbm90niv";
   };
 
   meta = {

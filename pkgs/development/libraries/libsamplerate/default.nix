@@ -1,23 +1,19 @@
-args: with args;
-stdenv.mkDerivation {
+{ stdenv, fetchurl, pkgconfig, fftw, libsndfile }:
 
-  name = "libsamplerate-0.1.2";
+stdenv.mkDerivation rec {
+  name = "libsamplerate-0.1.7";
 
-  src = args.fetchurl {
-    url = http://www.mega-nerd.com/SRC/libsamplerate-0.1.2.tar.gz;
+  src = fetchurl {
+    url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
     sha256 = "1m1iwzpcny42kcqv5as2nyb0ggrb56wzckpximqpp2y74dipdf4q";
   };
 
+  buildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ fftw libsndfile ];
 
-  buildInputs = ["pkgconfig"];
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
   #--disable-cpu-clip      disable tricky cpu specific clipper
-
-  configurePhase = "
-   export LIBSAMPLERATE_CFLAGS=\"-I \$libsamplerate/include\"
-   export LIBSAMPLERATE_LIBS=\"-L \$libsamplerate/libs\"
-   ./configure --prefix=\$out";
 
   meta = {
     description = "Sample Rate Converter for audio";

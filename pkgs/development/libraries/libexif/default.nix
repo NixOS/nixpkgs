@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   name = "libexif-0.6.16";
@@ -8,5 +8,5 @@ stdenv.mkDerivation rec {
     sha256 = "0hxc3aik3sn8xq4mbmxxb8ycx2lwffmhi5xvz0zjffhfwkaqas6v";
   };
 
-  buildInputs = [gettext];
+  buildInputs = [ gettext ];
 }

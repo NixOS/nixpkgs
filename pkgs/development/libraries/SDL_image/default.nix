@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_image";

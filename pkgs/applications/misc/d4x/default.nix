@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, gtk, glib, pkgconfig, openssl, boost }:
+
 stdenv.mkDerivation {
   name = "d4x-2.5.7.1";
   
@@ -12,11 +13,12 @@ stdenv.mkDerivation {
   configurePhase = "./configure --prefix=\$out "
     + " --with-boost-libdir=\$boost/lib"
     + " --with-boost-includedir=\$boost/include";
-  buildInputs = [gtk glib pkgconfig openssl boost];
+    
+  buildInputs = [ gtk glib pkgconfig openssl boost ];
 
   meta = { 
-      description = "graphical download manager";
-      homepage = http://www.krasu.ru/soft/chuchelo/;
-      license = "Artistic";
+    description = "Graphical download manager";
+    homepage = http://www.krasu.ru/soft/chuchelo/;
+    license = "Artistic";
   };
 }

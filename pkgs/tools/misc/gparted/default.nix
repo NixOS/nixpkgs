@@ -1,4 +1,6 @@
-args: with args;
+{ stdenv, fetchurl, parted, gtk, glib, intltool, gettext, libuuid
+, pkgconfig, gtkmm, gnomedocutils, libxml2 }:
+
 stdenv.mkDerivation {
   name = "gparted-0.5.1";
 
@@ -9,12 +11,14 @@ stdenv.mkDerivation {
 
   configureFlags = "--disable-doc";
 
-  buildInputs = [parted gtk glib intltool gettext libuuid pkgconfig
-    gtkmm gnomedocutils libxml2];
+  buildInputs =
+    [ parted gtk glib intltool gettext libuuid pkgconfig gtkmm
+      gnomedocutils libxml2
+    ];
 
   meta = { 
-      description = "gui partition tool";
-      homepage = http://gparted.sourceforge.net;
-      license = "GPLv2";
+    description = "Graphical disk partitioning tool";
+    homepage = http://gparted.sourceforge.net;
+    license = "GPLv2";
   };
 }

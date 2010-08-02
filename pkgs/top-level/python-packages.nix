@@ -4,11 +4,11 @@ rec {
   inherit (pkgs) fetchurl fetchsvn stdenv;
 
   argparse = buildPythonPackage (rec {
-    name = "argparse-0.9.1";
+    name = "argparse-1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
-      sha256 = "00jw32wwccpf9smraywjk869b93w7f99rw8gi63yfhw6379fnq6m";
+      sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
     };
 
     buildInputs = [ pkgs.unzip ];
@@ -117,11 +117,11 @@ rec {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.3.1";
+    name = "darcsver-1.5.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      sha256 = "1a5cl2yhnd88a4vkc9r381cbjkcvga87dp9zx5av68857q1nvvvq";
+      sha256 = "e643d607f27e4b8cc96565432ff1abdc2af5e9061c70798e2f33e78c07b66b3a";
     };
 
     # Note: We don't actually need to provide Darcs as a build input.
@@ -156,11 +156,11 @@ rec {
   });
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.4.2";
+    name = "foolscap-0.5.1";
 
     src = fetchurl {
       url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "14g89kjxxci3ssl9jgvpkyrcq62g361aw8pamlkclk8nnrh4f776";
+      sha256 = "c7dfb6f9331e05a8d9553730493b4740c7bf4b4cd68ba834061f0ca0d455492d";
     };
 
     propagatedBuildInputs = [ twisted pkgs.pyopenssl ];
@@ -293,6 +293,55 @@ rec {
     };
   });
 
+  mock = buildPythonPackage (rec {
+    name = "mock-0.1.0";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/python-mock/pythonmock-0.1.0.zip";
+      sha256 = "0r17f8sjq6pjlfh2sq2x80bd5r6y9sb3n5l05x5sf25iaba7sg9z";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    phases = "unpackPhase";
+
+    unpackPhase =
+      '' mkdir "${name}"
+         unzip "$src"
+
+         ensureDir "$out/lib/${python.libPrefix}/site-packages"
+         cp -v mock.py "$out/lib/${python.libPrefix}/site-packages"
+      '';
+
+    meta = {
+      description = "Mock objects for Python";
+
+      homepage = http://python-mock.sourceforge.net/;
+
+      license = "mBSD";
+    };
+  });
+
+  mock060 = pkgs.lowPrio (buildPythonPackage (rec {
+    # TODO: This appears to be an unofficially hacked version of 'mock'
+    #       from above. This could probably replace the previous
+    #       package, but I don't have time to test that right now.
+    name = "mock-0.6.0";
+
+    src = fetchurl {
+      url = "http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/${name}.tar.bz2";
+      sha256 = "1vwxzr2sjyl3x5jqgz9swpmp6cyhmwmab65akysfglf6acmn3czf";
+    };
+    doCheck = false;            # Package doesn't have any tests.
+
+    meta = {
+      description = "Mock objects for Python, provided by tahoe-lafs.org";
+      homepage = "http://python-mock.sourceforge.net/";
+      license = "mBSD";
+    };
+  }));
+
+
   namebench = buildPythonPackage (rec {
     name = "namebench-1.0.5";
 
@@ -327,11 +376,12 @@ rec {
   });
 
   nevow = buildPythonPackage (rec {
-    name = "nevow-0.9.33";
+    name = "nevow-${version}";
+    version = "0.10.0";
 
     src = fetchurl {
-      url = "http://divmod.org/trac/attachment/wiki/SoftwareReleases/Nevow-0.9.33.tar.gz?format=raw";
-      sha256 = "1b6zhfxx247b60n1qi2hrawhiaah88v8igg37pf7rjkmvy2z1c6c";
+      url = "http://divmod.org/trac/attachment/wiki/SoftwareReleases/Nevow-${version}.tar.gz?format=raw";
+      sha256 = "90631f68f626c8934984908d3df15e7c198939d36be7ead1305479dfc67ff6d0";
       name = "${name}.tar.gz";
     };
 
@@ -366,6 +416,22 @@ rec {
     };
   });
 
+  notify = pkgs.stdenv.mkDerivation (rec {
+    name = "python-notify-0.1.1";
+
+    src = fetchurl {
+      url = http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2;
+      sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
+    };
+
+    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.gtkLibs.glib pkgs.gtkLibs.gtk pkgs.dbus_glib ];
+
+    meta = {
+      description = "Python bindings for libnotify";
+      homepage = http://www.galago-project.org/;
+    };
+  });
+
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.4.1";
 
@@ -374,16 +440,16 @@ rec {
       sha256 = "01lf3nc2lp1qkrqnnar50vb7i6y07d1zs6f9yc3kw4p5fd2vhyrf";
     };
 
+    # TODO: add ATLAS=${pkgs.atlas}
+    installCommand = ''
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      python setup.py build --fcompiler="gnu95"
+      python setup.py install --root="$out"
+    '';
     doCheck = false;
 
-    buildInputs = [ pkgs.liblapack pkgs.blas /* pkgs.gfortran */ ];
-
-    # The build should be run as follows:
-    #
-    #   python setup.py config_fc --fcompiler=gnu95 build
-    #   python setup.py config_fc --fcompiler=gnu95 install
-    #
-    # But I con't figure out how to pass the extra flags to setuptools.
+    buildInputs = [ pkgs.gfortran ];
+    propagatedBuildInputs = [ pkgs.liblapack pkgs.blas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -443,15 +509,35 @@ rec {
     };
   };
 
+  pyasn1 = buildPythonPackage ({
+    name = "pyasn1-0.0.11a";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/pyasn1/pyasn1-devel/0.0.11a/pyasn1-0.0.11a.tar.gz";
+      sha256 = "0b7q67ygdk48zn07pyhyg7r0b74gds50652ndpzfw4vs8l3vjg0b";
+    };
+
+    meta = {
+      description = "ASN.1 tools for Python";
+
+      homepage = http://pyasn1.sourceforge.net/;
+
+      license = "mBSD";
+
+      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    };
+  });
+
   pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.5.15";
+    name = "pycryptopp-0.5.19";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
-      sha256 = "0f8v3cs8vjpj423yx3ikj7qjvljrm86x0qpkckidv69kah8kndxa";
+      sha256 = "6b610b3e5742d366d4fbe96b5f20d8459db9aba4fb802e6e5aab547f22ad04b9";
     };
 
-    # Use our own copy of Crypto++.
+    # Prefer crypto++ library from the Nix store over the one that's included
+    # in the pycryptopp distribution.
     preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
 
     buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
@@ -551,15 +637,18 @@ rec {
   });
 
   pyutil = buildPythonPackage (rec {
-    name = "pyutil-1.3.30";
+    name = "pyutil-1.7.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyutil/${name}.tar.gz";
-      sha256 = "1ksb4gn8x53wcyddmjv1ma8cvvhjlmfxc6kpszyhb838i7xzla19";
+      sha256 = "c303bb779f96073820e2eb7c9692fe15a57df491eb356839f3cb3377ed03b844";
     };
 
-    buildInputs = [ setuptoolsDarcs ];
-    propagatedBuildInputs = [ zbase32 argparse ];
+    buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
+    propagatedBuildInputs = [ zbase32 argparse twisted ];
+    # Tests fail because they try to write new code into the twisted
+    # package, apparently some kind of plugin.
+    doCheck = false;
 
     meta = {
       description = "Pyutil, a collection of mature utilities for Python programmers";
@@ -599,15 +688,16 @@ rec {
   });
 
   setuptoolsDarcs = buildPythonPackage {
-    name = "setuptools-darcs-1.2.8";
+    name = "setuptools-darcs-1.2.9";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/setuptools_darcs-1.2.8.tar.gz";
-      sha256 = "0jg9q9mhsky444mm7lpmmlxai8hmjg4pc71viv4kni8gls0gk9n8";
+      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/setuptools_darcs-1.2.9.tar.gz";
+      sha256 = "d37ce11030addbd729284c441facd0869cdc6e5c888dc5fa0a6f1edfe3c3e617";
     };
 
     # In order to break the dependency on darcs -> ghc, we don't add
     # darcs as a propagated build input.
+    propagatedBuildInputs = [ darcsver ];
 
     meta = {
       description = "setuptools plugin for the Darcs version control system";
@@ -619,11 +709,11 @@ rec {
   };
 
   setuptoolsTrial = buildPythonPackage {
-    name = "setuptools-trial-0.5.3";
+    name = "setuptools-trial-0.5.9";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.3.tar.gz";
-      sha256 = "0h3mgjsz3z1sjl9j0b6bv4bss8d0przamj4gnjmpyazc633hhlyi";
+      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.9.tar.gz";
+      sha256 = "4e3b5a183b9cf6ff637777c9852dfe8eaab156289e7a578525d68b1cfb3c9f29";
     };
 
     propagatedBuildInputs = [ twisted ];
@@ -638,12 +728,11 @@ rec {
   };
 
   simplejson = buildPythonPackage (rec {
-    name = "simplejson-2.0.9";
+    name = "simplejson-2.1.1";
 
-    src = fetchsvn {
-      url = "http://simplejson.googlecode.com/svn/tags/${name}";
-      sha256 = "a48d5256fdb4f258c33da3dda110ecf3c786f086dcb08a01309acde6d1ddb921";
-      rev = "172";  # to be on the safe side
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/simplejson/${name}.tar.gz";
+      sha256 = "8c1c833c5b997bf7b75bf9a02a2d2884b8427816228eac0fb84791be44d2f612";
     };
 
     meta = {
@@ -685,11 +774,11 @@ rec {
   };
 
   twisted = buildPythonPackage {
-    name = "twisted-10.0.0";
+    name = "twisted-10.1.0";
 
     src = fetchurl {
-      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.0/Twisted-10.0.0.tar.bz2;
-      sha256 = "1cbqpvwdwsc2av43fyqqdyyxs2j3drbagnl9m5vk7fl9k5q8q4fv";
+      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.1/Twisted-10.1.0.tar.bz2;
+      sha256 = "eda6e0e9e5ef6f6c19ab75bcb094f83a12ee25fe589fbcddf946e8a655c8070b";
     };
 
     propagatedBuildInputs = [ zopeInterface ];
@@ -718,11 +807,11 @@ rec {
   };
 
   zbase32 = buildPythonPackage (rec {
-    name = "zbase32-1.1.1";
+    name = "zbase32-1.1.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zbase32/${name}.tar.gz";
-      sha256 = "0n59l4rs26vrhxpsfrwybjjir68aj23f09k1yjnbxqy5n0khp8gm";
+      sha256 = "2f44b338f750bd37b56e7887591bf2f1965bfa79f163b6afcbccf28da642ec56";
     };
 
     # Tests require `pyutil' so disable them to avoid circular references.
@@ -740,11 +829,11 @@ rec {
   });
 
   zfec = buildPythonPackage (rec {
-    name = "zfec-1.4.4";
+    name = "zfec-1.4.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zfec/${name}.tar.gz";
-      sha256 = "0rgg7nsvbr4f9xmiclzypc39fnivg23kldv5aa8si0bgsxn6mh6w";
+      sha256 = "3335c9054f45e2c59188400e892634b68761b29d06f3cafe525c60484902d379";
     };
 
     buildInputs = [ setuptoolsDarcs ];
@@ -769,10 +858,10 @@ rec {
   });
 
   zopeInterface = buildPythonPackage {
-    name = "zope-interface-3.3.0";
+    name = "zope-interface-3.6.1";
     src = fetchurl {
-      url = http://www.zope.org/Products/ZopeInterface/3.3.0/zope.interface-3.3.0.tar.gz;
-      sha256 = "0xahg9cmagn4j3dbifvgzbjliw2jdrbf27fhqwkdp8j80xpyyjf0";
+      url = "http://pypi.python.org/packages/source/z/zope.interface/zope.interface-3.6.1.tar.gz";
+      sha256 = "294c3c0529e84169177bce78d616c768fa1c028a2fbc1854f615d32ed88dbc6c";
     };
 
     doCheck = false;

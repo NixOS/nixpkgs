@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, rpm, cpio, zlib }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -25,6 +25,7 @@ then. I've tried that.
 TODO tidy this all up. Find source instead of binary. Fix paths ... Find out how to check ink levels etc
  
 */
+
 stdenv.mkDerivation {
   name = "cups-gutenprint-binary-5.0.1";
 
@@ -58,6 +59,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "some additional drivers including canon printer drivers";
+    description = "Some additional CUPS drivers including Canon drivers";
   };
 }

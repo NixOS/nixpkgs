@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_net";

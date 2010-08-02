@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, hal, avahi
+{ stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, liboil, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
-, libcap, alsaLib, libsamplerate, libsndfile, speex }:
+, libcap, alsaLib, libsamplerate, libsndfile, speex, bluez, udev
+, ...}:
 
 stdenv.mkDerivation rec {
   name = "pulseaudio-0.9.21";
@@ -14,10 +15,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gdbm ];
 
   buildInputs = [
-    pkgconfig gnum4 libtool glib dbus hal avahi gconf liboil
+    pkgconfig gnum4 libtool glib dbus avahi gconf liboil
     libsamplerate libsndfile speex alsaLib libcap
     gtk libX11 libICE libSM libXtst libXi
-    intltool gettext
+    intltool gettext bluez udev
   ];
 
   preConfigure = ''
@@ -32,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = ''
-    --disable-solaris --disable-udev --disable-jack --disable-bluez --localstatedir=/var
+    --disable-solaris --disable-hal --disable-jack --localstatedir=/var
+    --disable-oss-output --disable-oss-wrapper
   '';
 
   meta = {

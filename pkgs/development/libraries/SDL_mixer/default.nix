@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, SDL, libogg, libvorbis }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_mixer";

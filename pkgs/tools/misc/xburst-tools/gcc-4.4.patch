@@ -1,0 +1,12 @@
+diff --git a/xbboot/host-app/host_main.c b/xbboot/host-app/host_main.c
+index 8835869..0d6fcc0 100644
+--- a/xbboot/host-app/host_main.c
++++ b/xbboot/host-app/host_main.c
+@@ -9,6 +9,7 @@
+ //
+ 
+ #include <stdio.h>
++#include <stdint.h>
+ #include <string.h>
+ #include <usb.h>
+ #include <time.h>

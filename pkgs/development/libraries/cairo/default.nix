@@ -11,11 +11,11 @@ assert pngSupport -> libpng != null;
 assert xcbSupport -> libxcb != null && xcbutil != null;
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.8.8";
+  name = "cairo-1.8.10";
   
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.gz";
-    sha256 = "140w8pz2k2kmjdaav3rfy009rjf2hqycsnk7lq0nwnf4bpgd6l9w";
+    sha1 = "fd5e8ca82ff0e8542ea4c51612cad387f2a49df3";
   };
 
   buildInputs =

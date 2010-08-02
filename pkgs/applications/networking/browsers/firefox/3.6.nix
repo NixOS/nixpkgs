@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.6.3";
+  firefoxVersion = "3.6.8";
   
-  xulVersion = "1.9.2.3"; # this attribute is used by other packages
+  xulVersion = "1.9.2.8"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1l5290l1jrglvih0957iv8xn5sxmqklx67kqqnv059dsg5fv781m";
+    sha1 = "4936e543f6c7492c5954cbd5b30ddda6b20e3797";
   };
 
 
@@ -46,11 +46,15 @@ rec {
     
     inherit src;
 
+    # To be removed when the change gets upstream. I don't know if the patch
+    # affects xulrunner or firefox.
+    patches = [ ./symlinks-bug551152.patch ];
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib nspr /* nss */ libnotify
+        alsaLib nspr /* nss */ libnotify xlibs.pixman
       ];
 
     configureFlags =
@@ -101,9 +105,14 @@ rec {
 
     inherit src;
 
+    # To be removed when the change gets upstream. I don't know if the patch
+    # affects xulrunner or firefox.
+    patches = [ ./symlinks-bug551152.patch ];
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
+        xlibs.pixman
       ];
 
     propagatedBuildInputs = [xulrunner];

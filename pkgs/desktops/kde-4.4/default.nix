@@ -41,7 +41,7 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   akonadi = import ./support/akonadi {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 shared_mime_info libxslt boost mysql;
+    inherit (pkgs) stdenv fetchurl cmake qt4 shared_mime_info libxslt boost mysql;
     inherit automoc4 soprano;
   };
   
@@ -83,8 +83,8 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdebase_runtime = import ./base-runtime {
-    inherit (pkgs) stdenv fetchurl lib cmake perl bzip2 xz qt4 exiv2 libssh;
-    inherit (pkgs) shared_mime_info xineLib alsaLib samba cluceneCore;
+    inherit (pkgs) stdenv fetchurl lib cmake perl bzip2 xz qt4 exiv2 libssh makeWrapper;
+    inherit (pkgs) shared_mime_info xineLib alsaLib samba cluceneCore virtuoso;
     inherit kdelibs attica;
     inherit automoc4 phonon strigi soprano;
   };
@@ -171,7 +171,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl python shared_mime_info;
     inherit (pkgs.xlibs) libXtst libXi;    
     inherit kdelibs kdebase_workspace kdepimlibs kdebase kdegraphics kdeedu;
-    inherit automoc4 phonon soprano eigen qimageblitz attica;
+    inherit automoc4 phonon soprano eigen qimageblitz attica qca2;
   };
   
   kdegames = import ./games {
@@ -200,7 +200,8 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   kdesdk = import ./sdk {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl libxml2 libxslt boost subversion apr aprutil shared_mime_info;
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl libxml2 libxslt boost
+      subversion apr aprutil shared_mime_info hunspell;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon strigi;
   };
@@ -283,7 +284,7 @@ pkgs.recurseIntoAttrs (rec {
   
   koffice = import ./extragear/koffice {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl lcms exiv2 giflib libxml2 libxslt boost glew;
-    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd libgsf;
+    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd libgsf fftw;
     inherit kdelibs kdepimlibs;
     inherit automoc4 phonon qimageblitz qca2 eigen soprano;
     poppler = pkgs.popplerQt4;
@@ -314,6 +315,13 @@ pkgs.recurseIntoAttrs (rec {
   yakuake = import ./extragear/yakuake {
     inherit (pkgs) stdenv fetchurl cmake perl gettext;
     inherit kdelibs automoc4 qt4 phonon;
+  };
+  
+  k3b = import ./extragear/k3b {
+    inherit (pkgs) stdenv fetchurl cmake qt4 perl shared_mime_info libvorbis taglib gettext;
+    inherit (pkgs) ffmpeg flac libsamplerate libdvdread lame libsndfile libmad;
+    inherit kdelibs kdemultimedia;
+    inherit automoc4 phonon;
   };
 
 ### LOCALIZATION

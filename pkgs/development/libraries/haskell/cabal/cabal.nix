@@ -54,9 +54,12 @@
                 test -f $i && ghc --make $i
               done
 
-              for p in $propagatedBuildNativeInputs; do
+              for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+                if [ -d "$p/include" ]; then
+                  extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
+                fi
                 for d in lib{,64}; do
-                  if [ -e "$p/$d" ]; then
+                  if [ -d "$p/$d" ]; then
                     extraLibDirs="$extraLibDirs --extra-lib-dir=$p/$d"
                   fi
                 done

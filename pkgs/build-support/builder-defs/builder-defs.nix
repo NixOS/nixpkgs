@@ -541,10 +541,11 @@ let inherit (builtins) head tail trace; in
      export PYTHONPATH=$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath $out)
    '') ["minInit" "addInputs" "defEnsureDir"];
 
-   fetchUrlFromSrcInfo = srcInfo: fetchurl {
+   fetchUrlFromSrcInfo = srcInfo: fetchurl ({
      url = srcInfo.url;
      sha256 = srcInfo.hash;
-   };
+   } // 
+   (if (srcInfo ? downloadName) then {name = srcInfo.downloadName;} else {}));
 
    fetchGitFromSrcInfo = srcInfo: fetchgit {
      url = srcInfo.url;

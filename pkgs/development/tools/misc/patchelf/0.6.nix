@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.6pre20950";
+  name = "patchelf-0.6pre22275";
   
   src = fetchurl {
     url = "http://hydra.nixos.org/build/504657/download/2/patchelf-0.6pre22813.tar.bz2";

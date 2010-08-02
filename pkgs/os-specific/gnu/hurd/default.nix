@@ -6,8 +6,10 @@
 assert (cross != null) -> (gccCross != null);
 
 let
-  date   = "2010-05-12";
-  rev    = "master@{${date}}";
+  # Unfortunately we can't use `master@{DATE}', see
+  # <http://www.bramschoenmakers.nl/en/node/645>.
+  date   = "20100512";
+  rev    = "7913beaef3e6a2c4f7f315a8db7a31dbe1f713e0";
   suffix = if headersOnly
            then "-headers"
            else (if buildTarget != "all"

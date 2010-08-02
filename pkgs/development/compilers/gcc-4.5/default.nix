@@ -150,19 +150,31 @@ stdenv.mkDerivation ({
         || (cross != null && cross.config == "i586-pc-gnu"
             && libcCross != null))
     then
-      # On GNU/Hurd glibc refers to Hurd & Mach headers so add the right `-I'
-      # flags to the default spec string.
+      # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
+      # in glibc, so add the right `-I' flags to the default spec string.
       let
         libc = if cross != null then libcCross else stdenv.glibc;
-        config_h = "gcc/config/i386/gnu.h";
+        gnu_h = "gcc/config/gnu.h";
+        i386_gnu_h = "gcc/config/i386/gnu.h";
+        extraCPPDeps =
+             libc.propagatedBuildInputs
+          ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
+          ++ stdenv.lib.optional (libpthread != null) libpthread;
         extraCPPSpec =
           concatStrings (intersperse " "
-                          (map (x: "-I${x}/include")
-                               libc.propagatedBuildInputs));
+                          (map (x: "-I${x}/include") extraCPPDeps));
+        extraLibSpec =
+          if libpthreadCross != null
+          then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
+          else "-L${libpthread}/lib";
       in
-        '' echo "augmenting \`CPP_SPEC' in \`${config_h}' with \`${extraCPPSpec}'..."
-           sed -i "${config_h}" \
+        '' echo "augmenting \`CPP_SPEC' in \`${i386_gnu_h}' with \`${extraCPPSpec}'..."
+           sed -i "${i386_gnu_h}" \
                -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
+
+           echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
+           sed -i "${gnu_h}" \
+               -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "${extraLibSpec} \1|g'
         ''
     else null;
 
@@ -205,8 +217,6 @@ stdenv.mkDerivation ({
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
-    --enable-lto
-    --enable-plugin
     --enable-languages=${
       concatStrings (intersperse ","
         (  optional langC        "c"
@@ -320,7 +330,7 @@ stdenv.mkDerivation ({
     if cross != null && libcCross != null
     then "-B${libcCross}/lib -Wl,-L${libcCross}/lib" +
          (optionalString (libpthreadCross != null)
-           " -L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}")
+           " -L${libpthreadCross}/lib -Wl,${libpthreadCross.TARGET_LDFLAGS}")
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl

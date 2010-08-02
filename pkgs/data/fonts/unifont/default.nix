@@ -1,28 +1,37 @@
-args: with args; with debPackage;
-debBuild ({
-  src = fetchurl {
-    url = mirror://debian/pool/main/u/unifont/unifont_5.1.20080914.orig.tar.gz;
-    sha256 = "1p8f3dkg0zy9f5hwn1q728hps258ll84xg9a7xqbhj2csvnsyajd";
+{ stdenv, fetchurl, mkfontscale, mkfontdir, bdftopcf, fontutil }:
+
+let
+
+  ttf = fetchurl {
+    url = http://unifoundry.com/unifont-5.1.20080907.ttf.gz;
+    sha256 = "03ssxsfhnayarzx15mn6khry2kgdxhkkc1bqzgr0c85ab5xm9jxw";
   };
-  patch = fetchurl {
-    url = mirror://debian/pool/main/u/unifont/unifont_5.1.20080914-1.diff.gz;
-    sha256 = "0faicwbjlgy78zrc94ffg52f71msll8kxc43bks40z8qb02nr7qx";
+
+  pcf = fetchurl {
+    url = http://unifoundry.com/unifont-5.1.20080820.pcf.gz;
+    sha256 = "0qwsgaplb2a79w14rrvazby3kwx7vyk08x70n0ih5dr91x3rqaqj";
   };
-  name = "unifont-5.1-20080914";
-  buildInputs = [mkfontscale mkfontdir bdftopcf fontutil perl];
+
+in
+
+stdenv.mkDerivation {
+  name = "unifont-5.1-20080907";
+
+  buildInputs = [ mkfontscale mkfontdir bdftopcf fontutil ];
+
+  unpackPhase = "true";
+  
+  installPhase =
+    ''
+      ensureDir $out/share/fonts $out/share/fonts/truetype
+      cp ${pcf} $out/share/fonts/unifont.pcf.gz
+      gunzip < ${ttf} > $out/share/fonts/truetype/unifont.ttf
+      cd $out/share/fonts
+      mkfontdir 
+      mkfontscale
+    '';
+    
   meta = {
     description = "Unicode font for Base Multilingual Plane.";
   };
-  #extraReplacements = ''sed -e s@/usr/bin/perl@${perl}/bin/perl@ -i hex2bdf.unsplit'';
-  omitConfigure = true;
-  Install = ''
-    ensureDir $out/share/fonts $out/share/fonts/truetype
-    cd font/precompiled
-    cp unifont.pcf.gz $out/share/fonts
-    cp unifont.ttf $out/share/fonts/truetype 
-    cd $out/share/fonts
-    mkfontdir 
-    mkfontscale
-  '';
-  extraInstallDeps = ["defEnsureDir"];
-} // args)
+}

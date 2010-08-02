@@ -1,0 +1,11 @@
+--- a/src/Makefile	2006-06-12 22:14:20.000000000 +0200
++++ b/src/Makefile	2010-06-17 11:30:11.804018145 +0200
+@@ -198,7 +198,7 @@
+ 	(cd elisp; ci -l $(CINAME) $(CIMSG) *.el)
+ 	ci -l $(CINAME) $(CIMSG) Makefile.nw INSTALL INSTALL.DOS README FAQ COPYRIGHT nwmake *.nw
+ 
+-source: FAQ
++source:
+ 	for i in c shell lib xdoc icon awk tex; do (cd $$i; make CPIF=">" source); done
+ 	sleep 1
+ 	for i in c shell lib xdoc icon awk tex; do (cd $$i; make touch); done

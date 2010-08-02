@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, xorgserver }:
 
 # !!! What does this package do, and does it belong in Nixpkgs?
 

@@ -1,15 +1,15 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  name = "chatzilla-0.9.85";
+stdenv.mkDerivation rec {
+  name = "chatzilla-0.9.86";
   
   src = fetchurl {
     # Obtained from http://chatzilla.rdmsoft.com/xulrunner/.
-    url = http://chatzilla.rdmsoft.com/xulrunner/download/chatzilla-0.9.85-xr.zip;
-    sha256 = "0jd7mq05715vad82sl4ycr7ga587k53dijxz371y3zwpf8479hqx";
+    url = http://chatzilla.rdmsoft.com/xulrunner/download/chatzilla-0.9.86-xr.zip;
+    sha256 = "1z8767arx2ncch0pzkdzhisjgmd45qianahz3xr8isvahv2klj5x";
   };
 
-  buildInputs = [unzip];
+  buildInputs = [ unzip ];
 
   buildCommand = ''
     ensureDir $out

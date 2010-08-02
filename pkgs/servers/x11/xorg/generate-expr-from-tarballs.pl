@@ -21,7 +21,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mesa", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "hal", "openssl", "gperf", "m4");
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mesa", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -46,8 +46,7 @@ while (<>) {
     die unless defined $1;
     my $pkg = $1;
     $pkg =~ s/-//g;
-    #next unless $pkg eq "printproto";
-    #print "$pkg\n";
+    #next unless $pkg eq "xcbutil";
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
     my $pkgName = $1;
@@ -77,25 +76,25 @@ while (<>) {
     my $pkgDir = `echo $tmpDir/*`;
     chomp $pkgDir;
 
-    my $provides = `cd $pkgDir && ls *.pc.in`;
+    my $provides = `find $pkgDir -name "*.pc.in"`;
     my @provides2 = split '\n', $provides;
     my @requires = ();
     
-    print "PROVIDES @provides2\n\n";
     foreach my $pcFile (@provides2) {
         my $pc = $pcFile;
+        $pc =~ s/.*\///;
         $pc =~ s/.pc.in//;
-        die "collission with $pcMap{$pc}" if defined $pcMap{$pc};
+        print "PROVIDES $pc\n";
+        die "collision with $pcMap{$pc}" if defined $pcMap{$pc};
         $pcMap{$pc} = $pkg;
 
-        print "$pkgDir/$pcFile\n";
-        open FOO, "<$pkgDir/$pcFile" or die;
+        open FOO, "<$pcFile" or die;
         while (<FOO>) {
             if (/Requires:(.*)/) {
                 my @reqs = split ' ', $1;
                 foreach my $req (@reqs) {
                     next unless $req =~ /^[a-z]+$/;
-                    print "REQUIRE (from $pcFile): $req\n";
+                    print "REQUIRE (from $pc): $req\n";
                     push @requires, $req;
                 }
             }
@@ -193,6 +192,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /X11_REQUIRES=\'(.*)\'/g;
     process \@requires, $1 while $file =~ /XDMCP_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;

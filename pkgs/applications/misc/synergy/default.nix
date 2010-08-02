@@ -1,4 +1,6 @@
-args: with args;
+{ stdenv, fetchurl, x11, xextproto, libXtst, inputproto, libXi
+, automake, autoconf, sourceFromHead }:
+
 stdenv.mkDerivation {
   name = "synergy-cvs";
 
@@ -10,18 +12,20 @@ stdenv.mkDerivation {
                (fetchurl { url = "http://mawercer.de/~nix/repos/synergy-F_23-55-02.tar.gz"; sha256 = "ae16a9b59039a32e383e71397405d7b610de6c6902c03177c2496bac440d3e28"; });
   # END
 
-  buildInputs = [x11 xextproto libXtst inputproto libXi automake autoconf autoconf];
+  buildInputs = [ x11 xextproto libXtst inputproto libXi automake autoconf ];
 
-  preConfigure = "autoreconf; ";
+  preConfigure = "autoreconf";
 
-  patches = [ (fetchurl {
-    url = http://mawercer.de/~nix/synergy-gcc43-r2.patch.gz;
-    sha256 = "0wnj5k93ybj7jg8ml1i1brwsnszfh41117q2qh7r8xr9m37997b7";
-  }) ];
+  patches =
+    [ (fetchurl {
+        url = http://mawercer.de/~nix/synergy-gcc43-r2.patch.gz;
+        sha256 = "0wnj5k93ybj7jg8ml1i1brwsnszfh41117q2qh7r8xr9m37997b7";
+      })
+    ];
 
-  meta= { 
-      description = "share mouse keyboard and clipboard between computers";
-      homepage = http://synergy2.sourceforge.net;
-      license = "GPL";
+  meta = { 
+    description = "Tool to share the mouse keyboard and the clipboard between computers";
+    homepage = http://synergy2.sourceforge.net;
+    license = "GPL";
   };
 }

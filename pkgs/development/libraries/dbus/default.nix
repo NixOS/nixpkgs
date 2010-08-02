@@ -1,12 +1,14 @@
-{stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true}:
+{ stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.2.16";
+  version = "1.2.24";
   
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1j742d22ablcgxfxa3hcwf5bq6bd1pba7fiwc3dvnjvcdb0k32ln";
+    sha256 = "0j2wb79kndq4b1qqr59n1g6s0lm7yp6r9ny3skimadkh9a7p8b7i";
   };
+
+  patches = [ ./ignore-missing-includedirs.patch ];
   
   configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
   
@@ -15,11 +17,11 @@ in rec {
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
     
-    buildInputs = [pkgconfig expat];
+    buildInputs = [ pkgconfig expat ];
     
-    inherit src configureFlags;
+    inherit src patches configureFlags;
     
-    patchPhase =
+    preConfigure =
       ''
         sed -i '/mkinstalldirs.*localstatedir/d' bus/Makefile.in
         sed -i '/SUBDIRS/s/ tools//' Makefile.in
@@ -31,22 +33,22 @@ in rec {
   tools = stdenv.mkDerivation {
     name = "dbus-tools-" + version;
 
-    inherit src;
+    inherit src patches;
 
     configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
     
-    buildInputs = [pkgconfig expat libs]
-      ++ stdenv.lib.optionals useX11 [libX11 libICE libSM];
+    buildInputs = [ pkgconfig expat libs ]
+      ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
       
-    postConfigure = "cd tools";
-
     NIX_LDFLAGS = "-ldbus-1";
 
-    patchPhase =
+    preConfigure =
       ''
         sed -i 's@ $(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
         substituteInPlace tools/Makefile.in --replace 'install-localstatelibDATA:' 'disabled:'
       '';
+
+    postConfigure = "cd tools";
   };
 
   # I'm too lazy to separate daemon and libs now.

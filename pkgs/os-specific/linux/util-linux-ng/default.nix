@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses ? null, ... }:
+{ stdenv, fetchurl, ncurses ? null }:
 
 stdenv.mkDerivation rec {
   name = "util-linux-ng-2.17.2";

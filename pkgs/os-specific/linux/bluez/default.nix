@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
    
 stdenv.mkDerivation rec {
-  name = "bluez-4.65";
+  name = "bluez-4.69";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.gz";
-    sha256 = "08j9h2cm0d4ifq8jna9lgfg37b3bncmjgxm9nirdrsr6505542sz";
+    sha256 = "1h4fp6l1sflc0l5vg90hzvgldlwv7rqc4cbn2z6axmxv969pmrhh";
   };
 
   buildInputs = [ pkgconfig dbus.libs glib libusb alsaLib ];

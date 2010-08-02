@@ -1,6 +1,8 @@
-args: with args;
-let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {} {
+{ composableDerivation, stdenv, fetchurl, alsaLib, jackaudio, ncurses }:
+
+let inherit (composableDerivation) edf; in
+
+composableDerivation.composableDerivation {} {
 
   name = "timidity-2.13.0";
 
@@ -8,8 +10,6 @@ composableDerivation {} {
     url = http://ovh.dl.sourceforge.net/sourceforge/timidity/TiMidity++-2.13.0.tar.bz2;
     sha256 = "1jbmk0m375fh5nj2awqzns7pdjbi7dxpjdwcix04zipfcilppbmf";
   };
-
-  buildInputs = [];
 
   mergeAttrBy.audioModes = a : b : "${a},${b}";
 
@@ -57,7 +57,6 @@ composableDerivation {} {
 
   meta = {
     description = "A software MIDI renderer";
-    maintainers = [args.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
   };
-
 }

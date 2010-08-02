@@ -1,24 +1,45 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "cpio-2.9";
-  
+stdenv.mkDerivation ({
+  name = "cpio-2.11";
+
   src = fetchurl {
-    url = mirror://gnu/cpio/cpio-2.9.tar.bz2;
-    sha256 = "01s7f9hg8kgpis96j99hgkiqgdy53pm7qi7bhm3fzx58jfk5z6mv";
+    url = mirror://gnu/cpio/cpio-2.11.tar.bz2;
+    sha256 = "1gavgpzqwgkpagjxw72xgxz52y1ifgz0ckqh8g7cckz7jvyhp0mv";
   };
 
-  patches = [
-    # Make it compile on GCC 4.3.
-    (fetchurl {
-      name = "cpio-2.9-gnu-inline.patch";
-      url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/app-arch/cpio/files/cpio-2.9-gnu-inline.patch?rev=1.1";
-      sha256 = "1167hrq64h9lh3qhgasm2rivfzkkgx6fik92b017qfa0q61ff8c3";
-    })
-  ];
+  # Tests fail on Darwin, see
+  # <http://lists.gnu.org/archive/html/bug-cpio/2010-07/msg00012.html> for
+  # details.
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = http://www.gnu.org/software/cpio/;
-    description = "A program to create or extract from cpio archives";
+    description = "GNU cpio, a program to create or extract from cpio archives";
+
+    longDescription =
+      '' GNU cpio copies files into or out of a cpio or tar archive.  The
+         archive can be another file on the disk, a magnetic tape, or a pipe.
+
+         GNU cpio supports the following archive formats: binary, old ASCII,
+         new ASCII, crc, HPUX binary, HPUX old ASCII, old tar, and POSIX.1
+         tar.  The tar format is provided for compatability with the tar
+         program.  By default, cpio creates binary format archives, for
+         compatibility with older cpio programs.  When extracting from
+         archives, cpio automatically recognizes which kind of archive it is
+         reading and can read archives created on machines with a different
+         byte-order.
+      '';
+
+    license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(if stdenv.isLinux
+ then {}
+ else { patches = [ ./darwin-fix.patch ]; }))

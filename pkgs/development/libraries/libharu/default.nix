@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, zlib, libpng }:
+
 stdenv.mkDerivation {
   name = "haru-2.1.0";
 
@@ -9,13 +10,13 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-zlib=${zlib} --with-png=${libpng}";
 
-  buildInputs = [zlib libpng];
+  buildInputs = [ zlib libpng ];
 
   meta = { 
     description = "cross platform, open source library for generating PDF files";
     homepage = http://libharu.org/wiki/Main_Page;
     license = "ZLIB/LIBPNG"; # see README.
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

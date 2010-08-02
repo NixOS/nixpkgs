@@ -1,18 +1,18 @@
-args: with args;
+{ stdenv, fetchurl }:
+
 stdenv.mkDerivation {
   name = "sbagen-1.4.4";
 
-  buildPhases="buildPhase installPhase";
+  buildPhases = "buildPhase installPhase";
 
-  buildPhase="./mk";
+  buildPhase = "./mk";
 
-  installPhase="
-    ensureDir \$out/{bin,share/sbagen/doc}
-    cp -r --target-directory=\$out/share/sbagen examples scripts river1.ogg river2.ogg
+  installPhase = ''
+    ensureDir $out/{bin,share/sbagen/doc}
+    cp -r --target-directory=$out/share/sbagen examples scripts river1.ogg river2.ogg
     cp sbagen $out/bin
-    cp --target-directory=\$out/share/sbagen/doc README.txt SBAGEN.txt theory{,2}.txt {wave,holosync,focus,TODO}.txt
-  
-   ";
+    cp --target-directory=$out/share/sbagen/doc README.txt SBAGEN.txt theory{,2}.txt {wave,holosync,focus,TODO}.txt
+  '';
 
   src = fetchurl {
     url = http://uazu.net/sbagen/sbagen-1.4.4.tgz;
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   };
 
   meta = { 
-      description = "binaural sound generator";
-      homepage = http://uazu.net/sbagen;
-      license = "GPL";
-    };
+    description = "Binaural sound generator";
+    homepage = http://uazu.net/sbagen;
+    license = "GPL";
+  };
 }

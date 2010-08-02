@@ -19,6 +19,8 @@ rec {
       
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
+    mkdir test-home
+    export HOME=$PWD/test-home
   '') ["minInit"];
 
   setVersion = a.fullDepEntry (''

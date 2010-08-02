@@ -1,11 +1,13 @@
 {stdenv, fetchurl, static ? false}:
 
-stdenv.mkDerivation {
-  name = "zlib-1.2.3";
+stdenv.mkDerivation (rec {
+  name = "zlib-1.2.5";
+  
   src = fetchurl {
-    url = http://www.zlib.net/zlib-1.2.3.tar.gz;
-    md5 = "debc62758716a169df9f62e6ab2bc634";
+    url = "http://www.zlib.net/${name}.tar.gz";
+    sha256 = "0n7rlgvjn73pyil3s1l6p77m7wkc809n934rnzxv1b1za4pfar30";
   };
+
   configureFlags = if static then "" else "--shared";
 
   preConfigure = ''
@@ -21,4 +23,7 @@ stdenv.mkDerivation {
 
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
-}
+  
+} // stdenv.lib.optionalAttrs (stdenv.system == "i686-cygwin") {
+  patches = [ ./no-shared.patch ];
+})

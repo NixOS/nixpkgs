@@ -9,11 +9,7 @@ rec {
   startupnotification = startup_notification;
   gnomedocutils = gnome_doc_utils;
   gnomeicontheme = gnome_icon_theme;
-
-  # !!! Missing! Need to add these.
-  gnomepanel = throw "gnomepanel not implemented";
-  gtksourceview_24 = gtksourceview;
-
+  gnomepanel = gnome_panel;
 
 #### PLATFORM
 
@@ -186,6 +182,12 @@ rec {
     inherit GConf gnome_keyring;
   };
 
+  libsoup_2_31 = import ./desktop/libsoup/2.31.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite curl;
+    inherit (pkgs.gtkLibs) glib;
+    inherit GConf gnome_keyring;
+  };
+
   libwnck = import ./desktop/libwnck {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit (pkgs.xlibs) libX11;
@@ -206,7 +208,7 @@ rec {
   };
 
   libgweather = import ./desktop/libgweather {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 libtasn1;
     inherit (pkgs.gtkLibs) gtk;
     inherit intltool GConf libsoup;
   };
@@ -264,7 +266,7 @@ rec {
   };
 
   gnome_panel = import ./desktop/gnome-panel {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib dbus cairo popt which bzip2 python libxslt;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus_glib dbus cairo popt which bzip2 python libxslt libtasn1;
     libxml2 = pkgs.libxml2Python;
     inherit (pkgs.gtkLibs) glib gtk pango atk;
     inherit (pkgs.xlibs) libXau;

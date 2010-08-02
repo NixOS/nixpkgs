@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libnova-0.12.1";

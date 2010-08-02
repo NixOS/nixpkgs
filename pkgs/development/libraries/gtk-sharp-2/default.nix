@@ -16,15 +16,15 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gtk-sharp-1.9.2";
+  name = "gtk-sharp-2.12.10";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://nixos.org/tarballs/gtk-sharp-1.9.2.tar.gz;
-    md5 = "b7c5afab5f736ffa4011974302831363";
+    url = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.12/gtk-sharp-2.12.10.tar.gz;
+    sha256 = "1y55vc2cp4lggmbil2lb28d0gn71iq6wfyja1l9mya5xll8svzwc";
   };
 
-  patches = [ ./dllmap-glue.patch ];
+  # patches = [ ./dllmap-glue.patch ];
 
   buildInputs = [
     pkgconfig mono glib pango gtk GConf libglade libgnomecanvas
@@ -32,5 +32,11 @@ stdenv.mkDerivation {
     gnomepanel
   ];
 
+  dontStrip = true;
+
   inherit monoDLLFixer;
+
+  passthru = {
+    inherit gtk;
+  };
 }

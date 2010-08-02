@@ -13,7 +13,7 @@ rec {
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant 
+    enchant python ruby
     ];
 
   propagatedBuildInputs = [
@@ -23,14 +23,27 @@ rec {
   configureCommand = "./autogen.sh ";
   configureFlags = [
     "--enable-3D-transforms"
-    "--enable-filters"
     "--enable-web-sockets"
-    # WML fails recent builds..
+    "--enable-indexeddb"
+    "--enable-image-resizer"
+
+    # https://bugs.webkit.org/show_bug.cgi?id=41859
+    # "--enable-mathml"
+
+    # "--enable-blob-slice"
+    
+    # Seem incomplete as of now
+    # "--enable-file-reader"
+    # "--enable-file-writer"
+
+    # https://bugs.webkit.org/show_bug.cgi?id=40765
     # "--enable-wml"
+
+    # "--enable-xhtmlmp"
     ];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" "paranoidFixComments" "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["setVars" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   setVars = fullDepEntry (''

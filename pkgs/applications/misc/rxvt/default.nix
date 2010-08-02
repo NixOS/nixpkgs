@@ -1,4 +1,5 @@
-args: with args;
+{ stdenv, fetchurl, libX11, libXt }:
+
 stdenv.mkDerivation {
   name = "rxvt-2.6.4";
 
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 libXt ];
 
   meta = { 
-      description = "colour vt102 terminal emulator with less features and lower memory consumption";
-      homepage = http://www.rxvt.org/;
-      license = "GPL";
+    description = "Colour vt102 terminal emulator with less features and lower memory consumption";
+    homepage = http://www.rxvt.org/;
+    license = "GPL";
   };
 }

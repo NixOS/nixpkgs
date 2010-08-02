@@ -1,9 +1,11 @@
-args: with args;
-stdenv.mkDerivation ( rec {
+{ stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
   pname = "zd1211-firmware";
   version = "1.4";
 
   name = "${pname}-${version}";
+  
   src = fetchurl {
     url = "http://surfnet.dl.sourceforge.net/sourceforge/zd1211/${name}.tar.bz2";
     sha256 = "866308f6f59f7075f075d4959dff2ede47735c751251fecd1496df1ba4d338e1";
@@ -18,4 +20,4 @@ stdenv.mkDerivation ( rec {
     homepage = http://sourceforge.net/projects/zd1211/;
     license = "GPL";
   };
-})
+}

@@ -167,6 +167,7 @@ rec {
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
+    http://archive.debian.org/debian-archive/debian/
   ];
 
   # Ubuntu.
@@ -174,6 +175,7 @@ rec {
     http://nl.archive.ubuntu.com/ubuntu/
     http://de.archive.ubuntu.com/ubuntu/
     http://archive.ubuntu.com/ubuntu/
+    http://old-releases.ubuntu.com/ubuntu/
   ];
 
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
@@ -194,11 +196,10 @@ rec {
 
   # openSUSE.
   opensuse = [
-    http://opensuse.hro.nl/opensuse/
-    http://ftp.funet.fi/pub/linux/mirrors/opensuse/
-    http://ftp5.gwdg.de/pub/opensuse/
-    http://ftp.opensuse.org/pub/opensuse/
-    http://ftp5.gwdg.de/pub/opensuse/discontinued/
+    http://opensuse.hro.nl/opensuse/distribution/
+    http://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/
+    http://ftp.opensuse.org/pub/opensuse/distribution/
+    http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/
   ];
 
   # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).
@@ -243,6 +244,7 @@ rec {
     http://ftp2.nl.postgresql.org/
     ftp://ftp.nl.postgresql.org/pub/mirror/postgresql/
     ftp://ftp.postgresql.org/pub/
+    ftp://ftp-archives.postgresql.org/pub/
   ];
 
 }

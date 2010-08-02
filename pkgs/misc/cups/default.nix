@@ -1,22 +1,15 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
 , dbus, libusb }:
 
-let version = "1.4.1"; in
+let version = "1.4.4"; in
 
 stdenv.mkDerivation {
   name = "cups-${version}";
 
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1fnkq993hr8l87x6f7a7wik2spac3f7nn4wksrvwk690r8a6zxng";
+    md5 = "8776403ad60fea9e85eab9c04d88560d";
   };
-
-  patches =
-    [ (fetchurl {
-        url = http://www.cups.org/strfiles/3332/0001-Fixed-side_cb-function-declaration-in-usb-unix.c.patch;
-        sha256 = "0h8fhhpzp7xngnc428040jv09yvpz5dxb9hw6sv67lnvb03fncnw";
-      })
-    ];
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus libusb ];
 

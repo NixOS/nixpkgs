@@ -4,10 +4,10 @@
 , kdelibs, kdepimlibs, automoc4, phonon, qca2, soprano, qimageblitz, strigi}:
 
 stdenv.mkDerivation {
-  name = "kdenetwork-4.4.4";
+  name = "kdenetwork-4.4.5";
   src = fetchurl {
-    url = mirror://kde/stable/4.4.4/src/kdenetwork-4.4.4.tar.bz2;
-    sha256 = "13aqgr59wm3iackifymd0vmhwd8p998al2bzalvviz5ganmxzyps";
+    url = mirror://kde/stable/4.4.5/src/kdenetwork-4.4.5.tar.bz2;
+    sha256 = "1rpf5kmcc3cw7vlj9g8px19b5vr4hnza8r78bw1g8i7vwcng57ya";
   };
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
                   libvncserver libmsn giflib gpgme boost stdenv.gcc.libc libv4l
