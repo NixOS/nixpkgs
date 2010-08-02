@@ -5980,23 +5980,14 @@ let
     inherit (kde4) qt4 kdelibs automoc4 phonon;
   };
 
-<<<<<<< HEAD
-  rsync = callPackage ../applications/networking/sync/rsync { 
-||||||| merged common ancestors
-  rsync = import ../applications/networking/sync/rsync {
-    inherit fetchurl stdenv acl perl;
-=======
-  rsibreak = makeOverridable (import ../applications/misc/rsibreak) {
-    inherit fetchurl stdenv cmake;
+  rsibreak = callPackage ../applications/misc/rsibreak {
     inherit (kde4) kdelibs kdebase_workspace;
   };
 
-  rsync = import ../applications/networking/sync/rsync {
-    inherit fetchurl stdenv acl perl;
->>>>>>> Add rsibreak
+  rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !stdenv.isDarwin;
   };
-
+  
   rxvt = callPackage ../applications/misc/rxvt { };
 
   # = urxvt
