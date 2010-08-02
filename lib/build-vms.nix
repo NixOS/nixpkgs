@@ -117,13 +117,4 @@ rec {
 
     in lib.listToAttrs nodes_;
 
-
-  # Zip two lists together.  Should be moved to pkgs.lib.
-  zip = xs: ys:
-    if xs != [] && ys != [] then
-      [ {first = lib.head xs; second = lib.head ys;} ]
-      ++ zip (lib.tail xs) (lib.tail ys)
-    else [];
-
-
 }
