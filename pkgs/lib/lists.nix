@@ -177,4 +177,10 @@ rec {
     let loop = l: if tail l == [] then head l else loop (tail l); in
     loop list;
 
+  # Zip two lists together.
+  zip = xs: ys:
+    if xs != [] && ys != [] then
+      [ {first = head xs; second = head ys;} ]
+      ++ zip (tail xs) (tail ys)
+    else [];
 }
