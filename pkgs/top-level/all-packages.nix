@@ -2577,8 +2577,7 @@ let
   };
 
   path64 = import ../development/compilers/path64 {
-    inherit fetchgit perl flex bison gmp mpfr cmake;
-    stdenv = stdenv2;
+    inherit stdenv fetchgit perl flex bison gmp mpfr cmake;
   };
 
   openjdkDarwin = import ../development/compilers/openjdk-darwin {
@@ -3722,8 +3721,7 @@ let
   };
 
   clapack = import ../development/libraries/clapack {
-    inherit fetchurl cmake;
-    stdenv = stdenv2;
+    inherit stdenv fetchurl cmake;
   };
 
   classads = import ../development/libraries/classads {
@@ -8227,12 +8225,11 @@ let
   };
 
   hugin = import ../applications/graphics/hugin {
-    inherit fetchurl cmake panotools libtiff libpng boost pkgconfig
+    inherit stdenv fetchurl cmake panotools libtiff libpng boost pkgconfig
       exiv2 gettext ilmbase enblendenfuse autopanosiftc mesa freeglut
       glew openexr;
     inherit wxGTK;
     inherit (xlibs) libXi libXmu;
-    stdenv = stdenv2;
   };
 
   i810switch = import ../os-specific/linux/i810switch {
@@ -8793,10 +8790,6 @@ let
     wxGTK = wxGTK28.override {
       unicode = false;
     };
-  };
-
-  simgrid = import ../applications/misc/simgrid {
-    inherit fetchurl stdenv cmake ruby;
   };
 
   semnotes = import ../applications/misc/semnotes {
@@ -9778,8 +9771,7 @@ let
   };
 
   simgrid = import ../applications/science/misc/simgrid {
-    inherit fetchurl cmake ruby;
-    stdenv = stdenv2;
+    inherit stdenv fetchurl cmake ruby;
   };
 
   tulip = import ../applications/science/misc/tulip {
@@ -9789,9 +9781,8 @@ let
   };
 
   vite = import ../applications/science/misc/vite {
-    inherit fetchsvn cmake mesa;
+    inherit stdenv fetchsvn cmake mesa;
     qt = qt4;
-    stdenv = stdenv2;
   };
 
   ### MISC
