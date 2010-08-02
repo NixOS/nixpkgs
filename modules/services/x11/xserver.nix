@@ -83,31 +83,6 @@ let
       ''; # */
   };
 
-
-  halConfigFiles = singleton (pkgs.writeTextFile
-    { name = "hal-policy-keymap";
-      destination = "/share/hal/fdi/policy/30-keymap.fdi";
-      text =
-        ''
-          <?xml version="1.0" encoding="ISO-8859-1"?>
-          <deviceinfo version="0.2">
-            <device>
-              <match key="info.capabilities" contains="input.keymap">
-                <append key="info.callouts.add" type="strlist">hal-setup-keymap</append>
-              </match>
-
-              <match key="info.capabilities" contains="input.keys">
-                <merge key="input.x11_options.XkbRules" type="string">base</merge>
-                <merge key="input.x11_options.XkbModel" type="string">${cfg.xkbModel}</merge>
-                <merge key="input.x11_options.XkbLayout" type="string">${cfg.layout}</merge>
-                <append key="input.x11_options.XkbOptions" type="strlist">${cfg.xkbOptions}</append>
-              </match>
-            </device>
-          </deviceinfo>
-        '';
-    });
-
-  
 in
 
 {
@@ -404,8 +379,7 @@ in
       
     environment.systemPackages = config.environment.x11Packages;
     
-    services.hal.packages = halConfigFiles ++
-      optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
+    services.hal.packages = optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
       { startOn = if cfg.autorun then "filesystem and stopped udevtrigger and started hal" else "";
@@ -481,6 +455,15 @@ in
         Section "Monitor"
           Identifier "Monitor[0]"
           ${cfg.monitorSection}
+        EndSection
+
+        Section "InputClass"
+          Identifier "Keyboards catch all"
+          MatchIsKeyboard "on"
+          Option "XkbRules" "base"
+          Option "XkbModel" "${cfg.xkbModel}"
+          Option "XkbLayout" "${cfg.layout}"
+          Option "XkbOptions" "${cfg.xkbOptions}"
         EndSection
 
         Section "ServerLayout"

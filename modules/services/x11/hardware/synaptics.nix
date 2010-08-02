@@ -22,18 +22,23 @@ let cfg = config.services.xserver.synaptics; in
       };
 
       minSpeed = mkOption {
-        default = "0.06";
+        default = "0.6";
         description = "Cursor speed factor for precision finger motion.";
       };
 
       maxSpeed = mkOption {
-        default = "0.12";
+        default = "1.0";
         description = "Cursor speed factor for highest-speed finger motion.";
       };
 
       twoFingerScroll = mkOption {
         default = false;
         description = "Whether to enable two-finger drag-scrolling.";
+      };
+
+      vertEdgeScroll = mkOption {
+        default = true;
+        description = "Whether to enable vertical edge drag-scrolling.";
       };
 
     };
@@ -71,6 +76,7 @@ let cfg = config.services.xserver.synaptics; in
           Option "TapButton3" "3"
           Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
+          Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
         EndSection
       '';
 
