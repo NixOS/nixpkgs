@@ -7801,7 +7801,7 @@ let
     dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
   });
 
-  emacsPackages = emacs: recurseIntoAttrs (rec {
+  emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     bbdb = import ../applications/editors/emacs-modes/bbdb {
       inherit fetchurl stdenv emacs texinfo ctags;
     };
@@ -7893,10 +7893,10 @@ let
     scalaMode = import ../applications/editors/emacs-modes/scala-mode {
       inherit fetchsvn stdenv emacs;
     };
-  });
+  };
 
-  emacs22Packages = emacsPackages emacs22;
-  emacs23Packages = emacsPackages emacs23;
+  emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
+  emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
 
   epdfview = import ../applications/misc/epdfview {
     inherit stdenv fetchurl pkgconfig poppler;
@@ -9714,7 +9714,8 @@ let
   };
 
   isabelle = import ../applications/science/logic/isabelle {
-    inherit (pkgs) stdenv fetchurl nettools perl polyml emacs emacsPackages;
+    inherit (pkgs) stdenv fetchurl nettools perl polyml;
+    inherit (pkgs.emacs23Packages) proofgeneral;
   };
 
   ssreflect = import ../applications/science/logic/ssreflect {

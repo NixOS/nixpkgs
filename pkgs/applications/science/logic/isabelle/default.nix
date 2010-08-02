@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, nettools, polyml, emacs, emacsPackages }:
+{ stdenv, fetchurl, perl, nettools, polyml, proofgeneral }:
 # nettools needed for hostname
 
 let
@@ -6,7 +6,6 @@ let
   version = "2009-1";
   name = "${pname}${version}";
   theories = ["HOL" "FOL" "ZF"];
-  proofgeneral = (emacsPackages emacs).proofgeneral;
 in
 
 stdenv.mkDerivation {
