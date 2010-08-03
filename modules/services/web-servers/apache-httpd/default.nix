@@ -582,6 +582,13 @@ in
             mkdir -m 0700 -p ${mainCfg.stateDir}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
+            ${optionalString (mainCfg.documentRoot != null)
+            ''
+              # Create the document root directory if does not exists yet
+              mkdir -p ${mainCfg.documentRoot}
+            ''
+            }
+
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
             # succesfully.
