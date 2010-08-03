@@ -1,6 +1,7 @@
 callPackage :
 
 {
+  recurseForRelease = true;
 
 ### SUPPORT
   akonadi = callPackage ./support/akonadi { };
