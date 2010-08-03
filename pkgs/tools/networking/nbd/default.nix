@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
 
-  doCheck = true;
-
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "map arbitrary files as block devices over the network";
