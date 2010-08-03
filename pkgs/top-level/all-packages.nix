@@ -4268,8 +4268,6 @@ let
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dmtcp_devel = callPackage ../os-specific/linux/dmtcp/devel.nix { };
-
   dietlibc = callPackage ../os-specific/linux/dietlibc {
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
@@ -6671,9 +6669,7 @@ let
 
   hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix {
-    dmtcp = dmtcp_devel;
-  };
+  hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix { };
 
   # This is a special version of OCaml handcrafted especially for
   # hol_light it should be merged with the current expresion for ocaml
