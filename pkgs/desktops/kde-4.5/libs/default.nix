@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = "LGPL";
     homepage = http://www.kde.org;
     maintainers = [ maintainers.sander maintainers.urkud ];
+    platforms = platforms.linux;
   };
 }
