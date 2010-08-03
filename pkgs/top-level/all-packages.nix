@@ -6155,15 +6155,17 @@ let
   vimHugeX = vim_configurable;
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit fetchurl stdenv ncurses pkgconfig composableDerivation lib;
+    inherit fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib;
     inherit (xlibs) libX11 libXext libSM libXpm
-        libXt libXaw libXau libXmu;
+        libXt libXaw libXau libXmu libICE;
     inherit (gtkLibs) glib gtk;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
     # python
     # TODO mzschemeinterp perlinterp
     inherit python perl tcl ruby /*x11*/;
+
+    lua = lua5;
 
     # optional features by flags
     flags = [ "X11" ]; # only flag "X11" by now
