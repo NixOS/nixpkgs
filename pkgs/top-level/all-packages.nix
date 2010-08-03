@@ -6867,8 +6867,8 @@ let
   polytable = callPackage ../misc/tex/polytable { };
 
   psi = callPackage ../applications/networking/instant-messengers/psi {
-    qca2 = kde4.qca2;
-    qca2_ossl = kde4.qca2_ossl;
+    qca2 = kde45.qca2;
+    qca2_ossl = kde45.qca2_ossl;
   };
 
   putty = callPackage ../applications/networking/remote/putty {

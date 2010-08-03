@@ -49,6 +49,7 @@ pkgs.recurseIntoAttrs (rec {
   qca2_ossl = import ./support/qca2/ossl.nix {
     inherit (pkgs) stdenv fetchurl qt4 openssl;
     inherit qca2;
+    inherit (pkgs) fetchsvn;
   };
 
 ### LIBS
