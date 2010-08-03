@@ -276,7 +276,6 @@ with (import ./release-lib.nix);
   slim = linux;
   sloccount = allBut "i686-cygwin";
   smartmontools = all;
-  smbfsFuse = linux;
   socat = linux;
   spidermonkey = linux;
   splashutils = linux;

@@ -15,8 +15,6 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
 
-  goSrcDir = "test -d sbcl-*/ && cd sbcl-*/ || true ";
-      
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
     mkdir test-home
@@ -38,6 +36,7 @@ rec {
      is not good enought
   */
   doFixNewer = a.fullDepEntry(''
+    pwd
 
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
     sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp

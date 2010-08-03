@@ -27,14 +27,10 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     preConfigure=''
-      export cross=$crossSystem-
+      # It's configure does not like --build or --host
+      export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
     '';
-    configureFlags="--libdir=lib ${opensslCrossSystem} shared";
-    buildPhase = ''
-      make CC=$crossConfig-gcc \
-        AR="$crossConfig-ar r" \
-        RANLIB=$crossConfig-ranlib
-    '';
+    configureScript = "./Configure";
   };
 
   meta = {

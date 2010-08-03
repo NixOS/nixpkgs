@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     -exceptions -xmlpatterns
     -multimedia -audio-backend -phonon -phonon-backend
     -webkit -javascript-jit
+    -make libs -make tools -make translations
     ${if buildDemos == true then "-make demos" else "-nomake demos"}
     ${if buildExamples == true then "-make examples" else "-nomake examples"}
     ${if useDocs then "-make docs" else "-nomake docs"}'';
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
     maintainers = with maintainers; [ urkud sander ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.linux;
     priority = 10;
   };
 }
