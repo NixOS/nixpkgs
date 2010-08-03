@@ -6869,6 +6869,7 @@ let
   psi = callPackage ../applications/networking/instant-messengers/psi {
     qca2 = kde45.qca2;
     qca2_ossl = kde45.qca2_ossl;
+    qt4 = qt47;
   };
 
   putty = callPackage ../applications/networking/remote/putty {
