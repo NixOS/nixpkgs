@@ -13,6 +13,6 @@ stdenv.mkDerivation {
     description = "KDE PIM libraries";
     license = "LGPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

@@ -17,7 +17,6 @@ stdenv.mkDerivation {
     longDescription = "Contains various development utilities such as the Umbrello UML modeler and Cerivisia CVS front-end";
     license = "GPL";
     homepage = http://www.kde.org;
-    maintainers = [ maintainers.sander maintainers.urkud ];
-    platforms = platforms.linux;
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

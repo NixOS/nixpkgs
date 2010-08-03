@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     longDescription = "Applications that form the KDE desktop, like Plasma, System Settings, Konqueror, Dolphin, Kate, and Konsole";
     license = "GPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

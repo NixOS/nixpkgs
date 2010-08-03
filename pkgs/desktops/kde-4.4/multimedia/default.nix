@@ -16,6 +16,6 @@ stdenv.mkDerivation {
     '';
     license = "GPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

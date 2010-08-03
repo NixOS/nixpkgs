@@ -14,6 +14,6 @@ stdenv.mkDerivation {
     longDescription = "Contains various artwork for KDE such as backgrounds, icons and screensavers";
     license = "LGPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

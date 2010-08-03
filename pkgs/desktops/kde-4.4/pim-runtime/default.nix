@@ -16,6 +16,6 @@ stdenv.mkDerivation {
     description = "KDE PIM runtime";
     homepage = http://www.kde.org;
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

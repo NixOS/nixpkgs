@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     description = "KDE libraries";
     license = "LGPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ lib.maintainers.sander lib.maintainers.urkud ];
+    platforms = lib.platforms.linux;
   };
 }
