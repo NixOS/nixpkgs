@@ -13,12 +13,14 @@ rec {
   configureFlags = ["--with-lablgtk-dir=${lablgtk}/lib/ocaml/lablgtk2"];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doAutoconf" "doConfigure" "doMakeInstall"];
+  phaseNames = ["doAutoconf" "doPatch" "doConfigure" "doMakeInstall"];
 
   doAutoconf = fullDepEntry(''
     aclocal -I .
     autoconf -I .
   '') ["minInit" "addInputs" "doUnpack"];
+
+  patches = [ ./graphviz.patch ];
       
   name = "monotone-viz-mtn-head";
   meta = {
