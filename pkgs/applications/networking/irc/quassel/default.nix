@@ -46,11 +46,11 @@ in with stdenv; mkDerivation rec {
       meaning that one (or multiple) client(s) can attach to
       and detach from a central core -- much like the popular
       combination of screen and a text-based IRC client such
-      as WeeChat, but graphical(based on Qt4/KDE4).
+      as WeeChat, but graphical (based on Qt4/KDE4).
     '';
     license = "GPLv3";
     maintainers = [ maintainers.phreedom ];
-    platforms = platforms.all;
+    inherit (qt4.meta) platforms;
   };
 }
 
