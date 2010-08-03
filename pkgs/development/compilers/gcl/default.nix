@@ -8,6 +8,7 @@ let
   ]; 
 in
 
+(
 assert a.stdenv ? gcc ;
 assert a.stdenv.gcc ? gcc ;
 assert a.stdenv.gcc ? libc ;
@@ -45,13 +46,13 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doUnpack" "preBuild" 
     "doConfigure" "doMakeInstall"];
-      
+}) // {
   meta = {
     description = "GNU Common Lisp compiler working via GCC";
     maintainers = [
       a.lib.maintainers.raskin
     ];
     platforms = with a.lib.platforms; 
-      all;
+      linux;
   };
 }
