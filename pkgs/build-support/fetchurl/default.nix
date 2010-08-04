@@ -100,4 +100,8 @@ stdenv.mkDerivation {
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
 
   inherit showURLs mirrorsFile;
+
+  # Doing the download on a remote machine just duplicates network
+  # traffic, so don't do that.
+  preferLocalBuild = true;
 }
