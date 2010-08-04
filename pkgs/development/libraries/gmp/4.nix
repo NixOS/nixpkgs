@@ -1,4 +1,8 @@
-{stdenv, fetchurl, m4, cxx ? true}:
+{stdenv, fetchurl, m4, cxx ? true, static ? false}:
+
+let
+  staticFlags = if static then " --enable-static --disable-shared" else "";
+in
 
 stdenv.mkDerivation rec {
   name = "gmp-4.3.2";
@@ -14,7 +18,11 @@ stdenv.mkDerivation rec {
   # instructions (e.g., SSE2 on i686).
   preConfigure = "ln -sf configfsf.guess config.guess";
 
-  configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
+  configureFlags = (if cxx then "--enable-cxx" else "--disable-cxx") +
+      staticFlags;
+
+  dontDisableStatic = if static then true else false;
+
 
   doCheck = true;
 

@@ -183,6 +183,18 @@ rec {
     bootStdenv = stdenvLinuxBoot2;
   };
 
+  gccWithStaticLibs = stdenvLinuxBoot2Pkgs.gcc.gcc.override (rec {
+        ppl = stdenvLinuxBoot2Pkgs.ppl.override {
+          static = true;
+          gmpxx = stdenvLinuxBoot2Pkgs.gmpxx.override {
+            static = true;
+          };
+        };
+        cloogppl = stdenvLinuxBoot2Pkgs.cloogppl.override {
+          inherit ppl;
+          static = true;
+        };
+      });
 
   # 6) Construct a third stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
@@ -193,7 +205,7 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
+      gcc = gccWithStaticLibs;
       name = "";
     };
     extraAttrs = {
@@ -231,7 +243,7 @@ rec {
       inherit (stdenvLinuxBoot2Pkgs) binutils;
       inherit (stdenvLinuxBoot3Pkgs) coreutils;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
+      gcc = gccWithStaticLibs;
       shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
       name = "";
     };
