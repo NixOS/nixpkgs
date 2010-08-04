@@ -46,7 +46,7 @@ let
 
     sendmail = "${pkgs.ssmtp}/sbin/sendmail";
     
-    inherit (pkgs) libxslt enscript db4 coreutils diffutils bzip2 python;
+    inherit (pkgs) libxslt enscript db4 coreutils diffutils gzip bzip2 python;
 
     inherit (serverInfo) canonicalName;
 
