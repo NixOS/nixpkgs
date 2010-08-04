@@ -3594,6 +3594,11 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc {
+    vlc = vlc.override { qt4 = qt47; };
+    inherit (kde45) automoc4;
+  };
+
   physfs = callPackage ../development/libraries/physfs { };
 
   plib = callPackage ../development/libraries/plib { };
