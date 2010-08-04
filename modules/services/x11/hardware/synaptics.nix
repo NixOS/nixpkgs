@@ -18,7 +18,8 @@ let cfg = config.services.xserver.synaptics; in
 
       dev = mkOption {
         default = "/dev/input/event0";
-        description = "Event device for Synaptics touchpad.";
+	example = null;
+        description = "Event device for Synaptics touchpad, null to omit specification.";
       };
 
       minSpeed = mkOption {
@@ -55,7 +56,7 @@ let cfg = config.services.xserver.synaptics; in
         Section "InputDevice"
           Identifier "Touchpad[0]"
           Driver "synaptics"
-          Option "Device" "${cfg.dev}"
+          ${if cfg.dev != null then ''Option "Device" "${cfg.dev}"'' else ""}
           Option "Protocol" "PS/2"
           Option "LeftEdge" "1700"
           Option "RightEdge" "5300"
