@@ -3734,9 +3734,9 @@ let
     ncurses = null;
   };
 
-  sqliteInteractive = lowPrio (appendToName "interactive" (sqlite.override {
+  sqliteInteractive = appendToName "interactive" (sqlite.override {
     inherit readline ncurses;
-  }));
+  });
 
   stlport = callPackage ../development/libraries/stlport { };
 
