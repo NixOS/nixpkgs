@@ -4,11 +4,11 @@
 , docbook_xml_dtd_45, libxslt, coreutils}:
 
 stdenv.mkDerivation rec {
-  name = "awesome-3.4.5";
+  name = "awesome-3.4.6";
  
   src = fetchurl {
-    url = http://awesome.naquadah.org/download/awesome-3.4.5.tar.xz;
-    sha256 = "124g6k4n2yf9shw3ig9lj1jdwiysfbj13mnjd38k22hqbj3yhnbi";
+    url = http://awesome.naquadah.org/download/awesome-3.4.6.tar.xz;
+    sha256 = "1bxym326pl32q5jsaqa7p785k8yviinzj0q1l42pdhiiq717zbwi";
   };
  
   buildInputs = [ xz cmake gperf imagemagick pkgconfig lua glib cairo pango
