@@ -4536,6 +4536,16 @@ let
       ];
   };
 
+  linux_nanonote_jz_2_6_34 = makeOverridable
+    (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.34.nix) {
+      inherit fetchurl fetchgit stdenv perl mktemp module_init_tools ubootChooser;
+    };
+
+  linux_nanonote_jz_2_6_35 = makeOverridable
+    (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.35.nix) {
+      inherit fetchurl fetchgit stdenv perl mktemp module_init_tools ubootChooser;
+    };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -4637,6 +4647,8 @@ let
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
   linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
   linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
+  linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34); 
+  linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35); 
 
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
@@ -4813,11 +4825,14 @@ let
 
   ubootChooser = name : if (name == "upstream") then ubootUpstream
     else if (name == "sheevaplug") then ubootSheevaplug
+    else if (name == "nanonote") then ubootNanonote
     else throw "Unknown uboot";
 
   ubootUpstream = callPackage ../misc/uboot { };
 
   ubootSheevaplug = callPackage ../misc/uboot/sheevaplug.nix { };
+
+  ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
