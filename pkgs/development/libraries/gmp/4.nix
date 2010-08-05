@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = if static then true else false;
 
-
   doCheck = true;
 
   meta = {
