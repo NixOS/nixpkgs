@@ -5051,8 +5051,8 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
-  adobeReader = callPackage ../applications/misc/adobe-reader {
-    inherit (gtkLibs) glib pango atk gtk;
+  adobeReader = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg) ../applications/misc/adobe-reader {
+    inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
   };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
