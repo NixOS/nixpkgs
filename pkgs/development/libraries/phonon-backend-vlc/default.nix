@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "VideoLAN backend for Phonon multimedia framework";
-    inherit (qt47) platforms;
+    inherit (qt47.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
