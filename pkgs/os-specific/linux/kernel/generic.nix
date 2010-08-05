@@ -41,7 +41,7 @@
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-  || stdenv.system == "armv5tel-linux";
+  || stdenv.system == "armv5tel-linux" || stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux";
 
 assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 
@@ -96,6 +96,7 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "armv5tel-linux" then "arm" else
+    if stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux" then "mips" else
     abort "Platform ${stdenv.system} is not supported.";
 
   crossAttrs = let

@@ -203,5 +203,6 @@ rec {
         FUSE_FS m
       '';
     kernelTarget = "vmlinux";
+    uboot = null;
   };
 }
