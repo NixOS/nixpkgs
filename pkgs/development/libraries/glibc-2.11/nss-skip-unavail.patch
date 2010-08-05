@@ -1,25 +1,21 @@
-diff -rc glibc-2.9-20081208-orig/sysdeps/posix/getaddrinfo.c glibc-2.9-20081208/sysdeps/posix/getaddrinfo.c
-*** glibc-2.9-20081208-orig/sysdeps/posix/getaddrinfo.c	2008-07-30 21:14:22.000000000 +0200
---- glibc-2.9-20081208/sysdeps/posix/getaddrinfo.c	2008-12-10 11:39:32.000000000 +0100
-***************
-*** 505,512 ****
-  	  int no_data = 0;
-  	  int no_inet6_data = 0;
-  	  service_user *nip = NULL;
-- 	  enum nss_status inet6_status = NSS_STATUS_UNAVAIL;
-- 	  enum nss_status status = NSS_STATUS_UNAVAIL;
-  	  int no_more;
-  	  int old_res_options;
-  
---- 505,510 ----
-***************
-*** 702,707 ****
---- 700,707 ----
-  
-  	  while (!no_more)
-  	    {
+diff -ru glibc-2.11.2-orig/sysdeps/posix/getaddrinfo.c glibc-2.11.2/sysdeps/posix/getaddrinfo.c
+--- glibc-2.11.2-orig/sysdeps/posix/getaddrinfo.c	2010-05-19 22:38:20.000000000 +0200
++++ glibc-2.11.2/sysdeps/posix/getaddrinfo.c	2010-08-05 18:39:54.259556327 +0200
+@@ -505,8 +505,6 @@
+ 	  int no_data = 0;
+ 	  int no_inet6_data = 0;
+ 	  service_user *nip = NULL;
+-	  enum nss_status inet6_status = NSS_STATUS_UNAVAIL;
+-	  enum nss_status status = NSS_STATUS_UNAVAIL;
+ 	  int no_more;
+ 	  int old_res_options;
+ 
+@@ -702,6 +700,8 @@
+ 
+ 	  while (!no_more)
+ 	    {
 + 	      enum nss_status inet6_status = NSS_STATUS_UNAVAIL;
 + 	      enum nss_status status = NSS_STATUS_UNAVAIL;
-  	      nss_gethostbyname4_r fct4
-  		= __nss_lookup_function (nip, "gethostbyname4_r");
-  	      if (fct4 != NULL)
+ 	      no_data = 0;
+ 	      nss_gethostbyname4_r fct4
+ 		= __nss_lookup_function (nip, "gethostbyname4_r");

@@ -11,9 +11,7 @@ cross :
 
 let
   # For GNU/Hurd, see below.
-  date = "20100512";
-  rev = "df4c3faf0ccc848b5a8086c222bdb42679a9798f";
-  version = if hurdHeaders != null then date else "2.11.1";
+  version = if hurdHeaders != null then "20100512" else "2.11.2";
 in
 
 assert (cross != null) -> (gccCross != null);
@@ -123,11 +121,11 @@ stdenv.mkDerivation ({
       # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
       url = "git://git.sv.gnu.org/hurd/glibc.git";
       sha256 = "f3590a54a9d897d121f91113949edbaaf3e30cdeacbb8d0a44de7b6564f6643e";
-      inherit rev;
+      rev = "df4c3faf0ccc848b5a8086c222bdb42679a9798f";
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
-      sha256 = "18azb6518ryqhkfmddr25p0h1s2msrmx7dblij58sjlnzh61vq34";
+      sha256 = "04w74879psq961cas1amidkg8fc1h6r9yj3plfr33v9y6vp7db62";
     };
 
   srcPorts = fetchurl {
