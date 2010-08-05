@@ -14,8 +14,8 @@ let
 
   dhclientExitHooks = pkgs.writeText "dhclient-exit-hooks"
     ''
-      echo "$reason" >> /tmp/dhcp-exit
-      echo "$exit_status" >> /tmp/dhcp-exit
+      #echo "$reason" >> /tmp/dhcp-exit
+      #echo "$exit_status" >> /tmp/dhcp-exit
 
       if test "$reason" = BOUND -o "$reason" = REBOOT; then
           ${pkgs.glibc}/sbin/nscd --invalidate hosts
