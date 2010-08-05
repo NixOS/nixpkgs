@@ -488,11 +488,12 @@ let
   cron = callPackage ../tools/system/cron {  # see also fcron
   };
 
-  curl = makeOverridable (import ../tools/networking/curl) {
+  curl = makeOverridable (import ../tools/networking/curl) rec {
     fetchurl = fetchurlBoot;
-    inherit stdenv zlib openssl;
+    inherit stdenv zlib openssl libssh2;
     zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
-    sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport;
   };
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };

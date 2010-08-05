@@ -1,6 +1,7 @@
 { stdenv, fetchurl
-, zlibSupport ? false, zlib ? null
-, sslSupport ? false, openssl ? null
+, zlibSupport ? false, zlib
+, sslSupport ? false, openssl
+, scpSupport ? false, libssh2
 , linkStatic ? false
 }:
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     
   configureFlags = ''
     ${if sslSupport then "--with-ssl=${openssl}" else "--without-ssl"}
+    ${if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2"}
     ${if linkStatic then "--enable-static --disable-shared" else ""}
   '';
 
