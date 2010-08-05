@@ -143,6 +143,7 @@ if test -n "$targetConfig"; then
     dontStrip=1
 fi
 
+
 preConfigure() {
     if test -n "$newlibSrc"; then
         tar xvf "$newlibSrc" -C ..
@@ -169,6 +170,12 @@ preConfigure() {
     mkdir ../build
     cd ../build
     configureScript=../$sourceRoot/configure
+}
+
+
+postConfigure() {
+    # Don't store the configure flags in the resulting executables.
+    sed -e '/TOPLEVEL_CONFIGURE_ARGUMENTS=/d' -i Makefile
 }
 
 
@@ -200,7 +207,7 @@ postInstall() {
         fi
     done
 
-    for i in $out/bin/*-c++* $out/bin/*-g++*; do
+    for i in $out/bin/c++ $out/bin/*-c++* $out/bin/*-g++*; do
         if cmp -s $out/bin/g++ $i; then
             ln -sfn g++ $i
         fi
