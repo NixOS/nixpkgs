@@ -3377,6 +3377,8 @@ let
 
   libssh = callPackage ../development/libraries/libssh { };
 
+  libssh2 = callPackage ../development/libraries/libssh2 { };
+
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
