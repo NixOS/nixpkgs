@@ -1,39 +1,39 @@
-diff -rc DBD-SQLite-1.25-orig/Makefile.PL DBD-SQLite-1.25/Makefile.PL
-*** DBD-SQLite-1.25-orig/Makefile.PL	2009-04-23 12:12:04.000000000 +0200
---- DBD-SQLite-1.25/Makefile.PL	2009-07-02 14:07:25.000000000 +0200
+diff -rc DBD-SQLite-1.29/Makefile.PL DBD-SQLite-1.29-new/Makefile.PL
+*** DBD-SQLite-1.29/Makefile.PL	2010-01-08 10:08:29.000000000 +0100
+--- DBD-SQLite-1.29-new/Makefile.PL	2010-08-05 11:42:53.000000000 +0200
 ***************
-*** 79,85 ****
-  # Let's find out the full story first, so we can make an informed
-  # decision to whether to do this. -- ADAMK
-  my ($force_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
+*** 123,129 ****
+  # a system sqlite is also sophisticated enough to have a patching system
+  # that can change the if ( 0 ) to if ( 1 )
+  my ($sqlite_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
 ! if ( 0 ) {
   	require File::Spec;
   	if ( $sqlite_base = (grep(/SQLITE_LOCATION=.*/, @ARGV))[0] ) {
   		$sqlite_base =~ /=(.*)/;
---- 79,85 ----
-  # Let's find out the full story first, so we can make an informed
-  # decision to whether to do this. -- ADAMK
-  my ($force_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
+--- 123,129 ----
+  # a system sqlite is also sophisticated enough to have a patching system
+  # that can change the if ( 0 ) to if ( 1 )
+  my ($sqlite_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
 ! if ( 1 ) {
   	require File::Spec;
   	if ( $sqlite_base = (grep(/SQLITE_LOCATION=.*/, @ARGV))[0] ) {
   		$sqlite_base =~ /=(.*)/;
 ***************
-*** 141,148 ****
-  
-  # Use always the bundled one.
-  # XXX: ... and this message should be more informative.
-! $force_local = 1;
-! print "We're using the bundled sqlite library.\n" if $ENV{AUTOMATED_TESTING};
-  
-  @ARGV = grep( ! /SQLITE_LOCATION|USE_LOCAL_SQLITE/, @ARGV );
-  
---- 141,148 ----
-  
-  # Use always the bundled one.
-  # XXX: ... and this message should be more informative.
-! #$force_local = 1;
-! #print "We're using the bundled sqlite library.\n" if $ENV{AUTOMATED_TESTING};
+*** 184,191 ****
+  } else {
+  	# Always the bundled one.
+  	# XXX: ... and this message should be more informative.
+! 	$sqlite_local = 1;
+! 	print "We're using the bundled sqlite library.\n" if $ENV{AUTOMATED_TESTING};
+  }
   
   @ARGV = grep( ! /SQLITE_LOCATION|USE_LOCAL_SQLITE/, @ARGV );
+--- 184,191 ----
+  } else {
+  	# Always the bundled one.
+  	# XXX: ... and this message should be more informative.
+! #	$sqlite_local = 1;
+! #	print "We're using the bundled sqlite library.\n" if $ENV{AUTOMATED_TESTING};
+  }
   
+  @ARGV = grep( ! /SQLITE_LOCATION|USE_LOCAL_SQLITE/, @ARGV );
