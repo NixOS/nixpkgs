@@ -4,19 +4,15 @@
 {stdenv, fetchurl, ocaml, camlp5, lablgtk, ncurses}:
 
 let
-
-  pname = "coq";
-  version = "8.2pl1";
-  name = "${pname}-${version}";
-
+  version = "8.2pl2";
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  name = "coq-${version}";
 
   src = fetchurl {
-    url = "http://coq.inria.fr/V${version}/files/${name}.tar.gz";
-    sha256 = "7c15acfd369111e51d937cce632d22fc77a6718a5ac9f2dd2dcbdfab4256ae0c";
+    url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
+    sha256 = "0dh2vv3bvz8694dd12kjdkdaq19l1vslvygzif11igshc5bw4rhf";
   };
 
   buildInputs = [ ocaml camlp5 ncurses lablgtk ];
