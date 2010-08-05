@@ -6904,9 +6904,7 @@ let
 
   tex4ht = callPackage ../misc/tex/tex4ht { };
 
-  texFunctions = callPackage ../misc/tex/nix {
-    inherit (haskellPackages) lhs2tex;
-  };
+  texFunctions = import ../misc/tex/nix pkgs;
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
