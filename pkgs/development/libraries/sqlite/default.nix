@@ -3,14 +3,15 @@
 assert readline != null -> ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.6.23";
+  name = "sqlite-3.7.0";
 
   src = fetchurl {
-    url = "http://www.sqlite.org/sqlite-amalgamation-3.6.23.tar.gz";
-    sha256 = "a5de9ec9273acabc6cb18235df802549c476410b09d58a206e02862b4dc303ae";
+    url = "http://www.sqlite.org/sqlite-amalgamation-3.7.0.tar.gz";
+    sha256 = "13krs46f6fx83hd13i1a6ndbqs12wv4nhgi2dg3aas58r40p7a3w";
   };
 
-  buildInputs = [readline ncurses];
+  buildInputs = [ readline ncurses ];
+  
   configureFlags = "--enable-threadsafe";
 
   NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1";
