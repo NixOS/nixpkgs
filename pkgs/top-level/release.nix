@@ -329,6 +329,7 @@ with (import ./release-lib.nix);
   vsftpd = linux;
   w3m = all;
   webkit = linux;
+  weechat = linux;
   wget = all;
   which = all;
   wicd = linux;

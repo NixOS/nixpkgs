@@ -6192,6 +6192,8 @@ let
     graphicsSupport = false;
   };
 
+  weechat = callPackage ../applications/networking/irc/weechat { };
+
   wings = callPackage ../applications/graphics/wings { };
 
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
