@@ -1,0 +1,122 @@
+diff --git a/locale/loadarchive.c b/locale/loadarchive.c
+index d545f17..0d8638a 100644
+--- a/locale/loadarchive.c
++++ b/locale/loadarchive.c
+@@ -124,6 +124,25 @@ calculate_head_size (const struct locarhead *h)
+ }
+ 
+ 
++static int
++open_locale_archive ()
++{
++  int fd = -1;
++  char *path = getenv ("LOCALE_ARCHIVE_2_11");
++  char *path2 = getenv ("LOCALE_ARCHIVE");
++  const char *usualpath = "/usr/lib/locale/locale-archive";
++  if (path)
++    fd = open_not_cancel_2 (path, O_RDONLY|O_LARGEFILE);
++  if (path2 && fd < 0)
++    fd = open_not_cancel_2 (path2, O_RDONLY|O_LARGEFILE);
++  if (fd < 0)
++    fd = open_not_cancel_2 (archfname, O_RDONLY|O_LARGEFILE);
++  if (fd < 0)
++    fd = open_not_cancel_2 (usualpath, O_RDONLY|O_LARGEFILE);
++  return fd;
++}
++
++
+ /* Find the locale *NAMEP in the locale archive, and return the
+    internalized data structure for its CATEGORY data.  If this locale has
+    already been loaded from the archive, just returns the existing data
+@@ -203,7 +222,7 @@ _nl_load_locale_from_archive (int category, const char **namep)
+       archmapped = &headmap;
+ 
+       /* The archive has never been opened.  */
+-      fd = open_not_cancel_2 (archfname, O_RDONLY|O_LARGEFILE);
++      fd = open_locale_archive ();
+       if (fd < 0)
+ 	/* Cannot open the archive, for whatever reason.  */
+ 	return NULL;
+@@ -394,7 +413,7 @@ _nl_load_locale_from_archive (int category, const char **namep)
+ 	  if (fd == -1)
+ 	    {
+ 	      struct stat64 st;
+-	      fd = open_not_cancel_2 (archfname, O_RDONLY|O_LARGEFILE);
++	      fd = open_locale_archive ();
+ 	      if (fd == -1)
+ 		/* Cannot open the archive, for whatever reason.  */
+ 		return NULL;
+diff --git a/locale/programs/locale.c b/locale/programs/locale.c
+index 77262b7..fddc00d 100644
+--- a/locale/programs/locale.c
++++ b/locale/programs/locale.c
+@@ -628,6 +628,23 @@ nameentcmp (const void *a, const void *b)
+ 		  ((const struct nameent *) b)->name);
+ }
+ 
++static int
++open_nix_locale_archive (const char * fname, int access)
++{
++  int fd = -1;
++  char *path = getenv ("LOCALE_ARCHIVE_2_11");
++  char *path2 = getenv ("LOCALE_ARCHIVE");
++  const char *usualpath = "/usr/lib/locale/locale-archive";
++  if (path)
++    fd = open64 (path, access);
++  if (path2 && fd < 0)
++    fd = open64 (path2, access);
++  if (fd < 0)
++    fd = open64 (fname, access);
++  if (fd < 0)
++    fd = open64 (usualpath, access);
++  return fd;
++}
+ 
+ static int
+ write_archive_locales (void **all_datap, char *linebuf)
+@@ -641,7 +658,7 @@ write_archive_locales (void **all_datap, char *linebuf)
+   int fd, ret = 0;
+   uint32_t cnt;
+ 
+-  fd = open64 (ARCHIVE_NAME, O_RDONLY);
++  fd = open_nix_locale_archive (ARCHIVE_NAME, O_RDONLY);
+   if (fd < 0)
+     return 0;
+ 
+diff --git a/locale/programs/locarchive.c b/locale/programs/locarchive.c
+index 85ba77d..3ad2af8 100644
+--- a/locale/programs/locarchive.c
++++ b/locale/programs/locarchive.c
+@@ -512,6 +512,23 @@ enlarge_archive (struct locarhandle *ah, const struct locarhead *head)
+   *ah = new_ah;
+ }
+ 
++static int
++open_nix_locale_archive (const char * fname, int access)
++{
++  int fd = -1;
++  char *path = getenv ("LOCALE_ARCHIVE_2_11");
++  char *path2 = getenv ("LOCALE_ARCHIVE");
++  const char *usualpath = "/usr/lib/locale/locale-archive";
++  if (path)
++    fd = open64 (path, access);
++  if (path2 && fd < 0)
++    fd = open64 (path2, access);
++  if (fd < 0)
++    fd = open64 (fname, access);
++  if (fd < 0)
++    fd = open64 (usualpath, access);
++  return fd;
++}
+ 
+ void
+ open_archive (struct locarhandle *ah, bool readonly)
+@@ -531,7 +548,7 @@ open_archive (struct locarhandle *ah, bool readonly)
+   while (1)
+     {
+       /* Open the archive.  We must have exclusive write access.  */
+-      fd = open64 (archivefname, readonly ? O_RDONLY : O_RDWR);
++      fd = open_nix_locale_archive (archivefname, readonly ? O_RDONLY : O_RDWR);
+       if (fd == -1)
+ 	{
+ 	  /* Maybe the file does not yet exist.  */

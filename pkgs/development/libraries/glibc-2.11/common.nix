@@ -63,6 +63,9 @@ stdenv.mkDerivation ({
 
     /* Fix for the check of -fgnu89-inline compiler flag */
     ./gnu89-inline.patch
+
+    /* Allow nixos and nix handle the locale-archive. */
+    ./nix-locale-archive.patch
   ]
   ++ stdenv.lib.optional (fetchgit == null)
     /* MOD_NANO definition, for ntp (taken from glibc upstream) */
