@@ -904,7 +904,7 @@ rec {
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit fetchurl buildPerlPackage DBI;
-    inherit (pkgs) sqlite;
+    sqlite = pkgs.sqlite36;
   };
 
   DBDmysql = import ../development/perl-modules/DBD-mysql {

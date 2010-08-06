@@ -3737,6 +3737,11 @@ let
     ncurses = null;
   };
 
+  sqlite36 = callPackage ../development/libraries/sqlite/3.6.x.nix {
+    readline = null;
+    ncurses = null;
+  };
+
   sqliteInteractive = appendToName "interactive" (sqlite.override {
     inherit readline ncurses;
   });
