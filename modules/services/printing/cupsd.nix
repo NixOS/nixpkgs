@@ -102,11 +102,18 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    environment.systemPackages = [cups];
+    users.extraUsers = singleton
+      { name = "cups";
+        uid = config.ids.uids.cups;
+        group = "lp";
+        description = "CUPS printing services";
+      };
 
-    services.dbus.packages = [cups];
+    environment.systemPackages = [ cups ];
 
-    # cups uses libusb to talk to printers, and does not use the
+    services.dbus.packages = [ cups ];
+
+    # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
@@ -166,6 +173,13 @@ in
         PageLog ${logDir}/page_log
 
         TempDir ${cfg.tempDir}
+
+        # User and group used to run external programs, including
+        # those that actually send the job to the printer.  Note that
+        # Udev sets the group of printer devices to `lp', so we want
+        # these programs to run as `lp' as well.
+        User cups
+        Group lp
 
         Browsing On
         BrowseOrder allow,deny
