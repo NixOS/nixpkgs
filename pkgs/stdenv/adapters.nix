@@ -15,7 +15,7 @@ rec {
 
     
   # Add some arbitrary packages to buildInputs for specific packages.
-  # Used to override packages in stenv like Make.  Should not be used
+  # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args //
