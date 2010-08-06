@@ -5940,7 +5940,7 @@ let
   };
 
   rsync = callPackage ../applications/networking/sync/rsync {
-    enableACLs = !stdenv.isDarwin;
+    enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
   };
 
   rxvt = callPackage ../applications/misc/rxvt { };
