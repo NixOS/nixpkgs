@@ -826,6 +826,8 @@ let
 
   mtdutils = callPackage ../tools/filesystems/mtdutils { };
 
+  mtools = callPackage ../tools/filesystems/mtools { };
+
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
