@@ -7,6 +7,7 @@
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
+assert scpSupport -> libssh2 != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.21.0";
