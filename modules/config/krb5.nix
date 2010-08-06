@@ -6,8 +6,6 @@ let
 
   cfg = config.krb5;
 
-  #myPkgs = import /home/nixer/nix/my-expr.nix { system = "x86_64-linux"; };
-
   options = {
     krb5 = {
 
@@ -19,6 +17,11 @@ let
       defaultRealm = mkOption {
         default = "ATENA.MIT.EDU";
         description = "Default realm.";
+      };
+
+      domainRealm = mkOption {
+        default = "atena.mit.edu";
+        description = "Default domain realm.";
       };
 
       kdc = mkOption {
@@ -49,6 +52,7 @@ mkIf config.krb5.enable {
           ''
 [libdefaults]
     default_realm = ${cfg.defaultRealm}
+    encrypt = true
 
 # The following krb5.conf variables are only for MIT Kerberos.
     krb4_config = /etc/krb.conf
@@ -84,6 +88,7 @@ mkIf config.krb5.enable {
     ${cfg.defaultRealm} = {
         kdc = ${cfg.kdc}
         admin_server = ${cfg.kerberosAdminServer}
+#        kpasswd_server = ${cfg.kerberosAdminServer}
     }
     ATHENA.MIT.EDU = {
         kdc = kerberos.mit.edu:88
@@ -162,6 +167,8 @@ mkIf config.krb5.enable {
     }
 
 [domain_realm]
+    .${cfg.domainRealm} = ${cfg.defaultRealm}
+    ${cfg.domainRealm} = ${cfg.defaultRealm}
     .mit.edu = ATHENA.MIT.EDU
     mit.edu = ATHENA.MIT.EDU
     .media.mit.edu = MEDIA-LAB.MIT.EDU
@@ -172,10 +179,23 @@ mkIf config.krb5.enable {
     whoi.edu = ATHENA.MIT.EDU
     .stanford.edu = stanford.edu
 
-[login]
+[logging]
+    kdc = SYSLOG:INFO:DAEMON
+    admin_server = SYSLOG:INFO:DAEMON
+    default = SYSLOG:INFO:DAEMON
     krb4_convert = true
     krb4_get_tickets = false
-        
+
+
+[appdefaults]
+    pam = {
+        debug = false
+        ticket_lifetime = 36000
+        renew_lifetime = 36000
+        max_timeout = 30
+        timeout_shift = 2
+        initial_timeout = 1
+    }
           '';
         target = "krb5.conf";
       }
