@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "KDE PIM libraries";
     license = "LGPL";
     homepage = http://www.kde.org;
-    inherit (kdelibs.meta) maintainers platforms;
+    inherit (kdelibs.meta) maintainers;
   };
 }
