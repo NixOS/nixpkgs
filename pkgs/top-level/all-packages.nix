@@ -4734,6 +4734,8 @@ let
 
   pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
 
+  pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
+
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
   pam_login = callPackage ../os-specific/linux/pam_login { };
