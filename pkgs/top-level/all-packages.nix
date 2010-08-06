@@ -1183,6 +1183,8 @@ let
     inherit (gnome) gtk;
   };
 
+  unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
+
   upx = callPackage ../tools/compression/upx { };
 
   vbetool = builderDefsPackage ../tools/system/vbetool {
