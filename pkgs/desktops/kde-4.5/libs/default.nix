@@ -1,18 +1,15 @@
-{ stdenv, fetchurl, cmake, perl
+{ kdePackage, gcc, cmake, perl
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
 , xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
 }:
 
-stdenv.mkDerivation rec {
-  name = "kdelibs-4.4.95";
-
-  src = fetchurl {
-    url = "mirror://kde/unstable/4.4.95/src/${name}.tar.bz2";
-    sha256 = "1fyjbdbzqxvl7rws4bvra1l4sczc1a72zdin7izif8dyjq6xblj0";
-  };
-
+kdePackage {
+  pn = "kdelibs";
+  v = "4.5.0";
+  sha256 = "0d3iml2v1vp1y6i5vpqv77nbdlw6qb8j6c88yi744ba4zvcirzrx";
+} {
   buildInputs = [
     cmake perl qt4 xz flex bison bzip2 pcre fam libxml2 libxslt
     shared_mime_info giflib jasper /*openexr*/ aspell avahi kerberos acl attr
@@ -20,9 +17,7 @@ stdenv.mkDerivation rec {
     automoc4 strigi soprano qca2 attica
   ];
 
-  patches = [ ./python-site-packages-install-dir.diff ];
-
-  propagatedBuildInputs = [ shared_desktop_ontologies stdenv.gcc.libc ];
+  propagatedBuildInputs = [ shared_desktop_ontologies gcc.libc ];
 
   # cmake fails to find acl.h because of C++-style comment
   cmakeFlags = [
@@ -31,11 +26,8 @@ stdenv.mkDerivation rec {
     "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
     ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "KDE libraries";
     license = "LGPL";
-    homepage = http://www.kde.org;
-    maintainers = [ maintainers.sander maintainers.urkud ];
-    platforms = platforms.linux;
   };
 }
