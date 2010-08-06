@@ -3083,7 +3083,11 @@ let
     inherit (gnome) libgnomecanvas;
   };
 
-  lcms = callPackage ../development/libraries/lcms { };
+  lcms = lcms1;
+
+  lcms1 = callPackage ../development/libraries/lcms { };
+
+  lcms2 = callPackage ../development/libraries/lcms2 { };
 
   lensfun = callPackage ../development/libraries/lensfun {
     inherit (gnome) glib;
