@@ -1,4 +1,4 @@
-{stdenv, fetchhg, bison, glibc, ed, which, bash, makeWrapper, perl, ...}:
+{ stdenv, fetchhg, bison, glibc, ed, which, bash, coreutils, makeWrapper, perl }:
 
 let
   version = "2010-06-09";
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
     sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo.go
     sed -i 's,/bin/ed,${ed}/bin/ed,' src/cmd/6l/mkenam
 
-    sed -i -e 's,/bin/cat,${stdenv.coreutils}/bin/cat,' \
-      -e 's,/bin/echo,${stdenv.coreutils}/bin/echo,' \
+    sed -i -e 's,/bin/cat,${coreutils}/bin/cat,' \
+      -e 's,/bin/echo,${coreutils}/bin/echo,' \
       src/pkg/exec/exec_test.go
 
     # Disabling the 'os/http/net' tests (they want files not available in

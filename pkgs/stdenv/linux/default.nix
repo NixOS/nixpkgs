@@ -73,7 +73,7 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.
   stdenvBootFun =
-    {gcc, extraAttrs ? {}, extraPath ? [], fetchurl}:
+    {gcc, extraAttrs ? {}, overrides ? {}, extraPath ? [], fetchurl}:
 
     import ../generic {
       inherit system;
@@ -89,8 +89,10 @@ rec {
       shell = "${bootstrapTools}/bin/sh";
       initialPath = [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
-      inherit gcc;
-      extraAttrs = extraAttrs // {inherit fetchurl;};
+      inherit gcc extraAttrs;
+      overrides = overrides // {
+        inherit fetchurl;
+      };
     };
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
@@ -168,7 +170,7 @@ rec {
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
     };
-    extraAttrs = {
+    overrides = {
       glibc = stdenvLinuxGlibc;
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
@@ -195,7 +197,7 @@ rec {
       gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
       name = "";
     };
-    extraAttrs = {
+    overrides = {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
@@ -215,7 +217,7 @@ rec {
   #
   #    When updating stdenvLinux, make sure that the result has no
   #    dependency (`nix-store -qR') on bootstrapTools.
-  stdenvLinux = import ../generic {
+  stdenvLinux = import ../generic rec {
     name = "stdenv-linux";
     
     inherit system;
@@ -240,10 +242,15 @@ rec {
     fetchurlBoot = fetchurl;
     
     extraAttrs = {
-      inherit (stdenvLinuxBoot2Pkgs) binutils /* gcc */ glibc;
+      inherit (stdenvLinuxBoot2Pkgs) glibc;
+    };
+
+    overrides = {
+      inherit gcc;
+      inherit (stdenvLinuxBoot2Pkgs) binutils glibc;
       inherit (stdenvLinuxBoot3Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk
-        gnumake gnused gnutar gnugrep patch patchelf
+        gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl;
     };
   };

@@ -93,10 +93,11 @@ let
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  __overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig;
+  overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig //
+    (if pkgsOrig.stdenv ? overrides then pkgsOrig.stdenv.overrides else { });
 
   pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
-  pkgs = pkgsFun __overrides; # the overriden, final packages
+  pkgs = pkgsFun overrides; # the overriden, final packages
 
 
   # We use `callPackage' to be able to omit function arguments that
@@ -113,6 +114,7 @@ let
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = __overrides: with helperFunctions; helperFunctions // rec {
 
+    
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
     inherit system;
@@ -151,10 +153,6 @@ let
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
-
-  useFromStdenv = it : alternative : if ((bootStdenv != null ||
-    crossSystem == null) && builtins.hasAttr it stdenv) then
-    (builtins.getAttr it stdenv) else alternative;
 
   # Return the first available value in the order: pkg.val, val, or default.
   getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
@@ -265,15 +263,10 @@ let
     inherit stdenv mercurial nix;
   };
 
-  # `fetchurl' downloads a file from the network.  The `useFromStdenv'
-  # is there to allow stdenv to determine fetchurl.  Used during the
-  # stdenv-linux bootstrap phases to prevent lots of different curls
-  # from being built.
-  fetchurl = useFromStdenv "fetchurl"
-    (import ../build-support/fetchurl {
-      curl = curl;
-      stdenv = stdenv;
-    });
+  # `fetchurl' downloads a file from the network.
+  fetchurl = import ../build-support/fetchurl {
+    inherit curl stdenv;
+  };
 
   # fetchurlBoot is used for curl and its dependencies in order to
   # prevent a cyclic dependency (curl depends on curl.tar.bz2,
@@ -428,10 +421,7 @@ let
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
-  bzip2 = useFromStdenv "bzip2"
-    (import ../tools/compression/bzip2 {
-      inherit fetchurl stdenv;
-    });
+  bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
@@ -469,17 +459,13 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  coreutils_real = makeOverridable (if stdenv ? isDietLibC
-      then import ../tools/misc/coreutils-5
-      else import ../tools/misc/coreutils)
+  coreutils = callPackage (if stdenv ? isDietLibC
+      then ../tools/misc/coreutils-5
+      else ../tools/misc/coreutils)
     {
-      inherit fetchurl stdenv acl perl gmp;
-
       # TODO: Add ACL support for cross-Linux.
-      aclSupport = (crossSystem == null) && stdenv.isLinux;
+      aclSupport = crossSystem == null && stdenv.isLinux;
     };
-
-  coreutils = useFromStdenv "coreutils" coreutils_real;
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -529,10 +515,7 @@ let
 
   diffstat = callPackage ../tools/text/diffstat { };
 
-  diffutils = useFromStdenv "diffutils"
-    (import ../tools/text/diffutils {
-      inherit fetchurl stdenv coreutils;
-    });
+  diffutils = callPackage ../tools/text/diffutils { };
 
   dirmngr = callPackage ../tools/security/dirmngr { };
 
@@ -590,12 +573,10 @@ let
 
   file = callPackage ../tools/misc/file { };
 
-  findutils = useFromStdenv "findutils"
-    (if stdenv.isDarwin then findutils4227 else
-      import ../tools/misc/findutils {
-        inherit fetchurl stdenv coreutils;
-      }
-    );
+  findutils =
+    if stdenv.isDarwin
+    then findutils4227
+    else callPackage ../tools/misc/findutils { };
 
   findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
 
@@ -611,10 +592,7 @@ let
 
   unix2dos = callPackage ../tools/text/unix2dos { };
 
-  gawk = useFromStdenv "gawk"
-    (import ../tools/text/gawk {
-      inherit fetchurl stdenv;
-    });
+  gawk = callPackage ../tools/text/gawk { };
 
   gdmap = callPackage ../tools/system/gdmap {
     inherit (gtkLibs216) gtk;
@@ -645,14 +623,9 @@ let
     inherit (gtkLibs) glib;
   };
 
-  gnugrep = useFromStdenv "gnugrep"
-    (import ../tools/text/gnugrep {
-      inherit fetchurl stdenv pcre;
-    });
+  gnugrep = callPackage ../tools/text/gnugrep { };
 
-  gnupatch = useFromStdenv "patch" (import ../tools/text/gnupatch {
-    inherit fetchurl stdenv ed;
-  });
+  gnupatch = callPackage ../tools/text/gnupatch { };
 
   gnupg1orig = callPackage ../tools/security/gnupg1 {
     ideaSupport = false;
@@ -671,17 +644,11 @@ let
     lua = null;
   };
 
-  gnused = useFromStdenv "gnused"
-    (import ../tools/text/gnused {
-      inherit fetchurl stdenv;
-    });
+  gnused = callPackage ../tools/text/gnused { };
 
   gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
 
-  gnutar = useFromStdenv "gnutar"
-    (import ../tools/archivers/gnutar {
-      inherit fetchurl stdenv;
-    });
+  gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
@@ -731,10 +698,7 @@ let
     inherit openssl gmp nettools iproute;
   };
 
-  gzip = useFromStdenv "gzip"
-    (import ../tools/compression/gzip {
-      inherit fetchurl stdenv;
-    });
+  gzip = callPackage ../tools/compression/gzip { };
 
   pigz = callPackage ../tools/compression/pigz { };
 
@@ -1385,14 +1349,11 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (useFromStdenv "bash" bashReal);
-
-  bashReal = callPackage ../shells/bash {
+  bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
-  };
+  });
 
-  bashInteractive = appendToName "interactive" (bashReal.override {
-    inherit readline texinfo;
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
   });
 
@@ -1480,7 +1441,7 @@ let
     profiledCompiler = false;
   });
 
-  gcc44 = useFromStdenv "gcc" gcc44_real;
+  gcc44 = gcc44_real;
 
   gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
@@ -2076,8 +2037,7 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  perl = useFromStdenv "perl"
-    (if system != "i686-cygwin" then perl510 else sysPerl);
+  perl = if system != "i686-cygwin" then perl510 else sysPerl;
 
   php = makeOverridable (import ../development/interpreters/php) {
     inherit
@@ -2274,10 +2234,9 @@ let
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
-  binutils = useFromStdenv "binutils"
-    (import ../development/tools/misc/binutils {
-      inherit fetchurl stdenv noSysDirs;
-    });
+  binutils = callPackage ../development/tools/misc/binutils {
+    inherit noSysDirs;
+  };
 
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl;
@@ -2378,10 +2337,7 @@ let
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
-  gnumake = useFromStdenv "gnumake"
-    (import ../development/tools/build-managers/gnumake {
-      inherit fetchurl stdenv;
-    });
+  gnumake = callPackage ../development/tools/build-managers/gnumake { };
 
   gnumake380 = callPackage ../development/tools/build-managers/gnumake-3.80 { };
 
@@ -2447,23 +2403,11 @@ let
      */
   };
 
-  patchelf = useFromStdenv "patchelf"
-    (import ../development/tools/misc/patchelf {
-      inherit fetchurl stdenv;
-    });
+  patchelf = callPackage ../development/tools/misc/patchelf { };
 
   patchelf06 = callPackage ../development/tools/misc/patchelf/0.6.nix { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
-
-  /**
-   * pkgconfig is optionally taken from the stdenv to allow bootstrapping
-   * of glib and pkgconfig itself on MinGW.
-   */
-  pkgconfigReal = useFromStdenv "pkgconfig"
-    (import ../development/tools/misc/pkgconfig {
-      inherit fetchurl stdenv;
-    });
 
   /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
      because most usage of pkgconfig as buildInput (inheritance of
@@ -2471,7 +2415,7 @@ let
      cross_renaming: we should make all programs use pkgconfig as
      buildNativeInput after the renaming.
      */
-  pkgconfig = forceBuildDrv pkgconfigReal;
+  pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gtkLibs) gtk;
@@ -2549,10 +2493,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  acl = useFromStdenv "acl"
-    (import ../development/libraries/acl {
-      inherit stdenv fetchurl gettext attr libtool;
-    });
+  acl = callPackage ../development/libraries/acl { };
 
   adns = import ../development/libraries/adns/1.4.nix {
     inherit stdenv fetchurl;
@@ -2589,10 +2530,7 @@ let
     inherit fetchurl stdenv;
   });
 
-  attr = useFromStdenv "attr"
-    (import ../development/libraries/attr {
-      inherit stdenv fetchurl gettext libtool;
-    });
+  attr = callPackage ../development/libraries/attr { };
 
   aubio = callPackage ../development/libraries/aubio { };
 
@@ -2831,7 +2769,7 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = useFromStdenv "glibc" glibc211;
+  glibc = glibc211;
 
   glibc25 = callPackage ../development/libraries/glibc-2.5 {
     kernelHeaders = linuxHeaders;

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, libxml2, openssl, readline, gawk }:
 
-assert stdenv ? gawk || gawk != null;
-
 stdenv.mkDerivation rec {
   name = "virtuoso-opensource-6.1.1";
 
@@ -10,8 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sd70j9i26ml16lig9r9lmrdf5q0kybq71r6vzzzc5v5jxjz0l7w";
   };
 
-  buildInputs = [ libxml2 openssl readline ]
-    ++ stdenv.lib.optional (! stdenv ? gawk) gawk;
+  buildInputs = [ libxml2 openssl readline gawk ];
 
   CPP="${stdenv.gcc}/bin/gcc -E";
 

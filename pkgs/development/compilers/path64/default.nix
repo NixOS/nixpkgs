@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     sed -i s,/usr/bin/ld,$(type -P ld), src/driver/phases.c
-    sed -i s,/lib64/ld-linux-x86-64.so.2,${stdenv.glibc}/lib/ld-linux-x86-64.so.2, src/include/main_defs.h.in
+    sed -i s,/lib64/ld-linux-x86-64.so.2,${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2, src/include/main_defs.h.in
   '';
 
   cmakeFlags = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     -DPATH64_ENABLE_PSCRUNTIME=OFF
     -DPATH64_ENABLE_PROFILING=OFF -DPATH64_ENABLE_TARGETS=x8664 
     -DCMAKE_BUILD_TYPE=Debug -DPATH64_ENABLE_FORTRAN=OFF
-    -DPSC_CRT_PATH=${stdenv.glibc}/lib
+    -DPSC_CRT_PATH=${stdenv.gcc.libc}/lib
   '';
 
   makeFlags = "-j4";

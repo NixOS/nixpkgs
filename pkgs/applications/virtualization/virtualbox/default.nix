@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
-, python, which, alsaLib, curl
+, python, which, alsaLib, curl, gawk
 }:
 
 stdenv.mkDerivation {
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
            -e "s|@QT4_PATH@|${qt4}/lib|" \
 	   -e "s|which|${which}/bin/which|" \
-	   -e "s|awk|${stdenv.gawk}/bin/awk|" \
+	   -e "s|awk|${gawk}/bin/awk|" \
 	   $out/bin/VBox.sh
     chmod 755 $out/bin/VBox.sh
     for file in VirtualBox VBoxManage VBoxSDL

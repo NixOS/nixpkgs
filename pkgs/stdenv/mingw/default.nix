@@ -62,7 +62,7 @@ let {
       body =
         stdenv // mkDerivationFun // {
           inherit fetchurl;
-          pkgconfig = pkgconfigBin;
+          overrides.pkgconfig = pkgconfigBin;
         };
 
       shell =

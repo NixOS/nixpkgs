@@ -1,6 +1,8 @@
-{stdenv, fetchurl, db4, glibc, openssl, cyrus_sasl}:
+{ stdenv, fetchurl, db4, glibc, openssl, cyrus_sasl
+, coreutils, findutils, gnused, gnugrep
+}:
 
-assert stdenv.isLinux && stdenv ? coreutils;
+assert stdenv.isLinux;
 
 stdenv.mkDerivation {
   name = "postfix-2.2.11";
@@ -24,8 +26,8 @@ stdenv.mkDerivation {
 
     mkdir $out/share/postfix/conf
     cp conf/* $out/share/postfix/conf
-    sed -e 's@PATH=.*@PATH=${stdenv.coreutils}/bin:${stdenv.findutils}/bin:${stdenv.gnused}/bin:${stdenv.gnugrep}/bin:$out/sbin@' -i $out/share/postfix/conf/post-install
-    sed -e '2aPATH=${stdenv.coreutils}/bin:${stdenv.findutils}/bin:${stdenv.gnused}/bin:${stdenv.gnugrep}/bin:$out/sbin' -i $out/share/postfix/conf/postfix-script
+    sed -e 's@PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:$out/sbin@' -i $out/share/postfix/conf/post-install
+    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:$out/sbin' -i $out/share/postfix/conf/postfix-script
     chmod a+x $out/share/postfix/conf/{postfix-script,post-install}
   '';
 

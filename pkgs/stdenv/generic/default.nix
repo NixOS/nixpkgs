@@ -1,6 +1,6 @@
 { system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
-, extraAttrs ? {}
+, extraAttrs ? {}, overrides ? {}
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -118,6 +118,7 @@ let
 
         inherit fetchurlBoot;
 
+        inherit overrides;
       }
 
       # Propagate any extra attributes.  For instance, we use this to
