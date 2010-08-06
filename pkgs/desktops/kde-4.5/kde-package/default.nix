@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
-{ pn, v, stable ? true, sha256 }: args:
+{ pn, v, stable ? true, sha256, subdir ? null }: args:
 stdenv.mkDerivation ({
   name = "${pn}-${v}";
   src = fetchurl {
-    url = "mirror://kde/" + (if stable then "" else "un")
-      + "stable/${v}/src/${pn}-${v}.tar.bz2";
+    url = "mirror://kde/" + (if stable then "" else "un") + "stable/" +
+      (if subdir == null then "${v}/src" else subdir) + "/${pn}-${v}.tar.bz2";
     inherit sha256;
   };
   meta = {
