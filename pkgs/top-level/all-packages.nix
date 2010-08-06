@@ -4727,6 +4727,10 @@ let
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
+  pam_ccreds = callPackage ../os-specific/linux/pam_ccreds {
+    db = db4;
+  };
+
   pam_console = callPackage ../os-specific/linux/pam_console {
     libtool = libtool_1_5;
     flex = if stdenv.system == "i686-linux" then flex else flex2533;
