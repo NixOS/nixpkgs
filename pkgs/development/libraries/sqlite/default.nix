@@ -3,11 +3,11 @@
 assert readline != null -> ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.7.0";
+  name = "sqlite-3.7.0.1";
 
   src = fetchurl {
-    url = "http://www.sqlite.org/sqlite-amalgamation-3.7.0.tar.gz";
-    sha256 = "13krs46f6fx83hd13i1a6ndbqs12wv4nhgi2dg3aas58r40p7a3w";
+    url = "http://www.sqlite.org/sqlite-amalgamation-3.7.0.1.tar.gz";
+    sha256 = "0nx506wmp32l6sh2p82bd2fscak1b402fp86cxl3r9pfs1yvychj";
   };
 
   buildInputs = [ readline ncurses ];
