@@ -57,6 +57,7 @@ let
           # Tools to create / manipulate filesystems.
           pkgs.ntfsprogs # for resizing NTFS partitions
           pkgs.btrfsProgs
+          pkgs.dosfstools
           pkgs.xfsprogs
           pkgs.jfsutils
           pkgs.jfsrec
