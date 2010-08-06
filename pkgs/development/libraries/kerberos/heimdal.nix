@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openldap, readline, db4, openssl, cyrus_sasl }:
+{ stdenv, fetchurl, openldap, readline, db4, openssl, cyrus_sasl, sqlite} :
 
 stdenv.mkDerivation rec {
   name = "heimdal-1.3.3";
@@ -14,7 +14,16 @@ stdenv.mkDerivation rec {
   patches = [ ./no-md2.patch ];
   
   ## ugly, X should be made an option
-  configureFlags = "--with-openldap=${openldap} --without-x";
-  
-  propagatedBuildInputs = [ readline db4 openssl openldap cyrus_sasl ];
+  configureFlags = [
+    "--with-openldap=${openldap}"
+    "--with-sqlite3=${sqlite}"
+    "--without-x"
+  ];
+  # dont succeed with --libexec=$out/sbin, so
+  postInstall = ''
+    mv $out/libexec/* $out/sbin/
+    rmdir $out/libexec
+  '';
+
+  propagatedBuildInputs = [ readline db4 openssl openldap cyrus_sasl sqlite];
 }
