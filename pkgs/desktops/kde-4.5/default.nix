@@ -1,7 +1,11 @@
-callPackage :
+{ callPackage, stdenv, fetchurl } :
 
 {
   recurseForRelease = true;
+
+  kdePackage = import ./kde-package {
+    inherit stdenv fetchurl;
+  };
 
 ### SUPPORT
   akonadi = callPackage ./support/akonadi { };
