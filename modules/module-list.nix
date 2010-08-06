@@ -110,6 +110,7 @@
   ./services/system/dbus.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
+  ./services/system/kerberos.nix
   ./services/ttys/gpm.nix
   ./services/ttys/mingetty.nix
   ./services/web-servers/apache-httpd/default.nix

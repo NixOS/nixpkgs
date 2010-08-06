@@ -26,6 +26,7 @@ let
       {
         protocol    = ${srv.protocol}
         ${optionalString srv.unlisted "type        = UNLISTED"}
+        ${optionalString (srv.flags != "") "flags = ${srv.flags}"}
         socket_type = ${if srv.protocol == "udp" then "dgram" else "stream"}
         ${if srv.port != 0 then "port        = ${toString srv.port}" else ""}
         wait        = ${if srv.protocol == "udp" then "yes" else "no"}
@@ -96,6 +97,12 @@ in
           type = types.string;
           default = "";
           description = "Command-line arguments for the server program.";
+        };
+
+        flags = mkOption {
+          type = types.string;
+          default = "";
+          description = "";
         };
 
         unlisted = mkOption {
