@@ -188,7 +188,7 @@ in
 
       # Add vfat to enable people to copy the contents of the CD to a
       # bootable USB stick.
-      "vfat"
+      "vfat" "nls_cp437" "nls_iso8859-1"
     ];
 
   boot.initrd.kernelModules =
