@@ -11,19 +11,19 @@ assert scpSupport -> libssh2 != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.21.0";
-  
+
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
     sha256 = "1fl7sh38i746b57aqjqjaykwq4rhm2p1phzrgnc2h6wm2k2b95gy";
   };
-  
+
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs =
     stdenv.lib.optional zlibSupport zlib ++
     stdenv.lib.optional sslSupport openssl;
-    
+
   configureFlags = ''
     ${if sslSupport then "--with-ssl=${openssl}" else "--without-ssl"}
     ${if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2"}
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   dontDisableStatic = if linkStatic then true else false;
-  
+
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   LDFLAGS = if linkStatic then "-static" else "";
   CXX = "g++";
