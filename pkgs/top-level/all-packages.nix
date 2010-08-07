@@ -1472,7 +1472,7 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc45 = useFromStdenv "gcc" gcc45_real;
+  gcc45 = gcc45_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc-4.5) {
