@@ -108,7 +108,7 @@ sub addPkg($;$) {
 my @args = split ' ', $ENV{"paths"};
 
 foreach my $pkgDir (@args) {
-    addPkg($pkgDir, $ENV{"ignoreCollisions"} eq "1");
+    addPkg($pkgDir, $ENV{"ignoreCollisions"} eq "1") if -e $pkgDir;
 }
 
 
