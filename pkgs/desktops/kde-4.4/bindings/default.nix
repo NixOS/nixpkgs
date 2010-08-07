@@ -35,6 +35,6 @@ stdenv.mkDerivation {
     longDescription = "Provides KDE bindings for several languages such as Java, Smoke and Python";
     license = "LGPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

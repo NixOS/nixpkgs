@@ -14,7 +14,8 @@ composableDerivation {} {
     configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
 
     buildNativeInputs = [ncurses pkgconfig]
-      ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu ];
+      ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu glib 
+           libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
@@ -30,17 +31,18 @@ composableDerivation {} {
       // edf { name = "python"; feat = "pythoninterp"; enable = { buildNativeInputs = [python]; }; } #Include Python interpreter.
       // edf { name = "tcl"; enable = { buildNativeInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { buildNativeInputs = [ruby]; };} #Include Ruby interpreter.
+      // edf { name = "lua" ; feat = "luainterp"; enable = { buildNativeInputs = [lua]; configureFlags = ["--with-lua-prefix=${args.lua}"];};}
       // edf { name = "cscope"; } #Include cscope interface.
       // edf { name = "workshop"; } #Include Sun Visual Workshop support.
       // edf { name = "netbeans"; } #Disable NetBeans integration support.
-      // edf { name = "sniff"; } #Include Sniff interface.
+      // edf { name = "sniff"; feat = "sniff" ; } #Include Sniff interface.
       // edf { name = "multibyte"; } #Include multibyte editing support.
-      // edf { name = "hangulinput"; } #Include Hangul input support.
-      # // edf { name = "xim"; enable = { buildNativeInputs = [xim]; }; } #Include XIM input support.
+      // edf { name = "hangulinput"; feat = "hangulinput" ;} #Include Hangul input support.
+      // edf { name = "xim"; } #Include XIM input support.
       // edf { name = "fontset"; } #Include X fontset output support.
       // edf { name = "acl"; } #Don't check for ACL support.
       // edf { name = "gpm"; } #Don't use gpm (Linux mouse daemon).
-      // edf { name = "nls"; } #Don't support NLS (gettext()).
+      // edf { name = "nls"; enable = {buildNativeInputs = [gettext];}; } #Don't support NLS (gettext()).
       ;
 
   cfg = {

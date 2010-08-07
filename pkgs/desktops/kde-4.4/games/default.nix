@@ -11,6 +11,6 @@ stdenv.mkDerivation {
     description = "KDE Games";
     homepage = http://www.kde.org;
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

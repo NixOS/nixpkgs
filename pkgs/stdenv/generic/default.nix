@@ -1,6 +1,6 @@
 { system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
 , param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
-, extraAttrs ? {}
+, extraAttrs ? {}, overrides ? {}
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -97,6 +97,7 @@ let
                || result.system == "armv5tel-linux"
                || result.system == "ict_loongson-2_v0.3_fpu_v0.1-linux";
         isSunOS = result.system == "i386-sunos";
+        isSunOS = result.system == "i386-sunos";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
@@ -120,6 +121,7 @@ let
 
         inherit fetchurlBoot;
 
+        inherit overrides;
       }
 
       # Propagate any extra attributes.  For instance, we use this to

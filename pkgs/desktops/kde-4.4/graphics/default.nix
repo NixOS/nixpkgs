@@ -19,6 +19,6 @@ stdenv.mkDerivation {
       Okular a document reader.
     '';
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

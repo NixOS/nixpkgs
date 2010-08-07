@@ -1,10 +1,10 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, gtk, ncurses,
   pythonSupport ? false, python}:
 stdenv.mkDerivation rec {
-  name = "vte-0.22.5";
+  name = "vte-0.25.1";
   src = fetchurl {
-    url = "mirror://gnome/desktop/2.28/2.28.2/sources/${name}.tar.bz2";
-    sha256 = "1xmjlz79z3apxmq18d5qyliaky6xb1n2nxwvpzrdl4ky6hk73660";
+    url = "http://ftp.gnome.org/pub/gnome/sources/vte/0.25/${name}.tar.bz2";
+    sha256 = "105f5ifyg09nh5p6fw2w7c0n9wd8vw9cvwlh6zg49ibsar893qi5";
   };
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
                 stdenv.lib.optional pythonSupport python;

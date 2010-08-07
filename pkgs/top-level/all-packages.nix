@@ -93,10 +93,11 @@ let
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  __overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig;
+  overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig //
+    (if pkgsOrig.stdenv ? overrides then pkgsOrig.stdenv.overrides else { });
 
   pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
-  pkgs = pkgsFun __overrides; # the overriden, final packages
+  pkgs = pkgsFun overrides; # the overriden, final packages
 
 
   # We use `callPackage' to be able to omit function arguments that
@@ -112,6 +113,7 @@ let
 
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = __overrides: with helperFunctions; helperFunctions // rec {
+
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
@@ -151,10 +153,6 @@ let
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
-
-  useFromStdenv = it : alternative : if ((bootStdenv != null ||
-    crossSystem == null) && builtins.hasAttr it stdenv) then
-    (builtins.getAttr it stdenv) else alternative;
 
   # Return the first available value in the order: pkg.val, val, or default.
   getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
@@ -265,15 +263,10 @@ let
     inherit stdenv mercurial nix;
   };
 
-  # `fetchurl' downloads a file from the network.  The `useFromStdenv'
-  # is there to allow stdenv to determine fetchurl.  Used during the
-  # stdenv-linux bootstrap phases to prevent lots of different curls
-  # from being built.
-  fetchurl = useFromStdenv "fetchurl"
-    (import ../build-support/fetchurl {
-      curl = curl;
-      stdenv = stdenv;
-    });
+  # `fetchurl' downloads a file from the network.
+  fetchurl = import ../build-support/fetchurl {
+    inherit curl stdenv;
+  };
 
   # fetchurlBoot is used for curl and its dependencies in order to
   # prevent a cyclic dependency (curl depends on curl.tar.bz2,
@@ -428,10 +421,7 @@ let
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
-  bzip2 = useFromStdenv "bzip2"
-    (import ../tools/compression/bzip2 {
-      inherit fetchurl stdenv;
-    });
+  bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
@@ -469,17 +459,13 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  coreutils_real = makeOverridable (if stdenv ? isDietLibC
-      then import ../tools/misc/coreutils-5
-      else import ../tools/misc/coreutils)
+  coreutils = callPackage (if stdenv ? isDietLibC
+      then ../tools/misc/coreutils-5
+      else ../tools/misc/coreutils)
     {
-      inherit fetchurl stdenv acl perl gmp;
-
       # TODO: Add ACL support for cross-Linux.
-      aclSupport = (crossSystem == null) && stdenv.isLinux;
+      aclSupport = crossSystem == null && stdenv.isLinux;
     };
-
-  coreutils = useFromStdenv "coreutils" coreutils_real;
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -488,11 +474,12 @@ let
   cron = callPackage ../tools/system/cron {  # see also fcron
   };
 
-  curl = makeOverridable (import ../tools/networking/curl) {
+  curl = makeOverridable (import ../tools/networking/curl) rec {
     fetchurl = fetchurlBoot;
-    inherit stdenv zlib openssl;
+    inherit stdenv zlib openssl libssh2;
     zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
-    sslSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport && (!stdenv.isSunOS);
   };
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
@@ -528,10 +515,7 @@ let
 
   diffstat = callPackage ../tools/text/diffstat { };
 
-  diffutils = useFromStdenv "diffutils"
-    (import ../tools/text/diffutils {
-      inherit fetchurl stdenv coreutils;
-    });
+  diffutils = callPackage ../tools/text/diffutils { };
 
   dirmngr = callPackage ../tools/security/dirmngr { };
 
@@ -589,12 +573,10 @@ let
 
   file = callPackage ../tools/misc/file { };
 
-  findutils = useFromStdenv "findutils"
-    (if stdenv.isDarwin then findutils4227 else
-      import ../tools/misc/findutils {
-        inherit fetchurl stdenv coreutils;
-      }
-    );
+  findutils =
+    if stdenv.isDarwin
+    then findutils4227
+    else callPackage ../tools/misc/findutils { };
 
   findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
 
@@ -610,10 +592,7 @@ let
 
   unix2dos = callPackage ../tools/text/unix2dos { };
 
-  gawk = useFromStdenv "gawk"
-    (import ../tools/text/gawk {
-      inherit fetchurl stdenv;
-    });
+  gawk = callPackage ../tools/text/gawk { };
 
   gdmap = callPackage ../tools/system/gdmap {
     inherit (gtkLibs216) gtk;
@@ -644,14 +623,9 @@ let
     inherit (gtkLibs) glib;
   };
 
-  gnugrep = useFromStdenv "gnugrep"
-    (import ../tools/text/gnugrep {
-      inherit fetchurl stdenv pcre;
-    });
+  gnugrep = callPackage ../tools/text/gnugrep { };
 
-  gnupatch = useFromStdenv "patch" (import ../tools/text/gnupatch {
-    inherit fetchurl stdenv ed;
-  });
+  gnupatch = callPackage ../tools/text/gnupatch { };
 
   gnupg1orig = callPackage ../tools/security/gnupg1 {
     ideaSupport = false;
@@ -670,17 +644,11 @@ let
     lua = null;
   };
 
-  gnused = useFromStdenv "gnused"
-    (import ../tools/text/gnused {
-      inherit fetchurl stdenv;
-    });
+  gnused = callPackage ../tools/text/gnused { };
 
   gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
 
-  gnutar = useFromStdenv "gnutar"
-    (import ../tools/archivers/gnutar {
-      inherit fetchurl stdenv;
-    });
+  gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
@@ -730,10 +698,7 @@ let
     inherit openssl gmp nettools iproute;
   };
 
-  gzip = useFromStdenv "gzip"
-    (import ../tools/compression/gzip {
-      inherit fetchurl stdenv;
-    });
+  gzip = callPackage ../tools/compression/gzip { };
 
   pigz = callPackage ../tools/compression/pigz { };
 
@@ -860,6 +825,8 @@ let
   mssys = callPackage ../tools/misc/mssys { };
 
   mtdutils = callPackage ../tools/filesystems/mtdutils { };
+
+  mtools = callPackage ../tools/filesystems/mtools { };
 
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
@@ -1216,6 +1183,8 @@ let
     inherit (gnome) gtk;
   };
 
+  unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
+
   upx = callPackage ../tools/compression/upx { };
 
   vbetool = builderDefsPackage ../tools/system/vbetool {
@@ -1384,14 +1353,11 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (useFromStdenv "bash" bashReal);
-
-  bashReal = callPackage ../shells/bash {
+  bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
-  };
+  });
 
-  bashInteractive = appendToName "interactive" (bashReal.override {
-    inherit readline texinfo;
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
   });
 
@@ -2088,8 +2054,7 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  perl = useFromStdenv "perl"
-    (if system != "i686-cygwin" then perl510 else sysPerl);
+  perl = if system != "i686-cygwin" then perl510 else sysPerl;
 
   php = makeOverridable (import ../development/interpreters/php) {
     inherit
@@ -2286,10 +2251,9 @@ let
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
-  binutils = useFromStdenv "binutils"
-    (import ../development/tools/misc/binutils {
-      inherit fetchurl stdenv noSysDirs;
-    });
+  binutils = callPackage ../development/tools/misc/binutils {
+    inherit noSysDirs;
+  };
 
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl;
@@ -2390,10 +2354,7 @@ let
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
-  gnumake = useFromStdenv "gnumake"
-    (import ../development/tools/build-managers/gnumake {
-      inherit fetchurl stdenv;
-    });
+  gnumake = callPackage ../development/tools/build-managers/gnumake { };
 
   gnumake380 = callPackage ../development/tools/build-managers/gnumake-3.80 { };
 
@@ -2459,23 +2420,11 @@ let
      */
   };
 
-  patchelf = useFromStdenv "patchelf"
-    (import ../development/tools/misc/patchelf {
-      inherit fetchurl stdenv;
-    });
+  patchelf = callPackage ../development/tools/misc/patchelf { };
 
   patchelf06 = callPackage ../development/tools/misc/patchelf/0.6.nix { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
-
-  /**
-   * pkgconfig is optionally taken from the stdenv to allow bootstrapping
-   * of glib and pkgconfig itself on MinGW.
-   */
-  pkgconfigReal = useFromStdenv "pkgconfig"
-    (import ../development/tools/misc/pkgconfig {
-      inherit fetchurl stdenv;
-    });
 
   /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
      because most usage of pkgconfig as buildInput (inheritance of
@@ -2483,7 +2432,7 @@ let
      cross_renaming: we should make all programs use pkgconfig as
      buildNativeInput after the renaming.
      */
-  pkgconfig = forceBuildDrv pkgconfigReal;
+  pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gtkLibs) gtk;
@@ -2561,10 +2510,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  acl = useFromStdenv "acl"
-    (import ../development/libraries/acl {
-      inherit stdenv fetchurl gettext attr libtool;
-    });
+  acl = callPackage ../development/libraries/acl { };
 
   adns = import ../development/libraries/adns/1.4.nix {
     inherit stdenv fetchurl;
@@ -2601,10 +2547,7 @@ let
     inherit fetchurl stdenv;
   });
 
-  attr = useFromStdenv "attr"
-    (import ../development/libraries/attr {
-      inherit stdenv fetchurl gettext libtool;
-    });
+  attr = callPackage ../development/libraries/attr { };
 
   aubio = callPackage ../development/libraries/aubio { };
 
@@ -2839,7 +2782,7 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = useFromStdenv "glibc" glibc211;
+  glibc = glibc211;
 
   glibc25 = callPackage ../development/libraries/glibc-2.5 {
     kernelHeaders = linuxHeaders;
@@ -3155,7 +3098,11 @@ let
     inherit (gnome) libgnomecanvas;
   };
 
-  lcms = callPackage ../development/libraries/lcms { };
+  lcms = lcms1;
+
+  lcms1 = callPackage ../development/libraries/lcms { };
+
+  lcms2 = callPackage ../development/libraries/lcms2 { };
 
   lensfun = callPackage ../development/libraries/lensfun {
     inherit (gnome) glib;
@@ -3388,6 +3335,8 @@ let
 
   libssh = callPackage ../development/libraries/libssh { };
 
+  libssh2 = callPackage ../development/libraries/libssh2 { };
+
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
@@ -3604,6 +3553,11 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc {
+    vlc = vlc.override { qt4 = qt47; };
+    inherit (kde45) automoc4;
+  };
+
   physfs = callPackage ../development/libraries/physfs { };
 
   plib = callPackage ../development/libraries/plib { };
@@ -3739,9 +3693,14 @@ let
     ncurses = null;
   };
 
-  sqliteInteractive = lowPrio (appendToName "interactive" (sqlite.override {
+  sqlite36 = callPackage ../development/libraries/sqlite/3.6.x.nix {
+    readline = null;
+    ncurses = null;
+  };
+
+  sqliteInteractive = appendToName "interactive" (sqlite.override {
     inherit readline ncurses;
-  }));
+  });
 
   stlport = callPackage ../development/libraries/stlport { };
 
@@ -4278,8 +4237,6 @@ let
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dmtcp_devel = callPackage ../os-specific/linux/dmtcp/devel.nix { };
-
   dietlibc = callPackage ../os-specific/linux/dietlibc {
     # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
     stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
@@ -4743,12 +4700,18 @@ let
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
+  pam_ccreds = callPackage ../os-specific/linux/pam_ccreds {
+    db = db4;
+  };
+
   pam_console = callPackage ../os-specific/linux/pam_console {
     libtool = libtool_1_5;
     flex = if stdenv.system == "i686-linux" then flex else flex2533;
   };
 
   pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
+
+  pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
@@ -5073,8 +5036,8 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
-  adobeReader = callPackage ../applications/misc/adobe-reader {
-    inherit (gtkLibs) glib pango atk gtk;
+  adobeReader = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg) ../applications/misc/adobe-reader {
+    inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
   };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
@@ -6003,7 +5966,7 @@ let
   };
 
   rsync = callPackage ../applications/networking/sync/rsync {
-    enableACLs = !stdenv.isDarwin;
+    enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
   };
 
   rxvt = callPackage ../applications/misc/rxvt { };
@@ -6173,15 +6136,17 @@ let
   vimHugeX = vim_configurable;
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit fetchurl stdenv ncurses pkgconfig composableDerivation lib;
+    inherit fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib;
     inherit (xlibs) libX11 libXext libSM libXpm
-        libXt libXaw libXau libXmu;
+        libXt libXaw libXau libXmu libICE;
     inherit (gtkLibs) glib gtk;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
     # python
     # TODO mzschemeinterp perlinterp
     inherit python perl tcl ruby /*x11*/;
+
+    lua = lua5;
 
     # optional features by flags
     flags = [ "X11" ]; # only flag "X11" by now
@@ -6204,6 +6169,8 @@ let
   w3m = callPackage ../applications/networking/browsers/w3m {
     graphicsSupport = false;
   };
+
+  weechat = callPackage ../applications/networking/irc/weechat { };
 
   wings = callPackage ../applications/graphics/wings { };
 
@@ -6601,22 +6568,26 @@ let
     inherit stdenv;
   });
 
-  kde45 = makeOverridable (import ../desktops/kde-4.5) (pkgs // {
-    qt4 = qt47;
-    pyqt4 = pyqt4.override { qt4 = qt47; };
-    libdbusmenu_qt = libdbusmenu_qt.override { qt4 = qt47; };
-    shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
-  });
+  kde45 = callPackage ../desktops/kde-4.5 {
+    callPackage = newScope ({
+      qt4 = qt47;
+      pyqt4 = pyqt4.override { qt4 = qt47; };
+      libdbusmenu_qt = libdbusmenu_qt.override { qt4 = qt47; };
+      shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
+    } // kde45);
+  };
 
   xfce = xfce4;
   xfce4 = recurseIntoAttrs (import ../desktops/xfce-4 pkgs);
 
+  
   ### SCIENCE
 
   xplanet = callPackage ../applications/science/xplanet {
     inherit (gtkLibs) pango;
   };
 
+  
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
@@ -6686,9 +6657,7 @@ let
 
   hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix {
-    dmtcp = dmtcp_devel;
-  };
+  hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix { };
 
   # This is a special version of OCaml handcrafted especially for
   # hol_light it should be merged with the current expresion for ocaml
@@ -6883,6 +6852,7 @@ let
   psi = callPackage ../applications/networking/instant-messengers/psi {
     qca2 = kde45.qca2;
     qca2_ossl = kde45.qca2_ossl;
+    qt4 = qt47;
   };
 
   putty = callPackage ../applications/networking/remote/putty {
@@ -6914,9 +6884,7 @@ let
 
   tex4ht = callPackage ../misc/tex/tex4ht { };
 
-  texFunctions = callPackage ../misc/tex/nix {
-    inherit (haskellPackages) lhs2tex;
-  };
+  texFunctions = import ../misc/tex/nix pkgs;
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed

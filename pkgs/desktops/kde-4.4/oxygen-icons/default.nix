@@ -12,5 +12,6 @@ stdenv.mkDerivation {
     longDescription = "Contains icons for the KDE Oxygen theme, which is the default icon theme since KDE 4.3";
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.all;
   };
 }

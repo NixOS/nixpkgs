@@ -6,7 +6,7 @@ let {
 
   /**
    * Initial standard environment based on native Cygwin tools.
-   * GCC is not requires.
+   * GCC is not required.
    * Required (approx): bash, mkdir, gnu tar, curl.
    */
   stdenvInit1 =
@@ -62,7 +62,7 @@ let {
       body =
         stdenv // mkDerivationFun // {
           inherit fetchurl;
-          pkgconfig = pkgconfigBin;
+          overrides.pkgconfig = pkgconfigBin;
         };
 
       shell =

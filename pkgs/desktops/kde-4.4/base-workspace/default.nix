@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     description = "KDE Workspace";
     longDescription = "KDE base components that are only required to work with X11 such KDM and KWin";
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

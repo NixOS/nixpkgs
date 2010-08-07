@@ -1,16 +1,14 @@
-{stdenv, fetchurl, cmake}:
+{kdePackage, cmake}:
 
-stdenv.mkDerivation rec {
-  name = "oxygen-icons-4.4.92";
-  src = fetchurl {
-    url = "mirror://kde/unstable/4.4.92/src/${name}.tar.bz2";
-    sha256 = "1aqc5p93c9jz660x94pxx7anamrpmwd490jy0lw38y99lbdhgz9k";
-  };
+kdePackage {
+  pn = "oxygen-icons";
+  v = "4.5.0";
+  sha256 = "11wlrxnral4q5wi46p1di1cff4vr5da35a8dv2xx3ag6lnhqvjqi";
+} {
   buildInputs = [ cmake ];
-  meta = with stdenv.lib; {
+  meta = {
     description = "KDE Oxygen theme icons";
     longDescription = "Contains icons for the KDE Oxygen theme, which is the default icon theme since KDE 4.3";
     license = "GPL";
-    maintainers = [ maintainers.sander ];
   };
 }

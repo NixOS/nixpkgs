@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     longDescription = "Libraries and tools which supports running KDE desktop applications";
     license = "LGPL";
     homepage = http://www.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) maintainers platforms;
   };
 }

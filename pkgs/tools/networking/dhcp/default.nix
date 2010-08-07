@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nettools, iputils, iproute, makeWrapper }:
+{ stdenv, fetchurl, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
   name = "dhcp-4.1.1-P1";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/sbin/dhclient-script \
         --replace /sbin/ip ${iproute}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
-        "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${stdenv.coreutils}/bin:${stdenv.gnused}/bin"
+        "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${coreutils}/bin:${gnused}/bin"
     '';
 
   preConfigure =

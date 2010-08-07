@@ -6,10 +6,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "xfce-terminal-0.4.4";
+  name = "xfce-terminal-0.4.5";
   src = fetchurl {
-    url = http://archive.xfce.org/src/apps/terminal/0.4/Terminal-0.4.4.tar.bz2;
-    sha256 = "1cmkrzgi2j5dgb1jigdqigf7fa84hh9l2bclgxzn17168cwpd1lw";
+    url = http://archive.xfce.org/src/apps/terminal/0.4/Terminal-0.4.5.tar.bz2;
+    sha256 = "14w8mhmyrq6dd9574zfvq0pymknljckq6qgcv1r6c1r22jydrzcj";
   };
 
   buildInputs = [ pkgconfig intltool libexo gtk vte libxfce4util ncurses ];
