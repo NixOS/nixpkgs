@@ -6108,6 +6108,8 @@ let
     qt = qt3;
   };
 
+  veracity = callPackage ../applications/version-management/veracity {};
+
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
     inherit monotone flup cheetahTemplate highlight ctags
