@@ -13,7 +13,7 @@ let
       default_xserver ${dmcfg.xserverBin}
       xserver_arguments ${dmcfg.xserverArgs}
       sessions ${pkgs.lib.concatStringsSep "," (dmcfg.session.names ++ ["custom"])}
-      login_cmd exec ${pkgs.stdenv.shell}/bin/sh ${dmcfg.session.script} "%session"
+      login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.system.build.upstart}/sbin/shutdown -h now
       reboot_cmd ${config.system.build.upstart}/sbin/shutdown -r now
       ${if cfg.defaultUser != "" then "default_user " + cfg.defaultUser else ""}
