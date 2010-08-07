@@ -107,11 +107,22 @@ in
   system.boot.loader.kernelFile = "bzImage";
   environment.systemPackages = [ pkgs.grub2 ];
 
-  # In stage 1 of the boot, mount the CD/DVD as the root FS by label
-  # so that we don't need to know its device.
+  # In stage 1 of the boot, mount the CD as the root FS by label so
+  # that we don't need to know its device.  We pass the label of the
+  # root filesystem on the kernel command line, rather than in
+  # `fileSystems' below.  This allows CD-to-USB converters such as
+  # UNetbootin to rewrite the kernel command line to pass the label or
+  # UUID of the USB stick.  It would be nicer to write
+  # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
+  # recognise that.
+  boot.kernelParams = [ "root=LABEL=${config.isoImage.volumeID}" ];
+
+  # Note that /dev/root is a symlink to the actual root device
+  # specified on the kernel command line, created in the stage 1 init
+  # script.
   fileSystems =
     [ { mountPoint = "/";
-        label = config.isoImage.volumeID;
+        device = "/dev/root";
       }
       { mountPoint = "/nix/store";
         fsType = "squashfs";

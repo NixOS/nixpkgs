@@ -130,6 +130,7 @@ let
       cp -v ${pkgs.coreutils}/bin/cat $out/bin
       cp -v ${pkgs.coreutils}/bin/chroot $out/bin
       cp -v ${pkgs.coreutils}/bin/sleep $out/bin
+      cp -v ${pkgs.coreutils}/bin/ln $out/bin
 
       # Copy e2fsck and friends.      
       cp -v ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
