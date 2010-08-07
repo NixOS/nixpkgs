@@ -1,9 +1,9 @@
 rec {
-   version="1.96";
-   name="asymptote-1.96";
-   hash="0rs2h77j3nq36w0vr131yvlp8lqsanidhf9fvd4bggz5j5r8r850";
+   version="2.03";
+   name="asymptote-2.03";
+   hash="1npj9igf4b9dy1frriqc20ihm1s0f3yw2pgs0xc4rv514rp0wkpx";
    url="http://downloads.sourceforge.net/project/asymptote/asymptote/${version}/asymptote-${version}.src.tgz";
-   advertisedUrl="http://downloads.sourceforge.net/project/asymptote/asymptote/1.96/asymptote-1.96.src.tgz";
+   advertisedUrl="http://downloads.sourceforge.net/project/asymptote/asymptote/2.03/asymptote-2.03.src.tgz";
   
   
 }
