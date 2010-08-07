@@ -539,22 +539,27 @@ with (import ./release-lib.nix);
     lndir = all;
     setxkbmap = linux;
     xauth = linux;
+    xbitmaps = linux;
     xev = linux;
+    xf86inputevdev = linux;
     xf86inputkeyboard = linux;
     xf86inputmouse = linux;
-    xf86inputevdev = linux;
     xf86inputsynaptics = linux;
     xf86videoati = linux;
+    xf86videocirrus = linux;
     xf86videointel = linux;
     xf86videonv = linux;
     xf86videovesa = linux;
     xfs = linux;
     xkbcomp = linux;
+    xlsclients = linux;
     xmessage = linux;
     xorgserver = linux;
+    xprop = linux;    
     xrandr = linux;
     xrdb = linux;
     xset = linux;
+    xsetroot = linux;
   };
 
 } ))

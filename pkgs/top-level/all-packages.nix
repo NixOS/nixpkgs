@@ -6563,12 +6563,14 @@ let
   xfce = xfce4;
   xfce4 = recurseIntoAttrs (import ../desktops/xfce-4 pkgs);
 
+  
   ### SCIENCE
 
   xplanet = callPackage ../applications/science/xplanet {
     inherit (gtkLibs) pango;
   };
 
+  
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
