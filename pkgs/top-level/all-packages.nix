@@ -2146,6 +2146,7 @@ let
   scsh = callPackage ../development/interpreters/scsh { };
 
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
+  spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
 
   sysPerl = callPackage ../development/interpreters/sys-perl { };
 
