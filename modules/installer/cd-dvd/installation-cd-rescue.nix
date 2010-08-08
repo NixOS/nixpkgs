@@ -20,7 +20,7 @@
     utillinuxCurses ddrescue 
     pciutils sdparm hdparm hddtemp usbutils
     btrfsProgs xfsprogs jfsutils jfsrec
-    wpa_supplicant iproute 
+    iproute 
     fuse ntfs3g smbfsFuse sshfsFuse
     manpages irssi elinks mcabber mutt openssh lftp 
     openssl ncat socat

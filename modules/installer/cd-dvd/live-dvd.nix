@@ -10,7 +10,6 @@
   # Include lots of packages.
   environment.systemPackages =
     [ pkgs.utillinuxCurses
-      pkgs.wpa_supplicant 
       pkgs.upstartJobControl
       pkgs.iproute
       pkgs.bc

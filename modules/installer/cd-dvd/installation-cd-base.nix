@@ -47,7 +47,6 @@ let
           pkgs.sshfsFuse
           pkgs.socat
           pkgs.screen
-          pkgs.wpa_supplicant # !!! should use the wpa module
 
           # Hardware-related tools.
           pkgs.sdparm
@@ -249,4 +248,8 @@ in
   # default root password is empty.
   services.openssh.enable = true;
   jobs.sshd.startOn = pkgs.lib.mkOverride 50 {} "";
+
+  # Enable wpa_supplicant, but don't start it by default.
+  networking.enableWLAN = true;
+  jobs.wpa_supplicant.startOn = pkgs.lib.mkOverride 50 {} "";
 }
