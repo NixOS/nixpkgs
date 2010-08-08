@@ -135,7 +135,7 @@ in
     
     hardware.firmware = mkOption {
       default = [];
-      example = [/root/my-firmware];
+      example = [ "/root/my-firmware" ];
       merge = mergeListOption; 
       description = ''
         List of directories containing firmware files.  Such files
