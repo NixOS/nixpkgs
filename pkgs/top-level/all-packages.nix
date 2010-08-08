@@ -93,8 +93,12 @@ let
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
+  # We don't want stdenv overrides in the case of cross-building, or
+  # otherwise the basic overrided packages will not be built with the
+  # crossStdenv adapter.
   overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig //
-    (if pkgsOrig.stdenv ? overrides then pkgsOrig.stdenv.overrides else { });
+    (if (pkgsOrig.stdenv ? overrides && crossSystem == null)
+    then pkgsOrig.stdenv.overrides else { });
 
   pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
   pkgs = pkgsFun overrides; # the overriden, final packages
