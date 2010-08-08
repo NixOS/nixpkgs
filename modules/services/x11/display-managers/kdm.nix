@@ -92,6 +92,8 @@ in
   ###### implementation
   
   config = mkIf cfg.enable {
+
+    services.xserver.displayManager.slim.enable = false;
   
     services.xserver.displayManager.job =
       { execCmd =

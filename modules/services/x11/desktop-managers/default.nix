@@ -19,6 +19,7 @@ in
   ];
 
   options = {
+  
     services.xserver.desktopManager = {
 
       session = mkOption {
@@ -63,6 +64,7 @@ in
       };
 
     };
+    
   };
 
   config = {
