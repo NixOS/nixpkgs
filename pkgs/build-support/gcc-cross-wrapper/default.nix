@@ -13,6 +13,20 @@ assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
 assert !noLibc -> (!nativeLibc -> libc != null);
 
+let
+  chosenName = if name == "" then gcc.name else name;
+  gccLibs = stdenv.mkDerivation {
+    name = chosenName + "-libs";
+    phases = [ "installPhase" ];
+    installPhase = ''
+      ensureDir $out
+      cp -Rd ${gcc}/lib $out/lib
+      if [ -d ${gcc}/lib64 ]; then
+          cp -Rd ${gcc}/lib64 $out/lib64
+      fi
+    '';
+  };
+in
 stdenv.mkDerivation {
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
@@ -22,7 +36,8 @@ stdenv.mkDerivation {
   addFlags = ./add-flags;
   inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
   crossConfig = if (cross != null) then cross.config else null;
-  name = if name == "" then gcc.name else name;
+  gccLibs = if gcc != null then gccLibs else null;
+  name = chosenName;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langF77 = if nativeTools then false else gcc ? langFortran;

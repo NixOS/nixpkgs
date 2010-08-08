@@ -74,5 +74,10 @@ in
 
         dontStrip=1
       '';
-   }
+
+      # To avoid a dependency on the build system 'bash'.
+      preFixup = ''
+        rm $out/bin/{ldd,tzselect,catchsegv,xtrace}
+      '';
+    }
    else {}))
