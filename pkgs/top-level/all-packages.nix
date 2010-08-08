@@ -4497,12 +4497,12 @@ let
 
   linux_nanonote_jz_2_6_34 = makeOverridable
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.34.nix) {
-      inherit fetchurl fetchgit stdenv perl mktemp module_init_tools ubootChooser;
+      inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
     };
 
   linux_nanonote_jz_2_6_35 = makeOverridable
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.35.nix) {
-      inherit fetchurl fetchgit stdenv perl mktemp module_init_tools ubootChooser;
+      inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
     };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So

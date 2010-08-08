@@ -1,4 +1,4 @@
-args @ { stdenv, fetchgit, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, fetchsvn, userModeLinux ? false, extraConfig ? ""
 , ... }:
 
 let
@@ -194,13 +194,42 @@ in
 import ./generic.nix (
 
   rec {
-    version = "jz-2.6.35";
+    version = "qi_lb60-2.6.35-openwrt-22513";
   
-    src = fetchgit {
-      url = "git://projects.qi-hardware.com/qi-kernel.git";
-      rev = "4a5edaeef89037e288d8ae6c81eca1c6bda753da";
-      sha256 = "42778cf871473bebc609eb26441591318b8396b03671360193bbe0e50cc29082";
+    src = fetchurl {
+      url = "mirror://kernel/linux/kernel/v2.6/linux-2.6.35.tar.bz2";
+      sha256 = "1kxz87nwksx4hvq1i45i9w1zq1fb09rvf8i6jin3cbh36v1y5chq";
     };
+
+    srcPatch = fetchsvn {
+      url = "svn://svn.openwrt.org/openwrt/trunk/target/linux";
+      rev = 22513;
+      sha256 = "0b7wzgqnbq8sq32z9ik08n1b7fnc9v9d91zwvb6qz7vj3dlrxw3g";
+    };
+
+    preConfigure = ''
+      cp -R ${srcPatch}/generic/files/* .
+      chmod +w -R *
+      GLOBIGNORE='.:..:*preinit_as_init*'
+      for a in ${srcPatch}/generic/patches-2.6.35/* ${srcPatch}/xburst/patches-2.6.35/* ; do
+        echo applying patch $a
+        patch -p1 < $a
+      done
+      unset GLOBIGNORE
+      cat ${srcPatch}/generic/config-2.6.35 ${srcPatch}/xburst/config-2.6.35 \
+          ${srcPatch}/xburst/qi_lb60/config-2.6.35 > arch/mips/configs/qi_lb60_defconfig
+    '';
+
+    postInstall = ''
+      set -x
+      gzip -9 -c $out/vmlinux.bin > $out/vmlinux.bin.gz
+      KERNEL_ENTRY="0x`$crossConfig-nm $out/vmlinux 2>/dev/null |
+        grep " kernel_entry" | cut -f1 -d ' '`"
+      mkimage -A mips -O linux -T kernel -a 0x80010000 -C gzip \
+          -e $KERNEL_ENTRY -n "MIPS Nix Linux-2.6.35" \
+          -d $out/vmlinux.bin.gz $out/uImage
+      set +x
+    '';
 
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;

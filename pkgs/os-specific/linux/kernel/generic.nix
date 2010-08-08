@@ -37,6 +37,7 @@
 , preConfigure ? ""
 , extraMeta ? {}
 , ubootChooser ? null
+, postInstall ? ""
 , ...
 }:
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation {
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion;
+  inherit preConfigure src module_init_tools localVersion postInstall;
 
   patches = map (p: p.patch) kernelPatches;
 
