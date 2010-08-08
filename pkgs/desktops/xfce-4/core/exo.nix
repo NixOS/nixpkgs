@@ -6,11 +6,12 @@
 , libxfce4util
 }:
 
-stdenv.mkDerivation {
-  name = "libexo-0.3.106";
+stdenv.mkDerivation rec {
+  name = "exo-0.3.107";
+  
   src = fetchurl {
-    url = http://archive.xfce.org/src/xfce/exo/0.3/exo-0.3.106.tar.bz2;
-    sha256 = "1n823ipqdz47kxq6fwry3zza3j9ap7gikwm4s8169297xcjqd6qb";
+    url = "http://www.xfce.org/archive/xfce/4.6.2/src/${name}.tar.bz2";
+    sha256 = "18z2xmdl577r60ln2waai10dd7i384k0bxrmf7gchrxd9c9aq4ha";
   };
 
   buildInputs = [ pkgconfig intltool URI glib gtk libxfce4util ];

@@ -1,28 +1,35 @@
-pkgs:
+{ callPackage, pkgs }:
+
 rec {
-  inherit (pkgs.gtkLibs) gtk;
+  inherit (pkgs.gtkLibs) gtk glib;
 
   #### CORE
 
-  libexo = import ./core/libexo {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit (pkgs.gnome) intltool;
+  exo = callPackage ./core/exo.nix {
     inherit (pkgs.perlPackages) URI;
     inherit (pkgs.gtkLibs) glib gtk;
-    inherit libxfce4util;
   };
 
-  libxfce4util = import ./core/libxfce4util {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
+  libxfce4util = callPackage ./core/libxfce4util.nix {
     inherit (pkgs.gtkLibs) glib;
   };
 
+  libxfcegui4 = callPackage ./core/libxfcegui4.nix {
+    inherit (pkgs.gnome) libglade;
+  };
+
+  xfconf = callPackage ./core/xfconf.nix {
+  };
+
+  xfwm4 = callPackage ./core/xfwm4.nix {
+    inherit (pkgs.gnome) libglade libwnck;
+  };
+
   #### APPLICATIONS
-  terminal = import ./applications/terminal {
-    inherit (pkgs) stdenv fetchurl pkgconfig ncurses;
-    inherit (pkgs.gnome) intltool vte;
+  
+  terminal = callPackage ./applications/terminal.nix {
+    inherit (pkgs.gnome) vte;
     inherit (pkgs.gtkLibs) gtk;
-    inherit libexo libxfce4util;
   };
 
 }
