@@ -30,6 +30,8 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
+  enableParallelBuilding = true;
+
   patches =
     stdenv.lib.optional (fetchgit == null)
     /* Fix for NIXPKGS-79: when doing host name lookups, when

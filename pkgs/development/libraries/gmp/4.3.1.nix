@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating point numbers";
     homepage = http://gmplib.org/;

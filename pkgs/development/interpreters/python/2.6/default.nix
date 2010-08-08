@@ -88,6 +88,8 @@ stdenv.mkDerivation ( {
     libPrefix = "python${majorVersion}";
   };
 
+  enableParallelBuilding = true;
+
   meta = {
     platforms = stdenv.lib.platforms.all;
   };

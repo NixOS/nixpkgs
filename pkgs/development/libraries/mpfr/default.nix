@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://www.mpfr.org/;
     description = "GNU MPFR, a library for multiple-precision floating-point arithmetic";

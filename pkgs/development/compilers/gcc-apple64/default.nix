@@ -21,6 +21,8 @@ stdenv.mkDerivation ({
       sha256 = "1fy6j41rhxdsm19sib9wygjl5l54g8pm13c6y5x13f40mavw1mma";
     }) ;
 
+  enableParallelBuilding = true;
+
   libstdcxx = "libstdcxx-39";
   sourceRoot = "gcc-5646/";
   patches =

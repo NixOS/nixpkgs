@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
 
+  enableParallelBuilding = true;
+
   preConfigure =
     ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"

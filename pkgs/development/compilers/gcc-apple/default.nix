@@ -21,6 +21,8 @@ stdenv.mkDerivation ({
       sha256 = "a7d8041e50e110f5a503e188a05cb217f0c99c51f248a0a1387cc07a0b6f167f";
     }) ;
 
+  enableParallelBuilding = true;
+
   sourceRoot = "gcc_42-5574/";
   patches =
     [./pass-cxxcpp.patch ./debug_list.patch]
