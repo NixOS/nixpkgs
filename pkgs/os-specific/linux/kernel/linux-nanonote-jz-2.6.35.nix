@@ -203,8 +203,8 @@ import ./generic.nix (
 
     srcPatch = fetchsvn {
       url = "svn://svn.openwrt.org/openwrt/trunk/target/linux";
-      rev = 22513;
-      sha256 = "0b7wzgqnbq8sq32z9ik08n1b7fnc9v9d91zwvb6qz7vj3dlrxw3g";
+      rev = 22530;
+      sha256 = "1j5ls7dg0pvdxh6isczmq4r0lkwhz1c1s46mvdkcjsm3qq633fpc";
     };
 
     preConfigure = ''
