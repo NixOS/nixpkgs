@@ -1,22 +1,23 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mergeOneOption mkIf filter optionalString any;
+
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 
   # Whether desktop manager `d' is capable of setting a background.
   # If it isn't, the `feh' program is used as a fallback.
   needBGCond = d: ! (d ? bgSupport && d.bgSupport);
+  
 in
 
 {
-  imports = [
-    ./kde4.nix
-    ./gnome.nix
-    ./xterm.nix
-    ./none.nix
-  ];
+  # Note: the order in which desktop manager modules are imported here
+  # determines the default: later modules (if enabled) are preferred.
+  # E.g., if KDE is enabled, it supersedes xterm.
+  imports = [ ./none.nix ./xterm.nix ./gnome.nix ./kde4.nix ];
 
   options = {
   
@@ -24,11 +25,11 @@ in
 
       session = mkOption {
         default = [];
-        example = [{
-          name = "kde";
-          bgSupport = true;
-          start = "...";
-        }];
+        example = singleton
+          { name = "kde";
+            bgSupport = true;
+            start = "...";
+          };
         description = "
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
@@ -48,16 +49,15 @@ in
         };
       };
 
-
       default = mkOption {
-        default = "xterm";
+        default = "";
         example = "none";
-        description = "
-          Default desktop manager loaded if none have been chosen.
-        ";
+        description = "Default desktop manager loaded if none have been chosen.";
         merge = mergeOneOption;
         apply = defaultDM:
-          if any (w: w.name == defaultDM) cfg.session.list then
+          if defaultDM == "" && cfg.session.list != [] then
+            (head cfg.session.list).name
+          else if any (w: w.name == defaultDM) cfg.session.list then
             defaultDM
           else
             throw "Default desktop manager ($(defaultDM)) not found.";

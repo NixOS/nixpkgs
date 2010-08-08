@@ -23,7 +23,7 @@ let
 
       # The first argument of this script is the session type.
       sessionType="$1"
-      if test "$sessionType" = default; then sessionType=""; fi
+      if [ "$sessionType" = default ]; then sessionType=""; fi
 
       ${optionalString (!cfg.displayManager.job.logsXsession) ''
         exec > ~/.xsession-errors 2>&1
@@ -180,7 +180,9 @@ in
         apply = list: rec {
           wm = filter (s: s.manage == "window") list;
           dm = filter (s: s.manage == "desktop") list;
-          names = concatMap (d: map (w: d.name + " + " + w.name) wm) dm;
+          names = flip concatMap dm
+            (d: map (w: d.name + optionalString (w.name != "none") (" + " + w.name))
+              (filter (w: d.name != "none" || w.name != "none") wm));
           desktops = mkDesktops names;
           script = xsession wm dm;
         };

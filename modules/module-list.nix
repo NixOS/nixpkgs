@@ -117,10 +117,6 @@
   ./services/web-servers/jboss.nix
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix
-  ./services/x11/desktop-managers/gnome.nix
-  ./services/x11/desktop-managers/kde4.nix
-  ./services/x11/desktop-managers/none.nix
-  ./services/x11/desktop-managers/xterm.nix
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/kdm.nix
