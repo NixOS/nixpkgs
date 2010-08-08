@@ -23,6 +23,7 @@ rec {
       export NIX_ENFORCE_PURITY=1
       havePatchELF=1
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
+      ${if system == "ict_loongson-2_v0.3_fpu_v0.1-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
 
 

@@ -231,6 +231,9 @@ if test "$NIX_NO_SELF_RPATH" != "1"; then
     if test -n "$NIX_LIB64_IN_SELF_RPATH"; then
         export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
     fi
+    if test -n "$NIX_LIB32_IN_SELF_RPATH"; then
+        export NIX_LDFLAGS="-rpath $out/lib32 $NIX_LDFLAGS"
+    fi
 fi
 
 
