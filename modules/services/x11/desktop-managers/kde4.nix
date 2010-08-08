@@ -23,8 +23,7 @@ in
       default = [];
       example = [ pkgs.kde4.digikam ];
       type = types.list types.package;
-      description = "Additional KDE 4 programs. Only minimal set is installed by
-        default.";
+      description = "Additional KDE 4 programs. Only a minimal set is installed by default.";
     };
 
   };
