@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "apr-1.3.9";
+  name = "apr-1.4.2";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    sha256 = "1qicxnk62d9mjza8vch2wxy4xlq8sa76chwi5cp6bs4cyj9s61ap";
+    sha256 = "14akizp9aq8c2qk8bj5a6n3s8hsy356prp911cmrvl4l0rqcl5r0";
   };
 
   configureFlags =
