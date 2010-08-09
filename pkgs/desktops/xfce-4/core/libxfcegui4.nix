@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, xfconf, libglade }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, xfconf
+, libglade, libstartup_notification }:
 
 stdenv.mkDerivation rec {
   name = "libxfcegui4-4.6.4";
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
       configureFlags="--with-libglade-module-path=$out/lib/libglade/2.0"
     '';
 
-  buildInputs = [ pkgconfig intltool gtk libxfce4util xfconf libglade ];
+  buildInputs =
+    [ pkgconfig intltool gtk libxfce4util xfconf libglade
+      libstartup_notification
+    ];
 
   meta = {
     homepage = http://www.xfce.org/;

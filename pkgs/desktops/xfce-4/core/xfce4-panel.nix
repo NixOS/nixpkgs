@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig intltool gtk libxfce4util libxfcegui4 exo libwnck
+    [ pkgconfig intltool gtk libxfce4util exo libwnck
       libstartup_notification
     ];
+
+  propagatedBuildInputs = [ libxfcegui4 ];
 
   meta = {
     homepage = http://www.xfce.org/;

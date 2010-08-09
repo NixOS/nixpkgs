@@ -15,6 +15,8 @@ rec {
     inherit (pkgs.gnome) libglade;
   };
 
+  libxfce4menu = callPackage ./core/libxfce4menu.nix { };
+
   xfconf = callPackage ./core/xfconf.nix { };
 
   xfwm4 = callPackage ./core/xfwm4.nix {
@@ -27,6 +29,10 @@ rec {
     inherit (pkgs.gnome) libglade libwnck;
   };
 
+  xfce4settings = callPackage ./core/xfce4-settings.nix {
+    inherit (pkgs.gnome) libglade libwnck;
+  };
+
   xfce4panel = callPackage ./core/xfce4-panel.nix {
     inherit (pkgs.gnome) libwnck;
   };
@@ -35,10 +41,18 @@ rec {
     inherit (pkgs.gnome) libwnck libglade;
   };
 
+  thunar = callPackage ./core/thunar.nix {
+    #inherit (pkgs.gnome) libwnck libglade;
+  };
+
   #### APPLICATIONS
   
   terminal = callPackage ./applications/terminal.nix {
     inherit (pkgs.gnome) vte;
   };
 
+  #### ART
+
+  xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };
+  
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfcegui4
-, libwnck, xfconf, libglade }:
+, libwnck, xfconf, libglade, libxfce4menu, xfce4panel, thunar, exo }:
 
 stdenv.mkDerivation rec {
   name = "xfdesktop-4.6.2";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util libxfcegui4 libwnck xfconf
-      libglade ];
+      libglade libxfce4menu xfce4panel thunar exo
+    ];
 
   meta = {
     homepage = http://www.xfce.org/;

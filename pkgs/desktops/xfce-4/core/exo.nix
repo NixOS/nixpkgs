@@ -1,10 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig
-, intltool
-, URI
-, glib, gtk
-, libxfce4util
-}:
+{ stdenv, fetchurl, pkgconfig, intltool, URI, glib, gtk, libxfce4util
+, enableHAL ? true, hal, dbus_glib }:
 
 stdenv.mkDerivation rec {
   name = "exo-0.3.107";
@@ -14,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "18z2xmdl577r60ln2waai10dd7i384k0bxrmf7gchrxd9c9aq4ha";
   };
 
-  buildInputs = [ pkgconfig intltool URI glib gtk libxfce4util ];
+  buildInputs =
+    [ pkgconfig intltool URI glib gtk libxfce4util ] ++
+    stdenv.lib.optionals enableHAL [ hal dbus_glib ];
 
   meta = {
     homepage = http://www.xfce.org/projects/exo;
