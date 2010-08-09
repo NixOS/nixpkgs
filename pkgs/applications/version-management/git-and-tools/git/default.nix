@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
        '')
 
    + ''# Install man pages and Info manual
-       make PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
    + (if guiSupport then ''

@@ -4,4 +4,7 @@ install: $(PROGRAM) $(SHARED_LIBRARY)
 	cp -v $(PROGRAM) $(DIST)/bin
 	cp -v $(SHARED_LIBRARY) $(LIBRARY) $(DIST)/lib
 	cp -v $(JS_HFILES) $(API_HFILES) $(OTHER_HFILES) $(DIST)/include
+	mkdir -pv $(DIST)/include/js
+	find . -name '*.h' -exec cp '{}' $(DIST)/include/js ';'
+	find . -name '*.msg' -exec cp '{}' $(DIST)/include/js ';'
 

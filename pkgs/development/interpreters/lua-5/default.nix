@@ -9,5 +9,10 @@ stdenv.mkDerivation {
   makeFlags = [ "CFLAGS=-fPIC" ];
   buildFlags = "linux"; # TODO: support for non-linux systems
   installFlags = "install INSTALL_TOP=\${out}";
+  postInstall = ''
+    sed -i -e "s@/usr/local@$out@" etc/lua.pc
+    sed -i -e "s@-llua -lm@-llua -lm -ldl@" etc/lua.pc
+    install -D -m 644 etc/lua.pc $out/lib/pkgconfig/lua.pc
+  '';
   buildInputs = [ ncurses readline ];
 }

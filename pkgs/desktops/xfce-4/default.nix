@@ -1,28 +1,62 @@
-pkgs:
+{ callPackage, pkgs }:
+
 rec {
-  inherit (pkgs.gtkLibs) gtk;
+  inherit (pkgs.gtkLibs) gtk glib;
 
   #### CORE
 
-  libexo = import ./core/libexo {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit (pkgs.gnome) intltool;
+  exo = callPackage ./core/exo.nix {
     inherit (pkgs.perlPackages) URI;
-    inherit (pkgs.gtkLibs) glib gtk;
-    inherit libxfce4util;
   };
 
-  libxfce4util = import ./core/libxfce4util {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit (pkgs.gtkLibs) glib;
+  libxfce4util = callPackage ./core/libxfce4util.nix { };
+
+  libxfcegui4 = callPackage ./core/libxfcegui4.nix {
+    inherit (pkgs.gnome) libglade;
   };
+
+  libxfce4menu = callPackage ./core/libxfce4menu.nix { };
+
+  xfconf = callPackage ./core/xfconf.nix { };
+
+  xfwm4 = callPackage ./core/xfwm4.nix {
+    inherit (pkgs.gnome) libglade libwnck;
+  };
+
+  xfceutils = callPackage ./core/xfce-utils.nix { };
+
+  xfce4session = callPackage ./core/xfce4-session.nix {
+    inherit (pkgs.gnome) libglade libwnck;
+  };
+
+  xfce4settings = callPackage ./core/xfce4-settings.nix {
+    inherit (pkgs.gnome) libglade libwnck;
+  };
+
+  xfce4panel = callPackage ./core/xfce4-panel.nix {
+    inherit (pkgs.gnome) libwnck;
+  };
+
+  xfdesktop = callPackage ./core/xfdesktop.nix {
+    inherit (pkgs.gnome) libwnck libglade;
+  };
+
+  thunar = callPackage ./core/thunar.nix { };
+
+  gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { };
 
   #### APPLICATIONS
-  terminal = import ./applications/terminal {
-    inherit (pkgs) stdenv fetchurl pkgconfig ncurses;
-    inherit (pkgs.gnome) intltool vte;
-    inherit (pkgs.gtkLibs) gtk;
-    inherit libexo libxfce4util;
+  
+  terminal = callPackage ./applications/terminal.nix {
+    inherit (pkgs.gnome) vte;
   };
 
+  mousepad = callPackage ./applications/mousepad.nix { };
+
+  ristretto = callPackage ./applications/ristretto.nix { };
+
+  #### ART
+
+  xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };
+  
 }

@@ -1,0 +1,33 @@
+Fix invisible cursor in xfce's terminal.
+
+http://bugzilla.xfce.org/show_bug.cgi?id=6423
+http://svn.mandriva.com/cgi-bin/viewvc.cgi/packages/cooker/vte/current/SOURCES/vte-0.25.1-cursor.patch?view=markup&pathrev=565638
+
+diff -p -up vte-0.25.1/src/vte.c.cursor vte-0.25.1/src/vte.c
+--- vte-0.25.1/src/vte.c.cursor	2010-05-03 05:28:46.000000000 -0300
++++ vte-0.25.1/src/vte.c	2010-08-03 14:06:29.000000000 -0300
+@@ -8752,6 +8752,10 @@ vte_terminal_determine_colors(VteTermina
+ 	if (highlight && !cursor && terminal->pvt->highlight_color_set) {
+ 		*fore = cell ? cell->attr.fore : VTE_DEF_FG;
+ 		*back = VTE_DEF_HL;
++	} else
++	if (reverse ^ ((cell != NULL) && (cell->attr.reverse))) {
++		*fore = cell ? cell->attr.back : VTE_DEF_BG;
++		*back = cell ? cell->attr.fore : VTE_DEF_FG;
+ 	} else {
+ 		*fore = cell ? cell->attr.fore : VTE_DEF_FG;
+ 		*back = cell ? cell->attr.back : VTE_DEF_BG;
+@@ -8782,13 +8786,6 @@ vte_terminal_determine_colors(VteTermina
+ 		}
+ 	}
+ 
+-	if (reverse ^ ((cell != NULL) && (cell->attr.reverse))) {
+-	  int tmp;
+-	  tmp = *fore;
+-	  *fore = *back;
+-	  *back = tmp;
+-	}
+-
+ 	if (!cursor && cell && cell->attr.invisible) {
+ 		*fore = *back;
+ 	}

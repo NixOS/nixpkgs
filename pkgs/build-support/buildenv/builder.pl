@@ -17,7 +17,10 @@ sub isInPathsToLink {
     my $path = shift;
     $path = "/" if $path eq "";
     foreach my $elem (@pathsToLink) {
-        return 1 if substr($path, 0, length($elem)) eq $elem;
+        return 1 if
+            $elem eq "/" || 
+            (substr($path, 0, length($elem)) eq $elem
+             && (($path eq $elem) || (substr($path, length($elem), 1) eq "/")));
     }
     return 0;
 }

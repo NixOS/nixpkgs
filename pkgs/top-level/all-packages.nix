@@ -945,6 +945,10 @@ let
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
+  pal = callPackage ../tools/misc/pal {
+    inherit (gtkLibs) glib;
+  };
+
   panomatic = callPackage ../tools/graphics/panomatic { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
@@ -2163,6 +2167,7 @@ let
   scsh = callPackage ../development/interpreters/scsh { };
 
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
+  spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
 
   sysPerl = callPackage ../development/interpreters/sys-perl { };
 
@@ -3089,6 +3094,8 @@ let
 
   jasper = callPackage ../development/libraries/jasper { };
 
+  jbig2dec = callPackage ../development/libraries/jbig2dec { };
+
   jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
 
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
@@ -3541,6 +3548,8 @@ let
     inherit (gtkLibs) glib;
     opensc = opensc_0_11_7;
   };
+
+  openjpeg = callPackage ../development/libraries/openjpeg { };
 
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
@@ -4946,9 +4955,11 @@ let
 
   docbook_xsl_ns = callPackage ../data/sgml+xml/stylesheets/xslt/docbook-xsl-ns { };
 
-  junicode = callPackage ../data/fonts/junicode { };
-
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
+
+  hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
+  
+  junicode = callPackage ../data/fonts/junicode { };
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
@@ -5831,6 +5842,9 @@ let
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
+  mupdf = callPackage ../applications/misc/mupdf {
+  };
+
   mythtv = callPackage ../applications/video/mythtv {
     qt3 = qt3mysql;
   };
@@ -5912,6 +5926,8 @@ let
       inherit pkgconfig pidgin texLive imagemagick which;
       inherit (gtkLibs) glib gtk;
     };
+
+  pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 
   pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
@@ -6128,6 +6144,8 @@ let
   valknut = callPackage ../applications/networking/p2p/valknut {
     qt = qt3;
   };
+
+  veracity = callPackage ../applications/version-management/veracity {};
 
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
@@ -6582,7 +6600,10 @@ let
   };
 
   xfce = xfce4;
-  xfce4 = recurseIntoAttrs (import ../desktops/xfce-4 pkgs);
+  
+  xfce4 = recurseIntoAttrs
+    (let callPackage = newScope pkgs.xfce4; in
+     import ../desktops/xfce-4 { inherit callPackage pkgs; });
 
   
   ### SCIENCE
