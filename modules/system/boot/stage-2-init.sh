@@ -118,6 +118,11 @@ rm -rf /var/log/upstart
 #echo " done"
 
 
+# Get rid of ICE locks and ensure that it's owned by root.
+rm -rf /tmp/.ICE-unix
+mkdir -m 1777 /tmp/.ICE-unix
+
+
 # This is a good time to clean up /nix/var/nix/chroots.  Doing an `rm
 # -rf' on it isn't safe in general because it can contain bind mounts
 # to /nix/store and other places.  But after rebooting these are all
