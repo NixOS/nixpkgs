@@ -3276,6 +3276,10 @@ let
 
   libmad = callPackage ../development/libraries/libmad { };
 
+  libmatchbox = callPackage ../development/libraries/libmatchbox {
+    inherit (gtkLibs) pango;
+  };
+
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
   libmcs = callPackage ../development/libraries/libmcs { };
@@ -5723,6 +5727,8 @@ let
   lyx = callPackage ../applications/misc/lyx {
    qt = qt4;
   };
+
+  matchbox = callPackage ../applications/window-managers/matchbox { };
 
   meld = callPackage ../applications/version-management/meld {
     inherit (gnome) scrollkeeper;
