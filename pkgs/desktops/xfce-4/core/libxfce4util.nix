@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/;
     description = "Basic utility non-GUI functions for Xfce";
-    license = "GPLv2";
+    license = "bsd";
   };
 }

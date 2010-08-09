@@ -10,13 +10,16 @@ stdenv.mkDerivation rec {
 
   # By default, libxfcegui4 tries to install into libglade's prefix.
   # Install into our own prefix instead.
-  configureFlags = "--with-libglade-module-path=$(out)/lib/libglade/2.0";
+  preConfigure =
+    ''
+      configureFlags="--with-libglade-module-path=$out/lib/libglade/2.0"
+    '';
 
   buildInputs = [ pkgconfig intltool gtk libxfce4util xfconf libglade ];
 
   meta = {
     homepage = http://www.xfce.org/;
     description = "Basic GUI library for Xfce";
-    license = "GPLv2";
+    license = "LGPLv2+";
   };
 }

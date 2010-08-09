@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xfce.org/;
     description = "Window manager for Xfce";
-    license = "GPLv2";
+    license = "GPLv2+";
   };
 }
