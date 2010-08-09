@@ -1923,11 +1923,11 @@ rec {
   };
 
   NetTwitterLite = buildPerlPackage {
-    name = "Net-Twitter-Lite-0.08003";
+    name = "Net-Twitter-Lite-0.10003";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MM/MMIMS/Net-Twitter-Lite-0.08003.tar.gz;
-      sha256 = "11p8w650cpfplwcrnk3qrz3l5235i37dwgrji8xpgccix4vsrfpl";
+      url = mirror://cpan/authors/id/M/MM/MMIMS/Net-Twitter-Lite-0.10003.tar.gz;
+      sha256 = "1qh5bw68ad4fqiqbqwhgj859kq35asjmp0fsmrqhlbqy195pwi1i";
     };
 
     propagatedBuildInputs = [JSONAny Encode LWP];
@@ -2206,10 +2206,10 @@ rec {
   };
 
   ScopeUpper = buildPerlPackage rec {
-    name = "Scope-Upper-0.10";
+    name = "Scope-Upper-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "0llscmwyw657pzid2lpc3q8zz3jj28aa66bdpmldv6gfa2a5ny1v";
+      sha256 = "1yrjx22hlsv2qdgicnz589j9iipyxl56y6pnks2cfg6icpp97v5w";
     };
   };
 
@@ -2758,6 +2758,15 @@ rec {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
       sha256 = "0gfdphz0yhm62vn9cbw720i6pm1gingcir15dq8ppbnk6cylnyal";
     };
+  };
+
+  UriGoogleChart = buildPerlPackage rec {
+    name = "URI-GoogleChart-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
+    };
+    buildInputs = [URI TestMore];
   };
 
   VariableMagic = buildPerlPackage rec {
