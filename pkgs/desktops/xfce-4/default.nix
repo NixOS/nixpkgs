@@ -55,6 +55,8 @@ rec {
 
   ristretto = callPackage ./applications/ristretto.nix { };
 
+  xfce4_power_manager = callPackage ./applications/xfce4-power-manager.nix { };
+
   #### ART
 
   xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };
