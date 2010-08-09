@@ -137,6 +137,7 @@ in
 
       resolutions = mkOption {
         default = [];
+        example = [ { x = 1600; y = 1200; } { x = 1024; y = 786; } ];
         description = ''
           The screen resolutions for the X server.  The first element
           is the default resolution.  If this list is empty, the X
@@ -496,6 +497,9 @@ in
           Section "Screen"
             Identifier "Screen-${driver.name}[0]"
             Device "Device-${driver.name}[0]"
+            ${optionalString (cfg.monitorSection != "") ''
+              Monitor "Monitor[0]"
+            ''}
 
             ${cfg.screenSection}
 
@@ -508,9 +512,11 @@ in
             ''}
 
             ${optionalString
-                (driver.name != "virtualbox" && (cfg.resolutions != []
-                 || cfg.extraDisplaySettings != "" || cfg.virtualScreen != null)) (
-              let
+                (driver.name != "virtualbox" &&
+                 (cfg.resolutions != [] ||
+                  cfg.extraDisplaySettings != "" ||
+                  cfg.virtualScreen != null))
+              (let
                 f = depth:
                   ''
                     SubSection "Display"

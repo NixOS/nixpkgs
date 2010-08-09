@@ -265,7 +265,12 @@ in
   services.xserver.videoDriver = mkOverride 50 {} null;
   services.xserver.videoDrivers = mkOverride 50 {} [ "cirrus" "vesa" ];
   services.xserver.defaultDepth = mkOverride 50 {} 0;
-  services.xserver.resolutions = mkOverride 50 {} [];
+  services.xserver.monitorSection =
+    ''
+      # Set a higher refresh rate so that resolutions > 800x600 work.
+      HorizSync 30-140
+      VertRefresh 50-160
+    '';
 
   services.mingetty.ttys = ttys ++ optional (!cfg.graphics) "ttyS0";
 
