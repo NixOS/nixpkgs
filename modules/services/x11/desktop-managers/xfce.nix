@@ -59,11 +59,11 @@ in
         pkgs.xfce.xfconf
         pkgs.xfce.xfdesktop
         pkgs.xfce.xfwm4
-
         # This supplies some "abstract" icons such as
         # "utilities-terminal" and "accessories-text-editor".
         pkgs.gnome.gnomeicontheme
-      ];
+      ]
+      ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
 
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" ];
