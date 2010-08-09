@@ -714,6 +714,14 @@ rec {
     };
   };
 
+  CommonSense = buildPerlPackage {
+    name = "common-sense-3.3";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/common-sense-3.3.tar.gz;
+      sha256 = "04j0lf5lwc70x33dfxxhqhylgikyb6p43mpc3daydx601wblscbj";
+    };
+  };
+
   CookieXS = buildPerlPackage rec {
     name = "Cookie-XS-0.11";
     src = fetchurl {
@@ -1093,10 +1101,10 @@ rec {
   };
 
   Encode = buildPerlPackage {
-    name = "Encode-2.25";
+    name = "Encode-2.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.25.tar.gz;
-      sha256 = "0prwmbg3xh1lqskianwrfrgasdfmz4kjm3qpdm27ay110jkk25ak";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.39.tar.gz;
+      sha256 = "0d9gzgxl9z5x2zq34m6gbx672b599h0fay4q0pfgv3va8mrm1wdz";
     };
   };
 
@@ -1580,10 +1588,10 @@ rec {
   };
 
   JSON = buildPerlPackage rec {
-    name = "JSON-2.15";
+    name = "JSON-2.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/${name}.tar.gz";
-      sha256 = "0dijqv5b6gnkmdnysx23229kvfg6mwvrxyjrvzn2j9r4m2hmsgvn";
+      sha256 = "1dz00922yq7pz8hb9bbk8pqkwh0brf595lklsind62lf5f247vj7";
     };
     propagatedBuildInputs = [JSONXS];
   };
@@ -1598,11 +1606,12 @@ rec {
   };
 
   JSONXS = buildPerlPackage rec {
-    name = "JSON-XS-2.24";
+    name = "JSON-XS-2.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "0ir0v87w2fwalcwi2fd49mqzjna7cixn3ri0ai6ysdwnsdvbhyny";
+      sha256 = "1gl8x2rc3krpj6cs1dg0g28iqqfbn9zyq4nz9mbngv0lccc0y5vy";
     };
+    buildInputs = [CommonSense];
   };
 
   libxml_perl = buildPerlPackage rec {
@@ -1929,8 +1938,9 @@ rec {
       url = mirror://cpan/authors/id/M/MM/MMIMS/Net-Twitter-Lite-0.10003.tar.gz;
       sha256 = "1qh5bw68ad4fqiqbqwhgj859kq35asjmp0fsmrqhlbqy195pwi1i";
     };
+    doCheck = false;
 
-    propagatedBuildInputs = [JSONAny Encode LWP];
+    propagatedBuildInputs = [JSONAny Encode LWP CryptSSLeay];
   };
 
   ObjectSignature = buildPerlPackage {
