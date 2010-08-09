@@ -945,6 +945,10 @@ let
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
+  pal = callPackage ../tools/misc/pal {
+    inherit (gtkLibs) glib;
+  };
+
   panomatic = callPackage ../tools/graphics/panomatic { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
