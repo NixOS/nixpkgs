@@ -6710,6 +6710,8 @@ let
     withX = true;
   };
 
+  yacas = callPackage ../applications/science/math/yacas { };
+
   ### SCIENCE / MISC
 
   golly = callPackage ../applications/science/misc/golly { };
