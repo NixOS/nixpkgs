@@ -3079,6 +3079,8 @@ let
 
   jasper = callPackage ../development/libraries/jasper { };
 
+  jbig2dec = callPackage ../development/libraries/jbig2dec { };
+
   jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
 
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
@@ -3532,6 +3534,8 @@ let
     inherit (gtkLibs) glib;
     opensc = opensc_0_11_7;
   };
+
+  openjpeg = callPackage ../development/libraries/openjpeg { };
 
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
@@ -5812,6 +5816,9 @@ let
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
   msmtp = callPackage ../applications/networking/msmtp { };
+
+  mupdf = callPackage ../applications/misc/mupdf {
+  };
 
   mythtv = callPackage ../applications/video/mythtv {
     qt3 = qt3mysql;
