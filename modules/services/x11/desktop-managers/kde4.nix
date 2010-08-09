@@ -67,7 +67,7 @@ in
 
       x11Packages = config.environment.kdePackages;
 
-      pathsToLink = [ "/etc/xdg" "/etc/dbus-1" "/share" ];
+      pathsToLink = [ "/etc/xdg" "/share" ];
 
       etc = singleton
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";

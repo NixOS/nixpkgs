@@ -161,6 +161,8 @@ in
         config.system.path
       ];
 
+    environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
+    
   };
  
 }
