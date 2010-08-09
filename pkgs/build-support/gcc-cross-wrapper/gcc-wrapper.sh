@@ -75,14 +75,18 @@ if test "$dontLink" != "1"; then
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_CROSS_LDFLAGS again).
     for i in $NIX_CROSS_LDFLAGS_BEFORE; do
-        extraBefore=(${extraBefore[@]} "-Wl,$i")
+        if test "${i:0:3}" = "-L/"; then
+            extraBefore=(${extraBefore[@]} "$i")
+        else
+            extraBefore=(${extraBefore[@]} "-Wl,$i")
+        fi
     done
     for i in $NIX_CROSS_LDFLAGS; do
-	if test "${i:0:3}" = "-L/"; then
-	    extraAfter=(${extraAfter[@]} "$i")
-	else
-	    extraAfter=(${extraAfter[@]} "-Wl,$i")
-	fi
+        if test "${i:0:3}" = "-L/"; then
+            extraAfter=(${extraAfter[@]} "$i")
+        else
+            extraAfter=(${extraAfter[@]} "-Wl,$i")
+        fi
     done
     export NIX_CROSS_LDFLAGS_SET=1
 

@@ -19,11 +19,14 @@ let
     name = chosenName + "-libs";
     phases = [ "installPhase" ];
     installPhase = ''
+      echo $out
       ensureDir $out
-      cp -Rd ${gcc}/lib $out/lib
-      if [ -d ${gcc}/lib64 ]; then
-          cp -Rd ${gcc}/lib64 $out/lib64
-      fi
+      cp -Rd ${gcc}/${cross.config}/lib $out/lib
+      chmod -R +w $out/lib
+      for a in $out/lib/*.la; do
+          sed -i -e s,${gcc}/${cross.config}/lib,$out/lib,g $a
+      done
+      rm -f $out/lib/*.py
     '';
   };
 in

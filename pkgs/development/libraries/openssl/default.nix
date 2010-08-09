@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
       # It's configure does not like --build or --host
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
     '';
+
+    # Openssl installs readonly files, which otherwise we can't strip.
+    # This could at some stdenv hash change be put out of crossAttrs, too
+    postInstall = ''
+      chmod -R +w $out
+    '';
     configureScript = "./Configure";
   };
 

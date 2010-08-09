@@ -1,6 +1,8 @@
 NIX_CROSS_CFLAGS_COMPILE=""
 NIX_CROSS_LDFLAGS=""
 
+set -x
+
 crossAddCVars () {
     if test -d $1/include; then
         export NIX_CROSS_CFLAGS_COMPILE="$NIX_CROSS_CFLAGS_COMPILE -I$1/include"
@@ -26,7 +28,7 @@ crossStripDirs() {
     dirs=${dirsNew}
 
     if test -n "${dirs}"; then
-        header "stripping (with flags $stripFlags) in $dirs"
+        header "cross stripping (with flags $stripFlags) in $dirs"
         # libc_nonshared.a should never be stripped, or builds will break.
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} $crossConfig-strip $stripFlags || true
         stopNest
@@ -80,3 +82,5 @@ if test "$NIX_NO_SELF_RPATH" != "1"; then
         export NIX_CROSS_LDFLAGS="-rpath $out/lib64 -rpath-link $out/lib $NIX_CROSS_LDFLAGS"
     fi
 fi
+
+set +x

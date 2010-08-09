@@ -8,12 +8,19 @@ mkdir $out/nix-support
 cflagsCompile="-B$out/bin/"
 
 if test -z "$nativeLibc"; then
-    cflagsCompile="$cflagsCompile -B$libc/lib/ -isystem $libc/include"
+    cflagsCompile="$cflagsCompile -B$gccLibs/lib -B$libc/lib/ -isystem $libc/include"
     ldflags="$ldflags -L$libc/lib"
     # Get the proper dynamic linker for glibc and uclibc. 
     dlinker=`eval 'echo $libc/lib/ld*.so.?'`
-    if [ -n "$dlinker" ]; then
+    if [ -n "$dynamicLinker" ]; then
       ldflagsBefore="-dynamic-linker $dlinker"
+    fi
+    # This trick is to avoid dependencies on the cross-toolchain gcc
+    # for libgcc, libstdc++, ...
+    # -L is for libtool's .la files, and -rpath for the usual fixupPhase
+    # shrinking rpaths.
+    if [ -n "$gccLibs" ]; then
+      ldflagsBefore="$ldflagsBefore -rpath $gccLibs/lib"
     fi
 
     # The same as above, but put into files, useful for the gcc builder.
@@ -31,16 +38,13 @@ if test -z "$nativeLibc"; then
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    echo "-dynamic-linker $dynamicLinker" > $out/nix-support/libc-ldflags-before
+    echo "$ldflagsBefore" > $out/nix-support/libc-ldflags-before
 fi
 
 if test -n "$nativeTools"; then
     gccPath="$nativePrefix/bin"
     ldPath="$nativePrefix/bin"
 else
-    if test -n "$gccLibs"; then
-        ldflags="$ldflags -L$gccLibs/lib -L$gccLibs/lib64"
-    fi
     ldflags="$ldflags -L$gcc/lib -L$gcc/lib64"
     gccPath="$gcc/bin"
     ldPath="$binutils/$crossConfig/bin"
