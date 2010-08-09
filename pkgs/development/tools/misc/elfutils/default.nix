@@ -1,11 +1,14 @@
 {stdenv, fetchurl, m4}:
 
 stdenv.mkDerivation rec {
-  name = "elfutils-0.143";
+  name = "elfutils-0.148";
   
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/e/l/elfutils/${name}.tar.bz2";
-    sha256 = "1zrqs93m6frg7j70a96xdhdb4mnzmqgh91f9bbm39jnmgs50qp23";
+    urls = [
+      "https://fedorahosted.org/releases/e/l/elfutils/${name}.tar.bz2"
+      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      ];
+    sha256 = "1nl7x2gidd2i048yjlvyzhpbca9793z435cw8bsircjxfi5gmswa";
   };
 
   buildInputs = [m4];
