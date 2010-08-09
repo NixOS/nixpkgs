@@ -4922,9 +4922,11 @@ let
 
   docbook_xsl_ns = callPackage ../data/sgml+xml/stylesheets/xslt/docbook-xsl-ns { };
 
-  junicode = callPackage ../data/fonts/junicode { };
-
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
+
+  hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
+  
+  junicode = callPackage ../data/fonts/junicode { };
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
