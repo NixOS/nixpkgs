@@ -28,14 +28,21 @@ in
         bgSupport = true;
         start =
           ''
-            ${pkgs.xfce.xfwm4}/bin/xfwm4 --daemon
-            exec ${pkgs.xfce.terminal}/bin/terminal
+            exec ${pkgs.stdenv.shell} ${pkgs.xfce.xfceutils}/etc/xdg/xfce4/xinitrc
           '';
       };
 
     environment.systemPackages =
-      [ pkgs.xfce.xfwm4
+      [
+        pkgs.which # Needed by the xfce's xinitrc script.
+        pkgs.xfce.exo
         pkgs.xfce.terminal
+        pkgs.xfce.xfce4panel
+        pkgs.xfce.xfce4session
+        pkgs.xfce.xfceutils
+        pkgs.xfce.xfconf
+        pkgs.xfce.xfdesktop
+        pkgs.xfce.xfwm4
       ];
 
   };
