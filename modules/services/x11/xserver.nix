@@ -378,7 +378,10 @@ in
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
       
     environment.systemPackages = config.environment.x11Packages;
-    
+
+    environment.pathsToLink =
+      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+        
     services.hal.packages = optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
