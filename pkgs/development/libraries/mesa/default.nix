@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   configureFlags =
     "--disable-gallium"
+    + (if stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux" then
+      " --with-dri-drivers=swrast --with-driver=dri" else "")
     + (if stdenv.isDarwin then " --disable-egl" else "");
 
   buildInputs =

@@ -149,8 +149,6 @@ in
         rm -fr $out/share/X11/xkb/compiled
         ln -s /var/tmp $out/share/X11/xkb/compiled
       '';
-    configureFlagsArray = args.stdenv.lib.optionals
-      (args.stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux") [ "--disable-dri" ];
   };
 
   libSM = attrs: attrs // args.stdenv.lib.optionalAttrs (args.stdenv.system == "i686-darwin") {
