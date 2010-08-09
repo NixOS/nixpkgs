@@ -97,10 +97,15 @@ let
           paths = list;
           inherit (cfg) pathsToLink;
           ignoreCollisions = true;
+          # !!! Hacky, should modularise.
           postBuild =
             ''
               if [ -x $out/bin/update-mime-database -a -d $out/share/mime/packages ]; then
                   $out/bin/update-mime-database -V $out/share/mime
+              fi
+
+              if [ -x $out/bin/gtk-update-icon-cache -a -d $out/share/icons/hicolor ]; then
+                  $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
               fi
             '';
         };
