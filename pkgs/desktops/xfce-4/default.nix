@@ -41,15 +41,19 @@ rec {
     inherit (pkgs.gnome) libwnck libglade;
   };
 
-  thunar = callPackage ./core/thunar.nix {
-    #inherit (pkgs.gnome) libwnck libglade;
-  };
+  thunar = callPackage ./core/thunar.nix { };
+
+  gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { };
 
   #### APPLICATIONS
   
   terminal = callPackage ./applications/terminal.nix {
     inherit (pkgs.gnome) vte;
   };
+
+  mousepad = callPackage ./applications/mousepad.nix { };
+
+  ristretto = callPackage ./applications/ristretto.nix { };
 
   #### ART
 
