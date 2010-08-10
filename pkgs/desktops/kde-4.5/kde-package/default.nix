@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-{ pn, v, stable ? true, sha256, subdir ? null }: args:
+a@{ pn, v, stable ? true, sha256, subdir ? null, ... }:
 stdenv.mkDerivation ({
   name = "${pn}-${v}";
   src = fetchurl {
@@ -13,5 +13,5 @@ stdenv.mkDerivation ({
     platforms = stdenv.lib.platforms.linux;
     inherit stable;
     homepage = http://www.kde.org;
-  } // ( if args ? meta then args.meta else { } );
-} // args)
+  } // ( if a ? meta then a.meta else { } );
+} // (removeAttrs a [ "meta" "pn" "v" "stable" "sha256" "subdir" ]))

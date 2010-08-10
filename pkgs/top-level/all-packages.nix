@@ -3287,6 +3287,10 @@ let
 
   libmad = callPackage ../development/libraries/libmad { };
 
+  libmatchbox = callPackage ../development/libraries/libmatchbox {
+    inherit (gtkLibs) pango;
+  };
+
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
   libmcs = callPackage ../development/libraries/libmcs { };
@@ -5745,6 +5749,8 @@ let
    qt = qt4;
   };
 
+  matchbox = callPackage ../applications/window-managers/matchbox { };
+
   meld = callPackage ../applications/version-management/meld {
     inherit (gnome) scrollkeeper;
     pygtk = pyGtkGlade;
@@ -6726,6 +6732,8 @@ let
     withOCaml = true;
     withX = true;
   };
+
+  yacas = callPackage ../applications/science/math/yacas { };
 
   ### SCIENCE / MISC
 
