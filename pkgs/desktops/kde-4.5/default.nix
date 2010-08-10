@@ -26,10 +26,15 @@
 
   qca2_ossl = callPackage ./support/qca2/ossl.nix { };
 
+  qimageblitz = callPackage ./support/qimageblitz { };
+
 ### LIBS
   kdelibs = callPackage ./libs { };
 
   kdepimlibs = callPackage ./pimlibs { };
+
+### BASE
+  kdebase = callPackage ./base { };
 
 ### DEVELOPMENT
 
