@@ -151,7 +151,7 @@ let kernel = config.boot.kernelPackages.kernel; in
         "ide_generic"
 
         # Filesystems.
-        "ext2" "ext3"
+        "ext2" "ext3" "ext4"
 
         # Support USB keyboards, in case the boot fails and we only have
         # a USB keyboard.
