@@ -4,7 +4,6 @@ kdePackage {
   pn = "oxygen-icons";
   v = "4.5.0";
   sha256 = "11wlrxnral4q5wi46p1di1cff4vr5da35a8dv2xx3ag6lnhqvjqi";
-} {
   buildInputs = [ cmake ];
   meta = {
     description = "KDE Oxygen theme icons";
