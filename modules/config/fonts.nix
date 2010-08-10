@@ -1,8 +1,10 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 ###### interface
+
 let
-  inherit (pkgs.lib) mkOption;
 
   options = {
 
@@ -19,7 +21,7 @@ let
         ";
       };
 
-      # should be move elsewhere.
+      # Should be moved elsewhere.
       enableGhostscriptFonts = mkOption {
         default = false;
         description = "
@@ -66,8 +68,8 @@ let
           pkgs.xorg.fontmiscmisc
           pkgs.xorg.fontcursormisc
         ]
-        ++ pkgs.lib.optional config.fonts.enableCoreFonts pkgs.corefonts
-        ++ pkgs.lib.optional config.fonts.enableGhostscriptFonts "${pkgs.ghostscript}/share/ghostscript/fonts"
+        ++ optional config.fonts.enableCoreFonts pkgs.corefonts
+        ++ optional config.fonts.enableGhostscriptFonts "${pkgs.ghostscript}/share/ghostscript/fonts"
         ++ config.fonts.extraFonts;
       };
 
@@ -156,7 +158,6 @@ let
     };
   };
 
-  inherit (pkgs.lib) mkIf;
 in
 
 {
@@ -180,5 +181,6 @@ in
     '';
 
   environment.systemPackages =
-    pkgs.lib.optional config.fonts.enableFontDir config.system.build.x11Fonts;
+    optional config.fonts.enableFontDir config.system.build.x11Fonts ++
+    optional config.fonts.enableFontConfig pkgs.fontconfig;
 }
