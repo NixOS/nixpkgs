@@ -1358,11 +1358,11 @@ let
   })) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
-    name = "xf86-input-synaptics-1.2.0";
+    name = "xf86-input-synaptics-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xf86-input-synaptics-1.2.0.tar.bz2;
-      sha256 = "033232bvvy0ibr6w0fmcm3mjv212fl2bywj22d32wbxd4m6avmfx";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.2.2.tar.bz2;
+      sha256 = "1a1dvdc1g8fgkhr3fn3rnly1bz3f6kz1qjxyrmm22qmsair4w2yj";
     };
     buildInputs = [pkgconfig inputproto recordproto libX11 libXi xorgserver xproto libXtst ];
   })) // {inherit inputproto recordproto libX11 libXi xorgserver xproto libXtst ;};
