@@ -17,9 +17,13 @@ let cfg = config.services.xserver.synaptics; in
       };
 
       dev = mkOption {
-        default = "/dev/input/event0";
-	example = null;
-        description = "Event device for Synaptics touchpad, null to omit specification.";
+        default = null;
+	example = "/dev/input/event0";
+        description = 
+          ''
+            Path for touchpad device.  Set to null to apply to any
+            auto-detected touchpad.
+          '';
       };
 
       minSpeed = mkOption {
@@ -53,25 +57,17 @@ let cfg = config.services.xserver.synaptics; in
 
     services.xserver.config =
       ''
-        Section "InputDevice"
-          Identifier "Touchpad[0]"
+        # Automatically enable the synaptics driver for all touchpads.
+        Section "InputClass"
+          Identifier "touchpad catchall"
           Driver "synaptics"
-          ${if cfg.dev != null then ''Option "Device" "${cfg.dev}"'' else ""}
-          Option "Protocol" "PS/2"
-          Option "LeftEdge" "1700"
-          Option "RightEdge" "5300"
-          Option "TopEdge" "1700"
-          Option "BottomEdge" "4200"
-          Option "FingerLow" "25"
-          Option "FingerHigh" "30"
+          MatchIsTouchpad "on"
+          ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
           Option "MaxTapTime" "180"
           Option "MaxTapMove" "220"
-          Option "VertScrollDelta" "100"
           Option "MinSpeed" "${cfg.minSpeed}"
           Option "MaxSpeed" "${cfg.maxSpeed}"
           Option "AccelFactor" "0.0010"
-          Option "SHMConfig" "on"
-          Option "Repeater" "/dev/input/mice"
           Option "TapButton1" "1"
           Option "TapButton2" "2"
           Option "TapButton3" "3"
@@ -79,11 +75,6 @@ let cfg = config.services.xserver.synaptics; in
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
         EndSection
-      '';
-
-    services.xserver.serverLayoutSection =
-      ''
-        InputDevice "Touchpad[0]" "CorePointer"
       '';
 
   };

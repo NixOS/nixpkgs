@@ -462,7 +462,7 @@ in
         EndSection
 
         Section "InputClass"
-          Identifier "Keyboards catch all"
+          Identifier "Keyboard catchall"
           MatchIsKeyboard "on"
           Option "XkbRules" "base"
           Option "XkbModel" "${cfg.xkbModel}"
