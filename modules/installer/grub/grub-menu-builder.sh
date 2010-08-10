@@ -25,17 +25,20 @@ case "$grubVersion" in
 esac
 
 
-# Discover whether /boot is on the same filesystem as /.  If not, then
-# all kernels and initrds must be copied to /boot, and all paths in
-# the GRUB config file must be relative to the root of the /boot
-# filesystem.  `$bootRoot' is the path to be prepended to paths under
-# /boot.
-if [ "$(stat -c '%D' /.)" = "$(stat -c '%D' /boot/.)" ]; then
-    bootRoot=/boot
-    copyKernels="@copyKernels@" # user can override in the NixOS config
-else
+# Discover whether /boot is on the same filesystem as / and
+# /nix/store.  If not, then all kernels and initrds must be copied to
+# /boot, and all paths in the GRUB config file must be relative to the
+# root of the /boot filesystem.  `$bootRoot' is the path to be
+# prepended to paths under /boot.
+if [ "$(stat -c '%D' /.)" != "$(stat -c '%D' /boot/.)" ]; then
     bootRoot=
     copyKernels=1
+elif [ "$(stat -c '%D' /boot/.)" != "$(stat -c '%D' /nix/store/.)" ]; then
+    bootRoot=/boot
+    copyKernels=1
+else
+    bootRoot=/boot
+    copyKernels="@copyKernels@" # user can override in the NixOS config
 fi
 
 
