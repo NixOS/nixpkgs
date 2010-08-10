@@ -220,7 +220,7 @@ in
       };
 
       xkbOptions = mkOption {
-        default = "";
+        default = "terminate:ctrl_alt_bksp";
         example = "grp:caps_toggle, grp_led:scroll";
         description = ''
           X keyboard options; layout switching goes here.
