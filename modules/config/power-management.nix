@@ -70,7 +70,10 @@ in
         target = "pm/sleep.d/00sleep-hook";
       };
 
-    boot.kernelModules = [ "acpi_cpufreq" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand" ];
+    boot.kernelModules = 
+      [ "acpi_cpufreq" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand" 
+        "p4_clockmod"
+      ];
     
   };
 
