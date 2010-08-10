@@ -562,5 +562,19 @@ with (import ./release-lib.nix);
     xsetroot = linux;
   };
 
+  xfce4 = {
+    gtk_xfce_engine = linux;
+    mousepad = linux;
+    ristretto = linux;
+    terminal = linux;
+    thunar = linux;
+    xfce4_power_manager = linux;
+    xfce4icontheme = linux;
+    xfce4panel = linux;
+    xfce4session = linux;
+    xfdesktop = linux;
+    xfwm4 = linux;
+  };
+
 } ))
 
