@@ -260,7 +260,7 @@ rec {
               throw "Option ${opt.name}: No description.";
 
             declarations = map (x: toString x.source) opt.declarations;
-            definitions = map (x: toString x.source) opt.definitions;
+            #definitions = map (x: toString x.source) opt.definitions;
           }
           // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
           // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }

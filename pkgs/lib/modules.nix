@@ -259,7 +259,6 @@ rec {
               value = m.config;
             }) definitions;
 
-
           values = values_ ++
             optionals (option.isOption && option.decl ? extraConfigs)
               option.decl.extraConfigs;
