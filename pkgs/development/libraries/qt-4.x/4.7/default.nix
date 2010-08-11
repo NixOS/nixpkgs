@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${if useDocs then "rm -rfv $out/share/doc/${name}/{html,src}" else ""}
-    ln -sv phonon $out/include/Phonon''
+    ln -sv phonon $out/include/Phonon'';
 
   enableParallelBuilding = true;
 
