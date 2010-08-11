@@ -3984,9 +3984,7 @@ let
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
   flup = builderDefsPackage ../development/python-modules/flup {
-    inherit fetchurl stdenv;
-    python = python25;
-    setuptools = setuptools.passthru.function {python = python25;};
+    inherit fetchurl stdenv python setuptools;
   };
 
   numeric = callPackage ../development/python-modules/numeric { };
@@ -6159,7 +6157,8 @@ let
 
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
-    inherit monotone flup cheetahTemplate highlight ctags
+    inherit 
+      monotone flup cheetahTemplate highlight ctags
       makeWrapper graphviz which python;
   };
 
