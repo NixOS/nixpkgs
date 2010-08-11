@@ -3,7 +3,7 @@
 , revision ? "HEAD"
 }:
 
-let
+let 
 
   # To prevent infinite recursion, remove system.path from the
   # options.  Not sure why this happens.
@@ -20,12 +20,15 @@ let
       -o $out ${./options-to-docbook.xsl} ${optionsXML}
   '';
 
+in rec {
+
+  # Generate the NixOS manual.
   manual = pkgs.stdenv.mkDerivation {
     name = "nixos-manual";
 
     sources = pkgs.lib.sourceFilesBySuffices ./. [".xml"];
 
-    buildInputs = [pkgs.libxml2 pkgs.libxslt];
+    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
 
     xsltFlags = ''
       --param section.autolabel 1
@@ -38,7 +41,6 @@ let
     '';
 
     buildCommand = ''
-      
       ln -s $sources/*.xml . # */
       ln -s ${optionsDocBook} options-db.xml
 
@@ -57,6 +59,28 @@ let
 
       ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $dst/
       cp ${./style.css} $dst/style.css
+      
+      ensureDir $out/nix-support
+      echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
+    '';
+  };
+
+  # Generate the NixOS manpages.
+  manpages = pkgs.stdenv.mkDerivation {
+    name = "nixos-manpages";
+
+    sources = pkgs.lib.sourceFilesBySuffices ./. [".xml"];
+
+    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+
+    buildCommand = ''
+      ln -s $sources/*.xml . # */
+      ln -s ${optionsDocBook} options-db.xml
+
+      # Check the validity of the manual sources.
+      xmllint --noout --nonet --xinclude --noxincludenode \
+        --relaxng ${pkgs.docbook5}/xml/rng/docbook/docbook.rng \
+        ./man-pages.xml
 
       # Generate manpages.
       ensureDir $out/share/man
@@ -66,10 +90,7 @@ let
         --param man.endnotes.are.numbered 0 \
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
         ./man-pages.xml
-      
-      ensureDir $out/nix-support
-      echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
     '';
   };
 
-in manual
+}

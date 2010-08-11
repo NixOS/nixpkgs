@@ -68,7 +68,7 @@ in
 
     system.build.manual = manual;
 
-    environment.systemPackages = [manual];
+    environment.systemPackages = [ manual.manpages ];
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
@@ -82,7 +82,7 @@ in
 
           exec =
             ''
-              ${cfg.browser} ${manual}/share/doc/nixos/manual.html \
+              ${cfg.browser} ${manual.manual}/share/doc/nixos/manual.html \
                 < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
             '';
         };

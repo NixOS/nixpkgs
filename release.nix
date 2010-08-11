@@ -106,7 +106,7 @@ let
       , officialRelease ? false
       }:
 
-      import "${nixosSrc}/doc/manual" {
+      (import "${nixosSrc}/doc/manual" {
         pkgs = import nixpkgs {};
         options =
           (import lib/eval-config.nix {
@@ -115,7 +115,7 @@ let
           }).options;
         revision = 
           if nixosSrc.rev == 1234 then "HEAD" else toString nixosSrc.rev;
-      };
+      }).manual;
 
 
     iso_minimal = makeIso {
