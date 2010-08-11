@@ -3505,6 +3505,10 @@ let
 
   nss = callPackage ../development/libraries/nss { };
 
+  nssTools = callPackage ../development/libraries/nss { 
+    includeTools = true;
+  };
+
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
 
