@@ -2075,6 +2075,7 @@ let
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
+  python27 = if getConfig ["python" "full"] false then python27Full else python27Base;
   pythonBase = python26Base;
   pythonFull = python26Full;
 
@@ -2104,6 +2105,25 @@ let
   };
 
   python26Full = lowPrio (python26Base.override {
+    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
+    db4 = if getConfig ["python" "db4Support"] true then db4 else null;
+    sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
+    readline = if getConfig ["python" "readlineSupport"] true then readline else null;
+    openssl = if getConfig ["python" "opensslSupport"] true then openssl else null;
+    tk = if getConfig ["python" "tkSupport"] true then tk else null;
+    tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
+    libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
+    xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
+    ncurses = if getConfig ["python" "curses"] true then ncurses else null;
+  });
+
+  python27Base = makeOverridable (import ../development/interpreters/python/2.7) {
+    inherit fetchurl stdenv zlib bzip2 gdbm;
+    arch = if stdenv.isDarwin then darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
+  };
+
+  python27Full = lowPrio (python27Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
     db4 = if getConfig ["python" "db4Support"] true then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
@@ -3934,6 +3954,13 @@ let
       setuptools = setuptools_python26;
     };
 
+  buildPython27Package =
+    import ../development/python-modules/generic {
+      inherit makeWrapper lib;
+      python = python26;
+      setuptools = setuptools_python27;
+    };
+
   pythonPackages = python26Packages;
 
   python25Packages = recurseIntoAttrs (import ./python-packages.nix {
@@ -3944,6 +3971,12 @@ let
     inherit pkgs;
     python = python26;
     buildPythonPackage = buildPython26Package;
+  });
+
+  python27Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+    python = python27;
+    buildPythonPackage = buildPython27Package;
   });
 
   foursuite = callPackage ../development/python-modules/4suite { };
@@ -4002,6 +4035,11 @@ let
   setuptools_python26 = builderDefsPackage (import ../development/python-modules/setuptools) {
     inherit makeWrapper;
     python = python26;
+  };
+
+  setuptools_python27 = builderDefsPackage (import ../development/python-modules/setuptools) {
+    inherit makeWrapper;
+    python = python27;
   };
 
   wxPython = wxPython26;
