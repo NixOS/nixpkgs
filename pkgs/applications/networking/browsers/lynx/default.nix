@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   configureFlags = if sslSupport then "--with-ssl" else "";
   
   buildInputs = [ ncurses ] ++ stdenv.lib.optional sslSupport openssl;
+  buildNativeInputs = [ ncurses ];
 
   meta = {
     homepage = http://lynx.isc.org/;

@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e 's|//int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);|/\*int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);\*/|' include/pcm.h
   '';
+
+  crossAttrs = {
+    patchPhase = ''
+      sed -i s/extern/static/g include/iatomic.h
+    '';
+  };
   
   meta = {
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
