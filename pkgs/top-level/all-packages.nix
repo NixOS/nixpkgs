@@ -6838,6 +6838,8 @@ let
 
   maven2 = callPackage ../misc/maven { };
 
+  mess = callPackage ../misc/emulators/mess { };
+
   nix = nixUnstable;
 
   nixStable = callPackage ../tools/package-management/nix {
