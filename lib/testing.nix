@@ -121,7 +121,7 @@ rec {
         
         $origBuilder $origArgs
          
-        echo "Exit code:" $?
+        exit $?
       '';
 
       testscript = ''
