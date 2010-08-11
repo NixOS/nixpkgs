@@ -9,12 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [pkgconfig glib];
-
-  # Link this package statically to generate an nbd-server binary that
-  # has no dynamic dependencies and that can be used on (non-Nix) remote
-  # machines that have a different setup than the local one.
-  configureFlags = "LDFLAGS=-static";
-
   postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
 
   meta = {
