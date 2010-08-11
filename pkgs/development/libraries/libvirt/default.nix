@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, gnutls, devicemapper, perl }:
+{ stdenv, fetchurl, libxml2, gnutls, devicemapper, perl, python }:
 
 let version = "0.8.3"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "07vsk4g1nxvxc8yr6cdvwp9kvwgm2g7lh6aaggfkxb2775n87q9m";
   };
 
-  buildInputs = [ libxml2 gnutls devicemapper perl ];
+  buildInputs = [ libxml2 gnutls devicemapper perl python ];
 
   # xen currently disabled in nixpkgs
   configureFlags = ''                                                  
