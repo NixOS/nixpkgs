@@ -157,7 +157,7 @@ rec {
     name = "fuloong2f_n32";
     kernelMajor = "2.6";
     kernelHeadersBaseConfig = "fuloong2e_defconfig";
-    kernelBaseConfig = "fuloong2f_defconfig";
+    kernelBaseConfig = "lemote2f_defconfig";
     kernelArch = "mips";
     kernelAutoModules = false;
     kernelExtraConfig =

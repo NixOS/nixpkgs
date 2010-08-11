@@ -1,7 +1,8 @@
 {stdenv, fetchurl}:
 
-# I could not build it in armv5tel-linux
+# I could not build it in armv5tel-linux or the fuloon2f
 assert stdenv.system != "armv5tel-linux";
+assert stdenv.system != "ict_loongson-2_v0.3_fpu_v0.1-linux";
    
 stdenv.mkDerivation {
   name = "libxcrypt-3.0.2";

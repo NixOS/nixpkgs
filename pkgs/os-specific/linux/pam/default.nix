@@ -9,7 +9,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ flex cracklib ]
-    ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") libxcrypt;
+    ++ stdenv.lib.optional
+      (stdenv.system != "armv5tel-linux" && stdenv.system != "ict_loongson-2_v0.3_fpu_v0.1-linux")
+      libxcrypt;
 
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
