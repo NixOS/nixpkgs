@@ -128,6 +128,8 @@ let
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux";
 
+  callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
+
   inherit __overrides;
 
 
@@ -5002,30 +5004,15 @@ let
   ### APPLICATIONS
 
 
-  aangifte2005 = import ../applications/taxes/aangifte-2005 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext;
-  };
+  aangifte2005 = callPackage_i686 ../applications/taxes/aangifte-2005 { };
 
-  aangifte2006 = import ../applications/taxes/aangifte-2006 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext;
-  };
+  aangifte2006 = callPackage_i686 ../applications/taxes/aangifte-2006 { };
 
-  aangifte2007 = import ../applications/taxes/aangifte-2007 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
-  };
+  aangifte2007 = callPackage_i686 ../applications/taxes/aangifte-2007 { };
 
-  aangifte2008 = import ../applications/taxes/aangifte-2008 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
-  };
+  aangifte2008 = callPackage_i686 ../applications/taxes/aangifte-2008 { };
 
-  aangifte2009 = import ../applications/taxes/aangifte-2009 {
-    inherit (pkgsi686Linux) stdenv fetchurl makeWrapper xdg_utils;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
-  };
+  aangifte2009 = callPackage_i686 ../applications/taxes/aangifte-2009 { };
 
   abcde = callPackage ../applications/audio/abcde { };
 
@@ -5034,7 +5021,7 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
-  adobeReader = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg) ../applications/misc/adobe-reader {
+  adobeReader = callPackage_i686 ../applications/misc/adobe-reader {
     inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
   };
 
@@ -5571,11 +5558,7 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  googleearth = import ../applications/misc/googleearth {
-    inherit (pkgsi686Linux) stdenv fetchurl glibc mesa freetype zlib glib;
-    inherit (pkgsi686Linux.xlibs) libSM libICE libXi libXv libXrender
-      libXrandr libXfixes libXcursor libXinerama libXext libX11;
-  };
+  googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
     inherit fetchsvn curl pkgconfig libxml2;
@@ -6011,10 +5994,7 @@ let
     inherit (kde4) qt4 kdelibs automoc4 phonon soprano;
   };
 
-  skype_linux = callPackage ../applications/networking/skype {
-    qt = qt46;
-    inherit (gtkLibs) glib;
-  };
+  skype_linux = callPackage_i686 ../applications/networking/skype { };
 
   slim = callPackage ../applications/display-managers/slim { };
 
@@ -6968,14 +6948,10 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  wine =
-    # Wine cannot be built in 64-bit; use a 32-bit build instead.
-    import ../misc/emulators/wine {
-      inherit (pkgsi686Linux) fetchurl stdenv bison mesa ncurses
-        libpng libjpeg alsaLib lcms xlibs freetype
-        fontconfig fontforge libxml2 libxslt openssl;
-      flex = pkgsi686Linux.flex2535;
-    };
+  # Wine cannot be built in 64-bit; use a 32-bit build instead.
+  wine = callPackage_i686 ../misc/emulators/wine {
+    flex = pkgsi686Linux.flex2535;
+  };
 
   x2x = callPackage ../tools/X11/x2x { };
 
