@@ -8,7 +8,6 @@
 kdePackage rec {
   pn = "kdebindings";
   v = "4.5.0";
-  sha256 = "0x8c98gbp2rm3dckzw3l0jh2ch5g9sb2prmilwzl8d5psyhx39n6";
 
   patches = [ ./python-site-packages-install-dir.diff ];
 

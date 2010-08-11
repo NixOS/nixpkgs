@@ -1,12 +1,16 @@
 { stdenv, fetchurl }:
 
-a@{ pn, v, stable ? true, sha256, subdir ? null, ... }:
+let
+  manifest = import ./manifest.nix;
+in
+
+a@{ pn, v, stable ? true, subdir ? null, ... }:
 stdenv.mkDerivation ({
   name = "${pn}-${v}";
   src = fetchurl {
     url = "mirror://kde/" + (if stable then "" else "un") + "stable/" +
       (if subdir == null then "${v}/src" else subdir) + "/${pn}-${v}.tar.bz2";
-    inherit sha256;
+    sha256 = builtins.getAttr "${pn}-${v}.tar.bz2" manifest;
   };
   meta = {
     maintainers = with stdenv.lib.maintainers; [ sander urkud ];
@@ -14,4 +18,4 @@ stdenv.mkDerivation ({
     inherit stable;
     homepage = http://www.kde.org;
   } // ( if a ? meta then a.meta else { } );
-} // (removeAttrs a [ "meta" "pn" "v" "stable" "sha256" "subdir" ]))
+} // (removeAttrs a [ "meta" "pn" "v" "stable" "subdir" ]))
