@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake, qt4, perl, bzip2, libxml2, expat, exiv2
+{ stdenv, fetchurl, cmake, qt4, perl, bzip2, libxml2, expat, exiv2
 , cluceneCore
 }:
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://strigi.sourceforge.net;
     description = "A very fast and efficient crawler to index data on your harddrive";
     license = "LGPL";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = with stdenv.lib.maintainers; [ sander urkud ];
+    inherit (qt4.meta) platforms;
   };
 }
