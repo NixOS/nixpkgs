@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-ncurses=${ncurses}";
 
-  buildInputs = [ ncurses pkgconfig emacs ];
+  buildInputs = [ ncurses emacs ];
+  buildNativeInputs = [ pkgconfig ];
 
   postInstall = ''
     # Install Emacs mode.
@@ -30,6 +31,11 @@ stdenv.mkDerivation rec {
     emacs --batch --eval '(byte-compile-file "xcscope.el")'
     cp xcscope.el{,c} "$out/share/emacs/site-lisp"
   '';
+
+  crossAttrs = {
+    postInstall = "";
+    propagatedBuildInputs = [ ncurses.hostDrv ];
+  };
 
   meta = {
     description = "Cscope, a developer's tool for browsing source code";
