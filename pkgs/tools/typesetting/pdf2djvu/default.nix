@@ -1,11 +1,12 @@
 {stdenv, fetchurl, pkgconfig, djvulibre, poppler, fontconfig, libjpeg }:
 
-stdenv.mkDerivation {
-  name = "pdf2djvu-0.5.3";
+stdenv.mkDerivation rec {
+  version = "0.7.4";
+  name = "pdf2djvu-${version}";
 
   src = fetchurl {
-    url = http://pdf2djvu.googlecode.com/files/pdf2djvu_0.5.3.tar.gz;
-    sha256 = "b36b958fc395dc8976485bef09aac2b97435d0d9f21b4cf8dacaa5b55f3f2c1c";
+    url = "http://pdf2djvu.googlecode.com/files/pdf2djvu_${version}.tar.gz";
+    sha256 = "4ca375cd4e873d82428bd934ecc7cdbc6331a8236090c2424bd3c3b7bfc1331c";
   };
 
   buildInputs = [ pkgconfig djvulibre poppler fontconfig libjpeg ];
