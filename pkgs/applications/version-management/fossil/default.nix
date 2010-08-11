@@ -19,6 +19,10 @@ stdenv.mkDerivation {
     INSTALLDIR=$out/bin make install
   '';
 
+  crossAttrs = {
+    makeFlagsArray = [ "TCC=${stdenv.cross.config}-gcc" ];
+  };
+
   meta = {
     description = "Simple, high-reliability, distributed software configuration management.";
     longDescription = ''
