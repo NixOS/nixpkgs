@@ -36,6 +36,8 @@
 ### BASE
   kdebase = callPackage ./base { };
 
+  kdebase_workspace = callPackage ./base-workspace { };
+
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
