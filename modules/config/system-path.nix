@@ -104,7 +104,7 @@ let
                   $out/bin/update-mime-database -V $out/share/mime
               fi
 
-              if [ -x $out/bin/gtk-update-icon-cache -a -d $out/share/icons/hicolor ]; then
+              if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
                   $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
               fi
             '';
