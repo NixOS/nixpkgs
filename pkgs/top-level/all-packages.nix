@@ -3527,7 +3527,7 @@ let
 
   nss = callPackage ../development/libraries/nss { };
 
-  nssTools = callPackage ../development/libraries/nss { 
+  nssTools = callPackage ../development/libraries/nss {
     includeTools = true;
   };
 
@@ -4981,7 +4981,7 @@ let
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
-  
+
   junicode = callPackage ../data/fonts/junicode { };
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
@@ -6611,19 +6611,19 @@ let
   };
 
   xfce = xfce4;
-  
+
   xfce4 = recurseIntoAttrs
     (let callPackage = newScope pkgs.xfce4; in
      import ../desktops/xfce-4 { inherit callPackage pkgs; });
 
-  
+
   ### SCIENCE
 
   xplanet = callPackage ../applications/science/xplanet {
     inherit (gtkLibs) pango;
   };
 
-  
+
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
