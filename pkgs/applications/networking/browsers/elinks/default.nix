@@ -18,6 +18,16 @@ stdenv.mkDerivation rec {
       --enable-nntp --with-openssl=${openssl}
     '';
 
+  crossAttrs = {
+    propagatedBuildInputs = [ ncurses.hostDrv zlib.hostDrv openssl.hostDrv ];
+    configureFlags = ''
+      --enable-finger --enable-html-highlight
+      --enable-gopher --enable-cgi --enable-bittorrent --enable-nntp
+      --with-openssl=${openssl.hostDrv}
+      --with-bzip2=${bzip2.hostDrv}
+    '';
+  };
+
   meta = {
     description = "Full-featured text-mode web browser";
     homepage = http://elinks.or.cz;

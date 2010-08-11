@@ -11,6 +11,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   postInstall = "ln -s $out/bin/vim $out/bin/vi";
+
+  crossAttrs = {
+    configureFlags = [
+      "vim_cv_toupper_broken=no"
+      "--with-tlib=ncurses"
+      "vim_cv_terminfo=yes"
+      "vim_cv_tty_group=tty"
+      "vim_cv_tty_mode=0660"
+      "vim_cv_getcwd_broken=no"
+      "vim_cv_stat_ignores_slash=yes"
+      "ac_cv_sizeof_int=4"
+      "vim_cv_memmove_handles_overlap=yes"
+      "STRIP=${stdenv.cross.config}-strip"
+    ];
+  };
   
   meta = {
     description = "The most popular clone of the VI editor";

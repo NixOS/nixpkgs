@@ -1,10 +1,11 @@
 { alsaSupport ? false, xvSupport ? true, theoraSupport ? false, cacaSupport ? false
 , xineramaSupport ? false, randrSupport ? false, dvdnavSupport ? true
 , stdenv, fetchurl, x11, freetype, fontconfig, zlib
-, alsa ? null, libX11, libXv ? null, libtheora ? null, libcaca ? null
+, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
 , amrnb ? null, amrwb ? null, amrSupport ? false
+, x11Support ? true, libX11 ? null
 , jackaudioSupport ? false, jackaudio ? null
 , x264Support ? false, x264 ? null
 , xvidSupport ? false, xvidcore ? null
@@ -13,11 +14,12 @@
 }:
 
 assert alsaSupport -> alsa != null;
-assert xvSupport -> libXv != null;
+assert x11Support -> libX11 != null;
+assert xvSupport -> (libXv != null && x11Support);
 assert theoraSupport -> libtheora != null;
 assert cacaSupport -> libcaca != null;
-assert xineramaSupport -> libXinerama != null;
-assert randrSupport -> libXrandr != null;
+assert xineramaSupport -> (libXinerama != null && x11Support);
+assert randrSupport -> (libXrandr != null && x11Support);
 assert dvdnavSupport -> libdvdnav != null;
 assert cddaSupport -> cdparanoia != null;
 assert jackaudioSupport -> jackaudio != null;
@@ -54,7 +56,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ x11 libXv freetype zlib mesa pkgconfig yasm ]
+    [ freetype zlib pkgconfig ]
+    ++ stdenv.lib.optional x11Support [ libX11 mesa ]
     ++ stdenv.lib.optional alsaSupport alsa
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -69,18 +72,32 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional lameSupport lame;
 
+  buildNativeInputs = [ yasm ];
+
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
     ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
     --codecsdir=${codecs}
     --enable-runtime-cpudetection
-    --enable-x11
+    ${if x11Support then "--enable-x11" else ""}
     --disable-xanim
     --disable-ivtv
   '';
 
-  NIX_LDFLAGS = "-lX11 -lXext";
+  NIX_LDFLAGS = if x11Support then "-lX11 -lXext" else "";
+
+  crossAttrs = {
+    preConfigure = ''
+      configureFlags="`echo $configureFlags |
+        sed -e 's/--build[^ ]\+//' \
+        -e 's/--host[^ ]\+//' \
+        -e 's/--codecsdir[^ ]\+//' \
+        -e 's/--enable-runtime-cpudetection//' `"
+      configureFlags="$configureFlags --target=${stdenv.cross.arch}-linux
+        --cc=$crossConfig-gcc --as=$crossConfig-as"
+    '';
+  };
 
   meta = {
     description = "A movie player that supports many video formats";

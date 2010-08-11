@@ -3676,8 +3676,9 @@ let
   schroedinger = callPackage ../development/libraries/schroedinger { };
 
   SDL = callPackage ../development/libraries/SDL {
-    openglSupport = mesaSupported;
+    openglSupport = false; #mesaSupported;
     alsaSupport = true;
+    x11Support = false;
     pulseaudioSupport = false; # better go through ALSA
   };
 
@@ -6450,6 +6451,8 @@ let
     inherit stdenv fetchurl pkgconfig intltool;
     inherit (gtkLibs) gtk /*glib gtkmm*/;
   };
+
+  prboom = callPackage ../games/prboom { };
 
   quake3demo = callPackage ../games/quake3/wrapper {
     name = "quake3-demo-${quake3game.name}";

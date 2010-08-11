@@ -1,8 +1,6 @@
 NIX_CROSS_CFLAGS_COMPILE=""
 NIX_CROSS_LDFLAGS=""
 
-set -x
-
 crossAddCVars () {
     if test -d $1/include; then
         export NIX_CROSS_CFLAGS_COMPILE="$NIX_CROSS_CFLAGS_COMPILE -I$1/include"
@@ -70,7 +68,9 @@ if test -n "@libc@"; then
     crossAddCVars @libc@
 fi
 
-configureFlags="$configureFlags --build=$system --host=$crossConfig"
+if test "$dontSetConfigureCross" != "1"; then
+    configureFlags="$configureFlags --build=$system --host=$crossConfig"
+fi
 # Disabling the tests when cross compiling, as usually the tests are meant for
 # native compilations.
 doCheck=""
@@ -82,5 +82,3 @@ if test "$NIX_NO_SELF_RPATH" != "1"; then
         export NIX_CROSS_LDFLAGS="-rpath $out/lib64 -rpath-link $out/lib $NIX_CROSS_LDFLAGS"
     fi
 fi
-
-set +x

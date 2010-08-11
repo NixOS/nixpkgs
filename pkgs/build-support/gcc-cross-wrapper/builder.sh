@@ -12,23 +12,18 @@ if test -z "$nativeLibc"; then
     ldflags="$ldflags -L$libc/lib"
     # Get the proper dynamic linker for glibc and uclibc. 
     dlinker=`eval 'echo $libc/lib/ld*.so.?'`
-    if [ -n "$dynamicLinker" ]; then
+    if [ -n "$dlinker" ]; then
       ldflagsBefore="-dynamic-linker $dlinker"
-    fi
-    # This trick is to avoid dependencies on the cross-toolchain gcc
-    # for libgcc, libstdc++, ...
-    # -L is for libtool's .la files, and -rpath for the usual fixupPhase
-    # shrinking rpaths.
-    if [ -n "$gccLibs" ]; then
-      ldflagsBefore="$ldflagsBefore -rpath $gccLibs/lib"
-    fi
 
-    # The same as above, but put into files, useful for the gcc builder.
-    dynamicLinker="$libc/lib/$dynamicLinker"
-    echo $dynamicLinker > $out/nix-support/dynamic-linker
-
-    if test -e $libc/lib/32/ld-linux.so.2; then
-        echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+      # The same as above, but put into files, useful for the gcc builder.
+      echo $dlinker > $out/nix-support/dynamic-linker
+      # This trick is to avoid dependencies on the cross-toolchain gcc
+      # for libgcc, libstdc++, ...
+      # -L is for libtool's .la files, and -rpath for the usual fixupPhase
+      # shrinking rpaths.
+      if [ -n "$gccLibs" ]; then
+        ldflagsBefore="$ldflagsBefore -rpath $gccLibs/lib"
+      fi
     fi
 
     echo "$cflagsCompile -B$libc/lib/ -idirafter $libc/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
