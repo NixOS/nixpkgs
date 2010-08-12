@@ -6630,6 +6630,8 @@ let
     inherit libxml2 guile perl intltool libtool pkgconfig;
   };
 
+  tetgen = callPackage ../applications/science/geometry/tetgen { };
+
 
   ### SCIENCE/BIOLOGY
 
