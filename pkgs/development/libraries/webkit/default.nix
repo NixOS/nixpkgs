@@ -24,22 +24,28 @@ rec {
   configureFlags = [
     "--enable-3D-transforms"
     "--enable-web-sockets"
-    "--enable-indexeddb"
+    "--enable-web-timing"
     "--enable-image-resizer"
 
-    # https://bugs.webkit.org/show_bug.cgi?id=41859
-    # "--enable-mathml"
+    "--enable-mathml"
 
-    # "--enable-blob-slice"
-    
-    # Seem incomplete as of now
-    # "--enable-file-reader"
-    # "--enable-file-writer"
-
-    # https://bugs.webkit.org/show_bug.cgi?id=40765
+    # https://bugs.webkit.org/show_bug.cgi?id=42943
     # "--enable-wml"
+    
+    # https://bugs.webkit.org/show_bug.cgi?id=43863
+    # "--enable-indexed-database"
 
-    # "--enable-xhtmlmp"
+    "--enable-xhtmlmp"
+
+    # "--enable-input-speech"
+
+    # https://bugs.webkit.org/show_bug.cgi?id=43878
+    # "--enable-file-writer"
+    # "--enable-blob"
+
+    # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
+    # "--enable-file-system"
+    # "--enable-directory-upload"
     ];
 
   /* doConfigure should be specified separately */
