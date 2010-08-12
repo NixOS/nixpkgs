@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://download.akonadi-project.org/${name}.tar.bz2";
     sha256 = "1d2ancspavp4qg717hj56j1likb0ifdr65q1awbc2ghqqgd9znck";
   };
+  patches = [ ./fix-broken-datadir-parameter.patch ];
   buildInputs = [ cmake qt4 shared_mime_info libxslt boost mysql automoc4 soprano ];
   meta = with stdenv.lib; {
     description = "KDE PIM Storage Service";
