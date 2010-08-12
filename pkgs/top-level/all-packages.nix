@@ -2124,7 +2124,6 @@ let
   };
 
   python27Full = python27Base.override {
-    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
     inherit db4 sqlite readline openssl tcl tk ncurses;
     inherit (xlibs) libX11 xproto;
   };
