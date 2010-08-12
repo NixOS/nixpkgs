@@ -3934,24 +3934,21 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  buildPythonPackage =
-    import ../development/python-modules/generic {
-      inherit python setuptools makeWrapper lib;
-    };
+  buildPythonPackage = import ../development/python-modules/generic {
+    inherit python setuptools makeWrapper lib;
+  };
 
-  buildPython26Package =
-    import ../development/python-modules/generic {
-      inherit makeWrapper lib;
-      python = python26;
-      setuptools = setuptools_python26;
-    };
+  buildPython26Package = import ../development/python-modules/generic {
+    inherit makeWrapper lib;
+    python = python26;
+    setuptools = setuptools.override { python = python26; };
+  };
 
-  buildPython27Package =
-    import ../development/python-modules/generic {
-      inherit makeWrapper lib;
-      python = python26;
-      setuptools = setuptools_python27;
-    };
+  buildPython27Package = import ../development/python-modules/generic {
+    inherit makeWrapper lib;
+    python = python27;
+    setuptools = setuptools.override { python = python27; };
+  };
 
   pythonPackages = python26Packages;
 
@@ -4020,16 +4017,6 @@ let
 
   setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
     inherit python makeWrapper;
-  };
-
-  setuptools_python26 = builderDefsPackage (import ../development/python-modules/setuptools) {
-    inherit makeWrapper;
-    python = python26;
-  };
-
-  setuptools_python27 = builderDefsPackage (import ../development/python-modules/setuptools) {
-    inherit makeWrapper;
-    python = python27;
   };
 
   wxPython = wxPython26;
