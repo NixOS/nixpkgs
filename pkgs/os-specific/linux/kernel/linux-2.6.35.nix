@@ -19,10 +19,6 @@ let
       # Enable the kernel's built-in memory tester.
       MEMTEST y
 
-      # Include the CFQ I/O scheduler in the kernel, rather than as a
-      # module, so that the initrd gets a good I/O scheduler.
-      IOSCHED_CFQ y
-
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
@@ -194,11 +190,11 @@ in
 import ./generic.nix (
 
   rec {
-    version = "2.6.34.3";
+    version = "2.6.35.1";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "1mm5yphkclcmjbq7v40nn6js1canna1gl5d4065xiza0v5gdq83v";
+      sha256 = "04pax26ksdp8i61qr4qdwc98iw47vjnwi53x73hbii5v0dz3qixy";
     };
 
     config = configWithPlatform stdenv.platform;

@@ -4523,6 +4523,14 @@ let
       ];
   };
 
+  linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [ /*kernelPatches.fbcondecor_2_6_33*/
+        kernelPatches.sec_perm_2_6_24
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -4624,6 +4632,7 @@ let
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
   linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
   linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
+  linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
 
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
