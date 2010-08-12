@@ -485,7 +485,7 @@ let
     inherit stdenv zlib openssl libssh2;
     zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
     sslSupport = zlibSupport;
-    scpSupport = zlibSupport && (!stdenv.isSunOS);
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };

@@ -96,6 +96,7 @@ let
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux";
         isSunOS = result.system == "i386-sunos";
+        isCygwin = result.system == "i686-cygwin";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
