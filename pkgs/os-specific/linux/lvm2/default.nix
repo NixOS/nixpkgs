@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "lvm2-${v}";
   
   src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/lvm2/LVM2.${v}.tgz";
+    url = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${v}.tgz";
     sha256 =  "2a4157b91b7ad5ea84359e8548b64947611beea01862e010be71f54b649e7ad1";
   };
   
