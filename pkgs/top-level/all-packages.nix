@@ -2123,7 +2123,7 @@ let
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   };
 
-  python27Full = lowPrio (python27Base.override {
+  python27Full = python27Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
     db4 = if getConfig ["python" "db4Support"] true then db4 else null;
     sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
@@ -2134,7 +2134,7 @@ let
     libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
     xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
     ncurses = if getConfig ["python" "curses"] true then ncurses else null;
-  });
+  };
 
   python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
