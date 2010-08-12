@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     ensureDir $out/bin
     ensureDir $out/include/qhull
     ensureDir $out/lib
-    ensureDir $out/share/man/man1
+    cp qconvex qdelaunay qhalf qhull rbox qvoronoi $out/bin
     cp *.h $out/include/qhull
     cp libqhull.a $out/lib
   '';
