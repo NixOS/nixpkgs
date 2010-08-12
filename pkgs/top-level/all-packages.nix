@@ -2117,11 +2117,11 @@ let
     ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
-  python27Base = makeOverridable (import ../development/interpreters/python/2.7) {
+  python27Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.7) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  };
+  });
 
   python27Full = python27Base.override {
     inherit db4 sqlite readline openssl tcl tk ncurses;
