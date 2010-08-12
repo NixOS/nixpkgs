@@ -1,11 +1,13 @@
 {stdenv, fetchurl, python, makeWrapper}:
 
-stdenv.mkDerivation {
-  name = "bazaar-1.10rc1";
+stdenv.mkDerivation rec {
+  version = "2.2";
+  release = ".0";
+  name = "bazaar-${version}${release}";
 
   src = fetchurl {
-    url = http://launchpad.net/bzr/1.10/1.10rc1/+download/bzr-1.10rc1.tar.gz;
-    sha256 = "dc3669e15ced93e0956c13b724f604075e0323ce07fb08f6463946c85e69bec0";
+    url = "http://launchpad.net/bzr/${version}/${version}${release}/+download/bzr-${version}${release}.tar.gz";
+    sha256 = "64cd6c23097884e40686adc7f0ad4a8200e2292bdc5e0caba3563b6f5c32bacf";
   };
 
   buildInputs = [python makeWrapper];
