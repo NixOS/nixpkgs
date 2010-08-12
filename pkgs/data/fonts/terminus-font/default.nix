@@ -2,8 +2,10 @@
 stdenv.mkDerivation rec {
   name = "terminus-font-4.30";
   src = fetchurl {
-    url = "http://www.is-vn.bg/hamster/${name}.tar.gz";
-    sha256 = "ca15718f715f1ca7af827a8ab5543b0c0339b2515f39f8c15f241b2bc1a15a9a";
+#    urls = "http://www.is-vn.bg/hamster/${name}.tar.gz"
+#    sha256 = "ca15718f715f1ca7af827a8ab5543b0c0339b2515f39f8c15f241b2bc1a15a9a";
+     url = "http://ftp.de.debian.org/debian/pool/main/x/xfonts-terminus/xfonts-terminus_4.30.orig.tar.gz";
+     sha256 = "d7f1253d75f0aa278b0bbf457d15927ed3bbf2565b9f6b829c2b2560fedc1712";
   };
   buildInputs = [ perl bdftopcf mkfontdir mkfontscale ];
   patchPhase = ''
