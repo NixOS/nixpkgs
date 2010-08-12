@@ -44,8 +44,8 @@ rec {
     # "--enable-blob"
 
     # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
-    # "--enable-file-system"
-    # "--enable-directory-upload"
+    "--enable-file-system"
+    "--enable-directory-upload"
     ];
 
   /* doConfigure should be specified separately */
