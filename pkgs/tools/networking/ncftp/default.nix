@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "ncftp-3.2.3";
 
   src = fetchurl {
-    url = ftp://ftp.ncftp.com/ncftp/ncftp-3.2.3-src.tar.bz2;
-    sha256 = "0455rf6yw568izq2nvz58mjd719dgp9y63yx9cb7l620vvxz5x26";
+    url = ftp://ftp.ncftp.com/ncftp/ncftp-3.2.4-src.tar.bz2;
+    sha256 = "0v0cfc4kqsvmfighl47djw5nw82dl5j5g5i2s8wy375fllim0cv6";
   };
 
   preConfigure = ''
