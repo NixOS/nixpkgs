@@ -6157,7 +6157,7 @@ let
 
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
-    inherit 
+    inherit
       monotone flup cheetahTemplate highlight ctags
       makeWrapper graphviz which python;
   };
