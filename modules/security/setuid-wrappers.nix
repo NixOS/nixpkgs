@@ -62,7 +62,8 @@ in
       default = "/var/setuid-wrappers";
       description = ''
         This option defines the path to the setuid wrappers.  It
-        should generally not be overriden.
+        should generally not be overriden. Some packages in nixpkgs rely on
+        wrapperDir == /var/setuid-wrappers
       '';
     };
 

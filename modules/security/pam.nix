@@ -191,7 +191,7 @@ in
   ###### implementation
 
   config = {
-  
+
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
@@ -205,6 +205,14 @@ in
           target = "pam.d/other";
         };
 
+    security.setuidOwners = [ {
+      program = "unix_chkpwd";
+      source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+      owner = "root";
+      setuid = true;
+    } ];
+
+
     security.pam.services =
       # Most of these should be moved to specific modules.
       [ { name = "cups"; }
@@ -217,5 +225,5 @@ in
       ];
 
   };
-  
+
 }
