@@ -40,6 +40,8 @@
 
   kdebase_workspace = callPackage ./base-workspace { };
 
+  kdebase_runtime = callPackage ./base-runtime { };
+
   kdeartwork = callPackage ./artwork { };
 
 ### DEVELOPMENT
