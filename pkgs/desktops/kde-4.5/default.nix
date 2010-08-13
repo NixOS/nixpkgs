@@ -40,6 +40,8 @@
 
   kdebase_workspace = callPackage ./base-workspace { };
 
+  kdeartwork = callPackage ./artwork { };
+
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
