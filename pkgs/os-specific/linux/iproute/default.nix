@@ -16,4 +16,9 @@ stdenv.mkDerivation rec {
   makeFlags = "DESTDIR= LIBDIR=$(out)/lib SBINDIR=$(out)/sbin CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc MANDIR=$(out)/share/man";
 
   buildInputs = [bison flex db4];
+
+  meta = {
+    homepage =
+      http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
+  };
 }

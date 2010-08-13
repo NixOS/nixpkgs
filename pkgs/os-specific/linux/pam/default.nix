@@ -19,4 +19,10 @@ stdenv.mkDerivation {
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
   '';
+
+  meta = {
+    homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
+    description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
