@@ -5332,6 +5332,8 @@ let
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
+    inherit emacs;
+
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
