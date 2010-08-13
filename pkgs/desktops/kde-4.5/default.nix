@@ -42,6 +42,8 @@
 
   kdebase_runtime = callPackage ./base-runtime { };
 
+  kdeutils = callPackage ./utils { };
+
   kdeartwork = callPackage ./artwork { };
 
 ### DEVELOPMENT
