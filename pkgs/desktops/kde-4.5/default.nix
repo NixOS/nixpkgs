@@ -14,6 +14,8 @@
 
   automoc4 = callPackage ./support/automoc4 { };
 
+  eigen = callPackage ./support/eigen { };
+
   oxygen_icons = callPackage ./support/oxygen-icons { };
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };
