@@ -489,7 +489,8 @@ rec {
   };
 
   httpdShed = import ../development/libraries/haskell/httpd-shed {
-    inherit cabal network;
+    inherit cabal;
+    network = network2217;
   };
 
   HUnit1221 = import ../development/libraries/haskell/HUnit/1.2.2.1.nix {
@@ -903,7 +904,8 @@ rec {
   };
 
   vacuum = import ../development/libraries/haskell/vacuum {
-    inherit cabal ghcPaths;
+    inherit cabal;
+    ghcPaths = ghcPaths0106;
   };
 
   vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {
