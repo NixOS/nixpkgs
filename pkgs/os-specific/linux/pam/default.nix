@@ -11,6 +11,11 @@ stdenv.mkDerivation {
   buildInputs = [ flex cracklib ]
     ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") libxcrypt;
 
+  postInstall = ''
+    mv -v $out/sbin/unix_chkpwd{,.orig}
+    ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
+    '';
+
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
   '';
