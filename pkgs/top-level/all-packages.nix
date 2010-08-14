@@ -4531,13 +4531,14 @@ let
       ];
   };
 
-  linux_2_6_35_oldI686 = linuxPackages_2_6_35.override {
+  linux_2_6_35_oldI686 = linux_2_6_35.override {
       extraConfig = ''
           HIGHMEM64G? n
           XEN? n
       '';
       extraMeta = {
         platforms = ["i686-linux"];
+	maintainers = [lib.maintainers.raskin];
       };
   };
 
