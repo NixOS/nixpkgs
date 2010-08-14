@@ -978,7 +978,7 @@ let
   pg_top = callPackage ../tools/misc/pg_top { };
 
   pdsh = callPackage ../tools/networking/pdsh {
-    rsh = true;			# enable internal rsh implementation
+    rsh = true;          # enable internal rsh implementation
     ssh = openssh;
   };
 
@@ -4529,6 +4529,16 @@ let
       [ /*kernelPatches.fbcondecor_2_6_33*/
         kernelPatches.sec_perm_2_6_24
       ];
+  };
+
+  linux_2_6_35_oldI686 = linuxPackages_2_6_35.override {
+      extraConfig = ''
+          HIGHMEM64G? n
+          XEN? n
+      '';
+      extraMeta = {
+        platforms = ["i686-linux"];
+      };
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
