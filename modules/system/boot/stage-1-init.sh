@@ -110,20 +110,6 @@ done
 mknod /dev/null c 1 3
 
 
-# Try to resume - all modules are loaded now.
-if test -e /sys/power/tuxonice/resume; then
-    if test -n "$(cat /sys/power/tuxonice/resume)"; then
-        echo 0 > /sys/power/tuxonice/user_interface/enabled
-        echo 1 > /sys/power/tuxonice/do_resume || echo "failed to resume..."
-    fi
-fi
-
-if test -e /sys/power/resume -a -e /sys/power/disk; then
-    echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
-    echo shutdown > /sys/power/disk
-fi
-
-
 # Create device nodes in /dev.
 echo "running udev..."
 export UDEV_CONFIG_FILE=@udevConf@
@@ -143,6 +129,20 @@ if test -n "$debug1devices"; then fail; fi
 
 
 @postDeviceCommands@
+
+
+# Try to resume - all modules are loaded now, and devices exist
+if test -e /sys/power/tuxonice/resume; then
+    if test -n "$(cat /sys/power/tuxonice/resume)"; then
+        echo 0 > /sys/power/tuxonice/user_interface/enabled
+        echo 1 > /sys/power/tuxonice/do_resume || echo "failed to resume..."
+    fi
+fi
+
+if test -e /sys/power/resume -a -e /sys/power/disk; then
+    echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+    echo shutdown > /sys/power/disk
+fi
 
 
 # Return true if the machine is on AC power, or if we can't determine
