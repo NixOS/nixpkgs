@@ -44,6 +44,8 @@
 
   kdeutils = callPackage ./utils { };
 
+  kdemultimedia = callPackage ./multimedia { };
+
   kdeartwork = callPackage ./artwork { };
 
 ### DEVELOPMENT
