@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "uniplate";
-  version = "1.2.0.3";
-  sha256 = "77cf07c96ae62799d790284c0c84beca9ee17c9c2416d4de6641f3fddd644b58";
+  version = "1.5.1";
+  sha256 = "cfeaaaabbbe318992df0c51a0c04729b22dac244f415b80a3b388708ed9cfc33";
   propagatedBuildInputs = [mtl];
   meta = {
     description = "Uniform type generic traversals";
