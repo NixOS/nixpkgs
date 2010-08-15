@@ -2624,6 +2624,8 @@ let
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
+  cln = callPackage ../development/libraries/cln { };
+
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
   };
 
