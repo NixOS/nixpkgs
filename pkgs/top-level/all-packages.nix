@@ -3342,6 +3342,8 @@ let
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
+  libqalculate = callPackage ../development/libraries/libqalculate { };
+
   librsync = callPackage ../development/libraries/librsync { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
