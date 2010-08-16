@@ -62,6 +62,7 @@ in
         # This supplies some "abstract" icons such as
         # "utilities-terminal" and "accessories-text-editor".
         pkgs.gnome.gnomeicontheme
+        pkgs.desktop_file_utils
       ]
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
 
