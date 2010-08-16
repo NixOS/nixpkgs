@@ -548,6 +548,8 @@ let
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
+  ebook_tools = callPackage ../tools/text/ebook-tools { };
+
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
