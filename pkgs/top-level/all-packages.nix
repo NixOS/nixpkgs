@@ -2081,6 +2081,8 @@ let
   pythonBase = python26Base;
   pythonFull = python26Full;
 
+  pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
+
   python24 = callPackage ../development/interpreters/python/2.4 { };
 
   python25Base = makeOverridable (import ../development/interpreters/python/2.5) {
