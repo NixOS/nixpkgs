@@ -3243,6 +3243,8 @@ let
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
 
+  libktorrent = newScope kde45 ../development/libraries/libktorrent { };
+
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
   };
