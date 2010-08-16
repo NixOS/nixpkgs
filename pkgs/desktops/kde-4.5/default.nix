@@ -42,6 +42,9 @@
 
   kdebase_runtime = callPackage ./base-runtime { };
 
+### OTHER MODULES
+  kdeaccessibility = callPackage ./accessibility { };
+
   kdeutils = callPackage ./utils { };
 
   kdemultimedia = callPackage ./multimedia { };
