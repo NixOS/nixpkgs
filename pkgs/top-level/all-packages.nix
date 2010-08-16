@@ -3955,7 +3955,7 @@ let
   buildPython27Package = import ../development/python-modules/generic {
     inherit makeWrapper lib;
     python = python27;
-    setuptools = setuptools.override { python = python27; };
+    setuptools = setuptools.override { python = python27; doCheck = false; };
   };
 
   pythonPackages = python26Packages;
