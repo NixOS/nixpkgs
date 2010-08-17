@@ -2083,11 +2083,11 @@ let
 
   pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
 
-  python24 = callPackage ../development/interpreters/python/2.4 { };
+  python24 = lowPrio (callPackage ../development/interpreters/python/2.4 { });
 
-  python25Base = makeOverridable (import ../development/interpreters/python/2.5) {
+  python25Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
-  };
+  });
 
   python25Full = lowPrio (python25Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
@@ -2102,11 +2102,11 @@ let
     ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
-  python26Base = makeOverridable (import ../development/interpreters/python/2.6) {
+  python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  };
+  });
 
   python26Full = lowPrio (python26Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
@@ -2127,10 +2127,10 @@ let
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   });
 
-  python27Full = python27Base.override {
+  python27Full = lowPrio (python27Base.override {
     inherit db4 sqlite readline openssl tcl tk ncurses;
     inherit (xlibs) libX11 xproto;
-  };
+  });
 
   python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
