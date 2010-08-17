@@ -434,7 +434,7 @@ let inherit (builtins) head tail trace; in
         realPhaseNames = 
 	  (optional ([] != attrByPath ["neededDirs"] [] args) "createDirs")
 	  ++
-	  args.phaseNames 
+	  (attrByPath ["phaseNames"] [] args)
 	  ++ 
           ["doForceShare" "doPropagate" "doForceCopy"]
 	  ++
@@ -500,18 +500,20 @@ let inherit (builtins) head tail trace; in
         done
    '') ["minInit" "addInputs" "doUnpack"];
 
-   installFonts = fullDepEntry (''
-           ensureDir $out/share/fonts/truetype/public/${args.name}
-           ensureDir $out/share/fonts/opentype/public/${args.name}
-           ensureDir $out/share/fonts/type1/public/${args.name}
-           ensureDir $out/share/texmf/fonts/enc/${args.name}
-           ensureDir $out/share/texmf/fonts/map/${args.name}
+   installFonts = 
+      let retrievedName = (if args ? name then args.name else ""); in
+   fullDepEntry (''
+           ensureDir $out/share/fonts/truetype/public/${retrievedName}
+           ensureDir $out/share/fonts/opentype/public/${retrievedName}
+           ensureDir $out/share/fonts/type1/public/${retrievedName}
+           ensureDir $out/share/texmf/fonts/enc/${retrievedName}
+           ensureDir $out/share/texmf/fonts/map/${retrievedName}
 
-        cp *.ttf $out/share/fonts/truetype/public/${args.name} || echo No TrueType fonts
-        cp *.otf $out/share/fonts/opentype/public/${args.name} || echo No OpenType fonts
-           cp *.{pfm,afm,pfb} $out/share/fonts/type1/public/${args.name} || echo No Type1 Fonts
-           cp *.enc $out/share/texmf/fonts/enc/${args.name} || echo No fontenc data
-           cp *.map $out/share/texmf/fonts/map/${args.name} || echo No fontmap data
+        cp *.ttf $out/share/fonts/truetype/public/${retrievedName} || echo No TrueType fonts
+        cp *.otf $out/share/fonts/opentype/public/${retrievedName} || echo No OpenType fonts
+           cp *.{pfm,afm,pfb} $out/share/fonts/type1/public/${retrievedName} || echo No Type1 Fonts
+           cp *.enc $out/share/texmf/fonts/enc/${retrievedName} || echo No fontenc data
+           cp *.map $out/share/texmf/fonts/map/${retrievedName} || echo No fontmap data
    '') ["minInit" "defEnsureDir"];
 
    simplyShare = shareName: fullDepEntry (''
