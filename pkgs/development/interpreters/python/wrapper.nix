@@ -8,9 +8,8 @@ stdenv.mkDerivation {
   unpackPhase = "true";
   installPhase = ''
     ensureDir "$out/bin"
-    declare -p
     for prg in 2to3 idle pydoc python python-config python${python.majorVersion} python${python.majorVersion}-config smtpd.py; do
-      makeWrapper "$python/bin/$prg" "$out/bin/$prg" --set PYTHONPATH "$PYTHONPATH"
+      makeWrapper "$python/bin/$prg" "$out/bin/$prg" --suffix PYTHONPATH : "$PYTHONPATH"
     done
   '';
 
