@@ -6853,7 +6853,7 @@ let
 
   mess = callPackage ../misc/emulators/mess { };
 
-  nix = nixUnstable;
+  nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
