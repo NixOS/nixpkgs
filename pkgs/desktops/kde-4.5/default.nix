@@ -51,6 +51,8 @@
 
   kdemultimedia = callPackage ./multimedia { };
 
+  kdetoys = callPackage ./toys { };
+
   kdeartwork = callPackage ./artwork { };
 
 ### DEVELOPMENT
