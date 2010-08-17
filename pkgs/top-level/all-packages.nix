@@ -97,10 +97,10 @@ let
   # otherwise the basic overrided packages will not be built with the
   # crossStdenv adapter.
   overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig //
-    (if (pkgsOrig.stdenv ? overrides && crossSystem == null)
-    then pkgsOrig.stdenv.overrides else { });
+    (if pkgsOrig.stdenv ? overrides && crossSystem == null
+     then pkgsOrig.stdenv.overrides else { });
 
-  pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
+  pkgsOrig = pkgsFun { }; # the un-overriden packages, passed to packageOverrides
   pkgs = pkgsFun overrides; # the overriden, final packages
 
 
@@ -2122,18 +2122,18 @@ let
   });
 
   python27Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.7) {
-    inherit fetchurl stdenv zlib bzip2 gdbm;
+    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   });
 
   python27Full = lowPrio (python27Base.override {
-    inherit db4 sqlite readline openssl tcl tk ncurses;
-    inherit (xlibs) libX11 xproto;
+    inherit (pkgs) db4 sqlite readline openssl tcl tk ncurses;
+    inherit (pkgs.xlibs) libX11 xproto;
   });
 
   python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
-    inherit fetchurl stdenv zlib bzip2 gdbm;
+    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   });
@@ -4201,11 +4201,11 @@ let
       xkeyboard_config dbus hal libuuid openssl gperf m4
       automake autoconf libtool xmlto asciidoc udev;
 
-    # !!! pythonBase is use instead of python because this cause an infinite
-    # !!! recursion when the flag python.full is set to true.  Packages
-    # !!! contained in the loop are python, tk, xlibs-wrapper, libX11,
-    # !!! libxcd (and xcb-proto).
-    python =  pythonBase;
+    # !!! pythonBase is used instead of python because this causes an
+    # infinite recursion when the flag python.full is set to true.
+    # Packages contained in the loop are python, tk, xlibs-wrapper,
+    # libX11, libxcd (and xcb-proto).
+    python = pythonBase;
   });
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
