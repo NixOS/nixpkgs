@@ -34,6 +34,9 @@ let inherit (builtins) head tail trace; in
                 else if (hasSuffixHack ".bz2" s) then "plain-bz2"
                 else if (hasSuffixHack ".gz" s) then "plain-gz"
 
+		# For bootstrap calls
+		else if (s ==("" + (substring 0 0 s))) then "empty"
+
                 else (abort "unknown archive type : ${s}"));
 
         # changing this ? see [1]
@@ -241,6 +244,8 @@ let inherit (builtins) head tail trace; in
                 NAME=\$(basename ${s} .gz)
                 gzip -d <${s} > \$PWD/\$(basename ${s} .gz)/\${NAME#*-}
                 cd \$(basename ${s} .gz)
+        " else if (archiveType s) == "empty" then "
+	        echo No source to unpack - doing nothing ..
         " else (abort "unknown archive type : ${s}"))+
                 # goSrcDir is typically something like "cd mysubdir" .. but can be anything else 
                 (if args ? goSrcDir then args.goSrcDir else "")
