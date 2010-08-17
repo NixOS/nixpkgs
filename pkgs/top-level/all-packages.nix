@@ -4570,8 +4570,8 @@ let
 
     aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
 
-    blcr = callPackage ../os-specific/linux/blcr/0.8.2.nix {
-      libtool = libtool_1_5; # libtool 2 causes a fork bomb
+    blcr = callPackage ../os-specific/linux/blcr {
+      #libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };
 
     exmap = callPackage ../os-specific/linux/exmap {
