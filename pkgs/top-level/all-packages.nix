@@ -3643,13 +3643,11 @@ let
   };
 
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
-    inherit (gst_all) gstreamer gstPluginsBase;
-    inherit (gnome) glib;
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
+    inherit (pkgs.gnome) glib;
   };
 
-  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator {
-    qt4 = qt46;
-  };
+  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quassel = callPackage ../applications/networking/irc/quassel {
     inherit (kde4) qt4 kdelibs phonon automoc4;
