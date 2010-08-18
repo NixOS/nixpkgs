@@ -51,6 +51,7 @@
   kdemultimedia = callPackage ./multimedia { };
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
+  kdesdk = callPackage ./sdk { };
   kdetoys = callPackage ./toys { };
   kdeutils = callPackage ./utils { };
 ### DEVELOPMENT
