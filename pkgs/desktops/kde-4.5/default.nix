@@ -44,6 +44,7 @@
 
 ### OTHER MODULES
   kdeaccessibility = callPackage ./accessibility { };
+  kdeadmin = callPackage ./admin { };
   kdeartwork = callPackage ./artwork { };
   kdeedu = callPackage ./edu { };
   kdegames = callPackage ./games { };
@@ -58,5 +59,4 @@
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
-  
 }
