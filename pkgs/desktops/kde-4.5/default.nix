@@ -1,7 +1,11 @@
-{ callPackage, stdenv, fetchurl } :
+{ callPackage, stdenv, fetchurl, qt47 } :
 
 {
   recurseForRelease = true;
+
+  qt4 = qt47;
+
+  phonon = null;
 
   kdePackage = import ./kde-package {
     inherit stdenv fetchurl;
@@ -56,6 +60,9 @@
   kdetoys = callPackage ./toys { };
   kdeutils = callPackage ./utils { };
   kdewebdev = callPackage ./webdev { };
+
+  kdepim_runtime = callPackage ../kde-4.4/pim-runtime { };
+  kdepim = callPackage ../kde-4.4/pim { };
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };

@@ -6610,12 +6610,11 @@ let
 
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage = newScope ({
-      qt4 = qt47;
       pyqt4 = pyqt4.override { qt4 = qt47; };
       libdbusmenu_qt = libdbusmenu_qt.override { qt4 = qt47; };
       shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
       stdenv = stdenv2;
-    } // kde45);
+    } // pkgs.kde45);
   };
 
   xfce = xfce4;
