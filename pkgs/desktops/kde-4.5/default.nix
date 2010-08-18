@@ -50,6 +50,7 @@
   kdegraphics = callPackage ./graphics { };
   kdemultimedia = callPackage ./multimedia { };
   kdenetwork = callPackage ./network { };
+  kdeplasma_addons = callPackage ./plasma-addons { };
   kdetoys = callPackage ./toys { };
   kdeutils = callPackage ./utils { };
 ### DEVELOPMENT
