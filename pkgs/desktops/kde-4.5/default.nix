@@ -54,6 +54,7 @@
   kdesdk = callPackage ./sdk { };
   kdetoys = callPackage ./toys { };
   kdeutils = callPackage ./utils { };
+  kdewebdev = callPackage ./webdev { };
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
