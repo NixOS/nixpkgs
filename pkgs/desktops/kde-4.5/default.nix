@@ -45,6 +45,7 @@
 ### OTHER MODULES
   kdeaccessibility = callPackage ./accessibility { };
   kdeartwork = callPackage ./artwork { };
+  kdeedu = callPackage ./edu { };
   kdegames = callPackage ./games { };
   kdegraphics = callPackage ./graphics { };
   kdemultimedia = callPackage ./multimedia { };
