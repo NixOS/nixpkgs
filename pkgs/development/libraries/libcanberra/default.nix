@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk, gthread
+{ stdenv, fetchurl, pkgconfig, libtool, gtk
 , alsaLib, pulseaudio, gstreamer, libvorbis, libcap }:
 
 stdenv.mkDerivation rec {

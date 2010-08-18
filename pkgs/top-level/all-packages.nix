@@ -3153,7 +3153,7 @@ let
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
-    inherit (gtkLibs) gtk gthread;
+    inherit (gtkLibs) gtk;
     gstreamer = gst_all.gstreamer;
   };
 
