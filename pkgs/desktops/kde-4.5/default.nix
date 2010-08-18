@@ -44,17 +44,12 @@
 
 ### OTHER MODULES
   kdeaccessibility = callPackage ./accessibility { };
-
-  kdeutils = callPackage ./utils { };
-
-  kdegraphics = callPackage ./graphics { };
-
-  kdemultimedia = callPackage ./multimedia { };
-
-  kdetoys = callPackage ./toys { };
-
   kdeartwork = callPackage ./artwork { };
-
+  kdegames = callPackage ./games { };
+  kdegraphics = callPackage ./graphics { };
+  kdemultimedia = callPackage ./multimedia { };
+  kdetoys = callPackage ./toys { };
+  kdeutils = callPackage ./utils { };
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
