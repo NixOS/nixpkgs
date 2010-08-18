@@ -6395,7 +6395,7 @@ let
 
   bsdgames = callPackage ../games/bsdgames { };
 
-  castleCombat = callPackage ../games/castle-combat { };
+  castle_combat = callPackage ../games/castle-combat { };
 
   construoBase = callPackage ../games/construo {
     mesa = null;

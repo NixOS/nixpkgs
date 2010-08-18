@@ -48,7 +48,7 @@ with (import ./release-lib.nix);
   bvi = all;
   bzip2 = all;
   cabextract = all;
-  castleCombat = linux;
+  castle_combat = linux;
   cdrkit = linux;
   chatzilla = linux;
   cksfv = all;
