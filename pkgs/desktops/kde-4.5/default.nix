@@ -48,6 +48,7 @@
   kdegames = callPackage ./games { };
   kdegraphics = callPackage ./graphics { };
   kdemultimedia = callPackage ./multimedia { };
+  kdenetwork = callPackage ./network { };
   kdetoys = callPackage ./toys { };
   kdeutils = callPackage ./utils { };
 ### DEVELOPMENT
