@@ -241,7 +241,6 @@ rec {
         path = /
         read only = no
         guest ok = yes
-        force user = root
       SMB
 
       rm -f ./samba
