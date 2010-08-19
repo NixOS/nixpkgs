@@ -47,12 +47,14 @@ stdenv.mkDerivation ( rec {
 
     if [ -d target/site/cobertura ] ; then
       cp -R target/site/cobertura $out/cobertura
-      echo "report cobertura $out/cobertura" >> $out/nix-support/hydra-build-products
+      echo "report coverage $out/cobertura" >> $out/nix-support/hydra-build-products
     fi
 
     if [ -d target/surefire-reports ] ; then
-      cp -R target/surefire-reports $out/surefire
-      echo "report surefire $out/surefire" >> $out/nix-support/hydra-build-products
+      mvn surefire-report:report-only
+      cp -vR target/surefire-reports $out/surefire
+      cp -v target/site/surefire-report.html $out/surefire/index.html
+      echo "report coverage $out/surefire/index.html" >> $out/nix-support/hydra-build-products
     fi
   '';  
 
