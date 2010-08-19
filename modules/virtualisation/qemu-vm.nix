@@ -219,7 +219,7 @@ in
       { mountPoint = "/hostfs";
         device = "//10.0.2.4/qemu";
         fsType = "cifs";
-        options = "guest,username=nobody,noperm,noacl";
+        options = "guest,sec=none,noperm,noacl";
         neededForBoot = true;
       }
       { mountPoint = "/nix/store";
