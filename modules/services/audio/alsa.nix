@@ -53,14 +53,13 @@ in
       };
 
     jobs.alsa =
-      { startOn = "started udev";
+      { startOn = "stopped udevtrigger";
 
         preStart =
           ''
             mkdir -m 0755 -p $(dirname ${soundState})
 
             # Load some additional modules.
-	    
 	    ${optionalString config.sound.enableOSSEmulation
 	      ''
                 for mod in snd_pcm_oss; do
@@ -70,7 +69,7 @@ in
 	    }
 
             # Restore the sound state.
-            ${alsaUtils}/sbin/alsactl -f ${soundState} restore
+            ${alsaUtils}/sbin/alsactl -f ${soundState} restore || true
           '';
 
         postStop =
