@@ -99,9 +99,7 @@ in
             fi
           '';
 
-        daemonType = "fork";
-
-        exec = "${at}/sbin/atd";
+        exec = "${at}/sbin/atd -f";
       };
 
   };
