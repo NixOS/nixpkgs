@@ -623,19 +623,9 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
   (let ((strverscmp
          (let ((sym (or (dynamic-func "strverscmp" (dynamic-link))
                         (error "could not find `strverscmp' (from GNU libc)"))))
-           (make-foreign-function int sym (list '* '*))))
-        (string->null-terminated-utf8
-         (lambda (s)
-           (let* ((utf8 (string->utf8 s))
-                  (len  (bytevector-length utf8))
-                  (nts  (make-bytevector (+ len 1))))
-             (bytevector-copy! utf8 0 nts 0 len)
-             (bytevector-u8-set! nts len 0)
-             nts))))
+           (make-foreign-function int sym (list '* '*)))))
     (lambda (a b)
-      (let ((a (bytevector->foreign (string->null-terminated-utf8 a)))
-            (b (bytevector->foreign (string->null-terminated-utf8 b))))
-        (> (strverscmp a b) 0)))))
+      (> (strverscmp (string->pointer a) (string->pointer b)) 0))))
 
 (define (latest-release project)
   ;; Return "FOO-X.Y" or #f.
