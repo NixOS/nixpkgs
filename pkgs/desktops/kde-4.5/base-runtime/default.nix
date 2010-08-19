@@ -1,6 +1,6 @@
 { kdePackage, cmake, perl, bzip2, xz, qt4, alsaLib, xineLib, samba,
   shared_mime_info, exiv2, libssh , kdelibs, automoc4, strigi, soprano,
-  cluceneCore, attica, virtuoso, makeWrapper }:
+  cluceneCore, attica, virtuoso, makeWrapper, oxygen_icons }:
 
 kdePackage {
   pn = "kdebase-runtime";
@@ -13,6 +13,8 @@ kdePackage {
   patches = [ ./freeze.diff ];
 
   postInstall = ''
+    rm -v $out/share/icons/default.kde4
+    ln -s ${oxygen_icons}/share/icons/oxygen $out/share/icons/default.kde4
     wrapProgram "$out/bin/nepomukservicestub" --prefix LD_LIBRARY_PATH : "${virtuoso}/lib" \
         --prefix PATH : "${virtuoso}/bin"
   '';
