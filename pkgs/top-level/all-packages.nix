@@ -1303,7 +1303,8 @@ let
     inherit stdenv fetchgit autoconf automake libusb confuse;
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross = let
+    gccCross =
+      let
         pkgsCross = (import ./all-packages.nix) {
           inherit system;
           inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
@@ -4879,7 +4880,8 @@ let
   windows = rec {
     w32api = callPackage ../os-specific/windows/w32api {
       gccCross = gccCrossStageStatic;
-      binutilsCross = binutilsCross;    };
+      binutilsCross = binutilsCross;
+    };
 
     w32api_headers = w32api.override {
       onlyHeaders = true;
@@ -5919,7 +5921,6 @@ let
 
   partitionManager = callPackage ../tools/misc/partition-manager {
     kde = kde44;
-    qt = qt4;
   };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };

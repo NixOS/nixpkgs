@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt, kde, perl }:
+{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kde, perl }:
 
 stdenv.mkDerivation {
   name = "partitionmanager-1.0.0";
@@ -9,16 +9,16 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ cmake gettext parted libuuid qt kde.kdelibs kde.kdebase kde.automoc4 perl kde.phonon ];
+    [ cmake gettext parted libuuid qt4 kde.kdelibs kde.kdebase kde.automoc4 perl kde.phonon ];
 
   preConfigure = ''
     export VERBOSE=1
-    cmakeFlagsArray=($cmakeFlagsArray -DGETTEXT_INCLUDE_DIR=${gettext}/include -DCMAKE_INCLUDE_PATH=${qt}/include/QtGui )
+    cmakeFlagsArray=($cmakeFlagsArray -DGETTEXT_INCLUDE_DIR=${gettext}/include -DCMAKE_INCLUDE_PATH=${qt4}/include/QtGui )
   '';
 
   postInstall = ''
     set -x
-    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt}/lib 
+    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt4}/lib 
     for p in $out/bin/partitionmanager-bin; do
       patchelf --set-rpath $rpath $p
     done

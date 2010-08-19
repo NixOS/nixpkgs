@@ -18,4 +18,8 @@ rec {
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
 
+  # `seq x y' evaluates x, then returns y.  That is, it forces strict
+  # evaluation of its first argument.
+  seq = x: y: if x == null then y else y;
+  
 }
