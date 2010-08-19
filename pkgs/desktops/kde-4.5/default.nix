@@ -61,7 +61,8 @@
   kdeutils = callPackage ./utils { };
   kdewebdev = callPackage ./webdev { };
 
-  kdepim_runtime = callPackage ../kde-4.4/pim-runtime { };
+  #kdepim_runtime = callPackage ../kde-4.4/pim-runtime { };
+  kdepim_runtime = callPackage ./pim-runtime { };
   kdepim = callPackage ../kde-4.4/pim { };
 ### DEVELOPMENT
 
