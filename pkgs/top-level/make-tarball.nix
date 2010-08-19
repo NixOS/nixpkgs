@@ -56,6 +56,11 @@ releaseTools.makeSourceTarball {
             -qa \* --drv-path --system-filter \* --system --meta --xml
         stopNest
     done
+
+    header "checking eval-release.nix"
+    nix-instantiate --eval-only --strict --xml ./maintainers/scripts/eval-release.nix > $TMPDIR/out.xml
+    xmllint --noout $TMPDIR/out.xml
+    stopNest
   '';
 
   distPhase = ''
