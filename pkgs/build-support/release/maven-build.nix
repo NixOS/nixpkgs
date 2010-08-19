@@ -77,7 +77,7 @@ stdenv.mkDerivation ( rec {
   '';  
 
   mvnAssembly = ''
-    mvn assembly:assembly ${mvnFlags}
+    mvn assembly:single ${mvnFlags}
   '';
 
   mvnRelease = ''
