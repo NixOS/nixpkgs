@@ -1,6 +1,14 @@
 builtins.listToAttrs
 [
 {
+  name = "kdepim-runtime-4.4.92.tar.bz2";
+  value = "1gshcnra3fcbj6ww7rfaw6ny1x9mf4l7pxwlrppv2slgwg141msy";
+}
+{
+  name = "kdepim-4.4.92.tar.bz2";
+  value = "0mhpifynnypg81nhwfvr28hbpr7c6w488afasprqhxbs4q57lin6";
+}
+{
   name = "kdegraphics-4.5.0.tar.bz2";
   value = "13ms1z26sb2pfadhagkykgnw0p7inrn36p4s9qr04qisy2b2vd6l";
 }
