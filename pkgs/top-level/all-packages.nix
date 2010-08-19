@@ -5237,6 +5237,7 @@ let
       glib pango libglade libgtkhtml gtkhtml
       libgnomecanvas libgnomeprint
       libgnomeprintui gnomepanel gnomedesktop;
+    inherit pyrex;
     gnomegtk = gnome.gtk;
   };
 
