@@ -49,13 +49,17 @@ rec {
   # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
   #     noBuildInputs = d.override { buildInputs = []; }
   #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
-  makeOverridable = f: origArgs: f origArgs //
-    { override = newArgs:
-        makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
-      deepOverride = newArgs:
-        makeOverridable f (lib.overrideExisting (lib.mapAttrs (deepOverrider newArgs) origArgs) newArgs);
-      #origArgs = origArgs;
-    };
+  makeOverridable = f: origArgs:
+    let
+      ff = f origArgs;
+    in
+      if builtins.isAttrs ff then (ff //
+        { override = newArgs:
+            makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
+          deepOverride = newArgs:
+            makeOverridable f (lib.overrideExisting (lib.mapAttrs (deepOverrider newArgs) origArgs) newArgs);
+        })
+      else ff;
 
   deepOverrider = newArgs: name: x: if builtins.isAttrs x then (
     if x ? deepOverride then (x.deepOverride newArgs) else
