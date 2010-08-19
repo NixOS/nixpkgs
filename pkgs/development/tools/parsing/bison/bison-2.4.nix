@@ -1,11 +1,11 @@
 {stdenv, fetchurl, m4}:
 
 stdenv.mkDerivation rec {
-  name = "bison-2.4.2";
+  name = "bison-2.4.3";
 
   src = fetchurl {
     url = "mirror://gnu/bison/${name}.tar.bz2";
-    sha256 = "1f2gmy9bhajrypyz25rqjbz5j024yikr2kaggjjsc15gm4x29ysp";
+    sha256 = "019s3pdzggb71g7p7dgajhh53gh0h6nfl4yrzrs0jzsc37ph4lwk";
   };
 
   buildInputs = [m4];
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/bison/;
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 
   passthru = { glrSupport = true; };
