@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "rush-1.6";
+  name = "rush-1.7";
 
   src = fetchurl {
     url = "mirror://gnu/rush/${name}.tar.gz";
-    sha256 = "1j9h1imql05cijav6hr9jigcmy1br8fs9vahvh6y7pf53k4lcfrv";
+    sha256 = "0fh0gbbp0iiq3wbkf503xb40r8ljk42vyj9bnlflbz82d6ipy1rm";
   };
 
   doCheck = true;
