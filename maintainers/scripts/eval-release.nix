@@ -8,9 +8,9 @@ let
 
   rel = removeAttrs (import ../../pkgs/top-level/release.nix) [ "tarball" "xbursttools" ];
 
-  strictList = xs: lib.fold (x: xs: lib.seq x xs) xs xs;
+  seqList = xs: res: lib.fold (x: xs: lib.seq x xs) res xs;
   
-  strictAttrs = as: strictList (lib.attrValues as);
+  strictAttrs = as: seqList (lib.attrValues as) as;
 
   maybe = as: let y = builtins.tryEval (strictAttrs as); in if y.success then y.value else builtins.trace "FAIL" null;
 
