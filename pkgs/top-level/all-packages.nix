@@ -2260,9 +2260,16 @@ let
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
-  binutils = callPackage ../development/tools/misc/binutils {
+  binutils_release = callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
   };
+
+  binutils_snapshot = callPackage ../development/tools/misc/binutils/snapshot.nix {
+    inherit noSysDirs;
+  };
+
+  binutils = if stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux" then binutils_snapshot
+    else binutils_release;
 
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl;
