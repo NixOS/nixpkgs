@@ -583,6 +583,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
       ("ghostscript" . "gnu-ghostscript") ;; ../ghostscript/gnu-ghoscript-X.Y.tar.gz
       ("gnum4"       . "m4")
       ("gnugrep"     . "grep")
+      ("gnumake"     . "make")
       ("gnused"      . "sed")
       ("gnutar"      . "tar")
       ("gnunet"      . "GNUnet") ;; ftp.gnu.org/gnu/gnunet/GNUnet-x.y.tar.gz
