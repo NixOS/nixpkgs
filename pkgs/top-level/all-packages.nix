@@ -4539,6 +4539,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.aufs2_2_6_35
       ];
   };
 
