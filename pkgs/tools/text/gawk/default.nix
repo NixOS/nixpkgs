@@ -1,19 +1,18 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, libsigsegv }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-3.1.7";
+  name = "gawk-3.1.8";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.bz2";
-    sha256 = "0wfyiqc28cxb5wjbdph4y33h1fdf56nj6cm7as546niwjsw7cazi";
+    sha256 = "1d0jfh319w4h8l1zzqv248916wrc2add1b1aghri31rj9hn7pg2x";
   };
 
   doCheck = true;
 
-  # The libsigsegv provided with gawk has failing tests:
-  # I did like in Fedora:
-  # http://rpmfind.net//linux/RPM/fedora/devel/i386/gawk-3.1.7-2.fc13.i686.html
-  configureFlags = "--disable-libsigsegv";
+  buildInputs = [ libsigsegv ];
+
+  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ];
 
   meta = {
     homepage = http://www.gnu.org/software/gawk/;
