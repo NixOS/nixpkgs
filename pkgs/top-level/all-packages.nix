@@ -6597,16 +6597,17 @@ let
   kde4 = kde44;
 
   kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
-    qt4 = qt46;
-    stdenv = stdenv2;
+    qt4 = pkgs.qt46;
+    stdenv = pkgs.stdenv2;
   });
 
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage = newScope ({
-      pyqt4 = pyqt4.override { qt4 = qt47; };
-      libdbusmenu_qt = libdbusmenu_qt.override { qt4 = qt47; };
-      shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
-      stdenv = stdenv2;
+      qjson  = pkgs.qjson.override { qt4 = qt47; };
+      pyqt4 = pkgs.pyqt4.override { qt4 = qt47; };
+      libdbusmenu_qt = pkgs.libdbusmenu_qt.override { qt4 = qt47; };
+      shared_desktop_ontologies = pkgs.shared_desktop_ontologies.override { v = "0.5"; };
+      stdenv = pkgs.stdenv2;
     } // pkgs.kde45);
   };
 
