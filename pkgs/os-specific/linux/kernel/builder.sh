@@ -68,7 +68,8 @@ installPhase() {
     if test "$arch" = um; then
         ensureDir $out/bin
         cp linux $out/bin
-    else
+    elif test "$kernelTarget" != "vmlinux"; then
+        # In any case we copy the 'vmlinux' ELF in the next lines
         cp arch/$archDir/boot/$kernelTarget $out
     fi
 
