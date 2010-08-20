@@ -4,16 +4,21 @@ x@{builderDefsPackage
 builderDefsPackage
 (a :  
 let 
-  s = import ./src-for-default.nix;
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
     [(abort "Specify helper argument names")];
+
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
+  sourceInfo = {
+  };
 in
 rec {
-  src = a.fetchUrlFromSrcInfo s;
+  src = a.fetchurl {
+    url = sourceInfo.url;
+    sha256 = sourceInfo.hash;
+  };
 
-  inherit (s) name;
+  inherit (sourceInfo) name version;
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
@@ -27,6 +32,11 @@ rec {
     ];
     platforms = with a.lib.platforms;
       (abort "Specify platforms");
+  };
+  passthru = {
+    updateInfo = {
+      downloadPage = "${abort ''Specify download page''}";
+    };
   };
 }) x
 
