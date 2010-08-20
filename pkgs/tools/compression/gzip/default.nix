@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "gzip-1.3.13";
+  name = "gzip-1.4";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${name}.tar.gz";
-    sha256 = "18vwa7x0b1sql9bs2d15n94fx3him1m6xpnwsfz52djjbjgzy1hx";
+    sha256 = "1vhiyzls60fws48scw48wvwn8mpv1f4yhcsnafys239qvb9wyrni";
   };
 
   patches = [ ./getopt.patch ];
