@@ -1,6 +1,6 @@
 { alsaSupport ? true, xvSupport ? true, theoraSupport ? true, cacaSupport ? true
 , xineramaSupport ? true, randrSupport ? true, dvdnavSupport ? true
-, stdenv, fetchurl, fetchsvn, x11, freetype, fontconfig, zlib
+, stdenv, fetchurl, x11, freetype, fontconfig, zlib
 , alsaLib, libX11, libXv, libtheora, libcaca
 , libXinerama, libXrandr, libdvdnav
 , cdparanoia, cddaSupport ? true
@@ -48,13 +48,12 @@ let
 
 in  
 
-stdenv.mkDerivation {
-  name = "MPlayer-1.0-pre-rc4-20100506";
+stdenv.mkDerivation rec {
+  name = "MPlayer-1.0-pre31984";
 
-  src = fetchsvn {
-    url = svn://svn.mplayerhq.hu/mplayer/trunk;
-    rev = 31984;
-    sha256 = "01niw0c7fwbp4v25k08c2rac8z55jp2wh5ikhsjn65ybg8f1v150";
+  src = fetchurl {
+    url = "http://www.loegria.net/misc/${name}.tar.bz2";
+    sha256 = "0mg6kggja113rsvvsk05gk50xl5qwzsms6pmb4ylc99mflh7m9km";
   };
 
   buildInputs =
