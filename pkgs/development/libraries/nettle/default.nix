@@ -1,12 +1,12 @@
 { fetchurl, stdenv, gmp, gnum4 }:
 
 stdenv.mkDerivation rec {
-  name = "nettle-2.0";
+  name = "nettle-2.1";
 
   src = fetchurl {
     # Eventually use `mirror://gnu/'.
     url = "ftp://ftp.lysator.liu.se/pub/security/lsh/${name}.tar.gz";
-    sha256 = "1mnb2zx6yxfzkkv8hnrjzhjviybd45z92wq4y5sv1gskp4qf5fb5";
+    sha256 = "0knp778738dpgbcj1yz54a7jsvmarfiafzl05z086bc470z6plmp";
   };
 
   buildInputs = [ gmp gnum4 ];
