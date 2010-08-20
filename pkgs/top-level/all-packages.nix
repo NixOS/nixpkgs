@@ -1341,6 +1341,8 @@ let
     inherit (gnome) libgnomeprint;
   };
 
+  xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
+
   xmlto = callPackage ../tools/typesetting/xmlto { };
 
   xmltv = callPackage ../tools/misc/xmltv { };
