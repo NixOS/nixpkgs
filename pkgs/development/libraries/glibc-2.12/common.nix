@@ -11,7 +11,7 @@ cross :
 
 let
   # For GNU/Hurd, see below.
-  version = if hurdHeaders != null then "20100512" else "2.11.2";
+  version = if hurdHeaders != null then "20100512" else "2.12.1";
 in
 
 assert (cross != null) -> (gccCross != null);
@@ -128,11 +128,11 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
-      sha256 = "04w74879psq961cas1amidkg8fc1h6r9yj3plfr33v9y6vp7db62";
+      sha256 = "01vlr473skl08xpcjz0b4lw23lsnskf5kx9s8nxwa4mwa9f137vm";
     };
 
   srcPorts = fetchurl {
-    url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2";
+    url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2"; # FIXME: 2.12.1 unavailable.
     sha256 = "12b53f5k4gcr8rr1kg2ycf2701rygqsyf9r8gz4j3l9flaqi5liq";
   };
 
