@@ -1,7 +1,7 @@
 { kdePackage, cmake, qt4, perl, automoc4, kdelibs, soprano, kdeedu
 , boost, eigen, kdebase_workspace, attica, python, qca2, qimageblitz
 , shared_mime_info, kdepimlibs, kdegraphics, libqalculate, libXtst }:
-# , qwt, scim, kdeedu 
+# TODO: qwt, scim, MARBLE!!
 
 kdePackage {
   pn = "kdeplasma-addons";

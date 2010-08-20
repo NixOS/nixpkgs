@@ -12,6 +12,7 @@ kdePackage {
 
   patches = [ ./freeze.diff ];
 
+# TODO: OpenSLP, OpenEXR
   postInstall = ''
     rm -v $out/share/icons/default.kde4
     ln -s ${oxygen_icons}/share/icons/oxygen $out/share/icons/default.kde4
