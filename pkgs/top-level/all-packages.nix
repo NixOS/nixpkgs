@@ -880,6 +880,8 @@ let
 
   netselect = callPackage ../tools/networking/netselect { };
 
+  nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
+
   nmap = callPackage ../tools/security/nmap {
     inherit (pythonPackages) pysqlite;
     inherit (gtkLibs) gtk;
@@ -4539,7 +4541,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_2_6_35
+        # kernelPatches.aufs2_2_6_35
       ];
   };
 
