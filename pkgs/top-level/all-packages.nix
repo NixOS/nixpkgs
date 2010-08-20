@@ -4537,7 +4537,7 @@ let
   linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
-      [ /*kernelPatches.fbcondecor_2_6_33*/
+      [ kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
       ];
   };
