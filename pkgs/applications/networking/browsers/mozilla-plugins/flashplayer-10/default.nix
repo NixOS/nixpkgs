@@ -51,9 +51,9 @@ let
         url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer10_1_p2_debug_linux_121709.tar.gz;
         sha256 = "162cnzn8sfdvr8mwyggsxi2bcl7zzi1nrl61bw481hhhpwnrjdx4";
       } else {
-        version = "10.1.53.64";
+        version = "10.1.82.76";
         url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
-        sha256 = "1598vn4dd96cp1nv225vvjpna70ydkd8lcyfm88gnpzkwx2scz1b";
+        sha256 = "c6f8831ce648e7fa8e037f1fa8362d2d998cae0e06490e792bcd5871f3eb936a";
       }
     else throw "flashplayer is not supported on this platform";
 

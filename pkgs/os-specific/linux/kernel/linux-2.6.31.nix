@@ -4,16 +4,12 @@ assert !userModeLinux;
 
 import ./generic.nix (
 
-  let
-    baseVersion = "2.6.31"; 
-  in
-
   rec {
-    version = "2.6.31";
+    version = "2.6.31.14";
   
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v2.6/linux-${baseVersion}.tar.bz2";
-      sha256 = "04im1rk53j1im1q8i6pl6qn75zd63dg51dxhq8cfxdsxp3vq7k8a";
+      url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
+      sha256 = "1c6ivcjgns4gbx04mhnhndqikm3prqhhfm2a5zrb1mfyvvishqpp";
     };
 
     features = {

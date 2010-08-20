@@ -1,15 +1,3 @@
-diff --git a/directory.cpp b/directory.cpp
-index 5f0d78a..b94cbe5 100644
---- a/directory.cpp
-+++ b/directory.cpp
-@@ -2,6 +2,7 @@
- #include <dirent.h>
- #include <sys/stat.h>
- #include <unistd.h>
-+#include <cstring>
- 
- #include "directory.h"
-
 diff --git a/Makefile b/Makefile
 index e65b64c..52af5ed 100644
 --- a/Makefile

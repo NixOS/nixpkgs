@@ -139,7 +139,7 @@ rec {
     mount -o bind /dev /fs/dev
 
     echo "mounting host filesystem..."
-    mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,username=nobody
+    mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,sec=none
 
     mkdir -p /fs/nix/store
     mount -o bind /fs/hostfs/nix/store /fs/nix/store
@@ -227,6 +227,8 @@ rec {
 
   startSamba =
     ''
+      export WHO=`whoami`
+
       cat > $TMPDIR/smb.conf <<SMB
       [global]
         private dir = $TMPDIR
@@ -238,6 +240,7 @@ rec {
         smb passwd file = $TMPDIR/smbpasswd
         security = share
       [qemu]
+        force user = $WHO
         path = /
         read only = no
         guest ok = yes

@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   # moved assertions here because the name is evaluated when the NixOS manual is generated
   # Don't make that fail - fail lazily when a users tries to build this derivation only
   dummy =
-    assert xorg.xorgserver.name == "xorg-server-1.7.5";
+    # assert xorg.xorgserver.name == "xorg-server-1.7.5";
     assert stdenv.system == "x86_64-linux"; # i686-linux should work as well - however I didn't test it.
     null;
 

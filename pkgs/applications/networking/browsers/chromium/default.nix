@@ -35,17 +35,17 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
   name = "chrome-${version}";
-  version = "51653";
+  version = "55366";
   src = 
     if stdenv.system == "x86_64-linux" then 
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/${version}/chrome-linux.zip";
-        sha256 = "1d8q4ac8s3b1bncli537phzxshfr50j69y49409g5p64v7iya9kw";
+        sha256 = "1dazdfpnl278wwh03hs0x184ql5zh0yhpfiaw75j437dp3668hnj";
       } 
     else if stdenv.system == "i686-linux" then 
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/${version}/chrome-linux.zip";
-        sha256 = "1kdhwkl7xxssmkrkkgrdwrwvbah97va7rxbwrfhlcnjgw60ppf9v";
+        sha256 = "1x5ykvp2hxc56p4bb1lykahkk1nzkqi2kkm474spplqcfnmd6j2b";
       } 
     else null;
 

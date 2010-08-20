@@ -49,6 +49,7 @@ in
 
 stdenv.mkDerivation ( {
   name = "python3-${version}";
+  inherit majorVersion version;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";

@@ -8,7 +8,6 @@
 kdePackage {
   pn = "kdelibs";
   v = "4.5.0";
-  sha256 = "0d3iml2v1vp1y6i5vpqv77nbdlw6qb8j6c88yi744ba4zvcirzrx";
 
   buildInputs = [
     cmake perl qt4 xz flex bison bzip2 pcre fam libxml2 libxslt
@@ -18,6 +17,8 @@ kdePackage {
   ];
 
   propagatedBuildInputs = [ shared_desktop_ontologies gcc.libc ];
+
+  patches = [ ./polkit-install.patch ];
 
   # cmake fails to find acl.h because of C++-style comment
   cmakeFlags = [

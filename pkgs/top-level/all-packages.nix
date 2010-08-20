@@ -97,10 +97,10 @@ let
   # otherwise the basic overrided packages will not be built with the
   # crossStdenv adapter.
   overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig //
-    (if (pkgsOrig.stdenv ? overrides && crossSystem == null)
-    then pkgsOrig.stdenv.overrides else { });
+    (if pkgsOrig.stdenv ? overrides && crossSystem == null
+     then pkgsOrig.stdenv.overrides else { });
 
-  pkgsOrig = pkgsFun {}; # the un-overriden packages, passed to packageOverrides
+  pkgsOrig = pkgsFun { }; # the un-overriden packages, passed to packageOverrides
   pkgs = pkgsFun overrides; # the overriden, final packages
 
 
@@ -127,6 +127,8 @@ let
 
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux";
+
+  callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
   inherit __overrides;
 
@@ -483,7 +485,7 @@ let
     inherit stdenv zlib openssl libssh2;
     zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
     sslSupport = zlibSupport;
-    scpSupport = zlibSupport && (!stdenv.isSunOS);
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
@@ -545,6 +547,8 @@ let
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
+
+  ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
@@ -976,7 +980,7 @@ let
   pg_top = callPackage ../tools/misc/pg_top { };
 
   pdsh = callPackage ../tools/networking/pdsh {
-    rsh = true;			# enable internal rsh implementation
+    rsh = true;          # enable internal rsh implementation
     ssh = openssh;
   };
 
@@ -1299,7 +1303,8 @@ let
     inherit stdenv fetchgit autoconf automake libusb confuse;
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross = let
+    gccCross =
+      let
         pkgsCross = (import ./all-packages.nix) {
           inherit system;
           inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
@@ -1335,6 +1340,8 @@ let
     inherit (gtkLibs) glib pango gtk;
     inherit (gnome) libgnomeprint;
   };
+
+  xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
   xmlto = callPackage ../tools/typesetting/xmlto { };
 
@@ -2086,14 +2093,17 @@ let
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
+  python27 = if getConfig ["python" "full"] false then python27Full else python27Base;
   pythonBase = python26Base;
   pythonFull = python26Full;
 
-  python24 = callPackage ../development/interpreters/python/2.4 { };
+  pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
 
-  python25Base = makeOverridable (import ../development/interpreters/python/2.5) {
+  python24 = lowPrio (callPackage ../development/interpreters/python/2.4 { });
+
+  python25Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.5) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
-  };
+  });
 
   python25Full = lowPrio (python25Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
@@ -2108,11 +2118,11 @@ let
     ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
-  python26Base = makeOverridable (import ../development/interpreters/python/2.6) {
+  python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  };
+  });
 
   python26Full = lowPrio (python26Base.override {
     # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
@@ -2127,8 +2137,19 @@ let
     ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
+  python27Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.7) {
+    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
+    arch = if stdenv.isDarwin then darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
+  });
+
+  python27Full = lowPrio (python27Base.override {
+    inherit (pkgs) db4 sqlite readline openssl tcl tk ncurses;
+    inherit (pkgs.xlibs) libX11 xproto;
+  });
+
   python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
-    inherit fetchurl stdenv zlib bzip2 gdbm;
+    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   });
@@ -2628,6 +2649,8 @@ let
   };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
+
+  cln = callPackage ../development/libraries/cln { };
 
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
   };
@@ -3151,7 +3174,7 @@ let
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
-    inherit (gtkLibs) gtk gthread;
+    inherit (gtkLibs) gtk;
     gstreamer = gst_all.gstreamer;
   };
 
@@ -3244,6 +3267,8 @@ let
     inherit (gtkLibs) gtk;
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
+
+  libktorrent = newScope kde45 ../development/libraries/libktorrent { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
@@ -3343,6 +3368,8 @@ let
   libproxy = callPackage ../development/libraries/libproxy { };
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
+
+  libqalculate = callPackage ../development/libraries/libqalculate { };
 
   librsync = callPackage ../development/libraries/librsync { };
 
@@ -3523,6 +3550,10 @@ let
 
   nss = callPackage ../development/libraries/nss { };
 
+  nssTools = callPackage ../development/libraries/nss {
+    includeTools = true;
+  };
+
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
 
@@ -3632,13 +3663,11 @@ let
   };
 
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
-    inherit (gst_all) gstreamer gstPluginsBase;
-    inherit (gnome) glib;
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
+    inherit (pkgs.gnome) glib;
   };
 
-  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator {
-    qt4 = qt46;
-  };
+  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quassel = callPackage ../applications/networking/irc/quassel {
     inherit (kde4) qt4 kdelibs phonon automoc4;
@@ -3934,17 +3963,21 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  buildPythonPackage =
-    import ../development/python-modules/generic {
-      inherit python setuptools makeWrapper lib;
-    };
+  buildPythonPackage = import ../development/python-modules/generic {
+    inherit python setuptools makeWrapper lib;
+  };
 
-  buildPython26Package =
-    import ../development/python-modules/generic {
-      inherit makeWrapper lib;
-      python = python26;
-      setuptools = setuptools_python26;
-    };
+  buildPython26Package = import ../development/python-modules/generic {
+    inherit makeWrapper lib;
+    python = python26;
+    setuptools = setuptools.override { python = python26; };
+  };
+
+  buildPython27Package = import ../development/python-modules/generic {
+    inherit makeWrapper lib;
+    python = python27;
+    setuptools = setuptools.override { python = python27; doCheck = false; };
+  };
 
   pythonPackages = python26Packages;
 
@@ -3958,14 +3991,18 @@ let
     buildPythonPackage = buildPython26Package;
   });
 
+  python27Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+    python = python27;
+    buildPythonPackage = buildPython27Package;
+  });
+
   foursuite = callPackage ../development/python-modules/4suite { };
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
   flup = builderDefsPackage ../development/python-modules/flup {
-    inherit fetchurl stdenv;
-    python = python25;
-    setuptools = setuptools.passthru.function {python = python25;};
+    inherit fetchurl stdenv python setuptools;
   };
 
   numeric = callPackage ../development/python-modules/numeric { };
@@ -4009,11 +4046,6 @@ let
 
   setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
     inherit python makeWrapper;
-  };
-
-  setuptools_python26 = builderDefsPackage (import ../development/python-modules/setuptools) {
-    inherit makeWrapper;
-    python = python26;
   };
 
   wxPython = wxPython26;
@@ -4188,11 +4220,11 @@ let
       xkeyboard_config dbus hal libuuid openssl gperf m4
       automake autoconf libtool xmlto asciidoc udev;
 
-    # !!! pythonBase is use instead of python because this cause an infinite
-    # !!! recursion when the flag python.full is set to true.  Packages
-    # !!! contained in the loop are python, tk, xlibs-wrapper, libX11,
-    # !!! libxcd (and xcb-proto).
-    python =  pythonBase;
+    # !!! pythonBase is used instead of python because this causes an
+    # infinite recursion when the flag python.full is set to true.
+    # Packages contained in the loop are python, tk, xlibs-wrapper,
+    # libX11, libxcd (and xcb-proto).
+    python = pythonBase;
   });
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
@@ -4520,6 +4552,14 @@ let
       ];
   };
 
+  linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [ /*kernelPatches.fbcondecor_2_6_33*/
+        kernelPatches.sec_perm_2_6_24
+      ];
+  };
+
   linux_nanonote_jz_2_6_34 = makeOverridable
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.34.nix) {
       inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
@@ -4529,6 +4569,17 @@ let
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.35.nix) {
       inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
     };
+
+  linux_2_6_35_oldI686 = linux_2_6_35.override {
+      extraConfig = ''
+          HIGHMEM64G? n
+          XEN? n
+      '';
+      extraMeta = {
+        platforms = ["i686-linux"];
+	maintainers = [lib.maintainers.raskin];
+      };
+  };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -4548,8 +4599,8 @@ let
 
     aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
 
-    blcr = callPackage ../os-specific/linux/blcr/0.8.2.nix {
-      libtool = libtool_1_5; # libtool 2 causes a fork bomb
+    blcr = callPackage ../os-specific/linux/blcr {
+      #libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };
 
     exmap = callPackage ../os-specific/linux/exmap {
@@ -4631,6 +4682,7 @@ let
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
   linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
   linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
+  linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34); 
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35); 
 
@@ -4863,7 +4915,8 @@ let
   windows = rec {
     w32api = callPackage ../os-specific/windows/w32api {
       gccCross = gccCrossStageStatic;
-      binutilsCross = binutilsCross;    };
+      binutilsCross = binutilsCross;
+    };
 
     w32api_headers = w32api.override {
       onlyHeaders = true;
@@ -4970,7 +5023,7 @@ let
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
-  
+
   junicode = callPackage ../data/fonts/junicode { };
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
@@ -5031,30 +5084,15 @@ let
   ### APPLICATIONS
 
 
-  aangifte2005 = import ../applications/taxes/aangifte-2005 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext;
-  };
+  aangifte2005 = callPackage_i686 ../applications/taxes/aangifte-2005 { };
 
-  aangifte2006 = import ../applications/taxes/aangifte-2006 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext;
-  };
+  aangifte2006 = callPackage_i686 ../applications/taxes/aangifte-2006 { };
 
-  aangifte2007 = import ../applications/taxes/aangifte-2007 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
-  };
+  aangifte2007 = callPackage_i686 ../applications/taxes/aangifte-2007 { };
 
-  aangifte2008 = import ../applications/taxes/aangifte-2008 {
-    inherit (pkgsi686Linux) stdenv fetchurl;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
-  };
+  aangifte2008 = callPackage_i686 ../applications/taxes/aangifte-2008 { };
 
-  aangifte2009 = import ../applications/taxes/aangifte-2009 {
-    inherit (pkgsi686Linux) stdenv fetchurl makeWrapper xdg_utils;
-    inherit (pkgsi686Linux.xlibs) libX11 libXext libSM;
-  };
+  aangifte2009 = callPackage_i686 ../applications/taxes/aangifte-2009 { };
 
   abcde = callPackage ../applications/audio/abcde { };
 
@@ -5063,7 +5101,7 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
-  adobeReader = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg) ../applications/misc/adobe-reader {
+  adobeReader = callPackage_i686 ../applications/misc/adobe-reader {
     inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
   };
 
@@ -5233,6 +5271,7 @@ let
       glib pango libglade libgtkhtml gtkhtml
       libgnomecanvas libgnomeprint
       libgnomeprintui gnomepanel gnomedesktop;
+    inherit pyrex;
     gnomegtk = gnome.gtk;
   };
 
@@ -5347,6 +5386,8 @@ let
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
+    inherit emacs;
+
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
@@ -5597,11 +5638,7 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  googleearth = import ../applications/misc/googleearth {
-    inherit (pkgsi686Linux) stdenv fetchurl glibc mesa freetype zlib glib;
-    inherit (pkgsi686Linux.xlibs) libSM libICE libXi libXv libXrender
-      libXrandr libXfixes libXcursor libXinerama libXext libX11;
-  };
+  googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
     inherit fetchsvn curl pkgconfig libxml2;
@@ -5912,7 +5949,6 @@ let
 
   partitionManager = callPackage ../tools/misc/partition-manager {
     kde = kde44;
-    qt = qt4;
   };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
@@ -6033,10 +6069,7 @@ let
     inherit (kde4) qt4 kdelibs automoc4 phonon soprano;
   };
 
-  skype_linux = callPackage ../applications/networking/skype {
-    qt = qt46;
-    inherit (gtkLibs) glib;
-  };
+  skype_linux = callPackage_i686 ../applications/networking/skype { };
 
   slim = callPackage ../applications/display-managers/slim { };
 
@@ -6163,7 +6196,8 @@ let
 
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
-    inherit monotone flup cheetahTemplate highlight ctags
+    inherit
+      monotone flup cheetahTemplate highlight ctags
       makeWrapper graphviz which python;
   };
 
@@ -6389,7 +6423,7 @@ let
 
   bsdgames = callPackage ../games/bsdgames { };
 
-  castleCombat = callPackage ../games/castle-combat { };
+  castle_combat = callPackage ../games/castle-combat { };
 
   construoBase = callPackage ../games/construo {
     mesa = null;
@@ -6608,33 +6642,34 @@ let
 
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage = newScope ({
-      qt4 = qt47;
       pyqt4 = pyqt4.override { qt4 = qt47; };
       libdbusmenu_qt = libdbusmenu_qt.override { qt4 = qt47; };
       shared_desktop_ontologies = shared_desktop_ontologies.override { v = "0.5"; };
-    } // kde45);
+    } // pkgs.kde45);
   };
 
   xfce = xfce4;
-  
+
   xfce4 = recurseIntoAttrs
     (let callPackage = newScope pkgs.xfce4; in
      import ../desktops/xfce-4 { inherit callPackage pkgs; });
 
-  
+
   ### SCIENCE
 
   xplanet = callPackage ../applications/science/xplanet {
     inherit (gtkLibs) pango;
   };
 
-  
+
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
     inherit libxml2 guile perl intltool libtool pkgconfig;
   };
+
+  tetgen = callPackage ../applications/science/geometry/tetgen { };
 
 
   ### SCIENCE/BIOLOGY
@@ -6841,17 +6876,22 @@ let
 
   maven2 = callPackage ../misc/maven { };
 
-  nix = nixUnstable;
+  mess = callPackage ../misc/emulators/mess { };
+
+  nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
 
+  nixUnstable = nixStable;
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
+  */
 
   # The SQLite branch.
   nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
@@ -6988,14 +7028,10 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  wine =
-    # Wine cannot be built in 64-bit; use a 32-bit build instead.
-    import ../misc/emulators/wine {
-      inherit (pkgsi686Linux) fetchurl stdenv bison mesa ncurses
-        libpng libjpeg alsaLib lcms xlibs freetype
-        fontconfig fontforge libxml2 libxslt openssl;
-      flex = pkgsi686Linux.flex2535;
-    };
+  # Wine cannot be built in 64-bit; use a 32-bit build instead.
+  wine = callPackage_i686 ../misc/emulators/wine {
+    flex = pkgsi686Linux.flex2535;
+  };
 
   x2x = callPackage ../tools/X11/x2x { };
 

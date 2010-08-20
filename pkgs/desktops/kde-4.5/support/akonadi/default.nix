@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "199fh5yqygr0xdwcnjqqms8vskigbzvwb3071r979606rrsnpnl5";
   };
   buildInputs = [ cmake qt4 shared_mime_info libxslt boost mysql automoc4 soprano ];
+  patches = [ ./fix-broken-datadir-parameter.patch ];
   meta = with stdenv.lib; {
     description = "KDE PIM Storage Service";
     license = "LGPL";

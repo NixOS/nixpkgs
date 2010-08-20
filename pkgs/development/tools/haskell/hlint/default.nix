@@ -2,9 +2,9 @@
 
 cabal.mkDerivation (self : {
   pname = "hlint";
-  version = "1.6.11";
+  version = "1.7.3";
   name = self.fname;
-  sha256 = "20210c72826be92ae34247d4e02e64187c3c99f70f8a099c747c46415e010af5";
+  sha256 = "afd4aa623fedf5257464bf18f38376a951d130f3004664803763e67cc55d9e83";
   extraBuildInputs = [haskellSrcExts mtl uniplate hscolour parallel];
   meta = {
     description = "Source code suggestions";

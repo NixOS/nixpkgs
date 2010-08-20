@@ -5,9 +5,10 @@ if ! bazaar.python.readlineSupport then
 else
 
 rec {
+  version = "2.2.0";
   src = fetchurl {
-    url = http://launchpad.net/bzrtools/stable/1.5.0/+download/bzrtools-1.5.0.tar.gz;
-    sha256 = "0lm4qhsjy3k8zp9hcahlf37v69w6lhhz2x3hjskgm3rk6b0bngjz";
+    url = "http://launchpad.net/bzrtools/stable/${version}/+download/bzrtools-${version}.tar.gz";
+    sha256 = "835e0dc2b3b798d3c88b960bf719fe3b4cec7ae241908aafeb6aafe4c83f591b";
   };
 
   buildInputs = [];
@@ -16,7 +17,7 @@ rec {
   /* doConfigure should be specified separately */
   phaseNames = [(simplyShare "bzrtools")];
       
-  name = "bzr-tools-1.5";
+  name = "bzr-tools-${version}";
   meta = {
     description = "Bazaar plugins.";
   };

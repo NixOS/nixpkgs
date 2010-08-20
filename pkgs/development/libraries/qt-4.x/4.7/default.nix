@@ -97,7 +97,9 @@ stdenv.mkDerivation rec {
     sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf
   '';
 
-  postInstall = if useDocs then "rm -rf $out/share/doc/${name}/{html,src}" else "";
+  postInstall = ''
+    ${if useDocs then "rm -rfv $out/share/doc/${name}/{html,src}" else ""}
+    ln -sv phonon $out/include/Phonon'';
 
   enableParallelBuilding = true;
 

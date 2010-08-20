@@ -61,6 +61,8 @@ in
 stdenv.mkDerivation {
   name = if userModeLinux then "user-mode-linux-${version}" else "linux-${version}";
 
+  enableParallelBuilding = true;
+
   passthru = {
     inherit version;
     # Combine the `features' attribute sets of all the kernel patches.

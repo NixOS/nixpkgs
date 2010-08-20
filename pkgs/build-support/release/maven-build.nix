@@ -17,7 +17,7 @@ in
 
 stdenv.mkDerivation ( rec {
   inherit name src; 
-  phases = "setupPhase unpackPhase patchPhase mvnCompile ${if doTestCompile then "mvnTestCompile mvnTestJar" else ""} ${if doTest then "mvnTest mvnCobertura" else ""} ${if doJavadoc then "mvnJavadoc" else ""} ${if doCheckstyle then "mvnCheckstyle" else ""} mvnJar mvnAssembly mvnRelease finalPhase";
+  phases = "setupPhase unpackPhase patchPhase mvnCompile ${if doTestCompile then "mvnTestCompile mvnTestJar" else ""} ${if doTest then "mvnTest" else ""} ${if doJavadoc then "mvnJavadoc" else ""} ${if doCheckstyle then "mvnCheckstyle" else ""} mvnJar mvnAssembly mvnRelease finalPhase";
 
   setupPhase = ''
     runHook preSetupPhase
@@ -44,18 +44,24 @@ stdenv.mkDerivation ( rec {
 
   mvnTest = ''
     mvn test ${mvnFlags}
+
+    if [ -d target/site/cobertura ] ; then
+      cp -R target/site/cobertura $out/cobertura
+      echo "report coverage $out/cobertura" >> $out/nix-support/hydra-build-products
+    fi
+
+    if [ -d target/surefire-reports ] ; then
+      mvn surefire-report:report-only
+      cp -vR target/surefire-reports $out/surefire
+      cp -v target/site/surefire-report.html $out/surefire/index.html
+      echo "report coverage $out/surefire/index.html" >> $out/nix-support/hydra-build-products
+    fi
   '';  
 
   mvnJavadoc = ''
     mvn javadoc:javadoc ${mvnFlags}
     cp -R target/site/apidocs $out/apidocs
     echo "report javadoc $out/apidocs" >> $out/nix-support/hydra-build-products
-  '';  
-
-  mvnCobertura = ''
-    mvn cobertura:cobertura ${mvnFlags}
-    cp -R target/site/cobertura $out/cobertura
-    echo "report cobertura $out/cobertura" >> $out/nix-support/hydra-build-products
   '';  
 
   mvnCheckstyle = ''
@@ -71,7 +77,7 @@ stdenv.mkDerivation ( rec {
   '';  
 
   mvnAssembly = ''
-    mvn assembly:assembly ${mvnFlags}
+    mvn assembly:single ${mvnFlags}
   '';
 
   mvnRelease = ''

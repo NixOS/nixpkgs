@@ -1,11 +1,11 @@
 { fetchurl, stdenv, perl }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20100620";
+  name = "parallel-20100722";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "1hzdzvkm5cqciy6lhcbdzi4aar09fgsf0lfb4a89mnlq4xdmr8jj";
+    sha256 = "1dq2icd6xigi4pf66178pdim6dmpw7vkfndwady5r93kymz7m399";
   };
 
   patchPhase =

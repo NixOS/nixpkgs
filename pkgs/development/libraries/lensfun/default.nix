@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib zlib libpng ];
 
+  configureFlags = "-v";
+
   meta = with stdenv.lib; {
     platforms = platforms.all;
     maintainers = [ maintainers.urkud ];
     license = "LGPL3";
-    description = "An opensource database of photographic lenses and their
-      characteristics";
+    description = "An opensource database of photographic lenses and their characteristics";
   };
 }

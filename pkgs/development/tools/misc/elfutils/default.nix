@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     urls = [
-      "https://fedorahosted.org/releases/e/l/elfutils/${name}.tar.bz2"
+      "https://fedorahosted.org/releases/e/l/elfutils/0.143/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
     sha256 = "1nl7x2gidd2i048yjlvyzhpbca9793z435cw8bsircjxfi5gmswa";

@@ -26,7 +26,7 @@ while (<ANSWERS>) {
     s/#.*//;
     if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(\S+)\s*$/) {
         $answers{$1} = $3;
-        $requiredAnswers{$1} = 1 unless defined $2;
+        $requiredAnswers{$1} = !(defined $2);
     } elsif (!/^\s*$/) {
         die "invalid config line: $_";
     }

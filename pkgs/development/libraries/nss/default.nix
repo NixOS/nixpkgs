@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib }:
+{ stdenv, fetchurl, nspr, perl, zlib, includeTools ? false}:
 
 let
 
@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nss-3.12.6";
+  name = "nss-3.12.7";
   
   src = fetchurl {
-    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_6_RTM/src/nss-3.12.6.tar.gz;
-    sha1 = "461e81adbdef6c3f848fcfee0dc5ad8c2dbebd46";
+    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_7_RTM/src/nss-3.12.7.tar.gz;
+    sha256 = "0x5h0r5hn4qzafxakhvqyw1r8r0zy09b7b0kmdh3ff6v29v4bnzx";
   };
 
   buildInputs = [nspr perl zlib];
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
       mv $out/public $out/include
       mv $out/*.OBJ/* $out/
       rmdir $out/*.OBJ
-      rm -rf $out/bin
+      ${if includeTools then "" else "rm -rf $out/bin"}
 
       # Borrowed from Gentoo.  Firefox expects an nss-config script,
       # but NSS doesn't provide it.
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
       NSS_VMINOR=`cat lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
       NSS_VPATCH=`cat lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
 
-      mkdir $out/bin
+      ${if includeTools then "" else "mkdir $out/bin"}
       cp ${nssConfig} $out/bin/nss-config
       chmod u+x $out/bin/nss-config
       substituteInPlace $out/bin/nss-config \

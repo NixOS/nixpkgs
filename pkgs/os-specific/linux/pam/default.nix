@@ -13,7 +13,18 @@ stdenv.mkDerivation {
       (stdenv.system != "armv5tel-linux" && stdenv.system != "ict_loongson-2_v0.3_fpu_v0.1-linux")
       libxcrypt;
 
+  postInstall = ''
+    mv -v $out/sbin/unix_chkpwd{,.orig}
+    ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
+    '';
+
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
   '';
+
+  meta = {
+    homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
+    description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

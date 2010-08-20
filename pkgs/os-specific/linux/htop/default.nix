@@ -10,5 +10,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An interactive process viewer for Linux";
     homepage = "http://htop.sourceforge.net";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

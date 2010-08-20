@@ -1,0 +1,10 @@
+--- kdeutils-4.5.0.orig/CMakeLists.txt.orig	2010-08-16 18:21:33.000000000 +0400
++++ kdeutils-4.5.0/CMakeLists.txt	2010-08-16 18:27:05.000000000 +0400
+@@ -36,6 +36,7 @@
+ endif( GMP_FOUND )
+ if( UNIX )
+     find_package( KDE4Workspace )
++    macro_log_feature( KDE4Workspace_FOUND "KDE4Workspace" "KDE workscpace library, part of kdebase-workspace" "http://www.kde.org" FALSE "" "Required to build kremotecontrol." )
+     if( KDE4Workspace_FOUND AND QT_QTXMLPATTERNS_FOUND )
+         macro_optional_add_subdirectory( kremotecontrol )
+     endif( KDE4Workspace_FOUND AND QT_QTXMLPATTERNS_FOUND )
