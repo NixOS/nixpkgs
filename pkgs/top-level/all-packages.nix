@@ -5833,18 +5833,7 @@ let
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
-  MPlayer = callPackage ../applications/video/MPlayer {
-    alsaSupport = true;
-    alsa = alsaLib;
-    theoraSupport = true;
-    cacaSupport = true;
-    xineramaSupport = true;
-    randrSupport = true;
-    cddaSupport = true;
-    amrSupport = getConfig [ "MPlayer" "amr" ] false;
-    x264Support = true;
-    xvidSupport = true;
-  };
+  MPlayer = callPackage ../applications/video/MPlayer { };
 
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
