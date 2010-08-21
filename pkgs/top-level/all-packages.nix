@@ -3252,7 +3252,7 @@ let
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
 
-  libktorrent = newScope kde45 ../development/libraries/libktorrent { };
+  libktorrent = newScope pkgs.kde45 ../development/libraries/libktorrent { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
@@ -3593,10 +3593,7 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
-  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc {
-    vlc = vlc.override { qt4 = qt47; };
-    inherit (kde45) automoc4;
-  };
+  phonon_backend_vlc = newScope pkgs.kde4 ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -3654,9 +3651,7 @@ let
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
-  quassel = callPackage ../applications/networking/irc/quassel {
-    inherit (kde4) qt4 kdelibs phonon automoc4;
-  };
+  quassel = newScope pkgs.kde4 ../applications/networking/irc/quassel { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
@@ -5107,13 +5102,10 @@ let
   awesome = callPackage ../applications/window-managers/awesome {
     inherit (gtkLibs) glib pango;
     lua = lua5;
-    cairo = cairo.override { xcbSupport = true;
-  };
+    cairo = cairo.override { xcbSupport = true; };
   };
 
-  bangarang = callPackage ../applications/video/bangarang {
-    inherit (kde4) qt4 kdelibs automoc4 phonon soprano kdemultimedia;
-  };
+  bangarang = newScope pkgs.kde4 ../applications/video/bangarang { };
 
   batik = callPackage ../applications/graphics/batik { };
 
@@ -5913,9 +5905,7 @@ let
     stdenv = stdenv2;
   };
 
-  partitionManager = callPackage ../tools/misc/partition-manager {
-    kde = kde44;
-  };
+  partitionManager = newScope pkgs.kde4 ../tools/misc/partition-manager { };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
@@ -5992,14 +5982,11 @@ let
       libstdcpp5 = gcc33.gcc;
   };
 
-  rekonq = callPackage ../applications/networking/browsers/rekonq {
+  rekonq = newScope pkgs.kde4 ../applications/networking/browsers/rekonq {
     inherit (gtkLibs) gtk;
-    inherit (kde4) qt4 kdelibs automoc4 phonon;
   };
 
-  rsibreak = callPackage ../applications/misc/rsibreak {
-    inherit (kde4) kdelibs kdebase_workspace;
-  };
+  rsibreak = newScope pkgs.kde4 ../applications/misc/rsibreak { };
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
@@ -6031,9 +6018,7 @@ let
   };
   };
 
-  semnotes = callPackage ../applications/misc/semnotes {
-    inherit (kde4) qt4 kdelibs automoc4 phonon soprano;
-  };
+  semnotes = newScope pkgs.kde4 ../applications/misc/semnotes { };
 
   skype_linux = callPackage_i686 ../applications/networking/skype { };
 
@@ -6172,17 +6157,17 @@ let
   vimHugeX = vim_configurable;
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib;
-    inherit (xlibs) libX11 libXext libSM libXpm
+    inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib;
+    inherit (pkgs.xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu libICE;
-    inherit (gtkLibs) glib gtk;
+    inherit (pkgs.gtkLibs) glib gtk;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
     # python
     # TODO mzschemeinterp perlinterp
-    inherit python perl tcl ruby /*x11*/;
+    inherit (pkgs) python perl tcl ruby /*x11*/;
 
-    lua = lua5;
+    lua = pkgs.lua5;
 
     # optional features by flags
     flags = [ "X11" ]; # only flag "X11" by now
@@ -6606,9 +6591,12 @@ let
 
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage = newScope ({
-      qjson  = pkgs.qjson.override { qt4 = qt47; };
-      pyqt4 = pkgs.pyqt4.override { qt4 = qt47; };
-      libdbusmenu_qt = pkgs.libdbusmenu_qt.override { qt4 = qt47; };
+      qjson  = pkgs.qjson.override { inherit (pkgs.kde45) qt4; };
+      pyqt4 = pkgs.pyqt4.override { inherit (pkgs.kde45) qt4; };
+      libdbusmenu_qt = pkgs.libdbusmenu_qt.override { inherit (pkgs.kde45) qt4; };
+      libktorrent = pkgs.libktorrent.override {
+        inherit (pkgs.kde45) qt4 kdelibs;
+      };
       shared_desktop_ontologies = pkgs.shared_desktop_ontologies.override { v = "0.5"; };
       stdenv = pkgs.stdenv2;
     } // pkgs.kde45);

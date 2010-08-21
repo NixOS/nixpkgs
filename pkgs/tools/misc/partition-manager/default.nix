@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kde, perl }:
+{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kdelibs, kdebase,
+  automoc4, phonon, perl }:
 
 stdenv.mkDerivation {
   name = "partitionmanager-1.0.0";
@@ -9,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ cmake gettext parted libuuid qt4 kde.kdelibs kde.kdebase kde.automoc4 perl kde.phonon ];
+    [ cmake gettext parted libuuid qt4 kdelibs kdebase automoc4 perl phonon ];
 
   preConfigure = ''
     export VERBOSE=1

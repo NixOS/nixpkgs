@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, cmake, gmp, qca2, boost, gettext, qt47, automoc4,
+{ stdenv, fetchurl, kdelibs, cmake, gmp, qca2, boost, gettext, qt4, automoc4,
   perl }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
 # TODO: xfs.h
-  buildInputs = [ cmake kdelibs gmp qca2 boost gettext qt47 automoc4 perl ];
+  buildInputs = [ cmake kdelibs gmp qca2 boost gettext qt4 automoc4 perl ];
 
   meta = {
     description = "A bittorrent library used in ktorrent";
