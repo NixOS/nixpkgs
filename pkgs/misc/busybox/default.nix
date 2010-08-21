@@ -1,4 +1,4 @@
-{stdenv, fetchurl, enableStatic ? false, extraConfig ? null}:
+{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""}:
 
 let
   configParser = ''
