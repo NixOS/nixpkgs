@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     md5 = "ba06992d3207666ed1bf2dcf7c72bf58";
   };
 
+  patches = [ ./newgc.patch ];
+
   buildInputs = [ncurses boehmgc gettext zlib]
     ++ stdenv.lib.optional sslSupport openssl
     ++ stdenv.lib.optionals graphicsSupport [imlib2 x11];
