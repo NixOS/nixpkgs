@@ -109,7 +109,7 @@ let
       ensureDir $out/lib
       
       # Copy what we need from Glibc.
-      cp -pv ${pkgs.glibc}/lib/ld-linux*.so.? $out/lib
+      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
       cp -pv ${pkgs.glibc}/lib/libc.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/libpthread.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/librt.so.* $out/lib
@@ -176,9 +176,9 @@ let
       for i in $out/bin/*; do
           if ! test -L $i; then
               echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
               if [ -n "$doublePatchelf" ]; then
-                  patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+                  patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
               fi
           fi
       done
