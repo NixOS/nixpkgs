@@ -40,13 +40,15 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "busybox-1.16.0";
+stdenv.mkDerivation rec {
+  name = "busybox-1.17.1";
 
   src = fetchurl {
-    url = http://busybox.net/downloads/busybox-1.16.0.tar.bz2;
-    sha256 = "1n738zk01yi2sjrx2y36hpzxbslas8b91vzykcifr0p1j7ym0lim";
+    url = "http://busybox.net/downloads/${name}.tar.bz2";
+    sha256 = "0r6i76lad5w359pw93i9wrq2a1pxk8xw6xr4cq71n5by1n0pg4dz";
   };
+
+  patches = [ ./make-3.82.patch ];
 
   configurePhase = ''
     make defconfig
