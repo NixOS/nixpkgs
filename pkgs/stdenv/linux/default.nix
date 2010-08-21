@@ -5,7 +5,7 @@
 # ensuring purity of components produced by it.
 
 # The function defaults are for easy testing.
-{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix}:
+{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix, platform}:
 
 rec {
 
@@ -91,7 +91,10 @@ rec {
       shell = "${bootstrapTools}/bin/sh";
       initialPath = [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
-      inherit gcc extraAttrs;
+      inherit gcc;
+      # Having the proper 'platform' in all the stdenvs allows getting proper
+      # linuxHeaders for example.
+      extraAttrs = extraAttrs // { inherit platform; };
       overrides = overrides // {
         inherit fetchurl;
       };
@@ -153,7 +156,7 @@ rec {
   # 2) These are the packages that we can build with the first
   #    stdenv.  We only need Glibc (in step 3).
   stdenvLinuxBoot1Pkgs = allPackages {
-    inherit system;
+    inherit system platform;
     bootStdenv = stdenvLinuxBoot1;
   };
 
@@ -182,7 +185,7 @@ rec {
   
   # 5) The packages that can be built using the second stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
-    inherit system;
+    inherit system platform;
     bootStdenv = stdenvLinuxBoot2;
   };
 
@@ -220,7 +223,7 @@ rec {
   
   # 7) The packages that can be built using the third stdenv.
   stdenvLinuxBoot3Pkgs = allPackages {
-    inherit system;
+    inherit system platform;
     bootStdenv = stdenvLinuxBoot3;
   };
 
@@ -257,6 +260,7 @@ rec {
     
     extraAttrs = {
       inherit (stdenvLinuxBoot2Pkgs) glibc;
+      inherit platform;
     };
 
     overrides = {

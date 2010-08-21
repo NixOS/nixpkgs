@@ -177,7 +177,7 @@ let
 
 
   allStdenvs = import ../stdenv {
-    inherit system stdenvType;
+    inherit system stdenvType platform;
     allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
   };
 
