@@ -109,7 +109,10 @@ let
                || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
                 || result.system == "x86_64-darwin";
-        isMips = result.system == "ict_loongson-2_v0.3_fpu_v0.1-linux";
+        isMips = result.system == "ict_loongson-2_v0.3_fpu_v0.1-linux"
+                || result.system == "mips-linux"
+                || result.system == "mips64-linux";
+        isArm = result.system == "armv5tel-linux";
 
         # Utility function: allow stdenv to be easily regenerated with
         # a different setup script.  (See all-packages.nix for an
