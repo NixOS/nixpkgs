@@ -6354,6 +6354,8 @@ let
     qgis = qgisReleased;
   };
 
+  yakuake = newScope pkgs.kde4 ../applications/misc/yakuake { };
+
   zapping = callPackage ../applications/video/zapping {
     inherit (gnome) scrollkeeper libgnomeui libglade esound;
     teletextSupport = true;

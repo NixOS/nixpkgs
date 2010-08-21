@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0azzvbh3jwz8yhn6gqd46ya7589sadfjyysw230vlf0zlfipdlvd";
   };
 
-  buildInputs = [ kdelibs cmake gettext perl automoc4 qt4 phonon stdenv.gcc.libc ];
+  buildInputs = [ kdelibs cmake gettext perl automoc4 qt4 phonon ];
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://yakuake.kde.org;
     description = "Quad-style terminal emulator for KDE";
-    maintainers = [ maintainers.urkud ];
-    platforms = platforms.linux;
+    inherit (kdelibs.meta) platforms;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
