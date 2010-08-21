@@ -18,8 +18,9 @@ let
   needsPorts = if cross == null then needsPortsNative else needsPortsCross;
 
   srcPorts = fetchurl {
-    url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2"; # FIXME: 2.12.1 unavailable.
-    sha256 = "12b53f5k4gcr8rr1kg2ycf2701rygqsyf9r8gz4j3l9flaqi5liq";
+    # A tarball I manually made from a git clone, for the tag "glibc-2.12.1".
+    url = http://vicerveza.homeunix.net/~viric/tmp/nix/glibc-ports-2.12.1.tar.gz;
+    sha256 = "160dr4v9210r6d7xp0af5kx1pljcjaa2x4ya88psjiphcr6bsy37";
   };
 
 in
