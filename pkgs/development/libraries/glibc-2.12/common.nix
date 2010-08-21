@@ -66,10 +66,7 @@ stdenv.mkDerivation ({
 
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
-  ]
-  ++ stdenv.lib.optional (fetchgit == null)
-    /* MOD_NANO definition, for ntp (taken from glibc upstream) */
-    ./mod_nano.patch;
+  ];
 
   configureFlags = [
     "-C"
