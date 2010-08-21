@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ cmake qt4 shared_mime_info libxslt boost mysql automoc4 soprano ];
   patches = [ ./fix-broken-datadir-parameter.patch ];
+  postPatch = "sed -e '/Q_ASSERT.*SQLITE/d' -i qsqlite/src/qsql_sqlite.cpp";
   meta = with stdenv.lib; {
     description = "KDE PIM Storage Service";
     license = "LGPL";
