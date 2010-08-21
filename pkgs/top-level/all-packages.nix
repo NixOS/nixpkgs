@@ -3252,7 +3252,7 @@ let
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
 
-  libktorrent = newScope pkgs.kde45 ../development/libraries/libktorrent { };
+  libktorrent = newScope pkgs.kde4 ../development/libraries/libktorrent { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
@@ -5728,6 +5728,8 @@ let
     # #  optional
     #  inherit ffmpeg2theora sox, vorbis-tools lame mjpegtools dvdauthor 'Q'dvdauthor growisofs mencoder;
   };
+
+  konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
 
   lame = callPackage ../applications/audio/lame { };
 
