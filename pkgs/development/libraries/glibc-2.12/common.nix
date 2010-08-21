@@ -12,6 +12,16 @@ cross :
 let
   # For GNU/Hurd, see below.
   version = if hurdHeaders != null then "20100512" else "2.12.1";
+
+  needsPortsNative = stdenv.isMips || stdenv.isArm;
+  needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
+  needsPorts = if cross == null then needsPortsNative else needsPortsCross;
+
+  srcPorts = fetchurl {
+    url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2"; # FIXME: 2.12.1 unavailable.
+    sha256 = "12b53f5k4gcr8rr1kg2ycf2701rygqsyf9r8gz4j3l9flaqi5liq";
+  };
+
 in
 
 assert (cross != null) -> (gccCross != null);
@@ -128,11 +138,6 @@ stdenv.mkDerivation ({
       sha256 = "01vlr473skl08xpcjz0b4lw23lsnskf5kx9s8nxwa4mwa9f137vm";
     };
 
-  srcPorts = fetchurl {
-    url = "mirror://gnu/glibc/glibc-ports-2.11.tar.bz2"; # FIXME: 2.12.1 unavailable.
-    sha256 = "12b53f5k4gcr8rr1kg2ycf2701rygqsyf9r8gz4j3l9flaqi5liq";
-  };
-
   # `fetchurl' is a function and thus should not be passed to the
   # `derivation' primitive.
   fetchurl = null;
@@ -146,7 +151,7 @@ stdenv.mkDerivation ({
         sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
     done
 
-    tar xvjf "$srcPorts"
+    ${if needsPorts then "tar xvjf ${srcPorts}" else ""}
 
     mkdir ../build
     cd ../build
