@@ -13,13 +13,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cmake perl qt4 stdenv.gcc.libc xz flex bison bzip2 pcre fam libxml2 libxslt
+    cmake perl qt4 xz flex bison bzip2 pcre fam libxml2 libxslt
     shared_mime_info giflib jasper /*openexr*/ aspell avahi kerberos acl attr
     libXScrnSaver enchant
     automoc4 phonon strigi soprano qca2 attica polkit_qt
   ];
 
-  propagatedBuildInputs = [ shared_desktop_ontologies ];
+  propagatedBuildInputs = [ stdenv.gcc.libc shared_desktop_ontologies ];
 
   # cmake fails to find acl.h because of C++-style comment
   cmakeFlags = [ "-DHAVE_ACL_LIBACL_H=ON" "-DHAVE_SYS_ACL_H=ON" ];
