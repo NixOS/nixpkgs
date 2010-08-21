@@ -39,7 +39,7 @@ for i in $out/lib/librt* ; do
     fi
 done
 
-for i in $out/lib/libgmp* $out/lib/libppl* $out/lib/libcloog* $out/lib/libmpc*; do
+for i in $out/lib/libgmp* $out/lib/libppl* $out/lib/libcloog* $out/lib/libmpc* $out/lib/libpcre* $out/lib/libstdc++*.so.*[0-9]; do
     echo trying to patch $i
     if test -f $i -a ! -L $i; then
          LD_LIBRARY_PATH=$out/lib $LD_BINARY \

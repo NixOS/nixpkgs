@@ -31,6 +31,49 @@ rec {
 
   #gccNoShared = wrapGCC ( gcc.gcc.override { enableShared = false; } );
 
+  busyboxStaticSh = busybox.override {
+    extraConfig = ''
+      CLEAR
+      CONFIG_STATIC y
+
+      CONFIG_ASH y
+      CONFIG_BASH_COMPAT y
+      CONFIG_ASH_ALIAS y
+      CONFIG_ASH_GETOPTS y
+      CONFIG_ASH_CMDCMD y
+      CONFIG_ASH_JOB_CONTROL y
+      CONFIG_ASH_BUILTIN_ECHO y
+      CONFIG_ASH_BUILTIN_PRINTF y
+      CONFIG_ASH_BUILTIN_TEST y
+    '';
+  };
+
+  busyboxStaticLn = busybox.override {
+    extraConfig = ''
+      CLEAR
+      CONFIG_STATIC y
+      CONFIG_LN y
+    '';
+  };
+
+  busyboxStaticMkdir = busybox.override {
+    extraConfig = ''
+      CLEAR
+      CONFIG_STATIC y
+      CONFIG_MKDIR y
+    '';
+  };
+
+  busyboxStaticCpio = busybox.override {
+    extraConfig = ''
+      CLEAR
+      CONFIG_STATIC y
+      CONFIG_CPIO y
+      CONFIG_FEATURE_CPIO_O y
+      CONFIG_FEATURE_CPIO_P y
+    '';
+  };
+
   build = 
 
     stdenv.mkDerivation {
@@ -43,7 +86,7 @@ rec {
         ensureDir $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
-        cp -d ${glibc}/lib/ld-*.so* $out/lib
+        cp -d ${glibc}/lib/ld*.so* $out/lib
         cp -d ${glibc}/lib/libc*.so* $out/lib
         cp -d ${glibc}/lib/libc_nonshared.a $out/lib
         cp -d ${glibc}/lib/libm*.so* $out/lib
@@ -97,6 +140,7 @@ rec {
         rm -f $out/lib/gcc/*/*/include*/sound
         rm -rf $out/lib/gcc/*/*/include*/root
         rm -f $out/lib/gcc/*/*/include-fixed/asm
+        rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
         cp -rd ${gcc.gcc}/libexec/* $out/libexec
         mkdir $out/include
@@ -105,10 +149,13 @@ rec {
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
 
-        cp -d ${gmp}/lib/libgmp*.so* $out/lib
+        cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
         cp -d ${ppl}/lib/libppl*.so* $out/lib
         cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
+        cp -d ${mpc}/lib/libmpc*.so* $out/lib
+        cp -d ${zlib}/lib/libz.so* $out/lib
+        cp -d ${libelf}/lib/libelf.so* $out/lib
         
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
@@ -137,10 +184,10 @@ rec {
         (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
 
         mkdir $out/in-nixpkgs
-        cp ${klibc}/lib/klibc/bin.static/sh $out/in-nixpkgs
-        cp ${klibc}/lib/klibc/bin.static/cpio $out/in-nixpkgs
-        cp ${klibc}/lib/klibc/bin.static/mkdir $out/in-nixpkgs
-        cp ${klibc}/lib/klibc/bin.static/ln $out/in-nixpkgs
+        cp ${busyboxStaticSh}/bin/busybox $out/in-nixpkgs/sh
+        cp ${busyboxStaticCpio}/bin/busybox $out/in-nixpkgs/cpio
+        cp ${busyboxStaticMkdir}/bin/busybox $out/in-nixpkgs/mkdir
+        cp ${busyboxStaticLn}/bin/busybox $out/in-nixpkgs/ln
         cp ${curlStatic}/bin/curl $out/in-nixpkgs
         cp ${bzip2Static}/bin/bzip2 $out/in-nixpkgs
         chmod u+w $out/in-nixpkgs/*
