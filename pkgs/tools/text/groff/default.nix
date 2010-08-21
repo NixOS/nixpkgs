@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghostscript, perl }:
+{ stdenv, fetchurl, ghostscript, perl, groff }:
 
 stdenv.mkDerivation rec {
   name = "groff-1.20.1";
@@ -8,9 +8,18 @@ stdenv.mkDerivation rec {
     sha256 = "01fq5i68p4s4fc6m8i90y5d28wk1x6zh2mkw85n0qqnb6n0qfidn";
   };
 
-  buildInputs = [ ghostscript perl ];
+  buildInputs = [ ghostscript ];
+  buildNativeInputs = [ perl ];
 
   doCheck = true;
+
+  crossAttrs = {
+    # Trick to get the build system find the proper 'native' groff
+    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
+    preBuild = ''
+      makeFlags="GROFF_BIN_PATH=${groff}/bin GROFFBIN=${groff}/bin/groff"
+    '';
+  };
 
   meta = {
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
