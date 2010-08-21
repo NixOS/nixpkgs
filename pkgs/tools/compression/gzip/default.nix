@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "1vhiyzls60fws48scw48wvwn8mpv1f4yhcsnafys239qvb9wyrni";
   };
 
-  patches = [ ./getopt.patch ];
-
   doCheck = true;
 
   meta = {
