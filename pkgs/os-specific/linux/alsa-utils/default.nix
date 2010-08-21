@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1c7pl5k3d60wacnha8zfn2dixz7hiiaxvijis4559y15bs8mxl5p";
   };
   
-  buildInputs = [ alsaLib gettext ncurses ];
+  buildInputs = [ alsaLib ncurses ];
+  buildNativeInputs = [ gettext ];
   
   configureFlags = "--disable-xmlto";
 

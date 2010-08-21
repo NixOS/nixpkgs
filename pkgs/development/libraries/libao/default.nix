@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pulseaudio
+{ stdenv, fetchurl, pkgconfig, pulseaudio, alsaLib
 , usePulseAudio }:
 
 stdenv.mkDerivation {
@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "e52e05af6b10f42d2ee9845df1a581bf2b352060eabf7946aee0a600c3878954";
   };
 
-  buildInputs = [ pkgconfig ] ++ stdenv.lib.optional usePulseAudio pulseaudio;
+  buildInputs = [ pkgconfig alsaLib ] ++ (if usePulseAudio then [ pulseaudio ]
+    else [ alsaLib ]);
 
   meta = {
     longDescription = ''
