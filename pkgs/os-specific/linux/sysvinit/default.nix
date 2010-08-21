@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = (if withoutInitTools then "sysvtools" else "sysvinit") + "-" + version;
   
   src = fetchurl {
-    url = "http://www.very-clever.com/download/nongnu/sysvinit/sysvinit-${version}.tar.bz2";
+    url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.bz2";
     sha256 = "068mvzaz808a673zigyaqb63xc8bndh2klk16zi5c83rw70wifv0";
   };
   
