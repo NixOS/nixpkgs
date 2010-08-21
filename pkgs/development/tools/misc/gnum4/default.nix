@@ -10,6 +10,9 @@ stdenv.mkDerivation {
 
   doCheck = !stdenv.isDarwin;
 
+  # Upstream is aware of it; it may be in the next release.
+  patches = [ ./s_isdir.patch ];
+
   meta = {
     homepage = http://www.gnu.org/software/m4/;
     description = "GNU M4, a macro processor";
