@@ -35,7 +35,7 @@ rec {
     # https://bugs.webkit.org/show_bug.cgi?id=43863
     # "--enable-indexed-database"
 
-    "--enable-xhtmlmp"
+    # "--enable-xhtmlmp"
 
     # "--enable-input-speech"
 
