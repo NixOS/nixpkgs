@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
     pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
     libuuid perl perlXMLParser gettext zlib gperf
     consolekit policykit
-    # !!! libsmbios is broken; it doesn't install headers.
-  ] ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") [ libsmbios ];
+  ];
 
   # !!! Hm, maybe the pci/usb.ids location should be in /etc, so that
   # we don't have to rebuild HAL when we update the PCI/USB IDs.
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ libusb ]
-    ++ stdenv.lib.optionals (stdenv.system != "armv5tel-linux") [ libsmbios ];
+    ++ stdenv.lib.optional (stdenv.isi686 || stdenv.isx86_64) [ libsmbios ];
 
   preConfigure = ''
     for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
