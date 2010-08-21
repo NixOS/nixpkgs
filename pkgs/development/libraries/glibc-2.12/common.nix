@@ -152,7 +152,7 @@ stdenv.mkDerivation ({
         sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
     done
 
-    ${if needsPorts then "tar xvjf ${srcPorts}" else ""}
+    ${if needsPorts then "tar xvf ${srcPorts}" else ""}
 
     mkdir ../build
     cd ../build
