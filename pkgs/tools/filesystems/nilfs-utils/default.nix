@@ -31,6 +31,7 @@ rec {
 
   doFixPaths = a.fullDepEntry (''
     sed -e '/sysconfdir=\/etc/d; /sbindir=\/sbin/d' -i configure
+    sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./sbin/mount/cleaner_ctl.c
   '') ["doUnpack" "minInit"];
 
   meta = {
