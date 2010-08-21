@@ -5860,6 +5860,8 @@ let
 
   mpc123 = callPackage ../applications/audio/mpc123 { };
 
+  mpg123 = callPackage ../applications/audio/mpg123 { };
+
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
   MPlayer = callPackage ../applications/video/MPlayer {
