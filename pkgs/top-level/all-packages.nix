@@ -5859,6 +5859,9 @@ let
 
   nano = callPackage ../applications/editors/nano { };
 
+  navipowm = callPackage ../applications/misc/navipowm {
+  };
+
   navit = callPackage ../applications/misc/navit {
     inherit (gtkLibs) gtk;
   };
