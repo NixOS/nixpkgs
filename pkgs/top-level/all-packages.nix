@@ -5859,6 +5859,10 @@ let
 
   nano = callPackage ../applications/editors/nano { };
 
+  navit = callPackage ../applications/misc/navit {
+    inherit (gtkLibs) gtk;
+  };
+
   nedit = callPackage ../applications/editors/nedit {
       motif = lesstif;
   };
