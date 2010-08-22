@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    ensureDir $out/bin $out/share/${name}/Icons
     cp bin/NaviPOWM $out/bin
+    cp ../../common/Config/navipowm.ini $out/share/${name}
+    cp ../../common/Images/* $out/share/${name}
   '';
 
   buildInputs = [ qt4 ];
