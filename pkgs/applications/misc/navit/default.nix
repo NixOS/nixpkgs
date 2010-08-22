@@ -1,15 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, gtk, SDL, fontconfig, freetype, imlib2, SDL_image, mesa,
-libXmu, freeglut, python, gettext, quesoglc, gd, postgresql }:
+{ stdenv, fetchsvn, pkgconfig, gtk, SDL, fontconfig, freetype, imlib2, SDL_image, mesa,
+libXmu, freeglut, python, gettext, quesoglc, gd, postgresql, autoconf, automake, libtool, cvs }:
 stdenv.mkDerivation rec {
-  name = "navit-0.1.1";
+  name = "navit-svn-3537";
 
-  src = fetchurl {
-    url = mirror://sourceforge/navit/navit-0.1.1.tar.gz;
-    sha256 = "1zm1nlh2jhslanpxm07cgp8g6mkna5zcv6ahh4wg1f7x0rabylic";
+  src = fetchsvn {
+    url = https://navit.svn.sourceforge.net/svnroot/navit/trunk/navit;
+    rev = 3537;
+    sha256 = "1ajd439i7z8xm16kqh20qalvafy9miyy4accc8j7w30c4qgc2bb7";
   };
 
+  # 'cvs' is only for the autogen
   buildInputs = [ pkgconfig gtk SDL fontconfig freetype imlib2 SDL_image mesa
-    libXmu freeglut python gettext quesoglc gd postgresql ];
+    libXmu freeglut python gettext quesoglc gd postgresql
+    autoconf automake libtool cvs ];
+
+  preConfigure = ''
+    sh ./autogen.sh
+  '';
 
   configureFlags = [ "--disable-samplemap" ];
 
