@@ -6720,6 +6720,10 @@ let
 
   ### SCIENCE / ELECTRONICS
 
+  kicad = callPackage ../applications/science/electronics/kicad {
+    stdenv = stdenv2;
+  };
+
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave {
