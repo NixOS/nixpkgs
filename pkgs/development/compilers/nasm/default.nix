@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "nasm-2.05.01";
+  name = "nasm-2.08.01";
   
   src = fetchurl {
     url = "mirror://sourceforge/nasm/${name}.tar.bz2";
-    sha256 = "0p2rlshd68m2h7psyjz4440grxwryxppqzchx7cbmzahqr2yy1lj";
+    sha256 = "1ilbvn5hfwhbfxsxdcnnpxy640hqgjjp5wlhfjh7biy0h49rm6q4";
   };
 
   meta = {
