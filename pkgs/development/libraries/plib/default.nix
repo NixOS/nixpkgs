@@ -1,5 +1,6 @@
 { fetchurl, stdenv, mesa, freeglut, SDL
-, libXi, libSM, libXmu, libXext, libX11 }:
+, libXi, libSM, libXmu, libXext, libX11,
+enablePIC ? false }:
 
 stdenv.mkDerivation rec {
   name = "plib-1.8.5";
@@ -9,6 +10,8 @@ stdenv.mkDerivation rec {
     url = "http://plib.sourceforge.net/dist/${name}.tar.gz";
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
+
+  NIX_CFLAGS_COMPILE = if (enablePIC) then "-fPIC" else "";
 
   propagatedBuildInputs = [
     mesa freeglut SDL

@@ -6507,6 +6507,12 @@ let
 
   tremulous = callPackage ../games/tremulous { };
 
+  torcs = callPackage ../games/torcs {
+    # Torcs wants to make shared libraries linked with plib libraries (it provides static).
+    # i686 is the only platform I know than can do that linking without plib built with -fPIC
+    plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+  };
+
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   urbanterror = callPackage ../games/urbanterror { };
