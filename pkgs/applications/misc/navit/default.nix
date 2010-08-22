@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk SDL fontconfig freetype imlib2 SDL_image mesa
     libXmu freeglut python gettext quesoglc gd postgresql ];
 
+  configureFlags = [ "--disable-samplemap" ];
+
   meta = {
     homepage = http://www.navit-project.org/;
     description = "Car navigation system with routing engine using OSM maps";
