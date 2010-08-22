@@ -3617,6 +3617,8 @@ let
 
   popt = callPackage ../development/libraries/popt { };
 
+  portaudio = callPackage ../development/libraries/portaudio { };
+
   proj = callPackage ../development/libraries/proj { };
 
   postgis = callPackage ../development/libraries/postgis { };
@@ -5410,6 +5412,8 @@ let
   epdfview = callPackage ../applications/misc/epdfview {
     inherit (gtkLibs) gtk;
   };
+
+  espeak = callPackage ../applications/audio/espeak { };
 
   evince = callPackage ../applications/misc/evince {
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
