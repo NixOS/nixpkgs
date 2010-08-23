@@ -33,5 +33,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = "LGPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
