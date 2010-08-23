@@ -239,6 +239,24 @@ rec {
     };
   };
 
+  libcloud = buildPythonPackage (rec {
+    name = "libcloud-0.3.1";
+
+    src = fetchurl {
+      url = mirror://apache/incubator/libcloud/apache-libcloud-incubating-0.3.1.tar.bz2;
+      sha256 = "11qilrs4sd4c1mkd64ikrjsc2vwrshhc54n5mh4xrark9c7ayp0y";
+    };
+
+    buildInputs = [ zopeInterface ];
+
+    preConfigure = "cp test/secrets.py-dist test/secrets.py";
+
+    meta = {
+      description = "A unified interface to many cloud providers";
+      homepage = http://incubator.apache.org/libcloud/;
+    };
+  });
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-2.2.2";
 
