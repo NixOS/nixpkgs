@@ -160,30 +160,10 @@ rec {
     bootStdenv = stdenvLinuxBoot1;
   };
 
-  # Create the first "real" standard environment.  This one consists
-  # of bootstrap tools only, and a minimal Glibc to keep the GCC
-  # configure script happy.
-  stdenvLinuxBoot1half = stdenvBootFun {
-    gcc = wrapGCC {
-      libc = bootstrapGlibc;
-      binutils = stdenvLinuxBoot1Pkgs.binutils;
-      coreutils = bootstrapTools;
-    };
-    inherit fetchurl;
-  };
-  
-
-  # 2) These are the packages that we can build with the first
-  #    stdenv.  We only need Glibc (in step 3).
-  stdenvLinuxBoot1halfPkgs = allPackages {
-    inherit system platform;
-    bootStdenv = stdenvLinuxBoot1half;
-  };
-
   
   # 3) Build Glibc with the bootstrap tools.  The result is the full,
   #    dynamically linked, final Glibc.
-  stdenvLinuxGlibc = stdenvLinuxBoot1halfPkgs.glibc;
+  stdenvLinuxGlibc = stdenvLinuxBoot1Pkgs.glibc;
 
   
   # 4) Construct a second stdenv identical to the first, except that
@@ -197,7 +177,7 @@ rec {
     };
     overrides = {
       glibc = stdenvLinuxGlibc;
-      inherit (stdenvLinuxBoot1halfPkgs) perl;
+      inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
   }) ["gcc" "binutils"];
@@ -235,7 +215,7 @@ rec {
       name = "";
     };
     overrides = {
-      inherit (stdenvLinuxBoot1halfPkgs) perl;
+      inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
   };
