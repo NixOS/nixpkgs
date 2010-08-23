@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext, attr, libtool}:
+{ stdenv, fetchurl, gettext, attr }:
 
 stdenv.mkDerivation rec {
   name = "acl-2.2.49";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [gettext];
-  buildInputs = [attr libtool];
+  buildInputs = [ attr ];
 
   # Upstream use C++-style comments in C code. Remove them.
   # This comment breaks compilation if too strict gcc flags are used.
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -e '/^\/\//d' -i include/acl.h
   '';
 
-  configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
+  configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
 
   installTargets = "install install-lib install-dev";
 
