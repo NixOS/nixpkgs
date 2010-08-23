@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0fmgk100ficm1jbm4ga9xy484v4cm89wsdfckdybb9gjx8jy4f5h";
   };
 
-  makeFlags = [ "CFLAGS=-fPIC" ];
+  makeFlags = "CFLAGS=-fPIC";
   buildFlags = "linux"; # TODO: support for non-linux systems
   installFlags = "install INSTALL_TOP=\${out}";
   postInstall = ''
