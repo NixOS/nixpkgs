@@ -39,7 +39,7 @@ let
         meta = {
           description = "The default build environment for Unix packages in Nixpkgs";
         };
-    
+
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
@@ -90,7 +90,9 @@ let
           (if attrs ? passthru then attrs.passthru else {});
 
         # Utility flags to test the type of platform.
-        isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin" || result.system == "x86_64-darwin";
+        isDarwin = result.system == "i686-darwin"
+	       || result.system == "powerpc-darwin"
+	       || result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
@@ -139,5 +141,5 @@ let
 
   }.result;
 
-  
+
 in stdenvGenerator ./setup.sh
