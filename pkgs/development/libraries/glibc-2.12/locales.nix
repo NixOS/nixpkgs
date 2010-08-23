@@ -26,6 +26,10 @@ in
     buildPhase =
       ''
         mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
+
+        # Hack to allow building of the locales (needed since glibc-2.12)
+        sed -i -e 's/^LOCALEDEF=/LOCALEDEF?=/' ../glibc-2*/localedata/Makefile
+
         make localedata/install-locales \
             LOCALEDEF="localedef --prefix=$TMPDIR" \
             localedir=$out/lib/locale \
