@@ -5556,7 +5556,8 @@ let
 
   gnash = callPackage ../applications/video/gnash {
     inherit (gtkLibs) glib gtk;
-    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg;
+    inherit (gnome) gtkglext;
+    inherit (gst_all) gstreamer gstPluginsBase gstPluginsGood gstFfmpeg;
   };
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
