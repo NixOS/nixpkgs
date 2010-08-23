@@ -6826,6 +6826,8 @@ let
     inherit (gtkLibs1x) gtk;
   };
 
+  gensgs = callPackage ../misc/emulators/gens-gs { };
+
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
     cupsSupport = getPkgConfig "ghostscript" "cups" true;
