@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
      homepage = http://www.lysator.liu.se/~nisse/nettle/;
 
      maintainers = [ stdenv.lib.maintainers.ludo ];
+     platforms = stdenv.lib.platforms.all;
   };
 }
