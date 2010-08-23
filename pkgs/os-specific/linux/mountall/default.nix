@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./no-plymouth.patch ];
 
-  preConfigure = "autoreconf";
+  preConfigure = "rm aclocal.m4; autoreconf";
 
   buildInputs = [ pkgconfig libnih dbus.libs udev autoconf automake libtool ];
 
