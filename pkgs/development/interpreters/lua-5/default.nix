@@ -19,7 +19,8 @@ stdenv.mkDerivation {
   postInstall = ''
     sed -i -e "s@/usr/local@$out@" etc/lua.pc
     sed -i -e "s@-llua -lm@-llua -lm -ldl@" etc/lua.pc
-    install -D -m 644 etc/lua.pc $out/lib/pkgconfig/lua.pc
+    ensureDir "$out/lib/pkgconfig"
+    install -m 644 etc/lua.pc $out/lib/pkgconfig/lua.pc
   '';
   buildInputs = [ ncurses readline ];
 
