@@ -9,7 +9,12 @@ stdenv.mkDerivation {
   };
 
   makeFlags = "CFLAGS=-fPIC";
-  buildFlags = "linux"; # TODO: support for non-linux systems
+  buildFlags = if stdenv.isLinux then "linux" else
+	       if stdenv.isDarwin then "macosx" else
+	       if stdenv.isFreeBSD then "freebsd" else
+	       if stdenv.isBSD then "bsd" else
+	       "posix"
+	       ;
   installFlags = "install INSTALL_TOP=\${out}";
   postInstall = ''
     sed -i -e "s@/usr/local@$out@" etc/lua.pc
@@ -30,7 +35,7 @@ stdenv.mkDerivation {
       for configuration, scripting, and rapid prototyping.
     '';
     license = "MIT";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [];
   };
 }
