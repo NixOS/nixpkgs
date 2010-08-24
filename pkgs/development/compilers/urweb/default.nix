@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export GCCARGS="-I${mysql}/include -I${postgresql}/include -I${sqlite}/include -L${libmhash}/lib -L${mysql}/lib -L${postgresql}/lib -L${sqlite}/lib"
+      export GCCARGS="-I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include -L${libmhash}/lib -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
     '';
 
   meta = {
