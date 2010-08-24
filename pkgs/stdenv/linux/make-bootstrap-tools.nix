@@ -10,7 +10,15 @@ rec {
     aclSupport = false;
   });
 
-  gccLinkStatic = wrapGCCWith (import ../../build-support/gcc-wrapper) uclibc
+  # bzip2 wants utime.h, a header 'legacy' in uclibc
+  uclibcForBzip2 = uclibc.override {
+    extraConfig = ''
+        UCLIBC_SUSV3_LEGACY y
+        UCLIBC_SUSV4_LEGACY y
+    '';
+  };
+
+  gccLinkStatic = wrapGCCWith (import ../../build-support/gcc-wrapper) uclibcForBzip2
     stdenv.gcc.gcc;
   stdenvLinkStatic = overrideGCC stdenv gccLinkStatic;
 
