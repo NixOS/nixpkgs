@@ -329,5 +329,6 @@ in {
 
   system.build.bootStage1 = bootStage1;
   system.build.initialRamdisk = initialRamdisk;
+  system.build.extraUtils = extraUtils;
 
 }

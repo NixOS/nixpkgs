@@ -99,8 +99,7 @@ let
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
-    in 
-      ''
+    in ''
       ensureDir $out
 
       if [ ! -f ${kernelPath} ]; then
