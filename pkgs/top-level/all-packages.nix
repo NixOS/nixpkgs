@@ -6834,7 +6834,7 @@ let
     inherit (gtkLibs1x) gtk;
   };
 
-  gensgs = callPackage ../misc/emulators/gens-gs { };
+  gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
