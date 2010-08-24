@@ -4614,7 +4614,8 @@ let
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_legacy = callPackage ../os-specific/linux/nvidia-x11/legacy.nix { };
+    nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
+    nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
 
     openafsClient = callPackage ../servers/openafs-client { };
 
