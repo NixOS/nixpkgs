@@ -20,7 +20,8 @@ let
     intel        = { modules = [ xorg.xf86videointel ]; };
     nv           = { modules = [ xorg.xf86videonv ]; };
     nvidia       = { modules = [ kernelPackages.nvidia_x11 ]; };
-    nvidiaLegacy = { modules = [ kernelPackages.nvidia_x11_legacy ]; driverName = "nvidia"; };
+    nvidiaLegacy96 = { modules = [ kernelPackages.nvidia_x11_legacy96 ]; driverName = "nvidia"; };
+    nvidiaLegacy173 = { modules = [ kernelPackages.nvidia_x11_legacy173 ]; driverName = "nvidia"; };
     openchrome   = { modules = [ xorg.xf86videoopenchrome ]; };
     sis          = { modules = [ xorg.xf86videosis ]; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
@@ -347,7 +348,8 @@ in
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
-      optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy ++
+      optional (elem "nvidiaLegacy96" driverNames) kernelPackages.nvidia_x11_legacy96 ++
+      optional (elem "nvidiaLegacy173" driverNames) kernelPackages.nvidia_x11_legacy173 ++
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions ++
       optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
 
@@ -374,7 +376,8 @@ in
         pkgs.xterm
       ]
       ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
-      ++ optional (elem "nvidiaLegacy" driverNames) kernelPackages.nvidia_x11_legacy
+      ++ optional (elem "nvidiaLegacy96" driverNames) kernelPackages.nvidia_x11_legacy96
+      ++ optional (elem "nvidiaLegacy173" driverNames) kernelPackages.nvidia_x11_legacy173
       ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
       
@@ -397,8 +400,10 @@ in
             XORG_DRI_DRIVER_PATH = "${pkgs.mesa}/lib/dri";
           } // optionalAttrs (elem "nvidia" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
-          } // optionalAttrs (elem "nvidiaLegacy" driverNames) {
-            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy}/lib";
+          } // optionalAttrs (elem "nvidiaLegacy96" driverNames) {
+            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy96}/lib";
+          } // optionalAttrs (elem "nvidiaLegacy173" driverNames) {
+            LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy173}/lib";
           } // optionalAttrs (elem "ati_unfree" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.ati_drivers_x11}/lib:${kernelPackages.ati_drivers_x11}/X11R6/lib64/modules/linux";
             XORG_DRI_DRIVER_PATH = "${kernelPackages.ati_drivers_x11}/lib/dri"; # is ignored because ati drivers ship their own unpatched libglx.so !
@@ -414,8 +419,10 @@ in
                   ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
                     "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /var/run/opengl-driver-32"}
                 ''
-              else if elem "nvidiaLegacy" driverNames then
-                "ln -sf ${kernelPackages.nvidia_x11_legacy} /var/run/opengl-driver"
+              else if elem "nvidiaLegacy96" driverNames then
+                "ln -sf ${kernelPackages.nvidia_x11_legacy96} /var/run/opengl-driver"
+              else if elem "nvidiaLegacy173" driverNames then
+                "ln -sf ${kernelPackages.nvidia_x11_legacy173} /var/run/opengl-driver"
               else if cfg.driSupport then
                 "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
               else ""
