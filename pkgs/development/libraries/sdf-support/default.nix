@@ -1,24 +1,27 @@
+
 { stdenv
 , fetchurl
 , aterm
+, toolbuslib
+, errorSupport
+, ptSupport
 , pkgconfig
-, w32api
 }:
 let 
   isMingw = stdenv ? cross && stdenv.cross.config == "i686-pc-mingw32" ;
 in
 stdenv.mkDerivation rec {
-  name = "toolbuslib-1.1";
+  name = "sdf-support-2.5";
 
   src = fetchurl {
     url = "http://www.meta-environment.org/releases/${name}.tar.gz";
-    sha256 = "0f4q0r177lih23ypypc8ckkyv5vhvnkhbrv25gswrqdif5dxbwr0";
+    sha256 = "0zazks2yvm8gqdx0389b1b8hf8ss284q1ywk4d7cqc8glba29cs0";
   };
 
   patches = if isMingw then [./mingw.patch] else [];
-  
-  buildInputs = [aterm] ++ (if isMingw then [w32api] else []);
-  buildNativeInputs = [pkgconfig];
-  
-  dontStrip = isMingw; 
-}  
+
+  buildInputs = [aterm toolbuslib errorSupport ptSupport];
+  buildNativeInputs = [pkgconfig];  
+
+  dontStrip = isMingw;
+} 

@@ -1,24 +1,22 @@
 { stdenv
 , fetchurl
 , aterm
+, ptSupport
 , pkgconfig
-, w32api
 }:
 let 
   isMingw = stdenv ? cross && stdenv.cross.config == "i686-pc-mingw32" ;
 in
 stdenv.mkDerivation rec {
-  name = "toolbuslib-1.1";
+  name = "ptable-support-1.2";
 
   src = fetchurl {
     url = "http://www.meta-environment.org/releases/${name}.tar.gz";
-    sha256 = "0f4q0r177lih23ypypc8ckkyv5vhvnkhbrv25gswrqdif5dxbwr0";
+    sha256 = "0bqx1xsimf9vq6q2qnsy3565rzlha4cm2blcn3kqwbirfyj1kln9";
   };
 
-  patches = if isMingw then [./mingw.patch] else [];
-  
-  buildInputs = [aterm] ++ (if isMingw then [w32api] else []);
+  buildInputs = [aterm ptSupport];
   buildNativeInputs = [pkgconfig];
   
-  dontStrip = isMingw; 
-}  
+  dontStrip = isMingw;
+} 
