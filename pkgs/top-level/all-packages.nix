@@ -1890,6 +1890,8 @@ let
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
+  mlton = callPackage ../development/compilers/mlton { };
+
   mono = callPackage ../development/compilers/mono { };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
