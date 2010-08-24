@@ -2697,6 +2697,8 @@ let
     inherit (gnome) glib;
   };
 
+  enet = callPackage ../development/libraries/enet { };
+
   enginepkcs11 = callPackage ../development/libraries/enginepkcs11 { };
 
   esdl = callPackage ../development/libraries/esdl { };
@@ -6429,6 +6431,8 @@ let
   eduke32 = callPackage ../games/eduke32 {
     inherit (gtkLibs) gtk;
   };
+
+  egoboo = callPackage ../games/egoboo { };
 
   exult = callPackage ../games/exult {
     stdenv = overrideGCC stdenv gcc42;
