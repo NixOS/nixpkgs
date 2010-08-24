@@ -86,6 +86,17 @@ let
           '';
       };
 
+    virtualisation.writableStore = 
+      mkOption {
+        default = false;
+        description =
+          ''
+            If enabled, the Nix store in the VM is made writable by
+            layering an AUFS/tmpfs filesystem on top of the host's Nix
+            store.
+          '';
+      };
+
     networking.primaryIPAddress =
       mkOption {
         default = "";
@@ -163,7 +174,11 @@ in
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.availableKernelModules =
-    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" ];
+    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" ]
+    ++ optional cfg.writableStore [ "aufs" ];
+
+  boot.extraModulePackages =
+    optional cfg.writableStore config.boot.kernelPackages.aufs2;
 
   boot.initrd.extraUtilsCommands =
     ''
@@ -190,6 +205,16 @@ in
       fi
     '';
 
+  boot.initrd.postMountCommands =
+    ''
+      mount -o remount,ro $targetRoot/nix/store
+      ${optionalString cfg.writableStore ''
+        mkdir /mnt-store-tmpfs
+        mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
+        mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
+      ''}
+    '';
+    
   # After booting, register the closure of the paths in
   # `virtualisation.pathsInNixDB' in the Nix database in the VM.  This
   # allows Nix operations to work in the VM.  The path to the

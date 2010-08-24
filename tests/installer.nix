@@ -77,18 +77,7 @@ let
           dir = "/tmp/channel";
         };
 
-      # Make the Nix store in this VM writable using AUFS.  This
-      # should probably be moved to qemu-vm.nix.
-      boot.extraModulePackages = [ config.boot.kernelPackages.aufs2 ];
-      boot.initrd.availableKernelModules = [ "aufs" ];
-
-      boot.initrd.postMountCommands =
-        ''
-          mkdir /mnt-store-tmpfs
-          mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-          mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
-        '';
-
+      virtualisation.writableStore = true;
       virtualisation.pathsInNixDB = channelContents;
     };
 
