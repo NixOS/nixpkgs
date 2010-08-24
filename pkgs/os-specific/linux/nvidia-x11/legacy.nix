@@ -9,7 +9,7 @@ in
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}-${kernel.version}";
   
-  builder = ./builder.sh;
+  builder = ./builder-legacy.sh;
   
   src =
     if stdenv.system == "i686-linux" then
