@@ -1,10 +1,10 @@
 {stdenv, fetchurl, gtk, gperf, pkgconfig, bzip2, xz, tcl, tk, judy} :
 stdenv.mkDerivation rec {
-  name = "gtkwave-3.3.6";
+  name = "gtkwave-3.3.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/${name}.tar.gz";
-    sha256 = "0vlayjvhmijcg4pbjix9lm1d5n2wxzcn16lkm2ysgpc8q6987df8";
+    sha256 = "1krhxdpzj2ma3xisbk0d9yzhlk1i60hgkkfycc2nsqqirqrvdpbr";
   };
 
   buildInputs = [ gtk gperf pkgconfig bzip2 xz tcl tk judy];
