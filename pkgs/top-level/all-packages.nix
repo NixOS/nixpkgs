@@ -1951,6 +1951,8 @@ let
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
+  urweb = callPackage ../development/compilers/urweb { };
+
   vala = callPackage ../development/compilers/vala { };
 
   visualcpp = callPackage ../development/compilers/visual-c++ { };

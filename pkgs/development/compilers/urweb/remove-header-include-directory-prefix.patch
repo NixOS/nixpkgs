@@ -1,0 +1,24 @@
+diff -Naur urweb-orig/src/mysql.sml urweb-patched/src/mysql.sml
+--- urweb-orig/src/mysql.sml	2010-08-23 15:36:58.665234434 -0430
++++ urweb-patched/src/mysql.sml	2010-08-23 15:44:10.765238334 -0430
+@@ -1521,7 +1521,7 @@
+ fun p_blank _ = "?"
+
+ val () = addDbms {name = "mysql",
+-                  header = "mysql/mysql.h",
++                  header = "mysql.h",
+                   link = "-lmysqlclient",
+                   init = init,
+                   p_sql_type = p_sql_type,
+diff -Naur urweb-orig/src/postgres.sml urweb-patched/src/postgres.sml
+--- urweb-orig/src/postgres.sml	2010-08-23 15:36:58.666253464 -0430
++++ urweb-patched/src/postgres.sml	2010-08-23 15:43:26.216251221 -0430
+@@ -928,7 +928,7 @@
+ fun p_blank (n, t) = p_cast ("$" ^ Int.toString n, t)
+
+ val () = addDbms {name = "postgres",
+-                  header = "postgresql/libpq-fe.h",
++                  header = "libpq-fe.h",
+                   link = "-lpq",
+                   p_sql_type = p_sql_type,
+                   init = init,
