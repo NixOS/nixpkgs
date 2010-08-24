@@ -82,6 +82,10 @@ in
           $client->succeed("nix-store -r \$(nix-instantiate ${expr nodes.client.config 2} ${expr nodes.client.config 3})");
       $slave1->succeed("test -e $out1 -o -e $out2");
       $slave2->succeed("test -e $out1 -o -e $out2");
+
+      # Test whether the build hook automatically skips unavailable slaves.
+      $slave1->block;
+      $client->succeed("nix-build ${expr nodes.client.config 4}");
     '';
 
 }
