@@ -5,19 +5,19 @@ let
   doPatchShebangs = args.doPatchShebangs;
   makeManyWrappers = args.makeManyWrappers;
 
-  version = lib.attrByPath ["version"] "0.1.7" args; 
+  version = "0.2"; 
+  release = "7";
   buildInputs = with args; [
     intltool python imagemagick gtk glib webkit libxml2 
     gtksourceview pkgconfig which gettext makeWrapper 
-    file libidn sqlite docutils libnotify libsoup
+    file libidn sqlite docutils libnotify libsoup vala
+    kbproto xproto scrnsaverproto libXScrnSaver dbus_glib
   ];
 in
 rec {
   src = fetchurl {
-    url = "http://goodies.xfce.org/releases/midori/midori-${version}.tar.bz2";
-    sha256 = if version == "0.1.7" then 
-      "1bxs4nlwvhzwiq73lf1gvx7qqdm1hm4x1hym1b0q0dhwhdvafx4v"
-    else null;
+    url = "http://archive.xfce.org/src/apps/midori/${version}/midori-${version}.${release}.tar.bz2";
+    sha256 = "b1dcc479ceb938c8d9cdea098c8d72d563bce5010c27fbcaa4c992d10f2d809c";
   };
 
   inherit buildInputs;
@@ -32,7 +32,7 @@ rec {
   shebangsInstalled = (doPatchShebangs "$out/bin");
   wrapWK = (makeManyWrappers "$out/bin/*" "--set WEBKIT_IGNORE_SSL_ERRORS 1");
 
-  name = "midori-" + version;
+  name = "midori-${version}.${release}";
   meta = {
     description = "Light WebKit-based web browser with GTK GUI.";
     maintainers = [args.lib.maintainers.raskin];

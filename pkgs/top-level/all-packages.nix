@@ -5815,10 +5815,12 @@ let
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
-      which gettext makeWrapper file libidn sqlite docutils libnotify;
+      which gettext makeWrapper file libidn sqlite docutils libnotify
+      vala dbus_glib;
     inherit (gtkLibs) gtk glib;
     inherit (gnome28) gtksourceview;
     inherit (webkit.passthru.args) libsoup;
+    inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
   };
 
   minicom = callPackage ../tools/misc/minicom { };
