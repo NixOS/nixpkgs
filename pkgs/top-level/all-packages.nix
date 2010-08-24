@@ -5387,6 +5387,8 @@ let
 
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
+    htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
+
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
