@@ -487,10 +487,6 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName}"
-            ${optionalString (driver.name == "nvidiaLegacy") ''
-              # This option allows suspending with a nvidiaLegacy card
-              Option "NvAGP" "1"
-            ''}
             ${cfg.deviceSection}
           EndSection
 
