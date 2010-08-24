@@ -12,15 +12,15 @@ let
     };
 
   # Trivial Nix expression to build remotely.
-  expr = config: pkgs.writeText "expr.nix"
+  expr = config: nr: pkgs.writeText "expr.nix"
     ''
       let utils = builtins.storePath ${config.system.build.extraUtils}; in
       derivation {
-        name = "hello";
+        name = "hello-${toString nr}";
         system = "i686-linux";
         PATH = "''${utils}/bin";
         builder = "''${utils}/bin/sh";
-        args = [ "-c" "echo Hello; mkdir $out; cat /proc/sys/kernel/hostname > $out/host" ];
+        args = [ "-c" "echo Hello; mkdir $out; cat /proc/sys/kernel/hostname > $out/host; sleep 3" ];
       }
     '';
 
@@ -30,7 +30,7 @@ in
 
   nodes =
     { slave1 = slave;
-      #slave2 = slave;
+      slave2 = slave;
 
       client =
         { config, pkgs, ... }:
@@ -38,6 +38,12 @@ in
           nix.distributedBuilds = true;
           nix.buildMachines =
             [ { hostName = "slave1";
+                sshUser = "root";
+                sshKey = "/root/.ssh/id_dsa";
+                system = "i686-linux";
+                maxJobs = 1;
+              }
+              { hostName = "slave2";
                 sshUser = "root";
                 sshKey = "/root/.ssh/id_dsa";
                 system = "i686-linux";
@@ -60,14 +66,22 @@ in
       $client->succeed("chmod 600 /root/.ssh/id_dsa");
 
       # Install the SSH key on the slaves.
-      $slave1->succeed("mkdir -m 700 /root/.ssh");
-      $slave1->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
-      $slave1->waitForJob("sshd");
-      $client->succeed("ssh -o StrictHostKeyChecking=no slave1 'echo hello world'");
+      foreach my $slave ($slave1, $slave2) {
+          $slave->succeed("mkdir -m 700 /root/.ssh");
+          $slave->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
+          $slave->waitForJob("sshd");
+          $client->succeed("ssh -o StrictHostKeyChecking=no " . $slave->name() . " 'echo hello world'");
+      }
 
       # Perform a build and check that it was performed on the slave.
-      my $out = $client->succeed("nix-build ${expr nodes.client.config}");
+      my $out = $client->succeed("nix-build ${expr nodes.client.config 1}");
       $slave1->succeed("test -e $out");
+
+      # And a parallel build.
+      my ($out1, $out2) = split /\s/,
+          $client->succeed("nix-store -r \$(nix-instantiate ${expr nodes.client.config 2} ${expr nodes.client.config 3})");
+      $slave1->succeed("test -e $out1 -o -e $out2");
+      $slave2->succeed("test -e $out1 -o -e $out2");
     '';
 
 }
