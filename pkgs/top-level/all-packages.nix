@@ -3260,6 +3260,8 @@ let
     inherit (gnome) glib;
   };
 
+  libmhash = callPackage ../development/libraries/libmhash {};
+
   libnice = callPackage ../development/libraries/libnice {
     inherit (gnome) glib;
   };
