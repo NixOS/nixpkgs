@@ -3616,6 +3616,8 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
+  pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
+
   phonon_backend_vlc = newScope pkgs.kde4 ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
@@ -6353,6 +6355,9 @@ let
     motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
+
+  libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix {
+  }; 
 
   xpra = callPackage ../tools/X11/xpra {
     inherit (gtkLibs) gtk;

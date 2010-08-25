@@ -232,6 +232,7 @@ with (import ./release-lib.nix);
   par2cmdline = all;
   pavucontrol = linux;
   pciutils = linux;
+  pdf2xml = all;
   perl = all;
   php = linux;
   pidgin = linux;
