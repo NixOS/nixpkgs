@@ -556,14 +556,6 @@ let
 
   enscript = callPackage ../tools/text/enscript { };
 
-  eprover = callPackage ../tools/misc/eProver {
-    texLive = texLiveAggregationFun {
-      paths = [
-        texLive texLiveExtra
-      ];
-  };
-  };
-
   ethtool = callPackage ../tools/misc/ethtool { };
 
   exif = callPackage ../tools/graphics/exif { };
@@ -6757,6 +6749,14 @@ let
 
   coq_beta = callPackage ../applications/science/logic/coq/beta.nix {
     camlp5 = camlp5_transitional;
+  };
+
+  eprover = callPackage ../applications/science/logic/eProver {
+    texLive = texLiveAggregationFun {
+      paths = [
+        texLive texLiveExtra
+      ];
+  };
   };
 
   hol = callPackage ../applications/science/logic/hol { };
