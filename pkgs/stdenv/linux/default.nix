@@ -165,7 +165,7 @@ rec {
   firstBinutils = stdenvLinuxBoot1Pkgs.binutils;
 
   # 3) 2nd stdenv that we will use to build only the glibc.
-  stdenvLinuxBoot1half = stdenvBootFun {
+  stdenvLinuxBoot2 = stdenvBootFun {
     gcc = wrapGCC {
       libc = bootstrapGlibc;
       binutils = firstBinutils;
@@ -177,21 +177,21 @@ rec {
 
   # 4) These are the packages that we can build with the 2nd
   #    stdenv.  We only need Glibc (in step 5).
-  stdenvLinuxBoot1halfPkgs = allPackages {
+  stdenvLinuxBoot2Pkgs = allPackages {
     inherit system platform;
-    bootStdenv = stdenvLinuxBoot1half;
+    bootStdenv = stdenvLinuxBoot2;
   };
 
   
   # 5) Build Glibc with the bootstrap tools.  The result is the full,
   #    dynamically linked, final Glibc.
-  stdenvLinuxGlibc = stdenvLinuxBoot1Pkgs.glibc;
+  stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
 
   
   # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
   #    the recent binutils and rest of the bootstrap tools, including GCC.
-  stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
+  stdenvLinuxBoot3 = removeAttrs (stdenvBootFun {
     gcc = wrapGCC {
       binutils = stdenvLinuxBoot1Pkgs.binutils;
       coreutils = bootstrapTools;
@@ -206,19 +206,19 @@ rec {
 
   
   # 7) The packages that can be built using the third stdenv.
-  stdenvLinuxBoot2Pkgs = allPackages {
+  stdenvLinuxBoot3Pkgs = allPackages {
     inherit system platform;
-    bootStdenv = stdenvLinuxBoot2;
+    bootStdenv = stdenvLinuxBoot3;
   };
 
-  gccWithStaticLibs = stdenvLinuxBoot2Pkgs.gcc.gcc.override (rec {
-        ppl = stdenvLinuxBoot2Pkgs.ppl.override {
+  gccWithStaticLibs = stdenvLinuxBoot3Pkgs.gcc.gcc.override (rec {
+        ppl = stdenvLinuxBoot3Pkgs.ppl.override {
           static = true;
-          gmpxx = stdenvLinuxBoot2Pkgs.gmpxx.override {
+          gmpxx = stdenvLinuxBoot3Pkgs.gmpxx.override {
             static = true;
           };
         };
-        cloogppl = stdenvLinuxBoot2Pkgs.cloogppl.override {
+        cloogppl = stdenvLinuxBoot3Pkgs.cloogppl.override {
           inherit ppl;
           static = true;
         };
@@ -228,9 +228,9 @@ rec {
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still from the
   #    bootstrap tools.
-  stdenvLinuxBoot3 = stdenvBootFun {
+  stdenvLinuxBoot4 = stdenvBootFun {
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot2Pkgs) binutils;
+      inherit (stdenvLinuxBoot3Pkgs) binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
       gcc = gccWithStaticLibs;
@@ -244,9 +244,9 @@ rec {
 
   
   # 9) The packages that can be built using the fourth stdenv.
-  stdenvLinuxBoot3Pkgs = allPackages {
+  stdenvLinuxBoot4Pkgs = allPackages {
     inherit system platform;
-    bootStdenv = stdenvLinuxBoot3;
+    bootStdenv = stdenvLinuxBoot4;
   };
 
   
@@ -265,31 +265,31 @@ rec {
     preHook = builtins.toFile "prehook.sh" commonPreHook;
     
     initialPath = 
-      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
-      ++ [stdenvLinuxBoot3Pkgs.patchelf];
+      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
+      ++ [stdenvLinuxBoot4Pkgs.patchelf];
 
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot2Pkgs) binutils;
-      inherit (stdenvLinuxBoot3Pkgs) coreutils;
+      inherit (stdenvLinuxBoot3Pkgs) binutils;
+      inherit (stdenvLinuxBoot4Pkgs) coreutils;
       libc = stdenvLinuxGlibc;
       gcc = gccWithStaticLibs;
-      shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
+      shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
       name = "";
     };
 
-    shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
+    shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
     
     fetchurlBoot = fetchurl;
     
     extraAttrs = {
-      inherit (stdenvLinuxBoot2Pkgs) glibc;
+      inherit (stdenvLinuxBoot3Pkgs) glibc;
       inherit platform;
     };
 
     overrides = {
       inherit gcc;
-      inherit (stdenvLinuxBoot2Pkgs) binutils glibc;
-      inherit (stdenvLinuxBoot3Pkgs)
+      inherit (stdenvLinuxBoot3Pkgs) binutils glibc;
+      inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl;
