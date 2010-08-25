@@ -133,6 +133,7 @@ let
           /nix/var/nix/chroots
       mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
       mkdir -m 1777 -p /nix/var/nix/profiles/per-user
+      mkdir -m 1777 -p /nix/var/nix/gcroots/tmp
 
       ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
       ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/

@@ -130,6 +130,10 @@ mkdir -m 1777 /tmp/.ICE-unix
 rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 
 
+# Also get rid of temporary GC roots.
+rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
+
+
 # Use a tmpfs for /var/run to ensure that / or /var can be unmounted
 # or at least remounted read-only during shutdown.  (Upstart 0.6
 # apparently uses nscd to do some name lookups, resulting in it
