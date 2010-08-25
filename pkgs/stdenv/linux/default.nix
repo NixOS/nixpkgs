@@ -154,24 +154,46 @@ rec {
   
 
   # 2) These are the packages that we can build with the first
-  #    stdenv.  We only need Glibc (in step 3).
+  #    stdenv.  We only need binutils, because recent glibcs
+  #    require recent binutils, and those in bootstrap-tools may
+  #    be too old. (in step 3).
   stdenvLinuxBoot1Pkgs = allPackages {
     inherit system platform;
     bootStdenv = stdenvLinuxBoot1;
   };
 
+  firstBinutils = stdenvLinuxBoot1Pkgs.binutils;
+
+  # 3) 2nd stdenv that we will use to build only the glibc.
+  stdenvLinuxBoot1half = stdenvBootFun {
+    gcc = wrapGCC {
+      libc = bootstrapGlibc;
+      binutils = firstBinutils;
+      coreutils = bootstrapTools;
+    };
+    inherit fetchurl;
+  };
+
+
+  # 4) These are the packages that we can build with the 2nd
+  #    stdenv.  We only need Glibc (in step 5).
+  stdenvLinuxBoot1halfPkgs = allPackages {
+    inherit system platform;
+    bootStdenv = stdenvLinuxBoot1half;
+  };
+
   
-  # 3) Build Glibc with the bootstrap tools.  The result is the full,
+  # 5) Build Glibc with the bootstrap tools.  The result is the full,
   #    dynamically linked, final Glibc.
   stdenvLinuxGlibc = stdenvLinuxBoot1Pkgs.glibc;
 
   
-  # 4) Construct a second stdenv identical to the first, except that
+  # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
-  #    the rest of the bootstrap tools, including GCC.
+  #    the recent binutils and rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
     gcc = wrapGCC {
-      binutils = bootstrapTools;
+      binutils = stdenvLinuxBoot1Pkgs.binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
     };
@@ -183,7 +205,7 @@ rec {
   }) ["gcc" "binutils"];
 
   
-  # 5) The packages that can be built using the second stdenv.
+  # 7) The packages that can be built using the third stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
     inherit system platform;
     bootStdenv = stdenvLinuxBoot2;
@@ -202,7 +224,7 @@ rec {
         };
       });
 
-  # 6) Construct a third stdenv identical to the second, except that
+  # 8) Construct a fourth stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still from the
   #    bootstrap tools.
@@ -221,19 +243,20 @@ rec {
   };
 
   
-  # 7) The packages that can be built using the third stdenv.
+  # 9) The packages that can be built using the fourth stdenv.
   stdenvLinuxBoot3Pkgs = allPackages {
     inherit system platform;
     bootStdenv = stdenvLinuxBoot3;
   };
 
   
-  # 8) Construct the final stdenv.  It uses the Glibc, GCC and
-  #    Binutils built above, and adds in dynamically linked versions
-  #    of all other tools.
+  # 10) Construct the final stdenv.  It uses the Glibc, GCC and
+  #     Binutils built above, and adds in dynamically linked versions
+  #     of all other tools.
   #
-  #    When updating stdenvLinux, make sure that the result has no
-  #    dependency (`nix-store -qR') on bootstrapTools.
+  #     When updating stdenvLinux, make sure that the result has no
+  #     dependency (`nix-store -qR') on bootstrapTools or the
+  #     first binutils built.
   stdenvLinux = import ../generic rec {
     name = "stdenv-linux";
     
