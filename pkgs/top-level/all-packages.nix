@@ -6759,6 +6759,8 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  hol = callPackage ../applications/science/logic/hol { };
+
   hol_light = callPackage ../applications/science/logic/hol_light { };
 
   hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix { };
