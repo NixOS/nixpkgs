@@ -4312,7 +4312,23 @@ let
     inherit devicemapper;
   };
 
-  libuuid = if ! stdenv.isDarwin then utillinuxng else null;
+  libuuid =
+    if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+    then (utillinuxng // {
+      hostDrv = lib.overrideDerivation utillinuxng.hostDrv (args: {
+        # `libblkid' fails to build on GNU/Hurd.
+        configureFlags = args.configureFlags
+          + " --disable-libblkid --disable-mount --disable-fsck";
+        doCheck = false;
+        CPPFLAGS =                    # ugly hack for ugly software!
+          lib.concatStringsSep " "
+            (map (v: "-D${v}=4096")
+                 [ "PATH_MAX" "MAXPATHLEN" "MAXHOSTNAMELEN" ]);
+      });
+    })
+    else if stdenv.isLinux
+    then utillinuxng
+    else null;
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
