@@ -2076,7 +2076,6 @@ let
   polyml = callPackage ../development/compilers/polyml { };
 
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
-  python25 = if getConfig ["python" "full"] false then python25Full else python25Base;
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
   python27 = if getConfig ["python" "full"] false then python27Full else python27Base;
   pythonBase = python26Base;
@@ -2085,23 +2084,6 @@ let
   pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
 
   python24 = lowPrio (callPackage ../development/interpreters/python/2.4 { });
-
-  python25Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.5) {
-    inherit fetchurl stdenv zlib bzip2 gdbm;
-  });
-
-  python25Full = lowPrio (python25Base.override {
-    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
-    db4 = if getConfig ["python" "db4Support"] true then db4 else null;
-    sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
-    readline = if getConfig ["python" "readlineSupport"] true then readline else null;
-    openssl = if getConfig ["python" "opensslSupport"] true then openssl else null;
-    tk = if getConfig ["python" "tkSupport"] true then tk else null;
-    tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
-    libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
-    xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
-    ncurses = if getConfig ["python" "curses"] true then ncurses else null;
-  });
 
   python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
     inherit fetchurl stdenv zlib bzip2 gdbm;
@@ -3978,10 +3960,6 @@ let
   };
 
   pythonPackages = python26Packages;
-
-  python25Packages = recurseIntoAttrs (import ./python-packages.nix {
-    inherit pkgs python buildPythonPackage;
-  });
 
   python26Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
