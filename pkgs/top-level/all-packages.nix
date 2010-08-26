@@ -1161,9 +1161,7 @@ let
 
   system_config_printer = callPackage ../tools/misc/system-config-printer { };
 
-  sitecopy = callPackage ../tools/networking/sitecopy {
-    neon = neon026;
-  };
+  sitecopy = callPackage ../tools/networking/sitecopy { };
 
   privoxy = callPackage ../tools/networking/privoxy {
     autoconf = autoconf213;
