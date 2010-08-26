@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Maxima computer algebra system";
     homepage = "http://maxima.sourceforge.net";
+    license = "GPL2";
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
