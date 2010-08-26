@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://hol.sourceforge.net/";
-    license = "BSD";
+    homepage = "http://www.cs.unm.edu/~mccune/mace4/";
+    license = "GPL";
     description = "Prover9 is an automated theorem prover for first-order and equational logic."
 
     longDescription = ''
