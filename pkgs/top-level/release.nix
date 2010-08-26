@@ -497,6 +497,18 @@ with (import ./release-lib.nix);
     virtualboxGuestAdditions = linux;
   };
 
+  linuxPackages_2_6_34 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_35 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
