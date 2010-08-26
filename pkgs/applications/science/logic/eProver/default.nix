@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   # HOME=. allows to build missing TeX formats
   installPhase = ''
     mkdir -p $out/bin
-    make install-exec
+    make install
     HOME=. make documentation
     mkdir -p $out/share/doc
     cp -r DOC $out/share/doc/EProver
