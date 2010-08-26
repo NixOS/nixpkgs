@@ -1,13 +1,24 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation
-{
-  name = "maude-mode-0.1";
-  src = fetchurl
-  {
-    url = "mirror://sourceforge/maude-mode/maude-mode.tar.gz";
-    sha256 = "12555j01mar48da2jy3ay93xfn7ybl23bpvhp0srzg8858gisx5g";
+stdenv.mkDerivation rec {
+  name = "maude-mode-2.0";
+
+  src = fetchurl   {
+    url = "http://maude.cs.uiuc.edu/download/maude-mode2.el";
+    sha256 = "0lq5p820pgky8i32005v91g0v9va9jwkv1jr6y4n8zc7bz1gyws6";
   };
-  buildInputs = [emacs];
-  configureFlags = "--with-lispdir=$$out/share/emacs/site-lisp";
+
+  buildInputs = [/* emacs */];
+
+  buildCommand = ''
+    ensureDir "$out/share/emacs/site-lisp"
+    substitute "${src}" "$out/share/emacs/site-lisp/maude-mode.el" --replace "/local/bin/maude" "maude"
+  '';
+
+  meta = {
+    description = "Emacs mode for the programming language Maude";
+    license = "GPLv2";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }
