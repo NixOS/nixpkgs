@@ -5422,7 +5422,7 @@ let
   };
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
-  emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
+  emacs23Packages = recurseIntoAttrs (emacsPackages emacs23 pkgs.emacs23Packages);
 
   epdfview = callPackage ../applications/misc/epdfview {
     inherit (gtkLibs) gtk;
