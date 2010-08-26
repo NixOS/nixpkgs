@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.cs.unm.edu/~mccune/mace4/";
     license = "GPL";
-    description = "Prover9 is an automated theorem prover for first-order and equational logic."
+    description = "Prover9 is an automated theorem prover for first-order and equational logic.";
 
     longDescription = ''
       Prover9 is a resolution/paramodulation automated theorem prover
