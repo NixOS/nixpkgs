@@ -36,7 +36,7 @@ installPhase() {
     ./vncinstall $out/bin $out/man
 
     # fix HTTP client:
-    t=$out/vnc
+    t=$out/share/tightvnc
     ensureDir $t
     sed -i "s@/usr/local/vnc/classes@$out/vnc/classes@g" $out/bin/vncserver
     cp -r classes $t
