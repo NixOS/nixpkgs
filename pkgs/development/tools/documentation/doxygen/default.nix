@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     else ''
       echo "using QTDIR=${qt}..."
       export QTDIR=${qt}
-    ''); 
+    '');
       # export CPLUS_INCLUDE_PATH="${qt}/include:$CPLUS_INCLUDE_PATH"
       # export LIBRARY_PATH="${qt}/lib:$LIBRARY_PATH"
 
