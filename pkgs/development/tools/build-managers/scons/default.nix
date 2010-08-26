@@ -1,10 +1,11 @@
 {stdenv, fetchurl, python, makeWrapper}:
 
 let
-    name = "scons";
-    version = "2.0.1";
+  name = "scons";
+  version = "2.0.1";
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
