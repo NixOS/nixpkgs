@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
       # export LIBRARY_PATH="${qt}/lib:$LIBRARY_PATH"
 
   meta = {
+    license = "GPLv2+";
+    homepage = "http://doxygen.org/";
     description = "Doxygen, a source code documentation generator tool";
 
     longDescription = ''
@@ -39,8 +41,7 @@ stdenv.mkDerivation rec {
       manual (in LaTeX) from a set of documented source files.
     '';
 
-    homepage = http://doxygen.org/;
-
-    license = "GPLv2+";
+    maintainers = [stdenv.lib.maintainers.simons];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
