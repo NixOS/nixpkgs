@@ -6,20 +6,23 @@
 
 let
     name    = "wxmaxima";
-    version = "0.8.5";
+    version = "0.8.6";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/wxMaxima-${version}.tar.gz";
-    sha256 = "794317fa2a8d0c2e88c3e5d238c5b81a3e11783ec4a692468b51f15bf5d294f2";
+    sha256 = "09w6gai0jfhl959yrdcdikz5l9kdjshasjk404vl19nfnivdbj9f";
   };
 
   buildInputs = [maxima wxGTK];
 
   meta = {
-    description = "wxWidgets GUI for the computer algebra system Maxima";
+    description = "Cross platform GUI for the computer algebra system Maxima.";
+    license = "GPL2";
     homepage = http://wxmaxima.sourceforge.net;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
