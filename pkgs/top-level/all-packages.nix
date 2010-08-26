@@ -6775,6 +6775,8 @@ let
     inherit (pkgs.emacs23Packages) proofgeneral;
   };
 
+  prover9 = callPackage ../applications/science/logic/prover9 { };
+
   ssreflect = callPackage ../applications/science/logic/ssreflect {
     camlp5 = camlp5_transitional;
   };
