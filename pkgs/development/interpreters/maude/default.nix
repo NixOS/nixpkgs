@@ -1,21 +1,16 @@
 { stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "maude-2.4";
+  name = "maude-2.5";
 
   src = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/Maude-2.4.tar.gz";
-    sha256 = "0bydkf8fd5v267bfak4mm5lmm3vvnr6ir1jr7gimgyzqygdk0in2";
+    url = "http://maude.cs.uiuc.edu/download/current/Maude-2.5.tar.gz";
+    sha256 = "16bvnbyi257z87crzkw9gx2kz13482hnjnik22c2p2ml4rj4lpfw";
   };
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/FM2.4/full-maude24.maude";
-    sha256 = "9e4ebdc717dc968d0b6c1179f360e60b3a39ea8cecc1a7fa49f2105bbddc48c4";
-  };
-
-  docs = fetchurl {
-    url = "http://mirror.switch.ch/mirror/gentoo/distfiles/maude-2.3.0-extras.tar.bz2";
-    sha256 = "0kd5623k1wwj1rk4b6halrm3sdvd9kbiwg1hi2c3qim1nlfdgl0d";
+    url = "http://maude.cs.uiuc.edu/download/current/FM2.5/full-maude25.maude";
+    sha256 = "1d0izdbmhpifb2plnkk3cp7li2z60r8a8ppxhifmfpzi6x6pfvrd";
   };
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
@@ -29,18 +24,23 @@ stdenv.mkDerivation rec {
     for n in $out/bin/*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     ensureDir $out/share/maude
     cp ${fullMaude} $out/share/maude/full-maude.maude
-
-    ensureDir $out/share/doc/maude
-    tar xf ${docs}
-    rm -f maude-2.3.0-extras/full-maude.maude
-    mv maude-2.3.0-extras/pdfs $out/share/doc/maude/pdf
-    mv maude-2.3.0-extras/* $out/share/doc/maude/
   '';
 
   meta = {
     homepage = "http://maude.cs.uiuc.edu/";
     description = "Maude -- a high-level specification language";
     license = "GPLv2";
+
+    longDescription = ''
+      Maude is a high-performance reflective language and system
+      supporting both equational and rewriting logic specification and
+      programming for a wide range of applications. Maude has been
+      influenced in important ways by the OBJ3 language, which can be
+      regarded as an equational logic sublanguage. Besides supporting
+      equational specification and programming, Maude also supports
+      rewriting logic computation.
+    '';
+
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
