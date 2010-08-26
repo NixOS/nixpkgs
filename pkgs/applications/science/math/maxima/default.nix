@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       symbolic integration, 3D plotting, and an ODE solver.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
