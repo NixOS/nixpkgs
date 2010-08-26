@@ -2330,7 +2330,7 @@ let
   };
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
-    qt = if getPkgConfig "doxygen" "qt4" true then qt4 else null;
+    qt = qt4;
   };
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
