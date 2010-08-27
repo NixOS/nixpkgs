@@ -17,7 +17,7 @@ with pkgs.lib;
             [ "closure" config.system.build.toplevel ];
         }
         ''
-          # Create an empty filesysten and mount it.
+          # Create an empty filesystem and mount it.
           ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda
           ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda
           mkdir /mnt
