@@ -723,6 +723,30 @@ rec {
     };
   });
 
+  pdfssa4met = buildPythonPackage (rec {
+    name = "pdfssa4met";
+
+    src = fetchurl {
+      url = "http://pdfssa4met.googlecode.com/files/${name}.tgz";
+      sha256 = "1x0vx8q6vmcanrk8asxs55hac8f4cwiy19krnqc3m1nbjha7l3zp";
+    };
+
+    doCheck = false;
+    
+    installCommand = ''
+      ensureDir $out/bin
+      sed -i 's|/usr/local/bin/pdftoxml.linux.exe.1_2_4|${pkgs.pdf2xml}/bin/pdftoxml|' config.py
+      cp *.py $out/bin
+    '';
+
+    propagatedBuildInputs = [ ];
+
+    meta = {
+      description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
+      homepage = http://www.rdflib.net/;
+    };
+  });
+
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.09";
 
@@ -738,6 +762,24 @@ rec {
       description = "The next generation YAML parser and emitter for Python";
       homepage = http://pyyaml.org;
       license = "free"; # !?
+    };
+  });
+
+  rdflib = buildPythonPackage (rec {
+    name = "rdflib-3.0.0";
+
+    src = fetchurl {
+      url = "http://www.rdflib.net/${name}.tar.gz";
+      sha256 = "1c7ipk5vwqnln83rmai5jzyxkjdajdzbk5cgy1z83nyr5hbkgkqr";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ ];
+
+    meta = {
+      description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
+      homepage = http://www.rdflib.net/;
     };
   });
 
