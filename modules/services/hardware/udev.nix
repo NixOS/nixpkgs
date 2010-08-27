@@ -46,7 +46,7 @@ let
       
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
-        echo "Add rules for package $i"
+        echo "Adding rules for package $i"
         for j in $i/*/udev/rules.d/*; do
           ln -sv $j $out/$(basename $j)
         done

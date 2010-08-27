@@ -16,9 +16,9 @@
   ./hardware/network/intel-3945abg.nix
   ./hardware/network/rt73.nix 
   ./hardware/pcmcia.nix
+  ./installer/generations-dir/generations-dir.nix
   ./installer/grub/grub.nix
   ./installer/init-script/init-script.nix
-  ./installer/generations-dir/generations-dir.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
@@ -50,6 +50,7 @@
   ./services/databases/mysql.nix
   ./services/databases/postgresql.nix
   ./services/hardware/acpid.nix
+  ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/udev.nix
@@ -78,8 +79,8 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
-  ./services/networking/dhclient.nix
   ./services/networking/ddclient.nix
+  ./services/networking/dhclient.nix
   ./services/networking/dhcpd.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
@@ -94,11 +95,11 @@
   ./services/networking/portmap.nix
   ./services/networking/privoxy.nix
   ./services/networking/quassel.nix
+  ./services/networking/sabnzbd.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/tftpd.nix
   ./services/networking/vsftpd.nix
-  ./services/networking/sabnzbd.nix
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
@@ -108,17 +109,17 @@
   ./services/scheduling/fcron.nix
   ./services/security/tor.nix
   ./services/system/dbus.nix
+  ./services/system/kerberos.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
-  ./services/system/kerberos.nix
   ./services/ttys/gpm.nix
   ./services/ttys/mingetty.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss.nix
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix
-  ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/auto.nix
+  ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/kdm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/hardware/synaptics.nix
