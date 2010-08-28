@@ -90,10 +90,10 @@ rec {
   };
 
   tig = stdenv.mkDerivation {
-    name = "tig-0.14.1";
+    name = "tig-0.16";
     src = fetchurl {
-      url = "http://jonas.nitro.dk/tig/releases/tig-0.14.1.tar.gz";
-      sha256 = "1a8mi1pv36v67n31vs95gcibkifnqq5s1x69lz1cz0218yv9s73r";
+      url = "http://jonas.nitro.dk/tig/releases/tig-0.16.tar.gz";
+      sha256 = "167kak44n66wqjj6jrv8q4ijjac07cw22rlpqjqz3brlhx4cb3ix";
     };
     buildInputs = [ncurses asciidoc xmlto docbook_xsl];
     installPhase = ''
