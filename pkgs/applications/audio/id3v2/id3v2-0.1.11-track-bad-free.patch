@@ -1,0 +1,14 @@
+http://sourceforge.net/tracker/index.php?func=detail&aid=1252035&group_id=4193&atid=304193
+
+diff -up id3v2-0.1.11/id3v2.cpp~ id3v2-0.1.11/id3v2.cpp
+--- id3v2-0.1.11/id3v2.cpp~	2004-05-04 21:30:15.000000000 +0300
++++ id3v2-0.1.11/id3v2.cpp	2008-01-03 21:22:02.000000000 +0200
+@@ -423,7 +423,7 @@ int main( int argc, char *argv[])
+         {
+           // check if there is a total track number and if we only have 
+           // the track number for this file.  In this case combine them.
+-          char *currentTrackNum, *newTrackNum;
++          char *currentTrackNum, *newTrackNum = NULL;
+ 
+           if (pFrame != NULL) 
+           {
