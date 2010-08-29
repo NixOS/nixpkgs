@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://psmisc.sourceforge.net/;
     description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
+    platforms = stdenv.lib.platforms.linux;    
   };
 }
