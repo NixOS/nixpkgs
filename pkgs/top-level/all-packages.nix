@@ -6534,6 +6534,11 @@ let
     plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
   };
 
+  ufoai = callPackage ../games/ufoai {
+    inherit (gtkLibs) glib gtk;
+    inherit (gnome) gtksourceview gtkglext;
+  };
+
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   urbanterror = callPackage ../games/urbanterror { };
