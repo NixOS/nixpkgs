@@ -5686,6 +5686,8 @@ let
 
   icewm = callPackage ../applications/window-managers/icewm { };
 
+  id3v2 = callPackage ../applications/audio/id3v2 { };
+
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
