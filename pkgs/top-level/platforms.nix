@@ -201,9 +201,6 @@ rec {
         BLK_DEV_CMD640_ENHANCED n
 
         FUSE_FS m
-
-        # To get /dev/sda devices instead of /dev/hda
-        IDE n
       '';
     kernelTarget = "vmlinux";
     uboot = null;
