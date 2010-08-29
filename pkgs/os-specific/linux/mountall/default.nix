@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnih, dbus, udev, autoconf, automake, libtool }:
+{ stdenv, fetchurl, pkgconfig, libnih, dbus, udev, autoconf, automake, libtool, gettext }:
    
 stdenv.mkDerivation {
   name = "mountall-2.15";
@@ -10,9 +10,9 @@ stdenv.mkDerivation {
 
   patches = [ ./no-plymouth.patch ];
 
-  preConfigure = "rm aclocal.m4; autoreconf";
+  preConfigure = "rm -R aclocal.m4; gettextize -f; autoreconf -vfi";
 
-  buildInputs = [ pkgconfig libnih dbus.libs udev autoconf automake libtool ];
+  buildInputs = [ pkgconfig libnih dbus.libs udev autoconf automake libtool gettext ];
 
   meta = {
     homepage = https://launchpad.net/ubuntu/+source/mountall;
