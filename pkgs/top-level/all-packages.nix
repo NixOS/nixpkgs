@@ -3337,6 +3337,8 @@ let
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
+  libsigcxx12 = callPackage ../development/libraries/libsigcxx/1.2.nix { };
+
   libsigsegv = callPackage ../development/libraries/libsigsegv { };
 
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
@@ -6399,6 +6401,11 @@ let
   };
 
   ### GAMES
+
+  asc = callPackage ../games/asc {
+    lua = lua5;
+    libsigcxx = libsigcxx12;
+  };
 
   ballAndPaddle = callPackage ../games/ball-and-paddle { };
 
