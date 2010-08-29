@@ -17,5 +17,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://launchpad.net/ubuntu/+source/mountall;
     description = "Utility to mount all filesystems and emit Upstart events";
+    platforms = stdenv.lib.platforms.linux;    
   };
 }
