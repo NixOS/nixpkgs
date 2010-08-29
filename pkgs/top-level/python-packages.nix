@@ -239,6 +239,24 @@ rec {
     };
   };
 
+  libcloud = buildPythonPackage (rec {
+    name = "libcloud-0.3.1";
+
+    src = fetchurl {
+      url = mirror://apache/incubator/libcloud/apache-libcloud-incubating-0.3.1.tar.bz2;
+      sha256 = "11qilrs4sd4c1mkd64ikrjsc2vwrshhc54n5mh4xrark9c7ayp0y";
+    };
+
+    buildInputs = [ zopeInterface ];
+
+    preConfigure = "cp test/secrets.py-dist test/secrets.py";
+
+    meta = {
+      description = "A unified interface to many cloud providers";
+      homepage = http://incubator.apache.org/libcloud/;
+    };
+  });
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-2.2.2";
 
@@ -491,6 +509,42 @@ rec {
     };
   });
 
+  pexpect = buildPythonPackage {
+    name = "pexpect-2.3";
+
+    src = fetchurl {
+      url = "http://pexpect.sourceforge.net/pexpect-2.3.tar.gz";
+      sha256 = "0x8bfjjqygriry1iyygm5048ykl5qpbpzqfp6i8dhkslm3ryf5fk";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.noah.org/wiki/Pexpect";
+      description = "Automate interactive console applications such as ssh, ftp, etc.";
+      license = "MIT";
+
+      longDescription = ''
+        Pexpect is similar to the Don Libes "Expect" system, but Pexpect
+        as a different interface that is easier to understand. Pexpect
+        is basically a pattern matching system. It runs programs and
+        watches output. When output matches a given pattern Pexpect can
+        respond as if a human were typing responses. Pexpect can be used
+        for automation, testing, and screen scraping. Pexpect can be
+        used for automating interactive console applications such as
+        ssh, ftp, passwd, telnet, etc. It can also be used to control
+        web applications via "lynx", "w3m", or some other text-based web
+        browser. Pexpect is pure Python. Unlike other Expect-like
+        modules for Python Pexpect does not require TCL or Expect nor
+        does it require C extensions to be compiled. It should work on
+        any platform that supports the standard Python pty module.
+      '';
+
+      maintainers = [ stdenv.lib.maintainers.simons ];
+      platforms = python.meta.platforms;
+    };
+  };
+
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.0.13";
 
@@ -684,6 +738,27 @@ rec {
       description = "The next generation YAML parser and emitter for Python";
       homepage = http://pyyaml.org;
       license = "free"; # !?
+    };
+  });
+
+  rdflib = buildPythonPackage (rec {
+    name = "rdflib-3.0.0";
+
+    src = fetchurl {
+      url = "http://www.rdflib.net/${name}.tar.gz";
+      sha256 = "1c7ipk5vwqnln83rmai5jzyxkjdajdzbk5cgy1z83nyr5hbkgkqr";
+    };
+
+    doCheck = false;
+
+    postInstall = ''
+      find $out -name easy-install.pth | xargs rm -v
+      find $out -name 'site.py*' | xargs rm -v
+    '';
+
+    meta = {
+      description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
+      homepage = http://www.rdflib.net/;
     };
   });
 

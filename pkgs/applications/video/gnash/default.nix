@@ -1,23 +1,22 @@
 { stdenv, fetchurl
-, SDL, SDL_mixer, gstreamer, gstPluginsBase, gstFfmpeg
+, SDL, SDL_mixer, gstreamer, gstPluginsBase, gstPluginsGood
+, gstFfmpeg, speex
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
-, glib, gtk, x11, ming, dejagnu, python
+, glib, gtk, gtkglext, x11, ming, dejagnu, python
 , lib, makeWrapper }:
 
 assert stdenv ? glibc;
 
-let version = "0.8.6"; in
+let version = "0.8.8"; in
 
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnash/${version}/${name}.tar.bz2";
-    sha256 = "1sijafl5c5a005p8jxgn1cdmxkj7a6142dklrlzm9g55n9gbgx05";
+    sha256 = "0872qrgzpy76lxq5b2xigyzaghn53xrpqba2qp3nrk8yz20lpb6w";
   };
-
-  builder = ./builder.sh;
 
   patchPhase = ''
     # Add all libs to `macros/libslist', a list of library search paths.
@@ -35,24 +34,36 @@ stdenv.mkDerivation rec {
     done
   '';
 
-
   # XXX: KDE is supported as well so we could make it available optionally.
   buildInputs = [
-    gettext x11 SDL SDL_mixer gstreamer gstPluginsBase gstFfmpeg libtool
+    gettext x11 SDL SDL_mixer gstreamer gstPluginsBase gstPluginsGood
+    gstFfmpeg speex libtool
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
-    dbus curl pkgconfig glib gtk
+    dbus curl pkgconfig glib gtk gtkglext
     makeWrapper
 
     # For the test suite
     ming dejagnu python
   ];
 
-  inherit SDL_mixer SDL gstPluginsBase;
+  preConfigure =
+    '' configureFlags="                                         \
+         --with-sdl-incl=${SDL}/include/SDL                     \
+         --with-npapi-plugindir=$out/plugins                    \
+         --enable-media=gst                                     \
+         --enable-gui=gtk"
+
+       # In `libmedia', Gnash compiles with "-I$gstPluginsBase/include",
+       # whereas it really needs "-I$gstPluginsBase/include/gstreamer-0.10".
+       # Work around this using GCC's $CPATH variable.
+       export CPATH="${gstPluginsBase}/include/gstreamer-0.10:${gstPluginsGood}/include/gstreamer-0.10"
+       echo "\$CPATH set to \`$CPATH'"
+    '';
 
   # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
   NIX_LDFLAGS="-lX11 -lXext";
 
-  #doCheck = true;
+  doCheck = true;
 
   preInstall = ''ensureDir $out/plugins'';
   postInstall = ''
@@ -64,7 +75,7 @@ stdenv.mkDerivation rec {
     do
       wrapProgram "$prog" --prefix                                            \
         GST_PLUGIN_PATH ":"                                                     \
-        "${gstPluginsBase}/lib/gstreamer-0.10:${gstFfmpeg}/lib/gstreamer-0.10"
+        "${gstPluginsBase}/lib/gstreamer-0.10:${gstPluginsGood}/lib/gstreamer-0.10:${gstFfmpeg}/lib/gstreamer-0.10"
     done
   '';
 

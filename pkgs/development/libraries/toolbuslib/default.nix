@@ -1,11 +1,24 @@
-{stdenv, fetchurl, aterm} :
+{ stdenv
+, fetchurl
+, aterm
+, pkgconfig
+, w32api
+}:
+let 
+  isMingw = stdenv ? cross && stdenv.cross.config == "i686-pc-mingw32" ;
+in
+stdenv.mkDerivation rec {
+  name = "toolbuslib-1.1";
 
-stdenv.mkDerivation {
-name = "toolbuslib-0.7.2";
-src = fetchurl {
-         url = http://www.cwi.nl/projects/MetaEnv/toolbuslib/toolbuslib-0.7.2.tar.gz;
-         md5 = "6619a155c6326d728d53c6901558e350";
-   };
-inherit aterm;
-buildinputs = [aterm];
-}
+  src = fetchurl {
+    url = "http://www.meta-environment.org/releases/${name}.tar.gz";
+    sha256 = "0f4q0r177lih23ypypc8ckkyv5vhvnkhbrv25gswrqdif5dxbwr0";
+  };
+
+  patches = if isMingw then [./mingw.patch] else [];
+  
+  buildInputs = [aterm] ++ (if isMingw then [w32api] else []);
+  buildNativeInputs = [pkgconfig];
+  
+  dontStrip = isMingw; 
+}  

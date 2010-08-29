@@ -4,7 +4,7 @@ let
   buildInputs = with a; [
     chipmunk sqlite curl zlib bzip2 libjpeg libpng
     freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf 
-    lua5 ode
+    lua5 ode libxdg_basedir
   ];
 in
 rec {
@@ -17,8 +17,6 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = [ "doPatch" "doConfigure" "doMakeInstall"];
 
-  patches = [ ./64bit-ftbs.patch ];
-      
   meta = {
     description = "X-Moto - obstacled race game";
     maintainers = [

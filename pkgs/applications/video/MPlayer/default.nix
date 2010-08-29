@@ -1,7 +1,7 @@
-{ alsaSupport ? false, xvSupport ? true, theoraSupport ? false, cacaSupport ? false
-, xineramaSupport ? false, randrSupport ? false, dvdnavSupport ? true
+{ alsaSupport ? true, xvSupport ? true, theoraSupport ? true, cacaSupport ? true
+, xineramaSupport ? true, randrSupport ? true, dvdnavSupport ? true
 , stdenv, fetchurl, x11, freetype, fontconfig, zlib
-, alsa ? null, libXv ? null, libtheora ? null, libcaca ? null
+, alsaLib ? null, libXv ? null, libtheora ? null, libcaca ? null
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
 , amrnb ? null, amrwb ? null, amrSupport ? false
@@ -10,10 +10,12 @@
 , x264Support ? false, x264 ? null
 , xvidSupport ? false, xvidcore ? null
 , lameSupport ? true, lame ? null
+, screenSaverSupport ? true, libXScrnSaver
+, pulseSupport ? false, pulseaudio
 , mesa, pkgconfig, unzip, yasm
 }:
 
-assert alsaSupport -> alsa != null;
+assert alsaSupport -> alsaLib != null;
 assert x11Support -> libX11 != null;
 assert xvSupport -> (libXv != null && x11Support);
 assert theoraSupport -> libtheora != null;
@@ -24,16 +26,29 @@ assert dvdnavSupport -> libdvdnav != null;
 assert cddaSupport -> cdparanoia != null;
 assert jackaudioSupport -> jackaudio != null;
 assert amrSupport -> (amrnb != null && amrwb != null);
+assert screenSaverSupport -> libXScrnSaver != null;
 
 let
 
-  codecs = stdenv.mkDerivation {
+  codecs_src =
+    let
+      dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
+    in
+    if stdenv.system == "i686-linux" then fetchurl {
+      url = "${dir}/essential-20071007.tar.bz2";
+      sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
+    } else if stdenv.system == "x86_64-linux" then fetchurl {
+      url = "${dir}/essential-amd64-20071007.tar.bz2";
+      sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
+    } else if stdenv.system == "powerpc-linux" then fetchurl {
+      url = "${dir}/essential-ppc-20071007.tar.bz2";
+      sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
+    } else null;
+
+  codecs = if codecs_src != null then stdenv.mkDerivation {
     name = "MPlayer-codecs-essential-20071007";
   
-    src = fetchurl {
-      url = http://www2.mplayerhq.hu/MPlayer/releases/codecs/essential-20071007.tar.bz2;
-      sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
-    };
+    src = codecs_src;
 
     installPhase = ''
       mkdir $out
@@ -43,22 +58,22 @@ let
     meta = {
       license = "unfree";
     };
-  };
+  } else null;
 
 in  
 
-stdenv.mkDerivation {
-  name = "MPlayer-1.0-pre-rc4-20100506";
+stdenv.mkDerivation rec {
+  name = "MPlayer-1.0-pre31984";
 
   src = fetchurl {
-    url = mirror://gentoo/distfiles/mplayer-1.0_rc4_p20100506.tar.bz2;
-    sha256 = "0rhs0mv216iir8cz13xdq0rs88lc48ciiyn0wqzxjrnjb17yajy6";
+    url = "http://www.loegria.net/misc/${name}.tar.bz2";
+    sha256 = "0mg6kggja113rsvvsk05gk50xl5qwzsms6pmb4ylc99mflh7m9km";
   };
 
   buildInputs =
     [ freetype zlib pkgconfig ]
     ++ stdenv.lib.optional x11Support [ libX11 mesa ]
-    ++ stdenv.lib.optional alsaSupport alsa
+    ++ stdenv.lib.optional alsaSupport alsaLib
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora
     ++ stdenv.lib.optional cacaSupport libcaca
@@ -70,6 +85,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ]
     ++ stdenv.lib.optional x264Support x264
     ++ stdenv.lib.optional xvidSupport xvidcore
+    ++ stdenv.lib.optional pulseSupport pulseaudio
+    ++ stdenv.lib.optional screenSaverSupport libXScrnSaver
     ++ stdenv.lib.optional lameSupport lame;
 
   buildNativeInputs = [ yasm ];
@@ -78,7 +95,7 @@ stdenv.mkDerivation {
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
     ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
-    --codecsdir=${codecs}
+    ${if codecs != null then "--codecsdir=${codecs}" else ""}
     --enable-runtime-cpudetection
     ${if x11Support then "--enable-x11" else ""}
     --disable-xanim
@@ -103,6 +120,6 @@ stdenv.mkDerivation {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.urkud ];
   };
 }

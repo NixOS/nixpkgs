@@ -206,11 +206,11 @@ in
 import ./generic.nix (
 
   rec {
-    version = "2.6.32.18";
+    version = "2.6.32.21";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "1z35clz0176blqk3ygfim0a6y7b4ndbjpc1pkz7pxnscsj1kl9k7";
+      sha256 = "14hc1ky8ww95qq7c9w9r8yvapx583kbf6fkd6d80kv3rll49xyil";
     };
 
     config = configWithPlatform stdenv.platform;

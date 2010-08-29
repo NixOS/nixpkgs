@@ -198,6 +198,10 @@ rec {
     inherit cabal mtl;
   };
 
+  fingertree = import ../development/libraries/haskell/fingertree {
+    inherit cabal;
+  };
+
   gdiff = import ../development/libraries/haskell/gdiff {
     inherit cabal;
   };

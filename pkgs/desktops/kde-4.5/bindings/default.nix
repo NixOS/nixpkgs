@@ -23,7 +23,7 @@ kdePackage rec {
     )
   '';
   
-  # Okular seems also an optional depenedency which I left out
+  # TODO: okular, qimageblitz, qwt5, qscintilla2, c#
   buildInputs = [ cmake perl python sip pyqt4 zlib libpng freetype fontconfig qt4 boost
           kdelibs kdepimlibs automoc4 soprano akonadi attica polkit_qt_1 ruby ];
 

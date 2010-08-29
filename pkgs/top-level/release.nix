@@ -232,6 +232,7 @@ with (import ./release-lib.nix);
   par2cmdline = all;
   pavucontrol = linux;
   pciutils = linux;
+  pdf2xml = all;
   perl = all;
   php = linux;
   pidgin = linux;
@@ -491,6 +492,18 @@ with (import ./release-lib.nix);
   };
 
   linuxPackages_2_6_33 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_34 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_35 = {
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;

@@ -21,6 +21,7 @@ kdePackage {
   patches = [ ./polkit-install.patch ];
 
   # cmake fails to find acl.h because of C++-style comment
+  # TODO: OpenEXR, hspell
   cmakeFlags = [
     "-DHAVE_ACL_LIBACL_H=ON" "-DHAVE_SYS_ACL_H=ON"
     "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"

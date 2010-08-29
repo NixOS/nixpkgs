@@ -1,6 +1,9 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+let 
+  isMingw = stdenv ? cross && stdenv.cross.config == "i686-pc-mingw32" ;
+in
+stdenv.mkDerivation ( {
   name = "aterm-2.8";
 
   src = fetchurl {
@@ -11,7 +14,7 @@ stdenv.mkDerivation {
   patches = [
     # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
     ./max-long.patch
-  ];
+  ] ++ ( if isMingw then [./aterm-mingw-asm.patch] else [] );
   
   doCheck = true;
 
@@ -20,4 +23,4 @@ stdenv.mkDerivation {
     license = "LGPL";
     description = "Library for manipulation of term data structures in C";
   };
-}
+} // ( if isMingw then { dontStrip = true; } else {}) ) 

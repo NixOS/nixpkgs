@@ -13,17 +13,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-5.5p1";
+  name = "openssh-5.6p1";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "12kywhjnz6w6kx5fk526fhs2xc7rf234hwrms9p1hqv6zrpdvvin";
+    sha256 = "0avc7jgp8i2jlp7b8q8g4nyil56v5fp09c1v54dc4ql15cxzb2jk";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
     ''
       gunzip -c ${hpnSrc} | patch -p1
     '';
+    
   patches = [ ./locale_archive.patch ];
 
   buildInputs = [ zlib openssl perl libedit pkgconfig pam ];

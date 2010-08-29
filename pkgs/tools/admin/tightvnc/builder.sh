@@ -19,8 +19,8 @@ buildPhase() {
     -i vncserver
 
 	cd Xvnc
-	sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/linux.cf 
-	sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/Imake.tmpl 
+	sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/linux.cf
+	sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/Imake.tmpl
         sed -i \
                -e 's@"uname","xauth","Xvnc","vncpasswd"@"uname","Xvnc","vncpasswd"@g' \
                -e "s@\<xauth\>@$xauth/bin/xauth@g" \
@@ -36,7 +36,7 @@ installPhase() {
     ./vncinstall $out/bin $out/man
 
     # fix HTTP client:
-    t=$out/vnc
+    t=$out/share/tightvnc
     ensureDir $t
     sed -i "s@/usr/local/vnc/classes@$out/vnc/classes@g" $out/bin/vncserver
     cp -r classes $t

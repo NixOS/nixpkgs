@@ -296,12 +296,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon qca2;
   };
   
-  konversation = import ./extragear/konversation {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
-    inherit (pkgs.xlibs) libXScrnSaver;
-    inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon qca2;
-  };
+  inherit (pkgs) konversation yakuake;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
@@ -312,11 +307,6 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
-  yakuake = import ./extragear/yakuake {
-    inherit (pkgs) stdenv fetchurl cmake perl gettext;
-    inherit kdelibs automoc4 qt4 phonon;
-  };
-  
   k3b = import ./extragear/k3b {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl shared_mime_info libvorbis taglib gettext;
     inherit (pkgs) ffmpeg flac libsamplerate libdvdread lame libsndfile libmad;

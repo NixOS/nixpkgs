@@ -30,7 +30,9 @@ rec {
 
     ensureDir $out/bin
     for i in $out/libexec/*/*; do
-        echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
+        test -f "$i" && \
+	test -x "$i" && \
+	echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i) && \
         chmod a+x $out/bin/$(basename $i)
     done
 

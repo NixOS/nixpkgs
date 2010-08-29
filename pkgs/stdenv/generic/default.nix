@@ -39,7 +39,7 @@ let
         meta = {
           description = "The default build environment for Unix packages in Nixpkgs";
         };
-    
+
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
@@ -90,7 +90,9 @@ let
           (if attrs ? passthru then attrs.passthru else {});
 
         # Utility flags to test the type of platform.
-        isDarwin = result.system == "i686-darwin" || result.system == "powerpc-darwin" || result.system == "x86_64-darwin";
+        isDarwin = result.system == "i686-darwin"
+	       || result.system == "powerpc-darwin"
+	       || result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
@@ -98,6 +100,14 @@ let
                || result.system == "ict_loongson-2_v0.3_fpu_v0.1-linux";
         isSunOS = result.system == "i386-sunos";
         isCygwin = result.system == "i686-cygwin";
+	isFreeBSD = result.system == "i686-freebsd"
+	       || result.system == "x86_64-freebsd";
+	isOpenBSD = result.system == "i686-openbsd"
+	       || result.system == "x86_64-openbsd";
+	isBSD = result.system == "i686-freebsd"
+	       || result.system == "x86_64-freebsd"
+	       || result.system == "i686-openbsd"
+	       || result.system == "x86_64-openbsd";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
@@ -136,5 +146,5 @@ let
 
   }.result;
 
-  
+
 in stdenvGenerator ./setup.sh

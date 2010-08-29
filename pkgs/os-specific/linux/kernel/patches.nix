@@ -90,6 +90,17 @@ in
       features.fbConDecor = true;
     };
 
+  fbcondecor_2_6_35 =
+    rec {
+      name = "fbcondecor-0.9.6-2.6.35-rc4";
+      patch = fetchurl {
+        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
+        sha256 = "0dlks1arr3b3hlmw9k1a1swji2x655why61sa0aahm62faibsg1r";
+      };
+      extraConfig = fbcondecorConfig;
+      features.fbConDecor = true;
+    };
+
   # From http://patchwork.kernel.org/patch/19495/
   ext4_softlockups_2_6_28 =
     { name = "ext4-softlockups-fix";
@@ -152,6 +163,15 @@ in
       # standalone package.
       name = "aufs2";
       patch = ./aufs2-34.patch;
+      features.aufsBase = true;
+    };
+
+  aufs2_2_6_35 =
+    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-35;hb=aufs2-35
+      # Note that this merely the patch needed to build AUFS2 as a
+      # standalone package.
+      name = "aufs2";
+      patch = ./aufs2-35.patch;
       features.aufsBase = true;
     };
 
