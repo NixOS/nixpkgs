@@ -334,6 +334,7 @@ rec {
      that allows you to boot into the VM and debug it interactively. */
      
   runInLinuxVM = drv: lib.overrideDerivation drv (attrs: {
+    requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
@@ -369,6 +370,7 @@ rec {
   */
   runInGenericVM = drv: lib.overrideDerivation drv (attrs: {
     system = "i686-linux";
+    requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandGeneric)];
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
