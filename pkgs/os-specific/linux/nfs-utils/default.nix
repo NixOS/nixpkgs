@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--disable-gss" "--disable-nfsv4" "--disable-nfsv41" "--disable-tirpc"
       "--with-statedir=/var/lib/nfs"
+      "--with-rpcgen=${stdenv.glibc}/bin/rpcgen"
     ];
 
   patchPhase =
