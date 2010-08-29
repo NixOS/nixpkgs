@@ -7,6 +7,12 @@
 
 assert stdenv ? glibc;
 
+let
+  isPC = stdenv.isi686 || stdenv.isx86_64;
+  changeDmidecode = if isPC then
+    "--replace /usr/sbin/dmidecode ${dmidecode}/sbin/dmidecode"
+    else "";
+in
 stdenv.mkDerivation rec {
   name = "hal-0.5.14";
 
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ libusb ]
-    ++ stdenv.lib.optional (stdenv.isi686 || stdenv.isx86_64) [ libsmbios ];
+    ++ stdenv.lib.optional isPC [ libsmbios ];
 
   preConfigure = ''
     for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
@@ -43,7 +49,7 @@ stdenv.mkDerivation rec {
              tools/linux/hal-*-linux
     do
       substituteInPlace $i \
-        --replace /usr/sbin/dmidecode ${dmidecode}/sbin/dmidecode \
+        ${changeDmidecode} \
         ${if udev != null then "--replace /sbin/udevadm ${udev}/sbin/udevadm" else ""} \
         --replace /bin/mount ${utillinuxng}/bin/mount \
         --replace /bin/umount ${utillinuxng}/bin/umount \
