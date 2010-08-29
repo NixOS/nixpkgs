@@ -15,10 +15,13 @@ rec {
   runTests = network: tests:
     stdenv.mkDerivation {
       name = "vm-test-run";
+      
+      requiredSystemFeatures = [ "kvm" ];
+      
       inherit tests;
       
       buildInputs = [ pkgs.qemu_kvm pkgs.imagemagick ];
-      
+
       buildCommand =
         ''
           mkdir $out
@@ -138,10 +141,11 @@ rec {
         cp ${./test-driver/Machine.pm} Machine.pm
         export tests='${testscript}'
         ${perl}/bin/perl ${./test-driver/test-driver.pl} ${vms}/vms/*/bin/run-*-vm
-      '';
+      ''; # */
 
     in
       lib.overrideDerivation drv (attrs: {
+        requiredSystemFeatures = [ "kvm" ];
         builder = "${bash}/bin/sh";
         args = ["-e" vmRunCommand];
         origArgs = attrs.args;
