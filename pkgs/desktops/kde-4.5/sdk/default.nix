@@ -1,10 +1,8 @@
-{ kdePackage, binutils, cmake, qt4, perl, libxml2, libxslt, boost, subversion, apr,
+{ kde, binutils, cmake, qt4, perl, libxml2, libxslt, boost, subversion, apr,
   aprutil , shared_mime_info, hunspell , kdelibs, kdepimlibs, automoc4,
   kdebindings, strigi, kdebase, libtool, antlr}:
 
-kdePackage {
-  pn = "kdesdk";
-  v = "4.5.0";
+kde.package {
 
   buildInputs = [ cmake qt4 perl libxml2 libxslt boost subversion aprutil apr
     shared_mime_info kdelibs kdepimlibs automoc4 strigi hunspell kdebindings
@@ -17,5 +15,9 @@ kdePackage {
     description = "KDE SDK";
     longDescription = "Contains various development utilities such as the Umbrello UML modeler and Cerivisia CVS front-end";
     license = "GPL";
+    kde = {
+      name = "kdesdk";
+      version = "4.5.0";
+    };
   };
 }

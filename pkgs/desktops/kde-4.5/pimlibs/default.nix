@@ -1,9 +1,7 @@
-{ kdePackage, cmake, qt4, perl, boost, cyrus_sasl, gpgme, libical, openldap, shared_mime_info
+{ kde, cmake, qt4, perl, boost, cyrus_sasl, gpgme, libical, openldap, shared_mime_info
 , kdelibs, automoc4, akonadi, soprano}:
 
-kdePackage {
-  pn = "kdepimlibs";
-  v = "4.5.0";
+kde.package {
 
   buildInputs = [ cmake qt4 perl boost cyrus_sasl gpgme libical openldap
     shared_mime_info kdelibs automoc4 akonadi soprano ];
@@ -11,5 +9,9 @@ kdePackage {
   meta = {
     description = "KDE PIM libraries";
     license = "LGPL";
+    kde = {
+      name = "kdepimlibs";
+      version = "4.5.0";
+    };
   };
 }

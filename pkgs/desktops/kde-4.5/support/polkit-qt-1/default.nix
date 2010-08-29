@@ -1,10 +1,13 @@
-{ kdePackage, cmake, qt4, pkgconfig, polkit, automoc4, glib }:
+{ kde, cmake, qt4, pkgconfig, polkit, automoc4, glib }:
 
-kdePackage {
-  pn = "polkit-qt-1";
-  v = "0.96.1";
-  subdir = "apps/KDE4.x/admin";
-
+kde.package {
   buildInputs = [ cmake qt4 automoc4 ];
   propagatedBuildInputs = [ polkit glib ];
+  meta.kde = {
+    name = "polkit-qt-1";
+    module = "polkit-qt-1";
+    version = "0.96.1";
+    release = "0.96.1";
+    subdir = "apps/KDE4.x/admin";
+  };
 }

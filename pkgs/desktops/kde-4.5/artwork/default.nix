@@ -1,9 +1,7 @@
-{ kdePackage, cmake, qt4, perl, xscreensaver
+{ kde, cmake, qt4, perl, xscreensaver
 , kdelibs, kdebase_workspace, automoc4, strigi, eigen}:
 
-kdePackage {
-  pn = "kdeartwork";
-  v = "4.5.0";
+kde.package {
 
   buildInputs = [ cmake qt4 perl xscreensaver kdelibs kdebase_workspace automoc4
     strigi eigen ];
@@ -16,5 +14,9 @@ kdePackage {
     description = "KDE artwork";
     longDescription = "Contains various artwork for KDE such as backgrounds, icons and screensavers";
     license = "LGPL";
+    kde = {
+      name = "kdeartwork";
+      version = "4.5.0";
+    };
   };
 }

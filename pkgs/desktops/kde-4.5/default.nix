@@ -3,11 +3,13 @@
 {
   recurseForRelease = true;
 
+  inherit callPackage;
+
   qt4 = qt47;
 
   phonon = null;
 
-  kdePackage = import ./kde-package {
+  kde = import ./kde-package {
     inherit stdenv fetchurl;
   };
 
@@ -58,7 +60,21 @@
   kdeplasma_addons = callPackage ./plasma-addons { };
   kdesdk = callPackage ./sdk { };
   kdetoys = callPackage ./toys { };
-  kdeutils = callPackage ./utils { };
+
+  ark = callPackage ./utils/ark.nix { };
+  kcalc = callPackage ./utils/kcalc.nix { };
+  kcharselect = callPackage ./utils/kcharselect.nix { };
+  kdf = callPackage ./utils/kdf.nix { };
+  kfloppy = callPackage ./utils/kfloppy.nix { };
+  kgpg = callPackage ./utils/kgpg.nix { };
+  kremotecontrol = callPackage ./utils/kremotecontrol.nix { };
+  ktimer = callPackage ./utils/ktimer.nix { };
+  kwallet = callPackage ./utils/kwallet.nix { };
+  okteta = callPackage ./utils/okteta.nix { };
+  printer_applet = callPackage ./utils/printer-applet.nix { };
+  superkaramba = callPackage ./utils/superkaramba.nix { };
+  sweeper = callPackage ./utils/sweeper.nix { };
+
   kdewebdev = callPackage ./webdev { };
 
   #kdepim_runtime = callPackage ../kde-4.4/pim-runtime { };
