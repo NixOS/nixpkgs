@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 09fb3ed..59eba16 100644
+--- a/Makefile
++++ b/Makefile
+@@ -174,7 +174,7 @@ INSTALL := $(BINFILES) $(MANFILES)
+ # want this rule first, use := on ALL, and ALL not filled in yet
+ all: do_all
+ 
+--include */module.mk
++-include proc/module.mk ps/module.mk
+ 
+ do_all:    $(ALL)
+ 
