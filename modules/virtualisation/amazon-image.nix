@@ -59,9 +59,9 @@ with pkgs.lib;
     [ { mountPoint = "/";
         device = "/dev/disk/by-label/nixos";
       }
-      { mountPoint = "/data";
+      { mountPoint = "/ephemeral0";
         device = "/dev/xvdc";
-        autocreate = true;
+        neededForBoot = true;
       }
     ];
 
@@ -71,10 +71,26 @@ with pkgs.lib;
   boot.initrd.kernelModules = [ "xen-blkfront" ];
   boot.kernelModules = [ "xen-netfront" ];
 
+  # Panic if an error occurs in stage 1, because there is nothing anybody can
+  # do about it.
+  boot.kernelParams = [ "stage1panic" ];
+
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "nodev";
   boot.loader.grub.timeout = 0;
   boot.loader.grub.extraPerEntryConfig = "root (hd0)";
+
+  # Put /tmp and /var on /ephemeral0, which has a lot more space.  
+  # Unfortunately we can't do this with the `fileSystems' option 
+  # because it has no support for creating the source of a bind 
+  # mount.
+  boot.initrd.postMountCommands =
+    ''
+      mkdir -m 1777 -p $targetRoot/ephemeral0/tmp
+      mount --bind $targetRoot/ephemeral0/tmp $targetRoot/tmp
+      mkdir -m 755 -p $targetRoot/ephemeral0/var
+      mount --bind $targetRoot/ephemeral0/var $targetRoot/var
+    '';
 
   # There are no virtual consoles.
   services.mingetty.ttys = [ ];
