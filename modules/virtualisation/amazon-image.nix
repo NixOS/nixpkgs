@@ -71,10 +71,6 @@ with pkgs.lib;
   boot.initrd.kernelModules = [ "xen-blkfront" ];
   boot.kernelModules = [ "xen-netfront" ];
 
-  # Panic if an error occurs in stage 1, because there is nothing anybody can
-  # do about it.
-  boot.kernelParams = [ "stage1panic" ];
-
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "nodev";
   boot.loader.grub.timeout = 0;
