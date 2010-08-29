@@ -108,6 +108,13 @@ with pkgs.lib;
               rm -f /root/key.pub
           fi
 
+          # Print the host public key on the console so that the user
+          # can obtain it securely by parsing the output of
+          # ec2-get-console-output.
+          echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
+          ${pkgs.openssh}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_dsa_key.pub > /dev/console
+          echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
+
           echo "setting host name..."
           ${pkgs.nettools}/bin/hostname $(${pkgs.curl}/bin/curl http://169.254.169.254/1.0/meta-data/hostname)
         '';
