@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://libexif.sourceforge.net/;
-    description = "A library to read and manipulate EXIF data in digital photographs;
+    description = "A library to read and manipulate EXIF data in digital photographs";
     license = "LGPL 2.1";
   };
 
