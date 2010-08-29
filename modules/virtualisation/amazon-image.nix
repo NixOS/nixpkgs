@@ -68,8 +68,10 @@ with pkgs.lib;
   swapDevices =
     [ { device = "/dev/xvdb"; } ];
 
-  boot.initrd.kernelModules = [ "xen-blkfront" ];
+  boot.initrd.kernelModules = [ "xen-blkfront" "aufs" ];
   boot.kernelModules = [ "xen-netfront" ];
+
+  boot.extraModulePackages = [ config.boot.kernelPackages.aufs2 ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "nodev";
@@ -79,13 +81,18 @@ with pkgs.lib;
   # Put /tmp and /var on /ephemeral0, which has a lot more space.  
   # Unfortunately we can't do this with the `fileSystems' option 
   # because it has no support for creating the source of a bind 
-  # mount.
+  # mount.  Also, "move" /nix to /ephemeral0 by layering an AUFS
+  # on top of it so we have a lot more space for Nix operations.
   boot.initrd.postMountCommands =
     ''
       mkdir -m 1777 -p $targetRoot/ephemeral0/tmp
       mount --bind $targetRoot/ephemeral0/tmp $targetRoot/tmp
+
       mkdir -m 755 -p $targetRoot/ephemeral0/var
       mount --bind $targetRoot/ephemeral0/var $targetRoot/var
+
+      mkdir -m 755 -p $targetRoot/ephemeral0/nix
+      mount -t aufs -o dirs=$targetRoot/ephemeral0/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
     '';
 
   # There are no virtual consoles.
