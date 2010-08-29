@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches =
     [ (fetchurl {
          url = "http://git.savannah.gnu.org/cgit/ratpoison.git/patch/?id=4ad0b38fb53506d613c4b4f7268dadfcedae9b8e";
-         sha256 = "09aa5l7qicld1prfsql6znlz3z8j67rlznw1vj7aja435rxm4lq9";
+         sha256 = "118c5b481fa22b8fefbe34e3dbb157f621a3bf5de0c7beb540001c99ff403a5f";
        })
     ];
 
