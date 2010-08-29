@@ -1264,9 +1264,7 @@ let
     tomcat = tomcat6;
   };
 
-  wdfs = callPackage ../tools/filesystems/wdfs {
-    neon = neon026;
-  };
+  wdfs = callPackage ../tools/filesystems/wdfs { };
 
   wdiff = callPackage ../tools/text/wdiff { };
 
