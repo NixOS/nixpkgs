@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, sip, qt4}:
+{stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "pyqt-x11-gpl-4.7.4";
@@ -8,9 +8,32 @@ stdenv.mkDerivation {
     sha256 = "0a7iqzp75hd29rvwhyqfmaj5ymd49wq8scysjkivhc5qkx5rh00r";
   };
   
-  configurePhase = "python ./configure.py --confirm-license -b $out/bin -d $out/lib/${python.libPrefix}/site-packages -v $out/share/sip -p $out/plugins";
+  preConfigure = ''
+    ensureDir $out
+    lndir ${pythonDBus} $out
+    export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
+    configureFlagsArray=( \
+      --confirm-license --bindir $out/bin \
+      --destdir $out/lib/${python.libPrefix}/site-packages \
+      --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip \
+      --dbus=$out/include/dbus-1.0 --verbose)
+    '';
+
+  configureScript="./configure.py";
+
+  configurePhase = ''
+    runHook preConfigure
+    python configure.py $configureFlags "''${configureFlagsArray[@]}"
+    runHook postConfigure'';
   
-  buildInputs = [ python sip qt4 ];
+  propagatedBuildInputs = [ python sip qt4 ]
+    ++ pythonDBus.propagatedBuildNativeInputs;
+  buildInputs = [ pkgconfig makeWrapper lndir ];
+
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
+    done'';
   
   meta = {
     description = "Python bindings for Qt";
