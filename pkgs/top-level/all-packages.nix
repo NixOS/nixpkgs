@@ -1759,14 +1759,14 @@ let
 
   # Helper functions to abstract away from repetitive instantiations.
   haskellPackagesFun610 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
-    inherit pkgs;
+    inherit pkgs newScope;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
     ghc = callPackage ghcPath {
       ghc = ghc6101Binary;    };
   });
 
   haskellPackagesFun612 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
-    inherit pkgs;
+    inherit pkgs newScope;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
     ghc = callPackage ghcPath {
       ghc = ghc6101Binary;    };

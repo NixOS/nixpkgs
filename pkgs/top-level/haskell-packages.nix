@@ -1,6 +1,13 @@
-{pkgs, ghc, enableLibraryProfiling ? false}:
+{pkgs, newScope, ghc, enableLibraryProfiling ? false}:
 
 let ghcReal = pkgs.lowPrio ghc; in
+
+let result = rec {
+
+      x = let callPackage = newScope x; in
+
+# Indentation deliberately broken at this point to keep the bulk
+# of this file at a low indentation level.
 
 rec {
 
@@ -14,1177 +21,727 @@ rec {
   # it's never useful to use the wrapped GHC (`ghcReal'), as the
   # wrapper provides essential functionality: the ability to find
   # Haskell packages in the buildInputs automatically.
-  ghc = import ../development/compilers/ghc/wrapper.nix {
-    inherit (pkgs) stdenv makeWrapper;
+  ghc = callPackage ../development/compilers/ghc/wrapper.nix {
     ghc = ghcReal;
   };
 
-  cabal = import ../development/libraries/haskell/cabal/cabal.nix {
-    inherit (pkgs) stdenv fetchurl lib;
-    inherit ghc enableLibraryProfiling;
-  };
+  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {};
 
 
   # Haskell libraries.
 
-  Agda = import ../development/libraries/haskell/Agda {
-    inherit cabal binary haskeline haskellSrc mtl utf8String xhtml zlib
-      happy alex;
-    QuickCheck = QuickCheck2;
+  Agda = callPackage ../development/libraries/haskell/Agda {
+    QuickCheck = QuickCheck_2;
   };
 
-  ansiTerminal = import ../development/libraries/haskell/ansi-terminal {
-    inherit cabal;
+  ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
+
+  ansiWLPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
+
+  AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
+
+  benchpress = callPackage ../development/libraries/haskell/benchpress {};
+
+  bimap = callPackage ../development/libraries/haskell/bimap {};
+
+  binary = callPackage ../development/libraries/haskell/binary {};
+
+  bitmap = callPackage ../development/libraries/haskell/bitmap {};
+
+  blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
+
+  bytestring = callPackage ../development/libraries/haskell/bytestring {};
+
+  networkBytestring = callPackage ../development/libraries/haskell/network-bytestring {};
+
+  cairo = callPackage ../development/libraries/haskell/cairo {
+    inherit (pkgs) cairo zlib;
   };
 
-  ansiWLPprint = import ../development/libraries/haskell/ansi-wl-pprint {
-    inherit cabal ansiTerminal;
+  cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
+
+  cereal = callPackage ../development/libraries/haskell/cereal {};
+
+  cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {
+    network = network_2_2_1_7;
   };
 
-  AspectAG = import ../development/libraries/haskell/AspectAG {
-    inherit cabal HList mtl;
+  cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {
+    network = network_2_2_1_7;
   };
 
-  benchpress = import ../development/libraries/haskell/benchpress {
-    inherit cabal;
+  cgi = callPackage ../development/libraries/haskell/cgi {};
+
+  cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
+
+  colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
+
+  ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
+
+  convertible = callPackage ../development/libraries/haskell/convertible {
+    time = time_1_1_3;
   };
 
-  bimap = import ../development/libraries/haskell/bimap {
-    inherit cabal;
+  Crypto = callPackage ../development/libraries/haskell/Crypto {};
+
+  CS173Tourney = callPackage ../development/libraries/haskell/CS173Tourney {
+    inherit (pkgs) fetchgit;
+    json = json_0_3_6;
   };
 
-  binary = import ../development/libraries/haskell/binary {
-    inherit cabal;
-  };
+  csv = callPackage ../development/libraries/haskell/csv {};
 
-  bitmap = import ../development/libraries/haskell/bitmap {
-    inherit cabal;
-  };
+  dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
-  blazeHtml = import ../development/libraries/haskell/blaze-html {
-    inherit cabal text;
-  };
+  dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
-  bytestring = import ../development/libraries/haskell/bytestring {
-    inherit cabal;
-  };
+  datetime = callPackage ../development/libraries/haskell/datetime {};
 
-  networkBytestring = import ../development/libraries/haskell/network-bytestring {
-    inherit cabal bytestring network;
-  };
+  deepseq = callPackage ../development/libraries/haskell/deepseq {};
 
-  cairo = import ../development/libraries/haskell/cairo {
-    inherit cabal gtk2hsBuildtools mtl;
-    inherit (pkgs) pkgconfig glibc cairo zlib;
-  };
+  Diff = callPackage ../development/libraries/haskell/Diff {};
 
-  cautiousFile = import ../development/libraries/haskell/cautious-file {
-    inherit cabal;
-  };
-
-  cereal = import ../development/libraries/haskell/cereal {
-    inherit cabal;
-  };
-
-  cgi3001172 = import ../development/libraries/haskell/cgi/3001.1.7.2.nix {
-    inherit cabal mtl parsec xhtml;
-    network = network2217;
-  };
-
-  cgi3001173 = import ../development/libraries/haskell/cgi/3001.1.7.3.nix {
-    inherit cabal mtl parsec xhtml;
-    network = network2217;
-  };
-
-  cgi = import ../development/libraries/haskell/cgi {
-    inherit cabal mtl network parsec xhtml;
-  };
-
-  cmdargs = import ../development/libraries/haskell/cmdargs {
-    inherit cabal filepath mtl;
-  };
-
-  colorizeHaskell = import ../development/libraries/haskell/colorize-haskell {
-    inherit cabal ansiTerminal haskellLexer;
-  };
-
-  ConfigFile = import ../development/libraries/haskell/ConfigFile {
-    inherit cabal mtl parsec MissingH;
-  };
-
-  convertible = import ../development/libraries/haskell/convertible {
-    inherit cabal mtl;
-    time = time113;
-  };
-
-  Crypto = import ../development/libraries/haskell/Crypto {
-    inherit cabal HUnit QuickCheck;
-  };
-
-  CS173Tourney = import ../development/libraries/haskell/CS173Tourney {
-    inherit cabal ;
-    inherit (pkgs) fetchgit ;
-    inherit time hslogger Crypto base64string CouchDB WebServer WebServerExtras;
-    json = json_036;
-  };
-
-  csv = import ../development/libraries/haskell/csv {
-    inherit cabal parsec;
-  };
-
-  dataenc = import ../development/libraries/haskell/dataenc {
-    inherit cabal;
-  };
-
-  dataReify = import ../development/libraries/haskell/data-reify {
-    inherit cabal;
-  };
-
-  datetime = import ../development/libraries/haskell/datetime {
-    inherit cabal QuickCheck time;
-  };
-
-  deepseq = import ../development/libraries/haskell/deepseq {
-    inherit cabal;
-  };
-
-  Diff = import ../development/libraries/haskell/Diff {
-    inherit cabal;
-  };
-
-  digest = import ../development/libraries/haskell/digest {
-    inherit cabal;
+  digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
 
-  dotgen = import ../development/libraries/haskell/dotgen {
-    inherit cabal;
-  };
+  dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
-  editline = import ../development/libraries/haskell/editline {
+  editline = callPackage ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
-    inherit cabal;
   };
 
-  filepath = import ../development/libraries/haskell/filepath {
-    inherit cabal;
+  filepath = callPackage ../development/libraries/haskell/filepath {};
+
+  emgm = callPackage ../development/libraries/haskell/emgm {};
+
+  extensibleExceptions = callPackage ../development/libraries/haskell/extensible-exceptions {};
+
+  fclabels = callPackage ../development/libraries/haskell/fclabels {};
+
+  feed = callPackage ../development/libraries/haskell/feed {};
+
+  filestore = callPackage ../development/libraries/haskell/filestore {};
+
+  fgl = callPackage ../development/libraries/haskell/fgl {};
+
+  fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
+
+  fingertree = callPackage ../development/libraries/haskell/fingertree {};
+
+  gdiff = callPackage ../development/libraries/haskell/gdiff {};
+
+  getOptions = callPackage ../development/libraries/haskell/get-options {};
+
+  ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
+
+  ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
+
+  ghcPaths_0_1_0_6 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.6.nix {};
+
+  ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
+
+  ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
+
+  gitit = callPackage ../development/libraries/haskell/gitit {
+    cgi = cgi_3001_1_7_2;
+    HTTP = HTTP_4000_0_9;
+    network = network_2_2_1_7;
   };
 
-  emgm = import ../development/libraries/haskell/emgm {
-    inherit cabal;
-  };
+  GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
-  extensibleExceptions = import ../development/libraries/haskell/extensible-exceptions {
-    inherit cabal;
-  };
-
-  fclabels = import ../development/libraries/haskell/fclabels {
-    inherit cabal monadsFd;
-  };
-
-  feed = import ../development/libraries/haskell/feed {
-    inherit cabal utf8String xml;
-  };
-
-  filestore = import ../development/libraries/haskell/filestore {
-    inherit cabal datetime parsec regexPosix split time utf8String xml Diff;
-  };
-
-  fgl = import ../development/libraries/haskell/fgl {
-    inherit cabal mtl;
-  };
-
-  fgl5423 = import ../development/libraries/haskell/fgl/5.4.2.3.nix {
-    inherit cabal mtl;
-  };
-
-  fingertree = import ../development/libraries/haskell/fingertree {
-    inherit cabal;
-  };
-
-  gdiff = import ../development/libraries/haskell/gdiff {
-    inherit cabal;
-  };
-
-  getOptions = import ../development/libraries/haskell/get-options {
-    inherit (pkgs) fetchurl sourceFromHead;
-    inherit cabal mtl;
-  };
-
-  ghcCore = import ../development/libraries/haskell/ghc-core {
-    inherit cabal pcreLight colorizeHaskell;
-  };
-
-  ghcMtl = import ../development/libraries/haskell/ghc-mtl {
-    inherit cabal mtl MonadCatchIOMtl;
-  };
-
-  ghcPaths0106 = import ../development/libraries/haskell/ghc-paths/0.1.0.6.nix {
-    inherit cabal;
-  };
-
-  ghcPaths = import ../development/libraries/haskell/ghc-paths {
-    inherit cabal;
-  };
-
-  ghcSyb = import ../development/libraries/haskell/ghc-syb {
-    inherit (pkgs) fetchurl sourceFromHead;
-    inherit cabal syb;
-  };
-
-  gitit = import ../development/libraries/haskell/gitit {
-    inherit cabal happstackServer happstackUtil
-      HStringTemplate SHA datetime
-      filestore highlightingKate safe
-      mtl pandoc parsec recaptcha
-      utf8String xhtml zlib ConfigFile url
-      cautiousFile feed;
-    cgi = cgi3001172;
-    HTTP = HTTP400009;
-    network = network2217;
-  };
-
-  GlomeVec = import ../development/libraries/haskell/GlomeVec {
-    inherit cabal;
-  };
-
-  GLUT2121 = import ../development/libraries/haskell/GLUT/2.1.2.1.nix {
-    inherit cabal;
-    OpenGL = OpenGL2230;
+  GLUT2121 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {
+    OpenGL = OpenGL_2_2_3_0;
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
 
-  GLUT = import ../development/libraries/haskell/GLUT {
-    inherit cabal OpenGL;
+  GLUT = callPackage ../development/libraries/haskell/GLUT {
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
 
-  gtk2hs = import ../development/libraries/haskell/gtk2hs {
-    inherit ghc mtl;
-    inherit (pkgs) stdenv fetchurl pkgconfig gnome cairo;
+  gtk2hs = callPackage ../development/libraries/haskell/gtk2hs {
+    inherit (pkgs) pkgconfig gnome cairo;
   };
 
-  gtk2hsBuildtools = import ../development/libraries/haskell/gtk2hs-buildtools {
-    inherit cabal;
-    alex = alex233;
-    happy = happy1185;
+  gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {
+    alex = alex_2_3_3;
+    happy = happy_1_18_5;
   };
 
-  hamlet = import ../development/libraries/haskell/hamlet {
-    inherit cabal blazeHtml parsec utf8String;
-  };
+  hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
-  HAppSData = import ../development/libraries/haskell/HAppS/HAppS-Data.nix {
-    inherit cabal mtl sybWithClass HaXml HAppSUtil bytestring binary;
-  };
+  HAppSData = callPackage ../development/libraries/haskell/HAppS/HAppS-Data.nix {};
 
-  HAppSIxSet = import ../development/libraries/haskell/HAppS/HAppS-IxSet.nix {
-    inherit cabal mtl hslogger HAppSUtil HAppSState HAppSData sybWithClass;
-  };
+  HAppSIxSet = callPackage ../development/libraries/haskell/HAppS/HAppS-IxSet.nix {};
 
-  HAppSUtil = import ../development/libraries/haskell/HAppS/HAppS-Util.nix {
-    inherit cabal mtl hslogger bytestring;
-  };
+  HAppSUtil = callPackage ../development/libraries/haskell/HAppS/HAppS-Util.nix {};
 
-  HAppSServer = import ../development/libraries/haskell/HAppS/HAppS-Server.nix {
-    inherit cabal HaXml parsec mtl network hslogger HAppSData HAppSUtil HAppSState HAppSIxSet HTTP xhtml html bytestring;
-  };
+  HAppSServer = callPackage ../development/libraries/haskell/HAppS/HAppS-Server.nix {};
 
-  HAppSState = import ../development/libraries/haskell/HAppS/HAppS-State.nix {
-    inherit cabal HaXml mtl network stm hslogger HAppSUtil HAppSData bytestring binary hspread;
-  };
+  HAppSState = callPackage ../development/libraries/haskell/HAppS/HAppS-State.nix {};
 
   /* cannot yet get this to work with 6.12.1 */
-  happstackData = import ../development/libraries/haskell/happstack/happstack-data.nix {
-    inherit cabal mtl sybWithClass HaXml happstackUtil binary;
+  happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {};
+
+  happstackUtil = callPackage ../development/libraries/haskell/happstack/happstack-util.nix {};
+
+  happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {
+    network = network_2_2_1_7;
   };
 
-  happstackUtil = import ../development/libraries/haskell/happstack/happstack-util.nix {
-    inherit cabal mtl hslogger QuickCheck HUnit strictConcurrency unixCompat SMTPClient;
+  hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
+
+  haskeline = callPackage ../development/libraries/haskell/haskeline {};
+
+  haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
+
+  haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
+
+  haskellSrc = callPackage ../development/libraries/haskell/haskell-src {};
+
+  haskellSrc_P = callPackage ../development/libraries/haskell/haskell-src {
+    happy = happy_1_18_5;
   };
 
-  happstackServer = import ../development/libraries/haskell/happstack/happstack-server.nix {
-    inherit cabal HUnit HaXml MaybeT parsec sendfile utf8String mtl hslogger happstackData happstackUtil xhtml html zlib;
-    network = network2217;
-  };
+  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
-  hashedStorage = import ../development/libraries/haskell/hashed-storage {
-    inherit cabal mtl zlib mmap binary dataenc;
-  };
+  haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
-  haskeline = import ../development/libraries/haskell/haskeline {
-    inherit cabal extensibleExceptions mtl utf8String;
-  };
+  haskellPlatform = haskellPlatform_2010_2_0_0;
 
-  haskelineClass = import ../development/libraries/haskell/haskeline-class {
-    inherit cabal haskeline mtl;
-  };
-
-  haskellLexer = import ../development/libraries/haskell/haskell-lexer {
-    inherit cabal;
-  };
-
-  haskellSrc = import ../development/libraries/haskell/haskell-src {
-    inherit cabal happy;
-  };
-
-  haskellSrcP = import ../development/libraries/haskell/haskell-src {
-    inherit cabal;
-    happy = happy1185;
-  };
-
-  haskellSrcExts = import ../development/libraries/haskell/haskell-src-exts {
-    inherit cabal cpphs happy;
-  };
-
-  haskellSrcMeta = import ../development/libraries/haskell/haskell-src-meta {
-    inherit cabal haskellSrcExts;
-  };
-
-  haskellPlatform = haskellPlatform2010200;
-
-  haskellPlatform2010200 = import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
+  haskellPlatform_2010_2_0_0 = import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
     inherit cabal ghc
       html xhtml;
-    haskellSrc = haskellSrcP;
-    fgl = fgl5423;
-    cabalInstall = cabalInstall082;
+    haskellSrc = haskellSrc_P;
+    fgl = fgl_5_4_2_3;
+    cabalInstall = cabalInstall_0_8_2;
     GLUT = GLUT2121;
-    OpenGL = OpenGL2230;
-    zlib = zlib0520;
-    alex = alex233;
-    cgi = cgi3001173;
-    QuickCheck = QuickCheck2;
-    HTTP = HTTP400009;
-    HUnit = HUnit1221;
-    network = network2217;
-    parallel = parallel2201;
-    regexBase = regexBase0932;
-    regexCompat = regexCompat0931;
-    regexPosix = regexPosix0942;
-    stm = stm2121;
-    haddock = haddock272P;
-    happy = happy1185;
+    OpenGL = OpenGL_2_2_3_0;
+    zlib = zlib_0_5_2_0;
+    alex = alex_2_3_3;
+    cgi = cgi_3001_1_7_3;
+    QuickCheck = QuickCheck_2;
+    HTTP = HTTP_4000_0_9;
+    HUnit = HUnit_1_2_2_1;
+    network = network_2_2_1_7;
+    parallel = parallel_2_2_0_1;
+    regexBase = regexBase_0_93_2;
+    regexCompat = regexCompat_0_93_1;
+    regexPosix = regexPosix_0_94_2;
+    stm = stm_2_1_2_1;
+    haddock = haddock_2_7_2_P;
+    happy = happy_1_18_5;
     inherit (pkgs) fetchurl;
   };
 
-  haskellPlatform2010100 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
+  haskellPlatform_2010_1_0_0 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
       haskellSrc html
       stm xhtml;
-    cabalInstall = cabalInstall080;
+    cabalInstall = cabalInstall_0_8_0;
     GLUT = GLUT2121;
-    OpenGL = OpenGL2230;
-    zlib = zlib0520;
-    alex = alex232;
-    cgi = cgi3001172;
-    QuickCheck = QuickCheck2103;
-    HTTP = HTTP400009;
-    HUnit = HUnit1221;
-    network = network2217;
-    parallel = parallel2201;
-    regexBase = regexBase0931;
-    regexCompat = regexCompat092;
-    regexPosix = regexPosix0941;
-    haddock = haddock272;
-    happy = happy1184;
+    OpenGL = OpenGL_2_2_3_0;
+    zlib = zlib_0_5_2_0;
+    alex = alex_2_3_2;
+    cgi = cgi_3001_1_7_2;
+    QuickCheck = QuickCheck_2_1_0_3;
+    HTTP = HTTP_4000_0_9;
+    HUnit = HUnit_1_2_2_1;
+    network = network_2_2_1_7;
+    parallel = parallel_2_2_0_1;
+    regexBase = regexBase_0_93_1;
+    regexCompat = regexCompat_0_92;
+    regexPosix = regexPosix_0_94_1;
+    haddock = haddock_2_7_2;
+    happy = happy_1_18_4;
     inherit (pkgs) fetchurl;
   });
 
-  haskellPlatform2009202 = import ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix {
+  haskellPlatform_2009_2_0_2 = import ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix {
     inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
       haskellSrc html parallel regexBase regexCompat regexPosix
       stm time xhtml zlib cabalInstall alex happy haddock;
     inherit (pkgs) fetchurl;
   };
 
-  HTTP400009 = import ../development/libraries/haskell/HTTP/4000.0.9.nix {
-    inherit cabal mtl parsec;
-    network = network2217;
+  HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {
+    network = network_2_2_1_7;
   };
 
-  HTTP = import ../development/libraries/haskell/HTTP {
-    inherit cabal mtl network parsec;
-  };
+  HTTP = callPackage ../development/libraries/haskell/HTTP {};
 
-  HTTP_3001 = import ../development/libraries/haskell/HTTP/3001.nix {
-    inherit cabal mtl network parsec;
-  };
+  HTTP_3001 = callPackage ../development/libraries/haskell/HTTP/3001.nix {};
 
-  haxr = import ../development/libraries/haskell/haxr {
-    inherit cabal HaXml HTTP dataenc time;
-  };
+  haxr = callPackage ../development/libraries/haskell/haxr {};
 
-  haxr_th = import ../development/libraries/haskell/haxr-th {
-    inherit cabal haxr HaXml HTTP;
-  };
+  haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
 
-  HaXml = import ../development/libraries/haskell/HaXml {
-    inherit cabal;
-  };
+  HaXml = callPackage ../development/libraries/haskell/HaXml {};
 
-  HDBC = import ../development/libraries/haskell/HDBC/HDBC.nix {
-    inherit cabal HUnit QuickCheck mtl time utf8String convertible testpack;
-  };
+  HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
-  HDBCPostgresql = import ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {
-    inherit cabal HDBC parsec;
+  HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {
     inherit (pkgs) postgresql;
   };
 
-  HDBCSqlite = import ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {
-    inherit cabal HDBC;
+  HDBCSqlite = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {
     inherit (pkgs) sqlite;
   };
 
-  HGL = import ../development/libraries/haskell/HGL {
-    inherit cabal X11;
+  HGL = callPackage ../development/libraries/haskell/HGL {};
+
+  highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
+
+  hint = callPackage ../development/libraries/haskell/hint {
+    ghcPaths = ghcPaths_0_1_0_6;
   };
 
-  highlightingKate = import ../development/libraries/haskell/highlighting-kate {
-    inherit cabal parsec pcreLight xhtml;
-  };
+  Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
 
-  hint = import ../development/libraries/haskell/hint {
-    inherit cabal extensibleExceptions filepath ghcMtl haskellSrc
-      MonadCatchIOMtl mtl utf8String;
-    ghcPaths = ghcPaths0106;
-  };
+  HList = callPackage ../development/libraries/haskell/HList {};
 
-  Hipmunk = import ../development/libraries/haskell/Hipmunk {
-    inherit cabal;
-  };
-
-  HList = import ../development/libraries/haskell/HList {
-    inherit cabal ;
-  };
-
-  hmatrix = import ../development/libraries/haskell/hmatrix {
-    inherit cabal QuickCheck HUnit storableComplex vector;
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
     inherit (pkgs) gsl liblapack/* lapack library */ blas;
   };
 
-  hscolour = import ../development/libraries/haskell/hscolour {
-    inherit cabal;
+  hscolour = callPackage ../development/libraries/haskell/hscolour {};
+
+  hsemail = callPackage ../development/libraries/haskell/hsemail {};
+
+  HStringTemplate = callPackage ../development/libraries/haskell/HStringTemplate {};
+
+  hspread = callPackage ../development/libraries/haskell/hspread {};
+
+  hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
+
+  html = callPackage ../development/libraries/haskell/html {};
+
+  httpdShed = callPackage ../development/libraries/haskell/httpd-shed {
+    network = network_2_2_1_7;
   };
 
-  hsemail = import ../development/libraries/haskell/hsemail {
-    inherit cabal mtl parsec;
+  HUnit_1_2_2_1 = callPackage ../development/libraries/haskell/HUnit/1.2.2.1.nix {};
+
+  HUnit = callPackage ../development/libraries/haskell/HUnit {};
+
+  ivor = callPackage ../development/libraries/haskell/ivor {};
+
+  jpeg = callPackage ../development/libraries/haskell/jpeg {};
+
+  json = callPackage ../development/libraries/haskell/json {};
+
+  json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
+
+  maybench = callPackage ../development/libraries/haskell/maybench {};
+
+  MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
+
+  MaybeTTransformers = callPackage ../development/libraries/haskell/MaybeT-transformers {};
+
+  MissingH = callPackage ../development/libraries/haskell/MissingH {
+    network = network_2_2_1_7;
   };
 
-  HStringTemplate = import ../development/libraries/haskell/HStringTemplate {
-    inherit cabal parsec time text utf8String parallel;
-  };
+  mmap = callPackage ../development/libraries/haskell/mmap {};
 
-  hspread = import ../development/libraries/haskell/hspread {
-    inherit cabal binary network;
-  };
+  MonadCatchIOMtl = callPackage ../development/libraries/haskell/MonadCatchIO-mtl {};
 
-  hsloggerTemplate = import ../development/libraries/haskell/hslogger-template {
-    inherit cabal hslogger mtl;
-  };
+  MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
-  html = import ../development/libraries/haskell/html {
-    inherit cabal;
-  };
+  monadlab = callPackage ../development/libraries/haskell/monadlab {};
 
-  httpdShed = import ../development/libraries/haskell/httpd-shed {
-    inherit cabal;
-    network = network2217;
-  };
+  MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
-  HUnit1221 = import ../development/libraries/haskell/HUnit/1.2.2.1.nix {
-    inherit cabal;
-  };
+  monadsFd = callPackage ../development/libraries/haskell/monads-fd {};
 
-  HUnit = import ../development/libraries/haskell/HUnit {
-    inherit cabal;
-  };
+  mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
-  ivor = import ../development/libraries/haskell/ivor {
-    inherit cabal mtl parsec;
-  };
+  mtl = callPackage ../development/libraries/haskell/mtl {};
 
-  jpeg = import ../development/libraries/haskell/jpeg {
-    inherit cabal mtl;
-  };
+  multirec = callPackage ../development/libraries/haskell/multirec {};
 
-  json = import ../development/libraries/haskell/json {
-    inherit cabal mtl;
-  };
+  multiset = callPackage ../development/libraries/haskell/multiset {};
 
-  json_036 = import ../development/libraries/haskell/json/0.3.6.nix {
-    inherit cabal mtl;
-  };
+  network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
 
-  maybench = import ../development/libraries/haskell/maybench {
-    inherit cabal benchpress;
-  };
+  network = callPackage ../development/libraries/haskell/network {};
 
-  MaybeT = import ../development/libraries/haskell/MaybeT {
-    inherit cabal mtl;
-  };
+  nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
-  MaybeTTransformers = import ../development/libraries/haskell/MaybeT-transformers {
-    inherit cabal transformers monadsFd;
-  };
+  numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
 
-  MissingH = import ../development/libraries/haskell/MissingH {
-    inherit cabal HUnit hslogger parsec regexCompat;
-    network = network2217;
-  };
-
-  mmap = import ../development/libraries/haskell/mmap {
-    inherit cabal;
-  };
-
-  MonadCatchIOMtl = import ../development/libraries/haskell/MonadCatchIO-mtl {
-    inherit cabal mtl extensibleExceptions;
-  };
-
-  MonadCatchIOTransformers = import ../development/libraries/haskell/MonadCatchIO-transformers {
-    inherit cabal transformers extensibleExceptions;
-  };
-
-  monadlab = import ../development/libraries/haskell/monadlab {
-    inherit cabal parsec;
-  };
-
-  MonadRandom = import ../development/libraries/haskell/MonadRandom {
-    inherit cabal mtl;
-  };
-
-  monadsFd = import ../development/libraries/haskell/monads-fd {
-    inherit cabal transformers;
-  };
-
-  mpppc = import ../development/libraries/haskell/mpppc {
-    inherit cabal ansiTerminal split text;
-  };
-
-  mtl = import ../development/libraries/haskell/mtl {
-    inherit cabal;
-  };
-
-  multirec = import ../development/libraries/haskell/multirec {
-    inherit cabal;
-  };
-
-  multiset = import ../development/libraries/haskell/multiset {
-    inherit cabal syb;
-  };
-
-  network2217 = import ../development/libraries/haskell/network/2.2.1.7.nix {
-    inherit cabal parsec;
-  };
-
-  network = import ../development/libraries/haskell/network {
-    inherit cabal parsec;
-  };
-
-  nonNegative = import ../development/libraries/haskell/non-negative {
-    inherit cabal QuickCheck;
-  };
-
-  numericPrelude = import ../development/libraries/haskell/numeric-prelude {
-    inherit cabal HUnit QuickCheck parsec nonNegative utilityHt;
-  };
-
-  OpenAL = import ../development/libraries/haskell/OpenAL {
-    inherit cabal OpenGL;
+  OpenAL = callPackage ../development/libraries/haskell/OpenAL {
     inherit (pkgs) openal;
   };
 
-  OpenGL2230 = import ../development/libraries/haskell/OpenGL/2.2.3.0.nix {
-    inherit cabal;
+  OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
   };
 
-  OpenGL = import ../development/libraries/haskell/OpenGL {
-    inherit cabal;
+  OpenGL = callPackage ../development/libraries/haskell/OpenGL {
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
   };
 
-  pandoc = import ../development/libraries/haskell/pandoc {
-    inherit cabal mtl parsec utf8String xhtml zipArchive
-      xml texmath;
-    HTTP = HTTP400009;
-    network = network2217;
+  pandoc = callPackage ../development/libraries/haskell/pandoc {
+    HTTP = HTTP_4000_0_9;
+    network = network_2_2_1_7;
   };
 
-  parallel2201 = import ../development/libraries/haskell/parallel/2.2.0.1.nix {
-    inherit cabal deepseq;
-  };
+  parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
 
-  parallel = import ../development/libraries/haskell/parallel {
-    inherit cabal;
-  };
+  parallel = callPackage ../development/libraries/haskell/parallel {};
 
-  parseargs = import ../development/libraries/haskell/parseargs {
-    inherit cabal;
-  };
+  parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
-  parsec = import ../development/libraries/haskell/parsec {
-    inherit cabal;
-  };
+  parsec = callPackage ../development/libraries/haskell/parsec {};
 
-  parsec3 = import ../development/libraries/haskell/parsec/3.nix {
-    inherit cabal mtl;
-  };
+  parsec_3 = callPackage ../development/libraries/haskell/parsec/3.nix {};
 
-  parsimony = import ../development/libraries/haskell/parsimony {
-    inherit cabal utf8String;
-  };
+  parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
-  pcreLight = import ../development/libraries/haskell/pcre-light {
-    inherit cabal;
+  pcreLight = callPackage ../development/libraries/haskell/pcre-light {
     inherit (pkgs) pcre;
   };
 
-  persistent = import ../development/libraries/haskell/persistent {
-    inherit cabal blazeHtml MonadCatchIOTransformers parsec text
-      transformers utf8String webRoutesQuasi;
-  };
+  persistent = callPackage ../development/libraries/haskell/persistent {};
 
-  polyparse = import ../development/libraries/haskell/polyparse {
-    inherit cabal;
-  };
+  polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
-  ppm = import ../development/libraries/haskell/ppm {
-    inherit cabal mtl;
-  };
+  ppm = callPackage ../development/libraries/haskell/ppm {};
 
-  pureMD5 = import ../development/libraries/haskell/pureMD5 {
-    inherit cabal binary;
-  };
+  pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
-  primitive = import ../development/libraries/haskell/primitive {
-    inherit cabal;
-  };
+  primitive = callPackage ../development/libraries/haskell/primitive {};
 
-  QuickCheck  = QuickCheck1;
+  QuickCheck  = QuickCheck_1;
 
-  QuickCheck1 = import ../development/libraries/haskell/QuickCheck {
-    inherit cabal;
-  };
+  QuickCheck_1 = callPackage ../development/libraries/haskell/QuickCheck {};
 
-  QuickCheck2103 = import ../development/libraries/haskell/QuickCheck/2.1.0.3.nix {
-    inherit cabal mtl;
-  };
+  QuickCheck_2_1_0_3 = callPackage ../development/libraries/haskell/QuickCheck/2.1.0.3.nix {};
 
-  QuickCheck2 = import ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {
-    inherit cabal mtl;
-  };
+  QuickCheck_2 = callPackage ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {};
 
-  RangedSets = import ../development/libraries/haskell/Ranged-sets {
-    inherit cabal HUnit QuickCheck;
-  };
+  RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
-  readline = import ../development/libraries/haskell/readline {
-    inherit cabal;
+  readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
   };
 
-  recaptcha = import ../development/libraries/haskell/recaptcha {
-    inherit cabal xhtml;
-    HTTP = HTTP400009;
-    network = network2217;
+  recaptcha = callPackage ../development/libraries/haskell/recaptcha {
+    HTTP = HTTP_4000_0_9;
+    network = network_2_2_1_7;
   };
 
-  regexBase0931 = import ../development/libraries/haskell/regex-base/0.93.1.nix {
-    inherit cabal mtl;
+  regexBase_0_93_1 = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix {};
+
+  regexBase_0_93_2 = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix {};
+
+  regexBase = callPackage ../development/libraries/haskell/regex-base {};
+
+  regexCompat_0_92 = callPackage ../development/libraries/haskell/regex-compat/0.92.nix {
+    regexBase = regexBase_0_93_1;
+    regexPosix = regexPosix_0_94_1;
   };
 
-  regexBase0932 = import ../development/libraries/haskell/regex-base/0.93.2.nix {
-    inherit cabal mtl;
+  regexCompat_0_93_1 = callPackage ../development/libraries/haskell/regex-compat/0.93.1.nix {
+    regexBase = regexBase_0_93_2;
+    regexPosix = regexPosix_0_94_2;
   };
 
-  regexBase = import ../development/libraries/haskell/regex-base {
-    inherit cabal mtl;
+  regexCompat = callPackage ../development/libraries/haskell/regex-compat {};
+
+  regexPosix_0_94_1 = callPackage ../development/libraries/haskell/regex-posix/0.94.1.nix {
+    regexBase = regexBase_0_93_1;
   };
 
-  regexCompat092 = import ../development/libraries/haskell/regex-compat/0.92.nix {
-    inherit cabal;
-    regexBase = regexBase0931;
-    regexPosix = regexPosix0941;
+  regexPosix_0_94_2 = callPackage ../development/libraries/haskell/regex-posix/0.94.2.nix {
+    regexBase = regexBase_0_93_2;
   };
 
-  regexCompat0931 = import ../development/libraries/haskell/regex-compat/0.93.1.nix {
-    inherit cabal;
-    regexBase = regexBase0932;
-    regexPosix = regexPosix0942;
-  };
-
-  regexCompat = import ../development/libraries/haskell/regex-compat {
-    inherit cabal regexBase regexPosix;
-  };
-
-  regexPosix0941 = import ../development/libraries/haskell/regex-posix/0.94.1.nix {
-    inherit cabal;
-    regexBase = regexBase0931;
-  };
-
-  regexPosix0942 = import ../development/libraries/haskell/regex-posix/0.94.2.nix {
-    inherit cabal;
-    regexBase = regexBase0932;
-  };
-
-  regexPosix = import ../development/libraries/haskell/regex-posix {
+  regexPosix = callPackage ../development/libraries/haskell/regex-posix {
     inherit cabal regexBase;
   };
 
-  regular = import ../development/libraries/haskell/regular {
-    inherit cabal;
+  regular = callPackage ../development/libraries/haskell/regular {};
+
+  safe = callPackage ../development/libraries/haskell/safe {};
+
+  salvia = callPackage ../development/libraries/haskell/salvia {
+    network = network_2_2_1_7;
   };
 
-  safe = import ../development/libraries/haskell/safe {
-    inherit cabal;
+  salviaProtocol = callPackage ../development/libraries/haskell/salvia-protocol {};
+
+  scion = callPackage ../development/libraries/haskell/scion {};
+
+  sendfile = callPackage ../development/libraries/haskell/sendfile {
+    network = network_2_2_1_7;
   };
 
-  salvia = import ../development/libraries/haskell/salvia {
-    inherit cabal fclabels MaybeTTransformers monadsFd pureMD5
-      safe salviaProtocol split text threadmanager transformers
-      utf8String stm time;
-    network = network2217;
-  };
+  syb = callPackage ../development/libraries/haskell/syb {};
 
-  salviaProtocol = import ../development/libraries/haskell/salvia-protocol {
-    inherit cabal fclabels parsec safe split utf8String bimap;
-  };
+  sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 
-  scion = import ../development/libraries/haskell/scion {
-    inherit cabal ghcPaths ghcSyb hslogger json multiset time uniplate;
-  };
-
-  sendfile = import ../development/libraries/haskell/sendfile {
-    inherit cabal;
-    network = network2217;
-  };
-
-  syb = import ../development/libraries/haskell/syb {
-    inherit cabal;
-  };
-
-  sybWithClass = import ../development/libraries/haskell/syb/syb-with-class.nix {
-    inherit cabal;
-  };
-
-  SDLImage = import ../development/libraries/haskell/SDL-image {
-    inherit cabal SDL;
+  SDLImage = callPackage ../development/libraries/haskell/SDL-image {
     inherit (pkgs) SDL_image;
   };
 
-  SDLMixer = import ../development/libraries/haskell/SDL-mixer {
-    inherit cabal SDL;
+  SDLMixer = callPackage ../development/libraries/haskell/SDL-mixer {
     inherit (pkgs) SDL_mixer;
   };
 
-  SDLTtf = import ../development/libraries/haskell/SDL-ttf {
-    inherit cabal SDL;
+  SDLTtf = callPackage ../development/libraries/haskell/SDL-ttf {
     inherit (pkgs) SDL_ttf;
   };
 
-  SDL = import ../development/libraries/haskell/SDL {
-    inherit cabal;
+  SDL = callPackage ../development/libraries/haskell/SDL {
     inherit (pkgs) SDL;
   };
 
-  SHA = import ../development/libraries/haskell/SHA {
-    inherit cabal binary;
+  SHA = callPackage ../development/libraries/haskell/SHA {};
+
+  Shellac = callPackage ../development/libraries/haskell/Shellac/Shellac.nix {};
+
+  ShellacHaskeline = callPackage ../development/libraries/haskell/Shellac/Shellac-haskeline.nix {};
+
+  ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
+
+  SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {
+    network = network_2_2_1_7;
   };
 
-  Shellac = import ../development/libraries/haskell/Shellac/Shellac.nix {
-    inherit cabal mtl;
-  };
+  split = callPackage ../development/libraries/haskell/split {};
 
-  ShellacHaskeline = import ../development/libraries/haskell/Shellac/Shellac-haskeline.nix {
-    inherit cabal Shellac haskeline;
-  };
+  stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
-  ShellacReadline = import ../development/libraries/haskell/Shellac/Shellac-readline.nix {
-    inherit cabal Shellac readline;
-  };
+  stm = callPackage ../development/libraries/haskell/stm {};
 
-  SMTPClient = import ../development/libraries/haskell/SMTPClient {
-    inherit cabal hsemail;
-    network = network2217;
-  };
+  stm_2_1_2_1 = callPackage ../development/libraries/haskell/stm/2.1.2.1.nix {};
 
-  split = import ../development/libraries/haskell/split {
-    inherit cabal;
-  };
+  storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
-  stbImage = import ../development/libraries/haskell/stb-image {
-    inherit cabal bitmap;
-  };
+  strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
-  stm = import ../development/libraries/haskell/stm {
-    inherit cabal;
-  };
-
-  stm2121 = import ../development/libraries/haskell/stm/2.1.2.1.nix {
-    inherit cabal;
-  };
-
-  storableComplex = import ../development/libraries/haskell/storable-complex {
-    inherit cabal;
-  };
-
-  strictConcurrency = import ../development/libraries/haskell/strictConcurrency {
-    inherit cabal parallel;
-  };
-
-  terminfo = import ../development/libraries/haskell/terminfo {
-    inherit cabal extensibleExceptions /* only required for <= ghc6102  ?*/;
+  terminfo = callPackage ../development/libraries/haskell/terminfo {
+    inherit extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
 
-  testpack = import ../development/libraries/haskell/testpack {
-    inherit cabal HUnit QuickCheck mtl;
+  testpack = callPackage ../development/libraries/haskell/testpack {};
+
+  texmath = callPackage ../development/libraries/haskell/texmath {
+    cgi = cgi_3001_1_7_2;
   };
 
-  texmath = import ../development/libraries/haskell/texmath {
-    inherit cabal json parsec xml;
-    cgi = cgi3001172;
+  text = callPackage ../development/libraries/haskell/text {};
+
+  threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
+
+  /* time is Haskell Platform default, time_1_1_3 is more recent but incompatible */
+  time = callPackage ../development/libraries/haskell/time {};
+
+  time_1_1_3 = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
+
+  transformers = callPackage ../development/libraries/haskell/transformers {};
+
+  uniplate = callPackage ../development/libraries/haskell/uniplate {};
+
+  uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
+
+  unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  url = callPackage ../development/libraries/haskell/url {};
+
+  utf8String = callPackage ../development/libraries/haskell/utf8-string {};
+
+  utilityHt = callPackage ../development/libraries/haskell/utility-ht {};
+
+  uulib = callPackage ../development/libraries/haskell/uulib {};
+
+  uuParsingLib = callPackage ../development/libraries/haskell/uu-parsinglib {};
+
+  vacuum = callPackage ../development/libraries/haskell/vacuum {
+    ghcPaths = ghcPaths_0_1_0_6;
   };
 
-  text = import ../development/libraries/haskell/text {
-    inherit cabal deepseq;
+  vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
+
+  Vec = callPackage ../development/libraries/haskell/Vec {};
+
+  vector = callPackage ../development/libraries/haskell/vector {};
+
+  vty = callPackage ../development/libraries/haskell/vty {};
+
+  webRoutes = callPackage ../development/libraries/haskell/web-routes {
+    network = network_2_2_1_7;
   };
 
-  threadmanager = import ../development/libraries/haskell/threadmanager {
-    inherit cabal;
-  };
+  webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {};
 
-  /* time is Haskell Platform default, time113 is more recent but incompatible */
-  time = import ../development/libraries/haskell/time {
-    inherit cabal;
-  };
-
-  time113 = import ../development/libraries/haskell/time/1.1.3.nix {
-    inherit cabal;
-  };
-
-  transformers = import ../development/libraries/haskell/transformers {
-    inherit cabal;
-  };
-
-  uniplate = import ../development/libraries/haskell/uniplate {
-    inherit cabal mtl;
-  };
-
-  uniqueid = import ../development/libraries/haskell/uniqueid {
-    inherit cabal;
-  };
-
-  unixCompat = import ../development/libraries/haskell/unix-compat {
-    inherit cabal;
-  };
-
-  url = import ../development/libraries/haskell/url {
-    inherit cabal utf8String;
-  };
-
-  utf8String = import ../development/libraries/haskell/utf8-string {
-    inherit cabal;
-  };
-
-  utilityHt = import ../development/libraries/haskell/utility-ht {
-    inherit cabal;
-  };
-
-  uulib = import ../development/libraries/haskell/uulib {
-    inherit cabal;
-  };
-
-  uuParsingLib = import ../development/libraries/haskell/uu-parsinglib {
-    inherit cabal;
-  };
-
-  vacuum = import ../development/libraries/haskell/vacuum {
-    inherit cabal;
-    ghcPaths = ghcPaths0106;
-  };
-
-  vacuumCairo = import ../development/libraries/haskell/vacuum-cairo {
-    inherit cabal vacuum gtk2hs parallel strictConcurrency;
-  };
-
-  Vec = import ../development/libraries/haskell/Vec {
-    inherit cabal QuickCheck;
-  };
-
-  vector = import ../development/libraries/haskell/vector {
-    inherit cabal primitive;
-  };
-
-  vty = import ../development/libraries/haskell/vty {
-    inherit cabal utf8String terminfo;
-  };
-
-  webRoutes = import ../development/libraries/haskell/web-routes {
-    inherit cabal utf8String parsec;
-    network = network2217;
-  };
-
-  webRoutesQuasi = import ../development/libraries/haskell/web-routes-quasi {
-    inherit cabal webRoutes;
-  };
-
-  WebServer = import ../development/libraries/haskell/WebServer {
-    inherit cabal network mtl parsec;
+  WebServer = callPackage ../development/libraries/haskell/WebServer {
     inherit (pkgs) fetchgit;
   };
 
-  WebServerExtras = import ../development/libraries/haskell/WebServer-Extras {
-    inherit cabal Crypto WebServer base64string hslogger mtl;
-    json = json_036;
+  WebServerExtras = callPackage ../development/libraries/haskell/WebServer-Extras {
+    json = json_0_3_6;
     inherit (pkgs) fetchgit;
   };
 
-  CouchDB = import ../development/libraries/haskell/CouchDB {
-    inherit cabal network mtl ;
+  CouchDB = callPackage ../development/libraries/haskell/CouchDB {
     HTTP = HTTP_3001;
-    json = json_036;
+    json = json_0_3_6;
   };
 
-  base64string = import ../development/libraries/haskell/base64-string {
-    inherit cabal;
-  };
+  base64string = callPackage ../development/libraries/haskell/base64-string {};
 
-  wx = import ../development/libraries/haskell/wxHaskell/wx.nix {
-    inherit cabal stm wxcore;
-  };
+  wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
 
-  wxcore = import ../development/libraries/haskell/wxHaskell/wxcore.nix {
-    inherit cabal time parsec stm;
+  wxcore = callPackage ../development/libraries/haskell/wxHaskell/wxcore.nix {
     wxGTK = pkgs.wxGTK28;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
   };
 
-  X11 = import ../development/libraries/haskell/X11 {
-    inherit cabal;
+  X11 = callPackage ../development/libraries/haskell/X11 {
     inherit (pkgs.xlibs) libX11 libXinerama libXext;
     xineramaSupport = true;
   };
 
-  X11_xft = import ../development/libraries/haskell/X11-xft {
-    inherit ghc cabal X11 utf8String;
+  X11Xft = callPackage ../development/libraries/haskell/X11-xft {
     inherit (pkgs) pkgconfig;
     inherit (pkgs.xlibs) libXft;
   };
 
-  xhtml = import ../development/libraries/haskell/xhtml {
-    inherit cabal;
-  };
+  xhtml = callPackage ../development/libraries/haskell/xhtml {};
 
-  xml = import ../development/libraries/haskell/xml {
-    inherit cabal;
-  };
+  xml = callPackage ../development/libraries/haskell/xml {};
 
-  zipArchive = import ../development/libraries/haskell/zip-archive {
-    inherit cabal binary mtl utf8String zlib digest;
-  };
+  zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
 
-  zipper = import ../development/libraries/haskell/zipper {
-    inherit cabal multirec;
-  };
+  zipper = callPackage ../development/libraries/haskell/zipper {};
 
-  zlib = import ../development/libraries/haskell/zlib {
-    inherit cabal;
+  zlib = callPackage ../development/libraries/haskell/zlib {
     inherit (pkgs) zlib;
   };
 
-  zlib0520 = import ../development/libraries/haskell/zlib/0.5.2.0.nix {
-    inherit cabal;
+  zlib_0_5_2_0 = callPackage ../development/libraries/haskell/zlib/0.5.2.0.nix {
     inherit (pkgs) zlib;
   };
 
   # Compilers.
 
-  ehc = import ../development/compilers/ehc {
-    inherit ghc uulib uuagc mtl network binary fgl;
+  ehc = callPackage ../development/compilers/ehc {
     inherit (pkgs) fetchsvn stdenv coreutils glibc m4 libtool llvm;
   };
 
-  helium = import ../development/compilers/helium {
-    inherit ghc;
-    inherit (pkgs) fetchurl stdenv;
-  };
+  helium = callPackage ../development/compilers/helium {};
 
-  idris = import ../development/compilers/idris {
-    inherit cabal mtl parsec readline ivor happy;
-    inherit (pkgs) fetchdarcs;
-  };
-
+  idris = callPackage ../development/compilers/idris {};
 
   # Development tools.
 
-  alex = import ../development/tools/parsing/alex {
-    inherit cabal;
-    inherit (pkgs) perl;
+  alex = callPackage ../development/tools/parsing/alex {};
+
+  alex_2_3_2 = callPackage ../development/tools/parsing/alex/2.3.2.nix {};
+
+  alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
+
+  cpphs = callPackage ../development/tools/misc/cpphs {};
+
+  frown = callPackage ../development/tools/parsing/frown {};
+
+  haddock = haddock_2_4_2;
+
+  haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/haddock-2.4.2.nix {};
+
+  haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/haddock-2.7.2.nix {
+    alex = alex_2_3_2;
+    happy = happy_1_18_4;
+    ghcPaths = ghcPaths_0_1_0_6;
   };
 
-  alex232 = import ../development/tools/parsing/alex/2.3.2.nix {
-    inherit cabal;
-    inherit (pkgs) perl;
+  haddock_2_7_2_P = callPackage ../development/tools/documentation/haddock/haddock-2.7.2.nix {
+    alex = alex_2_3_3;
+    happy = happy_1_18_5;
+    ghcPaths = ghcPaths_0_1_0_6;
   };
 
-  alex233 = import ../development/tools/parsing/alex/2.3.3.nix {
-    inherit cabal;
-    inherit (pkgs) perl;
+  happy = happy_1_18_4;
+
+  happy_1_17 = callPackage ../development/tools/parsing/happy/happy-1.17.nix {};
+
+  happy_1_18_4 = callPackage ../development/tools/parsing/happy/happy-1.18.4.nix {};
+
+  happy_1_18_5 = callPackage ../development/tools/parsing/happy/happy-1.18.5.nix {};
+
+  hlint = callPackage ../development/tools/haskell/hlint {};
+
+  hslogger = callPackage ../development/tools/haskell/hslogger {
+    network = network_2_2_1_7;
   };
 
-  cpphs = import ../development/tools/misc/cpphs {
-    inherit cabal;
-  };
+  mkcabal = callPackage ../development/tools/haskell/mkcabal {};
 
-  frown = import ../development/tools/parsing/frown {
-    inherit ghc;
-    inherit (pkgs) fetchurl stdenv;
-  };
+  tar = callPackage ../development/tools/haskell/tar {};
 
-  haddock = haddock242;
-
-  # old version of haddock, still more stable than 2.0
-  haddock09 = import ../development/tools/documentation/haddock/haddock-0.9.nix {
-    inherit cabal;
-  };
-
-  # does not compile with ghc-6.8.3
-  haddock210 = pkgs.lowPrio (import ../development/tools/documentation/haddock/haddock-2.1.0.nix {
-    inherit cabal;
-  });
-
-  haddock242 = import ../development/tools/documentation/haddock/haddock-2.4.2.nix {
-    inherit cabal ghcPaths;
-    inherit (pkgs) libedit;
-  };
-
-  haddock272 = import ../development/tools/documentation/haddock/haddock-2.7.2.nix {
-    inherit cabal;
-    alex = alex232;
-    happy = happy1184;
-    ghcPaths = ghcPaths0106;
-  };
-
-  haddock272P = import ../development/tools/documentation/haddock/haddock-2.7.2.nix {
-    inherit cabal;
-    alex = alex233;
-    happy = happy1185;
-    ghcPaths = ghcPaths0106;
-  };
-
-  happy = happy1184;
-
-  happy117 = import ../development/tools/parsing/happy/happy-1.17.nix {
-    inherit cabal;
-    inherit (pkgs) perl;
-  };
-
-  happy1184 = import ../development/tools/parsing/happy/happy-1.18.4.nix {
-    inherit cabal mtl;
-    inherit (pkgs) perl;
-  };
-
-  happy1185 = import ../development/tools/parsing/happy/happy-1.18.5.nix {
-    inherit cabal mtl;
-    inherit (pkgs) perl;
-  };
-
-  hlint = import ../development/tools/haskell/hlint {
-    inherit cabal haskellSrcExts mtl uniplate hscolour parallel;
-  };
-
-  hslogger = import ../development/tools/haskell/hslogger {
-    inherit cabal mtl time;
-    network = network2217;
-  };
-
-  mkcabal = import ../development/tools/haskell/mkcabal {
-    inherit cabal mtl pcreLight readline;
-  };
-
-  tar = import ../development/tools/haskell/tar {
-    inherit cabal binary;
-  };
-
-  uuagc = import ../development/tools/haskell/uuagc {
-    inherit cabal uulib;
-  };
+  uuagc = callPackage ../development/tools/haskell/uuagc {};
 
   # Applications.
 
-  darcs = import ../applications/version-management/darcs/darcs-2.nix {
-    inherit cabal html mtl parsec regexCompat haskeline hashedStorage;
-    zlib = zlib0520;
+  darcs = callPackage ../applications/version-management/darcs/darcs-2.nix {
+    zlib = zlib_0_5_2_0;
     inherit (pkgs) curl;
   };
 
-  leksah = import ../applications/editors/leksah {
-    inherit cabal gtk2hs binary parsec regexPosix regexCompat utf8String;
+  leksah = callPackage ../applications/editors/leksah {
     inherit (pkgs) libedit makeWrapper;
   };
 
-  xmobar = import ../applications/misc/xmobar {
-    inherit cabal X11 mtl parsec stm utf8String X11_xft;
-  };
+  xmobar = callPackage ../applications/misc/xmobar {};
 
-  xmonad = import ../applications/window-managers/xmonad {
-    inherit cabal X11 mtl;
+  xmonad = callPackage ../applications/window-managers/xmonad {
     inherit (pkgs.xlibs) xmessage;
   };
 
-  xmonadContrib = import ../applications/window-managers/xmonad/xmonad-contrib.nix {
-    inherit cabal xmonad X11 utf8String;
-  };
-
+  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
   # Tools.
 
-  cabalInstall082 = import ../tools/package-management/cabal-install/0.8.2.nix {
-    inherit cabal;
-    HTTP = HTTP400009;
-    network = network2217;
-    zlib = zlib0520;
+  cabalInstall_0_8_2 = callPackage ../tools/package-management/cabal-install/0.8.2.nix {
+    HTTP = HTTP_4000_0_9;
+    network = network_2_2_1_7;
+    zlib = zlib_0_5_2_0;
   };
 
-  cabalInstall080 = import ../tools/package-management/cabal-install/0.8.0.nix {
-    inherit cabal;
-    HTTP = HTTP400009;
-    network = network2217;
-    zlib = zlib0520;
+  cabalInstall_0_8_0 = callPackage ../tools/package-management/cabal-install/0.8.0.nix {
+    HTTP = HTTP_4000_0_9;
+    network = network_2_2_1_7;
+    zlib = zlib_0_5_2_0;
   };
 
-  cabalInstall = import ../tools/package-management/cabal-install {
-    inherit cabal HTTP network zlib;
-  };
+  cabalInstall = callPackage ../tools/package-management/cabal-install {};
 
-  lhs2tex = import ../tools/typesetting/lhs2tex {
-    inherit cabal regexCompat;
+  lhs2tex = callPackage ../tools/typesetting/lhs2tex {
     inherit (pkgs) tetex polytable;
   };
 
-  myhasktags = import ../tools/misc/myhasktags {
-    inherit ghcReal;
-    inherit (pkgs) stdenv fetchurl;
-  };
+  myhasktags = callPackage ../tools/misc/myhasktags {};
 
   # Games.
 
-  LambdaHack = import ../games/LambdaHack {
-    inherit cabal binary mtl zlib vty;
-  };
+  LambdaHack = callPackage ../games/LambdaHack {};
 
-  MazesOfMonad = import ../games/MazesOfMonad {
-    inherit cabal HUnit mtl regexPosix time;
-  };
+  MazesOfMonad = callPackage ../games/MazesOfMonad {};
 
-}
+# End of the main part of the file.
+
+}; };
+
+in result.x

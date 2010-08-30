@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "AspectAG";
-  version = "0.1.5";
-  sha256 = "4cefc7e3404a723f0a75b29797bd9fe685c2a1b3150826b3ba09ade94565f6ff";
+  version = "0.2";
+  sha256 = "5184ba55bc89d4afd12d1fe5f20e5d62b3b7306e771a7418db805afb70638ce7";
   propagatedBuildInputs = [HList mtl];
   meta = {
     description = "Attribute Grammars in the form of an EDSL";
