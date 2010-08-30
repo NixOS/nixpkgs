@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "text";
-  version = "0.7.1.0";
-  sha256 = "a6daa0ee43ddede620363ab26614fef69361bd5b8f77aa6918b5a4ecb083f425";
+  version = "0.7.2.1";
+  sha256 = "13b00db1363219e263a4af5b1318d2a296d67c975883cd7e17265fcd8fb1381c";
   propagatedBuildInputs = [deepseq];
   meta = {
     description = "An efficient package Unicode text type";
