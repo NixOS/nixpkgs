@@ -4589,6 +4589,8 @@ let
       inherit (gtkLibs) gtkmm;
     };
 
+    iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
+
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     iwlwifi4965ucode =
