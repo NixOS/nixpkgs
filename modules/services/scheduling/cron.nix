@@ -12,6 +12,7 @@ let
       SHELL=${pkgs.bash}/bin/bash
       PATH=${config.system.path}/bin:${config.system.path}/sbin
       MAILTO="${config.services.cron.mailto}"
+      NIX_CONF_DIR=/nix/etc/nix
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
   
