@@ -3317,6 +3317,8 @@ let
 
   liboop = callPackage ../development/libraries/liboop { };
 
+  libosip = callPackage ../development/libraries/osip {};
+
   libotr = callPackage ../development/libraries/libotr { };
 
   libp11 = callPackage ../development/libraries/libp11 { };
@@ -6965,7 +6967,7 @@ let
 
   polytable = callPackage ../misc/tex/polytable { };
 
-  psi = callPackage ../applications/networking/instant-messengers/psi {
+  psi = makeOverridable (callPackage ../applications/networking/instant-messengers/psi) {
     qca2 = kde45.qca2;
     qca2_ossl = kde45.qca2_ossl;
     qt4 = qt47;
