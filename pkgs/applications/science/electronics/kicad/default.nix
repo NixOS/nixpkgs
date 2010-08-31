@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, unzip, cmake, mesa, wxGTK, zlib, libX11}:
+{stdenv, fetchsvn, unzip, cmake, mesa, wxGTK, zlib, libX11, gettext}:
 
 stdenv.mkDerivation rec {
   name = "kicad-svn-2518";
@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
   # so we have to handle this.
   patchPhase = ''
     sed -i -e 's,/usr/local/kicad,'$out,g common/gestfich.cpp
+    pushd internat/ca
+    sed -i -e s/iso-8859-1/utf-8/ kicad.po
+    msgfmt -o kicad.mo kicad.po
+    popd
   '';
 
   enableParallelBuilding = true;
 
-  buildInputs = [ unzip cmake mesa wxGTK zlib libX11 ];
+  buildInputs = [ unzip cmake mesa wxGTK zlib libX11 gettext ];
 
   postInstall = ''
     mkdir library
