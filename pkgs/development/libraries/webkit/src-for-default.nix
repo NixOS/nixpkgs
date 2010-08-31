@@ -1,9 +1,9 @@
 rec {
-   version="r66356";
-   name="webkit-r66356";
-   hash="046xbmzxxhigsc2jwnkvgfvf11n54hi92i8nskcznwbbs1ra282i";
-   url="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r66356.tar.bz2";
-   advertisedUrl="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r66356.tar.bz2";
+   version="r66329";
+   name="webkit-r66329";
+   hash="1kfigk95lyfgjjks9c62gnb334zxnz44zcirxlx23sq3vrkqgs84";
+   url="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r66329.tar.bz2";
+   advertisedUrl="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r66329.tar.bz2";
   
   
 }
