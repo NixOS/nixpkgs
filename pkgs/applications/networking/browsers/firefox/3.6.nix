@@ -40,7 +40,6 @@ rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
     ];
 
-
   xulrunner = stdenv.mkDerivation {
     name = "xulrunner-${xulVersion}";
     
@@ -57,6 +56,10 @@ rec {
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman
       ];
+
+    preConfigure = if stdenv.isMips then ''
+      export ac_cv_thread_keyword=no
+    '' else "";
 
     configureFlags =
       [ "--enable-application=xulrunner"
