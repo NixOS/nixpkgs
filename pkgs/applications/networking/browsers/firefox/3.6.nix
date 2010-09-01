@@ -45,10 +45,16 @@ rec {
     
     inherit src;
 
-    # To be removed when the change gets upstream. I don't know if the patch
-    # affects xulrunner or firefox.
-    patches = [ ./symlinks-bug551152.patch ./xulrunner-chromium-mips.patch
-      ./xulrunner-mips-n32.patch ];
+    patches = [
+      # To be removed when the change gets upstream. I don't know if the patch
+      # affects xulrunner or firefox.
+      ./symlinks-bug551152.patch
+
+      # Loongson2f related patches:
+      ./xulrunner-chromium-mips.patch
+      ./xulrunner-mips-n32.patch
+      ./xulrunner-1.9.2_beta4-mips-bus-error.patch
+    ];
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
