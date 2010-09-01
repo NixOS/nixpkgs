@@ -1,8 +1,8 @@
 { fetchurl, stdenv, perl, bison, flex, pkgconfig, python
-, which, gtkdoc, glib, libxml2 }:
+, which, glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-0.10.26";
+  name = "gstreamer-0.10.30";
   # TODO: Remove gtkdoc dependency on next upgrade
 
   src = fetchurl {
@@ -10,11 +10,15 @@ stdenv.mkDerivation rec {
       "${meta.homepage}/src/gstreamer/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "1gah0ggfavl5z2wmwmwgs3h3ppwk6q1a6k0klk7zj1ph5n2isbc6";
+    sha256 = "0ajkfkchwpk5zlcis19laqbv84mi61cn3cqbdbrpyy93whdk1vz8";
   };
 
-  buildInputs = [perl bison flex pkgconfig python which  gtkdoc ];
+  buildInputs = [perl bison flex pkgconfig python which ];
   propagatedBuildInputs = [glib libxml2];
+
+  patchPhase = ''
+    sed -i -e 's/^   /\t/' docs/gst/Makefile.in docs/libs/Makefile.in docs/plugins/Makefile.in
+  '';
 
   configureFlags = ''
     --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook

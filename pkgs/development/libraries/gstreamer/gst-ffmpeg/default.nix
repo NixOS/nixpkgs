@@ -1,14 +1,14 @@
 { fetchurl, stdenv, pkgconfig, gstPluginsBase, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-ffmpeg-0.10.9";
+  name = "gst-ffmpeg-0.10.11";
 
   src = fetchurl {
     urls = [
       "http://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "05cg5jzl8wccsr495hgs7cgdkc6dfi1v218fsm5fv2slgly1pvb3";
+    sha256 = "0bk9k9sccx9nvhjakacvq8gd6vp63x9ddmjrqkfdhkmgwlwa2dpz";
   };
 
   propagatedBuildInputs = [ gstPluginsBase ];

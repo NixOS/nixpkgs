@@ -2,7 +2,7 @@ args: with args;
 rec {
   gstreamer = makeOverridable (import ./gstreamer) {
     inherit (args) fetchurl stdenv perl bison flex
-       pkgconfig python which gtkdoc glib libxml2;
+       pkgconfig python which glib libxml2;
   };
 
   gstPluginsBase = makeOverridable (import ./gst-plugins-base) {
