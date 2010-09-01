@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
-    url = "file:///root/binutils/${basename}.tar.bz2";
-    sha256 = "1f0na8c31sccbipzk8xiyd7n7ydh5gg09kirbs28vcb2714cxws0";
+    url = http://nixos.org/tarballs/binutils-2.20.51-pre-20100901.tar.bz2;
+    sha256 = "1872fdnbnq5z5svq7mvc0vyyad8pknwvx2glxq1bbk0xv7arp72y";
   };
 
   patches = [

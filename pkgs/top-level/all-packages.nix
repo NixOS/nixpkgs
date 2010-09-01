@@ -2267,8 +2267,8 @@ let
     inherit noSysDirs;
   };
 
-  binutils = if stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux" then binutils_snapshot
-    else binutils_release;
+  # We are waiting for a release. Meanwhile, sysvinit and the loongson2f need it.
+  binutils = binutils_snapshot;
 
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl;
