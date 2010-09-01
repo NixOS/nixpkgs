@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "ortp-0.13.1";
+  name = "ortp-0.16.3";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/ortp/sources/${name}.tar.gz";
-    sha256 = "0k2963v4b15xnf4cpkpgjhsb8ckxpf6vdr8dnw7z3mzilji7391b";
+    sha256 = "13805ec34ee818408aa1b4571915ef8f9e544c838a0fca9dff8d2308de6574eb";
   };
 
   meta = {
