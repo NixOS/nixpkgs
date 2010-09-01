@@ -1,17 +1,24 @@
-{ stdenv, fetchurl, gettext, libjpeg, libtiff, libungif, libpng, imlib, xlibs }:
+{ stdenv, fetchurl, gettext, libjpeg, libtiff, libungif, libpng, imlib, xlibs, automake, pkgconfig,
+  gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "icewm-1.2.37";
+  name = "icewm-1.3.6";
 
   buildInputs =
     [ gettext libjpeg libtiff libungif libpng imlib
       xlibs.libX11 xlibs.libXft xlibs.libXext xlibs.libXinerama xlibs.libXrandr
+      pkgconfig gdk_pixbuf
     ];
 
   src = fetchurl {
     url = "mirror://sourceforge/icewm/${name}.tar.gz";
-    sha256 = "15852k96z2w19v3d02jynxyf6ld378hbkd6lpy64byysrmjh3dmz";
+    sha256 = "1pr7rc10rddwvy4ncng4mf5fpxd1nqjsw34xba9ngsg32rg57b91";
   };
+
+  # The fuloong2f is not supported by 1.3.6 still
+  preConfigure = ''
+    cp ${automake}/share/automake*/config.{sub,guess} .
+  '';
 
   meta = {
     description = "A window manager for the X Window System";
