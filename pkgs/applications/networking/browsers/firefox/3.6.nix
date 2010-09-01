@@ -48,7 +48,7 @@ rec {
 
     # To be removed when the change gets upstream. I don't know if the patch
     # affects xulrunner or firefox.
-    patches = [ ./symlinks-bug551152.patch ];
+    patches = [ ./symlinks-bug551152.patch ./xulrunner-chromium-mips.patch ];
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
