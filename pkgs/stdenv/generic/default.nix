@@ -97,7 +97,7 @@ let
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux"
-               || result.system == "ict_loongson-2_v0.3_fpu_v0.1-linux";
+               || result.system == "mips64-linux";
         isSunOS = result.system == "i386-sunos";
         isCygwin = result.system == "i686-cygwin";
 	isFreeBSD = result.system == "i686-freebsd"
@@ -119,8 +119,7 @@ let
                || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
                 || result.system == "x86_64-darwin";
-        isMips = result.system == "ict_loongson-2_v0.3_fpu_v0.1-linux"
-                || result.system == "mips-linux"
+        isMips = result.system == "mips-linux"
                 || result.system == "mips64-linux";
         isArm = result.system == "armv5tel-linux";
 

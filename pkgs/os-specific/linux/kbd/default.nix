@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # We get a warning in armv5tel-linux and the fuloong2f,
   # so we disable -Werror in it
   patchPhase = if (stdenv.system == "armv5tel-linux" ||
-    stdenv.system == "ict_loongson-2_v0.3_fpu_v0.1-linux")
+    stdenv.system == "mips64-linux")
     then ''
       sed -i s/-Werror// src/Makefile.am
     '' else "";
