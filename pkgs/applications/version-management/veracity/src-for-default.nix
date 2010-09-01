@@ -1,8 +1,9 @@
 rec {
-   version="0.3.0.10246";
-   name="veracity-0.3.0.10246";
-   hash="03wn6dzbjv5p50xmiznynza5c1nk38v95mzv6rk6km1ykqprnlw0";
-   url="http://download-us.sourcegear.com/Veracity/0.3.0.10246/veracity-source-${version}.tar.gz";
-   advertisedUrl="http://download-us.sourcegear.com/Veracity/0.3.0.10246/veracity-source-0.3.0.10246.tar.gz";
+   version="0.3.1.10276";
+   name="veracity-0.3.1.10276";
+   hash="1qihrn243dlvvdg5w1vfv3g8bvpy7v0q3xc4d72k85xv8vkljkxw";
+   url="http://download-us.sourcegear.com/Veracity/nightly/veracity-source-${version}.tar.gz";
+   advertisedUrl="http://download-us.sourcegear.com/Veracity/nightly/veracity-source-0.3.1.10276.tar.gz";
+  
   
 }

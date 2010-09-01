@@ -18,15 +18,36 @@ rec {
   inherit (s) name;
   inherit buildInputs;
 
-  phaseNames = ["prepareMakefiles" "doMake" "doDeploy"];
+  phaseNames = ["prepare_sgneeds" "dump0" "prepareMakefiles" "doMake" "doDeploy"];
+
+  dump0 = (a.doDump "0");
+
+  prepare_sgneeds = a.fullDepEntry (''
+    for d in bin include lib; do 
+      ensureDir "$out/sgneeds/$d"
+      for p in "${spidermonkey_1_8_0rc1}"; do
+        for f in "$p"/"$d"/*; do
+	  ln -sf "$f" "$out"/sgneeds/"$d"
+	done
+      done
+    done
+
+    ensureDir "$out/sgneeds/include/sgbrings"
+    ln -s "$out/sgneeds/include/js" "$out/sgneeds/include/sgbrings/js"
+    for f in "$out/sgneeds/lib/"libjs*; do
+      bn="$(basename "$f")"
+      ln -s "$f" "$out/sgneeds/lib/''${bn/libjs/libsgbrings_js}"
+    done
+
+    export SGNEEDS_DIR="$out"/sgneeds/
+  '') ["minInit" "defEnsureDir"];
 
   prepareMakefiles = a.fullDepEntry ''
-    find src -type f -exec sed -e 's@#include \([<"]\)sgbrings/js/js@#include \1js/js@g' -i '{}' ';'
     cd ..
     mkdir build
     cd build
     export NIX_LDFLAGS="$NIX_LDFLAGS -lssl"
-    cmake -G "Unix Makefiles" -D SGBRINGS_JS_INCDIR="${spidermonkey_1_8_0rc1}/include" -D SGBRINGS_JS_LIB="${spidermonkey_1_8_0rc1}/lib/libjs.a" ../veracity*
+    cmake -G "Unix Makefiles" -D SGNEEDS_DIR="$SGNEEDS_DIR" ../veracity*
   '' ["minInit" "addInputs" "doUnpack"];
 
   doDeploy = a.fullDepEntry ''
