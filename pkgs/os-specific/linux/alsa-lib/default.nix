@@ -39,5 +39,10 @@ stdenv.mkDerivation rec {
        See http://thread.gmane.org/gmane.linux.distributions.nixos/3435
     */
     ./alsa-plugin-dirs.patch
+
+    /* patch provided by larsc on irc.
+       it may be a compiler problem on mips; without this, alsa does not build
+       on mips, because lacks some symbols atomic_add/atomic_sub  */
+    ./mips-atomic.patch
   ];
 }
