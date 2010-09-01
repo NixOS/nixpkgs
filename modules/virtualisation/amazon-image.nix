@@ -86,9 +86,11 @@ with pkgs.lib;
   boot.initrd.postMountCommands =
     ''
       mkdir -m 1777 -p $targetRoot/ephemeral0/tmp
+      mkdir -m 1777 -p $targetRoot/tmp
       mount --bind $targetRoot/ephemeral0/tmp $targetRoot/tmp
 
       mkdir -m 755 -p $targetRoot/ephemeral0/var
+      mkdir -m 755 -p $targetRoot/var
       mount --bind $targetRoot/ephemeral0/var $targetRoot/var
 
       mkdir -m 755 -p $targetRoot/ephemeral0/nix
