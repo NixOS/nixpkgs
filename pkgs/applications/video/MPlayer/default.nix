@@ -5,7 +5,7 @@
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
 , amrnb ? null, amrwb ? null, amrSupport ? false
-, x11Support ? true, libX11 ? null
+, x11Support ? true, libX11 ? null, libXext ? null
 , jackaudioSupport ? false, jackaudio ? null
 , x264Support ? false, x264 ? null
 , xvidSupport ? false, xvidcore ? null
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ freetype zlib pkgconfig ]
-    ++ stdenv.lib.optional x11Support [ libX11 mesa ]
+    ++ stdenv.lib.optional x11Support [ libX11 libXext mesa ]
     ++ stdenv.lib.optional alsaSupport alsaLib
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
     ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
     ${if codecs != null then "--codecsdir=${codecs}" else ""}
-    --enable-runtime-cpudetection
+    ${if (stdenv.isi686 || stdenv.isx86_64) then "--enable-runtime-cpudetection" else ""}
     ${if x11Support then "--enable-x11" else ""}
     --disable-xanim
     --disable-ivtv

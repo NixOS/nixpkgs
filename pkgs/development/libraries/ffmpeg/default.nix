@@ -1,5 +1,5 @@
 {stdenv, fetchurl, faad2, libtheora, speex, libvorbis, x264, pkgconfig, xvidcore, lame, yasm
-, libvpx}:
+, vpxSupport ? false, libvpx ? null}:
 
 stdenv.mkDerivation {
   name = "ffmpeg-0.6";
@@ -12,25 +12,26 @@ stdenv.mkDerivation {
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
   # applications.
-  configureFlags = ''
-    --enable-gpl
-    --enable-postproc
-    --enable-swscale
-    --disable-ffserver
-    --disable-ffplay
-    --enable-libfaad
-    --enable-shared
-    --enable-libtheora
-    --enable-libvorbis
-    --enable-libspeex
-    --enable-libx264
-    --enable-libxvid
-    --enable-libmp3lame
-    --enable-runtime-cpudetect
-    --enable-libvpx
-  '';
+  configureFlags = [
+    "--enable-gpl"
+    "--enable-postproc"
+    "--enable-swscale"
+    "--disable-ffserver"
+    "--disable-ffplay"
+    "--enable-libfaad"
+    "--enable-shared"
+    "--enable-libtheora"
+    "--enable-libvorbis"
+    "--enable-libspeex"
+    "--enable-libx264"
+    "--enable-libxvid"
+    "--enable-libmp3lame"
+    "--enable-runtime-cpudetect"
+  ] ++
+    stdenv.lib.optional vpxSupport "--enable-libvpx";
 
-  buildInputs = [faad2 libtheora speex libvorbis x264 pkgconfig xvidcore lame yasm libvpx];
+  buildInputs = [ faad2 libtheora speex libvorbis x264 pkgconfig xvidcore lame yasm ]
+    ++ stdenv.lib.optional vpxSupport libvpx;
 
   meta = {
     homepage = http://www.ffmpeg.org/;

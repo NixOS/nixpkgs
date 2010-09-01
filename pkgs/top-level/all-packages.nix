@@ -2723,7 +2723,9 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg = callPackage ../development/libraries/ffmpeg { };
+  ffmpeg = callPackage ../development/libraries/ffmpeg {
+    vpxSupport = if !stdenv.isMips then true else false;
+  };
 
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
