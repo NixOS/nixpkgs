@@ -681,6 +681,10 @@ rec {
 
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/happy-1.18.5.nix {};
 
+  HaRe = callPackage ../development/tools/haskell/HaRe {
+    network = network_2_2_1_7;
+  };
+
   hlint = callPackage ../development/tools/haskell/hlint {};
 
   hslogger = callPackage ../development/tools/haskell/hslogger {
