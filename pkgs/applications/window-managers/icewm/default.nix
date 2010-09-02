@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gettext, libjpeg, libtiff, libungif, libpng, imlib, xlibs, automake, pkgconfig,
-  gdk_pixbuf }:
+  gtk }:
 
 stdenv.mkDerivation rec {
   name = "icewm-1.3.6";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ gettext libjpeg libtiff libungif libpng imlib
       xlibs.libX11 xlibs.libXft xlibs.libXext xlibs.libXinerama xlibs.libXrandr
-      pkgconfig gdk_pixbuf
+      pkgconfig gtk
     ];
 
   src = fetchurl {

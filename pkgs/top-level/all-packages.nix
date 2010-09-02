@@ -5717,7 +5717,9 @@ let
 
   icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
 
-  icewm = callPackage ../applications/window-managers/icewm { };
+  icewm = callPackage ../applications/window-managers/icewm {
+    inherit (gtkLibs) gtk;
+  };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
