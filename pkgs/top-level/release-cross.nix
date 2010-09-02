@@ -9,7 +9,7 @@ let
     busybox.hostDrv = nativePlatforms;
     coreutils.hostDrv = nativePlatforms;
     dropbear.hostDrv = nativePlatforms;
-    tightvnc.hostDrv = nativePlatforms;
+    tigervnc.hostDrv = nativePlatforms;
     #openoffice.hostDrv = nativePlatforms;
     wxGTK.hostDrv = nativePlatforms;
     #firefox = nativePlatforms;
