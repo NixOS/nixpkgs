@@ -103,6 +103,11 @@ let
       kernelTarget = "vmlinux";
     };
     openssl.system = "linux-generic32";
+    uclibc.extraConfig = ''
+      ARCH_BIG_ENDIAN n
+      ARCH_WANTS_BIG_ENDIAN n
+      ARCH_WANTS_LITTLE_ENDIAN y
+    '';
   };
 in {
   crossMipselLinux24 = mapTestOnCross crossSystem basic;
