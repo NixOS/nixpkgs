@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     cat << EOF | parseconfig
     ${nixConfig}
     ${extraConfig}
-    ${if cross != null then cross.uclibc.extraConfig else ""}
+    ${if cross != null then stdenv.lib.attrByPath [ "uclibc" "extraConfig" ] "" cross else ""}
     $extraCrossConfig
     EOF
     make oldconfig

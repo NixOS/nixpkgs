@@ -4,9 +4,10 @@ let
 
   /* Basic list of packages to cross-build */
   basicHostDrv = {
+    gccCrossStageFinal = nativePlatforms;
     bison.hostDrv = nativePlatforms;
     busybox.hostDrv = nativePlatforms;
-    coreutils_real.hostDrv = nativePlatforms;
+    coreutils.hostDrv = nativePlatforms;
     dropbear.hostDrv = nativePlatforms;
     tightvnc.hostDrv = nativePlatforms;
     #openoffice.hostDrv = nativePlatforms;
@@ -18,6 +19,8 @@ let
     nixUnstable.hostDrv = nativePlatforms;
     linuxPackages_2_6_32.kernel.hostDrv = linux;
     linuxPackages_2_6_33.kernel.hostDrv = linux;
+    linuxPackages_2_6_34.kernel.hostDrv = linux;
+    linuxPackages_2_6_35.kernel.hostDrv = linux;
   };
 
   /* Basic list of packages to be natively built,
@@ -63,6 +66,13 @@ let
     platform = pkgs.platforms.sheevaplug;
     libc = "uclibc";
     openssl.system = "linux-generic32";
+    uclibc.extraConfig = ''
+      CONFIG_ARM_OABI n
+      CONFIG_ARM_EABI y
+      ARCH_BIG_ENDIAN n
+      ARCH_WANTS_BIG_ENDIAN n
+      ARCH_WANTS_LITTLE_ENDIAN y
+    '';
   };
 
 in {
@@ -135,7 +145,6 @@ let
 in {
   crossMingw32 = mapTestOnCross crossSystem {
     windows.wxMSW.hostDrv = nativePlatforms;
-    gccCrossStageFinal = nativePlatforms;
   };
 }) // (
 
@@ -153,7 +162,6 @@ let
   };
 in {
   crossGNU = mapTestOnCross crossSystem {
-    gccCrossStageFinal = nativePlatforms;
     hurdCross = nativePlatforms;
     mach.hostDrv = nativePlatforms;
 
@@ -194,7 +202,6 @@ let
   };
 in {
   fuloongminipc = mapTestOnCross crossSystem {
-    gccCrossStageFinal = nativePlatforms;
 
     coreutils_real.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
@@ -255,7 +262,6 @@ let
   };
 in {
   nanonote = mapTestOnCross crossSystem {
-    gccCrossStageFinal = nativePlatforms;
 
     coreutils_real.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
