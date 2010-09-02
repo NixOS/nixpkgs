@@ -166,7 +166,7 @@ with (import ./release-lib.nix);
   jwhois = linux;
   kbd = linux;
   keen4 = ["i686-linux"];
-  klibc = linux;
+#  klibc = linux;
   ktorrent = linux;
   kvm = linux;
   qemu = linux;
