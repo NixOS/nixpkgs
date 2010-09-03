@@ -3,7 +3,7 @@
 kde.package {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1fil2rbvy4j47gqpn4xcjvjwxy4yq5mvpwcd5lhp8fdzgsc0jmdn";
+  outputHash = "04j1csjjji5ffahbcjkcv17agjq5z84czmlpbicv4hnj3rby11nx";
 
   buildInputs = [ cmake ];
   meta = {
@@ -12,7 +12,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "oxygen-icons";
-      version = "4.5.0";
+      version = "4.5.1";
     };
   };
 }

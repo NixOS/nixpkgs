@@ -92,4 +92,8 @@ builtins.listToAttrs
   name = "polkit-qt-1-0.96.1.tar.bz2";
   value = "1ng5bi1gmr5lg49c5kyqyjzbjhs4w90c2zlnfcyviv9p3wzfgzbr";
 }
+{
+  name = "oxygen-icons-4.5.1.tar.bz2";
+  value = "1gnz8jrdccw91p2n52my0609h7g9ws55gal3jan2jylz6b0zq6dm";
+}
 ]
