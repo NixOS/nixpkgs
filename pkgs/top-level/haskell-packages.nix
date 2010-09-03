@@ -2,9 +2,7 @@
 
 let ghcReal = pkgs.lowPrio ghc; in
 
-let result = rec {
-
-      x = let callPackage = newScope x; in
+let result = let callPackage = newScope result; in
 
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
@@ -746,6 +744,6 @@ rec {
 
 # End of the main part of the file.
 
-}; };
+};
 
-in result.x
+in result
