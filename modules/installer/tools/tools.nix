@@ -4,35 +4,6 @@
 {config, pkgs, ...}:
 
 let
-
-  ### interface
-
-  options = {
-  
-    installer.nixpkgsURL = pkgs.lib.mkOption {
-      default = "";
-      example = http://nixos.org/releases/nix/nixpkgs-0.11pre7577;
-      description = ''
-        URL of the Nixpkgs distribution to use when building the
-        installation CD.
-      '';
-    };
-
-    installer.manifests = pkgs.lib.mkOption {
-      default = [http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST];
-      example =
-        [ http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST
-          http://nixos.org/releases/nixpkgs/channels/nixpkgs-stable/MANIFEST
-        ];
-      description = ''
-        URLs of manifests to be downloaded when you run
-        <command>nixos-rebuild</command> to speed up builds.
-      '';
-    };
-    
-  };
-
-
   ### implementation
 
   makeProg = args: pkgs.substituteAll (args // {
@@ -119,23 +90,48 @@ let
 in
 
 {
-  require = options;
+  options = {
+  
+    installer.nixpkgsURL = pkgs.lib.mkOption {
+      default = "";
+      example = http://nixos.org/releases/nix/nixpkgs-0.11pre7577;
+      description = ''
+        URL of the Nixpkgs distribution to use when building the
+        installation CD.
+      '';
+    };
 
-  environment.systemPackages =
-    [ nixosInstall
-      nixosRebuild
-      nixosHardwareScan
-      nixosGenSeccureKeys
-      nixosOption
+    installer.manifests = pkgs.lib.mkOption {
+      default = [http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST];
+      example =
+        [ http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST
+          http://nixos.org/releases/nixpkgs/channels/nixpkgs-stable/MANIFEST
+        ];
+      description = ''
+        URLs of manifests to be downloaded when you run
+        <command>nixos-rebuild</command> to speed up builds.
+      '';
+    };
+    
+  };
 
-      installer2.runInChroot
-      installer2.nixosPrepareInstall
-    ];
+  config = {
+    environment.systemPackages =
+      [ nixosInstall
+        nixosRebuild
+         nixosHardwareScan
+         nixosGenSeccureKeys
+         nixosOption
 
-  system.build = {
-    inherit nixosInstall;
+         installer2.runInChroot
+         installer2.nixosPrepareInstall
+      ];
 
-    # expose scripts
-    inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstallArchive;
+    system.build = {
+      inherit nixosInstall;
+
+      # expose scripts
+      inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstallArchive;
+    };
   };
 }
