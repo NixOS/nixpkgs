@@ -65,9 +65,9 @@ let
     in
       # allow both:
       # { /* the config */ } and
-      # { pkgsOrig, pkgs, ... } : { /* the config */ }
+      # { pkgs, ... } : { /* the config */ }
       if builtins.isFunction configExpr
-        then configExpr { inherit pkgs pkgsOrig; }
+        then configExpr { inherit pkgs; }
         else configExpr;
 
   # Return an attribute from the Nixpkgs configuration file, or
@@ -87,21 +87,42 @@ let
   # Allow packages to be overriden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
   # as an argument and returns a set of new or overriden packages.
-  # `__overrides' is a magic attribute that causes the attributes in
-  # its value to be added to the surrounding `rec'.  The
-  # `packageOverrides' function is called with the *original*
+  # The `packageOverrides' function is called with the *original*
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  # We don't want stdenv overrides in the case of cross-building, or
-  # otherwise the basic overrided packages will not be built with the
-  # crossStdenv adapter.
-  overrides = (getConfig ["packageOverrides"] (pkgs: {})) pkgsOrig //
-    (if pkgsOrig.stdenv ? overrides && crossSystem == null
-     then pkgsOrig.stdenv.overrides else { });
+  pkgs = applyGlobalOverrides (getConfig ["packageOverrides"] (pkgs: {}));
 
-  pkgsOrig = pkgsFun { }; # the un-overriden packages, passed to packageOverrides
-  pkgs = pkgsFun overrides; # the overriden, final packages
+
+  # Return the complete set of packages, after applying the overrides
+  # returned by the `overrider' function (see above).
+  applyGlobalOverrides = overrider:
+    let
+      # Call the overrider function.  We don't want stdenv overrides
+      # in the case of cross-building, or otherwise the basic
+      # overrided packages will not be built with the crossStdenv
+      # adapter.
+      overrides = overrider pkgsOrig //
+        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) pkgsOrig.stdenv.overrides);
+
+      # The un-overriden packages, passed to `overrider'.
+      pkgsOrig = pkgsFun pkgs {}; 
+
+      # The overriden, final packages.
+      pkgs = pkgsFun pkgs overrides; 
+    in pkgs;
+
+
+  # The package compositions.  Yes, this isn't properly indented.
+  pkgsFun = pkgs: __overrides:
+    with helperFunctions;
+    let defaultScope = pkgs // pkgs.xorg; in
+    helperFunctions // rec {
+
+  # `__overrides' is a magic attribute that causes the attributes in
+  # its value to be added to the surrounding `rec'.  We'll remove this
+  # eventually.
+  inherit __overrides;
 
 
   # We use `callPackage' to be able to omit function arguments that
@@ -112,25 +133,18 @@ let
 
   newScope = extra: lib.callPackageWith (defaultScope // extra);
 
-  defaultScope = pkgs // pkgs.xorg;
-
-
-  # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = __overrides: with helperFunctions; helperFunctions // rec {
-
-
+  
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
     inherit system;
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
   };
 
+  
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux";
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
-
-  inherit __overrides;
 
 
   # For convenience, allow callers to get the path to Nixpkgs.
@@ -853,7 +867,7 @@ let
   nbd = callPackage ../tools/networking/nbd {
     glib = gtkLibs.glib.override {
       stdenv = makeStaticBinaries stdenv;
-  };
+    };
   };
 
   nc6 = callPackage ../tools/networking/nc6 { };
@@ -2082,7 +2096,7 @@ let
   python24 = lowPrio (callPackage ../development/interpreters/python/2.4 { });
 
   python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
-    inherit fetchurl stdenv zlib bzip2 gdbm;
+    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
   });
