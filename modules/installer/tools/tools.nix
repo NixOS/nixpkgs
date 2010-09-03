@@ -111,6 +111,11 @@ let
     inherit (pkgs) perl;
   };
 
+  nixosOption = makeProg {
+    name = "nixos-option";
+    src = ./nixos-option.sh;
+  };
+
 in
 
 {
@@ -121,6 +126,7 @@ in
       nixosRebuild
       nixosHardwareScan
       nixosGenSeccureKeys
+      nixosOption
 
       installer2.runInChroot
       installer2.nixosPrepareInstall
