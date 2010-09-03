@@ -59,10 +59,10 @@ let cfg = config.services.xserver.synaptics; in
       ''
         # Automatically enable the synaptics driver for all touchpads.
         Section "InputClass"
-          Identifier "touchpad catchall"
-          Driver "synaptics"
+          Identifier "synaptics touchpad catchall"
           MatchIsTouchpad "on"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
+          Driver "synaptics"
           Option "MaxTapTime" "180"
           Option "MaxTapMove" "220"
           Option "MinSpeed" "${cfg.minSpeed}"
