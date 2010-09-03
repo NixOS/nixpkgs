@@ -72,6 +72,7 @@ let
       ARCH_BIG_ENDIAN n
       ARCH_WANTS_BIG_ENDIAN n
       ARCH_WANTS_LITTLE_ENDIAN y
+      LINUXTHREADS_OLD y
     '';
   };
 
@@ -107,6 +108,7 @@ let
       ARCH_BIG_ENDIAN n
       ARCH_WANTS_BIG_ENDIAN n
       ARCH_WANTS_LITTLE_ENDIAN y
+      LINUXTHREADS_OLD y
     '';
   };
 in {
