@@ -80,7 +80,7 @@ with pkgs.lib;
 
           # Unmount file systems.  We repeat this until no more file systems
           # can be unmounted.  This is to handle loopback devices, file
-          # systems  mounted on other file systems and so on.
+          # systems mounted on other file systems and so on.
           tryAgain=1
           while test -n "$tryAgain"; do
               tryAgain=
@@ -110,7 +110,7 @@ with pkgs.lib;
                   # (For instance, when applied to a bind-mount it
                   # unmounts the target of the bind-mount.)  !!! But
                   # we should use `-f' for NFS.
-                  if [ "$mp" != / -a "$mp" != /nix/store ]; then
+                  if [ "$mp" != / -a "$mp" != /nix -a "$mp" != /nix/store ]; then
                       if umount -n "$mp"; then success=1; tryAgain=1; fi
                   fi
 
