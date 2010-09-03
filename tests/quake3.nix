@@ -7,7 +7,7 @@ rec {
 
     { require = [ ./common/x11.nix ];
       services.xserver.driSupport = true;
-      services.xserver.defaultDepth = pkgs.lib.mkOverride 0 {} 16;
+      services.xserver.defaultDepth = pkgs.lib.mkOverrideTemplate 0 {} 16;
       environment.systemPackages = [ pkgs.icewm pkgs.quake3demo ];
     };
 

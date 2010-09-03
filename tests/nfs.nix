@@ -4,7 +4,7 @@ let
 
   client = 
     { config, pkgs, ... }:
-    { fileSystems = pkgs.lib.mkOverride 50 {} 
+    { fileSystems = pkgs.lib.mkOverrideTemplate 50 {} 
         [ { mountPoint = "/data";
             device = "server:/data";
             fsType = "nfs";

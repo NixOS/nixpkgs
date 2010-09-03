@@ -45,7 +45,7 @@ rec {
             autocreate = true;
             device = "share:/repos2";
           };
-        in pkgs.lib.mkOverride 50 {} [ 
+        in pkgs.lib.mkOverrideTemplate 50 {} [ 
           repos1
           repos1 # check remount 
           repos2 # check after remount

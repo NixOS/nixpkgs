@@ -5,7 +5,7 @@
 {pkgs, config, ...}:
 
 let
-  doOverride = pkgs.lib.mkOverride 0 {};
+  doOverride = pkgs.lib.mkOverrideTemplate 0 {};
 in
 
 {

@@ -5,9 +5,9 @@
 with pkgs.lib;
 
 {
-  boot.loader.grub.device = mkOverride 0 {} "";
+  boot.loader.grub.device = mkOverrideTemplate 0 {} "";
   # undefined the obsolete name of the previous option.
-  boot.grubDevice = mkOverride 0 {} pkgs.lib.mkNotdef;
-  nesting.children = mkOverride 0 {} [];
-  nesting.clone = mkOverride 0 {} [];
+  boot.grubDevice = mkOverrideTemplate 0 {} pkgs.lib.mkNotdef;
+  nesting.children = mkOverrideTemplate 0 {} [];
+  nesting.clone = mkOverrideTemplate 0 {} [];
 }

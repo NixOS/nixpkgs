@@ -31,7 +31,7 @@
     webserver = 
       {config, pkgs, ...}:
       {
-        fileSystems = pkgs.lib.mkOverride 50 {} 
+        fileSystems = pkgs.lib.mkOverrideTemplate 50 {} 
           [ { mountPoint = "/repos";
               device = "storage:/repos"; } 
           ];

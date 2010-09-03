@@ -247,9 +247,9 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.sshd.startOn = pkgs.lib.mkOverride 50 {} "";
+  jobs.sshd.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
   # Enable wpa_supplicant, but don't start it by default.
   networking.enableWLAN = true;
-  jobs.wpa_supplicant.startOn = pkgs.lib.mkOverride 50 {} "";
+  jobs.wpa_supplicant.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 }

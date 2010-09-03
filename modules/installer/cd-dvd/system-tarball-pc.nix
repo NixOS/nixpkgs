@@ -174,5 +174,5 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.sshd.startOn = pkgs.lib.mkOverride 50 {} "";
+  jobs.sshd.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 }
