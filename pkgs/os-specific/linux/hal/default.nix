@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ libusb ]
-    ++ stdenv.lib.optional isPC [ libsmbios ];
+    ++ stdenv.lib.optional isPC libsmbios;
 
   preConfigure = ''
     for i in hald/linux/probing/probe-smbios.c hald/linux/osspec.c \
