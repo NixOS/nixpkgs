@@ -215,11 +215,15 @@ rec {
 
 
   innerClosePropagation = ready: list: if list == [] then ready else
-    innerClosePropagation 
-      (ready ++ [(head list)])
-      ((tail list) 
-         ++ (maybeAttrNullable "propagatedBuildInputs" [] (head list))
-         ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] (head list)));
+    if ! isAttrs (head list) then
+      builtins.trace ("not an attrSet: ${lib.showVal (head list)}") 
+        innerClosePropagation ready (tail list)
+    else
+      innerClosePropagation 
+        (ready ++ [(head list)])
+        ((tail list) 
+           ++ (maybeAttrNullable "propagatedBuildInputs" [] (head list))
+           ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] (head list)));
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
