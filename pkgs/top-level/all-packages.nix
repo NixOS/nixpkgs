@@ -2947,6 +2947,8 @@ let
 
   gpgme = callPackage ../development/libraries/gpgme { };
 
+  grantlee = callPackage ../development/libraries/grantlee { };
+
   gsasl = callPackage ../development/libraries/gsasl { };
 
   gsl = callPackage ../development/libraries/gsl { };
