@@ -32,11 +32,11 @@
   config ? null
 
 , crossSystem ? null
-, platform ? (import ./platforms.nix).pc
+, platform ? null
 }:
 
 
-let config_ = config; in # rename the function argument
+let config_ = config; platform_ = platform; in # rename the function arguments
 
 let
 
@@ -69,6 +69,10 @@ let
       if builtins.isFunction configExpr
         then configExpr { inherit pkgs pkgsOrig; }
         else configExpr;
+
+  # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
+  platform = if platform_ != null then platform_ 
+    else getConfig [ "platform" ] (import ./platforms.nix).pc;
 
   # Return an attribute from the Nixpkgs configuration file, or
   # a default value if the attribute doesn't exist.
