@@ -96,4 +96,8 @@ builtins.listToAttrs
   name = "oxygen-icons-4.5.1.tar.bz2";
   value = "1gnz8jrdccw91p2n52my0609h7g9ws55gal3jan2jylz6b0zq6dm";
 }
+{
+  name = "kdelibs-4.5.1.tar.bz2";
+  value = "1xqvrrbwz5i4m6lipg1j97l2yq3kmxsl5j62jkhvp56q7dh85i0d";
+}
 ]
