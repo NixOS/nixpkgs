@@ -96,7 +96,7 @@ let
     platform = {
       name = "malta";
       kernelMajor = "2.4";
-      kernelBaseConfig = "malta_defconfig";
+      kernelBaseConfig = "defconfig-malta";
       kernelHeadersBaseConfig = "defconfig-malta";
       uboot = null;
       kernelArch = "mips";
@@ -109,6 +109,9 @@ let
       ARCH_WANTS_BIG_ENDIAN n
       ARCH_WANTS_LITTLE_ENDIAN y
       LINUXTHREADS_OLD y
+
+      # Without this, it does not build for linux 2.4
+      UCLIBC_SUSV4_LEGACY y
     '';
   };
 in {
