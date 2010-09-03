@@ -61,19 +61,22 @@
   kdesdk = callPackage ./sdk { };
   kdetoys = callPackage ./toys { };
 
-  ark = callPackage ./utils/ark.nix { };
-  kcalc = callPackage ./utils/kcalc.nix { };
-  kcharselect = callPackage ./utils/kcharselect.nix { };
-  kdf = callPackage ./utils/kdf.nix { };
-  kfloppy = callPackage ./utils/kfloppy.nix { };
-  kgpg = callPackage ./utils/kgpg.nix { };
-  kremotecontrol = callPackage ./utils/kremotecontrol.nix { };
-  ktimer = callPackage ./utils/ktimer.nix { };
-  kwallet = callPackage ./utils/kwallet.nix { };
-  okteta = callPackage ./utils/okteta.nix { };
-  printer_applet = callPackage ./utils/printer-applet.nix { };
-  superkaramba = callPackage ./utils/superkaramba.nix { };
-  sweeper = callPackage ./utils/sweeper.nix { };
+  kdeutils = {
+    ark = callPackage ./utils/ark.nix { };
+    kcalc = callPackage ./utils/kcalc.nix { };
+    kcharselect = callPackage ./utils/kcharselect.nix { };
+    kdf = callPackage ./utils/kdf.nix { };
+    kfloppy = callPackage ./utils/kfloppy.nix { };
+    kgpg = callPackage ./utils/kgpg.nix { };
+    kremotecontrol = callPackage ./utils/kremotecontrol.nix { };
+    ktimer = callPackage ./utils/ktimer.nix { };
+    kwallet = callPackage ./utils/kwallet.nix { };
+    okteta = callPackage ./utils/okteta.nix { };
+    printer_applet = callPackage ./utils/printer-applet.nix { };
+    superkaramba = callPackage ./utils/superkaramba.nix { };
+    sweeper = callPackage ./utils/sweeper.nix { };
+    recurseForRelease = true;
+  };
 
   kdewebdev = callPackage ./webdev { };
 
