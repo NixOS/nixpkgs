@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       contain, opening the door for theming.
 
       The syntax is intended to follow the syntax of the Django template system,
-      and the design of Django is reused in Grantlee.''
+      and the design of Django is reused in Grantlee.'';
 
     homepage = http://gitorious.org/grantlee;
   };
