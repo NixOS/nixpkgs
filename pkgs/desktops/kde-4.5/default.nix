@@ -49,7 +49,16 @@
   kdebase_runtime = callPackage ./base-runtime { };
 
 ### OTHER MODULES
-  kdeaccessibility = callPackage ./accessibility { };
+  kdeaccessibility = {
+    recurseForDerivations = true;
+    colorSchemes = callPackage ./accessibility/color-schemes.nix { };
+    iconThemes = callPackage ./accessibility/icon-themes.nix { };
+    jovie = callPackage ./accessibility/jovie.nix { };
+    kmag = callPackage ./accessibility/kmag.nix { };
+    kmousetool = callPackage ./accessibility/kmousetool.nix { };
+    kmouth = callPackage ./accessibility/kmouth.nix { };
+  };
+
   kdeadmin = callPackage ./admin { };
   kdeartwork = callPackage ./artwork { };
   kdeedu = callPackage ./edu { };
