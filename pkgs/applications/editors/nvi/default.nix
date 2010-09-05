@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "nvi-1.79";
 
   src = fetchurl {
-    url = ftp://ftp.bostic.com/pub/nvi-1.79.tar.gz;
+    url = http://www.cpan.org/src/misc/nvi-1.79.tar.gz;
     sha256 = "0cvf56rbylz7ksny6g2256sjg8yrsxrmbpk82r64rhi53sm8fnvm";
   };
 
