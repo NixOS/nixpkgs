@@ -3,7 +3,7 @@
 assert stdenv.isLinux;
 
 let
-  version = "1.5.18";
+  version = "1.5.20";
   baseMakeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
 in
 
@@ -12,8 +12,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
-    sha256 = "0ik4ddkfzjrrhpb50i31f2zihqlcnm82yqnl5ci59wx56j5ly474";
+    sha256 = "07683dn18r3k35d6pp0sn88pqcx7dldqx3m6f2gz45i1j094qp7m";
   };
+
+  patches = [ ./make382.patch ];
   
   makeFlags = baseMakeFlags;
 
