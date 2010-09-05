@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.12";
+  name = "ddrescue-1.13";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.gz";
-    sha256 = "0ld176lg7dpkv9vcywh3w1cv3iqafq86yi0jwjafls38n65jhnsq";
+    sha256 = "1fh3lim8nvy6984vbvyvc3w3mb6bdksdsln8an1l9k6im6b507cc";
   };
 
   doCheck = true;
