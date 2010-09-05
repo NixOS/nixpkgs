@@ -186,7 +186,7 @@ in
   no_xsave =
     { name = "no-xsave";
       patch = fetchurl {
-        url = "http://cvs.fedoraproject.org/viewvc/devel/kernel/fix_xen_guest_on_old_EC2.patch?revision=1.1&view=co";
+        url = "http://cvs.fedoraproject.org/viewvc/core/devel/kernel/fix_xen_guest_on_old_EC2.patch?revision=1.1&view=co";
         name = "no-xsave.patch";
         sha256 = "02f51f9b636b105c81a3ed62145abdc0ecb043b8114eb10257854577f617f894";
       };
