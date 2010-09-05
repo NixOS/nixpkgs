@@ -2,11 +2,11 @@
   , libglade ? null}:
 
 stdenv.mkDerivation {
-  name = "pygtk-2.21.0";
+  name = "pygtk-2.17.0";
 
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.21/pygtk-2.21.0.tar.bz2;
-    sha256 = "1zfzq5zwldaha2ivga8f2ydyslf0fs8j601yyqcqsqb3y1dk8vbj";
+    url = http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.17/pygtk-2.17.0.tar.bz2;
+    sha256 = "000l3wrcj0ghid045n6ipqg4q4zci51z9k9fqw4n4p3n5rx82qba";
   };
 
   buildInputs = [python pkgconfig glib gtk]
