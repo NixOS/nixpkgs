@@ -1,8 +1,8 @@
 { fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
-, target ? null }:
+, dejagnu, target ? null }:
 
 let
-    basename = "gdb-7.1";
+    basename = "gdb-7.2";
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (target != null)
@@ -10,11 +10,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.bz2";
-    sha256 = "0ljkv3xkpqg4x38mrmzx4b7h1bkpfy41vmi5q8nnakhajzbjfb0l";
+    sha256 = "1w0h6hya0bl46xddd57mdzwmffplwglhnh9x9hv46ll4mf44ni5z";
   };
 
   # TODO: Add optional support for Python scripting.
-  buildInputs = [ ncurses readline gmp mpfr expat texinfo ];
+  buildInputs = [ ncurses readline gmp mpfr expat texinfo ]
+    ++ stdenv.lib.optional doCheck dejagnu;
 
   configureFlags =
     '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
@@ -26,6 +27,9 @@ stdenv.mkDerivation rec {
     '' # Remove Info files already provided by Binutils and other packages.
        rm -v $out/share/info/{standards,configure,bfd}.info
     '';
+
+  # TODO: Investigate & fix the test failures.
+  doCheck = false;
 
   meta = {
     description = "GDB, the GNU Project debugger";
