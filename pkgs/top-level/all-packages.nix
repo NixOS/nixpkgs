@@ -3589,6 +3589,8 @@ let
     opensc = opensc_0_11_7;
   };
 
+  opal = callPackage ../development/libraries/opal {};
+
   openjpeg = callPackage ../development/libraries/openjpeg { };
 
   openssl = callPackage ../development/libraries/openssl {
@@ -3639,6 +3641,8 @@ let
   postgis = callPackage ../development/libraries/postgis { };
 
   pth = callPackage ../development/libraries/pth { };
+
+  ptlib = callPackage ../development/libraries/ptlib {};
 
   qjson = callPackage ../development/libraries/qjson { };
 
@@ -3737,6 +3741,8 @@ let
   };
 
   speex = callPackage ../development/libraries/speex { };
+
+  srtp = callPackage ../development/libraries/srtp {};
 
   sqlite = callPackage ../development/libraries/sqlite {
     readline = null;
@@ -5455,6 +5461,10 @@ let
       libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
   };
 
+  evolution_data_server = (newScope (gnome // gtkLibs))
+  ../servers/evolution-data-server {
+  };
+
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
     fltk = fltk20;
   };
@@ -6868,6 +6878,9 @@ let
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
+
+  ekiga = lib.callPackageWith (pkgs // pkgs.xorg // pkgs.gtkLibs // pkgs.gnome)
+    ../applications/networking/ekiga {};
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
