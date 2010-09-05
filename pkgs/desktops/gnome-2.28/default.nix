@@ -230,6 +230,11 @@ rec {
     inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42;
   };
 
+  # scrollkeeper replacement
+  rarian = import ./desktop/rarian {
+    inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42;
+  };
+
   gnome_doc_utils = import ./desktop/gnome-doc-utils {
     inherit (pkgs) stdenv fetchurl python pkgconfig libxslt
       makeWrapper;
