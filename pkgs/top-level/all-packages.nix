@@ -2210,7 +2210,7 @@ let
       libgnomeui pango;
   };
 
-  guileLib = callPackage ../development/guile-modules/guile-lib { };
+  guile_lib = callPackage ../development/guile-modules/guile-lib { };
 
   windowssdk = (
     import ../development/misc/windows-sdk {
