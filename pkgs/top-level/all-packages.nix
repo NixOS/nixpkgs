@@ -4810,7 +4810,6 @@ let
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
-
     firmware = getConfig ["pcmciaUtils" "firmware"] [];
     config = getConfig ["pcmciaUtils" "config"] null;
   };
@@ -4841,8 +4840,7 @@ let
 
   splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
 
-  statifier = builderDefsPackage (import ../os-specific/linux/statifier) {
-  };
+  statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
