@@ -137,7 +137,6 @@ with (import ./release-lib.nix);
   grub2 = linux;
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
-  guileLib = linux;
   gv = linux;
   gw6c = linux;
   gzip = all;
