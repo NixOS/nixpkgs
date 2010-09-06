@@ -517,6 +517,8 @@ let
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
+  detox = callPackage ../tools/misc/detox { };
+
   ddclient = callPackage ../tools/networking/ddclient { };
 
   ddrescue = callPackage ../tools/system/ddrescue { };
