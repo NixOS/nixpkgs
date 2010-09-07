@@ -315,6 +315,8 @@ rec {
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
+  HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
+
   HStringTemplate = callPackage ../development/libraries/haskell/HStringTemplate {};
 
   hspread = callPackage ../development/libraries/haskell/hspread {};
@@ -491,6 +493,8 @@ rec {
 
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 
+  sybWithClassInstancesText = callPackage ../development/libraries/haskell/syb/syb-with-class-instances-text.nix {};
+
   SDLImage = callPackage ../development/libraries/haskell/SDL-image {
     inherit (pkgs) SDL_image;
   };
@@ -624,6 +628,8 @@ rec {
   xhtml = callPackage ../development/libraries/haskell/xhtml {};
 
   xml = callPackage ../development/libraries/haskell/xml {};
+
+  yst = callPackage ../development/libraries/haskell/yst {};
 
   zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
 

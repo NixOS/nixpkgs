@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "HStringTemplate";
-  version = "0.6.2";
-  sha256 = "1d8ae847cb2b92f6d083ee1ed5db00c719e51fe43017d4289dea61335a116103";
+  version = "0.6.5";
+  sha256 = "e40b69e22900f381ca7fb080ea6e70d623e52e909bd7b896bc24e15c8e43252c";
   propagatedBuildInputs = [parsec time text utf8String parallel];
   meta = {
     description = "StringTemplate implementation in Haskell";

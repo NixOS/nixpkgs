@@ -3,13 +3,12 @@
 
 cabal.mkDerivation (self : {
   pname = "pandoc";
-  version = "1.5.1.1";
-  sha256 = "6d2283cb618fcaea5ee5cb885ef6532bc34628b351f14a6bd85b098d7a4128d9";
+  version = "1.6";
+  sha256 = "9b825233293edf1ea414b0e7ea821d6a914711dc2c60546566ab5a97512b079b";
   propagatedBuildInputs = [
     mtl network parsec utf8String xhtml zipArchive HTTP xml texmath
   ];
   meta = {
     description = "Conversion between markup formats";
   };
-})  
-
+})

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self : {
   pname = "gitit";
-  version = "0.7.3.5";
-  sha256 = "50cf6b853d439904e54884660eba6ffdc31b938e077fd0d9457fba972d4bde9f";
+  version = "0.7.3.8";
+  sha256 = "356c82604dcfe2eec4faeb36ee46546ea3e26738780723f457366b2e35f6211a";
   propagatedBuildInputs = [
     HStringTemplate happstackServer happstackUtil HTTP SHA cgi datetime
     filestore highlightingKate safe

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
     pname = "happstack-server";
-    version = "0.4.1";
-    sha256 = "2a5d32b4e635160ffab8a90891d9c5ca0433969944ae4013ec8cebe25ba63658";
+    version = "0.5.0.2";
+    sha256 = "0184c835958bf9f29009a5aedd2c913bb1ad6ab60b80d9750849381c172dd6b6";
     propagatedBuildInputs = [
       HUnit HaXml MaybeT happstackData happstackUtil hslogger html
       mtl network parsec sendfile utf8String xhtml zlib
