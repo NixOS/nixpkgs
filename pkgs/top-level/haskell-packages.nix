@@ -212,9 +212,8 @@ rec {
 
   haskellPlatform = haskellPlatform_2010_2_0_0;
 
-  haskellPlatform_2010_2_0_0 = import ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix {
-    inherit cabal ghc
-      html xhtml;
+  haskellPlatformArgs_2010_2_0_0 = {
+    inherit cabal ghc html xhtml;
     haskellSrc = haskellSrc_P;
     fgl = fgl_5_4_2_3;
     cabalInstall = cabalInstall_0_8_2;
@@ -234,8 +233,13 @@ rec {
     stm = stm_2_1_2_1;
     haddock = haddock_2_7_2_P;
     happy = happy_1_18_5;
-    inherit (pkgs) fetchurl;
   };
+
+  haskellPlatformDefaults_2010_2_0_0 = haskellPlatformArgs_2010_2_0_0 // {
+    haskellPlatform = haskellPlatform_2010_2_0_0;
+  };
+
+  haskellPlatform_2010_2_0_0 = callPackage ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix haskellPlatformArgs_2010_2_0_0;
 
   haskellPlatform_2010_1_0_0 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
     inherit cabal ghc fgl
