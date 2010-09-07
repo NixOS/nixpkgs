@@ -8,14 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0fmgk100ficm1jbm4ga9xy484v4cm89wsdfckdybb9gjx8jy4f5h";
   };
 
-  # Disabled: -fPIC cannot be passed this way, because setting CFLAGS
-  #           breaks lua's internal mechanism for passing flags from the
-  #           top-level Makefile to src/Makefile. The desired effect
-  #           could probably be achieved by modifying the Makefile with
-  #           sed(1), etc. I didn't add that, though, because it's not
-  #           clear to me why -fPIC is required in the first place.
-  #
-  # makeFlags = "CFLAGS=-fPIC";
+  NIX_CFLAGS_COMPILE = "-fPIC";
   buildFlags = if stdenv.isLinux then "linux" else
 	       if stdenv.isDarwin then "macosx" else
 	       if stdenv.isFreeBSD then "freebsd" else
