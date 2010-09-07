@@ -1117,7 +1117,7 @@ rec {
       fullName = "Debian 5.0.5 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "cd8158a16c1d3990d35116dfe88005fe685102f591268f8588d3222a02a11339";
+        sha256 = "df450198f1597b526281e507e858f614ceafbd1b4f047c8ed994648f3e2ece19";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1128,7 +1128,7 @@ rec {
       fullName = "Debian 5.0.5 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "aceb161a534a641c205fca7eabb27d60180c0616104be49562a0997a44571c42";
+        sha256 = "1817h2ag6fmrlifh1b9kv3zjr5ghknf53f38s1rqwfq6vh0avsig";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
