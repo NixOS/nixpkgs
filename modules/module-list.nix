@@ -68,6 +68,7 @@
   ./services/misc/nixos-manual.nix
   ./services/misc/rogue.nix
   ./services/misc/synergy.nix
+  ./services/misc/virtualbox.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
   ./services/monitoring/systemhealth.nix
