@@ -104,4 +104,8 @@ builtins.listToAttrs
   name = "kdeaccessibility-4.5.1.tar.bz2";
   value = "0jdd3n61lhabzs2dv6rfv6ksp7cqn5wpj6f2d8z33c354y9lqw24";
 }
+{
+  name = "kdepimlibs-4.5.1.tar.bz2";
+  value = "1dlxnxxay6wbwgcfbkq0xak9z0h1bkh6rvysjx3djmawmwi5aw6b";
+}
 ]
