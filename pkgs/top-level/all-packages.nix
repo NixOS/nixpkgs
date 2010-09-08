@@ -6783,11 +6783,6 @@ let
 
   hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix { };
 
-  # This is a special version of OCaml handcrafted especially for
-  # hol_light it should be merged with the current expresion for ocaml
-  # one day.
-  ocaml_with_sources = callPackage ../applications/science/logic/hol_light/ocaml-with-sources.nix { };
-
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
     inherit (pkgs.emacs23Packages) proofgeneral;

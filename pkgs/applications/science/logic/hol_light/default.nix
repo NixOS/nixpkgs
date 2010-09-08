@@ -1,56 +1,40 @@
-{stdenv, fetchurl, ocaml_with_sources}:
+{stdenv, fetchsvn, ocaml, camlp5_transitional}:
 
-let
-  pname = "hol_light";
-  version = "100110";
-  webpage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
+stdenv.mkDerivation rec {
+  name = "hol_light-${version}";
+  version = "20100820svn57";
 
-  dmtcp_checkpoint = ''
+  inherit ocaml;
+  camlp5 = camlp5_transitional;
 
-(* ------------------------------------------------------------------------- *)
-(* Non-destructive checkpoint using DMTCP.                                   *)
-(* ------------------------------------------------------------------------- *)
-
-let dmtcp_checkpoint bannerstring =
-  let longer_banner = startup_banner ^ " with DMTCP" in
-  let complete_banner =
-    if bannerstring = "" then longer_banner
-    else longer_banner^"\n        "^bannerstring in
-  (Gc.compact(); Unix.sleep 1;
-   try ignore(Unix.system ("dmtcp_command -bc")) with _ -> ();
-   Format.print_string complete_banner;
-   Format.print_newline(); Format.print_newline());;
-  '';
-
-in
-
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-  inherit version;
-
-  src = fetchurl {
-    url = "${webpage}${pname}_${version}.tgz";
-    sha256 = "1jkn9vpl3n9dgb96zwmly32h1p3f9mcf34pg6vm0fyvqp9kbx3ac";
+  src = fetchsvn {
+    url = http://hol-light.googlecode.com/svn/trunk;
+    rev = "57";
+    sha256 = "d1372744abca6c9978673850977d3e1577fd8cfd8298826eb713b3681c10cccd";
   };
 
-  buildInputs = [ ocaml_with_sources ];
+  buildInputs = [ ocaml camlp5 ];
 
   buildCommand = ''
-    ensureDir "$out/src"
-    cd "$out/src"
-
-    tar -xzf "$src"
-    cd hol_light
+    export HOL_DIR="$out/src/hol_light"
+    ensureDir `dirname $HOL_DIR` "$out/bin"
+    cp -a "${src}" "$HOL_DIR"
+    cd "$HOL_DIR"
+    chmod -R u+rwX .
 
     substituteInPlace hol.ml --replace \
       "(try Sys.getenv \"HOLLIGHT_DIR\" with Not_found -> Sys.getcwd())" \
-      "\"$out/src/hol_light\""
+      "\"$HOL_DIR\""
 
-    substituteInPlace Examples/update_database.ml --replace \
-      "Filename.concat ocaml_source_dir" \
-      "Filename.concat \"${ocaml_with_sources}/src/ocaml\""
+    substituteInPlace Makefile --replace \
+      "+camlp5" \
+      "${camlp5}/lib/ocaml/camlp5"
 
-    echo '${dmtcp_checkpoint}' >> make.ml
+    substitute ${./start_hol_light} "$out/bin/start_hol_light" \
+      --subst-var-by OCAML "${ocaml}" \
+      --subst-var-by CAMLP5 "${camlp5_transitional}" \
+      --subst-var HOL_DIR
+    chmod +x "$out/bin/start_hol_light"
 
     make
   '';
@@ -66,7 +50,8 @@ real analysis) to save the user work.  It is also fully programmable, so users
 can extend it with new theorems and inference rules without compromising its
 soundness.
     '';
-    homepage = webpage;
+    homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license = "BSD";
+    ocamlVersions = [ "3.10.0" "3.11.1" ];
   };
 }

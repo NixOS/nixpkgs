@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec @OCAML@/bin/ocaml -I @CAMLP5@/lib/ocaml/camlp5 -I @HOL_DIR@ "$@"
