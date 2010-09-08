@@ -1,0 +1,35 @@
+diff -Nuar dmtcp_1.1.8/dmtcp/src/dmtcp_restart.cpp dmtcp_1.1.8.dont_check_uid/dmtcp/src/dmtcp_restart.cpp
+--- dmtcp_1.1.8/dmtcp/src/dmtcp_restart.cpp	2010-07-01 06:42:54.000000000 +0200
++++ dmtcp_1.1.8.dont_check_uid/dmtcp/src/dmtcp_restart.cpp	2010-09-06 23:50:51.000000000 +0200
+@@ -662,14 +662,6 @@
+       sprintf(error_msg, "\ndmtcp_restart: ckpt image %s", restorename);
+       perror(error_msg);
+       doAbort = true;
+-    } else if (buf.st_uid != getuid()) { /*Could also run if geteuid() matches*/
+-      printf("\nProcess uid (%d) doesn't match uid (%d) of\n" \
+-             "checkpoint image (%s).\n" \
+-	     "This is dangerous.  Aborting for security reasons.\n" \
+-           "If you still want to do this (at your own risk),\n" \
+-           "  then modify dmtcp/src/%s:%d and re-compile.\n",
+-           getuid(), buf.st_uid, restorename, __FILE__, __LINE__ - 6);
+-      doAbort = true;
+     }
+     if (doAbort)
+       abort();
+diff -Nuar dmtcp_1.1.8/mtcp/mtcp_restart.c dmtcp_1.1.8.dont_check_uid/mtcp/mtcp_restart.c
+--- dmtcp_1.1.8/mtcp/mtcp_restart.c	2010-07-01 06:42:53.000000000 +0200
++++ dmtcp_1.1.8.dont_check_uid/mtcp/mtcp_restart.c	2010-09-07 01:49:20.000000000 +0200
+@@ -157,13 +157,6 @@
+       sprintf(error_msg, "\nmtcp_restart: ckpt image %s", restorename);
+       perror(error_msg);
+       abort();
+-    } else if (buf.st_uid != getuid()) { /*Could also run if geteuid() matches*/
+-      mtcp_printf("\nProcess uid (%d) doesn't match uid (%d) of\n" \
+-	          "checkpoint image (%s).\n" \
+-		  "This is dangerous.  Aborting for security reasons.\n" \
+-	   "If you still want to do this, modify mtcp/%s:%d and re-compile.\n",
+-	   getuid(), buf.st_uid, restorename, __FILE__, __LINE__ - 5);
+-      abort();
+     }
+   }
+ 
