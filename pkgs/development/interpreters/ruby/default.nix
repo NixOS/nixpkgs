@@ -1,27 +1,35 @@
-{ stdenv, fetchurl, ncurses, readline
-, zlib ? null
-, openssl ? null
-, gdbm ? null
+{ stdenv, fetchurl
+, zlib, zlibSupport ? true
+, openssl, opensslSupport ? true
+, gdbm, gdbmSupport ? true
+, ncurses, readline, cursesSupport ? false
+, groff, docSupport ? false
 }:
 
+let
+  op = stdenv.lib.optional;
+  ops = stdenv.lib.optionals;
+in
+
 stdenv.mkDerivation rec {
-  version = "1.8.7-p299";
+  version = "1.8.7-p302";
   
   name = "ruby-${version}";
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.8/${name}.tar.gz";
-    sha256 = "0ys2lpri2w3174axhi96vq17lrvk2ngj7f2m42a9008a7n79rj9j";
+    sha256 = "18a4w0n1n0sij7gkb3196dnqav5zr0c5p26f08k7cw6y0i9dz0sq";
   };
 
-  buildInputs = [ncurses readline]
-    ++ (stdenv.lib.optional (zlib != null) zlib)
-    ++ (stdenv.lib.optional (openssl != null) openssl)
-    ++ (stdenv.lib.optional (gdbm != null) gdbm);
+  buildInputs = (ops cursesSupport [ ncurses readline ] )
+    ++ (op docSupport groff )
+    ++ (op zlibSupport zlib)
+    ++ (op opensslSupport openssl)
+    ++ (op gdbmSupport gdbm);
     
   configureFlags = ["--enable-shared" "--enable-pthread"];
 
-  # NIX_LDFLAGS = "-lpthread -lutil";
+  installFlags = stdenv.lib.optionalString docSupport "install-doc";
 
   meta = {
     license = "Ruby";
