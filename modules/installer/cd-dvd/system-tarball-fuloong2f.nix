@@ -1,6 +1,3 @@
-# This module contains the basic configuration for building a NixOS
-# installation CD.
-
 { config, pkgs, ... }:
 
 with pkgs.lib;
@@ -82,7 +79,6 @@ in
       # Tools to create / manipulate filesystems.
       pkgs.ntfsprogs # for resizing NTFS partitions
       pkgs.btrfsProgs
-      pkgs.xfsprogs
       pkgs.jfsutils
       pkgs.jfsrec
 
@@ -102,42 +98,9 @@ in
   # The initrd has to contain any module that might be necessary for
   # mounting the CD/DVD.
   boot.initrd.availableKernelModules =
-    [ # SATA/PATA support.
-      "ahci"
+    [ "vfat" "reiserfs" ];
 
-      "ata_piix"
-
-      "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor"
-      "sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4"
-      "sata_uli" "sata_via" "sata_vsc"
-
-      "pata_ali" "pata_amd" "pata_artop" "pata_atiixp"
-      "pata_cs5520" "pata_cs5530" "pata_cs5535" "pata_efar"
-      "pata_hpt366" "pata_hpt37x" "pata_hpt3x2n" "pata_hpt3x3"
-      "pata_it8213" "pata_it821x" "pata_jmicron" "pata_marvell"
-      "pata_mpiix" "pata_netcell" "pata_ns87410" "pata_oldpiix"
-      "pata_pcmcia" "pata_pdc2027x" "pata_qdi" "pata_rz1000"
-      "pata_sc1200" "pata_serverworks" "pata_sil680" "pata_sis"
-      "pata_sl82c105" "pata_triflex" "pata_via"
-      "pata_winbond"
-
-      # SCSI support (incomplete).
-      "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" 
-
-      # USB support, especially for booting from USB CD-ROM
-      # drives.
-      "usb_storage"
-
-      # Firewire support.  Not tested.
-      "ohci1394" "sbp2"
-
-      # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
-
-      # Add vfat to enable people to copy the contents of the CD to a
-      # bootable USB stick.
-      "vfat"
-    ];
+  boot.kernelPackages = pkgs.linuxPackages_2_6_35;
 
   boot.initrd.kernelModules =
     [ # Wait for SCSI devices to appear.
@@ -168,17 +131,22 @@ in
 
   # To speed up further installation of packages, include the complete stdenv
   # in the Nix store of the tarball.
-  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv pkgs.klibc pkgs.klibcShrunk ];
+  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ];
 
-  tarball.contents =
-    [ { source = config.boot.kernelPackages.kernel + "/vmlinuz";
-        target = "/boot/vmlinuz";
-      }
-    ];
-     
   # Allow sshd to be started manually through "start sshd".  It should
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.sshd.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
+
+  jobs.openssh.startOn = pkgs.lib.mkOverride 50 {} "";
+
+  services.ttyBackgrounds.enable = false;
+
+  boot.loader.grub.enable = false;
+  boot.loader.generationsDir.enable = false;
+  system.boot.loader.kernelFile = "/vmlinux";
+
+  nixpkgs.config = {
+    platform = (import /etc/nixos/nixpkgs/pkgs/top-level/platforms.nix).fuloong2f_n32;
+  };
 }

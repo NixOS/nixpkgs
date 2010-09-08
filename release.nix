@@ -49,9 +49,7 @@ let
     }:
 
     with import nixpkgs {inherit system;};
-
     let
-
       version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
       versionModule = { system.nixosVersion = version; };
@@ -60,7 +58,7 @@ let
         inherit system nixpkgs;
         modules = [ module versionModule ];
       }).config;
-      
+
       tarball = config.system.build.tarball;
     in
       tarball //
@@ -135,6 +133,14 @@ let
     system_tarball_pc = makeSystemTarball {
       module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     };
+
+    system_tarball_fuloong2f = makeSystemTarball {
+      module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
+    } { system = "mips64-linux"; };
+
+    system_tarball_sheevaplug = makeSystemTarball {
+      module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
+    } { system = "armv5tel-linux"; };
 
     # Hacky: doesn't depend on configuration. Yet configuration is evaluated (TODO)
     minimal_install_archive = {system ? "i686-linux"}: (iso_minimal {inherit system;})
