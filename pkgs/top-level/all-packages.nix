@@ -6314,15 +6314,7 @@ let
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
-  /* Doesn't work yet
-
-  xen = builderDefsPackage (import ../applications/virtualization/xen) {
-    inherit python e2fsprogs gnutls pkgconfig libjpeg
-      ncurses SDL libvncserver zlib;
-    texLive = if (getConfig ["xen" "texLive"] false) then texLive else null;
-    graphviz = if (getConfig ["xen" "graphviz"] false) then graphviz else null;
-    ghostscript = if (getConfig ["xen" "ghostscript"] false) then ghostscript else null;
-  }; */
+  xen = callPackage ../applications/virtualization/xen { };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;

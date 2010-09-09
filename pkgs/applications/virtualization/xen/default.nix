@@ -1,36 +1,39 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  fullDepEntry = args.fullDepEntry;
+{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl, python
+, libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2, xz }:
 
-  version = lib.attrByPath ["version"] "3.3.0" args; 
-  _buildInputs = with args; [
-    python e2fsprogs gnutls pkgconfig libjpeg 
-    ncurses SDL libvncserver zlib graphviz ghostscript 
-    texLive
-  ];
-in
-rec {
+let version = "4.0.1"; in 
+
+stdenv.mkDerivation {
+  name = "xen-${version}";
+
   src = fetchurl {
     url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "0vghm31pqq8sc6x81jass2h5s22jlvv582xb8aq4j4cbcc5qixc9";
+    sha256 = "0ww8j5fa2jxg0zyx7d7z9jyv2j47m8w420sy16w3rf8d80lisvbf";
   };
 
-  buildInputs = lib.filter (x: x != null) _buildInputs;
-  configureFlags = [];
+  patches =
+    [ # Xen looks for headers in /usr/include and for libraries using
+      # ldconfig.  Don't do that.
+      ./has-header.patch
+    ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["makeTools" "makeXen"];
+  buildInputs =
+    [ which zlib pkgconfig SDL openssl python libuuid gettext ncurses
+      dev86 iasl pciutils bzip2 xz
+    ];
 
-  makeTools = fullDepEntry (''make -C tools install PREFIX=$out '') 
-    ["minInit" "addInputs" "doUnpack"];
-      
-  makeXen = fullDepEntry (''make -C xen install PREFIX=$out '') 
-    ["minInit" "addInputs" "doUnpack"];
-      
-  name = "xen-" + version;
+  makeFlags = "PREFIX=$(out)";
+
+  buildFlags = "xen tools";
+
+  installPhase =
+    ''
+      cp -prvd dist/install/nix/store/* $out
+      cp -prvd dist/install/boot $out/boot
+    ''; # */
+
   meta = {
-    description = "Xen paravirtualization tools";
+    homepage = http://www.xen.org/;
+    description = "Xen hypervisor and management tools for Dom0";
   };
 }
