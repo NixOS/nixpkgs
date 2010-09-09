@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "kbd-1.15.2";
 
   src = fetchurl {
-    url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.bz2";
-    sha256 = "19pb44m5m0mcgjkmgkjx4fn8j2m4xwqx4g7w2y1nlypg3qcjsq5k";
+    url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
+    sha256 = "0ff674y6d3b6ix08b9l2yzv8igns768biyp5y92vip7iz4xv2p2j";
   };
 
   buildInputs = [ bison flex autoconf automake  ];
