@@ -186,9 +186,9 @@ in
   no_xsave =
     { name = "no-xsave";
       patch = fetchurl {
-        url = "http://cvs.fedoraproject.org/viewvc/core/devel/kernel/fix_xen_guest_on_old_EC2.patch?revision=1.1&view=co";
+        url = "http://kernel.ubuntu.com/git?p=rtg/ubuntu-maverick.git;a=blobdiff_plain;f=arch/x86/xen/enlighten.c;h=f7ff4c7d22954ab5eda464320241300bd5a32ee5;hp=1ea06f842a921557e958110e22941d53a2822f3c;hb=1a30f99;hpb=8f2ff69dce18ed856a8d1b93176f768b47eeed86";
         name = "no-xsave.patch";
-        sha256 = "02f51f9b636b105c81a3ed62145abdc0ecb043b8114eb10257854577f617f894";
+        sha256 = "18732s3vmav5rpg6zqpiw2i0ll83pcc4gw266h6545pmbh9p7hky";
       };
       features.noXsave = true;
     };
