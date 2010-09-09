@@ -2259,7 +2259,9 @@ let
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
-  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
+  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
+    doCheck = if stdenv.isArm then false else true;
+  };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
