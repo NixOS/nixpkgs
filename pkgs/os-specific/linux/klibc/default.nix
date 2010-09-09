@@ -16,6 +16,15 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./make382.patch ];
+
+  # Trick to make this build on nix. It expects to have the kernel sources
+  # instead of only the linux kernel headers.
+  # So it cannot run the 'make headers_install' it wants to run.
+  # We don't install the headers, so klibc will not be useful as libc, but
+  # usually in nixpkgs we only use the userspace tools comming with klibc.
+  prePatch = ''
+    sed -i -e /headers_install/d scripts/Kbuild.install
+  '';
   
   makeFlags = baseMakeFlags;
 
