@@ -20,7 +20,8 @@ rec {
   configureFlags = [];
   makeFlags = ["prefix=$out"];
 
-  phaseNames = ["doEnsureBtrfsImage" "doMakeInstall"];
+  patches = [ ./glibc212.patch ];
+  phaseNames = ["doPatch" "doEnsureBtrfsImage" "doMakeInstall"];
       
   doEnsureBtrfsImage = a.fullDepEntry (''
     if ! grep 'progs = ' Makefile | grep btrfs-image; then 
