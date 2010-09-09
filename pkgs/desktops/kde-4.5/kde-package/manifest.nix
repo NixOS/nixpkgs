@@ -1,14 +1,6 @@
 builtins.listToAttrs
 [
 {
-  name = "kdepim-runtime-4.4.92.tar.bz2";
-  value = "1gshcnra3fcbj6ww7rfaw6ny1x9mf4l7pxwlrppv2slgwg141msy";
-}
-{
-  name = "kdepim-4.4.92.tar.bz2";
-  value = "0mhpifynnypg81nhwfvr28hbpr7c6w488afasprqhxbs4q57lin6";
-}
-{
   name = "kdegraphics-4.5.0.tar.bz2";
   value = "13ms1z26sb2pfadhagkykgnw0p7inrn36p4s9qr04qisy2b2vd6l";
 }
@@ -107,5 +99,17 @@ builtins.listToAttrs
 {
   name = "kdepimlibs-4.5.1.tar.bz2";
   value = "1dlxnxxay6wbwgcfbkq0xak9z0h1bkh6rvysjx3djmawmwi5aw6b";
+}
+{
+  name = "kdepim-4.4.93.tar.bz2";
+  value = "1xrqmsgbgqpa8qzqadp1hikhn8c1snh5k323kc6a5yqdpnsf2qa0";
+}
+{
+  name = "kdepim-runtime-4.4.93.tar.bz2";
+  value = "18g8dz57pflmri7v013lsn2g4552c35lawcr7jxgig2x05zrwgf7";
+}
+{
+  name = "kdebase-4.5.1.tar.bz2";
+  value = "06g8s3r153hdmxh24s2x98a0fb4lr6d00d4307ibgp7r29w6dklb";
 }
 ]

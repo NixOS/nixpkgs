@@ -1,11 +1,11 @@
-{ kde, cmake, perl, qt4, kdelibs, pciutils, libraw1394
-, automoc4, strigi, qimageblitz, soprano}:
+{ kde, cmake, perl, qt4, kdelibs, pciutils, libraw1394 , automoc4, strigi
+, qimageblitz, soprano}:
 
 kde.package {
   preConfigure = "cd apps";
 
   buildInputs = [ cmake perl qt4 kdelibs pciutils libraw1394 automoc4
-    strigi qimageblitz soprano ];
+    strigi qimageblitz ];
 
   meta = {
     description = "KDE Base components";
@@ -13,7 +13,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdebase";
-      version = "4.5.0";
+      version = "4.5.1";
     };
   };
 }

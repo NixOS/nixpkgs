@@ -1,0 +1,12 @@
+diff --git a/kleopatra/crypto/gui/newresultpage.cpp b/kleopatra/crypto/gui/newresultpage.cpp
+index 96d1cb2..5c7281a 100644
+--- a/kleopatra/crypto/gui/newresultpage.cpp
++++ b/kleopatra/crypto/gui/newresultpage.cpp
+@@ -40,6 +40,7 @@
+ #include <crypto/taskcollection.h>
+ 
+ #include <utils/stl_util.h>
++#include <boost/mem_fn.hpp>
+ 
+ #include <KLocalizedString>
+ 
