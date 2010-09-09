@@ -70,7 +70,7 @@ stdenv.mkDerivation ( rec {
   '';  
 
   mvnAssembly = ''
-    mvn assembly:single ${mvnFlags}
+    mvn assembly:assembly -Dmaven.test.skip.exec=true ${mvnFlags}
   '';
 
   mvnRelease = ''
@@ -91,6 +91,7 @@ stdenv.mkDerivation ( rec {
   finalPhase = ''
     if [ -d target/site ] ; then
       cp -R target/site $out/
+      echo "report site $out/site" >> $out/nix-support/hydra-build-products
     fi
   '';
 } // args 
