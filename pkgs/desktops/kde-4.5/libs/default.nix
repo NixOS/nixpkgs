@@ -8,13 +8,13 @@
 kde.package {
 
   buildInputs = [
-    cmake perl qt4 xz flex bison bzip2 pcre fam libxml2 libxslt
-    shared_mime_info giflib jasper /*openexr*/ aspell avahi kerberos acl attr
-    libXScrnSaver enchant libdbusmenu_qt polkit_qt_1
-    automoc4 strigi soprano qca2 attica
+    cmake perl xz flex bison bzip2 pcre fam libxml2 libxslt shared_mime_info
+    giflib jasper /*openexr*/ aspell avahi kerberos acl attr libXScrnSaver
+    enchant libdbusmenu_qt polkit_qt_1 automoc4
   ];
 
-  propagatedBuildInputs = [ shared_desktop_ontologies gcc.libc ];
+  propagatedBuildInputs = [ qt4 gcc.libc strigi soprano attica qca2
+    shared_desktop_ontologies ];
 
   patches = [ ./polkit-install.patch ];
 
