@@ -89,7 +89,9 @@ stdenv.mkDerivation ( rec {
   '';  
 
   finalPhase = ''
-    cp -R target/site $out/
+    if [ -d target/site ] ; then
+      cp -R target/site $out/
+    fi
   '';
 } // args 
 )
