@@ -244,7 +244,7 @@ done
 
 for generation in $(
     (cd /nix/var/nix/profiles && echo system-*-link) \
-    | sed 's/system-\([0-9]\+\)-link/\1/' \
+    | sed 's/system-\([0-9]\+\)-link/\1/g' \
     | sort -n -r); do
     link=/nix/var/nix/profiles/system-$generation-link
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
