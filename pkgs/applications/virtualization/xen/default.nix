@@ -32,6 +32,14 @@ stdenv.mkDerivation {
       cp -prvd dist/install/boot $out/boot
     ''; # */
 
+  # Set the Python search path in all Python scripts.
+  postFixup =
+    ''
+      for fn in $(grep -l '#!.*python' $out/bin/* $out/sbin/*); do
+          sed -i "$fn" -e "1 a import sys\nsys.path = ['$out/lib/python2.6/site-packages'] + sys.path"
+      done
+    ''; # */
+
   meta = {
     homepage = http://www.xen.org/;
     description = "Xen hypervisor and management tools for Dom0";

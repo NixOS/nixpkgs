@@ -6204,7 +6204,9 @@ let
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
-  xen = callPackage ../applications/virtualization/xen { };
+  xen = callPackage ../applications/virtualization/xen {
+    python = pythonFull;
+  };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;
