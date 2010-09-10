@@ -4473,7 +4473,14 @@ let
 
   linux_2_6_32_systemtap = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    systemtap = true;
+    extraConfig =
+      ''
+        DEBUG_KERNEL y
+        KPROBES y # kernel probes (needs `utrace' for process probes)
+        DEBUG_INFO y
+        RELAY y
+        DEBUG_FS y
+      '';
     dontStrip = true;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
