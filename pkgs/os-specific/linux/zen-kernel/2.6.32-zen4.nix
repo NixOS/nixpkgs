@@ -4,7 +4,7 @@ args @ {stdenv, fetchurl, xz, runCommand, userModeLinux ? false, extraConfig ? "
   ...}:
 
 let 
-  conf = import ../kernel/config-blocks.nix; 
+  conf = import ./config-blocks.nix; 
 
 in
 
