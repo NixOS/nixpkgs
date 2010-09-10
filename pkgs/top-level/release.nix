@@ -461,11 +461,6 @@ with (import ./release-lib.nix);
     l10n.ru = linux;
   };
 
-  linuxPackages_2_6_25 = {
-    aufs = linux;
-    kernel = linux;
-  };
-
   linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
@@ -473,31 +468,7 @@ with (import ./release-lib.nix);
     virtualboxGuestAdditions = linux;
   };
 
-  linuxPackages_2_6_28 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_29 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
   linuxPackages_2_6_32 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_33 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_34 = {
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
