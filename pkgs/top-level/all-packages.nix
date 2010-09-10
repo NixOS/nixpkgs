@@ -4471,6 +4471,18 @@ let
       ];
   };
 
+  linux_2_6_32_xen = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32-xen.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_31
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.aufs2_2_6_32
+        kernelPatches.cifs_timeout
+        kernelPatches.no_xsave
+        kernelPatches.dell_rfkill
+      ];
+  };
+
   linux_2_6_32_systemtap = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     extraConfig =
@@ -4663,6 +4675,8 @@ let
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
   linuxPackages_2_6_32_systemtap =
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
+  linuxPackages_2_6_32_xen =
+    recurseIntoAttrs (linuxPackagesFor linux_2_6_32_xen pkgs.linuxPackages_2_6_32_systemtap);
   linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
   linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
   linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);

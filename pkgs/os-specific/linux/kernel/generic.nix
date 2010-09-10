@@ -27,9 +27,6 @@
 , # Whether to build a User-Mode Linux kernel.
   userModeLinux ? false
 
-, # Whether to build a Xen kernel.
-  xen ? false
-
 , # Allows you to set your own kernel version suffix (e.g.,
   # "-my-kernel").
   localVersion ? ""
@@ -93,7 +90,6 @@ stdenv.mkDerivation {
   # Should we trust platform.kernelArch? We can only do
   # that once we differentiate i686/x86_64 in platforms.
   arch =
-    if xen then "xen" else
     if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
