@@ -5,7 +5,9 @@
 # it turns on GCC's coverage analysis feature.  It then runs `make
 # check' and produces a coverage analysis report using `lcov'.
 
-{ doCoverageAnalysis ? false
+{ buildOutOfSourceTree ? false
+, preConfigure ? null
+, doCoverageAnalysis ? false
 , lcovFilter ? []
 , lcovExtraTraceFiles ? []
 , src, stdenv
@@ -94,4 +96,24 @@ stdenv.mkDerivation (
     };
 
   }
+
+  //
+
+  (if buildOutOfSourceTree
+   then {
+     preConfigure =
+       # Build out of source tree and make the source tree read-only.  This
+       # helps catch violations of the GNU Coding Standards (info
+       # "(standards) Configuration"), like `make distcheck' does.
+       '' mkdir "../build"
+          cd "../build"
+          configureScript="../$sourceRoot/configure"
+          chmod -R a-w "../$sourceRoot"
+
+          echo "building out of source tree, from \`$PWD'..."
+
+          ${if preConfigure != null then preConfigure else ""}
+       '';
+   }
+   else {})
 )
