@@ -243,7 +243,7 @@ for link in $((ls -d $defaultConfig/fine-tune/* ) | sort -n); do
 done
 
 for generation in $(
-    (cd /nix/var/nix/profiles && ls -d system-*-link) \
+    (cd /nix/var/nix/profiles && echo system-*-link) \
     | sed 's/system-\([0-9]\+\)-link/\1/' \
     | sort -n -r); do
     link=/nix/var/nix/profiles/system-$generation-link
