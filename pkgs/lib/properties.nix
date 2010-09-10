@@ -304,13 +304,12 @@ rec {
     inherit content;
   };
 
-  # Currently an alias, but sooner or later the template argument should be
-  # removed.
-  mkOverride = mkOverrideTemplate;
+  # Like mkOverrideTemplate, but without the template argument.
+  mkOverride = priority: content: mkOverrideTemplate priority {} content;
 
   # Sugar to override the default value of the option by making a new
   # default value based on the configuration.
-  mkDefaultValue = content: mkOverride 1000 {} content;
+  mkDefaultValue = content: mkOverride 1000 content;
 
   # Make the template traversal in function of the property traversal.  If
   # the template define a non-empty attribute set, then the property is
