@@ -155,7 +155,7 @@ in
         example = 100;
         description = ''
           Specify this to limit the bandwidth usage of relayed (server)
-          traffic. Your own traffic is still unthrottled. Units: kilobytes/second.
+          traffic. Your own traffic is still unthrottled. Units: bytes/second.
         '';
       };
 
@@ -165,7 +165,7 @@ in
         description = ''
           Specify this to allow bursts of the bandwidth usage of relayed (server)
           traffic. The average usage will still be as specified in relayBandwidthRate.
-          Your own traffic is still unthrottled. Units: kilobytes/second.
+          Your own traffic is still unthrottled. Units: bytes/second.
         '';
       };
 
