@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, glib, gtk, dbus, dbus_glib, GConf}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mplayer-0.9.6";
+  name = "gnome-mplayer-0.9.99.rc1";
 
   src = fetchurl {
     url = "http://gnome-mplayer.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0gvciiy50y4vc9r6nlmw1q2fgwkywk0cq8rviswd6wbrxvz2gv2x";
+    sha256 = "00fbcjpashrld8bpvm63q9ms17kjnj3rrn1ghsfyqi2swpwzk2k1";
   };
 
   buildInputs = [pkgconfig glib gtk dbus dbus_glib GConf];
