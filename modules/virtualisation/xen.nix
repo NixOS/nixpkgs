@@ -71,6 +71,15 @@ let cfg = config.virtualisation.xen; in
         echo "${toString cfg.bootParams}" > $out/xen-params
       '';
 
+    # Mount the /proc/xen pseudo-filesystem.
+    system.activationScripts.xen = noDepEntry
+      ''
+        if [ -d /proc/xen ]; then
+            ${pkgs.sysvtools}/bin/mountpoint -q /proc/xen || \
+                ${pkgs.utillinux}/bin/mount -t xenfs none /proc/xen
+        fi
+      '';
+
   };
 
 }
