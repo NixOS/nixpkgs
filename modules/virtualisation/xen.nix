@@ -1,0 +1,76 @@
+# Xen hypervisor support.
+
+{ config, pkgs, ... }:
+
+with pkgs.lib;
+
+let cfg = config.virtualisation.xen; in
+
+{
+  ###### interface
+
+  options = {
+
+    virtualisation.xen.enable = 
+      mkOption {
+        default = false;
+        description =
+          ''
+            Setting this option enables the Xen hypervisor, a
+            virtualisation technology that allows multiple virtual
+            machines, known as <emphasis>domains</emphasis>, to run
+            concurrently on the physical machine.  NixOS runs as the
+            privileged <emphasis>Domain 0</emphasis>.  This option
+            requires a reboot to take effect.
+          '';
+      };
+
+    virtualisation.xen.bootParams = 
+      mkOption {
+        default = "";
+        description =
+          ''
+            Parameters passed to the Xen hypervisor at boot time.
+          '';
+      };
+
+    virtualisation.xen.domain0MemorySize = 
+      mkOption {
+        default = 0;
+        example = 512;
+        description =
+          ''
+            Amount of memory (in MiB) allocated to Domain 0 on boot.
+            If set to 0, all memory is assigned to Domain 0.
+          '';
+      };
+
+  };
+
+
+  ###### implementation
+
+  config = mkIf cfg.enable {
+
+    environment.systemPackages = [ pkgs.xen ];
+
+    # Domain 0 requires a pvops-enabled kernel.
+    boot.kernelPackages = pkgs.linuxPackages_2_6_32_xen;
+
+    # The radeonfb kernel module causes the screen to go black as soon
+    # as it's loaded, so don't load it.
+    boot.blacklistedKernelModules = [ "radeonfb" ];
+
+    virtualisation.xen.bootParams = 
+      [ "loglvl=all" "guest_loglvl=all" ] ++
+      optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";
+
+    system.extraSystemBuilderCmds =
+      ''
+        ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz
+        echo "${toString cfg.bootParams}" > $out/xen-params
+      '';
+
+  };
+
+}

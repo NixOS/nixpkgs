@@ -154,4 +154,5 @@
   ./tasks/network-interfaces.nix
   ./tasks/swraid.nix
   ./tasks/tty-backgrounds.nix
+  ./virtualisation/xen.nix
 ]

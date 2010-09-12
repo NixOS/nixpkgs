@@ -190,16 +190,16 @@ EOF
 	name="$confName $3"
     fi
 
-    local kernelArgs="systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)"
-    local xenArgs="loglvl=all guest_loglvl=all"
+    local kernelParams="systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)"
+    local xenParams="$([ -n "$xen" ] && cat $path/xen-params)"
 
     case "$grubVersion" in
 	1)
 	    cat >> "$tmp" << GRUBEND
 title $name
   @extraPerEntryConfig@
-  ${xen:+kernel $xen $xenArgs}
-  $(if [ -z "$xen" ]; then echo kernel; else echo module; fi) $kernel $kernelArgs
+  ${xen:+kernel $xen $xenParams}
+  $(if [ -z "$xen" ]; then echo kernel; else echo module; fi) $kernel $kernelParams
   module $initrd
 GRUBEND
 	    ;;
@@ -207,8 +207,8 @@ GRUBEND
 	    cat >> "$tmp" << GRUBEND
 menuentry "$name" {
   @extraPerEntryConfig@
-  ${xen:+multiboot $xen $xenArgs}
-  $(if [ -z "$xen" ]; then echo linux; else echo module; fi) $kernel $kernelArgs
+  ${xen:+multiboot $xen $xenParams}
+  $(if [ -z "$xen" ]; then echo linux; else echo module; fi) $kernel $kernelParams
   $(if [ -z "$xen" ]; then echo initrd; else echo module; fi) $initrd
 }
 GRUBEND
