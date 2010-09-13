@@ -124,4 +124,8 @@ builtins.listToAttrs
   name = "kdebindings-4.5.1.tar.bz2";
   value = "1j8bf7lwb70jc0m8d2hh6c1z6vgpxbqf47w5pkq58kgan8y3zcsw";
 }
+{
+  name = "kdeartwork-4.5.1.tar.bz2";
+  value = "0fjcx6wwgzxl64s62wv2sf15plx49fck86nwzfbgbmdha1ra2gmi";
+}
 ]

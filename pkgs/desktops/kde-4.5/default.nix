@@ -60,7 +60,20 @@
   };
 
   kdeadmin = callPackage ./admin { };
-  kdeartwork = callPackage ./artwork { };
+  kdeartwork = {
+    recurseForDerivations = true;
+    aurorae = callPackage ./artwork/aurorae.nix { };
+    colorSchemes = callPackage ./artwork/color-schemes.nix { };
+    desktop_themes = callPackage ./artwork/desktop-themes.nix { };
+    emoticons = callPackage ./artwork/emoticons.nix { };
+    high_resolution_wallpapers = callPackage ./artwork/high-resolution-wallpapers.nix { };
+    wallpapers = callPackage ./artwork/wallpapers.nix { };
+    nuvola_icon_theme = callPackage ./artwork/nuvola-icon-theme.nix { };
+    sounds = callPackage ./artwork/sounds.nix { };
+    weather_wallpapers = callPackage ./artwork/weather-wallpapers.nix { };
+    phase_style = callPackage ./artwork/phase-style.nix { };
+    kscreensaver = callPackage ./artwork/kscreensaver.nix { };
+  };
   kdeedu = callPackage ./edu { };
   kdegames = callPackage ./games { };
   kdegraphics = callPackage ./graphics { };
