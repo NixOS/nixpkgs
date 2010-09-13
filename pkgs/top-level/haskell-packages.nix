@@ -453,8 +453,6 @@ rec {
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
-  random = callPackage ../development/libraries/haskell/random {};
-
   random_newtime = callPackage ../development/libraries/haskell/random {
     time = time_1_2_0_3;
   };
