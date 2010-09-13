@@ -24,6 +24,8 @@
       <arg choice='plain'><option>build</option></arg>
       <arg choice='plain'><option>dry-run</option></arg>
       <arg choice='plain'><option>build-vm</option></arg>
+      <arg choice='plain'><option>build-vm-with-bootloader</option></arg>
+      <arg choice='plain'><option>pull</option></arg>
     </group>
     <sbr />
     <arg><option>--install-grub</option></arg>
@@ -148,6 +150,35 @@ $ ./result/bin/run-*-vm
       stored in <literal>./<replaceable>hostname</replaceable>.qcow2</literal>.
       The entire filesystem hierarchy of the host is available in the
       VM under <filename>/hostfs</filename>.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>build-vm-with-bootloader</option></term>
+    <listitem>
+      <para>Like <option>build-vm</option>, but boots using the
+      regular boot loader of your configuration (e.g., GRUB 1 or 2),
+      rather than booting directly into the kernel and initial ramdisk
+      of the system.  This allows you to test whether the boot loader
+      works correctly.  However, it does not guarantee that your NixOS
+      configuration will boot successfully on the host hardware (i.e.,
+      after running <command>nixos-rebuild switch</command>), because
+      the hardware and boot loader configuration in the VM are
+      different.  The boot loader is installed on an automatically
+      generated virtual disk containing a <filename>/boot</filename>
+      partition, which is mounted read-only in the VM.</para>
+    </listitem>
+  </varlistentry>
+  
+  <varlistentry>
+    <term><option>pull</option></term>
+    <listitem>
+      <para>This operation merely fetches the latest manifest in the
+      Nixpkgs channel to speed up subsequent
+      <command>nix-env</command> operations.  This is useful if you
+      are not using <command>nix-channel</command> but still want to
+      use pre-built binary packages.  It doesn’t reconfigure the
+      system at all.</para>
     </listitem>
   </varlistentry>
 

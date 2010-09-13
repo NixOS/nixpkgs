@@ -110,7 +110,24 @@ let
         example = "-vga std";
         description = "Options passed to QEMU.";
       };
-      
+
+    virtualisation.useBootLoader =
+      mkOption {
+        default = true;
+        description =
+          ''
+            If enabled, the virtual machine will be booted using the
+            regular boot loader (i.e., GRUB 1 or 2).  This allows
+            testing of the boot loader.  However, it does not
+            guarantee that your NixOS configuration will boot
+            successfully on the host hardware, because the hardware
+            and boot loader configuration in the VM are different.  If
+            disabled (the default), the VM directly boots the NixOS
+            kernel and initial ramdisk, bypassing the boot loader
+            altogether.
+          '';
+      };
+            
   };
 
   cfg = config.virtualisation;
@@ -146,12 +163,17 @@ let
           -net nic,vlan=0,model=virtio \
           -chardev socket,id=samba,path=./samba \
           -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
-          -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,cache=writeback,werror=report \
-          -kernel ${config.system.build.toplevel}/kernel \
-          -initrd ${config.system.build.toplevel}/initrd \
+          ${if cfg.useBootLoader then ''
+            -drive index=0,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
+            -drive index=1,file=${bootDisk}/disk.img,if=virtio,boot=on \
+          '' else ''
+            -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,cache=writeback,werror=report \
+            -kernel ${config.system.build.toplevel}/kernel \
+            -initrd ${config.system.build.toplevel}/initrd \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+          ''}
           ${qemuGraphics} \
           $QEMU_OPTS \
-          -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
           ${config.virtualisation.qemu.options}
     '';
 
@@ -165,11 +187,54 @@ let
       printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
     '';
 
+
+  # Generate a hard disk image containing a /boot partition and GRUB
+  # in the MBR.  Used when the `useBootLoader' option is set.
+  bootDisk =
+    pkgs.vmTools.runInLinuxVM (
+      pkgs.runCommand "nixos-boot-disk"
+        { preVM =
+            ''
+              mkdir $out
+              diskImage=$out/disk.img
+              ${pkgs.vmTools.kvm}/bin/qemu-img create -f qcow2 $diskImage "32M"
+            '';
+          buildInputs = [ pkgs.utillinux ];
+        }
+        ''
+          # Create a single /boot partition.
+          ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
+          ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
+          . /sys/class/block/vda1/uevent
+          mknod /dev/vda1 b $MAJOR $MINOR
+          . /sys/class/block/vda/uevent
+          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L boot /dev/vda1
+          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
+
+          # Mount /boot.
+          mkdir /boot
+          mount /dev/vda1 /boot
+
+          # This is needed for GRUB 0.97, which doesn't know about virtio devices.
+          mkdir /boot/grub
+          echo '(hd0) /dev/vda' > /boot/grub/device.map
+
+          # Install GRUB and generate the GRUB boot menu.
+          touch /etc/NIXOS 
+          mkdir -p /nix/var/nix/profiles
+          ${config.system.build.toplevel}/bin/switch-to-configuration boot
+
+          umount /boot
+        ''
+    );
+    
 in
 
 {
   require = options;
 
+  boot.loader.grub.device = mkOverride 50 "/dev/vda";
+  
   # All the modules the initrd needs to mount the host filesystem via
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
@@ -207,6 +272,7 @@ in
 
   boot.initrd.postMountCommands =
     ''
+      mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''
         mkdir /mnt-store-tmpfs
@@ -225,7 +291,9 @@ in
   boot.postBootCommands =
     ''
       ( source /proc/cmdline
-        ${config.environment.nix}/bin/nix-store --load-db < $regInfo
+        if [ -n "$regInfo" ]; then
+            ${config.environment.nix}/bin/nix-store --load-db < $regInfo
+        fi
       )
     '';
       
@@ -237,7 +305,7 @@ in
   # where the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
-  fileSystems = mkOverride 50
+  fileSystems = mkOverride 50 (
     [ { mountPoint = "/";
         device = "/dev/vda";
       }
@@ -253,7 +321,15 @@ in
         options = "bind";
         neededForBoot = true;
       }
-    ];
+    ] ++ optional cfg.useBootLoader
+      { mountPoint = "/boot";
+        device = "/dev/disk/by-label/boot";
+        fsType = "ext3";
+        options = "ro";
+        noCheck = true; # fsck fails on a r/o filesystem
+      });
+
+  swapDevices = mkOverride 50 [ ];
 
   # Starting DHCP brings down eth0, which kills the connection to the
   # host filesystem and thus deadlocks the system.

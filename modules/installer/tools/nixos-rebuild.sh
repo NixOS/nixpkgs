@@ -22,6 +22,8 @@ The operation is one of the following:
             activate it
   build-vm: build a virtual machine containing the configuration
             (useful for testing)
+  build-vm-with-bootloader:
+            like build-vm, but include a boot loader in the VM
   dry-run:  just show what store paths would be built/downloaded
   pull:     just pull the Nixpkgs channel manifest and exit
 
@@ -64,7 +66,7 @@ while test "$#" -gt 0; do
       --help)
         showSyntax
       ;;
-      switch|boot|test|build|dry-run|build-vm|pull)
+      switch|boot|test|build|dry-run|build-vm|build-vm-with-bootloader|pull)
         action="$i"
       ;;
       --install-grub)
@@ -171,8 +173,11 @@ if test -z "$rollback"; then
     elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
         nix-build $NIXOS -A system -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
-    elif test "$action" = build-vm; then
+    elif [ "$action" = build-vm ]; then
         nix-build $NIXOS -A vm -K -k $extraBuildFlags > /dev/null
+        pathToConfig=./result
+    elif [ "$action" = build-vm-with-bootloader ]; then
+        nix-build $NIXOS -A vmWithBootLoader -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
     else
         showSyntax
