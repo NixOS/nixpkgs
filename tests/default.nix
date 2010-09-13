@@ -18,6 +18,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   proxy = makeTest (import ./proxy.nix);
   quake3 = makeTest (import ./quake3.nix);
   remote_builds = makeTest (import ./remote-builds.nix);
+  simple = makeTest (import ./simple.nix);
   subversion = makeTest (import ./subversion.nix);
   trac = makeTest (import ./trac.nix);
 }
