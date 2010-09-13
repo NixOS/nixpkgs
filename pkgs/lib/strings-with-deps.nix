@@ -73,8 +73,6 @@ rec {
   fullDepEntry = text: deps: {inherit text deps;};
   packEntry = deps: {inherit deps; text="";};
 
-  # Old names - don't use. Will be removed soon. There are no more occurences in nixpkgs/nixos
-  FullDepEntry = fullDepEntry;
-  PackEntry = packEntry;
-  
+  stringAfter = deps: text: { inherit text deps; };
+
 }
