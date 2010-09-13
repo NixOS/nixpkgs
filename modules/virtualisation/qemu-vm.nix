@@ -168,7 +168,7 @@ let
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
-          ''}
+          ''} \
           ${qemuGraphics} \
           $QEMU_OPTS \
           ${config.virtualisation.qemu.options}
