@@ -1,6 +1,7 @@
 pkgs:
-
-rec {
+pkgs.makeOverridable
+(__overrides: rec {
+  inherit __overrides;
 
   inherit (pkgs.gtkLibs) glib pango atk gtk gtkmm;
 
@@ -331,4 +332,4 @@ rec {
     inherit gtkmm libglade;
   };
 
-}
+}) {}
