@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pn}-0.1.1";
+  name = "${pn}-0.2.0";
 
   src = fetchurl {
     url = "mirror://sf/${pn}/${name}.tar.gz";
-    sha256 = "07flqm0c252jklggjmg998qzyvwlw67c3db2jbg734figngrjh79";
+    sha256 = "18jb6v20pzk0kxv2dgjqgzzrcg7qid569apr63phfq1as1h09x67";
   };
 
   buildInputs = [ cmake libxml2 libzip ];
