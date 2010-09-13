@@ -232,12 +232,12 @@ in
   virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
   
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
-  # of the host into our own filesystem.  We use mkOverrideTemplate to allow
+  # of the host into our own filesystem.  We use mkOverride to allow
   # this module to be applied to "normal" NixOS system configuration,
   # where the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
-  fileSystems = mkOverrideTemplate 50 {}
+  fileSystems = mkOverride 50
     [ { mountPoint = "/";
         device = "/dev/vda";
       }
@@ -259,7 +259,7 @@ in
   # host filesystem and thus deadlocks the system.
   networking.useDHCP = false;
 
-  networking.defaultGateway = mkOverrideTemplate 200 {} "10.0.2.2";
+  networking.defaultGateway = mkOverride 200 "10.0.2.2";
 
   networking.nameservers = [ "10.0.2.3" ];
 
@@ -287,9 +287,9 @@ in
 
   # When building a regular system configuration, override whatever
   # video driver the host uses.
-  services.xserver.videoDriver = mkOverrideTemplate 50 {} null;
-  services.xserver.videoDrivers = mkOverrideTemplate 50 {} [ "cirrus" "vesa" ];
-  services.xserver.defaultDepth = mkOverrideTemplate 50 {} 0;
+  services.xserver.videoDriver = mkOverride 50 null;
+  services.xserver.videoDrivers = mkOverride 50 [ "cirrus" "vesa" ];
+  services.xserver.defaultDepth = mkOverride 50 0;
   services.xserver.monitorSection =
     ''
       # Set a higher refresh rate so that resolutions > 800x600 work.
@@ -300,5 +300,5 @@ in
   services.mingetty.ttys = ttys ++ optional (!cfg.graphics) "ttyS0";
 
   # Wireless won't work in the VM.
-  networking.enableWLAN = mkOverrideTemplate 50 {} false;
+  networking.enableWLAN = mkOverride 50 false;
 }
