@@ -140,4 +140,8 @@ builtins.listToAttrs
   name = "kdesdk-4.5.1.tar.bz2";
   value = "0kwgd3hxc6jwk7qk67z1jaks9jg04hgh5aywyfs2dc8w2ns1xyhp";
 }
+{
+  name = "kdetoys-4.5.1.tar.bz2";
+  value = "194a6ylxi5jrfh3w3cy6jhdissshswdrv9pnir72z67ca13dvd9s";
+}
 ]

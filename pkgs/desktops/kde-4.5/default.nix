@@ -103,7 +103,12 @@
     scripts = callPackage ./sdk/scripts.nix { };
     umbrello = callPackage ./sdk/umbrello.nix { };
   };
-  kdetoys = callPackage ./toys { };
+  kdetoys = {
+    recurseForDerivations = true;
+    amor = callPackage ./toys/amor.nix { };
+    kteatime = callPackage ./toys/kteatime.nix { };
+    ktux = callPackage ./toys/ktux.nix { };
+  };
 
   kdeutils = {
     ark = callPackage ./utils/ark.nix { };
