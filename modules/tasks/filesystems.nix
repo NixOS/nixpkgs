@@ -94,9 +94,7 @@ in
           example = "data=journal";
           type = types.string;
           merge = pkgs.lib.concatStringsSep ",";
-          description = "
-            Option used to mount the file system.
-          ";
+          description = "Options used to mount the file system.";
         };
 
         autocreate = mkOption {
@@ -106,6 +104,12 @@ in
             Automatically create the mount point defined in
             <option>fileSystems.*.mountPoint</option>.
           ";
+        };
+
+        noCheck = mkOption {
+          default = false;
+          type = types.bool;
+          description = "Disable running fsck on this filesystem.";
         };
       };
     };
@@ -142,7 +146,8 @@ in
                 + " " + fs.fsType
                 + " " + fs.options
                 + " 0"
-                + " " + (if fs.fsType == "none" then "0" else if fs.mountPoint == "/" then "1" else "2")
+                + " " + (if fs.fsType == "none" || fs.noCheck then "0" else
+                         if fs.mountPoint == "/" then "1" else "2")
                 + "\n"
             )}
 
