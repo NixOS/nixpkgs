@@ -128,4 +128,12 @@ builtins.listToAttrs
   name = "kdeartwork-4.5.1.tar.bz2";
   value = "0fjcx6wwgzxl64s62wv2sf15plx49fck86nwzfbgbmdha1ra2gmi";
 }
+{
+  name = "kdenetwork-4.5.1.tar.bz2";
+  value = "0wzbrhj4bzd4d432qqf5jwfagvxsv3flzdq7jzc449w6ybdgqw6n";
+}
+{
+  name = "kdeedu-4.5.1.tar.bz2";
+  value = "026gdb6q06l9d8v3a0dcynxkdnv9cal1gnnxwdawvc5rky2vp07j";
+}
 ]
