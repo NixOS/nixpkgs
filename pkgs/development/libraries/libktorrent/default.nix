@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kdelibs, cmake, gmp, qca2, boost, gettext, qt4, automoc4,
-  perl }:
+  perl, phonon }:
 
 stdenv.mkDerivation rec {
   name = pname + "-" + version;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
 # TODO: xfs.h
-  propagatedBuildInputs = [ kdelibs gmp boost qt4 ];
+  propagatedBuildInputs = [ kdelibs gmp boost qt4 phonon ];
   buildInputs = [ cmake automoc4 qca2 gettext perl ];
 
   meta = {
