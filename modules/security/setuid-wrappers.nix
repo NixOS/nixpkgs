@@ -110,7 +110,7 @@ in
             chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
           '';
 
-      in pkgs.stringsWithDeps.fullDepEntry
+      in stringAfter [ "users" ] 
         ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.
@@ -120,7 +120,7 @@ in
           mkdir -p ${wrapperDir}
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
-        '' [ "defaultPath" "users" ];
+        '';
 
   };
   

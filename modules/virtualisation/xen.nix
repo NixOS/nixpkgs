@@ -72,7 +72,7 @@ let cfg = config.virtualisation.xen; in
       '';
 
     # Mount the /proc/xen pseudo-filesystem.
-    system.activationScripts.xen = noDepEntry
+    system.activationScripts.xen =
       ''
         if [ -d /proc/xen ]; then
             ${pkgs.sysvtools}/bin/mountpoint -q /proc/xen || \

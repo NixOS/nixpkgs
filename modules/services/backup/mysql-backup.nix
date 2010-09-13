@@ -1,7 +1,9 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf singleton concatStrings;
+
   inherit (pkgs) mysql gzip;
 
   location = config.services.mysqlBackup.location ;
@@ -58,14 +60,15 @@ in
   };
 
   config = mkIf config.services.mysqlBackup.enable {
-    services.cron = {
-      systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
-    };
+  
+    services.cron.systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
 
-    system.activationScripts.mysqlBackup = pkgs.stringsWithDeps.fullDepEntry ''
-         mkdir -m 0700 -p ${config.services.mysqlBackup.location}
-         chown ${config.services.mysqlBackup.user} ${config.services.mysqlBackup.location}
-    '' [ "stdio" "defaultPath" "systemConfig" "users" ];
+    system.activationScripts.mysqlBackup = stringAfter [ "stdio" "defaultPath" "systemConfig" "users" ]
+      ''
+        mkdir -m 0700 -p ${config.services.mysqlBackup.location}
+        chown ${config.services.mysqlBackup.user} ${config.services.mysqlBackup.location}
+      '';
+    
   };
   
 }

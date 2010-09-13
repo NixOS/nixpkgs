@@ -88,6 +88,15 @@ with pkgs.lib;
         # too?
       ];
 
+    system.activationScripts.modprobe =
+      ''
+        # Allow the kernel to find our wrapped modprobe (which searches
+        # in the right location in the Nix store for kernel modules).
+        # We need this when the kernel (or some module) auto-loads a
+        # module.
+        echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
+      '';
+      
   };
 
 }
