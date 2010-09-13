@@ -46,6 +46,8 @@ rec {
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
+  blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
+
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
   bytestring = callPackage ../development/libraries/haskell/bytestring {};
@@ -115,6 +117,8 @@ rec {
 
   extensibleExceptions = callPackage ../development/libraries/haskell/extensible-exceptions {};
 
+  failure = callPackage ../development/libraries/haskell/failure {};
+
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
 
   feed = callPackage ../development/libraries/haskell/feed {};
@@ -169,6 +173,12 @@ rec {
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {
     alex = alex_2_3_3;
     happy = happy_1_18_5;
+  };
+
+  hakyll = callPackage ../development/libraries/haskell/hakyll {
+    regexBase = regexBase_0_93_2;
+    network = network_2_2_1_7;
+    time = time_1_2_0_3;
   };
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
@@ -371,6 +381,8 @@ rec {
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
 
+  neither = callPackage ../development/libraries/haskell/neither {};
+
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
 
   network = callPackage ../development/libraries/haskell/network {};
@@ -396,6 +408,7 @@ rec {
   pandoc = callPackage ../development/libraries/haskell/pandoc {
     HTTP = HTTP_4000_0_9;
     network = network_2_2_1_7;
+    random = random_newtime;
   };
 
   parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
@@ -434,6 +447,10 @@ rec {
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
+  random_newtime = callPackage ../development/libraries/haskell/random {
+    time = time_1_2_0_3;
+  };
+
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
   };
@@ -469,8 +486,10 @@ rec {
     regexBase = regexBase_0_93_2;
   };
 
-  regexPosix = callPackage ../development/libraries/haskell/regex-posix {
-    inherit cabal regexBase;
+  regexPosix = callPackage ../development/libraries/haskell/regex-posix {};
+
+  regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {
+    regexBase = regexBase_0_93_2;
   };
 
   regular = callPackage ../development/libraries/haskell/regular {};
@@ -550,10 +569,12 @@ rec {
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
-  /* time is Haskell Platform default, time_1_1_3 is more recent but incompatible */
+  /* time is Haskell Platform default, other time versions are more recent but incompatible */
   time = callPackage ../development/libraries/haskell/time {};
 
   time_1_1_3 = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
+
+  time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
 
   transformers = callPackage ../development/libraries/haskell/transformers {};
 
