@@ -82,8 +82,8 @@ in
     jobs.klogd.preStart = "dmesg -c > /dev/null";
 
     # Prevent tests from accessing the Internet.
-    networking.defaultGateway = mkOverrideTemplate 150 {} "";
-    networking.nameservers = mkOverrideTemplate 150 {} [ ];
+    networking.defaultGateway = mkOverride 150 "";
+    networking.nameservers = mkOverride 150 [ ];
 
     # Require a patch to the kernel to increase the 15s CIFS timeout.
     assertions =

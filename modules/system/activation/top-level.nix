@@ -102,9 +102,15 @@ let
       if [ -n "$grub" ]; then 
         ln -s $grub $out/grub
       fi
+      
       ln -s ${config.system.build.bootStage2} $out/init
       ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
-      ln -s ${config.system.activationScripts.script} $out/activate
+      
+      echo "$activationScript" > $out/activate
+      substituteInPlace $out/activate --subst-var out
+      chmod u+x $out/activate
+      unset activationScript
+      
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
       ln -s ${config.system.build.upstart} $out/upstart
@@ -116,7 +122,7 @@ let
 
       mkdir $out/fine-tune
       childCount=0;
-      for i in $children; do 
+      for i in $children; do
         childCount=$(( childCount + 1 ));
         ln -s $i $out/fine-tune/child-$childCount;
       done
@@ -142,6 +148,7 @@ let
       config.boot.kernelParams ++ config.boot.extraKernelParams;
     menuBuilder = config.system.build.menuBuilder;
     initScriptBuilder = config.system.build.initScriptBuilder;
+    activationScript = config.system.activationScripts.script;
     # Most of these are needed by grub-install.
     path = [
       pkgs.coreutils

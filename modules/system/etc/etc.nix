@@ -55,7 +55,7 @@ in
 
   system.build.etc = etc;
 
-  system.activationScripts.etc = stringAfter [ "systemConfig" "stdio" ]
+  system.activationScripts.etc = stringAfter [ "stdio" ]
     ''
       # Set up the statically computed bits of /etc.
       echo "setting up /etc..."

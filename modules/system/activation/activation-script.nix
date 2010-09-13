@@ -51,15 +51,17 @@ in
       merge = mergeTypedOption "script" builtins.isAttrs (fold mergeAttrs {});
       
       apply = set: {
-        script = pkgs.writeScript "nixos-activation-script"
+        script =
           ''
             #! ${pkgs.stdenv.shell}
 
+            systemConfig=@out@
+            
             export PATH=/empty
             for i in ${toString path}; do
                 PATH=$PATH:$i/bin:$i/sbin;
             done
-            
+
             ${
               let
                 set' = mapAttrs (n: v: if builtins.isString v then noDepEntry v else v) set;
@@ -86,14 +88,6 @@ in
   ###### implementation
 
   config = {
-
-    system.activationScripts.systemConfig =
-      ''
-        systemConfig="$1"
-        if test -z "$systemConfig"; then
-          systemConfig="/system" # for the installation CD
-        fi
-      '';
 
     system.activationScripts.stdio =
       ''
