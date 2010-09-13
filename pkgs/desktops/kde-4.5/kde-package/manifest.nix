@@ -144,4 +144,8 @@ builtins.listToAttrs
   name = "kdetoys-4.5.1.tar.bz2";
   value = "194a6ylxi5jrfh3w3cy6jhdissshswdrv9pnir72z67ca13dvd9s";
 }
+{
+  name = "kdewebdev-4.5.1.tar.bz2";
+  value = "0kgk3wwskvxw0hmzpify5by3mbnyprmy1c0nx44iw85xrk6riss0";
+}
 ]

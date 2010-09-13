@@ -127,7 +127,13 @@
     recurseForRelease = true;
   };
 
-  kdewebdev = callPackage ./webdev { };
+  kdewebdev = {
+    recurseForDerivations = true;
+    klinkstatus = callPackage ./webdev/klinkstatus.nix { };
+    kommander = callPackage ./webdev/kommander.nix { };
+    kfilereplace = callPackage ./webdev/kfilereplace.nix { };
+    kimagemapeditor = callPackage ./webdev/kimagemapeditor.nix { };
+  };
 
   #kdepim_runtime = callPackage ../kde-4.4/pim-runtime { };
   kdepim_runtime = callPackage ./pim-runtime { };
