@@ -183,8 +183,6 @@ in
   jobs.openssh.startOn = pkgs.lib.mkOverride 50 {} "";
 
   nixpkgs.config = {
-    packageOverrides = pkgs : rec {
-    };
-    platform = (import /etc/nixos/nixpkgs/pkgs/top-level/platforms.nix).sheevaplug;
+    platform = pkgs.platforms.sheevaplug;
   };
 }

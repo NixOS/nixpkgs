@@ -147,6 +147,6 @@ in
   system.boot.loader.kernelFile = "/vmlinux";
 
   nixpkgs.config = {
-    platform = (import /etc/nixos/nixpkgs/pkgs/top-level/platforms.nix).fuloong2f_n32;
+    platform = pkgs.platforms.fuloong2f_n32;
   };
 }
