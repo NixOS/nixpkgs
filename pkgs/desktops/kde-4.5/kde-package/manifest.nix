@@ -136,4 +136,8 @@ builtins.listToAttrs
   name = "kdeedu-4.5.1.tar.bz2";
   value = "026gdb6q06l9d8v3a0dcynxkdnv9cal1gnnxwdawvc5rky2vp07j";
 }
+{
+  name = "kdesdk-4.5.1.tar.bz2";
+  value = "0kwgd3hxc6jwk7qk67z1jaks9jg04hgh5aywyfs2dc8w2ns1xyhp";
+}
 ]

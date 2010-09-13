@@ -80,7 +80,29 @@
   kdemultimedia = callPackage ./multimedia { };
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
-  kdesdk = callPackage ./sdk { };
+  kdesdk = {
+    recurseForDerivations = true;
+    cervisia = callPackage ./sdk/cervisia.nix { };
+    kapptemplate = callPackage ./sdk/kapptemplate.nix { };
+    kate = callPackage ./sdk/kate.nix { };
+    kcachegrind = callPackage ./sdk/kcachegrind.nix { };
+    kdeaccounts_plugin = callPackage ./sdk/kdeaccounts-plugin.nix { };
+    dolphin_plugins = callPackage ./sdk/dolphin-plugins.nix { };
+    kioslave_perldoc = callPackage ./sdk/kioslave-perldoc.nix { };
+    kioslave_svn = callPackage ./sdk/kioslave-svn.nix { };
+    strigi_analyzer = callPackage ./sdk/strigi-analyzer.nix { };
+    kbugbuster = callPackage ./sdk/kbugbuster.nix { };
+    kmtrace = callPackage ./sdk/kmtrace.nix { };
+    kompare = callPackage ./sdk/kompare.nix { };
+    kpartloader = callPackage ./sdk/kpartloader.nix { };
+    kprofilemethod = callPackage ./sdk/kprofilemethod.nix { };
+    kstartperf = callPackage ./sdk/kstartperf.nix { };
+    kuiviewer = callPackage ./sdk/kuiviewer.nix { };
+    lokalize = callPackage ./sdk/lokalize.nix { };
+    poxml = callPackage ./sdk/poxml.nix { };
+    scripts = callPackage ./sdk/scripts.nix { };
+    umbrello = callPackage ./sdk/umbrello.nix { };
+  };
   kdetoys = callPackage ./toys { };
 
   kdeutils = {
