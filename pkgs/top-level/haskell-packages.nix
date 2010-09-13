@@ -179,6 +179,7 @@ rec {
     regexBase = regexBase_0_93_2;
     network = network_2_2_1_7;
     time = time_1_2_0_3;
+    pandoc = pandoc_newtime;
   };
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
@@ -408,6 +409,11 @@ rec {
   pandoc = callPackage ../development/libraries/haskell/pandoc {
     HTTP = HTTP_4000_0_9;
     network = network_2_2_1_7;
+  };
+
+  pandoc_newtime = callPackage ../development/libraries/haskell/pandoc {
+    HTTP = HTTP_4000_0_9;
+    network = network_2_2_1_7;
     random = random_newtime;
   };
 
@@ -446,6 +452,8 @@ rec {
   QuickCheck_2 = callPackage ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {};
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
+
+  random = callPackage ../development/libraries/haskell/random {};
 
   random_newtime = callPackage ../development/libraries/haskell/random {
     time = time_1_2_0_3;
