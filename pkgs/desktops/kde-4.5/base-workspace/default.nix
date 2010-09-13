@@ -16,12 +16,12 @@ kde.package {
     pciutils bluez ];
 
   meta = {
-    description = "KDE Workspace";
+    description = "KDE base platform-specific components";
     longDescription = "KDE base components that are only required to work with X11 such KDM and KWin";
     license = "GPL";
     kde = {
       name = "kdebase-workspace";
-      version = "4.5.0";
+      version = "4.5.1";
     };
   };
 }

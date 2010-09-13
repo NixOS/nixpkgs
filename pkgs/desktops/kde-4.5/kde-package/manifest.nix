@@ -112,4 +112,16 @@ builtins.listToAttrs
   name = "kdebase-4.5.1.tar.bz2";
   value = "06g8s3r153hdmxh24s2x98a0fb4lr6d00d4307ibgp7r29w6dklb";
 }
+{
+  name = "kdebase-runtime-4.5.1.tar.bz2";
+  value = "1fjpyxzffl0ravyicgb56sqaw5zkwky98lj9ad6z4rdiysq5v5rz";
+}
+{
+  name = "kdebase-workspace-4.5.1.tar.bz2";
+  value = "0mrx03bsb9qj78k0l04q28gc8l7ky0y0rqdshv4spbmrjfsa03fd";
+}
+{
+  name = "kdebindings-4.5.1.tar.bz2";
+  value = "1j8bf7lwb70jc0m8d2hh6c1z6vgpxbqf47w5pkq58kgan8y3zcsw";
+}
 ]
