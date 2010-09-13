@@ -103,13 +103,15 @@ let
         ln -s $grub $out/grub
       fi
       
-      ln -s ${config.system.build.bootStage2} $out/init
       ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
       
       echo "$activationScript" > $out/activate
       substituteInPlace $out/activate --subst-var out
       chmod u+x $out/activate
       unset activationScript
+
+      cp ${config.system.build.bootStage2} $out/init
+      substituteInPlace $out/init --subst-var-by systemConfig $out
       
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw

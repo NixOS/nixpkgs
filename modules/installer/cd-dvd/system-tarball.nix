@@ -34,8 +34,7 @@ let
   # A clue for the uboot loading
   ubootKernelParams = pkgs.writeText "uboot-kernel-params.txt" ''
     Kernel Parameters:
-      init=${config.system.build.bootStage2}
-      systemConfig=${config.system.build.toplevel}
+      init=${config.system.build.toplevel}/init
       ${toString config.boot.kernelParams}
   '';
 
@@ -70,12 +69,7 @@ in
   # Closures to be copied to the Nix store on the CD, namely the init
   # script and the top-level system configuration directory.
   tarball.storeContents =
-    [ {
-        object = config.system.build.bootStage2;
-        symlink = "none";
-      }
-      {
-        object = config.system.build.toplevel;
+    [ { object = config.system.build.toplevel;
         symlink = "/var/run/current-system";
       }
     ];
