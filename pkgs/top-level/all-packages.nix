@@ -769,8 +769,6 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
-  ktorrent = kde4.ktorrent;
-
   less = callPackage ../tools/misc/less { };
 
   most = callPackage ../tools/misc/most { };
@@ -5713,6 +5711,8 @@ let
   };
 
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
+
+  ktorrent = newScope pkgs.kde4 ../applications/networking/ktorrent { };
 
   lame = callPackage ../applications/audio/lame { };
 
