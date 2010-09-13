@@ -113,15 +113,12 @@ let
 
     virtualisation.useBootLoader =
       mkOption {
-        default = true;
+        default = false;
         description =
           ''
             If enabled, the virtual machine will be booted using the
             regular boot loader (i.e., GRUB 1 or 2).  This allows
-            testing of the boot loader.  However, it does not
-            guarantee that your NixOS configuration will boot
-            successfully on the host hardware, because the hardware
-            and boot loader configuration in the VM are different.  If
+            testing of the boot loader.  If
             disabled (the default), the VM directly boots the NixOS
             kernel and initial ramdisk, bypassing the boot loader
             altogether.
