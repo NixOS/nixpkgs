@@ -9,13 +9,13 @@
 # http://thread.gmane.org/gmane.comp.gnu.gnuzilla/1376 .
 #assert stdenv.isLinux -> (wirelesstools != null);
 
-let version = "3.6.7"; in
+let version = "3.6.9"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.xz";
-    sha256 = "0nm0py3kd55pgyx1yv44v1acq5d1rgka3p6msfbgqx60yd38rwsm";
+    sha256 = "041rdhhcaak0w0lg0wd1fdl9vlk9a466sh6y17dfz389nswyy8wr";
   };
 
   buildInputs =
@@ -87,6 +87,8 @@ stdenv.mkDerivation {
     ensureDir "$out/lib/$libDir/chrome/icons/default"
     ln -s ../../../icons/default.xpm  "$out/lib/$libDir/chrome/icons/default/"
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "GNU IceCat, a free web browser based on Mozilla Firefox";
