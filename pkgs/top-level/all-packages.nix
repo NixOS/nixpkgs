@@ -3362,6 +3362,8 @@ let
 
   libtommath = callPackage ../development/libraries/libtommath { };
 
+  libtunepimp = callPackage ../development/libraries/libtunepimp { };
+
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
