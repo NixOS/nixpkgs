@@ -14,7 +14,7 @@ kde.package {
       name = "ark";
       module = "kdeutils";
       version = "2.15";
-      release = "4.5.0";
+      release = "4.5.1";
     };
   };
 }

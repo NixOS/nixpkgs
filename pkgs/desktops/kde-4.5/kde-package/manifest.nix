@@ -148,4 +148,8 @@ builtins.listToAttrs
   name = "kdewebdev-4.5.1.tar.bz2";
   value = "0kgk3wwskvxw0hmzpify5by3mbnyprmy1c0nx44iw85xrk6riss0";
 }
+{
+  name = "kdeutils-4.5.1.tar.bz2";
+  value = "13i13pga3dlhg6bwz6p3wrr8qa0vzhwqg809a0r5yn0kz4icaasq";
+}
 ]

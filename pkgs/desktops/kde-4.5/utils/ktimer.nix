@@ -9,7 +9,7 @@ kde.package {
       name = "ktimer";
       module = "kdeutils";
       version = "0.6";
-      release = "4.5.0";
+      release = "4.5.1";
     };
   };
 }

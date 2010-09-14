@@ -8,8 +8,8 @@ kde.package {
     kde = {
       name = "kgpg";
       module = "kdeutils";
-      version = "2.4.0";
-      release = "4.5.0";
+      version = "2.4.1";
+      release = "4.5.1";
     };
   };
 }
