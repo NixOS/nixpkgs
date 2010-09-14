@@ -97,6 +97,11 @@ let cfg = config.virtualisation.xen; in
         postStop = "${pkgs.xen}/sbin/xend stop";
       };
 
+    # To prevent a race between dhclient and xend's bridge setup
+    # script (which renames eth* to peth* and recreates eth* as a
+    # virtual device), start dhclient after xend.
+    jobs.dhclient.startOn = mkOverride 50 "started xend";
+
   };
 
 }
