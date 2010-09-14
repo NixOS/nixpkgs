@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake neon libdiscid ];
 
-  patches = [ ./find-neon.patch ];
+  patches = [ ./find-neon.patch ./missing-include.patch ];
 
   src = fetchurl {
     url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${name}.tar.gz";
