@@ -4224,7 +4224,7 @@ let
 
   bluez = callPackage ../os-specific/linux/bluez { };
 
-  bridge_utils = callPackage ../os-specific/linux/bridge_utils { };
+  bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
 
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 

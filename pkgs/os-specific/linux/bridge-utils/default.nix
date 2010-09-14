@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, automake }:
 
-stdenv.mkDerivation {
-  name = "bridge-utils-1.2";
+stdenv.mkDerivation rec {
+  name = "bridge-utils-1.4";
 
   src = fetchurl {
-    url = mirror://sourceforge/bridge/bridge-utils-1.2.tar.gz;
-    sha256 = "0jg3z51c2c34byg4zi39j9g4b66js5kanjhid77hpa0jdfmryfy9";
+    url = "mirror://sourceforge/bridge/${name}.tar.gz";
+    sha256 = "0csrvpjx1n5fzscdrc0xky3rnaxi90rylqciha5sl0n3pklpasc7";
   };
 
   buildInputs = [ autoconf automake ];
