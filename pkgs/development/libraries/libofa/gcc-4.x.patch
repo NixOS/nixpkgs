@@ -1,0 +1,12 @@
+diff --git a/examples/example.cpp b/examples/example.cpp
+index ef978d5..7d58a0f 100644
+--- a/examples/example.cpp
++++ b/examples/example.cpp
+@@ -10,6 +10,7 @@
+ #include "protocol.h"
+ 
+ #include <string.h>
++#include <stdio.h>
+  
+ AudioData* loadWaveFile(char *file);
+ AudioData* loadDataUsingLAME(char *file);

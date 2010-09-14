@@ -3309,6 +3309,8 @@ let
 
   libnova = callPackage ../development/libraries/libnova { };
 
+  libofa = callPackage ../development/libraries/libofa { };
+
   libofx = callPackage ../development/libraries/libofx { };
 
   libogg = callPackage ../development/libraries/libogg { };
