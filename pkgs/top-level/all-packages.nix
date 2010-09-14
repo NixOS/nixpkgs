@@ -3493,6 +3493,8 @@ let
 
   msilbc = callPackage ../development/libraries/msilbc { };
 
+  mp4v2 = callPackage ../development/libraries/mp4v2 { };
+
   mpc = callPackage ../development/libraries/mpc { };
 
   mpich2 = callPackage ../development/libraries/mpich2 { };
