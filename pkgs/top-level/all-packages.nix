@@ -3162,6 +3162,8 @@ let
     inherit sqlite mysql;
   };
 
+  libdiscid = callPackage ../development/libraries/libdiscid { };
+
   libdv = callPackage ../development/libraries/libdv { };
 
   libdrm = if stdenv.isDarwin then null else (import ../development/libraries/libdrm {
