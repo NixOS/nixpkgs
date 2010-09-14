@@ -156,4 +156,7 @@ builtins.listToAttrs
   name = "kdegraphics-4.5.1.tar.bz2";
   value = "0z0fqqb868ywvdxvd94vp15drkizh59m4arblsx9cj19d157nbwd";
 }
-]
+{
+  name = "kdemultimedia-4.5.1.tar.bz2";
+  value = "1a5rgvznvykislif7igsb3b6xwps2g8s5ifkfj8dbkdvsmavlmjf";
+}]
