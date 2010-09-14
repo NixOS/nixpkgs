@@ -211,14 +211,9 @@ in
     # it's not configured in the NixOS configuration, since it may
     # have been set by dhclient in the meantime.
     system.activationScripts.hostname =
-      (if config.networking.hostName != "" then ''
+      optionalString (config.networking.hostName != "") ''
         hostname "${config.networking.hostName}"
-      '' else ''
-        # dhclient won't do anything if the hostname isn't empty.
-        if test "$(hostname)" = "(none)"; then
-          hostname ""
-        fi
-      '');
+      '';
 
   };
   
