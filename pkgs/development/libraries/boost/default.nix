@@ -48,6 +48,8 @@ stdenv.mkDerivation {
     sha256 = "1nvq36mvzr1fr85q0jh86rk3bk65s1y55jgqgzfg3lcpkl12ihs5";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [icu expat zlib bzip2 python];
 
   configureScript = "./bootstrap.sh";
