@@ -39,7 +39,8 @@ let
           
           ${optionalString (job.stopOn != "") "stop on ${job.stopOn}"}
 
-          env PATH=${makeSearchPath "bin" upstartPath}:${makeSearchPath "sbin" upstartPath}
+          env PATH=${makeSearchPath "bin" (job.path ++ upstartPath)}:${makeSearchPath "sbin" (job.path ++ upstartPath)}
+
           ${concatMapStrings (n: "env ${n}=\"${getAttr n job.environment}\"\n") (attrNames job.environment)}
           
           ${optionalString (job.preStart != "") ''
@@ -268,6 +269,15 @@ let
       example = "limit nofile 4096 4096";
       description = ''
         Additional Upstart stanzas not otherwise supported.
+      '';
+    };
+
+    path = mkOption {
+      default = [ ];
+      description = ''
+        Packages added to the job's <envar>PATH</envar> environment variable.
+        Both the <filename>bin</filename> and <filename>sbin</filename> 
+        subdirectories of each package are added.
       '';
     };
 
