@@ -1,0 +1,52 @@
+diff --git a/cmake/modules/FindNeon.cmake b/cmake/modules/FindNeon.cmake
+index 0a6b300..dbd6194 100644
+--- a/cmake/modules/FindNeon.cmake
++++ b/cmake/modules/FindNeon.cmake
+@@ -1,10 +1,10 @@
+ INCLUDE(UsePkgConfig)
+ PKGCONFIG(neon _NeonIncDir _NeonLinkDir _NeonLinkFlags _NeonCflags)
+ 
+-FIND_PATH(NEON_INCLUDE_DIR ne_request.h
++FIND_PATH(NEON_INCLUDE_DIR neon/ne_request.h
+     ${_NeonIncDir}
+-    /usr/include/neon
+-    /usr/local/include/neon
++    /usr/include
++    /usr/local/include
+ )
+ 
+ FIND_LIBRARY(NEON_LIBRARIES neon
+diff --git a/src/utils_private.cpp b/src/utils_private.cpp
+index 751b4a7..5a06eca 100644
+--- a/src/utils_private.cpp
++++ b/src/utils_private.cpp
+@@ -26,7 +26,7 @@
+ #include <cstdarg>
+ #include <iostream>
+ #include <map>
+-#include <ne_uri.h> 
++#include <neon/ne_uri.h> 
+ #include "utils_private.h"
+ 
+ using namespace std;
+diff --git a/src/webservice.cpp b/src/webservice.cpp
+index cd483f9..483f486 100644
+--- a/src/webservice.cpp
++++ b/src/webservice.cpp
+@@ -26,11 +26,11 @@
+ #include <iostream>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <ne_session.h>
+-#include <ne_request.h>
+-#include <ne_utils.h>
+-#include <ne_auth.h>
+-#include <ne_uri.h> 
++#include <neon/ne_session.h>
++#include <neon/ne_request.h>
++#include <neon/ne_utils.h>
++#include <neon/ne_auth.h>
++#include <neon/ne_uri.h> 
+ #include <musicbrainz3/webservice.h>
+ #include <musicbrainz3/artist.h>
+ #include "utils_private.h"

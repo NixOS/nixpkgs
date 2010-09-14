@@ -3299,6 +3299,12 @@ let
 
   libmusclecard = callPackage ../development/libraries/libmusclecard { };
 
+  libmusicbrainz2 = callPackage ../development/libraries/libmusicbrainz/2.x.nix { };
+
+  libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
+
+  libmusicbrainz = libmusicbrainz3;
+
   libnih = callPackage ../development/libraries/libnih { };
 
   libnova = callPackage ../development/libraries/libnova { };
