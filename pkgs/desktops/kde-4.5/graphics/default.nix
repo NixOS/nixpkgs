@@ -17,7 +17,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdegraphics";
-      version = "4.5.0";
+      version = "4.5.1";
     };
   };
 }
