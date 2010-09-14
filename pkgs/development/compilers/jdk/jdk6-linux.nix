@@ -72,7 +72,7 @@ stdenv.mkDerivation ({
   ( if stdenv.system == "i686-linux" then
       {
         mozillaPlugin =
-         if installjdk then "/jre/plugin/i386/ns7" else "/plugin/i386/ns7";
+         if installjdk then "/jre/lib/i386" else "/lib/i386";
       }
     else
       {}
