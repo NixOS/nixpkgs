@@ -57,6 +57,8 @@ let cfg = config.virtualisation.xen; in
     # Domain 0 requires a pvops-enabled kernel.
     boot.kernelPackages = pkgs.linuxPackages_2_6_32_xen;
 
+    boot.kernelModules = [ "xen_evtchn" "xen_gntdev" ];
+
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.
     boot.blacklistedKernelModules = [ "radeonfb" ];
@@ -79,6 +81,21 @@ let cfg = config.virtualisation.xen; in
                 ${pkgs.utillinux}/bin/mount -t xenfs none /proc/xen
         fi
       '';
+
+    jobs.xend =
+      { description = "Xen control daemon";
+
+        startOn = "stopped udevtrigger";
+
+        path = 
+          [ pkgs.bridge_utils pkgs.gawk pkgs.iproute pkgs.nettools 
+            pkgs.utillinux pkgs.bash pkgs.xen pkgs.pciutils pkgs.procps
+          ];
+
+        preStart = "${pkgs.xen}/sbin/xend start";
+
+        postStop = "${pkgs.xen}/sbin/xend stop";
+      };
 
   };
 
