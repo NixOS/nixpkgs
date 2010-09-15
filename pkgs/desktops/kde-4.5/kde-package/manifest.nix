@@ -159,4 +159,9 @@ builtins.listToAttrs
 {
   name = "kdemultimedia-4.5.1.tar.bz2";
   value = "1a5rgvznvykislif7igsb3b6xwps2g8s5ifkfj8dbkdvsmavlmjf";
-}]
+}
+{
+  name = "kdegames-4.5.1.tar.bz2";
+  value = "1d158z2hqc7i7mh43ajhmsqixdazhjm7pxs6rjala0fcgmqk1lj1";
+}
+]
