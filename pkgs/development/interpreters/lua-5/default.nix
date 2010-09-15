@@ -23,6 +23,15 @@ stdenv.mkDerivation {
   '';
   buildInputs = [ ncurses readline ];
 
+  crossAttrs = {
+    preBuild = ''
+      sed -i -e "s/ gcc/$crossConfig-gcc/" \
+        -e "s/ ar/$crossConfig-ar/" \
+        -e "s/ ranlib/$crossConfig-ranlib/" \
+        src/Makefile
+    '';
+  };
+
   meta = {
     homepage = "http://www.lua.org";
     description = "Lua is a powerful, fast, lightweight, embeddable scripting language.";
