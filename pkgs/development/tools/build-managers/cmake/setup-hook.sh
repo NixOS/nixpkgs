@@ -1,15 +1,15 @@
 addCMakeParams()
 {
     addToSearchPath CMAKE_PREFIX_PATH $1
-    addToSearchPath CMAKE_MODULE_PATH $1/share/cmake-@majorVersion@/Modules
 }
 
 fixCmakeFiles()
 {
     local replaceArgs
     echo "fixing cmake files"
-    replaceArgs="-e -f -L -T /usr /FOO"
-    find $1 -type f -name "*.cmake" -print0 | xargs -0 replace-literal ${replaceArgs}
+    replaceArgs="-e -f -L -T /usr /var/empty -a /opt /var/empty"
+    find $1 -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt -print0 |
+        xargs -0 replace-literal ${replaceArgs}
 }
 
 cmakeConfigurePhase()

@@ -2284,6 +2284,10 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
+  cmakeCurses = cmake.override { useNcurses = true; };
+
+  cmakeWithGui = cmakeCurses.override { useQt4 = true; };
+
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
   cppi = callPackage ../development/tools/misc/cppi { };
