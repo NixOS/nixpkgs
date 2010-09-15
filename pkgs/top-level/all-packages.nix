@@ -6675,11 +6675,7 @@ let
     camlp5 = camlp5_transitional;
   };
 
-  coq8_3 = callPackage ../applications/science/logic/coq/8.3rc1.nix {
-    camlp5 = camlp5_transitional;
-  };
-
-  coq_beta = callPackage ../applications/science/logic/coq/beta.nix {
+  coq_devel = callPackage ../applications/science/logic/coq/8.3rc1.nix {
     camlp5 = camlp5_transitional;
   };
 

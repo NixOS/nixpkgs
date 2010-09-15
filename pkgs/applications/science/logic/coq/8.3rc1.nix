@@ -5,7 +5,7 @@
 {stdenv, fetchurl, ocaml, camlp5, lablgtk, ncurses}:
 
 stdenv.mkDerivation {
-  name = "coq8.3-8.3pre1";
+  name = "coq-devel-8.3pre1";
 
   src = fetchurl {
     url = http://coq.inria.fr/distrib/V8.3-rc1/files/coq-8.3-rc1.tar.gz;
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   buildFlags = "world"; # Debug with "world VERBOSE=1";
 
   meta = {
-    description = "Coq proof assistant";
+    description = "Coq proof assistant (development version)";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
       to write mathematical definitions, executable algorithms and theorems
