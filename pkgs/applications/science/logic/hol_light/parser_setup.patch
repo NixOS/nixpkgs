@@ -1,0 +1,35 @@
+diff -Nuar hol_light/hol.ml hol_light.nixos/hol.ml
+--- hol_light/hol.ml	2010-09-12 18:57:28.000000000 +0200
++++ hol_light.nixos/hol.ml	2010-09-12 19:09:09.000000000 +0200
+@@ -11,8 +11,8 @@
+ 
+ let hol_version = "2.20++";;
+ 
+-let hol_dir = ref
+-  (try Sys.getenv "HOLLIGHT_DIR" with Not_found -> Sys.getcwd());;
++let hol_dir = ref "@HOL_LIGHT_SRC_DIR@";;
++Topdirs.dir_directory "@HOL_LIGHT_SRC_DIR@";;
+ 
+ (* ------------------------------------------------------------------------- *)
+ (* Should eventually change to "ref(Filename.temp_dir_name)".                *)
+@@ -23,20 +23,6 @@
+ let temp_path = ref "/tmp";;
+ 
+ (* ------------------------------------------------------------------------- *)
+-(* Load in parsing extensions.                                               *)
+-(* For Ocaml < 3.10, use the built-in camlp4                                 *)
+-(* and for Ocaml >= 3.10, use camlp5 instead.                                *)
+-(* ------------------------------------------------------------------------- *)
+-
+-if let v = String.sub Sys.ocaml_version 0 4 in
+-   v = "3.10" or v = "3.11"
+-then (Topdirs.dir_directory "+camlp5";
+-      Topdirs.dir_load Format.std_formatter "camlp5o.cma")
+-else (Topdirs.dir_load Format.std_formatter "camlp4o.cma");;
+-
+-Topdirs.dir_load Format.std_formatter (Filename.concat (!hol_dir) "pa_j.cmo");;
+-
+-(* ------------------------------------------------------------------------- *)
+ (* Load files from system and/or user-settable directories.                  *)
+ (* Paths map initial "$/" to !hol_dir dynamically; use $$ to get the actual  *)
+ (* $ character at the start of a directory.                                  *)

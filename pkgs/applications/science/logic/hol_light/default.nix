@@ -1,44 +1,43 @@
-{stdenv, fetchsvn, ocaml, camlp5_transitional}:
+{stdenv, writeText, writeTextFile, ocaml, camlp5_transitional, hol_light_sources}:
 
-stdenv.mkDerivation rec {
-  name = "hol_light-${version}";
-  version = "20100820svn57";
+let
+  version = hol_light_sources.version;
 
-  inherit ocaml;
   camlp5 = camlp5_transitional;
 
-  src = fetchsvn {
-    url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "57";
-    sha256 = "d1372744abca6c9978673850977d3e1577fd8cfd8298826eb713b3681c10cccd";
-  };
+  hol_light_src_dir = "${hol_light_sources}/lib/hol_light/src";
 
-  buildInputs = [ ocaml camlp5 ];
+  pa_j_cmo = stdenv.mkDerivation {
+    name = "pa_j.cmo";
+    inherit ocaml camlp5; 
+    buildInputs = [ ocaml camlp5 ];
+    buildCommand = ''
+      ocamlc -c \
+        -pp "camlp5r pa_lexer.cmo pa_extend.cmo q_MLast.cmo" \
+        -I "${camlp5}/lib/ocaml/camlp5" \
+        -o $out \
+        "${hol_light_src_dir}/pa_j_`ocamlc -version | cut -c1-4`.ml"
+      '';
+    };
 
-  buildCommand = ''
-    export HOL_DIR="$out/src/hol_light"
-    ensureDir `dirname $HOL_DIR` "$out/bin"
-    cp -a "${src}" "$HOL_DIR"
-    cd "$HOL_DIR"
-    chmod -R u+rwX .
-
-    substituteInPlace hol.ml --replace \
-      "(try Sys.getenv \"HOLLIGHT_DIR\" with Not_found -> Sys.getcwd())" \
-      "\"$HOL_DIR\""
-
-    substituteInPlace Makefile --replace \
-      "+camlp5" \
-      "${camlp5}/lib/ocaml/camlp5"
-
-    substitute ${./start_hol_light} "$out/bin/start_hol_light" \
-      --subst-var-by OCAML "${ocaml}" \
-      --subst-var-by CAMLP5 "${camlp5_transitional}" \
-      --subst-var HOL_DIR
-    chmod +x "$out/bin/start_hol_light"
-
-    make
+  start_ml = writeText "start.ml" ''
+    Topdirs.dir_directory "${hol_light_src_dir}";;
+    Topdirs.dir_directory "${camlp5}/lib/ocaml/camlp5";;
+    Topdirs.dir_load Format.std_formatter "camlp5o.cma";;
+    Topdirs.dir_load Format.std_formatter "${pa_j_cmo}";;
+    #use "${hol_light_src_dir}/make.ml";;
   '';
-
+in
+writeTextFile {
+  name = "hol_light-${version}";
+  destination = "/bin/start_hol_light";
+  executable = true;
+  text = ''
+      #!/bin/sh
+      exec ${ocaml}/bin/ocaml -init ${start_ml}
+    '';
+} // {
+  inherit (hol_light_sources) version src;
   meta = {
     description = "An interactive theorem prover based on Higher-Order Logic.";
     longDescription = ''
@@ -52,6 +51,5 @@ soundness.
     '';
     homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license = "BSD";
-    ocamlVersions = [ "3.10.0" "3.11.1" ];
   };
 }

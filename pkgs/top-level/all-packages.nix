@@ -6691,7 +6691,10 @@ let
 
   hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  hol_light_binaries = callPackage ../applications/science/logic/hol_light/binaries.nix { };
+  hol_light_sources = callPackage ../applications/science/logic/hol_light/sources.nix { };
+
+  hol_light_checkpoint_dmtcp =
+     recurseIntoAttrs (callPackage ../applications/science/logic/hol_light/dmtcp_checkpoint.nix { });
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;

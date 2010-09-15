@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec @DMTCP_RESTART@ --quiet @CKPT_FILE@
