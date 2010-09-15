@@ -5,6 +5,9 @@
 
 kde.package {
 
+  preConfigure =
+    "cp -v ${kdeedu}/share/apps/cmake/modules/FindMarble.cmake cmake";
+
   buildInputs = [ cmake qt4 perl automoc4 kdelibs boost eigen kdebase_workspace
     attica python qca2 qimageblitz shared_mime_info kdepimlibs kdegraphics
     libqalculate soprano libXtst kdeedu ];
@@ -14,7 +17,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdeplasma-addons";
-      version = "4.5.0";
+      version = "4.5.1";
     };
   };
 }

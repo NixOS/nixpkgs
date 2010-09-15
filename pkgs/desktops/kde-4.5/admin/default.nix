@@ -8,6 +8,8 @@ kde.package {
 
   inherit system_config_printer;
 
+  # TODO: split, check which packages work on nixos
+
   PYTHONPATH = "${pycups}/lib/python${python.majorVersion}/site-packages";
 
   buildInputs = [ cmake qt4 pkgconfig perl python sip pyqt4 pycups rhpl system_config_printer
@@ -18,7 +20,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdeadmin";
-      version = "4.5.0";
+      version = "4.5.1";
     };
   };
 }

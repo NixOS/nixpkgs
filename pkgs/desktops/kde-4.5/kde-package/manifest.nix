@@ -164,4 +164,12 @@ builtins.listToAttrs
   name = "kdegames-4.5.1.tar.bz2";
   value = "1d158z2hqc7i7mh43ajhmsqixdazhjm7pxs6rjala0fcgmqk1lj1";
 }
+{
+  name = "kdeplasma-addons-4.5.1.tar.bz2";
+  value = "17mjk2qdfgcz2l9f00q08dzxkqib8li5bjxawsb7fwzj93jc7lp5";
+}
+{
+  name = "kdeadmin-4.5.1.tar.bz2";
+  value = "011ajsma8s9ay0dsjx383jn8yynkyshlzx6gjw68caxzjhpc0ib2";
+}
 ]
