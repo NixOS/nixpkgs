@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       dev86 iasl pciutils bzip2 xz
     ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc";
 
   buildFlags = "xen tools";
 
@@ -49,12 +49,19 @@ stdenv.mkDerivation {
       # print the GCC version number properly.
       substituteInPlace xen/Makefile \
         --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
+
+      substituteInPlace tools/python/xen/xend/server/BlktapController.py \
+        --replace /usr/sbin/tapdisk2 $out/sbin/tapdisk2
+
+      substituteInPlace tools/python/xen/xend/XendQCoWStorageRepo.py \
+        --replace /usr/sbin/qcow-create $out/sbin/qcow-create
     '';
 
   installPhase =
     ''
       cp -prvd dist/install/nix/store/* $out
       cp -prvd dist/install/boot $out/boot
+      cp -prvd dist/install/etc $out/etc
     ''; # */
 
   postFixup =
