@@ -5732,6 +5732,8 @@ let
 
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
 
+  krename = newScope pkgs.kde4 ../applications/misc/krename { };
+
   ktorrent = newScope pkgs.kde4 ../applications/networking/ktorrent { };
 
   lame = callPackage ../applications/audio/lame { };
