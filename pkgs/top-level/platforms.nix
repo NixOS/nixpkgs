@@ -173,6 +173,8 @@ rec {
         USB_STORAGE_CYPRESS_ATACB m
 
         IP_PNP y
+        IP_PNP_DHCP y
+        IP_PNP_BOOTP y
         NFS_FS y
         ROOT_NFS y
         TUN m
@@ -201,6 +203,9 @@ rec {
         BLK_DEV_CMD640_ENHANCED n
 
         FUSE_FS m
+
+        # Needed for udev >= 150
+        SYSFS_DEPRECATED_V2 n
       '';
     kernelTarget = "vmlinux";
     uboot = null;
