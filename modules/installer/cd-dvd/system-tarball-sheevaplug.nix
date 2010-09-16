@@ -39,12 +39,10 @@ let
     };
   };
 
-  # A clue for the uboot loading
+  # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
     Kernel Parameters:
-      init=${config.system.build.bootStage2}
-      systemConfig=${config.system.build.toplevel}
-      ${toString config.boot.kernelParams}
+      init=${config.system.build.bootStage2} systemConfig=${config.system.build.toplevel} ${toString config.boot.kernelParams}
   '';
 
   
