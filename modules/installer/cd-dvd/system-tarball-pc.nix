@@ -171,8 +171,8 @@ in
   tarball.storeContents = pkgs2storeContents [ pkgs.stdenv pkgs.klibc pkgs.klibcShrunk ];
 
   tarball.contents =
-    [ { source = config.boot.kernelPackages.kernel + "/vmlinuz";
-        target = "/boot/vmlinuz";
+    [ { source = config.boot.kernelPackages.kernel + config.system.boot.loader.kernelFile;
+        target = "/boot/" + config.system.boot.loader.kernelFile;
       }
     ];
      
