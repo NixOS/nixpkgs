@@ -17,9 +17,11 @@ let
       {
         require = [ ];
 
-        # Add your own options below and run "nixos-rebuild switch".
+        # Add your own options below
         # E.g.,
         #   services.openssh.enable = true;
+
+        nixpkgs.config.platform = pkgs.platforms.fuloong2f_n32;
       }
     '';
   
@@ -35,6 +37,20 @@ let
       '';
     };
   };
+
+  # A clue for the kernel loading
+  kernelParams = pkgs.writeText "kernel-params.txt" ''
+    Kernel Parameters:
+      init=/boot/init systemConfig=/boot/init ${toString config.boot.kernelParams}
+  '';
+
+  # System wide nixpkgs config
+  nixpkgsUserConfig = pkgs.writeText "config.nix" ''
+    pkgs:
+    {
+      platform = pkgs.platforms.fuloong2f_n32;
+    }
+  '';
   
 in
 
@@ -101,6 +117,7 @@ in
     [ "vfat" "reiserfs" ];
 
   boot.kernelPackages = pkgs.linuxPackages_2_6_35;
+  boot.kernelParams = [ "console=tty" ];
 
   boot.initrd.kernelModules =
     [ # Wait for SCSI devices to appear.
@@ -131,7 +148,29 @@ in
 
   # To speed up further installation of packages, include the complete stdenv
   # in the Nix store of the tarball.
-  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ];
+  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ]
+    ++ [
+      {
+        object = config.system.build.bootStage2;
+        symlink = "/boot/init";
+      }
+      {
+        object = config.system.build.toplevel;
+        symlink = "/boot/system";
+      }
+    ];
+
+  tarball.contents = [
+    { source = kernelParams;
+      target = "/kernelparams.txt";
+    }
+    { source = config.boot.kernelPackages.kernel + config.system.boot.loader.kernelFile;
+      target = "/boot/vmlinux";
+    }
+    { source = nixpkgsUserConfig;
+      target = "/root/.nixpkgs/config.nix";
+    }
+  ];
 
   # Allow sshd to be started manually through "start sshd".  It should
   # not be started by default on the installation CD because the
@@ -145,6 +184,9 @@ in
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "/vmlinux";
+
+  # Needed for nixos to evaluate
+  system.build.menuBuilder = "true";
 
   nixpkgs.config = {
     platform = pkgs.platforms.fuloong2f_n32;
