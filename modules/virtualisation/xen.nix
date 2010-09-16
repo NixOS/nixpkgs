@@ -4,7 +4,20 @@
 
 with pkgs.lib;
 
-let cfg = config.virtualisation.xen; in
+let 
+
+  cfg = config.virtualisation.xen; 
+
+  xen = pkgs.xen;
+
+  xendConfig = pkgs.writeText "xend-config.sxp"
+    ''
+      (loglevel DEBUG)
+      (network-script network-bridge)
+      (vif-script vif-bridge)
+    '';
+
+in
 
 {
   ###### interface
@@ -52,12 +65,12 @@ let cfg = config.virtualisation.xen; in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.xen ];
+    environment.systemPackages = [ xen ];
 
     # Domain 0 requires a pvops-enabled kernel.
     boot.kernelPackages = pkgs.linuxPackages_2_6_32_xen;
 
-    boot.kernelModules = [ "xen_evtchn" "xen_gntdev" ];
+    boot.kernelModules = [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback" "blktap" ];
 
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.
@@ -69,7 +82,7 @@ let cfg = config.virtualisation.xen; in
 
     system.extraSystemBuilderCmds =
       ''
-        ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz
+        ln -s ${xen}/boot/xen.gz $out/xen.gz
         echo "${toString cfg.bootParams}" > $out/xen-params
       '';
 
@@ -89,18 +102,32 @@ let cfg = config.virtualisation.xen; in
 
         path = 
           [ pkgs.bridge_utils pkgs.gawk pkgs.iproute pkgs.nettools 
-            pkgs.utillinux pkgs.bash pkgs.xen pkgs.pciutils pkgs.procps
+            pkgs.utillinux pkgs.bash xen pkgs.pciutils pkgs.procps
           ];
 
-        preStart = "${pkgs.xen}/sbin/xend start";
+        preStart = "${xen}/sbin/xend start";
 
-        postStop = "${pkgs.xen}/sbin/xend stop";
+        postStop = "${xen}/sbin/xend stop";
       };
 
     # To prevent a race between dhclient and xend's bridge setup
     # script (which renames eth* to peth* and recreates eth* as a
     # virtual device), start dhclient after xend.
     jobs.dhclient.startOn = mkOverride 50 "started xend";
+
+    environment.etc =
+      [ { source = xendConfig;
+          target = "xen/xend-config.sxp";
+        }
+        { source = "${xen}/etc/xen/scripts";
+          target = "xen/scripts";
+        }
+      ];
+
+    # Xen provides udev rules.
+    services.udev.packages = [ xen ];
+
+    services.udev.path = [ pkgs.bridge_utils pkgs.iproute ];
 
   };
 
