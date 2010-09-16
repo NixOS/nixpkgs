@@ -9,4 +9,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake automoc4 kdelibs taglib exiv2 podofo gettext ];
+
+  meta = {
+    homepage = http://www.krename.net;
+    description = "KRename is a powerful batch renamer for KDE";
+    inherit (kdelibs.meta) platforms;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+  };
 }
