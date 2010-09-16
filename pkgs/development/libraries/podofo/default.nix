@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/podofo/${name}.tar.gz";
     sha256 = "064cgrvjvy57n5i25d4j7yx5wd3wgkdks448bzc3a8nsmyl08skq";
   };
-  buildInputs = [ cmake zlib freetype libjpeg libtiff fontconfig openssl libpng
-    lua5 stdenv.gcc.libc ];
+  propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
+  buildInputs = [ cmake lua5 stdenv.gcc.libc ];
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
   meta = {
