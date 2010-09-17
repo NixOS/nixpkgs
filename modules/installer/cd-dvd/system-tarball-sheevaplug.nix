@@ -100,7 +100,7 @@ in
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
-  system.boot.loader.kernelFile = "/uImage";
+  system.boot.loader.kernelFile = "uImage";
 
   boot.initrd.availableKernelModules =
     [ "mvsdio" "mmc_block" "reiserfs" "ext3" "ums-cypress" "rtc_mv"
@@ -165,8 +165,8 @@ in
     { source = kernelParams;
       target = "/kernelparams.txt";
     }
-    { source = config.boot.kernelPackages.kernel + config.system.boot.loader.kernelFile;
-      target = "/boot/uImage";
+    { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+      target = "/boot/" + config.system.boot.loader.kernelFile;
     }
     { source = pkgs.ubootSheevaplug;
       target = "/boot/uboot";

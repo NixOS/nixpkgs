@@ -164,8 +164,8 @@ in
     { source = kernelParams;
       target = "/kernelparams.txt";
     }
-    { source = config.boot.kernelPackages.kernel + config.system.boot.loader.kernelFile;
-      target = "/boot/vmlinux";
+    { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+      target = "/boot/" + config.system.boot.loader.kernelFile;
     }
     { source = nixpkgsUserConfig;
       target = "/root/.nixpkgs/config.nix";
@@ -183,7 +183,7 @@ in
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
-  system.boot.loader.kernelFile = "/vmlinux";
+  system.boot.loader.kernelFile = "vmlinux";
 
   # Needed for nixos to evaluate
   system.build.menuBuilder = "true";

@@ -171,7 +171,7 @@ in
   tarball.storeContents = pkgs2storeContents [ pkgs.stdenv pkgs.klibc pkgs.klibcShrunk ];
 
   tarball.contents =
-    [ { source = config.boot.kernelPackages.kernel + config.system.boot.loader.kernelFile;
+    [ { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
         target = "/boot/" + config.system.boot.loader.kernelFile;
       }
     ];
