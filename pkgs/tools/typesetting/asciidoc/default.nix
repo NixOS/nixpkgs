@@ -1,10 +1,10 @@
 { fetchurl, stdenv, python }:
 
 stdenv.mkDerivation rec {
-  name = "asciidoc-8.5.1";
+  name = "asciidoc-8.6.1";
   src = fetchurl {
     url = "mirror://sourceforge/asciidoc/${name}.tar.gz";
-    sha256 = "ccb02db04e6e6eff2149435516e88557ca30c85bc4467420f40c895e25f17a20";
+    sha256 = "1c844ahv4naghfv1jabyr8gnv2fsx4k7366vh63zx0h0w2x7ylaq";
   };
 
   patchPhase = ''
