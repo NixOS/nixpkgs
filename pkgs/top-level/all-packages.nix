@@ -1410,6 +1410,8 @@ let
     inherit gmp mpfr;
   };
 
+  eql = callPackage ../development/compilers/eql {};
+
   adobe_flex_sdk = callPackage ../development/compilers/adobe-flex-sdk { };
 
   fpc = callPackage ../development/compilers/fpc { };
