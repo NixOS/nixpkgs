@@ -14,7 +14,8 @@ let
     rev = "370b7968fd73d5babc81e35913a37111a788487f";
     url = "git://gitorious.org/eql/eql";
     hash = "2370e111d86330d178f3ec95e8fed13607e51fed8859c6e95840df2a35381636";
-    name = "eql-git";
+    version = rev;
+    name = "eql-git-${version}";
   };
 in
 rec {
