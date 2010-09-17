@@ -6816,9 +6816,9 @@ let
     cupsSupport = getPkgConfig "ghostscript" "cups" true;
   };
 
-  ghostscriptX = lowPrio (appendToName "with-X" (ghostscript.override {
+  ghostscriptX = appendToName "with-X" (ghostscript.override {
     x11Support = true;
-  }));
+  });
 
   gxemul = callPackage ../misc/gxemul { };
 
