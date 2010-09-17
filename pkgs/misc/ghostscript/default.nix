@@ -8,11 +8,11 @@ assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
   name = "ghostscript-8.64.0";
-  
+
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2"; 
+    url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2";
     sha256 = "0b94vlf03saa8vm9drz1kishh527g0brw2cg3jcy9mgpp764x2v1";
   };
 
