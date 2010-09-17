@@ -77,6 +77,22 @@ rec {
     };
   });
 
+  cherrypy = buildPythonPackage (rec {
+    name = "cherrypy-3.1.2";
+
+    src = fetchurl {
+      url = "http://download.cherrypy.org/cherrypy/3.1.2/CherryPy-3.1.2.tar.gz";
+      sha256 = "1xlvanhnxgvwd7vvypbafyl6yqfkpnwa9rs9k3058z84gd86bz8d";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.cherrypy.org";
+      description = "A pythonic, object-oriented HTTP framework";
+    };
+  });
+
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
 
