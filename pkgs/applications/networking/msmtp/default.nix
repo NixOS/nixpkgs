@@ -1,10 +1,10 @@
 {stdenv, fetchurl, openssl}:
 stdenv.mkDerivation {
-  name = "msmtp-1.4.13";
+  name = "msmtp-1.4.21";
 
   src = fetchurl {
-    url = http://dfn.dl.sourceforge.net/sourceforge/msmtp/msmtp-1.4.13.tar.bz2;
-    sha256 = "1x8q8dhcpnjym3icz6070l13hz98fvdvgc5j5psj4pmxbswx0r4p";
+    url = mirror://sourceforge/msmtp/msmtp-1.4.21.tar.bz2;
+    sha256 = "1yjgy56n02qs25728psg296amhbdkxq2pv1q3l484f3r9pjrpcrg";
   };
 
   buildInputs = [ openssl ];
