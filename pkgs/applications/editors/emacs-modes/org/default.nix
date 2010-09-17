@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs, texinfo }:
+{ fetchurl, stdenv, emacs, texinfo, which }:
 
 stdenv.mkDerivation rec {
   name = "org-7.01f";
@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ emacs texinfo ];
+
+  patchPhase =
+    '' sed -i "lisp/org-clock.el" -e's|"which"|"${which}/bin/which"|g'
+    '';
 
   configurePhase =
     '' sed -i Makefile \

@@ -21,4 +21,9 @@ stdenv.mkDerivation rec {
     dontStrip = true;
     configureFlags = [ "--with-pcap=linux" "ac_cv_linux_vers=2" ];
   };
+
+  meta = {
+    homepage = http://www.tcpdump.org;
+    description = "Packet Capture Library";
+  };
 }

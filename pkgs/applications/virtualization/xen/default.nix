@@ -1,36 +1,84 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  fullDepEntry = args.fullDepEntry;
+{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl, python
+, libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2, xz
+, lvm2, utillinux, procps }:
 
-  version = lib.attrByPath ["version"] "3.3.0" args; 
-  _buildInputs = with args; [
-    python e2fsprogs gnutls pkgconfig libjpeg 
-    ncurses SDL libvncserver zlib graphviz ghostscript 
-    texLive
-  ];
-in
-rec {
+let version = "4.0.1"; in 
+
+stdenv.mkDerivation {
+  name = "xen-${version}";
+
   src = fetchurl {
     url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "0vghm31pqq8sc6x81jass2h5s22jlvv582xb8aq4j4cbcc5qixc9";
+    sha256 = "0ww8j5fa2jxg0zyx7d7z9jyv2j47m8w420sy16w3rf8d80lisvbf";
   };
 
-  buildInputs = lib.filter (x: x != null) _buildInputs;
-  configureFlags = [];
+  patches =
+    [ # Xen looks for headers in /usr/include and for libraries using
+      # ldconfig.  Don't do that.
+      ./has-header.patch
+    ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["makeTools" "makeXen"];
+  buildInputs =
+    [ which zlib pkgconfig SDL openssl python libuuid gettext ncurses
+      dev86 iasl pciutils bzip2 xz
+    ];
 
-  makeTools = fullDepEntry (''make -C tools install PREFIX=$out '') 
-    ["minInit" "addInputs" "doUnpack"];
-      
-  makeXen = fullDepEntry (''make -C xen install PREFIX=$out '') 
-    ["minInit" "addInputs" "doUnpack"];
-      
-  name = "xen-" + version;
+  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc";
+
+  buildFlags = "xen tools";
+
+  preBuild =
+    ''
+      substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
+        --replace /usr $out
+
+      substituteInPlace tools/blktap2/lvm/lvm-util.c \
+        --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
+        --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
+
+      substituteInPlace tools/hotplug/Linux/network-bridge \
+        --replace /usr/bin/logger ${utillinux}/bin/logger
+
+      substituteInPlace tools/xenmon/xenmon.py \
+        --replace /usr/bin/pkill ${procps}/bin/pkill
+
+      substituteInPlace tools/xenstat/Makefile \
+        --replace /usr/include/curses.h ${ncurses}/include/curses.h
+
+      # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
+      # print the GCC version number properly.
+      substituteInPlace xen/Makefile \
+        --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
+
+      substituteInPlace tools/python/xen/xend/server/BlktapController.py \
+        --replace /usr/sbin/tapdisk2 $out/sbin/tapdisk2
+
+      substituteInPlace tools/python/xen/xend/XendQCoWStorageRepo.py \
+        --replace /usr/sbin/qcow-create $out/sbin/qcow-create
+    '';
+
+  installPhase =
+    ''
+      cp -prvd dist/install/nix/store/* $out
+      cp -prvd dist/install/boot $out/boot
+      cp -prvd dist/install/etc $out/etc
+    ''; # */
+
+  postFixup =
+    ''
+      # Set the Python search path in all Python scripts.
+      for fn in $(grep -l '#!.*python' $out/bin/* $out/sbin/*); do
+          sed -i "$fn" -e "1 a import sys\nsys.path = ['$out/lib/python2.6/site-packages'] + sys.path"
+      done
+
+      # Remove calls to `env'.
+      for fn in $(grep -l '#!.*/env.*python' $out/bin/* $out/sbin/*); do
+          sed -i "$fn" -e "1 s^/nix/store/.*/env.*python^${python}/bin/python^"
+      done
+    ''; # */
+
   meta = {
-    description = "Xen paravirtualization tools";
+    homepage = http://www.xen.org/;
+    description = "Xen hypervisor and management tools for Dom0";
   };
 }

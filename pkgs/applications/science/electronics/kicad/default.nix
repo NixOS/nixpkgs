@@ -1,14 +1,40 @@
-{stdenv, fetchurl, unzip, cmake, mesa, wxGTK, zlib, libX11}:
+{stdenv, fetchsvn, unzip, cmake, mesa, wxGTK, zlib, libX11, gettext}:
 
 stdenv.mkDerivation rec {
-  name = "kicad-2010-05-05";
+  name = "kicad-svn-2518";
 
-  src = fetchurl {
-    url = http://iut-tice.ujf-grenoble.fr/cao/sources/kicad-sources-2010-05-05-BZR2356-stable.zip;
-    sha256 = "05w2d7gpafs5xz532agyym5wnf5lw3lawpgncar7clgk1czcha7m";
+  src = fetchsvn {
+    url = https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad;
+    rev = 2518;
+    sha256 = "05z4fnkvvy91d0krf72q8xyislwh3zg8k0gy9w18caizbla5sih5";
   };
 
-  buildInputs = [ unzip cmake mesa wxGTK zlib libX11];
+  srcLibrary = fetchsvn {
+    url = https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad-library;
+    rev = 2518;
+    sha256 = "05sfmbp1z3hjxzcspj4vpprww5bxc6hq4alcjlc1vg6cvx2qgb9s";
+  };
+
+  # They say they only support installs to /usr or /usr/local,
+  # so we have to handle this.
+  patchPhase = ''
+    sed -i -e 's,/usr/local/kicad,'$out,g common/gestfich.cpp
+    pushd internat/ca
+    sed -i -e s/iso-8859-1/utf-8/ kicad.po
+    msgfmt -o kicad.mo kicad.po
+    popd
+  '';
+
+  enableParallelBuilding = true;
+
+  buildInputs = [ unzip cmake mesa wxGTK zlib libX11 gettext ];
+
+  postInstall = ''
+    mkdir library
+    cd library
+    cmake -DCMAKE_INSTALL_PREFIX=$out $srcLibrary
+    make install
+  '';
 
   meta = {
     description = "Free Software EDA Suite";

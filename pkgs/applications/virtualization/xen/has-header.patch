@@ -1,0 +1,40 @@
+diff -ru --exclude '*~' xen-4.0.1-orig/tools/check/funcs.sh xen-4.0.1/tools/check/funcs.sh
+--- xen-4.0.1-orig/tools/check/funcs.sh	2010-08-25 12:22:07.000000000 +0200
++++ xen-4.0.1/tools/check/funcs.sh	2010-09-09 17:47:20.000000000 +0200
+@@ -25,33 +25,13 @@
+ }
+ 
+ has_header() {
+-	case $1 in
+-		/*) ;;
+-		*) set -- "/usr/include/$1" ;;
+-	esac
+-
+-	check_sys_root || return 1
+-
+-	test -r "$CROSS_SYS_ROOT$1"
+-	return $?
++	echo "#include <$1>" | gcc -E - > /dev/null && return 0
++	return 1
+ }
+ 
+ has_lib() {
+ 	check_sys_root || return 1
+-
+-	# subshell to prevent pollution of caller's environment
+-	(
+-	PATH=/sbin:$PATH        # for ldconfig
+-
+-	# This relatively common in a sys-root; libs are installed but
+-	# ldconfig hasn't run there, so ldconfig -p won't work.
+-	if [ "$OS" = Linux -a ! -f "$CROSS_SYS_ROOT/etc/ld.so.cache" ]; then
+-	    echo "Please run ldconfig -r \"$CROSS_SYS_ROOT\" to generate ld.so.cache"
+-	    # fall through; ldconfig test below should fail
+-	fi
+-	ldconfig -p ${CROSS_SYS_ROOT+-r "$CROSS_SYS_ROOT"} | grep -Fq "$1"
+-	return $?
+-	)
++	return 0
+ }
+ 
+ test_link() {

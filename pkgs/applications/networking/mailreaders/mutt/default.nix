@@ -31,6 +31,10 @@ stdenv.mkDerivation {
   
   configureFlags = [
     "--with-mailpath=" "--enable-smtp"
+
+    # This allows calls with "-d N", that output debug info into ~/.muttdebug*
+    "--enable-debug"
+
     # The next allows building mutt without having anything setgid
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
@@ -38,7 +42,7 @@ stdenv.mkDerivation {
     (if headerCache then "--enable-hcache" else "--disable-hcache")
     (if sslSupport then "--with-ssl" else "--without-ssl")
     (if imapSupport then "--enable-imap" else "--disable-imap")
-    (if saslSupport then "--with-sasl" else "--without-imap")
+    (if saslSupport then "--with-sasl" else "--without-sasl")
   ];
 
   meta = {

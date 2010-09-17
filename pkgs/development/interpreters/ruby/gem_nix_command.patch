@@ -16,7 +16,7 @@ new file mode 100644
 index 0000000..24f3479
 --- /dev/null
 +++ b/lib/rubygems/commands/nix_command.rb
-@@ -0,0 +1,229 @@
+@@ -0,0 +1,228 @@
 +require 'net/http'
 +require 'rubygems/command'
 +require 'rubygems/doc_manager'
@@ -39,9 +39,9 @@ index 0000000..24f3479
 +  desc_from_spec = spec.description
 +  desc = desc_from_spec.sub(/[.].*/,'') # only keep first sentence
 +  desc = desc.length > 120 \
-+    ? "description = \"#{ desc[0..120] }\"; # cut to 120 chars" \
-+    : "description = \"#{ desc }\";"
-+  desc = desc.sub(/";$/,"[...]\";") if desc != desc_from_spec
++    ? "description = ''#{ desc[0..120] }''; # cut to 120 chars" \
++    : "description = ''#{ desc }'';"
++  desc = desc.sub(/'';$/,"[...]'';") if desc != desc_from_spec
 +  desc.gsub("\n"," ") # no \ns in description
 +end
 +
@@ -103,12 +103,12 @@ index 0000000..24f3479
 +          raise Gem::CommandLineError, "could'nt parse arg. expected: name or name-version"
 +        end
 +
-+        puts "adding #{gem_name}\n"
++        warn "adding #{gem_name}\n"
 +
 +        adddep(Gem::Dependency.new gem_name, version)
 +      }
 +
-+      print " total: #{@gems_with_deps.length}\n"
++      warn " total: #{@gems_with_deps.length}"
 +
 +
 +      out = "
@@ -139,8 +139,7 @@ index 0000000..24f3479
 +
 +         #raise Gem::DependencyError("src_url is nil, 302 redirection failed?") if src_url.nil?
 +
-+         out = "
-+         #{out}
++         out += "
 +  #{nixname spec} = rubyDerivation {
 +     name = \"ruby-#{spec.full_name}\"; # full_name
 +     nameNoVersion = \"#{nixname spec.name}\";
@@ -153,14 +152,14 @@ index 0000000..24f3479
 +       homepage = \"#{spec.homepage}\";
 +       license = [#{spec.licenses.map{|l| "\"#{l}\""}.join(" ") }]; # one of ?
 +       #{nixdescription spec}
-+       longDescription = \"#{ spec.description }\";
++       longDescription = ''#{ spec.description }'';
 +     };
 +  };\n"
 +      }
 +
-+      out = "#{out}\n# aliases\n"
++      out += "\n# aliases\n"
 +      aliases.each { |key, spec |
-+        out = "#{out}#{nixname key}=#{nixname spec};\n"
++        out += "#{nixname key}=#{nixname spec};\n"
 +      }
 +
 +      print out
@@ -187,7 +186,7 @@ index 0000000..24f3479
 +    # development deps can't be found. Some are old. Thus only add rutime dependencies
 +    deps = gem[0].dependencies.find_all { |d| d.type == :runtime }
 +
-+    print " total deps of #{full_name}: #{deps.length}\n"
++    warn " total deps of #{full_name}: #{deps.length}"
 +
 +    dep_specs = []
 +    # recurse while collecting deps

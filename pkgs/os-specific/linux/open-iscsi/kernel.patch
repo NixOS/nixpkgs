@@ -1,0 +1,12 @@
+*** open-iscsi-2.0-871/kernel/Makefile	2009-07-11 05:55:58.000000000 +0200
+--- open-iscsi-2.0-871-new/kernel/Makefile	2010-08-30 11:37:56.000000000 +0200
+***************
+*** 101,106 ****
+--- 101,107 ----
+  linux_2_6_29: $(unpatch_code)
+  
+  linux_2_6_30: $(unpatch_code)
++ linux_2_6_32: $(unpatch_code)
+  
+  
+  do_unpatch_code:

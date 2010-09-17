@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, vorbisTools
+{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, vorbisTools, id3v2, lame
 , makeWrapper }:
 
 let version = "2.3.99.6";
@@ -40,7 +40,7 @@ in
          --replace '#!/bin/bash' '#!${bash}/bin/bash'
 
       wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        "$out/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbisTools}/bin"
+        "$out/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbisTools}/bin:${id3v2}/bin:${lame}/bin"
 
       wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
         "${wget}/bin"

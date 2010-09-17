@@ -3,19 +3,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gecko-mediaplayer-0.9.6";
+  name = "gecko-mediaplayer-0.9.99.rc1";
 
   src = fetchurl {
     url = "http://gecko-mediaplayer.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1847jv1v9r4xzmvksvjvl2fmp8j5s22hx922hywdflzzq7jsgyr7";
+    sha256 = "1ddp8z2a40wxdj7v20wqph9l4z4a47bjqzac7wlmmzjq7a9pbij2";
   };
 
-  buildInputs = [pkgconfig glib dbus dbus_glib browser x11 GConf];
+  buildInputs = [pkgconfig glib dbus dbus_glib browser x11 GConf browser.xulrunner];
 
   # !!! fix this
   preBuild =
     ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${browser.xulrunner}/include/xulrunner-*/stable) -I${browser.nspr}/include/nspr"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${browser.xulrunner}/include/xulrunner-*) -I${browser.nspr}/include/nspr"
       echo $NIX_CFLAGS_COMPILE
     '';
 
@@ -26,9 +26,7 @@ stdenv.mkDerivation rec {
       echo "${gnome_mplayer}/bin:${MPlayer}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
     '';
 
-  passthru = {
-    mozillaPlugin = "/lib/mozilla/plugins";
-  };
+  passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
   meta = {
     description = "A browser plugin that uses GNOME MPlayer to play media in a browser";

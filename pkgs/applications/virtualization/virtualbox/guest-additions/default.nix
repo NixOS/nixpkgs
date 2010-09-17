@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel
-, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes}:
+, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-3.1.8";
+  name = "VirtualBox-GuestAdditions-3.2.8";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.1.8/VBoxGuestAdditions_3.1.8.iso;
-    sha256 = "11fn49zxmd7nxmqn9pcakmzj6j9f8kfb38czpl8fhbnl2k4ggj5q";
+    url = http://download.virtualbox.org/virtualbox/3.2.8/VBoxGuestAdditions_3.2.8.iso;
+    sha256 = "1pyfgrcdmw6zf3yxgzcd8c5qzqqn62bz4085ka453gfmi9d65lys";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     done
 
     # Change rpath for various binaries and libraries
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib bin/VBoxClient
+    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib bin/VBoxClient
 
     for i in lib/VBoxOGL*.so
     do
@@ -89,8 +89,8 @@ stdenv.mkDerivation {
     
     # Install Xorg drivers
     ensureDir $out/lib/xorg/modules/{drivers,input}
-    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_17.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
-    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_17.so $out/lib/xorg/modules/input/vboxmouse_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_18.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_18.so $out/lib/xorg/modules/input/vboxmouse_drv.so
     
     # Install kernel modules
     cd src

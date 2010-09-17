@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self : {
     pname = "happstack-util";
-    version = "0.4.1";
-    sha256 = "bb254140c30c39c420bc5a649da645f59df950f0a712c2dac4de1cc6572f05f9";
+    version = "0.5.0.2";
+    sha256 = "b6a84a55d6f7aec51095121a240bd6096b0df3c61c6fd25963d91190fcca4657";
     propagatedBuildInputs = [
       mtl hslogger HUnit QuickCheck strictConcurrency unixCompat
       SMTPClient

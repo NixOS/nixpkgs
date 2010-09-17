@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, guileLib, gwrap
+{ fetchurl, stdenv, guile, guile_lib, gwrap
 , pkgconfig, gconf, glib, gnomevfs, gtk
 , libglade, libgnome, libgnomecanvas, libgnomeui, pango, guileCairo }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       pkgconfig gconf glib gnomevfs gtk libglade libgnome libgnomecanvas
       libgnomeui pango guileCairo
     ]
-    ++ stdenv.lib.optional doCheck guileLib;
+    ++ stdenv.lib.optional doCheck guile_lib;
 
   # The test suite tries to open an X display, which fails.
   doCheck = false;

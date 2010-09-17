@@ -46,30 +46,23 @@ stdenv.mkDerivation ( rec {
     mvn test ${mvnFlags}
 
     if [ -d target/site/cobertura ] ; then
-      cp -R target/site/cobertura $out/cobertura
-      echo "report coverage $out/cobertura" >> $out/nix-support/hydra-build-products
+      echo "report coverage $out/site/cobertura" >> $out/nix-support/hydra-build-products
     fi
 
     if [ -d target/surefire-reports ] ; then
       mvn surefire-report:report-only
-      cp -vR target/surefire-reports $out/surefire
-      cp -v target/site/surefire-report.html $out/surefire/index.html
-      echo "report coverage $out/surefire/index.html" >> $out/nix-support/hydra-build-products
+      echo "report coverage $out/site/surefire-report.html" >> $out/nix-support/hydra-build-products
     fi
   '';  
 
   mvnJavadoc = ''
     mvn javadoc:javadoc ${mvnFlags}
-    cp -R target/site/apidocs $out/apidocs
-    echo "report javadoc $out/apidocs" >> $out/nix-support/hydra-build-products
+    echo "report javadoc $out/site/apidocs" >> $out/nix-support/hydra-build-products
   '';  
 
   mvnCheckstyle = ''
     mvn checkstyle:checkstyle ${mvnFlags}
-    ensureDir $out/checkstyle
-    cp -R target/site/checkstyle.* $out/checkstyle/
-    cp -R target/site/images $out/checkstyle/images
-    echo "report checkstyle $out/checkstyle/checkstyle.html" >> $out/nix-support/hydra-build-products
+    echo "report checkstyle $out/site/checkstyle.html" >> $out/nix-support/hydra-build-products
   '';  
 
   mvnJar = ''
@@ -77,12 +70,12 @@ stdenv.mkDerivation ( rec {
   '';  
 
   mvnAssembly = ''
-    mvn assembly:single ${mvnFlags}
+    mvn assembly:assembly -Dmaven.test.skip.exec=true ${mvnFlags}
   '';
 
   mvnRelease = ''
     ensureDir $out/release
-ls -l target/
+
     zip=$(ls target/*.zip| head -1)
     releaseName=$(basename $zip .zip)
     releaseName="$releaseName-r${toString src.rev}"
@@ -96,8 +89,10 @@ ls -l target/
   '';  
 
   finalPhase = ''
-    ensureDir $out/site
-    cp -R src/test/site/* $out/site
+    if [ -d target/site ] ; then
+      cp -R target/site $out/
+      echo "report site $out/site" >> $out/nix-support/hydra-build-products
+    fi
   '';
 } // args 
 )

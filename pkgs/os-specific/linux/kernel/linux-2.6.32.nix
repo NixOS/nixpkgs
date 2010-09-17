@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, userModeLinux ? false, systemtap ? false
-, extraConfig ? "", ... } @ args:
+{ stdenv, fetchurl, extraConfig ? "", ... } @ args:
 
 let
-  configWithPlatform = kernelPlatform :
+  configWithPlatform = kernelPlatform:
     ''
       # Don't include any debug features.
-      DEBUG_KERNEL ${if systemtap then "y" else "n"}
+      DEBUG_KERNEL n
 
       # Support drivers that need external firmware.
       STANDALONE n
@@ -25,6 +24,7 @@ let
 
       # Disable some expensive (?) features.
       FTRACE n
+      KPROBES n
       NUMA? n
       PM_TRACE_RTC n
 
@@ -189,14 +189,6 @@ let
       USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
-
-      ${if systemtap then ''
-        # SystemTap support.
-        KPROBES y    # kernel probes (needs `utrace' for process probes)
-        DEBUG_INFO y
-        RELAY y
-        DEBUG_FS y
-      '' else ""}
 
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}

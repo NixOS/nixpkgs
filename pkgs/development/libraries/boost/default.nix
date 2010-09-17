@@ -48,6 +48,8 @@ stdenv.mkDerivation {
     sha256 = "1nvq36mvzr1fr85q0jh86rk3bk65s1y55jgqgzfg3lcpkl12ihs5";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [icu expat zlib bzip2 python];
 
   configureScript = "./bootstrap.sh";
@@ -56,4 +58,23 @@ stdenv.mkDerivation {
   buildPhase = "./bjam -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
 
   installPhase = ":";
+
+  crossAttrs = rec {
+    buildInputs = [ expat.hostDrv zlib.hostDrv bzip2.hostDrv ];
+    # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
+    # override them.
+    propagatedBuildInputs = buildInputs;
+    # We want to substitute the contents of configureFlags, removing thus the
+    # usual --build and --host added on cross building.
+    preConfigure = ''
+      export configureFlags="--prefix=$out --without-icu"
+    '';
+    buildPhase = ''
+      set -x
+      cat << EOF > user-config.jam
+      using gcc : cross : $crossConfig-g++ ;
+      EOF
+      ./bjam -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.hostDrv}/include -sEXPAT_LIBPATH=${expat.hostDrv}/lib --layout=${finalLayout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
+    '';
+  };
 }

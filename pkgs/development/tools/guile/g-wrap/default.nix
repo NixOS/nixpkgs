@@ -1,5 +1,5 @@
 { fetchurl, stdenv, guile, libffi, pkgconfig, glib
-, guileLib }:
+, guile_lib }:
 
 stdenv.mkDerivation rec {
   name = "g-wrap-1.9.13";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   # Note: Glib support is optional, but it's quite useful (e.g., it's
   # used by Guile-GNOME).
   buildInputs = [ guile pkgconfig glib ]
-    ++ stdenv.lib.optional doCheck guileLib;
+    ++ stdenv.lib.optional doCheck guile_lib;
 
   propagatedBuildInputs = [ libffi ];
 

@@ -137,7 +137,6 @@ with (import ./release-lib.nix);
   grub2 = linux;
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
-  guileLib = linux;
   gv = linux;
   gw6c = linux;
   gzip = all;
@@ -410,29 +409,30 @@ with (import ./release-lib.nix);
   haskellPackages_ghc6104 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    gitit = linux;
+    # gitit = linux;
     gtk2hs = linux;
     leksah = linux;
-    haskellPlatform2009202 = ghcSupported;
+    haskellPlatform_2009_2_0_2 = ghcSupported;
     xmonad = linux;
   };
 
   haskellPackages_ghc6121 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    haskellPlatform2010100 = ghcSupported;
+    haskellPlatform_2010_1_0_0 = ghcSupported;
   };
 
   haskellPackages_ghc6122 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    haskellPlatform2010100 = ghcSupported;
+    haskellPlatform_2010_1_0_0 = ghcSupported;
   };
 
   haskellPackages_ghc6123 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
-    haskellPlatform2010200 = ghcSupported;
+    gitit = linux;
+    haskellPlatform_2010_2_0_0 = ghcSupported;
     lhs2tex = ghcSupported;
     xmonad = linux;
   };
@@ -461,11 +461,6 @@ with (import ./release-lib.nix);
     l10n.ru = linux;
   };
 
-  linuxPackages_2_6_25 = {
-    aufs = linux;
-    kernel = linux;
-  };
-
   linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
@@ -473,31 +468,7 @@ with (import ./release-lib.nix);
     virtualboxGuestAdditions = linux;
   };
 
-  linuxPackages_2_6_28 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_29 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
   linuxPackages_2_6_32 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_33 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_34 = {
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;

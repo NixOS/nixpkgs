@@ -79,6 +79,16 @@ rec {
     ubootConfig = "sheevaplug_config";
   };
 
+  guruplug = sheevaplug // {
+    # Define `CONFIG_MACH_GURUPLUG' (see
+    # <http://kerneltrap.org/mailarchive/git-commits-head/2010/5/19/33618>)
+    # and other GuruPlug-specific things.  Requires the `guruplug-defconfig'
+    # patch.
+
+    kernelBaseConfig = "guruplug_defconfig";
+    #kernelHeadersBaseConfig = "guruplug_defconfig";
+  };
+
   versatileARM = {
     name = "versatileARM";
     kernelMajor = "2.6";

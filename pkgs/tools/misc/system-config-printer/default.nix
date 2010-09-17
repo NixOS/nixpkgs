@@ -1,15 +1,20 @@
-{stdenv, fetchurl, perl, perlXMLParser, desktop_file_utils}:
+{stdenv, fetchurl, udev, intltool, python, pkgconfig, glib, xmlto,
+  docbook_xml_dtd_412, docbook_xsl, libxml2, desktop_file_utils, libusb, cups}:
 
-stdenv.mkDerivation {
-  name = "system-config-printer-0.9.93";
+stdenv.mkDerivation rec {
+  name = "${meta.name}-${meta.version}";
+
   src = fetchurl {
-    url = http://cyberelk.net/tim/data/system-config-printer/system-config-printer-0.9.93.tar.bz2;
-    md5 = "b97deae648bc1c5825874d250a9c140c";
+    url = "http://cyberelk.net/tim/data/${meta.name}/1.2/${name}.tar.bz2";
+    sha256 = "16xjvahmdkkix7281gx7ac9zqaxgfb7pjjlgcc6kmw52cifk86ww";
   };
-  preConfigure = ''
-    sed -i -e "s/xmlto/echo xmlto/" Makefile.in # Disable building manual pages
-    echo > man/system-config-printer.1
-    echo > man/system-config-printer-applet.1
-  ''; 
-  buildInputs = [ perl perlXMLParser desktop_file_utils ];
+  buildInputs = [ udev intltool python pkgconfig glib xmlto docbook_xml_dtd_412
+    libxml2 docbook_xsl desktop_file_utils libusb cups];
+
+  configureFlags = "--with-udev-rules";
+
+  meta = {
+    name = "system-config-printer";
+    version = "1.2.4";
+  };
 }

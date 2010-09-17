@@ -1,14 +1,14 @@
-{ kdePackage, cmake, qt4, pkgconfig, perl, python
+{ kde, cmake, qt4, pkgconfig, perl, python
 , sip, pyqt4, pycups, rhpl, system_config_printer
 , kdelibs, kdepimlibs, kdebindings, automoc4}:
 
-kdePackage {
-  pn = "kdeadmin";
-  v = "4.5.0";
+kde.package {
 
   builder = ./builder.sh;
 
   inherit system_config_printer;
+
+  # TODO: split, check which packages work on nixos
 
   PYTHONPATH = "${pycups}/lib/python${python.majorVersion}/site-packages";
 
@@ -18,5 +18,9 @@ kdePackage {
   meta = {
     description = "KDE Administration Utilities";
     license = "GPL";
+    kde = {
+      name = "kdeadmin";
+      version = "4.5.1";
+    };
   };
 }

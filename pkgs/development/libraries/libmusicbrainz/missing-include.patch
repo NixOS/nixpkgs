@@ -1,0 +1,12 @@
+diff --git a/src/utils_private.cpp b/src/utils_private.cpp
+index 2abe857..751b4a7 100644
+--- a/src/utils_private.cpp
++++ b/src/utils_private.cpp
+@@ -21,6 +21,7 @@
+  */
+  
+ #include <cstdlib>
++#include <cstdio>
+ #include <cstring>
+ #include <cstdarg>
+ #include <iostream>

@@ -290,13 +290,7 @@ pkgs.recurseIntoAttrs (rec {
     poppler = pkgs.popplerQt4;
   };
   
-  ktorrent = import ./extragear/ktorrent {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gmp taglib boost gettext;
-    inherit kdelibs kdepimlibs kdebase_workspace;
-    inherit automoc4 phonon qca2;
-  };
-  
-  inherit (pkgs) konversation yakuake;
+  inherit (pkgs) konversation yakuake ktorrent;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;

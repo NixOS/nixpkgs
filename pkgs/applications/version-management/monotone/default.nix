@@ -1,5 +1,5 @@
 {stdenv, fetchurl, boost, zlib, botan, libidn,
-  lua, pcre, sqlite, perl, lib}:
+  lua, pcre, sqlite, perl, pkgconfig}:
 
 let 
   version = "0.48";
@@ -10,18 +10,14 @@ in stdenv.mkDerivation rec {
     url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.gz";
     sha256 = "3149abf0e4433a0e14c5da805a04dbbc45b16086bc267d473b17e933407d839d";
   };
-  buildInputs = [boost zlib botan libidn lua pcre sqlite];
-  preConfigure = ''
-    export sqlite_LIBS=-lsqlite3
-    export NIX_LDFLAGS="$NIX_LDFLAGS -ldl"
-  '';
+  buildInputs = [boost zlib botan libidn lua pcre sqlite pkgconfig];
   postInstall = ''
     ensureDir $out/share/${name}
-    cp -r contrib/ $out/share/${name}/contrib
+    cp -rv contrib/ $out/share/${name}/contrib
     ensureDir $out/lib/perl5/site_perl/''${perl##*-perl-}
-    cp contrib/Monotone.pm $out/lib/perl5/site_perl/''${perl##*-perl-}
+    cp -v contrib/Monotone.pm $out/lib/perl5/site_perl/''${perl##*-perl-}
   '';
   meta = {
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [stdenv.lib.maintainers.raskin];
   };
 }

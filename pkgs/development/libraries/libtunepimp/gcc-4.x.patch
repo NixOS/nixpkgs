@@ -1,0 +1,177 @@
+diff --git a/include/tunepimp-0.5/metadata.h b/include/tunepimp-0.5/metadata.h
+index f9bab5d..ea08cf5 100644
+--- a/include/tunepimp-0.5/metadata.h
++++ b/include/tunepimp-0.5/metadata.h
+@@ -29,6 +29,7 @@
+ 
+ #include <string>
+ #include <cstdio>
++#include <cstring>
+ 
+ #include "defs.h"
+ #include "tp_c.h"
+diff --git a/lib/c_wrapper.cpp b/lib/c_wrapper.cpp
+index 760cc08..66c6111 100644
+--- a/lib/c_wrapper.cpp
++++ b/lib/c_wrapper.cpp
+@@ -43,6 +43,7 @@
+                          if (obj == NULL) return;
+ 
+ #include <deque>
++#include <cstdlib>
+ 
+ class NotifyData
+ {
+diff --git a/lib/fileio.cpp b/lib/fileio.cpp
+index a1602da..abe2b24 100644
+--- a/lib/fileio.cpp
++++ b/lib/fileio.cpp
+@@ -27,6 +27,8 @@
+ 
+ #include <assert.h>
+ #include <errno.h>
++#include <string.h>
++#include <stdlib.h>
+ #include <string>
+ #ifndef WIN32
+ #include <unistd.h>
+@@ -122,7 +124,8 @@ int taccess(const char *pathname, int mode, const char *encoding)
+ 
+ void tmktempname(const char *path, char *newPath, int newPathLen)
+ {
+-    char *ptr, *temp;
++    char *temp;
++	const char *ptr;
+ 
+     temp = (char *)malloc(strlen(path) + 32);
+     ptr = strrchr(path, dirSepChar);
+diff --git a/lib/metadata.cpp b/lib/metadata.cpp
+index 0a1a70a..dcd0aa1 100644
+--- a/lib/metadata.cpp
++++ b/lib/metadata.cpp
+@@ -24,8 +24,9 @@
+    $Id: metadata.cpp 8359 2006-08-07 20:34:50Z luks $
+ 
+ ----------------------------------------------------------------------------*/
+-#include <math.h>
+-#include <stdio.h>
++#include <cmath>
++#include <cstdio>
++#include <cstdlib>
+ #include "metadata.h"
+ #include "../config.h"
+ using namespace std;
+diff --git a/lib/protocol.cpp b/lib/protocol.cpp
+index 83e8b33..3436f80 100644
+--- a/lib/protocol.cpp
++++ b/lib/protocol.cpp
+@@ -8,6 +8,7 @@
+ -------------------------------------------------------------------*/
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <string>
+ #include <map>
+ #include <expat.h>
+diff --git a/lib/readmeta.cpp b/lib/readmeta.cpp
+index 7f325de..5e5513a 100644
+--- a/lib/readmeta.cpp
++++ b/lib/readmeta.cpp
+@@ -30,7 +30,8 @@
+ #endif
+ #endif
+ 
+-#include <stdio.h>
++#include <cstdio>
++#include <cstdlib>
+ #ifndef WIN32
+ #include <unistd.h>
+ #endif
+diff --git a/lib/tunepimp.cpp b/lib/tunepimp.cpp
+index bf09383..f1b9b56 100644
+--- a/lib/tunepimp.cpp
++++ b/lib/tunepimp.cpp
+@@ -30,7 +30,8 @@
+ #endif
+ #endif
+ 
+-#include <stdio.h>
++#include <cstdio>
++#include <cstdlib>
+ #include <map>
+ using namespace std;
+ 
+diff --git a/lib/utf8/utf8util.cpp b/lib/utf8/utf8util.cpp
+index a066956..6ea86e4 100644
+--- a/lib/utf8/utf8util.cpp
++++ b/lib/utf8/utf8util.cpp
+@@ -26,6 +26,7 @@
+ ----------------------------------------------------------------------------*/
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include "utf8util.h"
+ #include "utf8.h"
+ #ifdef WIN32
+diff --git a/plugins/mp3/id3_2_3_meta.cpp b/plugins/mp3/id3_2_3_meta.cpp
+index fa9a7e0..efac1c9 100644
+--- a/plugins/mp3/id3_2_3_meta.cpp
++++ b/plugins/mp3/id3_2_3_meta.cpp
+@@ -26,6 +26,7 @@
+ ----------------------------------------------------------------------------*/
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <assert.h>
+ #include <ctype.h>
+ #include <musicbrainz/mb_c.h>
+diff --git a/plugins/mp3/id3_meta.cpp b/plugins/mp3/id3_meta.cpp
+index d860bf6..804ca5c 100644
+--- a/plugins/mp3/id3_meta.cpp
++++ b/plugins/mp3/id3_meta.cpp
+@@ -26,6 +26,7 @@
+ ----------------------------------------------------------------------------*/
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <time.h>
+ #include <ctype.h>
+ #include <musicbrainz/mb_c.h>
+diff --git a/plugins/mp4/mp4.cpp b/plugins/mp4/mp4.cpp
+index 9f741e3..dcc7ec9 100644
+--- a/plugins/mp4/mp4.cpp
++++ b/plugins/mp4/mp4.cpp
+@@ -27,7 +27,8 @@
+ 
+ #include <string.h>
+ #include <stdio.h>
+-#include <mp4.h>
++#include <stdlib.h>
++#include <mp4v2/mp4v2.h>
+ #include "metadata.h"
+ #include "plugin.h"
+ #ifndef WIN32
+diff --git a/plugins/wma/wma.cpp b/plugins/wma/wma.cpp
+index 3d7a50a..a28901c 100644
+--- a/plugins/wma/wma.cpp
++++ b/plugins/wma/wma.cpp
+@@ -27,6 +27,7 @@
+ 
+ #include <string.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <wmafile.h>
+ #include "metadata.h"
+ #include "plugin.h"
+diff --git a/plugins/wma/wmafile.cpp b/plugins/wma/wmafile.cpp
+index 1b38af8..31fa150 100644
+--- a/plugins/wma/wmafile.cpp
++++ b/plugins/wma/wmafile.cpp
+@@ -19,6 +19,7 @@
+  *   USA                                                                   *
+  ***************************************************************************/
+ 
++#include <string.h>
+ #include <tstring.h>
+ #include <wmafile.h>
+ #include <wmatag.h>

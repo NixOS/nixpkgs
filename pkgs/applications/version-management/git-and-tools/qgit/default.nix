@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     license = "GPLv2";
     homepage = "http://digilander.libero.it/mcostalba/";
     description = "Graphical front-end to Git";
+    inherit (qt.meta) platforms;
   };
   src = fetchurl
   {

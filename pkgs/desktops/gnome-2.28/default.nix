@@ -1,6 +1,7 @@
 pkgs:
-
-rec {
+pkgs.makeOverridable
+(__overrides: rec {
+  inherit __overrides;
 
   inherit (pkgs.gtkLibs) glib pango atk gtk gtkmm;
 
@@ -230,6 +231,11 @@ rec {
     inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42 automake;
   };
 
+  # scrollkeeper replacement
+  rarian = import ./desktop/rarian {
+    inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42;
+  };
+
   gnome_doc_utils = import ./desktop/gnome-doc-utils {
     inherit (pkgs) stdenv fetchurl python pkgconfig libxslt
       makeWrapper;
@@ -326,4 +332,4 @@ rec {
     inherit gtkmm libglade;
   };
 
-}
+}) {}

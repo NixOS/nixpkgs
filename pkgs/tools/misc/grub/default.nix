@@ -1,7 +1,7 @@
 {stdenv, fetchurl, autoconf, automake, buggyBiosCDSupport ? true}:
 
 stdenv.mkDerivation {
-  name = "grub-0.97-patch-1.9";
+  name = "grub-0.97-patch-1.10";
   
   src = fetchurl {
     url = ftp://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   # failures on systems with more than 2 GiB RAM, and for booting from
   # ext3 filesystems with 256-byte inodes as well as ext4 filesystems.
   gentooPatches = fetchurl {
-    url = mirror://gentoo/distfiles/grub-0.97-patches-1.9.tar.bz2;
-    sha256 = "0a20bi2njqdgi0993g9dzjcn9vjzlisp9ghw0dcz00q84v4lb13b";
+    url = mirror://gentoo/distfiles/grub-0.97-patches-1.10.tar.bz2;
+    sha256 = "015hkmb2jd6jfzkfr13cdh16frvva04rwr4yahzyw5xhl634d1h9";
   };
 
   patches = [

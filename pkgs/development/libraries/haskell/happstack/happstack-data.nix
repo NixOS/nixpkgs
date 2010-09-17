@@ -1,10 +1,14 @@
-{cabal, mtl, sybWithClass, HaXml, happstackUtil, binary}:
+{cabal, mtl, sybWithClass, sybWithClassInstancesText, HaXml,
+ happstackUtil, binary, text}:
 
 cabal.mkDerivation (self : {
     pname = "happstack-data";
-    version = "0.4.1";
-    sha256 = "0d1f96472a4e13b9a5218bce8bf819a50d1773b7e110141ab235d1d7701e39f6";
-    propagatedBuildInputs = [mtl sybWithClass HaXml happstackUtil binary];
+    version = "0.5.0.2";
+    sha256 = "03795c24acc2268f39d38f18dd6cbfb92893f7de88b0443219d582a1eabdacd5";
+    propagatedBuildInputs = [
+        mtl sybWithClass sybWithClassInstancesText HaXml
+        happstackUtil binary text
+    ];
     meta = {
         description = "Happstack data manipulation libraries";
         license = "BSD";

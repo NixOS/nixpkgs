@@ -620,11 +620,17 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
               project message args)
       '())))
 
+(define pointer->procedure
+  ;; Compatibility hack for Guile up to 1.9.12 included.
+  (if (defined? 'pointer->procedure)
+      pointer->procedure
+      make-foreign-function))
+
 (define version-string>?
   (let ((strverscmp
          (let ((sym (or (dynamic-func "strverscmp" (dynamic-link))
                         (error "could not find `strverscmp' (from GNU libc)"))))
-           (make-foreign-function int sym (list '* '*)))))
+           (pointer->procedure int sym (list '* '*)))))
     (lambda (a b)
       (> (strverscmp (string->pointer a) (string->pointer b)) 0))))
 

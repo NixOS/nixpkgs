@@ -1,10 +1,8 @@
-{ kdePackage, cmake, qt4, perl, libxml2, libxslt, openbabel, boost, readline, gmm, gsl
+{ kde, cmake, qt4, perl, libxml2, libxslt, openbabel, boost, readline, gmm, gsl
 , xplanet, libspectre, pkgconfig, libqalculate
 , kdelibs, automoc4, eigen, attica}:
 
-kdePackage {
-  pn = "kdeedu";
-  v = "4.5.0";
+kde.package {
 
 #TODO:
 #* Boost.Python (1.31 or higher)  <http://www.boost.org/> - fails to find
@@ -23,5 +21,9 @@ kdePackage {
   meta = {
     description = "KDE Educative software";
     license = "GPL";
+    kde = {
+      name = "kdeedu";
+      version = "4.5.1";
+    };
   };
 }

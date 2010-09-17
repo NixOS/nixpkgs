@@ -1,0 +1,15 @@
+The GuruPlug's u-boot is configured with the wrong `arch_number', so
+change Linux so that it matches u-boot's expectations.  See
+<http://www.plugcomputer.org/plugwiki/index.php/Compiling_Linux_Kernel_for_the_Plug_Computer>.
+
+--- linux-2.6.35.3/arch/arm/tools/mach-types	2010-08-20 20:55:55.000000000 +0200
++++ linux-2.6.35.3/arch/arm/tools/mach-types	2010-09-13 22:49:41.000000000 +0200
+@@ -2643,7 +2643,7 @@ rfp43			MACH_RFP43		RFP43			2655
+ sk86r0301		MACH_SK86R0301		SK86R0301		2656
+ ctpxa			MACH_CTPXA		CTPXA			2657
+ epb_arm9_a		MACH_EPB_ARM9_A		EPB_ARM9_A		2658
+-guruplug		MACH_GURUPLUG		GURUPLUG		2659
++guruplug		MACH_GURUPLUG		GURUPLUG		2601
+ spear310		MACH_SPEAR310		SPEAR310		2660
+ spear320		MACH_SPEAR320		SPEAR320		2661
+ robotx			MACH_ROBOTX		ROBOTX			2662

@@ -1,25 +1,21 @@
 {stdenv, fetchurl, perl, python}:
+# Perl and Python required by the test suite.
 
-# Perl and python are needed in order to run the test suite.
+stdenv.mkDerivation rec {
+  name = "dmtcp-${version}";
 
-let
-  pname = "dmtcp";
   version = "1.1.8";
-in
-
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}_${version}.tar.gz";
-    sha256 = "05klyml5maw3f5rxl3i20fqyvpmx69bh09h7a48y19q3r4nqd8f2";
-  };
 
   buildInputs = [ perl python ];
 
-  doCheck = true;
+  src = fetchurl {
+    url = "mirror://sourceforge/dmtcp/dmtcp_${version}.tar.gz";
+    sha256 = "05klyml5maw3f5rxl3i20fqyvpmx69bh09h7a48y19q3r4nqd8f2";
+  };
 
-  preCheck = ''
+  patches = [ ./dont_check_uid.patch ];
+
+  postPatch = ''
     substituteInPlace dmtcp/src/dmtcp_coordinator.cpp \
       --replace /bin/bash /bin/sh
     substituteInPlace utils/gdb-add-symbol-file \
@@ -30,6 +26,8 @@ stdenv.mkDerivation {
       --replace /usr/bin/perl $(type -p perl) \
       --replace /usr/bin/python $(type -p python)
   '';
+
+  doCheck = true;
 
   meta = {
     description = "Distributed MultiThreaded Checkpointing";

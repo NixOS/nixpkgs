@@ -1,12 +1,10 @@
-{ kdePackage, cmake, qt4, perl, speex, gmp, libxml2, libxslt, sqlite, alsaLib, libidn
+{ kde, cmake, qt4, perl, speex, gmp, libxml2, libxslt, sqlite, alsaLib, libidn
 , libvncserver, libmsn, giflib, gpgme, boost, libv4l, libotr
 , libXi, libXtst, libXdamage, libXxf86vm, libktorrent, kdebase
 , kdebase_workspace
 , kdelibs, kdepimlibs, automoc4, qca2, soprano, qimageblitz, strigi}:
 
-kdePackage {
-  pn = "kdenetwork";
-  v = "4.5.0";
+kde.package {
 
   buildInputs = [ cmake qt4 perl speex gmp libxml2 libxslt sqlite alsaLib libidn
     libvncserver libmsn giflib gpgme boost libv4l libotr libXi libXtst
@@ -30,5 +28,9 @@ kdePackage {
     description = "KDE network utilities";
     longDescription = "Various network utilities for KDE such as a messenger client and network configuration interface";
     license = "GPL";
+    kde = {
+      name = "kdenetwork";
+      version = "4.5.1";
+    };
   };
 }

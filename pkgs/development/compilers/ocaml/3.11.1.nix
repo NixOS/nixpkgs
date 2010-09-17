@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
   '';
+  postBuild = ''
+    ensureDir $out/include
+    ln -sv $out/lib/ocaml/caml $out/include/caml
+  '';
 
   meta = {
     homepage = http://caml.inria.fr/ocaml;

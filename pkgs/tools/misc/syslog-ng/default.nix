@@ -1,16 +1,22 @@
 {stdenv, fetchurl, eventlog, pkgconfig, glib}:
 
-stdenv.mkDerivation rec {
-  name = "syslog-ng-2.1.3";
+stdenv.mkDerivation {
+  name = "syslog-ng-3.1.2";
+
+  src = fetchurl {
+    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/3.1.2/source/syslog-ng_3.1.2.tar.gz";
+    sha256 = "0a508l4j11336jn5kg65l70rf7xbpdxi2n477rvp5p48cc1adcg2";
+  };
+
+  buildInputs = [eventlog pkgconfig glib];
+  configureFlags = "--enable-dynamic-linking";
+
   meta = {
     homepage = "http://www.balabit.com/network-security/syslog-ng/";
     description = "Next-generation syslogd with advanced networking and filtering capabilities.";
     license = "GPLv2";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
-  src = fetchurl {
-    url = "http://www.balabit.com/downloads/files/syslog-ng/sources/2.1/src/${name}.tar.gz";
-    sha256 = "1m6djxhmihmg09a90gg6mp1ghgk2zm8rcp04shh458433rbzfjb0";
-  };
-  buildInputs = [eventlog pkgconfig glib];
-  configureFlags = "--enable-dynamic-linking";
 }

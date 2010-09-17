@@ -1,0 +1,60 @@
+diff --git a/lib/c_wrapper.cpp b/lib/c_wrapper.cpp
+index deae11d..ebc7854 100644
+--- a/lib/c_wrapper.cpp
++++ b/lib/c_wrapper.cpp
+@@ -24,6 +24,7 @@
+ #include "musicbrainz.h"
+ #include "trm.h"
+ #include "mb_c.h"
++#include <string.h>
+ 
+ extern "C"
+ {
+diff --git a/lib/comhttpsocket.cpp b/lib/comhttpsocket.cpp
+index 067313b..4371772 100644
+--- a/lib/comhttpsocket.cpp
++++ b/lib/comhttpsocket.cpp
+@@ -20,6 +20,7 @@
+ #endif
+ #include <stdlib.h>
+ #include <assert.h>
++#include <string.h>
+ 
+ const char* g_strCOMVer = "libmusicbrainz/"VERSION;
+ 
+diff --git a/lib/comsocket.cpp b/lib/comsocket.cpp
+index 01a94be..7bfc4dd 100644
+--- a/lib/comsocket.cpp
++++ b/lib/comsocket.cpp
+@@ -44,6 +44,7 @@ ____________________________________________________________________________*/
+ #include <net/if.h>
+ #include <sys/ioctl.h>
+ #endif
++#include <string.h>
+ 
+ #define mb_socklen_t ACCEPT_ARG3
+ 
+diff --git a/lib/http.cpp b/lib/http.cpp
+index 85390a3..e63713c 100644
+--- a/lib/http.cpp
++++ b/lib/http.cpp
+@@ -67,6 +67,7 @@
+ #ifdef __QNX__
+ #include <strings.h>
+ #endif
++#include <string.h>
+ 
+ using namespace std;
+ 
+diff --git a/lib/sigclient.cpp b/lib/sigclient.cpp
+index 9f76008..4bbbaae 100644
+--- a/lib/sigclient.cpp
++++ b/lib/sigclient.cpp
+@@ -32,6 +32,7 @@ email                : ijr@relatable.com
+ #ifdef WIN32
+ #pragma warning(disable:4786)
+ #endif
++#include <string.h>
+ 
+ #include "sigclient.h"
+ #include "comhttpsocket.h"

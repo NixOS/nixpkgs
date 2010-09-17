@@ -1,20 +1,22 @@
 { fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, mysql, guile, texinfo, gnum4 }:
+, ncurses, gnutls, mysql, guile, texinfo, gnum4, dejagnu }:
 
 /* TODO: Add GNU SASL, GNU GSSAPI, and FreeBidi.  */
 
 stdenv.mkDerivation rec {
-  name = "mailutils-2.1";
+  name = "mailutils-2.2";
 
   src = fetchurl {
     url = "mirror://gnu/mailutils/${name}.tar.bz2";
-    sha256 = "09c4cb7w8z0gaxsqg1wgn2w8kgmqcqpahv7mw3ygw3nagcfh84cs";
+    sha256 = "0szbqa12zqzldqyw97lxqax3ja2adis83i7brdfsxmrfw68iaf65";
   };
 
-  buildInputs = [
-    gettext gdbm libtool pam readline ncurses
-    gnutls mysql guile texinfo gnum4
-  ];
+  patches = [ ./path-to-cat.patch ];
+
+  buildInputs =
+   [ gettext gdbm libtool pam readline ncurses
+     gnutls mysql guile texinfo gnum4 ]
+   ++ stdenv.lib.optional doCheck dejagnu;
 
   doCheck = true;
 

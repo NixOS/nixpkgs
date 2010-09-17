@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "texmath";
-  version = "0.2.0.3";
-  sha256 = "d355a298d28b9f5356926c2d2942f28ed07afa9d944cadfa47d8cdec73725b55";
+  version = "0.3.0.2";
+  sha256 = "8d2bb26fc5aab09ae92d2c194ec39acb4e04c054ad2caf1a1db0dc9b53b4b1d4";
   propagatedBuildInputs = [cgi json parsec xml];
   meta = {
     description = "Conversion of LaTeX math formulas to MathML";

@@ -8,7 +8,7 @@
 , buildDemos ? false, buildExamples ? false, useDocs ? true}:
 
 let
-  v = "4.7.0-beta2";
+  v = "4.7.0-rc1";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "1gxckb5pxybnj5413dxk7dm8hm945ymm4ppqwg14wfk83zhnw6g0";
+    sha256 = "1bfvd42sdabb86m823yzbzgcy1sibd4ypz2wqaazd77ji768dn2r";
   };
 
   preConfigure = ''
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
       -importdir $out/lib/qt4/imports
       -examplesdir $out/share/doc/${name}/examples
       -demosdir $out/share/doc/${name}/demos
-      -datadir $out/share/qt4
+      -datadir $out/share/${name}
+      -translationdir $out/share/${name}/translations
     "
   '';
 

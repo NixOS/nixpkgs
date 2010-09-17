@@ -1,16 +1,20 @@
 { stdenv, fetchurl, kdelibs, cmake, gmp, qca2, boost, gettext, qt4, automoc4,
-  perl }:
+  perl, phonon }:
 
 stdenv.mkDerivation rec {
-  name = "libktorrent-1.0.2";
+  name = pname + "-" + version;
+  pname = "libktorrent";
+  version = "1.0.3";
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/4.0.2/${name}.tar.bz2";
-    sha256 = "11kh1mcijwzr2kf7hpxadggh346kdb5jy8rnmawhi9nc0i7wyjlw";
+    url = "${meta.homepage}/downloads/4${builtins.substring 1
+      (builtins.stringLength version) version}/${name}.tar.bz2";
+    sha256 = "1yfayzbmi7im0pf4g7awn8lqianpr55xwbsldz7lyj9lc1a3xcgs";
   };
 
 # TODO: xfs.h
-  buildInputs = [ cmake kdelibs gmp qca2 boost gettext qt4 automoc4 perl ];
+  propagatedBuildInputs = [ kdelibs gmp boost qt4 phonon ];
+  buildInputs = [ cmake automoc4 qca2 gettext perl ];
 
   meta = {
     description = "A bittorrent library used in ktorrent";
