@@ -197,5 +197,22 @@ in
     { name = "dell-rfkill";
       patch = ./dell-rfkill.patch;
     };
-  
+
+  guruplug_defconfig =
+    {
+      # Default configuration for the GuruPlug.  From
+      # <http://www.openplug.org/plugwiki/images/c/c6/Guruplug-patchset-2.6.33.2.tar.bz2>.
+      name = "guruplug-defconfig";
+      patch = ./guruplug-defconfig.patch;
+    };
+
+  guruplug_arch_number =
+    {
+      # Hack to match the `arch_number' of the U-Boot that ships with the
+      # GuruPlug.  This is only needed when using this specific U-Boot
+      # binary.  See
+      # <http://www.plugcomputer.org/plugwiki/index.php/Compiling_Linux_Kernel_for_the_Plug_Computer>.
+      name = "guruplug-arch-number";
+      patch = ./guruplug-mach-type.patch;
+    };
 }
