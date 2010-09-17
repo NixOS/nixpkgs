@@ -3633,9 +3633,7 @@ let
 
   plib = callPackage ../development/libraries/plib { };
 
-  podofo = callPackage ../development/libraries/podofo {
-    stdenv = stdenv2;
-  };
+  podofo = callPackage ../development/libraries/podofo { };
 
   polkit = callPackage ../development/libraries/polkit { };
 
