@@ -9,7 +9,7 @@ let
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = {
+  sourceInfo = rec {
     method = "fetchgit";
     rev = "370b7968fd73d5babc81e35913a37111a788487f";
     url = "git://gitorious.org/eql/eql";
