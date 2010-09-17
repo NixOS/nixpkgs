@@ -106,10 +106,10 @@ let
         (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) pkgsOrig.stdenv.overrides);
 
       # The un-overriden packages, passed to `overrider'.
-      pkgsOrig = pkgsFun pkgs {}; 
+      pkgsOrig = pkgsFun pkgs {};
 
       # The overriden, final packages.
-      pkgs = pkgsFun pkgs overrides; 
+      pkgs = pkgsFun pkgs overrides;
     in pkgs;
 
 
@@ -133,14 +133,14 @@ let
 
   newScope = extra: lib.callPackageWith (defaultScope // extra);
 
-  
+
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
     inherit system;
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
   };
 
-  
+
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux";
 
@@ -4633,7 +4633,7 @@ let
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
 
     openafsClient = callPackage ../servers/openafs-client { };
-    
+
     openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
