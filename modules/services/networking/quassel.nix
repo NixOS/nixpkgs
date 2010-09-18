@@ -38,11 +38,6 @@ in
         '';
       };
 
-      logFile = mkOption {
-        default = "/var/log/quassel.log";
-        description = "Location of the logfile of the Quassel daemon.";
-      };
-
       dataDir = mkOption {
         default = ''/home/${cfg.user}/.config/quassel-irc.org'';
         description = ''
@@ -86,7 +81,7 @@ in
         exec = ''
             ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${cfg.user} \
                 -c '${quassel}/bin/quasselcore --listen=${cfg.interface}\
-                    --port=${toString cfg.portNumber} --configdir=${cfg.dataDir} --logfile=${cfg.logFile}'
+                    --port=${toString cfg.portNumber} --configdir=${cfg.dataDir}'
         '';
       };
 
