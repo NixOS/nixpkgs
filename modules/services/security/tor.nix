@@ -163,7 +163,7 @@ in
         };
 
         bandwidthBurst = mkOption {
-          default = 0;
+          default = cfg.relay.bandwidthRate;
           example = 200;
           description = ''
             Specify this to allow bursts of the bandwidth usage of relayed (server)
