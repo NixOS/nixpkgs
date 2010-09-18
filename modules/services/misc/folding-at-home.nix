@@ -41,7 +41,6 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.foldingathome ];
 
     users.extraUsers = singleton
       { name = fahUser;
