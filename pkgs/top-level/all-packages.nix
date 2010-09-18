@@ -3679,6 +3679,16 @@ let
 
   quassel = newScope pkgs.kde4 ../applications/networking/irc/quassel { };
 
+  quasselDaemon = quassel.override {
+    monolithic = false;
+    daemon = true;
+  };
+  
+  quasselClient = quassel.override {
+    monolithic = false;
+    daemon = true;
+  };
+  
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   readline = readline6;
