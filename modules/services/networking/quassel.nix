@@ -3,7 +3,7 @@
 with pkgs.lib;
 
 let
-  quassel = pkgs.quassel.override { daemon = true; monolithic = false; client = false; };
+  quassel = pkgs.quasselDaemon;
   cfg = config.services.quassel;
 in
 
