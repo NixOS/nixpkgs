@@ -16,11 +16,11 @@ rec {
         PARAVIRT_GUEST y
         KVM_CLOCK y
         KVM_GUEST y
-        XEN y
+        #XEN y
         KSM y
 
         # We need 64 GB (PAE) support for Xen guest support.
-        HIGHMEM64G? y
+        #HIGHMEM64G? y
       '';
   };
 

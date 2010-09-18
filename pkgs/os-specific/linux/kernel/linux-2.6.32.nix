@@ -155,7 +155,7 @@ let
       BT_HCIUART_LL y
       BT_RFCOMM_TTY y # RFCOMM TTY support
       CPU_FREQ_DEBUG n
-      CRASH_DUMP n
+
       DMAR? n # experimental
       DVB_DYNAMIC_MINORS y # we use udev
       FUSION y # Fusion MPT device support
