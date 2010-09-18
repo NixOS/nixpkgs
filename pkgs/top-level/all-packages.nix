@@ -5782,6 +5782,8 @@ let
     inherit (xlibs) libX11 libXau xproto libXt;
   };
 
+  lxdvdrip = callPackage ../applications/video/lxdvdrip { };
+
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx {
