@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
 , svnSupport, subversion, perlLibs, smtpPerlLibs
@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
       echo "installing Emacs mode..."
       ensureDir $out/share/emacs/site-lisp
       cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
+
+      # grep is a runtime dependence, need to patch so that it's found
+      substituteInPlace $out/libexec/git-core/git-sh-setup \
+          --replace ' grep' ' ${gnugrep}/bin/grep' \
+          --replace ' egrep' ' ${gnugrep}/bin/egrep'
     '' # */
 
    + (if svnSupport then
