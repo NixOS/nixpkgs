@@ -38,7 +38,7 @@ in
       client = {
 
         enable = mkOption {
-          default = true;
+          default = false;
           description = ''
             Whether to enable Tor daemon to route application connections.
             You might want to disable this if you plan running a dedicated Tor relay.
