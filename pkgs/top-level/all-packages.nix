@@ -365,6 +365,16 @@ let
 
   amule = callPackage ../tools/networking/p2p/amule { };
 
+  amuleDaemon = amule.override {
+    monolithic = false;
+    daemon = true;
+  };
+  
+  amuleGui = amule.override {
+    monolithic = false;
+    client = true;
+  };
+  
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
 
