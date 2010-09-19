@@ -233,36 +233,33 @@ in
         home = stateDir;
       };
 
-    jobs.tor =
-      { name = "tor";
+    jobs = {
+      tor = { name = "tor";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+              startOn = "started network-interfaces";
+              stopOn = "stopping network-interfaces";
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${torUser} ${stateDir}
-          '';
-        exec = "${tor}/bin/tor -f ${pkgs.writeText "torrc" cfg.config}";
-      };
+              preStart = ''
+                mkdir -m 0755 -p ${stateDir}
+                chown ${torUser} ${stateDir}
+              '';
+              exec = "${tor}/bin/tor -f ${pkgs.writeText "torrc" cfg.config}";
+    }; }
+    // optionalAttrs (cfg.client.privoxy.enable && cfg.client.enable) {
+      torPrivoxy = { name = "tor-privoxy";
 
-    jobs.torPrivoxy = mkIf (cfg.client.privoxy.enable && cfg.client.enable)
-      { name = "tor-privoxy";
+                     startOn = "starting tor";
+                     stopOn = "stopping tor"; 
 
-        startOn = "starting tor";
-        stopOn = "stopping tor"; 
+                     preStart = ''
+                       mkdir -m 0755 -p ${privoxyDir}
+                       chown ${torUser} ${privoxyDir}
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${privoxyDir}
-            chown ${torUser} ${privoxyDir}
-
-            # Needed to run privoxy as an unprivileged user?
-            ${modprobe}/sbin/modprobe capability || true
-          '';
-        exec = "${privoxy}/sbin/privoxy --no-daemon --user ${torUser} ${pkgs.writeText "torPrivoxy.conf" cfg.client.privoxy.config}";
-      };
+                       # Needed to run privoxy as an unprivileged user?
+                       ${modprobe}/sbin/modprobe capability || true
+                     '';
+                     exec = "${privoxy}/sbin/privoxy --no-daemon --user ${torUser} ${pkgs.writeText "torPrivoxy.conf" cfg.client.privoxy.config}";
+    }; };
 
       services.tor.config = ''
         DataDirectory ${stateDir}
