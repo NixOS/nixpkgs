@@ -8,6 +8,9 @@ let
     glib pkgconfig
   ];
 in
+
+assert a.stdenv ? glibc;
+
 rec {
   src = a.fetchUrlFromSrcInfo s;
 
