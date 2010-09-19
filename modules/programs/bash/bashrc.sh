@@ -15,7 +15,7 @@ export LOCATE_PATH=/var/cache/locatedb
 # Include the various profiles in the appropriate environment variables.
 NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
 
-NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
+NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
 
 unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB GST_PLUGIN_PATH KDEDIRS
 unset XDG_CONFIG_DIRS XDG_DATA_DIRS
@@ -43,7 +43,7 @@ done
 
 
 # Search directory for Aspell dictionaries.
-export ASPELL_CONF="dict-dir $NIX_USER_PROFILE_DIR/profile/lib/aspell"
+export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
 
 
 # ~/bin and the setuid wrappers override other bin directories.
