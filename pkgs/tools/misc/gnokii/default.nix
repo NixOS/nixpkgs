@@ -26,7 +26,6 @@ rec {
     export CFLAGS="-ggdb -O0 -include ${a.stdenv.glibc}/include/locale.h"
     export CXXFLAGS="-ggdb -O0"
 
-    patch -p 1 < ${/tmp/patch}
   '' [ "minInit" "doUnpack" ];
       
   inherit(s) name;
