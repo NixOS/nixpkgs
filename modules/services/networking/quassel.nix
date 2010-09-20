@@ -75,7 +75,6 @@ in
         preStart = ''
             mkdir -p ${cfg.dataDir}
             chown ${cfg.user} ${cfg.dataDir}
-            touch ${cfg.logFile} && chown ${cfg.user} ${cfg.logFile}
         '';
 
         exec = ''
