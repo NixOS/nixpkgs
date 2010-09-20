@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "freefont-ttf-20090104";
+  name = "freefont-ttf-20100919";
 
   src = fetchurl {
     url = "mirror://gnu/freefont/${name}.tar.gz";
-    sha256 = "13k3gm31wqa5ch14rmd3zpapckaif9bv4x82x72xaqn3n1j733ib";
+    sha256 = "1q3h5jp1mbdkinkwxy0lfd0a1q7azlbagraydlzaa2ng82836wg4";
   };
 
   installPhase = ''
@@ -24,5 +24,8 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/freefont/;
     license = "GPLv3+";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
