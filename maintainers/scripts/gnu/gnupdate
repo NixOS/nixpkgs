@@ -560,8 +560,9 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
     '(("commoncpp2"   "ftp.gnu.org"   "/gnu/commoncpp" #f)
       ("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
       ("libgpg-error" "ftp.gnupg.org" "/gcrypt" #t)
+      ("freefont-ttf" "ftp.gnu.org"   "/gnu/freefont" #f)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
-      ("gnu-ghostscript" "ftp.gnu.org"  "/ghostscript" #f)
+      ("gnu-ghostscript" "ftp.gnu.org"  "/gnu/ghostscript" #f)
       ("grub"         "alpha.gnu.org" "/gnu" #t)
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
       ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg")
@@ -593,6 +594,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
 
 (define (releases project)
   ;; TODO: Handle project release trees like that of IceCat and MyServer.
+  ;; TODO: Parse something like fencepost.gnu.org:/gd/gnuorg/packages-ftp.
   (define release-rx
     (make-regexp (string-append "^" project "-[0-9].*\\.tar\\.")))
 
