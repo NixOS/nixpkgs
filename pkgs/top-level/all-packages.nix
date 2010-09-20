@@ -5143,6 +5143,8 @@ let
     inherit (gnome) libgnomecanvas;
   };
 
+  arora = callPackage ../applications/networking/browsers/arora { };
+
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity { };
