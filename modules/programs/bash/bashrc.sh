@@ -35,7 +35,7 @@ for i in $NIX_PROFILES; do # !!! reverse
 
     # KDE/Gnome stuff.
     export KDEDIRS=$i${KDEDIRS:+:}$KDEDIRS
-    export QT_PLUGIN_PATH=$i/plugins:$i/lib/qt4/plugins${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
+    export QT_PLUGIN_PATH=$i/lib/qt4/plugins:$i/lib/kde4/plugins${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
     export XDG_CONFIG_DIRS=$i/etc/xdg${XDG_CONFIG_DIRS:+:}$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 done
