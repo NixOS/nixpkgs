@@ -28,7 +28,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixPaths" "buildEQLLib" "doQMake" "doMake" "doDeploy"];
+  phaseNames = ["fixPaths" "buildEQLLib" "doQMake" "doMake" "buildLibEQL" "doDeploy"];
 
   fixPaths = a.fullDepEntry (''
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
@@ -43,11 +43,20 @@ rec {
     qmake
   '') ["addInputs"];
 
+  buildLibEQL = a.fullDepEntry (''
+    sed -i eql.pro -e 's@#CONFIG += eql_dll@CONFIG += eql_dll@'
+    qmake
+    make
+  '') ["doUnpack" "addInputs"];
+
   doDeploy = a.fullDepEntry (''
     cd ..
-    ensureDir $out/bin $out/lib/eql/
+    ensureDir $out/bin $out/lib/eql/ $out/include $out/include/gen $out/lib
     cp -r . $out/lib/eql/build-dir
     ln -s $out/lib/eql/build-dir/eql $out/bin
+    ln -s $out/lib/eql/build-dir/src/*.h $out/include
+    ln -s $out/lib/eql/build-dir/src/gen/*.h $out/include/gen
+    mv $out/lib/eql/build-dir/my_app/libeql*.so* $out/lib
   '') ["minInit" "defEnsureDir"];
 
   meta = {
