@@ -3688,7 +3688,7 @@ let
   
   quasselClient = quassel.override {
     monolithic = false;
-    daemon = true;
+    client = true;
   };
   
   quesoglc = callPackage ../development/libraries/quesoglc { };
