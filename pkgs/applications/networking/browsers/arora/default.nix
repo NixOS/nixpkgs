@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     platforms = qt.meta.platforms;
     maintainers = [ maintainers.phreedom ];
     description = "A cross-platform Qt4 Webkit browser";
-    homepage = http://rekonq.sourceforge.net;
+    homepage = http://arora.googlecode.com;
   };
 }
