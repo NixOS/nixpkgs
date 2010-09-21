@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
       went back to the beginning.
     '';
 
-    # Author's page: http://www.cs.usyd.edu.au/~jeff/ .
-    homepage = http://lout.wiki.sourceforge.net/;
+    # Author's page: http://www.cs.usyd.edu.au/~jeff/
+    # Wiki: http://lout.wiki.sourceforge.net/
+    homepage = http://savannah.nongnu.org/projects/lout/;
 
     license = "GPLv3+";
 
