@@ -1194,6 +1194,7 @@ let
   tor = callPackage ../tools/security/tor { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
+  ttf2pt1_cl_pdf = callPackage ../tools/misc/ttf2pt1 { };
 
   ucl = callPackage ../development/libraries/ucl { };
 
