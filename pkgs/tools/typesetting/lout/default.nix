@@ -1,16 +1,17 @@
 {stdenv, fetchurl, ghostscript}:
 
 stdenv.mkDerivation rec {
-  name = "lout-3.38";
+  name = "lout-3.39";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.cs.usyd.edu.au/jeff/lout/${name}.tar.gz"
-      "mirror://sourceforge/lout/${name}.tar.gz"
+      "mirror://savannah/lout/${name}.tar.gz"      # new!
+      "mirror://sourceforge/lout/${name}.tar.gz"   # to be phased out
       # XXX: We could add the CTAN mirrors
       # (see http://www.ctan.org/tex-archive/support/lout/).
     ];
-    sha256 = "02nqv99jsps2g3v20piyvaq6lji8v9w8fclkk39ixa5lm1jdqaka";
+    sha256 = "12gkyqrn0kaa8xq7sc7v3wm407pz2fxg9ngc75aybhi5z825b9vq";
   };
 
   buildInputs = [ ghostscript ];
@@ -43,5 +44,8 @@ stdenv.mkDerivation rec {
     homepage = http://lout.wiki.sourceforge.net/;
 
     license = "GPLv3+";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
