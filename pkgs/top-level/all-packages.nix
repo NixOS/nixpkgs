@@ -3424,6 +3424,8 @@ let
     inherit (gnome) glib;
   };
 
+  libwpg = callPackage ../development/libraries/libwpg { };
+
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
 
   libxcrypt = callPackage ../development/libraries/libxcrypt { };
