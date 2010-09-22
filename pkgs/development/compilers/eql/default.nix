@@ -29,7 +29,11 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixPaths" "buildEQLLib" "doQMake" "doMake" "buildLibEQL" "doDeploy"];
+  phaseNames = ["setVars" "fixPaths" "buildEQLLib" "doQMake" "doMake" "buildLibEQL" "doDeploy"];
+
+  setVars = a.fullDepEntry (''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
+  '') [];
 
   fixPaths = a.fullDepEntry (''
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
