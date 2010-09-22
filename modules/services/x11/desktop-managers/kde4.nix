@@ -47,7 +47,13 @@ in
           '';
       };
 
-    security.setuidPrograms = [ "kcheckpass" ];
+    security.setuidOwners = [ {
+      program = "kcheckpass";
+      source = "${pkgs.kde4.kdebase_workspace}/lib/kde4/libexec/kcheckpass";
+      owner = "root";
+      group = "root";
+      setuid = true;
+    } ];
 
     environment = {
       kdePackages = [
