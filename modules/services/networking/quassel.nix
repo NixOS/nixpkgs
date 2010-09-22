@@ -84,8 +84,6 @@ in
         '';
       };
 
-    environment.systemPackages = [ quassel ];
-
   };
   
 }
