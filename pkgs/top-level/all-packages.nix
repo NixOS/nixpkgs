@@ -3862,6 +3862,8 @@ let
     flex = flex2533;
   };
 
+  xbase = callPackage ../development/libraries/xbase { };
+
   xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
