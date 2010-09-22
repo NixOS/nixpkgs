@@ -11,19 +11,20 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     method = "fetchgit";
-    rev = "370b7968fd73d5babc81e35913a37111a788487f";
+    rev = "7bd32f49c9965d8f7dc262a0f265b153b0a81ced";
     url = "git://gitorious.org/eql/eql";
-    hash = "2370e111d86330d178f3ec95e8fed13607e51fed8859c6e95840df2a35381636";
+    hash = "f5f34b1a76f65b707446cd9bee4d7cef3b6f9b5b5d8d16fcccb70dbf855c2adf";
     version = rev;
     name = "eql-git-${version}";
   };
 in
 rec {
-  src = a.fetchgit {
+  srcDrv = a.fetchgit {
     url = sourceInfo.url;
     sha256 = sourceInfo.hash;
     rev = sourceInfo.rev;
-  } + "/";
+  };
+  src = srcDrv + "/";
 
   inherit (sourceInfo) name version;
   inherit buildInputs;
@@ -76,6 +77,7 @@ rec {
       url = "git://gitorious.org/eql/eql";
       hash = "2370e111d86330d178f3ec95e8fed13607e51fed8859c6e95840df2a35381636";
     };
+    inherit srcDrv;
   };
 }) x
 
