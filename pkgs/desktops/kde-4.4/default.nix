@@ -283,15 +283,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
   
-  koffice = import ./extragear/koffice {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl lcms exiv2 giflib libxml2 libxslt boost glew;
-    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd libgsf fftw;
-    inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon qimageblitz qca2 eigen soprano;
-    poppler = pkgs.popplerQt4;
-  };
-  
-  inherit (pkgs) konversation yakuake ktorrent;
+  inherit (pkgs) konversation yakuake ktorrent koffice;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;

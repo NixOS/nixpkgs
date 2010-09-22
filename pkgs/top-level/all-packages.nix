@@ -5767,6 +5767,8 @@ let
     inherit (xlibs) libXv libX11;
   };
 
+  koffice = newScope pkgs.kde4 ../applications/office/koffice { };
+
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
 
   krename = newScope pkgs.kde4 ../applications/misc/krename { };

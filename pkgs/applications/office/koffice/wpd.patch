@@ -1,7 +1,7 @@
-diff --git a/cmake/modules/FindWPD.cmake b/cmake/modules/FindWPD.cmake
+diff cmake/modules/FindWPD.cmake cmake/modules/FindWPD.cmake
 index 9bd788c..927785a 100644
---- a/cmake/modules/FindWPD.cmake
-+++ b/cmake/modules/FindWPD.cmake
+--- cmake/modules/FindWPD.cmake
++++ cmake/modules/FindWPD.cmake
 @@ -19,14 +19,17 @@ if (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
  else (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
  if(NOT WIN32)
