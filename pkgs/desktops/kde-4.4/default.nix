@@ -309,6 +309,10 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
+  konqPlugins = import ./extragear/konq-plugins {
+    inherit (pkgs) stdenv fetchurl cmake qt4 gettext;
+    inherit kdelibs automoc4 phonon kdebase;
+  };
 ### LOCALIZATION
 
   l10n = pkgs.recurseIntoAttrs (import ./l10n {
