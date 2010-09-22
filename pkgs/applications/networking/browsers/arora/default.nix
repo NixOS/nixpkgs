@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configurePhase = "qmake PREFIX=$out";
 
   meta = with stdenv.lib; {
-    platforms = qt.meta.platforms;
+    platforms = qt4.meta.platforms;
     maintainers = [ maintainers.phreedom ];
     description = "A cross-platform Qt4 Webkit browser";
     homepage = http://arora.googlecode.com;
