@@ -157,7 +157,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl boost gpgme libassuan libgpgerror libxslt;
     inherit (pkgs) shared_mime_info;
     inherit (pkgs.xlibs) libXScrnSaver;
-    inherit kdelibs kdepimlibs;
+    inherit kdelibs kdepimlibs kdepim_runtime;
     inherit automoc4 phonon akonadi strigi soprano qca2;
   };
   
