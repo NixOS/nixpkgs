@@ -219,7 +219,6 @@ in
   ###### implementation
 
   config = mkIf (cfg.client.enable || cfg.relay.enable) {
-    environment.systemPackages = [ tor ];  # provides tor-resolve and torify
 
     assertions = [ {
       assertion = cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit);
