@@ -74,6 +74,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver libpthreadstubs;
     inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt;
+    inherit (pkgs) bluez;
   };
   
   kdebase = import ./base {
