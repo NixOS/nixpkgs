@@ -32,7 +32,7 @@ rec {
     # https://bugs.webkit.org/show_bug.cgi?id=42943
     # "--enable-wml"
     
-    # https://bugs.webkit.org/show_bug.cgi?id=43863
+    # https://bugs.webkit.org/show_bug.cgi?id=45110
     # "--enable-indexed-database"
 
     # "--enable-xhtmlmp"
@@ -44,7 +44,7 @@ rec {
     # "--enable-blob"
 
     # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
-    "--enable-file-system"
+    # "--enable-file-system"
     "--enable-directory-upload"
     ];
 
