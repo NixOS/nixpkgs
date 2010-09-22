@@ -5749,6 +5749,8 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
+
   kermit = callPackage ../tools/misc/kermit { };
 
   kino = import ../applications/video/kino {
