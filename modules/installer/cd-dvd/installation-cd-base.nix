@@ -62,14 +62,4 @@ in
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
   isoImage.storeContents = [ pkgs.stdenv pkgs.klibc pkgs.klibcShrunk ];
-
-  # Allow sshd to be started manually through "start sshd".  It should
-  # not be started by default on the installation CD because the
-  # default root password is empty.
-  services.openssh.enable = true;
-  jobs.sshd.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
-
-  # Enable wpa_supplicant, but don't start it by default.
-  networking.enableWLAN = true;
-  jobs.wpa_supplicant.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 }
