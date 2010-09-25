@@ -42,19 +42,10 @@ $ nix-channel --update</screen>
   <link xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixpkgs</literal>.</para></listitem>
 
-  <listitem><para>In the directory <literal>nixos</literal>, make a
-  symbolic link <literal>pkgs</literal> to the <literal>pkgs</literal>
-  directory of the Nixpkgs tree, e.g.,
-
-<screen>
-$ ln -s nixpkgs/pkgs nixos/</screen>
-
-  </para></listitem>
-
   <listitem><para>Build the ISO image:
 
 <screen>
-$ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
+$ nix-build ./nixos/release.nix -A iso_minimal.iso</screen>
 
   If everything goes well, you’ll end up with an ISO image in
   <filename>./result/iso/nixos-<replaceable>version</replaceable>-<replaceable>platform</replaceable>.iso</filename>
@@ -62,7 +53,7 @@ $ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
   your favourite virtual machine software.</para></listitem>
 
 </orderedlist>
-  
+
 </para>
 
 </section>
@@ -88,8 +79,8 @@ $ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
   server on your network.  Otherwise configure
   manually.</para></listitem>
 
-  <listitem><para>The NixOS manual is available on virtual console 7
-  (press Alt+F7 to access).</para></listitem>
+  <listitem><para>The NixOS manual is available on virtual console 8
+  (press Alt+F8 to access).</para></listitem>
 
   <listitem><para>Login as <literal>root</literal>, empty
   password.</para></listitem>
@@ -280,7 +271,8 @@ $ reboot</screen>
 <screen>
 {
   boot.initrd.kernelModules = [ "ata_piix" ];
-  boot.grubDevice = "/dev/sda";
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/sda";
 
   fileSystems = [
     { mountPoint = "/";
