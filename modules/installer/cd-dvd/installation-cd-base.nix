@@ -75,6 +75,11 @@ in
       ./memtest.nix
       ./iso-image.nix
       ../../profiles/base.nix
+
+      # Enable devices which are usually scanned, because we don't know the
+      # target system.
+      ../scan/detected.nix
+      ../scan/not-detected.nix
     ];
 
   # ISO naming.
@@ -133,11 +138,6 @@ in
         else ""
       }
     '';
-
-  # Include the firmware for various wireless cards.
-  networking.enableRT73Firmware = true;
-  networking.enableIntel2200BGFirmware = true;
-  networking.enableIntel3945ABGFirmware = true;
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
