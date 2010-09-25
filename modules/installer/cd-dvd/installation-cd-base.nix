@@ -74,8 +74,6 @@ in
     [ options
       ./memtest.nix
       ./iso-image.nix
-      ../../hardware/network/intel-3945abg.nix
-      ../../hardware/network/rt73.nix
       ../../profiles/base.nix
     ];
 
