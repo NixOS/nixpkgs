@@ -38,9 +38,8 @@ $ nix-channel --update</screen>
   xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixos</literal>.</para></listitem>
 
-  <listitem><para>If you don’t already have Nixpkgs checkout, Check
-  out Nixpkgs from <link
-  xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
+  <listitem><para>Check out Nixpkgs from
+  <link xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixpkgs</literal>.</para></listitem>
 
   <listitem><para>In the directory <literal>nixos</literal>, make a
@@ -138,7 +137,8 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
   </para></listitem>
     
   <listitem><para>Mount the target file system on
-  <filename>/mnt</filename>.</para></listitem>
+  <filename>/mnt</filename> on which NixOS would be installed.</para>
+  </listitem>
 
   <listitem>
 
