@@ -170,7 +170,7 @@ let
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
       
       $machine->mustSucceed("nix-env -i coreutils >&2");
-      $machine->mustSucceed("type -tP ls") =~ /profiles/
+      $machine->mustSucceed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
       $machine->mustSucceed("nixos-rebuild switch >&2");
