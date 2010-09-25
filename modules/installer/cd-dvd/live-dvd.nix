@@ -1,7 +1,7 @@
 {config, pkgs, ...}:
 
 {
-  require = [./installation-cd.nix];
+  require = [./installation-cd-base.nix];
 
   # Build the build-time dependencies of this configuration on the DVD
   # to speed up installation.
