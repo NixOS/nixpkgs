@@ -80,6 +80,7 @@ let
     name = "nixos-hardware-scan";
     src = ./nixos-hardware-scan.pl;
     inherit (pkgs) perl;
+    profile = config.installer.installProfile;
   };
 
   nixosOption = makeProg {
@@ -110,6 +111,14 @@ in
       description = ''
         URLs of manifests to be downloaded when you run
         <command>nixos-rebuild</command> to speed up builds.
+      '';
+    };
+
+    installer.installProfile = pkgs.lib.mkOption {
+      default = "base";
+      example = "graphical";
+      description = ''
+        Name of the profile used when generating the hardware-scan.
       '';
     };
     
