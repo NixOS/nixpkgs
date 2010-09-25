@@ -1,21 +1,40 @@
-{config, pkgs, ...}:
+# Provide a basic cponfiguration for installation devices like CDs.
+{config, pkgs, modules, ...}:
 
 with pkgs.lib;
 
 let
   # Location of the repository on the harddrive
-  profilePath = toString ./.;
+  nixosPath = toString ../../.;
 
   # Check if the path is from the NixOS repository
-  isProfile = path:
+  isNixOSFile = path:
     let s = toString path; in
-      removePrefix profilePath s != s;
+      removePrefix nixosPath s != s;
 
-  # Rename NixOS modules used to setup the current device to make findable form
-  # the default location of the configuration.nix file.
-  getProfileModules =
-    map (path: "./nixos/modules/profiles" + removePrefix isProfile (toString path))
-      filter (m: isPath m && isProfile m) modules;
+  # Copy modules given as extra configuration files.  Unfortunately, we
+  # cannot serialized attribute set given in the list of modules (that's why
+  # you should use files).
+  moduleFiles =
+    filter isPath modules;
+
+  # Partition module files because between NixOS and non-NixOS files.  NixOS
+  # files may change if the repository is updated.
+  partitionnedModuleFiles =
+    let p = partition isNixOSFile moduleFiles; in
+    { nixos = p.right; others = p.wrong; };
+
+  # Path transformed to be valid on the installation device.  Thus the
+  # device configuration could be rebuild.
+  relocatedModuleFiles =
+    let
+      relocateNixOS = path:
+        "/etc/nixos/nixos" + removePrefix nixosPath (toString path);
+      relocateOthers = null;
+    in
+      { nixos = map relocateNixOS partitionnedModuleFiles.nixos;
+        others = []; # TODO: copy the modules to the install-device repository.
+      };
 
   # A dummy /etc/nixos/configuration.nix in the booted CD that
   # rebuilds the CD's configuration (and allows the configuration to
@@ -28,7 +47,9 @@ let
       {config, pkgs, ...}:
 
       {
-        require = [${toString config.installer.cloneConfigIncludes}];
+        require = [
+          ${toString config.installer.cloneConfigIncludes}
+        ];
 
         # Add your own options below and run "nixos-rebuild switch".
         # E.g.,
@@ -61,10 +82,23 @@ in
         List of modules used to re-build this installation device profile.
       '';
     };
+
+    # Ignored. Kept for Backward compatibiliy.
+    # you can retrieve the profiles which have been used by looking at the
+    # list of modules use to configure the installation device.
+    installer.configModule = mkOption {
+      example = "./nixos/modules/installer/cd-dvd/installation-cd.nix";
+      description = ''
+        Filename of the configuration module that builds the CD
+        configuration.  Must be specified to support reconfiguration
+        in live CDs.
+      '';
+    };
   };
 
   config = {
-    installer.cloneConfigIncludes = getProfileModules;
+    installer.cloneConfigIncludes =
+      relocatedModuleFiles.nixos ++ relocatedModuleFiles.others;
 
     # Show the manual.
     services.nixosManual.showManual = true;

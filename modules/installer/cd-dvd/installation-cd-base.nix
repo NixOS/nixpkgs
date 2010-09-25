@@ -7,21 +7,6 @@ with pkgs.lib;
 
 let
 
-  options = {
-
-    # you can retrieve the profiles which have been used by looking at the
-    # list of modules use to configure the installation device.
-    installer.configModule = mkOption {
-      example = "./nixos/modules/installer/cd-dvd/installation-cd.nix";
-      description = ''
-        Filename of the configuration module that builds the CD
-        configuration.  Must be specified to support reconfiguration
-        in live CDs.
-      '';
-    };
-  };
-
-
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD.  We put them in a tarball because accessing that many small
   # files from a slow device like a CD-ROM takes too long.  !!! Once
@@ -45,8 +30,7 @@ in
 
 {
   require =
-    [ options
-      ./memtest.nix
+    [ ./memtest.nix
       ./iso-image.nix
 
       # Profiles of this basic installation CD.
