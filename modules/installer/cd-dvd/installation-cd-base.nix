@@ -9,13 +9,8 @@ let
 
   options = {
 
-    system.nixosVersion = mkOption {
-      default = "${builtins.readFile ../../../VERSION}";
-      description = ''
-        NixOS version number.
-      '';
-    };
-
+    # you can retrieve the profiles which have been used by looking at the
+    # list of modules use to configure the installation device.
     installer.configModule = mkOption {
       example = "./nixos/modules/installer/cd-dvd/installation-cd.nix";
       description = ''
@@ -45,27 +40,6 @@ let
   nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource pkgs.path);
 
   includeSources = true;
-
-
-  # A dummy /etc/nixos/configuration.nix in the booted CD that
-  # rebuilds the CD's configuration (and allows the configuration to
-  # be modified, of course, providing a true live CD).  Problem is
-  # that we don't really know how the CD was built - the Nix
-  # expression language doesn't allow us to query the expression being
-  # evaluated.  So we'll just hope for the best.
-  dummyConfiguration = pkgs.writeText "configuration.nix"
-    ''
-      {config, pkgs, ...}:
-
-      {
-        require = [${config.installer.configModule}];
-
-        # Add your own options below and run "nixos-rebuild switch".
-        # E.g.,
-        #   services.openssh.enable = true;
-      }
-    '';
-  
   
 in
 
@@ -104,11 +78,6 @@ in
         tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
         chown -R root.root /etc/nixos
      ''}
-
-      # Provide a configuration for the CD/DVD itself, to allow users
-      # to run nixos-rebuild to change the configuration of the
-      # running system on the CD/DVD.
-      cp ${dummyConfiguration} /etc/nixos/configuration.nix
     '';
 
   # To speed up installation a little bit, include the complete stdenv
