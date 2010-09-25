@@ -74,7 +74,10 @@ in
     [ options
       ./memtest.nix
       ./iso-image.nix
+
+      # Profiles of this basic installation CD.
       ../../profiles/base.nix
+      ../../profiles/installation-device.nix
 
       # Enable devices which are usually scanned, because we don't know the
       # target system.
@@ -87,29 +90,9 @@ in
     
   isoImage.volumeID = "NIXOS_INSTALL_CD_${config.system.nixosVersion}";
   
-  # Show the manual.
-  services.nixosManual.showManual = true;
-
-  # Let the user play Rogue on TTY 8 during the installation.
-  services.rogue.enable = true;
-
-  # Disable some other stuff we don't need.
-  security.sudo.enable = false;
-
-  # Include only the en_US locale.  This saves 75 MiB or so compared to
-  # the full glibcLocales package.
-  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
-
-  # nixos-install will do a pull from this channel to speed up the
-  # installation.
-  installer.nixpkgsURL = http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable;
-
   boot.postBootCommands =
     ''
       export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
-
-      # Provide a mount point for nixos-install.
-      mkdir -p /mnt
 
       # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
       # for nixos-install.
@@ -126,17 +109,6 @@ in
       # to run nixos-rebuild to change the configuration of the
       # running system on the CD/DVD.
       cp ${dummyConfiguration} /etc/nixos/configuration.nix
-    '';
-
-  # Some more help text.
-  services.mingetty.helpLine =
-    ''
-        
-      Log in as "root" with an empty password.  ${
-        if config.services.xserver.enable then
-          "Type `start xserver' to start\nthe graphical user interface."
-        else ""
-      }
     '';
 
   # To speed up installation a little bit, include the complete stdenv
