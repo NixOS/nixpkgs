@@ -59,6 +59,13 @@ let
 in
 
 {
+  imports = [
+    # Enable devices which are usually scanned, because we don't know the
+    # target system.
+    ../installer/scan/detected.nix
+    ../installer/scan/not-detected.nix
+  ];
+
   options = {
     system.nixosVersion = mkOption {
       default = "${builtins.readFile ../../VERSION}";

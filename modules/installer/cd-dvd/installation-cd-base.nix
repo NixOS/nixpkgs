@@ -36,11 +36,6 @@ in
       # Profiles of this basic installation CD.
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
-
-      # Enable devices which are usually scanned, because we don't know the
-      # target system.
-      ../scan/detected.nix
-      ../scan/not-detected.nix
     ];
 
   # ISO naming.
