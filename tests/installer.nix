@@ -296,5 +296,43 @@ in {
         '';
       fileSystems = rootFS + bootFS;
     };
+
+  # Rebuild the CD configuration with a little modification.
+  rebuildCD = 
+    { inherit iso;
+      nodes = { };
+      testScript =
+    ''
+      # damn, it's costly to evaluate nixos-rebuild (1G of ram)
+      my $machine = Machine->new({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1} -m 1024' });
+      $machine->start;
       
+      # Make sure that we get a login prompt etc.
+      $machine->mustSucceed("echo hello");
+      $machine->waitForJob("tty1");
+      $machine->waitForJob("rogue");
+      $machine->waitForJob("nixos-manual");
+
+      # Make sure that we don't try to download anything.
+      $machine->stopJob("dhclient");
+      $machine->mustSucceed("rm /etc/resolv.conf");
+
+      # Enable sshd service.
+      $machine->mustSucceed(
+        "sed -i 's,^}\$,jobs.sshd.startOn = pkgs.lib.mkOverride 0 \"startup\"; },' /etc/nixos/configuration.nix"
+      );
+
+      my $cfg = $machine->mustSucceed("cat /etc/nixos/configuration.nix");
+      print STDERR "New CD config:\n$cfg\n";
+
+      # Apply the new CD configuration.
+      $machine->mustSucceed("nixos-rebuild build --no-pull"); # test / switch make it fails :(
+
+      # Connect to it-self.
+      #$machine->waitForJob("sshd");
+      #$machine->mustSucceed("ssh root@127.0.0.1 echo hello");
+
+      $machine->shutdown;
+    '';
+    };
 }
