@@ -3250,6 +3250,8 @@ let
 
   libmhash = callPackage ../development/libraries/libmhash {};
 
+  libmtp = callPackage ../development/libraries/libmtp { };
+
   libnice = callPackage ../development/libraries/libnice {
     inherit (gnome) glib;
   };
