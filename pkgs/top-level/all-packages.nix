@@ -3397,6 +3397,8 @@ let
 
   libusb = callPackage ../development/libraries/libusb { };
 
+  libusb1 = callPackage ../development/libraries/libusb1 { };
+
   libunwind = callPackage ../development/libraries/libunwind { };
 
   libv4l = callPackage ../development/libraries/libv4l { };
