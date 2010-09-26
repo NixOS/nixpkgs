@@ -3254,6 +3254,8 @@ let
     inherit (gnome) glib;
   };
 
+  libplist = callPackage ../development/libraries/libplist { stdenv = stdenv2; };
+
   libQGLViewer = callPackage ../development/libraries/libqglviewer { };
 
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
