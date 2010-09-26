@@ -3242,6 +3242,8 @@ let
 
   libical = callPackage ../development/libraries/libical { };
 
+  libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
+
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = getPkgConfig "libiodbc" "gtk" false;
   };
