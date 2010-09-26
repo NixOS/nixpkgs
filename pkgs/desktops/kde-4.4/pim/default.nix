@@ -8,12 +8,18 @@ stdenv.mkDerivation {
     url = mirror://kde/stable/4.4.5/src/kdepim-4.4.5.tar.bz2;
     sha256 = "0n95wjk1ly7zfn9wv589a9hrc0r7wvik7jrvsgimnxr0rapxk3bp";
   };
-  builder = ./builder.sh;  
+
   cmakeFlags = "-DBUILD_kleopatra=OFF"; # doesn't build with new boost
   buildInputs = [ cmake qt4 perl boost gpgme stdenv.gcc.libc libassuan libgpgerror libxslt
                   shared_mime_info libXScrnSaver
-                  kdelibs automoc4 phonon akonadi strigi soprano qca2 ];
-  propagatedBuildInputs = [ kdepimlibs kdepim_runtime ];
+                  kdelibs kdepimlibs automoc4 phonon akonadi strigi soprano qca2 ];
+  patchPhase = ''
+      find .. -name CMakeLists.txt | xargs sed -i -e "s@DESTINATION \''${KDE4_DBUS_INTERFACES_DIR}@DESTINATION \''${CMAKE_INSTALL_PREFIX}/share/dbus-1/interfaces/@"
+  '';
+  postInstall = ''
+      mkdir -p $out/nix-support/
+      echo ${akonadi} ${kdepimlibs} ${kdepim_runtime} > $out/nix-support/propagated-user-env-packages
+  '';
   meta = {
     description = "KDE PIM tools";
     longDescription = ''
