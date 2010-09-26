@@ -46,7 +46,7 @@ in
   config = mkIf cfg.enable {
 
     users.extraUsers = mkIf (cfg.user == null) [
-      { name = cfg.user;
+      { name = "amule";
         description = "AMule daemon";
       } ];
 
