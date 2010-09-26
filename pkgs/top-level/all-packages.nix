@@ -5549,7 +5549,7 @@ let
 
   flashplayer10 = (
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
-      inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat;
+      inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat cairo;
       inherit (xlibs) libX11 libXext libXrender libXt ;
       inherit (gtkLibs) gtk glib pango atk;
       debug = getConfig ["flashplayer" "debug"] false;
