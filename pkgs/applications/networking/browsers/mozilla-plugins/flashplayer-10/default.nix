@@ -15,6 +15,7 @@
 , gtk 
 , glib
 , pango
+, cairo
 , atk
 , debug ? false
 
@@ -53,7 +54,7 @@ let
       } else {
         version = "10.1.82.76";
         url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
-        sha256 = "c6f8831ce648e7fa8e037f1fa8362d2d998cae0e06490e792bcd5871f3eb936a";
+        sha256 = "7f0e57febd1ca96af626ca1b7f4f95b42eee4ef687ead6853fd49c5517089087";
       }
     else throw "flashplayer is not supported on this platform";
 
@@ -74,7 +75,7 @@ stdenv.mkDerivation {
 
   rpath = stdenv.lib.makeLibraryPath
     [ zlib alsaLib curl nss nspr fontconfig freetype expat libX11
-      libXext libXrender libXt gtk glib pango atk
+      libXext libXrender libXt gtk glib pango atk cairo
     ];
 
   buildPhase = ":";
