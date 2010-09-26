@@ -30,6 +30,9 @@ for i in $NIX_PROFILES; do # !!! reverse
     # from Nixpkgs <= 0.12.
     export PERL5LIB="$i/lib/perl5/site_perl:$i/lib/site_perl${PERL5LIB:+:}$PERL5LIB"
 
+    # ALSA plugins
+    export ALSA_PLUGIN_DIRS="$i/lib/alsa-lib${ALSA_PLUGIN_DIRS:+:}$ALSA_PLUGIN_DIRS"
+
     # GStreamer.
     export GST_PLUGIN_PATH="$i/lib/gstreamer-0.10${GST_PLUGIN_PATH:+:}$GST_PLUGIN_PATH"
 
