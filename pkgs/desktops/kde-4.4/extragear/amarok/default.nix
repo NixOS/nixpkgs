@@ -9,9 +9,17 @@ stdenv.mkDerivation {
   };
   inherit mysql loudmouth;
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
-  builder = ./builder.sh;
+
   buildInputs = [ cmake qt4 qtscriptgenerator perl stdenv.gcc.libc gettext curl libxml2 mysql taglib taglib_extras loudmouth
                   kdelibs automoc4 phonon strigi soprano qca2];
+  patchPhase = ''
+    sed -i -e "s|/usr|$loudmouth|g" cmake/modules/FindLoudmouth.cmake
+    sed -i -e "s|/usr|$mysql|g" cmake/modules/FindMySQLAmarok.cmake
+  '';
+  postInstall = ''
+    mkdir -p $out/nix-support
+    echo ${qtscriptgenerator} > $out/nix-support/propagated-user-env-packages
+  '';
   meta = {
     description = "Popular music player for KDE";
     license = "GPL";
