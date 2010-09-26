@@ -63,7 +63,7 @@ in
   config = mkIf cfg.enable {
 
     users.extraUsers = mkIf (cfg.user == null) [
-      { name = cfg.user;
+      { name = "quassel";
         description = "Quassel IRC client daemon";
       }];
     
