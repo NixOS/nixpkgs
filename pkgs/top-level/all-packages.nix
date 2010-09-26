@@ -3236,7 +3236,9 @@ let
 
   libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
 
-  libgpod = callPackage ../development/libraries/libgpod { };
+  libgpod = callPackage ../development/libraries/libgpod {
+    inherit (pkgs.pythonPackages) mutagen;
+  };
 
   libharu = callPackage ../development/libraries/libharu { };
 

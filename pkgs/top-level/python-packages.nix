@@ -375,6 +375,21 @@ rec {
     };
   }));
 
+  mutagen = buildPythonPackage (rec {
+    name = "mutagen-1.20";
+
+    src = fetchurl {
+      url = "http://mutagen.googlecode.com/files/${name}.tar.gz";
+      sha256 = "1rz63nh7r6qj3zsidf8d3a7ih647prvvqzi51p8dqkqmvrwc8mky";
+    };
+
+    meta = {
+      description = "Python multimedia tagging library";
+      homepage = http://code.google.com/p/mutagen;
+      license = "LGPLv2";
+    };
+  });
+
 
   namebench = buildPythonPackage (rec {
     name = "namebench-1.0.5";
