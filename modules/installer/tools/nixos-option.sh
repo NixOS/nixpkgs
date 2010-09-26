@@ -4,10 +4,10 @@
 # file to be overridden.
 
 : ${mountPoint=/mnt}
-: ${NIXOS_PATH=/etc/nixos/nixos}
+: ${NIXOS=/etc/nixos/nixos}
 : ${NIXOS_CONFIG=/etc/nixos/configuration.nix}
 : ${NIXPKGS=/etc/nixos/nixpkgs}
-export NIXOS_PATH
+export NIXOS
 
 usage () {
   echo 1>&2 "
@@ -15,8 +15,8 @@ Usage: $0 [--install] [-v] [-d] [-l] OPTION_NAME
        $0 [--install]
 
 This program is used to explore NixOS options by looking at their values or
-by looking at their description.  It is helpful for understanding the how
-your configuration is working.
+by looking at their description.  It is helpful for understanding how your
+configuration is working.
 
 Options:
 
@@ -27,7 +27,7 @@ Options:
                         specified.
   -v | --value          Display the current value, based on your
                         configuration.
-  -d | --default        Display the default value, the example and the
+  -d | --description    Display the default value, the example and the
                         description.
   -l | --lookup         Display where the option is defined and where it
                         is declared.
@@ -36,7 +36,7 @@ Options:
 Environment variables affecting $0:
 
   \$mountPoint          Path to the target file system.
-  \$NIXOS_PATH          Path where the NixOS repository is located.
+  \$NIXOS               Path where the NixOS repository is located.
   \$NIXOS_CONFIG        Path to your configuration file.
   \$NIXPKGS             Path to Nix packages.
 
@@ -133,7 +133,7 @@ evalAttr(){
   local prefix=$1
   local suffix=$2
   local strict=$3
-  echo "(import $NIXOS_PATH {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
+  echo "(import $NIXOS {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
     nix-instantiate - --eval-only ${strict:+--strict}
 }
 
@@ -147,13 +147,13 @@ evalCfg(){
 
 findSources(){
   local suffix=$1
-  echo "builtins.map (f: f.source) (import $NIXOS_PATH {}).eval.options${option:+.$option}.$suffix" |
+  echo "builtins.map (f: f.source) (import $NIXOS {}).eval.options${option:+.$option}.$suffix" |
     nix-instantiate - --eval-only --strict
 }
 
 if $install; then
-  if test -e "$mountPoint$NIXOS_PATH"; then
-    export NIXOS_PATH="$mountPoint$NIXOS_PATH"
+  if test -e "$mountPoint$NIXOS"; then
+    export NIXOS="$mountPoint$NIXOS"
   fi
   if test -e "$mountPoint$NIXPKGS"; then
     export NIXPKGS="$mountPoint$NIXPKGS"
