@@ -4,6 +4,7 @@ with pkgs.lib;
 
 let
   cfg = config.services.amule;
+  user = if cfg.user != null then cfg.user else "amule";
 in
 
 {
@@ -22,14 +23,14 @@ in
       };
 
       dataDir = mkOption {
-        default = ''/home/${cfg.user}/'';
+        default = ''/home/${user}/'';
         description = ''
           The directory holding configuration, incoming and temporary files.
         '';
       };
 
       user = mkOption {
-        default = "amule";
+        default = null;
         description = ''
           The user the AMule daemon should run as.
         '';
@@ -44,10 +45,10 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.extraUsers = mkIf (cfg.user == null) [
       { name = cfg.user;
         description = "AMule daemon";
-      };
+      } ];
 
     jobs.amuled =
       { description = "AMule daemon";
@@ -56,16 +57,14 @@ in
 
         preStart = ''
             mkdir -p ${cfg.dataDir}
-            chown ${cfg.user} ${cfg.dataDir}
+            chown ${user} ${cfg.dataDir}
         '';
 
         exec = ''
-            ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${cfg.user} \
+            ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${user} \
                 -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
         '';
       };
-
-    environment.systemPackages = [ pkgs.amuleDaemon ];
 
   };
   
