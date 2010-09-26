@@ -5161,6 +5161,8 @@ let
     inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
   };
 
+  amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
     libstdcpp = gcc33.gcc;
   };

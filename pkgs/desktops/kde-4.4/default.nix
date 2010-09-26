@@ -215,13 +215,6 @@ pkgs.recurseIntoAttrs (rec {
 
 #### EXTRA GEAR
 
-  amarok = import ./extragear/amarok {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 qtscriptgenerator perl gettext;
-    inherit (pkgs) curl mysql libxml2 taglib taglib_extras loudmouth;
-    inherit kdelibs;
-    inherit automoc4 phonon strigi soprano qca2;
-  };
-
   digikam = import ./extragear/digikam {
     inherit (pkgs) stdenv fetchurl cmake qt4 lcms jasper libgphoto2 gettext
       liblqr1 lensfun;
@@ -283,7 +276,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
   
-  inherit (pkgs) konversation yakuake ktorrent koffice;
+  inherit (pkgs) konversation yakuake ktorrent koffice amarok;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
