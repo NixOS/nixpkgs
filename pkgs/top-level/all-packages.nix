@@ -1206,6 +1206,8 @@ let
 
   upx = callPackage ../tools/compression/upx { };
   
+  usbmuxd = callPackage ../tools/misc/usbmuxd {};
+
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   vbetool = builderDefsPackage ../tools/system/vbetool {
