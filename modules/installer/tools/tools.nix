@@ -137,7 +137,7 @@ in
       ];
 
     system.build = {
-      inherit nixosInstall;
+      inherit nixosInstall nixosHardwareScan nixosOption;
 
       # expose scripts
       inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstallArchive;
