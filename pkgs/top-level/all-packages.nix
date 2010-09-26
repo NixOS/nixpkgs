@@ -3250,6 +3250,10 @@ let
 
   libktorrent = newScope pkgs.kde4 ../development/libraries/libktorrent { };
 
+  liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
+
+  liblastfm = callPackage ../development/libraries/liblastfm { };
+
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
   };
