@@ -4769,6 +4769,12 @@ let
 
   libcap = callPackage ../os-specific/linux/libcap { };
 
+  libcap_progs = callPackage ../os-specific/linux/libcap/progs.nix { };
+
+  libcap_pam = callPackage ../os-specific/linux/libcap/pam.nix { };
+
+  libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
+
   libnscd = callPackage ../os-specific/linux/libnscd { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
