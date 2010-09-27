@@ -1,4 +1,4 @@
-{stdenv, fetchurl, attr, perl}:
+{stdenv, fetchurl, attr, perl, pam}:
 
 assert stdenv.isLinux;
 
@@ -11,9 +11,7 @@ stdenv.mkDerivation {
   };
   
   buildNativeInputs = [perl];
-  buildInputs = [attr];
+  buildInputs = [attr pam];
 
-  preBuild = ''
-    makeFlagsArray=(LIBDIR=$out/lib INCDIR=$out/include SBINDIR=$out/sbin MANDIR=$out/man PAM_CAP=no)
-  '';
+  makeFlags = "PAM_CAP=yes lib=lib prefix=$(out)";
 }
