@@ -1,19 +1,19 @@
 { fetchurl, stdenv, pkgconfig, mesa, libXi, libXfixes, libXdamage
-, libXcomposite, cairo, glib, pango, gtk }:
+, libXcomposite, cairo, glib, pango, gtk, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "clutter-1.2.10";
+  name = "clutter-1.4.0";
 
   src = fetchurl {
-    url = "http://source.clutter-project.org/sources/clutter/1.2/${name}.tar.gz";
-    sha256 = "0bdnj026lqmwpgml73q4r0v90gsksjz0nv2fgjda9619bzx47igi";
+    url = "http://source.clutter-project.org/sources/clutter/1.4/${name}.tar.bz2";
+    sha256 = "15icq2gf2fi098lq1wqr7sq2cnb00g1ids050a5z3f43l1ajrnxw";
   };
 
   buildInputs = [ pkgconfig ];
 
   # There are all listed in the `Requires' field of `clutter-x11-1.0.pc'.
   propagatedBuildInputs =
-    [ mesa cairo glib pango gtk
+    [ mesa cairo glib pango gtk json_glib
       libXi libXfixes libXdamage libXcomposite
     ];
 
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = "LGPLv2+";
+    homepage = http://www.clutter-project.org/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
