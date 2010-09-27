@@ -190,11 +190,11 @@ in
 import ./generic.nix (
 
   rec {
-    version = "2.6.35.5";
+    version = "2.6.35.6";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "11lw324mpbxzvc1ln980fv06xgzrz8sznh3xaaw78z37l0x0pk2p";
+      sha256 = "1mz0sk7flyr115dcqwqmrzwk845v6pghmlp7j133p8z3jii49c8r";
     };
 
     config = configWithPlatform stdenv.platform;
