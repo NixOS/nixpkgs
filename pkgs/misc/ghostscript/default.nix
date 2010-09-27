@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     if x11Support then [ "--with-x" ] else [ "--without-x" ];
 
-  enableParallelBuilding = true;
-
   CFLAGS = "-fPIC";
 
   patches = [ ./purity.patch ./urw-font-files.patch ];
