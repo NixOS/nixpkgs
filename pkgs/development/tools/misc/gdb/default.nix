@@ -1,5 +1,5 @@
 { fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
-, dejagnu, target ? null }:
+, dejagnu, python, target ? null }:
 
 let
     basename = "gdb-7.2";
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w0h6hya0bl46xddd57mdzwmffplwglhnh9x9hv46ll4mf44ni5z";
   };
 
-  # TODO: Add optional support for Python scripting.
-  buildInputs = [ ncurses readline gmp mpfr expat texinfo ]
+  buildInputs = [ ncurses readline gmp mpfr expat texinfo python ]
     ++ stdenv.lib.optional doCheck dejagnu;
 
   configureFlags =
