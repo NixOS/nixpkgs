@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''sed -e "s,udevdir=,&$out," -i configure'';
   configureFlags = "--without-hal --enable-udev";
 
-  buildInputs = [ gettext perl perlXMLParser intltool pkgconfig glib libxml2
-    sqlite libplist libusb1 zlib sg3_utils gtk taglib libimobiledevice
-    python pygobject mutagen swig ];
+  propagatedBuildInputs = [ glib libxml2 sqlite libplist libusb1 zlib sg3_utils
+    gtk taglib libimobiledevice python pygobject mutagen ];
+
+  buildInputs = [ gettext perlXMLParser intltool pkgconfig perl swig ];
 
   meta = {
     homepage = http://gtkpod.sourceforge.net/;
