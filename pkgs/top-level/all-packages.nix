@@ -3109,6 +3109,8 @@ let
 
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
 
+  json_glib = callPackage ../development/libraries/json-glib { };
+
   judy = callPackage ../development/libraries/judy { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
