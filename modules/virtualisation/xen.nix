@@ -70,7 +70,10 @@ in
     # Domain 0 requires a pvops-enabled kernel.
     boot.kernelPackages = pkgs.linuxPackages_2_6_32_xen;
 
-    boot.kernelModules = [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback" "blktap" ];
+    boot.kernelModules = 
+      [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback" 
+        "blktap" "tap"
+      ];
 
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.
