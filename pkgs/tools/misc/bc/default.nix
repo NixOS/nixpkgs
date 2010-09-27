@@ -12,4 +12,9 @@ stdenv.mkDerivation {
   configureFlags = "--with-readline";
 
   buildInputs = [flex readline];
+
+  meta = {
+    description = "GNU software calculator";
+    homepage = http://www.gnu.org/software/bc/;
+  };
 }
