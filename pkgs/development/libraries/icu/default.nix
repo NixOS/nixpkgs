@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Unicode and globalization support library";
+    homepage = http://site.icu-project.org/;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
   };

@@ -34,6 +34,7 @@ rec {
   inherit(s) name;
   meta = {
     description = "Cellphone tool";
+    homepage = http://www.gnokii.org;
     maintainers = [a.lib.maintainers.raskin];
     platforms = with a.lib.platforms; linux;
   };
