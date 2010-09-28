@@ -1,0 +1,12 @@
+--- kadu/.config	2010-01-18 17:13:31.000000000 +0100
++++ kadu/.config	2010-09-28 21:21:48.000000000 +0200
+@@ -559,10 +559,10 @@ icons_glass16=y
+ icons_glass22=y
+ 
+ # Desctiption: Tango 16x16 icons made by BlotoPosniegowe
+-icons_tango16=n
++icons_tango16=y
+ 
+ # Description: Oxygen 16x16 icons maintained by Piotr Pelzowski
+-icons_oxygen16=n
++icons_oxygen16=y

@@ -2853,6 +2853,8 @@ let
 
   libdwg = callPackage ../development/libraries/libdwg { };
 
+  libgadu = callPackage ../development/libraries/libgadu { };
+
   eglibc = callPackage ../development/libraries/eglibc {
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
@@ -5771,6 +5773,14 @@ let
   joe = callPackage ../applications/editors/joe { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
+
+  kadu = callPackage ../applications/networking/instant-messengers/kadu {
+    stdenv = stdenv2;
+    qt = qt4;
+    inherit fetchurl cmake libgadu bash libsndfile wget alsaLib;
+    inherit (xlibs) libXScrnSaver libX11;
+    inherit (kde45) qca2;
+  };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
 
