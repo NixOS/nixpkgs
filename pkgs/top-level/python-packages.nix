@@ -540,6 +540,37 @@ rec {
     };
   });
 
+  paramiko = buildPythonPackage {
+    name = "paramiko-1.7.6";
+
+    src = fetchurl {
+      url = "http://www.lag.net/paramiko/download/paramiko-1.7.6.tar.gz";
+      sha256 = "00jhzl3s9xdkbj32h1kq1swk8wpx9zky7qfda40n8mb204xjcn9h";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.lag.net/paramiko/";
+      description = "SSH2 protocol for python";
+      license = "LGPL";
+
+      longDescription = ''
+        paramiko is a module for python 2.2 (or higher) that implements the
+        SSH2 protocol for secure (encrypted and authenticated) connections to
+        remote machines. unlike SSL (aka TLS), SSH2 protocol does not require
+        heirarchical certificates signed by a powerful central authority. you
+        may know SSH2 as the protocol that replaced telnet and rsh for secure
+        access to remote shells, but the protocol also includes the ability
+        to open arbitrary channels to remote services across the encrypted
+        tunnel -- this is how sftp works, for example.  it is written
+        entirely in python (no C or platform-dependent code) and is released
+        under the GNU LGPL (lesser GPL).  '';
+
+      platforms = python.meta.platforms;
+    };
+  };
+
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
 
