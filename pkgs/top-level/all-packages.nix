@@ -6436,6 +6436,8 @@ let
     inherit mesa freeglut;
   };
 
+  crack_attack = callPackage ../games/crack-attack { };
+
   eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
