@@ -617,6 +617,8 @@ let
 
   unix2dos = callPackage ../tools/text/unix2dos { };
 
+  uni2ascii = callPackage ../tools/text/uni2ascii { };
+
   gawk = callPackage ../tools/text/gawk { };
 
   gdmap = callPackage ../tools/system/gdmap {
