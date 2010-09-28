@@ -10,6 +10,7 @@
   bjg = "Brian Gough <bjg@gnu.org>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
