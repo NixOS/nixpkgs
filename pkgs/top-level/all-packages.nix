@@ -3807,6 +3807,8 @@ let
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
+  
+  taglib17 = callPackage ../development/libraries/taglib/1.7.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
