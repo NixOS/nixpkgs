@@ -6953,6 +6953,11 @@ let
     tex = tetex;
   };
 
+  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench { 
+    lua = lua5;
+    inherit (pythonPackages) pexpect paramiko;
+  };
+
   pgadmin = callPackage ../applications/misc/pgadmin { };
 
   pgf = pgf2;
