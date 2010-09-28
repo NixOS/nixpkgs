@@ -1781,14 +1781,7 @@ let
   # reducing the number or "enabled" versions again.
 
   # Helper functions to abstract away from repetitive instantiations.
-  haskellPackagesFun610 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
-    inherit pkgs newScope;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
-    ghc = callPackage ghcPath {
-      ghc = ghc6101Binary;    };
-  });
-
-  haskellPackagesFun612 = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
+  haskellPackagesFun = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
     inherit pkgs newScope;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
     ghc = callPackage ghcPath {
@@ -1797,36 +1790,32 @@ let
 
   # Currently active GHC versions.
   haskellPackages_ghc6101 =
-    haskellPackagesFun610 ../development/compilers/ghc/6.10.1.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.1.nix false;
 
   haskellPackages_ghc6102 =
-    haskellPackagesFun610 ../development/compilers/ghc/6.10.2.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.2.nix false;
 
   haskellPackages_ghc6103 =
-    haskellPackagesFun610 ../development/compilers/ghc/6.10.3.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.3.nix false;
 
-  # Current default version.
   haskellPackages_ghc6104 =
-    haskellPackagesFun610 ../development/compilers/ghc/6.10.4.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.4.nix false;
 
   haskellPackages_ghc6121 =
-    haskellPackagesFun612 ../development/compilers/ghc/6.12.1.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.12.1.nix false;
 
   haskellPackages_ghc6122 =
-    haskellPackagesFun612 ../development/compilers/ghc/6.12.2.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.12.2.nix false;
 
+  # Current default version.
   haskellPackages_ghc6123 =
-    haskellPackagesFun612 ../development/compilers/ghc/6.12.3.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.12.3.nix false;
 
-  # Currently not pointing to the actual HEAD, therefore disabled
-  /*
-  haskellPackages_ghcHEAD = lowPrio (import ./haskell-packages.nix {
-    inherit pkgs;
-    ghc = callPackage ../development/compilers/ghc/6.11.nix {
-      inherit (haskellPackages) happy alex; # hope these aren't required for the final version
-      ghc = ghc6101Binary;    };
-  });
-  */
+  haskellPackages_ghc701 =
+    lowPrio (haskellPackagesFun ../development/compilers/ghc/7.0.1.nix false);
+
+  haskellPackages_ghcHEAD =
+    lowPrio (haskellPackagesFun ../development/compilers/ghc/head.nix false);
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
