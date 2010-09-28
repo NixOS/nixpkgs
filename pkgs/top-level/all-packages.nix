@@ -3169,6 +3169,8 @@ let
 
   libcm = callPackage ../development/libraries/libcm { };
 
+  libctemplate = callPackage ../development/libraries/libctemplate { };
+
   libcue = callPackage ../development/libraries/libcue { };
 
   libcv = builderDefsPackage (import ../development/libraries/libcv) {
