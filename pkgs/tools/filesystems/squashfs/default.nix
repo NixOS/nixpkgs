@@ -1,14 +1,14 @@
-{stdenv, fetchurl, zlib}:
+{stdenv, fetchurl, zlib, attr}:
 
 stdenv.mkDerivation rec {
-  name = "squashfs-4.0";
+  name = "squashfs-4.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/squashfs/squashfs4.0.tar.gz;
-    sha256 = "089fw543fx2d3dadszjv5swf8hr6jvxrpagf0x1jrb3bw3dqx50q";
+    url = mirror://sourceforge/squashfs/squashfs4.1.tar.gz;
+    sha256 = "0sh40r7gz81fg7ivgr7rld8spvqb6hsfvnf6gd3gbcr5b830v1rs";
   };
   
-  buildInputs = [zlib];
+  buildInputs = [zlib attr];
 
   preBuild = ''
     cd squashfs-tools
