@@ -676,6 +676,8 @@ rec {
     inherit (pkgs) fetchsvn stdenv coreutils glibc m4 libtool llvm;
   };
 
+  epic = callPackage ../development/compilers/epic {};
+
   helium = callPackage ../development/compilers/helium {};
 
   idris = callPackage ../development/compilers/idris {};
