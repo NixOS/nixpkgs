@@ -60,12 +60,12 @@ rec {
   };
 
   topGit = stdenv.mkDerivation rec {
-    name = "topgit-0.8";
+    name = "topgit-0.8-19-g9404aa1";
 
     src = fetchgit {
       url = "http://repo.or.cz/r/topgit.git";
       rev = name;
-      sha256 = "14g233hk70xs51h4jqyivjfqnwmjjpc95fjb7wdny64i9ddz03aj";
+      sha256 = "47e92d31303c30a22b96ce4a005f3c51f0e12c163e54f6ca589ac4e50ec74bd0";
     };
 
     configurePhase = "export prefix=$out";
@@ -82,10 +82,10 @@ rec {
 
     meta = {
       description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-      maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo ];
-      homepage = http://repo.or.cz/w/topgit.git; # maybe there is also another one, I haven't checked
+      maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo lib.maintainers.simons ];
+      homepage = http://repo.or.cz/w/topgit.git;
       license = "GPLv2";
-      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 
