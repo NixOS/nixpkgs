@@ -6492,6 +6492,10 @@ let
 
   hexen = callPackage ../games/hexen { };
 
+  instead = callPackage ../games/instead {
+    lua = lua5;
+  };
+
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
   lincity = builderDefsPackage (import ../games/lincity) {
