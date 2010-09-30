@@ -22,7 +22,7 @@ unset XDG_CONFIG_DIRS XDG_DATA_DIRS
 
 for i in $NIX_PROFILES; do # !!! reverse
     # We have to care not leaving an empty PATH element, because that means '.' to Linux
-    export PATH=$i/bin:$i/sbin${PATH:+:}$PATH
+    export PATH=$i/bin:$i/sbin:$i/lib/kde4/libexec${PATH:+:}$PATH
     export INFOPATH=$i/info:$i/share/info${INFOPATH:+:}$INFOPATH
     export PKG_CONFIG_PATH="$i/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
 
