@@ -821,6 +821,10 @@ let
     flex = flex2535;
   };
 
+  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix {
+    flex = flex2535;
+  };
+
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
