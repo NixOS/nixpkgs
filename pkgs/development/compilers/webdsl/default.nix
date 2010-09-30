@@ -1,17 +1,17 @@
-{stdenv, fetchurl, pkgconfig, strategoPackages}:
+{ stdenv, fetchurl, pkgconfig, strategoPackages }:
 
 stdenv.mkDerivation rec {
-  name = "webdsl-9.7pre3056";
+  name = "webdsl-9.7pre4168";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/71896/download/1/webdsl-9.7pre3056.tar.gz";
-    sha256 = "3446b7e9dac27a9fd35541a57e961be5b74f2f9e3fb02dc14c86f945b47df045";
+    url = "http://hydra.nixos.org/build/654196/download/1/${name}.tar.gz";
+    sha256 = "08bec3ba02254ec7474ce70206b7be4390fe07456cfc57d927d96a21dd6dcb33";
   };
 
-  buildInputs = [
-    pkgconfig strategoPackages.aterm strategoPackages.sdf
-    strategoPackages.strategoxt strategoPackages.javafront
-  ];
+  buildInputs =
+    [ pkgconfig strategoPackages.aterm strategoPackages.sdf
+      strategoPackages.strategoxt strategoPackages.javafront
+    ];
 
   meta = {
     homepage = http://webdsl.org/;
