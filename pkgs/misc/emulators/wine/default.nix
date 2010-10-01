@@ -6,7 +6,7 @@
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-let 
+let
   s = import ./src-for-default.nix;
 in
 
