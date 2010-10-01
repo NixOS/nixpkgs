@@ -3833,8 +3833,6 @@ let
 
   tk = callPackage ../development/libraries/tk { };
 
-  tsocks = callPackage ../development/libraries/tsocks { };
-
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
   unixODBCDrivers = recurseIntoAttrs (import ../development/libraries/unixODBCDrivers {
