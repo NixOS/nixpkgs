@@ -262,7 +262,7 @@ if $generate; then
   # services.printing.enable = true;
 
   # Add XServer (default if you have used a graphical iso)
-  # service.xserver = {
+  # services.xserver = {
   #   enable = true;
   #   layout = "us";
   #   xkbOptions = "eurosign:e";
