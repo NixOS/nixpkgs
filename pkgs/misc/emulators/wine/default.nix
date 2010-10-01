@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = s.hash;
   };
 
+  gecko = fetchurl {
+    url = "http://downloads.sourceforge.net/wine/wine_gecko-1.1.0-x86.cab";
+    sha256 = "0a8bpqqhx146innrdwhn4c0jqi90mkmp8kw6aqwildm073yy31hp";
+  };
+
   buildInputs = [
     xlibs.xlibs flex bison xlibs.libXi mesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
@@ -39,6 +44,8 @@ stdenv.mkDerivation rec {
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
   dontPatchELF = true;
+
+  postInstall = "install -D ${gecko} $out/share/wine/gecko/wine_gecko-1.1.0-x86.cab";
 
   meta = {
     homepage = "http://www.winehq.org/";
