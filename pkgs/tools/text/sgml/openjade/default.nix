@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "OpenJade-1.3.2";
 
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/openjade/openjade-1.3.2.tar.gz";
+    url = "mirror://sourceforge/openjade/openjade-1.3.2.tar.gz";
     sha256 = "1l92sfvx1f0wmkbvzv1385y1gb3hh010xksi1iyviyclrjb7jb8x";
   };
 
