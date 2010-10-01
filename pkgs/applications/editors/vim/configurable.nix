@@ -4,11 +4,11 @@ args: with args;
 let inherit (args.composableDerivation) composableDerivation edf; in
 composableDerivation {} {
 
-    name = "vim_configurable-7.2";
+    name = "vim_configurable-7.3";
 
     src = args.fetchurl {
-      url = ftp://ftp.vim.org/pub/vim/unix/vim-7.2.tar.bz2;
-      sha256 = "11hxkb6r2550c4n13nwr0d8afvh30qjyr5c2hw16zgay43rb0kci";
+      url = ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2;
+      sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
     };
 
     configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
