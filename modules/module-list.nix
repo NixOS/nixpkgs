@@ -112,7 +112,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/security/tor.nix
-  ./services/security/torify.nix
+  ./services/security/torsocks.nix
   ./services/system/dbus.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix

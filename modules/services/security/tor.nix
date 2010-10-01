@@ -47,9 +47,9 @@ in
 
         socksListenAddress = mkOption {
           default = "127.0.0.1:9050";
-          example = "127.0.0.1:9050, 192.168.0.1:9100";
+          example = "192.168.0.1:9100";
           description = ''
-            Bind to this address(es) to listen for connections from Socks-speaking 
+            Bind to this address to listen for connections from Socks-speaking 
             applications. You can also specify a port.
           '';
         };
