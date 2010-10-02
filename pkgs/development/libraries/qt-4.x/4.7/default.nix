@@ -8,7 +8,7 @@
 , buildDemos ? false, buildExamples ? false, useDocs ? true}:
 
 let
-  v = "4.7.0-rc1";
+  v = "4.7.0";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "1bfvd42sdabb86m823yzbzgcy1sibd4ypz2wqaazd77ji768dn2r";
+    sha256 = "0mbr7sjaswkd5gibyb36mlaas049fj8vf2risi66fzfac3amclp0";
   };
 
   preConfigure = ''
@@ -90,12 +90,10 @@ stdenv.mkDerivation rec {
     ${if buildExamples == true then "-make examples" else "-nomake examples"}
     ${if useDocs then "-make docs" else "-nomake docs"}'';
 
-  patches = [ ./phonon-4.4.0.patch ];
-
-  postPatch = ''
+  prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-    sed -e 's@/usr@/FOO@' -i config.tests/*/*.test -i mkspecs/*/*.conf
+    sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
   '';
 
   postInstall = ''
