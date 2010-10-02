@@ -1,24 +1,25 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-data-0.2.1";
+  name = "poppler-data-0.4.3";
 
   src = fetchurl {
     url = "http://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "0q56l5v89pnpkm1kqmwb1sx2zcx89q6bxz2hq2cpkq5f8kgvl3c9";
+    sha256 = "19jq5miinzzrzlv6696j82hr60ga2r4msk6a34s9537vid410q22";
   };
 
-  installFlags = "prefix=\${out}";
-  config_tool_name = "poppler-data-dir";
-  config_tool = ./poppler-data-dir;
-  postInstall = "
-  ensureDir \${out}/bin
-  substituteAll ${config_tool} \${out}/bin/${config_tool_name}
-  chmod +x \${out}/bin/${config_tool_name}
-  ";
+  buildInputs = [ cmake ];
+
+  postInstall = ''
+    ensureDir ''${out}/etc/profile.d
+    echo "export POPPLER_DATADIR=''${out}/share/poppler" > \
+      ''${out}/etc/profile.d/60-poppler.sh
+  '';
 
   meta = {
     homepage = http://poppler.freedesktop.org/;
     description = "Encoding files for Poppler, a PDF rendering library";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
