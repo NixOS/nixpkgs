@@ -11,7 +11,8 @@ pkgs.recurseIntoAttrs (rec {
 
   phonon = import ./support/phonon {
     inherit (pkgs) stdenv fetchurl cmake pkgconfig;
-    inherit (pkgs) qt4 xineLib pulseaudio;
+    inherit (pkgs) qt4 xineLib;
+    pulseaudio = if pkgs.getConfig ["phonon" "pulseaudioSupport"] true then pkgs.pulseaudio else null;
     inherit (pkgs.gst_all) gstreamer gstPluginsBase;
     inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
     inherit automoc4;
