@@ -144,4 +144,6 @@
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
+
+  l10n = callPackage ./l10n { };
 }
