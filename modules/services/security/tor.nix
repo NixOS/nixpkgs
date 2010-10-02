@@ -50,7 +50,7 @@ in
           example = "192.168.0.1:9100";
           description = ''
             Bind to this address to listen for connections from Socks-speaking 
-            applications. You can also specify a port.
+            applications.
           '';
         };
 
