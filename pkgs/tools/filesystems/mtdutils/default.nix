@@ -14,6 +14,9 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     sed -i -e s,/usr/local,, -e s,/usr,$out, common.mk
+
+    # gcc 4.5.1 issues a warning where 4.4.3 did not
+    sed -i -e s/-Werror// ubi-utils/old-utils/Makefile
   '';
 
   buildInputs = [ libuuid lzo zlib acl ];
