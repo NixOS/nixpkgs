@@ -1,3 +1,5 @@
+I changed the patch for 2.11 so it allows 2.12 too.
+
 r10941 from svn://svn.valgrind.org/valgrind/trunk
 
 ------------------------------------------------------------------------
@@ -11,7 +13,7 @@ Index: configure.in
 ===================================================================
 --- configure.in	(revision 10940)
 +++ configure.in	(revision 10941)
-@@ -656,6 +656,16 @@
+@@ -656,6 +656,26 @@
  ],
  GLIBC_VERSION="2.10")
  
@@ -25,16 +27,33 @@ Index: configure.in
 +],
 +GLIBC_VERSION="2.11")
 +
++AC_EGREP_CPP([GLIBC_212], [
++#include <features.h>
++#ifdef __GNU_LIBRARY__
++ #if (__GLIBC__ == 2 && __GLIBC_MINOR__ == 12)
++  GLIBC_212
++ #endif
++#endif
++],
++GLIBC_VERSION="2.12")
++
  AC_EGREP_CPP([AIX5_LIBC], [
  #include <standards.h>
  #if defined(_AIXVERSION_510) || defined(_AIXVERSION_520) || defined(_AIXVERSION_530)
-@@ -742,6 +752,13 @@
+@@ -742,6 +752,20 @@
  	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
  	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
  	;;
 +     2.11)
 +	AC_MSG_RESULT(2.11 family)
 +	AC_DEFINE([GLIBC_2_11], 1, [Define to 1 if you're using glibc 2.11.x])
++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
++	;;
++     2.12)
++	AC_MSG_RESULT(2.12 family)
++	AC_DEFINE([GLIBC_2_12], 1, [Define to 1 if you're using glibc 2.12.x])
 +	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
 +	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
 +	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
@@ -47,7 +66,7 @@ Index: configure.in
       *)
  	AC_MSG_RESULT(unsupported version)
 -	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.10])
-+	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.11])
++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.12])
  	AC_MSG_ERROR([or AIX 5.1 or 5.2 or 5.3 GLIBC_VERSION])
  	AC_MSG_ERROR([or Darwin libc])
  	;;

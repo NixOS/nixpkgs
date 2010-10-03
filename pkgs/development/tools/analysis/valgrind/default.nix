@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "105s4y6h5rsfvml1dfhsjvqgsxvnclbnxbpgk8b4ghpbpcr52fkl";
   };
 
-  # Make Valgrind compile with Glibc 2.11.
-  patches = [ ./glibc-2.11.patch ];
+  # Make Valgrind compile with Glibc 2.12.
+  patches = [ ./glibc-2.12.patch ];
   patchFlags = "-p0";
   preConfigure = "autoreconf";
 
