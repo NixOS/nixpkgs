@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "vim-7.2";
@@ -8,7 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "11hxkb6r2550c4n13nwr0d8afvh30qjyr5c2hw16zgay43rb0kci";
   };
  
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses gettext pkgconfig ];
+
+  configureFlags = [
+    "--enable-multibyte"
+    "--enable-nls"
+  ];
 
   postInstall = "ln -s $out/bin/vim $out/bin/vi";
 
