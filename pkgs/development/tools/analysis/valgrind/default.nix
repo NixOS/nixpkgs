@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # Make Valgrind compile with Glibc 2.12.
-  patches = [ ./glibc-2.12.patch ];
+  patches = [ ./glibc-2.12.patch ./stat_h.patch ];
   patchFlags = "-p0";
   preConfigure = "autoreconf";
 

@@ -1,0 +1,53 @@
+Taken from gentoo:
+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-util/valgrind/files/valgrind-3.5.0-stat_h.patch?view=markup
+
+http://cvs.fedoraproject.org/viewvc/rpms/valgrind/devel/valgrind-3.5.0-stat_h.patch?view=log
+
+--- include/vki/vki-amd64-linux.h
++++ include/vki/vki-amd64-linux.h
+@@ -310,6 +310,9 @@ struct vki_stat {
+ 	long		st_blksize;
+ 	long		st_blocks;	/* Number 512-byte blocks allocated. */
+ 
++#undef st_atime
++#undef st_mtime
++#undef st_ctime
+ 	unsigned long	st_atime;
+ 	unsigned long 	st_atime_nsec; 
+ 	unsigned long	st_mtime;
+--- include/vki/vki-x86-linux.h
++++ include/vki/vki-x86-linux.h
+@@ -348,6 +348,9 @@ struct vki_stat {
+ 	unsigned long  st_size;
+ 	unsigned long  st_blksize;
+ 	unsigned long  st_blocks;
++#undef st_atime
++#undef st_mtime
++#undef st_ctime
+ 	unsigned long  st_atime;
+ 	unsigned long  st_atime_nsec;
+ 	unsigned long  st_mtime;
+--- include/vki/vki-ppc32-linux.h
++++ include/vki/vki-ppc32-linux.h
+@@ -392,6 +392,9 @@ struct vki_stat {
+    long			st_size;
+    unsigned long	st_blksize;
+    unsigned long	st_blocks;
++#undef st_atime
++#undef st_mtime
++#undef st_ctime
+    unsigned long	st_atime;
+    unsigned long	st_atime_nsec;
+    unsigned long	st_mtime;
+--- include/vki/vki-ppc64-linux.h
++++ include/vki/vki-ppc64-linux.h
+@@ -428,6 +428,9 @@ struct vki_stat {
+   long            st_size;
+   unsigned long   st_blksize;
+   unsigned long   st_blocks;
++#undef st_atime
++#undef st_mtime
++#undef st_ctime
+   unsigned long   st_atime;
+   unsigned long   st_atime_nsec;
+   unsigned long   st_mtime;
