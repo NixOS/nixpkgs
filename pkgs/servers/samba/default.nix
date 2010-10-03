@@ -1,6 +1,6 @@
 { stdenv, fetchurl, readline, pam, openldap, popt, iniparser, libunwind, fam
 , acl
-, useKerberos ? false, kerberos ? null
+, useKerberos ? false, kerberos ? null, winbind ? true
 
 # Eg. smbclient and smbspool require a smb.conf file.
 # If you set configDir to "" an empty configuration file
@@ -11,8 +11,11 @@
 # /etc/samba/smb.conf. That's why nixos touches /etc/samba/smb.conf even if you
 # don't enable the samba upstart service.
 , configDir ? "/etc/samba"
-}:
 
+}:
+let
+ usewith = flag: option: if flag then "--with-"+option else "";
+in
 stdenv.mkDerivation rec {
   name = "samba-3.3.3";
 
@@ -42,6 +45,7 @@ stdenv.mkDerivation rec {
     --disable-swat
     --enable-shared-libs
     --with-configdir=${configDir}
+    ${usewith winbind "winbind"}
     ${if stdenv.gcc.libc != null then "--with-libiconv=${stdenv.gcc.libc}" else ""}
   '';
 }

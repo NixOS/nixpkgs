@@ -87,7 +87,7 @@ let libs =
               ensureDir "$out/nix-support"
               export HOME=$TMP/home; mkdir "$HOME"
 
-              gem install -V --ignore-dependencies -E -i "$out" "$src" $gemFlags -- $buildFlags
+              gem install -V --ignore-dependencies -i "$out" "$src" $gemFlags -- $buildFlags
               rm -fr $out/cache # don't keep the .gem file here
 
               THIS_RUBY_LIB=$(echo $out/gems/*/lib)

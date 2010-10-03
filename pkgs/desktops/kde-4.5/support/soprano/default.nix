@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, qt4, cluceneCore, redland, libiodbc}:
 
 stdenv.mkDerivation rec {
-  name = "soprano-2.5.0";
+  name = "soprano-2.5.2";
 
   src = fetchurl {
-    url = "mirror://sf/soprano/${name}.tar.bz2";
-    sha256 = "01g0shwxksr6mg2g1pj1pbwz6nir5rw16ysmmly85891p62j8nxn";
+    url = "mirror://sourceforge/soprano/${name}.tar.bz2";
+    sha256 = "17k17hrcwij2plms4hb0j6994ar9kcxykf699iyiggfpj1zg7nym";
   };
 
   # We disable the Java backend, since we do not need them and they make the closure size much bigger

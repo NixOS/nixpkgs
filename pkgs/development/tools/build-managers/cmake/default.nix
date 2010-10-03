@@ -1,13 +1,19 @@
 {fetchurl, stdenv, replace, curl, expat, zlib
 , useNcurses ? false, ncurses, useQt4 ? false, qt4}:
 
-stdenv.mkDerivation rec {
-  name = "cmake-${majorVersion}.1";
-
+let
+  os = stdenv.lib.optionalString;
   majorVersion = "2.8";
+  minorVersion = "1";
+  version = "${majorVersion}.${minorVersion}";
+in
+stdenv.mkDerivation rec {
+  name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
+
+  inherit majorVersion;
 
   src = fetchurl {
-    url = "http://www.cmake.org/files/v${majorVersion}/${name}.tar.gz";
+    url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
     sha256 = "0hi28blqxvir0dkhln90sgr0m3ri9n2i3hlmwdl4m5vkfsmp9bky";
   };
 

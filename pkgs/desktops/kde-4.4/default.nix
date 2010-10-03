@@ -11,7 +11,8 @@ pkgs.recurseIntoAttrs (rec {
 
   phonon = import ./support/phonon {
     inherit (pkgs) stdenv fetchurl cmake pkgconfig;
-    inherit (pkgs) qt4 xineLib pulseaudio;
+    inherit (pkgs) qt4 xineLib;
+    pulseaudio = if pkgs.getConfig ["phonon" "pulseaudioSupport"] true then pkgs.pulseaudio else null;
     inherit (pkgs.gst_all) gstreamer gstPluginsBase;
     inherit (pkgs.xlibs) libXau libXdmcp libpthreadstubs;
     inherit automoc4;
@@ -74,6 +75,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs.xlibs) libXi libXau libXdmcp libXtst libXcomposite libXdamage libXScrnSaver libpthreadstubs;
     inherit kdelibs kdepimlibs kdebindings;
     inherit automoc4 phonon strigi soprano qimageblitz akonadi polkit_qt;
+    inherit (pkgs) bluez;
   };
   
   kdebase = import ./base {
@@ -156,7 +158,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl boost gpgme libassuan libgpgerror libxslt;
     inherit (pkgs) shared_mime_info;
     inherit (pkgs.xlibs) libXScrnSaver;
-    inherit kdelibs kdepimlibs;
+    inherit kdelibs kdepimlibs kdepim_runtime;
     inherit automoc4 phonon akonadi strigi soprano qca2;
   };
   
@@ -213,13 +215,6 @@ pkgs.recurseIntoAttrs (rec {
   };
 
 #### EXTRA GEAR
-
-  amarok = import ./extragear/amarok {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 qtscriptgenerator perl gettext;
-    inherit (pkgs) curl mysql libxml2 taglib taglib_extras loudmouth;
-    inherit kdelibs;
-    inherit automoc4 phonon strigi soprano qca2;
-  };
 
   digikam = import ./extragear/digikam {
     inherit (pkgs) stdenv fetchurl cmake qt4 lcms jasper libgphoto2 gettext
@@ -282,15 +277,7 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
   
-  koffice = import ./extragear/koffice {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl lcms exiv2 giflib libxml2 libxslt boost glew;
-    inherit (pkgs) shared_mime_info gsl gmm wv2 libwpd libgsf fftw;
-    inherit kdelibs kdepimlibs;
-    inherit automoc4 phonon qimageblitz qca2 eigen soprano;
-    poppler = pkgs.popplerQt4;
-  };
-  
-  inherit (pkgs) konversation yakuake ktorrent;
+  inherit (pkgs) konversation yakuake ktorrent koffice amarok;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
@@ -308,6 +295,10 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
+  konqPlugins = import ./extragear/konq-plugins {
+    inherit (pkgs) stdenv fetchurl cmake qt4 gettext;
+    inherit kdelibs automoc4 phonon kdebase;
+  };
 ### LOCALIZATION
 
   l10n = pkgs.recurseIntoAttrs (import ./l10n {

@@ -8,7 +8,7 @@ kde.package {
   meta = {
     description = "A KDE 4 project template generator";
     kde = {
-      name = "cervisia";
+      name = "kapptemplate";
       module = "kdesdk";
       version = "0.1";
       release = "4.5.1";

@@ -7,13 +7,13 @@ assert x11Support -> x11 != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "ghostscript-8.64.0";
+  name = "ghostscript-8.71.1";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2";
-    sha256 = "0b94vlf03saa8vm9drz1kishh527g0brw2cg3jcy9mgpp764x2v1";
+    sha256 = "0vab9905h6sl5s5miai4vhhwdacjlkxqmykfr42x32sr25wjqgvl";
   };
 
   fonts = [
@@ -32,19 +32,18 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x11Support x11
     ++ stdenv.lib.optional cupsSupport cups;
 
-  configureFlags = ''
-    ${if x11Support then "--with-x" else "--without-x"}
-  '';
+  configureFlags =
+    if x11Support then [ "--with-x" ] else [ "--without-x" ];
 
-  NIX_CFLAGS_COMPILE = "-fpic";
+  CFLAGS = "-fPIC";
 
-  patches = [ ./purity.patch ./mkromfs-zlib.patch ./urw-font-files.patch ];
+  patches = [ ./purity.patch ./urw-font-files.patch ];
 
   doCheck = true;
 
   meta = {
     homepage = http://www.gnu.org/software/ghostscript/;
-    description = "GNU Ghostscript, an PostScript interpreter";
+    description = "GNU Ghostscript, a PostScript interpreter";
 
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
@@ -55,6 +54,9 @@ stdenv.mkDerivation rec {
       of output drivers for various file formats and printers.
     '';
 
-    license = "GPLv2";
+    license = "GPLv3+";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

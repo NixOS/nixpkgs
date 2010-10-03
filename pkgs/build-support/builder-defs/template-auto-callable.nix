@@ -9,7 +9,7 @@ let
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = {
+  sourceInfo = rec {
   };
 in
 rec {

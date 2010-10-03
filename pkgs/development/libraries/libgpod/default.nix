@@ -1,13 +1,21 @@
-{stdenv, fetchurl, gettext, perl, perlXMLParser, pkgconfig, glib, libxml2 }:
+{stdenv, fetchurl, gettext, perl, perlXMLParser, intltool, pkgconfig, glib,
+  libxml2, sqlite, libplist, libusb1, zlib, sg3_utils, gtk, taglib,
+  libimobiledevice, python, pygobject, mutagen, swig }:
 
-stdenv.mkDerivation {
-  name = "libgpod-0.7.2";
+stdenv.mkDerivation rec {
+  name = "libgpod-0.7.94";
   src = fetchurl {
-    url = mirror://sourceforge/gtkpod/libgpod-0.7.2.tar.gz;
-    sha256 = "0xq7947rqf99n9zvbpxfwwkid5z8d2szv5s0024rq37d6zy333rf";
+    url = "mirror://sourceforge/gtkpod/${name}.tar.gz";
+    sha256 = "0bs6p5np8kbyhvkj4vza2dmq7qfsf48chx00hirkf3mqccp41xk4";
   };
 
-  buildInputs = [ gettext perl perlXMLParser pkgconfig glib libxml2 ];
+  patchPhase = ''sed -e "s,udevdir=,&$out," -i configure'';
+  configureFlags = "--without-hal --enable-udev";
+
+  propagatedBuildInputs = [ glib libxml2 sqlite libplist libusb1 zlib sg3_utils
+    gtk taglib libimobiledevice python pygobject mutagen ];
+
+  buildInputs = [ gettext perlXMLParser intltool pkgconfig perl swig ];
 
   meta = {
     homepage = http://gtkpod.sourceforge.net/;

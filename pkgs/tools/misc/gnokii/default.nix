@@ -8,6 +8,9 @@ let
     glib pkgconfig
   ];
 in
+
+assert a.stdenv ? glibc;
+
 rec {
   src = a.fetchUrlFromSrcInfo s;
 
@@ -26,12 +29,12 @@ rec {
     export CFLAGS="-ggdb -O0 -include ${a.stdenv.glibc}/include/locale.h"
     export CXXFLAGS="-ggdb -O0"
 
-    patch -p 1 < ${/tmp/patch}
   '' [ "minInit" "doUnpack" ];
       
   inherit(s) name;
   meta = {
     description = "Cellphone tool";
+    homepage = http://www.gnokii.org;
     maintainers = [a.lib.maintainers.raskin];
     platforms = with a.lib.platforms; linux;
   };

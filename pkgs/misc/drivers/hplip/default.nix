@@ -15,8 +15,10 @@ stdenv.mkDerivation {
   #'';
 
   prePatch = ''
-    sed -i s,/etc/sane.d,$out/etc/sane.d/, Makefile.in 
+    sed -i s,/etc/sane.d,$out/etc/sane.d/, Makefile.in
   '';
+
+  # --disable-network-build Until we have snmp
 
   preConfigure = ''
     export configureFlags="$configureFlags
@@ -25,7 +27,6 @@ stdenv.mkDerivation {
       --with-icondir=$out/share/applications
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
-      # Until we have snmp
       --disable-network-build"
 
     export makeFlags="
@@ -39,9 +40,10 @@ stdenv.mkDerivation {
   buildInputs = [libjpeg cups libusb python saneBackends dbus pkgconfig] ++
     stdenv.lib.optional qtSupport qt4;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
     license = "free"; # MIT/BSD/GPL
+    platforms = platforms.linux;
   };
 }

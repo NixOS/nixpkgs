@@ -8,6 +8,7 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [X11 mtl];
   meta = {
     description = "xmonad is a tiling window manager for X";
+    homepage = http://xmonad.org/;
   };
 
   preConfigure = '' 

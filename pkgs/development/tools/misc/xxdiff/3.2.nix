@@ -37,5 +37,6 @@ rec {
   name = "xxdiff-3.2";
   meta = {
     description = "Interactive merge tool";
+    homepage = http://furius.ca/xxdiff/;
   };
 }

@@ -11,4 +11,9 @@ stdenv.mkDerivation {
 
   inherit jre;
   buildInputs = [jre];
+
+  meta = {
+    homepage = http://www.eclipse.org/aspectj/;
+    description = "A seamless aspect-oriented extension to the Java programming language";
+  };
 }

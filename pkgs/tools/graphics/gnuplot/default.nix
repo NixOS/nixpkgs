@@ -13,12 +13,12 @@
 , readline
 }:
 
-stdenv.mkDerivation {
-  name = "gnuplot-4.4.0";
+stdenv.mkDerivation rec {
+  name = "gnuplot-4.4.2";
   
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/gnuplot-4.4.0.tar.gz";
-    sha256 = "0akb2lzxa3b0j4nr6anr0mhsk10b1fcnixk8vk9aa82rl1a2rph0";
+    url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
+    sha256 = "1r799l6ww9w21qnklqfn335jkfc6y0ilhv3sv4x4mf4ghgacis1p";
   };
 
   configureFlags = if libX11 != null then ["--with-x"] else ["--without-x"];
@@ -27,4 +27,10 @@ stdenv.mkDerivation {
     [ zlib gd texinfo readline emacs lua texLive libX11 libXt libXpm libXaw
       wxGTK pango cairo pkgconfig
     ];
+
+  meta = {
+    homepage = http://www.gnuplot.info;
+    description = "A portable command-line driven graphing utility for many platforms";
+    platforms = stdenv.lib.platforms.all;
+  };
 }

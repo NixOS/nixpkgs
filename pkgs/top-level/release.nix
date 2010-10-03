@@ -437,6 +437,10 @@ with (import ./release-lib.nix);
     xmonad = linux;
   };
 
+  haskellPackages_ghc701 = {
+    ghc = ghcSupported;
+  };
+
   kde3 = {
     kdebase = linux;
     kdelibs = linux;
