@@ -821,7 +821,7 @@ let
 
   mktemp = callPackage ../tools/security/mktemp { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+  mldonkey = misc.debugVersion (callPackage ../applications/networking/p2p/mldonkey { });
 
   monit = builderDefsPackage ../tools/system/monit {
     flex = flex2535;

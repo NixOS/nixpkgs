@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses, x11 }:
 
 let
-   useX11 = stdenv.system != "armv5tel-linux";
-   useNativeCompilers = stdenv.system != "armv5tel-linux";
+   useX11 = stdenv.isi686 || stdenv.isx86_64;
+   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
 in
 
@@ -15,14 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "8c36a28106d4b683a15c547dfe4cb757a53fa9247579d1cc25bd06a22cc62e50";
   };
 
+  # Needed to avoid a SIGBUS on the final executable on mips
+  NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
+
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11 ];
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
   buildInputs = [ncurses] ++ optionals useX11 [ x11 ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
-  patchPhase = ''
+  prePatch = ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
+    patch -p1 -l < ${./mips64.patch}
   '';
   postBuild = ''
     ensureDir $out/include
