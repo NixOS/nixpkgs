@@ -13,7 +13,7 @@ stdenv.mkDerivation (rec {
     homepage = http://mldonkey.sourceforge.net/;
   };
 
-  patches = [ ./gcc44mips64_2.patch ];
+  patches = [ ./gcc44mips64.patch ];
 
   buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng ];
   configureFlags = [ "--disable-gui" ];
