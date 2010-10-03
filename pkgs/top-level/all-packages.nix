@@ -6196,7 +6196,8 @@ let
   vimHugeX = vim_configurable;
 
   vim_configurable = import ../applications/editors/vim/configurable.nix {
-    inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib;
+    inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib
+      getConfig;
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu libICE;
     inherit (pkgs.gtkLibs) glib gtk;
