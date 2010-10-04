@@ -5641,7 +5641,7 @@ let
 
   gocr = callPackage ../applications/graphics/gocr { };
 
-  gobby = callPackage ../applications/editors/gobby {
+  gobby5 = callPackage ../applications/editors/gobby {
     inherit (gtkLibs) gtkmm;
     inherit (gnome) gtksourceview;
   };
