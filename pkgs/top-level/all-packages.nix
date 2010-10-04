@@ -4938,6 +4938,8 @@ let
 
   ubootSheevaplug = callPackage ../misc/uboot/sheevaplug.nix { };
 
+  ubootGuruplug = callPackage ../misc/uboot/guruplug.nix { };
+
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = import ../os-specific/linux/uclibc {
