@@ -942,6 +942,7 @@ let
 
   openjade = callPackage ../tools/text/sgml/openjade {
     stdenv = overrideGCC stdenv gcc33;
+    opensp = opensp.override { stdenv = overrideGCC stdenv gcc33; };
   };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
