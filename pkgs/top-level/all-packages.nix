@@ -5641,6 +5641,11 @@ let
 
   gocr = callPackage ../applications/graphics/gocr { };
 
+  gobby = callPackage ../applications/editors/gobby {
+    inherit (gtkLibs) gtkmm;
+    inherit (gnome) gtksourceview;
+  };
+
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
