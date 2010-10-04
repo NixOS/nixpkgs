@@ -16,6 +16,7 @@
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
+  roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   simons = "Peter Simons <simons@cryp.to>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
