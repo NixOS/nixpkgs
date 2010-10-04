@@ -369,12 +369,12 @@ let
     monolithic = false;
     daemon = true;
   };
-  
+
   amuleGui = amule.override {
     monolithic = false;
     client = true;
   };
-  
+
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
 
@@ -1215,7 +1215,7 @@ let
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
   upx = callPackage ../tools/compression/upx { };
-  
+
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
@@ -2232,7 +2232,7 @@ let
   antDarwin = apacheAnt.override rec { jdk = openjdkDarwin; name = "ant-" + jdk.name; } ;
 
   ant = apacheAnt;
-  
+
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant {
     name = "ant-" + jdk.name;
   };
@@ -3713,12 +3713,12 @@ let
     monolithic = false;
     daemon = true;
   };
-  
+
   quasselClient = quassel.override {
     monolithic = false;
     client = true;
   };
-  
+
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   readline = readline6;
@@ -3810,7 +3810,7 @@ let
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
-  
+
   taglib17 = callPackage ../development/libraries/taglib/1.7.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
@@ -6967,7 +6967,7 @@ let
     tex = tetex;
   };
 
-  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench { 
+  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5;
     inherit (pythonPackages) pexpect paramiko;
   };
