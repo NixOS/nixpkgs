@@ -15,11 +15,6 @@
   sha256 = "0097sk50cf1cq6wnah3kiab8vkh68snzahcng2blk63gw908yfvx";
 }
 {
-  lang = "ca@valencia";
-  version = "4.5.1";
-  sha256 = "1nfj4pgh4k7ld42arlw8vkh646mar615x7r0av02gskdgmixzqm8";
-}
-{
   lang = "cs";
   version = "4.5.1";
   sha256 = "077424cbqn68rf9wb026ip1n0rq5lz1iwp4k7ih15j87ymbrd03f";
