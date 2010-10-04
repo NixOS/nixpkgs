@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
     freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
-    xlibs.libXcursor xlibs.libXcomposite
+    xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls
   ];
 
