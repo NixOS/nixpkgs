@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
 
   postInstall = "install -D ${gecko} $out/share/wine/gecko/wine_gecko-1.1.0-x86.cab";
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "http://www.winehq.org/";
     license = "LGPL";
