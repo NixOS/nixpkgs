@@ -1197,7 +1197,10 @@ let
 
   telnet = callPackage ../tools/networking/telnet { };
 
-  texmacs = callPackage ../applications/office/texmacs { };
+  texmacs = callPackage ../applications/editors/texmacs {
+    tex = texLive; /* tetex is also an option */
+    extraFonts = true;
+  };
 
   tor = callPackage ../tools/security/tor { };
 
