@@ -190,7 +190,6 @@ rec {
   # since SUSE actually delete their old distributions (see
   # ftp://ftp.suse.com/pub/suse/discontinued/deleted-20070817/README.txt).
   oldsuse = [
-    http://ftp.hosteurope.de/pub/linux/suse/discontinued/i386/
     ftp://ftp.gmd.de/ftp.suse.com-discontinued/
   ];
 
@@ -198,8 +197,12 @@ rec {
   opensuse = [
     http://opensuse.hro.nl/opensuse/distribution/
     http://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/
+    http://ftp.belnet.be/mirror/ftp.opensuse.org/distribution/
+    http://ftp.uni-kassel.de/opensuse/distribution/
     http://ftp.opensuse.org/pub/opensuse/distribution/
     http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/
+    http://opensuse.mirror.server4you.net/distribution/
+    http://ftp.nsysu.edu.tw/Linux/OpenSuSE/distribution/
   ];
 
   # Gnome (see http://ftp.gnome.org/pub/GNOME/MIRRORS).
