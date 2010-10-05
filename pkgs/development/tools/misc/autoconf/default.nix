@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.67";
+  name = "autoconf-2.68";
 
   src = fetchurl {
     url = "mirror://gnu/autoconf/${name}.tar.bz2";
-    sha256 = "1vwalyqzgk1liyinblbc78isxa5qa4fvs5bx2fkjd7crfhhdkph0";
+    sha256 = "1j1j8d2p3r9mzx8b2hnmfqy2683r2wyyvki6bs9cmm6n7wkzp4f4";
   };
 
   buildInputs = [ m4 perl ];
