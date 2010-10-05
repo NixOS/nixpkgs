@@ -200,7 +200,7 @@ title $name
   @extraPerEntryConfig@
   ${xen:+kernel $xen $xenParams}
   $(if [ -z "$xen" ]; then echo kernel; else echo module; fi) $kernel $kernelParams
-  module $initrd
+  $(if [ -z "$xen" ]; then echo initrd; else echo module; fi) $initrd
 GRUBEND
 	    ;;
 	2)
