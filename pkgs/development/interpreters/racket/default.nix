@@ -1,20 +1,6 @@
-{ stdenv
-, fetchurl
-, cairo
-, coreutils
-, file
-, libjpeg
-, libpng
-, libtool
-, libXaw
-, libXext
-, libXft
-, libXrender
-, libXt
-, libXmu
-, mesa
-, pkgconfig
-, which } :
+{ stdenv, fetchurl, cairo, file, libjpeg
+, libpng, libtool, libXaw, libXext, libXft, libXrender
+, libXt, libXmu, mesa, pkgconfig, which } :
 
 stdenv.mkDerivation rec {
   name = "racket";
@@ -27,7 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cairo
-                  coreutils
                   file
                   libjpeg
                   libpng
@@ -64,7 +49,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://racket-lang.org/;
-    license = "LGPL";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = stdenv.lib.licenses.lgpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.kkallio ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
