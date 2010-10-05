@@ -130,7 +130,7 @@ in
 
             mkdir -p /var/run/avahi-daemon
 
-            exec ${avahi}/sbin/avahi-daemon --daemonize -f "${avahiDaemonConf}"
+            exec ${avahi}/sbin/avahi-daemon --syslog -f "${avahiDaemonConf}"
           '';
       };
 
