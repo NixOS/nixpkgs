@@ -5789,12 +5789,8 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
-  kadu = callPackage ../applications/networking/instant-messengers/kadu {
+  kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu {
     stdenv = stdenv2;
-    qt = qt4;
-    inherit fetchurl cmake libgadu bash libsndfile wget alsaLib;
-    inherit (xlibs) libXScrnSaver libX11;
-    inherit (kde45) qca2;
   };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
