@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     ${if !cplusplusSupport then "--disable-cpp" else ""}
   '';
 
+  doCheck = true;
+
   meta = {
     homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
