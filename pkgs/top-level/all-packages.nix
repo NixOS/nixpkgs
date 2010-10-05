@@ -5791,9 +5791,7 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
-  kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu {
-    stdenv = stdenv2;
-  };
+  kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu { };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
 
@@ -6687,8 +6685,8 @@ let
         inherit (pkgs.kde45) qt4 kdelibs;
       };
       shared_desktop_ontologies = pkgs.shared_desktop_ontologies.override { v = "0.5"; };
-      stdenv = pkgs.stdenv2;
     } // pkgs.kde45);
+    stdenv = pkgs.stdenv2;
   };
 
   xfce = xfce4;

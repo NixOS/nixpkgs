@@ -1,7 +1,7 @@
 pkgs:
 
 pkgs.recurseIntoAttrs (rec {
-  inherit (pkgs) qt4;
+  inherit (pkgs) qt4 stdenv;
 
 ### SUPPORT
   automoc4 = import ./support/automoc4 {
