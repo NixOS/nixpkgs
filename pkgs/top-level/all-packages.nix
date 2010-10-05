@@ -5817,7 +5817,9 @@ let
 
   kipi_plugins = newScope pkgs.kde4 ../applications/graphics/kipi-plugins { };
 
-  kmplayer = newScope pkgs.kde4 ../applications/video/kmplayer { };
+  kmplayer = newScope pkgs.kde4 ../applications/video/kmplayer {
+    inherit (pkgs.gtkLibs) pango;
+  };
 
   koffice = newScope pkgs.kde4 ../applications/office/koffice { };
 
