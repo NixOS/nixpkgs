@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2,
-kdegraphics, kdepimlibs, libxml2, libxslt, gettext, opencv, libgpod}:
+kdegraphics, kdepimlibs, libxml2, libxslt, gettext, opencv, libgpod, gtk }:
 
 stdenv.mkDerivation rec {
   name = "kipi-plugins-1.4.0";
@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 kdepimlibs 
-    libxml2 libxslt gettext opencv libgpod ];
+    libxml2 libxslt gettext opencv libgpod gtk ];
 
   KDEDIRS = kdegraphics;
+
+  patches = [ ./find-gdk.patch ];
 
   meta = {
     description = "Photo Management Program";

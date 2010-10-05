@@ -1,0 +1,16 @@
+diff --git a/cmake/modules/FindGdk.cmake b/cmake/modules/FindGdk.cmake
+index 033959a..ff61961 100644
+--- a/cmake/modules/FindGdk.cmake
++++ b/cmake/modules/FindGdk.cmake
+@@ -23,8 +23,9 @@ else (GDK_INCLUDE_DIR AND GDK_LIBRARIES)
+     set(GDK_DEFINITIONS ${_GDKCflags})
+   endif(NOT WIN32)
+ 
+-  FIND_PATH(GDK_INCLUDE_DIR gdk-pixbuf/gdk-pixbuf.h /usr/include/gtk-2.0
+-    ${_GDKIncDir}
++  FIND_PATH(GDK_INCLUDE_DIR gdk-pixbuf/gdk-pixbuf.h
++    HINTS ${_GDKIncDir}
++	PATH_SUFFIXES gtk-2.0
+   )
+   
+   FIND_LIBRARY(GDK_LIBRARIES NAMES gdk_pixbuf-2.0
