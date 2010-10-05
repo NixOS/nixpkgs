@@ -216,67 +216,12 @@ pkgs.recurseIntoAttrs (rec {
 
 #### EXTRA GEAR
 
-  filelight = import ./extragear/filelight {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
-    inherit kdelibs kdebase_workspace;
-    inherit automoc4 phonon qimageblitz;
-  };
-
-  kdenlive = import ./extragear/kdenlive {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl mlt gettext shared_mime_info;
-    inherit kdelibs soprano;
-    inherit automoc4 phonon;
-  };
-
-  kdesvn = import ./extragear/kdesvn {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-
-  kdiff3 = import ./extragear/kdiff3 {
-    inherit (pkgs) stdenv fetchurl cmake qt4 gettext perl;
-    inherit kdelibs kdebase;
-    inherit automoc4 phonon;
-  };
-
-  kmplayer = import ./extragear/kmplayer {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext dbus_glib;
-    inherit (pkgs.gtkLibs) pango gtk;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-  
-  krusader = import ./extragear/krusader {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-  
-  inherit (pkgs) konversation yakuake ktorrent koffice amarok kdevplatform
-    kdevelop kipi_plugins digikam;
-  
-  gtk_qt_engine = import ./extragear/gtk-qt-engine {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
-    inherit (pkgs.xlibs) libX11;
-    inherit (pkgs.gtkLibs) gtk;
-    inherit (pkgs.gnome) libbonoboui;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-
   k3b = import ./extragear/k3b {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl shared_mime_info libvorbis taglib gettext;
     inherit (pkgs) ffmpeg flac libsamplerate libdvdread lame libsndfile libmad;
     inherit kdelibs kdemultimedia;
     inherit automoc4 phonon;
   };
-
-  konqPlugins = import ./extragear/konq-plugins {
-    inherit (pkgs) stdenv fetchurl cmake qt4 gettext;
-    inherit kdelibs automoc4 phonon kdebase;
-  };
-### LOCALIZATION
 
   l10n = pkgs.recurseIntoAttrs (import ./l10n {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;

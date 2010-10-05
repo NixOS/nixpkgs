@@ -777,6 +777,8 @@ let
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
+  kdiff3 = newScope pkgs.kde4 ../tools/text/kdiff3 { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
@@ -5550,6 +5552,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
+  filelight = newScope pkgs.kde4 ../applications/misc/filelight { };
+
   firefox = firefox36Pkgs.firefox;
   firefoxWrapper = firefox36Wrapper;
 
@@ -5795,6 +5799,10 @@ let
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
 
+  kdenlive = newScope pkgs.kde4 ../applications/video/kdenlive { };
+
+  kdesvn = newScope pkgs.kde4 ../applications/version-management/kdesvn { };
+
   kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
 
   kermit = callPackage ../tools/misc/kermit { };
@@ -5809,11 +5817,17 @@ let
 
   kipi_plugins = newScope pkgs.kde4 ../applications/graphics/kipi-plugins { };
 
+  kmplayer = newScope pkgs.kde4 ../applications/video/kmplayer { };
+
   koffice = newScope pkgs.kde4 ../applications/office/koffice { };
+
+  konq_plugins = newScope pkgs.kde4 ../applications/networking/browsers/konq-plugins { };
 
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
 
   krename = newScope pkgs.kde4 ../applications/misc/krename { };
+
+  krusader = newScope pkgs.kde4 ../applications/misc/krusader { };
 
   ktorrent = newScope pkgs.kde4 ../applications/networking/ktorrent { };
 
