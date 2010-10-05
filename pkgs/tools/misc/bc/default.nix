@@ -1,20 +1,23 @@
 {stdenv, fetchurl, flex, readline}:
 
-stdenv.mkDerivation {
-  name = "bc-1.0.6";
+stdenv.mkDerivation rec {
+  name = "bc-1.06";
   src = fetchurl {
-    url = mirror://gnu/bc/bc-1.06.tar.gz;
-    md5 = "d44b5dddebd8a7a7309aea6c36fda117";
+    url = "mirror://gnu/bc/${name}.tar.gz";
+    sha256 = "0cqf5jkwx6awgd2xc2a0mkpxilzcfmhncdcfg7c9439wgkqxkxjf";
   };
 
   patches = [ ./readlinefix.patch ];
 
-  configureFlags = "--with-readline";
+  configureFlags = [ "--with-readline" ];
 
   buildInputs = [flex readline];
+
+  doCheck = true;
 
   meta = {
     description = "GNU software calculator";
     homepage = http://www.gnu.org/software/bc/;
+    platforms = stdenv.lib.platforms.all;
   };
 }
