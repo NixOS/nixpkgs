@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "gtk2hs-buildtools";
-  version = "0.9";
-  sha256 = "2586c419394601c1840d827d32cdb9d76bc94d71c03fdfa23c8d04cba99c6b20";
+  version = "0.11.2";
+  sha256 = "330c52830358966bcff308f58a570e84bb0b4d6004b6f01107d55dd88faa54ad";
   extraBuildInputs = [alex happy];
   meta = {
     description = "Tools to build the Gtk2Hs suite of User Interface libraries";
