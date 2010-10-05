@@ -15,4 +15,12 @@
           shutdown -r now 'Ctrl-Alt-Delete pressed'
         '';
     };
+
+  system.activationScripts.poweroff =
+    ''
+      # Allow the kernel to find the poweroff command.  This is used
+      # (for instance) by Xen's "xm shutdown" command to signal a
+      # guest to shut down cleanly.
+      echo ${config.system.build.upstart}/sbin/poweroff > /proc/sys/kernel/poweroff_cmd
+    '';
 }
