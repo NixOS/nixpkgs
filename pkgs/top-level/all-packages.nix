@@ -5807,6 +5807,8 @@ let
     inherit (xlibs) libXv libX11;
   };
 
+  kipi_plugins = newScope pkgs.kde4 ../applications/graphics/kipi-plugins { };
+
   koffice = newScope pkgs.kde4 ../applications/office/koffice { };
 
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };

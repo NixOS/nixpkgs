@@ -247,12 +247,6 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
-  kipiplugins = import ./extragear/kipi-plugins {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 libxml2 libxslt gettext;
-    inherit kdelibs kdepimlibs kdegraphics;
-    inherit automoc4 phonon qimageblitz qca2;
-  };
-  
   kmplayer = import ./extragear/kmplayer {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext dbus_glib;
     inherit (pkgs.gtkLibs) pango gtk;
@@ -267,7 +261,7 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   inherit (pkgs) konversation yakuake ktorrent koffice amarok kdevplatform
-    kdevelop;
+    kdevelop kipi_plugins;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
