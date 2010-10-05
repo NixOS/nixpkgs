@@ -4241,7 +4241,7 @@ let
   });
   squid = squids.squid3Beta; # has ipv6 support
 
-  tomcat5 = callPackage ../servers/http/tomcat { };
+  tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
 

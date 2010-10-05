@@ -1,15 +1,23 @@
-{stdenv, fetchurl, jdk}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+let version = "6.0.29"; in
 
-  name = "apache-tomcat-6.0.26";
-
-  builder = ./builder-6.0.sh;
+stdenv.mkDerivation rec {
+  name = "apache-tomcat-${version}";
 
   src = fetchurl {
-    url = http://apache.proserve.nl/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz;
-    sha256 = "0rxaz7wkw6xas9f2jslb6kp1prllhpqmq7c3h0ig19j146mrjbls";
+    url = "mirror://apache/tomcat/tomcat-6/v${version}/bin/${name}.tar.gz";
+    sha256 = "0v96wmd4fnk3qskw32k8mb77f7yssqqinsrf9sir672l5ggmmcjc";
   };
 
-  inherit jdk;
+  installPhase =
+    ''
+      mkdir $out
+      mv * $out
+    '';
+
+  meta = {
+    homepage = http://tomcat.apache.org/;
+    description = "An implementation of the Java Servlet and JavaServer Pages technologies";
+  };
 }
