@@ -1,4 +1,4 @@
-# Xen hypervisor support.
+# Xen hypervisor (Dom0) support.
 
 { config, pkgs, ... }:
 
