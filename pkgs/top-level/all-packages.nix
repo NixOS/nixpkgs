@@ -5373,6 +5373,8 @@ let
 
   dia = callPackage ../applications/graphics/dia { };
 
+  digikam = newScope pkgs.kde4 ../applications/graphics/digikam { };
+
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
   djview4 = callPackage ../applications/graphics/djview { };

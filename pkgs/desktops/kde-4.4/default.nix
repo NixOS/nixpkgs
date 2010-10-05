@@ -216,13 +216,6 @@ pkgs.recurseIntoAttrs (rec {
 
 #### EXTRA GEAR
 
-  digikam = import ./extragear/digikam {
-    inherit (pkgs) stdenv fetchurl cmake qt4 lcms jasper libgphoto2 gettext
-      liblqr1 lensfun;
-    inherit kdelibs kdepimlibs kdegraphics kdeedu;
-    inherit automoc4 phonon qimageblitz qca2 eigen soprano;
-  };
-
   filelight = import ./extragear/filelight {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
     inherit kdelibs kdebase_workspace;
@@ -261,7 +254,7 @@ pkgs.recurseIntoAttrs (rec {
   };
   
   inherit (pkgs) konversation yakuake ktorrent koffice amarok kdevplatform
-    kdevelop kipi_plugins;
+    kdevelop kipi_plugins digikam;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
