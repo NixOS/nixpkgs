@@ -235,17 +235,6 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
 
-  kdevelop = import ./extragear/kdevelop {
-    inherit (pkgs) stdenv fetchurl cmake pkgconfig shared_mime_info gettext perl;
-    inherit kdevplatform automoc4 kdebase_workspace;
-  };
-
-  kdevplatform = import ./extragear/kdevplatform {
-    inherit (pkgs) stdenv fetchurl cmake subversion qt4 perl gettext pkgconfig
-      apr aprutil boost;
-    inherit kdelibs automoc4 phonon;
-  };
-
   kdesvn = import ./extragear/kdesvn {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
     inherit kdelibs;
@@ -277,7 +266,8 @@ pkgs.recurseIntoAttrs (rec {
     inherit automoc4 phonon;
   };
   
-  inherit (pkgs) konversation yakuake ktorrent koffice amarok;
+  inherit (pkgs) konversation yakuake ktorrent koffice amarok kdevplatform
+    kdevelop;
   
   gtk_qt_engine = import ./extragear/gtk-qt-engine {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;

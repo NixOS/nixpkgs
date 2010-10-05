@@ -3118,6 +3118,8 @@ let
 
   judy = callPackage ../development/libraries/judy { };
 
+  kdevplatform = newScope pkgs.kde4 ../development/libraries/kdevplatform { };
+
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
   lablgtk = callPackage ../development/libraries/lablgtk {
@@ -5796,6 +5798,8 @@ let
   };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
+
+  kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
 
   kermit = callPackage ../tools/misc/kermit { };
 

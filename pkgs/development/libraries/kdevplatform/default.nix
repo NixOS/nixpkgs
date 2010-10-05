@@ -2,11 +2,11 @@
   gettext, pkgconfig, apr, aprutil, boost }:
 
 stdenv.mkDerivation rec {
-  name = "kdevplatform-1.0.0";
+  name = "kdevplatform-1.0.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/4.0.0/src/${name}.tar.bz2";
-    sha256 = "05qgi5hwvzqzysihd5nrn28kiz0l6rp9dbxlf25jcjs5dml3dza6";
+    url = "mirror://kde/stable/kdevelop/4.0.2/src/${name}.tar.bz2";
+    sha256 = "0yn4v3jx1dks84nvi7s40a1pmnvipqx5hlbvbmdgqhhpqik5y9qg";
   };
 
   propagatedBuildInputs = [ kdelibs subversion qt4 phonon ];

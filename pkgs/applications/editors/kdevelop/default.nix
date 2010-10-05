@@ -2,11 +2,13 @@
   kdebase_workspace, gettext, perl }:
 
 stdenv.mkDerivation rec {
-  name = "kdevelop-4.0.0";
+  name = "${pname}-${version}";
+  version = "4.0.2";
+  pname = "kdevelop";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/4.0.0/src/${name}.tar.bz2";
-    sha256 = "0cnwhfk71iksip17cjzf3g68n751k8fz2acin6qb27k7sh71pdfp";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
+    sha256 = "1y8ydx0fcmsab31qf5id5r5fcmp3j2l8mibvbbjfy66xgxarmnpc";
   };
 
   buildInputs = [ kdevplatform cmake pkgconfig automoc4 shared_mime_info
