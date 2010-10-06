@@ -90,6 +90,12 @@ stdenv.mkDerivation {
       substituteInPlace tools/python/xen/remus/device.py \
         --replace /usr/lib/xen/bin/imqebt $out/${libDir}/xen/bin/imqebt
 
+      # Allow the location of the xendomains config file to be
+      # overriden at runtime.
+      substituteInPlace tools/hotplug/Linux/init.d/xendomains \
+        --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
+        --replace /bin/ls ls
+
       # Xen's stubdoms need various sources that it usually fetches at
       # build time using wget.  We can't have that.
       ${flip concatMapStrings stubdomSrcs (x: let src = fetchurl x; in ''
