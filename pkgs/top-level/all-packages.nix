@@ -3879,7 +3879,7 @@ let
   };
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
-    inherit (gtkLibs216) gtk;
+    inherit (gtkLibs) gtk;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
