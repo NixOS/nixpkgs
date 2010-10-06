@@ -20,7 +20,7 @@ let
     # chroot to ${stateDir}, we have to specify it as /ntp.drift.
     driftfile /ntp.drift
 
-    ${toString (map (server: "server " + server + "\n") servers)}
+    ${toString (map (server: "server " + server + " iburst\n") servers)}
   '';
 
   ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup -i ${stateDir}";
