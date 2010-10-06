@@ -110,7 +110,11 @@ EOF
         # forget about current sessions.
         # Idem for the emergeny-shell, because its `console owner'
         # line screws up the X server.
-        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$\|^emergency-shell$"; then continue; fi
+        # Idem for xendomains because we don't want to save/restore
+	# Xen domains unless we have to.
+        # TODO: Jobs should be able to declare that they should not be
+	# auto-restarted.
+        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$\|^emergency-shell$\|^xendomains$"; then continue; fi
 
         if ! test -e "$oldJobs/$job.conf"; then
             echo "starting $job..."

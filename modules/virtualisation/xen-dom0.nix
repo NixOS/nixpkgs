@@ -108,9 +108,37 @@ in
             pkgs.utillinux pkgs.bash xen pkgs.pciutils pkgs.procps
           ];
 
-        preStart = "${xen}/sbin/xend start";
+        preStart = 
+          ''
+            ${xen}/sbin/xend start
+  
+            # Wait until Xend is running.
+            for ((i = 0; i < 60; i++)); do echo "waiting for xend..."; ${xen}/sbin/xend status && break; done
+
+            ${xen}/sbin/xend status || exit 1
+          '';
 
         postStop = "${xen}/sbin/xend stop";
+      };
+
+    jobs.xendomains =
+      { description = "Automatically starts, saves and restores Xen domains on startup/shutdown";
+
+        startOn = "started xend";
+
+        stopOn = "starting shutdown and stopping xend";
+
+        path = [ pkgs.xen ];
+
+        environment.XENDOM_CONFIG = "${xen}/etc/sysconfig/xendomains";
+
+        preStart = 
+          ''
+            mkdir -p /var/lock/subsys -m 755
+            ${xen}/etc/init.d/xendomains start
+          '';
+
+        postStop = "${xen}/etc/init.d/xendomains stop";
       };
 
     # To prevent a race between dhclient and xend's bridge setup
