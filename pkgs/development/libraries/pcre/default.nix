@@ -8,10 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1zsqk352mx2zklf9bgpg9d88ckfdssbbbiyslhrycfckw8m3qpvr";
   };
 
+  # The compiler on Darwin crashes with an internal error while building the
+  # C++ interface. Disabling optimizations on that platform remedies the
+  # problem. In case we ever update the Darwin GCC version, the exception for
+  # that platform ought to be removed.
   configureFlags = ''
     ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '';
+  '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
 
   meta = {
     homepage = "http://www.pcre.org/";
