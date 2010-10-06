@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ch640zmf159gr9qp3i4a5mh1ib2s9h3660g4w0bpiqc8g4qn9sy";
   };
 
-  buildInputs = [ pkgconfig ] ++ stdenv.lib.optional (stdenv.system == "i686-darwin") gettext;
+  buildInputs = [ pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin gettext;
 
   propagatedBuildInputs = [ x11 glib cairo libpng ];
 
