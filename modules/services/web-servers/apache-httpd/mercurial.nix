@@ -42,7 +42,6 @@ in {
         AllowOverride All
         Options ExecCGI
         AddHandler cgi-script .cgi
-        SetEnv PYTHONPATH "${mercurial}/lib/${pkgs.python.libPrefix}/site-packages"
         PassEnv PYTHONPATH
     </Directory>
   '';
@@ -55,6 +54,8 @@ in {
   extraServerPath = [
     (pkgs.python+"/bin")    
   ];
+  
+  globalEnvVars = [ { name = "PYTHONPATH"; value = "${mercurial}/lib/${pkgs.python.libPrefix}/site-packages"; } ];
   
   options = {
     urlPrefix = mkOption {
