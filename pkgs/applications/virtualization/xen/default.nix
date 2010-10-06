@@ -1,12 +1,14 @@
 { stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl, python
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2, xz
-, lvm2, utillinux, procps, texinfo }:
+, lvm2, utillinux, procps, texinfo, perl }:
 
 with stdenv.lib;
 
 let
 
   version = "4.0.1";
+
+  libDir = if stdenv.is64bit then "lib64" else "lib";
 
   # Sources needed to build the stubdoms.
 
@@ -46,7 +48,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ which zlib pkgconfig SDL openssl python libuuid gettext ncurses
-      dev86 iasl pciutils bzip2 xz texinfo
+      dev86 iasl pciutils bzip2 xz texinfo perl
     ];
 
   makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc";
@@ -82,6 +84,12 @@ stdenv.mkDerivation {
       substituteInPlace tools/python/xen/xend/XendQCoWStorageRepo.py \
         --replace /usr/sbin/qcow-create $out/sbin/qcow-create
 
+      substituteInPlace tools/python/xen/remus/save.py \
+        --replace /usr/lib/xen/bin/xc_save $out/${libDir}/xen/bin/xc_save
+
+      substituteInPlace tools/python/xen/remus/device.py \
+        --replace /usr/lib/xen/bin/imqebt $out/${libDir}/xen/bin/imqebt
+
       # Xen's stubdoms need various sources that it usually fetches at
       # build time using wget.  We can't have that.
       ${flip concatMapStrings stubdomSrcs (x: let src = fetchurl x; in ''
@@ -89,11 +97,17 @@ stdenv.mkDerivation {
       '')}
     '';
 
+  postBuild =
+    ''
+      make -C docs man-pages
+    '';
+
   installPhase =
     ''
       cp -prvd dist/install/nix/store/* $out
       cp -prvd dist/install/boot $out/boot
       cp -prvd dist/install/etc $out/etc
+      cp -dR docs/man1 docs/man5 $out/share/man/
     ''; # */
 
   postFixup =
