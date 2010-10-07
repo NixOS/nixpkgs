@@ -14,4 +14,12 @@ stdenv.mkDerivation rec {
     ensureDir "$out/share/emacs/site-lisp"
     cp *.el *.elc *.hs "$out/share/emacs/site-lisp/"
   '';
+
+  meta = {
+    homepage = "http://projects.haskell.org/haskellmode-emacs/";
+    description = "Haskell mode package for Emacs";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }
