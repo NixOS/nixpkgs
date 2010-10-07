@@ -1,11 +1,11 @@
 {stdenv, fetchurl, emacs}:
 
 stdenv.mkDerivation rec {
-  name = "haskell-mode-2.7.0";
+  name = "haskell-mode-2.8.0";
 
   src = fetchurl {
     url = "http://projects.haskell.org/haskellmode-emacs/${name}.tar.gz";
-    sha256 = "8b45c55ed5f2b498529a6d7e01b77fea899c1de93e24653cab188cb3a4f495bc";
+    sha256 = "1065g4xy3ca72xhqh6hfxs5j3mls82bli8w5rhz1npzyfwlwhkb1";
   };
 
   buildInputs = [emacs];
