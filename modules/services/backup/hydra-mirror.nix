@@ -6,19 +6,11 @@ let
   cfg = config.services.hydraChannelMirror ;
   mirrorChannel = pkgs.fetchsvn {
     url = https://svn.nixos.org/repos/nix/release/trunk/channels/mirror-channel.pl;
-    rev = 23988;
-    sha256 = "1h06clvhr3zz378d8fblhwynvzk1smq7fipv7caakakfd31cv8i6";
+    rev = 24132;
+    sha256 = "02xvswbbr2sj9k1wfraa0j9053vf6w88nhk15qwzs8nkm180n820";
   };
   cronjob = jobset : ''
-    ${cfg.period} root perl -I${config.environment.nix}/libexec/nix ${mirrorChannel} \
-        ${cfg.hydraURL}/jobset/${jobset.project}/${jobset.jobset}/channel/latest \
-        ${cfg.dataDir}/channels/${jobset.relURL} \
-        ${cfg.dataDir}/nars \
-        ${cfg.mirrorURL}/nars \
-        ${cfg.dataDir}/patches \
-        ${cfg.mirrorURL}/patches \
-        ${if jobset.nixexprs == "" then "" else "${cfg.hydraURL}/job/${jobset.project}/${jobset.jobset}/${jobset.nixexprs}/latest/download-by-type/file/source-dist"} \
-        >> ${cfg.dataDir}/logs/${jobset.name}.log
+    ${cfg.period} root ENABLE_PATCHES=1 PATH=${config.environment.nix}/libexec/nix:$PATH perl -I${config.environment.nix}/libexec/nix ${mirrorChannel} ${cfg.hydraURL}/jobset/${jobset.project}/${jobset.jobset}/channel/latest ${cfg.dataDir}/channels/${jobset.relURL} ${cfg.dataDir}/nars ${cfg.mirrorURL}/nars ${cfg.dataDir}/patches ${cfg.mirrorURL}/patches ${if jobset.nixexprs == "" then "" else "${cfg.hydraURL}/job/${jobset.project}/${jobset.jobset}/${jobset.nixexprs}/latest/download-by-type/file/source-dist"} >> ${cfg.dataDir}/logs/${jobset.name}.log
   '';
 in
 {
@@ -82,6 +74,8 @@ in
         mkdir -m 0755 -p ${cfg.dataDir}/nars
         mkdir -m 0755 -p ${cfg.dataDir}/patches
         mkdir -m 0755 -p ${cfg.dataDir}/channels
+        ln -fs ${cfg.dataDir}/nars ${cfg.dataDir}/channels/nars 
+        ln -fs ${cfg.dataDir}/patches ${cfg.dataDir}/channels/patches 
         mkdir -m 0755 -p ${cfg.dataDir}/logs
         ${concatMapStrings (j : ''
         mkdir -m 0755 -p ${cfg.dataDir}/channels/${j.relURL}
