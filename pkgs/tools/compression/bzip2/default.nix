@@ -18,6 +18,10 @@ stdenv.mkDerivation {
   inherit linkStatic;
     
   meta = {
-    homepage = http://www.bzip.org;
+    homepage = "http://www.bzip.org";
+    description = "high-quality data compression program";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [];
   };
 }
