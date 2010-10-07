@@ -11,6 +11,11 @@ let
     isExecutable = true;
   });
   
+  nixosDeployNetwork = makeProg {
+    name = "nixos-deploy-network";
+    src = ./nixos-deploy-network/nixos-deploy-network.sh;
+  };
+  
   nixosInstall = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
@@ -126,7 +131,8 @@ in
 
   config = {
     environment.systemPackages =
-      [ nixosInstall
+      [ nixosDeployNetwork
+        nixosInstall
         nixosRebuild
          nixosHardwareScan
          nixosGenSeccureKeys
