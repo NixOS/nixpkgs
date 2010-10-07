@@ -1,0 +1,540 @@
+From 43ec71bb4c761538a3c8813856654de756661cce Mon Sep 17 00:00:00 2001
+From: Nick Clifton <nickc@redhat.com>
+Date: Thu, 25 Feb 2010 11:15:46 +0000
+Subject: [PATCH]         * config/tc-mips.c (mips_fix_loongson2f, mips_fix_loongson2f_nop,
+         mips_fix_loongson2f_jump): New variables.
+         (md_longopts): Add New options -mfix-loongson2f-nop/jump,
+         -mno-fix-loongson2f-nop/jump.
+         (md_parse_option): Initialize variables via above options.
+         (options): New enums for the above options.
+         (md_begin): Initialize nop_insn from LOONGSON2F_NOP_INSN.
+         (fix_loongson2f, fix_loongson2f_nop, fix_loongson2f_jump):
+         New functions.
+         (append_insn): call fix_loongson2f().
+         (mips_handle_align): Replace the implicit nops.
+         * config/tc-mips.h (MAX_MEM_FOR_RS_ALIGN_CODE): Modified
+         for the new mips_handle_align().
+         * doc/c-mips.texi: Document the new options.
+
+        * gas/mips/loongson-2f-2.s: New test of -mfix-loongson2f-nop.
+        * gas/mips/loongson-2f-2.d: Likewise.
+        * gas/mips/loongson-2f-3.s: New test of -mfix-loongson2f-jump.
+        * gas/mips/loongson-2f-3.d: Likewise.
+        * gas/mips/mips.exp: Run the new tests.
+
+        * opcode/mips.h (LOONGSON2F_NOP_INSN): New macro.
+---
+ gas/ChangeLog                          |   17 ++++
+ gas/config/tc-mips.c                   |  130 +++++++++++++++++++++++++++++---
+ gas/config/tc-mips.h                   |    4 +-
+ gas/doc/c-mips.texi                    |   18 ++++-
+ gas/testsuite/ChangeLog                |    8 ++
+ gas/testsuite/gas/mips/loongson-2f-2.d |   18 +++++
+ gas/testsuite/gas/mips/loongson-2f-2.s |   10 +++
+ gas/testsuite/gas/mips/loongson-2f-3.d |   35 +++++++++
+ gas/testsuite/gas/mips/loongson-2f-3.s |   23 ++++++
+ gas/testsuite/gas/mips/mips.exp        |    2 +
+ include/opcode/ChangeLog               |    4 +
+ include/opcode/mips.h                  |    6 +-
+ 12 files changed, 258 insertions(+), 17 deletions(-)
+ create mode 100644 gas/testsuite/gas/mips/loongson-2f-2.d
+ create mode 100644 gas/testsuite/gas/mips/loongson-2f-2.s
+ create mode 100644 gas/testsuite/gas/mips/loongson-2f-3.d
+ create mode 100644 gas/testsuite/gas/mips/loongson-2f-3.s
+
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index f35eb3a..6dca72b 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,3 +1,20 @@
++2010-02-25  Wu Zhangjin <wuzhangjin@gmail.com>
++
++	* config/tc-mips.c (mips_fix_loongson2f, mips_fix_loongson2f_nop,
++	mips_fix_loongson2f_jump): New variables.
++	(md_longopts): Add New options -mfix-loongson2f-nop/jump,
++	-mno-fix-loongson2f-nop/jump.
++	(md_parse_option): Initialize variables via above options.
++	(options): New enums for the above options.
++	(md_begin): Initialize nop_insn from LOONGSON2F_NOP_INSN.
++	(fix_loongson2f, fix_loongson2f_nop, fix_loongson2f_jump):
++	New functions.
++	(append_insn): call fix_loongson2f().
++	(mips_handle_align): Replace the implicit nops.
++	* config/tc-mips.h (MAX_MEM_FOR_RS_ALIGN_CODE): Modified
++	for the new mips_handle_align().
++	* doc/c-mips.texi: Document the new options.
++
+ 2010-02-23  Daniel Gutson  <dgutson@codesourcery.com>
+ 
+ 	* config/tc-arm.c (do_rd_rm_rn): Added warning
+diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
+index 94128fe..f901ae4 100644
+--- a/gas/config/tc-mips.c
++++ b/gas/config/tc-mips.c
+@@ -1,6 +1,7 @@
+ /* tc-mips.c -- assemble code for a MIPS chip.
+    Copyright 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+-   2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
++   2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
++   Free Software Foundation, Inc.
+    Contributed by the OSF and Ralph Campbell.
+    Written by Keith Knowles and Ralph Campbell, working independently.
+    Modified for ECOFF and R4000 support by Ian Lance Taylor of Cygnus
+@@ -751,7 +752,8 @@ static const unsigned int mips16_to_32_reg_map[] =
+ 
+ /* Classifies the kind of instructions we're interested in when
+    implementing -mfix-vr4120.  */
+-enum fix_vr4120_class {
++enum fix_vr4120_class
++{
+   FIX_VR4120_MACC,
+   FIX_VR4120_DMACC,
+   FIX_VR4120_MULT,
+@@ -761,6 +763,15 @@ enum fix_vr4120_class {
+   NUM_FIX_VR4120_CLASSES
+ };
+ 
++/* ...likewise -mfix-loongson2f-jump.  */
++static bfd_boolean mips_fix_loongson2f_jump;
++
++/* ...likewise -mfix-loongson2f-nop.  */
++static bfd_boolean mips_fix_loongson2f_nop;
++
++/* True if -mfix-loongson2f-nop or -mfix-loongson2f-jump passed.  */
++static bfd_boolean mips_fix_loongson2f;
++
+ /* Given two FIX_VR4120_* values X and Y, bit Y of element X is set if
+    there must be at least one other instruction between an instruction
+    of type X and an instruction of type Y.  */
+@@ -1048,8 +1059,9 @@ static struct {
+ enum mips_regclass { MIPS_GR_REG, MIPS_FP_REG, MIPS16_REG };
+ 
+ static void append_insn
+-  (struct mips_cl_insn *ip, expressionS *p, bfd_reloc_code_real_type *r);
++  (struct mips_cl_insn *, expressionS *, bfd_reloc_code_real_type *);
+ static void mips_no_prev_insn (void);
++static void macro_build (expressionS *, const char *, const char *, ...);
+ static void mips16_macro_build
+   (expressionS *, const char *, const char *, va_list);
+ static void load_register (int, expressionS *, int);
+@@ -1918,6 +1930,8 @@ md_begin (void)
+ 	      if (nop_insn.insn_mo == NULL && strcmp (name, "nop") == 0)
+ 		{
+ 		  create_insn (&nop_insn, mips_opcodes + i);
++		  if (mips_fix_loongson2f_nop)
++		    nop_insn.insn_opcode = LOONGSON2F_NOP_INSN;
+ 		  nop_insn.fixed_p = 1;
+ 		}
+ 	    }
+@@ -2731,6 +2745,54 @@ nops_for_insn_or_target (const struct mips_cl_insn *hist,
+   return nops;
+ }
+ 
++/* Fix NOP issue: Replace nops by "or at,at,zero".  */
++
++static void
++fix_loongson2f_nop (struct mips_cl_insn * ip)
++{
++  if (strcmp (ip->insn_mo->name, "nop") == 0)
++    ip->insn_opcode = LOONGSON2F_NOP_INSN;
++}
++
++/* Fix Jump Issue: Eliminate instruction fetch from outside 256M region
++                   jr target pc &= 'hffff_ffff_cfff_ffff.  */
++
++static void
++fix_loongson2f_jump (struct mips_cl_insn * ip)
++{
++  if (strcmp (ip->insn_mo->name, "j") == 0
++      || strcmp (ip->insn_mo->name, "jr") == 0
++      || strcmp (ip->insn_mo->name, "jalr") == 0)
++    {
++      int sreg;
++      expressionS ep;
++
++      if (! mips_opts.at)
++        return;
++
++      sreg = EXTRACT_OPERAND (RS, *ip);
++      if (sreg == ZERO || sreg == KT0 || sreg == KT1 || sreg == ATREG)
++        return;
++
++      ep.X_op = O_constant;
++      ep.X_add_number = 0xcfff0000;
++      macro_build (&ep, "lui", "t,u", ATREG, BFD_RELOC_HI16);
++      ep.X_add_number = 0xffff;
++      macro_build (&ep, "ori", "t,r,i", ATREG, ATREG, BFD_RELOC_LO16);
++      macro_build (NULL, "and", "d,v,t", sreg, sreg, ATREG);
++    }
++}
++
++static void
++fix_loongson2f (struct mips_cl_insn * ip)
++{
++  if (mips_fix_loongson2f_nop)
++    fix_loongson2f_nop (ip);
++
++  if (mips_fix_loongson2f_jump)
++    fix_loongson2f_jump (ip);
++}
++
+ /* Output an instruction.  IP is the instruction information.
+    ADDRESS_EXPR is an operand of the instruction to be used with
+    RELOC_TYPE.  */
+@@ -2744,6 +2806,9 @@ append_insn (struct mips_cl_insn *ip, expressionS *address_expr,
+   bfd_boolean relaxed_branch = FALSE;
+   segment_info_type *si = seg_info (now_seg);
+ 
++  if (mips_fix_loongson2f)
++    fix_loongson2f (ip);
++
+   /* Mark instruction labels in mips16 mode.  */
+   mips16_mark_labels ();
+ 
+@@ -11216,6 +11281,10 @@ enum options
+     OPTION_MNO_7000_HILO_FIX, 
+     OPTION_FIX_24K,
+     OPTION_NO_FIX_24K,
++    OPTION_FIX_LOONGSON2F_JUMP,
++    OPTION_NO_FIX_LOONGSON2F_JUMP,
++    OPTION_FIX_LOONGSON2F_NOP,
++    OPTION_NO_FIX_LOONGSON2F_NOP,
+     OPTION_FIX_VR4120,
+     OPTION_NO_FIX_VR4120,
+     OPTION_FIX_VR4130,
+@@ -11304,6 +11373,10 @@ struct option md_longopts[] =
+   {"mfix7000", no_argument, NULL, OPTION_M7000_HILO_FIX},
+   {"no-fix-7000", no_argument, NULL, OPTION_MNO_7000_HILO_FIX},
+   {"mno-fix7000", no_argument, NULL, OPTION_MNO_7000_HILO_FIX},
++  {"mfix-loongson2f-jump", no_argument, NULL, OPTION_FIX_LOONGSON2F_JUMP},
++  {"mno-fix-loongson2f-jump", no_argument, NULL, OPTION_NO_FIX_LOONGSON2F_JUMP},
++  {"mfix-loongson2f-nop", no_argument, NULL, OPTION_FIX_LOONGSON2F_NOP},
++  {"mno-fix-loongson2f-nop", no_argument, NULL, OPTION_NO_FIX_LOONGSON2F_NOP},
+   {"mfix-vr4120",    no_argument, NULL, OPTION_FIX_VR4120},
+   {"mno-fix-vr4120", no_argument, NULL, OPTION_NO_FIX_VR4120},
+   {"mfix-vr4130",    no_argument, NULL, OPTION_FIX_VR4130},
+@@ -11571,6 +11644,22 @@ md_parse_option (int c, char *arg)
+       mips_fix_24k = 0;
+       break;
+ 
++    case OPTION_FIX_LOONGSON2F_JUMP:
++      mips_fix_loongson2f_jump = TRUE;
++      break;
++
++    case OPTION_NO_FIX_LOONGSON2F_JUMP:
++      mips_fix_loongson2f_jump = FALSE;
++      break;
++
++    case OPTION_FIX_LOONGSON2F_NOP:
++      mips_fix_loongson2f_nop = TRUE;
++      break;
++
++    case OPTION_NO_FIX_LOONGSON2F_NOP:
++      mips_fix_loongson2f_nop = FALSE;
++      break;
++
+     case OPTION_FIX_VR4120:
+       mips_fix_vr4120 = 1;
+       break;
+@@ -11785,6 +11874,8 @@ md_parse_option (int c, char *arg)
+       return 0;
+     }
+ 
++    mips_fix_loongson2f = mips_fix_loongson2f_nop || mips_fix_loongson2f_jump;
++
+   return 1;
+ }
+ 
+@@ -14790,6 +14881,8 @@ void
+ mips_handle_align (fragS *fragp)
+ {
+   char *p;
++  int bytes, size, excess;
++  valueT opcode;
+ 
+   if (fragp->fr_type != rs_align_code)
+     return;
+@@ -14797,17 +14890,28 @@ mips_handle_align (fragS *fragp)
+   p = fragp->fr_literal + fragp->fr_fix;
+   if (*p)
+     {
+-      int bytes;
++      opcode = mips16_nop_insn.insn_opcode;
++      size = 2;
++    }
++  else
++    {
++      opcode = nop_insn.insn_opcode;
++      size = 4;
++    }
+ 
+-      bytes = fragp->fr_next->fr_address - fragp->fr_address - fragp->fr_fix;
+-      if (bytes & 1)
+-	{
+-	  *p++ = 0;
+-	  fragp->fr_fix++;
+-	}
+-      md_number_to_chars (p, mips16_nop_insn.insn_opcode, 2);
+-      fragp->fr_var = 2;
++  bytes = fragp->fr_next->fr_address - fragp->fr_address - fragp->fr_fix;
++  excess = bytes % size;
++  if (excess != 0)
++    {
++      /* If we're not inserting a whole number of instructions,
++	 pad the end of the fixed part of the frag with zeros.  */
++      memset (p, 0, excess);
++      p += excess;
++      fragp->fr_fix += excess;
+     }
++
++  md_number_to_chars (p, opcode, size);
++  fragp->fr_var = size;
+ }
+ 
+ static void
+@@ -15519,6 +15623,8 @@ MIPS options:\n\
+ -mmt			generate MT instructions\n\
+ -mno-mt			do not generate MT instructions\n"));
+   fprintf (stream, _("\
++-mfix-loongson2f-jump	work around Loongson2F JUMP instructions\n\
++-mfix-loongson2f-nop	work around Loongson2F NOP errata\n\
+ -mfix-vr4120		work around certain VR4120 errata\n\
+ -mfix-vr4130		work around VR4130 mflo/mfhi errata\n\
+ -mfix-24k		insert a nop after ERET and DERET instructions\n\
+diff --git a/gas/config/tc-mips.h b/gas/config/tc-mips.h
+index 4bdf807..502fa8e 100644
+--- a/gas/config/tc-mips.h
++++ b/gas/config/tc-mips.h
+@@ -1,6 +1,6 @@
+ /* tc-mips.h -- header file for tc-mips.c.
+    Copyright 1993, 1994, 1995, 1996, 1997, 2000, 2001, 2002, 2003, 2004,
+-   2005, 2006, 2007, 2008  Free Software Foundation, Inc.
++   2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+    Contributed by the OSF and Ralph Campbell.
+    Written by Keith Knowles and Ralph Campbell, working independently.
+    Modified for ECOFF support by Ian Lance Taylor of Cygnus Support.
+@@ -59,7 +59,7 @@ extern char mips_nop_opcode (void);
+ extern void mips_handle_align (struct frag *);
+ #define HANDLE_ALIGN(fragp)  mips_handle_align (fragp)
+ 
+-#define MAX_MEM_FOR_RS_ALIGN_CODE  (1 + 2)
++#define MAX_MEM_FOR_RS_ALIGN_CODE  (3 + 4)
+ 
+ struct insn_label_list;
+ struct mips_segment_info {
+diff --git a/gas/doc/c-mips.texi b/gas/doc/c-mips.texi
+index 34fa694..641e60f 100644
+--- a/gas/doc/c-mips.texi
++++ b/gas/doc/c-mips.texi
+@@ -1,5 +1,5 @@
+ @c Copyright 1991, 1992, 1993, 1994, 1995, 1997, 1999, 2000, 2001,
+-@c 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
++@c 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+ @c Free Software Foundation, Inc.
+ @c This is part of the GAS manual.
+ @c For copying conditions, see the file as.texinfo.
+@@ -78,7 +78,7 @@ VxWorks-style position-independent macro expansions.
+ @itemx -mips2
+ @itemx -mips3
+ @itemx -mips4
+-@itemx -mips5
++@itemx -mips5xo
+ @itemx -mips32
+ @itemx -mips32r2
+ @itemx -mips64
+@@ -172,6 +172,20 @@ This tells the assembler to accept MT instructions.
+ Cause nops to be inserted if the read of the destination register
+ of an mfhi or mflo instruction occurs in the following two instructions.
+ 
++@item -mfix-loongson2f-jump
++@itemx -mno-fix-loongson2f-jump
++Eliminate instruction fetch from outside 256M region to work around the
++Loongson2F @samp{jump} instructions.  Without it, under extreme cases,
++the kernel may crash.  The issue has been solved in latest processor
++batches, but this fix has no side effect to them.
++
++@item -mfix-loongson2f-nop
++@itemx -mno-fix-loongson2f-nop
++Replace nops by @code{or at,at,zero} to work around the Loongson2F
++@samp{nop} errata.  Without it, under extreme cases, cpu might
++deadlock.  The issue has been solved in latest loongson2f batches, but
++this fix has no side effect to them.
++
+ @item -mfix-vr4120
+ @itemx -mno-fix-vr4120
+ Insert nops to work around certain VR4120 errata.  This option is
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 3ee595b..439e734 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2010-02-25  Wu Zhangjin  <wuzhangjin@gmail.com>
++
++	* gas/mips/loongson-2f-2.s: New test of -mfix-loongson2f-nop.
++	* gas/mips/loongson-2f-2.d: Likewise.
++	* gas/mips/loongson-2f-3.s: New test of -mfix-loongson2f-jump.
++	* gas/mips/loongson-2f-3.d: Likewise.
++	* gas/mips/mips.exp: Run the new tests.
++
+ 2010-02-24  Nick Clifton  <nickc@redhat.com>
+ 
+ 	PR binutils/6773
+diff --git a/gas/testsuite/gas/mips/loongson-2f-2.d b/gas/testsuite/gas/mips/loongson-2f-2.d
+new file mode 100644
+index 0000000..f5267a8
+--- /dev/null
++++ b/gas/testsuite/gas/mips/loongson-2f-2.d
+@@ -0,0 +1,18 @@
++#as: -mfix-loongson2f-nop
++#objdump: -M reg-names=numeric -dr
++#name: ST Microelectronics Loongson-2F workarounds of nop issue 
++
++.*:     file format .*
++
++
++Disassembly of section .text:
++
++00000000 <loongson2f_nop_insn>:
++   0:	00200825 	move	\$1,\$1
++   4:	00200825 	move	\$1,\$1
++   8:	00200825 	move	\$1,\$1
++   c:	00200825 	move	\$1,\$1
++  10:	00200825 	move	\$1,\$1
++  14:	00200825 	move	\$1,\$1
++  18:	00200825 	move	\$1,\$1
++  1c:	00200825 	move	\$1,\$1
+diff --git a/gas/testsuite/gas/mips/loongson-2f-2.s b/gas/testsuite/gas/mips/loongson-2f-2.s
+new file mode 100644
+index 0000000..842e157
+--- /dev/null
++++ b/gas/testsuite/gas/mips/loongson-2f-2.s
+@@ -0,0 +1,10 @@
++# Test the work around of the NOP issue of loongson2F
++	.text
++	.set noreorder
++
++	.align 5	# Test _implicit_ nops
++loongson2f_nop_insn:
++	nop		# Test _explicit_ nops
++
++# align section end to 16-byte boundary for easier testing on multiple targets
++	.p2align 4
+diff --git a/gas/testsuite/gas/mips/loongson-2f-3.d b/gas/testsuite/gas/mips/loongson-2f-3.d
+new file mode 100644
+index 0000000..99844d3
+--- /dev/null
++++ b/gas/testsuite/gas/mips/loongson-2f-3.d
+@@ -0,0 +1,35 @@
++#as: -mfix-loongson2f-jump
++#objdump: -M reg-names=numeric -dr
++#name: ST Microelectronics Loongson-2F workarounds of Jump Instruction issue 
++
++.*:     file format .*
++
++
++Disassembly of section .text:
++
++00000000 <.text>:
++   0:	3c01cfff 	lui	\$1,0xcfff
++   4:	3421ffff 	ori	\$1,\$1,0xffff
++   8:	03c1f024 	and	\$30,\$30,\$1
++   c:	03c00008 	jr	\$30
++  10:	00000000 	nop
++
++  14:	3c01cfff 	lui	\$1,0xcfff
++  18:	3421ffff 	ori	\$1,\$1,0xffff
++  1c:	03e1f824 	and	\$31,\$31,\$1
++  20:	03e00008 	jr	\$31
++  24:	00000000 	nop
++
++  28:	3c01cfff 	lui	\$1,0xcfff
++  2c:	3421ffff 	ori	\$1,\$1,0xffff
++  30:	03c1f024 	and	\$30,\$30,\$1
++  34:	03c0f809 	jalr	\$30
++  38:	00000000 	nop
++
++  3c:	00200008 	jr	\$1
++  40:	00000000 	nop
++
++  44:	08000000 	j	0x0
++			44: R_MIPS_26	external_label
++  48:	00000000 	nop
++  4c:	00000000 	nop
+diff --git a/gas/testsuite/gas/mips/loongson-2f-3.s b/gas/testsuite/gas/mips/loongson-2f-3.s
+new file mode 100644
+index 0000000..cbb73de
+--- /dev/null
++++ b/gas/testsuite/gas/mips/loongson-2f-3.s
+@@ -0,0 +1,23 @@
++# Test the work around of the Jump instruction Issue of Loongson2F
++	.text
++	.set noreorder
++
++	j	$30	# j with register
++	 nop
++
++	jr	$31	# jr
++	 nop
++
++	jalr	$30	# jalr
++	 nop
++
++	.set	noat
++	jr	$1	# jr with at register and .set annotation
++ 	 nop
++	.set	at
++
++	j	external_label	# j with label
++	 nop
++
++# align section end to 16-byte boundary for easier testing on multiple targets
++	.p2align 4
+diff --git a/gas/testsuite/gas/mips/mips.exp b/gas/testsuite/gas/mips/mips.exp
+index 14ce5cc..34bb5ea 100644
+--- a/gas/testsuite/gas/mips/mips.exp
++++ b/gas/testsuite/gas/mips/mips.exp
+@@ -789,6 +789,8 @@ if { [istarget mips*-*-vxworks*] } {
+ 
+     run_dump_test "loongson-2e"
+     run_dump_test "loongson-2f"
++    run_dump_test "loongson-2f-2"
++    run_dump_test "loongson-2f-3"
+ 
+     run_dump_test_arches "octeon"	[mips_arch_list_matching octeon]
+     run_list_test_arches "octeon-ill" "" \
+diff --git a/include/opcode/ChangeLog b/include/opcode/ChangeLog
+index 39cecde..549d565 100644
+--- a/include/opcode/ChangeLog
++++ b/include/opcode/ChangeLog
+@@ -1,3 +1,7 @@
++2010-02-25  Wu Zhangjin  <wuzhangjin@gmail.com>
++
++	* mips.h: (LOONGSON2F_NOP_INSN): New macro.
++
+ 2010-02-08  Philipp Tomsich  <philipp.tomsich@theobroma-systems.com>
+ 
+ 	* opcode/ppc.h (PPC_OPCODE_TITAN): Define.
+diff --git a/include/opcode/mips.h b/include/opcode/mips.h
+index 27d10e6..d6b3cf4 100644
+--- a/include/opcode/mips.h
++++ b/include/opcode/mips.h
+@@ -1,6 +1,6 @@
+ /* mips.h.  Mips opcode list for GDB, the GNU debugger.
+    Copyright 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+-   2003, 2004, 2005, 2008, 2009
++   2003, 2004, 2005, 2008, 2009, 2010
+    Free Software Foundation, Inc.
+    Contributed by Ralph Campbell and OSF
+    Commented and modified by Ian Lance Taylor, Cygnus Support
+@@ -1106,4 +1106,8 @@ extern int bfd_mips_num_opcodes;
+ extern const struct mips_opcode mips16_opcodes[];
+ extern const int bfd_mips16_num_opcodes;
+ 
++/* A NOP insn impemented as "or at,at,zero".
++   Used to implement -mfix-loongson2f.  */
++#define LOONGSON2F_NOP_INSN	0x00200825
++
+ #endif /* _MIPS_H_ */
+-- 
+1.6.5.GIT
+

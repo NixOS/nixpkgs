@@ -2,6 +2,8 @@
 
 let
     basename = "binutils-2.20.1";
+
+    targetIsMips = stdenv.system == "mips64-linux" || (cross != null && cross.arch == "mips");
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
-  ];
+  ] ++ stdenv.lib.optionals targetIsMips [ ./loongson2f.patch ./version-bump.patch ];
 
   inherit noSysDirs;
 

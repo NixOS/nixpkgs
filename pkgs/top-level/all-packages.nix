@@ -2289,16 +2289,9 @@ let
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
-  binutils_release = callPackage ../development/tools/misc/binutils {
+  binutils = callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
   };
-
-  binutils_snapshot = callPackage ../development/tools/misc/binutils/snapshot.nix {
-    inherit noSysDirs;
-  };
-
-  # We are waiting for a release. Meanwhile, sysvinit and the loongson2f need it.
-  binutils = binutils_snapshot;
 
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl;
