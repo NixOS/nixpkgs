@@ -1,7 +1,7 @@
 pkgs:
 
 pkgs.recurseIntoAttrs (rec {
-  inherit (pkgs) qt4;
+  inherit (pkgs) qt4 stdenv;
 
 ### SUPPORT
   automoc4 = import ./support/automoc4 {
@@ -216,90 +216,12 @@ pkgs.recurseIntoAttrs (rec {
 
 #### EXTRA GEAR
 
-  digikam = import ./extragear/digikam {
-    inherit (pkgs) stdenv fetchurl cmake qt4 lcms jasper libgphoto2 gettext
-      liblqr1 lensfun;
-    inherit kdelibs kdepimlibs kdegraphics kdeedu;
-    inherit automoc4 phonon qimageblitz qca2 eigen soprano;
-  };
-
-  filelight = import ./extragear/filelight {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl;
-    inherit kdelibs kdebase_workspace;
-    inherit automoc4 phonon qimageblitz;
-  };
-
-  kdenlive = import ./extragear/kdenlive {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl mlt gettext shared_mime_info;
-    inherit kdelibs soprano;
-    inherit automoc4 phonon;
-  };
-
-  kdevelop = import ./extragear/kdevelop {
-    inherit (pkgs) stdenv fetchurl cmake pkgconfig shared_mime_info gettext perl;
-    inherit kdevplatform automoc4 kdebase_workspace;
-  };
-
-  kdevplatform = import ./extragear/kdevplatform {
-    inherit (pkgs) stdenv fetchurl cmake subversion qt4 perl gettext pkgconfig
-      apr aprutil boost;
-    inherit kdelibs automoc4 phonon;
-  };
-
-  kdesvn = import ./extragear/kdesvn {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext apr aprutil subversion db4;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-
-  kdiff3 = import ./extragear/kdiff3 {
-    inherit (pkgs) stdenv fetchurl cmake qt4 gettext perl;
-    inherit kdelibs kdebase;
-    inherit automoc4 phonon;
-  };
-
-  kipiplugins = import ./extragear/kipi-plugins {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 libxml2 libxslt gettext;
-    inherit kdelibs kdepimlibs kdegraphics;
-    inherit automoc4 phonon qimageblitz qca2;
-  };
-  
-  kmplayer = import ./extragear/kmplayer {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext dbus_glib;
-    inherit (pkgs.gtkLibs) pango gtk;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-  
-  krusader = import ./extragear/krusader {
-    inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-  
-  inherit (pkgs) konversation yakuake ktorrent koffice amarok;
-  
-  gtk_qt_engine = import ./extragear/gtk-qt-engine {
-    inherit (pkgs) stdenv fetchurl cmake qt4 perl gettext;
-    inherit (pkgs.xlibs) libX11;
-    inherit (pkgs.gtkLibs) gtk;
-    inherit (pkgs.gnome) libbonoboui;
-    inherit kdelibs;
-    inherit automoc4 phonon;
-  };
-
   k3b = import ./extragear/k3b {
     inherit (pkgs) stdenv fetchurl cmake qt4 perl shared_mime_info libvorbis taglib gettext;
     inherit (pkgs) ffmpeg flac libsamplerate libdvdread lame libsndfile libmad;
     inherit kdelibs kdemultimedia;
     inherit automoc4 phonon;
   };
-
-  konqPlugins = import ./extragear/konq-plugins {
-    inherit (pkgs) stdenv fetchurl cmake qt4 gettext;
-    inherit kdelibs automoc4 phonon kdebase;
-  };
-### LOCALIZATION
 
   l10n = pkgs.recurseIntoAttrs (import ./l10n {
     inherit (pkgs) stdenv fetchurl lib cmake qt4 perl gettext;

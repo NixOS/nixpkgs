@@ -13,10 +13,9 @@ stdenv.mkDerivation {
   # problem. In case we ever update the Darwin GCC version, the exception for
   # that platform ought to be removed.
   configureFlags = ''
-    CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=${if stdenv.isDarwin then "-O0" else "-O3"}
     ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '';
+  '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
 
   doCheck = true;
 

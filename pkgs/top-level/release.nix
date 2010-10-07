@@ -449,22 +449,6 @@ with (import ./release-lib.nix);
     kile = linux;
   };
 
-  kde44 = {
-    krusader = linux;
-    kmplayer = linux;
-    ktorrent = linux;
-    koffice = linux;
-    konversation = linux;
-    kdesvn = linux;
-    amarok = linux;
-    k3b = linux;
-    l10n.ca = linux;
-    l10n.de = linux;
-    l10n.fr = linux;
-    l10n.nl = linux;
-    l10n.ru = linux;
-  };
-
   linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;

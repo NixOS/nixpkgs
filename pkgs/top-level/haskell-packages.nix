@@ -137,6 +137,8 @@ rec {
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
+  ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
+
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
   ghcPaths_0_1_0_6 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.6.nix {};
@@ -149,6 +151,14 @@ rec {
     cgi = cgi_3001_1_7_2;
     HTTP = HTTP_4000_0_9;
     network = network_2_2_1_7;
+  };
+
+  glade = callPackage ../development/libraries/haskell/glade {
+    inherit (pkgs) pkgconfig gnome glibc;
+  };
+
+  glib = callPackage ../development/libraries/haskell/glib {
+    inherit (pkgs) pkgconfig glib glibc;
   };
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
@@ -164,6 +174,11 @@ rec {
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
+  };
+
+  gtk = callPackage ../development/libraries/haskell/gtk {
+    inherit (pkgs) pkgconfig glibc;
+    inherit (pkgs.gtkLibs) gtk;
   };
 
   gtk2hs = callPackage ../development/libraries/haskell/gtk2hs {
@@ -415,6 +430,11 @@ rec {
     HTTP = HTTP_4000_0_9;
     network = network_2_2_1_7;
     random = random_newtime;
+  };
+
+  pango = callPackage ../development/libraries/haskell/pango {
+    inherit (pkgs) pkgconfig glibc;
+    inherit (pkgs.gtkLibs) pango;
   };
 
   parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
@@ -731,6 +751,8 @@ rec {
   mkcabal = callPackage ../development/tools/haskell/mkcabal {};
 
   tar = callPackage ../development/tools/haskell/tar {};
+
+  threadscope = callPackage ../development/tools/haskell/threadscope {};
 
   uuagc = callPackage ../development/tools/haskell/uuagc {};
 

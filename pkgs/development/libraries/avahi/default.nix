@@ -5,10 +5,11 @@
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-0.6.27";
+  name = "avahi-0.6.28";
+
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "112yqh5k4ph5f1fsd98q1035477wmzq5nm2jrkivz5fnn3hgabf2";
+    sha256 = "14gw611d3srn2r18a6g4y04r571w3l4lihiiaffryar1i2n0mn50";
   };
 
   patches = [ ./no-mkdir-localstatedir.patch ];

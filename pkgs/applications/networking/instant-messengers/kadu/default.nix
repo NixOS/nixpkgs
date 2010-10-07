@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, qt, libgadu, bash, libXScrnSaver, libsndfile, qca2, wget, libX11, alsaLib }:
+{ stdenv, fetchurl, cmake, qt4, libgadu, libXScrnSaver, libsndfile, qca2
+, libX11, alsaLib }:
 
 stdenv.mkDerivation {
 
@@ -10,19 +11,13 @@ stdenv.mkDerivation {
   };
   
   buildInputs = [
-    cmake qt libgadu bash libXScrnSaver libsndfile qca2 wget libX11 alsaLib
+    cmake qt4 libgadu libXScrnSaver libsndfile qca2 libX11 alsaLib
   ];
 
-  cmakeFlags = "-Wno-dev";
+  cmakeFlags = "-DENABLE_AUTODOWNLOAD=OFF";
 
-  NIX_LDFLAGS="-lX11";
-
-  patches = [ ./more-icons.patch ];
-
-  patchPhase = ''
-    unset patchPhase; patchPhase
-    sed 's=/bin/bash=/${stdenv.shell}=g' -i \
-      `find -type f -name '*.sh' -or -name 'autodownload'`
+  prePatch = ''
+    patchShebangs .
   '';
 
   meta = { 

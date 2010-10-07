@@ -7,7 +7,9 @@ stdenv.mkDerivation rec {
     sha256 = "1hgpw9lld0k6z34kxrapz8dxf3cbgnnhkx6himnvw9ax3qf7p5gk";
   };
 
-  buildInputs = [ pkgconfig libxml2 glibmm perl ];
+  buildInputs = [ pkgconfig glibmm perl ];
+
+  propagatedBuildInputs = [ libxml2 ];
 
   configureFlags = "--disable-documentation"; #doesn't build without this for some reason
 

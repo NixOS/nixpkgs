@@ -1,12 +1,10 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, kde ? true # enable KDE integration
+, withKDE ? true # enable KDE integration
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
-, stdenv, fetchurl, cmake, qt4, kdelibs ? null, automoc4 ? null, phonon ? null }:
-
-assert kde -> kdelibs != null && automoc4 != null && phonon != null;
+, stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
@@ -21,9 +19,9 @@ in with stdenv; mkDerivation rec {
   };
 
   buildInputs = [ cmake qt4 ]
-    ++ lib.optional kde kdelibs
-    ++ lib.optional kde automoc4
-    ++ lib.optional kde phonon;
+    ++ lib.optional withKDE kdelibs
+    ++ lib.optional withKDE automoc4
+    ++ lib.optional withKDE phonon;
 
   cmakeFlags = [
     "-DWITH_DBUS=OFF"
@@ -34,7 +32,7 @@ in with stdenv; mkDerivation rec {
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
-    ++ edf kde "WITH_KDE"
+    ++ edf withKDE "WITH_KDE"
     ++ edf ssl "WITH_OPENSSL"
     ++ edf previews "WITH_WEBKIT"  ;
 

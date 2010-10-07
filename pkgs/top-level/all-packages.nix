@@ -373,12 +373,12 @@ let
     monolithic = false;
     daemon = true;
   };
-  
+
   amuleGui = amule.override {
     monolithic = false;
     client = true;
   };
-  
+
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
 
@@ -781,6 +781,8 @@ let
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
+  kdiff3 = newScope pkgs.kde4 ../tools/text/kdiff3 { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
@@ -946,6 +948,7 @@ let
 
   openjade = callPackage ../tools/text/sgml/openjade {
     stdenv = overrideGCC stdenv gcc33;
+    opensp = opensp.override { stdenv = overrideGCC stdenv gcc33; };
   };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
@@ -1201,7 +1204,10 @@ let
 
   telnet = callPackage ../tools/networking/telnet { };
 
-  texmacs = callPackage ../applications/office/texmacs { };
+  texmacs = callPackage ../applications/editors/texmacs {
+    tex = texLive; /* tetex is also an option */
+    extraFonts = true;
+  };
 
   tor = callPackage ../tools/security/tor { };
 
@@ -1219,7 +1225,7 @@ let
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
   upx = callPackage ../tools/compression/upx { };
-  
+
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
@@ -2249,7 +2255,7 @@ let
   antDarwin = apacheAnt.override rec { jdk = openjdkDarwin; name = "ant-" + jdk.name; } ;
 
   ant = apacheAnt;
-  
+
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant {
     name = "ant-" + jdk.name;
   };
@@ -2620,6 +2626,8 @@ let
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
+
+  check = callPackage ../development/libraries/check { };
 
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
     inherit cmake freeglut mesa;
@@ -3139,6 +3147,8 @@ let
   json_glib = callPackage ../development/libraries/json-glib { };
 
   judy = callPackage ../development/libraries/judy { };
+
+  kdevplatform = newScope pkgs.kde4 ../development/libraries/kdevplatform { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
@@ -3736,12 +3746,12 @@ let
     monolithic = false;
     daemon = true;
   };
-  
+
   quasselClient = quassel.override {
     monolithic = false;
     client = true;
   };
-  
+
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   readline = readline6;
@@ -3834,7 +3844,7 @@ let
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
-  
+
   taglib17 = callPackage ../development/libraries/taglib/1.7.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
@@ -3895,7 +3905,7 @@ let
   };
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
-    inherit (gtkLibs216) gtk;
+    inherit (gtkLibs) gtk;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -4069,10 +4079,6 @@ let
   foursuite = callPackage ../development/python-modules/4suite { };
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
-
-  flup = builderDefsPackage ../development/python-modules/flup {
-    inherit fetchurl stdenv python setuptools;
-  };
 
   numeric = callPackage ../development/python-modules/numeric { };
 
@@ -4263,7 +4269,7 @@ let
   });
   squid = squids.squid3Beta; # has ipv6 support
 
-  tomcat5 = callPackage ../servers/http/tomcat { };
+  tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
 
@@ -4983,6 +4989,8 @@ let
 
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
+  ubootGuruplug = callPackage ../misc/uboot/guruplug.nix { };
+
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = import ../os-specific/linux/uclibc {
@@ -5411,6 +5419,8 @@ let
 
   dia = callPackage ../applications/graphics/dia { };
 
+  digikam = newScope pkgs.kde4 ../applications/graphics/digikam { };
+
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
   djview4 = callPackage ../applications/graphics/djview { };
@@ -5586,6 +5596,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
+  filelight = newScope pkgs.kde4 ../applications/misc/filelight { };
+
   firefox = firefox36Pkgs.firefox;
   firefoxWrapper = firefox36Wrapper;
 
@@ -5682,6 +5694,11 @@ let
   };
 
   gocr = callPackage ../applications/graphics/gocr { };
+
+  gobby5 = callPackage ../applications/editors/gobby {
+    inherit (gtkLibs) gtkmm;
+    inherit (gnome) gtksourceview;
+  };
 
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
@@ -5823,14 +5840,15 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
-  kadu = callPackage ../applications/networking/instant-messengers/kadu {
-    qt = qt4;
-    inherit fetchurl cmake libgadu bash libsndfile wget alsaLib;
-    inherit (xlibs) libXScrnSaver libX11;
-    inherit (kde45) qca2;
-  };
+  kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu { };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
+
+  kdenlive = newScope pkgs.kde4 ../applications/video/kdenlive { };
+
+  kdesvn = newScope pkgs.kde4 ../applications/version-management/kdesvn { };
+
+  kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
 
   kermit = callPackage ../tools/misc/kermit { };
 
@@ -5842,11 +5860,21 @@ let
     inherit (xlibs) libXv libX11;
   };
 
+  kipi_plugins = newScope pkgs.kde4 ../applications/graphics/kipi-plugins { };
+
+  kmplayer = newScope pkgs.kde4 ../applications/video/kmplayer {
+    inherit (pkgs.gtkLibs) pango;
+  };
+
   koffice = newScope pkgs.kde4 ../applications/office/koffice { };
+
+  konq_plugins = newScope pkgs.kde4 ../applications/networking/browsers/konq-plugins { };
 
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
 
   krename = newScope pkgs.kde4 ../applications/misc/krename { };
+
+  krusader = newScope pkgs.kde4 ../applications/misc/krusader { };
 
   ktorrent = newScope pkgs.kde4 ../applications/networking/ktorrent { };
 
@@ -6259,9 +6287,9 @@ let
 
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
-    inherit
-      monotone flup cheetahTemplate highlight ctags
+    inherit monotone cheetahTemplate highlight ctags
       makeWrapper graphviz which python;
+    flup = pythonPackages.flup;
   };
 
   vim = callPackage ../applications/editors/vim { };
@@ -7003,7 +7031,7 @@ let
     tex = tetex;
   };
 
-  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench { 
+  mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5;
     inherit (pythonPackages) pexpect paramiko;
   };

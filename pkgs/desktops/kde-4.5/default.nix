@@ -3,15 +3,13 @@
 {
   recurseForRelease = true;
 
-  inherit callPackage;
+  inherit callPackage stdenv;
 
   qt4 = qt47;
 
   phonon = null;
 
-  kde = import ./kde-package {
-    inherit stdenv fetchurl;
-  };
+  kde = callPackage ./kde-package { };
 
 ### SUPPORT
   akonadi = callPackage ./support/akonadi { };

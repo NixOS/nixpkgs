@@ -17,11 +17,13 @@ in stdenv.mkDerivation rec {
     sha256 = "1vdyj6xvwkisrc222i84mq93gasywad4i0ismafdjq2wapxn30r6";
   };
 
-  buildInputs = [ pkgconfig glib libxml2 gnutls gsasl ]
+  buildInputs = [ pkgconfig glib libxml2 gsasl ]
     ++ optional gtkWidgets gtk
     ++ optional documentation gtkdoc
     ++ optional avahiSupport avahi
     ++ optional daemon libdaemon;
+
+  propagatedBuildInputs = [ gnutls ];
   
   configureFlags = ''
     ${if documentation then "--enable-gtk-doc" else "--disable-gtk-doc"}

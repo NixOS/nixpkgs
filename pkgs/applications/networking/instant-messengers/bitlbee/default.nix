@@ -1,14 +1,17 @@
-{ fetchurl, stdenv, gnutls, glib, pkgconfig }:
+{ fetchurl, stdenv, gnutls, glib, pkgconfig, check }:
 
 stdenv.mkDerivation rec {
-  name = "bitlbee-1.2.4";
+  name = "bitlbee-1.2.8";
 
   src = fetchurl {
-    url = "mirror://bitlbee/src/" + name + ".tar.gz";
-    sha256 = "1lwcjh1r81xqf6fxjwd2a2hv8dq9g0iyc8dnbr1pgas4vmjg9xf2";
+    url = "mirror://bitlbee/src/${name}.tar.gz";
+    sha256 = "11lfxvra46mwcnlxvhnywv6xbp7zl3h27hsbfwdh16b6fy41n1is";
   };
 
-  buildInputs = [ gnutls glib pkgconfig ];
+  buildInputs = [ gnutls glib pkgconfig ]
+    ++ stdenv.lib.optional doCheck check;
+
+  doCheck = true;
 
   meta = {
     description = "BitlBee, an IRC to other chat networks gateway";
@@ -26,5 +29,8 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.bitlbee.org/;
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

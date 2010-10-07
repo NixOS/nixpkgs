@@ -202,11 +202,12 @@ in
 import ./generic.nix (
 
   rec {
-    version = "2.6.32.21-xen-2968b25";
+    version = "2.6.32.24-xen-179eca5";
+    localVersion = "-xen-179eca5";
   
     src = fetchurl {
       url = "http://nixos.org/tarballs/linux-${version}.tar.bz2";
-      sha256 = "06dxwchyxvfwg35y78bs0bm91ah6jlb6pjkqwgdnsgfjnxhibfx9";
+      sha256 = "09a7xh4hvw0hzq67dqdxn8p4rkd907937xvshx30rg4ab6717scf";
     };
 
     config = configWithPlatform stdenv.platform;

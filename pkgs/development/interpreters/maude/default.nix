@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''./configure --disable-dependency-tracking --prefix=$out --datadir=$out/share/maude TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
 
-  doCheck = true;
+  # The test suite is known to fail on Darwin. If maude is ever updated to a
+  # new version, this exception ought to be removed again.
+  doCheck = !stdenv.isDarwin;
 
   postInstall =
   ''

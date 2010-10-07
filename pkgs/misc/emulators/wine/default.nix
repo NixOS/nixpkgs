@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
     freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
-    xlibs.libXcursor xlibs.libXcomposite
+    xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls
   ];
 
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   postInstall = "install -D ${gecko} $out/share/wine/gecko/wine_gecko-1.1.0-x86.cab";
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "http://www.winehq.org/";
