@@ -135,11 +135,15 @@ let
       module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     };
 
-    system_tarball_fuloong2f = makeSystemTarball {
+    system_tarball_fuloong2f =
+        assert builtins.currentSystem == "mips64-linux";
+      makeSystemTarball {
       module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
     } { system = "mips64-linux"; };
 
-    system_tarball_sheevaplug = makeSystemTarball {
+    system_tarball_sheevaplug =
+        assert builtins.currentSystem == "armv5tel-linux";
+      makeSystemTarball {
       module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
     } { system = "armv5tel-linux"; };
 
