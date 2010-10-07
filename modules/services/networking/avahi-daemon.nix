@@ -81,12 +81,6 @@ in
           Whether to enable the mDNS NSS (Name Service Switch) plug-in.
           Enabling it allows applications to resolve names in the `.local'
           domain by transparently querying the Avahi daemon.
-
-          Warning: Currently, enabling this option breaks DNS lookups after
-          a `nixos-rebuild'.  This is because `/etc/nsswitch.conf' is
-          updated to use `nss-mdns' but `libnss_mdns' is not in
-          applications' `LD_LIBRARY_PATH'.  The next time `/etc/profile' is
-          sourced, it will set up an appropriate `LD_LIBRARY_PATH', though.
         '';
       };
       
