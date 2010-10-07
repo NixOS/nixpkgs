@@ -76,10 +76,14 @@ stdenv.mkDerivation ({
     ./nix-locale-archive.patch
   ];
 
-  # Needed for glibc to build with the gnumake 3.82
-  # http://comments.gmane.org/gmane.linux.lfs.support/31227
   postPatch = ''
+    # Needed for glibc to build with the gnumake 3.82
+    # http://comments.gmane.org/gmane.linux.lfs.support/31227
     sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
+
+    # nscd needs libgcc, and we don't want it dynamically linked
+    # because we don't want it to depend on bootstrap-tools libs.
+    echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
   '';
 
   configureFlags = [
