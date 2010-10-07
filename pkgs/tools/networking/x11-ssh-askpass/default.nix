@@ -15,4 +15,12 @@ stdenv.mkDerivation {
   buildPhase = "xmkmf; make includes; make";
 
   buildInputs = [x11 imake];
+
+  meta = {
+    homepage = "http://www.jmknoble.net/software/x11-ssh-askpass/";
+    description = "lightweight passphrase dialog for OpenSSH or other open variants of SSH";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [];
+  };
 }
