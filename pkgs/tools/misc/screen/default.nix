@@ -8,4 +8,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ncurses];
+
+  meta = {
+    homepage = "http://www.gnu.org/software/screen/";
+    description = "Full-screen window manager that multiplexes a physical terminal";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [];
+  };
 }
