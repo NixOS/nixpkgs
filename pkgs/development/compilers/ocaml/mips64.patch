@@ -1,0 +1,204 @@
+http://www.mail-archive.com/caml-list@yquem.inria.fr/msg04424.html
+
+diff -u -r ocaml-3.11.1/asmcomp/mips/arch.ml my_ocaml/asmcomp/mips/arch.ml
+--- ocaml-3.11.1/asmcomp/mips/arch.ml 2002-11-29 16:03:36.000000000 +0100
++++ my_ocaml/asmcomp/mips/arch.ml 2009-08-09 23:18:31.000000000 +0200
+@@ -35,7 +35,7 @@
+ 
+ let big_endian =
+   match Config.system with
+-    "ultrix" -> false
++    "ultrix" | "gnu" -> false
+   | "irix" -> true
+   | _ -> fatal_error "Arch_mips.big_endian"
+ 
+diff -u -r ocaml-3.11.1/asmcomp/mips/emit.mlp my_ocaml/asmcomp/mips/emit.mlp
+--- ocaml-3.11.1/asmcomp/mips/emit.mlp  2004-01-05 21:25:56.000000000 +0100
++++ my_ocaml/asmcomp/mips/emit.mlp  2009-08-23 12:11:58.000000000 +0200
+@@ -252,7 +252,7 @@
+     | Lop(Icall_ind) ->
+         `  move  $25, {emit_reg i.arg.(0)}\n`;
+         liveregs i live_25;
+-        `  jal {emit_reg i.arg.(0)}\n`;
++        `  jal $25\n`; (* {emit_reg i.arg.(0)}\n; Equivalent but avoids "Warning: MIPS PIC call to register other than $25" on GNU as *)
+         `{record_frame i.live}\n`
+     | Lop(Icall_imm s) ->
+         liveregs i 0;
+@@ -269,7 +269,7 @@
+         liveregs i 0;
+         `  move  $25, {emit_reg i.arg.(0)}\n`;
+         liveregs i live_25;
+-        `  j {emit_reg i.arg.(0)}\n`
++        `  j $25\n`
+     | Lop(Itailcall_imm s) ->
+         if s = !function_name then begin
+           `  b {emit_label !tailrec_entry_point}\n`
+@@ -277,11 +277,11 @@
+           let n = frame_size() in
+           if !contains_calls then
+             `  lw  $31, {emit_int(n - 4)}($sp)\n`;
++          `  la  $25, {emit_symbol s}\n`;
+           if !uses_gp then
+             `  lw  $gp, {emit_int(n - 8)}($sp)\n`;
+           if n > 0 then
+             `  addu  $sp, $sp, {emit_int n}\n`;
+-          `  la  $25, {emit_symbol s}\n`;
+           liveregs i live_25;
+           `  j $25\n`
+         end
+@@ -305,8 +305,13 @@
+         begin match chunk with
+           Double_u ->
+             (* Destination is not 8-aligned, hence cannot use l.d *)
+-            `  ldl $24, {emit_addressing addr i.arg 0}\n`;
+-            `  ldr $24, {emit_addressing (offset_addressing addr 7) i.arg 0}\n`;
++            if big_endian then begin
++              `  ldl $24, {emit_addressing addr i.arg 0}\n`;
++              `  ldr $24, {emit_addressing (offset_addressing addr 7) i.arg 0}\n`
++            end else begin
++              `  ldl $24, {emit_addressing (offset_addressing addr 7) i.arg 0}\n`;
++              `  ldr $24, {emit_addressing addr i.arg 0}\n`
++            end;
+             `  dmtc1 $24, {emit_reg dest}\n`
+         | Single ->
+             `  l.s {emit_reg dest}, {emit_addressing addr i.arg 0}\n`;
+@@ -328,8 +333,13 @@
+           Double_u ->
+             (* Destination is not 8-aligned, hence cannot use l.d *)
+             `  dmfc1 $24, {emit_reg src}\n`;
+-            `  sdl $24, {emit_addressing addr i.arg 1}\n`;
+-            `  sdr $24, {emit_addressing (offset_addressing addr 7) i.arg 1}\n`
++            if big_endian then begin
++              `  sdl $24, {emit_addressing addr i.arg 1}\n`;
++              `  sdr $24, {emit_addressing (offset_addressing addr 7) i.arg 1}\n`
++            end else begin
++              `  sdl $24, {emit_addressing (offset_addressing addr 7) i.arg 1}\n`;
++              `  sdr $24, {emit_addressing addr i.arg 1}\n`
++            end
+         | Single ->
+             `  cvt.s.d $f31, {emit_reg src}\n`;
+             `  s.s $f31, {emit_addressing addr i.arg 1}\n`
+@@ -552,16 +562,18 @@
+   (* There are really two groups of registers:
+       $sp and $30 always point to stack locations
+       $2 - $21 never point to stack locations. *)
+-  `  .noalias $2,$sp;  .noalias $2,$30;  .noalias $3,$sp;  .noalias $3,$30\n`;
+-  `  .noalias $4,$sp;  .noalias $4,$30;  .noalias $5,$sp;  .noalias $5,$30\n`;
+-  `  .noalias $6,$sp;  .noalias $6,$30;  .noalias $7,$sp;  .noalias $7,$30\n`;
+-  `  .noalias $8,$sp;  .noalias $8,$30;  .noalias $9,$sp;  .noalias $9,$30\n`;
+-  `  .noalias $10,$sp; .noalias $10,$30; .noalias $11,$sp; .noalias $11,$30\n`;
+-  `  .noalias $12,$sp; .noalias $12,$30; .noalias $13,$sp; .noalias $13,$30\n`;
+-  `  .noalias $14,$sp; .noalias $14,$30; .noalias $15,$sp; .noalias $15,$30\n`;
+-  `  .noalias $16,$sp; .noalias $16,$30; .noalias $17,$sp; .noalias $17,$30\n`;
+-  `  .noalias $18,$sp; .noalias $18,$30; .noalias $19,$sp; .noalias $19,$30\n`;
+-  `  .noalias $20,$sp; .noalias $20,$30; .noalias $21,$sp; .noalias $21,$30\n\n`;
++  if Config.system = "irix" then begin
++    `  .noalias $2,$sp;  .noalias $2,$30;  .noalias $3,$sp;  .noalias $3,$30\n`;
++    `  .noalias $4,$sp;  .noalias $4,$30;  .noalias $5,$sp;  .noalias $5,$30\n`;
++    `  .noalias $6,$sp;  .noalias $6,$30;  .noalias $7,$sp;  .noalias $7,$30\n`;
++    `  .noalias $8,$sp;  .noalias $8,$30;  .noalias $9,$sp;  .noalias $9,$30\n`;
++    `  .noalias $10,$sp; .noalias $10,$30; .noalias $11,$sp; .noalias $11,$30\n`;
++    `  .noalias $12,$sp; .noalias $12,$30; .noalias $13,$sp; .noalias $13,$30\n`;
++    `  .noalias $14,$sp; .noalias $14,$30; .noalias $15,$sp; .noalias $15,$30\n`;
++    `  .noalias $16,$sp; .noalias $16,$30; .noalias $17,$sp; .noalias $17,$30\n`;
++    `  .noalias $18,$sp; .noalias $18,$30; .noalias $19,$sp; .noalias $19,$30\n`;
++    `  .noalias $20,$sp; .noalias $20,$30; .noalias $21,$sp; .noalias $21,$30\n\n`
++  end;
+   let lbl_begin = Compilenv.make_symbol (Some "data_begin") in
+   `  .data\n`;
+   `  .globl  {emit_symbol lbl_begin}\n`;
+diff -u -r ocaml-3.11.1/asmrun/mips.s my_ocaml/asmrun/mips.s
+--- ocaml-3.11.1/asmrun/mips.s  2004-07-13 14:18:53.000000000 +0200
++++ my_ocaml/asmrun/mips.s  2009-08-20 09:34:36.000000000 +0200
+@@ -187,7 +187,7 @@
+         sw      $30, caml_exception_pointer
+     /* Call C function */
+         move    $25, $24
+-        jal     $24
++        jal     $25
+     /* Reload return address, alloc ptr, alloc limit */
+         lw      $31, 0($16)     /* caml_last_return_address */
+         lw      $22, 0($17)     /* caml_young_ptr */
+@@ -254,7 +254,7 @@
+         sw      $0, caml_last_return_address
+     /* Call the Caml code */
+         move    $25, $24
+-        jal     $24
++        jal     $25
+ $104:
+     /* Pop the trap frame, restoring caml_exception_pointer */
+         lw      $24, 0($sp)
+diff -u -r ocaml-3.11.1/configure my_ocaml/configure
+--- ocaml-3.11.1/configure  2009-05-20 17:33:09.000000000 +0200
++++ my_ocaml/configure  2009-08-23 10:55:44.000000000 +0200
+@@ -40,7 +40,7 @@
+ verbose=no
+ withcurses=yes
+ withsharedlibs=yes
+-gcc_warnings="-Wall"
++gcc_warnings="-W -Wall"
+ partialld="ld -r"
+ 
+ # Try to turn internationalization off, can cause config.guess to malfunction!
+@@ -292,6 +292,9 @@
+     # (For those who want to force "cc -64")
+     # Turn off warning "unused library"
+     bytecclinkopts="-Wl,-woff,84";;
++  gcc*,mips64el-*)
++    bytecccompopts=""
++    bytecclinkopts="-fno-defer-pop $gcc_warnings -Wl,-O1 -Wl,--as-needed";;
+   *,alpha*-*-unicos*)
+     # For the Cray T3E
+     bytecccompopts="-DUMK";;
+@@ -468,6 +471,8 @@
+         echo "64-bit integers must be doubleword-aligned."
+         echo "#define ARCH_ALIGN_INT64" >> m.h
+       fi;;
++    mips64el-*)
++     echo "#define ARCH_ALIGN_INT64" >> m.h;;
+     *)
+       sh ./runtest int64align.c
+       case $? in
+@@ -636,6 +641,7 @@
+                                 fi;;
+   i[3456]86-*-gnu*)             arch=i386; system=gnu;;
+   mips-*-irix6*)                arch=mips; system=irix;;
++  mips*-gnu*)                   arch=mips; system=gnu;;
+   hppa1.1-*-hpux*)              arch=hppa; system=hpux;;
+   hppa2.0*-*-hpux*)             arch=hppa; system=hpux;;
+   hppa*-*-linux*)               arch=hppa; system=linux;;
+@@ -672,7 +678,7 @@
+ if test -z "$ccoption"; then
+   case "$arch,$system,$cc" in
+     alpha,digital,gcc*) nativecc=cc;;
+-    mips,*,gcc*) nativecc=cc;;
++    mips,irix,gcc*) nativecc=cc;;
+     *) nativecc="$bytecc";;
+   esac
+ else
+@@ -687,6 +693,9 @@
+   alpha,cc*,digital,*) nativecccompopts=-std1;;
+   mips,cc*,irix,*)     nativecccompopts=-n32
+                        nativecclinkopts="-n32 -Wl,-woff,84";;
++  mips,gcc*,gnu,mips64el-*)
++                       nativecccompopts="$gcc_warnings -fPIC"
++                       nativecclinkopts="--as-needed";;
+   *,*,nextstep,*)      nativecccompopts="$gcc_warnings -U__GNUC__ -posix"
+                        nativecclinkopts="-posix";;
+   *,*,rhapsody,*darwin[1-5].*)
+@@ -725,6 +734,8 @@
+                     aspp='gcc -c -Wa,-xexplicit';;
+   mips,*,irix)      as='as -n32 -O2 -nocpp -g0'
+                     aspp='as -n32 -O2';;
++  mips,*,gnu)       as='as -KPIC'
++                    aspp='gcc -c -fPIC';;  # got bus error without fPIC ?
+   power,*,elf)      as='as -u -m ppc'
+                     aspp='gcc -c';;
+   power,*,bsd)      as='as'
+@@ -756,6 +767,7 @@
+     case "$nativecc" in gcc*) ;; *) cc_profile='-xpg';; esac;;
+   amd64,*,linux) profiling='prof';;
+   amd64,*,gnu) profiling='prof';;
++  mips,*,gnu) profiling='prof';;
+   *) profiling='noprof';;
+ esac
