@@ -198,6 +198,11 @@ in
       patch = ./dell-rfkill.patch;
     };
 
+  sheevaplug_modules_2_6_35 =
+    { name = "sheevaplug_modules-2.6.35";
+      patch = ./sheevaplug_modules-2.6.35.patch;
+    };
+
   guruplug_defconfig =
     {
       # Default configuration for the GuruPlug.  From

@@ -4661,7 +4661,8 @@ let
       [ #kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_2_6_35
-      ];
+      ] ++ lib.optional (platform.kernelArch == "arm")
+        kernelPatches.sheevaplug_modules_2_6_35;
   };
 
   linux_nanonote_jz_2_6_34 = makeOverridable
