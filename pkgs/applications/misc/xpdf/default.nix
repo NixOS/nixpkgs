@@ -53,4 +53,12 @@ stdenv.mkDerivation {
         --replace '#displayFontT1' displayFontT1
     fi
   ";
+
+  meta = {
+    homepage = "http://www.foolabs.com/xpdf/";
+    description = "viewer for Portable Document Format (PDF) files";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [];
+  };
 }
