@@ -52,9 +52,9 @@ with pkgs;
        $two->mustSucceed("test `wc -l < out` -gt 0");
 
        # NSS-mDNS.
-       print STDERR $one->mustSucceed("ping -c1 one.local");
-       print STDERR $one->mustSucceed("ping -c1 two.local");
-       print STDERR $two->mustSucceed("ping -c1 one.local");
-       print STDERR $two->mustSucceed("ping -c1 two.local");
+       print STDERR $one->mustSucceed("getent hosts one.local");
+       print STDERR $one->mustSucceed("getent hosts two.local");
+       print STDERR $two->mustSucceed("getent hosts one.local");
+       print STDERR $two->mustSucceed("getent hosts two.local");
     '';
 }
