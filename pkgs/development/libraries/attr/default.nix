@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libtool, gettext}:
+{ stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   name = "attr-2.4.44";
@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [gettext];
-  buildInputs = [libtool];
 
-  configureFlags = "MAKE=make LIBTOOL=libtool MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
+  configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
 
   installTargets = "install install-lib install-dev";
 
