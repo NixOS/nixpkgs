@@ -2601,6 +2601,8 @@ let
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
+  check = callPackage ../development/libraries/check { };
+
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
     inherit cmake freeglut mesa;
     inherit (xlibs) libX11 xproto inputproto libXi libXmu;
