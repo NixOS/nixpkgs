@@ -1,4 +1,4 @@
-{ nixpkgs ? ../nixpkgs }:
+{ nixpkgs ? ../stdenv-updates-svn }:
 
 let
 
@@ -66,6 +66,7 @@ let
             description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
           };
+          inherit config;
         };
 
 
