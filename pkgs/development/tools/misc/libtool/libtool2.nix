@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, perl, lzma }:
 
 stdenv.mkDerivation rec {
-  name = "libtool-2.2.10";
+  name = "libtool-2.4";
 
   src = fetchurl {
-    url = "mirror://gnu/libtool/${name}.tar.lzma";
-    sha256 = "146lf1gas8gdpcjdn6ffad605n198ja0jqwxpixyglabczwpisba";
+    url = "mirror://gnu/libtool/${name}.tar.gz";
+    sha256 = "0bpnvmqryzqpiz184phdg3z38a16ad7dd5bfbmn1jkm9cfmmgpqk";
   };
 
   buildNativeInputs = [ lzma m4 perl ];
