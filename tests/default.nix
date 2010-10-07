@@ -6,6 +6,7 @@
 with import ../lib/testing.nix { inherit nixpkgs services system; };
 
 {
+  avahi = makeTest (import ./avahi.nix);
   bittorrent = makeTest (import ./bittorrent.nix);
   firefox = makeTest (import ./firefox.nix);
   installer = makeTests (import ./installer.nix);
