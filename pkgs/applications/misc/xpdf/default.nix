@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02.tar.gz;
     sha256 = "000zq4ddbwyxiki4vdwpmxbnw5n9hsg9hvwra2p33hslyib7sfmk";
   };
-  
+
   buildInputs =
     (if enableGUI then [x11 motif] else []) ++
     (if useT1Lib then [t1lib] else []);
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     })
     ./xpdf-3.02-protection.patch
   ];
-    
+
   configureFlags =
     [ "--enable-a4-paper" ] /* We obey ISO standards! */
     ++ (if enablePDFtoPPM then [
