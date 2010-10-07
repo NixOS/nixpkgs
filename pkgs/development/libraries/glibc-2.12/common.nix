@@ -69,9 +69,6 @@ stdenv.mkDerivation ({
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
 
-    /* Make sure `nscd' et al. are linked against `libssp'.  */
-    ./stack-protector-link.patch
-
     /* Fix for the check of -fgnu89-inline compiler flag */
     ./gnu89-inline.patch
 
