@@ -42,31 +42,6 @@ Subject: [PATCH]         * config/tc-mips.c (mips_fix_loongson2f, mips_fix_loong
  create mode 100644 gas/testsuite/gas/mips/loongson-2f-3.d
  create mode 100644 gas/testsuite/gas/mips/loongson-2f-3.s
 
-diff --git a/gas/ChangeLog b/gas/ChangeLog
-index f35eb3a..6dca72b 100644
---- a/gas/ChangeLog
-+++ b/gas/ChangeLog
-@@ -1,3 +1,20 @@
-+2010-02-25  Wu Zhangjin <wuzhangjin@gmail.com>
-+
-+	* config/tc-mips.c (mips_fix_loongson2f, mips_fix_loongson2f_nop,
-+	mips_fix_loongson2f_jump): New variables.
-+	(md_longopts): Add New options -mfix-loongson2f-nop/jump,
-+	-mno-fix-loongson2f-nop/jump.
-+	(md_parse_option): Initialize variables via above options.
-+	(options): New enums for the above options.
-+	(md_begin): Initialize nop_insn from LOONGSON2F_NOP_INSN.
-+	(fix_loongson2f, fix_loongson2f_nop, fix_loongson2f_jump):
-+	New functions.
-+	(append_insn): call fix_loongson2f().
-+	(mips_handle_align): Replace the implicit nops.
-+	* config/tc-mips.h (MAX_MEM_FOR_RS_ALIGN_CODE): Modified
-+	for the new mips_handle_align().
-+	* doc/c-mips.texi: Document the new options.
-+
- 2010-02-23  Daniel Gutson  <dgutson@codesourcery.com>
- 
- 	* config/tc-arm.c (do_rd_rm_rn): Added warning
 diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
 index 94128fe..f901ae4 100644
 --- a/gas/config/tc-mips.c
@@ -363,22 +338,6 @@ index 34fa694..641e60f 100644
  @item -mfix-vr4120
  @itemx -mno-fix-vr4120
  Insert nops to work around certain VR4120 errata.  This option is
-diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
-index 3ee595b..439e734 100644
---- a/gas/testsuite/ChangeLog
-+++ b/gas/testsuite/ChangeLog
-@@ -1,3 +1,11 @@
-+2010-02-25  Wu Zhangjin  <wuzhangjin@gmail.com>
-+
-+	* gas/mips/loongson-2f-2.s: New test of -mfix-loongson2f-nop.
-+	* gas/mips/loongson-2f-2.d: Likewise.
-+	* gas/mips/loongson-2f-3.s: New test of -mfix-loongson2f-jump.
-+	* gas/mips/loongson-2f-3.d: Likewise.
-+	* gas/mips/mips.exp: Run the new tests.
-+
- 2010-02-24  Nick Clifton  <nickc@redhat.com>
- 
- 	PR binutils/6773
 diff --git a/gas/testsuite/gas/mips/loongson-2f-2.d b/gas/testsuite/gas/mips/loongson-2f-2.d
 new file mode 100644
 index 0000000..f5267a8
@@ -502,18 +461,6 @@ index 14ce5cc..34bb5ea 100644
  
      run_dump_test_arches "octeon"	[mips_arch_list_matching octeon]
      run_list_test_arches "octeon-ill" "" \
-diff --git a/include/opcode/ChangeLog b/include/opcode/ChangeLog
-index 39cecde..549d565 100644
---- a/include/opcode/ChangeLog
-+++ b/include/opcode/ChangeLog
-@@ -1,3 +1,7 @@
-+2010-02-25  Wu Zhangjin  <wuzhangjin@gmail.com>
-+
-+	* mips.h: (LOONGSON2F_NOP_INSN): New macro.
-+
- 2010-02-08  Philipp Tomsich  <philipp.tomsich@theobroma-systems.com>
- 
- 	* opcode/ppc.h (PPC_OPCODE_TITAN): Define.
 diff --git a/include/opcode/mips.h b/include/opcode/mips.h
 index 27d10e6..d6b3cf4 100644
 --- a/include/opcode/mips.h

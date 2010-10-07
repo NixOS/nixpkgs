@@ -6,7 +6,9 @@ let
     targetIsMips = stdenv.system == "mips64-linux" || (cross != null && cross.arch == "mips");
 in
 stdenv.mkDerivation rec {
-  name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
+  # In the case of targetIsMips we apply a version-bump patch
+  name = (if targetIsMips then "binutils-2.20.51" else
+    basename) + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -18,7 +20,11 @@ stdenv.mkDerivation rec {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
-  ] ++ stdenv.lib.optionals targetIsMips [ ./loongson2f.patch ./version-bump.patch ];
+  ]
+    # For loongson2f (the only mips running nixos now) we need these patches for
+    # linux to build. It checks the binutils version, so we have even to udpate the
+    # version.
+    ++ stdenv.lib.optionals targetIsMips [ ./loongson2f.patch ./version-bump.patch ];
 
   inherit noSysDirs;
 

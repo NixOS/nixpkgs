@@ -1,29 +1,3 @@
-From 3ca360dab62f7008f42d835affe5c89144db3e07 Mon Sep 17 00:00:00 2001
-From: Tristan Gingold <gingold@adacore.com>
-Date: Fri, 4 Sep 2009 08:48:19 +0000
-Subject: [PATCH] bfd/
- 2009-09-04  Tristan Gingold  <gingold@adacore.com>
-
-	* configure.in: Bump version to 2.20.51
-	* configure: Regenerated.
----
- bfd/ChangeLog    |    5 +++++
- bfd/configure.in |    2 +-
- 2 files changed, 6 insertions(+), 1 deletions(-)
-
-diff --git a/bfd/ChangeLog b/bfd/ChangeLog
-index 8a26fa4..8b0f252 100644
---- a/bfd/ChangeLog
-+++ b/bfd/ChangeLog
-@@ -1,3 +1,8 @@
-+2009-09-04  Tristan Gingold  <gingold@adacore.com>
-+
-+	* configure.in: Bump version to 2.20.51
-+	* configure: Regenerated.
-+
- 2009-09-04  Alan Modra  <amodra@bigpond.net.au>
- 
- 	* elf32-spu.c (spu_elf_relocate_section): Correct 2009-07-24 logic.
 diff --git a/bfd/configure.in b/bfd/configure.in
 index 0a8d486..a3cc89a 100644
 --- a/bfd/configure.in
@@ -32,7 +6,7 @@ index 0a8d486..a3cc89a 100644
  AC_CANONICAL_TARGET
  AC_ISC_POSIX
  
--AM_INIT_AUTOMAKE(bfd, 2.19.51)
+-AM_INIT_AUTOMAKE(bfd, 2.20.1)
 +AM_INIT_AUTOMAKE(bfd, 2.20.51)
  
  dnl These must be called before LT_INIT, because it may want
