@@ -48,9 +48,9 @@ let
     else if stdenv.system == "i686-linux" then
       if debug then {
         # The debug version also contains a player
-        version = "10.1pre2-debug-121709";
-        url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer10_1_p2_debug_linux_121709.tar.gz;
-        sha256 = "162cnzn8sfdvr8mwyggsxi2bcl7zzi1nrl61bw481hhhpwnrjdx4";
+        version = "10.2_p2-debug-r092710";
+        url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer_square_p2_32bit_debug_linux_092710.tar.gz;
+        sha256 = "11w3mxa39l4mnlsqzlwbdh1sald549afyqbx2kbid7in5qzamlcc";
       } else {
         version = "10.1.82.76";
         url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
