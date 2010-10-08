@@ -4,7 +4,7 @@ assert zlib != null;
 
 stdenv.mkDerivation rec {
   version = "1.4.4";
-  name = "libpng-${version}";
+  name = "libpng-apng-${version}";
   
   patch_src = fetchurl {
     url = "mirror://sourceforge/project/libpng-apng/libpng-master/${version}/libpng-${version}-apng.patch.gz";
