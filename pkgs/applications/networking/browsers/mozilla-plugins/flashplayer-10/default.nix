@@ -40,10 +40,10 @@ let
         # http://labs.adobe.com/technologies/flashplayer10/faq.html
         throw "no x86_64 debugging version available"
       else {
-        # -> http://labs.adobe.com/downloads/flashplayer10_64bit.html
-        version = "10.1_p1-r091510";
-        url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer_square_p1_64bit_linux_091510.tar.gz;
-        sha256 = "0dzhvnxcwfyiqvk2jn2hmdy29qclq95zd57w7bca82m8bsj1sn4b";
+        # -> http://labs.adobe.com/downloads/flashplayer10.html
+        version = "10.1_p2-r092710";
+        url = http://download.macromedia.com/pub/labs/flashplayer10/flashplayer_square_p2_64bit_linux_092710.tar.gz;
+        sha256 = "188dn08n3rb6w3hzq4snqvip5njxdyc8k8arp8xnlqw331lfvapx";
       }
     else if stdenv.system == "i686-linux" then
       if debug then {
