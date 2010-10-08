@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit zlib; };
   
   meta = {
-    description = "The official reference implementation for the PNG file format";
+    description = "The official reference implementation for the PNG file format with animation patch";
     homepage = http://www.libpng.org/pub/png/libpng.html;
     license = "free-non-copyleft"; # http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
   };
