@@ -5,8 +5,6 @@ let version = "2.7"; in
 stdenv.mkDerivation {
   name = "gnugrep-${version}";
   
-  patches = [ ./malloc.patch ];
-  
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.gz";
     sha256 = "1b8vksfd1ngharac3ygaqim3lrf0yqap992sg0vfm7572l88655d";
