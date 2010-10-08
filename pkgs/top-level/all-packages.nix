@@ -3380,6 +3380,7 @@ let
   libpcap = callPackage ../development/libraries/libpcap { };
 
   libpng = callPackage ../development/libraries/libpng { };
+  libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
 
   libproxy = callPackage ../development/libraries/libproxy { };
 
