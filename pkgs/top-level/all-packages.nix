@@ -401,6 +401,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  barcode = callPackage ../tools/graphics/barcode {};
+
   bc = callPackage ../tools/misc/bc { };
 
   bfr = callPackage ../tools/misc/bfr { };
