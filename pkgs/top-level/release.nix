@@ -541,6 +541,8 @@ with (import ./release-lib.nix);
     xfce4icontheme = linux;
     xfce4panel = linux;
     xfce4session = linux;
+    xfce4settings = linux;
+    xfceutils = linux;
     xfdesktop = linux;
     xfwm4 = linux;
   };
