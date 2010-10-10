@@ -133,12 +133,12 @@
     kimagemapeditor = callPackage ./webdev/kimagemapeditor.nix { };
   };
 
-  kdepim_runtime = callPackage ../kde-4.4/pim-runtime { };
-  kdepim = callPackage ../kde-4.4/pim { };
+  kdepim_runtime = callPackage ./pim-runtime { };
+  kdepim = callPackage ./pim { };
 
   # Experimental 4.5 versions
-  kdepim_runtime45 = callPackage ./pim-runtime { };
-  kdepim45 = callPackage ./pim { };
+  kdepim_runtime45 = callPackage ./pim-runtime45 { };
+  kdepim45 = callPackage ./pim45 { };
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };

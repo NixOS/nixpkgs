@@ -405,6 +405,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  barcode = callPackage ../tools/graphics/barcode {};
+
   bc = callPackage ../tools/misc/bc { };
 
   bfr = callPackage ../tools/misc/bfr { };
@@ -3399,6 +3401,7 @@ let
   libpcap = callPackage ../development/libraries/libpcap { };
 
   libpng = callPackage ../development/libraries/libpng { };
+  libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
 
   libproxy = callPackage ../development/libraries/libproxy { };
 
@@ -3716,7 +3719,7 @@ let
     mysqlSupport = true;
   };
 
-  qt4 = qt46;
+  qt4 = pkgs.kde4.qt4;
 
   qt45 = callPackage ../development/libraries/qt-4.x/4.5 {
     inherit (gnome) glib;
@@ -5607,6 +5610,11 @@ let
     inherit (gnome) libIDL;
   };
 
+  firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
   firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
 
   flac = callPackage ../applications/audio/flac { };
@@ -6728,20 +6736,15 @@ let
 
   kde4 = kde44;
 
-  kde44 = makeOverridable (import ../desktops/kde-4.4) (pkgs // {
-    qt4 = pkgs.qt46;
-  });
+  kde44 = makeOverridable (import ../desktops/kde-4.4) (
+    applyGlobalOverrides (p: { kde4 = p.kde44; qt4 = p.qt46; }));
 
   kde45 = callPackage ../desktops/kde-4.5 {
-    callPackage = newScope ({
-      qjson  = pkgs.qjson.override { inherit (pkgs.kde45) qt4; };
-      pyqt4 = pkgs.pyqt4.override { inherit (pkgs.kde45) qt4; };
-      libdbusmenu_qt = pkgs.libdbusmenu_qt.override { inherit (pkgs.kde45) qt4; };
-      libktorrent = pkgs.libktorrent.override {
-        inherit (pkgs.kde45) qt4 kdelibs;
-      };
-      shared_desktop_ontologies = pkgs.shared_desktop_ontologies.override { v = "0.5"; };
-    } // pkgs.kde45);
+    callPackage =
+      let
+        pkgs_for_45 = (applyGlobalOverrides (p: { kde4 = p.kde45; }));
+      in
+        pkgs_for_45.newScope pkgs_for_45.kde45;
   };
 
   xfce = xfce4;
