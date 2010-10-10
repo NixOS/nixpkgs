@@ -1,14 +1,16 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf singleton concatStrings;
   inherit (pkgs) postgresql gzip;
 
   location = config.services.postgresqlBackup.location ;
 
-  postgresqlBackupCron = db : ''
-    ${config.services.postgresqlBackup.period} root ${postgresql}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
-  ''; 
+  postgresqlBackupCron = db:
+    ''
+      ${config.services.postgresqlBackup.period} root ${postgresql}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
+    ''; 
 
 in
 
@@ -52,14 +54,13 @@ in
   };
 
   config = mkIf config.services.postgresqlBackup.enable {
-    services.cron = {
-      systemCronJobs = map postgresqlBackupCron config.services.postgresqlBackup.databases;
-    };
+    services.cron.systemCronJobs = map postgresqlBackupCron config.services.postgresqlBackup.databases;
 
-    system.activationScripts.postgresqlBackup = pkgs.stringsWithDeps.fullDepEntry ''
-         mkdir -m 0700 -p ${config.services.postgresqlBackup.location}
-         chown root ${config.services.postgresqlBackup.location}
-    '' [ "stdio" "defaultPath" "systemConfig" "users" ];
+    system.activationScripts.postgresqlBackup = stringAfter [ "stdio" "defaultPath" "systemConfig" "users" ]
+      ''
+        mkdir -m 0700 -p ${config.services.postgresqlBackup.location}
+        chown root ${config.services.postgresqlBackup.location}
+      '';
   };
   
 }

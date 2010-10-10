@@ -156,7 +156,23 @@ in
 
   config = {
 
-    system.activationScripts.users = fullDepEntry
+    system.activationScripts.rootPasswd = stringAfter [ "etc" ]
+      ''
+        # If there is no password file yet, create a root account with an
+        # empty password.
+        if ! test -e /etc/passwd; then
+            rootHome=/root
+            touch /etc/passwd; chmod 0644 /etc/passwd
+            touch /etc/group; chmod 0644 /etc/group
+            touch /etc/shadow; chmod 0600 /etc/shadow
+            # Can't use useradd, since it complains that it doesn't know us
+            # (bootstrap problem!).
+            echo "root:x:0:0:System administrator:$rootHome:${config.users.defaultUserShell}" >> /etc/passwd
+            echo "root::::::::" >> /etc/shadow
+        fi
+      '';
+
+    system.activationScripts.users = stringAfter [ "groups" ]
       ''
         echo "updating users..."
 
@@ -206,9 +222,9 @@ in
             fi
 
         done
-      '' [ "groups" ];
+      '';
 
-    system.activationScripts.groups = fullDepEntry
+    system.activationScripts.groups = stringAfter [ "rootPasswd" "binsh" "etc" "var" ]
       ''
         echo "updating groups..."
         
@@ -231,7 +247,7 @@ in
         done <<EndOfGroupList
         ${concatStringsSep "\n" (map serializedGroup groups)}
         EndOfGroupList
-      '' [ "rootPasswd" "binsh" "etc" "var" ];
+      '';
 
   };
 

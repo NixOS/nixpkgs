@@ -1,19 +1,21 @@
 # This module defines global configuration for the Bash shell, in
 # particular /etc/bashrc and /etc/profile.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
-    environment.shellInit = pkgs.lib.mkOption {
+    environment.shellInit = mkOption {
         default = "";
         example = ''export PATH=/godi/bin/:$PATH'';
         description = "
           Script used to initialized user shell environments.
         ";
-        merge = pkgs.lib.mergeStringOption;
+        merge = mergeStringOption;
       };
 
   };
@@ -57,4 +59,13 @@ in
     ];
 
   system.build.binsh = pkgs.bashInteractive;
+
+  system.activationScripts.binsh = stringAfter [ "stdio" ]
+    ''
+      # Create the required /bin/sh symlink; otherwise lots of things
+      # (notably the system() function) won't work.
+      mkdir -m 0755 -p /bin
+      ln -sfn ${config.system.build.binsh}/bin/sh /bin/sh
+    '';
+  
 }

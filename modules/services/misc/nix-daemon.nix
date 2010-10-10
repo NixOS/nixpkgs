@@ -277,7 +277,7 @@ in
         # do this, mount the remote file system on a subdirectory of
         # /var/run/nix/remote-stores.
         export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
-      '' 
+      '' # */
       + optionalString config.nix.distributedBuilds ''
         export NIX_BUILD_HOOK=${config.environment.nix}/libexec/nix/build-remote.pl
         export NIX_REMOTE_SYSTEMS=/etc/nix.machines
@@ -291,6 +291,33 @@ in
       '';
 
     users.extraUsers = map makeNixBuildUser (pkgs.lib.range 1 config.nix.nrBuildUsers);
+
+    system.activationScripts.nix = stringAfter [ "etc" "users" ]
+      ''
+        # Set up Nix.
+        mkdir -p /nix/etc/nix
+        ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
+        chown root.nixbld /nix/store
+        chmod 1775 /nix/store
+
+        # Nix initialisation.
+        mkdir -m 0755 -p \
+          /nix/var/nix/gcroots \
+          /nix/var/nix/temproots \
+          /nix/var/nix/manifests \
+          /nix/var/nix/userpool \
+          /nix/var/nix/profiles \
+          /nix/var/nix/db \
+          /nix/var/log/nix/drvs \
+          /nix/var/nix/channel-cache \
+          /nix/var/nix/chroots
+        mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
+        mkdir -m 1777 -p /nix/var/nix/profiles/per-user
+        mkdir -m 1777 -p /nix/var/nix/gcroots/tmp
+
+        ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
+        ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
+      '';
 
   };
 

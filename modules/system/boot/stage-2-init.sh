@@ -1,6 +1,6 @@
 #! @shell@
 
-# !!! copied from stage 1; remove duplication
+systemConfig=@systemConfig@
 
 
 # Print a greeting.
@@ -56,11 +56,6 @@ rm -f /etc/mtab* # not that we care about stale locks
 cat /proc/mounts > /etc/mtab
 
 
-# If no `systemConfig' parameter is specified on the kernel command
-# line, use a fallback.
-systemConfig=/nix/var/nix/profiles/system
-
-
 # Process the kernel command line.
 for o in $(cat /proc/cmdline); do
     case $o in
@@ -79,18 +74,12 @@ for o in $(cat /proc/cmdline); do
         safemode)
             safeMode=1
             ;;
-        systemConfig=*)
-            set -- $(IFS==; echo $o)
-            systemConfig=$2
-            ;;
         resume=*)
             set -- $(IFS==; echo $o)
             resumeDevice=$2
             ;;
     esac
 done
-
-systemConfig="$(readlink -f "$systemConfig")"
 
 
 # More special file systems, initialise required directories.
@@ -153,19 +142,16 @@ fi
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
 echo "running activation script..."
-@activateConfiguration@ "$systemConfig"
+$systemConfig/activate
 
 
 # Record the boot configuration.
-if test -n "$systemConfig"; then
-    ln -sfn "$systemConfig" /var/run/booted-system
+ln -sfn "$systemConfig" /var/run/booted-system
 
-    # Prevent the booted system form being garbage-collected
-    # If it weren't a gcroot, if we were running a different kernel,
-    # switched system, and garbage collected all, we could not load
-    # kernel modules anymore.
-    ln -sfn /var/run/booted-system /nix/var/nix/gcroots/booted-system
-fi
+# Prevent the booted system form being garbage-collected If it weren't
+# a gcroot, if we were running a different kernel, switched system,
+# and garbage collected all, we could not load kernel modules anymore.
+ln -sfn /var/run/booted-system /nix/var/nix/gcroots/booted-system
 
 
 # Ensure that the module tools can find the kernel modules.

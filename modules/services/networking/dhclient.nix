@@ -78,9 +78,13 @@ in
 
             for i in $(cd /sys/class/net && ls -d *); do
                 # Only run dhclient on interfaces of type ARPHRD_ETHER
-                # (1), i.e. Ethernet.
-                if [ "$(cat /sys/class/net/$i/type)" = 1 ]; then 
-                    if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i"; then
+                # (1), i.e. Ethernet.  Ignore peth* devices; on Xen,
+                # they're renamed physical Ethernet cards used for
+                # bridging.
+                if [ "$(cat /sys/class/net/$i/type)" = 1 ]; then
+                    if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i" &&
+                       ! echo "$i" | grep -x -q "peth.*";
+		    then
                         echo "Running dhclient on $i"
                         interfaces="$interfaces $i"
                     fi

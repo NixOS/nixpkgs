@@ -75,43 +75,44 @@ in
   config = mkIf cfg.enable {
     services.cron.systemCronJobs = [ cronJob ];
 
-    system.activationScripts.systemhealth = fullDepEntry ''
-      mkdir -p ${rrdDir} ${htmlDir}
-      chown wwwrun.wwwrun ${rrdDir} ${htmlDir}
+    system.activationScripts.systemhealth = stringAfter [ "var" ]
+      ''
+        mkdir -p ${rrdDir} ${htmlDir}
+        chown wwwrun.wwwrun ${rrdDir} ${htmlDir}
 
-      cat >${configFile} << EOF
-      [paths]
-      rrdtool = ${pkgs.rrdtool}/bin/rrdtool
-      loadavg_rrd = loadavg
-      ps = /var/run/current-system/sw/bin/ps
-      df = /var/run/current-system/sw/bin/df
-      meminfo_rrd = meminfo
-      uptime_rrd = uptime
-      rrd_path = ${rrdDir}
-      png_path = ${htmlDir}
+        cat >${configFile} << EOF
+        [paths]
+        rrdtool = ${pkgs.rrdtool}/bin/rrdtool
+        loadavg_rrd = loadavg
+        ps = /var/run/current-system/sw/bin/ps
+        df = /var/run/current-system/sw/bin/df
+        meminfo_rrd = meminfo
+        uptime_rrd = uptime
+        rrd_path = ${rrdDir}
+        png_path = ${htmlDir}
 
-      [processes]
+        [processes]
 
-      [interfaces]
-      ${interfacesSection}
+        [interfaces]
+        ${interfacesSection}
 
-      [drives]
-      ${drivesSection}
+        [drives]
+        ${drivesSection}
 
-      [graphs]
-      width = 400
-      time = ['-3hours', '-32hours', '-8days', '-5weeks', '-13months']
-      height = 100
+        [graphs]
+        width = 400
+        time = ['-3hours', '-32hours', '-8days', '-5weeks', '-13months']
+        height = 100
 
-      [external]
+        [external]
 
-      EOF
+        EOF
 
-      chown wwwrun.wwwrun ${configFile}
+        chown wwwrun.wwwrun ${configFile}
 
-      ${pkgs.su}/bin/su -s "/bin/sh" -c "${command} --check" wwwrun
-      ${pkgs.su}/bin/su -s "/bin/sh" -c "${command} --html" wwwrun
-    '' [ "var" ];
+        ${pkgs.su}/bin/su -s "/bin/sh" -c "${command} --check" wwwrun
+        ${pkgs.su}/bin/su -s "/bin/sh" -c "${command} --html" wwwrun
+      '';
 
     services.httpd.extraSubservices = [
       { function = f: {

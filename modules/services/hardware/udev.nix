@@ -38,7 +38,7 @@ let
       cp -v ${udev}/libexec/rules.d/*.rules $out/
 
       # Set a reasonable $PATH for programs called by udev rules.
-      echo 'ENV{PATH}="${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.utillinux}/bin"' > $out/00-path.rules
+      echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
 
       # Set the firmware search path so that the firmware.sh helper
       # called by 50-firmware.rules works properly.
@@ -84,6 +84,15 @@ let
     #udev_log="debug"
   '';
 
+  # Udev has a 512-character limit for ENV{PATH}, so create a symlink
+  # tree to work around this.
+  udevPath = pkgs.buildEnv {
+    name = "udev-path";
+    paths = cfg.path;
+    pathsToLink = [ "/bin" "/sbin" ];
+    ignoreCollisions = true;
+  };
+
 in
 
 {
@@ -115,6 +124,15 @@ in
           <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
           <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
           will be included.
+        '';
+      };
+
+      path = mkOption {
+        default = [];
+        merge = mergeListOption;
+        description = ''
+          Packages added to the <envar>PATH</envar> environment variable when
+          executing programs from Udev rules.
         '';
       };
 
@@ -159,7 +177,9 @@ in
 
     services.udev.extraRules = nixosRules;
     
-    services.udev.packages = [extraUdevRules];
+    services.udev.packages = [ extraUdevRules ];
+
+    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux ];
 
     jobs.udev =
       { startOn = "startup";
@@ -207,7 +227,7 @@ in
             initctl emit -n new-devices
           '';
       };
-      
+
   };
 
 }

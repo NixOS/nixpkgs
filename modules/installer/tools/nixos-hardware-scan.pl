@@ -227,7 +227,14 @@ my $attrs = multiLineList("  ", removeDups @attrs);
 print <<EOF ;
 # This is a generated file.  Do not modify!
 # Make changes to /etc/nixos/configuration.nix instead.
+{modulesPath, ...}:
+
 {
+  require = [
+    "\${modulesPath}/profiles/@profile@.nix"
+    "\${modulesPath}/installer/scan/not-detected.nix"
+  ];
+
   boot.initrd.kernelModules = [ $initrdKernelModules ];
   boot.kernelModules = [ $kernelModules ];
 

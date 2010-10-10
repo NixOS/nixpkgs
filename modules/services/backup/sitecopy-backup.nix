@@ -1,7 +1,8 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf singleton concatStrings;
   inherit (pkgs) sitecopy;
 
   stateDir = "/var/spool/sitecopy";
@@ -63,45 +64,41 @@ in
   config = mkIf config.services.sitecopy.enable {
     environment.systemPackages = [ sitecopy ];
 
-    services.cron = {
-      systemCronJobs = map sitecopyCron config.services.sitecopy.backups;
-    };
+    services.cron.systemCronJobs = map sitecopyCron config.services.sitecopy.backups;
 
+    system.activationScripts.sitecopyBackup = stringAfter [ "stdio" "systemConfig" "users" ]
+      ''  
+        mkdir -m 0700 -p ${stateDir}
+        chown root ${stateDir}
+        touch ${stateDir}/sitecopy.secrets
+        chown root ${stateDir}/sitecopy.secrets
 
-    system.activationScripts.sitecopyBackup = 
-      pkgs.stringsWithDeps.fullDepEntry ''  
-          mkdir -m 0700 -p ${stateDir}
-          chown root ${stateDir}
-          touch ${stateDir}/sitecopy.secrets
-          chown root ${stateDir}/sitecopy.secrets
-
-          ${pkgs.lib.concatStrings (map ( b: ''
-              unset secrets
-              unset secret
-              secrets=`grep '^${b.server}' ${stateDir}/sitecopy.secrets | head -1`
-              secret=($secrets)
-              cat > ${stateDir}/${b.name}.conf << EOF
-                site ${b.name}
-                server ${b.server}
-                protocol ${b.protocol}
-                username ''${secret[1]}
-                password ''${secret[2]}
-                local ${b.local}
-                remote ${b.remote}
-                symlinks ${b.symlinks}
-                ${if b.https then "http secure" else ""}
-              EOF
-              chmod 0600 ${stateDir}/${b.name}.conf
-              if ! test -e ${stateDir}/${b.name} ; then
-                echo " * Initializing sitecopy '${b.name}'"
-                ${sitecopy}/bin/sitecopy --storepath=${stateDir} --rcfile=${stateDir}/${b.name}.conf --initialize ${b.name}
-              else
-                echo " * Sitecopy '${b.name}' already initialized"
-              fi
-            '' ) config.services.sitecopy.backups 
-         )}
-
-      '' [ "stdio" "defaultPath" "systemConfig" "users" ] ;
+        ${pkgs.lib.concatStrings (map ( b: ''
+            unset secrets
+            unset secret
+            secrets=`grep '^${b.server}' ${stateDir}/sitecopy.secrets | head -1`
+            secret=($secrets)
+            cat > ${stateDir}/${b.name}.conf << EOF
+              site ${b.name}
+              server ${b.server}
+              protocol ${b.protocol}
+              username ''${secret[1]}
+              password ''${secret[2]}
+              local ${b.local}
+              remote ${b.remote}
+              symlinks ${b.symlinks}
+              ${if b.https then "http secure" else ""}
+            EOF
+            chmod 0600 ${stateDir}/${b.name}.conf
+            if ! test -e ${stateDir}/${b.name} ; then
+              echo " * Initializing sitecopy '${b.name}'"
+              ${sitecopy}/bin/sitecopy --storepath=${stateDir} --rcfile=${stateDir}/${b.name}.conf --initialize ${b.name}
+            else
+              echo " * Sitecopy '${b.name}' already initialized"
+            fi
+          '' ) config.services.sitecopy.backups 
+        )}
+      '';
   };
   
 }

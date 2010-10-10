@@ -77,9 +77,13 @@ in
     # Send all of /var/log/messages to the serial port.
     services.syslogd.extraConfig = "*.* /dev/ttyS0";
 
+    # Clear the kernel log buffer before starting klogd to prevent it
+    # from printing messages that we have already seen.
+    jobs.klogd.preStart = "dmesg -c > /dev/null";
+
     # Prevent tests from accessing the Internet.
-    networking.defaultGateway = mkOverrideTemplate 150 {} "";
-    networking.nameservers = mkOverrideTemplate 150 {} [ ];
+    networking.defaultGateway = mkOverride 150 "";
+    networking.nameservers = mkOverride 150 [ ];
 
     # Require a patch to the kernel to increase the 15s CIFS timeout.
     assertions =

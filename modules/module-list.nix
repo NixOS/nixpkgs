@@ -14,6 +14,7 @@
   ./config/users-groups.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/network/intel-3945abg.nix
+  ./hardware/network/rt2870.nix 
   ./hardware/network/rt73.nix 
   ./hardware/pcmcia.nix
   ./installer/generations-dir/generations-dir.nix
@@ -44,6 +45,7 @@
   ./security/sudo.nix
   ./services/audio/alsa.nix
   ./services/audio/pulseaudio.nix
+  ./services/backup/hydra-mirror.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/sitecopy-backup.nix
@@ -58,10 +60,12 @@
   ./services/logging/logrotate.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
+  ./services/mail/mail.nix
   ./services/mail/postfix.nix
   ./services/misc/autofs.nix
   ./services/misc/disnix.nix
   ./services/misc/felix.nix
+  ./services/misc/folding-at-home.nix
   ./services/misc/gpsd.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
@@ -77,6 +81,7 @@
   ./services/network-filesystems/nfs-kernel.nix
   ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/samba.nix
+  ./services/networking/amuled.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
@@ -109,6 +114,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/security/tor.nix
+  ./services/security/torsocks.nix
   ./services/system/dbus.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
@@ -154,4 +160,5 @@
   ./tasks/network-interfaces.nix
   ./tasks/swraid.nix
   ./tasks/tty-backgrounds.nix
+  ./virtualisation/xen-dom0.nix
 ]

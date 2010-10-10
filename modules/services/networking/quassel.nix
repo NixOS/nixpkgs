@@ -3,8 +3,9 @@
 with pkgs.lib;
 
 let
-  quassel = pkgs.quassel.override { daemon = true; monolithic = false; client = false; };
+  quassel = pkgs.quasselDaemon;
   cfg = config.services.quassel;
+  user = if cfg.user != null then cfg.user else "quassel";
 in
 
 {
@@ -38,22 +39,17 @@ in
         '';
       };
 
-      logFile = mkOption {
-        default = "/var/log/quassel.log";
-        description = "Location of the logfile of the Quassel daemon.";
-      };
-
       dataDir = mkOption {
-        default = ''/home/${cfg.user}/.config/quassel-irc.org'';
+        default = ''/home/${user}/.config/quassel-irc.org'';
         description = ''
           The directory holding configuration files, the SQlite database and the SSL Cert.
         '';
       };
 
       user = mkOption {
-        default = "quassel";
+        default = null;
         description = ''
-          The user the Quassel daemon should run as.
+          The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
         '';
       };
 
@@ -66,10 +62,10 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = cfg.user;
+    users.extraUsers = mkIf (cfg.user == null) [
+      { name = "quassel";
         description = "Quassel IRC client daemon";
-      };
+      }];
     
 
     jobs.quassel =
@@ -79,18 +75,15 @@ in
 
         preStart = ''
             mkdir -p ${cfg.dataDir}
-            chown ${cfg.user} ${cfg.dataDir}
-            touch ${cfg.logFile} && chown ${cfg.user} ${cfg.logFile}
+            chown ${user} ${cfg.dataDir}
         '';
 
         exec = ''
-            ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${cfg.user} \
+            ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${user} \
                 -c '${quassel}/bin/quasselcore --listen=${cfg.interface}\
-                    --port=${toString cfg.portNumber} --configdir=${cfg.dataDir} --logfile=${cfg.logFile}'
+                    --port=${toString cfg.portNumber} --configdir=${cfg.dataDir}'
         '';
       };
-
-    environment.systemPackages = [ quassel ];
 
   };
   

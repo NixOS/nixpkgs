@@ -27,12 +27,10 @@ in
     environment = {
       systemPackages = [ pkWrapper ];
       pathsToLink = [ "/share/polkit-1" "/etc/polkit-1" ];
-      etc = [
-        {
-          source = "${config.system.path}/etc/polkit-1";
+      etc = singleton
+        { source = "${config.system.path}/etc/polkit-1";
           target = "polkit-1";
-        }
-      ];
+        };
     };
 
     services.dbus.packages = [ pkWrapper ];
@@ -41,18 +39,16 @@ in
       pam.services = [ { name = "polkit-1"; } ];
       setuidPrograms = [ "pkexec" ];
 
-      setuidOwners = [
-        {
-          program = "polkit-agent-helper-1";
+      setuidOwners = singleton
+        { program = "polkit-agent-helper-1";
           owner = "root";
           group = "root";
           setuid = true;
           source = pkgs.polkit + "/" + pkWrapper.helper;
-        }
-      ];
+        };
     };
 
-    system.activationScripts.polikit = pkgs.stringsWithDeps.noDepEntry
+    system.activationScripts.polkit =
       ''
         mkdir -p /var/lib/polkit-1/localauthority
         chmod 700 /var/lib/polkit-1{/localauthority,}

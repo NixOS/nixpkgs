@@ -15,6 +15,13 @@ let
       NIX_CONF_DIR=/nix/etc/nix
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
+
+  # Vixie cron requires build-time configuration for the sendmail path.
+  cronNixosPkg = pkgs.cron.override {
+    # The mail.nix nixos module, if there is any local mail system enabled,
+    # should have sendmail in this path.
+    sendmailPath = "/var/setuid-wrappers/sendmail";
+  };
   
 in
 
@@ -25,6 +32,11 @@ in
   options = {
   
     services.cron = {
+
+      enable = mkOption {
+        default = true;
+        description = "Whether to enable the `vixie cron' daemon.";
+      };
 
       mailto = mkOption {
         default = "";
@@ -46,6 +58,10 @@ in
           If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
           will is allowed to have its own crontab file. The /var/cron/cron.deny file
           is created automatically for you. So every user can use a crontab.
+
+          Many nixos modules set systemCronJobs, so if you decide to disable vixie cron
+          and enable another cron daemon, you may want it to get its system crontab
+          based on systemCronJobs.
         '';
       };
 
@@ -56,7 +72,7 @@ in
 
   ###### implementation
 
-  config = {  
+  config = mkIf config.services.cron.enable {
 
     environment.etc = singleton
       # The system-wide crontab.
@@ -65,7 +81,9 @@ in
         mode = "0600"; # Cron requires this.
       };
 
-    environment.systemPackages = [pkgs.cron];
+    security.setuidPrograms = [ "crontab" ];
+
+    environment.systemPackages = [ cronNixosPkg ];
 
     jobs.cron =
       { description = "Cron daemon";
@@ -86,7 +104,7 @@ in
             fi
           '';
 
-        exec = "${pkgs.cron}/sbin/cron -n";
+        exec = "${cronNixosPkg}/sbin/cron -n";
       };
 
   };

@@ -51,7 +51,7 @@ in
         }
       ];
       
-    system.activationScripts.policyKit = fullDepEntry
+    system.activationScripts.policyKit = stringAfter [ "users" ]
       ''
         mkdir -m 0770 -p /var/run/PolicyKit
         chown root.polkituser /var/run/PolicyKit
@@ -63,7 +63,7 @@ in
         touch /var/lib/misc/PolicyKit.reload
         chmod 0664 /var/lib/misc/PolicyKit.reload
         chown polkituser.polkituser /var/lib/misc/PolicyKit.reload
-      '' [ "users" ];
+      '';
 
   };
 

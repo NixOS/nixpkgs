@@ -66,7 +66,7 @@ in
     jobs.atd =
       { description = "at daemon (atd)";
 
-        startOn = "started udev";
+        startOn = "stopped udevtrigger";
 
         preStart =
           ''
@@ -99,7 +99,9 @@ in
             fi
           '';
 
-        exec = "${at}/sbin/atd -f";
+        exec = "${at}/sbin/atd";
+
+        daemonType = "fork";
       };
 
   };

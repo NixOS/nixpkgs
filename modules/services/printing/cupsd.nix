@@ -134,10 +134,7 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        environment = {
-          # Cups scripts for printing (psto...) require awk, sed, grep, ...
-          PATH = "${config.system.path}/bin";
-        };
+        path = [ config.system.path ];
 
         preStart =
           ''

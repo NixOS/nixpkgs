@@ -15,14 +15,14 @@ export LOCATE_PATH=/var/cache/locatedb
 # Include the various profiles in the appropriate environment variables.
 NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
 
-NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $NIX_USER_PROFILE_DIR/profile"
+NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
 
 unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB GST_PLUGIN_PATH KDEDIRS
 unset XDG_CONFIG_DIRS XDG_DATA_DIRS
 
 for i in $NIX_PROFILES; do # !!! reverse
     # We have to care not leaving an empty PATH element, because that means '.' to Linux
-    export PATH=$i/bin:$i/sbin${PATH:+:}$PATH
+    export PATH=$i/bin:$i/sbin:$i/lib/kde4/libexec${PATH:+:}$PATH
     export INFOPATH=$i/info:$i/share/info${INFOPATH:+:}$INFOPATH
     export PKG_CONFIG_PATH="$i/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
 
@@ -30,12 +30,15 @@ for i in $NIX_PROFILES; do # !!! reverse
     # from Nixpkgs <= 0.12.
     export PERL5LIB="$i/lib/perl5/site_perl:$i/lib/site_perl${PERL5LIB:+:}$PERL5LIB"
 
+    # ALSA plugins
+    export ALSA_PLUGIN_DIRS="$i/lib/alsa-lib${ALSA_PLUGIN_DIRS:+:}$ALSA_PLUGIN_DIRS"
+
     # GStreamer.
     export GST_PLUGIN_PATH="$i/lib/gstreamer-0.10${GST_PLUGIN_PATH:+:}$GST_PLUGIN_PATH"
 
     # KDE/Gnome stuff.
     export KDEDIRS=$i${KDEDIRS:+:}$KDEDIRS
-    export QT_PLUGIN_PATH=$i/plugins:$i/lib/qt4/plugins${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
+    export QT_PLUGIN_PATH=$i/lib/qt4/plugins:$i/lib/kde4/plugins${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
     export XDG_CONFIG_DIRS=$i/etc/xdg${XDG_CONFIG_DIRS:+:}$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 done
@@ -43,7 +46,7 @@ done
 
 
 # Search directory for Aspell dictionaries.
-export ASPELL_CONF="dict-dir $NIX_USER_PROFILE_DIR/profile/lib/aspell"
+export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
 
 
 # ~/bin and the setuid wrappers override other bin directories.

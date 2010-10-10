@@ -199,7 +199,6 @@ let
       $out/bin/umount --version | grep "umount "
       $out/bin/e2fsck -V 2>&1 | grep "e2fsck "
       $out/bin/tune2fs 2> /dev/null | grep "tune2fs "
-      $out/bin/fsck -N | grep "fsck from"
       $out/bin/udevadm --version
       $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux-ng"
       $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"

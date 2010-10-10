@@ -20,7 +20,7 @@ let
   defaultUrlHost = "";
 
   # Build the TWiki CGI and configuration files.
-  twikiRoot = (import /etc/nixos/services/twiki/twiki-instance.nix).twiki {
+  twikiRoot = (import /etc/nixos/services/twiki/twiki-instance.nix { inherit pkgs; }).twiki {
     name = "wiki-instance";
     pubdir = pubDir;
     datadir = dataDir;

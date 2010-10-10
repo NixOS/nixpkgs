@@ -11,6 +11,11 @@ let
     isExecutable = true;
   });
   
+  nixosDeployNetwork = makeProg {
+    name = "nixos-deploy-network";
+    src = ./nixos-deploy-network/nixos-deploy-network.sh;
+  };
+  
   nixosInstall = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
@@ -80,6 +85,7 @@ let
     name = "nixos-hardware-scan";
     src = ./nixos-hardware-scan.pl;
     inherit (pkgs) perl;
+    profile = config.installer.installProfile;
   };
 
   nixosOption = makeProg {
@@ -112,12 +118,21 @@ in
         <command>nixos-rebuild</command> to speed up builds.
       '';
     };
+
+    installer.installProfile = pkgs.lib.mkOption {
+      default = "base";
+      example = "graphical";
+      description = ''
+        Name of the profile used when generating the hardware-scan.
+      '';
+    };
     
   };
 
   config = {
     environment.systemPackages =
-      [ nixosInstall
+      [ nixosDeployNetwork
+        nixosInstall
         nixosRebuild
          nixosHardwareScan
          nixosGenSeccureKeys
@@ -128,7 +143,7 @@ in
       ];
 
     system.build = {
-      inherit nixosInstall;
+      inherit nixosInstall nixosHardwareScan nixosOption;
 
       # expose scripts
       inherit (installer2) nixosPrepareInstall runInChroot nixosBootstrap minimalInstallArchive;

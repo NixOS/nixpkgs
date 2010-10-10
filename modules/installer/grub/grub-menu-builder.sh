@@ -52,8 +52,8 @@ default @default@
 timeout @timeout@
 GRUBEND
 	    if test -n "@splashImage@"; then
-		echo "splashimage $bootRoot/background.xpm.gz" >> "$1"
-	    fi
+                echo "splashimage $bootRoot/background.xpm.gz" >> "$1"
+            fi
 	    ;;
 	2)
             cp -f @grub@/share/grub/unicode.pf2 /boot/grub/unicode.pf2
@@ -154,6 +154,7 @@ addEntry() {
 
     local kernel=$(readlink -f $path/kernel)
     local initrd=$(readlink -f $path/initrd)
+    local xen=$([ -f $path/xen.gz ] && readlink -f $path/xen.gz)
 
     if test "$path" = "$defaultConfig"; then
 	cp "$kernel" /boot/nixos-kernel
@@ -181,28 +182,34 @@ EOF
     if test -n "$copyKernels"; then
         copyToKernelsDir $kernel; kernel=$result
         copyToKernelsDir $initrd; initrd=$result
+        if [ -n "$xen" ]; then copyToKernelsDir $xen; xen=$result; fi
     fi
-    
+
     local confName=$(cat $path/configuration-name 2>/dev/null || true)
     if test -n "$confName"; then
 	name="$confName $3"
     fi
+
+    local kernelParams="systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)"
+    local xenParams="$([ -n "$xen" ] && cat $path/xen-params)"
 
     case "$grubVersion" in
 	1)
 	    cat >> "$tmp" << GRUBEND
 title $name
   @extraPerEntryConfig@
-  kernel $kernel systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)
-  initrd $initrd
+  ${xen:+kernel $xen $xenParams}
+  $(if [ -z "$xen" ]; then echo kernel; else echo module; fi) $kernel $kernelParams
+  $(if [ -z "$xen" ]; then echo initrd; else echo module; fi) $initrd
 GRUBEND
 	    ;;
 	2)
 	    cat >> "$tmp" << GRUBEND
 menuentry "$name" {
   @extraPerEntryConfig@
-  linux  $kernel systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) $(cat $path/kernel-params)
-  initrd $initrd
+  ${xen:+multiboot $xen $xenParams}
+  $(if [ -z "$xen" ]; then echo linux; else echo module; fi) $kernel $kernelParams
+  $(if [ -z "$xen" ]; then echo initrd; else echo module; fi) $initrd
 }
 GRUBEND
 	    ;;
@@ -243,7 +250,7 @@ for link in $((ls -d $defaultConfig/fine-tune/* ) | sort -n); do
 done
 
 for generation in $(
-    (cd /nix/var/nix/profiles && ls -d system-*-link) \
+    (cd /nix/var/nix/profiles && for i in system-*-link; do echo $i; done) \
     | sed 's/system-\([0-9]\+\)-link/\1/' \
     | sort -n -r); do
     link=/nix/var/nix/profiles/system-$generation-link

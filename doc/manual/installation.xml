@@ -38,24 +38,14 @@ $ nix-channel --update</screen>
   xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixos</literal>.</para></listitem>
 
-  <listitem><para>If you don’t already have Nixpkgs checkout, Check
-  out Nixpkgs from <link
-  xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
+  <listitem><para>Check out Nixpkgs from
+  <link xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixpkgs</literal>.</para></listitem>
-
-  <listitem><para>In the directory <literal>nixos</literal>, make a
-  symbolic link <literal>pkgs</literal> to the <literal>pkgs</literal>
-  directory of the Nixpkgs tree, e.g.,
-
-<screen>
-$ ln -s nixpkgs/pkgs nixos/</screen>
-
-  </para></listitem>
 
   <listitem><para>Build the ISO image:
 
 <screen>
-$ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
+$ nix-build ./nixos/release.nix -A iso_minimal.iso</screen>
 
   If everything goes well, you’ll end up with an ISO image in
   <filename>./result/iso/nixos-<replaceable>version</replaceable>-<replaceable>platform</replaceable>.iso</filename>
@@ -63,7 +53,7 @@ $ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
   your favourite virtual machine software.</para></listitem>
 
 </orderedlist>
-  
+
 </para>
 
 </section>
@@ -89,8 +79,8 @@ $ nix-build configuration/rescue-cd.nix -A rescueCD</screen>
   server on your network.  Otherwise configure
   manually.</para></listitem>
 
-  <listitem><para>The NixOS manual is available on virtual console 7
-  (press Alt+F7 to access).</para></listitem>
+  <listitem><para>The NixOS manual is available on virtual console 8
+  (press Alt+F8 to access).</para></listitem>
 
   <listitem><para>Login as <literal>root</literal>, empty
   password.</para></listitem>
@@ -138,43 +128,37 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
   </para></listitem>
     
   <listitem><para>Mount the target file system on
-  <filename>/mnt</filename>.</para></listitem>
+  <filename>/mnt</filename> on which NixOS would be installed.</para>
+  </listitem>
 
   <listitem>
 
-    <para>The installation is declarative; you need to write a
-    description of the configuration that you want to be built and
-    activated.  The configuration is specified in a Nix expression and
-    must be stored <emphasis>on the target file system</emphasis> in
-    <filename>/mnt/etc/nixos/configuration.nix</filename>.  See
-    <filename>/etc/nixos/nixos/doc/config-examples</filename> for
-    example machine configurations.  You can copy and edit one of
-    those (e.g., copy
-    <filename>/etc/nixos/nixos/doc/config-examples/basic.nix</filename>
-    to <filename>/mnt/etc/nixos/configuration.nix</filename>).  See
-    <xref linkend="ch-options"/> for a list of the available
-    configuration options.  The text editors <command>nano</command>
-    and <command>vim</command> are available.</para>
+    <para>Generate a template configuration for the target system:</para>
 
-    <para>In particular you need to specify a root file system in
-    <option>fileSystems</option> and the target device for the Grub
-    boot loader in <option>boot.grubDevice</option>.</para>
-
-    <para>The command <command>nixos-hardware-scan</command> can
+    <para>The command <command>nixos-option</command> can
     generate an initial configuration file for you, i.e.,
 
 <screen>
-$ mkdir -p /mnt/etc/nixos
-$ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix</screen>
+$ nixos-option --install</screen>
 
     It tries to figure out the modules necessary for mounting the root
     device, as well as various other hardware characteristics.
-    However, it doesn’t try to figure out the
+    However, it doesn’t try to figure out the 
     <option>fileSystems</option> option yet.</para>
 
-    <para>More examples of NixOS configurations for some actual
-    machines can be found at <link
-    xlink:href="https://svn.nixos.org/repos/nix/configurations/trunk/"/>.</para>
+    <para>Edit <filename>/mnt/etc/nixos/configuration.nix</filename> to
+    configure your system.  The installation is declarative; you need to
+    write a description of the configuration that you want to be built and
+    activated.  The configuration is specified in a Nix expression and must
+    be stored <emphasis>on the target file system</emphasis>.  The text
+    editors <command>nano</command> and <command>vim</command> are
+    available.</para>
+
+    <para>You need to specify a root file system in
+    <option>fileSystems</option> and the target device for the Grub boot
+    loader in <option>boot.grubDevice</option>.  See
+    <xref linkend="ch-options"/> for a list of the available configuration
+    options.</para>
 
     <note><para>It is very important that you specify in the option
     <option>boot.initrd.kernelModules</option> all kernel modules that
@@ -186,6 +170,11 @@ $ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix</screen>
     <filename>nixos-install</filename>.)
     <command>nixos-hardware-scan</command> should figure out the
     required modules in most cases.</para></note>
+
+    <para>Examples are available in
+    <filename>/etc/nixos/nixos/doc/config-examples</filename> and some
+    actual NixOS configuration can be found at <link
+    xlink:href="https://svn.nixos.org/repos/nix/configurations/trunk/"/>.</para>
 
   </listitem>
 
@@ -268,8 +257,7 @@ $ fdisk /dev/sda <lineannotation>(or whatever device you want to install on)</li
 $ mke2fs -j -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
 $ mkswap -L swap /dev/sda2 <lineannotation>(idem)</lineannotation>
 $ mount LABEL=nixos /mnt
-$ mkdir -p /mnt/etc/nixos
-$ nixos-hardware-scan > /mnt/etc/nixos/configuration.nix
+$ nixos-option --install
 $ nano /mnt/etc/nixos/configuration.nix
 <lineannotation>(in particular, set the fileSystems and swapDevices options)</lineannotation>
 $ nixos-install
@@ -280,7 +268,8 @@ $ reboot</screen>
 <screen>
 {
   boot.initrd.kernelModules = [ "ata_piix" ];
-  boot.grubDevice = "/dev/sda";
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/sda";
 
   fileSystems = [
     { mountPoint = "/";

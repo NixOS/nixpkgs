@@ -43,7 +43,7 @@ let
   bootStage2 = substituteAll {
     src = ./stage-2-init.sh;
     isExecutable = true;
-    inherit kernel activateConfiguration;
+    inherit kernel;
     inherit (config.boot) devShmSize;
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;

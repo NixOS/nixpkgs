@@ -282,7 +282,7 @@ in
 	    mkdir -p ${cfg.baseDir}/work
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/work
 	    
-	    ${if cfg.axis2.enable == true then
+	    ${if cfg.axis2.enable then
 		''
 		# Copy the Axis2 web application
 		cp -av ${pkgs.axis2}/webapps/axis2 ${cfg.baseDir}/webapps

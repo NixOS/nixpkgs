@@ -6,6 +6,7 @@
 with import ../lib/testing.nix { inherit nixpkgs services system; };
 
 {
+  avahi = makeTest (import ./avahi.nix);
   bittorrent = makeTest (import ./bittorrent.nix);
   firefox = makeTest (import ./firefox.nix);
   installer = makeTests (import ./installer.nix);
@@ -18,6 +19,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   proxy = makeTest (import ./proxy.nix);
   quake3 = makeTest (import ./quake3.nix);
   remote_builds = makeTest (import ./remote-builds.nix);
+  simple = makeTest (import ./simple.nix);
   subversion = makeTest (import ./subversion.nix);
   trac = makeTest (import ./trac.nix);
 }
