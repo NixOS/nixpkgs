@@ -1,15 +1,10 @@
-{stdenv, fetchurl, cmake, v ? "0.2"}:
+{stdenv, fetchurl, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "shared-desktop-ontologies-${v}";
+  name = "shared-desktop-ontologies-0.5";
   src = fetchurl {
     url = "mirror://sf/oscaf/${name}.tar.bz2";
-    sha256 =
-      if v == "0.2" then
-        "1w9gfprrp518hb7nm5wspxjd7xx0h08bph6asrx5vrx7j7fzg4m7"
-      else if v == "0.5" then
-        "1a1gs2b314133rg7vzwvnqbxchf7xgs0jpkydid5l2wz98m7j17r"
-      else throw "Unknown version";
+    sha256 = "1a1gs2b314133rg7vzwvnqbxchf7xgs0jpkydid5l2wz98m7j17r";
   };
   buildInputs = [ cmake ];
   meta = with stdenv.lib; {
