@@ -111,6 +111,11 @@ in
         default = false;
         description = "Whether to run the Postfix mail server.";
       };
+
+      setSendmail = mkOption {
+        default = true;
+        description = "Whether to set the system sendmail to postfix's.";
+      };
       
       user = mkOption {
         default = "postfix";
@@ -254,10 +259,24 @@ in
 
   config = mkIf config.services.postfix.enable {
 
-    environment.etc = singleton
-      { source = "/var/postfix/conf";
-        target = "postfix";
-      };
+    environment = {
+      etc = singleton
+        { source = "/var/postfix/conf";
+          target = "postfix";
+        };
+
+      # This makes comfortable for root to run 'postqueue' for example.
+      systemPackages = [ pkgs.postfix ];
+    };
+
+    services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
+      program = "sendmail";
+      source = "${pkgs.postfix}/bin/sendmail";
+      owner = "nobody";
+      group = "postdrop";
+      setuid = false;
+      setgid = true;
+    };
 
     users.extraUsers = singleton
       { name = user;

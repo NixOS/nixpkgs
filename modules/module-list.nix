@@ -14,6 +14,7 @@
   ./config/users-groups.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/network/intel-3945abg.nix
+  ./hardware/network/rt2870.nix 
   ./hardware/network/rt73.nix 
   ./hardware/pcmcia.nix
   ./installer/generations-dir/generations-dir.nix
@@ -59,6 +60,7 @@
   ./services/logging/logrotate.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
+  ./services/mail/mail.nix
   ./services/mail/postfix.nix
   ./services/misc/autofs.nix
   ./services/misc/disnix.nix
