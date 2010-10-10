@@ -330,6 +330,12 @@ sub waitForFile {
     }
 }
 
+sub startJob {
+    my ($self, $jobName) = @_;
+    $self->execute("initctl start $jobName");
+    my ($status, $out) = $self->execute("initctl status $jobName");
+    die "failed to start $jobName" unless $out =~ /start\/running/;
+}
 
 sub stopJob {
     my ($self, $jobName) = @_;
