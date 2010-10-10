@@ -14,7 +14,6 @@
   ./config/users-groups.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/network/intel-3945abg.nix
-  ./hardware/network/rt2870.nix 
   ./hardware/network/rt73.nix 
   ./hardware/pcmcia.nix
   ./installer/generations-dir/generations-dir.nix
