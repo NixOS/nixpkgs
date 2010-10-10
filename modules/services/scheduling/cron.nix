@@ -15,6 +15,13 @@ let
       NIX_CONF_DIR=/nix/etc/nix
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
+
+  # Vixie cron requires build-time configuration for the sendmail path.
+  cronNixosPkg = pkgs.cron.override {
+    # The mail.nix nixos module, if there is any local mail system enabled,
+    # should have sendmail in this path.
+    sendmailPath = "/var/setuid-wrappers/sendmail";
+  };
   
 in
 
@@ -65,7 +72,7 @@ in
         mode = "0600"; # Cron requires this.
       };
 
-    environment.systemPackages = [pkgs.cron];
+    environment.systemPackages = [ cronNixosPkg ];
 
     jobs.cron =
       { description = "Cron daemon";
@@ -86,7 +93,7 @@ in
             fi
           '';
 
-        exec = "${pkgs.cron}/sbin/cron -n";
+        exec = "${cronNixosPkg}/sbin/cron -n";
       };
 
   };
