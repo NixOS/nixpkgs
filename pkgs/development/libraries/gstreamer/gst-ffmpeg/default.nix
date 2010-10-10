@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gstPluginsBase, bzip2 }:
+{ fetchurl, stdenv, pkgconfig, gstPluginsBase, bzip2, liboil }:
 
 stdenv.mkDerivation rec {
   name = "gst-ffmpeg-0.10.9";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gstPluginsBase ];
   
-  buildInputs = [ pkgconfig bzip2 ];
+  buildInputs = [ pkgconfig bzip2 liboil ];
 
   configureFlags = "--enable-ladspa";
 

@@ -2942,19 +2942,9 @@ let
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
 
-  gst_all = recurseIntoAttrs (import ../development/libraries/gstreamer {
-    inherit lib stdenv fetchurl perl bison pkgconfig libxml2
-      python alsaLib cdparanoia libogg libvorbis libtheora freetype liboil
-      libjpeg zlib speex libpng libdv aalib cairo libcaca flac hal libiec61883
-      dbus libavc1394 ladspaH taglib pulseaudio gdbm bzip2 which makeOverridable
-      libcap libtasn1;
-    flex = flex2535;
-    inherit (xorg) libX11 libXv libXext;
-    inherit (gtkLibs) glib pango gtk;
-    inherit (gnome) gnomevfs /* <- only passed for the no longer used older versions
-             it is deprecated and didn't build on amd64 due to samba dependency */ gtkdoc
-      libsoup;
-  });
+  gst_all = recurseIntoAttrs
+    (let callPackage = newScope pkgs.gst_all; in
+     import ../development/libraries/gstreamer { inherit callPackage pkgs; });
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -2982,6 +2972,7 @@ let
 
   glib = gtkLibs.glib;
   gtk = gtkLibs.gtk;
+  pango = gtkLibs.pango;
 
   gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in rec {
 

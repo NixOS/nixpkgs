@@ -1,32 +1,17 @@
-args: with args;
+{ callPackage, pkgs }:
+
 rec {
-  gstreamer = makeOverridable (import ./gstreamer) {
-    inherit (args) fetchurl stdenv perl bison flex
-       pkgconfig python which gtkdoc glib libxml2;
+  gstreamer = callPackage ./gstreamer {
+    flex = pkgs.flex2535;
   };
 
-  gstPluginsBase = makeOverridable (import ./gst-plugins-base) {
-    inherit gstreamer;
-    inherit (args) fetchurl stdenv pkgconfig python
-      libX11 libXv libXext alsaLib cdparanoia libogg libtheora
-      libvorbis freetype pango liboil gtk which gtkdoc;
-  };
+  gstPluginsBase = callPackage ./gst-plugins-base { };
 
-  gstPluginsGood = makeOverridable (import ./gst-plugins-good) {
-    inherit gstPluginsBase;
-    inherit (args) fetchurl stdenv pkgconfig aalib cairo flac hal
-      libjpeg zlib speex libpng libdv libcaca dbus libiec61883
-      libavc1394 ladspaH taglib gdbm pulseaudio libsoup libcap 
-      libtasn1;
-  };
+  gstPluginsGood = callPackage ./gst-plugins-good { };
 
-  gstFfmpeg = makeOverridable (import ./gst-ffmpeg) {
-    inherit fetchurl stdenv pkgconfig gstPluginsBase bzip2;
-  };
+  gstFfmpeg = callPackage ./gst-ffmpeg { };
 
-  gnonlin = makeOverridable (import ./gnonlin) {
-    inherit fetchurl stdenv pkgconfig gstreamer gstPluginsBase;
-  };
+  gnonlin = callPackage ./gnonlin { };
 
   # Header files are in include/${prefix}/
   prefix = "gstreamer-0.10";

@@ -1,4 +1,4 @@
-args: with args;
+{ stdenv, fetchurl, pkgconfig, gstPluginsBase, gstreamer }:
 
 stdenv.mkDerivation rec {
   name = "gnonlin-0.10.14";
