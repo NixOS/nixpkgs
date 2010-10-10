@@ -1,15 +1,22 @@
-{ kde, cmake, kdelibs, qt4, kdepimlibs, akonadi, pkgconfig, boost, shared_mime_info, libxml2, shared_desktop_ontologies, soprano, strigi, automoc4, libxslt }:
+{ kde, cmake, qt4, perl, libxml2, libxslt, boost, shared_mime_info
+, kdelibs, kdepimlibs
+, automoc4, phonon, akonadi, soprano, strigi}:
 
-kde.package rec {
-	buildInputs = [ automoc4 cmake kdelibs qt4 kdepimlibs akonadi pkgconfig boost shared_mime_info shared_desktop_ontologies libxml2 soprano strigi libxslt ];
-
+kde.package {
+  buildInputs = [ cmake qt4 perl libxml2 libxslt boost shared_mime_info
+                  kdelibs kdepimlibs
+		  automoc4 phonon akonadi soprano strigi ];
+  prePatch = ''
+      find .. -name CMakeLists.txt | xargs sed -i -e "s@DESTINATION \''${KDE4_DBUS_INTERFACES_DIR}@DESTINATION \''${CMAKE_INSTALL_PREFIX}/share/dbus-1/interfaces/@"
+  '';
   meta = {
-    description = "Runtime files for KDE PIM: akonadi agents etc.";
+    description = "KDE PIM runtime";
+    homepage = http://www.kde.org;
+    license = "GPL";
     kde = rec {
       name = "kdepim-runtime";
-      version = "4.4.93";
-      subdir = "kdepim/${version}/src/src";
-      stable = false;
+      version = "4.4.6";
+      subdir = "kdepim-${version}/src";
     };
   };
 }
