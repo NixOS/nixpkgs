@@ -33,6 +33,11 @@ in
   
     services.cron = {
 
+      enable = mkOption {
+        default = true;
+        description = "Whether to enable the `vixie cron' daemon.";
+      };
+
       mailto = mkOption {
         default = "";
         description = " The job output will be mailed to this email address. ";
@@ -63,7 +68,7 @@ in
 
   ###### implementation
 
-  config = {  
+  config = mkIf config.services.cron.enable {  
 
     environment.etc = singleton
       # The system-wide crontab.
