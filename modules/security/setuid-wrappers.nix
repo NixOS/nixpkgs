@@ -75,7 +75,7 @@ in
   config = {
 
     security.setuidPrograms =
-      [ "crontab" "fusermount" "wodim" "cdrdao" "growisofs" ];
+      [ "fusermount" "wodim" "cdrdao" "growisofs" ];
 
     system.activationScripts.setuid =
       let

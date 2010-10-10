@@ -4,20 +4,17 @@ with pkgs.lib;
 
 let
 
-  # Put all the system cronjobs together.
-  # TODO allow using fcron only..
-  #systemCronJobs =
-  #  config.services.cron.systemCronJobs;
   cfg = config.services.fcron;
   
   queuelen = if cfg.queuelen == "" then "" else "-q ${toString cfg.queuelen}";
 
-  # shell is set to /sh in config..
-  # ${pkgs.lib.concatStrings (map (job: job + "\n") systemCronJobs)}
-  systemCronJobsFile = pkgs.writeText "fcron-systab"
+  systemCronJobsFile = pkgs.writeText "system-crontab"
     ''
-      SHELL=${pkgs.bash}/bin/sh
-      PATH=${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnused}/bin
+      SHELL=${pkgs.bash}/bin/bash
+      PATH=${config.system.path}/bin:${config.system.path}/sbin
+      MAILTO="${config.services.cron.mailto}"
+      NIX_CONF_DIR=/nix/etc/nix
+      ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
 
   allowdeny = target: users:
@@ -42,7 +39,7 @@ in
       };
       
       allow = mkOption {
-        default = [];
+        default = [ "all" ];
         description = ''
           Users allowed to use fcrontab and fcrondyn (one name per line, "all" for everyone).
         '';
@@ -64,7 +61,7 @@ in
       };
       
       systab = mkOption {
-        default = "";
+        default = systemCronJobsFile;
         description = ''The "system" crontab contents.'';
       };
     };
@@ -77,7 +74,7 @@ in
   config = mkIf cfg.enable {
 
     environment.etc =
-      [ (allowdeny "allow" (["root"] ++ cfg.allow))
+      [ (allowdeny "allow" (cfg.allow))
         (allowdeny "deny" cfg.deny)
         # see man 5 fcron.conf
         { source = pkgs.writeText "fcon.conf" ''
@@ -96,6 +93,8 @@ in
       ];
 
     environment.systemPackages = [ pkgs.fcron ];
+
+    security.setuidPrograms = [ "fcrontab" ];
 
     jobs.fcron =
       { description = "fcron daemon";
