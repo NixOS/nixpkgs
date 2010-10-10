@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, sendmailPath ? "/usr/sbin/sendmail"}:
 
 stdenv.mkDerivation {
   name = "cron-4.1";
@@ -9,10 +9,15 @@ stdenv.mkDerivation {
 
   unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
 
-  preBuild = "
+  preBuild = ''
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
-    makeFlags=\"DESTROOT=$out\"
-  ";
+    makeFlags="DESTROOT=$out"
+
+    # We want to ignore the $glibc/include/paths.h definition of
+    # sendmail path
+    echo "#undef _PATH_SENDMAIL" >> pathnames.h
+    echo '#define _PATH_SENDMAIL "${sendmailPath}"' >> pathnames.h
+  '';
 
   preInstall = "ensureDir $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";
   
