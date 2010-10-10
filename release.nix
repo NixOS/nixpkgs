@@ -148,6 +148,7 @@ let
           system = "i686-linux";
         };
       in {
+        avahi = t.avahi.test;
         bittorrent = t.bittorrent.test;
         firefox = t.firefox.test;
         installer.lvm = t.installer.lvm.test;
