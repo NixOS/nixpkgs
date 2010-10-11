@@ -1,14 +1,14 @@
 {stdenv, fetchurl, noSysDirs, cross ? null}:
 
 let
-    basename = "binutils-2.20.1";
+    basename = "binutils-2.20.51";
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1y7nwsprhr4hvx9ps2l0l0ivb6k41rcrx1invmzqxs475mr892r2";
+    url = http://nixos.org/tarballs/binutils-2.20.51-pre-20100901.tar.bz2;
+    sha256 = "1872fdnbnq5z5svq7mvc0vyyad8pknwvx2glxq1bbk0xv7arp72y";
   };
 
   patches = [
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = "--disable-werror" # needed for dietlibc build
+      + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
+        " --enable-fix-loongson2f-nop"
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}";
 
   meta = {
