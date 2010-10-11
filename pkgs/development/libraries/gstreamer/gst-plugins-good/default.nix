@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-0.10.20";
+  name = "gst-plugins-good-0.10.25";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-plugins-good/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "11x3irvfm9v96rkyh0ajdqd94y4xhshd98lb2zapf7wykq7pyjrw";
+    sha256 = "1xlr8rzb6pxi91g6jxhqa7cwl0kg5y21qfd9bgc4fb212867bmdm";
   };
 
   propagatedBuildInputs = [gstPluginsBase aalib cairo flac hal libjpeg
