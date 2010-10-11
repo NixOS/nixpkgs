@@ -3,11 +3,11 @@ kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu,
 liblqr1, lensfun, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "digikam-1.4.0";
+  name = "digikam-1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/digikam/${name}.tar.bz2";
-    sha256 = "1fky4jkji9fkhzzvw7wic6xy7vkj9g39hx1xm76qxxq8i2nzlynk";
+    sha256 = "1vvzw132aw2c1z2v1zc3aqa99kvg501krr2law35ri12zkqjsvaz";
   };
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 eigen
