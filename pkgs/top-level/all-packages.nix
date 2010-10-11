@@ -5630,9 +5630,7 @@ let
 
   qcad = callPackage ../applications/misc/qcad { };
 
-  qjackctl = callPackage ../applications/audio/qjackctl {
-    qt4 = qt4;
-  };
+  qjackctl = callPackage ../applications/audio/qjackctl { };
 
   gkrellm = callPackage ../applications/misc/gkrellm { };
 
@@ -7004,11 +7002,7 @@ let
 
   polytable = callPackage ../misc/tex/polytable { };
 
-  psi = makeOverridable (callPackage ../applications/networking/instant-messengers/psi) {
-    qca2 = kde45.qca2;
-    qca2_ossl = kde45.qca2_ossl;
-    qt4 = qt47;
-  };
+  psi = newScope pkgs.kde45 ../applications/networking/instant-messengers/psi { };
 
   putty = callPackage ../applications/networking/remote/putty { };
 
