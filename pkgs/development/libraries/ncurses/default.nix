@@ -7,6 +7,10 @@ stdenv.mkDerivation ( rec {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
     sha256 = "1x4q6kma6zgg438llbgiac3kik7j2lln9v97jdffv3fyqyjxx6qa";
   };
+
+  crossAttrs = { 
+    patches = [ ./wint_t.patch ];
+  };
   
   configureFlags = ''
     --with-shared --includedir=''${out}/include --without-debug
