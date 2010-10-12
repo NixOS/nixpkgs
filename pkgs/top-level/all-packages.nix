@@ -7091,7 +7091,7 @@ let
     flex = pkgsi686Linux.flex2535;
   };
 
-  wineWacraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix {
+  wineWarcraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix {
     flex = pkgsi686Linux.flex2535;
   };
 
