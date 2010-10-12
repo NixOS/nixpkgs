@@ -28,7 +28,12 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doQMake" "doMakeInstall"];
+  phaseNames = ["preBuild" "doQMake" "doMakeInstall"];
+
+  preBuild = a.fullDepEntry (''
+    echo "Fixing a name collision with a function added in Qt 4.7"
+    sed -re 's/qHash[(][a-z ]*QUrl/vacuum_obsolete_&/' -i src/plugins/dataforms/dataforms.cpp
+  '') ["minInit" "doUnpack"];
 
   goSrcDir = ''cd vacuum-*/'';
 
