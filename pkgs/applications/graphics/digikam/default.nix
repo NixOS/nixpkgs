@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu liblqr1 lensfun
     pkgconfig ];
 
+  KDEDIRS=kdeedu;
+
   meta = {
     description = "Photo Management Program";
     license = "GPL";
