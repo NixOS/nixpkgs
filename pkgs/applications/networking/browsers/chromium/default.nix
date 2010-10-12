@@ -34,20 +34,18 @@
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
-  name = "chrome-${version}"; # !!! Shouldn't this be "chromium"?
-  version = "61624";
-
-  # TODO: Use a stable release that doesn't disappear every few days.  
+  name = "chrome-${version}";
+  version = "62263";
   src = 
     if stdenv.system == "x86_64-linux" then 
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/${version}/chrome-linux.zip";
-        sha256 = "16kv1zbs3ypb2b00dpg2s4nn8zqdnv8jdvgxknp3s0xcq02w2asl";
+        sha256 = "0yn52bqxadwnzi04gfg0ginrvwz18wchqgcl701s7n4i5xzdnmv8";
       } 
     else if stdenv.system == "i686-linux" then 
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/${version}/chrome-linux.zip";
-        sha256 = "081pvwzpys98m3arj3qagyhrrphz7rjwn7yy4mk6bcrds6mwdxiz";
+        sha256 = "1cbzd4k9m1hf08462him8jqxw13k0wy0q1rpq84niifsqnq4z8nx";
       } 
     else throw "Chromium is not supported on this platform.";
 
