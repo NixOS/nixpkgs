@@ -1,10 +1,11 @@
-{cabal, utf8String, terminfo}:
+{cabal, utf8String, terminfo, deepseq, mtl, parallel, parsec, vectorSpace}:
 
 cabal.mkDerivation (self : {
   pname = "vty";
-  version = "3.1.8.4";
-  sha256 = "9a006e77bb4f032613e059eea7bc4d92cbc7943449fb9c7269a061ddd9b3d82b";
-  propagatedBuildInputs = [utf8String terminfo];
+  version = "4.4.0.0";
+  sha256 = "bf032022a72831e263d2d48d0a7a3191fb1174554cd714902a60cb0f39afe312";
+  propagatedBuildInputs =
+    [utf8String terminfo deepseq mtl parallel parsec vectorSpace];
   meta = {
     description = "A simple terminal access library";
   };

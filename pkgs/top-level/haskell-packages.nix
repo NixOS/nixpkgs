@@ -50,6 +50,8 @@ rec {
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
+  Boolean = callPackage ../development/libraries/haskell/Boolean {};
+
   bytestring = callPackage ../development/libraries/haskell/bytestring {};
 
   networkBytestring = callPackage ../development/libraries/haskell/network-bytestring {};
@@ -373,6 +375,8 @@ rec {
 
   MaybeTTransformers = callPackage ../development/libraries/haskell/MaybeT-transformers {};
 
+  MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
+
   MissingH = callPackage ../development/libraries/haskell/MissingH {
     network = network_2_2_1_7;
   };
@@ -630,7 +634,11 @@ rec {
 
   vector = callPackage ../development/libraries/haskell/vector {};
 
-  vty = callPackage ../development/libraries/haskell/vty {};
+  vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
+
+  vty = callPackage ../development/libraries/haskell/vty {
+    parallel = parallel_2_2_0_1;
+  };
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {
     network = network_2_2_1_7;
