@@ -102,10 +102,13 @@
                 GHC_PACKAGE_PATH=$installedPkgConf ghc-pkg --global register $pkgConf --force
               fi
 
-              ensureDir $out/nix-support
-              ln -s $out/nix-support/propagated-build-native-inputs $out/nix-support/propagated-user-env-packages
-
               eval "$postInstall"
+            '';
+
+            postFixup = ''
+              if test -f $out/nix-support/propagated-build-native-inputs; then
+                ln -s $out/nix-support/propagated-build-native-inputs $out/nix-support/propagated-user-env-packages
+              fi
             '';
 
             # We inherit stdenv and ghc so that they can be used
