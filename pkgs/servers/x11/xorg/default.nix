@@ -98,51 +98,51 @@ let
   })) // {inherit xextproto ;};
     
   fontadobe100dpi = (stdenv.mkDerivation ((if overrides ? fontadobe100dpi then overrides.fontadobe100dpi else x: x) {
-    name = "font-adobe-100dpi-1.0.1";
+    name = "font-adobe-100dpi-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/font-adobe-100dpi-1.0.1.tar.bz2;
-      sha256 = "0b5m5iwc6925ysf0ljghx5znh9nkl792l77i26spdyzqsslbqhm7";
+      url = mirror://xorg/individual/font/font-adobe-100dpi-1.0.2.tar.bz2;
+      sha256 = "0xb767577698d9ribv4p4lgi7f8sjb8y6nvd357i5g23404nw0bi";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
   })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobe75dpi = (stdenv.mkDerivation ((if overrides ? fontadobe75dpi then overrides.fontadobe75dpi else x: x) {
-    name = "font-adobe-75dpi-1.0.1";
+    name = "font-adobe-75dpi-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/font-adobe-75dpi-1.0.1.tar.bz2;
-      sha256 = "0wczvzn5pc3c46xxp4328s207giisy4vwwv5if574w3bs9jigrad";
+      url = mirror://xorg/individual/font/font-adobe-75dpi-1.0.2.tar.bz2;
+      sha256 = "1z8h2gq7r553lf1fphk3pya6g4n8rs5f00kffyqdy284j77wlj9d";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
   })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobeutopia100dpi = (stdenv.mkDerivation ((if overrides ? fontadobeutopia100dpi then overrides.fontadobeutopia100dpi else x: x) {
-    name = "font-adobe-utopia-100dpi-1.0.2";
+    name = "font-adobe-utopia-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/font-adobe-utopia-100dpi-1.0.2.tar.bz2;
-      sha256 = "0plmfm3x5lsaa27slslw0sxx4jv9wb6zwwv2n8r957sq15akz36x";
+      url = mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.3.tar.bz2;
+      sha256 = "1b4cdjynwzrlsnqfi930gpvbs2mvjrawak801385pf0hfb9x2j70";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
   })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobeutopia75dpi = (stdenv.mkDerivation ((if overrides ? fontadobeutopia75dpi then overrides.fontadobeutopia75dpi else x: x) {
-    name = "font-adobe-utopia-75dpi-1.0.2";
+    name = "font-adobe-utopia-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/font-adobe-utopia-75dpi-1.0.2.tar.bz2;
-      sha256 = "0mv5pa2x7xvz8cjkcfihnfnl98ljx8bbxdb26qxy2wsvbfxa8g1v";
+      url = mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.3.tar.bz2;
+      sha256 = "1qs2jp6vw9j07qk38f0ambjd9g6d3ph4ichfgjjkaymmvd5bwk97";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
   })) // {inherit bdftopcf fontutil mkfontdir ;};
     
   fontadobeutopiatype1 = (stdenv.mkDerivation ((if overrides ? fontadobeutopiatype1 then overrides.fontadobeutopiatype1 else x: x) {
-    name = "font-adobe-utopia-type1-1.0.2";
+    name = "font-adobe-utopia-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/font-adobe-utopia-type1-1.0.2.tar.bz2;
-      sha256 = "0cz2aqknq4r923v77s9r61bxvxi1jy7igz2c3ff23xjawi92fpwc";
+      url = mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.3.tar.bz2;
+      sha256 = "1y8h0v15m3j0d83c3rp14bg5shx7kpg34vjaky8gvwndjdr4dyjh";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
   })) // {inherit mkfontdir mkfontscale ;};
@@ -1318,11 +1318,11 @@ let
   })) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputevdev = (stdenv.mkDerivation ((if overrides ? xf86inputevdev then overrides.xf86inputevdev else x: x) {
-    name = "xf86-input-evdev-2.4.0";
+    name = "xf86-input-evdev-2.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-evdev-2.4.0.tar.bz2;
-      sha256 = "0sl02sx755j5kg9sd762sgqk2gnvkhj3pm76l47qhw0a2jvqmx4f";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.5.0.tar.bz2;
+      sha256 = "0cq34rk3fqlbjnakwzw2138xvwzmf52ffy9grgsrxl6qr4x1gv4x";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   })) // {inherit inputproto xorgserver xproto ;};
@@ -1358,21 +1358,21 @@ let
   })) // {inherit inputproto randrproto xorgserver xproto ;};
     
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
-    name = "xf86-input-synaptics-1.2.2";
+    name = "xf86-input-synaptics-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.2.2.tar.bz2;
-      sha256 = "1a1dvdc1g8fgkhr3fn3rnly1bz3f6kz1qjxyrmm22qmsair4w2yj";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.3.0.tar.bz2;
+      sha256 = "1mwgb85qjyzx2yfi7jhgvd435zdyqxyq9aqwlsldmlpkqi8358rh";
     };
-    buildInputs = [pkgconfig inputproto recordproto libX11 libXi xorgserver xproto libXtst ];
-  })) // {inherit inputproto recordproto libX11 libXi xorgserver xproto libXtst ;};
+    buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
+  })) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
     
   xf86inputvmmouse = (stdenv.mkDerivation ((if overrides ? xf86inputvmmouse then overrides.xf86inputvmmouse else x: x) {
-    name = "xf86-input-vmmouse-12.6.5";
+    name = "xf86-input-vmmouse-12.6.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.5/src/everything/xf86-input-vmmouse-12.6.5.tar.bz2;
-      sha256 = "03ccsqs5hyrjspfaww8dwia01iz98nczqj27bd1bpxs7vjww66iq";
+      url = mirror://xorg/individual/driver/xf86-input-vmmouse-12.6.10.tar.bz2;
+      sha256 = "0409lkwk1ws8vw4axxilwmcs8qxj8lq5dma2i2iz49q6hrd9sdm6";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
   })) // {inherit inputproto randrproto xorgserver xproto ;};
@@ -1528,14 +1528,14 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
-    name = "xf86-video-intel-2.12.0";
+    name = "xf86-video-intel-2.13.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.12.0.tar.bz2;
-      sha256 = "1pzzzpw0i55m6s48ac8c3a0453rskqrdb4v6s9dq5bvj3ywpysz1";
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.13.0.tar.bz2;
+      sha256 = "11y85xsm21zaadn7di8vkglbi5d9ibgghzfbjhlkgbn4s3lgmcnq";
     };
-    buildInputs = [pkgconfig dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
-  })) // {inherit dri2proto fontsproto glproto libdrm libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
+    buildInputs = [pkgconfig dri2proto fontsproto libdrm libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
+  })) // {inherit dri2proto fontsproto libdrm libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
     
   xf86videomach64 = (stdenv.mkDerivation ((if overrides ? xf86videomach64 then overrides.xf86videomach64 else x: x) {
     name = "xf86-video-mach64-6.8.2";
@@ -1798,11 +1798,11 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
     
   xf86videovmware = (stdenv.mkDerivation ((if overrides ? xf86videovmware then overrides.xf86videovmware else x: x) {
-    name = "xf86-video-vmware-11.0.1";
+    name = "xf86-video-vmware-11.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vmware-11.0.1.tar.bz2;
-      sha256 = "1gp7gj1a1jdcqr8qa9z57h1zjf0wjhr78b7fyxbl9fl1rdd1sdx6";
+      url = mirror://xorg/individual/driver/xf86-video-vmware-11.0.2.tar.bz2;
+      sha256 = "1lkmyichry4kz4mhj35ry482rflz622gq8j788iq8j5rcjjrvcga";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ;};
