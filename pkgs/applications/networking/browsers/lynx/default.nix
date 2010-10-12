@@ -17,11 +17,6 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ stdenv.lib.optional sslSupport openssl;
   buildNativeInputs = [ ncurses ];
 
-  crossAttrs = {
-    configureFlags = "--enable-widec" +
-      (if sslSupport then " --with-ssl" else "");
-  };
-
   meta = {
     homepage = http://lynx.isc.org/;
     description = "A text-mode web browser";
