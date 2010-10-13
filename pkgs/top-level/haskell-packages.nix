@@ -50,6 +50,8 @@ rec {
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
+  bktrees = callPackage ../development/libraries/haskell/bktrees {};
+
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
   bytestring = callPackage ../development/libraries/haskell/bytestring {};
@@ -77,6 +79,8 @@ rec {
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
+
+  colour = callPackage ../development/libraries/haskell/colour {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -190,6 +194,14 @@ rec {
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {
     alex = alex_2_3_3;
     happy = happy_1_18_5;
+  };
+
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
+    fgl = fgl_5_4_2_3;
+  };
+
+  graphviz = callPackage ../development/libraries/haskell/graphviz {
+    fgl = fgl_5_4_2_3;
   };
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {
