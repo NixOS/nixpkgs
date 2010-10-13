@@ -1364,6 +1364,7 @@ let
       url = mirror://xorg/individual/driver/xf86-input-synaptics-1.3.0.tar.bz2;
       sha256 = "1mwgb85qjyzx2yfi7jhgvd435zdyqxyq9aqwlsldmlpkqi8358rh";
     };
+    preConfigure = ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${xorgserver}/include/xorg"'';
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
   })) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
     
