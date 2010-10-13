@@ -3863,7 +3863,7 @@ let
     inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
     flex = flex2535;
-    inherit (xlibs) libXt;
+    inherit (xlibs) libXt renderproto libXrender;
   }).deepOverride {libsoup = gnome28.libsoup_2_31;});
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
