@@ -279,5 +279,14 @@ in {
     nixUnstable.hostDrv = nativePlatforms;
     patch.hostDrv = nativePlatforms;
     zile.hostDrv = nativePlatforms;
+    prboom.hostDrv = nativePlatforms;
+    vim.hostDrv = nativePlatforms;
+    lynx.hostDrv = nativePlatforms;
+    patchelf.hostDrv = nativePlatforms;
+    nix.hostDrv = nativePlatforms;
+    fossil.hostDrv = nativePlatforms;
+    binutils.hostDrv = nativePlatforms;
+    mpg123.hostDrv = nativePlatforms;
+    yacas.hostDrv = nativePlatforms;
   };
 })
