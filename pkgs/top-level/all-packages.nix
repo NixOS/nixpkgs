@@ -3832,6 +3832,8 @@ let
 
   tk = callPackage ../development/libraries/tk { };
 
+  tnt = callPackage ../development/libraries/tnt { };
+
   unicap = callPackage ../development/libraries/unicap {};
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
