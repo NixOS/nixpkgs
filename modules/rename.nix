@@ -82,5 +82,6 @@ in zipModules ([]
 
 # KDE
 ++ rename deprecated "kde.extraPackages" "environment.kdePackages"
+# ++ rename obsolete "environment.kdePackages" "environment.systemPackages" # !!! doesn't work!
 
 ) # do not add renaming after this.
