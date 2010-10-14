@@ -341,7 +341,7 @@ rec {
     else if isAttrs options && lib.attrNames m.options != [] then
       all (name:
         lib.addErrorContext "${eol
-          }while checking the attribute '${addName name}'.${eol
+          }while checking the attribute `${addName name}':${eol
         }" (checkModule (addName name) (selectModule name m))
       ) (lib.attrNames m.config)
     else
