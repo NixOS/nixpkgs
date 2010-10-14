@@ -3845,6 +3845,8 @@ let
     inherit postgresql mysql sqlite;
   });
 
+  urt = callPackage ../development/libraries/urt { };
+
   vamp = callPackage ../development/libraries/audio/vamp { };
 
   vigra = callPackage ../development/libraries/vigra { };
