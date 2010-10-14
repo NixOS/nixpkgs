@@ -3089,6 +3089,8 @@ let
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
+  incrtcl = callPackage ../development/libraries/incrtcl { };
+
   indilib = callPackage ../development/libraries/indilib { };
 
   iniparser = callPackage ../development/libraries/iniparser { };
