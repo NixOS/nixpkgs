@@ -2103,7 +2103,7 @@ let
 
   pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
 
-  python24 = lowPrio (callPackage ../development/interpreters/python/2.4 { });
+  python24 = callPackage ../development/interpreters/python/2.4 { };
 
   python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
     inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
@@ -6700,6 +6700,7 @@ let
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage =
       let
+        # !!! Ugly, inefficient.
         pkgs_for_45 = (applyGlobalOverrides (p: { kde4 = p.kde45; }));
       in
         pkgs_for_45.newScope pkgs_for_45.kde45;
@@ -6963,7 +6964,6 @@ let
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   };
-
 
   # The SQLite branch.
   nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {

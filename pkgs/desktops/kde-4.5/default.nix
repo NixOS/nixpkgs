@@ -1,6 +1,23 @@
-{ callPackage, stdenv, fetchurl, qt47 } :
+{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47 } :
 
-{
+let
+
+  version = "4.5.1";
+
+  # Various packages (e.g. kdesdk) have been split up into many
+  # smaller packages.  Some people may want to install the entire
+  # package, so provide a wrapper package that recombines them.
+  combinePkgs = name: pkgs:
+    let pkgs' = stdenv.lib.attrValues pkgs; in
+    runCommand "${name}-${version}" ({ passthru = pkgs // { inherit pkgs; }; })
+      ''
+        mkdir -p $out/nix-support
+        echo ${toString pkgs'} > $out/nix-support/propagated-user-env-packages
+      '';
+
+in
+
+recurseIntoAttrs rec {
   recurseForRelease = true;
 
   inherit callPackage stdenv;
@@ -47,8 +64,8 @@
   kdebase_runtime = callPackage ./base-runtime { };
 
 ### OTHER MODULES
-  kdeaccessibility = {
-    recurseForDerivations = true;
+
+  kdeaccessibility = combinePkgs "kdeaccessibility" {
     colorSchemes = callPackage ./accessibility/color-schemes.nix { };
     iconThemes = callPackage ./accessibility/icon-themes.nix { };
     jovie = callPackage ./accessibility/jovie.nix { };
@@ -58,8 +75,8 @@
   };
 
   kdeadmin = callPackage ./admin { };
-  kdeartwork = {
-    recurseForDerivations = true;
+  
+  kdeartwork = combinePkgs "kdeartwork" {
     aurorae = callPackage ./artwork/aurorae.nix { };
     colorSchemes = callPackage ./artwork/color-schemes.nix { };
     desktop_themes = callPackage ./artwork/desktop-themes.nix { };
@@ -72,14 +89,15 @@
     phase_style = callPackage ./artwork/phase-style.nix { };
     kscreensaver = callPackage ./artwork/kscreensaver.nix { };
   };
+  
   kdeedu = callPackage ./edu { };
   kdegames = callPackage ./games { };
   kdegraphics = callPackage ./graphics { };
   kdemultimedia = callPackage ./multimedia { };
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
-  kdesdk = {
-    recurseForDerivations = true;
+  
+  kdesdk = combinePkgs "kdesdk" {
     cervisia = callPackage ./sdk/cervisia.nix { };
     kapptemplate = callPackage ./sdk/kapptemplate.nix { };
     kate = callPackage ./sdk/kate.nix { };
@@ -101,14 +119,14 @@
     scripts = callPackage ./sdk/scripts.nix { };
     umbrello = callPackage ./sdk/umbrello.nix { };
   };
-  kdetoys = {
-    recurseForDerivations = true;
+  
+  kdetoys = combinePkgs "kdetoys" {
     amor = callPackage ./toys/amor.nix { };
     kteatime = callPackage ./toys/kteatime.nix { };
     ktux = callPackage ./toys/ktux.nix { };
   };
 
-  kdeutils = {
+  kdeutils = combinePkgs "kdeutils" {
     ark = callPackage ./utils/ark.nix { };
     kcalc = callPackage ./utils/kcalc.nix { };
     kcharselect = callPackage ./utils/kcharselect.nix { };
@@ -122,11 +140,9 @@
     printer_applet = callPackage ./utils/printer-applet.nix { };
     superkaramba = callPackage ./utils/superkaramba.nix { };
     sweeper = callPackage ./utils/sweeper.nix { };
-    recurseForRelease = true;
   };
 
-  kdewebdev = {
-    recurseForDerivations = true;
+  kdewebdev = combinePkgs "kdewebdev" {
     klinkstatus = callPackage ./webdev/klinkstatus.nix { };
     kommander = callPackage ./webdev/kommander.nix { };
     kfilereplace = callPackage ./webdev/kfilereplace.nix { };
@@ -139,9 +155,15 @@
   # Experimental 4.5 versions
   kdepim_runtime45 = callPackage ./pim-runtime45 { };
   kdepim45 = callPackage ./pim45 { };
+  
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };
 
   l10n = callPackage ./l10n { };
+
+  # Make the split packages visible to `nix-env -q'.
+  misc = recurseIntoAttrs
+    (kdeaccessibility.pkgs // kdeartwork.pkgs // kdesdk.pkgs // kdetoys.pkgs // kdeutils.pkgs // kdewebdev.pkgs);
+
 }
