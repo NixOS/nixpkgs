@@ -3177,11 +3177,6 @@ let
 
   libcue = callPackage ../development/libraries/libcue { };
 
-  libcv = builderDefsPackage (import ../development/libraries/libcv) {
-    inherit libtiff libjpeg libpng pkgconfig;
-    inherit (gtkLibs) gtk glib;
-  };
-
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdbi = callPackage ../development/libraries/libdbi { };
@@ -5672,7 +5667,7 @@ let
   };
 
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
-    inherit libpng libcv;
+    inherit libpng opencv;
   };
 
   qrencode = builderDefsPackage (import ../tools/graphics/qrencode) {
