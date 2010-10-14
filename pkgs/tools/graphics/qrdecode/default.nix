@@ -6,7 +6,7 @@ let
 
   version = lib.attrByPath ["version"] "0.9.3" args; 
   buildInputs = with args; [
-    libpng libcv
+    libpng opencv
   ];
 in
 rec {
