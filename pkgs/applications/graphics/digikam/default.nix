@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   KDEDIRS=kdeedu;
 
+  patches = [ ./include.diff ];
+
   meta = {
     description = "Photo Management Program";
     license = "GPL";
