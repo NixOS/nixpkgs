@@ -4456,6 +4456,8 @@ let
 
   iptables = callPackage ../os-specific/linux/iptables { };
 
+  ipw2100fw = callPackage ../os-specific/linux/firmware/ipw2100 { };
+
   ipw2200fw = callPackage ../os-specific/linux/firmware/ipw2200 { };
 
   iwlwifi1000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-1000-ucode { };
