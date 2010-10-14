@@ -3837,6 +3837,8 @@ let
 
   tk = callPackage ../development/libraries/tk { };
 
+  unicap = callPackage ../development/libraries/unicap {};
+
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
   unixODBCDrivers = recurseIntoAttrs (import ../development/libraries/unixODBCDrivers {
