@@ -100,7 +100,7 @@ in
     services.xserver.displayManager.job =
       { execCmd =
           (optionalString (config.system.boot.loader.id == "grub") "PATH=${config.system.build.grub}/sbin:$PATH ") +
-          "exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon";
+          "KDEDIRS=${kdebase_workspace} exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon";
         logsXsession = true;
       };
 
