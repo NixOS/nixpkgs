@@ -3105,6 +3105,8 @@ let
 
   jasper = callPackage ../development/libraries/jasper { };
 
+  jama = callPackage ../development/libraries/jama { };
+
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
   jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
