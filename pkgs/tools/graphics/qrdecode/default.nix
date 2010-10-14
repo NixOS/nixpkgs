@@ -25,6 +25,9 @@ rec {
   preConfigure = fullDepEntry ''
     cd src
     sed -e /LDCONFIG/d -i libdecodeqr/Makefile.in
+    sed -e '/#include <cv.h>/a#include <ml.h>' -i libdecodeqr/imagereader.h
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${args.opencv}/include/opencv"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lcxcore"
   '' ["doUnpack"];
   postInstall = fullDepEntry ''
     cp sample/simple/simpletest $out/bin/qrdecode 
