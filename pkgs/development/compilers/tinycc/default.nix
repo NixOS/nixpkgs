@@ -91,6 +91,6 @@ let version = "0.9.25"; in
       license = "LGPLv2+";
 
       platforms = stdenv.lib.platforms.unix;
-      maintainers = [ stdenv.lib.platforms.ludo ];
+      maintainers = [ stdenv.lib.maintainers.ludo ];
     };
   }
