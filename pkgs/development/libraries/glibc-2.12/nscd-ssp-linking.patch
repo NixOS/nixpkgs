@@ -9,7 +9,7 @@ index 93874e5..63f7144 100644
  ifeq (yesyes,$(have-fpie)$(build-shared))
  nscd-cflags += $(pie-ccflag)
 +ifeq (yes,$(have-ssp))
-+LDFLAGS-nscd += -lssp_noshared -lssp
++LDFLAGS-nscd += -lssp_nonshared -lssp
 +endif
  endif
  ifeq (yes,$(have-ssp))
