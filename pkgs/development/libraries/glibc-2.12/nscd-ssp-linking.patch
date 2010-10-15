@@ -1,0 +1,16 @@
+http://sources.redhat.com/bugzilla/show_bug.cgi?id=12125
+
+diff --git a/nscd/Makefile b/nscd/Makefile
+index 93874e5..63f7144 100644
+--- a/nscd/Makefile
++++ b/nscd/Makefile
+@@ -90,6 +90,9 @@ CFLAGS-nscd_initgroups.c = -fexceptions
+ nscd-cflags = -DIS_IN_nscd=1 -D_FORTIFY_SOURCE=2
+ ifeq (yesyes,$(have-fpie)$(build-shared))
+ nscd-cflags += $(pie-ccflag)
++ifeq (yes,$(have-ssp))
++LDFLAGS-nscd += -lssp_noshared -lssp
++endif
+ endif
+ ifeq (yes,$(have-ssp))
+ nscd-cflags += -fstack-protector

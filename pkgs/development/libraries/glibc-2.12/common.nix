@@ -74,6 +74,9 @@ stdenv.mkDerivation ({
 
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
+
+    /* Allow nixos and nix handle the locale-archive. */
+    ./nscd-ssp-linking.patch
   ];
 
   postPatch = ''
@@ -83,9 +86,7 @@ stdenv.mkDerivation ({
 
     # nscd needs libgcc, and we don't want it dynamically linked
     # because we don't want it to depend on bootstrap-tools libs.
-    # It also needs -lssp when building with nixpkgs gcc (not of
-    # boostrap-tools)
-    echo "LDFLAGS-nscd += -static-libgcc -lssp" >> nscd/Makefile
+    echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
   '';
 
   configureFlags = [
