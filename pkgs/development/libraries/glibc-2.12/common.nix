@@ -75,8 +75,11 @@ stdenv.mkDerivation ({
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
 
-    /* Allow nixos and nix handle the locale-archive. */
+    /* A fix for a glibc nscd linking bug, reported upstream already.*/
     ./nscd-ssp-linking.patch
+
+    /* Workaround for a glibc bug reported upstraem already */
+    ./disable-strstr-sse42.patch
   ];
 
   postPatch = ''

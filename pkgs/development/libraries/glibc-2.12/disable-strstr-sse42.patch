@@ -1,0 +1,14 @@
+Workaround for http://sources.redhat.com/bugzilla/show_bug.cgi?id=12123
+
+diff --git a/sysdeps/i386/i686/multiarch/strstr-c.c b/sysdeps/i386/i686/multiarch/strstr-c.c
+index efa9f78..cd34a88 100644
+--- a/sysdeps/i386/i686/multiarch/strstr-c.c
++++ b/sysdeps/i386/i686/multiarch/strstr-c.c
+@@ -10,4 +10,6 @@
+ extern char *__strstr_sse42 (const char *, const char *) attribute_hidden;
+ extern __typeof (__strstr_ia32) __strstr_ia32 attribute_hidden;
+ 
+-libc_ifunc (strstr, HAS_SSE4_2 ? __strstr_sse42 : __strstr_ia32);
++// Disabled any sse42, due to a bug:
++// http://sources.redhat.com/bugzilla/show_bug.cgi?id=12123
++libc_ifunc (strstr, __strstr_ia32);
