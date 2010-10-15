@@ -13,14 +13,34 @@ let version = "0.9.25"; in
 
     buildInputs = [ perl texinfo ];
 
-    patchPhase = ''
+    patches =
+      [ (fetchurl {
+           # Add support for `alloca' on x86-64.
+           url = "http://repo.or.cz/w/tinycc.git/patch/8ea8305199496ba29b6d0da2de07aea4441844aa";
+           sha256 = "0dz1cm9zihk533hszqql4gxpzbp8c4g9dnvkkh9vs4js6fnz1fl2";
+           name = "x86-64-alloca.patch";
+         })
+
+        (fetchurl {
+           # Fix alignment of the return value of `alloca'.
+           url = "http://repo.or.cz/w/tinycc.git/patch/dca2b15df42c1341794dd412917708416da25594";
+           sha256 = "0617a69gnfdmv8pr6dj3szv97v3zh57439dsbklxrnipx2jv6pq7";
+           name = "x86-64-alloca-align.patch";
+         })
+      ];
+
+    postPatch = ''
       substituteInPlace "texi2pod.pl" \
         --replace "/usr/bin/perl" "${perl}/bin/perl"
 
       # To produce executables, `tcc' needs to know where `crt*.o' are.
-      sed -i "tcc.c" \
-        -e's|define CONFIG_TCC_CRT_PREFIX.*$|define CONFIG_TCC_CRT_PREFIX "${stdenv.glibc}/lib"|g ;
-           s|tcc_add_library_path(s, "/usr/lib");|tcc_add_library_path(s, "${stdenv.glibc}/lib");|g'
+      sed -i "tcc.h" \
+        -e's|define CONFIG_TCC_CRT_PREFIX.*$|define CONFIG_TCC_CRT_PREFIX "${stdenv.glibc}/lib"|g'
+
+      sed -i "libtcc.c" \
+        -e's|tcc_add_library_path(s, CONFIG_SYSROOT "/lib");|tcc_add_library_path(s, "${stdenv.glibc}/lib");|g;
+           s|tcc_add_sysinclude_path(s, CONFIG_SYSROOT "/usr/include");|tcc_add_library_path(s, "${stdenv.glibc}/include");|g ;
+           s|tcc_add_sysinclude_path(s, buf);|tcc_add_sysinclude_path(s, buf); tcc_add_sysinclude_path(s, "${stdenv.glibc}/include");|g'
 
       # Tell it about the loader's location.
       sed -i "tccelf.c" \
@@ -36,6 +56,9 @@ let version = "0.9.25"; in
       echo 'int main () { printf ("it works!\n"); exit(0); }' | \
          "$out/bin/tcc" -run -
     '';
+
+    doCheck = true;
+    checkTarget = "test";
 
     meta = {
       description = "TinyCC, a small, fast, and embeddable C compiler and interpreter";
