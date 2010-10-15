@@ -2260,7 +2260,7 @@ let
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
 
-  automake = automake110x;
+  automake = automake111x;
 
   automake17x = callPackage ../development/tools/misc/automake/automake-1.7.x.nix { };
 
@@ -4262,7 +4262,11 @@ let
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus hal libuuid openssl gperf m4
-      automake autoconf libtool xmlto asciidoc udev;
+      autoconf libtool xmlto asciidoc udev;
+
+    # XXX: Update to newer Automake on the next big rebuild; better yet:
+    # remove the dependency on Automake.
+    automake = automake110x;
 
     # !!! pythonBase is used instead of python because this causes an
     # infinite recursion when the flag python.full is set to true.
