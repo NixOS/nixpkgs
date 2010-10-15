@@ -83,7 +83,9 @@ stdenv.mkDerivation ({
 
     # nscd needs libgcc, and we don't want it dynamically linked
     # because we don't want it to depend on bootstrap-tools libs.
-    echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+    # It also needs -lssp when building with nixpkgs gcc (not of
+    # boostrap-tools)
+    echo "LDFLAGS-nscd += -static-libgcc -lssp" >> nscd/Makefile
   '';
 
   configureFlags = [
