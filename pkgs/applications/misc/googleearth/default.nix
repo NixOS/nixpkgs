@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv,
-libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11,
+libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, qt4,
 zlib }:
 
 /* I haven't found any x86_64 package from them */
@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     freetype 
     libXext 
     libX11 
+    qt4
     zlib
   ];
 
