@@ -3069,6 +3069,10 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
+  hspell = callPackage ../development/libraries/hspell { };
+
+  hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
+
   hsqldb = callPackage ../development/libraries/java/hsqldb { };
 
   hunspell = callPackage ../development/libraries/hunspell { };
