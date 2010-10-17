@@ -5,8 +5,8 @@ let
     inherit (hspell) src patchPhase buildNativeInputs;
     meta = hspell.meta // {
       description = "${a.buildFlags} Hebrew dictionary";
-    } // a.meta;
-  } // (removeAttrs ["meta"] a));
+    } // (if a ? meta then a.meta else {});
+  } // (removeAttrs a ["meta"]));
 in
 {
   recurseForDerivations = true;
