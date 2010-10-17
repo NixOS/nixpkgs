@@ -631,6 +631,8 @@ let
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
+  getmail = callPackage ../tools/networking/getmail {};
+
   getopt = callPackage ../tools/misc/getopt { };
 
   gftp = callPackage ../tools/networking/gftp { };
