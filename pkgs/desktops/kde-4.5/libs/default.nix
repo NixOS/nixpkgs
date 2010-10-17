@@ -2,7 +2,7 @@
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
 , xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
-, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
+, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, hspell
 }:
 
 kde.package {
@@ -10,8 +10,13 @@ kde.package {
   buildInputs = [
     cmake perl xz flex bison bzip2 pcre fam libxml2 libxslt shared_mime_info
     giflib jasper /*openexr*/ aspell avahi kerberos acl attr libXScrnSaver
-    enchant libdbusmenu_qt polkit_qt_1 automoc4
+    enchant libdbusmenu_qt polkit_qt_1 automoc4 hspell
   ];
+
+# TODO: make sonnet plugins (dictionaries) really work.
+# There are a few hardcoded paths.
+# Let kdelibs find openexr
+# Split plugins from libs?
 
   propagatedBuildInputs = [ qt4 gcc.libc strigi soprano attica qca2
     shared_desktop_ontologies ];
@@ -31,7 +36,7 @@ kde.package {
     license = "LGPL";
     kde = {
       name = "kdelibs";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

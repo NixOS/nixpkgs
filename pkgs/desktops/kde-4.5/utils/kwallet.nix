@@ -9,7 +9,8 @@ kde.package {
       name = "kwallet";
       module = "kdeutils";
       version = "1.6";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "main.cpp";
     };
   };
 }

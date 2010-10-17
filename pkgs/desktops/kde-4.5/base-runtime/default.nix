@@ -21,7 +21,7 @@ kde.package {
     license = "LGPL";
     kde = {
       name = "kdebase-runtime";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

@@ -9,7 +9,8 @@ kde.package {
       name = "kmag";
       module = "kdeaccessibility";
       version = "1.0";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "kmag/version.h";
     };
   };
 }

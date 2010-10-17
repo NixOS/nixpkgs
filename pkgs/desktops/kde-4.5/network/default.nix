@@ -21,7 +21,7 @@ kde.package {
 # * libmeanwhile  <http://meanwhile.sf.net>
 # * libgadu (1.8.0 or higher)  <http://toxygen.net/libgadu/>
 
-# Let cmake find libktorrent. Waiting for upstream fix in 4.5.1
+# Let cmake find libktorrent. Waiting for upstream fix
   KDEDIRS="${libktorrent}";
 
   meta = {
@@ -30,7 +30,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdenetwork";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

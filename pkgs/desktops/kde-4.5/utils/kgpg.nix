@@ -9,7 +9,8 @@ kde.package {
       name = "kgpg";
       module = "kdeutils";
       version = "2.4.1";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "main.cpp";
     };
   };
 }

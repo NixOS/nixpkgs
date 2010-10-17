@@ -8,7 +8,7 @@ kde.package {
     kde = {
       name = "IconThemes";
       module = "kdeaccessibility";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

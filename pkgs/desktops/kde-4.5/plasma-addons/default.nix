@@ -17,7 +17,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdeplasma-addons";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

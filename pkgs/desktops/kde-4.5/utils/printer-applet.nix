@@ -15,7 +15,8 @@ kde.package {
       name = "printer-applet";
       module = "kdeutils";
       version = "1.5";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "printer-applet.py";
     };
   };
 }

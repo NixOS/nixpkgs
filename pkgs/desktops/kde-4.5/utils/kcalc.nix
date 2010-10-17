@@ -9,7 +9,8 @@ kde.package {
       name = "kcalc";
       module = "kdeutils";
       version = "2.7";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "version.h";
     };
   };
 }
