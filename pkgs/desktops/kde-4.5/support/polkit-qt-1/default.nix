@@ -5,9 +5,7 @@ kde.package {
   propagatedBuildInputs = [ polkit glib ];
   meta.kde = {
     name = "polkit-qt-1";
-    module = "polkit-qt-1";
     version = "0.96.1";
-    release = "0.96.1";
     subdir = "apps/KDE4.x/admin";
   };
 }
