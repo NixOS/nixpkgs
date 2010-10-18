@@ -8,31 +8,6 @@ let
 
   nssModulesPath = config.system.nssModules.path;
 
-  sshdConfig = pkgs.writeText "sshd_config"
-    ''
-      Protocol 2
-
-      UsePAM yes
-
-      ${ concatMapStrings (port : ''Port ${toString port}
-                                           '') cfg.ports}
-
-      ${if cfg.forwardX11 then "
-        X11Forwarding yes
-        XAuthLocation ${pkgs.xlibs.xauth}/bin/xauth
-      " else "
-        X11Forwarding no
-      "}
-
-      ${if cfg.allowSFTP then "
-        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
-      " else "
-      "}
-
-      PermitRootLogin ${cfg.permitRootLogin}
-      GatewayPorts ${cfg.gatewayPorts}
-    '';
-
   permitRootLoginCheck = v:
     v == "yes" ||
     v == "without-password" ||
@@ -102,6 +77,11 @@ in
         '';
       };
       
+      extraConfig = mkOption {
+        default = "";
+        description = "Verbatim contents of <filename>sshd_config</filename>.";
+      };
+      
     };
 
   };
@@ -146,10 +126,40 @@ in
 
         daemonType = "fork";
 
-        exec = "${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key -f ${sshdConfig}";
+        exec = 
+          ''
+            ${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key \
+              -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
+          '';
       };
 
     networking.firewall.allowedTCPPorts = cfg.ports;
+
+    services.openssh.extraConfig =
+      ''
+        Protocol 2
+
+        UsePAM yes
+
+        ${concatMapStrings (port: ''
+          Port ${toString port}
+        '') cfg.ports}
+
+        ${if cfg.forwardX11 then ''
+          X11Forwarding yes
+          XAuthLocation ${pkgs.xlibs.xauth}/bin/xauth
+        '' else ''
+          X11Forwarding no
+        ''}
+
+        ${optionalString cfg.allowSFTP ''
+          Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+        ''}
+
+        PermitRootLogin ${cfg.permitRootLogin}
+        GatewayPorts ${cfg.gatewayPorts}
+      '';
+
   };
 
 }
