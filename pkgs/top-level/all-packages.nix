@@ -6673,7 +6673,7 @@ let
       inherit (kde3) kdelibs;
     };
 
-    k3b1 = callPackage ../applications/misc/k3b/1.0.nix {
+    k3b = callPackage ../applications/misc/k3b/1.0.nix {
       inherit (kde3) kdelibs;
     };
 
