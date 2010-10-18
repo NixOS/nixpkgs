@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1p0bm5p8g8h0mimhj0d58dqdrhfipvcwv95l6hf69z4gygksclak";
   };
   
-  buildInputs = [ pkgconfig expat gettext libiconv ];
+  buildInputs = [ pkgconfig expat gettext ]
+                ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
   
   propagatedBuildInputs = [ dbus.libs glib ];
   

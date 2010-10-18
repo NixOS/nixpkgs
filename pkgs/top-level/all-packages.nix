@@ -2686,8 +2686,7 @@ let
   };
 
   dbus_glib = makeOverridable (import ../development/libraries/dbus-glib) {
-    inherit fetchurl stdenv pkgconfig gettext dbus expat glib;
-    libiconv = if (stdenv.system == "i686-freebsd") then libiconv else null;
+    inherit fetchurl stdenv pkgconfig gettext dbus expat glib libiconv;
   };
 
   dbus_java = callPackage ../development/libraries/java/dbus-java { };
@@ -3010,9 +3009,7 @@ let
 
   gtkLibs218 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs218; in rec {
 
-    glib = callPackage ../development/libraries/glib/2.22.x.nix {
-      libiconv = if stdenv.system == "i686-freebsd" then libiconv else null;
-    };
+    glib = callPackage ../development/libraries/glib/2.22.x.nix { };
 
     glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
 
@@ -3030,9 +3027,7 @@ let
 
   gtkLibs220 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs220; in rec {
 
-    glib = callPackage ../development/libraries/glib/2.24.x.nix {
-      libiconv = if stdenv.system == "i686-freebsd" then libiconv else null;
-    };
+    glib = callPackage ../development/libraries/glib/2.24.x.nix { };
 
     glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
 
