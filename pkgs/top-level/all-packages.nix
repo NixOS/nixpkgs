@@ -1096,6 +1096,8 @@ let
     python=python;  };
   */
 
+  ripmime = callPackage ../tools/networking/ripmime {};
+
   rsnapshot = callPackage ../tools/backup/rsnapshot {
 
     # For the `logger' command, we can use either `utillinux' or
