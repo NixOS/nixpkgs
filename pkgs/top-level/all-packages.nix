@@ -5817,6 +5817,8 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  k3b = newScope pkgs.kde4 ../applications/misc/k3b { };
+
   kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu { };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
@@ -6676,7 +6678,7 @@ let
       inherit (kde3) kdelibs;
     };
 
-    k3b = callPackage ../applications/misc/k3b {
+    k3b1 = callPackage ../applications/misc/k3b/1.0.nix {
       inherit (kde3) kdelibs;
     };
 
