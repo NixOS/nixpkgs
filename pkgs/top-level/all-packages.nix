@@ -631,7 +631,9 @@ let
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
-  getmail = callPackage ../tools/networking/getmail {};
+  getmail = callPackage ../tools/networking/getmail {
+    python = pythonFull;
+  };
 
   getopt = callPackage ../tools/misc/getopt { };
 
@@ -1008,6 +1010,8 @@ let
   pfstools = callPackage ../tools/graphics/pfstools {
     qt = qt3;
   };
+
+  philter = callPackage ../tools/networking/philter { };
 
   pinentry = callPackage ../tools/misc/pinentry {
     inherit (gnome) glib gtk;
