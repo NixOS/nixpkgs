@@ -2,7 +2,7 @@
 , libusb, dbus, dbus_glib, glib, libuuid, perl
 , perlXMLParser, gettext, zlib, gperf, consolekit, policykit
 , libsmbios, dmidecode, udev, utillinuxng, pmutils, usbutils
-, eject
+, eject, upstart
 }:
 
 assert stdenv ? glibc;
@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
         --replace /bin/mount ${utillinuxng}/bin/mount \
         --replace /bin/umount ${utillinuxng}/bin/umount \
         --replace /usr/bin/pm-is-supported ${pmutils}/bin/pm-is-supported \
-        --replace /usr/sbin/pm ${pmutils}/sbin/pm
+        --replace /usr/sbin/pm ${pmutils}/sbin/pm \
+        --replace /sbin/shutdown ${upstart}/sbin/shutdown
     done
   '';
 
