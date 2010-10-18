@@ -1,19 +1,19 @@
-{stdenv, fetchurl, python, pkgconfig, glib, gtk, pygobject, pycairo
-  , libglade ? null}:
+{ stdenv, fetchurl, makeWrapper, python, pkgconfig, glib, gtk, pygobject, pycairo
+, libglade ? null }:
 
-stdenv.mkDerivation {
-  name = "pygtk-2.17.0";
+stdenv.mkDerivation rec {
+  name = "pygtk-2.22.0";
 
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.17/pygtk-2.17.0.tar.bz2;
-    sha256 = "000l3wrcj0ghid045n6ipqg4q4zci51z9k9fqw4n4p3n5rx82qba";
+    url = "http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.22/${name}.tar.bz2";
+    sha256 = "4acf0ef2bde8574913c40ee4a43d9c4f43bb77b577b67147271b534501a54cc8";
   };
 
-  buildInputs = [python pkgconfig glib gtk]
-    ++ (if libglade != null then [libglade] else [])
-  ;
+  buildInputs =
+    [ makeWrapper python pkgconfig glib gtk ]
+    ++ stdenv.lib.optional (libglade != null) libglade;
 
-  propagatedBuildInputs = [pygobject pycairo];
+  propagatedBuildInputs = [ pygobject pycairo ];
 
   postInstall = ''
     rm $out/bin/pygtk-codegen-2.0
@@ -28,5 +28,8 @@ stdenv.mkDerivation {
     for n in *; do
       ln -s "gtk-2.0/$n" "../$n"
     done
+
+    wrapProgram $out/bin/pygtk-demo --prefix PYTHONPATH ":" \
+        $(toPythonPath "${pygobject} ${pycairo} $out")
   '';
 }
