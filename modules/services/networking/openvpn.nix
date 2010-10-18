@@ -155,7 +155,11 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
     jobs = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
+
+    environment.systemPackages = [ openvpn ];
+
   };
   
 }
