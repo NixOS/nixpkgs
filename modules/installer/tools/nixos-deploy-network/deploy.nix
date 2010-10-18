@@ -2,33 +2,71 @@
 , nixpkgs ? /etc/nixos/nixpkgs
 , networkExpr
 , infrastructureExpr
+, targetProperty ? "hostname"
 }:
 
 let
   pkgs = import nixpkgs {};
   
-  inherit (builtins) attrNames getAttr listToAttrs concatMapStrings;
+  inherit (builtins) attrNames getAttr listToAttrs;
+  inherit (pkgs.lib) concatMapStrings;
   
   network = import networkExpr;
   infrastructure = import infrastructureExpr;
- 
-  generateScript = network: infrastructure: configs:
+  
+  generateRollbackSucceededPhase = network: infrastructure: configs:
     concatMapStrings (configurationName: 
       let
         infrastructureElement = getAttr configurationName infrastructure;
 	config = getAttr configurationName configs;
       in
       ''
-        echo "=== upgrading ${infrastructureElement.hostName} ==="
-        nix-copy-closure --to ${infrastructureElement.hostName} ${config.system.build.toplevel} \
-        && ssh $NIX_SSHOPTS ${infrastructureElement.hostName} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} \
-        && ssh $NIX_SSHOPTS ${infrastructureElement.hostName} ${config.system.build.toplevel}/bin/switch-to-configuration switch \
-        && { succeeded=$((succeeded + 1)); } \
-        || { failed=$((failed + 1)); echo 'WARNING: upgrade of ${infrastructureElement.hostName} failed!'; }
+        if [ "$rollback" != "$succeeded" ]
+	then
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/bin/switch-to-configuration switch
+	    
+	    rollback=$((rollback + 1))
+	fi
+      ''
+    ) (attrNames network)  
+  ;
+  
+  generateDistributionPhase = network: infrastructure: configs:
+    concatMapStrings (configurationName: 
+      let
+        infrastructureElement = getAttr configurationName infrastructure;
+	config = getAttr configurationName configs;
+      in
+      ''
+        echo "=== copy system closure to ${getAttr targetProperty infrastructureElement} ==="
+        nix-copy-closure --to ${getAttr targetProperty infrastructureElement} ${config.system.build.toplevel}
       ''
     ) (attrNames network)
   ;
-
+  
+  generateActivationPhase = network: infrastructure: configs:
+    concatMapStrings (configurationName: 
+      let
+        infrastructureElement = getAttr configurationName infrastructure;
+	config = getAttr configurationName configs;
+      in
+      ''
+        echo "=== activating system configuration on ${getAttr targetProperty infrastructureElement} ==="
+	ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} || 
+	  (ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback; rollbackSucceeded)
+	
+        ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/bin/switch-to-configuration switch ||
+	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/bin/switch-to-configuration switch
+	    rollbackSucceeded
+	  )
+	
+	succeeded=$((succeeded + 1))
+      ''
+    ) (attrNames network)
+  ;
+  
   evaluateMachines = network: infrastructure:
     listToAttrs (map (configurationName:
       let
@@ -48,13 +86,27 @@ let
 in
 pkgs.stdenv.mkDerivation {
   name = "deploy-script";
-  buildCommand = ''
+  buildCommand = 
+  ''
     ensureDir $out/bin
     cat > $out/bin/deploy-systems << "EOF"
     #! ${pkgs.stdenv.shell} -e
-    failed=0; succeeded=0
-    ${generateScript network infrastructure configs}
-    echo "Upgrade of $failed machines failed, $succeeded machines succeeded.";
+    
+    rollbackSucceeded()
+    {
+        rollback=0
+        ${generateRollbackSucceededPhase network infrastructure configs}
+    }
+    
+    # Distribution phase
+    
+    ${generateDistributionPhase network infrastructure configs}
+    
+    # Activation phase
+    
+    succeeded=0
+    
+    ${generateActivationPhase network infrastructure configs}
     EOF
     chmod +x $out/bin/deploy-systems
   '';
