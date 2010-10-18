@@ -1,4 +1,4 @@
-{ nixpkgs ? ../stdenv-updates-svn }:
+{ nixpkgs ? ../nixpkgs }:
 
 let
 
