@@ -5324,6 +5324,21 @@ let
     inherit (gnome) esound;
   };
 
+  compiz = callPackage ../applications/window-managers/compiz/core.nix { };
+
+  compiz_ccsm = callPackage ../applications/window-managers/compiz/ccsm.nix { };
+
+  compizconfig_python = callPackage ../applications/window-managers/compiz/config-python.nix { };
+
+  libcompizconfig = callPackage ../applications/window-managers/compiz/libcompizconfig.nix { };
+
+  compiz_bcop = callPackage ../applications/window-managers/compiz/bcop.nix { };
+
+  compiz_plugins_main = callPackage ../applications/window-managers/compiz/plugins-main.nix { };
+
+  compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
+
+  /*
   compizBase = (builderDefsPackage (import ../applications/window-managers/compiz/0.8.0.nix)) {
     inherit lib stringsWithDeps builderDefs;
     inherit fetchurl stdenv pkgconfig libpng mesa perl perlXMLParser libxslt gettext
@@ -5361,6 +5376,7 @@ let
   compizExtra = callPackage ../applications/window-managers/compiz/extra.nix {
     inherit (gnome) GConf;
   };
+  */
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk11;
