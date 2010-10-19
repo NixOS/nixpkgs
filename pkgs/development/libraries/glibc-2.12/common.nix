@@ -76,6 +76,15 @@ stdenv.mkDerivation ({
     ./nix-locale-archive.patch
 
     /* A fix for a glibc nscd linking bug, reported upstream already.*/
+    /* Currently this fix works only for i686; as it only affects
+       the building of glibc from a final nixpkgs stdenv, we don't care much
+       on whether it works or not. The patch does not affect building
+       from the bootstrap-tools gcc because it does not have libssp at all.
+       TODO: Link ssp to nscd dynamically, and set the proper rpath to
+       nscd, although linking dynamically will make this libc
+       dynamically linked with gcc's libssp, and gcc's libssp is dynamically
+       linked with stdenv.glibc's libc. This does not look very correct.
+       */
     ./nscd-ssp-linking.patch
 
     /* Workaround for a glibc bug reported upstraem already */
