@@ -3084,6 +3084,14 @@ let
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
+  icedtea = callPackage ../development/libraries/java/icedtea {
+    ant = apacheAntGcj;
+    xerces = xercesJava;
+    xulrunner = icecatXulrunner3;
+    inherit (xlibs) libX11 libXp libXtst libXinerama libXt
+      libXrender xproto;
+  };
+
   icu = callPackage ../development/libraries/icu { };
 
   id3lib = callPackage ../development/libraries/id3lib { };

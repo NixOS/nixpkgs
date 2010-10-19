@@ -1,0 +1,20 @@
+Remove references to /bin/echo to allow NixOS builds.
+
+--- openjdk/jdk/make/common/shared/Defs-utils.gmk	2009-04-24 09:33:55.000000000 +0200
++++ openjdk/jdk/make/common/shared/Defs-utils.gmk	2010-01-19 15:39:29.000000000 +0100
+@@ -177,7 +177,7 @@ ifeq ($(PLATFORM),linux)
+ 
+   NAWK           = $(USRBIN_PATH)gawk
+   # Intrinsic unix command, with backslash-escaped character interpretation
+-  ECHO           = /bin/echo -e
++  ECHO           = echo -e
+   # These are really in UTILS_USR_BIN_PATH on Linux (only sccs is not)
+   AR             = $(UTILS_USR_BIN_PATH)ar
+   AS             = $(UTILS_USR_BIN_PATH)as
+@@ -195,6 +195,6 @@ ifeq ($(PLATFORM),solaris)
+   # Intrinsic unix command, with backslash-escaped character interpretation
+   #   (not using -e  will cause build failure when using /bin/bash)
+   #   (using -e breaks something else)
+-  ECHO           = /usr/bin/echo
++  ECHO           = echo
+ endif
