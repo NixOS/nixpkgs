@@ -68,6 +68,6 @@ fi
 
 # Deploy the network
 
-nix-build $NIXOS/deploy.nix --argstr networkExpr $networkExpr --argstr infrastructureExpr $infrastructureExpr $showTraceArg
+nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr --argstr infrastructureExpr $infrastructureExpr $showTraceArg
 ./result/bin/deploy-systems
 rm -f result

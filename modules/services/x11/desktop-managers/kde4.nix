@@ -23,7 +23,7 @@ in
       default = [];
       example = [ pkgs.kde4.kdesdk ];
       type = types.list types.package;
-      description = "Additional KDE 4 programs. Only a minimal set is installed by default.";
+      description = "This option is obsolete.  Please use <option>environment.systemPackages</option> instead.";
     };
 
   };
@@ -56,7 +56,7 @@ in
     } ];
 
     environment = {
-      kdePackages = [
+      systemPackages = [
         pkgs.kde4.kdelibs
         pkgs.kde4.kdebase
         pkgs.kde4.kdebase_runtime
@@ -69,9 +69,7 @@ in
         pkgs.gst_all.gstPluginsGood
         xorg.xmessage # so that startkde can show error messages
         xorg.xset # used by startkde, non-essential
-      ];
-
-      x11Packages = config.environment.kdePackages;
+      ] ++ config.environment.kdePackages;
 
       pathsToLink = [ "/share" ];
 

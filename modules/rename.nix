@@ -1,8 +1,6 @@
 {pkgs, options, config, ...}:
 
-
 let
-  to = throw "This is just a dummy keyword";
 
   alias = from: to: {
     name = "Alias";
@@ -29,10 +27,16 @@ let
 
   zipModules = list: with pkgs.lib;
     zip (n: v:
-      if tail v != [] then zipModules v else head v
+      if tail v != [] then
+        if n == "_type" then builtins.trace "Merge _type" (head v)
+        else if n == "extraConfigs" then builtins.trace "Merge extraConfigs" (concatLists v)
+        else if n == "description" || n == "apply" then
+          abort "Cannot rename an option to multiple options."
+        else zipModules v
+      else head v
     ) list;
 
-  rename = statusTemplate: from: keyword: to: with pkgs.lib;
+  rename = statusTemplate: from: to: with pkgs.lib;
     let
       status = statusTemplate from to;
       setTo = setAttrByPath (splitString "." to);
@@ -60,30 +64,30 @@ let
 in zipModules ([]
 
 # usage example:
-# ++ rename alias "services.xserver.slim.theme" to "services.xserver.displayManager.slim.theme"
-++ rename obsolete "environment.extraPackages" to "environment.systemPackages"
+# ++ rename alias "services.xserver.slim.theme" "services.xserver.displayManager.slim.theme"
+++ rename obsolete "environment.extraPackages" "environment.systemPackages"
 
 # Old Grub-related options.
-++ rename obsolete "boot.copyKernels" to "boot.loader.grub.copyKernels"
-++ rename obsolete "boot.extraGrubEntries" to "boot.loader.grub.extraEntries"
-++ rename obsolete "boot.extraGrubEntriesBeforeNixos" to "boot.loader.grub.extraEntriesBeforeNixOS"
-++ rename obsolete "boot.grubDevice" to "boot.loader.grub.device"
-++ rename obsolete "boot.bootMount" to "boot.loader.grub.bootDevice"
-++ rename obsolete "boot.grubSplashImage" to "boot.loader.grub.splashImage"
+++ rename obsolete "boot.copyKernels" "boot.loader.grub.copyKernels"
+++ rename obsolete "boot.extraGrubEntries" "boot.loader.grub.extraEntries"
+++ rename obsolete "boot.extraGrubEntriesBeforeNixos" "boot.loader.grub.extraEntriesBeforeNixOS"
+++ rename obsolete "boot.grubDevice" "boot.loader.grub.device"
+++ rename obsolete "boot.bootMount" "boot.loader.grub.bootDevice"
+++ rename obsolete "boot.grubSplashImage" "boot.loader.grub.splashImage"
 
-++ rename obsolete "boot.initrd.extraKernelModules" to "boot.initrd.kernelModules"
+++ rename obsolete "boot.initrd.extraKernelModules" "boot.initrd.kernelModules"
 
 # OpenSSH
-++ rename obsolete "services.sshd.ports" to "services.openssh.ports"
-++ rename obsolete "services.sshd.enable" to "services.openssh.enable"
-++ rename obsolete "services.sshd.allowSFTP" to "services.openssh.allowSFTP"
-++ rename obsolete "services.sshd.forwardX11" to "services.openssh.forwardX11"
-++ rename obsolete "services.sshd.gatewayPorts" to "services.openssh.gatewayPorts"
-++ rename obsolete "services.sshd.permitRootLogin" to "services.openssh.permitRootLogin"
-++ rename obsolete "services.xserver.startSSHAgent" to "services.xserver.startOpenSSHAgent"
+++ rename obsolete "services.sshd.ports" "services.openssh.ports"
+++ rename obsolete "services.sshd.enable" "services.openssh.enable"
+++ rename obsolete "services.sshd.allowSFTP" "services.openssh.allowSFTP"
+++ rename obsolete "services.sshd.forwardX11" "services.openssh.forwardX11"
+++ rename obsolete "services.sshd.gatewayPorts" "services.openssh.gatewayPorts"
+++ rename obsolete "services.sshd.permitRootLogin" "services.openssh.permitRootLogin"
+++ rename obsolete "services.xserver.startSSHAgent" "services.xserver.startOpenSSHAgent"
 
 # KDE
-++ rename deprecated "kde.extraPackages" to "environment.kdePackages"
-
+++ rename deprecated "kde.extraPackages" "environment.kdePackages"
+# ++ rename obsolete "environment.kdePackages" "environment.systemPackages" # !!! doesn't work!
 
 ) # do not add renaming after this.

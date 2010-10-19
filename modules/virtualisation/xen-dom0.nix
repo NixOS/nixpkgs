@@ -72,7 +72,7 @@ in
 
     boot.kernelModules = 
       [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback" 
-        "blktap" "tap"
+        "blktap" "tun"
       ];
 
     # The radeonfb kernel module causes the screen to go black as soon
