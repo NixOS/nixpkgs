@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ensureDir $out/share/emacs/site-lisp
-    cp contrib/client-side/emacs/*.el $out/share/emacs/site-lisp/
+    cp contrib/client-side/emacs/[dp]svn*.el $out/share/emacs/site-lisp/
 
     if test -n "$pythonBindings"; then
         make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
         make install
         cd -
     fi
-  ''; # */
+  '';
 
   inherit perlBindings pythonBindings;
 
