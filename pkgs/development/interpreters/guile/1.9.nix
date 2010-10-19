@@ -18,7 +18,13 @@ rec {
     [ makeWrapper gawk readline libtool libunistring
       libffi pkgconfig
     ];
-  propagatedBuildInputs = [ gmp boehmgc ];
+  propagatedBuildInputs = [ gmp boehmgc ]
+
+    # XXX: These ones aren't normally needed here, but since
+    # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
+    # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
+    # see below.
+    ++ [ libtool libunistring ];
 
   patches =
     stdenv.lib.optionals (coverageAnalysis != null)
