@@ -10,7 +10,7 @@
 , ... } @ args:
 
 let
-  antFlags = "-f ${buildfile} " + stdenv.lib.concatMapStrings ({name, value}: "-D${name}=${value}" ) antProperties ;
+  antFlags = "-f ${buildfile} " + stdenv.lib.concatMapStrings ({name, value}: "-D${name}=${value} " ) antProperties ;
 in
 stdenv.mkDerivation (
 
