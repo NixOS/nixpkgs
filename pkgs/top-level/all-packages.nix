@@ -5957,6 +5957,8 @@ let
     inherit (xlibs) libX11 xproto;
   };
 
+  mp3info = callPackage ../applications/audio/mp3info { };
+
   mpc123 = callPackage ../applications/audio/mpc123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
