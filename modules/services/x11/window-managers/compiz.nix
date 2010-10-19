@@ -1,64 +1,63 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
+
   cfg = config.services.xserver.windowManager.compiz;
   xorg = config.services.xserver.package;
-  gnome = pkgs.gnome;
 
-  options = { services = { xserver = { windowManager = {
+in
+  
+{
 
-    compiz = {
+  options = {
+
+    services.xserver.windowManager.compiz = {
+    
       enable = mkOption {
         default = false;
-        example = true;
-        description = "Enable the compiz window manager.";
+        description = "Enable the Compiz window manager.";
       };
-
 
       renderingFlag = mkOption {
         default = "";
         example = "--indirect-rendering";
-        description = "
-          Possibly pass --indierct-rendering to Compiz.
-        ";
+        description = "Pass the <option>--indirect-rendering</option> flag to Compiz.";
       };
+      
     };
 
-  }; }; }; };
-in
+  };
+  
 
-mkIf cfg.enable {
-  require = options;
+  config = mkIf cfg.enable {
+  
+    services.xserver.windowManager.session = singleton
+      { name = "compiz";
+        start =
+          ''
+            # Start Compiz using the flat-file configuration backend
+            # (ccp).
+            export COMPIZ_PLUGINDIR=${config.system.path}/lib/compiz
+            export COMPIZ_METADATADIR=${config.system.path}/share/compiz
+            ${pkgs.compiz}/bin/compiz ccp ${cfg.renderingFlag} &
 
-  services = {
-    xserver = {
-
-      windowManager = {
-        session = [{
-          name = "compiz";
-          start = ''
-            # !!! Hack: load the schemas for Compiz.
-            GCONF_CONFIG_SOURCE=xml::~/.gconf ${gnome.GConf}/bin/gconftool-2 \
-              --makefile-install-rule ${pkgs.compiz}/etc/gconf/schemas/*.schemas # */
-
-            # !!! Hack: turn on most Compiz modules.
-            ${gnome.GConf}/bin/gconftool-2 -t list --list-type=string \
-              --set /apps/compiz/general/allscreens/options/active_plugins \
-              [gconf,png,decoration,wobbly,fade,minimize,move,resize,cube,switcher,rotate,place,scale,water]
-
-            # Start Compiz and the GTK-style window decorator.
-            env LD_LIBRARY_PATH=${xorg.libX11}/lib:${xorg.libXext}/lib:/usr/lib/
-            ${pkgs.compiz}/bin/compiz gconf ${cfg.renderingFlag} &
-            ${pkgs.compiz}/bin/gtk-window-decorator --sync &
+            # Start GTK-style window decorator.
+            ${pkgs.compiz}/bin/gtk-window-decorator &
           '';
-        }];
       };
 
-    };
+    environment.systemPackages =
+      [ pkgs.compiz
+        pkgs.compiz_ccsm
+        pkgs.compiz_plugins_main
+        pkgs.compiz_plugins_extra
+        pkgs.libcompizconfig # for the "ccp" plugin
+      ];
+
+    environment.pathsToLink = [ "/lib/compiz" "/share/compiz" ];
+
   };
 
-  environment = {
-    x11Packages = [ pkgs.compiz ];
-  };
 }
