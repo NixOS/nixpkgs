@@ -6140,6 +6140,8 @@ let
 
   rsibreak = newScope pkgs.kde4 ../applications/misc/rsibreak { };
 
+  recode = callPackage ../tools/text/recode { };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
   };
