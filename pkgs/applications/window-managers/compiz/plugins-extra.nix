@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1qbxfi332bbadm0ah48frnrl9dkczl111s5a91a0cqz5v7nbw4g1";
   };
 
+  patches =
+    [ # Support scaling wallpapers to the maximum size while still
+      # respecting the aspect ratio.
+      ./wallpaper-maxpect.patch
+    ];
+
   NIX_CFLAGS_COMPILE = "-I${compiz_plugins_main}/include/compiz";
 
   buildInputs =
