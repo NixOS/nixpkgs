@@ -15,10 +15,12 @@
 
 let
   antFlags = "-f ${buildfile} " + stdenv.lib.concatMapStrings ({name, value}: "-D${name}=${value} " ) antProperties ;
+  lib = stdenv.lib;
 in
 stdenv.mkDerivation (
 
   {
+    inherit jre ant;
     showBuildStats = true;
 
     postPhases =
@@ -48,14 +50,18 @@ stdenv.mkDerivation (
       done
     '';
 
-    generateWrappersPhase = '' 
+    generateWrappersPhase = 
+      let 
+        cp = w: "-cp ${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/lib/java/${w.jar}"}";
+      in
+      '' 
       header "Generating jar wrappers"
     '' + (stdenv.lib.concatMapStrings (w: ''
 
       cat >> $out/bin/${w.name} <<EOF
       #! /bin/sh
       export JAVA_HOME=$jre
-      $jre/bin/java ${if w ? mainClass then "-cp $out/lib/java/${w.jar} ${w.mainClass}" else "-jar $out/lib/java/${w.jar}"} \$@
+      $jre/bin/java ${cp w} ${if w ? mainClass then w.mainClass else "-jar ${w.jar}"} \$@
       EOF
 
       chmod a+x $out/bin/${w.name} || exit 1
@@ -83,7 +89,7 @@ stdenv.mkDerivation (
       '';
   }
 
-  // removeAttrs args ["antProperties" "buildInputs" "pkgs"] // 
+  // removeAttrs args ["antProperties" "buildInputs" "pkgs" "jarWrappers"] // 
 
   {
     name = name + (if src ? version then "-" + src.version else "");
