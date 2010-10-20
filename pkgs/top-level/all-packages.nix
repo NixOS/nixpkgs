@@ -615,6 +615,8 @@ let
     withX11 = true;
   };
 
+  ftgl = callPackage ../development/libraries/ftgl { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   unix2dos = callPackage ../tools/text/unix2dos { };
@@ -682,6 +684,8 @@ let
   gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
+
+  gource = callPackage ../tools/misc/gource { };
 
   graphviz = callPackage ../tools/graphics/graphviz {
     inherit (gtkLibs) pango;
