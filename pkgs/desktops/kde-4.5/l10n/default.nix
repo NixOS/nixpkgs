@@ -3,18 +3,22 @@
 let
   overrides = { };
 
-  defaultVersion = "4.5.1";
+  defaultRelease = "4.5.2";
+  releases = [ "4.5.1" "4.5.2" ];
 
-  getOverride = name: stdenv.lib.attrByPath [name] {} overrides;
+  sanitizeString = replaceChars [ "@" "." ] [ "_" "_" ];
+  getOverride = name: attrByPath [name] {} overrides;
 
-  kdeL10nDerivation = {lang, sha256, version} :
+  inherit (stdenv.lib) replaceChars attrByPath singleton;
+
+  kdeL10nDerivation = {lang, sha256, release} :
     let
-      name = "kde-l10n-${lang}-${version}";
+      name = "kde-l10n-${lang}-${release}";
     in
     stdenv.mkDerivation ({
       inherit name;
       src = fetchurl {
-        url = "mirror://kde/stable/${version}/src/kde-l10n/${name}.tar.bz2";
+        url = "mirror://kde/stable/${release}/src/kde-l10n/${name}.tar.bz2";
         inherit sha256;
       };
 
@@ -28,24 +32,25 @@ let
     }
     // (getOverride lang) // (getOverride name)
   );
+
+  kdeL10nRelease = release:
+    let
+      releaseStr = sanitizeString release;
+    in
+    builtins.listToAttrs (
+      map ({lang, sha256}:
+        {
+          name = "${sanitizeString lang}";
+          value = kdeL10nDerivation { inherit lang release sha256;};
+        }
+      ) (import (./manifest + "-${release}.nix"))
+    );
+
 in
 {
   inherit kdeL10nDerivation;
   recurseForDerivations = true;
 }
-// (builtins.listToAttrs (
-  map (a@{lang, version, sha256} :
-      {
-        name = stdenv.lib.replaceChars ["." "@"] ["_" "_"] "${lang}_${version}";
-        value = kdeL10nDerivation a;
-      }
-    ) (import ./manifest.nix)
-))
-// (builtins.listToAttrs (
-  map (a@{lang, version, sha256} :
-      {
-        name = stdenv.lib.replaceChars ["." "@"] ["_" "_"] "${lang}";
-        value = kdeL10nDerivation a;
-      }
-    ) (stdenv.lib.filter (x : x.version == defaultVersion) (import ./manifest.nix))
-))
+// builtins.listToAttrs (map (r : { name = sanitizeString r; value =
+kdeL10nRelease r; }) releases)
+// (kdeL10nRelease defaultRelease)
