@@ -1,5 +1,6 @@
 { src
-, stdenv
+, pkgs
+, stdenv ? pkgs.stdenv
 , name
 , antTargets ? []
 , jars ? []
@@ -7,6 +8,9 @@
 , antProperties ? []
 , antBuildInputs ? []
 , buildfile ? "build.xml"
+, ant ? pkgs.ant
+, jre ? pkgs.jre
+, hydraAntLogger ? pkgs.hydraAntLogger
 , ... } @ args:
 
 let
@@ -79,11 +83,13 @@ stdenv.mkDerivation (
       '';
   }
 
-  // removeAttrs args ["antProperties"] // 
+  // removeAttrs args ["antProperties" "buildInputs" "pkgs"] // 
 
   {
     name = name + (if src ? version then "-" + src.version else "");
   
+    buildInputs = [ant jre] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
+
     postHook = ''
       ensureDir $out/nix-support
       echo "$system" > $out/nix-support/system
