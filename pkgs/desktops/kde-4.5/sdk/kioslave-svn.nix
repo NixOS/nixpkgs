@@ -3,6 +3,7 @@
 kde.package {
   buildInputs = [ cmake kdelibs automoc4 subversion apr aprutil ];
 
+  patches = [ ./find-svn.patch ];
   cmakeFlags = "-DBUILD_kioslave=ON";
 
   meta = {
