@@ -92,7 +92,7 @@ in
           , group ? "nogroup"
           , setuid ? false
           , setgid ? false
-          , permissions ? "u+rx,g+rx,o+rx"
+          , permissions ? "u+rx,g+x,o+x"
           }:
 
           ''
