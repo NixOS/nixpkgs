@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.compiz.org/;
     description = "Compiz settings manager";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

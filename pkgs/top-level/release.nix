@@ -54,7 +54,6 @@ with (import ./release-lib.nix);
   cksfv = all;
   classpath = linux;
   cmake = all;
-  #compiz = linux;
   consolekit = linux;
   coreutils = all;
   cpio = all;

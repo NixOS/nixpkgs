@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.compiz.org/;
     description = "Extra plugins for Compiz";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

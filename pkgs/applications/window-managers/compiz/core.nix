@@ -32,5 +32,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.compiz.org/;
     description = "A compositing window manager";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
