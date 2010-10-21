@@ -4189,6 +4189,8 @@ let
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
+  mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
+
   mpd = callPackage ../servers/mpd { };
 
   myserver = callPackage ../servers/http/myserver { };
