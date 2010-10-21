@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit apr aprutil sslSupport proxySupport;
   };
-  
+
   meta = {
     description = "Apache HTTPD, the world's most popular web server";
     homepage = http://httpd.apache.org/;
+    license = "ASL2.0";
   };
 }
