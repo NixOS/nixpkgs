@@ -598,6 +598,8 @@ let
 
   fdisk = callPackage ../tools/system/fdisk { };
 
+  fdm = callPackage ../tools/networking/fdm {};
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
