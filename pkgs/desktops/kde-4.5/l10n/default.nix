@@ -14,11 +14,13 @@ let
   kdeL10nDerivation = {lang, sha256, release} :
     let
       name = "kde-l10n-${lang}-${release}";
+      saneName = "kde-l10n-${sanitizeString lang}-${release}";
     in
     stdenv.mkDerivation ({
-      inherit name;
+      name = saneName;
       src = fetchurl {
         url = "mirror://kde/stable/${release}/src/kde-l10n/${name}.tar.bz2";
+        name = "${saneName}.tar.bz2";
         inherit sha256;
       };
 
