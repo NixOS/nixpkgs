@@ -4191,6 +4191,8 @@ let
 
   mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
 
+  mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
+
   mpd = callPackage ../servers/mpd { };
 
   myserver = callPackage ../servers/http/myserver { };
