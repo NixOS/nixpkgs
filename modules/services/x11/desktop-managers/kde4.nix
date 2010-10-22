@@ -67,6 +67,7 @@ in
         pkgs.gst_all.gstreamer
         pkgs.gst_all.gstPluginsBase
         pkgs.gst_all.gstPluginsGood
+        pkgs.gst_all.gstFfmpeg # for mp3 playback
         xorg.xmessage # so that startkde can show error messages
         xorg.xset # used by startkde, non-essential
       ] ++ config.environment.kdePackages;
