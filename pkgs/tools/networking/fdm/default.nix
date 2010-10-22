@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , openssl, samba, zlib, flex, bison
+  , openssl, tdb, zlib, flex, bison
   , ...}:
 builderDefsPackage
 (a :  
