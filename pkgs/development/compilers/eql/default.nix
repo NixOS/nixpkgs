@@ -1,5 +1,6 @@
 x@{builderDefsPackage
-  , fetchgit, qt4, ecl
+  , fetchgit, qt4, ecl, xorgserver
+  , xkbcomp, xkeyboard_config
   , ...}:
 builderDefsPackage
 (a :  
@@ -29,7 +30,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["setVars" "fixPaths" "buildEQLLib" "doQMake" "doMake" "buildLibEQL" "doDeploy"];
+  phaseNames = ["setVars" "fixPaths" "firstMetaTypeId" "buildEQLLib" "doQMake" "doMake" "doDeploy"];
 
   setVars = a.fullDepEntry (''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
@@ -39,20 +40,26 @@ rec {
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
   '') ["minInit" "doUnpack"];
 
-  buildEQLLib = a.fullDepEntry (''
-    cd src
-    ecl -shell make-eql-lib.lisp
+  firstMetaTypeId = a.fullDepEntry (''
+    cd src 
+    qmake first_metatype_id.pro
+    make
+    TMP=.
+    TMPDIR=.
+    XKB_BINDIR="${xkbcomp}/bin" Xvfb -once -reset -terminate :2 -xkbdir ${xkeyboard_config}/etc/X11/xkb &
+    DISPLAY=:2 ./first_metatype_id
   '') ["doUnpack" "addInputs"];
+
+  buildEQLLib = a.fullDepEntry (''
+    ecl -shell make-eql-lib.lisp
+    qmake eql_lib.pro
+    make
+  '') ["doUnpack" "addInputs" "firstMetaTypeId"];
 
   doQMake = a.fullDepEntry (''
-    qmake
-  '') ["addInputs"];
-
-  buildLibEQL = a.fullDepEntry (''
-    sed -i eql.pro -e 's@#CONFIG += eql_dll@CONFIG += eql_dll@'
-    qmake
+    qmake eql_exe.pro
     make
-  '') ["doUnpack" "addInputs"];
+  '') ["addInputs" "firstMetaTypeId" "buildEQLLib"];
 
   doDeploy = a.fullDepEntry (''
     cd ..
@@ -61,7 +68,7 @@ rec {
     ln -s $out/lib/eql/build-dir/eql $out/bin
     ln -s $out/lib/eql/build-dir/src/*.h $out/include
     ln -s $out/lib/eql/build-dir/src/gen/*.h $out/include/gen
-    mv $out/lib/eql/build-dir/my_app/libeql*.so* $out/lib
+    ln -s $out/lib/eql/build-dir/libeql*.so* $out/lib
   '') ["minInit" "defEnsureDir"];
 
   meta = {
