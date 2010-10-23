@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "arora-${version}";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "http://arora.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1np9xiy7vkpz4dar6ka90wxw4nkwapjafyjzqrv7ghnc3nqdnnvv";
+    sha256 = "1ffkranxi93lrg5r7a90pix9j8xqmf0z1mb1m8579v9m34cyypvg";
   };
 
   buildInputs = [ qt4 ];

@@ -1,6 +1,7 @@
 Author: Yury Kudryashov
 Reason: other KDE modules try to install polkit action files into
 $kdelibs/share/polkit-1/actions
+Upstream: rejected, they propose to set install dir in each package
 --- a/cmake/modules/FindPolkitQt-1.cmake.old	2010-08-12 16:13:45.000000000 +0400
 +++ b/cmake/modules/FindPolkitQt-1.cmake	2010-08-12 16:13:56.000000000 +0400
 @@ -101,4 +101,4 @@

@@ -54,7 +54,6 @@ with (import ./release-lib.nix);
   cksfv = all;
   classpath = linux;
   cmake = all;
-  #compiz = linux;
   consolekit = linux;
   coreutils = all;
   cpio = all;
@@ -468,6 +467,12 @@ with (import ./release-lib.nix);
     virtualboxGuestAdditions = linux;
   };
 
+  linuxPackages_2_6_36 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
   strategoPackages = {
     sdf = all;
     strategoxt = all;
@@ -539,6 +544,7 @@ with (import ./release-lib.nix);
     thunar = linux;
     xfce4_power_manager = linux;
     xfce4icontheme = linux;
+    xfce4mixer = linux;
     xfce4panel = linux;
     xfce4session = linux;
     xfce4settings = linux;

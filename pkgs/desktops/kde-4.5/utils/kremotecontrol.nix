@@ -4,11 +4,11 @@ kde.package {
   buildInputs = [ cmake qt4 perl kdelibs automoc4 kdebase_workspace ];
 
   meta = {
-    description = "";
+    description = "KDE remote control";
     kde = {
       name = "kremotecontrol";
       module = "kdeutils";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

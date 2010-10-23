@@ -1,9 +1,7 @@
-{ fetchurl, stdenv, perl, bison, flex, pkgconfig, python
-, which, glib, libxml2 }:
+{ fetchurl, stdenv, perl, bison, flex, pkgconfig, glib, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-0.10.30";
-  # TODO: Remove gtkdoc dependency on next upgrade
 
   src = fetchurl {
     urls = [
@@ -13,16 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "0ajkfkchwpk5zlcis19laqbv84mi61cn3cqbdbrpyy93whdk1vz8";
   };
 
-  buildInputs = [perl bison flex pkgconfig python which ];
-  propagatedBuildInputs = [glib libxml2];
+  buildInputs = [ perl bison flex pkgconfig ];
+  propagatedBuildInputs = [ glib libxml2 ];
 
   patchPhase = ''
     sed -i -e 's/^   /\t/' docs/gst/Makefile.in docs/libs/Makefile.in docs/plugins/Makefile.in
   '';
 
   configureFlags = ''
-    --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
+    --disable-examples --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
   '';
+
+  # Hm, apparently --disable-gtk-doc is ignored...
+  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     homepage = http://gstreamer.freedesktop.org;

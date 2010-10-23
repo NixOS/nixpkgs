@@ -11,7 +11,8 @@ kde.package {
       name = "superkaramba";
       module = "kdeutils";
       version = "0.55";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "src/main.cpp";
     };
   };
 }

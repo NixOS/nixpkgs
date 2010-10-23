@@ -13,6 +13,13 @@ stdenv.mkDerivation {
     sha256 = "0qk74nrnm9qlijrq6gmy8cyhjgp0gis4zx44divnr8n487d5308a";
   };
 
+  preConfigure = ''
+    for i in script/* 
+    do 
+     substituteInPlace $i --replace "/usr/bin/env python" "${python}/bin/python"
+    done
+  '';
+
   propagatedBuildInputs = [python makeWrapper];
   buildPhase = "python setup.py install --prefix=$out --install-lib=$(toPythonPath $out) --hardlink-scons -O1";
   installPhase = "for n in $out/bin/*; do wrapProgram $n --suffix PYTHONPATH ':' \"$(toPythonPath $out)\"; done";

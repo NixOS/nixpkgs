@@ -8,7 +8,7 @@ kde.package rec {
     kde = {
       name = "aurorae";
       module = "kdeartwork";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

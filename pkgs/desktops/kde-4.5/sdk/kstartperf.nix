@@ -3,7 +3,6 @@
 kde.package {
   buildInputs = [ cmake kdelibs automoc4 libtool ];
 
-  patches = [ ./optional-docs.diff ];
 
   meta = {
     description = "Measures start up time of a KDE application";
@@ -11,7 +10,8 @@ kde.package {
       name = "kstartperf";
       module = "kdesdk";
       version = "1.0";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "kstartperf.cpp";
     };
   };
 }

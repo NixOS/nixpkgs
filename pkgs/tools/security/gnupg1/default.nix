@@ -15,11 +15,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gnupg-1.4.10";
+  name = "gnupg-1.4.11";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0f5v8c8fkxcnrlmnijaq2sqfqq6xhmbyi2p44pj98y6n6927z452";
+    sha256 = "1xkfxr4z2fy9d5d6hj4lzv854lk227kgv6qb2w0sam752snfx36i";
   };
 
   buildInputs = [ readline bzip2 ];
@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
     ''
       gunzip < ${idea} > ./cipher/idea.c
     '';
-  
+
+  doCheck = true;
+
   meta = {
-    description = "A free implementation of the OpenPGP standard for encrypting and signing data";
+    description = "GnuPG, a free implementation of the OpenPGP standard for encrypting and signing data";
     homepage = http://www.gnupg.org/;
+    license = "GPLv3+";
+    platforms = stdenv.lib.platforms.gnu; # arbitrary choice
   };
 }

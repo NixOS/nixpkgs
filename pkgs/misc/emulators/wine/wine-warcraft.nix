@@ -6,12 +6,9 @@
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-let 
-  s = import ./src-for-default.nix;
-in
-
 stdenv.mkDerivation rec {
-  name = "wine-warcraft-${s.version}";
+  name = "wine-warcraft-${version}";
+  version = "1.1.19";
 
   src = fetchgit {
     url = git://repo.or.cz/wine/warcraft3.git;
@@ -40,11 +37,11 @@ stdenv.mkDerivation rec {
   # elements specified above.
   dontPatchELF = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.winehq.org/";
     license = "LGPL";
-    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix with patches for Warcraft 3";
+    maintainers = [ maintainers.phreedom ];
     platforms = [ "i686-linux" ];
   };
 }

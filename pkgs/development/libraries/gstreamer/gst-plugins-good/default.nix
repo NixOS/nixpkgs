@@ -1,23 +1,23 @@
 { fetchurl, stdenv, pkgconfig, gstPluginsBase, aalib, cairo
 , flac , hal, libjpeg, zlib, speex, libpng, libdv, libcaca, dbus
 , libiec61883, libavc1394, ladspaH, taglib, gdbm, pulseaudio
-, libsoup, libcap, libtasn1
+, gnome, libcap, libtasn1, liboil
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-0.10.24";
+  name = "gst-plugins-good-0.10.25";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-plugins-good/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "1gnhw86yx0362hvmnihiq5d7i710ag9zlg636dlcdvxqqp4slx7j";
+    sha256 = "1xlr8rzb6pxi91g6jxhqa7cwl0kg5y21qfd9bgc4fb212867bmdm";
   };
 
   propagatedBuildInputs = [gstPluginsBase aalib cairo flac hal libjpeg
     zlib speex libpng libdv libcaca dbus.libs libiec61883 libavc1394 ladspaH
-    taglib gdbm pulseaudio libsoup libcap libtasn1];
+    taglib gdbm pulseaudio gnome.libsoup libcap libtasn1 liboil];
   buildInputs = [pkgconfig];
 
   configureFlags = "--enable-ladspa";

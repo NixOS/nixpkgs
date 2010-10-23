@@ -30,7 +30,7 @@ kde.package rec {
     license = "LGPL";
     kde = {
       name = "kdebindings";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

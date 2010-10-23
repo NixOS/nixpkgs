@@ -1,6 +1,8 @@
 { stdenv, fetchurl, hotplugSupport ? false, libusb ? null
 , gt68xxFirmware ? null }:
-
+let
+  firmware = gt68xxFirmware {inherit fetchurl;};
+in
 assert hotplugSupport -> stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
@@ -24,8 +26,7 @@ stdenv.mkDerivation {
 
   preInstall =
     if gt68xxFirmware != null then 
-      "mkdir -p \${out}/share/sane/gt68xx ; ln -s " +  
-      (gt68xxFirmware {inherit fetchurl;}) +
-      "  \${out}/share/sane/gt68xx/PS1fw.usb "
+      "mkdir -p \${out}/share/sane/gt68xx ; ln -s " + firmware.fw +
+      " \${out}/share/sane/gt68xx/" + firmware.name
     else "";
 }

@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -e 's/-Werror//' -i configure
-    sed -e 's/for aspell_dir in/for aspell_dir in ${aspell} /' -i configure
-    sed -e 's/for imlib2_dir in/for imlib2_dir in ${imlib2} /' -i configure
-    sed -e 's/for xosd_dir in/for xosd_dir in ${xosd} /' -i configure
+    sed -e 's@for aspell_dir in@for aspell_dir in ${aspell} @' -i configure
+    sed -e 's@for imlib2_dir in@for imlib2_dir in ${imlib2} @' -i configure
+    sed -e 's@for xosd_dir in@for xosd_dir in ${xosd} @' -i configure
 
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/lib/gtk-2.0/include"

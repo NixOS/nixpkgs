@@ -7,18 +7,24 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-1.9.12";  # This is a beta release!
+  name = "guile-1.9.13";  # This is a beta release!
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
-    sha256 = "098p940fs6jmjpdp4jb2wjqrr0l2cgf8yhy3nf9s444pxwlyvn2g";
+    sha256 = "1idrp39lnqyiw68k1mmbfrd46zqdn19crwqbg3b064p6hljypdl4";
   };
 
   buildInputs =
     [ makeWrapper gawk readline libtool libunistring
       libffi pkgconfig
     ];
-  propagatedBuildInputs = [ gmp boehmgc ];
+  propagatedBuildInputs = [ gmp boehmgc ]
+
+    # XXX: These ones aren't normally needed here, but since
+    # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
+    # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
+    # see below.
+    ++ [ libtool libunistring ];
 
   patches =
     stdenv.lib.optionals (coverageAnalysis != null)

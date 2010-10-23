@@ -1,5 +1,5 @@
 { stdenv, fetchurl, emacs, texinfo
-, mpg321, vorbisTools, taglib, alsaUtils }:
+, mpg321, vorbisTools, taglib, mp3info, alsaUtils }:
 
 # XXX: EMMS also supports Xine, MPlayer, Jack, etc.
 
@@ -36,12 +36,18 @@ stdenv.mkDerivation rec {
     # Use the libtag info back-end for MP3s since we're building it.
     sed -i "emms-setup.el" \
         -e 's|emms-info-mp3info|emms-info-libtag|g'
+
+    # But use mp3info for the tag editor.
+    sed -i "emms-info-mp3info.el" \
+        -e 's|emms-info-mp3info-program-name[[:blank:]]\+"mp3info"|emms-info-mp3info-program-name "${mp3info}/bin/mp3info"|g'
+    sed -i "emms-tag-editor.el" \
+        -e 's|"mp3info"|"${mp3info}/bin/mp3info"|g'
   '';
 
   postInstall = ''
     ensureDir "$out/bin" && cp emms-print-metadata "$out/bin"
   '';
-  
+
   meta = {
     description = "GNU EMMS, The Emacs Multimedia System";
 
@@ -57,6 +63,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/emms/;
+
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;
   };
 }

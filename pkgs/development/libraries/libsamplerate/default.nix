@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
-    sha256 = "1m1iwzpcny42kcqv5as2nyb0ggrb56wzckpximqpp2y74dipdf4q";
+    sha256 = "1k3z09b13c0z10mqfn6w48pxsdx569s3wslg0x52q5mzy6gmvvbq";
   };
 
   buildInputs = [ pkgconfig ];

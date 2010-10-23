@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, libvpx, yasm, mesa
+, libvpx, yasm, mesa, wirelesstools
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -52,6 +52,8 @@ rec {
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman libvpx yasm mesa
+	wirelesstools xlibs.libXscrnsaver xlibs.scrnsaverproto
+	xlibs.libXext xlibs.xextproto
       ];
 
     configureFlags =
@@ -105,7 +107,7 @@ rec {
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
-        xlibs.pixman libvpx yasm mesa
+        xlibs.pixman libvpx yasm mesa wirelesstools
       ];
 
     propagatedBuildInputs = [xulrunner];

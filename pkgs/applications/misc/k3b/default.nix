@@ -1,19 +1,29 @@
-{stdenv, fetchurl, kdelibs, x11, zlib, libpng, libjpeg, perl, qt3}:
+{ stdenv, fetchurl, cmake, qt4, perl, shared_mime_info, libvorbis, taglib
+, ffmpeg, flac, libsamplerate, libdvdread, lame, libsndfile, libmad, gettext
+, kdelibs, kdemultimedia, cdrdao, cdrtools, dvdplusrwtools
+, automoc4, phonon, makeWrapper
+}:
 
-stdenv.mkDerivation {
-  name = "k3b-1.0.5";
-  
+stdenv.mkDerivation rec {
+  name = "k3b-2.0.1";
   src = fetchurl {
-    url = mirror://sourceforge/k3b/k3b-1.0.5.tar.bz2;
-    sha256 = "1pshv8na1sr9xcmkr0byjgyl8jmxwcylkl8pwjvripja4fgpkyfl";
+    url = "mirror://sourceforge/k3b/${name}.tar.bz2";
+    sha256 = "1dyd3i2hqd5xs9rz4f8k74zca91j9sp72lhl0zws2cvqc474ccc6";
   };
-  
-  buildInputs = [kdelibs x11 zlib libpng libjpeg perl qt3];
 
-  configureFlags = "--without-arts";
+  buildInputs = [ cmake qt4 perl shared_mime_info libvorbis taglib
+                  ffmpeg flac libsamplerate libdvdread lame libsndfile
+                  libmad gettext stdenv.gcc.libc cdrdao cdrtools
+                  kdelibs kdemultimedia automoc4 phonon dvdplusrwtools
+                  makeWrapper ];
 
-  meta = {
-    description = "A CD and DVD authoring application for KDE";
-    homepage = http://www.k3b.org/;
+  postInstall = ''
+    wrapProgram $out/bin/k3b --suffix PATH : "${cdrdao}/bin:${dvdplusrwtools}/bin:${cdrtools}/bin"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "CD/DVD Burning Application for KDE";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sander maintainers.urkud ];
   };
 }

@@ -57,6 +57,8 @@ rec {
 
   xfce4_power_manager = callPackage ./applications/xfce4-power-manager.nix { };
 
+  xfce4mixer = callPackage ./applications/xfce4-mixer.nix { };
+
   #### ART
 
   xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };

@@ -3,7 +3,6 @@
 kde.package {
   buildInputs = [ cmake kdelibs automoc4 kdepimlibs ];
 
-  patches = [ ./optional-docs.diff ];
 
   meta = {
     description = "KDE bugzilla client";
@@ -11,7 +10,8 @@ kde.package {
       name = "kbugbuster";
       module = "kdesdk";
       version = "3.80.3";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "version.h";
     };
   };
 }

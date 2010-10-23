@@ -1,13 +1,16 @@
-{stdenv, fetchurl, python, pkgconfig, glib}:
+{ stdenv, fetchurl, python, pkgconfig, glib }:
 
-stdenv.mkDerivation {
-  name = "pygobject-2.20.0";
+stdenv.mkDerivation rec {
+  name = "pygobject-2.26.0";
+  
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.20/pygobject-2.20.0.tar.bz2;
-    sha256 = "10gsf3i2q9y659hayxyaxyfz7inswcjc8m6iyqckwsj2yjij7sa1";
+    url = "http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.26/${name}.tar.bz2";
+    sha256 = "5554acff9c27b647144143b0459359864e4a6f2ff62c7ba21cf310ad755cf7c7";
   };
 
-  buildInputs = [python pkgconfig glib];
+  configureFlags = "--disable-introspection";
+
+  buildInputs = [ python pkgconfig glib ];
 
   postInstall = ''
     # All python code is installed into a "gtk-2.0" sub-directory. That
@@ -20,4 +23,9 @@ stdenv.mkDerivation {
       ln -s "gtk-2.0/$n" "../$n"
     done
   '';
+
+  meta = {
+    homepage = http://live.gnome.org/PyGObject;
+    description = "Python bindings for Glib";
+  };
 }

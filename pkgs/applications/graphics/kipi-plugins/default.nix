@@ -2,11 +2,11 @@
 kdegraphics, kdepimlibs, libxml2, libxslt, gettext, opencv, libgpod, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "kipi-plugins-1.4.0";
+  name = "kipi-plugins-1.5.0";
 
   src = fetchurl { 
     url = "mirror://sourceforge/kipi/${name}.tar.bz2";
-    sha256 = "1ybxhp4rs6c5xlrs0q765vrx4mvw4k0kq6n42dyk3kxvmcb9iq34";
+    sha256 = "1wsqh0lbsqyzdfmb9f53bmmypw00n80p62ym4pnxb8w0zwlhbkbw";
   };
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 kdepimlibs 

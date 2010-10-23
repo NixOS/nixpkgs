@@ -12,7 +12,7 @@ kde.package {
     license = "LGPL";
     kde = {
       name = "kdepimlibs";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

@@ -1,0 +1,19 @@
+--- tools/rlecat.c
++++ tools/rlecat.c
+@@ -110,8 +110,14 @@
+ 	    nflag = 0;		/* Not really repeating! */
+ 	else
+ 	{
+-	    mktemp( temp );	/* Make a temporary file name */
+-	    tmpfile = rle_open_f( cmd_name( argv ), temp, "w+" );
++	    /* we dont have to use rle_open_f() because all it does in
++	     * this case is run fopen() ... we're creating a file so all
++	     * the checks for opening an existing file aren't needed */
++	    int fd = mkstemp(temp);
++	    if (fd == -1 || (tmpfile = fdopen(fd, "w+")) == NULL) {
++		perror("Unable to open tempfile");
++		exit(-1);
++	    }
+ 	}
+     }
+ 

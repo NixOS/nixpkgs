@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ghostscript }:
 
 stdenv.mkDerivation rec {
-  name = "libspectre-0.2.0";
+  name = "libspectre-0.2.6";
 
   src = fetchurl {
     url = "http://libspectre.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0j75c84gqmfr6hbhiydri4msrxns8293lfxi7hkcnfa15v8qa0i0";
+    sha256 = "1lqdmi7vx497pbigpp77064a4463lmihzh44898l101c69i7qqrg";
   };
 
   buildInputs = [

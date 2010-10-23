@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://fuse.sourceforge.net/sshfs.html;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

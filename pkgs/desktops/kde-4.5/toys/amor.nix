@@ -9,7 +9,8 @@ kde.package {
       name = "amor";
       module = "kdetoys";
       version = "2.4.0";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "src/version.h";
     };
   };
 }

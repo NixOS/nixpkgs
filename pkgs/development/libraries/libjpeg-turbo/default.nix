@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nasm }: 
 
 stdenv.mkDerivation {
-  name = "libjpeg-turbo-1.0.0";
+  name = "libjpeg-turbo-1.0.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/libjpeg-turbo/libjpeg-turbo-1.0.0.tar.gz;
-    sha256 = "17zvyckjbscrr9b8i43g6g0960q5ammf4r93hkkx7s4hzjxvmkfj";
+    url = mirror://sourceforge/libjpeg-turbo/libjpeg-turbo-1.0.1.tar.gz;
+    sha256 = "094jvqzibqbzmhh7mz3xi76lzlilxzb4j1x8rpdcdkzyig9dizqf";
   };
 
   buildInputs = [ nasm ];

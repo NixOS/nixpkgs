@@ -8,7 +8,7 @@ kde.package {
     kde = {
       name = "kfloppy";
       module = "kdeutils";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

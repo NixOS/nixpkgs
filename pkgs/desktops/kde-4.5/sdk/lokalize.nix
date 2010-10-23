@@ -3,7 +3,6 @@
 kde.package {
   buildInputs = [ cmake kdelibs automoc4 hunspell ];
 
-  patches = [ ./optional-docs.diff ];
 
   meta = {
     description = "KDE 4 Computer-aided translation system";
@@ -14,7 +13,8 @@ kde.package {
       name = "lokalize";
       module = "kdesdk";
       version = "1.1";
-      release = "4.5.1";
+      release = "4.5.2";
+      versionFile = "src/version.h";
     };
   };
 }

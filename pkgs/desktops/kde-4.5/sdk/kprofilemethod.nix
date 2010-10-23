@@ -3,7 +3,6 @@
 kde.package {
   buildInputs = [ cmake kdelibs automoc4 ];
 
-  patches = [ ./optional-docs.diff ];
 
   meta = {
     description = "A macros for profiling using QTime";
@@ -11,7 +10,7 @@ kde.package {
     kde = {
       name = "kprofilemethod";
       module = "kdesdk";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

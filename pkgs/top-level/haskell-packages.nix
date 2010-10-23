@@ -50,6 +50,10 @@ rec {
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
+  bktrees = callPackage ../development/libraries/haskell/bktrees {};
+
+  Boolean = callPackage ../development/libraries/haskell/Boolean {};
+
   bytestring = callPackage ../development/libraries/haskell/bytestring {};
 
   networkBytestring = callPackage ../development/libraries/haskell/network-bytestring {};
@@ -75,6 +79,8 @@ rec {
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
+
+  colour = callPackage ../development/libraries/haskell/colour {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -188,6 +194,14 @@ rec {
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {
     alex = alex_2_3_3;
     happy = happy_1_18_5;
+  };
+
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
+    fgl = fgl_5_4_2_3;
+  };
+
+  graphviz = callPackage ../development/libraries/haskell/graphviz {
+    fgl = fgl_5_4_2_3;
   };
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {
@@ -372,6 +386,8 @@ rec {
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
   MaybeTTransformers = callPackage ../development/libraries/haskell/MaybeT-transformers {};
+
+  MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
   MissingH = callPackage ../development/libraries/haskell/MissingH {
     network = network_2_2_1_7;
@@ -630,7 +646,11 @@ rec {
 
   vector = callPackage ../development/libraries/haskell/vector {};
 
-  vty = callPackage ../development/libraries/haskell/vty {};
+  vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
+
+  vty = callPackage ../development/libraries/haskell/vty {
+    parallel = parallel_2_2_0_1;
+  };
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {
     network = network_2_2_1_7;

@@ -3,7 +3,7 @@
 kde.package {
   buildInputs = [ cmake kdelibs automoc4 subversion apr aprutil ];
 
-  patches = [ ./optional-docs.diff ./find-svn.patch ];
+  patches = [ ./find-svn.patch ];
   cmakeFlags = "-DBUILD_kioslave=ON";
 
   meta = {
@@ -11,7 +11,7 @@ kde.package {
     kde = {
       name = "kioslave-svn";
       module = "kdesdk";
-      version = "4.5.1";
+      version = "4.5.2";
     };
   };
 }

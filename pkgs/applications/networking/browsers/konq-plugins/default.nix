@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake kdelibs qt4 automoc4 phonon kdebase gettext ];
 
+  patches = [ ./qt47.patch ];
+
   meta = with stdenv.lib; {
     description = "Various plugins for Konqueror";
     license = "GPL";
