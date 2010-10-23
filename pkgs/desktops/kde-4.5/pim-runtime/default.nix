@@ -16,7 +16,7 @@ kde.package {
     kde = rec {
       name = "kdepim-runtime";
       version = "4.4.7";
-      subdir = "kdepim-${version}";
+      subdir = "kdepim-${version}/src";
     };
   };
 }
