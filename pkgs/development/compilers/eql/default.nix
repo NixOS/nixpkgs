@@ -11,9 +11,9 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     method = "fetchgit";
-    rev = "7bd32f49c9965d8f7dc262a0f265b153b0a81ced";
+    rev = "14f62c94f952104d27d920ea662c8a61b370abe8";
     url = "git://gitorious.org/eql/eql";
-    hash = "f5f34b1a76f65b707446cd9bee4d7cef3b6f9b5b5d8d16fcccb70dbf855c2adf";
+    hash = "1ca31f0ad8cbc45d2fdf7b1e4059b1e612523c043f4688d7147c7e16fa5ba9ca";
     version = rev;
     name = "eql-git-${version}";
   };
