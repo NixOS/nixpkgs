@@ -1300,6 +1300,8 @@ let
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  unarj = callPackage ../tools/archivers/unarj { };
+
   unshield = callPackage ../tools/archivers/unshield { };
 
   unzip = unzip552;
