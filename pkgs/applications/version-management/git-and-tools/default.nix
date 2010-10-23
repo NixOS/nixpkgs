@@ -60,14 +60,15 @@ rec {
   };
 
   topGit = stdenv.mkDerivation rec {
-    name = "topgit-0.8-19-g9404aa1";
+    name = "topgit-0.8";
 
-    src = fetchgit {
-      url = "http://repo.or.cz/r/topgit.git";
-      rev = name;
-      sha256 = "47e92d31303c30a22b96ce4a005f3c51f0e12c163e54f6ca589ac4e50ec74bd0";
+    src = fetchurl {
+      name = "topgit-0.8.zip";
+      url = "http://repo.or.cz/w/topgit.git/snapshot/f59e4f9e87e5f485fdaee0af002edd2105fa298a.zip";
+      sha256 = "1rjzfxlw5xaqkd21xfw1innhclvr3i2vrzjnm2amj18jbl4ygds8";
     };
 
+    buildInputs = [unzip];
     configurePhase = "export prefix=$out";
 
     postInstall = ''
