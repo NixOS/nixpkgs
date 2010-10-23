@@ -6339,10 +6339,13 @@ let
   wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox/wrapper.nix {
     inherit stdenv nameSuffix makeWrapper makeDesktopItem browser browserName;
     plugins =
-      let enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
+      let
+        enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
+        enableGnash = getConfig [ browserName "enableGnash" ] false;
       in
+       assert !(enableGnash && enableAdobeFlash);
        ([]
-        ++ lib.optional (!enableAdobeFlash) gnash
+        ++ lib.optional enableGnash gnash
         ++ lib.optional enableAdobeFlash flashplayer
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
