@@ -1,9 +1,9 @@
 { kde, automoc4, cmake, kdelibs, akonadi, kdepimlibs, boost, zlib, strigi,
-  shared_desktop_ontologies, soprano, grantlee, libassuan, perl, libxslt }:
+  shared_mime_info, soprano, grantlee, libassuan, perl, libxslt }:
 
 kde.package {
   buildInputs = [ automoc4 cmake kdelibs akonadi kdepimlibs boost zlib strigi
-    shared_desktop_ontologies soprano grantlee libassuan perl libxslt ];
+    shared_mime_info soprano grantlee libassuan perl libxslt ];
 
   patches = [ ./boost-1.44.diff ];
 
