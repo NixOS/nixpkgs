@@ -6848,6 +6848,12 @@ let
 
   ### SCIENCE / ELECTRONICS
 
+  caneda = callPackage ../applications/science/electronics/caneda {
+    stdenv = stdenv2;
+    # At the time of writing, it fails to build with qt47
+    qt4 = qt46;
+  };
+
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
