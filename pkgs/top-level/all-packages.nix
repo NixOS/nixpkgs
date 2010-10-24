@@ -6848,13 +6848,17 @@ let
 
   ### SCIENCE / ELECTRONICS
 
+  gtkwave = callPackage ../applications/science/electronics/gtkwave { };
+
   kicad = callPackage ../applications/science/electronics/kicad {
     stdenv = stdenv2;
   };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  gtkwave = callPackage ../applications/science/electronics/gtkwave { };
+  qucs = callPackage ../applications/science/electronics/qucs {
+    qt = qt3;
+  };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
