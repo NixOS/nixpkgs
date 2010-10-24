@@ -5418,7 +5418,9 @@ let
     patches = getConfig [ "dwm" "patches" ] [];
   };
 
-  eaglemode = callPackage ../applications/misc/eaglemode { };
+  eaglemode = callPackage ../applications/misc/eaglemode {
+    stdenv = stdenv2;
+  };
 
   eclipse = callPackage ../applications/editors/eclipse {
     # GTK 2.18 gives glitches such as mouse clicks on buttons not
