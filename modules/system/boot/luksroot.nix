@@ -10,7 +10,7 @@ in
   options = {
 
     boot.initrd.luksRoot = mkOption {
-      default = null;
+      default = "";
       example = "/dev/sda3";
       description = '';
         The device that should be decrypted using LUKS before trying to mount the
@@ -26,7 +26,7 @@ in
 
 
 
-  config = mkIf (luksRoot != null) {
+  config = mkIf (luksRoot != "") {
 
     boot.initrd.extraUtilsCommands = ''
       cp -r ${pkgs.cryptsetup}/lib/* $out/lib/
