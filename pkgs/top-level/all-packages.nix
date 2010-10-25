@@ -1049,7 +1049,7 @@ let
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
 
-  psmisc = callPackage ../tools/misc/psmisc { };
+  psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
