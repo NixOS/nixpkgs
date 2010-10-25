@@ -4584,6 +4584,7 @@ let
         kernelPatches.cifs_timeout
         kernelPatches.no_xsave
         kernelPatches.dell_rfkill
+        kernelPatches.revert_pvclock_sync
       ];
   };
 
