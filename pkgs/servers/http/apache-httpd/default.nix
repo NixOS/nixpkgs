@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha1 = "ef92f5b3124fe5e9ba6121ea7f4bab8c014068f9";
   };
 
-  #inherit sslSupport;
-
   buildInputs = [perl apr aprutil pcre] ++
     stdenv.lib.optional sslSupport openssl;
 
