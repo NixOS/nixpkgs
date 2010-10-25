@@ -17,7 +17,7 @@ let
     rev="30b75609d858588ea00b427015940351896867e9";
     version="git-${rev}";
     name="${baseName}-${version}";
-    hash="bfbb6a80c0137035421af86d1261d5e12810f15e4a683ee9a714bfb5d397579f";
+    hash="44553c90d67f839cdd57d14d37d9faa25b1b766f607408896137f3013c1c9424";
   };
 in
 rec {
