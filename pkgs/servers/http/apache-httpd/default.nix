@@ -39,5 +39,8 @@ stdenv.mkDerivation rec {
     description = "Apache HTTPD, the world's most popular web server";
     homepage = http://httpd.apache.org/;
     license = "ASL2.0";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
