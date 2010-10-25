@@ -57,6 +57,10 @@ in
 
     environment = {
       systemPackages = [
+        # temporary workarounds
+        pkgs.shared_desktop_ontologies 
+        pkgs.kde4.strigi
+
         pkgs.kde4.kdelibs
         pkgs.kde4.kdebase
         pkgs.kde4.kdebase_runtime
