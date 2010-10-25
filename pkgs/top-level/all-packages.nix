@@ -3254,6 +3254,8 @@ let
     libmpeg2 = mpeg2dec;
   };
 
+  libfixposix = callPackage ../development/libraries/libfixposix {};
+
   libffcall = builderDefsPackage (import ../development/libraries/libffcall) {
     inherit fetchcvs;
   };
