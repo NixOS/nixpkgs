@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
-    patch -p1 -l < ${./mips64.patch}
+    patch -p0 < ${./mips64.patch}
   '';
   postBuild = ''
     ensureDir $out/include
