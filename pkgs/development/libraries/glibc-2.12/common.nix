@@ -89,6 +89,9 @@ stdenv.mkDerivation ({
 
     /* Workaround for a glibc bug reported upstraem already */
     ./disable-strstr-sse42.patch
+
+    /* Fix for a vulnerability */
+    ./audit_suid.patch
   ];
 
   postPatch = ''
