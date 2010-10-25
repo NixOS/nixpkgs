@@ -18,5 +18,8 @@ stdenv.mkDerivation {
     homepage = "http://code.google.com/p/modwsgi/";
     description = "Host Python applications in Apache through the WSGI interface";
     license = "ASL2.0";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
