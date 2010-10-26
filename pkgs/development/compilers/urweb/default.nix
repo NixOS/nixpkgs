@@ -1,12 +1,12 @@
 { stdenv, fetchurl, file, libmhash, mlton, mysql, postgresql, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "urweb";
+  pname = "urweb";
   version = "20100603";
-  pname = "${name}-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.impredicative.com/ur/${pname}.tgz";
+    url = "http://www.impredicative.com/ur/${name}.tgz";
     sha256 = "1f2l09g3586w0fyd7i7wkfnqlqwrk7c1q9pngmd8jz69g5ysl808";
   };
 

@@ -3,12 +3,12 @@
 , libXt, libXmu, mesa, pkgconfig, which } :
 
 stdenv.mkDerivation rec {
-  name = "racket";
+  pname = "racket";
   version = "5.0.1";
-  pname = "${name}-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://download.racket-lang.org/installers/${version}/${name}/${pname}-src-unix.tgz";
+    url = "http://download.racket-lang.org/installers/${version}/${pname}/${name}-src-unix.tgz";
     sha256 = "18bzzzbxvr888lnpwggismq5grysrwlyg2dp026hhv5n2mk5sfvn";
   };
 

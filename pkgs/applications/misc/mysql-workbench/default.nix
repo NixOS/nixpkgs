@@ -5,8 +5,9 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mysql-workbench";
+  pname = "mysql-workbench";
   version = "5.2.27";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}.tar.gz";
