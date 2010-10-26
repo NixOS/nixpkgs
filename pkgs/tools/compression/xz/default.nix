@@ -1,11 +1,11 @@
 {stdenv, fetchurl, lib}:
 
 stdenv.mkDerivation ({
-  name = "xz-4.999.9beta";
+  name = "xz-5.0.0";
   
   src = fetchurl {
-    url = http://tukaani.org/xz/xz-4.999.9beta.tar.bz2;
-    sha256 = "0p51d9jng9vfh56idhjbc40n3ypapznwfb1npsvxh23n772140rk";
+    url = http://tukaani.org/xz/xz-5.0.0.tar.bz2;
+    sha256 = "1n2nc00d83di0jl5d9qwpngkmlk3wqhs4w9q2ah680v9qijrxa27";
   };
 
   meta = {
