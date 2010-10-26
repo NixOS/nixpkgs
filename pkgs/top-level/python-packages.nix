@@ -562,6 +562,8 @@ rec {
       sha256 = "00jhzl3s9xdkbj32h1kq1swk8wpx9zky7qfda40n8mb204xjcn9h";
     };
 
+    buildInputs = [ pkgs.pycrypto ];
+
     doCheck = false;
 
     meta = {
