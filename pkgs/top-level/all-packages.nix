@@ -2881,14 +2881,6 @@ let
     gccCross = null;
   };
 
-  glibc212x = callPackage ../development/libraries/x {
-    kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
-    machHeaders = null;
-    hurdHeaders = null;
-    gccCross = null;
-  };
-
   glibc212Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.12)
     (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
      in ({
