@@ -2348,9 +2348,7 @@ let
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
-  distcc = callPackage ../development/tools/misc/distcc {
-    static = false;
-  };
+  distcc = callPackage ../development/tools/misc/distcc { };
 
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
     inherit python pil makeWrapper;

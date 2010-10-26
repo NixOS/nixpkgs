@@ -1,8 +1,12 @@
-{stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk, static ? false}:
+{ stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk
+, sysconfDir ? ""   # set this parameter to override the default value $out/etc
+, static ? false
+}:
 
-let name        = "distcc";
-    version     = "3.1";
+let name    = "distcc";
+    version = "3.1";
 in
+
 stdenv.mkDerivation {
   name = "${name}-${version}";
   src = fetchurl {
@@ -15,6 +19,7 @@ stdenv.mkDerivation {
   ''
     configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                           CXXFLAGS="-O2 -fno-strict-aliasing"
+                          ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
                           ${if static then "LDFLAGS=-static" else ""}
                           --with${if static == true || popt == null then "" else "out"}-included-popt
                           --with${if avahi != null then "" else "out"}-avahi
@@ -22,6 +27,7 @@ stdenv.mkDerivation {
                           --without-gnome
                           --enable-rfc2553
                          )
+    installFlags="sysconfdir=$out/etc";
   '';
   patches = [ ./20-minute-io-timeout.patch ];
 
@@ -32,5 +38,8 @@ stdenv.mkDerivation {
     description = "a fast, free distributed C/C++ compiler";
     homepage = "http://distcc.org";
     license = "GPL";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
