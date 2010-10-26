@@ -214,9 +214,10 @@ in
       patch = ./guruplug-mach-type.patch;
     };
 
-  revert_pvclock_sync =
-    { name = "revert-pvclock-sync";
-      patch = ./revert-pvclock-sync.patch;
+  xen_pvclock_resume =
+    { # Fix the clock after a DomU restore following a Dom0 reboot or migration.
+      name = "xen-pvclock-resume";
+      patch = ./xen-pvclock-resume.patch;
     };
   
 }
