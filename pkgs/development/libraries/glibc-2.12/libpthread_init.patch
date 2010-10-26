@@ -1,0 +1,15 @@
+http://sourceware.org/bugzilla/show_bug.cgi?id=12123
+
+diff --git a/nptl/sysdeps/i386/Makefile b/nptl/sysdeps/i386/Makefile
+index 2f0d88f..3d9d223 100644
+--- a/nptl/sysdeps/i386/Makefile
++++ b/nptl/sysdeps/i386/Makefile
+@@ -21,6 +21,8 @@ gen-as-const-headers += tcb-offsets.sym
+ endif
+ 
+ ifeq ($(subdir),nptl)
++CFLAGS-nptl-init.c += -mpreferred-stack-boundary=4
++CFLAGS-pt-initfini.c += -mpreferred-stack-boundary=4
+ CFLAGS-pthread_create.c += -mpreferred-stack-boundary=4
+ CFLAGS-tst-align.c += -mpreferred-stack-boundary=4
+ CFLAGS-tst-align2.c += -mpreferred-stack-boundary=4
