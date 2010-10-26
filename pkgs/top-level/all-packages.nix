@@ -813,6 +813,8 @@ let
 
   lsh = callPackage ../tools/networking/lsh { };
 
+  lxc = callPackage ../tools/system/lxc { };
+
   lzma = xz;
 
   xz = callPackage ../tools/compression/xz { };
