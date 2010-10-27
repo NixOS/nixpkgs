@@ -840,6 +840,50 @@ rec {
     };
   });
 
+  pysvn = pkgs.stdenv.mkDerivation {
+    name = "pysvn-1.7.2";
+
+    src = fetchurl {
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
+      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+    };
+
+    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.e2fsprogs
+      pkgs.expat pkgs.neon pkgs.openssl ];
+
+    # There seems to be no way to pass that path to configure.
+    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
+
+    configurePhase = ''
+      cd Source
+      python setup.py backport
+      python setup.py configure \
+        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
+        --apr-lib-dir=${pkgs.apr}/lib \
+        --svn-root-dir=${pkgs.subversion}
+    '';
+
+    # The regression test suite expects locale support, which our glibc
+    # doesn't have by default.
+    doCheck = false;
+    checkPhase = "make -C ../Tests";
+
+    installPhase = ''
+      dest=$(toPythonPath $out)/pysvn
+      ensureDir $dest
+      cp pysvn/__init__.py $dest/
+      cp pysvn/_pysvn*.so $dest/
+      ensureDir $out/share/doc
+      mv -v ../Docs $out/share/doc/pysvn-1.7.2
+      rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
+    '';
+
+    meta = {
+      description = "Python bindings for Subversion";
+      homepage = "http://pysvn.tigris.org/";
+    };
+  };
+
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
