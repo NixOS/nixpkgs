@@ -75,9 +75,6 @@ stdenv.mkDerivation ({
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
 
-    /* Patch already sent upstream against a segafult on libpthread load */
-    ./libpthread_init.patch
-
     /* Fix for a vulnerability, taken from upstream */
     ./audit_suid.patch
   ];
