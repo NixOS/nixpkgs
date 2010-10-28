@@ -1,12 +1,14 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libsndfile-1.0.21";
+  name = "libsndfile-1.0.23";
 
   src = fetchurl {
     url = "http://www.mega-nerd.com/libsndfile/files/${name}.tar.gz";
-    sha256 = "0rzav3g865cr1s036r5pq0vx372g5cgvdkc2dlklgwqzani8743y";
+    sha256 = "0k9x4804gfh9d9zd4rm1v2izm8l716rzk4d6jlrjcf45b5sw7jal";
   };
+
+  buildInputs = [pkgconfig flac libogg libvorbis];
 
   meta = {
     description = "Libsndfile, a C library for reading and writing files containing sampled sound";
