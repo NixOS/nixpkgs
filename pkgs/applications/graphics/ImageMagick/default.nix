@@ -17,20 +17,21 @@
 }:
 
 let
-  version = "6.5.9-1";
+  version = "6.6.5-4";
 in
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/${name}.tar.bz2";
-    sha256 = "0a4yhhfqagz28yccydngi31050101jfmq5ljln61g69yy6m47ifg";
+    sha256 = "1s3l98xc1gnxi2wdg3sy9723f6qf5yk81wln8ghn2z9kvi09w7gw";
   };
 
   configureFlags = ''
     --with-gs-font-dir=${ghostscript}/share/ghostscript/fonts
     --with-gslib
-    ${if tetex != null then "--with-frozenpaths" else ""}
+    --with-frozenpaths
+    ${if librsvg != null then "--with-rsvg" else ""}
   '';
 
   buildInputs =
