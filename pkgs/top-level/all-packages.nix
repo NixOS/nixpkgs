@@ -604,6 +604,8 @@ let
 
   file = callPackage ../tools/misc/file { };
 
+  fileschanged = callPackage ../tools/misc/fileschanged { };
+
   findutils =
     if stdenv.isDarwin
     then findutils4227
