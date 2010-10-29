@@ -848,8 +848,8 @@ rec {
       sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
     };
 
-    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.e2fsprogs
-      pkgs.expat pkgs.neon pkgs.openssl ];
+    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
+      ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
 
     # There seems to be no way to pass that path to configure.
     NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
