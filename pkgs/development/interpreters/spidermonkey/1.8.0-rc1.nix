@@ -22,5 +22,9 @@ stdenv.mkDerivation rec {
       sed -e 's/ -ltermcap/ -lncurses/' -i ${makefile}
     '';
 
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr}/include/nspr"
+  '';
+
   makeFlags = "-f ${makefile} JS_DIST=\${out} BUILD_OPT=1 JS_READLINE=1 JS_THREADSAFE=1";
 }
