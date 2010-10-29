@@ -861,7 +861,9 @@ rec {
         --apr-inc-dir=${pkgs.apr}/include/apr-1 \
         --apr-lib-dir=${pkgs.apr}/lib \
         --svn-root-dir=${pkgs.subversion}
-    '';
+    '' + (if !stdenv.isDarwin then "" else ''
+      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
+    '');
 
     # The regression test suite expects locale support, which our glibc
     # doesn't have by default.
