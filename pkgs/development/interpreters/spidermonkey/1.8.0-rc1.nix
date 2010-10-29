@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline }:
+{ stdenv, fetchurl, readline, nspr }:
 
 stdenv.mkDerivation rec {
   version = "1.8.0-rc1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "374398699ac3fd802d98d642486cf6b0edc082a119c9c9c499945a0bc73e3413";
   };
 
-  buildInputs = [ readline ];
+  buildInputs = [ readline nspr ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
@@ -22,5 +22,5 @@ stdenv.mkDerivation rec {
       sed -e 's/ -ltermcap/ -lncurses/' -i ${makefile}
     '';
 
-  makeFlags = "-f ${makefile} JS_DIST=\${out} BUILD_OPT=1 JS_READLINE=1";
+  makeFlags = "-f ${makefile} JS_DIST=\${out} BUILD_OPT=1 JS_READLINE=1 JS_THREADSAFE=1";
 }
