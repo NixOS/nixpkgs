@@ -7022,9 +7022,10 @@ let
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
-        autoconf libtool configureFlags enableScripts lib bison libxml2 boehmgc
+        autoconf libtool configureFlags enableScripts lib libxml2 boehmgc
 	pkgconfig;
-      flex = flex2533;
+      flex = flex2535;
+      bison = bison24;
       aterm = aterm25;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
