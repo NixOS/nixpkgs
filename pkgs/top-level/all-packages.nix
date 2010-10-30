@@ -6518,6 +6518,10 @@ let
 
   crack_attack = callPackage ../games/crack-attack { };
 
+  dwarf_fortress = callPackage ../games/dwarf-fortress { 
+    gnomegtk = gnome.gtk;
+  };
+
   eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
