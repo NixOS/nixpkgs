@@ -3869,6 +3869,8 @@ let
 
   tnt = callPackage ../development/libraries/tnt { };
 
+  tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
+
   unicap = callPackage ../development/libraries/unicap {};
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
