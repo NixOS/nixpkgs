@@ -3707,6 +3707,8 @@ let
 
   postgis = callPackage ../development/libraries/postgis { };
 
+  protobuf = callPackage ../development/libraries/protobuf { };
+
   pth = callPackage ../development/libraries/pth { };
 
   ptlib = callPackage ../development/libraries/ptlib {};
