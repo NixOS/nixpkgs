@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     # Recreate a directory sturctor reflecting the original distribution in the user directory
 
-    # Now link in the static data
+    # Link in the static stuff
     mkdir -p \$DF_DIR
     ln -sf $out/share/df_linux/libs \$DF_DIR/
     ln -sf $out/share/df_linux/raw \$DF_DIR/
@@ -44,30 +44,21 @@ stdenv.mkDerivation rec {
     # Delete old data directory
     rm -rf \$DF_DIR/data
     
-    # Link in the data directory
+    # Link in the static data directory
     mkdir \$DF_DIR/data
     for i in $out/share/df_linux/data/*
     do
      ln -s \$i \$DF_DIR/data/
     done
 
-    # index as of 0.31.16 opened in read/write mode 
+    # index initial_movies, announcement, and help files are as of 0.31.16 opened in read/write mode instead of read-only mode
     # this is a hack to work around this
-    rm \$DF_DIR/data/index
-    cp $out/share/df_linux/data/index \$DF_DIR/data/index
-    chmod u+w \$DF_DIR/data/index
-
-    # initial_movies files are as of 0.31.16 opened in read/write mode instead of read-only mode
-    # this is a hack to work around this
-    rm \$DF_DIR/data/initial_movies
-    cp -rf $out/share/df_linux/data/initial_movies \$DF_DIR/data/
-    chmod -R u+w \$DF_DIR/data/initial_movies
-
-    # announcement files are as of 0.31.16 opened in read/write mode instead of read-only mode
-    # this is a hack to work around this
-    rm \$DF_DIR/data/announcement
-    cp -rf $out/share/df_linux/data/announcement \$DF_DIR/data/
-    chmod -R u+w \$DF_DIR/data/announcement
+    for i in index initial_movies announcement help
+    do
+     rm \$DF_DIR/data/\$i
+     cp -rf $out/share/df_linux/data/\$i \$DF_DIR/data/
+     chmod -R u+w \$DF_DIR/data/\$i
+    done
 
     # link in persistant data
     mkdir -p \$DF_DIR/save
