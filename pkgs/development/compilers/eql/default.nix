@@ -1,5 +1,6 @@
 x@{builderDefsPackage
-  , fetchgit, qt4, ecl
+  , fetchgit, qt4, ecl, xorgserver
+  , xkbcomp, xkeyboard_config
   , ...}:
 builderDefsPackage
 (a :  
@@ -11,9 +12,9 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     method = "fetchgit";
-    rev = "7bd32f49c9965d8f7dc262a0f265b153b0a81ced";
+    rev = "14f62c94f952104d27d920ea662c8a61b370abe8";
     url = "git://gitorious.org/eql/eql";
-    hash = "f5f34b1a76f65b707446cd9bee4d7cef3b6f9b5b5d8d16fcccb70dbf855c2adf";
+    hash = "1ca31f0ad8cbc45d2fdf7b1e4059b1e612523c043f4688d7147c7e16fa5ba9ca";
     version = rev;
     name = "eql-git-${version}";
   };
@@ -29,7 +30,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["setVars" "fixPaths" "buildEQLLib" "doQMake" "doMake" "buildLibEQL" "doDeploy"];
+  phaseNames = ["setVars" "fixPaths" "firstMetaTypeId" "buildEQLLib" "doQMake" "doMake" "doDeploy"];
 
   setVars = a.fullDepEntry (''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
@@ -39,20 +40,26 @@ rec {
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
   '') ["minInit" "doUnpack"];
 
-  buildEQLLib = a.fullDepEntry (''
-    cd src
-    ecl -shell make-eql-lib.lisp
+  firstMetaTypeId = a.fullDepEntry (''
+    cd src 
+    qmake first_metatype_id.pro
+    make
+    TMP=.
+    TMPDIR=.
+    XKB_BINDIR="${xkbcomp}/bin" Xvfb -once -reset -terminate :2 -xkbdir ${xkeyboard_config}/etc/X11/xkb &
+    DISPLAY=:2 ./first_metatype_id
   '') ["doUnpack" "addInputs"];
+
+  buildEQLLib = a.fullDepEntry (''
+    ecl -shell make-eql-lib.lisp
+    qmake eql_lib.pro
+    make
+  '') ["doUnpack" "addInputs" "firstMetaTypeId"];
 
   doQMake = a.fullDepEntry (''
-    qmake
-  '') ["addInputs"];
-
-  buildLibEQL = a.fullDepEntry (''
-    sed -i eql.pro -e 's@#CONFIG += eql_dll@CONFIG += eql_dll@'
-    qmake
+    qmake eql_exe.pro
     make
-  '') ["doUnpack" "addInputs"];
+  '') ["addInputs" "firstMetaTypeId" "buildEQLLib"];
 
   doDeploy = a.fullDepEntry (''
     cd ..
@@ -61,7 +68,7 @@ rec {
     ln -s $out/lib/eql/build-dir/eql $out/bin
     ln -s $out/lib/eql/build-dir/src/*.h $out/include
     ln -s $out/lib/eql/build-dir/src/gen/*.h $out/include/gen
-    mv $out/lib/eql/build-dir/my_app/libeql*.so* $out/lib
+    ln -s $out/lib/eql/build-dir/libeql*.so* $out/lib
   '') ["minInit" "defEnsureDir"];
 
   meta = {

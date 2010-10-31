@@ -608,6 +608,8 @@ let
 
   file = callPackage ../tools/misc/file { };
 
+  fileschanged = callPackage ../tools/misc/fileschanged { };
+
   findutils =
     if stdenv.isDarwin
     then findutils4227
@@ -816,6 +818,8 @@ let
   lrzip = callPackage ../tools/compression/lrzip { };
 
   lsh = callPackage ../tools/networking/lsh { };
+
+  lxc = callPackage ../tools/system/lxc { };
 
   lzma = xz;
 
@@ -1053,7 +1057,7 @@ let
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
 
-  psmisc = callPackage ../tools/misc/psmisc { };
+  psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
@@ -1303,6 +1307,8 @@ let
   units = callPackage ../tools/misc/units { };
 
   unrar = callPackage ../tools/archivers/unrar { };
+
+  unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
 
@@ -2372,9 +2378,7 @@ let
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
-  distcc = callPackage ../development/tools/misc/distcc {
-    static = false;
-  };
+  distcc = callPackage ../development/tools/misc/distcc { };
 
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
     inherit python pil makeWrapper;
@@ -3278,6 +3282,8 @@ let
     libmpeg2 = mpeg2dec;
   };
 
+  libfixposix = callPackage ../development/libraries/libfixposix {};
+
   libffcall = builderDefsPackage (import ../development/libraries/libffcall) {
     inherit fetchcvs;
   };
@@ -3722,6 +3728,8 @@ let
 
   postgis = callPackage ../development/libraries/postgis { };
 
+  protobuf = callPackage ../development/libraries/protobuf { };
+
   pth = callPackage ../development/libraries/pth { };
 
   ptlib = callPackage ../development/libraries/ptlib {};
@@ -3882,6 +3890,8 @@ let
   tk = callPackage ../development/libraries/tk { };
 
   tnt = callPackage ../development/libraries/tnt { };
+
+  tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
   unicap = callPackage ../development/libraries/unicap {};
 
@@ -4602,6 +4612,7 @@ let
         kernelPatches.cifs_timeout
         kernelPatches.no_xsave
         kernelPatches.dell_rfkill
+        kernelPatches.xen_pvclock_resume
       ];
   };
 
@@ -6257,9 +6268,7 @@ let
     gconf = gnome.GConf;
   };
 
-  /* does'nt work yet i686-linux only (32bit version)
   teamspeak_client = callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
-  */
 
   taskJuggler = callPackage ../applications/misc/taskjuggler {
     qt = qt3;
@@ -6301,7 +6310,7 @@ let
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk glib;
-    inherit (xlibs) libX11;
+    inherit (xlibs) libX11 kbproto;
     libsoup = gnome28.libsoup_2_31;
   };
 
@@ -6552,6 +6561,10 @@ let
   };
 
   crack_attack = callPackage ../games/crack-attack { };
+
+  dwarf_fortress = callPackage ../games/dwarf-fortress { 
+    gnomegtk = gnome.gtk;
+  };
 
   eduke32 = callPackage ../games/eduke32 { };
 
@@ -6888,11 +6901,20 @@ let
 
   ### SCIENCE / ELECTRONICS
 
+  caneda = callPackage ../applications/science/electronics/caneda {
+    # At the time of writing, it fails to build with qt47
+    qt4 = qt46;
+  };
+
+  gtkwave = callPackage ../applications/science/electronics/gtkwave { };
+
   kicad = callPackage ../applications/science/electronics/kicad { };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  gtkwave = callPackage ../applications/science/electronics/gtkwave { };
+  qucs = callPackage ../applications/science/electronics/qucs {
+    qt = qt3;
+  };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
@@ -7038,8 +7060,10 @@ let
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
-        autoconf libtool configureFlags enableScripts lib bison libxml2;
-      flex = flex2533;
+        autoconf libtool configureFlags enableScripts lib libxml2 boehmgc
+	pkgconfig;
+      flex = flex2535;
+      bison = bison24;
       aterm = aterm25;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;

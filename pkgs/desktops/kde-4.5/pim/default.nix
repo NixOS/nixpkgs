@@ -22,7 +22,7 @@ kde.package {
     homepage = http://pim.kde.org;
     kde = rec {
       name = "kdepim";
-      version = "4.4.6";
+      version = "4.4.7";
       subdir = "kdepim-${version}/src";
     };
   };

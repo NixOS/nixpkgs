@@ -29,5 +29,8 @@ stdenv.mkDerivation {
       virtually any type of web application, but the result is generally
       more scalable.
     '';
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

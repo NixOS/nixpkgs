@@ -1,3 +1,61 @@
+{ stdenv, fetchurl, zlib, glib, libpng, freetype, xorg, fontconfig, alsaLib }:
+
+let
+
+  libDir = if stdenv.is64bit then "lib64" else "lib";
+
+  deps =
+    [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
+      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
+      fontconfig xorg.libXext xorg.libX11 alsaLib
+    ];
+
+in
+
+stdenv.mkDerivation {
+  name = "teamspeak-client-3.0.0-beta35";
+
+  src = fetchurl {
+    url = http://ftp.4players.de/pub/hosted/ts3/releases/beta-35/TeamSpeak3-Client-linux_amd64-3.0.0-beta35.run;
+    sha256 = "0vygsvjs11lr5lv4x7awv7hvkycvmm9qs2vklfjs91w3f434cmrx";
+  };
+
+  unpackPhase =
+    ''
+      yes yes | sh $src
+      cd TeamSpeak*
+    '';
+
+  buildPhase =
+    ''
+      ls -l
+      for i in ts3client_linux_*; do
+        echo "patching $i..."
+        patchelf \
+          --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+          --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_GCC/nix-support/orig-gcc)/${libDir} \
+          --force-rpath \
+          $i
+      done
+    '';
+    
+
+  installPhase =
+    ''
+      mkdir -p $out/lib/teamspeak
+      mv * $out/lib/teamspeak/
+    '';
+
+  dontStrip = true;
+  dontPatchELF = true;
+  
+  meta = { 
+    description = "The TeamSpeak voice communication tool";
+    homepage = http://teamspeak.com/;
+    license = "http://www.teamspeak.com/?page=downloads&type=ts3_linux_client_latest";
+  };
+}
+
 /*
 License issues:
 Date: Mon, 10 Dec 2007 19:55:16 -0500
@@ -32,40 +90,3 @@ I'd like to ask wether you permit us to add teamspeak (server/ client?)
 Sincerly
 Marc Weber (small nix contributor)
 */
-
-args: with args;
-stdenv.mkDerivation {
-  name = "teamspeak-client-rc2-2032";
-
-  src = fetchurl {
-    url = ftp://213.202.254.114/teamspeak/releases/ts2_client_rc2_2032.tar.bz2;
-    md5 = "e93d17a25e07b1cbe400e4eb028ca8f8";
-  };
-
-  phases="installPhase";
-
-  rpathInputs = [ glibc x11 ];
-
-  installPhase="
-    set -x
-    i=\$out/nix-support
-    ensureDir \$out/{bin,nix-support}
-    mv setup.data/image \$i
-    cp \$out/{nix-support/image/TeamSpeak,bin}
-    echo sed
-    sed -i \"s=%installdir%=\$i/image=\" \$out/bin/TeamSpeak
-      
-    echo for
-    for p in $\rpathInputs; do
-      rpath=\$rpath:\$p/lib
-    done
-    echo patchelf
-    patchelf --set-rpath \$rpath \$i/image/TeamSpeak.bin
-  ";
-
-  meta = { 
-      description = "The TeamSpeak voice communication tool";
-      homepage = http://www.goteamspeak.com;
-      license = "TODO"; # non commercial use see email above 
-  };
-}

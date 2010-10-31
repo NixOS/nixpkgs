@@ -10,6 +10,8 @@
 , libxml2 ? null
 , docbook5_xsl ? null, libxslt ? null
 , docbook5 ? null, docbook_xml_dtd_43 ? null 
+, boehmgc ? null
+, pkgconfig ? null
 , configureFlags ? []
 , lib
 , enableScripts ? []
@@ -32,6 +34,8 @@ stdenv.mkDerivation {
   	++ (if docbook_xml_dtd_43 != null then [docbook_xml_dtd_43] else [])
   	++ (if w3m != null then [w3m] else [])
   	++ (if libxml2 != null then [libxml2] else [])
+  	++ (if boehmgc != null then [boehmgc] else [])
+  	++ (if pkgconfig != null then [pkgconfig] else [])
   ;
 
   preConfigure = 

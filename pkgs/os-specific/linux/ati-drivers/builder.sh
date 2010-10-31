@@ -13,6 +13,7 @@ sh archive --extract .
 
 kernelVersion=$(cd ${kernel}/lib/modules && ls)
 kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/build)
+linuxsources=$(echo ${kernel}/lib/modules/$kernelVersion/source)
 
 
 # note: maybe the .config file should be used to determine this ?
@@ -28,7 +29,15 @@ setSMP(){
   # 3
   # linux/autoconf.h may contain this: #define CONFIG_SMP 1
 
-  src_file=$linuxincludes/linux/autoconf.h
+  # Before 2.6.33 autoconf.h is under linux/.
+  # For 2.6.33 and later autoconf.h is under generated/.
+  if [ -f $linuxincludes/generated/autoconf.h ]; then
+      autoconf_h=$linuxincludes/generated/autoconf.h
+  else
+      autoconf_h=$linuxincludes/linux/autoconf.h
+  fi
+  src_file=$autoconf_h
+
   [ -e $src_file ] || die "$src_file not found"
 
   if [ `cat $src_file | grep "#undef" | grep "CONFIG_SMP" -c` = 0 ]; then
@@ -53,6 +62,39 @@ setModVersions(){
   def_modversions="-DMODVERSIONS"
   # make.sh contains much more code to determine this whether its enabled
 }
+
+# ==============================================================
+# resolve if we are building for a kernel with a fix for CVE-2010-3081
+# On kernels with the fix, use arch_compat_alloc_user_space instead
+# of compat_alloc_user_space since the latter is GPL-only
+
+COMPAT_ALLOC_USER_SPACE=compat_alloc_user_space
+
+for src_file in \
+    $kernelBuild/arch/x86/include/asm/compat.h \
+    $linuxsources/arch/x86/include/asm/compat.h \
+    $kernelBuild/include/asm-x86_64/compat.h \
+    $linuxsources/include/asm-x86_64/compat.h \
+    $kernelBuild/include/asm/compat.h;
+do
+  if [ -e $src_file ];
+  then
+    break
+  fi
+done
+if [ ! -e $src_file ];
+then
+  echo "Warning: x86 compat.h not found in kernel headers"        
+  echo "neither arch/x86/include/asm/compat.h nor include/asm-x86_64/compat.h" 
+  echo "could be found in $kernelBuild or $linuxsources"            
+  echo ""                                                          
+else
+  if [ `cat $src_file | grep -c arch_compat_alloc_user_space` -gt 0 ]
+  then
+    COMPAT_ALLOC_USER_SPACE=arch_compat_alloc_user_space
+  fi
+  echo "file $src_file says: COMPAT_ALLOC_USER_SPACE=$COMPAT_ALLOC_USER_SPACE" 
+fi
 
 
 # make.sh contains some code figuring out whether to use these or not..
@@ -83,7 +125,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
 
   make CC=${CC} \
       LIBIP_PREFIX=$(echo "$LIBIP_PREFIX" | sed -e 's|^\([^/]\)|../\1|') \
-      MODFLAGS="-DMODULE -DATI -DFGL -DPAGE_ATTR_FIX=$PAGE_ATTR_FIX $def_smp $def_modversions" \
+      MODFLAGS="-DMODULE -DATI -DFGL -DPAGE_ATTR_FIX=$PAGE_ATTR_FIX -DCOMPAT_ALLOC_USER_SPACE=$COMPAT_ALLOC_USER_SPACE $def_smp $def_modversions" \
       KVER=$kernelVersion \
       KDIR=$kernelBuild \
       PAGE_ATTR_FIX=$PAGE_ATTR_FIX \

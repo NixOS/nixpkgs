@@ -6,6 +6,7 @@ let
 
   buildInputs = with a; [
     libsoup pkgconfig webkit gtk makeWrapper
+    kbproto
   ];
 in
 rec {

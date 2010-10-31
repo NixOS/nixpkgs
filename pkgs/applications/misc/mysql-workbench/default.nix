@@ -1,21 +1,22 @@
 { stdenv, fetchurl, makeWrapper, autoconf, automake, boost, file, gettext
 , glib, glibc, gnome_keyring, gtk, gtkmm, intltool, libctemplate, libglade
 , libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
-, pango, paramiko, pcre, pexpect, pkgconfig, python, sqlite
+, pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "mysql-workbench";
-  version = "5.2.27";
+  pname = "mysql-workbench";
+  version = "5.2.28";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}.tar.gz";
-    sha256 = "01l15f9nvcpcsb56r7qb39jjlknh0dkj5iwfg1pj5bm12pbligng";
+    url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
+    sha256 = "1i7icrf3z09rijlvlg99w6m1n3xw0650840hk95ymgrb95kc3437";
   };
 
   buildInputs = [ autoconf automake boost file gettext glib glibc gnome_keyring gtk gtkmm intltool
     libctemplate libglade libgnome libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
-    mysql paramiko pcre pexpect pkgconfig python sqlite ];
+    mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
     substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"

@@ -180,4 +180,11 @@ builtins.listToAttrs
   name = "oxygen-icons-4.5.2.tar.bz2";
   value = "0c8hy3vsqpm6n52v6w3igj78s0qy6cb3m6fm8qh795rpw495d5yj";
 }
-]
+{
+  name = "kdepim-4.4.7.tar.bz2";
+  value = "0jjv1y23hwlkwdvqf3pcs37hzcnnxz5baa4vw1wznj4v816ixj1s";
+}
+{
+  name = "kdepim-runtime-4.4.7.tar.bz2";
+  value = "196gkz2jbphw4r9i91jaz6wd4wnyxavc1na2kpp9s9cvmiafcp7m";
+}]

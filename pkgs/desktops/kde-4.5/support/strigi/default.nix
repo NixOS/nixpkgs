@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "strigi-0.7.1";
-  
+  name = "strigi-${version}";
+  version = "0.7.2";
+
   src = fetchurl {
     url = "http://www.vandenoever.info/software/strigi/${name}.tar.bz2";
-    sha256 = "1cra4jlpd7cdvckwalfjrf2224qvhbkmxdd3sn02q9jhv830b0yi";
+    sha256 = "1f1ac27cjm5m4iwsgvd7nylr0md0a95przkbpsdq7l90wjxj390w";
   };
   includeAllQtDirs=true;
   

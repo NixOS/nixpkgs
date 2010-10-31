@@ -2,13 +2,13 @@
   lua, pcre, sqlite, perl, pkgconfig}:
 
 let 
-  version = "0.48";
+  version = "0.99";
 in stdenv.mkDerivation rec {
   name = "monotone-${version}";
   inherit perl;
   src = fetchurl {
     url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.gz";
-    sha256 = "3149abf0e4433a0e14c5da805a04dbbc45b16086bc267d473b17e933407d839d";
+    sha256 = "fa677f09169afb71452598ce92ea376fe06037d17bfe650fb6aed17cead11453";
   };
   buildInputs = [boost zlib botan libidn lua pcre sqlite pkgconfig];
   postInstall = ''

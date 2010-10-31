@@ -11,12 +11,17 @@ stdenv.mkDerivation {
   buildInputs = [ apacheHttpd python ];
 
   patchPhase = ''
-    sed -r -i "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" configure
+    sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \
+      ${if stdenv.isDarwin then "-e 's|/usr/bin/lipo|lipo|'" else ""} \
+      configure
   '';
 
   meta = {
     homepage = "http://code.google.com/p/modwsgi/";
     description = "Host Python applications in Apache through the WSGI interface";
     license = "ASL2.0";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

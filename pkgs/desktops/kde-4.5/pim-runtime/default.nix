@@ -15,7 +15,7 @@ kde.package {
     license = "GPL";
     kde = rec {
       name = "kdepim-runtime";
-      version = "4.4.6";
+      version = "4.4.7";
       subdir = "kdepim-${version}/src";
     };
   };

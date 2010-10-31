@@ -1,22 +1,19 @@
 { fetchurl, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
-, autoconf, automake, libtool }:
+, pkgconfig, protobuf, tokyocabinet }:
 
-let version = "0.2.3a"; in
+let version = "0.3.0"; in
 stdenv.mkDerivation {
   name = "seeks-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/seeks/solo/seeks_solo_stable-${version}.src.tar.gz";
-    sha256 = "0hjaqwcaa19qbq28y5gq0415fz10vx034aghqa01hrhhl9yrjvc4";
+    url = "mirror://sourceforge/seeks/solo/seeks-${version}.tar.gz";
+    sha256 = "07gkf7666bx5fk3zk0s47fj659czlyk3ag9bihkl5mdjfikb6k46";
   };
 
   buildInputs =
-    [ zlib docbook2x pcre curl libxml2 libevent perl
-      autoconf automake libtool
+    [ zlib docbook2x pcre curl libxml2 libevent perl pkgconfig
+      protobuf tokyocabinet
     ];
-
-  # The tarball doesn't contain `configure' & co.  Sigh...
-  preConfigure = "autoreconf -vfi";
 
   configureFlags =
     [ # Enable the built-in web server providing a web search interface.

@@ -64,9 +64,9 @@ runLaTeX
 echo
 
 
-# Run bibtex to process all bibliographies.  There may be several when
-# we're using the multibib package.
 for auxFile in $(find . -name "*.aux"); do
+    # Run bibtex to process all bibliographies.  There may be several
+    # when we're using the multibib package.
     if grep -q '\\citation' $auxFile; then
         echo "RUNNING BIBTEX ON $auxFile..."
         auxBase=$(basename $auxFile .aux)
@@ -74,6 +74,12 @@ for auxFile in $(find . -name "*.aux"); do
         cp $auxBase.bbl $out
         runNeeded=1
         echo
+    fi
+
+    # "\pgfsyspdfmark" in the aux file seems to indicate that PGF/TikZ
+    # requires a second run (e.g. to resolve arrows between pictures).
+    if grep -q pgfsyspdfmark $auxFile; then
+        runNeeded=1
     fi
 done
 

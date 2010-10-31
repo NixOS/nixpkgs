@@ -6,15 +6,13 @@
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  version = "2.2.16";
+  version = "2.2.17";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha1 = "ef92f5b3124fe5e9ba6121ea7f4bab8c014068f9";
+    sha256 = "017vc5g0dwjycai2qa8427vkw6wpa57ylhajw6nrmynq7qgg32l6";
   };
-
-  #inherit sslSupport;
 
   buildInputs = [perl apr aprutil pcre] ++
     stdenv.lib.optional sslSupport openssl;
@@ -46,5 +44,8 @@ stdenv.mkDerivation rec {
     description = "Apache HTTPD, the world's most popular web server";
     homepage = http://httpd.apache.org/;
     license = "ASL2.0";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

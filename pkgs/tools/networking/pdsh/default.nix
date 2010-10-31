@@ -1,11 +1,12 @@
 {stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
 
 stdenv.mkDerivation rec {
-  name = "pdsh-2.18";
+  name = "pdsh-2.22";
   src = fetchurl {
     url = "mirror://sourceforge/pdsh/${name}.tar.bz2";
-    sha256 = "8c94acb17b4af8a9f553db180b4d5745c9c98844a5dc070e2ce80590e8e8a539";
+    sha256 = "1b3c5dbaa8nhw2a5h89khs501m6ywg3zfzv7zahgsvjc8zcnfg8q";
   };
+
   buildInputs = [perl readline ssh pam];
 
   /* pdsh uses pthread_cancel(), which requires libgcc_s.so.1 to be
@@ -39,6 +40,16 @@ stdenv.mkDerivation rec {
     homepage = "https://computing.llnl.gov/linux/pdsh.html";
     description = "A high-performance, parallel remote shell utility.";
     license = "GPLv2";
+
+    longDescription = ''
+      Pdsh is a high-performance, parallel remote shell utility. It has
+      built-in, thread-safe clients for Berkeley and Kerberos V4 rsh and
+      can call SSH externally (though with reduced performance). Pdsh
+      uses a "sliding window" parallel algorithm to conserve socket
+      resources on the initiating node and to allow progress to continue
+      while timeouts occur on some connections.
+    '';
+
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
