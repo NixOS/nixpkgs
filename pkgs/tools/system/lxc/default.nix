@@ -12,6 +12,8 @@ stdenv.mkDerivation rec{
     sed -i -e '/ldconfig/d' src/lxc/Makefile.in
   '';
 
+  configureFlags = [ "--localstatedir=/var" ];
+
   buildInputs = [ libcap ];
 
   meta = {
