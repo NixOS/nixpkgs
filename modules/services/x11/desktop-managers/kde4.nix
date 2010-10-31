@@ -57,6 +57,10 @@ in
 
     environment = {
       systemPackages = [
+        # temporary workarounds
+        pkgs.shared_desktop_ontologies 
+        pkgs.kde4.strigi
+
         pkgs.kde4.kdelibs
         pkgs.kde4.kdebase
         pkgs.kde4.kdebase_runtime
@@ -67,6 +71,7 @@ in
         pkgs.gst_all.gstreamer
         pkgs.gst_all.gstPluginsBase
         pkgs.gst_all.gstPluginsGood
+        pkgs.gst_all.gstFfmpeg # for mp3 playback
         xorg.xmessage # so that startkde can show error messages
         xorg.xset # used by startkde, non-essential
       ] ++ config.environment.kdePackages;

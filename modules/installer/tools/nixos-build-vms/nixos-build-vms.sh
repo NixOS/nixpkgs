@@ -8,14 +8,14 @@ showUsage()
     echo "Options:"
     echo
     echo "-n,--network        Network Nix expression which captures properties of machines in the network"
-    echo "-i,--infrastructure Infrastructure Nix expression which captures properties of machines in the network"
-    echo "--show-trace        Shows an output trace"
+    echo "--use-backdoor      Indicates that the backdoor must be enabled so that the VMs can be accessed through a UNIX domain socket" 
+    echo "--show-trace        Shows the output trace"
     echo "-h,--help           Shows the usage of this command"
 }
 
 # Parse valid argument options
 
-PARAMS=`getopt -n $0 -o n:i:h -l network:,infrastructure:,show-trace,help -- "$@"`
+PARAMS=`getopt -n $0 -o n:h -l network:,use-backdoor,show-trace,help -- "$@"`
 
 if [ $? != 0 ]
 then
@@ -33,8 +33,8 @@ do
 	-n|--network)
 	    networkExpr=`readlink -f $2`
 	    ;;
-	-i|--infrastructure)
-	    infrastructureExpr=`readlink -f $2`
+	--use-backdoor)
+	    useBackdoorArg="--arg useBackdoor true"
 	    ;;
 	--show-trace)
 	    showTraceArg="--show-trace"
@@ -50,12 +50,6 @@ done
 
 # Validate the given options
 
-if [ "$infrastructureExpr" = "" ]
-then
-    echo "ERROR: A infrastructure expression must be specified!" >&2
-    exit 1
-fi
-
 if [ "$networkExpr" = "" ]
 then
     echo "ERROR: A network expression must be specified!" >&2
@@ -67,8 +61,6 @@ then
     NIXOS=/etc/nixos/nixos
 fi
 
-# Deploy the network
+# Build a network of VMs
 
-nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr --argstr infrastructureExpr $infrastructureExpr $showTraceArg
-./result/bin/deploy-systems
-rm -f result
+nix-build $NIXOS/modules/installer/tools/nixos-build-vms/build-vms.nix --argstr networkExpr $networkExpr --argstr nixos $NIXOS --argstr nixpkgs $NIXPKGS_ALL $useBackdoorArg $showTraceArg

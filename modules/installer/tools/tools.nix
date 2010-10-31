@@ -11,6 +11,11 @@ let
     isExecutable = true;
   });
   
+  nixosBuildVMS = makeProg {
+    name = "nixos-build-vms";
+    src = ./nixos-build-vms/nixos-build-vms.sh;
+  };
+  
   nixosDeployNetwork = makeProg {
     name = "nixos-deploy-network";
     src = ./nixos-deploy-network/nixos-deploy-network.sh;
@@ -131,7 +136,8 @@ in
 
   config = {
     environment.systemPackages =
-      [ nixosDeployNetwork
+      [ nixosBuildVMS
+        nixosDeployNetwork
         nixosInstall
         nixosRebuild
          nixosHardwareScan

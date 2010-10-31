@@ -1,4 +1,4 @@
-{ nixpkgs, services, system }:
+{ nixpkgs, services, system, useBackdoor ? false }:
 
 let pkgs = import nixpkgs { config = {}; inherit system; }; in
 
@@ -58,7 +58,7 @@ rec {
       modules = configurations ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
-          { key = "no-manual"; services.nixosManual.enable = false; }
+          { key = "no-manual"; services.nixosManual.enable = false; virtualisation.useBackdoor = useBackdoor; }
         ];
       extraArgs = { inherit nodes; };
     };

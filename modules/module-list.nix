@@ -146,6 +146,7 @@
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
   ./system/boot/kernel.nix
+  ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix

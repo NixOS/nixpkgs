@@ -111,6 +111,17 @@ let
         description = "Options passed to QEMU.";
       };
 
+    virtualisation.useBackdoor =
+      mkOption {
+        default = false;
+	description =
+	''
+	  If enabled, the virtual machine makes a connection through TCP port 23
+	  to a daemon running on the host system acting as a proxy.
+	  This option makes it possible to connect to a VM through a socket file.
+	'';
+      };
+
     virtualisation.useBootLoader =
       mkOption {
         default = false;
@@ -145,6 +156,11 @@ let
             ${toString config.virtualisation.diskSize}M || exit 1
       fi
 
+      ${pkgs.lib.optionalString cfg.useBackdoor ''
+        # Remember the current working directory
+        WORKDIR=$(pwd)
+      ''}
+      
       # Start Samba (which wants to put its socket and config files in TMPDIR).
       if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
           TMPDIR=$(mktemp -d nix-vm-smbd.XXXXXXXXXX --tmpdir)
@@ -153,13 +169,24 @@ let
 
       ${pkgs.vmTools.startSamba}
 
+      ${pkgs.lib.optionalString cfg.useBackdoor ''
+        # Create a shell socket file to which the VM can connect and create in the
+	# current working directory a socket file which can be used to remotely access
+	# the VM through the shell interface
+	
+        ${pkgs.socat}/bin/socat UNIX-LISTEN:./shell UNIX-LISTEN:$WORKDIR/${vmName}.socket,fork &
+	
+	while [ ! -e ./shell ]; do sleep 0.1; done # Wait until the socket file is there
+      ''}
+
       # Start QEMU.
       exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           -net nic,vlan=0,model=virtio \
           -chardev socket,id=samba,path=./samba \
-          -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+          -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba${if cfg.useBackdoor then ",guestfwd=tcp:10.0.2.6:23-chardev:shell" else ""}''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+	  ${if cfg.useBackdoor then "-chardev socket,id=shell,path=./shell" else ""} \
           ${if cfg.useBootLoader then ''
             -drive index=0,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -drive index=1,file=${bootDisk}/disk.img,if=virtio,boot=on \

@@ -17,8 +17,8 @@ NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
 
 NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
 
-unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB GST_PLUGIN_PATH KDEDIRS
-unset XDG_CONFIG_DIRS XDG_DATA_DIRS
+unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB ALSA_PLUGIN_DIRS GST_PLUGIN_PATH KDEDIRS
+unset QT_PLUGIN_PATH QTWEBKIT_PLUGIN_PATH STRIGI_PLUGIN_PATH XDG_CONFIG_DIRS XDG_DATA_DIRS
 
 for i in $NIX_PROFILES; do # !!! reverse
     # We have to care not leaving an empty PATH element, because that means '.' to Linux
@@ -38,7 +38,9 @@ for i in $NIX_PROFILES; do # !!! reverse
 
     # KDE/Gnome stuff.
     export KDEDIRS=$i${KDEDIRS:+:}$KDEDIRS
+    export STRIGI_PLUGIN_PATH=$i/lib/strigi/${STRIGI_PLUGIN_PATH:+:}$STRIGI_PLUGIN_PATH
     export QT_PLUGIN_PATH=$i/lib/qt4/plugins:$i/lib/kde4/plugins${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
+    export QTWEBKIT_PLUGIN_PATH=$i/lib/mozilla/plugins/${QTWEBKIT_PLUGIN_PATH:+:}$QTWEBKIT_PLUGIN_PATH
     export XDG_CONFIG_DIRS=$i/etc/xdg${XDG_CONFIG_DIRS:+:}$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 done
@@ -58,7 +60,7 @@ PROMPT_COLOR="1;31m"
 let $UID && PROMPT_COLOR="1;32m"
 PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
 if test "$TERM" = "xterm"; then
-    PS1="\033]2;\h:\u:\w\007$PS1"
+    PS1="\[\033]2;\h:\u:\w\007\]$PS1"
 fi
 
 

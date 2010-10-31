@@ -53,10 +53,10 @@ in
     davfs2 = 31;
     privoxy = 32;    
     osgi = 34;
-    sabnzbd = 33;
     tor = 35;
     cups = 36;
     foldingAtHome = 37;
+    sabnzbd = 38;
     # When adding a uid, make sure it doesn't match an existing gid.
 
     nixbld = 30000; # start of range of uids

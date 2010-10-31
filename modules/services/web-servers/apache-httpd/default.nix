@@ -555,7 +555,7 @@ in
 
         description = "Apache HTTPD";
 
-        startOn = "started ${startingDependency}";
+        startOn = "started ${startingDependency} and filesystem";
 
         environment =
           { # !!! This should be added in test-instrumentation.nix.  It
