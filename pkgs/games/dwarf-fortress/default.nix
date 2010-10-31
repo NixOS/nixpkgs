@@ -51,9 +51,10 @@ stdenv.mkDerivation rec {
      ln -s \$i \$DF_DIR/data/
     done
 
-    # index initial_movies, announcement, and help files are as of 0.31.16 opened in read/write mode instead of read-only mode
+    # index initial_movies, announcement, dipscript and help files are as of 0.31.16 opened in read/write mode instead of read-only mode
     # this is a hack to work around this
-    for i in index initial_movies announcement help
+    # Should I just apply this to the whole data directory?
+    for i in index initial_movies announcement dipscript help
     do
      rm \$DF_DIR/data/\$i
      cp -rf $out/share/df_linux/data/\$i \$DF_DIR/data/
