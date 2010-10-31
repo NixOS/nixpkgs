@@ -177,7 +177,7 @@ in
   # default root password is empty.
   services.openssh.enable = true;
 
-  jobs.openssh.startOn = pkgs.lib.mkOverride 50 {} "";
+  jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
   services.ttyBackgrounds.enable = false;
 

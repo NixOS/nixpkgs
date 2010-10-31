@@ -22,7 +22,7 @@ let
 
         # Add your own options below and run "nixos-rebuild switch".
         # E.g.,
-        #   services.sshd.enable = true;
+        #   services.openssh.enable = true;
       }
     '';
   
@@ -178,7 +178,7 @@ in
   # default root password is empty.
   services.openssh.enable = true;
   services.ttyBackgrounds.enable = false;
-  jobs.openssh.startOn = pkgs.lib.mkOverride 50 {} "";
+  jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
   nixpkgs.config = {
     platform = pkgs.platforms.sheevaplug;
