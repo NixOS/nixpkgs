@@ -26,6 +26,12 @@ in
         description = "Location where Tomcat stores configuration files, webapplications and logfiles";
       };
 
+      extraGroups = mkOption {
+        default = [];
+	example = [ "users" ];
+	description = "Defines extra groups to which the tomcat user belongs.";
+      };
+      
       user = mkOption {
         default = "tomcat";
         description = "User account under which Apache Tomcat runs.";
@@ -104,6 +110,7 @@ in
         uid = config.ids.uids.tomcat;
         description = "Tomcat user";
         home = "/homeless-shelter";
+	extraGroups = cfg.extraGroups;
       };
             
     jobs.tomcat =

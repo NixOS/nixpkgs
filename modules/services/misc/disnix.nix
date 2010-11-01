@@ -49,6 +49,7 @@ in
     services.dbus.packages = [ pkgs.disnix ];
 
     services.tomcat.enable = cfg.useWebServiceInterface;
+    services.tomcat.extraGroups = [ "disnix" ];
     services.tomcat.javaOpts = "${optionalString cfg.useWebServiceInterface "-Djava.library.path=${pkgs.libmatthew_java}/lib/jni"} ";
     services.tomcat.sharedLibs = []
                                  ++ optional cfg.useWebServiceInterface "${pkgs.DisnixWebService}/share/java/DisnixConnection.jar"
@@ -67,6 +68,9 @@ in
 
         script =
           ''
+	    export PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
+            export HOME=/root
+
             ${pkgs.disnix}/bin/disnix-service --activation-modules-dir=${disnix_activation_scripts}/libexec/disnix/activation-scripts
           '';
       };
