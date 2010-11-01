@@ -7037,9 +7037,15 @@ let
 
   disnix = callPackage ../tools/package-management/disnix { };
 
-  disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts { };
+  disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts {
+    enableApacheWebApplication = getConfig ["disnix" "enableApacheWebApplication"] false;
+    enableAxis2WebService = getConfig ["disnix" "enableAxis2WebService"] false;
+    enableEjabberdDump = getConfig ["disnix" "enableEjabberdDump"] false;
+    enableMySQLDatabase = getConfig ["disnix" "enableMySQLDatabase"] false;
+    enableTomcatWebApplication = getConfig ["disnix" "enableTomcatWebApplication"] false;
+  };
 
-  DisnixService = callPackage ../tools/package-management/disnix/DisnixService { };
+  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   latex2html = callPackage ../misc/tex/latex2html/default.nix {
     tex = tetex;
