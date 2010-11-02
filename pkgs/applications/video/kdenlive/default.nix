@@ -2,10 +2,10 @@
 shared_mime_info, soprano}:
 
 stdenv.mkDerivation {
-  name = "kdenlive-0.7.7.1";
+  name = "kdenlive-0.7.8";
   src = fetchurl {
-    url = mirror://sourceforge/kdenlive/kdenlive-0.7.7.1.tar.gz;
-    sha256 = "047kpzfdmipgnnkbdhcpy5c0kqgpg7yn3qhyd7inlplmyd3i1pfx";
+    url = mirror://sourceforge/kdenlive/kdenlive-0.7.8.tar.gz;
+    sha256 = "10bwmhh3kzdbq1nzq8s5ln7ydrzg41d1rihj5kdmf5hb91az8mvx";
   };
 
   buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon mlt gettext
