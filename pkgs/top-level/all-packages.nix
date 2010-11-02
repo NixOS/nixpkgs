@@ -5739,6 +5739,8 @@ let
     python = pythonFull;
   };
 
+  guitone = callPackage ../applications/version-management/guitone { };
+
   gv = callPackage ../applications/misc/gv { };
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
