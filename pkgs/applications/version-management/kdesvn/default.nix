@@ -8,11 +8,12 @@ stdenv.mkDerivation {
     sha256 = "02sb34p04dyd88ksxvpiffhxqwmhs3yv1wif9m8w0fly9hvy1zk7";
   };
 
-  patchPhase = ''
+  prePatch = ''
     sed -i -e "s|/usr|${subversion}|g" src/svnqt/cmakemodules/FindSubversion.cmake
   '';
 
-  makeFlags = [ "VERBOSE=1" ];
+  patches = [ ./docbook.patch ];
+  
 
   buildInputs = [ cmake qt4 perl gettext apr aprutil subversion db4 kdelibs automoc4 phonon ];
 
