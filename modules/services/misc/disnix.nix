@@ -43,7 +43,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.disnix ];
+    environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
     services.dbus.enable = true;
     services.dbus.packages = [ pkgs.disnix ];
