@@ -233,9 +233,8 @@ let
     theAttrSet = arg;
   };
 
-  buildEnvScript = ../build-support/buildenv/builder.pl;
   buildEnv = import ../build-support/buildenv {
-    inherit stdenv perl;
+    inherit runCommand perl;
   };
 
   dotnetenv = import ../build-support/dotnetenv {

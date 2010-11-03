@@ -10,7 +10,6 @@ STDOUT->autoflush(1);
 
 my $out = $ENV{"out"};
 
-
 my @pathsToLink = split ' ', $ENV{"pathsToLink"};
 
 sub isInPathsToLink {
@@ -153,7 +152,3 @@ my $manifest = $ENV{"manifest"};
 if ($manifest) {
     symlink($manifest, "$out/manifest") or die "cannot create manifest";
 }
-
-
-system("eval \"\$postBuild\"") == 0
-    or die "post-build hook failed";
