@@ -3841,6 +3841,8 @@ let
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
+  sword = callPackage ../development/libraries/sword { };
+
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
