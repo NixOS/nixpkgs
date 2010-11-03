@@ -5278,6 +5278,10 @@ let
     inherit (gnome) libgnomecanvas libart_lgpl;
   };
 
+  bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
+    qt = qt4;
+  } ;
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
   bitlbeeOtr = callPackage ../applications/networking/instant-messengers/bitlbee-otr { };
