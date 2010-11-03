@@ -9,22 +9,16 @@ let
   # see description of extraPlugins
   postgresqlAndPlugins = pg:
     if cfg.extraPlugins == [] then pg
-    else pkgs.runCommand "postgresql-and-plugins" {
-      inherit (pkgs) perl;
-      inherit pg;
-      # used by env builder:
+    else pkgs.buildEnv {
+      name = "postgresql-and-plugins";
       paths = [ pg ] ++ cfg.extraPlugins;
-      pathsToLink = "/";
-      ignoreCollisions = 0;
-      manifest = null;
-    }
-      ''
-        perlScript=${pkgs.buildEnvScript}
-        mkdir -p $out/bin
-        $perl/bin/perl $perlScript
-        rm $out/bin/{pg_config,postgres,pg_ctl}
-        cp --target-directory=$out/bin $pg/bin/{postgres,pg_config,pg_ctl}
-      '';
+      postBuild =
+        ''
+          mkdir -p $out/bin
+          rm $out/bin/{pg_config,postgres,pg_ctl}
+          cp --target-directory=$out/bin ${pg}/bin/{postgres,pg_config,pg_ctl}
+        '';
+    };
 
   postgresql = postgresqlAndPlugins pkgs.postgresql;
 
