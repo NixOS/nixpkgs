@@ -1,6 +1,6 @@
 diff -Nuar hol_light/hol.ml hol_light.nixos/hol.ml
---- hol_light/hol.ml	2010-09-12 18:57:28.000000000 +0200
-+++ hol_light.nixos/hol.ml	2010-09-12 19:09:09.000000000 +0200
+--- hol_light/hol.ml	2010-11-03 23:09:01.000000000 +0100
++++ hol_light.nixos/hol.ml	2010-11-03 23:10:31.000000000 +0100
 @@ -11,8 +11,8 @@
  
  let hol_version = "2.20++";;
@@ -12,7 +12,7 @@ diff -Nuar hol_light/hol.ml hol_light.nixos/hol.ml
  
  (* ------------------------------------------------------------------------- *)
  (* Should eventually change to "ref(Filename.temp_dir_name)".                *)
-@@ -23,20 +23,6 @@
+@@ -23,19 +23,6 @@
  let temp_path = ref "/tmp";;
  
  (* ------------------------------------------------------------------------- *)
@@ -21,8 +21,7 @@ diff -Nuar hol_light/hol.ml hol_light.nixos/hol.ml
 -(* and for Ocaml >= 3.10, use camlp5 instead.                                *)
 -(* ------------------------------------------------------------------------- *)
 -
--if let v = String.sub Sys.ocaml_version 0 4 in
--   v = "3.10" or v = "3.11"
+-if let v = String.sub Sys.ocaml_version 0 4 in v >= "3.10"
 -then (Topdirs.dir_directory "+camlp5";
 -      Topdirs.dir_load Format.std_formatter "camlp5o.cma")
 -else (Topdirs.dir_load Format.std_formatter "camlp4o.cma");;
