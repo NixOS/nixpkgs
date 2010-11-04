@@ -6836,10 +6836,6 @@ let
     camlp5 = camlp5_transitional;
   };
 
-  coq_devel = callPackage ../applications/science/logic/coq/8.3rc1.nix {
-    camlp5 = camlp5_transitional;
-  };
-
   eprover = callPackage ../applications/science/logic/eProver {
     texLive = texLiveAggregationFun {
       paths = [
