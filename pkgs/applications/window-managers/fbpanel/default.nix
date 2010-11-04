@@ -36,7 +36,7 @@ rec {
   '' [];
       
   meta = {
-    description = "${abort ''Specify description''}";
+    description = "A stand-alone panel";
     maintainers = with a.lib.maintainers;
     [
       raskin
