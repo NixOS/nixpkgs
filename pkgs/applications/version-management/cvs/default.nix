@@ -10,14 +10,16 @@ stdenv.mkDerivation {
 
   patches = [ ./getcwd-chroot.patch ];
 
-  preConfigure =
+  preConfigure = ''
+    # Fix location of info and man directories.
+    configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
+
     # Apply the Debian patches.
-    '' for p in "debian/patches/"*
-       do
-         echo "applying \`$p'..."
-         patch --verbose -p1 < "$p"
-       done
-    '';
+    for p in "debian/patches/"*; do
+      echo "applying \`$p' ..."
+      patch --verbose -p1 < "$p"
+    done
+  '';
 
   buildInputs = [ nano ];
 
@@ -26,6 +28,6 @@ stdenv.mkDerivation {
     description = "Concurrent Versions System - a source control system";
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [];
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
