@@ -10,10 +10,14 @@ stdenv.mkDerivation {
 
   patches = [ ./no-root.patch ];
 
+  preConfigure = ''
+    configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
+  '';
+
   meta = {
     homepage = http://www.cs.purdue.edu/homes/trinkle/RCS/;
     description = "Revision Control System, a version management system";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.all;
   };
 }
