@@ -40,11 +40,11 @@ stdenv.mkDerivation {
   ];
 
   configureFlags =
-    [ "--enable-a4-paper" ] /* We obey ISO standards! */
-    ++ (if enablePDFtoPPM then [
-      "--with-freetype2-library=${freetype}/lib"
-      "--with-freetype2-includes=${freetype}/include/freetype2"
-    ] else []);
+    "--infodir=$out/share/info --mandir=$out/share/man --enable-a4-paper"
+    + (if enablePDFtoPPM then
+         " --with-freetype2-library=${freetype}/lib"
+         + " --with-freetype2-includes=${freetype}/include/freetype2"
+       else "");
 
   postInstall = "
     if test -n \"${base14Fonts}\"; then
@@ -59,6 +59,6 @@ stdenv.mkDerivation {
     description = "viewer for Portable Document Format (PDF) files";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [];
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
