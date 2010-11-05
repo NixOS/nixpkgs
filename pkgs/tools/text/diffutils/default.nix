@@ -2,17 +2,24 @@
 
 stdenv.mkDerivation {
   name = "diffutils-2.8.1";
-  
+
   src = fetchurl {
     url = mirror://gnu/diffutils/diffutils-2.8.1.tar.gz;
     md5 = "71f9c5ae19b60608f6c7f162da86a428";
   };
-  
+
+  preConfigure = ''
+    configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
+  '';
+
   /* If no explicit coreutils is given, use the one from stdenv. */
   buildInputs = [coreutils];
 
   meta = {
     homepage = http://www.gnu.org/software/diffutils/diffutils.html;
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
