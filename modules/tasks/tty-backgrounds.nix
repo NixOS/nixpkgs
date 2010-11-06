@@ -86,7 +86,8 @@ in
 
     assertions = singleton
       { assertion = kernelPackages.splashutils != null;
-        message = "kernelPackages.splashutils may not be false";
+        message = "The kernelPackages does not provide splashutils, as required by ttyBackgrounds. " +
+          "Either provide kernelPackages with splashutils, or disable ttyBackgrounds.";
       };
 
     services.ttyBackgrounds.specificThemes = singleton
