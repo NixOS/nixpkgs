@@ -5104,6 +5104,8 @@ let
 
   ### DATA
 
+  andagii = callPackage ../data/fonts/andagii {};
+
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
   };
 
