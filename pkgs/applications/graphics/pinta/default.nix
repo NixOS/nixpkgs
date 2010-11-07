@@ -1,12 +1,11 @@
-{stdenv, fetchgit, mono, gtksharp, pkgconfig}:
+{stdenv, fetchurl, mono, gtksharp, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "pinta-0.3";
+  name = "pinta-0.5";
 
-  src = fetchgit {
-    url = http://github.com/jpobst/Pinta.git;
-    rev = "0.3";
-    sha256 = "17fde1187be4cfd50a9acda4ba45584e24d51ff22df5074654bed23f61faf33b";
+  src = fetchurl {
+    url =  http://github.com/downloads/jpobst/Pinta/pinta-0.5.tar.gz; 
+    sha256 = "0qv95zswi488bkbck9b9yhmczj1sgqc96nzn4f5rwfqz516kilrl";
   };
 
   buildInputs = [mono gtksharp pkgconfig];
