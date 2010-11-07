@@ -3813,7 +3813,7 @@ let
   schroedinger = callPackage ../development/libraries/schroedinger { };
 
   SDL = callPackage ../development/libraries/SDL {
-    openglSupport = false; #mesaSupported;
+    openglSupport = mesaSupported;
     alsaSupport = true;
     x11Support = true;
     pulseaudioSupport = false; # better go through ALSA
