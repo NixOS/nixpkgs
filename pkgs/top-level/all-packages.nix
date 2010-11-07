@@ -3815,7 +3815,7 @@ let
   SDL = callPackage ../development/libraries/SDL {
     openglSupport = false; #mesaSupported;
     alsaSupport = true;
-    x11Support = false;
+    x11Support = true;
     pulseaudioSupport = false; # better go through ALSA
   };
 
