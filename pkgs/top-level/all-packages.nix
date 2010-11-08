@@ -1453,6 +1453,8 @@ let
     buildClang = true;
   };
 
+  cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
+
   dylan = callPackage ../development/compilers/gwydion-dylan {
     dylan =
       import ../development/compilers/gwydion-dylan/binary.nix {
