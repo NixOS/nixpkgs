@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./no-root.patch ];
 
   preConfigure = ''
-    configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
+    makeFlags="man1dir=$out/share/man/man1 man5dir=$out/share/man/man5";
   '';
 
   meta = {
