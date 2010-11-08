@@ -366,15 +366,15 @@ let
 
   amule = callPackage ../tools/networking/p2p/amule { };
 
-  amuleDaemon = amule.override {
+  amuleDaemon = appendToName "daemon" (amule.override {
     monolithic = false;
     daemon = true;
-  };
+  });
 
-  amuleGui = amule.override {
+  amuleGui = appendToName "gui" (amule.override {
     monolithic = false;
     client = true;
-  };
+  });
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
@@ -3744,15 +3744,15 @@ let
 
   quassel = newScope pkgs.kde4 ../applications/networking/irc/quassel { };
 
-  quasselDaemon = quassel.override {
+  quasselDaemon = appendToName "daemon" (quassel.override {
     monolithic = false;
     daemon = true;
-  };
+  });
 
-  quasselClient = quassel.override {
+  quasselClient = appendToName "client" (quassel.override {
     monolithic = false;
     client = true;
-  };
+  });
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
