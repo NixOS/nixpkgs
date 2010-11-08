@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20100603";
+  version = "20101102";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "1f2l09g3586w0fyd7i7wkfnqlqwrk7c1q9pngmd8jz69g5ysl808";
+    sha256 = "1x661z6hg8gb7v1n580kdij9mr6vv3psm28zr4mmipj2kqh66gfi";
   };
 
   buildInputs = [ stdenv.gcc file libmhash mlton mysql postgresql sqlite ];
