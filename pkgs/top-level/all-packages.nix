@@ -3216,6 +3216,12 @@ let
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
+    /* Using GNU Make 3.82 leads to this:
+
+         Makefile:939: *** missing separator (did you mean TAB instead of 8 spaces?).  Stop.
+
+       So use 3.81.  */
+    stdenv = overrideInStdenv stdenv [gnumake381];
     gstreamer = gst_all.gstreamer;
   };
 
