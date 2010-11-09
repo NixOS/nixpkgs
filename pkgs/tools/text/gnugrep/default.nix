@@ -1,16 +1,17 @@
-{stdenv, fetchurl, pcre}:
+{ stdenv, fetchurl, pcre, libiconv ? null}:
 
 let version = "2.7"; in
 
 stdenv.mkDerivation {
   name = "gnugrep-${version}";
-  
+
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.gz";
     sha256 = "1b8vksfd1ngharac3ygaqim3lrf0yqap992sg0vfm7572l88655d";
   };
-  
-  buildInputs = [pcre];
+
+  buildInputs = [ pcre ]
+    ++ (stdenv.lib.optional (libiconv != null) libiconv);
 
   doCheck = if stdenv.isDarwin then false else true;
 
@@ -31,6 +32,9 @@ stdenv.mkDerivation {
     '';
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 
   passthru = {inherit pcre;};

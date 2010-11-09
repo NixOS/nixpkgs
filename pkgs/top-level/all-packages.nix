@@ -666,7 +666,13 @@ let
     inherit (gtkLibs) gtk glib;
   };
 
-  gnugrep = callPackage ../tools/text/gnugrep { };
+  gnugrep =
+    # Use libiconv only on non-GNU platforms (we can't test with
+    # `stdenv ? glibc' at this point.)
+    let gnu = stdenv.isLinux; in
+      callPackage ../tools/text/gnugrep {
+        libiconv = if gnu then null else libiconv;
+      };
 
   gnupatch = callPackage ../tools/text/gnupatch { };
 
