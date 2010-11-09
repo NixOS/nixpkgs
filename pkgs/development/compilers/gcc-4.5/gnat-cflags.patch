@@ -22,12 +22,12 @@ index f5057a0..337e0c6 100644
  # Pretend that _Unwind_GetIPInfo is available for the target by default.  This
  # should be autodetected during the configuration of libada and passed down to
  # here, but we need something for --disable-libada and hope for the best.
-@@ -1838,7 +1838,7 @@ ADA_INCLUDE_SRCS =\
+@@ -193,7 +193,7 @@ RTSDIR = rts$(subst /,_,$(MULTISUBDIR))
+ # Link flags used to build gnat tools.  By default we prefer to statically
+ # link with libgcc to avoid a dependency on shared libgcc (which is tricky
+ # to deal with as it may conflict with the libgcc provided by the system).
+-GCC_LINK_FLAGS=-static-libgcc
++GCC_LINK_FLAGS=-static-libgcc $(CFLAGS_FOR_TARGET)
  
- LIBGNAT=../$(RTSDIR)/libgnat.a
+ # End of variables for you to override.
  
--GCC_LINK=$(CC) -static-libgcc $(ADA_INCLUDES)
-+GCC_LINK=$(CC) -static-libgcc $(CFLAGS_FOR_TARGET) $(ADA_INCLUDES)
- 
- # when compiling the tools, the runtime has to be first on the path so that
- # it hides the runtime files lying with the rest of the sources
