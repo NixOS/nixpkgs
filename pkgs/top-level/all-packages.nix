@@ -2427,6 +2427,7 @@ let
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
 
   gnumake380 = callPackage ../development/tools/build-managers/gnumake-3.80 { };
+  gnumake381 = callPackage ../development/tools/build-managers/gnumake/3.81.nix { };
 
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
