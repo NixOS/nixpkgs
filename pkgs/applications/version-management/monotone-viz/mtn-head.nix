@@ -1,12 +1,13 @@
 args : with args; 
 rec {
-  src = fetchmtn {
+  srcDrv = fetchmtn {
     name = "monotone-viz-mtn-checkout";
-    dbs = ["monotone.ca"];
-    selector = "b34ff2e695b53c2d73d533a3ffa7cb081b48eefb";
+    dbs = ["monotone.mtn-host.prjek.net"];
+    selector = "c3fdb3af1c7c89989c7da8062bb62203f2aaccf0";
     branch = "net.venge.monotone-viz.new-stdio";
-    sha256 = "06263564bc111d865b50b4a9587a86f8d97fff47625a3c1cb98d90b79faf7889";
-  } + "/";
+    sha256 = "661c6a49d442b7e5a7ba455bb9a892e7e12b3968c2ddd69375e7bd0cd0b3ecb9";
+  };
+  src = srcDrv + "/";
 
   buildInputs = [ocaml lablgtk libgnomecanvas gtk graphviz glib 
     pkgconfig autoconf automake libtool];
@@ -20,12 +21,13 @@ rec {
     autoconf -I .
   '') ["minInit" "addInputs" "doUnpack"];
 
-  patches = [ ./graphviz.patch ];
-      
   name = "monotone-viz-mtn-head";
   meta = {
     description = "Monotone commit tree visualizer";
     maintainers = [args.lib.maintainers.raskin];
+  };
+  passthru = {
+    inherit srcDrv;
   };
 }
 
