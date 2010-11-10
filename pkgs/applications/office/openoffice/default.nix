@@ -21,6 +21,22 @@ stdenv.mkDerivation rec {
 
   patches = [ ./oo.patch  ./root-required.patch ];
 
+  postPatch =
+    /* Compiling with GCC 4.5 fails:
+
+         Compiling: cppu/source/AffineBridge/AffineBridge.cxx
+         [...]
+         ../../inc/uno/lbnames.h:67:2: error: #error "Supported gcc majors are 2 , 3 and 4 <= 4.4.  Unsupported gcc major version."
+
+       However, we can't compile with GCC 4.4 because then we'd end up with
+       two different versions of libstdc++ (because the deps are compiled
+       with 4.5), which isn't supported (link time error.)
+
+       Thus, force compilation with 4.5 and hope for the best.  */
+    '' sed -i *"/cppu/inc/uno/lbnames.h" \
+           -es 's/#[[:blank:]]*error "Supported.*$//g'
+    '';
+
   src_system = fetchurl {
       url = "${downloadRoot}/${if versionDirs then version + "/" else ""}OOo_${version}_src_system.tar.bz2";
       sha256 = "0giy3sza64ij19w7b06rxcrkrb5kq2fvkz486vh3mv08s8xa8zfc";
