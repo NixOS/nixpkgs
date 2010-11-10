@@ -2610,9 +2610,7 @@ let
     enableStatic = true;
   });
 
-  botan = builderDefsPackage (import ../development/libraries/botan) {
-    inherit perl;
-  };
+  botan = callPackage ../development/libraries/botan { };
 
   buddy = callPackage ../development/libraries/buddy { };
 
