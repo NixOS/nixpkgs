@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
       sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
+      sed -e "s@'/lib64/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
     '' else "";
 
   makeFlags = "NOGDB=1";
