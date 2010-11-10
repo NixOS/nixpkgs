@@ -6084,6 +6084,12 @@ let
   openjump = callPackage ../applications/misc/openjump { };
 
   openoffice = callPackage ../applications/office/openoffice {
+    /* OOo wants GCC 4.4 at most:
+
+        ../../inc/uno/lbnames.h:70:2: error: #error "Supported gcc majors are 2 , 3 and 4 <= 4.4.  Unsupported gcc major version."
+        dmake:  Error code 1, while making '../../unxlngx6.pro/slo/AffineBridge.obj'
+     */
+    stdenv = overrideGCC stdenv gcc44;
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
