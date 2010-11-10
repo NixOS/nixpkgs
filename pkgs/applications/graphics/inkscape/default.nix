@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
        "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml})" ||  \
         exit 2
     done
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   NIX_LDFLAGS = "-lX11";
