@@ -4,11 +4,11 @@
 , gsl, python, pyxml, lxml }:
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.47";
+  name = "inkscape-0.48.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/inkscape/${name}.tar.gz";
-    sha256 = "15wvcllq0nj69hkyanzvxbjhlq06cwabqabaa54n5n4307hrp2g5";
+    url = "mirror://sourceforge/inkscape/${name}.tar.bz2";
+    sha256 = "0w72xf76vxpm3fpslmix0x71l2rd2sdhrvgwx2vk7hxfjqdxib1n";
   };
 
   patches = [ ./configure-python-libs.patch ]; 
