@@ -2,7 +2,7 @@
 
 let version = "2.7"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "gnugrep-${version}";
 
   src = fetchurl {
@@ -38,4 +38,4 @@ stdenv.mkDerivation {
   };
 
   passthru = {inherit pcre;};
-}
+} // (if libiconv != null then { NIX_LDFLAGS="-L${libiconv}/lib -liconv"; } else {}) )
