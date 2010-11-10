@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
        Thus, force compilation with 4.5 and hope for the best.  */
     '' sed -i *"/cppu/inc/uno/lbnames.h" \
-           -es 's/#[[:blank:]]*error "Supported.*$//g'
+           -e 's/#[[:blank:]]*error "Supported.*$//g'
     '';
 
   src_system = fetchurl {
