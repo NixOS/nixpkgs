@@ -5116,7 +5116,7 @@ let
   corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
-    inherit fetchurl stdenv builderDefs paths ttmkfdir;
+    inherit fetchurl stdenv builderDefs paths;
     inherit (xorg) mkfontdir mkfontscale;
   });
 
