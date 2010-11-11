@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
        with 4.5), which isn't supported (link time error.)
 
        Thus, force compilation with 4.5 and hope for the best.  */
-    '' sed -i *"/cppu/inc/uno/lbnames.h" \
+    '' sed -i "cppu/inc/uno/lbnames.h" \
            -e 's/#[[:blank:]]*error "Supported.*$//g'
     '';
 
