@@ -4714,6 +4714,8 @@ let
 
     inherit kernel;
 
+    acpi_call = callPackage ../os-specific/linux/acpi-call {};
+
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
     aufs = callPackage ../os-specific/linux/aufs { };
