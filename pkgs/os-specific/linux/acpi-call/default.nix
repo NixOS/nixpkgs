@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     ensureDir $out/lib/modules/$kernelVersion/misc
     cp acpi_call.ko $out/lib/modules/$kernelVersion/misc
     ensureDir $out/bin
-    cp test_off.sh $out/bin
+    cp test_off.sh $out/bin/test_discrete_video_off.sh
   '';
 
   meta = {
