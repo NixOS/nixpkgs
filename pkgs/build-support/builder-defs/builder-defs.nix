@@ -484,6 +484,7 @@ let inherit (builtins) head tail trace; in
 
    generateFontsFromSFD = fullDepEntry (''
            for i in *.sfd; do
+                echo $i;
                 fontforge -c \
                         'Open($1);
                         ${optionalString (args ? extraFontForgeCommands) args.extraFontForgeCommands

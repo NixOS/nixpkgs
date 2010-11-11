@@ -1,0 +1,13 @@
+The name of the dtd changed in kdelibs 4.5, so we need to increase it.
+
+diff --git a/doc/nl/index.docbook b/doc/nl/index.docbook
+index 8747869..a9676aa 100644
+--- a/doc/nl/index.docbook
++++ b/doc/nl/index.docbook
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" ?>
+-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
++<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+   <!ENTITY kdesvn "<application>kdesvn</application>">
+   <!ENTITY kappname "&kdesvn;"><!-- Do *not* replace kappname-->
+   <!ENTITY package "kde-module"><!-- kdebase, kdeadmin, etc -->

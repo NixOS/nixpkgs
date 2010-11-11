@@ -3,12 +3,12 @@
 , libffi, libffcall, coreutils }:
 
 stdenv.mkDerivation rec {
-  v = "2.48";
+  v = "2.49";
   name = "clisp-${v}";
   
   src = fetchurl {
     url = "mirror://gnu/clisp/release/${v}/${name}.tar.bz2";
-    sha256 = "1hix1j7zhbn37ld46d6pi6agwxski893l1zwriwkd8jr11b3zf05";
+    sha256 = "8132ff353afaa70e6b19367a25ae3d5a43627279c25647c220641fed00f8e890";
   };
 
   inherit libsigsegv gettext coreutils;

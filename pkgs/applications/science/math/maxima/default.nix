@@ -12,6 +12,10 @@ stdenv.mkDerivation {
     sha256 = "0sdrv3lra6j3ylaqsblnd3x7rq4ybafyj7rb114ycadpx2qf06lq";
   };
 
+  preConfigure = ''
+    configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
+  '';
+
   buildInputs = [clisp];
 
   meta = {

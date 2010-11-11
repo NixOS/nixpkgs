@@ -2,7 +2,7 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{stdenv, perl}:
+{ perl, runCommand }:
 
 { name
 
@@ -25,8 +25,9 @@
   postBuild ? ""
 }:
 
-stdenv.mkDerivation {
-  inherit name manifest paths ignoreCollisions pathsToLink postBuild;
-  realBuilder = "${perl}/bin/perl";
-  args = ["-w" ./builder.pl];
-}
+runCommand name
+  { inherit manifest paths ignoreCollisions pathsToLink postBuild; }
+  ''
+    ${perl}/bin/perl -w ${./builder.pl}
+    eval "$postBuild"
+  ''

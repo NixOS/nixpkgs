@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0xvckv1ia5pjxk7fs4za6gz2njwmfd54sc464n8ab13096qxbw3q";
   };
 
-  configureFlags = [ "--enable-telnet" ];
+  preConfigure = ''
+    configureFlags="--enable-telnet --infodir=$out/share/info --mandir=$out/share/man"
+    sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
+  '';
+
   buildInputs = [ ncurses ];
 
   doCheck = true;
@@ -42,6 +46,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
   };
 }

@@ -134,13 +134,11 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
     gdSupport = getConfig ["php" "gd"] true;
   };
 
-  # only -O1
   configurePhase = ''
     iniFile=$out/etc/php-recommended.ini
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
     ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out  $configureFlags
     echo configurePhase end
-    sed -e 's/-O2/-O1/g' -i Makefile # http://bugs.php.net/bug.php?id=47730&edit=3
   '';
 
   installPhase = ''

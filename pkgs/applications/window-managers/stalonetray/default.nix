@@ -1,7 +1,5 @@
 x@{builderDefsPackage
-  , python
-  , bzip2, zlib, gmp, openssl
-  , boost
+  , libX11, xproto
   , ...}:
 builderDefsPackage
 (a :  
@@ -12,14 +10,11 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    baseName="botan";
-    tarBaseName="Botan";
-    baseVersion="1.8";
-    revision="11";
-    version="${baseVersion}.${revision}";
+    baseName="stalonetray";
+    version="0.8.0";
     name="${baseName}-${version}";
-    url="http://files.randombit.net/${baseName}/v${baseVersion}/${tarBaseName}-${version}.tbz";
-    hash="194vffc9gfb0912lzndn8nzblg2d2gjmk13fc8hppgpw7ln0mdn3";
+    url="mirror://sourceforge/${baseName}/${name}.tar.bz2";
+    hash="0ccllmpsmilns6xxl174vgcjf8kfakcrhg3psc4cg0yynqbi2mka";
   };
 in
 rec {
@@ -33,20 +28,20 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
-  configureCommand = "python configure.py --with-gnump --with-bzip2 --with-zlib --with-openssl --with-tr1-implementation=boost";
       
   meta = {
-    description = "Cryptographic algorithms library";
+    description = "Stand alone tray";
     maintainers = with a.lib.maintainers;
     [
       raskin
     ];
     platforms = with a.lib.platforms;
-      unix;
+      linux;
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://files.randombit.net/botan/";
+      downloadPage = "http://sourceforge.net/projects/stalonetray/files/";
     };
   };
 }) x
+

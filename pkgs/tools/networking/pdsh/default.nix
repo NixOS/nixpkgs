@@ -14,27 +14,28 @@ stdenv.mkDerivation rec {
      library can be found. Obviously, though, this is a hack. */
   NIX_LDFLAGS="-lgcc_s";
 
-  # Setting --with-machines=$out in configureFlags doesn't seem to work,
-  # so I specify configurePhase instead.
-  configurePhase = "./configure --prefix=$out --with-machines=$out/etc/machines"
-                 + " " + (if readline == null then "--without-readline" else "--with-readline")
-                 + " " + (if ssh == null then "--without-ssh" else "--with-ssh")
-                 + " " + (if pam == null then "--without-pam" else "--with-pam")
-                 + " " + (if rsh == false then "--without-rsh" else "--with-rsh")
-                 + " --with-dshgroups"
-                 + " --with-xcpu"
-                 + " --without-genders"
-                 + " --without-mqshell"
-                 + " --without-mrsh"
-                 + " --without-netgroup"
-                 + " --without-nodeattr"
-                 + " --without-nodeupdown"
-                 + " --without-qshell"
-                 + " --without-slurm"
-                 + " --enable-fast-install"
-                 + " --disable-dependency-tracking"
-                 + " --disable-debug"
-                 ;
+  preConfigure = ''
+    configureFlagsArray=(
+      "--infodir=$out/share/info"
+      "--mandir=$out/share/man"
+      "--with-machines=$out/etc/machines"
+      ${if readline == null then "--without-readline" else "--with-readline"}
+      ${if ssh == null then "--without-ssh" else "--with-ssh"}
+      ${if pam == null then "--without-pam" else "--with-pam"}
+      ${if rsh == false then "--without-rsh" else "--with-rsh"}
+      "--with-dshgroups"
+      "--with-xcpu"
+      "--without-genders"
+      "--without-mqshell"
+      "--without-mrsh"
+      "--without-netgroup"
+      "--without-nodeattr"
+      "--without-nodeupdown"
+      "--without-qshell"
+      "--without-slurm"
+      "--disable-debug"
+    )
+  '';
 
   meta = {
     homepage = "https://computing.llnl.gov/linux/pdsh.html";

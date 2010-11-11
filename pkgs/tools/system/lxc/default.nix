@@ -20,6 +20,6 @@ stdenv.mkDerivation rec{
     homepage = http://lxc.sourceforge.net;
     description = "lxc Linux Containers userland tools";
     license = "LGPLv2.1+";
-    platforms = with stdenv.lib.platforms; all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

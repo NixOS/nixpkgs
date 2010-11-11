@@ -9,8 +9,8 @@ in
 rec {
   src = fetchsvn {
     url = http://svn.openstreetmap.org/applications/rendering/gosmore;
-    sha256 = "0r6c6gk0pjljwcqxjy18d2s526pyv2kwydf5gl9k68s1b20ps3nd";
-    rev = "21657";
+    sha256 = "0ds61gl75rnzvm0hj9papl5sfcgdv4310df9ch7x9rifssfli9zm";
+    rev = "24178";
   } + "/";
 
   inherit buildInputs;

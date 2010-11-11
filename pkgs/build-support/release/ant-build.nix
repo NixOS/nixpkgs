@@ -52,12 +52,13 @@ stdenv.mkDerivation (
 
     generateWrappersPhase = 
       let 
-        cp = w: "-cp ${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/lib/java/${w.jar}"}";
+        cp = w: "-cp '${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/lib/java/*"}'";
       in
       '' 
       header "Generating jar wrappers"
     '' + (stdenv.lib.concatMapStrings (w: ''
 
+      ensureDir $out/bin
       cat >> $out/bin/${w.name} <<EOF
       #! /bin/sh
       export JAVA_HOME=$jre

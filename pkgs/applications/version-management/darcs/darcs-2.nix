@@ -6,7 +6,7 @@ cabal.mkDerivation (self : {
   version = "2.4.4";
   sha256 = "97cde35ae4b74488f8b98b487bc0498069eaa74fe035903394f3d4aff1da9f9e";
 
-  extraBuildInputs = [
+  propagatedBuildInputs = [
     html parsec regexCompat curl haskeline hashedStorage zlib
   ];
 

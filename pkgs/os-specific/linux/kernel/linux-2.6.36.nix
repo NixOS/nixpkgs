@@ -78,6 +78,8 @@ let
       # Video configuration
       # The intel drivers already require KMS
       DRM_I915_KMS y
+      # Hybrid graphics support
+      VGA_SWITCHEROO y
 
       # Sound.
       SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode

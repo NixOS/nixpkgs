@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs-3g";
-  version = "2009.4.4";
+  version = "2010.10.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}.tgz";
-    sha256 = "03qdbv0c6gfssmb2s0zzqhwp447n2hgr2qjvc0p527slj2z9xlxw";
+    url = "http://tuxera.com/opensource/${name}.tgz";
+    sha256 = "0wcyks4nvi1kck8i2dgwfsy5zxhil0v0xam8zbg1p592xbqygiqp";
   };
 
   preConfigure = ''
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-ldconfig --exec-prefix=\${prefix} --enable-mount-helper";
 
   meta = {
-    homepage = http://www.ntfs-3g.org;
+    homepage = http://www.tuxera.com/community/;
     description = "FUSE-base NTFS driver with full write support";
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

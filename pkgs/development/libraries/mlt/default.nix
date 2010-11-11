@@ -2,11 +2,11 @@
 libvorbis, sox}:
 
 stdenv.mkDerivation {
-  name = "mlt-0.5.4";
+  name = "mlt-0.5.10";
 
   src = fetchurl {
-    url = mirror://sourceforge/mlt/mlt-0.5.4.tar.gz;
-    sha256 = "12s5znbm6q45r33ymyw1bak3d41xhh72gh9i1pdsgvddr0pizshj";
+    url = mirror://sourceforge/mlt/mlt-0.5.10.tar.gz;
+    sha256 = "17nil3snm6qgcyld852ys0kqm61cx94zb3bvjdqgci6z1ia3crhh";
   };
 
   buildInputs = [ qt SDL ffmpeg libdv libxml2 libsamplerate libvorbis sox ];

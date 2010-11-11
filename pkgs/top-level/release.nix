@@ -534,6 +534,7 @@ with (import ./release-lib.nix);
     xrdb = linux;
     xset = linux;
     xsetroot = linux;
+    xwininfo = linux;
   };
 
   xfce4 = {

@@ -237,9 +237,8 @@ let
     theAttrSet = arg;
   };
 
-  buildEnvScript = ../build-support/buildenv/builder.pl;
   buildEnv = import ../build-support/buildenv {
-    inherit stdenv perl;
+    inherit runCommand perl;
   };
 
   dotnetenv = import ../build-support/dotnetenv {
@@ -371,15 +370,15 @@ let
 
   amule = callPackage ../tools/networking/p2p/amule { };
 
-  amuleDaemon = amule.override {
+  amuleDaemon = appendToName "daemon" (amule.override {
     monolithic = false;
     daemon = true;
-  };
+  });
 
-  amuleGui = amule.override {
+  amuleGui = appendToName "gui" (amule.override {
     monolithic = false;
     client = true;
-  };
+  });
 
   aria = builderDefsPackage (import ../tools/networking/aria) {
   };
@@ -1463,6 +1462,8 @@ let
   clang = llvm.override {
     buildClang = true;
   };
+
+  cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
   dylan = callPackage ../development/compilers/gwydion-dylan {
     dylan =
@@ -2642,9 +2643,7 @@ let
     enableStatic = true;
   });
 
-  botan = builderDefsPackage (import ../development/libraries/botan) {
-    inherit perl;
-  };
+  botan = callPackage ../development/libraries/botan { };
 
   buddy = callPackage ../development/libraries/buddy { };
 
@@ -3779,15 +3778,15 @@ let
 
   quassel = newScope pkgs.kde4 ../applications/networking/irc/quassel { };
 
-  quasselDaemon = quassel.override {
+  quasselDaemon = appendToName "daemon" (quassel.override {
     monolithic = false;
     daemon = true;
-  };
+  });
 
-  quasselClient = quassel.override {
+  quasselClient = appendToName "client" (quassel.override {
     monolithic = false;
     client = true;
-  };
+  });
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
@@ -3877,6 +3876,8 @@ let
   stlport = callPackage ../development/libraries/stlport { };
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
+
+  sword = callPackage ../development/libraries/sword { };
 
   t1lib = callPackage ../development/libraries/t1lib { };
 
@@ -4761,6 +4762,8 @@ let
 
     inherit kernel;
 
+    acpi_call = callPackage ../os-specific/linux/acpi-call {};
+
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
     aufs = callPackage ../os-specific/linux/aufs { };
@@ -5162,6 +5165,8 @@ let
 
   ### DATA
 
+  andagii = callPackage ../data/fonts/andagii {};
+
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
   };
 
@@ -5172,7 +5177,7 @@ let
   corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
-    inherit fetchurl stdenv builderDefs paths ttmkfdir;
+    inherit fetchurl stdenv builderDefs paths;
     inherit (xorg) mkfontdir mkfontscale;
   });
 
@@ -5333,6 +5338,10 @@ let
   beast = callPackage ../applications/audio/beast {
     inherit (gnome) libgnomecanvas libart_lgpl;
   };
+
+  bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
+    qt = qt4;
+  } ;
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
@@ -5802,6 +5811,8 @@ let
     python = pythonFull;
   };
 
+  guitone = callPackage ../applications/version-management/guitone { };
+
   gv = callPackage ../applications/misc/gv { };
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
@@ -6248,6 +6259,8 @@ let
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
+
+  stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
     inherit texinfo;
@@ -6891,10 +6904,6 @@ let
     camlp5 = camlp5_transitional;
   };
 
-  coq_devel = callPackage ../applications/science/logic/coq/8.3rc1.nix {
-    camlp5 = camlp5_transitional;
-  };
-
   eprover = callPackage ../applications/science/logic/eProver {
     texLive = texLiveAggregationFun {
       paths = [
@@ -7095,9 +7104,15 @@ let
 
   disnix = callPackage ../tools/package-management/disnix { };
 
-  disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts { };
+  disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts {
+    enableApacheWebApplication = getConfig ["disnix" "enableApacheWebApplication"] false;
+    enableAxis2WebService = getConfig ["disnix" "enableAxis2WebService"] false;
+    enableEjabberdDump = getConfig ["disnix" "enableEjabberdDump"] false;
+    enableMySQLDatabase = getConfig ["disnix" "enableMySQLDatabase"] false;
+    enableTomcatWebApplication = getConfig ["disnix" "enableTomcatWebApplication"] false;
+  };
 
-  DisnixService = callPackage ../tools/package-management/disnix/DisnixService { };
+  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   latex2html = callPackage ../misc/tex/latex2html/default.nix {
     tex = tetex;
