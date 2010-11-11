@@ -2850,6 +2850,8 @@ let
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gettext_017 = callPackage ../development/libraries/gettext/0.17.nix { };
+
   gd = callPackage ../development/libraries/gd { };
 
   gdal = callPackage ../development/libraries/gdal { };
