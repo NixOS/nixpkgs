@@ -11,7 +11,7 @@
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   tag = "OOO320_m19";
-  version = "3.2.1.3";
+  version = "3.2.1.6";
 in
 stdenv.mkDerivation rec {
   name = "go-oo-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
       url = "http://download.go-oo.org/OOO320/ooo-build-${version}.tar.gz";
-      sha256 = "0c8y66ca9nsfbznjazblpszpvg20mgic2bnpffgqb6qlpji6iwd1";
+      sha256 = "1l9kpg61wyqjsig5n6a7c7zyygbg09zsmn4q267c12zzpl5qpmxy";
     };
 
   srcs_download = import ./go-srcs.nix { inherit fetchurl; };
