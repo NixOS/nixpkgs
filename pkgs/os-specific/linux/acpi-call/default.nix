@@ -9,9 +9,10 @@ stdenv.mkDerivation {
   name = "acpi-call";
 
   preBuild = ''
+    kernelVersion=$(cd ${kernel}/lib/modules && ls)
     sed -e 's/break/true/' -i test_off.sh
     sed -e 's@/bin/bash@.bin/sh@' -i test_off.sh
-    sed -e "s@/lib/modules@${kernel}/&@" -i Makefile
+    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/$kernelVersion@" -i Makefile
   '';
  
   installPhase = ''
