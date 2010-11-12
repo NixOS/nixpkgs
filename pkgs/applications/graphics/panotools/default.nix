@@ -1,24 +1,22 @@
-{stdenv, fetchsvn, libjpeg, libpng, libtiff, automake, libtool, autoconf }:
+{ fetchurl, stdenv, libjpeg, libpng, libtiff, perl }:
 
-stdenv.mkDerivation {
-  name = "panotools-r955";
+stdenv.mkDerivation rec {
+  name = "libpano13-2.9.17";
 
-  src = fetchsvn {
-    url = https://panotools.svn.sourceforge.net/svnroot/panotools/trunk/libpano;
-    rev = 955;
-    sha256 = "e896c21caa098d33f33f33f134a8c9a725686c2470fe3cd08b76cd7934a56034";
+  src = fetchurl {
+    url = "mirror://sourceforge/panotools/libpano13/${name}/${name}.tar.gz";
+    sha256 = "1zcrkw0xw11170mlhh9r8562gafwx3hd92wahl9xxaah5z4v0am2";
   };
 
-  configurePhase = ''
-    export AUTOGEN_CONFIGURE_ARGS="--prefix $out"
-    ./bootstrap
-  '';
+  buildInputs = [ perl libjpeg libpng libtiff ];
 
-  buildInputs = [ libjpeg libpng libtiff automake libtool autoconf ];
+  doCheck = true;
 
   meta = {
     homepage = http://panotools.sourceforge.net/;
     description = "Free software suite for authoring and displaying virtual reality panoramas";
-    license = "LGPL";
+    license = "GPLv2+";
+
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
