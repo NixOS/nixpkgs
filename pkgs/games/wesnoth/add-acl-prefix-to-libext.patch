@@ -1,0 +1,28 @@
+diff -Naur wesnoth-upstream-1.8.5/m4/boost.m4 wesnoth-1.8.5/m4/boost.m4
+
+Libtools seems to set a variable called acl_libext while the Boost
+library check code uses a variable called libext.  This patch makes
+the Boost check use the variable acl_libext actually set by libtools.
+
+--- wesnoth-upstream-1.8.5/m4/boost.m4	2010-10-02 20:35:59.577619372 -0430
++++ wesnoth-1.8.5/m4/boost.m4	2010-10-02 20:39:10.383653233 -0430
+@@ -252,8 +252,8 @@
+   test -n "$boost_rtopt" && boost_rtopt="-$boost_rtopt"
+   $boost_guess_use_mt && boost_mt=-mt
+   # Look for the abs path the static archive.
+-  # $libext is computed by Libtool but let's make sure it's non empty.
+-  test -z "$libext" &&
++  # $acl_libext is computed by Libtool but let's make sure it's non empty.
++  test -z "$acl_libext" &&
+     AC_MSG_ERROR([the libext variable is empty, did you invoke Libtool?])
+   boost_save_ac_objext=$ac_objext
+   # Generate the test file.
+@@ -309,7 +309,7 @@
+       # Are we looking for a static library?
+       case $boost_ldpath:$boost_rtopt_ in #(
+         *?*:*s*) # Yes (Non empty boost_ldpath + s in rt opt)
+-          Boost_lib_LIBS="$boost_ldpath/lib$boost_lib.$libext"
++          Boost_lib_LIBS="$boost_ldpath/lib$boost_lib.$acl_libext"
+           test -e "$Boost_lib_LIBS" || continue;; #(
+         *) # No: use -lboost_foo to find the shared library.
+           Boost_lib_LIBS="-l$boost_lib";;

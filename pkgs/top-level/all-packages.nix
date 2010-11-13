@@ -5081,6 +5081,7 @@ let
 
   wesnoth = callPackage ../games/wesnoth {
     inherit (gtkLibs) pango;
+    lua = lua5;
   };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
