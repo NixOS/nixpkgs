@@ -3220,6 +3220,8 @@ let
     inherit sqlite mysql;
   };
 
+  libdevil = callPackage ../development/libraries/libdevil { };
+
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdv = callPackage ../development/libraries/libdv { };
@@ -3434,6 +3436,8 @@ let
   libtiff = callPackage ../development/libraries/libtiff { };
 
   libtommath = callPackage ../development/libraries/libtommath { };
+
+  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
@@ -6629,6 +6633,14 @@ let
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit {
     inherit (gnome) esound;  };
+
+  spring = callPackage ../games/spring {
+    stdenv = stdenv2;
+  };
+
+  springLobby = callPackage ../games/spring/spring-lobby.nix { 
+    stdenv = stdenv2;
+  };
 
   superTux = callPackage ../games/super-tux { };
 
