@@ -18,11 +18,6 @@ stdenv.mkDerivation rec {
   # Can't have -werror because of the Vorbis header files.
   cmakeFlags = "-DDISABLE_WERROR=ON -DCMAKE_VERBOSE_MAKEFILE=ON";
 
-  # !!! Ugly.  CMake passes library dependencies to the linker using
-  # the full path of the library rather than `-l...', and the
-  # ld-wrapper doesn't add the necessary `-rpath' flag.
-  NIX_LDFLAGS = "-rpath ${zlib}/lib -rpath ${libpng}/lib -rpath ${python}/lib -rpath ${openal}/lib -rpath ${SDL}/lib -rpath ${libvorbis}/lib";
-
   meta = {
     description = "A reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
     homepage = http://gemrb.sourceforge.net/;

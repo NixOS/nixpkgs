@@ -6565,7 +6565,9 @@ let
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
-  gemrb = callPackage ../games/gemrb { };
+  gemrb = callPackage ../games/gemrb {
+    stdenv = stdenv2;
+  };
 
   gltron = callPackage ../games/gltron { };
 
