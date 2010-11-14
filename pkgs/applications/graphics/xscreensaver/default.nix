@@ -4,12 +4,12 @@
 , libjpeg, mesa, gtk , libxml2, libglade}:
 
 stdenv.mkDerivation rec {
-  version = "5.11";
+  version = "5.12";
   name = "xscreensaver-${version}";
 
   src = fetchurl {
     url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256="0w47s0qd8ab6ywhhhkqjx0grb2b28bh2flnkdpj3yaind202l0s7";
+    sha256="1knvxxr50iq3wrx1qsgg174gzv7xg8c74i1a66ff55f8flksa7di";
   };
 
   buildInputs =
