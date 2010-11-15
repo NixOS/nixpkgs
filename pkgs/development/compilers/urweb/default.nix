@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
       export GCCARGS="-I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include -L${libmhash}/lib -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
     '';
 
+  dontDisableStatic = true;
+
   meta = {
     description = "Ur/Web supports construction of dynamic web applications backed by SQL databases.";
     longDescription = ''

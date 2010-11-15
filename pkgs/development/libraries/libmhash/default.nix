@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   version = "0.9.9.9";
   name = "${pname}-${version}";
 
+  dontDisableStatic = true;
+
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
     sha256 = "1w7yiljan8gf1ibiypi6hm3r363imm3sxl1j8hapjdq3m591qljn";
