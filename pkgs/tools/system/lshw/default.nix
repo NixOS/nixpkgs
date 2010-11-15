@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with stdenv.libs; {
+  meta = with stdenv.lib; {
     homepage = http://ezix.org/project/wiki/HardwareLiSter;
     description = "A small tool to provide detailed information on the hardware configuration of the machine.";
     license = licenses.gpl2;
