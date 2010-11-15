@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, withGUI? true, gtk? null, pkgconfig? null, sqlite? null  # compile GUI
+, withGUI? false, gtk? null, pkgconfig? null, sqlite? null  # compile GUI
  }:
 stdenv.mkDerivation rec {
 
