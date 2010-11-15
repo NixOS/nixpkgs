@@ -1,13 +1,11 @@
-{cabal, syb}:
+{cabal}:
 
 cabal.mkDerivation (self : {
   pname = "multiset";
-  version = "0.1";
-  sha256 = "0nh1bfis4r5yd4jd9dqwckiyrqa7j8yqn4ai676xb18rh4hwsv87";
-  propagatedBuildInputs = [syb];
+  version = "0.2";
+  sha256 = "35d76c026bab0dbdf761c8590297d718507bb9ef93c30bce4f524efee23f5323";
   meta = {
     description = "A variation of Data.Set. Multisets, sometimes also called bags, can contain multiple copies of the same key";
   };
-  patchPhase = '' sed -i 's/containers/containers, syb/' *.cabal ''; # add syb to library dependency list
 })  
 

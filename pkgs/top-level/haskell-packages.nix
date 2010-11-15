@@ -105,6 +105,8 @@ rec {
 
   deepseq = callPackage ../development/libraries/haskell/deepseq {};
 
+  derive = callPackage ../development/libraries/haskell/derive {};
+
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
   digest = callPackage ../development/libraries/haskell/digest {
@@ -152,6 +154,8 @@ rec {
   ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
 
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
+
+  ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
 
   gitit = callPackage ../development/libraries/haskell/gitit {
     cgi = cgi_3001_1_7_2;

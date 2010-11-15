@@ -1,15 +1,10 @@
-{cabal, fetchurl, syb, sourceFromHead}:
+{cabal}:
 
 cabal.mkDerivation (self : {
   pname = "ghc-syb";
-  version = "dev";
-  name = self.fname;
-  # REGION AUTO UPDATE:   { name="ghc_syb"; type = "git"; url = "git://github.com/nominolo/ghc-syb.git"; groups="haskell scien"; }
-  src = sourceFromHead "ghc_syb-876b121e73f1b5ca4b17b0c6908b27ba7efb0374.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/ghc_syb-876b121e73f1b5ca4b17b0c6908b27ba7efb0374.tar.gz"; sha256 = "bb5071ee8a6a6cd99634e0f146c921592e8c77b13d511cde0c91fedc406a0a07"; });
-  # END
-  extraBuildInputs = [syb];
+  version = "0.2.0.0";
+  sha256 = "0052bd2ee4d92fbb010bebc7bcfd533a0b78437f1fb0834288ce979c103d9d67";
   meta = {
-    description = "Source code suggestions";
+    description = "Data and Typeable instances for the GHC API";
   };
 })
