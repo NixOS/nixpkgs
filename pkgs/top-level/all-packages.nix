@@ -814,6 +814,8 @@ let
 
   lsh = callPackage ../tools/networking/lsh { };
 
+  lshw = callPackage ../tools/system/lshw { };
+
   lxc = callPackage ../tools/system/lxc { };
 
   lzma = xz;
