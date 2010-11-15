@@ -1,8 +1,12 @@
-{pkgs, newScope, ghc, enableLibraryProfiling ? false}:
+{pkgs, newScope, ghc, enableLibraryProfiling ? false, modifyPrio ? (x : x)}:
 
-let ghcReal = pkgs.lowPrio ghc; in
+let ghcOuter = ghc; in
 
-let result = let callPackage = newScope result; in
+# We redefine callPackage to take into account the new scope. The optional
+# modifyPrio argument can be set to lowPrio to make all Haskell packages have
+# low priority.
+
+let result = let callPackage = x : y : modifyPrio (newScope result x y); in
 
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
@@ -13,14 +17,14 @@ rec {
   # -> http://github.com/MarcWeber/hack-nix. Read its README file.
   # You can install (almost) all packages from hackage easily.
 
-  inherit ghcReal;
+  ghcReal = pkgs.lowPrio ghcOuter;
 
   # In the remainder, `ghc' refers to the wrapper.  This is because
   # it's never useful to use the wrapped GHC (`ghcReal'), as the
   # wrapper provides essential functionality: the ability to find
   # Haskell packages in the buildInputs automatically.
   ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghcReal;
+    ghc = ghcOuter;
   };
 
   cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {};
