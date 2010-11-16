@@ -11,19 +11,20 @@
     
 }:
 
-let version = "3.1.2"; in
+let version = "3.1.6"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "645cb75a0e0b0ea38e25d54f970052bc02e7afe5";
+    sha1 = "d9c089c64cc7a784e128d9c594ef649a35babe30";
   };
 
   buildInputs =
     [ pkgconfig perl python zip bzip2 gtk dbus_glib alsaLib libIDL nspr libnotify
-      libnotify cairo pixman fontconfig ];
+      libnotify cairo pixman fontconfig
+    ];
 
   NIX_LDFLAGS = "-lpixman-1";
 
