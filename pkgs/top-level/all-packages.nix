@@ -3043,7 +3043,7 @@ let
 
   });
 
-  gtkLibs220 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs220; in rec {
+  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in rec {
 
     glib = callPackage ../development/libraries/glib/2.24.x.nix { };
 
@@ -5623,9 +5623,11 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
+  firefox40Pkgs = let p = (applyGlobalOverrides (x : {cairo = x.cairo_1_10_0;}));
+  in p.callPackage 
+      ../applications/networking/browsers/firefox/4.0.nix {
+    inherit (p.gtkLibs) gtk pango;
+    inherit (p.gnome) libIDL;
   };
 
   firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
