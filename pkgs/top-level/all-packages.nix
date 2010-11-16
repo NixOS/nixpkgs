@@ -2619,6 +2619,9 @@ let
   buddy = callPackage ../development/libraries/buddy { };
 
   cairo = callPackage ../development/libraries/cairo { };
+  cairo_1_10_0 = callPackage ../development/libraries/cairo/1.10.nix {
+    pixman = xlibs.pixman_0_20_0;
+  };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
