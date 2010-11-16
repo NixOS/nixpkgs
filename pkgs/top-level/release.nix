@@ -406,7 +406,6 @@ with (import ./release-lib.nix);
   };
 
   haskellPackages_ghc6104 = {
-    darcs = ghcSupported;
     ghc = ghcSupported;
     # gitit = linux;
     gtk2hs = linux;
