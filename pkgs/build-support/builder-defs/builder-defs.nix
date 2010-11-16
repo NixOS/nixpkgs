@@ -276,6 +276,11 @@ let inherit (builtins) head tail trace; in
         ")["minInit" "addInputs" "doUnpack"];
 
         # changing this ? see [1]
+        doAutogen = fullDepEntry (''
+                ./autogen.sh
+        '')["minInit" "addInputs" "doUnpack"];
+
+        # changing this ? see [1]
         doMake = fullDepEntry ("        
                 make ${toString makeFlags}
         ") ["minInit" "addInputs" "doUnpack"];
