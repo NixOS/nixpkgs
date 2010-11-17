@@ -742,7 +742,7 @@ rec {
 
   frown = callPackage ../development/tools/parsing/frown {};
 
-  haddock = haddock_2_4_2;
+  haddock = haddock_2_7_2;
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/haddock-2.4.2.nix {};
 
