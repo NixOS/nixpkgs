@@ -13,6 +13,8 @@ rec {
 
   gnonlin = callPackage ./gnonlin { };
 
+  gst_python = callPackage ./gst-python {};
+
   # Header files are in include/${prefix}/
   prefix = "gstreamer-0.10";
 }
