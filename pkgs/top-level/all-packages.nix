@@ -822,7 +822,9 @@ let
 
   lrzip = callPackage ../tools/compression/lrzip { };
 
-  lsh = callPackage ../tools/networking/lsh { };
+  # lsh installs `bin/nettle-lfib-stream' and so does Nettle.  Give the
+  # former a lower priority than Nettle.
+  lsh = lowPrio (callPackage ../tools/networking/lsh { });
 
   lxc = callPackage ../tools/system/lxc { };
 
@@ -5602,10 +5604,13 @@ let
 
   espeak = callPackage ../applications/audio/espeak { };
 
-  evince = callPackage ../applications/misc/evince {
+  # FIXME: Evince and other GNOME/GTK+ apps (e.g., Viking) provide
+  # `share/icons/hicolor/icon-theme.cache'.  Arbitrarily give this one a
+  # higher priority.
+  evince = hiPrio (callPackage ../applications/misc/evince {
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
       libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
-  };
+  });
 
   evolution_data_server = (newScope (gnome // gtkLibs))
   ../servers/evolution-data-server {
