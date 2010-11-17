@@ -902,6 +902,8 @@ let
     };
   };
 
+  netcdf = callPackage ../development/libraries/netcdf { };
+
   nc6 = callPackage ../tools/networking/nc6 { };
 
   ncat = callPackage ../tools/networking/ncat { };
