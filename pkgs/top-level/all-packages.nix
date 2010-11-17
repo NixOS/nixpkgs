@@ -6698,7 +6698,12 @@ let
 
   superTux = callPackage ../games/super-tux { };
 
-  superTuxKart = callPackage ../games/super-tux-kart { };
+  superTuxKart = callPackage ../games/super-tux-kart {
+    /* With GNU Make 3.82, the build process is stuck in the `data'
+       directory, after displaying "Making all in tracks", and `pstree'
+       indicates that `make' doesn't launch any new process.  */
+    stdenv = overrideInStdenv stdenv [ gnumake381 ];
+  };
 
   teeworlds = callPackage ../games/teeworlds { };
 
