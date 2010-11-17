@@ -5248,6 +5248,8 @@ let
 
   amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
 
+  cmus = callPackage ../applications/audio/cmus { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
     libstdcpp = gcc33.gcc;
   };
