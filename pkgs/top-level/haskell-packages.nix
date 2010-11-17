@@ -48,6 +48,8 @@ rec {
 
   binary = callPackage ../development/libraries/haskell/binary {};
 
+  binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
+
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
   blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
@@ -204,6 +206,12 @@ rec {
     happy = happy_1_18_5;
   };
 
+  gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
+    inherit (pkgs) pkgconfig glibc;
+    inherit (pkgs.gnome) gtksourceview;
+    gtkC = pkgs.gtkLibs.gtk;
+  };
+
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
     fgl = fgl_5_4_2_3;
   };
@@ -315,7 +323,8 @@ rec {
   haskellPlatform_2009_2_0_2 = import ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix {
     inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
       haskellSrc html parallel regexBase regexCompat regexPosix
-      stm time xhtml zlib cabalInstall alex happy haddock;
+      stm time xhtml zlib cabalInstall alex happy;
+    haddock = haddock_2_4_2;
     inherit (pkgs) fetchurl;
   };
 
@@ -388,6 +397,12 @@ rec {
   json = callPackage ../development/libraries/haskell/json {};
 
   json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
+
+  leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {
+    network = network_2_2_1_7;
+  };
+
+  ltk = callPackage ../development/libraries/haskell/ltk {};
 
   maybench = callPackage ../development/libraries/haskell/maybench {};
 
@@ -486,6 +501,8 @@ rec {
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
   primitive = callPackage ../development/libraries/haskell/primitive {};
+
+  processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
   QuickCheck  = QuickCheck_1;
 
@@ -742,7 +759,7 @@ rec {
 
   frown = callPackage ../development/tools/parsing/frown {};
 
-  haddock = haddock_2_7_2;
+  haddock = haddock_2_7_2_P;
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/haddock-2.4.2.nix {};
 
@@ -792,7 +809,9 @@ rec {
   };
 
   leksah = callPackage ../applications/editors/leksah {
-    inherit (pkgs) libedit makeWrapper;
+    network = network_2_2_1_7;
+    regexBase = regexBase_0_93_2;
+    inherit (pkgs) makeWrapper;
   };
 
   xmobar = callPackage ../applications/misc/xmobar {};
