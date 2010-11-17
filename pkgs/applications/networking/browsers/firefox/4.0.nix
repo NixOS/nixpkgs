@@ -23,8 +23,6 @@ rec {
     sha256 = "02cc466a92af828ff3bc563d4515bd98064cf5f136b5871e072b9408fb4db128";
   };
 
-  enableParallelBuilding = true;
-
   commonConfigureFlags =
     [ "--enable-optimize"
       "--disable-debug"
@@ -43,7 +41,7 @@ rec {
     ];
 
 
-  xulrunner = stdenv.mkDerivation {
+  xulrunner = stdenv.mkDerivation rec {
     name = "xulrunner-${xulVersion}";
     
     inherit src;
@@ -65,6 +63,14 @@ rec {
     # !!! Temporary hack.
     preBuild = ''
      export NIX_ENFORCE_PURITY=
+    '';
+
+    # Hack to work around make's idea of -lbz2 dependency
+    preConfigure = ''
+     find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
+       stdenv.lib.concatStringsSep ":" 
+         (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
+     }' ';'
     '';
 
     installFlags = "SKIP_GRE_REGISTRATION=1";
