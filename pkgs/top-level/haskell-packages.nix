@@ -94,6 +94,11 @@ rec {
     time = time_1_1_3;
   };
 
+  criterion = callPackage ../development/libraries/haskell/criterion {
+    parallel = parallel_2_2_0_1;
+    parsec = parsec_3;
+  };
+
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
   CS173Tourney = callPackage ../development/libraries/haskell/CS173Tourney {
@@ -124,6 +129,8 @@ rec {
   editline = callPackage ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
   };
+
+  erf = callPackage ../development/libraries/haskell/erf {};
 
   filepath = callPackage ../development/libraries/haskell/filepath {};
 
@@ -436,6 +443,8 @@ rec {
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
 
+  mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
+
   neither = callPackage ../development/libraries/haskell/neither {};
 
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
@@ -575,6 +584,8 @@ rec {
     network = network_2_2_1_7;
   };
 
+  statistics = callPackage ../development/libraries/haskell/statistics {};
+
   syb = callPackage ../development/libraries/haskell/syb {};
 
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
@@ -670,6 +681,8 @@ rec {
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
   vector = callPackage ../development/libraries/haskell/vector {};
+
+  vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "primitive";
-  version = "0.3";
-  sha256 = "b63cb5dd3417433429b3ad5489791bddd0973b96b7c3314a4ecc9e6a68b2a35d";
+  version = "0.3.1";
+  sha256 = "1903hx88ax4dgyyx00a0k86jy4mkqrprpn7arfy19dqqyfpb2ikj";
   meta = {
     description = "Wrappers for primitive operations";
     license = "BSD";
