@@ -137,6 +137,14 @@ rec {
       $out/bin/firefox -register
     ''; # */
 
+    # Hack to work around make's idea of -lbz2 dependency
+    preConfigure = ''
+     find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
+       stdenv.lib.concatStringsSep ":" 
+         (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
+     }' ';'
+    '';
+
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
       homepage = http://www.mozilla.com/en-US/firefox/;
