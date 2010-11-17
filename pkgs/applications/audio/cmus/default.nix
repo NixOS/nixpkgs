@@ -1,20 +1,21 @@
 { stdenv, fetchurl, ncurses, pkgconfig, alsaLib, flac, libmad, ffmpeg, libvorbis, mpc, mp4v2 }:
 
 stdenv.mkDerivation rec {
-  name = "cmus-2.3.3";
+  name = "cmus-${version}";
+  version = "2.3.3";
 
   configurePhase = "./configure prefix=$out";
 
   buildInputs = [ ncurses pkgconfig alsaLib flac libmad ffmpeg libvorbis mpc mp4v2 ];
 
   src = fetchurl {
-    url = mirror://sourceforge/cmus/cmus-v2.3.3.tar.bz2;
-    md5 = "220e875e4210a6b54882114ef7094a79";
+    url = "mirror://sourceforge/cmus/cmus-v${version}.tar.bz2";
+    sha256 = "13hc5d7h2ayjwnip345hc59rpjj9fgrp1i5spjw3s14prdqr733v";
   };
 
   meta = {
     description = "cmus is a small, fast and powerful console music player for Linux and *BSD";
     homepage = http://cmus.sourceforge.net;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

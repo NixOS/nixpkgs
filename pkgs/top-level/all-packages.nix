@@ -5248,8 +5248,6 @@ let
 
   amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
 
-  cmus = callPackage ../applications/audio/cmus { };
-
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
     libstdcpp = gcc33.gcc;
   };
@@ -5381,6 +5379,8 @@ let
     fftw = fftwSinglePrec;
     inherit (gnome) esound;
   };
+
+  cmus = callPackage ../applications/audio/cmus { };
 
   compiz = callPackage ../applications/window-managers/compiz/core.nix { };
 
