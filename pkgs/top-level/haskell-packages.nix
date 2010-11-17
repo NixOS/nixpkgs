@@ -1,8 +1,12 @@
-{pkgs, newScope, ghc, enableLibraryProfiling ? false}:
+{pkgs, newScope, ghc, enableLibraryProfiling ? false, modifyPrio ? (x : x)}:
 
-let ghcReal = pkgs.lowPrio ghc; in
+let ghcOuter = ghc; in
 
-let result = let callPackage = newScope result; in
+# We redefine callPackage to take into account the new scope. The optional
+# modifyPrio argument can be set to lowPrio to make all Haskell packages have
+# low priority.
+
+let result = let callPackage = x : y : modifyPrio (newScope result x y); in
 
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
@@ -13,14 +17,14 @@ rec {
   # -> http://github.com/MarcWeber/hack-nix. Read its README file.
   # You can install (almost) all packages from hackage easily.
 
-  inherit ghcReal;
+  ghcReal = pkgs.lowPrio ghcOuter;
 
   # In the remainder, `ghc' refers to the wrapper.  This is because
   # it's never useful to use the wrapped GHC (`ghcReal'), as the
   # wrapper provides essential functionality: the ability to find
   # Haskell packages in the buildInputs automatically.
   ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghcReal;
+    ghc = ghcOuter;
   };
 
   cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {};
@@ -43,6 +47,8 @@ rec {
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
   binary = callPackage ../development/libraries/haskell/binary {};
+
+  binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
@@ -88,6 +94,11 @@ rec {
     time = time_1_1_3;
   };
 
+  criterion = callPackage ../development/libraries/haskell/criterion {
+    parallel = parallel_2_2_0_1;
+    parsec = parsec_3;
+  };
+
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
   CS173Tourney = callPackage ../development/libraries/haskell/CS173Tourney {
@@ -105,6 +116,8 @@ rec {
 
   deepseq = callPackage ../development/libraries/haskell/deepseq {};
 
+  derive = callPackage ../development/libraries/haskell/derive {};
+
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
   digest = callPackage ../development/libraries/haskell/digest {
@@ -116,6 +129,8 @@ rec {
   editline = callPackage ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
   };
+
+  erf = callPackage ../development/libraries/haskell/erf {};
 
   filepath = callPackage ../development/libraries/haskell/filepath {};
 
@@ -152,6 +167,8 @@ rec {
   ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
 
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
+
+  ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
 
   gitit = callPackage ../development/libraries/haskell/gitit {
     cgi = cgi_3001_1_7_2;
@@ -194,6 +211,12 @@ rec {
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {
     alex = alex_2_3_3;
     happy = happy_1_18_5;
+  };
+
+  gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
+    inherit (pkgs) pkgconfig glibc;
+    inherit (pkgs.gnome) gtksourceview;
+    gtkC = pkgs.gtkLibs.gtk;
   };
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
@@ -307,7 +330,8 @@ rec {
   haskellPlatform_2009_2_0_2 = import ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix {
     inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
       haskellSrc html parallel regexBase regexCompat regexPosix
-      stm time xhtml zlib cabalInstall alex happy haddock;
+      stm time xhtml zlib cabalInstall alex happy;
+    haddock = haddock_2_4_2;
     inherit (pkgs) fetchurl;
   };
 
@@ -381,6 +405,12 @@ rec {
 
   json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
 
+  leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {
+    network = network_2_2_1_7;
+  };
+
+  ltk = callPackage ../development/libraries/haskell/ltk {};
+
   maybench = callPackage ../development/libraries/haskell/maybench {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
@@ -412,6 +442,8 @@ rec {
   multirec = callPackage ../development/libraries/haskell/multirec {};
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
+
+  mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   neither = callPackage ../development/libraries/haskell/neither {};
 
@@ -478,6 +510,8 @@ rec {
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
   primitive = callPackage ../development/libraries/haskell/primitive {};
+
+  processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
   QuickCheck  = QuickCheck_1;
 
@@ -549,6 +583,8 @@ rec {
   sendfile = callPackage ../development/libraries/haskell/sendfile {
     network = network_2_2_1_7;
   };
+
+  statistics = callPackage ../development/libraries/haskell/statistics {};
 
   syb = callPackage ../development/libraries/haskell/syb {};
 
@@ -646,6 +682,8 @@ rec {
 
   vector = callPackage ../development/libraries/haskell/vector {};
 
+  vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
+
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
   vty = callPackage ../development/libraries/haskell/vty {
@@ -734,7 +772,7 @@ rec {
 
   frown = callPackage ../development/tools/parsing/frown {};
 
-  haddock = haddock_2_4_2;
+  haddock = haddock_2_7_2_P;
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/haddock-2.4.2.nix {};
 
@@ -784,7 +822,9 @@ rec {
   };
 
   leksah = callPackage ../applications/editors/leksah {
-    inherit (pkgs) libedit makeWrapper;
+    network = network_2_2_1_7;
+    regexBase = regexBase_0_93_2;
+    inherit (pkgs) makeWrapper;
   };
 
   xmobar = callPackage ../applications/misc/xmobar {};

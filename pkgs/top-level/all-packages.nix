@@ -826,6 +826,8 @@ let
   # former a lower priority than Nettle.
   lsh = lowPrio (callPackage ../tools/networking/lsh { });
 
+  lshw = callPackage ../tools/system/lshw { };
+
   lxc = callPackage ../tools/system/lxc { };
 
   lzma = xz;
@@ -911,6 +913,8 @@ let
       stdenv = makeStaticBinaries stdenv;
     };
   };
+
+  netcdf = callPackage ../development/libraries/netcdf { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
 
@@ -1483,6 +1487,7 @@ let
   adobe_flex_sdk = callPackage ../development/compilers/adobe-flex-sdk { };
 
   fpc = callPackage ../development/compilers/fpc { };
+  fpc_2_4_0 = callPackage ../development/compilers/fpc/2.4.0.nix { };
 
   gambit = callPackage ../development/compilers/gambit { };
 
@@ -1853,8 +1858,8 @@ let
   # reducing the number or "enabled" versions again.
 
   # Helper functions to abstract away from repetitive instantiations.
-  haskellPackagesFun = ghcPath : profDefault : recurseIntoAttrs (import ./haskell-packages.nix {
-    inherit pkgs newScope;
+  haskellPackagesFun = ghcPath : profDefault : modifyPrio : recurseIntoAttrs (import ./haskell-packages.nix {
+    inherit pkgs newScope modifyPrio;
     enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
     ghc = callPackage ghcPath {
       ghc = ghc6101Binary;    };
@@ -1862,32 +1867,32 @@ let
 
   # Currently active GHC versions.
   haskellPackages_ghc6101 =
-    haskellPackagesFun ../development/compilers/ghc/6.10.1.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.1.nix false (x : x);
 
   haskellPackages_ghc6102 =
-    haskellPackagesFun ../development/compilers/ghc/6.10.2.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.2.nix false (x : x);
 
   haskellPackages_ghc6103 =
-    haskellPackagesFun ../development/compilers/ghc/6.10.3.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.3.nix false (x : x);
 
   haskellPackages_ghc6104 =
-    haskellPackagesFun ../development/compilers/ghc/6.10.4.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.10.4.nix false (x : x);
 
   haskellPackages_ghc6121 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.1.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.12.1.nix false (x : x);
 
   haskellPackages_ghc6122 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.2.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.12.2.nix false (x : x);
 
   # Current default version.
   haskellPackages_ghc6123 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.3.nix false;
+    haskellPackagesFun ../development/compilers/ghc/6.12.3.nix false (x : x);
 
   haskellPackages_ghc701 =
-    lowPrio (haskellPackagesFun ../development/compilers/ghc/7.0.1.nix false);
+    haskellPackagesFun ../development/compilers/ghc/7.0.1.nix  false lowPrio;
 
   haskellPackages_ghcHEAD =
-    lowPrio (haskellPackagesFun ../development/compilers/ghc/head.nix false);
+    haskellPackagesFun ../development/compilers/ghc/head.nix   false lowPrio;
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
@@ -1951,9 +1956,10 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
-    inherit fpc makeWrapper;
+    inherit makeWrapper;
     inherit (gtkLibs) gtk glib pango atk;
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
+    fpc = fpc_2_4_0;
   };
 
   llvm = callPackage ../development/compilers/llvm { };
@@ -2650,6 +2656,9 @@ let
   buddy = callPackage ../development/libraries/buddy { };
 
   cairo = callPackage ../development/libraries/cairo { };
+  cairo_1_10_0 = callPackage ../development/libraries/cairo/1.10.nix {
+    pixman = xlibs.pixman_0_20_0;
+  };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
@@ -2778,7 +2787,7 @@ let
 
   farsight2 = callPackage ../development/libraries/farsight2 {
     inherit (gnome) glib;
-    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gst_all) gstreamer gstPluginsBase gst_python;
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
@@ -3073,7 +3082,7 @@ let
 
   });
 
-  gtkLibs220 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs220; in rec {
+  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in rec {
 
     glib = callPackage ../development/libraries/glib/2.24.x.nix { };
 
@@ -3262,6 +3271,8 @@ let
   libdbiDrivers = libdbiDriversBase.override {
     inherit sqlite mysql;
   };
+
+  libdevil = callPackage ../development/libraries/libdevil { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
@@ -3477,6 +3488,8 @@ let
   libtiff = callPackage ../development/libraries/libtiff { };
 
   libtommath = callPackage ../development/libraries/libtommath { };
+
+  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
@@ -5138,6 +5151,7 @@ let
 
   wesnoth = callPackage ../games/wesnoth {
     inherit (gtkLibs) pango;
+    lua = lua5;
   };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
@@ -5424,6 +5438,8 @@ let
     inherit (gnome) esound;
   };
 
+  cmus = callPackage ../applications/audio/cmus { };
+
   compiz = callPackage ../applications/window-managers/compiz/core.nix { };
 
   compiz_ccsm = callPackage ../applications/window-managers/compiz/ccsm.nix { };
@@ -5679,9 +5695,11 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
+  firefox40Pkgs = let p = (applyGlobalOverrides (x : {cairo = x.cairo_1_10_0;}));
+  in p.callPackage 
+      ../applications/networking/browsers/firefox/4.0.nix {
+    inherit (p.gtkLibs) gtk pango;
+    inherit (p.gnome) libIDL;
   };
 
   firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
@@ -5922,6 +5940,22 @@ let
   kdesvn = newScope pkgs.kde4 ../applications/version-management/kdesvn { };
 
   kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
+
+  keepnote = callPackage ../applications/office/keepnote {
+    # I did not find any better way of reusing buildPythonPackage+setuptools
+    # for a python with openssl support
+    buildPythonPackage = assert pythonFull.sqliteSupport;
+      import ../development/python-modules/generic {
+        inherit makeWrapper lib;
+        python = pythonFull;
+        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
+          inherit makeWrapper;
+          python = pythonFull;
+        };
+      };
+    # How could this pygtk use also pythonFull, I don't know.
+    pygtk = pyGtkGlade;
+  };
 
   kermit = callPackage ../tools/misc/kermit { };
 
@@ -6700,6 +6734,10 @@ let
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit {
     inherit (gnome) esound;  };
+
+  spring = callPackage ../games/spring { };
+
+  springLobby = callPackage ../games/spring/spring-lobby.nix { };
 
   superTux = callPackage ../games/super-tux { };
 

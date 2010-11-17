@@ -967,6 +967,16 @@ let
     buildInputs = [pkgconfig perl ];
   })) // {inherit perl ;};
     
+  pixman_0_20_0 = (stdenv.mkDerivation ((if overrides ? pixman then overrides.pixman else x: x) {
+    name = "pixman-0.20.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/pixman-0.20.0.tar.bz2;
+      sha256 = "1dc804v98222n5awx1x1inwwdp6p7yksiw5yr8jip2pk3fbak627";
+    };
+    buildInputs = [pkgconfig perl ];
+  })) // {inherit perl ;};
+
   printproto = (stdenv.mkDerivation ((if overrides ? printproto then overrides.printproto else x: x) {
     name = "printproto-1.0.4";
     builder = ./builder.sh;

@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "5.0.1";
+  version = "5.0.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://download.racket-lang.org/installers/${version}/${pname}/${name}-src-unix.tgz";
-    sha256 = "18bzzzbxvr888lnpwggismq5grysrwlyg2dp026hhv5n2mk5sfvn";
+    sha256 = "1xx0gc935mvh9b1nch7p4xscx9hjd0401rl1sdpf291nj9vmpb3k";
   };
 
   buildInputs = [ cairo

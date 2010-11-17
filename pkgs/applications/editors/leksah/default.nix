@@ -1,26 +1,27 @@
-{cabal, gtk2hs, binary, parsec, regexPosix, regexCompat, utf8String, libedit, makeWrapper}:
+{cabal, gtk, glib, binary, binaryShared, deepseq, hslogger, ltk, network, parsec,
+ leksahServer, processLeksah, regexBase, regexTDFA, utf8String, gtksourceview2,
+ makeWrapper}:
 
 cabal.mkDerivation (self : {
   pname = "leksah";
-  version = "0.6.1";
-  sha256 = "de4e0974be3df0e58fd26bfbb76594d81514f1e1d898b9f47881b42084bacf35";
+  version = "0.8.0.8";
+  sha256 = "1d6n5dlnqlqfckg9f611qf9lvi6b7ghrkk1l0myh6h667fxh8a1r";
 
-  # !!! The explicit libedit dependency shouldn't be necessary.
-  extraBuildInputs = [gtk2hs binary parsec regexPosix regexCompat utf8String libedit makeWrapper];
+  propagatedBuildInputs =
+    [gtk glib binary binaryShared deepseq hslogger ltk network parsec
+     leksahServer processLeksah regexBase regexTDFA utf8String gtksourceview2];
+  extraBuildInputs = [makeWrapper];
 
-  preConfigure =
-    ''
-      substituteInPlace leksah.cabal --replace 'Cabal ==1.6.0.1' 'Cabal >=1.6.0.1' 
-    '';
-
-  postInstall =
-    ''
-      wrapProgram $out/bin/leksah --prefix XDG_DATA_DIRS : ${gtk2hs.gtksourceview}/share
-    '';
+  # postInstall =
+  #   ''
+  #     wrapProgram $out/bin/leksah --prefix XDG_DATA_DIRS : ${gtk2hs.gtksourceview}/share
+  #   '';
   
   meta = {
     homepage = http://leksah.org/;
     description = "An Integrated Development Environment for Haskell written in Haskell";
+    license = "GPL";
+    maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })  
 

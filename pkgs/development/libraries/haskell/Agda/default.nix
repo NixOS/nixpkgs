@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self : {
   pname = "Agda";
-  version = "2.2.6";
-  sha256 = "e9268a61db30fc0f22f7e1fbc78673cd3e0d1bf2dd40ee5cf809635ca40fca78";
+  version = "2.2.8";
+  sha256 = "06j2s7x3h5lanygd6mhhxkzjf4c0m8pw6c0s7gbmwlxqrkz9firg";
   extraBuildInputs = [happy alex];
   propagatedBuildInputs =
     [QuickCheck binary haskeline haskellSrc mtl utf8String xhtml zlib];

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     xlibs.xlibs flex bison xlibs.libXi mesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
+    xlibs.xf86vidmodeproto
     alsaLib ncurses libpng libjpeg lcms fontforge
     libxml2 libxslt openssl gnutls
   ];
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
     freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
-    xlibs.libXcursor xlibs.libXcomposite
+    xlibs.libXcursor xlibs.libXcomposite xlibs.libXxf86vm
+    xlibs.xf86vidmodeproto
     openssl gnutls
   ];
 

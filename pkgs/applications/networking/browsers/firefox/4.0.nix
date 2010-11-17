@@ -13,16 +13,15 @@
 
 rec {
 
-  firefoxVersion = "4.0b6";
+  firefoxVersion = "4.0b7";
   
-  xulVersion = "2.0b6"; # this attribute is used by other packages
+  xulVersion = "2.0b7"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1ssgb41h43kbf012iwdybf9kp2gfqkg3icf81dg8ibwr2cd0kmz2";
+    sha256 = "02cc466a92af828ff3bc563d4515bd98064cf5f136b5871e072b9408fb4db128";
   };
-
 
   commonConfigureFlags =
     [ "--enable-optimize"
@@ -42,17 +41,17 @@ rec {
     ];
 
 
-  xulrunner = stdenv.mkDerivation {
+  xulrunner = stdenv.mkDerivation rec {
     name = "xulrunner-${xulVersion}";
     
     inherit src;
 
     buildInputs =
-      [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+    [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman libvpx yasm mesa
-	wirelesstools xlibs.libXscrnsaver xlibs.scrnsaverproto
+	wirelesstools xlibs.libXScrnSaver xlibs.scrnsaverproto
 	xlibs.libXext xlibs.xextproto
       ];
 
@@ -64,6 +63,14 @@ rec {
     # !!! Temporary hack.
     preBuild = ''
      export NIX_ENFORCE_PURITY=
+    '';
+
+    # Hack to work around make's idea of -lbz2 dependency
+    preConfigure = ''
+     find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
+       stdenv.lib.concatStringsSep ":" 
+         (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
+     }' ';'
     '';
 
     installFlags = "SKIP_GRE_REGISTRATION=1";
@@ -129,6 +136,14 @@ rec {
       echo "running firefox -register..."
       $out/bin/firefox -register
     ''; # */
+
+    # Hack to work around make's idea of -lbz2 dependency
+    preConfigure = ''
+     find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
+       stdenv.lib.concatStringsSep ":" 
+         (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
+     }' ';'
+    '';
 
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = svn://svn.tartarus.org/sgt/putty;
     rev = rev;
-    sha256 = "1yg5jhk7jp4yrnhpi0lvz71qqaf5gfpcwy8p198qqs8xgd1w51jc";
+    sha256 = "f5d9870dde7166afd277f7501914c6515b35ee7bb42965ccd22fe977ee5d1b0d";
   };
 
   buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut ];

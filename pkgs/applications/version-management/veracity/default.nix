@@ -1,6 +1,7 @@
 x@{builderDefsPackage
   , cmake, curl, patch, zlib, icu, sqlite, libuuid
   , readline, openssl, spidermonkey_1_8_0rc1
+  , nspr, nss
   , ...}:
 builderDefsPackage
 (a :  

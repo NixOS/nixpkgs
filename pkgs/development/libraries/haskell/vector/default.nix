@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "vector";
-  version = "0.6.0.1";
-  sha256 = "b0cba9b3aa94688321a2ec7b4fb4b41781073b2605584ad41957ba1c6892acce";
+  version = "0.7.0.1";
+  sha256 = "147kwm3p6w1qg1sg3ls7i8zj3mcnyxf80il4r5kz5fd3n1ibvyxj";
   propagatedBuildInputs = [primitive];
   meta = {
     description = "Efficient arrays";
