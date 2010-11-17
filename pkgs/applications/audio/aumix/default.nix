@@ -8,7 +8,7 @@ assert gtkGUI -> pkgconfig != null && gtk != null;
 stdenv.mkDerivation rec {
   name = "aumix-2.9.1";
   src = fetchurl {
-    url = "http://www.jpj.net/~trevor/aumix/${name}.tar.bz2";
+    url = "http://www.jpj.net/~trevor/aumix/releases/${name}.tar.bz2";
     sha256 = "0a8fwyxnc5qdxff8sl2sfsbnvgh6pkij4yafiln0fxgg6bal7knj";
   };
 
