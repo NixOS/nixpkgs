@@ -81,6 +81,9 @@ stdenv.mkDerivation ({
     /* Fix for CVE-2010-3856. */
     ./ignore-origin.patch
 
+    /* Fix for CVE-2010-3856. */
+    ./strncasecmp_sse42.patch
+
   ];
 
   postPatch = ''
