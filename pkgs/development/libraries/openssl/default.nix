@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssl-1.0.0a";
+  name = "openssl-1.0.0b";
 
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
-    sha256 = "0qqgyzfb0alwx329z8bqybzamfl9j2maykykvq6zk3ibq0gvva8q";
+    sha256 = "0cbk04cwmbf7l0bycqx8y04grfsx96mn2d8lbrydkqiyncplwysf";
   };
 
   patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
