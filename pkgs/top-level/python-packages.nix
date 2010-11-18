@@ -886,6 +886,29 @@ rec {
     };
   };
 
+  magic = buildPythonPackage rec {
+    name = "magic-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-magic/python-${name}.tar.gz";
+      md5 = "397cff81d2502e81fd3830a61ca2ad2c";
+    };
+
+    preConfigure =
+      ''
+        # Ensure that the module can find libmagic by hard-coding the
+        # path to libmagic.so.  Maybe there is a nicer way.
+        substituteInPlace magic.py --replace \
+          "ctypes.util.find_library('magic')" \
+          "'${pkgs.file}/lib/libmagic.so'"
+      '';
+
+    meta = {
+      description = "A Python wrapper around libmagic";
+      homepage = https://github.com/ahupp/python-magic;
+    };
+  };
+
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
