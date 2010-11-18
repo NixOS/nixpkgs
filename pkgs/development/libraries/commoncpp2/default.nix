@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preBuild = ''
+    echo '#include <sys/stat.h>' >> inc/cc++/config.h
+  '';
+
   meta = {
     description = "GNU Common C++, a portable, highly optimized C++ class framework";
 
