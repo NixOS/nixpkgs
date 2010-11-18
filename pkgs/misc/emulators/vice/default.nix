@@ -3,10 +3,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vice-2.1";
+  name = "vice-2.2";
   src = fetchurl {
-    url = http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/vice-2.1.tar.gz;
-    sha256 = "dc42df924bd4b4ab4af43e372d873a79ea035059f31f2f5c297c234b1c532c66";
+    url = http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/vice-2.2.tar.gz;
+    sha256 = "0l8mp9ybx494fdqgr1ps4x3c3qzms4yyg4hzcn3ihzy92zw1nn2x";
   };
   buildInputs = [ perl gettext libpng giflib libjpeg alsaLib readline mesa
                   pkgconfig gtk SDL autoconf automake ];
