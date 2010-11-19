@@ -11,7 +11,8 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doConfigure" "doPreBuild" "doMakeInstall"];
+  phaseNames = ["doPatch" "doConfigure" "doPreBuild" "doMakeInstall"];
+  patches = [ ./struct.patch ];
 
   doPreBuild = fullDepEntry (''
     cp drgeo.desktop.in drgeo.desktop
