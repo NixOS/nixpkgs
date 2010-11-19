@@ -745,7 +745,7 @@ let
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf5 = callPackage ../tools/misc/hdf5 { };
-
+  
   hevea = callPackage ../tools/typesetting/hevea { };
 
   highlight = callPackage ../tools/text/highlight { };
@@ -3855,6 +3855,8 @@ let
 
   sword = callPackage ../development/libraries/sword { };
 
+  szip = callPackage ../development/libraries/szip { };
+
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
@@ -5462,6 +5464,9 @@ let
     inherit (gtkLibs216) glib gtk;
   };
   eclipseLatest = eclipse.override { version = "latest"; };
+  eclipse36 = callPackage ../applications/editors/eclipse {
+      version = "3.6.1";
+  };
 
   ed = callPackage ../applications/editors/ed { };
 
@@ -7052,8 +7057,8 @@ let
   martyr = callPackage ../development/libraries/martyr { };
 
   maven = callPackage ../misc/maven/maven-1.0.nix { };
-
   maven2 = callPackage ../misc/maven { };
+  maven3 = callPackage ../misc/maven/3.0.nix { };
 
   mess = callPackage ../misc/emulators/mess { };
 
