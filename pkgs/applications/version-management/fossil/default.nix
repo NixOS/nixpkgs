@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, openssl}:
+{stdenv, fetchurl, zlib, openssl, tcl}:
 
 let
   version = "20101117133825";
@@ -12,7 +12,16 @@ stdenv.mkDerivation {
     sha256 = "0h4g7qsbz5vyd3zxywcc2pf6vf3gavxqznpx8gn47j8y6mjp4byn";
   };
 
-  buildInputs = [ zlib openssl ];
+  buildInputs = [ zlib openssl tcl ];
+  buildNativeInputs = [ zlib openssl ];
+
+  doCheck = true;
+
+  checkTarget = "test";
+
+  crossAttrs = {
+    doCheck = false;
+  };
 
   installPhase = ''
     ensureDir $out/bin
