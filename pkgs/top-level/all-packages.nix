@@ -7070,8 +7070,7 @@ let
   };
 
   # The SQLite branch.
-  nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl sqlite;
+  nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   });
