@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake gtk glib libjpeg libpng libtiff jasper ffmpeg pkgconfig
     xineLib gstreamer ];
 
+  patches = [ ./changeset_r3190.diff ];
+
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.willowgarage.com/;
