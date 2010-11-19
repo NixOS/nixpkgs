@@ -39,8 +39,10 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.fossil-scm.org/;
     license = "GPLv2";
+    platforms = with stdenv.lib.platforms; all;
     maintainers = [ #Add your name here!
       stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.viric
     ];
   };
 }
