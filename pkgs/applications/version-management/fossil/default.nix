@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       from the others by being extremely simple to setup and operate.
     '';
     homepage = http://www.fossil-scm.org/;
-    license = "GPLv2";
+    license = "BSD";
     platforms = with stdenv.lib.platforms; all;
     maintainers = [ #Add your name here!
       stdenv.lib.maintainers.z77z
