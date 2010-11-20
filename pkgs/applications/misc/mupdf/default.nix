@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, zlib, freetype, libjpeg, jbig2dec, openjpeg
 , libX11, libXext }:
 stdenv.mkDerivation rec {
-  name = "mupdf-0.6";
+  name = "mupdf-0.7";
 
   src = fetchurl {
-    url = "http://mupdf.com/download/source/${name}.tar.gz";
-    sha256 = "01cn2kz4zx53qhqvbxy8xd7xqbh58kpid8ykvx5hz7pf2gqw91vg";
+    url = "http://mupdf.com/download/${name}.tar.gz";
+    sha256 = "e7f6307fa472575d27fe893e787ddb3fc927f03ba4ae23105f917189e81960a6";
   };
 
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];
