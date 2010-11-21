@@ -1,4 +1,4 @@
-{stdenv, fetchurl, noSysDirs, cross ? null}:
+{stdenv, fetchurl, noSysDirs, zlib, cross ? null}:
 
 let
     basename = "binutils-2.20.51";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
   ];
+
+  buildInputs = [ zlib ];
 
   inherit noSysDirs;
 

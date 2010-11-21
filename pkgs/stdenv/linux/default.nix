@@ -191,7 +191,7 @@ rec {
   # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
   #    the recent binutils and rest of the bootstrap tools, including GCC.
-  stdenvLinuxBoot3 = removeAttrs (stdenvBootFun {
+  stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC {
       binutils = stdenvLinuxBoot1Pkgs.binutils;
       coreutils = bootstrapTools;
@@ -202,7 +202,7 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
-  }) ["gcc" "binutils"];
+  };
 
   
   # 7) The packages that can be built using the third stdenv.
