@@ -203,6 +203,11 @@ in
       patch = ./sheevaplug_modules-2.6.35.patch;
     };
 
+  mips_restart_2_6_36 =
+    { name = "mips_restart_2_6_36";
+      patch = ./mips_restart.patch;
+    };
+
   guruplug_defconfig =
     { # Default configuration for the GuruPlug.  From
       # <http://www.openplug.org/plugwiki/images/c/c6/Guruplug-patchset-2.6.33.2.tar.bz2>.
