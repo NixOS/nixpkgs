@@ -20,10 +20,8 @@ let
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
-            if test "$OPTION" != n; then
-                echo "parseconfig: setting $NAME=$OPTION"
-                echo "$NAME=$OPTION" >> .config
-            fi
+            echo "parseconfig: setting $NAME=$OPTION"
+            echo "$NAME=$OPTION" >> .config
         done
         set +x
     }
@@ -41,14 +39,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.17.1";
+  name = "busybox-1.17.3";
 
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "0r6i76lad5w359pw93i9wrq2a1pxk8xw6xr4cq71n5by1n0pg4dz";
+    sha256 = "1whza71p28r243j0qil1ari6p779h84ix1ikmmsqs1hsyrs04byy";
   };
-
-  patches = [ ./make-3.82.patch ];
 
   configurePhase = ''
     make defconfig
