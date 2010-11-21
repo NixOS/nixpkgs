@@ -95,6 +95,7 @@ in
           ${pkgs.avahi}/bin/avahi-publish-service disnix-$(${pkgs.nettools}/bin/hostname) _disnix._tcp 22 \
             "hostname=\"$(${pkgs.nettools}/bin/hostname)\"" \
 	    "mem=$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')" \
+	    ${optionalString (cfg.useWebServiceInterface) ''"targetEPR=\"http://(${pkgs.nettools}/bin/hostname):8080/DisnixWebService/services/DisnixWebService\""''} \
             ${optionalString (config.services.httpd.enable) ''"documentRoot=\"${config.services.httpd.documentRoot}\""''} \
             ${optionalString (config.services.mysql.enable) ''"mysqlPort=3306"''} \
             ${optionalString (config.services.tomcat.enable) ''"tomcatPort=8080"''} \
