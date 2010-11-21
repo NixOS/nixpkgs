@@ -33,6 +33,11 @@ in
         default = false;
 	description = "Whether to enable the DisnixWebService interface running on Apache Tomcat";
       };
+      
+      publishAvahi = mkOption {
+        default = false;
+	description = "Whether to publish capabilities/properties as a Disnix service through Avahi";
+      };
 
     };
     
@@ -75,6 +80,26 @@ in
           '';
       };
 
+  } //
+  mkIf cfg.publishAvahi {
+  
+    services.avahi.enable = true;
+  
+    jobs.disnixAvahi =
+      { description = "Disnix Avahi publisher";
+      
+        startOn = "started avahi-daemon";
+	
+	exec =
+        ''
+          ${pkgs.avahi}/bin/avahi-publish-service disnix-$(${pkgs.nettools}/bin/hostname) _disnix._tcp 22 \
+            "hostname=\"$(${pkgs.nettools}/bin/hostname)\"" \
+	    "mem=$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')" \
+            ${optionalString (config.services.httpd.enable) ''"documentRoot=\"${config.services.httpd.documentRoot}\""''} \
+            ${optionalString (config.services.mysql.enable) ''"mysqlPort=3306"''} \
+            ${optionalString (config.services.tomcat.enable) ''"tomcatPort=8080"''} \
+            "supportedTypes=[$(for i in ${disnix_activation_scripts}/libexec/disnix/activation-scripts/*; do echo -n " \"$(basename $i)\""; done) ]"
+        '';
+      };
   };
-
 }
