@@ -533,6 +533,8 @@ let
 
   ddclient = callPackage ../tools/networking/ddclient { };
 
+  dd_rescue = callPackage ../tools/system/dd_rescue { };
+
   ddrescue = callPackage ../tools/system/ddrescue { };
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
