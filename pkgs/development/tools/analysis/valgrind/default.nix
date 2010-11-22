@@ -1,17 +1,12 @@
 { stdenv, fetchurl, perl, gdb, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.5.0";
+  name = "valgrind-3.6.0";
 
   src = fetchurl {
     url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "105s4y6h5rsfvml1dfhsjvqgsxvnclbnxbpgk8b4ghpbpcr52fkl";
+    sha256 = "0pr8h0q909z15g2i2jrcryhqbshair42rylf3mprhyx4nm9h23xw";
   };
-
-  # Make Valgrind compile with Glibc 2.11.
-  patches = [ ./glibc-2.11.patch ];
-  patchFlags = "-p0";
-  preConfigure = "autoreconf";
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
