@@ -3,6 +3,7 @@ installFlags="PREFIX=$out"
 
 preBuild() {
     cp Makefile.def Makefile
+    sed -i GNUmakefile -e 's/compress %/%/g'
 }
 
 postInstall() {
