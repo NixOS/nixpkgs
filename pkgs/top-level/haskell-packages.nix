@@ -445,6 +445,8 @@ rec {
 
   mtl = callPackage ../development/libraries/haskell/mtl {};
 
+  multiplate = callPackage ../development/libraries/haskell/multiplate {};
+
   multirec = callPackage ../development/libraries/haskell/multirec {};
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
