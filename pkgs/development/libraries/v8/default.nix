@@ -2,8 +2,9 @@
 
 let
   system = stdenv.system;
-  arch = if system == "i686-linux" then "ia32" else if system == "x86_64-linux" then "x64" else abort "not supported"; 
+  arch = if system == "i686-linux" then "ia32" else if system == "x86_64-linux" then "x64" else ""; 
 in
+assert system == "i686-linux" || system == "x86_64-linux";
 stdenv.mkDerivation rec {
     name = "v8-r${toString src.rev}";
     src = fetchsvn {
