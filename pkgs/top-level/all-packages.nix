@@ -2541,6 +2541,8 @@ let
 
   valgrind = callPackage ../development/tools/analysis/valgrind { };
 
+  valkyrie = callPackage ../development/tools/analysis/valkyrie { };
+
   xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
     flex = flex2535;
     qt = qt3;
