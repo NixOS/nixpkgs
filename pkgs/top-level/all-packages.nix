@@ -4045,6 +4045,8 @@ let
 
   swt = callPackage ../development/libraries/java/swt { };
 
+  v8 = callPackage ../development/libraries/v8 { };
+
   xalanj = xalanJava;
   xalanJava = callPackage ../development/libraries/java/xalanj {
     ant    = apacheAntGcj;  # for bootstrap purposes
