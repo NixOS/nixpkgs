@@ -1,14 +1,12 @@
 {stdenv, fetchurl, SDL, zlib, which}:
 
 stdenv.mkDerivation rec {
-  name = "qemu-0.12.3";
+  name = "qemu-0.13.0";
 
   src = fetchurl {
     url = "http://download.savannah.gnu.org/releases/qemu/${name}.tar.gz";
-    sha256 = "0jyyz9vm8qrjb6nzfgdwmj9y990fnk2bl9ja0sr1i555n27nzqiw";
+    sha256 = "0xyqbwy78218ja6r9ya5p37j8hcd81l4cpw3ghvnxsjwn18mhvqy";
   };
-
-  patchFlags = "-p2";
   
   buildInputs = [SDL zlib which];
   

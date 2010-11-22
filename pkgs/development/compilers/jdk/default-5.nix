@@ -2,7 +2,7 @@
 
 if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
   then
-    (import ./jdk5-sun-linux.nix) {
+    (import ./jdk5-oracle-linux.nix) {
       inherit stdenv fetchurl unzip;
     }
   else

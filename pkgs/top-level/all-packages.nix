@@ -537,6 +537,8 @@ let
 
   ddclient = callPackage ../tools/networking/ddclient { };
 
+  dd_rescue = callPackage ../tools/system/dd_rescue { };
+
   ddrescue = callPackage ../tools/system/ddrescue { };
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
@@ -755,7 +757,7 @@ let
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf5 = callPackage ../tools/misc/hdf5 { };
-
+  
   hevea = callPackage ../tools/typesetting/hevea { };
 
   highlight = callPackage ../tools/text/highlight { };
@@ -3894,6 +3896,8 @@ let
 
   sword = callPackage ../development/libraries/sword { };
 
+  szip = callPackage ../development/libraries/szip { };
+
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
@@ -5519,6 +5523,9 @@ let
     inherit (gtkLibs216) glib gtk;
   };
   eclipseLatest = eclipse.override { version = "latest"; };
+  eclipse36 = callPackage ../applications/editors/eclipse {
+      version = "3.6.1";
+  };
 
   ed = callPackage ../applications/editors/ed { };
 
@@ -6216,7 +6223,7 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qemu = callPackage ../applications/virtualization/qemu/0.12.3.nix { };
+  qemu = callPackage ../applications/virtualization/qemu/0.13.nix { };
 
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
@@ -7115,8 +7122,8 @@ let
   martyr = callPackage ../development/libraries/martyr { };
 
   maven = callPackage ../misc/maven/maven-1.0.nix { };
-
   maven2 = callPackage ../misc/maven { };
+  maven3 = callPackage ../misc/maven/3.0.nix { };
 
   mess = callPackage ../misc/emulators/mess { };
 
@@ -7133,8 +7140,7 @@ let
   };
 
   # The SQLite branch.
-  nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl sqlite;
+  nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   });
