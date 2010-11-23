@@ -14,6 +14,10 @@ stdenv.mkDerivation {
 
   makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man";
 
+  crossAttrs = {
+    makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man CC=${stdenv.cross.config}-gcc";
+  };
+
   preInstall =
     ''
       substituteInPlace src/Makefile --replace /usr /
