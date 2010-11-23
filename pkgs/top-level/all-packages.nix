@@ -4508,6 +4508,10 @@ let
 
   ifplugd = callPackage ../os-specific/linux/ifplugd { };
 
+  iotop = callPackage ../os-specific/linux/iotop {
+    python = pythonFull;
+  };
+
   iproute = callPackage ../os-specific/linux/iproute { };
 
   iputils = (
