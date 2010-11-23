@@ -1,8 +1,8 @@
 { stdenv, fetchurl, unzip, ant, gcj }:
 
 let
-  version = "3.5.1";
-  date    = "200909170800";
+  version = "3.6.1";
+  date    = "201009090800";
   isGCJ   = stdenv.lib.strings.substring 0 3 gcj.name == "gcj";
   javaExec  = if isGCJ then "gij" else "java";
   javaFlags = if isGCJ then "--cp" else "-cp";
@@ -12,7 +12,7 @@ in
 
     src = fetchurl {
       url = "http://eclipse.ialto.org/eclipse/downloads/drops/R-${version}-${date}/ecjsrc-${version}.zip";
-      sha256 = "1vnl2mavisc567bip736xzsvvbjif5279wc4a7pbdik5wlir8qr7";
+      sha256 = "0xfsig2pzd9wy524wp11s7pc7cj81s28g1485995b44d9qbi17h8";
     };
 
     buildInputs = [ unzip ant gcj ];

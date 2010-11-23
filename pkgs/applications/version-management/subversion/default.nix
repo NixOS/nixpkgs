@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
+    ${if stdenv.isDarwin then "--enable-keychain" else ""}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';

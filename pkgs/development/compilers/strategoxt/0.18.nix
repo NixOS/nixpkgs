@@ -73,11 +73,11 @@ rec {
   };
 
   javafront = stdenv.mkDerivation (rec {
-    name = "java-front-0.9";
+    name = "java-front-0.9.1";
 
     src = fetchurl {
-      url = "http://hydra.nixos.org/build/79602/download/1/java-front-0.9.1pre19993.tar.gz";
-      sha256 = "e07e7d9ecc4a57c24d7af309d576d6eda75cb07a9d3d06594edfded366863c9c";
+      url = "http://hydra.nixos.org/build/766286/download/1/java-front-0.9.1pre20122.tar.gz";
+      sha256 = "ef85d3af962fcd54e028ea501e64220b86af335a49143f2819bd3f4789bef7e6";
     };
 
     buildInputs = [pkgconfig aterm sdf strategoxt];

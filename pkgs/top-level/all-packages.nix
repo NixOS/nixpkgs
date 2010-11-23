@@ -2576,6 +2576,8 @@ let
 
   valgrind = callPackage ../development/tools/analysis/valgrind { };
 
+  valkyrie = callPackage ../development/tools/analysis/valkyrie { };
+
   xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
     flex = flex2535;
     qt = qt3;
@@ -4084,6 +4086,8 @@ let
 
   swt = callPackage ../development/libraries/java/swt { };
 
+  v8 = callPackage ../development/libraries/v8 { };
+
   xalanj = xalanJava;
   xalanJava = callPackage ../development/libraries/java/xalanj {
     ant    = apacheAntGcj;  # for bootstrap purposes
@@ -4542,6 +4546,10 @@ let
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
   ifplugd = callPackage ../os-specific/linux/ifplugd { };
+
+  iotop = callPackage ../os-specific/linux/iotop {
+    python = pythonFull;
+  };
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
@@ -5100,6 +5108,8 @@ let
   umlutilities = callPackage ../os-specific/linux/uml-utilities {
     tunctl = true; mconsole = true;
   };
+
+  untie = callPackage ../os-specific/linux/untie {};
 
   upstart = callPackage ../os-specific/linux/upstart { };
 
