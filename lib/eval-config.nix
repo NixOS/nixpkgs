@@ -11,7 +11,7 @@
 , modules
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs; in
+let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system; in
 
 rec {
 
@@ -39,7 +39,8 @@ rec {
   # Import Nixpkgs, allowing the NixOS option nixpkgs.config to
   # specify the Nixpkgs configuration (e.g., to set package options
   # such as firefox.enableGeckoMediaPlayer, or to apply global
-  # overrides such as changing GCC throughout the system).  This is
+  # overrides such as changing GCC throughout the system), and the
+  # option nixpkgs.system to override the platform type.  This is
   # tricky, because we have to prevent an infinite recursion: "pkgs"
   # is passed as an argument to NixOS modules, but the value of "pkgs"
   # depends on config.nixpkgs.config, which we get from the modules.
@@ -50,12 +51,13 @@ rec {
     then pkgs_
     else import nixpkgs (
       let
+        system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
         nixpkgsOptions = (import ./eval-config.nix {
           inherit system nixpkgs services extraArgs modules;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
-          pkgs = import nixpkgs { inherit system; config = {}; };
+          pkgs = import nixpkgs { system = system_; config = {}; };
         }).optionDefinitions.nixpkgs;
       in
       {
