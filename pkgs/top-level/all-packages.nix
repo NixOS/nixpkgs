@@ -5047,6 +5047,8 @@ let
     tunctl = true; mconsole = true;
   };
 
+  untie = callPackage ../os-specific/linux/untie {};
+
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
