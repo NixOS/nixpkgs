@@ -6591,7 +6591,7 @@ let
   crack_attack = callPackage ../games/crack-attack { };
 
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
-    gnomegtk = gnome.gtk;
+    gnomegtk = pkgsi686Linux.gnome.gtk;
   };
 
   eduke32 = callPackage ../games/eduke32 { };
