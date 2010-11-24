@@ -94,12 +94,14 @@ in
         ''
           ${pkgs.avahi}/bin/avahi-publish-service disnix-$(${pkgs.nettools}/bin/hostname) _disnix._tcp 22 \
             "hostname=\"$(${pkgs.nettools}/bin/hostname)\"" \
+	    "system=\"$(uname -m)-linux\"" \
 	    "mem=$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')" \
 	    ${optionalString (cfg.useWebServiceInterface) ''"targetEPR=\"http://(${pkgs.nettools}/bin/hostname):8080/DisnixWebService/services/DisnixWebService\""''} \
             ${optionalString (config.services.httpd.enable) ''"documentRoot=\"${config.services.httpd.documentRoot}\""''} \
             ${optionalString (config.services.mysql.enable) ''"mysqlPort=3306"''} \
             ${optionalString (config.services.tomcat.enable) ''"tomcatPort=8080"''} \
-            "supportedTypes=[$(for i in ${disnix_activation_scripts}/libexec/disnix/activation-scripts/*; do echo -n " \"$(basename $i)\""; done) ]"
+            "supportedTypes=[$(for i in ${disnix_activation_scripts}/libexec/disnix/activation-scripts/*; do echo -n " \"$(basename $i)\""; done) ]" \
+	    ${concatMapStrings (deploymentAttrName: let deploymentAttrValue = getAttr deploymentAttrName (config.deployment); in ''${deploymentAttrName}=\"${deploymentAttrValue}\" '' ) (attrNames (config.deployment))}
         '';
       };
   };
