@@ -21,7 +21,7 @@ rec {
     sha256 = sourceInfo.hash;
   };
 
-  inherit (sourceInfo) name version;
+  inherit (sourceInfo) name;
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
