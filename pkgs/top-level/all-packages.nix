@@ -5180,6 +5180,8 @@ let
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
 
+  inconsolata = callPackage ../data/fonts/inconsolata {};
+
   junicode = callPackage ../data/fonts/junicode { };
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
