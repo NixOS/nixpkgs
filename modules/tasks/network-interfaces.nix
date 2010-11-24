@@ -171,7 +171,7 @@ in
                 ''
                   echo "Configuring interface ${i.name}..."
                   ${ifconfig} "${i.name}" down || true
-                  ${ifconfig} hw ether "${i.name}" "${i.macAddress}" || true
+                  ${ifconfig} "${i.name}" hw ether "${i.macAddress}" || true
                 ''
               else "") cfg.interfaces
             }
