@@ -6,7 +6,7 @@
 # some bindings are even broken.
 
 kde.package rec {
-  patches = [ ./python-site-packages-install-dir.diff ];
+  patches = [ ./python-site-packages-install-dir.diff ./sip-4.11.patch ];
 
   preConfigure = ''
     CUSTOM_RUBY_SITE_ARCH_DIR=$(ruby -r rbconfig -e "print Config::CONFIG['sitearchdir']" | sed -e "s@${ruby}@$out@")
