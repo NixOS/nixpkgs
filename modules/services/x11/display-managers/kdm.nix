@@ -106,6 +106,13 @@ in
 
     security.pam.services = [ { name = "kde"; } ];
       
+    users.extraUsers = singleton
+      { name = "kdm";
+        uid = config.ids.uids.kdm;
+        description = "kdm user";
+        home = "/tmp/kdm";
+      };
+
   };
   
 }
