@@ -5136,6 +5136,8 @@ let
 
   andagii = callPackage ../data/fonts/andagii {};
 
+  anonymousPro = callPackage ../data/fonts/anonymous-pro {};
+
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
   };
 
