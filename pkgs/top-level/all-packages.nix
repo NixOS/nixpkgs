@@ -6590,7 +6590,7 @@ let
 
   crack_attack = callPackage ../games/crack-attack { };
 
-  dwarf_fortress = callPackage ../games/dwarf-fortress { 
+  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
     gnomegtk = gnome.gtk;
   };
 
