@@ -8,6 +8,8 @@ let
 
   cfg = config.networking;
 
+  ifconfig = "${nettools}/sbin/ifconfig";
+
 in 
 
 {
@@ -157,7 +159,7 @@ in
 
             for i in $(cd /sys/class/net && ls -d *); do
                 echo "Bringing up network device $i..."
-                ${nettools}/sbin/ifconfig $i up || true
+                ${ifconfig} $i up || true
             done
 
             # Configure the manually specified interfaces.
@@ -169,7 +171,7 @@ in
                   if test -n "${i.subnetMask}"; then
                       extraFlags="$extraFlags netmask ${i.subnetMask}"
                   fi
-                  ${nettools}/sbin/ifconfig "${i.name}" "${i.ipAddress}" $extraFlags || true
+                  ${ifconfig} "${i.name}" "${i.ipAddress}" $extraFlags || true
                 ''
               else "") cfg.interfaces}
 
@@ -202,7 +204,7 @@ in
           ''
             #for i in $(cd /sys/class/net && ls -d *); do
             #    echo "Taking down network device $i..."
-            #    ${nettools}/sbin/ifconfig $i down || true
+            #    ${ifconfig} $i down || true
             #done
           '';
       };
