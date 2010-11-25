@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ff674y6d3b6ix08b9l2yzv8igns768biyp5y92vip7iz4xv2p2j";
   };
 
-  buildInputs = [ bison flex autoconf automake  ];
+  buildNativeInputs = [ bison flex autoconf automake ];
 
   # We get a warning in armv5tel-linux and the fuloong2f,
   # so we disable -Werror in it

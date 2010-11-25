@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       import ./bash-patches.nix patch;
 
   # Note: Bison is needed because the patches above modify parse.y.
-  buildNativeInputs = [bison];
-  buildInputs = stdenv.lib.optional (texinfo != null) texinfo
+  buildNativeInputs = [bison]
+    ++ stdenv.lib.optional (texinfo != null) texinfo
     ++ stdenv.lib.optional interactive readline;
 
   configureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
