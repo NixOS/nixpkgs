@@ -1257,6 +1257,8 @@ let
     inherit pciutils libx86 zlib;
   };
 
+  verilog = callPackage ../applications/science/electronics/verilog {};
+
   viking = callPackage ../applications/misc/viking { };
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
