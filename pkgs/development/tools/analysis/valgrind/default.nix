@@ -8,14 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0pr8h0q909z15g2i2jrcryhqbshair42rylf3mprhyx4nm9h23xw";
   };
 
-  # Make Valgrind compile with Glibc 2.12.
-  patches = [ ./glibc-2.12.patch ./stat_h.patch ];
-  patchFlags = "-p0";
-  preConfigure = "autoreconf";
-
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl autoconf automake ] ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  buildNativeInputs = [ perl autoconf automake ];
+  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =
     if stdenv.system == "x86_64-linux" then ["--enable-only64bit"] else [];
