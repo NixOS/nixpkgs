@@ -39,11 +39,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.17.3";
+  name = "busybox-1.18.0";
 
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "1whza71p28r243j0qil1ari6p779h84ix1ikmmsqs1hsyrs04byy";
+    sha256 = "007bc8k6sc62iyjmyv3di2c8xdxvdhvqg68c7pn40m0455lmx79s";
   };
 
   configurePhase = ''
