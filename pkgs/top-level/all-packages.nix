@@ -616,6 +616,8 @@ let
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
+  flvstreamer = callPackage ../tools/networking/flvstreamer { };
+
   fontforge = callPackage ../tools/misc/fontforge { };
 
   fontforgeX = callPackage ../tools/misc/fontforge {
