@@ -133,7 +133,15 @@ in
             startOn = "started nfs-kernel-exports and started nfs-kernel-mountd and started nfs-kernel-statd and started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
-            preStart = "${pkgs.nfsUtils}/sbin/rpc.nfsd ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} ${builtins.toString cfg.server.nproc}";
+            preStart = 
+              ''
+                # Create a state directory required by NFSv4.
+                mkdir -p /var/lib/nfs/v4recovery
+
+                ${pkgs.nfsUtils}/sbin/rpc.nfsd \
+                  ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} \
+                  ${builtins.toString cfg.server.nproc}
+              '';
 
             postStop = "${pkgs.nfsUtils}/sbin/rpc.nfsd 0";
           };

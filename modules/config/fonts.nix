@@ -98,7 +98,7 @@ in
 
 ###### implementation
 let
-  inherit (pkgs) builderDefs ttmkfdir;
+  inherit (pkgs) builderDefs;
   inherit (pkgs.xorg) mkfontdir mkfontscale fontalias;
 
   fontDirs = config.fonts.fonts;
@@ -107,7 +107,7 @@ let
   localDefs = with builderDefs; builderDefs.passthru.function rec {
     src = "";/* put a fetchurl here */
 
-    buildInputs = [mkfontdir mkfontscale ttmkfdir];
+    buildInputs = [mkfontdir mkfontscale];
     configureFlags = [];
     inherit fontDirs;
     installPhase = fullDepEntry ("
@@ -135,13 +135,6 @@ let
     rm fonts.alias
     mkfontdir
     mkfontscale
-    mv fonts.scale fonts.scale.old
-    mv fonts.dir fonts.dir.old
-    ttmkfdir
-    cat fonts.scale.old >> fonts.scale
-    cat fonts.dir.old >> fonts.dir
-    rm fonts.dir.old
-    rm fonts.scale.old
     cat \$( find ${fontalias}/ -name fonts.alias) >fonts.alias
   ") ["minInit" "addInputs"];
   };

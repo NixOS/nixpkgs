@@ -66,13 +66,14 @@ for arg; do
         sarg="$arg"
         while test "$sarg" != "-"; do
           case $sarg in
-            --*) longarg=$arg;;
+            --*) longarg=$arg; sarg="--";;
             -d*) longarg="$longarg --description";;
             -v*) longarg="$longarg --value";;
             -l*) longarg="$longarg --lookup";;
             -i*) longarg="$longarg --install";;
             -*) usage;;
           esac
+          # remove the first letter option
           sarg="-${sarg#??}"
         done
         ;;

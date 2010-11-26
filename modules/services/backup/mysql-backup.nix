@@ -6,10 +6,10 @@ let
 
   inherit (pkgs) mysql gzip;
 
-  location = config.services.mysqlBackup.location ;
-
+  cfg = config.services.mysqlBackup ;
+  location = cfg.location ;
   mysqlBackupCron = db : ''
-    ${config.services.mysqlBackup.period} ${config.services.mysqlBackup.user} ${mysql}/bin/mysqldump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
+    ${cfg.period} ${cfg.user} ${mysql}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
   ''; 
 
 in
@@ -53,6 +53,13 @@ in
         default = "/var/backup/mysql";
         description = ''
           Location to put the gzipped MySQL database dumps.
+        '';
+      };
+
+      singleTransaction = mkOption {
+        default = false;
+        description = ''
+          Whether to create database dump in a single transaction
         '';
       };
     };

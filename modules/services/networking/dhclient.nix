@@ -8,7 +8,7 @@ let
 
   # Don't start dhclient on explicitly configured interfaces.
   ignoredInterfaces = 
-    map (i: i.name) (lib.filter (i: i ? ipAddress) config.networking.interfaces);
+    map (i: i.name) (lib.filter (i: i ? ipAddress && i.ipAddress != "" ) config.networking.interfaces);
 
   stateDir = "/var/lib/dhcp"; # Don't use /var/state/dhcp; not FHS-compliant.
 

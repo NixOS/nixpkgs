@@ -8,6 +8,8 @@ let
 
   cfg = config.networking;
 
+  ifconfig = "${nettools}/sbin/ifconfig";
+
 in 
 
 {
@@ -113,6 +115,15 @@ in
           '';
         };
 
+        macAddress = mkOption {
+          default = "";
+          example = "00:11:22:33:44:55";
+          type = types.string;
+          description = ''
+            MAC address of the interface. Leave empty to use the default.
+          '';
+        };
+
       };
       
     };
@@ -155,9 +166,19 @@ in
             export PATH=${config.system.sbin.modprobe}/sbin:$PATH
             modprobe af_packet || true
 
+            ${pkgs.lib.concatMapStrings (i:
+              if i.macAddress != "" then
+                ''
+                  echo "Configuring interface ${i.name}..."
+                  ${ifconfig} "${i.name}" down || true
+                  ${ifconfig} "${i.name}" hw ether "${i.macAddress}" || true
+                ''
+              else "") cfg.interfaces
+            }
+
             for i in $(cd /sys/class/net && ls -d *); do
                 echo "Bringing up network device $i..."
-                ${nettools}/sbin/ifconfig $i up || true
+                ${ifconfig} $i up || true
             done
 
             # Configure the manually specified interfaces.
@@ -169,7 +190,7 @@ in
                   if test -n "${i.subnetMask}"; then
                       extraFlags="$extraFlags netmask ${i.subnetMask}"
                   fi
-                  ${nettools}/sbin/ifconfig "${i.name}" "${i.ipAddress}" $extraFlags || true
+                  ${ifconfig} "${i.name}" "${i.ipAddress}" $extraFlags || true
                 ''
               else "") cfg.interfaces}
 
@@ -202,7 +223,7 @@ in
           ''
             #for i in $(cd /sys/class/net && ls -d *); do
             #    echo "Taking down network device $i..."
-            #    ${nettools}/sbin/ifconfig $i down || true
+            #    ${ifconfig} $i down || true
             #done
           '';
       };
