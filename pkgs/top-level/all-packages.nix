@@ -4491,6 +4491,8 @@ let
     inherit fontconfig gpm freetype pkgconfig ncurses;
   };
 
+  fbtermStdenv = callPackage ../os-specific/linux/fbterm/stdenv.nix { };
+
   fuse = callPackage ../os-specific/linux/fuse { };
 
   fxload = callPackage ../os-specific/linux/fxload { };
