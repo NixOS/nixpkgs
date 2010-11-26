@@ -2864,7 +2864,8 @@ let
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gettext_017 = callPackage ../development/libraries/gettext/0.17.nix { };
+  gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
+  gettext_0_18 = gettext;
 
   gd = callPackage ../development/libraries/gd { };
 
