@@ -10,7 +10,10 @@ stdenv.mkDerivation {
     sha256 = "068mvzaz808a673zigyaqb63xc8bndh2klk16zi5c83rw70wifv0";
   };
   
-  patches = [ ./sysvinit-2.85-exec.patch ];
+  prePatch = ''
+    # Patch some minimal hard references, so halt/shutdown work
+    sed -i -e 's,/sbin/,$out/sbin/,' src/halt.c src/init.c src/paths.h
+  '';
 
   makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man";
 
