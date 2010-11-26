@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1990i19ddzn8gg5xwm53yn7d0mya885f48sd2hyvr7dvzyaw7ch8";
   };
 
-  buildInputs = [ flex bison ncurses ];
+  buildNativeInputs = [ flex bison ];
+  buildInputs = [ ncurses ];
 
   preConfigure =
     ''
