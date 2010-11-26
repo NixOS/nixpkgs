@@ -27,6 +27,9 @@ stdenv.mkDerivation {
     ' -i src/Makefile.in
 
     export HOME=$PWD;
+
     export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
+    # This is only relevant cross-building
+    export NIX_CROSS_LDFLAGS="$NIX_CROSS_LDFLAGS -lfreetype"
   '';
 }
