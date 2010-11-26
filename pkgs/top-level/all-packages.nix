@@ -1269,6 +1269,8 @@ let
     inherit pciutils libx86 zlib;
   };
 
+  verilog = callPackage ../applications/science/electronics/verilog {};
+
   viking = callPackage ../applications/misc/viking { };
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
@@ -2132,7 +2134,16 @@ let
 
   perl = if system != "i686-cygwin" then perl510 else sysPerl;
 
-  php = makeOverridable (import ../development/interpreters/php) {
+  php = php5_3;
+
+  php5_2 = makeOverridable (import ../development/interpreters/php/5.2.nix) {
+    inherit
+      stdenv fetchurl lib composableDerivation autoconf automake
+      flex bison apacheHttpd mysql libxml2
+      zlib curl gd postgresql openssl pkgconfig sqlite getConfig libiconv libjpeg libpng;
+  };
+
+  php5_3 = makeOverridable (import ../development/interpreters/php/5.3.nix) {
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
       flex bison apacheHttpd mysql libxml2
@@ -5199,6 +5210,8 @@ let
 
   andagii = callPackage ../data/fonts/andagii {};
 
+  anonymousPro = callPackage ../data/fonts/anonymous-pro {};
+
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
   };
 
@@ -5242,6 +5255,8 @@ let
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
+
+  inconsolata = callPackage ../data/fonts/inconsolata {};
 
   junicode = callPackage ../data/fonts/junicode { };
 
@@ -6657,8 +6672,8 @@ let
 
   crack_attack = callPackage ../games/crack-attack { };
 
-  dwarf_fortress = callPackage ../games/dwarf-fortress { 
-    gnomegtk = gnome.gtk;
+  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
+    gnomegtk = pkgsi686Linux.gnome.gtk;
   };
 
   eduke32 = callPackage ../games/eduke32 { };

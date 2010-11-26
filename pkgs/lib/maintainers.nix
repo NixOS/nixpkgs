@@ -21,5 +21,6 @@
   simons = "Peter Simons <simons@cryp.to>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viriketo@gmail.com>";
+  winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
 }

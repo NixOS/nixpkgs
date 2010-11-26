@@ -12,5 +12,8 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "QEmu processor emulator";
+    license = "GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
