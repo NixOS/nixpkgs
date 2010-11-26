@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     sha256 = "0h4g7qsbz5vyd3zxywcc2pf6vf3gavxqznpx8gn47j8y6mjp4byn";
   };
 
-  buildInputs = [ zlib openssl tcl ];
-  buildNativeInputs = [ zlib openssl ];
+  buildInputs = [ zlib openssl ];
+  buildNativeInputs = [ tcl ];
 
   doCheck = true;
 
