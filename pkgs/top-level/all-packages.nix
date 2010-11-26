@@ -2862,10 +2862,10 @@ let
 
   geos = callPackage ../development/libraries/geos { };
 
-  gettext = callPackage ../development/libraries/gettext { };
+  gettext = gettext_0_18;
 
   gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
-  gettext_0_18 = gettext;
+  gettext_0_18 = callPackage ../development/libraries/gettext { };
 
   gd = callPackage ../development/libraries/gd { };
 
