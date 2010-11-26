@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   
   prePatch = ''
     # Patch some minimal hard references, so halt/shutdown work
-    sed -i -e 's,/sbin/,$out/sbin/,' src/halt.c src/init.c src/paths.h
+    sed -i -e "s,/sbin/,$out/sbin/," src/halt.c src/init.c src/paths.h
   '';
 
   makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man";
