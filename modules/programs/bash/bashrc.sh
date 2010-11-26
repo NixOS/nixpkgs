@@ -68,7 +68,7 @@ fi
 alias ls="ls --color=tty"
 alias ll="ls -l"
 alias l="ls -alh"
-alias which="type -p"
+alias which="type -P"
 
 # The "non-interactive" Bash build does not support programmable
 # completion so check whether it's available.
