@@ -2828,9 +2828,9 @@ let
 
   geos = callPackage ../development/libraries/geos { };
 
-  gettext = callPackage ../development/libraries/gettext { };
+  gettext = gettext_0_17;
 
-  gettext_0_17 = gettext;
+  gettext_0_17 = callPackage ../development/libraries/gettext { };
   gettext_0_18 = callPackage ../development/libraries/gettext/0.18.nix { };
 
   gd = callPackage ../development/libraries/gd { };
