@@ -2650,6 +2650,8 @@ let
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
+  cgui = callPackage ../development/libraries/cgui {};
+
   check = callPackage ../development/libraries/check { };
 
   chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
