@@ -2584,6 +2584,8 @@ let
 
   agg = callPackage ../development/libraries/agg { };
 
+  allegro = callPackage ../development/libraries/allegro {};
+
   amrnb = callPackage ../development/libraries/amrnb { };
 
   amrwb = callPackage ../development/libraries/amrwb { };
