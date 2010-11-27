@@ -6584,6 +6584,8 @@ let
     libsigcxx = libsigcxx12;
   };
 
+  atanks = callPackage ../games/atanks {};
+
   ballAndPaddle = callPackage ../games/ball-and-paddle { };
 
   blackshades = callPackage ../games/blackshades { };
