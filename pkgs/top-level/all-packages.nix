@@ -584,6 +584,8 @@ let
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
+  encfs = callPackage ../tools/filesystems/encfs { };
+
   enscript = callPackage ../tools/text/enscript { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
@@ -3817,6 +3819,8 @@ let
     javac = gcj;
     jvm = gcj;
   };
+
+  rlog = callPackage ../development/libraries/rlog { };
 
   rte = callPackage ../development/libraries/rte { };
 
