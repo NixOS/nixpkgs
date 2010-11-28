@@ -6725,6 +6725,8 @@ let
     stdenv = stdenv2;
   };
 
+  stardust = callPackage ../games/stardust {};
+
   superTux = callPackage ../games/super-tux { };
 
   superTuxKart = callPackage ../games/super-tux-kart { };
