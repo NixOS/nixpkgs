@@ -3,7 +3,7 @@ x@{builderDefsPackage
   , db4, krb5, openldap, glib, libxml2, GConf
   , nss, gtk, libgnome, libsoup, gnome_keyring
   , gtkdoc, sqlite, libgweather, libical, icu
-  , dbus_glib, gperf, nspr, gdk_pixbuf ? null
+  , dbus_glib, gperf, nspr
   , ...}:
 builderDefsPackage
 (a :  

@@ -7034,8 +7034,7 @@ let
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = lib.callPackageWith (pkgs // pkgs.xorg // pkgs.gtkLibs // pkgs.gnome)
-    ../applications/networking/ekiga {};
+  ekiga = newScope (pkgs.gtkLibs // pkgs.gnome) ../applications/networking/ekiga { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
