@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel
+{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
 
 stdenv.mkDerivation {
@@ -8,7 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1pyfgrcdmw6zf3yxgzcd8c5qzqqn62bz4085ka453gfmi9d65lys";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
-  buildInputs = [ patchelf cdrkit ];
+  buildInputs = [ patchelf cdrkit makeWrapper ];
+
+  installPhase = ''
+    ensureDir $out
+    cp -r install/* $out
+
+  '';
+  
   buildCommand = ''
     ${if stdenv.system == "i686-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions-x86.run > ./VBoxLinuxAdditions-x86.run
@@ -72,6 +79,9 @@ stdenv.mkDerivation {
     install -m 755 bin/VBoxClient $out/bin
     install -m 755 bin/VBoxControl $out/bin
     install -m 755 bin/VBoxClient-all $out/bin
+
+    wrapProgram $out/bin/VBoxClient-all \
+            --prefix PATH : "${which}/bin"
 
     # Install OpenGL libraries
     ensureDir $out/lib
