@@ -1397,6 +1397,8 @@ let
 
   xclip = callPackage ../tools/misc/xclip { };
 
+  xdelta = callPackage ../tools/compression/xdelta { };
+
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff {
