@@ -6107,6 +6107,8 @@ let
 
   nvi = callPackage ../applications/editors/nvi { };
 
+  openbox = callPackage ../applications/window-managers/openbox { };
+
   openjump = callPackage ../applications/misc/openjump { };
 
   openoffice = callPackage ../applications/office/openoffice {
