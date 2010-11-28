@@ -1,61 +1,37 @@
-{ stdenv
-, fetchurl
-, ffmpeg
-, cairo
-, pango
-, glib
-, libXrender
-, libXScrnSaver
-, gtk
-, nspr
-, nss
-, fontconfig
-, freetype
-, alsaLib
-, libX11
-, GConf
-, libXext
-, libXt
-, atk
-, makeWrapper
-, unzip
-, expat
-, zlib
-, libjpeg
-, bzip2
-, libpng
-, dbus
-, dbus_glib
-, patchelf
-, cups
-, libgcrypt
-}:
+{ GConf, alsaLib, atk, bzip2, cairo, cups, dbus, dbus_glib,
+  expat, fetchurl, ffmpeg, fontconfig, freetype, glib, gtk,
+  libX11, libXScrnSaver, libXdamage, libXext, libXrender, libXt,
+  libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, pango,
+  patchelf, stdenv, unzip, zlib }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
   name = "chrome-${version}";
   version = "65039";
-  src = 
-    if stdenv.system == "x86_64-linux" then 
+  src =
+    if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/${version}/chrome-linux.zip";
         sha256 = "1ad7kwd1w1958mb3pwzhshawrf2nlxdsf0gy7d2q4qnx5d809vws";
-      } 
-    else if stdenv.system == "i686-linux" then 
+      }
+    else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/${version}/chrome-linux.zip";
         sha256 = "06hz3gvv3623ldrj141w3mnzw049yylvv9b9q5r6my8icm722phf";
-      } 
+      }
     else throw "Chromium is not supported on this platform.";
 
   phases = "unpackPhase installPhase";
 
   buildInputs = [makeWrapper unzip];
 
-  libPath = 
+  libPath =
     stdenv.lib.makeLibraryPath
-       [ stdenv.gcc.libc stdenv.gcc.gcc ffmpeg cairo pango glib libXrender gtk nspr nss fontconfig freetype alsaLib libX11 GConf libXext atk libXt expat zlib libjpeg bzip2 libpng libXScrnSaver dbus dbus_glib cups libgcrypt] ;
+       [ GConf alsaLib atk bzip2 cairo cups dbus dbus_glib expat
+         ffmpeg fontconfig freetype glib gtk libX11 libXScrnSaver
+         libXdamage libXext libXrender libXt libgcrypt libjpeg libpng
+         nspr nss pango stdenv.gcc.gcc zlib stdenv.gcc.libc ];
 
   installPhase = ''
     ensureDir $out/bin
@@ -64,8 +40,7 @@ stdenv.mkDerivation rec {
 
     cp -R * $out/chrome
     ln -s $out/chrome/chrome $out/bin/chrome
-    ${patchelf}/bin/patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath ${libPath}:$out/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib $out/chrome/chrome 
-        
+    ${patchelf}/bin/patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath ${libPath}:$out/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib $out/chrome/chrome
 
     ln -s ${nss}/lib/libsmime3.so $out/lib/libsmime3.so.1d
     ln -s ${nss}/lib/libnssutil3.so $out/lib/libnssutil3.so.1d
