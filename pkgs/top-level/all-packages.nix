@@ -1239,6 +1239,8 @@ let
     extraFonts = true;
   };
 
+  tmux = callPackage ../tools/misc/tmux { };
+
   tor = callPackage ../tools/security/tor { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
