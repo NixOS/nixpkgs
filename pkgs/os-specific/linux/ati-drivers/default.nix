@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "ati-drivers-${version}";
-  version = "10-10-x86";
+  version = "10-11-x86";
 
   builder = ./builder.sh;
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   src =
     assert stdenv.system == "x86_64-linux";
   fetchurl {
-    url = https://a248.e.akamai.net/f/674/9206/0/www2.ati.com/drivers/linux/ati-driver-installer-10-10-x86.x86_64.run;
-    sha256 = "1g71sj8qbarshw3hfds2v6y9q7lma3d36d0x79c7vvgllcd5c76x";
+    url = https://a248.e.akamai.net/f/674/9206/0/www2.ati.com/drivers/linux/ati-driver-installer-10-11-x86.x86_64.run;
+    sha256 = "1z33w831ayx1j5lm9d1xv6whkmzsz9v8li3s8c96hwnwki6zpimr";
   };
 
   buildInputs = [xlibs.libXext xlibs.libX11
