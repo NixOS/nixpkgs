@@ -1,7 +1,7 @@
-{stdenv, fetchurl, zlib, openssl}:
+{stdenv, fetchurl, zlib, openssl, tcl}:
 
 let
-  version = "20101101142335";
+  version = "20101117133825";
 in
 
 stdenv.mkDerivation {
@@ -9,10 +9,19 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.fossil-scm.org/download/fossil-src-${version}.tar.gz";
-    sha256 = "129a2zf5zpq397nmmmk31k1yhkgvrssgrh9z4aaj6lh50s3ax0bh";
+    sha256 = "0h4g7qsbz5vyd3zxywcc2pf6vf3gavxqznpx8gn47j8y6mjp4byn";
   };
 
-  buildInputs = [ zlib openssl ];
+  buildInputs = [ zlib openssl tcl ];
+  buildNativeInputs = [ zlib openssl ];
+
+  doCheck = true;
+
+  checkTarget = "test";
+
+  crossAttrs = {
+    doCheck = false;
+  };
 
   installPhase = ''
     ensureDir $out/bin
@@ -29,9 +38,11 @@ stdenv.mkDerivation {
       from the others by being extremely simple to setup and operate.
     '';
     homepage = http://www.fossil-scm.org/;
-    license = "GPLv2";
+    license = "BSD";
+    platforms = with stdenv.lib.platforms; all;
     maintainers = [ #Add your name here!
       stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.viric
     ];
   };
 }

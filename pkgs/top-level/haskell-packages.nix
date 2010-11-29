@@ -82,6 +82,8 @@ rec {
 
   cgi = callPackage ../development/libraries/haskell/cgi {};
 
+  Chart = callPackage ../development/libraries/haskell/Chart {};
+
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
@@ -107,6 +109,10 @@ rec {
   };
 
   csv = callPackage ../development/libraries/haskell/csv {};
+
+  dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
+
+  dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
@@ -438,6 +444,8 @@ rec {
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
   mtl = callPackage ../development/libraries/haskell/mtl {};
+
+  multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
   multirec = callPackage ../development/libraries/haskell/multirec {};
 

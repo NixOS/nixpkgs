@@ -98,6 +98,17 @@ stdenv.mkDerivation rec {
         url = http://mirrors.linux-bg.org/eclipse/eclipse/downloads/drops/R-3.5.1-200909170800/eclipse-SDK-3.5.1-linux-gtk.tar.gz;
         sha256 = "0a0lpa7gxg91zswpahi6fvg3csl4csvlym4z2ad5cc1d4yvicp56";
       }
+    else if v == "3.6.1" then
+     if stdenv.system == "x86_64-linux" then
+       fetchurl {
+        url = http://ftp.ing.umu.se/mirror/eclipse/eclipse/downloads/drops/R-3.6.1-201009090800/eclipse-SDK-3.6.1-linux-gtk-x86_64.tar.gz;
+        sha256 = "1cg9rrb5w978sdqbzz9lnli1lds9zhb6wfsj3wp725bqf1i6v9lg";
+       }
+     else
+       fetchurl {
+        url = http://ftp.ing.umu.se/mirror/eclipse/eclipse/downloads/drops/R-3.6.1-201009090800/eclipse-SDK-3.6.1-linux-gtk.tar.gz;
+        sha256 = "0s48rjaswi8m5gan1zlqvfwb4l06x5nslkq41wpkrbyj9ka8gh4x";
+      }
     else throw "no source for eclipse version ${v} known";
 
   desktopItem = makeDesktopItem {
@@ -131,11 +142,12 @@ stdenv.mkDerivation rec {
     ensureDir $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
-
+  
   meta = {
     homepage = http://www.eclipse.org/;
     description = "A extensible multi-language software development environment";
     longDescription = ''
     '';
   };
+  
 }

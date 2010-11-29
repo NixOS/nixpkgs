@@ -533,6 +533,8 @@ let
 
   ddclient = callPackage ../tools/networking/ddclient { };
 
+  dd_rescue = callPackage ../tools/system/dd_rescue { };
+
   ddrescue = callPackage ../tools/system/ddrescue { };
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
@@ -582,6 +584,8 @@ let
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
+  encfs = callPackage ../tools/filesystems/encfs { };
+
   enscript = callPackage ../tools/text/enscript { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
@@ -613,6 +617,8 @@ let
   findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
+
+  flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
   fontforge = callPackage ../tools/misc/fontforge { };
 
@@ -745,7 +751,7 @@ let
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf5 = callPackage ../tools/misc/hdf5 { };
-
+  
   hevea = callPackage ../tools/typesetting/hevea { };
 
   highlight = callPackage ../tools/text/highlight { };
@@ -1209,7 +1215,10 @@ let
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
-  system_config_printer = callPackage ../tools/misc/system-config-printer { };
+  system_config_printer = callPackage ../tools/misc/system-config-printer {
+    inherit (pythonPackages) notify;
+    libxml2 = libxml2Python;
+   };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
 
@@ -1229,6 +1238,8 @@ let
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
   };
+
+  tmux = callPackage ../tools/misc/tmux { };
 
   tor = callPackage ../tools/security/tor { };
 
@@ -1254,6 +1265,8 @@ let
   vbetool = builderDefsPackage ../tools/system/vbetool {
     inherit pciutils libx86 zlib;
   };
+
+  verilog = callPackage ../applications/science/electronics/verilog {};
 
   viking = callPackage ../applications/misc/viking { };
 
@@ -1383,6 +1396,8 @@ let
   };
 
   xclip = callPackage ../tools/misc/xclip { };
+
+  xdelta = callPackage ../tools/compression/xdelta { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
@@ -2105,7 +2120,16 @@ let
 
   perl = if system != "i686-cygwin" then perl510 else sysPerl;
 
-  php = makeOverridable (import ../development/interpreters/php) {
+  php = php5_3;
+
+  php5_2 = makeOverridable (import ../development/interpreters/php/5.2.nix) {
+    inherit
+      stdenv fetchurl lib composableDerivation autoconf automake
+      flex bison apacheHttpd mysql libxml2
+      zlib curl gd postgresql openssl pkgconfig sqlite getConfig libiconv libjpeg libpng;
+  };
+
+  php5_3 = makeOverridable (import ../development/interpreters/php/5.3.nix) {
     inherit
       stdenv fetchurl lib composableDerivation autoconf automake
       flex bison apacheHttpd mysql libxml2
@@ -2539,6 +2563,8 @@ let
 
   valgrind = callPackage ../development/tools/analysis/valgrind { };
 
+  valkyrie = callPackage ../development/tools/analysis/valkyrie { };
+
   xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
     flex = flex2535;
     qt = qt3;
@@ -2566,6 +2592,8 @@ let
   };
 
   agg = callPackage ../development/libraries/agg { };
+
+  allegro = callPackage ../development/libraries/allegro {};
 
   amrnb = callPackage ../development/libraries/amrnb { };
 
@@ -2630,6 +2658,8 @@ let
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
+
+  cgui = callPackage ../development/libraries/cgui {};
 
   check = callPackage ../development/libraries/check { };
 
@@ -2822,9 +2852,9 @@ let
 
   geos = callPackage ../development/libraries/geos { };
 
-  gettext = callPackage ../development/libraries/gettext { };
+  gettext = gettext_0_17;
 
-  # XXX: Remove me when `stdenv-updates' is merged.
+  gettext_0_17 = callPackage ../development/libraries/gettext { };
   gettext_0_18 = callPackage ../development/libraries/gettext/0.18.nix { };
 
   gd = callPackage ../development/libraries/gd { };
@@ -3794,6 +3824,8 @@ let
     jvm = gcj;
   };
 
+  rlog = callPackage ../development/libraries/rlog { };
+
   rte = callPackage ../development/libraries/rte { };
 
   rubberband = callPackage ../development/libraries/rubberband {
@@ -3854,6 +3886,8 @@ let
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
   sword = callPackage ../development/libraries/sword { };
+
+  szip = callPackage ../development/libraries/szip { };
 
   t1lib = callPackage ../development/libraries/t1lib { };
 
@@ -4040,6 +4074,8 @@ let
   smack = callPackage ../development/libraries/java/smack { };
 
   swt = callPackage ../development/libraries/java/swt { };
+
+  v8 = callPackage ../development/libraries/v8 { };
 
   xalanj = xalanJava;
   xalanJava = callPackage ../development/libraries/java/xalanj {
@@ -4499,6 +4535,10 @@ let
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
   ifplugd = callPackage ../os-specific/linux/ifplugd { };
+
+  iotop = callPackage ../os-specific/linux/iotop {
+    python = pythonFull;
+  };
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
@@ -5035,6 +5075,8 @@ let
     tunctl = true; mconsole = true;
   };
 
+  untie = callPackage ../os-specific/linux/untie {};
+
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
@@ -5122,6 +5164,8 @@ let
 
   andagii = callPackage ../data/fonts/andagii {};
 
+  anonymousPro = callPackage ../data/fonts/anonymous-pro {};
+
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
   };
 
@@ -5165,6 +5209,8 @@ let
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
+
+  inconsolata = callPackage ../data/fonts/inconsolata {};
 
   junicode = callPackage ../data/fonts/junicode { };
 
@@ -5462,6 +5508,9 @@ let
     inherit (gtkLibs216) glib gtk;
   };
   eclipseLatest = eclipse.override { version = "latest"; };
+  eclipse36 = callPackage ../applications/editors/eclipse {
+      version = "3.6.1";
+  };
 
   ed = callPackage ../applications/editors/ed { };
 
@@ -6062,6 +6111,8 @@ let
 
   nvi = callPackage ../applications/editors/nvi { };
 
+  openbox = callPackage ../applications/window-managers/openbox { };
+
   openjump = callPackage ../applications/misc/openjump { };
 
   openoffice = callPackage ../applications/office/openoffice {
@@ -6147,7 +6198,7 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qemu = callPackage ../applications/virtualization/qemu/0.12.3.nix { };
+  qemu = callPackage ../applications/virtualization/qemu/0.13.nix { };
 
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
@@ -6548,6 +6599,8 @@ let
     libsigcxx = libsigcxx12;
   };
 
+  atanks = callPackage ../games/atanks {};
+
   ballAndPaddle = callPackage ../games/ball-and-paddle { };
 
   blackshades = callPackage ../games/blackshades { };
@@ -6569,8 +6622,8 @@ let
 
   crack_attack = callPackage ../games/crack-attack { };
 
-  dwarf_fortress = callPackage ../games/dwarf-fortress { 
-    gnomegtk = gnome.gtk;
+  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
+    gnomegtk = pkgsi686Linux.gnome.gtk;
   };
 
   eduke32 = callPackage ../games/eduke32 { };
@@ -6673,6 +6726,8 @@ let
   springLobby = callPackage ../games/spring/spring-lobby.nix { 
     stdenv = stdenv2;
   };
+
+  stardust = callPackage ../games/stardust {};
 
   superTux = callPackage ../games/super-tux { };
 
@@ -6994,8 +7049,7 @@ let
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = lib.callPackageWith (pkgs // pkgs.xorg // pkgs.gtkLibs // pkgs.gnome)
-    ../applications/networking/ekiga {};
+  ekiga = newScope (pkgs.gtkLibs // pkgs.gnome) ../applications/networking/ekiga { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
@@ -7052,8 +7106,8 @@ let
   martyr = callPackage ../development/libraries/martyr { };
 
   maven = callPackage ../misc/maven/maven-1.0.nix { };
-
   maven2 = callPackage ../misc/maven { };
+  maven3 = callPackage ../misc/maven/3.0.nix { };
 
   mess = callPackage ../misc/emulators/mess { };
 
@@ -7070,8 +7124,7 @@ let
   };
 
   # The SQLite branch.
-  nixSqlite = lowPrio (makeOverridable (import ../tools/package-management/nix/sqlite.nix) {
-    inherit fetchurl stdenv perl curl bzip2 openssl sqlite;
+  nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
   });

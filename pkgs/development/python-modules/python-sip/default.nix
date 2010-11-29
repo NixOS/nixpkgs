@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "sip-4.10.5";
+  name = "sip-4.11.2";
   
   src = fetchurl {
     url = "http://www.riverbankcomputing.co.uk/static/Downloads/sip4/${name}.tar.gz";
-    sha256 = "1hkn2n5hvfcfz0xprwyy5dzjzndgmvlf7abjsd868pv3hxdx1rs8";
+    sha256 = "0g1pj203m491rhy111ayr4k4lsbcqd8sa1np503xv94a90b05l6f";
   };
   
   configurePhase = "python ./configure.py -d $out/lib/${python.libPrefix}/site-packages -b $out/bin -e $out/include";

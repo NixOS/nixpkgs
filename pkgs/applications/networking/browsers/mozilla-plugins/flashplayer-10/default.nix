@@ -54,7 +54,7 @@ let
       } else {
         version = "10.1.102.64";
         url = http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_10_linux.tar.gz;
-        sha256 = "1bx3cbls40si3l3x6ahncbn8dwrr41gj34hfn51k5ak9ccqn27wg";
+        sha256 = "1jfk9va3id0m6q6csg6gfycmryvi7kylbb7dswpsh6zh1zv00s62";
       }
     else throw "flashplayer is not supported on this platform";
 

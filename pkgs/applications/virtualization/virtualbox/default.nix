@@ -30,6 +30,7 @@ stdenv.mkDerivation {
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
+    substituteInPlace Config.kmk --replace "VBOX_WITH_TESTCASES = 1" "#"
     cat >> AutoConfig.kmk << END_PATHS
     VBOX_PATH_APP_PRIVATE := $out
     VBOX_PATH_APP_DOCS := $out/doc
