@@ -6665,6 +6665,8 @@ let
     stdenv = stdenv2;
   };
 
+  gl117 = callPackage ../games/gl-117 {};
+
   gltron = callPackage ../games/gltron { };
 
   gnuchess = builderDefsPackage (import ../games/gnuchess) {
