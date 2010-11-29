@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpcap, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
-  name = "tcpdump-4.1.0";
+  name = "tcpdump-4.1.1";
 
   src = fetchurl {
     url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "1yhmz23cb0qx16nwnmyk2v7nnqai20lzcc4lx34v728qdpkmc1in";
+    sha256 = "02kz3sghpg16p26dhid8ma67pxil8x5jqdd83fvdnypcc6ylpkg6";
   };
 
   buildInputs = [ libpcap ];
