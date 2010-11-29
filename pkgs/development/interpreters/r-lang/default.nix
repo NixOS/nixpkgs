@@ -1,5 +1,5 @@
-{stdenv, fetchurl, readline, perl, gfortran, libX11, libpng, libXt, zlib, 
-withBioconductor ? false
+{ stdenv, fetchurl, readline, perl, gfortran, libX11, libpng, libXt, zlib
+, withBioconductor ? false
 }:
 
 stdenv.mkDerivation {
@@ -23,14 +23,15 @@ stdenv.mkDerivation {
 
   meta = {
     description = "R is a language and environment for statistical computing and graphics";
-    longDescription = ''R is a language and environment for statistical computin
-g and graphics. It is a GNU project which is similar to the S language. R provid
-es a wide variety of statistical (linear and nonlinear modelling, classical stat
-istical tests, time-series analysis, classification, clustering, ...) and graphi
-cal techniques, and is highly extensible.'';
     license     = "GPL2";
     homepage    = http://www.r-project.org/;
+    longDescription = ''
+      R is a language and environment for statistical computing and
+      graphics. It is a GNU project which is similar to the S language.
+      R provides a wide variety of statistical (linear and nonlinear
+      modelling, classical statistical tests, time-series analysis,
+      classification, clustering, ...) and graphical techniques, and is
+      highly extensible.
+    '';
   };
 }
-
-
