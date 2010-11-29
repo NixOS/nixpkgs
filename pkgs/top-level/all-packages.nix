@@ -2507,7 +2507,7 @@ let
   openocd = callPackage ../development/tools/misc/openocd { };
 
   oprofile = import ../development/tools/profiling/oprofile {
-    inherit fetchurl stdenv binutils popt makeWrapper gawk which gnugrep;
+    inherit fetchurl stdenv binutils popt makeWrapper gawk which gnugrep zlib;
 
     # Optional build inputs for the (useless) GUI.
     /*

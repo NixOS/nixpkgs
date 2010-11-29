@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils, popt, makeWrapper, gawk, which, gnugrep
+{ stdenv, fetchurl, binutils, popt, makeWrapper, gawk, which, gnugrep, zlib
 , qt ? null, libX11 ? null, libXext ? null, libpng ? null }:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
             s|^PATH=.*$||g"
   '';
 
-  buildInputs = [ binutils popt makeWrapper gawk which gnugrep ]
+  buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep ]
     ++ stdenv.lib.optionals (qt != null) [ qt libX11 libXext libpng ];
 
   configureFlags =
