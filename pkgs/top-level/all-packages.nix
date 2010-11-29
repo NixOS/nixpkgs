@@ -6045,6 +6045,8 @@ let
     inherit (xlibs) libX11 libXau xproto libXt;
   };
 
+  links2Stdenv = callPackage ../applications/networking/browsers/links2/stdenv.nix { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
