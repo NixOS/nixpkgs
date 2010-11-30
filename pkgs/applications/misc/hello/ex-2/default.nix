@@ -2,6 +2,8 @@
 
 stdenv.mkDerivation rec {
   name = "hello-2.6";
+
+  x = 108;
   
   src = fetchurl {
     url = "mirror://gnu/hello/${name}.tar.gz";

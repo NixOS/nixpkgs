@@ -58,19 +58,25 @@ stdenv.mkDerivation ({
     ./nss-skip-unavail.patch
 
     ++ [
-    /* Make it possible to override the locale-archive in NixOS. */
-    ./locale-override.patch
+      /* Make it possible to override the locale-archive in NixOS. */
+      ./locale-override.patch
 
-    /* Have rpcgen(1) look for cpp(1) in $PATH.  */
-    ./rpcgen-path.patch
+      /* Have rpcgen(1) look for cpp(1) in $PATH.  */
+      ./rpcgen-path.patch
 
-    /* Make sure `nscd' et al. are linked against `libssp'.  */
-    ./stack-protector-link.patch
-  ]
+      /* Make sure `nscd' et al. are linked against `libssp'.  */
+      ./stack-protector-link.patch
 
-  ++ stdenv.lib.optional (fetchgit == null)
-    /* MOD_NANO definition, for ntp (taken from glibc upstream) */
-    ./mod_nano.patch;
+      /* Fix for CVE-2010-3856. */
+      ./audit-suid.patch
+
+      /* Fix for CVE-2010-3856. */
+      ./ignore-origin.patch
+    ]
+
+    ++ stdenv.lib.optional (fetchgit == null)
+      /* MOD_NANO definition, for ntp (taken from glibc upstream) */
+      ./mod_nano.patch;
 
   configureFlags = [
     "-C"
