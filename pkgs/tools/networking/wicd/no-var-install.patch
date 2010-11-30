@@ -2,10 +2,11 @@ The install tries to create files in /var.  This patch removes those steps.
 
 --- wicd-1.7.0/setup.py 2010-01-14 23:49:11.000000000 -0500
 +++ wicd-1.7.0/setup.py 2010-11-16 22:15:33.855977242 -0500
-@@ -494,10 +494,8 @@
+@@ -493,11 +493,8 @@
+     print "Using init file",(wpath.init, wpath.initfile)
      data = [
      (wpath.dbus, ['other/wicd.conf']),
-     (wpath.log, [empty_file]), 
+-    (wpath.log, [empty_file]), 
 -    (wpath.etc, ['other/dhclient.conf.template.default']),
      (wpath.encryption, [('encryption/templates/' + b) for b in 
                          os.listdir('encryption/templates') if not b.startswith('.')]),
