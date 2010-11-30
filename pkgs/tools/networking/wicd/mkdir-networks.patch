@@ -1,11 +1,12 @@
-wicd normally makes the NETWORKS directory at install time, but we cannot do that,
-so we make it at runtime instead.
+wicd normally makes the NETWORKS directory and install the dhclient.conf.template.default at install time, 
+but we cannot do that, so we make it at runtime instead.
 
---- wicd-1.6.2.2/in/scripts=wicd.in	2009-09-01 11:05:31.000000000 -0400
-+++ wicd-1.6.2.2/in/scripts=wicd.in	2010-01-04 18:01:57.000000000 -0500
-@@ -1,3 +1,5 @@
+--- wicd-1.7.0/in/scripts=wicd.in       2010-01-14 23:49:11.000000000 -0500
++++ wicd-1.7.0/in/scripts=wicd.in       2010-11-16 22:35:50.272555487 -0500
+@@ -1,3 +1,6 @@
  #!/bin/bash
  
 +mkdir -p %NETWORKS%
++ln -sf @TEMPLATE-DEFAULT@ %ETC%dhclient.conf.template.default
 +
- exec python -O %LIB%wicd-daemon.py $@
+ exec %PYTHON% -O %SHARE%daemon/wicd-daemon.py $@

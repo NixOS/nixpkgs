@@ -1443,6 +1443,20 @@ let
 
   dash = callPackage ../shells/dash { };
 
+  ipython = callPackage ../shells/ipython {
+    # I did not find any better way of reusing buildPythonPackage+setuptools
+    # for a python with openssl support
+    buildPythonPackage = assert pythonFull.readlineSupport;
+      import ../development/python-modules/generic {
+        inherit makeWrapper lib;
+        python = pythonFull;
+        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
+          inherit makeWrapper;
+          python = pythonFull;
+        };
+      };
+ };
+
   tcsh = callPackage ../shells/tcsh { };
 
   rush = callPackage ../shells/rush { };
@@ -6622,6 +6636,8 @@ let
 
   crack_attack = callPackage ../games/crack-attack { };
 
+  crrcsim = callPackage ../games/crrcsim {};
+
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
     gnomegtk = pkgsi686Linux.gnome.gtk;
   };
@@ -6650,6 +6666,8 @@ let
   gemrb = callPackage ../games/gemrb {
     stdenv = stdenv2;
   };
+
+  gl117 = callPackage ../games/gl-117 {};
 
   gltron = callPackage ../games/gltron { };
 
