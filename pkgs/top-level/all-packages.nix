@@ -543,7 +543,12 @@ let
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
-  dev86 = callPackage ../development/compilers/dev86 { };
+  dev86 = callPackage ../development/compilers/dev86 {
+    /* Using GNU Make 3.82 leads to this:
+         make[4]: *** No rule to make target `__ldivmod.o)'
+       So use 3.81.  */
+    stdenv = overrideInStdenv stdenv [gnumake381];
+  };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq {
     # TODO i18n can be installed as well, implement it?
