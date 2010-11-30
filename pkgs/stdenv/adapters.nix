@@ -242,17 +242,18 @@ rec {
   */
   addCoverageInstrumentation = stdenv:
     addAttrsToDerivation
-      { NIX_CFLAGS_COMPILE = "-O0 --coverage";
-
-        # This is an uberhack to prevent libtool from removing gcno
-        # files.  This has been fixed in libtool, but there are
-        # packages out there with old ltmain.sh scripts.
-        # See http://www.mail-archive.com/libtool@gnu.org/msg10725.html
+      {
         postUnpack =
           ''
+            # This is an uberhack to prevent libtool from removing gcno
+            # files.  This has been fixed in libtool, but there are
+            # packages out there with old ltmain.sh scripts.
+            # See http://www.mail-archive.com/libtool@gnu.org/msg10725.html
             for i in $(find -name ltmain.sh); do
                 substituteInPlace $i --replace '*.$objext)' '*.$objext | *.gcno)'
             done
+
+            export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -O0 --coverage"
           '';
       }
       
