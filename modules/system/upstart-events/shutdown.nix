@@ -29,9 +29,11 @@ with pkgs.lib;
               echo "[1;32m<<< System shutdown >>>[0m"
           fi
           echo ""
+
+          ${config.powerManagement.powerDownCommands}
       
           export PATH=${pkgs.utillinux}/bin:${pkgs.utillinux}/sbin:$PATH
-      
+
 
           # Do an initial sync just in case.
           sync
