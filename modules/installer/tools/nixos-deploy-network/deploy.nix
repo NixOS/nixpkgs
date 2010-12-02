@@ -86,6 +86,11 @@ let
 in
 pkgs.stdenv.mkDerivation {
   name = "deploy-script";
+
+  # This script has a zillion dependencies and is trivial to build, so
+  # we don't want to build it remotely.
+  preferLocalBuild = true;
+  
   buildCommand = 
   ''
     ensureDir $out/bin
