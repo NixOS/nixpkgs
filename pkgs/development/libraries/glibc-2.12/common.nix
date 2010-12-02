@@ -115,6 +115,10 @@ stdenv.mkDerivation ({
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
+
+    # To avoid linking with -lgcc_s (dynamic link)
+    # so the glibc does not depend on its compiler store path
+    "libc_cv_as_needed=no"
   ];
   
   buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ]
