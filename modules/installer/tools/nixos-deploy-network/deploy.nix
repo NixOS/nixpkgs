@@ -24,7 +24,7 @@ let
         if [ "$rollback" != "$succeeded" ]
 	then
 	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/bin/switch-to-configuration switch
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
 	    
 	    rollback=$((rollback + 1))
 	fi
@@ -56,9 +56,9 @@ let
 	ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} || 
 	  (ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback; rollbackSucceeded)
 	
-        ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/bin/switch-to-configuration switch ||
+        ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/system/bin/switch-to-configuration switch ||
 	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/bin/switch-to-configuration switch
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
 	    rollbackSucceeded
 	  )
 	
