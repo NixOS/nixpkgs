@@ -6983,6 +6983,8 @@ let
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
+  satallax = callPackage ../applications/science/logic/satallax {};
+
   ssreflect = callPackage ../applications/science/logic/ssreflect {
     camlp5 = camlp5_transitional;
   };
