@@ -782,6 +782,14 @@ rec {
     };
   };
 
+  CryptRandPasswd = buildPerlPackage rec {
+    name = "Crypt-RandPasswd-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JD/JDPORTER/${name}.tar.gz";
+      sha256 = "0r5w5i81s02x756alad9psxmpqmcxahzjpqxsb3kacsqj8s5br9b";
+    };
+  };
+
   CryptSSLeay = buildPerlPackage rec {
     name = "Crypt-SSLeay-0.57";
     src = fetchurl {
