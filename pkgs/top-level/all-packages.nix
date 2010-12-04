@@ -2052,6 +2052,7 @@ let
     nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
     gcc = baseGCC;
     libc = glibc;
+    shell = bash;
     inherit stdenv binutils coreutils zlib;
   };
 
@@ -2917,13 +2918,13 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
-  glibc212 = callPackage ../development/libraries/glibc-2.12 {
+  glibc212 = (callPackage ../development/libraries/glibc-2.12 {
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
-  };
+  }) // { hostDrv = glibc212Cross; };
 
   glibc212Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.12)
     (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");

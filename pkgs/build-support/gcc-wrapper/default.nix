@@ -51,6 +51,22 @@ stdenv.mkDerivation {
   langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
   zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
   shell = if shell == "" then stdenv.shell else shell;
+
+  crossAttrs = {
+    shell = shell.hostDrv + "${shell.hostDrv.shellPath}";
+    libc = libc.hostDrv;
+    coreutils = coreutils.hostDrv;
+    binutils = binutils.hostDrv;
+    gcc = gcc.hostDrv;
+    #
+    # This is not the best way to do this. I think the reference should be
+    # the style in the gcc-cross-wrapper, but to keep a stable stdenv now I
+    # do this sufficient if/else.
+    dynamicLinker = 
+      (if stdenv.cross.arch == "arm" then "ld-linux.so.3" else
+       if stdenv.cross.arch == "mips" then "ld.so.1" else
+       abort "don't know the name of the dynamic linker for this platform");
+  };
   
   meta =
     let gcc_ = if gcc != null then gcc else {}; in

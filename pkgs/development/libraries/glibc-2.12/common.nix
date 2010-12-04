@@ -15,7 +15,9 @@ let
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
-  needsPorts = if cross == null then needsPortsNative else needsPortsCross;
+  needsPorts = if (stdenv ? cross) && stdenv.cross != null then true
+    else if cross == null then needsPortsNative
+    else needsPortsCross;
 
   srcPorts = fetchurl {
     # A tarball I manually made from a git clone, for the tag "glibc-2.12.1".

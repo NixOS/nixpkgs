@@ -81,4 +81,8 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
+
+  passthru = {
+    shellPath = "/bin/bash";
+  };
 }
