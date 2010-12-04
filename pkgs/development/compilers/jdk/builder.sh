@@ -8,6 +8,7 @@ if ! test -e "$pathname"; then
     echo "SORRY!"
     echo "You should download \`$(basename $pathname)' from Sun and place it in $(dirname $pathname)."
     echo "Blame Sun, not us."
+    echo "If you are doing a chroot build - try a non-chroot build, because we need to access /tmp."
     echo ""
     exit 1
 fi
