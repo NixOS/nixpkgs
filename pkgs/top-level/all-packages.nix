@@ -6985,6 +6985,8 @@ let
 
   satallax = callPackage ../applications/science/logic/satallax {};
 
+  spass = callPackage ../applications/science/logic/spass {};
+
   ssreflect = callPackage ../applications/science/logic/ssreflect {
     camlp5 = camlp5_transitional;
   };
