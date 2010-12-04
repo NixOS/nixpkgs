@@ -6979,6 +6979,8 @@ let
     inherit (pkgs.emacs23Packages) proofgeneral;
   };
 
+  iprover = callPackage ../applications/science/logic/iprover {};
+
   leo2 = callPackage ../applications/science/logic/leo2 {};
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
