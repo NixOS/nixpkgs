@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-ncurses=${ncurses}";
 
-  buildInputs = [ ncurses emacs ];
-  buildNativeInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ];
+  buildNativeInputs = [ pkgconfig emacs ];
 
   postInstall = ''
     # Install Emacs mode.
