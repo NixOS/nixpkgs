@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1w0h6hya0bl46xddd57mdzwmffplwglhnh9x9hv46ll4mf44ni5z";
   };
 
-  buildInputs = [ ncurses readline gmp mpfr expat texinfo python ]
+  # I think python is not a native input, but I leave it
+  # here while I will not need it cross building
+  buildNativeInputs = [ texinfo python ];
+  buildInputs = [ ncurses readline gmp mpfr expat ]
     ++ stdenv.lib.optional doCheck dejagnu;
 
   configureFlags =
@@ -21,6 +24,14 @@ stdenv.mkDerivation rec {
        --with-expat --with-libexpat-prefix=${expat}
     '' + stdenv.lib.optionalString (target != null)
        " --target=${target.config}";
+
+  crossAttrs = {
+    configureFlags =
+      '' --with-gmp=${gmp.hostDrv} --with-mpfr=${mpfr.hostDrv} --with-system-readline
+         --with-expat --with-libexpat-prefix=${expat.hostDrv}
+      '' + stdenv.lib.optionalString (target != null)
+         " --target=${target.config}";
+  };
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.
