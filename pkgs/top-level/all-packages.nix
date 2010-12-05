@@ -6983,6 +6983,10 @@ let
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
 
+  opensmt = callPackage ../applications/science/logic/opensmt {
+    flex = flex2535;
+  };
+
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
   satallax = callPackage ../applications/science/logic/satallax {};
