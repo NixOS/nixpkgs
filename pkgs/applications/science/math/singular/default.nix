@@ -29,11 +29,17 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doFixPaths" "doConfigure" "doMakeInstall"];
+  phaseNames = ["doFixPaths" "doConfigure" "doMakeInstall" "fixInstall"];
   doFixPaths = a.fullDepEntry (''
     find . -exec sed -e 's@/bin/rm@${a.coreutils}&@g' -i '{}' ';'
     find . -exec sed -e 's@/bin/uname@${a.coreutils}&@g' -i '{}' ';'
   '') ["minInit" "doUnpack"];
+  fixInstall = a.fullDepEntry (''
+    rm -rf "$out/LIB"
+    cp -r Singular/LIB "$out"
+    ensureDir "$out/bin"
+    ln -s "$out"/*/Singular "$out/bin"
+  '') ["minInit" "defEnsureDir"];
       
   meta = {
     description = "A CAS for polynomial computations";
