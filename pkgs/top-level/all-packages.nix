@@ -6955,6 +6955,8 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  cvc3 = callPackage ../applications/science/logic/cvc3 {};
+
   eprover = callPackage ../applications/science/logic/eProver {
     texLive = texLiveAggregationFun {
       paths = [
