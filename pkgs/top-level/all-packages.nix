@@ -6983,6 +6983,8 @@ let
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
 
+  minisat = callPackage ../applications/science/logic/minisat {};
+
   opensmt = callPackage ../applications/science/logic/opensmt {
     flex = flex2535;
   };
