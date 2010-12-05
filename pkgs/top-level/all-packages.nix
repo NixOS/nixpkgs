@@ -7026,6 +7026,8 @@ let
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { };
 
+  pari = callPackage ../applications/science/math/pari {};
+
   singular = callPackage ../applications/science/math/singular {};
 
   scilab = callPackage ../applications/science/math/scilab {
