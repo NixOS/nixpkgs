@@ -1,25 +1,7 @@
 buildInputs="$unzip"
 source $stdenv/setup
 
-src=$filename.bin
-
-if ! test -e "$pathname"; then
-    echo ""
-    echo "SORRY!"
-    echo "You should download \`$(basename $pathname)' from Sun and place it in $(dirname $pathname)."
-    echo "Blame Sun, not us."
-    echo "If you are doing a chroot build - try a non-chroot build, because we need to access /tmp."
-    echo ""
-    exit 1
-fi
-
-actual=$(md5sum -b $pathname | cut -c1-32)
-if test "$actual" != "$md5"; then
-    echo "hash is $actual, expected $md5"
-    exit 1
-fi
-
-unzip $pathname || true
+unzip $src || true
 
 ensureDir $out
 mv $dirname/* $out/
