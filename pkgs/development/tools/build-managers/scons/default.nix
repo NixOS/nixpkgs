@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    for i in script/* 
-    do 
+    configureFlags="--mandir=$out/share/man"
+    for i in "script/"*; do
      substituteInPlace $i --replace "/usr/bin/env python" "${python}/bin/python"
     done
   '';
