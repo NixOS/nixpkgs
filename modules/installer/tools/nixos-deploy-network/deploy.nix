@@ -1,7 +1,6 @@
 { nixos ? /etc/nixos/nixos
 , nixpkgs ? /etc/nixos/nixpkgs
 , networkExpr
-, infrastructureExpr
 , targetProperty ? "hostname"
 }:
 
@@ -12,19 +11,17 @@ let
   inherit (pkgs.lib) concatMapStrings;
   
   network = import networkExpr;
-  infrastructure = import infrastructureExpr;
   
-  generateRollbackSucceededPhase = network: infrastructure: configs:
+  generateRollbackSucceededPhase = network: configs:
     concatMapStrings (configurationName: 
       let
-        infrastructureElement = getAttr configurationName infrastructure;
 	config = getAttr configurationName configs;
       in
       ''
         if [ "$rollback" != "$succeeded" ]
 	then
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
 	    
 	    rollback=$((rollback + 1))
 	fi
@@ -32,33 +29,31 @@ let
     ) (attrNames network)  
   ;
   
-  generateDistributionPhase = network: infrastructure: configs:
+  generateDistributionPhase = network: configs:
     concatMapStrings (configurationName: 
       let
-        infrastructureElement = getAttr configurationName infrastructure;
 	config = getAttr configurationName configs;
       in
       ''
-        echo "=== copy system closure to ${getAttr targetProperty infrastructureElement} ==="
-        nix-copy-closure --to ${getAttr targetProperty infrastructureElement} ${config.system.build.toplevel}
+        echo "=== copy system closure to ${getAttr targetProperty (config.deployment)} ==="
+        nix-copy-closure --to ${getAttr targetProperty (config.deployment)} ${config.system.build.toplevel}
       ''
     ) (attrNames network)
   ;
   
-  generateActivationPhase = network: infrastructure: configs:
+  generateActivationPhase = network: configs:
     concatMapStrings (configurationName: 
       let
-        infrastructureElement = getAttr configurationName infrastructure;
 	config = getAttr configurationName configs;
       in
       ''
-        echo "=== activating system configuration on ${getAttr targetProperty infrastructureElement} ==="
-	ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} || 
-	  (ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback; rollbackSucceeded)
+        echo "=== activating system configuration on ${getAttr targetProperty (config.deployment)} ==="
+	ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} || 
+	  (ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback; rollbackSucceeded)
 	
-        ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/system/bin/switch-to-configuration switch ||
-	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} nix-env -p /nix/var/nix/profiles/system --rollback
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty infrastructureElement} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+        ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch ||
+	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
 	    rollbackSucceeded
 	  )
 	
@@ -67,22 +62,21 @@ let
     ) (attrNames network)
   ;
   
-  evaluateMachines = network: infrastructure:
+  evaluateMachines = network:
     listToAttrs (map (configurationName:
       let
         configuration = getAttr configurationName network;
-        system = (getAttr configurationName infrastructure).system;
       in
       { name = configurationName;
         value = (import "${nixos}/lib/eval-config.nix" {
-          inherit nixpkgs system;
+          inherit nixpkgs;
           modules = [ configuration ];
-          extraArgs = evaluateMachines network infrastructure;
+          extraArgs = evaluateMachines network;
         }).config; }
     ) (attrNames (network)))
   ;
 
-  configs = evaluateMachines network infrastructure;
+  configs = evaluateMachines network;
 in
 pkgs.stdenv.mkDerivation {
   name = "deploy-script";
@@ -100,18 +94,18 @@ pkgs.stdenv.mkDerivation {
     rollbackSucceeded()
     {
         rollback=0
-        ${generateRollbackSucceededPhase network infrastructure configs}
+        ${generateRollbackSucceededPhase network configs}
     }
     
     # Distribution phase
     
-    ${generateDistributionPhase network infrastructure configs}
+    ${generateDistributionPhase network configs}
     
     # Activation phase
     
     succeeded=0
     
-    ${generateActivationPhase network infrastructure configs}
+    ${generateActivationPhase network configs}
     EOF
     chmod +x $out/bin/deploy-systems
   '';
