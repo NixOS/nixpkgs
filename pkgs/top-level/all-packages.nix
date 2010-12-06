@@ -725,10 +725,8 @@ let
     ghostscript = null;
   };
 
-  grub = import ../tools/misc/grub {
-    inherit fetchurl autoconf automake;
-    stdenv = stdenv_32bit;
-    buggyBiosCDSupport = (getConfig ["grub" "buggyBiosCDSupport"] true);
+  grub = callPackage_i686 ../tools/misc/grub {
+    buggyBiosCDSupport = getConfig ["grub" "buggyBiosCDSupport"] true;
   };
 
   grub2 = callPackage ../tools/misc/grub/1.9x.nix { };
