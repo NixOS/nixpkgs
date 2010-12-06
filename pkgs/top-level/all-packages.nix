@@ -4777,6 +4777,17 @@ let
       inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
     };
 
+  linux_nanonote_jz_2_6_36 = makeOverridable
+    (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.36.nix) {
+      inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
+      kernelPatches =
+        [ #kernelPatches.fbcondecor_2_6_35
+          kernelPatches.sec_perm_2_6_24
+          #kernelPatches.aufs2_2_6_35
+          kernelPatches.mips_restart_2_6_36
+        ];
+    };
+
   linux_2_6_35_oldI686 = linux_2_6_35.override {
       extraConfig = ''
           HIGHMEM64G? n
@@ -4912,6 +4923,7 @@ let
   linuxPackages_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_2_6_36 pkgs.linuxPackages_2_6_36);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34); 
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35); 
+  linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36); 
 
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
