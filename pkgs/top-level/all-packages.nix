@@ -3780,10 +3780,6 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt45 = callPackage ../development/libraries/qt-4.x/4.5 {
-    inherit (gnome) glib;
-  };
-
   qt46 = callPackage ../development/libraries/qt-4.x/4.6 {
     inherit (gnome) glib;
   };
