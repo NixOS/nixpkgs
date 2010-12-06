@@ -4577,6 +4577,11 @@ let
 
   libcroup = callPackage ../os-specific/linux/libcg { };
 
+  libnl = callPackage ../os-specific/linux/libnl {
+    flex = flex2535;
+    bison = bison24;
+  };
+
   linuxHeaders = linuxHeaders_2_6_28;
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
