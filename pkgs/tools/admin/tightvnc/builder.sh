@@ -32,8 +32,8 @@ buildPhase() {
 
 installPhase() {
     ensureDir $out/bin
-    ensureDir $out/man/man1
-    ./vncinstall $out/bin $out/man
+    ensureDir $out/share/man/man1
+    ./vncinstall $out/bin $out/share/man
 
     # fix HTTP client:
     t=$out/share/tightvnc
