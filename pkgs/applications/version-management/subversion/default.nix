@@ -34,12 +34,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional perlBindings perl;
 
   configureFlags = ''
-    --disable-keychain
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
-    ${if stdenv.isDarwin then "--enable-keychain" else ""}
+    ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';
