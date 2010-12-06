@@ -13,39 +13,49 @@
 , configDir ? "/etc/samba"
 
 }:
+
 let
- usewith = flag: option: if flag then "--with-"+option else "";
+
+ useWith = flag: option: if flag then "--with-"+option else "";
+ 
 in
+
 stdenv.mkDerivation rec {
-  name = "samba-3.3.3";
+  name = "samba-3.5.6";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "08x3ng7ls5c1a95v7djx362i55wdlmnvarpr7rhng5bb55s9n5qn";
+    sha256 = "1nj78bahph9fwxv0v3lz31cy6z167jgmvz63d8l9mlbmhf310r26";
   };
 
-  buildInputs = [readline pam openldap popt iniparser libunwind fam acl]
+  buildInputs = [ readline pam openldap popt iniparser libunwind fam acl ]
     ++ stdenv.lib.optional useKerberos kerberos;
 
-  preConfigure = "cd source";
+  preConfigure = "cd source3";
 
-  postInstall = ''
-    mkdir -pv $out/lib/cups/backend
-    ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
-  '' + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
-
-  # Don't pass --with-private-dir=/var/samba/private
-  #            --with-lockdir=/var/samba/lock
-  # the build system will try to create it.
   configureFlags = ''
     --with-pam
     --with-cifsmount
     --with-aio-support
     --with-pam_smbpass
     --disable-swat
-    --enable-shared-libs
     --with-configdir=${configDir}
-    ${usewith winbind "winbind"}
+    --with-fhs
+    --localstatedir=/var
+    ${useWith winbind "winbind"}
     ${if stdenv.gcc.libc != null then "--with-libiconv=${stdenv.gcc.libc}" else ""}
   '';
+
+  # Need to use a DESTDIR because `make install' tries to write in /var and /etc.
+  installFlags = "DESTDIR=$(TMPDIR)/inst";
+
+  postInstall =
+    ''
+      mkdir -p $out
+      mv $TMPDIR/inst/$out/* $out/
+  
+      mkdir -pv $out/lib/cups/backend
+      ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
+    '' # */
+    + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
 }
