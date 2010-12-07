@@ -1,7 +1,7 @@
 { nixos ? /etc/nixos/nixos
 , nixpkgs ? /etc/nixos/nixpkgs
 , networkExpr
-, targetProperty ? "hostname"
+, targetProperty ? "targetHost"
 }:
 
 let
