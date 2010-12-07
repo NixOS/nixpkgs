@@ -50,10 +50,12 @@ stdenv.mkDerivation {
   langAda = if nativeTools then false else gcc ? langAda && gcc.langAda;
   langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
   zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
-  shell = if shell == "" then stdenv.shell else shell;
+  shell = if shell == "" then stdenv.shell else
+    if builtins.isAttrs shell then (shell + shell.shellPath)
+    else shell;
 
   crossAttrs = {
-    shell = shell.hostDrv + "${shell.hostDrv.shellPath}";
+    shell = shell.hostDrv + shell.hostDrv.shellPath;
     libc = libc.hostDrv;
     coreutils = coreutils.hostDrv;
     binutils = binutils.hostDrv;
