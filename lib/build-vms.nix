@@ -108,7 +108,7 @@ rec {
                   
                   virtualisation.qemu.options =
                     lib.flip lib.concatMapStrings interfacesNumbered
-                      ({ first, second }: qemuNICFlags second first );
+                      ({ first, second }: qemuNICFlags second first m.second);
                 };
             }
           )

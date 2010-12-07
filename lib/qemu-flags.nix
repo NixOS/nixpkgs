@@ -2,8 +2,8 @@
 
 {
 
-  qemuNICFlags = nic: net:
-    "-net nic,vlan=${toString nic},model=virtio " +
+  qemuNICFlags = nic: net: machine:
+    "-net nic,vlan=${toString nic},macaddr=52:54:00:12:${toString net}:${toString machine},model=virtio " +
     # Use 232.0.1.<vlan> as the multicast address to connect VMs on
     # the same vlan, but allow it to be overriden using the
     # $QEMU_MCAST_ADDR_<vlan> environment variable.  The test driver
