@@ -18,7 +18,7 @@ let
               ${cfg.resumeCommands}
               ${cfg.powerUpCommands}
               ;;
-      fi
+      esac
     '';
 
 in
