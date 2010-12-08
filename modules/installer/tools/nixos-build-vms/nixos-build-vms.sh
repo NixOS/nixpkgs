@@ -15,7 +15,7 @@ showUsage()
 
 # Parse valid argument options
 
-PARAMS=`getopt -n $0 -o h -l use-backdoor,show-trace,help -- "$@"`
+PARAMS=`getopt -n $0 -o h -l use-backdoor,no-out-link,show-trace,help -- "$@"`
 
 if [ $? != 0 ]
 then
