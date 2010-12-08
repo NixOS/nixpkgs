@@ -1,14 +1,14 @@
-{stdenv, fetchurl, pkgconfig, libuuid}:
+{ stdenv, fetchurl, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.41.9";
+  name = "e2fsprogs-1.41.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "1s365fpv5w5m8n6n5fnn6q003whr1clr22xn25wkssx1c51f7wfb";
+    sha256 = "084zpg4ma6g4y4plz7alfqc1q78jss8lfmpk4w7zvnmz43fd09lw";
   };
 
-  buildInputs = [pkgconfig libuuid];
+  buildInputs = [ pkgconfig libuuid ];
 
   crossAttrs = {
     preConfigure = ''
