@@ -1,0 +1,16 @@
+--- src/Makefile	2010-10-08 00:32:59.000000000 +0200
++++ src/Makefile	2010-11-09 11:06:28.832999850 +0100
+@@ -27,10 +27,10 @@
+ EXTRA_LDFLAGS      := $(src)/lib/wlc_hybrid.o_shipped
+ 
+ all:
+-	KBUILD_NOPEDANTIC=1 make -C /lib/modules/`uname -r`/build M=`pwd`
++	KBUILD_NOPEDANTIC=1 make -C ${KDIR} M=`pwd`
+ 
+ clean:
+-	KBUILD_NOPEDANTIC=1 make -C /lib/modules/`uname -r`/build M=`pwd` clean
++	KBUILD_NOPEDANTIC=1 make -C ${KDIR} clean
+ 
+ install:
+-	install -D -m 755 wl.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/wl.ko
++	install -D -m 755 wl.ko $out/lib/modules/${kernelVersion}/kernel/drivers/net/wireless/wl.ko

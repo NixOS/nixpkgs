@@ -4849,6 +4849,8 @@ let
 
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
+    broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
+
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
