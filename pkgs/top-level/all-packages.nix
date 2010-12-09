@@ -1982,6 +1982,43 @@ let
 
   ocaml_3_12_0 = callPackage ../development/compilers/ocaml/3.12.0.nix { };
 
+  mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
+    inherit ocaml;
+
+    camlzip = callPackage ../development/ocaml-modules/camlzip { };
+
+    camomile = camomile_0_7_3;
+    camomile_0_7_3 = callPackage ../development/ocaml-modules/camomile/0.7.3.nix { };
+    camomile_0_8_1 = callPackage ../development/ocaml-modules/camomile/0.8.1.nix { };
+
+    cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
+
+    findlib = callPackage ../development/tools/ocaml/findlib { };
+
+    menhir = callPackage ../development/ocaml-modules/menhir { };
+
+    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
+
+    ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
+
+    ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
+      inherit pcre;
+    };
+
+    ocaml_react = callPackage ../development/ocaml-modules/react { };
+
+    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
+
+    ounit = callPackage ../development/ocaml-modules/ounit { };
+  };
+
+  ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
+  ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
+  ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
+  ocamlPackages_3_12_0 = mkOcamlPackages ocaml_3_12_0 pkgs.ocamlPackages_3_12_0;
+
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
   };

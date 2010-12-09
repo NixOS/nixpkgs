@@ -1,0 +1,32 @@
+diff -Naur camlzip-1.04/Makefile camlzip-1.04.nixos/Makefile
+--- camlzip-1.04/Makefile	2002-04-22 17:28:57.000000000 +0200
++++ camlzip-1.04.nixos/Makefile	2010-08-17 14:40:07.000000000 +0200
+@@ -4,14 +4,14 @@
+ ZLIB_LIB=-lz
+ 
+ # The directory containing the Zlib library (libz.a or libz.so)
+-ZLIB_LIBDIR=/usr/local/lib
++ZLIB_LIBDIR=@ZLIB_LIBDIR@
+ 
+ # The directory containing the Zlib header file (zlib.h)
+-ZLIB_INCLUDE=/usr/local/include
++ZLIB_INCLUDE=@ZLIB_INCLUDE@
+ 
+ # Where to install the library.  By default: sub-directory 'zip' of
+ # OCaml's standard library directory.
+-INSTALLDIR=`$(OCAMLC) -where`/zip
++INSTALLDIR=@INSTALLDIR@
+ 
+ ### End of configuration section
+ 
+@@ -59,10 +59,6 @@
+ 	cp zip.cma zip.cmi gzip.cmi zip.mli gzip.mli libcamlzip.a $(INSTALLDIR)
+ 	if test -f dllcamlzip.so; then \
+ 	  cp dllcamlzip.so $(INSTALLDIR); \
+-          ldconf=`$(OCAMLC) -where`/ld.conf; \
+-          installdir=$(INSTALLDIR); \
+-          if test `grep -s -c $$installdir'$$' $$ldconf || :` = 0; \
+-          then echo $$installdir >> $$ldconf; fi \
+         fi
+ 
+ installopt:
