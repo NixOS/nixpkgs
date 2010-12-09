@@ -1980,6 +1980,8 @@ let
 
   ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
+  ocaml_3_12_0 = callPackage ../development/compilers/ocaml/3.12.0.nix { };
+
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
   };
