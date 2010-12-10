@@ -7205,7 +7205,6 @@ let
   nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
     storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
     stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
-    sqlite = sqlite36;
   });
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
