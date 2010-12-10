@@ -87,8 +87,8 @@ in
       optionalAttrs (cfg.publishInfrastructure.enable)
       ( { hostname = config.networking.hostName;
           targetHost = config.deployment.targetHost;
+	  system = if config.nixpkgs.system == "" then builtins.currentSystem else config.nixpkgs.system;
         }
-        // optionalAttrs (config.nixpkgs.system != "") { system = config.nixpkgs.system; }
         // optionalAttrs (cfg.useWebServiceInterface) { targetEPR = "http://${config.deployment.targetHost}:8080/DisnixWebService/services/DisnixWebService"; }
         // optionalAttrs (config.services.httpd.enable) { documentRoot = config.services.httpd.documentRoot; }
         // optionalAttrs (config.services.mysql.enable) { mysqlPort = config.services.mysql.port; }
@@ -97,6 +97,8 @@ in
           optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = builtins.readFile config.services.mysql.rootPassword; }) 
 	)
     ;
+    
+    services.disnix.publishInfrastructure.enable = cfg.publishAvahi;
     
     jobs = {
       disnix =
@@ -120,16 +122,19 @@ in
 	
 	  exec =
           ''
-            ${pkgs.avahi}/bin/avahi-publish-service disnix-$(${pkgs.nettools}/bin/hostname) _disnix._tcp 22 \
-              "hostname=\"$(${pkgs.nettools}/bin/hostname)\"" \
-	      "system=\"$(uname -m)-linux\"" \
+            ${pkgs.avahi}/bin/avahi-publish-service disnix-${config.networking.hostName} _disnix._tcp 22 \
 	      "mem=$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')" \
-	      ${optionalString (cfg.useWebServiceInterface) ''"targetEPR=\"http://(${pkgs.nettools}/bin/hostname):8080/DisnixWebService/services/DisnixWebService\""''} \
-              ${optionalString (config.services.httpd.enable) ''"documentRoot=\"${config.services.httpd.documentRoot}\""''} \
-              ${optionalString (config.services.mysql.enable) ''"mysqlPort=3306"''} \
-              ${optionalString (config.services.tomcat.enable) ''"tomcatPort=8080"''} \
               "supportedTypes=[$(for i in ${disnix_activation_scripts}/libexec/disnix/activation-scripts/*; do echo -n " \"$(basename $i)\""; done) ]" \
-	      ${concatMapStrings (deploymentAttrName: let deploymentAttrValue = getAttr deploymentAttrName (config.deployment); in ''${deploymentAttrName}=\"${deploymentAttrValue}\" '' ) (attrNames (config.deployment))}
+	      ${concatMapStrings (infrastructureAttrName:
+	        let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
+		in
+		if builtins.isInt infrastructureAttrValue then
+		''${infrastructureAttrName}=${infrastructureAttrValue} \
+		''
+		else
+                ''${infrastructureAttrName}=\"${infrastructureAttrValue}\" \
+                ''
+		) (attrNames (cfg.infrastructure))}
           '';
         };
     };
