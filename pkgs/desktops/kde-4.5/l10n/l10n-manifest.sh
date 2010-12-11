@@ -24,9 +24,6 @@ for i in `cd "${dir}"; ls kde-l10n-*-${release}.tar.bz2`; do
   hash=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")
   echo "{"
   echo "  lang = \"${lang}\";"
-  if [[ "${lang}" =~ "@" ]]; then
-    echo "  langStripped = \"${lang/@/_}\";"
-  fi
   echo "  sha256 = \"${hash}\";"
   echo "}"
   echo $hash >&2

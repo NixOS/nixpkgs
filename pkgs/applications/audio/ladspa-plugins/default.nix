@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   postInstall =
     ''
       ensureDir $out/share/ladspa/
-      ln -s $out/lib/ladspa $out/share/ladspa/lib
+      ln -sv $out/lib/ladspa $out/share/ladspa/lib
     '';
 
   meta = {

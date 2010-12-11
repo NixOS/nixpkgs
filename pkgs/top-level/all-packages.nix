@@ -593,6 +593,8 @@ let
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
+  encfs = callPackage ../tools/filesystems/encfs { };
+
   enscript = callPackage ../tools/text/enscript { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
@@ -624,6 +626,8 @@ let
   findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
+
+  flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
   fontforge = callPackage ../tools/misc/fontforge { };
 
@@ -1226,7 +1230,10 @@ let
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
-  system_config_printer = callPackage ../tools/misc/system-config-printer { };
+  system_config_printer = callPackage ../tools/misc/system-config-printer {
+    inherit (pythonPackages) notify;
+    libxml2 = libxml2Python;
+   };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
 
@@ -1246,6 +1253,8 @@ let
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
   };
+
+  tmux = callPackage ../tools/misc/tmux { };
 
   tor = callPackage ../tools/security/tor { };
 
@@ -1403,6 +1412,8 @@ let
 
   xclip = callPackage ../tools/misc/xclip { };
 
+  xdelta = callPackage ../tools/compression/xdelta { };
+
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff {
@@ -1446,6 +1457,20 @@ let
   });
 
   dash = callPackage ../shells/dash { };
+
+  ipython = callPackage ../shells/ipython {
+    # I did not find any better way of reusing buildPythonPackage+setuptools
+    # for a python with openssl support
+    buildPythonPackage = assert pythonFull.readlineSupport;
+      import ../development/python-modules/generic {
+        inherit makeWrapper lib;
+        python = pythonFull;
+        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
+          inherit makeWrapper;
+          python = pythonFull;
+        };
+      };
+ };
 
   tcsh = callPackage ../shells/tcsh { };
 
@@ -1938,9 +1963,7 @@ let
 
   jdk5 = (
     assert system == "i686-linux" || system == "x86_64-linux";
-    import ../development/compilers/jdk/default-5.nix {
-      inherit fetchurl stdenv unzip;
-    });
+    callPackage ../development/compilers/jdk/default-5.nix { });
 
   jdk       = if stdenv.isDarwin then openjdkDarwin else jdkdistro true  false;
   jre       = jdkdistro false false;
@@ -1992,6 +2015,45 @@ let
   ocaml_3_10_0 = callPackage ../development/compilers/ocaml/3.10.0.nix { };
 
   ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
+
+  ocaml_3_12_0 = callPackage ../development/compilers/ocaml/3.12.0.nix { };
+
+  mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
+    inherit ocaml;
+
+    camlzip = callPackage ../development/ocaml-modules/camlzip { };
+
+    camomile = camomile_0_7_3;
+    camomile_0_7_3 = callPackage ../development/ocaml-modules/camomile/0.7.3.nix { };
+    camomile_0_8_1 = callPackage ../development/ocaml-modules/camomile/0.8.1.nix { };
+
+    cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
+
+    findlib = callPackage ../development/tools/ocaml/findlib { };
+
+    menhir = callPackage ../development/ocaml-modules/menhir { };
+
+    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
+
+    ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
+
+    ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
+      inherit pcre;
+    };
+
+    ocaml_react = callPackage ../development/ocaml-modules/react { };
+
+    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
+
+    ounit = callPackage ../development/ocaml-modules/ounit { };
+  };
+
+  ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
+  ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
+  ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
+  ocamlPackages_3_12_0 = mkOcamlPackages ocaml_3_12_0 pkgs.ocamlPackages_3_12_0;
 
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
@@ -2621,6 +2683,8 @@ let
 
   agg = callPackage ../development/libraries/agg { };
 
+  allegro = callPackage ../development/libraries/allegro {};
+
   amrnb = callPackage ../development/libraries/amrnb { };
 
   amrwb = callPackage ../development/libraries/amrwb { };
@@ -2684,6 +2748,8 @@ let
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
+
+  cgui = callPackage ../development/libraries/cgui {};
 
   check = callPackage ../development/libraries/check { };
 
@@ -3796,10 +3862,6 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt45 = callPackage ../development/libraries/qt-4.x/4.5 {
-    inherit (gnome) glib;
-  };
-
   qt46 = callPackage ../development/libraries/qt-4.x/4.6 {
     inherit (gnome) glib;
   };
@@ -3851,6 +3913,8 @@ let
     javac = gcj;
     jvm = gcj;
   };
+
+  rlog = callPackage ../development/libraries/rlog { };
 
   rte = callPackage ../development/libraries/rte { };
 
@@ -4598,6 +4662,11 @@ let
 
   libcroup = callPackage ../os-specific/linux/libcg { };
 
+  libnl = callPackage ../os-specific/linux/libnl {
+    flex = flex2535;
+    bison = bison24;
+  };
+
   linuxHeaders = linuxHeaders_2_6_32;
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
@@ -4848,6 +4917,8 @@ let
        else iwlwifi4965ucodeV1);
 
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
+
+    broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
@@ -6187,6 +6258,8 @@ let
 
   nvi = callPackage ../applications/editors/nvi { };
 
+  openbox = callPackage ../applications/window-managers/openbox { };
+
   openjump = callPackage ../applications/misc/openjump { };
 
   openoffice = callPackage ../applications/office/openoffice {
@@ -6671,6 +6744,8 @@ let
     libsigcxx = libsigcxx12;
   };
 
+  atanks = callPackage ../games/atanks {};
+
   ballAndPaddle = callPackage ../games/ball-and-paddle { };
 
   blackshades = callPackage ../games/blackshades { };
@@ -6691,6 +6766,8 @@ let
   };
 
   crack_attack = callPackage ../games/crack-attack { };
+
+  crrcsim = callPackage ../games/crrcsim {};
 
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
     gnomegtk = pkgsi686Linux.gnome.gtk;
@@ -6718,6 +6795,8 @@ let
   };
 
   gemrb = callPackage ../games/gemrb { };
+
+  gl117 = callPackage ../games/gl-117 {};
 
   gltron = callPackage ../games/gltron { };
 
@@ -6792,6 +6871,8 @@ let
   spring = callPackage ../games/spring { };
 
   springLobby = callPackage ../games/spring/spring-lobby.nix { };
+
+  stardust = callPackage ../games/stardust {};
 
   superTux = callPackage ../games/super-tux { };
 
@@ -7006,6 +7087,8 @@ let
     camlp5 = camlp5_transitional;
   };
 
+  cvc3 = callPackage ../applications/science/logic/cvc3 {};
+
   eprover = callPackage ../applications/science/logic/eProver {
     texLive = texLiveAggregationFun {
       paths = [
@@ -7028,7 +7111,21 @@ let
     inherit (pkgs.emacs23Packages) proofgeneral;
   };
 
+  iprover = callPackage ../applications/science/logic/iprover {};
+
+  leo2 = callPackage ../applications/science/logic/leo2 {};
+
+  minisat = callPackage ../applications/science/logic/minisat {};
+
+  opensmt = callPackage ../applications/science/logic/opensmt {
+    flex = flex2535;
+  };
+
   prover9 = callPackage ../applications/science/logic/prover9 { };
+
+  satallax = callPackage ../applications/science/logic/satallax {};
+
+  spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
     camlp5 = camlp5_transitional;
@@ -7059,6 +7156,10 @@ let
   maxima = callPackage ../applications/science/math/maxima { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { };
+
+  pari = callPackage ../applications/science/math/pari {};
+
+  singular = callPackage ../applications/science/math/singular {};
 
   scilab = callPackage ../applications/science/math/scilab {
     withXaw3d = false;
@@ -7110,8 +7211,7 @@ let
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = lib.callPackageWith (pkgs // pkgs.xorg // pkgs.gtkLibs // pkgs.gnome)
-    ../applications/networking/ekiga {};
+  ekiga = newScope (pkgs.gtkLibs // pkgs.gnome) ../applications/networking/ekiga { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 

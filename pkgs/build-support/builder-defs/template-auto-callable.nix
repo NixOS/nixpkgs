@@ -10,6 +10,11 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
+    baseName="${abort ''Specify package name''}";
+    version="";
+    name="${baseName}-${version}";
+    url="${name}";
+    hash="";
   };
 in
 rec {
@@ -32,6 +37,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       (abort "Specify platforms");
+    license = "${abort ''Specify license''}";
   };
   passthru = {
     updateInfo = {

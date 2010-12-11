@@ -3,8 +3,8 @@
 let
   overrides = { };
 
-  defaultRelease = "4.5.2";
-  releases = [ "4.5.1" "4.5.2" ];
+  defaultRelease = "4.5.3";
+  releases = [ "4.5.1" "4.5.2" "4.5.3" ];
 
   sanitizeString = replaceChars [ "@" "." ] [ "_" "_" ];
   getOverride = name: attrByPath [name] {} overrides;

@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   ''
     configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                           CXXFLAGS="-O2 -fno-strict-aliasing"
+			  --mandir=$out/share/man
                           ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
                           ${if static then "LDFLAGS=-static" else ""}
                           --with${if static == true || popt == null then "" else "out"}-included-popt

@@ -1,9 +1,9 @@
 rec {
-   version="0.10.0";
-   name="xneur-0.10.0";
-   hash="1jh40awnc5bvdj07jv99ymiln8nzr5ac5ahz9v4w0m560b7qq48f";
+   version="0.11.1";
+   name="xneur-0.11.1";
+   hash="12r2wv1glnx3ilqkrypff9r3mxzk1m3yma3khmam1b0z32lfbxxx";
    url="http://dists.xneur.ru/release-${version}/tgz/xneur-${version}.tar.bz2";
-   advertisedUrl="http://dists.xneur.ru/release-0.10.0/tgz/xneur-0.10.0.tar.bz2";
+   advertisedUrl="http://dists.xneur.ru/release-0.11.1/tgz/xneur-0.11.1.tar.bz2";
   
   
 }

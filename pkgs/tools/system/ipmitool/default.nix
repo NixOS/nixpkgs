@@ -13,13 +13,23 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ openssl ];
-  dontDisableStatic = static;
-  configureFlags = if static then "LDFLAGS=-static --enable-static --disable-shared" else "--enable-shared";
+
+  preConfigure = ''
+    configureFlagsArray=(
+      --infodir=$out/share/info
+      --mandir=$out/share/man
+      ${if static then "LDFLAGS=-static --enable-static --disable-shared" else "--enable-shared"}
+    )
+  '';
   makeFlags = if static then "AM_LDFLAGS=-all-static" else "";
+  dontDisableStatic = static;
 
   meta = {
     description = ''Command-line interface to IPMI-enabled devices'';
     license = "BSD";
     homepage = "http://ipmitool.sourceforge.net";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

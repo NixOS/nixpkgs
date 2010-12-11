@@ -152,10 +152,6 @@ recurseIntoAttrs rec {
   kdepim_runtime = callPackage ./pim-runtime { };
   kdepim = callPackage ./pim { };
 
-  # Experimental 4.5 versions
-  kdepim_runtime45 = callPackage ./pim-runtime45 { };
-  kdepim45 = callPackage ./pim45 { };
-  
 ### DEVELOPMENT
 
   kdebindings = callPackage ./bindings { };

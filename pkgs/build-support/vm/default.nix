@@ -216,7 +216,7 @@ rec {
       -nographic -no-reboot \
       -net nic,model=virtio \
       -chardev socket,id=samba,path=./samba \
-      -net user,guestfwd=tcp:10.0.2.4:139-chardev:samba \
+      -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
       -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
       -kernel ${kernel}/bzImage \
       -initrd ${initrd}/initrd \
@@ -247,7 +247,7 @@ rec {
       SMB
 
       rm -f ./samba
-      ${socat}/bin/socat unix-listen:./samba exec:"${samba}/sbin/smbd -s $TMPDIR/smb.conf",nofork > /dev/null 2>&1 &
+      ${socat}/bin/socat unix-listen:./samba exec:"${utillinux}/bin/setsid ${samba}/sbin/smbd -s $TMPDIR/smb.conf",nofork > /dev/null 2>&1 &
       while [ ! -e ./samba ]; do sleep 0.1; done # ugly
     '';
 
@@ -1117,7 +1117,7 @@ rec {
       fullName = "Debian 5.0.5 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "df450198f1597b526281e507e858f614ceafbd1b4f047c8ed994648f3e2ece19";
+        sha256 = "1nzd0r44lnvw2bmshqpbhghs84fxbcr1jkg55d37v4d09gsdmln0";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1128,7 +1128,7 @@ rec {
       fullName = "Debian 5.0.5 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "1817h2ag6fmrlifh1b9kv3zjr5ghknf53f38s1rqwfq6vh0avsig";
+        sha256 = "04hab4ybjilppr1hwnl4k50vr5y88w7zn6v22phfrsrxf23nrlv3";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

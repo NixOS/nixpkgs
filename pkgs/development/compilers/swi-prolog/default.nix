@@ -1,11 +1,12 @@
 { stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib, libXinerama, libXft, libXpm, libSM, libXt }:
 
-stdenv.mkDerivation {
-  name = "swi-prolog-5.6.64";
+stdenv.mkDerivation rec {
+  version = "5.10.2";
+  name = "swi-prolog-${version}";
 
   src = fetchurl {
-    url = "http://gollem.science.uva.nl/cgi-bin/nph-download/SWI-Prolog/pl-5.6.64.tar.gz";
-    sha256 = "b0e70c3c02b7753ed440359746e7729d21c93e42689c1f0f32b148167b1b2c66";
+    url = "http://www.swi-prolog.org/download/stable/src/pl-${version}.tar.gz";
+    sha256 = "1a3ebbcd649f429a41b64561d38423692e00524c29227432d0eb5a0e24e2a4c9";
   };
 
   buildInputs = [gmp readline openssl libjpeg unixODBC libXinerama libXft libXpm libSM libXt zlib];

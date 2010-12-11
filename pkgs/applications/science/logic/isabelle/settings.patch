@@ -6,7 +6,7 @@ diff -Naur Isabelle2009-1/etc/settings Isabelle2009-1-patched/etc/settings
  
  # Poly/ML 5.x (automated settings)
 -POLY_HOME="$(type -p poly)"; [ -n "$POLY_HOME" ] && POLY_HOME="$(dirname "$POLY_HOME")"
- ML_PLATFORM=$("$ISABELLE_HOME/lib/scripts/polyml-platform")
+ ML_PLATFORM="$ISABELLE_PLATFORM"
 -ML_HOME=$(choosefrom \
 -  "$ISABELLE_HOME/contrib/polyml/$ML_PLATFORM" \
 -  "$ISABELLE_HOME/../polyml/$ML_PLATFORM" \

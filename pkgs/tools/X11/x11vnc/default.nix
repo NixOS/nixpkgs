@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
       xorg.recordproto xorg.libXi xorg.libXrender xorg.renderproto
     ];
 
+  preConfigure = ''
+    configureFlags="--mandir=$out/share/man"
+  '';
+
   meta = {
     description = "A VNC server connected to a real X11 screen";
     homepage = http://www.karlrunge.com/x11vnc/;

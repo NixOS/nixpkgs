@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, xorg, pcre, GStreamer, glib, libxml2
-, aspell, cairo, imlib2, xosd, libnotify, gtk, pango, atk }:
+, aspell, cairo, imlib2, xosd, libnotify, gtk, pango, atk, enchant }:
 
 let s = import ./src-for-default.nix; in
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ xorg.libX11 pkgconfig pcre GStreamer glib libxml2 aspell cairo
       xorg.libXpm imlib2 xosd xorg.libXt xorg.libXext xorg.libXi libnotify
-      gtk pango
+      gtk pango enchant
     ];
 
   preConfigure = ''

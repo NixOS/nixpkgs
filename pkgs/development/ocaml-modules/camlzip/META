@@ -1,0 +1,23 @@
+# Specifications for the "camlzip" library:
+
+name="zip"
+version="1.04"
+description="A library for handling ZIP and GZIP files in OCaml"
+directory="@INSTALLDIR@"
+
+requires="unix"
+requires(byte)="unix"
+requires(native)="unix"
+requires(toploop)="unix"
+
+requires(byte,mt)="unix"
+requires(native,mt)="unix"
+requires(toploop,mt)="unix"
+
+archive(byte)="zip.cma"
+archive(native)="zip.cmxa"
+archive(toploop)="zip.cma"
+
+archive(byte,mt)="zip.cma"
+archive(native,mt)="zip.cmxa"
+archive(toploop,mt)="zip.cma"

@@ -8,19 +8,29 @@
  * Note that this is not necessary if someone has already pushed a
  * binary.
  */
-{stdenv, fetchurl, unzip}: 
+{stdenv, fetchurl, unzip, requireFile}: 
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
-let name = "jdk-1_5_0_22"; in
-stdenv.mkDerivation {
-  inherit name;
-  filename = "jdk-1_5_0_22";
+stdenv.mkDerivation rec {
+  name =  "jdk-1_5_0_22";
   dirname = "jdk1.5.0_22";
   builder = ./builder.sh;
-  pathname = if stdenv.system == "x86_64-linux" then "/tmp/${name}-linux-amd64.bin" else "/tmp/${name}-linux-i586.bin";
-  md5 = if stdenv.system == "x86_64-linux" then "b62abcaf9ea8617c50fa213bbc88824a" else "df5dae6d50d2abeafb472dde6d9a17f3";
+  src = requireFile {
+    message = ''
+      SORRY!
+      We may not download the needed binary distribution automatically.
+      You should download ${distfilename} from Sun and add it to store.
+      For example, "nix-prefetch-url file:///\$PWD/${distfilename}" in the 
+      directory where you saved it is OK.
+      Blame Sun, not us.
+    '';
+    name = distfilename;
+    sha256 = if stdenv.system == "x86_64-linux" then 
+      "1h63gigvg8id95igcj8xw7qvxs4p2y9hvx4xbvkwg8bji3ifb0sk" 
+    else "0655n2q1y023zzwbk6gs9vwsnb29jc0m3bg3x3xdw623qgb4k6px";
+  };
+  distfilename = if stdenv.system == "x86_64-linux" then "${name}-linux-amd64.bin" else "${name}-linux-i586.bin";
   
-  stdenv = stdenv;
-  inherit unzip;
+  inherit unzip stdenv;
 }

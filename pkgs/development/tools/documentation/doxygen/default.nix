@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--release"
 		 + (if qt == null then "" else " --with-doxywizard")
 		 ;
-
+  makeFlags = "MAN1DIR=share/man/man1";
   preConfigure =
    (if (qt == null)
     then ""

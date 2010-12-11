@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libevent, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.1.26";
+  name = "tor-0.2.1.27";
 
   src = fetchurl {
     url = "http://www.torproject.org/dist/${name}.tar.gz";
-    sha256 = "18kz1hs6lvckkddy4y36gi7ly03ar2il2xzkrf8bfgif1gnn1p3c";
+    sha256 = "07367wynpbbqnwzis3z8zf8k9b6cgywcrjzn7gpdal8m4dkmqkgc";
   };
 
   patchPhase =

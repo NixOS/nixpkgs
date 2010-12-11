@@ -13,12 +13,14 @@
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  neznalek = "Vladimír Čunát <vcunat@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   simons = "Peter Simons <simons@cryp.to>";
+  thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viriketo@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";

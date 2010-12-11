@@ -19,13 +19,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.12";
+  version = "1.6.15";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "http://subversion.tigris.org/downloads/${name}.tar.bz2";
-    sha1 = "b4ae7c75abbbdade8b2c9122ca7e2e26c6468a82";
+    sha1 = "b6fadf944a94b86f989f07bc2d781be41df017bf";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
@@ -34,12 +34,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional perlBindings perl;
 
   configureFlags = ''
-    --disable-keychain
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
     ${if httpServer then "--with-apxs=${httpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
-    ${if stdenv.isDarwin then "--enable-keychain" else ""}
+    ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';
