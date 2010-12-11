@@ -43,5 +43,9 @@ stdenv.mkDerivation {
       and Yann Régis-Gianas.
     '';
     license = "QPL,LGPL+linking exceptions";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

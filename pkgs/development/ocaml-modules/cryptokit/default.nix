@@ -39,5 +39,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";
     description = "A library of cryptographic primitives for OCaml";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

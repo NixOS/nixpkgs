@@ -29,5 +29,9 @@ stdenv.mkDerivation {
     homepage = http://erratique.ch/software/react;
     description = "Applicative events and signals for OCaml";
     license = "BSD";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

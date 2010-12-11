@@ -27,5 +27,9 @@ stdenv.mkDerivation {
     homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
     description = "Unit test framework for OCaml";
     license = "MIT/X11";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }
