@@ -2009,6 +2009,8 @@ let
 
     ocaml_react = callPackage ../development/ocaml-modules/react { };
 
+    ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
+
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
