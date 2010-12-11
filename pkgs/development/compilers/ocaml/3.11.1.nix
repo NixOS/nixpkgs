@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
          documentation generator (ocamldoc).
        '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];
