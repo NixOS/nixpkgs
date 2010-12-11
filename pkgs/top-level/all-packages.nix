@@ -5660,6 +5660,8 @@ let
 
   espeak = callPackage ../applications/audio/espeak { };
 
+  evopedia = callPackage ../applications/misc/evopedia { };
+
   evince = callPackage ../applications/misc/evince {
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
       libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
