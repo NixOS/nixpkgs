@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-1.24";
+  name = "gnutar-1.25";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-1.24.tar.bz2";
-    sha256 = "1vddwgpdic4b88819bhg5jk4sj7cp1x1hxx9rqsg0s4gfmjy1ihp";
+    url = "mirror://gnu/tar/tar-1.25.tar.bz2";
+    sha256 = "0js9b1jd93kjk6dgf40y2fpgpnix247rk5aws2mjgwz0p10wxxpk";
   };
 
   meta = {
