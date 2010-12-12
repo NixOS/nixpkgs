@@ -4581,7 +4581,8 @@ let
 
   hurdCross = forceBuildDrv(import ../os-specific/gnu/hurd {
     inherit fetchgit stdenv autoconf libtool texinfo machHeaders
-      mig glibcCross;
+      mig glibcCross hurdPartedCross;
+    libuuid = libuuid.hostDrv;
     automake = automake111x;
     headersOnly = false;
     cross = assert crossSystem != null; crossSystem;
@@ -4612,6 +4613,8 @@ let
     headersOnly = true;
     gccCross = null;
     glibcCross = null;
+    libuuid = null;
+    hurdPartedCross = null;
   };
 
   hurdLibpthreadCross = forceBuildDrv(import ../os-specific/gnu/libpthread {
