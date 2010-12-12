@@ -4524,8 +4524,8 @@ let
       hostDrv = lib.overrideDerivation utillinuxng.hostDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
-          + " --disable-libblkid --disable-mount --disable-fsck"
-          + " --enable-static";
+          + " --disable-libblkid --disable-mount --disable-libmount"
+          + " --disable-fsck --enable-static";
         doCheck = false;
         CPPFLAGS =                    # ugly hack for ugly software!
           lib.concatStringsSep " "
