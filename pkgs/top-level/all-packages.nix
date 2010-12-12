@@ -664,9 +664,7 @@ let
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   glusterfs = builderDefsPackage ../tools/filesystems/glusterfs {
-    inherit fuse;
-    bison = bison24;
-    flex = flex2535;
+    inherit fuse flex bison;
   };
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
@@ -859,13 +857,9 @@ let
 
   mcron = callPackage ../tools/system/mcron { };
 
-  mdbtools = callPackage ../tools/misc/mdbtools {
-    flex = flex2535;
-  };
+  mdbtools = callPackage ../tools/misc/mdbtools { };
 
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix {
-    flex = flex2535;
-  };
+  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
@@ -878,9 +872,7 @@ let
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
   monit = builderDefsPackage ../tools/system/monit {
-    flex = flex2535;
-    bison = bison24;
-    inherit openssl;
+    inherit openssl flex bison;
   };
 
   mpage = callPackage ../tools/text/mpage { };
@@ -1325,9 +1317,7 @@ let
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
   };
 
-  ttmkfdir = callPackage ../tools/misc/ttmkfdir {
-    flex = flex2534;
-  };
+  ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
   unbound = callPackage ../tools/networking/unbound { };
 
@@ -2424,7 +2414,7 @@ let
       cross = assert crossSystem != null; crossSystem;
   });
 
-  bison = bison23;
+  bison = bison24;
 
   bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
@@ -2498,7 +2488,7 @@ let
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
-  flex = flex254a;
+  flex = flex2535;
 
   flex2535 = callPackage ../development/tools/parsing/flex/flex-2.5.35.nix { };
 
@@ -2656,9 +2646,8 @@ let
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
   xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
-    flex = flex2535;
     qt = qt3;
-    inherit pkgconfig makeWrapper bison python;
+    inherit pkgconfig makeWrapper bison python flex;
     inherit (xlibs) libXext libX11;
   };
 
@@ -4036,10 +4025,9 @@ let
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
       pkgconfig autoconf bison libproxy enchant
-      python ruby which;
+      python ruby which flex;
     inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
-    flex = flex2535;
     inherit (xlibs) libXt renderproto libXrender;
   }).deepOverride {libsoup = gnome28.libsoup_2_31;});
 
@@ -4064,9 +4052,7 @@ let
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
   };
 
-  Xaw3d = callPackage ../development/libraries/Xaw3d {
-    flex = flex2533;
-  };
+  Xaw3d = callPackage ../development/libraries/Xaw3d { };
 
   xbase = callPackage ../development/libraries/xbase { };
 
@@ -4565,9 +4551,7 @@ let
 
   fxload = callPackage ../os-specific/linux/fxload { };
 
-  gpm = callPackage ../servers/gpm {
-    flex = flex2535;
-  };
+  gpm = callPackage ../servers/gpm { };
 
   hal = callPackage ../os-specific/linux/hal { };
 
@@ -4662,10 +4646,7 @@ let
 
   libcroup = callPackage ../os-specific/linux/libcg { };
 
-  libnl = callPackage ../os-specific/linux/libnl {
-    flex = flex2535;
-    bison = bison24;
-  };
+  libnl = callPackage ../os-specific/linux/libnl { };
 
   linuxHeaders = linuxHeaders_2_6_32;
 
@@ -5097,7 +5078,6 @@ let
 
   pam_console = callPackage ../os-specific/linux/pam_console {
     libtool = libtool_1_5;
-    flex = if stdenv.system == "i686-linux" then flex else flex2533;
   };
 
   pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
@@ -6800,9 +6780,7 @@ let
 
   gltron = callPackage ../games/gltron { };
 
-  gnuchess = builderDefsPackage (import ../games/gnuchess) {
-    flex = flex2535;
-  };
+  gnuchess = builderDefsPackage (import ../games/gnuchess) { };
 
   gnugo = callPackage ../games/gnugo { };
 
@@ -6914,9 +6892,7 @@ let
     libjpeg = libjpeg62;
   };
 
-  warzone2100 = callPackage ../games/warzone2100 {
-    flex = flex2535;
-  };
+  warzone2100 = callPackage ../games/warzone2100 { };
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
@@ -7117,9 +7093,7 @@ let
 
   minisat = callPackage ../applications/science/logic/minisat {};
 
-  opensmt = callPackage ../applications/science/logic/opensmt {
-    flex = flex2535;
-  };
+  opensmt = callPackage ../applications/science/logic/opensmt { };
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
@@ -7262,7 +7236,6 @@ let
 
   lilypond = callPackage ../misc/lilypond {
     inherit (gtkLibs) pango;
-    flex = flex2535;
   };
 
   martyr = callPackage ../development/libraries/martyr { };
@@ -7295,9 +7268,7 @@ let
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
         autoconf libtool configureFlags enableScripts lib libxml2 boehmgc
-	pkgconfig;
-      flex = flex2535;
-      bison = bison24;
+	pkgconfig flex bison;
       aterm = aterm25;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
@@ -7368,10 +7339,9 @@ let
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
       gd t1lib freetype icu perl ruby expat curl
-      libjpeg bison python fontconfig;
+      libjpeg bison python fontconfig flex;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
-    flex = flex2535;
     ghostscript = ghostscriptX;
   };
 
@@ -7421,13 +7391,9 @@ let
   vice = callPackage ../misc/emulators/vice { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
-  wine = callPackage_i686 ../misc/emulators/wine {
-    flex = pkgsi686Linux.flex2535;
-  };
+  wine = callPackage_i686 ../misc/emulators/wine { };
 
-  wineWarcraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix {
-    flex = pkgsi686Linux.flex2535;
-  };
+  wineWarcraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix { };
 
   x2x = callPackage ../tools/X11/x2x { };
 
