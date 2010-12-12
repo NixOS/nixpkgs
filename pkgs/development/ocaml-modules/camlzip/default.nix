@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, ocaml}:
+{stdenv, fetchurl, zlib, ocaml, findlib}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -14,25 +14,20 @@ stdenv.mkDerivation {
     sha256 = "1zpchmp199x7f4mzmapvfywgy7f6wy9yynd9nd8yh8l78s5gixbn";
   };
 
-  buildInputs = [zlib ocaml];
+  buildInputs = [zlib ocaml findlib];
 
   patches = [ ./makefile.patch ];
 
-  configurePhase = ''
-    export INSTALLDIR="$out/lib/ocaml/${ocaml_version}/site-lib/zip"
+  postPatch = ''
+    substitute ${./META} META --subst-var-by VERSION "${version}"
     substituteInPlace Makefile \
       --subst-var-by ZLIB_LIBDIR "${zlib}/lib" \
-      --subst-var-by ZLIB_INCLUDE "${zlib}/include" \
-      --subst-var INSTALLDIR
+      --subst-var-by ZLIB_INCLUDE "${zlib}/include"
   '';
 
   buildFlags = "all allopt";
 
-  installTargets = "install installopt";
-
-  postInstall = ''
-    substitute ${./META} $INSTALLDIR/META --subst-var INSTALLDIR
-  '';
+  installTargets = "install";
 
   meta = {
     homepage = "http://cristal.inria.fr/~xleroy/software.html#camlzip";

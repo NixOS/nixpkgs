@@ -1,7 +1,7 @@
-diff -Naur camlzip-1.04/Makefile camlzip-1.04.nixos/Makefile
+diff -Nuar camlzip-1.04/Makefile camlzip-1.04.nixpkgs/Makefile
 --- camlzip-1.04/Makefile	2002-04-22 17:28:57.000000000 +0200
-+++ camlzip-1.04.nixos/Makefile	2010-08-17 14:40:07.000000000 +0200
-@@ -4,14 +4,14 @@
++++ camlzip-1.04.nixpkgs/Makefile	2010-12-12 18:30:49.000000000 +0100
+@@ -4,14 +4,10 @@
  ZLIB_LIB=-lz
  
  # The directory containing the Zlib library (libz.a or libz.so)
@@ -10,23 +10,45 @@ diff -Naur camlzip-1.04/Makefile camlzip-1.04.nixos/Makefile
  
  # The directory containing the Zlib header file (zlib.h)
 -ZLIB_INCLUDE=/usr/local/include
-+ZLIB_INCLUDE=@ZLIB_INCLUDE@
- 
- # Where to install the library.  By default: sub-directory 'zip' of
- # OCaml's standard library directory.
+-
+-# Where to install the library.  By default: sub-directory 'zip' of
+-# OCaml's standard library directory.
 -INSTALLDIR=`$(OCAMLC) -where`/zip
-+INSTALLDIR=@INSTALLDIR@
++ZLIB_INCLUDE=@ZLIB_INCLUDE@
  
  ### End of configuration section
  
-@@ -59,10 +59,6 @@
- 	cp zip.cma zip.cmi gzip.cmi zip.mli gzip.mli libcamlzip.a $(INSTALLDIR)
- 	if test -f dllcamlzip.so; then \
- 	  cp dllcamlzip.so $(INSTALLDIR); \
+@@ -19,10 +15,13 @@
+ OCAMLOPT=ocamlopt
+ OCAMLDEP=ocamldep
+ OCAMLMKLIB=ocamlmklib
++OCAMLFIND=ocamlfind 
+ 
+ OBJS=zlib.cmo zip.cmo gzip.cmo
+ C_OBJS=zlibstubs.o
+ 
++LIBINSTALL_FILES = $(wildcard *.mli *.cmi *.cma *.cmxa *.a *.so)
++
+ all: libcamlzip.a zip.cma
+ 
+ allopt: libcamlzip.a zip.cmxa
+@@ -55,18 +54,7 @@
+ 	rm -f *.o *.a
+ 
+ install:
+-	mkdir -p $(INSTALLDIR)
+-	cp zip.cma zip.cmi gzip.cmi zip.mli gzip.mli libcamlzip.a $(INSTALLDIR)
+-	if test -f dllcamlzip.so; then \
+-	  cp dllcamlzip.so $(INSTALLDIR); \
 -          ldconf=`$(OCAMLC) -where`/ld.conf; \
 -          installdir=$(INSTALLDIR); \
 -          if test `grep -s -c $$installdir'$$' $$ldconf || :` = 0; \
 -          then echo $$installdir >> $$ldconf; fi \
-         fi
+-        fi
+-
+-installopt:
+-	cp zip.cmxa zip.a zip.cmx gzip.cmx $(INSTALLDIR)
++	$(OCAMLFIND) install camlzip META $(LIBINSTALL_FILES)
  
- installopt:
+ depend:
+ 	gcc -MM -I$(ZLIB_INCLUDE) *.c > .depend
