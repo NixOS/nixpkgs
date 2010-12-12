@@ -3,11 +3,13 @@ source $stdenv/setup
 echo "unpacking $src..."
 tar xvfa $src
 
-ensureDir $out
+ensureDir $out/Adobe/Reader9
 
 echo "unpacking reader..."
+set +e
 tar xvf AdobeReader/COMMON.TAR -C $out
 tar xvf AdobeReader/ILINXR.TAR -C $out
+set -e
 
 # Disable this plugin for now (it needs LDAP, and I'm too lazy to add it).
 rm $out/Adobe/Reader*/Reader/intellinux/plug_ins/PPKLite.api
