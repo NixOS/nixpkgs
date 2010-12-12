@@ -1014,17 +1014,20 @@ let
 
   parted = callPackage ../tools/misc/parted { };
 
-  hurdPartedCross = (callPackage ../tools/misc/parted {
-    # Needs the Hurd's libstore.
-    hurd = hurdCrossIntermediate;
+  hurdPartedCross =
+    if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+    then (callPackage ../tools/misc/parted {
+        # Needs the Hurd's libstore.
+        hurd = hurdCrossIntermediate;
 
-    # The Hurd wants a libparted.a.
-    enableStatic = true;
+        # The Hurd wants a libparted.a.
+        enableStatic = true;
 
-    gettext = null;
-    readline = null;
-    devicemapper = null;
-  }).hostDrv;
+        gettext = null;
+        readline = null;
+        devicemapper = null;
+      }).hostDrv
+    else null;
 
   patch = gnupatch;
 
