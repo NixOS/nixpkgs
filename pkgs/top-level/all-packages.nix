@@ -1014,6 +1014,18 @@ let
 
   parted = callPackage ../tools/misc/parted { };
 
+  hurdPartedCross = (callPackage ../tools/misc/parted {
+    # Needs the Hurd's libstore.
+    hurd = hurdCrossIntermediate;
+
+    # The Hurd wants a libparted.a.
+    enableStatic = true;
+
+    gettext = null;
+    readline = null;
+    devicemapper = null;
+  }).hostDrv;
+
   patch = gnupatch;
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
@@ -4588,10 +4600,11 @@ let
     # intermediate GCC.
     gccCross = gccCrossStageStatic;
 
-    # This intermediate Hurd is only needed to build libpthread, which really
-    # only needs libihash.
-    buildTarget = "libihash";
-    installTarget = "libihash-install";
+    # This intermediate Hurd is only needed to build libpthread, which needs
+    # libihash, and to build Parted, which needs libstore and
+    # libshouldbeinlibc.
+    buildTarget = "libihash libstore libshouldbeinlibc";
+    installTarget = "libihash-install libstore-install libshouldbeinlibc-install";
   });
 
   hurdHeaders = callPackage ../os-specific/gnu/hurd {
