@@ -2003,6 +2003,8 @@ let
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
+    ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
+
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
       inherit pcre;
     };
