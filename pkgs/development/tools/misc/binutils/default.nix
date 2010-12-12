@@ -1,14 +1,14 @@
-{stdenv, fetchurl, noSysDirs, cross ? null}:
+{stdenv, fetchurl, noSysDirs, zlib, cross ? null}:
 
 let
-    basename = "binutils-2.20.1";
+    basename = "binutils-2.21";
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1y7nwsprhr4hvx9ps2l0l0ivb6k41rcrx1invmzqxs475mr892r2";
+    sha256 = "1iyhc42zfa0j2gaxy4zvpk47sdqj4rqvib0mb8597ss8yidyrav0";
   };
 
   patches = [
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
   ];
+
+  buildInputs = [ zlib ];
 
   inherit noSysDirs;
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = "--disable-werror" # needed for dietlibc build
+      + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
+        " --enable-fix-loongson2f-nop"
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}";
 
   meta = {
