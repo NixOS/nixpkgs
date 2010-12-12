@@ -2988,7 +2988,7 @@ let
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
-  }) // { hostDrv = glibc212Cross; };
+  }) // (if crossSystem != null then { hostDrv = glibc212Cross; } else {});
 
   glibc212Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.12)
     (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
