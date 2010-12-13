@@ -78,13 +78,7 @@ stdenv.mkDerivation ({
     ./nix-locale-archive.patch
 
     /* Fix for CVE-2010-3856. */
-    ./audit_suid.patch
-
-    /* Fix for CVE-2010-3856. */
     ./ignore-origin.patch
-
-    /* Fix for CVE-2010-3856. */
-    ./strncasecmp_sse42.patch
 
   ];
 
