@@ -93,7 +93,7 @@ let
     ''
       createDisk("harddisk", 4 * 1024);
 
-      my $machine = Machine->new({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1}' });
+      my $machine = Machine->new({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1 1}' });
       $machine->start;
 
       ${optionalString testChannel ''
