@@ -2417,9 +2417,9 @@ let
   };
 
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
-      inherit stdenv fetchurl;
-      noSysDirs = true;
-      cross = assert crossSystem != null; crossSystem;
+    inherit stdenv fetchurl zlib;
+    noSysDirs = true;
+    cross = assert crossSystem != null; crossSystem;
   });
 
   bison = bison24;
