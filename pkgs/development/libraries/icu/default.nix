@@ -2,7 +2,7 @@
 
 let
   pname = "icu4c";
-  version = "4.4.1";
+  version = "4.6";
 in
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "0qrhf9gsj38saxfzpzvlwp1jwdsxr06npdds5dbsc86shg0lz69l";
+    sha256 = "1z6zklqdf6pq7fckk8ar4vmfrnw79bih6yc8gwc7k2vx2alav8dm";
   };
 
   postUnpack = "
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Unicode and globalization support library";
     homepage = http://site.icu-project.org/;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin urkud];
     platforms = stdenv.lib.platforms.all;
   };
 }
