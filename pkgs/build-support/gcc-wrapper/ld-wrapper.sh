@@ -105,6 +105,11 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
             n=$((n + 1))
         elif test "${p:0:2}" = "-l"; then
             addToLibs ${p:2}
+        elif test "$p" = "-dynamic-linker"; then
+            # Ignore the dynamic linker argument, or it 
+            # will get into the next 'elif'. We don't want
+            # the dynamic linker path rpath to go always first.
+            n=$((n + 1))
         elif [[ "$p" =~ ^[^-].*\.so($|\.) ]]; then
             # This is a direct reference to a shared library, so add
             # its directory to the rpath.
