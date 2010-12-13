@@ -1,13 +1,13 @@
 { stdenv, fetchurl, zlib, ncurses, readline }:
 
-let version = "8.3.11"; in
+let version = "8.3.12"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
   
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "1nvjcsa0218849r2913mxia58cjgcw6rikkf1g7kmjb902lv3aw1";
+    sha256 = "0w7h09nx8pkpzznmz4wd1zv8dg3f6jv366rr8bf3s5g6vrvxcssr";
   };
 
   buildInputs = [ zlib ncurses readline ];
