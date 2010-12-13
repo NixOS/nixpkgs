@@ -77,9 +77,6 @@ stdenv.mkDerivation ({
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
 
-    /* Fix for CVE-2010-3856. */
-    ./ignore-origin.patch
-
   ];
 
   postPatch = ''
