@@ -71,9 +71,6 @@ stdenv.mkDerivation ({
     /* Have rpcgen(1) look for cpp(1) in $PATH.  */
     ./rpcgen-path.patch
 
-    /* Fix for the check of -fgnu89-inline compiler flag */
-    ./gnu89-inline.patch
-
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
 
