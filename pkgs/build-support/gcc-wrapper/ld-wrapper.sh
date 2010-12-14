@@ -122,11 +122,13 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
     # Second, for each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
+    # It's important to add the rpath in the order of -L..., so
+    # the link time chosen objects will be those of runtime linking.
     
-    for i in $libs; do
-        for j in $libPath; do
-            if test -f "$j/lib$i.so"; then
-                addToRPath $j
+    for i in $libPath; do
+        for j in $libs; do
+            if test -f "$i/lib$j.so"; then
+                addToRPath $i
                 break
             fi
         done
