@@ -11,7 +11,7 @@ kde.package {
       name = "kioslave-perldoc";
       module = "kdesdk";
       version = "0.9.1";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "kioslave/perldoc/perldoc.cpp";
     };
   };

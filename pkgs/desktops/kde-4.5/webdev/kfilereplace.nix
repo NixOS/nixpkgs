@@ -10,7 +10,7 @@ kde.package {
       name = "kfilereplace";
       module = "kdewebdev";
       version = "0.1";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "main.cpp";
     };
   };

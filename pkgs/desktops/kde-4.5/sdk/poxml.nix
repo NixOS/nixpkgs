@@ -9,7 +9,7 @@ kde.package {
     kde = {
       name = "poxml";
       module = "kdesdk";
-      version = "4.5.2";
+      version = "4.5.4";
     };
   };
 }

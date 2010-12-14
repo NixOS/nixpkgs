@@ -11,7 +11,7 @@ kde.package {
     kde = {
       name = "kioslave-svn";
       module = "kdesdk";
-      version = "4.5.2";
+      version = "4.5.4";
     };
   };
 }

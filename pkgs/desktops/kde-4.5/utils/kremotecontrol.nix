@@ -8,7 +8,7 @@ kde.package {
     kde = {
       name = "kremotecontrol";
       module = "kdeutils";
-      version = "4.5.2";
+      version = "4.5.4";
     };
   };
 }

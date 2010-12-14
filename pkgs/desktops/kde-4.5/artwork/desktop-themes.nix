@@ -9,7 +9,7 @@ kde.package rec {
     kde = {
       name = "desktopthemes";
       module = "kdeartwork";
-      version = "4.5.2";
+      version = "4.5.4";
     };
   };
 }

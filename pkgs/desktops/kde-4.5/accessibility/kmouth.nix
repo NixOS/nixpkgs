@@ -9,7 +9,7 @@ kde.package {
       name = "kmouth";
       module = "kdeaccessibility";
       version = "1.1.1";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "kmouth/version.h";
     };
   };

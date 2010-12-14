@@ -10,7 +10,7 @@ kde.package {
       name = "kimagemapeditor";
       module = "kdewebdev";
       version = "3.9.0";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "version.h";
     };
   };

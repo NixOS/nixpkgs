@@ -10,7 +10,7 @@ kde.package {
       name = "kstartperf";
       module = "kdesdk";
       version = "1.0";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "kstartperf.cpp";
     };
   };
