@@ -176,6 +176,21 @@ stdenv.mkDerivation ({
            sed -i "${gnu_h}" \
                -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "${extraLibSpec} \1|g'
         ''
+    else if cross != null || stdenv.gcc.libc != null then
+      # On NixOS, use the right path to the dynamic linker instead of
+      # `/lib/ld*.so'.
+      let
+        libc = if cross != null then libcCross else stdenv.gcc.libc;
+      in
+        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
+           for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
+           do
+             grep -q LIBC_DYNAMIC_LINKER "$header" || continue
+             echo "  fixing \`$header'..."
+             sed -i "$header" \
+                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc}\3"|g'
+           done
+        ''
     else null;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
