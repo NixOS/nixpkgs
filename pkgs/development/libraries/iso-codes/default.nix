@@ -1,10 +1,10 @@
 {stdenv, fetchurl, gettext, python}:
 
-stdenv.mkDerivation {
-  name = "iso-codes-3.5";
+stdenv.mkDerivation rec {
+  name = "iso-codes-3.23";
   src = fetchurl {
-    url = ftp://pkg-isocodes.alioth.debian.org/pub/pkg-isocodes/iso-codes-3.5.tar.bz2;
-    sha256 = "2aac5f37a9ebb5af9c5d186ba1428f05ad779c7760e279cd8b86897a5d434807";
+    url = "ftp://pkg-isocodes.alioth.debian.org/pub/pkg-isocodes/${name}.tar.bz2";
+    sha256 = "0lf9phrdr10biihqswq1qmwk5cz954nwavgbnpm7a5r6vzfzkfbq";
   };
   patchPhase = ''
     for i in `find . -name \*.py`
@@ -13,4 +13,11 @@ stdenv.mkDerivation {
     done
   '';
   buildInputs = [ gettext ];
+
+  meta = {
+    homepage = http://pkg-isocodes.alioth.debian.org/;
+    description = "Various ISO codes packaged as XML files";
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.all;
+  };
 }
