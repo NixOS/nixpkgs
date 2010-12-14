@@ -70,11 +70,18 @@ let
       { name = configurationName;
         value = (import "${nixos}/lib/eval-config.nix" {
           inherit nixpkgs;
-          modules = [ configuration ];
+          modules =
+            [ configuration
+              # Provide a default hostname and deployment target equal
+              # to the attribute name of the machine in the model.
+              { key = "set-default-hostname";
+                networking.hostName = pkgs.lib.mkOverride 900 configurationName;
+                deployment.targetHost = pkgs.lib.mkOverride 900 configurationName;
+              }
+            ];
           extraArgs = evaluateMachines network;
         }).config; }
-    ) (attrNames (network)))
-  ;
+    ) (attrNames (network)));
 
   configs = evaluateMachines network;
 in
