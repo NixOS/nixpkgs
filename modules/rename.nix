@@ -79,7 +79,7 @@ in zipModules ([]
 
 # OpenSSH
 ++ rename obsolete "services.sshd.ports" "services.openssh.ports"
-++ rename obsolete "services.sshd.enable" "services.openssh.enable"
+++ rename alias "services.sshd.enable" "services.openssh.enable"
 ++ rename obsolete "services.sshd.allowSFTP" "services.openssh.allowSFTP"
 ++ rename obsolete "services.sshd.forwardX11" "services.openssh.forwardX11"
 ++ rename obsolete "services.sshd.gatewayPorts" "services.openssh.gatewayPorts"
