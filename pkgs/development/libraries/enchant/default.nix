@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, aspell, pkgconfig, glib }:
+{ stdenv, fetchurl, aspell, pkgconfig, glib, hunspell, hspell }:
 
 stdenv.mkDerivation rec {
-  name = "enchant-1.3.0";
+  name = "${pname}-${version}";
+  version = "1.6.0";
+  pname = "enchant";
   
   src = fetchurl {
-    url = "http://www.abisource.com/downloads/enchant/1.3.0/${name}.tar.gz";
-    sha256 = "1vwqwsadnp4rf8wj7d4rglvszjzlcli0jyxh06h8inka1sm1al76";
+    url = "http://www.abisource.com/downloads/${pname}/${version}/${name}.tar.gz";
+    sha256 = "0zq9yw1xzk8k9s6x83n1f9srzcwdavzazn3haln4nhp9wxxrxb1g";
   };
   
-  buildInputs = [aspell pkgconfig glib];
+  buildInputs = [aspell pkgconfig glib hunspell hspell];
   
   meta = {
     homepage = http://www.abisource.com/enchant;
