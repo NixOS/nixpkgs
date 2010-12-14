@@ -3788,6 +3788,7 @@ let
   policykit = callPackage ../development/libraries/policykit { };
 
   poppler = callPackage ../development/libraries/poppler {
+    stdenv = stdenv2;
     qt4Support = false;
   };
 

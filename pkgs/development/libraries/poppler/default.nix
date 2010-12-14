@@ -1,34 +1,27 @@
-{ fetchurl, stdenv, qt4Support ? false, qt4 ? null
-, cairo, freetype, fontconfig, zlib, libjpeg
-, pkgconfig, glib, gtk }:
-
-assert qt4Support -> (qt4 != null);
+{ fetchurl, stdenv, qt4Support ? false, qt4, cairo, freetype, fontconfig, zlib,
+  libjpeg, pixman, curl, libpthreadstubs, libXau, libXdmcp, openjpeg,
+  libxml2, pkgconfig, glib, gtk, cmake, lcms }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-0.12.3";
+  name = "poppler-0.14.5";
 
   src = fetchurl {
-    url = "http://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "1k7vilpz0ipnmw9dfpb3rqkhlm4rqcnkn3bhhp14di2h55nzwkvs";
+    url = "${meta.homepage}${name}.tar.gz";
+    sha256 = "0k41cj0yp3l7854y1hlghn2cgqmqq6hw5iz8i84q0w0s9iy321f8";
   };
 
-  buildInputs = [pkgconfig zlib glib cairo freetype fontconfig libjpeg gtk]
+  propagatedBuildInputs = [zlib glib cairo freetype fontconfig libjpeg gtk lcms
+    pixman curl libpthreadstubs libXau libXdmcp openjpeg libxml2 stdenv.gcc.libc]
     ++ (if qt4Support then [qt4] else []);
 
-  configureFlags =
-    ''
-      --enable-exceptions --enable-cairo --enable-splash
-      --enable-poppler-glib --enable-zlib --enable-xpdf-headers
-    ''
-    + (if qt4Support then "--enable-qt-poppler" else "--disable-qt-poppler");
+  buildInputs = [ pkgconfig cmake ];
 
-  patches = [ ./GDir-const.patch ];
-
-  preConfigure = "sed -e '/jpeg_incdirs/s@/usr@${libjpeg}@' -i configure";
+  cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 
   # XXX: The Poppler/Qt4 test suite refers to non-existent PDF files
   # such as `../../../test/unittestcases/UseNone.pdf'.
-  doCheck = !qt4Support;
+#doCheck = !qt4Support;
+  checkTarget = "test";
 
   meta = {
     homepage = http://poppler.freedesktop.org/;
@@ -37,6 +30,10 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base.
     '';
+
+    platforms = if qt4Support
+      then qt4.meta.platforms
+      else stdenv.lib.platforms.all;
 
     license = "GPLv2";
   };
