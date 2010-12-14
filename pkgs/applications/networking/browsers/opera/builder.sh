@@ -5,11 +5,15 @@ buildPhase() {
 }
 
 installPhase() {
-    substituteInPlace install.sh --replace /bin/pwd pwd
+    substituteInPlace install --replace /bin/pwd pwd
+    substituteInPlace install --replace /usr/local "$out"
     
     # Note: the "no" is because the install scripts asks whether we
     # want to install icons in some system-wide directories.
-    echo no | ./install.sh --prefix=$out
+    
+    ensureDir "$out"
+
+    ./install --text --system
 
     [ -z ${system##*64*} ] && suf=64
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, qt, zlib, libX11, libXext, libSM, libICE, libXt, glibc
-, makeDesktopItem
+, makeDesktopItem, freetype, fontconfig, libXft, libXrender
 }:
 
 assert stdenv.isLinux && stdenv.gcc.gcc != null;
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   # `operapluginwrapper' requires libXt. Adding it makes startup faster
   # and omits error messages (on x86).
   libPath =
-    let list = [ stdenv.gcc.gcc glibc qt zlib libX11 libXt libXext libSM libICE];
+    let list = [ stdenv.gcc.gcc glibc qt zlib libX11 libXt libXext libSM libICE libXft freetype fontconfig
+       libXrender];
     in stdenv.lib.makeLibraryPath list
         + ":" + (if stdenv.system == "x86_64-linux" then stdenv.lib.makeSearchPath "lib64" list else "");
 
