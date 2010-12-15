@@ -147,7 +147,7 @@ in
         exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
 
-    services.printing.drivers = [ pkgs.cups pkgs.ghostscript additionalBackends ];
+    services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];
     services.printing.cupsdConf =
       ''
         LogLevel info
