@@ -63,11 +63,11 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.15.4";
+    name= "mediawiki-1.15.5";
     
     src = pkgs.fetchurl {
       url = "http://download.wikimedia.org/mediawiki/1.15/${name}.tar.gz";
-      sha256 = "1blf79lhnaxixc8z96f9z4xi2jlg906ps3kd4x8b9ipg2dgl3vy9";
+      sha256 = "1d8afbdh3lsg54b69mnh6a47psb3lg978xpp277qs08yz15cjf7q";
     };
 
     buildPhase = "true";
