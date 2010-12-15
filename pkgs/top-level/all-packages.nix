@@ -4289,6 +4289,10 @@ let
 
   firebird = callPackage ../servers/firebird { };
 
+  ghostOne = callPackage ../servers/games/ghost-one {
+    boost = boostFull;
+  };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
