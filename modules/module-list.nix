@@ -52,6 +52,7 @@
   ./services/backup/sitecopy-backup.nix
   ./services/databases/mysql.nix
   ./services/databases/postgresql.nix
+  ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
