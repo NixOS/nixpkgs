@@ -4,7 +4,11 @@ stdenv.mkDerivation rec {
   name = "nvi-1.79";
 
   src = fetchurl {
-    url = "https://sites.google.com/a/bostic.com/external/files/nvi-1.79.tar.gz?attredirects=0";
+    urls =
+      [ "ftp://ftp.eenet.ee/pub/cpan/src/misc/nvi-1.79.tar.gz"
+        "ftp://ftp.saintjoe.edu/pub/CPAN/src/misc/nvi-1.79.tar.gz"
+        "ftp://ftp.free.fr/.mirrors1/ftp.netbsd.org/packages/distfiles/nvi-1.79.tar.gz"
+      ];
     sha256 = "0cvf56rbylz7ksny6g2256sjg8yrsxrmbpk82r64rhi53sm8fnvm";
   };
 
