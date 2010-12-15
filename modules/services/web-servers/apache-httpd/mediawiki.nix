@@ -57,6 +57,11 @@ let
           $wgArticlePath = "${config.articleUrlPrefix}/$1";
         ''}
 
+        ${optionalString config.enableUploads ''
+          $wgEnableUploads = true;
+          $wgUploadDirectory = "${config.uploadDir}";
+        ''}
+
         ${config.extraConfig}
       ?>
     '';
@@ -96,6 +101,16 @@ in
 
   extraConfig =
     ''
+      ${optionalString config.enableUploads ''
+        Alias ${config.urlPrefix}/images ${config.uploadDir}
+
+        <Directory ${config.uploadDir}>
+            Order allow,deny
+            Allow from all
+            Options -Indexes
+        </Directory>
+      ''}
+      
       Alias ${config.urlPrefix} ${mediawikiRoot}
 
       <Directory ${mediawikiRoot}>
@@ -203,6 +218,17 @@ in
         e.g. http://server/wiki/Page.  Leave empty to use the main URL
         prefix, e.g. http://server/w/index.php?title=Page.
       '';
+    };
+
+    enableUploads = mkOption {
+      default = false;
+      description = "Whether to enable file uploads.";
+    };
+
+    uploadDir = mkOption {
+      default = throw "You must specify `uploadDir'.";
+      example = "/data/mediawiki-upload";
+      description = "The directory that stores uploaded files.";
     };
 
     extraConfig = mkOption {
