@@ -24,6 +24,13 @@ sub new {
     my ($class, $args) = @_;
 
     my $startCommand = $args->{startCommand};
+    
+    my $name = $args->{name};
+    if (!$name) {
+        $startCommand =~ /run-(.*)-vm$/;
+        $name = $1 || "machine";
+    }
+
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
         $startCommand =
@@ -34,12 +41,8 @@ sub new {
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= $args->{qemuFlags} || "";
-    }
-
-    my $name = $args->{name};
-    if (!$name) {
-        $startCommand =~ /run-(.*)-vm$/;
-        $name = $1 || "machine";
+    } else {
+        $startCommand = Cwd::abs_path $startCommand;
     }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
@@ -126,7 +129,7 @@ sub start {
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
-        die;
+        die "running VM script: $!";
     }
 
     # Process serial line output.
