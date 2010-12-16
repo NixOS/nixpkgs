@@ -19,6 +19,8 @@ for (my $n = 0; $n < 256; $n++) {
     $ENV{"QEMU_MCAST_ADDR_$n"} = "$mcastPrefix.$n.$mcastSuffix";
 }
 
+my $showGraphics = defined $ENV{'DISPLAY'};
+
 
 sub new {
     my ($class, $args) = @_;
@@ -54,7 +56,7 @@ sub new {
         pid => 0,
         connected => 0,
         socket => undef,
-        stateDir => "$tmpDir/$name",
+        stateDir => "$tmpDir/vm-state-$name",
         monitor => undef,
     };
 
@@ -124,7 +126,9 @@ sub start {
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
         $ENV{USE_TMPDIR} = 1;
-        $ENV{QEMU_OPTS} = "-nographic -no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell";
+        $ENV{QEMU_OPTS} =
+            "-no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
+            ($showGraphics ? "-serial stdio" : "-nographic");
         $ENV{QEMU_NET_OPTS} = "guestfwd=tcp:10.0.2.6:23-chardev:shell";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
