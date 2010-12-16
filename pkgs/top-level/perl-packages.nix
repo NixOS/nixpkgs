@@ -2543,6 +2543,30 @@ rec {
     };
   };
 
+  TermReadLineGnu = buildPerlPackage rec {
+    name = "Term-ReadLine-Gnu-1.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAYASHI/${name}.tar.gz";
+      sha256 = "00fvkqbnpmyld59jv2vbfw1szr5d0xxmbgl59gr7qijp9c497ni5";
+    };
+    buildInputs = [ pkgs.readline pkgs.ncurses ];
+    NIX_CFLAGS_LINK = "-lreadline";
+
+    # For some crazy reason Makefile.PL doesn't generate a Makefile if
+    # AUTOMATED_TESTING is set.
+    AUTOMATED_TESTING = false;
+
+    # Makefile.PL looks for ncurses in Glibc's prefix.
+    preConfigure =
+      ''
+        substituteInPlace Makefile.PL --replace '$Config{libpth}' \
+          "'${pkgs.ncurses}/lib'"
+      '';
+
+    # Tests don't work because they require /dev/tty.
+    doCheck = false;
+  };
+
   TestDeep = buildPerlPackage rec {
     name = "Test-Deep-0.106";
     src = fetchurl {
