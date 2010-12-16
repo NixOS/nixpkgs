@@ -251,7 +251,8 @@ sub execute {
     my $out = "";
 
     while (1) {
-        my $line = readline($self->{socket}) or die "connection to VM lost unexpectedly";
+        my $line = readline($self->{socket});
+        die "connection to VM lost unexpectedly" unless defined $line;
         #$self->log("got line: $line");
         if ($line =~ /^(.*)\|\!\=EOF\s+(\d+)$/) {
             $out .= $1;
@@ -270,7 +271,7 @@ sub succeed {
         my ($status, $out) = $self->execute($command);
         if ($status != 0) {
             $self->log("output: $out");
-            die "command `$command' did not succeed (exit code $status)";
+            die "command `$command' did not succeed (exit code $status)\n";
         }
         $res .= $out;
     }
@@ -407,7 +408,8 @@ sub unblock {
 # Take a screenshot of the X server on :0.0.
 sub screenshot {
     my ($self, $filename) = @_;
-    $filename = "$ENV{'out'}/${filename}.png" if $filename =~ /^\w+$/;
+    my $dir = $ENV{'out'} || Cwd::abs_path(".");
+    $filename = "$dir/${filename}.png" if $filename =~ /^\w+$/;
     my $tmp = "${filename}.ppm";
     $self->sendMonitorCommand("screendump $tmp");
     system("convert $tmp ${filename}") == 0

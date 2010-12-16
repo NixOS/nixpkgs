@@ -8,6 +8,27 @@ rec {
   inherit pkgs;
 
 
+  testDriver = stdenv.mkDerivation {
+    name = "nixos-test-driver";
+    buildCommand =
+      ''
+        mkdir -p $out/bin
+        cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
+        chmod u+x $out/bin/nixos-test-driver
+        
+        libDir=$out/lib/perl5/site_perl
+        mkdir -p $libDir
+        cp ${./test-driver/Machine.pm} $libDir/Machine.pm
+
+        substituteInPlace $out/bin/nixos-test-driver \
+          --subst-var-by perl "${perl}/bin/perl" \
+          --subst-var-by readline "${perlPackages.TermReadLineGnu}/lib/perl5/site_perl" \
+          --subst-var-by extraPath "${imagemagick}/bin" \
+          --subst-var libDir
+      '';
+  };
+
+
   # Run an automated test suite in the given virtual network.
   # `network' must be the result of a call to the
   # `buildVirtualNetwork' function.  `tests' is a Perl fragment
@@ -20,15 +41,13 @@ rec {
       
       inherit tests;
       
-      buildInputs = [ pkgs.qemu_kvm pkgs.imagemagick ];
+      buildInputs = [ pkgs.qemu_kvm ];
 
       buildCommand =
         ''
-          mkdir $out
-          cp ${./test-driver/Machine.pm} Machine.pm
           ensureDir $out/nix-support
-          
-          ${perl}/bin/perl ${./test-driver/test-driver.pl} ${network}/vms/*/bin/run-*-vm
+
+          ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm
           
           for i in */coverage-data; do
             ensureDir $out/coverage-data
@@ -103,6 +122,17 @@ rec {
       # Call the test script with the computed nodes.
       (if builtins.isFunction t.testScript then t.testScript { inherit (vms) nodes; } else t.testScript);
     report = makeReport test;
+
+    # Generate a convenience wrapper for running the test driver
+    # interactively with the specified network.
+    driver = runCommand "nixos-test-driver" { buildInputs = [ makeWrapper]; }
+      ''
+        mkdir -p $out/bin
+        ln -s ${vms}/bin/* $out/bin/
+        ln -s ${testDriver}/bin/* $out/bin/
+        wrapProgram $out/bin/nixos-test-driver \
+          --add-flags "${vms}/vms/*/bin/run-*-vm"
+      ''; # "
   };
 
   runInMachine =
@@ -140,7 +170,7 @@ rec {
         export PATH=${qemu_kvm}/bin:${coreutils}/bin
         cp ${./test-driver/Machine.pm} Machine.pm
         export tests='${testscript}'
-        ${perl}/bin/perl ${./test-driver/test-driver.pl} ${vms}/vms/*/bin/run-*-vm
+        ${testDriver}/bin/nixos-test-driver ${vms}/vms/*/bin/run-*-vm
       ''; # */
 
     in

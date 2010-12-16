@@ -1,7 +1,12 @@
+#! @perl@ -w -I@libDir@ -I@readline@
+
 use strict;
 use Machine;
+use Term::ReadLine;
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
+
+$ENV{PATH} = "@extraPath@:$ENV{PATH}";
 
 STDERR->autoflush(1);
 
@@ -26,10 +31,13 @@ sub runTests {
         eval "$context $ENV{tests}";
         die $@ if $@;
     } else {
-        while (<STDIN>) {
+        my $term = Term::ReadLine->new('nixos-vm-test');
+        $term->ReadHistory;
+        while (defined ($_ = $term->readline("> "))) {
             eval "$context $_\n";
             warn $@ if $@;
         }
+        $term->WriteHistory;
     }
 
     # Copy the kernel coverage data for each machine, if the kernel
