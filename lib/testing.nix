@@ -117,24 +117,38 @@ rec {
       if t ? nodes then t.nodes else
       if t ? machine then { machine = t.machine; }
       else { };
+      
     vms = buildVirtualNetwork { inherit nodes; };
-    test = runTests vms
+    
+    testScript =
       # Call the test script with the computed nodes.
-      (if builtins.isFunction t.testScript then t.testScript { inherit (vms) nodes; } else t.testScript);
+      if builtins.isFunction t.testScript
+      then t.testScript { inherit (vms) nodes; }
+      else t.testScript;
+      
+    test = runTests vms testScript;
+      
     report = makeReport test;
 
     # Generate a convenience wrapper for running the test driver
     # interactively with the specified network.
-    driver = runCommand "nixos-test-driver" { buildInputs = [ makeWrapper]; }
+    driver = runCommand "nixos-test-driver"
+      { buildInputs = [ makeWrapper];
+        inherit testScript;
+      }
       ''
         mkdir -p $out/bin
         ln -s ${vms}/bin/* $out/bin/
         ln -s ${testDriver}/bin/* $out/bin/
         wrapProgram $out/bin/nixos-test-driver \
-          --add-flags "${vms}/vms/*/bin/run-*-vm"
+          --add-flags "${vms}/vms/*/bin/run-*-vm" \
+          --run "testScript=\"\$(cat $out/test-script)\"" \
+          --set testScript '"$testScript"'
+        echo "$testScript" > $out/test-script
       ''; # "
   };
 
+  
   runInMachine =
     { drv
     , machine
@@ -182,6 +196,7 @@ rec {
         origBuilder = attrs.builder;   
       });
 
+      
   runInMachineWithX = { require ? [], ...}@args :
     let
       client =
@@ -204,6 +219,7 @@ rec {
             '' ;
           } // args );   
 
+          
   simpleTest = as: (makeTest ({ ... }: as)).test;
 
 }
