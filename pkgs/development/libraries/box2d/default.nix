@@ -27,8 +27,12 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["doCmake" "doMakeInstall"];
+  phaseNames = ["changeSettings" "doCmake" "doMakeInstall"];
 
+  changeSettings = a.fullDepEntry ''
+    sed -i Box2D/Common/b2Settings.h -e 's@b2_maxPolygonVertices .*@b2_maxPolygonVertices 15@'
+  '' ["minInit" "addInputs" "doUnpack"];
+      
   goSrcDir = ''cd Box2D'';
 
   doCmake = a.fullDepEntry ''

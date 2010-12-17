@@ -27,7 +27,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixIncludes" "setVars" "doMake" "doDeploy"];
+  phaseNames = ["fixIncludes" "setVars" "changeSettings" "doMake" "doDeploy"];
 
   goSrcDir = ''cd Box2D'';
 
@@ -58,6 +58,10 @@ rec {
     ensureDir "$out/share"
     cp -r Examples "$out/share"
   '' ["minInit" "addInputs" "doMake" "defEnsureDir"];
+
+  changeSettings = a.fullDepEntry ''
+    sed -i Source/Common/b2Settings.h -e 's@b2_maxPolygonVertices .*@b2_maxPolygonVertices = 15;@'
+  '' ["minInit" "addInputs" "doUnpack"];
       
   meta = {
     description = "2D physics engine";
