@@ -21,5 +21,7 @@ stdenv.mkDerivation rec {
       sed -e 's/ -ltermcap/ -lncurses/' -i ${makefile}
     '';
 
+  CFLAGS = "-DPIC -fPIC -DJS_C_STRINGS_ARE_UTF8";
+
   makeFlags = "-f ${makefile} JS_DIST=\${out} BUILD_OPT=1 JS_READLINE=1";
 }
