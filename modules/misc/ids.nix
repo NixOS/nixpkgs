@@ -59,6 +59,7 @@ in
     sabnzbd = 38;
     kdm = 39;
     ghostOne = 40;
+    git = 41;
     # When adding a uid, make sure it doesn't match an existing gid.
 
     nixbld = 30000; # start of range of uids
@@ -100,6 +101,7 @@ in
     disnix = 33;
     osgi = 34;
     ghostOne = 40;
+    git = 41;
     # When adding a gid, make sure it doesn't match an existing uid.
 
     users = 100;
