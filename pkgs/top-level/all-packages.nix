@@ -2701,6 +2701,8 @@ let
 
   botan = callPackage ../development/libraries/botan { };
 
+  box2d = callPackage ../development/libraries/box2d { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   cairo = callPackage ../development/libraries/cairo { };
