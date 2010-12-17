@@ -4,20 +4,12 @@ with pkgs.lib;
 
 {
   options = {
-
-    deployment = mkOption {
+    deployment.targetHost = mkOption {
+      default = config.networking.hostName;
       description = ''
-        This option captures various custom attributes related to the configuration of the system, which
-        are not directly used for building a system configuration. Usually these attributes
-        are used by external tooling, such as the nixos-deploy-network tool or the Disnix Avahi
-        publisher.
+        This option specifies a hostname or IP address which can be used by nixos-deploy-network
+        to execute remote deployment operations.
       '';
-      default = {};
-      example = {
-        description = "My production machine";
-	hostname = "my.test.org";
-	country = "NL";
-      };
     };
   };
 }

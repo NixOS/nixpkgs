@@ -10,10 +10,15 @@ let
     ''
       #! ${pkgs.stdenv.shell}
       action="$1"
-      if [ "$action" = "resume" ]; then
-          ${cfg.resumeCommands}
-          ${cfg.powerUpCommands}
-      fi
+      case "$action" in
+          hibernate|suspend)
+              ${cfg.powerDownCommands}
+              ;;
+          thaw|resume)
+              ${cfg.resumeCommands}
+              ${cfg.powerUpCommands}
+              ;;
+      esac
     '';
 
 in
@@ -48,6 +53,17 @@ in
             Commands executed when the machine powers up.  That is,
             they're executed both when the system first boots and when
             it resumes from suspend or hibernation.
+          '';
+      };
+
+      powerDownCommands = mkOption {
+        default = "";
+        example = "${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda";
+        description =
+          ''
+            Commands executed when the machine powers down.  That is,
+            they're executed both when the system shuts down and when
+            it goes to suspend or hibernation.
           '';
       };
       

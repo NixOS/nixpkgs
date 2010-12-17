@@ -7,6 +7,7 @@ use File::Basename;
 my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
+my @modulePackages = ();
 
 
 sub debug {
@@ -92,6 +93,19 @@ sub pciCheck {
             push @initrdKernelModules, $module;
         }
     }
+
+    # broadcom STA driver (wl.ko)
+    # list taken from http://www.broadcom.com/docs/linux_sta/README.txt
+    if ($vendor eq "0x14e4" &&
+        ($device eq "0x4311" || $device eq "0x4312" || $device eq "0x4313" ||
+         $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||
+         $device eq "0x4329" || $device eq "0x432a" || $device eq "0x432b" ||
+         $device eq "0x432c" || $device eq "0x432d" || $device eq "0x4353" ||
+         $device eq "0x4357") )
+     {
+        push @modulePackages, "kernelPackages.broadcom_sta";
+        push @kernelModules, "wl";
+     }
 
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
@@ -222,6 +236,7 @@ sub multiLineList {
 
 my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
+my $modulePackages = toNixExpr(removeDups @modulePackages);
 my $attrs = multiLineList("  ", removeDups @attrs);
 
 print <<EOF ;
@@ -235,8 +250,12 @@ print <<EOF ;
     "\${modulesPath}/installer/scan/not-detected.nix"
   ];
 
-  boot.initrd.kernelModules = [ $initrdKernelModules ];
-  boot.kernelModules = [ $kernelModules ];
+  boot = rec {
+    initrd.kernelModules = [ $initrdKernelModules ];
+    kernelModules = [ $kernelModules ];
+    kernelPackages = pkgs.linuxPackages;
+    extraModulePackages = [ $modulePackages ];
+  };
 
   nix.maxJobs = $cpus;
 

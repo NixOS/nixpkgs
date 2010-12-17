@@ -79,6 +79,14 @@ in
     # as it's loaded, so don't load it.
     boot.blacklistedKernelModules = [ "radeonfb" ];
 
+    # Increase the number of loopback devices from the default (8),
+    # which is way too small because every VM virtual disk requires a
+    # loopback device.
+    boot.extraModprobeConfig =
+      ''
+        options loop max_loop=64
+      '';
+
     virtualisation.xen.bootParams = 
       [ "loglvl=all" "guest_loglvl=all" ] ++
       optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";

@@ -19,11 +19,20 @@ for (my $n = 0; $n < 256; $n++) {
     $ENV{"QEMU_MCAST_ADDR_$n"} = "$mcastPrefix.$n.$mcastSuffix";
 }
 
+my $showGraphics = defined $ENV{'DISPLAY'};
+
 
 sub new {
     my ($class, $args) = @_;
 
     my $startCommand = $args->{startCommand};
+    
+    my $name = $args->{name};
+    if (!$name) {
+        $startCommand =~ /run-(.*)-vm$/;
+        $name = $1 || "machine";
+    }
+
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
         $startCommand =
@@ -34,12 +43,8 @@ sub new {
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= $args->{qemuFlags} || "";
-    }
-
-    my $name = $args->{name};
-    if (!$name) {
-        $startCommand =~ /run-(.*)-vm$/;
-        $name = $1 || "machine";
+    } else {
+        $startCommand = Cwd::abs_path $startCommand;
     }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
@@ -51,7 +56,7 @@ sub new {
         pid => 0,
         connected => 0,
         socket => undef,
-        stateDir => "$tmpDir/$name",
+        stateDir => "$tmpDir/vm-state-$name",
         monitor => undef,
     };
 
@@ -121,12 +126,14 @@ sub start {
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
         $ENV{USE_TMPDIR} = 1;
-        $ENV{QEMU_OPTS} = "-nographic -no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell";
+        $ENV{QEMU_OPTS} =
+            "-no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
+            ($showGraphics ? "-serial stdio" : "-nographic");
         $ENV{QEMU_NET_OPTS} = "guestfwd=tcp:10.0.2.6:23-chardev:shell";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
-        die;
+        die "running VM script: $!";
     }
 
     # Process serial line output.
@@ -248,7 +255,8 @@ sub execute {
     my $out = "";
 
     while (1) {
-        my $line = readline($self->{socket}) or die "connection to VM lost unexpectedly";
+        my $line = readline($self->{socket});
+        die "connection to VM lost unexpectedly" unless defined $line;
         #$self->log("got line: $line");
         if ($line =~ /^(.*)\|\!\=EOF\s+(\d+)$/) {
             $out .= $1;
@@ -267,7 +275,7 @@ sub succeed {
         my ($status, $out) = $self->execute($command);
         if ($status != 0) {
             $self->log("output: $out");
-            die "command `$command' did not succeed (exit code $status)";
+            die "command `$command' did not succeed (exit code $status)\n";
         }
         $res .= $out;
     }
@@ -404,7 +412,8 @@ sub unblock {
 # Take a screenshot of the X server on :0.0.
 sub screenshot {
     my ($self, $filename) = @_;
-    $filename = "$ENV{'out'}/${filename}.png" if $filename =~ /^\w+$/;
+    my $dir = $ENV{'out'} || Cwd::abs_path(".");
+    $filename = "$dir/${filename}.png" if $filename =~ /^\w+$/;
     my $tmp = "${filename}.ppm";
     $self->sendMonitorCommand("screendump $tmp");
     system("convert $tmp ${filename}") == 0

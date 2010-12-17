@@ -66,7 +66,7 @@ in
 
     services.cron.systemCronJobs = map sitecopyCron config.services.sitecopy.backups;
 
-    system.activationScripts.sitecopyBackup = stringAfter [ "stdio" "systemConfig" "users" ]
+    system.activationScripts.sitecopyBackup = stringAfter [ "stdio" "users" ]
       ''  
         mkdir -m 0700 -p ${stateDir}
         chown root ${stateDir}

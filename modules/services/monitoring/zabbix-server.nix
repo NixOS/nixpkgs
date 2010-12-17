@@ -5,6 +5,8 @@ with pkgs.lib;
 
 let
 
+  cfg = config.services.zabbixServer;
+
   stateDir = "/var/run/zabbix";
 
   logDir = "/var/log/zabbix";
@@ -19,9 +21,15 @@ let
   
       PidFile = ${pidFile}
 
+      DBHost = ${cfg.dbServer}
+
       DBName = zabbix
 
       DBUser = zabbix
+
+      ${optionalString (cfg.dbPassword != "") ''
+        DBPassword = ${cfg.dbPassword}
+      ''}
     '';
 
 in
@@ -39,11 +47,21 @@ in
       '';
     };
 
+    services.zabbixServer.dbServer = mkOption {
+      default = "localhost";
+      description = "Hostname or IP address of the database server.";
+    };
+
+    services.zabbixServer.dbPassword = mkOption {
+      default = "";
+      description = "Password used to connect to the database server.";
+    };
+
   };
 
   ###### implementation
 
-  config = mkIf config.services.zabbixServer.enable {
+  config = mkIf cfg.enable {
 
     services.postgresql.enable = true;
 

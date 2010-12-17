@@ -57,17 +57,22 @@ let
           $wgArticlePath = "${config.articleUrlPrefix}/$1";
         ''}
 
+        ${optionalString config.enableUploads ''
+          $wgEnableUploads = true;
+          $wgUploadDirectory = "${config.uploadDir}";
+        ''}
+
         ${config.extraConfig}
       ?>
     '';
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.15.4";
+    name= "mediawiki-1.15.5";
     
     src = pkgs.fetchurl {
       url = "http://download.wikimedia.org/mediawiki/1.15/${name}.tar.gz";
-      sha256 = "1blf79lhnaxixc8z96f9z4xi2jlg906ps3kd4x8b9ipg2dgl3vy9";
+      sha256 = "1d8afbdh3lsg54b69mnh6a47psb3lg978xpp277qs08yz15cjf7q";
     };
 
     buildPhase = "true";
@@ -96,6 +101,16 @@ in
 
   extraConfig =
     ''
+      ${optionalString config.enableUploads ''
+        Alias ${config.urlPrefix}/images ${config.uploadDir}
+
+        <Directory ${config.uploadDir}>
+            Order allow,deny
+            Allow from all
+            Options -Indexes
+        </Directory>
+      ''}
+      
       Alias ${config.urlPrefix} ${mediawikiRoot}
 
       <Directory ${mediawikiRoot}>
@@ -203,6 +218,17 @@ in
         e.g. http://server/wiki/Page.  Leave empty to use the main URL
         prefix, e.g. http://server/w/index.php?title=Page.
       '';
+    };
+
+    enableUploads = mkOption {
+      default = false;
+      description = "Whether to enable file uploads.";
+    };
+
+    uploadDir = mkOption {
+      default = throw "You must specify `uploadDir'.";
+      example = "/data/mediawiki-upload";
+      description = "The directory that stores uploaded files.";
     };
 
     extraConfig = mkOption {

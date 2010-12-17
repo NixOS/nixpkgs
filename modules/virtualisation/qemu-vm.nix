@@ -185,7 +185,7 @@ let
           -m ${toString config.virtualisation.memorySize} \
           -net nic,vlan=0,model=virtio \
           -chardev socket,id=samba,path=./samba \
-          -net user,vlan=0,guestfwd=tcp:10.0.2.4:139-chardev:samba${if cfg.useBackdoor then ",guestfwd=tcp:10.0.2.6:23-chardev:shell" else ""}''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+          -net user,vlan=0,guestfwd=tcp:10.0.2.4:445-chardev:samba${if cfg.useBackdoor then ",guestfwd=tcp:10.0.2.6:23-chardev:shell" else ""}''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
 	  ${if cfg.useBackdoor then "-chardev socket,id=shell,path=./shell" else ""} \
           ${if cfg.useBootLoader then ''
             -drive index=0,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \

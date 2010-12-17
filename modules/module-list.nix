@@ -52,6 +52,7 @@
   ./services/backup/sitecopy-backup.nix
   ./services/databases/mysql.nix
   ./services/databases/postgresql.nix
+  ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
@@ -91,6 +92,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
+  ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
   ./services/networking/gvpe.nix
   ./services/networking/gw6c.nix
@@ -107,6 +109,7 @@
   ./services/networking/ssh/sshd.nix
   ./services/networking/tftpd.nix
   ./services/networking/vsftpd.nix
+  ./services/networking/wakeonlan.nix
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix

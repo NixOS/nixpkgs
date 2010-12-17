@@ -16,16 +16,16 @@ let
     name = "additional-cups-backends";
     builder = pkgs.writeScript "additional-backends-builder.sh" ''
       PATH=${pkgs.coreutils}/bin
-      mkdir -p $out
+      mkdir -pv $out
       if [ ! -e ${pkgs.samba}/lib/cups/backend/smb ]; then
-        mkdir -p $out/lib/cups/backend
-        ln -s ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
+        mkdir -pv $out/lib/cups/backend
+        ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
       if [ ! -e ${pkgs.cups}/lib/cups/backend/https ]; then
-        mkdir -p $out/lib/cups/backend
-        ln -s ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
+        mkdir -pv $out/lib/cups/backend
+        ln -sv ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
     '';
   };
@@ -147,7 +147,7 @@ in
         exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
 
-    services.printing.drivers = [ pkgs.cups pkgs.ghostscript additionalBackends ];
+    services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];
     services.printing.cupsdConf =
       ''
         LogLevel info

@@ -4,18 +4,17 @@
 
 showUsage()
 {
-    echo "Usage: $0 -n network_expr -i infrastructure_expr"
+    echo "Usage: $0 network_expr"
     echo "Options:"
     echo
-    echo "-n,--network        Network Nix expression which captures properties of machines in the network"
-    echo "-i,--infrastructure Infrastructure Nix expression which captures properties of machines in the network"
-    echo "--show-trace        Shows an output trace"
-    echo "-h,--help           Shows the usage of this command"
+    echo "--show-trace  Shows an output trace"
+    echo "--no-out-link Do not create a 'result' symlink"
+    echo "-h,--help     Shows the usage of this command"
 }
 
 # Parse valid argument options
 
-PARAMS=`getopt -n $0 -o n:i:h -l network:,infrastructure:,show-trace,help -- "$@"`
+PARAMS=`getopt -n $0 -o h -l show-trace,no-out-link,help -- "$@"`
 
 if [ $? != 0 ]
 then
@@ -30,14 +29,11 @@ eval set -- "$PARAMS"
 while [ "$1" != "--" ]
 do
     case "$1" in
-	-n|--network)
-	    networkExpr=`readlink -f $2`
-	    ;;
-	-i|--infrastructure)
-	    infrastructureExpr=`readlink -f $2`
-	    ;;
 	--show-trace)
 	    showTraceArg="--show-trace"
+	    ;;
+	--no-out-link)
+	    noOutLinkArg="--no-out-link"
 	    ;;
 	-h|--help)
 	    showUsage
@@ -48,27 +44,24 @@ do
     shift
 done
 
+shift
+
 # Validate the given options
-
-if [ "$infrastructureExpr" = "" ]
-then
-    echo "ERROR: A infrastructure expression must be specified!" >&2
-    exit 1
-fi
-
-if [ "$networkExpr" = "" ]
-then
-    echo "ERROR: A network expression must be specified!" >&2
-    exit 1
-fi
 
 if [ -z "$NIXOS" ]
 then
     NIXOS=/etc/nixos/nixos
 fi
 
+if [ "$@" = "" ]
+then
+    echo "ERROR: A network Nix expression must be specified!" >&2
+    exit 1
+else
+    networkExpr=$(readlink -f $@)
+fi
+
 # Deploy the network
 
-nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr --argstr infrastructureExpr $infrastructureExpr $showTraceArg
-./result/bin/deploy-systems
-rm -f result
+vms=`nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr $showTraceArg $noOutLinkArg`
+$vms/bin/deploy-systems
