@@ -46,7 +46,7 @@ xkb_symbols "altgr-intl-rich" {
     key <AE05> { [	  5,	percent,	EuroSign,	approxeq	] };
     key <AE06> { [	  6,	asciicircum,	dead_circumflex, dead_stroke	] };
     key <AE07> { [	  7,	ampersand,		dead_horn		] };
-    key <AE08> { [	  8,	asterisk,		dead_ogonek		] };
+    key <AE08> { [	  8,	asterisk,	dead_ogonek,	infinity	] };
     key <AE09> { [	  9,	parenleft,  leftsinglequotemark,dead_breve	] };
     key <AE10> { [	  0,	parenright,rightsinglequotemark,dead_abovering	] };
     key <AE11> { [    minus,	underscore,	yen,		dead_belowdot	] };
@@ -68,8 +68,8 @@ xkb_symbols "altgr-intl-rich" {
     key <AC01> { [	  a,	A,		aacute,		Aacute		] };
     key <AC02> { [	  s,	S,		ssharp,		section		] };
     key <AC03> { [	  d,	D,		eth,		ETH		] };
-    key <AC04> { [	  f,	F						] };
-    key <AC05> { [	  g,	G						] };
+    key <AC04> { [	  f,	F,		union,		intersection	] };
+    key <AC05> { [	  g,	G,		eng,		ENG		] };
     key <AC06> { [	  h,	H,		hyphen,		nobreakspace	] };
     key <AC07> { [	  j,	J,		idiaeresis,	Idiaeresis	] };
     key <AC08> { [	  k,	K						] };
@@ -80,7 +80,7 @@ xkb_symbols "altgr-intl-rich" {
     key <AB01> { [	  z,	Z,		ae,		AE		] };
     key <AB02> { [	  x,	X,		oe,		OE		] };
     key <AB03> { [	  c,	C,		copyright,	cent		] };
-    key <AB04> { [	  v,	V,		registered,	registered	] };
+    key <AB04> { [	  v,	V,		registered,	trademark	] };
     key <AB05> { [	  b,	B,		emdash,		endash		] };
     key <AB06> { [	  n,	N,		nu,		numerosign	] };
     key <AB07> { [	  m,	M,		mu,		plusminus	] };
