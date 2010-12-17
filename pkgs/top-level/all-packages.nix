@@ -6807,6 +6807,8 @@ let
 
   superTuxKart = callPackage ../games/super-tux-kart { };
 
+  tbe = callPackage ../games/the-butterfly-effect {};
+
   teeworlds = callPackage ../games/teeworlds { };
 
   tennix = callPackage ../games/tennix { };
