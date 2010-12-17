@@ -5,6 +5,7 @@ let
   cfg = config.services.ghostOne;
   ghostUser = "ghostone";
   stateDir = "/var/lib/ghost-one";
+
 in
 {
 
@@ -20,6 +21,7 @@ in
 
       language = mkOption {
         default = "English";
+        check = lang: elem lang [ "English" "Spanish" "Russian" "Serbian" "Turkish" ];
         description = "The language of bot messages: English, Spanish, Russian, Serbian or Turkish.";
       };
       
