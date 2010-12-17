@@ -7249,6 +7249,8 @@ let
     enableTomcatWebApplication = getConfig ["disnix" "enableTomcatWebApplication"] false;
   };
 
+  disnixos = callPackage ../tools/package-management/disnix/disnixos { };
+  
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   latex2html = callPackage ../misc/tex/latex2html/default.nix {

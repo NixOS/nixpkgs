@@ -14,8 +14,8 @@ assert enableEjabberdDump -> ejabberd != null;
 stdenv.mkDerivation {
   name = "disnix-activation-scripts-0.2pre24557";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/727573/download/1/disnix-activation-scripts-0.2pre24557.tar.gz;
-    sha256 = "089bp700rjdxfa0wzf81420i5iphs78kkz41506ibsfnbm8k3axj";
+    url = http://hydra.nixos.org/build/774785/download/1/disnix-activation-scripts-0.2pre24557.tar.gz;
+    sha256 = "16allbni0hwcj9qyg67n4ly4bl09wp32rrds3s1hvq6a2p3a3fg7";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
