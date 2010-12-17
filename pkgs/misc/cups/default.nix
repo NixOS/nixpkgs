@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, libusb }:
+, dbus, libusb, acl }:
 
-let version = "1.4.4"; in
+let version = "1.4.5"; in
 
 stdenv.mkDerivation {
   name = "cups-${version}";
 
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    md5 = "8776403ad60fea9e85eab9c04d88560d";
+    sha256 = "1zhf3hvx11i0qnbwyybmdhx4fxkxfd4ch69k59fj5bz8wvcdcl04";
   };
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus libusb ];
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus libusb acl ];
 
   propagatedBuildInputs = [ openssl ];
 
@@ -39,5 +39,7 @@ stdenv.mkDerivation {
     homepage = http://www.cups.org/;
     description = "A standards-based printing system for UNIX";
     license = "GPLv2"; # actually LGPL for the library and GPL for the rest
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -47,6 +47,7 @@ rec {
     TMP=.
     TMPDIR=.
     XKB_BINDIR="${xkbcomp}/bin" Xvfb -once -reset -terminate :2 -xkbdir ${xkeyboard_config}/etc/X11/xkb &
+    sleep 10;
     DISPLAY=:2 ./first_metatype_id
   '') ["doUnpack" "addInputs"];
 

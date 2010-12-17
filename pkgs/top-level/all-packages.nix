@@ -2021,7 +2021,7 @@ let
 
   ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
-  ocaml_3_12_0 = callPackage ../development/compilers/ocaml/3.12.0.nix { };
+  ocaml_3_12_0 = lowPrio (callPackage ../development/compilers/ocaml/3.12.0.nix { });
 
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
@@ -2044,11 +2044,15 @@ let
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
+    ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
+
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
       inherit pcre;
     };
 
     ocaml_react = callPackage ../development/ocaml-modules/react { };
+
+    ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
@@ -2732,6 +2736,9 @@ let
   });
 
   botan = callPackage ../development/libraries/botan { };
+
+  box2d = callPackage ../development/libraries/box2d { };
+  box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
   buddy = callPackage ../development/libraries/buddy { };
 
@@ -4322,6 +4329,10 @@ let
 
   firebird = callPackage ../servers/firebird { };
 
+  ghostOne = callPackage ../servers/games/ghost-one {
+    boost = boostFull;
+  };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -4392,6 +4403,8 @@ let
   postgresql83 = callPackage ../servers/sql/postgresql/8.3.x.nix { };
 
   postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
+
+  postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -5735,6 +5748,8 @@ let
 
   espeak = callPackage ../applications/audio/espeak { };
 
+  evopedia = callPackage ../applications/misc/evopedia { };
+
   # FIXME: Evince and other GNOME/GTK+ apps (e.g., Viking) provide
   # `share/icons/hicolor/icon-theme.cache'.  Arbitrarily give this one a
   # higher priority.
@@ -6873,6 +6888,8 @@ let
     stdenv = overrideInStdenv stdenv [ gnumake381 ];
   };
 
+  tbe = callPackage ../games/the-butterfly-effect {};
+
   teeworlds = callPackage ../games/teeworlds { };
 
   tennix = callPackage ../games/tennix { };
@@ -7185,6 +7202,8 @@ let
 
   cups = callPackage ../misc/cups { };
 
+  cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
+
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
@@ -7296,6 +7315,8 @@ let
     enableTomcatWebApplication = getConfig ["disnix" "enableTomcatWebApplication"] false;
   };
 
+  disnixos = callPackage ../tools/package-management/disnix/disnixos { };
+  
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   latex2html = callPackage ../misc/tex/latex2html/default.nix {

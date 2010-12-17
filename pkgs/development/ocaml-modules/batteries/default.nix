@@ -30,5 +30,9 @@ stdenv.mkDerivation {
       language.
     '';
     license = "LGPL";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

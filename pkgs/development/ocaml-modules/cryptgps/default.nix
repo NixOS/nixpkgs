@@ -27,5 +27,9 @@ stdenv.mkDerivation {
       itself.
     '';
     license = "MIT/X11";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

@@ -1,19 +1,7 @@
 { stdenv, fetchurl }:
 
 rec {
-  manifest = import ./manifest.nix;
-
-  kdeSrc = { stable ? true, subdir ? null, module, release, sha256 ? null } :
-    fetchurl {
-      url = "mirror://kde/" + (if stable then "" else "un") + "stable/"
-        + (if subdir == null then "${release}/src" else subdir)
-        + "/${module}-${release}.tar.bz2";
-      sha256 =
-        if sha256 != null then sha256
-        else builtins.getAttr "${module}-${release}.tar.bz2" manifest;
-    };
-
-  defaultArgs = {name, stable ? true, subdir ? null, version,
+  defaultArgs = {name, stable ? true, version,
     module ? name, release ? version, ... }:
 
     assert (name == module) -> (release == version);
@@ -22,7 +10,15 @@ rec {
       {
         name = "${name}-${version}";
 
-        src = kdeSrc { inherit stable subdir module release; };
+        src = fetchurl {
+          url = "mirror://kde/" + (if stable then "" else "un")
+            + "stable/${release}/src/${module}-${release}.tar.bz2";
+          sha256 = (stdenv.lib.findFirst
+              (x: x.module == module)
+              (throw "No module ${module} in release ${release}!")
+              (import (./manifest + "-${release}.nix"))
+            ).sha256;
+        };
 
         meta = {
           maintainers = with stdenv.lib.maintainers; [ sander urkud ];

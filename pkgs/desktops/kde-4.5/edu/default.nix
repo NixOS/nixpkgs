@@ -23,7 +23,7 @@ kde.package {
     license = "GPL";
     kde = {
       name = "kdeedu";
-      version = "4.5.2";
+      version = "4.5.4";
     };
   };
 }

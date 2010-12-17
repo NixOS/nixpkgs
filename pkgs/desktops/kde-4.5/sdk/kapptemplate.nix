@@ -10,7 +10,7 @@ kde.package {
       name = "kapptemplate";
       module = "kdesdk";
       version = "0.1";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "kapptemplate/main.cpp";
     };
   };

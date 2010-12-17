@@ -21,5 +21,9 @@ stdenv.mkDerivation {
     homepage = http://ocsigen.org/lwt;
     description = "Lightweight thread library for Objective Caml";
     license = "LGPL";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

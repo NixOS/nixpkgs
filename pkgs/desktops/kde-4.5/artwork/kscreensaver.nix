@@ -9,7 +9,7 @@ kde.package rec {
       name = "kscreensaver";
       module = "kdeartwork";
       version = "1.0";
-      release = "4.5.2";
+      release = "4.5.4";
       versionFile = "kscreensaver/kpartsaver/kpartsaver.cpp";
     };
   };

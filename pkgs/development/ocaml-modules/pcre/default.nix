@@ -22,5 +22,9 @@ stdenv.mkDerivation {
     homepage = "http://www.ocaml.info/home/ocaml_sources.html#pcre-ocaml";
     description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = "LGPL";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

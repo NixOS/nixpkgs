@@ -10,7 +10,7 @@ kde.package rec {
     kde = {
       name = "IconThemes";
       module = "kdeartwork";
-      version = "4.5.2";
+      version = "4.5.4";
     };
   };
 }
