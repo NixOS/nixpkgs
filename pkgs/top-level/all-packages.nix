@@ -2702,7 +2702,7 @@ let
   botan = callPackage ../development/libraries/botan { };
 
   box2d = callPackage ../development/libraries/box2d { };
-  box2d = callPackage ../development/libraries/box2d/2.0.1.nix { };
+  box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
   buddy = callPackage ../development/libraries/buddy { };
 
