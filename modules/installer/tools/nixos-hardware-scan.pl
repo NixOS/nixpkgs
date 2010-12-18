@@ -103,7 +103,7 @@ sub pciCheck {
          $device eq "0x432c" || $device eq "0x432d" || $device eq "0x4353" ||
          $device eq "0x4357") )
      {
-        push @modulePackages, "kernelPackages.broadcom_sta";
+        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
         push @kernelModules, "wl";
      }
 
@@ -242,7 +242,7 @@ my $attrs = multiLineList("  ", removeDups @attrs);
 print <<EOF ;
 # This is a generated file.  Do not modify!
 # Make changes to /etc/nixos/configuration.nix instead.
-{modulesPath, ...}:
+{ config, pkgs, modulesPath, ... }:
 
 {
   require = [
@@ -250,12 +250,9 @@ print <<EOF ;
     "\${modulesPath}/installer/scan/not-detected.nix"
   ];
 
-  boot = rec {
-    initrd.kernelModules = [ $initrdKernelModules ];
-    kernelModules = [ $kernelModules ];
-    kernelPackages = pkgs.linuxPackages;
-    extraModulePackages = [ $modulePackages ];
-  };
+  boot.initrd.kernelModules = [ $initrdKernelModules ];
+  boot.kernelModules = [ $kernelModules ];
+  boot.extraModulePackages = [ $modulePackages ];
 
   nix.maxJobs = $cpus;
 
