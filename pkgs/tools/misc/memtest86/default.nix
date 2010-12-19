@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "memtest86+-4.00";
+  name = "memtest86+-4.10";
   
   src = fetchurl {
-    url = http://www.memtest.org/download/4.00/memtest86+-4.00.tar.gz;
-    sha256 = "193chqvwmcxsrvpcfy3mbz1vakvpfhxvjmawzidp26x8kma2zi3f";
+    url = http://www.memtest.org/download/4.10/memtest86+-4.10.tar.gz;
+    sha256 = "0kxa2m7vfcm543wp53fv16sjjf5p12mzdz5rm87mrrr6hw43a6gq";
   };
 
   preBuild = ''
@@ -17,10 +17,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  # Override the default optimisation setting (`-Os') to prevent lots
-  # of spurious errors.  See
-  # https://bugs.launchpad.net/fedora/+source/memtest86+/+bug/246412.
-  NIX_CFLAGS_COMPILE = "-O1 -I.";
+  NIX_CFLAGS_COMPILE = "-I.";
   
   installPhase = ''
     ensureDir $out
