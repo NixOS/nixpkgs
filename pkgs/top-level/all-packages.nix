@@ -2001,6 +2001,10 @@ let
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
+    lablgtk = callPackage ../development/libraries/lablgtk {
+      inherit (gnome) libgnomecanvas;
+    };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -3245,10 +3249,6 @@ let
   kdevplatform = newScope pkgs.kde4 ../development/libraries/kdevplatform { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
-
-  lablgtk = callPackage ../development/libraries/lablgtk {
-    inherit (gnome) libgnomecanvas;
-  };
 
   lcms = lcms1;
 
@@ -6119,7 +6119,8 @@ let
   };
 
   monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
-    inherit ocaml lablgtk graphviz pkgconfig autoconf automake libtool;
+    inherit ocaml graphviz pkgconfig autoconf automake libtool;
+    inherit (ocamlPackages) lablgtk;
     inherit (gnome) gtk libgnomecanvas glib;
   };
 
@@ -6432,7 +6433,9 @@ let
     boost = boostFull;
   };
 
-  unison = callPackage ../applications/networking/sync/unison { };
+  unison = callPackage ../applications/networking/sync/unison {
+    inherit (ocamlPackages) lablgtk;
+  };
 
   uucp = callPackage ../tools/misc/uucp { };
 
@@ -7012,7 +7015,7 @@ let
   ### SCIENCE/LOGIC
 
   coq = callPackage ../applications/science/logic/coq {
-    inherit (ocamlPackages) findlib;
+    inherit (ocamlPackages) findlib lablgtk;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
