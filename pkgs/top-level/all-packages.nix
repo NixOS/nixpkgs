@@ -1985,6 +1985,12 @@ let
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
 
+    camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
+
+    camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
+      transitional = true;
+    };
+
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
     camomile = camomile_0_7_3;
@@ -2403,12 +2409,6 @@ let
   };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
-
-  camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
-
-  camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
-    transitional = true;
-  };
 
   ccache = callPackage ../development/tools/misc/ccache { };
 
@@ -7012,7 +7012,8 @@ let
   ### SCIENCE/LOGIC
 
   coq = callPackage ../applications/science/logic/coq {
-    camlp5 = camlp5_transitional;
+    inherit (ocamlPackages) findlib;
+    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
@@ -7027,7 +7028,9 @@ let
 
   hol = callPackage ../applications/science/logic/hol { };
 
-  hol_light = callPackage ../applications/science/logic/hol_light { };
+  hol_light = callPackage ../applications/science/logic/hol_light {
+    inherit (ocamlPackages) camlp5_transitional;
+  };
 
   hol_light_sources = callPackage ../applications/science/logic/hol_light/sources.nix { };
 
@@ -7056,7 +7059,7 @@ let
   spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
-    camlp5 = camlp5_transitional;
+    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   ### SCIENCE / ELECTRONICS

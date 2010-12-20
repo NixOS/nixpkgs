@@ -1,9 +1,11 @@
 {stdenv, fetchurl, ocaml, transitional ? false}:
 
 let
+  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "camlp5";
-  version = "5.12";
+  version = "5.15";
   webpage = http://pauillac.inria.fr/~ddr/camlp5/;
+  metafile = ./META;
 in
 
 stdenv.mkDerivation {
@@ -12,16 +14,19 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/distrib/src/${pname}-${version}.tgz";
-    sha256 = "985a5e373ea75f89667e71bc857c868c395769fce664cba88aa76f93b0ad8461";
+    sha256 = "1sx5wlfpydqskm97gp7887p3avbl3vanlmrwj35wx5mbzj6kn9nq";
   };
 
   buildInputs = [ ocaml ];
 
   prefixKey = "-prefix ";
 
-  configureFlags = if transitional then "--transitional" else "--strict";
+  preConfigure = "configureFlagsArray=(" +  (if transitional then "--transitional" else "--strict") +
+                  " --libdir $out/lib/ocaml/${ocaml_version}/site-lib)";
 
   buildFlags = "world.opt";
+
+  postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml_version}/site-lib/camlp5/META";
 
   meta = {
     description = "Preprocessor-pretty-printer for OCaml";
@@ -31,5 +36,9 @@ stdenv.mkDerivation {
     '';
     homepage = "${webpage}";
     license = "BSD";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }
