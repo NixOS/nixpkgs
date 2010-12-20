@@ -95,7 +95,7 @@ in
   config = mkIf cfg.enable {
   
     users.extraUsers = singleton
-      { name = cfg.user; };
+      { name = cfg.user; description = "Hydra mirror"; };
 
     services.cron.systemCronJobs = map cronjob cfg.jobsets;
 
