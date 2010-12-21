@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     ensureDir $out/bin
   '';
 
+  createFindlibDestdir = true;
+
   meta = {
     homepage = "http://ocaml.info/home/ocaml_sources.html#ocaml-sqlite3";
     description = "OCaml bindings to the SQLite 3 database access library";

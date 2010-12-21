@@ -40,7 +40,9 @@ stdenv.mkDerivation {
             export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml_version}/site-lib/"
         fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml_version}/site-lib/"
-        ensureDir ''$OCAMLFIND_DESTDIR
+        if test -n $createFindlibDestdir; then
+          ensureDir $OCAMLFIND_DESTDIR
+        fi
     }
     
     envHooks=(''${envHooks[@]} addOCamlPath)
@@ -50,5 +52,9 @@ stdenv.mkDerivation {
     homepage = http://projects.camlcity.org/projects/findlib.html;
     description = "O'Caml library manager";
     license = "MIT/X11";
+    platforms = ocaml.meta.platforms;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

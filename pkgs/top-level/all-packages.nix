@@ -2026,6 +2026,12 @@ let
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
 
+    camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
+
+    camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
+      transitional = true;
+    };
+
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
     camomile = camomile_0_7_3;
@@ -2035,6 +2041,10 @@ let
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
+
+    lablgtk = callPackage ../development/libraries/lablgtk {
+      inherit (gnome) libgnomecanvas;
+    };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -2439,12 +2449,6 @@ let
   };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
-
-  camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
-
-  camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
-    transitional = true;
-  };
 
   ccache = callPackage ../development/tools/misc/ccache { };
 
@@ -3284,10 +3288,6 @@ let
   kdevplatform = newScope pkgs.kde4 ../development/libraries/kdevplatform { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
-
-  lablgtk = callPackage ../development/libraries/lablgtk {
-    inherit (gnome) libgnomecanvas;
-  };
 
   lcms = lcms1;
 
@@ -5728,6 +5728,8 @@ let
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
 
+    phpMode = callPackage ../applications/editors/emacs-modes/php { };
+
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
     proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral { };
@@ -6201,7 +6203,8 @@ let
   };
 
   monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
-    inherit ocaml lablgtk graphviz pkgconfig autoconf automake libtool;
+    inherit ocaml graphviz pkgconfig autoconf automake libtool;
+    inherit (ocamlPackages) lablgtk;
     inherit (gnome) gtk libgnomecanvas glib;
   };
 
@@ -6513,7 +6516,9 @@ let
     boost = boostFull;
   };
 
-  unison = callPackage ../applications/networking/sync/unison { };
+  unison = callPackage ../applications/networking/sync/unison {
+    inherit (ocamlPackages) lablgtk;
+  };
 
   uucp = callPackage ../tools/misc/uucp { };
 
@@ -7089,7 +7094,8 @@ let
   ### SCIENCE/LOGIC
 
   coq = callPackage ../applications/science/logic/coq {
-    camlp5 = camlp5_transitional;
+    inherit (ocamlPackages) findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
@@ -7104,7 +7110,9 @@ let
 
   hol = callPackage ../applications/science/logic/hol { };
 
-  hol_light = callPackage ../applications/science/logic/hol_light { };
+  hol_light = callPackage ../applications/science/logic/hol_light {
+    inherit (ocamlPackages) camlp5_transitional;
+  };
 
   hol_light_sources = callPackage ../applications/science/logic/hol_light/sources.nix { };
 
@@ -7131,7 +7139,7 @@ let
   spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
-    camlp5 = camlp5_transitional;
+    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   ### SCIENCE / ELECTRONICS
