@@ -23,6 +23,8 @@ stdenv.mkDerivation {
 
   checkTarget = "test";
 
+  createFindlibDestdir = true;
+
   meta = {
     homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
     description = "Unit test framework for OCaml";

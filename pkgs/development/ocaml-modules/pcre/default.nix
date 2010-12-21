@@ -16,6 +16,8 @@ stdenv.mkDerivation {
 
   buildInputs = [pcre ocaml findlib];
 
+  createFindlibDestdir = true;
+
   configurePhase = "true";	# Skip configure phase
 
   meta = {

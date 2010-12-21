@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   configurePhase = "true";	# Skip configure
 
+  createFindlibDestdir = true;
+
   preBuild = ''
     #Fix makefiles.
     RM=$(type -p rm)

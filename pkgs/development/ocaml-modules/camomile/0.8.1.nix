@@ -15,7 +15,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml findlib];
 
-  #dontAddPrefix = true;
+  preInstall = ''
+    ensureDir $OCAMLFIND_DESTDIR
+  '';
+
+  createFindlibDestdir = true;
 
   meta = {
     homepage = http://camomile.sourceforge.net/;

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml findlib];
 
-  #dontAddPrefix = true;
+  createFindlibDestdir = true;
 
   meta = {
     homepage = http://camomile.sourceforge.net/;

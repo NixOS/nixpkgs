@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   configurePhase = "true";	# Skip configure phase
 
+  createFindlibDestdir = true;
+
   meta = {
     homepage = http://projects.camlcity.org/projects/cryptgps.html;
     description = "Cryptographic functions for OCaml";

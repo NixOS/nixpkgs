@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   configureFlags = "--disable-ldconf";
 
+  createFindlibDestdir = true;
+
   meta = {
     homepage = http://savonet.rastageeks.org/;
     description = "OCaml bindings for libssl ";

@@ -18,6 +18,8 @@ stdenv.mkDerivation {
 
   patches = [ ./makefile.patch ];
 
+  createFindlibDestdir = true;
+
   postPatch = ''
     substitute ${./META} META --subst-var-by VERSION "${version}"
     substituteInPlace Makefile \
