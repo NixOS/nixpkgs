@@ -15,10 +15,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml findlib];
 
-  preInstall = ''
-    ensureDir $OCAMLFIND_DESTDIR
-  '';
-
   createFindlibDestdir = true;
 
   meta = {
