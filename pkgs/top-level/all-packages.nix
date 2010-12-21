@@ -1122,6 +1122,8 @@ let
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
+  recutils = callPackage ../tools/misc/recutils { };
+
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
