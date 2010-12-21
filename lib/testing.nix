@@ -179,10 +179,9 @@ rec {
       '';
 
       vmRunCommand = writeText "vm-run" ''
-        ${coreutils}/bin/mkdir -p client
-        export > client/saved-env
+        ${coreutils}/bin/mkdir -p vm-state-client
+        export > vm-state-client/saved-env
         export PATH=${qemu_kvm}/bin:${coreutils}/bin
-        cp ${./test-driver/Machine.pm} Machine.pm
         export tests='${testscript}'
         ${testDriver}/bin/nixos-test-driver ${vms}/vms/*/bin/run-*-vm
       ''; # */
