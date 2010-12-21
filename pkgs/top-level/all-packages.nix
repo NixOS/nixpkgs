@@ -5652,6 +5652,8 @@ let
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
 
+    phpMode = callPackage ../applications/editors/emacs-modes/php { };
+
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
     proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral { };
