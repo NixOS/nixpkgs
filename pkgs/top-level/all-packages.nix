@@ -7253,6 +7253,8 @@ let
     enableAxis2WebService = getConfig ["disnix" "enableAxis2WebService"] false;
     enableEjabberdDump = getConfig ["disnix" "enableEjabberdDump"] false;
     enableMySQLDatabase = getConfig ["disnix" "enableMySQLDatabase"] false;
+    enablePostgreSQLDatabase = getConfig ["disnix" "enablePostgreSQLDatabase"] false;
+    enableSubversionRepository = getConfig ["disnix" "enableSubversionRepository"] false;
     enableTomcatWebApplication = getConfig ["disnix" "enableTomcatWebApplication"] false;
   };
 
