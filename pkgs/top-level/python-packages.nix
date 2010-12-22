@@ -479,6 +479,19 @@ rec {
     };
   });
 
+  nose = buildPythonPackage {
+    name = "nose-0.11.3";
+    
+    src = fetchurl {
+      url = http://python-nose.googlecode.com/files/nose-0.11.3.tar.gz;
+      sha256 = "1hl3lbwdfl2a64q3dxc73kbiks4iwx5cixlbavyryd8xdr7iziww";
+    };
+    
+    meta = {
+      description = "A unittest-based testing framework for python that makes writing and running tests easier";
+    };
+  };
+
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
 
@@ -906,6 +919,25 @@ rec {
     meta = {
       description = "A Python wrapper around libmagic";
       homepage = https://github.com/ahupp/python-magic;
+    };
+  };
+  
+  MySQL_python = buildPythonPackage {
+    name = "MySQL-python-1.2.3";
+    
+    doCheck = false;
+    
+    src = fetchurl {
+      url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
+      sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
+    };
+    
+    propagatedBuildInputs = [ pkgs.mysql pkgs.zlib nose ];
+    
+    meta = {
+      description = "MySQL database binding for Python";
+
+      homepage = http://sourceforge.net/projects/mysql-python;
     };
   };
 
