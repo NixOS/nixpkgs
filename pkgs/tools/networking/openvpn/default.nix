@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "openvpn-2.1.4";
 
   src = fetchurl {
-    url = "http://openvpn.net/release/${name}.tar.gz";
+    url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
     sha256 = "1x9aymbk580zp35b7dhhkn29a4chhxnzrxjfmp948bgqvvjpizk7";
   };
 
