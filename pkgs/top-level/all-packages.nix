@@ -4628,7 +4628,7 @@ let
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
-  libcroup = callPackage ../os-specific/linux/libcg { };
+  libcgroup = callPackage ../os-specific/linux/libcg { };
 
   libnl = callPackage ../os-specific/linux/libnl {
     flex = flex2535;
@@ -6818,10 +6818,7 @@ let
 
   tennix = callPackage ../games/tennix { };
 
-  /*tpm = import ../games/thePenguinMachine {
-    inherit stdenv fetchurl pil pygame SDL;
-    python24 = python;
-  };*/
+  tpm = callPackage ../games/thePenguinMachine { };
 
   tremulous = callPackage ../games/tremulous { };
 
