@@ -3766,6 +3766,8 @@ let
 
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
+  
+  ogre = callPackage ../development/libraries/ogre {};
 
   openal = callPackage ../development/libraries/openal { };
 
@@ -3798,6 +3800,8 @@ let
   libopensc_dnie = callPackage ../development/libraries/libopensc-dnie {
     opensc = opensc_0_11_7;
   };
+
+  ois = callPackage ../development/libraries/ois {};
 
   opal = callPackage ../development/libraries/opal {};
 
@@ -4671,7 +4675,7 @@ let
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
-  libcroup = callPackage ../os-specific/linux/libcg { };
+  libcgroup = callPackage ../os-specific/linux/libcg { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
@@ -6901,10 +6905,7 @@ let
 
   tennix = callPackage ../games/tennix { };
 
-  /*tpm = import ../games/thePenguinMachine {
-    inherit stdenv fetchurl pil pygame SDL;
-    python24 = python;
-  };*/
+  tpm = callPackage ../games/thePenguinMachine { };
 
   tremulous = callPackage ../games/tremulous { };
 
@@ -7322,6 +7323,8 @@ let
     enableAxis2WebService = getConfig ["disnix" "enableAxis2WebService"] false;
     enableEjabberdDump = getConfig ["disnix" "enableEjabberdDump"] false;
     enableMySQLDatabase = getConfig ["disnix" "enableMySQLDatabase"] false;
+    enablePostgreSQLDatabase = getConfig ["disnix" "enablePostgreSQLDatabase"] false;
+    enableSubversionRepository = getConfig ["disnix" "enableSubversionRepository"] false;
     enableTomcatWebApplication = getConfig ["disnix" "enableTomcatWebApplication"] false;
   };
 

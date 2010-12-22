@@ -36,6 +36,18 @@ stdenv.mkDerivation (
           cp $origSrc/nix-support/hydra-release-name $out/nix-support/hydra-release-name
         fi
       '';
+
+    failureHook = ''
+      if test -n "$succeedOnFailure"; then
+          if test -n "$keepBuildDirectory"; then
+              KEEPBUILDDIR="$out/`basename $TMPDIR`"
+              header "Copying build directory to $KEEPBUILDDIR"
+              ensureDir $KEEPBUILDDIR
+              cp -vR $TMPDIR/* $KEEPBUILDDIR
+              stopNest 
+          fi
+      fi
+    '';
   }
 
   // args // 

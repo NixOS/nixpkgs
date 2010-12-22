@@ -1,4 +1,4 @@
-args: with args;
+{stdenv, fetchurl, python, pil, pygame, SDL} @ args: with args;
 stdenv.mkDerivation {
   name = "thePenguinMachine";
 
@@ -7,27 +7,35 @@ stdenv.mkDerivation {
 		sha256 = "09ljks8vj75g00h3azc83yllbfsrxwmv1c9g32gylcmsshik0dqv";
 	};
 
-  buildInputs = [python24 pil pygame SDL];
+  buildInputs = [python pil pygame SDL];
 
-  configurePhase = "
-		sed -e \"/includes = /aincludes.append('${SDL}/include/SDL')\" -i setup.py;
-		sed -e \"/includes = /aincludes.append('${pygame}/include/python2.4')\" -i setup.py;
+  configurePhase = ''
+		sed -e "/includes = /aincludes.append('${SDL}/include/SDL')" -i setup.py;
+		sed -e "/includes = /aincludes.append('$(echo ${pygame}/include/python*)')" -i setup.py;
 		cat setup.py;
-	";
-  buildPhase = "
+		export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
+	'';
+  buildPhase = ''
+		sed -e "s/pygame.display.toggle_fullscreen.*/pass;/" -i tpm/Application.py
+                sed -e 's@"Surface"@"pygame.Surface"@' -i src/surfutils.c
 		python setup.py build;
 		python setup.py build_clib;
 		python setup.py build_ext;
 		python setup.py build_py;
 		python setup.py build_scripts;
-		";
-  installPhase = "
-		python setup.py install --prefix=\${out}
-		cp -r . /tmp/tpm-build
-		echo 'export PYTHONPATH=$PYTHONPATH:${pygame}/lib/python2.4/site-packages:${pil}/lib/python2.4/site-packages/PIL
-		python ThePenguinMachine.py' >/tmp/tpm-build/tpm.sh; 
-		chmod a+rx /tmp/tpm-build/tpm.sh
-		";
+		'';
+  installPhase = ''
+		python setup.py install --prefix=$out
+		ensureDir "$out"/share/tpm/
+		cp -r .  "$out"/share/tpm/build-dir
+		ensureDir "$out/bin"
+		echo "#! /bin/sh" >> "$out/bin/tpm"
+		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pil}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
+		echo "cd \"$out/share/tpm/build-dir\"" >> "$out/bin/tpm"
+		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pil}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
+		echo "${python}/bin/python \"$out\"/share/tpm/build-dir/ThePenguinMachine.py \"\$@\"" >> "$out/bin/tpm"
+		chmod a+x "$out/bin/tpm"
+		'';
 
   meta = {
     description = "
