@@ -3721,6 +3721,8 @@ let
 
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
+  
+  ogre = callPackage ../development/libraries/ogre {};
 
   openal = callPackage ../development/libraries/openal { };
 

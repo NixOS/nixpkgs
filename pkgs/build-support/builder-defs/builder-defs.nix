@@ -384,6 +384,14 @@ let inherit (builtins) head tail trace; in
                 echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
+        cmakeFlags = "";
+
+	doCmake = fullDepEntry (''
+          mkdir build
+	  cd build
+	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${toString cmakeFlags} ..
+	'') ["minInit" "addInputs" "doUnpack"];
+
         /*debug = x:(trace x x);
         debugX = x:(trace (toXML x) x);*/
 
