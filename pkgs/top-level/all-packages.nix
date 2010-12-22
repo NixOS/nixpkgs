@@ -3755,6 +3755,8 @@ let
     opensc = opensc_0_11_7;
   };
 
+  ois = callPackage ../development/libraries/ois {};
+
   opal = callPackage ../development/libraries/opal {};
 
   openjpeg = callPackage ../development/libraries/openjpeg { };
