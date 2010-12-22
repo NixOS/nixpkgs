@@ -42,7 +42,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = a.lib.zlib;
+    license = a.lib.licenses.zlib;
   };
   passthru = {
     updateInfo = {
