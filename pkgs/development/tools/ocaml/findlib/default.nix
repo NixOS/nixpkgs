@@ -40,7 +40,7 @@ stdenv.mkDerivation {
             export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml_version}/site-lib/"
         fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml_version}/site-lib/"
-        if test -n $createFindlibDestdir; then
+        if test -n "$createFindlibDestdir"; then
           ensureDir $OCAMLFIND_DESTDIR
         fi
     }

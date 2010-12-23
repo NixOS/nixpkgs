@@ -7035,7 +7035,7 @@ let
   hol = callPackage ../applications/science/logic/hol { };
 
   hol_light = callPackage ../applications/science/logic/hol_light {
-    inherit (ocamlPackages) camlp5_transitional;
+    inherit (ocamlPackages) findlib camlp5_transitional;
   };
 
   hol_light_sources = callPackage ../applications/science/logic/hol_light/sources.nix { };
