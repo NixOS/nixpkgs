@@ -12,7 +12,7 @@
 , lameSupport ? true, lame ? null
 , screenSaverSupport ? true, libXScrnSaver
 , pulseSupport ? false, pulseaudio
-, mesa, pkgconfig, unzip, yasm
+, mesa, pkgconfig, unzip, yasm, freefont_ttf
 }:
 
 assert alsaSupport -> alsaLib != null;
@@ -103,6 +103,13 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = if x11Support then "-lX11 -lXext" else "";
+
+  # Provide a reasonable standard font.  Maybe we should symlink here.
+  postInstall =
+    ''
+      mkdir -p $out/share/mplayer
+      cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
+    '';
 
   crossAttrs = {
     preConfigure = ''
