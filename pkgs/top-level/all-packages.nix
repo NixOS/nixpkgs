@@ -6818,7 +6818,7 @@ let
 
   gltron = callPackage ../games/gltron { };
 
-  gnuchess = builderDefsPackage (import ../games/gnuchess) { };
+  gnuchess = callPackage ../games/gnuchess { };
 
   gnugo = callPackage ../games/gnugo { };
 
