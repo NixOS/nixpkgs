@@ -132,7 +132,7 @@ in
 	        let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
 		in
 		if builtins.isInt infrastructureAttrValue then
-		''${infrastructureAttrName}=${infrastructureAttrValue} \
+		''${infrastructureAttrName}=${toString infrastructureAttrValue} \
 		''
 		else
                 ''${infrastructureAttrName}=\"${infrastructureAttrValue}\" \
