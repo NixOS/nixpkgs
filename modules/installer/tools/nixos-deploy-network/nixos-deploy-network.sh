@@ -63,5 +63,5 @@ fi
 
 # Deploy the network
 
-vms=`nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr $showTraceArg $noOutLinkArg`
+vms=`nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr --argstr nixos $NIXOS $showTraceArg $noOutLinkArg`
 $vms/bin/deploy-systems
