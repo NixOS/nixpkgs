@@ -7270,6 +7270,8 @@ let
     tex = tetex;
   };
 
+  lkproof = callPackage ../misc/tex/lkproof { };
+
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5;
     inherit (pythonPackages) pexpect paramiko;
