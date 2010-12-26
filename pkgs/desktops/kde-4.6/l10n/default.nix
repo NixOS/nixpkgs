@@ -3,8 +3,8 @@
 let
   overrides = { };
 
-  defaultRelease = "4.5.4";
-  releases = [ "4.5.1" "4.5.2" "4.5.3" "4.5.4" ];
+  defaultRelease = "4.5.90";
+  releases = [ "4.5.90" ];
 
   sanitizeString = replaceChars [ "@" "." ] [ "_" "_" ];
   getOverride = name: attrByPath [name] {} overrides;
@@ -19,7 +19,7 @@ let
     stdenv.mkDerivation ({
       name = saneName;
       src = fetchurl {
-        url = "mirror://kde/stable/${release}/src/kde-l10n/${name}.tar.bz2";
+        url = "mirror://kde/unstable/${release}/src/kde-l10n/${name}.tar.bz2";
         name = "${saneName}.tar.bz2";
         inherit sha256;
       };
