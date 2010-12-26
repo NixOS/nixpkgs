@@ -7,11 +7,13 @@ kde.package rec {
   src = fetchurl {
     url = with meta.kde;
       "mirror://kde/stable/apps/KDE4.x/admin/${name}-${version}.tar.bz2";
-    sha256 = "1ng5bi1gmr5lg49c5kyqyjzbjhs4w90c2zlnfcyviv9p3wzfgzbr";
+    sha256 = "02m710q34aapbmnz1p6qwgkk5xjmm239zdl3lvjg77dh3j0w5i3r";
   };
+
+  patches = [ ./policy-files.patch ];
 
   meta.kde = {
     name = "polkit-qt-1";
-    version = "0.96.1";
+    version = "0.99.0";
   };
 }
