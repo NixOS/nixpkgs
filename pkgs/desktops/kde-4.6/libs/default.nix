@@ -2,7 +2,7 @@
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
 , xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
-, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, hspell
+, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, hspell, udev, grantlee, hupnp
 }:
 
 kde.package {
@@ -10,7 +10,7 @@ kde.package {
   buildInputs = [
     cmake perl xz flex bison bzip2 pcre fam libxml2 libxslt shared_mime_info
     giflib jasper /*openexr*/ aspell avahi kerberos acl attr libXScrnSaver
-    enchant libdbusmenu_qt polkit_qt_1 automoc4 hspell
+    enchant libdbusmenu_qt polkit_qt_1 automoc4 hspell udev grantlee hupnp
   ];
 
 # TODO: make sonnet plugins (dictionaries) really work.
@@ -20,8 +20,6 @@ kde.package {
 
   propagatedBuildInputs = [ qt4 gcc.libc strigi soprano attica qca2
     shared_desktop_ontologies ];
-
-  patches = [ ./polkit-install.patch ];
 
   # cmake fails to find acl.h because of C++-style comment
   # TODO: OpenEXR, hspell
@@ -36,7 +34,7 @@ kde.package {
     license = "LGPL";
     kde = {
       name = "kdelibs";
-      version = "4.5.4";
+      version = "4.5.90";
     };
   };
 }
