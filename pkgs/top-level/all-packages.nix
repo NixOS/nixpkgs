@@ -3194,6 +3194,8 @@ let
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
+  hupnp = callPackage ../development/libraries/hupnp { };
+
   hwloc = callPackage ../development/libraries/hwloc { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
