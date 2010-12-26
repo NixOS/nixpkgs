@@ -6946,6 +6946,16 @@ let
     stdenv = pkgs.stdenv2;
   };
 
+  kde46 = callPackage ../desktops/kde-4.6 {
+    callPackage =
+      let
+        # !!! Ugly, inefficient.
+        pkgs_for_46 = (applyGlobalOverrides (p: { kde4 = p.kde46; }));
+      in
+        pkgs_for_46.newScope pkgs_for_46.kde46;
+    stdenv = pkgs.stdenv2;
+  };
+
   xfce = xfce4;
 
   xfce4 = recurseIntoAttrs
