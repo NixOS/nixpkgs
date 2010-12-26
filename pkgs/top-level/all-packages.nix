@@ -3186,6 +3186,12 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
+  herqqSvn = callPackage ../development/libraries/herqq/svn.nix { };
+
+  herqq070 = callPackage ../development/libraries/herqq/0.7.0.nix { };
+
+  herqq080 = callPackage ../development/libraries/herqq/0.8.0.nix { };
+
   hspell = callPackage ../development/libraries/hspell { };
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
@@ -3193,8 +3199,6 @@ let
   hsqldb = callPackage ../development/libraries/java/hsqldb { };
 
   hunspell = callPackage ../development/libraries/hunspell { };
-
-  hupnp = callPackage ../development/libraries/hupnp { };
 
   hwloc = callPackage ../development/libraries/hwloc { };
 
