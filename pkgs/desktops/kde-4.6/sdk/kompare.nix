@@ -10,7 +10,7 @@ kde.package {
       name = "kompare";
       module = "kdesdk";
       version = "4.0.0";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "main.cpp";
     };
   };

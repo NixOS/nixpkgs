@@ -10,7 +10,7 @@ kde.package {
       name = "kbugbuster";
       module = "kdesdk";
       version = "3.80.3";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "version.h";
     };
   };

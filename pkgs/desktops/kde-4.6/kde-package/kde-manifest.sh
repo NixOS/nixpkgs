@@ -13,18 +13,27 @@ fi
 release=$(ls "${dir}"/kdelibs-*.tar.bz2 | \
 	sed -e 's/.*kdelibs-//' -e 's/\.tar\.bz2//')
 
+if [[ ${release##*.} -gt 50 ]]; then
+	stable="false"
+else
+	stable="true"
+fi
+
 echo "Detected release ${release}" >&2
 
 exec > "manifest-${release}.nix"
-echo "["
+echo "{"
+echo "  stable = ${stable};"
+echo "  packages = builtins.listToAttrs ["
 for i in `cd "${dir}"; ls *-${release}.tar.bz2`; do
   module=${i%-${release}.tar.bz2}
   echo -n "${module}.. " >&2
   hash=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")
-  echo "{"
-  echo "  module = \"${module}\";"
-  echo "  sha256 = \"${hash}\";"
-  echo "}"
+  echo "    {"
+  echo "      name = \"${module}\";"
+  echo "      value = \"${hash}\";"
+  echo "    }"
   echo $hash >&2
 done
-echo "]"
+echo "  ];"
+echo "}"

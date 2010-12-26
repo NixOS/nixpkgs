@@ -13,7 +13,7 @@ kde.package {
       name = "lokalize";
       module = "kdesdk";
       version = "1.1";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "src/version.h";
     };
   };

@@ -9,7 +9,7 @@ kde.package {
       name = "ktux";
       module = "kdetoys";
       version = "1.0.1";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "src/sprite.cpp";
     };
   };

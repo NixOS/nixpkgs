@@ -9,7 +9,7 @@ kde.package {
       name = "okteta";
       module = "kdeutils";
       version = "0.5.2";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "program/about.cpp";
     };
   };

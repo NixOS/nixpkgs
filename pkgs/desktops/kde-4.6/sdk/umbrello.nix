@@ -10,7 +10,7 @@ kde.package {
       name = "umbrello";
       module = "kdesdk";
       version = "2.5.2"; # release - 200
-      release = "4.5.4";
+      release = "4.5.90";
     };
   };
 }

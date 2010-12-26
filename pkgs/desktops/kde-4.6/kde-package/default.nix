@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 rec {
-  defaultArgs = {name, stable ? true, version,
+  defaultArgs = {name, stable ? null, version,
     module ? name, release ? version, ... }:
 
     assert (name == module) -> (release == version);
@@ -10,15 +10,19 @@ rec {
       {
         name = "${name}-${version}";
 
-        src = fetchurl {
-          url = "mirror://kde/" + (if stable then "" else "un")
-            + "stable/${release}/src/${module}-${release}.tar.bz2";
-          sha256 = (stdenv.lib.findFirst
-              (x: x.module == module)
+        src =
+          let
+            manifest = (import (./manifest + "-${release}.nix"));
+            _stable = if stable == null then manifest.stable else stable;
+            stableString = if _stable then "stable" else "unstable";
+          in
+          fetchurl {
+            url = "mirror://kde/${stableString}/${release}/src/${module}-${release}.tar.bz2";
+            sha256 = stdenv.lib.maybeAttr
+              module
               (throw "No module ${module} in release ${release}!")
-              (import (./manifest + "-${release}.nix"))
-            ).sha256;
-        };
+              manifest.packages;
+          };
 
         meta = {
           maintainers = with stdenv.lib.maintainers; [ sander urkud ];

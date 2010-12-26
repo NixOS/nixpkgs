@@ -9,7 +9,7 @@ kde.package {
     kde = {
       name = "scripts";
       module = "kdesdk";
-      version = "4.5.4";
+      version = "4.5.90";
     };
   };
 }

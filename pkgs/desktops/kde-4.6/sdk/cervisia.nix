@@ -9,7 +9,7 @@ kde.package {
       name = "cervisia";
       module = "kdesdk";
       version = "3.5.0";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "cervisia/version.h";
     };
   };

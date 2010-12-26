@@ -10,7 +10,7 @@ kde.package {
       name = "jovie";
       module = "kdeaccessibility";
       version = "0.6.0";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "jovie/jovie/main.cpp";
     };
   };

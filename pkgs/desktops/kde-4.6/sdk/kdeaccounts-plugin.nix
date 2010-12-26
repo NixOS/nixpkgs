@@ -9,7 +9,7 @@ kde.package {
     kde = {
       name = "kdeaccounts-plugin";
       module = "kdesdk";
-      version = "4.5.4";
+      version = "4.5.90";
     };
   };
 }

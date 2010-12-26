@@ -10,7 +10,7 @@ kde.package {
       name = "kate";
       module = "kdesdk";
       version = "3.5.2"; # (release.major-1).(release.minor).(release.patch)
-      release = "4.5.4";
+      release = "4.5.90";
     };
   };
 }

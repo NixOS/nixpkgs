@@ -12,7 +12,7 @@ kde.package {
       name = "klinkstatus";
       module = "kdewebdev";
       version = "0.7.0";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "src/main.cpp";
     };
   };

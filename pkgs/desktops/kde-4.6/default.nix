@@ -2,7 +2,7 @@
 
 let
 
-  version = "4.5.4";
+  version = "4.5.90";
 
   # Various packages (e.g. kdesdk) have been split up into many
   # smaller packages.  Some people may want to install the entire

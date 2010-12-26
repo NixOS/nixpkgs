@@ -9,7 +9,7 @@ kde.package {
       name = "kommander";
       module = "kdewebdev";
       version = "1.91";
-      release = "4.5.4";
+      release = "4.5.90";
       versionFile = "lib/kommanderversion.h";
     };
   };
