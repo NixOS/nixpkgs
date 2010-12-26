@@ -6784,6 +6784,8 @@ let
 
   rogue = callPackage ../games/rogue { };
 
+  sauerbraten = callPackage ../games/sauerbraten {};
+
   scummvm = callPackage ../games/scummvm { };
 
   scorched3d = callPackage ../games/scorched3d {
