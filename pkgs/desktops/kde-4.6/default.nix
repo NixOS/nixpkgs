@@ -17,7 +17,7 @@ let
 
 in
 
-recurseIntoAttrs rec {
+rec {
   inherit callPackage stdenv;
 
   qt4 = qt47;
