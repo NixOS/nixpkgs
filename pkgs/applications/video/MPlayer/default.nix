@@ -13,6 +13,7 @@
 , screenSaverSupport ? true, libXScrnSaver
 , pulseSupport ? false, pulseaudio
 , mesa, pkgconfig, unzip, yasm, freefont_ttf
+, vdpauSupport ? false, libvdpau ? null
 }:
 
 assert alsaSupport -> alsaLib != null;
@@ -27,6 +28,7 @@ assert cddaSupport -> cdparanoia != null;
 assert jackaudioSupport -> jackaudio != null;
 assert amrSupport -> (amrnb != null && amrwb != null);
 assert screenSaverSupport -> libXScrnSaver != null;
+assert vdpauSupport -> libvdpau != null;
 
 let
 
@@ -63,11 +65,11 @@ let
 in  
 
 stdenv.mkDerivation rec {
-  name = "MPlayer-1.0-pre31984";
+  name = "MPlayer-1.0-pre20101227";
 
   src = fetchurl {
-    url = "http://www.loegria.net/misc/${name}.tar.bz2";
-    sha256 = "0mg6kggja113rsvvsk05gk50xl5qwzsms6pmb4ylc99mflh7m9km";
+    url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
+    sha256 = "0q9rvjz3byvs0qlnb9jbnw3qs6c3vdcqaqxm1rnql8kqic442hv2";
   };
 
   buildInputs =
@@ -87,7 +89,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional pulseSupport pulseaudio
     ++ stdenv.lib.optional screenSaverSupport libXScrnSaver
-    ++ stdenv.lib.optional lameSupport lame;
+    ++ stdenv.lib.optional lameSupport lame
+    ++ stdenv.lib.optional vdpauSupport libvdpau;
 
   buildNativeInputs = [ yasm ];
 
