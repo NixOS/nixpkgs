@@ -3603,6 +3603,8 @@ let
 
   libv4l = callPackage ../development/libraries/libv4l { };
 
+  libvdpau = callPackage ../development/libraries/libvdpau { };
+
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
@@ -6538,6 +6540,8 @@ let
   valknut = callPackage ../applications/networking/p2p/valknut {
     qt = qt3;
   };
+
+  vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   veracity = callPackage ../applications/version-management/veracity {};
 
