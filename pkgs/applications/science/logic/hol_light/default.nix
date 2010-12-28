@@ -1,4 +1,4 @@
-{stdenv, writeText, writeTextFile, ocaml, camlp5_transitional, hol_light_sources}:
+{stdenv, writeText, writeTextFile, ocaml, findlib, camlp5_transitional, hol_light_sources}:
 
 let
   version = hol_light_sources.version;
@@ -10,11 +10,11 @@ let
   pa_j_cmo = stdenv.mkDerivation {
     name = "pa_j.cmo";
     inherit ocaml camlp5; 
-    buildInputs = [ ocaml camlp5 ];
+    buildInputs = [ ocaml camlp5 findlib ];
     buildCommand = ''
       ocamlc -c \
         -pp "camlp5r pa_lexer.cmo pa_extend.cmo q_MLast.cmo" \
-        -I "${camlp5}/lib/ocaml/camlp5" \
+        -I "$(ocamlfind query camlp5)" \
         -o $out \
         "${hol_light_src_dir}/pa_j_`ocamlc -version | cut -c1-4`.ml"
       '';
@@ -22,7 +22,7 @@ let
 
   start_ml = writeText "start.ml" ''
     Topdirs.dir_directory "${hol_light_src_dir}";;
-    Topdirs.dir_directory "${camlp5}/lib/ocaml/camlp5";;
+    Topdirs.dir_directory ("${camlp5}/lib/ocaml/"^Sys.ocaml_version^"/site-lib/camlp5");;
     Topdirs.dir_load Format.std_formatter "camlp5o.cma";;
     Topdirs.dir_load Format.std_formatter "${pa_j_cmo}";;
     #use "${hol_light_src_dir}/make.ml";;

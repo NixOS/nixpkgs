@@ -1508,6 +1508,8 @@ let
     buildClang = true;
   };
 
+  clean = callPackage ../development/compilers/clean { };
+
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
   dylan = callPackage ../development/compilers/gwydion-dylan {
@@ -3224,6 +3226,12 @@ let
   kerberos = heimdal;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+
+  herqqSvn = callPackage ../development/libraries/herqq/svn.nix { };
+
+  herqq070 = callPackage ../development/libraries/herqq/0.7.0.nix { };
+
+  herqq080 = callPackage ../development/libraries/herqq/0.8.0.nix { };
 
   hspell = callPackage ../development/libraries/hspell { };
 
@@ -6868,6 +6876,8 @@ let
 
   rogue = callPackage ../games/rogue { };
 
+  sauerbraten = callPackage ../games/sauerbraten {};
+
   scummvm = callPackage ../games/scummvm { };
 
   scorched3d = callPackage ../games/scorched3d {
@@ -6924,6 +6934,11 @@ let
   };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
+
+  ultrastardx = callPackage ../games/ultrastardx {
+    stdenv = stdenv2;
+    lua = lua5;
+  };
 
   urbanterror = callPackage ../games/urbanterror { };
 
@@ -7025,6 +7040,16 @@ let
         pkgs_for_45.newScope pkgs_for_45.kde45;
   };
 
+  kde46 = callPackage ../desktops/kde-4.6 {
+    callPackage =
+      let
+        # !!! Ugly, inefficient.
+        pkgs_for_46 = (applyGlobalOverrides (p: { kde4 = p.kde46; }));
+      in
+        pkgs_for_46.newScope pkgs_for_46.kde46;
+    stdenv = pkgs.stdenv2;
+  };
+
   xfce = xfce4;
 
   xfce4 = recurseIntoAttrs
@@ -7118,7 +7143,7 @@ let
   hol = callPackage ../applications/science/logic/hol { };
 
   hol_light = callPackage ../applications/science/logic/hol_light {
-    inherit (ocamlPackages) camlp5_transitional;
+    inherit (ocamlPackages) findlib camlp5_transitional;
   };
 
   hol_light_sources = callPackage ../applications/science/logic/hol_light/sources.nix { };
@@ -7339,6 +7364,8 @@ let
   latex2html = callPackage ../misc/tex/latex2html/default.nix {
     tex = tetex;
   };
+
+  lkproof = callPackage ../misc/tex/lkproof { };
 
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5;
