@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, db4, gettext} :
+{ stdenv, fetchurl, openssl, db4, gettext, automake} :
 
 stdenv.mkDerivation {
   name = "cyrus-sasl-2.1.23";
@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   };
   preConfigure=''
     configureFlags="--with-openssl=${openssl} --with-plugindir=$out/lib/sasl2 --with-configdir=$out/lib/sasl2 --enable-login"
+    cp ${automake}/share/automake*/config.{sub,guess} config
   '';
   buildInputs = [ openssl db4 gettext ];
   patches = [ ./cyrus-sasl-2.1.22-bad-elif.patch ];

@@ -2,11 +2,11 @@
 , pkgconfig, fontconfig, libzip, zip, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "freedink-1.08.20100420";
+  name = "freedink-1.08.20101114";
 
   src = fetchurl {
     url = "mirror://gnu/freedink/${name}.tar.gz";
-    sha256 = "0jw0690k7wgsga74nd8m1c3k34xmzgav6z0hhpx507krw2mkbm90";
+    sha256 = "0h3i7p7awk5flymh22xaazm2r56hv86z2il2gmbzrr6xh434zffa";
   };
 
   buildInputs = [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx pkgconfig fontconfig libzip zip zlib] ;

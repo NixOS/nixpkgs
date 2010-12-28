@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gmp}:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-2.4.2";
+  name = "mpfr-3.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "1fpjphja2ridy1wfc53mcbavj4axl28ibvnawj1217flm045mry7";
+    sha256 = "07w24h8by7n319p2vwwa1xdcg7qzkd1aqm84lfcbfv2kaff5yklg";
   };
 
   buildInputs = [ gmp ];
@@ -31,5 +31,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = "LGPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

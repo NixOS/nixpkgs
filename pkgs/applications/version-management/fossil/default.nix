@@ -12,21 +12,22 @@ stdenv.mkDerivation {
     sha256 = "1yx35gq9ialvnvjn1r5yar4zxgy0rkxzyz9paxwy8qan3qb53mwz";
   };
 
-  buildInputs = [ zlib openssl tcl ];
-  buildNativeInputs = [ zlib openssl ];
+  buildInputs = [ zlib openssl ];
+  buildNativeInputs = [ tcl ];
 
   doCheck = true;
 
   checkTarget = "test";
 
-  crossAttrs = {
-    doCheck = false;
-  };
-
   installPhase = ''
     ensureDir $out/bin
     INSTALLDIR=$out/bin make install
   '';
+
+  crossAttrs = {
+    doCheck = false;
+    makeFlagsArray = [ "TCC=${stdenv.cross.config}-gcc" ];
+  };
 
   meta = {
     description = "Simple, high-reliability, distributed software configuration management.";

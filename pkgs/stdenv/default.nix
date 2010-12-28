@@ -10,7 +10,7 @@
 # system, e.g., cygwin and mingw builds on i686-cygwin.  Most people
 # can ignore it.
 
-{system, stdenvType ? system, allPackages ? import ../..}:
+{system, stdenvType ? system, allPackages ? import ../.., platform}:
 
 assert system != "i686-cygwin" -> system == stdenvType;
 
@@ -41,7 +41,7 @@ rec {
 
 
   # Linux standard environment.
-  stdenvLinux = (import ./linux {inherit system allPackages;}).stdenvLinux;
+  stdenvLinux = (import ./linux {inherit system allPackages platform;}).stdenvLinux;
 
     
   # MinGW/MSYS standard environment.
@@ -55,6 +55,7 @@ rec {
     if stdenvType == "i686-linux" then stdenvLinux else
     if stdenvType == "x86_64-linux" then stdenvLinux else
     if stdenvType == "armv5tel-linux" then stdenvLinux else
+    if stdenvType == "mips64-linux" then stdenvLinux else
     if stdenvType == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
     if stdenvType == "i686-mingw" then stdenvMinGW else
     if stdenvType == "i686-darwin" then stdenvNix else

@@ -1,33 +1,69 @@
-{stdenv, fetchurl, enableStatic ? false}:
+{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""}:
 
 let
-  basicConfigure = ''
-    make defconfig
-    sed -i 's,.*CONFIG_PREFIX.*,CONFIG_PREFIX="'$out'",' .config
-    sed -i 's,.*CONFIG_INSTALL_NO_USR.*,CONFIG_INSTALL_NO_USR=y,' .config
-  '' +
-    (if enableStatic then ''
-      sed -i 's,.*CONFIG_STATIC.*,CONFIG_STATIC=y,' .config
+  configParser = ''
+    function parseconfig {
+        set -x
+        while read LINE; do
+            NAME=`echo "$LINE" | cut -d \  -f 1`
+            OPTION=`echo "$LINE" | cut -d \  -f 2`
+
+            if test -z "$NAME"; then
+                continue
+            fi
+
+            if test "$NAME" == "CLEAR"; then
+                echo "parseconfig: CLEAR"
+                echo > .config
+            fi
+
+            echo "parseconfig: removing $NAME"
+            sed -i /^$NAME=/d .config
+
+            echo "parseconfig: setting $NAME=$OPTION"
+            echo "$NAME=$OPTION" >> .config
+        done
+        set +x
+    }
+  '';
+
+  nixConfig = ''
+    CONFIG_PREFIX "$out"
+    CONFIG_INSTALL_NO_USR n
+  '';
+
+  staticConfig = (if enableStatic then ''
+      CONFIG_STATIC y
     '' else "");
 
 in
 
-stdenv.mkDerivation {
-  name = "busybox-1.16.0";
+stdenv.mkDerivation rec {
+  name = "busybox-1.18.0";
 
   src = fetchurl {
-    url = http://busybox.net/downloads/busybox-1.16.0.tar.bz2;
-    sha256 = "1n738zk01yi2sjrx2y36hpzxbslas8b91vzykcifr0p1j7ym0lim";
+    url = "http://busybox.net/downloads/${name}.tar.bz2";
+    sha256 = "007bc8k6sc62iyjmyv3di2c8xdxvdhvqg68c7pn40m0455lmx79s";
   };
 
-  configurePhase = basicConfigure;
+  configurePhase = ''
+    make defconfig
+    ${configParser}
+    cat << EOF | parseconfig
+    ${staticConfig}
+    ${extraConfig}
+    ${nixConfig}
+    $extraCrossConfig
+    EOF
+    make oldconfig
+  '';
 
   crossAttrs = {
-    configurePhase = basicConfigure + ''
-      sed -i 's,.*CONFIG_CROSS_COMPILER_PREFIX.*,CONFIG_CROSS_COMPILER_PREFIX="'$crossConfig-'",' .config
+    extraCrossConfig = ''
+      CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cross.config}-"
     '' +
       (if (stdenv.cross.platform.kernelMajor == "2.4") then ''
-        sed -i 's,.*CONFIG_IONICE.*,CONFIG_IONICE=n,' .config
+        CONFIG_IONICE n
       '' else "");
   };
 }

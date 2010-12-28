@@ -228,7 +228,7 @@ pkgs.makeOverridable
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = import ./desktop/scrollkeeper {
-    inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42;
+    inherit (pkgs) stdenv fetchurl pkgconfig perl perlXMLParser libxml2 libxslt docbook_xml_dtd_42 automake;
   };
 
   # scrollkeeper replacement

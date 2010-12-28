@@ -24,7 +24,7 @@ rec {
     export NIX_LDFLAGS='-lXi -lX11 -lglib-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0 -lc -lXext -lpango-1.0 -latk-1.0'
     export LCL_PLATFORM=gtk2
     ensureDir $out/share
-    tar xf ${fpc.src} --strip-components=1 -C $out/share
+    tar xf ${fpc.src} --strip-components=1 -C $out/share -m
     sed -e 's@/usr/fpcsrc@'"$out/share/fpcsrc@" -i ide/include/unix/lazbaseconf.inc
   '') 
   ["minInit" "defEnsureDir" "doUnpack"];

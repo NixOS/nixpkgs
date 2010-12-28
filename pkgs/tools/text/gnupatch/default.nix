@@ -4,18 +4,22 @@ stdenv.mkDerivation rec {
   name = "patch-2.6.1";
 
   src =
-    if !(stdenv ? glibc)
+    if stdenv.isDarwin
     then fetchurl {
       # Temporary fix for
       # http://lists.gnu.org/archive/html/bug-patch/2010-01/msg00004.html .
-      url = "http://nixos.org/tarballs/patch-2.6.1-2-g2c4e3ec.tar.gz";
-      sha256 = "1rspyzrik5cnav3m2fxr8146bsq4mc0yw4x0r8nkl2x7i052yr2c";
+      url = "ftp://alpha.gnu.org/gnu/patch/patch-2.6.1.87-94d8.tar.gz";
+      sha256 = "0jnw8p0nvkmwi1a2z56bssqik8fvkb71zd2cpzl1sklnrg1g3b6p";
     } else fetchurl {
       url = "mirror://gnu/patch/${name}.tar.gz";
       sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
     };
 
   buildInputs = (stdenv.lib.optional doCheck ed);
+
+  crossAttrs = {
+    configureFlags = [ "ac_cv_func_strnlen_working=yes" ];
+  };
 
   doCheck = true;
 

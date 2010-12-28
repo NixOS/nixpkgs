@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
   '';
 
-  configureFlags = [ "--enable-shared" ];
+  configureFlags = [ "--enable-shared" ]
+    ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic";
 
   buildInputs = [ yasm ];
 

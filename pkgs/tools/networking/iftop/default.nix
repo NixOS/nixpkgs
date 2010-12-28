@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, libpcap}:
+{stdenv, fetchurl, ncurses, libpcap, automake}:
 
 stdenv.mkDerivation rec {
   name = "iftop-0.17";
@@ -7,6 +7,10 @@ stdenv.mkDerivation rec {
     url = http://ex-parrot.com/pdw/iftop/download/iftop-0.17.tar.gz;
     sha256 = "1b0fis53280qx85gldhmqfcpgyiwplzg43gxyngia1w3f1y58cnh";
   };
+
+  preConfigure = ''
+    cp ${automake}/share/automake*/config.{sub,guess} config
+  '';
 
   buildInputs = [ncurses libpcap];
 

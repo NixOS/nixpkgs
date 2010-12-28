@@ -46,8 +46,14 @@ composableDerivation {} {
       ;
 
   cfg = {
-    pythonSupport = true;
-    ftNixSupport = true; # add .nix filetype detection and minimal syntax highlighting support
+    pythonSupport    = getConfig [ "vim" "python" ] true;
+    darwinSupport    = getConfig [ "vim" "darwin" ] false;
+    nlsSupport       = getConfig [ "vim" "nls" ] false;
+    tclSupport       = getConfig [ "vim" "tcl" ] false;
+    multibyteSupport = getConfig [ "vim" "multibyte" ] false;
+    cscopeSupport    = getConfig [ "vim" "cscope" ] false;
+    # add .nix filetype detection and minimal syntax highlighting support
+    ftNixSupport     = getConfig [ "vim" "ftNix" ] true;
   };
 
   #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gnome/gnome2/motif/athena/neXtaw/photon/carbon

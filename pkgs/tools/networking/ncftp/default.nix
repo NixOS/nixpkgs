@@ -1,11 +1,13 @@
 {stdenv, fetchurl, ncurses, coreutils}:
 
+let version = "3.2.4"; in
 stdenv.mkDerivation {
-  name = "ncftp-3.2.3";
+  name = "ncftp-${version}";
 
   src = fetchurl {
-    url = ftp://ftp.ncftp.com/ncftp/ncftp-3.2.4-src.tar.bz2;
-    sha256 = "0v0cfc4kqsvmfighl47djw5nw82dl5j5g5i2s8wy375fllim0cv6";
+    # `ncftp.com' got stolen, apparently, so resort to Debian.
+    url = "mirror://debian/pool/main/n/ncftp/ncftp_${version}.orig.tar.gz";
+    sha256 = "6f26e7891f3eab27eebd2bbbe2bc87d5ae872e610eaf0bc5652aec520adcf68a";
   };
 
   preConfigure = ''
@@ -22,6 +24,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "NcFTP Client (also known as just NcFTP) is a set of FREE application programs implementing the File Transfer Protocol (FTP).";
-    homepage = http://www.ncftp.com/ncftp/;
+
+    # Homeless!
+    # homepage = http://www.ncftp.com/ncftp/;
   };
 }

@@ -122,14 +122,9 @@ rec {
     http://ftp.cc.uoc.gr/mirrors/nongnu.org/
     http://ftp.twaren.net/Unix/NonGNU/
     http://mirror.csclub.uwaterloo.ca/nongnu/
-    http://mirror.publicns.net/pub/nongnu/
     http://nongnu.askapache.com/
-    http://nongnu.bigsearcher.com/
     http://savannah.c3sl.ufpr.br/
     http://www.centervenus.com/mirrors/nongnu/
-    http://www.de-mirrors.de/nongnu/
-    http://www.very-clever.com/download/nongnu/
-    http://www.wikifusion.info/nongnu/
   ];
 
   # BitlBee mirrors, see http://www.bitlbee.org/main.php/mirrors.html .

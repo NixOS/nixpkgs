@@ -40,11 +40,17 @@ rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
     ];
 
-
   xulrunner = stdenv.mkDerivation {
     name = "xulrunner-${xulVersion}";
     
     inherit src;
+
+    patches = [
+      # Loongson2f related patches:
+      ./xulrunner-chromium-mips.patch
+      ./xulrunner-mips-n32.patch
+      ./xulrunner-1.9.2_beta4-mips-bus-error.patch
+    ];
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
@@ -52,6 +58,10 @@ rec {
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman
       ];
+
+    preConfigure = if stdenv.isMips then ''
+      export ac_cv_thread_keyword=no
+    '' else "";
 
     configureFlags =
       [ "--enable-application=xulrunner"

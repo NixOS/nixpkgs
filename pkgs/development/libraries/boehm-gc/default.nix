@@ -1,16 +1,19 @@
 {stdenv, fetchurl}:
 
-let version = "7.1"; in
+let
+  version = if stdenv.isMips then "7.2alpha4" else "7.1";
+in
 stdenv.mkDerivation ({
   name = "boehm-gc-${version}";
 
   src = fetchurl {
     url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-${version}.tar.gz";
-    sha256 = "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3";
+    sha256 = (if version == "7.1" then "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3"
+      else if version == "7.2alpha4" then "1ya9hr1wbx0hrx29q5zy2k51ml71k9mhqzqs7f505qr9s6jsfh0b"
+      else throw "Version unknown");
   };
 
-  patches =
-    stdenv.lib.optional (stdenv.system == "i686-cygwin")
+  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
                         ./cygwin-pthread-dl.patch;
 
   doCheck = true;

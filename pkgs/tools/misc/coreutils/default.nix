@@ -1,28 +1,35 @@
-{ stdenv, fetchurl, aclSupport ? false, acl ? null, perl, gmp ? null
-, cross ? null, gccCross ? null }:
+{ stdenv, fetchurl, aclSupport ? false, acl ? null, perl, gmp ? null}:
 
 assert aclSupport -> acl != null;
-assert cross != null -> gccCross != null;
 
-stdenv.mkDerivation (rec {
-  name = "coreutils-8.4";
+stdenv.mkDerivation rec {
+  name = "coreutils-8.7";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "0zq11lykc7hfs9nsdnb8gqk354l82hswqj38607mvwj3b0zqvc4b";
+    sha256 = "11ykd7glys6lcfb2mwgmkqmmffv1pan70j6sl9vcjpnlf9dvk7bw";
   };
 
   buildNativeInputs = [ perl ];
-  buildInputs =
-       stdenv.lib.optional (gmp != null) gmp
-    ++ stdenv.lib.optional aclSupport acl
-    ++ stdenv.lib.optional (gccCross != null) gccCross;
+  buildInputs = [ gmp ] ++ stdenv.lib.optional aclSupport acl;
+
+  crossAttrs = {
+    buildInputs = [ gmp ]
+      ++ stdenv.lib.optional aclSupport acl.hostDrv
+      ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
+        stdenv.gccCross.libc.libiconv.hostDrv;
+
+    # Needed for fstatfs()
+    # I don't know why it is not properly detected cross building with glibc.
+    configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ];
+    doCheck = false;
+  };
 
   # The tests are known broken on Cygwin
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc) && (cross == null);
+  doCheck = (stdenv ? glibc);
 
   enableParallelBuilding = true;
 
@@ -42,9 +49,3 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
-
-//
-
-(if cross != null
- then { crossConfig = cross.config; }
- else { }))

@@ -1,18 +1,34 @@
 { alsaSupport ? true, xvSupport ? true, theoraSupport ? true, cacaSupport ? true
 , xineramaSupport ? true, randrSupport ? true, dvdnavSupport ? true
 , stdenv, fetchurl, x11, freetype, fontconfig, zlib
-, alsaLib, libX11, libXv, libtheora, libcaca
-, libXinerama, libXrandr, libdvdnav
-, cdparanoia, cddaSupport ? true
-, pulseaudio, pulseSupport ? true
-, amrnb, amrwb, amrSupport ? false
-, jackaudioSupport ? false, jackaudio
-, x264Support ? true, x264
-, xvidSupport ? true, xvidcore
-, lameSupport ? true, lame
+, alsaLib ? null, libXv ? null, libtheora ? null, libcaca ? null
+, libXinerama ? null, libXrandr ? null, libdvdnav ? null
+, cdparanoia ? null, cddaSupport ? true
+, amrnb ? null, amrwb ? null, amrSupport ? false
+, x11Support ? true, libX11 ? null, libXext ? null
+, jackaudioSupport ? false, jackaudio ? null
+, x264Support ? false, x264 ? null
+, xvidSupport ? false, xvidcore ? null
+, lameSupport ? true, lame ? null
 , screenSaverSupport ? true, libXScrnSaver
-, mesa, pkgconfig, unzip, yasm
+, pulseSupport ? false, pulseaudio
+, mesa, pkgconfig, unzip, yasm, freefont_ttf
+, vdpauSupport ? false, libvdpau ? null
 }:
+
+assert alsaSupport -> alsaLib != null;
+assert x11Support -> libX11 != null;
+assert xvSupport -> (libXv != null && x11Support);
+assert theoraSupport -> libtheora != null;
+assert cacaSupport -> libcaca != null;
+assert xineramaSupport -> (libXinerama != null && x11Support);
+assert randrSupport -> (libXrandr != null && x11Support);
+assert dvdnavSupport -> libdvdnav != null;
+assert cddaSupport -> cdparanoia != null;
+assert jackaudioSupport -> jackaudio != null;
+assert amrSupport -> (amrnb != null && amrwb != null);
+assert screenSaverSupport -> libXScrnSaver != null;
+assert vdpauSupport -> libvdpau != null;
 
 let
 
@@ -49,15 +65,16 @@ let
 in  
 
 stdenv.mkDerivation rec {
-  name = "MPlayer-1.0-pre31984";
+  name = "MPlayer-1.0-pre20101227";
 
   src = fetchurl {
-    url = "http://www.loegria.net/misc/${name}.tar.bz2";
-    sha256 = "0mg6kggja113rsvvsk05gk50xl5qwzsms6pmb4ylc99mflh7m9km";
+    url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
+    sha256 = "0q9rvjz3byvs0qlnb9jbnw3qs6c3vdcqaqxm1rnql8kqic442hv2";
   };
 
   buildInputs =
-    [ x11 libXv freetype zlib mesa pkgconfig yasm ]
+    [ freetype zlib pkgconfig ]
+    ++ stdenv.lib.optional x11Support [ libX11 libXext mesa ]
     ++ stdenv.lib.optional alsaSupport alsaLib
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -72,20 +89,42 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional pulseSupport pulseaudio
     ++ stdenv.lib.optional screenSaverSupport libXScrnSaver
-    ++ stdenv.lib.optional lameSupport lame;
+    ++ stdenv.lib.optional lameSupport lame
+    ++ stdenv.lib.optional vdpauSupport libvdpau;
+
+  buildNativeInputs = [ yasm ];
 
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
     ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
     ${if codecs != null then "--codecsdir=${codecs}" else ""}
-    --enable-runtime-cpudetection
-    --enable-x11
+    ${if (stdenv.isi686 || stdenv.isx86_64) then "--enable-runtime-cpudetection" else ""}
+    ${if x11Support then "--enable-x11" else ""}
     --disable-xanim
     --disable-ivtv
   '';
 
-  NIX_LDFLAGS = "-lX11 -lXext";
+  NIX_LDFLAGS = if x11Support then "-lX11 -lXext" else "";
+
+  # Provide a reasonable standard font.  Maybe we should symlink here.
+  postInstall =
+    ''
+      mkdir -p $out/share/mplayer
+      cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
+    '';
+
+  crossAttrs = {
+    preConfigure = ''
+      configureFlags="`echo $configureFlags |
+        sed -e 's/--build[^ ]\+//' \
+        -e 's/--host[^ ]\+//' \
+        -e 's/--codecsdir[^ ]\+//' \
+        -e 's/--enable-runtime-cpudetection//' `"
+      configureFlags="$configureFlags --target=${stdenv.cross.arch}-linux
+        --cc=$crossConfig-gcc --as=$crossConfig-as"
+    '';
+  };
 
   meta = {
     description = "A movie player that supports many video formats";

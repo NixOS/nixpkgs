@@ -1,0 +1,263 @@
+From 1e3a6c25bc258021899c0a31ea9b68ea656d8f6b Mon Sep 17 00:00:00 2001
+From: Yury G. Kudryashov <urkud.urkud@gmail.com>
+Date: Sat, 8 May 2010 18:42:35 +0400
+Subject: [PATCH] Find include directories as well
+
+Makes it possible to compile phonon if gstreamer and gst-plugins-base are
+installed into different prefixes. Theoretically, should work even if each
+plugin is installed into dedicated prefix, but this feature is not tested.
+---
+ cmake/FindGStreamerPlugins.cmake |  160 +++++++++++++++-----------------------
+ gstreamer/CMakeLists.txt         |    4 +-
+ gstreamer/ConfigureChecks.cmake  |   10 +-
+ 3 files changed, 72 insertions(+), 102 deletions(-)
+
+diff --git a/cmake/FindGStreamerPlugins.cmake b/cmake/FindGStreamerPlugins.cmake
+index f6d70d5..9e7a4d0 100644
+--- a/cmake/FindGStreamerPlugins.cmake
++++ b/cmake/FindGStreamerPlugins.cmake
+@@ -2,19 +2,63 @@
+ # Once done this will define
+ #
+ #  GSTREAMERPLUGINSBASE_FOUND - system has GStreamer_Plugins
+-#  GSTREAMERPLUGINSBASE_INCLUDE_DIR - the GStreamer_Plugins include directory
++#  GSTREAMERPLUGINSBASE_INCLUDE_DIRS - the GStreamer_Plugins include directories
+ #  GSTREAMERPLUGINSBASE_LIBRARIES - the libraries needed to use GStreamer_Plugins
+-#  GSTREAMERPLUGINSBASE_DEFINITIONS - Compiler switches required for using GStreamer_Plugins
++#
++# The following variables are set for each plugin PLUGINNAME:
++#
++#  GSTREAMER_PLUGIN_PLUGINNAME_FOUND - plugin is found
++#  GSTREAMER_PLUGIN_PLUGINNAME_INCLUDE_DIR - plugin include directory
++#  GSTREAMER_PLUGIN_PLUGINNAME_LIBRARY - the library needed to use plugin
+ #
+ #  (c)2009 Nokia Corporation
++#  (c)2010 Yury G. Kudryashov <urkud@ya.ru>
+ 
+ FIND_PACKAGE(PkgConfig REQUIRED)
+ 
+ IF (NOT WIN32)
+    # don't make this check required - otherwise you can't use macro_optional_find_package on this one
+-   PKG_CHECK_MODULES( PKG_GSTREAMER gstreamer-plugins-base-0.10 )
++   PKG_CHECK_MODULES( PKG_GSTREAMER_PLUGINSBASE gstreamer-plugins-base-0.10 )
+ ENDIF (NOT WIN32)
+ 
++MACRO(MACRO_FIND_GSTREAMER_PLUGIN _plugin _header)
++   STRING(TOUPPER ${_plugin} _upper)
++   IF (NOT WIN32)
++      # don't make this check required - otherwise you can't use macro_optional_find_package on this one
++      PKG_CHECK_MODULES( PKG_GSTREAMER_${_upper} gstreamer-${_plugin}-0.10 )
++   ENDIF (NOT WIN32)
++
++   FIND_LIBRARY(GSTREAMER_PLUGIN_${_upper}_LIBRARY NAMES gst${_plugin}-0.10
++      PATHS
++      ${PKG_GSTREAMER_PLUGINSBASE_LIBRARY_DIRS}
++      ${PKG_GSTREAMER_${_upper}_LIBRARY_DIRS}
++      )
++
++   FIND_PATH(GSTREAMER_PLUGIN_${_upper}_INCLUDE_DIR
++       NAMES gst/${_plugin}/${_header}
++       PATHS
++       ${PKG_GSTREAMER_PLUGINSBASE_INCLUDE_DIRS}
++       ${PKG_GSTREAMER_${_upper}_INCLUDE_DIRS}
++       )
++
++   IF(GSTREAMER_PLUGIN_${_upper}_LIBRARY AND GSTREAMER_PLUGIN_${_upper}_INCLUDE_DIR)
++      SET(GSTREAMER_PLUGIN_${_upper}_FOUND TRUE)
++      LIST(APPEND GSTREAMERPLUGINSBASE_INCLUDE_DIRS GSTREAMER_${_upper}_INCLUDE_DIR)
++      LIST(APPEND GSTREAMERPLUGINSBASE_LIBRARIES GSTREAMER_${_upper}_LIBRARY)
++   ELSE(GSTREAMER_PLUGIN_${_upper}_LIBRARY AND GSTREAMER_PLUGIN_${_upper}_INCLUDE_DIR)
++      MESSAGE(STATUS "Could not find ${_plugin} plugin")
++      MESSAGE(STATUS "${_upper} library: ${GSTREAMER_${_upper}_LIBRARY}")
++      MESSAGE(STATUS "${_upper} include dir: ${GSTREAMER_${_upper}_INCLUDE_DIR}")
++      SET(GSTREAMER_PLUGIN_${_upper}_FOUND FALSE)
++      SET(GSTREAMER_PLUGIN_${_upper}_LIBRARY GSTREAMER_${_upper}_LIBRARY-NOTFOUND)
++      SET(GSTREAMER_PLUGIN_${_upper}_INCLUDE_DIR GSTREAMER_${_upper}_INCLUDE_DIR-NOTFOUND)
++      SET(GSTREAMERPLUGINSBASE_FOUND FALSE)
++   ENDIF(GSTREAMER_PLUGIN_${_upper}_LIBRARY AND GSTREAMER_PLUGIN_${_upper}_INCLUDE_DIR)
++
++   MARK_AS_ADVANCED(GSTREAMER_PLUGIN_${_upper}_LIBRARY
++      GSTREAMER_PLUGIN_${_upper}_INCLUDE_DIR)
++ENDMACRO(MACRO_FIND_GSTREAMER_PLUGIN)
++
+ #
+ # Base plugins:
+ #  audio
+@@ -31,87 +75,21 @@ ENDIF (NOT WIN32)
+ # The gstinterfaces-0.10 library is found by FindGStreamer.cmake
+ #
+ 
+-FIND_LIBRARY(GSTREAMER_PLUGIN_AUDIO_LIBRARIES NAMES gstaudio-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_CDDA_LIBRARIES NAMES gstcdda-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES NAMES gstnetbuffer-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_PBUTILS_LIBRARIES NAMES gstpbutils-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_RIFF_LIBRARIES NAMES gstriff-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_RTP_LIBRARIES NAMES gstrtp-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_RTSP_LIBRARIES NAMES gstrtsp-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_SDP_LIBRARIES NAMES gstsdp-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_TAG_LIBRARIES NAMES gsttag-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-FIND_LIBRARY(GSTREAMER_PLUGIN_VIDEO_LIBRARIES NAMES gstvideo-0.10
+-   PATHS
+-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+-   )
+-
+-IF (GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND
+-    GSTREAMER_PLUGIN_CDDA_LIBRARIES AND
+-    GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES AND
+-    GSTREAMER_PLUGIN_PBUTILS_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RIFF_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RTP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RTSP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_SDP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_TAG_LIBRARIES AND
+-    GSTREAMER_PLUGIN_VIDEO_LIBRARIES)
+-   SET(GSTREAMERPLUGINSBASE_FOUND TRUE)
+-ELSE (GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND
+-    GSTREAMER_PLUGIN_CDDA_LIBRARIES AND
+-    GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES AND
+-    GSTREAMER_PLUGIN_PBUTILS_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RIFF_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RTP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RTSP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_SDP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_TAG_LIBRARIES AND
+-    GSTREAMER_PLUGIN_VIDEO_LIBRARIES)
+-   SET(GSTREAMERPLUGINSBASE_FOUND FALSE)
+-ENDIF (GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND
+-    GSTREAMER_PLUGIN_CDDA_LIBRARIES AND
+-    GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES AND
+-    GSTREAMER_PLUGIN_PBUTILS_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RIFF_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RTP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_RTSP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_SDP_LIBRARIES AND
+-    GSTREAMER_PLUGIN_TAG_LIBRARIES AND
+-    GSTREAMER_PLUGIN_VIDEO_LIBRARIES)
++SET(GSTREAMER_PLUGINSBASE_FOUND TRUE)
++MACRO_FIND_GSTREAMER_PLUGIN(audio audio.h)
++MACRO_FIND_GSTREAMER_PLUGIN(cdda gstcddabasesrc.h)
++MACRO_FIND_GSTREAMER_PLUGIN(netbuffer gstnetbuffer.h)
++MACRO_FIND_GSTREAMER_PLUGIN(pbutils pbutils.h)
++MACRO_FIND_GSTREAMER_PLUGIN(riff riff-ids.h)
++MACRO_FIND_GSTREAMER_PLUGIN(rtp gstrtpbuffer.h)
++MACRO_FIND_GSTREAMER_PLUGIN(rtsp gstrtspdefs.h)
++MACRO_FIND_GSTREAMER_PLUGIN(sdp gstsdp.h)
++MACRO_FIND_GSTREAMER_PLUGIN(tag tag.h)
++MACRO_FIND_GSTREAMER_PLUGIN(video video.h)
+ 
+ IF (GSTREAMERPLUGINSBASE_FOUND)
+-   SET(GSTREAMERPLUGINS_FOUND TRUE)
+-ELSE (GSTREAMERPLUGINSBASE_FOUND)
+-   SET(GSTREAMERPLUGINS_FOUND FALSE)
+-ENDIF (GSTREAMERPLUGINSBASE_FOUND)
+-
+-IF (GSTREAMERPLUGINS_FOUND)
++   LIST(REMOVE_DUPLICATES GSTREAMERPLUGINSBASE_LIBRARIES)
++   LIST(REMOVE_DUPLICATES GSTREAMERPLUGINSBASE_INCLUDE_DIRS)
+    IF (NOT GStreamer_Plugins_FIND_QUIETLY)
+       MESSAGE(STATUS "Found GStreamer Plugins:
+     ${GSTREAMER_PLUGIN_AUDIO_LIBRARIES}
+@@ -125,20 +103,10 @@ IF (GSTREAMERPLUGINS_FOUND)
+     ${GSTREAMER_PLUGIN_TAG_LIBRARIES}
+     ${GSTREAMER_PLUGIN_VIDEO_LIBRARIES}")
+    ENDIF (NOT GStreamer_Plugins_FIND_QUIETLY)
+-ELSE (GSTREAMERPLUGINS_FOUND)
++ELSE (GSTREAMERPLUGINSBASE_FOUND)
++   SET(GSTREAMERPLUGINSBASE_LIBRARIES GSTREAMERPLUGINSBASE_LIBRARIES-NOTFOUND)
++   SET(GSTREAMERPLUGINSBASE_INCLUDE_DIRS GSTREAMERPLUGINSBASE_INCLUDE_DIRS-NOTFOUND)
+    IF (GStreamer_Plugins_FIND_REQUIRED)
+       MESSAGE(SEND_ERROR "Could NOT find GStreamer Plugins")
+    ENDIF (GStreamer_Plugins_FIND_REQUIRED)
+-ENDIF (GSTREAMERPLUGINS_FOUND)
+-
+-MARK_AS_ADVANCED(GSTREAMERPLUGINS_DEFINITIONS
+-    GSTREAMER_PLUGIN_AUDIO_LIBRARIES
+-    GSTREAMER_PLUGIN_CDDA_LIBRARIES
+-    GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES
+-    GSTREAMER_PLUGIN_PBUTILS_LIBRARIES
+-    GSTREAMER_PLUGIN_RIFF_LIBRARIES
+-    GSTREAMER_PLUGIN_RTP_LIBRARIES
+-    GSTREAMER_PLUGIN_RTSP_LIBRARIES
+-    GSTREAMER_PLUGIN_SDP_LIBRARIES
+-    GSTREAMER_PLUGIN_TAG_LIBRARIES
+-    GSTREAMER_PLUGIN_VIDEO_LIBRARIES)
++ENDIF (GSTREAMERPLUGINSBASE_FOUND)
+diff --git a/gstreamer/CMakeLists.txt b/gstreamer/CMakeLists.txt
+index d529fb6..c42710b 100644
+--- a/gstreamer/CMakeLists.txt
++++ b/gstreamer/CMakeLists.txt
+@@ -20,6 +20,8 @@ if (BUILD_PHONON_GSTREAMER)
+    include_directories(
+ 	  ${CMAKE_CURRENT_BINARY_DIR}
+ 	  ${GSTREAMER_INCLUDE_DIR}
++	  ${GSTREAMER_PLUGIN_VIDEO_INCLUDE_DIR}
++	  ${GSTREAMER_PLUGIN_AUDIO_INCLUDE_DIR}
+ 	  ${GLIB2_INCLUDE_DIR}
+       ${LIBXML2_INCLUDE_DIR}
+ 	  ${X11_X11_INCLUDE_PATH})
+@@ -78,7 +80,7 @@ if (BUILD_PHONON_GSTREAMER)
+       ${QT_QTOPENGL_LIBRARY}
+       ${PHONON_LIBS} ${OPENGL_gl_LIBRARY}
+       ${GSTREAMER_LIBRARIES} ${GSTREAMER_BASE_LIBRARY} ${GSTREAMER_INTERFACE_LIBRARY}
+-      ${GSTREAMER_PLUGIN_VIDEO_LIBRARIES} ${GSTREAMER_PLUGIN_AUDIO_LIBRARIES}
++      ${GSTREAMER_PLUGIN_VIDEO_LIBRARY} ${GSTREAMER_PLUGIN_AUDIO_LIBRARY}
+       ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES})
+    if(ALSA_FOUND)
+       target_link_libraries(phonon_gstreamer ${ASOUND_LIBRARY})
+diff --git a/gstreamer/ConfigureChecks.cmake b/gstreamer/ConfigureChecks.cmake
+index 095a0e9..73616fa 100644
+--- a/gstreamer/ConfigureChecks.cmake
++++ b/gstreamer/ConfigureChecks.cmake
+@@ -16,8 +16,8 @@ macro_optional_find_package(GStreamer)
+ macro_log_feature(GSTREAMER_FOUND "GStreamer" "gstreamer 0.10 is required for the multimedia backend" "http://gstreamer.freedesktop.org/modules/" FALSE "0.10")
+ 
+ macro_optional_find_package(GStreamerPlugins)
+-macro_log_feature(GSTREAMER_PLUGIN_VIDEO_LIBRARIES "GStreamer video plugin" "The gstreamer video plugin (part of gstreamer-plugins-base 0.10) is required for the multimedia gstreamer backend" "http://gstreamer.freedesktop.org/modules/" FALSE "0.10")
+-macro_log_feature(GSTREAMER_PLUGIN_AUDIO_LIBRARIES "GStreamer audio plugin" "The gstreamer audio plugin (part of gstreamer-plugins-base 0.10) is required for the multimedia gstreamer backend" "http://gstreamer.freedesktop.org/modules/" FALSE "0.10")
++macro_log_feature(GSTREAMER_PLUGIN_VIDEO_FOUND "GStreamer video plugin" "The gstreamer video plugin (part of gstreamer-plugins-base 0.10) is required for the multimedia gstreamer backend" "http://gstreamer.freedesktop.org/modules/" FALSE "0.10")
++macro_log_feature(GSTREAMER_PLUGIN_AUDIO_FOUND "GStreamer audio plugin" "The gstreamer audio plugin (part of gstreamer-plugins-base 0.10) is required for the multimedia gstreamer backend" "http://gstreamer.freedesktop.org/modules/" FALSE "0.10")
+ 
+ macro_optional_find_package(GLIB2)
+ macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the gstreamer backend for Phonon" "http://www.gtk.org/download/" FALSE)
+@@ -31,8 +31,8 @@ macro_log_feature(LIBXML2_FOUND "LibXml2" "LibXml2 is required to compile the gs
+ macro_optional_find_package(OpenGL)
+ macro_log_feature(OPENGL_FOUND "OpenGL" "OpenGL support is required to compile the gstreamer backend for Phonon" "" FALSE)
+ 
+-if (GSTREAMER_FOUND AND GSTREAMER_PLUGIN_VIDEO_LIBRARIES AND GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND GLIB2_FOUND AND GOBJECT_FOUND AND LIBXML2_FOUND AND OPENGL_FOUND)
++if (GSTREAMER_FOUND AND GSTREAMER_PLUGIN_VIDEO_FOUND AND GSTREAMER_PLUGIN_AUDIO_FOUND AND GLIB2_FOUND AND GOBJECT_FOUND AND LIBXML2_FOUND AND OPENGL_FOUND)
+    set(BUILD_PHONON_GSTREAMER TRUE)
+-else (GSTREAMER_FOUND AND GSTREAMER_PLUGIN_VIDEO_LIBRARIES AND GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND GLIB2_FOUND AND GOBJECT_FOUND AND LIBXML2_FOUND AND OPENGL_FOUND)
++else (GSTREAMER_FOUND AND GSTREAMER_PLUGIN_VIDEO_FOUND AND GSTREAMER_PLUGIN_AUDIO_FOUND AND GLIB2_FOUND AND GOBJECT_FOUND AND LIBXML2_FOUND AND OPENGL_FOUND)
+    set(BUILD_PHONON_GSTREAMER FALSE)
+-endif (GSTREAMER_FOUND AND GSTREAMER_PLUGIN_VIDEO_LIBRARIES AND GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND GLIB2_FOUND AND GOBJECT_FOUND AND LIBXML2_FOUND AND OPENGL_FOUND)
++endif (GSTREAMER_FOUND AND GSTREAMER_PLUGIN_VIDEO_FOUND AND GSTREAMER_PLUGIN_AUDIO_FOUND AND GLIB2_FOUND AND GOBJECT_FOUND AND LIBXML2_FOUND AND OPENGL_FOUND)
+-- 
+1.7.1
+

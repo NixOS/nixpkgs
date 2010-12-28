@@ -13,6 +13,23 @@ assert nativeTools -> nativePrefix != "";
 assert !nativeTools -> gcc != null && binutils != null;
 assert !noLibc -> (!nativeLibc -> libc != null);
 
+let
+  chosenName = if name == "" then gcc.name else name;
+  gccLibs = stdenv.mkDerivation {
+    name = chosenName + "-libs";
+    phases = [ "installPhase" ];
+    installPhase = ''
+      echo $out
+      ensureDir $out
+      cp -Rd ${gcc}/${cross.config}/lib $out/lib
+      chmod -R +w $out/lib
+      for a in $out/lib/*.la; do
+          sed -i -e s,${gcc}/${cross.config}/lib,$out/lib,g $a
+      done
+      rm -f $out/lib/*.py
+    '';
+  };
+in
 stdenv.mkDerivation {
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
@@ -22,7 +39,8 @@ stdenv.mkDerivation {
   addFlags = ./add-flags;
   inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
   crossConfig = if (cross != null) then cross.config else null;
-  name = if name == "" then gcc.name else name;
+  gccLibs = if gcc != null then gccLibs else null;
+  name = chosenName;
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langF77 = if nativeTools then false else gcc ? langFortran;

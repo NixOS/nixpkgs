@@ -44,6 +44,9 @@ stdenv.mkDerivation {
     [ # Xen looks for headers in /usr/include and for libraries using
       # ldconfig.  Don't do that.
       ./has-header.patch
+
+      # GCC 4.5 compatibility.
+      ./gcc-4.5.patch
     ];
 
   buildInputs =
@@ -101,6 +104,10 @@ stdenv.mkDerivation {
       ${flip concatMapStrings stubdomSrcs (x: let src = fetchurl x; in ''
         cp ${src} stubdom/${src.name}
       '')}
+
+      # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
+      mkdir -p tools/include/gnu
+      touch tools/include/gnu/stubs-32.h
     '';
 
   postBuild =

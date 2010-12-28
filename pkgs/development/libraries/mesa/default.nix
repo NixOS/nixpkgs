@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   configureFlags =
     "--disable-gallium"
+    + (if stdenv.system == "mips64-linux" then
+      " --with-dri-drivers=swrast --with-driver=dri" else "")
     + (if stdenv.isDarwin then " --disable-egl" else "");
 
   buildInputs =

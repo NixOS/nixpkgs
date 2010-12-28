@@ -1,0 +1,20 @@
+--- opencv/src/highgui/cvcap_ffmpeg.cpp
++++ opencv/src/highgui/cvcap_ffmpeg.cpp
+@@ -49,6 +49,15 @@
+ #if !defined(WIN32) || defined(__MINGW32__)
+ // some versions of FFMPEG assume a C99 compiler, and don't define INT64_C
+-#ifndef INT64_C
+-#define INT64_C
++#if !defined INT64_C || !defined UINT64_C
++# if __WORDSIZE == 64
++#  define INT64_C(c)	c ## UL
++# else
++#  define INT64_C(c)	c ## ULL
++# endif
++# if __WORDSIZE == 64
++#  define UINT64_C(c)	c ## UL
++# else
++#  define UINT64_C(c)	c ## ULL
++# endif
+ #define __STDC_CONSTANT_MACROS
+ // force re-inclusion of stdint.h to get INT64_C macro

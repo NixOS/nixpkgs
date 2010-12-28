@@ -34,11 +34,12 @@
 , preConfigure ? ""
 , extraMeta ? {}
 , ubootChooser ? null
+, postInstall ? ""
 , ...
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-  || stdenv.system == "armv5tel-linux";
+  || stdenv.system == "armv5tel-linux" || stdenv.system == "mips64-linux";
 
 assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation {
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion;
+  inherit preConfigure src module_init_tools localVersion postInstall;
 
   patches = map (p: p.patch) kernelPatches;
 
@@ -94,6 +95,7 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "armv5tel-linux" then "arm" else
+    if stdenv.system == "mips64-linux" then "mips" else
     abort "Platform ${stdenv.system} is not supported.";
 
   crossAttrs = let

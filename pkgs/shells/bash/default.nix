@@ -2,7 +2,10 @@
 
 assert interactive -> readline != null;
 
-let realName = "bash-4.1"; in
+let
+  realName = "bash-4.1";
+  baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
+in
 
 stdenv.mkDerivation rec {
   name = "${realName}-p${toString (builtins.length patches)}";
@@ -33,12 +36,17 @@ stdenv.mkDerivation rec {
     in
       import ./bash-patches.nix patch;
 
-  # Note: Bison is needed because the patches above modify parse.y.
-  buildNativeInputs = [bison];
-  buildInputs = stdenv.lib.optional (texinfo != null) texinfo
-    ++ stdenv.lib.optional interactive readline;
+  crossAttrs = {
+    configureFlags = baseConfigureFlags +
+      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing";
+  };
 
-  configureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
+  configureFlags = baseConfigureFlags;
+
+  # Note: Bison is needed because the patches above modify parse.y.
+  buildNativeInputs = [bison]
+    ++ stdenv.lib.optional (texinfo != null) texinfo
+    ++ stdenv.lib.optional interactive readline;
    
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
@@ -72,5 +80,9 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+  };
+
+  passthru = {
+    shellPath = "/bin/bash";
   };
 }

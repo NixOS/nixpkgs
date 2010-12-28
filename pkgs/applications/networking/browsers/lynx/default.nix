@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses
+{ stdenv, fetchurl, ncurses, gzip
 , sslSupport ? true, openssl ? null
 }:
 
@@ -14,7 +14,13 @@ stdenv.mkDerivation {
   
   configureFlags = if sslSupport then "--with-ssl" else "";
   
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional sslSupport openssl;
+  buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl;
+  buildNativeInputs = [ ncurses ];
+
+  crossAttrs = {
+    configureFlags = "--enable-widec" +
+      (if sslSupport then " --with-ssl" else "");
+  };
 
   meta = {
     homepage = http://lynx.isc.org/;

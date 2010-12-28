@@ -5,7 +5,7 @@
 # ensuring purity of components produced by it.
 
 # The function defaults are for easy testing.
-{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix}:
+{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix, platform}:
 
 rec {
 
@@ -14,6 +14,7 @@ rec {
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
+    else if system == "mips64-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
 
 
@@ -22,6 +23,7 @@ rec {
       export NIX_ENFORCE_PURITY=1
       havePatchELF=1
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
+      ${if system == "mips64-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
 
 
@@ -89,7 +91,10 @@ rec {
       shell = "${bootstrapTools}/bin/sh";
       initialPath = [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
-      inherit gcc extraAttrs;
+      inherit gcc;
+      # Having the proper 'platform' in all the stdenvs allows getting proper
+      # linuxHeaders for example.
+      extraAttrs = extraAttrs // { inherit platform; };
       overrides = overrides // {
         inherit fetchurl;
       };
@@ -149,24 +154,46 @@ rec {
   
 
   # 2) These are the packages that we can build with the first
-  #    stdenv.  We only need Glibc (in step 3).
+  #    stdenv.  We only need binutils, because recent glibcs
+  #    require recent binutils, and those in bootstrap-tools may
+  #    be too old. (in step 3).
   stdenvLinuxBoot1Pkgs = allPackages {
-    inherit system;
+    inherit system platform;
     bootStdenv = stdenvLinuxBoot1;
   };
 
-  
-  # 3) Build Glibc with the bootstrap tools.  The result is the full,
-  #    dynamically linked, final Glibc.
-  stdenvLinuxGlibc = stdenvLinuxBoot1Pkgs.glibc;
+  firstBinutils = stdenvLinuxBoot1Pkgs.binutils;
+
+  # 3) 2nd stdenv that we will use to build only the glibc.
+  stdenvLinuxBoot2 = stdenvBootFun {
+    gcc = wrapGCC {
+      libc = bootstrapGlibc;
+      binutils = firstBinutils;
+      coreutils = bootstrapTools;
+    };
+    inherit fetchurl;
+  };
+
+
+  # 4) These are the packages that we can build with the 2nd
+  #    stdenv.  We only need Glibc (in step 5).
+  stdenvLinuxBoot2Pkgs = allPackages {
+    inherit system platform;
+    bootStdenv = stdenvLinuxBoot2;
+  };
 
   
-  # 4) Construct a second stdenv identical to the first, except that
+  # 5) Build Glibc with the bootstrap tools.  The result is the full,
+  #    dynamically linked, final Glibc.
+  stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
+
+  
+  # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
-  #    the rest of the bootstrap tools, including GCC.
-  stdenvLinuxBoot2 = removeAttrs (stdenvBootFun {
+  #    the recent binutils and rest of the bootstrap tools, including GCC.
+  stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC {
-      binutils = bootstrapTools;
+      binutils = stdenvLinuxBoot1Pkgs.binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
     };
@@ -175,26 +202,38 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
-  }) ["gcc" "binutils"];
-
-  
-  # 5) The packages that can be built using the second stdenv.
-  stdenvLinuxBoot2Pkgs = allPackages {
-    inherit system;
-    bootStdenv = stdenvLinuxBoot2;
   };
 
+  
+  # 7) The packages that can be built using the third stdenv.
+  stdenvLinuxBoot3Pkgs = allPackages {
+    inherit system platform;
+    bootStdenv = stdenvLinuxBoot3;
+  };
 
-  # 6) Construct a third stdenv identical to the second, except that
+  gccWithStaticLibs = stdenvLinuxBoot3Pkgs.gcc.gcc.override (rec {
+        ppl = stdenvLinuxBoot3Pkgs.ppl.override {
+          static = true;
+          gmpxx = stdenvLinuxBoot3Pkgs.gmpxx.override {
+            static = true;
+          };
+        };
+        cloogppl = stdenvLinuxBoot3Pkgs.cloogppl.override {
+          inherit ppl;
+          static = true;
+        };
+      });
+
+  # 8) Construct a fourth stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still from the
   #    bootstrap tools.
-  stdenvLinuxBoot3 = stdenvBootFun {
+  stdenvLinuxBoot4 = stdenvBootFun {
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot2Pkgs) binutils;
+      inherit (stdenvLinuxBoot3Pkgs) binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
+      gcc = gccWithStaticLibs;
       name = "";
     };
     overrides = {
@@ -204,19 +243,20 @@ rec {
   };
 
   
-  # 7) The packages that can be built using the third stdenv.
-  stdenvLinuxBoot3Pkgs = allPackages {
-    inherit system;
-    bootStdenv = stdenvLinuxBoot3;
+  # 9) The packages that can be built using the fourth stdenv.
+  stdenvLinuxBoot4Pkgs = allPackages {
+    inherit system platform;
+    bootStdenv = stdenvLinuxBoot4;
   };
 
   
-  # 8) Construct the final stdenv.  It uses the Glibc, GCC and
-  #    Binutils built above, and adds in dynamically linked versions
-  #    of all other tools.
+  # 10) Construct the final stdenv.  It uses the Glibc, GCC and
+  #     Binutils built above, and adds in dynamically linked versions
+  #     of all other tools.
   #
-  #    When updating stdenvLinux, make sure that the result has no
-  #    dependency (`nix-store -qR') on bootstrapTools.
+  #     When updating stdenvLinux, make sure that the result has no
+  #     dependency (`nix-store -qR') on bootstrapTools or the
+  #     first binutils built.
   stdenvLinux = import ../generic rec {
     name = "stdenv-linux";
     
@@ -225,30 +265,31 @@ rec {
     preHook = builtins.toFile "prehook.sh" commonPreHook;
     
     initialPath = 
-      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot3Pkgs;})
-      ++ [stdenvLinuxBoot3Pkgs.patchelf];
+      ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
+      ++ [stdenvLinuxBoot4Pkgs.patchelf];
 
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot2Pkgs) binutils;
-      inherit (stdenvLinuxBoot3Pkgs) coreutils;
+      inherit (stdenvLinuxBoot3Pkgs) binutils;
+      inherit (stdenvLinuxBoot4Pkgs) coreutils;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot2Pkgs.gcc.gcc;
-      shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
+      gcc = gccWithStaticLibs;
+      shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
       name = "";
     };
 
-    shell = stdenvLinuxBoot3Pkgs.bash + "/bin/bash";
+    shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
     
     fetchurlBoot = fetchurl;
     
     extraAttrs = {
-      inherit (stdenvLinuxBoot2Pkgs) glibc;
+      inherit (stdenvLinuxBoot3Pkgs) glibc;
+      inherit platform;
     };
 
     overrides = {
       inherit gcc;
-      inherit (stdenvLinuxBoot2Pkgs) binutils glibc;
-      inherit (stdenvLinuxBoot3Pkgs)
+      inherit (stdenvLinuxBoot3Pkgs) binutils glibc;
+      inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl;

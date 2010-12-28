@@ -82,6 +82,13 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
         rpath="$rpath $1 "
     }
 
+    libs=""
+    addToLibs() {
+        libs="$libs $1"
+    }
+
+    rpath=""
+
     # First, find all -L... switches.
     allParams=("${params[@]}" ${extra[@]})
     n=0
@@ -92,6 +99,16 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
             addToLibPath ${p:2}
         elif test "$p" = "-L"; then
             addToLibPath ${p2}
+            n=$((n + 1))
+        elif test "$p" = "-l"; then
+            addToLibs ${p2}
+            n=$((n + 1))
+        elif test "${p:0:2}" = "-l"; then
+            addToLibs ${p:2}
+        elif test "$p" = "-dynamic-linker"; then
+            # Ignore the dynamic linker argument, or it 
+            # will get into the next 'elif'. We don't want
+            # the dynamic linker path rpath to go always first.
             n=$((n + 1))
         elif [[ "$p" =~ ^[^-].*\.so($|\.) ]]; then
             # This is a direct reference to a shared library, so add
@@ -105,24 +122,16 @@ if test "$NIX_DONT_SET_RPATH" != "1"; then
     # Second, for each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
-    rpath=""
+    # It's important to add the rpath in the order of -L..., so
+    # the link time chosen objects will be those of runtime linking.
     
     for i in $libPath; do
-        n=0
-        while test $n -lt ${#allParams[*]}; do
-            p=${allParams[n]}
-            p2=${allParams[$((n+1))]}
-            if test "${p:0:2}" = "-l" -a -f "$i/lib${p:2}.so"; then
-                addToRPath $i
-                break
-            elif test "$p" = "-l" -a -f "$i/lib${p2}"; then
-                # I haven't seen `-l foo', but you never know...
+        for j in $libs; do
+            if test -f "$i/lib$j.so"; then
                 addToRPath $i
                 break
             fi
-            n=$((n + 1))
         done
-            
     done
     
 

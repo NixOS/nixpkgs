@@ -28,9 +28,7 @@ installPhase() {
 
     # Install libGL and friends.
     ensureDir $out/lib
-    cp -prd libcuda.* libGL.* libnvidia-cfg.* libnvidia-compiler.* libnvidia-tls.* libnvidia-glcore.* libOpenCL.* libvdpau.* libXv* tls $out/lib/
-    ensureDir $out/lib/vdpau
-    cp -p libvdpau_* $out/lib/vdpau
+    cp -prd libcuda.* libGL.* libnvidia-cfg.* libnvidia-compiler.* libnvidia-tls.* libnvidia-glcore.* libOpenCL.* libXv* libvdpau_nvidia* tls $out/lib/
     
     ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so
     ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so.1
@@ -41,9 +39,11 @@ installPhase() {
     ln -snf libnvidia-tls.so.$versionNumber $out/lib/tls/libnvidia-tls.so.1
     ln -snf libXvMCNVIDIA.so.$versionNumber $out/lib/libXvMCNVIDIA_dynamic.so.1
     ln -snf libcuda.so.$versionNumber $out/lib/libcuda.so.1
+    ln -snf libvdpau_nvidia.so.$versionNumber $out/lib/libvdpau_nvidia.so
 
     patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
     patchelf --set-rpath $out/lib:$glPath $out/lib/libXvMCNVIDIA.so.*.*
+    patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
     patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
     
     if test -z "$libsOnly"; then

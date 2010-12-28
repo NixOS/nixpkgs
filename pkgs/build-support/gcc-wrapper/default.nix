@@ -50,7 +50,25 @@ stdenv.mkDerivation {
   langAda = if nativeTools then false else gcc ? langAda && gcc.langAda;
   langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
   zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
-  shell = if shell == "" then stdenv.shell else shell;
+  shell = if shell == "" then stdenv.shell else
+    if builtins.isAttrs shell then (shell + shell.shellPath)
+    else shell;
+
+  crossAttrs = {
+    shell = shell.hostDrv + shell.hostDrv.shellPath;
+    libc = libc.hostDrv;
+    coreutils = coreutils.hostDrv;
+    binutils = binutils.hostDrv;
+    gcc = gcc.hostDrv;
+    #
+    # This is not the best way to do this. I think the reference should be
+    # the style in the gcc-cross-wrapper, but to keep a stable stdenv now I
+    # do this sufficient if/else.
+    dynamicLinker = 
+      (if stdenv.cross.arch == "arm" then "ld-linux.so.3" else
+       if stdenv.cross.arch == "mips" then "ld.so.1" else
+       abort "don't know the name of the dynamic linker for this platform");
+  };
   
   meta =
     let gcc_ = if gcc != null then gcc else {}; in
@@ -67,6 +85,7 @@ stdenv.mkDerivation {
        if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2" else
        if stdenv.system == "armv5tel-linux" then "ld-linux.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
+       if stdenv.system == "mips64-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
     else "";
 }

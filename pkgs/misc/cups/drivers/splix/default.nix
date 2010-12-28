@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bwivrwwvh6hzvnycpzqs7a0capgycahc4s3v9ihx552fgy07xwp";
   };
 
+  patches = [ ./splix-2.0.0-gcc45.patch ];
+
   preBuild=''
     makeFlags="V=1 DISABLE_JBIG=1 CUPSFILTER=$out/lib/cups/filter CUPSPPD=$out/share/cups/model"
   '';

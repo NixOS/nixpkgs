@@ -1,0 +1,39 @@
+http://lists.xensource.com/archives/html/xen-devel/2010-07/msg01276.html
+
+diff -ru -x '*~' xen-4.0.1-orig//extras/mini-os/arch/x86/mm.c xen-4.0.1//extras/mini-os/arch/x86/mm.c
+--- xen-4.0.1-orig//extras/mini-os/arch/x86/mm.c	2010-08-25 12:22:07.000000000 +0200
++++ xen-4.0.1//extras/mini-os/arch/x86/mm.c	2010-12-22 20:10:05.000000000 +0100
+@@ -281,7 +281,7 @@
+ /*
+  * Mark portion of the address space read only.
+  */
+-extern void shared_info;
++extern char shared_info[PAGE_SIZE]; 
+ static void set_readonly(void *text, void *etext)
+ {
+     unsigned long start_address =
+diff -ru -x '*~' xen-4.0.1-orig//extras/mini-os/minios.mk xen-4.0.1//extras/mini-os/minios.mk
+--- xen-4.0.1-orig//extras/mini-os/minios.mk	2010-08-25 12:22:07.000000000 +0200
++++ xen-4.0.1//extras/mini-os/minios.mk	2010-12-22 20:03:11.000000000 +0100
+@@ -10,6 +10,7 @@
+ DEF_CFLAGS += $(call cc-option,$(CC),-fno-stack-protector,)
+ DEF_CFLAGS += $(call cc-option,$(CC),-fgnu89-inline)
+ DEF_CFLAGS += -Wstrict-prototypes -Wnested-externs -Wpointer-arith -Winline
++DEF_CFLAGS += -Wno-uninitialized
+ DEF_CPPFLAGS += -D__XEN_INTERFACE_VERSION__=$(XEN_INTERFACE_VERSION)
+ 
+ DEF_ASFLAGS += -D__ASSEMBLY__
+diff -ru -x '*~' xen-4.0.1-orig//extras/mini-os/netfront.c xen-4.0.1//extras/mini-os/netfront.c
+--- xen-4.0.1-orig//extras/mini-os/netfront.c	2010-08-25 12:22:07.000000000 +0200
++++ xen-4.0.1//extras/mini-os/netfront.c	2010-12-22 19:56:59.000000000 +0100
+@@ -25,8 +25,8 @@
+ 
+ 
+ 
+-#define NET_TX_RING_SIZE __RING_SIZE((struct netif_tx_sring *)0, PAGE_SIZE)
+-#define NET_RX_RING_SIZE __RING_SIZE((struct netif_rx_sring *)0, PAGE_SIZE)
++#define NET_TX_RING_SIZE __CONST_RING_SIZE(netif_tx, PAGE_SIZE)
++#define NET_RX_RING_SIZE __CONST_RING_SIZE(netif_rx, PAGE_SIZE)
+ #define GRANT_INVALID_REF 0
+ 
+ 

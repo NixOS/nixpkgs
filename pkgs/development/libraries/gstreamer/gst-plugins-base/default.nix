@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "1mw5n1w7l0hgyzf75srdxlh3knfgrmddbs2ah1f97s8b710qd4v3";
   };
 
-  patchPhase = "sed -i 's@/bin/echo@echo@g' configure";
+  patchPhase = ''
+    sed -i 's@/bin/echo@echo@g' configure
+    sed -i -e 's/^   /\t/' docs/{libs,plugins}/Makefile.in
+  '';
 
   # TODO : v4l, libvisual
   buildInputs =

@@ -1,14 +1,18 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "commoncpp2-1.8.0";
+  name = "commoncpp2-1.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/commoncpp/${name}.tar.gz";
-    sha256 = "0a7arpm9l3s5qics5m77lyx1yl7998lkypydqwx11nj730034nmc";
+    sha256 = "0kmgr5w3b1qwzxnsnw94q6rqs0hr8nbv9clf07ca2a2fyypx9kjk";
   };
 
   doCheck = true;
+
+  preBuild = ''
+    echo '#include <sys/stat.h>' >> inc/cc++/config.h
+  '';
 
   meta = {
     description = "GNU Common C++, a portable, highly optimized C++ class framework";

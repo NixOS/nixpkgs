@@ -1,16 +1,22 @@
-{ fetchurl, stdenv, gmpxx, perl, gnum4 }:
+{ fetchurl, stdenv, gmpxx, perl, gnum4, static ? false }:
 
-let version = "0.10.2"; in
+let
+  version = "0.10.2";
+  staticFlags = if static then " --enable-static --disable-shared" else "";
+in
   stdenv.mkDerivation rec {
     name = "ppl-${version}";
 
     src = fetchurl {
-      url = "ftp://ftp.cs.unipr.it/pub/ppl/releases/${version}/${name}.tar.bz2";
-      sha256 = "0xz2f3lny4l9ji1ilg6pxv34sh4cbh535cnm68smynzp01wgnh7y";
+      url = "mirror://gcc/infrastructure/ppl-${version}.tar.gz";
+      sha256 = "0lly44sac4jd72klnhhil3wha15vak76r6gy88sh0zjsaww9hf6h";
     };
 
-    buildInputs = [ perl gnum4 ];
+    buildNativeInputs = [ perl gnum4 ];
     propagatedBuildInputs = [ gmpxx ];
+
+    dontDisableStatic = if static then true else false;
+    configureFlags = staticFlags;
 
     # Beware!  It took ~6 hours to compile PPL and run its tests on a 1.2 GHz
     # x86_64 box.  Nevertheless, being a dependency of GCC, it probably ought

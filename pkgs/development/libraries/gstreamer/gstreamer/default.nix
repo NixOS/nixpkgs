@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl bison flex pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 ];
 
+  patchPhase = ''
+    sed -i -e 's/^   /\t/' docs/gst/Makefile.in docs/libs/Makefile.in docs/plugins/Makefile.in
+  '';
+
   configureFlags = ''
     --disable-examples --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
   '';

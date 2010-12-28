@@ -127,7 +127,8 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langFortran langVhdl langTreelang
       enableMultilib; };
 
-  enableParallelBuilding = true;
+  # ghdl does not build fine with parallel building
+  enableParallelBuilding = if langVhdl then false else true;
 
   meta = {
     homepage = "http://gcc.gnu.org/";

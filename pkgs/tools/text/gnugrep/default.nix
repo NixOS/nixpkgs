@@ -1,16 +1,17 @@
-{stdenv, fetchurl, pcre}:
+{ stdenv, fetchurl, pcre, libiconv ? null}:
 
-let version = "2.5.4"; in
+let version = "2.7"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "gnugrep-${version}";
-  
+
   src = fetchurl {
-    url = "mirror://gnu/grep/grep-${version}.tar.bz2";
-    sha256 = "0800lj1ywf43x5jnjyga56araak0f601sd9k5q1vv3s5057cdgha";
+    url = "mirror://gnu/grep/grep-${version}.tar.gz";
+    sha256 = "1b8vksfd1ngharac3ygaqim3lrf0yqap992sg0vfm7572l88655d";
   };
-  
-  buildInputs = [pcre];
+
+  buildInputs = [ pcre ]
+    ++ (stdenv.lib.optional (libiconv != null) libiconv);
 
   doCheck = if stdenv.isDarwin then false else true;
 
@@ -31,7 +32,10 @@ stdenv.mkDerivation {
     '';
 
     license = "GPLv3+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 
   passthru = {inherit pcre;};
-}
+} // (if libiconv != null then { NIX_LDFLAGS="-L${libiconv}/lib -liconv"; } else {}) )

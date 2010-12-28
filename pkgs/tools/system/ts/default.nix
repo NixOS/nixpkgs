@@ -6,6 +6,10 @@ stdenv.mkDerivation {
 
   installPhase=''make install "PREFIX=$out"'';
 
+  crossAttrs = {
+    makeFlags = "CC=${stdenv.cross.config}-gcc";
+  };
+
   src = fetchurl {
     url = http://vicerveza.homeunix.net/~viric/soft/ts/ts-0.6.6.tar.gz;
     sha256 = "0mdg123ppq8ibf4315l4qi0w3n7wlj4x8dq5gx8f680v4bjvc30g";

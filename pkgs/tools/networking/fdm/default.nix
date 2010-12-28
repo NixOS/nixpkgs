@@ -33,6 +33,7 @@ rec {
     sed -i */Makefile -i Makefile -e 's@ -o root @ @'
     sed -i GNUmakefile -e 's@ -g $(BIN_OWNER) @ @'
     sed -i GNUmakefile -e 's@ -o $(BIN_GROUP) @ @'
+    sed -i */Makefile -i Makefile -e 's@-I-@@g'
   '') ["minInit" "doUnpack"];
       
   meta = {

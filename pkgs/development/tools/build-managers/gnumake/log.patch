@@ -93,9 +93,9 @@ diff -rc make-3.81-orig/make.h make-3.81/make.h
 ***************
 *** 609,611 ****
 --- 609,614 ----
-  #define ENULLLOOP(_v,_c)   do{ errno = 0; \
-                                 while (((_v)=_c)==0 && errno==EINTR); }while(0)
   
+  #define ENULLLOOP(_v,_c)   do { errno = 0; (_v) = _c; } \
+                             while((_v)==0 && errno==EINTR)
 + extern int enable_nested_output;
 + extern int stdout_nesting_level;
 + extern int stderr_nesting_level;

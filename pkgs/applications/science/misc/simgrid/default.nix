@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, cmake, ruby }:
+{ fetchurl, stdenv, cmake, perl, ruby }:
 
 stdenv.mkDerivation rec {
-  name = "simgrid-3.4.1";
+  name = "simgrid-3.5";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/26944/${name}.tar.bz2";
-    sha256 = "acd2bb2c1abf59e9b190279b1c38582b7c1edd4b6ef4c6a9b01100740f1a6b28";
+    url = "https://gforge.inria.fr/frs/download.php/28017/${name}.tar.gz";
+    sha256 = "1vd4pvrcyii1nfwyca3kpbwshbc965lfpn083zd8rigg6ydchq8y";
   };
 
   /* FIXME: Ruby currently disabled because of this:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
      ld: cannot find -lruby-1.8.7-p72
 
    */
-  buildInputs = [ cmake /* ruby */ ];
+  buildInputs = [ cmake perl /* ruby */ ];
 
   preConfigure =
     # Make it so that libsimgrid.so will be found when running programs from
@@ -28,14 +28,31 @@ stdenv.mkDerivation rec {
 
   makeFlags = "VERBOSE=1";
 
+  preBuild =
+    /* Work around this:
+
+      [ 20%] Generating _msg_handle_simulator.c, _msg_handle_client.c, _msg_handle_server.c
+      cd /tmp/nix-build-7yc8ghmf2yb8zi3bsri9b6qadwmfpzhr-simgrid-3.5.drv-0/simgrid-3.5/build/teshsuite/gras/msg_handle && ../../../bin/gras_stub_generator msg_handle /tmp/nix-build-7yc8ghmf2yb8zi3bsri9b6qadwmfpzhr-simgrid-3.5.drv-0/simgrid-3.5/teshsuite/gras/msg_handle/msg_handle.xml
+      ../../../bin/gras_stub_generator: error while loading shared libraries: libsimgrid.so.3.5: cannot open shared object file: No such file or directory
+      make[2]: *** [teshsuite/gras/msg_handle/_msg_handle_simulator.c] Error 127
+      make[2]: Leaving directory `/tmp/nix-build-7yc8ghmf2yb8zi3bsri9b6qadwmfpzhr-simgrid-3.5.drv-0/simgrid-3.5/build'
+
+    */
+    '' export LD_LIBRARY_PATH="$PWD/lib:$LD_LIBRARY_PATH"
+       echo "\$LD_LIBRARY_PATH is \`$LD_LIBRARY_PATH'"
+    '';
+
   patchPhase =
     '' for i in "src/smpi/"*
        do
          sed -i "$i" -e's|/bin/bash|/bin/sh|g'
        done
-    '';
 
-  installPhase = "make install-simgrid";
+       for i in $(grep -rl /usr/bin/perl .)
+       do
+         sed -i "$i" -e's|/usr/bin/perl|${perl}/bin/perl|g'
+       done
+    '';
 
   # Fixing the few tests that fail is left as an exercise to the reader.
   doCheck = false;

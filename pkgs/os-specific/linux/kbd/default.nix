@@ -1,19 +1,22 @@
 { stdenv, fetchurl, bison, flex, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "kbd-1.15.1";
+  name = "kbd-1.15.2";
 
   src = fetchurl {
     url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
-    sha256 = "1klrxas8vjikx6jm6m2lcpmn88lhxb6p3whwgdwq9d9flf1qrf4i";
+    sha256 = "0ff674y6d3b6ix08b9l2yzv8igns768biyp5y92vip7iz4xv2p2j";
   };
 
-  buildInputs = [ bison flex autoconf automake  ];
+  buildNativeInputs = [ bison flex autoconf automake ];
 
-  # We get a warning in armv5tel-linux, so we disable -Werror in it
-  patchPhase = if (stdenv.system == "armv5tel-linux") then ''
-    sed -i s/-Werror// src/Makefile.am
-  '' else "";
+  # We get a warning in armv5tel-linux and the fuloong2f,
+  # so we disable -Werror in it
+  patchPhase = if (stdenv.system == "armv5tel-linux" ||
+    stdenv.system == "mips64-linux")
+    then ''
+      sed -i s/-Werror// src/Makefile.am
+    '' else "";
 
   # Grrr, kbd 1.15.1 doesn't include a configure script.
   preConfigure = "autoreconf";

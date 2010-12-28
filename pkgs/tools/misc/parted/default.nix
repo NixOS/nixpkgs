@@ -1,5 +1,5 @@
 { stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinuxng, xz }:
+, utillinuxng, xz, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
   name = "parted-2.3";
@@ -9,14 +9,26 @@ stdenv.mkDerivation rec {
     sha256 = "0sabj81nawcjm8ww34lxg65ka8crv3w2ab4crh8ypw5agg681836";
   };
 
-  buildInputs = [ xz libuuid gettext readline libuuid devicemapper ];
+  buildNativeInputs = [ xz ];
+  buildInputs = [ libuuid ]
+    ++ stdenv.lib.optional (readline != null) readline
+    ++ stdenv.lib.optional (gettext != null) gettext
+    ++ stdenv.lib.optional (devicemapper != null) devicemapper
+    ++ stdenv.lib.optional (hurd != null) hurd;
 
-  configureFlags = "--with-readline";
+  configureFlags =
+       (if (readline != null)
+        then [ "--with-readline" ]
+        else [ "--without-readline" ])
+    ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
+    ++ stdenv.lib.optional enableStatic "--enable-static";
 
   doCheck = true;
 
-  # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
-  preCheck = "export PATH=\"${utillinuxng}/sbin:$PATH\"";
+  preCheck =
+    stdenv.lib.optionalString doCheck
+      # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
+      "export PATH=\"${utillinuxng}/sbin:$PATH\"";
 
   meta = {
     description = "GNU Parted, a tool to create, destroy, resize, check, and copy partitions";

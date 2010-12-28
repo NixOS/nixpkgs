@@ -8,8 +8,13 @@ stdenv.mkDerivation {
     sha256 = "1c2nkxx83vmlh1v3ib6r2xqh121gdb1rharwsimcb2h0xwc558dm";
   };
 
-  makeFlags = ["TREE=\$(out)"];
+  makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man";
 
+  crossAttrs = {
+    makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man CC=${stdenv.cross.config}-gcc";
+  };
+
+  preInstall = "ensureDir \$out/share/man";
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 
   patches = [./malloc.patch];

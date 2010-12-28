@@ -1,11 +1,13 @@
+# XXX: Remove me when `stdenv-updates' is merged.
+
 { stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.17";
+  name = "gettext-0.18.1.1";
   
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "1fipjpaxxwifdw6cbr7mkxp1yvy643i38nhlh7124bqnisxki5i0";
+    sha256 = "1sa3ch12qxa4h3ya6hkz119yclcccmincl9j20dhrdx5mykp3b4k";
   };
 
   configureFlags = "--disable-csharp";
@@ -20,6 +22,13 @@ stdenv.mkDerivation (rec {
       configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
     fi
   '';
+
+  crossAttrs = {
+    buildInputs = stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
+      stdenv.gccCross.libc.libiconv.hostDrv;
+    # Gettext fails to guess the cross compiler
+    configureFlags = "CXX=${stdenv.cross.config}-g++";
+  };
 
   meta = {
     description = "GNU gettext, a well integrated set of translation tools and documentation";
@@ -46,6 +55,7 @@ stdenv.mkDerivation (rec {
     homepage = http://www.gnu.org/software/gettext/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
 

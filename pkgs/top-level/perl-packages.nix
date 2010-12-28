@@ -1575,11 +1575,11 @@ rec {
   };
 
   ImageExifTool = buildPerlPackage rec {
-      name = "Image-ExifTool-8.12";
+      name = "Image-ExifTool-8.41";
 
       src = fetchurl {
         url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-        sha256 = "1s95f6cyl4cwyymmzsn49llza2hggh9lb3fqdpa83k6vbrzs86dh";
+        sha256 = "1fdjic0bhbai8zzl3287i9wcs88khiv8qx5slx9n3gzvbnxacvqg";
       };
 
       meta = {
@@ -1601,6 +1601,7 @@ rec {
         licenses = [ "GPLv1+" /* or */ "Artistic" ];
 
         maintainers = [ stdenv.lib.maintainers.ludo ];
+	platforms = stdenv.lib.platforms.unix;
       };
     };
 

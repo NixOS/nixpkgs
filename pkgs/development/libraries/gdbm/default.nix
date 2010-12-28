@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, automake }:
 
 stdenv.mkDerivation rec {
   name = "gdbm-1.8.3";
@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./install.patch ];
+
+  # The fuloong2f is not supported by gdbm 1.8.3 still
+  preConfigure = ''
+    cp ${automake}/share/automake*/config.{sub,guess} .
+  '';
 
   meta = {
     description = "GNU DBM key/value database library";

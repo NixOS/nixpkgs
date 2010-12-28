@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, exiv2, openexr, fftw, libtiff, ilmbase }:
+{stdenv, fetchurl, qt4, exiv2, openexr, fftwSinglePrec, libtiff, ilmbase }:
 
 stdenv.mkDerivation rec {
   name = "qtpfsgui-1.9.3";
@@ -8,13 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1mlg9dry4mfnnjlnwsw375hzsiagssdhccfmapx5nh6ykqrslsh1";
   };
 
-  buildInputs = [ qt4 exiv2 openexr fftw libtiff ];
+  buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
 
   configurePhase = ''
     export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
     qmake PREFIX=$out EXIV2PATH=${exiv2}/include/exiv2  \
       OPENEXRDIR=${openexr}/include/OpenEXR             \
-      FFTW3DIR=${fftw}/include                          \
+      FFTW3DIR=${fftwSinglePrec}/include                \
       LIBTIFFDIR=${libtiff}/include
   '';
 

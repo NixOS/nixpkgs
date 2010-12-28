@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${v}.tgz";
-    sha256 =  "2a4157b91b7ad5ea84359e8548b64947611beea01862e010be71f54b649e7ad1";
+    sha256 = "1lbskrj4pxbipq8f0qhql3p1nqa796v4i1cy6n2fmmbs3fwmfh9a";
   };
   
   configureFlags = "--disable-readline --enable-udev_rules --enable-udev_sync";

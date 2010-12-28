@@ -1,0 +1,35 @@
+To avoid an endless loop with gnumake 3.82
+http://www.mail-archive.com/pld-cvs-commit@lists.pld-linux.org/msg228690.html
+
+Index: packages/klibc/klibc-make.patch
+--- klibc-1.5.19/scripts/Kbuild.include.orig   2010-08-19 09:39:45.986816591 
+0200
++++ klibc-1.5.19/scripts/Kbuild.include        2010-08-19 09:49:15.010816591 
+0200
+@@ -127,7 +127,7 @@
+ # >'< substitution is for echo to work, >$< substitution to preserve $ when reloading .cmd file
+ # note: when using inline perl scripts [perl -e '...$$t=1;...'] in $(cmd_xxx) double $$ your perl vars
+ #
+-if_changed = $(if $(strip $(filter-out $(PHONY),$?)          \
++if_changed = $(if $(strip $(filter-out $(PHONY) FORCE,$?)          \
+ 		$(call arg-check, $(cmd_$(1)), $(cmd_$@)) ), \
+ 	@set -e; \
+ 	$(echo-cmd) $(cmd_$(1)); \
+@@ -135,7 +135,7 @@
+ 
+ # execute the command and also postprocess generated .d dependencies
+ # file
+-if_changed_dep = $(if $(strip $(filter-out $(PHONY),$?)  \
++if_changed_dep = $(if $(strip $(filter-out $(PHONY) FORCE,$?)  \
+ 		$(filter-out FORCE $(wildcard $^),$^)    \
+ 	$(call arg-check, $(cmd_$(1)), $(cmd_$@)) ),     \
+ 	@set -e; \
+@@ -147,7 +147,7 @@
+ # Usage: $(call if_changed_rule,foo)
+ # will check if $(cmd_foo) changed, or any of the prequisites changed,
+ # and if so will execute $(rule_foo)
+-if_changed_rule = $(if $(strip $(filter-out $(PHONY),$?)            \
++if_changed_rule = $(if $(strip $(filter-out $(PHONY) FORCE,$?)            \
+ 			$(call arg-check, $(cmd_$(1)), $(cmd_$@)) ),\
+ 			@set -e; \
+ 			$(rule_$(1)))

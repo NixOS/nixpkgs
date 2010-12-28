@@ -1,5 +1,5 @@
-{stdenv, fetchgit, libusb, autoconf, automake, confuse
-, gccCross ? null}:
+{ stdenv, fetchgit, libusb, autoconf, automake, confuse
+, gccCross ? null }:
 
 let
   version = "2010-07-29";

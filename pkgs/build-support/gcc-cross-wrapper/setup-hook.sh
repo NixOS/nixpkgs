@@ -26,7 +26,7 @@ crossStripDirs() {
     dirs=${dirsNew}
 
     if test -n "${dirs}"; then
-        header "stripping (with flags $stripFlags) in $dirs"
+        header "cross stripping (with flags $stripFlags) in $dirs"
         # libc_nonshared.a should never be stripped, or builds will break.
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} $crossConfig-strip $stripFlags || true
         stopNest
@@ -68,7 +68,9 @@ if test -n "@libc@"; then
     crossAddCVars @libc@
 fi
 
-configureFlags="$configureFlags --build=$system --host=$crossConfig"
+if test "$dontSetConfigureCross" != "1"; then
+    configureFlags="$configureFlags --build=$system --host=$crossConfig"
+fi
 # Disabling the tests when cross compiling, as usually the tests are meant for
 # native compilations.
 doCheck=""

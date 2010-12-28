@@ -1,9 +1,11 @@
 { fetchgit, stdenv, autoconf, automake, libtool, texinfo
 , machHeaders, mig, headersOnly ? true
 , cross ? null, gccCross ? null, glibcCross ? null
+, hurdPartedCross ? null, libuuid ? null
 , buildTarget ? "all", installTarget ? "install" }:
 
 assert (cross != null) -> (gccCross != null);
+assert (hurdPartedCross != null) -> (libuuid != null);
 
 let
   # Unfortunately we can't use `master@{DATE}', see
@@ -26,12 +28,15 @@ stdenv.mkDerivation ({
   };
 
   buildInputs = [ autoconf automake libtool texinfo mig ]
+    ++ stdenv.lib.optional (hurdPartedCross != null) hurdPartedCross
+    ++ stdenv.lib.optional (libuuid != null) libuuid
     ++ stdenv.lib.optional (gccCross != null) gccCross
     ++ stdenv.lib.optional (glibcCross != null) glibcCross;
 
   propagatedBuildInputs = [ machHeaders ];
 
-  configureFlags = stdenv.lib.optionals headersOnly [ "--build=i586-pc-gnu" ];
+  configureFlags = stdenv.lib.optionals headersOnly [ "--build=i586-pc-gnu" ]
+    ++ stdenv.lib.optional (hurdPartedCross != null) [ "--with-parted" ];
 
   preConfigure = "autoreconf -vfi";
 

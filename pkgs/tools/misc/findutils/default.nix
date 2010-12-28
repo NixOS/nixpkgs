@@ -1,14 +1,14 @@
 {stdenv, fetchurl, coreutils}:
 
 stdenv.mkDerivation rec {
-  name = "findutils-4.4.1";
+  name = "findutils-4.4.2";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/${name}.tar.gz";
-    sha256 = "0f61phan4q8w5i1lz768q973c1spfqgvc470jc89rpg0gxfvi9bp";
+    sha256 = "0amn0bbwqvsvvsh6drfwz20ydc2czk374lzw5kksbh6bf78k4ks3";
   };
 
-  buildInputs = [coreutils];
+  buildNativeInputs = [coreutils];
 
   patches = [ ./findutils-path.patch ./change_echo_path.patch ]
     # Note: the dietlibc patch is just to get findutils to compile.
@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv ? isDietLibC) ./dietlibc-hack.patch;
 
   doCheck = true;
+
+  crossAttrs = {
+    # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
+    configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
+  };
 
   meta = {
     homepage = http://www.gnu.org/software/findutils/;

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unicodeSupport ? false, cplusplusSupport ? true}:
 
 stdenv.mkDerivation {
-  name = "pcre-7.8";
+  name = "pcre-8.10";
 
   src = fetchurl {
-    url = mirror://sourceforge/pcre/pcre-7.8.tar.bz2;
-    sha256 = "1zsqk352mx2zklf9bgpg9d88ckfdssbbbiyslhrycfckw8m3qpvr";
+    url = mirror://sourceforge/pcre/pcre-8.10.tar.bz2;
+    sha256 = "7ac4e016f6bad8c7d990e6de9bce58c04ff5dd8838be0c5ada0afad1d6a07480";
   };
 
   # The compiler on Darwin crashes with an internal error while building the
@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
   '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
+
+  doCheck = true;
 
   meta = {
     homepage = "http://www.pcre.org/";

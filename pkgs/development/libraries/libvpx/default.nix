@@ -11,13 +11,24 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -e 's,/bin/bash,${bash}/bin/bash,' -i configure build/make/version.sh \
       examples/gen_example_code.sh
+    sed -e '/enable linux/d' -i configure
   '';
 
-  configurePhase = ''
+  configureScript = "../configure";
+
+  preConfigure = ''
     mkdir -p build
     cd build
-    ../configure --disable-install-srcs --disable-examples --enable-vp8 --enable-runtime-cpu-detect --enable-shared --enable-pic
   '';
+
+  configureFlags = [
+    "--disable-install-srcs"
+    "--disable-examples"
+    "--enable-vp8"
+    "--enable-runtime-cpu-detect"
+    "--enable-shared"
+    "--enable-pic"
+  ];
 
   installPhase = ''
     make quiet=false DIST_DIR=$out install

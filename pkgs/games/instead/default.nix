@@ -21,6 +21,10 @@ let
       url = http://instead-games.googlecode.com/files/instead-vinny-0.1.zip;
       sha256 = "15qdbg82zp3a8vz4qxminr0xbzbdpnsciliy2wm3raz4hnadawg1";
     })
+    (fetchurl {
+      url = http://instead-games.googlecode.com/files/instead-toilet-1.1.zip;
+      sha256 = "17mlkr93y77pxhimq0v9f0w78fz8alkxwjwsr8z67p458iw6s1wr";
+    })
   ];
 in
 

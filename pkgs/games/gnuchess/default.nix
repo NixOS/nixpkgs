@@ -1,4 +1,6 @@
-a :  
+{builderDefsPackage, flex} @ x:
+builderDefsPackage 
+(a :  
 let 
   fetchurl = a.fetchurl;
 
@@ -31,4 +33,4 @@ rec {
   meta = {
     description = "GNU Chess playing program";
   };
-}
+}) x

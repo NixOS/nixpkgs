@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl autoconf automake ] ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  buildNativeInputs = [ perl autoconf automake ];
+  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =
     if stdenv.system == "x86_64-linux" then ["--enable-only64bit"] else [];

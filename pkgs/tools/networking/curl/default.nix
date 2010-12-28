@@ -1,7 +1,7 @@
 { stdenv, fetchurl
-, zlibSupport ? false, zlib
-, sslSupport ? false, openssl
-, scpSupport ? false, libssh2
+, zlibSupport ? false, zlib ? null
+, sslSupport ? false, openssl ? null
+, scpSupport ? false, libssh2 ? null
 , linkStatic ? false
 }:
 
