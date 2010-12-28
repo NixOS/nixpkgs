@@ -62,7 +62,7 @@ rec {
       in
       {
         inherit system;
-        inherit (nixpkgsOptions) config platform;
+        inherit (nixpkgsOptions) config;
       });
 
   # Optionally check wether all config values have corresponding

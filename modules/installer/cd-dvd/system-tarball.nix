@@ -31,13 +31,6 @@ let
 
   };
 
-  # A clue for the uboot loading
-  ubootKernelParams = pkgs.writeText "uboot-kernel-params.txt" ''
-    Kernel Parameters:
-      init=${config.system.build.toplevel}/init
-      ${toString config.boot.kernelParams}
-  '';
-
   versionFile = pkgs.writeText "nixos-version" config.system.nixosVersion;
 
 in
@@ -45,20 +38,11 @@ in
 {
   require = options;
 
-  # Don't build the GRUB menu builder script, since we don't need it
-  # here and it causes a cyclic dependency.
-  boot.loader.grub.enable = false;
-
-  # !!! Hack - attributes expected by other modules.
-  system.build.menuBuilder = "true";
-  system.boot.loader.kernelFile = "bzImage";
-  environment.systemPackages = [ pkgs.grub2 ];
-
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
   # so that we don't need to know its device.
   fileSystems =
     [ { mountPoint = "/";
-        label = "rootfs";
+        device = "/dev/sda";
       }
     ];
 
@@ -77,23 +61,9 @@ in
   # Individual files to be included on the CD, outside of the Nix
   # store on the CD.
   tarball.contents =
-    [ { source = config.boot.kernelPackages.kernel + "/bzImage";
-        target = "/boot/bzImage";
-      }
-      { source = config.system.build.initialRamdisk + "/initrd";
+    [ { source = config.system.build.initialRamdisk + "/initrd";
         target = "/boot/initrd";
       }
-      { source = "${pkgs.grub2}/share/grub/unicode.pf2";
-        target = "/boot/grub/unicode.pf2";
-      }
-      { source = config.boot.loader.grub.splashImage;
-        target = "/boot/grub/splash.png";
-      }
-/*
-      { source = pkgs.ubootKernelParams;
-        target = "/uboot-kernelparams.txt";
-      }
-*/
       { source = versionFile;
         target = "/nixos-version.txt";
       }
@@ -110,7 +80,7 @@ in
     ''
       # After booting, register the contents of the Nix store on the
       # CD in the Nix database in the tmpfs.
-      ${config.environment.nix}/bin/nix-store --load-db < /nix/store/nix-path-registration
+      ${config.environment.nix}/bin/nix-store --load-db < /nix-path-registration
 
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.

@@ -1,7 +1,7 @@
 { stdenv, perl, xz, pathsFromGraph
 
 , # The file name of the resulting tarball
-  fileName ? "nixos-built.tar.bz2"
+  fileName ? "nixos-system-${stdenv.system}"
 
 , # The files and directories to be placed in the tarball.
   # This is a list of attribute sets {source, target} where `source'
