@@ -6848,6 +6848,11 @@ let
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
+  ultrastardx = callPackage ../games/ultrastardx {
+    stdenv = stdenv2;
+    lua = lua5;
+  };
+
   urbanterror = callPackage ../games/urbanterror { };
 
   ut2004demo = callPackage ../games/ut2004demo { };
