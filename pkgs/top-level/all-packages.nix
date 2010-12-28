@@ -174,9 +174,6 @@ let
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
 
-  # Return the first available value in the order: pkg.val, val, or default.
-  getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
-
   builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
       fetchurl fetchmtn fetchgit;
@@ -2649,7 +2646,7 @@ let
 
   adns = import ../development/libraries/adns/1.4.nix {
     inherit stdenv fetchurl;
-    static = getPkgConfig "adns" "static" (stdenv ? isStatic || stdenv ? isDietLibC);
+    static = getConfig [ "adns" "static" ] (stdenv ? isStatic || stdenv ? isDietLibC);
   };
 
   agg = callPackage ../development/libraries/agg { };
@@ -2945,19 +2942,19 @@ let
 
   glibc29 = callPackage ../development/libraries/glibc-2.9 {
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
   glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic;
     kernelHeaders = linuxHeadersCross;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
   });
 
   glibc211 = callPackage ../development/libraries/glibc-2.11 {
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
@@ -2969,7 +2966,7 @@ let
        inherit stdenv fetchurl;
        gccCross = gccCrossStageStatic;
        kernelHeaders = if crossGNU then hurdHeaders else linuxHeadersCross;
-       installLocales = getPkgConfig "glibc" "locales" false;
+       installLocales = getConfig [ "glibc" "locales" ] false;
      }
 
      //
@@ -2996,7 +2993,7 @@ let
 
   eglibc = callPackage ../development/libraries/eglibc {
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
   glibcLocales = callPackage ../development/libraries/glibc-2.11/locales.nix { };
@@ -3389,7 +3386,7 @@ let
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
-    useGTK = getPkgConfig "libiodbc" "gtk" false;
+    useGTK = getConfig [ "libiodbc" "gtk" ] false;
   };
 
   libktorrent = newScope pkgs.kde4 ../development/libraries/libktorrent { };
@@ -5601,8 +5598,8 @@ let
   emacs = emacs23;
 
   emacs22 = callPackage ../applications/editors/emacs-22 {
-    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
-    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
+    xaw3dSupport = getConfig [ "emacs" "xaw3dSupport" ] false;
+    gtkGUI = getConfig [ "emacs" "gtkSupport" ] true;
   };
 
   emacs23 = callPackage ../applications/editors/emacs-23 {
@@ -5616,11 +5613,11 @@ let
   };
 
   emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
-    xawSupport = getPkgConfig "emacs" "xawSupport" false;
-    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
-    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
-    xftSupport = getPkgConfig "emacs" "xftSupport" true;
-    dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
+    xawSupport = getConfig [ "emacs" "xawSupport" ] false;
+    xaw3dSupport = getConfig [ "emacs" "xaw3dSupport" ] false;
+    gtkGUI = getConfig [ "emacs" "gtkSupport" ] true;
+    xftSupport = getConfig [ "emacs" "xftSupport" ] true;
+    dbusSupport = getConfig [ "emacs" "dbusSupport" ] true;
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
@@ -5951,8 +5948,8 @@ let
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
       RpcXML XMLSimple PerlMagick;
-    gitSupport = getPkgConfig "ikiwiki" "git" false;
-    monotoneSupport = getPkgConfig "ikiwiki" "monotone" false;
+    gitSupport = getConfig [ "ikiwiki" "git" ] false;
+    monotoneSupport = getConfig [ "ikiwiki" "monotone" ] false;
     extraUtils = [];
   };
 
@@ -6419,7 +6416,7 @@ let
 
     # KDE support is not working yet.
     inherit (kde3) kdelibs kdebase;
-    withKde = getPkgConfig "taskJuggler" "kde" false;
+    withKde = getConfig [ "taskJuggler" "kde" ] false;
   };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
@@ -7210,7 +7207,7 @@ let
 
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
-    cupsSupport = getPkgConfig "ghostscript" "cups" true;
+    cupsSupport = getConfig [ "ghostscript" "cups" ] true;
   };
 
   ghostscriptX = appendToName "with-X" (ghostscript.override {
@@ -7246,19 +7243,19 @@ let
   nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
-    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
-    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
+    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
+    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
-    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
-    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
+    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
+    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
   # The SQLite branch.
   nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
-    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
-    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
+    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
+    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   });
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
@@ -7319,7 +7316,7 @@ let
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
   xlockmore = callPackage ../misc/screensavers/xlockmore {
-    pam = if getPkgConfig "xlockmore" "pam" true then pam else null;
+    pam = if getConfig [ "xlockmore" "pam" ] true then pam else null;
   };
 
   saneBackends = callPackage ../misc/sane-backends {

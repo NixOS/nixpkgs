@@ -4,7 +4,7 @@
 args: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchurl subversion;
-  config = getPkgConfig "git";
+  config = param: getConfig [ "git" param ];
 in
 rec {
 
