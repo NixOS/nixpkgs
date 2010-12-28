@@ -73,6 +73,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/rogue.nix
+  ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/virtualbox.nix
   ./services/monitoring/monit.nix

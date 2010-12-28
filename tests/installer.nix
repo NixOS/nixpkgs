@@ -304,7 +304,7 @@ in {
       testScript =
         ''
           # damn, it's costly to evaluate nixos-rebuild (1G of ram)
-          my $machine = Machine->new({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1} -m 1024' });
+          my $machine = Machine->new({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1 1} -m 1024' });
           $machine->start;
 
           # Make sure that we don't try to download anything.

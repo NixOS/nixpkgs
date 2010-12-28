@@ -12,6 +12,8 @@ let
     enableAxis2WebService = config.services.tomcat.axis2.enable;
     enableEjabberdDump = config.services.ejabberd.enable;
     enableMySQLDatabase = config.services.mysql.enable;
+    enablePostgreSQLDatabase = config.services.postgresql.enable;
+    enableSubversionRepository = config.services.svnserve.enable;
     enableTomcatWebApplication = config.services.tomcat.enable;
   });
 in
@@ -93,6 +95,7 @@ in
         // optionalAttrs (config.services.httpd.enable) { documentRoot = config.services.httpd.documentRoot; }
         // optionalAttrs (config.services.mysql.enable) { mysqlPort = config.services.mysql.port; }
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
+	// optionalAttrs (config.services.svnserve.enable) { svnBaseDir = config.services.svnserve.svnBaseDir; }
 	// optionalAttrs (cfg.publishInfrastructure.enableAuthentication) (
           optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = builtins.readFile config.services.mysql.rootPassword; }) 
 	)
@@ -129,7 +132,7 @@ in
 	        let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
 		in
 		if builtins.isInt infrastructureAttrValue then
-		''${infrastructureAttrName}=${infrastructureAttrValue} \
+		''${infrastructureAttrName}=${toString infrastructureAttrValue} \
 		''
 		else
                 ''${infrastructureAttrName}=\"${infrastructureAttrValue}\" \
