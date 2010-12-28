@@ -6936,7 +6936,6 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
-    stdenv = stdenv2;
     lua = lua5;
   };
 
@@ -7047,7 +7046,6 @@ let
         pkgs_for_46 = (applyGlobalOverrides (p: { kde4 = p.kde46; }));
       in
         pkgs_for_46.newScope pkgs_for_46.kde46;
-    stdenv = pkgs.stdenv2;
   };
 
   xfce = xfce4;
