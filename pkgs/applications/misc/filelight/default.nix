@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     url = http://www.kde-apps.org/CONTENT/content-files/99561-filelight-1.9rc3.tgz;
     sha256 = "0ljyx23j4cvrsi1dvmxila82q2cd26barmcvc8qmr74kz6pj78sq";
   };
+  patches = [ ./gcc45.diff ];
   buildInputs = [ cmake qt4 perl kdelibs kdebase_workspace automoc4 phonon 
     qimageblitz ];
   meta = {
