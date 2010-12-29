@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-       for prog in bin/gitk libexec/git-core/git-gui
+       for prog in bin/gitk bin/git
        do
          wrapProgram "$out/$prog"                       \
                      --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
