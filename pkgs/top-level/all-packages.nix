@@ -993,6 +993,8 @@ let
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
+  spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
+
   openvpn = callPackage ../tools/networking/openvpn { };
 
   optipng = callPackage ../tools/graphics/optipng { };
