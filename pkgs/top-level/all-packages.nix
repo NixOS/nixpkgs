@@ -632,6 +632,8 @@ let
     withX11 = true;
   };
 
+  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {};
+
   ftgl = callPackage ../development/libraries/ftgl { };
 
   dos2unix = callPackage ../tools/text/dos2unix { };
