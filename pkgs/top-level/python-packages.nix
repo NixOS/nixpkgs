@@ -899,26 +899,22 @@ rec {
     };
   };
 
-  magic = buildPythonPackage rec {
-    name = "magic-0.3.1";
+  magic = pkgs.stdenv.mkDerivation rec {
+    name = "python-${pkgs.file.name}";
 
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/python-magic/python-${name}.tar.gz";
-      md5 = "397cff81d2502e81fd3830a61ca2ad2c";
-    };
+    src = pkgs.file.src;
 
-    preConfigure =
-      ''
-        # Ensure that the module can find libmagic by hard-coding the
-        # path to libmagic.so.  Maybe there is a nicer way.
-        substituteInPlace magic.py --replace \
-          "ctypes.util.find_library('magic')" \
-          "'${pkgs.file}/lib/libmagic.so'"
-      '';
+    buildInputs = [ python pkgs.file ];
+
+    configurePhase = "cd python";
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
 
     meta = {
       description = "A Python wrapper around libmagic";
-      homepage = https://github.com/ahupp/python-magic;
+      homepage = http://www.darwinsys.com/file/;
     };
   };
   
