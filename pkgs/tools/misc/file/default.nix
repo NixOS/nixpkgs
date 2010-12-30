@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
  
 stdenv.mkDerivation {
-  name = "file-5.03";
+  name = "file-5.04";
 
   src = fetchurl {
-    url = ftp://ftp.astron.com/pub/file/file-5.03.tar.gz;
-    sha256 = "1fwmpplwc6h2g89ribq7w8x2np0yn5k7bw042815rv7jkrzv9nhy";
+    url = ftp://ftp.astron.com/pub/file/file-5.04.tar.gz;
+    sha256 = "0316lj3jxmp2g8azv0iykmmwjsnjanq93bklccwb6k77jiwnx7jc";
   };
 
   meta = {
