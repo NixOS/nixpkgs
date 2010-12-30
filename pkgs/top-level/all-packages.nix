@@ -3520,6 +3520,8 @@ let
 
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
 
+  libmrss = callPackage ../development/libraries/libmrss { };
+
   libmsn = callPackage ../development/libraries/libmsn { };
 
   libmspack = callPackage ../development/libraries/libmspack { };
@@ -3535,6 +3537,8 @@ let
   libnih = callPackage ../development/libraries/libnih { };
 
   libnova = callPackage ../development/libraries/libnova { };
+
+  libnxml = callPackage ../development/libraries/libnxml { };
 
   libofa = callPackage ../development/libraries/libofa { };
 
