@@ -11,9 +11,9 @@ stdenv.mkDerivation {
   buildInputs = [ curl libnxml pkgconfig ];
 
   meta = {
-    homepage = http://code.google.com/p/feed-reader-lib;
-    description = "C++ library designed to retrieve and parse web feeds such as RSS, ATOM and RDF";
-    license = "MIT";
+    homepage = http://www.autistici.org/bakunin/libmrss/doc;
+    description = "C library for parsing, writing and creating RSS/ATOM files or streams";
+    license = "LGPLv2";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.viric ];
