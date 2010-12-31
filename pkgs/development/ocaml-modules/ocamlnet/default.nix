@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl];
 
+  createFindlibDestdir = true;
+
   dontAddPrefix = true;
 
   preConfigure = ''

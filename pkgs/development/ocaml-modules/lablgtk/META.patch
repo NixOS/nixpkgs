@@ -1,0 +1,64 @@
+diff -ruN zzz/lablgtk-2.14.1/META lablgtk-2.14.1/META
+--- zzz/lablgtk-2.14.1/META	2009-02-12 21:39:14.000000000 -0500
++++ lablgtk-2.14.1/META	2010-09-07 19:48:06.454452726 -0400
+@@ -1,8 +1,52 @@
+-requires=""
+-version="2.12.0"
+-archive(byte)="lablgtk.cma"
+-archive(byte,init)="lablgtk.cma gtkInit.cmo"
+-archive(native)="lablgtk.cmxa"
+-archive(native,init)="lablgtk.cmxa gtkInit.cmx"
+-linkopts=""
+-directory="+lablgtk2"
++version="2.14.1"
++requires(mt) = "threads"
++requires(mt,mt_vm) = "threads.vm"
++requires(mt,mt_posix) = "threads.posix"
++archive(byte) = "lablgtk.cma"
++archive(native) = "lablgtk.cmxa"
++archive(byte,mt) += "gtkThread.cmo"
++archive(native,mt) += "gtkThread.cmx"
++
++package "init" (
++  requires = "lablgtk2"
++  archive(byte) = "gtkInit.cmo"
++  archive(native) = "gtkInit.cmx"
++)
++
++package "glade" (
++  requires = "lablgtk2"
++  archive(byte) = "lablglade.cma"
++  archive(native) = "lablglade.cmxa"
++)
++
++package "gtkspell" (
++  requires = "lablgtk2"
++  archive(byte) = "lablgtkspell.cma"
++  archive(native) = "lablgtkspell.cmxa"
++)
++
++package "gnomecanvas" (
++  archive(byte)	= "lablgnomecanvas.cma"
++  archive(native) = "lablgnomecanvas.cmxa"
++)
++
++package "gnomeui" (
++  archive(byte) = "lablgnomeui.cma"
++  archive(native) = "lablgnomeui.cmxa"
++)
++
++package "panel" (
++  archive(byte) = "lablpanel.cma"
++  archive(native) = "lablpanel.cmxa"
++)
++
++package "rsvg" (
++  archive(byte) = "lablrsvg.cma"
++  archive(native) = "lablrsvg.cmxa"
++)
++
++package "gtksourceview" (
++  requires = "lablgtk2"
++  archive(byte) = "lablgtksourceview2.cma"
++  archive(native) = "lablgtksourceview2.cmxa"
++)

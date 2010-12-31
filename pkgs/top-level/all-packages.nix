@@ -2047,8 +2047,14 @@ let
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
-    lablgtk = callPackage ../development/libraries/lablgtk {
-      inherit (gnome) libgnomecanvas;
+    gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
+    
+    lablgtk = callPackage ../development/ocaml-modules/lablgtk {
+      inherit (gnome) libgnomecanvas libglade gtksourceview;
+    };
+
+    lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview { 
+      gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
@@ -2057,7 +2063,13 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
+    ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+
+    ocaml_http = callPackage ../development/ocaml-modules/http { };
+
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
@@ -2072,6 +2084,10 @@ let
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
+
+    ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
+      camlp5 = camlp5_transitional;
+    };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
@@ -2937,6 +2953,10 @@ let
     stdenv = overrideGCC stdenv gcc41;
   };
 
+  gdome2 = callPackage ../development/libraries/gdome2 {
+    inherit (gnome) gtkdoc;
+  };
+
   gdbm = callPackage ../development/libraries/gdbm { };
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf {
@@ -3130,6 +3150,8 @@ let
   gtkimageview = callPackage ../development/libraries/gtkimageview {
     inherit (gnome) gtk;
   };
+
+  gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
   gtkLibs = gtkLibs220;
 
@@ -7162,6 +7184,12 @@ let
   iprover = callPackage ../applications/science/logic/iprover {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
+
+  matita = callPackage ../applications/science/logic/matita {
+    inherit (ocamlPackages) findlib lablgtk ocaml_expat gmetadom ocaml_http 
+            lablgtkmathview ocaml_mysql ocaml_sqlite3 ocamlnet ulex08 camlzip ocaml_pcre;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
 
   minisat = callPackage ../applications/science/logic/minisat {};
 
