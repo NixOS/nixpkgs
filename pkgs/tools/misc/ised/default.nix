@@ -1,20 +1,19 @@
 x@{builderDefsPackage
-  (abort "Specify dependencies")
   , ...}:
 builderDefsPackage
 (a :  
 let 
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [(abort "Specify helper argument names")];
+    [];
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    baseName="${abort ''Specify package name''}";
-    version="";
+    baseName="ised";
+    version="2.2.2";
     name="${baseName}-${version}";
-    url="${name}";
-    hash="";
+    url="mirror://sf/project/ised/${name}.tar.bz2";
+    hash="1nb1cnsbs2k3j9cy2kc2kg01rd7wf3jwxm62rwn1rjlc46nwdlmn";
   };
 in
 rec {
@@ -30,18 +29,18 @@ rec {
   phaseNames = ["doConfigure" "doMakeInstall"];
       
   meta = {
-    description = "${abort ''Specify description''}";
+    description = "A numeric sequence editor";
     maintainers = with a.lib.maintainers;
     [
-      (abort "Specify maintainers")
+      raskin
     ];
     platforms = with a.lib.platforms;
-      (abort "Specify platforms");
-    license = a.lib.licenses.(abort "Specify license");
+      linux;
+    license = a.lib.licenses.gpl3Plus;
   };
   passthru = {
     updateInfo = {
-      downloadPage = "${abort ''Specify download page''}";
+      downloadPage = "ised.sf.net";
     };
   };
 }) x

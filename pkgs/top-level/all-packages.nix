@@ -790,6 +790,8 @@ let
     static = false;
   };
 
+  ised = callPackage ../tools/misc/ised {};
+
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
   jfsrec = callPackage ../tools/filesystems/jfsrec { };
