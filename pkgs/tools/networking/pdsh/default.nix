@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
 
-stdenv.mkDerivation rec {
-  name = "pdsh-2.22";
+stdenv.mkDerivation {
+  name = "pdsh-2.23";
   src = fetchurl {
-    url = "mirror://sourceforge/pdsh/${name}.tar.bz2";
-    sha256 = "1b3c5dbaa8nhw2a5h89khs501m6ywg3zfzv7zahgsvjc8zcnfg8q";
+    url = "http://pdsh.googlecode.com/files/pdsh-2.23.tar.bz2";
+    sha256 = "4ff7e850ea74dd8a739aef6039288a2355b4d244c9da2c011fedf78d9ef73c23";
   };
 
   buildInputs = [perl readline ssh pam];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://computing.llnl.gov/linux/pdsh.html";
+    homepage = "http://code.google.com/p/pdsh/";
     description = "A high-performance, parallel remote shell utility.";
     license = "GPLv2";
 
