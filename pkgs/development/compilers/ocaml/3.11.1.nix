@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   # Needed to avoid a SIGBUS on the final executable on mips
   NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
 
+  patches = optionals stdenv.isDarwin [ ./gnused-on-osx-fix.patch ];
+
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11 ];
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
