@@ -40,7 +40,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = a.lib.licenses.lglp2;
+    license = a.lib.licenses.lgpl2;
   };
   passthru = {
     updateInfo = {
