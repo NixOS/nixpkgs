@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     configureFlagsArray=(
       -camldir ${ocaml}/bin
       -camlp5dir $(ocamlfind query camlp5)
-      -lablgtkdir ${lablgtk}/lib/ocaml/lablgtk2 -opt -coqide opt
+      -lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -opt -coqide opt
     )
   '';
 
