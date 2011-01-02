@@ -81,8 +81,8 @@ let
       smtpd_use_tls = yes 
 
       recipientDelimiter = ${cfg.recipientDelimiter}
-
-    '';
+    ''
+    + cfg.extraConfig;
 
   aliases = 
     optionalString (cfg.postmasterAlias != "") ''
@@ -224,6 +224,13 @@ in
         default = "";
         description = "
           Additional entries to put verbatim into aliases file.
+        ";
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = "
+          Extra configuration, will be added verbatim to the configuration file.
         ";
       };
 
