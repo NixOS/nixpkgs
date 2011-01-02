@@ -1,13 +1,17 @@
-{stdenv, fetchsvn, zlib, cmake}:
+{stdenv, fetchsvn, fetchsvnrevision, zlib, cmake
+, repository ? "svn://anonsvn.kde.org/home/kde/trunk/kdesupport/taglib"
+, rev ? fetchsvnrevision repository
+, src ? fetchsvn {
+    url = repository;
+    rev = rev;
+  }
+}:
 
 stdenv.mkDerivation {
-  name = "taglib-1.7a";
-  
-  src = fetchsvn {
-    url = svn://anonsvn.kde.org/home/kde/trunk/kdesupport/taglib;
-    rev = 1145554;
-  };
-  
+  name = "taglib-live";
+
+  inherit src;
+
   cmakeFlags = [ "-DWITH-ASF=ON" "-DWITH-MP4=ON" ];
 
   buildInputs = [ zlib cmake ];

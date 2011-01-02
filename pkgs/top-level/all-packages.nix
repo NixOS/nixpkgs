@@ -263,6 +263,8 @@ let
     inherit stdenv git;
   };
 
+  fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
+
   fetchmtn = import ../build-support/fetchmtn {
     inherit monotone stdenv;
     cacheDB = getConfig ["fetchmtn" "cacheDB"] "";
@@ -273,6 +275,8 @@ let
     inherit stdenv subversion openssh;
     sshSupport = true;
   };
+  
+  fetchsvnrevision = import ../build-support/fetchsvnrevision runCommand subversion;
 
   fetchsvnssh = import ../build-support/fetchsvnssh {
     inherit stdenv subversion openssh expect;
@@ -4036,7 +4040,7 @@ let
 
   taglib = callPackage ../development/libraries/taglib { };
 
-  taglib17 = callPackage ../development/libraries/taglib/1.7.nix { };
+  taglib_live = callPackage ../development/libraries/taglib/live.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
