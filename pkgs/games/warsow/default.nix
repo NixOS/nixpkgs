@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     cd source
     unzip $src2 'basewsw/*' -d release
   '';
+  patchPhase = ''
+    substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
+  '';
   buildInputs = [ unzip pkgconfig zlib curl libjpeg libvorbis libXxf86dga
                   libXxf86vm libXinerama SDL mesa openal ];
   installPhase = ''
