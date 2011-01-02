@@ -2970,6 +2970,8 @@ let
     inherit (gtkLibs) pango glib gtk;
   };
 
+  geoclue = callPackage ../development/libraries/geoclue {};
+
   geoip = builderDefsPackage ../development/libraries/geoip {
     inherit zlib;
   };

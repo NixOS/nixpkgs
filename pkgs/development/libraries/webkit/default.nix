@@ -13,7 +13,7 @@ rec {
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant python ruby which renderproto libXrender
+    enchant python ruby which renderproto libXrender geoclue
     ];
 
   propagatedBuildInputs = [
@@ -27,21 +27,28 @@ rec {
     "--enable-web-timing"
     "--enable-image-resizer"
 
+    "--enable-geolocation"
+
+    # Not implemented?
+    # "--enable-web-audio"
+
     "--enable-mathml"
 
     # https://bugs.webkit.org/show_bug.cgi?id=42943
-    # "--enable-wml"
+    # FIXED
+    "--enable-wml"
     
     # https://bugs.webkit.org/show_bug.cgi?id=45110
     # "--enable-indexed-database"
 
     # Related bug is marked as closed, but seems to persist
-    # "--enable-xhtmlmp"
+    "--enable-xhtmlmp"
 
     # "--enable-input-speech"
 
     # https://bugs.webkit.org/show_bug.cgi?id=43878
-    # "--enable-file-writer"
+    # Related bug FIXED
+    "--enable-file-writer"
     # "--enable-blob"
 
     # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
