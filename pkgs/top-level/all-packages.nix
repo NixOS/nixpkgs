@@ -3889,6 +3889,7 @@ let
   popt = callPackage ../development/libraries/popt { };
 
   portaudio = callPackage ../development/libraries/portaudio { };
+  portaudioSVN = callPackage ../development/libraries/portaudio/svn-head.nix { };
 
   proj = callPackage ../development/libraries/proj { };
 
