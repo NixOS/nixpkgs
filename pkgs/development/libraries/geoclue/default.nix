@@ -27,6 +27,8 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
+  propagatedBuildInputs = [a.dbus a.glib a.dbus_glib];
+
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
       
