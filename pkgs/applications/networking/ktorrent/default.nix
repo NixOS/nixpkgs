@@ -5,11 +5,11 @@ stdenv.mkDerivation rec {
   name = pname + "-" + version;
 
   pname = "ktorrent";
-  version = "4.0.3";
+  version = "4.0.5";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${version}/${name}.tar.bz2";
-    sha256 = "02hp52333w75mdywgsln28samf9ybr9yldg1jsw0b93lj44pfxli";
+    sha256 = "1kgy0r9c51w38vj5kjla16vh7nigs89qvvjybjjkv4r41nz9kcfn";
   };
 
   patches = [ ./find-workspace.diff ];
