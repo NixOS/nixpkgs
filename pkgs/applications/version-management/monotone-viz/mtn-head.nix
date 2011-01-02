@@ -11,7 +11,7 @@ rec {
 
   buildInputs = [ocaml lablgtk libgnomecanvas gtk graphviz glib 
     pkgconfig autoconf automake libtool];
-  configureFlags = ["--with-lablgtk-dir=${lablgtk}/lib/ocaml/lablgtk2"];
+  configureFlags = ["--with-lablgtk-dir=$(echo ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2)"];
 
   /* doConfigure should be specified separately */
   phaseNames = ["doAutoconf" "doPatch" "doConfigure" "doMakeInstall"];
