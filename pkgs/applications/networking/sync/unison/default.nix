@@ -11,7 +11,7 @@ stdenv.mkDerivation (rec {
   buildInputs = [ocaml makeWrapper];
 
   preBuild = ''
-    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I ${lablgtk}/lib/ocaml/lablgtk2|" Makefile.OCaml
+    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" Makefile.OCaml
   '';
   makeFlags = "UISTYLE=gtk2 INSTALLDIR=$(out)/bin/";
   preInstall = "ensureDir $out/bin";
