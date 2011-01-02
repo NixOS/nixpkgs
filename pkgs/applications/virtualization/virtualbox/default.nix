@@ -4,11 +4,14 @@
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-3.2.8-${kernel.version}";
+#  name = "virtualbox-3.2.8-${kernel.version}";
+  name = "virtualbox-3.2.10-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.2.8/VirtualBox-3.2.8-OSE.tar.bz2;
-    sha256 = "00qvgaqg4gsabrc0rba5rh0jxqrjzk2vn6qbkc6nlxvngha95klh";
+#    url = http://download.virtualbox.org/virtualbox/3.2.8/VirtualBox-3.2.8-OSE.tar.bz2;
+#    sha256 = "00qvgaqg4gsabrc0rba5rh0jxqrjzk2vn6qbkc6nlxvngha95klh";
+    url = http://download.virtualbox.org/virtualbox/3.2.10/VirtualBox-3.2.10-OSE.tar.bz2;
+    sha256 = "06abkv8lsh6b0z21ialdhxyw5qg1r2x07qwwkn2b9akx8ab5pcjd";
   };
 
   buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl pam];
@@ -35,6 +38,7 @@ stdenv.mkDerivation {
     VBOX_PATH_APP_PRIVATE := $out
     VBOX_PATH_APP_DOCS := $out/doc
     END_PATHS
+    echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
   '';
 
   buildPhase = ''
