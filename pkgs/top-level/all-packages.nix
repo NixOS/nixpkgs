@@ -4087,7 +4087,7 @@ let
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
       pkgconfig autoconf bison libproxy enchant
-      python ruby which flex;
+      python ruby which flex geoclue;
     inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
     inherit (xlibs) libXt renderproto libXrender;
