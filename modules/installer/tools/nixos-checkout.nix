@@ -55,6 +55,7 @@ let
       default = {
         svn = { valid = "[ -d .svn ]"; env = [ pkgs.coreutils pkgs.subversion ]; };
         git = { valid = "[ -d .git ]"; env = [ pkgs.coreutils pkgs.git pkgs.gnused /*  FIXME: use full path to sed in nix-pull */ ]; };
+        gitsvn = { valid = "[ -d .git/svn ]"; env = [ pkgs.coreutils pkgs.gitFull pkgs.gnused ]; };
       };
       description = ''
         Defines, for each supported version control system
@@ -111,6 +112,28 @@ let
     [ -d ${t} ] || { echo "git initialize failed to create target directory ${t}"; exit 1; }
     ${update}'';
     }
+    else  if attrs.type == "gitsvn" then # sanity check for existing attrs
+      let
+        a = {
+          # add gitsvn defaults
+          url = "https://svn.nixos.org/repos/nix/${repo}";
+	   # XXX: same default target as svn: good/bad?
+          target = "/etc/nixos/${repo}";
+          initialize = "git svn clone -s ${a.url} ${a.target}";
+          # splitting this in fetch and rebase -l helps to recover partly cloned repo
+          update = "git svn fetch && git svn rebase -l";
+        } // attrs;
+        t = escapeShellArg a.target;
+      in
+      rec {
+        inherit (a) type target;
+        default =  if a ? default then a.default else false;
+        update = "cd ${t} && ${a.update}";
+        initialize =  ''
+          cd $(dirname ${t}) && ${a.initialize}
+          [ -d ${t} ] || { echo "gitsvn initialize failed to create target directory ${t}"; exit 1; }
+          ${update}'';
+      }
     else throw "unkown repo type ${attrs.type}";
 
   # apply prepareRepoAttrs on each repo definition
