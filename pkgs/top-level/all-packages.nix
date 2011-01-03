@@ -5486,6 +5486,8 @@ let
 
   amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
 
+  amarok_live = newScope pkgs.kde4 ../applications/audio/amarok/live.nix { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
     libstdcpp = gcc33.gcc;
   };
