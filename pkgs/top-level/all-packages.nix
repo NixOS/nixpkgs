@@ -6576,6 +6576,7 @@ let
 
   unison = callPackage ../applications/networking/sync/unison {
     inherit (ocamlPackages) lablgtk;
+    enableX11 = getConfig [ "unison" "enableX11" ] true;
   };
 
   uucp = callPackage ../tools/misc/uucp { };

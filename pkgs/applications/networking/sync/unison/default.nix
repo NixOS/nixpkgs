@@ -1,4 +1,5 @@
-{stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper}:
+{stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper
+, enableX11 ? true}:
 
 stdenv.mkDerivation (rec {
 
@@ -10,17 +11,20 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ocaml makeWrapper];
 
-  preBuild = ''
+  preBuild = if enableX11 then ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" Makefile.OCaml
-  '';
-  makeFlags = "UISTYLE=gtk2 INSTALLDIR=$(out)/bin/";
+  '' else "";
+
+  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then "UISTYLE=gtk2" else "");
+
   preInstall = "ensureDir $out/bin";
-  postInstall = ''
+
+  postInstall = if enableX11 then ''
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
         --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
     done
-  '';
+  '' else "";
 
   meta = {
     homepage = http://www.cis.upenn.edu/~bcpierce/unison/;
