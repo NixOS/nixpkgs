@@ -23,7 +23,7 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}";
+  version = "${majorVersion}.1";
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
@@ -51,7 +51,7 @@ stdenv.mkDerivation ( {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "935d3316edfec5eb98c2f6930756b47b00dc27192541e62d6fd0077ffa008af8";
+    sha256 = "14i2c7yqa7ljmx2i2bb827n61q33zn23ax96czi8rbkyyny8gqw0";
   };
 
   patches = [
