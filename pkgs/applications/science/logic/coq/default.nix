@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
     substituteInPlace scripts/coqmktop.ml --replace \
       "\"-I\"; \"+lablgtk2\"" \
-      "\"-I\"; \"${lablgtk}/lib/ocaml/lablgtk2\"; \"-I\"; \"${lablgtk}/lib/ocaml/stublibs\""
+      "\"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)\"; \"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/stublibs)\""
   '';
 
   postInstall = ''
