@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.8.1";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/NetworkManager-${version}.tar.bz2";
+    url = "mirror://gnome/sources/NetworkManager/0.8/NetworkManager-${version}.tar.bz2";
     sha256 = "1yhr1zc9p2dakvg6m33jgkf09r6f6bzly7kqqjcpim4r66z6y4nw";
   };
 
