@@ -938,6 +938,8 @@ let
 
   netselect = callPackage ../tools/networking/netselect { };
 
+  networkmanager = callPackage ../tools/networking/network-manager { };
+
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
   nmap = callPackage ../tools/security/nmap {
