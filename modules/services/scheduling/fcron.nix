@@ -8,7 +8,7 @@ let
   
   queuelen = if cfg.queuelen == "" then "" else "-q ${toString cfg.queuelen}";
 
-  systemCronJobsFile = pkgs.writeText "system-crontab"
+  systemCronJobs =
     ''
       SHELL=${pkgs.bash}/bin/bash
       PATH=${config.system.path}/bin:${config.system.path}/sbin
@@ -61,7 +61,7 @@ in
       };
       
       systab = mkOption {
-        default = systemCronJobsFile;
+        default = systemCronJobs;
         description = ''The "system" crontab contents.'';
       };
     };
