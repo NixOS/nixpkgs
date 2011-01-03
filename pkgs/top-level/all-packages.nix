@@ -4725,6 +4725,8 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
+
   linuxHeaders = linuxHeaders_2_6_32;
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
