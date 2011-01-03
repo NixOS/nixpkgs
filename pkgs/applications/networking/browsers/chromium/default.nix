@@ -1,24 +1,24 @@
-{ GConf, alsaLib, atk, bzip2, cairo, cups, dbus, dbus_glib,
-  expat, fetchurl, ffmpeg, fontconfig, freetype, glib, gtk,
-  libX11, libXScrnSaver, libXdamage, libXext, libXrender, libXt,
-  libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, pango,
-  patchelf, stdenv, unzip, zlib }:
+{ GConf, alsaLib, atk, bzip2, cairo, cups, dbus, dbus_glib, expat,
+  fetchurl, ffmpeg, fontconfig, freetype, glib, gtk, libX11,
+  libXScrnSaver, libXdamage, libXext, libXrender, libXt, libXtst,
+  libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, pango, patchelf,
+  stdenv, unzip, zlib }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
   name = "chrome-${version}";
-  version = "65039";
+  version = "70357";
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux-64/${version}/chrome-linux.zip";
-        sha256 = "1ad7kwd1w1958mb3pwzhshawrf2nlxdsf0gy7d2q4qnx5d809vws";
+        url = http://build.chromium.org/f/chromium/continuous/linux64/2011-01-02/70375/chrome-linux.zip;
+        sha256 = "0zz9pl1ksiwk5kcsa5isviacg8awzs2gmirg8n36qni07dj5wiq8";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://build.chromium.org/buildbot/snapshots/chromium-rel-linux/${version}/chrome-linux.zip";
-        sha256 = "06hz3gvv3623ldrj141w3mnzw049yylvv9b9q5r6my8icm722phf";
+        url = http://build.chromium.org/f/chromium/continuous/linux/2011-01-02/70375/chrome-linux.zip;
+        sha256 = "1i7sb6wgf19zr97r2s5n0p4543i736n8c2hnhk483hjzikg2j55i";
       }
     else throw "Chromium is not supported on this platform.";
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.makeLibraryPath
        [ GConf alsaLib atk bzip2 cairo cups dbus dbus_glib expat
          ffmpeg fontconfig freetype glib gtk libX11 libXScrnSaver
-         libXdamage libXext libXrender libXt libgcrypt libjpeg libpng
-         nspr nss pango stdenv.gcc.gcc zlib stdenv.gcc.libc ];
+         libXdamage libXext libXrender libXt libXtst libgcrypt libjpeg
+         libpng nspr nss pango stdenv.gcc.gcc zlib stdenv.gcc.libc ];
 
   installPhase = ''
     ensureDir $out/bin
