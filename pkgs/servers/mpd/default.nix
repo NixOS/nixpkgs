@@ -7,10 +7,10 @@ let
   opt = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  name = "mpd-0.15.9";
+  name = "mpd-0.16";
   src = fetchurl {
     url = "mirror://sourceforge/musicpd/${name}.tar.bz2";
-    sha256 = "1fv7ydxs755rsj4pijmsjjpvzlhy5idpvdi6p46nsq3ivjha2msa";
+    sha256 = "0sy0ra9wmqp6a2207lhz0b2k5dmfw2bgic9mawbgn17j80aikbg2";
   };
   buildInputs = [ pkgconfig glib ]
     ++ opt alsaSupport alsaLib
