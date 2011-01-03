@@ -10,18 +10,25 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nss-3.12.7";
+  name = "nss-3.12.8";
   
   src = fetchurl {
-    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_7_RTM/src/nss-3.12.7.tar.gz;
-    sha256 = "0x5h0r5hn4qzafxakhvqyw1r8r0zy09b7b0kmdh3ff6v29v4bnzx";
+    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_8_RTM/src/nss-3.12.8.tar.gz;
+    sha256 = "050c175l5zyzqxcp5fxj4q4n641c3j7w6w6fjg5hk3cyfhlwwy4i";
   };
 
   buildInputs = [nspr perl zlib];
 
+  patches = [ ./nss-3.12.5-gentoo-fixups.diff ];
+
   # Based on the build instructions at
   # http://www.mozilla.org/projects/security/pki/nss/nss-3.11.4/nss-3.11.4-build.html
   
+  postPatch = ''
+    sed -i -e "/^PREFIX =/s:= /usr:= $out:" \
+                "mozilla/security/nss/config/Makefile"
+  '';
+
   preConfigure = "cd mozilla/security/nss";
 
   BUILD_OPT = "1";
