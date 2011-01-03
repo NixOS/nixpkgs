@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus, dbus_glib, udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, iptables }:
+{ stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus, dbus_glib, udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, iptables, libtasn1 }:
 stdenv.mkDerivation rec {
 
   name = "network-manager-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     "--with-crypto=gnutls" "--disable-more-warnings"
     "--with-udev-dir=\${out}/lib/udev" ];
 
-  buildInputs = [ intltool wirelesstools pkgconfig dbus dbus_glib udev libnl1 libuuid polkit gnutls ppp ];
+  buildInputs = [ intltool wirelesstools pkgconfig dbus dbus_glib udev libnl1 libuuid polkit gnutls ppp libtasn1 ];
 
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;
