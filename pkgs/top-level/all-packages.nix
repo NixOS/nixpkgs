@@ -964,17 +964,8 @@ let
 
   offlineimap = import ../tools/networking/offlineimap {
     inherit fetchurl;
-    # I did not find any better way of reusing buildPythonPackage+setuptools
-    # for a python with openssl support
-    buildPythonPackage = assert pythonFull.opensslSupport;
-      import ../development/python-modules/generic {
-        inherit makeWrapper lib;
-        python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-          inherit makeWrapper;
-          python = pythonFull;
-        };
-      };
+    buildPythonPackage = buildPython27Package;
+    ssl = pythonModules.ssl;
   };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -2313,6 +2304,10 @@ let
     inherit (pkgs) db4 sqlite readline openssl tcl tk ncurses;
     inherit (pkgs.xlibs) libX11 xproto;
   });
+
+  pythonModules = callPackage ../development/interpreters/python/2.7/modules.nix {
+    python = python27Base;
+  };
 
   python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
     inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
