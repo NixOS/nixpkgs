@@ -2268,7 +2268,6 @@ let
   python = python27;
   
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  pythonBase = python26Base;
   pythonFull = python26Full;
 
   pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
