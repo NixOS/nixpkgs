@@ -33,6 +33,12 @@ stdenv.mkDerivation {
   patches =
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
+
+      # Python recompiles a Python if the mtime stored *in* the
+      # pyc/pyo file differs from the mtime of the source file.  This
+      # doesn't work in Nix because Nix changes the mtime of files in
+      # the Nix store to 1.  So treat that as a special case.
+      ./nix-store-mtime.patch
     ];
 
   inherit buildInputs;
