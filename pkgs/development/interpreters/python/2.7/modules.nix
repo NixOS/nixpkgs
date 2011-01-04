@@ -1,4 +1,4 @@
-{ stdenv, python, sqlite, tcl, tk, x11, openssl, readline }:
+{ stdenv, python, sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm }:
 
 with stdenv.lib;
 
@@ -46,14 +46,25 @@ let
 
 in {
     
+  bsddb = buildInternalPythonModule {
+    moduleName = "bsddb";
+    deps = [ db4 ];
+  };
+    
+  curses = buildInternalPythonModule {
+    moduleName = "curses";
+    deps = [ ncurses ];
+  };
+    
+  gdbm = buildInternalPythonModule {
+    moduleName = "gdbm";
+    internalName = "gdbm";
+    deps = [ gdbm ];
+  };
+    
   sqlite3 = buildInternalPythonModule {
     moduleName = "sqlite3";
     deps = [ sqlite ];
-  };
-    
-  tkinter = buildInternalPythonModule {
-    moduleName = "tkinter";
-    deps = [ tcl tk x11 ];
   };
     
   ssl = buildInternalPythonModule {
@@ -61,10 +72,15 @@ in {
     deps = [ openssl ];
   };
     
+  tkinter = buildInternalPythonModule {
+    moduleName = "tkinter";
+    deps = [ tcl tk x11 ];
+  };
+    
   readline = buildInternalPythonModule {
     moduleName = "readline";
     internalName = "readline";
     deps = [ readline ];
   };
-    
+
 }
