@@ -2265,7 +2265,8 @@ let
 
   polyml = callPackage ../development/compilers/polyml { };
 
-  python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
+  python = python27;
+  
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
   pythonBase = python26Base;
   pythonFull = python26Full;
@@ -4484,17 +4485,11 @@ let
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus hal libuuid openssl gperf m4
-      autoconf libtool xmlto asciidoc udev;
+      autoconf libtool xmlto asciidoc udev python;
 
     # XXX: Update to newer Automake on the next big rebuild; better yet:
     # remove the dependency on Automake.
     automake = automake110x;
-
-    # !!! pythonBase is used instead of python because this causes an
-    # infinite recursion when the flag python.full is set to true.
-    # Packages contained in the loop are python, tk, xlibs-wrapper,
-    # libX11, libxcd (and xcb-proto).
-    python = pythonBase;
   });
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
