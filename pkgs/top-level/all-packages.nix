@@ -6194,10 +6194,7 @@ let
 
   mercurial = callPackage ../applications/version-management/mercurial {
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
-    python = # allow cloning sources from https servers.
-      if getConfig ["mercurial" "httpsSupport"] true
-      then pythonFull
-      else pythonBase;
+    inherit (python27Modules) ssl;
   };
 
   merkaartor = callPackage ../applications/misc/merkaartor {
