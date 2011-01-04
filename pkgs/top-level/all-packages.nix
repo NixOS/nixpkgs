@@ -820,8 +820,6 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
-  knetworkmanager_live = newScope pkgs.kde4 ../tools/networking/knetworkmanager/live.nix { };
-  
   less = callPackage ../tools/misc/less { };
 
   most = callPackage ../tools/misc/most { };
@@ -4044,8 +4042,6 @@ let
 
   taglib = callPackage ../development/libraries/taglib { };
 
-  taglib_live = callPackage ../development/libraries/taglib/live.nix { };
-
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
   talloc = callPackage ../development/libraries/talloc { };
@@ -5491,8 +5487,6 @@ let
   };
 
   amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
-
-  amarok_live = newScope pkgs.kde4 ../applications/audio/amarok/live.nix { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
     libstdcpp = gcc33.gcc;
