@@ -820,6 +820,8 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  knetworkmanager_live = newScope pkgs.kde4 ../tools/networking/knetworkmanager/live.nix { };
+  
   less = callPackage ../tools/misc/less { };
 
   most = callPackage ../tools/misc/most { };
