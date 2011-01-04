@@ -1,22 +1,10 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, gdbmSupport ? true, gdbm ? null
-, sqlite ? null
-, db4 ? null
-, readline ? null
-, openssl ? null
-, tk ? null
-, tcl ? null
-, libX11 ? null
-, xproto ? null
-, arch ? null
-, sw_vers ? null
-, ncurses ? null
+, darwinArchUtility ? null, darwinSwVersUtility ? null
 }:
 
 assert zlibSupport -> zlib != null;
-assert gdbmSupport -> gdbm != null;
-assert stdenv.isDarwin -> arch != null;
-assert stdenv.isDarwin -> sw_vers != null;
+assert stdenv.isDarwin -> darwinArchUtility != null;
+assert stdenv.isDarwin -> darwinSwVersUtility != null;
 
 with stdenv.lib;
 
@@ -27,25 +15,13 @@ let
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [bzip2]
+    [ bzip2 ]
     ++ optional zlibSupport zlib
-    ++ optional gdbmSupport gdbm
-    ++ optional (sqlite != null) sqlite
-    ++ optional (db4 != null) db4
-    ++ optional (readline != null) readline
-    ++ optional (openssl != null) openssl
-    ++ optional (tk != null) tk
-    ++ optional (tcl != null) tcl
-    ++ optional (libX11 != null) libX11
-    ++ optional (xproto != null) xproto
-    ++ optional (arch != null) arch
-    ++ optional (sw_vers != null) sw_vers
-    ++ optional (ncurses != null) ncurses
-    ;
+    ++ optionals stdenv.isDarwin [ darwinArchUtility darwinSwVersUtility ];
 
 in
 
-stdenv.mkDerivation ( {
+stdenv.mkDerivation {
   name = "python-${version}";
   inherit majorVersion version;
 
@@ -54,38 +30,37 @@ stdenv.mkDerivation ( {
     sha256 = "14i2c7yqa7ljmx2i2bb827n61q33zn23ax96czi8rbkyyny8gqw0";
   };
 
-  patches = [
-    # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
-    ./search-path.patch
-  ];
+  patches =
+    [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
+      ./search-path.patch
+    ];
 
   inherit buildInputs;
+  
   C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
   LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+  
   configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
 
-  preConfigure = ''
-    # Purity.
-    for i in /usr /sw /opt /pkg; do
-      substituteInPlace ./setup.py --replace $i /no-such-path
-    done
-  '' + (if readline != null then ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lncurses"
-  '' else "");
+  preConfigure =
+    ''
+      # Purity.
+      for i in /usr /sw /opt /pkg; do
+        substituteInPlace ./setup.py --replace $i /no-such-path
+      done
+    '';
+
+  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
 
   setupHook = ./setup-hook.sh;
 
-  postInstall = ''
-    rm -rf "$out/lib/python${majorVersion}/test"
-  '';
+  postInstall =
+    ''
+      rm -rf "$out/lib/python${majorVersion}/test"
+    '';
 
   passthru = {
     inherit zlibSupport;
-    sqliteSupport = sqlite != null;
-    db4Support = db4 != null;
-    readlineSupport = readline != null;
-    opensslSupport = openssl != null;
-    tkSupport = (tk != null) && (tcl != null);
     libPrefix = "python${majorVersion}";
   };
 
@@ -107,4 +82,4 @@ stdenv.mkDerivation ( {
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
-} // (if stdenv.isDarwin then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
+}

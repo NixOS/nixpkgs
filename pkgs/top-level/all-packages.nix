@@ -2267,7 +2267,6 @@ let
 
   python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  python27 = if getConfig ["python" "full"] false then python27Full else python27Base;
   pythonBase = python26Base;
   pythonFull = python26Full;
 
@@ -2294,19 +2293,10 @@ let
     ncurses = if getConfig ["python" "curses"] true then ncurses else null;
   });
 
-  python27Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.7) {
-    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  });
+  python27 = callPackage ../development/interpreters/python/2.7 { };
 
-  python27Full = lowPrio (python27Base.override {
-    inherit (pkgs) db4 sqlite readline openssl tcl tk ncurses;
-    inherit (pkgs.xlibs) libX11 xproto;
-  });
-
-  pythonModules = callPackage ../development/interpreters/python/2.7/modules.nix {
-    python = python27Base;
+  python27Modules = callPackage ../development/interpreters/python/2.7/modules.nix {
+    python = python27;
   };
 
   python31Base = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
