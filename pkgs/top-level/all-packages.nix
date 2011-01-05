@@ -5536,8 +5536,6 @@ let
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
-  bitlbeeOtr = callPackage ../applications/networking/instant-messengers/bitlbee-otr { };
-
   # commented out because it's using the new configuration style proposal which is unstable
   #biew = import ../applications/misc/biew {
   #  inherit lib stdenv fetchurl ncurses;
