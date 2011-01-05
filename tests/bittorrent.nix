@@ -75,7 +75,7 @@ in
       # Create the torrent.
       $tracker->mustSucceed("mkdir /tmp/data");
       $tracker->mustSucceed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->mustSucceed("transmissioncli -n /tmp/data/test.tar.bz2 -a http://tracker:6969/announce /tmp/test.torrent");
+      $tracker->mustSucceed("transmission-create /tmp/data/test.tar.bz2 -t http://tracker:6969/announce -o /tmp/test.torrent");
       $tracker->mustSucceed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
@@ -83,11 +83,11 @@ in
       $tracker->waitForOpenPort(6969);
 
       # Start the initial seeder.
-      my $pid = $tracker->mustSucceed("transmissioncli /tmp/test.torrent -M -w /tmp/data >&2 & echo \$!");
+      my $pid = $tracker->mustSucceed("transmission-cli /tmp/test.torrent -M -w /tmp/data >&2 & echo \$!");
 
       # Now we should be able to download from the client behind the NAT.
       $tracker->waitForJob("httpd");
-      $client1->mustSucceed("transmissioncli http://tracker/test.torrent -w /tmp >&2 &");
+      $client1->mustSucceed("transmission-cli http://tracker/test.torrent -w /tmp >&2 &");
       $client1->waitForFile("/tmp/test.tar.bz2");
       $client1->mustSucceed("cmp /tmp/test.tar.bz2 ${file}");
 
@@ -96,7 +96,7 @@ in
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.
-      $client2->mustSucceed("transmissioncli http://tracker/test.torrent -M -w /tmp >&2 &");
+      $client2->mustSucceed("transmission-cli http://tracker/test.torrent -M -w /tmp >&2 &");
       $client2->waitForFile("/tmp/test.tar.bz2");
       $client2->mustSucceed("cmp /tmp/test.tar.bz2 ${file}");
     '';
