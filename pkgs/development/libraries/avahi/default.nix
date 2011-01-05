@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = http://avahi.org;
     license = "LGPLv2+";
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
