@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "binary decision diagram package";
     license = "as-is";
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.allBut "i686-cygwin";
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
