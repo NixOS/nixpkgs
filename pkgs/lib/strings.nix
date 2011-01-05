@@ -45,6 +45,10 @@ rec {
   makeLibraryPath = makeSearchPath "lib";
 
 
+  # Idem for Perl search paths.
+  makePerlPath = makeSearchPath "lib/perl5/site_perl";
+  
+
   # Dependening on the boolean `cond', return either the given string
   # or the empty string.
   optionalString = cond: string: if cond then string else "";
