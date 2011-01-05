@@ -21,7 +21,6 @@ with (import ./release-lib.nix);
   apacheHttpd = linux;
   aspell = all;
   at = linux;
-  aterm242fixes = all;
   aterm25 = all;
   aterm28 = all;
   audacious = linux;

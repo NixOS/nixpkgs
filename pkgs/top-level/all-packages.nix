@@ -2737,10 +2737,6 @@ let
 
   aterm = aterm25;
 
-  aterm242fixes = lowPrio (import ../development/libraries/aterm/2.4.2-fixes.nix {
-    inherit fetchurl stdenv;
-  });
-
   aterm25 = callPackage ../development/libraries/aterm/2.5.nix { };
 
   aterm28 = lowPrio (callPackage ../development/libraries/aterm/2.8.nix { });
