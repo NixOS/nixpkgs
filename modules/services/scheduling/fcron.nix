@@ -61,7 +61,7 @@ in
       };
       
       systab = mkOption {
-        default = systemCronJobs;
+        default = "";
         description = ''The "system" crontab contents.'';
       };
     };
@@ -72,6 +72,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    services.fcron.systab = systemCronJobs;
 
     environment.etc =
       [ (allowdeny "allow" (cfg.allow))
