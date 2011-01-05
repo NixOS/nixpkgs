@@ -6484,6 +6484,8 @@ let
 
   sox = callPackage ../applications/misc/audio/sox { };
 
+  spotify = callPackage ../applications/audio/spotify { };
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
