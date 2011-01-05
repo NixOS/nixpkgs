@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     license = "LGPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
