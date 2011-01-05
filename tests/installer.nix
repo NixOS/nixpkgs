@@ -93,7 +93,7 @@ let
     ''
       createDisk("harddisk", 4 * 1024);
 
-      my $machine = Machine->new({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1 1}' });
+      my $machine = createMachine({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1 1}' });
       $machine->start;
 
       ${optionalString testChannel ''
@@ -158,7 +158,7 @@ let
       $machine->shutdown;
 
       # Now see if we can boot the installation.
-      my $machine = Machine->new({ hda => "harddisk" });
+      my $machine = createMachine({ hda => "harddisk" });
       
       # Did /boot get mounted, if appropriate?
       # !!! There is currently no good way to wait for the
@@ -181,7 +181,7 @@ let
 
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
-      my $machine = Machine->new({ hda => "harddisk" });
+      my $machine = createMachine({ hda => "harddisk" });
       $machine->mustSucceed("echo hello");
       $machine->shutdown;
     '';
@@ -304,7 +304,7 @@ in {
       testScript =
         ''
           # damn, it's costly to evaluate nixos-rebuild (1G of ram)
-          my $machine = Machine->new({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1 1} -m 1024' });
+          my $machine = createMachine({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '${qemuNICFlags 1 1 1} -m 1024' });
           $machine->start;
 
           # Make sure that we don't try to download anything.

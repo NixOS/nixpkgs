@@ -1,4 +1,4 @@
-#! /somewhere/perl
+#! /somewhere/perl -w
 
 use strict;
 use Machine;
@@ -10,13 +10,23 @@ $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
 STDERR->autoflush(1);
 
+my $logFile = defined $ENV{LOGFILE} ? "$ENV{LOGFILE}" : "/dev/null";
+my $log = new XML::Writer(OUTPUT => new IO::File(">$logFile"));
+$log->startTag("logfile");
+
 
 my %vms;
 my $context = "";
 
-foreach my $vmScript (@ARGV) {
-    my $vm = Machine->new({startCommand => $vmScript});
+sub createMachine {
+    my ($args) = @_;
+    my $vm = Machine->new($args);
     $vms{$vm->name} = $vm;
+    return $vm;
+}
+
+foreach my $vmScript (@ARGV) {
+    my $vm = createMachine({startCommand => $vmScript});
     $context .= "my \$" . $vm->name . " = \$vms{'" . $vm->name . "'}; ";
 }
 
@@ -86,6 +96,8 @@ END {
             kill 9, $vm->{pid};
         }
     }
+    $log->endTag("logfile");
+    $log->end;
 }
 
 

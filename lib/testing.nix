@@ -50,7 +50,7 @@ rec {
         ''
           ensureDir $out/nix-support
 
-          ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm
+          LOGFILE=$out/log.xml ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm
           
           for i in */coverage-data; do
             ensureDir $out/coverage-data
