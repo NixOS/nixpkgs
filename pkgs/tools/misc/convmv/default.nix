@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.all;
+    platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ maintainers.urkud ];
   };
 }
