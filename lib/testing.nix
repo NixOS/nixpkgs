@@ -10,7 +10,12 @@ rec {
 
   testDriver = stdenv.mkDerivation {
     name = "nixos-test-driver";
-    buildCommand =
+
+    buildInputs = [ makeWrapper perl ];
+
+    unpackPhase = "true";
+    
+    installPhase =
       ''
         mkdir -p $out/bin
         cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
@@ -20,11 +25,9 @@ rec {
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
 
-        substituteInPlace $out/bin/nixos-test-driver \
-          --subst-var-by perl "${perl}/bin/perl" \
-          --subst-var-by readline "${perlPackages.TermReadLineGnu}/lib/perl5/site_perl" \
-          --subst-var-by extraPath "${imagemagick}/bin" \
-          --subst-var libDir
+        wrapProgram $out/bin/nixos-test-driver \
+          --prefix PATH : "${imagemagick}/bin" \
+          --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter ]}:$out/lib/perl5/site_perl"
       '';
   };
 

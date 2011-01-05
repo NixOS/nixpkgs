@@ -1,18 +1,18 @@
-#! @perl@ -w -I@libDir@ -I@readline@
+#! /somewhere/perl
 
 use strict;
 use Machine;
 use Term::ReadLine;
+use IO::File;
+use XML::Writer;
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
-$ENV{PATH} = "@extraPath@:$ENV{PATH}";
-
 STDERR->autoflush(1);
+
 
 my %vms;
 my $context = "";
-
 
 foreach my $vmScript (@ARGV) {
     my $vm = Machine->new({startCommand => $vmScript});
@@ -23,6 +23,14 @@ foreach my $vmScript (@ARGV) {
 
 sub startAll {
     $_->start foreach values %vms;
+}
+
+
+# In interactive tests, this allows the non-interactive test script to
+# be executed conveniently.
+sub testScript {
+    eval "$context $ENV{testScript};\n";
+    warn $@ if $@;
 }
 
 
