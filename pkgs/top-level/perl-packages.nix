@@ -3079,11 +3079,11 @@ rec {
     propagatedBuildInputs = [XMLParser];
   };
 
-  XMLWriter = buildPerlPackage {
-    name = "XML-Writer-0.602";
+  XMLWriter = buildPerlPackage rec {
+    name = "XML-Writer-0.612";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.602.tar.gz;
-      sha256 = "0kdi022jcn9mwqsxy2fiwl2cjlid4x13r038jvi426fhjknl11nl";
+      url = "mirror://cpan/authors/id/J/JO/JOSEPHW/${name}.tar.gz";
+      sha256 = "1prvgbjxynxg6061qxzfbbimjvil04513hf3hsilv0hdg58nb9jk";
     };
   };
 
