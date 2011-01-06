@@ -606,6 +606,8 @@ let
 
   expect = callPackage ../tools/misc/expect { };
 
+  fakeroot = callPackage ../tools/system/fakeroot { };
+
   fcron = callPackage ../tools/system/fcron {  # see also cron
   };
 
