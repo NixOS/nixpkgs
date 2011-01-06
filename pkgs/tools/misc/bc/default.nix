@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./readlinefix.patch ];
 
+  preConfigure = ''
+    sed -i 's/program.*save/static &/' bc/load.c
+  '';
+
   configureFlags = [ "--with-readline" ];
 
   buildInputs = [flex readline];
