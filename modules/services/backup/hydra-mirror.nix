@@ -114,8 +114,8 @@ in
         chown ${cfg.user} ${cfg.dataDir}/logs
 
         ${concatMapStrings (j : ''
-          mkdir -m 0755 -p ${cfg.dataDir}/{j.project}/channels/${j.name}
-          chown ${cfg.user} ${cfg.dataDir}/{j.project}/channels/${j.name}
+          mkdir -m 0755 -p ${cfg.dataDir}/${j.project}/channels/${j.name}
+          chown ${cfg.user} ${cfg.dataDir}/${j.project}/channels/${j.name}
         '') cfg.jobsets}
       '';
     
