@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     description = "Give a fake root environment through LD_PRELOAD";
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; linux;
   };
 
 }
