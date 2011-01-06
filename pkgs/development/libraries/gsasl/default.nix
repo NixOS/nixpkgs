@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsasl-1.4.4";
+  name = "gsasl-1.6.0";
 
   src = fetchurl {
     url = "mirror://gnu/gsasl/${name}.tar.gz";
-    sha256 = "0xd9irff42dd5i4cr74dy0yd9ijjv9nkg6c2l1328grsn8zifwdc";
+    sha256 = "1panxrfy8f6gfhd3iqx1rssz7k473463xvnp6sxagrg4p83qz36a";
   };
 
   doCheck = true;
