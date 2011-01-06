@@ -4,15 +4,13 @@ use strict;
 use Machine;
 use Term::ReadLine;
 use IO::File;
-use XML::Writer;
+use Logger;
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
 STDERR->autoflush(1);
 
-my $logFile = defined $ENV{LOGFILE} ? "$ENV{LOGFILE}" : "/dev/null";
-my $log = new XML::Writer(OUTPUT => new IO::File(">$logFile"));
-$log->startTag("logfile");
+my $log = new Logger;
 
 
 my %vms;
@@ -20,7 +18,7 @@ my $context = "";
 
 sub createMachine {
     my ($args) = @_;
-    my $vm = Machine->new($args);
+    my $vm = Machine->new({%{$args}, log => $log});
     $vms{$vm->name} = $vm;
     return $vm;
 }
@@ -32,7 +30,9 @@ foreach my $vmScript (@ARGV) {
 
 
 sub startAll {
-    $_->start foreach values %vms;
+    $log->nest("starting all VMs", sub {
+        $_->start foreach values %vms;
+    });
 }
 
 
@@ -41,6 +41,20 @@ sub startAll {
 sub testScript {
     eval "$context $ENV{testScript};\n";
     warn $@ if $@;
+}
+
+
+my $nrTests = 0;
+my $nrSucceeded = 0;
+
+
+sub subtest {
+    my ($name, $coderef) = @_;
+    $log->nest("subtest: $name", sub {
+        $nrTests++;
+        &$coderef;
+        $nrSucceeded++;
+    });
 }
 
 
@@ -77,6 +91,10 @@ sub runTests {
         # Copy all the *.gcda files.
         $vm->execute("for d in $gcovDir/nix/store/*/.build/linux-*; do for i in \$(cd \$d && find -name '*.gcda'); do echo \$i; mkdir -p $coverageDir/\$(dirname \$i); cp -v \$d/\$i $coverageDir/\$i; done; done");
     }
+
+    if ($nrTests != 0) {
+        #$log->dataElement("line", "$nrSucceeded out of $nrTests tests succeeded");
+    }
 }
 
 
@@ -92,12 +110,11 @@ sub createDisk {
 END {
     foreach my $vm (values %vms) {
         if ($vm->{pid}) {
-            print STDERR "killing ", $vm->{name}, " (pid ", $vm->{pid}, ")\n";
+            $log->log("killing " . $vm->{name} . " (pid " . $vm->{pid} . ")");
             kill 9, $vm->{pid};
         }
     }
-    $log->endTag("logfile");
-    $log->end;
+    $log->close();
 }
 
 

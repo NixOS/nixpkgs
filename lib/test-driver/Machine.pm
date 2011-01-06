@@ -7,6 +7,7 @@ use IO::Handle;
 use POSIX qw(dup2);
 use FileHandle;
 use Cwd;
+use File::Basename;
 
 
 # Stuff our PID in the multicast address/port to prevent collissions
@@ -58,6 +59,7 @@ sub new {
         socket => undef,
         stateDir => "$tmpDir/vm-state-$name",
         monitor => undef,
+        log => $args->{log},
     };
 
     mkdir $self->{stateDir}, 0700;
@@ -69,8 +71,13 @@ sub new {
 
 sub log {
     my ($self, $msg) = @_;
-    chomp $msg;
-    print STDERR $self->{name}, ": $msg\n";
+    $self->{log}->log($msg, { machine => $self->{name} });
+}
+
+
+sub nest {
+    my ($self, $msg, $coderef, $attrs) = @_;
+    $self->{log}->nest($msg, $coderef, { %{$attrs || {}}, machine => $self->{name} });
 }
 
 
@@ -146,7 +153,8 @@ sub start {
         while (<$serialP>) {
             chomp;
             s/\r$//;
-            print STDERR $self->name, "# $_\n";
+            print STDERR $self->{name}, "# $_\n";
+            $self->{log}->{logQueue}->enqueue({msg => $_, machine => $self->{name}}); # !!!
         }
     }
 
@@ -214,26 +222,32 @@ sub connect {
     my ($self) = @_;
     return if $self->{connected};
 
-    $self->start;
+    $self->nest("waiting for the VM to finish booting", sub {
 
-    local $SIG{ALRM} = sub { die "timed out waiting for the guest to connect\n"; };
-    alarm 300;
-    readline $self->{socket} or die;
-    alarm 0;
+        $self->start;
+
+        local $SIG{ALRM} = sub { die "timed out waiting for the guest to connect\n"; };
+        alarm 300;
+        readline $self->{socket} or die;
+        alarm 0;
         
-    $self->log("connected to guest root shell");
-    $self->{connected} = 1;
+        $self->log("connected to guest root shell");
+        $self->{connected} = 1;
+
+    });
 }
 
 
 sub waitForShutdown {
     my ($self) = @_;
     return unless $self->{booted};
-    
-    waitpid $self->{pid}, 0;
-    $self->{pid} = 0;
-    $self->{booted} = 0;
-    $self->{connected} = 0;
+
+    $self->nest("waiting for the VM to power off", sub {
+        waitpid $self->{pid}, 0;
+        $self->{pid} = 0;
+        $self->{booted} = 0;
+        $self->{connected} = 0;
+    });
 }
 
 
@@ -243,12 +257,10 @@ sub isUp {
 }
 
 
-sub execute {
+sub execute_ {
     my ($self, $command) = @_;
     
     $self->connect;
-
-    $self->log("running command: $command");
 
     print { $self->{socket} } ("( $command ); echo '|!=EOF' \$?\n");
 
@@ -268,17 +280,31 @@ sub execute {
 }
 
 
+sub execute {
+    my ($self, $command) = @_;
+    my @res;
+    $self->nest("running command: $command", sub {
+        @res = $self->execute_($command);
+    });
+    return @res;
+}
+
+
 sub succeed {
     my ($self, @commands) = @_;
+
     my $res;
     foreach my $command (@commands) {
-        my ($status, $out) = $self->execute($command);
-        if ($status != 0) {
-            $self->log("output: $out");
-            die "command `$command' did not succeed (exit code $status)\n";
-        }
-        $res .= $out;
+        $self->nest("must succeed: $command", sub {
+            my ($status, $out) = $self->execute_($command);
+            if ($status != 0) {
+                $self->log("output: $out");
+                die "command `$command' did not succeed (exit code $status)\n";
+            }
+            $res .= $out;
+        });
     }
+
     return $res;
 }
 
@@ -290,27 +316,33 @@ sub mustSucceed {
 
 sub waitUntilSucceeds {
     my ($self, $command) = @_;
-    retry sub {
-        my ($status, $out) = $self->execute($command);
-        return 1 if $status == 0;
-    };
+    $self->nest("waiting for success: $command", sub {
+        retry sub {
+            my ($status, $out) = $self->execute($command);
+            return 1 if $status == 0;
+        };
+    });
 }
 
 
 sub waitUntilFails {
     my ($self, $command) = @_;
-    retry sub {
-        my ($status, $out) = $self->execute($command);
-        return 1 if $status != 0;
-    };
+    $self->nest("waiting for failure: $command", sub {
+        retry sub {
+            my ($status, $out) = $self->execute($command);
+            return 1 if $status != 0;
+        };
+    });
 }
 
 
 sub fail {
     my ($self, $command) = @_;
-    my ($status, $out) = $self->execute($command);
-    die "command `$command' unexpectedly succeeded"
-        if $status == 0;
+    $self->nest("must fail: $command", sub {
+        my ($status, $out) = $self->execute_($command);
+        die "command `$command' unexpectedly succeeded"
+            if $status == 0;
+    });
 }
 
 
@@ -322,20 +354,24 @@ sub mustFail {
 # Wait for an Upstart job to reach the "running" state.
 sub waitForJob {
     my ($self, $jobName) = @_;
-    retry sub {
-        my ($status, $out) = $self->execute("initctl status $jobName");
-        return 1 if $out =~ /start\/running/;
-    };
+    $self->nest("waiting for job ‘$jobName’", sub {
+        retry sub {
+            my ($status, $out) = $self->execute("initctl status $jobName");
+            return 1 if $out =~ /start\/running/;
+        };
+    });
 }
 
 
 # Wait until the specified file exists.
 sub waitForFile {
     my ($self, $fileName) = @_;
-    retry sub {
-        my ($status, $out) = $self->execute("test -e $fileName");
-        return 1 if $status == 0;
-    }
+    $self->nest("waiting for file ‘$fileName’", sub {
+        retry sub {
+            my ($status, $out) = $self->execute("test -e $fileName");
+            return 1 if $status == 0;
+        }
+    });
 }
 
 sub startJob {
@@ -356,10 +392,12 @@ sub stopJob {
 # Wait until the machine is listening on the given TCP port.
 sub waitForOpenPort {
     my ($self, $port) = @_;
-    retry sub {
-        my ($status, $out) = $self->execute("nc -z localhost $port");
-        return 1 if $status == 0;
-    }
+    $self->nest("waiting for TCP port $port", sub {
+        retry sub {
+            my ($status, $out) = $self->execute("nc -z localhost $port");
+            return 1 if $status == 0;
+        }
+    });
 }
 
 
@@ -415,10 +453,13 @@ sub screenshot {
     my $dir = $ENV{'out'} || Cwd::abs_path(".");
     $filename = "$dir/${filename}.png" if $filename =~ /^\w+$/;
     my $tmp = "${filename}.ppm";
-    $self->sendMonitorCommand("screendump $tmp");
-    system("convert $tmp ${filename}") == 0
-        or die "cannot convert screenshot";
-    unlink $tmp;
+    my $name = basename($filename);
+    $self->nest("making screenshot ‘$name’", sub {
+        $self->sendMonitorCommand("screendump $tmp");
+        system("convert $tmp ${filename}") == 0
+            or die "cannot convert screenshot";
+        unlink $tmp;
+    }, { image => $name } );
 }
 
 
@@ -471,7 +512,9 @@ sub sendKeys {
 
 sub sendChars {
     my ($self, $chars) = @_;
-    $self->sendKeys(split //, $chars);
+    $self->nest("sending keys ‘$chars’", sub {
+        $self->sendKeys(split //, $chars);
+    });
 }
 
 

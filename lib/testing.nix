@@ -24,6 +24,7 @@ rec {
         libDir=$out/lib/perl5/site_perl
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
+        cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${imagemagick}/bin" \

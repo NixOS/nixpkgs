@@ -6,43 +6,55 @@
 
   testScript =
     ''
-      $machine->mustSucceed("useradd -m alice");
-      $machine->mustSucceed("(echo foobar; echo foobar) | passwd alice");
+      subtest "create user", sub {
+          $machine->succeed("useradd -m alice");
+          $machine->succeed("(echo foobar; echo foobar) | passwd alice");
+      };
 
-      # Log in as alice on a virtual console.      
-      $machine->waitForJob("tty1");
-      $machine->sendChars("alice\n");
-      $machine->waitUntilSucceeds("pgrep login");
-      $machine->execute("sleep 2"); # urgh: wait for `Password:'
-      $machine->sendChars("foobar\n");
-      $machine->waitUntilSucceeds("pgrep -u alice bash");
-      $machine->sendChars("touch done\n");
-      $machine->waitForFile("/home/alice/done");
+      # Log in as alice on a virtual console.
+      subtest "virtual console login", sub {
+          $machine->waitForJob("tty1");
+          $machine->sendChars("alice\n");
+          $machine->waitUntilSucceeds("pgrep login");
+          $machine->execute("sleep 2"); # urgh: wait for `Password:'
+          $machine->sendChars("foobar\n");
+          $machine->waitUntilSucceeds("pgrep -u alice bash");
+          $machine->sendChars("touch done\n");
+          $machine->waitForFile("/home/alice/done");
+      };
       
       # Check whether switching VTs works.
-      $machine->sendKeys("alt-f10");
-      $machine->waitUntilSucceeds("[ \$(fgconsole) = 10 ]");
-      $machine->execute("sleep 2"); # allow fbcondecor to catch up (not important)
-      $machine->screenshot("syslog");
+      subtest "virtual console switching", sub {
+          $machine->sendKeys("alt-f10");
+          $machine->waitUntilSucceeds("[ \$(fgconsole) = 10 ]");
+          $machine->execute("sleep 2"); # allow fbcondecor to catch up (not important)
+          $machine->screenshot("syslog");
+      };
 
       # Check whether ConsoleKit/udev gives and removes device
       # ownership as needed.
-      $machine->mustSucceed("chvt 1");
-      $machine->execute("sleep 1"); # urgh
-      $machine->mustSucceed("getfacl /dev/snd/timer | grep -q alice");
-      $machine->mustSucceed("chvt 2");
-      $machine->execute("sleep 1"); # urgh
-      $machine->mustFail("getfacl /dev/snd/timer | grep -q alice");
+      subtest "device permissions", sub {
+          $machine->succeed("chvt 1");
+          $machine->execute("sleep 1"); # urgh
+          $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+          $machine->succeed("chvt 2");
+          $machine->execute("sleep 1"); # urgh
+          $machine->fail("getfacl /dev/snd/timer | grep -q alice");
+      };
 
       # Log out.
-      $machine->mustSucceed("chvt 1");
-      $machine->sendChars("exit\n");
-      $machine->waitUntilFails("pgrep -u alice bash");
-      $machine->screenshot("mingetty");
+      subtest "virtual console logout", sub {
+          $machine->succeed("chvt 1");
+          $machine->sendChars("exit\n");
+          $machine->waitUntilFails("pgrep -u alice bash");
+          $machine->screenshot("mingetty");
+      };
       
       # Check whether ctrl-alt-delete works.
-      $machine->sendKeys("ctrl-alt-delete");
-      $machine->waitForShutdown;
+      subtest "ctrl-alt-delete", sub {
+          $machine->sendKeys("ctrl-alt-delete");
+          $machine->waitForShutdown;
+      };
     '';
   
 }
