@@ -2,11 +2,11 @@
 , gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "guile-1.8.7";
+  name = "guile-1.8.8";
 
   src = fetchurl {
     url = "mirror://gnu/guile/" + name + ".tar.gz";
-    sha256 = "1czhcrn6l63xhsw3fjmv88djflqxbdpxjhgmwwvscm8rv4wn7vmz";
+    sha256 = "0l200a0v7h8bh0cwz6v7hc13ds39cgqsmfrks55b1rbj5vniyiy3";
   };
 
   patches = [ ./cpp-4.5.patch ];
