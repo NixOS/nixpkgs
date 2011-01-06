@@ -1,0 +1,97 @@
+commit 66d86131086d80356bfde1a9ea920f9bfb2b304c
+Author: Ludovic Courtès <ludo@gnu.org>
+Date:   Wed Jan 5 22:17:26 2011 +0100
+
+    Change `getaddrinfo' test to handle the GNU-specific `EAI_NODATA'.
+    
+    * doc/ref/posix.texi (Network Databases): Mention `EAI_NODATA'.
+    
+    * libguile/net_db.c (scm_getaddrinfo): Likewise for the docstring.
+    
+    * test-suite/tests/net-db.test ("getaddrinfo")["no name"]: Handle
+      `EAI_NODATA'.
+
+	Modified doc/ref/posix.texi
+diff --git a/doc/ref/posix.texi b/doc/ref/posix.texi
+index 468eaea..156ed5c 100644
+--- a/doc/ref/posix.texi
++++ b/doc/ref/posix.texi
+@@ -1,6 +1,6 @@
+ @c -*-texinfo-*-
+ @c This is part of the GNU Guile Reference Manual.
+-@c Copyright (C)  1996, 1997, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010
++@c Copyright (C)  1996, 1997, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011
+ @c   Free Software Foundation, Inc.
+ @c See the file guile.texi for copying conditions.
+ 
+@@ -2497,6 +2497,12 @@ resolve the name.
+ Either @var{name} does not resolve for the supplied parameters,
+ or neither @var{name} nor @var{service} were supplied.
+ 
++@item EAI_NODATA
++This non-POSIX error code can be returned on GNU systems when a
++request was actually made but returned no data, meaning
++that no address is associated with @var{name}.  Error handling
++code should be prepared to handle it when it is defined.
++
+ @item EAI_SERVICE
+ @var{service} was not recognized for the specified socket type.
+ 
+	Modified libguile/net_db.c
+diff --git a/libguile/net_db.c b/libguile/net_db.c
+index bcba18e..14722d5 100644
+--- a/libguile/net_db.c
++++ b/libguile/net_db.c
+@@ -1,5 +1,5 @@
+ /* "net_db.c" network database support
+- * Copyright (C) 1995,1996,1997,1998,1999,2000,2001, 2006, 2009, 2010 Free Software Foundation, Inc.
++ * Copyright (C) 1995,1996,1997,1998,1999,2000,2001, 2006, 2009, 2010, 2011 Free Software Foundation, Inc.
+  * 
+  * This library is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public License
+@@ -590,6 +590,11 @@ SCM_DEFINE (scm_getaddrinfo, "getaddrinfo", 1, 5, 0,
+ 	    "@item EAI_NONAME\n"
+ 	    "Either @var{name} does not resolve for the supplied parameters, "
+ 	    "or neither @var{name} nor @var{service} were supplied.\n\n"
++	    "@item EAI_NODATA\n"
++	    "This non-POSIX error code can be returned on GNU systems when a\n"
++	    "request was actually made but returned no data, meaning\n"
++	    "that no address is associated with @var{name}.  Error handling\n"
++	    "code should be prepared to handle it when it is defined.\n\n"
+ 	    "@item EAI_SERVICE\n"
+ 	    "@var{service} was not recognized for the specified socket type.\n\n"
+ 	    "@item EAI_SOCKTYPE\n"
+	Modified test-suite/tests/net-db.test
+diff --git a/test-suite/tests/net-db.test b/test-suite/tests/net-db.test
+index 083cf5f..89ebb1b 100644
+--- a/test-suite/tests/net-db.test
++++ b/test-suite/tests/net-db.test
+@@ -1,7 +1,7 @@
+ ;;;; net-db.test --- Test suite for `net-db' -*- mode: scheme; coding: utf-8; -*-
+ ;;;; Ludovic Courtès <ludo@gnu.org>
+ ;;;;
+-;;;; 	Copyright (C) 2010 Free Software Foundation, Inc.
++;;;; 	Copyright (C) 2010, 2011 Free Software Foundation, Inc.
+ ;;;;
+ ;;;; This library is free software; you can redistribute it and/or
+ ;;;; modify it under the terms of the GNU Lesser General Public
+@@ -73,9 +73,16 @@
+             (throw 'unresolved))
+           (lambda (key errcode)
+             ;; In some cases (e.g., in a chroot without
+-            ;; /etc/{hosts,resolv.conf}), this can result in `EAI_EAGAIN'.
++            ;; /etc/{hosts,resolv.conf}), this can result in
++            ;; `EAI_EAGAIN' (glibc 2.11), or `EAI_NODATA' (glibc 2.12).
+             (and (or (= errcode EAI_NONAME)
+-                     (= errcode EAI_AGAIN))
++                     (and (defined? 'EAI_NODATA)  ; GNU extension
++                          (= errcode EAI_NODATA))
++                     (= errcode EAI_AGAIN)
++                     (begin
++                       (format #t "unexpected error code: ~a ~s~%"
++                               errcode (gai-strerror errcode))
++                       #f))
+                  (string? (gai-strerror errcode))))))
+ 
+       (pass-if "wrong service name"
+

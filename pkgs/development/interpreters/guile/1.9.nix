@@ -26,7 +26,7 @@ rec {
     # see below.
     ++ [ libtool libunistring ];
 
-  patches =
+  patches = [ ./net-db.patch ] ++
     stdenv.lib.optionals (coverageAnalysis != null)
       [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
 
