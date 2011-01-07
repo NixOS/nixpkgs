@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
         if [ -z "''\${seen["$sum"]}" ]; then
           seen["$sum"]="$f"
         else
-          rm "$f"; ln -s "''\${seen["$sum"]}" "$f"
+          rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
         fi
       done
 
