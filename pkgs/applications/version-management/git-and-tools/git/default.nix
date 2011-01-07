@@ -95,9 +95,8 @@ stdenv.mkDerivation rec {
 		"$out/libexec/git-core/$prog"
        done
      '' else ''
-      # Don't wrap Tcl/Tk, replace them by notification scripts
-       for prog in bin/gitk libexec/git-core/git-gui
-       do
+       # Don't wrap Tcl/Tk, replace them by notification scripts
+       for prog in bin/gitk libexec/git-core/git-gui; do
          notSupported "$out/$prog" \
                       "reinstall with config git = { guiSupport = true; } set"
        done
@@ -111,7 +110,7 @@ stdenv.mkDerivation rec {
    # multiple times into $out so replace duplicates by symlinks because I
    # haven't tested whether the nix distribution system can handle hardlinks.
    # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
-   + ''#
+   + ''
       declare -A seen
       shopt -s globstar
       for f in "$out/"**; do
@@ -124,7 +123,6 @@ stdenv.mkDerivation rec {
           rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
         fi
       done
-
      '';
 
   enableParallelBuilding = true;
