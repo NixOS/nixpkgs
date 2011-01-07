@@ -113,7 +113,9 @@ stdenv.mkDerivation rec {
    # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
    + ''#
       declare -A seen
-      find $out -type f | while read f; do
+      shopt -s globstar
+      for f in "$out/"**; do
+        test -f "$f" || continue
         sum=$(md5sum "$f");
         sum=''\${sum/ */}
         if [ -z "''\${seen["$sum"]}" ]; then
