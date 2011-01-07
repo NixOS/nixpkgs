@@ -4346,8 +4346,8 @@ let
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
-  bind = builderDefsPackage (import ../servers/dns/bind/9.5.0.nix) {
-    inherit openssl libtool;
+  bind = callPackage ../servers/dns/bind/default.nix {
+    inherit openssl libtool perl;
   };
 
   dico = callPackage ../servers/dico { };
