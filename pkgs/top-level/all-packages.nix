@@ -5662,6 +5662,10 @@ let
 
   darcs = haskellPackages.darcs;
 
+  darktable = callPackage ../applications/graphics/darktable { 
+     inherit (gnome) GConf gnome_keyring libglade;
+  };
+
   dia = callPackage ../applications/graphics/dia { };
 
   digikam = newScope pkgs.kde4 ../applications/graphics/digikam { };
