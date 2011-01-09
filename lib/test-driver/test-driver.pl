@@ -60,8 +60,10 @@ sub subtest {
 
 sub runTests {
     if (defined $ENV{tests}) {
-        eval "$context $ENV{tests}";
-        die $@ if $@;
+        $log->nest("running the VM test script", sub {
+            eval "$context $ENV{tests}";
+            die $@ if $@;
+        }, { expanded => 1 });
     } else {
         my $term = Term::ReadLine->new('nixos-vm-test');
         $term->ReadHistory;
