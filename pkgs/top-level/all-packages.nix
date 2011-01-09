@@ -4229,6 +4229,11 @@ let
   zziplib = callPackage ../development/libraries/zziplib { };
 
 
+  ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
+
+  jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
+  
+
   ### DEVELOPMENT / PERL MODULES
 
   buildPerlPackage = import ../development/perl-modules/generic perl;
