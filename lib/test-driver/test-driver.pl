@@ -66,7 +66,10 @@ sub runTests {
     if (defined $ENV{tests}) {
         $log->nest("running the VM test script", sub {
             eval "$context $ENV{tests}";
-            die $@ if $@;
+            if ($@) {
+                $log->log("error: $@", { error => 1 });
+                die $@;
+            }
         }, { expanded => 1 });
     } else {
         my $term = Term::ReadLine->new('nixos-vm-test');
