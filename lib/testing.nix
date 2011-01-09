@@ -49,7 +49,7 @@ rec {
 
       buildCommand =
         ''
-          ensureDir $out/nix-support
+          mkdir -p $out/nix-support
 
           LOGFILE=$out/log.xml ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm || failed=1
 
@@ -64,7 +64,7 @@ rec {
           echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
 
           for i in */coverage-data; do
-            ensureDir $out/coverage-data
+            mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $i)
           done
 
@@ -107,12 +107,14 @@ rec {
       done
             
       echo "making report..."
-      ensureDir $out/coverage
+      mkdir -p $out/coverage
       ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/full.info -o $out/coverage
       cp $TMPDIR/full.info $out/coverage/
 
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
+      cat ${x}/nix-support/hydra-build-products >> $out/nix-support/hydra-build-products
       echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
+      [ ! -e ${x}/nix-support/failed ] || touch $out/nix-support/failed
     ''; # */
 
 

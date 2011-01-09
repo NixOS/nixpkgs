@@ -1,5 +1,17 @@
 { pkgs, ... }:
 
+let
+
+  # Build Quake with coverage instrumentation.
+  overrides = pkgs:
+    rec {
+      quake3game = pkgs.quake3game.override (args: {
+        stdenv = pkgs.stdenvAdapters.addCoverageInstrumentation args.stdenv;
+      });
+    };
+
+in
+      
 rec {
 
   client = 
@@ -9,6 +21,7 @@ rec {
       services.xserver.driSupport = true;
       services.xserver.defaultDepth = pkgs.lib.mkOverride 0 16;
       environment.systemPackages = [ pkgs.quake3demo ];
+      nixpkgs.config.packageOverrides = overrides;
     };
 
   nodes =
@@ -22,6 +35,7 @@ rec {
                 "${pkgs.quake3demo}/bin/quake3 '+set dedicated 1' '+set g_gametype 0' " +
                 "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
             };
+          nixpkgs.config.packageOverrides = overrides;
         };
 
       client1 = client;
