@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -23,6 +23,8 @@ let
     let
       hasMain = job.script != "" || job.exec != "";
 
+      env = config.system.upstartEnvironment // job.environment;
+
       jobText =
         let log = "/var/log/upstart/${job.name}"; in
         ''
@@ -41,7 +43,7 @@ let
 
           env PATH=${makeSearchPath "bin" (job.path ++ upstartPath)}:${makeSearchPath "sbin" (job.path ++ upstartPath)}
 
-          ${concatMapStrings (n: "env ${n}=\"${getAttr n job.environment}\"\n") (attrNames job.environment)}
+          ${concatMapStrings (n: "env ${n}=\"${getAttr n env}\"\n") (attrNames env)}
           
           ${optionalString (job.preStart != "") ''
             pre-start script
@@ -334,6 +336,15 @@ in
       '';
     };
     
+    system.upstartEnvironment = mkOption {
+      type = types.attrs;
+      default = {};
+      example = { TZ = "CET"; };
+      description = ''
+        Environment variables passed to <emphasis>all</emphasis> Upstart jobs.
+      '';
+    };
+
   };
 
 
