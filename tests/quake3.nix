@@ -71,6 +71,10 @@ rec {
 
       $client1->screenshot("screen3");
       $client2->screenshot("screen4");
+
+      $client1->shutdown();
+      $client2->shutdown();
+      $server->shutdown();
     '';
   
 }
