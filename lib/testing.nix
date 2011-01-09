@@ -65,7 +65,7 @@ rec {
           ln -s ${pkgs.jquery_ui}/js/jquery-ui.min.js $out/
 
           touch $out/nix-support/hydra-build-products
-          echo "report testlog $out/log.html" >> $out/nix-support/hydra-build-products
+          echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
         ''; # */
     };
 

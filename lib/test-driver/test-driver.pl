@@ -52,8 +52,12 @@ sub subtest {
     my ($name, $coderef) = @_;
     $log->nest("subtest: $name", sub {
         $nrTests++;
-        &$coderef;
-        $nrSucceeded++;
+        eval { &$coderef };
+        if ($@) {
+            $log->log("error: $@", { error => 1 });
+        } else {
+            $nrSucceeded++;
+        }
     });
 }
 
@@ -95,7 +99,8 @@ sub runTests {
     }
 
     if ($nrTests != 0) {
-        #$log->dataElement("line", "$nrSucceeded out of $nrTests tests succeeded");
+        $log->log("$nrSucceeded out of $nrTests tests succeeded",
+            ($nrSucceeded != $nrTests ? { error => 1 } : { }));
     }
 }
 

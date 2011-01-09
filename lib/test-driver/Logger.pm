@@ -46,9 +46,11 @@ sub nest {
     $self->{log}->startTag("nest");
     $self->{log}->dataElement("head", $msg, %{$attrs});
     $self->drainLogQueue();
-    &$coderef;
+    eval { &$coderef };
+    my $res = $@;
     $self->drainLogQueue();
     $self->{log}->endTag("nest");
+    die $@ if $@;
 }
 
 sub sanitise {
