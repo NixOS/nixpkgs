@@ -100,7 +100,7 @@ sub runTests {
 
     if ($nrTests != 0) {
         $log->log("$nrSucceeded out of $nrTests tests succeeded",
-            ($nrSucceeded != $nrTests ? { error => 1 } : { }));
+            ($nrSucceeded < $nrTests ? { error => 1 } : { }));
     }
 }
 
@@ -126,3 +126,5 @@ END {
 
 
 runTests;
+
+exit ($nrSucceeded < $nrTests ? 1 : 0);

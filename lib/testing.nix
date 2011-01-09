@@ -51,13 +51,9 @@ rec {
         ''
           ensureDir $out/nix-support
 
-          LOGFILE=$out/log.xml ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm
-          
-          for i in */coverage-data; do
-            ensureDir $out/coverage-data
-            mv $i $out/coverage-data/$(dirname $i)
-          done
+          LOGFILE=$out/log.xml ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm || failed=1
 
+          # Generate a pretty-printed log.          
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
           ln -s ${./test-driver/logfile.css} $out/logfile.css
           ln -s ${./test-driver/treebits.js} $out/treebits.js
@@ -66,6 +62,13 @@ rec {
 
           touch $out/nix-support/hydra-build-products
           echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
+
+          for i in */coverage-data; do
+            ensureDir $out/coverage-data
+            mv $i $out/coverage-data/$(dirname $i)
+          done
+
+          [ -z "$failed" ] || touch $out/nix-support/failed
         ''; # */
     };
 
