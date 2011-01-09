@@ -65,11 +65,7 @@ rec {
           ln -s ${pkgs.jquery_ui}/js/jquery-ui.min.js $out/
 
           touch $out/nix-support/hydra-build-products
-          echo "report testlog log.html" >> $out/nix-support/hydra-build-products
-
-          for i in $out/*.png; do
-            echo "report screenshot $i" >> $out/nix-support/hydra-build-products
-          done
+          echo "report testlog $out/log.html" >> $out/nix-support/hydra-build-products
         ''; # */
     };
 
