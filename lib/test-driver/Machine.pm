@@ -436,14 +436,14 @@ sub crash {
 # the test driver can continue to talk to the machine.
 sub block {
     my ($self) = @_;
-    $self->sendMonitorCommand("set_link virtio-net-pci.1 down");
+    $self->sendMonitorCommand("set_link virtio-net-pci.1 off");
 }
 
 
 # Make the machine reachable.
 sub unblock {
     my ($self) = @_;
-    $self->sendMonitorCommand("set_link virtio-net-pci.1 up");
+    $self->sendMonitorCommand("set_link virtio-net-pci.1 on");
 }
 
 
