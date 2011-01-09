@@ -32,7 +32,6 @@ in
             export USER=root
             export HOME=/root
             export DISPLAY=:0.0
-            export GCOV_PREFIX=/tmp/coverage-data
             source /etc/profile
             cd /tmp
             echo "connecting to host..." > /dev/ttyS0
@@ -91,6 +90,8 @@ in
           message = "VM tests require that the kernel has the CIFS timeout patch.";
         }
       ];
+
+    system.upstartEnvironment.GCOV_PREFIX = "/tmp/coverage-data";
       
   };
 
