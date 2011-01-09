@@ -77,11 +77,11 @@ rec {
   # runTests.
   makeReport = x: runCommand "report" { buildInputs = [rsync]; }
     ''
+      mkdir -p $TMPDIR/gcov/
+
       for d in ${x}/coverage-data/*; do
-
           echo "doing $d"
-
-          ensureDir $TMPDIR/gcov/
+          [ -n "$(ls -A "$d")" ] || continue
 
           for i in $(cd $d/nix/store && ls); do
               if ! test -e $TMPDIR/gcov/nix/store/$i; then
