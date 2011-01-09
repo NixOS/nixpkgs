@@ -42,10 +42,21 @@ rec {
       $server->waitUntilSucceeds("grep -q 'Foo.*entered the game' /tmp/log");
       $server->waitUntilSucceeds("grep -q 'Bar.*entered the game' /tmp/log");
 
-      sleep 30; # wait for a while to get a nice screenshot
+      sleep 10; # wait for a while to get a nice screenshot
+
+      $client1->block();
+
+      sleep 20;
 
       $client1->screenshot("screen1");
       $client2->screenshot("screen2");
+
+      $client1->unblock();
+
+      sleep 10;
+
+      $client1->screenshot("screen3");
+      $client2->screenshot("screen4");
     '';
   
 }
