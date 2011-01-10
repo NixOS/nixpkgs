@@ -52,7 +52,12 @@
     <xsl:variable name="style"><xsl:if test="$collapsed">display: none;</xsl:if></xsl:variable>
 
     <xsl:if test="line|nest">
-      <a href="javascript:" class="logTreeToggle"></a>
+      <a href="javascript:" class="logTreeToggle">
+        <xsl:choose>
+          <xsl:when test="$collapsed"><xsl:text>+</xsl:text></xsl:when>
+          <xsl:otherwise><xsl:text>-</xsl:text></xsl:otherwise>
+        </xsl:choose>
+      </a>
       <xsl:text> </xsl:text>
     </xsl:if>
     
@@ -66,7 +71,7 @@
 
           <!-- Is this the last line?  If so, mark it as such so that it
                can be rendered differently. -->
-          <xsl:variable  name="class"><xsl:choose><xsl:when test="position() != last()">line</xsl:when><xsl:otherwise>lastline</xsl:otherwise></xsl:choose></xsl:variable>
+          <xsl:variable name="class"><xsl:choose><xsl:when test="position() != last()">line</xsl:when><xsl:otherwise>lastline</xsl:otherwise></xsl:choose></xsl:variable>
         
           <li class='{$class}'>
             <span class='lineconn' />
