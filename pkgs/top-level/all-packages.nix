@@ -1285,6 +1285,8 @@ let
 
   ucl = callPackage ../development/libraries/ucl { };
 
+  udftools = callPackage ../tools/filesystems/udftools {};
+
   ufraw = callPackage ../applications/graphics/ufraw {
     inherit (gnome) gtk;
   };
