@@ -69,7 +69,7 @@
       $client->waitForX;
       $client->execute("konqueror http://webserver/projects/test &");
       $client->waitForWindow(qr/Test.*Konqueror/);
-      sleep 30; # loading takes a long time
+      $client->sleep(30); # loading takes a long time
       
       $client->screenshot("screen");
     '';

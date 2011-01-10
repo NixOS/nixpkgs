@@ -467,10 +467,12 @@ sub screenshot {
 # testing the existence of /tmp/.X11-unix/X0 is insufficient.
 sub waitForX {
     my ($self, $regexp) = @_;
-    retry sub {
-        my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
-        return 1 if $status == 0;
-    }
+    $self->nest("waiting for the X11 server", sub {
+        retry sub {
+            my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
+            return 1 if $status == 0;
+        }
+    });
 }
 
 
@@ -484,12 +486,14 @@ sub getWindowNames {
 
 sub waitForWindow {
     my ($self, $regexp) = @_;
-    retry sub {
-        my @names = $self->getWindowNames;
-        foreach my $n (@names) {
-            return 1 if $n =~ /$regexp/;
+    $self->nest("waiting for a window to appear", sub {
+        retry sub {
+            my @names = $self->getWindowNames;
+            foreach my $n (@names) {
+                return 1 if $n =~ /$regexp/;
+            }
         }
-    }
+    });
 }
 
 
@@ -515,6 +519,13 @@ sub sendChars {
     $self->nest("sending keys ‘$chars’", sub {
         $self->sendKeys(split //, $chars);
     });
+}
+
+
+# Sleep N seconds (in virtual guest time, not real time).
+sub sleep {
+    my ($self, $time) = @_;
+    $self->succeed("sleep $time");
 }
 
 

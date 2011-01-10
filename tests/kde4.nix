@@ -45,7 +45,7 @@
       $machine->waitForWindow(qr/messages.*KWrite/);
       $machine->waitForWindow(qr/Valgrind.*Konqueror/);
 
-      sleep 5;
+      $machine->sleep(5);
       
       $machine->screenshot("screen");
     '';

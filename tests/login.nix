@@ -16,7 +16,7 @@
           $machine->waitForJob("tty1");
           $machine->sendChars("alice\n");
           $machine->waitUntilSucceeds("pgrep login");
-          $machine->execute("sleep 2"); # urgh: wait for `Password:'
+          $machine->sleep(2); # urgh: wait for `Password:'
           $machine->sendChars("foobar\n");
           $machine->waitUntilSucceeds("pgrep -u alice bash");
           $machine->sendChars("touch done\n");
@@ -27,7 +27,7 @@
       subtest "virtual console switching", sub {
           $machine->sendKeys("alt-f10");
           $machine->waitUntilSucceeds("[ \$(fgconsole) = 10 ]");
-          $machine->execute("sleep 2"); # allow fbcondecor to catch up (not important)
+          $machine->sleep(2); # allow fbcondecor to catch up (not important)
           $machine->screenshot("syslog");
       };
 
@@ -35,10 +35,10 @@
       # ownership as needed.
       subtest "device permissions", sub {
           $machine->succeed("chvt 1");
-          $machine->execute("sleep 1"); # urgh
+          $machine->sleep(1); # urgh
           $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
           $machine->succeed("chvt 2");
-          $machine->execute("sleep 1"); # urgh
+          $machine->sleep(1); # urgh
           $machine->fail("getfacl /dev/snd/timer | grep -q alice");
       };
 

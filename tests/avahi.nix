@@ -46,7 +46,7 @@ with pkgs;
 
        # More DNS-SD.
        $one->execute("avahi-publish -s \"This is a test\" _test._tcp 123 one=1 &");
-       sleep 5;
+       $one->sleep(5);
        print STDERR
         $two->mustSucceed("avahi-browse -r -t _test._tcp | tee out");
        $two->mustSucceed("test `wc -l < out` -gt 0");
