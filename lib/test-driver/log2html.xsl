@@ -16,8 +16,11 @@
         <title>Log File</title>
       </head>
       <body>
-        [<a href="javascript:" class="logTreeExpandAll">Expand all</a>]
-        [<a href="javascript:" class="logTreeCollapseAll">Collapse all</a>]
+        <h1>VM build log</h1>
+        <p>
+          <a href="javascript:" class="logTreeExpandAll">Expand all</a> |
+          <a href="javascript:" class="logTreeCollapseAll">Collapse all</a>
+        </p>
         <ul class='toplevel'>
           <xsl:for-each select='line|nest'>
             <li>
@@ -25,6 +28,16 @@
             </li>
           </xsl:for-each>
         </ul>
+
+        <xsl:if test=".//*[@image]">
+          <h1>Screenshots</h1>
+          <ul class="vmScreenshots">
+            <xsl:for-each select='.//*[@image]'>
+              <li><a href="{@image}"><xsl:value-of select="@image" /></a></li>
+            </xsl:for-each>
+          </ul>
+        </xsl:if>
+        
       </body>
     </html>
   </xsl:template>

@@ -3,6 +3,16 @@ body {
     background: white;
 }
 
+h1
+{
+    color: #005aa0;
+    font-size: 180%;
+}
+
+a {
+    text-decoration: none;
+}
+
 
 ul.nesting, ul.toplevel {
     padding: 0;
@@ -107,4 +117,13 @@ code {
 .machine {
     color: #002399;
     font-style: italic;
+}
+
+ul.vmScreenshots {
+    padding-left: 1em;
+}
+
+ul.vmScreenshots li {
+    font-family: monospace;
+    list-style: square;
 }
