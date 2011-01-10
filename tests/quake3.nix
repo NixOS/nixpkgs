@@ -32,7 +32,7 @@ rec {
             { name = "quake3-server";
               startOn = "startup";
               exec =
-                "${pkgs.quake3demo}/bin/quake3 '+set dedicated 1' '+set g_gametype 0' " +
+                "${pkgs.quake3demo}/bin/quake3-server '+set g_gametype 0' " +
                 "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
             };
           nixpkgs.config.packageOverrides = overrides;
@@ -74,7 +74,7 @@ rec {
 
       $client1->shutdown();
       $client2->shutdown();
-      $server->shutdown();
+      $server->succeed("stop quake3-server");
     '';
   
 }
