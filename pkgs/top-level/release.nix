@@ -199,7 +199,6 @@ with (import ./release-lib.nix);
   mod_python = linux;
   module_init_tools = linux;
   mono = linux;
-  monotone = linux;
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
