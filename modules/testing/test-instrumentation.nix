@@ -41,6 +41,16 @@ in
         respawn = false;
       };
 
+    boot.initrd.postDeviceCommands =
+      ''
+        # Using acpi_pm as a clock source causes the guest clock to
+        # slow down under high host load.  This is usually a bad
+        # thing, but for VM tests it should provide a bit more
+        # determinism (e.g. if the VM runs at lower speed, then
+        # timeouts in the VM should also be delayed).
+        echo acpi_pm > /sys/devices/system/clocksource/clocksource0/current_clocksource
+      '';
+    
     boot.postBootCommands =
       ''
         # Panic on out-of-memory conditions rather than letting the
