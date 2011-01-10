@@ -894,6 +894,8 @@ let
 
   mtools = callPackage ../tools/filesystems/mtools { };
 
+  mtr = callPackage ../tools/networking/mtr {};
+
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
