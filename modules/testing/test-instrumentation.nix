@@ -52,8 +52,8 @@ in
         # it to the host filesystem so that we don't need to copy it
         # on shutdown.
         ( eval $(cat /proc/cmdline)
-          mkdir /hostfs/$hostTmpDir/coverage-data
-          ln -s /hostfs/$hostTmpDir/coverage-data /tmp/coverage-data
+          mkdir -p /hostfs/$hostTmpDir/coverage-data
+          ln -sfn /hostfs/$hostTmpDir/coverage-data /tmp/coverage-data
         )
 
         # Mount debugfs to gain access to the kernel coverage data (if
