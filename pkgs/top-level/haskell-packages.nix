@@ -515,11 +515,13 @@ rec {
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
-  pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
+  prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
 
   primitive = callPackage ../development/libraries/haskell/primitive {};
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
+
+  pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
   QuickCheck  = QuickCheck_1;
 
