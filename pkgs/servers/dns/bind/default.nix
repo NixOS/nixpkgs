@@ -12,10 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "0zpvmgs75lisw746wccm2r428dmd4vv5s1pc512lyrmycr3mz56d";
   };
 
+  patchPhase = ''
+    sed -i 's/^\t.*run/\t/' Makefile.in
+  '';
+
   buildInputs = [ openssl libtool perl libxml2 ];
 
   /* Why --with-libtool? */
-  configureFlags = [ "--with-libtool" "--with-openssl=${openssl}" ];
+  configureFlags = [ "--with-libtool" "--with-openssl=${openssl}"
+    "--localstatedir=/var" ];
       
   meta = {
     homepage = http://www.isc.org/software/bind;
