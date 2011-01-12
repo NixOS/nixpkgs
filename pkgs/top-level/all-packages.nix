@@ -3741,6 +3741,10 @@ let
   mesa = callPackage ../development/libraries/mesa {
     lipo = if stdenv.isDarwin then darwinLipoUtility else null;
   };
+  mesa_7_9 = callPackage ../development/libraries/mesa/7.9.nix {
+    lipo = if stdenv.isDarwin then darwinLipoUtility else null;
+  };
+
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
