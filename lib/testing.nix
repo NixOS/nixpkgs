@@ -27,31 +27,27 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${imagemagick}/bin" \
+          --prefix PATH : "${pkgs.qemu_kvm}/bin:${pkgs.vde2}/bin:${imagemagick}/bin" \
           --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter ]}:$out/lib/perl5/site_perl"
       '';
   };
 
 
   # Run an automated test suite in the given virtual network.
-  # `network' must be the result of a call to the
-  # `buildVirtualNetwork' function.  `tests' is a Perl fragment
-  # describing the tests.
-  runTests = network: tests:
+  # `driver' is the script that runs the network.
+  runTests = driver:
     stdenv.mkDerivation {
       name = "vm-test-run";
       
       requiredSystemFeatures = [ "kvm" ];
       
-      inherit tests;
-      
-      buildInputs = [ pkgs.qemu_kvm pkgs.libxslt ];
+      buildInputs = [ pkgs.libxslt ];
 
       buildCommand =
         ''
           mkdir -p $out/nix-support
 
-          LOGFILE=$out/log.xml ${testDriver}/bin/nixos-test-driver ${network}/vms/*/bin/run-*-vm || failed=1
+          LOGFILE=$out/log.xml tests="testScript" ${driver}/bin/nixos-test-driver || failed=1
 
           # Generate a pretty-printed log.          
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
@@ -138,10 +134,6 @@ rec {
       then t.testScript { inherit (vms) nodes; }
       else t.testScript;
       
-    test = runTests vms testScript;
-      
-    report = makeReport test;
-
     # Generate a convenience wrapper for running the test driver
     # interactively with the specified network.
     driver = runCommand "nixos-test-driver"
@@ -150,14 +142,19 @@ rec {
       }
       ''
         mkdir -p $out/bin
+        echo "$testScript" > $out/test-script
         ln -s ${vms}/bin/* $out/bin/
         ln -s ${testDriver}/bin/* $out/bin/
         wrapProgram $out/bin/nixos-test-driver \
           --add-flags "${vms}/vms/*/bin/run-*-vm" \
           --run "testScript=\"\$(cat $out/test-script)\"" \
-          --set testScript '"$testScript"'
-        echo "$testScript" > $out/test-script
+          --set testScript '"$testScript"' \
+          --set VLANS '"${toString (map (m: m.config.virtualisation.vlans) (lib.attrValues vms.nodes))}"' \
       ''; # "
+
+    test = runTests driver;
+      
+    report = makeReport test;
   };
 
   

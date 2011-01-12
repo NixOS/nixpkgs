@@ -10,16 +10,6 @@ use Cwd;
 use File::Basename;
 
 
-# Stuff our PID in the multicast address/port to prevent collissions
-# with other NixOS VM networks.  See
-# http://www.iana.org/assignments/multicast-addresses/.
-my $mcastPrefix = "232.18";
-my $mcastSuffix = ($$ >> 8) . ":" . (64000 + ($$ & 0xff));
-print STDERR "using multicast addresses $mcastPrefix.<vlan>.$mcastSuffix\n";
-for (my $n = 0; $n < 256; $n++) {
-    $ENV{"QEMU_MCAST_ADDR_$n"} = "$mcastPrefix.$n.$mcastSuffix";
-}
-
 my $showGraphics = defined $ENV{'DISPLAY'};
 
 

@@ -5,12 +5,26 @@ use Machine;
 use Term::ReadLine;
 use IO::File;
 use Logger;
+use Cwd;
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
 STDERR->autoflush(1);
 
 my $log = new Logger;
+
+
+# Start vde_switch for each network required by the test.
+my %vlans;
+foreach my $vlan (split / /, $ENV{VLANS} || "") {
+    next if defined $vlans{$vlan};
+    $log->log("starting VDE switch for network $vlan");
+    my $socket = Cwd::abs_path "./vde$vlan.ctl";
+    system("vde_switch -d -s $socket") == 0
+        or die "cannot start vde_switch";
+    $ENV{"QEMU_VDE_SOCKET_$vlan"} = $socket;
+    $vlans{$vlan} = 1;
+}
 
 
 my %vms;
@@ -83,23 +97,26 @@ sub runTests {
 
     # Copy the kernel coverage data for each machine, if the kernel
     # has been compiled with coverage instrumentation.
-    foreach my $vm (values %vms) {
-        my $gcovDir = "/sys/kernel/debug/gcov";
+    $log->nest("collecting coverage data", sub {
+        foreach my $vm (values %vms) {
+            my $gcovDir = "/sys/kernel/debug/gcov";
 
-        next unless $vm->isUp();
+            next unless $vm->isUp();
 
-        my ($status, $out) = $vm->execute("test -e $gcovDir");
-        next if $status != 0;
+            my ($status, $out) = $vm->execute("test -e $gcovDir");
+            next if $status != 0;
 
-        # Figure out where to put the *.gcda files so that the report
-        # generator can find the corresponding kernel sources.
-        my $kernelDir = $vm->mustSucceed("echo \$(dirname \$(readlink -f /var/run/current-system/kernel))/.build/linux-*");
-        chomp $kernelDir;
-        my $coverageDir = "/hostfs" . $vm->stateDir() . "/coverage-data/$kernelDir";
+            # Figure out where to put the *.gcda files so that the
+            # report generator can find the corresponding kernel
+            # sources.
+            my $kernelDir = $vm->mustSucceed("echo \$(dirname \$(readlink -f /var/run/current-system/kernel))/.build/linux-*");
+            chomp $kernelDir;
+            my $coverageDir = "/hostfs" . $vm->stateDir() . "/coverage-data/$kernelDir";
 
-        # Copy all the *.gcda files.
-        $vm->execute("for d in $gcovDir/nix/store/*/.build/linux-*; do for i in \$(cd \$d && find -name '*.gcda'); do echo \$i; mkdir -p $coverageDir/\$(dirname \$i); cp -v \$d/\$i $coverageDir/\$i; done; done");
-    }
+            # Copy all the *.gcda files.
+            $vm->execute("for d in $gcovDir/nix/store/*/.build/linux-*; do for i in \$(cd \$d && find -name '*.gcda'); do echo \$i; mkdir -p $coverageDir/\$(dirname \$i); cp -v \$d/\$i $coverageDir/\$i; done; done");
+        }
+    });
 
     if ($nrTests != 0) {
         $log->log("$nrSucceeded out of $nrTests tests succeeded",
@@ -118,12 +135,14 @@ sub createDisk {
 
 
 END {
-    foreach my $vm (values %vms) {
-        if ($vm->{pid}) {
-            $log->log("killing " . $vm->{name} . " (pid " . $vm->{pid} . ")");
-            kill 9, $vm->{pid};
+    $log->nest("cleaning up", sub {
+        foreach my $vm (values %vms) {
+            if ($vm->{pid}) {
+                $log->log("killing " . $vm->{name} . " (pid " . $vm->{pid} . ")");
+                kill 9, $vm->{pid};
+            }
         }
-    }
+    });
     $log->close();
 }
 
