@@ -1,25 +1,26 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   nodes = {
   
     server = 
-      {pkgs, config, ...}:
+      { config, pkgs, ... }:
       
       {
         services.openssh.enable = true;
       };
       
     client = 
-      {pkgs, config, ...}:
+      { config, pkgs, ... }: { };
       
-      {
-      };
   };
   
-  testScript =
-  ''
+  testScript = ''
+    startAll;
+    
     my $key=`${pkgs.openssh}/bin/ssh-keygen -t dsa -f key -N ""`;
+
+    $server->waitForJob("sshd");
     
     $server->mustSucceed("mkdir -m 700 /root/.ssh");
     $server->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
