@@ -171,12 +171,12 @@ let
 
       ${pkgs.lib.optionalString cfg.useBackdoor ''
         # Create a shell socket file to which the VM can connect and create in the
-	# current working directory a socket file which can be used to remotely access
-	# the VM through the shell interface
+        # current working directory a socket file which can be used to remotely access
+        # the VM through the shell interface
 	
         ${pkgs.socat}/bin/socat UNIX-LISTEN:./shell UNIX-LISTEN:$WORKDIR/${vmName}.socket,fork &
-	
-	while [ ! -e ./shell ]; do sleep 0.1; done # Wait until the socket file is there
+
+        while [ ! -e ./shell ]; do sleep 0.1; done # Wait until the socket file is there
       ''}
 
       # Start QEMU.
@@ -186,7 +186,7 @@ let
           -net nic,vlan=0,model=virtio \
           -chardev socket,id=samba,path=./samba \
           -net user,vlan=0,guestfwd=tcp:10.0.2.4:445-chardev:samba${if cfg.useBackdoor then ",guestfwd=tcp:10.0.2.6:23-chardev:shell" else ""}''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
-	  ${if cfg.useBackdoor then "-chardev socket,id=shell,path=./shell" else ""} \
+          ${if cfg.useBackdoor then "-chardev socket,id=shell,path=./shell" else ""} \
           ${if cfg.useBootLoader then ''
             -drive index=0,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -drive index=1,file=${bootDisk}/disk.img,if=virtio,boot=on \
