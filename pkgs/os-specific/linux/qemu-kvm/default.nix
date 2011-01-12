@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid }:
+{ stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2 }:
    
 assert stdenv.isLinux;
    
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./smb-tmpdir.patch ];
 
-  buildInputs = [ zlib SDL alsaLib pkgconfig pciutils libuuid ];
+  buildInputs = [ zlib SDL alsaLib pkgconfig pciutils libuuid vde2 ];
 
   preBuild =
     ''
