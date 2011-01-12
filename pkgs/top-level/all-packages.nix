@@ -1305,6 +1305,8 @@ let
     inherit pciutils libx86 zlib;
   };
 
+  vde2 = callPackage ../tools/networking/vde2 { };
+  
   verilog = callPackage ../applications/science/electronics/verilog {};
 
   viking = callPackage ../applications/misc/viking { };
