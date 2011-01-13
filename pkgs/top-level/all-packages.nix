@@ -3441,6 +3441,8 @@ let
 
   libexif = callPackage ../development/libraries/libexif { };
 
+  libexosip = callPackage ../development/libraries/exosip {};
+
   libextractor = callPackage ../development/libraries/libextractor {
     inherit (gnome) gtk;
     libmpeg2 = mpeg2dec;
@@ -6222,6 +6224,10 @@ let
   };
 
   links2Stdenv = callPackage ../applications/networking/browsers/links2/stdenv.nix { };
+
+  linphone = callPackage ../applications/networking/linphone {
+    inherit (gnome) libglade gtk;
+  };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
