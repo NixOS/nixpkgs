@@ -167,8 +167,8 @@ rec {
     }:
     let
       vm = buildVM { }
-        [ ({ config, pkgs, ... }: { networking.hostName = "client"; })
-          machine
+        [ machine
+          { key = "hostname"; networking.hostName = "client"; }
         ];
 
       buildrunner = writeText "vm-build" ''
