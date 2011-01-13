@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "18a4w0n1n0sij7gkb3196dnqav5zr0c5p26f08k7cw6y0i9dz0sq";
   };
 
+  # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
+  NROFF = "${groff}/bin/nroff";
+
   buildInputs = (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
