@@ -5,11 +5,11 @@ fontDirectories, fontutil }:
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "tigervnc-svn-4086";
+  name = "tigervnc-svn-4232";
   src = fetchsvn {
     url = https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk;
-    rev = 4086;
-    sha256 = "0aqn9d5yz21k5l4mwh5f73il77w2rbvsrz91z3lz4bizivvkwszc";
+    rev = 4232;
+    sha256 = "070lsddgx6qj7bpw4p65w54fr7z46vp8wyshv9p0fh3k5izrfnxj";
   };
 
   preConfigure = ''
