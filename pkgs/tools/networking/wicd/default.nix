@@ -74,6 +74,12 @@ stdenv.mkDerivation rec {
     python setup.py install --prefix=$out
     ensureDir $out/share/other
     cp other/dhclient.conf.template.default $out/share/other/dhclient.conf.template.default
+
+    # Add a template for "WPA2 Enterprise" encryption as used, e.g., by the
+    # Eduroam network.  Taken and adapted from
+    # <http://wicd.net/punbb/viewtopic.php?id=87>.
+    cp -v "${./wpa2-ttls}" "$out/etc/encryption/templates/wpa2-ttls"
+    echo "wpa2-ttls" >> "$out/etc/encryption/templates/active"
   '';
 
   meta = {
