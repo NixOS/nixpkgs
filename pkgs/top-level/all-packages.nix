@@ -745,6 +745,8 @@ let
   gt5 = callPackage ../tools/system/gt5 { };
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
+  
+  gtkvnc = callPackage ../tools/admin/gtk-vnc {};
 
   gupnp = callPackage ../development/libraries/gupnp {
     inherit (gnome) libsoup;
@@ -2875,6 +2877,8 @@ let
 
   directfb = callPackage ../development/libraries/directfb { };
 
+  dssi = callPackage ../development/libraries/dssi {};
+
   dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix {
     stdenv = overrideGCC stdenv gcc45;
   };
@@ -3431,6 +3435,8 @@ let
   libelf = callPackage ../development/libraries/libelf { };
 
   liblo = callPackage ../development/libraries/liblo { };
+
+  liblrdf = callPackage ../development/libraries/liblrdf {};
 
   libev = builderDefsPackage ../development/libraries/libev {
   };
