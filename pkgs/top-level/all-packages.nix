@@ -7453,6 +7453,8 @@ let
 
   pgf2 = callPackage ../misc/tex/pgf/2.x.nix { };
 
+  pjsip = callPackage ../applications/networking/pjsip { };
+
   polytable = callPackage ../misc/tex/polytable { };
 
   psi = newScope pkgs.kde45 ../applications/networking/instant-messengers/psi { };
