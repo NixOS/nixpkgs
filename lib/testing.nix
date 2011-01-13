@@ -27,7 +27,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${pkgs.qemu_kvm}/bin:${pkgs.vde2}/bin:${imagemagick}/bin" \
+          --prefix PATH : "${pkgs.qemu_kvm}/bin:${pkgs.vde2}/bin:${imagemagick}/bin:${coreutils}/bin" \
           --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -163,11 +163,13 @@ rec {
     , machine
     , preBuild ? ""
     , postBuild ? ""
-    , ...
+    , ... # ???
     }:
     let
-      vms =
-        buildVirtualNetwork { nodes = { client = machine; } ; };
+      vm = buildVM { }
+        [ ({ config, pkgs, ... }: { networking.hostName = "client"; })
+          machine
+        ];
 
       buildrunner = writeText "vm-build" ''
         source $1
@@ -183,16 +185,15 @@ rec {
       testscript = ''
         startAll;
         ${preBuild}
-        print STDERR $client->mustSucceed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /hostfs".$client->stateDir."/saved-env");
+        $client->succeed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /hostfs".$client->stateDir."/saved-env >&2");
         ${postBuild}
       '';
 
       vmRunCommand = writeText "vm-run" ''
         ${coreutils}/bin/mkdir -p vm-state-client
         export > vm-state-client/saved-env
-        export PATH=${qemu_kvm}/bin:${coreutils}/bin
         export tests='${testscript}'
-        ${testDriver}/bin/nixos-test-driver ${vms}/vms/*/bin/run-*-vm
+        ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
 
     in
@@ -205,7 +206,7 @@ rec {
       });
 
       
-  runInMachineWithX = { require ? [], ...}@args :
+  runInMachineWithX = { require ? [], ... } @ args:
     let
       client =
         { config, pkgs, ... }:
@@ -221,11 +222,12 @@ rec {
         };
     in
       runInMachine ({
-            machine = client;
-            preBuild = ''
-              $client->waitForX;
-            '' ;
-          } // args );   
+        machine = client;
+        preBuild =
+          ''
+            $client->waitForX;
+          '';
+      } // args);
 
           
   simpleTest = as: (makeTest ({ ... }: as)).test;
