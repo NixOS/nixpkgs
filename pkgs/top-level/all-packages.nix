@@ -6661,6 +6661,8 @@ let
     flags = [ "X11" ]; # only flag "X11" by now
   };
 
+  virtviewer = callPackage ../applications/virtualization/virt-viewer {};
+
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
   vlc = callPackage ../applications/video/vlc {
