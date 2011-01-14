@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
             --set NIX_RELEASE ${nix.name}
     done
   ''; # */
-  
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };  
 }
 
