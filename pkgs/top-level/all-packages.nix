@@ -5274,6 +5274,7 @@ let
 
   ubootChooser = name : if (name == "upstream") then ubootUpstream
     else if (name == "sheevaplug") then ubootSheevaplug
+    else if (name == "guruplug") then ubootGuruplug
     else if (name == "nanonote") then ubootNanonote
     else throw "Unknown uboot";
 
