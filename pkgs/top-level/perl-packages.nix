@@ -9,7 +9,7 @@
 
 rec {
 
-  inherit (pkgs) buildPerlPackage fetchurl stdenv perl;
+  inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn;
 
   ack = buildPerlPackage rec {
     name = "ack-1.92";
@@ -2017,6 +2017,17 @@ rec {
     doCheck = false;
 
     propagatedBuildInputs = [JSONAny Encode LWP CryptSSLeay];
+  };
+
+  nixPerl = buildPerlPackage {
+    name = "Nix-0.15";
+    src = fetchsvn {
+      url = https://svn.nixos.org/repos/nix/nix-perl/trunk;
+      rev = 24774;
+      sha256 = "1akj695gpnbrjlnwd1gdnnnk7ppvpp1qsinjn04az7q6hjqzbm6p";
+    };
+    NIX_PREFIX = pkgs.nixSqlite;
+    doCheck = false; # tests currently don't work
   };
 
   ObjectSignature = buildPerlPackage {

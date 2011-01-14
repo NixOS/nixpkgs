@@ -778,6 +778,10 @@ let
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
+  hydra = callPackage ../development/tools/misc/hydra { 
+    nix = nixSqlite ;  
+  };
+
   iasl = callPackage ../development/compilers/iasl { };
 
   idutils = callPackage ../tools/misc/idutils { };
