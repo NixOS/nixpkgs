@@ -28,7 +28,7 @@ rec {
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${pkgs.qemu_kvm}/bin:${pkgs.vde2}/bin:${imagemagick}/bin:${coreutils}/bin" \
-          --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter ]}:$out/lib/perl5/site_perl"
+          --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter perlPackages.IOTty ]}:$out/lib/perl5/site_perl"
       '';
   };
 

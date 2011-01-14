@@ -4,8 +4,10 @@ use strict;
 use Machine;
 use Term::ReadLine;
 use IO::File;
+use IO::Pty;
 use Logger;
 use Cwd;
+use POSIX qw(_exit dup2);
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
@@ -18,12 +20,27 @@ my $log = new Logger;
 my %vlans;
 foreach my $vlan (split / /, $ENV{VLANS} || "") {
     next if defined $vlans{$vlan};
+    # Start vde_switch as a child process.  We don't run it in daemon
+    # mode because we want the child process to be cleaned up when we
+    # die.  Since we have to make sure that the control socket is
+    # ready, we send a dummy command to vde_switch (via stdin) and
+    # wait for a reply.  Note that vde_switch requires stdin to be a
+    # TTY, so we create one.
     $log->log("starting VDE switch for network $vlan");
     my $socket = Cwd::abs_path "./vde$vlan.ctl";
-    system("vde_switch -d -s $socket") == 0
-        or die "cannot start vde_switch";
+    my $pty = new IO::Pty;
+    my ($stdoutR, $stdoutW); pipe $stdoutR, $stdoutW;
+    my $pid = fork(); die "cannot fork" unless defined $pid;
+    if ($pid == 0) {
+        dup2(fileno($pty->slave), 0);
+        dup2(fileno($stdoutW), 1);
+        exec "vde_switch -s $socket" or _exit(1);
+    }
+    close $stdoutW;
+    print $pty "version\n";
+    readline $pty or die "cannot start vde_switch";
     $ENV{"QEMU_VDE_SOCKET_$vlan"} = $socket;
-    $vlans{$vlan} = 1;
+    $vlans{$vlan} = $pty;
 }
 
 
