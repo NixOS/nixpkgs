@@ -1557,6 +1557,14 @@ rec {
     };
   };
 
+  IOTty = buildPerlPackage rec {
+    name = "IO-Tty-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
+      sha256 = "1cgqyv1zg8857inlnfczrrgpqr0r6mmqv29b7jlmxv47s4df59ii";
+    };
+  };
+
   IPCRun = buildPerlPackage rec {
     name = "IPC-Run-0.82";
     src = fetchurl {
