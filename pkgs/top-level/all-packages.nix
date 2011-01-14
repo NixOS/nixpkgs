@@ -6364,6 +6364,8 @@ let
 
   nvi = callPackage ../applications/editors/nvi { };
 
+  ocrad = callPackage ../applications/graphics/ocrad { };
+
   openbox = callPackage ../applications/window-managers/openbox { };
 
   openjump = callPackage ../applications/misc/openjump { };
