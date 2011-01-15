@@ -132,6 +132,7 @@ in
     [
       "selinux=0"
       "console=tty1"
+      # "console=ttyS0,115200n8"  # serial console
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_2_6_35;
