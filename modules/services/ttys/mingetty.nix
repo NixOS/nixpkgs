@@ -28,7 +28,7 @@ with pkgs.lib;
       };
 
       greetingLine = mkOption {
-        default = ''<<< Welcome to NixOS (\m) - Kernel \r (\l) >>>'';
+        default = ''<<< Welcome to NixOS (\m) - \s \r (\l) >>>'';
         description = ''
           Welcome line printed by mingetty.
         '';
