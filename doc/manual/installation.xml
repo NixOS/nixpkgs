@@ -96,11 +96,12 @@ $ nix-build ./nixos/release.nix -A iso_minimal.iso</screen>
     
     <listitem><para>For initialising Ext2/Ext3 partitions:
     <command>mke2fs</command>.  Ext3 is recommended; use the
-    <option>-j</option> to create a journalled file system.  It is
-    also recommended that you assign a unique symbolic label to the
-    file system using the option <option>-L
-    <replaceable>label</replaceable></option>.  This will make the
-    file system configuration independent from device
+    <option>-j</option> to create a journalled file system.  For
+    faster access to the Nix store, you may also want to use the
+    <option>-O dir_index</option>.  It is also recommended that you
+    assign a unique symbolic label to the file system using the option
+    <option>-L <replaceable>label</replaceable></option>.  This will
+    make the file system configuration independent from device
     changes.</para></listitem>
 
     <listitem><para>For creating swap partitions:
