@@ -8,9 +8,6 @@
 
 let nodes = import networkExpr;
 in
-(import "${nixos}/lib/build-vms.nix" {
-  inherit nixpkgs services system useBackdoor;
-})
-.buildVirtualNetwork {
-  inherit nodes;
-}
+with import "${nixos}/lib/testing.nix" { inherit nixpkgs services system useBackdoor; };
+
+(complete { inherit nodes; testScript = ""; }).driver
