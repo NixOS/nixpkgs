@@ -12,42 +12,10 @@ rec {
   
   # Build a virtual network from an attribute set `{ machine1 =
   # config1; ... machineN = configN; }', where `machineX' is the
-  # hostname and `configX' is a NixOS system configuration.  The
-  # result is a script that starts a QEMU instance for each virtual
-  # machine.  Each machine is given an arbitrary IP address in the
-  # virtual network.
+  # hostname and `configX' is a NixOS system configuration.  Each
+  # machine is given an arbitrary IP address in the virtual network.
   buildVirtualNetwork =
-    { nodes }:
-
-    let nodes_ = lib.mapAttrs (n: buildVM nodes_) (assignIPAddresses nodes); in
-
-    stdenv.mkDerivation {
-      name = "vms";
-      buildCommand =
-        ''
-          ensureDir $out/vms
-          ${
-            lib.concatMapStrings (vm:
-              ''
-                ln -sn ${vm.config.system.build.vm} $out/vms/${vm.config.networking.hostName}
-              ''
-            ) (lib.attrValues nodes_)
-          }
-
-          ensureDir $out/bin
-          cat > $out/bin/run-vms <<EOF
-          #! ${stdenv.shell}
-          port=8080
-          for i in $out/vms/*; do
-            port2=\$((port++))
-            echo "forwarding localhost:\$port2 to \$(basename \$i):80"
-            QEMU_OPTS="-redir tcp:\$port2::80" \$i/bin/run-*-vm &
-          done
-          EOF
-          chmod +x $out/bin/run-vms
-        ''; # */
-      passthru = { nodes = nodes_; };
-    };
+    nodes: let nodesOut = lib.mapAttrs (n: buildVM nodesOut) (assignIPAddresses nodes); in nodesOut;
 
 
   buildVM =

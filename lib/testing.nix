@@ -121,21 +121,24 @@ rec {
   call = f: f { inherit pkgs nixpkgs system; };
 
   complete = t: t // rec {
-    nodes =
+    nodes = buildVirtualNetwork (
       if t ? nodes then t.nodes else
       if t ? machine then { machine = t.machine; }
-      else { };
-      
-    vms = buildVirtualNetwork { inherit nodes; };
-    
+      else { } );
+
     testScript =
       # Call the test script with the computed nodes.
       if builtins.isFunction t.testScript
-      then t.testScript { inherit (vms) nodes; }
+      then t.testScript { inherit nodes; }
       else t.testScript;
       
-    # Generate a convenience wrapper for running the test driver
-    # interactively with the specified network.
+    vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
+
+    vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
+    
+    # Generate onvenience wrappers for running the test driver
+    # interactively with the specified network, and for starting the
+    # VMs from the command line.
     driver = runCommand "nixos-test-driver"
       { buildInputs = [ makeWrapper];
         inherit testScript;
@@ -143,13 +146,18 @@ rec {
       ''
         mkdir -p $out/bin
         echo "$testScript" > $out/test-script
-        ln -s ${vms}/bin/* $out/bin/
-        ln -s ${testDriver}/bin/* $out/bin/
+        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
+        vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
         wrapProgram $out/bin/nixos-test-driver \
-          --add-flags "${vms}/vms/*/bin/run-*-vm" \
+          --add-flags "$vms" \
           --run "testScript=\"\$(cat $out/test-script)\"" \
           --set testScript '"$testScript"' \
-          --set VLANS '"${toString (map (m: m.config.virtualisation.vlans) (lib.attrValues vms.nodes))}"' \
+          --set VLANS '"${toString vlans}"'
+        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+        wrapProgram $out/bin/nixos-run-vms \
+          --add-flags "$vms" \
+          --set tests '"startAll; sleep 1e9;"' \
+          --set VLANS '"${toString vlans}"'
       ''; # "
 
     test = runTests driver;
