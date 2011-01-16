@@ -1,34 +1,29 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, libjpeg, libexif, giflib, libtiff, libpng
+, pkgconfig, freetype, fontconfig
+}:
 
-  version = a.lib.attrByPath ["version"] "2.07" a; 
-  buildInputs = with a; [
-    libjpeg libexif giflib libtiff libpng
-      imagemagick ghostscript which curl 
-      pkgconfig freetype fontconfig
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "fbida-2.07";
+  
   src = fetchurl {
-    url = "http://dl.bytesex.org/releases/fbida/fbida-${version}.tar.gz";
+    url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
     sha256 = "0i6v3fvjc305pfw48sglb5f22lwxldmfch6mjhqbcp7lqkkxw435";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
-  makeFlags = [
-    "prefix=$out"
-    "verbose=yes"
+  patches =
+    [ # Fetch a segfault in exiftran (http://bugs.gentoo.org/284753).
+      (fetchurl {
+        url = http://bugs.gentoo.org/attachment.cgi?id=203930;
+        sha256 = "0zwva6qbahjdzk7vaw7cn3mj0326kawqw58rspvrz9m4vw5kqdzj";
+      })
     ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doMakeInstall" (a.doPatchShebangs "$out/bin")];
-      
-  name = "fbida-" + version;
+  buildInputs =
+    [ pkgconfig libexif libjpeg giflib libpng giflib freetype fontconfig ];
+  
+  makeFlags = [ "prefix=$(out)" "verbose=yes" ];
+
   meta = {
-    description = "Framebuffer image viewing programs";
-    maintainers = [
-    ];
+    description = "Image viewing and manipulation programs";
   };
 }

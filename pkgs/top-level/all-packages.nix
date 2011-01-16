@@ -5893,11 +5893,7 @@ let
 
   wvdial = callPackage ../os-specific/linux/wvdial { };
 
-  fbida = builderDefsPackage ../applications/graphics/fbida {
-    inherit libjpeg libexif giflib libtiff libpng
-      imagemagick ghostscript which curl pkgconfig
-      freetype fontconfig;
-  };
+  fbida = callPackage ../applications/graphics/fbida { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
