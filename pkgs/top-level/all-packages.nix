@@ -6513,6 +6513,8 @@ let
 
   semnotes = newScope pkgs.kde4 ../applications/misc/semnotes { };
 
+  siproxd = callPackage ../applications/networking/siproxd { };
+
   skype_linux = callPackage_i686 ../applications/networking/skype { };
 
   slim = callPackage ../applications/display-managers/slim { };
