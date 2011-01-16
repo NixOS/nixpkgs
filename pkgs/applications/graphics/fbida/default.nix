@@ -10,13 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "0i6v3fvjc305pfw48sglb5f22lwxldmfch6mjhqbcp7lqkkxw435";
   };
 
-  patches =
-    [ # Fetch a segfault in exiftran (http://bugs.gentoo.org/284753).
-      (fetchurl {
-        url = http://bugs.gentoo.org/attachment.cgi?id=203930;
-        sha256 = "0zwva6qbahjdzk7vaw7cn3mj0326kawqw58rspvrz9m4vw5kqdzj";
-      })
-    ];
+  preBuild =
+    ''
+      # Fetch a segfault in exiftran (http://bugs.gentoo.org/284753).
+      # `fbida' contains a copy of some internal libjpeg source files.
+      # If these do not match with the actual libjpeg, exiftran may
+      # fail.
+      tar xvf ${libjpeg.src}
+      for i in jpegint.h jpeglib.h jinclude.h transupp.c transupp.h; do
+        cp jpeg-*/$i jpeg/
+      done
+    '';
 
   buildInputs =
     [ pkgconfig libexif libjpeg giflib libpng giflib freetype fontconfig ];
