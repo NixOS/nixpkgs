@@ -8,6 +8,6 @@
 
 let nodes = import networkExpr;
 in
-with import "${nixos}/lib/testing.nix" { inherit nixpkgs services system useBackdoor; };
+with import "${nixos}/lib/testing.nix" { inherit nixpkgs services system; };
 
 (complete { inherit nodes; testScript = ""; }).driver
