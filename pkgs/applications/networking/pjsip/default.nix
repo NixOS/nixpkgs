@@ -1,6 +1,6 @@
 {stdenv, fetchurl, openssl, libsamplerate}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pjsip-1.8.10";
 
   src = fetchurl {
@@ -10,9 +10,18 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl libsamplerate ];
 
+  postInstall = ''
+    ensureDir $out/bin
+    cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
+    ensureDir $out/share/${name}/samples
+    cp pjsip-apps/bin/samples/*/* $out/share/${name}/samples
+  '';
+
   meta = {
     description = "SIP stack and media stack for presence, im, and multimedia communication";
     homepage = http://pjsip.org/;
     license = "GPLv2+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
