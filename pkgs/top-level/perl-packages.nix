@@ -3063,6 +3063,15 @@ rec {
     makeMakerFlags = "EXPATLIBPATH=${pkgs.expat}/lib EXPATINCPATH=${pkgs.expat}/include";
   };
 
+  XMLXPath = buildPerlPackage {
+    name = "XML-XPath-1.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSERGEANT/XML-XPath-1.13.tar.gz;
+      sha256 = "0xjmfwda7m3apj7yrjzmkm4sjwnz4bqyaynzgcwqhx806kgw4j9a";
+    };
+    propagatedBuildInputs = [XMLParser];
+  };
+
   XMLRegExp = buildPerlPackage {
     name = "XML-RegExp-0.03";
     src = fetchurl {
