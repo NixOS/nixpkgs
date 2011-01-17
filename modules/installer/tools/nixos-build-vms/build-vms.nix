@@ -3,7 +3,6 @@
 , services ? "/etc/nixos/services"
 , system ? builtins.currentSystem
 , networkExpr
-, useBackdoor ? false
 }:
 
 let nodes = import networkExpr;
