@@ -16,10 +16,10 @@ assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
 
 stdenv.mkDerivation {
-  name = "disnix-activation-scripts-0.2pre25585";
+  name = "disnix-activation-scripts-0.2pre25619";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/859162/download/1/disnix-activation-scripts-0.2pre25585.tar.gz;
-    sha256 = "03gh3qw8vnvl01x6qgy9szyjn7w3q98f3nzwq4shzd7l5j7170mf";
+    url = http://hydra.nixos.org/build/860730/download/1/disnix-activation-scripts-0.2pre25619.tar.gz;
+    sha256 = "0lfix5mh0hcdb6jwz6pi92zi4k0xnvdksw17q8bj7x7vqpscq5s6";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
