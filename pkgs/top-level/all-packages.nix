@@ -1542,9 +1542,7 @@ let
   };
   };
 
-  ecl = builderDefsPackage ../development/compilers/ecl {
-    inherit gmp mpfr;
-  };
+  ecl = callPackage ../development/compilers/ecl { };
 
   eql = callPackage ../development/compilers/eql {};
 

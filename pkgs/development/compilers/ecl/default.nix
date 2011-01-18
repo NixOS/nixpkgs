@@ -1,11 +1,15 @@
-a :  
+{builderDefsPackage
+  , gmp, mpfr, libffi
+  , ...} @ x:
+builderDefsPackage (a :  
 let 
   s = import ./src-for-default.nix;
-  buildInputs = with a; [
-  ];
+  helperArgNames = [];
   propagatedBuildInputs = with a; [
     gmp mpfr
   ];
+  buildInputs = map (n: builtins.getAttr n x)
+    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
 in
 rec {
   src = a.fetchUrlFromSrcInfo s;
@@ -35,4 +39,4 @@ rec {
     platforms = with a.lib.platforms; 
       linux;
   };
-}
+}) x
