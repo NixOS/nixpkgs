@@ -342,6 +342,49 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
   });
 
+  extractFs = {file, fs ? null} :
+    with pkgs; runInLinuxVM (
+    stdenv.mkDerivation {
+      name = "extract-file";
+      buildInputs = [utillinuxng];
+      buildCommand = ''
+        ln -s ${linux}/lib /lib
+        ${module_init_tools}/sbin/modprobe loop
+        ${module_init_tools}/sbin/modprobe ext4
+        ${module_init_tools}/sbin/modprobe iso9660
+        mknod /dev/loop0 b 7 0
+
+        ensureDir $out
+        ensureDir tmp
+        mount -o loop ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
+        cp -R tmp/* $out/
+      '';
+    });
+
+  extractMTDfs = {file, fs ? null} :
+    with pkgs; runInLinuxVM (
+    stdenv.mkDerivation {
+      name = "extract-file-mtd";
+      buildInputs = [utillinuxng mtdutils];
+      buildCommand = ''
+        ln -s ${linux}/lib /lib
+        ${module_init_tools}/sbin/modprobe mtd
+        ${module_init_tools}/sbin/modprobe mtdram total_size=65536
+        ${module_init_tools}/sbin/modprobe mtdchar
+        ${module_init_tools}/sbin/modprobe mtdblock
+        ${module_init_tools}/sbin/modprobe jffs2
+        mknod /dev/mtd0 c 90 0
+        mknod /dev/mtdblock0 b 31 0
+
+        ensureDir $out
+        ensureDir tmp
+
+        dd if=${file} of=/dev/mtd0
+        mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
+
+        cp -R tmp/* $out/
+      '';
+    });
 
   qemuCommandGeneric = ''
     ${kvm}/bin/qemu-system-x86_64 \
