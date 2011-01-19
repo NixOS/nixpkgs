@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, openssl, pkgconfig, zlib }:
+{ fetchurl, stdenv, gnutls, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
   name = "ucommon-4.0.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h2xyb9s1xivpr5039jhhcqvd7ygn37si8yvmh5fd57n1y8by6vm";
   };
 
-  buildInputs = [ pkgconfig openssl zlib ];
+  buildInputs = [ pkgconfig gnutls zlib ];
 
   doCheck = true;
 

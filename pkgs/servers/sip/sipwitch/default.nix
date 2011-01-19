@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, ucommon, libosip, libexosip, openssl, zlib }:
+{ fetchurl, stdenv, pkgconfig, ucommon, libosip, libexosip, gnutls, zlib }:
 
 stdenv.mkDerivation rec {
   name = "sipwitch-0.9.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xww6v4s45ss7v4548gxk6dgal5605cxnvdfsblmqn3ydzp6227h";
   };
 
-  buildInputs = [ pkgconfig ucommon libosip libexosip openssl zlib ];
+  buildInputs = [ pkgconfig ucommon libosip libexosip gnutls zlib ];
 
   preConfigure = ''
     export configureFlags="--sysconfdir=$out/etc"
