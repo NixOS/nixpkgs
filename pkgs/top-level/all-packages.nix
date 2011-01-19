@@ -4095,6 +4095,8 @@ let
 
   urt = callPackage ../development/libraries/urt { };
 
+  ucommon = callPackage ../development/libraries/ucommon { };
+
   vamp = callPackage ../development/libraries/audio/vamp { };
 
   vigra = callPackage ../development/libraries/vigra { };
@@ -4498,6 +4500,8 @@ let
   samba = callPackage ../servers/samba { };
 
   shishi = callPackage ../servers/shishi { };
+
+  sipwitch = callPackage ../servers/sip/sipwitch { };
 
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
     inherit fetchurl stdenv perl lib composableDerivation;
