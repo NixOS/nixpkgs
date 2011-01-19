@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
     cp pjsip-apps/bin/samples/*/* $out/share/${name}/samples
   '';
 
+  # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
+  dontPatchELF = true;
+
   meta = {
     description = "SIP stack and media stack for presence, im, and multimedia communication";
     homepage = http://pjsip.org/;
