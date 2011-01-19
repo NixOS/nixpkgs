@@ -352,12 +352,14 @@ rec {
         ${module_init_tools}/sbin/modprobe loop
         ${module_init_tools}/sbin/modprobe ext4
         ${module_init_tools}/sbin/modprobe iso9660
+        ${module_init_tools}/sbin/modprobe ufs
         mknod /dev/loop0 b 7 0
 
         ensureDir $out
         ensureDir tmp
-        mount -o loop ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
-        cp -R tmp/* $out/
+        mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
+          mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
+        cp -Rv tmp/* $out/
       '';
     });
 
