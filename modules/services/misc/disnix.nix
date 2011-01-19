@@ -107,7 +107,11 @@ in
       disnix =
         { description = "Disnix server";
 
-          startOn = "started dbus";
+          startOn = "started dbus"
+	  + optionalString config.services.httpd.enable " and started httpd"
+	  + optionalString config.services.mysql.enable " and started mysql"
+	  + optionalString config.services.tomcat.enable " and started tomcat"
+	  + optionalString config.services.svnserve.enable " and started svnserve";
 
           script =
           ''
