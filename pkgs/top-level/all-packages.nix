@@ -2417,6 +2417,8 @@ let
 
   guile_lib = callPackage ../development/guile-modules/guile-lib { };
 
+  guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
+
   windowssdk = (
     import ../development/misc/windows-sdk {
       inherit fetchurl stdenv cabextract;
