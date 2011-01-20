@@ -3421,7 +3421,7 @@ let
 
   libdv = callPackage ../development/libraries/libdv { };
 
-  libdrm = if stdenv.isDarwin then null else (import ../development/libraries/libdrm {
+  libdrm = if stdenv.isDarwin then null else (callPackage ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
   });
