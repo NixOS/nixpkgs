@@ -101,7 +101,7 @@ rec {
         NIX_CFLAGS_LINK = "-static";
 
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
+          (if args ? configureFlags then toString args.configureFlags else "")
           + " --disable-shared"; # brrr...
       });
       isStatic = true;
