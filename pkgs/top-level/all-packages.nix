@@ -6545,7 +6545,7 @@ let
   };
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {
-    neon = neon029;
+    neon = pkgs.neon029;
     bdbSupport = getConfig ["subversion" "bdbSupport"] true;
     httpServer = getConfig ["subversion" "httpServer"] false;
     httpSupport = getConfig ["subversion" "httpSupport"] true;
