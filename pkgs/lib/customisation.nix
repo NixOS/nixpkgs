@@ -89,7 +89,7 @@ rec {
       };
   */
   callPackageWith = autoArgs: fn: args:
-    let f = import fn; in
+    let f = if builtins.isFunction fn then fn else import fn; in
     makeOverridable f ((builtins.intersectAttrs (builtins.functionArgs f) autoArgs) // args);
 
 }
