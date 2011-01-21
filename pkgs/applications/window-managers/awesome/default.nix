@@ -3,12 +3,16 @@
 , libstartup_notification, libev, asciidoc, xmlto, dbus, docbook_xsl
 , docbook_xml_dtd_45, libxslt, coreutils}:
 
+let
+  version = "3.4.9";
+in
+
 stdenv.mkDerivation rec {
-  name = "awesome-3.4.8";
+  name = "awesome-${version}";
  
   src = fetchurl {
-    url = http://awesome.naquadah.org/download/awesome-3.4.8.tar.xz;
-    sha256 = "1mrdk8q0kj1p7zp5mchr2zl3cnja4z4ir0wx3yz5y361py5bjy78";
+    url = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
+    sha256 = "0382v482904xv295l0gvhwzc64b7631miiv8wyq7jxmwqf2vfbp7";
   };
  
   buildInputs = [ xz cmake gperf imagemagick pkgconfig lua glib cairo pango
