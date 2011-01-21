@@ -12,13 +12,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.8.7-p302";
+  version = with passthru; "${majorVersion}.${minorVersion}-p${patchLevel}";
   
   name = "ruby-${version}";
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.8/${name}.tar.gz";
-    sha256 = "18a4w0n1n0sij7gkb3196dnqav5zr0c5p26f08k7cw6y0i9dz0sq";
+    sha256 = "0qf50wa1ziziagnxarj8z6yrsivrhchq1j9017ff3z2z7d31l9kc";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   configureFlags = ["--enable-shared" "--enable-pthread"];
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";
+  # Bundler tries to create this directory
+  postInstall = "mkdir -pv $out/${passthru.gemPath}";
 
   meta = {
     license = "Ruby";
@@ -40,8 +42,11 @@ stdenv.mkDerivation rec {
     description = "The Ruby language";
   };
 
-  passthru = {
-    # install ruby libs into "$out/${ruby.libPath}"
-    libPath = "lib/ruby-1.8";
+  passthru = rec {
+    majorVersion = "1.8";
+    minorVersion = "7";
+    patchLevel = "330";
+    libPath = "lib/ruby/${majorVersion}";
+    gemPath = "lib/ruby/gems/${majorVersion}";
   };
 }
