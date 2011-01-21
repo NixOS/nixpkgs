@@ -802,7 +802,7 @@ let
     static = false;
   };
 
-  ipmiutil = callPackage ../utils/system/ipmiutil {};
+  ipmiutil = callPackage ../tools/system/ipmiutil {};
 
   ised = callPackage ../tools/misc/ised {};
 
