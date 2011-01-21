@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg ];
 
-  # enableParallelBuilding = true;
-
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = http://freeswitch.org/;
