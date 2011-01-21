@@ -16,7 +16,7 @@ rec {
 
   doInstall = fullDepEntry (''
     ruby setup.rb --prefix=$out/
-    wrapProgram $out/bin/gem --prefix RUBYLIB : $out/lib:$out/lib
+    wrapProgram $out/bin/gem --prefix RUBYLIB : $out/lib
     find $out -type f -name "*.rb" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
     mkdir -pv $out/nix-support
     cat > $out/nix-support/setup-hook <<EOF
@@ -37,11 +37,15 @@ rec {
   meta = {
     description = "Ruby gems package collection";
     longDescription = ''
-      see comment in rubyLibs to get to know how to use ruby gems in nix
+      Nix can create nix packages from gems.
+
+      To use it do the following:
+      1. Install rubygems and rubyLibs.nix.
+      2. Add $your_profile/${ruby.gemPath} to GEM_PATH.
+      3. export RUBYLIB=$your_profile/lib RUBYOPT=rubygems
+      4. See `gem nix --help` for the rest.
     '';
   };
 
-  # TODO don't resolve 302 redirects but make nix resolve in fetchurl and
-  # nix-prefetch-url. This should be done on stdenv-updates.
-  patches = [ ./gem_hook.patch /* see longDescription above */ ];
+  patches = [ ./gem_hook.patch ];
 }
