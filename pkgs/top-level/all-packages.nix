@@ -4408,6 +4408,8 @@ let
 
   firebird = callPackage ../servers/firebird { };
 
+  freeswitch = callPackage ../servers/sip/freeswitch { };
+
   ghostOne = callPackage ../servers/games/ghost-one {
     boost = boostFull;
   };
