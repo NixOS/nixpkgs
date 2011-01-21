@@ -3116,7 +3116,7 @@ let
   gmm = callPackage ../development/libraries/gmm { };
 
   gmp =
-    if stdenv.system == "i686-darwin" then
+    if stdenv.isDarwin then
       # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
       makeOverridable (import ../development/libraries/gmp/4.3.1.nix) {
         inherit stdenv fetchurl m4;
