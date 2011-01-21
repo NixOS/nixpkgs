@@ -4,10 +4,10 @@ rec {
   # some packages (eg ruby-debug) still require 1.8. So let's stick to that for
   # now if nobody has different requirements
 
-  version = "1.3.7";
+  version = "1.4.1";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
-    sha256 = "17bwlqxqrjrial111rn395yjx9wyxrmvmj0hgd85bxkkcap912rq";
+    sha256 = "189wg1msb4sdjvdzv9ia6q3lvjlygpp67wlbkl7cjb22bpjy4w4b";
   };
 
 
@@ -18,7 +18,17 @@ rec {
     ruby setup.rb --prefix=$out/
     wrapProgram $out/bin/gem --prefix RUBYLIB : $out/lib:$out/lib
     find $out -type f -name "*.rb" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
-  '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
+    mkdir -pv $out/nix-support
+    cat > $out/nix-support/setup-hook <<EOF
+    export RUBYOPT=rubygems
+    addToSearchPath RUBYLIB $out/lib
+
+    addGemPath() {
+      addToSearchPath GEM_PATH \$1/${ruby.gemPath}
+    }
+
+    envHooks+=(addGemPath)
+    EOF'') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   /* doConfigure should be specified separately */
   phaseNames = ["doPatch" "doInstall"];
