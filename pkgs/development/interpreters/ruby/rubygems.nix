@@ -43,5 +43,5 @@ rec {
 
   # TODO don't resolve 302 redirects but make nix resolve in fetchurl and
   # nix-prefetch-url. This should be done on stdenv-updates.
-  patches = [ ./gem_nix_command.patch /* see longDescription above */ ];
+  patches = [ ./gem_hook.patch /* see longDescription above */ ];
 }

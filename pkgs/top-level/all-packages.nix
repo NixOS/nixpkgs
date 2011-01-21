@@ -2348,9 +2348,7 @@ let
   #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
   ruby = ruby18;
 
-  rubyLibs = recurseIntoAttrs (import ../development/interpreters/ruby/libs.nix {
-    inherit pkgs stdenv;
-  });
+  rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
   rake = callPackage ../development/ruby-modules/rake { };
 
@@ -2360,7 +2358,7 @@ let
     withBioconductor = getConfig ["rLang" "withBioconductor"] false;
   };
 
-  rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/gems.nix) {
+  rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
   };
   rubygems = rubygemsFun ruby;
