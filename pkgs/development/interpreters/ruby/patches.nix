@@ -1,6 +1,5 @@
 {fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi, zlib,
-  libuuid}:
-gems:
+  libuuid, gems}:
 
 let
   patchUsrBinEnv = writeScript "path-usr-bin-env" ''

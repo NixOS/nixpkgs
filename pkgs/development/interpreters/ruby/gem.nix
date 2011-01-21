@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ruby, rubygems, makeWrapper, patches, overwrites}:
+{stdenv, fetchurl, ruby, rubygems, makeWrapper, patches, overrides}:
 
 let
   gemDefaults = { name, basename, requiredGems, sha256, meta }:
@@ -42,10 +42,11 @@ let
     '';
   };
   mb = stdenv.lib.maybeAttr;
+  patchedGem = a: stdenv.mkDerivation (removeAttrs (stdenv.lib.mergeAttrsByFuncDefaults
+      ([ (gemDefaults a) ]
+      ++ (stdenv.lib.concatMap (p: [(mb a.basename {} p) (mb a.name {} p)] )
+      patches)))
+    [ "mergeAttrBy" ]);
 in
 aName: a@{ name, basename, requiredGems, sha256, meta }:
-  mb name (mb basename (
-    stdenv.mkDerivation (removeAttrs (stdenv.lib.mergeAttrsByFuncDefaults
-      [ (gemDefaults a) (mb name {} patches) (mb basename {} patches) ]
-    ) ["mergeAttrBy"])
-  ) overwrites) overwrites
+  stdenv.lib.foldl (d: o: mb name (mb basename d o) o) (patchedGem a) overrides
