@@ -802,6 +802,8 @@ let
     static = false;
   };
 
+  ipmiutil = callPackage ../utils/system/ipmiutil {};
+
   ised = callPackage ../tools/misc/ised {};
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
