@@ -1317,6 +1317,8 @@ let
   
   verilog = callPackage ../applications/science/electronics/verilog {};
 
+  vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
+
   viking = callPackage ../applications/misc/viking { };
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
