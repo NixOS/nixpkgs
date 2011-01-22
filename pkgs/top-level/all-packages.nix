@@ -565,6 +565,8 @@ let
 
   dirmngr = callPackage ../tools/security/dirmngr { };
 
+  dmg2img = callPackage ../tools/misc/dmg2img { };
+
   docbook2x = callPackage ../tools/typesetting/docbook2x {
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
     libiconv = if stdenv.isDarwin then libiconv else null;
