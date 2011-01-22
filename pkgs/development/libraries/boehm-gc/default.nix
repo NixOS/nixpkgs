@@ -1,17 +1,32 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, cvsVersion ? true, fetchcvs ? null
+, autoconf ? null, automake ? null, libtool ? null }:
 
 let
-  version = if stdenv.isMips then "7.2alpha4" else "7.1";
+  cvs = cvsVersion;
+  version = if !cvs then "7.1" else "7.2pre20110122";
 in
 stdenv.mkDerivation ({
   name = "boehm-gc-${version}";
 
-  src = fetchurl {
-    url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-${version}.tar.gz";
-    sha256 = (if version == "7.1" then "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3"
-      else if version == "7.2alpha4" then "1ya9hr1wbx0hrx29q5zy2k51ml71k9mhqzqs7f505qr9s6jsfh0b"
-      else throw "Version unknown");
-  };
+  src =
+    if version == "7.1"
+    then fetchurl {
+      url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-${version}.tar.gz";
+      sha256 = "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3";
+      /* else if version == "7.2alpha4" then
+               "1ya9hr1wbx0hrx29q5zy2k51ml71k9mhqzqs7f505qr9s6jsfh0b" */
+    }
+
+    /* Use the CVS version for now since it contains many, many fixes
+       compared to 7.1 and even 7.2alpha4 (e.g., interception of
+       `pthread_exit', dated 2010-08-14, which fixes possible deadlocks
+       on GNU/Linux.) */
+    else fetchcvs {
+      cvsRoot = ":pserver:anonymous@bdwgc.cvs.sourceforge.net:/cvsroot/bdwgc";
+      module = "bdwgc";
+      date = "20110121";
+      sha256 = "00f7aed82fa02211db93692c24b74e15010aff545f97691c5e362432a7ae283a";
+    };
 
   patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
                         ./cygwin-pthread-dl.patch;
@@ -47,6 +62,15 @@ stdenv.mkDerivation ({
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(if cvs
+ then {
+   buildInputs = [ autoconf automake libtool ];
+   preConfigure = "autoreconf -vfi";
+ }
+ else { })
 
 //
 

@@ -2769,7 +2769,14 @@ let
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
-  boehmgc = callPackage ../development/libraries/boehm-gc { };
+  boehmgc_7_1 = callPackage ../development/libraries/boehm-gc {
+    cvsVersion = false;
+  };
+
+  boehmgc_cvs = callPackage ../development/libraries/boehm-gc { };
+
+  # There are good reasons to use CVS instead of 7.1 or 7.2alpha4.
+  boehmgc = boehmgc_cvs;
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
