@@ -2468,7 +2468,9 @@ let
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
-    doCheck = if stdenv.isArm then false else true;
+    doCheck = !stdenv.isArm
+      # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
+      && stdenv.system != "i386-sunos";
   };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
