@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "02r1bgj8qlkn63xqfi5yq8y7wrilxcnkycaag8qskhg5ranic507";
   };
 
-  buildInputs = [ curl libnxml pkgconfig ];
+  buildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ curl libnxml ];
 
   meta = {
     homepage = http://www.autistici.org/bakunin/libmrss/doc;

@@ -6385,6 +6385,8 @@ let
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 
+  offrss = callPackage ../applications/networking/offrss { };
+
   openbox = callPackage ../applications/window-managers/openbox { };
 
   openjump = callPackage ../applications/misc/openjump { };
