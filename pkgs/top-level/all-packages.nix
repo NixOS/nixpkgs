@@ -2468,7 +2468,7 @@ let
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
-    doCheck = !stdenv.isArm
+    doCheck = !stdenv.isArm && !stdenv.isCygwin
       # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
       && stdenv.system != "i386-sunos";
   };
