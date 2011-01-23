@@ -7158,6 +7158,10 @@ let
         pkgs_for_46.newScope pkgs_for_46.kde46;
   };
 
+  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { 
+        inherit (gtkLibs) glib gtk;
+	};
+
   xfce = xfce4;
 
   xfce4 = recurseIntoAttrs
