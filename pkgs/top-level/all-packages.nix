@@ -7162,9 +7162,14 @@ let
         pkgs_for_46.newScope pkgs_for_46.kde46;
   };
 
+  redshift = callPackage ../applications/misc/redshift {
+    inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
+      xf86vidmodeproto;
+  };
+
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { 
-        inherit (gtkLibs) glib gtk;
-	};
+    inherit (gtkLibs) glib gtk;
+  };
 
   xfce = xfce4;
 
