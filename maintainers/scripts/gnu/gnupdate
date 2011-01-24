@@ -5,7 +5,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
          -c "(apply $main (command-line))" "$@"
 !#
 ;;; GNUpdate -- Update GNU packages in Nixpkgs.
-;;; Copyright (C) 2010  Ludovic Courtès <ludo@gnu.org>
+;;; Copyright (C) 2010, 2011  Ludovic Courtès <ludo@gnu.org>
 ;;;
 ;;; This program is free software: you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -558,6 +558,8 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
 (define (ftp-server/directory project)
   (define quirks
     '(("commoncpp2"   "ftp.gnu.org"   "/gnu/commoncpp" #f)
+      ("libzrtpcpp"   "ftp.gnu.org"   "/gnu/ccrtp" #f)
+      ("libosip2"     "ftp.gnu.org"   "/gnu/osip" #f)
       ("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
       ("libgpg-error" "ftp.gnupg.org" "/gcrypt" #t)
       ("freefont-ttf" "ftp.gnu.org"   "/gnu/freefont" #f)
