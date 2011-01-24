@@ -640,6 +640,8 @@ let
     withX11 = true;
   };
 
+  freeipmi = callPackage ../tools/system/freeipmi {};
+
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {};
 
   ftgl = callPackage ../development/libraries/ftgl { };
