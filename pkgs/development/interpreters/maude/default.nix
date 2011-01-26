@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
   ''
-    for n in $out/bin/*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
+    for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     ensureDir $out/share/maude
     cp ${fullMaude} $out/share/maude/full-maude.maude
   '';
