@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     ./includes.patch
   ];
 
+  NIX_LDFLAGS="-lX11";
+
   meta = { 
     description = "An instance messanger client for the gadu-gadu network (most popular polish IM network)";
     homepage = http://www.kadu.net/w/English:Main_Page;
