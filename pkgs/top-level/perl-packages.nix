@@ -698,6 +698,17 @@ rec {
     ];
   };
 
+  CompressUnLZMA = buildPerlPackage rec {
+    name = "Compress-unLZMA-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
+      sha256 = "0sg9gj3rhif6hgmhwpz6w0g52l65vj5hx9818v5cdhvcif0jhg0b";
+    };
+    propagatedBuildInputs = [
+      IOCompressBase
+    ];
+  };
+
   ConfigAny = buildPerlPackage rec {
     name = "Config-Any-0.18";
     src = fetchurl {
