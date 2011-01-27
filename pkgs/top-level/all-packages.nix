@@ -884,8 +884,6 @@ let
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
-  mkisofs = callPackage ../tools/cd-dvd/mkisofs { };
-
   mktemp = callPackage ../tools/security/mktemp { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
@@ -1468,6 +1466,8 @@ let
   xmpppy = builderDefsPackage (import ../development/python-modules/xmpppy) {
     inherit python setuptools;
   };
+
+  xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
   xpf = callPackage ../tools/text/xml/xpf {
     libxml2 = libxml2Python;
