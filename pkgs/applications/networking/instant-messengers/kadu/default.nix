@@ -19,6 +19,10 @@ stdenv.mkDerivation {
   prePatch = ''
     patchShebangs .
   '';
+  
+  patches = [ 
+    ./includes.patch
+  ];
 
   meta = { 
     description = "An instance messanger client for the gadu-gadu network (most popular polish IM network)";

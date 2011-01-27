@@ -1,0 +1,13 @@
+--- kadu/kadu-core/main.cpp	2011-01-27 22:58:22.000000000 +0100
++++ kadu/kadu-core/main.cpp	2011-01-27 22:58:28.000000000 +0100
+@@ -20,10 +20,8 @@
+ #include <winsock2.h>
+ #include <windows.h>
+ #endif
+-#ifdef Q_OS_BSD4
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#endif
+ 
+ #include "config_file.h"
+ #include "debug.h"
