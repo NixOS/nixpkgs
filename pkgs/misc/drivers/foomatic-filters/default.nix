@@ -32,6 +32,7 @@ rec {
     sed -e "s@= .*/store/[^/]\+/lib/cups/filter@= $out/lib/cups/filter@" -i Makefile
     sed -e "s@= .*/store/[^/]\+/lib/cups/backend@= $out/lib/cups/backend@" -i Makefile
     sed -e "s@= /usr/@= $out/@" -i Makefile
+    sed -e "s@/bin/bash@/bin/sh@g" -i foomaticrip.c
   '' ["doConfigure" "minInit"];
       
   meta = {

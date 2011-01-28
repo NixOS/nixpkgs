@@ -33,12 +33,14 @@ rec {
   ];
   fixMakefile = a.fullDepEntry ''
     touch all-test
+    sed -e "/BASENAME=/iPATH=$out/bin:$PATH" -i *-wrapper *-wrapper.in
   '' ["doUnpack" "minInit"];
 
   deployGetWeb = a.fullDepEntry ''
     ensureDir "$out/bin"
     ensureDir "$out/share"
     cp ./getweb "$out/bin"
+    cp ./arm2hpdl "$out/bin"
     cp -r PPD "$out/share/foo2zjs-ppd"
   '' ["minInit" "defEnsureDir"];
       
