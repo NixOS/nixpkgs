@@ -2907,6 +2907,8 @@ let
     stdenv = overrideGCC stdenv gcc45;
   };
 
+  eigen = callPackage ../development/libraries/eigen {};
+
   enchant = callPackage ../development/libraries/enchant {
     inherit (gnome) glib;
   };
@@ -7008,6 +7010,8 @@ let
   six = callPackage ../games/six {
     inherit (kde3) arts kdelibs;
   };
+
+  soi = callPackage ../games/soi {};
 
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit {
