@@ -7393,6 +7393,10 @@ let
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
   foldingathome = callPackage ../misc/foldingathome { };
+  
+  foo2zjs = callPackage ../misc/drivers/foo2zjs {};
+  
+  foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
 
   freestyle = callPackage ../misc/freestyle {
     #stdenv = overrideGCC stdenv gcc41;
