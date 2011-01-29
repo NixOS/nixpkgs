@@ -9,6 +9,7 @@
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
+  goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
