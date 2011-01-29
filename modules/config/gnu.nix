@@ -19,13 +19,15 @@ with pkgs.lib;
     environment.systemPackages = with pkgs;
       # TODO: Adjust `requiredPackages' from `system-path.nix'.
       # TODO: Add Inetutils once it has the new `ifconfig'.
-      [ grub2 parted fdisk
+      [ parted fdisk
         nano zile
         texinfo # for the stand-alone Info reader
-      ];
+      ]
+      ++ stdenv.lib.optional !stdenv.isArm grub2;
 
-    # GNU GRUB.
-    boot.loader.grub.enable = true;
+
+    # GNU GRUB, where available.
+    boot.loader.grub.enable = !stdenv.isArm;
     boot.loader.grub.version = 2;
 
     # GNU lsh.
