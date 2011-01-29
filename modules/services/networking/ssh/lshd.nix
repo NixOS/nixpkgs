@@ -135,7 +135,8 @@ in
                 # XXX: It would be nice to provide feedback to the
                 # user when this fails, so that they can retry it
                 # manually.
-                ${lsh}/bin/lsh-make-seed -o /var/spool/lsh/yarrow-seed-file
+                ${lsh}/bin/lsh-make-seed --sloppy \
+                   -o /var/spool/lsh/yarrow-seed-file
             fi
 
             if ! test -f "${cfg.hostKey}"
