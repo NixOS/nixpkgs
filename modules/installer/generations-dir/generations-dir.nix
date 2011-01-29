@@ -12,8 +12,18 @@ let
           enable = mkOption {
             default = false;
             description = ''
-              Whether to enable the simple preparation of symlinks to the system
-              generations in /boot.
+              Whether to create symlinks to the system generations under
+              <literal>/boot</literal>.  When enabled,
+              <literal>/boot/default/kernel</literal>,
+              <literal>/boot/default/initrd</literal>, etc., are updated to
+              point to the current generation's kernel image, initial RAM
+              disk, and other bootstrap files.
+
+              This optional is not necessary with bootloads such as GNU GRUB
+              for which the menu is updated to point to the latest bootstrap
+              files.  However, it is needed for U-Boot on platforms where the
+              boot command line is stored in flash memory rather than in a
+              menu file.
             '';
           };
 
