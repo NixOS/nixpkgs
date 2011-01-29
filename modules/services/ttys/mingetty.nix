@@ -11,7 +11,10 @@ with pkgs.lib;
     services.mingetty = {
 
       ttys = mkOption {
-        default = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
+        default =
+          if pkgs.stdenv.isArm
+          then [ "ttyS0" ] # presumably an embedded platform such as a plug
+          else [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
         description = ''
           The list of tty devices on which to start a login prompt.
         '';
