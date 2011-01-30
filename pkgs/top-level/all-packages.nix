@@ -6836,11 +6836,9 @@ let
 
   xmove = callPackage ../applications/misc/xmove { };
 
-  xnee = builderDefsPackage (import ../tools/X11/xnee) {
-    inherit (gtkLibs) gtk;
-    inherit (xlibs) libX11 libXtst xextproto libXext
-      inputproto libXi xproto recordproto;
-    inherit pkgconfig;
+  xnee = callPackage ../tools/X11/xnee {
+    # Work around "missing separator" error.
+    stdenv = overrideInStdenv stdenv [ gnumake381 ];
   };
 
   xvidcap = callPackage ../applications/video/xvidcap {
