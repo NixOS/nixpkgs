@@ -646,6 +646,8 @@ let
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
+  fuppes = callPackage ../tools/networking/fuppes {};
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   unix2dos = callPackage ../tools/text/unix2dos { };
