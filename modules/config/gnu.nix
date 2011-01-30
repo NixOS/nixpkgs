@@ -27,7 +27,7 @@ with pkgs.lib;
 
 
     # GNU GRUB, where available.
-    boot.loader.grub.enable = !stdenv.isArm;
+    boot.loader.grub.enable = !pkgs.stdenv.isArm;
     boot.loader.grub.version = 2;
 
     # GNU lsh.
