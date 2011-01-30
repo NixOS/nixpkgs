@@ -23,7 +23,7 @@ with pkgs.lib;
         nano zile
         texinfo # for the stand-alone Info reader
       ]
-      ++ stdenv.lib.optional !stdenv.isArm grub2;
+      ++ stdenv.lib.optional (!stdenv.isArm) grub2;
 
 
     # GNU GRUB, where available.
