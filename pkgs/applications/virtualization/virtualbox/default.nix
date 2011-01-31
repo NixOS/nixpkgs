@@ -1,22 +1,24 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
 , python, which, alsaLib, curl, gawk
+, xorriso, makeself, perl, jdk
 }:
 
 stdenv.mkDerivation {
-  name = "virtualbox-3.2.10-${kernel.version}";
+  name = "virtualbox-4.0.2-${kernel.version}";
 
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.2.10/VirtualBox-3.2.10-OSE.tar.bz2;
-    sha256 = "06abkv8lsh6b0z21ialdhxyw5qg1r2x07qwwkn2b9akx8ab5pcjd";
+    url = http://download.virtualbox.org/virtualbox/4.0.2/VirtualBox-4.0.2.tar.bz2;
+    sha256 = "3dbb3303a6237b8a3732c0bb12abc89ae3ad5c804579bc1390325713c741c568";
   };
 
-  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl pam];
+  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk ];
 
   patchPhase = "
     set -x
     MODULES_BUILD_DIR=`echo ${kernel}/lib/modules/*/build`
     sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \\
+        -e 's@MKISOFS --version@MKISOFS -version@' \\
         -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 
@@ -25,7 +27,7 @@ stdenv.mkDerivation {
   ";
 
   configurePhase = ''
-    ./configure --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening
+    ./configure --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
@@ -34,7 +36,9 @@ stdenv.mkDerivation {
     cat >> AutoConfig.kmk << END_PATHS
     VBOX_PATH_APP_PRIVATE := $out
     VBOX_PATH_APP_DOCS := $out/doc
+    VBOX_JAVA_HOME := ${jdk}
     END_PATHS
+    echo "VBOX_WITH_DOCS :=" >> LocalConfig.kmk
     echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
   '';
 
