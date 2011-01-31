@@ -356,13 +356,14 @@ rec {
         ${module_init_tools}/sbin/modprobe squashfs
         ${module_init_tools}/sbin/modprobe iso9660
         ${module_init_tools}/sbin/modprobe ufs
+        ${module_init_tools}/sbin/modprobe cramfs
         mknod /dev/loop0 b 7 0
 
         ensureDir $out
         ensureDir tmp
         mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
           mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
-        cp -Rv tmp/* $out/
+        cp -Rv tmp/* $out/ || exit 0
       '';
     });
 
@@ -374,10 +375,11 @@ rec {
       buildCommand = ''
         ln -s ${linux}/lib /lib
         ${module_init_tools}/sbin/modprobe mtd
-        ${module_init_tools}/sbin/modprobe mtdram total_size=65536
+        ${module_init_tools}/sbin/modprobe mtdram total_size=131072
         ${module_init_tools}/sbin/modprobe mtdchar
         ${module_init_tools}/sbin/modprobe mtdblock
         ${module_init_tools}/sbin/modprobe jffs2
+        ${module_init_tools}/sbin/modprobe zlib
         mknod /dev/mtd0 c 90 0
         mknod /dev/mtdblock0 b 31 0
 
