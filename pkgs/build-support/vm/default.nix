@@ -351,6 +351,9 @@ rec {
         ln -s ${linux}/lib /lib
         ${module_init_tools}/sbin/modprobe loop
         ${module_init_tools}/sbin/modprobe ext4
+        ${module_init_tools}/sbin/modprobe hfs
+        ${module_init_tools}/sbin/modprobe hfsplus
+        ${module_init_tools}/sbin/modprobe squashfs
         ${module_init_tools}/sbin/modprobe iso9660
         ${module_init_tools}/sbin/modprobe ufs
         mknod /dev/loop0 b 7 0
