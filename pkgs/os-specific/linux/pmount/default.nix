@@ -7,12 +7,12 @@
 # constraint mention in the configure.ac
 assert stdenv.lib.hasSuffix "/" mediaDir;
 
-stdenv.mkDerivation {
-  name = "pmount-0.9.20";
+stdenv.mkDerivation rec {
+  name = "pmount-0.9.23";
 
   src = fetchurl {
-    url = https://alioth.debian.org/frs/download.php/3127/pmount-0.9.20.tar.gz;
-    sha256 = "0574d2e805610c179904f5c676b2b93e088906b91bcb76980daa4a8da1d23e8c";
+    url = "https://alioth.debian.org/frs/download.php/3310/${name}.tar.gz";
+    sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
   buildInputs = [ hal intltool utillinuxng ];
