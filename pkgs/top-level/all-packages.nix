@@ -6275,6 +6275,8 @@ let
    qt = qt4;
   };
 
+  makeself = callPackage ../applications/misc/makeself { };
+
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
   meld = callPackage ../applications/version-management/meld {
