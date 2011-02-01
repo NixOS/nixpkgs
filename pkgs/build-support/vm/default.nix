@@ -1,4 +1,8 @@
-{ pkgs }:
+{ pkgs
+, linuxKernel ? pkgs.linux
+, img ? "bzImage"
+, rootModules ? [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix" ]
+}:
 
 with pkgs;
 
@@ -7,16 +11,13 @@ rec {
   # The 15 second CIFS timeout is too short if the host if heavily
   # loaded (e.g., in the Hydra build farm when it's running many jobs
   # in parallel).  So apply a patch to increase the timeout to 120s.
-  kernel = assert pkgs.linux.features.cifsTimeout; pkgs.linux;
+  kernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
 
   kvm = pkgs.qemu_kvm;
 
 
   modulesClosure = makeModulesClosure {
-    inherit kernel;
-    rootModules =
-      [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
-        "nls_utf8" "ext2" "ext3" "unix" ];
+    inherit kernel rootModules;
   };
 
 
@@ -218,7 +219,7 @@ rec {
       -chardev socket,id=samba,path=./samba \
       -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
       -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
-      -kernel ${kernel}/bzImage \
+      -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
