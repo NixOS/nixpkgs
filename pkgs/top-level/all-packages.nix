@@ -2774,19 +2774,7 @@ let
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
-  boehmgc_7_1 = callPackage ../development/libraries/boehm-gc {
-    cvsVersion = false;
-  };
-
-  boehmgc_cvs = callPackage ../development/libraries/boehm-gc { };
-
-  # There are good reasons to use CVS instead of 7.1 or 7.2alpha4.
-  # See `default.nix' for details.
-  boehmgc =
-    # XXX: `fetchcvs' doesn't work on FreeBSD ("cp: illegal option -- d").
-    if stdenv.system == "i686-freebsd"
-    then boehmgc_7_1
-    else boehmgc_cvs;
+  boehmgc = callPackage ../development/libraries/boehm-gc { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
