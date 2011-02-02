@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libX11, inputproto, libXt, libXpm, libXft, fontconfig
-, libXtst, xextproto, readline, libXi, pkgconfig, autoconf, automake }:
+, libXtst, xextproto, readline, libXi, pkgconfig, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   name = "ratpoison-1.4.5";
@@ -16,13 +16,11 @@ stdenv.mkDerivation rec {
        })
     ];
 
-  preConfigure = "autoreconf -vf";
+  preConfigure = "autoreconf -vf";	# needed because of the patch above
 
   buildInputs =
-    [ libX11 inputproto libXt
-      libXpm libXft fontconfig libXtst
-      xextproto readline libXi pkgconfig
-      autoconf automake  # needed because of the patch above
+    [ libX11 inputproto libXt libXpm libXft fontconfig libXtst
+      xextproto readline libXi pkgconfig perl autoconf automake
     ];
 
   meta = {
@@ -46,8 +44,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.nongnu.org/ratpoison/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
-
