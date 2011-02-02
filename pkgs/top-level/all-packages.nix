@@ -2329,8 +2329,8 @@ let
 
   python27Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.7) {
     inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
+    arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   });
 
   python27Full = lowPrio (python27Base.override {
@@ -2340,8 +2340,8 @@ let
 
   python3 = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
     inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
+    arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   });
 
   pyrex = pyrex095;
