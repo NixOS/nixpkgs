@@ -2338,11 +2338,11 @@ let
     inherit (pkgs.xlibs) libX11 xproto;
   });
 
-  python3 = lowPrio (makeOverridable (import ../development/interpreters/python/3.1) {
+  python3 = makeOverridable (import ../development/interpreters/python/3.1) {
     inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
-  });
+  };
 
   pyrex = pyrex095;
 
