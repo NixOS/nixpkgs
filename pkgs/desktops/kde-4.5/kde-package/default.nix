@@ -1,10 +1,9 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, release }:
 
 rec {
-  defaultArgs = {name, stable ? true, version,
-    module ? name, release ? version, ... }:
+  inherit release;
 
-    assert (name == module) -> (release == version);
+  defaultArgs = { name, stable ? true, version ? release, module ? name, ... }:
 
     (
       {

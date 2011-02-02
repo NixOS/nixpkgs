@@ -9,7 +9,6 @@ kde.package {
       name = "kcharselect";
       module = "kdeutils";
       version = "1.7";
-      release = "4.5.4";
       versionFile = "main.cc";
     };
   };

@@ -9,8 +9,6 @@ kde.package {
       name = "kteatime";
       module = "kdetoys";
       version = "1.2.1";
-      release = "4.5.4";
-      versionFile = "src/main.cpp";
     };
   };
 }

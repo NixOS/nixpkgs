@@ -14,9 +14,6 @@ kde.package {
   meta = {
     description = "KDE Games";
     license = "GPL";
-    kde = {
-      name = "kdegames";
-      version = "4.5.4";
-    };
+    kde.name = "kdegames";
   };
 }

@@ -24,6 +24,7 @@ for i in `cd "${dir}"; ls kde-l10n-*-${release}.tar.bz2`; do
   hash=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")
   echo "{"
   echo "  lang = \"${lang}\";"
+  echo "  saneName = \"$(echo $lang | sed s^@^_^g)\";"
   echo "  sha256 = \"${hash}\";"
   echo "}"
   echo $hash >&2

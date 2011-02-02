@@ -1,7 +1,7 @@
 { cmake, kde, automoc4, kdelibs }:
 
 kde.package rec {
-  name = "kde-color-schemes-${meta.kde.version}";
+  name = "kde-color-schemes-${kde.release}";
 
   buildInputs = [ cmake automoc4 kdelibs ];
   meta = {
@@ -9,7 +9,6 @@ kde.package rec {
     kde = {
       name = "ColorSchemes";
       module = "kdeartwork";
-      version = "4.5.4";
     };
   };
 }

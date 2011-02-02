@@ -19,11 +19,8 @@ kde.package {
     libqalculate ];
 
   meta = {
-    description = "KDE Educative software";
+    description = "KDE educational software";
     license = "GPL";
-    kde = {
-      name = "kdeedu";
-      version = "4.5.4";
-    };
+    kde.name = "kdeedu";
   };
 }

@@ -10,7 +10,6 @@ kde.package {
     kde = {
       name = "kmtrace";
       module = "kdesdk";
-      version = "4.5.4";
     };
   };
 }

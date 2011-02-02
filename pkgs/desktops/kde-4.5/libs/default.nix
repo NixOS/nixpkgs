@@ -34,9 +34,6 @@ kde.package {
   meta = {
     description = "KDE libraries";
     license = "LGPL";
-    kde = {
-      name = "kdelibs";
-      version = "4.5.4";
-    };
+    kde.name = "kdelibs";
   };
 }

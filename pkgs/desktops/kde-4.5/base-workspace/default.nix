@@ -19,9 +19,6 @@ kde.package {
     description = "KDE base platform-specific components";
     longDescription = "KDE base components that are only required to work with X11 such KDM and KWin";
     license = "GPL";
-    kde = {
-      name = "kdebase-workspace";
-      version = "4.5.4";
-    };
+    kde.name = "kdebase-workspace";
   };
 }

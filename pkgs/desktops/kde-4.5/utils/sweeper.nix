@@ -9,7 +9,6 @@ kde.package {
       name = "sweeper";
       module = "kdeutils";
       version = "1.5";
-      release = "4.5.4";
       versionFile = "main.cpp";
     };
   };
