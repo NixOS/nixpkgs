@@ -92,6 +92,19 @@ stdenv.mkDerivation ( {
   };
 
   meta = {
+    homepage = "http://python.org";
+    description = "a high-level dynamically-typed programming language";
+    longDescription = ''
+      Python is a remarkably powerful dynamic programming language that
+      is used in a wide variety of application domains. Some of its key
+      distinguishing features include: clear, readable syntax; strong
+      introspection capabilities; intuitive object orientation; natural
+      expression of procedural code; full modularity, supporting
+      hierarchical packages; exception-based error handling; and very
+      high level dynamic data types.
+    '';
+    license = "GPLv2";
     platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 } // (if stdenv.isDarwin then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
