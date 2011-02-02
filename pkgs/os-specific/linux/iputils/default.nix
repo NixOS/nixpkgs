@@ -1,15 +1,29 @@
-{stdenv, fetchurl, linuxHeaders, glibc}:
+{ stdenv, fetchurl, libsysfs, openssl }:
 
-assert stdenv.isLinux && stdenv.system != "powerpc-linux";
+assert stdenv ? glibc;
 
 stdenv.mkDerivation {
-  name = "iputils-20020927";
-  builder = ./builder.sh;
+  name = "iputils-20101006";
+  
   src = fetchurl {
-    url = ftp://ftp.nl.debian.org/debian/pool/main/i/iputils/iputils_20020927.orig.tar.gz;
-    md5 = "b5493f7a2997130a4f86c486c9993b86";
+    url = http://www.skbuff.net/iputils/iputils-s20101006.tar.bz2;
+    sha256 = "1rvfvdnmzlmgy9a6xv5v4n785zmn10v2l7yaq83rdfgbh1ng8fpx";
   };
 
-  inherit linuxHeaders glibc;
-  patches = [ ./open-max.patch ];
+  buildInputs = [ libsysfs openssl ];
+
+  # Urgh, it uses Make's `-l' dependency "feature". 
+  makeFlags = "VPATH=${libsysfs}/lib:${stdenv.glibc}/lib:${openssl}/lib";
+
+  installPhase =
+    ''
+      mkdir -p $out/sbin
+      cp -p arping ping ping6 rdisc tracepath tracepath6 traceroute6 $out/sbin/
+    '';
+    
+  meta = {
+    homepage = http://www.skbuff.net/iputils/;
+    description = "A set of small useful utilities for Linux networking";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

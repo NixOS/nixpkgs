@@ -4738,12 +4738,7 @@ let
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
-  iputils = (
-    import ../os-specific/linux/iputils {
-    inherit fetchurl stdenv;
-    glibc = stdenv.gcc.libc;
-    linuxHeaders = stdenv.gcc.libc.kernelHeaders;
-  });
+  iputils = callPackage ../os-specific/linux/iputils { };
 
   iptables = callPackage ../os-specific/linux/iptables { };
 
