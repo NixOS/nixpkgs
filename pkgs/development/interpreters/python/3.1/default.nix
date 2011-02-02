@@ -1,53 +1,32 @@
-{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, gdbmSupport ? true, gdbm ? null
-, sqlite ? null
-, db4 ? null
-, readline ? null
-, openssl ? null
-, tk ? null
-, tcl ? null
-, libX11 ? null
-, xproto ? null
-, arch ? null
-, sw_vers ? null
+{ stdenv, fetchurl
+, zlib
+, bzip2
+, gdbm
+, sqlite
+, db4
+, ncurses
+, readline
+, openssl
+, tcl, tk
+, libX11, xproto
+, arch ? null, sw_vers ? null
 }:
 
-# This derivation is mostly identical to the one that builds Python 2.x.
-# Some of these settings may not apply to the latest version. A general
-# cleanup might be worthwile.
-
-assert zlibSupport -> zlib != null;
-assert gdbmSupport -> gdbm != null;
 assert stdenv.isDarwin -> arch != null;
 assert stdenv.isDarwin -> sw_vers != null;
+assert readline != null -> ncurses != null;
 
 with stdenv.lib;
 
 let
-
   majorVersion = "3.1";
   version = "${majorVersion}.3";
 
-  buildInputs =
-    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [bzip2]
-    ++ optional zlibSupport zlib
-    ++ optional gdbmSupport gdbm
-    ++ optional (sqlite != null) sqlite
-    ++ optional (db4 != null) db4
-    ++ optional (readline != null) readline
-    ++ optional (openssl != null) openssl
-    ++ optional (tk != null) tk
-    ++ optional (tcl != null) tcl
-    ++ optional (libX11 != null) libX11
-    ++ optional (xproto != null) xproto
-    ++ optional (arch != null) arch
-    ++ optional (sw_vers != null) sw_vers
-    ;
-
+  buildInputs = filter (p: p != null) [
+    zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto arch sw_vers
+  ];
 in
-
-stdenv.mkDerivation ( {
+stdenv.mkDerivation {
   name = "python3-${version}";
   inherit majorVersion version;
 
@@ -56,24 +35,20 @@ stdenv.mkDerivation ( {
     sha256 = "1jsqapgwrcqcaskyi2qdn1xj7l8x5340a137hdfshk5ya4dg9xkp";
   };
 
-  patches = [
-    # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
-    ./search-path.patch
-  ];
-
   inherit buildInputs;
+  patches = [ ./search-path.patch ];
+
   C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
   LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
   configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
 
   preConfigure = ''
-    # Purity.
-    for i in /usr /sw /opt /pkg; do
+    for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-  '' + (if readline != null then ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lncurses"
-  '' else "");
+    ${optionalString (ncurses != null) ''export NIX_LDFLAGS="$NIX_LDFLAGS -lncurses"''}
+    ${optionalString stdenv.isDarwin   ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"''}
+  '';
 
   setupHook = ./setup-hook.sh;
 
@@ -82,7 +57,7 @@ stdenv.mkDerivation ( {
   '';
 
   passthru = {
-    inherit zlibSupport;
+    zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
     db4Support = db4 != null;
     readlineSupport = readline != null;
@@ -109,4 +84,4 @@ stdenv.mkDerivation ( {
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
-} // (if stdenv.isDarwin then { NIX_CFLAGS_COMPILE = "-msse2" ; patches = [./search-path.patch]; } else {} ) )
+}
