@@ -7135,9 +7135,6 @@ let
 
   kde4 = kde45;
 
-  kde44 = makeOverridable (import ../desktops/kde-4.4) (
-    applyGlobalOverrides (p: { kde4 = p.kde44; qt4 = p.qt46; }));
-
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage =
       let
