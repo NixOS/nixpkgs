@@ -91,6 +91,8 @@ stdenv.mkDerivation ( {
     libPrefix = "python${majorVersion}";
   };
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "http://python.org";
     description = "a high-level dynamically-typed programming language";
