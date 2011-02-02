@@ -84,15 +84,10 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-       for prog in bin/gitk; do
-         wrapProgram "$out/$prog"                       \
-                     --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
-                     --prefix PATH : "${tk}/bin"
-       done
-       for prog in git-gui git-citool git-gui--askpass; do
+       for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
          sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
                 -e "s|exec wish|exec '${tk}/bin/wish'|g" \
-		"$out/libexec/git-core/$prog"
+		"$out/$prog"
        done
      '' else ''
        # Don't wrap Tcl/Tk, replace them by notification scripts
