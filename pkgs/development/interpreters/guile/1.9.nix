@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-1.9.14";  # This is a beta release!
+  name = "guile-1.9.15";  # This is a beta release!
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guile/${name}.tar.gz";
-    sha256 = "16239r7racjjv8pjvmcg4jzsxz1s54rwfj4lqwf6qbignj0gnga0";
+    sha256 = "0b6sd2a9s2ccdcr84d16ryk08sqqxgcw8bxisdz9z5b53dvpmh0p";
   };
 
   buildInputs =
@@ -26,7 +26,7 @@ rec {
     # see below.
     ++ [ libtool libunistring ];
 
-  patches = [ ./net-db.patch ] ++
+  patches =
     stdenv.lib.optionals (coverageAnalysis != null)
       [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
 
