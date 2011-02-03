@@ -9,7 +9,7 @@
 
 let 
   pname = "TeXmacs";
-  version = "1.0.7.6";
+  version = "1.0.7.9";
   extraFontsSrc = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/TeXmacs/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";
     sha256 = "0hylgjmd95y9yahbblmawkkw0i71vb145xxv2xqrmff81301n6k7";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/${pname}/targz/${name}-src.tar.gz";
-    sha256 = "0x4qy3ai9nmz1i90mbqi1n2vgwyllxwmlpllfwcz0fad7yby7msh";
+    sha256 = "081ysqvka6m2vy2n9q89mmprsb0vkvxgjil0cqv9c2syvn79z4cm";
   };
 
   buildInputs = [ guile libX11 libXext makeWrapper ];
