@@ -31,9 +31,11 @@
     webserver = 
       {config, pkgs, ...}:
       {
-        fileSystems = pkgs.lib.mkOverrideTemplate 50 {} 
+        fileSystems = pkgs.lib.mkOverride 50  
           [ { mountPoint = "/repos";
-              device = "storage:/repos"; } 
+              device = "storage:/repos";
+	      fsType = "nfs";
+	      options = "bootwait"; } 
           ];
       
         services.portmap.enable = true;
