@@ -1,11 +1,11 @@
 { fetchurl, stdenv, guile, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "guile-ncurses-1.2";
+  name = "guile-ncurses-1.3";
 
   src = fetchurl {
     url = "mirror://gnu/guile-ncurses/${name}.tar.gz";
-    sha256 = "038jfi14wdcpq87bpyff2b5mb9mr0garsa3dypwwd29ah6h1x00i";
+    sha256 = "0chvfjrlmg99db98ra9vzwjmbypqx7d4ssm8q0kvzi0n0p9irszi";
   };
 
   buildInputs = [ guile ncurses ];
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     '' configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site" '';
 
-  preCheck = '' export TERM=xterm '';
-  doCheck = false;  # FIXME: Hard to test non-interactively.
+  doCheck = false;  # XXX: 1 of 65 tests failed
 
   meta = {
     description = "GNU Guile-Ncurses, Scheme interface to the NCurses libraries";
