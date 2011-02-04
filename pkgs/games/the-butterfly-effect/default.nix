@@ -1,36 +1,40 @@
 x@{builderDefsPackage
-  , qt4, box2d_2_0_1
+  , qt4, box2d
+  ,fetchsvn
   , ...}:
 builderDefsPackage
 (a :  
 let 
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+    ["fetchsvn"];
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="tbe";
-    version="8.2";
+    revision="1316";
+    version="r${revision}";
     name="${baseName}-${version}";
-    url="mirror://sourceforge/project/${baseName}/Milestone%20${version}/TheButterflyEffect-m${version}.src.tgz";
-    hash="1s6xxvhw5rplpfmrhvfp4kb5z89lhcnrhawam8v7i51rk5hmjkd0";
+    url="https://tbe.svn.sourceforge.net/svnroot/tbe/trunk";
+    hash="0ag1nl4yf42ixwaly93fg2kcry71nrfq54z4w556qfh0i44fhcvd";
   };
 in
 rec {
-  src = a.fetchurl {
+  srcDrv = a.fetchsvn {
     url = sourceInfo.url;
     sha256 = sourceInfo.hash;
+    rev = sourceInfo.revision;
   };
+  src = srcDrv + "/";
 
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["setVars" /*"patchBox2d"*/ "doConfigure" "doMakeInstall" "doDeploy"];
+  phaseNames = ["setVars" "doConfigure" "doMakeInstall" "doDeploy"];
   configureCommand = "sh configure";
 
   setVars = a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.box2d_2_0_1}/include/Box2D"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.box2d}/include/Box2D"
   '';
 
   doDeploy = a.fullDepEntry ''
@@ -42,10 +46,6 @@ rec {
     chmod a+x "$out/bin/tbe"
   '' ["minInit" "doMake" "defEnsureDir"];
 
-  patchBox2d = a.fullDepEntry ''
-    find . -exec sed -i '{}' -e s@b2XForm@b2Transform@g ';'
-  '' ["minInit" "doUnpack"];
-      
   meta = {
     description = "A physics-based game vaguely similar to Incredible Machine";
     maintainers = with a.lib.maintainers;
