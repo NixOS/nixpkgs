@@ -100,7 +100,7 @@ let
           # !!! Hacky, should modularise.
           postBuild =
             ''
-              if [ -x $out/bin/update-mime-database -a -d $out/share/mime/packages ]; then
+              if [ -x $out/bin/update-mime-database -a -w $out/share/mime/packages ]; then
                   $out/bin/update-mime-database -V $out/share/mime
               fi
 
