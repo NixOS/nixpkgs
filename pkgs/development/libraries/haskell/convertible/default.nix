@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "convertible";
-  version = "1.0.5";
-  sha256 = "caf75727a35cf249690f3da60fce770642c8a1fad6080f3ba57e924fbe3c9465";
+  version = "1.0.9.1";
+  sha256 = "a1f46bf1166356c02e7a241d0bfea7010dc3e5f9f15181cfc2405a95df402914";
   propagatedBuildInputs = [mtl time];
   meta = {
     description = "Typeclasses and instances for converting between types";
