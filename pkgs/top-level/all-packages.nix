@@ -4114,6 +4114,8 @@ let
 
   vigra = callPackage ../development/libraries/vigra { };
 
+  vmime = callPackage ../development/libraries/vmime { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vxl = callPackage ../development/libraries/vxl { };
