@@ -12,11 +12,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="tbe";
-    revision="1316";
+    revision="1319";
     version="r${revision}";
     name="${baseName}-${version}";
     url="https://tbe.svn.sourceforge.net/svnroot/tbe/trunk";
-    hash="0ag1nl4yf42ixwaly93fg2kcry71nrfq54z4w556qfh0i44fhcvd";
+    hash="e9a7c24f0668ba2f36c472c1d05238fa7d9ed2150d99ce8a927285d099cc0f7f";
   };
 in
 rec {
@@ -57,6 +57,7 @@ rec {
     license = "GPLv2";
   };
   passthru = {
+    inherit srcDrv;
     updateInfo = {
       downloadPage = "http://sourceforge.net/projects/tbe/files/";
     };
