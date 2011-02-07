@@ -812,6 +812,8 @@ let
 
   ised = callPackage ../tools/misc/ised {};
 
+  isync = callPackage ../tools/networking/isync { };
+
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
   jfsrec = callPackage ../tools/filesystems/jfsrec { };
