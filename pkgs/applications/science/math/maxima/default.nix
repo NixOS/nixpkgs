@@ -2,14 +2,14 @@
 
 let
     name    = "maxima";
-    version = "5.22.1";
+    version = "5.23.2";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "0sdrv3lra6j3ylaqsblnd3x7rq4ybafyj7rb114ycadpx2qf06lq";
+    sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
   };
 
   preConfigure = ''
