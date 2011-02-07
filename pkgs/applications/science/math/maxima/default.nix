@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+    sha256 = "0x6fl7lm2jmybd5n3l5qpyvcj9f5zfwizk7wkbpgkjimh58n5skv";
   };
 
   preConfigure = ''
