@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/wxMaxima-${version}.tar.gz";
-    sha256 = "40e792eb27866ae68e3b3fa67983518fd0274eaad314e6ba709cb1f972204157";
+    sha256 = "0ms141rgkccwf2xfc56km972gl4ga61pk9iz7f7fcsl64zmr5rs0";
   };
 
   buildInputs = [maxima wxGTK];
