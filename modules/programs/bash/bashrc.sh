@@ -2,6 +2,11 @@ if [ -n "$NOSYSBASHRC" ]; then
     return
 fi
 
+# In interactive shells, check the window size after every command.
+if [ -n "$PS1" ]; then
+    shopt -s checkwinsize
+fi
+
 # Initialise a bunch of environment variables.
 export LD_LIBRARY_PATH=/var/run/opengl-driver/lib:/var/run/opengl-driver-32/lib # !!! only set if needed
 export MODULE_DIR=@modulesTree@/lib/modules
