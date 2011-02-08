@@ -1,5 +1,5 @@
 { kde, cmake, qt4, perl, libxml2, libxslt, openbabel, boost, readline, gmm, gsl
-, xplanet, libspectre, pkgconfig, libqalculate
+, xplanet, libspectre, pkgconfig, libqalculate, python
 , kdelibs, automoc4, eigen, attica}:
 
 kde.package {
@@ -16,7 +16,13 @@ kde.package {
 
   buildInputs = [ cmake qt4 perl libxml2 libxslt openbabel boost readline gmm
     gsl xplanet kdelibs automoc4 eigen attica libspectre pkgconfig
-    libqalculate ];
+    libqalculate python ];
+
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${python}/include/${python.libPrefix}"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -l${python.libPrefix} -lboost_python"
+  '';
+  cmakeFlags = '' -DBOOST_PYTHON_INCLUDES="${boost}/include" -DBOOST_PYTHON_LIBS="boost_python" -DKIG_ENABLE_PYTHON_SCRIPTING=1'';
 
   meta = {
     description = "KDE educational software";
