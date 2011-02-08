@@ -65,6 +65,7 @@ in
 
   libXt = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    propagatedBuildInputs = [ xorg.libSM ];
   };
 
   libXft = attrs: attrs // {
