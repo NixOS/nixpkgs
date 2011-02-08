@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, clisp, texinfo }:
+{ stdenv, fetchurl, clisp, texinfo, perl }:
 
 let
     name    = "maxima";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
   '';
 
-  buildInputs = [clisp texinfo];
+  buildInputs = [clisp texinfo perl];
 
   meta = {
     description = "Maxima computer algebra system";
