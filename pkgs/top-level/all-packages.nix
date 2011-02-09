@@ -2989,7 +2989,7 @@ let
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf {
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/0.22.x.nix {
     inherit (gtkLibs1x) gtk;
   };
 
@@ -3185,7 +3185,7 @@ let
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = gtkLibs220;
+  gtkLibs = gtkLibs224;
 
   glib = gtkLibs.glib;
   gtk = gtkLibs.gtk;
@@ -3230,6 +3230,26 @@ let
     pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
 
     gtk = callPackage ../development/libraries/gtk+/2.20.x.nix { };
+
+    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
+
+  });
+
+  gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in rec {
+
+    glib = callPackage ../development/libraries/glib/2.28.x.nix { };
+
+    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
+
+    atk = callPackage ../development/libraries/atk/1.32.x.nix { };
+
+    pango = callPackage ../development/libraries/pango/1.28.x.nix { };
+
+    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
+
+    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.22.x.nix { };
+
+    gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
 
     gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
 

@@ -63,11 +63,20 @@ in
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
+  # Propagate some build inputs because of header file dependencies.
   libXt = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     propagatedBuildInputs = [ xorg.libSM ];
   };
 
+  compositeproto = attrs: attrs // {
+    propagatedBuildInputs = [ xorg.fixesproto ];
+  };
+  
+  libXcomposite = attrs: attrs // {
+    propagatedBuildInputs = [ xorg.libXfixes ];
+  };
+  
   libXft = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.libX11
         xorg.renderproto ];
