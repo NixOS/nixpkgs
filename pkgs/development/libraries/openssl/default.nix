@@ -25,6 +25,15 @@ stdenv.mkDerivation rec {
   
   configureFlags = "shared --libdir=lib";
 
+  postInstall =
+    ''
+      # If we're building dynamic libraries, then don't install static
+      # libraries.
+      if [ -n "$(echo $out/lib/*.so)" ]; then
+          rm $out/lib/*.a
+      fi
+    ''; # */
+
   crossAttrs = {
     preConfigure=''
       # It's configure does not like --build or --host
