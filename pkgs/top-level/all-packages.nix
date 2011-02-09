@@ -2989,10 +2989,6 @@ let
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/0.22.x.nix {
-    inherit (gtkLibs1x) gtk;
-  };
-
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
     inherit (gtkLibs) pango glib gtk;
