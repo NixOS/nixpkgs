@@ -2797,9 +2797,6 @@ let
   buddy = callPackage ../development/libraries/buddy { };
 
   cairo = callPackage ../development/libraries/cairo { };
-  cairo_1_10_0 = callPackage ../development/libraries/cairo/1.10.nix {
-    pixman = xlibs.pixman_0_20_0;
-  };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
@@ -3217,24 +3214,6 @@ let
     gtk = callPackage ../development/libraries/gtk+/2.16.x.nix { };
 
     gtkmm = callPackage ../development/libraries/gtkmm/2.14.x.nix { };
-
-  });
-
-  gtkLibs218 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs218; in rec {
-
-    glib = callPackage ../development/libraries/glib/2.22.x.nix { };
-
-    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/1.28.x.nix { };
-
-    pango = callPackage ../development/libraries/pango/1.26.x.nix { };
-
-    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.18.x.nix { };
-
-    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
 
   });
 
@@ -5933,9 +5912,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox40Pkgs = let p = (applyGlobalOverrides (x : {cairo = x.cairo_1_10_0;}));
-  in p.callPackage 
-      ../applications/networking/browsers/firefox/4.0.nix {
+  firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
     inherit (p.gtkLibs) gtk pango;
     inherit (p.gnome) libIDL;
   };
