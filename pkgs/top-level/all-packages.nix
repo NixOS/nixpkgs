@@ -3559,6 +3559,8 @@ let
     libtool = libtool_1_5;
   };
 
+  libkate = callPackage ../development/libraries/libkate { };
+
   libksba = callPackage ../development/libraries/libksba { };
 
   libmad = callPackage ../development/libraries/libmad { };
