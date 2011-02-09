@@ -3383,6 +3383,8 @@ let
 
   libarchive = callPackage ../development/libraries/libarchive { };
 
+  libass = callPackage ../development/libraries/libass { };
+
   libassuan1 = callPackage ../development/libraries/libassuan1 { };
 
   libassuan = callPackage ../development/libraries/libassuan { };
