@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig jasper ];
   
   propagatedBuildInputs =
-    [ xlibs.xlibs glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr ]
+    [ xlibs.xlibs glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr xlibs.libXrender ]
     ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 
