@@ -49,6 +49,11 @@ in
 
   libX11 = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    postInstall =
+      ''
+        # Remove useless DocBook XML files.
+        rm -rf $out/share/doc
+      '';
   };
 
   libXrender = attrs: attrs // {
