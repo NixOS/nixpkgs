@@ -9,7 +9,7 @@ Fix broken datadir parameter.
 +  arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
  #ifndef Q_WS_WIN
 -  arguments << QString::fromLatin1( "--datadir" ) << QString::fromLatin1( "%1/" ).arg( dataDir );
-   arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
+   arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( socketDirectory );
  #else
 -  arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
    arguments << QString::fromLatin1( "--shared-memory" );
