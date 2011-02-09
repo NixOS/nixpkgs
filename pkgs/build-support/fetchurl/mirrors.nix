@@ -10,6 +10,7 @@ rec {
   
   # SourceForge.
   sourceforge = [
+    http://prdownloads.sourceforge.net/
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
@@ -17,7 +18,6 @@ rec {
     http://ovh.dl.sourceforge.net/sourceforge/
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
-    http://prdownloads.sourceforge.net/
   ];
 
   sf = sourceforge;
@@ -101,6 +101,7 @@ rec {
 
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
   kde = [
+    "http://download.kde.org/download.php?url="
     http://ftp.gwdg.de/pub/x11/kde/
     ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
     ftp://ftp.kde.org/pub/kde/
