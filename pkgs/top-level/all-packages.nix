@@ -3659,6 +3659,8 @@ let
 
   libtiff = callPackage ../development/libraries/libtiff { };
 
+  libtiger = callPackage ../development/libraries/libtiger { };
+
   libtommath = callPackage ../development/libraries/libtommath { };
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
