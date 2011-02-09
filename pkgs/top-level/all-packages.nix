@@ -3607,6 +3607,8 @@ let
 
   libogg = callPackage ../development/libraries/libogg { };
 
+  liboggz = callPackage ../development/libraries/liboggz { };
+
   liboil = callPackage ../development/libraries/liboil { };
 
   liboop = callPackage ../development/libraries/liboop { };
