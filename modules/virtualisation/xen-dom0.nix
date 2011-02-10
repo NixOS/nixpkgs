@@ -116,8 +116,12 @@ in
             pkgs.utillinux pkgs.bash xen pkgs.pciutils pkgs.procps
           ];
 
+        environment.XENCONSOLED_TRACE = "hv";
+
         preStart = 
           ''
+            mkdir -p /var/log/xen/console -m 0700
+
             ${xen}/sbin/xend start
   
             # Wait until Xend is running.
