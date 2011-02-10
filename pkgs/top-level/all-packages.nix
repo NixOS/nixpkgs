@@ -4768,6 +4768,8 @@ let
 
   iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
 
+  iwlwifi6000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000-ucode { };
+
   kbd = callPackage ../os-specific/linux/kbd { };
 
   libcgroup = callPackage ../os-specific/linux/libcg { };
