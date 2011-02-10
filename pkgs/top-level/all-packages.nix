@@ -2892,6 +2892,8 @@ let
 
   directfb = callPackage ../development/libraries/directfb { };
 
+  dotconf = callPackage ../development/libraries/dotconf { };
+
   dssi = callPackage ../development/libraries/dssi {};
 
   dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix {
@@ -4052,6 +4054,8 @@ let
   snack = callPackage ../development/libraries/snack {
         # optional
   };
+
+  speechd = callPackage ../development/libraries/speechd { };
 
   speex = callPackage ../development/libraries/speex { };
 
@@ -6361,6 +6365,13 @@ let
 
   multisync = callPackage ../applications/misc/multisync {
     inherit (gnome) gtk glib ORBit2 libbonobo libgnomeui GConf;
+  };
+
+  mumble = callPackage ../applications/networking/mumble {
+    avahi = avahi.override {
+      qt4Support = true;
+      inherit qt4;
+    };
   };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
