@@ -150,12 +150,12 @@ in
   xorgserver = attrs: attrs // {
     patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch];
     buildInputs = attrs.buildInputs ++
-      [ args.zlib args.udev args.mesa
+      [ args.zlib args.udev args.mesa args.dbus.libs
         xorg.xf86bigfontproto xorg.glproto xorg.xf86driproto
         xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
         xorg.xineramaproto xorg.dri2proto xorg.xf86dgaproto
         xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
-        xorg.recordproto xorg.libXext
+        xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto ];
