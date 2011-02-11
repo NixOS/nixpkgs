@@ -481,12 +481,12 @@ rec {
 
   nose = buildPythonPackage {
     name = "nose-0.11.3";
-    
+
     src = fetchurl {
       url = http://python-nose.googlecode.com/files/nose-0.11.3.tar.gz;
       sha256 = "1hl3lbwdfl2a64q3dxc73kbiks4iwx5cixlbavyryd8xdr7iziww";
     };
-    
+
     meta = {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
@@ -853,6 +853,24 @@ rec {
     };
   });
 
+  ropemacs = buildPythonPackage (rec {
+    version = "0.6";
+    name = "ropemacs-${version}";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/rope/${name}.tar.gz";
+      sha256 = "1afqybmjn7fqkwx8y8kx1kfx181ix73cbq3a0d5n7ryjm7k1r0s4";
+    };
+
+    doCheck = false;
+    meta = with stdenv.lib; {
+      description = "a plugin for performing python refactorings in emacs";
+      homepage = http://rope.sf.net/ropemacs.html;
+      maintainers = [ maintainers.goibhniu ];
+      license = licenses.gpl2;
+    };
+  });
+
   pysvn = pkgs.stdenv.mkDerivation {
     name = "pysvn-1.7.2";
 
@@ -917,19 +935,19 @@ rec {
       homepage = http://www.darwinsys.com/file/;
     };
   };
-  
+
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
-    
+
     doCheck = false;
-    
+
     src = fetchurl {
       url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
       sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
     };
-    
+
     propagatedBuildInputs = [ pkgs.mysql pkgs.zlib nose ];
-    
+
     meta = {
       description = "MySQL database binding for Python";
 
