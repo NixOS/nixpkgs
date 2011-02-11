@@ -1918,11 +1918,11 @@ let
   })) // {inherit inputproto libX11 libXext libXi ;};
     
   xkbcomp = (stdenv.mkDerivation ((if overrides ? xkbcomp then overrides.xkbcomp else x: x) {
-    name = "xkbcomp-1.2.0";
+    name = "xkbcomp-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.6/src/everything/xkbcomp-1.2.0.tar.bz2;
-      sha256 = "193ywzx2plvg4azidjhvw3avpdgpjlzckrcaak569rsm8x0slr1c";
+      url = mirror://xorg/individual/app/xkbcomp-1.2.1.tar.bz2;
+      sha256 = "1sv51rliqs6wygrp2hc79a5pgn6ly0bbr4sa8a8x00j4j4kjaqdp";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
   })) // {inherit libX11 libxkbfile ;};

@@ -174,7 +174,7 @@ mirror://xorg/X11R7.6/src/everything/xgamma-1.0.4.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xhost-1.0.4.tar.bz2
 mirror://xorg/individual/proto/xineramaproto-1.2.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xinput-1.5.3.tar.bz2
-mirror://xorg/X11R7.6/src/everything/xkbcomp-1.2.0.tar.bz2
+mirror://xorg/individual/app/xkbcomp-1.2.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xkbevd-1.1.2.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xkbutils-1.0.3.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xkill-1.0.3.tar.bz2
