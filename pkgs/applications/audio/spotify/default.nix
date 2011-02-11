@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
       preload=$out/libexec/spotify/libpreload.so
       mkdir -p $out/libexec/spotify
-      gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\"
+      gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
       wrapProgram $out/bin/spotify --set LD_PRELOAD $preload
     ''; # */
