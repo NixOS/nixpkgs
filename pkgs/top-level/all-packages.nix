@@ -785,7 +785,7 @@ let
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   hydra = callPackage ../development/tools/misc/hydra { 
-    nix = nixSqlite ;  
+    nix = nixSqlite;  
   };
 
   iasl = callPackage ../development/compilers/iasl { };
@@ -7471,11 +7471,7 @@ let
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
-  # The SQLite branch.
-  nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
-    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
-    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
-  });
+  nixSqlite = nixUnstable;
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {

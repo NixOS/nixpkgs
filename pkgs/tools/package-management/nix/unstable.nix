@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, perl, curl, bzip2, openssl ? null
+{ stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
 , pkgconfig, boehmgc
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.0pre24855";
+  name = "nix-1.0pre25886";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/774404/download/4/${name}.tar.bz2";
-    sha256 = "cd2a75a04fc03dcafbab1d183e6ee485b491e17f1680bb7ee38738a2b1235932";
+    url = "http://hydra.nixos.org/build/894162/download/4/${name}.tar.bz2";
+    sha256 = "4513a6a42f485bed692ba2d34214383496f59064b9eb5d5ecec739dda703ddb3";
   };
 
   buildNativeInputs = [ perl pkgconfig ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     ''
       --with-store-dir=${storeDir} --localstatedir=${stateDir}
-      --with-bzip2=${bzip2}
+      --with-bzip2=${bzip2} --with-sqlite=${sqlite}
       --disable-init-state
       --enable-gc
       CFLAGS=-O3 CXXFLAGS=-O3
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     configureFlags =
       ''
         --with-store-dir=${storeDir} --localstatedir=${stateDir}
-        --with-bzip2=${bzip2.hostDrv}
+        --with-bzip2=${bzip2.hostDrv} --with-sqlite=${sqlite.hostDrv}
         --disable-init-state
         CFLAGS=-O3 CXXFLAGS=-O3
       '';
