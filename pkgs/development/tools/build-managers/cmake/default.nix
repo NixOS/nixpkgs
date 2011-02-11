@@ -1,10 +1,11 @@
-{fetchurl, stdenv, replace, curl, expat, zlib
+{fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
 , useNcurses ? false, ncurses, useQt4 ? false, qt4}:
 
 let
   os = stdenv.lib.optionalString;
+  inherit (stdenv.lib) optional;
   majorVersion = "2.8";
-  minorVersion = "1";
+  minorVersion = "3";
   version = "${majorVersion}.${minorVersion}";
 in
 stdenv.mkDerivation rec {
@@ -14,12 +15,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0hi28blqxvir0dkhln90sgr0m3ri9n2i3hlmwdl4m5vkfsmp9bky";
+    sha256 = "1262bz0c0g5c57ba7rbbrs72xa42xs26fwf72mazmkmmhqkx17k8";
   };
 
-  buildInputs = [ curl expat zlib ]
-    ++ stdenv.lib.optional useNcurses ncurses
-    ++ stdenv.lib.optional useQt4 qt4;
+  buildInputs = [ curl expat zlib bzip2 libarchive ]
+    ++ optional useNcurses ncurses
+    ++ optional useQt4 qt4;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
   configureFlags =

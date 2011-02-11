@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "dhcp-4.1.1-P1";
+  name = "dhcp-4.1.2-P1";
   
   src = fetchurl {
     url = "http://ftp.isc.org/isc/dhcp/${name}.tar.gz";
-    sha256 = "1nk36bk7yiqaj779czvlbxjs6jfn53qw7601171nx5mird806r1g";
+    sha256 = "1kcdsylyx0ai0wlmc6rc6b1qi2fsndqh1pvgvddd3i4hmbhi6vmz";
   };
 
   patches =
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # due to an uninitialized variable.
   CFLAGS = "-g -O2 -Wall";
 
-  buildInputs = [makeWrapper];
+  buildInputs = [ makeWrapper ];
 
   postInstall =
     ''

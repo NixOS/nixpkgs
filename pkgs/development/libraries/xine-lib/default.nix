@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.1.16.3";
+  name = "xine-lib-1.1.19";
   
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.bz2";
-    sha256 = "0lkvss7r8q16gyisiy3dkgbbk6vvpflfydi3927pvp2mz8g28nnj";
+    sha256 = "0x47kmsaxx1bv8w2cacvzls3sjw9y4vk82rd94km1m1s6k2wcxv2";
   };
   
   buildInputs =

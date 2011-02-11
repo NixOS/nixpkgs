@@ -785,7 +785,7 @@ let
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   hydra = callPackage ../development/tools/misc/hydra { 
-    nix = nixSqlite ;  
+    nix = nixSqlite;  
   };
 
   iasl = callPackage ../development/compilers/iasl { };
@@ -2889,6 +2889,8 @@ let
 
   directfb = callPackage ../development/libraries/directfb { };
 
+  dotconf = callPackage ../development/libraries/dotconf { };
+
   dssi = callPackage ../development/libraries/dssi {};
 
   dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix {
@@ -3378,6 +3380,8 @@ let
 
   libarchive = callPackage ../development/libraries/libarchive { };
 
+  libass = callPackage ../development/libraries/libass { };
+
   libassuan1 = callPackage ../development/libraries/libassuan1 { };
 
   libassuan = callPackage ../development/libraries/libassuan { };
@@ -3552,6 +3556,8 @@ let
     libtool = libtool_1_5;
   };
 
+  libkate = callPackage ../development/libraries/libkate { };
+
   libksba = callPackage ../development/libraries/libksba { };
 
   libmad = callPackage ../development/libraries/libmad { };
@@ -3602,6 +3608,8 @@ let
 
   libogg = callPackage ../development/libraries/libogg { };
 
+  liboggz = callPackage ../development/libraries/liboggz { };
+
   liboil = callPackage ../development/libraries/liboil { };
 
   liboop = callPackage ../development/libraries/liboop { };
@@ -3647,6 +3655,8 @@ let
   libtheora = callPackage ../development/libraries/libtheora { };
 
   libtiff = callPackage ../development/libraries/libtiff { };
+
+  libtiger = callPackage ../development/libraries/libtiger { };
 
   libtommath = callPackage ../development/libraries/libtommath { };
 
@@ -4039,6 +4049,8 @@ let
   snack = callPackage ../development/libraries/snack {
         # optional
   };
+
+  speechd = callPackage ../development/libraries/speechd { };
 
   speex = callPackage ../development/libraries/speex { };
 
@@ -4754,6 +4766,8 @@ let
   iwlwifi4965ucodeV2 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix { };
 
   iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
+
+  iwlwifi6000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000-ucode { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
@@ -6346,6 +6360,13 @@ let
     inherit (gnome) gtk glib ORBit2 libbonobo libgnomeui GConf;
   };
 
+  mumble = callPackage ../applications/networking/mumble {
+    avahi = avahi.override {
+      qt4Support = true;
+      inherit qt4;
+    };
+  };
+
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
   msmtp = callPackage ../applications/networking/msmtp { };
@@ -7443,17 +7464,13 @@ let
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
-  # The SQLite branch.
-  nixSqlite = lowPrio (callPackage ../tools/package-management/nix/sqlite.nix {
-    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
-    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
-  });
+  nixSqlite = nixUnstable;
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
         autoconf libtool configureFlags enableScripts lib libxml2 boehmgc
-	pkgconfig flex bison;
+	pkgconfig flex bison sqlite;
       aterm = aterm25;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;

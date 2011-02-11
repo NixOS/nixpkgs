@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
       }
     else throw "Spotify not supported on this platform.";
 
-  buildInputs = [ dpkg ];
+  buildInputs = [ dpkg makeWrapper ];
 
   unpackPhase = "true";
   
@@ -35,6 +35,12 @@ stdenv.mkDerivation {
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
         --set-rpath ${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver qt4 alsaLib stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64 \
         $out/bin/spotify
+
+      preload=$out/libexec/spotify/libpreload.so
+      mkdir -p $out/libexec/spotify
+      gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
+
+      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload
     ''; # */
 
   dontStrip = true;
@@ -52,14 +58,6 @@ stdenv.mkDerivation {
         provides the Spotify client for Linux.  At present, it does not
         work with free Spotify accounts; it requires a Premium or
         Unlimited account.
-
-        Currently, the Spotify client requires a symlink from
-        /usr/share/spotify to its resources.  Thus, you should do
-        something like:
-
-          $ nix-env -i spotify
-          $ mkdir -p /usr/share
-          $ ln -s ~/.nix-profile/share/spotify /usr/share/
       '';
   };
 }
