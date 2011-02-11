@@ -5790,8 +5790,8 @@ let
     Xaw3d = null;
     gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
     # TODO: these packages don't build on Darwin.
-    gconf = if stdenv.isDarwin then null else gnome.GConf;
-    librsvg = if stdenv.isDarwin then null else librsvg;
+    gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
+    librsvg = null /* if stdenv.isDarwin then null else librsvg */;
   };
 
   emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
