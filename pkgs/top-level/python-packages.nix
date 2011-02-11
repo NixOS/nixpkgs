@@ -853,6 +853,24 @@ rec {
     };
   });
 
+  rope = buildPythonPackage (rec {
+    version = "0.9.3";
+    name = "rope-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/rope/${name}.tar.gz";
+      sha256 = "1092rlsfna7rm1jkdanilsmw7rr3hlkgyji02xfd02wfcm8xa2i7";
+    };
+
+    doCheck = false;
+    meta = with stdenv.lib; {
+      description = "python refactoring library";
+      homepage = http://rope.sf.net;
+      maintainers = [ maintainers.goibhniu ];
+      license = licenses.gpl2;
+    };
+  });
+
   ropemacs = buildPythonPackage (rec {
     version = "0.6";
     name = "ropemacs-${version}";
