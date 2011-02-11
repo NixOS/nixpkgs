@@ -4,11 +4,11 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "udev-160";
+  name = "udev-166";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/hotplug/${name}.tar.bz2";
-    sha256 = "0wx43bxiff8i80k7w3j2iszksdzw1hz6sanx8cjsiypgppi4fr12";
+    sha256 = "1msl8cwf47shmz5lr2w9w3nzzxqnf5dc0bs7dvbnxmbal60p7lpm";
   };
 
   buildInputs = [ gperf pkgconfig glib acl libusb usbutils ];
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
       sed -e '/PATH=/d' -i $out/libexec/rule_generator.functions
 
       ln -s $out/lib/ConsoleKit $out/etc/ConsoleKit
+
+      rm -rf $out/share/gtk-doc
     '';
   
   meta = {
