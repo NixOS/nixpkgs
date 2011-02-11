@@ -2876,7 +2876,7 @@ let
   db45 = callPackage ../development/libraries/db4/db4-4.5.nix { };
 
   dbus = callPackage ../development/libraries/dbus {
-    useX11 = true; # !!! `false' doesn't build
+    useX11 = true;
   };
 
   dbus_glib = makeOverridable (import ../development/libraries/dbus-glib) {
