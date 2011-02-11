@@ -6369,8 +6369,7 @@ let
 
   mumble = callPackage ../applications/networking/mumble {
     avahi = avahi.override {
-      qt4Support = true;
-      inherit qt4;
+      withLibdnsCompat = true;
     };
   };
 

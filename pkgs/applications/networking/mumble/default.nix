@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qt4, libvorbis, boost, speechd, protobuf, libsndfile,
  avahi }:
         
-throw "It does not build still. It wants dns_sd.h"
+throw "It does not build still. It wants a g15daemon header file or so"
 
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
