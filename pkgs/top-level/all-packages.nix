@@ -3451,6 +3451,8 @@ let
 
   libdvdread = callPackage ../development/libraries/libdvdread { };
 
+  libebml = callPackage ../development/libraries/libebml { };
+
   libedit = callPackage ../development/libraries/libedit { };
 
   libelf = callPackage ../development/libraries/libelf { };
