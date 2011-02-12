@@ -13,11 +13,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.96";
+  name = "polkit-0.99";
 
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0jh5v0dhf9msvmfmr9d67563m64gq5l96m9jax9abchhfa8wl9il";
+    sha256 = "0gsqnc5x6angma7paw0hnl5cagqimsj5f022a5vzc8n8dv1cf4pn";
   };
 
   buildInputs = [ pkgconfig glib eggdbus expat pam intltool gettext
