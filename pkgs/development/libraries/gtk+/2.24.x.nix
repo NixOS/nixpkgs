@@ -14,13 +14,17 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.bz2";
     sha256 = "cbed1a7b8cd1e471388a00f22557dd061334698a0c1aece11b7ed6541d115606";
   };
+
+  configureFlags = "--with-xinput=yes";
+
+  enableParallelBuilding = true;
   
   buildNativeInputs = [ perl ];
   buildInputs = [ pkgconfig jasper ];
   
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango gdk_pixbuf /* libtiff libjpeg libpng */ cairo
-      xlibs.libXrandr xlibs.libXrender xlibs.libXcomposite
+      xlibs.libXrandr xlibs.libXrender xlibs.libXcomposite xlibs.libXi
     ]
     ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
