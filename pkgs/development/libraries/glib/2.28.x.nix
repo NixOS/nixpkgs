@@ -8,13 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "0605f538e5c022c237c97a34496979ba71d33c7b10b8d8edb84435498a651fb3";
   };
 
+  # configure script looks for d-bus but it is only needed for tests
   buildInputs = [ pkgconfig gettext ]
                 ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
   buildNativeInputs = [ perl ];
 
   propagatedBuildInputs = [ zlib ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  # glib buildsystem fails to find python, thus hardcodes python2.4 in #!
+  postInstall = ''
+    rm -rvf $out/share/gtk-doc
+    sed -e 's@python2\.4@python@' -i $out/bin/gtester-report'';
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
