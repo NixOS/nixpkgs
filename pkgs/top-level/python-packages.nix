@@ -699,6 +699,34 @@ rec {
     };
   });
 
+  pymacs = pkgs.stdenv.mkDerivation rec {
+    version = "v0.24-beta2";
+    name = "Pymacs-${version}";
+
+    src = fetchurl {
+      url = "https://github.com/pinard/Pymacs/tarball/${version}";
+      name = "${name}.tar.gz";
+      sha256 = "0nzb3wrxwy0cmmj087pszkwgj2v22x0y5m4vxb6axz94zfl02r8j";
+    };
+
+    buildInputs = [ python ];
+
+    configurePhase = ''
+      python p4 -C p4config.py *.in Pymacs contrib tests
+    '';
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Emacs Lisp to Python interface";
+      homepage = http://pymacs.progiciels-bpi.ca;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
   pyopengl =
     let version = "3.0.0b5";
     in
