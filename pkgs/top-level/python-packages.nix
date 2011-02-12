@@ -853,7 +853,7 @@ rec {
     };
   });
 
-  rope = buildPythonPackage (rec {
+  rope = pkgs.stdenv.mkDerivation rec {
     version = "0.9.3";
     name = "rope-${version}";
 
@@ -862,16 +862,21 @@ rec {
       sha256 = "1092rlsfna7rm1jkdanilsmw7rr3hlkgyji02xfd02wfcm8xa2i7";
     };
 
-    doCheck = false;
+    buildInputs = [ python ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
     meta = with stdenv.lib; {
       description = "python refactoring library";
       homepage = http://rope.sf.net;
       maintainers = [ maintainers.goibhniu ];
       license = licenses.gpl2;
     };
-  });
+  };
 
-  ropemacs = buildPythonPackage (rec {
+  ropemacs = pkgs.stdenv.mkDerivation rec {
     version = "0.6";
     name = "ropemacs-${version}";
 
@@ -880,14 +885,19 @@ rec {
       sha256 = "1afqybmjn7fqkwx8y8kx1kfx181ix73cbq3a0d5n7ryjm7k1r0s4";
     };
 
-    doCheck = false;
-    meta = with stdenv.lib; {
-      description = "a plugin for performing python refactorings in emacs";
-      homepage = http://rope.sf.net/ropemacs.html;
-      maintainers = [ maintainers.goibhniu ];
-      license = licenses.gpl2;
-    };
-  });
+    buildInputs = [ python ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+     meta = with stdenv.lib; {
+       description = "a plugin for performing python refactorings in emacs";
+       homepage = http://rope.sf.net/ropemacs.html;
+       maintainers = [ maintainers.goibhniu ];
+       license = licenses.gpl2;
+     };
+  };
 
   pysvn = pkgs.stdenv.mkDerivation {
     name = "pysvn-1.7.2";
