@@ -3806,6 +3806,8 @@ let
 
   ming = callPackage ../development/libraries/ming { };
 
+  mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
+
   mlt = callPackage ../development/libraries/mlt {
     qt = qt4;
   };
