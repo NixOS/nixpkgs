@@ -657,7 +657,7 @@ let
   gawk = callPackage ../tools/text/gawk { };
 
   gdmap = callPackage ../tools/system/gdmap {
-    inherit (gtkLibs216) gtk;
+    inherit (pkgs.gtkLibs) gtk;
   };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
