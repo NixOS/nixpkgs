@@ -3575,6 +3575,8 @@ let
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
+  libmatroska = callPackage ../development/libraries/libmatroska { };
+
   libmcs = callPackage ../development/libraries/libmcs { };
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
