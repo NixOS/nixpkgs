@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Matroska library";
-    homepage = http://dl.matroska.org/downloads/libmatroska;
+    description = "Cross-platform tools for Matroska";
+    homepage = http://www.bunkus.org/videotools/mkvtoolnix/;
   };
 }
 
