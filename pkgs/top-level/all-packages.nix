@@ -6193,6 +6193,8 @@ let
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
 
+  kde_wacomtablet = newScope pkgs.kde4 ../applications/misc/kde-wacomtablet { };
+
   kdenlive = newScope pkgs.kde4 ../applications/video/kdenlive { };
 
   kdesvn = newScope pkgs.kde4 ../applications/version-management/kdesvn { };
