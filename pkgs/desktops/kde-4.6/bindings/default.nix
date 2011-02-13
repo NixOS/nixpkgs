@@ -28,10 +28,7 @@ kde.package rec {
     description = "KDE bindings";
     longDescription = "Provides KDE bindings for several languages such as Java, Smoke and Python";
     license = "LGPL";
-    kde = {
-      name = "kdebindings";
-      version = "4.5.90";
-    };
+    kde.module = "kdebindings";
   };
 }
 

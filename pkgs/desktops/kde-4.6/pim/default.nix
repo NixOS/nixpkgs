@@ -15,7 +15,7 @@ kde.package rec {
   '';
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.name}-${meta.kde.version}.tar.bz2";
+    url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.module}-${meta.kde.version}.tar.bz2";
     sha256 = "02nbdn8s4504ljqz0qylm1jyw4hpg5fjw3vi6sbzm522xvkax4wh";
   };
 
@@ -26,9 +26,6 @@ kde.package rec {
     '';
     license = "GPL";
     homepage = http://pim.kde.org;
-    kde = {
-      name = "kdepim";
-      version = "4.4.8";
-    };
+    kde.module = "kdepim";
   };
 }

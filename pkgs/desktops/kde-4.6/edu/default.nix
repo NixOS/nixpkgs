@@ -27,9 +27,6 @@ kde.package {
   meta = {
     description = "KDE Educative software";
     license = "GPL";
-    kde = {
-      name = "kdeedu";
-      version = "4.5.90";
-    };
+    kde.module = "kdeedu";
   };
 }

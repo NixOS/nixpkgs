@@ -10,9 +10,6 @@ kde.package {
   meta = {
     description = "KDE PIM libraries";
     license = "LGPL";
-    kde = {
-      name = "kdepimlibs";
-      version = "4.5.90";
-    };
+    kde.module = "kdepimlibs";
   };
 }

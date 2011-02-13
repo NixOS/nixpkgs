@@ -11,7 +11,7 @@ kde.package rec {
   '';
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.name}-${meta.kde.version}.tar.bz2";
+    url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.module}-${meta.kde.version}.tar.bz2";
     sha256 = "029a0i83b2yrc1xn9as7gc9rakpxjh5cjmqcmhrrj0xwalqz490n";
   };
 
@@ -19,9 +19,6 @@ kde.package rec {
     description = "KDE PIM runtime";
     homepage = http://www.kde.org;
     license = "GPL";
-    kde = {
-      name = "kdepim-runtime";
-      version = "4.4.8";
-    };
+    kde.module = "kdepim-runtime";
   };
 }
