@@ -6359,9 +6359,7 @@ let
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
-  MPlayer = callPackage ../applications/video/MPlayer { 
-    pulseSupport = getConfig [ "pulseaudio" ] false;
-  };
+  MPlayer = callPackage ../applications/video/MPlayer { };
 
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
