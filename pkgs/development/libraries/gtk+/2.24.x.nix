@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "cbed1a7b8cd1e471388a00f22557dd061334698a0c1aece11b7ed6541d115606";
   };
 
-  configureFlags = "--with-xinput=yes";
+  patches =
+    [ # Fix broken icons such as the back/forward buttons in Firefox.
+      # http://bugs.gentoo.org/339319
+      ./old-icons.patch
+    ];
 
   enableParallelBuilding = true;
   
@@ -28,6 +32,8 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
+
+  configureFlags = "--with-xinput=yes";
 
   postInstall = "rm -rf $out/share/gtk-doc";
   
