@@ -139,7 +139,6 @@ rec {
     printer_applet = callPackage ./utils/printer-applet.nix { };
     superkaramba = callPackage ./utils/superkaramba.nix { };
     sweeper = callPackage ./utils/sweeper.nix { };
-    wacomtablet = callPackage ./utils/wacomtablet.nix { };
   };
 
   kdewebdev = combinePkgs "kdewebdev" {
