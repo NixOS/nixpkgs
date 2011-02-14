@@ -1,11 +1,11 @@
 {stdenv, fetchurl, x11, libjpeg, libpng, libXmu, freetype, pam}:
 
 stdenv.mkDerivation rec {
-  name = "slim-1.3.1";
+  name = "slim-1.3.2";
 
   src = fetchurl {
     url = "http://download.berlios.de/slim/${name}.tar.gz";
-    sha256 = "0xqgzvg6h1bd29140mcgg9r16vcmskz7zmym7i7jlz7x9c1a9mxc";
+    sha256 = "1f42skdp5k1zrb364s3i0ps5wmx9szz9h192i2dkn9az00jh2mpi";
   };
 
   patches = [
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     # Don't set PAM_RHOST to "localhost", it confuses ConsoleKit
     # (which assumes that a non-empty string means a remote session).
     ./pam2.patch
-    
-    ./slim-1.3.1-gcc4.4.patch
   ];
 
   buildInputs = [x11 libjpeg libpng libXmu freetype pam];
