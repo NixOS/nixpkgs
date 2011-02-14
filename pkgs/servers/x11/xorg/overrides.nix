@@ -69,6 +69,8 @@ in
   };
 
   # Propagate some build inputs because of header file dependencies.
+  # Note: most of these are in Requires.private, so maybe builder.sh
+  # should propagate them automatically.
   libXt = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     propagatedBuildInputs = [ xorg.libSM ];
@@ -80,6 +82,10 @@ in
   
   libXcomposite = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXfixes ];
+  };
+  
+  libXaw = attrs: attrs // {
+    propagatedBuildInputs = [ xorg.libXmu ];
   };
   
   libXft = attrs: attrs // {
