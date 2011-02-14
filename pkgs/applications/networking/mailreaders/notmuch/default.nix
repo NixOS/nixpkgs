@@ -1,11 +1,12 @@
-{ fetchurl, stdenv, emacs, glib, gmime, pkgconfig, talloc, xapian }:
+{ fetchgit, stdenv, emacs, glib, gmime, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.5";
+  name = "notmuch-0.5-20110203";
 
-  src = fetchurl {
-    url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "c7eeb95c89c5b9cb22cc0b90abce5f923c20c982d607bf32829c989e905ff1a9";
+  src = fetchgit {
+    url = "git://notmuchmail.org/git/notmuch";
+    rev = "62725a5b59625c164512465af5b3912396b61e8b";
+    sha256 = "39b339f47cee1938d76e046cccfd7c3e5e5d37a578e40007a5d43adfc4cd41ce";
   };
 
   buildInputs = [ emacs glib gmime pkgconfig talloc xapian ];
