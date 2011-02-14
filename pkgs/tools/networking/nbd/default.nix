@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib}:
+{ stdenv, fetchurl, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   name = "nbd-2.9.20";
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig glib];
   postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
+  
+  # Glib calls `clock_gettime', which is in librt.  Since we're using
+  # a static Glib, we need to pass it explicitly.
+  NIX_LDFLAGS = "-lrt";
 
   meta = {
     homepage = "http://nbd.sourceforge.net";
