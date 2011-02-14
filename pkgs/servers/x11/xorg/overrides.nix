@@ -89,8 +89,9 @@ in
   };
   
   libXft = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.libX11
-        xorg.renderproto ];
+    buildInputs = attrs.buildInputs ++
+      [ xorg.xproto xorg.libX11 xorg.renderproto ];
+    propagatedBuildInputs = [ xorg.libXrender ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
