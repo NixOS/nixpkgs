@@ -7,6 +7,7 @@
 }:
 
 let version = "3.2.1"; in
+
 stdenv.mkDerivation rec {
   name = "openoffice.org-${version}";
   builder = ./builder.sh;
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
       sha256 = "0gj2hinhnzkazh44k1an05x5cj7n6721f2grqrkjh31cm38r9p6i";
     };
 
-  patches = [ ./oo.patch  ./root-required.patch ];
+  patches = [ ./oo.patch ./root-required.patch ./xlib.patch ];
 
   postPatch =
     /* Compiling with GCC 4.5 fails:
