@@ -113,13 +113,13 @@ in
   };
 
   xf86inputevdev = attrs: attrs // {
-    configureFlags = "--with-sdkdir=\${out}/include/xorg";
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     buildInputs = attrs.buildInputs ++ [xorg.kbproto xorg.libxkbfile xorg.randrproto];
+    installFlags = "sdkdir=\${out}/include/xorg";
   };
 
   xf86inputsynaptics = attrs: attrs // {
-    makeFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/include/xorg";
   };
 
   xf86videointel = attrs: attrs // {
@@ -166,7 +166,7 @@ in
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto
-        xorg.dri2proto
+        xorg.dri2proto xorg.kbproto
       ];
     postInstall =
       ''
