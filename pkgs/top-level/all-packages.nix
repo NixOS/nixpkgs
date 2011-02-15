@@ -7224,7 +7224,7 @@ let
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
-    inherit libxml2 guile perl intltool libtool pkgconfig;
+    inherit libxml2 perl intltool libtool pkgconfig;
     guile = guile_1_8;
   };
 
