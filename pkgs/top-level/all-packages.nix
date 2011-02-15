@@ -388,7 +388,9 @@ let
 
   at = callPackage ../tools/system/at { };
 
-  autogen = callPackage ../development/tools/misc/autogen { };
+  autogen = callPackage ../development/tools/misc/autogen {
+    guile = guile_1_8;
+  };
 
   autojump = callPackage ../tools/misc/autojump { };
 
@@ -866,7 +868,9 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
-  mailutils = callPackage ../tools/networking/mailutils { };
+  mailutils = callPackage ../tools/networking/mailutils {
+    guile = guile_1_8;
+  };
 
   man = callPackage ../tools/misc/man { };
 
@@ -878,7 +882,9 @@ let
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
-  mcron = callPackage ../tools/system/mcron { };
+  mcron = callPackage ../tools/system/mcron {
+    guile = guile_1_8;
+  };
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
@@ -1288,6 +1294,7 @@ let
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
+    guile = guile_1_8;
   };
 
   tmux = callPackage ../tools/misc/tmux { };
@@ -2234,9 +2241,11 @@ let
 
   groovy = callPackage ../development/interpreters/groovy { };
 
-  guile = callPackage ../development/interpreters/guile { };
+  guile_1_8 = callPackage ../development/interpreters/guile { };
 
   guile_1_9 = callPackage ../development/interpreters/guile/1.9.nix { };
+
+  guile = guile_1_8;
 
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
@@ -5300,6 +5309,7 @@ let
 
   trackballs = callPackage ../games/trackballs {
     debug = false;
+    guile = guile_1_8;
   };
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
@@ -5606,6 +5616,7 @@ let
 
   beast = callPackage ../applications/audio/beast {
     inherit (gnome) libgnomecanvas libart_lgpl;
+    guile = guile_1_8;
   };
 
   bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
@@ -6016,6 +6027,7 @@ let
     inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml
       libgnomeprint;
     gconf = gnome.GConf;
+    guile = guile_1_8;
   };
 
   qcad = callPackage ../applications/misc/qcad { };
@@ -6574,7 +6586,8 @@ let
   };
 
   snd = sndBase.passthru.function {
-    inherit guile mesa libtool jackaudio alsaLib;
+    inherit mesa libtool jackaudio alsaLib;
+    guile = guile_1_8;
   };
 
   sonicVisualizer = callPackage ../applications/audio/sonic-visualizer {
@@ -6911,7 +6924,9 @@ let
 
   atanks = callPackage ../games/atanks {};
 
-  ballAndPaddle = callPackage ../games/ball-and-paddle { };
+  ballAndPaddle = callPackage ../games/ball-and-paddle {
+    guile = guile_1_8;
+  };
 
   blackshades = callPackage ../games/blackshades { };
 
@@ -7210,6 +7225,7 @@ let
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
     inherit libxml2 guile perl intltool libtool pkgconfig;
+    guile = guile_1_8;
   };
 
   tetgen = callPackage ../applications/science/geometry/tetgen { };
