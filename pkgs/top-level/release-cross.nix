@@ -154,6 +154,13 @@ let
   };
 in {
   crossMingw32 = mapTestOnCross crossSystem {
+    coreutils.hostDrv = nativePlatforms;
+    boehmgc.hostDrv = nativePlatforms;
+    gmp.hostDrv = nativePlatforms;
+    guile_1_8.hostDrv = nativePlatforms;
+    libffi.hostDrv = nativePlatforms;
+    libtool.hostDrv = nativePlatforms;
+    libunistring.hostDrv = nativePlatforms;
     windows.wxMSW.hostDrv = nativePlatforms;
   };
 }) // (
@@ -179,6 +186,12 @@ in {
     ed.hostDrv = nativePlatforms;
     grub2.hostDrv = nativePlatforms;
     inetutils.hostDrv = nativePlatforms;
+    boehmgc.hostDrv = nativePlatforms;
+    gmp.hostDrv = nativePlatforms;
+    guile_1_8.hostDrv = nativePlatforms;
+    libffi.hostDrv = nativePlatforms;
+    libtool.hostDrv = nativePlatforms;
+    libunistring.hostDrv = nativePlatforms;
     nixUnstable.hostDrv = nativePlatforms;
     patch.hostDrv = nativePlatforms;
     zile.hostDrv = nativePlatforms;
