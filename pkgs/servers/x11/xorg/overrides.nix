@@ -160,12 +160,14 @@ in
       [ args.zlib args.udev args.mesa args.dbus.libs
         xorg.xf86bigfontproto xorg.glproto xorg.xf86driproto
         xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
-        xorg.xineramaproto xorg.dri2proto xorg.xf86dgaproto
+        xorg.xineramaproto xorg.xf86dgaproto
         xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
         xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
       ];
     propagatedBuildInputs =
-      [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto ];
+      [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto
+        xorg.dri2proto
+      ];
     postInstall =
       ''
         rm -fr $out/share/X11/xkb/compiled
