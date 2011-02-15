@@ -252,13 +252,15 @@ rec {
 
   HAppSState = callPackage ../development/libraries/haskell/HAppS/HAppS-State.nix {};
 
-  /* cannot yet get this to work with 6.12.1 */
-  happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {};
+  happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {
+    HaXml = HaXml_1_13_3;
+  };
 
   happstackUtil = callPackage ../development/libraries/haskell/happstack/happstack-util.nix {};
 
   happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {
     network = network_2_2_1_7;
+    HaXml = HaXml_1_13_3;
   };
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
@@ -349,11 +351,16 @@ rec {
 
   HTTP_3001 = callPackage ../development/libraries/haskell/HTTP/3001.nix {};
 
-  haxr = callPackage ../development/libraries/haskell/haxr {};
+  haxr = callPackage ../development/libraries/haskell/haxr {
+    HTTP = HTTP_4000_0_9;
+    HaXml = HaXml_1_13_3;
+  };
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
 
   HaXml = callPackage ../development/libraries/haskell/HaXml {};
+
+  HaXml_1_13_3 = callPackage ../development/libraries/haskell/HaXml/1.13.3.nix {};
 
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
