@@ -182,7 +182,7 @@ in {
     hurdCross = nativePlatforms;
     mach.hostDrv = nativePlatforms;
 
-    coreutils_real.hostDrv = nativePlatforms;
+    coreutils.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
     grub2.hostDrv = nativePlatforms;
     inetutils.hostDrv = nativePlatforms;
@@ -226,7 +226,7 @@ let
 in {
   fuloongminipc = mapTestOnCross crossSystem {
 
-    coreutils_real.hostDrv = nativePlatforms;
+    coreutils.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
     grub2.hostDrv = nativePlatforms;
     inetutils.hostDrv = nativePlatforms;
@@ -286,7 +286,7 @@ let
 in {
   nanonote = mapTestOnCross crossSystem {
 
-    coreutils_real.hostDrv = nativePlatforms;
+    coreutils.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
     inetutils.hostDrv = nativePlatforms;
     nixUnstable.hostDrv = nativePlatforms;
