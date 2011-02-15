@@ -47,7 +47,7 @@ rec {
         ''
           mkdir -p $out/nix-support
 
-          LOGFILE=$out/log.xml tests="testScript" ${driver}/bin/nixos-test-driver || failed=1
+          LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver || failed=1
 
           # Generate a pretty-printed log.          
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
