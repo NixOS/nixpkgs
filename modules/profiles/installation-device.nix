@@ -5,7 +5,7 @@ with pkgs.lib;
 
 let
   # Location of the repository on the harddrive
-  nixosPath = toString ../../.;
+  nixosPath = toString ../..;
 
   # Check if the path is from the NixOS repository
   isNixOSFile = path:
@@ -20,7 +20,7 @@ let
 
   # Partition module files because between NixOS and non-NixOS files.  NixOS
   # files may change if the repository is updated.
-  partitionnedModuleFiles =
+  partitionedModuleFiles =
     let p = partition isNixOSFile moduleFiles; in
     { nixos = p.right; others = p.wrong; };
 
@@ -32,7 +32,7 @@ let
         "/etc/nixos/nixos" + removePrefix nixosPath (toString path);
       relocateOthers = null;
     in
-      { nixos = map relocateNixOS partitionnedModuleFiles.nixos;
+      { nixos = map relocateNixOS partitionedModuleFiles.nixos;
         others = []; # TODO: copy the modules to the install-device repository.
       };
 
