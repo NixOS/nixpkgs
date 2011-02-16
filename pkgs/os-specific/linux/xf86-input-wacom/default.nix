@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ maintainers.goibhniu maintainers.urkud ];
     description = "Wacom digitizer driver for X11";
     homepage = http://linuxwacom.sourceforge.net;
-    license = "GPLv2";
+    license = licenses.gpl2;
     platforms = platforms.linux; # Probably, works with other unices as well
   };
 }
