@@ -2362,7 +2362,10 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    inherit (gtkLibs) pango glib gtk;
+    libjpeg = libjpeg62;
+  };
 
   ruby18 = callPackage ../development/interpreters/ruby { };
   #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
