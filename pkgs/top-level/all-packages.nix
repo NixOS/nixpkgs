@@ -7098,6 +7098,8 @@ let
 
   ut2004demo = callPackage ../games/ut2004demo { };
 
+  warmux = callPackage ../games/warmux {};
+
   warsow = callPackage ../games/warsow {
     libjpeg = libjpeg62;
   };
