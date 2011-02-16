@@ -1,55 +1,69 @@
-{ fetchurl, stdenv, libtool, readline, gmp
-, gawk, makeWrapper }:
+{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
+, libffi, gawk, makeWrapper, coverageAnalysis ? null }:
 
-stdenv.mkDerivation rec {
-  name = "guile-1.8.8";
+# Do either a coverage analysis build or a standard build.
+(if coverageAnalysis != null
+ then coverageAnalysis
+ else stdenv.mkDerivation)
+
+rec {
+  name = "guile-2.0.0"
 
   src = fetchurl {
-    url = "mirror://gnu/guile/" + name + ".tar.gz";
-    sha256 = "0l200a0v7h8bh0cwz6v7hc13ds39cgqsmfrks55b1rbj5vniyiy3";
+    url = "mirror://gnu/guile/${name}.tar.gz";
+    sha256 = "0yy6iqlgqaav0nszldlkv8dq4xhcs6r18ahp4h2885jv9payp93v";
   };
 
-  patches = [ ./cpp-4.5.patch ];
+  buildInputs =
+    [ makeWrapper gawk readline libtool libunistring
+      libffi pkgconfig
+    ];
+  propagatedBuildInputs = [ gmp boehmgc ]
 
-  buildNativeInputs = [ makeWrapper gawk ];
-  propagatedBuildInputs = [ readline gmp libtool ];
-  selfBuildNativeInput = true;
+    # XXX: These ones aren't normally needed here, but since
+    # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
+    # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
+    # see below.
+    ++ [ libtool libunistring ];
+
+  patches =
+    stdenv.lib.optionals (coverageAnalysis != null)
+      [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
+
+    # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+    # why `--with-libunistring-prefix' and similar options coming from
+    # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
+    sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
+        -e 's|-lunistring|-L${libunistring}/lib -lunistring|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
+            s|-lltdl|-L${libtool}/lib -lltdl|g'
   '';
 
-  preBuild = ''
-    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
-  '';
-
-  # Guile needs patching to preset results for the configure tests
-  # about pthreads, which work only in native builds.
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      configureFlags="--with-threads=no $configureFlags"
-    fi
-  '';
-
-  # One test fails.
-  # ERROR: file: "libtest-asmobs", message: "file not found"
-  # This is fixed here:
-  # <http://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=a0aa1e5b69d6ef0311aeea8e4b9a94eae18a1aaf>.
-  doCheck = false;
+  doCheck = true;
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "GNU Guile, an embeddable Scheme interpreter";
+    description = "GNU Guile 2.0, an embeddable Scheme implementation";
+
     longDescription = ''
-      GNU Guile is an interpreter for the Scheme programming language,
-      packaged as a library that can be embedded into programs to make
-      them extensible.  It supports many SRFIs.
+      GNU Guile is an implementation of the Scheme programming language, with
+      support for many SRFIs, packaged for use in a wide variety of
+      environments.  In addition to implementing the R5RS Scheme standard
+      and a large subset of R6RS, Guile includes a module system, full access
+      to POSIX system calls, networking support, multiple threads, dynamic
+      linking, a foreign function call interface, and powerful string
+      processing.
     '';
 
     homepage = http://www.gnu.org/software/guile/;
-    license = "LGPLv2+";
+    license = "LGPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+
+    platforms = stdenv.lib.platforms.all;
   };
 }
