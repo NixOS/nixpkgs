@@ -20,7 +20,7 @@ sub new {
     
     my $name = $args->{name};
     if (!$name) {
-        $startCommand =~ /run-(.*)-vm$/;
+        $startCommand =~ /run-(.*)-vm$/ if defined $startCommand;
         $name = $1 || "machine";
     }
 
