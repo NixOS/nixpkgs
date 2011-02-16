@@ -388,7 +388,9 @@ let
 
   at = callPackage ../tools/system/at { };
 
-  autogen = callPackage ../development/tools/misc/autogen { };
+  autogen = callPackage ../development/tools/misc/autogen {
+    guile = guile_1_8;
+  };
 
   autojump = callPackage ../tools/misc/autojump { };
 
@@ -866,7 +868,9 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
-  mailutils = callPackage ../tools/networking/mailutils { };
+  mailutils = callPackage ../tools/networking/mailutils {
+    guile = guile_1_8;
+  };
 
   man = callPackage ../tools/misc/man { };
 
@@ -878,7 +882,9 @@ let
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
-  mcron = callPackage ../tools/system/mcron { };
+  mcron = callPackage ../tools/system/mcron {
+    guile = guile_1_8;
+  };
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
@@ -1288,6 +1294,7 @@ let
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
+    guile = guile_1_8;
   };
 
   tmux = callPackage ../tools/misc/tmux { };
@@ -2234,9 +2241,11 @@ let
 
   groovy = callPackage ../development/interpreters/groovy { };
 
-  guile = callPackage ../development/interpreters/guile { };
+  guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
-  guile_1_9 = callPackage ../development/interpreters/guile/1.9.nix { };
+  guile_2_0 = callPackage ../development/interpreters/guile { };
+
+  guile = guile_2_0;
 
   io = builderDefsPackage (import ../development/interpreters/io) {
     inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
@@ -2353,7 +2362,10 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    inherit (gtkLibs) pango glib gtk;
+    libjpeg = libjpeg62;
+  };
 
   ruby18 = callPackage ../development/interpreters/ruby { };
   #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
@@ -3446,6 +3458,8 @@ let
 
   libdvdread = callPackage ../development/libraries/libdvdread { };
 
+  libebml = callPackage ../development/libraries/libebml { };
+
   libedit = callPackage ../development/libraries/libedit { };
 
   libelf = callPackage ../development/libraries/libelf { };
@@ -3567,6 +3581,8 @@ let
   };
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
+
+  libmatroska = callPackage ../development/libraries/libmatroska { };
 
   libmcs = callPackage ../development/libraries/libmcs { };
 
@@ -3792,6 +3808,8 @@ let
   });
 
   ming = callPackage ../development/libraries/ming { };
+
+  mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
     qt = qt4;
@@ -5285,6 +5303,7 @@ let
 
   trackballs = callPackage ../games/trackballs {
     debug = false;
+    guile = guile_1_8;
   };
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
@@ -5591,6 +5610,7 @@ let
 
   beast = callPackage ../applications/audio/beast {
     inherit (gnome) libgnomecanvas libart_lgpl;
+    guile = guile_1_8;
   };
 
   bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
@@ -5999,6 +6019,7 @@ let
     inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml
       libgnomeprint;
     gconf = gnome.GConf;
+    guile = guile_1_8;
   };
 
   qcad = callPackage ../applications/misc/qcad { };
@@ -6175,6 +6196,8 @@ let
   kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu { };
 
   kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
+
+  kde_wacomtablet = newScope pkgs.kde4 ../applications/misc/kde-wacomtablet { };
 
   kdenlive = newScope pkgs.kde4 ../applications/video/kdenlive { };
 
@@ -6358,8 +6381,7 @@ let
 
   mumble = callPackage ../applications/networking/mumble {
     avahi = avahi.override {
-      qt4Support = true;
-      inherit qt4;
+      withLibdnsCompat = true;
     };
   };
 
@@ -6387,6 +6409,8 @@ let
 
   netsurfBrowser = netsurf.browser;
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
+
+  notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
   nvi = callPackage ../applications/editors/nvi { };
 
@@ -6554,7 +6578,8 @@ let
   };
 
   snd = sndBase.passthru.function {
-    inherit guile mesa libtool jackaudio alsaLib;
+    inherit mesa libtool jackaudio alsaLib;
+    guile = guile_1_8;
   };
 
   sonicVisualizer = callPackage ../applications/audio/sonic-visualizer {
@@ -6891,7 +6916,9 @@ let
 
   atanks = callPackage ../games/atanks {};
 
-  ballAndPaddle = callPackage ../games/ball-and-paddle { };
+  ballAndPaddle = callPackage ../games/ball-and-paddle {
+    guile = guile_1_8;
+  };
 
   blackshades = callPackage ../games/blackshades { };
 
@@ -7189,7 +7216,8 @@ let
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
     inherit (gnome) libglade gtk;
-    inherit libxml2 guile perl intltool libtool pkgconfig;
+    inherit libxml2 perl intltool libtool pkgconfig;
+    guile = guile_1_8;
   };
 
   tetgen = callPackage ../applications/science/geometry/tetgen { };

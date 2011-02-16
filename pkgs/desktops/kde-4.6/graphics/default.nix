@@ -15,9 +15,6 @@ kde.package {
       Okular  document reader.
     '';
     license = "GPL";
-    kde = {
-      name = "kdegraphics";
-      version = "4.5.90";
-    };
+    kde.module = "kdegraphics";
   };
 }

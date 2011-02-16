@@ -2,14 +2,14 @@
 
 let
 
-  version = "4.5.90";
+  release = "4.6.0";
 
   # Various packages (e.g. kdesdk) have been split up into many
   # smaller packages.  Some people may want to install the entire
   # package, so provide a wrapper package that recombines them.
   combinePkgs = name: pkgs:
     let pkgs' = stdenv.lib.attrValues pkgs; in
-    runCommand "${name}-${version}" ({ passthru = pkgs // { inherit pkgs; }; })
+    runCommand "${name}-${release}" ({ passthru = pkgs // { inherit pkgs; }; })
       ''
         mkdir -p $out/nix-support
         echo ${toString pkgs'} > $out/nix-support/propagated-user-env-packages
@@ -18,13 +18,14 @@ let
 in
 
 rec {
+  recurseForRelease = true;
   inherit callPackage stdenv;
 
   qt4 = qt47;
 
   phonon = null;
 
-  kde = callPackage ./kde-package { };
+  kde = callPackage ./kde-package { inherit release; };
 
 ### SUPPORT
   akonadi = callPackage ./support/akonadi { };
@@ -35,7 +36,7 @@ rec {
 
   eigen = callPackage ./support/eigen { };
 
-  oxygen_icons = callPackage ./support/oxygen-icons { };
+  oxygen_icons = callPackage ./oxygen-icons { };
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };
 
@@ -154,7 +155,7 @@ rec {
 
   kdebindings = callPackage ./bindings { };
 
-  l10n = callPackage ./l10n { };
+  l10n = callPackage ./l10n { inherit release; };
 
   # Make the split packages visible to `nix-env -q'.
   misc = recurseIntoAttrs

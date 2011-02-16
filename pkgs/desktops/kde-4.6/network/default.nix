@@ -28,9 +28,6 @@ kde.package {
     description = "KDE network utilities";
     longDescription = "Various network utilities for KDE such as a messenger client and network configuration interface";
     license = "GPL";
-    kde = {
-      name = "kdenetwork";
-      version = "4.5.90";
-    };
+    kde.module = "kdenetwork";
   };
 }

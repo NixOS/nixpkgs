@@ -1,10 +1,9 @@
-{cabal, polyparse}:
+{cabal}:
 
 cabal.mkDerivation (self : {
   pname = "HaXml";
-  version = "1.20.2";
-  sha256 = "05kmr2ablinnrg3x1xr19g5kzzby322lblvcvhwbkv26ajwi0b63";
-  propagatedBuildInputs = [polyparse];
+  version = "1.13.3";
+  sha256 = "08d9wy0rg9m66dd10x0zvkl74l25vxdakz7xp3j88s2gd31jp1v0";
   meta = {
     description = "Haskell utilities for parsing, filtering, transforming and generating XML documents.";
   };

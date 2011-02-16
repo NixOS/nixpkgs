@@ -1,8 +1,6 @@
 { stdenv, fetchurl, qt4, libvorbis, boost, speechd, protobuf, libsndfile,
- avahi }:
+ avahi, dbus, libcap }:
         
-throw "It does not build still. It wants dns_sd.h"
-
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
   version = "1.2.2";
@@ -17,9 +15,13 @@ stdenv.mkDerivation rec {
     sed -e /qt_ja_JP.qm/d -i src/mumble/mumble_qt.qrc src/mumble11x/mumble_qt.qrc
   '';
 
-  configurePhase = "qmake PREFIX=$out";
+  configurePhase = ''
+    qmake PREFIX=$out CONFIG+=no-g15 CONFIG+=no-update \
+      CONFIG+=no-embed-qt-translations CONFIG+=no-ice
+  '';
 
-  buildInputs = [ qt4 libvorbis boost speechd protobuf libsndfile avahi ];
+  buildInputs = [ qt4 libvorbis boost speechd protobuf libsndfile avahi dbus
+    libcap ];
 
   meta = { 
     homepage = http://mumble.sourceforge.net/;

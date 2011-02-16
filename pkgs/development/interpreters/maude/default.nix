@@ -1,25 +1,23 @@
 { stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "maude-2.5";
+  name = "maude-2.6";
 
   src = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/Maude-2.5.tar.gz";
-    sha256 = "16bvnbyi257z87crzkw9gx2kz13482hnjnik22c2p2ml4rj4lpfw";
+    url = "http://maude.cs.uiuc.edu/download/current/Maude-2.6.tar.gz";
+    sha256 = "182abzhvjvlaa21aqv7802v3bs57a4dm7cw09s3mqmih7nzpkfm5";
   };
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/FM2.5/full-maude25.maude";
-    sha256 = "1d0izdbmhpifb2plnkk3cp7li2z60r8a8ppxhifmfpzi6x6pfvrd";
+    url = "http://maude.cs.uiuc.edu/download/current/FM2.6/full-maude26.maude";
+    sha256 = "1382hjwwrsdgd5yjn3ph1b5i1bhrhzvqx0v369bmcjkly9k96v6q";
   };
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
 
   configurePhase = ''./configure --disable-dependency-tracking --prefix=$out --datadir=$out/share/maude TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
 
-  # The test suite is known to fail on Darwin. If maude is ever updated to a
-  # new version, this exception ought to be removed again.
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   postInstall =
   ''

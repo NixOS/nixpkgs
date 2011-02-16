@@ -3,13 +3,13 @@
 
 let inherit (composableDerivation) wwf; in
 
-composableDerivation.composableDerivation {} {
+composableDerivation.composableDerivation {} rec {
 
-  name = "xapian-bindings-1.0.14";
+  name = "xapian-bindings-1.0.23";
 
   src = fetchurl {
-    url = http://oligarchy.co.uk/xapian/1.0.14/xapian-bindings-1.0.14.tar.gz;
-    sha256 = "060jjwddv6ws8iy3jkpl4zcrzzinkjvdblkl0gcja90qzl2j81q5";
+    url = "http://oligarchy.co.uk/xapian/1.0.23/${name}.tar.gz";
+    sha256 = "6028123c3cd9bfc380b672b89f5420f7d5c063fc3511dee4dd5d34033ccb6911";
   };
 
   buildInputs = [ xapian pkgconfig ];
