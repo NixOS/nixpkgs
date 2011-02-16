@@ -7,7 +7,7 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-2.0.0"
+  name = "guile-2.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.gz";
