@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-fPIC";
 
-  patches = [ ./purity.patch ./urw-font-files.patch ];
+  patches = [ ./purity.patch ./urw-font-files.patch ./pstoraster.patch];
 
   doCheck = true;
 
