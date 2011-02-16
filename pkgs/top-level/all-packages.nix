@@ -3768,12 +3768,13 @@ let
 
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
-    inherit gmp guile mesa libjpeg libpng
+    inherit gmp mesa libjpeg libpng
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
       libogg libvorbis
       ;
+   guile = guile_1_8;
   };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
