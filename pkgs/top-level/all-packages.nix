@@ -7482,6 +7482,7 @@ let
 
   lilypond = callPackage ../misc/lilypond {
     inherit (gtkLibs) pango;
+    guile = guile_1_8;
   };
 
   martyr = callPackage ../development/libraries/martyr { };
