@@ -79,4 +79,6 @@ in (mapTestOn {
   ballAndPaddle = linux;
   drgeo = linux;
   lilypond = linux;
+  liquidwar = linux;
+  freetalk = linux;
 })

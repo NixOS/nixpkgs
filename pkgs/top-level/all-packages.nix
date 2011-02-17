@@ -644,7 +644,9 @@ let
 
   freeipmi = callPackage ../tools/system/freeipmi {};
 
-  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {};
+  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
+    guile = guile_1_8;
+  };
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
@@ -3763,12 +3765,13 @@ let
 
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
-    inherit gmp guile mesa libjpeg libpng
+    inherit gmp mesa libjpeg libpng
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
       libogg libvorbis
       ;
+   guile = guile_1_8;
   };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
@@ -7087,6 +7090,8 @@ let
 
   ut2004demo = callPackage ../games/ut2004demo { };
 
+  warmux = callPackage ../games/warmux {};
+
   warsow = callPackage ../games/warsow {
     libjpeg = libjpeg62;
   };
@@ -7466,6 +7471,7 @@ let
 
   lilypond = callPackage ../misc/lilypond {
     inherit (gtkLibs) pango;
+    guile = guile_1_8;
   };
 
   martyr = callPackage ../development/libraries/martyr { };
