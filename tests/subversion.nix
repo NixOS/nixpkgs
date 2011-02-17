@@ -96,7 +96,7 @@ in
 
       # Bob should not be able change the ACLs of the repo.
       # !!! Repoman should really return a 403 here.
-      $client->execute("curl --fail -u bob:fnord -F description=Xyzzy -F readers=alice,bob -F writers=alice -F watchers= -F tardirs= http://webserver/repoman/update/xyzzy")
+      $client->succeed("curl --fail -u bob:fnord -F description=Xyzzy -F readers=alice,bob -F writers=alice -F watchers= -F tardirs= http://webserver/repoman/update/xyzzy")
           =~ /not authorised/ or die;
       
       # Give Bob access.
