@@ -9,7 +9,7 @@
     enable = true;
     autorun = true;
     defaultDepth = 24;
-    displayManager.kdm.enable = true;
+    displayManager.auto.enable = true;
     desktopManager.default = "kde4";
     desktopManager.kde4.enable = true;
   };

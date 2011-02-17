@@ -1,7 +1,6 @@
 { services.xserver.enable = true;
 
   # Automatically log in.
-  services.xserver.displayManager.slim.enable = false;
   services.xserver.displayManager.auto.enable = true;
 
   # Use IceWM as the window manager.
