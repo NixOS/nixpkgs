@@ -26,6 +26,13 @@ stdenv.mkDerivation {
       lipo talloc
     ];
 
+  enableParallelBuilding = true;
+
+  # Remove swrast_dri.so.  If it's available, the X server will use
+  # it, but it doesn't work properly (giving corrupt output or
+  # crashing the server).  (NixOS/121)
+  postInstall = "rm -f $out/lib/dri/swrast_dri.so";
+
   passthru = { inherit libdrm; };
 
   meta = {
