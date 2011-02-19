@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.30";
+  version = "5.2.31a";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "0dlhnq7pv2ccgm0d7a3hzf9jxa09jzw36h0ljs9vw9q5nyd5kq71";
+    sha256 = "0mvjpin2qmnr8ksiknpcmlqjh5r3mafjcjdrnzbccyxc6r55xiy3";
   };
 
   buildInputs = [ autoconf automake boost file gettext glib glibc gnome_keyring gtk gtkmm intltool
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
       --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64" \
       --prefix PATH : "${gnome_keyring}/bin" \
+      --prefix PATH : "${python}/bin" \
       --set PYTHONPATH $PYTHONPATH \
       --run '
 # The gnome-keyring-daemon must be running.  To allow for environments like
