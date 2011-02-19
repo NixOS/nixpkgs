@@ -26,11 +26,10 @@ in
       '';
     };
 
-    networking.nativeIPv6 = mkOption {
-      default = false;
+    networking.enableIPv6 = mkOption {
+      default = true;
       description = ''
-        Whether to use IPv6 even though gw6c is not used. For example, 
-        for Postfix.
+        Whether to enable support for IPv6.
       '';
     };
 
@@ -144,6 +143,8 @@ in
   ###### implementation
 
   config = {
+
+    boot.kernelModules = optional cfg.enableIPv6 "ipv6";
 
     environment.systemPackages =
       [ pkgs.host

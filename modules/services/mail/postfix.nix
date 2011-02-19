@@ -21,7 +21,7 @@ let
       default_privs = nobody
 
     ''
-    + optionalString (config.services.gw6c.enable || config.networking.nativeIPv6) (''
+    + optionalString (config.services.gw6c.enable || config.networking.enableIPv6) (''
       inet_protocols = all
     '')
     + (if cfg.networks != null then
