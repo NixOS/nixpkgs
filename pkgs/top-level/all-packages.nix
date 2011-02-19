@@ -1236,6 +1236,8 @@ let
   slsnif = callPackage ../tools/misc/slsnif { };
 
   smartmontools = callPackage ../tools/system/smartmontools { };
+ 
+  smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
 
