@@ -10,6 +10,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   bittorrent = makeTest (import ./bittorrent.nix);
   firefox = makeTest (import ./firefox.nix);
   installer = makeTests (import ./installer.nix);
+  ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
   login = makeTest (import ./login.nix);
   nat = makeTest (import ./nat.nix);
