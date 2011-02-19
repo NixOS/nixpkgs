@@ -105,6 +105,7 @@
   ./services/networking/portmap.nix
   ./services/networking/privoxy.nix
   ./services/networking/quassel.nix
+  ./services/networking/radvd.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
