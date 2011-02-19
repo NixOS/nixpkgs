@@ -1155,6 +1155,8 @@ let
     qt = qt4;
   };
 
+  radvd = callPackage ../tools/networking/radvd { };
+
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   recutils = callPackage ../tools/misc/recutils { };
