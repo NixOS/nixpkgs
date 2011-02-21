@@ -249,6 +249,20 @@ rec {
     };
   };
 
+  gflags = buildPythonPackage rec {
+    name = "gflags-1.5.1";
+
+    src = fetchurl {
+      url = "http://python-gflags.googlecode.com/files/python-${name}.tar.gz";
+      sha256 = "1p8blsc3z1wasi9dhbjij7m2czps17dll3cpj37v97fv5ww7al9v";
+    };
+
+    meta = {
+      homepage = http://code.google.com/p/python-gflags/;
+      description = "A module for command line handling, similar to Google's gflags for C++";
+    };
+  };
+
   jinja2 = buildPythonPackage {
     name = "jinja2-2.2.1";
 
