@@ -172,6 +172,30 @@ rec {
   });
 
 
+  eventlet = buildPythonPackage rec {
+    name = "eventlet-0.9.14";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/eventlet/${name}.tar.gz";
+      md5 = "dfc96ed14b27392fdc529abcafeed880";
+    };
+
+    buildInputs = [ nose httplib2 ];
+
+    propagatedBuildInputs = [ greenlet ];
+
+    # It tries to scribble in ~/.python-eggs.
+    preConfigure = "export HOME=$(pwd)";
+
+    doCheck = false; # !!! fix; test requires ssl support in Python
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/eventlet/;
+      description = "A concurrent networking library for Python";
+    };
+  };
+
+  
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
 
