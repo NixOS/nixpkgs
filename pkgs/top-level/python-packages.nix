@@ -171,6 +171,7 @@ rec {
     };
   });
 
+
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
 
@@ -261,6 +262,38 @@ rec {
     meta = {
       homepage = http://code.google.com/p/python-gflags/;
       description = "A module for command line handling, similar to Google's gflags for C++";
+    };
+  };
+
+  
+  greenlet = buildPythonPackage rec {
+    name = "greenlet-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/greenlet/${name}.tar.gz";
+      md5 = "8d75d7f3f659e915e286e1b0fa0e1c4d";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/greenlet;
+      description = "Module for lightweight in-process concurrent programming";
+    };
+  };
+
+  
+  httplib2 = buildPythonPackage rec {
+    name = "httplib2-0.6.0";
+
+    src = fetchurl {
+      url = "http://httplib2.googlecode.com/files/${name}.tar.gz";
+      sha256 = "134pldyxayc0x4akzzvkciz2kj1w2dsim1xvd9b1qrpmba70dpjq";
+    };
+
+    doCheck = false; # doesn't have a test
+
+    meta = {
+      homepage = http://code.google.com/p/httplib2/;
+      description = "A comprehensive HTTP client library";
     };
   };
 
