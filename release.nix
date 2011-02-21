@@ -1,4 +1,4 @@
-{ nixpkgs ? ../nixpkgs }:
+{ nixpkgs ? ../nixpkgs-wc }:
 
 let
 
@@ -167,6 +167,7 @@ let
         installer.simple = t.installer.simple.test;
         installer.swraid = t.installer.swraid.test;
         installer.rebuildCD = t.installer.rebuildCD.test;
+        ipv6 = t.ipv6.test;
         kde4 = t.kde4.test;
         login = t.login.test;
         nat = t.nat.test;
