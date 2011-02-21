@@ -6452,6 +6452,8 @@ let
     neon = neon029;
   };
 
+  openstack_compute = callPackage ../applications/virtualization/openstack-compute { };
+
   opera = callPackage ../applications/networking/browsers/opera {
     qt = qt3;
   };
