@@ -249,6 +249,7 @@ rec {
     };
   };
 
+  
   gflags = buildPythonPackage rec {
     name = "gflags-1.5.1";
 
@@ -263,6 +264,7 @@ rec {
     };
   };
 
+  
   jinja2 = buildPythonPackage {
     name = "jinja2-2.2.1";
 
@@ -452,6 +454,24 @@ rec {
     };
   });
 
+  
+  netaddr = buildPythonPackage rec {
+    name = "netaddr-0.7.5";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/drkjam/netaddr/${name}.tar.gz";
+      sha256 = "0ssxic389rdc79zkz8dxcjpqdi5qs80h12khkag410cl9cwk11f2";
+    };
+
+    doCheck = false; # there is no test command
+
+    meta = {
+      homepage = https://github.com/drkjam/netaddr/;
+      description = "A network address manipulation library for Python";
+    };
+  };
+
+  
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
     version = "0.10.0";
