@@ -16,10 +16,10 @@ assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
 
 stdenv.mkDerivation {
-  name = "disnix-activation-scripts-0.2pre25895";
+  name = "disnix-activation-scripts-0.2";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/895077/download/1/disnix-activation-scripts-0.2pre25895.tar.gz;
-    sha256 = "0c6mi7v6jpjlhamcpf7i1axnrzidwbaayvq8glqfkza0c94yg4j9";
+    url = http://hydra.nixos.org/build/910903/download/1/disnix-activation-scripts-0.2.tar.gz;
+    sha256 = "0r7yqvh3jnbvpb6lmr10lm4r5pvi4jaw0c6rhlyl5q6nh3mxymnd";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
@@ -39,4 +39,10 @@ stdenv.mkDerivation {
                 ++ stdenv.lib.optional enableMySQLDatabase mysql
 		++ stdenv.lib.optional enablePostgreSQLDatabase postgresql
 		++ stdenv.lib.optional enableSubversionRepository subversion;
+
+  meta = {
+    description = "Provides various activation types for Disnix";
+    license = "MIT";
+    maintainers = [ stdenv.lib.maintainers.sander ];
+  };
 }

@@ -171,6 +171,31 @@ rec {
     };
   });
 
+
+  eventlet = buildPythonPackage rec {
+    name = "eventlet-0.9.14";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/eventlet/${name}.tar.gz";
+      md5 = "dfc96ed14b27392fdc529abcafeed880";
+    };
+
+    buildInputs = [ nose httplib2 ];
+
+    propagatedBuildInputs = [ greenlet ];
+
+    # It tries to scribble in ~/.python-eggs.
+    preConfigure = "export HOME=$(pwd)";
+
+    doCheck = false; # !!! fix; test requires ssl support in Python
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/eventlet/;
+      description = "A concurrent networking library for Python";
+    };
+  };
+
+  
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
 
@@ -249,6 +274,54 @@ rec {
     };
   };
 
+  
+  gflags = buildPythonPackage rec {
+    name = "gflags-1.5.1";
+
+    src = fetchurl {
+      url = "http://python-gflags.googlecode.com/files/python-${name}.tar.gz";
+      sha256 = "1p8blsc3z1wasi9dhbjij7m2czps17dll3cpj37v97fv5ww7al9v";
+    };
+
+    meta = {
+      homepage = http://code.google.com/p/python-gflags/;
+      description = "A module for command line handling, similar to Google's gflags for C++";
+    };
+  };
+
+  
+  greenlet = buildPythonPackage rec {
+    name = "greenlet-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/greenlet/${name}.tar.gz";
+      md5 = "8d75d7f3f659e915e286e1b0fa0e1c4d";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/greenlet;
+      description = "Module for lightweight in-process concurrent programming";
+    };
+  };
+
+  
+  httplib2 = buildPythonPackage rec {
+    name = "httplib2-0.6.0";
+
+    src = fetchurl {
+      url = "http://httplib2.googlecode.com/files/${name}.tar.gz";
+      sha256 = "134pldyxayc0x4akzzvkciz2kj1w2dsim1xvd9b1qrpmba70dpjq";
+    };
+
+    doCheck = false; # doesn't have a test
+
+    meta = {
+      homepage = http://code.google.com/p/httplib2/;
+      description = "A comprehensive HTTP client library";
+    };
+  };
+
+  
   jinja2 = buildPythonPackage {
     name = "jinja2-2.2.1";
 
@@ -438,6 +511,24 @@ rec {
     };
   });
 
+  
+  netaddr = buildPythonPackage rec {
+    name = "netaddr-0.7.5";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/drkjam/netaddr/${name}.tar.gz";
+      sha256 = "0ssxic389rdc79zkz8dxcjpqdi5qs80h12khkag410cl9cwk11f2";
+    };
+
+    doCheck = false; # there is no test command
+
+    meta = {
+      homepage = https://github.com/drkjam/netaddr/;
+      description = "A network address manipulation library for Python";
+    };
+  };
+
+  
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
     version = "0.10.0";

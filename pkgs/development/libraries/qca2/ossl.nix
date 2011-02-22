@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchsvn, qt4, qca2, openssl}:
+{stdenv, fetchurl, fetchsvn, qt4, qca2, openssl, which}:
 
 stdenv.mkDerivation rec {
   version = "2.0.0-beta3";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 =  "ef2c0307e8834e1e7cb23b6fea1cc22486328a37186301a6c11161b1c93d834b";
   };
   buildInputs = [ qt4 qca2 openssl ];
+  buildNativeInputs = [ which ];
   dontAddPrefix = true;
   configureFlags="--no-separate-debug-info --with-qca=${qca2}
     --with-openssl-inc=${openssl}/include --with-openssl-lib=${openssl}/lib";

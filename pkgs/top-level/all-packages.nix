@@ -1155,6 +1155,8 @@ let
     qt = qt4;
   };
 
+  radvd = callPackage ../tools/networking/radvd { };
+
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   recutils = callPackage ../tools/misc/recutils { };
@@ -1236,6 +1238,8 @@ let
   slsnif = callPackage ../tools/misc/slsnif { };
 
   smartmontools = callPackage ../tools/system/smartmontools { };
+ 
+  smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
 
@@ -2492,6 +2496,8 @@ let
       && stdenv.system != "i386-sunos";
   };
 
+  automoc4 = callPackage ../development/tools/misc/automoc4 { };
+
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
   binutils = callPackage ../development/tools/misc/binutils {
@@ -2686,7 +2692,8 @@ let
 
   # couldn't find the source yet
   seleniumRCBin = callPackage ../development/tools/selenium/remote-control {
-    jre = jdk;  };
+    jre = jdk;
+  };
 
   scons = callPackage ../development/tools/build-managers/scons { };
 
@@ -3961,6 +3968,10 @@ let
   pth = callPackage ../development/libraries/pth { };
 
   ptlib = callPackage ../development/libraries/ptlib {};
+
+  qca2 = callPackage ../development/libraries/qca2 {};
+
+  qca2_ossl = callPackage ../development/libraries/qca2/ossl.nix {};
 
   qjson = callPackage ../development/libraries/qjson { };
 
@@ -6436,6 +6447,8 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
   };
+
+  openstack_compute = callPackage ../applications/virtualization/openstack-compute { };
 
   opera = callPackage ../applications/networking/browsers/opera {
     qt = qt3;

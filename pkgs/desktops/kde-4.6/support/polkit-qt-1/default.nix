@@ -3,8 +3,9 @@
 stdenv.mkDerivation rec {
   name = "polkit-qt-1-0.99.0";
 
-  buildInputs = [ cmake qt4 automoc4 ];
+  buildInputs = [ qt4 automoc4 ];
   propagatedBuildInputs = [ polkit glib ];
+  buildNativeInputs = [ cmake pkgconfig ];
 
   src = fetchurl {
     url = "mirror://kde/stable/apps/KDE4.x/admin/${name}.tar.bz2";
