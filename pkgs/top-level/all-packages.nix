@@ -3978,6 +3978,10 @@ let
 
   ptlib = callPackage ../development/libraries/ptlib {};
 
+  qca2 = callPackage ../development/libraries/qca2 {};
+
+  qca2_ossl = callPackage ../development/libraries/qca2/ossl.nix {};
+
   qjson = callPackage ../development/libraries/qjson { };
 
   qt3 = callPackage ../development/libraries/qt-3 {
