@@ -59,7 +59,7 @@ in
       systemPackages = [
         # temporary workarounds
         pkgs.shared_desktop_ontologies 
-        pkgs.kde4.strigi
+        pkgs.strigi
 
         pkgs.kde4.kdelibs
         pkgs.kde4.kdebase
