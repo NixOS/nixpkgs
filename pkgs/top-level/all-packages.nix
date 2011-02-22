@@ -4111,6 +4111,8 @@ let
 
   stlport = callPackage ../development/libraries/stlport { };
 
+  strigi = callPackage ../development/libraries/strigi {};
+
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
   sword = callPackage ../development/libraries/sword { };
