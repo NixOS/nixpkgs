@@ -4704,8 +4704,6 @@ let
     then utillinuxng
     else null;
 
-  lsscsi = callPackage ../os-specific/linux/lsscsi { };
-
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   eject = callPackage ../os-specific/linux/eject { };
@@ -5206,6 +5204,8 @@ let
   libnotify = callPackage ../development/libraries/libnotify { };
 
   libvolume_id = callPackage ../os-specific/linux/libvolume_id { };
+
+  lsscsi = callPackage ../os-specific/linux/lsscsi { };
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
