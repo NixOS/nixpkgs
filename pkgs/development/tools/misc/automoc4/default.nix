@@ -7,9 +7,10 @@ stdenv.mkDerivation rec {
     sha256 = "0jackvg0bdjg797qlbbyf9syylm0qjs55mllhn11vqjsq3s1ch93";
   };
   buildInputs = [ cmake qt4 ];
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = http://techbase.kde.org/Development/Tools/Automoc4;
     description = "KDE Meta Object Compiler";
-    license = "BSD";
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.sander maintainers.urkud ];
   };
 }

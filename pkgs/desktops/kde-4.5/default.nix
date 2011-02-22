@@ -33,8 +33,6 @@ recurseIntoAttrs rec {
 
   attica = callPackage ./support/attica { };
 
-  automoc4 = callPackage ./support/automoc4 { };
-
   eigen = callPackage ./support/eigen { };
 
   oxygen_icons = callPackage ./support/oxygen-icons { };

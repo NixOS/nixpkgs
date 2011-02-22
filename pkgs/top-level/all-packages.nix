@@ -2496,6 +2496,8 @@ let
       && stdenv.system != "i386-sunos";
   };
 
+  automoc4 = callPackage ../development/tools/misc/automoc4 { };
+
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
   binutils = callPackage ../development/tools/misc/binutils {
