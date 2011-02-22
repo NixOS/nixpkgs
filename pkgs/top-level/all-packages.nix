@@ -4704,6 +4704,8 @@ let
     then utillinuxng
     else null;
 
+  lsscsi = callPackage ../os-specific/linux/lsscsi { };
+
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   eject = callPackage ../os-specific/linux/eject { };
