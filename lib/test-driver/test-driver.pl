@@ -38,9 +38,10 @@ foreach my $vlan (split / /, $ENV{VLANS} || "") {
     }
     close $stdoutW;
     print $pty "version\n";
-    readline $pty or die "cannot start vde_switch";
+    readline $stdoutR or die "cannot start vde_switch";
     $ENV{"QEMU_VDE_SOCKET_$vlan"} = $socket;
     $vlans{$vlan} = $pty;
+    die unless -e "$socket/ctl";
 }
 
 
