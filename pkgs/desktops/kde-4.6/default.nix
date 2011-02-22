@@ -42,8 +42,6 @@ rec {
 
   soprano = callPackage ./support/soprano { };
 
-  qimageblitz = callPackage ./support/qimageblitz { };
-
 ### LIBS
   kdelibs = callPackage ./libs { };
 

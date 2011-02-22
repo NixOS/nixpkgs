@@ -3982,6 +3982,8 @@ let
 
   qca2_ossl = callPackage ../development/libraries/qca2/ossl.nix {};
 
+  qimageblitz = callPackage ../development/libraries/qimageblitz {};
+
   qjson = callPackage ../development/libraries/qjson { };
 
   qt3 = callPackage ../development/libraries/qt-3 {
