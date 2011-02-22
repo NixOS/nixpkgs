@@ -10,7 +10,7 @@ let
     allPackages {
       inherit system;
       config.packageOverrides = pkgs: {
-        guile = pkgs.guile_1_9;
+        guile = pkgs.guile_2_0;
       };
     };
 
