@@ -32,8 +32,6 @@ rec {
 
   attica = callPackage ./support/attica { };
 
-  eigen = callPackage ./support/eigen { };
-
   oxygen_icons = callPackage ./oxygen-icons { };
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };

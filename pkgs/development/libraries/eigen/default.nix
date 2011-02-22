@@ -1,49 +1,20 @@
-x@{builderDefsPackage
-  , cmake
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{stdenv, fetchurl, cmake}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="eigen";
-    version="2.0.15";
-    name="${baseName}-${version}";
-    ext="tar.bz2";
-    project="${baseName}";
-    url="http://bitbucket.org/${project}/${baseName}/get/${version}.${ext}";
-    hash="c68509b80ec2570d025a98e6c4279062b801593c5165ba3d683852e7dbff1569";
-  };
+let
+  v = "2.0.15";
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-    name="${sourceInfo.name}.${sourceInfo.ext}";
+stdenv.mkDerivation {
+  name = "eigen-${v}";
+  src = fetchurl {
+    url = "http://bitbucket.org/eigen/eigen/get/${v}.tar.bz2";
+    name = "eigen-${v}.tar.bz2";
+    sha256 = "1a00hqyig4rc7nkz97xv23q7k0vdkzvgd0jkayk61fn9aqcrky79";
   };
-
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  phaseNames = ["doCmake" "doMakeInstall"];
-      
-  meta = {
-    description = "A C++ linear algebra template header";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl3Plus;
+  buildNativeInputs = [ cmake ];
+  meta = with stdenv.lib; {
+    description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
+    license = licenses.lgpl3Plus;
+    homepage = http://eigen.tuxfamily.org ;
+    maintainers = with stdenv.lib.maintainers; [ sander urkud raskin ];
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://eigen.tuxfamily.org/index.php?title=Main_Page";
-    };
-  };
-}) x
+}
