@@ -9,6 +9,9 @@
     ../../profiles/graphical.nix
   ];
 
+  # Provide wicd for easy wireless configuration.
+  networking.wicd.enable = true;
+
   # Disable compositing for now.  It seems to cause problems with KDE
   # 4.5 on some graphics drivers (such as Cirrus and VGA in QEMU).
   services.xserver.config =
