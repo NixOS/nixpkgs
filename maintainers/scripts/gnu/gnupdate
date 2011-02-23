@@ -569,6 +569,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
       ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg" #f)
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
+      ("source-highlight" "ftp.gnu.org" "/gnu/src-highlite" #f)
       ("TeXmacs"      "ftp.texmacs.org" "/TeXmacs/targz" #f)))
 
   (let ((quirk (assoc project quirks)))
