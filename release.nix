@@ -1,4 +1,4 @@
-{ nixpkgs ? ../nixpkgs-wc }:
+{ nixpkgs ? ../nixpkgs }:
 
 let
 
@@ -146,10 +146,6 @@ let
       makeSystemTarball {
       module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
     } { system = "armv5tel-linux"; };
-
-    # Hacky: doesn't depend on configuration. Yet configuration is evaluated (TODO)
-    minimal_install_archive = {system ? "i686-linux"}: (iso_minimal {inherit system;})
-      .config.system.build.minimalInstallArchive;
 
     tests = 
       { services ? ../services }:
