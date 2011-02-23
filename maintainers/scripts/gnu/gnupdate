@@ -478,8 +478,14 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
                          (throw 'ftp-error conn "LIST" code)))))
                 (else
                  (loop (read-line s)
-                       (let ((file (car (reverse (string-tokenize line)))))
-                         (cons file result)))))))
+                       (match (reverse (string-tokenize line))
+                         ((file _ ... permissions)
+                          (let ((type (case (string-ref permissions 0)
+                                        ((#\d) 'directory)
+                                        (else 'file))))
+                            (cons (list file type) result)))
+                         ((file _ ...)
+                          (cons (cons file 'file) result))))))))
       (lambda ()
         (close s)
         (let-values (((code message) (%ftp-listen (ftp-connection-socket conn))))
@@ -597,28 +603,59 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
   (or (assoc-ref quirks project) project))
 
 (define (releases project)
-  ;; TODO: Handle project release trees like that of IceCat and MyServer.
+  "Return the list of releases of PROJECT as a list of release name/directory
+pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). "
   ;; TODO: Parse something like fencepost.gnu.org:/gd/gnuorg/packages-ftp.
   (define release-rx
-    (make-regexp (string-append "^" project "-[0-9].*\\.tar\\.")))
+    (make-regexp (string-append "^" project
+                                "-([0-9]|[^-])*(-src)?\\.tar\\.")))
 
-  (catch #t
+  (define alpha-rx
+    (make-regexp "^.*-.*[0-9](-|~)?(alpha|beta|rc|cvs|svn|git)-?[0-9\\.]*\\.tar\\."))
+
+  (define (sans-extension tarball)
+    (let ((end (string-contains tarball ".tar")))
+      (substring tarball 0 end)))
+
+  (catch 'ftp-error
     (lambda ()
       (let-values (((server directory) (ftp-server/directory project)))
-        (let* ((conn  (ftp-open server))
-               (files (ftp-list conn directory)))
-          (ftp-close conn)
-          (map (lambda (tarball)
-                 (let ((end (string-contains tarball ".tar")))
-                   (substring tarball 0 end)))
+        (define conn (ftp-open server))
 
-               ;; Filter out signatures, deltas, and files which are potentially
-               ;; not releases of PROJECT (e.g., in /gnu/guile, filter out
-               ;; guile-oops and guile-www).
-               (filter (lambda (file)
-                         (and (not (string-suffix? ".sig" file))
-                              (regexp-exec release-rx file)))
-                       files)))))
+        (let loop ((directories (list directory))
+                   (result      '()))
+          (if (null? directories)
+              (begin
+                (ftp-close conn)
+                result)
+              (let* ((directory (car directories))
+                     (files     (ftp-list conn directory))
+                     (subdirs   (filter-map (lambda (file)
+                                              (match file
+                                                ((name 'directory . _) name)
+                                                (_ #f)))
+                                            files)))
+                (loop (append (map (cut string-append directory "/" <>)
+                                   subdirs)
+                              (cdr directories))
+                      (append
+                       ;; Filter out signatures, deltas, and files which are potentially
+                       ;; not releases of PROJECT (e.g., in /gnu/guile, filter out
+                       ;; guile-oops and guile-www; in mit-scheme, filter out
+                       ;; binaries).
+                       (filter-map (lambda (file)
+                                     (match file
+                                       ((file 'file . _)
+                                        (and (not (string-suffix? ".sig" file))
+                                             (regexp-exec release-rx file)
+                                             (not (regexp-exec alpha-rx file))
+                                             (let ((s (sans-extension file)))
+                                               (and (regexp-exec
+                                                     %package-name-rx s)
+                                                    (cons s directory)))))
+                                       (_ #f)))
+                                   files)
+                       result)))))))
     (lambda (key subr message . args)
       (format (current-error-port)
               "failed to get release list for `~A': ~A ~A~%"
@@ -634,53 +671,64 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
       (> (strverscmp (string->pointer a) (string->pointer b)) 0))))
 
 (define (latest-release project)
-  ;; Return "FOO-X.Y" or #f.
+  "Return (\"FOO-X.Y\" . \"/bar/foo\") or #f."
   (let ((releases (releases project)))
     (and (not (null? releases))
          (fold (lambda (release latest)
-                 (if (version-string>? release latest)
+                 (if (version-string>? (car release) (car latest))
                      release
                      latest))
-               ""
+               '("" . "")
                releases))))
 
+(define %package-name-rx
+  ;; Regexp for a package name, e.g., "foo-X.Y".  Since TeXmacs uses
+  ;; "TeXmacs-X.Y-src", the `-src' suffix is allowed.
+  (make-regexp "^(.*)-(([0-9]|\\.)+)(-src)?"))
+
 (define (package/version name+version)
-  (let ((hyphen (string-rindex name+version #\-)))
-    (if (not hyphen)
+  "Return the package name and version number extracted from NAME+VERSION."
+  (let ((match (regexp-exec %package-name-rx name+version)))
+    (if (not match)
         (values name+version #f)
-        (let ((name    (substring name+version 0 hyphen))
-              (version (substring name+version (+ hyphen 1)
-                                  (string-length name+version))))
-          (values name version)))))
+        (values (match:substring match 1) (match:substring match 2)))))
 
 (define (file-extension file)
   (let ((dot (string-rindex file #\.)))
     (and dot (substring file (+ 1 dot) (string-length file)))))
 
 (define (packages-to-update gnu-packages)
+  (define (unpack latest)
+    (call-with-values (lambda ()
+                        (package/version (car latest)))
+      (lambda (name version)
+        (list name version (cdr latest)))))
+
   (fold (lambda (pkg result)
           (call-with-package pkg
             (lambda (attribute name+version location meta src)
               (let-values (((name old-version)
                             (package/version name+version)))
                 (let ((latest (latest-release (nixpkgs->gnu-name name))))
-                  (cond ((not latest)
-                         (format #t "~A [unknown latest version]~%"
-                                 name+version)
-                         result)
-                        ((string=? name+version latest)
+                  (if (not latest)
+                      (begin
+                        (format #t "~A [unknown latest version]~%"
+                                name+version)
+                        result)
+                      (match (unpack latest)
+                        ((_ (? (cut string=? old-version <>)) _)
                          (format #t "~A [up to date]~%" name+version)
                          result)
-                        (else
-                         (let-values (((project new-version)
-                                       (package/version latest))
-                                      ((old-name old-hash old-urls)
+                        ((project new-version directory)
+                         (let-values (((old-name old-hash old-urls)
                                        (src->values src)))
-                           (format #t "~A -> ~A [~A]~%" name+version latest
+                           (format #t "~A -> ~A [~A]~%"
+                                   name+version (car latest)
                                    (and (pair? old-urls) (car old-urls)))
                            (let* ((url      (and (pair? old-urls)
                                                  (car old-urls)))
-                                  (new-hash (fetch-gnu project new-version
+                                  (new-hash (fetch-gnu project directory
+                                                       new-version
                                                        (if url
                                                            (file-extension url)
                                                            "gz"))))
@@ -688,39 +736,38 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
                                          old-version old-hash
                                          new-version new-hash
                                          location)
-                                   result))))))))))
+                                   result)))))))))))
         '()
         gnu-packages))
 
-(define (fetch-gnu project version archive-type)
-  (let-values (((server directory)
-                (ftp-server/directory project)))
-    (let* ((base    (string-append project "-" version ".tar." archive-type))
-           (url     (string-append "ftp://" server "/" directory "/" base))
-           (sig     (string-append base ".sig"))
-           (sig-url (string-append url ".sig")))
-      (let-values (((hash path) (nix-prefetch-url url)))
-        (pk 'prefetch-url url hash path)
-        (and hash path
-             (begin
-               (false-if-exception (delete-file sig))
-               (system* "wget" sig-url)
-               (if (file-exists? sig)
-                   (let ((ret (system* "gpg" "--verify" sig path)))
-                     (false-if-exception (delete-file sig))
-                     (if (and ret (= 0 (status:exit-val ret)))
-                         hash
-                         (begin
-                           (format (current-error-port)
-                                   "signature verification failed for `~a'~%"
-                                   base)
-                           (format (current-error-port)
-                                   "(could be because the public key is not in your keyring)~%")
-                           #f)))
-                   (begin
-                     (format (current-error-port)
-                             "no signature for `~a'~%" base)
-                     hash))))))))
+(define (fetch-gnu project directory version archive-type)
+  (let* ((server  (ftp-server/directory project))
+         (base    (string-append project "-" version ".tar." archive-type))
+         (url     (string-append "ftp://" server "/" directory "/" base))
+         (sig     (string-append base ".sig"))
+         (sig-url (string-append url ".sig")))
+    (let-values (((hash path) (nix-prefetch-url url)))
+      (pk 'prefetch-url url hash path)
+      (and hash path
+           (begin
+             (false-if-exception (delete-file sig))
+             (system* "wget" sig-url)
+             (if (file-exists? sig)
+                 (let ((ret (system* "gpg" "--verify" sig path)))
+                   (false-if-exception (delete-file sig))
+                   (if (and ret (= 0 (status:exit-val ret)))
+                       hash
+                       (begin
+                         (format (current-error-port)
+                                 "signature verification failed for `~a'~%"
+                                 base)
+                         (format (current-error-port)
+                                 "(could be because the public key is not in your keyring)~%")
+                         #f)))
+                 (begin
+                   (format (current-error-port)
+                           "no signature for `~a'~%" base)
+                   hash)))))))
 
 
 ;;;
@@ -823,3 +870,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
                   (_ #f)))
               updates)
     #t))
+
+;;; Local Variables:
+;;; eval: (put 'call-with-package 'scheme-indent-function 1)
+;;; End:
