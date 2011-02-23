@@ -504,7 +504,6 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
     "automake17x"
     "automake19x"
     "automake110x"
-    "automake" ;; = 1.10.x
     "bison1875"
     "bison23"
     "bison" ;; = 2.3
@@ -522,7 +521,10 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
     "glibc25"
     "glibc27"
     "glibc29"
-    "guile_1_9"
+    "guile_1_8"
+    "icecat3Xul" ;; redundant with `icecat'
+    "icecatWrapper"
+    "icecatXulrunner3"
     ))
 
 (define (gnu? package)
