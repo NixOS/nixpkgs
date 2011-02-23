@@ -7,13 +7,6 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.xfce;
 
-  fakeXfdesktop = pkgs.runCommand "xfdesktop" {}
-    ''
-      mkdir -p $out/bin
-      echo 'true' > $out/bin/xfdesktop
-      chmod u+x $out/bin/xfdesktop
-    '';
-
 in
 
 {
@@ -50,7 +43,7 @@ in
       };
 
     environment.systemPackages =
-      [ fakeXfdesktop
+      [
         pkgs.gtkLibs.gtk # To get GTK+'s themes.
         pkgs.hicolor_icon_theme
         pkgs.shared_mime_info
