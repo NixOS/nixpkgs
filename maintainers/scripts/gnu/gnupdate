@@ -567,7 +567,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
       ("gnu-ghostscript" "ftp.gnu.org"  "/gnu/ghostscript" #f)
       ("grub"         "alpha.gnu.org" "/gnu" #t)
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
-      ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg")
+      ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg" #f)
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
       ("TeXmacs"      "ftp.texmacs.org" "/TeXmacs/targz" #f)))
 
