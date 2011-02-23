@@ -3210,7 +3210,7 @@ let
   gtk = gtkLibs.gtk;
   pango = gtkLibs.pango;
 
-  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in rec {
+  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
 
     glib = callPackage ../development/libraries/glib/1.2.x.nix { };
 
@@ -3218,7 +3218,7 @@ let
 
   });
 
-  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in rec {
+  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in {
 
     glib = callPackage ../development/libraries/glib/2.20.x.nix { };
 
@@ -3236,7 +3236,7 @@ let
 
   });
 
-  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in rec {
+  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in {
 
     glib = callPackage ../development/libraries/glib/2.24.x.nix { };
 
@@ -3254,7 +3254,7 @@ let
 
   });
 
-  gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in rec {
+  gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
 
@@ -5156,9 +5156,7 @@ let
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
-  libsexy = callPackage ../development/libraries/libsexy {
-    inherit (gtkLibs) glib gtk pango;
-  };
+  libsexy = callPackage ../development/libraries/libsexy { };
 
   librsvg = gnome.librsvg;
 
