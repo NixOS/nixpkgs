@@ -2,27 +2,31 @@
 
 let
   name = "source-highlight";
-  version = "3.1.3";
+  version = "3.1.4";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
       url = "mirror://gnu/src-highlite/${name}-${version}.tar.gz";
-      sha256 = "2d819f2ffdc8bb23a87635bdfbc51545db22605a8e544f66f86054b8075af0b5";
+      sha256 = "1jd30ansx2pld196lik6r85aifdhd0cav701vasf4ws8kc8zkcxc";
     };
 
+  # Help it find Boost::Regex.
+  preConfigure =
+    '' export ax_cv_boost_regex=yes
+       export link_regex=yes
+       export BOOST_REGEX_LIB=-lboost_regex
+    '';
+
   buildInputs = [boost];
-  doCheck = false;		# The test suite fails with a trivial
-				# error, so I'll disable it for now.
-				# Whoever bumps this build to the next
-				# version, please re-enable it though!
+  doCheck = true;
 
   meta = {
-    description = "render source code with syntax highlighting";
+    description = "GNU Source-Highlight, source code renderer with syntax highlighting";
     homepage = "http://www.gnu.org/software/src-highlite/";
     license = "GPLv3+";
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
     longDescription =
       ''
