@@ -658,7 +658,7 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
                        result)))))))
     (lambda (key subr message . args)
       (format (current-error-port)
-              "failed to get release list for `~A': ~A ~A~%"
+              "failed to get release list for `~A': ~S ~S~%"
               project message args)
       '())))
 
