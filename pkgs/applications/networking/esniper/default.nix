@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     homepage = "http://esnipe.rsourceforge.net";
     license = "GPLv2";
 
-    platforms = stdenv.lib.platforms.alld;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
