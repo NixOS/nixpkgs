@@ -7,7 +7,9 @@ stdenv.mkDerivation rec {
     url = "http://devresources.linux-foundation.org/dev/iproute2/download/${name}.tar.bz2";
     sha256 = "18why1wy0v859axgrlfxn80zmskss0410hh9rf5gn9cr29zg9cla";
   };
- 
+
+  patches = [ ./vpnc.patch ];
+
   preConfigure =
     ''
       patchShebangs ./configure
