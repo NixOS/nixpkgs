@@ -164,7 +164,7 @@ let
             -drive index=0,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -drive index=1,file=${bootDisk}/disk.img,if=virtio,boot=on \
           '' else ''
-            -drive file=$NIX_DISK_IMAGE,if=virtio,boot=on,cache=writeback,werror=report \
+            -drive file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
