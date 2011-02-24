@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libxml2, gnutls, devicemapper, perl, python, iproute, iptables }:
+{ stdenv, fetchurl, libxml2, gnutls, devicemapper, perl, python
+, iproute, iptables, readline }:
 
 let version = "0.8.8"; in
 
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "04z1757qpi3ssnjv5h2qnw1sds2m50yxk67cbdam6w4i50vyl2h3";
   };
 
-  buildInputs = [ libxml2 gnutls devicemapper perl python iproute iptables ];
+  buildInputs = [ libxml2 gnutls devicemapper perl python iproute iptables readline ];
 
   configureFlags =
     ''
