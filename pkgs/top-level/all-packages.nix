@@ -71,7 +71,7 @@ let
         else configExpr;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
-  platform = if platform_ != null then platform_ 
+  platform = if platform_ != null then platform_
     else getConfig [ "platform" ] (import ./platforms.nix).pc;
 
   # Return an attribute from the Nixpkgs configuration file, or
@@ -275,7 +275,7 @@ let
     inherit stdenv subversion openssh;
     sshSupport = true;
   };
-  
+
   fetchsvnrevision = import ../build-support/fetchsvnrevision runCommand subversion;
 
   fetchsvnssh = import ../build-support/fetchsvnssh {
@@ -755,7 +755,7 @@ let
   gt5 = callPackage ../tools/system/gt5 { };
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
-  
+
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
 
   gupnp = callPackage ../development/libraries/gupnp {
@@ -779,7 +779,7 @@ let
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf5 = callPackage ../tools/misc/hdf5 { };
-  
+
   hevea = callPackage ../tools/typesetting/hevea { };
 
   highlight = callPackage ../tools/text/highlight { };
@@ -788,8 +788,8 @@ let
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
-  hydra = callPackage ../development/tools/misc/hydra { 
-    nix = nixSqlite;  
+  hydra = callPackage ../development/tools/misc/hydra {
+    nix = nixSqlite;
   };
 
   iasl = callPackage ../development/compilers/iasl { };
@@ -1238,7 +1238,7 @@ let
   slsnif = callPackage ../tools/misc/slsnif { };
 
   smartmontools = callPackage ../tools/system/smartmontools { };
- 
+
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
@@ -1333,7 +1333,7 @@ let
   };
 
   vde2 = callPackage ../tools/networking/vde2 { };
-  
+
   verilog = callPackage ../applications/science/electronics/verilog {};
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
@@ -2093,12 +2093,12 @@ let
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
-    
+
     lablgtk = callPackage ../development/ocaml-modules/lablgtk {
       inherit (gnome) libgnomecanvas libglade gtksourceview;
     };
 
-    lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview { 
+    lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
@@ -3884,7 +3884,7 @@ let
 
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
-  
+
   ogre = callPackage ../development/libraries/ogre {};
 
   openal = callPackage ../development/libraries/openal { };
@@ -4319,7 +4319,7 @@ let
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
-  
+
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -5155,9 +5155,9 @@ let
   linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
   linuxPackages_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_2_6_36 pkgs.linuxPackages_2_6_36);
   linuxPackages_2_6_37 = recurseIntoAttrs (linuxPackagesFor linux_2_6_37 pkgs.linuxPackages_2_6_37);
-  linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34); 
-  linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35); 
-  linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36); 
+  linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
+  linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
+  linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
 
   # The current default kernel / kernel modules.
   linux = linux_2_6_32;
@@ -5772,7 +5772,7 @@ let
 
   darcs = haskellPackages.darcs;
 
-  darktable = callPackage ../applications/graphics/darktable { 
+  darktable = callPackage ../applications/graphics/darktable {
      inherit (gnome) GConf gnome_keyring libglade;
   };
 
@@ -5914,6 +5914,8 @@ let
 
   espeak = callPackage ../applications/audio/espeak { };
 
+  esniper = callPackage ../applications/networking/esniper { };
+
   evopedia = callPackage ../applications/misc/evopedia { };
 
   # FIXME: Evince and other GNOME/GTK+ apps (e.g., Viking) provide
@@ -5988,7 +5990,7 @@ let
   };
 
   firefox40Pkgs = let p = (applyGlobalOverrides (x : {cairo = x.cairo_1_10_0;}));
-  in p.callPackage 
+  in p.callPackage
       ../applications/networking/browsers/firefox/4.0.nix {
     inherit (p.gtkLibs) gtk pango;
     inherit (p.gnome) libIDL;
@@ -6974,7 +6976,7 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
-  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { 
+  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress {
     gnomegtk = pkgsi686Linux.gnome.gtk;
   };
 
@@ -7229,7 +7231,7 @@ let
       xf86vidmodeproto;
   };
 
-  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { 
+  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk {
     inherit (gtkLibs) glib gtk;
   };
 
@@ -7345,7 +7347,7 @@ let
   leo2 = callPackage ../applications/science/logic/leo2 {};
 
   matita = callPackage ../applications/science/logic/matita {
-    inherit (ocamlPackages) findlib lablgtk ocaml_expat gmetadom ocaml_http 
+    inherit (ocamlPackages) findlib lablgtk ocaml_expat gmetadom ocaml_http
             lablgtkmathview ocaml_mysql ocaml_sqlite3 ocamlnet ulex08 camlzip ocaml_pcre;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
@@ -7451,9 +7453,9 @@ let
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
   foldingathome = callPackage ../misc/foldingathome { };
-  
+
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
-  
+
   foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
 
   freestyle = callPackage ../misc/freestyle {
@@ -7549,7 +7551,7 @@ let
   };
 
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
-  
+
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   latex2html = callPackage ../misc/tex/latex2html/default.nix {
