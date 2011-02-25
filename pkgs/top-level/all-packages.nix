@@ -2970,7 +2970,7 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = glibc212;
+  glibc = glibc213;
 
   glibc25 = callPackage ../development/libraries/glibc-2.5 {
     kernelHeaders = linuxHeaders;
@@ -2994,15 +2994,15 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   });
 
-  glibc212 = (callPackage ../development/libraries/glibc-2.12 {
+  glibc213 = (callPackage ../development/libraries/glibc-2.13 {
     kernelHeaders = linuxHeaders;
     installLocales = getPkgConfig "glibc" "locales" false;
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
-  }) // (if crossSystem != null then { hostDrv = glibc212Cross; } else {});
+  }) // (if crossSystem != null then { hostDrv = glibc213Cross; } else {});
 
-  glibc212Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.12)
+  glibc213Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.13)
     (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
      in ({
        inherit stdenv fetchurl;
@@ -3017,7 +3017,7 @@ let
       then { inherit machHeaders hurdHeaders mig fetchgit; }
       else { }))));
 
-  glibcCross = glibc212Cross;
+  glibcCross = glibc213Cross;
 
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross
@@ -3038,9 +3038,9 @@ let
     installLocales = getPkgConfig "glibc" "locales" false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc-2.12/locales.nix { };
+  glibcLocales = callPackage ../development/libraries/glibc-2.13/locales.nix { };
 
-  glibcInfo = callPackage ../development/libraries/glibc-2.12/info.nix { };
+  glibcInfo = callPackage ../development/libraries/glibc-2.13/info.nix { };
 
   glibc_multi =
       runCommand "${glibc.name}-multi"

@@ -11,7 +11,7 @@ cross :
 
 let
   # For GNU/Hurd, see below.
-  version = if hurdHeaders != null then "20100512" else "2.12.2";
+  version = if hurdHeaders != null then "20100512" else "2.13";
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
@@ -20,7 +20,7 @@ let
     else needsPortsCross;
 
   srcPorts = fetchurl {
-    # These should work equally well for 2.12.2
+    # These should work equally well for 2.13
     url = "mirror://gnu/glibc/glibc-ports-2.12.1.tar.bz2";
     sha256 = "041ix0nq7nc5r7jf80jsdlw4idah2mjp5nf7khybhc4cs1kc31ir";
   };
@@ -147,7 +147,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
-      sha256 = "05hjz816a2hmzc44gxxi9vrdx6l9f23az794zj45xsxr94yfpy12";
+      sha256 = "1cnv319ysc8nkwpqw6f6ymb6b8hbl0nyvyx48sddkrj50lmcjwq1";
     };
 
   # `fetchurl' is a function and thus should not be passed to the
