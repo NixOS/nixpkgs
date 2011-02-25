@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
+, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess }:
 
 let version = "0.8.8"; in
 
@@ -11,15 +11,17 @@ stdenv.mkDerivation {
     sha256 = "04z1757qpi3ssnjv5h2qnw1sds2m50yxk67cbdam6w4i50vyl2h3";
   };
 
-  buildInputs = [ libxml2 gnutls devicemapper perl python iproute iptables readline ];
+  buildInputs =
+    [ pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
+      utillinux udev libpciaccess
+    ];
 
-  configureFlags =
+  preConfigure =
     ''
-      --localstatedir=/var
-      IP_PATH=${iproute}/sbin/ip
-      IPTABLES_PATH=${iptables}/sbin/iptables
-      IP6TABLES_PATH=${iptables}/sbin/ip6tables
+      PATH=${iproute}/sbin:${iptables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
     '';
+
+  configureFlags = "--localstatedir=/var";
 
   installFlags = "localstatedir=$(TMPDIR)/var";
 
