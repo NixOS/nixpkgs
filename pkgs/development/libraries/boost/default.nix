@@ -33,20 +33,19 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "boost-1.46.0";
+  name = "boost-1.44.0";
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "http://boost.org/";
     description = "Boost C++ Library Collection";
     license = "boost-license";
-    platforms = platforms.all;
 
-    maintainers = [ maintainers.simons maintainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_46_0.tar.bz2";
-    sha256 = "0ndsiv06332gbh6wj68pcnci3l5qrc5pm1ca9dkmxhpxj83zd41g";
+    url = "mirror://sourceforge/boost/boost_1_44_0.tar.bz2";
+    sha256 = "1nvq36mvzr1fr85q0jh86rk3bk65s1y55jgqgzfg3lcpkl12ihs5";
   };
 
   enableParallelBuilding = true;
