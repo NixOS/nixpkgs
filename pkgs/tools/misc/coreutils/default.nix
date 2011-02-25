@@ -3,11 +3,11 @@
 assert aclSupport -> acl != null;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.7";
+  name = "coreutils-8.10";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "11ykd7glys6lcfb2mwgmkqmmffv1pan70j6sl9vcjpnlf9dvk7bw";
+    sha256 = "11fr0hkdk9h7a5ggpp3hj45ryvq3gc8ri2kksbgn7v8rjmp1x1jb";
   };
 
   buildNativeInputs = [ perl ];
