@@ -167,5 +167,6 @@
   ./tasks/network-interfaces.nix
   ./tasks/swraid.nix
   ./tasks/tty-backgrounds.nix
+  ./virtualisation/libvirtd.nix
   ./virtualisation/xen-dom0.nix
 ]
