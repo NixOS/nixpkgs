@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "readline-6.1";
+  name = "readline-6.2";
 
   src = fetchurl {
     url = "mirror://gnu/readline/${name}.tar.gz";
-    sha256 = "0sd97zqdh4fc0zzgzpskkczwa2fmb0s89qdyndb6vkbcq04gdjph";
+    sha256 = "10ckm2bd2rkxhvdmj7nmbsylmihw0abwcsnxf8y27305183rd9kr";
   };
 
   propagatedBuildInputs = [ncurses];
