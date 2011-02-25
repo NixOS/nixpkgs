@@ -59,6 +59,28 @@ in
         daemonType = "daemon";
       };
 
+    jobs.libvirt_guests =
+      { name = "libvirt-guests";
+      
+        description = "Job to save/restore libvirtd VMs";
+
+        startOn = "started libvirtd";
+
+        # We want to suspend VMs only on shutdown, but Upstart is broken.
+        #stopOn = "starting shutdown and stopping libvirtd";
+        stopOn = "stopping libvirtd";
+
+        path = [ pkgs.gettext pkgs.libvirt pkgs.gawk ];
+
+        preStart = 
+          ''
+            mkdir -p /var/lock/subsys -m 755
+            ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start
+          '';
+
+        postStop = "${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop";
+      };
+
   };
 
 }
