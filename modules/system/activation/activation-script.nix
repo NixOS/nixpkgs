@@ -129,6 +129,14 @@ in
         mkdir -p /media
       '';
     
+    system.activationScripts.cgroups =
+      ''
+        if ! ${pkgs.sysvtools}/bin/mountpoint -q /dev/cgroup; then
+            mkdir -p /dev/cgroup
+            ${pkgs.utillinux}/bin/mount -t cgroup none /dev/cgroup
+        fi
+      '';
+    
   };
   
 }
