@@ -814,6 +814,9 @@ genericBuild() {
         if test "$curPhase" = fixupPhase -a -n "$dontFixup"; then continue; fi
         if test "$curPhase" = distPhase -a -z "$doDist"; then continue; fi
         
+	echo
+	echo "@ phase-started $out $curPhase"
+
         showPhaseHeader "$curPhase"
         dumpVars
         
@@ -825,6 +828,9 @@ genericBuild() {
             cd "${sourceRoot:-.}"
         fi
         
+	echo
+	echo "@ phase-succeeded $out $curPhase"
+
         stopNest
     done
 
