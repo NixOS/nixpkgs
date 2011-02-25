@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess }:
+, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext }:
 
 let version = "0.8.8"; in
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
-      utillinux udev libpciaccess
+      utillinux udev libpciaccess gettext
     ];
 
   preConfigure =
@@ -21,9 +21,15 @@ stdenv.mkDerivation {
       PATH=${iproute}/sbin:${iptables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
     '';
 
-  configureFlags = "--localstatedir=/var";
+  configureFlags = "--localstatedir=/var --with-init-script=redhat";
 
   installFlags = "localstatedir=$(TMPDIR)/var";
+
+  postInstall =
+    ''
+      substituteInPlace $out/etc/rc.d/init.d/libvirt-guests \
+        --replace "$out/bin" "${gettext}/bin"
+    '';
 
   meta = {
     homepage = http://libvirt.org/;
