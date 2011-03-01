@@ -1,7 +1,8 @@
 {stdenv, fetchurl, ghc, perl, gmp, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "6.13.20100917";
+  version = "7.0.1.20110217";
+  label = "7.0.2-rc2";
   
   name = "ghc-${version}";
   
@@ -9,8 +10,8 @@ stdenv.mkDerivation rec {
   homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
-    url = "${homepage}/dist/current/dist/${name}-src.tar.bz2";
-    sha256 = "0b5pg6688yfzd5zfaffjp21y933vp94h94ds85gwi156f4g3bkij";
+    url = "${homepage}/dist/${label}/${name}-src.tar.bz2";
+    sha256 = "18jbw5na4v8v2vzswbi8xfd73mx8zv1diym0bg5bns5337q76lzi";
   };
 
   buildInputs = [ghc perl gmp ncurses];
@@ -42,43 +43,4 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 
-  # TODO: requires a comment as to what it does and why it is needed.
-  passthru = {
-    corePackages = [
-       [ "Cabal" "1.8.0.2" ]
-       [ "array" "0.3.0.0" ]
-       [ "base" "3.0.3.2" ]
-       [ "base" "4.2.0.0" ]
-       [ "bin-package-db" "0.0.0.0" ]
-       [ "bytestring" "0.9.1.5" ]
-       [ "containers" "0.3.0.0" ]
-       [ "directory" "1.0.1.0" ]
-       [ "dph-base" "0.4.0" ]
-       [ "dph-par" "0.4.0" ]
-       [ "dph-prim-interface" "0.4.0" ]
-       [ "dph-prim-par" "0.4.0" ]
-       [ "dph-prim-seq" "0.4.0" ]
-       [ "dph-seq" "0.4.0" ]
-       [ "extensible-exceptions" "0.1.1.1" ]
-       [ "ffi" "1.0" ]
-       [ "filepath" "1.1.0.3" ]
-       [ "ghc" "6.12.1" ]
-       [ "ghc-binary" "0.5.0.2" ]
-       [ "ghc-prim" "0.2.0.0" ]
-       [ "haskell98" "1.0.1.1" ]
-       [ "hpc" "0.5.0.4" ]
-       [ "integer-gmp" "0.2.0.0" ]
-       [ "old-locale" "1.0.0.2" ]
-       [ "old-time" "1.0.0.3" ]
-       [ "pretty" "1.0.1.1" ]
-       [ "process" "1.0.1.2" ]
-       [ "random" "1.0.0.2" ]
-       [ "rts" "1.0" ]
-       [ "syb" "0.1.0.2" ]
-       [ "template-haskell" "2.4.0.0" ]
-       [ "time" "1.1.4" ]
-       [ "unix" "2.4.0.0" ]
-       [ "utf8-string" "0.3.4" ]
-    ];
-  };
 }
