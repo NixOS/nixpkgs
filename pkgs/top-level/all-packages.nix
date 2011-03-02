@@ -2875,6 +2875,8 @@ let
     inherit (gnome) gtk;
   };
 
+  coin3d = callPackage ../development/libraries/coin3d { };
+
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
 
   confuse = callPackage ../development/libraries/confuse { };
@@ -4091,6 +4093,8 @@ let
         # optional
   };
 
+  soqt = callPackage ../development/libraries/soqt { };
+
   speechd = callPackage ../development/libraries/speechd { };
 
   speex = callPackage ../development/libraries/speex { };
@@ -4213,6 +4217,8 @@ let
   xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
+
+  xercesc = callPackage ../development/libraries/xercesc {};
 
   xercesJava = callPackage ../development/libraries/java/xerces {
     ant   = apacheAntGcj;  # for bootstrap purposes
@@ -6020,6 +6026,8 @@ let
     });
 
   flite = callPackage ../applications/misc/flite { };
+
+  freecad = callPackage ../applications/graphics/freecad { };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk;
