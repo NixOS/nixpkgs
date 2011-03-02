@@ -3303,6 +3303,8 @@ let
 
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
+  gts = callPackage ../development/libraries/gts { };
+
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
