@@ -33,7 +33,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "boost-1.46.0";
+  name = "boost-1.44.0";
 
   meta = {
     homepage = "http://boost.org/";
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_46_0.tar.bz2";
-    sha256 = "0ndsiv06332gbh6wj68pcnci3l5qrc5pm1ca9dkmxhpxj83zd41g";
+    url = "mirror://sourceforge/boost/boost_1_44_0.tar.bz2";
+    sha256 = "1nvq36mvzr1fr85q0jh86rk3bk65s1y55jgqgzfg3lcpkl12ihs5";
   };
 
   enableParallelBuilding = true;
