@@ -55,9 +55,8 @@ in
       setuid = true;
     } ];
 
-    environment = {
-      systemPackages = [
-        # temporary workarounds
+    environment.systemPackages =
+      [ # temporary workarounds
         pkgs.shared_desktop_ontologies 
         pkgs.strigi
 
@@ -76,13 +75,13 @@ in
         xorg.xset # used by startkde, non-essential
       ] ++ config.environment.kdePackages;
 
-      pathsToLink = [ "/share" ];
+    environment.pathsToLink = [ "/share" ];
 
-      etc = singleton
+    environment.etc = singleton
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         target = "X11/xkb";
       };
-    };
+
   };
 
 }
