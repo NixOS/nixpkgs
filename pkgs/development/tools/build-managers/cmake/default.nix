@@ -5,7 +5,7 @@ let
   os = stdenv.lib.optionalString;
   inherit (stdenv.lib) optional;
   majorVersion = "2.8";
-  minorVersion = "3";
+  minorVersion = "4";
   version = "${majorVersion}.${minorVersion}";
 in
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "1262bz0c0g5c57ba7rbbrs72xa42xs26fwf72mazmkmmhqkx17k8";
+    sha256 = "1k2kjaj3vfifb329ff7fr4hcbpbaqb66l97pshq70h7m0zwajznr";
   };
 
   buildInputs = [ curl expat zlib bzip2 libarchive ]

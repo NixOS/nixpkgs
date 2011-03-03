@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1f1ac27cjm5m4iwsgvd7nylr0md0a95przkbpsdq7l90wjxj390w";
   };
   includeAllQtDirs=true;
-  
+
   CLUCENE_HOME = cluceneCore;
-  
+
   # Dependencies such as SQLite and FAM are unreliable in this release
   buildInputs = [
     cmake perl qt4 bzip2 stdenv.gcc.libc libxml2 expat exiv2 cluceneCore

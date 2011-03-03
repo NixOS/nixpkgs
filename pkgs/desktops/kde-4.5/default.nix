@@ -33,17 +33,11 @@ recurseIntoAttrs rec {
 
   attica = callPackage ./support/attica { };
 
-  eigen = callPackage ./support/eigen { };
-
   oxygen_icons = callPackage ./support/oxygen-icons { };
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };
 
-  strigi = callPackage ./support/strigi { };
-
   soprano = callPackage ./support/soprano { };
-
-  qimageblitz = callPackage ./support/qimageblitz { };
 
 ### LIBS
   kdelibs = callPackage ./libs { };

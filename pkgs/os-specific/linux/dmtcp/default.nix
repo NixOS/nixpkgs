@@ -4,18 +4,16 @@
 stdenv.mkDerivation rec {
   name = "dmtcp-${version}";
 
-  version = "1.1.8";
+  version = "1.2.0";
 
   buildInputs = [ perl python ];
 
   src = fetchurl {
     url = "mirror://sourceforge/dmtcp/dmtcp_${version}.tar.gz";
-    sha256 = "05klyml5maw3f5rxl3i20fqyvpmx69bh09h7a48y19q3r4nqd8f2";
+    sha256 = "1pw3m4l1xf887xagd0yrrnb35s372j0kvjziyy3gmx9fxpga1jzb";
   };
 
-  patches = [ ./dont_check_uid.patch ];
-
-  postPatch = ''
+  preConfigure = ''
     substituteInPlace dmtcp/src/dmtcp_coordinator.cpp \
       --replace /bin/bash /bin/sh
     substituteInPlace utils/gdb-add-symbol-file \

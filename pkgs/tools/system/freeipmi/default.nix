@@ -1,48 +1,39 @@
-x@{builderDefsPackage
-  , libgcrypt, readline
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ fetchurl, stdenv, libgcrypt, readline }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="freeipmi";
-    version="1.0.1";
-    name="${baseName}-${version}";
-    url="http://download.gluster.com/pub/${baseName}/${version}/${name}.tar.gz";
-    hash="11j0jvarxvzj89c2fg49ghz75gljdkacid6631q313kc1bd2l0ms";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "freeipmi-1.0.2";
+
+  src = fetchurl {
+    url = "mirror://gnu/freeipmi/${name}.tar.gz";
+    sha256 = "1v7f9y6dsb6bg5yribq1i66s6kr4hq6g95fhh9k7h1dgcf2qgpyj";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ libgcrypt readline ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  doCheck = true;
+
   meta = {
-    description = "IPMI utility";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl3;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.gnu.org/software/freeipmi/download.html";
-    };
-  };
-}) x
+    description = "GNU FreeIPMI, an implementation of the Intelligent Platform Management Interface";
 
+    longDescription =
+      '' GNU FreeIPMI provides in-band and out-of-band IPMI software based on
+         the IPMI v1.5/2.0 specification.  The IPMI specification defines a
+         set of interfaces for platform management and is implemented by a
+         number vendors for system management.  The features of IPMI that
+         most users will be interested in are sensor monitoring, system event
+         monitoring, power control, and serial-over-LAN (SOL).  The FreeIPMI
+         tools and libraries listed below should provide users with the
+         ability to access and utilize these and many other features.  A
+         number of useful features for large HPC or cluster environments have
+         also been implemented into FreeIPMI. See the README or FAQ for more
+         info.
+      '';
+
+    homepage = http://www.gnu.org/software/freeipmi/;
+
+    license = "GPLv3+";
+
+    maintainers = with stdenv.lib.maintainers; [ raskin ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+  };
+}

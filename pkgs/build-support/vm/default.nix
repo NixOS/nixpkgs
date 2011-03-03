@@ -218,7 +218,7 @@ rec {
       -net nic,model=virtio \
       -chardev socket,id=samba,path=./samba \
       -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
-      -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
+      -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
