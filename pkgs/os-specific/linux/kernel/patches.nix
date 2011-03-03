@@ -224,10 +224,4 @@ in
       patch = ./guruplug-mach-type.patch;
     };
 
-  xen_pvclock_resume =
-    { # Fix the clock after a DomU restore following a Dom0 reboot or migration.
-      name = "xen-pvclock-resume";
-      patch = ./xen-pvclock-resume.patch;
-    };
-  
 }
