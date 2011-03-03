@@ -2,10 +2,6 @@ source $stdenv/setup
 
 source $mirrorsFile
 
-if test -n "$showURLs"; then
-    header "downloading file $name with $outputHashAlgo hash $outputHash..."
-fi
-
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for
 # servers to need them during redirects, and work on SSL without a
