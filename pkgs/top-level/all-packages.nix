@@ -3502,6 +3502,8 @@ let
     libmpeg2 = mpeg2dec;
   };
 
+  libf2c = callPackage ../development/libraries/libf2c {};
+
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
   libffcall = builderDefsPackage (import ../development/libraries/libffcall) {
