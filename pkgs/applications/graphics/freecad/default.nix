@@ -1,45 +1,31 @@
-{ fetchurl, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
+{ fetchsvn, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
 boost, zlib,
-python, swig, gfortran, soqt, autoconf, automake, libtool }:
+python, swig, gfortran, soqt, libf2c }:
 
-throw "It does not build still"
+# It builds but fails to install
 
 stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.11.3729";
+  version = "svn-${src.rev}";
 
-  src = fetchurl {
-/*
-    url = "mirror://sourceforge/free-cad/freecad-${version}.tar.gz";
-    sha256 = "0q9jhnhkjsq9iy4kqi4xh2ljack4b2jj4pjm4dylv4z2d9gg5p4l";
-*/
-    url = "mirror://sourceforge/free-cad/freecad-${version}.dfsg.tar.gz";
-    sha256 = "0sjcbadzzgdjr5bk51nr3nq0siyvfdq0913dqlhv9xr42vha3j8r";
+  src = fetchsvn {
+    url = https://free-cad.svn.sourceforge.net/svnroot/free-cad/trunk;
+    rev = "4184";
+    sha256 = "26bd8407ce38f070b81ef39145aed093eed3c200d165a605b8169162d66568ce";
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt /*autoconf automake libtool*/ ];
+    zlib python swig gfortran soqt libf2c ];
 
-/*
-  # Using autotools
-  patchPhase = ''
-    sed -i -e 's/boost_\([a-z_]\+\)-mt/boost_\1/' \
-      configure
-  '';
+  enableParallelBuilding = true;
 
-  configureFlags = [ "--with-eigen2-include=${eigen}/include/eigen2"
-    "--with-boost-include=${boost}/include"
-    "--with-boost-lib=${boost}/lib"
-    "--with-qt4-dir=${qt4}"
-  ];
-*/
+  # They are used to boost 1.42, and we have newer boost that require
+  # this for freecad to build
+  NIX_CFLAGS_COMPILE = "-DBOOST_FILESYSTEM_VERSION=2";
 
-  # Using cmake
-
-  patchPhase = ''
-    sed -i -e '/Idf/d' -e '/Start/d' src/Mod/CMakeLists.txt
-  '';
-
-  cmakeFlags = [ "-Wno-dev" ];
-
+  meta = {
+    homepage = http://free-cad.sourceforge.net/;
+    license = [ "GPLv2+" "LGPLv2+" ];
+    description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
+  };
 }
