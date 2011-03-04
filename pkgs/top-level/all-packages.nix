@@ -3283,6 +3283,8 @@ let
 
   });
 
+  glib_2_28 = callPackage ../development/libraries/glib/2.28.x.nix {};
+
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     inherit (gnome) gtk;
     gtksharp = gtksharp2;
@@ -4180,18 +4182,22 @@ let
 
   vxl = callPackage ../development/libraries/vxl { };
 
-  webkit = ((builderDefsPackage ../development/libraries/webkit {
-    inherit (gnome28) gtkdoc libsoup;
-    inherit (gtkLibs) gtk atk pango glib;
-    inherit freetype fontconfig gettext gperf curl
+  webkit = let p = applyGlobalOverrides (x : {
+    libsoup = x.gnome28.libsoup_2_31;
+  });
+  in
+  (builderDefsPackage ../development/libraries/webkit {
+    inherit (p.gnome28) gtkdoc libsoup;
+    inherit (p.gtkLibs) gtk atk pango glib;
+    inherit (p) freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
       pkgconfig autoconf bison libproxy enchant
       python ruby which flex geoclue;
-    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
+    inherit (p.gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
-    inherit (xlibs) libXt renderproto libXrender;
-  }).deepOverride {libsoup = gnome28.libsoup_2_31;});
+    inherit (p.xlibs) libXt renderproto libXrender;
+  });
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
