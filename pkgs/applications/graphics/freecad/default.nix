@@ -1,6 +1,6 @@
 { fetchsvn, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
 boost, zlib,
-python, swig, gfortran, soqt, libf2c, pyqt4 }:
+python, swig, gfortran, soqt, libf2c }:
 
 # It builds but fails to install
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c pyqt ];
+    zlib python swig gfortran soqt libf2c ];
 
   enableParallelBuilding = true;
 
