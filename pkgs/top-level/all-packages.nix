@@ -394,16 +394,9 @@ let
 
   autojump = callPackage ../tools/misc/autojump { };
 
-  avahi =
-    let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
-    in
-      makeOverridable (import ../development/libraries/avahi) {
-        inherit stdenv fetchurl pkgconfig libdaemon dbus perl perlXMLParser
-          expat gettext intltool lib;
-        inherit (gtkLibs) glib gtk;
-        inherit qt4Support;
-        qt4 = if qt4Support then qt4 else null;
-      };
+  avahi = callPackage ../development/libraries/avahi {
+    qt4Support = getConfig [ "avahi" "qt4Support" ] false;
+  };
 
   axel = callPackage ../tools/networking/axel { };
 
