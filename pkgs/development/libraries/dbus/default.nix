@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.4.1";
+  version = "1.4.6";
   
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1gc375cz6qwr32kl3vdhqll4k0s4pp4f7isf3mffkwnhsbga18fa";
+    sha256 = "0rx5p1f0jg4ch4958qb3ld3w3cw57a0rmvmxjgn1ir9dvxj1wgkm";
   };
 
   patches = [ ./ignore-missing-includedirs.patch ];
