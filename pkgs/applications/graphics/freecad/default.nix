@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   # this for freecad to build
   NIX_CFLAGS_COMPILE = "-DBOOST_FILESYSTEM_VERSION=2";
 
+  patches = [ ./cmakeinstall.patch ];
+
   meta = {
     homepage = http://free-cad.sourceforge.net/;
     license = [ "GPLv2+" "LGPLv2+" ];

@@ -2803,6 +2803,8 @@ let
 
   boost = callPackage ../development/libraries/boost { };
 
+  boost146 = callPackage ../development/libraries/boost/1.46.nix { };
+
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
     enableDebug = true;
@@ -6028,7 +6030,9 @@ let
 
   flite = callPackage ../applications/misc/flite { };
 
-  freecad = callPackage ../applications/graphics/freecad { };
+  freecad = callPackage ../applications/graphics/freecad {
+    boost = boost146;
+  };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk;
