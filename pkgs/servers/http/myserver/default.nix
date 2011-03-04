@@ -1,8 +1,8 @@
 { fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
-, libxml2, zlib, guile, texinfo, cppunit, xz }:
+, libxml2, zlib, guile, texinfo, cppunit, xz, psmisc }:
 
 let version = "0.10"; in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (rec {
     name = "myserver-${version}";
 
     src = fetchurl {
@@ -42,3 +42,11 @@ let version = "0.10"; in
       platforms = stdenv.lib.platforms.gnu;
     };
   }
+
+  //
+
+  # On GNU/Linux the `test_suite' process sometimes stays around, so
+  # forcefully terminate it.
+  (if stdenv.isLinux
+   then { postCheck = "${psmisc}/bin/killall test_suite || true"; }
+   else { }))
