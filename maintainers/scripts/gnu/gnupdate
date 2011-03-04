@@ -277,18 +277,27 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
                 "--strict" "--eval-only" "--xml"
                 script)))
 
+(define (pipe-failed? pipe)
+  "Close pipe and return its status if it failed."
+  (let ((status (close-pipe pipe)))
+    (if (or (status:term-sig status)
+            (not (= (status:exit-val status) 0)))
+        status
+        #f)))
+
 (define (nix-prefetch-url url)
   ;; Download URL in the Nix store and return the base32-encoded SHA256 hash
   ;; of the file at URL
   (let* ((pipe (open-pipe* OPEN_READ "nix-prefetch-url" url))
          (hash (read-line pipe)))
-    (close-pipe pipe)
-    (if (eof-object? hash)
+    (if (or (pipe-failed? pipe)
+            (eof-object? hash))
         (values #f #f)
         (let* ((pipe (open-pipe* OPEN_READ "nix-store" "--print-fixed-path"
-                                 "sha256" hash (basename url)))
+                                   "sha256" hash (basename url)))
                (path (read-line pipe)))
-          (if (eof-object? path)
+          (if (or (pipe-failed? pipe)
+                  (eof-object? path))
               (values #f #f)
               (values (string-trim-both hash) (string-trim-both path)))))))
 
@@ -815,20 +824,31 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
 
 (define (gnupdate . args)
   ;; Assume Nixpkgs is under $NIXPKGS or ~/src/nixpkgs.
+
+  (define (nixpkgs->snix xml-file)
+    (format (current-error-port) "evaluating Nixpkgs...~%")
+    (let* ((home (getenv "HOME"))
+           (xml  (if xml-file
+                     (open-input-file xml-file)
+                     (open-nixpkgs (or (getenv "NIXPKGS")
+                                       (string-append home "/src/nixpkgs")))))
+           (snix (xml->snix xml)))
+      (if (not xml-file)
+          (let ((status (pipe-failed? xml)))
+            (if status
+                (begin
+                  (format (current-error-port) "`nix-instantiate' failed: ~A~%"
+                          status)
+                  (exit 1)))))
+      snix))
+
   (let* ((opts      (args-fold (cdr args) %options
                                (lambda (opt name arg result)
                                  (error "unrecognized option `~A'" name))
                                (lambda (operand result)
                                  (error "extraneous argument `~A'" operand))
                                '()))
-         (home      (getenv "HOME"))
-         (path      (or (getenv "NIXPKGS")
-                        (string-append home "/src/nixpkgs")))
-         (snix      (begin
-                      (format (current-error-port) "parsing XML...~%")
-                      (xml->snix
-                       (or (and=> (assoc-ref opts 'xml-file) open-input-file)
-                           (open-nixpkgs path)))))
+         (snix      (nixpkgs->snix (assoc-ref opts 'xml-file)))
          (packages  (match snix
                       (('snix _ ('attribute-set attributes))
                        attributes)
