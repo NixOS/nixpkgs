@@ -79,8 +79,6 @@ rec {
     chmod a+x "$TARGET/bin/"*
     ensureDir "$out/bin"
 
-    sed -e 's@ jena[.]@ com.hp.hpl.jena.@' -i "$TARGET/bin/"*
-
     echo -e '#! /bin/sh\nls "'"$TARGET"'"/bin' > "$out/bin/jena-list-commands"
     echo '#! /bin/sh' >> "$out/bin/jena-command"
     echo 'export JENAROOT="'"$TARGET"'"' >> "$out/bin/jena-command"
