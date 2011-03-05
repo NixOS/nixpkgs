@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   # this for freecad to build
   NIX_CFLAGS_COMPILE = "-DBOOST_FILESYSTEM_VERSION=2";
 
-  # This will help only x86_64, but will not hurt on others.
+  # This should work on both x86_64, and i686 linux
   preBuild = ''
-    export NIX_LDFLAGS="-L${gfortran.gcc}/lib64 $NIX_LDFLAGS";
+    export NIX_LDFLAGS="-L${gfortran.gcc}/lib64 -L${gfortran.gcc}/lib $NIX_LDFLAGS";
   '';
 
   postInstall = ''
