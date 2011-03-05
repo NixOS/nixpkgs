@@ -1,6 +1,6 @@
 { fetchsvn, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
 boost, zlib,
-python, swig, gfortran, soqt, libf2c }:
+python, swig, gfortran, soqt, libf2c, pyqt4, makeWrapper }:
 
 # It builds but fails to install
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c ];
+    zlib python swig gfortran soqt libf2c pyqt4 makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="-L${gfortran.gcc}/lib64 $NIX_LDFLAGS";
   '';
 
-  patches = [ ./cmakeinstall.patch ];
+  postInstall = ''
+    wrapProgram $out/bin/FreeCAD --prefix PYTHONPATH : $PYTHONPATH \
+      --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
+  '';
+
+  patches = [ ./cmakeinstall.patch ./pythonpath.patch ];
 
   meta = {
     homepage = http://free-cad.sourceforge.net/;
