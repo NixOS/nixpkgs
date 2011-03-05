@@ -4508,6 +4508,8 @@ let
 
   jetty61 = callPackage ../servers/http/jetty/6.1 { };
 
+  joseki = callPackage ../servers/http/joseki {};
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
