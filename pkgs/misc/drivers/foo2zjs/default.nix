@@ -26,7 +26,10 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixMakefile" "doMakeDirs" "doMakeInstall" "deployGetWeb"];
+  phaseNames = ["doPatch" "fixHardcodedPaths" "doMakeDirs" "doMakeInstall" "deployGetWeb"];
+
+  patches = [ ./no-hardcode-fw.diff ];
+
   makeFlags = [
       ''PREFIX=$out''
       ''UDEVBIN=$out/bin''
@@ -37,13 +40,16 @@ rec {
       ''FOODB=$out/share/foomatic/db/source''
       ''MODEL=$out/share/cups/model''
   ];
+
   installFlags = [ "install-hotplug" ];
-  fixMakefile = a.fullDepEntry ''
+
+  fixHardcodedPaths = a.fullDepEntry ''
     touch all-test
     sed -e "/BASENAME=/iPATH=$out/bin:$PATH" -i *-wrapper *-wrapper.in
     sed -e '/install-usermap/d' -i Makefile
     sed -e "s@/etc/hotplug/usb@$out&@" -i *rules*
-  '' ["doUnpack" "minInit"];
+    sed -e "/PRINTERID=/s@=.*@=$out/bin/usb_printerid@" -i hplj1000
+  '' ["doPatch" "minInit"];
 
   doMakeDirs = a.fullDepEntry ''
     mkdir -pv $out/{etc/udev/rules.d,lib/udev/rules.d,etc/hotplug/usb}
