@@ -1348,6 +1348,8 @@ let
       libXp;
   };
 
+  vorbisgain = callPackage ../tools/misc/vorbisgain { };
+
   vpnc = callPackage ../tools/networking/vpnc { };
 
   vtun = callPackage ../tools/networking/vtun { };
