@@ -896,6 +896,8 @@ let
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
+  mkcue = callPackage ../tools/cd-dvd/mkcue { };
+
   mktemp = callPackage ../tools/security/mktemp { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
