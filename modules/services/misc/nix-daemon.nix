@@ -69,6 +69,16 @@ in
           This option allows to append lines to nix.conf. 
         ";
       };
+      
+      extraChrootPaths = mkOption {
+        default = [];
+	example = ["/var/dist"];
+	description = ''
+	  Extra paths to include in chroot. May be useful if you build
+	  from private repository mirrors to avoid extra checksumming 
+	  and copying to store.
+	'';
+      };
 
       distributedBuilds = mkOption {
         default = false;
@@ -176,7 +186,6 @@ in
           you should increase this value.
         '';
       };
-      
     };
   };
 
@@ -211,7 +220,7 @@ in
                 build-users-group = nixbld
                 build-max-jobs = ${toString (config.nix.maxJobs)}
                 build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-                build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths)
+                build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths) ${builtins.toString config.nix.extraChrootPaths}
                 $extraOptions
                 END
               '';
