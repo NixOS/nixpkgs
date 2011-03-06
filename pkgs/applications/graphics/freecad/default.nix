@@ -19,9 +19,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # They are used to boost 1.42, and we have newer boost that require
-  # this for freecad to build
-  NIX_CFLAGS_COMPILE = "-DBOOST_FILESYSTEM_VERSION=2";
+  # The freecad people are used to boost 1.42, and we have newer boost that
+  # require the -DBOOST_FILESYSTEM_VERSION=2 for freecad to build
+  # For zlib to build in i686-linux, as g++ plus glibc defines _LARGEFILE64_SOURCE,
+  # we need the -D-FILE_OFFSET_BITS=64 indication for zlib headers to work.
+  NIX_CFLAGS_COMPILE = "-DBOOST_FILESYSTEM_VERSION=2 -D_FILE_OFFSET_BITS=64";
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
