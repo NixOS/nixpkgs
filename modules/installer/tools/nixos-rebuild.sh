@@ -84,7 +84,7 @@ while test "$#" -gt 0; do
       --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
         extraBuildFlags="$extraBuildFlags $i"
       ;;
-      --max-jobs|-j)
+      --max-jobs|-j|--cores)
         j="$1"; shift 1
         extraBuildFlags="$extraBuildFlags $i $j"
       ;;
