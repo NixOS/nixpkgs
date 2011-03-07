@@ -84,15 +84,9 @@ while test "$#" -gt 0; do
       --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
         extraBuildFlags="$extraBuildFlags $i"
       ;;
-      --max-jobs|-j*)
-        if [ -z "${i:2}" ]; then
-          # -j n
-          extraBuildFlags="$extraBuildFlags $i $1"
-          shift 1
-        else
-          # -jn
-          extraBuildFlags="$extraBuildFlags $i"
-        fi
+      --max-jobs|-j)
+        j="$1"; shift 1
+        extraBuildFlags="$extraBuildFlags $i $j"
       ;;
       --fast)
         buildNix=
