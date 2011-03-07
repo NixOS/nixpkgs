@@ -39,7 +39,7 @@ $ nix-channel --update</screen>
   <literal>nixos</literal>.</para></listitem>
 
   <listitem><para>Check out Nixpkgs from
-  <link xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
+  <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk"/> as
   <literal>nixpkgs</literal>.</para></listitem>
 
   <listitem><para>Build the ISO image:
