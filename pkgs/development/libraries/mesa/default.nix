@@ -4,14 +4,14 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "7.9.1"; in
+let version = "7.10.1"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    md5 = "07dc6cfb5928840b8b9df5bd1b3ae434";
+    md5 = "efe8da4d80c2a5d32a800770b8ce5dfa";
   };
 
   configureFlags =
@@ -21,9 +21,9 @@ stdenv.mkDerivation {
     + stdenv.lib.optionalString stdenv.isDarwin " --disable-egl";
 
   buildInputs =
-    [ pkgconfig expat x11 libdrm xlibs.glproto
+    [ pkgconfig expat x11 libdrm xlibs.makedepend xlibs.glproto
       xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
-      lipo talloc
+      lipo talloc 
     ];
 
   enableParallelBuilding = true;
