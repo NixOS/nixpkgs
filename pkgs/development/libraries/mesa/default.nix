@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     md5 = "efe8da4d80c2a5d32a800770b8ce5dfa";
   };
 
+  patches = [ ./swrast-settexbuffer.patch ];
+
   configureFlags =
     "--disable-gallium"
     + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
