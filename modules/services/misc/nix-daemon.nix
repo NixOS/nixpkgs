@@ -61,12 +61,12 @@ in
 
       chrootDirs = mkOption {
         default = [];
-	example = [ "/dev" "/proc" ];
-	description =
-	  ''
-	    Directories from the host filesystem to be included
-	    in the chroot.
-	  '';
+        example = [ "/dev" "/proc" ];
+        description =
+          ''
+            Directories from the host filesystem to be included
+            in the chroot.
+          '';
       };
 
       extraOptions = mkOption {
