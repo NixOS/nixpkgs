@@ -889,6 +889,8 @@ let
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
+  mkcue = callPackage ../tools/cd-dvd/mkcue { };
+
   mktemp = callPackage ../tools/security/mktemp { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
@@ -1338,6 +1340,8 @@ let
       libXmu libXaw libXext xextproto libSM libICE libXpm
       libXp;
   };
+
+  vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
@@ -2796,6 +2800,8 @@ let
 
   boost = callPackage ../development/libraries/boost { };
 
+  boost146 = callPackage ../development/libraries/boost/1.46.nix { };
+
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
     enableDebug = true;
@@ -3490,6 +3496,8 @@ let
     libmpeg2 = mpeg2dec;
   };
 
+  libf2c = callPackage ../development/libraries/libf2c {};
+
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
   libffcall = builderDefsPackage (import ../development/libraries/libffcall) {
@@ -4160,18 +4168,25 @@ let
 
   vxl = callPackage ../development/libraries/vxl { };
 
-  webkit = ((builderDefsPackage ../development/libraries/webkit {
-    inherit (gnome28) gtkdoc libsoup;
-    inherit (gtkLibs) gtk atk pango glib;
-    inherit freetype fontconfig gettext gperf curl
+  webkit = let p = applyGlobalOverrides (x : {
+    libsoup = x.gnome28.libsoup_2_31;
+    gnome28 = x.gnome28 // {
+      libsoup = x.gnome28.libsoup_2_31;
+    };
+  });
+  in
+  (p.builderDefsPackage ../development/libraries/webkit {
+    inherit (p.gnome28) gtkdoc;
+    inherit (p.gtkLibs) gtk atk pango glib;
+    inherit (p) freetype fontconfig gettext gperf curl
       libjpeg libtiff libpng libxml2 libxslt sqlite
       icu cairo perl intltool automake libtool
       pkgconfig autoconf bison libproxy enchant
-      python ruby which flex geoclue;
-    inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
+      python ruby which flex geoclue libsoup;
+    inherit (p.gst_all) gstreamer gstPluginsBase gstFfmpeg
       gstPluginsGood;
-    inherit (xlibs) libXt renderproto libXrender;
-  }).deepOverride {libsoup = gnome28.libsoup_2_31;});
+    inherit (p.xlibs) libXt renderproto libXrender;
+  });
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
@@ -4478,6 +4493,8 @@ let
   jetty = callPackage ../servers/http/jetty { };
 
   jetty61 = callPackage ../servers/http/jetty/6.1 { };
+
+  joseki = callPackage ../servers/http/joseki {};
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
@@ -4886,7 +4903,6 @@ let
         kernelPatches.cifs_timeout
         kernelPatches.no_xsave
         kernelPatches.dell_rfkill
-        kernelPatches.xen_pvclock_resume
       ];
   };
 
@@ -6007,7 +6023,9 @@ let
 
   flite = callPackage ../applications/misc/flite { };
 
-  freecad = callPackage ../applications/graphics/freecad { };
+  freecad = callPackage ../applications/graphics/freecad {
+    boost = boost146;
+  };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk;

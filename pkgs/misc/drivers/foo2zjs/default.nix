@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , foomatic_filters, bc, unzip, ghostscript
+  , foomatic_filters, bc, unzip, ghostscript, udev, vim
   , ...}:
 builderDefsPackage
 (a :  
@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="foo2zjs";
-    version="20090908";
+    version="20110210";
     name="${baseName}-${version}";
-    url="http://ftp.de.debian.org/debian/pool/main/f/foo2zjs/foo2zjs_${version}dfsg.orig.tar.gz";
-    hash="1pg4dmckvlx94zxh4gcw7jfmyb10ada7f6vsp5bgz1z95fwwlqjz";
+    url="http://www.loegria.net/mirrors/foo2zjs/${name}.tar.gz";
+    hash="0vss8gdbbgxr694xw48rys2qflbnb4sp4gdb1v6z4m9ab97hs5yk";
   };
 in
 rec {
@@ -26,15 +26,36 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixMakefile" "doMakeInstall" "deployGetWeb"];
+  phaseNames = ["doPatch" "fixHardcodedPaths" "doMakeDirs" "doMakeInstall" "deployGetWeb"];
+
+  patches = [ ./no-hardcode-fw.diff ];
+
   makeFlags = [
-    ''PREFIX=$out/''
-    ''UDEVBIN=$out/bin/''
+      ''PREFIX=$out''
+      ''UDEVBIN=$out/bin''
+      ''UDEVDIR=$out/etc/udev/rules.d''
+      ''UDEVD=${udev}/sbin/udevd''
+      ''LIBUDEVDIR=$out/lib/udev/rules.d''
+      ''USBDIR=$out/etc/hotplug/usb''
+      ''FOODB=$out/share/foomatic/db/source''
+      ''MODEL=$out/share/cups/model''
   ];
-  fixMakefile = a.fullDepEntry ''
+
+  installFlags = [ "install-hotplug" ];
+
+  fixHardcodedPaths = a.fullDepEntry ''
     touch all-test
     sed -e "/BASENAME=/iPATH=$out/bin:$PATH" -i *-wrapper *-wrapper.in
-  '' ["doUnpack" "minInit"];
+    sed -e '/install-usermap/d' -i Makefile
+    sed -e "s@/etc/hotplug/usb@$out&@" -i *rules*
+    sed -e "/PRINTERID=/s@=.*@=$out/bin/usb_printerid@" -i hplj1000
+  '' ["doPatch" "minInit"];
+
+  doMakeDirs = a.fullDepEntry ''
+    mkdir -pv $out/{etc/udev/rules.d,lib/udev/rules.d,etc/hotplug/usb}
+    mkdir -pv $out/share/foomatic/db/source/{opt,printer,driver}
+    mkdir -pv $out/share/cups/model
+  '' ["minInit"];
 
   deployGetWeb = a.fullDepEntry ''
     ensureDir "$out/bin"
