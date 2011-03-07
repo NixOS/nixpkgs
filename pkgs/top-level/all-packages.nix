@@ -3155,8 +3155,6 @@ let
 
   gmime = callPackage ../development/libraries/gmime { };
 
-  gmime_2_2 = callPackage ../development/libraries/gmime/2.2.x.nix { };
-
   gmm = callPackage ../development/libraries/gmm { };
 
   gmp =
@@ -6504,7 +6502,6 @@ let
   };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
-    gmime = gmime_2_2;
     spellChecking = false;
   };
 
