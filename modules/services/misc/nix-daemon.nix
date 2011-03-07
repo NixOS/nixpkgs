@@ -59,6 +59,16 @@ in
         ";
       };
 
+      chrootDirs = mkOption {
+        default = [];
+	example = [ "/dev" "/proc" ];
+	description =
+	  ''
+	    Directories from the host filesystem to be included
+	    in the chroot.
+	  '';
+      };
+
       extraOptions = mkOption {
         default = "";
         example = "
@@ -70,16 +80,6 @@ in
         ";
       };
       
-      extraChrootPaths = mkOption {
-        default = [];
-	example = ["/var/dist"];
-	description = ''
-	  Extra paths to include in chroot. May be useful if you build
-	  from private repository mirrors to avoid extra checksumming 
-	  and copying to store.
-	'';
-      };
-
       distributedBuilds = mkOption {
         default = false;
         description = "
@@ -194,6 +194,8 @@ in
 
   config = {
 
+    nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin" ];
+
     environment.etc =
       [ { # Nix configuration.
           source =
@@ -220,7 +222,7 @@ in
                 build-users-group = nixbld
                 build-max-jobs = ${toString (config.nix.maxJobs)}
                 build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-                build-chroot-dirs = /dev /dev/pts /proc /bin $(echo $extraPaths) ${builtins.toString config.nix.extraChrootPaths}
+                build-chroot-dirs = ${toString config.nix.chrootDirs} $(echo $extraPaths)
                 $extraOptions
                 END
               '';
