@@ -2881,6 +2881,8 @@ let
     inherit (gnome) gtk;
   };
 
+  cminpack = callPackage ../development/libraries/cminpack { };
+
   coin3d = callPackage ../development/libraries/coin3d { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
