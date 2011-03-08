@@ -1,13 +1,17 @@
-{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu }:
+{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
+, EFIsupport ? false }:
 
-let unifont_bdf = fetchurl {
+let
+    prefix = "grub${if EFIsupport then "-efi" else ""}";
+    version = "1.99rc1";
+    unifont_bdf = fetchurl {
       url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
       sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
     };
 in
 
 stdenv.mkDerivation rec {
-  name = "grub-1.99rc1";
+  name = "${prefix}-${version}";
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/grub/grub-1.99~rc1.tar.gz";
@@ -42,6 +46,14 @@ stdenv.mkDerivation rec {
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
+
+  configureFlags =
+    let arch = if stdenv.system == "i686-linux" then "i386"
+               else if stdenv.system == "x86_64-linux" then "x86_64"
+               else abort "unsupported EFI firmware architecture";
+    in
+      stdenv.lib.optionals EFIsupport
+        [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
 
   doCheck = false;
 
