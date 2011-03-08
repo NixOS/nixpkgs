@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "cminpack-1.1.1";
+  name = "cminpack-1.1.2";
   
   src = fetchurl {
-    url = http://pr.willowgarage.com/downloads/cminpack-1.1.1.tar.gz;
-    sha256 = "0bi86c9712i68nyv8d52f7wgyb35kik14iwj4rpxcnz91m7wgacp";
+    url = http://devernay.free.fr/hacks/cminpack/cminpack-1.1.2.tar.gz;
+    sha256 = "0sd8gqk7npyiiiz2jym8q89d9gqx8fig0mnx63swkwmp4lqmmxww";
   };
 
   patchPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.ros.org/wiki/cminpack;
+    homepage = http://devernay.free.fr/hacks/cminpack/cminpack.html;
     license = "BSD";
     description = "Software for solving nonlinear equations and nonlinear least squares problems";
   };
