@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
 
   programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
-    [ gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib xlibs.libXv ] );
+    [ gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib gtkLibs.gdk_pixbuf xlibs.libXv ] );
 
   buildInputs = [ perl ];
 
