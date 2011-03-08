@@ -2984,6 +2984,8 @@ let
     singlePrecision = true;
   };
 
+  flann = callPackage ../development/libraries/flann { };
+
   fltk11 = callPackage ../development/libraries/fltk/fltk11.nix { };
 
   fltk20 = callPackage ../development/libraries/fltk { };
