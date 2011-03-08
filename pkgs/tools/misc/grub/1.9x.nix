@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bison, gettext, ncurses, libusb, freetype, qemu }:
+{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu }:
 
 let unifont_bdf = fetchurl {
       url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -7,14 +7,15 @@ let unifont_bdf = fetchurl {
 in
 
 stdenv.mkDerivation rec {
-  name = "grub-1.98";
+  name = "grub-1.99rc1";
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/grub/${name}.tar.gz";
-    sha256 = "05660x82y2rwrzm0d1c4z07fbh02qwmacsmbbav6fa855s4w3wmy";
+    url = "ftp://alpha.gnu.org/gnu/grub/grub-1.99~rc1.tar.gz";
+    sha256 = "0llxycgrs5h9n2mlgmkkg1mr2fv1rzmlw4mqb3v9hcaydkx3wczh";
+    name = "${name}.tar.gz";
   };
 
-  buildInputs = [ bison ncurses libusb freetype gettext ]
+  buildInputs = [ flex bison ncurses libusb freetype gettext ]
     ++ stdenv.lib.optional doCheck qemu;
 
   preConfigure =
@@ -35,16 +36,6 @@ stdenv.mkDerivation rec {
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
     '';
-
-  patches =
-    [ # The udev rules for LVM create symlinks in /dev/mapper rathe
-      # than device nodes, causing GRUB to fail to recognize LVM
-      # volumes. See
-      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=550704
-      # This ugly workaround makes `find_root_device' use stat() on
-      # files in /dev/mapper instead of lstat().
-      ./device-mapper-symlinks.patch
-    ];
 
   postPatch =
     '' gunzip < "${unifont_bdf}" > "unifont.bdf"
