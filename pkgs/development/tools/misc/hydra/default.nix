@@ -34,10 +34,10 @@ in
 
 stdenv.mkDerivation rec {
   name = "hydra-${version}";
-  version = "0.1pre25566";
+  version = "0.1pre26202";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/858318/download/1/hydra-0.1pre25566.tar.gz;
-    sha256 = "6b2dc48d609a69dec117debbd185d71bfb092bc7078f8ca59e29aaf3c9591ca7";
+    url = http://hydra.nixos.org/build/956221/download/2/hydra-0.1pre26202.tar.gz;
+    sha256 = "0v727al406akn9n9ys5kl77kagr5l8yq9zi4nnn9nrcii8pavb99";
   };
 
   configureFlags = "--with-nix=${nix}";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     rpm dpkg cdrkit]));
 
   postInstall = ''
-    for i in $out/bin/*; do
+    for i in "$out/bin/"*; do
         wrapProgram $i \
             --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
             --prefix PATH ':' $out/bin:$hydraPath \
@@ -58,10 +58,12 @@ stdenv.mkDerivation rec {
             --set HYDRA_HOME $out/libexec/hydra \
             --set NIX_RELEASE ${nix.name}
     done
-  ''; # */
+  '';
 
   meta = {
+    description = "Hydra, the Nix-based continuous integration system";
+    homepage = http://nixos.org/hydra/;
+    license = "GPLv3+";
     platforms = stdenv.lib.platforms.linux;
-  };  
+  };
 }
-
