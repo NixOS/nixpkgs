@@ -62,6 +62,15 @@ in
         '';
     };
   
+    networking.firewall.allowPing = mkOption {
+      default = false;
+      type = types.bool;
+      description =
+        ''
+          Whether to respond to incoming ICMP echo requests ("pings").
+        '';
+    };
+  
   };
 
 
@@ -129,6 +138,12 @@ in
             # Accept IPv6 ICMP packets on the local link.  Otherwise
             # stuff like neighbor/router solicitation won't work.
             ip6tables -A INPUT -s fe80::/10 -p icmpv6 -j ACCEPT
+
+            # Optionally respond to pings.
+            ${optionalString cfg.allowPing ''
+              iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+              ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -j ACCEPT
+            ''}
 
             # Reject/drop everything else.
             ip46tables -A INPUT -j FW_REFUSE
