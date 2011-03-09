@@ -41,11 +41,16 @@ stdenv.mkDerivation rec {
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
     '';
 
-  postPatch =
+  prePatch =
     '' gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
+
+  postInstall = ''
+    ensureDir ./share/grub
+    cp ./unicode.pf2 ./share/grub/ 
+  '';
 
   configureFlags =
     let arch = if stdenv.system == "i686-linux" then "i386"
