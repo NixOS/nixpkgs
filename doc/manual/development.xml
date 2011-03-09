@@ -381,8 +381,8 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     the location in the Nix store of the test results (e.g.,
     screenshots, test reports, and so on).  In particular, a
     pretty-printed log of the test is written to
-    <filename>log.html</filename>, which can be viewed using something
-    like:
+    <filename>log.html</filename>, which can be viewed using a web
+    browser like this:
 
     <screen>
       $ icecat result/log.html
@@ -402,7 +402,7 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     virtual machines defined in the NFS test using QEMU/KVM.  The root
     file system of the VMs is created on the fly and kept across VM
     restarts in
-    <filename>./<varname>hostname</varname>.qcow2</filename>.
+    <filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.
   </para>
 
   <para>
