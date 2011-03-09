@@ -4,8 +4,6 @@ with pkgs.lib;
 
 let
 
-  iptables = "${pkgs.iptables}/sbin/iptables";
-
   cfg = config.networking.firewall;
 
 in
@@ -76,47 +74,49 @@ in
   # holds).
   config = mkIf config.networking.firewall.enable {
 
-    environment.systemPackages = [pkgs.iptables];
+    environment.systemPackages = [ pkgs.iptables ];
 
     jobs.firewall =
       { startOn = "started network-interfaces";
 
+        path = [ pkgs.iptables ];
+
         preStart =
           ''
-            ${iptables} -F
+            iptables -F
 
             # Accept all traffic on the loopback interface.
-            ${iptables} -A INPUT -i lo -j ACCEPT
+            iptables -A INPUT -i lo -j ACCEPT
 
             # Accept packets from established or related connections.
-            ${iptables} -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+            iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
             # Accept connections to the allowed TCP ports.            
             ${concatMapStrings (port:
                 ''
-                  ${iptables} -A INPUT -p tcp --dport ${toString port} -j ACCEPT
+                  iptables -A INPUT -p tcp --dport ${toString port} -j ACCEPT
                 ''
               ) config.networking.firewall.allowedTCPPorts
             }
 
             # Accept multicast.  Not a big security risk since
             # probably nobody is listening anyway.
-            ${iptables} -A INPUT -d 224.0.0.0/4 -j ACCEPT
+            iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
 
             # Drop everything else.
             ${optionalString cfg.logRefusedConnections ''
-              ${iptables} -A INPUT -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
+              iptables -A INPUT -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
             ''}
             ${optionalString cfg.logRefusedPackets ''
-              ${iptables} -A INPUT -j LOG --log-level info --log-prefix "rejected packet: "
+              iptables -A INPUT -j LOG --log-level info --log-prefix "rejected packet: "
             ''}
-            ${iptables} -A INPUT -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
+            iptables -A INPUT -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
           '';
 
         postStop =
           ''
-            ${iptables} -F
-          '';     
+            iptables -F
+          '';
       };
 
   };

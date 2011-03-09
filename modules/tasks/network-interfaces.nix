@@ -162,9 +162,10 @@ in
 
         startOn = "stopped udevtrigger";
 
+        path = [ config.system.sbin.modprobe pkgs.iproute ];
+
         preStart =
           ''
-            export PATH=${config.system.sbin.modprobe}/sbin:${pkgs.iproute}/sbin:$PATH
             modprobe af_packet || true
 
             ${pkgs.lib.concatMapStrings (i:
