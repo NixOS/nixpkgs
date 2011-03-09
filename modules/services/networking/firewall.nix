@@ -90,6 +90,23 @@ in
             }
 
             ip46tables -F
+            ip46tables -X # flush unused chains
+            ip46tables -P INPUT DROP
+
+
+            # The "FW_REFUSE" chain performs logging and
+            # rejecting/dropping of packets.
+            ip46tables -N FW_REFUSE
+
+            ${optionalString cfg.logRefusedConnections ''
+              ip46tables -A FW_REFUSE -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
+            ''}
+            ${optionalString cfg.logRefusedPackets ''
+              ip46tables -A FW_REFUSE -j LOG --log-level info --log-prefix "rejected packet: "
+            ''}
+
+            ip46tables -A FW_REFUSE -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
+
 
             # Accept all traffic on the loopback interface.
             ip46tables -A INPUT -i lo -j ACCEPT
@@ -113,20 +130,16 @@ in
             # stuff like neighbor/router solicitation won't work.
             ip6tables -A INPUT -s fe80::/10 -p icmpv6 -j ACCEPT
 
-            # Drop everything else.
-            ${optionalString cfg.logRefusedConnections ''
-              ip46tables -A INPUT -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
-            ''}
-            ${optionalString cfg.logRefusedPackets ''
-              ip46tables -A INPUT -j LOG --log-level info --log-prefix "rejected packet: "
-            ''}
-            ip46tables -A INPUT -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
+            # Reject/drop everything else.
+            ip46tables -A INPUT -j FW_REFUSE
           '';
 
         postStop =
           ''
             iptables -F
+            iptables -P INPUT ACCEPT
             ip6tables -F
+            ip6tables -P INPUT ACCEPT
           '';
       };
 
