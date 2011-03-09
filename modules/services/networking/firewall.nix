@@ -53,12 +53,22 @@ in
   
     networking.firewall.allowedTCPPorts = mkOption {
       default = [];
-      example = [22 80];
+      example = [ 22 80 ];
       type = types.list types.int;
       description =
         ''
           List of TCP ports on which incoming connections are
           accepted.
+        '';
+    };
+  
+    networking.firewall.allowedUDPPorts = mkOption {
+      default = [];
+      example = [ 53 ];
+      type = types.list types.int;
+      description =
+        ''
+          List of open UDP ports.
         '';
     };
   
@@ -131,6 +141,14 @@ in
               ) config.networking.firewall.allowedTCPPorts
             }
 
+            # Accept packets on the allowed UDP ports.
+            ${concatMapStrings (port:
+                ''
+                  ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
+                ''
+              ) config.networking.firewall.allowedUDPPorts
+            }
+
             # Accept IPv4 multicast.  Not a big security risk since
             # probably nobody is listening anyway.
             iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
@@ -138,6 +156,7 @@ in
             # Accept IPv6 ICMP packets on the local link.  Otherwise
             # stuff like neighbor/router solicitation won't work.
             ip6tables -A INPUT -s fe80::/10 -p icmpv6 -j ACCEPT
+            ip6tables -A INPUT -d fe80::/10 -p icmpv6 -j ACCEPT
 
             # Optionally respond to pings.
             ${optionalString cfg.allowPing ''
