@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     let arch = if stdenv.system == "i686-linux" then "i386"
                else if stdenv.system == "x86_64-linux" then "x86_64"
-               else abort "unsupported EFI firmware architecture";
+               else throw "unsupported EFI firmware architecture";
     in
       stdenv.lib.optionals EFIsupport
         [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
