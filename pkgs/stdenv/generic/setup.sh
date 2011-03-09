@@ -719,10 +719,18 @@ fixupPhase() {
         done;
     fi
 
-    if test -z "$dontBzipMan"; then
-        for f in $out/share/man/*/*; do
-            gzip -c $f > $f.gz && rm $f
+    if test -z "$dontGzipMan"; then
+        GLOBIGNORE=.:..:*.gz:*.bz2
+        for f in $out/share/man/*/* $out/share/man/*/*/*; do
+            if test -f $f; then
+                if gzip -c $f > $f.gz; then
+                    rm $f
+                else
+                    rm $f.gz
+                fi
+            fi
         done
+        unset GLOBIGNORE
     fi
 
     # TODO: strip _only_ ELF executables, and return || fail here...
