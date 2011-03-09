@@ -83,39 +83,50 @@ in
 
         preStart =
           ''
-            iptables -F
+            # Helper command to manipulate both the IPv4 and IPv6 filters.
+            ip46tables() {
+              iptables "$@"
+              ip6tables "$@"
+            }
+
+            ip46tables -F
 
             # Accept all traffic on the loopback interface.
-            iptables -A INPUT -i lo -j ACCEPT
+            ip46tables -A INPUT -i lo -j ACCEPT
 
             # Accept packets from established or related connections.
-            iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+            ip46tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-            # Accept connections to the allowed TCP ports.            
+            # Accept connections to the allowed TCP ports.
             ${concatMapStrings (port:
                 ''
-                  iptables -A INPUT -p tcp --dport ${toString port} -j ACCEPT
+                  ip46tables -A INPUT -p tcp --dport ${toString port} -j ACCEPT
                 ''
               ) config.networking.firewall.allowedTCPPorts
             }
 
-            # Accept multicast.  Not a big security risk since
+            # Accept IPv4 multicast.  Not a big security risk since
             # probably nobody is listening anyway.
             iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
 
+            # Accept IPv6 ICMP packets on the local link.  Otherwise
+            # stuff like neighbor/router solicitation won't work.
+            ip6tables -A INPUT -s fe80::/10 -p icmpv6 -j ACCEPT
+
             # Drop everything else.
             ${optionalString cfg.logRefusedConnections ''
-              iptables -A INPUT -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
+              ip46tables -A INPUT -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
             ''}
             ${optionalString cfg.logRefusedPackets ''
-              iptables -A INPUT -j LOG --log-level info --log-prefix "rejected packet: "
+              ip46tables -A INPUT -j LOG --log-level info --log-prefix "rejected packet: "
             ''}
-            iptables -A INPUT -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
+            ip46tables -A INPUT -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
           '';
 
         postStop =
           ''
             iptables -F
+            ip6tables -F
           '';
       };
 
