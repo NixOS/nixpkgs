@@ -164,7 +164,7 @@ in
 
         preStart =
           ''
-            export PATH=${config.system.sbin.modprobe}/sbin:$PATH
+            export PATH=${config.system.sbin.modprobe}/sbin:${pkgs.iproute}/sbin:$PATH
             modprobe af_packet || true
 
             ${pkgs.lib.concatMapStrings (i:
