@@ -719,6 +719,12 @@ fixupPhase() {
         done;
     fi
 
+    if test -z "$dontBzipMan"; then
+        for f in $out/share/man/*/*; do
+            gzip -c $f > $f.gz && rm $f
+        done
+    fi
+
     # TODO: strip _only_ ELF executables, and return || fail here...
     if test -z "$dontStrip"; then
         stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
