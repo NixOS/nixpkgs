@@ -6847,6 +6847,7 @@ let
         ++ lib.optional enableAdobeFlash flashplayer
         # RealPlayer is disabled by default for legal reasons.
         ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
+        ++ lib.optional (getConfig [browserName "enableDjvu"] false) (djview4)
         ++ lib.optional (getConfig [browserName "enableMPlayer"] false) (MPlayerPlugin browser)
         ++ lib.optional (getConfig [browserName "enableGeckoMediaPlayer"] false) gecko_mediaplayer
         ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
