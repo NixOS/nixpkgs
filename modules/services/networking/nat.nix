@@ -63,6 +63,8 @@ in
 
     environment.systemPackages = [ pkgs.iptables ];
 
+    boot.kernelModules = [ "nf_nat_ftp" ];
+
     jobs.nat =
       { description = "Network Address Translation";
 

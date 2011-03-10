@@ -29,6 +29,8 @@
         { virtualisation.vlans = [ 2 ];
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
+          services.vsftpd.enable = true;
+          services.vsftpd.anonymousUser = true;
         };
     };
 
@@ -46,6 +48,18 @@
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
       
+      # Test whether passive FTP works.
+      $server->waitForJob("vsftpd");
+      $server->succeed("echo Hello World > /home/ftp/foo.txt");
+      $client->succeed("curl -v ftp://server/foo.txt >&2");
+      
+      # Test whether active FTP works.
+      $client->succeed("curl -v -P - ftp://server/foo.txt >&2");
+
+      # Test ICMP.
+      $client->succeed("ping -c 1 router >&2");
+      $router->succeed("ping -c 1 client >&2");
+      
       # If we turn off NAT, the client shouldn't be able to reach the server.
       $router->succeed("stop nat");
       $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
@@ -55,9 +69,6 @@
       $router->succeed("start nat");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
-
-      $client->succeed("ping -c 1 router >&2");
-      $router->succeed("ping -c 1 client >&2");
     '';
 
 }
