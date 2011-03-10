@@ -99,6 +99,7 @@
   ./services/networking/gw6c.nix
   ./services/networking/ifplugd.nix
   ./services/networking/ircd-hybrid.nix
+  ./services/networking/nat.nix
   ./services/networking/ntpd.nix
   ./services/networking/openfire.nix
   ./services/networking/openvpn.nix

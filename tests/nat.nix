@@ -19,7 +19,9 @@
       router = 
         { config, pkgs, ... }:
         { virtualisation.vlans = [ 2 1 ];
-          environment.systemPackages = [ pkgs.iptables ];
+          networking.nat.enable = true;
+          networking.nat.internalIPs = "192.168.1.0/24";
+          networking.nat.externalInterface = "eth1";
         };
 
       server = 
@@ -37,22 +39,25 @@
 
       # The router should have access to the server.
       $server->waitForJob("httpd");
-      $router->mustSucceed("curl --fail http://server/ >&2");
+      $router->succeed("curl --fail http://server/ >&2");
 
-      # But the client shouldn't be able to reach the server.
-      $client->mustFail("curl --fail --connect-timeout 5 http://server/ >&2");
+      # The client should be also able to connect via the NAT router.
+      $router->waitForJob("nat");
+      $client->succeed("curl --fail http://server/ >&2");
+      $client->succeed("ping -c 1 server >&2");
+      
+      # If we turn off NAT, the client shouldn't be able to reach the server.
+      $router->succeed("stop nat");
+      $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
+      $client->fail("ping -c 1 server >&2");
 
-      # Enable NAT on the router.
-      $router->mustSucceed(
-          "iptables -t nat -F",
-          "iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -d 192.168.1.0/24 -j ACCEPT",
-          "iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -j SNAT "
-          . "--to-source ${nodes.router.config.networking.ifaces.eth1.ipAddress}",
-          "echo 1 > /proc/sys/net/ipv4/ip_forward"
-      );
+      # And make sure that restarting the NAT job works.
+      $router->succeed("start nat");
+      $client->succeed("curl --fail http://server/ >&2");
+      $client->succeed("ping -c 1 server >&2");
 
-      # Now the client should be able to connect.
-      $client->mustSucceed("curl --fail http://server/ >&2");
+      $client->succeed("ping -c 1 router >&2");
+      $router->succeed("ping -c 1 client >&2");
     '';
 
 }
