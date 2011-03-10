@@ -9,13 +9,13 @@
 # http://thread.gmane.org/gmane.comp.gnu.gnuzilla/1376 .
 #assert stdenv.isLinux -> (wirelesstools != null);
 
-let version = "3.6.13"; in
+let version = "3.6.15"; in
 stdenv.mkDerivation {
   name = "icecat-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnuzilla/${version}/icecat-${version}.tar.xz";
-    sha256 = "0lnpny34sryi55clwcnn80ya7124ips11y18ba36bc2sqwiniigb";
+    sha256 = "1px018bd81c81a4hbz0qgf89pkshkbhg4abwq1d26dwy8128cxwg";
   };
 
   buildInputs =
