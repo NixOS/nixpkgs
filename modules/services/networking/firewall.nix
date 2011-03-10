@@ -158,10 +158,19 @@ in
             # probably nobody is listening anyway.
             iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
 
-            # Accept IPv6 ICMP packets on the local link.  Otherwise
-            # stuff like neighbor/router solicitation won't work.
+            # Accept IPv6 ICMP packets on the local link.
             ip6tables -A INPUT -s fe80::/10 -p icmpv6 -j ACCEPT
             ip6tables -A INPUT -d fe80::/10 -p icmpv6 -j ACCEPT
+            
+            # Accept neighbour solicitations from solicited-node
+            # addresses.  Otherwise other nodes cannot reach us at
+            # all.
+            ip6tables -A INPUT -d ff02::1:ff00:0/104 -p icmpv6 --icmpv6-type neighbour-solicitation -j ACCEPT
+
+            # Accept router and neighbour advertisements from
+            # anywhere.  Would be nice to be more specific.
+            ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -j ACCEPT
+            ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbour-advertisement -j ACCEPT
 
             # Optionally respond to pings.
             ${optionalString cfg.allowPing ''
