@@ -1,3 +1,5 @@
+# This module enables a simple firewall.
+
 { config, pkgs, ... }:
 
 with pkgs.lib;
@@ -18,7 +20,10 @@ in
       default = false;
       description =
         ''
-          Whether to enable the firewall.
+          Whether to enable the firewall.  This is a simple stateful
+          firewall that blocks connection attempts to unauthorised TCP
+          or UDP ports on this machine.  It does not affect packet
+          forwarding.
         '';
     };
   
@@ -91,7 +96,7 @@ in
   # doesn't deal with such Upstart jobs properly (it starts them if
   # they are changed, regardless of whether the start condition
   # holds).
-  config = mkIf config.networking.firewall.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.iptables ];
 
@@ -102,7 +107,7 @@ in
 
         preStart =
           ''
-            # Helper command to manipulate both the IPv4 and IPv6 filters.
+            # Helper command to manipulate both the IPv4 and IPv6 tables.
             ip46tables() {
               iptables "$@"
               ip6tables "$@"
@@ -138,7 +143,7 @@ in
                 ''
                   ip46tables -A INPUT -p tcp --dport ${toString port} -j ACCEPT
                 ''
-              ) config.networking.firewall.allowedTCPPorts
+              ) cfg.allowedTCPPorts
             }
 
             # Accept packets on the allowed UDP ports.
@@ -146,7 +151,7 @@ in
                 ''
                   ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
                 ''
-              ) config.networking.firewall.allowedUDPPorts
+              ) cfg.allowedUDPPorts
             }
 
             # Accept IPv4 multicast.  Not a big security risk since
