@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "global-5.9.3";
+  name = "global-5.9.4";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "1fi97frjbaacwj8qs17nv9zlmsfq62nwss6m45l1ai1w58fpb58r";
+    sha256 = "0ay6f1fffics3vkls1xykzmz9cmgj3hdighni7asnpa38s8j0lmn";
   };
 
   buildInputs = [ libtool ];
