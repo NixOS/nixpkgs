@@ -398,14 +398,6 @@ with (import ./release-lib.nix);
     gtk = linux;
   };
 
-  haskellPackages_ghc6102 = {
-    ghc = ghcSupported;
-  };
-
-  haskellPackages_ghc6103 = {
-    ghc = ghcSupported;
-  };
-
   haskellPackages_ghc6104 = {
     ghc = ghcSupported;
     gtk2hs = linux;
@@ -414,12 +406,6 @@ with (import ./release-lib.nix);
   };
 
   haskellPackages_ghc6121 = {
-    darcs = ghcSupported;
-    ghc = ghcSupported;
-    haskellPlatform_2010_1_0_0 = ghcSupported;
-  };
-
-  haskellPackages_ghc6122 = {
     darcs = ghcSupported;
     ghc = ghcSupported;
     haskellPlatform_2010_1_0_0 = ghcSupported;
@@ -437,6 +423,10 @@ with (import ./release-lib.nix);
   };
 
   haskellPackages_ghc701 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc702 = {
     ghc = ghcSupported;
   };
 

@@ -1,20 +1,25 @@
-{ fetchurl, stdenv, bison, gettext, ncurses, libusb, freetype, qemu }:
+{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
+, EFIsupport ? false }:
 
-let unifont_bdf = fetchurl {
+let
+    prefix = "grub${if EFIsupport then "-efi" else ""}";
+    version = "1.99rc1";
+    unifont_bdf = fetchurl {
       url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
       sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
     };
 in
 
 stdenv.mkDerivation rec {
-  name = "grub-1.98";
+  name = "${prefix}-${version}";
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/grub/${name}.tar.gz";
-    sha256 = "05660x82y2rwrzm0d1c4z07fbh02qwmacsmbbav6fa855s4w3wmy";
+    url = "ftp://alpha.gnu.org/gnu/grub/grub-1.99~rc1.tar.gz";
+    sha256 = "0llxycgrs5h9n2mlgmkkg1mr2fv1rzmlw4mqb3v9hcaydkx3wczh";
+    name = "${name}.tar.gz";
   };
 
-  buildInputs = [ bison ncurses libusb freetype gettext ]
+  buildInputs = [ flex bison ncurses libusb freetype gettext ]
     ++ stdenv.lib.optional doCheck qemu;
 
   preConfigure =
@@ -36,21 +41,19 @@ stdenv.mkDerivation rec {
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
     '';
 
-  patches =
-    [ # The udev rules for LVM create symlinks in /dev/mapper rathe
-      # than device nodes, causing GRUB to fail to recognize LVM
-      # volumes. See
-      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=550704
-      # This ugly workaround makes `find_root_device' use stat() on
-      # files in /dev/mapper instead of lstat().
-      ./device-mapper-symlinks.patch
-    ];
-
-  postPatch =
+  prePatch =
     '' gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
+
+  configureFlags =
+    let arch = if stdenv.system == "i686-linux" then "i386"
+               else if stdenv.system == "x86_64-linux" then "x86_64"
+               else throw "unsupported EFI firmware architecture";
+    in
+      stdenv.lib.optionals EFIsupport
+        [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
 
   doCheck = false;
 

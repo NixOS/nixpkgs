@@ -740,6 +740,7 @@ let
   };
 
   grub2 = callPackage ../tools/misc/grub/1.9x.nix { };
+  grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
 
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome) libsoup;
@@ -1972,8 +1973,13 @@ let
   haskellPackages_ghc6123 =
     haskellPackagesFun ../development/compilers/ghc/6.12.3.nix false (x : x);
 
+  # Will never make it into a platform release, severe bugs; leave at lowPrio.
   haskellPackages_ghc701 =
     haskellPackagesFun ../development/compilers/ghc/7.0.1.nix  false lowPrio;
+
+  # Will hopefully become new default once Haskell Platform 2011 is released.
+  haskellPackages_ghc702 =
+    haskellPackagesFun ../development/compilers/ghc/7.0.2.nix  false lowPrio;
 
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix   false lowPrio;
@@ -2871,6 +2877,8 @@ let
     inherit (gnome) gtk;
   };
 
+  cminpack = callPackage ../development/libraries/cminpack { };
+
   coin3d = callPackage ../development/libraries/coin3d { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
@@ -2971,6 +2979,8 @@ let
   fftwSinglePrec = callPackage ../development/libraries/fftw {
     singlePrecision = true;
   };
+
+  flann = callPackage ../development/libraries/flann { };
 
   fltk11 = callPackage ../development/libraries/fltk/fltk11.nix { };
 
@@ -3140,8 +3150,6 @@ let
   glpk = callPackage ../development/libraries/glpk { };
 
   gmime = callPackage ../development/libraries/gmime { };
-
-  gmime_2_2 = callPackage ../development/libraries/gmime/2.2.x.nix { };
 
   gmm = callPackage ../development/libraries/gmm { };
 
@@ -6482,7 +6490,6 @@ let
   };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
-    gmime = gmime_2_2;
     spellChecking = false;
   };
 
