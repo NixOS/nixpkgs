@@ -4171,6 +4171,8 @@ let
 
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
+  tremor = callPackage ../development/libraries/tremor { };
+
   unicap = callPackage ../development/libraries/unicap {};
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
@@ -6098,6 +6100,8 @@ let
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
   gkrellm = callPackage ../applications/misc/gkrellm { };
+
+  gmu = callPackage ../applications/audio/gmu { };
 
   gnash = callPackage ../applications/video/gnash {
     inherit (gnome) gtkglext;
