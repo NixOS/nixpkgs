@@ -89,6 +89,18 @@ in
         '';
     };
   
+    networking.firewall.extraCommands = mkOption {
+      default = "";
+      example = "iptables -A INPUT -p icmp -j ACCEPT";
+      description =
+        ''
+          Additional shell commands executed as part of the firewall
+          initialisation script.  These are executed just before the
+          final "reject" firewall rule is added, so they can be used
+          to allow packets that would otherwise be refused.
+        '';
+    };
+  
   };
 
 
@@ -119,7 +131,7 @@ in
             ip46tables -F INPUT
             ip46tables -F FW_REFUSE || true
             ip46tables -X # flush unused chains
-            ip46tables -P INPUT DROP
+            ip46tables -P INPUT ACCEPT
 
 
             # The "FW_REFUSE" chain performs logging and
@@ -173,6 +185,8 @@ in
             ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -j DROP
             ip6tables -A INPUT -p icmpv6 --icmpv6-type 139 -j DROP
             ip6tables -A INPUT -p icmpv6 -j ACCEPT
+
+            ${cfg.extraCommands}
 
             # Reject/drop everything else.
             ip46tables -A INPUT -j FW_REFUSE
