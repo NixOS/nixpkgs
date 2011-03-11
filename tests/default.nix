@@ -24,4 +24,5 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   simple = makeTest (import ./simple.nix);
   subversion = makeTest (import ./subversion.nix);
   trac = makeTest (import ./trac.nix);
+  xfce = makeTest (import ./xfce.nix);
 }
