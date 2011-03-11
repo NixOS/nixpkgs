@@ -116,7 +116,8 @@ in
               ip6tables "$@"
             }
 
-            ip46tables -F
+            ip46tables -F INPUT
+            ip46tables -F FW_REFUSE || true
             ip46tables -X # flush unused chains
             ip46tables -P INPUT DROP
 
@@ -179,9 +180,9 @@ in
 
         postStop =
           ''
-            iptables -F
+            iptables -F INPUT
             iptables -P INPUT ACCEPT
-            ip6tables -F
+            ip6tables -F INPUT
             ip6tables -P INPUT ACCEPT
           '';
       };
