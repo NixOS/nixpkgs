@@ -158,6 +158,7 @@ let
         avahi = t.avahi.test;
         bittorrent = t.bittorrent.test;
         firefox = t.firefox.test;
+        firewall = t.firewall.test;
         installer.lvm = t.installer.lvm.test;
         installer.separateBoot = t.installer.separateBoot.test;
         installer.simple = t.installer.simple.test;
