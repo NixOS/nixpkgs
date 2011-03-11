@@ -1,25 +1,30 @@
-args:
-args.stdenv.mkDerivation {
-  name = "flapjax-source-20070514";
+{cabal, fetchurl, unzip, xhtml, WebBits, WebBitsHtml, JsContracts}:
 
-  src = args.fetchurl {
-    url = http://www.flapjax-lang.org/download/20070514/flapjax-source.tar.gz;
-    sha256 = "188dafpggbfdyciqhrjaq12q0q01z1rp3mpm2iixb0mvrci14flc";
+cabal.mkDerivation ( self: {
+  pname = "flapjax";
+  version = "2.1";
+
+  src = fetchurl {
+    url = https://github.com/brownplt/flapjax/zipball/Flapjax-2.1;
+    name = "flapjax-2.1.zip";
+    sha256 = "1cp9g570528a813ljnvd1lb389iz0i6511xynf6kzryv8ckc1n7v";
   };
 
-  phases = "unpackPhase buildPhase";
+  # The Makefile copies some files to update the flapjax website into
+  # missing directories; the -p is to avoid these errors.
+  preConfigure = ''
+    cd fx
+    sed -i 's/mkdir/mkdir -p/' Makefile
+    make
+    cd ../compiler
+  '';
 
-  buildPhase  = "
-    ensureDir \$out/bin
-    cd compiler;
-    ghc --make Fjc.hs -o \$out/bin/fjc
-  ";
-
-  buildInputs =(with args; [ghc] ++ libs);
+  extraBuildInputs = [ unzip JsContracts ];
+  propagatedBuildInputs = [ xhtml WebBits WebBitsHtml ];
 
   meta = { 
       description = "programming language designed around the demands of modern, client-based Web applications";
       homepage = http://www.flapjax-lang.org/;
       license = "BSD";
   };
-}
+})

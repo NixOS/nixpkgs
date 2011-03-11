@@ -414,6 +414,10 @@ rec {
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
 
+  JsContracts = callPackage ../development/libraries/haskell/JsContracts {
+    WebBits = WebBits_1_0;
+  };
+
   json = callPackage ../development/libraries/haskell/json {};
 
   json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
@@ -707,6 +711,12 @@ rec {
     parallel = parallel_2_2_0_1;
   };
 
+  WebBits = callPackage ../development/libraries/haskell/WebBits {};
+
+  WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {};
+
+  WebBitsHtml = callPackage ../development/libraries/haskell/WebBits-Html {};
+
   webRoutes = callPackage ../development/libraries/haskell/web-routes {
     network = network_2_2_1_7;
   };
@@ -772,6 +782,10 @@ rec {
   };
 
   epic = callPackage ../development/compilers/epic {};
+
+  flapjax = callPackage ../development/compilers/flapjax {
+    WebBits = WebBits_1_0;
+  };
 
   helium = callPackage ../development/compilers/helium {};
 
