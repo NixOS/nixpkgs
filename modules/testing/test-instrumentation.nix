@@ -86,9 +86,8 @@ in
     # Send all of /var/log/messages to the serial port.
     services.syslogd.extraConfig = "*.* /dev/ttyS0";
 
-    # Clear the kernel log buffer before starting klogd to prevent it
-    # from printing messages that we have already seen.
-    jobs.klogd.preStart = "dmesg -c > /dev/null";
+    # Don't run klogd.  Kernel messages appear on the serial console anyway.
+    jobs.klogd.startOn = mkOverride 50 "";
 
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 "";
