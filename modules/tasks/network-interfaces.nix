@@ -162,12 +162,10 @@ in
 
         startOn = "stopped udevtrigger";
 
-        path = [ config.system.sbin.modprobe pkgs.iproute ];
+        path = [ pkgs.iproute ];
 
         preStart =
           ''
-            modprobe af_packet || true
-
             ${pkgs.lib.concatMapStrings (i:
               if i.macAddress != "" then
                 ''
