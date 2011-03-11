@@ -9,6 +9,7 @@ with import ../lib/testing.nix { inherit nixpkgs services system; };
   avahi = makeTest (import ./avahi.nix);
   bittorrent = makeTest (import ./bittorrent.nix);
   firefox = makeTest (import ./firefox.nix);
+  firewall = makeTest (import ./firewall.nix);
   installer = makeTests (import ./installer.nix);
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);

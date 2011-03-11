@@ -24,7 +24,10 @@ in
   config = {
 
     jobs.backdoor =
-      { startOn = "ip-up";
+      { # If the firewall is enabled, this job must start *after* the
+        # firewall, otherwise connection tracking won't know about
+        # this connection.
+        startOn = if config.networking.firewall.enable then "started firewall" else "ip-up";
         stopOn = "never";
         
         script =
