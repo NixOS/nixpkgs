@@ -82,7 +82,10 @@ in
       type = types.bool;
       description =
         ''
-          Whether to respond to incoming ICMP echo requests ("pings").
+          Whether to respond to incoming ICMPv4 echo requests
+          ("pings").  ICMPv6 pings are always allowed because the
+          larger address space of IPv6 makes network scanning much
+          less effective.
         '';
     };
   
@@ -158,25 +161,17 @@ in
             # probably nobody is listening anyway.
             iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
 
-            # Accept IPv6 ICMP packets on the local link.
-            ip6tables -A INPUT -s fe80::/10 -p icmpv6 -j ACCEPT
-            ip6tables -A INPUT -d fe80::/10 -p icmpv6 -j ACCEPT
-            
-            # Accept neighbour solicitations from solicited-node
-            # addresses.  Otherwise other nodes cannot reach us at
-            # all.
-            ip6tables -A INPUT -d ff02::1:ff00:0/104 -p icmpv6 --icmpv6-type neighbour-solicitation -j ACCEPT
-
-            # Accept router and neighbour advertisements from
-            # anywhere.  Would be nice to be more specific.
-            ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -j ACCEPT
-            ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbour-advertisement -j ACCEPT
-
-            # Optionally respond to pings.
+            # Optionally respond to ICMPv4 pings.
             ${optionalString cfg.allowPing ''
               iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
-              ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -j ACCEPT
             ''}
+
+            # Accept all ICMPv6 messages except redirects and node
+            # information queries (type 139).  See RFC 4890, section
+            # 4.4.
+            ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -j DROP
+            ip6tables -A INPUT -p icmpv6 --icmpv6-type 139 -j DROP
+            ip6tables -A INPUT -p icmpv6 -j ACCEPT
 
             # Reject/drop everything else.
             ip46tables -A INPUT -j FW_REFUSE
