@@ -51,6 +51,7 @@ rec {
                 lib.flip map interfacesNumbered ({ first, second }:
                   { name = "eth${toString second}";
                     ipAddress = "192.168.${toString first}.${toString m.second}";
+                    subnetMask = "255.255.255.0";
                   }
                 );
             in

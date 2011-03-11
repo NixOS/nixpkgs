@@ -4,11 +4,7 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) nettools;
-
   cfg = config.networking;
-
-  ifconfig = "${nettools}/sbin/ifconfig";
 
 in 
 
@@ -166,33 +162,28 @@ in
 
         preStart =
           ''
-            ${pkgs.lib.concatMapStrings (i:
-              if i.macAddress != "" then
+            ${flip concatMapStrings cfg.interfaces (i:
+              optionalString (i.macAddress != "")
                 ''
-                  echo "Configuring interface ${i.name}..."
-                  ${ifconfig} "${i.name}" down || true
-                  ${ifconfig} "${i.name}" hw ether "${i.macAddress}" || true
-                ''
-              else "") cfg.interfaces
+                  echo "Setting MAC address of ${i.name} to ${i.macAddress}..."
+                  ip link set "${i.name}" address "${i.macAddress}" || true
+                '')
             }
 
             for i in $(cd /sys/class/net && ls -d *); do
                 echo "Bringing up network device $i..."
-                ${ifconfig} $i up || true
+                ip link set "$i" up || true
             done
 
             # Configure the manually specified interfaces.
-            ${pkgs.lib.concatMapStrings (i:
-              if i.ipAddress != "" then
+            ${flip concatMapStrings cfg.interfaces (i:
+              optionalString (i.ipAddress != "")
                 ''
                   echo "Configuring interface ${i.name}..."
-                  extraFlags=
-                  if test -n "${i.subnetMask}"; then
-                      extraFlags="$extraFlags netmask ${i.subnetMask}"
-                  fi
-                  ${ifconfig} "${i.name}" "${i.ipAddress}" $extraFlags || true
-                ''
-              else "") cfg.interfaces}
+                  ip addr add "${i.ipAddress}""${optionalString (i.subnetMask != "") ("/" + i.subnetMask)}" \
+                    dev "${i.name}" || true
+                '')
+            }
 
             # Set the nameservers.
             if test -n "${toString cfg.nameservers}"; then
@@ -206,9 +197,9 @@ in
             fi
 
             # Set the default gateway.
-            if test -n "${cfg.defaultGateway}"; then
-                ${nettools}/sbin/route add default gw "${cfg.defaultGateway}" || true
-            fi
+            ${optionalString (cfg.defaultGateway != "") ''
+                ip route add default via "${cfg.defaultGateway}" || true
+            ''}
 
             # Run any user-specified commands.
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands} || true
@@ -217,14 +208,6 @@ in
               # Emit the ip-up event (e.g. to start ntpd).
               initctl emit -n ip-up
             ''}
-          '';
-
-        postStop =
-          ''
-            #for i in $(cd /sys/class/net && ls -d *); do
-            #    echo "Taking down network device $i..."
-            #    ${ifconfig} $i down || true
-            #done
           '';
       };
 
