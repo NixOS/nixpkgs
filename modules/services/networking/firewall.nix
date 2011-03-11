@@ -115,6 +115,8 @@ in
 
     environment.systemPackages = [ pkgs.iptables ];
 
+    boot.kernelModules = [ "nf_conntrack_ftp" ];
+
     jobs.firewall =
       { startOn = "started network-interfaces";
 
