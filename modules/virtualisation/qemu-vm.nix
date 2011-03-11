@@ -247,14 +247,16 @@ in
       # We need mke2fs in the initrd.
       cp ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
 
-      # And `ifconfig'.
-      cp ${pkgs.nettools}/sbin/ifconfig $out/bin
+      # And `ip' (which needs libresolv.so).
+      cp ${pkgs.iproute}/sbin/ip $out/bin
+      cp ${pkgs.glibc}/lib/libresolv.so.* $out/lib
     '';
       
   boot.initrd.postDeviceCommands =
     ''
       # Set up networking.  Needed for CIFS mounting.
-      ifconfig eth0 up 10.0.2.15
+      ip link set eth0 up
+      ip addr add 10.0.2.15/24 dev eth0
 
       # If the disk image appears to be empty, run mke2fs to
       # initialise.
