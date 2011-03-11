@@ -5,10 +5,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "k3b-2.0.1";
+  name = "k3b-2.0.2";
   src = fetchurl {
     url = "mirror://sourceforge/k3b/${name}.tar.bz2";
-    sha256 = "1dyd3i2hqd5xs9rz4f8k74zca91j9sp72lhl0zws2cvqc474ccc6";
+    sha256 = "1kdpylz3w9bg02jg4mjhqz8bq1yb4xi4fqfl9139qcyjq4lny5xg";
   };
 
   buildInputs = [ cmake qt4 perl shared_mime_info libvorbis taglib
