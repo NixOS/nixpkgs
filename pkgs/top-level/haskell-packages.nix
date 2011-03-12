@@ -464,7 +464,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {};
+  hakyll = callPackage ../development/libraries/haskell/hakyll {
+    time = self.time_1_2_0_3;
+  };
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
