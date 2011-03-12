@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "feed";
-  version = "0.3.7";
-  sha256 = "c2d539f763cdce1b1498f1fd0707b12078337aff690f01e41db0b6e3569c08aa";
+  version = "0.3.8";
+  sha256 = "1yvigcvb8cvxfa8vb2i11xkrylqw57jwzkaji6m1wp03k80zf576";
   propagatedBuildInputs = [utf8String xml];
   meta = {
     description = "Interfacing with RSS and Atom feeds";

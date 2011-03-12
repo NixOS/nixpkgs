@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "wx";
-  version = "0.11.1.2";
-  sha256 = "d407e191391ec977552932ffbfc86ce7826b56208bbcbc1262d3fc65fe1c2337";
+  version = "0.12.1.6";
+  sha256 = "1p0gn46gk1abin095va22n9bycxhm2cq1vyvwiypcdq7jq541lhk";
   propagatedBuildInputs = [stm wxcore];
   meta = {
     description = "wxHaskell";

@@ -1,10 +1,10 @@
-{cabal, parsec, time, text, utf8String, parallel}:
+{cabal, parsec, time, text, utf8String, parallel, syb}:
 
 cabal.mkDerivation (self : {
   pname = "HStringTemplate";
-  version = "0.6.5";
-  sha256 = "e40b69e22900f381ca7fb080ea6e70d623e52e909bd7b896bc24e15c8e43252c";
-  propagatedBuildInputs = [parsec time text utf8String parallel];
+  version = "0.6.6";
+  sha256 = "1ian79az5q6m08pwb5fks52ffs4h2mq02kkcwmr6jb7i0ha2k2si";
+  propagatedBuildInputs = [parsec time text utf8String parallel syb];
   meta = {
     description = "StringTemplate implementation in Haskell";
   };

@@ -1,4 +1,4 @@
-{fetchurl, stdenv, ghcReal} :
+{fetchurl, stdenv, ghcPlain} :
 
 /* use case:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     ensureDir $out/bin
     ghc --make $src -o $out/bin/hasktags-modified
   '';
-  buildInputs = [ ghcReal ];
+  buildInputs = [ ghcPlain ];
 
   meta = {
     description = "my patched version of hasktags. Should be merged into hasktags?";

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "glib";
-  version = "0.11.2";
-  sha256 = "e0fb5f3c22701807db364dff86d55f2a33a57d8a4e58d37a80d367bca50b3dbb";
+  version = "0.12.0";
+  sha256 = "1sqkj6adg87ccdnl9yy1p8yrv5xnfcrlaflj52nrh6anwlqy9z19";
   extraBuildInputs = [pkgconfig glib glibc gtk2hsBuildtools];
   meta = {
     description = "Binding to the GLIB library for Gtk2Hs";
