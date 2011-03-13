@@ -464,9 +464,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {
-    time = self.time_1_2_0_3;
-  };
+  hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
@@ -595,6 +593,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
   monadlab = callPackage ../development/libraries/haskell/monadlab {};
+
+  monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 

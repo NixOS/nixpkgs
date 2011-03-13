@@ -1,10 +1,12 @@
-{cabal, binary, hamlet, mtl, network, pandoc, regexBase, regexTDFA, time}:
+{cabal, binary, blazeHtml, hamlet, mtl, network, pandoc, regexBase,
+ regexTDFA}:
 
 cabal.mkDerivation (self : {
   pname = "hakyll";
-  version = "2.3";
-  sha256 = "40e57c5cf5be3c6fdc270d00ff765a2b3e11ba7e302f40146d83048aa4436116";
-  propagatedBuildInputs = [hamlet mtl network pandoc regexBase regexTDFA time];
+  version = "2.4.3";
+  sha256 = "1n1hibwhg22l9p126d10zwhvaab46svcri2rkvd78f4vhmwpvkbs";
+  propagatedBuildInputs =
+    [binary blazeHtml hamlet mtl network pandoc regexBase regexTDFA];
   meta = {
     description = "A simple static site generator library";
     license = "BSD";

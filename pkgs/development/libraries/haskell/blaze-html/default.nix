@@ -1,10 +1,10 @@
-{cabal, text}:
+{cabal, text, blazeBuilder}:
 
 cabal.mkDerivation (self : {
   pname = "blaze-html";
-  version = "0.1.2";
-  sha256 = "c1e65e3d23e90a3830ceee69ecfac65c7a8a045da06443fb7690609a59480f5f";
-  propagatedBuildInputs = [text];
+  version = "0.4.1.0";
+  sha256 = "0a39wzfsb8lsr0z8c0s90n6pwmhjg6lihbxigk2c02vn5marzc4f";
+  propagatedBuildInputs = [text blazeBuilder];
   meta = {
     description = "A blazingly fast HTML combinator library";
     license = "BSD";
