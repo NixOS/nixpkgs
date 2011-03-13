@@ -574,6 +574,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     network = self.network_2_2_1_7;
   };
 
+  ListLike = callPackage ../development/libraries/haskell/ListLike {};
+
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   maybench = callPackage ../development/libraries/haskell/maybench {};

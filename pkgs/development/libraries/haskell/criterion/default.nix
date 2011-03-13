@@ -1,17 +1,14 @@
 {cabal, deepseq, mtl, parallel, parsec, vector, vectorAlgorithms,
- mwcRandom, statistics, Chart, dataAccessor}:
+ mwcRandom, statistics}:
 
 cabal.mkDerivation (self : {
   pname = "criterion";
-  version = "0.5.0.5";
-  sha256 = "1b1g7a2ip07j0554cj4d0413859fbdkaxpcgq2znjz7wh8z5aabn";
+  version = "0.5.0.7";
+  sha256 = "1f1vpc3cwvc6wjy7fras5kp1iap8abh6ap3w6pf75qpkbdrcd3dq";
 
   propagatedBuildInputs = [
     deepseq mtl parallel parsec vector vectorAlgorithms mwcRandom statistics
-    Chart dataAccessor
   ];
-
-  configureFlags = "-fchart";
 
   meta = {
     homepage = "http://bitbucket.org/bos/criterion";
