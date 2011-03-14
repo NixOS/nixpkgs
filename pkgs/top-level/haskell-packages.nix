@@ -1,39 +1,279 @@
-{pkgs, newScope, ghc, enableLibraryProfiling ? false, modifyPrio ? (x : x)}:
+# Haskell packages in Nixpkgs
+#
+# If you have any questions about the packages defined here or how to
+# contribute, please contact Andres Loeh.
+#
+# This file defines all packages that depend on GHC, the Glasgow Haskell
+# compiler. They are usually distributed via Hackage, the central Haskell
+# package repository. Since at least the libraries are incompatible between
+# different compiler versions, the whole file is parameterized by the GHC
+# that is being used. GHC itself is defined in all-packages.nix
+#
+# Note that next to the packages defined here, there is another way to build
+# arbitrary packages from HackageDB in Nix, using the hack-nix tool that is
+# developed by Marc Weber.
+# -> http://github.com/MarcWeber/hack-nix. Read its README file.
+#
+#
+# This file defines a function parameterized by the following:
+#
+#    pkgs:
+#       the whole Nixpkgs (so that we can depend on non-Haskell packages)
+#
+#    newScope:
+#       for redefining callPackage locally to resolve dependencies of
+#       Haskell packages automatically
+#
+#    ghc:
+#       the GHC version to be used for building the Haskell packages
+#
+#    prefFun:
+#       version preferences for Haskell packages (see below)
+#
+#    enableLibraryProfiling:
+#       Boolean flag indicating whether profiling libraries for all Haskell
+#       packages should be built. If a library is to be built with profiling
+#       enabled, its dependencies should have profiling enabled as well.
+#       Therefore, this is implemented as a global flag.
+#
+#    modifyPrio:
+#       Either the identity function or lowPrio is intended to be passed
+#       here. The idea is that we can make a complete set of Haskell packages
+#       have low priority from the outside.
+#
+#
+# Policy for keeping multiple versions:
+#
+# We keep multiple versions for
+#
+#    * packages that are part of the Haskell Platform
+#    * packages that are known to have severe interface changes
+#
+# For the packages where we keep multiple versions, version x.y.z is mapped
+# to an attribute of name package_x_y_z and stored in a Nix expression called
+# x.y.z.nix. There is no default.nix for such packages. There also is an
+# attribute package that is defined to be self.package_x_y_z where x.y.z is
+# the default version of the package. The global default can be overridden by
+# passing a preferences function.
+#
+# For most packages, however, we keep only one version, and use default.nix.
 
-let ghcOuter = ghc; in
+{pkgs, newScope, ghc, prefFun, enableLibraryProfiling ? false, modifyPrio ? (x : x)}:
 
 # We redefine callPackage to take into account the new scope. The optional
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
 # low priority.
 
-let result = let callPackage = x : y : modifyPrio (newScope result x y); in
+let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
+                 self = (prefFun result) result; in
 
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
 
-rec {
+{
 
-  # ==> You're looking for a package but can't find it? Get hack-nix.
-  # -> http://github.com/MarcWeber/hack-nix. Read its README file.
-  # You can install (almost) all packages from hackage easily.
+  final = self;
 
-  ghcReal = pkgs.lowPrio ghcOuter;
+  # Preferences
+  #
+  # Different versions of GHC need different versions of certain core packages.
+  # We start with a suitable platform version per GHC version.
 
-  # In the remainder, `ghc' refers to the wrapper.  This is because
-  # it's never useful to use the wrapped GHC (`ghcReal'), as the
-  # wrapper provides essential functionality: the ability to find
-  # Haskell packages in the buildInputs automatically.
+  emptyPrefs   = super : super // { };
+  ghc6104Prefs = super : super // super.haskellPlatformDefaults_2009_2_0_2 super;
+  ghc6121Prefs = super : super // super.haskellPlatformDefaults_2010_1_0_0 super;
+  ghc6122Prefs = super : super // super.haskellPlatformDefaults_2010_2_0_0 super; # link
+  ghc6123Prefs = super : super // super.haskellPlatformDefaults_2010_2_0_0 super;
+  ghc701Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_0 super; # link
+  ghc702Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_0 super;
+  ghcHEADPrefs = super : super // super.haskellPlatformDefaults_2011_2_0_0 super; # link
+
+  # GHC and its wrapper
+  #
+  # We use a wrapped version of GHC for nearly everything. The wrapped version
+  # adds functionality to GHC to find libraries depended on or installed via
+  # Nix. Because the wrapper is so much more useful than the plain GHC, we
+  # call the plain GHC ghcPlain and the wrapped GHC simply ghc.
+
+  ghcPlain = pkgs.lowPrio ghc; # Note that "ghc" is not "self.ghc" and
+                               # refers to the function argument at the
+                               # top of this file.
+
   ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghcOuter;
+    ghc = ghc;
   };
 
+  # This is the Cabal builder, the function we use to build most Haskell
+  # packages. It isn't the Cabal library, which is a core package of GHC
+  # and therefore not separately listed here.
+
   cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {};
+
+  # Haskell Platform
+  #
+  # We try to support several platform versions. For these, we set all
+  # versions explicitly.
+
+  haskellPlatform = self.haskellPlatform_2011_2_0_0; # global platform default
+
+  haskellPlatformArgs_2011_2_0_0 = self : {
+    inherit (self) cabal ghc;
+    cgi          = self.cgi_3001_1_7_4;
+    fgl          = self.fgl_5_4_2_3;
+    GLUT         = self.GLUT_2_1_2_1;
+    haskellSrc   = self.haskellSrc_1_0_1_4;
+    html         = self.html_1_0_1_2;
+    HUnit        = self.HUnit_1_2_2_3;
+    network      = self.network_2_3_0_2;
+    OpenGL       = self.OpenGL_2_2_3_0;
+    parallel     = self.parallel_3_1_0_1;
+    parsec       = self.parsec_3_1_1;
+    QuickCheck   = self.QuickCheck_2_4_0_1;
+    regexBase    = self.regexBase_0_93_2;
+    regexCompat  = self.regexCompat_0_93_1;
+    regexPosix   = self.regexPosix_0_94_4;
+    stm          = self.stm_2_2_0_1;
+    syb          = self.syb_0_3;
+    xhtml        = self.xhtml_3000_2_0_1;
+    zlib         = self.zlib_0_5_3_1;
+    HTTP         = self.HTTP_4000_1_1;
+    deepseq      = self.deepseq_1_1_0_2;
+    text         = self.text_0_11_0_5;
+    transformers = self.transformers_0_2_2_0;
+    mtl          = self.mtl_2_0_1_0;
+    cabalInstall = self.cabalInstall_0_10_2;
+    alex         = self.alex_2_3_5;
+    happy        = self.happy_1_18_6;
+    haddock      = self.haddock_2_9_2;
+  };
+
+  haskellPlatformDefaults_2011_2_0_0 =
+    self : self.haskellPlatformArgs_2011_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2011_2_0_0;
+      mtl1 = self.mtl_1_1_1_1;
+    };
+
+  haskellPlatform_2011_2_0_0 =
+    callPackage ../development/libraries/haskell/haskell-platform/2011.2.0.0.nix
+      (self.haskellPlatformArgs_2011_2_0_0 self);
+
+  haskellPlatformArgs_2010_2_0_0 = self : {
+    inherit (self) cabal ghc;
+    cgi          = self.cgi_3001_1_7_3;
+    fgl          = self.fgl_5_4_2_3;
+    GLUT         = self.GLUT_2_1_2_1;
+    haskellSrc   = self.haskellSrc_1_0_1_3;
+    html         = self.html_1_0_1_2;
+    HUnit        = self.HUnit_1_2_2_1;
+    mtl          = self.mtl_1_1_0_2;
+    network      = self.network_2_2_1_7;
+    OpenGL       = self.OpenGL_2_2_3_0;
+    parallel     = self.parallel_2_2_0_1;
+    parsec       = self.parsec_2_1_0_1;
+    QuickCheck   = self.QuickCheck_2_1_1_1;
+    regexBase    = self.regexBase_0_93_2;
+    regexCompat  = self.regexCompat_0_93_1;
+    regexPosix   = self.regexPosix_0_94_2;
+    stm          = self.stm_2_1_2_1;
+    xhtml        = self.xhtml_3000_2_0_1;
+    zlib         = self.zlib_0_5_2_0;
+    HTTP         = self.HTTP_4000_0_9;
+    deepseq      = self.deepseq_1_1_0_0;
+    cabalInstall = self.cabalInstall_0_8_2;
+    alex         = self.alex_2_3_3;
+    happy        = self.happy_1_18_5;
+    haddock      = self.haddock_2_7_2;
+  };
+
+  haskellPlatformDefaults_2010_2_0_0 =
+    self : self.haskellPlatformArgs_2010_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2010_2_0_0;
+    };
+
+  haskellPlatform_2010_2_0_0 =
+    callPackage ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix
+      (self.haskellPlatformArgs_2010_2_0_0 self);
+
+  haskellPlatformArgs_2010_1_0_0 = self : {
+    inherit (self) cabal ghc;
+    haskellSrc   = self.haskellSrc_1_0_1_3;
+    html         = self.html_1_0_1_2;
+    fgl          = self.fgl_5_4_2_2;
+    cabalInstall = self.cabalInstall_0_8_0;
+    GLUT         = self.GLUT_2_1_2_1;
+    OpenGL       = self.OpenGL_2_2_3_0;
+    zlib         = self.zlib_0_5_2_0;
+    alex         = self.alex_2_3_2;
+    cgi          = self.cgi_3001_1_7_2;
+    QuickCheck   = self.QuickCheck_2_1_0_3;
+    HTTP         = self.HTTP_4000_0_9;
+    HUnit        = self.HUnit_1_2_2_1;
+    network      = self.network_2_2_1_7;
+    parallel     = self.parallel_2_2_0_1;
+    parsec       = self.parsec_2_1_0_1;
+    regexBase    = self.regexBase_0_93_1;
+    regexCompat  = self.regexCompat_0_92;
+    regexPosix   = self.regexPosix_0_94_1;
+    stm          = self.stm_2_1_1_2;
+    xhtml        = self.xhtml_3000_2_0_1;
+    haddock      = self.haddock_2_7_2;
+    happy        = self.happy_1_18_4;
+  };
+
+  haskellPlatformDefaults_2010_1_0_0 =
+    self : self.haskellPlatformArgs_2010_1_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2010_1_0_0;
+    };
+
+  haskellPlatform_2010_1_0_0 =
+    callPackage ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix
+      (self.haskellPlatformArgs_2010_1_0_0 self);
+
+  haskellPlatformArgs_2009_2_0_2 = self : {
+    inherit (self) cabal ghc editline;
+    time         = self.time_1_1_2_4;
+    haddock      = self.haddock_2_4_2;
+    cgi          = self.cgi_3001_1_7_1;
+    fgl          = self.fgl_5_4_2_2;
+    GLUT         = self.GLUT_2_1_1_2;
+    haskellSrc   = self.haskellSrc_1_0_1_3;
+    html         = self.html_1_0_1_2;
+    HUnit        = self.HUnit_1_2_0_3;
+    network      = self.network_2_2_1_4;
+    OpenGL       = self.OpenGL_2_2_1_1;
+    parallel     = self.parallel_1_1_0_1;
+    parsec       = self.parsec_2_1_0_1;
+    QuickCheck   = self.QuickCheck_1_2_0_0;
+    regexBase    = self.regexBase_0_72_0_2;
+    regexCompat  = self.regexCompat_0_71_0_1;
+    regexPosix   = self.regexPosix_0_72_0_3;
+    stm          = self.stm_2_1_1_2;
+    xhtml        = self.xhtml_3000_2_0_1;
+    zlib         = self.zlib_0_5_0_0;
+    HTTP         = self.HTTP_4000_0_6;
+    cabalInstall = self.cabalInstall_0_6_2;
+    alex         = self.alex_2_3_1;
+    happy        = self.happy_1_18_4;
+  };
+
+  haskellPlatformDefaults_2009_2_0_2 =
+    self : self.haskellPlatformArgs_2009_2_0_2 self // {
+      haskellPlatform = self.haskellPlatform_2009_2_0_2;
+    };
+
+  haskellPlatform_2009_2_0_2 =
+    callPackage ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix
+      (self.haskellPlatformArgs_2009_2_0_2 self);
 
 
   # Haskell libraries.
 
   Agda = callPackage ../development/libraries/haskell/Agda {
-    QuickCheck = QuickCheck_2;
+    # I've been trying to get the latest Agda to build with ghc-6.12, too,
+    # but failed so far.
+    # mtl        = self.mtl2;
+    # QuickCheck = self.QuickCheck2;
+    syb        = self.syb02;
   };
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
@@ -72,17 +312,15 @@ rec {
 
   cereal = callPackage ../development/libraries/haskell/cereal {};
 
-  cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {
-    network = network_2_2_1_7;
-  };
-
-  cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {
-    network = network_2_2_1_7;
-  };
-
-  cgi = callPackage ../development/libraries/haskell/cgi {};
+  cgi_3001_1_7_1 = callPackage ../development/libraries/haskell/cgi/3001.1.7.1.nix {};
+  cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {};
+  cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
+  cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
+  cgi = self.cgi_3001_1_7_1; 
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
+
+  citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
@@ -93,19 +331,18 @@ rec {
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
   convertible = callPackage ../development/libraries/haskell/convertible {
-    time = time_1_1_3;
+    time = self.time_1_1_3;
   };
 
   criterion = callPackage ../development/libraries/haskell/criterion {
-    parallel = parallel_2_2_0_1;
-    parsec = parsec_3;
+    parsec = self.parsec3;
   };
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
   CS173Tourney = callPackage ../development/libraries/haskell/CS173Tourney {
     inherit (pkgs) fetchgit;
-    json = json_0_3_6;
+    json = self.json_0_3_6;
   };
 
   csv = callPackage ../development/libraries/haskell/csv {};
@@ -118,9 +355,13 @@ rec {
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
-  datetime = callPackage ../development/libraries/haskell/datetime {};
+  datetime = callPackage ../development/libraries/haskell/datetime {
+    QuickCheck = self.QuickCheck1;
+  };
 
-  deepseq = callPackage ../development/libraries/haskell/deepseq {};
+  deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
+  deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
+  deepseq = self.deepseq_1_1_0_0;
 
   derive = callPackage ../development/libraries/haskell/derive {};
 
@@ -129,6 +370,8 @@ rec {
   digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
+
+  dlist = callPackage ../development/libraries/haskell/dlist {};
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
@@ -152,9 +395,9 @@ rec {
 
   filestore = callPackage ../development/libraries/haskell/filestore {};
 
-  fgl = callPackage ../development/libraries/haskell/fgl {};
-
+  fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
+  fgl = self.fgl_5_4_2_2;
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
@@ -164,7 +407,9 @@ rec {
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
-  ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
+  ghcEvents = callPackage ../development/libraries/haskell/ghc-events {
+    mtl = self.mtl1;
+  };
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
@@ -176,11 +421,7 @@ rec {
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
 
-  gitit = callPackage ../development/libraries/haskell/gitit {
-    cgi = cgi_3001_1_7_2;
-    HTTP = HTTP_4000_0_9;
-    network = network_2_2_1_7;
-  };
+  gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs) pkgconfig gnome glibc;
@@ -192,32 +433,26 @@ rec {
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
-  GLUT2121 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {
-    OpenGL = OpenGL_2_2_3_0;
+  GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
 
-  GLUT = callPackage ../development/libraries/haskell/GLUT {
+  GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
+
+  GLUT = self.GLUT_2_1_1_2; 
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gtkLibs) gtk;
   };
 
-  gtk2hs = callPackage ../development/libraries/haskell/gtk2hs {
-    inherit (pkgs) pkgconfig gnome cairo;
-  };
-
-  gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {
-    alex = alex_2_3_3;
-    happy = happy_1_18_5;
-  };
+  gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
     inherit (pkgs) pkgconfig glibc;
@@ -225,43 +460,21 @@ rec {
     gtkC = pkgs.gtkLibs.gtk;
   };
 
-  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
-    fgl = fgl_5_4_2_3;
-  };
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {
-    fgl = fgl_5_4_2_3;
-  };
+  graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {
-    regexBase = regexBase_0_93_2;
-    network = network_2_2_1_7;
-    time = time_1_2_0_3;
-    pandoc = pandoc_newtime;
-  };
+  hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
-  HAppSData = callPackage ../development/libraries/haskell/HAppS/HAppS-Data.nix {};
-
-  HAppSIxSet = callPackage ../development/libraries/haskell/HAppS/HAppS-IxSet.nix {};
-
-  HAppSUtil = callPackage ../development/libraries/haskell/HAppS/HAppS-Util.nix {};
-
-  HAppSServer = callPackage ../development/libraries/haskell/HAppS/HAppS-Server.nix {};
-
-  HAppSState = callPackage ../development/libraries/haskell/HAppS/HAppS-State.nix {};
-
   happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {
-    HaXml = HaXml_1_13_3;
+    HaXml = self.HaXml113;
   };
 
   happstackUtil = callPackage ../development/libraries/haskell/happstack/happstack-util.nix {};
 
-  happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {
-    network = network_2_2_1_7;
-    HaXml = HaXml_1_13_3;
-  };
+  happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {};
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
@@ -271,96 +484,31 @@ rec {
 
   haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
 
-  haskellSrc = callPackage ../development/libraries/haskell/haskell-src {};
-
-  haskellSrc_P = callPackage ../development/libraries/haskell/haskell-src {
-    happy = happy_1_18_5;
-  };
+  haskellSrc_1_0_1_3 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.3.nix {};
+  haskellSrc_1_0_1_4 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.4.nix {};
+  haskellSrc = self.haskellSrc_1_0_1_3;
 
   haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
-  haskellPlatform = haskellPlatform_2010_2_0_0;
-
-  haskellPlatformArgs_2010_2_0_0 = {
-    inherit cabal ghc html xhtml;
-    haskellSrc = haskellSrc_P;
-    fgl = fgl_5_4_2_3;
-    cabalInstall = cabalInstall_0_8_2;
-    GLUT = GLUT2121;
-    OpenGL = OpenGL_2_2_3_0;
-    zlib = zlib_0_5_2_0;
-    alex = alex_2_3_3;
-    cgi = cgi_3001_1_7_3;
-    QuickCheck = QuickCheck_2;
-    HTTP = HTTP_4000_0_9;
-    HUnit = HUnit_1_2_2_1;
-    network = network_2_2_1_7;
-    parallel = parallel_2_2_0_1;
-    regexBase = regexBase_0_93_2;
-    regexCompat = regexCompat_0_93_1;
-    regexPosix = regexPosix_0_94_2;
-    stm = stm_2_1_2_1;
-    haddock = haddock_2_7_2_P;
-    happy = happy_1_18_5;
-  };
-
-  haskellPlatformDefaults_2010_2_0_0 = haskellPlatformArgs_2010_2_0_0 // {
-    haskellPlatform = haskellPlatform_2010_2_0_0;
-  };
-
-  haskellPlatform_2010_2_0_0 = callPackage ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix haskellPlatformArgs_2010_2_0_0;
-
-  haskellPlatform_2010_1_0_0 = pkgs.lowPrio (import ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix {
-    inherit cabal ghc fgl
-      haskellSrc html
-      stm xhtml;
-    cabalInstall = cabalInstall_0_8_0;
-    GLUT = GLUT2121;
-    OpenGL = OpenGL_2_2_3_0;
-    zlib = zlib_0_5_2_0;
-    alex = alex_2_3_2;
-    cgi = cgi_3001_1_7_2;
-    QuickCheck = QuickCheck_2_1_0_3;
-    HTTP = HTTP_4000_0_9;
-    HUnit = HUnit_1_2_2_1;
-    network = network_2_2_1_7;
-    parallel = parallel_2_2_0_1;
-    regexBase = regexBase_0_93_1;
-    regexCompat = regexCompat_0_92;
-    regexPosix = regexPosix_0_94_1;
-    haddock = haddock_2_7_2;
-    happy = happy_1_18_4;
-    inherit (pkgs) fetchurl;
-  });
-
-  haskellPlatform_2009_2_0_2 = import ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix {
-    inherit cabal ghc GLUT HTTP HUnit OpenGL QuickCheck cgi fgl editline
-      haskellSrc html parallel regexBase regexCompat regexPosix
-      stm time xhtml zlib cabalInstall alex happy;
-    haddock = haddock_2_4_2;
-    inherit (pkgs) fetchurl;
-  };
-
-  HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {
-    network = network_2_2_1_7;
-  };
-
-  HTTP = callPackage ../development/libraries/haskell/HTTP {};
-
-  HTTP_3001 = callPackage ../development/libraries/haskell/HTTP/3001.nix {};
+  HTTP_3001_1_5 = callPackage ../development/libraries/haskell/HTTP/3001.1.5.nix {};
+  HTTP_4000_0_6 = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
+  HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {};
+  HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
+  HTTP = self.HTTP_4000_0_6;
 
   haxr = callPackage ../development/libraries/haskell/haxr {
-    HTTP = HTTP_4000_0_9;
-    HaXml = HaXml_1_13_3;
+    HaXml = self.HaXml113;
   };
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
 
-  HaXml = callPackage ../development/libraries/haskell/HaXml {};
-
   HaXml_1_13_3 = callPackage ../development/libraries/haskell/HaXml/1.13.3.nix {};
+  HaXml_1_20_2 = callPackage ../development/libraries/haskell/HaXml/1.20.2.nix {};
+  HaXml113 = self.HaXml_1_13_3;
+  HaXml120 = self.HaXml_1_20_2;
+  HaXml    = self.HaXml120;
 
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
@@ -377,7 +525,7 @@ rec {
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
 
   hint = callPackage ../development/libraries/haskell/hint {
-    ghcPaths = ghcPaths_0_1_0_6;
+    ghcPaths = self.ghcPaths_0_1_0_6;
   };
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
@@ -400,27 +548,33 @@ rec {
 
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
-  html = callPackage ../development/libraries/haskell/html {};
+  html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
+  html = self.html_1_0_1_2;
 
-  httpdShed = callPackage ../development/libraries/haskell/httpd-shed {
-    network = network_2_2_1_7;
-  };
+  httpdShed = callPackage ../development/libraries/haskell/httpd-shed {};
 
+  HUnit_1_2_0_3 = callPackage ../development/libraries/haskell/HUnit/1.2.0.3.nix {};
   HUnit_1_2_2_1 = callPackage ../development/libraries/haskell/HUnit/1.2.2.1.nix {};
-
-  HUnit = callPackage ../development/libraries/haskell/HUnit {};
+  HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
+  HUnit = self.HUnit_1_2_0_3;
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
+
+  JsContracts = callPackage ../development/libraries/haskell/JsContracts {
+    WebBits = self.WebBits_1_0;
+  };
 
   json = callPackage ../development/libraries/haskell/json {};
 
   json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {
-    network = network_2_2_1_7;
+    network = self.network_2_2_1_7;
   };
+
+  ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
@@ -432,9 +586,7 @@ rec {
 
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
-  MissingH = callPackage ../development/libraries/haskell/MissingH {
-    network = network_2_2_1_7;
-  };
+  MissingH = callPackage ../development/libraries/haskell/MissingH {};
 
   mmap = callPackage ../development/libraries/haskell/mmap {};
 
@@ -444,13 +596,20 @@ rec {
 
   monadlab = callPackage ../development/libraries/haskell/monadlab {};
 
+  monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
+
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
   monadsFd = callPackage ../development/libraries/haskell/monads-fd {};
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
-  mtl = callPackage ../development/libraries/haskell/mtl {};
+  mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
+  mtl_1_1_1_1 = callPackage ../development/libraries/haskell/mtl/1.1.1.1.nix {};
+  mtl_2_0_1_0 = callPackage ../development/libraries/haskell/mtl/2.0.1.0.nix {};
+  mtl1 = self.mtl_1_1_0_2;
+  mtl2 = self.mtl_2_0_1_0;
+  mtl  = self.mtl1;
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
@@ -462,9 +621,10 @@ rec {
 
   neither = callPackage ../development/libraries/haskell/neither {};
 
+  network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
-
-  network = callPackage ../development/libraries/haskell/network {};
+  network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
+  network = self.network_2_2_1_4;
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
@@ -474,41 +634,39 @@ rec {
     inherit (pkgs) openal;
   };
 
+  OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {
+    inherit (pkgs) mesa;
+    inherit (pkgs.xlibs) libX11;
+  };
+
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
   };
 
-  OpenGL = callPackage ../development/libraries/haskell/OpenGL {
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libX11;
-  };
+  OpenGL = self.OpenGL_2_2_1_1;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {
-    HTTP = HTTP_4000_0_9;
-    network = network_2_2_1_7;
-  };
+  pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
-  pandoc_newtime = callPackage ../development/libraries/haskell/pandoc {
-    HTTP = HTTP_4000_0_9;
-    network = network_2_2_1_7;
-    random = random_newtime;
-  };
+  pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
   pango = callPackage ../development/libraries/haskell/pango {
     inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gtkLibs) pango;
   };
 
+  parallel_1_1_0_1 = callPackage ../development/libraries/haskell/parallel/1.1.0.1.nix {};
   parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
-
-  parallel = callPackage ../development/libraries/haskell/parallel {};
+  parallel_3_1_0_1 = callPackage ../development/libraries/haskell/parallel/3.1.0.1.nix {};
+  parallel = self.parallel_1_1_0_1;
 
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
-  parsec = callPackage ../development/libraries/haskell/parsec {};
-
-  parsec_3 = callPackage ../development/libraries/haskell/parsec/3.nix {};
+  parsec_2_1_0_1 = callPackage ../development/libraries/haskell/parsec/2.1.0.1.nix {};
+  parsec_3_1_1   = callPackage ../development/libraries/haskell/parsec/3.1.1.nix {};
+  parsec2 = self.parsec_2_1_0_1;
+  parsec3 = self.parsec_3_1_1;
+  parsec  = self.parsec2;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -530,80 +688,66 @@ rec {
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
-  QuickCheck  = QuickCheck_1;
-
-  QuickCheck_1 = callPackage ../development/libraries/haskell/QuickCheck {};
-
+  QuickCheck_1_2_0_0 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.0.nix {};
+  QuickCheck_1_2_0_1 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.1.nix {};
   QuickCheck_2_1_0_3 = callPackage ../development/libraries/haskell/QuickCheck/2.1.0.3.nix {};
-
-  QuickCheck_2 = callPackage ../development/libraries/haskell/QuickCheck/QuickCheck-2.nix {};
+  QuickCheck_2_1_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.1.1.1.nix {};
+  QuickCheck_2_4_0_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.0.1.nix {};
+  QuickCheck1 = self.QuickCheck_1_2_0_1;
+  QuickCheck2 = self.QuickCheck_2_4_0_1;
+  QuickCheck  = self.QuickCheck2;
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
   random_newtime = callPackage ../development/libraries/haskell/random {
-    time = time_1_2_0_3;
+    time = self.time_1_2_0_3;
   };
 
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
   };
 
-  recaptcha = callPackage ../development/libraries/haskell/recaptcha {
-    HTTP = HTTP_4000_0_9;
-    network = network_2_2_1_7;
-  };
+  recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
 
-  regexBase_0_93_1 = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix {};
+  regexBase_0_72_0_2 = callPackage ../development/libraries/haskell/regex-base/0.72.0.2.nix {};
+  regexBase_0_93_1   = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix   {};
+  regexBase_0_93_2   = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix   {};
+  regexBase = self.regexBase_0_72_0_2;
 
-  regexBase_0_93_2 = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix {};
+  regexCompat_0_71_0_1 = callPackage ../development/libraries/haskell/regex-compat/0.71.0.1.nix {};
+  regexCompat_0_92     = callPackage ../development/libraries/haskell/regex-compat/0.92.nix     {};
+  regexCompat_0_93_1   = callPackage ../development/libraries/haskell/regex-compat/0.93.1.nix   {};
+  regexCompat = self.regexCompat_0_71_0_1;
 
-  regexBase = callPackage ../development/libraries/haskell/regex-base {};
+  regexPosix_0_72_0_3 = callPackage ../development/libraries/haskell/regex-posix/0.72.0.3.nix {};
+  regexPosix_0_94_1   = callPackage ../development/libraries/haskell/regex-posix/0.94.1.nix   {};
+  regexPosix_0_94_2   = callPackage ../development/libraries/haskell/regex-posix/0.94.2.nix   {};
+  regexPosix_0_94_4   = callPackage ../development/libraries/haskell/regex-posix/0.94.4.nix   {};
+  regexPosix = self.regexPosix_0_72_0_3;
 
-  regexCompat_0_92 = callPackage ../development/libraries/haskell/regex-compat/0.92.nix {
-    regexBase = regexBase_0_93_1;
-    regexPosix = regexPosix_0_94_1;
-  };
-
-  regexCompat_0_93_1 = callPackage ../development/libraries/haskell/regex-compat/0.93.1.nix {
-    regexBase = regexBase_0_93_2;
-    regexPosix = regexPosix_0_94_2;
-  };
-
-  regexCompat = callPackage ../development/libraries/haskell/regex-compat {};
-
-  regexPosix_0_94_1 = callPackage ../development/libraries/haskell/regex-posix/0.94.1.nix {
-    regexBase = regexBase_0_93_1;
-  };
-
-  regexPosix_0_94_2 = callPackage ../development/libraries/haskell/regex-posix/0.94.2.nix {
-    regexBase = regexBase_0_93_2;
-  };
-
-  regexPosix = callPackage ../development/libraries/haskell/regex-posix {};
-
-  regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {
-    regexBase = regexBase_0_93_2;
-  };
+  regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
 
   regular = callPackage ../development/libraries/haskell/regular {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
 
-  salvia = callPackage ../development/libraries/haskell/salvia {
-    network = network_2_2_1_7;
-  };
+  salvia = callPackage ../development/libraries/haskell/salvia {};
 
   salviaProtocol = callPackage ../development/libraries/haskell/salvia-protocol {};
 
   scion = callPackage ../development/libraries/haskell/scion {};
 
-  sendfile = callPackage ../development/libraries/haskell/sendfile {
-    network = network_2_2_1_7;
-  };
+  sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
 
-  syb = callPackage ../development/libraries/haskell/syb {};
+  # TODO: investigate status of syb in older platform versions
+  syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
+  syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
+  syb02     = self.syb_0_2_2;
+  syb03     = self.syb_0_3;
+  syb       = null; # by default, we assume that syb ships with GHC, which is
+                    # true for the older GHC versions
 
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 
@@ -633,45 +777,48 @@ rec {
 
   ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
 
-  SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {
-    network = network_2_2_1_7;
-  };
+  SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split = callPackage ../development/libraries/haskell/split {};
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
-  stm = callPackage ../development/libraries/haskell/stm {};
-
+  stm_2_1_1_2 = callPackage ../development/libraries/haskell/stm/2.1.1.2.nix {};
   stm_2_1_2_1 = callPackage ../development/libraries/haskell/stm/2.1.2.1.nix {};
+  stm_2_2_0_1 = callPackage ../development/libraries/haskell/stm/2.2.0.1.nix {};
+  stm = self.stm_2_1_1_2;
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
+  svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
+
+  tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
+
   terminfo = callPackage ../development/libraries/haskell/terminfo {
-    inherit extensibleExceptions /* only required for <= ghc6102  ?*/;
+    inherit (self) extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
 
   testpack = callPackage ../development/libraries/haskell/testpack {};
 
-  texmath = callPackage ../development/libraries/haskell/texmath {
-    cgi = cgi_3001_1_7_2;
-  };
+  texmath = callPackage ../development/libraries/haskell/texmath {};
 
-  text = callPackage ../development/libraries/haskell/text {};
+  text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
+  text = self.text_0_11_0_5;
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
-  /* time is Haskell Platform default, other time versions are more recent but incompatible */
-  time = callPackage ../development/libraries/haskell/time {};
-
-  time_1_1_3 = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
-
+  time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
+  time_1_1_3   = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
   time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
+  # time is in the core package set. It should only be necessary to
+  # pass it explicitly in rare circumstances.
+  time = null;
 
-  transformers = callPackage ../development/libraries/haskell/transformers {};
+  transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
+  transformers = self.transformers_0_2_2_0;
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
 
@@ -690,7 +837,7 @@ rec {
   uuParsingLib = callPackage ../development/libraries/haskell/uu-parsinglib {};
 
   vacuum = callPackage ../development/libraries/haskell/vacuum {
-    ghcPaths = ghcPaths_0_1_0_6;
+    ghcPaths = self.ghcPaths_0_1_0_6;
   };
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
@@ -704,12 +851,20 @@ rec {
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
   vty = callPackage ../development/libraries/haskell/vty {
-    parallel = parallel_2_2_0_1;
+    mtl = self.mtl2;
   };
 
-  webRoutes = callPackage ../development/libraries/haskell/web-routes {
-    network = network_2_2_1_7;
+  WebBits = callPackage ../development/libraries/haskell/WebBits {
+    parsec = self.parsec2;
   };
+
+  WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
+    parsec = self.parsec2;
+  };
+
+  WebBitsHtml = callPackage ../development/libraries/haskell/WebBits-Html {};
+
+  webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {};
 
@@ -718,13 +873,13 @@ rec {
   };
 
   WebServerExtras = callPackage ../development/libraries/haskell/WebServer-Extras {
-    json = json_0_3_6;
+    json = self.json_0_3_6;
     inherit (pkgs) fetchgit;
   };
 
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {
-    HTTP = HTTP_3001;
-    json = json_0_3_6;
+    HTTP = self.HTTP_3001_1_5;
+    json = self.json_0_3_6;
   };
 
   base64string = callPackage ../development/libraries/haskell/base64-string {};
@@ -737,6 +892,8 @@ rec {
     inherit (pkgs.xlibs) libX11;
   };
 
+  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
+
   X11 = callPackage ../development/libraries/haskell/X11 {
     inherit (pkgs.xlibs) libX11 libXinerama libXext;
     xineramaSupport = true;
@@ -747,9 +904,12 @@ rec {
     inherit (pkgs.xlibs) libXft;
   };
 
-  xhtml = callPackage ../development/libraries/haskell/xhtml {};
+  xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
+  xhtml = self.xhtml_3000_2_0_1;
 
   xml = callPackage ../development/libraries/haskell/xml {};
+
+  xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
   yst = callPackage ../development/libraries/haskell/yst {};
 
@@ -757,13 +917,19 @@ rec {
 
   zipper = callPackage ../development/libraries/haskell/zipper {};
 
-  zlib = callPackage ../development/libraries/haskell/zlib {
+  zlib_0_5_0_0 = callPackage ../development/libraries/haskell/zlib/0.5.0.0.nix {
     inherit (pkgs) zlib;
   };
 
   zlib_0_5_2_0 = callPackage ../development/libraries/haskell/zlib/0.5.2.0.nix {
     inherit (pkgs) zlib;
   };
+
+  zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
+    inherit (pkgs) zlib;
+  };
+
+  zlib = self.zlib_0_5_0_0;
 
   # Compilers.
 
@@ -773,55 +939,45 @@ rec {
 
   epic = callPackage ../development/compilers/epic {};
 
+  flapjax = callPackage ../development/compilers/flapjax {
+    WebBits = self.WebBits_1_0;
+  };
+
   helium = callPackage ../development/compilers/helium {};
 
   idris = callPackage ../development/compilers/idris {};
 
   # Development tools.
 
-  alex = callPackage ../development/tools/parsing/alex {};
-
+  alex_2_3_1 = callPackage ../development/tools/parsing/alex/2.3.1.nix {};
   alex_2_3_2 = callPackage ../development/tools/parsing/alex/2.3.2.nix {};
-
   alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
+  alex_2_3_5 = callPackage ../development/tools/parsing/alex/2.3.5.nix {};
+  alex = self.alex_2_3_1;
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   frown = callPackage ../development/tools/parsing/frown {};
 
-  haddock = haddock_2_7_2_P;
-
-  haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/haddock-2.4.2.nix {};
-
-  haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/haddock-2.7.2.nix {
-    alex = alex_2_3_2;
-    happy = happy_1_18_4;
-    ghcPaths = ghcPaths_0_1_0_6;
+  haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
+  haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {
+    ghcPaths = self.ghcPaths_0_1_0_6;
   };
-
-  haddock_2_7_2_P = callPackage ../development/tools/documentation/haddock/haddock-2.7.2.nix {
-    alex = alex_2_3_3;
-    happy = happy_1_18_5;
-    ghcPaths = ghcPaths_0_1_0_6;
+  haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {
+    ghcPaths = self.ghcPaths_0_1_0_6;
   };
+  haddock = self.haddock_2_7_2;
 
-  happy = happy_1_18_4;
+  happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
+  happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
+  happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
+  happy = self.happy_1_18_4;
 
-  happy_1_17 = callPackage ../development/tools/parsing/happy/happy-1.17.nix {};
-
-  happy_1_18_4 = callPackage ../development/tools/parsing/happy/happy-1.18.4.nix {};
-
-  happy_1_18_5 = callPackage ../development/tools/parsing/happy/happy-1.18.5.nix {};
-
-  HaRe = callPackage ../development/tools/haskell/HaRe {
-    network = network_2_2_1_7;
-  };
+  HaRe = callPackage ../development/tools/haskell/HaRe {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
 
-  hslogger = callPackage ../development/tools/haskell/hslogger {
-    network = network_2_2_1_7;
-  };
+  hslogger = callPackage ../development/tools/haskell/hslogger {};
 
   mkcabal = callPackage ../development/tools/haskell/mkcabal {};
 
@@ -834,13 +990,13 @@ rec {
   # Applications.
 
   darcs = callPackage ../applications/version-management/darcs/darcs-2.nix {
-    zlib = zlib_0_5_2_0;
     inherit (pkgs) curl;
+    parsec = self.parsec2;
   };
 
   leksah = callPackage ../applications/editors/leksah {
-    network = network_2_2_1_7;
-    regexBase = regexBase_0_93_2;
+    network = self.network_2_2_1_7;
+    regexBase = self.regexBase_0_93_2;
     inherit (pkgs) makeWrapper;
   };
 
@@ -854,19 +1010,11 @@ rec {
 
   # Tools.
 
-  cabalInstall_0_8_2 = callPackage ../tools/package-management/cabal-install/0.8.2.nix {
-    HTTP = HTTP_4000_0_9;
-    network = network_2_2_1_7;
-    zlib = zlib_0_5_2_0;
-  };
-
-  cabalInstall_0_8_0 = callPackage ../tools/package-management/cabal-install/0.8.0.nix {
-    HTTP = HTTP_4000_0_9;
-    network = network_2_2_1_7;
-    zlib = zlib_0_5_2_0;
-  };
-
-  cabalInstall = callPackage ../tools/package-management/cabal-install {};
+  cabalInstall_0_6_2  = callPackage ../tools/package-management/cabal-install/0.6.2.nix  {};
+  cabalInstall_0_8_0  = callPackage ../tools/package-management/cabal-install/0.8.0.nix  {};
+  cabalInstall_0_8_2  = callPackage ../tools/package-management/cabal-install/0.8.2.nix  {};
+  cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
+  cabalInstall = self.cabalInstall_0_6_2;
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {
     inherit (pkgs) tetex polytable;
@@ -884,4 +1032,4 @@ rec {
 
 };
 
-in result
+in result.final

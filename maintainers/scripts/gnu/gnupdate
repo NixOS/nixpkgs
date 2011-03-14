@@ -527,6 +527,8 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
     "gcc43"
     "gcc44"
     "gcc45"
+    "gcc45_real"
+    "gcc45_realCross"
     "glibc25"
     "glibc27"
     "glibc29"
@@ -575,6 +577,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
 (define (ftp-server/directory project)
   (define quirks
     '(("commoncpp2"   "ftp.gnu.org"   "/gnu/commoncpp" #f)
+      ("ucommon"      "ftp.gnu.org"   "/gnu/commoncpp" #f)
       ("libzrtpcpp"   "ftp.gnu.org"   "/gnu/ccrtp" #f)
       ("libosip2"     "ftp.gnu.org"   "/gnu/osip" #f)
       ("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)

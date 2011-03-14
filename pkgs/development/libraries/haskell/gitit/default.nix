@@ -2,20 +2,20 @@
  SHA, cgi, datetime,
  filestore, highlightingKate, safe, mtl, network, pandoc, parsec,
  recaptcha, utf8String, xhtml, zlib, ConfigFile, url,
- cautiousFile, feed}:
+ cautiousFile, feed, xssSanitize}:
 
 cabal.mkDerivation (self : {
   pname = "gitit";
-  version = "0.7.3.8";
-  sha256 = "356c82604dcfe2eec4faeb36ee46546ea3e26738780723f457366b2e35f6211a";
+  version = "0.7.3.12";
+  sha256 = "1z5cbkgfvwc9h6jciw7ghlj9ra6xph5z4lmliwkdnf38wfparxja";
   propagatedBuildInputs = [
     HStringTemplate happstackServer happstackUtil HTTP SHA cgi datetime
     filestore highlightingKate safe
     mtl network pandoc parsec recaptcha utf8String xhtml zlib ConfigFile
-    url cautiousFile feed
+    url cautiousFile feed xssSanitize
   ];
   meta = {
-    description = "Wiki using HAppS, git or darcs, and pandoc";
+    description = "Wiki using happstack, git or darcs, and pandoc";
     license = "GPL";
     maintainers = [self.stdenv.lib.maintainers.andres];
   };

@@ -2,8 +2,9 @@
 
 cabal.mkDerivation (self : {
   pname = "multirec";
-  version = "0.4";
-  sha256 = "ad7a6ae90e1880b3fd79686ce8012e531b738f8f1d10ba836550fc91cfe3695e";
+  version = "0.5";
+  sha256 = "1nrfbiy5g51cpaqqi1adrr32x74wjjvplyyrphvzf4rxhnhj3xpw";
+  noHaddock = true; # don't know why Haddock causes an error
   meta = {
     description = "Generic programming with systems of recursive datatypes";
   };

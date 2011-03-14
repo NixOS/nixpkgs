@@ -1,10 +1,10 @@
-{cabal, mtl}:
+{cabal, mtl, syb}:
 
 cabal.mkDerivation (self : {
   pname = "uniplate";
-  version = "1.5.1";
-  sha256 = "cfeaaaabbbe318992df0c51a0c04729b22dac244f415b80a3b388708ed9cfc33";
-  propagatedBuildInputs = [mtl];
+  version = "1.6";
+  sha256 = "13nlyzsnj6hshgl839ww1kp49r87kpdcdyn7hxahg8k2qkj5zzxr";
+  propagatedBuildInputs = [mtl syb];
   meta = {
     description = "Uniform type generic traversals";
   };

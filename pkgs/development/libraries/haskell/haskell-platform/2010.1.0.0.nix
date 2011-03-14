@@ -1,6 +1,7 @@
 {cabal, fetchurl, GLUT, HTTP, HUnit, OpenGL, QuickCheck, cgi, fgl,
  haskellSrc, html, network, parallel, regexBase, regexCompat, regexPosix,
- stm, xhtml, zlib, cabalInstall, alex, happy, haddock, ghc}:
+ stm, xhtml, zlib, parsec,
+ cabalInstall, alex, happy, haddock, ghc}:
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
@@ -12,7 +13,8 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [
     GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
     haskellSrc html network parallel regexBase regexCompat regexPosix
-    stm xhtml zlib cabalInstall alex happy ghc haddock
+    stm xhtml zlib parsec
+    cabalInstall alex happy ghc haddock
   ];
   meta = {
     description = "Haskell Platform meta package";

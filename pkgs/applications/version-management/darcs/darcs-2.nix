@@ -3,8 +3,8 @@
 cabal.mkDerivation (self : {
   pname = "darcs";
   name = self.fname;
-  version = "2.5";
-  sha256 = "0i99z3wsfc1hhr0a0ax7254gj3i69yg8cb9lhp55wl6lfqvpzcnh";
+  version = "2.5.1";
+  sha256 = "0h7i2nw1fkmdrvwgzccqvbbfx8bdhn0h9d5rd98ayjs207dnvrj8";
 
   propagatedBuildInputs = [
     curl html parsec regexCompat haskeline hashedStorage zlib tar text

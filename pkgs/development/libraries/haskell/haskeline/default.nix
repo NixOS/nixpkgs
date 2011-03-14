@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "haskeline";
-  version = "0.6.2.2";
-  sha256 = "b6307563258802453d65c7e7bd1ef1c6635fefea17af3e01449192b52075b25b";
+  version = "0.6.3.2";
+  sha256 = "0ragimzrilsk5r8n0fbq3lyjww28bmc1r1vgjf9pb4kpfpbz0cq8";
   propagatedBuildInputs = [extensibleExceptions mtl utf8String];
   meta = {
     description = "A command-line interface for user input, written in Haskell";

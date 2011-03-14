@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "SHA";
-  version = "1.4.1.1";
-  sha256 = "8ecdc91679d1aa1d4050e1124cf5af79ae2ece66aee3b907e1078d71bf03169a";
+  version = "1.4.1.3";
+  sha256 = "1sx68mvzb2y3dq9hk769fzp8vw4jf4hk5v45i0a9a8b31imlicf0";
   propagatedBuildInputs = [binary];
   meta = {
     description = "Implementations of the SHA suite of message digest functions";

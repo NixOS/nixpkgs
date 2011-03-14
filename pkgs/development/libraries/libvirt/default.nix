@@ -1,5 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext }:
+, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext 
+, libtasn1
+}:
 
 let version = "0.8.8"; in
 
@@ -13,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
-      utillinux udev libpciaccess gettext
+      utillinux udev libpciaccess gettext libtasn1
     ];
 
   preConfigure =
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://libvirt.org/;
-    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux (and other OSes).";
+    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux (and other OSes)";
     license = "LGPLv2+";
     platforms = stdenv.lib.platforms.linux;
   };

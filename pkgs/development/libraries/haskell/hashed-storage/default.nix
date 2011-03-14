@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "hashed-storage";
-  version = "0.5.3";
-  sha256 = "0ql8hgsaazs0wxvr920vm2s2iljcnh6lnivcy3vgd5wjaw6lkd00";
+  version = "0.5.5";
+  sha256 = "03wx21kgnvkny8b6fz86wg85pr2sxbm15ndznnpqjg5gf126n842";
   propagatedBuildInputs = [mtl zlib mmap binary dataenc];
   meta = {
     description = "Hashed file storage support code";

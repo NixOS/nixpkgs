@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gnutls, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "ucommon-4.0.5";
+  name = "ucommon-4.1.7";
 
   src = fetchurl {
-    url = mirror://gnu/commoncpp/ucommon-4.0.5.tar.gz;
-    sha256 = "1h2xyb9s1xivpr5039jhhcqvd7ygn37si8yvmh5fd57n1y8by6vm";
+    url = mirror://gnu/commoncpp/ucommon-4.1.7.tar.gz;
+    sha256 = "1qbfhi3gfzjs44ilaipv0ynjvilxk06897g0zk974g0fgk98dd7i";
   };
 
   buildInputs = [ pkgconfig gnutls zlib ];
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "C++ library to facilitate using C++ design patterns";
-    homepage = http://www.gnutelephony.org/index.php/GNU_uCommon_C;
+    description = "GNU uCommon C++, C++ library to facilitate using C++ design patterns";
+    homepage = http://www.gnu.org/software/commoncpp/;
     license = "LGPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.viric ];

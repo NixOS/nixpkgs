@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "transformers";
-  version = "0.2.1.0";
-  sha256 = "1ff9768e60130810e888452b6052d64998d0651fe2835902f032d8f8182a2c6d";
+  version = "0.2.2.0"; # Haskell Platform 2011.2.0.0
+  sha256 = "1nkazxy2p0w5ad76vg1lc4l0nla1kdqjdf9pymjgk75dpiyijbdz";
   meta = {
     description = "Concrete functor and monad transformers";
   };
