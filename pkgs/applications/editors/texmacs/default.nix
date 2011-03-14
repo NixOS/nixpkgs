@@ -1,4 +1,4 @@
-{stdenv, fetchurl, guile, libX11, libXext, xmodmap, which, makeWrapper,
+{stdenv, fetchurl, guile, libX11, libXext, xmodmap, which, makeWrapper, freetype,
  tex ? null,
  aspell ? null,
  ghostscriptX ? null,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sha256 = "02gqalr775r4xyfy4bq3qq1h3pkarsxjb6ami7lgxfgmyg6ca5kn";
   };
 
-  buildInputs = [ guile libX11 libXext makeWrapper ghostscriptX ];
+  buildInputs = [ guile libX11 libXext makeWrapper ghostscriptX freetype ];
 
   patchPhase = (if tex == null then ''
     gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
