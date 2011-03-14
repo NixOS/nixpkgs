@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sha256 = "02gqalr775r4xyfy4bq3qq1h3pkarsxjb6ami7lgxfgmyg6ca5kn";
   };
 
-  buildInputs = [ guile libX11 libXext makeWrapper ];
+  buildInputs = [ guile libX11 libXext makeWrapper ghostscriptX ];
 
   patchPhase = (if tex == null then ''
     gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
