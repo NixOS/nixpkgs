@@ -5940,9 +5940,7 @@ let
       libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
   });
 
-  evolution_data_server = (newScope (gnome // gtkLibs))
-  ../servers/evolution-data-server {
-  };
+  evolution_data_server = newScope (gnome // gtkLibs) ../servers/evolution-data-server { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
     fltk = fltk20;
