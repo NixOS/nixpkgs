@@ -32,6 +32,8 @@ rec {
 
   makeFlags = [
       ''PREFIX=$out''
+      ''APPL=$out/share/applications''
+      ''PIXMAPS=$out/share/pixmaps''
       ''UDEVBIN=$out/bin''
       ''UDEVDIR=$out/etc/udev/rules.d''
       ''UDEVD=${udev}/sbin/udevd''
@@ -46,8 +48,12 @@ rec {
   fixHardcodedPaths = a.fullDepEntry ''
     touch all-test
     sed -e "/BASENAME=/iPATH=$out/bin:$PATH" -i *-wrapper *-wrapper.in
+    sed -e "s@PREFIX=/usr@PREFIX=$out@" -i *-wrapper{,.in}
+    sed -e "s@/usr/share@$out/share@" -i hplj10xx_gui.tcl
+    sed -e "s@\[.*-x.*/usr/bin/logger.*\]@type logger >/dev/null 2>\&1@" -i *wrapper{,.in}
     sed -e '/install-usermap/d' -i Makefile
     sed -e "s@/etc/hotplug/usb@$out&@" -i *rules*
+    sed -e "s@/usr@$out@g" -i hplj1020.desktop
     sed -e "/PRINTERID=/s@=.*@=$out/bin/usb_printerid@" -i hplj1000
   '' ["doPatch" "minInit"];
 
@@ -55,29 +61,22 @@ rec {
     mkdir -pv $out/{etc/udev/rules.d,lib/udev/rules.d,etc/hotplug/usb}
     mkdir -pv $out/share/foomatic/db/source/{opt,printer,driver}
     mkdir -pv $out/share/cups/model
+    mkdir -pv $out/share/{applications,pixmaps}
   '' ["minInit"];
 
   deployGetWeb = a.fullDepEntry ''
-    ensureDir "$out/bin"
-    ensureDir "$out/share"
-    cp ./getweb "$out/bin"
-    cp ./arm2hpdl "$out/bin"
-    cp -r PPD "$out/share/foo2zjs-ppd"
-  '' ["minInit" "defEnsureDir"];
+    mkdir -pv "$out/bin"
+    cp -v getweb arm2hpdl "$out/bin"
+  '' ["minInit"];
       
   meta = {
     description = "ZjStream printer drivers";
     maintainers = with a.lib.maintainers;
     [
-      raskin
+      raskin urkud
     ];
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.gpl2Plus;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://packages.debian.org/sid/foo2zjs";
-    };
   };
 }) x
