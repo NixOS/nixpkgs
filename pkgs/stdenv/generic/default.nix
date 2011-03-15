@@ -91,8 +91,8 @@ let
 
         # Utility flags to test the type of platform.
         isDarwin = result.system == "i686-darwin"
-	       || result.system == "powerpc-darwin"
-	       || result.system == "x86_64-darwin";
+               || result.system == "powerpc-darwin"
+               || result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
@@ -100,14 +100,14 @@ let
                || result.system == "mips64-linux";
         isSunOS = result.system == "i386-sunos";
         isCygwin = result.system == "i686-cygwin";
-	isFreeBSD = result.system == "i686-freebsd"
-	       || result.system == "x86_64-freebsd";
-	isOpenBSD = result.system == "i686-openbsd"
-	       || result.system == "x86_64-openbsd";
-	isBSD = result.system == "i686-freebsd"
-	       || result.system == "x86_64-freebsd"
-	       || result.system == "i686-openbsd"
-	       || result.system == "x86_64-openbsd";
+        isFreeBSD = result.system == "i686-freebsd"
+               || result.system == "x86_64-freebsd";
+        isOpenBSD = result.system == "i686-openbsd"
+               || result.system == "x86_64-openbsd";
+        isBSD = result.system == "i686-freebsd"
+               || result.system == "x86_64-freebsd"
+               || result.system == "i686-openbsd"
+               || result.system == "x86_64-openbsd";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
