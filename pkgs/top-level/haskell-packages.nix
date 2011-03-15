@@ -276,6 +276,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb        = self.syb02;
   };
 
+  ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
+
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
   ansiWLPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
