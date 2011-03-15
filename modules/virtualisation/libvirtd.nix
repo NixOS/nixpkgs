@@ -45,6 +45,8 @@ in
 
     environment.systemPackages = [ pkgs.libvirt ];
 
+    boot.kernelModules = [ "tun" ];
+
     jobs.libvirtd =
       { description = "Libvirtd virtual machine management daemon";
 
