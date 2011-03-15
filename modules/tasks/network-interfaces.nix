@@ -133,6 +133,36 @@ in
       '';
     };
     
+    networking.bridges = mkOption {
+      default = { };
+      example =
+        { br0.interfaces = [ "eth0" "eth1" ];
+          br1.interfaces = [ "eth2" "wlan0" ];
+        };
+      description =
+        ''
+          This option allows you to define Ethernet bridge devices
+          that connect physical networks together.  The value of this
+          option is an attribute set.  Each attribute specifies a
+          bridge, with the attribute name specifying the name of the
+          bridge's network interface.
+        '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        interfaces = mkOption {
+          example = [ "eth0" "eth1" ];
+          type = types.listOf types.string;
+          description =
+            "The physical network interfaces connected by the bridge.";
+        };
+
+      };
+      
+    };
+
   };
 
 
@@ -149,7 +179,7 @@ in
         pkgs.nettools
         pkgs.wirelesstools
         pkgs.rfkill
-      ];
+      ] ++ optional (cfg.bridges != {}) [ pkgs.bridge_utils ];
 
     security.setuidPrograms = [ "ping" "ping6" ];
     
@@ -204,6 +234,18 @@ in
             # Run any user-specified commands.
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands} || true
 
+            # Create bridge devices.
+            ${concatStrings (attrValues (flip mapAttrs cfg.bridges (n: v: ''
+                echo "Creating bridge ${n}..."
+                ${pkgs.bridge_utils}/sbin/brctl addbr "${n}" || true
+                ${flip concatMapStrings v.interfaces (i: ''
+                  ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}" || true
+                  ip addr flush dev "${i}" || true
+                '')}
+                # !!! Should delete (brctl delif) any interfaces that
+                # no longer belong to the bridge.
+            '')))}
+            
             ${optionalString (cfg.interfaces != [] || cfg.localCommands != "") ''
               # Emit the ip-up event (e.g. to start ntpd).
               initctl emit -n ip-up
