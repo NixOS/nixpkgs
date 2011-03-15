@@ -34,6 +34,7 @@
 
   testScript =
     ''
+      $machine->waitUntilSucceeds("pgrep plasma-desktop");
       $machine->waitForWindow(qr/plasma-desktop/);
 
       # Check that logging in has given the user ownership of devices.
