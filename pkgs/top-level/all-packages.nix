@@ -2966,6 +2966,8 @@ let
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
+  funambol = callPackage ../development/libraries/funambol { };
+
   fam = gamin;
 
   gamin = callPackage ../development/libraries/gamin { };
