@@ -5572,6 +5572,8 @@ let
     inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
   };
 
+  akunambol = newScope pkgs.kde4 ../applications/networking/sync/akunambol { };
+
   amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn {

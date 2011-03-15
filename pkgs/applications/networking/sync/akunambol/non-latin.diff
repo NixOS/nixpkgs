@@ -1,0 +1,17 @@
+diff --git a/qtgui/standardsourcesettings.cpp b/qtgui/standardsourcesettings.cpp
+index a14a737..5d4712e 100644
+--- a/qtgui/standardsourcesettings.cpp
++++ b/qtgui/standardsourcesettings.cpp
+@@ -83,9 +83,9 @@ void StandardSourceSettings::populateCollections()
+     foreach( const Collection &collection, colls ) {
+         if (collection.contentMimeTypes().contains(source->getAkonadiMimeType())) {
+             i++;
+-            const char* dn = collection.name().toUtf8();
+-            LOG.debug("Adding collection id %lld named %s", collection.id(), dn);
+-            collections->addItem(dn);
++            LOG.debug("Adding collection id %lld named %s", collection.id(),
++                      collection.name().toLocal8Bit().data());
++            collections->addItem(collection.name());
+             idList.append(collection.id());
+         }
+     }
