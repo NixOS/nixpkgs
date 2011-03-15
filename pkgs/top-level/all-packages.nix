@@ -408,6 +408,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bluedevil = newScope pkgs.kde4 ../tools/bluetooth/bluedevil { };
+
   bootchart = callPackage ../tools/system/bootchart { };
 
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
@@ -3372,6 +3374,8 @@ let
   libassuan = callPackage ../development/libraries/libassuan { };
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
+
+  libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
   libcaca = callPackage ../development/libraries/libcaca { };
 
