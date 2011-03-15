@@ -680,8 +680,10 @@ let
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
-    inherit intltool perl gettext libusb pkgconfig;
+    inherit intltool perl gettext libusb pkgconfig bluez readline pcsclite
+      libical;
     inherit (gtkLibs) gtk glib;
+    inherit (xorg) libXpm;
   };
 
   gnugrep =
