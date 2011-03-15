@@ -51,8 +51,13 @@ in
         startOn = "stopped udevtrigger";
 
         path =
-          [ pkgs.bridge_utils pkgs.dmidecode
+          [ pkgs.bridge_utils pkgs.dmidecode pkgs.dnsmasq
           ] ++ optional cfg.enableKVM pkgs.qemu_kvm;
+
+        preStart = 
+          ''
+            mkdir -p /var/log/libvirt/qemu -m 755
+          '';
 
         exec = "${pkgs.libvirt}/sbin/libvirtd --daemon --verbose";
 
