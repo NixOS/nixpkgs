@@ -19,6 +19,8 @@ rec {
             ).sha256;
         };
 
+        enableParallelBuilding = true;
+
         meta = {
           maintainers = with stdenv.lib.maintainers; [ sander urkud ];
           platforms = stdenv.lib.platforms.linux;

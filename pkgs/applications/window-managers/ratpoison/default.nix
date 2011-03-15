@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, inputproto, libXt, libXpm, libXft, fontconfig
+{ stdenv, fetchurl, libX11, inputproto, libXt, libXpm, libXft, fontconfig, freetype
 , libXtst, xextproto, readline, libXi, pkgconfig, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vf";	# needed because of the patch above
 
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2"; # urgh
+  
   buildInputs =
-    [ libX11 inputproto libXt libXpm libXft fontconfig libXtst
+    [ libX11 inputproto libXt libXpm libXft fontconfig freetype libXtst
       xextproto readline libXi pkgconfig perl autoconf automake
     ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }: 
 
 stdenv.mkDerivation {
-  name = "libjpeg-8";
+  name = "libjpeg-8c";
   
   src = fetchurl {
     url = http://www.ijg.org/files/jpegsrc.v8c.tar.gz;

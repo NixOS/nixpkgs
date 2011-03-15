@@ -1,16 +1,18 @@
 { stdenv, fetchurl, pkgconfig, perl, glib }:
 
 stdenv.mkDerivation rec {
-  name = "atk-1.28.0";
+  name = "atk-1.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atk/1.28/${name}.tar.bz2";
-    sha256 = "11zyamivv7fcj9ap3w3bn3gm89mkni9waf51fx75zmfjh3jrznp4";
+    url = "mirror://gnome/sources/atk/1.32/${name}.tar.bz2";
+    sha256 = "e9a3e598f75c4db1af914f8b052dd9f7e89e920a96cc187c18eb06b8339cb16e";
   };
 
-  buildInputs = [pkgconfig perl];
-  propagatedBuildInputs = [glib];
+  buildInputs = [ pkgconfig perl ];
+  propagatedBuildInputs = [ glib ];
 
+  postInstall = "rm -rf $out/share/gtk-doc";
+  
   meta = {
     description = "ATK, the accessibility toolkit";
 

@@ -2,11 +2,11 @@
 , libXcomposite, cairo, glib, pango, gtk, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "clutter-1.4.0";
+  name = "clutter-1.4.2";
 
   src = fetchurl {
     url = "http://source.clutter-project.org/sources/clutter/1.4/${name}.tar.bz2";
-    sha256 = "15icq2gf2fi098lq1wqr7sq2cnb00g1ids050a5z3f43l1ajrnxw";
+    sha256 = "14l8wgk5jdwsnjf991qgzl115kjs1xywil2awlrwj1airsn6gzcj";
   };
 
   buildInputs = [ pkgconfig ];
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     [ mesa cairo glib pango gtk json_glib
       libXi libXfixes libXdamage libXcomposite
     ];
-
 
   meta = {
     description = "Clutter, a library for creating fast, dynamic graphical user interfaces";

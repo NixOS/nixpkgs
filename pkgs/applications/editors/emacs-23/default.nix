@@ -17,10 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "0kfa546qi0idkwk29gclgi13qd8q54pcqgy9qwjknlclszprdp3a";
   };
 
-  buildInputs = [
-    ncurses x11 texinfo libXaw Xaw3d libXpm dbus libpng libjpeg libungif
-    libtiff librsvg gtk (if gtk != null then pkgconfig else null) libXft gconf
-  ];
+  buildInputs = 
+    [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
+      libtiff librsvg libXft gconf
+    ] 
+    ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
+    ++ stdenv.lib.optional stdenv.isLinux dbus;
 
   configureFlags =
     stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft"]

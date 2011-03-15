@@ -97,6 +97,8 @@ rec {
       rm -f $out/bin/run-mozilla.sh
     ''; # */
 
+    enableParallelBuilding = true;
+
     meta = {
       description = "Mozilla Firefox XUL runner";
       homepage = http://www.mozilla.com/en-US/firefox/;

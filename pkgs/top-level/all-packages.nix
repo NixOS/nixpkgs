@@ -394,16 +394,9 @@ let
 
   autojump = callPackage ../tools/misc/autojump { };
 
-  avahi =
-    let qt4Support = getConfig [ "avahi" "qt4Support" ] false;
-    in
-      makeOverridable (import ../development/libraries/avahi) {
-        inherit stdenv fetchurl pkgconfig libdaemon dbus perl perlXMLParser
-          expat gettext intltool lib;
-        inherit (gtkLibs) glib gtk;
-        inherit qt4Support;
-        qt4 = if qt4Support then qt4 else null;
-      };
+  avahi = callPackage ../development/libraries/avahi {
+    qt4Support = getConfig [ "avahi" "qt4Support" ] false;
+  };
 
   axel = callPackage ../tools/networking/axel { };
 
@@ -661,7 +654,7 @@ let
   gawk = callPackage ../tools/text/gawk { };
 
   gdmap = callPackage ../tools/system/gdmap {
-    inherit (gtkLibs216) gtk;
+    inherit (pkgs.gtkLibs) gtk;
   };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
@@ -2783,9 +2776,6 @@ let
   buddy = callPackage ../development/libraries/buddy { };
 
   cairo = callPackage ../development/libraries/cairo { };
-  cairo_1_10_0 = callPackage ../development/libraries/cairo/1.10.nix {
-    pixman = xlibs.pixman_0_20_0;
-  };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
@@ -2869,7 +2859,7 @@ let
   db45 = callPackage ../development/libraries/db4/db4-4.5.nix { };
 
   dbus = callPackage ../development/libraries/dbus {
-    useX11 = true; # !!! `false' doesn't build
+    useX11 = true;
   };
 
   dbus_glib = makeOverridable (import ../development/libraries/dbus-glib) {
@@ -2985,10 +2975,6 @@ let
   };
 
   gdbm = callPackage ../development/libraries/gdbm { };
-
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf {
-    inherit (gtkLibs1x) gtk;
-  };
 
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
@@ -3180,13 +3166,13 @@ let
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = gtkLibs220;
+  gtkLibs = gtkLibs224;
 
   glib = gtkLibs.glib;
   gtk = gtkLibs.gtk;
   pango = gtkLibs.pango;
 
-  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in rec {
+  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
 
     glib = callPackage ../development/libraries/glib/1.2.x.nix { };
 
@@ -3194,7 +3180,7 @@ let
 
   });
 
-  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in rec {
+  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in {
 
     glib = callPackage ../development/libraries/glib/2.20.x.nix { };
 
@@ -3212,25 +3198,7 @@ let
 
   });
 
-  gtkLibs218 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs218; in rec {
-
-    glib = callPackage ../development/libraries/glib/2.22.x.nix { };
-
-    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/1.28.x.nix { };
-
-    pango = callPackage ../development/libraries/pango/1.26.x.nix { };
-
-    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.18.x.nix { };
-
-    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
-
-  });
-
-  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in rec {
+  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in {
 
     glib = callPackage ../development/libraries/glib/2.24.x.nix { };
 
@@ -3248,7 +3216,25 @@ let
 
   });
 
-  glib_2_28 = callPackage ../development/libraries/glib/2.28.x.nix {};
+  gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
+
+    glib = callPackage ../development/libraries/glib/2.28.x.nix { };
+
+    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
+
+    atk = callPackage ../development/libraries/atk/1.32.x.nix { };
+
+    pango = callPackage ../development/libraries/pango/1.28.x.nix { };
+
+    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
+
+    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.22.x.nix { };
+
+    gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+
+    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
+
+  });
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     inherit (gnome) gtk;
@@ -3779,10 +3765,6 @@ let
   mesa = callPackage ../development/libraries/mesa {
     lipo = if stdenv.isDarwin then darwinLipoUtility else null;
   };
-  mesa_7_9 = callPackage ../development/libraries/mesa/7.9.nix {
-    lipo = if stdenv.isDarwin then darwinLipoUtility else null;
-  };
-
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
@@ -5158,9 +5140,7 @@ let
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
-  libsexy = callPackage ../development/libraries/libsexy {
-    inherit (gtkLibs) glib gtk pango;
-  };
+  libsexy = callPackage ../development/libraries/libsexy { };
 
   librsvg = gnome.librsvg;
 
@@ -5828,8 +5808,8 @@ let
     Xaw3d = null;
     gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
     # TODO: these packages don't build on Darwin.
-    gconf = if stdenv.isDarwin then null else gnome.GConf;
-    librsvg = if stdenv.isDarwin then null else librsvg;
+    gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
+    librsvg = null /* if stdenv.isDarwin then null else librsvg */;
   };
 
   emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
@@ -5915,9 +5895,7 @@ let
       libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
   });
 
-  evolution_data_server = (newScope (gnome // gtkLibs))
-  ../servers/evolution-data-server {
-  };
+  evolution_data_server = newScope (gnome // gtkLibs) ../servers/evolution-data-server { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
     fltk = fltk20;
@@ -5978,9 +5956,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox40Pkgs = let p = (applyGlobalOverrides (x : {cairo = x.cairo_1_10_0;}));
-  in p.callPackage
-      ../applications/networking/browsers/firefox/4.0.nix {
+  firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
     inherit (p.gtkLibs) gtk pango;
     inherit (p.gnome) libIDL;
   };
