@@ -3501,6 +3501,8 @@ let
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
+  liblikeback = newScope pkgs.kde4 ../development/libraries/liblikeback { };
+
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
   };
