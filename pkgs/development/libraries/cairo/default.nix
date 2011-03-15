@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional pngSupport libpng;
     
   configureFlags =
-    stdenv.lib.optional xcbSupport "--enable-xcb" ++
-    stdenv.lib.optional pdfSupport "--enable-pdf";
+    [ "--enable-tee" ]
+    ++ stdenv.lib.optional xcbSupport "--enable-xcb"
+    ++ stdenv.lib.optional pdfSupport "--enable-pdf";
 
   preConfigure = ''
     # Work around broken `Requires.private' that prevents Freetype
