@@ -57,6 +57,13 @@ in
         tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
         chown -R root.root /etc/nixos
      ''}
+
+     # Make the installer more likely to succeed in low memory
+     # environments.  The kernel's overcommit heustistics bite us
+     # fairly often, preventing processes such as nix-worker or
+     # download-using-manifests.pl from forking even if there is
+     # plenty of free memory.
+     echo 1 > /proc/sys/vm/overcommit_memory
     '';
 
   # To speed up installation a little bit, include the complete stdenv
