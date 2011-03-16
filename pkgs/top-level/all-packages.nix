@@ -5650,14 +5650,6 @@ let
     python = python3;
   });
 
-  bmp = callPackage ../applications/audio/bmp {
-    inherit (gnome) esound libglade;
-  };
-
-  bmp_plugin_musepack = callPackage ../applications/audio/bmp-plugins/musepack { };
-
-  bmp_plugin_wma = callPackage ../applications/audio/bmp-plugins/wma { };
-
   bvi = callPackage ../applications/editors/bvi { };
 
   calibre = callPackage ../applications/misc/calibre {
