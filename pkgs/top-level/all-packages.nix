@@ -5606,23 +5606,11 @@ let
 
   bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
     qt = qt4;
-  } ;
+  };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  #biew = import ../applications/misc/biew {
-  #  inherit lib stdenv fetchurl ncurses;
-  #};
-
-  # only to be able to compile blender - I couldn't compile the default openal software
-  # Perhaps this can be removed - don't know which one openal{,soft} is better
-  freealut_soft = callPackage ../development/libraries/freealut {
-    openal = openalSoft;  };
-
-  blender = callPackage ../applications/misc/blender/2.49.nix {
-    python = python26Base;
-  };
+  blender = callPackage ../applications/misc/blender/2.49.nix { };
 
   blender_2_50 = lowPrio (import ../applications/misc/blender {
     inherit stdenv fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
