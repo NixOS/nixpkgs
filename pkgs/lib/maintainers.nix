@@ -5,7 +5,7 @@
      alphabetically sorted.  */
 
   all = "Nix Committers <nix-commits@cs.uu.nl>";
-  andres = "Andres Loeh <andres@cs.uu.nl>";
+  andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
