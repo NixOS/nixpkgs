@@ -61,6 +61,7 @@ in
         preStart = 
           ''
             mkdir -p /var/log/libvirt/qemu -m 755
+            rm -f /var/run/libvirtd.pid
           '';
 
         exec = "${pkgs.libvirt}/sbin/libvirtd --daemon --verbose";
