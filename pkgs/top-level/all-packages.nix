@@ -2274,8 +2274,6 @@ let
 
   pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
 
-  python24 = callPackage ../development/interpreters/python/2.4 { };
-
   python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
     inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
     arch = if stdenv.isDarwin then darwinArchUtility else null;
@@ -4390,9 +4388,11 @@ let
 
   ZopeInterface = pythonPackages.zopeInterface;
 
+  /*
   zope = callPackage ../development/python-modules/zope {
     python = python24;
   };
+  */
 
   
   ### SERVERS
