@@ -1,20 +1,30 @@
 {stdenv, fetchurl, unicode ? true}:
 
-stdenv.mkDerivation ( rec {
+let
+  /* C++ bindings fail to build on `i386-pc-solaris2.11' with GCC 3.4.3:
+     <http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6395191>.
+     It seems that it could be worked around by #including <wchar.h> in the
+     right place, according to
+     <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
+     but this is left as an exercise to the reader.
+     So disable them for now.  */
+  cxx = stdenv.system != "i386-sunos";
+in
+stdenv.mkDerivation (rec {
   name = "ncurses-5.7";
-  
+
   src = fetchurl {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
     sha256 = "1x4q6kma6zgg438llbgiac3kik7j2lln9v97jdffv3fyqyjxx6qa";
   };
 
-  crossAttrs = { 
+  crossAttrs = {
     patches = [ ./wint_t.patch ];
   };
-  
+
   configureFlags = ''
     --with-shared --includedir=''${out}/include --without-debug
-    ${if unicode then "--enable-widec" else ""}
+    ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
   '';
 
   selfBuildNativeInput = true;
@@ -27,7 +37,7 @@ stdenv.mkDerivation ( rec {
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postInstall = if unicode then ''
-    chmod 644 $out/lib/libncurses++w.a
+    ${if cxx then "chmod 644 $out/lib/libncurses++w.a" else ""}
     for lib in curses ncurses form panel menu; do
       if test -e $out/lib/lib''${lib}w.a; then
         rm -f $out/lib/lib$lib.so
@@ -58,5 +68,8 @@ stdenv.mkDerivation ( rec {
     homepage = http://www.gnu.org/software/ncurses/;
 
     license = "X11";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 } // ( if stdenv.isDarwin then { postFixup = "rm $out/lib/*.so"; } else { } ) )

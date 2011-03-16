@@ -1,9 +1,9 @@
 rec {
-   version="0.6.29";
-   name="gnokii-0.6.29";
-   hash="0w94balyy9l0xy8x3z20f127b5ijpm9a9fbbskz147jyzhprgw0l";
+   version="0.6.30";
+   name="gnokii-0.6.30";
+   hash="0k14dymifk7dx3z58cqrc4mgxrm17s4jk12chwdfjhjarz390x8p";
    url="http://www.gnokii.org/download/gnokii/gnokii-${version}.tar.gz";
-   advertisedUrl="http://www.gnokii.org/download/gnokii/gnokii-0.6.29.tar.gz";
+   advertisedUrl="http://www.gnokii.org/download/gnokii/gnokii-0.6.30.tar.gz";
   
   
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, guile, libX11, libXext, xmodmap, which, makeWrapper,
+{stdenv, fetchurl, guile, libX11, libXext, xmodmap, which, makeWrapper, freetype,
  tex ? null,
  aspell ? null,
  ghostscriptX ? null,
@@ -9,7 +9,7 @@
 
 let 
   pname = "TeXmacs";
-  version = "1.0.7.6";
+  version = "1.0.7.10";
   extraFontsSrc = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/TeXmacs/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";
     sha256 = "0hylgjmd95y9yahbblmawkkw0i71vb145xxv2xqrmff81301n6k7";
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/${pname}/targz/${name}-src.tar.gz";
-    sha256 = "0x4qy3ai9nmz1i90mbqi1n2vgwyllxwmlpllfwcz0fad7yby7msh";
+    sha256 = "02gqalr775r4xyfy4bq3qq1h3pkarsxjb6ami7lgxfgmyg6ca5kn";
   };
 
-  buildInputs = [ guile libX11 libXext makeWrapper ];
+  buildInputs = [ guile libX11 libXext makeWrapper ghostscriptX freetype ];
 
   patchPhase = (if tex == null then ''
     gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)

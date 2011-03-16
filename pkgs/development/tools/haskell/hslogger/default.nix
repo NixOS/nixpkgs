@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "hslogger";
-  version = "1.0.7";
-  sha256 = "0fb8aagylrr5z19801szj868apcns8lafc4ydx9v0ka2lbmjqvbz";
+  version = "1.1.4";
+  sha256 = "0858jbkjda7ccjzxjnlp2ng1jyvfsa1jhd45vr9bbhsr8qwrdky7";
   propagatedBuildInputs = [ mtl time network ];
   meta = {
     description = "Versatile logging framework";

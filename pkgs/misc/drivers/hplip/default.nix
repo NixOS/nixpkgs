@@ -1,13 +1,13 @@
-{stdenv, fetchurl, cups, zlib, libjpeg, libusb, python, saneBackends, dbus, pkgconfig
-, qtSupport ? false, qt4
+{stdenv, fetchurl, cups, zlib, libjpeg, libusb, python, saneBackends, dbus
+, pkgconfig, polkit, qtSupport ? false, qt4
 }:
 
-stdenv.mkDerivation {
-  name = "hplip-3.10.5";
+stdenv.mkDerivation rec {
+  name = "hplip-3.11.1";
 
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/hplip/hplip-3.10.5.tar.gz";
-    sha256 = "1lyl9nrdaih64cqw6fa7ivjf7a74bq8zn0gkj1gap47b04my608p";
+    url = "mirror://sourceforge/hplip/${name}.tar.gz";
+    sha256 = "0y68s4xm5d0kv7p5j41qq0xglp4vdbjwbrjs89b4a21wwn69hp9g";
   };
 
   #preBuild=''
@@ -27,12 +27,16 @@ stdenv.mkDerivation {
       --with-icondir=$out/share/applications
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
+      --enable-policykit
       --disable-network-build"
 
     export makeFlags="
       halpredir=$out/share/hal/fdi/preprobe/10osvendor
       hplip_statedir=$out/var
       rulesdir=$out/etc/udev/rules.d
+      policykit_dir=$out/share/polkit-1/actions
+      policykit_dbus_etcdir=$out/etc/dbus-1/system.d
+      policykit_dbus_sharedir=$out/share/dbus-1/system-services
       hplip_confdir=$out/etc/hp
     ";
   '';

@@ -1,0 +1,18 @@
+diff --git a/lib/rubygems/installer.rb b/lib/rubygems/installer.rb
+index d1ef3cb..bf15652 100755
+--- a/lib/rubygems/installer.rb
++++ b/lib/rubygems/installer.rb
+@@ -545,6 +545,13 @@ Results logged to #{File.join(Dir.pwd, 'gem_make.out')}
+ 
+       say path if Gem.configuration.really_verbose
+     end
++
++    if !ENV['NIX_POST_EXTRACT_FILES_HOOK'].nil?
++      print "\nrunning NIX_POST_EXTRACT_FILES_HOOK #{ENV['NIX_POST_EXTRACT_FILES_HOOK']} #{@gem_dir}\n"
++      print `#{ENV['NIX_POST_EXTRACT_FILES_HOOK']} #{@gem_dir}`
++      print "\nrunning NIX_POST_EXTRACT_FILES_HOOK done\n"
++    end
++
+   end
+ 
+   ##

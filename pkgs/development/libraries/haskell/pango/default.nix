@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "pango";
-  version = "0.11.2";
-  sha256 = "fb7f5dc303d3d49a330aaa3acf29560f78746edb9c67f6191756baa1b08fb504";
+  version = "0.12.0";
+  sha256 = "1vp0hl4kpgcc3xphml1hmy04hqcn12y0ks03nn32g6g33ni9mwrb";
   extraBuildInputs = [pkgconfig gtk2hsBuildtools pango glibc];
   propagatedBuildInputs = [cairo glib mtl];
   meta = {

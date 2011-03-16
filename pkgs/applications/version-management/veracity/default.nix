@@ -19,12 +19,21 @@ rec {
   inherit (s) name;
   inherit buildInputs;
 
-  phaseNames = ["prepare_sgneeds" "dump0" "prepareMakefiles" "doMake" "doDeploy"];
+  phaseNames = ["prepare_sgneeds" "dump0" "prepareMakefiles" "doMake" "doTest" "doDeploy"];
 
   dump0 = (a.doDump "0");
 
+  doTest = a.fullDepEntry ''
+    sed -e "s@/bin/bash@${a.stdenv.shell}@" -i $(find .. -type f)
+    mkdir pseudo-home
+    export HOME=$PWD/pseudo-home
+    echo make test
+  '' ["doMake" "minInit"];
+
   prepare_sgneeds = a.fullDepEntry (''
+    ensureDir "$out/sgneeds/include/spidermonkey"
     for d in bin include lib; do 
+      ensureDir "$out/sgneeds/$d"
       ensureDir "$out/sgneeds/$d"
       for p in "${spidermonkey_1_8_0rc1}"; do
         for f in "$p"/"$d"/*; do
@@ -32,6 +41,11 @@ rec {
 	done
       done
     done
+      for p in  "${spidermonkey_1_8_0rc1}/include" "${spidermonkey_1_8_0rc1}/include/js"; do
+        for f in "$p"/*; do
+	  ln -sf "$f" "$out"/sgneeds/include/spidermonkey/
+	done
+      done
 
     ensureDir "$out/sgneeds/include/sgbrings"
     ln -s "$out/sgneeds/include/js" "$out/sgneeds/include/sgbrings/js"
@@ -41,6 +55,9 @@ rec {
     done
 
     export SGNEEDS_DIR="$out"/sgneeds/
+    export VVTHIRDPARTY="$out"/sgneeds/
+
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$out/sgneeds/include"
   '') ["minInit" "defEnsureDir"];
 
   prepareMakefiles = a.fullDepEntry ''
@@ -48,7 +65,7 @@ rec {
     mkdir build
     cd build
     export NIX_LDFLAGS="$NIX_LDFLAGS -lssl"
-    cmake -G "Unix Makefiles" -D SGNEEDS_DIR="$SGNEEDS_DIR" ../veracity*
+    cmake -G "Unix Makefiles" -D SGNEEDS_DIR="$SGNEEDS_DIR" -D VVTHIRDPARTY="$VVTHIRDPARTY" -D SPIDERMONKEY_INCDIR="${a.spidermonkey_1_8_0rc1}/include" -D SPIDERMONKEY_LIB="${a.spidermonkey_1_8_0rc1}/lib/libjs.so" ../veracity*
   '' ["minInit" "addInputs" "doUnpack"];
 
   doDeploy = a.fullDepEntry ''

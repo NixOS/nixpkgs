@@ -1,22 +1,20 @@
 { kde, fetchurl, cmake, perl, boost, gpgme, libassuan, libgpgerror, libxslt
 , shared_mime_info, libXScrnSaver, kdelibs, kdepimlibs, kdepim_runtime
-, automoc4, akonadi, qca2}:
+, automoc4, akonadi, qca2, gettext, grantlee}:
 
 kde.package rec {
 
   buildInputs = [ cmake boost gpgme libassuan libgpgerror libxslt
-    shared_mime_info libXScrnSaver kdelibs kdepimlibs automoc4 akonadi ];
-  prePatch = ''
-      find .. -name CMakeLists.txt | xargs sed -i -e "s@DESTINATION \''${KDE4_DBUS_INTERFACES_DIR}@DESTINATION \''${CMAKE_INSTALL_PREFIX}/share/dbus-1/interfaces/@"
-  '';
+    shared_mime_info libXScrnSaver kdelibs kdepimlibs automoc4 akonadi gettext
+    grantlee ];
   postInstall = ''
       mkdir -p $out/nix-support/
       echo ${akonadi} ${kdepimlibs} ${kdepim_runtime} > $out/nix-support/propagated-user-env-packages
   '';
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.name}-${meta.kde.version}.tar.bz2";
-    sha256 = "02nbdn8s4504ljqz0qylm1jyw4hpg5fjw3vi6sbzm522xvkax4wh";
+    url = "mirror://kde/unstable/kdepim/${meta.kde.release}/src/${meta.kde.module}-${meta.kde.release}.tar.bz2";
+    sha256 = "1bnlyrflcjy7lj4c2jag212ws2gzzpqyn5g2p97x8y936dza7ic3";
   };
 
   meta = {
@@ -27,8 +25,8 @@ kde.package rec {
     license = "GPL";
     homepage = http://pim.kde.org;
     kde = {
-      name = "kdepim";
-      version = "4.4.8";
+      release = "4.5.94.1";
+      module = "kdepim";
     };
   };
 }

@@ -1,11 +1,12 @@
-{cabal, haskellSrcExts, mtl, uniplate, hscolour, parallel}:
+{cabal, haskellSrcExts, mtl, uniplate, hscolour, parallel, transformers}:
 
 cabal.mkDerivation (self : {
   pname = "hlint";
-  version = "1.7.3";
+  version = "1.8.7";
   name = self.fname;
-  sha256 = "afd4aa623fedf5257464bf18f38376a951d130f3004664803763e67cc55d9e83";
-  extraBuildInputs = [haskellSrcExts mtl uniplate hscolour parallel];
+  sha256 = "0k2fwwwmq0qqb5nw5acsjr2gqnsmqcf3ckb6wdrkqsqp8g2k14mn";
+  extraBuildInputs =
+    [haskellSrcExts mtl uniplate hscolour parallel transformers];
   meta = {
     description = "Source code suggestions";
   };

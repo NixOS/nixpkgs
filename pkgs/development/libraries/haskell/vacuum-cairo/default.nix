@@ -1,10 +1,11 @@
-{cabal, vacuum, gtk2hs, parallel, strictConcurrency}:
+{cabal, vacuum, cairo, svgcairo, gtk, parallel, strictConcurrency}:
 
 cabal.mkDerivation (self : {
   pname = "vacuum-cairo";
-  version = "0.4.1";
-  sha256 = "4d506fec246d40e5c983eea1dbd72735e276f882539aa3682cda9d9a33f8ddb2";
-  propagatedBuildInputs = [vacuum gtk2hs parallel strictConcurrency];
+  version = "0.5";
+  sha256 = "0jp3xn1h28igcg3xb97ifawx11i7adnyi0ff264w0fril9b8ylwc";
+  propagatedBuildInputs =
+    [vacuum cairo svgcairo gtk parallel strictConcurrency];
   meta = {
     description = "Visualize live Haskell data structures using vacuum, graphviz and cairo";
   };

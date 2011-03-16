@@ -1,8 +1,9 @@
 { cmake, kde, automoc4, kdelibs }:
 
 kde.package rec {
-  name = "nuvola-icon-theme-${meta.kde.version}";
-# Sources contain primary and kdeclassic as well but they're not installed
+  name = "nuvola-icon-theme-${kde.release}";
+  
+  # Sources contain primary and kdeclassic as well but they're not installed
 
   buildInputs = [ cmake automoc4 kdelibs ];
   meta = {
@@ -10,7 +11,6 @@ kde.package rec {
     kde = {
       name = "IconThemes";
       module = "kdeartwork";
-      version = "4.5.4";
     };
   };
 }

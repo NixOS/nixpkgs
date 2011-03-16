@@ -1,10 +1,11 @@
-{fetchurl, stdenv, replace, curl, expat, zlib
+{fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
 , useNcurses ? false, ncurses, useQt4 ? false, qt4}:
 
 let
   os = stdenv.lib.optionalString;
+  inherit (stdenv.lib) optional;
   majorVersion = "2.8";
-  minorVersion = "1";
+  minorVersion = "4";
   version = "${majorVersion}.${minorVersion}";
 in
 stdenv.mkDerivation rec {
@@ -14,12 +15,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0hi28blqxvir0dkhln90sgr0m3ri9n2i3hlmwdl4m5vkfsmp9bky";
+    sha256 = "1k2kjaj3vfifb329ff7fr4hcbpbaqb66l97pshq70h7m0zwajznr";
   };
 
-  buildInputs = [ curl expat zlib ]
-    ++ stdenv.lib.optional useNcurses ncurses
-    ++ stdenv.lib.optional useQt4 qt4;
+  buildInputs = [ curl expat zlib bzip2 libarchive ]
+    ++ optional useNcurses ncurses
+    ++ optional useQt4 qt4;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
   configureFlags =
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.all;
+    platforms = if useQt4 then qt4.meta.platforms else (with stdenv.lib.platforms; linux ++ freebsd);
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

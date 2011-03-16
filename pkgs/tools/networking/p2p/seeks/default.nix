@@ -1,18 +1,18 @@
 { fetchurl, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
-, pkgconfig, protobuf, tokyocabinet }:
+, pkgconfig, protobuf, tokyocabinet, opencv }:
 
-let version = "0.3.0"; in
+let version = "0.3.1"; in
 stdenv.mkDerivation {
   name = "seeks-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/seeks/solo/seeks-${version}.tar.gz";
-    sha256 = "07gkf7666bx5fk3zk0s47fj659czlyk3ag9bihkl5mdjfikb6k46";
+    sha256 = "0yvws1j6rh1nv230gkqz3fkf21zdx0x7w8lh3w7gjmi7hfij25gx";
   };
 
   buildInputs =
     [ zlib docbook2x pcre curl libxml2 libevent perl pkgconfig
-      protobuf tokyocabinet
+      protobuf tokyocabinet opencv
     ];
 
   configureFlags =
@@ -21,6 +21,9 @@ stdenv.mkDerivation {
       "--enable-httpserv-plugin=yes"
       "--with-libevent=${libevent}"
     ];
+
+  # FIXME: Test suite needs <https://code.google.com/p/googletest/>.
+  doCheck = false;
 
   meta = {
     description = "Seeks, a social web search engine";

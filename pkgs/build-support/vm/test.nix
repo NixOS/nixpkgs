@@ -32,7 +32,7 @@ rec {
     '';
   });
 
-
+/*
   testFreeBSD = runInGenericVM {
     name = "aterm-freebsd";
     src = aterm242fixes.src;
@@ -65,6 +65,6 @@ rec {
       make install
     '';
   };
-  
+*/  
 
 }

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "regex-tdfa";
-  version = "1.1.4";
-  sha256 = "382c7ed1ee75448574b42e9ecb9228b25f55143f3008ecd6f5d3a30471337b39";
+  version = "1.1.8";
+  sha256 = "1m75xh5bwmmgg5f757dc126kv47yfqqnz9fzj1hc80p6jpzs573x";
   propagatedBuildInputs = [mtl parsec regexBase];
   meta = {
     description = "Replaces/Enhances Text.Regex";

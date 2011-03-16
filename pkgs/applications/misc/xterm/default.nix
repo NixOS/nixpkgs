@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xorg, ncurses, freetype, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-231";
+  name = "xterm-268";
   
   src = fetchurl {
     url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "0qlz5nkdqkahdg9kbd1ni96n69srj1pd9yggwrw3z0kghaajb2sr";
+    sha256 = "1hr886mgr74k146fjppnq1pmg6f95l00v88cfwac3rms5lx7ckap";
   };
   
   buildInputs =
@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
       --enable-load-vt-fonts --enable-i18n --enable-doublechars --enable-luit
       --enable-mini-luit --with-tty-group=tty
     '';
+
+  # Work around broken "plink.sh".
+  NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11";
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
   # decided by the sysadmin to allow the xterm reporting to /var/run/utmp

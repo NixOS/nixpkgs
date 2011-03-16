@@ -1,10 +1,9 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, release }:
 
 rec {
-  defaultArgs = {name, stable ? true, version,
-    module ? name, release ? version, ... }:
+  inherit release;
 
-    assert (name == module) -> (release == version);
+  defaultArgs = { name, stable ? true, version ? release, module ? name, ... }:
 
     (
       {
@@ -19,6 +18,8 @@ rec {
               (import (./manifest + "-${release}.nix"))
             ).sha256;
         };
+
+        enableParallelBuilding = true;
 
         meta = {
           maintainers = with stdenv.lib.maintainers; [ sander urkud ];

@@ -12,11 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "git-1.7.3.2";
+  name = "git-1.7.4.1";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "0w9yappfl0jb88fk28vv680p33c2j4b0afzl1q2mcq0igjygck5w";
+    sha256 = "06ydc1dr8ndiqc7rkh0xxiffyfq22gwfdzdds7cbqsprr30szic5";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -84,16 +84,14 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-       for prog in bin/gitk libexec/git-core/git-gui
-       do
-         wrapProgram "$out/$prog"                       \
-                     --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
-                     --prefix PATH : "${tk}/bin"
+       for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
+         sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
+                -e "s|exec wish|exec '${tk}/bin/wish'|g" \
+		"$out/$prog"
        done
      '' else ''
-      # Don't wrap Tcl/Tk, replace them by notification scripts
-       for prog in bin/gitk libexec/git-core/git-gui
-       do
+       # Don't wrap Tcl/Tk, replace them by notification scripts
+       for prog in bin/gitk libexec/git-core/git-gui; do
          notSupported "$out/$prog" \
                       "reinstall with config git = { guiSupport = true; } set"
        done
@@ -107,18 +105,19 @@ stdenv.mkDerivation rec {
    # multiple times into $out so replace duplicates by symlinks because I
    # haven't tested whether the nix distribution system can handle hardlinks.
    # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
-   + ''#
+   + ''
       declare -A seen
-      find $out -type f | while read f; do
+      shopt -s globstar
+      for f in "$out/"**; do
+        test -f "$f" || continue
         sum=$(md5sum "$f");
         sum=''\${sum/ */}
         if [ -z "''\${seen["$sum"]}" ]; then
           seen["$sum"]="$f"
         else
-          rm "$f"; ln -s "''\${seen["$sum"]}" "$f"
+          rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
         fi
       done
-
      '';
 
   enableParallelBuilding = true;

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "vty";
-  version = "4.4.0.0";
-  sha256 = "bf032022a72831e263d2d48d0a7a3191fb1174554cd714902a60cb0f39afe312";
+  version = "4.6.0.4";
+  sha256 = "0kabssw3v7nglvsr687ppmdnnmii1q2g5zg8rxwi2hcmvnjx7567";
   propagatedBuildInputs =
     [utf8String terminfo deepseq mtl parallel parsec vectorSpace];
   meta = {

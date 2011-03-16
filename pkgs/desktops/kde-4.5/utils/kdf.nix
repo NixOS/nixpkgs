@@ -9,7 +9,6 @@ kde.package {
       name = "kdf";
       module = "kdeutils";
       version = "0.11";
-      release = "4.5.4";
       versionFile = "kdf.cpp";
     };
   };

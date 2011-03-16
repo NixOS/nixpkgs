@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "gtksourceview2";
-  version = "0.11.1";
-  sha256 = "1skb13ssp6sd06jb3nshv97wjqvwa0mnzcxgmrxwd5l21r6k1m2v";
+  version = "0.12.2";
+  sha256 = "0l9y48kmzqzps6k54fgf0dkmmv0ppxx8amggfdswwk86zsf8j81r";
   extraBuildInputs = [pkgconfig gtksourceview gtkC glibc gtk2hsBuildtools];
   propagatedBuildInputs = [glib gtk];
   meta = {

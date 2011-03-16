@@ -21,7 +21,6 @@ with (import ./release-lib.nix);
   apacheHttpd = linux;
   aspell = all;
   at = linux;
-  aterm242fixes = all;
   aterm25 = all;
   aterm28 = all;
   audacious = linux;
@@ -66,6 +65,9 @@ with (import ./release-lib.nix);
   dico = linux;
   dietlibc = linux;
   diffutils = all;
+  disnix = all;
+  disnixos = linux;
+  DisnixWebService = linux;
   docbook5 = all;
   docbook5_xsl = all;
   docbook_xml_dtd_42 = all;
@@ -200,7 +202,6 @@ with (import ./release-lib.nix);
   mod_python = linux;
   module_init_tools = linux;
   mono = linux;
-  monotone = linux;
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
@@ -397,29 +398,12 @@ with (import ./release-lib.nix);
     gtk = linux;
   };
 
-  haskellPackages_ghc6102 = {
-    ghc = ghcSupported;
-  };
-
-  haskellPackages_ghc6103 = {
-    ghc = ghcSupported;
-  };
-
   haskellPackages_ghc6104 = {
     ghc = ghcSupported;
-    gtk2hs = linux;
     haskellPlatform_2009_2_0_2 = ghcSupported;
-    xmonad = linux;
   };
 
   haskellPackages_ghc6121 = {
-    darcs = ghcSupported;
-    ghc = ghcSupported;
-    haskellPlatform_2010_1_0_0 = ghcSupported;
-  };
-
-  haskellPackages_ghc6122 = {
-    darcs = ghcSupported;
     ghc = ghcSupported;
     haskellPlatform_2010_1_0_0 = ghcSupported;
   };
@@ -437,6 +421,16 @@ with (import ./release-lib.nix);
 
   haskellPackages_ghc701 = {
     ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc702 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    gitit = linux;
+    gtk = linux;
+    haskellPlatform_2011_2_0_0 = ghcSupported;
+    lhs2tex = ghcSupported;
+    xmonad = linux;
   };
 
   kde3 = {

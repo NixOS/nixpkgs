@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.6.13";
+  firefoxVersion = "3.6.15";
   
-  xulVersion = "1.9.2.13"; # this attribute is used by other packages
+  xulVersion = "1.9.2.15"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "1d1bc70d651bce4006687f5762638563c0494267";
+    sha1 = "bfb69ae49b2def7482543d4d982fa58993a458e9";
   };
 
 
@@ -96,6 +96,8 @@ rec {
       done;
       rm -f $out/bin/run-mozilla.sh
     ''; # */
+
+    enableParallelBuilding = true;
 
     meta = {
       description = "Mozilla Firefox XUL runner";

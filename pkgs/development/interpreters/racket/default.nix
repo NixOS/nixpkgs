@@ -1,40 +1,47 @@
-{ stdenv, fetchurl, cairo, file, libjpeg
-, libpng, libtool, libXaw, libXext, libXft, libXrender
-, libXt, libXmu, mesa, pkgconfig, which } :
+{ stdenv, fetchurl, cairo, file, pango, glib, gtk
+, which, libtool, makeWrapper, libjpeg, libpng
+, fontconfig, liberation_ttf } :
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "5.0.2";
+  version = "5.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://download.racket-lang.org/installers/${version}/${pname}/${name}-src-unix.tgz";
-    sha256 = "1xx0gc935mvh9b1nch7p4xscx9hjd0401rl1sdpf291nj9vmpb3k";
+    sha256 = "0k53jdsz0qf8jvydw29gnz1z8d9vs9ycfgilgqa6rcyp8i0f468k";
   };
 
-  buildInputs = [ cairo
-                  file
-                  libjpeg
-                  libpng
-                  libtool
-                  libXaw
-                  libXext
-                  libXft
-                  libXrender
-                  libXt
-                  libXmu
-                  mesa
-                  pkgconfig
-                  which
-                ];
+  # Various racket executables do run-time searches for these.
+  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib";
+
+  buildInputs = [ file libtool which makeWrapper fontconfig liberation_ttf ];
 
   preConfigure = ''
+    export LD_LIBRARY_PATH=${ffiSharedLibs}:$LD_LIBRARY_PATH
+
+    # Chroot builds do not have access to /etc/fonts/fonts.conf, but the Racket bootstrap
+    # needs a working fontconfig, so here a simple standin is used.
+    mkdir chroot-fontconfig
+    cat ${fontconfig}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
+    sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
+    echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
+    echo "</fontconfig>" >> chroot-fontconfig/fonts.conf
+   
+    export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
+
     cd src
     sed -e 's@/usr/bin/uname@'"$(which uname)"'@g' -i configure
     sed -e 's@/usr/bin/file@'"$(which file)"'@g' -i foreign/libffi/configure 
   '';
 
   configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
+
+  postInstall = ''
+    for p in $(ls $out/bin/) ; do
+      wrapProgram $out/bin/$p --prefix LD_LIBRARY_PATH ":" "${ffiSharedLibs}" ;
+    done
+  '';
 
   meta = {
     description = "Racket (formerly called PLT Scheme) is a programming language derived from Scheme.";

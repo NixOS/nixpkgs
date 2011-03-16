@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, clisp }:
+{ stdenv, fetchurl, clisp, texinfo, perl }:
 
 let
     name    = "maxima";
-    version = "5.22.1";
+    version = "5.23.2";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "0sdrv3lra6j3ylaqsblnd3x7rq4ybafyj7rb114ycadpx2qf06lq";
+    sha256 = "0x6fl7lm2jmybd5n3l5qpyvcj9f5zfwizk7wkbpgkjimh58n5skv";
   };
 
   preConfigure = ''
     configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
   '';
 
-  buildInputs = [clisp];
+  buildInputs = [clisp texinfo perl];
 
   meta = {
     description = "Maxima computer algebra system";

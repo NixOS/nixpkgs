@@ -12,9 +12,6 @@ kde.package {
       Contains various Multimedia utilties for KDE such as a movie player and sound volume mixer.
     '';
     license = "GPL";
-    kde = {
-      name = "kdemultimedia";
-      version = "4.5.4";
-    };
+    kde.name = "kdemultimedia";
   };
 }

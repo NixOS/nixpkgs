@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, libpng, exiv2, lcms
-, intltool, gettext, libchamplain }:
+, intltool, gettext, libchamplain, fbida }:
 
 stdenv.mkDerivation rec {
   name = "geeqie-1.0";
@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
     [ pkgconfig gtk libpng exiv2 lcms intltool gettext
       libchamplain
     ];
+
+  postInstall =
+    ''
+      # Allow geeqie to find exiv2 and exiftran, necessary to
+      # losslessly rotate JPEG images.
+      sed -i $out/lib/geeqie/geeqie-rotate \
+          -e '1 a export PATH=${exiv2}/bin:${fbida}/bin:$PATH'
+    '';
 
   meta = {
     description = "Geeqie, a lightweight GTK+ based image viewer";

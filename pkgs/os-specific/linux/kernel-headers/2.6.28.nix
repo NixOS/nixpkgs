@@ -33,6 +33,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     patch --verbose -p1 < "${./unifdef-getline.patch}"
     sed -i '/scsi/d' include/Kbuild
+    sed -i 's|/ %/: prepare scripts FORCE|%/: prepare scripts FORCE|' Makefile
   '';
 
   buildPhase = ''

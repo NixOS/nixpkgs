@@ -1,4 +1,8 @@
-{ pkgs }:
+{ pkgs
+, linuxKernel ? pkgs.linux
+, img ? "bzImage"
+, rootModules ? [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix" ]
+}:
 
 with pkgs;
 
@@ -7,16 +11,13 @@ rec {
   # The 15 second CIFS timeout is too short if the host if heavily
   # loaded (e.g., in the Hydra build farm when it's running many jobs
   # in parallel).  So apply a patch to increase the timeout to 120s.
-  kernel = assert pkgs.linux.features.cifsTimeout; pkgs.linux;
+  kernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
 
   kvm = pkgs.qemu_kvm;
 
 
   modulesClosure = makeModulesClosure {
-    inherit kernel;
-    rootModules =
-      [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
-        "nls_utf8" "ext2" "ext3" "unix" ];
+    inherit kernel rootModules;
   };
 
 
@@ -217,8 +218,8 @@ rec {
       -net nic,model=virtio \
       -chardev socket,id=samba,path=./samba \
       -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
-      -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
-      -kernel ${kernel}/bzImage \
+      -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
+      -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
@@ -342,6 +343,56 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
   });
 
+  extractFs = {file, fs ? null} :
+    with pkgs; runInLinuxVM (
+    stdenv.mkDerivation {
+      name = "extract-file";
+      buildInputs = [utillinuxng];
+      buildCommand = ''
+        ln -s ${linux}/lib /lib
+        ${module_init_tools}/sbin/modprobe loop
+        ${module_init_tools}/sbin/modprobe ext4
+        ${module_init_tools}/sbin/modprobe hfs
+        ${module_init_tools}/sbin/modprobe hfsplus
+        ${module_init_tools}/sbin/modprobe squashfs
+        ${module_init_tools}/sbin/modprobe iso9660
+        ${module_init_tools}/sbin/modprobe ufs
+        ${module_init_tools}/sbin/modprobe cramfs
+        mknod /dev/loop0 b 7 0
+
+        ensureDir $out
+        ensureDir tmp
+        mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
+          mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
+        cp -Rv tmp/* $out/ || exit 0
+      '';
+    });
+
+  extractMTDfs = {file, fs ? null} :
+    with pkgs; runInLinuxVM (
+    stdenv.mkDerivation {
+      name = "extract-file-mtd";
+      buildInputs = [utillinuxng mtdutils];
+      buildCommand = ''
+        ln -s ${linux}/lib /lib
+        ${module_init_tools}/sbin/modprobe mtd
+        ${module_init_tools}/sbin/modprobe mtdram total_size=131072
+        ${module_init_tools}/sbin/modprobe mtdchar
+        ${module_init_tools}/sbin/modprobe mtdblock
+        ${module_init_tools}/sbin/modprobe jffs2
+        ${module_init_tools}/sbin/modprobe zlib
+        mknod /dev/mtd0 c 90 0
+        mknod /dev/mtdblock0 b 31 0
+
+        ensureDir $out
+        ensureDir tmp
+
+        dd if=${file} of=/dev/mtd0
+        mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
+
+        cp -R tmp/* $out/
+      '';
+    });
 
   qemuCommandGeneric = ''
     ${kvm}/bin/qemu-system-x86_64 \
@@ -629,7 +680,7 @@ rec {
           done
           chroot=$(type -tP chroot)
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            /usr/bin/dpkg --install --force-all $debs < /dev/null
+            /usr/bin/dpkg --install --force-all $debs < /dev/null || true
         done
         
         echo "running post-install script..."
@@ -1054,7 +1105,7 @@ rec {
         sha256 = "6e3e813857496f2af6cd7e6ada06b3398fa067a7992c5fd7e8bd8fa92e3548b7";
       };
       urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diff" ];
+      packages = commonDebPackages ++ [ "diff" "mktemp" ];
     };
  
     ubuntu910x86_64 = {
@@ -1065,7 +1116,7 @@ rec {
         sha256 = "3a604fcb0c135eeb8b95da3e90a8fd4cfeff519b858cd3c9e62ea808cb9fec40";
       };
       urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diff" ];
+      packages = commonDebPackages ++ [ "diff" "mktemp" ];
     };
 
     ubuntu1004i386 = {
@@ -1076,7 +1127,7 @@ rec {
         sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
       };
       urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diffutils" ];
+      packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
  
     ubuntu1004x86_64 = {
@@ -1085,6 +1136,28 @@ rec {
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
         sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
+    };
+
+    ubuntu1010i386 = {
+      name = "ubuntu-10.04-maverick-i386";
+      fullName = "Ubuntu 10.04 Maverick (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
+        sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+ 
+    ubuntu1010x86_64 = {
+      name = "ubuntu-10.04-maverick-amd64";
+      fullName = "Ubuntu 10.04 Maverick (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
+        sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
@@ -1113,22 +1186,44 @@ rec {
     };
 
     debian50i386 = {
-      name = "debian-5.0.5-lenny-i386";
-      fullName = "Debian 5.0.5 Lenny (i386)";
+      name = "debian-5.0.8-lenny-i386";
+      fullName = "Debian 5.0.8 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "1nzd0r44lnvw2bmshqpbhghs84fxbcr1jkg55d37v4d09gsdmln0";
+        sha256 = "0dcvd8ivn71dwln7mx5dbqj30v4cqmc61lj21ry05karkglb5scg";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
         
     debian50x86_64 = {
-      name = "debian-5.0.5-lenny-amd64";
-      fullName = "Debian 5.0.5 Lenny (amd64)";
+      name = "debian-5.0.8-lenny-amd64";
+      fullName = "Debian 5.0.8 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "04hab4ybjilppr1hwnl4k50vr5y88w7zn6v22phfrsrxf23nrlv3";
+        sha256 = "1wrqjfcqfs7q5i7jnr8115zsjlhzxxm2x41agp546d3wpj68k938";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian60i386 = {
+      name = "debian-6.0-squeeze-i386";
+      fullName = "Debian 6.0 Squeeze (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
+        sha256 = "1c1faz7ig9jvx3a2d2crp6fx0gynh5s4xw1vv1mn14rzkx86l59i";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+        
+    debian60x86_64 = {
+      name = "debian-6.0-squeeze-amd64";
+      fullName = "Debian 6.0 Squeeze (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
+        sha256 = "1c1n16q0hrimrnmv6shrr0z82xjqfjhm17salry8xi984c5fprwd";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1211,11 +1306,9 @@ rec {
     # Needed because it provides /etc/login.defs, whose absence causes
     # the "passwd" post-installs script to fail.
     "login"
-    # For shutting up some messages during some post-install scripts:
-    "mktemp"
   ];
 
-  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" ];
+  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
   
 
   /* A set of functions that build the Linux distributions specified

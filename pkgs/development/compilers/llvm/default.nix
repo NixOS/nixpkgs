@@ -1,16 +1,17 @@
-{stdenv, fetchurl, fetchsvn, gcc, flex, perl, libtool, groff
-, buildClang ? false}:
+{ stdenv, fetchurl, gcc, flex, perl, libtool, groff
+, buildClang ? false }:
 
 stdenv.mkDerivation ({
-  name = "llvm-2.7";
+  name = "llvm-2.8";
+  
   src = fetchurl {
-    url    = http://llvm.org/releases/2.7/llvm-2.7.tgz;
-    sha256 = "19dwvfyxr851fjfsaxbm56gdj9mlivr37bv6h41hd8q3hpf4nrlr";
+    url    = http://llvm.org/releases/2.8/llvm-2.8.tgz;
+    sha256 = "0fyl2gk2ld28isz9bq4f6r4dhqm9vljfj3pdfwlc2v0w5xsdpb95";
   };
 
-  buildInputs = [ gcc flex perl libtool groff ];
+  buildInputs = [ gcc flex perl groff ];
 
-  configureFlags = [ "--enable-optimized" "--enable-shared" ];
+  configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ];
 
   meta = {
     homepage = http://llvm.org/;
@@ -20,8 +21,7 @@ stdenv.mkDerivation ({
     platforms = with stdenv.lib.platforms; all;
   };
 }
-//
-(if buildClang then 
+// stdenv.lib.optionalAttrs buildClang (
   # I write the assert because 'gcc.libc' will be evaluated although 'triplet' would not
   # evaluate properly (in the preConfigure below)
   assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -30,19 +30,19 @@ stdenv.mkDerivation ({
               else if (stdenv.system == "x86_64-linux") then "x86_64-unknown-linux-gnu"
               else throw "System not supported";
   in {
-    name = "clang-2.7";
+    name = "clang-2.8";
 
-    srcClang = fetchsvn {
-      url = http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_27;
-      rev = 105900;
-      sha256 = "fe79988950319b62d3bca34848424f20a3f33c8182507df222f2ac93fbacf671";
+    srcClang = fetchurl {
+      url = http://llvm.org/releases/2.8/clang-2.8.tgz;
+      sha256 = "1hg0vqmyr4wdy686l2bga0rpin41v0q9ds2k5659m8z6acali0zd";
     };
 
     prePatch = ''
       pushd tools
-      cp -R "$srcClang" clang
-      chmod u+w -R clang
+      unpackFile $srcClang
+      mv clang-2.8 clang
       popd
+      find
     '';
 
     patches = [ ./clang-include-paths.patch ];
@@ -63,5 +63,4 @@ stdenv.mkDerivation ({
       platforms = with stdenv.lib.platforms; linux;
     };
   }
-else {}
 ))

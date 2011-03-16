@@ -8,22 +8,28 @@ assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-23.2";
+  name = "emacs-23.3";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.bz2";
-    sha256 = "1i96hp91s86jawrqjhfxm5y2sjxizv99009128b4bh06bgx6dm7z";
+    sha256 = "0kfa546qi0idkwk29gclgi13qd8q54pcqgy9qwjknlclszprdp3a";
   };
 
-  buildInputs = [
-    ncurses x11 texinfo libXaw Xaw3d libXpm dbus libpng libjpeg libungif
-    libtiff librsvg gtk (if gtk != null then pkgconfig else null) libXft gconf
-  ];
+  buildInputs = 
+    [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
+      libtiff librsvg libXft gconf
+    ] 
+    ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
+    ++ stdenv.lib.optional stdenv.isLinux dbus;
 
   configureFlags =
-    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft" ];
+    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft"]
+
+    # On NixOS, help Emacs find `crt*.o'.
+    ++ stdenv.lib.optional (stdenv ? glibc)
+         [ "--with-crt-dir=${stdenv.glibc}/lib" ];
 
   doCheck = true;
 

@@ -8,17 +8,17 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
   name = "chrome-${version}";
-  version = "70357";
+  version = "75853";
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://build.chromium.org/f/chromium/continuous/linux64/2011-01-02/70375/chrome-linux.zip;
-        sha256 = "0zz9pl1ksiwk5kcsa5isviacg8awzs2gmirg8n36qni07dj5wiq8";
+        url = "http://build.chromium.org/f/chromium/continuous/linux64/2011-02-23/${version}/chrome-linux.zip";
+        sha256 = "1bh507j1pm3qrkj8afzhmqicza5nms6f4dc9848xjgcvj9x2qii7";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://build.chromium.org/f/chromium/continuous/linux/2011-01-02/70375/chrome-linux.zip;
-        sha256 = "1i7sb6wgf19zr97r2s5n0p4543i736n8c2hnhk483hjzikg2j55i";
+        url = "http://build.chromium.org/f/chromium/continuous/linux/2011-02-23/${version}/chrome-linux.zip";
+        sha256 = "0rq888yvw5zsh0c3jnp115y4sl1q5kn4pz8flnwhrh35ca15lchn";
       }
     else throw "Chromium is not supported on this platform.";
 
@@ -51,7 +51,10 @@ stdenv.mkDerivation rec {
     ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so.0d
   '';
 
-  meta = {
+  meta =  with stdenv.lib; {
     description = "Chromium, an open source web browser";
+    homepage = http://www.chromium.org/;
+    maintainers = [ maintainers.goibhniu ];
+    license = licenses.bsd3;
   };
 }

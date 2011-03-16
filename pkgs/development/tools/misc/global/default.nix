@@ -1,12 +1,19 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "global-5.7.5";
+  name = "global-5.9.4";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "0fdkkg5qs76cjdnig54bhw97dgwg2rm2dg8k8r7hz836pk838540";
+    sha256 = "0ay6f1fffics3vkls1xykzmz9cmgj3hdighni7asnpa38s8j0lmn";
   };
+
+  buildInputs = [ libtool ];
+
+  configurePhase =
+    '' ./configure --prefix="$out" --disable-static --with-posix-sort=$(type -p sort) '';
+
+  doCheck = true;
 
   postInstall = ''
     ensureDir "$out/share/emacs/site-lisp"
@@ -32,5 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/global/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

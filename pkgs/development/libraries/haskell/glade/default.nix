@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "glade";
-  version = "0.11.1";
-  sha256 = "0d96a8576f89a81aa1ecdaf172e42e9eb1e7b40ce1b23cff36ab473165832c6a";
+  version = "0.12.0";
+  sha256 = "0h7l1kp9y17xqyz16kv0dvwgblph9r70wimyl8aq9gi1r4is5lmq";
   extraBuildInputs = [pkgconfig gtk2hsBuildtools gnome.libglade gnome.gtk glibc];
   propagatedBuildInputs = [cairo glib gtk mtl pango];
   meta = {

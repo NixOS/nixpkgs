@@ -1,0 +1,40 @@
+From 1aedd853fcaeeafadd24512f84e6e269f5db0b4e Mon Sep 17 00:00:00 2001
+From: Thomas Moschny <thomas.moschny@gmx.de>
+Date: Mon, 21 Feb 2011 17:58:04 +0100
+Subject: [PATCH] Normalize icon path names (fixes #869).
+
+The elements in ${icon_sources}, as returned by file(GLOB ...) contain
+double slashes, could be a bug in cmake. This causes building with
+cmake 2.8.4 to fail, due to dependency problems lateron.
+
+This patch works around the issue by normalizing all path names in
+${icon_sources} while appending them to ${ALL_ICONS}, thereby removing
+the double slashes.
+---
+ CMakeLists.txt |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 64be9b9..472bec2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -244,14 +244,15 @@ endif()
+ 
+ # {{{ Theme icons
+ file(GLOB icon_sources RELATIVE ${SOURCE_DIR} ${SOURCE_DIR}/themes/*/titlebar/*.png)
+-set(ALL_ICONS ${icon_sources})
+ 
+ foreach(icon ${icon_sources})
+     # Copy all icons to the build dir to simplify the following code.
+     # Source paths are interpreted relative to ${SOURCE_DIR}, target paths
+     # relative to ${BUILD_DIR}.
+     get_filename_component(icon_path ${icon} PATH)
++    get_filename_component(icon_name ${icon} NAME)
+     file(COPY ${icon} DESTINATION ${icon_path})
++    set(ALL_ICONS ${ALL_ICONS} "${icon_path}/${icon_name}")
+ endforeach()
+ 
+ macro(a_icon_convert match replacement input)
+-- 
+1.7.3.4
+

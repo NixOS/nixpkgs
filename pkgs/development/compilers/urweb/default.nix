@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, file, libmhash, mlton, mysql, postgresql, sqlite }:
+{ stdenv, fetchurl, file, openssl, mlton, mysql, postgresql, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20101102";
+  version = "20110123";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "1x661z6hg8gb7v1n580kdij9mr6vv3psm28zr4mmipj2kqh66gfi";
+    sha256 = "00k3ghv115fn8xm99dbc6jygl0g3j6fwc84mgcg76nnim3rvgb8r";
   };
 
-  buildInputs = [ stdenv.gcc file libmhash mlton mysql postgresql sqlite ];
+  buildInputs = [ stdenv.gcc file openssl mlton mysql postgresql sqlite ];
 
   patches = [ ./remove-header-include-directory-prefix.patch ];
 
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export GCCARGS="-I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include -L${libmhash}/lib -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
+      export GCCARGS="-I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
     '';
+
+  configureFlags = "--with-openssl=${openssl}"; 
 
   dontDisableStatic = true;
 

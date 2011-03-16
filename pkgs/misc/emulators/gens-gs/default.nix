@@ -10,6 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkgconfig gtkLibs.gtk SDL nasm zlib libpng mesa ];
 
+  # Work around build failures on recent GTK+.
+  # See http://ubuntuforums.org/showthread.php?p=10535837
+  NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
+
   meta = {
     homepage = http://segaretro.org/Gens/GS;
     description = "A Genesis/Mega Drive emulator";

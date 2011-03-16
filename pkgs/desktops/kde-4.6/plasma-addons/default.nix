@@ -15,9 +15,6 @@ kde.package {
   meta = {
     description = "KDE Plasma Addons";
     license = "GPL";
-    kde = {
-      name = "kdeplasma-addons";
-      version = "4.5.90";
-    };
+    kde.module = "kdeplasma-addons";
   };
 }

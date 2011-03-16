@@ -1,6 +1,7 @@
 { fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
 , expat, gettext, intltool, glib, gtk, qt4 ? null, lib
-, qt4Support ? false }:
+, qt4Support ? false
+, withLibdnsCompat ? false }:
 
 assert qt4Support -> qt4 != null;
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
       "--${if qt4Support then "enable" else "disable"}-qt4"
       "--disable-python"
       "--with-distro=none" "--localstatedir=/var"
-    ];
+    ] ++ stdenv.lib.optional withLibdnsCompat "--enable-compat-libdns_sd";
 
   meta = {
     description = "Avahi, an mDNS/DNS-SD implementation";
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = http://avahi.org;
     license = "LGPLv2+";
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

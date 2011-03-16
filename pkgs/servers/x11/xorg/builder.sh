@@ -38,12 +38,15 @@ postInstall() {
 }
 
 
-installFlags="appdefaultdir=$out/share/X11/app-defaults"
+installFlags="appdefaultdir=$out/share/X11/app-defaults $installFlags"
 
 
 if test -n "$x11BuildHook"; then
     source $x11BuildHook
-fi   
+fi
+
+
+enableParallelBuilding=1
 
 
 genericBuild

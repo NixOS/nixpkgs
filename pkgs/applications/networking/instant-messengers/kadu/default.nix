@@ -19,6 +19,12 @@ stdenv.mkDerivation {
   prePatch = ''
     patchShebangs .
   '';
+  
+  patches = [ 
+    ./includes.patch
+  ];
+
+  NIX_LDFLAGS="-lX11";
 
   meta = { 
     description = "An instance messanger client for the gadu-gadu network (most popular polish IM network)";

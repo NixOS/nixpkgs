@@ -2,14 +2,14 @@
 
 let
   baseName = "libdbusmenu-qt";
-  v = "0.5.1";
+  v = "0.7.0";
 in
 stdenv.mkDerivation rec {
   name = "${baseName}-${v}";
 
   src = fetchurl {
     url = "http://launchpad.net/${baseName}/trunk/${v}/+download/${name}.tar.bz2";
-    sha256 = "0ipz1f08d2wgg18l12wssv9lhm66xhj31a1dbikg2rzw7c6bvjvk";
+    sha256 = "0zn3w57xjk34j08fx4n757kakkd4y07halrnaj4a0x0c9dhyjf14";
   };
 
   buildInputs = [ cmake qt4 ];

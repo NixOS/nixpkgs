@@ -19,9 +19,6 @@ kde.package {
     description = "KDE runtime";
     longDescription = "Libraries and tools which supports running KDE desktop applications";
     license = "LGPL";
-    kde = {
-      name = "kdebase-runtime";
-      version = "4.5.90";
-    };
+    kde.module = "kdebase-runtime";
   };
 }

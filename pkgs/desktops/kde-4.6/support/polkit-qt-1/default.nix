@@ -1,19 +1,20 @@
-{ kde, fetchurl, cmake, qt4, pkgconfig, polkit, automoc4, glib }:
+{ stdenv, fetchurl, cmake, qt4, pkgconfig, polkit, automoc4, glib }:
 
-kde.package rec {
-  buildInputs = [ cmake qt4 automoc4 ];
+stdenv.mkDerivation rec {
+  name = "polkit-qt-1-0.99.0";
+
+  buildInputs = [ qt4 automoc4 ];
   propagatedBuildInputs = [ polkit glib ];
+  buildNativeInputs = [ cmake pkgconfig ];
 
   src = fetchurl {
-    url = with meta.kde;
-      "mirror://kde/stable/apps/KDE4.x/admin/${name}-${version}.tar.bz2";
+    url = "mirror://kde/stable/apps/KDE4.x/admin/${name}.tar.bz2";
     sha256 = "02m710q34aapbmnz1p6qwgkk5xjmm239zdl3lvjg77dh3j0w5i3r";
   };
 
   patches = [ ./policy-files.patch ];
 
-  meta.kde = {
-    name = "polkit-qt-1";
-    version = "0.99.0";
+  meta = {
+    maintainers = with stdenv.lib.maintainers; [ urkud sander ];
   };
 }

@@ -1,6 +1,6 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, gettext }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libelf-0.8.13";
 
   src = fetchurl {
@@ -21,3 +21,12 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+# Gettext is lacking from `stdenv' on Darwin, but not completely, so NLS
+# support is enabled but eventually fails.
+# FIXME: Eventually make Gettext a build input on all platforms.
+(if stdenv.isDarwin
+ then { buildInputs = [ gettext ]; }
+ else { }))

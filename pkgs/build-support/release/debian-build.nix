@@ -47,6 +47,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     '';
 
     sysInfoPhase = ''
+      [ ! -f /etc/lsb-release ] || (source /etc/lsb-release; echo "OS release: $DISTRIB_DESCRIPTION")
       echo "System/kernel: $(uname -a)"
       if test -e /etc/debian_version; then echo "Debian release: $(cat /etc/debian_version)"; fi
       header "installed Debian packages"

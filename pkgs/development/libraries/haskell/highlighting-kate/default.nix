@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "highlighting-kate";
-  version = "0.2.7.1";
-  sha256 = "330c5fdc6b5dae62c12ee2455892319df12723346aa75401aea05ea0b24cf5ed";
+  version = "0.2.9";
+  sha256 = "0mk8m01mqw6vnjldr5idc6611475j4m292cm18kn3wa83000mbgk";
   propagatedBuildInputs = [parsec pcreLight xhtml];
   meta = {
     description = "Syntax highlighting";

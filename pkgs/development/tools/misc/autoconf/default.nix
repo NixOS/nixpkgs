@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
-  doCheck = (stdenv.system != "i686-cygwin");
+  # There are many test failures on `i386-pc-solaris2.11'.
+  doCheck = (stdenv.system != "i686-cygwin"
+             && stdenv.system != "i386-sunos");
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!

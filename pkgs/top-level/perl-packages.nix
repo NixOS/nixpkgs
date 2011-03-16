@@ -9,7 +9,7 @@
 
 rec {
 
-  inherit (pkgs) buildPerlPackage fetchurl stdenv perl;
+  inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn;
 
   ack = buildPerlPackage rec {
     name = "ack-1.92";
@@ -695,6 +695,17 @@ rec {
     };
     propagatedBuildInputs = [
       CompressRawZlib IOCompressBase IOCompressGzip
+    ];
+  };
+
+  CompressUnLZMA = buildPerlPackage rec {
+    name = "Compress-unLZMA-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
+      sha256 = "0sg9gj3rhif6hgmhwpz6w0g52l65vj5hx9818v5cdhvcif0jhg0b";
+    };
+    propagatedBuildInputs = [
+      IOCompressBase
     ];
   };
 
@@ -1557,6 +1568,14 @@ rec {
     };
   };
 
+  IOTty = buildPerlPackage rec {
+    name = "IO-Tty-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
+      sha256 = "1cgqyv1zg8857inlnfczrrgpqr0r6mmqv29b7jlmxv47s4df59ii";
+    };
+  };
+
   IPCRun = buildPerlPackage rec {
     name = "IPC-Run-0.82";
     src = fetchurl {
@@ -2017,6 +2036,17 @@ rec {
     doCheck = false;
 
     propagatedBuildInputs = [JSONAny Encode LWP CryptSSLeay];
+  };
+
+  nixPerl = buildPerlPackage {
+    name = "Nix-0.15";
+    src = fetchsvn {
+      url = https://svn.nixos.org/repos/nix/nix-perl/trunk;
+      rev = 24774;
+      sha256 = "1akj695gpnbrjlnwd1gdnnnk7ppvpp1qsinjn04az7q6hjqzbm6p";
+    };
+    NIX_PREFIX = pkgs.nixSqlite;
+    doCheck = false; # tests currently don't work
   };
 
   ObjectSignature = buildPerlPackage {
@@ -3044,6 +3074,15 @@ rec {
     makeMakerFlags = "EXPATLIBPATH=${pkgs.expat}/lib EXPATINCPATH=${pkgs.expat}/include";
   };
 
+  XMLXPath = buildPerlPackage {
+    name = "XML-XPath-1.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSERGEANT/XML-XPath-1.13.tar.gz;
+      sha256 = "0xjmfwda7m3apj7yrjzmkm4sjwnz4bqyaynzgcwqhx806kgw4j9a";
+    };
+    propagatedBuildInputs = [XMLParser];
+  };
+
   XMLRegExp = buildPerlPackage {
     name = "XML-RegExp-0.03";
     src = fetchurl {
@@ -3079,11 +3118,11 @@ rec {
     propagatedBuildInputs = [XMLParser];
   };
 
-  XMLWriter = buildPerlPackage {
-    name = "XML-Writer-0.602";
+  XMLWriter = buildPerlPackage rec {
+    name = "XML-Writer-0.612";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.602.tar.gz;
-      sha256 = "0kdi022jcn9mwqsxy2fiwl2cjlid4x13r038jvi426fhjknl11nl";
+      url = "mirror://cpan/authors/id/J/JO/JOSEPHW/${name}.tar.gz";
+      sha256 = "1prvgbjxynxg6061qxzfbbimjvil04513hf3hsilv0hdg58nb9jk";
     };
   };
 

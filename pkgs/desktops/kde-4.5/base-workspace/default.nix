@@ -3,7 +3,7 @@
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
 , lm_sensors, libxklavier, libusb, libpthreadstubs, boost
 , automoc4, strigi, soprano, qimageblitz, akonadi
-, libdbusmenu_qt, libqalculate, pciutils, libraw1394, bluez
+, libdbusmenu_qt, libqalculate, pciutils, libraw1394, bluez, networkmanager
 }:
 
 kde.package {
@@ -13,15 +13,19 @@ kde.package {
     kdepimlibs kdebindings boost libusb libXi libXau libXdmcp libraw1394
     libXcomposite libXdamage libXScrnSaver lm_sensors libxklavier automoc4
     strigi soprano qimageblitz akonadi libpthreadstubs libdbusmenu_qt libqalculate
-    pciutils bluez ];
+    pciutils bluez networkmanager ];
+
+  patches =
+    [ # Don't do compositing with the software GLX driver, since it's
+      # completely broken (corrupt output, server crashes, etc.).
+      # (NixOS/121)
+      ./no-software-compositing.patch
+    ];
 
   meta = {
     description = "KDE base platform-specific components";
     longDescription = "KDE base components that are only required to work with X11 such KDM and KWin";
     license = "GPL";
-    kde = {
-      name = "kdebase-workspace";
-      version = "4.5.4";
-    };
+    kde.name = "kdebase-workspace";
   };
 }

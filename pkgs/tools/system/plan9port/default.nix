@@ -1,16 +1,16 @@
-{stdenv, fetchurl, libX11, xproto, libXt, xextproto}:
+{stdenv, fetchurl, libX11, xproto, libXt, xextproto, libXext}:
 
-stdenv.mkDerivation {
-  name = "plan9port-20090318";
+stdenv.mkDerivation rec {
+  name = "plan9port-20110103";
   
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://swtch.com/plan9port/plan9port-20090318.tgz;
-    sha256 = "1idb2l1s5j34sa1dj1wwnvj97z5z7cy73qjafrxf2bbda26axzqj";
+    url = "http://swtch.com/plan9port/${name}.tgz";
+    sha256 = "12hq3k03jgva72498qa1dyndakbhbfg0sc1jhcap9cxqj04xf0dc";
   };
 
-  buildInputs = [ libX11 xproto libXt xextproto ];
+  buildInputs = [ libX11 xproto libXt xextproto libXext ];
 
   meta = {
     homepage = "http://swtch.com/plan9port/";

@@ -1,16 +1,15 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "lcov-1.8";
+  name = "lcov-1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/ltp/${name}.tar.gz";
-    sha256 = "1xrd9abh1gyki9ln9v772dq7jinvyrvx39s3kxbpiila68mbpa7j";
+    sha256 = "1jhs1x2qy5la5gpdfl805zm11rsz6anla3b0wffk6wq79xfi4zn3";
   };
 
   patches =
-    [ ./unexpected-eof.patch
-      ./find-source.patch
+    [ ./find-source.patch
     ];
 
   preBuild = ''

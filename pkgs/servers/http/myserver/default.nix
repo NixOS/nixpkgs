@@ -1,8 +1,8 @@
 { fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
-, libxml2, zlib, guile, texinfo, cppunit, xz }:
+, libxml2, zlib, guile, texinfo, cppunit, xz, psmisc }:
 
 let version = "0.10"; in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (rec {
     name = "myserver-${version}";
 
     src = fetchurl {
@@ -10,7 +10,8 @@ let version = "0.10"; in
       sha256 = "0w8njgka54if8ycd9cyxgmqa0ivv7r0rka7gda3x2rfr2z4nxvpb";
     };
 
-    patches = [ ./disable-dns-lookup-in-chroot.patch ];
+    patches =
+      [ ./disable-dns-lookup-in-chroot.patch ./installable-binary.patch ];
 
     buildInputs =
       [ libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo xz ]
@@ -42,3 +43,11 @@ let version = "0.10"; in
       platforms = stdenv.lib.platforms.gnu;
     };
   }
+
+  //
+
+  # On GNU/Linux the `test_suite' process sometimes stays around, so
+  # forcefully terminate it.
+  (if stdenv.isLinux
+   then { postCheck = "${psmisc}/bin/killall test_suite || true"; }
+   else { }))

@@ -2,14 +2,14 @@
 
 let
 
-  version = "4.5.4";
+  release = "4.5.5";
 
   # Various packages (e.g. kdesdk) have been split up into many
   # smaller packages.  Some people may want to install the entire
   # package, so provide a wrapper package that recombines them.
   combinePkgs = name: pkgs:
     let pkgs' = stdenv.lib.attrValues pkgs; in
-    runCommand "${name}-${version}" ({ passthru = pkgs // { inherit pkgs; }; })
+    runCommand "${name}-${release}" ({ passthru = pkgs // { inherit pkgs; }; })
       ''
         mkdir -p $out/nix-support
         echo ${toString pkgs'} > $out/nix-support/propagated-user-env-packages
@@ -26,30 +26,18 @@ recurseIntoAttrs rec {
 
   phonon = null;
 
-  kde = callPackage ./kde-package { };
+  kde = callPackage ./kde-package { inherit release; };
 
 ### SUPPORT
   akonadi = callPackage ./support/akonadi { };
 
   attica = callPackage ./support/attica { };
 
-  automoc4 = callPackage ./support/automoc4 { };
-
-  eigen = callPackage ./support/eigen { };
-
   oxygen_icons = callPackage ./support/oxygen-icons { };
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };
 
-  strigi = callPackage ./support/strigi { };
-
   soprano = callPackage ./support/soprano { };
-
-  qca2 = callPackage ./support/qca2 { };
-
-  qca2_ossl = callPackage ./support/qca2/ossl.nix { };
-
-  qimageblitz = callPackage ./support/qimageblitz { };
 
 ### LIBS
   kdelibs = callPackage ./libs { };
@@ -156,7 +144,7 @@ recurseIntoAttrs rec {
 
   kdebindings = callPackage ./bindings { };
 
-  l10n = callPackage ./l10n { };
+  l10n = callPackage ./l10n { inherit release; };
 
   # Make the split packages visible to `nix-env -q'.
   misc = recurseIntoAttrs

@@ -3,9 +3,9 @@
 {stdenv, fetchurl, lib, ghc, enableLibraryProfiling ? false} :
 {
   mkDerivation =
-    transform :
-    let dtransform =
-          self : {
+    args : # arguments for the individual package, can modify the defaults
+    let defaults =
+          self : { # self is the final version of the attribute set
 
             # pname should be defined by the client to be the package basename
             # version should be defined by the client to be the package version
@@ -77,7 +77,7 @@
               ./Setup build
 
               export GHC_PACKAGE_PATH=$(ghc-packages)
-              [ -n "$noHadock" ] || ./Setup haddock
+              [ -n "$noHaddock" ] || ./Setup haddock
 
               eval "$postBuild"
             '';
@@ -115,5 +115,5 @@
             # in Cabal derivations.
             inherit stdenv ghc;
           };
-    in  stdenv.mkDerivation ((rec { f = dtransform f // transform f; }).f);
+    in  stdenv.mkDerivation ((rec { f = defaults f // args f; }).f);
 }

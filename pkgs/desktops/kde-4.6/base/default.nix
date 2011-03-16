@@ -11,9 +11,6 @@ kde.package {
     description = "KDE Base components";
     longDescription = "Applications that form the KDE desktop, like Plasma, System Settings, Konqueror, Dolphin, Kate, and Konsole";
     license = "GPL";
-    kde = {
-      name = "kdebase";
-      version = "4.5.90";
-    };
+    kde.module = "kdebase";
   };
 }

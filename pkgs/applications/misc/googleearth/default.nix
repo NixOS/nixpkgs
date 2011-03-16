@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv,
-libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, qt4,
-zlib }:
+{ stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv
+, libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, qt4
+, zlib, fontconfig }:
 
 /* I haven't found any x86_64 package from them */
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "googleearth-5.2.0001";
+  name = "googleearth-6.0.1.2032";
 
   src = fetchurl {
     url = http://dl.google.com/earth/client/current/GoogleEarthLinux.bin;
-    sha256 = "2e6fcbd2384446e2a6eed8ca23173e32c5f3f9ae4d1168e2e348c3924fd2bf30";
+    sha256 = "15bcr379bsdg0flvrgaiyjccx07b4a48z9v3pl006ywm6gp3jbfm";
   };
 
   buildNativeInputs = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation {
     libX11 
     qt4
     zlib
+    fontconfig
   ];
 
   phases = "unpackPhase installPhase";

@@ -1,16 +1,23 @@
 { fetchurl, stdenv, guile, which }:
 
-let version = "5.9.8"; in
+let version = "5.11.6"; in
 
   stdenv.mkDerivation {
     name = "autogen-${version}";
 
     src = fetchurl {
-      url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.bz2";
-      sha256 = "0y3ygzhzzv7sa0ndvszpfqwcjg4hcb35bcp8qqsndmr6mh6v6cnn";
+      url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.gz";
+      sha256 = "013xy0f3hv1cw62nwh4r1x46zs9sndydaz31kd6889dp5p0snfkw";
     };
 
     buildInputs = [ guile which ];
+
+    patchPhase =
+      '' for i in $(find -name \*.in)
+         do
+           sed -i "$i" -e's|/usr/bin/||g'
+         done
+      '';
 
     # The tests rely on being able to find `libopts.a'.
     configureFlags = "--enable-static";

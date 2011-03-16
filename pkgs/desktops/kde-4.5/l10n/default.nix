@@ -1,26 +1,18 @@
-{ stdenv, fetchurl, cmake, kdelibs, gettext, perl, automoc4 }:
+{ stdenv, fetchurl, cmake, kdelibs, gettext, perl, automoc4, release }:
 
 let
-  overrides = { };
 
-  defaultRelease = "4.5.4";
-  releases = [ "4.5.1" "4.5.2" "4.5.3" "4.5.4" ];
+  inherit (stdenv.lib) attrByPath singleton;
 
-  sanitizeString = replaceChars [ "@" "." ] [ "_" "_" ];
-  getOverride = name: attrByPath [name] {} overrides;
-
-  inherit (stdenv.lib) replaceChars attrByPath singleton;
-
-  kdeL10nDerivation = {lang, sha256, release} :
-    let
-      name = "kde-l10n-${lang}-${release}";
-      saneName = "kde-l10n-${sanitizeString lang}-${release}";
-    in
-    stdenv.mkDerivation ({
-      name = saneName;
+  kdeL10nDerivation =
+    { lang, saneName, sha256 }:
+    
+    stdenv.mkDerivation rec {
+      name = "kde-l10n-${saneName}-${release}";
+      
       src = fetchurl {
-        url = "mirror://kde/stable/${release}/src/kde-l10n/${name}.tar.bz2";
-        name = "${saneName}.tar.bz2";
+        url = "mirror://kde/stable/${release}/src/kde-l10n/kde-l10n-${lang}-${release}.tar.bz2";
+        name = "${name}.tar.bz2";
         inherit sha256;
       };
 
@@ -31,19 +23,14 @@ let
         license = "GPL";
         inherit (kdelibs.meta) maintainers platforms homepage;
       };
-    }
-    // (getOverride lang) // (getOverride name)
-  );
+    };
 
-  kdeL10nRelease = release:
-    let
-      releaseStr = sanitizeString release;
-    in
+  kdeL10nRelease =
     builtins.listToAttrs (
-      map ({lang, sha256}:
+      map ({lang, saneName, sha256}:
         {
-          name = "${sanitizeString lang}";
-          value = kdeL10nDerivation { inherit lang release sha256;};
+          name = saneName;
+          value = kdeL10nDerivation { inherit lang saneName sha256; };
         }
       ) (import (./manifest + "-${release}.nix"))
     );
@@ -52,7 +39,4 @@ in
 {
   inherit kdeL10nDerivation;
   recurseForDerivations = true;
-}
-// builtins.listToAttrs (map (r : { name = sanitizeString r; value =
-kdeL10nRelease r; }) releases)
-// (kdeL10nRelease defaultRelease)
+} // kdeL10nRelease

@@ -1,22 +1,16 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-let
-  version = if stdenv.isMips then "7.2alpha4" else "7.1";
-in
-stdenv.mkDerivation ({
-  name = "boehm-gc-${version}";
+stdenv.mkDerivation rec {
+  name = "boehm-gc-7.2pre20110122";
 
   src = fetchurl {
-    url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-${version}.tar.gz";
-    sha256 = (if version == "7.1" then "0c5zrsdw0rsli06lahcqwwz0prgah340fhfg7ggfgvz3iw1gdkp3"
-      else if version == "7.2alpha4" then "1ya9hr1wbx0hrx29q5zy2k51ml71k9mhqzqs7f505qr9s6jsfh0b"
-      else throw "Version unknown");
+    url = "http://nixos.org/tarballs/${name}.tar.bz2";
+    sha256 = "06nf60flq6344pgic3bz83jh6pvj4k42apm3x4xwxc4d2is457ly";
   };
 
-  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
-                        ./cygwin-pthread-dl.patch;
-
   doCheck = true;
+
+  configureFlags = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "CPPFLAGS=-D_XOPEN_SOURCE";
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
@@ -47,10 +41,3 @@ stdenv.mkDerivation ({
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-(if stdenv.system == "x86_64-darwin"
- # Fix "#error ucontext routines are deprecated, and require _XOPEN_SOURCE to be defined".
- then { configureFlags = "CPPFLAGS=-D_XOPEN_SOURCE"; }
- else {}))

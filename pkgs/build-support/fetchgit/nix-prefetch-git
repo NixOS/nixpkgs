@@ -120,6 +120,17 @@ clone(){
     # Checkout linked sources.
     init_submodules;
 
+    if [ -f .topdeps ]; then
+	if tg help 2>&1 > /dev/null
+	then
+	    echo "populating TopGit branches..."
+	    tg remote --populate origin
+	else
+	    echo "WARNING: would populate TopGit branches but TopGit is not available" >&2
+	    echo "WARNING: install TopGit to fix the problem" >&2
+	fi
+    fi
+
     cd $top;
 }
 

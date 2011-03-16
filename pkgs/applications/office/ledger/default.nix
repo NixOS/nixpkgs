@@ -5,7 +5,7 @@
 let
 
   pname = "ledger";
-  version = "2.6.1";
+  version = "2.6.3";
   name = "${pname}-${version}";
 
 in
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "96830d77d3aa6bf6c5778f5dd52169f9b5203fb7daad0e12831abeb35b14f27a";
+    url = "https://github.com/downloads/jwiegley/ledger/ledger-${version}.tar.gz";
+    sha256 = "05zpnypcwgck7lwk00pbdlcwa347xsqifxh4zsbbn01m98bx1v5k";
   };
 
   buildInputs = [ emacs gmp pcre ];

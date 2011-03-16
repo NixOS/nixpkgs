@@ -3,7 +3,7 @@
 , libtiff, libpng, openssl, gimp }:
 
 let
-   version = "5.2.4";
+   version = "5.2.6";
    inherit (composableDerivation) edf wwf;
 in
 
@@ -11,8 +11,8 @@ composableDerivation.composableDerivation {} {
   name = "gutenprint-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gimp-print/files/gutenprint-5.2/${version}/gutenprint-${version}.tar.bz2";
-    sha256 = "09lnmf92h51sm0hmzd1hn2kl1sh6dxlnc0zjd9lrifzg0miyh45n";
+    url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.bz2";
+    sha256 = "0znwbv51vqf20p4isc3if4hqsgfav21rsqnsz1d8mixlmasy2i27";
   };
 
   # gimp, gui is still not working (TODO)

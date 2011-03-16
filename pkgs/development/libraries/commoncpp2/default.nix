@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.marcweber
                     stdenv.lib.maintainers.ludo
                   ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.allBut "i686-freebsd";
   };
 }
