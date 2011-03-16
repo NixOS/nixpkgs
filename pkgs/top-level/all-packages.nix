@@ -2267,6 +2267,7 @@ let
   polyml = callPackage ../development/compilers/polyml { };
 
   python = python27;
+  pythonModules = python27Modules;
   
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
   pythonFull = python26Full;
@@ -4393,6 +4394,7 @@ let
     python = python24;
   };
 
+  
   ### SERVERS
 
   rdf4store = callPackage ../servers/http/4store { };
