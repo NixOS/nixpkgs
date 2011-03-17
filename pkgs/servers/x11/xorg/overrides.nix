@@ -190,4 +190,8 @@ in
     buildNativeInputs = [args.bison args.flex];
   };
 
+  xbacklight = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.libXrender];
+  };
+
 }
