@@ -2219,6 +2219,8 @@ let
       freeglut e2fsprogs libsamplerate pcre libevent libedit;
   };
 
+  j = callPackage ../development/interpreters/j {};
+
   kaffe = callPackage ../development/interpreters/kaffe { };
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
