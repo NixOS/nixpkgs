@@ -186,4 +186,8 @@ in
     '';
   };
 
+  twm = attrs: attrs // {
+    buildNativeInputs = [args.bison args.flex];
+  };
+
 }

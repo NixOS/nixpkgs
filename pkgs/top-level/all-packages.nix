@@ -4577,7 +4577,7 @@ let
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus hal libuuid openssl gperf m4
-      autoconf libtool xmlto asciidoc udev;
+      autoconf libtool xmlto asciidoc udev bison flex;
 
     # XXX: Update to newer Automake on the next big rebuild; better yet:
     # remove the dependency on Automake.
