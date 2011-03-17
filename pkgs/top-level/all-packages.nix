@@ -7281,6 +7281,8 @@ let
       libXmu libXext libXcursor;
   };
 
+  jags = callPackage ../applications/science/math/jags { };
+
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
 
