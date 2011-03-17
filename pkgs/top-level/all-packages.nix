@@ -5961,8 +5961,8 @@ let
   };
 
   firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
-    inherit (p.gtkLibs) gtk pango;
-    inherit (p.gnome) libIDL;
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
   };
 
   firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
