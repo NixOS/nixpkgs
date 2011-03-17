@@ -5,7 +5,9 @@
   machine = 
     { config, pkgs, ... }:
 
-    { services.xserver.enable = true;
+    { require = [ ./common/user-account.nix ];
+
+      services.xserver.enable = true;
 
       services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
@@ -21,15 +23,6 @@
         '';
 
       services.xserver.desktopManager.kde4.enable = true;
-
-      users.extraUsers = pkgs.lib.singleton
-        { name = "alice";
-          description = "Alice Foobar";
-          home = "/home/alice";
-          createHome = true;
-          useDefaultShell = true;
-          password = "foobar";
-        };
     };
 
   testScript =
