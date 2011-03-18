@@ -36,7 +36,7 @@ in
             cd /tmp
             exec < /dev/hvc0 > /dev/hvc0 2> /dev/ttyS0
             echo "connecting to host..." >&2
-            stty -F /dev/hvc0 raw # prevent nl -> cr/nl conversion
+            stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             ${pkgs.socat}/bin/socat stdio exec:${rootShell}
           '';
 
