@@ -24,10 +24,7 @@ in
   config = {
 
     jobs.backdoor =
-      { # If the firewall is enabled, this job must start *after* the
-        # firewall, otherwise connection tracking won't know about
-        # this connection.
-        startOn = if config.networking.firewall.enable then "started firewall" else "ip-up";
+      { startOn = "startup";
         stopOn = "never";
         
         script =
@@ -37,8 +34,10 @@ in
             export DISPLAY=:0.0
             source /etc/profile
             cd /tmp
-            echo "connecting to host..." > /dev/ttyS0
-            ${pkgs.socat}/bin/socat tcp:10.0.2.6:23 exec:${rootShell} 2> /dev/ttyS0 # || poweroff -f
+            exec < /dev/hvc0 > /dev/hvc0 2> /dev/ttyS0
+            echo "connecting to host..." >&2
+            stty -F /dev/hvc0 raw # prevent nl -> cr/nl conversion
+            ${pkgs.socat}/bin/socat stdio exec:${rootShell}
           '';
 
         respawn = false;

@@ -125,8 +125,8 @@ sub start {
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =
             "-no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
+            "-device virtio-serial -device virtconsole,chardev=shell " .
             ($showGraphics ? "-serial stdio" : "-nographic");
-        $ENV{QEMU_NET_OPTS} = "guestfwd=tcp:10.0.2.6:23-chardev:shell";
         $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};

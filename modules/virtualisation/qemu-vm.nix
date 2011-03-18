@@ -228,7 +228,7 @@ let
 in
 
 {
-  require = options;
+  require = [ options ../profiles/qemu-guest.nix ];
 
   boot.loader.grub.device = mkOverride 50 "/dev/vda";
   
@@ -236,7 +236,7 @@ in
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.availableKernelModules =
-    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" ]
+    [ "cifs" "nls_utf8" ]
     ++ optional cfg.writableStore [ "aufs" ];
 
   boot.extraModulePackages =
