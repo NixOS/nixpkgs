@@ -92,6 +92,7 @@ in
     buildInputs = attrs.buildInputs ++
       [ xorg.xproto xorg.libX11 xorg.renderproto ];
     # probably, fontconfig and freetype could be added
+    # pkgconfig seems to be nice, too...
     propagatedBuildInputs = [ xorg.libXrender ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
