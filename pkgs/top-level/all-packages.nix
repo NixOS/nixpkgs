@@ -4144,9 +4144,9 @@ let
   vxl = callPackage ../development/libraries/vxl { };
 
   webkit = let p = applyGlobalOverrides (x : {
-    libsoup = x.gnome28.libsoup_2_31;
+    libsoup = x.gnome28.libsoup_2_33;
     gnome28 = x.gnome28 // {
-      libsoup = x.gnome28.libsoup_2_31;
+      libsoup = x.gnome28.libsoup_2_33;
     };
   });
   in
