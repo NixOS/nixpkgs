@@ -58,7 +58,7 @@ push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 # modules are auto-detected so we don't need to list them here.
 # However, some are needed in the initrd to boot the system.
 
-my $videoDriver = "vesa";
+my $videoDriver;
 
 sub pciCheck {
     my $path = shift;
@@ -119,27 +119,6 @@ sub pciCheck {
         $vendor eq "0x8086" &&
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
-
-    # Hm, can we extract the PCI ids supported by X drivers somehow?
-    # cf. http://www.calel.org/pci-devices/xorg-device-list.html
-    $videoDriver = "intel" if $vendor eq "0x8086" &&
-        ($device eq "0x1132" ||
-         $device eq "0x2572" ||
-         $device eq "0x2592" ||
-         $device eq "0x2772" ||
-         $device eq "0x2776" ||
-         $device eq "0x2782" ||
-         $device eq "0x2792" ||
-         $device eq "0x2792" ||
-         $device eq "0x27a2" ||
-         $device eq "0x27a6" ||
-         $device eq "0x29a2" ||
-         $device eq "0x3582" ||
-         $device eq "0x7121" ||
-         $device eq "0x7123" ||
-         $device eq "0x7125" ||
-         $device eq "0x7128"
-        );
 
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
@@ -202,6 +181,11 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
+if ($videoDriver) {
+    push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];";
+}
+
+
 # Generate the configuration file.
 
 sub removeDups {
@@ -227,10 +211,10 @@ sub toNixExpr {
 sub multiLineList {
     my $indent = shift;
     my $res = "";
+    $res = "\n" if scalar @_ > 0;
     foreach my $s (@_) {
-        $res .= "\n$indent$s";
+        $res .= "$indent$s\n";
     }
-    $res .= "\n$indent";
     return $res;
 }
 
@@ -250,13 +234,10 @@ print <<EOF ;
     "\${modulesPath}/installer/scan/not-detected.nix"
   ];
 
-  boot.initrd.kernelModules = [ $initrdKernelModules ];
-  boot.kernelModules = [ $kernelModules ];
-  boot.extraModulePackages = [ $modulePackages ];
+  boot.initrd.kernelModules = [$initrdKernelModules ];
+  boot.kernelModules = [$kernelModules ];
+  boot.extraModulePackages = [$modulePackages ];
 
   nix.maxJobs = $cpus;
-
-  services.xserver.videoDriver = "$videoDriver";
-  $attrs
-}
+$attrs}
 EOF
