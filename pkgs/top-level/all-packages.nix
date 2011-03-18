@@ -5023,6 +5023,16 @@ let
       ];
   };
 
+  linux_2_6_38 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.38.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [ #kernelPatches.fbcondecor_2_6_35
+        kernelPatches.sec_perm_2_6_24
+        #kernelPatches.aufs2_2_6_35
+        #kernelPatches.mips_restart_2_6_36
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
