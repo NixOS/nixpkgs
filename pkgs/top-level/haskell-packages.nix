@@ -1018,9 +1018,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
   cabalInstall = self.cabalInstall_0_6_2;
 
-  lhs2tex = callPackage ../tools/typesetting/lhs2tex {
-    inherit (pkgs) tetex polytable;
-  };
+  lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
   myhasktags = callPackage ../tools/misc/myhasktags {};
 

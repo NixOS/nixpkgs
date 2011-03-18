@@ -1,14 +1,11 @@
-{cabal, tetex, polytable, regexCompat}:
-
-#assert tetex == polytable.tetex;
+{cabal, texLive, regexCompat}:
 
 cabal.mkDerivation (self : {
   pname = "lhs2tex";
-  version = "1.16";
+  version = "1.17";
   name = self.fname;
-  sha256 = "aa43ec92e8d7c94213365a7211d605314476977155e36420caa3cfb394f7c76f";
-  extraBuildInputs = [tetex regexCompat];
-  propagatedBuildInputs = [polytable]; # automatically in user-env now with cabal
+  sha256 = "1x49316m5xm4f6hw5q7kia9rpfpygxhk5gnifd54ai0zjmdlkxrc";
+  extraBuildInputs = [regexCompat texLive];
 
   postInstall = ''
     ensureDir "$out/share/doc/$name"
