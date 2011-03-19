@@ -101,6 +101,17 @@ in
       features.fbConDecor = true;
     };
 
+  fbcondecor_2_6_37 =
+    rec {
+      name = "fbcondecor-0.9.6-2.6.37";
+      patch = fetchurl {
+        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
+        sha256 = "1yap9q6mp15jhsysry4x17cpm5dj35g8l2d0p0vn1xq25x3jfkqk";
+      };
+      extraConfig = fbcondecorConfig;
+      features.fbConDecor = true;
+    };
+
   # From http://patchwork.kernel.org/patch/19495/
   ext4_softlockups_2_6_28 =
     { name = "ext4-softlockups-fix";
