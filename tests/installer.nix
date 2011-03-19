@@ -41,7 +41,7 @@ let
         boot.loader.grub.version = 2;
         boot.loader.grub.device = "/dev/vda";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-        boot.initrd.kernelModules = [ "ext3" ];
+        boot.initrd.kernelModules = [ "ext3" "virtio_console" ];
       
         fileSystems = [ ${fileSystems} ];
         swapDevices = [ { label = "swap"; } ];
@@ -114,10 +114,7 @@ let
       $machine->waitForJob("tty1");
       $machine->waitForJob("rogue");
       $machine->waitForJob("nixos-manual");
-
-      # Make sure that we don't try to download anything.
-      $machine->stopJob("dhclient");
-      $machine->mustSucceed("rm /etc/resolv.conf");
+      $machine->waitForJob("dhclient");
 
       ${optionalString testChannel ''
         # Allow the machine to talk to the fake nixos.org.
@@ -183,7 +180,7 @@ let
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
       my $machine = createMachine({ hda => "harddisk" });
-      $machine->mustSucceed("echo hello");
+      $machine->waitForJob("network-interfaces");
       $machine->shutdown;
     '';
 
@@ -307,10 +304,6 @@ in {
           # damn, it's costly to evaluate nixos-rebuild (1G of ram)
           my $machine = createMachine({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '-m 1024' });
           $machine->start;
-
-          # Make sure that we don't try to download anything.
-          $machine->stopJob("dhclient");
-          $machine->mustSucceed("rm /etc/resolv.conf");
 
           # Enable sshd service.
           $machine->mustSucceed(

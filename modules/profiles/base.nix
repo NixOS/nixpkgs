@@ -35,7 +35,7 @@
       "ohci1394" "sbp2"
 
       # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
+      "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console"
 
       # Add vfat to enable people to copy the contents of the CD to a
       # bootable USB stick.
