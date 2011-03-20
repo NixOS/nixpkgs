@@ -7019,6 +7019,8 @@ let
     inherit libpng zlib;
   };
 
+  mars = callPackage ../games/mars { };
+
   micropolis = callPackage ../games/micropolis { };
 
   openttd = callPackage ../games/openttd {
