@@ -902,7 +902,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) pkgconfig freetype fontconfig;
     inherit (pkgs.xlibs) libXft;
   };
 
