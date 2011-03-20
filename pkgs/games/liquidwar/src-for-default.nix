@@ -1,9 +1,9 @@
 rec {
-   version="0.0.8beta";
-   name="liquidwar-0.0.8beta";
-   hash="1qcwms44i9x2s38hy64w7xxjkb2j0bh7ril9hldkjy3z208s3wff";
+   version="0.0.9beta";
+   name="liquidwar-0.0.9beta";
+   hash="1a4yqh79y6s3f6dv5kkwjdqzi62y3qbwrx6420fqpvdn1694ycr9";
    url="http://download.savannah.gnu.org/releases/liquidwar6/${version}/liquidwar6-${version}.tar.gz";
-   advertisedUrl="http://download.savannah.gnu.org/releases/liquidwar6/0.0.8beta/liquidwar6-0.0.8beta.tar.gz";
+   advertisedUrl="http://download.savannah.gnu.org/releases/liquidwar6/0.0.9beta/liquidwar6-0.0.9beta.tar.gz";
   
   
 }
