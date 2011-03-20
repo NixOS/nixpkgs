@@ -4048,6 +4048,8 @@ let
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
+  sfml_svn = callPackage ../development/libraries/sfml { };
+
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
