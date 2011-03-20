@@ -6820,6 +6820,8 @@ let
 
   xawtv = callPackage ../applications/video/xawtv { };
 
+  xbindkeys = callPackage ../tools/X11/xbindkeys { };
+
   xchat = callPackage ../applications/networking/irc/xchat { };
 
   xchm = callPackage ../applications/misc/xchm { };
