@@ -1,4 +1,4 @@
-{ fetchurl }:
+{ stdenv, fetchurl }:
 
 let
 
@@ -233,6 +233,22 @@ in
       # <http://www.plugcomputer.org/plugwiki/index.php/Compiling_Linux_Kernel_for_the_Plug_Computer>.
       name = "guruplug-arch-number";
       patch = ./guruplug-mach-type.patch;
+    };
+
+  tuxonice_2_6_35 =
+    { name = "tuxonice-2.6.35";
+      patch = stdenv.mkDerivation {
+        name = "tuxonice-3.2-rc2-for-2.6.35.patch";
+        src = fetchurl {
+          url = http://tuxonice.net/files/tuxonice-3.2-rc2-for-2.6.35.patch.bz2;
+          sha256 = "00jbrqq6p1lyvli835wczc0vqsn0z73jpb2aak3ak0vgnvsxw37q";
+        };
+        phases = [ "installPhase" ];
+        installPhase = ''
+          source $stdenv/setup
+          bunzip2 -c $src > $out
+        '';
+      };
     };
 
 }
