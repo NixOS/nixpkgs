@@ -6846,8 +6846,7 @@ let
 
   xawtv = callPackage ../applications/video/xawtv { };
 
-  /* Commented until I can commit the default.nix I forgot
-  xbindkeys = callPackage ../tools/X11/xbindkeys { };*/
+  xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
 
