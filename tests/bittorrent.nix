@@ -37,8 +37,11 @@ in
 
       router = 
         { config, pkgs, ... }:
-        { environment.systemPackages = [ pkgs.iptables pkgs.miniupnpd ];
+        { environment.systemPackages = [ pkgs.miniupnpd ];
           virtualisation.vlans = [ 1 2 ];
+          networking.nat.enable = true;
+          networking.nat.internalIPs = "192.168.2.0/24";
+          networking.nat.externalInterface = "eth1";
         };
 
       client1 = 
@@ -61,11 +64,8 @@ in
       startAll;
 
       # Enable NAT on the router and start miniupnpd.
-      $router->mustSucceed(
-          "iptables -t nat -F",
-          "iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -d 192.168.2.0/24 -j ACCEPT",
-          "iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -j SNAT "
-          . "--to-source ${nodes.router.config.networking.ifaces.eth1.ipAddress}",
+      $router->waitForJob("nat");
+      $router->succeed(
           "iptables -t nat -N MINIUPNPD",
           "iptables -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
           "echo 1 > /proc/sys/net/ipv4/ip_forward",
@@ -73,32 +73,35 @@ in
       );
 
       # Create the torrent.
-      $tracker->mustSucceed("mkdir /tmp/data");
-      $tracker->mustSucceed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->mustSucceed("transmission-create /tmp/data/test.tar.bz2 -t http://tracker:6969/announce -o /tmp/test.torrent");
-      $tracker->mustSucceed("chmod 644 /tmp/test.torrent");
+      $tracker->succeed("mkdir /tmp/data");
+      $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
+      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://tracker:6969/announce -o /tmp/test.torrent");
+      $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
-      $tracker->mustSucceed("bittorrent-tracker --port 6969 --dfile /tmp/dstate >&2 &");
+      $tracker->waitForJob("network-interfaces");
+      $tracker->succeed("bittorrent-tracker --port 6969 --dfile /tmp/dstate >&2 &");
       $tracker->waitForOpenPort(6969);
 
       # Start the initial seeder.
-      my $pid = $tracker->mustSucceed("transmission-cli /tmp/test.torrent -M -w /tmp/data >&2 & echo \$!");
+      my $pid = $tracker->succeed("transmission-cli /tmp/test.torrent -M -w /tmp/data >&2 & echo \$!");
 
       # Now we should be able to download from the client behind the NAT.
       $tracker->waitForJob("httpd");
-      $client1->mustSucceed("transmission-cli http://tracker/test.torrent -w /tmp >&2 &");
+      $client1->waitForJob("network-interfaces");
+      $client1->succeed("transmission-cli http://tracker/test.torrent -w /tmp >&2 &");
       $client1->waitForFile("/tmp/test.tar.bz2");
-      $client1->mustSucceed("cmp /tmp/test.tar.bz2 ${file}");
+      $client1->succeed("cmp /tmp/test.tar.bz2 ${file}");
 
       # Bring down the initial seeder.
-      $tracker->mustSucceed("kill -9 $pid");
+      $tracker->succeed("kill -9 $pid");
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.
-      $client2->mustSucceed("transmission-cli http://tracker/test.torrent -M -w /tmp >&2 &");
+      $client2->waitForJob("network-interfaces");
+      $client2->succeed("transmission-cli http://tracker/test.torrent -M -w /tmp >&2 &");
       $client2->waitForFile("/tmp/test.tar.bz2");
-      $client2->mustSucceed("cmp /tmp/test.tar.bz2 ${file}");
+      $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");
     '';
   
 }
