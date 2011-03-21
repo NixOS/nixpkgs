@@ -5697,10 +5697,8 @@ let
     };
 
   chrome = callPackage ../applications/networking/browsers/chromium {
-    inherit (gtkLibs) gtk glib pango atk;
     inherit (gnome) GConf;
     patchelf = patchelf06;
-    libjpeg = libjpeg62;
   };
 
   chromeWrapper = wrapFirefox chrome "chrome" "";
