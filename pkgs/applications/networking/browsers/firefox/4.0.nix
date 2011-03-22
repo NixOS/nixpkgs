@@ -11,6 +11,8 @@
   enableOfficialBranding ? false
 }:
 
+assert stdenv.gcc ? libc;
+
 rec {
 
   firefoxVersion = "4.0";
@@ -47,7 +49,7 @@ rec {
     inherit src;
 
     buildInputs =
-    [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+      [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman libvpx yasm mesa
