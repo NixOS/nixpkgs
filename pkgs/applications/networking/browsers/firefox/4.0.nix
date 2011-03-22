@@ -60,9 +60,11 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
+    enableParallelBuilding = true;
+      
     # !!! Temporary hack.
     preBuild = ''
-     export NIX_ENFORCE_PURITY=
+      export NIX_ENFORCE_PURITY=
     '';
 
     # Hack to work around make's idea of -lbz2 dependency
@@ -111,6 +113,8 @@ rec {
 
     inherit src;
 
+    enableParallelBuilding = true;
+      
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
@@ -122,6 +126,7 @@ rec {
     configureFlags =
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
+        "--enable-chrome-format=jar"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
