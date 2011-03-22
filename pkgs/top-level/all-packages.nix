@@ -591,6 +591,8 @@ let
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
+  efibootmgr = callPackage ../tools/system/efibootmgr { };
+
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
   encfs = callPackage ../tools/filesystems/encfs { };
