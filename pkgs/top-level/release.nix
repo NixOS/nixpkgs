@@ -380,10 +380,6 @@ with (import ./release-lib.nix);
     jdee = linux;
   };
 
-  firefox35Pkgs = {
-    firefox = prio 150 linux;
-  };
-
   firefox36Pkgs = {
     firefox = linux;
   };
