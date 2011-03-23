@@ -56,7 +56,7 @@ rec {
 
 
   stgit = import ./stgit {
-        inherit fetchurl stdenv python git;
+    inherit fetchurl stdenv python git;
   };
 
   topGit = lib.makeOverridable (import ./topgit) {
