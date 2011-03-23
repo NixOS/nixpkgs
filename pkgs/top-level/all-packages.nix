@@ -4180,6 +4180,10 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9 {
+    inherit (gtkLibs) gtk;
+  };
+
   wtk = callPackage ../development/libraries/wtk { };
 
   x264 = callPackage ../development/libraries/x264 { };
