@@ -42,6 +42,11 @@ rec {
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
+  gitAnnex = lib.makeOverridable (import ./git-annex) {
+    inherit stdenv fetchurl libuuid rsync findutils curl perl;
+    inherit (haskellPackages) ghc MissingH utf8String QuickCheck2 pcreLight;
+  };
+
   qgit = import ./qgit {
     inherit fetchurl stdenv;
     inherit (xlibs) libXext libX11;
