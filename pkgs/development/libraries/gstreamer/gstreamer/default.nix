@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   # Hm, apparently --disable-gtk-doc is ignored...
   postInstall = "rm -rf $out/share/gtk-doc";
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://gstreamer.freedesktop.org;
 
