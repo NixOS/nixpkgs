@@ -672,6 +672,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
+  pathtype = callPackage ../development/libraries/haskell/pathtype {};
+
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {
     inherit (pkgs) pcre;
   };
