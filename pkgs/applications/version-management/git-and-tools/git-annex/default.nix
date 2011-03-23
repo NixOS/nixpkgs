@@ -15,7 +15,10 @@ stdenv.mkDerivation {
   buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2
     pcreLight];
 
-  preConfigure = "makeFlagsArray=( PREFIX=$out )";
+  preConfigure = ''
+    makeFlagsArray=( PREFIX=$out )
+    sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' mdwn2man
+  '';
 
   meta = {
     description = "Manage files with git, without checking the file contents into git";
