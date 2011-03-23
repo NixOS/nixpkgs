@@ -47,7 +47,7 @@ if test "$noSysDirs" = "1"; then
     fi
 
     extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY $extraFlags"
-    extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
+    extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
     EXTRA_FLAGS="$extraFlags"
     for i in $extraLDFlags; do
@@ -90,7 +90,7 @@ if test "$noSysDirs" = "1"; then
             glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
 
             extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
-            extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
+            extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
             EXTRA_TARGET_CFLAGS="$extraFlags"
             for i in $extraLDFlags; do

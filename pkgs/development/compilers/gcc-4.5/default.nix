@@ -26,6 +26,7 @@
 , crossStageStatic ? true
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
+, stripped ? true
 }:
 
 assert langTreelang -> bison != null && flex != null;
@@ -259,6 +260,11 @@ stdenv.mkDerivation ({
 
   targetConfig = if (cross != null) then cross.config else null;
 
+  installTargets =
+    if stripped
+    then "install-strip"
+    else "install";
+
   crossAttrs = {
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
@@ -364,7 +370,8 @@ stdenv.mkDerivation ({
   meta = {
     homepage = http://gcc.gnu.org/;
     license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
-    description = "GNU Compiler Collection, version ${version}";
+    description = "GNU Compiler Collection, version ${version}"
+      + (if stripped then "" else " (with debugging info)");
 
     longDescription = ''
       The GNU Compiler Collection includes compiler front ends for C, C++,
@@ -391,6 +398,8 @@ stdenv.mkDerivation ({
   makeFlags = [ "all-gcc" "all-target-libgcc" ];
   installTargets = "install-gcc install-target-libgcc";
 }
+
+// optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = false; }
 
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";

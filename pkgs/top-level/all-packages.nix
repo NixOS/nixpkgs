@@ -1670,6 +1670,20 @@ let
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
   }));
 
+  # A non-stripped version of GCC.
+  gcc45_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.5 {
+    stripped = false;
+
+    inherit noSysDirs;
+    cross = null;
+    libcCross = null;
+    binutilsCross = null;
+
+    # bootstrapping a profiled compiler does not work in the sheevaplug:
+    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+  }));
+
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;
