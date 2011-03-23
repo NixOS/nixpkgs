@@ -318,7 +318,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {};
   cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
   cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
-  cgi = self.cgi_3001_1_7_1; 
+  cgi = self.cgi_3001_1_7_1;
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
 
@@ -447,7 +447,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
 
-  GLUT = self.GLUT_2_1_1_2; 
+  GLUT = self.GLUT_2_1_1_2;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs) pkgconfig glibc;
