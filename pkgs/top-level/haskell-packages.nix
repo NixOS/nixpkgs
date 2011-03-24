@@ -951,6 +951,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   idris = callPackage ../development/compilers/idris {};
 
+  pakcs = callPackage ../development/compilers/pakcs {
+    syb = self.syb02;
+  };
+
   # Development tools.
 
   alex_2_3_1 = callPackage ../development/tools/parsing/alex/2.3.1.nix {};
