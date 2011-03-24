@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
+  configureFlags = "--localstatedir=/var";
+
+  installFlags = "localstatedir=$(TMPDIR)";
+
   meta = {
     homepage = http://www.remlab.net/ndisc6/;
     description = "A small collection of useful tools for IPv6 networking";
