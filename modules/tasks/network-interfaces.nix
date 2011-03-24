@@ -179,7 +179,9 @@ in
         pkgs.nettools
         pkgs.wirelesstools
         pkgs.rfkill
-      ] ++ optional (cfg.bridges != {}) [ pkgs.bridge_utils ];
+      ] 
+      ++ optional (cfg.bridges != {}) pkgs.bridge_utils
+      ++ optional cfg.enableIPv6 pkgs.ndisc6;
 
     security.setuidPrograms = [ "ping" "ping6" ];
     
