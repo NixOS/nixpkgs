@@ -5559,7 +5559,7 @@ let
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
-  posixmanpages = callPackage ../data/documentation/man-pages-posix { };
+  posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   pthreadmanpages = callPackage ../data/documentation/pthread-man-pages { };
 
