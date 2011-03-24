@@ -960,6 +960,8 @@ let
 
   ncompress = callPackage ../tools/compression/ncompress { };
 
+  ndisc6 = callPackage ../tools/networking/ndisc6 { };
+  
   netcat = callPackage ../tools/networking/netcat { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
