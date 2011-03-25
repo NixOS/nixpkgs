@@ -1,7 +1,7 @@
 x@{builderDefsPackage
   , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
   , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
-  , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal
+  , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
   , ...}:
 builderDefsPackage
 (a :  

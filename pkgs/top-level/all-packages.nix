@@ -3278,6 +3278,8 @@ let
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
+  hawknl = callPackage ../development/libraries/hawknl { };
+
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   herqqSvn = callPackage ../development/libraries/herqq/svn.nix { };
@@ -7474,6 +7476,8 @@ let
 
   cupsBjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  darcnes = callPackage ../misc/emulators/darcnes { };
+
   dblatex = callPackage ../misc/tex/dblatex { };
 
   dosbox = callPackage ../misc/emulators/dosbox { };
@@ -7483,6 +7487,8 @@ let
   ekiga = newScope (pkgs.gtkLibs // pkgs.gnome) ../applications/networking/ekiga { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
+
+  fakenes = callPackage ../misc/emulators/fakenes { };
 
   foldingathome = callPackage ../misc/foldingathome { };
 
