@@ -7083,6 +7083,8 @@ let
 
   quake3game = callPackage ../games/quake3/game { };
 
+  racer = callPackage ../games/racer { };
+
   rogue = callPackage ../games/rogue { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
