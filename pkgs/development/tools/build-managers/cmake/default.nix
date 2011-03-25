@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else (with stdenv.lib.platforms; linux ++ freebsd);
+    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
