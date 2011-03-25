@@ -12,7 +12,8 @@ with pkgs.lib;
   options = {
   
     services.rdnssd.enable = mkOption {
-      default = config.networking.enableIPv6;
+      default = false;
+      #default = config.networking.enableIPv6;
       description =
         ''
           Whether to enable the RDNSS daemon
