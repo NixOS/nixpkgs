@@ -4660,6 +4660,8 @@ let
 
   darwinLipoUtility = callPackage ../os-specific/darwin/lipo { };
 
+  darwinInstallNameToolUtility = callPackage ../os-specific/darwin/install_name_tool { };
+
   devicemapper = lvm2;
 
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
