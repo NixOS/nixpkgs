@@ -107,7 +107,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # packages. It isn't the Cabal library, which is a core package of GHC
   # and therefore not separately listed here.
 
-  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {};
+  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
+    enableLibraryProfiling = enableLibraryProfiling;
+  };
 
   # Haskell Platform
   #
