@@ -1,5 +1,6 @@
 {fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
-, useNcurses ? false, ncurses, useQt4 ? false, qt4}:
+, useNcurses ? false, ncurses, useQt4 ? false, qt4
+, darwinInstallNameToolUtility}:
 
 let
   os = stdenv.lib.optionalString;
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ curl expat zlib bzip2 libarchive ]
+    ++ optional stdenv.isDarwin darwinInstallNameToolUtility
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
