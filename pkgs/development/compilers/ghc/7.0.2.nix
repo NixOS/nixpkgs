@@ -2,11 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "7.0.2";
-  
   name = "ghc-${version}";
-  
-  # TODO: Does this have to be here, or can it go to meta?
-  homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
     url = "http://haskell.org/ghc/dist/${version}/${name}-src.tar.bz2";
@@ -35,7 +31,7 @@ stdenv.mkDerivation rec {
   stripDebugFlags=["-S" "--keep-file-symbols"];
 
   meta = {
-    inherit homepage;
+    homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = [
       stdenv.lib.maintainers.marcweber
