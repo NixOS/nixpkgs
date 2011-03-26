@@ -7101,6 +7101,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  simutrans = callPackage ../games/simutrans { };
+
   six = callPackage ../games/six {
     inherit (kde3) arts kdelibs;
   };
