@@ -1115,6 +1115,8 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
+  polkit_gnome = callPackage ../tools/misc/polkit-gnome { };
+
   povray = callPackage ../tools/graphics/povray { };
 
   ppl = callPackage ../development/libraries/ppl { };
