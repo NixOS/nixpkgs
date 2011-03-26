@@ -13,8 +13,13 @@ stdenv.mkDerivation {
 
   buildInputs = [emacs texinfo];
 
+  configurePhase =
+    '' sed -i Makefile \
+           -e "s|^PREFIX=.*$|PREFIX=$out|g ; s|/etc/emacs/|$out/etc/emacs/|"
+    '';
+
   meta = {
-    description = "An an interface to Git, implemented as an extension to Emacs.";
+    description = "Magit, an Emacs interface to Git";
 
     longDescription = ''
       With Magit, you can inspect and modify your Git repositories with
@@ -31,6 +36,6 @@ stdenv.mkDerivation {
     license = "GPLv3+";
     homepage = "http://github.com/philjackson/magit";
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons ludo ];
   };
 }
