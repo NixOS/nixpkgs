@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://kde.org;
     description = "KDE systray and plasma applet for network management.";
-    license = licenses.gplv2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [  phreedom ];
   };
 }
