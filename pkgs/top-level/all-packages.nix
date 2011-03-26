@@ -972,6 +972,8 @@ let
 
   networkmanager = callPackage ../tools/networking/network-manager { };
 
+  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
+
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
   nmap = callPackage ../tools/security/nmap {
