@@ -2873,6 +2873,10 @@ let
 
   db45 = callPackage ../development/libraries/db4/db4-4.5.nix { };
 
+  db47 = callPackage ../development/libraries/db4/db4-4.7.nix { };
+
+  db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
+
   dbus = callPackage ../development/libraries/dbus {
     useX11 = true;
   };
@@ -4191,6 +4195,10 @@ let
   };
 
   wxGTK29 = callPackage ../development/libraries/wxGTK-2.9 {
+    inherit (gtkLibs) gtk;
+  };
+
+  wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
     inherit (gtkLibs) gtk;
   };
 
@@ -5697,6 +5705,12 @@ let
   bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
     qt = qt4;
   } ;
+
+  bitcoin = callPackage ../applications/misc/bitcoin { 
+    wxGTK = wxGTK290;
+    db4 = db47;
+    inherit (xlibs) libSM;
+  };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
