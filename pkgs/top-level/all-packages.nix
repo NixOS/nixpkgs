@@ -4144,6 +4144,8 @@ let
 
   urt = callPackage ../development/libraries/urt { };
 
+  ustr = callPackage ../development/libraries/ustr { stdenv = overrideGCC stdenv gcc44; };
+
   ucommon = callPackage ../development/libraries/ucommon { };
 
   vamp = callPackage ../development/libraries/audio/vamp { };
