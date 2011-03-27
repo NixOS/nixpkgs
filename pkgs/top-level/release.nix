@@ -13,7 +13,7 @@ with (import ./release-lib.nix);
 
   tarball = import ./make-tarball.nix;
 
-} // (mapTestOn (/* (packagesWithMetaPlatform pkgs) // */ rec {
+} // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
 
   MPlayer = linux;
   abcde = linux;
@@ -380,7 +380,6 @@ with (import ./release-lib.nix);
     jdee = linux;
   };
 
-  /*
   firefox36Pkgs.firefox = linux;
   firefox40Pkgs.firefox = linux;
 
@@ -542,7 +541,6 @@ with (import ./release-lib.nix);
     xfdesktop = linux;
     xfwm4 = linux;
   };
-  */
 
 } ))
 
