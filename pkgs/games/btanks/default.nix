@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://trackballs.sourceforge.net/;
+    homepage = http://sourceforge.net/projects/btanks/;
     description = "Fast 2d tank arcade game";
     license = "GPLv2+";
   };
