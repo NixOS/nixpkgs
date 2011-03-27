@@ -5067,7 +5067,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_37
         kernelPatches.sec_perm_2_6_24
-        #kernelPatches.aufs2_2_6_35
+        kernelPatches.aufs2_1_2_6_37
         #kernelPatches.mips_restart_2_6_36
       ];
   };
@@ -5106,7 +5106,11 @@ let
 
     aufs2 = callPackage ../os-specific/linux/aufs2 { };
 
+    aufs2_1 = callPackage ../os-specific/linux/aufs2.1 { };
+
     aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
+
+    aufs2_1_util = callPackage ../os-specific/linux/aufs2.1-util { };
 
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
