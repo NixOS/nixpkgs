@@ -5211,6 +5211,8 @@ let
 
   libselinux = callPackage ../os-specific/linux/libselinux { };
 
+  libsemanage = callPackage ../os-specific/linux/libsemanage { };
+
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
   libsexy = callPackage ../development/libraries/libsexy { };
