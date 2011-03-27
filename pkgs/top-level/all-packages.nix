@@ -7021,6 +7021,8 @@ let
 
   bsdgames = callPackage ../games/bsdgames { };
 
+  btanks = callPackage ../games/btanks { };
+
   bzflag = callPackage ../games/bzflag { };
 
   castle_combat = callPackage ../games/castle-combat { };
