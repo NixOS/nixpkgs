@@ -7096,6 +7096,8 @@ let
 
   micropolis = callPackage ../games/micropolis { };
 
+  njam = callPackage ../games/njam { };
+
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
   };
