@@ -4643,6 +4643,8 @@ let
 
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
 
+  checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
+
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 
   conky = callPackage ../os-specific/linux/conky { };
