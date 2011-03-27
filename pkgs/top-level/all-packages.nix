@@ -5329,6 +5329,8 @@ let
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
 
+  policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
+
   powertop = callPackage ../os-specific/linux/powertop { };
 
   procps = callPackage ../os-specific/linux/procps { };
