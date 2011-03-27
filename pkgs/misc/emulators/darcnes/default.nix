@@ -3,7 +3,7 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation { 
-  name = "darnes-9b0401";
+  name = "darcnes-9b0401";
   src = fetchurl {
     url = http://www.dridus.com/~nyef/darcnes/download/dn9b0401.tgz;
     sha256 = "05a7mh51rg7ydb414m3p5mm05p4nz2bgvspqzwm3bhbj7zz543k3";
