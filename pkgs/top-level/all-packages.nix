@@ -2266,36 +2266,14 @@ let
 
   python = python27;
   
-  python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  pythonFull = python26Full;
-
-  pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
-
-  python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
-    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  });
-
-  python26Full = lowPrio (python26Base.override {
-    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
-    db4 = if getConfig ["python" "db4Support"] true then db4 else null;
-    sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
-    readline = if getConfig ["python" "readlineSupport"] true then readline else null;
-    openssl = if getConfig ["python" "opensslSupport"] true then openssl else null;
-    tk = if getConfig ["python" "tkSupport"] true then tk else null;
-    tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
-    libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
-    xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
-    ncurses = if getConfig ["python" "curses"] true then ncurses else null;
-  });
-
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
   python3 = callPackage ../development/interpreters/python/3.1 {
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
+
+  pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
 
   pyrex = pyrex095;
 
@@ -4297,12 +4275,6 @@ let
 
   buildPythonPackage = buildPython27Package;
 
-  buildPython26Package = import ../development/python-modules/generic {
-    inherit makeWrapper lib;
-    python = python26;
-    setuptools = setuptools.override { python = python26; };
-  };
-
   buildPython27Package = import ../development/python-modules/generic {
     inherit makeWrapper lib;
     python = python27;
@@ -4310,12 +4282,6 @@ let
   };
 
   pythonPackages = python27Packages;
-
-  python26Packages = recurseIntoAttrs (import ./python-packages.nix {
-    inherit pkgs;
-    python = python26;
-    buildPythonPackage = buildPython26Package;
-  });
 
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
@@ -5620,10 +5586,7 @@ let
 
   bvi = callPackage ../applications/editors/bvi { };
 
-  calibre = callPackage ../applications/misc/calibre {
-    python = python26Full;
-    inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
-  };
+  calibre = callPackage ../applications/misc/calibre { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
