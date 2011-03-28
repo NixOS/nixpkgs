@@ -1,9 +1,9 @@
 {stdenv, fetchurl, unzip}:
 stdenv.mkDerivation {
-  name = "freeimage-3.14.1";
+  name = "freeimage-3.15.0";
   src = fetchurl {
-    url = mirror://sourceforge/freeimage/FreeImage3141.zip;
-    sha256 = "0rgzdjwzd64z5z9j4bq075h3kfqjk8ab2dwswy0lnzw9jvmbbifm";
+    url = mirror://sourceforge/freeimage/FreeImage3150.zip;
+    sha256 = "0diyj862sdqwjqb7v2nccf8cl6886v937jkw6dgszp86qpwsfx3n";
   };
   buildInputs = [ unzip ];
   prePatch = ''
@@ -12,7 +12,6 @@ stdenv.mkDerivation {
         -e 's@ldconfig@echo not running ldconfig@' \
         -i Makefile.gnu
   '';
-  patches = [ ./memset.patch ];
   preInstall = "mkdir -p $out/include $out/lib";
 
   meta = {
