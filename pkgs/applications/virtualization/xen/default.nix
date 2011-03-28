@@ -1,6 +1,6 @@
 { stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl, python
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2, xz
-, lvm2, utillinux, procps, texinfo, perl }:
+, lvm2, utillinux, procps, texinfo, perl, wrapPython, pythonPackages }:
 
 with stdenv.lib;
 
@@ -51,8 +51,10 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ which zlib pkgconfig SDL openssl python libuuid gettext ncurses
-      dev86 iasl pciutils bzip2 xz texinfo perl
+      dev86 iasl pciutils bzip2 xz texinfo perl wrapPython
     ];
+
+  pythonPath = [ pythonPackages.curses ];
 
   makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc";
 
@@ -121,19 +123,7 @@ stdenv.mkDerivation {
       cp -prvd dist/install/boot $out/boot
       cp -prvd dist/install/etc $out/etc
       cp -dR docs/man1 docs/man5 $out/share/man/
-    ''; # */
-
-  postFixup =
-    ''
-      # Set the Python search path in all Python scripts.
-      for fn in $(grep -l '#!.*python' $out/bin/* $out/sbin/*); do
-          sed -i "$fn" -e "1 a import sys\nsys.path = ['$out/lib/python2.6/site-packages'] + sys.path"
-      done
-
-      # Remove calls to `env'.
-      for fn in $(grep -l '#!.*/env.*python' $out/bin/* $out/sbin/*); do
-          sed -i "$fn" -e "1 s^/nix/store/.*/env.*python^${python}/bin/python^"
-      done
+      wrapPythonPrograms
     ''; # */
 
   meta = {
