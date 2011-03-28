@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsepol libselinux ];
 
+  NIX_LDFLAGS = "-lsepol";
+
   makeFlags = "LOCALEDIR=$(out)/share/locale";
 
   meta = with stdenv.lib; {
