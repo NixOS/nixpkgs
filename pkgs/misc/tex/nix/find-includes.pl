@@ -45,6 +45,7 @@ while (<FILE>) {
             $bib =~ s/^\s+//; # remove leading / trailing whitespace
             $bib =~ s/\s+$//;
             addName "misc", "$bib.bib";
+            addName "misc", (basename($ENV{"rootFile"}, ".tex", ".ltx") . ".bbl");
         }
     } elsif (/\\includegraphics(\[.*\])?\{(.*)\}/) {
         my $fn2 = $2;

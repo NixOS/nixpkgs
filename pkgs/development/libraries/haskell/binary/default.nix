@@ -7,4 +7,4 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Efficient, pure binary serialisation using lazy ByteStrings";
   };
-})  
+})

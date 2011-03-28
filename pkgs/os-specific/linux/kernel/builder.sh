@@ -50,6 +50,7 @@ postBuild() {
     # After the builder did a 'make all' (kernel + modules)
     # we force building the target asked: bzImage/zImage/uImage/...
     make $makeFlags $kernelTarget
+    make $makeFlags -C scripts unifdef
 }
 
 installPhase() {

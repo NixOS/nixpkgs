@@ -1,4 +1,4 @@
-{ fetchurl }:
+{ stdenv, fetchurl }:
 
 let
 
@@ -19,6 +19,22 @@ let
       FB_VESA y
       FRAMEBUFFER_CONSOLE y
     '';
+
+  makeTuxonicePatch = { version, kernelVersion, sha256,
+    url ? "http://tuxonice.net/files/tuxonice-${version}-for-${kernelVersion}.patch.bz2" }:
+    { name = "tuxonice-${kernelVersion}";
+      patch = stdenv.mkDerivation {
+        name = "tuxonice-${version}-for-${kernelVersion}.patch";
+        src = fetchurl {
+          inherit url sha256;
+        };
+        phases = [ "installPhase" ];
+        installPhase = ''
+          source $stdenv/setup
+          bunzip2 -c $src > $out
+        '';
+      };
+    };
 
 in
 
@@ -101,6 +117,17 @@ in
       features.fbConDecor = true;
     };
 
+  fbcondecor_2_6_37 =
+    rec {
+      name = "fbcondecor-0.9.6-2.6.37";
+      patch = fetchurl {
+        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
+        sha256 = "1yap9q6mp15jhsysry4x17cpm5dj35g8l2d0p0vn1xq25x3jfkqk";
+      };
+      extraConfig = fbcondecorConfig;
+      features.fbConDecor = true;
+    };
+
   # From http://patchwork.kernel.org/patch/19495/
   ext4_softlockups_2_6_28 =
     { name = "ext4-softlockups-fix";
@@ -175,6 +202,15 @@ in
       features.aufsBase = true;
     };
 
+  aufs2_1_2_6_37 =
+    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-37;hb=refs/heads/aufs2.1-37
+      # Note that this merely the patch needed to build AUFS2.1 as a
+      # standalone package.
+      name = "aufs2.1";
+      patch = ./aufs2.1-37.patch;
+      features.aufsBase = true;
+    };
+
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
   cifs_timeout =
@@ -223,5 +259,30 @@ in
       name = "guruplug-arch-number";
       patch = ./guruplug-mach-type.patch;
     };
+
+  tuxonice_2_6_34 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.34";
+    sha256 = "0bagqinmky1kmvg3vw8cdysqklxrsfjm7gqrpxviq9jq8vyycviz";
+  };
+
+  tuxonice_2_6_35 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.35";
+    sha256 = "00jbrqq6p1lyvli835wczc0vqsn0z73jpb2aak3ak0vgnvsxw37q";
+  };
+
+  tuxonice_2_6_36 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.36";
+    sha256 = "1vcw3gpjdghnkli46j37pc6rp8mqk8dh688jv8rppzsry0ll7b7k";
+  };
+
+  tuxonice_2_6_37 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.37";
+    url = "http://tuxonice.net/files/current-tuxonice-for-2.6.37.patch_0.bz2";
+    sha256 = "0acllabvbm9pmjnh0zx9mgnp47xbrl9ih6i037c85h0ymnjsxdhk";
+  };
 
 }

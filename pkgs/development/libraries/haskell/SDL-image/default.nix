@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Binding to libSDL_image";
   };
-})  
+})
 

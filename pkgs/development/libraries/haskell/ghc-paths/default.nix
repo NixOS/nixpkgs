@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Knowledge of GHC's installations directories";
   };
-})  
+})
 

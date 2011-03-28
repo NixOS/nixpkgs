@@ -8,4 +8,4 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Syntax highlighting";
   };
-})  
+})

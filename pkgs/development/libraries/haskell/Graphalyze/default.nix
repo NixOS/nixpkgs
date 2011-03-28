@@ -9,5 +9,5 @@ cabal.mkDerivation (self : {
     description = "A library to use graph theory analysis";
     license = "OtherLicene";
   };
-})  
+})
 

@@ -1,8 +1,11 @@
-{ stdenv, fetchurl, aclSupport ? false, acl ? null, perl, gmp ? null}:
+{ stdenv, fetchurl, perl, gmp ? null
+, aclSupport ? false, acl ? null
+, selinuxSupport? false, libselinux ? null, libsepol ? null }:
 
 assert aclSupport -> acl != null;
+assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "coreutils-8.7";
 
   src = fetchurl {
@@ -11,11 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [ perl ];
-  buildInputs = [ gmp ] ++ stdenv.lib.optional aclSupport acl;
+  buildInputs = [ gmp ]
+    ++ stdenv.lib.optional aclSupport acl
+    ++ stdenv.lib.optional selinuxSupport libselinux
+    ++ stdenv.lib.optional selinuxSupport libsepol;
 
   crossAttrs = {
     buildInputs = [ gmp ]
       ++ stdenv.lib.optional aclSupport acl.hostDrv
+      ++ stdenv.lib.optional selinuxSupport libselinux.hostDrv
+      ++ stdenv.lib.optional selinuxSupport libsepol.hostDrv
       ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
         stdenv.gccCross.libc.libiconv.hostDrv;
 
@@ -48,4 +56,5 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
-}
+} // (if selinuxSupport then { NIX_LDFLAGS = "-lsepol"; } else { } ) )
+

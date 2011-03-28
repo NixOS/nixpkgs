@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A small, efficient and portable regex library for Perl 5 compatible regular expressions";
   };
-})  
+})
 

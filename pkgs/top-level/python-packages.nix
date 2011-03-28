@@ -630,6 +630,28 @@ python.modules // rec {
     };
   });
 
+  optfunc = buildPythonPackage ( rec {
+    name = "optfunc-git";
+
+    src = pkgs.fetchgit {
+      url = "http://github.com/simonw/optfunc.git";
+      rev = "e3fa034a545ed94ac5a039cf5b170c7d0ee21b7b";
+    };
+
+    installCommand = ''
+      dest=$(toPythonPath $out)/optfunc
+      ensureDir $dest
+      cp * $dest/
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "A new experimental interface to optparse which works by introspecting a function definition";
+      homepage = "http://simonwillison.net/2009/May/28/optfunc/";
+    };
+  });
+
   ply = buildPythonPackage (rec {
     name = "ply-3.2";
 
@@ -795,6 +817,42 @@ python.modules // rec {
       platforms = stdenv.lib.platforms.linux;
     };
   });
+
+
+  pycurl =
+    let libcurl = pkgs.stdenv.lib.overrideDerivation pkgs.curl
+      (oldAttrs: {
+        configureFlags =
+          (if oldAttrs ? configureFlags then oldAttrs.configureFlags else "" )
+          + " --enable-static";
+      });
+    in
+  buildPythonPackage (rec {
+    name = "pycurl-7.19.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
+      sha256 = "0hh6icdbp7svcq0p57zf520ifzhn7jw64x07k99j7h57qpy2sy7b";
+    };
+
+    buildInputs = [ libcurl ];
+
+    doCheck = false;
+
+    postInstall = ''
+      find $out -name easy-install.pth | xargs rm -v
+      find $out -name 'site.py*' | xargs rm -v
+    '';
+
+    meta = {
+      homepage = http://pycurl.sourceforge.net/;
+
+      description = "Python wrapper for libcurl";
+
+      platforms = stdenv.lib.platforms.linux;
+    };
+  });
+
 
   pymacs = pkgs.stdenv.mkDerivation rec {
     version = "v0.24-beta2";

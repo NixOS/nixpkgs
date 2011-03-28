@@ -42,6 +42,11 @@ rec {
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
+  gitAnnex = lib.makeOverridable (import ./git-annex) {
+    inherit stdenv fetchurl libuuid rsync findutils curl perl;
+    inherit (haskellPackages) ghc MissingH utf8String QuickCheck2 pcreLight;
+  };
+
   qgit = import ./qgit {
     inherit fetchurl stdenv;
     inherit (xlibs) libXext libX11;
@@ -56,37 +61,11 @@ rec {
 
 
   stgit = import ./stgit {
-        inherit fetchurl stdenv python git;
+    inherit fetchurl stdenv python git;
   };
 
-  topGit = stdenv.mkDerivation rec {
-    name = "topgit-0.8-32-g8b0f1f9";
-
-    src = fetchurl {
-      url = "http://repo.or.cz/w/topgit.git/snapshot/${name}.zip";
-      sha256 = "0v3binh7wc2di57w6rdnlww30ryszzsklfdmm61sl1ildyl1klk4";
-    };
-
-    buildInputs = [unzip];
-    configurePhase = "export prefix=$out";
-
-    postInstall = ''
-      mkdir -p "$out/share/doc/${name}"
-      cp -v README "$out/share/doc/${name}"
-
-      mkdir -p $out/etc/bash_completion.d
-      make prefix=$out \
-        install
-      mv contrib/tg-completion.bash $out/etc/bash_completion.d
-    '';
-
-    meta = {
-      description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-      maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo lib.maintainers.simons ];
-      homepage = http://repo.or.cz/w/topgit.git;
-      license = "GPLv2";
-      platforms = stdenv.lib.platforms.unix;
-    };
+  topGit = lib.makeOverridable (import ./topgit) {
+    inherit stdenv fetchurl unzip;
   };
 
   tig = stdenv.mkDerivation {

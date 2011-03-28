@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Implementations of the SHA suite of message digest functions";
   };
-})  
+})
 

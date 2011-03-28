@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, python, makeWrapper
+{ stdenv, fetchurl, python, makeWrapper, docutils
 , guiSupport ? false, tk ? null, ssl }:
 
 stdenv.mkDerivation rec {
-  name = "mercurial-1.6.4";
-  
+  name = "mercurial-1.7.5";
+
   src = fetchurl {
     url = "http://www.selenic.com/mercurial/release/${name}.tar.gz";
-    sha256 = "04c8vj942ys71dn0bjga33i0qi5hybjjhq087xd0jp29ijzxp3hy";
+    sha256 = "14849n52vladjmzp0s3nc8q31rkjxswg7l2f2v3j7a9h7n4czbfz";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ python makeWrapper ];
-  
+  buildInputs = [ python makeWrapper docutils ];
+
   makeFlags = "PREFIX=$(out)";
-  
+
   postInstall = (stdenv.lib.optionalString guiSupport
     ''
       ensureDir $out/etc/mercurial

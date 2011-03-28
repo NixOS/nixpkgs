@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
     description = "Data type, conversion and composition of colours";
     license = "OtherLicense";
   };
-})  
+})
 

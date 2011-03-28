@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Test Utility Pack for HUnit and QuickCheck";
   };
-})  
+})
 

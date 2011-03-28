@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Splittable Unique Identifier Supply";
   };
-})  
+})
 

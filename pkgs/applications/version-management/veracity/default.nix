@@ -27,7 +27,7 @@ rec {
     sed -e "s@/bin/bash@${a.stdenv.shell}@" -i $(find .. -type f)
     mkdir pseudo-home
     export HOME=$PWD/pseudo-home
-    echo make test
+    make test || true
   '' ["doMake" "minInit"];
 
   prepare_sgneeds = a.fullDepEntry (''

@@ -8,6 +8,11 @@ stdenv.mkDerivation {
     sha256 = "10bwmhh3kzdbq1nzq8s5ln7ydrzg41d1rihj5kdmf5hb91az8mvx";
   };
 
+  prePatch = ''
+    # For Qt47 compatibility.
+    sed -i 's@class QImage@#include <QImage>@' src/colorcorrection/vectorscopegenerator.h
+  '';
+
   buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon mlt gettext
     shared_mime_info soprano ];
 

@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Library for manipulating FilePath's in a cross platform way";
   };
-})  
+})
 

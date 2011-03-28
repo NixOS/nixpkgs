@@ -107,7 +107,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # packages. It isn't the Cabal library, which is a core package of GHC
   # and therefore not separately listed here.
 
-  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {};
+  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
+    enableLibraryProfiling = enableLibraryProfiling;
+  };
 
   # Haskell Platform
   #
@@ -318,7 +320,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {};
   cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
   cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
-  cgi = self.cgi_3001_1_7_1; 
+  cgi = self.cgi_3001_1_7_1;
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
 
@@ -352,6 +354,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
+
+  dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
@@ -447,7 +451,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
 
-  GLUT = self.GLUT_2_1_1_2; 
+  GLUT = self.GLUT_2_1_1_2;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs) pkgconfig glibc;
@@ -588,6 +592,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
+  mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
+
   MissingH = callPackage ../development/libraries/haskell/MissingH {};
 
   mmap = callPackage ../development/libraries/haskell/mmap {};
@@ -598,7 +604,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadlab = callPackage ../development/libraries/haskell/monadlab {};
 
+  monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
+
   monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
+
+  MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
@@ -672,6 +682,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
+  pathtype = callPackage ../development/libraries/haskell/pathtype {};
+
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {
     inherit (pkgs) pcre;
   };
@@ -704,6 +716,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   random_newtime = callPackage ../development/libraries/haskell/random {
     time = self.time_1_2_0_3;
   };
+
+  randomFu = callPackage ../development/libraries/haskell/random-fu {};
+
+  randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
 
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
@@ -740,6 +756,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   scion = callPackage ../development/libraries/haskell/scion {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
+
+  stateref = callPackage ../development/libraries/haskell/stateref {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
 
@@ -795,6 +813,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
+
+  tagged = callPackage ../development/libraries/haskell/tagged {};
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
 
@@ -902,7 +922,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) pkgconfig freetype fontconfig;
     inherit (pkgs.xlibs) libXft;
   };
 
@@ -948,6 +968,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   helium = callPackage ../development/compilers/helium {};
 
   idris = callPackage ../development/compilers/idris {};
+
+  pakcs = callPackage ../development/compilers/pakcs {
+    syb = self.syb02;
+  };
 
   # Development tools.
 
@@ -1018,9 +1042,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
   cabalInstall = self.cabalInstall_0_6_2;
 
-  lhs2tex = callPackage ../tools/typesetting/lhs2tex {
-    inherit (pkgs) tetex polytable;
-  };
+  lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
   myhasktags = callPackage ../tools/misc/myhasktags {};
 

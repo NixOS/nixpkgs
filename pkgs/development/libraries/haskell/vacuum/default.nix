@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Extract graph representations of ghc heap values";
   };
-})  
+})
 

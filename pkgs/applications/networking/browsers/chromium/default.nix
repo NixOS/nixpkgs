@@ -1,24 +1,24 @@
-{ GConf, alsaLib, atk, bzip2, cairo, cups, dbus, dbus_glib, expat,
-  fetchurl, ffmpeg, fontconfig, freetype, glib, gtk, libX11,
-  libXScrnSaver, libXdamage, libXext, libXrender, libXt, libXtst,
-  libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, pango, patchelf,
-  stdenv, unzip, zlib }:
+{ GConf, alsaLib, bzip2, cairo, cups, dbus, dbus_glib, expat
+, fetchurl, ffmpeg, fontconfig, freetype, gtkLibs, libX11
+, libXScrnSaver, libXdamage, libXext, libXrender, libXt, libXtst
+, libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, patchelf
+, stdenv, unzip, zlib, pam }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
   name = "chrome-${version}";
-  version = "75853";
+  version = "78873";
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://build.chromium.org/f/chromium/continuous/linux64/2011-02-23/${version}/chrome-linux.zip";
-        sha256 = "1bh507j1pm3qrkj8afzhmqicza5nms6f4dc9848xjgcvj9x2qii7";
+        url = "http://build.chromium.org/f/chromium/continuous/linux64/2011-03-21/${version}/chrome-linux.zip";
+        sha256 = "04jmk4hfj305iyc6mi26iy617q4hd8341vfnl830qy02cp8pwf03";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://build.chromium.org/f/chromium/continuous/linux/2011-02-23/${version}/chrome-linux.zip";
-        sha256 = "0rq888yvw5zsh0c3jnp115y4sl1q5kn4pz8flnwhrh35ca15lchn";
+        url = "http://build.chromium.org/f/chromium/continuous/linux/2011-03-21/${version}/chrome-linux.zip";
+        sha256 = "0jilfj5kk6zwr02m6982ss7xxnalmny8ml6m5k91h6gnlsrgi808";
       }
     else throw "Chromium is not supported on this platform.";
 
@@ -28,10 +28,13 @@ stdenv.mkDerivation rec {
 
   libPath =
     stdenv.lib.makeLibraryPath
-       [ GConf alsaLib atk bzip2 cairo cups dbus dbus_glib expat
-         ffmpeg fontconfig freetype glib gtk libX11 libXScrnSaver
+       [ GConf alsaLib bzip2 cairo cups dbus dbus_glib expat
+         ffmpeg fontconfig freetype libX11 libXScrnSaver
          libXdamage libXext libXrender libXt libXtst libgcrypt libjpeg
-         libpng nspr nss pango stdenv.gcc.gcc zlib stdenv.gcc.libc ];
+         libpng nspr nss stdenv.gcc.gcc zlib stdenv.gcc.libc
+         gtkLibs.glib gtkLibs.gtk gtkLibs.gdk_pixbuf gtkLibs.pango
+         pam
+       ];
 
   installPhase = ''
     ensureDir $out/bin

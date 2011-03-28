@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
     description = "Burkhard-Keller trees sets implementation";
     license = "BSD3";
   };
-})  
+})
 

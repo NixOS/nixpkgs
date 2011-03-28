@@ -189,6 +189,12 @@ pkgs.makeOverridable
     inherit GConf gnome_keyring;
   };
 
+  libsoup_2_33 = import ./desktop/libsoup/2.33.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite curl;
+    inherit (pkgs.gtkLibs) glib;
+    inherit GConf gnome_keyring;
+  };
+
   libwnck = import ./desktop/libwnck {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit (pkgs.xlibs) libX11;

@@ -1,10 +1,13 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  builder = ./builder.sh;
-  name = "libsepol-1.12";
+stdenv.mkDerivation rec {
+  name = "libsepol-${version}";
+  version = "2.0.42";
+
   src = fetchurl {
-    url = http://www.nsa.gov/selinux/archives/libsepol-1.12.tgz;
-    md5 = "937885f1fcbfe597a0f02aa9af044710";
+    url = "http://userspace.selinuxproject.org/releases/20101221/devel/${name}.tar.gz";
+    sha256 = "0sg61mb9qhyh4vplasar6nwd6j123v453zss93qws3h95fhrfc08";
   };
+
+  preBuild = '' makeFlags="$makeFlags PREFIX=$out DESTDIR=$out" '';
 }

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses, gettext}:
 
 stdenv.mkDerivation {
-  name = "powertop-1.11";
+  name = "powertop-1.13";
   src = fetchurl {
-    url = http://www.lesswatts.org/projects/powertop/download/powertop-1.11.tar.gz;
-    sha256 = "1wl0c7sav5rf7andnx704vs3n5gj2b5g1adx8zjfbbgvwm9wrrvh";
+    url = http://www.lesswatts.org/projects/powertop/download/powertop-1.13.tar.gz;
+    sha256 = "164dqp6msdaxpi2bmvwawasyrf1sfvanlc9ddp97v1wnjh46dj1b";
   };
-  patches = [./powertop-1.8.patch];
+  patches = [./powertop-1.13.patch];
   buildInputs = [ncurses gettext];
 }

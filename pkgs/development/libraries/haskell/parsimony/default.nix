@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Monadic parser combinators derived from Parsec";
   };
-})  
+})
 

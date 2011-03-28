@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Memory mapped files for POSIX and Windows";
   };
-})  
+})
 

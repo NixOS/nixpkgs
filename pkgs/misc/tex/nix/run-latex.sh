@@ -68,11 +68,15 @@ for auxFile in $(find . -name "*.aux"); do
     # Run bibtex to process all bibliographies.  There may be several
     # when we're using the multibib package.
     if grep -q '\\citation' $auxFile; then
-        echo "RUNNING BIBTEX ON $auxFile..."
         auxBase=$(basename $auxFile .aux)
-        bibtex --terse $auxBase
-        cp $auxBase.bbl $out
-        runNeeded=1
+        if [ -e $auxBase.bbl ]; then
+            echo "SKIPPING BIBTEX ON $auxFile!"
+        else
+            echo "RUNNING BIBTEX ON $auxFile..."
+            bibtex --terse $auxBase
+            cp $auxBase.bbl $out
+            runNeeded=1
+        fi
         echo
     fi
 

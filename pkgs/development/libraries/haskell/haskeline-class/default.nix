@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Class interface for working with Haskeline";
   };
-})  
+})
 

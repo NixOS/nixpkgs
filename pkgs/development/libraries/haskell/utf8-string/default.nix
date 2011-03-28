@@ -7,4 +7,4 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A UTF8 layer for IO and Strings";
   };
-})  
+})

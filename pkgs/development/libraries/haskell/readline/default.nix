@@ -13,5 +13,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "An interface to the GNU readline library";
   };
-})  
+})
 

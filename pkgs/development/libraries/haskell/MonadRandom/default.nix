@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Random-number generation monad";
   };
-})  
+})
 

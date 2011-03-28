@@ -1,19 +1,16 @@
-{stdenv, fetchurl, ghc, perl, gmp, ncurses}:
+{stdenv, fetchurl, ghc, perl, gmp, ncurses, darwinInstallNameToolUtility}:
 
 stdenv.mkDerivation rec {
   version = "7.0.2";
-  
   name = "ghc-${version}";
-  
-  # TODO: Does this have to be here, or can it go to meta?
-  homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
     url = "http://haskell.org/ghc/dist/${version}/${name}-src.tar.bz2";
     sha256 = "f0551f1af2f008a8a14a888b70c0557e00dd04f9ae309ac91897306cd04a6668";
   };
 
-  buildInputs = [ghc perl gmp ncurses];
+  buildInputs = [ghc perl gmp ncurses] ++
+    (if stdenv.isDarwin then [darwinInstallNameToolUtility] else []);
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
@@ -22,6 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
+    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '';
 
   configureFlags=[
@@ -33,13 +31,13 @@ stdenv.mkDerivation rec {
   stripDebugFlags=["-S" "--keep-file-symbols"];
 
   meta = {
-    inherit homepage;
+    homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
     ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 
 }

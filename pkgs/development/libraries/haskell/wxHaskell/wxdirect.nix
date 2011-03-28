@@ -12,5 +12,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "helper tool for building wxHaskell";
   };
-})  
+})
 

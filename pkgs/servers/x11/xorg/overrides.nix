@@ -91,6 +91,8 @@ in
   libXft = attrs: attrs // {
     buildInputs = attrs.buildInputs ++
       [ xorg.xproto xorg.libX11 xorg.renderproto ];
+    # probably, fontconfig and freetype could be added
+    # pkgconfig seems to be nice, too...
     propagatedBuildInputs = [ xorg.libXrender ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
@@ -184,6 +186,14 @@ in
       substituteInPlace lndir.c \
         --replace 'n_dirs--;' ""
     '';
+  };
+
+  twm = attrs: attrs // {
+    buildNativeInputs = [args.bison args.flex];
+  };
+
+  xbacklight = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.libXrender];
   };
 
 }

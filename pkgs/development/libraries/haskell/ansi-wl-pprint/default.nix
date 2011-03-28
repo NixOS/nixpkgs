@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "The Wadler/Leijen Pretty Printer for colored ANSI terminal output";
   };
-})  
+})
 

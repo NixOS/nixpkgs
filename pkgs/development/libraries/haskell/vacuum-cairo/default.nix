@@ -9,5 +9,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Visualize live Haskell data structures using vacuum, graphviz and cairo";
   };
-})  
+})
 

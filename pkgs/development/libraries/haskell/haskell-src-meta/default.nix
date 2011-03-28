@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Parse source to template-haskell abstract syntax";
   };
-})  
+})
 

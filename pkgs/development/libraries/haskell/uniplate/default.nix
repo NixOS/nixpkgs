@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Uniform type generic traversals";
   };
-})  
+})
 
