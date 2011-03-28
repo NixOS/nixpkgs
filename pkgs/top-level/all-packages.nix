@@ -2748,6 +2748,8 @@ let
     bdbSupport = true;
   };
 
+  asio = callPackage ../development/libraries/asio { };
+
   aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (import ../development/libraries/aspell/dictionaries.nix {
@@ -7194,7 +7196,9 @@ let
 
   ut2004demo = callPackage ../games/ut2004demo { };
 
-  warmux = callPackage ../games/warmux {};
+  vdrift = callPackage ../games/vdrift { };
+
+  warmux = callPackage ../games/warmux { };
 
   warsow = callPackage ../games/warsow {
     libjpeg = libjpeg62;
