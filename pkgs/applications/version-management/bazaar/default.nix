@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python wrapPython ];
 
-  pythonPath = [ pythonPackages.ssl ];
+  # Readline support is needed by bzrtools.
+  pythonPath = [ pythonPackages.ssl pythonPackages.readline ];
 
   installPhase = ''
     python setup.py install --prefix=$out
