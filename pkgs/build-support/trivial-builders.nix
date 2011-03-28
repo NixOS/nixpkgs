@@ -45,12 +45,14 @@ rec {
 
 
   # Make a package that just contains a setup hook with the given contents.
-  makeSetupHook = script:
-    runCommand "hook" {}
-      ''
+  makeSetupHook = deps: script:
+    runCommand "hook" { }
+      (''
         ensureDir $out/nix-support
         cp ${script} $out/nix-support/setup-hook
-      '';
+      '' + stdenv.lib.optionalString (deps != []) ''
+        echo ${toString deps} > $out/nix-support/propagated-build-native-inputs
+      '');
 
 
   # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.

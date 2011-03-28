@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, makeWrapper, lib }:
+{ python, setuptools, wrapPython, lib }:
 
 { name, namePrefix ? "python-"
 
@@ -36,7 +36,7 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
-  buildInputs = [ python makeWrapper setuptools ] ++ buildInputs ++ pythonPath;
+  buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
   pythonPath = [ setuptools] ++ pythonPath;
 
@@ -54,47 +54,8 @@ python.stdenv.mkDerivation (attrs // {
 
   postFixup =
     ''
-      declare -A pythonPathsSeen
+      wrapPythonPrograms
     
-      addToPythonPath() {
-          local dir="$1"
-          if [ -n "''${pythonPathsSeen[$dir]}" ]; then return; fi
-          pythonPathsSeen[$dir]=1
-          addToSearchPath program_PYTHONPATH $dir/lib/${python.libPrefix}/site-packages
-          addToSearchPath program_PATH $dir/bin
-          local prop="$dir/nix-support/propagated-build-native-inputs"
-          if [ -e $prop ]; then
-              local i
-              for i in $(cat $prop); do
-                  addToPythonPath $i
-              done
-          fi
-      }
-    
-      wrapPythonPrograms() {
-          local dir="$1"
-          local pythonPath="$2"
-          local i
-
-          pythonPathsSeen=()
-          program_PYTHONPATH=
-          program_PATH=
-          for i in $pythonPath; do
-              addToPythonPath $i
-          done
-
-          for i in $(find "$out" -type f -perm +0100); do
-              if head -n1 "$i" | grep -q "${python}"; then
-                  echo "wrapping \`$i'..."
-                  wrapProgram "$i" \
-                    --prefix PYTHONPATH ":" $program_PYTHONPATH \
-                    --prefix PATH ":" $program_PATH
-              fi
-          done
-      }
-
-      wrapPythonPrograms $out "$out $pythonPath"
-
       # If a user installs a Python package, she probably also wants its
       # dependencies in the user environment (since Python modules don't
       # have something like an RPATH, so the only way to find the

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages, makeWrapper }:
+{ stdenv, fetchurl, python, pythonPackages, wrapPython }:
 
 stdenv.mkDerivation rec {
   version = "2.3";
@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "07kx41w4gqv68bcykdflsg68wvpmcyqknzyb4vr1zqlf27hahp53";
   };
 
-  buildInputs = [ python makeWrapper ];
+  buildInputs = [ python wrapPython ];
+
+  pythonPath = [ pythonPackages.ssl ];
 
   installPhase = ''
     python setup.py install --prefix=$out
-    wrapProgram $out/bin/bzr --prefix PYTHONPATH : "$(toPythonPath $out ${pythonPackages.ssl})"
+    wrapPythonPrograms
   '';
 
   meta = {

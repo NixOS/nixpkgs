@@ -312,7 +312,9 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
-  makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
+  makeWrapper = makeSetupHook [] ../build-support/make-wrapper/make-wrapper.sh;
+
+  wrapPython = makeSetupHook [ makeWrapper ] ../development/python-modules/generic/wrap.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {
@@ -343,6 +345,7 @@ let
   };
 
   platforms = import ./platforms.nix;
+  
 
   ### TOOLS
 
@@ -4264,7 +4267,7 @@ let
   buildPythonPackage = buildPython27Package;
 
   buildPython27Package = import ../development/python-modules/generic {
-    inherit makeWrapper lib;
+    inherit wrapPython lib;
     python = python27;
     setuptools = setuptools.override { python = python27; doCheck = false; };
   };
