@@ -7218,6 +7218,8 @@ let
 
   zdoom = callPackage ../games/zdoom { };
 
+  zod = callPackage ../games/zod { };
+
   zoom = callPackage ../games/zoom { };
 
   keen4 = callPackage ../games/keen4 { };
