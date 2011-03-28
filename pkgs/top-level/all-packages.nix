@@ -5653,9 +5653,7 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
-  adobeReader = callPackage_i686 ../applications/misc/adobe-reader {
-    inherit (pkgsi686Linux.gtkLibs) glib pango atk gtk;
-  };
+  adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   akunambol = newScope pkgs.kde4 ../applications/networking/sync/akunambol { };
 
