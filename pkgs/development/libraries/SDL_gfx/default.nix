@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-mmx";
 
-  postInstall = "ln -s $out/include/SDL/*.h $out/include/";
+  postInstall = ''
+    sed -i -e 's,"SDL.h",<SDL/SDL.h>,' \
+      $out/include/SDL/*.h
+    
+    ln -s $out/include/SDL/*.h $out/include/;
+  '';
 
   meta = {
     description = "SDL graphics drawing primitives and support functions";
