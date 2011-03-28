@@ -992,10 +992,8 @@ let
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
 
-  offlineimap = import ../tools/networking/offlineimap {
-    inherit fetchurl;
-    buildPythonPackage = buildPython27Package;
-    ssl = pythonModules.ssl;
+  offlineimap = callPackage ../tools/networking/offlineimap {
+    ssl = pythonPackages.ssl;
   };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -2267,7 +2265,6 @@ let
   polyml = callPackage ../development/compilers/polyml { };
 
   python = python27;
-  pythonModules = python27Modules;
   
   python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
   pythonFull = python26Full;
@@ -2294,10 +2291,6 @@ let
   });
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
-
-  python27Modules = callPackage ../development/interpreters/python/2.7/modules.nix {
-    python = python27;
-  };
 
   python3 = callPackage ../development/interpreters/python/3.1 {
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
@@ -4302,9 +4295,7 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  buildPythonPackage = import ../development/python-modules/generic {
-    inherit python setuptools makeWrapper lib;
-  };
+  buildPythonPackage = buildPython27Package;
 
   buildPython26Package = import ../development/python-modules/generic {
     inherit makeWrapper lib;
@@ -4318,7 +4309,7 @@ let
     setuptools = setuptools.override { python = python27; doCheck = false; };
   };
 
-  pythonPackages = python26Packages;
+  pythonPackages = python27Packages;
 
   python26Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
@@ -6283,7 +6274,7 @@ let
 
   mercurial = callPackage ../applications/version-management/mercurial {
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
-    inherit (python27Modules) ssl;
+    inherit (pythonPackages) ssl;
   };
 
   merkaartor = callPackage ../applications/misc/merkaartor {

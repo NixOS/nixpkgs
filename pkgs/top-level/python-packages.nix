@@ -1,7 +1,11 @@
 { pkgs, python, buildPythonPackage }:
 
-rec {
+python.modules // rec {
+
   inherit (pkgs) fetchurl fetchsvn stdenv;
+
+  inherit (python.modules) ssl;
+  
 
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
