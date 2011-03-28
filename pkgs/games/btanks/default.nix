@@ -1,6 +1,4 @@
-{stdenv, fetchurl, scons, pkgconfig, SDL, mesa, zlib }:
-
-throw "Still does not build. It needs smpeg"
+{stdenv, fetchurl, scons, pkgconfig, SDL, mesa, zlib, smpeg, SDL_image, libvorbis, lua5, zip }:
 
 stdenv.mkDerivation rec {
   name = "battle-tanks-0.9.8083";
@@ -10,12 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ha35kxc8xlbg74wsrbapfgxvcrwy6psjkqi7c6adxs55dmcxliz";
   };
 
-  /* It still does not build */
-  buildInputs = [ scons pkgconfig SDL mesa zlib ];
+  buildInputs = [ scons pkgconfig SDL mesa zlib smpeg SDL_image libvorbis lua5
+    zip ];
+
+  buildPhase = ''
+    scons prefix=$out
+  '';
 
   installPhase = ''
-    scons PREFIX=$out
-    scons PREFIX=$out install
+    scons install
   '';
 
   meta = {

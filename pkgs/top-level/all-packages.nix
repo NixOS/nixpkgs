@@ -4075,6 +4075,8 @@ let
     scheme = guile;
   };
 
+  smpeg = callPackage ../development/libraries/smpeg { };
+
   snack = callPackage ../development/libraries/snack {
         # optional
   };
