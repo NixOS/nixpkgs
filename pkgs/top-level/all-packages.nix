@@ -1947,6 +1947,11 @@ let
   haskellPackages_ghc702 =
     haskellPackagesFun ../development/compilers/ghc/7.0.2.nix  (x : x.ghc702Prefs) false (x : x);
 
+  # Can become default after a short testing phase. There's also a minor platform
+  # release planned based on 703. Please keep at lowPrio until then.
+  haskellPackages_ghc703 =
+    haskellPackagesFun ../development/compilers/ghc/7.0.3.nix  (x : x.ghc703Prefs) false lowPrio;
+
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix   (x : x.ghcHEADPrefs) false lowPrio;
 
