@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A library for writing CGI programs";
   };
-})  
+})
 

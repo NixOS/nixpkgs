@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Generic zipper for systems of recursive datatypes";
   };
-})  
+})
 

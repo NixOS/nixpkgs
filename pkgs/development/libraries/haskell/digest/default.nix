@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Various cryptographic hashes for bytestrings: CRC32 and Adler32 for now";
   };
-})  
+})
 

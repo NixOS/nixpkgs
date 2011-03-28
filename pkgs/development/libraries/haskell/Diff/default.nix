@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "O(ND) diff algorithm in Haskell";
   };
-})  
+})
 

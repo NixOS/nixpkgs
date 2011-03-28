@@ -9,5 +9,5 @@ cabal.mkDerivation (self : {
     description = "Bindings for the Dot language (Graphviz)";
     license = "BSD3";
   };
-})  
+})
 

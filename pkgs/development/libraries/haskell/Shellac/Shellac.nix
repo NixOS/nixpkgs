@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A framework for creating shell environments";
   };
-})  
+})
 

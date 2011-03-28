@@ -3,7 +3,7 @@
 cabal.mkDerivation (self : {
   pname = "WebServer";
   version = "1.2";
-  
+
   src = fetchgit {
     url = git://github.com/arjunguha/haskell-web.git;
     rev = "76c9aabd31d03f052a80a0f6999dc7c5f1b11c41" ;
@@ -14,5 +14,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "";
   };
-})  
+})
 

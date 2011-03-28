@@ -13,5 +13,5 @@ cabal.mkDerivation (self : {
     license = "BSD";
     maintainers = [self.stdenv.lib.maintainers.andres];
   };
-})  
+})
 

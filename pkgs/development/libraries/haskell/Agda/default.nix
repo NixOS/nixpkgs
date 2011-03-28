@@ -14,5 +14,5 @@ cabal.mkDerivation (self : {
     description = "A dependently typed functional language and proof assistant";
     maintainers = [self.stdenv.lib.maintainers.andres];
   };
-})  
+})
 

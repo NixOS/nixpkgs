@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Simple ANSI terminal support, with Windows compatibility";
   };
-})  
+})
 

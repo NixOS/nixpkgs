@@ -12,5 +12,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "An mtl compatible version of the Ghc-Api monads and monad-transformers";
   };
-})  
+})
 

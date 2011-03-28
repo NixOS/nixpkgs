@@ -9,5 +9,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A Citation Style Language implementation in Haskell";
   };
-})  
+})
 

@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "New version of the Utrecht University parser combinator library";
   };
-})  
+})
 

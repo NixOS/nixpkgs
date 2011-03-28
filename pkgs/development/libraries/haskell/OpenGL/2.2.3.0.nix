@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A binding for the OpenGL graphics system";
   };
-})  
+})
 

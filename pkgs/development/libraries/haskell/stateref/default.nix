@@ -10,5 +10,5 @@ cabal.mkDerivation (self : {
     license = "Public Domain";
     maintainers = [self.stdenv.lib.maintainers.andres];
   };
-})  
+})
 

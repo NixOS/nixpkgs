@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Haskeline backend module for Shellac";
   };
-})  
+})
 

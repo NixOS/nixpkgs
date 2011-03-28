@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Generic programming with systems of recursive datatypes";
   };
-})  
+})
 

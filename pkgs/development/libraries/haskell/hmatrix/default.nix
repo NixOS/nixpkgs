@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   configureFlags = "-fvector";
   /* dirty hack to find blas at link time */
   postConfigure = ''
-    sed -i -e "/^extra-libraries/ s/: /: blas /" hmatrix.buildinfo 
+    sed -i -e "/^extra-libraries/ s/: /: blas /" hmatrix.buildinfo
     sed -i -e "/^extra-libraries/ s/$/ blas/" hmatrix.buildinfo
   '';
   extraLibDirs = "--extra-lib-dir=${blas}/lib --extra-lib-dir=${gsl}/lib --extra-lib-dir=${liblapack}/lib";

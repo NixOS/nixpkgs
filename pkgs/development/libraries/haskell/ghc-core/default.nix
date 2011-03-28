@@ -9,5 +9,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Display GHC's core and assembly output in a pager";
   };
-})  
+})
 

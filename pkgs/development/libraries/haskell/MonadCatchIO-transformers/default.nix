@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Monad-transformer compatible version of the Control.Exception module";
   };
-})  
+})
 

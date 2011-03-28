@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Replaces/Enhances Text.Regex";
   };
-})  
+})
 

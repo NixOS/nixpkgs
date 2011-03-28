@@ -11,5 +11,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Support for serialising Haskell to and from JSON";
   };
-})  
+})
 

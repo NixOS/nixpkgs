@@ -9,5 +9,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
   };
-})  
+})
 

@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A binding to the OpenAL cross-platform 3D audio API";
   };
-})  
+})
 

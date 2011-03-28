@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A simple web-server with an interact style API";
   };
-})  
+})
 

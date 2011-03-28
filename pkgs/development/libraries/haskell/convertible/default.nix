@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Typeclasses and instances for converting between types";
   };
-})  
+})
 

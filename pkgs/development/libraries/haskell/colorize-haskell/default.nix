@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Highlight Haskell source";
   };
-})  
+})
 

@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Several encryption algorithms for Haskell";
   };
-})  
+})
 

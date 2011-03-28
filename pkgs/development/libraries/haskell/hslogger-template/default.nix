@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Library for generating hslogger functions using Template Haskell";
   };
-})  
+})
 

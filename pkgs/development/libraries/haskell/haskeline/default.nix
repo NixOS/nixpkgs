@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A command-line interface for user input, written in Haskell";
   };
-})  
+})
 

@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A variation of Data.Set. Multisets, sometimes also called bags, can contain multiple copies of the same key";
   };
-})  
+})
 

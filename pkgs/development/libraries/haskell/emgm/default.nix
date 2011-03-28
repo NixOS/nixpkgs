@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Extensible and Modular Generics for the Masses";
   };
-})  
+})
 

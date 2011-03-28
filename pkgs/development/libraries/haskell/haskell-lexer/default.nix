@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A fully compliant Haskell 98 lexer";
   };
-})  
+})
 

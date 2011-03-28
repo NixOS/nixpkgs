@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Multi-dimensional parametric pretty-printer with color";
   };
-})  
+})
 

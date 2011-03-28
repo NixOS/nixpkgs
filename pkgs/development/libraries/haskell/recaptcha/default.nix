@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Functions for using the reCAPTCHA service in web applications";
   };
-})  
+})
 

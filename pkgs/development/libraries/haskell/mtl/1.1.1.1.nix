@@ -7,5 +7,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Monad transformer library";
   };
-})  
+})
 

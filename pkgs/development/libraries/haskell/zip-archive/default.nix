@@ -8,5 +8,5 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Library for creating and modifying zip archives";
   };
-})  
+})
 

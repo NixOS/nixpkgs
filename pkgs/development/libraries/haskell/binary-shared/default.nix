@@ -10,4 +10,4 @@ cabal.mkDerivation (self : {
     license = "GPL";
     maintainers = [self.stdenv.lib.maintainers.andres];
   };
-})  
+})
