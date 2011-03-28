@@ -5534,9 +5534,7 @@ let
 
   batik = callPackage ../applications/graphics/batik { };
 
-  bazaar = callPackage ../applications/version-management/bazaar {
-    python = pythonFull;
-  };
+  bazaar = callPackage ../applications/version-management/bazaar { };
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
     inherit bazaar;

@@ -1,30 +1,24 @@
-{stdenv, fetchurl, python, makeWrapper}:
+{ stdenv, fetchurl, python, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "2.2";
-  release = ".0";
+  version = "2.3";
+  release = ".1";
   name = "bazaar-${version}${release}";
 
   src = fetchurl {
     url = "http://launchpad.net/bzr/${version}/${version}${release}/+download/bzr-${version}${release}.tar.gz";
-    sha256 = "64cd6c23097884e40686adc7f0ad4a8200e2292bdc5e0caba3563b6f5c32bacf";
+    sha256 = "07kx41w4gqv68bcykdflsg68wvpmcyqknzyb4vr1zqlf27hahp53";
   };
 
-  buildInputs = [python makeWrapper];
+  buildInputs = [ python makeWrapper ];
 
   installPhase = ''
     python setup.py install --prefix=$out
-    wrapProgram $out/bin/bzr --prefix PYTHONPATH : "$(toPythonPath $out)"
+    wrapProgram $out/bin/bzr --prefix PYTHONPATH : "$(toPythonPath $out ${pythonPackages.ssl})"
   '';
-
-  passthru = {
-    # If someone wants to assert python features..
-    inherit python;
-  };
 
   meta = {
     homepage = http://bazaar-vcs.org/;
     description = "A distributed version control system that Just Works";
   };
-
 }

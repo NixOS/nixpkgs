@@ -582,6 +582,8 @@ python.modules // rec {
       sha256 = "1hl3lbwdfl2a64q3dxc73kbiks4iwx5cixlbavyryd8xdr7iziww";
     };
 
+    doCheck = false; # see http://code.google.com/p/python-nose/issues/detail?id=340
+
     meta = {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
