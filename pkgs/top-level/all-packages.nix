@@ -6017,10 +6017,7 @@ let
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
-  gpsd = callPackage ../servers/gpsd {
-    # We need a Python with NCurses bindings.
-    python = pythonFull;
-  };
+  gpsd = callPackage ../servers/gpsd { };
 
   guitone = callPackage ../applications/version-management/guitone { };
 

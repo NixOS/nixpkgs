@@ -5,6 +5,7 @@ wrapPythonPrograms() {
 wrapPythonProgramsIn() {
     local dir="$1"
     local pythonPath="$2"
+    local python="$(type -p python)"
     local i
 
     declare -A pythonPathsSeen=()
@@ -15,6 +16,12 @@ wrapPythonProgramsIn() {
     done
 
     for i in $(find "$dir" -type f -perm +0100); do
+
+        # Rewrite "#! .../env python" to "#! /nix/store/.../python".
+        if head -n1 "$i" | grep -q '#!.*/env.*python'; then
+            sed -i "$i" -e "1 s^.*/env[ ]*python^#! $python^"
+        fi
+        
         if head -n1 "$i" | grep -q /python; then
             echo "wrapping \`$i'..."
             wrapProgram "$i" \
