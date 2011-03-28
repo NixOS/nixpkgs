@@ -2,6 +2,7 @@
 
 buildPythonPackage {
   name = "ipython-0.10.1";
+  namePrefix = "";
 
   src = fetchurl {
     url = "http://ipython.scipy.org/dist/0.10.1/ipython-0.10.1.tar.gz";

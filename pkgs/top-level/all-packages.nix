@@ -663,9 +663,7 @@ let
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
-  getmail = callPackage ../tools/networking/getmail {
-    python = pythonFull;
-  };
+  getmail = callPackage ../tools/networking/getmail { };
 
   getopt = callPackage ../tools/misc/getopt { };
 
