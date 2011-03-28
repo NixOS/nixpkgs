@@ -2273,7 +2273,9 @@ let
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
 
-  pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
+  pythonFull = callPackage ../development/interpreters/python/wrapper.nix {
+    extraLibs = lib.attrValues python.modules;
+  };
 
   pyrex = pyrex095;
 
