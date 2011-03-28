@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1dfvw3khr2rvqllvs9wad9ca3ld4i7szqf0ibq87rn36ickrf3ll";
   };
 
-  propagatedBuildInputs = [ pythonPackages.curses ];
+  pythonPath = [ pythonPackages.curses ];
 
   doCheck = false;
 

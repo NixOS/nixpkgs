@@ -5,46 +5,40 @@
 
 { python, setuptools, makeWrapper, lib }:
 
-{ name, namePrefix ? "python-", src, meta, patches ? []
-, installCommand ? ""
+{ name, namePrefix ? "python-"
+
+, buildInputs ? []
+
+, # List of packages that should be added to the PYTHONPATH
+  # environment variable in programs built by this function.  Packages
+  # in the standard `propagatedBuildInputs' variable are also added.
+  # The difference is that `pythonPath' is not propagated to the user
+  # environment.  This is preferrable for programs because it doesn't
+  # pollute the user environment.
+  pythonPath ? []
+
+, installCommand ?
+    ''
+      easy_install --prefix="$out" .
+    ''
+    
+, buildPhase ? "true"
+
 , doCheck ? true, checkPhase ? "python setup.py test"
+
 , postInstall ? ""
+
 , ... } @ attrs:
 
-let
-    defaultInstallCommand = ''easy_install --prefix="$out" .'';
+# Keep extra attributes from ATTR, e.g., `patchPhase', etc.
+python.stdenv.mkDerivation (attrs // {
+  inherit doCheck buildPhase checkPhase;
 
-    # Return the list of recursively propagated build inputs of PKG.
-    recursiveBuildInputs =
-      pkg:
-        [ pkg ] ++
-        (if pkg ? propagatedBuildNativeInputs
-         then lib.concatLists (map recursiveBuildInputs
-                                   pkg.propagatedBuildNativeInputs)
-         else []);
+  name = namePrefix + name;
 
-in
+  buildInputs = [ python makeWrapper setuptools ] ++ buildInputs ++ pythonPath;
 
-python.stdenv.mkDerivation (
-  # Keep extra attributes from ATTR, e.g., `patchPhase', etc.
-  attrs
-
-  //
-
-  (rec {
-  inherit src meta patches doCheck checkPhase;
-
-  name = namePrefix + attrs.name;
-
-  buildInputs = [ python setuptools makeWrapper ] ++
-    (if attrs ? buildInputs then attrs.buildInputs else []);
-
-  propagatedBuildInputs = [ setuptools ] ++
-    (if attrs ? propagatedBuildInputs
-     then attrs.propagatedBuildInputs
-     else []);
-
-  buildPhase = "true";
+  pythonPath = [ setuptools] ++ pythonPath;
 
   # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
   # to have a noticeable impact on small scripts.
@@ -53,49 +47,60 @@ python.stdenv.mkDerivation (
 
     echo "installing \`${name}' with \`easy_install'..."
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-    ${if installCommand == "" then defaultInstallCommand else installCommand}
+    ${installCommand}
 
     ${postInstall}
   '';
 
-  postFixup = ''
-    # Wrap scripts that are under `{s,}bin/' so that they get the right
-    # $PYTHONPATH.
-    for i in "$out/bin/"* "$out/sbin/"*
-    do
-      if head -n1 "$i" | grep -q "${python}"
-      then
-          echo "wrapping \`$i'..."
+  postFixup =
+    ''
+      declare -A pythonPathsSeen
+    
+      addToPythonPath() {
+          local dir="$1"
+          if [ -n "''${pythonPathsSeen[$dir]}" ]; then return; fi
+          pythonPathsSeen[$dir]=1
+          addToSearchPath program_PYTHONPATH $dir/lib/${python.libPrefix}/site-packages
+          addToSearchPath program_PATH $dir/bin
+          local prop="$dir/nix-support/propagated-build-native-inputs"
+          if [ -e $prop ]; then
+              local i
+              for i in $(cat $prop); do
+                  addToPythonPath $i
+              done
+          fi
+      }
+    
+      wrapPythonPrograms() {
+          local dir="$1"
+          local pythonPath="$2"
+          local i
 
-          # Compute a $PATH prefix for the program.
-          program_PATH=""
-          ${lib.concatStrings
-            (map (path:
-                  ''if [ -d "${path}/bin" ]
-                    then
-                        program_PATH="${path}/bin'' + "\$" + ''{program_PATH:+:}$program_PATH"
-                    fi
-                   '')
-                 (lib.concatMap recursiveBuildInputs propagatedBuildInputs))}
+          pythonPathsSeen=()
+          program_PYTHONPATH=
+          program_PATH=
+          for i in $pythonPath; do
+              addToPythonPath $i
+          done
 
-          wrapProgram "$i"                          \
-            --prefix PYTHONPATH ":"                 \
-            ${lib.concatStringsSep ":"
-               ([ "$out/lib/${python.libPrefix}/site-packages" ] ++
-                (map (path: path + "/lib/${python.libPrefix}/site-packages")
-                     (lib.concatMap recursiveBuildInputs
-                                    propagatedBuildInputs)))} \
-            --prefix PATH ":" "$program_PATH"
+          for i in $(find "$out" -type f -perm +0100); do
+              if head -n1 "$i" | grep -q "${python}"; then
+                  echo "wrapping \`$i'..."
+                  wrapProgram "$i" \
+                    --prefix PYTHONPATH ":" $program_PYTHONPATH \
+                    --prefix PATH ":" $program_PATH
+              fi
+          done
+      }
 
+      wrapPythonPrograms $out "$out $pythonPath"
+
+      # If a user installs a Python package, she probably also wants its
+      # dependencies in the user environment (since Python modules don't
+      # have something like an RPATH, so the only way to find the
+      # dependencies is to have them in the PYTHONPATH variable).
+      if test -e $out/nix-support/propagated-build-inputs; then
+          ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
       fi
-    done
-
-    # If a user installs a Python package, she probably also wants its
-    # dependencies in the user environment (since Python modules don't
-    # have something like an RPATH, so the only way to find the
-    # dependencies is to have them in the PYTHONPATH variable).
-    if test -e $out/nix-support/propagated-build-inputs; then
-        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-    fi
-  '';
-}))
+    '';
+})
