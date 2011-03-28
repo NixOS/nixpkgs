@@ -355,6 +355,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
 
+  dataDefault = callPackage ../development/libraries/haskell/data-default {};
+
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
@@ -590,6 +592,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
+  mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
+
   MissingH = callPackage ../development/libraries/haskell/MissingH {};
 
   mmap = callPackage ../development/libraries/haskell/mmap {};
@@ -600,7 +604,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadlab = callPackage ../development/libraries/haskell/monadlab {};
 
+  monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
+
   monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
+
+  MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
@@ -709,6 +717,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_2_0_3;
   };
 
+  randomFu = callPackage ../development/libraries/haskell/random-fu {};
+
+  randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
+
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
   };
@@ -744,6 +756,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   scion = callPackage ../development/libraries/haskell/scion {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
+
+  stateref = callPackage ../development/libraries/haskell/stateref {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
 
@@ -799,6 +813,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
+
+  tagged = callPackage ../development/libraries/haskell/tagged {};
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
 
