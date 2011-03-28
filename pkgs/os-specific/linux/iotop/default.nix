@@ -13,8 +13,6 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  #installCommand = "python setup.py install --prefix=\"\$prefix\"";
-  
   meta = {
     description = "A tool to find out the processes doing the most IO";
     maintainers = [ stdenv.lib.maintainers.raskin ];
