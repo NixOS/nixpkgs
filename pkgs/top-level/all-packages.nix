@@ -2276,6 +2276,8 @@ let
 
   phpXdebug = callPackage ../development/interpreters/php-xdebug { };
 
+  picolisp = callPackage ../development/interpreters/picolisp {};
+
   pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
     inherit cairo fontconfig freetype libjpeg libpng openssl
       perl mesa zlib which;
