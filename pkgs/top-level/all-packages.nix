@@ -6132,18 +6132,6 @@ let
   kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
 
   keepnote = callPackage ../applications/office/keepnote {
-    # I did not find any better way of reusing buildPythonPackage+setuptools
-    # for a python with openssl support
-    buildPythonPackage = assert pythonFull.sqliteSupport;
-      import ../development/python-modules/generic {
-        inherit makeWrapper lib;
-        python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-          inherit makeWrapper;
-          python = pythonFull;
-        };
-      };
-    # How could this pygtk use also pythonFull, I don't know.
     pygtk = pyGtkGlade;
   };
 
