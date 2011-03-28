@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "MPC, a library for multiprecision complex arithmetic with exact rounding";
+    description = "GNU MPC, a library for multiprecision complex arithmetic with exact rounding";
 
     longDescription =
-      '' MPC is a C library for the arithmetic of complex numbers with
+      '' GNU MPC is a C library for the arithmetic of complex numbers with
          arbitrarily high precision and correct rounding of the result.  It is
          built upon and follows the same principles as GNU MPFR.
       '';
