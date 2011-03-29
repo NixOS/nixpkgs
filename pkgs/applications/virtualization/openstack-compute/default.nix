@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, python, setuptools, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
+
+with stdenv.lib;
 
 let version = "2011.1"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "openstack-compute-2011.1";
 
   src = fetchurl {
@@ -10,9 +12,16 @@ stdenv.mkDerivation {
     sha256 = "1g8f75mzjpkzhqk91hga5wpjh8d0kbc9fxxjk0px0qjk20qrmb45";
   };
 
-  buildInputs =
-    [ python setuptools pythonPackages.gflags pythonPackages.netaddr pythonPackages.eventlet
+  pythonPath = 
+    [ pythonPackages.setuptools pythonPackages.eventlet pythonPackages.greenlet
+      pythonPackages.gflags pythonPackages.netaddr pythonPackages.sqlalchemy
+      pythonPackages.carrot
     ];
+
+  buildInputs =
+    [ pythonPackages.python 
+      pythonPackages.wrapPython
+    ] ++ pythonPath;
 
   preConfigure = "export HOME=$(pwd)";
   
@@ -24,6 +33,8 @@ stdenv.mkDerivation {
       export PYTHONPATH=$p:$PYTHONPATH
       mkdir -p $p
       python setup.py install --prefix=$out
+
+      wrapPythonPrograms
     '';
 
   meta = {

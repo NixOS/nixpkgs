@@ -28,6 +28,40 @@ python.modules // rec {
     ../development/python-modules/generic/wrap.sh;
 
 
+  anyjson = buildPythonPackage rec {
+    name = "anyjson-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/a/anyjson/${name}.tar.gz";
+      md5 = "2b53b5d53fc40af4da7268d3c3e35a50";
+    };
+
+    buildInputs = [ nose ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/anyjson/;
+      description = "Wrapper that selects the best available JSON implementation";
+    };
+  };
+
+
+  amqplib = buildPythonPackage rec {
+    name = "amqplib-0.6.1";
+
+    src = fetchurl {
+      url = "http://py-amqplib.googlecode.com/files/${name}.tgz";
+      sha1 = "f124e5e4a6644bf6d1734032a01ac44db1b25a29";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/py-amqplib/;
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    };
+  };
+
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
 
@@ -101,6 +135,28 @@ python.modules // rec {
       '';
     };
   });
+
+
+  carrot = buildPythonPackage rec {
+    name = "carrot-0.10.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/carrot/${name}.tar.gz";
+      md5 = "530a0614de3a669314c3acd4995c54d5";
+    };
+
+    buildInputs = [ nose ];
+
+    propagatedBuildInputs = [ amqplib anyjson ];
+
+    doCheck = false; # depends on the network
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/carrot;
+      description = "AMQP Messaging Framework for Python";
+    };
+  };
+
 
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-3.1.2";
@@ -205,14 +261,14 @@ python.modules // rec {
       md5 = "dfc96ed14b27392fdc529abcafeed880";
     };
 
-    buildInputs = [ nose httplib2 ];
+    buildInputs = [ nose httplib2  ];
 
     propagatedBuildInputs = [ greenlet ];
 
     # It tries to scribble in ~/.python-eggs.
     preConfigure = "export HOME=$(pwd)";
 
-    doCheck = false; # !!! fix; test requires ssl support in Python
+    doCheck = false; # !!! fix; tests access the network
 
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
@@ -596,14 +652,12 @@ python.modules // rec {
   });
 
   nose = buildPythonPackage {
-    name = "nose-0.11.3";
+    name = "nose-1.0.0";
 
     src = fetchurl {
-      url = http://python-nose.googlecode.com/files/nose-0.11.3.tar.gz;
-      sha256 = "1hl3lbwdfl2a64q3dxc73kbiks4iwx5cixlbavyryd8xdr7iziww";
+      url = http://somethingaboutorange.com/mrl/projects/nose/nose-1.0.0.tar.gz;
+      sha256 = "0qm6q232h5r071gwfkiszkmfqc60k7abl15bk495lcdkk62m91db";
     };
-
-    doCheck = false; # see http://code.google.com/p/python-nose/issues/detail?id=340
 
     meta = {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
@@ -1252,6 +1306,26 @@ python.modules // rec {
     };
   });
 
+
+  sqlalchemy = buildPythonPackage {
+    name = "sqlalchemy-0.6.6";
+
+    src = fetchurl {
+      url = mirror://sourceforge/sqlalchemy/0.6.6/SQLAlchemy-0.6.6.tar.gz;
+      sha256 = "0inj9b66pi447cw500mqn7d09dij20ic3k5bnyhj6rpdl2l83a0l";
+    };
+
+    buildInputs = [ nose ];
+
+    propagatedBuildInputs = [ python.modules.sqlite3 ];
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
+  };
+
+
   trac = buildPythonPackage {
     name = "trac-0.11.5";
 
@@ -1372,4 +1446,5 @@ python.modules // rec {
       license = "ZPL";
     };
   };
+
 }
