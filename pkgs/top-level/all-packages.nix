@@ -6906,6 +6906,8 @@ let
 
   xcompmgr = callPackage ../applications/window-managers/xcompmgr { };
 
+  xdaliclock = callPackage ../tools/misc/xdaliclock {};
+
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
   xen = callPackage ../applications/virtualization/xen {
