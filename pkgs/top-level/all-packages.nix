@@ -4299,20 +4299,13 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  buildPythonPackage = buildPython27Package;
-
-  buildPython27Package = import ../development/python-modules/generic {
-    inherit wrapPython lib;
-    python = python27;
-    setuptools = setuptools.override { python = python27; doCheck = false; };
-  };
+  buildPythonPackage = pythonPackages.buildPythonPackage;
 
   pythonPackages = python27Packages;
 
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     python = python27;
-    buildPythonPackage = buildPython27Package;
   });
 
   foursuite = callPackage ../development/python-modules/4suite { };
@@ -4355,9 +4348,7 @@ let
 
   pyxml = callPackage ../development/python-modules/pyxml { };
 
-  setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-    inherit python makeWrapper;
-  };
+  setuptools = pythonPackages.setuptools;
 
   wxPython = wxPython26;
 

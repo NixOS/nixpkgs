@@ -1,48 +1,29 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, python, wrapPython }:
 
-  version = a.lib.attrByPath ["version"] "0.6c11" a; 
-  buildInputs = with a; [
-    python makeWrapper
-  ];
-in
-rec {
-  name = "setuptools-" + version;
+stdenv.mkDerivation rec {
+  name = "setuptools-0.6c11";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${name}.tar.gz";
     sha256 = "1lx1hwxkhipyh206bgl90ddnfcnb68bzcvyawczbf833fadyl3v3";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ python wrapPython ];
 
-  doCheck = true;
+  buildPhase = "python setup.py build --build-base $out";
 
-  doMakeCheck = a.fullDepEntry (''
-    python setup.py test
-  '') ["minInit" "doUnpack" "addInputs" "doBuild"];
+  installPhase =
+    ''
+      dst=$out/lib/${python.libPrefix}/site-packages
+      mkdir -p $dst
+      PYTHONPATH=$dst:$PYTHONPATH
+      python setup.py install --prefix=$out
+      wrapPythonPrograms
+    '';
 
-  doBuild = a.fullDepEntry(''
-    python setup.py build --build-base $out
-  '') ["addInputs" "doUnpack"];
+  doCheck = false; # doesn't work with Python 2.7
 
-  doInstall = a.fullDepEntry(''
-    ensureDir "$out/lib/${a.python.libPrefix}/site-packages"
-
-    PYTHONPATH="$out/lib/${a.python.libPrefix}/site-packages:$PYTHONPATH" \
-    python setup.py install --prefix="$out"
-
-    for i in "$out/bin/"*
-    do
-      wrapProgram "$i"                          \
-        --prefix PYTHONPATH ":"			\
-          "$out/lib/${a.python.libPrefix}/site-packages"
-    done
-  '') ["doBuild"];
-
-  phaseNames = ["doBuild" "doInstall"];
+  checkPhase = "python setup.py test";
 
   meta = {
     description = "Utilities to facilitate the installation of Python packages";

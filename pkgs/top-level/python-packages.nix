@@ -1,11 +1,26 @@
-{ pkgs, python, buildPythonPackage }:
+{ pkgs, python }:
 
 python.modules // rec {
+
+  inherit python;
 
   inherit (pkgs) fetchurl fetchsvn stdenv;
 
   inherit (python.modules) ssl;
+
+
+  buildPythonPackage = import ../development/python-modules/generic {
+    inherit (pkgs) wrapPython lib;
+    inherit python setuptools;
+  };
+
   
+  setuptools = import ../development/python-modules/setuptools {
+    inherit (pkgs) stdenv fetchurl wrapPython;
+    inherit python;
+  };
+
+
 
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
