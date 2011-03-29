@@ -35,7 +35,7 @@ _addToPythonPath() {
     local dir="$1"
     if [ -n "${pythonPathsSeen[$dir]}" ]; then return; fi
     pythonPathsSeen[$dir]=1
-    addToSearchPath program_PYTHONPATH $dir/lib/python2.7/site-packages
+    addToSearchPath program_PYTHONPATH $dir/lib/@libPrefix@/site-packages
     addToSearchPath program_PATH $dir/bin
     local prop="$dir/nix-support/propagated-build-native-inputs"
     if [ -e $prop ]; then

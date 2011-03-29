@@ -10,16 +10,22 @@ python.modules // rec {
 
 
   buildPythonPackage = import ../development/python-modules/generic {
-    inherit (pkgs) wrapPython lib;
-    inherit python setuptools;
+    inherit (pkgs) lib;
+    inherit python wrapPython setuptools;
   };
 
   
   setuptools = import ../development/python-modules/setuptools {
-    inherit (pkgs) stdenv fetchurl wrapPython;
-    inherit python;
+    inherit (pkgs) stdenv fetchurl;
+    inherit python wrapPython;
   };
 
+
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
 
 
   argparse = buildPythonPackage (rec {

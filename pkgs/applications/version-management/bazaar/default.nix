@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages, wrapPython }:
+{ stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   version = "2.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "07kx41w4gqv68bcykdflsg68wvpmcyqknzyb4vr1zqlf27hahp53";
   };
 
-  buildInputs = [ python wrapPython ];
+  buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
 
   # Readline support is needed by bzrtools.
   pythonPath = [ pythonPackages.ssl pythonPackages.readline ];

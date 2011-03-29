@@ -312,9 +312,7 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
-  makeWrapper = makeSetupHook [] ../build-support/make-wrapper/make-wrapper.sh;
-
-  wrapPython = makeSetupHook [ makeWrapper ] ../development/python-modules/generic/wrap.sh;
+  makeWrapper = makeSetupHook {} ../build-support/make-wrapper/make-wrapper.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {

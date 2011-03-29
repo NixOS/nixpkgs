@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl, python
+{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2, xz
-, lvm2, utillinux, procps, texinfo, perl, wrapPython, pythonPackages }:
+, lvm2, utillinux, procps, texinfo, perl, pythonPackages }:
 
 with stdenv.lib;
 
@@ -50,8 +50,9 @@ stdenv.mkDerivation {
     ];
 
   buildInputs =
-    [ which zlib pkgconfig SDL openssl python libuuid gettext ncurses
-      dev86 iasl pciutils bzip2 xz texinfo perl wrapPython
+    [ which zlib pkgconfig SDL openssl libuuid gettext ncurses
+      dev86 iasl pciutils bzip2 xz texinfo perl
+      pythonPackages.python pythonPackages.wrapPython
     ];
 
   pythonPath = [ pythonPackages.curses ];

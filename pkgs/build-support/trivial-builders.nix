@@ -45,13 +45,15 @@ rec {
 
 
   # Make a package that just contains a setup hook with the given contents.
-  makeSetupHook = deps: script:
-    runCommand "hook" { }
+  makeSetupHook = { deps ? [], substitutions ? {} }: script:
+    runCommand "hook" substitutions
       (''
         ensureDir $out/nix-support
         cp ${script} $out/nix-support/setup-hook
       '' + stdenv.lib.optionalString (deps != []) ''
         echo ${toString deps} > $out/nix-support/propagated-build-native-inputs
+      '' + stdenv.lib.optionalString (substitutions != {}) ''
+        substituteAll ${script} $out/nix-support/setup-hook
       '');
 
 

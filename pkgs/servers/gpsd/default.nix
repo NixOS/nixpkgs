@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, python, pkgconfig, dbus, dbus_glib
-, ncurses, libX11, libXt, libXpm, libXaw, libXext, wrapPython
-, libxslt, xmlto, gpsdUser ? "gpsd", pythonPackages }:
+{ fetchurl, stdenv, pythonPackages, pkgconfig, dbus, dbus_glib
+, ncurses, libX11, libXt, libXpm, libXaw, libXext
+, libxslt, xmlto, gpsdUser ? "gpsd" }:
 
 stdenv.mkDerivation rec {
   name = "gpsd-2.39";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python pkgconfig dbus dbus_glib ncurses
-    libX11 libXt libXpm libXaw libXext
-    wrapPython libxslt xmlto
+    pythonPackages.python pythonPackages.wrapPython
+    pkgconfig dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
+    libxslt xmlto
   ];
 
   pythonPath = [ pythonPackages.curses ];
