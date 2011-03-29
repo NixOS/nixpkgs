@@ -643,6 +643,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
 
+  OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
+
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {
     inherit (pkgs) openal;
   };
@@ -842,6 +844,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers = self.transformers_0_2_2_0;
+
+  tuple = callPackage ../development/libraries/haskell/tuple {};
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
 
