@@ -347,7 +347,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if cross != null && libcCross != null
-    then "-g0 -O2 -idirafter ${libcCross}/include"
+    then "-idirafter ${libcCross}/include"
     else null;
 
   EXTRA_TARGET_LDFLAGS =
