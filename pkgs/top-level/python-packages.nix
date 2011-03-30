@@ -253,6 +253,20 @@ python.modules // rec {
   });
 
 
+  decorator = buildPythonPackage rec {
+    name = "decorator-3.3.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
+      md5 = "0d62c81d9db4923e88e6a94581807cf6";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/decorator;
+    };
+  };
+
+
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
     
@@ -1359,6 +1373,24 @@ python.modules // rec {
   };
 
   
+  scripttest = buildPythonPackage rec {
+    version = "1.1.1";
+    name = "scripttest-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/S/ScriptTest/ScriptTest-${version}.tar.gz";
+      md5 = "592ce890764c3f546d35b4d7c40c32ef";
+    };
+
+    buildInputs = [ nose ];
+
+    meta = {
+      description = "A library for testing interactive command-line applications";
+      homepage = http://pypi.python.org/pypi/ScriptTest/;
+    };
+  };
+
+  
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
@@ -1444,6 +1476,51 @@ python.modules // rec {
   };
 
 
+  sqlalchemy_migrate = buildPythonPackage rec {
+    name = "sqlalchemy-migrate-0.6.1";
+
+    src = fetchurl {
+      url = "http://sqlalchemy-migrate.googlecode.com/files/${name}.tar.gz";
+      sha1 = "17168b5fa066bd56fd93f26345525377e8a83d8a";
+    };
+
+    buildInputs = [ nose unittest2 scripttest ];
+
+    propagatedBuildInputs = [ tempita decorator sqlalchemy ];
+
+    preCheck =
+      ''
+        echo sqlite:///__tmp__ > test_db.cfg
+      '';
+
+    # Some tests fail with "unexpected keyword argument 'script_path'".
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/sqlalchemy-migrate/;
+      description = "Schema migration tools for SQLAlchemy";
+    };
+  };
+
+
+  tempita = buildPythonPackage rec {
+    version = "0.4";
+    name = "tempita-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/T/Tempita/Tempita-${version}.tar.gz";
+      md5 = "0abe015a72e748d0c6284679a497426c";
+    };
+
+    buildInputs = [ nose ];
+
+    meta = {
+      homepage = http://pythonpaste.org/tempita/;
+      description = "A very small text templating language";
+    };
+  };
+
+
   trac = buildPythonPackage {
     name = "trac-0.11.5";
 
@@ -1499,6 +1576,21 @@ python.modules // rec {
   };
 
 
+  unittest2 = buildPythonPackage rec {
+    name = "unittest2-0.5.1";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/u/unittest2/${name}.tar.gz";
+      md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
+    };
+
+    meta = {
+      description = "A backport of the new features added to the unittest testing framework in Python 2.7";
+      homepage = http://pypi.python.org/pypi/unittest2;
+    };
+  };
+
+  
   webob = buildPythonPackage rec {
     version = "1.0.6";
     name = "webob-${version}";
