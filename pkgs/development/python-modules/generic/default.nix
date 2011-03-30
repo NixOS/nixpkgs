@@ -24,7 +24,14 @@
     
 , buildPhase ? "true"
 
-, doCheck ? true, checkPhase ? "python setup.py test"
+, doCheck ? true
+
+, checkPhase ?
+    ''
+      runHook preCheck
+      python setup.py test
+      runHook postCheck
+    ''
 
 , postInstall ? ""
 
