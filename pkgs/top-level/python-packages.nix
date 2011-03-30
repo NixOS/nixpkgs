@@ -6,8 +6,6 @@ python.modules // rec {
 
   inherit (pkgs) fetchurl fetchsvn stdenv;
 
-  inherit (python.modules) ssl;
-
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
@@ -267,6 +265,21 @@ python.modules // rec {
   };
 
 
+  distutils_extra = buildPythonPackage rec {
+    name = "distutils-extra-2.26";
+
+    src = fetchurl {
+      url = "http://launchpad.net/python-distutils-extra/trunk/2.26/+download/python-${name}.tar.gz";
+      md5 = "7caded30a45907b5cdb10ac4182846eb";
+    };
+
+    meta = {
+      homepage = https://launchpad.net/python-distutils-extra;
+      description = "Enhancements to Python's distutils";
+    };
+  };
+
+  
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
     
@@ -1432,11 +1445,11 @@ python.modules // rec {
   };
 
   simplejson = buildPythonPackage (rec {
-    name = "simplejson-2.1.1";
+    name = "simplejson-2.1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/simplejson/${name}.tar.gz";
-      sha256 = "8c1c833c5b997bf7b75bf9a02a2d2884b8427816228eac0fb84791be44d2f612";
+      md5 = "58d9b1d8fa17ea4ce205cea088607e02";
     };
 
     meta = {
