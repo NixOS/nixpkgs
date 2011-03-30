@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool }:
+{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python }:
 
 with stdenv.lib;
 
@@ -15,19 +15,23 @@ stdenv.mkDerivation rec {
   pythonPath = with pythonPackages;
     [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
-      distutils_extra simplejson readline
+      distutils_extra simplejson readline glance cheetah
+      # !!! should libvirt be a build-time dependency?  Note that
+      # libxml2Python is a dependency of libvirt.py. 
+      libvirt libxml2Python 
     ];
 
   buildInputs =
     [ pythonPackages.python 
       pythonPackages.wrapPython
+      pythonPackages.mox
       intltool
     ] ++ pythonPath;
 
+  PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+
   preConfigure =
     ''
-      export HOME=$(pwd)
-
       # Set the built-in state location to something sensible.
       sed -i nova/flags.py \
         -e "/DEFINE.*'state_path'/ s|../|/var/lib/nova|"
@@ -58,6 +62,10 @@ stdenv.mkDerivation rec {
       cp etc/nova-api.conf $out/etc/
     '';
 
+  doCheck = false; # !!! fix
+
+  checkPhase = "python setup.py test";
+    
   meta = {
     homepage = http://nova.openstack.org/;
     description = "OpenStack Compute (a.k.a. Nova), a cloud computing fabric controller";
