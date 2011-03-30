@@ -1,5 +1,5 @@
 {stdenv, fetchurl,
-zlib, libpng, perl, expat, qt,
+zlib, libpng, libjpeg, perl, expat, qt,
 libX11, libXext, libSM, libICE,
 withKde, kdelibs, kdebase
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [zlib libpng libX11 libXext libSM libICE perl expat]
+    [zlib libpng libX11 libXext libSM libICE perl expat libjpeg]
     ++ (if withKde then [kdelibs] else [])
     ;
 
