@@ -602,6 +602,8 @@ let
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
+  euca2ools = callPackage ../tools/virtualization/euca2ools { };
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
