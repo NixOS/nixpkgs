@@ -2605,6 +2605,8 @@ let
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
+  jam = callPackage ../development/tools/build-managers/jam { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
@@ -7194,6 +7196,8 @@ let
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
     plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
   };
+
+  trigger = callPackage ../games/trigger { };
 
   ufoai = callPackage ../games/ufoai {
     inherit (gnome) gtksourceview gtkglext;
