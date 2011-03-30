@@ -114,11 +114,11 @@ python.modules // rec {
   });
 
   boto = buildPythonPackage (rec {
-    name = "boto-1.9b";
+    name = "boto-2.0b4";
 
     src = fetchurl {
       url = "http://boto.googlecode.com/files/${name}.tar.gz";
-      sha256 = "0kir3ddm79rxdf7wb5czmxpbnqzgj3j966q4mach29kkb98p48wz";
+      sha1 = "3e1deab58b8432d01baef1d37f17cbf6fa999f8d";
     };
 
     meta = {
@@ -253,6 +253,21 @@ python.modules // rec {
   });
 
 
+  dtopt = buildPythonPackage rec {
+    name = "dtopt-0.1";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/dtopt/${name}.tar.gz";
+      md5 = "9a41317149e926fcc408086aedee6bab";
+    };
+
+    meta = {
+      description = "Add options to doctest examples while they are running";
+      homepage = http://pypi.python.org/pypi/dtopt;
+    };
+  };
+
+  
   eventlet = buildPythonPackage rec {
     name = "eventlet-0.9.14";
 
@@ -403,6 +418,24 @@ python.modules // rec {
   };
 
   
+  ipy = buildPythonPackage rec {
+    version = "0.74";
+    name = "ipy-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/I/IPy/IPy-${version}.tar.gz";
+      md5 = "f4f7ddc7c5e55a47222a5cc6c0a87b6d";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Class and tools for handling of IPv4 and IPv6 addresses and networks";
+      homepage = http://pypi.python.org/pypi/IPy;
+    };
+  };
+
+  
   jinja2 = buildPythonPackage {
     name = "jinja2-2.2.1";
 
@@ -475,6 +508,28 @@ python.modules // rec {
     meta = {
       description = "A Python wrapper around libmagic";
       homepage = http://www.darwinsys.com/file/;
+    };
+  };
+
+  
+  m2crypto = buildPythonPackage rec {
+    version = "0.21.1";
+    name = "m2crypto-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/M2Crypto/M2Crypto-${version}.tar.gz";
+      md5 = "f93d8462ff7646397a9f77a2fe602d17";
+    };
+
+    buildInputs = [ pkgs.swig pkgs.openssl ];
+
+    buildPhase = "python setup.py build_ext --openssl=${pkgs.openssl}";
+
+    doCheck = false; # another test that depends on the network.
+
+    meta = {
+      description = "A Python crypto and SSL toolkit";
+      homepage = http://chandlerproject.org/Projects/MeTooCrypto;
     };
   };
 
@@ -835,6 +890,46 @@ python.modules // rec {
     };
   };
 
+
+  paste = buildPythonPackage rec {
+    name = "paste-1.7.5.1";
+    
+    src = fetchurl {
+      url = http://pypi.python.org/packages/source/P/Paste/Paste-1.7.5.1.tar.gz;
+      md5 = "7ea5fabed7dca48eb46dc613c4b6c4ed";
+    };
+
+    buildInputs = [ nose ];
+
+    doCheck = false; # some files required by the test seem to be missing
+
+    meta = {
+      description = "Tools for using a Web Server Gateway Interface stack";
+      homepage = http://pythonpaste.org/;
+    };
+  };
+
+  
+  paste_deploy = buildPythonPackage rec {
+    version = "1.3.4";
+    name = "paste-deploy-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PasteDeploy/PasteDeploy-${version}.tar.gz";
+      md5 = "eb4b3e2543d54401249c2cbd9f2d014f";
+    };
+
+    buildInputs = [ nose ];
+
+    doCheck = false; # can't find "FakeEgg.app", apparently missing from the tarball
+
+    meta = {
+      description = "Load, configure, and compose WSGI applications and servers";
+      homepage = http://pythonpaste.org/deploy/;
+    };
+  };
+
+  
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
 
@@ -1247,6 +1342,23 @@ python.modules // rec {
   };
 
   
+  routes = buildPythonPackage rec {
+    name = "routes-1.12.3";
+    
+    src = fetchurl {
+      url = http://pypi.python.org/packages/source/R/Routes/Routes-1.12.3.tar.gz;
+      md5 = "9740ff424ff6b841632c784a38fb2be3";
+    };
+
+    propagatedBuildInputs = [ paste webtest ];
+
+    meta = {
+      description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
+      homepage = http://routes.groovie.org/;
+    };
+  };
+
+  
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
@@ -1353,12 +1465,12 @@ python.modules // rec {
     };
   };
 
-  twisted = buildPythonPackage {
-    name = "twisted-10.1.0";
+  twisted = buildPythonPackage rec {
+    name = "twisted-10.2.0";
 
     src = fetchurl {
-      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.1/Twisted-10.1.0.tar.bz2;
-      sha256 = "eda6e0e9e5ef6f6c19ab75bcb094f83a12ee25fe589fbcddf946e8a655c8070b";
+      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.2/Twisted-10.2.0.tar.bz2;
+      sha256 = "110c30z622jn14yany1sxfaqj5qx20n9rc9zqacxlwma30fdcbjn";
     };
 
     propagatedBuildInputs = [ zopeInterface ];
@@ -1386,6 +1498,46 @@ python.modules // rec {
     };
   };
 
+
+  webob = buildPythonPackage rec {
+    version = "1.0.6";
+    name = "webob-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.zip";
+      md5 = "8e46dd755f6998d471bfbcb4def897ff";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    # The test requires "webtest", which is a cyclic dependency.  (WTF?)
+    doCheck = false;
+
+    meta = {
+      description = "WSGI request and response object";
+      homepage = http://pythonpaste.org/webob/;
+    };
+  };
+
+  
+  webtest = buildPythonPackage rec {
+    version = "1.2.3";
+    name = "webtest-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.tar.gz";
+      md5 = "585f9331467e6d99acaba4051c1c5878";
+    };
+
+    propagatedBuildInputs = [ nose webob dtopt ];
+
+    meta = {
+      description = "Helper to test WSGI applications";
+      homepage = http://pythonpaste.org/webtest/;
+    };
+  };
+
+  
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 
