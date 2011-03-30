@@ -74,14 +74,13 @@ in
 
   ###### implementation
 
-  config = {
+  config =
+  mkAssert
+    (cfg.client.enable || cfg.server.enable -> config.services.portmap.enable) "
+    Please enable portmap (services.portmap.enable) to use nfs-kernel.
+  " {
 
-    services.portmap.enable = cfg.client.enable || cfg.server.enable;
-    
-    assertions = mkIf (cfg.client.enable || cfg.server.enable) (singleton
-      { assertion = cfg.client.enable || cfg.server.enable;
-        message = "Please enable portmap (services.portmap.enable) to use nfs-kernel.";
-      });
+    services.portmap.enable = mkAlways (cfg.client.enable || cfg.server.enable);
 
     environment.etc = mkIf cfg.server.enable (singleton
       { source = exports;

@@ -33,12 +33,10 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.xfs.enable {
-
-    assertions = singleton
-      { assertion = config.fonts.enableFontDir;
-        message = "Please enable fontDir (fonts.enableFontDir) to use xfs.";
-      };
+  config = mkIf config.services.xfs.enable (
+  mkAssert config.fonts.enableFontDir "
+    Please enable fontDir (fonts.enableFontDir) to use xfs.
+  " {
 
     jobs.xfs =
       { description = "X Font Server";
@@ -48,6 +46,6 @@ in
         exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
       };
 
-  };
+  });
   
 }

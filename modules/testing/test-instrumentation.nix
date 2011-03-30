@@ -21,7 +21,11 @@ in
     
 {
 
-  config = {
+  config =
+  # Require a patch to the kernel to increase the 15s CIFS timeout.
+  mkAssert (config.boot.kernelPackages.kernel.features ? cifsTimeout) "
+    VM tests require that the kernel has the CIFS timeout patch.
+  " {
 
     jobs.backdoor =
       { startOn = "startup";
@@ -94,13 +98,6 @@ in
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
-
-    # Require a patch to the kernel to increase the 15s CIFS timeout.
-    assertions =
-      [ { assertion = config.boot.kernelPackages.kernel.features ? cifsTimeout;
-          message = "VM tests require that the kernel has the CIFS timeout patch.";
-        }
-      ];
 
     system.upstartEnvironment.GCOV_PREFIX = "/tmp/coverage-data";
       

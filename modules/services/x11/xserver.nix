@@ -328,23 +328,18 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
-    assertions =
-      [ { assertion = config.services.hal.enable == true;
-          message = "The X server needs HAL running. Set services.hal.enable to true";
-        }
-
-        { assertion = if cfg.startOpenSSHAgent
-                      then !cfg.startGnuPGAgent
-                      else (if cfg.startGnuPGAgent
-                            then !cfg.startOpenSSHAgent
-                            else true);
-          message =
-            "The OpenSSH agent and GnuPG agent cannot be started both.  " +
-            "Choose between `startOpenSSHAgent' and `startGnuPGAgent'.";
-        }
-      ];
+  config = mkIf cfg.enable (
+  mkAssert (config.services.hal.enable == true) "
+    The X server needs HAL running. Set services.hal.enable to true
+  " (
+  mkAssert (if cfg.startOpenSSHAgent
+            then !cfg.startGnuPGAgent
+            else (if cfg.startGnuPGAgent
+                  then !cfg.startOpenSSHAgent
+                  else true)) "
+    The OpenSSH agent and GnuPG agent cannot be started both.
+    Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+  " {
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
@@ -385,7 +380,8 @@ in
 
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
-        
+
+    services.hal.enable = mkAlways cfg.enable;
     services.hal.packages = optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
 
     jobs.xserver =
@@ -538,6 +534,6 @@ in
         '')}
       '';
 
-  };
+  }));
 
 }

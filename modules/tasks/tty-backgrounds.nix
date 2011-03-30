@@ -82,13 +82,11 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.ttyBackgrounds.enable {
-
-    assertions = singleton
-      { assertion = kernelPackages.splashutils != null;
-        message = "The kernelPackages does not provide splashutils, as required by ttyBackgrounds. " +
-          "Either provide kernelPackages with splashutils, or disable ttyBackgrounds.";
-      };
+  config = mkIf config.services.ttyBackgrounds.enable (
+  mkAssert (kernelPackages.splashutils != null) "
+    The kernelPackages does not provide splashutils, as required by ttyBackgrounds.
+    Either provide kernelPackages with splashutils, or disable ttyBackgrounds.
+  " {
 
     services.ttyBackgrounds.specificThemes = singleton
       { tty = config.services.syslogd.tty;
@@ -145,6 +143,6 @@ in
           '';
       };
     
-  };
+  });
   
 }
