@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = with pythonPackages;
     [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
-      paste_deploy m2crypto ipy boto twisted sqlalchemy_migrate
+      paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
       distutils_extra simplejson readline
     ];
 
@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
       }
       
       wrapPythonPrograms
+
+      mkdir -p $out/etc
+      cp etc/nova-api.conf $out/etc/
     '';
 
   meta = {
