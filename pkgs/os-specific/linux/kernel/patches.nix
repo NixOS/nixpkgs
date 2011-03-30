@@ -209,6 +209,7 @@ in
       name = "aufs2.1";
       patch = ./aufs2.1-37.patch;
       features.aufsBase = true;
+      features.aufs2_1 = true;
     };
 
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
