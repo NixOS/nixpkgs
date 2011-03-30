@@ -6387,6 +6387,8 @@ let
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
+  nova = callPackage ../applications/virtualization/nova { };
+
   nvi = callPackage ../applications/editors/nvi { };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
@@ -6408,8 +6410,6 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
   };
-
-  openstack_compute = callPackage ../applications/virtualization/openstack-compute { };
 
   opera = callPackage ../applications/networking/browsers/opera {
     qt = qt3;

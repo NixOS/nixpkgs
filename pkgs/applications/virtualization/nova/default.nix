@@ -5,7 +5,7 @@ with stdenv.lib;
 let version = "2011.1.1"; in
 
 stdenv.mkDerivation rec {
-  name = "openstack-compute-${version}";
+  name = "nova-${version}";
 
   src = fetchurl {
     url = "http://launchpad.net/nova/bexar/${version}/+download/nova-${version}.tar.gz";
