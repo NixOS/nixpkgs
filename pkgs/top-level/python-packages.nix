@@ -458,6 +458,27 @@ python.modules // rec {
     };
   });
 
+
+  magic = pkgs.stdenv.mkDerivation rec {
+    name = "python-${pkgs.file.name}";
+
+    src = pkgs.file.src;
+
+    buildInputs = [ python pkgs.file ];
+
+    configurePhase = "cd python";
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      description = "A Python wrapper around libmagic";
+      homepage = http://www.darwinsys.com/file/;
+    };
+  };
+
+  
   matplotlib = buildPythonPackage ( rec {
     name = "matplotlib-0.99.1.2";
 
@@ -557,6 +578,26 @@ python.modules // rec {
       license = "LGPLv2";
     };
   });
+
+
+  MySQL_python = buildPythonPackage {
+    name = "MySQL-python-1.2.3";
+
+    doCheck = false;
+
+    src = fetchurl {
+      url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
+      sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
+    };
+
+    propagatedBuildInputs = [ pkgs.mysql pkgs.zlib nose ];
+
+    meta = {
+      description = "MySQL database binding for Python";
+
+      homepage = http://sourceforge.net/projects/mysql-python;
+    };
+  };
 
 
   namebench = buildPythonPackage (rec {
@@ -1039,6 +1080,54 @@ python.modules // rec {
     };
   });
 
+  
+  pysvn = pkgs.stdenv.mkDerivation {
+    name = "pysvn-1.7.2";
+
+    src = fetchurl {
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
+      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+    };
+
+    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
+      ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
+
+    # There seems to be no way to pass that path to configure.
+    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
+
+    configurePhase = ''
+      cd Source
+      python setup.py backport
+      python setup.py configure \
+        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
+        --apr-lib-dir=${pkgs.apr}/lib \
+        --svn-root-dir=${pkgs.subversion}
+    '' + (if !stdenv.isDarwin then "" else ''
+      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
+    '');
+
+    # The regression test suite expects locale support, which our glibc
+    # doesn't have by default.
+    doCheck = false;
+    checkPhase = "make -C ../Tests";
+
+    installPhase = ''
+      dest=$(toPythonPath $out)/pysvn
+      ensureDir $dest
+      cp pysvn/__init__.py $dest/
+      cp pysvn/_pysvn*.so $dest/
+      ensureDir $out/share/doc
+      mv -v ../Docs $out/share/doc/pysvn-1.7.2
+      rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
+    '';
+
+    meta = {
+      description = "Python bindings for Subversion";
+      homepage = "http://pysvn.tigris.org/";
+    };
+  };
+
+  
   pyutil = buildPythonPackage (rec {
     name = "pyutil-1.7.9";
 
@@ -1157,90 +1246,7 @@ python.modules // rec {
      };
   };
 
-  pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.2";
-
-    src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
-      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
-    };
-
-    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
-      ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
-
-    # There seems to be no way to pass that path to configure.
-    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
-
-    configurePhase = ''
-      cd Source
-      python setup.py backport
-      python setup.py configure \
-        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
-        --apr-lib-dir=${pkgs.apr}/lib \
-        --svn-root-dir=${pkgs.subversion}
-    '' + (if !stdenv.isDarwin then "" else ''
-      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-    '');
-
-    # The regression test suite expects locale support, which our glibc
-    # doesn't have by default.
-    doCheck = false;
-    checkPhase = "make -C ../Tests";
-
-    installPhase = ''
-      dest=$(toPythonPath $out)/pysvn
-      ensureDir $dest
-      cp pysvn/__init__.py $dest/
-      cp pysvn/_pysvn*.so $dest/
-      ensureDir $out/share/doc
-      mv -v ../Docs $out/share/doc/pysvn-1.7.2
-      rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
-    '';
-
-    meta = {
-      description = "Python bindings for Subversion";
-      homepage = "http://pysvn.tigris.org/";
-    };
-  };
-
-  magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file.name}";
-
-    src = pkgs.file.src;
-
-    buildInputs = [ python pkgs.file ];
-
-    configurePhase = "cd python";
-
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
-
-    meta = {
-      description = "A Python wrapper around libmagic";
-      homepage = http://www.darwinsys.com/file/;
-    };
-  };
-
-  MySQL_python = buildPythonPackage {
-    name = "MySQL-python-1.2.3";
-
-    doCheck = false;
-
-    src = fetchurl {
-      url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
-      sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
-    };
-
-    propagatedBuildInputs = [ pkgs.mysql pkgs.zlib nose ];
-
-    meta = {
-      description = "MySQL database binding for Python";
-
-      homepage = http://sourceforge.net/projects/mysql-python;
-    };
-  };
-
+  
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
