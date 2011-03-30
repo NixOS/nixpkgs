@@ -182,6 +182,24 @@ python.modules // rec {
   };
 
 
+  cheetah = buildPythonPackage rec {
+    version = "2.4.4";
+    name = "cheetah-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/C/Cheetah/Cheetah-${version}.tar.gz";
+      md5 = "853917116e731afbc8c8a43c37e6ddba";
+    };
+
+    propagatedBuildInputs = [ markdown ];
+
+    meta = {
+      homepage = http://www.cheetahtemplate.org/;
+      description = "A template engine and code generation tool";
+    };
+  };
+
+  
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-3.1.2";
 
@@ -333,8 +351,7 @@ python.modules // rec {
 
     propagatedBuildInputs = [ greenlet ];
 
-    # It tries to scribble in ~/.python-eggs.
-    preConfigure = "export HOME=$(pwd)";
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
     doCheck = false; # !!! fix; tests access the network
 
@@ -435,6 +452,27 @@ python.modules // rec {
     meta = {
       homepage = http://code.google.com/p/python-gflags/;
       description = "A module for command line handling, similar to Google's gflags for C++";
+    };
+  };
+
+  
+  glance = buildPythonPackage rec {
+    name = "glance-0.1.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/glance/${name}.tar.gz";
+      md5 = "e733713ccd23e4a6253386a47971cfb5";
+    };
+
+    buildInputs = [ nose mox ];
+
+    propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet python.modules.ssl ];
+
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+
+    meta = {
+      homepage = https://launchpad.net/glance;
+      description = "Services for discovering, registering, and retrieving virtual machine images";
     };
   };
 
@@ -587,6 +625,23 @@ python.modules // rec {
   };
 
   
+  markdown = buildPythonPackage rec {
+    version = "2.0.3";
+    name = "markdown-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/Markdown/Markdown-2.0.3.tar.gz";
+      md5 = "751e8055be2433dfd1a82e0fb1b12f13";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://www.freewisdom.org/projects/python-markdown;
+    };
+  };
+
+  
   matplotlib = buildPythonPackage ( rec {
     name = "matplotlib-0.99.1.2";
 
@@ -672,6 +727,24 @@ python.modules // rec {
     };
   }));
 
+
+  mox = buildPythonPackage rec {
+    name = "mox-0.5.3";
+
+    src = fetchurl {
+      url = "http://pymox.googlecode.com/files/${name}.tar.gz";
+      sha1 = "b71aeaacf31898c3b38d8b9ca5bcc0664499c0de";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/pymox/;
+      description = "A mock object framework for Python.";
+    };
+  };
+
+  
   mutagen = buildPythonPackage (rec {
     name = "mutagen-1.20";
 
