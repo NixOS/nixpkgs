@@ -35,8 +35,10 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
+  doMyBuild = a.fullDepEntry ("make -j4") ["doCmake"];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMakeInstall"];
+  phaseNames = ["doCmake" "doMyBuild" "doMakeInstall"];
 
   meta = {
     description = "A 3D engine";

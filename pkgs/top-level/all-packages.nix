@@ -3841,6 +3841,10 @@ let
 
   muparser = callPackage ../development/libraries/muparser { };
 
+  mygui = callPackage ../development/libraries/mygui {};
+
+  myguiSvn = callPackage ../development/libraries/mygui/svn.nix {};
+
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = system != "i686-cygwin";
@@ -7137,6 +7141,10 @@ let
   quake3game = callPackage ../games/quake3/game { };
 
   racer = callPackage ../games/racer { };
+
+  rigsofrods = callPackage ../games/rigsofrods {
+    mygui = myguiSvn;
+  };
 
   rogue = callPackage ../games/rogue { };
 
