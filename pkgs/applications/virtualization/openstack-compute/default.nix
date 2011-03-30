@@ -24,7 +24,14 @@ stdenv.mkDerivation rec {
       intltool
     ] ++ pythonPath;
 
-  preConfigure = "export HOME=$(pwd)";
+  preConfigure =
+    ''
+      export HOME=$(pwd)
+
+      # Set the built-in state location to something sensible.
+      sed -i nova/flags.py \
+        -e "/DEFINE.*'state_path'/ s|../|/var/lib/nova|"
+    '';
   
   buildPhase = "python setup.py build";
 
