@@ -63,7 +63,24 @@ in
           ''
             mkdir -p /var/log/libvirt/qemu -m 755
             rm -f /var/run/libvirtd.pid
-          '';
+
+            mkdir -p /var/lib/libvirt -m 700
+            mkdir -p /var/lib/libvirt/dnsmasq -m 700
+
+            # Libvirt unfortunately writes mutable state (such as
+            # runtime changes to VM, network or filter configurations)
+            # to /etc.  So we can't use environment.etc to make the
+            # default network and filter definitions available, since
+            # libvirt will then modify the originals in the Nix store.
+            # So here we copy them instead.  Ugly.
+            for i in $(cd ${pkgs.libvirt}/etc && echo \
+                libvirt/qemu/networks/*.xml libvirt/qemu/networks/autostart/*.xml \
+                libvirt/nwfilter/*.xml );
+            do
+                mkdir -p /etc/$(dirname $i) -m 755
+                cp -fpd ${pkgs.libvirt}/etc/$i /etc/$i
+            done
+          ''; # */
 
         exec = "${pkgs.libvirt}/sbin/libvirtd --daemon --verbose";
 
