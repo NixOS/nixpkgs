@@ -287,6 +287,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
+  attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
+
+  attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
+
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
@@ -299,15 +303,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
 
+  blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
+
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
-  bytestring = callPackage ../development/libraries/haskell/bytestring {};
-
-  networkBytestring = callPackage ../development/libraries/haskell/network-bytestring {};
+  bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
@@ -378,6 +382,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) zlib;
   };
 
+  directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
+
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
@@ -385,6 +391,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   editline = callPackage ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
   };
+
+  enumerator = callPackage ../development/libraries/haskell/enumerator {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
@@ -543,6 +551,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) gsl liblapack/* lapack library */ blas;
   };
 
+  hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
+
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
@@ -576,6 +586,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   json = callPackage ../development/libraries/haskell/json {};
 
   json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
+
+  jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
+
+  jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {
     network = self.network_2_2_1_7;
@@ -629,6 +643,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   multirec = callPackage ../development/libraries/haskell/multirec {};
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
+
+  murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
@@ -703,6 +719,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
+  PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
+
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
   QuickCheck_1_2_0_0 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.0.nix {};
@@ -748,6 +766,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
 
+  regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
+
   regular = callPackage ../development/libraries/haskell/regular {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
@@ -759,6 +779,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   scion = callPackage ../development/libraries/haskell/scion {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
+
+  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
+  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
