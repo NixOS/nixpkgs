@@ -25,18 +25,6 @@ in
 ###### implementation
 let
 
-  copyScript = {source, target, mode ? "644", own ? "root.root"}:
-    assert target != "nixos";
-    ''
-      source="${source}"
-      target="/etc/${target}"
-      mkdir -p $(dirname "$target")
-      test -e "$target" && rm -f "$target"
-      cp "$source" "$target"
-      chown ${own} "$target"
-      chmod ${mode} "$target"
-    '';
-
   etc = pkgs.stdenv.mkDerivation {
     name = "etc";
 
