@@ -42,7 +42,7 @@ do
 
     rm -f "${url}.sig"
     wget "${url}.sig"
-    gpg --verify "${file}.sig" "${path}"
+    gpg --verify "${file}.sig" "${path}" || gpg2 --verify "${file}.sig" "${path}"
     rm "${file}.sig"
 
     cat >> "$out" <<EOF
