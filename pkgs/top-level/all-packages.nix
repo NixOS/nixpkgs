@@ -1820,6 +1820,14 @@ let
     profiledCompiler = false;
   });
 
+  gfortran46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   gcj = gcj45;
 
   gcj44 = wrapGCC (gcc44.gcc.override {
