@@ -56,6 +56,7 @@ in
 
         path =
           [ pkgs.bridge_utils pkgs.dmidecode pkgs.dnsmasq
+            pkgs.ebtables
           ] ++ optional cfg.enableKVM pkgs.qemu_kvm;
 
         preStart = 
