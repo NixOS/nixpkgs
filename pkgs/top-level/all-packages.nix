@@ -4648,6 +4648,8 @@ let
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
+  ebtables = callPackage ../os-specific/linux/ebtables { };
+
   eject = callPackage ../os-specific/linux/eject { };
 
   fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
