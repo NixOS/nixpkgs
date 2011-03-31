@@ -44,6 +44,7 @@
   ./security/polkit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
+  ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
   ./services/audio/pulseaudio.nix
   ./services/backup/hydra-mirror.nix
