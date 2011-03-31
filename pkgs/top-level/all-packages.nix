@@ -4379,7 +4379,7 @@ let
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
-  bind = callPackage ../servers/dns/bind/default.nix {
+  bind = callPackage ../servers/dns/bind {
     inherit openssl libtool perl;
   };
 
@@ -4502,6 +4502,8 @@ let
   pyMAILt = builderDefsPackage (import ../servers/xmpp/pyMAILt) {
     inherit xmpppy python makeWrapper fetchcvs;
   };
+
+  rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server { };
 
   radius = callPackage ../servers/radius { };
 
