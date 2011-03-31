@@ -1900,6 +1900,20 @@ let
     ppl = null;
   });
 
+  gnat46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gnat";
+    langCC = false;
+    langC = true;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat45;
+    # We can't use the ppl stuff, because we would have
+    # libstdc++ problems.
+    cloogppl = null;
+    ppl = null;
+    cloog = null;
+  });
+
   gnatboot = wrapGCC (import ../development/compilers/gnatboot {
     inherit fetchurl stdenv;
   });
