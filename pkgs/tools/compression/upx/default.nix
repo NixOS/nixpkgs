@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ucl, zlib, xz}:
+{stdenv, fetchurl, ucl, zlib}:
 
 stdenv.mkDerivation {
   name = "upx-3.07";
