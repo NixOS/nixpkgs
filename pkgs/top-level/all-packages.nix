@@ -649,6 +649,8 @@ let
 
   fuppes = callPackage ../tools/networking/fuppes {};
 
+  fsfs = callPackage ../tools/filesystems/fsfs { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   unix2dos = callPackage ../tools/text/unix2dos { };
