@@ -23,9 +23,9 @@ stdenv.mkDerivation {
       PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
     '';
 
-  configureFlags = "--localstatedir=/var --with-init-script=redhat";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-init-script=redhat";
 
-  installFlags = "localstatedir=$(TMPDIR)/var";
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
 
   postInstall =
     ''
