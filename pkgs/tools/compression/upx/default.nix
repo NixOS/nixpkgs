@@ -1,14 +1,28 @@
-{stdenv, fetchurl, ucl, zlib}:
+{stdenv, fetchurl, ucl, zlib, xz}:
 
 stdenv.mkDerivation {
-  name = "upx-3.04";
+  name = "upx-3.07";
   src = fetchurl {
-    url = http://upx.sourceforge.net/download/upx-3.04-src.tar.bz2;
-    sha256 = "15vxjzaf21vfanidv6d0zf37jgy4xfhn399nc66651b064pnbf39";
+    url = http://upx.sourceforge.net/download/upx-3.07-src.tar.bz2;
+    sha256 = "07pcgjn7x0a734mvhgqwz24qkm1rzqrkcp67pmagzz6i765cp7bs";
   };
+
   buildInputs = [ ucl zlib ];
 
-  preConfigure = "cd src";
+  lzmaSrc = fetchurl {
+    url = mirror://sourceforge/sevenzip/lzma443.tar.bz2;
+    sha256 = "1ck4z81y6xv1x9ky8abqn3mj9xj2dwg41bmd5j431xgi8crgd1ds";
+  };
+
+  preConfigure = "
+    export UPX_UCLDIR=${ucl}
+    mkdir lzma443
+    pushd lzma443
+    tar xf $lzmaSrc
+    popd
+    export UPX_LZMADIR=`pwd`/lzma443
+    cd src
+  ";
 
   installPhase = "ensureDir $out/bin ; cp upx.out $out/bin/upx";
 
