@@ -150,7 +150,8 @@ in
     optional 
       (! ( config.boot.kernelPackages.kernel.features ? aufs || config.boot.kernelPackages.kernel.features ? aufs2_1 ) ) 
       config.boot.kernelPackages.aufs2
-      ++ optional( config.boot.kernelPackages.kernel.features ? aufs2_1 )
+    ++ optional
+      ( config.boot.kernelPackages.kernel.features ? aufs2_1 )
       config.boot.kernelPackages.aufs2_1;
       
   boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
