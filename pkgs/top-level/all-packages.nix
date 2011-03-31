@@ -750,6 +750,7 @@ let
   };
 
   grub2 = callPackage ../tools/misc/grub/1.9x.nix { };
+
   grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
 
   gssdp = callPackage ../development/libraries/gssdp {
