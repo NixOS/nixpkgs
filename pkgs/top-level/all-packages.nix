@@ -1403,6 +1403,8 @@ let
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  vlan = callPackage ../tools/networking/vlan { };
+
   w3cCSSValidator = callPackage ../tools/misc/w3c-css-validator {
     tomcat = tomcat6;
   };
