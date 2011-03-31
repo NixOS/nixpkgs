@@ -148,8 +148,10 @@ in
   # and aufs to make the root filesystem appear writable.
   boot.extraModulePackages =
     optional 
-      (! config.boot.kernelPackages.kernel.features ? aufs) 
-      config.boot.kernelPackages.aufs2;
+      (! ( config.boot.kernelPackages.kernel.features ? aufs || config.boot.kernelPackages.kernel.features ? aufs2_1 ) ) 
+      config.boot.kernelPackages.aufs2
+      ++ optional( config.boot.kernelPackages.kernel.features ? aufs2_1 )
+      config.boot.kernelPackages.aufs2_1;
       
   boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
 
