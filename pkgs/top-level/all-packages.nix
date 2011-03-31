@@ -1858,6 +1858,20 @@ let
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
+  gcj46 = wrapGCC (gcc46.gcc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = true;
+    langC = false;
+    profiledCompiler = false;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libart_lgpl;
+    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+      libXrandr xproto renderproto xextproto inputproto randrproto;
+  });
+
   gnat = gnat45;
 
   gnat44 = wrapGCC (gcc44.gcc.override {
