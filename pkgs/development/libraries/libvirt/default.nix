@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext 
-, libtasn1
+, libtasn1, ebtables
 }:
 
-let version = "0.8.8"; in
+let version = "0.9.0-rc2"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "04z1757qpi3ssnjv5h2qnw1sds2m50yxk67cbdam6w4i50vyl2h3";
+    sha256 = "1blfx5rh8in5qn91944fz1mxv8jyigac4br8qmh7hvrw3wj2wrl9";
   };
 
   buildInputs =
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      PATH=${iproute}/sbin:${iptables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
+      PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
     '';
 
   configureFlags = "--localstatedir=/var --with-init-script=redhat";
