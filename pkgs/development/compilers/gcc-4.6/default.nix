@@ -10,7 +10,7 @@
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, mpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
-, ppl ? null, cloogppl ? null # optional, for the Graphite optimization framework
+, ppl ? null, cloogppl ? null, cloog ? null # optional, for the Graphite optimization framework. Cannot pass both cloog and cloogppl
 , bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
@@ -38,10 +38,13 @@ assert langVhdl     -> gnat != null;
 # LTO needs libelf and zlib.
 assert libelf != null -> zlib != null;
 
+# Cannot use both cloog and cloog-ppl
+assert cloog != null -> cloogppl == null;
+
 with stdenv.lib;
 with builtins;
 
-let version = "4.5.1";
+let version = "4.6.0";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -97,6 +100,7 @@ let version = "4.5.1";
         " --disable-threads " +
         " --disable-libmudflap " +
         " --disable-libgomp " +
+        " --disable-libquadmath" +
         " --disable-shared" +
         " --disable-decimal-float" # libdecnumber requires libc
         else
@@ -202,6 +206,7 @@ stdenv.mkDerivation ({
   buildInputs = [ gmp mpfr mpc libelf gettext ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
+    ++ (optional (cloog != null) cloog)
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
@@ -222,6 +227,9 @@ stdenv.mkDerivation ({
     ${if enableShared then "" else "--disable-shared"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
+    ${if cloog != null then 
+      "--with-cloog=${cloog} --enable-cloog-backend=isl" 
+      else ""}
     ${if langJava then
       "--with-ecj-jar=${javaEcj} " +
 
@@ -277,6 +285,7 @@ stdenv.mkDerivation ({
       ${if enableShared then "" else "--disable-shared"}
       ${if ppl != null then "--with-ppl=${ppl.hostDrv}" else ""}
       ${if cloogppl != null then "--with-cloog=${cloogppl.hostDrv}" else ""}
+      ${if cloog != null then "--with-cloog=${cloog.hostDrv} --enable-cloog-backend=isl" else ""}
       ${if langJava then "--with-ecj-jar=${javaEcj.hostDrv}" else ""}
       ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
       ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.hostDrv}" else ""}

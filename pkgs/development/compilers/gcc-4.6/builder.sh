@@ -201,8 +201,9 @@ postInstall() {
     rm -rf $out/bin/gccbug
     # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
     for i in $out/libexec/gcc/*/*/*; do
-        PREV_RPATH=`patchelf --print-rpath $i`
-        patchelf --set-rpath `echo $PREV_RPATH | sed 's,:[^:]*bootstrap-tools/lib,,'` $i
+        if PREV_RPATH=`patchelf --print-rpath $i`; then
+            patchelf --set-rpath `echo $PREV_RPATH | sed 's,:[^:]*bootstrap-tools/lib,,'` $i
+        fi
     done
 
     # Get rid of some "fixed" header files

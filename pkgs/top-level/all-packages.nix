@@ -1663,6 +1663,8 @@ let
 
   gcc45 = gcc45_real;
 
+  gcc46 = gcc46_real;
+
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc-4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
@@ -1731,6 +1733,16 @@ let
     inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
+    # bootstrapping a profiled compiler does not work in the sheevaplug:
+    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+  }));
+
+  gcc46_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.6) {
+    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
+      cloog gettext which noSysDirs;
+    ppl = callPackage ../development/libraries/ppl/0.11.nix { };
+    
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
