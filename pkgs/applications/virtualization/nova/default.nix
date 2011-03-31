@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python }:
+{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl }:
 
 with stdenv.lib;
 
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
       # Set the built-in state location to something sensible.
       sed -i nova/flags.py \
         -e "/DEFINE.*'state_path'/ s|../|/var/lib/nova|"
+
+      substituteInPlace nova/virt/images.py --replace /usr/bin/curl ${curl}/bin/curl
     '';
   
   buildPhase = "python setup.py build";
@@ -60,6 +62,10 @@ stdenv.mkDerivation rec {
 
       mkdir -p $out/etc
       cp etc/nova-api.conf $out/etc/
+
+      # Nova makes some weird assumptions about where to find its own
+      # programs relative to the Python directory.
+      ln -sfn $out/bin $out/lib/${pythonPackages.python.libPrefix}/site-packages/bin
     '';
 
   doCheck = false; # !!! fix
