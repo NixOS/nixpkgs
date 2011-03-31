@@ -1677,6 +1677,19 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
+  gcc46_realCross = lib.addMetaAttrs { platforms = []; }
+    (makeOverridable (import ../development/compilers/gcc-4.6) {
+      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+        cloog gettext which noSysDirs;
+      ppl = callPackage ../development/libraries/ppl/0.11.nix { };
+      binutilsCross = binutilsCross;
+      libcCross = libcCross;
+      profiledCompiler = false;
+      enableMultilib = false;
+      crossStageStatic = false;
+      cross = assert crossSystem != null; crossSystem;
+    });
+
   gcc_realCross = gcc45_realCross;
 
   gccCrossStageStatic = let
