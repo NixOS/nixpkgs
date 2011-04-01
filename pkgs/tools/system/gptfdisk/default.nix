@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid popt icu ];
 
   installPhase = ''
-    ensureDir $out/bin
+    ensureDir $out/sbin
     ensureDir $out/share/man/man8
-    install -v -m755 gdisk sgdisk fixparts $out/bin
+    install -v -m755 gdisk sgdisk fixparts $out/sbin
     install -v -m644 gdisk.8 sgdisk.8 fixparts.8 \
         $out/share/man/man8
   '';
