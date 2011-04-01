@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       
       wrapPythonPrograms
 
-      mkdir -p $out/etc
-      cp etc/nova-api.conf $out/etc/
+      mkdir -p $out/etc/nova
+      cp etc/nova-api.conf $out/etc/nova/
 
       # Nova makes some weird assumptions about where to find its own
       # programs relative to the Python directory.
