@@ -171,5 +171,6 @@
   ./tasks/swraid.nix
   ./tasks/tty-backgrounds.nix
   ./virtualisation/libvirtd.nix
+  ./virtualisation/nova.nix
   ./virtualisation/xen-dom0.nix
 ]
