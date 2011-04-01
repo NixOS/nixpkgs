@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0xd7cxn60vzhkvjwnj0i6jfcxaggwwyw2pnhl4qnb759q9hvk1b9";
   };
 
+  patches =
+    [ ./fix-dhcpbridge-output.patch ];
+
   pythonPath = with pythonPackages;
     [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
