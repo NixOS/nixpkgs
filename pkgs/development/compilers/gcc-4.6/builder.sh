@@ -46,8 +46,8 @@ if test "$noSysDirs" = "1"; then
         export NIX_FIXINC_DUMMY=/usr/include
     fi
 
-    extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY $extraFlags"
-    extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
+    extraFlags="-I$NIX_FIXINC_DUMMY $extraFlags"
+    extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
     EXTRA_FLAGS="$extraFlags"
     for i in $extraLDFlags; do
@@ -63,7 +63,7 @@ if test "$noSysDirs" = "1"; then
         unset LIBRARY_PATH
         unset CPATH
         if test -z "$crossStageStatic"; then
-            EXTRA_TARGET_CFLAGS="-g0 -O2 -B${libcCross}/lib -idirafter ${libcCross}/include"
+            EXTRA_TARGET_CFLAGS="-B${libcCross}/lib -idirafter ${libcCross}/include"
             EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib"
         fi
     else
@@ -89,8 +89,8 @@ if test "$noSysDirs" = "1"; then
             # The path to the Glibc binaries such as `crti.o'.
             glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
 
-            extraFlags="-g0 -O2 -I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
-            extraLDFlags="--strip-debug -L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
+            extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
+            extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
             EXTRA_TARGET_CFLAGS="$extraFlags"
             for i in $extraLDFlags; do

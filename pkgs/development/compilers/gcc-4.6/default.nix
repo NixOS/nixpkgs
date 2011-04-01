@@ -26,6 +26,7 @@
 , crossStageStatic ? true
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
+, stripped ? true
 }:
 
 assert langTreelang -> bison != null && flex != null;
@@ -355,7 +356,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if cross != null && libcCross != null
-    then "-g0 -O2 -idirafter ${libcCross}/include"
+    then "-idirafter ${libcCross}/include"
     else null;
 
   EXTRA_TARGET_LDFLAGS =
@@ -373,7 +374,8 @@ stdenv.mkDerivation ({
   meta = {
     homepage = http://gcc.gnu.org/;
     license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
-    description = "GNU Compiler Collection, version ${version}";
+    description = "GNU Compiler Collection, version ${version}"
+      + (if stripped then "" else " (with debugging info)");
 
     longDescription = ''
       The GNU Compiler Collection includes compiler front ends for C, C++,
@@ -401,6 +403,10 @@ stdenv.mkDerivation ({
   makeFlags = [ "all-gcc" "all-target-libgcc" ];
   installTargets = "install-gcc install-target-libgcc";
 }
+
+# GCC 4.6.0 DOES support the `install-strip' target, but we'll let`stdenv' do
+# the stripping by default to match stdenv-updates, for now
+// optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = false; }
 
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";

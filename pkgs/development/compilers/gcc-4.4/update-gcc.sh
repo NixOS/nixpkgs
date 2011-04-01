@@ -36,11 +36,13 @@ do
     file="gcc-${component}-${version}.tar.bz2"
     url="${dir}/${file}"
 
-    path_and_hash="$(nix-prefetch-url "$url" 2>&1 | grep -E '^(hash|path) is')"
-    path="$(echo $path_and_hash | sed -e's/^.*path is \([^ ]\+\).*$/\1/g')"
-    hash="$(echo $path_and_hash | sed -e's/^.*hash is \([^ ]\+\).*$/\1/g')"
+    rm -f "${file}"
 
-    rm -f "${url}.sig"
+    wget "$url"
+    hash="$(nix-hash --flat --type sha256 "$file")"
+    path="$(nix-store --add-fixed sha256 "$file")"
+
+    rm -f "${file}" "${file}.sig"
     wget "${url}.sig"
     gpg --verify "${file}.sig" "${path}" || gpg2 --verify "${file}.sig" "${path}"
     rm "${file}.sig"
