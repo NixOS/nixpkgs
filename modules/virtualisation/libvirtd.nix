@@ -84,9 +84,20 @@ in
 
         exec = "${pkgs.libvirt}/sbin/libvirtd --daemon --verbose";
 
+        # Wait until libvirtd is ready to accept requests.
+        postStart =
+          ''
+            for ((i = 0; i < 60; i++)); do
+                if ${pkgs.libvirt}/bin/virsh list > /dev/null; then exit 0; fi
+                sleep 1
+            done
+            exit 1 # !!! seems to be ignored
+          '';
+
         daemonType = "daemon";
       };
 
+    # !!! Split this into save and restore tasks.
     jobs.libvirt_guests =
       { name = "libvirt-guests";
       
@@ -103,10 +114,12 @@ in
         preStart = 
           ''
             mkdir -p /var/lock/subsys -m 755
-            ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start
+            ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start || true
           '';
 
         postStop = "${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop";
+
+        respawn = false;
       };
 
   };
