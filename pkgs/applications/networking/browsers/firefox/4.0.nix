@@ -36,7 +36,8 @@ rec {
       "--with-system-nspr"
       # "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      "--enable-system-cairo"
+      # Disabled system Cairo for now because it causes gradients in tabs etc. to be missing.
+      # "--enable-system-cairo"
       # Compiling with the Nixpkgs SQLite gives:
       # "configure: error: System SQLite library is not compiled with SQLITE_SECURE_DELETE."
       # "--enable-system-sqlite"
