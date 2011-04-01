@@ -194,17 +194,19 @@ in
 
         preStart =
           ''
+            set +e # continue in case of errors
+          
             ${flip concatMapStrings cfg.interfaces (i:
               optionalString (i.macAddress != "")
                 ''
                   echo "Setting MAC address of ${i.name} to ${i.macAddress}..."
-                  ip link set "${i.name}" address "${i.macAddress}" || true
+                  ip link set "${i.name}" address "${i.macAddress}"
                 '')
             }
 
             for i in $(cd /sys/class/net && ls -d *); do
                 echo "Bringing up network device $i..."
-                ip link set "$i" up || true
+                ip link set "$i" up
             done
 
             # Configure the manually specified interfaces.
@@ -213,7 +215,7 @@ in
                 ''
                   echo "Configuring interface ${i.name}..."
                   ip addr add "${i.ipAddress}""${optionalString (i.subnetMask != "") ("/" + i.subnetMask)}" \
-                    dev "${i.name}" || true
+                    dev "${i.name}"
                 '')
             }
 
@@ -230,20 +232,30 @@ in
 
             # Set the default gateway.
             ${optionalString (cfg.defaultGateway != "") ''
-                ip route add default via "${cfg.defaultGateway}" || true
+                ip route add default via "${cfg.defaultGateway}"
             ''}
 
             # Run any user-specified commands.
-            ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands} || true
+            ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands}
 
             # Create bridge devices.
             ${concatStrings (attrValues (flip mapAttrs cfg.bridges (n: v: ''
                 echo "Creating bridge ${n}..."
-                ${pkgs.bridge_utils}/sbin/brctl addbr "${n}" || true
+                ${pkgs.bridge_utils}/sbin/brctl addbr "${n}"
+                
                 ${flip concatMapStrings v.interfaces (i: ''
-                  ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}" || true
-                  ip addr flush dev "${i}" || true
+                  ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}"
+                  ip addr flush dev "${i}"
                 '')}
+
+                # For some reason enslaving an interface to a bridge
+                # causes traffic to be blocked for a few seconds, long
+                # enough for IPv6 router solicitations to get lost.
+                # So increase the number of attemts.
+                ${optionalString cfg.enableIPv6 ''
+                  echo 5 > /proc/sys/net/ipv6/conf/${n}/router_solicitations
+                ''}
+                
                 # !!! Should delete (brctl delif) any interfaces that
                 # no longer belong to the bridge.
             '')))}
