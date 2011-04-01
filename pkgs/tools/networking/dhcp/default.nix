@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
       # recover when the wlan interface goes down.  Instead just flush
       # all addresses, routes and neighbours of the interface.
       ./flush-if.patch
+
+      # Make sure that the hostname gets set on reboot.  Without this
+      # patch, the hostname doesn't get set properly if the old
+      # hostname (i.e. before reboot) is equal to the new hostname.
+      ./set-hostname.patch
     ];
 
   # Fixes "socket.c:591: error: invalid application of 'sizeof' to

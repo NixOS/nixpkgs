@@ -1,0 +1,14 @@
+diff -ru -x '*~' dhcp-4.1.2-P1-orig//client/scripts/linux dhcp-4.1.2-P1//client/scripts/linux
+--- dhcp-4.1.2-P1-orig//client/scripts/linux	2010-09-15 00:49:48.000000000 +0200
++++ dhcp-4.1.2-P1//client/scripts/linux	2011-04-01 16:08:10.984372269 +0200
+@@ -133,9 +133,7 @@
+      [ x$current_hostname = "x(none)" ] || \
+      [ x$current_hostname = xlocalhost ] || \
+      [ x$current_hostname = x$old_host_name ]; then
+-    if [ x$new_host_name != x$old_host_name ]; then
+-      hostname "$new_host_name"
+-    fi
++    hostname "$new_host_name"
+   fi
+     
+   if [ x$old_ip_address != x ] && [ x$alias_ip_address != x ] && \
