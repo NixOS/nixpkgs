@@ -387,6 +387,7 @@ stdenv.mkDerivation ({
     maintainers = [
       stdenv.lib.maintainers.ludo
       stdenv.lib.maintainers.viric
+      stdenv.lib.maintainers.shlevy
     ];
 
     # Volunteers needed for the {Cyg,Dar}win ports of *PPL.
