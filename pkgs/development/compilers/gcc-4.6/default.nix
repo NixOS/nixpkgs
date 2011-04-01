@@ -268,6 +268,11 @@ stdenv.mkDerivation ({
 
   targetConfig = if (cross != null) then cross.config else null;
 
+  installTargets =
+    if stripped
+    then "install-strip"
+    else "install";
+
   crossAttrs = {
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
@@ -404,8 +409,6 @@ stdenv.mkDerivation ({
   installTargets = "install-gcc install-target-libgcc";
 }
 
-# GCC 4.6.0 DOES support the `install-strip' target, but we'll let`stdenv' do
-# the stripping by default to match stdenv-updates, for now
 // optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = false; }
 
 // optionalAttrs langVhdl rec {
