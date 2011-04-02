@@ -3,6 +3,7 @@
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
+, langGo ? false
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
@@ -137,7 +138,7 @@ stdenv.mkDerivation ({
 
   src = (import ./sources.nix) {
     inherit fetchurl optional version;
-    inherit langC langCC langFortran langJava langAda;
+    inherit langC langCC langFortran langJava langAda langGo;
   };
 
   patches =
@@ -256,6 +257,7 @@ stdenv.mkDerivation ({
         ++ optional langTreelang "treelang"
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
+        ++ optional langGo       "go"
         )
       )
     }
@@ -309,6 +311,7 @@ stdenv.mkDerivation ({
           ++ optional langTreelang "treelang"
           ++ optional langAda      "ada"
           ++ optional langVhdl     "vhdl"
+          ++ optional langGo       "go"
           )
         )
       }
@@ -372,7 +375,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
-      enableMultilib version; };
+      langGo enableMultilib version; };
 
   enableParallelBuilding = true;
 

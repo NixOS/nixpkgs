@@ -1918,6 +1918,15 @@ let
     inherit fetchurl stdenv;
   });
 
+  gccgo = gccgo46;
+
+  gccgo46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gccgo";
+    langCC = true; #required for go
+    langC = true;
+    langGo = true;
+  });
+
   ghdl = wrapGCC (import ../development/compilers/gcc-4.3 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
     name = "ghdl";
