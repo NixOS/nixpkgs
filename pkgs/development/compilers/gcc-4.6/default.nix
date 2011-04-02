@@ -200,7 +200,7 @@ stdenv.mkDerivation ({
     else null;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
-    libcCross crossMingw;
+    libcCross crossMingw langCC;
 
   buildNativeInputs = [ texinfo which ]
     ++ optional (perl != null) perl;
