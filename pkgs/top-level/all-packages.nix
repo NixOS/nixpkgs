@@ -4175,6 +4175,8 @@ let
 
   speex = callPackage ../development/libraries/speex { };
 
+  sphinxbase = callPackage ../development/libraries/sphinxbase { };
+
   srtp = callPackage ../development/libraries/srtp {};
 
   sqlite = callPackage ../development/libraries/sqlite {
