@@ -152,7 +152,7 @@ $ nixos-option --install</screen>
     write a description of the configuration that you want to be built and
     activated.  The configuration is specified in a Nix expression and must
     be stored <emphasis>on the target file system</emphasis>.  The text
-    editors <command>nano</command> and <command>vi</command> are
+    editors <command>nano</command> and <command>vim</command> are
     available.</para>
 
     <para>You need to specify a root file system in

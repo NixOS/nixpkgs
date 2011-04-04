@@ -85,7 +85,7 @@
     pkgs.dar # disk archiver
 
     # Some editors.
-    pkgs.nvi
+    pkgs.vim
     pkgs.bvi # binary editor
     pkgs.joe
   ];
