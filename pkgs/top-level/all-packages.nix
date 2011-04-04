@@ -4024,6 +4024,8 @@ let
 
   plib = callPackage ../development/libraries/plib { };
 
+  pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
+
   podofo = callPackage ../development/libraries/podofo { };
 
   polkit = callPackage ../development/libraries/polkit { };
