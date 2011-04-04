@@ -6698,8 +6698,7 @@ let
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
-      numpy pyasn1;
-    mock = pythonPackages.mock060;
+      numpy pyasn1 mock;
   };
 
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {

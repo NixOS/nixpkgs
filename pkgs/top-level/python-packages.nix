@@ -256,17 +256,22 @@ python.modules // rec {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.5.1";
+    name = "darcsver-1.7.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      sha256 = "e643d607f27e4b8cc96565432ff1abdc2af5e9061c70798e2f33e78c07b66b3a";
+      md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
     };
+
+    buildInputs = [ mock ];
 
     # Note: We don't actually need to provide Darcs as a build input.
     # Darcsver will DTRT when Darcs isn't available.  See news.gmane.org
     # http://thread.gmane.org/gmane.comp.file-systems.tahoe.devel/3200 for a
     # discussion.
+
+    # Gives "ValueError: Empty module name" with no clue as to why.
+    doCheck = false;
 
     meta = {
       description = "Darcsver, generate a version number from Darcs history";
@@ -679,25 +684,16 @@ python.modules // rec {
     };
   });
 
+  
   mock = buildPythonPackage (rec {
-    name = "mock-0.1.0";
+    name = "mock-0.7.0";
 
     src = fetchurl {
-      url = "mirror://sourceforge/python-mock/pythonmock-0.1.0.zip";
-      sha256 = "0r17f8sjq6pjlfh2sq2x80bd5r6y9sb3n5l05x5sf25iaba7sg9z";
+      url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
+      md5 = "be029f8c963c55250a452c400e10cf42";
     };
 
-    buildInputs = [ pkgs.unzip ];
-
-    phases = "unpackPhase";
-
-    unpackPhase =
-      '' mkdir "${name}"
-         unzip "$src"
-
-         ensureDir "$out/lib/${python.libPrefix}/site-packages"
-         cp -v mock.py "$out/lib/${python.libPrefix}/site-packages"
-      '';
+    buildInputs = [ unittest2 ];
 
     meta = {
       description = "Mock objects for Python";
@@ -707,25 +703,6 @@ python.modules // rec {
       license = "mBSD";
     };
   });
-
-  mock060 = pkgs.lowPrio (buildPythonPackage (rec {
-    # TODO: This appears to be an unofficially hacked version of 'mock'
-    #       from above. This could probably replace the previous
-    #       package, but I don't have time to test that right now.
-    name = "mock-0.6.0";
-
-    src = fetchurl {
-      url = "http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/${name}.tar.bz2";
-      sha256 = "1vwxzr2sjyl3x5jqgz9swpmp6cyhmwmab65akysfglf6acmn3czf";
-    };
-    doCheck = false;            # Package doesn't have any tests.
-
-    meta = {
-      description = "Mock objects for Python, provided by tahoe-lafs.org";
-      homepage = "http://python-mock.sourceforge.net/";
-      license = "mBSD";
-    };
-  }));
 
 
   mox = buildPythonPackage rec {
