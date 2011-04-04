@@ -5309,6 +5309,7 @@ let
   linuxPackages_2_6_36_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_36_tuxonice pkgs.linuxPackages_2_6_36_tuxonice);
   linuxPackages_2_6_37 = recurseIntoAttrs (linuxPackagesFor linux_2_6_37 pkgs.linuxPackages_2_6_37);
   linuxPackages_2_6_37_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_37_tuxonice pkgs.linuxPackages_2_6_37_tuxonice);
+  linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
