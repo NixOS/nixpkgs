@@ -1525,11 +1525,11 @@ python.modules // rec {
   };
 
   setuptoolsTrial = buildPythonPackage {
-    name = "setuptools-trial-0.5.9";
+    name = "setuptools-trial-0.5.12";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.9.tar.gz";
-      sha256 = "4e3b5a183b9cf6ff637777c9852dfe8eaab156289e7a578525d68b1cfb3c9f29";
+      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.12.tar.gz";
+      md5 = "f16f4237c9ee483a0cd13208849d96ad";
     };
 
     propagatedBuildInputs = [ twisted ];
