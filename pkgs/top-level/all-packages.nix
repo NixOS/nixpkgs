@@ -490,6 +490,8 @@ let
 
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
+  cloog = callPackage ../development/libraries/cloog { };
+
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
   convmv = callPackage ../tools/misc/convmv { };
@@ -652,6 +654,8 @@ let
 
   fuppes = callPackage ../tools/networking/fuppes {};
 
+  fsfs = callPackage ../tools/filesystems/fsfs { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   unix2dos = callPackage ../tools/text/unix2dos { };
@@ -749,6 +753,7 @@ let
   };
 
   grub2 = callPackage ../tools/misc/grub/1.9x.nix { };
+
   grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
 
   gssdp = callPackage ../development/libraries/gssdp {
@@ -818,6 +823,8 @@ let
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
   ised = callPackage ../tools/misc/ised {};
+
+  isl = callPackage ../development/libraries/isl { };
 
   isync = callPackage ../tools/networking/isync { };
 
@@ -1636,10 +1643,25 @@ let
 
   gcc45 = gcc45_real;
 
+  gcc46 = gcc46_real;
+
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc-4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
+      binutilsCross = binutilsCross;
+      libcCross = libcCross;
+      profiledCompiler = false;
+      enableMultilib = false;
+      crossStageStatic = false;
+      cross = assert crossSystem != null; crossSystem;
+    });
+
+  gcc46_realCross = lib.addMetaAttrs { platforms = []; }
+    (makeOverridable (import ../development/compilers/gcc-4.6) {
+      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+        cloog gettext which noSysDirs;
+      ppl = callPackage ../development/libraries/ppl/0.11.nix { };
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -1709,6 +1731,16 @@ let
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
   }));
 
+  gcc46_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.6) {
+    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
+      cloog gettext which noSysDirs;
+    ppl = callPackage ../development/libraries/ppl/0.11.nix { };
+    
+    # bootstrapping a profiled compiler does not work in the sheevaplug:
+    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+  }));
+
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;
@@ -1768,6 +1800,14 @@ let
     profiledCompiler = false;
   });
 
+  gfortran46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   gcj = gcj45;
 
   gcj44 = wrapGCC (gcc44.gcc.override {
@@ -1785,6 +1825,20 @@ let
   });
 
   gcj45 = wrapGCC (gcc45.gcc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = true;
+    langC = false;
+    profiledCompiler = false;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
+    inherit (gtkLibs) gtk;
+    inherit (gnome) libart_lgpl;
+    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+      libXrandr xproto renderproto xextproto inputproto randrproto;
+  });
+
+  gcj46 = wrapGCC (gcc46.gcc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -1826,8 +1880,31 @@ let
     ppl = null;
   });
 
+  gnat46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gnat";
+    langCC = false;
+    langC = true;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat45;
+    # We can't use the ppl stuff, because we would have
+    # libstdc++ problems.
+    cloogppl = null;
+    ppl = null;
+    cloog = null;
+  });
+
   gnatboot = wrapGCC (import ../development/compilers/gnatboot {
     inherit fetchurl stdenv;
+  });
+
+  gccgo = gccgo46;
+
+  gccgo46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gccgo";
+    langCC = true; #required for go
+    langC = true;
+    langGo = true;
   });
 
   ghdl = wrapGCC (import ../development/compilers/gcc-4.3 {
@@ -1926,6 +2003,11 @@ let
   # Current default version.
   haskellPackages_ghc702 =
     haskellPackagesFun ../development/compilers/ghc/7.0.2.nix  (x : x.ghc702Prefs) false (x : x);
+
+  # Can become default after a short testing phase. There's also a minor platform
+  # release planned based on 703. Please keep at lowPrio until then.
+  haskellPackages_ghc703 =
+    haskellPackagesFun ../development/compilers/ghc/7.0.3.nix  (x : x.ghc703Prefs) false lowPrio;
 
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix   (x : x.ghcHEADPrefs) false lowPrio;
@@ -2547,6 +2629,8 @@ let
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
+
+  jam = callPackage ../development/tools/build-managers/jam { };
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
@@ -3781,6 +3865,10 @@ let
   mpich2 = callPackage ../development/libraries/mpich2 { };
 
   muparser = callPackage ../development/libraries/muparser { };
+
+  mygui = callPackage ../development/libraries/mygui {};
+
+  myguiSvn = callPackage ../development/libraries/mygui/svn.nix {};
 
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
@@ -5033,11 +5121,15 @@ let
 
     aufs2 = callPackage ../os-specific/linux/aufs2 { };
 
-    aufs2_1 = callPackage ../os-specific/linux/aufs2.1 { };
+    aufs2_1 = if kernel.features ? aufs2_1 then
+      callPackage ../os-specific/linux/aufs2.1 { }
+      else null;
+
+    aufs2_1_util = if kernel.features ? aufs2_1 then
+      callPackage ../os-specific/linux/aufs2.1-util { }
+      else null;
 
     aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
-
-    aufs2_1_util = callPackage ../os-specific/linux/aufs2.1-util { };
 
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
@@ -6620,7 +6712,7 @@ let
 
   teamspeak_client = callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
 
-  taskJuggler = callPackage ../applications/misc/taskjuggler {
+  taskjuggler = callPackage ../applications/misc/taskjuggler {
     qt = qt3;
 
     # KDE support is not working yet.
@@ -6786,6 +6878,8 @@ let
   xchm = callPackage ../applications/misc/xchm { };
 
   xcompmgr = callPackage ../applications/window-managers/xcompmgr { };
+
+  xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
@@ -7009,6 +7103,10 @@ let
 
   racer = callPackage ../games/racer { };
 
+  rigsofrods = callPackage ../games/rigsofrods {
+    mygui = myguiSvn;
+  };
+
   rogue = callPackage ../games/rogue { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
@@ -7062,11 +7160,19 @@ let
 
   tremulous = callPackage ../games/tremulous { };
 
+  speed_dreams = callPackage ../games/speed-dreams {
+    # Torcs wants to make shared libraries linked with plib libraries (it provides static).
+    # i686 is the only platform I know than can do that linking without plib built with -fPIC
+    plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+  };
+
   torcs = callPackage ../games/torcs {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
     plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
   };
+
+  trigger = callPackage ../games/trigger { };
 
   ufoai = callPackage ../games/ufoai {
     inherit (gnome) gtksourceview gtkglext;

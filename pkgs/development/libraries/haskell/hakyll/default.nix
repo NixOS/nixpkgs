@@ -1,12 +1,14 @@
-{cabal, binary, blazeHtml, hamlet, mtl, network, pandoc, regexBase,
- regexTDFA}:
+{cabal, binary, blazeHtml, hamlet, hopenssl, mtl, network, pandoc, regexBase
+, regexPCRE, snapCore, snapServer, strictConcurrency}:
 
 cabal.mkDerivation (self : {
   pname = "hakyll";
-  version = "2.4.3";
-  sha256 = "1n1hibwhg22l9p126d10zwhvaab46svcri2rkvd78f4vhmwpvkbs";
+  version = "3.0.2.0";
+  sha256 = "0d1kmvkbwygr9mxz7m8jiasrbj470j4hwsj8mmkdgdm9clxbi74k";
   propagatedBuildInputs =
-    [binary blazeHtml hamlet mtl network pandoc regexBase regexTDFA];
+    [ binary blazeHtml hamlet hopenssl mtl network pandoc regexBase
+     regexPCRE snapCore snapServer strictConcurrency
+    ];
   meta = {
     description = "A simple static site generator library";
     license = "BSD";

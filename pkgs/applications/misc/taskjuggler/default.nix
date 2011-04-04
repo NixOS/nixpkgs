@@ -1,20 +1,22 @@
 {stdenv, fetchurl,
-zlib, libpng, perl, expat, qt,
+zlib, libpng, libjpeg, perl, expat, qt,
 libX11, libXext, libSM, libICE,
 withKde, kdelibs, kdebase
 }:
 
 stdenv.mkDerivation rec {
-  name = "taskjuggler-2.4.1";
+  name = "taskjuggler-2.4.3";
   src = fetchurl {
     url = "http://www.taskjuggler.org/download/${name}.tar.bz2";
-    md5 = "18e0cec8b2ec69220ae7c9a790c16819";
+    sha256 = "14gkxa2vwfih5z7fffbavps7m44z5bq950qndigw2icam5ks83jl";
   };
 
   buildInputs =
-    [zlib libpng libX11 libXext libSM libICE perl expat]
+    [zlib libpng libX11 libXext libSM libICE perl expat libjpeg]
     ++ (if withKde then [kdelibs] else [])
     ;
+
+  patches = [ ./timezone-glibc.patch ];
 
   preConfigure = ''
     for i in $(grep -R "/bin/bash" .  | sed 's/:.*//'); do
@@ -34,6 +36,14 @@ stdenv.mkDerivation rec {
     for i in Examples/FirstProject/AccountingSoftware.tjp; do
       substituteInPlace $i --replace "icalreport" "# icalreport"
     done
+
+    for i in TestSuite/testdir TestSuite/createrefs \
+      TestSuite/Scheduler/Correct/Expression.sh; do
+      substituteInPlace $i --replace '/bin/rm' 'rm'
+    done
+
+    # Some tests require writing at $HOME
+    HOME=$TMPDIR
   '';
 
   configureFlags = "
@@ -41,7 +51,7 @@ stdenv.mkDerivation rec {
     --x-includes=${libX11}/include
     --x-libraries=${libX11}/lib
     --with-qt-dir=${qt}
-    --with-kde-support=${if withKde then "yes" else "no"}
+    --with-kde-support=${if withKde then "yes" else "no"} --with-ical-support=${if withKde then "yes" else "no"}
   ";
 
   preInstall = ''

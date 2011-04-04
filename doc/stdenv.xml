@@ -470,7 +470,7 @@ Additional file types can be supported by setting the
 <section><title>The configure phase</title>
 
 <para>The configure phase prepares the source tree for building.  The
-default <function>unpackPhase</function> runs
+default <function>configurePhase</function> runs
 <filename>./configure</filename> (typically an Autoconf-generated
 script) if it exists.</para>
 

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
 
 stdenv.mkDerivation {
-  name = "pdsh-2.23";
+  name = "pdsh-2.25";
   src = fetchurl {
-    url = "http://pdsh.googlecode.com/files/pdsh-2.23.tar.bz2";
-    sha256 = "4ff7e850ea74dd8a739aef6039288a2355b4d244c9da2c011fedf78d9ef73c23";
+    url = "http://pdsh.googlecode.com/files/pdsh-2.25.tar.bz2";
+    sha256 = "00cigkpdmabvh2aqzw2qbs6i7yj5x4lg1196ap0k9gqdnw0fd70z";
   };
 
   buildInputs = [perl readline ssh pam];

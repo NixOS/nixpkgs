@@ -2,7 +2,7 @@
 , lua, pcre, sqlite, perl, pkgconfig }:
 
 let 
-  version = "0.99.1";
+  version = "1.0";
   perlVersion = (builtins.parseDrvName perl.name).version;
 in
 
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   name = "monotone-${version}";
   
   src = fetchurl {
-    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.gz";
-    sha256 = "189h5f6gqd4ng0qmzi3xwnj17nnpxm2vzras216ar6b5yc9bnki0";
+    url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
+    sha256 = "5c530bc4652b2c08b5291659f0c130618a14780f075f981e947952dcaefc31dc";
   };
   
   buildInputs = [boost zlib botan libidn lua pcre sqlite pkgconfig];

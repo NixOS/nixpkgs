@@ -384,7 +384,7 @@ let inherit (builtins) head tail trace; in
                 echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
-        cmakeFlags = "";
+        cmakeFlags = "-DCMAKE_SKIP_BUILD_RPATH=ON";
 
 	doCmake = fullDepEntry (''
           mkdir build
