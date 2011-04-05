@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     ''
       # extboot.bin isn't installed due to a bug in the Makefile.
       cp pc-bios/optionrom/extboot.bin $out/share/qemu/
+
+      # Libvirt expects us to be called `qemu-kvm'.  Otherwise it will
+      # set the domain type to "qemu" rather than "kvm", which can
+      # cause architecture selection to misbehave.
+      ln -s $(cd $out/bin && echo qemu-system-*) $out/bin/qemu-kvm
     '';
 
   meta = {

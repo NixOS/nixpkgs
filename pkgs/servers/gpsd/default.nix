@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, python, pkgconfig, dbus, dbus_glib
-, ncurses, libX11, libXt, libXpm, libXaw, libXext, makeWrapper
+{ fetchurl, stdenv, pythonPackages, pkgconfig, dbus, dbus_glib
+, ncurses, libX11, libXt, libXpm, libXaw, libXext
 , libxslt, xmlto, gpsdUser ? "gpsd" }:
 
 stdenv.mkDerivation rec {
@@ -11,30 +11,20 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python pkgconfig dbus dbus_glib ncurses
-    libX11 libXt libXpm libXaw libXext
-    makeWrapper libxslt xmlto
+    pythonPackages.python pythonPackages.wrapPython
+    pkgconfig dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
+    libxslt xmlto
   ];
 
-  configureFlags = "--enable-dbus --enable-gpsd-user=${gpsdUser} "
+  pythonPath = [ pythonPackages.curses ];
 
+  configureFlags = "--enable-dbus --enable-gpsd-user=${gpsdUser} "
     # Make sure `xgpsspeed' has libXt and libX11 in its RPATH.
     + "LDFLAGS=-Wl,--rpath=${libXt}/lib:${libX11}/lib";
 
   doCheck = true;
 
-  postInstall = ''
-    for prog in "$out/bin"/*
-    do
-      if grep -q python "$prog"
-      then
-          echo "patching \`$prog'..."
-          wrapProgram "$prog"                                                   \
-            --prefix PATH ":" "${python}/bin"                                   \
-            --prefix PYTHONPATH ":" "$out/lib/${python.libPrefix}/site-packages"
-      fi
-    done
-  '';
+  postInstall = "wrapPythonPrograms";
 
   meta = {
     description = "`gpsd', a GPS service daemon";

@@ -1,7 +1,64 @@
-{ pkgs, python, buildPythonPackage }:
+{ pkgs, python }:
 
-rec {
+python.modules // rec {
+
+  inherit python;
+
   inherit (pkgs) fetchurl fetchsvn stdenv;
+
+
+  buildPythonPackage = import ../development/python-modules/generic {
+    inherit (pkgs) lib;
+    inherit python wrapPython setuptools;
+  };
+
+  
+  setuptools = import ../development/python-modules/setuptools {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python wrapPython;
+  };
+
+
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
+
+
+  anyjson = buildPythonPackage rec {
+    name = "anyjson-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/a/anyjson/${name}.tar.gz";
+      md5 = "2b53b5d53fc40af4da7268d3c3e35a50";
+    };
+
+    buildInputs = [ nose ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/anyjson/;
+      description = "Wrapper that selects the best available JSON implementation";
+    };
+  };
+
+
+  amqplib = buildPythonPackage rec {
+    name = "amqplib-0.6.1";
+
+    src = fetchurl {
+      url = "http://py-amqplib.googlecode.com/files/${name}.tgz";
+      sha1 = "f124e5e4a6644bf6d1734032a01ac44db1b25a29";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/py-amqplib/;
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    };
+  };
+
 
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
@@ -54,12 +111,14 @@ rec {
     };
   });
 
-  boto = buildPythonPackage (rec {
+
+  # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
+  boto_1_9 = buildPythonPackage (rec {
     name = "boto-1.9b";
 
     src = fetchurl {
       url = "http://boto.googlecode.com/files/${name}.tar.gz";
-      sha256 = "0kir3ddm79rxdf7wb5czmxpbnqzgj3j966q4mach29kkb98p48wz";
+      sha1 = "00a033b0a593c3ca82927867950f73d88b831155";
     };
 
     meta = {
@@ -77,6 +136,70 @@ rec {
     };
   });
 
+
+  boto = buildPythonPackage (rec {
+    name = "boto-2.0b4";
+
+    src = fetchurl {
+      url = "http://boto.googlecode.com/files/${name}.tar.gz";
+      sha1 = "3e1deab58b8432d01baef1d37f17cbf6fa999f8d";
+    };
+
+    meta = {
+      homepage = http://code.google.com/p/boto/;
+
+      license = "bsd";
+
+      description = "Python interface to Amazon Web Services";
+
+      longDescription = ''
+        The boto module is an integrated interface to current and
+        future infrastructural services offered by Amazon Web
+        Services.  This includes S3, SQS, EC2, among others.
+      '';
+    };
+  });
+
+
+  carrot = buildPythonPackage rec {
+    name = "carrot-0.10.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/carrot/${name}.tar.gz";
+      md5 = "530a0614de3a669314c3acd4995c54d5";
+    };
+
+    buildInputs = [ nose ];
+
+    propagatedBuildInputs = [ amqplib anyjson ];
+
+    doCheck = false; # depends on the network
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/carrot;
+      description = "AMQP Messaging Framework for Python";
+    };
+  };
+
+
+  cheetah = buildPythonPackage rec {
+    version = "2.4.4";
+    name = "cheetah-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/C/Cheetah/Cheetah-${version}.tar.gz";
+      md5 = "853917116e731afbc8c8a43c37e6ddba";
+    };
+
+    propagatedBuildInputs = [ markdown ];
+
+    meta = {
+      homepage = http://www.cheetahtemplate.org/;
+      description = "A template engine and code generation tool";
+    };
+  };
+
+  
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-3.1.2";
 
@@ -133,17 +256,22 @@ rec {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.5.1";
+    name = "darcsver-1.7.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      sha256 = "e643d607f27e4b8cc96565432ff1abdc2af5e9061c70798e2f33e78c07b66b3a";
+      md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
     };
+
+    buildInputs = [ mock ];
 
     # Note: We don't actually need to provide Darcs as a build input.
     # Darcsver will DTRT when Darcs isn't available.  See news.gmane.org
     # http://thread.gmane.org/gmane.comp.file-systems.tahoe.devel/3200 for a
     # discussion.
+
+    # Gives "ValueError: Empty module name" with no clue as to why.
+    doCheck = false;
 
     meta = {
       description = "Darcsver, generate a version number from Darcs history";
@@ -172,6 +300,50 @@ rec {
   });
 
 
+  decorator = buildPythonPackage rec {
+    name = "decorator-3.3.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
+      md5 = "0d62c81d9db4923e88e6a94581807cf6";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/decorator;
+    };
+  };
+
+
+  distutils_extra = buildPythonPackage rec {
+    name = "distutils-extra-2.26";
+
+    src = fetchurl {
+      url = "http://launchpad.net/python-distutils-extra/trunk/2.26/+download/python-${name}.tar.gz";
+      md5 = "7caded30a45907b5cdb10ac4182846eb";
+    };
+
+    meta = {
+      homepage = https://launchpad.net/python-distutils-extra;
+      description = "Enhancements to Python's distutils";
+    };
+  };
+
+  
+  dtopt = buildPythonPackage rec {
+    name = "dtopt-0.1";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/dtopt/${name}.tar.gz";
+      md5 = "9a41317149e926fcc408086aedee6bab";
+    };
+
+    meta = {
+      description = "Add options to doctest examples while they are running";
+      homepage = http://pypi.python.org/pypi/dtopt;
+    };
+  };
+
+  
   eventlet = buildPythonPackage rec {
     name = "eventlet-0.9.14";
 
@@ -180,14 +352,13 @@ rec {
       md5 = "dfc96ed14b27392fdc529abcafeed880";
     };
 
-    buildInputs = [ nose httplib2 ];
+    buildInputs = [ nose httplib2  ];
 
     propagatedBuildInputs = [ greenlet ];
 
-    # It tries to scribble in ~/.python-eggs.
-    preConfigure = "export HOME=$(pwd)";
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
-    doCheck = false; # !!! fix; test requires ssl support in Python
+    doCheck = false; # !!! fix; tests access the network
 
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
@@ -290,6 +461,27 @@ rec {
   };
 
   
+  glance = buildPythonPackage rec {
+    name = "glance-0.1.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/glance/${name}.tar.gz";
+      md5 = "e733713ccd23e4a6253386a47971cfb5";
+    };
+
+    buildInputs = [ nose mox ];
+
+    propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet python.modules.ssl ];
+
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+
+    meta = {
+      homepage = https://launchpad.net/glance;
+      description = "Services for discovering, registering, and retrieving virtual machine images";
+    };
+  };
+
+  
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
 
@@ -318,6 +510,24 @@ rec {
     meta = {
       homepage = http://code.google.com/p/httplib2/;
       description = "A comprehensive HTTP client library";
+    };
+  };
+
+  
+  ipy = buildPythonPackage rec {
+    version = "0.74";
+    name = "ipy-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/I/IPy/IPy-${version}.tar.gz";
+      md5 = "f4f7ddc7c5e55a47222a5cc6c0a87b6d";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Class and tools for handling of IPv4 and IPv6 addresses and networks";
+      homepage = http://pypi.python.org/pypi/IPy;
     };
   };
 
@@ -377,6 +587,66 @@ rec {
     };
   });
 
+
+  magic = pkgs.stdenv.mkDerivation rec {
+    name = "python-${pkgs.file.name}";
+
+    src = pkgs.file.src;
+
+    buildInputs = [ python pkgs.file ];
+
+    configurePhase = "cd python";
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      description = "A Python wrapper around libmagic";
+      homepage = http://www.darwinsys.com/file/;
+    };
+  };
+
+  
+  m2crypto = buildPythonPackage rec {
+    version = "0.21.1";
+    name = "m2crypto-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/M2Crypto/M2Crypto-${version}.tar.gz";
+      md5 = "f93d8462ff7646397a9f77a2fe602d17";
+    };
+
+    buildInputs = [ pkgs.swig pkgs.openssl ];
+
+    buildPhase = "python setup.py build_ext --openssl=${pkgs.openssl}";
+
+    doCheck = false; # another test that depends on the network.
+
+    meta = {
+      description = "A Python crypto and SSL toolkit";
+      homepage = http://chandlerproject.org/Projects/MeTooCrypto;
+    };
+  };
+
+  
+  markdown = buildPythonPackage rec {
+    version = "2.0.3";
+    name = "markdown-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/Markdown/Markdown-2.0.3.tar.gz";
+      md5 = "751e8055be2433dfd1a82e0fb1b12f13";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://www.freewisdom.org/projects/python-markdown;
+    };
+  };
+
+  
   matplotlib = buildPythonPackage ( rec {
     name = "matplotlib-0.99.1.2";
 
@@ -414,25 +684,16 @@ rec {
     };
   });
 
+  
   mock = buildPythonPackage (rec {
-    name = "mock-0.1.0";
+    name = "mock-0.7.0";
 
     src = fetchurl {
-      url = "mirror://sourceforge/python-mock/pythonmock-0.1.0.zip";
-      sha256 = "0r17f8sjq6pjlfh2sq2x80bd5r6y9sb3n5l05x5sf25iaba7sg9z";
+      url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
+      md5 = "be029f8c963c55250a452c400e10cf42";
     };
 
-    buildInputs = [ pkgs.unzip ];
-
-    phases = "unpackPhase";
-
-    unpackPhase =
-      '' mkdir "${name}"
-         unzip "$src"
-
-         ensureDir "$out/lib/${python.libPrefix}/site-packages"
-         cp -v mock.py "$out/lib/${python.libPrefix}/site-packages"
-      '';
+    buildInputs = [ unittest2 ];
 
     meta = {
       description = "Mock objects for Python";
@@ -443,25 +704,24 @@ rec {
     };
   });
 
-  mock060 = pkgs.lowPrio (buildPythonPackage (rec {
-    # TODO: This appears to be an unofficially hacked version of 'mock'
-    #       from above. This could probably replace the previous
-    #       package, but I don't have time to test that right now.
-    name = "mock-0.6.0";
+
+  mox = buildPythonPackage rec {
+    name = "mox-0.5.3";
 
     src = fetchurl {
-      url = "http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/${name}.tar.bz2";
-      sha256 = "1vwxzr2sjyl3x5jqgz9swpmp6cyhmwmab65akysfglf6acmn3czf";
+      url = "http://pymox.googlecode.com/files/${name}.tar.gz";
+      sha1 = "b71aeaacf31898c3b38d8b9ca5bcc0664499c0de";
     };
-    doCheck = false;            # Package doesn't have any tests.
+
+    doCheck = false;
 
     meta = {
-      description = "Mock objects for Python, provided by tahoe-lafs.org";
-      homepage = "http://python-mock.sourceforge.net/";
-      license = "mBSD";
+      homepage = http://code.google.com/p/pymox/;
+      description = "A mock object framework for Python.";
     };
-  }));
+  };
 
+  
   mutagen = buildPythonPackage (rec {
     name = "mutagen-1.20";
 
@@ -476,6 +736,26 @@ rec {
       license = "LGPLv2";
     };
   });
+
+
+  MySQL_python = buildPythonPackage {
+    name = "MySQL-python-1.2.3";
+
+    doCheck = false;
+
+    src = fetchurl {
+      url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
+      sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
+    };
+
+    propagatedBuildInputs = [ pkgs.mysql pkgs.zlib nose ];
+
+    meta = {
+      description = "MySQL database binding for Python";
+
+      homepage = http://sourceforge.net/projects/mysql-python;
+    };
+  };
 
 
   namebench = buildPythonPackage (rec {
@@ -571,11 +851,11 @@ rec {
   });
 
   nose = buildPythonPackage {
-    name = "nose-0.11.3";
+    name = "nose-1.0.0";
 
     src = fetchurl {
-      url = http://python-nose.googlecode.com/files/nose-0.11.3.tar.gz;
-      sha256 = "1hl3lbwdfl2a64q3dxc73kbiks4iwx5cixlbavyryd8xdr7iziww";
+      url = http://somethingaboutorange.com/mrl/projects/nose/nose-1.0.0.tar.gz;
+      sha256 = "0qm6q232h5r071gwfkiszkmfqc60k7abl15bk495lcdkk62m91db";
     };
 
     meta = {
@@ -713,6 +993,46 @@ rec {
     };
   };
 
+
+  paste = buildPythonPackage rec {
+    name = "paste-1.7.5.1";
+    
+    src = fetchurl {
+      url = http://pypi.python.org/packages/source/P/Paste/Paste-1.7.5.1.tar.gz;
+      md5 = "7ea5fabed7dca48eb46dc613c4b6c4ed";
+    };
+
+    buildInputs = [ nose ];
+
+    doCheck = false; # some files required by the test seem to be missing
+
+    meta = {
+      description = "Tools for using a Web Server Gateway Interface stack";
+      homepage = http://pythonpaste.org/;
+    };
+  };
+
+  
+  paste_deploy = buildPythonPackage rec {
+    version = "1.3.4";
+    name = "paste-deploy-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PasteDeploy/PasteDeploy-${version}.tar.gz";
+      md5 = "eb4b3e2543d54401249c2cbd9f2d014f";
+    };
+
+    buildInputs = [ nose ];
+
+    doCheck = false; # can't find "FakeEgg.app", apparently missing from the tarball
+
+    meta = {
+      description = "Load, configure, and compose WSGI applications and servers";
+      homepage = http://pythonpaste.org/deploy/;
+    };
+  };
+
+  
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
 
@@ -958,6 +1278,54 @@ rec {
     };
   });
 
+  
+  pysvn = pkgs.stdenv.mkDerivation {
+    name = "pysvn-1.7.2";
+
+    src = fetchurl {
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
+      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+    };
+
+    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
+      ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
+
+    # There seems to be no way to pass that path to configure.
+    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
+
+    configurePhase = ''
+      cd Source
+      python setup.py backport
+      python setup.py configure \
+        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
+        --apr-lib-dir=${pkgs.apr}/lib \
+        --svn-root-dir=${pkgs.subversion}
+    '' + (if !stdenv.isDarwin then "" else ''
+      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
+    '');
+
+    # The regression test suite expects locale support, which our glibc
+    # doesn't have by default.
+    doCheck = false;
+    checkPhase = "make -C ../Tests";
+
+    installPhase = ''
+      dest=$(toPythonPath $out)/pysvn
+      ensureDir $dest
+      cp pysvn/__init__.py $dest/
+      cp pysvn/_pysvn*.so $dest/
+      ensureDir $out/share/doc
+      mv -v ../Docs $out/share/doc/pysvn-1.7.2
+      rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
+    '';
+
+    meta = {
+      description = "Python bindings for Subversion";
+      homepage = "http://pysvn.tigris.org/";
+    };
+  };
+
+  
   pyutil = buildPythonPackage (rec {
     name = "pyutil-1.7.9";
 
@@ -1076,90 +1444,42 @@ rec {
      };
   };
 
-  pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.2";
-
+  
+  routes = buildPythonPackage rec {
+    name = "routes-1.12.3";
+    
     src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
-      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+      url = http://pypi.python.org/packages/source/R/Routes/Routes-1.12.3.tar.gz;
+      md5 = "9740ff424ff6b841632c784a38fb2be3";
     };
 
-    buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
-      ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
-
-    # There seems to be no way to pass that path to configure.
-    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
-
-    configurePhase = ''
-      cd Source
-      python setup.py backport
-      python setup.py configure \
-        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
-        --apr-lib-dir=${pkgs.apr}/lib \
-        --svn-root-dir=${pkgs.subversion}
-    '' + (if !stdenv.isDarwin then "" else ''
-      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-    '');
-
-    # The regression test suite expects locale support, which our glibc
-    # doesn't have by default.
-    doCheck = false;
-    checkPhase = "make -C ../Tests";
-
-    installPhase = ''
-      dest=$(toPythonPath $out)/pysvn
-      ensureDir $dest
-      cp pysvn/__init__.py $dest/
-      cp pysvn/_pysvn*.so $dest/
-      ensureDir $out/share/doc
-      mv -v ../Docs $out/share/doc/pysvn-1.7.2
-      rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
-    '';
+    propagatedBuildInputs = [ paste webtest ];
 
     meta = {
-      description = "Python bindings for Subversion";
-      homepage = "http://pysvn.tigris.org/";
+      description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
+      homepage = http://routes.groovie.org/;
     };
   };
 
-  magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file.name}";
-
-    src = pkgs.file.src;
-
-    buildInputs = [ python pkgs.file ];
-
-    configurePhase = "cd python";
-
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
-
-    meta = {
-      description = "A Python wrapper around libmagic";
-      homepage = http://www.darwinsys.com/file/;
-    };
-  };
-
-  MySQL_python = buildPythonPackage {
-    name = "MySQL-python-1.2.3";
-
-    doCheck = false;
-
+  
+  scripttest = buildPythonPackage rec {
+    version = "1.1.1";
+    name = "scripttest-${version}";
+    
     src = fetchurl {
-      url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
-      sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
+      url = "http://pypi.python.org/packages/source/S/ScriptTest/ScriptTest-${version}.tar.gz";
+      md5 = "592ce890764c3f546d35b4d7c40c32ef";
     };
 
-    propagatedBuildInputs = [ pkgs.mysql pkgs.zlib nose ];
+    buildInputs = [ nose ];
 
     meta = {
-      description = "MySQL database binding for Python";
-
-      homepage = http://sourceforge.net/projects/mysql-python;
+      description = "A library for testing interactive command-line applications";
+      homepage = http://pypi.python.org/pypi/ScriptTest/;
     };
   };
 
+  
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
@@ -1182,11 +1502,11 @@ rec {
   };
 
   setuptoolsTrial = buildPythonPackage {
-    name = "setuptools-trial-0.5.9";
+    name = "setuptools-trial-0.5.12";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.9.tar.gz";
-      sha256 = "4e3b5a183b9cf6ff637777c9852dfe8eaab156289e7a578525d68b1cfb3c9f29";
+      url = "http://pypi.python.org/packages/source/s/setuptools_trial/setuptools_trial-0.5.12.tar.gz";
+      md5 = "f16f4237c9ee483a0cd13208849d96ad";
     };
 
     propagatedBuildInputs = [ twisted ];
@@ -1201,11 +1521,11 @@ rec {
   };
 
   simplejson = buildPythonPackage (rec {
-    name = "simplejson-2.1.1";
+    name = "simplejson-2.1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/simplejson/${name}.tar.gz";
-      sha256 = "8c1c833c5b997bf7b75bf9a02a2d2884b8427816228eac0fb84791be44d2f612";
+      md5 = "58d9b1d8fa17ea4ce205cea088607e02";
     };
 
     meta = {
@@ -1224,6 +1544,71 @@ rec {
       license = "MIT";
     };
   });
+
+
+  sqlalchemy = buildPythonPackage {
+    name = "sqlalchemy-0.6.6";
+
+    src = fetchurl {
+      url = mirror://sourceforge/sqlalchemy/0.6.6/SQLAlchemy-0.6.6.tar.gz;
+      sha256 = "0inj9b66pi447cw500mqn7d09dij20ic3k5bnyhj6rpdl2l83a0l";
+    };
+
+    buildInputs = [ nose ];
+
+    propagatedBuildInputs = [ python.modules.sqlite3 ];
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
+  };
+
+
+  sqlalchemy_migrate = buildPythonPackage rec {
+    name = "sqlalchemy-migrate-0.6.1";
+
+    src = fetchurl {
+      url = "http://sqlalchemy-migrate.googlecode.com/files/${name}.tar.gz";
+      sha1 = "17168b5fa066bd56fd93f26345525377e8a83d8a";
+    };
+
+    buildInputs = [ nose unittest2 scripttest ];
+
+    propagatedBuildInputs = [ tempita decorator sqlalchemy ];
+
+    preCheck =
+      ''
+        echo sqlite:///__tmp__ > test_db.cfg
+      '';
+
+    # Some tests fail with "unexpected keyword argument 'script_path'".
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/sqlalchemy-migrate/;
+      description = "Schema migration tools for SQLAlchemy";
+    };
+  };
+
+
+  tempita = buildPythonPackage rec {
+    version = "0.4";
+    name = "tempita-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/T/Tempita/Tempita-${version}.tar.gz";
+      md5 = "0abe015a72e748d0c6284679a497426c";
+    };
+
+    buildInputs = [ nose ];
+
+    meta = {
+      homepage = http://pythonpaste.org/tempita/;
+      description = "A very small text templating language";
+    };
+  };
+
 
   trac = buildPythonPackage {
     name = "trac-0.11.5";
@@ -1246,12 +1631,12 @@ rec {
     };
   };
 
-  twisted = buildPythonPackage {
-    name = "twisted-10.1.0";
+  twisted = buildPythonPackage rec {
+    name = "twisted-10.2.0";
 
     src = fetchurl {
-      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.1/Twisted-10.1.0.tar.bz2;
-      sha256 = "eda6e0e9e5ef6f6c19ab75bcb094f83a12ee25fe589fbcddf946e8a655c8070b";
+      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.2/Twisted-10.2.0.tar.bz2;
+      sha256 = "110c30z622jn14yany1sxfaqj5qx20n9rc9zqacxlwma30fdcbjn";
     };
 
     propagatedBuildInputs = [ zopeInterface ];
@@ -1279,6 +1664,61 @@ rec {
     };
   };
 
+
+  unittest2 = buildPythonPackage rec {
+    name = "unittest2-0.5.1";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/u/unittest2/${name}.tar.gz";
+      md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
+    };
+
+    meta = {
+      description = "A backport of the new features added to the unittest testing framework in Python 2.7";
+      homepage = http://pypi.python.org/pypi/unittest2;
+    };
+  };
+
+  
+  webob = buildPythonPackage rec {
+    version = "1.0.6";
+    name = "webob-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.zip";
+      md5 = "8e46dd755f6998d471bfbcb4def897ff";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    # The test requires "webtest", which is a cyclic dependency.  (WTF?)
+    doCheck = false;
+
+    meta = {
+      description = "WSGI request and response object";
+      homepage = http://pythonpaste.org/webob/;
+    };
+  };
+
+  
+  webtest = buildPythonPackage rec {
+    version = "1.2.3";
+    name = "webtest-${version}";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.tar.gz";
+      md5 = "585f9331467e6d99acaba4051c1c5878";
+    };
+
+    propagatedBuildInputs = [ nose webob dtopt ];
+
+    meta = {
+      description = "Helper to test WSGI applications";
+      homepage = http://pythonpaste.org/webtest/;
+    };
+  };
+
+  
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 
@@ -1345,4 +1785,5 @@ rec {
       license = "ZPL";
     };
   };
+
 }

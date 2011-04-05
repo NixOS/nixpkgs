@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, makeWrapper, docutils
-, guiSupport ? false, tk ? null }:
+, guiSupport ? false, tk ? null, ssl }:
 
 stdenv.mkDerivation rec {
   name = "mercurial-1.7.5";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath $out)" \
+          --prefix PYTHONPATH : "$(toPythonPath "$out ${ssl}")" \
           $WRAP_TK
       done
 

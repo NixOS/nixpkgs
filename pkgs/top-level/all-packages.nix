@@ -312,7 +312,7 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
-  makeWrapper = makeSetupHook ../build-support/make-wrapper/make-wrapper.sh;
+  makeWrapper = makeSetupHook {} ../build-support/make-wrapper/make-wrapper.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {
@@ -343,6 +343,7 @@ let
   };
 
   platforms = import ./platforms.nix;
+  
 
   ### TOOLS
 
@@ -603,6 +604,8 @@ let
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
+  euca2ools = callPackage ../tools/virtualization/euca2ools { };
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
@@ -669,9 +672,7 @@ let
 
   gengetopt = callPackage ../development/tools/misc/gengetopt { };
 
-  getmail = callPackage ../tools/networking/getmail {
-    python = pythonFull;
-  };
+  getmail = callPackage ../tools/networking/getmail { };
 
   getopt = callPackage ../tools/misc/getopt { };
 
@@ -1005,19 +1006,8 @@ let
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
 
-  offlineimap = import ../tools/networking/offlineimap {
-    inherit fetchurl;
-    # I did not find any better way of reusing buildPythonPackage+setuptools
-    # for a python with openssl support
-    buildPythonPackage = assert pythonFull.opensslSupport;
-      import ../development/python-modules/generic {
-        inherit makeWrapper lib;
-        python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-          inherit makeWrapper;
-          python = pythonFull;
-        };
-      };
+  offlineimap = callPackage ../tools/networking/offlineimap {
+    ssl = pythonPackages.ssl;
   };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -1420,6 +1410,8 @@ let
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  vlan = callPackage ../tools/networking/vlan { };
+
   w3cCSSValidator = callPackage ../tools/misc/w3c-css-validator {
     tomcat = tomcat6;
   };
@@ -1533,19 +1525,7 @@ let
 
   dash = callPackage ../shells/dash { };
 
-  ipython = callPackage ../shells/ipython {
-    # I did not find any better way of reusing buildPythonPackage+setuptools
-    # for a python with openssl support
-    buildPythonPackage = assert pythonFull.readlineSupport;
-      import ../development/python-modules/generic {
-        inherit makeWrapper lib;
-        python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-          inherit makeWrapper;
-          python = pythonFull;
-        };
-      };
- };
+  ipython = callPackage ../shells/ipython { };
 
   tcsh = callPackage ../shells/tcsh { };
 
@@ -2370,49 +2350,17 @@ let
 
   polyml = callPackage ../development/compilers/polyml { };
 
-  python = if getConfig ["python" "full"] false then pythonFull else pythonBase;
-  python26 = if getConfig ["python" "full"] false then python26Full else python26Base;
-  python27 = if getConfig ["python" "full"] false then python27Full else python27Base;
-  pythonBase = python26Base;
-  pythonFull = python26Full;
-
-  pythonWrapper = callPackage ../development/interpreters/python/wrapper.nix { };
-
-  python24 = callPackage ../development/interpreters/python/2.4 { };
-
-  python26Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.6) {
-    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then darwinSwVersUtility else null;
-  });
-
-  python26Full = lowPrio (python26Base.override {
-    # FIXME: We lack ncurses support, needed, e.g., for `gpsd'.
-    db4 = if getConfig ["python" "db4Support"] true then db4 else null;
-    sqlite = if getConfig ["python" "sqliteSupport"] true then sqlite else null;
-    readline = if getConfig ["python" "readlineSupport"] true then readline else null;
-    openssl = if getConfig ["python" "opensslSupport"] true then openssl else null;
-    tk = if getConfig ["python" "tkSupport"] true then tk else null;
-    tcl = if getConfig ["python" "tkSupport"] true then tcl else null;
-    libX11 = if getConfig ["python" "tkSupport"] true then xlibs.libX11 else null;
-    xproto = if getConfig ["python" "tkSupport"] true then xlibs.xproto else null;
-    ncurses = if getConfig ["python" "curses"] true then ncurses else null;
-  });
-
-  python27Base = lowPrio (makeOverridable (import ../development/interpreters/python/2.7) {
-    inherit (pkgs) fetchurl stdenv zlib bzip2 gdbm;
-    arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
-  });
-
-  python27Full = lowPrio (python27Base.override {
-    inherit (pkgs) db4 sqlite readline openssl tcl tk ncurses;
-    inherit (pkgs.xlibs) libX11 xproto;
-  });
+  python = python27;
+  
+  python27 = callPackage ../development/interpreters/python/2.7 { };
 
   python3 = callPackage ../development/interpreters/python/3.1 {
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
+  };
+
+  pythonFull = callPackage ../development/interpreters/python/wrapper.nix {
+    extraLibs = lib.attrValues python.modules;
   };
 
   pyrex = pyrex095;
@@ -4445,34 +4393,13 @@ let
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  buildPythonPackage = import ../development/python-modules/generic {
-    inherit python setuptools makeWrapper lib;
-  };
+  buildPythonPackage = pythonPackages.buildPythonPackage;
 
-  buildPython26Package = import ../development/python-modules/generic {
-    inherit makeWrapper lib;
-    python = python26;
-    setuptools = setuptools.override { python = python26; };
-  };
-
-  buildPython27Package = import ../development/python-modules/generic {
-    inherit makeWrapper lib;
-    python = python27;
-    setuptools = setuptools.override { python = python27; doCheck = false; };
-  };
-
-  pythonPackages = python26Packages;
-
-  python26Packages = recurseIntoAttrs (import ./python-packages.nix {
-    inherit pkgs;
-    python = python26;
-    buildPythonPackage = buildPython26Package;
-  });
+  pythonPackages = python27Packages;
 
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     python = python27;
-    buildPythonPackage = buildPython27Package;
   });
 
   foursuite = callPackage ../development/python-modules/4suite { };
@@ -4515,9 +4442,7 @@ let
 
   pyxml = callPackage ../development/python-modules/pyxml { };
 
-  setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-    inherit python makeWrapper;
-  };
+  setuptools = pythonPackages.setuptools;
 
   wxPython = wxPython26;
 
@@ -4531,10 +4456,13 @@ let
 
   ZopeInterface = pythonPackages.zopeInterface;
 
+  /*
   zope = callPackage ../development/python-modules/zope {
     python = python24;
   };
+  */
 
+  
   ### SERVERS
 
   rdf4store = callPackage ../servers/http/4store { };
@@ -4545,7 +4473,7 @@ let
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
-  bind = callPackage ../servers/dns/bind/default.nix {
+  bind = callPackage ../servers/dns/bind {
     inherit openssl libtool perl;
   };
 
@@ -4669,6 +4597,8 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
+  rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server { };
+
   radius = callPackage ../servers/radius { };
 
   redstore = callPackage ../servers/http/redstore { };
@@ -4702,17 +4632,8 @@ let
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus hal libuuid openssl gperf m4
-      autoconf libtool xmlto asciidoc udev bison flex;
-
-    # XXX: Update to newer Automake on the next big rebuild; better yet:
-    # remove the dependency on Automake.
+      autoconf libtool xmlto asciidoc udev flex bison python;
     automake = automake110x;
-
-    # !!! pythonBase is used instead of python because this causes an
-    # infinite recursion when the flag python.full is set to true.
-    # Packages contained in the loop are python, tk, xlibs-wrapper,
-    # libX11, libxcd (and xcb-proto).
-    python = pythonBase;
   });
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
@@ -4819,6 +4740,8 @@ let
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
+  ebtables = callPackage ../os-specific/linux/ebtables { };
+
   eject = callPackage ../os-specific/linux/eject { };
 
   fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
@@ -4897,9 +4820,7 @@ let
 
   ifplugd = callPackage ../os-specific/linux/ifplugd { };
 
-  iotop = callPackage ../os-specific/linux/iotop {
-    python = pythonFull;
-  };
+  iotop = callPackage ../os-specific/linux/iotop { };
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
@@ -5794,9 +5715,7 @@ let
 
   batik = callPackage ../applications/graphics/batik { };
 
-  bazaar = callPackage ../applications/version-management/bazaar {
-    python = pythonFull;
-  };
+  bazaar = callPackage ../applications/version-management/bazaar { };
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
     inherit bazaar;
@@ -5809,7 +5728,7 @@ let
 
   bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
     qt = qt4;
-  } ;
+  };
 
   bitcoin = callPackage ../applications/misc/bitcoin { 
     wxGTK = wxGTK290;
@@ -5819,19 +5738,7 @@ let
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
-  # commented out because it's using the new configuration style proposal which is unstable
-  #biew = import ../applications/misc/biew {
-  #  inherit lib stdenv fetchurl ncurses;
-  #};
-
-  # only to be able to compile blender - I couldn't compile the default openal software
-  # Perhaps this can be removed - don't know which one openal{,soft} is better
-  freealut_soft = callPackage ../development/libraries/freealut {
-    openal = openalSoft;  };
-
-  blender = callPackage ../applications/misc/blender/2.49.nix {
-    python = python26Base;
-  };
+  blender = callPackage ../applications/misc/blender/2.49.nix { };
 
   blender_2_50 = lowPrio (import ../applications/misc/blender {
     inherit stdenv fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
@@ -5842,10 +5749,7 @@ let
 
   bvi = callPackage ../applications/editors/bvi { };
 
-  calibre = callPackage ../applications/misc/calibre {
-    python = python26Full;
-    inherit (python26Packages) mechanize lxml dateutil cssutils beautifulsoap;
-  };
+  calibre = callPackage ../applications/misc/calibre { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
@@ -6283,10 +6187,7 @@ let
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
-  gpsd = callPackage ../servers/gpsd {
-    # We need a Python with NCurses bindings.
-    python = pythonFull;
-  };
+  gpsd = callPackage ../servers/gpsd { };
 
   guitone = callPackage ../applications/version-management/guitone { };
 
@@ -6398,18 +6299,6 @@ let
   kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
 
   keepnote = callPackage ../applications/office/keepnote {
-    # I did not find any better way of reusing buildPythonPackage+setuptools
-    # for a python with openssl support
-    buildPythonPackage = assert pythonFull.sqliteSupport;
-      import ../development/python-modules/generic {
-        inherit makeWrapper lib;
-        python = pythonFull;
-        setuptools = builderDefsPackage (import ../development/python-modules/setuptools) {
-          inherit makeWrapper;
-          python = pythonFull;
-        };
-      };
-    # How could this pygtk use also pythonFull, I don't know.
     pygtk = pyGtkGlade;
   };
 
@@ -6490,10 +6379,7 @@ let
 
   mercurial = callPackage ../applications/version-management/mercurial {
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
-    python = # allow cloning sources from https servers.
-      if getConfig ["mercurial" "httpsSupport"] true
-      then pythonFull
-      else pythonBase;
+    inherit (pythonPackages) ssl;
   };
 
   merkaartor = callPackage ../applications/misc/merkaartor {
@@ -6604,6 +6490,8 @@ let
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
+  nova = callPackage ../applications/virtualization/nova { };
+
   nvi = callPackage ../applications/editors/nvi { };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
@@ -6625,8 +6513,6 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
   };
-
-  openstack_compute = callPackage ../applications/virtualization/openstack-compute { };
 
   opera = callPackage ../applications/networking/browsers/opera {
     qt = qt3;
@@ -6817,8 +6703,7 @@ let
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
-      numpy pyasn1;
-    mock = pythonPackages.mock060;
+      numpy pyasn1 mock;
   };
 
   tailor = builderDefsPackage (import ../applications/version-management/tailor) {
@@ -7002,9 +6887,7 @@ let
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
-  xen = callPackage ../applications/virtualization/xen {
-    python = pythonFull;
-  };
+  xen = callPackage ../applications/virtualization/xen { };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;

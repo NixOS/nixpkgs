@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, buildPythonPackage }:
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages }:
 
 buildPythonPackage {
   name = "ipython-0.10.1";
+  namePrefix = "";
 
   src = fetchurl {
     url = "http://ipython.scipy.org/dist/0.10.1/ipython-0.10.1.tar.gz";
     sha256 = "18zwrg25zn72w4rmcwxzcw11ibgp001fawm2sz189zv86z70fxi2";
   };
+
+  propagatedBuildInputs = [ pythonPackages.readline ];
 
   doCheck = false;
 

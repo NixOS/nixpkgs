@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt4, mechanize, lxml, dateutil
-, pil, cssutils, beautifulsoap, makeWrapper, unrar, chmlib
+, imagemagick, libjpeg, fontconfig, podofo, qt4
+, pil, makeWrapper, unrar, chmlib, pythonPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pyqt4 sip popplerQt4 pkgconfig libpng imagemagick libjpeg
-      fontconfig podofo qt4 mechanize lxml dateutil pil makeWrapper
-      cssutils beautifulsoap chmlib
+      fontconfig podofo qt4 pil makeWrapper chmlib 
+      pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
+      pythonPackages.cssutils pythonPackages.beautifulsoap pythonPackages.sqlite3
     ];
 
   installPhase = ''

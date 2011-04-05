@@ -212,17 +212,18 @@ rec {
   };
 
   gccWithStaticLibs = stdenvLinuxBoot3Pkgs.gcc.gcc.override (rec {
-        ppl = stdenvLinuxBoot3Pkgs.ppl.override {
-          static = true;
-          gmpxx = stdenvLinuxBoot3Pkgs.gmpxx.override {
-            static = true;
-          };
-        };
-        cloogppl = stdenvLinuxBoot3Pkgs.cloogppl.override {
-          inherit ppl;
-          static = true;
-        };
-      });
+    ppl = stdenvLinuxBoot3Pkgs.ppl.override {
+      static = true;
+      gmpxx = stdenvLinuxBoot3Pkgs.gmpxx.override {
+        static = true;
+      };
+    };
+    cloogppl = stdenvLinuxBoot3Pkgs.cloogppl.override {
+      inherit ppl;
+      static = true;
+    };
+  });
+
 
   # 8) Construct a fourth stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
