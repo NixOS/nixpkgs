@@ -221,8 +221,7 @@ stdenv.mkDerivation ({
 
   configureFlagsArray = stdenv.lib.optionals
     (ppl != null && ppl.dontDisableStatic == true)
-        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s"
-            "--with-stage1-libs=-lstdc++ -lgcc_s" ];
+        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s" ];
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
