@@ -50,6 +50,7 @@ in
         # starts as a non-login shell.
         source = ./bashrc-user.sh;
         target = "skel/.bashrc";
+        mode = "0644";
       }
       
       { # Configuration for readline in bash.
