@@ -2,7 +2,7 @@
 
 let
   version = "0.10.2";
-  staticFlags = if static then " --enable-static --disable-shared --disable-watchdog" else "";
+  staticFlags = if static then " --enable-static --disable-shared" else "";
 in
   stdenv.mkDerivation rec {
     name = "ppl-${version}";
