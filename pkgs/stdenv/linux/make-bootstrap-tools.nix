@@ -218,7 +218,7 @@ rec {
 
       buildCommand = ''
         ${build}/in-nixpkgs/mkdir $out
-        ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -V -i)
+        ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -v -i)
 
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             echo patching $i
