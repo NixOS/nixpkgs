@@ -77,6 +77,7 @@ rec {
       CLEAR
       CONFIG_STATIC y
       CONFIG_CPIO y
+      # (shlevy) Are these necessary?
       CONFIG_FEATURE_CPIO_O y
       CONFIG_FEATURE_CPIO_P y
     '';
