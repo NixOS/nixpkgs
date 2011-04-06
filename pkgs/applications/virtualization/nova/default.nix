@@ -52,11 +52,13 @@ stdenv.mkDerivation rec {
       python setup.py install --prefix=$out
 
       # Nova doesn't like to be called ".nova-foo-wrapped" because it
-      # computes some stuff from its own argv[0].  So call the wrapped
-      # programs ".nova-foo" by overriding wrapProgram.
+      # computes some stuff from its own argv[0].  So put the wrapped
+      # programs in $out/libexec under their original names.
+      mkdir -p $out/libexec/nova
+      
       wrapProgram() {
           local prog="$1"
-          local hidden="$(dirname "$prog")/.$(basename "$prog")"
+          local hidden=$out/libexec/nova/$(basename "$prog")
           mv $prog $hidden
           makeWrapper $hidden $prog "$@"
       }
