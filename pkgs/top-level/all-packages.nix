@@ -5343,6 +5343,8 @@ let
     stdenv = overrideGCC stdenv gcc34;
   };
 
+  multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
+
   nettools = callPackage ../os-specific/linux/net-tools { };
 
   neverball = callPackage ../games/neverball { };
