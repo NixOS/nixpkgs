@@ -1,15 +1,15 @@
 { fetchurl, stdenv, gmpxx, perl, gnum4, static ? false }:
 
 let
-  version = "0.10.2";
-  staticFlags = if static then " --enable-static --disable-shared" else "";
+  version = "0.11";
+  staticFlags = if static then " --enable-static --disable-shared --disable-watchdog" else "";
 in
   stdenv.mkDerivation rec {
     name = "ppl-${version}";
 
     src = fetchurl {
       url = "mirror://gcc/infrastructure/ppl-${version}.tar.gz";
-      sha256 = "0lly44sac4jd72klnhhil3wha15vak76r6gy88sh0zjsaww9hf6h";
+      sha256 = "0xqwyaj232gi0pgm6z2rihk6p8l1rngbbibnhmcrbq4jq550clrl";
     };
 
     buildNativeInputs = [ perl gnum4 ];
