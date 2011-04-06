@@ -12,11 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cloog-ppl-0.15.9";
+  name = "cloog-ppl-0.15.11";
 
   src = fetchurl {
     url = "mirror://gcc/infrastructure/${name}.tar.gz";
-    sha256 = "19a2n75k3d3n8llng25f2g88lpvd4zn0lm073rkndjw6l6yd8m4c";
+    sha256 = "0psdm0bn5gx60glfh955x5b3b23zqrd92idmjr0b00dlnb839mkw";
   };
 
   propagatedBuildInputs = [ ppl ];
