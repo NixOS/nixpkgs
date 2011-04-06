@@ -6135,6 +6135,7 @@ let
 
   giv = callPackage ../applications/graphics/giv {
     inherit (gtkLibs) gdk_pixbuf gtk gob2;
+    pcre = pcre.override { unicodeSupport = true; };
   };
 
   gnucash = callPackage ../applications/office/gnucash {
