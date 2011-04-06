@@ -1747,6 +1747,19 @@ let
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
   }));
 
+  # A non-stripped version of GCC.
+  gcc46_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.6 {
+    stripped = false;
+
+    inherit noSysDirs;
+    cross = null;
+    libcCross = null;
+    binutilsCross = null;
+
+    ppl = ppl0_11;
+    cloogppl = null;
+  }));
+
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
       inherit fetchurl stdenv noSysDirs;

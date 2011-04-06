@@ -132,7 +132,7 @@ in
 assert gtk != null -> (filter (x: x == null) xlibs) == [];
 
 stdenv.mkDerivation ({
-  name = "${name}-${version}" + crossNameAddon;
+  name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
 
   builder = ./builder.sh;
 
