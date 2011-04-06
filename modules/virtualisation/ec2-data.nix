@@ -18,18 +18,22 @@
           echo "setting host name..."
           ${pkgs.nettools}/bin/hostname $(${pkgs.curl}/bin/curl http://169.254.169.254/1.0/meta-data/hostname)
 
-          echo "obtaining SSH key..."
-          mkdir -p /root/.ssh
-          ${pkgs.curl}/bin/curl --retry 3 --retry-delay 0 --fail \
-            -o /root/key.pub \
-            http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
-          if [ $? -eq 0 -a -e /root/key.pub ]; then
-              if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
-                  cat /root/key.pub >> /root/.ssh/authorized_keys
-                  echo "new key added to authorized_keys"
+          # Don't download the SSH key if it has already been injected
+          # into the image (a Nova feature).
+          if ! [ -e /root/.ssh/authorized_keys ]; then
+              echo "obtaining SSH key..."
+              mkdir -p /root/.ssh
+              ${pkgs.curl}/bin/curl --retry 3 --retry-delay 0 --fail \
+                -o /root/key.pub \
+                http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
+              if [ $? -eq 0 -a -e /root/key.pub ]; then
+                  if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
+                      cat /root/key.pub >> /root/.ssh/authorized_keys
+                      echo "new key added to authorized_keys"
+                  fi
+                  chmod 600 /root/.ssh/authorized_keys
+                  rm -f /root/key.pub
               fi
-              chmod 600 /root/.ssh/authorized_keys
-              rm -f /root/key.pub
           fi
 
           # Print the host public key on the console so that the user
