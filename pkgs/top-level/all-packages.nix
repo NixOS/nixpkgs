@@ -2371,6 +2371,8 @@ let
 
   python = python27;
   
+  python26 = callPackage ../development/interpreters/python/2.6 { };
+
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
   python3 = callPackage ../development/interpreters/python/3.1 {
@@ -4417,6 +4419,11 @@ let
   buildPythonPackage = pythonPackages.buildPythonPackage;
 
   pythonPackages = python27Packages;
+
+  python26Packages = recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+    python = python26;
+  });
 
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
