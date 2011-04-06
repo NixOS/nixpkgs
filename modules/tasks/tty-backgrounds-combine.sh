@@ -7,8 +7,8 @@ ensureDir $out
 
 defaultName=$(cd $default && ls | grep -v default)
 echo $defaultName
-ln -s $default/default $out/default
-ln -s $defaultName $out/$defaultName
+ln -s $default/$defaultName $out/$defaultName
+ln -s $defaultName $out/default
 
 for ((n = 0; n < ${#ttys[*]}; n++)); do
     tty=${ttys[$n]}
