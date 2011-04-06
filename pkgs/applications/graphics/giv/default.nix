@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i s,/usr/local,$out, SConstruct 
   '';
 
-  patches = [ /tmp/patch ];
+  patches = [ ./build.patch ];
 
   buildPhase = "scons";
 
