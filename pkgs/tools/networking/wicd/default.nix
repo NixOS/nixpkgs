@@ -6,11 +6,11 @@
 # on urwid which has not been packaged at this time (2009-12-27).
 
 stdenv.mkDerivation rec {
-  name = "wicd-1.7.0";
+  name = "wicd-1.7.1-beta2";
   
   src = fetchurl {
-    url = "mirror://sourceforge/project/wicd/wicd-stable/${name}/${name}.tar.bz2";
-    sha256 = "0civfmpjlsvnaiw7fkpq34mh5ndhfzb9mkl3q2d3rjd4z0mnki8l";
+    url = "mirror://sourceforge/wicd/wicd-1.7.1b2.tar.bz2";
+    sha256 = "13ga6a2ip8dy8h49wvv02jxxfvpk5q5sm2wz76dy62y1xsrm23c1";
   };
 
   buildInputs = [ python ];
@@ -18,8 +18,13 @@ stdenv.mkDerivation rec {
   patches = [ ./no-var-install.patch ./pygtk.patch ./mkdir-networks.patch ];
 
   # Should I be using pygtk's propogated build inputs?
+  # !!! Should use makeWrapper.
   postPatch = ''
+    # We don't have "python2".
+    substituteInPlace wicd/wicd-daemon.py --replace 'misc.find_path("python2")' "'${python}/bin/python'"
+    
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
+    
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${iproute}/sbin" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pythonDBus})" in/scripts=wicd.in
     sed -i "4iexport LC_ALL=\\\"${locale}\\\"" in/scripts=wicd.in
