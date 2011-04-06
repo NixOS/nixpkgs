@@ -203,16 +203,15 @@ stdenv.mkDerivation ({
     libcCross crossMingw;
 
   buildNativeInputs = [ texinfo which ]
-    ++ optional (perl != null) perl;
-    
+    ++ optional langJava perl;
+
   buildInputs = [ gmp mpfr mpc libelf gettext ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optional (cloog != null) cloog)
     ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
-    ++ (optional (boehmgc != null) boehmgc)
-    ++ (optionals langJava [zip unzip])
+    ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
