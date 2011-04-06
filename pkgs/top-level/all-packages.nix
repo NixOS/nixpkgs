@@ -3293,6 +3293,8 @@ let
 
     gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
 
+    gob2 = callPackage ../development/tools/misc/gob2 { };
+
   });
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
@@ -6109,6 +6111,10 @@ let
   });
   git = gitAndTools.git;
   gitFull = gitAndTools.gitFull;
+
+  giv = callPackage ../applications/graphics/giv {
+    inherit (gtkLibs) gdk_pixbuf gtk gob2;
+  };
 
   gnucash = callPackage ../applications/office/gnucash {
     inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml

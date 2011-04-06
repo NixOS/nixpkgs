@@ -1,0 +1,56 @@
+Get the environment propagated to scons forked childs, and correct the dicom plugin about
+a typedef of size_t that failed at least on x86_64-linux.
+
+diff --git a/SConstruct b/SConstruct
+index 16eccd9..603e931 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -7,8 +7,7 @@ else:
+     cppflags = ['-O2']
+     variant = 'Release'
+ 
+-env = Environment(LIBPATH=[],
+-                  CPPFLAGS = cppflags)
++env = Environment(ENV = os.environ)
+ 
+ env['SBOX'] = False
+ 
+diff --git a/giv/SConstruct b/giv/SConstruct
+index 047839a..2c267aa 100644
+--- a/giv/SConstruct
++++ b/giv/SConstruct
+@@ -3,8 +3,9 @@
+ 
+ import sys
+ import re
++import os
+ 
+-env = Environment()
++env = Environment(ENV = os.environ)
+ 
+ src = ["giv.c",
+        "giv-backstore.c",
+diff --git a/src/plugins/dcmtk/SConstruct.standalone b/src/plugins/dcmtk/SConstruct.standalone
+index ffce001..74246f8 100644
+--- a/src/plugins/dcmtk/SConstruct.standalone
++++ b/src/plugins/dcmtk/SConstruct.standalone
+@@ -1,4 +1,6 @@
+-env = Environment()
++import os
++
++env = Environment(ENV = os.environ)
+ 
+ variant = "Debug"
+ 
+diff --git a/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h b/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h
+index 32dbcbb..c456604 100644
+--- a/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h
++++ b/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h
+@@ -332,7 +332,6 @@ typedef int pid_t;
+ #endif
+ 
+ /* Define `size_t' to `unsigned' if <sys/types.h> does not define. */
+-#define HAVE_NO_TYPEDEF_SIZE_T 1
+ #ifdef HAVE_NO_TYPEDEF_SIZE_T
+ typedef unsigned size_t;
+ #endif
