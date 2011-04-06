@@ -4867,6 +4867,8 @@ let
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
+  libaio = callPackage ../os-specific/linux/libaio { };
+
   libcgroup = callPackage ../os-specific/linux/libcg { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
