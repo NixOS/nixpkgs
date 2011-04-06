@@ -3,15 +3,15 @@
 with pkgs.lib;
 
 {
-  require = [ ./ec2-data.nix ];
+  require = [ ../profiles/qemu-guest.nix ./ec2-data.nix ];
 
-  system.build.amazonImage =
+  system.build.novaImage =
     pkgs.vmTools.runInLinuxVM (
-      pkgs.runCommand "amazon-image"
+      pkgs.runCommand "nova-image"
         { preVM =
             ''
               mkdir $out
-              diskImage=$out/nixos.img
+              diskImage=$out/image
               ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "4G"
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
@@ -19,20 +19,29 @@ with pkgs.lib;
             [ "closure" config.system.build.toplevel ];
         }
         ''
+          # Create a single / partition.
+          ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
+          ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
+          . /sys/class/block/vda1/uevent
+          mknod /dev/vda1 b $MAJOR $MINOR
+        
           # Create an empty filesystem and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda
-          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda
+          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda1
+          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
           mkdir /mnt
-          mount /dev/vda /mnt
+          mount /dev/vda1 /mnt
 
           # The initrd expects these directories to exist.
           mkdir /mnt/dev /mnt/proc /mnt/sys
+          mount --bind /proc /mnt/proc
+          mount --bind /dev /mnt/dev
+          mount --bind /sys /mnt/sys
 
           # Copy all paths in the closure to the filesystem.
           storePaths=$(perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure)
 
           mkdir -p /mnt/nix/store
-          cp -prvd $storePaths /mnt/nix/store/
+          ${pkgs.rsync}/bin/rsync -av $storePaths /mnt/nix/store/
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure | \
@@ -48,11 +57,12 @@ with pkgs.lib;
 
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
-          cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
+          #cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
 
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
+          umount /mnt/proc /mnt/dev /mnt/sys
           umount /mnt
         ''
     );
@@ -61,30 +71,33 @@ with pkgs.lib;
     [ { mountPoint = "/";
         device = "/dev/disk/by-label/nixos";
       }
-      { mountPoint = "/ephemeral0";
-        device = "/dev/xvdc";
-        neededForBoot = true;
-      }
+      #{ mountPoint = "/ephemeral0";
+      #  device = "/dev/xvdc";
+      #  neededForBoot = true;
+      #}
     ];
 
+  /*
   swapDevices =
     [ { device = "/dev/xvdb"; } ];
+  */
+  
+  boot.kernelParams = [ "console=ttyS0" ];
 
-  boot.initrd.kernelModules = [ "xen-blkfront" "aufs" ];
-  boot.kernelModules = [ "xen-netfront" ];
+  boot.initrd.kernelModules = [ "aufs" ];
 
   boot.extraModulePackages = [ config.boot.kernelPackages.aufs2 ];
 
-  # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
-  boot.loader.grub.device = "nodev";
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.timeout = 0;
-  boot.loader.grub.extraPerEntryConfig = "root (hd0)";
 
   # Put /tmp and /var on /ephemeral0, which has a lot more space.  
   # Unfortunately we can't do this with the `fileSystems' option 
   # because it has no support for creating the source of a bind 
   # mount.  Also, "move" /nix to /ephemeral0 by layering an AUFS
   # on top of it so we have a lot more space for Nix operations.
+  /*
   boot.initrd.postMountCommands =
     ''
       mkdir -m 1777 -p $targetRoot/ephemeral0/tmp
@@ -98,6 +111,7 @@ with pkgs.lib;
       mkdir -m 755 -p $targetRoot/ephemeral0/nix
       mount -t aufs -o dirs=$targetRoot/ephemeral0/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
     '';
+    */
 
   # There are no virtual consoles.
   services.mingetty.ttys = [ ];
