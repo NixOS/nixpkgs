@@ -59,7 +59,10 @@ in
 
     system.activationScripts.nova =
       ''
-        mkdir -m 700 -p /var/lib/nova
+        mkdir -m 755 -p /var/lib/nova
+        mkdir -m 755 -p /var/lib/nova/networks
+        mkdir -m 700 -p /var/lib/nova/instances
+        mkdir -m 700 -p /var/lib/nova/keys
 
         # Allow the CA certificate generation script (called by
         # nova-api) to work.
@@ -80,7 +83,9 @@ in
 
         startOn = "ip-up";
 
-        path = [ pkgs.openssl ];
+        # `openssl' is required to generate the CA.  `openssh' is
+        # required to generate key pairs.
+        path = [ pkgs.openssl pkgs.openssh ];
           
         exec = "${nova}/bin/nova-api";
       };
@@ -94,6 +99,11 @@ in
         description = "Nova simple object store service";
 
         startOn = "ip-up";
+
+        preStart =
+          ''
+            mkdir -m 700 -p /var/lib/nova/images
+          '';
 
         exec = "${nova}/bin/nova-objectstore --nodaemon";
       };
