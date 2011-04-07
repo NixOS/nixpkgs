@@ -17,6 +17,7 @@
 , pango
 , cairo
 , atk
+, gdk_pixbuf
 , debug ? false
 
 /* you have to add ~/mm.cfg :
@@ -75,7 +76,7 @@ stdenv.mkDerivation {
 
   rpath = stdenv.lib.makeLibraryPath
     [ zlib alsaLib curl nss nspr fontconfig freetype expat libX11
-      libXext libXrender libXt gtk glib pango atk cairo
+      libXext libXrender libXt gtk glib pango atk cairo gdk_pixbuf
     ];
 
   buildPhase = ":";

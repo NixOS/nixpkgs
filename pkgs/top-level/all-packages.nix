@@ -6101,7 +6101,7 @@ let
     import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
       inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat cairo;
       inherit (xlibs) libX11 libXext libXrender libXt ;
-      inherit (gtkLibs) gtk glib pango atk;
+      inherit (gtkLibs) gtk glib pango atk gdk_pixbuf;
       debug = getConfig ["flashplayer" "debug"] false;
     });
 
