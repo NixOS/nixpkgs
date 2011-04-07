@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
         -e "/DEFINE.*'state_path'/ s|../|/var/lib/nova|"
 
       substituteInPlace nova/virt/images.py --replace /usr/bin/curl ${curl}/bin/curl
+
+      substituteInPlace nova/api/ec2/cloud.py \
+        --replace 'sh genrootca.sh' $out/libexec/nova/genrootca.sh
     '';
   
   buildPhase = "python setup.py build";
@@ -71,6 +74,10 @@ stdenv.mkDerivation rec {
       # Nova makes some weird assumptions about where to find its own
       # programs relative to the Python directory.
       ln -sfn $out/bin $out/lib/${pythonPackages.python.libPrefix}/site-packages/bin
+
+      # Install the certificate generation script.
+      cp CA/genrootca.sh $out/libexec/nova/
+      cp CA/openssl.cnf.tmpl $out/libexec/nova/
     '';
 
   doCheck = false; # !!! fix
