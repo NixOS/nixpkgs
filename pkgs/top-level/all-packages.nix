@@ -6622,6 +6622,11 @@ let
 
   pstree = callPackage ../applications/misc/pstree { };
 
+  puredata = callPackage ../applications/audio/puredata {
+    inherit (gtkLibs) glib;
+    inherit (xlibs) libX11;
+  };
+
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qemu = callPackage ../applications/virtualization/qemu/0.13.nix { };
