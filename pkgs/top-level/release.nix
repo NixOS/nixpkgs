@@ -436,11 +436,31 @@ with (import ./release-lib.nix);
     kile = linux;
   };
 
+  linuxPackages_2_6_25 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
   linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_28 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
+  linuxPackages_2_6_29 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
+  linuxPackages_2_6_31 = {
+    aufs = linux;
+    kernel = linux;
   };
 
   linuxPackages_2_6_32 = {
