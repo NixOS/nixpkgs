@@ -41,7 +41,7 @@ in
 
   config = mkIf cfg.enableSingleNode {
 
-    environment.systemPackages = [ nova ];
+    environment.systemPackages = [ nova pkgs.euca2ools ];
 
     environment.etc =
       [ # The Paste configuration file for nova-api.
@@ -56,6 +56,19 @@ in
 
     # `qemu-nbd' required the `nbd' kernel module.
     boot.kernelModules = [ "nbd" ];
+
+    system.activationScripts.nova =
+      ''
+        mkdir -m 700 -p /var/lib/nova
+
+        # Allow the CA certificate generation script (called by
+        # nova-api) to work.
+        mkdir -m 700 -p /var/lib/nova/CA /var/lib/nova/CA/private
+        cp -p ${nova}/libexec/nova/openssl.cnf.tmpl /var/lib/nova/CA/
+
+        # Initialise the SQLite database.        
+        ${nova}/bin/nova-manage db sync
+      '';
       
     # `nova-api' receives and executes external client requests from
     # tools such as euca2ools.  It listens on port 8773 (XML) and 8774
@@ -67,6 +80,8 @@ in
 
         startOn = "ip-up";
 
+        path = [ pkgs.openssl ];
+          
         exec = "${nova}/bin/nova-api";
       };
 
