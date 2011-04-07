@@ -810,6 +810,8 @@ let
     inherit (perlPackages) MailIMAPClient;
   };
 
+  inadyn = callPackage ../tools/networking/inadyn { };
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   iodine = callPackage ../tools/networking/iodine { };
