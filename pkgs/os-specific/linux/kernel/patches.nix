@@ -286,4 +286,11 @@ in
     sha256 = "0acllabvbm9pmjnh0zx9mgnp47xbrl9ih6i037c85h0ymnjsxdhk";
   };
 
+  glibc_getline =
+    {
+      # Patch to work around conflicting types for the `getline' function
+      # with recent Glibcs (2009).
+      name = "glibc-getline";
+      patch = ./getline.patch;
+    };
 }
