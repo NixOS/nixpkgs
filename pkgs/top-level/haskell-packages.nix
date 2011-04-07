@@ -1027,6 +1027,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Compilers.
 
+  AgdaExecutable = callPackage ../development/compilers/Agda-executable {};
+
   ehc = callPackage ../development/compilers/ehc {
     inherit (pkgs) fetchsvn stdenv coreutils glibc m4 libtool llvm;
   };
