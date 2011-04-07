@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  patches = [ ./no-var-install.patch ./pygtk.patch ./mkdir-networks.patch ];
+  patches = [ ./no-var-install.patch ./mkdir-networks.patch ./pygtk.patch ./no-optimization.patch ];
 
   # Should I be using pygtk's propogated build inputs?
   # !!! Should use makeWrapper.
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     --icons=$out/share/icons/hicolour/ \
     --translations=$out/share/locale/ \
     --autostart=$out/etc/xdg/autostart/ \
-    --varlib=$out/share/ \
+    --varlib=/var/lib/wicd/ \
     --docdir=$out/share/doc/ \
     --mandir=$out/share/man/ \
     --kdedir=$out/share/autostart/ \
