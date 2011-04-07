@@ -1,14 +1,14 @@
 { stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String, QuickCheck2, pcreLight }:
 
 let
-  version = "0.20110320";
+  version = "0.20110401";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/g/git-annex/git-annex_${version}.tar.gz";
-    sha256 = "1waq9kx8yzyhaf3yib2adz91vqs2csa3lyxm5w7kvyqdq2yymhs4";
+    sha256 = "046jifc8fkhqar0qnrmk8kks44mdd7cgdrmhn7m6nr6hbsji7in5";
   };
 
   buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight];
