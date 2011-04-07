@@ -906,6 +906,8 @@ let
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
+  minixml = callPackage ../development/libraries/minixml { };
+
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
@@ -7035,6 +7037,10 @@ let
   };
 
   zathura = callPackage ../applications/misc/zathura { };
+
+  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { 
+    fltk = fltk11;
+  };
 
   ### GAMES
 
