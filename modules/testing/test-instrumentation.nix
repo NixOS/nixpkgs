@@ -84,7 +84,7 @@ in
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention). 
     boot.kernelParams =
-      [ "console=tty1" "console=ttyS0" "panic=1" "stage1panic" ];
+      [ "console=tty1" "console=ttyS0" "panic=1" "stage1panic=1" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];

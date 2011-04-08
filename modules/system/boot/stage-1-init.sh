@@ -77,7 +77,7 @@ for o in $(cat /proc/cmdline); do
         debug1mounts) # stop after mounting file systems
             debug1mounts=1
             ;;
-        stage1panic)
+        stage1panic=1)
             panicOnFail=1
             ;;
         root=*)
