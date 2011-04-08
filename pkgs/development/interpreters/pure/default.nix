@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , llvm, gmp, mpfr
+  , llvm, gmp, mpfr, readline
   , ...}:
 builderDefsPackage
 (a :  
