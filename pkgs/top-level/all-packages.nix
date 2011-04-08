@@ -2288,6 +2288,8 @@ let
     inherit sbcl;
   };
 
+  angelscript = callPackage ../development/interpreters/angelscript {};
+
   clisp = callPackage ../development/interpreters/clisp { };
 
   # compatibility issues in 2.47 - at list 2.44.1 is known good
