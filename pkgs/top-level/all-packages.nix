@@ -3019,6 +3019,8 @@ let
 
   flann = callPackage ../development/libraries/flann { };
 
+  flite = callPackage ../development/libraries/flite { };
+
   fltk11 = callPackage ../development/libraries/fltk/fltk11.nix { };
 
   fltk20 = callPackage ../development/libraries/fltk { };
@@ -6116,8 +6118,6 @@ let
       inherit (gtkLibs) gtk glib pango atk gdk_pixbuf;
       debug = getConfig ["flashplayer" "debug"] false;
     });
-
-  flite = callPackage ../applications/misc/flite { };
 
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost146;
