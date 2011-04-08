@@ -1,4 +1,4 @@
-{ fetchsvn, fetchurl, stdenv, wxGTK29, freeimage, cmake, zziplib, mesa, boost, 
+{ fetchsvn, fetchurl, stdenv, wxGTK290, freeimage, cmake, zziplib, mesa, boost, 
   pkgconfig, libuuid, lua5, openal, ogre, ois, curl, gtk, pixman, mygui, unzip,
   angelscript
   }:
@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     ensureDir $out/bin
     for i in RoR rorconfig RoRViewer; do
       echo '#! ${stdenv.shell}' >> "$out/bin/$i"
+      if [ "$i" = "rorconfig" ]; then
+        echo "[ -d \"\$HOME/.rigsofrods\" ] && cp -r '$out/share/rigsofrods/build-dirs/bin/skeleton' \"\$HOME/.rigsofrods\"" >> "$out/bin/$i"
+        echo "chmod u+w -R \"\$HOME/.rigsofrods\"" >> "$out/bin/$i"
+      fi
       echo "\"$out/share/rigsofrods/build-dir/bin/$i\"" >> "$out/bin/$i"
       chmod a+x "$out/bin/$i"
     done
@@ -52,7 +56,7 @@ stdenv.mkDerivation rec {
 
   # patches = [ ./wx.patch ];
 
-  buildInputs = [ wxGTK29 freeimage cmake zziplib mesa boost pkgconfig
+  buildInputs = [ wxGTK290 freeimage cmake zziplib mesa boost pkgconfig
     libuuid lua5 openal ogre ois curl gtk mygui unzip angelscript ];
 
   meta = {
