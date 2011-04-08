@@ -5917,7 +5917,7 @@ let
   };
   eclipseLatest = eclipse.override { version = "latest"; };
   eclipse36 = callPackage ../applications/editors/eclipse {
-      version = "3.6.1";
+      version = "3.6.2";
   };
 
   ed = callPackage ../applications/editors/ed { };
