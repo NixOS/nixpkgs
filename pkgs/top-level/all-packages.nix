@@ -2375,6 +2375,8 @@ let
 
   polyml = callPackage ../development/compilers/polyml { };
 
+  pure = callPackage ../development/interpreters/pure {};
+
   python = python27;
   
   python26 = callPackage ../development/interpreters/python/2.6 { };
