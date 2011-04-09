@@ -3986,6 +3986,8 @@ let
 
   openjpeg = callPackage ../development/libraries/openjpeg { };
 
+  openscenegraph = callPackage ../development/libraries/openscenegraph {};
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
   };
@@ -4141,6 +4143,8 @@ let
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
+
+  simgear = callPackage ../development/libraries/simgear {};
 
   sfml_svn = callPackage ../development/libraries/sfml { };
 
