@@ -47,6 +47,23 @@ in
       default = "wwwrun";
       description = "Group under which Trac runs.";
     };
+
+    ldapAuthentication = {
+      enable = mkOption {
+        default = false;
+        description = "Enable the ldap authentication in trac";
+      };
+
+      url = mkOption {
+        default = "ldap://127.0.0.1/dc=example,dc=co,dc=ke?uid?sub?(objectClass=inetOrgPerson)";
+        description = "URL of the LDAP authentication";
+      };
+
+      name = mkOption {
+        default = "Trac server";
+        description = "AuthName";
+      };
+    };
     
   };
 
@@ -61,6 +78,16 @@ in
       PythonOption TracUriRoot ${config.projectsLocation}
       PythonOption PYTHON_EGG_CACHE /var/trac/egg-cache
     </Location>
+    ${if config.ldapAuthentication.enable then ''
+      <LocationMatch "^${config.projectsLocation}/[^/]+/login$">
+        AuthType Basic
+        AuthName "${config.ldapAuthentication.name}"
+        AuthBasicProvider "ldap"
+        AuthLDAPURL "${config.ldapAuthentication.url}"
+        authzldapauthoritative Off
+        require valid-user
+    '' else ""}
+    </LocationMatch>
   '';
   
   globalEnvVars = singleton
@@ -72,6 +99,7 @@ in
             pkgs.setuptools
             pkgs.pythonPackages.genshi
             pkgs.pythonPackages.psycopg2
+            pkgs.python.modules.sqlite3
             subversion
           ];
     };
