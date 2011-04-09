@@ -1,9 +1,11 @@
 { stdenv, fetchurl, openssl, perl, zlib
 , sslSupport, proxySupport ? true
 , apr, aprutil, pcre
+, ldapSupport ? true, openldap
 }:
 
 assert sslSupport -> openssl != null;
+assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
   version = "2.2.17";
@@ -15,7 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [perl apr aprutil pcre] ++
-    stdenv.lib.optional sslSupport openssl;
+    stdenv.lib.optional sslSupport openssl ++
+    stdenv.lib.optional ldapSupport openldap;
 
   # An apr-util header file includes an apr header file
   # through #include "" (quotes)
@@ -29,6 +32,7 @@ stdenv.mkDerivation rec {
     --enable-authn-alias
     ${if proxySupport then "--enable-proxy" else ""}
     ${if sslSupport then "--enable-ssl --with-ssl=${openssl}" else ""}
+    ${if ldapSupport then "--enable-ldap --enable-authnz-ldap" else ""}
   '';
 
   postInstall = ''

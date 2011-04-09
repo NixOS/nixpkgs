@@ -1,5 +1,6 @@
 { stdenv, fetchurl, apr, expat
 , bdbSupport ? false, db4 ? null
+, ldapSupport ? true, openldap
 }:
 
 assert bdbSupport -> db4 != null;
@@ -15,10 +16,14 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --with-apr=${apr} --with-expat=${expat}
     ${if bdbSupport then "--with-berkeley-db=${db4}" else ""}
+    ${if ldapSupport then "--with-ldap" else ""}
   '';
+
+  buildInputs = if ldapSupport then [ openldap ] else [];
   
   passthru = {
     inherit bdbSupport;
+    inherit ldapSupport;
   };
 
   meta = {
