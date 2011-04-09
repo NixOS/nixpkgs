@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [perl apr aprutil pcre] ++
-    stdenv.lib.optional sslSupport openssl ++
-    stdenv.lib.optional ldapSupport openldap;
+    stdenv.lib.optional sslSupport openssl;
 
   # An apr-util header file includes an apr header file
   # through #include "" (quotes)

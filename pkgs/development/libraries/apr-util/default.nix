@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ${if ldapSupport then "--with-ldap" else ""}
   '';
 
-  buildInputs = if ldapSupport then [ openldap ] else [];
+  propagatedBuildInputs = stdenv.lib.optional ldapSupport openldap;
   
   passthru = {
     inherit bdbSupport;
