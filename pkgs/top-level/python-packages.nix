@@ -415,20 +415,12 @@ python.modules // rec {
   });
 
   genshi = buildPythonPackage {
-    name = "genshi-0.5.1";
+    name = "genshi-0.6";
 
     src = fetchurl {
-      url = http://ftp.edgewall.com/pub/genshi/Genshi-0.5.1.tar.bz2;
-      sha256 = "1g2xw3zvgz59ilv7mrdlnvfl6ph8lwflwd4jr6zwrca2zhj7d8rs";
+      url = http://ftp.edgewall.com/pub/genshi/Genshi-0.6.tar.gz;
+      sha256 = "0jrajyppdzb3swcxv3w1mpp88vcy7400gy1v2h2gm3pq0dmggaij";
     };
-
-    patches =
-      [ # Fix `make check' (http://bugs.gentoo.org/276299)
-        (fetchurl {
-          url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/dev-python/genshi/files/genshi-0.5.1_test_fix.patch?rev=1.1";
-          sha256 = "019skkas07lc2kjy5br5jhhf9dqfy4fs389m5f4ws3fc62fklwhk";
-        })
-      ];
 
     buildInputs = [ pkgs.setuptools ];
 
@@ -1611,18 +1603,18 @@ python.modules // rec {
 
 
   trac = buildPythonPackage {
-    name = "trac-0.11.5";
+    name = "trac-0.12.2";
 
     src = fetchurl {
-      url = http://ftp.edgewall.com/pub/trac/Trac-0.11.5.tar.gz;
-      sha256 = "cc3362ecc533abc1755dd78e2d096d1413bc975abc3185318f4821458cd6a8ac";
+      url = http://ftp.edgewall.com/pub/trac/Trac-0.12.2.tar.gz;
+      sha256 = "1ihf5031pc1wpwbxpfzzz2bcpwww795n5y22baglyim1lalivd65";
     };
 
     doCheck = false;
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
-    propagatedBuildInputs = [ genshi pkgs.setuptools ];
+    propagatedBuildInputs = [ genshi pkgs.setuptools python.modules.sqlite3 ];
 
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
