@@ -7111,6 +7111,8 @@ let
   });
   */
 
+  flightgear = callPackage ../games/flightgear {};
+
   freedink = callPackage ../games/freedink { };
 
   fsg = callPackage ../games/fsg {
