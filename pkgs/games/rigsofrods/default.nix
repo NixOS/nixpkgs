@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "03mxmxpfdlsri0j3nqgyj2pc4gpzs8zq8qgg6qhnyazi7j95j4mk";
   };
 
+  contentPackSrc = fetchurl {
+    url = mirror://sourceforge/rigsofrods/rigsofrods/0.37/content-pack-0.37.zip;
+    sha256 = "0prvn8lxqazadad4mv0nilax9i4vqb9s7dp7mqzvqc0ycmcnf4ps";
+  };
+
   enableParallelBuilding = true;
 
   cmakeFlags = [
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     # "-DROR_USE_MOFILEREADER=TRUE"
     # "-DROR_USE_CAELUM=TRUE"
     # "-DROR_USE_PAGED=TRUE"
-    # "-DROR_USE_ANGELSCRIPT=TRUE"
+    "-DROR_USE_ANGELSCRIPT=TRUE"
     # "-DROR_USE_SOCKETW=TRUE"
   ];
 
@@ -47,6 +52,8 @@ stdenv.mkDerivation rec {
       echo "\"$out/share/rigsofrods/build-dir/bin/$i\"" >> "$out/bin/$i"
       chmod a+x "$out/bin/$i"
     done
+    cd $out/share/rigsofrods/build-dir/bin/
+    unzip "${contentPackSrc}"
   '';
 
   preConfigure = ''
