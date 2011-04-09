@@ -40,6 +40,8 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doCmake" "doMyBuild" "doMakeInstall"];
 
+  cmakeSkipRpath = false;
+
   meta = {
     description = "A 3D engine";
     maintainers = with a.lib.maintainers;
