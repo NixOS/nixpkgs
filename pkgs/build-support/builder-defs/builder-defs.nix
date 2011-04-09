@@ -384,12 +384,14 @@ let inherit (builtins) head tail trace; in
                 echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
-        cmakeFlags = "-DCMAKE_SKIP_BUILD_RPATH=ON";
+        cmakeFlags = attrByPath ["cmakeFlags"] [] args;
+
+        cmakeRPathFlag = if (attrByPath ["cmakeSkipRpath "] true args) then " -DCMAKE_SKIP_BUILD_RPATH=ON " else "";
 
 	doCmake = fullDepEntry (''
           mkdir build
 	  cd build
-	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${toString cmakeFlags} ..
+	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${cmakeRPathFlag}${toString cmakeFlags} ..
 	'') ["minInit" "addInputs" "doUnpack"];
 
         /*debug = x:(trace x x);
