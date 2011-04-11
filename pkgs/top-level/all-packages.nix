@@ -5920,15 +5920,7 @@ let
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipse = callPackage ../applications/editors/eclipse {
-    # GTK 2.18 gives glitches such as mouse clicks on buttons not
-    # working correctly.
-    inherit (gtkLibs216) glib gtk;
-  };
-  eclipseLatest = eclipse.override { version = "latest"; };
-  eclipse36 = callPackage ../applications/editors/eclipse {
-      version = "3.6.2";
-  };
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   ed = callPackage ../applications/editors/ed { };
 
