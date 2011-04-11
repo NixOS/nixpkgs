@@ -79,7 +79,7 @@ in
       PythonOption PYTHON_EGG_CACHE /var/trac/egg-cache
     </Location>
     ${if config.ldapAuthentication.enable then ''
-      <LocationMatch "^${config.projectsLocation}/[^/]+/login$">
+      <LocationMatch "^${config.projectsLocation}[^/]+/login$">
         AuthType Basic
         AuthName "${config.ldapAuthentication.name}"
         AuthBasicProvider "ldap"
