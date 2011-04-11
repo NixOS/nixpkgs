@@ -36,14 +36,18 @@ fi
 if test -z "$finalPath"; then
 
     tmpPath=/tmp/hg-checkout-tmp-$$
-    tmpClone=$tmpPath/hg-clone
     tmpArchive=$tmpPath/hg-archive
     mkdir $tmpPath
 
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    hg clone -q -y -U "$url" $tmpClone >&2
+    if [[ $url != /* ]]; then
+      tmpClone=$tmpPath/hg-clone
+      hg clone -q -y -U "$url" $tmpClone >&2
+    else
+      tmpClone=$url
+    fi
     hg archive -q -y -r "$rev" --cwd $tmpClone $tmpArchive
 
 
