@@ -11,14 +11,14 @@
     
 }:
 
-let version = "3.1.7"; in
+let version = "3.1.9"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "c2d6cdedfe399c1ab41c00045e4fce835cc0b36f";
+    sha1 = "22b153102939430180ae1873ce15ef52286ff08d";
   };
 
   buildInputs =
