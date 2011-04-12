@@ -6279,7 +6279,33 @@ let
        [ icecat3 icecatXulrunner3 ])
     // { inherit (icecat3) gtk isFirefox3Like meta; };
 
-  icecatWrapper = wrapFirefox icecat3Xul "icecat" "";
+  icecat3Wrapper = wrapFirefox icecat3Xul "icecat" "";
+
+  icecat4 = lowPrio (import ../applications/networking/browsers/icecat-4 {
+    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
+      wirelesstools;
+    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (xlibs) pixman;
+    inherit (pythonPackages) ply;
+  });
+
+  icecatXulrunner4 = lowPrio (import ../applications/networking/browsers/icecat-4 {
+    application = "xulrunner";
+    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
+      python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
+      wirelesstools;
+    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (xlibs) pixman;
+    inherit (pythonPackages) ply;
+  });
+
+  icecat4Xul =
+    (symlinkJoin "icecat-with-xulrunner-${icecat4.version}"
+       [ icecat4 icecatXulrunner4 ])
+    // { inherit (icecat4) gtk isFirefox4Like meta; };
+
+  icecat4Wrapper = wrapFirefox icecat4Xul "icecat" "";
 
   icewm = callPackage ../applications/window-managers/icewm {
     inherit (gtkLibs) gtk;
