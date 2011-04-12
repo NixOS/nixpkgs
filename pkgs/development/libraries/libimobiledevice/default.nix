@@ -1,10 +1,10 @@
 { stdenv, fetchurl, python, swig, pkgconfig, usbmuxd, glib, gnutls, libgcrypt,
-  libtasn1, libplist, readline, gmp }:
+  libtasn1, libplist, readline }:
 
 stdenv.mkDerivation rec {
   name = "libimobiledevice-1.0.2";
 
-  buildInputs = [ python swig pkgconfig readline gmp ];
+  buildInputs = [ python swig pkgconfig readline ];
   propagatedBuildInputs = [ usbmuxd glib gnutls libgcrypt libtasn1 libplist ];
 
   configureFlags = "--enable-dev-tools";

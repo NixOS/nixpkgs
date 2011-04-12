@@ -179,7 +179,7 @@ pkgs.makeOverridable
 
   libsoup = import ./desktop/libsoup {
     inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite
-      curl libgcrypt gmp;
+      curl libgcrypt;
     inherit (pkgs.gtkLibs) glib;
     inherit GConf gnome_keyring;
   };
