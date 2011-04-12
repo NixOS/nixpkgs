@@ -1,16 +1,18 @@
-{ fetchurl, stdenv, zlib, lzo, libtasn1, libgcrypt
+{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle
 , guileBindings, guile }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-2.10.5";
+  name = "gnutls-2.12.2";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.bz2";
-    sha256 = "1jfrxd1h4f5kkfzrwx8yx6a2dwrgqr6imbxnil1jfi7hdr1db1n0";
+    sha256 = "0hvymf1q3d63hbi3hia876alaq7asprgwzhy49192i2h2gjlx5nc";
   };
+
+  patches = [ ./no-libgcrypt.patch ];
 
   configurePhase = ''
     ./configure --prefix="$out"                                 \
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib lzo libtasn1 ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  propagatedBuildInputs = [ libgcrypt ];
+  propagatedBuildInputs = [ nettle ];
 
   doCheck = true;
 
