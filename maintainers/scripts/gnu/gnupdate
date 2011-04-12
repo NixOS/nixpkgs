@@ -117,8 +117,19 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
              (if (pair? body)
                  (values `(derivation ,drv-path ,out-path ,(cdr body))
                          derivations)
-                 (error "no previous occurrence of derivation"
-                        drv-path)))
+
+                 ;; DRV-PATH hasn't been encountered yet but may be later
+                 ;; (see <http://article.gmane.org/gmane.linux.distributions.nixos/5946>.)
+                 ;; Return an `unresolved' node.
+                 (values `(unresolved
+                           ,(lambda (derivations)
+                              (let ((body (vhash-assoc drv-path derivations)))
+                                (if (pair? body)
+                                    `(derivation ,drv-path ,out-path
+                                                 ,(cdr body))
+                                    (error "no previous occurrence of derivation"
+                                           drv-path)))))
+                         derivations)))
            (values `(derivation ,drv-path ,out-path ,body)
                    (vhash-cons drv-path body derivations)))))
     ((ellipsis)
@@ -145,6 +156,32 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
     ((varpat)
      (values `(varpat ,(assq-ref attributes 'name)) derivations))
     (else (error "unhandled Nix XML element" elem))))
+
+(define (resolve snix derivations)
+  "Return a new SNix tree where `unresolved' nodes from SNIX have been
+replaced by the result of their application to DERIVATIONS, a vhash."
+  (let loop ((node snix)
+             (seen vlist-null))
+    (if (vhash-assq node seen)
+        (values node seen)
+        (match node
+          (('unresolved proc)
+           (let ((n (proc derivations)))
+             (values n seen)))
+          ((tag body ...)
+           (let ((body+seen (fold (lambda (n body+seen)
+                                    (call-with-values
+                                        (lambda ()
+                                          (loop n (cdr body+seen)))
+                                      (lambda (n* seen)
+                                        (cons (cons n* (car body+seen))
+                                              (vhash-consq n #t seen)))))
+                                  (cons '() (vhash-consq node #t seen))
+                                  body)))
+             (values (cons tag (reverse (car body+seen)))
+                     (vhash-consq node #t (cdr body+seen)))))
+          (anything
+           (values anything seen))))))
 
 (define xml->snix
   ;; Return the SNix represention of TREE, an SXML tree as returned by
@@ -173,9 +210,9 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
                              ;; Discard inter-node strings, which are blanks.
                              seed))))
     (lambda (port)
-      ;; Discard the second value returned by the parser (the derivation
-      ;; vhash).
-      (caar (parse port (cons '() vlist-null))))))
+      (match (parse port (cons '() vlist-null))
+        (((snix) . derivations)
+         (resolve snix derivations))))))
 
 (define (call-with-package snix proc)
   (match snix
