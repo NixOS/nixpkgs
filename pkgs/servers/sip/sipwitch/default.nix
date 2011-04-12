@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, ucommon, libosip, libexosip, gnutls, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "sipwitch-0.10.4";
+  name = "sipwitch-0.10.5";
 
   src = fetchurl {
     url = "mirror://gnu/sipwitch/${name}.tar.gz";
-    sha256 = "0nmag4cpnll34fqrp4qg613knv99gmx6p8s0l1imic68i9a260vh";
+    sha256 = "0zsdlrri6nph8da9rb2rmr4xgj79hn2ysrfxpnil699qv7qnpb0v";
   };
 
   buildInputs = [ pkgconfig ucommon libosip libexosip gnutls zlib ];
