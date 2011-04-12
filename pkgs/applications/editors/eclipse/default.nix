@@ -110,5 +110,21 @@ in {
         };
   };
 
+  eclipse_modeling_36 = buildEclipse {
+    name = "eclipse-modeling-3.6.2";
+    description = "Eclipse Modeling Tools (includes Incubating components)";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/technology/epp/downloads/release/helios/SR2/eclipse-modeling-helios-SR2-incubation-linux-gtk-x86_64.tar.gz;
+          sha1 = "e96f5f006298f68476f4a15a2be8589158d5cc61";
+        }
+      else
+        fetchurl {
+          url = http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/technology/epp/downloads/release/helios/SR2/eclipse-modeling-helios-SR2-incubation-linux-gtk.tar.gz;
+          sha1 = "696377895bb26445de39d82a916b7e69edb1d939";
+        };
+  };
+
 }
 
