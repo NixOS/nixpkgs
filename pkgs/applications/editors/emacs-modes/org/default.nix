@@ -19,11 +19,21 @@ stdenv.mkDerivation rec {
            -e "s|^prefix=.*$|prefix=$out|g"
     '';
 
+  #XXX: fails because of missing UTILITIES/manfull.pl, currently not
+  # included in the release tarball, but git.
+
+  #postBuild =
+  #  '' make doc
+  #  '';
+
   installPhase =
     '' make install install-info
 
        ensureDir "$out/share/doc/${name}"
-       cp -v doc/orgcard*.{pdf,txt} "$out/share/doc/${name}"
+       cp -v doc/org*.{html,pdf,txt} "$out/share/doc/${name}"
+
+       ensureDir "$out/share/org"
+       cp -R contrib "$out/share/org/contrib"
     '';
 
   meta = {
