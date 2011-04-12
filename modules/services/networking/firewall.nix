@@ -147,7 +147,15 @@ in
               ip46tables -A FW_REFUSE -j LOG --log-level info --log-prefix "rejected packet: "
             ''}
 
-            ip46tables -A FW_REFUSE -j ${if cfg.rejectPackets then "REJECT" else "DROP"}
+            ${if cfg.rejectPackets then ''
+              # Send a reset for existing TCP connections that we've
+              # somehow forgotten about.  Send ICMP "port unreachable"
+              # for everything else.
+              ip46tables -A FW_REFUSE -p tcp ! --syn -j REJECT --reject-with tcp-reset
+              ip46tables -A FW_REFUSE -j REJECT
+            '' else ''
+              ip46tables -A FW_REFUSE -j DROP
+            ''}
 
 
             # Accept all traffic on the loopback interface.
