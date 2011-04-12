@@ -1,11 +1,11 @@
 { fetchurl, stdenv, emacs, texinfo, which }:
 
 stdenv.mkDerivation rec {
-  name = "org-7.4";
+  name = "org-7.5";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "0fpzfq6jynggyw62ai1cjvdmik9jnglfwrwj3nwcmy3g8j8i86fg";
+    sha256 = "978822bc4c5f9f67450fbaa8572f1d4217406b7e28551278c9f23f7e9515cd4b";
   };
 
   buildInputs = [ emacs texinfo ];
