@@ -28,6 +28,7 @@ exec ${GUILE-guile} -L "$PWD" -l "$0"    \
   #:use-module (ice-9 popen)
   #:use-module (ice-9 match)
   #:use-module (ice-9 rdelim)
+  #:use-module (ice-9 format)
   #:use-module (ice-9 regex)
   #:use-module (ice-9 vlist)
   #:use-module (srfi srfi-1)
