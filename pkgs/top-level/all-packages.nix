@@ -343,7 +343,7 @@ let
   };
 
   platforms = import ./platforms.nix;
-  
+
 
   ### TOOLS
 
@@ -977,7 +977,7 @@ let
   ncompress = callPackage ../tools/compression/ncompress { };
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
-  
+
   netcat = callPackage ../tools/networking/netcat { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
@@ -2384,7 +2384,7 @@ let
   pure = callPackage ../development/interpreters/pure {};
 
   python = python27;
-  
+
   python26 = callPackage ../development/interpreters/python/2.6 { };
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
@@ -4512,7 +4512,7 @@ let
   };
   */
 
-  
+
   ### SERVERS
 
   rdf4store = callPackage ../servers/http/4store { };
@@ -5788,7 +5788,7 @@ let
     qt = qt4;
   };
 
-  bitcoin = callPackage ../applications/misc/bitcoin { 
+  bitcoin = callPackage ../applications/misc/bitcoin {
     wxGTK = wxGTK290;
     db4 = db47;
     inherit (xlibs) libSM;
@@ -7072,7 +7072,7 @@ let
 
   zathura = callPackage ../applications/misc/zathura { };
 
-  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { 
+  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
     fltk = fltk11;
   };
 
