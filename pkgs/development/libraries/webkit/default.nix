@@ -25,7 +25,10 @@ rec {
     "--enable-3D-transforms"
     "--enable-web-sockets"
     "--enable-web-timing"
-    "--enable-image-resizer"
+    
+    # https://bugs.webkit.org/show_bug.cgi?id=56718
+    # https://bugs.webkit.org/show_bug.cgi?id=55294
+    #"--enable-image-resizer"
 
     "--enable-geolocation"
 
@@ -34,8 +37,6 @@ rec {
 
     "--enable-mathml"
 
-    # https://bugs.webkit.org/show_bug.cgi?id=42943
-    # FIXED
     "--enable-wml"
     
     # https://bugs.webkit.org/show_bug.cgi?id=45110
@@ -49,11 +50,14 @@ rec {
     # https://bugs.webkit.org/show_bug.cgi?id=43878
     # Related bug FIXED
     "--enable-file-writer"
-    # "--enable-blob"
+    "--enable-blob"
 
     # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
-    # "--enable-file-system"
+    # Allegedly FIXED
     "--enable-directory-upload"
+
+    # Maybe related: https://bugs.webkit.org/show_bug.cgi?id=57925
+    # "--enable-file-system"
     ];
 
   /* doConfigure should be specified separately */
