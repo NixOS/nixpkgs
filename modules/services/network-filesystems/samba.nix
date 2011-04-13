@@ -59,12 +59,17 @@ let
       ${cfg.extraConfig}
     '';
 
+  # This may include nss_ldap, needed for samba if it has to use ldap.
+  nssModulesPath = config.system.nssModules.path;
+
   daemonJob = appName: args:
     { name = "samba-${appName}";
       description = "Samba Service daemon ${appName}";
 
       startOn = "started samba";
       stopOn = "stopping samba";
+
+      environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
       exec = "${samba}/sbin/${appName} ${args}";
     };
