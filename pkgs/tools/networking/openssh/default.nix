@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   prePatch = stdenv.lib.optionalString hpnSupport
     ''
       gunzip -c ${hpnSrc} | patch -p1
+      export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
     
   patches = [ ./locale_archive.patch ];
