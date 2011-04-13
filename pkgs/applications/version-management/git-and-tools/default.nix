@@ -10,8 +10,7 @@ rec {
 
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_45 libxslt
+      asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
     svnSupport = config "svnSupport" false; # for git-svn support
     guiSupport = config "guiSupport" false;
@@ -26,11 +25,11 @@ rec {
   };
 
   # The full-featured Git.
-  gitFull = git.override {
+  gitFull = appendToName "full" (git.override {
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = stdenv.isDarwin == false;
-  };
+  });
 
   gitGit = import ./git/git-git.nix {
     inherit fetchurl sourceFromHead stdenv curl openssl zlib expat perl gettext
