@@ -1206,6 +1206,8 @@ let
 
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
+  rockbox_utility = callPackage ../tools/misc/rockbox-utility { };
+
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
     inherit ppp;
   };
