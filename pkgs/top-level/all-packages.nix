@@ -6155,6 +6155,7 @@ let
   });
   git = gitAndTools.git;
   gitFull = gitAndTools.gitFull;
+  gitSVN = gitAndTools.gitSVN;
 
   giv = callPackage ../applications/graphics/giv {
     inherit (gtkLibs) gdk_pixbuf gtk gob2;

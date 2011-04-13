@@ -24,6 +24,11 @@ rec {
     ];
   };
 
+  # Git with SVN support, but without GUI.
+  gitSVN = lowPrio (appendToName "with-svn" (git.override {
+    svnSupport = true;
+  }));
+
   # The full-featured Git.
   gitFull = appendToName "full" (git.override {
     svnSupport = true;
