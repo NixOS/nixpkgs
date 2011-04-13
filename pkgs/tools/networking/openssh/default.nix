@@ -6,8 +6,8 @@
 let
 
   hpnSrc = fetchurl {
-    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.3p1-hpn13v7.diff.gz;
-    sha256 = "1kqir6v14z77l0wn9j4jzdqsip5s1ky34w749psvbshbp9dzizn8";
+    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.8p1-hpn13v11.diff.gz;
+    sha256 = "1xwx2m2sihpy57mwdnc9km3c72hxfdjyp5mmr1vcx2c8kp901db2";
   };
 
 in
