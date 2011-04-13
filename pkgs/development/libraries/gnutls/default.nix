@@ -1,5 +1,5 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, gmp }:
+, guileBindings, guile }:
 
 assert guileBindings -> guile != null;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib lzo libtasn1 ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  propagatedBuildInputs = [ nettle gmp ];
+  propagatedBuildInputs = [ nettle ];
 
   doCheck = true;
 

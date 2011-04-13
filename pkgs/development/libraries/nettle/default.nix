@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0knp778738dpgbcj1yz54a7jsvmarfiafzl05z086bc470z6plmp";
   };
 
-  buildInputs = [ gmp gnum4 ];
+  buildInputs = [ gnum4 ];
+  propagatedBuildInputs = [ gmp ];
 
   doCheck = (stdenv.system != "i686-cygwin");
 
