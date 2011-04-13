@@ -4,7 +4,6 @@
 args: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchurl subversion;
-  config = param: getConfig [ "git" param ];
 in
 rec {
 
@@ -12,9 +11,9 @@ rec {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
-    svnSupport = config "svnSupport" false; # for git-svn support
-    guiSupport = config "guiSupport" false;
-    sendEmailSupport = config "sendEmailSupport" false;
+    svnSupport = false;		# for git-svn support
+    guiSupport = false;		# requires tcl/tk
+    sendEmailSupport = false;	# requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
       perlPackages.NetSMTP perlPackages.NetSMTPSSL
@@ -41,8 +40,8 @@ rec {
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion autoconf;
-    svnSupport = config "svnSupport" false; # for git-svn support
-    guiSupport = config "guiSupport" false;
+    svnSupport = false;
+    guiSupport = false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
   };
 
