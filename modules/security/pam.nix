@@ -61,21 +61,21 @@ let
         # module provides the right hooks.
         ''
           # Account management.
+          account sufficient pam_unix.so
           ${optionalString config.users.ldap.enable
-              "account optional ${pam_ldap}/lib/security/pam_ldap.so"}
+              "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
-          account required pam_unix.so
 
           # Authentication management.
           ${optionalString rootOK
               "auth sufficient pam_rootok.so"}
           ${optionalString usbAuth
               "auth sufficient ${pam_usb}/lib/security/pam_usb.so"}
-          ${optionalString config.users.ldap.enable
-              "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           auth sufficient pam_unix.so ${
-            optionalString allowNullPassword "nullok"}
+            optionalString allowNullPassword "nullok"} likeauth
+          ${optionalString config.users.ldap.enable
+              "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.krb5.enable
 ''auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
 auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
@@ -84,20 +84,20 @@ auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_
           auth required   pam_deny.so
 
           # Password management.
+          password requisite pam_unix.so nullok sha512
           ${optionalString config.users.ldap.enable
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
-          password requisite pam_unix.so nullok sha512
           ${optionalString config.services.samba.syncPasswordsByPam
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
 
           # Session management.
+          session required pam_unix.so
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
-          session required pam_unix.so
           ${optionalString ownDevices
               "session optional ${pkgs.consolekit}/lib/security/pam_ck_connector.so"}
           ${optionalString forwardXAuth
