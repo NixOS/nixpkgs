@@ -6774,6 +6774,12 @@ let
     httpd = apacheHttpd;
   };
 
+  subversionClient = lowPrio (appendToName "client" (subversion.override {
+    bdbSupport = false;
+    perlBindings = true;
+    pythonBindings = true;
+  }));
+
   svk = perlPackages.SVK;
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
