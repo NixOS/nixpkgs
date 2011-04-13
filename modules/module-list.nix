@@ -92,6 +92,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/dhclient.nix
   ./services/networking/dhcpd.nix
+  ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
   ./services/networking/git-daemon.nix
