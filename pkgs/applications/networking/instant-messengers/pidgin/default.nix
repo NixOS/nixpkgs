@@ -17,6 +17,7 @@
   , lib, python
   , openssl ? null
   , gnutls ? null
+  , libgcrypt ? null
   , voice ? null
 } :
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation {
     libxml2] 
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
+  ++ (lib.optional (libgcrypt != null) libgcrypt)
   ++
   [nss nspr farsight2
     libXScrnSaver ncurses python
