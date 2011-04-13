@@ -2536,6 +2536,8 @@ let
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
+  bam = callPackage ../development/tools/build-managers/bam {};
+
   binutils = callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
   };
