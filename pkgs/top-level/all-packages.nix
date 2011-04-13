@@ -2444,7 +2444,7 @@ let
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
       inherit stdenv application launcher;
-      xulrunner = firefox36Pkgs.xulrunner;
+      xulrunner = firefox40Pkgs.xulrunner;
     };
 
 
@@ -6087,8 +6087,9 @@ let
 
   filelight = newScope pkgs.kde4 ../applications/misc/filelight { };
 
-  firefox = firefox36Pkgs.firefox;
-  firefoxWrapper = firefox36Wrapper;
+  firefox = firefox40Pkgs.firefox;
+
+  firefoxWrapper = firefox40Wrapper;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
@@ -6102,7 +6103,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox40Wrapper = lowPrio (wrapFirefox firefox40Pkgs.firefox "firefox" "");
+  firefox40Wrapper = wrapFirefox firefox40Pkgs.firefox "firefox" "";
 
   flac = callPackage ../applications/audio/flac { };
 
