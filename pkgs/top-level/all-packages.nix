@@ -6763,14 +6763,14 @@ let
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {
     neon = pkgs.neon029;
-    bdbSupport = getConfig ["subversion" "bdbSupport"] true;
-    httpServer = getConfig ["subversion" "httpServer"] false;
-    httpSupport = getConfig ["subversion" "httpSupport"] true;
-    sslSupport = getConfig ["subversion" "sslSupport"] true;
-    pythonBindings = getConfig ["subversion" "pythonBindings"] false;
-    perlBindings = getConfig ["subversion" "perlBindings"] false;
-    javahlBindings = supportsJDK && getConfig ["subversion" "javahlBindings"] false;
-    compressionSupport = getConfig ["subversion" "compressionSupport"] true;
+    bdbSupport = true;
+    httpServer = false;
+    httpSupport = true;
+    sslSupport = true;
+    pythonBindings = false;
+    perlBindings = false;
+    javahlBindings = false;
+    compressionSupport = true;
     httpd = apacheHttpd;
   };
 
