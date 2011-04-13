@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl ]
     ++ stdenv.lib.optional useKerberos kerberos;
 
+  enableParallelBuilding = true;
+
   preConfigure = "cd source3";
 
   configureFlags = ''
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
   
       mkdir -pv $out/lib/cups/backend
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
+      mkdir -pv $out/etc/openldap/schema
+      cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
 }
