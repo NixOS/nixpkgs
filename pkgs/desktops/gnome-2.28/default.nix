@@ -185,7 +185,8 @@ pkgs.makeOverridable
   };
 
   libsoup_2_31 = import ./desktop/libsoup/2.31.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite curl;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite 
+      curl libgcrypt;
     inherit (pkgs.gtkLibs) glib;
     inherit GConf gnome_keyring;
   };

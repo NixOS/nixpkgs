@@ -1,5 +1,5 @@
 {stdenv, fetchurl, pkgconfig, libxml2, gnutls, libproxy, sqlite, curl, 
-  glib, GConf, gnome_keyring}:
+  glib, GConf, gnome_keyring, libgcrypt}:
 
 stdenv.mkDerivation {
   name = "libsoup-2.31.2";
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
   };
   patches = [./2.31.gnutls.patch];
   buildInputs = [ pkgconfig libxml2 gnutls libproxy sqlite curl 
-    glib GConf gnome_keyring ];
+    glib GConf gnome_keyring libgcrypt];
 }
