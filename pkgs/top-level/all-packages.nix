@@ -6624,6 +6624,7 @@ let
       gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool libidn;
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;
+    libgcrypt = if (getConfig ["pidgin" "gnutls"] false) then libgcrypt else null;
     GStreamer = gst_all.gstreamer;
     inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
@@ -6854,7 +6855,7 @@ let
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libX11 kbproto;
-    libsoup = gnome28.libsoup_2_31;
+    libsoup = gnome28.libsoup_2_33;
   };
 
   valknut = callPackage ../applications/networking/p2p/valknut {
