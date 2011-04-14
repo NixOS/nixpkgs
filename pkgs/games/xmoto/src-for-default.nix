@@ -1,9 +1,9 @@
 rec {
-   version="0.5.5";
-   name="xmoto-0.5.5";
-   hash="190ramkq4iyh48i6nlhnaf0w67b9pvg3dd3n258969sxz1y9wfp5";
+   version="0.5.7";
+   name="xmoto-0.5.7";
+   hash="19pwxjgvajv2img3sz8rd0c37d1gsidscwwjbm4jyxhahgg33mks";
    url="http://download.tuxfamily.org/xmoto/xmoto/${version}/xmoto-${version}-src.tar.gz";
-   advertisedUrl="http://download.tuxfamily.org/xmoto/xmoto/0.5.5/xmoto-0.5.5-src.tar.gz";
+   advertisedUrl="http://download.tuxfamily.org/xmoto/xmoto/0.5.7/xmoto-0.5.7-src.tar.gz";
   
   
 }
