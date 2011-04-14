@@ -2367,6 +2367,8 @@ let
       zlib curl gd postgresql openssl pkgconfig sqlite getConfig libiconv libjpeg libpng;
   };
 
+  php_apc = callPackage ../development/libraries/php-apc { };
+
   phpXdebug = callPackage ../development/interpreters/php-xdebug { };
 
   picolisp = callPackage ../development/interpreters/picolisp {};
