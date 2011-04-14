@@ -1,5 +1,5 @@
 { stdenv, fetchurl, readline, pam, openldap, popt, iniparser, libunwind, fam
-, acl
+, acl, cups
 , useKerberos ? false, kerberos ? null, winbind ? true
 
 # Eg. smbclient and smbspool require a smb.conf file.
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nj78bahph9fwxv0v3lz31cy6z167jgmvz63d8l9mlbmhf310r26";
   };
 
-  buildInputs = [ readline pam openldap popt iniparser libunwind fam acl ]
+  buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
     ++ stdenv.lib.optional useKerberos kerberos;
 
   enableParallelBuilding = true;
