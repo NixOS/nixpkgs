@@ -50,6 +50,10 @@ in
         startOn = "filesystem";
         daemonType = "fork";
 
+        preStart =
+          ''
+            mkdir -p /var/run/slapd
+          '';
         exec = "${openldap}/libexec/slapd -f ${configFile}";
       };
 
