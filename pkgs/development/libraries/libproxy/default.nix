@@ -1,9 +1,10 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, cmake, zlib}:
 
-stdenv.mkDerivation {
-  name = "libproxy-0.2.3";
+stdenv.mkDerivation rec {
+  name = "libproxy-0.4.6";
   src = fetchurl {
-    url = http://libproxy.googlecode.com/files/libproxy-0.2.3.tar.gz;
-    sha256 = "16ikq42ffrfd60j57r0l488r8zgkyxcn7l69gkijjzalndhd3pjr";
+    url = "http://libproxy.googlecode.com/files/${name}.tar.gz";
+    sha256 = "9ad912e63b1efca98fb442240a2bc7302e6021c1d0b1b9363327729f29462f30";
   };
+  buildInputs = [cmake zlib];
 }
