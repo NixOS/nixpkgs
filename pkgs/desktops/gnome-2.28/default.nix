@@ -137,6 +137,11 @@ pkgs.makeOverridable
     inherit intltool libbonobo ORBit2;
   };
 
+  glib_networking = import ./platform/glib-networking {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib libtool intltool gnutls
+      libproxy libgcrypt libtasn1;
+  };
+
   gtk_doc = import ./platform/gtk-doc {
     inherit (pkgs) stdenv fetchurl pkgconfig perl python libxml2 libxslt;
     inherit (pkgs) docbook_xml_dtd_43 docbook_xsl dblatex;
