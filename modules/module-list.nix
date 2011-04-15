@@ -51,6 +51,7 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/sitecopy-backup.nix
+  ./services/databases/4store.nix
   ./services/databases/mysql.nix
   ./services/databases/postgresql.nix
   ./services/databases/openldap.nix
