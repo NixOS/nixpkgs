@@ -11,7 +11,7 @@
   enableOfficialBranding ? false
 }:
 
-assert stdenv.gcc ? libc;
+assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 

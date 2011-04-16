@@ -1,5 +1,7 @@
 {stdenv, fetchurl, guile, texinfo}:
 
+assert stdenv ? gcc && stdenv.gcc ? gcc && stdenv.gcc.gcc != null;
+
 stdenv.mkDerivation rec {
   name = "guile-lib-0.2.0";
 
