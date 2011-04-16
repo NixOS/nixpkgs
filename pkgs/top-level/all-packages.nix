@@ -2667,6 +2667,8 @@ let
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
+  intelgen4asm = callPackage ../development/misc/intelgen4asm { };
+
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
@@ -3778,6 +3780,8 @@ let
   libunwind = callPackage ../development/libraries/libunwind { };
 
   libv4l = callPackage ../development/libraries/libv4l { };
+
+  libva = callPackage ../development/libraries/libva { };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
