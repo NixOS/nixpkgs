@@ -5,7 +5,7 @@
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
-, libass
+, libass, libva
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
     libkate libtiger libv4l samba liboggz libass
   ]
-  ++ (with xlibs; [ xlibs.xlibs libXv libXpm xcbutil ]);
+  ++ (with xlibs; [ xlibs.xlibs libXv libXvMC libXpm xcbutil libva ]);
 
   configureFlags = [ "--enable-alsa"
     "--disable-glx"
