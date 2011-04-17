@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ neon zlib ];
   
-  patches = [ ./davfs2-install.patch ]; 
+  patches = [ ./davfs2-install.patch ./isdir.patch ]; 
 
   meta = {
     longDescription = "Web Distributed Authoring and Versioning (WebDAV), an extension to the HTTP-protocol, allows authoring of resources on a remote web server. davfs2 provides the ability to access such resources like a typical filesystem, allowing for use by standard applications with no built-in support for WebDAV.";

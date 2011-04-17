@@ -529,7 +529,7 @@ let
   dar = callPackage ../tools/archivers/dar { };
 
   davfs2 = callPackage ../tools/filesystems/davfs2 {
-    neon = neon028;
+    neon = neon029;
   };
 
   dcraw = callPackage ../tools/graphics/dcraw { };
