@@ -1,14 +1,15 @@
-{stdenv, fetchurl, tetex}:
+{stdenv, fetchurl, tetex, unzip}:
 
 stdenv.mkDerivation rec {
   name = "tex4ht-1.0.2009_06_11_1038";
 
   src = fetchurl {
-    url = "http://www.cse.ohio-state.edu/~gurari/TeX4ht/fix/${name}.tar.gz";
-    sha1 = "7d46488059316dec3234b6478cd0d2ca8f4d110f";
+    url = "http://www.tug.org/applications/tex4ht/tex4ht.zip";
+    # http://www.cse.ohio-state.edu/~gurari/TeX4ht/fix/${name}.tar.gz";
+    sha1 = "2970cec5f4afc9039b82d6a4210f21d70ded2f5a";
   };
 
-  buildInputs = [ tetex ];
+  buildInputs = [ tetex unzip ];
 
   buildPhase = ''
     cd src
