@@ -7,6 +7,7 @@ rec {
 
   doAggregate = fullDepEntry (''
 
+    ensureDir $out/bin
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
         find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*/) ! -type d | while read; do
@@ -15,6 +16,13 @@ rec {
 	    ln -fs $currentPath/"$REPLY" $out/"$REPLY"
 	    echo
         done | while read; do head -n 99 >/dev/null; echo -n .; done
+
+        for i in $currentPath/bin/* :; do #*/
+            test "$i" = : && continue;
+            echo -ne "#! /bin/sh\\n$i \"\$@\"" > "$out/bin/$(basename "$i")" && \
+            chmod a+x "$out/bin/$(basename "$i")"
+        done
+
 	echo
 
 	cp -Trfp $currentPath/libexec $out/libexec || true
@@ -28,8 +36,8 @@ rec {
       ensureDir $out/texmf-config/"$REPLY"
     done
 
-    ensureDir $out/bin
-    for i in $out/libexec/*/*; do
+    for i in $out/libexec/*/* :; do
+        test "$i" = : && continue;
         test -f "$i" && \
 	test -x "$i" && \
 	echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i) && \
