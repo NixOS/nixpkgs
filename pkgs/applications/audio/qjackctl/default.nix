@@ -1,13 +1,14 @@
 { stdenv, fetchurl, qt4, alsaLib, jackaudio }:
 
-stdenv.mkDerivation {
-  name = "qjackctl-0.3.3";
+stdenv.mkDerivation rec {
+  version = "0.3.7";
+  name = "qjackctl-${version}";
 
   # some dependencies such as killall have to be installed additionally
 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/qjackctl/qjackctl-0.3.3.tar.gz;
-    sha256 = "1z9v208fs79ka6ni3p5v5xb0k5y1wqqm2a9cf903387b9p3fhpxj";
+    url = "mirror://sourceforge/qjackctl/${name}.tar.gz";
+    sha256 = "1gynym21d8d4d38qyl817qg0v8360brcpga4wcdapccbgpaz3c28";
   };
 
   buildInputs = [ qt4 alsaLib jackaudio ];
