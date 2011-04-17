@@ -1,6 +1,6 @@
 { stdenv, fetchurl, qt4, libvorbis, boost, speechd, protobuf, libsndfile,
  avahi, dbus, libcap }:
-        
+
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
   version = "1.2.2";
@@ -16,12 +16,17 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    qmake PREFIX=$out CONFIG+=no-g15 CONFIG+=no-update \
+    qmake CONFIG+=no-g15 CONFIG+=no-update \
       CONFIG+=no-embed-qt-translations CONFIG+=no-ice
   '';
 
   buildInputs = [ qt4 libvorbis boost speechd protobuf libsndfile avahi dbus
     libcap ];
+
+  installPhase = ''
+    ensureDir $out
+    cp -r ./release $out/bin
+  '';
 
   meta = { 
     homepage = http://mumble.sourceforge.net/;
