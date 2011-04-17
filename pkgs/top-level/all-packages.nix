@@ -484,6 +484,8 @@ let
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
+  colordiff = callPackage ../tools/text/colordiff { };
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
