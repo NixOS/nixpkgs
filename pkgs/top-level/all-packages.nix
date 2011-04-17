@@ -3102,6 +3102,8 @@ let
 
   gdal = callPackage ../development/libraries/gdal { };
 
+  ggz_base_libs = callPackage ../development/libraries/ggz_base_libs {};
+
   giblib = callPackage ../development/libraries/giblib { };
 
   glew = callPackage ../development/libraries/glew { };
@@ -6864,6 +6866,7 @@ let
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libX11 kbproto;
     libsoup = gnome28.libsoup_2_33;
+    inherit (gnome28) glib_networking;
   };
 
   valknut = callPackage ../applications/networking/p2p/valknut {
@@ -7310,6 +7313,8 @@ let
   };
 
   warzone2100 = callPackage ../games/warzone2100 { };
+
+  widelands = callPackage ../games/widelands {};
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
