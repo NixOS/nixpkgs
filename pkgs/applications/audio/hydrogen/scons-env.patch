@@ -1,0 +1,20 @@
+--- hydrogen-0.9.5/Sconstruct	2011-03-15 13:22:35.000000000 +0100
++++ hydrogen-0.9.5/Sconstruct	2011-04-17 16:06:54.000000000 +0200
+@@ -178,7 +178,7 @@
+ 
+ 	includes.append( "libs/hydrogen/include" )
+ 	
+-	env = Environment( options = opts ) 
++	env = Environment( options = opts, ENV = os.environ ) 
+ 
+ 
+ 	#location of qt4.py
+@@ -379,7 +379,7 @@
+ 
+ includes, a , b = get_platform_flags( opts )
+ 
+-env = Environment(options = opts, CPPPATH = includes)
++env = Environment(options = opts, ENV = os.environ)
+ 
+ 
+ Help(opts.GenerateHelpText(env))

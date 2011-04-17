@@ -6267,6 +6267,8 @@ let
   hugin = callPackage ../applications/graphics/hugin {
   };
 
+  hydrogen = callPackage ../applications/audio/hydrogen { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
