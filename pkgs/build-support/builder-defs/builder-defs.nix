@@ -394,6 +394,19 @@ let inherit (builtins) head tail trace; in
 	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${cmakeRPathFlag}${toString cmakeFlags} ..
 	'') ["minInit" "addInputs" "doUnpack"];
 
+	doScons = fullDepEntry (''
+		ensureDir $out
+		${if (attrByPath ["sconsCleanEnv"] false args)
+		 then ""
+		 else ''
+                   sed -e '1iimport os' -i SConstruct
+                   sed -e 's/env *= *Environment *.*/&; env['"'"'ENV'"'"']=os.environ;/' -i SConstruct
+		 ''
+		}
+		scons PREFIX=$out 
+		scons PREFIX=$out install
+	'') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
+
         /*debug = x:(trace x x);
         debugX = x:(trace (toXML x) x);*/
 
