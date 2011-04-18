@@ -4309,6 +4309,8 @@ let
 
   xapian = callPackage ../development/libraries/xapian { };
 
+  xapian12 = callPackage ../development/libraries/xapian/1_2.nix { };
+
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
   };
 
@@ -6582,6 +6584,9 @@ let
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+  notmuchXapian12 = callPackage ../applications/networking/mailreaders/notmuch {
+    xapian = xapian12;
+  };
 
   nova = callPackage ../applications/virtualization/nova { };
 
