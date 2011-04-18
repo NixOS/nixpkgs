@@ -1,19 +1,15 @@
-{ fetchgit, stdenv, bash, emacs, glib, gmime, gnupg1orig, pkgconfig, talloc, xapian }:
+{ fetchgit, stdenv, bash, emacs, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.5-20110322-2";
+  name = "notmuch-0.5-cfl3";
 
   src = fetchgit {
     url = "git://github.com/chaoflow/notmuch";
-    # personal
-    rev = "9515cc2d76a9b9c28948156036037b0efb5e136c";
+    rev = "cfl3";
     sha256 = "d142cc1cff4c810b22b9c7b8c831bb25e7076e7d74089120d1ad6ccb0a95159c";
-    # master
-    # rev = "74bc93f02d5061e0eb360571c2664541ae5bd98b";
-    # sha256 = "7cc2ea0658c97c39586249bcb815ebcb07e59c62d78e0cff748f3f4be12d2c54";
   };
 
-  buildInputs = [ bash emacs glib gmime gnupg1orig pkgconfig talloc xapian ];
+  buildInputs = [ bash emacs glib gmime gnupg1 pkgconfig talloc xapian ];
 
   patchPhase = ''
     substituteInPlace "test/author-order" \
