@@ -1,11 +1,13 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
 
+let version = "4.0.4"; in
+
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-4.0.2";
+  name = "VirtualBox-GuestAdditions-${version}";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/4.0.2/VBoxGuestAdditions_4.0.2.iso;
-    sha256 = "4c8726f70d4202747d35e1ad715ca9dcd29be1fe74720492097d7fb83cae7988";
+    url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
+    sha256 = "0f3phmy75cfyhvfsyljs85rgra13kiy2zans6bhc7sqji30kkk48";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit makeWrapper ];
