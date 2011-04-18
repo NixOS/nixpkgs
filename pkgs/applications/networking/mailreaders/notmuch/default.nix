@@ -1,12 +1,12 @@
 { fetchgit, stdenv, bash, emacs, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.5-cfl4";
+  name = "notmuch-0.5-cfl7";
 
   src = fetchgit {
     url = "git://github.com/chaoflow/notmuch";
-    rev = "cfl4";
-    sha256 = "ea0c0ca4d07eb4dd2600708f60775ded0ded2b4a61c2d4ab80e89c9fc4701ee9";
+    rev = "cfl7";
+    sha256 = "d0096e312ad1d2c278d22377b273aae117ccc8de3605575fd23306e244157263";
   };
 
   buildInputs = [ bash emacs glib gmime gnupg1 pkgconfig talloc xapian ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Notmuch -- The mail indexer + inheritable-tags-hack + crypto";
+    description = "Notmuch -- The mail indexer";
 
     longDescription = "";
 
