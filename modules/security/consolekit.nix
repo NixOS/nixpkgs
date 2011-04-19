@@ -20,8 +20,6 @@ let
         PATH=${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.glibc}/bin
         TAGDIR=/var/run/console
 
-        exec >> /tmp/xyzzy 2>&1
-
         [ -n "$CK_SESSION_USER_UID" ] || exit 1
 
         TAGFILE="$TAGDIR/`getent passwd $CK_SESSION_USER_UID | cut -f 1 -d:`"
