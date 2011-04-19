@@ -7167,6 +7167,8 @@ let
 
   gl117 = callPackage ../games/gl-117 {};
 
+  globulation2 = callPackage ../games/globulation {};
+
   gltron = callPackage ../games/gltron { };
 
   gnuchess = callPackage ../games/gnuchess { };

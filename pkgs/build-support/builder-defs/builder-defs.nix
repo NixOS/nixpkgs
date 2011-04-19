@@ -403,8 +403,8 @@ let inherit (builtins) head tail trace; in
                    sed -e 's/env *= *Environment *.*/&; env['"'"'ENV'"'"']=os.environ;/' -i SConstruct
 		 ''
 		}
-		scons PREFIX=$out 
-		scons PREFIX=$out install
+		scons ${toString (attrByPath ["sconsFlags"] [] args)} PREFIX=$out 
+		scons ${toString (attrByPath ["sconsFlags"] [] args)} PREFIX=$out install
 	'') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
         /*debug = x:(trace x x);
