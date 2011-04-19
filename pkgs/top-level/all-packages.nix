@@ -2398,6 +2398,11 @@ let
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
 
+  python32 = callPackage ../development/interpreters/python/3.2 {
+    arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
+    sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
+  };
+
   pythonFull = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = lib.attrValues python.modules;
   };
@@ -5808,11 +5813,11 @@ let
 
   blender = callPackage ../applications/misc/blender/2.49.nix { };
 
-  blender_2_50 = lowPrio (import ../applications/misc/blender {
-    inherit stdenv fetchurl cmake mesa gettext libjpeg libpng zlib openal SDL openexr
-      libsamplerate libtiff ilmbase;
+  blender_2_57 = lowPrio (import ../applications/misc/blender {
+    inherit stdenv fetchurl SDL cmake gettext ilmbase libjpeg libpng
+      libsamplerate libtiff mesa openal openexr openjpeg zlib;
     inherit (xlibs) libXi;
-    python = python3;
+    python = python32;
   });
 
   bvi = callPackage ../applications/editors/bvi { };
