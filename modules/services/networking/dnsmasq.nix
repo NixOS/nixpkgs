@@ -19,7 +19,7 @@ in
     services.dnsmasq = {
 
       enable = mkOption {
-        default = true;
+        default = false;
         description = ''
           Whether to run dnsmasq.
         '';
