@@ -6998,6 +6998,8 @@ let
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
+  xdotool = callPackage ../tools/X11/xdotool { };
+
   xen = callPackage ../applications/virtualization/xen { };
 
   xfig = callPackage ../applications/graphics/xfig {
