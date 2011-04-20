@@ -3,7 +3,7 @@
 
 let
   pname = "Isabelle";
-  version = "2009-2";
+  version = "2011";
   name = "${pname}${version}";
   theories = ["HOL" "FOL" "ZF"];
 in
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.cl.cam.ac.uk/research/hvg/${pname}/dist/${name}.tar.gz";
-    sha256 = "f92a275b78bd8844de47a5902e339b58f3b768c07a7fb19d8e606b68499d5ac4";
+    sha256 = "ea85eb2a859891be387f020b2e45f8c9a0bd1d8bbc3902f28a429e9c61cb0b6a";
   };
 
   buildInputs = [ perl polyml nettools ];
