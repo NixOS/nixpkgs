@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk, ladspaH,
-ladspaPlugins, liblo, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk, jackaudio,
+ladspaH, ladspaPlugins, liblo, pkgconfig }:
 
 stdenv.mkDerivation  rec {
   name = "xsynth-dssi-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation  rec {
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 
-  buildInputs = [ alsaLib autoconf automake dssi gtk ladspaH
+  buildInputs = [ alsaLib autoconf automake dssi gtk jackaudio ladspaH
     ladspaPlugins liblo pkgconfig ];
 
   installPhase = ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation  rec {
       synths) with user interfaces, permitting them to be hosted
       in-process by audio applications.
     '';
-    homepage = http://dssi.sourceforge.net/download.html#Xsynth-DSSI;
-    license = licenses.gpl2+;
+    homepage = "http://dssi.sourceforge.net/download.html#Xsynth-DSSI";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
   };
