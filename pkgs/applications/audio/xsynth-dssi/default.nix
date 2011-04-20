@@ -15,7 +15,9 @@ stdenv.mkDerivation  rec {
 
   installPhase = ''
     ensureDir $out/bin
+    ensureDir $out/lib
     cp src/Xsynth_gtk $out/bin
+    cp src/.libs/xsynth-dssi.so $out/lib
   '';
 
   meta = with stdenv.lib; {
