@@ -7045,6 +7045,10 @@ let
     inherit (gnome) libglade;
   };
 
+  xsynth_dssi = callPackage ../applications/audio/xsynth-dssi {
+    inherit (gtkLibs) gtk;
+  };
+
   xterm = callPackage ../applications/misc/xterm { };
 
   xtrace = callPackage ../tools/X11/xtrace { };
