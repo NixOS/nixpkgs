@@ -4,7 +4,7 @@ let
 
 
   makeIso =
-    { module, description, maintainers ? ["eelco"]}:
+    { module, type, description ? type, maintainers ? ["eelco"] }:
     { nixosSrc ? {outPath = ./.; rev = 1234;}
     , officialRelease ? false
     , system ? "i686-linux"
@@ -16,7 +16,10 @@ let
 
       version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
-      versionModule = { system.nixosVersion = version; };
+      versionModule =
+        { system.nixosVersion = version;
+          isoImage.isoBaseName = "nixos-${type}";
+        };
 
       config = (import lib/eval-config.nix {
         inherit system nixpkgs;
@@ -119,12 +122,12 @@ let
 
     iso_minimal = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
-      description = "minimal";
+      type = "minimal";
     };
 
     iso_graphical = makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
-      description = "graphical";
+      type = "graphical";
     };
 
     # Provide a tarball that can be unpacked into an SD card, and easily

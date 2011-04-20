@@ -11,9 +11,16 @@ let
   options = {
 
     isoImage.isoName = mkOption {
-      default = "cd.iso";
+      default = "${config.isoImage.isoName}.iso";
       description = ''
         Name of the generated ISO image file.
+      '';
+    };
+
+    isoImage.isoBaseName = mkOption {
+      default = "nixos";
+      description = ''
+        Prefix of the name of the generated ISO image file.
       '';
     };
 

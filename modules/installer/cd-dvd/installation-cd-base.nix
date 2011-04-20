@@ -39,7 +39,7 @@ in
     ];
 
   # ISO naming.
-  isoImage.isoName = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
+  isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
     
   isoImage.volumeID = "NIXOS_INSTALL_CD_${config.system.nixosVersion}";
   
