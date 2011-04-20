@@ -1426,6 +1426,8 @@ let
 
   vlan = callPackage ../tools/networking/vlan { };
 
+  wakelan = callPackage ../tools/networking/wakelan { };
+
   w3cCSSValidator = callPackage ../tools/misc/w3c-css-validator {
     tomcat = tomcat6;
   };

@@ -246,4 +246,10 @@ rec {
     ftp://ftp-archives.postgresql.org/pub/
   ];
 
+  metalab = [
+    ftp://mirrors.kernel.org/metalab/
+    ftp://ftp.gwdg.de/pub/linux/metalab/
+    ftp://ftp.xemacs.org/sites/metalab.unc.edu/
+  ];
+
 }
