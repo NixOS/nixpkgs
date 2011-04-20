@@ -2,7 +2,7 @@
 
 let
   minor = "1.5";
-  version = "${minor}.0";
+  version = "${minor}.1";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ftp.gnome.org/pub/gnome/sources/meld/${minor}/meld-${version}.tar.bz2";
-    sha256 = "1kf0k3813nfmahn2l2lbs6n9zg2902gixypsf656m6mqyyrmxrrm";
+    sha256 = "0ykj3rb5hvcr4dmc52mz8q3iknrsh042v1x7yvffgs6yibakcac2";
   };
 
   buildInputs = [ pygtk python intltool scrollkeeper makeWrapper ];
