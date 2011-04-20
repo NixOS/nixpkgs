@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   makefile = "makefile.unix";
 
+  preBuild = "make -f ${makefile} clean";
+
   buildFlags = "bitcoin bitcoind";
 
   installPhase = ''
