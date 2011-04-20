@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , mesa, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net, speex, libvorbis
-  , libogg, boost, fribidi
+  , libogg, boost, fribidi, bsdiff
   , ...}:
 builderDefsPackage
 (a :  
@@ -25,13 +25,24 @@ rec {
     sha256 = sourceInfo.hash;
   };
 
+  tutorial4patch = a.fetchurl {
+    url = "http://bugs.debian.org/cgi-bin/bugreport.cgi?msg=34;filename=tutorial-part4.map.bspatch;att=1;bug=595448";
+    name = "globulation2-tutorial4-map-patch-debian.bspatch";
+    sha256 = "d3511ac0f822d512c42abd34b3122f2990862d3d0af6ce464ff372f5bd7f35e9";
+  };
+
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doUnpack" "doPatch" "workaroundScons" "doScons"];
+  phaseNames = ["doUnpack" "doPatch" "doBspatch" "workaroundScons" "doScons"];
 
   patches = [./header-order.patch];
+
+  doBspatch = a.fullDepEntry ''
+    cp campaigns/tutorial-part4.map{,.orig}
+    bspatch  campaigns/tutorial-part4.map{.orig,} ${tutorial4patch}
+  '' ["minInit" "doUnpack" "addInputs"];
 
   # FIXME
   # I officially fail to understand what goes on, but that seems to work
