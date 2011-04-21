@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hol_light_sources-${version}";
-  version = "20101029";
+  version = "20110417";
 
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "64";
-    sha256 = "91e9cac62586039b13c11af245f85a743e299892b24b39d3c7b2ee13157e87c9";
+    rev = "89";
+    sha256 = "a14a7ce61002443daac85583362f9f6f5509b22d441effaeb378e0f2c29185e5";
   };
 
   buildCommand = ''
