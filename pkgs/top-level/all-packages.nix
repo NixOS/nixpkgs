@@ -7609,6 +7609,8 @@ let
     withX = true;
   };
 
+  msieve = callPackage ../applications/science/math/msieve { };
+
   yacas = callPackage ../applications/science/math/yacas { };
 
   ### SCIENCE / MISC
