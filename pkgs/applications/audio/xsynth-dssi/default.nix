@@ -6,7 +6,7 @@ stdenv.mkDerivation  rec {
   version = "0.9.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xsynth-dssi/${name}.tar.gz";
+    url = "mirror://sourceforge/dssi/${name}.tar.gz";
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 
