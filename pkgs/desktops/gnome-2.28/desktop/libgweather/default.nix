@@ -1,13 +1,14 @@
-{stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup, libtasn1}:
+{stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup, libtasn1, nettle, gmp}:
 
+#Is this really necessary?
 assert stdenv ? glibc;
 
-stdenv.mkDerivation {
-  name = "libgweather-2.28.0";
+stdenv.mkDerivation rec {
+  name = "libgweather-2.30.3";
   src = fetchurl {
-    url = mirror://gnome/sources/libgweather/2.28/libgweather-2.28.0.tar.bz2;
-    sha256 = "0m4ncqzf13037zvyihydif1asgp6pnzdkmx5qnmffzb1gd6qxzb5";
+    url = "mirror://gnome/sources/libgweather/2.30/${name}.tar.bz2";
+    sha256 = "0k16lpdyy8as8wgc5dqpy5b8i9i4mrl77qx8db23fgs2c533fddq";
   };
   configureFlags = "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo";
-  buildInputs = [ pkgconfig libxml2 gtk intltool GConf libsoup libtasn1 ];
+  buildInputs = [ pkgconfig libxml2 gtk intltool GConf libsoup libtasn1 nettle gmp ];
 }

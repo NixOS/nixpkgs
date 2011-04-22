@@ -222,7 +222,7 @@ pkgs.makeOverridable
   };
 
   libgweather = import ./desktop/libgweather {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 libtasn1;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 libtasn1 nettle gmp;
     inherit (pkgs.gtkLibs) gtk;
     inherit intltool GConf libsoup;
   };
