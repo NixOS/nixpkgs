@@ -17,7 +17,7 @@ stdenv.mkDerivation  rec {
     ensureDir $out/bin
     ensureDir $out/lib
     cp src/Xsynth_gtk $out/bin
-    cp src/.libs/xsynth-dssi.so $out/lib
+    cp src/.libs/* $out/lib
   '';
 
   meta = with stdenv.lib; {
