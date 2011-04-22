@@ -5436,6 +5436,10 @@ let
     config = getConfig ["pcmciaUtils" "config"] null;
   };
 
+  phat = callPackage ../development/libraries/phat { 
+    inherit (gnome) gtk libgnomecanvas;
+  };
+
   pmount = callPackage ../os-specific/linux/pmount { };
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
@@ -6773,6 +6777,10 @@ let
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
+
+  specimen = callPackage ../applications/audio/specimen {
+    inherit (gnome) gtk libgnomecanvas;
+  };
 
   spotify = callPackage ../applications/audio/spotify { };
 
