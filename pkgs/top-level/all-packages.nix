@@ -6917,6 +6917,10 @@ let
 
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
+  vkeybd = callPackage ../applications/audio/vkeybd {
+    inherit (xlibs) libX11;
+  };
+
   vlc = callPackage ../applications/video/vlc {
     dbus = dbus.libs;
     alsa = alsaLib;
