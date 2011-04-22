@@ -6464,6 +6464,8 @@ let
     inherit (gnome) libglade gtk;
   };
 
+  lmms = callPackage ../applications/audio/lmms { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
