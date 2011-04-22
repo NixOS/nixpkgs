@@ -7184,6 +7184,8 @@ let
 
   gl117 = callPackage ../games/gl-117 {};
 
+  glestae = callPackage ../games/glestae {};
+
   globulation2 = callPackage ../games/globulation {};
 
   gltron = callPackage ../games/gltron { };
