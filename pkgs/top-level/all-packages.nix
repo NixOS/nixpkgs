@@ -6753,6 +6753,10 @@ let
 
   semnotes = newScope pkgs.kde4 ../applications/misc/semnotes { };
 
+  seq24 = callPackage ../applications/audio/seq24 {
+    inherit (gtkLibs) gtkmm;
+  };
+
   siproxd = callPackage ../applications/networking/siproxd { };
 
   skype_linux = callPackage_i686 ../applications/networking/skype { };
