@@ -1,28 +1,35 @@
-{ stdenv, fetchurl, openssl, libcap, pam }:
+{ stdenv, fetchurl, openssl, sslEnable ? false, libcap, pam }:
 
-stdenv.mkDerivation rec {
-  name = "vsftpd-2.0.5";
+stdenv.mkDerivation (rec {
+  name = "vsftpd-2.3.4";
   
   src = fetchurl {
     url = "ftp://vsftpd.beasts.org/users/cevans/${name}.tar.gz";
-    sha256 = "0nzsxknnaqnfk853yjsmi31sl02jf5ydix9wxbldv4i7vzqfnqjl";
+    sha256 = "0nhsqwnb8qkbxx5wjahara1ln85hp151v656psra5brpckwysrml";
   };
   
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
-
-  preInstall = ''
-    ensureDir $out/{,s}bin
-    ensureDir $out/man/man{5,8}
+  preBuild =''
+    makeFlagsArray=( "LIBS=${if sslEnable then "-lcrypt -lssl -lcrypto " else ""}-lpam -lcap" )
   '';
-
-  patches = [ ./fix.patch ] ;
-  
-  preConfigure = ''
-    sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h
-    sed -i "s@/etc/vsftpd.user_list@$out/vsftpd.user_list@" vsftpd.conf.5 tunables.c
-  '';
-
-  postInstall = "cp ${./vsftpd.user_list} $out/vsftpd.user_list";
 
   buildInputs = [ openssl libcap pam ];
-}
+
+  installPhase = ''
+    mkdir -pv $out/sbin
+    install -v -m 755 vsftpd $out/sbin/vsftpd
+
+    mkdir -pv $out/share/man/man{5,8}
+    install -v -m 644 vsftpd.8 $out/share/man/man8/vsftpd.8
+    install -v -m 644 vsftpd.conf.5 $out/share/man/man5/vsftpd.conf.5
+
+    mkdir -pv $out/etc/xinetd.d
+    install -v -m 644 xinetd.d/vsftpd $out/etc/xinetd.d/vsftpd
+  '';
+} // (if sslEnable then {
+  preConfigure = ''
+    echo "Will enable SSL"
+    sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h
+  '';
+
+} else { })
+)
