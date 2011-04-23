@@ -3,11 +3,11 @@
 assert stdenv ? gcc && stdenv.gcc ? gcc && stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  name = "guile-lib-0.2.0";
+  name = "guile-lib-0.2.1";
 
   src = fetchurl {
     url = "mirror://savannah/guile-lib/${name}.tar.gz";
-    sha256 = "14acyznc0xgjd33fb9ngil102nvbhx12bvxi4hd25pl66i2d6izc";
+    sha256 = "0ag18l7f9cpv4l577ln3f106xiggl7ndxhrqqiz7cg0w38s3cjvl";
   };
 
   buildInputs = [guile texinfo];
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Guile-Library, a collection of useful Guile Scheme modules";
+
+    longDescription =
+      '' guile-lib is intended as an accumulation place for pure-scheme Guile
+         modules, allowing for people to cooperate integrating their generic
+         Guile modules into a coherent library.  Think "a down-scaled,
+         limited-scope CPAN for Guile".
+      '';
+
     homepage = http://www.nongnu.org/guile-lib/;
     license = "GPLv3+";
 
