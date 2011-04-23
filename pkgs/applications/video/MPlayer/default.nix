@@ -1,6 +1,6 @@
 { alsaSupport ? true, xvSupport ? true, theoraSupport ? true, cacaSupport ? true
 , xineramaSupport ? true, randrSupport ? true, dvdnavSupport ? true
-, stdenv, fetchurl, x11, freetype, fontconfig, zlib
+, stdenv, fetchurl, x11, freetype, fontconfig, zlib, ffmpeg
 , alsaLib ? null, libXv ? null, libtheora ? null, libcaca ? null
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
@@ -65,15 +65,22 @@ let
 in  
 
 stdenv.mkDerivation rec {
-  name = "MPlayer-1.0-pre20101227";
+  name = "mplayer-20110423";
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
-    sha256 = "0q9rvjz3byvs0qlnb9jbnw3qs6c3vdcqaqxm1rnql8kqic442hv2";
+    # Old kind of URL:
+    # url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
+    # Snapshot I took on 20110423
+    url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
+    sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
   };
 
+  prePatch = ''
+    sed -i /^_install_strip/d configure
+  '';
+
   buildInputs =
-    [ freetype zlib pkgconfig ]
+    [ freetype zlib pkgconfig ffmpeg ]
     ++ stdenv.lib.optional x11Support [ libX11 libXext mesa ]
     ++ stdenv.lib.optional alsaSupport alsaLib
     ++ stdenv.lib.optional xvSupport libXv
@@ -94,6 +101,11 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ yasm ];
 
+  preConfigure = ''
+    tar xf ${ffmpeg.src}
+    mv ffmpeg* ffmpeg
+  '';
+
   configureFlags = ''
     ${if cacaSupport then "--enable-caca" else "--disable-caca"}
     ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
@@ -103,6 +115,8 @@ stdenv.mkDerivation rec {
     ${if x11Support then "--enable-x11" else ""}
     --disable-xanim
     --disable-ivtv
+    --enable-vidix
+    --enable-fbdev
   '';
 
   NIX_LDFLAGS = if x11Support then "-lX11 -lXext" else "";
@@ -115,14 +129,15 @@ stdenv.mkDerivation rec {
     '';
 
   crossAttrs = {
-    preConfigure = ''
+    dontSetConfigureCross = true;
+    # Some things (vidix) are nanonote specific. Once someone cares, we can make options from them.
+    preConfigure = preConfigure + ''
       configureFlags="`echo $configureFlags |
-        sed -e 's/--build[^ ]\+//' \
-        -e 's/--host[^ ]\+//' \
-        -e 's/--codecsdir[^ ]\+//' \
+        sed -e 's/--codecsdir[^ ]\+//' \
         -e 's/--enable-runtime-cpudetection//' `"
       configureFlags="$configureFlags --target=${stdenv.cross.arch}-linux
-        --cc=$crossConfig-gcc --as=$crossConfig-as"
+        --enable-cross-compile --cc=$crossConfig-gcc --as=$crossConfig-as
+        --disable-vidix-pcidb --with-vidix-drivers=no --host-cc=gcc"
     '';
   };
 
