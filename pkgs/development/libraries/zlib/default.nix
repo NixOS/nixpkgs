@@ -19,7 +19,15 @@ stdenv.mkDerivation (rec {
 
   crossAttrs = {
     dontStrip = if static then true else false;
-  };
+  } // (if stdenv.cross.libc == "msvcrt" then {
+    configurePhase=''
+      installFlags="BINARY_PATH=$out/bin INCLUDE_PATH=$out/include LIBRARY_PATH=$out/lib"
+    '';
+    makeFlags = [
+      "-f" "win32/Makefile.gcc"
+      "PREFIX=${stdenv.cross.config}-"
+    ] ++ (if static then [] else [ "SHARED_MODE=1" ]);
+  } else {});
 
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
