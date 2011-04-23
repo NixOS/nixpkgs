@@ -7617,6 +7617,8 @@ let
 
   ### SCIENCE / MATH
 
+  ecm = callPackage ../applications/science/math/ecm { };
+
   maxima = callPackage ../applications/science/math/maxima { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { };
