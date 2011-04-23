@@ -9,7 +9,7 @@ composableDerivation.composableDerivation {} {
   name = "jack-0.120.1";
   
   src = fetchurl {
-    url = "mirror://sourceforge/jackit/jack-audio-connection-kit-0.120.1.tar.gz";
+    url = "http://jackaudio.org/downloads/jack-audio-connection-kit-0.120.1.tar.gz";
     sha256 = "02h8536c67059gq2vsl323kvy9jak9dp0syi1h58awlkbgzlg80d";
   };
   
