@@ -7119,6 +7119,10 @@ let
 
   yakuake = newScope pkgs.kde4 ../applications/misc/yakuake { };
 
+  yoshimi = callPackage ../applications/audio/yoshimi {
+    fltk = fltk11;
+  };
+
   zapping = callPackage ../applications/video/zapping {
     inherit (gnome) scrollkeeper libgnomeui libglade esound;
     teletextSupport = true;
