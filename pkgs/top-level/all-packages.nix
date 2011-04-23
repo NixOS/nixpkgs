@@ -6438,6 +6438,10 @@ let
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
+  lash = callPackage ../applications/audio/lash {
+    inherit (gtkLibs) gtk;
+  };
+
   ladspaH = callPackage ../applications/audio/ladspa-plugins/ladspah.nix { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
