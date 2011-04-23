@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, gmp}:
+{stdenv, fetchurl, zlib, gmp, ecm }:
 
 stdenv.mkDerivation {
   name = "msieve-1.48";
@@ -8,7 +8,9 @@ stdenv.mkDerivation {
       sha256 = "05cm23mpfsbwssqda243sbi8m31j783qx89x9gl7sy8a4dnv7h63";
     };
 
-  buildInputs = [ zlib gmp ];
+  buildInputs = [ zlib gmp ecm ];
+
+  ECM = if ecm == null then "0" else "1";
 
   buildFlags = if stdenv.system == "x86_64-linux" then "x86_64"
                else if stdenv.system == "i686-linux" then "x86"
