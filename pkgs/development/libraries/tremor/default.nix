@@ -9,10 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "161411cbefa1527da7a8fc087e78d8e21d19143d3a6eb42fb281e5026aad7568";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig ];
+  buildNativeInputs = [ autoconf automake libtool pkgconfig ];
   propagatedBuildInputs = [ libogg ];
 
-  preConfigure = "autoreconf -vfi";
+  preConfigure = ''
+    autoreconf -vfi
+    sed -i /XIPH_PATH_OGG/d configure
+  '';
 
   meta = {
     homepage = http://xiph.org/tremor/;

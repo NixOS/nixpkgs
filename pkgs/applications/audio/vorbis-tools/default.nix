@@ -2,17 +2,13 @@
 , speex, flac}:
 
 stdenv.mkDerivation {
-  name = "vorbis-tools-1.1.1";
+  name = "vorbis-tools-1.4.0";
   src = fetchurl {
-    url = http://downloads.xiph.org/releases/vorbis/vorbis-tools-1.1.1.tar.gz;
-    sha256 = "617b4aa69e600c215b34fa3fd5764bc1d9d205d9d7d9fe7812bde7ec956fcaad";
+    url = http://downloads.xiph.org/releases/vorbis/vorbis-tools-1.4.0.tar.gz;
+    sha256 = "1g12bnh5ah08v529y72kfdz5lhvy75iaz7f9jskyby23m9dkk2d3";
   };
 
-  # FIXME: Vorbis-tools expects `libOggFLAC', but this library was
-  # merged with `libFLAC' as of FLAC 1.1.3.
   buildInputs = [ libogg libvorbis libao pkgconfig curl speex glibc flac ];
-
-  patches = [ ./ogg123-curlopt-mute.patch ];
 
   meta = {
     longDescription = ''
