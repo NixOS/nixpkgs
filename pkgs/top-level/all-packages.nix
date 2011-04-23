@@ -4615,6 +4615,8 @@ let
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
+  pies = callPackage ../servers/pies { };
+
   portmap = callPackage ../servers/portmap { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
