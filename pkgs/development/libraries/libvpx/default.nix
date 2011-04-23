@@ -1,11 +1,11 @@
-{stdenv, fetchurl, bash, yasm}:
+{stdenv, fetchurl, bash, yasm, which}:
 
 stdenv.mkDerivation rec {
-  name = "libvpx-0.9.1";
+  name = "libvpx-0.9.6";
   
   src = fetchurl {
-    url = http://webm.googlecode.com/files/libvpx-0.9.1.tar.bz2;
-    sha256 = "0ngc8y12np2q6yhrrn6cbmlbzwbk10fnldj8d5dxxzvrw1iy9s64";
+    url = http://webm.googlecode.com/files/libvpx-v0.9.6.tar.bz2;
+    sha256 = "0wxay9wss4lawrcmnwqkpy0rdnaih1k7ilzh284mgyqnya78mg98";
   };
 
   patchPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     make quiet=false DIST_DIR=$out install
   '';
 
-  buildInputs = [ yasm ];
+  buildInputs = [ yasm which ];
 
   meta = {
     description = "VP8 video encoder";
