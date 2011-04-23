@@ -56,11 +56,11 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = a.lib.licenses.gpl;
+    license = a.lib.licenses.gpl2Plus;
   };
   passthru = {
     updateInfo = {
-      downloadPage = "${abort ''Specify download page''}";
+      downloadPage = "https://launchpad.net/widelands/+download";
     };
   };
 }) x
