@@ -6,11 +6,11 @@
 let inherit (composableDerivation) edf; in
 
 composableDerivation.composableDerivation {} {
-  name = "jack-0.103.0";
+  name = "jack-0.120.1";
   
   src = fetchurl {
-    url = "mirror://sourceforge/jackit/jack-audio-connection-kit-0.109.2.tar.gz";
-    sha256 = "1m5z8dzalqspsa63pkcgyns0cvh0kqwhb9g1ivcwvnz0bc7ag9r7";
+    url = "mirror://sourceforge/jackit/jack-audio-connection-kit-0.120.1.tar.gz";
+    sha256 = "02h8536c67059gq2vsl323kvy9jak9dp0syi1h58awlkbgzlg80d";
   };
   
   buildInputs = [ pkgconfig ];
