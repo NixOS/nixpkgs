@@ -316,7 +316,7 @@ else
   # echo 1>&2 "Warning: This value is not an option."
 
   result=$(evalCfg)
-  if names=$(echo "builtins.attrNames $result" | sed 's,<CODE>,"<CODE>",g' | nix-instantiate - --eval-only --strict 2> /dev/null); then
+  if names=$(echo "builtins.attrNames $result" | sed 's,<[A-Z]*>,0,g' | nix-instantiate - --eval-only --strict 2> /dev/null); then
     echo 1>&2 "This attribute set contains:" 
     for attr in $names; do
       test $attr = '[' -o $attr = ']' && continue;
