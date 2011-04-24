@@ -194,11 +194,11 @@ in
 import ./generic.nix (
 
   rec {
-    version = "qi_lb60-2.6.35-openwrt-24283";
+    version = "qi_lb60-2.6.36.3-openwrt-24283";
   
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v2.6/linux-2.6.36.tar.bz2";
-      sha256 = "15a076d1a435a6bf8e92834eba4b390b4ec094ce06d47f89d071ca9e5788ce04";
+      url = "mirror://kernel/linux/kernel/v2.6/linux-2.6.36.3.tar.bz2";
+      sha256 = "1kxj4m9f5iplbll1c5inszg5yxywakz533nl5p4ia84mq2ch03dc";
     };
 
     srcPatch = fetchsvn {
@@ -210,7 +210,7 @@ import ./generic.nix (
     preConfigure = ''
       cp -R ${srcPatch}/generic/files/* .
       chmod +w -R *
-      GLOBIGNORE='.:..:*preinit_as_init*'
+      GLOBIGNORE='.:..:*preinit_as_init*:*gpio-for-the-6th-row-of-the-keyboard*'
       for a in ${srcPatch}/generic/patches-2.6.36/* ${srcPatch}/xburst/patches-2.6.36/* ; do
         echo applying patch $a
         patch -p1 < $a
