@@ -13,6 +13,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ libtiff gettext];
 
+  preInstall = ''
+    ensureDir $out/lib
+  '';
+
   meta = {
     homepage = http://djvu.sourceforge.net/djview4.html;
     description = "Black-and-white djvu page encoder and decoder that use interpage information";
