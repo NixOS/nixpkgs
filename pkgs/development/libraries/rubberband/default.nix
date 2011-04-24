@@ -2,11 +2,11 @@
 , vampSDK, ladspaH }:
 
 stdenv.mkDerivation {
-  name = "rubberband-1.3";
+  name = "rubberband-1.6.0";
 
   src = fetchurl {
-    url = http://www.breakfastquay.com/rubberband/files/rubberband-1.3.tar.bz2;
-    sha256 = "0g1bihjzagp9mx9zppjyd9566dfdqh38a1ghwsd7c245hv2syri8";
+    url = http://www.breakfastquay.com/rubberband/files/rubberband-1.6.0.tar.bz2;
+    sha256 = "15n875x3bbg7nbnqbl33v5jp2p6yw779124xz4la8ysclvikklsv";
   };
 
   buildInputs = [ pkgconfig libsamplerate libsndfile fftw vampSDK ladspaH ];
