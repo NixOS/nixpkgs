@@ -188,10 +188,19 @@ OptionView.prototype = {
           opt.load();
         if (opt.isOption)
           opts.push(opt);
+
+        // FIXME: no need to make things slowing down, because our current
+        // callback do not handle multiple option display.
+        if (!opts.empty)
+          break;
       }
+      // FIXME: no need to make things slowing down, because our current
+      // callback do not handle multiple option display.
+      if (!opts.empty)
+        break;
     }
 
-    if (opts.lenght != 0)
+    if (!opts.empty)
       this.selCallback(opts);
   },
 

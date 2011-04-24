@@ -45,65 +45,78 @@ Option.prototype = {
     env += "'NIXOS_PKGS=" + this.context_.root + this.context_.nixpkgs + "' ";
     env += "'NIXOS_CONFIG=" + this.context_.config + "' ";
     var out = makeTempFile(this.context_.tmpFile);
-    var prog = this.context_.instantiateBin + " 2>&1 >" + out.path + " ";
-    var args = "";
-    args += " -A eval.options" + (this.path != "" ? "." : "") + this.path;
-    args += " --eval-only --xml --no-location";
-    args += " '" + this.context_.root + this.context_.nixos + "'";
+    var prog = this.context_.optionBin + " 2>&1 >" + out.path + " ";
+    var args = " --xml " + this.path;
 
-    runProgram(/*env +*/ prog + args);
+    runProgram(/*env + */ prog + args);
     var xml = readFromFile(out);
     out.remove(false);
 
     // jQuery does a stack overflow when converting a huge XML to a DOM.
     var dom = DOMParser().parseFromString(xml, "text/xml");
-    var xmlAttrs = $("attr", dom);
+    var xmlAttrs = $("expr > attrs > attr", dom);
 
-    this.isOption = xmlAttrs
-      .filter (
-        function (idx) {
-          return $(this).attr("name") == "_type";
-          // !!! We could not rely on the value of the attribute because it
-          // !!! may be unevaluated.
-          // $(this).children("string[value='option']").length != 0;
-        })
-      .length != 0;
+    this.isOption = xmlAttrs.first().attr("name") == "_isOption";
 
     if (!this.isOption)
-    {
-      var cur = this;
-      var attrs = new Array();
-
-      xmlAttrs.each(
-        function (index) {
-          var name = $(this).attr("name");
-          var attr = new Option(name, cur.context_, cur);
-          attrs.push(attr);
-        }
-      );
-
-      this.subOptions = attrs;
-    }
+      this.loadSubOptions(xmlAttrs);
     else
-    {
-      this.loadDesc();
-      // TODO: handle sub-options here.
-    }
+      this.loadOption(xmlAttrs);
     this.isLoaded = true;
   },
 
-  loadDesc:  function () {
-    var env = "";
-    env += "'NIXOS=" + this.context_.root + this.context_.nixos + "' ";
-    env += "'NIXOS_PKGS=" + this.context_.root + this.context_.nixpkgs + "' ";
-    env += "'NIXOS_CONFIG=" + this.context_.config + "' ";
-    var out = makeTempFile(this.context_.tmpFile);
-    var prog = this.context_.optionBin + " 2>&1 >" + out.path + " ";
-    var args = " -vdl " + this.path;
+  loadSubOptions:  function (xmlAttrs) {
+    var cur = this;
+    var attrs = new Array();
 
-    runProgram(/*env + */ prog + args);
-    this.description = readFromFile(out);
-    out.remove(false);
+    xmlAttrs.each(
+      function (index) {
+        var name = $(this).attr("name");
+        var attr = new Option(name, cur.context_, cur);
+        attrs.push(attr);
+      }
+    );
+
+    this.subOptions = attrs;
+  },
+
+  optionAttributeMap: {
+    _isOption: function (cur, v) { },
+    value: function (cur, v) { cur.value = xml2nix($(v).children().first()); },
+    default: function (cur, v) { cur.defaultValue = xml2nix($(v).children().first()); },
+    example: function (cur, v) { cur.example = xml2nix($(v).children().first()); },
+    description: function (cur, v) { cur.description = this.string(v); },
+    typename: function (cur, v) { cur.typename = this.string(v); },
+    options: function (cur, v) { cur.loadSubOptions($("attrs", v).children()); },
+    declarations: function (cur, v) { cur.declarations = this.pathList(v); },
+    definitions: function (cur, v) { cur.definitions = this.pathList(v); },
+
+    string: function (v) {
+      return $(v).children("string").first().attr("value");
+    },
+
+    pathList: function (v) {
+      var list = [];
+      $(v).children("list").first().children().each(
+        function (idx) {
+          list.push($(this).attr("value"));
+        }
+      );
+      return list;
+    }
+  },
+
+
+  loadOption: function (attrs) {
+    var cur = this;
+
+    attrs.each(
+      function (index) {
+        var name = $(this).attr("name");
+        log("loadOption: " + name);
+        cur.optionAttributeMap[name](cur, this);
+      }
+    );
   },
 
   // keep the context under which this option has been used.
@@ -111,7 +124,13 @@ Option.prototype = {
   // name of the option.
   name: "",
   // result of nixos-option.
+  value: null,
+  typename: null,
+  defaultValue: null,
+  example: null,
   description: "",
+  declarations: [],
+  definitions: [],
   // path to reach this option
   path: "",
 
@@ -121,6 +140,107 @@ Option.prototype = {
   subOptions: []
 };
 
+var xml2nix_pptable = {
+  attrs: function (node, depth, pp) {
+    var out = "";
+    out += "{";
+    var children = node.children().not(
+      function () {
+        var name = $(this).attr("name");
+        return name.charAt(0) == "_";
+      }
+    );
+    if (children.lenght != 0)
+    {
+      depth += 1;
+      children.each(
+        function (idx) { out += pp.dispatch($(this), depth, pp); }
+      );
+      depth -= 1;
+      out += this.indent(depth) + "";
+    }
+    else
+      out += " ";
+    out += "}";
+    return out;
+  },
+  list: function (node, depth, pp) {
+    var out = "";
+    out += "[";
+    var children = node.children();
+    if (children.lenght != 0)
+    {
+      depth += 1;
+      children.each(
+        function (idx) { out += pp.dispatch($(this), depth, pp); }
+      );
+      depth -= 1;
+      out += this.indent(depth);
+    }
+    else
+      out += " ";
+    out += "]";
+    return out;
+  },
+  attr: function (node, depth, pp) {
+    var name = node.attr("name");
+    var out = "";
+    var val = "";
+    out += this.indent(depth);
+    out += name + " = ";
+    depth += 1;
+    val = pp.dispatch(node.children().first(), depth, pp);
+    out += val;
+    if (val.indexOf("\n") != -1)
+      out += this.indent(depth);;
+    depth -= 1;
+    out += ";";
+    return out;
+  },
+  string: function (node, depth, pp) {
+    return "\"" + node.attr("value") + "\"";
+  },
+  bool: function (node, depth, pp) {
+    return node.attr("value");
+  },
+  null: function (node, depth, pp) {
+    return "null";
+  },
+  function: function (node, depth, pp) {
+    return "<function>";
+  },
+  unevaluated: function (node, depth, pp) {
+    return "<unevaluated>";
+  },
+
+  dispatch: function (node, depth, pp) {
+    for (var key in pp)
+    {
+      if(node.is(key))
+      {
+        log(this.indent(depth) + "dispatch: " + key);
+        var out = pp[key](node, depth, pp);
+        log(this.indent(depth) + "dispatch: => " + out);
+        return out;
+      }
+    }
+    return "<dispatch-error>";
+  },
+  indent: function (depth) {
+    var ret = "\n";
+    while (depth--)
+      ret += "  ";
+    return ret;
+  }
+};
+
+function xml2nix(node) {
+  var depth = 0;
+  var pp = xml2nix_pptable;
+  var out = pp.dispatch(node, depth, pp);
+  log("pretty:\n" + out);
+  return out;
+}
 
 /*
 // Pretty print Nix values.

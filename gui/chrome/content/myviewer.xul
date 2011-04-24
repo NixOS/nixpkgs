@@ -13,7 +13,7 @@
   width  = "800"
   height = "600"
   xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script src="jquery-1.3.2.js"/>
+  <script src="jquery-1.5.2.js"/>
   <script src="io.js"/>
   <script src="nixos.js"/>
   <script src="optionView.js"/>
@@ -35,7 +35,25 @@
       </tree>
     </column>
     <column flex="1">
-      <description id="option-desc" hidden="false"></description>
+      <caption id="name" label=""/>
+      <caption id="typename" label=""/>
+      <separator/>
+      <description id="desc" hidden="false"></description>
+      <separator/>
+      <caption label="Value:"/>
+      <description id="val" hidden="false"></description>
+      <separator/>
+      <caption label="Default:"/>
+      <description id="def" hidden="false"></description>
+      <separator/>
+      <caption label="Example:"/>
+      <description id="exp" hidden="false"></description>
+      <separator/>
+      <caption label="Declarations:"/>
+      <description id="decls" hidden="false"></description>
+      <separator/>
+      <caption label="Definitions:"/>
+      <description id="defs" hidden="false"></description>
     </column>
   </columns>
 <!--  <progressmeter id="progress-bar" value="0%"/> -->
