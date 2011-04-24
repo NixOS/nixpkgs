@@ -6518,6 +6518,8 @@ let
 
   minicom = callPackage ../tools/misc/minicom { };
 
+  minidjvu = callPackage ../applications/graphics/minidjvu { };
+
   mmex = callPackage ../applications/office/mmex { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
