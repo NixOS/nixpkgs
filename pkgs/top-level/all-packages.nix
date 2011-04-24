@@ -6862,6 +6862,8 @@ let
     withKde = getConfig [ "taskJuggler" "kde" ] false;
   };
 
+  tesseract = callPackage ../applications/graphics/tesseract { };
+
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
   thunderbird = thunderbird3;
