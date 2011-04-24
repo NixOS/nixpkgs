@@ -6715,6 +6715,11 @@ let
     inherit (gtkLibs) gtk;
   };
 
+  rakarrack = callPackage ../applications/audio/rakarrack { 
+    inherit (xorg) libXpm libXft;
+    fltk = fltk11;
+  };
+
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
