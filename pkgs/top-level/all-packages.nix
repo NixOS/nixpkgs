@@ -5775,7 +5775,9 @@ let
 
   audacious = callPackage ../applications/audio/audacious { };
 
-  audacity = callPackage ../applications/audio/audacity { };
+  audacity = callPackage ../applications/audio/audacity { 
+    portaudio = portaudioSVN;
+  };
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
