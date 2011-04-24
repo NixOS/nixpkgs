@@ -3,21 +3,23 @@
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
-  version = "0.6";
+  version = "0.61";
   src1 = fetchurl {
     url = "http://www.zcdn.org/dl/warsow_${version}_sdk.zip";
-    sha256 = "1mrsr4af4wi04slc2f66rr467rxa15ppny7ms4gxhaqvvki5x3nq";
+    sha256 = "0yxvj796r53j1qy7b2yislvhj75m0hwrmf7vplgvmc41wnix39lr";
   };
   src2 = fetchurl {
     url = "http://www.zcdn.org/dl/warsow_${version}_unified.zip";
-    sha256 = "0a4407kw86yvr411dd9m0dgp7wdkgd9j4ac32gfz6xprgplqkws3";
+    sha256 = "1b5bv4dsly7i7c4fqlkckv4da1knxl9m3kg8nlgkgr8waczgvazv";
   };
   unpackPhase = ''
     mkdir warsow_${version}_sdk
     cd warsow_${version}_sdk
     unzip $src1
+    unzip $src2
+    ensureDir source/release/
+    mv warsow_${version}_unified/basewsw source/release/
     cd source
-    unzip $src2 'basewsw/*' -d release
   '';
   patchPhase = ''
     substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
