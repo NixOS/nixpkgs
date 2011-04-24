@@ -11,7 +11,7 @@ export NIXOS
 
 usage () {
   echo 1>&2 "
-Usage: $0 [--install] [-v] [-d] [-l] OPTION_NAME
+Usage: $0 [--install] [-v] [-d] [-l] [--xml] OPTION_NAME
        $0 [--install]
 
 This program is used to explore NixOS options by looking at their values or
@@ -31,6 +31,8 @@ Options:
                         description.
   -l | --lookup         Display where the option is defined and where it
                         is declared.
+  --xml                 Print an XML representation of the result.
+                        Implies -vdl options.
   --help                Show this message.
 
 Environment variables affecting $0:
@@ -52,6 +54,7 @@ Environment variables affecting $0:
 desc=false
 defs=false
 value=false
+xml=false
 install=false
 verbose=false
 
@@ -84,6 +87,7 @@ for arg; do
         --description) desc=true;;
         --value) value=true;;
         --lookup) defs=true;;
+        --xml) xml=true;;
         --install) install=true;;
         --verbose) verbose=true;;
         --help) usage;;
@@ -105,6 +109,12 @@ for arg; do
     argfun=""
   fi
 done
+
+if $xml; then
+  value=true
+  desc=true
+  defs=true
+fi
 
 # --install cannot be used with -d -v -l without option name.
 if $value || $desc || $defs && $install && test -z "$option"; then
@@ -130,12 +140,16 @@ fi
 # Process the configuration #
 #############################
 
+evalNix(){
+  nix-instantiate - --eval-only "$@"
+}
+
 evalAttr(){
   local prefix=$1
   local suffix=$2
   local strict=$3
   echo "(import $NIXOS {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
-    nix-instantiate - --eval-only ${strict:+--strict}
+    evalNix ${strict:+--strict}
 }
 
 evalOpt(){
@@ -149,7 +163,7 @@ evalCfg(){
 findSources(){
   local suffix=$1
   echo "builtins.map (f: f.source) (import $NIXOS {}).eval.options${option:+.$option}.$suffix" |
-    nix-instantiate - --eval-only --strict
+    evalNix --strict
 }
 
 if $install; then
@@ -276,6 +290,57 @@ if $generate; then
 
   exit 0
 fi;
+
+# This dupplicate the work made below, but it is useful for processing the
+# output of nixos-option with other tools such as nixos-gui.
+if $xml; then
+  evalNix --xml --no-location <<EOF
+let
+  reach = attrs: attrs${option:+.$option};
+  nixos = import $NIXOS {};
+  nixpkgs = import $NIXPKGS {};
+  sources = builtins.map (f: f.source);
+  opt = reach nixos.eval.options;
+  cfg = reach nixos.config;
+in
+
+with nixpkgs.lib;
+
+let
+  optStrict = v:
+    let
+      traverse = x :
+        if isAttrs x then
+          if x ? outPath then true
+          else all id (mapAttrsFlatten (n: traverseNoAttrs) x)
+        else traverseNoAttrs x;
+      traverseNoAttrs = x:
+        # do not continue in attribute sets
+        if isAttrs x then true
+        else if isList x then all id (map traverse x)
+        else true;
+    in assert traverse v; v;
+in
+
+if isOption opt then
+  optStrict ({}
+  // optionalAttrs (opt ? default) { inherit (opt) default; }
+  // optionalAttrs (opt ? example) { inherit (opt) example; }
+  // optionalAttrs (opt ? description) { inherit (opt) description; }
+  // optionalAttrs (opt ? type) { typename = opt.type.name; }
+  // optionalAttrs (opt ? options) { inherit (opt) options; }
+  // {
+    # to disambiguate the xml output.
+    _isOption = true;
+    declarations = sources opt.declarations;
+    definitions = sources opt.definitions;
+    value = cfg;
+  })
+else
+  opt
+EOF
+  exit $?
+fi
 
 if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
   $value && evalCfg;
