@@ -3470,6 +3470,8 @@ let
 
   levmar = callPackage ../development/libraries/levmar { };
 
+  leptonica = callPackage ../development/libraries/leptonica { };
+
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
   libaal = callPackage ../development/libraries/libaal { };
