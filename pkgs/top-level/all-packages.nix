@@ -6709,6 +6709,10 @@ let
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
+  qtractor = callPackage ../applications/audio/qtractor { 
+    inherit (gtkLibs) gtk;
+  };
+
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
