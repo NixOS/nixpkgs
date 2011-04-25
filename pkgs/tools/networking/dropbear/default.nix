@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional enableStatic "LDFLAGS=-static";
 
-  CFLAGS = "-DSFTPSERVER_PATH=${sftpPath}";
+  CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
   patches = [
     # Allow sessions to inherit the PATH from the parent dropbear.
