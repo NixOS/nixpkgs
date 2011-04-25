@@ -1,6 +1,6 @@
 { alsaLib, autoconf, automake, dssi, fetchsvn, gtk, jackaudio,
 ladspaH, ladspaPlugins, liblo, libmad, libsndfile, libtool, libvorbis,
-pkgconfig, qt4, stdenv }:
+pkgconfig, qt4, rubberband, stdenv }:
 
 stdenv.mkDerivation rec {
   version = "svn-1992";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib autoconf automake dssi gtk jackaudio ladspaH
     ladspaPlugins liblo libmad libsndfile libtool libvorbis pkgconfig
-    qt4 ];
+    qt4 rubberband ];
 
   meta = with stdenv.lib; {
     description = "Audio/MIDI multi-track sequencer";
