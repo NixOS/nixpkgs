@@ -230,9 +230,9 @@ var xml2nix_pptable = {
     {
       if(node.is(key))
       {
-        log(this.indent(depth) + "dispatch: " + key);
+        // log(this.indent(depth) + "dispatch: " + key);
         var out = pp[key](node, depth, pp);
-        log(this.indent(depth) + "dispatch: => " + out);
+        // log(this.indent(depth) + "dispatch: => " + out);
         return out;
       }
     }
@@ -250,88 +250,6 @@ function xml2nix(node) {
   var depth = 0;
   var pp = xml2nix_pptable;
   var out = pp.dispatch(node, depth, pp);
-  log("pretty:\n" + out);
+  // log("pretty:\n" + out);
   return out;
 }
-
-/*
-// Pretty print Nix values.
-function nixPP(value, level)
-{
-  function indent(level) {  ret = ""; while (level--) ret+= "  "; return ret; }
-
-  if (!level) level = 0;
-  var ret = "<no match>";
-  if (value.is("attrs")) {
-    var content = "";
-    value.children().each(function (){
-      var name = $(this).attr("name");
-      var value = nixPP($(this).children(), level + 1);
-      content += indent(level + 1) + name + " = " + value + ";\n";
-    });
-    ret = "{\n" + content + indent(level) + "}";
-  }
-  else if (value.is("list")) {
-    var content = "";
-    value.children().each(function (){
-      content += indent(level + 1) + "(" + nixPP($(this), level + 1) + ")\n";
-    });
-    ret = "[\n" + content + indent(level) + "]";
-  }
-  else if (value.is("bool"))
-    ret = (value.attr("value") == "true");
-  else if (value.is("string"))
-    ret = '"' + value.attr("value") + '"';
-  else if (value.is("path"))
-    ret = value.attr("value");
-  else if (value.is("int"))
-    ret = parseInt(value.attr("value"));
-  else if (value.is("derivation"))
-    ret = value.attr("outPath");
-  else if (value.is("function"))
-    ret = "<function>";
-  else {
-    var content = "";
-    value.children().each(function (){
-      content += indent(level + 1) + "(" + nixPP($(this), level + 1) + ")\n";
-    });
-    ret = "<!--" + value.selector + "--><!--\n" + content + indent(level) + "-->";
-  }
-  return ret;
-}
-
-// Function used to reproduce the select operator on the XML DOM.
-// It return the value contained in the targeted attribute.
-function nixSelect(attrs, selector)
-{
-  var names = selector.split(".");
-  var value = $(attrs);
-  for (var i = 0; i < names.length; i++) {
-    log(nixPP(value) + "." + names[i]);
-    if (value.is("attrs"))
-      value = value.children("attr[name='" + names[i] + "']").children();
-    else {
-      log("Cannot do an attribute selection.");
-      break;
-    }
-  }
-
-  log("nixSelect return: " + nixPP(value));
-
-  var ret;
-  if (value.is("attrs") || value.is("list"))
-    ret = value;
-  else if (value.is("bool"))
-    ret = value.attr("value") == "true";
-  else if (value.is("string"))
-    ret = value.attr("value");
-  else if (value.is("int"))
-    ret = parseInt(value.attr("value"));
-  else if (value.is("derivation"))
-    ret = value.attr("outPath");
-  else if (value.is("function"))
-    ret = "<function>";
-
-  return ret;
-}
-*/
