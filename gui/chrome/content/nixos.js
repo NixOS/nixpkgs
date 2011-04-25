@@ -200,6 +200,9 @@ var xml2nix_pptable = {
   string: function (node, depth, pp) {
     return "\"" + node.attr("value") + "\"";
   },
+  path: function (node, depth, pp) {
+    return node.attr("value");
+  },
   bool: function (node, depth, pp) {
     return node.attr("value");
   },
