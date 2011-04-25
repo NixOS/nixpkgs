@@ -1,0 +1,15 @@
+Allow sessions to inherit the PATH from the parent dropbear.
+
+diff --git a/svr-chansession.c b/svr-chansession.c
+index 23dad8c..9af8e55 100644
+--- a/svr-chansession.c
++++ b/svr-chansession.c
+@@ -878,7 +878,7 @@ static void execchild(void *user_data) {
+ 	addnewvar("LOGNAME", ses.authstate.pw_name);
+ 	addnewvar("HOME", ses.authstate.pw_dir);
+ 	addnewvar("SHELL", get_user_shell());
+-	addnewvar("PATH", DEFAULT_PATH);
++	addnewvar("PATH", getenv("PATH"));
+ 	if (chansess->term != NULL) {
+ 		addnewvar("TERM", chansess->term);
+ 	}

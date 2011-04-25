@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional enableStatic "LDFLAGS=-static";
 
+  patches = [
+    # Allow sessions to inherit the PATH from the parent dropbear.
+    # Otherwise they only get the usual /bin:/usr/bin kind of PATH
+    ./pass-path.patch
+  ];
+
   buildInputs = [ zlib ];
 
   meta = {
