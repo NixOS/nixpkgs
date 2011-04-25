@@ -15,6 +15,13 @@ function setProgress(current, max)
 }
 */
 
+function updateTextbox(id, value)
+{
+  // setting the height cause an overflow which resize the textbox to its
+  // content due to its onoverflow attribute.
+  $(id).attr("value", value).attr("height", 1);
+};
+
 function updatePanel(options)
 {
   log("updatePanel: " + options.length);
@@ -32,22 +39,22 @@ function updatePanel(options)
   $("#desc").text(o.description);
 
   if (o.value != null)
-    $("#val").text(o.value);
+    updateTextbox("#val", o.value);
   else
-    $("#val").text("");
+    updateTextbox("#val", "");
 
   if (o.defaultValue != null)
-    $("#def").text(o.defaultValue);
+    updateTextbox("#def", o.defaultValue);
   else
-    $("#def").text("");
+    updateTextbox("#def", "");
 
   if (o.example != null)
-    $("#exp").text(o.example);
+    updateTextbox("#exp", o.example);
   else
-    $("#exp").text("");
+    updateTextbox("#exp", "");
 
-  $("#decls").text(o.declarations.join("\n"));
-  $("#defs").text(o.definitions.join("\n"));
+  updateTextbox("#decls", o.declarations.join("\n"));
+  updateTextbox("#defs", o.definitions.join("\n"));
 }
 
 

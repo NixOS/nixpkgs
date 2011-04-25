@@ -18,43 +18,46 @@
   <script src="nixos.js"/>
   <script src="optionView.js"/>
   <script src="main.js"/>
-  <columns height="580">
-    <column width = "300">
+  <hbox flex="1">
+    <vbox width="250">
       <tree flex="1" id="option-tree" persist="height" onselect="gOptionView.selectionChanged()">
         <treecols>
-          <treecol persist="hidden width" flex="1" id="opt-name"
+          <treecol persist="hidden width" flex="9" id="opt-name"
                    label="Option" primary="true"/>
           <!-- Uncomment the following column to see the number of option
                printed below each options. -->
           <!--
           <treecol persist="hidden width" flex="1" id="dbg-size"
-                   label="Size"/>
+                   label="sz"/>
           -->
         </treecols>
         <treechildren id="first-child" flex="1"/>
       </tree>
-    </column>
-    <column flex="1">
+    </vbox>
+    <vbox flex="3" style="overflow: auto">
       <caption id="name" label=""/>
       <caption id="typename" label=""/>
       <separator/>
       <description id="desc" hidden="false"></description>
       <separator/>
       <caption label="Value:"/>
-      <description id="val" hidden="false"></description>
+      <textbox id="val" readonly="true" multiline="true" value=""
+      class="plain" hidden="false" onoverflow="this.height =
+      this.inputField.scrollHeight;" />
       <separator/>
       <caption label="Default:"/>
-      <description id="def" hidden="false"></description>
+      <textbox id="def" readonly="true" multiline="true" value="" class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
       <separator/>
       <caption label="Example:"/>
-      <description id="exp" hidden="false"></description>
+      <textbox id="exp" readonly="true" multiline="true" value="" class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
       <separator/>
       <caption label="Declarations:"/>
-      <description id="decls" hidden="false"></description>
+      <textbox id="decls" readonly="true" multiline="true" value="" class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
       <separator/>
       <caption label="Definitions:"/>
-      <description id="defs" hidden="false"></description>
-    </column>
-  </columns>
+      <textbox id="defs" readonly="true" multiline="true" value=""
+      class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
+    </vbox>
+  </hbox>
 <!--  <progressmeter id="progress-bar" value="0%"/> -->
 </window>
