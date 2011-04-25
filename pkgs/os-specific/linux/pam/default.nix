@@ -8,10 +8,16 @@ stdenv.mkDerivation {
     sha256 = "015r3xdkjpqwcv4lvxavq0nybdpxhfjycqpzbx8agqd5sywkx3b0";
   };
 
-  buildInputs = [ flex cracklib ]
+  buildNativeInputs = [ flex ];
+  buildInputs = [ cracklib ]
     ++ stdenv.lib.optional
       (stdenv.system != "armv5tel-linux" && stdenv.system != "mips64-linux")
       libxcrypt;
+
+  crossAttrs = {
+    # Skip libxcrypt cross-building, as it fails for mips and armv5tel
+    propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
+  };
 
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}

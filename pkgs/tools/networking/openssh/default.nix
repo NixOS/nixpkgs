@@ -28,12 +28,16 @@ stdenv.mkDerivation rec {
     
   patches = [ ./locale_archive.patch ];
 
-  buildInputs = [ zlib openssl perl libedit pkgconfig pam ];
+  buildNativeInptus = [ perl ];
+  buildInputs = [ zlib openssl libedit pkgconfig pam ];
 
+  # I set --disable-strip because later we strip anyway. And it fails to strip
+  # properly when cross building.
   configureFlags =
     ''
       --with-mantype=man
       --with-libedit=yes
+      --disable-strip
       ${if pam != null then "--with-pam" else "--without-pam"}
       ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
     '';
