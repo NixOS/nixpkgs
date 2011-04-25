@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, zlib, enableStatic ? false }:
+{ stdenv, fetchurl, zlib, enableStatic ? false,
+sftpPath ? "/var/run/current-system/sw/libexec/sftp-server" }:
 
 stdenv.mkDerivation rec {
   name = "dropbear-0.52";
@@ -11,6 +12,8 @@ stdenv.mkDerivation rec {
   dontDisableStatic = enableStatic;
 
   configureFlags = stdenv.lib.optional enableStatic "LDFLAGS=-static";
+
+  CFLAGS = "-DSFTPSERVER_PATH=${sftpPath}";
 
   patches = [
     # Allow sessions to inherit the PATH from the parent dropbear.
