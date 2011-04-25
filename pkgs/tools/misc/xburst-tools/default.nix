@@ -2,29 +2,24 @@
 , gccCross ? null }:
 
 let
-  version = "2011-04-08";
+  version = "2011-03-08";
 in
 stdenv.mkDerivation {
   name = "xburst-tools-${version}";
 
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;
-    rev = "c070928faee41f36920a035eef0dbcabdfa8a2bb";
-    sha256 = "66ea1a81b71bad599d76691f07a986f9bb2ccecf397e8486b661d8baace3460e";
+    rev = "a3a38cabf1e854667d90f49f0b4487e28974a3a6";
+    sha256 = "ac5671708cf9d18de79207530335f6781fa4bedf55288069786f4ecb971c4658";
   };
-
-  prePatch = ''
-    find . -name Makefile* -exec sed -i \
-      -e s/mipsel-openwrt-linux-/mipsel-unknown-linux-/ {} \;
-  '';
-
-  patches = [ ./gcc-4.4.patch ];
 
   preConfigure = ''
     sh autogen.sh
   '';
 
-  configureFlags = if gccCross != null then "--enable-firmware" else "";
+  configureFlags = if gccCross != null then
+    "--enable-firmware CROSS_COMPILE=${gccCross.crossConfig}-"
+    else "";
 
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;
