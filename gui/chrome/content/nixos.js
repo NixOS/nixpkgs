@@ -142,41 +142,47 @@ Option.prototype = {
 
 var xml2nix_pptable = {
   attrs: function (node, depth, pp) {
-    var out = "";
-    out += "{";
     var children = node.children().not(
       function () {
         var name = $(this).attr("name");
         return name.charAt(0) == "_";
       }
     );
-    if (children.lenght != 0)
-    {
-      depth += 1;
-      children.each(
-        function (idx) { out += pp.dispatch($(this), depth, pp); }
-      );
-      depth -= 1;
-      out += this.indent(depth) + "";
-    }
+    var c = 0;
+    var out = "";
+    out += "{";
+    depth += 1;
+    children.each(
+      function (idx) {
+        c += 1;
+        out += pp.indent(depth);
+        out += pp.dispatch($(this), depth, pp);
+      }
+    );
+    depth -= 1;
+    if (c > 0)
+      out += this.indent(depth);
     else
       out += " ";
     out += "}";
     return out;
   },
   list: function (node, depth, pp) {
+    var children = node.children();
+    var c = 0;
     var out = "";
     out += "[";
-    var children = node.children();
-    if (children.lenght != 0)
-    {
-      depth += 1;
-      children.each(
-        function (idx) { out += pp.dispatch($(this), depth, pp); }
-      );
-      depth -= 1;
+    depth += 1;
+    children.each(
+      function (idx) {
+        c += 1;
+        out += pp.indent(depth);
+        out += pp.dispatch($(this), depth, pp);
+      }
+    );
+    depth -= 1;
+    if (c > 0)
       out += this.indent(depth);
-    }
     else
       out += " ";
     out += "]";
@@ -186,13 +192,10 @@ var xml2nix_pptable = {
     var name = node.attr("name");
     var out = "";
     var val = "";
-    out += this.indent(depth);
     out += name + " = ";
     depth += 1;
     val = pp.dispatch(node.children().first(), depth, pp);
     out += val;
-    if (val.indexOf("\n") != -1)
-      out += this.indent(depth);;
     depth -= 1;
     out += ";";
     return out;
@@ -206,8 +209,14 @@ var xml2nix_pptable = {
   bool: function (node, depth, pp) {
     return node.attr("value");
   },
+  "int": function (node, depth, pp) {
+    return node.attr("value");
+  },
   null: function (node, depth, pp) {
     return "null";
+  },
+  derivation: function (node, depth, pp) {
+    return "<derivation>";
   },
   function: function (node, depth, pp) {
     return "<function>";
