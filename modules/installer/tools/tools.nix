@@ -104,14 +104,17 @@ let
     application = pkgs.stdenv.mkDerivation {
       name = "nixos-gui";
       buildCommand = ''
-        ensureDir $out
-        cp -r $source $out
-        cp $jquery $out/chrome/content/jquery-1.5.2.js
+        cp -r "$gui" "$out"
+
+        # Do not force the copy if the file exists in the sources (this
+        # happens for developpers)
+        test -e "$out/chrome/content/jquery-1.5.2.js" ||
+          cp -f "$jquery" "$out/chrome/content/jquery-1.5.2.js"
       '';
-      sources = pkgs.lib.cleanSource "${modulesPath}/../gui";
+      gui = pkgs.lib.cleanSource "${modulesPath}/../gui";
       jquery = pkgs.fetchurl {
         url = http://code.jquery.com/jquery-1.5.2.min.js;
-        sha256 = "e2107c8ecdb479c36d822d82bda2a8caf4429ab2d2cf9f20d5c931f75275403c";
+        sha256 = "8f0a19ee8c606b35a10904951e0a27da1896eafe33c6e88cb7bcbe455f05a24a";
       };
     };
   };
