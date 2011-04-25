@@ -13,4 +13,6 @@
     desktopManager.default = "kde4";
     desktopManager.kde4.enable = true;
   };
+
+  installer.enableGraphicalTools = true;
 }

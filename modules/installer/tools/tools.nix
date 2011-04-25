@@ -1,33 +1,34 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-hardware-scan, etc.
 
-{config, pkgs, ...}:
+{config, pkgs, modulesPath, ...}:
 
 let
   ### implementation
+  cfg = config.installer;
 
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
   });
-  
+
   nixosBuildVMS = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
   };
-  
+
   nixosDeployNetwork = makeProg {
     name = "nixos-deploy-network";
     src = ./nixos-deploy-network/nixos-deploy-network.sh;
   };
-  
+
   nixosInstall = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
 
     inherit (pkgs) perl pathsFromGraph;
     nix = config.environment.nix;
-    nixpkgsURL = config.installer.nixpkgsURL;
+    nixpkgsURL = cfg.nixpkgsURL;
 
     nixClosure = pkgs.runCommand "closure"
       {exportReferencesGraph = ["refs" config.environment.nix];}
@@ -64,7 +65,7 @@ let
       inherit nixClosure nix;
 
       # TODO shell ?
-      nixpkgsURL = config.installer.nixpkgsURL;
+      nixpkgsURL = cfg.nixpkgsURL;
     };
 
     # see ./nixos-bootstrap-archive/README-BOOTSTRAP-NIXOS
@@ -90,7 +91,7 @@ let
     name = "nixos-hardware-scan";
     src = ./nixos-hardware-scan.pl;
     inherit (pkgs) perl;
-    profile = config.installer.installProfile;
+    profile = cfg.installProfile;
   };
 
   nixosOption = makeProg {
@@ -98,11 +99,28 @@ let
     src = ./nixos-option.sh;
   };
 
+  nixosGui = pkgs.xulrunnerWrapper {
+    launcher = "nixos-gui";
+    application = pkgs.stdenv.mkDerivation {
+      name = "nixos-gui";
+      buildCommand = ''
+        ensureDir $out
+        cp -r $source $out
+        cp $jquery $out/chrome/content/jquery-1.5.2.js
+      '';
+      sources = pkgs.lib.cleanSource "${modulesPath}/../gui";
+      jquery = pkgs.fetchurl {
+        url = http://code.jquery.com/jquery-1.5.2.min.js;
+        sha256 = "e2107c8ecdb479c36d822d82bda2a8caf4429ab2d2cf9f20d5c931f75275403c";
+      };
+    };
+  };
+
 in
 
 {
   options = {
-  
+
     installer.nixpkgsURL = pkgs.lib.mkOption {
       default = "";
       example = http://nixos.org/releases/nix/nixpkgs-0.11pre7577;
@@ -131,7 +149,16 @@ in
         Name of the profile used when generating the hardware-scan.
       '';
     };
-    
+
+    installer.enableGraphicalTools = pkgs.lib.mkOption {
+      default = false;
+      type = with pkgs.lib.types; bool;
+      example = true;
+      description = ''
+        Enable the installation of graphical tools.
+      '';
+    };
+
   };
 
   config = {
@@ -146,7 +173,7 @@ in
 
          installer2.runInChroot
          installer2.nixosPrepareInstall
-      ];
+      ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixosGui;
 
     system.build = {
       inherit nixosInstall nixosHardwareScan nixosOption;

@@ -1,19 +1,16 @@
-This file should become a nix expression.
+This file should become a nix expression. (see modules/installer/tools/tools.nix)
 
 you need to:
-- download the latest jQuery from:
-    http://jqueryjs.googlecode.com/files/jquery-1.3.2.js
-    SHA1 Checksum: f0b95e99225f314fbe37ccf6b74ce2f916c517de
+- download the latest jQuery from and copy it to chrome/content:
+    http://code.jquery.com/jquery-1.5.2.js
 
 - install 'xulrunner' with nix:
-    nix-env -i xulrunner
+    nix-env -Ai nixpkgs_sys.firefox40Pkgs.xulrunner
 
-- install and add nix-intantiate in your path
+- make sure nixos-option in your path
 
 - have /etc/nixos/nixpkgs
 - have /etc/nixos/nixos
 
-
-to run it, either:
-- cd /etc/nixos/nixos/gui; ./nixos-gui
-- xulrunner /etc/nixos/nixos/gui/application.ini
+run it:
+- xulrunner /etc/nixos/nixos/gui/application.ini -jsconsole
