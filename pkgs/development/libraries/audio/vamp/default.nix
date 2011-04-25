@@ -9,7 +9,7 @@ rec {
     name = "vamp-sdk-2.2.1";
 
     src = fetchurl {
-      url = mirror://sourceforge/vamp/files/vamp-plugin-sdk/2.0/vamp-plugin-sdk-2.2.1.tar.gz;
+      url = mirror://sourceforge/vamp/vamp-plugin-sdk-2.2.1.tar.gz;
       sha256 = "09iw6gv8aqq5v322fhi872mrhjp0a2w63966g0mks4vhh84q252p";
     };
 
