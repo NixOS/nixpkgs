@@ -52,11 +52,10 @@ rec {
     "--enable-file-writer"
     "--enable-blob"
 
-    # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
-    # Allegedly FIXED
-    "--enable-directory-upload"
+    # https://bugs.webkit.org/show_bug.cgi?id=59430
+    # "--enable-directory-upload"
 
-    # Maybe related: https://bugs.webkit.org/show_bug.cgi?id=57925
+    # https://bugs.webkit.org/show_bug.cgi?id=58443
     # "--enable-file-system"
     ];
 
