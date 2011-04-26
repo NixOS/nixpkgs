@@ -1,16 +1,17 @@
 { fetchgit, stdenv, bash, emacs, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.5-cfl7";
+  name = "notmuch-0.5-cfl8";
 
   src = fetchgit {
     url = "git://github.com/chaoflow/notmuch";
-    rev = "cfl7";
-    sha256 = "d0096e312ad1d2c278d22377b273aae117ccc8de3605575fd23306e244157263";
+    rev = "cfl8";
+    sha256 = "ee39cd0b48511468f569220909ed46966f10f14ad118f2388843b823712b0333";
   };
 
   buildInputs = [ bash emacs glib gmime gnupg1 pkgconfig talloc xapian ];
 
+  # XXX: Make me a loop
   patchPhase = ''
     substituteInPlace "test/author-order" \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
