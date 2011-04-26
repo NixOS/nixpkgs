@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl, xapian, pkgconfig
+{ stdenv, composableDerivation, fetchurl, xapian10, pkgconfig
 , python ? null, php ? null, ruby ? null }:
 
 let inherit (composableDerivation) wwf; in
@@ -12,7 +12,7 @@ composableDerivation.composableDerivation {} rec {
     sha256 = "6028123c3cd9bfc380b672b89f5420f7d5c063fc3511dee4dd5d34033ccb6911";
   };
 
-  buildInputs = [ xapian pkgconfig ];
+  buildInputs = [ xapian10 pkgconfig ];
 
   # most interpreters aren't tested yet.. (see python for example how to do it)
   flags =
@@ -67,7 +67,7 @@ composableDerivation.composableDerivation {} rec {
 
   meta = { 
     description = "Bindings for the Xapian library";
-    homepage = xapian.meta.homepage;
+    homepage = xapian10.meta.homepage;
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
   };

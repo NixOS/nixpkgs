@@ -4316,9 +4316,9 @@ let
 
   x264 = callPackage ../development/libraries/x264 { };
 
-  xapian = callPackage ../development/libraries/xapian { };
+  xapian10 = callPackage ../development/libraries/xapian/1.0.x.nix { };
 
-  xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
+  xapianBindings10 = callPackage ../development/libraries/xapian/bindings/1.0.x.nix {  # TODO perl php Java, tcl, C#, python
   };
 
   Xaw3d = callPackage ../development/libraries/Xaw3d { };
