@@ -68,7 +68,7 @@ composableDerivation.composableDerivation {} rec {
   meta = { 
     description = "Bindings for the Xapian library";
     homepage = xapian.meta.homepage;
-    license = "GPL";
+    license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
   };
 }
