@@ -51,11 +51,11 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/sitecopy-backup.nix
-  ./services/databases/4store.nix
   ./services/databases/4store-endpoint.nix
+  ./services/databases/4store.nix
   ./services/databases/mysql.nix
-  ./services/databases/postgresql.nix
   ./services/databases/openldap.nix
+  ./services/databases/postgresql.nix
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
@@ -103,7 +103,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/gw6c/default.nix
   ./services/networking/ifplugd.nix
-  #./services/networking/ircd-hybrid.nix
+  ./services/networking/ircd-hybrid/default.nix
   ./services/networking/nat.nix
   ./services/networking/ntpd.nix
   ./services/networking/openfire.nix

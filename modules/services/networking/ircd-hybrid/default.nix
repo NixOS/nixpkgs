@@ -1,4 +1,4 @@
-{ config, pkgs, servicesPath, ... }:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -6,19 +6,24 @@ let
 
   cfg = config.services.ircdHybrid;
   
-  ircdService = import (servicesPath + /ircd-hybrid) {
-    stdenv = pkgs.stdenv;
-    inherit (pkgs) ircdHybrid coreutils 
-            su iproute gnugrep procps;
-    serverName = cfg.serverName;
-    sid = cfg.sid;
-    description = cfg.description;
-    rsaKey = cfg.rsaKey;
-    certificate = cfg.certificate;
-    adminEmail = cfg.adminEmail;
-    extraIPs = cfg.extraIPs;
-    extraPort = cfg.extraPort;
-    gw6cEnabled = config.services.gw6c.enable && config.services.gw6c.autorun;
+  ircdService = pkgs.stdenv.mkDerivation {
+    name = "ircd-hybrid-service";
+    scripts = [ "=>/bin" ./control.in ];
+    substFiles = [ "=>/conf" ./ircd.conf ];
+    inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
+
+    gw6cEnabled = if config.services.gw6c.enable && config.services.gw6c.autorun then "true" else "false";
+
+    inherit (cfg) serverName sid description adminEmail
+            extraPort;
+
+    cryptoSettings = 
+      (optionalString (cfg.rsaKey != null) "rsa_private_key_file = \"${cfg.rsaKey}\";\n") +
+      (optionalString (cfg.certificate != null) "ssl_certificate_file = \"${cfg.certificate}\";\n");
+
+    extraListen = map (ip: "host = \""+ip+"\";\nport = 6665 .. 6669, "+extraPort+"; ") cfg.extraIPs;
+
+    builder = ./builder.sh;
   };
 
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
@@ -118,7 +123,7 @@ in
       { name = "ircd"; };
 
     jobs.ircd_hybrid =
-      { # name = "ircd-hybrid"; !!! mkIf bug
+      { name = "ircd-hybrid";
 
         description = "IRCD Hybrid server";
 
