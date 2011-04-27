@@ -7263,6 +7263,8 @@ let
 
   micropolis = callPackage ../games/micropolis { };
 
+  naev = callPackage ../games/naev { };
+
   njam = callPackage ../games/njam { };
 
   openttd = callPackage ../games/openttd {
