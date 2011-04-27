@@ -48,11 +48,6 @@ shift
 
 # Validate the given options
 
-if [ -z "$NIXOS" ]
-then
-    NIXOS=/etc/nixos/nixos
-fi
-
 if [ "$@" = "" ]
 then
     echo "ERROR: A network expression must be specified!" >&2
@@ -63,4 +58,5 @@ fi
 
 # Build a network of VMs
 
-nix-build $NIXOS/modules/installer/tools/nixos-build-vms/build-vms.nix --argstr networkExpr $networkExpr --argstr nixos $NIXOS --argstr nixpkgs $NIXPKGS_ALL $noOutLinkArg $showTraceArg
+nix-build ${NIXOS:-/etc/nixos/nixos}/modules/installer/tools/nixos-build-vms/build-vms.nix \
+    --argstr networkExpr $networkExpr --argstr nixpkgs "${NIXPKGS_ALL:-/etc/nixos/nixpkgs}" $noOutLinkArg $showTraceArg
