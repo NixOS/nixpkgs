@@ -131,7 +131,7 @@ rec {
   zipListsWith = f: fst: snd:
     if fst != [] && snd != [] then
       [ (f (head fst) (head snd)) ]
-      ++ zipLists (tail fst) (tail snd)
+      ++ zipListsWith f (tail fst) (tail snd)
     else [];
 
   zipLists = zipListsWith (fst: snd: { inherit fst snd; });
