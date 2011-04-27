@@ -28,13 +28,18 @@ let
         fi
 
         # Check out the NixOS and Nixpkgs sources.
-        svn co https://svn.nixos.org/repos/nix/nixos/trunk nixos
-        svn co https://svn.nixos.org/repos/nix/nixpkgs/trunk nixpkgs
+        ${pkgs.subversion}/bin/svn co https://svn.nixos.org/repos/nix/nixos/trunk nixos
+        ${pkgs.subversion}/bin/svn co https://svn.nixos.org/repos/nix/nixpkgs/trunk nixpkgs
       '';
    };
   
 in
 
 {
-  environment.systemPackages = [ nixosCheckout ];
+  environment.systemPackages =
+    [ nixosCheckout
+      # Since the checkout script depends on Subversion, we may as
+      # well put it in $PATH.
+      pkgs.subversion
+    ];
 }
