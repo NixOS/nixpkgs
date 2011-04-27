@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchurl, bison, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "sphinxbase-0.6.1";
+  name = "sphinxbase-0.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/cmusphinx/${name}.tar.gz";
-    sha256 = "1blra8igkqbqr7m2izbis1h3kkzblsqj9rkbw0f00025li8i1z55";
+    sha256 = "0xab4ph9215rw5865gihmahbbnbi58klll5xg0il9ifld4wdjacq";
   };
 
-  buildInputs = [ pkgconfig ];
+  buildInputs = [ pkgconfig bison ];
 
   meta = {
     description = "Support Library for Pocketsphinx";
