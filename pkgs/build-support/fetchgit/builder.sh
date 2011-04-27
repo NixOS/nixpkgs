@@ -2,19 +2,22 @@ source $stdenv/setup
 
 header "exporting $url (rev $rev) into $out"
 
-git clone "$url" $out
+git init $out
+cd $out
+git remote add origin "$url"
+git fetch origin
+git remote set-head origin -a
+
+# If no revision was specified, the remote HEAD will be used
+git checkout -b __nixos_build__ origin/HEAD
+
 if test -n "$rev"; then
-  cd $out
-
-  # Track all remote branches so that revisions like
-  # `t/foo@{2010-05-12}' are correctly resolved.  Failing to do that,
-  # Git bails out with an "invalid reference" error.
-  for branch in $(git branch -rl | grep -v ' origin/master$')
-  do
-    git branch --track "$(echo $branch | sed -es,origin/,,g)" "$branch"
-  done
-
-  git checkout "$rev" --
+    echo "Trying to checkout: $rev"
+    parsed_rev=$(
+        git rev-parse --verify "$rev" 2>/dev/null ||
+        git rev-parse --verify origin/"$rev" 2>/dev/null
+    ) 
+    git reset --hard $parsed_rev
 fi
 
 if test -z "$leaveDotGit"; then
