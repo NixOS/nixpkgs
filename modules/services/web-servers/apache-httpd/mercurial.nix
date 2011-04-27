@@ -1,4 +1,4 @@
-{ config, pkgs, serverInfo, servicesPath, ... }:
+{ config, pkgs, serverInfo, ... }:
 
 let
   inherit (pkgs) mercurial;
