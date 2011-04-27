@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, cairo, expat, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.1";
+  name = "hwloc-1.2";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.1/downloads/${name}.tar.bz2";
-    sha256 = "0l31yhcpq6bjsamxk0lqlidv9j43vg7m7906zdb5aj18i085ymyv";
+    url = "http://www.open-mpi.org/software/hwloc/v1.2/downloads/${name}.tar.bz2";
+    sha256 = "04mrlmcp596imzbhlflb53ddld705k9617rzpprnhp3643krn0dw";
   };
 
   buildInputs = [ pkgconfig cairo expat ncurses ];
