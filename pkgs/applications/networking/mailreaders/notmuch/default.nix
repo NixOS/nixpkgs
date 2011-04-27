@@ -1,12 +1,12 @@
 { fetchgit, stdenv, bash, emacs, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.5-cfl8";
+  name = "notmuch-0.5-nixos1";
 
   src = fetchgit {
     url = "git://github.com/chaoflow/notmuch";
-    rev = "cfl8";
-    sha256 = "ee39cd0b48511468f569220909ed46966f10f14ad118f2388843b823712b0333";
+    rev = "nixos1";
+    sha256 = "979bf154c05b1560ac95ec29c55a221960cba65073fdf5cb1d00312dd9ecfb57";
   };
 
   buildInputs = [ bash emacs glib gmime gnupg1 pkgconfig talloc xapian ];
