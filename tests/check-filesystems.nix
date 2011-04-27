@@ -1,10 +1,9 @@
 { nixos ? ./..
 , nixpkgs ? /etc/nixos/nixpkgs
-, services ? /etc/nixos/services
 , system ? builtins.currentSystem
 }:
 
-with import ../lib/build-vms.nix { inherit nixos nixpkgs services system; };
+with import ../lib/build-vms.nix { inherit nixos nixpkgs system; };
 
 rec {
   nodes = {
