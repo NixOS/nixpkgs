@@ -1,5 +1,7 @@
 #! @shell@ -e
 
+# !!! use a proper Upstart job.
+
 # Make sure that the environment is deterministic.
 export PATH=@coreutils@/bin
 export PATH=@coreutils@/bin:@gnugrep@/bin:@gnused@/bin:@iputils@/bin:@iputils@/sbin:@procps@/bin:@seccure@/bin
