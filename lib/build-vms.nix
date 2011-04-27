@@ -1,4 +1,4 @@
-{ nixpkgs, services, system }:
+{ nixpkgs, system }:
 
 let pkgs = import nixpkgs { config = {}; inherit system; }; in
 
@@ -22,7 +22,7 @@ rec {
     nodes: configurations:
 
     import ./eval-config.nix {
-      inherit nixpkgs services system;
+      inherit nixpkgs system;
       modules = configurations ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs

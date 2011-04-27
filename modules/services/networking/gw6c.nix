@@ -1,4 +1,4 @@
-{ config, pkgs, servicesPath, ... }:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -7,7 +7,7 @@ let
   cfg = config.services.gw6c;
 
   # !!! Move this from the services tree to the nixos tree.
-  gw6cService = import (servicesPath + /gw6c) {
+  gw6cService = import /etc/nixos/services/gw6c {
     inherit (pkgs) stdenv gw6c coreutils 
       procps iputils gnused 
       gnugrep seccure writeScript;

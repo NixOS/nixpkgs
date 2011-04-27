@@ -1,6 +1,6 @@
-{ nixpkgs, services, system }:
+{ nixpkgs, system }:
 
-with import ./build-vms.nix { inherit nixpkgs services system; };
+with import ./build-vms.nix { inherit nixpkgs system; };
 with pkgs;
 
 rec {

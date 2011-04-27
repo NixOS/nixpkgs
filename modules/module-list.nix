@@ -103,7 +103,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/gw6c.nix
   ./services/networking/ifplugd.nix
-  ./services/networking/ircd-hybrid.nix
+  #./services/networking/ircd-hybrid.nix
   ./services/networking/nat.nix
   ./services/networking/ntpd.nix
   ./services/networking/openfire.nix
@@ -135,7 +135,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/mingetty.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/jboss.nix
+  #./services/web-servers/jboss.nix
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix

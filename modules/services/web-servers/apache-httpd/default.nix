@@ -1,4 +1,4 @@
-{ config, pkgs, servicesPath, ... }:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -72,7 +72,7 @@ let
           phpOptions = "";
           options = {};
         };
-        res = defaults // svcFunction {inherit config pkgs serverInfo servicesPath;};
+        res = defaults // svcFunction { inherit config pkgs serverInfo; };
       in res;
     in map f defs;
 

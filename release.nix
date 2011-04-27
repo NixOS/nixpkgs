@@ -151,10 +151,9 @@ let
     } { system = "armv5tel-linux"; };
 
     tests = 
-      { services ? ../services }:
       let
         t = import ./tests { 
-          inherit nixpkgs services;
+          inherit nixpkgs;
           system = "i686-linux";
         };
       in {
