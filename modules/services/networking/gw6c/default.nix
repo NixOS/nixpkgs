@@ -6,21 +6,37 @@ let
 
   cfg = config.services.gw6c;
 
-  # !!! Move this from the services tree to the nixos tree.
-  gw6cService = import /etc/nixos/services/gw6c {
-    inherit (pkgs) stdenv gw6c coreutils 
-      procps iputils gnused 
-      gnugrep seccure writeScript;
-    upstart = config.system.build.upstart;
-    username = cfg.username;
-    password = cfg.password;
-    server = cfg.server;
-    keepAlive = cfg.keepAlive;
-    everPing = cfg.everPing;
-    seccureKeys = config.security.seccureKeys;
-    waitPingableBroker = cfg.waitPingableBroker;
+  gw6cService = pkgs.stdenv.mkDerivation {
+    name = "gw6c-service";
+    inherit (pkgs) gw6c coreutils procps upstart iputils gnused gnugrep seccure;
+
+    inherit (cfg) username password keepAlive everPing;
+
+    gw6server = cfg.server;
+    authMethod = if cfg.username == "" then "anonymous" else "any";
+    gw6dir = pkgs.gw6c;
+
+    pingBefore = if cfg.waitPingableBroker then "true" else "";
+
+    pubkey = config.security.seccureKeys.public;
+    privkey = config.security.seccureKeys.private;
+
+    buildCommand =
+      ''
+        mkdir -p $out/bin $out/conf
+
+        mkdir conf
+        chmod 0700 conf
+        touch conf/raw
+        chmod 0700 conf/raw
+
+        substituteAll ${./gw6c.conf} conf/raw
+        $seccure/bin/seccure-encrypt "$(cat $pubkey)" -i conf/raw -o $out/conf/gw6c.conf
+        substituteAll ${./control.in} $out/bin/control
+        chmod a+x $out/bin/control
+      '';
   };
-  
+
 in
 
 {
