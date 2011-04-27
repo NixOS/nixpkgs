@@ -1,7 +1,7 @@
 # General list operations.
 
 rec {
-  inherit (builtins) head tail isList;
+  inherit (builtins) head tail length isList;
 
 
   # Create a list consisting of a single element.  `singleton x' is
@@ -27,6 +27,10 @@ rec {
     then nul
     else foldl op (op nul (head list)) (tail list);
 
+  # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
+  # ["a-1" "b-2"]'
+  imap = f: list:
+    zipListsWith f (range 1 (length list)) list;
 
   # Concatenate a list of lists.
   concatLists = fold (x: y: x ++ y) [];
