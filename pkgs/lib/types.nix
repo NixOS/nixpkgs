@@ -101,7 +101,7 @@ rec {
     };
 
     attrsOf = elemType: mkOptionType {
-      name = "attribute set of ${elemType}s";
+      name = "attribute set of ${elemType.name}s";
       check = x: lib.traceValIfNot builtins.isAttrs x
         && fold (e: v: v && elemType.check e) true (lib.attrValues x);
       merge = lib.zip (name: elemType.merge);
