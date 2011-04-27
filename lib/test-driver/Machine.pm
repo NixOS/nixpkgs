@@ -519,4 +519,14 @@ sub sleep {
 }
 
 
+# Forward a TCP port on the host to a TCP port on the guest.  Useful
+# during interactive testing.
+sub forwardPort {
+    my ($self, $hostPort, $guestPort) = @_;
+    $hostPort = 8080 unless defined $hostPort;
+    $guestPort = 80 unless defined $guestPort;
+    $self->sendMonitorCommand("hostfwd_add tcp::$hostPort-:$guestPort");
+}
+
+
 1;
