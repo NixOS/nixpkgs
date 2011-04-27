@@ -1,4 +1,4 @@
-{ config, pkgs, servicesPath, ... }:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -6,8 +6,10 @@ let
 
   cfg = config.services.jboss;
   
-  jbossService = import (servicesPath + /jboss) {
-    inherit (pkgs) stdenv jboss su;
+  jbossService = pkgs.stdenv.mkDerivation {
+    name = "jboss-server";
+    builder = ./builder.sh;
+    inherit (pkgs) jboss su;
     inherit (cfg) tempDir logDir libUrl deployDir serverDir user useJK;
   };
 
