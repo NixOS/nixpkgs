@@ -6,7 +6,7 @@ let
 
   cfg = config.services.ircdHybrid;
   
-  ircdService = pkgs.stdenv.mkDerivation {
+  ircdService = pkgs.stdenv.mkDerivation rec {
     name = "ircd-hybrid-service";
     scripts = [ "=>/bin" ./control.in ];
     substFiles = [ "=>/conf" ./ircd.conf ];
