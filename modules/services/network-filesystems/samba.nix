@@ -69,7 +69,10 @@ let
       startOn = "started samba";
       stopOn = "stopping samba";
 
-      environment = { LD_LIBRARY_PATH = nssModulesPath; };
+      environment = {
+        LD_LIBRARY_PATH = nssModulesPath;
+        TZ = config.time.timeZone;
+      };
 
       exec = "${samba}/sbin/${appName} ${args}";
     };
