@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-2.0.0";
+  name = "guile-2.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.gz";
-    sha256 = "0yy6iqlgqaav0nszldlkv8dq4xhcs6r18ahp4h2885jv9payp93v";
+    sha256 = "1miq6rlzj8k43aby4874ds55z4g1pmfgbfhwkczf57bxlan8q6gi";
   };
 
   buildInputs =
