@@ -4169,7 +4169,7 @@ let
 
   simgear = callPackage ../development/libraries/simgear {};
 
-  sfml_svn = callPackage ../development/libraries/sfml { };
+  sfml_git = callPackage ../development/libraries/sfml { };
 
   slang = callPackage ../development/libraries/slang { };
 
