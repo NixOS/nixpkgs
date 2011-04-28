@@ -1,6 +1,6 @@
 { nixos ? /etc/nixos/nixos
 , nixpkgs ? /etc/nixos/nixpkgs
-, networkExpr
+, networkExprs
 , targetProperty ? "targetHost"
 }:
 
@@ -8,9 +8,11 @@ let
   pkgs = import nixpkgs {};
   
   inherit (builtins) attrNames getAttr listToAttrs;
-  inherit (pkgs.lib) concatMapStrings;
+  inherit (pkgs.lib) concatMapStrings zipAttrs;
   
-  network = import networkExpr;
+  networks = map (networkExpr: import networkExpr) networkExprs;
+  
+  network = zipAttrs networks;
   
   generateRollbackSucceededPhase = network: configs:
     concatMapStrings (configurationName: 
@@ -65,14 +67,14 @@ let
   evaluateMachines = network:
     listToAttrs (map (configurationName:
       let
-        configuration = getAttr configurationName network;
+        modules = getAttr configurationName network;
       in
       { name = configurationName;
         value = (import "${nixos}/lib/eval-config.nix" {
           inherit nixpkgs;
           modules =
-            [ configuration
-              # Provide a default hostname and deployment target equal
+	    modules ++
+            [ # Provide a default hostname and deployment target equal
               # to the attribute name of the machine in the model.
               { key = "set-default-hostname";
                 networking.hostName = pkgs.lib.mkOverride 900 configurationName;

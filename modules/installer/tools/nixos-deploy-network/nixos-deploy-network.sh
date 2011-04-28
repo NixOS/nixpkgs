@@ -4,7 +4,7 @@
 
 showUsage()
 {
-    echo "Usage: $0 network_expr"
+    echo "Usage: $0 network_expr [network_expr2 ...]"
     echo "Options:"
     echo
     echo "--show-trace  Shows an output trace"
@@ -55,13 +55,16 @@ fi
 
 if [ "$@" = "" ]
 then
-    echo "ERROR: A network Nix expression must be specified!" >&2
+    echo "ERROR: At least one network Nix expression must be specified!" >&2
     exit 1
 else
-    networkExpr=$(readlink -f $@)
+    for i in $@
+    do
+	networkExprs="$networkExprs \"$(readlink -f $i)\""
+    done    
 fi
 
 # Deploy the network
 
-vms=`nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --argstr networkExpr $networkExpr --argstr nixos $NIXOS $showTraceArg $noOutLinkArg`
+vms=`nix-build $NIXOS/modules/installer/tools/nixos-deploy-network/deploy.nix --arg networkExprs "[ $networkExprs ]" --argstr nixos $NIXOS $showTraceArg $noOutLinkArg`
 $vms/bin/deploy-systems
