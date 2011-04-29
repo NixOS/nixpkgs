@@ -7,6 +7,12 @@ stdenv.mkDerivation (rec {
     url = "ftp://vsftpd.beasts.org/users/cevans/${name}.tar.gz";
     sha256 = "0nhsqwnb8qkbxx5wjahara1ln85hp151v656psra5brpckwysrml";
   };
+
+  # The gcc-wrappers use -idirafter for glibc, and vsftpd also, and
+  # their dummyinc come before those of glibc, then the build works bad.
+  prePatch = ''
+    sed -i -e 's/-idirafter.*//' Makefile
+  '';
   
   preBuild =''
     makeFlagsArray=( "LIBS=${if sslEnable then "-lcrypt -lssl -lcrypto " else ""}-lpam -lcap" )
