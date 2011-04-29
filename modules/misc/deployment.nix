@@ -66,7 +66,7 @@ with pkgs.lib;
     # Ad hoc cloud options.
 
     deployment.adhoc.controller = mkOption {
-      example = "https://ec2.eu-west-1.amazonaws.com:443/";
+      example = "cloud.example.org";
       description = ''
         Hostname or IP addres of the machine to which
         <command>nixos-deploy-network</command> should connect (via
