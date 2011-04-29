@@ -2373,6 +2373,8 @@ let
 
   php_apc = callPackage ../development/libraries/php-apc { };
 
+  php_xcache = callPackage ../development/libraries/php-xcache { };
+
   phpXdebug = callPackage ../development/interpreters/php-xdebug { };
 
   picolisp = callPackage ../development/interpreters/picolisp {};
