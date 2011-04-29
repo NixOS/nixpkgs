@@ -1,4 +1,4 @@
-{stdenv, fetchurl, php, autoconf, automake, libtool }:
+{stdenv, fetchurl, php, autoconf, automake, libtool, m4 }:
 
 stdenv.mkDerivation rec {
   name = "php-xcache-1.3.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-apc" "--enable-apc-mmap" ];
 */
 
-  buildInputs = [ php autoconf automake libtool ];
+  buildInputs = [ php autoconf automake libtool m4 ];
 
   meta = {
     description = "Fast, stable PHP opcode cacher";
