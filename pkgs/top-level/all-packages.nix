@@ -382,8 +382,7 @@ let
     client = true;
   });
 
-  aria = builderDefsPackage (import ../tools/networking/aria) {
-  };
+  aria = builderDefsPackage (import ../tools/networking/aria) { };
 
   aria2 = callPackage ../tools/networking/aria2 { };
 
@@ -1008,6 +1007,8 @@ let
 
   nylon = callPackage ../tools/networking/nylon { };
 
+  nzbget = callPackage ../tools/networking/nzbget { };
+  
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
@@ -3733,6 +3734,8 @@ let
   libotr = callPackage ../development/libraries/libotr { };
 
   libp11 = callPackage ../development/libraries/libp11 { };
+
+  libpar2 = callPackage ../development/libraries/libpar2 { };
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
