@@ -8,12 +8,12 @@
 assert sslSupport -> openssl != null;
 assert graphicsSupport -> x11 != null;
 
-stdenv.mkDerivation {
-  name = "w3m-0.5.2";
+stdenv.mkDerivation rec {
+  name = "w3m-0.5.3";
 
   src = fetchurl {
-    url = mirror://sourceforge/w3m/w3m-0.5.2.tar.gz;
-    md5 = "ba06992d3207666ed1bf2dcf7c72bf58";
+    url = "mirror://sourceforge/w3m/${name}.tar.gz";
+    sha256 = "1qx9f0kprf92r1wxl3sacykla0g04qsi0idypzz24b7xy9ix5579";
   };
 
   # Patch for the newer unstable boehm-gc 7.2alpha. Not all platforms use that
