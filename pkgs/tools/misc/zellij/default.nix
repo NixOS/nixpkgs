@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     description = "A terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh ];
+    maintainers = with maintainers; [ therealansh _0x4A6F ];
   };
 }
