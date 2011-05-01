@@ -84,6 +84,11 @@ pkgs.makeOverridable
     inherit intltool libart_lgpl libglade;
   };
 
+  libgnomecanvasmm = import ./platform/libgnomecanvasmm {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit libgnomecanvas gtkmm;
+  };
+
   # for git-head builds
   gnome_common = import platform/gnome-common {
     inherit (pkgs) stdenv fetchgit pkgconfig
