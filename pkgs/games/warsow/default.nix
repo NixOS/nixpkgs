@@ -3,13 +3,14 @@
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
-  version = "0.61";
+  version = "0.62";
+  mversion = "0.61";  # sometimes only engine is updated
   src1 = fetchurl {
     url = "http://www.zcdn.org/dl/warsow_${version}_sdk.zip";
-    sha256 = "0yxvj796r53j1qy7b2yislvhj75m0hwrmf7vplgvmc41wnix39lr";
+    sha256 = "0nb1z55lzmwarnn71dcyg9b3k7r7wxagqxks8a7rnlq7acsnra71";
   };
   src2 = fetchurl {
-    url = "http://www.zcdn.org/dl/warsow_${version}_unified.zip";
+    url = "http://www.zcdn.org/dl/warsow_${mversion}_unified.zip";
     sha256 = "1b5bv4dsly7i7c4fqlkckv4da1knxl9m3kg8nlgkgr8waczgvazv";
   };
   unpackPhase = ''
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     unzip $src1
     unzip $src2
     ensureDir source/release/
-    mv warsow_${version}_unified/basewsw source/release/
+    mv warsow_${mversion}_unified/basewsw source/release/
     cd source
   '';
   patchPhase = ''
