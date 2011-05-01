@@ -7,42 +7,209 @@
 NixOS.</para>
 
 
+<!--===============================================================-->
+
 <section>
 
 <title>Extending NixOS</title>
 
-<para>A unique syntax is used to express all system, hardware, computer and
-  service configurations.  This syntax helps for reading and writing new
-  configuration files.  It is coming with some extra strategies defined in
-  NixPkgs which are used to merge and evaluate all configuration files.</para>
+<para>NixOS is based on a modular system for declarative configuration.
+  This system combines multiple <emphasis>modules</emphasis> to produce one
+  configuration.  One of the module which compose your computer
+  configuration is <filename>/etc/nixos/configuration.nix</filename>.  Other
+  modules are available under NixOS <filename>modules</filename>
+  directory</para>
 
-  <para>A configuration file is the same as your own computer
-  configuration.</para>
+<para>A module is a file which handles one specific part of the
+  configuration.  This part of the configuration could correspond to an
+  hardware, a service, network settings, or preferences.  A module
+  configuration does not have to handle everything from scratch, it can base
+  its configuration on other configurations provided by other modules.  Thus
+  a module can <emphasis>define</emphasis> options to setup its
+  configuration, and it can also <emphasis>declare</emphasis> options to be
+  fed by other modules.</para>
 
-<example xml:id='conf-syntax'><title>Usual configuration file</title>
+<!-- module syntax -->
+
+<para xml:id="para-module-syn">A module is a file which contains a Nix
+  expression.  This expression should be either an expression which gets
+  evaluated into an attribute set or a function which returns an attribute
+  set.</para>
+
+<para>When the expression is a function, it should expect only one argument
+  which is an attribute set containing an attribute
+  named <varname>config</varname> and another attribute
+  named <varname>pkgs</varname>.  The <varname>config</varname> attribute
+  contains the result of the merge of all modules.  This attribute is
+  evaluated lazily, such as any Nix expression.  For more details on how
+  options are merged, see the details in <xref linkend="para-opt-decl"/>.
+  The <varname>pkgs</varname> attribute
+  contains <emphasis>nixpkgs</emphasis> attribute set of packages.  This
+  attribute is necessary for declaring options.</para>
+
+<example xml:id='module-syntax'><title>Usual module content</title>
 <programlisting>
-{config, modulesPath, pkgs, ...}: <co xml:id='conf-syntax-1' />
+{config, pkgs, ...}: <co xml:id='module-syntax-1' />
+
+{
+  imports = [
+    <co xml:id='module-syntax-2' />
+  ];
+
+  options = {
+    <co xml:id='module-syntax-3' />
+  };
+
+  config = {
+    <co xml:id='module-syntax-4' />
+  };
+}</programlisting>
+</example>
+
+<para><xref linkend='module-syntax' /> Illustrates
+  a <emphasis>module</emphasis> skeleton.
+
+<calloutlist>
+  <callout arearefs='module-syntax-1'>
+    <para>This line makes the current Nix expression a function.  This
+    line can be omitted if there is no reference to <varname>pkgs</varname>
+    and <varname>config</varname> inside the module.</para>
+  </callout>
+
+  <callout arearefs='module-syntax-2'>
+    <para>This list is used to enumerate path to other modules which are
+    declaring options used by the current module.  In NixOS, default modules
+    are listed in the file <filename>modules/module-list.nix</filename>.
+    The default modules don't need to be added in the import list.</para>
+  </callout>
+
+  <callout arearefs='module-syntax-3'>
+    <para>This attribute set contains an attribute set of <emphasis>option
+    declaration</emphasis>.</para>
+  </callout>
+
+  <callout arearefs='module-syntax-4'>
+    <para>This attribute set contains an attribute set of <emphasis>option
+    definitions</emphasis>.  If the module does not have any imported
+    modules or any option declarations, then this attribute set can be used
+    in place of its parent attribute set.  This is a common case for simple
+    modules such
+    as <filename>/etc/nixos/configuration.nix</filename>.</para>
+  </callout>
+</calloutlist>
+
+</para>
+
+<!-- option definitions -->
+
+<para xml:id="para-opt-def">A module defines a configuration which would be
+  interpreted by other modules.  To define a configuration, a module needs
+  to provide option definitions.  An option definition is a simple
+  attribute assignment.</para>
+
+<para>Option definitions are made in a declarative manner.  Without
+  properties, options will always be defined with the same value.  To
+  introduce more flexibility in the system, option definitions are guarded
+  by <emphasis>properties</emphasis>.</para>
+
+<para>Properties are means to introduce conditional values inside option
+  definitions.  This conditional values can be distinguished in two
+  categories.  The condition which are local to the current configuration
+  and conditions which are dependent on others configurations.  Local
+  properties are <varname>mkIf</varname>, <varname>mkAlways</varname>
+  and <varname>mkAssert</varname>.  Global properties
+  are <varname>mkOverride</varname>, <varname>mkDefault</varname>
+  and <varname>mkOrder</varname>.</para>
+
+<para><varname>mkIf</varname> is used to remove the option definitions which
+  are below it if the condition is evaluated to
+  false.  <varname>mkAssert</varname> expects the condition to be evaluated
+  to true otherwise it raises an error message.  <varname>mkAlways</varname>
+  is used to ignore all the <varname>mkIf</varname>
+  and <varname>mkAssert</varname> which have been made
+  previously.  <varname>mkAlways</varname> and <varname>mkAssert</varname>
+  are often used together to set an option value and to ensure that it has
+  not been masked by another one.</para>
+
+<para><varname>mkOverride</varname> is used to mask previous definitions if
+  the current value has a lower mask number.  The mask value is 100 (default)
+  for any option definition which does not use this property.
+  Thus, <varname>mkDefault</varname> is just a short-cut with a higher mask
+  (1000) than the default mask value.  This means that a module can set an
+  option definition as a preference, and still let another module defining
+  it with a different value without using any property.</para>
+
+<para><varname>mkOrder</varname> is used to sort definitions based on the
+  rank number.  The rank number will sort all options definitions before
+  giving the sorted list of option definition to the merge function defined
+  in the option declaration.  A lower rank will move the definition to the
+  beginning and a higher rank will move the option toward the end.  The
+  default rank is 100.</para>
+
+<!-- option declarations -->
+
+<para xml:id="para-opt-decl">A module may declare options which are used by
+  other module to change the configuration provided by the current module.
+  Changes to the option definitions are made with properties which are using
+  values extracted from the result of the merge of all modules
+  (the <varname>config</varname> argument).</para>
+
+<para>The <varname>config</varname> argument reproduce the same hierarchy of
+  all options declared in all modules.  For each option, the result of the
+  option is available, it is either the default value or the merge of all
+  definitions of the option.</para>
+
+<para>Options are declared with the
+  function <varname>pkgs.lib.mkOption</varname>.  This function expects an
+  attribute set which at least provides a description.  A default value, an
+  example, a type, a merge function and a post-process function can be
+  added.</para>
+
+<para>Types are used to provide a merge strategy for options and to ensure
+  the type of each option definitions.  They are defined
+  in <varname>pkgs.lib.types</varname>.</para>
+
+<para>The merge function expects a list of option definitions and merge
+  them to obtain one result of the same type.</para>
+
+<para>The post-process function (named <varname>apply</varname>) takes the
+  result of the merge or of the default value, and produce an output which
+  could have a different type than the type expected by the option.</para>
+
+<!-- end -->
+
+<example xml:id='locate-example'><title>Locate Module Example</title>
+<programlisting>
+{config, pkgs, ...}:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf mkThenElse types; <co xml:id='conf-syntax-2' />
-
-  cfg = config.services.locate; <co xml:id='conf-syntax-4' />
+  cfg = config.services.locate;
   locatedb = "/var/cache/locatedb";
   logfile = "/var/log/updatedb";
-  cmd = "root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}";
+  cmd =''root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}'';
+
+  mkCheck = x:
+    mkIf cfg.enable (
+      mkAssert config.services.cron.enable ''
+        The cron daemon is not enabled, required by services.locate.enable.
+      ''
+      x
+    )
 in
 
 {
-  imports = [ <co xml:id='conf-syntax-6' />
-    (modulesPath + /services/scheduling/cron.nix)
+  imports = [
+    /etc/nixos/nixos/modules/services/scheduling/cron.nix
   ];
 
-  options = { <co xml:id='conf-syntax-3' />
+  options = {
     services.locate = {
       enable = mkOption {
         default = false;
         example = true;
-        type = types.bool;
+        type = with types; bool;
         description = ''
           If enabled, NixOS will periodically update the database of
           files used by the <command>locate</command> command.
@@ -51,7 +218,7 @@ in
 
       period = mkOption {
         default = "15 02 * * *";
-        type = types.uniq type.string;
+        type = with types; uniq string;
         description = ''
           This option defines (in the format used by cron) when the
           locate database is updated.
@@ -61,164 +228,29 @@ in
     };
   };
 
-  config = mkIf cfg.enable { <co xml:id='conf-syntax-5' />
+  config = mkCheck {
     services.cron = {
-      systemCronJobs = mkThenElse { <co xml:id='conf-syntax-7' />
-        thenPart = "${cfg.period}  root ${cmd}";
-        elsePart = "";
-      };
+      enable = mkAlways cfg.enable;
+      systemCronJobs = "${cfg.period}  root ${cmd}";
     };
   };
 }</programlisting>
 </example>
 
-<para><xref linkend='conf-syntax' /> shows the <emphasis>configuration
-  file</emphasis> for the locate service which uses cron to update the
-  database at some dates which can be defined by the user.  This nix
-  expression is coming
-  from <filename>upstart-jobs/cron/locate.nix</filename>.  It shows a simple
-  example of a service that can be either distributed on many computer that
-  are using the same configuration or to shared with the community.  This
-  file is divided in two with the interface and the implementation.  Both
-  the interface and the implementation declare a <emphasis>configuration
-  set</emphasis>.
-
-<calloutlist>
-
-  <callout arearefs='conf-syntax-1'>
-
-    <para>This line declares the arguments of the configuration file.  You
-    can omit this line if there is no reference to <varname>pkgs</varname>
-    and <varname>config</varname> inside the configuration file.</para>
-
-    <para>The argument <varname>pkgs</varname> refers to NixPkgs and allow
-    you to access all attributes contained inside it.  In this
-    example <varname>pkgs</varname> is used to retrieve common functions to
-    ease the writing of configuration files
-    like <varname>mkOption</varname>, <varname>mkIf</varname>
-    and <varname>mkThenElse</varname>.</para>
-
-    <para>The argument <varname>config</varname> corresponds to the whole
-    NixOS configuration.  This is a set which is build by merging all
-    configuration files imported to set up the system.  Thus all options
-    declared are contained inside this variable.  In this
-    example <varname>config</varname> is used to retrieve the status of
-    the <varname>enable</varname> flag.  The important point of this
-    argument is that it contains either the result of the merge of different
-    settings or the default value, therefore you cannot assume
-    that <option>config.services.locate.enable</option> is always false
-    because it may have been defined in another configuration file.</para>
-
-  </callout>
-
-  <callout arearefs='conf-syntax-2'>
-
-    <para>This line is used to import a functions that are useful for
-    writing this configuration file.</para>
-
-  </callout>
-
-  <callout arearefs='conf-syntax-3'>
-
-    <para>The variable <varname>options</varname> is
-    a <emphasis>configuration set</emphasis> which is only used to declare
-    options with the function <varname>mkOption</varname> imported
-    from <filename>pkgs/lib/default.nix</filename>.  Options may contained
-    any attribute but only the following have a special
-    meaning: <varname>default</varname>, <varname>example</varname>,
-    <varname>description</varname>, <varname>merge</varname>
-    and <varname>apply</varname>.</para>
-
-    <para>The <varname>merge</varname> attribute is used to merge all values
-    defined in all configuration files and this function return a value
-    which has the same type as the default value.  If the merge function is
-    not defined, then a default function
-    (<varname>pkgs.lib.mergeDefaultOption</varname>) is used to merge
-    values.  The <varname>merge</varname> attribute is a function which
-    expect two arguments: the location of the option and the list of values
-    which have to be merged.</para>
-
-    <para>The <varname>apply</varname> attribute is a function used to
-    process the option.  Thus the value return
-    by <option>config.<replaceable>option</replaceable></option> would be
-    the result of the <varname>apply</varname> function called with either
-    the <varname>default</varname> value or the result of
-    the <varname>merge</varname> function.</para>
-
-  </callout>
-
-  <callout arearefs='conf-syntax-4'>
-
-    <para>This line is a common trick used to reduce the amount of
-    writing.  In this case <varname>cfg</varname> is just a sugar over
-    <option>config.services.locate</option></para>
-
-  </callout>
-
-  <callout arearefs='conf-syntax-5'>
-
-    <para>This line is used to declare a special <emphasis>IF</emphasis>
-    statement.  If you had put a usual <emphasis>IF</emphasis> statement
-    here, with the same condition, then you will get an infinite loop.  The
-    reason is that your condition ask for the value of the
-    option <option>config.services.locate.enable</option> but in order to
-    get this value you have to evaluate all configuration sets including the
-    configuration set contained inside your file.</para>
-
-    <para>To remove this extra complexity, <varname>mkIf</varname> has been
-    introduced to get rid of possible infinite loop and to factor your
-    writing.</para>
-
-  </callout>
-
-  <callout arearefs='conf-syntax-6'>
-
-    <para>The attribute <varname>imports</varname> contains a list of other
-    module location.  These modules should provide option declarations for
-    the current module in order to be evaluated safely.</para>
-
-    <para>When a dependence on a NixOS module has to be made, then you
-    should use the argument <varname>modulesPath</varname> to prefix the
-    location of your NixOS repository.</para>
-
-  </callout>
-
-  <callout arearefs='conf-syntax-7'>
-
-    <para>The attribute <varname>config</varname>, which should not be
-    confused with the argument of the same name, contains a set of option
-    definitions defined by this module. When there is
-    neither <varname>imports</varname> nor <varname>options</varname>, then
-    this attribute set can be return without any enclosing.  This feature
-    allow you to write your <filename>configuration.nix</filename> as a
-    module which does not contains any option declarations.</para>
-
-    <para>As <varname>mkIf</varname> does not need
-    any <emphasis>then</emphasis> part or <emphasis>else</emphasis> part,
-    then you can specify one on each option definition with the
-    function <varname>mkThenElse</varname>.</para>
-
-    <para>To avoid a lot of <varname>mkThenElse</varname> with empty
-    <emphasis>else</emphasis> part, a sugar has been added to infer the
-    corresponding <emphasis>empty</emphasis>-value of your option when the
-    function <varname>mkThenElse</varname> is not used.</para>
-
-    <para>If your <emphasis>then</emphasis> part
-    and <emphasis>else</emphasis> part are identical, then you should use
-    the function <varname>mkAlways</varname> to ignore the condition.</para>
-
-    <para>If you need to add another condition, then you can add <varname>mkIf</varname> to on
-    the appropriate location.  Thus the <emphasis>then</emphasis> part will
-    only be used if all conditions declared with <varname>mkIf</varname>
-    are satisfied.</para>
-
-  </callout>
-
-</calloutlist>
-
-</para>
+<para><xref linkend='locate-example' /> illustrates a module which handles
+  the regular update of the database which index all files on the file
+  system.  This modules has option definitions to rely on the cron service
+  to run the command at predefined dates.  In addition, this modules
+  provides option declarations to enable the indexing and to use different
+  period of time to run the indexing.  Properties are used to prevent
+  ambiguous definitions of option (enable locate service and disable cron
+  services) and to ensure that no options would be defined if the locate
+  service is not enabled.</para>
 
 </section>
+
+
+<!--===============================================================-->
 
 <section>
 
@@ -271,6 +303,8 @@ config.system.build</command>
 </section>
 
 
+<!--===============================================================-->
+
 <section>
 
 <title>Building your own NixOS CD</title>
@@ -322,6 +356,8 @@ $ ./result/bin/nixos-install</screen>
 
 </section>
 
+
+<!--===============================================================-->
 
 <section>
 
