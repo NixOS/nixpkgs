@@ -5783,6 +5783,11 @@ let
     inherit (gnome) libgnomecanvas;
   };
 
+  ardour3 =  lowPrio (callPackage ../applications/audio/ardour/ardour3.nix {
+    inherit (gtkLibs) glib pango gtk glibmm gtkmm;
+    inherit (gnome) libgnomecanvas libgnomecanvasmm;
+  });
+
   arora = callPackage ../applications/networking/browsers/arora { };
 
   audacious = callPackage ../applications/audio/audacious { };
