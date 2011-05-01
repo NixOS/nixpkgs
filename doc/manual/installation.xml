@@ -363,11 +363,6 @@ $ nixos-rebuild switch</screen>
 (Or instead of <literal>switch</literal>, use any of the alternatives
 shown in <xref linkend="sec-changing-config"/>.)</para>
 
-<para>To customize your VCS or to handle more repositories with
-<command>nixos-checkout</command>, you can have a look at the
-options <option>installer.repos.nixos</option>
-and <option>installer.repos.nixpkgs</option>.</para>
-
 </section>
 
 
