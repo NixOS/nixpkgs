@@ -177,7 +177,7 @@ let
         proxy = t.proxy.test;
         quake3 = t.quake3.report;
         remote_builds = t.remote_builds.test;
-        subversion = t.subversion.report;
+        #subversion = t.subversion.report;
         trac = t.trac.test;
         xfce = t.xfce.test;
       };
