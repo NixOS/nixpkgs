@@ -9,7 +9,7 @@
 <section>
 <title>Compiz Fusion</title>
 <para>
-	Compiz Fusion is just a set of plugins fr Compiz. Your best interest is to have 
+	Compiz Fusion is just a set of plugins for Compiz. Your best interest is to have
 	them found both by Compiz and by Compiz Configuration Settings (also in Compiz Fusion
 	distribution). By default they look in Compiz installation path and in home directory.
 	You do not need to track /nix/store manually - everything is already in 
