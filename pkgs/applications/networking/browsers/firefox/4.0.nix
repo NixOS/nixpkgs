@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, libvpx, yasm, mesa
+, yasm, mesa
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "4.0";
+  firefoxVersion = "4.0.1";
   
-  xulVersion = "2.0"; # this attribute is used by other packages
+  xulVersion = "2.0.1"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "403da9dd65662e5c4dd34299214e04cb6f80575e";
+    sha1 = "c89bc5106266aa0097a7be15be84555bd2649f03";
   };
 
   
@@ -58,7 +58,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib nspr /* nss */ libnotify xlibs.pixman libvpx yasm mesa
+        alsaLib nspr /* nss */ libnotify xlibs.pixman yasm mesa
 	xlibs.libXScrnSaver xlibs.scrnsaverproto
 	xlibs.libXext xlibs.xextproto
       ];
@@ -128,7 +128,7 @@ rec {
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
-        xlibs.pixman libvpx yasm mesa
+        xlibs.pixman yasm mesa
       ];
 
     propagatedBuildInputs = [xulrunner];
