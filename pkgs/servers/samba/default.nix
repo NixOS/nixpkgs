@@ -21,11 +21,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "samba-3.5.6";
+  name = "samba-3.5.8";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1nj78bahph9fwxv0v3lz31cy6z167jgmvz63d8l9mlbmhf310r26";
+    sha256 = "15i7i0agcsrsq23d8pmbw5n9mbb76djiwjwgni9xijpd0ql3y7ik";
   };
 
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
