@@ -7809,7 +7809,7 @@ let
     import ../tools/package-management/nix/custom.nix {
       inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
         autoconf libtool configureFlags enableScripts lib libxml2 boehmgc
-	pkgconfig flex bison sqlite;
+	pkgconfig flex bison sqlite perlPackages;
       aterm = aterm25;
       db4 = db45;
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;

@@ -10,6 +10,7 @@
 , libxml2 ? null
 , docbook5_xsl ? null, libxslt ? null
 , docbook5 ? null, docbook_xml_dtd_43 ? null 
+, perlPackages
 , boehmgc ? null
 , pkgconfig ? null
 , sqlite ? null
@@ -54,6 +55,8 @@ stdenv.mkDerivation {
     --with-aterm=${aterm} --with-bdb=${db4} --with-bzip2=${bzip2}
     --with-sqlite=${sqlite}
     --disable-init-state
+    --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
+    --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
     ${toString configureFlags}
   '';
 
