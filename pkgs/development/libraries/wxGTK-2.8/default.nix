@@ -9,11 +9,11 @@ assert gtk.libpng != null;
 assert gtk.libpng.zlib != null;
 
 stdenv.mkDerivation {
-  name = "wxGTK-2.8.11";
+  name = "wxGTK-2.8.12";
 
   src = fetchurl {
-    url = mirror://sourceforge/wxwindows/wxGTK-2.8.11.tar.gz;
-    sha256 = "149waiwwzw238avkhj8vmm1394nw45fa02b7cf1mqwc3jdd1pfz6";
+    url = mirror://sourceforge/wxwindows/wxGTK-2.8.12.tar.gz;
+    sha256 = "1gjs9vfga60mk4j4ngiwsk9h6c7j22pw26m3asxr1jwvqbr8kkqk";
   };
 
   buildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation {
   ";
 
   postBuild = "(cd contrib/src && make)";
+  
   postInstall = "
     (cd contrib/src && make install)
     (cd $out/include && ln -s wx-*/* .)
