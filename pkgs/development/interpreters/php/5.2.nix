@@ -44,6 +44,11 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
           ];
         buildInputs = [ libxml2 ];
       };
+
+      readline = {
+        configureFlags = ["--with-readline=${readline}"];
+        buildInputs = [ readline ];
+      };
     
       sqlite = {
         configureFlags = ["--with-pdo-sqlite=${sqlite}"];
@@ -126,6 +131,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
     curlSupport = getConfig ["php" "curl"] true;
     gettextSupport = getConfig ["php" "gettext"] true;
     postgresqlSupport = getConfig ["php" "postgresql"] true;
+    readlineSupport = getConfig ["php" "readline"] true;
     sqliteSupport = getConfig ["php" "sqlite"] true;
     soapSupport = getConfig ["php" "soap"] true;
     zlibSupport = getConfig ["php" "zlib"] true;
