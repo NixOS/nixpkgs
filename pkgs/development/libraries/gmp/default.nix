@@ -1,7 +1,8 @@
 {stdenv, fetchurl, m4, cxx ? true, static ? false}:
 
 let
-  staticFlags = if static then " --enable-static --disable-shared" else "";
+  staticFlags = stdenv.lib.optionals static
+                  [ "--enable-static" "--disable-shared" ];
 in
 
 stdenv.mkDerivation rec {
@@ -14,12 +15,12 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [m4];
 
-  # Prevent the build system from using sub-architecture-specific
-  # instructions (e.g., SSE2 on i686).
-  preConfigure = "ln -sf configfsf.guess config.guess";
+  configureFlags =
+    # Build a "fat binary", with routines for several sub-architectures (x86).
+    [ "--enable-fat" ]
 
-  configureFlags = if cxx then "--enable-cxx" else "--disable-cxx" +
-      staticFlags;
+    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ])
+    ++ staticFlags;
 
   dontDisableStatic = if static then true else false;
 
