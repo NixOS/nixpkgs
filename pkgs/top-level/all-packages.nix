@@ -6454,7 +6454,7 @@ let
 
   krusader = newScope pkgs.kde4 ../applications/misc/krusader { };
 
-  ktorrent = newScope pkgs.kde4 ../applications/networking/ktorrent { };
+  ktorrent = newScope pkgs.kde4 ../applications/networking/p2p/ktorrent { };
 
   lame = callPackage ../applications/audio/lame { };
 
