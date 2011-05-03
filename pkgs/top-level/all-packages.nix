@@ -2330,6 +2330,8 @@ let
 
   kaffe = callPackage ../development/interpreters/kaffe { };
 
+  kona = callPackage ../development/interpreters/kona {};
+
   lua4 = callPackage ../development/interpreters/lua-4 { };
 
   lua5 = callPackage ../development/interpreters/lua-5 { };
