@@ -435,7 +435,6 @@ let
   };
 
   bittorrent = callPackage ../tools/networking/p2p/bittorrent {
-    wxPython = wxPython26;
     gui = true;
   };
 
@@ -4525,7 +4524,7 @@ let
 
   setuptools = pythonPackages.setuptools;
 
-  wxPython = wxPython26;
+  wxPython = wxPython28;
 
   wxPython26 = callPackage ../development/python-modules/wxPython/2.6.nix {
     wxGTK = wxGTK26;
