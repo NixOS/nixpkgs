@@ -60,6 +60,27 @@ python.modules // rec {
   };
 
 
+  apsw = buildPythonPackage rec {
+    name = "apsw-3.7.6.2-r1";
+    
+    src = fetchurl {
+      url = "http://apsw.googlecode.com/files/${name}.zip";
+      sha1 = "fa4aec08e59fa5964197f59ba42408d64031675b";
+    };
+
+    buildInputs = [ pkgs.unzip pkgs.sqlite ];
+
+    doCheck = false;
+
+    #propagatedBuildInputs = [ paste webtest ];
+
+    meta = {
+      description = "A Python wrapper for the SQLite embedded relational database engine";
+      homepage = http://code.google.com/p/apsw/;
+    };
+  };
+
+  
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
 
