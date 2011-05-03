@@ -72,8 +72,6 @@ python.modules // rec {
 
     doCheck = false;
 
-    #propagatedBuildInputs = [ paste webtest ];
-
     meta = {
       description = "A Python wrapper for the SQLite embedded relational database engine";
       homepage = http://code.google.com/p/apsw/;
