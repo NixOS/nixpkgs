@@ -3,7 +3,7 @@
 
 let
     prefix = "grub${if EFIsupport then "-efi" else ""}";
-    version = "1.99rc1";
+    version = "1.99rc2";
     unifont_bdf = fetchurl {
       url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
       sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   name = "${prefix}-${version}";
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/grub/grub-1.99~rc1.tar.gz";
-    sha256 = "0llxycgrs5h9n2mlgmkkg1mr2fv1rzmlw4mqb3v9hcaydkx3wczh";
+    url = "ftp://alpha.gnu.org/gnu/grub/grub-1.99~rc2.tar.gz";
+    sha256 = "ea8f243c95851d58d34ac04910929395790e9b9383d6deb2bb6750435bc3e7bd";
     name = "${name}.tar.gz";
   };
 
