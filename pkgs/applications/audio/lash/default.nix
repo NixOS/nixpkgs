@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, alsaLib, gtk, jackaudio, libuuid, libxml2,
-makeWrapper, pkgconfig, readline }:
+{ stdenv, fetchurl, alsaLib, gtk, jackaudio, libuuid, libxml2
+, makeWrapper, pkgconfig, readline }:
+
+assert libuuid != null;
 
 stdenv.mkDerivation  rec {
   name = "lash-${version}";
@@ -24,7 +26,7 @@ stdenv.mkDerivation  rec {
   meta = with stdenv.lib; {
     description = "LASH Audio Session Handler";
     longDescription = ''
-      session management system for GNU/Linux audio applications
+      Session management system for GNU/Linux audio applications.
     '';
     homepage = http://www.nongnu.org/lash;
     license = licenses.gpl2Plus;

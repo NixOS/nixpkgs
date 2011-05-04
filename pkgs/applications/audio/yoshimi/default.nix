@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, alsaLib, boost, cmakeCurses, fftwSinglePrec, fltk,
-jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib }:
+{ stdenv, fetchurl, alsaLib, boost, cmakeCurses, fftwSinglePrec, fltk
+, jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib }:
+
+assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
