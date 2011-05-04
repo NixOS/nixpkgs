@@ -992,6 +992,8 @@ let
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
+  nlopt = callPackage ../development/libraries/nlopt {};
+
   nmap = callPackage ../tools/security/nmap {
     inherit (pythonPackages) pysqlite;
   };
@@ -2559,6 +2561,11 @@ let
     inherit noSysDirs;
   };
 
+  binutils_gold = callPackage ../development/tools/misc/binutils {
+    inherit noSysDirs;
+    gold = true;
+  };
+
   binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
     inherit stdenv fetchurl zlib;
     noSysDirs = true;
@@ -2864,6 +2871,7 @@ let
 
   boost = callPackage ../development/libraries/boost { };
 
+  boost142 = callPackage ../development/libraries/boost/1.42.nix { };
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
@@ -2950,6 +2958,7 @@ let
   ctl = callPackage ../development/libraries/ctl { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
+  cppunit_1_10 = callPackage ../development/libraries/cppunit/1.10.nix { };
 
   cracklib = callPackage ../development/libraries/cracklib { };
 
@@ -4067,6 +4076,7 @@ let
   postgis = callPackage ../development/libraries/postgis { };
 
   protobuf = callPackage ../development/libraries/protobuf { };
+  protobuf_2_2_0 = callPackage ../development/libraries/protobuf/2.2.0.nix { };
 
   pth = callPackage ../development/libraries/pth { };
 

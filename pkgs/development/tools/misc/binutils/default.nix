@@ -1,4 +1,4 @@
-{stdenv, fetchurl, noSysDirs, zlib, cross ? null}:
+{stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison, flex2535, bc, dejagnu}:
 
 let
     basename = "binutils-2.21";
@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     ./new-dtags.patch
   ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ] ++ stdenv.lib.optional gold [dejagnu flex2535 bison
+
+              # Some Gold tests require this:
+              bc] ;
 
   inherit noSysDirs;
 
@@ -38,7 +41,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-werror" # needed for dietlibc build
       + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
         " --enable-fix-loongson2f-nop"
-      + stdenv.lib.optionalString (cross != null) " --target=${cross.config}";
+      + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
+      + stdenv.lib.optionalString gold " --enable-gold" ;
 
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
