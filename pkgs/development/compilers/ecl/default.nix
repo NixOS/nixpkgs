@@ -4,12 +4,10 @@
 builderDefsPackage (a :  
 let 
   s = import ./src-for-default.nix;
-  helperArgNames = [];
   propagatedBuildInputs = with a; [
     gmp mpfr
   ];
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
+  buildInputs = [ gmp libffi mpfr ];
 in
 rec {
   src = a.fetchUrlFromSrcInfo s;

@@ -7,7 +7,9 @@
 			sha256 = "0c661rjasax4ykw77dgqj39jhb4qi48m0bhhdy42vd5a4rfdrcck";
 		};
 
-		buildInputs = [libX11 zlib xproto mesa freeglut];
+		buildInputs = [ libX11 zlib xproto ]
+                  ++ stdenv.lib.optional (mesa != null) mesa
+                  ++ stdenv.lib.optional (freeglut != null) freeglut;
 		preConfigure = builderDefs.stringsWithDeps.fullDepEntry (''
 		  sed -e 's/math[.]h/cmath/' -i vector.cxx
 		  sed -e 's/games/bin/' -i Makefile.in

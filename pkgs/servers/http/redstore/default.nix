@@ -1,32 +1,19 @@
-x@{builderDefsPackage
-  , redland, pkgconfig, gmp
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  s = import ./src-for-default.nix;
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, redland, pkgconfig, gmp }:
 
-  inherit (s) name;
-  inherit buildInputs;
+stdenv.mkDerivation rec {
+  name = "redstore-0.4";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  src = fetchurl {
+    url = "http://redstore.googlecode.com/files/${name}.tar.gz";
+    sha256 = "1fs54v0d0kkqaz9ajacabb8wifrglvg6kkhd5b0mxmnng352wpp7";
+  };
+
+  buildInputs = [ gmp pkgconfig redland ];
       
   meta = {
     description = "An HTTP interface to Redland RDF store";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = with stdenv.lib.platforms;
       linux ++ freebsd ++ gnu;
   };
-}) x
-
+}
