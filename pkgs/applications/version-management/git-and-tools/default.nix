@@ -98,7 +98,7 @@ rec {
     inherit fetchgit stdenv perl;
   };
 
-  git2svn = import ./git2svn {
+  svn2git = import ./svn2git {
     inherit stdenv fetchgit qt47 subversion apr;
   };
 
