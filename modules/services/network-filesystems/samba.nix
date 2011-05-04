@@ -72,7 +72,10 @@ let
       environment = {
         LD_LIBRARY_PATH = nssModulesPath;
         TZ = config.time.timeZone;
+        LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
       };
+  
+      daemonType = "fork";
 
       exec = "${samba}/sbin/${appName} ${args}";
     };
@@ -210,13 +213,11 @@ in
         preStart = setupScript;
       };
 
-    # nmbd says "standard input is not a socket, assuming -D option",
-    # but using -i makes it stay in foreground (?)
-    jobs.nmbd = daemonJob "nmbd" " -i -F";
+    jobs.nmbd = daemonJob "nmbd" "-D";
 
-    jobs.smbd = daemonJob "smbd" " -i -F";
+    jobs.smbd = daemonJob "smbd" "-D";
 
-    jobs.winbindd = daemonJob "winbindd" " -F";
+    jobs.winbindd = daemonJob "winbindd" "-D";
 
   };
   
