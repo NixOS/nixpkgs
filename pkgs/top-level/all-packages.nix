@@ -4524,13 +4524,9 @@ let
 
   setuptools = pythonPackages.setuptools;
 
-  wxPython = wxPython28;
-
-  wxPython26 = callPackage ../development/python-modules/wxPython/2.6.nix {
-    wxGTK = wxGTK26;
-  };
-
-  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix { };
+  wxPython = pythonPackages.wxPython;
+  wxPython26 = pythonPackages.wxPython26;
+  wxPython28 = pythonPackages.wxPython28;
 
   twisted = pythonPackages.twisted;
 
@@ -6909,7 +6905,9 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
-  tribler = callPackage ../applications/networking/p2p/tribler { };
+  tribler = callPackage ../applications/networking/p2p/tribler {
+    wxPython = wxPython26;
+  };
 
   twinkle = callPackage ../applications/networking/twinkle {
     qt = qt3;

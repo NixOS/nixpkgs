@@ -1,6 +1,6 @@
 { pkgs, python }:
 
-python.modules // rec {
+let pythonPackages = python.modules // rec {
 
   inherit python;
 
@@ -1729,6 +1729,23 @@ python.modules // rec {
     };
   };
 
+
+  wxPython = wxPython28;
+  
+
+  wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit pythonPackages;
+    wxGTK = pkgs.wxGTK26;
+  };
+
+  
+  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit pythonPackages;
+    wxGTK = pkgs.wxGTK28;
+  };
+
   
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
@@ -1797,4 +1814,4 @@ python.modules // rec {
     };
   };
 
-}
+}; in pythonPackages
