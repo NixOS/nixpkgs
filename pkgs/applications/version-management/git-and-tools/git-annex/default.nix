@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String, QuickCheck2, pcreLight }:
+{ stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String, QuickCheck2, pcreLight, SHA }:
 
 let
   version = "0.20110427";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1vbmkvf9hlnfcaqsyi1ay2rr835j49bxqyfdi3v3373pdfd6195z";
   };
 
-  buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight];
+  buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight SHA];
 
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
