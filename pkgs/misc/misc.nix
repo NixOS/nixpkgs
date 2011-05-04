@@ -128,7 +128,7 @@ in
       for var in CFLAGS CXXFLAGS NIX_CFLAGS_COMPILE; do
         declare -x "$var=''${!var} -ggdb -O0"
       done
-      echo "file should tell that executable has not been strippee"
+      echo "file should tell that executable has not been stripped"
     '';
 
   });
