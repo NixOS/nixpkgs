@@ -6905,9 +6905,7 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
-  tribler = callPackage ../applications/networking/p2p/tribler {
-    wxPython = wxPython26;
-  };
+  tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twinkle = callPackage ../applications/networking/twinkle {
     qt = qt3;

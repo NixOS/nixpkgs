@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, wxPython, nettools }:
+{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools }:
 
 stdenv.mkDerivation {
   name = "tribler-5.3.8";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
 
   pythonPath =
-    [ wxPython pythonPackages.ssl pythonPackages.curses pythonPackages.apsw
+    [ pythonPackages.wxPython pythonPackages.ssl pythonPackages.curses pythonPackages.apsw
       pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
     ];
 
