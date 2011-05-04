@@ -6820,9 +6820,11 @@ let
     guile = guile_1_8;
   };
 
-  sonicVisualizer = callPackage ../applications/audio/sonic-visualizer {
+  sonicVisualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (vamp) vampSDK;
+    inherit (xlibs) libX11;
     qt = qt4;
+    fftw = fftwSinglePrec;
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
