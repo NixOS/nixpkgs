@@ -98,6 +98,10 @@ rec {
     inherit fetchgit stdenv perl;
   };
 
+  git2svn = import ./git2svn {
+    inherit stdenv fetchgit qt47 subversion apr;
+  };
+
   gitSubtree = stdenv.mkDerivation {
     name = "git-subtree-0.3";
     src = fetchurl {
