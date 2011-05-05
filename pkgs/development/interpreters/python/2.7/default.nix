@@ -18,7 +18,7 @@ let
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
     sha256 = "14i2c7yqa7ljmx2i2bb827n61q33zn23ax96czi8rbkyyny8gqw0";
   };
-  
+
   patches =
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
@@ -36,12 +36,12 @@ let
     ++ optional zlibSupport zlib
     ++ optionals stdenv.isDarwin [ darwinArchUtility darwinSwVersUtility ];
 
-    
+
   # Build the basic Python interpreter without modules that have
   # external dependencies.
   python = stdenv.mkDerivation {
     name = "python-${version}";
-    
+
     inherit majorVersion version src patches buildInputs;
 
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
@@ -181,5 +181,5 @@ let
     };
 
   };
-  
+
 in python // { inherit modules; }
