@@ -24,9 +24,10 @@ stdenv.mkDerivation {
       libogg # ?
       # fishsound
       liblo
+      libX11
+      makeWrapper
     ];
 
-  # TODO: Check if this is necessary
   buildPhase = ''
     for i in sonic-visualiser svapp svcore svgui; 
       do cd $i && qmake -makefile PREFIX=$out && cd ..;
@@ -38,10 +39,6 @@ stdenv.mkDerivation {
     ensureDir $out/{bin,share/sonic-visualiser}
     cp sonic-visualiser/sonic-visualiser $out/bin
     cp -r sonic-visualiser/samples $out/share/sonic-visualiser/samples
-  '';
-
-  # TODO: Fix this, it is not getting called
-  postInstall = ''
     wrapProgram $out/bin/sonic-visualiser --prefix LD_LIBRARY_PATH : ${libX11}/lib
   '';
 
@@ -49,7 +46,8 @@ stdenv.mkDerivation {
     description = "View and analyse contents of music audio files";
     homepage = http://www.sonicvisualiser.org/;
     license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    maintainers = [ stdenv.lib.maintainers.marcweber 
+      stdenv.lib.maintainers.goibhniu ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
