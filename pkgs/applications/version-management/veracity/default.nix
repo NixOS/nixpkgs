@@ -2,13 +2,14 @@ x@{builderDefsPackage
   , cmake, curl, patch, zlib, icu, sqlite, libuuid
   , readline, openssl, spidermonkey_1_8_0rc1
   , nspr, nss
+  , runTests ? false
   , ...}:
 builderDefsPackage
 (a :  
 let 
   s = import ./src-for-default.nix;
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+    ["runTests"];
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
     
@@ -23,12 +24,14 @@ rec {
 
   dump0 = (a.doDump "0");
 
-  doTest = a.fullDepEntry ''
+  runTests = a.stdenv.lib.attrByPath ["runTests"] false a;
+
+  doTest = a.fullDepEntry (if runTests then ''
     sed -e "s@/bin/bash@${a.stdenv.shell}@" -i $(find .. -type f)
     mkdir pseudo-home
     export HOME=$PWD/pseudo-home
     make test || true
-  '' ["doMake" "minInit"];
+  '' else "") ["doMake" "minInit"];
 
   prepare_sgneeds = a.fullDepEntry (''
     ensureDir "$out/sgneeds/include/spidermonkey"
@@ -73,6 +76,10 @@ rec {
     cp -r .. "$out/share/veracity/build-dir"
     ln -s "$out/share/veracity/build-dir/build/src/cmd/vv" "$out/bin"
     ln -s "$out/share/veracity/build-dir/build/src/script/vscript" "$out/bin"
+    ${if runTests then "" else '' 
+      rm -rf  "$out/share/veracity/build-dir/veracity/testsuite" 
+      rm -rf  "$out/share/veracity/build-dir/build/testsuite" 
+    ''}
   '' ["doMake" "minInit" "defEnsureDir"];
 
   meta = {
