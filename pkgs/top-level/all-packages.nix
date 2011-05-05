@@ -862,6 +862,8 @@ let
 
   most = callPackage ../tools/misc/most { };
 
+  nodejs = callPackage ../development/web/nodejs {};
+
   lftp = callPackage ../tools/networking/lftp { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
