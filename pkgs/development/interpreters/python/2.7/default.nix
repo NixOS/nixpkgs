@@ -57,10 +57,10 @@ let
         done
       '' + optionalString stdenv.isCygwin ''
         # On Cygwin, `make install' tries to read this Makefile.
-        mkdir -p $out/lib/python2.7/config
-        touch $out/lib/python2.7/config/Makefile
-        mkdir -p $out/include/python2.7
-        touch $out/include/python2.7/pyconfig.h
+        mkdir -p $out/lib/python${majorVersion}/config
+        touch $out/lib/python${majorVersion}/config/Makefile
+        mkdir -p $out/include/python${majorVersion}
+        touch $out/include/python${majorVersion}/pyconfig.h
       '';
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
