@@ -36,6 +36,13 @@ let
     ++ optional zlibSupport zlib
     ++ optionals stdenv.isDarwin [ darwinArchUtility darwinSwVersUtility ];
 
+  ensurePurity =
+    ''
+      # Purity.
+      for i in /usr /sw /opt /pkg; do
+        substituteInPlace ./setup.py --replace $i /no-such-path
+      done
+    '';
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
@@ -49,13 +56,8 @@ let
 
     configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
 
-    preConfigure =
+    preConfigure = "${ensurePurity}" + optionalString stdenv.isCygwin
       ''
-        # Purity.
-        for i in /usr /sw /opt /pkg; do
-          substituteInPlace ./setup.py --replace $i /no-such-path
-        done
-      '' + optionalString stdenv.isCygwin ''
         # On Cygwin, `make install' tries to read this Makefile.
         mkdir -p $out/lib/python${majorVersion}/config
         touch $out/lib/python${majorVersion}/config/Makefile
@@ -115,7 +117,7 @@ let
       C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
       LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-      configurePhase = "true";
+      configurePhase = "${ensurePurity}";
 
       buildPhase =
         ''
