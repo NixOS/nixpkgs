@@ -1,15 +1,15 @@
 { stdenv, fetchurl, clisp, texinfo, perl }:
 
 let
-    name    = "maxima";
-    version = "5.23.2";
+  name    = "maxima";
+  version = "5.24.0";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "0x6fl7lm2jmybd5n3l5qpyvcj9f5zfwizk7wkbpgkjimh58n5skv";
+    sha256 = "137crv2f6hxwqrv75m8679vrlbnqgg5ww755cs4kihs1cy03bssq";
   };
 
   preConfigure = ''
