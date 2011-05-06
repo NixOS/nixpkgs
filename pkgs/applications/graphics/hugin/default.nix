@@ -3,11 +3,11 @@
  glew, libXmu, libXi }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2010.0.0";
+  name = "hugin-2010.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hugin/${name}.tar.gz";
-    sha256 = "08xm7ggfrh536lqvdzw7zg09p2awbclw5r7i8c59gf092w1cac7d";
+    url = "mirror://sourceforge/hugin/${name}.tar.bz2";
+    sha256 = "13n3p4f39mbdydsjqy48csjgvv30lfcwvln5y5dyy95lyrfwcp6l";
   };
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
