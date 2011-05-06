@@ -1,18 +1,20 @@
-{ fetchgit, stdenv, bash, emacs, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
+{ fetchgit, stdenv, bash, emacs, gdb, git, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.5-nixos1";
+  name = "notmuch-0.6-rc1";
 
   src = fetchgit {
     url = "git://github.com/chaoflow/notmuch";
-    rev = "nixos1";
-    sha256 = "979bf154c05b1560ac95ec29c55a221960cba65073fdf5cb1d00312dd9ecfb57";
+    rev = "236dc05f919a2deda8ed7f65bb8f52e0c39cd017";
+    sha256 = "7045f0cfee3d44f404e2a40295cfc586f803f9d6cabb063f0256e468a8be3670";
   };
 
-  buildInputs = [ bash emacs glib gmime gnupg1 pkgconfig talloc xapian ];
+  buildInputs = [ bash emacs gdb git glib gmime gnupg1 pkgconfig talloc xapian ];
 
   # XXX: Make me a loop
   patchPhase = ''
+    substituteInPlace "test/atomicity" \
+      --replace "#!/bin/bash" "#!${bash}/bin/bash"
     substituteInPlace "test/author-order" \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
     substituteInPlace "test/basic" \
