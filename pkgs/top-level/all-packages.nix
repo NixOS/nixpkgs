@@ -6482,6 +6482,10 @@ let
     inherit (gnome) libglade;
   };
 
+  lingot = callPackage ../applications/audio/lingot {
+    inherit (gnome) libglade;
+  };
+
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger = callPackage ../applications/office/ledger { };
