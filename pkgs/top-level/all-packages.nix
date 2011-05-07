@@ -1126,6 +1126,8 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
+  polipo = callPackage ../servers/polipo { };
+
   polkit_gnome = callPackage ../tools/misc/polkit-gnome { };
 
   povray = callPackage ../tools/graphics/povray { };
