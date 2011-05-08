@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "merkaartor-0.17.2";
   src = fetchurl {
-    url = "http://www.merkaartor.org/downloads/source/${name}.tar.bz2";
+    url = "http://merkaartor.be/attachments/download/253/merkaartor-0.17.2.tar.bz2";
     sha256 = "0akhp9czzn39132mgj9h38nlh4l9ibzn3vh93bfs685zxyn4yps2";
   };
 
