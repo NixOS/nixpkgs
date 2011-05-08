@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, gnutls}:
+{stdenv, fetchurl, zlib, gnutls, libgcrypt}:
 
 stdenv.mkDerivation {
   name = "rtmpdump-2.2d";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0w2cr3mgp4dcabmr7d7pnsn8f2r1zvar553vfavnzqv61gnhyrm5";
   };
 
-  buildInputs = [ zlib gnutls ];
+  buildInputs = [ zlib gnutls libgcrypt ];
 
   makeFlags = "CRYPTO=GNUTLS posix";
 
