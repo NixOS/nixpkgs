@@ -2429,7 +2429,6 @@ let
 
   racket = callPackage ../development/interpreters/racket {
     inherit (gtkLibs) pango glib gtk;
-    libjpeg = libjpeg62;
   };
 
   ruby18 = callPackage ../development/interpreters/ruby { };
