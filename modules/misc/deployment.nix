@@ -74,7 +74,7 @@ with pkgs.lib;
       '';
     };
     
-    deployment.adhoc.startVMCommand = mkOption {
+    deployment.adhoc.createVMCommand = mkOption {
       default = "create-vm";
       description = ''
         Remote command to create a NixOS virtual machine.  It should
