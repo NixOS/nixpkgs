@@ -14,6 +14,12 @@ stdenv.mkDerivation rec{
 
   configureFlags = [ "--localstatedir=/var" ];
 
+  postInstall = '' 
+    cd "$out/lib"
+    lib=liblxc.so.?.*
+    ln -s $lib $(echo $lib | sed -re 's/(liblxc[.]so[.].)[.].*/\1/')
+  '';
+
   buildInputs = [ libcap ];
 
   meta = {
