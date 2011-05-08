@@ -3,21 +3,21 @@
 g: # Get dependencies from patched gems
 {
   aliases = {
-    nix = g.nix_0_1;
+    nix = g.nix_0_1_1;
     rake = g.rake_0_8_7;
   };
   gem_nix_args = [ ''nix'' ''rake'' ];
   gems = {
-    nix_0_1 = {
+    nix_0_1_1 = {
       basename = ''nix'';
       meta = {
         description = ''Nix package manager interface'';
         homepage = ''http://gitorious.org/ruby-nix'';
         longDescription = ''Adds 'gem nix' command that dumps given set of gems to format suitable for Nix package manager'';
       };
-      name = ''nix-0.1'';
+      name = ''nix-0.1.1'';
       requiredGems = [  ];
-      sha256 = ''16lc3yfjcsm1s5jjfazlwia1vhy6x401f0mam79r2qkcic70xnap'';
+      sha256 = ''0kwrbkkg0gxibhsz9dpd5zabcf2wqsicg28yiazyb3dc9dslk26k'';
     };
     rake_0_8_7 = {
       basename = ''rake'';

@@ -26,8 +26,20 @@ in
   generated = import ./generated.nix;
   patches = import ./patches.nix;
   overrides = import ./overrides.nix;
-}).merge {
-  generated = getConfig [ "gems" "generated" ] null;
-  patches = getConfig [ "gems" "patches" ] null;
-  overrides = getConfig [ "gems" "overrides" ] null;
-}
+}).merge (
+  let
+    localGemDir = (builtins.getEnv "HOME") + "/.nixpkgs/gems/";
+    getLocalGemFun = name:
+      let
+        file = localGemDir + name + ".nix";
+        fallback =
+          if builtins.pathExists file then import (builtins.toPath file)
+          else null;
+      in
+      getConfig [ "gems" name ] fallback;
+  in
+{
+  generated = getLocalGemFun "generated";
+  patches = getLocalGemFun "patches";
+  overrides = getLocalGemFun "overrides";
+})

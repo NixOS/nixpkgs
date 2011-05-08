@@ -42,8 +42,10 @@ rec {
       To use it do the following:
       1. Install rubygems and rubyLibs.nix.
       2. Add $your_profile/${ruby.gemPath} to GEM_PATH.
-      3. export RUBYLIB=$your_profile/lib RUBYOPT=rubygems
-      4. See `gem nix --help` for the rest.
+      3. export RUBYLIB=$your_profile/lib RUBYOPT=rubygems.
+      4. Run `gem nix --[no-]user-install gem1 gem2 ...` to generate Nix
+      expression from gem repository.
+      5. Install rubyLibs.gem1 etc.
     '';
   };
 
