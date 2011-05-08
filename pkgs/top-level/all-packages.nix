@@ -6527,9 +6527,7 @@ let
     inherit (pythonPackages) ssl;
   };
 
-  merkaartor = callPackage ../applications/misc/merkaartor {
-    qt = qt4;
-  };
+  merkaartor = callPackage ../applications/misc/merkaartor { };
 
   meshlab = callPackage ../applications/graphics/meshlab {
     qt = qt4;
