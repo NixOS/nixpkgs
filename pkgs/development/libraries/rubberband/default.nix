@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "rubberband-1.6.0";
 
   src = fetchurl {
-    url = http://www.breakfastquay.com/rubberband/files/rubberband-1.6.0.tar.bz2;
+    url = http://code.breakfastquay.com/attachments/download/16/rubberband-1.6.0.tar.bz2;
     sha256 = "15n875x3bbg7nbnqbl33v5jp2p6yw779124xz4la8ysclvikklsv";
   };
 
