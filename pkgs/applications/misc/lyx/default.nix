@@ -1,18 +1,18 @@
 # I haven't put much effort into this expressions .. so some optional depencencies may be missing - Marc
 { fetchurl, stdenv, texLive, python, makeWrapper
-, libX11, qt
+, libX11, qt, xz
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.9";
+  version = "2.0.0";
   name = "lyx-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/1.6.x/${name}.tar.bz2";
-    sha256 = "c5b3602c58db385be5c52ba958f52239c5fd090320ec99d79b7eb861c1597709";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.0.x/${name}.tar.xz";
+    sha256 = "a790951d6ed660b254e82d682b478665f119dd522ab4759fdeb5cd8d42f66f61";
   };
 
-  buildInputs = [texLive qt python makeWrapper ];
+  buildInputs = [texLive qt python makeWrapper xz ];
 
   # don't ask me why it can't find libX11.so.6
   postInstall = ''
