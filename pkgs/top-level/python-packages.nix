@@ -1814,4 +1814,21 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  hgsvn = buildPythonPackage rec {
+    name = "hgsvn-0.1.8";
+    src = fetchurl rec {
+      name = "hgsvn-0.1.8.tar.gz";
+      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
+      sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
+    };
+
+    buildInputs = [ pkgs.setuptools ];
+    doCheck = false;
+
+    meta = {
+      description = "HgSVN";
+      homepage = http://pypi.python.org/pypi/hgsvn;
+    };
+  };
+
 }; in pythonPackages
