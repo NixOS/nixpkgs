@@ -1,48 +1,30 @@
-# Perhaps we can get some ideas from here ? http://gentoo-wiki.com/HOWTO_Jack
-# still much to test but it compiles now
+{ stdenv, fetchurl, pkgconfig, alsaLib, python, dbus, pythonDBus, expat, makeWrapper }:
 
-{ composableDerivation, fetchurl, pkgconfig, alsaLib }:
+stdenv.mkDerivation rec {
+  name = "jackdbus-${version}";
+  version = "1.9.7";
 
-let inherit (composableDerivation) edf; in
-
-composableDerivation.composableDerivation {} {
-  name = "jack-0.120.1";
-  
   src = fetchurl {
-    url = "http://jackaudio.org/downloads/jack-audio-connection-kit-0.120.1.tar.gz";
-    sha256 = "02h8536c67059gq2vsl323kvy9jak9dp0syi1h58awlkbgzlg80d";
+    url = "http://www.grame.fr/~letz/jack-1.9.7.tar.bz2";
+    sha256 = "01gcn82bb7xnbcsd2ispbav6lwm0il4g8rs2mbaqpcrf9nnmfvq9";
   };
-  
-  buildInputs = [ pkgconfig ];
-  
-  flags =
-      # FIXME: tidy up
-       edf { name = "posix-shm"; } #use POSIX shm API
-    // edf { name = "timestamps"; }                      # allow clients to use the JACK timestamp API
-    // edf { name = "capabilities"; }                   #use libcap to gain realtime scheduling priviledges
-    // edf { name = "oldtrans"; }                      #remove old transport interfaces
-    // edf { name = "stripped-jackd"; }                 #strip jack before computing its md5 sum
-    // edf { name = "portaudio"; }                     #ignore PortAudio driver
-    // edf { name = "coreaudio"; }                     #ignore CoreAudio driver
-    // edf { name = "oss"; }                           #ignore OSS driver
-    // edf { name = "freebob"; }                       #ignore FreeBob driver
-    // edf { name = "alsa"; enable = { buildInputs = [ alsaLib ]; }; };
 
-  cfg = {
-    posix_shmSupport = true;
-    timestampsSupport = true;
-    alsaSupport = true;
-  };
-  
-  # make sure the jackaudio is found by symlinking lib64 to lib
-  postInstall = ''
-    ensureDir $out/lib
-    ln -s $out/lib{64,}/pkgconfig
+  buildInputs = [ pkgconfig alsaLib python dbus pythonDBus expat makeWrapper ];
+
+  configurePhase = "python waf configure --prefix=$out --dbus --alsa";
+
+  buildPhase = "python waf";
+
+  installPhase = ''
+    python waf install
+    wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '';
-  
-  meta = {
-    description = "JACK audio connection kit";
+
+  meta = with stdenv.lib; {
+    description = "JACK audio connection kit, version 2 with jackdbus";
     homepage = "http://jackaudio.org";
-    license = "GPL";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.goibhniu ];
   };
 }

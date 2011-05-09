@@ -7788,6 +7788,8 @@ let
   };
 
   # using the new configuration style proposal which is unstable
+  jack1d = callPackage ../misc/jackaudio/jack1.nix { };
+
   jackaudio = callPackage ../misc/jackaudio { };
 
   keynav = callPackage ../tools/X11/keynav { };
