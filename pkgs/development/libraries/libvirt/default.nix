@@ -3,14 +3,14 @@
 , libtasn1, ebtables
 }:
 
-let version = "0.9.0"; in
+let version = "0.9.1"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "0rlhn08zgj9v0jrh0pq0hfdw6vmw98fg3c573k8mpnwm2byc3gby";
+    sha256 = "0avv3c95l95rpk5n5b6hwir52px5k2v5rvn3x82ak948n4xl5cq2";
   };
 
   buildInputs =
