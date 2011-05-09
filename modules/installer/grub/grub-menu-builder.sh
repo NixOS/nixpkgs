@@ -172,7 +172,7 @@ EOF
 		cat > /boot/nixos-grub-config <<EOF
 menuentry "Emergency boot" {
   linux  $bootRoot/nixos-kernel systemConfig=$(readlink -f "$path") init=/boot/nixos-init $(cat "$path/kernel-params")
-  initrd $bootRoot/initrd
+  initrd $bootRoot/nixos-initrd
 }
 EOF
 		;;
