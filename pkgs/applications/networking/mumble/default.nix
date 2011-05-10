@@ -1,5 +1,8 @@
 { stdenv, fetchurl, qt4, libvorbis, boost, speechd, protobuf, libsndfile,
- avahi, dbus, libcap }:
+ avahi, dbus, libcap,
+jackSupport ? false, 
+jackaudio ? null }:
+
 
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
@@ -13,15 +16,21 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -e s/qt_ja_JP.qm// -i src/mumble/mumble.pro src/mumble11x/mumble11x.pro
     sed -e /qt_ja_JP.qm/d -i src/mumble/mumble_qt.qrc src/mumble11x/mumble_qt.qrc
+    patch -p1 < ${ ./mumble-jack-support.patch }
   '';
 
   configurePhase = ''
     qmake CONFIG+=no-g15 CONFIG+=no-update \
-      CONFIG+=no-embed-qt-translations CONFIG+=no-ice
+      CONFIG+=no-embed-qt-translations CONFIG+=no-ice \
+  '' 
+  + stdenv.lib.optionalString jackSupport ''
+    CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio
   '';
 
+
   buildInputs = [ qt4 libvorbis boost speechd protobuf libsndfile avahi dbus
-    libcap ];
+    libcap ]
+    ++ (stdenv.lib.optional jackSupport jackaudio);
 
   installPhase = ''
     ensureDir $out

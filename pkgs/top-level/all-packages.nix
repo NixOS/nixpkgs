@@ -6606,6 +6606,7 @@ let
     avahi = avahi.override {
       withLibdnsCompat = true;
     };
+    jackSupport = getConfig [ "mumble" "jackSupport" ] false;
   };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
