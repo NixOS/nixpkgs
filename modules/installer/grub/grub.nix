@@ -35,8 +35,8 @@ in
       };
 
       version = mkOption {
-        default = 2;
-        example = 1;
+        default = 1;
+        example = 2;
         description = ''
           The version of GRUB to use: <literal>1</literal> for GRUB Legacy
           (versions 0.9x), or <literal>2</literal> for GRUB 2.
