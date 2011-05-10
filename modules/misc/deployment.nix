@@ -82,6 +82,14 @@ with pkgs.lib;
       '';
     };
     
+    deployment.adhoc.destroyVMCommand = mkOption {
+      default = "destroy-vm";
+      description = ''
+        Remote command to destroy a previously created NixOS virtual
+        machine.
+      '';
+    };
+    
     deployment.adhoc.queryVMCommand = mkOption {
       default = "query-vm";
       description = ''
