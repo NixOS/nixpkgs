@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [pkgconfig glib];
   postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
+  doCheck = true;
 
   # Glib calls `clock_gettime', which is in librt.  Since we're using
   # a static Glib, we need to pass it explicitly.
