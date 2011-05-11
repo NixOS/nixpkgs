@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
       # Install the certificate generation script.
       cp CA/genrootca.sh $out/libexec/nova/
       cp CA/openssl.cnf.tmpl $out/libexec/nova/
+
+      ln -s /etc/nova/nova.conf $out/libexec/nova/
     '';
 
   doCheck = false; # !!! fix
