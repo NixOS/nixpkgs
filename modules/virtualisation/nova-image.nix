@@ -57,7 +57,7 @@ with pkgs.lib;
 
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
-          #cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix
+          cp ${./nova-config.nix} /mnt/etc/nixos/configuration.nix
 
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
@@ -71,17 +71,8 @@ with pkgs.lib;
     [ { mountPoint = "/";
         device = "/dev/disk/by-label/nixos";
       }
-      #{ mountPoint = "/ephemeral0";
-      #  device = "/dev/xvdc";
-      #  neededForBoot = true;
-      #}
     ];
 
-  /*
-  swapDevices =
-    [ { device = "/dev/xvdb"; } ];
-  */
-  
   boot.kernelParams = [ "console=ttyS0" ];
 
   boot.initrd.kernelModules = [ "aufs" ];

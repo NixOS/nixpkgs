@@ -10,6 +10,12 @@ let
 
   nova = pkgs.nova;
 
+  novaConf = pkgs.writeText "nova.conf"
+    ''
+      --nodaemon
+      --verbose
+    '';
+
 in
 
 {
@@ -87,7 +93,7 @@ in
         # required to generate key pairs.
         path = [ pkgs.openssl pkgs.openssh ];
           
-        exec = "${nova}/bin/nova-api";
+        exec = "${nova}/bin/nova-api --flagfile=${novaConf}";
       };
 
     # `nova-objectstore' is a simple image server.  Useful if you're
@@ -105,7 +111,7 @@ in
             mkdir -m 700 -p /var/lib/nova/images
           '';
 
-        exec = "${nova}/bin/nova-objectstore --nodaemon";
+        exec = "${nova}/bin/nova-objectstore --flagfile=${novaConf}";
       };
 
     # `nova-scheduler' schedules VM execution requests.
@@ -116,7 +122,7 @@ in
 
         startOn = "ip-up";
 
-        exec = "${nova}/bin/nova-scheduler --nodaemon --verbose";
+        exec = "${nova}/bin/nova-scheduler --flagfile=${novaConf}";
       };
 
     # `nova-compute' starts and manages virtual machines.
@@ -132,7 +138,7 @@ in
             pkgs.e2fsprogs pkgs.utillinux pkgs.multipath_tools
           ];
 
-        exec = "${nova}/bin/nova-compute --nodaemon --verbose";
+        exec = "${nova}/bin/nova-compute --flagfile=${novaConf}";
       };
 
     # `nova-network' manages networks and allocates IP addresses.
@@ -148,7 +154,7 @@ in
             pkgs.iproute pkgs.bridge_utils pkgs.radvd
           ];
 
-        exec = "${nova}/bin/nova-network --nodaemon --verbose";
+        exec = "${nova}/bin/nova-network --flagfile=${novaConf}";
       };
 
   };
