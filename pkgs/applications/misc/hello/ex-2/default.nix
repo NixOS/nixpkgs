@@ -3,8 +3,6 @@
 stdenv.mkDerivation rec {
   name = "hello-2.7";
 
-  x = 108;
-  
   src = fetchurl {
     url = "mirror://gnu/hello/${name}.tar.gz";
     sha256 = "1h17p5lgg47lbr2cnp4qqkr0q0f0rpffyzmvs7bvc6vdrxdknngx";
