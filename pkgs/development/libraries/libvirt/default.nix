@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext 
-, libtasn1, ebtables
+, libtasn1, ebtables, libgcrypt
 }:
 
 let version = "0.9.1"; in
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
-      utillinux udev libpciaccess gettext libtasn1
+      utillinux udev libpciaccess gettext libtasn1 libgcrypt
     ];
 
   preConfigure =
