@@ -320,11 +320,11 @@ let pythonPackages = python.modules // rec {
 
 
   decorator = buildPythonPackage rec {
-    name = "decorator-3.3.0";
+    name = "decorator-3.3.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
-      md5 = "0d62c81d9db4923e88e6a94581807cf6";
+      md5 = "a8fc62acd705f487a71bc406e19e0cc6";
     };
 
     meta = {
