@@ -38,10 +38,11 @@ with pkgs.lib;
 
     # EC2/Nova/Eucalyptus-specific options.
         
-    deployment.ec2.url = mkOption {
-      example = "https://ec2.eu-west-1.amazonaws.com:443/";
+    deployment.ec2.controller = mkOption {
+      example = https://ec2.eu-west-1.amazonaws.com:443/;
       description = ''
-        URL of an Amazon EC2-compatible web service, used to create virtual machines.
+        URI of an Amazon EC2-compatible cloud controller web service,
+        used to create and manage virtual machines.
       '';
     };
 
@@ -60,6 +61,15 @@ with pkgs.lib;
         EC2 instance type.  See <link
         xlink:href='http://aws.amazon.com/ec2/instance-types/'/> for a
         list of valid Amazon EC2 instance types.
+      '';
+    };
+
+    deployment.ec2.keyPair = mkOption {
+      example = "my-keypair";
+      description = ''
+        Name of the SSH key pair to be used to communicate securely
+        with the instance.  Key pairs can be created using the
+        <command>ec2-add-keypair</command> command.
       '';
     };
 
