@@ -1968,6 +1968,16 @@ rec {
     propagatedBuildInputs = [BHooksEndOfScope];
   };
 
+  NetAmazonEC2 = buildPerlPackage rec {
+    name = "Net-Amazon-EC2-0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JK/JKIM/${name}.tar.gz";
+      sha256 = "14am9m19ziyv12bjxljhfyl0zy120yf4gligsa9v26smb61fxyjr";
+    };
+    propagatedBuildInputs = [ DigestHMAC LWP Moose URI ParamsValidate XMLSimple Moose ];
+    doCheck = false; # wants to create actual EC2 instances (for $$$)
+  };
+
   NetDNS = buildPerlPackage {
     name = "Net-DNS-0.63";
     src = fetchurl {
