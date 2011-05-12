@@ -1,11 +1,11 @@
 {stdenv, fetchurl, nasm}:
 
 stdenv.mkDerivation rec {
-  name = "xvidcore-1.2.2";
+  name = "xvidcore-1.3.1";
   
   src = fetchurl {
-    url = http://downloads.xvid.org/downloads/xvidcore-1.2.2.tar.bz2;
-    sha256 = "04bd1clv90i5pdwh6mz3mskyzmxyx5l2nx7lyyb8nhw9whnn0ap4";
+    url = "http://downloads.xvid.org/downloads/${name}.tar.bz2";
+    sha256 = "0r1x00fgm7cbb7i9p17p9l0p4b82gig6sm0mbs6qrz84kd2fh6n5";
   };
 
   preConfigure = ''

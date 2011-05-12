@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, autoconf, automake, libtool }:
+{ stdenv, fetchurl, mp4v2 }:
 
-stdenv.mkDerivation {
-  name = "faac-1.26";
+stdenv.mkDerivation rec {
+  name = "faac-1.28";
 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/faac/faac-1.26.tar.gz;
-    sha256 = "0ld9d8mn3yp90japzkqkicmjcggi7d8y9gn7cl1jdsb74bif4j2b";
+    url = "http://downloads.sourceforge.net/faac/${name}.tar.gz";
+    sha256 = "1pqr7nf6p2r283n0yby2czd3iy159gz8rfinkis7vcfgyjci2565";
   };
 
-  preConfigure = "./bootstrap";
-
-  buildInputs = [ autoconf automake libtool ];
+  buildInputs = [ mp4v2 ];
 
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
