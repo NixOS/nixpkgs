@@ -642,6 +642,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
+  logfloat = callPackage ../development/libraries/haskell/logfloat {};
+
   maybench = callPackage ../development/libraries/haskell/maybench {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "Chart";
-  version = "0.13.1";
-  sha256 = "1gh8qw8xil543wssflhpjrgnig4v79vi7xizrm93a93i4n84npd5";
+  version = "0.14";
+  sha256 = "0ji81j4c2by5zyrdhx1s17j6kqsi3ngr9y1zh7hr9wv7jsrj3rf2";
   propagatedBuildInputs =
     [cairo colour dataAccessor dataAccessorTemplate gtk mtl];
   meta = {
