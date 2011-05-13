@@ -4,14 +4,15 @@ assert stdenv.isLinux;
 
 let
   version = "0.8.2";
-  website = https://ftg.lbl.gov/CheckpointRestart;
+  #website = https://ftg.lbl.gov/CheckpointRestart;
 in
 
 stdenv.mkDerivation {
   name = "blcr-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "${website}/downloads/blcr-${version}.tar.gz";
+    url = https://ftg.lbl.gov/assets/projects/CheckpointRestart/downloads/blcr-0.8.2.tar.gz;
+    #url = "${website}/downloads/blcr-${version}.tar.gz";
     sha256 = "1ldvzrajljkm318z5ix1p27n0gmv7gqxij6ck7p5fz4ncdbb01x8";
   };
   
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
       sha256 = "1f5s9c7iiaxd67ki3bmz09mf66shzbl97hvwaq4nmk6miq94k1fw";
     }
     { url = http://upc-bugs.lbl.gov/blcr-dist/blcr-0.8.2+kernel-2.6.34.patch03;
-      sha256 = "09924h83xdwpxjlx3yg5b51fgm6gjywn2rb4nnygz16n87wqvb41";
+      sha256 = "0g2v67n40ikx5hja7zgnc2axif16r2sibi5vf0r4wjzc5z9gdfrh";
     }
   ];
 
@@ -49,7 +50,7 @@ stdenv.mkDerivation {
       
   meta = {
     description = "Berkeley Lab Checkpoint/Restart for Linux (BLCR)";
-    homepage = website;
+    homepage = https://ftg.lbl.gov/projects/CheckpointRestart/;
     license = "GPL2";
   };
 }
