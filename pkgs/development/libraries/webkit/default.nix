@@ -26,9 +26,8 @@ rec {
     "--enable-web-sockets"
     "--enable-web-timing"
     
-    # https://bugs.webkit.org/show_bug.cgi?id=56718
     # https://bugs.webkit.org/show_bug.cgi?id=55294
-    #"--enable-image-resizer"
+    "--enable-image-resizer"
 
     "--enable-geolocation"
 
@@ -42,13 +41,10 @@ rec {
     # https://bugs.webkit.org/show_bug.cgi?id=45110
     # "--enable-indexed-database"
 
-    # Related bug is marked as closed, but seems to persist
     "--enable-xhtmlmp"
 
     # "--enable-input-speech"
 
-    # https://bugs.webkit.org/show_bug.cgi?id=43878
-    # Related bug FIXED
     "--enable-file-writer"
     "--enable-blob"
 
