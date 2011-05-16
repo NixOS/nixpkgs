@@ -20,13 +20,14 @@ rec {
     gstreamer gstPluginsBase gstFfmpeg gstPluginsGood
     ];
 
+  configureCommand = "./autogen.sh ";
   configureFlags = [
     "--enable-3D-transforms"
     "--enable-web-sockets"
     "--enable-web-timing"
     
     # https://bugs.webkit.org/show_bug.cgi?id=55294
-    # "--enable-image-resizer"
+    "--enable-image-resizer"
 
     "--enable-geolocation"
 
@@ -35,7 +36,7 @@ rec {
 
     "--enable-mathml"
 
-    #"--enable-wml"
+    "--enable-wml"
     
     # https://bugs.webkit.org/show_bug.cgi?id=45110
     # "--enable-indexed-database"
