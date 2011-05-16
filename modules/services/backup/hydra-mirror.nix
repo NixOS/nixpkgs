@@ -15,7 +15,7 @@ let
   cronjob = jobset:
     "${cfg.period} ${cfg.user}"
     + optionalString cfg.enableBinaryPatches " ENABLE_PATCHES=1"
-    + " perl -I${config.environment.nix}/libexec/nix ${mirrorChannel}"
+    + " perl -I${config.environment.nix}/libexec/nix -I${pkgs.perlPackages.DBI}/lib/perl5/site_perl -I${pkgs.perlPackages.DBDSQLite}/lib/perl5/site_perl ${mirrorChannel}"
     + " ${cfg.hydraURL}/jobset/${jobset.project}/${jobset.jobset}/channel/latest"
     + " ${cfg.dataDir}/${jobset.project}/channels/${jobset.name}"
     + " ${cfg.dataDir}/nars"
