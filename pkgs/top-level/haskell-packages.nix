@@ -344,13 +344,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
+  bktrees = callPackage ../development/libraries/haskell/bktrees {};
+
   blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
 
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
-  bktrees = callPackage ../development/libraries/haskell/bktrees {};
+  bmp = callPackage ../development/libraries/haskell/bmp {};
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
@@ -814,6 +816,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
 
   regular = callPackage ../development/libraries/haskell/regular {};
+
+  repa = callPackage ../development/libraries/haskell/repa {};
+
+  repaAlgorithms = callPackage ../development/libraries/haskell/repa-algorithms {};
+
+  repaBytestring = callPackage ../development/libraries/haskell/repa-bytestring {};
+
+  repaExamples = callPackage ../development/libraries/haskell/repa-examples {};
+
+  repaIO = callPackage ../development/libraries/haskell/repa-io {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
 
