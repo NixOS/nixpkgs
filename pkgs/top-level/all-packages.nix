@@ -910,6 +910,8 @@ let
 
   mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
 
+  miniupnpc = callPackage ../tools/networking/miniupnpc { };
+
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
   minixml = callPackage ../development/libraries/minixml { };
