@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20110123";
+  version = "20110517";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "00k3ghv115fn8xm99dbc6jygl0g3j6fwc84mgcg76nnim3rvgb8r";
+    sha256 = "1jmaj62laf8q4f07jrg6r2gb1ky120n21qfzpia3q5j5ihjiavb1";
   };
 
   buildInputs = [ stdenv.gcc file openssl mlton mysql postgresql sqlite ];
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export GCCARGS="-I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
+      export GCCARGS="-I$out/include -I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include \
+                      -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
     '';
 
   configureFlags = "--with-openssl=${openssl}"; 
