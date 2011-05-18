@@ -2,6 +2,7 @@ source $stdenv/setup
 
 dontStrip=1
 dontPatchELF=1
+sourceRoot=$TMPDIR
 
 unpackPhase() {
     tar xvzf $src;
