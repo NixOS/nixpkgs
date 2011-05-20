@@ -1,6 +1,6 @@
 { stdenv, fetchurl, apr, expat
 , bdbSupport ? false, db4 ? null
-, ldapSupport ? true, openldap
+, ldapSupport ? !stdenv.isDarwin, openldap
 }:
 
 assert bdbSupport -> db4 != null;
