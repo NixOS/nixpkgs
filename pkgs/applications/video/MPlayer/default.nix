@@ -1,6 +1,6 @@
 { alsaSupport ? true, xvSupport ? true, theoraSupport ? true, cacaSupport ? true
 , xineramaSupport ? true, randrSupport ? true, dvdnavSupport ? true
-, stdenv, fetchurl, x11, freetype, fontconfig, zlib, ffmpeg
+, stdenv, fetchurl, fetchsvn, fetchgit, x11, freetype, fontconfig, zlib
 , alsaLib ? null, libXv ? null, libtheora ? null, libcaca ? null
 , libXinerama ? null, libXrandr ? null, libdvdnav ? null
 , cdparanoia ? null, cddaSupport ? true
@@ -61,18 +61,30 @@ let
       license = "unfree";
     };
   } else null;
+  ffmpegGit = fetchgit {
+    url = "git://git.videolan.org/ffmpeg.git";
+    rev = "80d156d";
+    sha256 = "e65f4b8fa363c474dc2c03dd4bf01debf1f43395b751dc0f7b8d32113938fe26";
+  };
+  mplayerRev = "33472";
 
 in  
 
 stdenv.mkDerivation rec {
-  name = "mplayer-20110423";
+  name = "mplayer-r${mplayerRev}";
 
-  src = fetchurl {
+  src = fetchsvn {
     # Old kind of URL:
     # url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
     # Snapshot I took on 20110423
-    url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
-    sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
+
+    #Transient
+    #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
+    #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
+
+    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
+    rev = "${mplayerRev}";
+    sha256 = "01b0b5x6li8c2m2mam7mabmk02npvprcwrim00a51sdlvqxh309v";
   };
 
   prePatch = ''
@@ -102,8 +114,13 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ yasm ];
 
   preConfigure = ''
-    tar xf ${ffmpeg.src}
-    mv ffmpeg* ffmpeg
+    cp -r ${ffmpegGit} ffmpeg
+    chmod u+w -R ffmpeg
+    sed -ie '1i#include "libavutil/intreadwrite.h"' ffmpeg/libavcodec/libmp3lame.c
+  '';
+
+  postConfigure = ''
+    echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
   configureFlags = ''
