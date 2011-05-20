@@ -54,8 +54,6 @@ let
       # Wireless networking.
       IPW2100_MONITOR y # support promiscuous mode
       IPW2200_MONITOR y # support promiscuous mode
-      IWL4965 y # Intel Wireless WiFi 4965AGN
-      IWL5000 y # Intel Wireless WiFi 5000AGN
       HOSTAP_FIRMWARE y # Support downloading firmware images with Host AP driver
       HOSTAP_FIRMWARE_NVRAM y
 
@@ -148,6 +146,8 @@ let
       BT_HCIUART_BCSP y
       BT_HCIUART_H4 y # UART (H4) protocol support
       BT_HCIUART_LL y
+      BT_L2CAP y
+      BT_RFCOMM m
       BT_RFCOMM_TTY y # RFCOMM TTY support
       CPU_FREQ_DEBUG n
       CRASH_DUMP n
