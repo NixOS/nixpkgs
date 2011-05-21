@@ -1,43 +1,36 @@
-{stdenv, writeText, writeTextFile, ocaml, findlib, camlp5_transitional, hol_light_sources}:
+{stdenv, fetchsvn, writeScript, ocaml, findlib, camlp5}:
 
-let
-  version = hol_light_sources.version;
+stdenv.mkDerivation rec {
+  name = "hol_light-20110423";
+  src = fetchsvn {
+    url = http://hol-light.googlecode.com/svn/trunk;
+    rev = "90";
+    sha256 = "e10f32392eb94de559495f2a2977da9e325ff1f39edbcd28db701a1801566c89";
+  };
 
-  camlp5 = camlp5_transitional;
+  buildInputs = [ ocaml findlib camlp5 ];
 
-  hol_light_src_dir = "${hol_light_sources}/lib/hol_light/src";
-
-  pa_j_cmo = stdenv.mkDerivation {
-    name = "pa_j.cmo";
-    inherit ocaml camlp5; 
-    buildInputs = [ ocaml camlp5 findlib ];
-    buildCommand = ''
-      ocamlc -c \
-        -pp "camlp5r pa_lexer.cmo pa_extend.cmo q_MLast.cmo" \
-        -I "$(ocamlfind query camlp5)" \
-        -o $out \
-        "${hol_light_src_dir}/pa_j_`ocamlc -version | cut -c1-4`.ml"
-      '';
-    };
-
-  start_ml = writeText "start.ml" ''
-    Topdirs.dir_directory "${hol_light_src_dir}";;
-    Topdirs.dir_directory ("${camlp5}/lib/ocaml/"^Sys.ocaml_version^"/site-lib/camlp5");;
-    Topdirs.dir_load Format.std_formatter "camlp5o.cma";;
-    Topdirs.dir_load Format.std_formatter "${pa_j_cmo}";;
-    #use "${hol_light_src_dir}/make.ml";;
+  start_script = ''
+    #!/bin/sh
+    cd "$out/lib/hol_light"
+    exec ${ocaml}/bin/ocaml -I "$(ocamlfind query camlp5)" -init make.ml
   '';
-in
-writeTextFile {
-  name = "hol_light-${version}";
-  destination = "/bin/start_hol_light";
-  executable = true;
-  text = ''
-      #!/bin/sh
-      exec ${ocaml}/bin/ocaml -init ${start_ml}
-    '';
-} // {
-  inherit (hol_light_sources) version src;
+
+  buildPhase = ''
+    make pa_j.ml
+    ocamlc -c \
+      -pp "camlp5r pa_lexer.cmo pa_extend.cmo q_MLast.cmo" \
+      -I "$(ocamlfind query camlp5)" \
+      pa_j.ml
+  '';
+
+  installPhase = ''
+    ensureDir "$out/lib/hol_light" "$out/bin"
+    cp -a  . $out/lib/hol_light
+    echo "${start_script}" > "$out/bin/hol_light"
+    chmod a+x "$out/bin/hol_light"
+  '';
+
   meta = {
     description = "An interactive theorem prover based on Higher-Order Logic.";
     longDescription = ''

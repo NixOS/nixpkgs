@@ -7649,13 +7649,9 @@ let
   hol = callPackage ../applications/science/logic/hol { };
 
   hol_light = callPackage ../applications/science/logic/hol_light {
-    inherit (ocamlPackages) findlib camlp5_transitional;
+    inherit (ocamlPackages) findlib;
+    camlp5 = ocamlPackages.camlp5_strict;
   };
-
-  hol_light_sources = callPackage ../applications/science/logic/hol_light/sources.nix { };
-
-  hol_light_checkpoint_dmtcp =
-     recurseIntoAttrs (callPackage ../applications/science/logic/hol_light/dmtcp_checkpoint.nix { });
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
