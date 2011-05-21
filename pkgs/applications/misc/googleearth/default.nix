@@ -6,11 +6,11 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "googleearth-6.0.1.2032";
+  name = "googleearth-6.0.3.2197";
 
   src = fetchurl {
     url = http://dl.google.com/earth/client/current/GoogleEarthLinux.bin;
-    sha256 = "15bcr379bsdg0flvrgaiyjccx07b4a48z9v3pl006ywm6gp3jbfm";
+    sha256 = "0bcpmnlk03382x577qbnbw3i6y08hr3qmg85pqj35scnl6van74c";
   };
 
   buildNativeInputs = [
