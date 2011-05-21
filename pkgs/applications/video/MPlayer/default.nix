@@ -49,14 +49,14 @@ let
 
   codecs = if codecs_src != null then stdenv.mkDerivation {
     name = "MPlayer-codecs-essential-20071007";
-  
+
     src = codecs_src;
 
     installPhase = ''
       mkdir $out
       cp -prv * $out
     '';
-  
+
     meta = {
       license = "unfree";
     };
@@ -64,11 +64,11 @@ let
   ffmpegGit = fetchgit {
     url = "git://git.videolan.org/ffmpeg.git";
     rev = "80d156d";
-    sha256 = "e65f4b8fa363c474dc2c03dd4bf01debf1f43395b751dc0f7b8d32113938fe26";
+    sha256 = "6d0124621491b8adc5f1bfb426ab137efc72dab99a89835aa3c30b970cb14004";
   };
   mplayerRev = "33472";
 
-in  
+in
 
 stdenv.mkDerivation rec {
   name = "mplayer-r${mplayerRev}";
