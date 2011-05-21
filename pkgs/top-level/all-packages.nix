@@ -1046,6 +1046,7 @@ let
   openssh = callPackage ../tools/networking/openssh {
     hpnSupport = false;
     etcDir = "/etc/ssh";
+    pam = if stdenv.isLinux then pam else null;
   };
 
   opensp = callPackage ../tools/text/sgml/opensp { };
