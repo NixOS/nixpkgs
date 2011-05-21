@@ -64,6 +64,7 @@ rec {
   '') ["minInit" "defEnsureDir"];
 
   prepareMakefiles = a.fullDepEntry ''
+    sed -e 's@ /bin/uname @ uname @g' -i CMakeLists.txt
     cd ..
     mkdir build
     cd build
