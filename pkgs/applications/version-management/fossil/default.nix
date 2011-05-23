@@ -1,7 +1,7 @@
 {stdenv, fetchurl, zlib, openssl, tcl}:
 
 let
-  version = "20110413120518";
+  version = "20110512145652";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.fossil-scm.org/download/fossil-src-${version}.tar.gz";
-    sha256 = "0ngwhz7m8qqail8xiddp00si9xm4dfrj7ykzq4pwi41q5j2n5c3w";
+    sha256 = "1x51bmmzmabq8dkpm4sxkqbpmp6nxk9dix7pqa2calmjn3rmzc8k";
   };
 
   buildInputs = [ zlib openssl ];
