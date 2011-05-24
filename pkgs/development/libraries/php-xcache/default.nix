@@ -14,9 +14,14 @@ stdenv.mkDerivation rec {
     sed -i 's,^EXTENSION_DIR.*,'EXTENSION_DIR=$out/lib/php/extensions, configure
   '';
 
-/*
-  configureFlags = [ "--enable-apc" "--enable-apc-mmap" ];
-*/
+  configureFlags = [
+    "--enable-xcache" 
+    "--enable-xcache-coverager" 
+    "--enable-xcache-optimizer" 
+    "--enable-xcache-assembler"
+    "--enable-xcache-encoder"
+    "--enable-xcache-decoder"
+  ];
 
   buildInputs = [ php autoconf automake libtool m4 ];
 
