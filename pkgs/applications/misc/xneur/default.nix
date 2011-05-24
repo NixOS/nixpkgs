@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, xorg, pcre, GStreamer, glib, libxml2
-, aspell, cairo, imlib2, xosd, libnotify, gtk, pango, atk, enchant }:
+, aspell, cairo, imlib2, xosd, libnotify, gtk, pango, atk, enchant,
+ gdk_pixbuf}:
 
 let s = import ./src-for-default.nix; in
 
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ xorg.libX11 pkgconfig pcre GStreamer glib libxml2 aspell cairo
       xorg.libXpm imlib2 xosd xorg.libXt xorg.libXext xorg.libXi libnotify
-      gtk pango enchant
+      gtk pango enchant gdk_pixbuf
     ];
 
   preConfigure = ''
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${cairo}/include/cairo"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pango}/include/pango-1.0"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${atk}/include/atk-1.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gdk_pixbuf}/include/gdk-pixbuf-2.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gdk_pixbuf}/lib/gdk-pixbuf-2.0/include"
 
     export NIX_LDFLAGS="$NIX_LDFLAGS -lnotify"
   '';

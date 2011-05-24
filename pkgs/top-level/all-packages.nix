@@ -7125,7 +7125,7 @@ let
 
   xneur = callPackage ../applications/misc/xneur {
     GStreamer=gst_all.gstreamer;
-    inherit (gtkLibs) glib gtk pango atk;
+    inherit (gtkLibs) glib gtk pango atk gdk_pixbuf;
   };
 
   xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix {
