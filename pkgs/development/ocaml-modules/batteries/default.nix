@@ -2,14 +2,13 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.3.0";
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-batteries-${version}";
+  name = "ocaml-batteries-1.3.0";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/423/batteries-${version}.tar.gz";
+    url = "https://forge.ocamlcore.org/frs/download.php/560/batteries-1.3.0.tar.gz";
     sha256 = "1kf8dyivigavi89lpsz7hzdv48as10yck7gkmqmnsnn1dps3m7an";
   };
 
