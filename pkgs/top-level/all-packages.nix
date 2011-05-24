@@ -5736,10 +5736,8 @@ let
 
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
-  libertine = builderDefsPackage (import ../data/fonts/libertine/2.7.nix) {
+  libertine = builderDefsPackage (import ../data/fonts/libertine) {
     inherit fontforge;
-  };
-  libertineBin = builderDefsPackage (import ../data/fonts/libertine/2.7.bin.nix) {
   };
 
   lmodern = callPackage ../data/fonts/lmodern { };

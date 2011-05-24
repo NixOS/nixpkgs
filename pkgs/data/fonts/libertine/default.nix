@@ -1,8 +1,8 @@
 args : with args; 
 rec {
   src = fetchurl {
-    url = http://downloads.sourceforge.net/linuxlibertine/LinLibertineSRC-2.7.tgz;
-    sha256 = "1czc3pil4zrii6qh6zk0g6hj6axj20gfnpbbdfrzm703wm9w70ic";
+    url = http://downloads.sourceforge.net/linuxlibertine/5.0.0/LinLibertineSRC_2011_05_22.tgz;
+    sha256 = "1cr0kvvlqrcmaxfl6szfp3m93mcnhmypx33dxmdm3xdxxkab74vg";
   };
 
   buildInputs = [fontforge];
@@ -15,7 +15,11 @@ rec {
     ScaleToEm(1000);
   '';
 
-  name = "linux-libertine-2.7";
+  doUnpack = fullDepEntry ''
+    tar xf ${src}
+  '' ["minInit"];
+
+  name = "linux-libertine-5.0.0";
   meta = {
     description = "Linux Libertine Fonts";
     homepage = http://linuxlibertine.sf.net;
