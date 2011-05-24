@@ -2157,9 +2157,8 @@ let
 
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
-    camomile = camomile_0_7_3;
-    camomile_0_7_3 = callPackage ../development/ocaml-modules/camomile/0.7.3.nix { };
-    camomile_0_8_1 = callPackage ../development/ocaml-modules/camomile/0.8.1.nix { };
+    camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
+    camomile = callPackage ../development/ocaml-modules/camomile { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
@@ -2177,7 +2176,9 @@ let
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
-    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
+    ocaml_batteries = callPackage ../development/ocaml-modules/batteries {
+      camomile = camomile_0_8_2;
+    };
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 

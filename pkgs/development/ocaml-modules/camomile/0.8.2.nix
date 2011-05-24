@@ -2,7 +2,7 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.8.1";
+  version = "0.8.2";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/camomile/camomile-${version}.tar.bz2";
-    sha256 = "1r84y7wl10zkjmp8qqq2bcmll23qmfczlnykm74hxkig8ksm0g6a";
+    sha256 = "0x43pjxx70kgip86mmdn08s97k4qzdqc8i79xfyyx28smy1bsa00";
   };
 
   buildInputs = [ocaml findlib];
