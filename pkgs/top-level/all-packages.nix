@@ -2115,9 +2115,9 @@ let
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper;
-    inherit (gtkLibs) gtk glib pango atk;
+    inherit (gtkLibs) gtk glib pango atk gdk_pixbuf;
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
-    fpc = fpc_2_4_0;
+    fpc = fpc;
   };
 
   llvm = callPackage ../development/compilers/llvm { };
@@ -4209,6 +4209,8 @@ let
   soqt = callPackage ../development/libraries/soqt { };
 
   speechd = callPackage ../development/libraries/speechd { };
+
+  speech_tools = callPackage ../development/libraries/speech-tools {};
 
   speex = callPackage ../development/libraries/speex { };
 
