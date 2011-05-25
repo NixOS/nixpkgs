@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "ocaml-batteries-1.3.0";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/560/batteries-1.3.0.tar.gz";
+    url = "http://forge.ocamlcore.org/frs/download.php/560/batteries-1.3.0.tar.gz";
     sha256 = "1kf8dyivigavi89lpsz7hzdv48as10yck7gkmqmnsnn1dps3m7an";
   };
 
