@@ -3200,6 +3200,9 @@ let
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
+  libgdata = (newScope gnome) ../development/libraries/libgdata {};
+  libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
+
   eglibc = callPackage ../development/libraries/eglibc {
     kernelHeaders = linuxHeaders;
     installLocales = getConfig [ "glibc" "locales" ] false;
