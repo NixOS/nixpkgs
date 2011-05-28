@@ -117,7 +117,7 @@ let
         list=\"\$list \$i\";
       fi;
     done
-    list=\$(find \$list -name fonts.dir);
+    list=\$(find \$list -name fonts.dir -o -name '*.ttf' -o -name '*.otf');
     fontDirs='';
     for i in \$list ; do
       fontDirs=\"\$fontDirs \$(dirname \$i)\";
