@@ -5734,6 +5734,8 @@ let
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
+  gentium = callPackage ../data/fonts/gentium {};
+
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
