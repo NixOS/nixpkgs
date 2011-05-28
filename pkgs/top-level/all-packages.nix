@@ -5708,6 +5708,8 @@ let
 
   clearlyU = callPackage ../data/fonts/clearlyU { };
 
+  cm_unicode = callPackage ../data/fonts/cm-unicode {};
+
   dejavu_fonts = callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
   };
