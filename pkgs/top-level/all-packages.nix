@@ -5782,6 +5782,8 @@ let
 
   terminus_font = callPackage ../data/fonts/terminus-font { };
 
+  theano = callPackage ../data/fonts/theano { };
+
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
   ucsFonts = callPackage ../data/fonts/ucs-fonts { };
