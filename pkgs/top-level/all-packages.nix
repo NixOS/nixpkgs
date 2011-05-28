@@ -7456,6 +7456,8 @@ let
     inherit gnuchess texinfo;
   };
 
+  xconq = callPackage ../games/xconq {};
+
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;
   };

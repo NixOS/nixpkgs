@@ -26,6 +26,7 @@ let inherit (builtins) head tail trace; in
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
                 else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
                 else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
+                else if (hasSuffixHack ".rpm" s) then "rpm"
 
                 # Mostly for manually specified directories..
                 else if (hasSuffixHack "/" s) then "dir"
@@ -234,7 +235,12 @@ let inherit (builtins) head tail trace; in
         " else if (archiveType s) == "narbz2" then "
                 bzip2 <${s} | nix-store --restore \$PWD/\$(basename ${s} .nar.bz2)
                 cd \$(basename ${s} .nar.bz2)
-        " else if (archiveType s) == "plain-bz2" then "
+        " else if (archiveType s) == "rpm" then ''
+                rpm2cpio ${s} > ${s}.cpio
+                cpio -iv < ${s}.cpio
+		test -f *.tar.* && tar -xvf *.tar.*
+		test -d */ && cd */
+        '' else if (archiveType s) == "plain-bz2" then "
                 mkdir \$PWD/\$(basename ${s} .bz2)
                 NAME=\$(basename ${s} .bz2)
                 bzip2 -d <${s} > \$PWD/\$(basename ${s} .bz2)/\${NAME#*-}
