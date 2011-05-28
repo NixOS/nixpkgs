@@ -123,10 +123,10 @@ let
       fontDirs=\"\$fontDirs \$(dirname \$i)\";
     done;
     mkdir -p \$out/share/X11-fonts/; 
-    for i in \$(find \$fontDirs -type f -o -type l); do
-      j=\${i##*/}
-      if ! test -e \$out/share/X11-fonts/\${j}; then
-        ln -s \$i \$out/share/X11-fonts/\${j};
+    find \$fontDirs -type f -o -type l | while read i; do
+      j=\"\${i##*/}\"
+      if ! test -e \"\$out/share/X11-fonts/\${j}\"; then
+        ln -s \"\$i\" \"\$out/share/X11-fonts/\${j}\";
       fi;
     done;
     cd \$out/share/X11-fonts/
