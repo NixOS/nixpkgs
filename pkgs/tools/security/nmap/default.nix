@@ -4,21 +4,12 @@
 }:
   
 stdenv.mkDerivation rec {
-  name = "nmap-5.21";
+  name = "nmap-5.50";
 
   src = fetchurl {
     url = "http://nmap.org/dist/${name}.tar.bz2";
-    sha256 = "1fmh05iamynmr8zic3bja6dr0pfiwp0hr2nc2wpiqm2pc7w29jwz";
+    sha256 = "aa044113caa47e172c154daed73afc70ffa18d359eb47c22a9ea85ffcb14ffb8";
   };
-
-  patches =
-    [ (fetchurl {
-        url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-analyzer/nmap/files/nmap-5.21-openssl-1.patch?revision=1.1";
-        sha256 = "0q0kgwvg5b770xpp31a5a3lxh8d5ik6d5bv11nlh3syd78q6f08y";
-      })
-    ];
-
-  patchFlags = "-p0";
 
   postInstall =
     ''
