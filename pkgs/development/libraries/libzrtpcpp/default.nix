@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, commoncpp2, openssl, pkgconfig, ccrtp }:
+{ stdenv, fetchurl, cmake, ucommon, openssl, pkgconfig, ccrtp }:
 
 stdenv.mkDerivation rec {
-  name = "libzrtpcpp-1.6.0";
+  name = "libzrtpcpp-2.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/ccrtp/${name}.tar.gz";
-    sha256 = "17aayr4f27rp4fvminxn6jx7kq56kkk341l7ypqb9h0k6kns27kb";
+    sha256 = "05yw8n5xpj0jxkvzgsvn3xkxirpypc1japy9k1jqs9301fgb1a3i";
   };
 
-  buildInputs = [ commoncpp2 openssl pkgconfig ccrtp ];
+  buildInputs = [ cmake ucommon openssl pkgconfig ccrtp ];
 
   meta = { 
     description = "GNU RTP stack for the zrtp protocol developed by Phil Zimmermann";
