@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libgcrypt, commoncpp2 }:
+{ stdenv, fetchurl, openssl, pkgconfig, libgcrypt, ucommon }:
 
 stdenv.mkDerivation {
-  name = "ccrtp-1.8.0";
+  name = "ccrtp-2.0.0";
 
   src = fetchurl {
-    url = mirror://gnu/ccrtp/ccrtp-1.8.0.tar.gz;
-    sha256 = "0wr4dandlfajhmg90nqyvwv61ikn9vdycji001310y3c4zfysprn";
+    url = mirror://gnu/ccrtp/ccrtp-2.0.0.tar.gz;
+    sha256 = "1gx3jsywvihwkhk69xkcpq2plb6lbylpz0gpg55c5dx7xg1796b2";
   };
 
-  buildInputs = [ openssl pkgconfig libgcrypt commoncpp2 ];
+  buildInputs = [ openssl pkgconfig libgcrypt ucommon ];
 
-  meta = { 
-    description = "GNU ccRTP is an implementation of RTP, the real-time transport protocol from the IETF";
-    homepage = "http://www.gnu.org/software/ccrtp/";
+  doCheck = true;
+
+  meta = {
+    description = "GNU ccRTP, an implementation of the IETF real-time transport protocol (RTP)";
+    homepage = http://www.gnu.org/software/ccrtp/;
     license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber ludo ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
