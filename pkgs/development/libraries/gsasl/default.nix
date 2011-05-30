@@ -1,12 +1,14 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, gss, libidn }:
 
 stdenv.mkDerivation rec {
-  name = "gsasl-1.6.0";
+  name = "gsasl-1.6.1";
 
   src = fetchurl {
     url = "mirror://gnu/gsasl/${name}.tar.gz";
-    sha256 = "1panxrfy8f6gfhd3iqx1rssz7k473463xvnp6sxagrg4p83qz36a";
+    sha256 = "02dmras3kqik08p14mpq0lj678w7wmmaxpcvdrx116wkcgspv2z6";
   };
+
+  buildInputs = [ gss libidn ];
 
   doCheck = true;
 
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/gsasl/;
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.bjg ];
+    maintainers = with stdenv.lib.maintainers; [ bjg ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }
