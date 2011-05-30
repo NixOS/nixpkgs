@@ -1,17 +1,27 @@
-{ fetchurl, stdenv, libtool }:
+{ fetchurl, stdenv, libtool, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "global-5.9.4";
+  name = "global-5.9.5";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "0ay6f1fffics3vkls1xykzmz9cmgj3hdighni7asnpa38s8j0lmn";
+    sha256 = "0hi7s9nnd0fwdqis2bs66k4bfmwvkwjclv7sx1p9rfpl21ngj8zw";
   };
 
-  buildInputs = [ libtool ];
+  buildInputs = [ libtool ncurses ];
+
+  patchPhase =
+    # Remove $(CURSES_LIBS) from the dependencies because it contains stuff
+    # like "-ldl -lncurses".
+    '' sed -i gtags-cscope/Makefile.in \
+           -e 's|gtags_cscope_DEPENDENCIES = $(LDADD) $(LTDLDEPS) $(CURSES_LIBS)|gtags_cscope_DEPENDENCIES = $(LDADD)|g'
+    '';
 
   configurePhase =
-    '' ./configure --prefix="$out" --disable-static --with-posix-sort=$(type -p sort) '';
+    '' ./configure --prefix="$out" --disable-static ''
+    + ''--with-posix-sort=$(type -p sort) ''
+    + ''--with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib ''
+    + ''--with-ncurses=${ncurses}'';
 
   doCheck = true;
 
