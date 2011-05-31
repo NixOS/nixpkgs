@@ -20,7 +20,7 @@ with pkgs.lib;
 
       config = mkOption {
         default = "";
-        description = "Extra options to put into virtuoso configuration file.";
+        description = "Extra options to put into Virtuoso configuration file.";
       };
 
       listenAddress = mkOption {
@@ -32,9 +32,14 @@ with pkgs.lib;
       httpListenAddress = mkOption {
 	default = null;
 	example = "myserver:8080";
-        description = "ip:port or port for virtuoso HTTP server to listen on.";
+        description = "ip:port or port for Virtuoso HTTP server to listen on.";
       };
 
+      dirsAllowed = mkOption {
+	default = null;
+	example = "/www, /home/";
+        description = "A list of directories Virtuoso is allowed to access";
+      };
     };
 
   };
@@ -76,6 +81,7 @@ with pkgs.lib;
       [Parameters]
       ServerPort=${cfg.listenAddress}
       RunAs=${virtuosoUser}
+      ${optionalString (cfg.dirsAllowed != null) "DirsAllowed=${cfg.dirsAllowed}"}
 
       [HTTPServer]
       ${optionalString (cfg.httpListenAddress != null) "ServerPort=${cfg.httpListenAddress}"}
