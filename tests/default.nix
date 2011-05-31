@@ -13,6 +13,7 @@ with import ../lib/testing.nix { inherit nixpkgs system; };
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
   login = makeTest (import ./login.nix);
+  mpich = makeTest (import ./mpich.nix);
   nat = makeTest (import ./nat.nix);
   nfs = makeTest (import ./nfs.nix);
   openssh = makeTest (import ./openssh.nix);
