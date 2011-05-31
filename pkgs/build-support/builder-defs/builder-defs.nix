@@ -335,6 +335,8 @@ let inherit (builtins) head tail trace; in
 
         doDump = n: noDepEntry "echo Dump number ${n}; set";
 
+	saveEnv = noDepEntry ''export > $TMP/env-vars'';
+
 	doDumpBuildInputs = noDepEntry (''
 	  echo "${toString realBuildInputs}"
 	'');
