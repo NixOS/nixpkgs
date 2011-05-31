@@ -30,8 +30,8 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["addInputs" "doUnpack" "fixMakefiles" "fixCfiles" "doConfigure"
-    "doMakeInstall" "doWrap"];
+  phaseNames = ["addInputs" "doUnpack" "fixMakefiles" "fixCfiles" "fixTCLfiles" 
+    "doConfigure" "doMakeInstall" "doWrap"];
       
   doWrap = a.makeManyWrappers ''$out/bin/*'' ''--prefix TCLLIBPATH : "${tk}/lib"'';
 
@@ -44,6 +44,10 @@ rec {
   fixCfiles = a.fullDepEntry ''
     sed -re 's@[(]int[)]color@(long)color@' -i tcltk/tkmap.c
     sed -re '/unitp = view_unit[(]uview[)]/aelse *unitp = NULL\;' -i tcltk/tkmap.c
+  '' ["minInit" "doUnpack"];
+
+  fixTCLfiles = a.fullDepEntry ''
+    sed -re 's@MediumBlue@LightBlue@g' -i tcltk/tkconq.tcl
   '' ["minInit" "doUnpack"];
 
   configureFlags = [
