@@ -56,6 +56,7 @@
   ./services/databases/mysql.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
+  ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix

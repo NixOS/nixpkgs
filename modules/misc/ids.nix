@@ -62,6 +62,7 @@ in
     git = 41;
     fourStore = 42;
     fourStoreEndpoint = 43;
+    virtuoso = 44;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -107,6 +108,7 @@ in
     git = 41;
     fourStore = 42;
     fourStoreEndpoint = 43;
+    virtuoso = 44;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
