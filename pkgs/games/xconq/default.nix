@@ -43,6 +43,7 @@ rec {
 
   fixCfiles = a.fullDepEntry ''
     sed -re 's@[(]int[)]color@(long)color@' -i tcltk/tkmap.c
+    sed -re '/unitp = view_unit[(]uview[)]/aelse *unitp = NULL\;' -i tcltk/tkmap.c
   '' ["minInit" "doUnpack"];
 
   configureFlags = [
