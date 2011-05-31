@@ -75,6 +75,7 @@ with pkgs.lib;
 
       [Parameters]
       ServerPort=${cfg.listenAddress}
+      RunAs=${virtuosoUser}
 
       [HTTPServer]
       ${optionalString (cfg.httpListenAddress != null) "ServerPort=${cfg.httpListenAddress}"}
