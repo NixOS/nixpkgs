@@ -2902,6 +2902,7 @@ let
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
+  ccrtp_1_8 = callPackage ../development/libraries/ccrtp/1.8.nix { };
 
   cgui = callPackage ../development/libraries/cgui {};
 
@@ -3881,6 +3882,9 @@ let
   libzip = callPackage ../development/libraries/libzip { };
 
   libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
+  libzrtpcpp_1_6 = callPackage ../development/libraries/libzrtpcpp/1.6.nix {
+    ccrtp = ccrtp_1_8;
+  };
 
   lightning = callPackage ../development/libraries/lightning { };
 
@@ -6976,6 +6980,8 @@ let
   twinkle = callPackage ../applications/networking/twinkle {
     qt = qt3;
     boost = boostFull;
+    ccrtp = ccrtp_1_8;
+    libzrtpcpp = libzrtpcpp_1_6;
   };
 
   unison = callPackage ../applications/networking/sync/unison {
