@@ -171,6 +171,7 @@ let
         ipv6 = t.ipv6.test;
         kde4 = t.kde4.test;
         login = t.login.test;
+        mpich = t.mpich.test;
         nat = t.nat.test;
         nfs = t.nfs.test;
         openssh = t.openssh.test;
