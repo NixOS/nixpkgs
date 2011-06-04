@@ -2595,6 +2595,8 @@ let
 
   ccache = callPackage ../development/tools/misc/ccache { };
 
+  complexity = callPackage ../development/tools/misc/complexity { };
+
   ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
