@@ -23,6 +23,11 @@ with pkgs.lib;
         description = "Extra options to put into Virtuoso configuration file.";
       };
 
+      parameters = mkOption {
+        default = "";
+        description = "Extra options to put into [Parameters] section of Virtuoso configuration file.";
+      };
+
       listenAddress = mkOption {
 	default = "1111";
 	example = "myserver:1323";
@@ -82,6 +87,7 @@ with pkgs.lib;
       ServerPort=${cfg.listenAddress}
       RunAs=${virtuosoUser}
       ${optionalString (cfg.dirsAllowed != null) "DirsAllowed=${cfg.dirsAllowed}"}
+      ${cfg.parameters}
 
       [HTTPServer]
       ${optionalString (cfg.httpListenAddress != null) "ServerPort=${cfg.httpListenAddress}"}
