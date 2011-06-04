@@ -1,5 +1,5 @@
 { stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinuxng, xz, enableStatic ? false, hurd ? null }:
+, utillinuxng, xz, check, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
   name = "parted-3.0";
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
     ++ stdenv.lib.optional (devicemapper != null) devicemapper
-    ++ stdenv.lib.optional (hurd != null) hurd;
+    ++ stdenv.lib.optional (hurd != null) hurd
+    ++ stdenv.lib.optional doCheck check;
 
   configureFlags =
        (if (readline != null)
