@@ -1070,6 +1070,7 @@ let
   patchutils = callPackage ../tools/text/patchutils { };
 
   parted = callPackage ../tools/misc/parted { };
+  parted_2_3 = callPackage ../tools/misc/parted/2.3.nix { };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
