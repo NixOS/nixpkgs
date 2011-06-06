@@ -617,7 +617,7 @@ let
   fcron = callPackage ../tools/system/fcron {  # see also cron
   };
 
-  fdisk = callPackage ../tools/system/fdisk { };
+  fdisk = callPackage ../tools/system/fdisk { parted = parted_2_3; };
 
   fdm = callPackage ../tools/networking/fdm {};
 
