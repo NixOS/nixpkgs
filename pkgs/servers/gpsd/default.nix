@@ -1,26 +1,25 @@
 { fetchurl, stdenv, pythonPackages, pkgconfig, dbus, dbus_glib
-, ncurses, libX11, libXt, libXpm, libXaw, libXext
+, ncurses, libX11, libXt, libXpm, libXaw, libXext, makeWrapper
+, libusb1, docbook_xml_dtd_412, docbook_xsl, bc
 , libxslt, xmlto, gpsdUser ? "gpsd" }:
 
 stdenv.mkDerivation rec {
-  name = "gpsd-2.39";
+  name = "gpsd-2.95";
 
   src = fetchurl {
     url = "http://download.berlios.de/gpsd/${name}.tar.gz";
-    sha256 = "089ahf97dhws3sk8nc88687h4ny2rlavkzg4wxqkhb0i0fs2yfzf";
+    sha256 = "1bjhyjg561kwp6zc2wg58njdvpnsj5yaa2slz8g3ga1176jl68w3";
   };
 
-  buildInputs = [
-    pythonPackages.python pythonPackages.wrapPython
-    pkgconfig dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
-    libxslt xmlto
-  ];
+  buildNativeInputs = [ makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl
+    xmlto bc pythonPackages.wrapPython ];
 
   pythonPath = [ pythonPackages.curses ];
 
-  configureFlags = "--enable-dbus --enable-gpsd-user=${gpsdUser} "
-    # Make sure `xgpsspeed' has libXt and libX11 in its RPATH.
-    + "LDFLAGS=-Wl,--rpath=${libXt}/lib:${libX11}/lib";
+  buildInputs = [ pythonPackages.python dbus dbus_glib ncurses libX11 libXt
+    libXpm libXaw libXext libxslt libusb1 ];
+
+  configureFlags = "--enable-static --enable-dbus --enable-gpsd-user=${gpsdUser}";
 
   doCheck = true;
 
