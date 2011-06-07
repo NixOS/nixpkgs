@@ -6,6 +6,9 @@ stdenv.mkDerivation rec {
     url = "ftp://ftp.gnupg.org/gcrypt/gpgme/${name}.tar.bz2";
     sha256 = "18g6wgiacnbj437yfsczbjxaf041ljia48dnv2qgcqb0sky41q3l";
   };
-  buildInputs = [libgpgerror gnupg pkgconfig glib pth libassuan];
+  propagatedBuildInputs = [libgpgerror glib pth libassuan];
+
+  buildNativeInputs = [pkgconfig];
+
   configureFlags = "--with-gpg=${gnupg}/bin/gpg2";
 }
