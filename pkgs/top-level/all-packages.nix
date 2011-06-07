@@ -4990,6 +4990,8 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  libnl2 = callPackage ../os-specific/linux/libnl/v2.nix { };
+
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
   linuxHeaders = linuxHeaders_2_6_32;

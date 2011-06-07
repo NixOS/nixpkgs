@@ -1,14 +1,15 @@
 {stdenv, fetchurl, bison, flex}:
 
 stdenv.mkDerivation rec {
-  name = "libnl-3.0";
+  name = "libnl-2.0";
 
   src = fetchurl {
     url = "${meta.homepage}files/${name}.tar.gz";
-    sha256 = "1vac10m3w0m5lsypjcrhs2dzwng82nkbzqz8g8kyzkxb3qz5ql3s";
+    sha256 = "173sr25xpsakdvjcg62790v6kwcgxj5r0js2lx6hg89w7n8dqh2s";
   };
 
   buildInputs = [ bison flex ];
+  postConfigure = "type -tp flex";
 
   meta = {
     homepage = "http://www.infradead.org/~tgr/libnl/";
