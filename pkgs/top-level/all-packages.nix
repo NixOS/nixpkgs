@@ -5680,15 +5680,9 @@ let
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant {
-    guiSupport = false;
   };
-  # prebuild binaries:
-  wpa_supplicant_gui = wpa_supplicant.override { guiSupport = true; };
 
-  # deprecated, but contains icon ? Does no longer build
-  /* didn't build Sun Apr 25 20:34:18 CEST 2010
-  wpa_supplicant_gui_qt4_old = callPackage ../os-specific/linux/wpa_supplicant/gui-qt4.nix { };
-  */
+  wpa_supplicant_gui = pkgs.wpa_supplicant.gui;
 
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
