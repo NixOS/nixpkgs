@@ -1264,6 +1264,8 @@ let
 
   shebangfix = callPackage ../tools/misc/shebangfix { };
 
+  siege = callPackage ../tools/networking/siege {};
+
   slimrat = callPackage ../tools/networking/slimrat {
     inherit (perlPackages) WWWMechanize LWP;
   };
