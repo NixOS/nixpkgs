@@ -3205,15 +3205,6 @@ let
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
 
-  libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
-
-  libdwg = callPackage ../development/libraries/libdwg { };
-
-  libgadu = callPackage ../development/libraries/libgadu { };
-
-  libgdata = (newScope gnome) ../development/libraries/libgdata {};
-  libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
-
   eglibc = callPackage ../development/libraries/eglibc {
     kernelHeaders = linuxHeaders;
     installLocales = getConfig [ "glibc" "locales" ] false;
@@ -3569,16 +3560,22 @@ let
     inherit sqlite mysql;
   };
 
+  libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
+
   libdevil = callPackage ../development/libraries/libdevil { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
-  libdv = callPackage ../development/libraries/libdv { };
+  libdmtx = callPackage ../development/libraries/libdmtx { };
 
   libdrm = if stdenv.isDarwin then null else (callPackage ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
   });
+
+  libdv = callPackage ../development/libraries/libdv { };
+
+  libdwg = callPackage ../development/libraries/libdwg { };
 
   libdvdcss = callPackage ../development/libraries/libdvdcss { };
 
@@ -3591,6 +3588,11 @@ let
   libedit = callPackage ../development/libraries/libedit { };
 
   libelf = callPackage ../development/libraries/libelf { };
+
+  libgadu = callPackage ../development/libraries/libgadu { };
+
+  libgdata = (newScope gnome) ../development/libraries/libgdata {};
+  libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
 
   liblo = callPackage ../development/libraries/liblo { };
 
