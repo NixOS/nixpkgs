@@ -1,16 +1,26 @@
-{ stdenv, msilbc }:
+{ stdenv, fetchurl, gawk, cmake }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ilbc-rfc3951";
 
-# I'm too lazy to extract .c source from rfc3951. So, I'm using autotools stuff
-# from linphone project
-  src = stdenv.mkDerivation {
-    name = "ilbc-rfc3951.tar.gz";
-    src = msilbc.src;
-    outputHashAlgo = "sha256";
-    outputHash = "0f6scsp72bz2ifscd8c0x57ipcxi2i4a9b4nwlnwx7a7a0hrazhj";
-    phases = "unpackPhase installPhase";
-    installPhase = "cp ilbc-rfc3951.tar.gz \${out}";
+  script = fetchurl {
+    url = http://ilbcfreeware.org/documentation/extract-cfile.awk;
+    sha256 = "155izy7p7azak1h6bgafvh84b1605zyw14k2s4pyl5nd4saap5c6";
   };
+
+  rfc3951 = fetchurl {
+    url = http://www.ietf.org/rfc/rfc3951.txt;
+    sha256 = "0zf4mvi3jzx6zjrfl2rbhl2m68pzbzpf1vbdmn7dqbfpcb67jpdy";
+  };
+
+  cmakeLists = ./CMakeLists.txt;
+  buildNativeInputs = [ cmake ];
+
+  unpackPhase = ''
+    mkdir -v ${name}
+    cd ${name}
+    ${gawk}/bin/gawk -f ${script} ${rfc3951}
+    cp -v ${cmakeLists} CMakeLists.txt
+    '';
+
 }
