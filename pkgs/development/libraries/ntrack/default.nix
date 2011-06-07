@@ -19,4 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--without-gobject CFLAGS=--std=gnu99";
 
   patches = [ ./libnl2.patch ];
+  postPatch = ''
+    sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
+    '';
 }
