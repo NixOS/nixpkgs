@@ -837,6 +837,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
+  smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
+
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
