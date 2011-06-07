@@ -4009,6 +4009,8 @@ let
     includeTools = true;
   };
 
+  ntrack = callPackage ../development/libraries/ntrack { };
+
   ode = builderDefsPackage (import ../development/libraries/ode) {
   };
 
