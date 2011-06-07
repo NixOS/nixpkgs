@@ -818,6 +818,8 @@ let
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  ioping = callPackage ../tools/system/ioping {};
+
   iodine = callPackage ../tools/networking/iodine { };
 
   iperf = callPackage ../tools/networking/iperf { };
