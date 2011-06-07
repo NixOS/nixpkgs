@@ -1,27 +1,17 @@
 { stdenv, fetchurl, ilbc, mediastreamer, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "msilbc-2.0.0";
+  name = "msilbc-2.0.3";
   
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/linphone/plugins/sources/${name}.tar.gz";
-    sha256 = "0ifydb7qmpync56l4hbrp36n5wrb7gadb76isp643s6wsg7l743j";
+    url = "mirror://savannah/linphone/plugins/sources/${name}.tar.gz";
+    sha256 = "125yadpc0w1q84839dadin3ahs0gxxfas0zmc4c18mjmf58dmm7d";
   };
 
-  patchPhase = "sed -i /MS_FILTER_SET_FMTP/d ilbc.c";
+#  patchPhase = "sed -i /MS_FILTER_SET_FMTP/d ilbc.c";
 
   propagatedBuildInputs = [ilbc mediastreamer];
-  
+
   buildInputs = [pkgconfig];
-
-  buildPhase = ''
-    cc -fPIC -c -pthread -o ilbc.o ilbc.c `pkg-config --cflags mediastreamer`
-    echo "next"
-    cc `pkg-config --libs mediastreamer` -shared -pthread -o libilbc.so
-  '';
-
-  installPhase = ''
-    ensureDir $out/lib/mediastreamer/plugins
-    cp libilbc.so $out/lib/mediastreamer/plugins
-  '';
+  configureFlags = "ILBC_LIBS=ilbc ILBC_CFLAGS=-I${ilbc}/include";
 }
