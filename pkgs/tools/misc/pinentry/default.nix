@@ -1,11 +1,9 @@
 { fetchurl, stdenv, pkgconfig, glib
-, useGtk ? true, gtk ? null
-, useNcurses ? true, ncurses ? null
-, useQt4 ? false, qt4 ? null }:
+, useGtk ? true, gtk
+, useNcurses ? true, ncurses
+, useQt4 ? false, qt4 }:
 
-assert useGtk -> (gtk != null);
-assert useNcurses -> (ncurses != null);
-assert useQt4 -> (qt4 != null);
+assert useGtk || useNcurses || useQt4;
 
 stdenv.mkDerivation rec {
   name = "pinentry-0.8.0";
@@ -15,7 +13,18 @@ stdenv.mkDerivation rec {
     sha256 = "06phs3gbs6gf0z9g28z3jgsw312dhhpdgzrx4hhps53xrbwpyv22";
   };
 
-  buildInputs = [ glib pkgconfig gtk ncurses ] ++ stdenv.lib.optional useQt4 qt4;
+  buildInputs = let opt = stdenv.lib.optional; in []
+    ++ opt useGtk glib
+    ++ opt useGtk gtk
+    ++ opt useNcurses ncurses
+    ++ opt useQt4 qt4;
+
+  configureFlags = [ "--disable-pinentry-gtk" "--disable-pinentry-qt" ]
+    ++ (if useGtk || useQt4 then ["--with-x"] else ["--without-x"])
+    ++ (if useGtk then ["--enable-pinentry-gtk2"] else ["--disable-pinentry-gtk"])
+    ++ (if useQt4 then ["--enable-pinentry-qt4"] else ["--disable-pinentry-qt4"]);
+
+  buildNativeInputs = [ pkgconfig ];
 
   meta = { 
     description = "GnuPG's interface to passphrase input";
