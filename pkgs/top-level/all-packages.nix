@@ -3041,10 +3041,7 @@ let
 
   eventlog = callPackage ../development/libraries/eventlog { };
 
-  facile = callPackage ../development/libraries/facile {
-    # Actually, we don't need this version but we need native-code compilation
-    ocaml = ocaml_3_10_0;
-  };
+  facile = callPackage ../development/libraries/facile { };
 
   faac = callPackage ../development/libraries/faac { };
 
