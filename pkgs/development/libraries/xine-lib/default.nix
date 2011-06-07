@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, xlibs, alsaLib, mesa, aalib
+{ stdenv, fetchurl, pkgconfig, xorg, alsaLib, mesa, aalib
 , libvorbis, libtheora, speex, zlib, libdvdcss, perl, ffmpeg
+, flac, libcaca, pulseaudio, libmng
 }:
 
 stdenv.mkDerivation rec {
@@ -10,13 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0x47kmsaxx1bv8w2cacvzls3sjw9y4vk82rd94km1m1s6k2wcxv2";
   };
   
-  buildInputs =
-    [ xlibs.xlibs pkgconfig xlibs.libXv xlibs.libXinerama alsaLib mesa aalib
-      libvorbis libtheora speex perl ffmpeg
-      # removed SDL dependency; it's a big dependency and doesn't seem
-      # particularly useful here.
-    ];
-    
+  buildNativeInputs = [ pkgconfig perl ];
+
+  buildInputs = [
+    xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
+    alsaLib mesa aalib libvorbis libtheora speex perl ffmpeg flac
+    libcaca pulseaudio libmng
+  ];
+
   NIX_LDFLAGS = "-rpath ${libdvdcss}/lib -L${libdvdcss}/lib -ldvdcss";
   
   propagatedBuildInputs = [zlib];
