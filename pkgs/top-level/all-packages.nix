@@ -2907,6 +2907,9 @@ let
   ccrtp = callPackage ../development/libraries/ccrtp { };
   ccrtp_1_8 = callPackage ../development/libraries/ccrtp/1.8.nix { };
 
+  celt = callPackage ../development/libraries/celt {};
+  celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
+
   cgui = callPackage ../development/libraries/cgui {};
 
   check = callPackage ../development/libraries/check { };
@@ -3293,6 +3296,8 @@ let
   gsasl = callPackage ../development/libraries/gsasl { };
 
   gsl = callPackage ../development/libraries/gsl { };
+
+  gsm = callPackage ../development/libraries/gsm {};
 
   gsoap = callPackage ../development/libraries/gsoap { };
 
