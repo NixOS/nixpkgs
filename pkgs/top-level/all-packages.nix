@@ -6025,7 +6025,7 @@ let
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
       pkgconfig bzip2 zlib libtool freetype fontconfig
-      ghostscript jasper;
+      ghostscript jasper xz;
     inherit (xlibs) libX11;
   };
 
