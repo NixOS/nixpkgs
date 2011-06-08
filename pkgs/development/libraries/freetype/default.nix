@@ -1,11 +1,11 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, gnumake
 , # FreeType supports sub-pixel rendering.  This is patented by
   # Microsoft, so it is disabled by default.  This option allows it to
   # be enabled.  See http://www.freetype.org/patents.html.
   useEncumberedCode ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "freetype-2.4.4";
   
   src = fetchurl {
@@ -27,3 +27,10 @@ stdenv.mkDerivation rec {
     license = "GPLv2+"; # or the FreeType License (BSD + advertising clause)
   };
 }
+
+//
+
+# FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+(if stdenv.system == "i686-freebsd"
+ then { buildInputs = [ gnumake ]; }
+ else {}))
