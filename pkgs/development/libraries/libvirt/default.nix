@@ -3,14 +3,14 @@
 , libtasn1, ebtables, libgcrypt
 }:
 
-let version = "0.9.1"; in
+let version = "0.9.2"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "0avv3c95l95rpk5n5b6hwir52px5k2v5rvn3x82ak948n4xl5cq2";
+    sha256 = "0f4z85whrjfjjfd9rmpn57sib42sh599g0cjvq2bdbrbafx1z1cs";
   };
 
   buildInputs =
@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
+      patchShebangs . # fixes /usr/bin/python references
     '';
 
   configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-init-script=redhat";
