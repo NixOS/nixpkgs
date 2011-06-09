@@ -6701,6 +6701,8 @@ let
 
   nova = callPackage ../applications/virtualization/nova { };
 
+  novaclient = callPackage ../applications/virtualization/nova/client.nix { };
+
   nvi = callPackage ../applications/editors/nvi { };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
