@@ -6146,6 +6146,8 @@ let
 
   evopedia = callPackage ../applications/misc/evopedia { };
 
+  keepassx = callPackage ../applications/misc/keepassx { };
+
   # FIXME: Evince and other GNOME/GTK+ apps (e.g., Viking) provide
   # `share/icons/hicolor/icon-theme.cache'.  Arbitrarily give this one a
   # higher priority.

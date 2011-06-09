@@ -18,6 +18,7 @@
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
+  qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
