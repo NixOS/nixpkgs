@@ -47,7 +47,7 @@ in
 
   config = mkIf cfg.enableSingleNode {
 
-    environment.systemPackages = [ nova pkgs.euca2ools ];
+    environment.systemPackages = [ nova pkgs.euca2ools pkgs.novaclient ];
 
     environment.etc =
       [ # The Paste configuration file for nova-api.
@@ -73,7 +73,6 @@ in
         # Allow the CA certificate generation script (called by
         # nova-api) to work.
         mkdir -m 700 -p /var/lib/nova/CA /var/lib/nova/CA/private
-        cp -p ${nova}/libexec/nova/openssl.cnf.tmpl /var/lib/nova/CA/
 
         # Initialise the SQLite database.        
         ${nova}/bin/nova-manage db sync
@@ -91,9 +90,11 @@ in
 
         # `openssl' is required to generate the CA.  `openssh' is
         # required to generate key pairs.
-        path = [ pkgs.openssl pkgs.openssh ];
-          
-        exec = "${nova}/bin/nova-api --flagfile=${novaConf}";
+        path = [ pkgs.openssl pkgs.openssh pkgs.bash ];
+
+        respawn = false;
+        
+        exec = "${nova}/bin/nova-api --flagfile=${novaConf} --api_paste_config=${nova}/etc/nova/api-paste.ini";
       };
 
     # `nova-objectstore' is a simple image server.  Useful if you're
@@ -135,7 +136,8 @@ in
 
         path =
           [ pkgs.sudo pkgs.vlan pkgs.nettools pkgs.iptables pkgs.qemu_kvm
-            pkgs.e2fsprogs pkgs.utillinux pkgs.multipath_tools
+            pkgs.e2fsprogs pkgs.utillinux pkgs.multipath_tools pkgs.iproute
+            pkgs.bridge_utils
           ];
 
         exec = "${nova}/bin/nova-compute --flagfile=${novaConf}";
