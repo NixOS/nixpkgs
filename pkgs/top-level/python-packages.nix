@@ -364,11 +364,11 @@ let pythonPackages = python.modules // rec {
 
   
   eventlet = buildPythonPackage rec {
-    name = "eventlet-0.9.14";
+    name = "eventlet-0.9.16";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/e/eventlet/${name}.tar.gz";
-      md5 = "dfc96ed14b27392fdc529abcafeed880";
+      md5 = "4728e3bd7f72763c1e5dccac0296f8ea";
     };
 
     buildInputs = [ nose httplib2  ];
