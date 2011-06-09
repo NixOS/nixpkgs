@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl }:
+{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl, novaclient }:
 
 with stdenv.lib;
 
-let version = "2011.1.1"; in
+let version = "2011.2"; in
 
 stdenv.mkDerivation rec {
   name = "nova-${version}";
 
   src = fetchurl {
-    url = "http://launchpad.net/nova/bexar/${version}/+download/nova-${version}.tar.gz";
-    sha256 = "0xd7cxn60vzhkvjwnj0i6jfcxaggwwyw2pnhl4qnb759q9hvk1b9";
+    url = "http://launchpad.net/nova/cactus/${version}/+download/nova-${version}.tar.gz";
+    sha256 = "1s2w0rm332y9x34ngjz8sys9sbldg857rx9d6r3nb1ik979fx8p7";
   };
 
   patches =
-    [ ./fix-dhcpbridge-output.patch ];
+    [ ./convert.patch ];
 
   pythonPath = with pythonPackages;
     [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
-      distutils_extra simplejson readline glance cheetah
+      distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py. 
-      libvirt libxml2Python 
+      libvirt libxml2Python
+      novaclient
     ];
 
   buildInputs =
@@ -68,18 +69,15 @@ stdenv.mkDerivation rec {
       
       wrapPythonPrograms
 
-      mkdir -p $out/etc/nova
-      cp etc/nova-api.conf $out/etc/nova/
+      cp -prvd etc $out/etc
 
       # Nova makes some weird assumptions about where to find its own
       # programs relative to the Python directory.
       ln -sfn $out/bin $out/lib/${pythonPackages.python.libPrefix}/site-packages/bin
 
       # Install the certificate generation script.
-      cp CA/genrootca.sh $out/libexec/nova/
-      cp CA/openssl.cnf.tmpl $out/libexec/nova/
-
-      ln -s /etc/nova/nova.conf $out/libexec/nova/
+      cp nova/CA/genrootca.sh $out/libexec/nova/
+      cp nova/CA/openssl.cnf.tmpl $out/libexec/nova/
     '';
 
   doCheck = false; # !!! fix
