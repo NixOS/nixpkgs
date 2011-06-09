@@ -563,6 +563,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.3.1";
 
@@ -581,6 +582,24 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
+  lockfile = buildPythonPackage rec {
+    name = "lockfile-0.9.1";
+
+    src = fetchurl {
+      url = "http://pylockfile.googlecode.com/files/${name}.tar.gz";
+      sha1 = "1eebaee375641c9f29aeb21768f917dd2b985752";
+    };
+
+    doCheck = false; # no tests
+
+    meta = {
+      homepage = http://code.google.com/p/pylockfile/;
+      description = "Platform-independent advisory file locking capability for Python applications";
+    };
+  };
+
+  
   lxml = buildPythonPackage ( rec {
     name = "lxml-2.2.2";
 
@@ -1087,6 +1106,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
+  prettytable = buildPythonPackage rec {
+    name = "prettytable-0.5";
+    
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.gz";
+      md5 = "13a6930d775395f393afd86948afa4fa";
+    };
+
+    meta = {
+      description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
+      homepage = http://code.google.com/p/prettytable/;
+    };
+  };
+
+  
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.0.13";
 
