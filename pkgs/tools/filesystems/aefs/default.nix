@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fuse }:
+{ stdenv, fetchurl, fuse, fetchsvn }:
   
 stdenv.mkDerivation rec {
-  name = "aefs-0.3pre287";
+  name = "aefs-0.3pre288";
   
   src = fetchurl {
     url = "http://nixos.org/tarballs/${name}.tar.bz2";
-    sha256 = "07ndb1cs05l83birrn55cy1ks54q5gbvmhzb3r5cflmd8n4byhyl";
+    sha256 = "0s102s75h7ycjppvbankadsgpw6w1p4fc676zdpd64x8s66bs6lp";
   };
 
   buildInputs = [ fuse ];
