@@ -64,9 +64,10 @@ stdenv.mkDerivation {
     # This is not the best way to do this. I think the reference should be
     # the style in the gcc-cross-wrapper, but to keep a stable stdenv now I
     # do this sufficient if/else.
-    dynamicLinker = 
+    dynamicLinker =
       (if stdenv.cross.arch == "arm" then "ld-linux.so.3" else
        if stdenv.cross.arch == "mips" then "ld.so.1" else
+       if stdenv.lib.hasSuffix "pc-gnu" cross.config then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform");
   };
   
