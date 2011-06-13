@@ -1,9 +1,9 @@
-{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
+{ fetchurl, stdenv, xz, flex, bison, gettext, ncurses, libusb, freetype, qemu
 , EFIsupport ? false }:
 
 let
     prefix = "grub${if EFIsupport then "-efi" else ""}";
-    version = "1.99rc2";
+    version = "1.99";
     unifont_bdf = fetchurl {
       url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
       sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   name = "${prefix}-${version}";
 
   src = fetchurl {
-    url = "ftp://alpha.gnu.org/gnu/grub/grub-1.99~rc2.tar.gz";
-    sha256 = "ea8f243c95851d58d34ac04910929395790e9b9383d6deb2bb6750435bc3e7bd";
-    name = "${name}.tar.gz";
+    url = "mirror://gnu/grub/grub-${version}.tar.xz";
+    sha256 = "06q2a7bg1mbsms604a89fkdnwrc1jg9hr2mmfdmg3il39j6i827k";
   };
 
-  buildInputs = [ flex bison ncurses libusb freetype gettext ]
+  buildNativeInputs = [ xz flex bison ];
+  buildInputs = [ ncurses libusb freetype gettext ]
     ++ stdenv.lib.optional doCheck qemu;
 
   preConfigure =
@@ -56,9 +56,10 @@ stdenv.mkDerivation rec {
         [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
 
   doCheck = false;
+  enableParallelBuilding = true;
 
   meta = {
-    description = "GNU GRUB, the Grand Unified Boot Loader (2.x alpha)";
+    description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 
     longDescription =
       '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand

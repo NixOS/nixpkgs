@@ -630,7 +630,6 @@ replaced by the result of their application to DERIVATIONS, a vhash."
       ("freefont-ttf" "ftp.gnu.org"   "/gnu/freefont" #f)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/gnu/ghostscript" #f)
-      ("grub"         "alpha.gnu.org" "/gnu" #t)
       ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
       ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg" #f)
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
