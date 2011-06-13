@@ -1,16 +1,21 @@
 { stdenv, fetchurl, pkgconfig, openssl, curl, intltool, libevent, gtkClient ? true, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "transmission-2.13";
+  name = "transmission-2.31";
   
   src = fetchurl {
     url = "http://download.transmissionbt.com/files/${name}.tar.bz2";
-    sha256 = "18mpxr2l56bcl0vshwv5zb7l1xvpf77vbb6kd6qidjids6znqikk";
+    sha256 = "0z0npasbrbii5qnjyk31v0kfr04kwm57dmnl2542bpx615q212zk";
   };
   
-  buildInputs = [ pkgconfig openssl curl intltool libevent ] ++ stdenv.lib.optional gtkClient gtk;
+  buildInputs = [ pkgconfig openssl curl intltool libevent ] ++
+                stdenv.lib.optional gtkClient gtk;
   
   configureFlags = if gtkClient then "--enable-gtk" else "--disable-gtk";
+
+  postInstall = ''
+    rm $out/share/icons/hicolor/icon-theme.cache
+  '';
   
   meta = {
     description = "A fast, easy and free BitTorrent client";
