@@ -7,10 +7,10 @@ let
   opt = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  name = "mpd-0.16";
+  name = "mpd-0.16.3";
   src = fetchurl {
     url = "mirror://sourceforge/musicpd/${name}.tar.bz2";
-    sha256 = "0sy0ra9wmqp6a2207lhz0b2k5dmfw2bgic9mawbgn17j80aikbg2";
+    sha256 = "1liihxj58f944gapdqg15firl6phbxh3y3vjxq9m8dlvm37pkpsq";
   };
   buildInputs = [ pkgconfig glib ]
     ++ opt alsaSupport alsaLib
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       music. Through plugins and libraries it can play a variety of sound
       files while being controlled by its network protocol.
     '';
-    homepage = http://mpd.wikia.com/;
+    homepage = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
