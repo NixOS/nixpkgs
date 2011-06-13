@@ -1,11 +1,12 @@
-{stdenv, fetchurl, gnutls, libtasn1, pkgconfig, readline, zlib}:
-stdenv.mkDerivation {
-  name = "lftp-4.1.3";
+{stdenv, fetchurl, gnutls, libtasn1, pkgconfig, readline, zlib, xz}:
+
+stdenv.mkDerivation rec {
+  name = "lftp-4.2.3";
 
   src = fetchurl {
-    url = ftp://ftp.cs.tu-berlin.de/pub/net/ftp/lftp/lftp-4.1.3.tar.bz2;
-    sha256 = "1nbgbql8kkhdvai0glwgkq8l9ik09l5lb8znpjrv26hfzl15dvv1";
+    url = "ftp://ftp.cs.tu-berlin.de/pub/net/ftp/lftp/${name}.tar.xz";
+    sha256 = "0l58lw2xgx9y64kz6mjd8ggdx92yr05rp08zssvsn8wx1vlvg6bh";
   };
 
-  buildInputs = [gnutls libtasn1 pkgconfig readline zlib];
+  buildInputs = [gnutls libtasn1 pkgconfig readline zlib xz];
 }
