@@ -2476,6 +2476,7 @@ let
       xulrunner = firefox40Pkgs.xulrunner;
     };
 
+  xulrunner = firefox40Pkgs.xulrunner;
 
   ### DEVELOPMENT / MISC
 
