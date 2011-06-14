@@ -21,11 +21,12 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
-       --with-expat --with-libexpat-prefix=${expat}
+       --with-expat --with-libexpat-prefix=${expat} --with-python
     '' + stdenv.lib.optionalString (target != null)
        " --target=${target.config}";
 
   crossAttrs = {
+    # Do not add --with-python here to avoid cross building it.
     configureFlags =
       '' --with-gmp=${gmp.hostDrv} --with-mpfr=${mpfr.hostDrv} --with-system-readline
          --with-expat --with-libexpat-prefix=${expat.hostDrv}
