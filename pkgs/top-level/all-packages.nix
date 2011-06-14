@@ -7901,6 +7901,8 @@ let
       inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
     };
 
+  nut = callPackage ../applications/misc/nut { };
+
   disnix = callPackage ../tools/package-management/disnix { };
 
   disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts {
