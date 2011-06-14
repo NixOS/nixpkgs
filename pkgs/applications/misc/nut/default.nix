@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       It uses a layered approach to connect all of the parts.
     '';
     homepage = http://www.networkupstools.org/;
-    platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers [ pierron ];
+    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with stdenv.lib.maintainers; [ pierron ];
   };
 }

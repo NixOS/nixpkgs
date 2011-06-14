@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       a pop3 interface to a webmail.
     '';
     homepage = http://www.freepops.org/;
-    platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers [ pierron ];
+    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with stdenv.lib.maintainers; [ pierron ];
   };
-};
+}
