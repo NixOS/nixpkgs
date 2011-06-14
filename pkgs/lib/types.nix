@@ -6,6 +6,7 @@ let lib = import ./default.nix; in
 with import ./lists.nix;
 with import ./attrsets.nix;
 with import ./options.nix;
+with import ./trivial.nix;
 
 rec {
 
@@ -16,7 +17,7 @@ rec {
     _type = typeName;
   };
 
-  
+
   # name (name of the type)
   # check (boolean function)
   # merge (default merge function)
@@ -43,7 +44,7 @@ rec {
       inherit name check merge iter fold docPath hasOptions delayOnGlobalEval;
     };
 
-    
+
   types = rec {
 
     inferred = mkOptionType {
@@ -75,7 +76,7 @@ rec {
 
     attrs = mkOptionType {
       name = "attribute set";
-      check = lib.traceValIfNot builtins.isAttrs;
+      check = lib.traceValIfNot isAttrs;
       merge = fold lib.mergeAttrs {};
     };
 
@@ -102,7 +103,7 @@ rec {
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
-      check = x: lib.traceValIfNot builtins.isAttrs x
+      check = x: lib.traceValIfNot isAttrs x
         && fold (e: v: v && elemType.check e) true (lib.attrValues x);
       merge = lib.zip (name: elemType.merge);
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
@@ -110,6 +111,43 @@ rec {
       docPath = path: elemType.docPath (path + ".<name>");
       inherit (elemType) hasOptions delayOnGlobalEval;
     };
+
+    # List or attribute set of ...
+    loaOf = elemType:
+      let
+        convertIfList = defIdx: def:
+          if isList def then
+            listToAttrs (
+              flip imap def (elemIdx: elem:
+                nameValuePair "unnamed-${toString defIdx}.${toString elemIdx}" elem))
+          else
+            def;
+        listOnly = listOf elemType;
+        attrOnly = attrsOf elemType;
+
+      in mkOptionType {
+        name = "list or attribute set of ${elemType.name}s";
+        check = x:
+          if isList x       then listOnly.check x
+          else if isAttrs x then attrOnly.check x
+          else lib.traceValIfNot (x: false) x;
+        ## The merge function returns an attribute set
+        merge = defs:
+          attrOnly.merge (imap convertIfList defs);
+        iter = f: path: def:
+          if isList def       then listOnly.iter f path def
+          else if isAttrs def then attrOnly.iter f path def
+          else throw "Unexpected value";
+        fold = op: nul: def:
+          if isList def       then listOnly.fold op nul def
+          else if isAttrs def then attrOnly.fold op nul def
+          else throw "Unexpected value";
+
+        docPath = path: elemType.docPath (path + ".<name?>");
+        inherit (elemType) hasOptions delayOnGlobalEval;
+      }
+    ;
+
 
     uniq = elemType: mkOptionType {
       inherit (elemType) name check iter fold docPath hasOptions;
