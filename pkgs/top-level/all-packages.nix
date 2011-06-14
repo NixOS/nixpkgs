@@ -4642,6 +4642,8 @@ let
 
   firebird = callPackage ../servers/firebird { };
 
+  freepops = callPackage ../servers/mail/freepops { };
+
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   ghostOne = callPackage ../servers/games/ghost-one {
