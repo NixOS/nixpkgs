@@ -1,5 +1,7 @@
 {stdenv, fetchgit, perl}:
 
+assert stdenv ? glibc;
+
 let
   rev = "7a9a5c48ede207eec881";
 in

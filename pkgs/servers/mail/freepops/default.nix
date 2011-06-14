@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "FreePOPs is an extensible pop3 server.";
+    description = "An extensible pop3 server";
     longDescription = ''
       FreePOPs is an extensible pop3 server. Its main purpose is to provide
       a pop3 interface to a webmail.
