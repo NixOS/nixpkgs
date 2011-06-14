@@ -864,6 +864,8 @@ let
 
   most = callPackage ../tools/misc/most { };
 
+  ninka = callPackage ../development/tools/misc/ninka { };
+  
   nodejs = callPackage ../development/web/nodejs {};
 
   lftp = callPackage ../tools/networking/lftp { };
