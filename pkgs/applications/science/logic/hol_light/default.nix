@@ -1,11 +1,11 @@
 {stdenv, fetchsvn, writeScript, ocaml, findlib, camlp5}:
 
 stdenv.mkDerivation rec {
-  name = "hol_light-20110423";
+  name = "hol_light-20110611";
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "90";
-    sha256 = "e10f32392eb94de559495f2a2977da9e325ff1f39edbcd28db701a1801566c89";
+    rev = "92";
+    sha256 = "773fd353c06ebcbba28d2ba8cc495bd3ab0bb6f3f722f566fb3261a27a873ca0";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
