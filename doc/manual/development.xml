@@ -480,6 +480,52 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     a NixOS or Nixpkgs change.
   </para>
 
+  <para>
+    The actual Nix programming interface to VM testing is in NixOS,
+    under <link
+    xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk/lib/testing.nix">
+    <filename>lib/testing.nix</filename></link>.  This file defines a
+    function which takes an attribute set containing a
+    <literal>nixpkgs</literal> attribute (the path to a Nixpkgs
+    checkout), and a <literal>system</literal> attribute (the system
+    type).  It returns an attribute set containing several utility
+    functions, among which the main entry point is
+    <literal>makeTest</literal>.
+  </para>
+
+  <para>
+    The <literal>makeTest</literal> function takes a function similar to
+    that found in <link
+    xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
+    <filename>tests/nfs.nix</filename></link> (discussed above).  It
+    returns an attribute set containing (among others):
+
+    <variablelist>
+
+      <varlistentry>
+	<term><varname>test</varname></term>
+	<listitem>A derivation containing the test log as an HTML file,
+	as seen above, suitable for presentation in the Hydra continuous
+	build system.</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><varname>report</varname></term>
+	<listitem>A derivation containing a code coverage report, with
+	meta-data suitable for Hydra.</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><varname>driver</varname></term>
+	<listitem>A derivation containing scripts to run the VM test or
+	interact with the VM network interactively, as seen above.
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </para>
+    
+
 </section>
 
 </chapter>
