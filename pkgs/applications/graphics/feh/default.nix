@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "feh-1.14.1";
 
   src = fetchurl {
-    url = http://www.chaosdorf.de/~derf/feh/feh-1.14.1.tar.bz2;
+    url = http://feh.finalrewind.org/feh-1.14.1.tar.bz2;
     sha256 = "1dask2pm7y2yjvxlwiyi0v4145alixp5lk8v68dcs0qxz8v1pqk1";
   };
 
