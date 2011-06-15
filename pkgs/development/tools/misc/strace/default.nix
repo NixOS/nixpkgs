@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, xz, perl }:
 
 stdenv.mkDerivation rec {
-  name = "strace-4.5.20";
+  name = "strace-4.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/strace/${name}.tar.bz2";
-    sha256 = "1gfakika8833373p09pfzn5y83kx4jmlxws6na8av9gad69hb37a";
+    url = "mirror://sourceforge/strace/${name}.tar.xz";
+    sha256 = "12n2faqq7whmszpjhv2lcb06r7900j53p0zl7vipi18inr0smycy";
   };
+
+  buildInputs = [ xz perl ];
 
   meta = {
     homepage = http://strace.sourceforge.net/;
