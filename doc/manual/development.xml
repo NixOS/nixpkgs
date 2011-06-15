@@ -504,21 +504,21 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
 
       <varlistentry>
 	<term><varname>test</varname></term>
-	<listitem>A derivation containing the test log as an HTML file,
+	<listitem><para>A derivation containing the test log as an HTML file,
 	as seen above, suitable for presentation in the Hydra continuous
-	build system.</listitem>
+	build system.</para></listitem>
       </varlistentry>
 
       <varlistentry>
 	<term><varname>report</varname></term>
-	<listitem>A derivation containing a code coverage report, with
-	meta-data suitable for Hydra.</listitem>
+	<listitem><para>A derivation containing a code coverage report, with
+	meta-data suitable for Hydra.</para></listitem>
       </varlistentry>
 
       <varlistentry>
 	<term><varname>driver</varname></term>
-	<listitem>A derivation containing scripts to run the VM test or
-	interact with the VM network interactively, as seen above.
+	<listitem><para>A derivation containing scripts to run the VM test or
+	interact with the VM network interactively, as seen above.</para>
 	</listitem>
       </varlistentry>
 
