@@ -15,21 +15,23 @@ stdenv.mkDerivation {
   
   buildInputs = [ perl ];
   
+  buildPhase = ''
+    cd comments
+    tar xfvz comments.tar.gz
+    cd comments
+    sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/local/man|$out/share/man|g" Makefile
+    make
+  '';
+  
   installPhase = ''
+    cd ../..
     ensureDir $out/bin
     cp ninka.pl $out/bin
     cp -av {extComments,splitter,filter,senttok,matcher} $out/bin
     
-    cd comments
-    tar xfvz comments.tar.gz
-    cd comments
-    sed -i -e "s|/usr/local/bin|$out/bin|" -e "s|/usr/local/man|$out/share/man|" Makefile    
+    cd comments/comments    
     ensureDir $out/{bin,share/man/man1}
-    make install
-    
-    # Dirty
-    #patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $out/bin/comments
-    #patchelf --set-rpath ${stdenv.glibc}/lib:${stdenv.gcc}/lib $out/bin/comments
+    make install    
   '';
   
   meta = {
