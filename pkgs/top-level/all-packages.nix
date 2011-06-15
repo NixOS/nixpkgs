@@ -7722,6 +7722,8 @@ let
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
+  tptp = callPackage ../applications/science/logic/tptp {};
+
   ### SCIENCE / ELECTRONICS
 
   caneda = callPackage ../applications/science/electronics/caneda {
