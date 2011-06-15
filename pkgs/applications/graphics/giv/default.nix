@@ -2,11 +2,11 @@
   pcre, cfitsio, perl, gob2, vala, libtiff }:
 
 stdenv.mkDerivation rec {
-  name = "giv-0.9.18";
+  name = "giv-0.9.19";
 
   src = fetchurl {
     url = "mirror://sourceforge/giv/${name}.tar.gz";
-    sha256 = "0w81cc56mq8qiv36jljgarycly3fnpr5i7cjnsprgfm79icdi8nl";
+    sha256 = "07sgpp4k27417ymavcvil4waq6ac2mj08g42g1l52l435xm5mnh7";
   };
 
   # It built code to be put in a shared object without -fPIC

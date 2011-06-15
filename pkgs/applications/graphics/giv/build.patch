@@ -42,15 +42,3 @@ index ffce001..74246f8 100644
  
  variant = "Debug"
  
-diff --git a/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h b/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h
-index 32dbcbb..c456604 100644
---- a/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h
-+++ b/src/plugins/dcmtk/config/include/dcmtk/config/cfunix.h
-@@ -332,7 +332,6 @@ typedef int pid_t;
- #endif
- 
- /* Define `size_t' to `unsigned' if <sys/types.h> does not define. */
--#define HAVE_NO_TYPEDEF_SIZE_T 1
- #ifdef HAVE_NO_TYPEDEF_SIZE_T
- typedef unsigned size_t;
- #endif
