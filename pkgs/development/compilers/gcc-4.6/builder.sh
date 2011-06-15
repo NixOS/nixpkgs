@@ -50,6 +50,17 @@ if test "$noSysDirs" = "1"; then
     extraFlags="-I$NIX_FIXINC_DUMMY $extraFlags"
     extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
+    # BOOT_CFLAGS defaults to `-g -O2'; since we override it below,
+    # make sure to explictly add them so that files compiled with the
+    # bootstrap compiler are optimized and (optionally) contain
+    # debugging information (info "(gccinstall) Building").
+    if test -n "$dontStrip"; then
+	extraFlags="-O2 -g $extraFlags"
+    else
+	# Don't pass `-g' at all; this saves space while building.
+	extraFlags="-O2 $extraFlags"
+    fi
+
     EXTRA_FLAGS="$extraFlags"
     for i in $extraLDFlags; do
         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,$i"
