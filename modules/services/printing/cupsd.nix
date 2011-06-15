@@ -27,6 +27,11 @@ let
         mkdir -pv $out/lib/cups/backend
         ln -sv ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
+
+      # Awful hack to get programs needed by some PPDs in CUPS'
+      # hard-coded $PATH.
+      mkdir -p $out/lib/cups/filter
+      ln -s ${pkgs.coreutils}/bin/date ${pkgs.coreutils}/bin/cat ${pkgs.gnused}/bin/sed $out/lib/cups/filter/
     '';
   };
 
@@ -148,6 +153,7 @@ in
       };
 
     services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];
+    
     services.printing.cupsdConf =
       ''
         LogLevel info
