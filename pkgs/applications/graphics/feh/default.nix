@@ -1,15 +1,15 @@
 { stdenv, fetchurl, x11, imlib2, libjpeg, libpng, giblib
-, libXinerama }:
+, libXinerama, curl }:
 
 stdenv.mkDerivation {
-  name = "feh-1.11.2";
+  name = "feh-1.14.1";
 
   src = fetchurl {
-    url = http://www.chaosdorf.de/~derf/feh/feh-1.11.1.tar.bz2;
-    sha256 = "1rxi0hjp8w1rga48qvq3sgsbsgs4d5q1sq59ld1f7rih1knm2v45";
+    url = http://www.chaosdorf.de/~derf/feh/feh-1.14.1.tar.bz2;
+    sha256 = "1dask2pm7y2yjvxlwiyi0v4145alixp5lk8v68dcs0qxz8v1pqk1";
   };
 
-  buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama];
+  buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama curl];
 
   preBuild = ''
     makeFlags="PREFIX=$out"
