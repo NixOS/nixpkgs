@@ -104,8 +104,9 @@ with pkgs.lib;
     '';
     */
 
-  # There are no virtual consoles.
-  services.mingetty.ttys = [ ];
+  # Since Nova allows VNC access to instances, it's nice to start to
+  # start a few virtual consoles.
+  services.mingetty.ttys = [ "tty1" "tty2" ];
 
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
