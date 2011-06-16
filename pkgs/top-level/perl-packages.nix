@@ -1974,6 +1974,12 @@ rec {
       url = "mirror://cpan/authors/id/J/JK/JKIM/${name}.tar.gz";
       sha256 = "14am9m19ziyv12bjxljhfyl0zy120yf4gligsa9v26smb61fxyjr";
     };
+    patches =
+      [ # In DescribeInstance requests, say "InstanceId.1" instead of
+        # "InstanceId", as required by the Amazon spec.  EC2 tolerates
+        # "InstanceId", but Nova doesn't.
+        ../development/perl-modules/net-amazon-ec2-nova-compat.patch
+      ];
     propagatedBuildInputs =
       [ DigestHMAC LWP Moose URI ParamsValidate XMLSimple Moose CryptSSLeay ];
     doCheck = false; # wants to create actual EC2 instances (for $$$)
