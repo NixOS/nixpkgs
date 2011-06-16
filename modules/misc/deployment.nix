@@ -38,6 +38,16 @@ with pkgs.lib;
 
     # EC2/Nova/Eucalyptus-specific options.
         
+    deployment.ec2.type = mkOption {
+      default = "ec2";
+      example = "nova";
+      description = ''
+        Specifies the type of cloud.  This affects the machine
+        configuration.  Current values are <literal>"ec2"</literal>
+        and <literal>"nova"</literal>.
+      '';
+    };
+
     deployment.ec2.controller = mkOption {
       example = https://ec2.eu-west-1.amazonaws.com:443/;
       description = ''
