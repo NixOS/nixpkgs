@@ -6225,6 +6225,13 @@ let
 
   firefox40Wrapper = wrapFirefox firefox40Pkgs.firefox "firefox" "";
 
+  firefox50Pkgs = callPackage ../applications/networking/browsers/firefox/5.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
+  firefox50Wrapper = wrapFirefox firefox50Pkgs.firefox "firefox" "";
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer10;
