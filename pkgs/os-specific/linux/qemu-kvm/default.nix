@@ -1,8 +1,8 @@
 { stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
-, libjpeg, libpng }:
-   
+, libjpeg, libpng, ncurses }:
+
 assert stdenv.isLinux;
-   
+
 stdenv.mkDerivation rec {
   name = "qemu-kvm-0.14.1";
 
@@ -13,14 +13,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./smb-tmpdir.patch ];
 
-  buildInputs = [ zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng ];
+  buildInputs =
+    [ zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
+      ncurses
+    ];
 
   preBuild =
     ''
       # Don't use a hardcoded path to Samba.
       substituteInPlace ./net.h --replace /usr/sbin/smbd smbd
     '';
-  
+
   postInstall =
     ''
       # extboot.bin isn't installed due to a bug in the Makefile.
@@ -35,5 +38,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.linux-kvm.org/;
     description = "A full virtualization solution for Linux on x86 hardware containing virtualization extensions";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
