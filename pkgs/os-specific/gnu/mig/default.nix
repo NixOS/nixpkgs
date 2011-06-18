@@ -13,11 +13,11 @@ stdenv.mkDerivation {
     inherit rev;
   };
 
+  patches = [ ./noyywrap.patch ];
+
   buildInputs = [ autoconf automake flex bison machHeaders ];
 
   preConfigure = "autoreconf -vfi";
-
-  configureFlags = [ "--build=i586-pc-gnu" ];
 
   doCheck = true;
 
