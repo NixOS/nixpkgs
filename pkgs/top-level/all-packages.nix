@@ -2729,7 +2729,20 @@ let
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
-  mig = callPackage ../os-specific/gnu/mig { };
+  mig = callPackage ../os-specific/gnu/mig
+    (if stdenv.isLinux
+     then {
+       # Build natively, but force use of a 32-bit environment because we're
+       # targeting `i586-pc-gnu'.
+       stdenv = (import ../stdenv {
+         system = "i686-linux";
+         stdenvType = "i686-linux";
+         allPackages = args:
+           import ./all-packages.nix ({ inherit config; } // args);
+         inherit platform;
+       }).stdenv;
+     }
+     else { });
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
