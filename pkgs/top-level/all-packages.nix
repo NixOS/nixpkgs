@@ -5564,6 +5564,8 @@ let
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
+  rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
+
   rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
 
   rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
