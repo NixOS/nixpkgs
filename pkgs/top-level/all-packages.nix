@@ -7467,6 +7467,8 @@ let
 
   tbe = callPackage ../games/the-butterfly-effect {};
 
+  teetertorture = callPackage ../games/teetertorture { };
+
   teeworlds = callPackage ../games/teeworlds { };
 
   tennix = callPackage ../games/tennix { };
