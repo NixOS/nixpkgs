@@ -7373,6 +7373,8 @@ let
 
   hexen = callPackage ../games/hexen { };
 
+  icbm3d = callPackage ../games/icbm3d { };
+
   instead = callPackage ../games/instead {
     lua = lua5;
   };
