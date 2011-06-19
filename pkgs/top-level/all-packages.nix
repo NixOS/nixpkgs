@@ -7399,6 +7399,8 @@ let
 
   pioneers = callPackage ../games/pioneers { };
 
+  pong3d = callPackage ../games/pong3d { };
+
   prboom = callPackage ../games/prboom { };
 
   quake3demo = callPackage ../games/quake3/wrapper {
