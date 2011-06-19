@@ -7501,6 +7501,8 @@ let
 
   vdrift = callPackage ../games/vdrift { };
 
+  vectoroids = callPackage ../games/vectoroids { };
+
   warmux = callPackage ../games/warmux { };
 
   warsow = callPackage ../games/warsow {
