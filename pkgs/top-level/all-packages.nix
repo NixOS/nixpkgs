@@ -4928,6 +4928,8 @@ let
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
+  hostapd = callPackage ../os-specific/linux/hostapd { };
+
   htop = callPackage ../os-specific/linux/htop { };
 
   hurdCross = forceBuildDrv(import ../os-specific/gnu/hurd {
