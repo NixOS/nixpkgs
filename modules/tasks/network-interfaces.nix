@@ -209,6 +209,28 @@ in
                 ip link set "$i" up
             done
 
+            # Create bridge devices.
+            ${concatStrings (attrValues (flip mapAttrs cfg.bridges (n: v: ''
+                echo "Creating bridge ${n}..."
+                ${pkgs.bridge_utils}/sbin/brctl addbr "${n}"
+                
+                ${flip concatMapStrings v.interfaces (i: ''
+                  ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}"
+                  ip addr flush dev "${i}"
+                '')}
+
+                # For some reason enslaving an interface to a bridge
+                # causes traffic to be blocked for a few seconds, long
+                # enough for IPv6 router solicitations to get lost.
+                # So increase the number of attemts.
+                ${optionalString cfg.enableIPv6 ''
+                  echo 5 > /proc/sys/net/ipv6/conf/${n}/router_solicitations
+                ''}
+                
+                # !!! Should delete (brctl delif) any interfaces that
+                # no longer belong to the bridge.
+            '')))}
+            
             # Configure the manually specified interfaces.
             ${flip concatMapStrings cfg.interfaces (i:
               optionalString (i.ipAddress != "")
@@ -238,28 +260,6 @@ in
             # Run any user-specified commands.
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands}
 
-            # Create bridge devices.
-            ${concatStrings (attrValues (flip mapAttrs cfg.bridges (n: v: ''
-                echo "Creating bridge ${n}..."
-                ${pkgs.bridge_utils}/sbin/brctl addbr "${n}"
-                
-                ${flip concatMapStrings v.interfaces (i: ''
-                  ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}"
-                  ip addr flush dev "${i}"
-                '')}
-
-                # For some reason enslaving an interface to a bridge
-                # causes traffic to be blocked for a few seconds, long
-                # enough for IPv6 router solicitations to get lost.
-                # So increase the number of attemts.
-                ${optionalString cfg.enableIPv6 ''
-                  echo 5 > /proc/sys/net/ipv6/conf/${n}/router_solicitations
-                ''}
-                
-                # !!! Should delete (brctl delif) any interfaces that
-                # no longer belong to the bridge.
-            '')))}
-            
             ${optionalString (cfg.interfaces != [] || cfg.localCommands != "") ''
               # Emit the ip-up event (e.g. to start ntpd).
               initctl emit -n ip-up
