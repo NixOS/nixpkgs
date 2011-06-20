@@ -14,6 +14,7 @@ let
     ''
       --nodaemon
       --verbose
+      ${cfg.extraConfig}
     '';
 
 in
@@ -40,6 +41,16 @@ in
           '';
       };
 
+    virtualisation.nova.extraConfig = 
+      mkOption {
+        default = false;
+        description =
+          ''
+            Additional text appended to <filename>nova.conf</filename>,
+            the main Nova configuration file.
+          '';
+      };
+
   };
 
 
@@ -50,9 +61,8 @@ in
     environment.systemPackages = [ nova pkgs.euca2ools pkgs.novaclient ];
 
     environment.etc =
-      [ # The Paste configuration file for nova-api.
-        { source = "${nova}/etc/nova/nova-api.conf";
-          target = "nova/nova-api.conf";
+      [ { source = novaConf;
+          target = "nova/nova.conf";
         }
       ];
 
