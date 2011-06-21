@@ -13,7 +13,10 @@ with pkgs.lib;
 
 let
 
-  vmName = config.networking.hostName;
+  vmName = 
+    if config.networking.hostName == "" 
+    then "noname" 
+    else config.networking.hostName;
 
   options = {
   
