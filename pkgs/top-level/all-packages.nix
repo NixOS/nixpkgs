@@ -852,6 +852,8 @@ let
     inherit (gnome) glib;
   };
 
+  jscoverage = callPackage ../development/tools/misc/jscoverage { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   kdiff3 = newScope pkgs.kde4 ../tools/text/kdiff3 { };
