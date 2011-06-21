@@ -7371,6 +7371,7 @@ let
   gnugo = callPackage ../games/gnugo { };
 
   gparted = callPackage ../tools/misc/gparted {
+    parted = parted_2_3;
     inherit (gtkLibs) gtk glib gtkmm;
     inherit (gnome) gnomedocutils;
   };
