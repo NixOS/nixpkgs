@@ -2,8 +2,8 @@
 , pkgconfig, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
 , libiec61883, libraw1394, libsndfile, libvorbis, libogg, libjpeg
 , libtiff, freetype, mjpegtools, x264, gettext, openexr, esound 
-, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
-, libdv, nasm, perl, e2fsprogs }:
+, libXext, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
+, libdv, libuuid, file, nasm, perl }:
         
 stdenv.mkDerivation {
   name = "cinelerra-git";
@@ -24,22 +24,22 @@ stdenv.mkDerivation {
     find -type f -print0 | xargs --null sed -e "s@/usr/bin/perl@${perl}/bin/perl@" -i
     touch config.rpath
     ./autogen.sh
+    sed -i -e "s@/usr/bin/file@${file}/bin/file@" ./configure
   '';
   
   configureFlags = [ "--enable-freetype2" ];
 
   buildInputs =
     [ automake
-      autoconf libtool pkgconfig
+      autoconf libtool pkgconfig file
       faad2 faac
       a52dec alsaLib   fftw lame libavc1394 libiec61883
       libraw1394 libsndfile libvorbis libogg libjpeg libtiff freetype
       mjpegtools x264 gettext openexr esound 
-      libXxf86vm libXv libXi libX11 xextproto
-      libtheora libpng libdv
+      libXext libXxf86vm libXv libXi libX11 xextproto
+      libtheora libpng libdv libuuid
       nasm
       perl
-      e2fsprogs
     ];
 
   meta = { 
