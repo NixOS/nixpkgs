@@ -11,7 +11,7 @@ cd $out
 git remote add origin "$url"
 git fetch --progress origin
 git remote set-head origin -a || (
-    test -n $rev && echo "that's ok, we want $rev" || exit 1)
+    test -n "$rev" && echo "that's ok, we want $rev" || exit 1)
 
 if test -n "$rev"; then
     echo "Trying to checkout: $rev"
