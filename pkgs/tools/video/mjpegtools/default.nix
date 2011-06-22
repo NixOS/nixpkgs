@@ -1,15 +1,15 @@
-{stdenv, fetchurl, libjpeg, libX11}:
+{ stdenv, fetchurl, gtk, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx }:
 
-stdenv.mkDerivation {
-  name = "mjpegtools-1.9.0rc3";
+# TODO:
+# - make dependencies optional
+# - libpng-apng as alternative to libpng?
+# - libXxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
+
+stdenv.mkDerivation rec {
+  name = "mjpegtools-2.0.0";
   src = fetchurl {
-    url = mirror://sourceforge/mjpeg/mjpegtools-1.9.0rc3.tar.gz;
-    sha256 = "1xvgqzdb2rw6j4ss65k4hrzrbsl74p7k5l4qgf5dbfcw522kw7lb";
+    url = "mirror://sourceforge/mjpeg/${name}.tar.gz";
+    sha256 = "bf3541593e71602f7b440c2e7d81b433f53d0511e74642f35bea9b3feded7a97";
   };
-  buildInputs = [libjpeg libX11];
-  patches = [ ( fetchurl {
-      url = "http://bugs.gentoo.org/attachment.cgi?id=145622";
-      sha256 = "0c3bdrkr0qsrd3jybzz84z9gs4bq90rvxg87ffw08149v5qjz7a1";
-      name = "patch.patch";
-  } ) ]; # from gentoo. Don't know why it broke. Make it compile again.
+  buildInputs = [ gtk libdv libjpeg libpng libX11 pkgconfig SDL SDL_gfx ];
 }
