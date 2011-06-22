@@ -38,13 +38,13 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
 
               if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
                   echo "installing the GRUB bootloader..."
-                  @grub@/sbin/grub-install "@grubDevice@" --no-floppy
+                  @grub@/sbin/grub-install "$(readlink -f "@grubDevice@")" --no-floppy
                   echo "$newGrubVersion" > /boot/grub/version
               fi
           fi
           
       else
-          echo "Warning: don't know how to make this configuration bootable; please set \`boot.grubDevice'." 1>&2
+          echo "Warning: don't know how to make this configuration bootable; please set \`boot.loader.grub.device'." 1>&2
       fi
       
     elif [ "@bootLoader@" = "generationsDir" ]; then
