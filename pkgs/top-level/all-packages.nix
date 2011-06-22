@@ -5984,7 +5984,6 @@ let
   chromeWrapper = wrapFirefox chrome "chrome" "";
 
   cinelerra = callPackage ../applications/video/cinelerra {
-    fftw = fftwSinglePrec;
     inherit (gnome) esound;
   };
 
