@@ -1,7 +1,7 @@
 { stdenv, fetchgit, sourceFromHead, autoconf, automake, libtool
 , pkgconfig, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
 , libiec61883, libraw1394, libsndfile, libvorbis, libogg, libjpeg
-, libtiff, freetype, mjpegtools, x264, gettext, openexr, esound 
+, libtiff, freetype, mjpegtools, x264, gettext, openexr, esound
 , libXext, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
 , libdv, libuuid, file, nasm, perl }:
         
@@ -26,8 +26,6 @@ stdenv.mkDerivation {
     ./autogen.sh
     sed -i -e "s@/usr/bin/file@${file}/bin/file@" ./configure
   '';
-  
-  configureFlags = [ "--enable-freetype2" ];
 
   buildInputs =
     [ automake
