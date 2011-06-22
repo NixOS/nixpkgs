@@ -19,12 +19,10 @@ rec {
   
   xulVersion = "5.0"; # this attribute is used by other packages
 
-  versionSuffix = "-rc1";
-
   
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/5.0-candidates/build1/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "0i6zxvhvf717bzz3mwlbvrk601k81r38fym0fv2nlvr9r207vybb";
+    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha1 = "22b7b4751173c2142a0f09cca1aebc717d97b45a";
   };
 
   
@@ -52,7 +50,7 @@ rec {
 
 
   xulrunner = stdenv.mkDerivation rec {
-    name = "xulrunner-${xulVersion}${versionSuffix}";
+    name = "xulrunner-${xulVersion}";
     
     inherit src;
 
@@ -121,7 +119,7 @@ rec {
 
 
   firefox = stdenv.mkDerivation rec {
-    name = "firefox-${firefoxVersion}${versionSuffix}";
+    name = "firefox-${firefoxVersion}";
 
     inherit src;
 
