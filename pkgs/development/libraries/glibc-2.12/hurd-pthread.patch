@@ -1,0 +1,18 @@
+Don't include <pthread.h> since it's not needed and not available.
+This fixes a typo introduced in commit
+bcdced6aa67195b39d9d1871e624e2d009372a77 in branch `t/tls' of the
+Hurd's libc repo.
+
+diff --git a/sysdeps/mach/hurd/i386/tls.h b/sysdeps/mach/hurd/i386/tls.h
+index 795588a..5827d8b 100644
+--- b/sysdeps/mach/hurd/i386/tls.h
++++ a/sysdeps/mach/hurd/i386/tls.h
+@@ -31,8 +31,6 @@
+ 
+ # ifndef __ASSEMBLER__
+ 
+-#include <pthread/pthread.h>
+-
+ /* Use i386-specific RPCs to arrange that %gs segment register prefix
+    addresses the TCB in each thread.  */
+ # include <mach/i386/mach_i386.h>

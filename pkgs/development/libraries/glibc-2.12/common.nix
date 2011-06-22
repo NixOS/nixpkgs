@@ -11,7 +11,7 @@ cross :
 
 let
   # For GNU/Hurd, see below.
-  version = if hurdHeaders != null then "20100512" else "2.12.2";
+  version = if hurdHeaders != null then "20110622" else "2.12.2";
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
@@ -74,7 +74,9 @@ stdenv.mkDerivation ({
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
 
-  ];
+  ]
+
+  ++ (stdenv.lib.optional (hurdHeaders != null) ./hurd-pthread.patch);
 
   postPatch = ''
     # Needed for glibc to build with the gnumake 3.82
@@ -142,8 +144,8 @@ stdenv.mkDerivation ({
       # maintained by the Hurd folks, `tschwinge/Roger_Whittaker' branch.
       # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
       url = "git://git.sv.gnu.org/hurd/glibc.git";
-      sha256 = "f3590a54a9d897d121f91113949edbaaf3e30cdeacbb8d0a44de7b6564f6643e";
-      rev = "df4c3faf0ccc848b5a8086c222bdb42679a9798f";
+      sha256 = "7b7bba027f17f30773ba73e97adb319c4bf75caab96e867d76ea33ae3b0f68ba";
+      rev = "239939de899afa3cfcd9f92e1dbc09225fc7f558";
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
