@@ -8,7 +8,7 @@ header "exporting $url (rev $rev) into $out"
 git init $out
 cd $out
 git remote add origin "$url"
-git fetch origin
+git fetch --progress origin
 git remote set-head origin -a || (
     test -n $rev && echo "that's ok, we want $rev" || exit 1)
 
