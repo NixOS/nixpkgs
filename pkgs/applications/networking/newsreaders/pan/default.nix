@@ -5,14 +5,14 @@
 
 assert spellChecking -> gtkspell != null;
 
-let version = "0.134"; in
+let version = "0.135"; in
 
 stdenv.mkDerivation {
   name = "pan-${version}";
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha1 = "7ef9385e59edf7d511ad3de6c39482297c820685";
+    sha1 = "6cd93facf86615761279113badd7462e59399ae4";
   };
 
   buildInputs = [ pkgconfig gtk perl gmime gettext intltool ]
