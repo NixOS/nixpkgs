@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, librsync, gnupg, boto, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "duplicity-0.6.12";
+  name = "duplicity-0.6.14";
 
   src = fetchurl {
-    url = http://code.launchpad.net/duplicity/0.6-series/0.6.12/+download/duplicity-0.6.12.tar.gz;
-    sha256 = "13ypzp8g3fmbxk7mixrj390vz6sgm93pg8gdw4bk9xrbznrw6shv";
+    url = http://code.launchpad.net/duplicity/0.6-series/0.6.14/+download/duplicity-0.6.14.tar.gz;
+    sha256 = "1h0gxi7hdz22fvah9mcavimfgahf31pixy1mx2mivncl14b45wf7";
   };
 
   installPhase = ''
