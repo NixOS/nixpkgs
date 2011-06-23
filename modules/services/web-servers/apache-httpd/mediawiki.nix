@@ -4,6 +4,16 @@ with pkgs.lib;
 
 let
 
+  src_clean_skin = pkgs.fetchurl {
+    url = "http://lastlog.de/misc/clean-1.01.tar.gz"; 
+    sha256 = "5fb1736b64b33ca3429d035f1358cf8217da2d02019d8a80b14c7985367f659f"; 
+  };
+
+  src_nixos_skin = pkgs.fetchurl {
+    url = "http://lastlog.de/misc/nixos-1.0.tar.gz"; 
+    sha256 = "413b0f451bde81ac2dd0bede17dd088f9abcd0f3cea1722279311ca648a855cf"; 
+  };
+
   mediawikiConfig = pkgs.writeText "LocalSettings.php"
     ''
       <?php
@@ -62,6 +72,10 @@ let
           $wgUploadDirectory = "${config.uploadDir}";
         ''}
 
+        ${optionalString (config.defaultSkin != "") ''
+          $wgDefaultSkin = "${config.defaultSkin}";
+        ''}
+
         ${config.extraConfig}
       ?>
     '';
@@ -75,7 +89,15 @@ let
       sha256 = "1d8afbdh3lsg54b69mnh6a47psb3lg978xpp277qs08yz15cjf7q";
     };
 
-    buildPhase = "true";
+    skinTarball = if config.defaultSkin == "clean" then src_clean_skin
+             else if config.defaultSkin == "nixos" then src_nixos_skin
+             else "";
+
+    buildPhase = "
+      if [ '${skinTarball}' ]; then
+         tar xfz ${skinTarball} -C skins/;
+      fi
+    ";
 
     installPhase =
       ''
@@ -229,6 +251,12 @@ in
       default = throw "You must specify `uploadDir'.";
       example = "/data/mediawiki-upload";
       description = "The directory that stores uploaded files.";
+    };
+
+    defaultSkin = mkOption {
+      default = "standard";
+      example = "nostalgia";
+      description = "Default skin: you can change the default skin.";
     };
 
     extraConfig = mkOption {
