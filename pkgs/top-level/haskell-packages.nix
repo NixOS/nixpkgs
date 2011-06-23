@@ -1125,6 +1125,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
+  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {};
+
   # Tools.
 
   cabalInstall_0_6_2  = callPackage ../tools/package-management/cabal-install/0.6.2.nix  {};
