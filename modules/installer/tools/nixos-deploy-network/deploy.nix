@@ -81,7 +81,7 @@ let
                 deployment.targetHost = pkgs.lib.mkOverride 900 configurationName;
               }
             ];
-          extraArgs = evaluateMachines network;
+          extraArgs = { nodes = evaluateMachines network; };
         }).config; }
     ) (attrNames (network)));
 
