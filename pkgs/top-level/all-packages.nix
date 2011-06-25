@@ -8090,6 +8090,8 @@ let
     inherit (stdenv) mkDerivation;
   };
 
+  zsnes = callPackage_i686 ../misc/emulators/zsnes { };
+
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
 }; in pkgs
