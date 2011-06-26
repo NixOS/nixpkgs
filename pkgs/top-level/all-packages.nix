@@ -7996,6 +7996,8 @@ let
 
   psi = newScope pkgs.kde45 ../applications/networking/instant-messengers/psi { };
 
+  uae = callPackage ../misc/emulators/uae { };
+
   putty = callPackage ../applications/networking/remote/putty { };
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
