@@ -6340,7 +6340,8 @@ let
 
   gnunet = callPackage ../applications/networking/p2p/gnunet {
     inherit (gnome) gtk libglade;
-    gtkSupport = getConfig [ "gnunet" "gtkSupport" ] false;
+    guile = guile_1_8;
+    gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
   };
 
   gocr = callPackage ../applications/graphics/gocr { };
