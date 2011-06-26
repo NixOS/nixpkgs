@@ -6340,7 +6340,7 @@ let
 
   gnunet = callPackage ../applications/networking/p2p/gnunet {
     inherit (gnome) gtk libglade;
-    gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
+    gtkSupport = getConfig [ "gnunet" "gtkSupport" ] false;
   };
 
   gocr = callPackage ../applications/graphics/gocr { };
@@ -6872,6 +6872,11 @@ let
   rsibreak = newScope pkgs.kde4 ../applications/misc/rsibreak { };
 
   recode = callPackage ../tools/text/recode { };
+
+  retroshare = callPackage ../applications/networking/p2p/retroshare {
+    qt = qt4;
+   inherit (gnome) gnome_keyring;
+  };
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
