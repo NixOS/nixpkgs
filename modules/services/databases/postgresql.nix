@@ -32,6 +32,7 @@ let
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'syslog'
+      ${cfg.extraConfig}
     '';  
 
 in
@@ -122,6 +123,10 @@ in
         # libdir explicitely.
       };
       
+      extraConfig = mkOption {
+        default = "";
+        description = "Additional text to be appended to <filename>postgresql.conf</filename>.";
+      };
     };
 
   };
