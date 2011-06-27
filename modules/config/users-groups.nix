@@ -24,6 +24,7 @@ let
           }
         ];
 
+      # !!! Use NixOS module system to add default attributes.
       addAttrs =
         { name
         , description
@@ -35,8 +36,9 @@ let
         , createHome ? false
         , useDefaultShell ? false
         , password ? null
+        , isSystemUser ? true
         }:
-        { inherit name description uid group extraGroups home shell createHome password; };
+        { inherit name description uid group extraGroups home shell createHome password isSystemUser; };
 
     in map addAttrs (defaultUsers ++ config.users.extraUsers);
 
@@ -104,7 +106,7 @@ let
 
   # Note: the 'X' in front of the password is to distinguish between
   # having an empty password, and not having a password.
-  serializedUser = u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n";
+  serializedUser = u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n";
   serializedGroup = g: "${g.name}\n${toString g.gid}";
   
   # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
@@ -186,9 +188,10 @@ in
             read shell
             read createHome
             read password
+            read isSystemUser
 
             if ! curEnt=$(getent passwd "$name"); then
-                useradd --system \
+                useradd ''${isSystemUser:+--system} \
                     --comment "$description" \
                     ''${uid:+--uid $uid} \
                     --gid "$group" \
