@@ -396,9 +396,11 @@ let inherit (builtins) head tail trace; in
 
         cmakeRPathFlag = if (attrByPath ["cmakeSkipRpath "] true args) then " -DCMAKE_SKIP_BUILD_RPATH=ON " else "";
 
+        cmakeBuildDir = attrByPath ["cmakeBuildDir"] "build" args;
+
 	doCmake = fullDepEntry (''
-          mkdir build
-	  cd build
+          mkdir ${cmakeBuildDir}
+	  cd ${cmakeBuildDir}
 	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${cmakeRPathFlag}${toString cmakeFlags} ..
 	'') ["minInit" "addInputs" "doUnpack"];
 

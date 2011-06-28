@@ -6745,6 +6745,8 @@ let
 
   offrss = callPackage ../applications/networking/offrss { };
 
+  oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
+
   openbox = callPackage ../applications/window-managers/openbox { };
 
   openjump = callPackage ../applications/misc/openjump { };
