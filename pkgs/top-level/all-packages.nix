@@ -6490,10 +6490,9 @@ let
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
-
     # XXX These are the PyOpenGL dependencies, which we need here.
-
-    inherit (pythonPackages) pyopengl;  };
+    inherit (pythonPackages) pyopengl;
+  };
 
   inkscape = callPackage ../applications/graphics/inkscape {
     inherit (pythonPackages) lxml;
