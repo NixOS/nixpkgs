@@ -7983,6 +7983,8 @@ let
     inherit (pythonPackages) pexpect paramiko;
   };
 
+  opkg = callPackage ../tools/package-management/opkg { };
+
   pgadmin = callPackage ../applications/misc/pgadmin { };
 
   pgf = pgf2;
