@@ -50,20 +50,21 @@
 #AMR-WB float support      no
 #AMR-WB IF2 support        no
 
+{ stdenv, fetchurl, gtk, libglade, libxml2, libraw1394, libsamplerate, libdv
+, pkgconfig, perl, perlXMLParser, libavc1394, libiec61883, libXv, gettext
+, libX11, glib, cairo, intltool
+}:
 
-args: with args;
 stdenv.mkDerivation {
-  name = "kino-1.2.0";
-
-  phases = "unpackPhase configurePhase buildPhase installPhase";
+  name = "kino-1.3.4";
 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/kino/kino-1.2.0.tar.gz;
-    sha256 = "15q1qmii5a2zbrrrg8iba2d1rjzaisa75zvxjhrs86jwglpn4lp9";
+    url = http://downloads.sourceforge.net/kino/kino-1.3.4.tar.gz;
+    sha256 = "020s05k0ma83rq2kfs8x474pqicaqp9spar81qc816ddfrnh8k8i";
   };
 
   buildInputs = [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
-      pkgconfig perl perlXMLParser libavc1394 libiec61883 x11 libXv gettext libX11 glib cairo ]; # TODOoptional packages 
+      pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ]; # TODOoptional packages 
 
   #preConfigure = "
   #  grep 11 env-vars

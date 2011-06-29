@@ -6539,12 +6539,8 @@ let
 
   kermit = callPackage ../tools/misc/kermit { };
 
-  kino = import ../applications/video/kino {
-    inherit fetchurl stdenv pkgconfig libxml2 perl perlXMLParser
-      libdv libraw1394 libavc1394 libiec61883 x11 gettext cairo; /* libavformat */
-    inherit libsamplerate ffmpeg;
-    inherit (gnome) libglade gtk glib;
-    inherit (xlibs) libXv libX11;
+  kino = callPackage ../applications/video/kino {
+    inherit (gnome) libglade;
   };
 
   kipi_plugins = newScope pkgs.kde4 ../applications/graphics/kipi-plugins { };
