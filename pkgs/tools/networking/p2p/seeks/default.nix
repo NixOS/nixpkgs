@@ -1,13 +1,13 @@
 { fetchurl, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
 , pkgconfig, protobuf, tokyocabinet, opencv }:
 
-let version = "0.3.1"; in
+let version = "0.3.3"; in
 stdenv.mkDerivation {
   name = "seeks-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/seeks/solo/seeks-${version}.tar.gz";
-    sha256 = "0yvws1j6rh1nv230gkqz3fkf21zdx0x7w8lh3w7gjmi7hfij25gx";
+    sha256 = "1zsl6ixmkvjhy9r2cs22g4q31gg5fkhayvws5jra7jfgmzbrll5c";
   };
 
   buildInputs =
