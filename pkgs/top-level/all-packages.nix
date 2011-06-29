@@ -1446,6 +1446,8 @@ let
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
+  wavemon = callPackage ../tools/networking/wavemon { };
+
   w3cCSSValidator = callPackage ../tools/misc/w3c-css-validator {
     tomcat = tomcat6;
   };
