@@ -1,7 +1,7 @@
 {stdenv, fetchurl, curl, libmrss}:
 
 stdenv.mkDerivation {
-  name = "offrss-1.0";
+  name = "offrss-1.1";
 
   installPhase = ''
     ensureDir $out/bin
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   buildInputs = [ curl libmrss ];
 
   src = fetchurl {
-    url = http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-1.0.tar.gz;
-    sha256 = "15qf5vvvaf6jjm05acx0s0fjb6iyiw63mk96cpqhlmif02g8rysd";
+    url = http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-1.1.tar.gz;
+    sha256 = "1l8c5sw368zbrcfq4wf963fbh29q9lqgsn0lbsiwz3vpybc8plp2";
   };
 
   meta = {
