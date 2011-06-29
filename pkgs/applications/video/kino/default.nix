@@ -52,7 +52,7 @@
 
 { stdenv, fetchurl, gtk, libglade, libxml2, libraw1394, libsamplerate, libdv
 , pkgconfig, perl, perlXMLParser, libavc1394, libiec61883, libXv, gettext
-, libX11, glib, cairo, intltool
+, libX11, glib, cairo, intltool, ffmpeg
 }:
 
 stdenv.mkDerivation {
@@ -64,8 +64,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
-      pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ]; # TODOoptional packages 
+      pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg ]; # TODOoptional packages 
 
+  configureFlags = "--enable-local-ffmpeg=no";
   #preConfigure = "
   #  grep 11 env-vars
   #  ex
