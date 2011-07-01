@@ -1391,6 +1391,8 @@ let
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  welkin = callPackage ../tools/graphics/welkin {};
+
   testdisk = callPackage ../tools/misc/testdisk { };
 
   htmlTidy = callPackage ../tools/text/html-tidy { };
