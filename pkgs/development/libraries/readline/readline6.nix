@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "readline-6.1";
 
   src = fetchurl {
@@ -48,3 +48,10 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+# Don't run the native `strip' when cross-compiling.
+(if (stdenv ? cross)
+ then { dontStrip = true; }
+ else { }))

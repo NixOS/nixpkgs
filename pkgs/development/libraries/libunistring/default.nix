@@ -55,4 +55,11 @@ stdenv.mkDerivation (rec {
 # can't find the dll, it will only create a static library.
 (if (stdenv ? glibc)
  then {}
- else { configureFlags = "--with-libiconv-prefix=${libiconv}"; }))
+ else { configureFlags = "--with-libiconv-prefix=${libiconv}"; })
+
+//
+
+# Don't run the native `strip' when cross-compiling.
+(if (stdenv ? cross)
+ then { dontStrip = true; }
+ else { }))

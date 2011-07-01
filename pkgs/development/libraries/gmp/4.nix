@@ -4,7 +4,7 @@ let
   staticFlags = if static then " --enable-static --disable-shared" else "";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gmp-4.3.2";
 
   src = fetchurl {
@@ -64,3 +64,10 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+# Don't run the native `strip' when cross-compiling.
+(if (stdenv ? cross)
+ then { dontStrip = true; }
+ else { }))

@@ -1,6 +1,6 @@
 { fetchurl, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libffi-3.0.9";
 
   src = fetchurl {
@@ -42,3 +42,10 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+# Don't run the native `strip' when cross-compiling.
+(if (stdenv ? cross)
+ then { dontStrip = true; }
+ else { }))
