@@ -1,29 +1,17 @@
 { fetchurl, stdenv, libxml2, freetype, mesa, glew, qt
-, autoconf, automake, libtool }:
+, autoconf, automake, libtool, cmake }:
 
-let version = "3.4.0"; in
+let version = "3.5.0"; in
 stdenv.mkDerivation rec {
   name = "tulip-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/tulip/tulip-${version}/${name}.tar.bz2";
-    sha256 = "2889113f773ba539472d501fb4f45dbf5eb76e02c949dfa74c63f6f815a2baab";
+    url = "mirror://sourceforge/auber/tulip/tulip-${version}/${name}-src.tar.gz";
+    sha256 = "0wl0wqjlifpay61pn7dxr3dl5r4a7v80f5g277p6s06ibvn2p3ln";
   };
 
-  patches = [ ./configure-opengl.patch ];
-
-  preConfigure =
-    '' export CPATH="${mesa}/include:${glew}/include"
-       export LIBRARY_PATH="${mesa}/lib:${glew}/lib"
-       export QTDIR="${qt}"
-       export LDFLAGS="-lGLEW"
-
-       rm -vf aclocal.m4 ltmain.sh
-       autoreconf -fi
-    '';
-
   buildInputs = [ libxml2 freetype glew ]
-    ++ [ autoconf automake libtool ];
+    ++ [ autoconf automake libtool cmake qt ];
   propagagedBuildInputs = [ mesa qt ];
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
