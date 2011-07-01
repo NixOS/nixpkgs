@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, perl, lzma }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libtool-2.4";
 
   src = fetchurl {
@@ -38,3 +38,11 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+# Don't run the native `strip' when cross-compiling.  This breaks at least
+# with `.a' files for MinGW.
+(if (stdenv ? cross)
+ then { dontNativeStrip = true; }
+ else { }))
