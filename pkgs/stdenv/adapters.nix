@@ -197,7 +197,7 @@ rec {
     { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
 
 
-  /* Return a modified stdenv that perfoms the build under $out/.build
+  /* Return a modified stdenv that performs the build under $out/.build
      instead of in $TMPDIR.  Thus, the sources are kept available.
      This is useful for things like debugging or generation of
      dynamic analysis reports. */ 
