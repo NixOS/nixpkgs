@@ -44,5 +44,5 @@ stdenv.mkDerivation (rec {
 # Don't run the native `strip' when cross-compiling.  This breaks at least
 # with `.a' files for MinGW.
 (if (stdenv ? cross)
- then { dontNativeStrip = true; }
+ then { dontStrip = true; }
  else { }))
