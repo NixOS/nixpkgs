@@ -3,17 +3,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "graphviz-2.26.3";
+  name = "graphviz-2.28.0";
 
   src = fetchurl {
     url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/${name}.tar.gz";
-    sha256 = "18bzyg17ni0lpcd2g5dhan8fjv3vzkjym38jq8vm42did5p9j47l";
+    sha256 = "0xpwg99cd8sp0c6r8klsmc66h1pday64kmnr4v6f9jkqqmrpkank";
   };
 
   buildInputs =
     [ pkgconfig libpng libjpeg expat libXaw yacc libtool fontconfig
-      pango gd
-    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ];
+      pango gd zlib
+    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ]
+    ++ stdenv.lib.optionals (gtk != null) [ gtk glib ];
   
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
@@ -24,6 +25,10 @@ stdenv.mkDerivation rec {
       "--with-expatlibdir=${expat}/lib"
     ]
     ++ stdenv.lib.optional (xlibs == null) "--without-x";
+
+  preBuild = ''
+    sed -e 's@am__append_5 *=.*@am_append_5 =@' -i lib/gvc/Makefile
+  '';
 
   meta = {
     description = "A program for visualising graphs";
