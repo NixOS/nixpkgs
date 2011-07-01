@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libxml2, freetype, mesa, glew, qt
-, autoconf, automake, libtool, cmake }:
+, autoconf, automake, libtool, cmake, makeWrapper }:
 
 let version = "3.5.0"; in
 stdenv.mkDerivation rec {
@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxml2 freetype glew ]
-    ++ [ autoconf automake libtool cmake qt ];
+    ++ [ autoconf automake libtool cmake qt makeWrapper ];
   propagagedBuildInputs = [ mesa qt ];
+
+  postInstall=''
+    wrapProgram "$out/bin/tulip"
+  '';
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;
