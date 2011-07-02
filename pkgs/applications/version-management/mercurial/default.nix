@@ -2,11 +2,11 @@
 , guiSupport ? false, tk ? null, ssl }:
 
 stdenv.mkDerivation rec {
-  name = "mercurial-1.8.2";
+  name = "mercurial-1.9";
 
   src = fetchurl {
     url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "0hdhaxn05rc33yxbrpqpqakpp4v4zpcd9b8wmfzkk7cdbmmbw9nk";
+    sha256 = "1q1307rv5cyv7qalwkampy1h2f92j4d46v4x9647ljljs8f4n7ki";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
