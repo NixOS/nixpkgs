@@ -120,7 +120,8 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      cp -prvd dist/install/nix/store/* $out
+      mkdir -p $out
+      cp -prvd dist/install/nix/store/*/* $out/
       cp -prvd dist/install/boot $out/boot
       cp -prvd dist/install/etc $out/etc
       cp -dR docs/man1 docs/man5 $out/share/man/
