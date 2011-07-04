@@ -254,9 +254,9 @@ in
     };
 
     defaultSkin = mkOption {
-      default = "standard";
+      default = "";
       example = "nostalgia";
-      description = "Default skin: you can change the default skin.";
+      description = "Set this value to change the default skin used by MediaWiki.";
     };
 
     extraConfig = mkOption {
