@@ -1,14 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gprolog-1.3.1";
+  name = "gprolog-1.4.0";
 
   src = fetchurl {
     urls = [
       "mirror://gnu/gprolog/${name}.tar.gz"
       "http://www.gprolog.org/${name}.tar.gz"
     ];
-    sha256 = "05n3k0yynzvpc1ir1nw5bwm6m3ail0a0r1vqdsh4fii3kndiacrw";
+    sha256 = "1l66k66ryfw1nfi2wlvsyq4cmr6mm95f4iay1fxdk3hdk3fjyjl0";
   };
 
   configurePhase = "cd src ;"
