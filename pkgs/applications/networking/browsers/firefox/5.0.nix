@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa
+, yasm, mesa, sqlite
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -36,11 +36,8 @@ rec {
       "--with-system-nspr"
       # "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      # Disabled system Cairo for now because it causes gradients in tabs etc. to be missing.
-      # "--enable-system-cairo"
-      # Compiling with the Nixpkgs SQLite gives:
-      # "configure: error: System SQLite library is not compiled with SQLITE_SECURE_DELETE."
-      # "--enable-system-sqlite"
+      "--enable-system-cairo"
+      "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
@@ -60,7 +57,7 @@ rec {
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman yasm mesa
 	xlibs.libXScrnSaver xlibs.scrnsaverproto
-	xlibs.libXext xlibs.xextproto
+	xlibs.libXext xlibs.xextproto sqlite
       ];
 
     configureFlags =
@@ -128,7 +125,7 @@ rec {
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
-        xlibs.pixman yasm mesa
+        xlibs.pixman yasm mesa sqlite
       ];
 
     propagatedBuildInputs = [xulrunner];
