@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   
   configureFlags = "--enable-threadsafe";
 
-  NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_SECURE_DELETE=1";
+  NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1";
   NIX_CFLAGS_LINK = if readline != null then "-lncurses" else "";
 
   meta = {
