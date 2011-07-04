@@ -2491,10 +2491,10 @@ let
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
       inherit stdenv application launcher;
-      xulrunner = firefox40Pkgs.xulrunner;
+      xulrunner = firefox50Pkgs.xulrunner;
     };
 
-  xulrunner = firefox40Pkgs.xulrunner;
+  xulrunner = firefox50Pkgs.xulrunner;
 
   ### DEVELOPMENT / MISC
 
@@ -6239,9 +6239,9 @@ let
 
   filelight = newScope pkgs.kde4 ../applications/misc/filelight { };
 
-  firefox = firefox40Pkgs.firefox;
+  firefox = firefox50Pkgs.firefox;
 
-  firefoxWrapper = firefox40Wrapper;
+  firefoxWrapper = firefox50Wrapper;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
