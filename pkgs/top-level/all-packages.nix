@@ -99,7 +99,8 @@ let
 
 
   # Return the complete set of packages, after applying the overrides
-  # returned by the `overrider' function (see above).
+  # returned by the `overrider' function (see above).  Warning: this
+  # function is very expensive!
   applyGlobalOverrides = overrider:
     let
       # Call the overrider function.  We don't want stdenv overrides
@@ -4390,7 +4391,7 @@ let
         gstPluginsGood;
       inherit (p.xlibs) libXt renderproto libXrender;
     });
-
+    
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
@@ -7620,21 +7621,11 @@ let
   kde4 = kde45;
 
   kde45 = callPackage ../desktops/kde-4.5 {
-    callPackage =
-      let
-        # !!! Ugly, inefficient.
-        pkgs_for_45 = (applyGlobalOverrides (p: { kde4 = p.kde45; }));
-      in
-        pkgs_for_45.newScope pkgs_for_45.kde45;
+    callPackage = newScope pkgs.kde45;
   };
-
+    
   kde46 = callPackage ../desktops/kde-4.6 {
-    callPackage =
-      let
-        # !!! Ugly, inefficient.
-        pkgs_for_46 = (applyGlobalOverrides (p: { kde4 = p.kde46; }));
-      in
-        pkgs_for_46.newScope pkgs_for_46.kde46;
+    callPackage = newScope pkgs.kde46;
   };
 
   redshift = callPackage ../applications/misc/redshift {
