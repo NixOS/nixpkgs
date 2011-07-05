@@ -65,7 +65,7 @@ in
     };
   
     networking.firewall.logRefusedPackets = mkOption {
-      default = true;
+      default = false;
       description =
         ''
           Whether to log all rejected or dropped incoming packets.
