@@ -1,4 +1,24 @@
-# This module enables a simple firewall.
+/* This module enables a simple firewall.
+
+   The firewall can be customised in arbitrary ways by setting
+   ‘networking.firewall.extraCommands’.  For modularity, the firewall
+   uses several chains:
+
+   - ‘nixos-fw-input’ is the main chain for input packet processing.
+   
+   - ‘nixos-fw-log-refuse’ and ‘nixos-fw-refuse’ are called for
+     refused packets.  (The former jumps to the latter after logging
+     the packet.)  If you want additional logging, or want to accept
+     certain packets anyway, you can insert rules at the start of
+     these chain.
+
+   - ‘nixos-fw-accept’ is called for accepted packets.  If you want
+     additional logging, or want to reject certain packets anyway, you
+     can insert rules at the start of this chain.
+
+*/
+  
+
 
 { config, pkgs, ... }:
 
@@ -7,6 +27,15 @@ with pkgs.lib;
 let
 
   cfg = config.networking.firewall;
+
+  helpers =
+    ''
+      # Helper command to manipulate both the IPv4 and IPv6 tables.
+      ip46tables() {
+        iptables "$@"
+        ip6tables "$@"
+      }
+    '';
 
 in
 
@@ -36,12 +65,23 @@ in
     };
   
     networking.firewall.logRefusedPackets = mkOption {
-      default = false;
+      default = true;
       description =
         ''
           Whether to log all rejected or dropped incoming packets.
           This tends to give a lot of log messages, so it's mostly
           useful for debugging.
+        '';
+    };
+
+    networking.firewall.logRefusedUnicastsOnly = mkOption {
+      default = true;
+      description =
+        ''
+          If <option>networking.firewall.logRefusedPackets</option>
+          and this option are enabled, then only log packets
+          specifically directed at this machine, i.e., not broadcasts
+          or multicasts.
         '';
     };
 
@@ -124,50 +164,72 @@ in
 
         preStart =
           ''
-            # Helper command to manipulate both the IPv4 and IPv6 tables.
-            ip46tables() {
-              iptables "$@"
-              ip6tables "$@"
-            }
+            ${helpers}
+            set -x
 
-            ip46tables -F INPUT
-            ip46tables -F FW_REFUSE || true
-            ip46tables -X # flush unused chains
-            ip46tables -P INPUT ACCEPT
+            # Flush the old firewall rules.  !!! Ideally, updating the
+            # firewall would be atomic.  Apparently that's possible
+            # with iptables-restore.
+            ip46tables -D INPUT -j nixos-fw || true
+            for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse FW_REFUSE; do
+              ip46tables -F "$chain" || true
+              ip46tables -X "$chain" || true
+            done
 
 
-            # The "FW_REFUSE" chain performs logging and
-            # rejecting/dropping of packets.
-            ip46tables -N FW_REFUSE
+            # The "nixos-fw-accept" chain just accepts packets.
+            ip46tables -N nixos-fw-accept
+            ip46tables -A nixos-fw-accept -j ACCEPT
 
-            ${optionalString cfg.logRefusedConnections ''
-              ip46tables -A FW_REFUSE -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
-            ''}
-            ${optionalString cfg.logRefusedPackets ''
-              ip46tables -A FW_REFUSE -j LOG --log-level info --log-prefix "rejected packet: "
-            ''}
 
+            # The "nixos-fw-refuse" chain rejects or drops packets.
+            ip46tables -N nixos-fw-refuse
+            
             ${if cfg.rejectPackets then ''
               # Send a reset for existing TCP connections that we've
               # somehow forgotten about.  Send ICMP "port unreachable"
               # for everything else.
-              ip46tables -A FW_REFUSE -p tcp ! --syn -j REJECT --reject-with tcp-reset
-              ip46tables -A FW_REFUSE -j REJECT
+              ip46tables -A nixos-fw-refuse -p tcp ! --syn -j REJECT --reject-with tcp-reset
+              ip46tables -A nixos-fw-refuse -j REJECT
             '' else ''
-              ip46tables -A FW_REFUSE -j DROP
+              ip46tables -A nixos-fw-refuse -j DROP
             ''}
 
 
+            # The "nixos-fw-log-refuse" chain performs logging, then
+            # jumps to the "nixos-fw-refuse" chain.
+            ip46tables -N nixos-fw-log-refuse
+
+            ${optionalString cfg.logRefusedConnections ''
+              ip46tables -A nixos-fw-log-refuse -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
+            ''}
+            ${optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
+              ip46tables -A nixos-fw-log-refuse -m pkttype --pkt-type broadcast \
+                -j LOG --log-level info --log-prefix "rejected broadcast: "
+              ip46tables -A nixos-fw-log-refuse -m pkttype --pkt-type multicast \
+                -j LOG --log-level info --log-prefix "rejected multicast: "
+            ''}
+            ip46tables -A nixos-fw-log-refuse -m pkttype ! --pkt-type unicast -j nixos-fw-refuse
+            ${optionalString cfg.logRefusedPackets ''
+              ip46tables -A nixos-fw-log-refuse \
+                -j LOG --log-level info --log-prefix "rejected packet: "
+            ''}
+            ip46tables -A nixos-fw-log-refuse -j nixos-fw-refuse
+
+
+            # The "nixos-fw" chain does the actual work.
+            ip46tables -N nixos-fw
+            
             # Accept all traffic on the loopback interface.
-            ip46tables -A INPUT -i lo -j ACCEPT
+            ip46tables -A nixos-fw -i lo -j nixos-fw-accept
 
             # Accept packets from established or related connections.
-            ip46tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+            ip46tables -A nixos-fw -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
 
             # Accept connections to the allowed TCP ports.
             ${concatMapStrings (port:
                 ''
-                  ip46tables -A INPUT -p tcp --dport ${toString port} -j ACCEPT
+                  ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept
                 ''
               ) cfg.allowedTCPPorts
             }
@@ -175,39 +237,42 @@ in
             # Accept packets on the allowed UDP ports.
             ${concatMapStrings (port:
                 ''
-                  ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
+                  ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept
                 ''
               ) cfg.allowedUDPPorts
             }
 
             # Accept IPv4 multicast.  Not a big security risk since
             # probably nobody is listening anyway.
-            iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
+            #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
 
             # Optionally respond to ICMPv4 pings.
             ${optionalString cfg.allowPing ''
-              iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+              iptables -A nixos-fw -p icmp --icmp-type echo-request -j nixos-fw-accept
             ''}
 
             # Accept all ICMPv6 messages except redirects and node
             # information queries (type 139).  See RFC 4890, section
             # 4.4.
-            ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -j DROP
-            ip6tables -A INPUT -p icmpv6 --icmpv6-type 139 -j DROP
-            ip6tables -A INPUT -p icmpv6 -j ACCEPT
+            ip6tables -A nixos-fw -p icmpv6 --icmpv6-type redirect -j DROP
+            ip6tables -A nixos-fw -p icmpv6 --icmpv6-type 139 -j DROP
+            ip6tables -A nixos-fw -p icmpv6 -j nixos-fw-accept
 
             ${cfg.extraCommands}
 
             # Reject/drop everything else.
-            ip46tables -A INPUT -j FW_REFUSE
+            ip46tables -A nixos-fw -j nixos-fw-log-refuse
+
+
+            # Enable the firewall.
+            ip46tables -A INPUT -j nixos-fw
           '';
 
         postStop =
           ''
-            iptables -F INPUT
-            iptables -P INPUT ACCEPT
-            ip6tables -F INPUT
-            ip6tables -P INPUT ACCEPT
+            ${helpers}
+            ip46tables -D INPUT -j nixos-fw || true
+            #ip46tables -P INPUT ACCEPT
           '';
       };
 
