@@ -4349,45 +4349,47 @@ let
 
   vxl = callPackage ../development/libraries/vxl { };
 
-  webkit = let p = applyGlobalOverrides (x : {
-    libsoup = x.gnome28.libsoup_2_33;
-    gnome28 = x.gnome28 // {
+  webkit =
+    let p = applyGlobalOverrides (x : {
       libsoup = x.gnome28.libsoup_2_33;
-    };
+      gnome28 = x.gnome28 // {
+        libsoup = x.gnome28.libsoup_2_33;
+      };
+    });
+    in
+    (p.builderDefsPackage ../development/libraries/webkit {
+      inherit (p.gnome28) gtkdoc;
+      inherit (p.gtkLibs) gtk atk pango glib;
+      inherit (p) freetype fontconfig gettext gperf curl
+        libjpeg libtiff libpng libxml2 libxslt sqlite
+        icu cairo perl intltool automake libtool
+        pkgconfig autoconf bison libproxy enchant
+        python ruby which flex geoclue libsoup;
+      inherit (p.gst_all) gstreamer gstPluginsBase gstFfmpeg
+        gstPluginsGood;
+      inherit (p.xlibs) libXt renderproto libXrender;
   });
-  in
-  (p.builderDefsPackage ../development/libraries/webkit {
-    inherit (p.gnome28) gtkdoc;
-    inherit (p.gtkLibs) gtk atk pango glib;
-    inherit (p) freetype fontconfig gettext gperf curl
-      libjpeg libtiff libpng libxml2 libxslt sqlite
-      icu cairo perl intltool automake libtool
-      pkgconfig autoconf bison libproxy enchant
-      python ruby which flex geoclue libsoup;
-    inherit (p.gst_all) gstreamer gstPluginsBase gstFfmpeg
-      gstPluginsGood;
-    inherit (p.xlibs) libXt renderproto libXrender;
-  });
-  webkitSVN = let p = applyGlobalOverrides (x : {
-    libsoup = x.gnome28.libsoup_2_33;
-    gnome28 = x.gnome28 // {
+  
+  webkitSVN =
+    let p = applyGlobalOverrides (x : {
       libsoup = x.gnome28.libsoup_2_33;
-    };
-  });
-  in
-  (p.builderDefsPackage ../development/libraries/webkit/svn.nix {
-    inherit (p.gnome28) gtkdoc;
-    inherit (p.gtkLibs) gtk atk pango glib;
-    inherit (p) freetype fontconfig gettext gperf curl
-      libjpeg libtiff libpng libxml2 libxslt sqlite
-      icu cairo perl intltool automake libtool
-      pkgconfig autoconf bison libproxy enchant
-      python ruby which flex geoclue libsoup;
-    inherit (p.gst_all) gstreamer gstPluginsBase gstFfmpeg
-      gstPluginsGood;
-    inherit (p.xlibs) libXt renderproto libXrender;
-  });
-
+      gnome28 = x.gnome28 // {
+        libsoup = x.gnome28.libsoup_2_33;
+      };
+    });
+    in
+    (p.builderDefsPackage ../development/libraries/webkit/svn.nix {
+      inherit (p.gnome28) gtkdoc;
+      inherit (p.gtkLibs) gtk atk pango glib;
+      inherit (p) freetype fontconfig gettext gperf curl
+        libjpeg libtiff libpng libxml2 libxslt sqlite
+        icu cairo perl intltool automake libtool
+        pkgconfig autoconf bison libproxy enchant
+        python ruby which flex geoclue libsoup;
+      inherit (p.gst_all) gstreamer gstPluginsBase gstFfmpeg
+        gstPluginsGood;
+      inherit (p.xlibs) libXt renderproto libXrender;
+    });
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
