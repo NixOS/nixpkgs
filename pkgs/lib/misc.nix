@@ -216,7 +216,7 @@ rec {
 
   innerClosePropagation = ready: list: if list == [] then ready else
     if ! isAttrs (head list) then
-      builtins.trace ("not an attrSet: ${lib.showVal (head list)}") 
+      /* builtins.trace ("not an attrSet: ${lib.showVal (head list)}") */
         innerClosePropagation ready (tail list)
     else
       innerClosePropagation 
