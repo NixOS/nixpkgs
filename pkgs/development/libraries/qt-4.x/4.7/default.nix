@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
+      configureFlags+="
+        -docdir $out/share/doc/${name}
+        -plugindir $out/lib/qt4/plugins
+        -importdir $out/lib/qt4/imports
+        -examplesdir $out/share/doc/${name}/examples
+        -demosdir $out/share/doc/${name}/demos
+        -datadir $out/share/${name}
+        -translationdir $out/share/${name}/translations
+      "
     '';
 
   configureFlags =
@@ -40,13 +49,6 @@ stdenv.mkDerivation rec {
       ${if buildDemos == true then "-make demos" else "-nomake demos"}
       ${if buildExamples == true then "-make examples" else "-nomake examples"}
       ${if useDocs then "-make docs" else "-nomake docs"}
-      -docdir $out/share/doc/${name}
-      -plugindir $out/lib/qt4/plugins
-      -importdir $out/lib/qt4/imports
-      -examplesdir $out/share/doc/${name}/examples
-      -demosdir $out/share/doc/${name}/demos
-      -datadir $out/share/${name}
-      -translationdir $out/share/${name}/translations
     '';
 
   propagatedBuildInputs = [
