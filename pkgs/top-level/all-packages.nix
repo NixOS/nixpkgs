@@ -7777,6 +7777,8 @@ let
 
   ecm = callPackage ../applications/science/math/ecm { };
 
+  eukleides = callPackage ../applications/science/math/eukleides { };
+
   maxima = callPackage ../applications/science/math/maxima { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { };
