@@ -450,6 +450,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) libedit;
   };
 
+  emailValidate = callPackage ../development/libraries/haskell/email-validate {};
+
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
@@ -812,6 +814,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
 
+  ranges = callPackage ../development/libraries/haskell/ranges {};
+
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
   };
@@ -1055,6 +1059,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
   yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
+
+  yesodForm = callPackage ../development/libraries/haskell/yesod-form {};
+
+  yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
