@@ -11,7 +11,20 @@ stdenv.mkDerivation {
   patches = [ ./install-infodir.patch ];
 
   buildInputs = [emacs texinfo ctags];
-  builder = ./builder.sh;
+  configureFlags = "--with-package-dir=$$out/share/emacs/site-lisp";
+  preInstall = "ensureDir $out/info";
+  installTargets = "install-pkg texinfo";
+  postInstall = ''
+    mv  $out/info $out/share/
+    mv "$out/share/emacs/site-lisp/lisp/bbdb/"* $out/share/emacs/site-lisp/
+    mv $out/share/emacs/site-lisp/etc/bbdb $out/share/
+    rm -rf $out/share/emacs/site-lisp/{lisp,etc}
+    mv bits $out/share/bbdb/
+    # Make optional modules from bbdb available for import, but symlink
+    # them into the site-lisp directory to make it obvious that they are
+    # not a genuine part of the distribution.
+    ln -s "$out/share/bbdb/bits/"*.el $out/share/emacs/site-lisp/
+  '';
 
   meta = {
     description = "The Insidious Big Brother Database (BBDB), a contact management utility for Emacs";
