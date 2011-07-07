@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake perl zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus.tools ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://strigi.sourceforge.net;
     description = "A very fast and efficient crawler to index data on your harddrive";
