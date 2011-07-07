@@ -873,7 +873,7 @@ let
   most = callPackage ../tools/misc/most { };
 
   ninka = callPackage ../development/tools/misc/ninka { };
-  
+
   nodejs = callPackage ../development/web/nodejs {};
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -1025,7 +1025,7 @@ let
   nylon = callPackage ../tools/networking/nylon { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
-  
+
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
@@ -4363,7 +4363,7 @@ let
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
     };
-  
+
   webkitSVN =
     builderDefsPackage ../development/libraries/webkit/svn.nix {
       inherit (gnome28) gtkdoc libsoup;
@@ -4377,7 +4377,7 @@ let
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
     };
-    
+
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
@@ -5544,7 +5544,7 @@ let
     config = getConfig ["pcmciaUtils" "config"] null;
   };
 
-  phat = callPackage ../development/libraries/phat { 
+  phat = callPackage ../development/libraries/phat {
     inherit (gnome) gtk libgnomecanvas;
   };
 
@@ -5890,7 +5890,7 @@ let
 
   audacious = callPackage ../applications/audio/audacious { };
 
-  audacity = callPackage ../applications/audio/audacity { 
+  audacity = callPackage ../applications/audio/audacity {
     portaudio = portaudioSVN;
   };
 
@@ -6837,11 +6837,11 @@ let
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
-  qtractor = callPackage ../applications/audio/qtractor { 
+  qtractor = callPackage ../applications/audio/qtractor {
     inherit (gtkLibs) gtk;
   };
 
-  rakarrack = callPackage ../applications/audio/rakarrack { 
+  rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
     fltk = fltk11;
   };
@@ -7608,7 +7608,7 @@ let
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage = newScope pkgs.kde45;
   };
-    
+
   kde46 = callPackage ../desktops/kde-4.6 {
     callPackage = newScope pkgs.kde46;
   };
