@@ -24,7 +24,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Manage files with git, without checking the file contents into git";
+    homepage = "http://git-annex.branchable.com/";
+    description = "Manage files with git without checking them into git";
+    license = "GPLv3+";
 
     longDescription = ''
       Git-annex allows managing files with git, without checking the
@@ -43,8 +45,6 @@ stdenv.mkDerivation {
       control.
     '';
 
-    license = "GPLv3+";
-    homepage = "http://git-annex.branchable.com/";
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
