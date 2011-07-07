@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
   dontPatchELF = true;
+  doCheck = true;
 
   meta = {
     homepage = "http://ledger-cli.org/";
