@@ -2654,7 +2654,11 @@ let
     inherit python pil makeWrapper;
   };
 
-  doxygen = callPackage ../development/tools/documentation/doxygen {
+  doxygen = lowPrio (callPackage ../development/tools/documentation/doxygen {
+    qt = null;
+  });
+
+  doxygen_gui = doxygen.override {
     qt = qt4;
   };
 
@@ -2984,7 +2988,7 @@ let
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
   };
 
-  cluceneCore = callPackage ../development/libraries/clucene-core { };
+  clucene_core = callPackage ../development/libraries/clucene-core { };
 
   clutter = callPackage ../development/libraries/clutter {
     inherit (gnome) glib pango gtk;
