@@ -16,7 +16,7 @@
 # Fortunately, libtools builds the program with proper paths hard-coded
 # alread, so we don't need patchelf. Phew!
 
-{stdenv, fetchurl, emacs, gmp, pcre}:
+{stdenv, fetchurl, emacs, gmp, pcre, expat}:
 
 let
   name = "ledger-2.6.3";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     sha256 = "05zpnypcwgck7lwk00pbdlcwa347xsqifxh4zsbbn01m98bx1v5k";
   };
 
-  buildInputs = [ emacs gmp pcre ];
+  buildInputs = [ emacs gmp pcre expat ];
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
   dontPatchELF = true;
