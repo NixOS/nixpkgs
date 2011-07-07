@@ -4,11 +4,11 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "udev-166";
+  name = "udev-171";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/hotplug/${name}.tar.bz2";
-    sha256 = "1msl8cwf47shmz5lr2w9w3nzzxqnf5dc0bs7dvbnxmbal60p7lpm";
+    sha256 = "0pk921963m10qyrv1bnwqxf91ds074xxgswkh616r8f1fihf9lgy";
   };
 
   buildInputs = [ gperf pkgconfig glib acl libusb usbutils ];
@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
       --with-firmware-path=/root/test-firmware:/var/run/current-system/firmware
     '';
 
+  # Workaround for the Linux kernel headers being too old.
+  NIX_CFLAGS_COMPILE = "-DBTN_TRIGGER_HAPPY=0x2c0";
+    
   postInstall =
     ''
       # The path to rule_generator.functions in write_cd_rules and
