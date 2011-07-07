@@ -403,6 +403,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  banner = callPackage ../games/banner {};
+
   barcode = callPackage ../tools/graphics/barcode {};
 
   bc = callPackage ../tools/misc/bc { };
