@@ -1,17 +1,22 @@
-{ stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String, QuickCheck2, pcreLight, SHA, dataenc }:
+{ stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String
+, QuickCheck2, pcreLight, SHA, dataenc, HTTP, testpack, git }:
 
 let
-  version = "0.20110427";
+  version = "3.20110705";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/g/git-annex/git-annex_${version}.tar.gz";
-    sha256 = "1vbmkvf9hlnfcaqsyi1ay2rr835j49bxqyfdi3v3373pdfd6195z";
+    sha256 = "781b0c02f992e46f3c2555db803caed2a9bbd274a62fcebab3f596bfd7888c9a";
   };
 
-  buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight SHA dataenc];
+  buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight
+    SHA dataenc HTTP testpack git];
+
+  checkTarget = "test";
+  doCheck = true;
 
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
