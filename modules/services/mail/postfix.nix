@@ -315,6 +315,8 @@ in
 
         respawn = true;
 
+        environment.TZ = config.time.timeZone;
+
         script = ''
           while ${pkgs.procps}/bin/ps `${pkgs.coreutils}/bin/cat /var/postfix/queue/pid/master.pid` |
             grep -q postfix
