@@ -41,16 +41,19 @@ stdenv.mkDerivation rec {
         chmod +x $1
       }
 
-      # Install Emacs mode.
-      echo "installing Emacs mode..."
+      # Install contrib stuff.
+      ensureDir $out/share/git
+      mv contrib $out/share/git/
       ensureDir $out/share/emacs/site-lisp
-      cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
+      ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
+      ensureDir $out/etc/bash_completion.d
+      ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
 
       # grep is a runtime dependence, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
-    '' # */
+    ''
 
    + (if svnSupport then
 
@@ -97,10 +100,6 @@ stdenv.mkDerivation rec {
        done
      '')
 
-   + ''# install bash completion script
-      d="$out/etc/bash_completion.d"
-      ensureDir $d; cp contrib/completion/git-completion.bash "$d"
-     ''
    # Don't know why hardlinks aren't created. git installs the same executable
    # multiple times into $out so replace duplicates by symlinks because I
    # haven't tested whether the nix distribution system can handle hardlinks.
@@ -109,6 +108,7 @@ stdenv.mkDerivation rec {
       declare -A seen
       shopt -s globstar
       for f in "$out/"**; do
+        if [ -L "$f" ]; then continue; fi
         test -f "$f" || continue
         sum=$(md5sum "$f");
         sum=''\${sum/ */}
