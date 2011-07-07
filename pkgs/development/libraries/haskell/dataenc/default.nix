@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self : {
   pname = "dataenc";
-  version = "0.11.1";
-  sha256 = "1212dbed8a1b8f80140d6450a7635a4365bc5733a00e2b96d00bcc526396c6bc";
+  version = "0.14";
+  sha256 = "0q92pzm6wp4rl92ac9b2x2b6na8nzhf229myc9h3cyr3p822liw6";
   meta = {
     description = "Data encoding library";
+    license = "BSD3";
   };
 })
 

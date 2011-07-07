@@ -769,7 +769,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
+  persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
+
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
+
+  pool = callPackage ../development/libraries/haskell/pool {};
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
@@ -1043,6 +1047,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
   yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
+
+  yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
   yst = callPackage ../development/libraries/haskell/yst {};
 

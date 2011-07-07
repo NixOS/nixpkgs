@@ -1,17 +1,15 @@
-{cabal, blazeHtml, MonadCatchIOTransformers, parsec, text, transformers,
- utf8String, webRoutesQuasi}:
+{cabal, blazeHtml, enumerator, monadControl, parsec, pool, text, transformers}:
 
 cabal.mkDerivation (self : {
   pname = "persistent";
-  version = "0.1.0";
-  sha256 = "32379f5ef937da1bf910cfaf9b6cce6326b8fba7554ef81159e6684c7ce2ca45";
+  version = "0.5.1";
+  sha256 = "1m0558vi99z15q0w62a9rkz25n8djswggbad9m0il359jb3mrzsd";
   propagatedBuildInputs = [
-    blazeHtml MonadCatchIOTransformers parsec text transformers
-    utf8String webRoutesQuasi
+    blazeHtml enumerator monadControl parsec pool text transformers
   ];
   meta = {
     description = "Type-safe, non-relational, multi-backend persistence";
-    license = "BSD";
+    license = "BSD3";
     maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })
