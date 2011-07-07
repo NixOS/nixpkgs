@@ -335,6 +335,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
 
+  baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
+
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
@@ -379,6 +381,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
+  clientsession = callPackage ../development/libraries/haskell/clientsession {};
+
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
@@ -390,6 +394,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   convertible = callPackage ../development/libraries/haskell/convertible {
     time = self.time_1_1_3;
   };
+
+  cookie = callPackage ../development/libraries/haskell/cookie {};
 
   criterion = callPackage ../development/libraries/haskell/criterion {
     parsec = self.parsec3;
@@ -668,6 +674,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadCatchIOMtl = callPackage ../development/libraries/haskell/MonadCatchIO-mtl {};
 
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
+
+  monadControl = callPackage ../development/libraries/haskell/monad-control {};
 
   monadlab = callPackage ../development/libraries/haskell/monadlab {};
 
@@ -973,6 +981,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wai = callPackage ../development/libraries/haskell/wai {};
 
+  waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
+
   warp = callPackage ../development/libraries/haskell/warp {};
 
   WebBits = callPackage ../development/libraries/haskell/WebBits {
@@ -1032,6 +1042,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
+  yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
+
   yst = callPackage ../development/libraries/haskell/yst {};
 
   zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
@@ -1051,6 +1063,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   zlib = self.zlib_0_5_0_0;
+
+  zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
   # Compilers.
 
