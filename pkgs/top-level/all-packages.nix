@@ -2906,6 +2906,8 @@ let
 
   aterm28 = lowPrio (callPackage ../development/libraries/aterm/2.8.nix { });
 
+  attica = callPackage ../development/libraries/attica { };
+
   attr = callPackage ../development/libraries/attr { };
 
   aubio = callPackage ../development/libraries/aubio { };
@@ -4119,6 +4121,8 @@ let
   podofo = callPackage ../development/libraries/podofo { };
 
   polkit = callPackage ../development/libraries/polkit { };
+
+  polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 { };
 
   policykit = callPackage ../development/libraries/policykit { };
 
@@ -7618,6 +7622,10 @@ let
     callPackage = newScope pkgs.kde46;
   };
 
+  kde47 = callPackage ../desktops/kde-4.7 {
+    callPackage = newScope pkgs.kde47;
+  };
+    
   redshift = callPackage ../applications/misc/redshift {
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
       xf86vidmodeproto;
