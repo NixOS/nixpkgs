@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self : {
   pname = "hakyll";
-  version = "3.0.2.0";
-  sha256 = "0d1kmvkbwygr9mxz7m8jiasrbj470j4hwsj8mmkdgdm9clxbi74k";
+  version = "3.2.0.3";
+  sha256 = "0biy9p662anhhlmwa502iy8cck597q0vlwj57l6cj8kpyxj4g0lz";
   propagatedBuildInputs =
     [ binary blazeHtml hamlet hopenssl mtl network pandoc regexBase
      regexPCRE snapCore snapServer strictConcurrency

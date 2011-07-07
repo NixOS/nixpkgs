@@ -363,6 +363,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) cairo zlib;
   };
 
+  caseInsensitive = callPackage ../development/libraries/haskell/case-insensitive {};
+
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
   cereal = callPackage ../development/libraries/haskell/cereal {};
