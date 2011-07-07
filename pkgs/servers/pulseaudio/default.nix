@@ -1,25 +1,23 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
-, gconf, liboil, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
-, libcap, alsaLib, libsamplerate, libsndfile, speex, bluez, udev
-, ...}:
+, gconf, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
+, alsaLib, libsamplerate, libsndfile, speex, bluez, udev }:
 
 stdenv.mkDerivation rec {
-  name = "pulseaudio-0.9.21";
+  name = "pulseaudio-0.9.23";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/pulseaudio/${name}.tar.gz";
+    url = "http://freedesktop.org/software/pulseaudio/releases/${name}.tar.gz";
     sha256 = "0m72rrbgy9qncwhqsq9q35niicy6i06sk3g5i8w9bvkhmib27qll";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
   propagatedBuildInputs = [ gdbm ];
 
-  buildInputs = [
-    pkgconfig gnum4 libtool glib dbus avahi gconf liboil
-    libsamplerate libsndfile speex alsaLib libcap
-    gtk libX11 libICE libSM libXtst libXi
-    intltool gettext bluez udev
-  ];
+  buildInputs =
+    [ pkgconfig gnum4 libtool intltool glib dbus avahi
+      libsamplerate libsndfile speex alsaLib bluez udev
+      #gtk gconf libX11 libICE libSM libXtst libXi
+    ];
 
   preConfigure = ''
     # Change the `padsp' script so that it contains the full path to
@@ -36,6 +34,8 @@ stdenv.mkDerivation rec {
     --disable-solaris --disable-hal --disable-jack --localstatedir=/var
     --disable-oss-output --disable-oss-wrapper
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "PulseAudio, a sound server for POSIX and Win32 systems";
