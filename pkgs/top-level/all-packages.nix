@@ -3306,7 +3306,8 @@ let
 
   gst_all = recurseIntoAttrs
     (let callPackage = newScope pkgs.gst_all; in
-     import ../development/libraries/gstreamer { inherit callPackage pkgs; });
+     import ../development/libraries/gstreamer { inherit callPackage; }
+    );
 
   gnet = callPackage ../development/libraries/gnet { };
 
