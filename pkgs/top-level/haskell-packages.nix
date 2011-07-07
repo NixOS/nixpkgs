@@ -325,6 +325,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
 
+  aeson = callPackage ../development/libraries/haskell/aeson {};
+
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
   ansiWLPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
@@ -354,6 +356,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
+
+  blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
@@ -544,6 +548,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackUtil = callPackage ../development/libraries/haskell/happstack/happstack-util.nix {};
 
   happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {};
+
+  hashable = callPackage ../development/libraries/haskell/hashable {};
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
@@ -954,6 +960,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 
   url = callPackage ../development/libraries/haskell/url {};
 
