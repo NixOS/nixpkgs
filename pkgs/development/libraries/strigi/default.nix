@@ -1,23 +1,22 @@
-{ stdenv, fetchurl, cmake, qt4, perl, bzip2, libxml2, expat, exiv2
-, cluceneCore
+{ stdenv, fetchurl, cmake, qt4, perl, bzip2, libxml2, exiv2
+, clucene_core, fam, zlib, dbus
 }:
 
 stdenv.mkDerivation rec {
   name = "strigi-${version}";
-  version = "0.7.2";
+  version = "0.7.5";
 
   src = fetchurl {
     url = "http://www.vandenoever.info/software/strigi/${name}.tar.bz2";
-    sha256 = "1f1ac27cjm5m4iwsgvd7nylr0md0a95przkbpsdq7l90wjxj390w";
+    sha256 = "16qqnlh0dy3r92shzm2q36h5qi3m06pihr4h5cq944hpvqz5w7qi";
   };
+  
   includeAllQtDirs=true;
 
-  CLUCENE_HOME = cluceneCore;
+  CLUCENE_HOME = clucene_core;
 
-  # Dependencies such as SQLite and FAM are unreliable in this release
-  buildInputs = [
-    cmake perl qt4 bzip2 stdenv.gcc.libc libxml2 expat exiv2 cluceneCore
-  ];
+  buildInputs =
+    [ cmake perl zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus.tools ];
 
   meta = {
     homepage = http://strigi.sourceforge.net;
