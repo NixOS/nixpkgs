@@ -618,6 +618,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   httpdShed = callPackage ../development/libraries/haskell/httpd-shed {};
 
+  httpTypes = callPackage ../development/libraries/haskell/http-types {};
+
   HUnit_1_2_0_3 = callPackage ../development/libraries/haskell/HUnit/1.2.0.3.nix {};
   HUnit_1_2_2_1 = callPackage ../development/libraries/haskell/HUnit/1.2.2.1.nix {};
   HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
@@ -840,6 +842,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
+  simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
+
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
@@ -966,6 +970,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   vty = callPackage ../development/libraries/haskell/vty {
     mtl = self.mtl2;
   };
+
+  wai = callPackage ../development/libraries/haskell/wai {};
+
+  warp = callPackage ../development/libraries/haskell/warp {};
 
   WebBits = callPackage ../development/libraries/haskell/WebBits {
     parsec = self.parsec2;
