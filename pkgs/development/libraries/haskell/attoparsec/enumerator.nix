@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "attoparsec-enumerator";
-  version = "0.2.0.3";
-  sha256 = "02v9cwq1jbn0179zd2cky4ix6ykrkd7cpw38c1x7zgy0pal42x4v";
+  version = "0.2.0.4";
+  sha256 = "14v53vppcf4k3m4kid10pg5r3zsn894f36w1y2pzlc72w81fv3gd";
   propagatedBuildInputs = [attoparsec enumerator];
   meta = {
     description = "Converts an Attoparsec parser into an iteratee";
