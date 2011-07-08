@@ -6475,9 +6475,9 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick;
-    gitSupport = getConfig [ "ikiwiki" "git" ] false;
-    monotoneSupport = getConfig [ "ikiwiki" "monotone" ] false;
+      RpcXML XMLSimple PerlMagick YAML;
+    gitSupport = false;
+    monotoneSupport = false;
     extraUtils = [];
   };
 
