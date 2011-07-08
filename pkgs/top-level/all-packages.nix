@@ -5663,6 +5663,7 @@ let
 
   utillinuxng = callPackage ../os-specific/linux/util-linux-ng {
     ncurses = null;
+    perl = null;
   };
 
   utillinuxngCurses = utillinuxng.override {

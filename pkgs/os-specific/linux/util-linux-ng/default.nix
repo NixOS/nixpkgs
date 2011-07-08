@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses ? null }:
+{ stdenv, fetchurl, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
   name = "util-linux-ng-2.18";
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
-  buildInputs = stdenv.lib.optional (ncurses != null) ncurses;
+  buildInputs = stdenv.lib.optional (ncurses != null) ncurses
+             ++ stdenv.lib.optional (perl != null) perl;
 }
