@@ -5667,7 +5667,7 @@ let
   };
 
   utillinuxngCurses = utillinuxng.override {
-    inherit ncurses;
+    inherit ncurses perl;
   };
 
   windows = rec {
