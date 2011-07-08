@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, perl, gettext, makeWrapper, lib, PerlMagick,
-  TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate,
-  CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
+{ stdenv, fetchurl, perl, gettext, makeWrapper, lib, PerlMagick, YAML
+, TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate
+, CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
 , gitSupport ? false
 , git ? null
 , monotoneSupport ? false
@@ -13,19 +13,19 @@ assert monotoneSupport -> (monotone != null);
 
 let
   name = "ikiwiki";
-  version = "3.20100704";
+  version = "3.20110707";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "1kakh2bf9k0fhvqhn9p9g4wwck64if2y9z23zmlcrm02bw1m6lr9";
+    sha256 = "b51fa7452a900212ab1c8c879227b83a688c10f770552aee61944695f8c6f1bf";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
     TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple PerlMagick]
+    RpcXML XMLSimple PerlMagick YAML]
     ++ stdenv.lib.optionals gitSupport [git]
     ++ stdenv.lib.optionals monotoneSupport [monotone];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   configurePhase = "perl Makefile.PL PREFIX=$out";
 
   postInstall = ''
-    for a in $out/bin/*; do
+    for a in "$out/bin/"*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin \
       ${lib.optionalString (git != null)
         ''--prefix PATH : ${git}/bin \''}
