@@ -7633,7 +7633,7 @@ let
 
   ### SCIENCE
 
-  xplanet = callPackage ../applications/science/xplanet {
+  xplanet = callPackage ../applications/science/astronomy/xplanet {
     inherit (gtkLibs) pango;
   };
 
