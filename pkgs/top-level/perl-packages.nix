@@ -1277,7 +1277,7 @@ rec {
       sha256 = "1p84585b4iyqa21hbqni0blj8fzd917ynd3y1hwh3mrmyfqj178x";
     };
 
-    buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype 
+    buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype
                     pkgs.libpng pkgs.fontconfig pkgs.xlibs.libXpm GetOptLong ];
 
     # Patch needed to get arguments past the first GetOptions call
@@ -1290,7 +1290,7 @@ rec {
     # ( although the images look the same to my eye ); this is
     # possibly because the source packaged image was generated with a
     # different version of some library ( libpng maybe? ).
-    postPatch = "sed -ie 's/if (GD::Image->can(.newFromJpeg.)) {/if ( 0 ) {/' t/GD.t";    
+    postPatch = "sed -ie 's/if (GD::Image->can(.newFromJpeg.)) {/if ( 0 ) {/' t/GD.t";
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xlibs.libXpm}";
   };
@@ -2081,7 +2081,7 @@ rec {
       sha256 = "179cxwqxb0f9dpx8954nvwjmggxxi5ndnang41yav1dx6mf0abp7";
     };
   };
-  
+
   ParamsUtil = buildPerlPackage rec {
     name = "Params-Util-1.01";
     src = fetchurl {
