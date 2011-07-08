@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 let
-  name = "nbd-2.9.22";
+  name = "nbd-2.9.23";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.bz2";
-    sha256 = "f9e1a9db1663393fd1f2de2dd70cf15cc4fa17616853b717db7ca6c539f8787d";
+    sha256 = "0ab44fe9e80c3f41bb1025ecda351a874affd46bf56ba4033ea03700c3b83803";
   };
 
   buildInputs = [pkgconfig glib];
