@@ -1488,8 +1488,8 @@ rec {
   PerlMagick = buildPerlPackage {
     name = "PerlMagick-6.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.59.tar.gz;
-      sha256 = "a87999b322460f7ba964eed81f91f400fba4ba6ff88e3f9e2b216d4d8ecf638d";
+      url = http://image_magick.veidrodis.com:8003/image_magick/perl/PerlMagick-6.59.tar.gz;
+      sha256 = "6d7a33f6431b5650637cf73dd696927dbb2073f28e8f8d11a465d7de4c4638b3";
     };
     buildInputs = [pkgs.imagemagick];
     preConfigure =
