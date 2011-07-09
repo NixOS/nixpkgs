@@ -6321,6 +6321,7 @@ let
       libgnomeprint;
     gconf = gnome.GConf;
     guile = guile_1_8;
+    slibGuile = slibGuile.override { scheme = guile_1_8; };
   };
 
   qcad = callPackage ../applications/misc/qcad { };
