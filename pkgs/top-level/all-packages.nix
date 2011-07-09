@@ -4254,7 +4254,7 @@ let
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
-    scheme = guile;
+    scheme = guile_1_8;
   };
 
   smpeg = callPackage ../development/libraries/smpeg { };
