@@ -6317,8 +6317,8 @@ let
   };
 
   gnucash = callPackage ../applications/office/gnucash {
-    inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml
-      libgnomeprint;
+    inherit (gnome) gtk glib libgnomeui libgtkhtml gtkhtml
+      libbonoboui libgnomeprint;
     gconf = gnome.GConf;
     guile = guile_1_8;
     slibGuile = slibGuile.override { scheme = guile_1_8; };

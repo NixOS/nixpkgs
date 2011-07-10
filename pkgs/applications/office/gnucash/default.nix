@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk
-, libglade, libgnomeui, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant
+, libbonoboui, libgnomeui, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant
 , gettext, intltool, perl, guile, slibGuile, swig, isocodes, bzip2
 , makeWrapper }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     pkgconfig libxml2 gconf glib gtk
-    libglade libgnomeui libgtkhtml gtkhtml libgnomeprint goffice enchant
+    libgnomeui libgtkhtml gtkhtml libgnomeprint goffice enchant
     gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper
   ];
 
@@ -38,6 +38,8 @@ stdenv.mkDerivation {
        --enable-aqbanking        compile with AqBanking support
        --enable-python-bindings  enable python bindings
    */
+
+  NIX_LDFLAGS = "-rpath=${libgnomeui}/lib/libglade/2.0 -rpath=${libbonoboui}/lib/libglade/2.0 -rpath=${guile}/lib";
 
   postInstall = ''
     for prog in "$out/bin/"*
