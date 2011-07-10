@@ -752,8 +752,6 @@ let
     inherit (gtkLibs) pango;
   };
 
-  gravit = callPackage ../applications/science/astronomy/gravit { };
-
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
   };
@@ -7643,6 +7641,9 @@ let
     inherit (gtkLibs) pango;
   };
 
+  gravit = callPackage ../applications/science/astronomy/gravit { };
+
+  stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
   ### SCIENCE/GEOMETRY
 
