@@ -44,7 +44,8 @@ stdenv.mkDerivation {
     do
       wrapProgram "$prog"                                       \
         --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"        \
-        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"
+        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"         \
+        --prefix PATH ":" "${gconf}/bin"
     done
   '';
 
