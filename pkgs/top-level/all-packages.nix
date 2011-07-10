@@ -2373,6 +2373,8 @@ let
 
   lua5 = callPackage ../development/interpreters/lua-5 { };
 
+  lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
+
   maude = callPackage ../development/interpreters/maude { };
 
   octave = callPackage ../development/interpreters/octave {
