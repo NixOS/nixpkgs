@@ -615,6 +615,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
+  hostname = callPackage ../development/libraries/haskell/hostname {};
+
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
@@ -936,6 +938,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (self) extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
+
+  testFramework = callPackage ../development/libraries/haskell/test-framework {};
+
+  testFrameworkHUnit = callPackage ../development/libraries/haskell/test-framework-hunit {};
+
+  testFrameworkQuickCheck = callPackage ../development/libraries/haskell/test-framework-quickcheck {};
+
+  testFrameworkQuickCheck2 = callPackage ../development/libraries/haskell/test-framework-quickcheck2 {};
 
   testpack = callPackage ../development/libraries/haskell/testpack {};
 

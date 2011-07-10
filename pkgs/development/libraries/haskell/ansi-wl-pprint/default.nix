@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self : {
   pname = "ansi-wl-pprint";
-  version = "0.5.0";
-  sha256 = "295e6924409012e3371db1bb5c02475614fcf1ea99e6bff45a5fc84fb13b8284";
+  version = "0.6.3";
+  sha256 = "1cpkfn1ld0sjysksdsxxwwy1b17s4smmzk8y88y9mb81vgwlalkl";
   propagatedBuildInputs = [ansiTerminal];
   meta = {
     description = "The Wadler/Leijen Pretty Printer for colored ANSI terminal output";
