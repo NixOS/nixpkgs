@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, mesa }:
+{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, mesa, lua5_0 }:
 
 let
   name = "gravit-0.4.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "f37f3ac256a4acbf575f709addaae8cb01eda4f85537affa28c45f2df6fddb07";
   };
 
-  buildInputs = [mesa SDL SDL_ttf SDL_image];
+  buildInputs = [mesa SDL SDL_ttf SDL_image lua5_0];
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3";
 
