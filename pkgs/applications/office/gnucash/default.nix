@@ -3,6 +3,9 @@
 , gettext, intltool, perl, guile, slibGuile, swig, isocodes, bzip2
 , makeWrapper }:
 
+# TODO: Fix the gconf issue. The following posting might be the missing clue:
+# <http://osdir.com/ml/linux.distributions.nixos/2007-09/msg00003.html>.
+
 let
   name = "gnucash-2.4.7";
 in
@@ -20,15 +23,7 @@ stdenv.mkDerivation {
     gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper
   ];
 
-  /* The test suite isn't enabled at the moment, so this setting
-     shouldn't be necessary.
-
-  preConfigure = ''
-    # The `.gnucash' directory, used by the test suite.
-    export GNC_DOT_DIR="$PWD/dot-gnucash"
-    echo "\$GNC_DOT_DIR set to \`$GNC_DOT_DIR'"
-  '';
-   */
+  NIX_LDFLAGS = "-rpath=${libgnomeui}/lib/libglade/2.0 -rpath=${libbonoboui}/lib/libglade/2.0 -rpath=${guile}/lib";
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O2 CXXFLAGS=-O2 --disable-dbi";
   /* More flags to figure out:
@@ -38,8 +33,6 @@ stdenv.mkDerivation {
        --enable-aqbanking        compile with AqBanking support
        --enable-python-bindings  enable python bindings
    */
-
-  NIX_LDFLAGS = "-rpath=${libgnomeui}/lib/libglade/2.0 -rpath=${libbonoboui}/lib/libglade/2.0 -rpath=${guile}/lib";
 
   postInstall = ''
     for prog in "$out/bin/"*
@@ -51,13 +44,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  doCheck = false;
-  /* The test suite fails as follows:
-
-       /tmp/nix-build-y1mba6vkkscggnfigji57mwd0zhvnx1w-gnucash-2.4.7.drv-0/gnucash-2.4.7/src/import-export/test/.libs/lt-test-import-parse: error while loading shared libraries: libguile.so.17: cannot open shared object file: No such file or directory
-
-  */
-
+  preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
+  doCheck = true;
   enableParallelBuilding = true;
 
   meta = {
