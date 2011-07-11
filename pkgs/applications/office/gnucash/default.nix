@@ -1,10 +1,29 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk
-, libbonoboui, libgnomeui, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant
-, gettext, intltool, perl, guile, slibGuile, swig, isocodes, bzip2
-, makeWrapper }:
+{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
+, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
+, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
+}:
 
-# TODO: Fix the gconf issue. The following posting might be the missing clue:
-# <http://osdir.com/ml/linux.distributions.nixos/2007-09/msg00003.html>.
+/******************************************************************************
+ *                            Note for NixOS users                            *
+ ******************************************************************************
+ *
+ * GnuCash relies on the GConf daemon to store and retrieve its internal
+ * configuration. That daemon implements a Windows-like, system-wide registry,
+ * which is very hard to support on NixOS because the concept is inherently
+ * impure. To register GnuCash's configuration schemas with GConf, you have to
+ * add ${gnucash}/etc/gconf/gconf.xml.defaults to GConf's search path, i.e. by
+ * adding the line
+ *
+ *   xml:readonly:$(HOME)/.nix-profile/etc/gconf/gconf.xml.defaults/
+ *
+ * to ~/.gconf.path in your user's home directory. Furthermore, the line
+ *
+ *   services.dbus.packages = [ pkgs.gnome.GConf ];
+ *
+ * must be added to /etc/nixos/configuration.nix to make sure the DBus daemon
+ * knows about GConf and starts it automatically whenever a program (such as
+ * GnuCash) needs it.
+ */
 
 let
   name = "gnucash-2.4.7";
@@ -18,19 +37,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig libxml2 gconf glib gtk
-    libgnomeui libgtkhtml gtkhtml libgnomeprint goffice enchant
-    gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper
+    pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
+    libgnomeprint goffice enchant gettext intltool perl guile slibGuile
+    swig isocodes bzip2 makeWrapper libofx
   ];
 
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi";
-  /* More flags to figure out:
-
-       --enable-gtkmm            enable gtkmm gui
-       --enable-ofx              compile with ofx support (needs LibOFX)
-       --enable-aqbanking        compile with AqBanking support
-       --enable-python-bindings  enable python bindings
-   */
+  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
 
   postInstall = ''
     sed -i $out/bin/update-gnucash-gconf                                \
@@ -42,7 +54,7 @@ stdenv.mkDerivation {
         --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"                 \
         --prefix LD_LIBRARY_PATH ":" "${libgnomeui}/lib/libglade/2.0"   \
         --prefix LD_LIBRARY_PATH ":" "${libbonoboui}/lib/libglade/2.0"  \
-	--set GCONF_CONFIG_SOURCE 'xml::~/.gconf'			\
+        --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix PATH ":" "${gconf}/bin"                                \
         --suffix PATH ":" "$out/bin"
     done
