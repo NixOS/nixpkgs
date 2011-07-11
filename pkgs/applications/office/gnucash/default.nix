@@ -23,9 +23,7 @@ stdenv.mkDerivation {
     gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper
   ];
 
-  NIX_LDFLAGS = "-rpath=${libgnomeui}/lib/libglade/2.0 -rpath=${libbonoboui}/lib/libglade/2.0 -rpath=${guile}/lib";
-
-  configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O2 CXXFLAGS=-O2 --disable-dbi";
+  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi";
   /* More flags to figure out:
 
        --enable-gtkmm            enable gtkmm gui
@@ -35,17 +33,26 @@ stdenv.mkDerivation {
    */
 
   postInstall = ''
+    sed -i $out/bin/update-gnucash-gconf                                \
+       -e 's|--config-source=[^ ]* --install-schema-file|--makefile-install-rule|'
     for prog in "$out/bin/"*
     do
-      wrapProgram "$prog"                                       \
-        --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"        \
-        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"         \
-        --prefix PATH ":" "${gconf}/bin"
+      wrapProgram "$prog"                                               \
+        --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"                \
+        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"                 \
+        --prefix LD_LIBRARY_PATH ":" "${libgnomeui}/lib/libglade/2.0"   \
+        --prefix LD_LIBRARY_PATH ":" "${libbonoboui}/lib/libglade/2.0"  \
+	--set GCONF_CONFIG_SOURCE 'xml::~/.gconf'			\
+        --prefix PATH ":" "${gconf}/bin"                                \
+        --suffix PATH ":" "$out/bin"
     done
   '';
 
+  # The following settings fix failures in the test suite. It's not required otherwise.
+  NIX_LDFLAGS = "-rpath=${guile}/lib";
   preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
   doCheck = true;
+
   enableParallelBuilding = true;
 
   meta = {
