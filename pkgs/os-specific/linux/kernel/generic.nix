@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     # Combine the `features' attribute sets of all the kernel patches.
     features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
   };
-  
+
   builder = ./builder.sh;
 
   generateConfig = ./generate-config.pl;
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
   kernelBaseConfig = stdenv.platform.kernelBaseConfig;
   kernelTarget = stdenv.platform.kernelTarget;
   autoModules = stdenv.platform.kernelAutoModules;
-  
+
   # Should we trust platform.kernelArch? We can only do
   # that once we differentiate i686/x86_64 in platforms.
   arch =
@@ -137,5 +137,6 @@ stdenv.mkDerivation {
     license = "GPLv2";
     homepage = http://www.kernel.org/;
     maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.linux;
   } // extraMeta;
 }
