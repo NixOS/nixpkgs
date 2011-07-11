@@ -4123,11 +4123,12 @@ let
   policykit = callPackage ../development/libraries/policykit { };
 
   poppler = callPackage ../development/libraries/poppler {
+    gtkSupport = true;
     qt4Support = false;
   };
 
   popplerQt4 = poppler.override {
-    inherit qt4;
+    gtkSupport = false;
     qt4Support = true;
   };
 
