@@ -3,24 +3,18 @@
 , xz, openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
-, getopt, udev
+, getopt, udev, herqq
 }:
 
 kde.package {
 
   buildInputs =
-    [ acl attr attica automoc4 avahi bzip2 cmake
-      enchant fam getopt giflib jasper libdbusmenu_qt libXScrnSaver libxslt pcre perl perl polkit_qt_1
-      qt4 shared_mime_info strigi udev
-      xz 
+    [ acl attr attica automoc4 avahi bzip2 cmake enchant fam getopt
+      giflib herqq jasper libdbusmenu_qt libXScrnSaver libxslt pcre
+      perl perl polkit_qt_1 qca2 qt4 shared_desktop_ontologies
+      shared_mime_info soprano strigi udev xz 
     ];
     
-  #buildInputs = [
-  #  cmake perl xz flex bison bzip2 pcre fam libxml2 libxslt shared_mime_info
-  #  giflib jasper /*openexr*/ aspell avahi kerberos acl attr libXScrnSaver
-  #  enchant libdbusmenu_qt polkit_qt_1 automoc4 hspell
-  #];
-
   # TODO: make sonnet plugins (dictionaries) really work.
   # There are a few hardcoded paths.
   # Let kdelibs find openexr

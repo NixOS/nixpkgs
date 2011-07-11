@@ -3446,11 +3446,7 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  herqqSvn = callPackage ../development/libraries/herqq/svn.nix { };
-
-  herqq070 = callPackage ../development/libraries/herqq/0.7.0.nix { };
-
-  herqq080 = callPackage ../development/libraries/herqq/0.8.0.nix { };
+  herqq = callPackage ../development/libraries/herqq { };
 
   hspell = callPackage ../development/libraries/hspell { };
 
@@ -4205,6 +4201,8 @@ let
 
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
+  librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };
+
   librdf_rasqal = callPackage ../development/libraries/librdf/rasqal.nix { };
 
   librdf = callPackage ../development/libraries/librdf { };
@@ -4214,6 +4212,7 @@ let
   redland = callPackage ../development/libraries/redland/1.0.10.nix {
     bdb = db4;
     postgresql = null;
+    mysql = null;
   };
 
   rhino = callPackage ../development/libraries/java/rhino {

@@ -8,12 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "a042846e8b7af52d9d66fba788c9d579e58c535cfaf80d33dc0bd69bf6ffeb08";
   };
 
-  buildInputs = [ librdf_raptor gmp /*or mpfr*/ pkgconfig pcre libxml2 ];
+  buildInputs = [ pkgconfig librdf_raptor gmp pcre libxml2 ];
 
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lraptor"
-  '';
-
+  postInstall = "rm -rf $out/share/gtk-doc";
+  
   meta = { 
     description = "Library that handles Resource Description Framework (RDF)";
     homepage = "http://librdf.org/rasqal";

@@ -1,8 +1,7 @@
 { stdenv, fetchurl, qt4, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "herqq-0.8.0";
-
+  name = "herqq-1.0.0";
 
   buildInputs = [ qt4 unzip ];
 
@@ -10,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/hupnp/${name}.zip";
-    sha256 = "0z1z9f48fhdif3wd7gn2gj0yxk15f0lpm01q0igsccv8m1y3mphn";
+    sha256 = "13klwszi7h7mvdz2ap0ac4dp7lc0gswp8lzzlwidhqfmf9pwgkyb";
   };
 
   meta = {
