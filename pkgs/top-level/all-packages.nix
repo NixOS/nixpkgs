@@ -3705,9 +3705,7 @@ let
 
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
-  libspectre = callPackage ../development/libraries/libspectre {
-    ghostscript = ghostscriptX;
-  };
+  libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf {
     inherit (gnome) glib gnomevfs libbonobo;
