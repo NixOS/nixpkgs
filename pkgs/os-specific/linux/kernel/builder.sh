@@ -16,8 +16,8 @@ postPatch() {
 }
 
 configurePhase() {
-    if test -n "$preConfigure"; then 
-        eval "$preConfigure"; 
+    if test -n "$preConfigure"; then
+        eval "$preConfigure";
     fi
 
     export INSTALL_PATH=$out
@@ -45,13 +45,6 @@ configurePhase() {
         perl -w $generateConfig
 }
 
-
-postBuild() {
-    # After the builder did a 'make all' (kernel + modules)
-    # we force building the target asked: bzImage/zImage/uImage/...
-    make $makeFlags $kernelTarget
-    make $makeFlags -C scripts unifdef
-}
 
 installPhase() {
 
@@ -149,8 +142,8 @@ installPhase() {
         fi
     fi
 
-    if test -n "$postInstall"; then 
-        eval "$postInstall"; 
+    if test -n "$postInstall"; then
+        eval "$postInstall";
     fi
 }
 
