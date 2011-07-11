@@ -47,7 +47,11 @@ recurseIntoAttrs rec {
 
   kdebase_runtime = callPackage ./base-runtime { };
 
+  kde_baseapps = callPackage ./baseapps.nix { };
+
 ### OTHER MODULES
+
+  gwenview = callPackage ./gwenview.nix { };
 
   okular = callPackage ./okular.nix { };
 
