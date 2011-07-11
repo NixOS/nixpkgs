@@ -5096,7 +5096,9 @@ let
 
   linux_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools platform;
-    kernelPatches = [];
+    kernelPatches =
+      [ kernelPatches.cifs_timeout_2_6_29
+      ];
   };
 
   linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
