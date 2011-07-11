@@ -4688,6 +4688,8 @@ let
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
+  mediatomb = callPackage ../servers/mediatomb { };
+
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
   mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
