@@ -5656,7 +5656,8 @@ let
     cross = assert crossSystem != null; crossSystem;
   };
 
-  udev = callPackage ../os-specific/linux/udev { };
+  udev166 = callPackage ../os-specific/linux/udev/166.nix { };
+  udev = udev166;
 
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
