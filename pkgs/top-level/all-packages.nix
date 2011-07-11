@@ -5064,6 +5064,17 @@ let
       ];
   };
 
+  linux_2_6_26 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.26.nix) {
+    inherit fetchurl perl mktemp module_init_tools;
+    stdenv = overrideInStdenv stdenv [gnumake381];
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_25
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.glibc_getline
+	kernelPatches.cifs_timeout_2_6_25
+      ];
+  };
+
   linux_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
     inherit fetchurl perl mktemp module_init_tools;
     stdenv = overrideInStdenv stdenv [gnumake381];
