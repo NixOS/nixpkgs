@@ -365,6 +365,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
+  bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
+
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
   };
@@ -616,6 +618,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
   hostname = callPackage ../development/libraries/haskell/hostname {};
+
+  hp2anyCore = callPackage ../development/libraries/haskell/hp2any-core {};
+
+  hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
 
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
