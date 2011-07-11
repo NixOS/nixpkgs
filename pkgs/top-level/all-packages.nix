@@ -5054,6 +5054,7 @@ let
 
   linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
     inherit fetchurl perl mktemp module_init_tools;
+    extraConfig = "KMOD y";
     stdenv = overrideInStdenv stdenv [gnumake381];
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_25
