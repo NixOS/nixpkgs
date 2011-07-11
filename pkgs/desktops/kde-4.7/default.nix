@@ -39,7 +39,7 @@ recurseIntoAttrs rec {
 
   libkipi = callPackage ./libkipi.nix { };
 
-  kipi_plugins = callPackage ./kipi-plugins { };
+  #kipi_plugins = callPackage ./kipi-plugins { };
 
 ### LIBS
   kdelibs = callPackage ./libs { };
@@ -62,6 +62,12 @@ recurseIntoAttrs rec {
   okular = callPackage ./okular.nix { };
 
   konsole = callPackage ./konsole.nix { };
+
+  kcolorchooser = callPackage ./kcolorchooser.nix { };
+
+  kate = callPackage ./kate.nix { };
+
+  ksnapshot = callPackage ./ksnapshot.nix { };
 
   kdeaccessibility = combinePkgs "kdeaccessibility" {
     colorSchemes = callPackage ./accessibility/color-schemes.nix { };
