@@ -5059,6 +5059,7 @@ let
       [ kernelPatches.fbcondecor_2_6_25
         kernelPatches.sec_perm_2_6_24
         kernelPatches.glibc_getline
+	kernelPatches.cifs_timeout_2_6_25
       ];
   };
 
@@ -5068,6 +5069,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_27
         kernelPatches.sec_perm_2_6_24
+	kernelPatches.cifs_timeout_2_6_25
       ];
   };
 
@@ -5079,6 +5081,7 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.ext4_softlockups_2_6_28
         kernelPatches.glibc_getline
+	kernelPatches.cifs_timeout_2_6_25
       ];
   };
 
