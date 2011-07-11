@@ -5052,6 +5052,14 @@ let
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
+  linux_2_6_15 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.15.nix) {
+    inherit fetchurl perl mktemp module_init_tools;
+    stdenv = overrideInStdenv stdenv [gcc34 gnumake381];
+    kernelPatches =
+      [ kernelPatches.cifs_timeout_2_6_15
+      ];
+  };
+
   linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
     inherit fetchurl perl mktemp module_init_tools;
     extraConfig = "KMOD y";
