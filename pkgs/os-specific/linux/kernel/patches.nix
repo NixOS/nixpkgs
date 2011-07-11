@@ -235,6 +235,12 @@ rec {
 
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
+  cifs_timeout_2_6_25 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.25.patch;
+      features.cifsTimeout = true;
+    };
+
   cifs_timeout_2_6_29 =
     { name = "cifs-timeout";
       patch = ./cifs-timeout-2.6.29.patch;
