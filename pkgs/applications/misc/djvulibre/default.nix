@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lib, useQt3 ? false, libjpeg, libtiff, libpng, ghostscript
 , libungif, zlib, x11, libX11, mesa, qt3 }:
 
-stdenv.mkDerivation {
-  name = "djvulibre-3.5.22";
+stdenv.mkDerivation rec {
+  name = "djvulibre-3.5.24";
 
   src = fetchurl {
-    url = mirror://sourceforge/djvu/djvulibre-3.5.22.tar.gz;
-    sha256 = "1gphi67qiq1ky7k8vymkwcgla80cwy8smk1rla6grxdqipwl54ix";
+    url = "mirror://sourceforge/djvu/${name}.tar.gz";
+    sha256 = "0d1592cmc7scg2jzah47mnvbqldhxb1x9vxm7y64a3iasa0lqwy0";
   };
 
   buildInputs = [ libjpeg libtiff libpng ghostscript zlib libungif ] ++
