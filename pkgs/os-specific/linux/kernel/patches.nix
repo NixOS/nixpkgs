@@ -241,6 +241,18 @@ rec {
       features.cifsTimeout = true;
     };
 
+  cifs_timeout_2_6_35 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.35.patch;
+      features.cifsTimeout = true;
+    };
+
+  cifs_timeout_2_6_38 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.38.patch;
+      features.cifsTimeout = true;
+    };
+
   cifs_timeout = cifs_timeout_2_6_32;
 
   no_xsave =

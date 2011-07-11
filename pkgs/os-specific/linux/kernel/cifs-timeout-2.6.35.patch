@@ -1,0 +1,45 @@
+--- /tmp/linux-2.6.32.14/fs/cifs/transport.c	2010-11-22 20:01:26.000000000 +0100
++++ linux-2.6.32.14/fs/cifs/transport.c	2011-03-29 15:31:14.926510480 +0200
+@@ -166,8 +166,8 @@
+ 			   after the retries we will kill the socket and
+ 			   reconnect which may clear the network problem.
+ 			*/
+-			if ((i >= 14) || (!server->noblocksnd && (i > 2))) {
+-				cERROR(1, "sends on sock %p stuck for 15 seconds",
++			if ((i >= 119) || (!server->noblocksnd && (i > 2))) {
++				cERROR(1, "sends on sock %p stuck for 119 seconds",
+ 				    ssocket);
+ 				rc = -EAGAIN;
+ 				break;
+@@ -458,11 +458,11 @@
+ 		goto out;
+ 
+ 	if (long_op == CIFS_STD_OP)
+-		timeout = 15 * HZ;
++		timeout = 120 * HZ;
+ 	else if (long_op == CIFS_VLONG_OP) /* e.g. slow writes past EOF */
+ 		timeout = 180 * HZ;
+ 	else if (long_op == CIFS_LONG_OP)
+-		timeout = 45 * HZ; /* should be greater than
++		timeout = 120 * HZ; /* should be greater than
+ 			servers oplock break timeout (about 43 seconds) */
+ 	else if (long_op == CIFS_ASYNC_OP)
+ 		goto out;
+@@ -650,7 +650,7 @@
+ 		goto out;
+ 
+ 	if (long_op == CIFS_STD_OP)
+-		timeout = 15 * HZ;
++		timeout = 120 * HZ;
+ 	/* wait for 15 seconds or until woken up due to response arriving or
+ 	   due to last connection to this server being unmounted */
+ 	else if (long_op == CIFS_ASYNC_OP)
+@@ -658,7 +658,7 @@
+ 	else if (long_op == CIFS_VLONG_OP) /* writes past EOF can be slow */
+ 		timeout = 180 * HZ;
+ 	else if (long_op == CIFS_LONG_OP)
+-		timeout = 45 * HZ; /* should be greater than
++		timeout = 120 * HZ; /* should be greater than
+ 			servers oplock break timeout (about 43 seconds) */
+ 	else if (long_op == CIFS_BLOCKING_OP)
+ 		timeout = 0x7FFFFFFF; /* large but no so large as to wrap */
