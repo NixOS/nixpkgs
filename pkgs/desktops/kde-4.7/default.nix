@@ -35,6 +35,12 @@ recurseIntoAttrs rec {
 
   soprano = callPackage ./support/soprano { };
 
+  libkexiv2 = callPackage ./libkexiv2.nix { };
+
+  libkipi = callPackage ./libkipi.nix { };
+
+  kipi_plugins = callPackage ./kipi-plugins { };
+
 ### LIBS
   kdelibs = callPackage ./libs { };
 
