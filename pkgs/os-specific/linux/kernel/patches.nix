@@ -38,7 +38,7 @@ let
 
 in
 
-{
+rec {
 
   sec_perm_2_6_24 =
     { name = "sec_perm-2.6.24";
@@ -55,7 +55,7 @@ in
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
     };
-      
+
   fbcondecor_2_6_27 =
     { name = "fbcondecor-0.9.4-2.6.27";
       patch = fetchurl {
@@ -75,7 +75,7 @@ in
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
     };
-    
+
   fbcondecor_2_6_29 =
     { name = "fbcondecor-0.9.6-2.6.29.2";
       patch = fetchurl {
@@ -85,7 +85,7 @@ in
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
     };
-    
+
   fbcondecor_2_6_31 =
     { name = "fbcondecor-0.9.6-2.6.31.2";
       patch = fetchurl {
@@ -148,7 +148,7 @@ in
       };
     };
 
-  gcov_2_6_28 = 
+  gcov_2_6_28 =
     { name = "gcov";
       patch = fetchurl {
         url = http://buildfarm.st.ewi.tudelft.nl/~eelco/dist/linux-2.6.28-gcov.patch;
@@ -235,11 +235,13 @@ in
 
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
-  cifs_timeout =
+  cifs_timeout_2_6_32 =
     { name = "cifs-timeout";
-      patch = ./cifs-timeout.patch;
+      patch = ./cifs-timeout-2.6.32.patch;
       features.cifsTimeout = true;
     };
+
+  cifs_timeout = cifs_timeout_2_6_32;
 
   no_xsave =
     { name = "no-xsave";
