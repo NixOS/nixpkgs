@@ -55,6 +55,8 @@ recurseIntoAttrs rec {
 
   kde_baseapps = callPackage ./baseapps.nix { };
 
+  kde_workspace = callPackage ./workspace.nix { };
+
 ### OTHER MODULES
 
   gwenview = callPackage ./gwenview.nix { };

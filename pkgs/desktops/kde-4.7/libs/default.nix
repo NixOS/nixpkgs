@@ -23,7 +23,7 @@ kde.package {
   #propagatedBuildInputs = [ qt4 gcc.libc strigi soprano attica qca2
   #  shared_desktop_ontologies ];
 
-  #patches = [ ./polkit-install.patch ];
+  patches = [ ./polkit-install.patch ];
 
   # cmake fails to find acl.h because of C++-style comment
   # TODO: OpenEXR
