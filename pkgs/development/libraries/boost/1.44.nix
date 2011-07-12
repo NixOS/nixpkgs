@@ -33,7 +33,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "boost-1.47.0";
+  name = "boost-1.44.0";
 
   meta = {
     homepage = "http://boost.org/";
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_47_0.tar.bz2";
-    sha256 = "815a5d9faac4dbd523fbcf3fe1065e443c0bbf43427c44aa423422c6ec4c2e31";
+    url = "mirror://sourceforge/boost/boost_1_44_0.tar.bz2";
+    sha256 = "1nvq36mvzr1fr85q0jh86rk3bk65s1y55jgqgzfg3lcpkl12ihs5";
   };
 
   enableParallelBuilding = true;
@@ -55,10 +55,20 @@ stdenv.mkDerivation {
   configureScript = "./bootstrap.sh";
   configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python";
 
-  buildPhase = "./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
+  buildPhase = "./bjam -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
 
   installPhase = ":";
 
+  patches = [
+    # Patch to get rid of following error, experienced by some packages like encfs, bitcoin:
+    #    terminate called after throwing an instance of 'std::runtime_error'
+    #    what():  locale::facet::_S_create_c_locale name not valid
+    (fetchurl { 
+       url = https://svn.boost.org/trac/boost/raw-attachment/ticket/4688/boost_filesystem.patch ;
+       sha256 = "15k91ihzs6190pnryh4cl0b3c2pjpl9d790mr14x16zq52y7px2d"; 
+     })
+  ];
+  
   crossAttrs = rec {
     buildInputs = [ expat.hostDrv zlib.hostDrv bzip2.hostDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
@@ -74,7 +84,7 @@ stdenv.mkDerivation {
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
       EOF
-      ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.hostDrv}/include -sEXPAT_LIBPATH=${expat.hostDrv}/lib --layout=${finalLayout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
+      ./bjam -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.hostDrv}/include -sEXPAT_LIBPATH=${expat.hostDrv}/lib --layout=${finalLayout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
     '';
   };
 }
