@@ -19,9 +19,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.openssh = {
 
       enable = mkOption {
@@ -99,7 +99,7 @@ in
         default = "";
         description = "Verbatim contents of <filename>sshd_config</filename>.";
       };
-      
+
     };
 
   };
@@ -144,7 +144,7 @@ in
 
         daemonType = "fork";
 
-        exec = 
+        exec =
           ''
             ${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key \
               -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
