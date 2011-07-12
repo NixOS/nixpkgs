@@ -69,6 +69,8 @@ recurseIntoAttrs rec {
 
   ksnapshot = callPackage ./ksnapshot.nix { };
 
+  kamera = callPackage ./kamera.nix { };
+
   kdeaccessibility = combinePkgs "kdeaccessibility" {
     colorSchemes = callPackage ./accessibility/color-schemes.nix { };
     iconThemes = callPackage ./accessibility/icon-themes.nix { };
