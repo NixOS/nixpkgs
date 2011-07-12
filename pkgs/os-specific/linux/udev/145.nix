@@ -1,4 +1,6 @@
-{stdenv, fetchurl, gperf, pkgconfig, glib, acl, libusb, usbutils, pciutils}:
+{ stdenv, fetchurl, gperf, pkgconfig, glib, acl, libusb, usbutils, pciutils }:
+
+assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
   name = "udev-145";
