@@ -76,7 +76,25 @@ in
           Specifies on which ports the SSH daemon listens.
         '';
       };
-      
+
+      usePAM = mkOption {
+        default = true;
+        description = ''
+          Specifies whether the OpenSSH daemon uses PAM to authenticate
+          login attempts.
+        '';
+      };
+
+      passwordAuthentication = mkOption {
+        default = true;
+        description = ''
+          Specifies whether password authentication is allowed. Note
+          that setting this value to <literal>false</literal> is most
+          probably not going to have the desired effect unless
+          <literal>usePAM</literal> is disabled as well.
+        '';
+      };
+
       extraConfig = mkOption {
         default = "";
         description = "Verbatim contents of <filename>sshd_config</filename>.";
@@ -139,7 +157,7 @@ in
       ''
         Protocol 2
 
-        UsePAM yes
+        UsePAM ${if cfg.usePAM then "yes" else "no"}
 
         ${concatMapStrings (port: ''
           Port ${toString port}
@@ -158,6 +176,7 @@ in
 
         PermitRootLogin ${cfg.permitRootLogin}
         GatewayPorts ${cfg.gatewayPorts}
+        PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
       '';
 
   };
