@@ -14,6 +14,7 @@ with pkgs.lib;
     environment.shellInit =
       ''
         export CURL_CA_BUNDLE=/etc/ca-bundle.crt
+        export GIT_SSL_CAINFO=/etc/ca-bundle.crt
       '';
       
   };
