@@ -29,11 +29,11 @@ rec {
   }));
 
   # The full-featured Git.
-  gitFull = lowPrio (appendToName "full" (git.override {
+  gitFull = appendToName "full" (git.override {
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = stdenv.isDarwin == false;
-  }));
+  });
 
   gitGit = import ./git/git-git.nix {
     inherit fetchurl sourceFromHead stdenv curl openssl zlib expat perl gettext
