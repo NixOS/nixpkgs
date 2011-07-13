@@ -5699,10 +5699,10 @@ let
 
   utillinuxCurses = utillinuxngCurses;
 
-  utillinuxng = callPackage ../os-specific/linux/util-linux-ng {
+  utillinuxng = lowPrio (callPackage ../os-specific/linux/util-linux-ng {
     ncurses = null;
     perl = null;
-  };
+  });
 
   utillinuxngCurses = utillinuxng.override {
     inherit ncurses perl;
