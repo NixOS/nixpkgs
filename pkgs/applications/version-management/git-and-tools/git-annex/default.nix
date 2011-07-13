@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String
-, QuickCheck2, pcreLight, SHA, dataenc, HTTP, testpack, git, ikiwiki }:
+, QuickCheck2, pcreLight, SHA, dataenc, HTTP, testpack, git, ikiwiki, which }:
 
 let
   version = "3.20110705";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight
-    SHA dataenc HTTP testpack git ikiwiki];
+    SHA dataenc HTTP testpack git ikiwiki which];
 
   checkTarget = "test";
   doCheck = true;
