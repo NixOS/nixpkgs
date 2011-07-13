@@ -44,9 +44,9 @@ stdenv.mkDerivation {
   postInstall = ''
     for a in "$out/bin/"*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin \
-      ${lib.optionalString (git != null)
+      ${lib.optionalString gitSupport
         ''--prefix PATH : ${git}/bin \''}
-      ${lib.optionalString (monotone != null)
+      ${lib.optionalString monotoneSupport
         ''--prefix PATH : ${monotone}/bin \''}
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
     done
