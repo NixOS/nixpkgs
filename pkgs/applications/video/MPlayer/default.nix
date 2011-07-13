@@ -61,11 +61,13 @@ let
       license = "unfree";
     };
   } else null;
+  
   ffmpegGit = fetchgit {
     url = "git://git.videolan.org/ffmpeg.git";
     rev = "80d156d";
     sha256 = "6d0124621491b8adc5f1bfb426ab137efc72dab99a89835aa3c30b970cb14004";
   };
+  
   mplayerRev = "33472";
 
 in
