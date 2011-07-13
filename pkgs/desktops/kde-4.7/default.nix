@@ -2,7 +2,7 @@
 
 let
 
-  release = "4.6.90";
+  release = "4.6.95";
 
   # Various packages (e.g. kdesdk) have been split up into many
   # smaller packages.  Some people may want to install the entire
