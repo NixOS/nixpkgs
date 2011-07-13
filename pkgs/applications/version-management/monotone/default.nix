@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A free distributed version control system";
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
