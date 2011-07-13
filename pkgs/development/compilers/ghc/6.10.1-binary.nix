@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, libedit, ncurses, gmp}:
 
-assert stdenv.system == "x86_64-darwin" || stdenv.system == "i686-darwin" || stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+assert stdenv.system == "i686-darwin" || stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
   version = "6.10.1";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "14jvvn333i36wm7mmvi47jr93f5hxrw1h2dpjvqql0rp00svhzzg";
       }
-    else if (stdenv.system == "i686-darwin" || stdenv.system == "x86_64-darwin") then
+    else if stdenv.system == "i686-darwin" then
       fetchurl {
         # Idem.
         url = "http://haskell.org/ghc/dist/${version}/maeder/ghc-${version}-i386-apple-darwin.tar.bz2";
@@ -100,10 +100,5 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
-  meta = {
-    homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-  };
+  meta.platforms = [ "i686-darwin" "x86_64-linux" "i686-linux"] ;
 }
