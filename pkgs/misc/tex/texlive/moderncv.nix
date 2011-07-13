@@ -16,7 +16,7 @@ rec {
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   meta = {
-    description = "Extra components for TeXLive";
+    description = "the moderncv class for TeXLive";
     maintainers = [ args.lib.maintainers.simons ];
 
     # Actually, arch-independent..
