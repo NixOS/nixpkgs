@@ -846,7 +846,9 @@ let
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
-  jfsrec = callPackage ../tools/filesystems/jfsrec { };
+  jfsrec = callPackage ../tools/filesystems/jfsrec {
+    boost = boost144;
+  };
 
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
