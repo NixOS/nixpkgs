@@ -15,7 +15,7 @@
   ./hardware/network/intel-2100bg.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/network/intel-3945abg.nix
-  ./hardware/network/rt73.nix 
+  ./hardware/network/rt73.nix
   ./hardware/pcmcia.nix
   ./installer/generations-dir/generations-dir.nix
   ./installer/grub/grub.nix
@@ -83,6 +83,7 @@
   ./services/misc/virtualbox.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
+  ./services/monitoring/smartd.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
