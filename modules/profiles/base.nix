@@ -25,7 +25,7 @@
       "pata_winbond"
 
       # SCSI support (incomplete).
-      "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" 
+      "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr"
 
       # USB support, especially for booting from USB CD-ROM
       # drives.
