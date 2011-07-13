@@ -3,26 +3,9 @@
 , intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
 }:
 
-/******************************************************************************
- *                            Note for NixOS users                            *
- ******************************************************************************
- *
- * GnuCash relies on the GConf daemon to store and retrieve its internal
- * configuration. That daemon implements a Windows-like, system-wide registry,
- * which is very hard to support on NixOS because the concept is inherently
- * impure. To register GnuCash's configuration schemas with GConf, you have to
- * add ${gnucash}/etc/gconf/gconf.xml.defaults to GConf's search path, i.e. by
- * adding the line
- *
- *   xml:readonly:$(HOME)/.nix-profile/etc/gconf/gconf.xml.defaults/
- *
- * to ~/.gconf.path in your user's home directory. Furthermore, the line
- *
- *   services.dbus.packages = [ pkgs.gnome.GConf ];
- *
- * must be added to /etc/nixos/configuration.nix to make sure the DBus daemon
- * knows about GConf and starts it automatically whenever a program (such as
- * GnuCash) needs it.
+/* If you experience GConf errors when running GnuCash on NixOS, see
+ * http://wiki.nixos.org/wiki/Solve_GConf_errors_when_running_GNOME_applications
+ * for a possible solution.
  */
 
 let
