@@ -8113,6 +8113,10 @@ let
     inherit texLiveLatexXColor texLivePGF texLive;
   };
 
+  texLiveModerncv = builderDefsPackage (import ../misc/tex/texlive/moderncv.nix) {
+    inherit texLive;
+  };
+
   trac = callPackage ../misc/trac {
     inherit (pythonPackages) pysqlite;
   };
