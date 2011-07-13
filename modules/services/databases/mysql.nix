@@ -14,6 +14,20 @@ let
     "--user=${cfg.user} --datadir=${cfg.dataDir} " +
     "--log-error=${cfg.logError} --pid-file=${pidFile}";
 
+  myCnf = pkgs.writeText "my.cnf"
+  ''
+    [mysqld]
+    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
+    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
+    ${optionalString (cfg.replication.role == "slave")
+    ''
+      master-host = ${cfg.replication.masterHost}
+      master-user = ${cfg.replication.masterUser}
+      master-password = ${cfg.replication.masterPassword}
+      master-port = ${toString cfg.replication.masterPort}
+    ''}
+  '';
+
 in
 
 {
@@ -81,6 +95,35 @@ in
         default = null;
 	description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";	
       };
+      
+      replication = {
+        role = mkOption {
+	  default = "none";
+	  description = "Role of the MySQL server instance. Can be either: master, slave or none";
+	};
+	
+        serverId = mkOption {
+	  default = 1;
+	  description = "Id of the MySQL server instance. This number must be unique for each instance";
+	};
+	
+	masterHost = mkOption {
+	  description = "Hostname of the MySQL master server";
+	};
+	
+	masterUser = mkOption {
+	  description = "Username of the MySQL replication user";
+	};
+	
+	masterPassword = mkOption {
+	  description = "Password of the MySQL replication user";
+	};
+	
+	masterPort = mkOption {
+	  default = 3306;
+	  description = "Port number on which the MySQL master server runs";
+	};
+      };
     };
     
   };
@@ -115,7 +158,7 @@ in
             chown -R ${cfg.user} ${cfg.pidDir}
           '';
 
-        exec = "${mysql}/libexec/mysqld ${mysqldOptions}";
+        exec = "${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
 	
 	postStart =
 	  ''
