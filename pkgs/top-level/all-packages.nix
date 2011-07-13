@@ -354,6 +354,8 @@ let
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
+  archivemount = callPackage ../tools/filesystems/archivemount { };
+
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
       mesa ncurses readline gsl libsigsegv python zlib perl
