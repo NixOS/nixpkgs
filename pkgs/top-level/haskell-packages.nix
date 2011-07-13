@@ -468,6 +468,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
 
+  funcmp = callPackage ../development/libraries/haskell/funcmp {};
+
   feed = callPackage ../development/libraries/haskell/feed {};
 
   filestore = callPackage ../development/libraries/haskell/filestore {};
