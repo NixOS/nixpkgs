@@ -60,6 +60,7 @@
     pkgs.cryptsetup # needed for dm-crypt volumes
 
     # Some networking tools.
+    pkgs.fuse
     pkgs.sshfsFuse
     pkgs.socat
     pkgs.screen
