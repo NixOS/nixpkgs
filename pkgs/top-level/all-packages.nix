@@ -8114,7 +8114,7 @@ let
   };
 
   texLiveModerncv = builderDefsPackage (import ../misc/tex/texlive/moderncv.nix) {
-    inherit texLive;
+    inherit texLive unzip;
   };
 
   trac = callPackage ../misc/trac {

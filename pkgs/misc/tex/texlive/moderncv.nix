@@ -9,10 +9,11 @@ rec {
   buildInputs = [texLive unzip];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    ensureDir $out/share
-    cp -r texmf* $out/
-    ln -s $out/texmf* $out/share
-  '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
+    ensureDir $out/texmf/tex/latex/moderncv $out/texmf/doc $out/share
+    mv *.cls *.sty $out/texmf/tex/latex/moderncv/
+    mv examples $out/texmf/doc/moderncv
+    ln -s $out/texmf* $out/share/
+  '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   meta = {
     description = "Extra components for TeXLive";
