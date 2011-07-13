@@ -4,9 +4,15 @@ with pkgs.lib;
 
 let
 
-  syslogConf = pkgs.writeText "syslog.conf" ''
-    kern.warning;*.err;authpriv.none /dev/${config.services.syslogd.tty}
+  cfg = config.services.syslogd;
 
+  syslogConf = pkgs.writeText "syslog.conf" ''
+    ${if (cfg.tty != "") then "kern.warning;*.err;authpriv.none /dev/${cfg.tty}" else ""}
+    ${cfg.defaultConfig}
+    ${cfg.extraConfig}
+  '';
+
+  defaultConf = ''
     # Send emergency messages to all users.
     *.emerg                       *
 
@@ -19,44 +25,54 @@ let
     *.crit                        /var/log/warn
 
     *.*;mail.none;local1.none    -/var/log/messages
-
-    ${config.services.syslogd.extraConfig}
   '';
-
 in
 
 {
   ###### interface
 
   options = {
-  
+
     services.syslogd = {
 
       tty = mkOption {
+        type = types.string;
         default = "tty10";
         description = ''
           The tty device on which syslogd will print important log
-          messages.
+          messages. Leave this option blank to disable tty logging.
+        '';
+      };
+
+      defaultConfig = mkOption {
+        type = types.string;
+        default = defaultConf;
+        description = ''
+          The default <filename>syslog.conf</filename> file configures a
+          fairly standard setup of log files, which can be extended by
+          means of <varname>extraConfig</varname>.
         '';
       };
 
       extraConfig = mkOption {
+        type = types.string;
         default = "";
         example = "news.* -/var/log/news";
         description = ''
-          Additional text appended to <filename>syslog.conf</filename>.
+          Additional text appended to <filename>syslog.conf</filename>,
+          i.e. the contents of <varname>defaultConfig</varname>.
         '';
       };
-      
+
     };
-    
+
   };
 
 
   ###### implementation
 
   config = {
-  
+
     jobs.syslogd =
       { description = "Syslog daemon";
 
@@ -70,5 +86,5 @@ in
       };
 
   };
-  
+
 }
