@@ -2452,7 +2452,7 @@ let
   };
 
   pythonFull = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = lib.attrValues python.modules;
+    extraLibs = lib.attrValues python.modules ++ [libxml2Python];
   };
 
   pyrex = pyrex095;
