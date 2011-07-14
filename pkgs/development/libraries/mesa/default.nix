@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, file, expat, pythonFull, lipo ? null, talloc }:
+{ stdenv, fetchurl, flex, bison, pkgconfig, x11, xlibs, libdrm, file, expat
+, pythonFull, lipo ? null, talloc }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "7.10.2"; in
+let version = "7.10.3"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "1hf7f6n5ms674v3bv5c9mrcg30kbraijxacl8s031kqirrw2dvcc";
+    sha256 = "1h451vgsfsp0h0wig66spqgxmjalsy28gvd9viynfwmq7741yw0y";
   };
 
   patches = [ ./swrast-settexbuffer.patch ];
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.makedepend xlibs.glproto
       xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
-      lipo talloc file pythonFull
+      lipo talloc file pythonFull flex bison
     ];
 
   enableParallelBuilding = true;
