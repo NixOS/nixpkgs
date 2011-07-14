@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       view in 3D and zoom in and out.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

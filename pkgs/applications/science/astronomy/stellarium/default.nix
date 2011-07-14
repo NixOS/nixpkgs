@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     description = "an free open source planetarium";
     homepage = http://stellarium.org/;
     license = "GPL2";
+
+    platforms = stdenv.lib.platforms.mesaPlatforms;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
