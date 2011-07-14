@@ -22,10 +22,10 @@ stdenv.mkDerivation {
   '';
 
   configureFlags =
-    "--enable-gallium --enable-gl-osmesa --with-dri-drivers=swrast,radeon,r600 "
-    + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
-      " --with-dri-drivers=swrast --with-driver=dri"
-    + stdenv.lib.optionalString stdenv.isDarwin " --disable-egl";
+      " --with-driver=dri --enable-gl-osmesa --enable-gles1"
+    + " --enable-gallium --enable-gallium-r600 --enable-gles2"
+    + " --enable-gallium-swrast --enable-gallium-egl --enable-glx-tls"
+    + " --enable-xcb --enable-egl --disable-glut";
 
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.makedepend xlibs.glproto
