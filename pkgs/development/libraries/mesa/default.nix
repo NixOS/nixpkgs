@@ -1,5 +1,5 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, x11, xlibs, libdrm, file, expat
-, pythonFull, lipo ? null, talloc }:
+, python, libxml2Python, lipo ? null }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   patches = [ ./swrast-settexbuffer.patch ];
 
   postPatch = ''
-    find . -name "*.py" -exec sed -i -e "s|#! */usr/bin/env python|#! ${pythonFull}/bin/python|" {} +
+    find . -name "*.py" -exec sed -i -e "s|#! */usr/bin/env python|#! ${python}/bin/python|" {} +
   '';
 
   configureFlags =
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.makedepend xlibs.glproto
       xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
-      lipo talloc file pythonFull flex bison
+      lipo file python libxml2Python flex bison
     ];
 
   enableParallelBuilding = true;
