@@ -29,6 +29,7 @@ recurseIntoAttrs rec {
   kde = callPackage ./kde-package { inherit release; stable = false; };
 
 ### SUPPORT
+
   akonadi = callPackage ./support/akonadi { };
 
   oxygen_icons = callPackage ./support/oxygen-icons { };
@@ -42,16 +43,12 @@ recurseIntoAttrs rec {
   #kipi_plugins = callPackage ./kipi-plugins { };
 
 ### LIBS
+
   kdelibs = callPackage ./libs { };
 
   kdepimlibs = callPackage ./pimlibs { };
 
 ### BASE
-  kdebase = callPackage ./base { };
-
-  kdebase_workspace = callPackage ./base-workspace { };
-
-  kdebase_runtime = callPackage ./base-runtime { };
 
   kde_baseapps = callPackage ./baseapps.nix { };
 
