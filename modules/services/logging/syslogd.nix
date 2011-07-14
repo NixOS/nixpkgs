@@ -36,7 +36,7 @@ in
     services.syslogd = {
 
       tty = mkOption {
-        type = types.string;
+        type = types.uniq types.string;
         default = "tty10";
         description = ''
           The tty device on which syslogd will print important log
