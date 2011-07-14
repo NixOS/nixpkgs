@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   configureFlags =
       " --with-driver=dri --enable-gl-osmesa --enable-gles1"
     + " --enable-gallium --enable-gallium-r600 --enable-gles2"
-    + " --enable-gallium-swrast --enable-gallium-egl --enable-glx-tls"
+    + " --enable-gallium-swrast --enable-gallium-egl --disable-glx-tls"
     + " --enable-xcb --enable-egl --disable-glut";
 
   buildInputs =
