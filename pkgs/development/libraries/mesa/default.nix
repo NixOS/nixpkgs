@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, expat, lipo ? null, talloc }:
+{ stdenv, fetchurl, pkgconfig, x11, xlibs, libdrm, file, expat, pythonFull, lipo ? null, talloc }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "7.10.1"; in
+let version = "7.10.2"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    md5 = "efe8da4d80c2a5d32a800770b8ce5dfa";
+    sha256 = "1hf7f6n5ms674v3bv5c9mrcg30kbraijxacl8s031kqirrw2dvcc";
   };
 
   patches = [ ./swrast-settexbuffer.patch ];
 
+  postPatch = ''
+    find . -name "*.py" -exec sed -i -e "s|#! */usr/bin/env python|#! ${pythonFull}/bin/python|" {} +
+  '';
+
   configureFlags =
-    "--disable-gallium"
+    "--enable-gallium --enable-gl-osmesa --with-dri-drivers=swrast,radeon,r600 "
     + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
       " --with-dri-drivers=swrast --with-driver=dri"
     + stdenv.lib.optionalString stdenv.isDarwin " --disable-egl";
@@ -25,7 +29,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ pkgconfig expat x11 libdrm xlibs.makedepend xlibs.glproto
       xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
-      lipo talloc 
+      lipo talloc file pythonFull
     ];
 
   enableParallelBuilding = true;
