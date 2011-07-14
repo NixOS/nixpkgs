@@ -172,6 +172,8 @@ let
         kde4 = t.kde4.test;
         login = t.login.test;
         mpich = t.mpich.test;
+	mysql = t.mysql.test;
+	mysql_replication = t.mysql_replication.test;
         nat = t.nat.test;
         nfs = t.nfs.test;
         openssh = t.openssh.test;
