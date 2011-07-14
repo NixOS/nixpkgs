@@ -27,7 +27,7 @@ in
         services.mysql.enable = true;
 	services.mysql.replication.role = "slave";
 	services.mysql.replication.serverId = 2;
-	services.mysql.replication.masterHost = "${nodes.master.config.networking.hostName}";
+	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
 	services.mysql.replication.masterUser = replicateUser;
 	services.mysql.replication.masterPassword = replicatePassword;	
       };
@@ -39,7 +39,7 @@ in
         services.mysql.enable = true;
 	services.mysql.replication.role = "slave";
 	services.mysql.replication.serverId = 3;
-	services.mysql.replication.masterHost = "${nodes.master.config.networking.hostName}";
+	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
 	services.mysql.replication.masterUser = replicateUser;
 	services.mysql.replication.masterPassword = replicatePassword;
       };
