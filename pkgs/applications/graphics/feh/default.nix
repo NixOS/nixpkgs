@@ -2,11 +2,11 @@
 , libXinerama, curl }:
 
 stdenv.mkDerivation {
-  name = "feh-1.14.1";
+  name = "feh-1.14.2";
 
   src = fetchurl {
-    url = http://feh.finalrewind.org/feh-1.14.1.tar.bz2;
-    sha256 = "1dask2pm7y2yjvxlwiyi0v4145alixp5lk8v68dcs0qxz8v1pqk1";
+    url = http://feh.finalrewind.org/feh-1.14.2.tar.bz2;
+    sha256 = "117g1caihil88a3q0qy9gqj521l3illlsk56cgxhpc2am6ch5nwr";
   };
 
   buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama curl];
