@@ -54,6 +54,9 @@ recurseIntoAttrs rec {
 
   kde_workspace = callPackage ./workspace.nix { };
 
+  # Backwards compatibility.
+  kdebase_workspace = kde_workspace;
+
 ### OTHER MODULES
 
   gwenview = callPackage ./gwenview.nix { };
