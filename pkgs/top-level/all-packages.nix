@@ -3554,6 +3554,8 @@ let
 
   libassuan = callPackage ../development/libraries/libassuan { };
 
+  libav = callPackage ../development/libraries/libav { };
+
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
