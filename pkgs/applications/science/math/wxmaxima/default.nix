@@ -1,8 +1,4 @@
-{ stdenv, fetchurl, maxima, wxGTK }:
-
-# TODO: Build the correct ${maxima}/bin/maxima store path into wxMaxima so that
-#       it can run that binary without relying on $PATH, /etc/wxMaxima.conf, or
-#       ~/.wxMaxima.
+{ stdenv, fetchurl, maxima, wxGTK, makeWrapper }:
 
 let
   name    = "wxmaxima";
@@ -16,7 +12,18 @@ stdenv.mkDerivation {
     sha256 = "1dfwh5ka125wr6wxzyiwz16lk8kaf09rb6lldzryjwh8zi7yw8dm";
   };
 
-  buildInputs = [maxima wxGTK];
+  buildInputs = [wxGTK maxima makeWrapper];
+
+  postInstall = ''
+    # Make sure that wxmaxima can find its runtime dependencies.
+    for prog in "$out/bin/"*; do
+      wrapProgram "$prog" --prefix PATH ":" "${maxima}/bin"
+    done
+  '';
+
+  doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Cross platform GUI for the computer algebra system Maxima.";

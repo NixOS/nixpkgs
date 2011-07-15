@@ -1,17 +1,22 @@
-{ stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String, QuickCheck2, pcreLight, SHA, dataenc }:
+{ stdenv, fetchurl, ghc, libuuid, rsync, findutils, curl, perl, MissingH, utf8String
+, QuickCheck2, pcreLight, SHA, dataenc, HTTP, testpack, git, ikiwiki, which }:
 
 let
-  version = "0.20110427";
+  version = "3.20110707";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/g/git-annex/git-annex_${version}.tar.gz";
-    sha256 = "1vbmkvf9hlnfcaqsyi1ay2rr835j49bxqyfdi3v3373pdfd6195z";
+    sha256 = "0yyrp94przjmdljd97q5p0yll9aa1jdajrvlhl4m1yq0ngx6x4rr";
   };
 
-  buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight SHA dataenc];
+  buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight
+    SHA dataenc HTTP testpack git ikiwiki which];
+
+  checkTarget = "test";
+  doCheck = true;
 
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
@@ -19,7 +24,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Manage files with git, without checking the file contents into git";
+    homepage = "http://git-annex.branchable.com/";
+    description = "Manage files with git without checking them into git";
+    license = "GPLv3+";
 
     longDescription = ''
       Git-annex allows managing files with git, without checking the
@@ -38,9 +45,7 @@ stdenv.mkDerivation {
       control.
     '';
 
-    license = "GPLv3+";
-    homepage = "http://git-annex.branchable.com/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.haskellPlatforms;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

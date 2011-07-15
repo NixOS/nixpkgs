@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       more scalable.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

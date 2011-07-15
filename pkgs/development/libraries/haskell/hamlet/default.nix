@@ -1,11 +1,11 @@
-{cabal, blazeBuilder, blazeHtml, failure, parsec, text, jsonEnumerator, jsonTypes}:
+{cabal, blazeBuilder, blazeHtml, failure, parsec, text}:
 
 cabal.mkDerivation (self : {
   pname = "hamlet";
-  version = "0.7.3";
-  sha256 = "1knapi8506kqm6pbl1qdr3vm579z2dn6q3h3ahzwbxqjafy7pnj9";
+  version = "0.8.2.1";
+  sha256 = "0798ic6qap4npw2rx42xcgmi1fcbwqvyic5x6vyyf6abvxv16925";
   propagatedBuildInputs =
-    [blazeBuilder blazeHtml failure parsec text jsonEnumerator jsonTypes];
+    [blazeBuilder blazeHtml failure parsec text];
   meta = {
     description = "Haml-like template files that are compile-time checked";
     license = "BSD";

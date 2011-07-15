@@ -354,6 +354,8 @@ let
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
+  archivemount = callPackage ../tools/filesystems/archivemount { };
+
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
       mesa ncurses readline gsl libsigsegv python zlib perl
@@ -402,6 +404,8 @@ let
   axel = callPackage ../tools/networking/axel { };
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
+
+  banner = callPackage ../games/banner {};
 
   barcode = callPackage ../tools/graphics/barcode {};
 
@@ -844,7 +848,9 @@ let
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
-  jfsrec = callPackage ../tools/filesystems/jfsrec { };
+  jfsrec = callPackage ../tools/filesystems/jfsrec {
+    boost = boost144;
+  };
 
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
@@ -873,7 +879,7 @@ let
   most = callPackage ../tools/misc/most { };
 
   ninka = callPackage ../development/tools/misc/ninka { };
-  
+
   nodejs = callPackage ../development/web/nodejs {};
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -1025,7 +1031,7 @@ let
   nylon = callPackage ../tools/networking/nylon { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
-  
+
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
@@ -2369,6 +2375,8 @@ let
 
   lua5 = callPackage ../development/interpreters/lua-5 { };
 
+  lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
+
   maude = callPackage ../development/interpreters/maude { };
 
   octave = callPackage ../development/interpreters/octave {
@@ -2925,6 +2933,7 @@ let
   boost = callPackage ../development/libraries/boost { };
 
   boost142 = callPackage ../development/libraries/boost/1.42.nix { };
+  boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
@@ -4257,7 +4266,7 @@ let
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
-    scheme = guile;
+    scheme = guile_1_8;
   };
 
   smpeg = callPackage ../development/libraries/smpeg { };
@@ -4370,7 +4379,7 @@ let
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
     };
-  
+
   webkitSVN =
     builderDefsPackage ../development/libraries/webkit/svn.nix {
       inherit (gnome28) gtkdoc libsoup;
@@ -4384,7 +4393,7 @@ let
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
     };
-    
+
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
@@ -4690,6 +4699,8 @@ let
   joseki = callPackage ../servers/http/joseki {};
 
   lighttpd = callPackage ../servers/http/lighttpd { };
+
+  mediatomb = callPackage ../servers/mediatomb { };
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
@@ -5053,13 +5064,34 @@ let
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
+  linux_2_6_15 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.15.nix) {
+    inherit fetchurl perl mktemp module_init_tools;
+    stdenv = overrideInStdenv stdenv [gcc34 gnumake381];
+    kernelPatches =
+      [ kernelPatches.cifs_timeout_2_6_15
+      ];
+  };
+
   linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
+    inherit fetchurl perl mktemp module_init_tools;
+    extraConfig = "KMOD y";
+    stdenv = overrideInStdenv stdenv [gnumake381];
+    kernelPatches =
+      [ kernelPatches.fbcondecor_2_6_25
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.glibc_getline
+	kernelPatches.cifs_timeout_2_6_25
+      ];
+  };
+
+  linux_2_6_26 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.26.nix) {
     inherit fetchurl perl mktemp module_init_tools;
     stdenv = overrideInStdenv stdenv [gnumake381];
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_25
         kernelPatches.sec_perm_2_6_24
         kernelPatches.glibc_getline
+	kernelPatches.cifs_timeout_2_6_25
       ];
   };
 
@@ -5069,6 +5101,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_27
         kernelPatches.sec_perm_2_6_24
+	kernelPatches.cifs_timeout_2_6_25
       ];
   };
 
@@ -5080,6 +5113,7 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.ext4_softlockups_2_6_28
         kernelPatches.glibc_getline
+	kernelPatches.cifs_timeout_2_6_25
       ];
   };
 
@@ -5088,12 +5122,15 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_29
         kernelPatches.sec_perm_2_6_24
+	kernelPatches.cifs_timeout_2_6_29
       ];
   };
 
   linux_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools platform;
-    kernelPatches = [];
+    kernelPatches =
+      [ kernelPatches.cifs_timeout_2_6_29
+      ];
   };
 
   linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
@@ -5102,7 +5139,7 @@ let
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_2_6_32
-        kernelPatches.cifs_timeout
+        kernelPatches.cifs_timeout_2_6_29
         kernelPatches.no_xsave
         kernelPatches.dell_rfkill
       ];
@@ -5160,6 +5197,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_33
         kernelPatches.sec_perm_2_6_24
+	kernelPatches.cifs_timeout_2_6_29
       ];
   };
 
@@ -5185,6 +5223,7 @@ let
       [ /*kernelPatches.fbcondecor_2_6_33*/
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_2_6_34
+	kernelPatches.cifs_timeout_2_6_29
       ];
   };
 
@@ -5200,6 +5239,7 @@ let
       [ #kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_2_6_35
+	kernelPatches.cifs_timeout_2_6_35
       ] ++ lib.optional (platform.kernelArch == "arm")
         kernelPatches.sheevaplug_modules_2_6_35;
   };
@@ -5228,6 +5268,7 @@ let
           kernelPatches.sec_perm_2_6_24
           #kernelPatches.aufs2_2_6_35
           kernelPatches.mips_restart_2_6_36
+	  kernelPatches.cifs_timeout_2_6_35
         ];
     };
 
@@ -5249,6 +5290,7 @@ let
         kernelPatches.sec_perm_2_6_24
         #kernelPatches.aufs2_2_6_35
         kernelPatches.mips_restart_2_6_36
+	kernelPatches.cifs_timeout_2_6_35
       ];
   };
 
@@ -5264,6 +5306,7 @@ let
       [ kernelPatches.fbcondecor_2_6_37
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_1_2_6_37
+	kernelPatches.cifs_timeout_2_6_35
         #kernelPatches.mips_restart_2_6_36
       ];
   };
@@ -5280,9 +5323,12 @@ let
       [ kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_1_2_6_38
+	kernelPatches.cifs_timeout_2_6_38
         #kernelPatches.mips_restart_2_6_36
       ];
   };
+
+  linux_2_6_38_ati = linux_2_6_38.override { extraConfig="DRM_RADEON_KMS y"; };
 
   linux_2_6_39 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.39.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
@@ -5422,6 +5468,7 @@ let
   linuxPackages_2_6_37 = recurseIntoAttrs (linuxPackagesFor linux_2_6_37 pkgs.linuxPackages_2_6_37);
   linuxPackages_2_6_37_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_37_tuxonice pkgs.linuxPackages_2_6_37_tuxonice);
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
+  linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
@@ -5551,7 +5598,7 @@ let
     config = getConfig ["pcmciaUtils" "config"] null;
   };
 
-  phat = callPackage ../development/libraries/phat { 
+  phat = callPackage ../development/libraries/phat {
     inherit (gnome) gtk libgnomecanvas;
   };
 
@@ -5570,6 +5617,9 @@ let
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
   radeontools = callPackage ../os-specific/linux/radeontools { };
+
+  radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
+  radeonR600 = callPackage ../os-specific/linux/firmware/radeon-r600 { };
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
@@ -5643,7 +5693,9 @@ let
     cross = assert crossSystem != null; crossSystem;
   };
 
-  udev = callPackage ../os-specific/linux/udev { };
+  udev145 = callPackage ../os-specific/linux/udev/145.nix { };
+  udev172 = callPackage ../os-specific/linux/udev/172.nix { };
+  udev = udev172;
 
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -5664,12 +5716,13 @@ let
 
   utillinuxCurses = utillinuxngCurses;
 
-  utillinuxng = callPackage ../os-specific/linux/util-linux-ng {
+  utillinuxng = lowPrio (callPackage ../os-specific/linux/util-linux-ng {
     ncurses = null;
-  };
+    perl = null;
+  });
 
   utillinuxngCurses = utillinuxng.override {
-    inherit ncurses;
+    inherit ncurses perl;
   };
 
   windows = rec {
@@ -5897,7 +5950,7 @@ let
 
   audacious = callPackage ../applications/audio/audacious { };
 
-  audacity = callPackage ../applications/audio/audacity { 
+  audacity = callPackage ../applications/audio/audacity {
     portaudio = portaudioSVN;
   };
 
@@ -6319,10 +6372,11 @@ let
   };
 
   gnucash = callPackage ../applications/office/gnucash {
-    inherit (gnome) gtk glib libglade libgnomeui libgtkhtml gtkhtml
-      libgnomeprint;
+    inherit (gnome) gtk glib libgnomeui libgtkhtml gtkhtml
+      libbonoboui libgnomeprint;
     gconf = gnome.GConf;
     guile = guile_1_8;
+    slibGuile = slibGuile.override { scheme = guile_1_8; };
   };
 
   qcad = callPackage ../applications/misc/qcad { };
@@ -6480,9 +6534,9 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick;
-    gitSupport = getConfig [ "ikiwiki" "git" ] false;
-    monotoneSupport = getConfig [ "ikiwiki" "monotone" ] false;
+      RpcXML XMLSimple PerlMagick YAML;
+    gitSupport = false;
+    monotoneSupport = false;
     extraUtils = [];
   };
 
@@ -6844,11 +6898,11 @@ let
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
-  qtractor = callPackage ../applications/audio/qtractor { 
+  qtractor = callPackage ../applications/audio/qtractor {
     inherit (gtkLibs) gtk;
   };
 
-  rakarrack = callPackage ../applications/audio/rakarrack { 
+  rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
     fltk = fltk11;
   };
@@ -7615,7 +7669,7 @@ let
   kde45 = callPackage ../desktops/kde-4.5 {
     callPackage = newScope pkgs.kde45;
   };
-    
+
   kde46 = callPackage ../desktops/kde-4.6 {
     callPackage = newScope pkgs.kde46;
   };
@@ -7642,10 +7696,13 @@ let
 
   ### SCIENCE
 
-  xplanet = callPackage ../applications/science/xplanet {
+  xplanet = callPackage ../applications/science/astronomy/xplanet {
     inherit (gtkLibs) pango;
   };
 
+  gravit = callPackage ../applications/science/astronomy/gravit { };
+
+  stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
   ### SCIENCE/GEOMETRY
 
@@ -7787,6 +7844,8 @@ let
   ### SCIENCE / MATH
 
   ecm = callPackage ../applications/science/math/ecm { };
+
+  eukleides = callPackage ../applications/science/math/eukleides { };
 
   maxima = callPackage ../applications/science/math/maxima { };
 
@@ -8069,6 +8128,10 @@ let
 
   texLiveBeamer = builderDefsPackage (import ../misc/tex/texlive/beamer.nix) {
     inherit texLiveLatexXColor texLivePGF texLive;
+  };
+
+  texLiveModerncv = builderDefsPackage (import ../misc/tex/texlive/moderncv.nix) {
+    inherit texLive unzip;
   };
 
   trac = callPackage ../misc/trac {

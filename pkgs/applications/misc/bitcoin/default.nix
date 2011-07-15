@@ -1,18 +1,18 @@
 { fetchurl, stdenv, openssl, db4, boost, zlib, glib, libSM, gtk, wxGTK, miniupnpc }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.22";
+  version = "0.3.24";
   name = "bitcoin-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bitcoin/Bitcoin/${name}/${name}-linux.tar.gz";
-    sha256 = "1nyji3xjyvw91snnbxk71dih3yf292d7mvkakw0nkqplbap14xjb";
+    url = "mirror://sourceforge/project/bitcoin/Bitcoin/${name}/${name}-src.tar.gz";
+    sha256 = "18n8i37c478b275m2x82411i1fsw8l34qm1k65ynnw38fpaj4h3r";
   };
 
   buildInputs = [ openssl db4 boost zlib glib libSM gtk wxGTK miniupnpc ];
 
   preConfigure = ''
-    cd src/src
+    cd src
     substituteInPlace makefile.unix \
       --replace "-Wl,-Bstatic" "" \
       --replace "-Wl,-Bdynamic" "" \
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
   '';
 
   makefile = "makefile.unix";
-
-  preBuild = "make -f ${makefile} clean";
 
   buildFlags = "bitcoin bitcoind";
 
