@@ -94,7 +94,7 @@ with pkgs.lib;
                   # Skip various special filesystems.  Non-existent
                   # mount points are typically tmpfs/aufs mounts from
                   # the initrd.
-                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /var/run -o ! -e "$mp" ]; then continue; fi
+                  if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /run -o "$mp" = /var/run -o "$mp" = /var/lock -o ! -e "$mp" ]; then continue; fi
               
                   echo "unmounting $mp..."
 

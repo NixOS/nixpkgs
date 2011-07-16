@@ -16,8 +16,6 @@ let
 
   setupScript =
     ''
-      mkdir -p /var/lock
-
       if ! test -d /home/smbd ; then
         mkdir -p /home/smbd
         chown ${user} /home/smbd

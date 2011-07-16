@@ -98,9 +98,7 @@ mkdir -m 0755 -p /etc/nixos
 
 
 # Miscellaneous boot time cleanup.
-rm -rf /var/run
-rm -rf /var/lock
-rm -rf /var/log/upstart
+rm -rf /run /var/run /var/lock /var/log/upstart
 
 #echo -n "cleaning \`/tmp'..."
 #rm -rf --one-file-system /tmp/*
@@ -123,14 +121,17 @@ rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
 
-# Use a tmpfs for /var/run to ensure that / or /var can be unmounted
-# or at least remounted read-only during shutdown.  (Upstart 0.6
-# apparently uses nscd to do some name lookups, resulting in it
-# holding some mmap mapping to deleted files in /var/run/nscd.
-# Similarly, portmap and statd have open files in /var/run and are
-# needed during shutdown to unmount NFS volumes.)
-mkdir -m 0755 -p /var/run
-mount -t tmpfs -o "mode=755" none /var/run
+# Create a tmpfs on /run to hold runtime state for programs such as
+# udev.  
+mkdir -m 0755 -p /run
+mount -t tmpfs -o "mode=755" none /run
+mkdir -m 0700 -p /run/lock
+
+
+# For backwards compatibility, symlink /var/run to /run, and /var/lock
+# to /run/lock.
+ln -s /run /var/run
+ln -s /run/lock /var/lock
 
 
 # Clear the resume device.
