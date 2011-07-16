@@ -59,7 +59,8 @@ let
           --replace /sbin/blkid ${pkgs.utillinux}/sbin/blkid \
           --replace /sbin/mdadm ${pkgs.mdadm}/sbin/mdadm \
           --replace '$env{DM_SBIN_PATH}/blkid' ${pkgs.utillinux}/sbin/blkid \
-          --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"'
+          --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"' \
+          --replace /bin/mount ${pkgs.utillinux}/bin/mount
       done
 
       # If auto-configuration is disabled, then remove
