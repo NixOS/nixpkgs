@@ -24,8 +24,6 @@ recurseIntoAttrs rec {
 
   qt4 = qt47;
 
-  phonon = null;
-
   kde = callPackage ./kde-package { inherit release; stable = false; };
 
 ### SUPPORT
@@ -40,6 +38,8 @@ recurseIntoAttrs rec {
 
   libkipi = callPackage ./libkipi.nix { };
 
+  phonon = callPackage ./phonon.nix { };
+
   #kipi_plugins = callPackage ./kipi-plugins { };
 
 ### LIBS
@@ -53,6 +53,8 @@ recurseIntoAttrs rec {
   kde_baseapps = callPackage ./baseapps.nix { };
 
   kde_workspace = callPackage ./workspace.nix { };
+
+  kde_runtime = callPackage ./runtime.nix { };
 
   # Backwards compatibility.
   kdebase_workspace = kde_workspace;

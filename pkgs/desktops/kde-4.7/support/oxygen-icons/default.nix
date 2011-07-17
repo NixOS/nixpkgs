@@ -1,14 +1,15 @@
-{kde, cmake}:
+{ kde, cmake }:
 
 kde.package {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "4c2881683f8d66114ac79a9573498e627146aa647574efb9b8f89f837e1d7b06";
+  outputHash = "4736af7eef8c0defa8f5ae997ac85e0a19c4d1af9a9e963b2434317c5408ab86";
 
   buildInputs = [ cmake ];
+  
   meta = {
     description = "KDE Oxygen theme icons";
-    longDescription = "Contains icons for the KDE Oxygen theme, which is the default icon theme since KDE 4.3";
+    longDescription = "Icons for KDE's default theme";
     license = "GPL";
     kde.name = "oxygen-icons";
   };
