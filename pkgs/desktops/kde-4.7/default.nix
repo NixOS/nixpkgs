@@ -75,6 +75,8 @@ recurseIntoAttrs rec {
 
   kamera = callPackage ./kamera.nix { };
 
+  kde_wallpapers = callPackage ./wallpapers.nix { };
+
   kdeaccessibility = combinePkgs "kdeaccessibility" {
     colorSchemes = callPackage ./accessibility/color-schemes.nix { };
     iconThemes = callPackage ./accessibility/icon-themes.nix { };
