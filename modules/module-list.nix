@@ -7,6 +7,7 @@
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
+  ./config/shells.nix
   ./config/swap.nix
   ./config/system-path.nix
   ./config/timezone.nix
