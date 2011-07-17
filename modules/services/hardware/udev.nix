@@ -192,6 +192,7 @@ in
             echo "" > /proc/sys/kernel/hotplug || true
 
             mkdir -p /var/lib/udev/rules.d
+            touch /var/lib/udev/rules.d/70-persistent-cd.rules /var/lib/udev/rules.d/70-persistent-net.rules
 
             # Do the loading of additional stage 2 kernel modules.
             # Maybe this isn't the best place...
