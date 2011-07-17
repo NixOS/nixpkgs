@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -15,7 +15,7 @@ let
       HaltCmd=${config.system.build.upstart}/sbin/halt
       RebootCmd=${config.system.build.upstart}/sbin/reboot
       ${optionalString (config.system.boot.loader.id == "grub") ''
-        BootManager=Grub
+        BootManager=${if config.boot.loader.grub.version == 2 then "Grub2" else "Grub"}
       ''}
 
       [X-*-Core]
@@ -99,8 +99,11 @@ in
   
     services.xserver.displayManager.job =
       { execCmd =
-          (optionalString (config.system.boot.loader.id == "grub") "PATH=${config.system.build.grub}/sbin:$PATH ") +
-          "KDEDIRS=${kdebase_workspace} exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon";
+          ''
+            mkdir -p /var/lib/kdm
+            ${(optionalString (config.system.boot.loader.id == "grub") "PATH=${config.system.build.grub}/sbin:$PATH ") +
+              "KDEDIRS=${kdebase_workspace} exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon"}
+          '';
         logsXsession = true;
       };
 
@@ -109,8 +112,7 @@ in
     users.extraUsers = singleton
       { name = "kdm";
         uid = config.ids.uids.kdm;
-        description = "kdm user";
-        home = "/tmp/kdm";
+        description = "KDM user";
       };
 
   };
