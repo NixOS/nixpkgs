@@ -18,6 +18,12 @@ kde.package {
   # kwinglutils_funcs.cpp and ‘clock_gettime’ in kdm/backend/dm.c.
   NIX_LDFLAGS = "-ldl -lrt";
 
+  preConfigure =
+   ''
+     # Fix incorrect path to kde4-config.
+     substituteInPlace startkde.cmake --replace '$bindir/kde4-config' ${kdelibs}/bin/kde4-config
+   '';
+
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";
     license = "GPLv2";
