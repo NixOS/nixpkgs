@@ -136,6 +136,7 @@ stdenv.mkDerivation rec {
     --disable-ivtv
     --enable-vidix
     --enable-fbdev
+    --disable-ossaudio
   '';
 
   NIX_LDFLAGS = if x11Support then "-lX11 -lXext" else "";
