@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://libtorrent.rakshasa.no/downloads/libtorrent-${version}.tar.gz";
-    sha256 = "25dc9e8dd45d070f447e599bef08ef0ca421bac6e7f55e608dcd19360594af64";
+    sha256 = "0r5gjh2kc6fdimh5xxg7qsx2390cxw4fz6srgr20y1sxsj6rxp0m";
   };
 
   buildInputs = [ pkgconfig openssl libsigcxx ];
