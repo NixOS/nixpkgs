@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "magit-${version}";
 
   src = fetchurl {
-    url = "http://github.com/downloads/philjackson/magit/magit-${version}.tar.gz";
+    url = "http://github.com/downloads/magit/magit/magit-${version}.tar.gz";
     sha256 = "1hfdl90d96zin31v8x4p8zx5f0x0i5i9hccysx6q3prdgw9r6wzq";
   };
 
