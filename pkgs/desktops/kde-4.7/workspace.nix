@@ -1,6 +1,7 @@
 { automoc4, cmake, kde, kdelibs, qt4, strigi, qimageblitz, libdbusmenu_qt
 , xorg, soprano, shared_desktop_ontologies, lm_sensors, pciutils, libraw1394
 , libusb, libxklavier, perl, python, libqalculate, akonadi, consolekit
+, phonon
 }:
 
 kde.package {
@@ -11,7 +12,7 @@ kde.package {
       xorg.libXcomposite xorg.libXdamage xorg.libXau xorg.libXdmcp
       xorg.libpthreadstubs
       soprano shared_desktop_ontologies lm_sensors pciutils libraw1394
-      libusb python libqalculate akonadi perl consolekit
+      libusb python libqalculate akonadi perl consolekit phonon
     ];
 
   # Workaround for undefined reference to ‘dlsym’ in

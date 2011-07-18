@@ -3,7 +3,7 @@
 , xz, openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
-, getopt, udev, herqq
+, getopt, udev, herqq, phonon, gettext
 }:
 
 kde.package {
@@ -12,16 +12,13 @@ kde.package {
     [ acl attr attica automoc4 avahi bzip2 cmake enchant fam getopt
       giflib herqq jasper libdbusmenu_qt libXScrnSaver libxslt pcre
       perl perl polkit_qt_1 qca2 qt4 shared_desktop_ontologies
-      shared_mime_info soprano strigi udev xz 
+      shared_mime_info soprano strigi udev xz phonon libxml2
     ];
     
   # TODO: make sonnet plugins (dictionaries) really work.
   # There are a few hardcoded paths.
   # Let kdelibs find openexr
   # Split plugins from libs?
-
-  #propagatedBuildInputs = [ qt4 gcc.libc strigi soprano attica qca2
-  #  shared_desktop_ontologies ];
 
   patches = [ ./polkit-install.patch ];
 

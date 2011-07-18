@@ -1,12 +1,12 @@
 { automoc4, cmake, kde, kdelibs, qt4, strigi, soprano
-, shared_desktop_ontologies, glib
+, shared_desktop_ontologies, glib, phonon
 }:
 
 kde.package {
 
   buildInputs =
     [ cmake kdelibs qt4 automoc4 strigi soprano shared_desktop_ontologies
-      glib
+      glib phonon
     ];
 
   meta = {

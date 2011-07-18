@@ -1,11 +1,12 @@
 { kde, cmake, qt4, kdelibs, automoc4, exiv2, soprano
-, shared_desktop_ontologies, kde_baseapps, libkipi }:
+, shared_desktop_ontologies, kde_baseapps, libkipi, phonon
+}:
 
 kde.package {
 
   buildInputs =
     [ cmake qt4 kdelibs automoc4 exiv2 soprano shared_desktop_ontologies
-      kde_baseapps libkipi
+      kde_baseapps libkipi phonon
     ];
 
   meta = {

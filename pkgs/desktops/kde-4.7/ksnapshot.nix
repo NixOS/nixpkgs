@@ -1,8 +1,8 @@
-{ automoc4, cmake, kde, kdelibs, qt4, libkipi }:
+{ automoc4, cmake, kde, kdelibs, qt4, libkipi, phonon }:
 
 kde.package {
 
-  buildInputs = [ cmake kdelibs qt4 automoc4 libkipi ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 libkipi phonon ];
 
   meta = {
     description = "KDE screenshot utility";
