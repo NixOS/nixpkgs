@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, alsaLib, gstreamer, gstPluginsBase, pulseaudio
+, alsaLib, pulseaudio
 , libXft, libXrender, randrproto, xextproto, libXinerama, xineramaproto, libXcursor, libXmu
 , libXv, libXext, libXfixes, inputproto, fixesproto, libXrandr, freetype, fontconfig
 , zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig, libtiff, glib
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       -qdbus -cups -glib -xfixes -dbus-linked -openssl-linked
       -fontconfig -I${freetype}/include/freetype2
       -exceptions -xmlpatterns
-      -multimedia -audio-backend -phonon -phonon-backend
+      -multimedia -audio-backend -no-phonon
       -webkit -javascript-jit
       -make libs -make tools -make translations
       ${if buildDemos == true then "-make demos" else "-nomake demos"}
@@ -85,8 +85,6 @@ stdenv.mkDerivation rec {
     libXfixes
     glib
     libtiff
-    gstreamer
-    gstPluginsBase
     pulseaudio
   ];
 
@@ -102,7 +100,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${if useDocs then "rm -rfv $out/share/doc/${name}/{html,src}" else ""}
-    ln -sv phonon $out/include/Phonon
   '';
 
   enableParallelBuilding = true;

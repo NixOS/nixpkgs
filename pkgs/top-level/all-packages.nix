@@ -4173,7 +4173,6 @@ let
   };
 
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
-    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
     inherit (pkgs.gnome) glib;
   };
 
