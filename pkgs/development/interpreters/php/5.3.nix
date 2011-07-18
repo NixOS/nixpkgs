@@ -10,7 +10,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
   version = "5.3.6";
 
-  name = "php_configurable-${version}";
+  name = "php-${version}";
 
   buildInputs = ["flex" "bison" "pkgconfig"];
 
