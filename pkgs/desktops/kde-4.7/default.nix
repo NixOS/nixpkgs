@@ -40,6 +40,8 @@ recurseIntoAttrs rec {
 
   phonon = callPackage ./phonon.nix { };
 
+  phonon_backend_gstreamer = callPackage ./phonon-backend-gstreamer.nix { };
+
   #kipi_plugins = callPackage ./kipi-plugins { };
 
 ### LIBS
