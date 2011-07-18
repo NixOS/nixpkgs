@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./smb-tmpdir.patch ];
 
+  configureFlags = "--audio-drv-list=alsa";
+
+  enableParallelBuilding = true;
+
   buildInputs =
     [ zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses
