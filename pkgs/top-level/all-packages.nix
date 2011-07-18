@@ -6315,7 +6315,7 @@ let
   flashplayer = flashplayer10;
 
   flashplayer9 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
-      inherit (gtkLibs) atk;
+    inherit (gtkLibs) atk;
   };
 
   flashplayer10 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
@@ -6433,6 +6433,10 @@ let
   gqview = callPackage ../applications/graphics/gqview { };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
+
+  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
+    inherit pkgsi686Linux;
+  };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
     inherit fetchsvn curl pkgconfig libxml2;
@@ -6911,8 +6915,8 @@ let
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
   RealPlayer = callPackage ../applications/video/RealPlayer {
-      inherit (gtkLibs) glib pango atk gtk;
-      libstdcpp5 = gcc33.gcc;
+    inherit (gtkLibs) glib pango atk gtk;
+    libstdcpp5 = gcc33.gcc;
   };
 
   rekonq = newScope pkgs.kde4 ../applications/networking/browsers/rekonq { };
@@ -6923,7 +6927,7 @@ let
 
   retroshare = callPackage ../applications/networking/p2p/retroshare {
     qt = qt4;
-   inherit (gnome) gnome_keyring;
+    inherit (gnome) gnome_keyring;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync {
@@ -6934,7 +6938,8 @@ let
 
   # = urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
-    perlSupport = false;  };
+    perlSupport = false;
+  };
 
   sakura = callPackage ../applications/misc/sakura {
     inherit (gnome) vte;
@@ -6950,9 +6955,7 @@ let
   seeks = callPackage ../tools/networking/p2p/seeks { };
 
   seg3d = callPackage ../applications/graphics/seg3d {
-    wxGTK = wxGTK28.override {
-      unicode = false;
-  };
+    wxGTK = wxGTK28.override { unicode = false; };
   };
 
   semnotes = newScope pkgs.kde4 ../applications/misc/semnotes { };
@@ -7188,7 +7191,7 @@ let
         enableGnash = getConfig [ browserName "enableGnash" ] false;
       in
        assert !(enableGnash && enableAdobeFlash);
-       ([]
+       ([ ]
         ++ lib.optional enableGnash gnash
         ++ lib.optional enableAdobeFlash flashplayer
         # RealPlayer is disabled by default for legal reasons.
@@ -7197,6 +7200,7 @@ let
         ++ lib.optional (getConfig [browserName "enableMPlayer"] false) (MPlayerPlugin browser)
         ++ lib.optional (getConfig [browserName "enableGeckoMediaPlayer"] false) gecko_mediaplayer
         ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
+        ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin 
        );
   };
 
