@@ -100,9 +100,10 @@ in
     services.xserver.displayManager.job =
       { execCmd =
           ''
-            mkdir -p /var/lib/kdm
+            mkdir -m 0755 -p /var/lib/kdm
+            chown kdm /var/lib/kdm
             ${(optionalString (config.system.boot.loader.id == "grub") "PATH=${config.system.build.grub}/sbin:$PATH ") +
-              "KDEDIRS=${kdebase_workspace} exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon"}
+              "KDEDIRS=/var/run/current-system/sw exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon"}
           '';
         logsXsession = true;
       };
