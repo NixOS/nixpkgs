@@ -47,33 +47,61 @@ in
           '';
       };
 
-    security.setuidOwners = [ {
-      program = "kcheckpass";
-      source = "${pkgs.kde4.kdebase_workspace}/lib/kde4/libexec/kcheckpass";
-      owner = "root";
-      group = "root";
-      setuid = true;
-    } ];
+    security.setuidOwners = singleton
+      { program = "kcheckpass";
+        source = "${pkgs.kde4.kdebase_workspace}/lib/kde4/libexec/kcheckpass";
+        owner = "root";
+        group = "root";
+        setuid = true;
+      };
 
     environment.systemPackages =
-      [ # temporary workarounds
-        pkgs.shared_desktop_ontologies 
-        pkgs.strigi
+      (if pkgs.kde4 ? kdebase then
+        # KDE <= 4.6
+        [ # temporary workarounds
+          pkgs.shared_desktop_ontologies 
+          pkgs.strigi
 
-        pkgs.kde4.kdelibs
-        pkgs.kde4.kdebase
-        pkgs.kde4.kdebase_runtime
-        pkgs.kde4.kdebase_workspace
-        pkgs.kde4.oxygen_icons
-        pkgs.kde4.qt4 # needed for qdbus
-        pkgs.shared_mime_info
-        pkgs.gst_all.gstreamer
-        pkgs.gst_all.gstPluginsBase
-        pkgs.gst_all.gstPluginsGood
-        pkgs.gst_all.gstFfmpeg # for mp3 playback
-        xorg.xmessage # so that startkde can show error messages
-        xorg.xset # used by startkde, non-essential
-      ] ++ config.environment.kdePackages;
+          pkgs.kde4.kdelibs
+          pkgs.kde4.kdebase
+          pkgs.kde4.kdebase_runtime
+          pkgs.kde4.kdebase_workspace
+          pkgs.kde4.oxygen_icons
+          pkgs.kde4.qt4 # needed for qdbus
+          pkgs.shared_mime_info
+          pkgs.gst_all.gstreamer
+          pkgs.gst_all.gstPluginsBase
+          pkgs.gst_all.gstPluginsGood
+          pkgs.gst_all.gstFfmpeg # for mp3 playback
+          xorg.xmessage # so that startkde can show error messages
+          xorg.xset # used by startkde, non-essential
+        ]
+      else
+        # KDE >= 4.7
+        [ pkgs.kde4.kdelibs
+          pkgs.kde4.kde_baseapps
+          pkgs.kde4.kde_runtime
+          pkgs.kde4.kde_workspace
+          pkgs.kde4.kde_wallpapers # contains kdm's default background
+          pkgs.kde4.oxygen_icons
+          pkgs.kde4.konsole
+          pkgs.kde4.kcolorchooser
+          pkgs.kde4.ksnapshot
+          pkgs.kde4.kate
+          pkgs.kde4.okular
+          pkgs.kde4.gwenview
+
+          # Phonon backends.
+          pkgs.kde4.phonon_backend_gstreamer
+          pkgs.gst_all.gstPluginsBase
+
+          # Miscellaneous runtime dependencies.
+          pkgs.kde4.qt4 # needed for qdbus
+          pkgs.shared_mime_info
+          xorg.xmessage # so that startkde can show error messages
+          xorg.xset # used by startkde, non-essential
+        ]
+      ) ++ config.environment.kdePackages;
 
     environment.pathsToLink = [ "/share" ];
 
