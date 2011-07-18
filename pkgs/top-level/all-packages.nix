@@ -6314,20 +6314,14 @@ let
 
   flashplayer = flashplayer10;
 
-  flashplayer9 = (
-    import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
-      inherit fetchurl stdenv zlib alsaLib nss nspr fontconfig freetype expat;
-      inherit (xlibs) libX11 libXext libXrender libXt;
-      inherit (gtkLibs) gtk glib pango atk;
-    });
+  flashplayer9 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
+      inherit (gtkLibs) atk;
+  };
 
-  flashplayer10 = (
-    import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
-      inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat cairo;
-      inherit (xlibs) libX11 libXext libXrender libXt ;
-      inherit (gtkLibs) gtk glib pango atk gdk_pixbuf;
-      debug = getConfig ["flashplayer" "debug"] false;
-    });
+  flashplayer10 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
+    inherit (gtkLibs) atk gdk_pixbuf;
+    debug = getConfig ["flashplayer" "debug"] false;
+  };
 
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost146;
