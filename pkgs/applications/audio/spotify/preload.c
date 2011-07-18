@@ -57,3 +57,10 @@ int __xstat64(int ver, const char *path, struct stat64 *st)
     int (*___xstat64) (int ver, const char *, struct stat64 *) = dlsym(RTLD_NEXT, "__xstat64");
     return ___xstat64(ver, rewrite(path, buf), st);
 }
+
+int access(const char *path, int mode)
+{
+    char buf[PATH_MAX];
+    int (*_access) (const char *path, int mode) = dlsym(RTLD_NEXT, "access");
+    return _access(rewrite(path, buf), mode);
+}
