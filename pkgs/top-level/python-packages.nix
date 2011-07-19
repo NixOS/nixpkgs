@@ -110,6 +110,16 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  astng = buildPythonPackage rec {
+    name = "logilab-astng-0.21.1";
+
+    src = fetchurl {
+      url = "http://ftp.logilab.org/pub/astng/${name}.tar.gz";
+      sha256 = "0rqp2vwrnv6gkzdd96j078h1sz26plh49cmnyswy2wb6l4wans67";
+    };
+    propagatedBuildInputs = [logilabCommon];
+  };
+
   beautifulsoap = buildPythonPackage (rec {
     name = "beautifulsoap-3.0.8";
 
@@ -599,6 +609,15 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  logilabCommon = buildPythonPackage rec {
+    name = "logilab-common-0.56.0";
+
+    src = fetchurl {
+      url = "http://ftp.logilab.org/pub/common/${name}.tar.gz";
+      sha256 = "14p557nqypbd10d8k7qs6jlm58pksiwh86wvvl0axyki00hj6971";
+    };
+    propagatedBuildInputs = [unittest2];
+  };
   
   lxml = buildPythonPackage ( rec {
     name = "lxml-2.2.2";
@@ -1220,6 +1239,15 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  pylint = buildPythonPackage rec {
+    name = "pylint-0.23.0";
+
+    src = fetchurl {
+      url = "http://ftp.logilab.org/pub/pylint/${name}.tar.gz";
+      sha256 = "07091avcc2b374i5f3blszmawjcin8xssjfryz91qbxybb8r7c6d";
+    };
+    propagatedBuildInputs = [astng];
+  };
 
   pymacs = pkgs.stdenv.mkDerivation rec {
     version = "v0.24-beta2";
