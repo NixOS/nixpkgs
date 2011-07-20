@@ -854,6 +854,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
 
+  regexpr = callPackage ../development/libraries/haskell/regexpr {};
+
   regular = callPackage ../development/libraries/haskell/regular {};
 
   repa = callPackage ../development/libraries/haskell/repa {};
