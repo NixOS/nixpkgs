@@ -1,10 +1,14 @@
 {stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
 
+let
+  name = "pdsh-2.26";
+in
 stdenv.mkDerivation {
-  name = "pdsh-2.25";
+  inherit name;
+
   src = fetchurl {
-    url = "http://pdsh.googlecode.com/files/pdsh-2.25.tar.bz2";
-    sha256 = "00cigkpdmabvh2aqzw2qbs6i7yj5x4lg1196ap0k9gqdnw0fd70z";
+    url = "http://pdsh.googlecode.com/files/${name}.tar.bz2";
+    sha256 = "ada2f35509064bf9cd0fd5ca39a351108cdd6f5155b05f39f1711a271298469a";
   };
 
   buildInputs = [perl readline ssh pam];
@@ -18,21 +22,13 @@ stdenv.mkDerivation {
     configureFlagsArray=(
       "--infodir=$out/share/info"
       "--mandir=$out/share/man"
-      "--with-machines=$out/etc/machines"
+      "--with-machines=/etc/pdsh/machines"
       ${if readline == null then "--without-readline" else "--with-readline"}
       ${if ssh == null then "--without-ssh" else "--with-ssh"}
       ${if pam == null then "--without-pam" else "--with-pam"}
       ${if rsh == false then "--without-rsh" else "--with-rsh"}
       "--with-dshgroups"
       "--with-xcpu"
-      "--without-genders"
-      "--without-mqshell"
-      "--without-mrsh"
-      "--without-netgroup"
-      "--without-nodeattr"
-      "--without-nodeupdown"
-      "--without-qshell"
-      "--without-slurm"
       "--disable-debug"
     )
   '';
