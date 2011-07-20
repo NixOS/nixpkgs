@@ -934,6 +934,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
+  storableRecord = callPackage ../development/libraries/haskell/storable-record {};
+
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
