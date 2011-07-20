@@ -2,17 +2,17 @@
   xineLib, gstreamer }:
 
 stdenv.mkDerivation rec {
-  name = "opencv-2.1.0";
+  name = "opencv-2.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opencvlibrary/OpenCV-2.1.0.tar.bz2";
-    sha256 = "0zrr24hr64gz35qb95nsvvbmdf89biglpy9z14y5kaxh5baiy1i6";
+    url = "mirror://sourceforge/opencvlibrary/OpenCV-2.3.0.tar.bz2";
+    sha256 = "02wl56a87if84brrhd4wq59linyhbxx30ykh4cjwzw37yw7zzgxw";
   };
 
   buildInputs = [ cmake gtk glib libjpeg libpng libtiff jasper ffmpeg pkgconfig
     xineLib gstreamer ];
 
-  patches = [ ./changeset_r3190.diff ];
+  enableParallelBuilding = true;
 
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
