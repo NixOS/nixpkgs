@@ -48,6 +48,9 @@ stdenv.mkDerivation {
     sha256 = "815a5d9faac4dbd523fbcf3fe1065e443c0bbf43427c44aa423422c6ec4c2e31";
   };
 
+  # See <http://svn.boost.org/trac/boost/ticket/4688>.
+  patches = [ ./boost_filesystem.patch ];
+
   enableParallelBuilding = true;
 
   buildInputs = [icu expat zlib bzip2 python];
