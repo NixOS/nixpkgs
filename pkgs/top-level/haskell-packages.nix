@@ -632,6 +632,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
+  hsdns = callPackage ../development/libraries/haskell/hsdns {
+    inherit (pkgs) adns;
+  };
+
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
