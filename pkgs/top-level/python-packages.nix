@@ -466,7 +466,25 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+  genzshcomp = buildPythonPackage {
+    name = "genzshcomp-0.2.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/genzshcomp/genzshcomp-0.2.2.tar.gz";
+      sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
+    };
+
+    buildInputs = [ pkgs.setuptools ];
+
+    meta = {
+      description = "automatically generated zsh completion function for Python's option parser modules";
+      license = "BSD";
+      maintainers = [ stdenv.lib.maintainers.simons ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+
   gflags = buildPythonPackage rec {
     name = "gflags-1.5.1";
 
