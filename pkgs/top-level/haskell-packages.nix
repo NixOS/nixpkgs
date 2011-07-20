@@ -611,6 +611,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
 
+  hledger = callPackage ../development/libraries/haskell/hledger {};
+  hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
+
   HList = callPackage ../development/libraries/haskell/HList {};
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {
