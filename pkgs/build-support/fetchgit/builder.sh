@@ -25,6 +25,10 @@ else
     git checkout -b __nixos_build__ origin/HEAD
 fi
 
+if test -f .gitmodules; then
+  git submodule update --init
+fi
+
 if test -z "$leaveDotGit"; then
     find $out -name .git\* | xargs rm -rf
 fi
