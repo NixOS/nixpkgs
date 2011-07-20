@@ -6638,6 +6638,7 @@ let
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger = callPackage ../applications/office/ledger { };
+  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
     inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
