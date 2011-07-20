@@ -1,10 +1,10 @@
-{cabal, QuickCheck}:
+{cabal, QuickCheck, utilityHt}:
 
 cabal.mkDerivation (self : {
   pname = "non-negative";
-  version = "0.0.4";
-  sha256 = "0b82b7be086c8d4e493d606098d82c2e5d943fe76d18a5eb6836c449ba19fc6f";
-  propagatedBuildInputs = [QuickCheck];
+  version = "0.1";
+  sha256 = "0aebb6f5518191a02b11230798444997a03b84d63d2aaa6c38cac6718f6c351c";
+  propagatedBuildInputs = [QuickCheck utilityHt];
   meta = {
     description = "Non-negative numbers";
   };
