@@ -42,6 +42,16 @@ in
         bgSupport = true;
         start =
           ''
+            # The KDE icon cache is supposed to update itself
+            # automatically, but it uses the timestamp on the icon
+            # theme directory as a trigger.  Since in Nix the
+            # timestamp is always the same, this doesn't work.  So as
+            # a workaround, nuke the icon cache on login.  This isn't
+            # perfect, since it may require logging out after
+            # installing new applications to update the cache.
+            # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
+            rm -fv $HOME/.kde/cache-*/icon-cache.kcache
+
             # Start KDE.
             exec ${pkgs.kde4.kdebase_workspace}/bin/startkde
           '';
