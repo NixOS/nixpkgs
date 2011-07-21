@@ -6415,6 +6415,8 @@ let
     inherit (gnome) libglade;
   };
 
+  jbidwatcher = callPackage ../applications/misc/jbidwatcher { };
+
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
     inherit libpng opencv;
   };
