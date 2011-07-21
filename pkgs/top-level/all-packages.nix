@@ -1573,6 +1573,8 @@ let
     interactive = true;
   });
 
+  bashCompletion = callPackage ../shells/bash-completion { };
+
   dash = callPackage ../shells/dash { };
 
   ipython = callPackage ../shells/ipython { };
