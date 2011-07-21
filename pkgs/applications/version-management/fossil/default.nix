@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   buildInputs = [ zlib openssl ];
   buildNativeInputs = [ tcl ];
 
-  configurePhase = ":";
-
   doCheck = true;
 
   checkTarget = "test";
