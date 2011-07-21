@@ -15,6 +15,9 @@ stdenv.mkDerivation {
     sha256 = "1zm99i9fd5gfijd144ajngn6x73563355im79sqdi98pj6ir4yvi";
   };
 
+  preConfigure =
+    stdenv.lib.optionalString stdenv.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
+
   # http://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
   doCheck = false;
 
