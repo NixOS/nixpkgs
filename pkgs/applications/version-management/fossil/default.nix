@@ -18,6 +18,8 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+  configurePhase = ":";
+
   checkTarget = "test";
 
   installPhase = ''
