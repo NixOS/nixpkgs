@@ -11,9 +11,6 @@ kde.package {
       (libcanberra.override { gtk = null; })
     ];
 
-  # Work around undefined reference to ‘openpty’ in kioslave/fish/fish.cpp.
-  NIX_LDFLAGS = "-lutil";
-    
   meta = {
     license = "LGPL";
     kde.name = "kde-runtime";

@@ -1,7 +1,7 @@
 { automoc4, cmake, kde, kdelibs, qt4, strigi, qimageblitz, libdbusmenu_qt
 , xorg, soprano, shared_desktop_ontologies, lm_sensors, pciutils, libraw1394
 , libusb, libxklavier, perl, python, libqalculate, akonadi, consolekit
-, phonon, xkeyboard_config
+, phonon, xkeyboard_config, kdepimlibs
 }:
 
 kde.package {
@@ -13,11 +13,8 @@ kde.package {
       xorg.libpthreadstubs
       soprano shared_desktop_ontologies lm_sensors pciutils libraw1394
       libusb python libqalculate akonadi perl consolekit phonon
+      kdepimlibs
     ];
-
-  # Workaround for undefined reference to ‘dlsym’ in
-  # kwinglutils_funcs.cpp and ‘clock_gettime’ in kdm/backend/dm.c.
-  NIX_LDFLAGS = "-ldl -lrt";
 
   preConfigure =
    ''

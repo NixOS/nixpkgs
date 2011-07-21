@@ -48,7 +48,7 @@ recurseIntoAttrs rec {
 
   kdelibs = callPackage ./libs { };
 
-  #kdepimlibs = callPackage ./pimlibs { };
+  kdepimlibs = callPackage ./pimlibs { };
 
 ### BASE
 
