@@ -1178,10 +1178,7 @@ let
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pythonDBus = builderDefsPackage (import ../development/python-modules/dbus) {
-    inherit python pkgconfig dbus_glib;
-    dbus = dbus.libs;
-  };
+  pythonDBus = callPackage ../development/python-modules/dbus { };
 
   pythonIRClib = builderDefsPackage (import ../development/python-modules/irclib) {
     inherit python;

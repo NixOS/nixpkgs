@@ -1,28 +1,15 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, python, pkgconfig, dbus, dbus_glib }:
 
-  version = a.lib.attrByPath ["version"] "0.83.1" a; 
-  buildInputs = with a; [
-    pkgconfig
-  ];
-  propagatedBuildInputs = with a; [
-    dbus python dbus_glib
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "dbus-python-0.84.0";
+
   src = fetchurl {
-    url = "http://dbus.freedesktop.org/releases/dbus-python/dbus-python-${version}.tar.gz";
-    sha256 = "168vrizxnszh16yk4acpfhy502w8i997d8l3w4i26kxgy433ha6f";
+    url = "http://dbus.freedesktop.org/releases/dbus-python/${name}.tar.gz";
+    sha256 = "01jrmj7ps79dkd6f8bzm17vxzpad1ixwmcb1liy64xm9y6mcfnxq";
   };
 
-  inherit buildInputs propagatedBuildInputs;
-  configureFlags = [];
+  buildInputs = [ python pkgconfig dbus dbus_glib ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  name = "python-dbus-" + version;
   meta = {
     description = "Python DBus bindings";
   };
