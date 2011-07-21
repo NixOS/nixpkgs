@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
     python configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ python pkgconfig makeWrapper sip qt4 pythonDBus ];
+  buildInputs = [ python pkgconfig makeWrapper qt4 ];
+
+  propagatedBuildInputs = [ sip pythonDBus ];
 
   postInstall = ''
     for i in $out/bin/*; do

@@ -61,6 +61,10 @@ recurseIntoAttrs rec {
   # Backwards compatibility.
   kdebase_workspace = kde_workspace;
 
+### BINDINGS
+
+  pykde4 = callPackage ./pykde4.nix { };
+
 ### OTHER MODULES
 
   gwenview = callPackage ./gwenview.nix { };
@@ -78,6 +82,8 @@ recurseIntoAttrs rec {
   kamera = callPackage ./kamera.nix { };
 
   kde_wallpapers = callPackage ./wallpapers.nix { };
+
+  kdegames = callPackage ./games.nix { };
 
   /*
   kdeaccessibility = combinePkgs "kdeaccessibility" {
