@@ -48,7 +48,7 @@ recurseIntoAttrs rec {
 
   kdelibs = callPackage ./libs { };
 
-  kdepimlibs = callPackage ./pimlibs { };
+  #kdepimlibs = callPackage ./pimlibs { };
 
 ### BASE
 
@@ -79,6 +79,7 @@ recurseIntoAttrs rec {
 
   kde_wallpapers = callPackage ./wallpapers.nix { };
 
+  /*
   kdeaccessibility = combinePkgs "kdeaccessibility" {
     colorSchemes = callPackage ./accessibility/color-schemes.nix { };
     iconThemes = callPackage ./accessibility/icon-themes.nix { };
@@ -165,9 +166,11 @@ recurseIntoAttrs rec {
 
   kdepim_runtime = callPackage ./pim-runtime { };
   kdepim = callPackage ./pim { };
+  */
 
 ### DEVELOPMENT
 
+  /*
   kdebindings = callPackage ./bindings { };
 
   l10n = callPackage ./l10n { inherit release; };
@@ -175,5 +178,6 @@ recurseIntoAttrs rec {
   # Make the split packages visible to `nix-env -q'.
   misc = recurseIntoAttrs
     (kdeaccessibility.pkgs // kdeartwork.pkgs // kdesdk.pkgs // kdetoys.pkgs // kdeutils.pkgs // kdewebdev.pkgs);
+  */
 
 }

@@ -3001,6 +3001,8 @@ let
 
   clucene_core = callPackage ../development/libraries/clucene-core { };
 
+  cluceneCore = clucene_core; # !!! remove this
+
   clutter = callPackage ../development/libraries/clutter {
     inherit (gnome) glib pango gtk;
   };
