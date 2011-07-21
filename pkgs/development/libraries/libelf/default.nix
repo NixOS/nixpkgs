@@ -24,9 +24,9 @@ stdenv.mkDerivation (rec {
 
 //
 
-# Gettext is lacking from `stdenv' on Darwin, but not completely, so NLS
-# support is enabled but eventually fails.
+# Libelf's custom NLS macros fail to determine the catalog file extension on
+# Darwin, so disable NLS for now.
 # FIXME: Eventually make Gettext a build input on all platforms.
 (if stdenv.isDarwin
- then { buildInputs = [ gettext ]; }
+ then { configureFlags = [ "--disable-nls" ]; }
  else { }))
