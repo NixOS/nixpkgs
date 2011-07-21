@@ -2879,10 +2879,7 @@ let
 
   acl = callPackage ../development/libraries/acl { };
 
-  adns = import ../development/libraries/adns/1.4.nix {
-    inherit stdenv fetchurl;
-    static = getConfig [ "adns" "static" ] (stdenv ? isStatic || stdenv ? isDietLibC);
-  };
+  adns = callPackage ../development/libraries/adns { };
 
   agg = callPackage ../development/libraries/agg { };
 
