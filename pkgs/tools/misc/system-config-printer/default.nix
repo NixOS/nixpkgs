@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      
       wrapPythonPrograms
       ( cd $out/share/system-config-printer/troubleshoot
         mv .__init__.py-wrapped __init__.py
