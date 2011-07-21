@@ -1,14 +1,16 @@
-{fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
+{ fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
-, darwinInstallNameToolUtility}:
+, darwinInstallNameToolUtility }:
+
+with stdenv.lib;
 
 let
   os = stdenv.lib.optionalString;
-  inherit (stdenv.lib) optional;
   majorVersion = "2.8";
-  minorVersion = "4";
+  minorVersion = "5";
   version = "${majorVersion}.${minorVersion}";
 in
+
 stdenv.mkDerivation rec {
   name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
 
@@ -16,8 +18,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "1k2kjaj3vfifb329ff7fr4hcbpbaqb66l97pshq70h7m0zwajznr";
+    sha256 = "148bxnn5msl1zg366cdgxy2inzjj0n4jlhakymj6qr81bzvvy62y";
   };
+
+  patches =
+    # Don't search in non-Nix locations such as /usr, but do search in
+    # Nixpkgs' Glibc.
+    optional (stdenv ? glibc) ./search-path.patch;
 
   buildInputs = [ curl expat zlib bzip2 libarchive ]
     ++ optional stdenv.isDarwin darwinInstallNameToolUtility
@@ -25,17 +32,24 @@ stdenv.mkDerivation rec {
     ++ optional useQt4 qt4;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
+  
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
     + stdenv.lib.optionalString useQt4 " --qt-gui";
 
   setupHook = ./setup-hook.sh;
 
-  postUnpack = ''
-    dontUseCmakeConfigure=1
-    source $setupHook
-    fixCmakeFiles $sourceRoot
-  '';
+  postUnpack =
+    ''
+      dontUseCmakeConfigure=1
+      source $setupHook
+      fixCmakeFiles $sourceRoot
+    '';
+
+  preConfigure = optionalString (stdenv ? glibc)
+    ''
+      substituteInPlace Modules/Platform/UnixPaths.cmake --subst-var-by glibc ${stdenv.glibc}
+    '';
 
   meta = {
     homepage = http://www.cmake.org/;
