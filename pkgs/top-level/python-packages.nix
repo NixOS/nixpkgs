@@ -910,6 +910,8 @@ let pythonPackages = python.modules // rec {
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.gtkLibs.glib pkgs.gtkLibs.gtk pkgs.dbus_glib ];
 
+    postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
+    
     meta = {
       description = "Python bindings for libnotify";
       homepage = http://www.galago-project.org/;

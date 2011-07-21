@@ -1327,7 +1327,6 @@ let
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
   system_config_printer = callPackage ../tools/misc/system-config-printer {
-    inherit (pythonPackages) notify;
     libxml2 = libxml2Python;
    };
 
