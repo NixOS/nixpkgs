@@ -1,7 +1,7 @@
 { automoc4, cmake, kde, kdelibs, qt4, strigi, qimageblitz, libdbusmenu_qt
 , xorg, soprano, shared_desktop_ontologies, lm_sensors, pciutils, libraw1394
 , libusb, libxklavier, perl, python, libqalculate, akonadi, consolekit
-, phonon
+, phonon, xkeyboard_config
 }:
 
 kde.package {
@@ -23,6 +23,10 @@ kde.package {
    ''
      # Fix incorrect path to kde4-config.
      substituteInPlace startkde.cmake --replace '$bindir/kde4-config' ${kdelibs}/bin/kde4-config
+
+     # Fix the path to the keyboard configuration files.
+     substituteInPlace kcontrol/keyboard/xkb_rules.cpp \
+       --replace /usr/share/X11 ${xkeyboard_config}/etc/X11
    '';
 
   meta = {
