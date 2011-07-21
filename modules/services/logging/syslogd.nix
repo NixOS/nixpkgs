@@ -26,6 +26,9 @@ let
 
     *.*;mail.none;local1.none    -/var/log/messages
   '';
+
+  syslogdParameters = if cfg.enableNetworkInput then "-r " else "";
+
 in
 
 {
@@ -51,6 +54,14 @@ in
           The default <filename>syslog.conf</filename> file configures a
           fairly standard setup of log files, which can be extended by
           means of <varname>extraConfig</varname>.
+        '';
+      };
+
+      enableNetworkInput = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Accept logging through UDP. Option -r of syslogd(8).
         '';
       };
 
@@ -82,7 +93,7 @@ in
 
         daemonType = "fork";
 
-        exec = "${pkgs.sysklogd}/sbin/syslogd -f ${syslogConf}";
+        exec = "${pkgs.sysklogd}/sbin/syslogd ${syslogdParameters} -f ${syslogConf}";
       };
 
   };
