@@ -1,7 +1,7 @@
 { automoc4, cmake, kde, kdelibs, qt4, strigi, qimageblitz, libdbusmenu_qt
 , xorg, soprano, shared_desktop_ontologies, lm_sensors, pciutils, libraw1394
 , libusb, libxklavier, perl, python, libqalculate, akonadi, consolekit
-, phonon, xkeyboard_config, kdepimlibs
+, phonon, xkeyboard_config, kdepimlibs, pam
 }:
 
 kde.package {
@@ -13,7 +13,7 @@ kde.package {
       xorg.libpthreadstubs
       soprano shared_desktop_ontologies lm_sensors pciutils libraw1394
       libusb python libqalculate akonadi perl consolekit phonon
-      kdepimlibs
+      kdepimlibs pam
     ];
 
   preConfigure =
