@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
   };
   
   configurePhase = ''
+    mkdir -p $out
+    lndir ${pythonDBus} $out
+
+    export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
+    
     substituteInPlace configure.py \
       --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'"
   
@@ -16,18 +21,18 @@ stdenv.mkDerivation rec {
       --confirm-license --bindir $out/bin \
       --destdir $out/lib/${python.libPrefix}/site-packages \
       --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip \
-      --dbus=${pythonDBus}/include/dbus-1.0 --verbose)
+      --dbus=$out/include/dbus-1.0 --verbose)
 
     python configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ python pkgconfig makeWrapper qt4 ];
+  buildInputs = [ python pkgconfig makeWrapper qt4 lndir ];
 
-  propagatedBuildInputs = [ sip pythonDBus ];
+  propagatedBuildInputs = [ sip ];
 
   postInstall = ''
     for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages:$PYTHONPATH
+      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done
   ''; # */
 

@@ -13,10 +13,7 @@ kde.package rec {
     
   # TODO: ggz
 
-  postInstall =
-    ''
-      wrapPythonPrograms
-    '';
+  postInstall = "wrapPythonPrograms";
 
   meta = {
     description = "KDE Games";

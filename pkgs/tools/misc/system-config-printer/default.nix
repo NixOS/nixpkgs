@@ -2,6 +2,7 @@
 , makeWrapper, pygobject, pygtk, docbook_xml_dtd_412, docbook_xsl
 , pythonDBus, libxml2, desktop_file_utils, libusb, cups, pycups
 , xz, pythonPackages
+, withGUI ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,9 @@ stdenv.mkDerivation rec {
       pythonPackages.python pythonPackages.wrapPython
     ];
 
-  pythonPath = [ pythonDBus pycups pygtk pythonPackages.notify ];
+  pythonPath =
+    [ pythonDBus pycups pygobject ]
+    ++ stdenv.lib.optionals withGUI [ pygtk pythonPackages.notify ];
     
   configureFlags = "--with-udev-rules";
 

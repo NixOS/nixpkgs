@@ -83,6 +83,8 @@ recurseIntoAttrs rec {
 
   kde_wallpapers = callPackage ./wallpapers.nix { };
 
+  kdeadmin = callPackage ./admin.nix { };
+
   kdegames = callPackage ./games.nix { };
 
   /*
