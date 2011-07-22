@@ -7975,6 +7975,8 @@ let
 
   mess = callPackage ../misc/emulators/mess { };
 
+  mupen64plus = callPackage ../misc/emulators/mupen64plus { };
+
   nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
