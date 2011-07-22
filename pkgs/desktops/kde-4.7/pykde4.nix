@@ -15,6 +15,10 @@ kde.package {
       substituteInPlace CMakeLists.txt \
         --replace '{SIP_DEFAULT_SIP_DIR}' '{CMAKE_INSTALL_PREFIX}/share/sip'
 
+      # Use an absolute path to open libpython.so.
+      substituteInPlace kpythonpluginfactory/kpythonpluginfactory.cpp \
+        --replace LIB_PYTHON \"$(echo ${python}/lib/libpython*.so.*)\"
+
       # Symlink PyQt into PyKDE.  This is necessary because PyQt looks
       # in its PyQt4/uic/widget-plugins directory for plugins, and KDE
       # needs to install a plugin.
