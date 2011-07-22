@@ -16,6 +16,9 @@ stdenv.mkDerivation {
 
     # Fix some hardcoded paths
     sed -i -e "s|/usr/local|$out|g" main/main.c
+
+    # Remove PATH environment variable from install script
+    sed -i -e "s|export PATH=|#export PATH=|" ./install.sh
   '';
   
   buildPhase = "make all";
