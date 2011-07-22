@@ -5,7 +5,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-batteries-1.3.0";
+  name = "ocaml-batteries-1.4.0";
 
   src = fetchurl {
     url = https://forge.ocamlcore.org/frs/download.php/643/batteries-1.4.0.tar.gz;
