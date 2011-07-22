@@ -8133,6 +8133,8 @@ let
 
   vice = callPackage ../misc/emulators/vice { };
 
+  VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
+  
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wine = callPackage_i686 ../misc/emulators/wine { };
 
