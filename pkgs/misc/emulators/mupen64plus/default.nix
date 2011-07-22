@@ -20,4 +20,11 @@ stdenv.mkDerivation {
   
   buildPhase = "make all";
   installPhase = "PREFIX=$out make install";
+  
+  meta = {
+    description = "A Nintendo 64 Emulator";
+    license = "GPLv2+";
+    homepage = http://code.google.com/p/mupen64plus;
+    maintainers = [ stdenv.lib.maintainers.sander ];
+  };
 }

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Commodore 64, 128 and other emulators";
     homepage = http://www.viceteam.org;
-    license = "GPL";
+    license = "GPLv2+";
     maintainers = [ lib.maintainers.sander ];
   };
 }
