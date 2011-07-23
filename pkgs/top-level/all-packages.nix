@@ -5019,6 +5019,8 @@ let
 
   libaio = callPackage ../os-specific/linux/libaio { };
 
+  libatasmart = callPackage ../os-specific/linux/libatasmart { };
+  
   libcgroup = callPackage ../os-specific/linux/libcg { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
@@ -5688,6 +5690,8 @@ let
   udev172 = callPackage ../os-specific/linux/udev/172.nix { };
   udev = udev172;
 
+  udisks = callPackage ../os-specific/linux/udisks { };
+  
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     userModeLinux = true;
