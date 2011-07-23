@@ -83,7 +83,7 @@ in
   ###### implementation
 
   config = mkIf config.services.ttyBackgrounds.enable (
-  mkAssert (kernelPackages.splashutils != null) "
+  mkAssert (splashutils != null) "
     The kernelPackages does not provide splashutils, as required by ttyBackgrounds.
     Either provide kernelPackages with splashutils, or disable ttyBackgrounds.
   " {
