@@ -50,7 +50,7 @@ in
     services.ttyBackgrounds = {
 
       enable = mkOption {
-        default = true;
+        default = splashutils != null;
         description = ''
           Whether to enable graphical backgrounds for the virtual consoles.
         '';
