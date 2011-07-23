@@ -62,6 +62,7 @@
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
+  ./services/hardware/udisks.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/udev.nix
   ./services/logging/klogd.nix
