@@ -5625,6 +5625,8 @@ let
 
   rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
+  rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
