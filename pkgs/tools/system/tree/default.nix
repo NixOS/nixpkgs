@@ -10,9 +10,9 @@ let
     if stdenv.isDarwin then ''
       CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
       LDFLAGS=
-      OBJS+=strverscmp.o
+      EXTRA_OBJS=strverscmp.o
     '' else
-    "";
+    ""; # use linux flags by default
 in
 stdenv.mkDerivation {
   name = "tree-${version}";
@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
+    sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
     makeFlagsArray=(
       prefix=$out
       MANDIR=$out/share/man/man1
