@@ -35,6 +35,7 @@
 , extraMeta ? {}
 , ubootChooser ? null
 , postInstall ? ""
+, setModuleDir ? true
 
 , # After the builder did a 'make all' (kernel + modules)
   # we force building the target asked: bzImage/zImage/uImage/...
@@ -74,7 +75,11 @@ stdenv.mkDerivation {
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion postBuild postInstall;
+  inherit preConfigure src module_init_tools localVersion postInstall;
+
+  postBuild = (if setModuleDir then "" else '' 
+    eval "$(type installPhase | sed -e '1d' -e '/export MODULE_DIR/d')";
+  '') + postBuild;
 
   patches = map (p: p.patch) kernelPatches;
 
@@ -140,3 +145,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
   } // extraMeta;
 }
+

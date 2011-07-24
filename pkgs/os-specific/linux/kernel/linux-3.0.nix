@@ -200,6 +200,8 @@ import ./generic.nix (
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
 
+    setModuleDir = false;
+
     features.iwlwifi = true;
   }
 
