@@ -7094,6 +7094,8 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
+  tree = callPackage ../tools/system/tree { };
+
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twinkle = callPackage ../applications/networking/twinkle {
