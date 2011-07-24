@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, java }:
 
 stdenv.mkDerivation rec {
   pname = "jbidwatcher";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nrs9ly56cqn33dm1sjm53pzj1cf7jncwn4c8v0xyva4jqyz2y5p";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ java ];
 
   jarfile = "$out/share/java/${pname}/JBidwatcher.jar";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     ensureDir "$out/bin"
     echo > "$out/bin/${pname}" "#!/bin/sh"
-    echo >>"$out/bin/${pname}" "${jre}/bin/java -Xmx512m -jar ${jarfile}"
+    echo >>"$out/bin/${pname}" "${java}/bin/java -Xmx512m -jar ${jarfile}"
     chmod +x "$out/bin/${pname}"
     install -D -m644 ${src} ${jarfile}
   '';
