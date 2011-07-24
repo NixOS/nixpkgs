@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       the LS_COLORS environment variable is set and output is to tty.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [stdenv.lib.maintainers.simons];
   };
 }
