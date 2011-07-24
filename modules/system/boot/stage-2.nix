@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 let
 
@@ -36,11 +36,10 @@ let
 
   };
 
-  inherit (pkgs) substituteAll writeText coreutils utillinux udev;
   kernel = config.boot.kernelPackages.kernel;
   activateConfiguration = config.system.activationScripts.script;
 
-  bootStage2 = substituteAll {
+  bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel;
@@ -48,11 +47,12 @@ let
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
     path =
-      [ coreutils
-        utillinux
-        udev
+      [ pkgs.coreutils
+        pkgs.utillinux
+        pkgs.udev
+        pkgs.sysvtools
       ];
-    postBootCommands = writeText "local-cmds"
+    postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}
         ${config.powerManagement.powerUpCommands}

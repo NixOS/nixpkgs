@@ -98,7 +98,7 @@ mkdir -m 0755 -p /etc/nixos
 
 
 # Miscellaneous boot time cleanup.
-rm -rf /run /var/run /var/lock /var/log/upstart
+rm -rf /var/run /var/lock /var/log/upstart
 
 #echo -n "cleaning \`/tmp'..."
 #rm -rf --one-file-system /tmp/*
@@ -122,9 +122,13 @@ rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
 
 # Create a tmpfs on /run to hold runtime state for programs such as
-# udev.  
-mkdir -m 0755 -p /run
-mount -t tmpfs -o "mode=755" none /run
+# udev (if stage 1 hasn't already done so).
+if ! mountpoint -q /run; then
+    rm -rf /run
+    mkdir -m 0755 -p /run
+    mount -t tmpfs -o "mode=755" none /run
+fi
+
 mkdir -m 0700 -p /run/lock
 
 

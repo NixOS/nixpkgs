@@ -54,6 +54,8 @@ mount -t proc none /proc
 mkdir -p /sys
 mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
+mkdir -p /run
+mount -t tmpfs none /run
 
 
 # Process the kernel command line.
@@ -310,7 +312,10 @@ if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
     fail
 fi
 
-mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev
+mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
+
+# `switch_root' doesn't move /run yet, so we have to do it ourselves.
+mount --bind /run $targetRoot/run
 
 exec switch_root "$targetRoot" "$stage2Init"
 
