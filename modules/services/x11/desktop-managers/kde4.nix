@@ -21,7 +21,7 @@ in
 
     environment.kdePackages = mkOption {
       default = [];
-      example = [ pkgs.kde4.kdesdk ];
+      example = "[ pkgs.kde4.kdesdk ]";
       type = types.list types.package;
       description = "This option is obsolete.  Please use <option>environment.systemPackages</option> instead.";
     };
@@ -51,6 +51,17 @@ in
             # installing new applications to update the cache.
             # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
             rm -fv $HOME/.kde/cache-*/icon-cache.kcache
+
+            # Qt writes a weird ‘libraryPath’ line to
+            # ~/.config/Trolltech.conf that causes the KDE plugin
+            # paths of previous KDE invocations to be searched.
+            # Obviously using mismatching KDE libraries is potentially
+            # disastrous, so here we nuke references to the Nix store
+            # in Trolltech.conf.  A better solution would be to stop
+            # Qt from doing this wackiness in the first place.
+            if [ -e $HOME/.config/Trolltech.conf ]; then
+                sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
+            fi
 
             # Start KDE.
             exec ${pkgs.kde4.kdebase_workspace}/bin/startkde
@@ -110,6 +121,7 @@ in
           pkgs.shared_mime_info
           xorg.xmessage # so that startkde can show error messages
           xorg.xset # used by startkde, non-essential
+          xorg.xauth # used by kdesu
         ]
       ) ++ config.environment.kdePackages;
 
