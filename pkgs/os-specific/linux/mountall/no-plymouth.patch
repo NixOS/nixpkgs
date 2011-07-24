@@ -1,6 +1,6 @@
-diff -ru -x '*~' mountall-2.15-orig/configure.ac mountall-2.15/configure.ac
---- mountall-2.15-orig/configure.ac	2010-05-09 01:42:22.000000000 +0200
-+++ mountall-2.15/configure.ac	2010-06-03 13:46:09.000000000 +0200
+diff -ru -x '*~' mountall-2.31-orig/configure.ac mountall-2.31/configure.ac
+--- mountall-2.31-orig/configure.ac	2011-07-15 14:00:15.000000000 +0200
++++ mountall-2.31/configure.ac	2011-07-25 00:13:13.000000000 +0200
 @@ -29,7 +29,7 @@
  PKG_CHECK_MODULES([NIH_DBUS], [libnih-dbus >= 1.0.0])
  PKG_CHECK_MODULES([DBUS], [dbus-1 >= 1.2.16])
@@ -10,9 +10,9 @@ diff -ru -x '*~' mountall-2.15-orig/configure.ac mountall-2.15/configure.ac
  
  # Checks for header files.
  
-diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
---- mountall-2.15-orig/src/mountall.c	2010-05-09 01:42:24.000000000 +0200
-+++ mountall-2.15/src/mountall.c	2010-07-07 14:40:47.000000000 +0200
+diff -ru -x '*~' mountall-2.31-orig/src/mountall.c mountall-2.31/src/mountall.c
+--- mountall-2.31-orig/src/mountall.c	2011-07-15 14:00:15.000000000 +0200
++++ mountall-2.31/src/mountall.c	2011-07-25 00:21:13.000000000 +0200
 @@ -64,8 +64,10 @@
  #include <nih-dbus/dbus_proxy.h>
  #include <nih-dbus/errors.h>
@@ -24,16 +24,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  #include "ioprio.h"
  
-@@ -75,7 +77,7 @@
- 
- #define BUILTIN_FSTAB   "/lib/init/fstab"
- 
--#define BOREDOM_TIMEOUT 3
-+#define BOREDOM_TIMEOUT 15
- 
- enum exit {
- 	EXIT_OK = 0,		/* Ok */
-@@ -214,15 +216,19 @@
+@@ -219,15 +221,19 @@
  void   boredom_timeout       (void *data, NihTimer *timer);
  
  int    plymouth_connect      (void);
@@ -52,8 +43,8 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
 +#endif
  
  void   usr1_handler          (void *data, NihSignal *signal);
- 
-@@ -241,8 +247,10 @@
+ int    set_dev_wait_time        (NihOption *option, const char *arg);
+@@ -247,8 +253,10 @@
   **/
  size_t num_local = 0;
  size_t num_local_mounted = 0;
@@ -64,7 +55,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  size_t num_virtual = 0;
  size_t num_virtual_mounted = 0;
  size_t num_swap = 0;
-@@ -310,6 +318,7 @@
+@@ -318,6 +326,7 @@
   **/
  static struct udev *udev = NULL;
  
@@ -72,7 +63,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  /**
   * ply_event_loop:
   *
-@@ -323,6 +332,7 @@
+@@ -331,6 +340,7 @@
   * Plymouth boot client.
   **/
  static ply_boot_client_t *ply_boot_client = NULL;
@@ -80,7 +71,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  /**
   * plymouth_error:
-@@ -1208,11 +1218,12 @@
+@@ -1253,11 +1263,12 @@
  			nih_debug ("%s is root filesystem", MOUNT_NAME (mnt));
  			tag = TAG_LOCAL;
  		} else if (is_remote (mnt)) {
@@ -95,7 +86,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  			{
  				tag = TAG_REMOTE;
  			} else {
-@@ -1475,7 +1486,8 @@
+@@ -1566,7 +1577,8 @@
  	/* Enforce local only after virtual filesystems triggered */
  	if ((! local_triggered)
  	    && virtual_triggered
@@ -105,7 +96,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		nih_info (_("%s finished"), "local");
  		emit_event ("local-filesystems", NULL);
  		local_triggered = TRUE;
-@@ -1484,7 +1496,8 @@
+@@ -1575,7 +1587,8 @@
  	/* Enforce remote only after virtual filesystems triggrered */
  	if ((! remote_triggered)
  	    && virtual_triggered
@@ -115,7 +106,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		nih_info (_("%s finished"), "remote");
  		emit_event ("remote-filesystems", NULL);
  		remote_triggered = TRUE;
-@@ -1494,7 +1507,9 @@
+@@ -1585,7 +1598,9 @@
  	if ((! filesystem_triggered)
  	    && virtual_triggered
  	    && local_triggered
@@ -126,7 +117,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		nih_info (_("All filesystems mounted"));
  		emit_event ("filesystem", NULL);
  		filesystem_triggered = TRUE;
-@@ -1508,9 +1523,9 @@
+@@ -1599,9 +1614,9 @@
  		swap_triggered = TRUE;
  	}
  
@@ -139,7 +130,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  		   num_virtual_mounted, num_virtual,
  		   num_swap_mounted, num_swap);
  }
-@@ -2203,12 +2218,14 @@
+@@ -2442,12 +2457,14 @@
  	if (no_events)
  		return;
  
@@ -155,7 +146,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	env = NIH_MUST (nih_str_array_new (NULL));
  
  	if (mnt) {
-@@ -2787,6 +2804,7 @@
+@@ -3026,6 +3043,7 @@
  int
  plymouth_connect (void)
  {
@@ -163,7 +154,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* If we were already connected, just re-use that connection */
  	if (ply_boot_client)
  		return TRUE;
-@@ -2813,8 +2831,13 @@
+@@ -3052,8 +3070,13 @@
  	nih_info (_("Connected to Plymouth"));
  
  	return TRUE;
@@ -177,7 +168,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  void
  plymouth_disconnected (void *             user_data,
  		       ply_boot_client_t *client)
-@@ -2827,6 +2850,7 @@
+@@ -3066,6 +3089,7 @@
  	ply_boot_client_free (ply_boot_client);
  	ply_boot_client = NULL;
  }
@@ -185,7 +176,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  
  void
-@@ -2837,6 +2861,7 @@
+@@ -3076,6 +3100,7 @@
  
  	nih_assert (mnt != NULL);
  
@@ -193,7 +184,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* No Plymouth => no progress information */
  	if (! plymouth_connect ())
  		return;
-@@ -2866,6 +2891,7 @@
+@@ -3105,6 +3130,7 @@
  				       plymouth_response,
  				       plymouth_failed,
  				       NULL);
@@ -201,7 +192,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  }
  
  void
-@@ -2881,20 +2907,31 @@
+@@ -3120,20 +3146,31 @@
  		NIH_LIST_FOREACH (mounts, iter) {
  			Mount *mnt = (Mount *)iter;
  
@@ -235,7 +226,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* If we're already displaying messages, don't change them unless
  	 * the message is no longer valid for that mount point; otherwise
  	 * clear the message.
-@@ -3005,8 +3042,10 @@
+@@ -3244,8 +3281,10 @@
  							   plymouth_answer,
  							   plymouth_failed,
  							   NULL);
@@ -246,16 +237,23 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  void
  plymouth_response (void *             user_data,
  		   ply_boot_client_t *client)
-@@ -3125,7 +3164,7 @@
+@@ -3364,6 +3403,7 @@
  		break;
  	}
  }
--
 +#endif
  
+ /*
+  * set_dev_wait_time:
+@@ -3399,7 +3439,6 @@
+         return err;
+ }
  
+-
  /**
-@@ -3211,6 +3250,7 @@
+  * stop_mountpoint_timer:
+  * @mountpoint: mountpoint whose timer you want to stop.
+@@ -3673,6 +3712,7 @@
  				    (NihIoWatcher)udev_monitor_watcher,
  				    udev_monitor));
  
@@ -263,7 +261,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	/* Initialise a Plymouth event loop; this is an epoll instance that
  	 * we can poll within our own main loop and call out to when needs
  	 * be.
-@@ -3224,6 +3264,7 @@
+@@ -3686,6 +3726,7 @@
  
  	/* Attempt an early connection to Plymouth */
  	plymouth_connect ();
@@ -271,7 +269,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  
  	mounts = NIH_MUST (nih_list_new (NULL));
  
-@@ -3236,7 +3277,9 @@
+@@ -3698,7 +3739,9 @@
  	 * from /etc/fstab and /proc/self/mountinfo to find out what else
  	 * we need to do.
  	 */
@@ -281,7 +279,7 @@ diff -ru -x '*~' mountall-2.15-orig/src/mountall.c mountall-2.15/src/mountall.c
  	parse_fstab (_PATH_MNTTAB);
  	parse_mountinfo ();
  
-@@ -3338,10 +3381,12 @@
+@@ -3822,10 +3865,12 @@
  	/* Flush the D-Bus connection to ensure all messages are sent */
  	dbus_connection_flush (connection);
  
