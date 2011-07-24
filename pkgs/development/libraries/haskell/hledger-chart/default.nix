@@ -7,7 +7,7 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [Chart colour hledger hledgerLib safe];
   meta = {
     description = "generate simple pie chart graphics showing hledger account balances";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.stdenv.lib.platforms.linux;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
