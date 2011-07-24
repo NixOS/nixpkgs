@@ -2,6 +2,17 @@
 
 let
   version = "1.6.0";
+
+  # These settings are found in the Makefile, but there seems to be no
+  # way to select one ore the other setting other than editing the file
+  # manually, so we have to duplicate the know how here.
+  systemFlags =
+    if stdenv.isDarwin then ''
+      CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
+      LDFLAGS=
+      OBJS+=strverscmp.o
+    '' else
+    "";
 in
 stdenv.mkDerivation {
   name = "tree-${version}";
@@ -15,6 +26,7 @@ stdenv.mkDerivation {
     makeFlagsArray=(
       prefix=$out
       MANDIR=$out/share/man/man1
+      ${systemFlags}
     )
   '';
 
