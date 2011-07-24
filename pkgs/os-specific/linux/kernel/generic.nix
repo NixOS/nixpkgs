@@ -77,6 +77,11 @@ stdenv.mkDerivation {
 
   inherit preConfigure src module_init_tools localVersion postInstall;
 
+  #Currently, the builder sets $MODULE_DIR during installPhase. This causes
+  #problems with at least linux 3.0, so we need to conditionally avoid
+  #setting $MODULE_DIR. This prepend to postBuild accomplishes this with a
+  #sed/eval trick thanks to MarcWeber
+
   postBuild = (if setModuleDir then "" else '' 
     eval "$(type installPhase | sed -e '1d' -e '/export MODULE_DIR/d')";
   '') + postBuild;
