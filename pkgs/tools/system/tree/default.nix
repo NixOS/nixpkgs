@@ -11,6 +11,11 @@ let
       CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
       LDFLAGS=
       EXTRA_OBJS=strverscmp.o
+    '' else if stdenv.isCygwin then ''
+      CFLAGS="-O2 -Wall -fomit-frame-pointer -DCYGWIN"
+      LDFLAGS=-s
+      TREE_DEST=tree.exe
+      EXTRA_OBJS=strverscmp.o
     '' else
     ""; # use linux flags by default
 in
