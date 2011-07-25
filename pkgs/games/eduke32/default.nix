@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
   
   NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
-  NIX_LDFLAGS = "-L${SDL}/lib";
+  NIX_LDFLAGS = "-L${SDL}/lib -lgcc_s";
   
   desktopItem = makeDesktopItem {
     name = "eduke32";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     fi
     
     cd \$EDUKE32_DATA_DIR
-    eduke32 /g\$EDUKE32_GRP_FILE    
+    eduke32 -g \$EDUKE32_GRP_FILE    
     EOF
     chmod 755 $out/bin/eduke32-wrapper
     
