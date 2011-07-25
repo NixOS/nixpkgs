@@ -2,10 +2,10 @@
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, vorbisSupport ? true, libvorbis ? null
+, vorbisSupport ? false, libvorbis ? null
 , vpxSupport ? false, libvpx ? null
 , x264Support ? true, x264 ? null
-, xvidSupport ? true, xvidcore ? null
+, xvidSupport ? false, xvidcore ? null
 , faacSupport ? false, faac ? null
 }:
 
@@ -17,11 +17,11 @@ assert x264Support -> x264 != null;
 assert xvidSupport -> xvidcore != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.7-rc1";
+  name = "ffmpeg-0.8";
   
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "07ma2b80nslwwy4ddfrz8k575dxyc8x9mvja55ghrwxys8lkhw2m";
+    sha256 = "03zwwc1qs117pfjk9r071fbx4al3j0c85j97dgwqc0wp2z1zs9iy";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional faacSupport faac;
 
+  enableParallelBuilding = true;
+    
   crossAttrs = {
     dontSetConfigureCross = true;
     configureFlags = configureFlags ++ [
