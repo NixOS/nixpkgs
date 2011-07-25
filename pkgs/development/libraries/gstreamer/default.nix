@@ -7,6 +7,10 @@ rec {
 
   gstPluginsGood = callPackage ./gst-plugins-good { };
 
+  gstPluginsUgly = callPackage ./gst-plugins-ugly { };
+
+  gstPluginsBad = callPackage ./gst-plugins-bad { };
+
   gstFfmpeg = callPackage ./gst-ffmpeg { };
 
   gnonlin = callPackage ./gnonlin { };
