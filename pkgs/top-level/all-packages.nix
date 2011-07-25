@@ -3989,7 +3989,9 @@ let
     qt = qt4;
   };
 
-  mpeg2dec = callPackage ../development/libraries/mpeg2dec { };
+  libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
+
+  mpeg2dec = libmpeg2;
 
   msilbc = callPackage ../development/libraries/msilbc { };
 
