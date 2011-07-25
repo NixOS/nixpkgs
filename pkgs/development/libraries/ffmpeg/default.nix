@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm
+{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree";
 
-  buildInputs = [ pkgconfig lame yasm ]
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
