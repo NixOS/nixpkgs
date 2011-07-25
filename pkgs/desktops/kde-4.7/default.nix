@@ -86,6 +86,8 @@ recurseIntoAttrs rec {
   kdeadmin = callPackage ./admin.nix { };
 
   kdegames = callPackage ./games.nix { };
+  
+  kdemultimedia = callPackage ./multimedia.nix { };
 
   /*
   kdeaccessibility = combinePkgs "kdeaccessibility" {
@@ -116,7 +118,6 @@ recurseIntoAttrs rec {
   kdeedu = callPackage ./edu { };
   kdegames = callPackage ./games { };
   kdegraphics = callPackage ./graphics { };
-  kdemultimedia = callPackage ./multimedia { };
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
   
