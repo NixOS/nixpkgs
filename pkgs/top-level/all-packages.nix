@@ -5703,6 +5703,8 @@ let
 
   untie = callPackage ../os-specific/linux/untie {};
 
+  upower = callPackage ../os-specific/linux/upower { };
+  
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
