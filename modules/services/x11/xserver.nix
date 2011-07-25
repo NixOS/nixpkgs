@@ -328,18 +328,13 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (
-  mkAssert (config.services.hal.enable == true) "
-    The X server needs HAL running. Set services.hal.enable to true
-  " (
-  mkAssert (if cfg.startOpenSSHAgent
-            then !cfg.startGnuPGAgent
-            else (if cfg.startGnuPGAgent
-                  then !cfg.startOpenSSHAgent
-                  else true)) "
-    The OpenSSH agent and GnuPG agent cannot be started both.
-    Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
-  " {
+  config = mkIf cfg.enable
+    (mkAssert (!(cfg.startOpenSSHAgent && cfg.startGnuPGAgent))
+      ''
+        The OpenSSH agent and GnuPG agent cannot be started both.
+        Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+      ''
+  {
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
@@ -381,11 +376,8 @@ in
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
-    services.hal.enable = mkAlways cfg.enable;
-    services.hal.packages = optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions;
-
     jobs.xserver =
-      { startOn = if cfg.autorun then "filesystem and stopped udevtrigger and started hal" else "";
+      { startOn = if cfg.autorun then "filesystem and stopped udevtrigger" else "";
  
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
@@ -534,6 +526,6 @@ in
         '')}
       '';
 
-  }));
+  });
 
 }
