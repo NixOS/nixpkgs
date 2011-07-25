@@ -16,6 +16,10 @@ let
       LDFLAGS=-s
       TREE_DEST=tree.exe
       EXTRA_OBJS=strverscmp.o
+    '' else if stdenv.isBSD then ''
+      CFLAGS="-O2 -Wall -fomit-frame-pointer"
+      LDFLAGS=-s
+      EXTRA_OBJS=strverscmp.o
     '' else
     ""; # use linux flags by default
 in
