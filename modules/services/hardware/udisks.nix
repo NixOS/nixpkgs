@@ -15,8 +15,8 @@ with pkgs.lib;
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable support for Udisks, a DBus service that
-          allows applications to query and manipulate storage devices.
+          Whether to enable Udisks, a DBus service that allows
+          applications to query and manipulate storage devices.
         '';
       };
 
