@@ -1,18 +1,22 @@
 {stdenv, fetchurl, nasm}:
 
 stdenv.mkDerivation rec {
-  name = "xvidcore-1.3.1";
+  name = "xvidcore-1.3.2";
   
   src = fetchurl {
     url = "http://downloads.xvid.org/downloads/${name}.tar.bz2";
-    sha256 = "0r1x00fgm7cbb7i9p17p9l0p4b82gig6sm0mbs6qrz84kd2fh6n5";
+    sha256 = "1x0b2rq6fv99ramifhkakycd0prjc93lbzrffbjgjwg7w4s17hfn";
   };
 
-  preConfigure = ''
-    cd build/generic
-  '';
+  preConfigure = "cd build/generic";
 
   buildInputs = [ nasm ];
+
+  postInstall =
+    ''
+      rm $out/lib/*.a
+      (cd $out/lib && ln -s *.so.* libxvidcore.so)
+    '';
   
   meta = {
     description = "MPEG-4 video codec for PC";
