@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       rm $out/lib/*.a
-      (cd $out/lib && ln -s *.so.* libxvidcore.so)
+      (cd $out/lib && ln -s *.so.4.* libxvidcore.so && ln -s *.so.4.* libxvidcore.so.4 )
     '';
   
   meta = {
