@@ -708,6 +708,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
+  monadPar = callPackage ../development/libraries/haskell/monad-par {};
+
   monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
 
   MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
