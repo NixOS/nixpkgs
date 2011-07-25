@@ -19,7 +19,17 @@ in
 
 {
 
-  config = {
+  options = {
+  
+    security.policykit.enable = mkOption {
+      default = false;
+      description = "Enable PolicyKit (obsolete).";
+    };
+
+  };
+
+
+  config = mkIf config.security.policykit.enable {
 
     environment.systemPackages = [ pkgs.policykit ];
 

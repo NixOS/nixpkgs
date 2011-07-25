@@ -74,6 +74,8 @@ in
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" ];
       
+    services.hal.enable = true;
+    
   };
 
 }

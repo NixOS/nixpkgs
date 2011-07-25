@@ -8,6 +8,8 @@ let
   cfg = xcfg.desktopManager.kde4;
   xorg = pkgs.xorg;
 
+  isKDE47 = !(pkgs.kde4 ? kdebase);
+
 in
 
 {
@@ -77,7 +79,7 @@ in
       };
 
     environment.systemPackages =
-      (if pkgs.kde4 ? kdebase then
+      (if !isKDE47 then
         # KDE <= 4.6
         [ # temporary workarounds
           pkgs.shared_desktop_ontologies 
@@ -132,6 +134,11 @@ in
         target = "X11/xkb";
       };
 
+    # Enable required DBus services.
+    services.hal = mkIf (!isKDE47) { enable = true; };
+    services.udisks = mkIf isKDE47 { enable = true; };
+    services.upower = mkIf isKDE47 { enable = true; };
+    
   };
 
 }

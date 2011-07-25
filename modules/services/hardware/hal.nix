@@ -26,7 +26,7 @@ in
     services.hal = {
     
       enable = mkOption {
-        default = true;
+        default = false;
         description = ''
           Whether to start the HAL daemon.
         '';
@@ -51,6 +51,8 @@ in
     environment.systemPackages = [ hal ];
 
     services.hal.packages = [ hal pkgs.hal_info ];
+
+    security.policykit.enable = true;
 
     users.extraUsers = singleton
       { name = "haldaemon";
