@@ -1,16 +1,16 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libraw1394-1.3.0";
+  name = "libraw1394-2.0.7";
 
   src = fetchurl {
-    url = "${meta.homepage}/dl/${name}.tar.gz";
-    sha256 = "035mrca9fhg4kq8r1s5yjgzg3vrn1nc3ndy13yg3chhqgx4dzzr0";
+    url = "mirror://kernel/linux/libs/ieee1394/${name}.tar.gz";
+    sha256 = "1mq9yy73q85lzk288lbdzvzrs5ajh84pzfh7xdhd3d8dy9v53xca";
   };
 
   meta = { 
     description = "Library providing direct access to the IEEE 1394 bus through the Linux 1394 subsystem's raw1394 user space interface";
-    homepage = http://www.linux1394.org;
+    homepage = "https://ieee1394.wiki.kernel.org/index.php/Libraries#libraw1394";
     license = ["GPL" "LGPL"];
   };
 }
