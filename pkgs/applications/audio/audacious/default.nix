@@ -4,20 +4,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "audacious-2.4.2";
+  name = "audacious-3.0";
   
   src = fetchurl {
-    url = "http://distfiles.atheme.org/${name}.tgz";
-    sha256 = "03dd0fn17znjbmnc7hiafsg1axiwysk9q4r21s6giy2yfwhi8b30";
+    url = "http://distfiles.atheme.org/${name}.tar.gz";
+    sha256 = "0kj78hgf73fmbm6y3idir2kavbnnlv0jb9ka0pcsb12sxb994s68";
   };
 
   pluginsSrc = fetchurl {
-    url = "http://distfiles.atheme.org/audacious-plugins-2.4.2.tgz";
-    sha256 = "1a2vbqyamlpvnhr3mm8b5i9304d16c796v2ycw3i396ppjvnhyxz";
+    url = "http://distfiles.atheme.org/audacious-plugins-3.0.tar.gz";
+    sha256 = "0hhxk1mxnnrb1shshpf1nf8mqpc9q1qpsljwn4jzylcnwy6pq4rw";
   };
   
   # `--enable-amidiplug' is to prevent configure from looking in /proc/asound.
-  configureFlags = "--enable-amidiplug";
+  configureFlags = "--enable-amidiplug --disable-oss";
   
   buildInputs =
     [ gettext pkgconfig glib gtk libmowgli libmcs libxml2 dbus_glib
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
         genericBuild
       )
     '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Audacious, a media player forked from the Beep Media Player, which was itself an XMMS fork";
