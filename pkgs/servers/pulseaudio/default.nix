@@ -31,9 +31,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = ''
-    --disable-solaris --disable-hal --disable-jack --localstatedir=/var
+    --disable-solaris --disable-hal --disable-jack
     --disable-oss-output --disable-oss-wrapper
+    --localstatedir=/var --sysconfdir=/etc
   '';
+
+  installFlags = "sysconfdir=$(out)/etc";
 
   enableParallelBuilding = true;
 
