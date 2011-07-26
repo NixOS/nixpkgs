@@ -144,8 +144,6 @@ in
     services.udisks = mkIf isKDE47 { enable = true; };
     services.upower = mkIf isKDE47 { enable = true; };
 
-    hardware.pulseaudio = mkIf isKDE47 { enable = true; };
-    
   };
 
 }
