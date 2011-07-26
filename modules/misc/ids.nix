@@ -63,6 +63,7 @@ in
     fourStore = 42;
     fourStoreEndpoint = 43;
     virtuoso = 44;
+    rtkit = 45;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 

@@ -45,6 +45,7 @@
   ./security/pam_usb.nix
   ./security/policykit.nix
   ./security/polkit.nix
+  ./security/rtkit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
   ./services/amqp/rabbitmq.nix
