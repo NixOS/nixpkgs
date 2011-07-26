@@ -55,7 +55,7 @@ in
 
         # Force polkitd to be restarted so that it reloads its
         # configuration.
-        pkill -INT -u root -x polkitd
+        ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
       '';
       
   };
