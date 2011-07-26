@@ -57,6 +57,17 @@ let
           exec ${pkgs.consolekit}/bin/ck-launch-session "$0" "$sessionType"
       fi
 
+      # Start PulseAudio if enabled.
+      ${optionalString config.hardware.pulseaudio.enable ''
+        ${pkgs.pulseaudio}/bin/pulseaudio --start
+
+        # Publish access credentials in the root window.
+        ${pkgs.pulseaudio}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+
+        # Keep track of devices.  Mostly useful for Phonon/KDE.
+        ${pkgs.pulseaudio}/bin/pactl load-module module-device-manager "do_routing=1"
+      ''}
+
       # Handle being called by kdm.
       if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
