@@ -4834,7 +4834,10 @@ let
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
-  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
+  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
+    jackaudio = null;
+  };
+  
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
