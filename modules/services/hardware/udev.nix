@@ -180,7 +180,7 @@ in
     
     services.udev.packages = [ extraUdevRules ];
 
-    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux ];
+    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux pkgs.udev ];
 
     jobs.udev =
       { startOn = "startup";
