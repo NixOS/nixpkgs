@@ -2,6 +2,8 @@
 
 with pkgs.lib;
 
+let cfg = config.hardware.pulseaudio; in
+
 {
 
   options = {
@@ -16,12 +18,23 @@ with pkgs.lib;
   };
   
 
-  config = mkIf config.hardware.pulseaudio.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages =
       [ pkgs.pulseaudio ];
 
-    environment.etc =
+    environment.etc = mkAlways (
+      [ # Create pulse/client.conf even if PulseAudio is disabled so
+        # that we can disable the autospawn feature in programs that
+        # are built with PulseAudio support (like KDE).
+        { target = "pulse/client.conf";
+          source = pkgs.writeText "client.conf"
+            ''
+              autospawn=${if cfg.enable then "yes" else "no"}
+            '';
+        }
+        
+      ] ++ optionals cfg.enable
       [ # Write an /etc/asound.conf that causes all ALSA applications to
         # be re-routed to the PulseAudio server through ALSA's Pulse
         # plugin.
@@ -46,7 +59,16 @@ with pkgs.lib;
               }
             '';
         }
-      ];
+
+        { target = "pulse/default.pa";
+          source = "${pkgs.pulseaudio}/etc/pulse/default.pa";
+        }
+
+        { target = "pulse/system.pa";
+          source = "${pkgs.pulseaudio}/etc/pulse/system.pa";
+        }
+
+      ]);
 
     # Allow PulseAudio to get realtime priority using rtkit.
     security.rtkit.enable = true;
