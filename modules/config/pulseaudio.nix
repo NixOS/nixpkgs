@@ -19,7 +19,7 @@ with pkgs.lib;
   config = mkIf config.hardware.pulseaudio.enable {
 
     environment.systemPackages =
-      [ pkgs.pulseaudio pkgs.alsaPlugins ];
+      [ pkgs.pulseaudio ];
 
     environment.etc =
       [ # Write an /etc/asound.conf that causes all ALSA applications to
@@ -28,19 +28,25 @@ with pkgs.lib;
         { target = "asound.conf";
           source = pkgs.writeText "asound.conf"
             ''
+              pcm_type.pulse {
+                lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so
+              }
+            
               pcm.!default {
                 type pulse
                 hint.description "Default Audio Device (via PulseAudio)"
               }
+              
+              ctl_type.pulse {
+                lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so
+              }
+            
               ctl.!default {
                 type pulse
               }
             '';
         }
       ];
-
-    # Ensure that the ALSA Pulse plugin appears in ALSA's search path.
-    environment.pathsToLink = [ "lib/alsa-lib" ];
 
   };
 
