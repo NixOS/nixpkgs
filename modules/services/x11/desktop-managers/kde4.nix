@@ -117,6 +117,11 @@ in
           # Phonon backends.
           pkgs.kde4.phonon_backend_gstreamer
           pkgs.gst_all.gstPluginsBase
+          pkgs.gst_all.gstPluginsGood
+          pkgs.gst_all.gstPluginsUgly
+          pkgs.gst_all.gstPluginsBad
+          pkgs.gst_all.gstFfmpeg # for mp3 playback
+          pkgs.gst_all.gstreamer # needed?
 
           # Miscellaneous runtime dependencies.
           pkgs.kde4.qt4 # needed for qdbus
@@ -138,6 +143,8 @@ in
     services.hal = mkIf (!isKDE47) { enable = true; };
     services.udisks = mkIf isKDE47 { enable = true; };
     services.upower = mkIf isKDE47 { enable = true; };
+
+    hardware.pulseaudio = mkIf isKDE47 { enable = true; };
     
   };
 
