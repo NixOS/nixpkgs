@@ -52,7 +52,12 @@ in
       ''
         mkdir -p /var/lib/polkit-1/localauthority
         chmod 700 /var/lib/polkit-1{/localauthority,}
+
+        # Force polkitd to be restarted so that it reloads its
+        # configuration.
+        pkill -INT -u root -x polkitd
       '';
+      
   };
 
 }
