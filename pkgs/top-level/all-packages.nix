@@ -5627,6 +5627,8 @@ let
 
   rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
+  rtkit = callPackage ../os-specific/linux/rtkit { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
