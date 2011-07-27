@@ -6298,7 +6298,7 @@ let
 
   firefox = firefoxPkgs.firefox;
 
-  firefoxWrapper = wrapFirefox firefoxPkgs.firefox "firefox" "";
+  firefoxWrapper = wrapFirefox firefox "firefox" "";
 
   firefoxPkgs = firefox50Pkgs;
 
