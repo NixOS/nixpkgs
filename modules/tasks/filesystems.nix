@@ -50,7 +50,8 @@ in
         <command>mkdir -p</command> .
       ";
       
-      type = types.nullOr (types.list types.optionSet);
+      type = types.nullOr (types.loaOf types.optionSet);
+      apply = x: attrValues x;
 
       options = {
 

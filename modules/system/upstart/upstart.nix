@@ -322,7 +322,7 @@ in
         This option defines the system jobs started and managed by the
         Upstart daemon.
       '';
-      type = types.attrsOf types.optionSet;
+      type = types.loaOf types.optionSet;
       options = [ jobOptions upstartJob ];
     };
   
