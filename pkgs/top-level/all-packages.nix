@@ -2501,8 +2501,7 @@ let
 
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
-      inherit stdenv application launcher;
-      xulrunner = firefoxPkgs.xulrunner;
+      inherit stdenv application launcher xulrunner;
     };
 
   xulrunner = firefoxPkgs.xulrunner;
