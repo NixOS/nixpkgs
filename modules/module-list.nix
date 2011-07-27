@@ -50,6 +50,7 @@
   ./security/sudo.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
+  ./services/audio/fuppes.nix
   ./services/audio/pulseaudio.nix
   ./services/backup/hydra-mirror.nix
   ./services/backup/mysql-backup.nix
@@ -73,6 +74,7 @@
   ./services/logging/logrotate.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
+  ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/postfix.nix
   ./services/misc/autofs.nix
@@ -89,6 +91,7 @@
   ./services/misc/virtualbox.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
+  ./services/monitoring/ups.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/zabbix-agent.nix
