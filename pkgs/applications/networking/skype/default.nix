@@ -4,11 +4,11 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "skype-2.1.0.81";
+  name = "skype-2.2.0.35";
 
   src = fetchurl {
     url = "http://download.skype.com/linux/${name}.tar.bz2";
-    sha256 = "1x18m4900c0ssaq95wv8mhhgwvw9fh66dszx7zq24zgvb2v1h4jz";
+    sha256 = "157ba3ci12bq0nv2m8wlsab45ib5sccqagyna8nixnhqw9q72sxm";
   };
 
   buildInputs = [
