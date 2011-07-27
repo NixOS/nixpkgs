@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, pulseaudio, makeWrapper }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib pulseaudio stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64 \
+        --set-rpath ${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64 \
         $out/bin/spotify
 
       preload=$out/libexec/spotify/libpreload.so
