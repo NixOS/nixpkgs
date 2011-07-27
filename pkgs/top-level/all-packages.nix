@@ -657,7 +657,9 @@ let
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
-  fuppes = callPackage ../tools/networking/fuppes {};
+  fuppes = callPackage ../tools/networking/fuppes {
+    ffmpeg = ffmpeg_0_6_90;
+  };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
@@ -3097,6 +3099,10 @@ let
   fcgi = callPackage ../development/libraries/fcgi { };
 
   ffmpeg = callPackage ../development/libraries/ffmpeg {
+    vpxSupport = if !stdenv.isMips then true else false;
+  };
+
+  ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
     vpxSupport = if !stdenv.isMips then true else false;
   };
 

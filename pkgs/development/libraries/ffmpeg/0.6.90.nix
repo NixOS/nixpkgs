@@ -18,13 +18,13 @@ assert xvidSupport -> xvidcore != null;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.7-rc1";
-  
+  name = "ffmpeg-0.6.90-rc0";
+
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "07ma2b80nslwwy4ddfrz8k575dxyc8x9mvja55ghrwxys8lkhw2m";
+    sha256 = "1xn9fmpq2cbf1bx1gxbxnas8fq02gb8bmvvg5vjjxyw9lz5zw49f";
   };
-  
+
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
   # applications.
