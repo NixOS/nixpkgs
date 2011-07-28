@@ -386,6 +386,13 @@ substituteAll() {
 }
 
 
+substituteAllInPlace() {
+    local fileName="$1"
+    shift
+    substituteAll "$fileName" "$fileName" "$@"
+}
+
+
 ######################################################################
 # What follows is the generic builder.
 
