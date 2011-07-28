@@ -4107,6 +4107,10 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
+  phonon = callPackage ../development/libraries/phonon { };
+
+  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
+
   phonon_backend_vlc = newScope pkgs.kde4 ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };

@@ -2,7 +2,7 @@
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
 , xz, flex, bison, openexr, aspell, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
-, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, hspell
+, docbook_xml_dtd_42, docbook_xsl, polkit_qt_1, hspell, phonon
 }:
 
 kde.package {
@@ -19,7 +19,7 @@ kde.package {
 # Split plugins from libs?
 
   propagatedBuildInputs = [ qt4 gcc.libc strigi soprano attica qca2
-    shared_desktop_ontologies ];
+    shared_desktop_ontologies phonon ];
 
   patches = [ ./polkit-install.patch ];
 

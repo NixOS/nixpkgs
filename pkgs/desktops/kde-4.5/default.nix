@@ -24,8 +24,6 @@ recurseIntoAttrs rec {
 
   qt4 = qt47;
 
-  phonon = null;
-
   kde = callPackage ./kde-package { inherit release; };
 
 ### SUPPORT
