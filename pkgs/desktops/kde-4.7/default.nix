@@ -2,7 +2,7 @@
 
 let
 
-  release = "4.6.95";
+  release = "4.7.0";
 
   # Various packages (e.g. kdesdk) have been split up into many
   # smaller packages.  Some people may want to install the entire
@@ -24,7 +24,7 @@ recurseIntoAttrs rec {
 
   qt4 = qt47;
 
-  kde = callPackage ./kde-package { inherit release; stable = false; };
+  kde = callPackage ./kde-package { inherit release; stable = true; };
 
 ### SUPPORT
 
