@@ -120,11 +120,11 @@ in
             background=NO
             listen=YES
             nopriv_user=vsftpd
-            secure_chroot_dir=/var/ftp/empty
+            secure_chroot_dir=/var/empty
             EOF
 
             ${if cfg.anonymousUser then ''
-              mkdir -p ${cfg.anonymousUserHome}
+              mkdir -p -m 555 ${cfg.anonymousUserHome}
               chown -R ftp:ftp ${cfg.anonymousUserHome}
             '' else ""}
           '';
