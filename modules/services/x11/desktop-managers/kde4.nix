@@ -115,7 +115,7 @@ in
           pkgs.kde4.gwenview
 
           # Phonon backends.
-          pkgs.kde4.phonon_backend_gstreamer
+          pkgs.phonon_backend_gstreamer
           pkgs.gst_all.gstPluginsBase
           pkgs.gst_all.gstPluginsGood
           pkgs.gst_all.gstPluginsUgly
