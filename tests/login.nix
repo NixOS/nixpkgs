@@ -14,6 +14,7 @@
       # Log in as alice on a virtual console.
       subtest "virtual console login", sub {
           $machine->waitForJob("tty1");
+          $machine->sleep(2); # urgh: wait for username prompt
           $machine->sendChars("alice\n");
           $machine->waitUntilSucceeds("pgrep login");
           $machine->sleep(2); # urgh: wait for `Password:'
