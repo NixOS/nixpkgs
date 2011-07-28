@@ -7674,10 +7674,6 @@ let
     callPackage = newScope pkgs.kde45;
   };
 
-  kde46 = callPackage ../desktops/kde-4.6 {
-    callPackage = newScope pkgs.kde46;
-  };
-
   kde47 = callPackage ../desktops/kde-4.7 {
     callPackage = newScope pkgs.kde47;
   };
