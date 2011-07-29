@@ -1,7 +1,7 @@
-{ kde, cmake, qt4, perl, automoc4, kdelibs, libXtst }:
+{ kde, cmake, qt4, kdelibs, automoc4, phonon, libXtst }:
 
 kde.package {
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 libXtst ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon libXtst ];
 
   meta = {
     description = "A program that clicks the mouse for you";

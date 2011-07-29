@@ -1,7 +1,7 @@
-{ kde, cmake, qt4, perl, automoc4, kdelibs }:
+{ kde, cmake, qt4, kdelibs, automoc4, phonon }:
 
 kde.package {
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon ];
 
   meta = {
     description = "A type-and-say front end for speech synthesizers";
@@ -12,4 +12,3 @@ kde.package {
     };
   };
 }
-

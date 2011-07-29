@@ -87,16 +87,15 @@ recurseIntoAttrs rec {
   
   kdemultimedia = callPackage ./multimedia.nix { };
 
-  /*
   kdeaccessibility = combinePkgs "kdeaccessibility" {
-    colorSchemes = callPackage ./accessibility/color-schemes.nix { };
-    iconThemes = callPackage ./accessibility/icon-themes.nix { };
-    jovie = callPackage ./accessibility/jovie.nix { };
+    #jovie = callPackage ./accessibility/jovie.nix { };
     kmag = callPackage ./accessibility/kmag.nix { };
     kmousetool = callPackage ./accessibility/kmousetool.nix { };
     kmouth = callPackage ./accessibility/kmouth.nix { };
+    kaccessible = callPackage ./accessibility/kaccessible.nix { };
   };
 
+  /*
   kdeartwork = combinePkgs "kdeartwork" {
     aurorae = callPackage ./artwork/aurorae.nix { };
     colorSchemes = callPackage ./artwork/color-schemes.nix { };
