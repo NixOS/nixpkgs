@@ -183,9 +183,9 @@ recurseIntoAttrs rec {
 
   /*
   kdebindings = callPackage ./bindings { };
+  */
 
   l10n = callPackage ./l10n { inherit release; };
-  */
 
   # Make the split packages visible to `nix-env -q'.
   misc = recurseIntoAttrs

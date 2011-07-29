@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, kdelibs, gettext, perl, automoc4, release }:
+{ stdenv, fetchurl, cmake, kdelibs, gettext, perl, automoc4, qt4, phonon, release }:
 
 let
 
@@ -16,7 +16,7 @@ let
         inherit sha256;
       };
 
-      buildInputs = [ cmake perl gettext kdelibs automoc4 ];
+      buildInputs = [ cmake perl gettext kdelibs automoc4 qt4 phonon ];
 
       meta = {
         description = "KDE translation for ${lang}";
