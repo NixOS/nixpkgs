@@ -1,8 +1,11 @@
-{ cmake, kde, automoc4, kdelibs, xscreensaver, kdebase_workspace, eigen }:
+{ cmake, kde, qt4, automoc4, kdelibs, phonon, xscreensaver, kde_workspace, eigen, libkexiv2 }:
 
 kde.package rec {
-  buildInputs = [ cmake automoc4 kdelibs xscreensaver kdebase_workspace eigen ];
+  buildInputs =
+    [ cmake automoc4 qt4 kdelibs phonon xscreensaver kde_workspace eigen libkexiv2 ];
+  
   preConfigure = "cp -v ${./FindXscreensaver.cmake} cmake/modules/FindXscreensaver.cmake";
+  
   meta = {
     description = "KDE screensavers";
     kde = {

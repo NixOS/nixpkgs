@@ -95,10 +95,9 @@ recurseIntoAttrs rec {
     kaccessible = callPackage ./accessibility/kaccessible.nix { };
   };
 
-  /*
   kdeartwork = combinePkgs "kdeartwork" {
     aurorae = callPackage ./artwork/aurorae.nix { };
-    colorSchemes = callPackage ./artwork/color-schemes.nix { };
+    color_schemes = callPackage ./artwork/color-schemes.nix { };
     desktop_themes = callPackage ./artwork/desktop-themes.nix { };
     emoticons = callPackage ./artwork/emoticons.nix { };
     high_resolution_wallpapers = callPackage ./artwork/high-resolution-wallpapers.nix { };
@@ -108,8 +107,10 @@ recurseIntoAttrs rec {
     weather_wallpapers = callPackage ./artwork/weather-wallpapers.nix { };
     phase_style = callPackage ./artwork/phase-style.nix { };
     kscreensaver = callPackage ./artwork/kscreensaver.nix { };
+    kwin_styles = callPackage ./artwork/kwin-styles.nix { };
   };
   
+  /*
   kdeedu = callPackage ./edu { };
   kdegraphics = callPackage ./graphics { };
   kdenetwork = callPackage ./network { };
@@ -178,10 +179,10 @@ recurseIntoAttrs rec {
   kdebindings = callPackage ./bindings { };
 
   l10n = callPackage ./l10n { inherit release; };
+  */
 
   # Make the split packages visible to `nix-env -q'.
   misc = recurseIntoAttrs
     (kdeaccessibility.pkgs // kdeartwork.pkgs // kdesdk.pkgs // kdetoys.pkgs // kdeutils.pkgs // kdewebdev.pkgs);
-  */
 
 }

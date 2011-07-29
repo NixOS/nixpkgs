@@ -1,11 +1,12 @@
-{ cmake, kde, automoc4, kdelibs }:
+{ cmake, kde, qt4, automoc4, kdelibs, phonon }:
 
 kde.package rec {
   name = "kde-style-phase-${kde.release}";
 
-  buildInputs = [ cmake automoc4 kdelibs ];
+  buildInputs = [ cmake qt4 automoc4 kdelibs phonon ];
+
   meta = {
-    description = "KDE phase style. Clean classical look";
+    description = "Phase, a widget style for KDE";
     kde = {
       name = "styles";
       module = "kdeartwork";
