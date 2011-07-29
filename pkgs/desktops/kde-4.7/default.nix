@@ -161,7 +161,6 @@ recurseIntoAttrs rec {
     filelight = callPackage ./utils/filelight.nix { };
   };
 
-  /*
   kdewebdev = combinePkgs "kdewebdev" {
     klinkstatus = callPackage ./webdev/klinkstatus.nix { };
     kommander = callPackage ./webdev/kommander.nix { };
@@ -169,6 +168,7 @@ recurseIntoAttrs rec {
     kimagemapeditor = callPackage ./webdev/kimagemapeditor.nix { };
   };
 
+  /*
   kdepim_runtime = callPackage ./pim-runtime { };
   kdepim = callPackage ./pim { };
   */

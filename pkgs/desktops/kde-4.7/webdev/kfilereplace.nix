@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, libxml2, libxslt }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, libxml2, libxslt }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 libxml2 libxslt ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon libxml2 libxslt ];
 
   meta = {
     description = "Batch search and replace tool";
