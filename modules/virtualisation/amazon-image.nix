@@ -27,6 +27,8 @@ with pkgs.lib;
 
           # The initrd expects these directories to exist.
           mkdir /mnt/dev /mnt/proc /mnt/sys
+          
+          mount -o bind /proc /mnt/proc
 
           # Copy all paths in the closure to the filesystem.
           storePaths=$(perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure)
@@ -53,6 +55,7 @@ with pkgs.lib;
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
+          umount /mnt/proc
           umount /mnt
         ''
     );
