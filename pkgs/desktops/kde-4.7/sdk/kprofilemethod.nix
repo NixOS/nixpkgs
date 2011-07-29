@@ -1,11 +1,10 @@
-{ kde, cmake, kdelibs, automoc4 }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi ];
 
   meta = {
-    description = "A macros for profiling using QTime";
-    longDescription = "Don't commit any code using kprofilemethod.h to KDE repositories.";
+    description = "A macro for profiling using QTime";
     kde = {
       name = "kprofilemethod";
       module = "kdesdk";

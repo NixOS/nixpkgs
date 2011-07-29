@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, kdepimlibs }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, kdepimlibs }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 kdepimlibs ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi kdepimlibs ];
 
   meta = {
     description = "KDE accounts akonadi agent";

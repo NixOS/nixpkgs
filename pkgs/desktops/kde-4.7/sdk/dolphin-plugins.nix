@@ -1,9 +1,11 @@
-{ kde, cmake, kdelibs, automoc4, kdebase }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, kde_baseapps, kdepimlibs }:
 
 kde.package {
   # Needs kdebase for libkonq
-  buildInputs = [ cmake kdelibs automoc4 kdebase ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi kde_baseapps ];
 
+  cmakeFlags = "-DBUILD_dolphin-plugins/svn=TRUE -DBUILD_dolphin-plugins/git=TRUE";
+  
   meta = {
     description = "Git and Svn plugins for dolphin";
     kde = {

@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, hunspell }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, hunspell }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 hunspell ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi hunspell ];
 
   meta = {
     description = "KDE 4 Computer-aided translation system";
@@ -12,7 +12,7 @@ kde.package {
     kde = {
       name = "lokalize";
       module = "kdesdk";
-      version = "1.1";
+      version = "1.2";
       versionFile = "src/version.h";
     };
   };

@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, perl }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, perl }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 perl ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi perl ];
 
   cmakeFlags = "-DBUILD_kioslave=ON -DBUILD_perldoc=ON";
 

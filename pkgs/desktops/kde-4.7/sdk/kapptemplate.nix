@@ -1,8 +1,7 @@
-{ kde, cmake, kdelibs, automoc4 }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 ];
-
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi ];
 
   meta = {
     description = "A KDE 4 project template generator";

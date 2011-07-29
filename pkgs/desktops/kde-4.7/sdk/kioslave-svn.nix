@@ -1,13 +1,13 @@
-{ kde, cmake, kdelibs, automoc4, subversion, apr, aprutil }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, subversion, apr, aprutil }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 subversion apr aprutil ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi subversion apr aprutil ];
 
   patches = [ ./find-svn.patch ];
   cmakeFlags = "-DBUILD_kioslave=ON";
 
   meta = {
-    description = "svn:/ kioslave";
+    description = "Subversion kioslave";
     kde = {
       name = "kioslave-svn";
       module = "kdesdk";

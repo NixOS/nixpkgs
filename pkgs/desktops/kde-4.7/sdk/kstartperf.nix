@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, libtool }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, libtool }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 libtool ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi libtool ];
 
   meta = {
     description = "Measures start up time of a KDE application";

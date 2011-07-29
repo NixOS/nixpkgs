@@ -1,8 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, antlr }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, strigi, antlr }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 antlr ];
-
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon strigi antlr ];
 
   meta = {
     description = "Po<->xml tools";
