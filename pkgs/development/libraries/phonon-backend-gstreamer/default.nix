@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
+    platforms = stdenv.lib.platforms.linux;
   };  
 }

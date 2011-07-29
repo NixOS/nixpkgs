@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://phonon.kde.org/;
     description = "Multimedia API for Qt";
     license = "LGPLv2";
+    platforms = stdenv.lib.platforms.linux;
   };  
 }
