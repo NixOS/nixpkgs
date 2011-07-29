@@ -1,11 +1,9 @@
 { kde, cmake, qt4, pkgconfig, perl, pythonPackages
 , sip, pycups, pygobject, system_config_printer
 , kdelibs, automoc4, phonon, kdepimlibs, pykde4
-, cups, nettools } @ args:
+, cups, nettools }:
 
 let
-
-  system_config_printer = args.system_config_printer.override { withGUI = false; };
 
 in
 

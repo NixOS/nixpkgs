@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, qt4, perl, automoc4, kdebase_workspace }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, libXtst }:
 
 kde.package {
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 kdebase_workspace ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon libXtst ];
 
   meta = {
     description = "KDE remote control";

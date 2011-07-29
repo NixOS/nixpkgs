@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, qt4, perl, automoc4 }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon }:
 
 kde.package {
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon ];
 
   meta = {
     description = "KDE Wallet (password storage) management tool";

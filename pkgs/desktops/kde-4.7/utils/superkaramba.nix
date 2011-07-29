@@ -1,7 +1,7 @@
-{ kde, cmake, perl, kdelibs, qt4, automoc4, qimageblitz, python }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, qimageblitz, python }:
 
 kde.package {
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 qimageblitz python ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon qimageblitz ];
 
   cmakeFlags = "-DBUILD_icons=TRUE -DBULD_plasma=TRUE";
 
@@ -10,7 +10,7 @@ kde.package {
     kde = {
       name = "superkaramba";
       module = "kdeutils";
-      version = "0.55";
+      version = "0.57";
       versionFile = "src/main.cpp";
     };
   };

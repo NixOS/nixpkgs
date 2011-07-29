@@ -1,4 +1,4 @@
-{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47 } :
+{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, system_config_printer } @ args:
 
 let
 
@@ -27,6 +27,8 @@ recurseIntoAttrs rec {
   kde = callPackage ./kde-package { inherit release; stable = true; };
 
 ### SUPPORT
+
+  system_config_printer = args.system_config_printer.override { withGUI = false; };
 
   akonadi = callPackage ./support/akonadi { };
 
@@ -95,8 +97,6 @@ recurseIntoAttrs rec {
     kmouth = callPackage ./accessibility/kmouth.nix { };
   };
 
-  kdeadmin = callPackage ./admin { };
-  
   kdeartwork = combinePkgs "kdeartwork" {
     aurorae = callPackage ./artwork/aurorae.nix { };
     colorSchemes = callPackage ./artwork/color-schemes.nix { };
@@ -112,7 +112,6 @@ recurseIntoAttrs rec {
   };
   
   kdeedu = callPackage ./edu { };
-  kdegames = callPackage ./games { };
   kdegraphics = callPackage ./graphics { };
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
@@ -138,6 +137,7 @@ recurseIntoAttrs rec {
     poxml = callPackage ./sdk/poxml.nix { };
     scripts = callPackage ./sdk/scripts.nix { };
     umbrello = callPackage ./sdk/umbrello.nix { };
+    okteta = callPackage ./utils/okteta.nix { };
   };
   
   kdetoys = combinePkgs "kdetoys" {
@@ -145,6 +145,7 @@ recurseIntoAttrs rec {
     kteatime = callPackage ./toys/kteatime.nix { };
     ktux = callPackage ./toys/ktux.nix { };
   };
+  */
 
   kdeutils = combinePkgs "kdeutils" {
     ark = callPackage ./utils/ark.nix { };
@@ -156,12 +157,13 @@ recurseIntoAttrs rec {
     kremotecontrol = callPackage ./utils/kremotecontrol.nix { };
     ktimer = callPackage ./utils/ktimer.nix { };
     kwallet = callPackage ./utils/kwallet.nix { };
-    okteta = callPackage ./utils/okteta.nix { };
     printer_applet = callPackage ./utils/printer-applet.nix { };
     superkaramba = callPackage ./utils/superkaramba.nix { };
     sweeper = callPackage ./utils/sweeper.nix { };
+    filelight = callPackage ./utils/filelight.nix { };
   };
 
+  /*
   kdewebdev = combinePkgs "kdewebdev" {
     klinkstatus = callPackage ./webdev/klinkstatus.nix { };
     kommander = callPackage ./webdev/kommander.nix { };

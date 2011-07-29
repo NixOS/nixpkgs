@@ -4,12 +4,11 @@ kde.package {
   buildInputs = [ cmake qt4 kdelibs automoc4 phonon ];
 
   meta = {
-    description = "Helps clean unwanted traces the user leaves on the system";
+    description = "Tool to visualise file and directory sizes";
     kde = {
-      name = "sweeper";
+      name = "filelight";
       module = "kdeutils";
-      version = "1.7";
-      versionFile = "main.cpp";
+      version = "1.10";
     };
   };
 }

@@ -1,10 +1,10 @@
-{ kde, cmake, kdelibs, qt4, perl, automoc4 }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon }:
 
 kde.package {
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon ];
 
   meta = {
-    description = "Helps you format floppies with the filesystem of your choice";
+    description = "Floppy disk formatting utility";
     kde = {
       name = "kfloppy";
       module = "kdeutils";

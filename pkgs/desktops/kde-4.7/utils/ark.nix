@@ -1,11 +1,10 @@
-{ kde, cmake, kdelibs, qt4, perl, libarchive, xz, automoc4, qjson,
-  kdebase }:
+{ kde, cmake, kdelibs, qt4, libarchive, xz, automoc4
+, phonon, bzip2, kde_baseapps }:
 
 kde.package {
-  patchPhase = "cp -vn ${qjson}/share/apps/cmake/modules/FindQJSON.cmake cmake/modules";
-
-  buildInputs = [ cmake qt4 perl libarchive xz kdelibs automoc4 qjson
-    kdebase # for libkonq
+  buildInputs =
+    [ cmake kdelibs qt4 automoc4 phonon kde_baseapps
+      libarchive xz bzip2
     ];
 
   meta = {
@@ -13,7 +12,7 @@ kde.package {
     kde = {
       name = "ark";
       module = "kdeutils";
-      version = "2.15";
+      version = "2.17";
       versionFile = "app/main.cpp";
     };
   };
