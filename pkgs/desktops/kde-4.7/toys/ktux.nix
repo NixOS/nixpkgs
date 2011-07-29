@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4, kdebase_workspace }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon, kde_workspace }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 kdebase_workspace ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon kde_workspace ];
 
   meta = {
     description = "Tux Screen Saver";

@@ -1,7 +1,7 @@
-{ kde, cmake, kdelibs, automoc4 }:
+{ kde, cmake, kdelibs, qt4, automoc4, phonon }:
 
 kde.package {
-  buildInputs = [ cmake kdelibs automoc4 ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon ];
 
   meta = {
     description = "KDE creature for your desktop";

@@ -139,13 +139,13 @@ recurseIntoAttrs rec {
     umbrello = callPackage ./sdk/umbrello.nix { };
     okteta = callPackage ./utils/okteta.nix { };
   };
-  
+  */
+
   kdetoys = combinePkgs "kdetoys" {
     amor = callPackage ./toys/amor.nix { };
     kteatime = callPackage ./toys/kteatime.nix { };
     ktux = callPackage ./toys/ktux.nix { };
   };
-  */
 
   kdeutils = combinePkgs "kdeutils" {
     ark = callPackage ./utils/ark.nix { };
