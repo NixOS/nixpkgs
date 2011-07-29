@@ -48,7 +48,7 @@ recurseIntoAttrs rec {
 
   kdelibs = callPackage ./libs { };
 
-  kdepimlibs = callPackage ./pimlibs { };
+  kdepimlibs = callPackage ./pimlibs.nix { };
 
 ### BASE
 
@@ -174,10 +174,9 @@ recurseIntoAttrs rec {
     kimagemapeditor = callPackage ./webdev/kimagemapeditor.nix { };
   };
 
-  /*
-  kdepim_runtime = callPackage ./pim-runtime { };
-  kdepim = callPackage ./pim { };
-  */
+  kdepim_runtime = callPackage ./pim-runtime.nix { };
+  
+  kdepim = callPackage ./pim.nix { };
 
 ### DEVELOPMENT
 
