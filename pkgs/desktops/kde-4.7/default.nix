@@ -40,7 +40,9 @@ recurseIntoAttrs rec {
 
   libkipi = callPackage ./libkipi.nix { };
 
-  #kipi_plugins = callPackage ./kipi-plugins { };
+  libkdcraw = callPackage ./libkdcraw.nix { };
+
+  kipi_plugins = callPackage ./kipi-plugins.nix { };
 
 ### LIBS
 
@@ -86,6 +88,10 @@ recurseIntoAttrs rec {
   kdegames = callPackage ./games.nix { };
   
   kdemultimedia = callPackage ./multimedia.nix { };
+
+  kolourpaint = callPackage ./kolourpaint.nix { };
+
+  kgamma = callPackage ./kgamma.nix { };
 
   kdeaccessibility = combinePkgs "kdeaccessibility" {
     #jovie = callPackage ./accessibility/jovie.nix { };
