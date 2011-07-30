@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, alsaLib, jackaudio }:
+{ stdenv, fetchurl, qt4, alsaLib, jackaudio, dbus }:
 
 stdenv.mkDerivation rec {
   version = "0.3.7";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1gynym21d8d4d38qyl817qg0v8360brcpga4wcdapccbgpaz3c28";
   };
 
-  buildInputs = [ qt4 alsaLib jackaudio ];
+  buildInputs = [ qt4 alsaLib jackaudio dbus ];
 
-  meta = { 
+  meta = {
     description = "qt jackd control gui tool";
     homepage = http://qjackctl.sourceforge.net/;
     license = "GPL";
