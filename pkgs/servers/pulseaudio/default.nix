@@ -1,7 +1,10 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, liboil, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
 , libcap, alsaLib, libsamplerate, libsndfile, speex, bluez, udev
+, jackaudioSupport ? false, jackaudio ? null
 , ...}:
+
+assert jackaudioSupport -> jackaudio != null;
 
 stdenv.mkDerivation rec {
   name = "pulseaudio-0.9.21";
@@ -18,8 +21,8 @@ stdenv.mkDerivation rec {
     pkgconfig gnum4 libtool glib dbus avahi gconf liboil
     libsamplerate libsndfile speex alsaLib libcap
     gtk libX11 libICE libSM libXtst libXi
-    intltool gettext bluez udev
-  ];
+    intltool gettext bluez udev]
+    ++ stdenv.lib.optional jackaudioSupport jackaudio;
 
   preConfigure = ''
     # Change the `padsp' script so that it contains the full path to
@@ -33,8 +36,9 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = ''
-    --disable-solaris --disable-hal --disable-jack --localstatedir=/var
+    --disable-solaris --disable-hal --localstatedir=/var
     --disable-oss-output --disable-oss-wrapper
+    ${if (!jackaudioSupport) then "--disable-jack" else ""}
   '';
 
   meta = {
