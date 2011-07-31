@@ -6109,7 +6109,8 @@ let
   darcs = haskellPackages.darcs;
 
   darktable = callPackage ../applications/graphics/darktable {
-     inherit (gnome) GConf gnome_keyring libglade;
+    inherit (gnome) GConf gnome_keyring libglade atk;
+    inherit (xlibs) libxcb pixman libpthreadstubs libXau;
   };
 
   dia = callPackage ../applications/graphics/dia { };
