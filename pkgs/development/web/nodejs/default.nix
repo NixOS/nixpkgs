@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "nodejs-${version}";
 
   src = fetchurl {
-    url = "http://nodejs.org/dist/node-v${version}.tar.gz";
+    url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
     sha256 = "16z16gq5pibw5l830pv5dgx7v2gw6syrddphikcgia92pw4r33qr";
   };
 
