@@ -123,7 +123,7 @@ recurseIntoAttrs rec {
     ktimer = callPackage ./utils/ktimer.nix { };
     kwallet = callPackage ./utils/kwallet.nix { };
     okteta = callPackage ./utils/okteta.nix { };
-    printer_applet = callPackage ./utils/printer-applet.nix { };
+    #printer_applet = callPackage ./utils/printer-applet.nix { };
     superkaramba = callPackage ./utils/superkaramba.nix { };
     sweeper = callPackage ./utils/sweeper.nix { };
   };
@@ -140,7 +140,8 @@ recurseIntoAttrs rec {
 
 ### DEVELOPMENT
 
-  kdebindings = callPackage ./bindings { };
+  #kdebindings = callPackage ./bindings { };
+  kdebindings = null;
 
   l10n = callPackage ./l10n { inherit release; };
 
