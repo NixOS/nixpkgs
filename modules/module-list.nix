@@ -52,7 +52,6 @@
   ./services/audio/alsa.nix
   ./services/audio/fuppes.nix
   ./services/audio/pulseaudio.nix
-  ./services/backup/hydra-mirror.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/sitecopy-backup.nix
