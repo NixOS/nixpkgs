@@ -541,7 +541,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {};
+  graphviz = callPackage ../development/libraries/haskell/graphviz {
+    polyparse = self.polyparse14;
+  };
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
@@ -587,8 +589,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HaXml_1_13_3 = callPackage ../development/libraries/haskell/HaXml/1.13.3.nix {};
   HaXml_1_20_2 = callPackage ../development/libraries/haskell/HaXml/1.20.2.nix {};
+  HaXml_1_22_2 = callPackage ../development/libraries/haskell/HaXml/1.22.2.nix {};
   HaXml113 = self.HaXml_1_13_3;
   HaXml120 = self.HaXml_1_20_2;
+  HaXml122 = self.HaXml_1_22_2;
   HaXml    = self.HaXml120;
 
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
@@ -611,6 +615,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
 
+  hledger = callPackage ../development/libraries/haskell/hledger {};
+  hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
+  hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
+  hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
+
   HList = callPackage ../development/libraries/haskell/HList {};
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {
@@ -626,6 +635,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
 
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
+
+  hsdns = callPackage ../development/libraries/haskell/hsdns {
+    inherit (pkgs) adns;
+  };
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
@@ -699,6 +712,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
+  monadPar = callPackage ../development/libraries/haskell/monad-par {};
+
   monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
 
   MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
@@ -715,6 +730,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl1 = self.mtl_1_1_0_2;
   mtl2 = self.mtl_2_0_1_0;
   mtl  = self.mtl1;
+
+  mtlparse  = callPackage ../development/libraries/haskell/mtlparse {};
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
@@ -789,7 +806,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
-  polyparse = callPackage ../development/libraries/haskell/polyparse {};
+  polyparse14 = callPackage ../development/libraries/haskell/polyparse/1.4.nix {};
+  polyparse17 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
+  polyparse = self.polyparse17;
 
   pool = callPackage ../development/libraries/haskell/pool {};
 
@@ -851,6 +870,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
 
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
+
+  regexpr = callPackage ../development/libraries/haskell/regexpr {};
 
   regular = callPackage ../development/libraries/haskell/regular {};
 
@@ -933,6 +954,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stm = self.stm_2_1_1_2;
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
+
+  storableRecord = callPackage ../development/libraries/haskell/storable-record {};
 
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 

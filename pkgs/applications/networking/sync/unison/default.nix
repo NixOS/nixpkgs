@@ -6,10 +6,10 @@ let
 in
 stdenv.mkDerivation (rec {
 
-  name = "unison-2.32.52";
+  name = "unison-2.40.63";
   src = fetchurl {
     url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/${name}/${name}.tar.gz";
-    sha256 = "11844yh1gpjjapn8pvc14hla7g70spwqy6h61qk2is83mpafahhm";
+    sha256 = "17fd2bg5jxwbib87j6j2bjpwdm66whqm1fq46v70hfby79j00vkf";
   };
 
   buildInputs = [ ocaml makeWrapper ncurses ];

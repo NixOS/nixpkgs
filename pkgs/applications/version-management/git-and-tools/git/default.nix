@@ -53,6 +53,12 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/libexec/git-core/git-sh-setup \
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
+
+      # Fix references to the perl binary. Note that the tab character
+      # in the patterns is important.
+      sed -i -e 's|	perl -ne|	${perl}/bin/perl -ne|g' \
+             -e 's|	perl -e|	${perl}/bin/perl -e|g' \
+             $out/libexec/git-core/{git-am,git-submodule}
     ''
 
    + (if svnSupport then

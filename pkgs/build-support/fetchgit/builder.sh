@@ -18,11 +18,15 @@ if test -n "$rev"; then
     parsed_rev=$(
         git rev-parse --verify "$rev" 2>/dev/null ||
         git rev-parse --verify origin/"$rev" 2>/dev/null
-    ) 
+    )
     git reset --hard $parsed_rev
     git checkout -b __nixos_build__
 else
     git checkout -b __nixos_build__ origin/HEAD
+fi
+
+if test -f .gitmodules; then
+  git submodule update --init
 fi
 
 if test -z "$leaveDotGit"; then

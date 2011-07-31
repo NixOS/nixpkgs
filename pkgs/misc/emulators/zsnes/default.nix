@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   
   meta = {
     description = "A Super Nintendo Entertainment System Emulator";
-    license = "GPLv2";
+    license = "GPLv2+";
+    maintainers = [ stdenv.lib.maintainers.sander ];
+    homepage = http://www.zsnes.com;
   };
 }

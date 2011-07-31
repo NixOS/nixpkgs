@@ -1,21 +1,24 @@
 {stdenv, fetchurl, zlib, openssl, tcl}:
 
 let
-  version = "20110512145652";
+  version = "1.18";
+  filedate = "20110713230341";
 in
 
 stdenv.mkDerivation {
   name = "fossil-${version}";
 
   src = fetchurl {
-    url = "http://www.fossil-scm.org/download/fossil-src-${version}.tar.gz";
-    sha256 = "1x51bmmzmabq8dkpm4sxkqbpmp6nxk9dix7pqa2calmjn3rmzc8k";
+    url = "http://www.fossil-scm.org/download/fossil-src-${filedate}.tar.gz";
+    sha256 = "065hp5hppzjzvvk9g8zaqbfms011rkiimydnfsgkp4s8jlc2h6dc";
   };
 
   buildInputs = [ zlib openssl ];
   buildNativeInputs = [ tcl ];
 
   doCheck = true;
+
+  configurePhase = ":";
 
   checkTarget = "test";
 

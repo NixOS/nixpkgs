@@ -1,20 +1,24 @@
 { stdenv, fetchurl, libtorrent, ncurses, pkgconfig, libsigcxx, curl
 , zlib, openssl }:
 
-stdenv.mkDerivation rec {
-  pname = "rtorrent";
-  version = "0.8.6";
+let
+  version = "0.8.9";
+in
+stdenv.mkDerivation {
+  name = "rtorrent-${version}";
 
-  name = "${pname}-${version}";
-  
   src = fetchurl {
-    url = "http://libtorrent.rakshasa.no/downloads/${name}.tar.gz";
-    sha256 = "1nrj1cgjhscf40zhp70m4p6gq96rqg815dn43yyjl5i42n7cd5lc";
+    url = "http://libtorrent.rakshasa.no/downloads/rtorrent-${version}.tar.gz";
+    sha256 = "cca70eb36a0c176bbd6fdb3afe2bc9f163fa4c9377fc33bc29689dec60cf6d84";
   };
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
-  
+
   meta = {
+    homepage = "http://libtorrent.rakshasa.no/";
     description = "An ncurses client for libtorrent, ideal for use with screen or dtach";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

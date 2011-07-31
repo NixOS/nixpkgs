@@ -100,5 +100,5 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
-  meta.platforms = [ "i686-darwin" "x86_64-linux" "i686-linux"] ;
+  meta.platforms = stdenv.lib.platforms.haskellPlatforms;
 }

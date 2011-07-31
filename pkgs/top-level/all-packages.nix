@@ -657,7 +657,9 @@ let
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
-  fuppes = callPackage ../tools/networking/fuppes {};
+  fuppes = callPackage ../tools/networking/fuppes {
+    ffmpeg = ffmpeg_0_6_90;
+  };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
@@ -1568,6 +1570,8 @@ let
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
   });
+
+  bashCompletion = callPackage ../shells/bash-completion { };
 
   dash = callPackage ../shells/dash { };
 
@@ -2495,11 +2499,10 @@ let
 
   xulrunnerWrapper = {application, launcher}:
     import ../development/interpreters/xulrunner/wrapper {
-      inherit stdenv application launcher;
-      xulrunner = firefox50Pkgs.xulrunner;
+      inherit stdenv application launcher xulrunner;
     };
 
-  xulrunner = firefox50Pkgs.xulrunner;
+  xulrunner = firefoxPkgs.xulrunner;
 
   ### DEVELOPMENT / MISC
 
@@ -2615,6 +2618,8 @@ let
   bison23 = callPackage ../development/tools/parsing/bison/bison-2.3.nix { };
 
   bison24 = callPackage ../development/tools/parsing/bison/bison-2.4.nix { };
+
+  bison25 = callPackage ../development/tools/parsing/bison/bison-2.5.nix { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted;
@@ -2877,10 +2882,7 @@ let
 
   acl = callPackage ../development/libraries/acl { };
 
-  adns = import ../development/libraries/adns/1.4.nix {
-    inherit stdenv fetchurl;
-    static = getConfig [ "adns" "static" ] (stdenv ? isStatic || stdenv ? isDietLibC);
-  };
+  adns = callPackage ../development/libraries/adns { };
 
   agg = callPackage ../development/libraries/agg { };
 
@@ -3101,6 +3103,10 @@ let
   fcgi = callPackage ../development/libraries/fcgi { };
 
   ffmpeg = callPackage ../development/libraries/ffmpeg {
+    vpxSupport = if !stdenv.isMips then true else false;
+  };
+
+  ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
     vpxSupport = if !stdenv.isMips then true else false;
   };
 
@@ -3554,6 +3560,8 @@ let
   libassuan1 = callPackage ../development/libraries/libassuan1 { };
 
   libassuan = callPackage ../development/libraries/libassuan { };
+
+  libav = callPackage ../development/libraries/libav { };
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
@@ -4717,6 +4725,11 @@ let
 
   pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome.GConf;
+    # The following are disabled in the default build, because if this
+    # functionality is desired, they are only needed in the PulseAudio
+    # server.
+    bluez = null;
+    avahi = null;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -5342,6 +5355,16 @@ let
       ];
   };
 
+  linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [ #kernelPatches.fbcondecor_2_6_38
+        kernelPatches.sec_perm_2_6_24
+        #kernelPatches.aufs2_1_2_6_38
+        #kernelPatches.mips_restart_2_6_36
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5472,6 +5495,7 @@ let
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
+  linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
@@ -5632,6 +5656,8 @@ let
   rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
+
+  rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
@@ -6103,7 +6129,8 @@ let
   darcs = haskellPackages.darcs;
 
   darktable = callPackage ../applications/graphics/darktable {
-     inherit (gnome) GConf gnome_keyring libglade;
+    inherit (gnome) GConf gnome_keyring libglade atk;
+    inherit (xlibs) libxcb pixman libpthreadstubs libXau;
   };
 
   dia = callPackage ../applications/graphics/dia { };
@@ -6296,9 +6323,11 @@ let
 
   filelight = newScope pkgs.kde4 ../applications/misc/filelight { };
 
-  firefox = firefox50Pkgs.firefox;
+  firefox = firefoxPkgs.firefox;
 
-  firefoxWrapper = firefox50Wrapper;
+  firefoxWrapper = wrapFirefox firefox "firefox" "";
+
+  firefoxPkgs = firefox50Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
@@ -6325,20 +6354,14 @@ let
 
   flashplayer = flashplayer10;
 
-  flashplayer9 = (
-    import ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
-      inherit fetchurl stdenv zlib alsaLib nss nspr fontconfig freetype expat;
-      inherit (xlibs) libX11 libXext libXrender libXt;
-      inherit (gtkLibs) gtk glib pango atk;
-    });
+  flashplayer9 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
+    inherit (gtkLibs) atk;
+  };
 
-  flashplayer10 = (
-    import ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
-      inherit fetchurl stdenv zlib alsaLib curl nss nspr fontconfig freetype expat cairo;
-      inherit (xlibs) libX11 libXext libXrender libXt ;
-      inherit (gtkLibs) gtk glib pango atk gdk_pixbuf;
-      debug = getConfig ["flashplayer" "debug"] false;
-    });
+  flashplayer10 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
+    inherit (gtkLibs) atk gdk_pixbuf;
+    debug = getConfig ["flashplayer" "debug"] false;
+  };
 
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost146;
@@ -6432,6 +6455,10 @@ let
     inherit (gnome) libglade;
   };
 
+  jbidwatcher = callPackage ../applications/misc/jbidwatcher {
+    java = if stdenv.isLinux then jre else jdk;
+  };
+
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
     inherit libpng opencv;
   };
@@ -6450,6 +6477,10 @@ let
   gqview = callPackage ../applications/graphics/gqview { };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
+
+  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
+    inherit pkgsi686Linux;
+  };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
     inherit fetchsvn curl pkgconfig libxml2;
@@ -6651,6 +6682,7 @@ let
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger = callPackage ../applications/office/ledger { };
+  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
     inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
@@ -6928,8 +6960,8 @@ let
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
   RealPlayer = callPackage ../applications/video/RealPlayer {
-      inherit (gtkLibs) glib pango atk gtk;
-      libstdcpp5 = gcc33.gcc;
+    inherit (gtkLibs) glib pango atk gtk;
+    libstdcpp5 = gcc33.gcc;
   };
 
   rekonq = newScope pkgs.kde4 ../applications/networking/browsers/rekonq { };
@@ -6940,7 +6972,7 @@ let
 
   retroshare = callPackage ../applications/networking/p2p/retroshare {
     qt = qt4;
-   inherit (gnome) gnome_keyring;
+    inherit (gnome) gnome_keyring;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync {
@@ -6951,7 +6983,8 @@ let
 
   # = urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
-    perlSupport = false;  };
+    perlSupport = false;
+  };
 
   sakura = callPackage ../applications/misc/sakura {
     inherit (gnome) vte;
@@ -6967,9 +7000,7 @@ let
   seeks = callPackage ../tools/networking/p2p/seeks { };
 
   seg3d = callPackage ../applications/graphics/seg3d {
-    wxGTK = wxGTK28.override {
-      unicode = false;
-  };
+    wxGTK = wxGTK28.override { unicode = false; };
   };
 
   semnotes = newScope pkgs.kde4 ../applications/misc/semnotes { };
@@ -7093,6 +7124,8 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
+  tree = callPackage ../tools/system/tree { };
+
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twinkle = callPackage ../applications/networking/twinkle {
@@ -7205,7 +7238,7 @@ let
         enableGnash = getConfig [ browserName "enableGnash" ] false;
       in
        assert !(enableGnash && enableAdobeFlash);
-       ([]
+       ([ ]
         ++ lib.optional enableGnash gnash
         ++ lib.optional enableAdobeFlash flashplayer
         # RealPlayer is disabled by default for legal reasons.
@@ -7214,6 +7247,7 @@ let
         ++ lib.optional (getConfig [browserName "enableMPlayer"] false) (MPlayerPlugin browser)
         ++ lib.optional (getConfig [browserName "enableGeckoMediaPlayer"] false) gecko_mediaplayer
         ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
+        ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin
        );
   };
 
@@ -7986,6 +8020,8 @@ let
 
   mess = callPackage ../misc/emulators/mess { };
 
+  mupen64plus = callPackage ../misc/emulators/mupen64plus { };
+
   nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
@@ -8063,9 +8099,7 @@ let
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
-  xlockmore = callPackage ../misc/screensavers/xlockmore {
-    pam = if getConfig [ "xlockmore" "pam" ] true then pam else null;
-  };
+  xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
   saneBackends = callPackage ../misc/sane-backends {
     gt68xxFirmware = getConfig ["sane" "gt68xxFirmware"] null;
@@ -8143,6 +8177,8 @@ let
   };
 
   vice = callPackage ../misc/emulators/vice { };
+
+  VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wine = callPackage_i686 ../misc/emulators/wine { };

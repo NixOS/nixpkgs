@@ -171,13 +171,15 @@ preConfigure() {
         rm -Rf zlib
     fi
 
-    # Patch the configure script so it finds glibc headers
-    # It's important for example in order not to get libssp built, because it's
-    # functionality is in glibc already.
-    glibc_headers="$(cat $NIX_GCC/nix-support/orig-libc)/include"
-    sed -i \
-      -e s,glibc_header_dir=/usr/include,glibc_header_dir=$glibc_headers, \
-      gcc/configure
+    if test -f "$NIX_GCC/nix-support/orig-libc"; then
+        # Patch the configure script so it finds glibc headers.  It's
+        # important for example in order not to get libssp built,
+        # because its functionality is in glibc already.
+        glibc_headers="$(cat $NIX_GCC/nix-support/orig-libc)/include"
+        sed -i \
+            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$glibc_headers", \
+            gcc/configure
+    fi
 
     if test -n "$crossMingw" -a -n "$crossStageStatic"; then
         mkdir -p ../mingw

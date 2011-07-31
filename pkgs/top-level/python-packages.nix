@@ -12,7 +12,7 @@ let pythonPackages = python.modules // rec {
     inherit python wrapPython setuptools;
   };
 
-  
+
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
     inherit python wrapPython;
@@ -62,7 +62,7 @@ let pythonPackages = python.modules // rec {
 
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
-    
+
     src = fetchurl {
       url = "http://apsw.googlecode.com/files/${name}.zip";
       sha1 = "fa4aec08e59fa5964197f59ba42408d64031675b";
@@ -78,7 +78,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
 
@@ -109,6 +109,16 @@ let pythonPackages = python.modules // rec {
       '';
     };
   });
+
+  astng = buildPythonPackage rec {
+    name = "logilab-astng-0.21.1";
+
+    src = fetchurl {
+      url = "http://ftp.logilab.org/pub/astng/${name}.tar.gz";
+      sha256 = "0rqp2vwrnv6gkzdd96j078h1sz26plh49cmnyswy2wb6l4wans67";
+    };
+    propagatedBuildInputs = [logilabCommon];
+  };
 
   beautifulsoap = buildPythonPackage (rec {
     name = "beautifulsoap-3.0.8";
@@ -218,7 +228,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-3.1.2";
 
@@ -347,10 +357,10 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/dtopt/${name}.tar.gz";
       md5 = "9a41317149e926fcc408086aedee6bab";
@@ -362,7 +372,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   eventlet = buildPythonPackage rec {
     name = "eventlet-0.9.16";
 
@@ -385,7 +395,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
 
@@ -456,7 +466,25 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+  genzshcomp = buildPythonPackage {
+    name = "genzshcomp-0.2.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/genzshcomp/genzshcomp-0.2.2.tar.gz";
+      sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
+    };
+
+    buildInputs = [ pkgs.setuptools ];
+
+    meta = {
+      description = "automatically generated zsh completion function for Python's option parser modules";
+      license = "BSD";
+      maintainers = [ stdenv.lib.maintainers.simons ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+
   gflags = buildPythonPackage rec {
     name = "gflags-1.5.1";
 
@@ -471,7 +499,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   glance = buildPythonPackage rec {
     name = "glance-0.1.7";
 
@@ -492,7 +520,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
 
@@ -507,7 +535,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.6.0";
 
@@ -524,11 +552,11 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   ipy = buildPythonPackage rec {
     version = "0.74";
     name = "ipy-${version}";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/I/IPy/IPy-${version}.tar.gz";
       md5 = "f4f7ddc7c5e55a47222a5cc6c0a87b6d";
@@ -542,7 +570,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   jinja2 = buildPythonPackage {
     name = "jinja2-2.2.1";
 
@@ -563,7 +591,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.3.1";
 
@@ -582,7 +610,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
 
@@ -599,7 +627,16 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+  logilabCommon = buildPythonPackage rec {
+    name = "logilab-common-0.56.0";
+
+    src = fetchurl {
+      url = "http://ftp.logilab.org/pub/common/${name}.tar.gz";
+      sha256 = "14p557nqypbd10d8k7qs6jlm58pksiwh86wvvl0axyki00hj6971";
+    };
+    propagatedBuildInputs = [unittest2];
+  };
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-2.2.2";
 
@@ -637,11 +674,11 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   m2crypto = buildPythonPackage rec {
     version = "0.21.1";
     name = "m2crypto-${version}";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/M/M2Crypto/M2Crypto-${version}.tar.gz";
       md5 = "f93d8462ff7646397a9f77a2fe602d17";
@@ -659,7 +696,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   markdown = buildPythonPackage rec {
     version = "2.0.3";
     name = "markdown-${version}";
@@ -676,7 +713,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   matplotlib = buildPythonPackage ( rec {
     name = "matplotlib-0.99.1.2";
 
@@ -714,7 +751,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   mock = buildPythonPackage (rec {
     name = "mock-0.7.0";
 
@@ -751,7 +788,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   mutagen = buildPythonPackage (rec {
     name = "mutagen-1.20";
 
@@ -821,7 +858,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.5";
 
@@ -838,7 +875,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
     version = "0.10.0";
@@ -1035,7 +1072,7 @@ let pythonPackages = python.modules // rec {
 
   paste = buildPythonPackage rec {
     name = "paste-1.7.5.1";
-    
+
     src = fetchurl {
       url = http://pypi.python.org/packages/source/P/Paste/Paste-1.7.5.1.tar.gz;
       md5 = "7ea5fabed7dca48eb46dc613c4b6c4ed";
@@ -1051,11 +1088,11 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   paste_deploy = buildPythonPackage rec {
     version = "1.3.4";
     name = "paste-deploy-${version}";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/PasteDeploy/PasteDeploy-${version}.tar.gz";
       md5 = "eb4b3e2543d54401249c2cbd9f2d014f";
@@ -1071,7 +1108,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
 
@@ -1108,10 +1145,10 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.5";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.gz";
       md5 = "13a6930d775395f393afd86948afa4fa";
@@ -1123,7 +1160,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.0.13";
 
@@ -1222,6 +1259,15 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  pylint = buildPythonPackage rec {
+    name = "pylint-0.23.0";
+
+    src = fetchurl {
+      url = "http://ftp.logilab.org/pub/pylint/${name}.tar.gz";
+      sha256 = "07091avcc2b374i5f3blszmawjcin8xssjfryz91qbxybb8r7c6d";
+    };
+    propagatedBuildInputs = [astng];
+  };
 
   pymacs = pkgs.stdenv.mkDerivation rec {
     version = "v0.24-beta2";
@@ -1333,7 +1379,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   pysvn = pkgs.stdenv.mkDerivation {
     name = "pysvn-1.7.2";
 
@@ -1380,7 +1426,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   pyutil = buildPythonPackage (rec {
     name = "pyutil-1.7.9";
 
@@ -1499,10 +1545,10 @@ let pythonPackages = python.modules // rec {
      };
   };
 
-  
+
   routes = buildPythonPackage rec {
     name = "routes-1.12.3";
-    
+
     src = fetchurl {
       url = http://pypi.python.org/packages/source/R/Routes/Routes-1.12.3.tar.gz;
       md5 = "9740ff424ff6b841632c784a38fb2be3";
@@ -1516,11 +1562,11 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   scripttest = buildPythonPackage rec {
     version = "1.1.1";
     name = "scripttest-${version}";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/ScriptTest/ScriptTest-${version}.tar.gz";
       md5 = "592ce890764c3f546d35b4d7c40c32ef";
@@ -1534,7 +1580,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
 
@@ -1722,7 +1768,7 @@ let pythonPackages = python.modules // rec {
 
   unittest2 = buildPythonPackage rec {
     name = "unittest2-0.5.1";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/u/unittest2/${name}.tar.gz";
       md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
@@ -1734,11 +1780,11 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   webob = buildPythonPackage rec {
     version = "1.0.6";
     name = "webob-${version}";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.zip";
       md5 = "8e46dd755f6998d471bfbcb4def897ff";
@@ -1755,11 +1801,11 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   webtest = buildPythonPackage rec {
     version = "1.2.3";
     name = "webtest-${version}";
-    
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.tar.gz";
       md5 = "585f9331467e6d99acaba4051c1c5878";
@@ -1775,7 +1821,7 @@ let pythonPackages = python.modules // rec {
 
 
   wxPython = wxPython28;
-  
+
 
   wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
@@ -1783,14 +1829,14 @@ let pythonPackages = python.modules // rec {
     wxGTK = pkgs.wxGTK26;
   };
 
-  
+
   wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit pythonPackages;
     wxGTK = pkgs.wxGTK28;
   };
 
-  
+
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 

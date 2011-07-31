@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr }:
 
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.0.1";
+  name = "bitlbee-3.0.3";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "027n5f0phjr5fcrphbcflqv8hlkv5qnrpc1xgr09qjyv6mxp72j0";
+    sha256 = "09dgwfqznd2cnqraksivmh132nnl99gwgplynjmfsyyf6y4pbjl2";
   };
 
   buildInputs = [ gnutls glib pkgconfig libotr ]

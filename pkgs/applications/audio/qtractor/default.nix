@@ -1,22 +1,19 @@
-{ alsaLib, autoconf, automake, dssi, fetchsvn, gtk, jackaudio,
-ladspaH, ladspaPlugins, liblo, libmad, libsndfile, libtool, libvorbis,
-pkgconfig, qt4, rubberband, stdenv }:
+{ alsaLib, autoconf, automake, dssi, fetchurl, gtk, jackaudio,
+ladspaH, ladspaPlugins, liblo, libmad, libsamplerate, libsndfile,
+libtool, libvorbis, pkgconfig, qt4, rubberband, stdenv }:
 
 stdenv.mkDerivation rec {
-  version = "svn-1992";
+  version = "0.5.0";
   name = "qtractor-${version}";
 
-  src = fetchsvn {
-    url = "http://qtractor.svn.sourceforge.net/svnroot/qtractor/trunk";
-    rev = "1992";
-    sha256 = "10k0w5pzci21k1i32jzv5gdkbs34iv4hdn6dzp3n5048hvrp1hiy";
+  src = fetchurl {
+    url = "mirror://sourceforge/qtractor/${name}.tar.gz";
+    sha256 = "de5991d2d29b2713d73a90ab29efc24db0be68d8e9ca328062d53d229e902e89";
   };
 
-  preConfigure = "make -f Makefile.svn";
-
   buildInputs = [ alsaLib autoconf automake dssi gtk jackaudio ladspaH
-    ladspaPlugins liblo libmad libsndfile libtool libvorbis pkgconfig
-    qt4 rubberband ];
+    ladspaPlugins liblo libmad libsamplerate libsndfile libtool
+    libvorbis pkgconfig qt4 rubberband ];
 
   meta = with stdenv.lib; {
     description = "Audio/MIDI multi-track sequencer";

@@ -8,4 +8,11 @@ stdenv.mkDerivation {
   };
   configureFlags = [ "--with-sdl" "--with-sdl-sound" "--with-sdl-gfx" "--with-alsa" ];
   buildInputs = [ pkgconfig gtk alsaLib SDL ];
+  
+  meta = {
+    description = "Ultimate/Unix/Unusuable Amiga Emulator";
+    license = "GPLv2+";
+    homepage = http://www.amigaemulator.org;
+    maintainers = [ stdenv.lib.maintainers.sander ];
+  };
 }

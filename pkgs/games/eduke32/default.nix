@@ -1,19 +1,18 @@
-{stdenv, fetchsvn, SDL, SDL_mixer, unzip, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
+{stdenv, fetchurl, SDL, SDL_mixer, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
 
 stdenv.mkDerivation rec {
-  name = "eduke32";
+  name = "eduke32-1944";
   
-  src = fetchsvn {
-    url = https://eduke32.svn.sourceforge.net/svnroot/eduke32/polymer/eduke32;
-    rev = 1597;
-    sha256 = "be917420d628584e1b950570f67332f66cee0d24edfcee39c7bd62e6b9456436";
+  src = fetchurl {
+    url = http://dukeworld.duke4.net/eduke32/synthesis/20110724-1944/eduke32_src_20110724-1944.tar.bz2;
+    sha256 = "0y2y9agydfkdq4krp4lz22br3p23as6hrqhq7l9djw0pm2y76fqh";
   };
   
-  buildInputs = [ unzip SDL SDL_mixer libvorbis mesa gtk pkgconfig ]
+  buildInputs = [ SDL SDL_mixer libvorbis mesa gtk pkgconfig ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
   
-  NIX_LDFLAGS = "-lgcc_s";
   NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
+  NIX_LDFLAGS = "-L${SDL}/lib -lgcc_s";
   
   desktopItem = makeDesktopItem {
     name = "eduke32";
@@ -24,6 +23,10 @@ stdenv.mkDerivation rec {
     categories = "Application;Game;";
   };
 
+  preConfigure = ''
+    sed -i -e "s|/usr/bin/sdl-config|${SDL}/bin/sdl-config|" build/Makefile.shared
+  '';
+  
   buildPhase = ''
     make OPTLEVEL=0
   '';
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
     
     if [ "$EDUKE32_DATA_DIR" = "" ]
     then 
-        EDUKE32_DATA_DIR=/var/games/eduke32
+        EDUKE32_DATA_DIR=/var/lib/games/eduke32
     fi
     if [ "$EDUKE32_GRP_FILE" = "" ]
     then
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
     fi
     
     cd \$EDUKE32_DATA_DIR
-    eduke32 /g\$EDUKE32_GRP_FILE    
+    eduke32 -g \$EDUKE32_GRP_FILE    
     EOF
     chmod 755 $out/bin/eduke32-wrapper
     
@@ -58,7 +61,8 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
-    license = "GPL";
+    license = "GPLv2+ and BUILD license";
+    homepage = http://eduke32.com;
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

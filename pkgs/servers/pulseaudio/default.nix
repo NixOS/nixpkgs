@@ -1,13 +1,16 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
-, alsaLib, libsamplerate, libsndfile, speex, bluez, udev }:
+, alsaLib, libsamplerate, libsndfile, speex, bluez, udev
+, jackaudioSupport ? false, jackaudio ? null }:
+
+assert jackaudioSupport -> jackaudio != null;
 
 stdenv.mkDerivation rec {
   name = "pulseaudio-0.9.23";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/${name}.tar.gz";
-    sha256 = "0m72rrbgy9qncwhqsq9q35niicy6i06sk3g5i8w9bvkhmib27qll";
+    sha256 = "0kms3w1i48j9368amr8wv83gk4szrnglh1biyp8jyqyb2k388gmg";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
@@ -17,7 +20,8 @@ stdenv.mkDerivation rec {
     [ pkgconfig gnum4 libtool intltool glib dbus avahi
       libsamplerate libsndfile speex alsaLib bluez udev
       #gtk gconf libX11 libICE libSM libXtst libXi
-    ];
+    ]
+    ++ stdenv.lib.optional jackaudioSupport jackaudio;
 
   preConfigure = ''
     # Change the `padsp' script so that it contains the full path to
@@ -34,6 +38,7 @@ stdenv.mkDerivation rec {
     --disable-solaris --disable-hal --disable-jack
     --disable-oss-output --disable-oss-wrapper
     --localstatedir=/var --sysconfdir=/etc
+    ${if jackaudioSupport then "--enable-jack" else ""}
   '';
 
   installFlags = "sysconfdir=$(out)/etc";

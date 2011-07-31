@@ -15,6 +15,7 @@ assert vorbisSupport -> libvorbis != null;
 assert vpxSupport -> libvpx != null;
 assert x264Support -> x264 != null;
 assert xvidSupport -> xvidcore != null;
+assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-0.8";

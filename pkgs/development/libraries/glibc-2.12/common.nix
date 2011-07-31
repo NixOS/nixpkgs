@@ -141,8 +141,8 @@ stdenv.mkDerivation ({
       # maintained by the Hurd folks, `tschwinge/Roger_Whittaker' branch.
       # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
       url = "git://git.sv.gnu.org/hurd/glibc.git";
-      sha256 = "e51c6b0bb8544ee4547fda22272bfa6a23677655d15da3c041be6e820f37f844";
-      rev = "05862f9210fb029df3773ef004af954461f07478";
+      sha256 = "39ea53f318376cbd33e06ec23f4a393fc0801ea3aa87286b30943aa7ef7604cd";
+      rev = "77a94de8d3490e73a71efc0b981356d5acb7a28a";
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
