@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     PRINTF=${coreutils}/bin/printf \
     BOOTDIR=${jdk} \
     FIND=${findutils}/bin/find \
+    ALLOW_DOWNLOADS=true \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
