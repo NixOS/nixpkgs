@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     USRBIN_PATH="" \
     COMPILER_PATH="" \
     DEVTOOLS_PATH="" \
+    UNIXCOMMAND_PATH="" \
     NAWK=${gawk}/bin/gawk \
     BOOTDIR=${jdk} \
     FIND=${findutils}/bin/find \
