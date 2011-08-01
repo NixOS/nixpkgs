@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
 
     sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
       openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk
+
+    sed -i "s@<Xrender.h>@<X11/extensions/Xrender.h>@" \
+      openjdk/jdk/src/solaris/native/sun/java2d/x11/XRSurfaceData.c
   '';
 
   makeFlags = [
