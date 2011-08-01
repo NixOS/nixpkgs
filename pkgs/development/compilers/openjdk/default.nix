@@ -24,10 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip procps ant which zip nettools ];
 
   postUnpack = ''
-    sed -i s@/usr/bin/test@${coreutils}/bin/test@ \
-      openjdk/hotspot/make/linux/makefiles/sa.make 
-
-    sed -i s@/bin/ls@${coreutils}/bin/ls@ \
+    sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
+      -e "s@/bin/ls@${coreutils}/bin/ls@" \
       openjdk/hotspot/make/linux/makefiles/sa.make 
 
     sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
