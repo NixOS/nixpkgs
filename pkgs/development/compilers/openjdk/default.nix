@@ -13,6 +13,7 @@
 , gawk
 , which
 , jdk
+, findutils
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     NAWK=${gawk}/bin/gawk \
     PRINTF=${coreutils}/bin/printf \
     BOOTDIR=${jdk} \
+    FIND=${findutils}/bin/find \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
