@@ -15,6 +15,7 @@
 , libXt
 , libXext
 , libXrender
+, libXtst
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     libXt
     libXext
     libXrender
+    libXtst
   ];
 
   postUnpack = ''
