@@ -5986,6 +5986,7 @@ let
 
   audacity = callPackage ../applications/audio/audacity {
     portaudio = portaudioSVN;
+    ffmpeg = ffmpeg_0_6_90;
   };
 
   aumix = callPackage ../applications/audio/aumix {
