@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip, procps, coreutils}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "openjdk-7b127";
 
   src = fetchurl {
@@ -17,8 +17,13 @@ stdenv.mkDerivation {
       --replace /usr/nix/store /nix/store
   '';
 
+  makeFlags = ''
+    MKDIR=${coreutils}/bin/mkdir \
+    CC=${stdenv.gcc}/bin/gcc
+  '';
+
   configurePhase = ''
-    make MKDIR=${coreutils}/bin/mkdir CC=${stdenv.gcc}/bin/gcc sanity
+    make ${makeFlags} sanity
   '';
 }
 
