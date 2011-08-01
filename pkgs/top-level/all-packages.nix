@@ -3198,7 +3198,7 @@ let
   glibc = glibc212;
 
   glibc25 = callPackage ../development/libraries/glibc-2.5 {
-    kernelHeaders = linuxHeaders;
+    kernelHeaders = linuxHeaders_2_6_28;
     installLocales = false;
   };
 
