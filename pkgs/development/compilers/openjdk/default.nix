@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
+    MV=${coreutils}/bin/mv \
     TOUCH=${coreutils}/bin/touch \
     CP=${coreutils}/bin/cp \
     CHMOD=${coreutils}/bin/chmod \
