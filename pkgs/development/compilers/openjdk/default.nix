@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
     TOUCH=${coreutils}/bin/touch \
+    CP=${coreutils}/bin/cp \
     ECHO=${coreutils}/bin/echo \
     CAT=${coreutils}/bin/cat \
     GREP=${gnugrep}/bin/grep \
