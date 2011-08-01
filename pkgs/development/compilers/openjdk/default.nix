@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
     MILESTONE="release" \
     BUILD_NUMBER="127" \
     CUPS_HEADERS_PATH="${cups}/include" \
-    USRBIN_PATH="/" \
-    COMPILER_PATH="/" \
-    DEVTOOLS_PATH="/" \
+    USRBIN_PATH="" \
+    COMPILER_PATH="" \
+    DEVTOOLS_PATH="" \
     NAWK=${gawk}/bin/gawk \
     PRINTF=${coreutils}/bin/printf \
     BOOTDIR=${jdk} \
