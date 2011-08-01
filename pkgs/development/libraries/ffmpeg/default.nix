@@ -18,11 +18,11 @@ assert xvidSupport -> xvidcore != null;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.8";
+  name = "ffmpeg-0.8.1";
   
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "03zwwc1qs117pfjk9r071fbx4al3j0c85j97dgwqc0wp2z1zs9iy";
+    sha256 = "0vdq6bmrsi55p1l3dddiwyqsspb3l5dgqb87lysf5cz3sjxcfw2v";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
