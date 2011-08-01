@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, procps, coreutils, gnugrep, gnused}:
+{stdenv, fetchurl, unzip, procps, coreutils, gnugrep, gnused, alsaLib}:
 
 stdenv.mkDerivation rec {
   name = "openjdk-7b127";
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     PWD=${coreutils}/bin/pwd \
     TR=${coreutils}/bin/tr \
     SED=${gnused}/bin/sed \
+    ALSA_INCLUDE=${alsaLib}/include \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
