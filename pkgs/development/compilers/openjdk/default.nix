@@ -25,15 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip procps ant which ];
 
-  postUnpack = ''
-    substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
-      --replace /bin/echo ${coreutils}/bin/echo
-    substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
-      --replace /usr/nix/store /nix/store
-  '';
-
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
+    ECHO=${coreutils}/bin/echo \
     CAT=${coreutils}/bin/cat \
     GREP=${gnugrep}/bin/grep \
     EGREP=${gnugrep}/bin/egrep \
