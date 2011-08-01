@@ -9,6 +9,7 @@
 , alsaLib
 , ant
 , freetype
+, cups
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     FREETYPE_LIB_PATH=${freetype}/lib \
     MILESTONE="release" \
     BUILD_NUMBER="127" \
+    CUPS_HEADERS_PATH="${cups}/include" \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
