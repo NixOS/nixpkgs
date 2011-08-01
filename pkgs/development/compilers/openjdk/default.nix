@@ -39,14 +39,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''
     ECHO=${coreutils}/bin/echo \
-    LDD=${glibc}/bin/ldd \
-    NM=${binutils}/bin/nm \
-    READELF=${binutils}/bin/readelf \
-    GREP=${gnugrep}/bin/grep \
-    EGREP=${gnugrep}/bin/egrep \
-    SED=${gnused}/bin/sed \
     ALSA_INCLUDE=${alsaLib}/include/alsa/version.h \
-    ZIPEXE=${zip}/bin/zip \
     FREETYPE_HEADERS_PATH=${freetype}/include \
     FREETYPE_LIB_PATH=${freetype}/lib \
     MILESTONE="release" \
@@ -56,11 +49,8 @@ stdenv.mkDerivation rec {
     COMPILER_PATH="" \
     DEVTOOLS_PATH="" \
     UNIXCOMMAND_PATH="" \
-    NAWK=${gawk}/bin/gawk \
     BOOTDIR=${jdk} \
-    FIND=${findutils}/bin/find \
-    ALLOW_DOWNLOADS=true \
-    CC=${stdenv.gcc}/bin/gcc
+    ALLOW_DOWNLOADS=true
   '';
 
   configurePhase = ''
