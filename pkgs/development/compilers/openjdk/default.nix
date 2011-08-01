@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXi
-  ];
+ ;
 
   postUnpack = ''
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
@@ -84,5 +84,15 @@ stdenv.mkDerivation rec {
     cp -av build/*/j2sdk-image/* $out
     rm $out/src.zip
   '';
+
+  meta = {
+    homepage = http://openjdk.java.net/;
+
+    license = "GPLv2";
+
+    description = "The open-source Java Development Kit";
+
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
+  };
 }
 
