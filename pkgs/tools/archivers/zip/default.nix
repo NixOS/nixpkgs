@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "zip-2.32";
+  name = "zip-3.0";
 
   src = fetchurl {
-    url = ftp://ftp.info-zip.org/pub/infozip/src/zip232.tgz;
-    md5 = "8a4da4460386e324debe97f3b7fe4d96";
+    url = ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz;
+    sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
 
   buildFlags="-f unix/Makefile generic";
