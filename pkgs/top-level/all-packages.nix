@@ -7195,8 +7195,6 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    dbus = dbus.libs;
-    alsa = alsaLib;
     lua = lua5;
   };
 
