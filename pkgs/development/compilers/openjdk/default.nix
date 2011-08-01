@@ -31,25 +31,25 @@ stdenv.mkDerivation rec {
       openjdk/hotspot/make/linux/makefiles/sa.make 
   '';
 
-  makeFlags = ''
-    ECHO=${coreutils}/bin/echo \
-    SORT=${coreutils}/bin/sort \
-    ALSA_INCLUDE=${alsaLib}/include/alsa/version.h \
-    FREETYPE_HEADERS_PATH=${freetype}/include \
-    FREETYPE_LIB_PATH=${freetype}/lib \
-    MILESTONE="release" \
-    BUILD_NUMBER="127" \
-    CUPS_HEADERS_PATH="${cups}/include" \
-    USRBIN_PATH="" \
-    COMPILER_PATH="" \
-    DEVTOOLS_PATH="" \
-    UNIXCOMMAND_PATH="" \
-    BOOTDIR=${jdk} \
-    ALLOW_DOWNLOADS=true
-  '';
+  makeFlags = [
+    "ECHO=${coreutils}/bin/echo"
+    "SORT=${coreutils}/bin/sort"
+    "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
+    "FREETYPE_HEADERS_PATH=${freetype}/include"
+    "FREETYPE_LIB_PATH=${freetype}/lib"
+    "MILESTONE=release"
+    "BUILD_NUMBER=127"
+    "CUPS_HEADERS_PATH=${cups}/include"
+    "USRBIN_PATH="
+    "COMPILER_PATH="
+    "DEVTOOLS_PATH="
+    "UNIXCOMMAND_PATH="
+    "BOOTDIR=${jdk}"
+    "ALLOW_DOWNLOADS=true"
+  ];
 
   configurePhase = ''
-    make ${makeFlags} sanity
+    make $makeFlags sanity
   '';
 }
 
