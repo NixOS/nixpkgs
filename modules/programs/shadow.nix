@@ -87,9 +87,7 @@ in
         { name = "groupmod"; rootOK = true; } 
         { name = "groupmems"; rootOK = true; }
         { name = "groupdel"; rootOK = true; }
-        { name = "login"; ownDevices = true; allowNullPassword = true;
-          limits = config.security.pam.loginLimits;
-        }
+        { name = "login"; ownDevices = true; allowNullPassword = true; }
       ];
       
     security.setuidPrograms = [ "passwd" "chfn" "su" ];

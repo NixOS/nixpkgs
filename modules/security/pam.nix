@@ -52,7 +52,7 @@ let
       # in.
       allowNullPassword ? false
     , # The limits, as per limits.conf(5).
-      limits ? []
+      limits ? config.security.pam.loginLimits
     }:
 
     { source = pkgs.writeText "${name}.pam"
@@ -132,13 +132,12 @@ in
        ];
 
      description =
-       '' Define resource limits that should apply to users or groups for the
-          <command>login</command> service.  Each item in the list should be
-          an attribute set with a <varname>domain</varname>,
-          <varname>type</varname>, <varname>item</varname>, and
-          <varname>value</varname> attribute.  The syntax and semantics of
-          these attributes must be that described in the limits.conf(5) man
-          page.
+       '' Define resource limits that should apply to users or groups.
+          Each item in the list should be an attribute set with a
+          <varname>domain</varname>, <varname>type</varname>,
+          <varname>item</varname>, and <varname>value</varname>
+          attribute.  The syntax and semantics of these attributes
+          must be that described in the limits.conf(5) man page.
        '';
     };
 
@@ -211,7 +210,6 @@ in
       owner = "root";
       setuid = true;
     } ];
-
 
     security.pam.services =
       # Most of these should be moved to specific modules.
