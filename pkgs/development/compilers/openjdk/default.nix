@@ -4,18 +4,12 @@
 , zip
 , procps
 , coreutils
-, gnugrep
-, gnused
 , alsaLib
 , ant
 , freetype
 , cups
-, gawk
 , which
 , jdk
-, findutils
-, glibc
-, binutils
 , nettools
 }:
 
