@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , unzip
+, zip
 , procps
 , coreutils
 , gnugrep
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     SED=${gnused}/bin/sed \
     ALSA_INCLUDE=${alsaLib}/include \
     HEAD=${coreutils}/bin/head \
+    ZIPEXE=${zip}/bin/zip \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
