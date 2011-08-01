@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     sed -i s@/usr/bin/test@${coreutils}/bin/test@ \
       openjdk/hotspot/make/linux/makefiles/sa.make 
+
+    sed -i s@/bin/ls@${coreutils}/bin/ls@ \
+      openjdk/hotspot/make/linux/makefiles/sa.make 
   '';
 
   makeFlags = ''
