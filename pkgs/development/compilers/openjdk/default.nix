@@ -78,5 +78,11 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     make $makeFlags sanity
   '';
+
+  installPhase = ''
+    ensureDir $out
+    cp -av build/*/j2sdk-image/* $out
+    rm $out/src.zip
+  '';
 }
 
