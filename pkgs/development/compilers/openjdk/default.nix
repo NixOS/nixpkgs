@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, procps, coreutils}:
+{stdenv, fetchurl, unzip, procps, coreutils, gnugrep}:
 
 stdenv.mkDerivation rec {
   name = "openjdk-7b127";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
+    GREP=${gnugrep}/bin/grep \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
