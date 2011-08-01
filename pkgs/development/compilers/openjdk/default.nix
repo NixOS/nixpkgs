@@ -12,12 +12,13 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
-       --replace /bin/echo ${coreutils}/bin/echo
+      --replace /bin/echo ${coreutils}/bin/echo
     substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
-       --replace /usr/nix/store /nix/store
+      --replace /usr/nix/store /nix/store
   '';
 
   configurePhase = ''
     make sanity
   '';
 }
+
