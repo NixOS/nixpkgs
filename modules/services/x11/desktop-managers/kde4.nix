@@ -65,6 +65,10 @@ in
                 sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
             fi
 
+            ${optionalString (!isKDE47) ''
+              export DBUS_FATAL_WARNINGS=0
+            ''}
+
             # Start KDE.
             exec ${pkgs.kde4.kdebase_workspace}/bin/startkde
           '';
@@ -98,7 +102,7 @@ in
           pkgs.gst_all.gstFfmpeg # for mp3 playback
           xorg.xmessage # so that startkde can show error messages
           xorg.xset # used by startkde, non-essential
-        ]
+        ] ++ optional (pkgs ? phonon_backend_gstreamer) pkgs.phonon_backend_gstreamer
       else
         # KDE >= 4.7
         [ pkgs.kde4.kdelibs
