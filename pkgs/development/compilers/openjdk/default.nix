@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, procps}:
+{stdenv, fetchurl, unzip, procps, coreutils}:
 
 stdenv.mkDerivation {
   name = "openjdk-7b127";
@@ -9,4 +9,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ unzip procps ];
+
+  postUnpack = ''
+    substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
+       --replace /bin/echo ${coreutils}/bin/echo
+    substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
+       --replace /usr/nix/store /nix/store
+  '';
 }
