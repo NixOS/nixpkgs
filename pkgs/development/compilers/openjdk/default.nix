@@ -14,6 +14,8 @@
 , which
 , jdk
 , findutils
+, glibc
+, binutils
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
+    LDD=${glibc}/bin/ldd \
+    NM=${binutils}/bin/nm \
     MV=${coreutils}/bin/mv \
     TOUCH=${coreutils}/bin/touch \
     CP=${coreutils}/bin/cp \
