@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       openjdk/hotspot/make/linux/makefiles/sa.make 
 
     sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
-      openjdk/jdk/make/common/shared/Defs-utils.gmk
+      openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk
   '';
 
   makeFlags = [
