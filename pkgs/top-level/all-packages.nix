@@ -4070,7 +4070,8 @@ let
   openct = callPackage ../development/libraries/openct { };
 
   opencv = callPackage ../development/libraries/opencv {
-      inherit (gst_all) gstreamer;
+    ffmpeg = ffmpeg_0_6_90;
+    inherit (gst_all) gstreamer;
   };
 
   # this ctl version is needed by openexr_viewers
@@ -4705,7 +4706,9 @@ let
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
-  mediatomb = callPackage ../servers/mediatomb { };
+  mediatomb = callPackage ../servers/mediatomb {
+    ffmpeg = ffmpeg_0_6_90;
+  };
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
