@@ -16,4 +16,8 @@ stdenv.mkDerivation {
     substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
        --replace /usr/nix/store /nix/store
   '';
+
+  configurePhase = ''
+    make sanity
+  '';
 }
