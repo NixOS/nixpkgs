@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
       openjdk/jdk/src/solaris/native/sun/java2d/x11/XRSurfaceData.c
   '';
 
+  patches = [ ./cppflags-include-fix.patch ];
+
   makeFlags = [
     "SORT=${coreutils}/bin/sort"
     "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
