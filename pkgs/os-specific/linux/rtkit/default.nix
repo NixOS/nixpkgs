@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://0pointer.de/blog/projects/rtkit;
     descriptions = "A daemon that hands out real-time priority to processes";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
