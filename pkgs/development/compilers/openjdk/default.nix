@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = ''
+    ECHO=${coreutils}/bin/echo \
     LDD=${glibc}/bin/ldd \
     NM=${binutils}/bin/nm \
     READELF=${binutils}/bin/readelf \
