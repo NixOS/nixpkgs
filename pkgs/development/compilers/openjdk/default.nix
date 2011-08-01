@@ -1,16 +1,12 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "openjdk6-b16-24_apr_2009-r1";
+  name = "openjdk-7b127";
 
   src = fetchurl {
-    url = http://hg.bikemonkey.org/archive/openjdk6_darwin/openjdk6-b16-24_apr_2009-r1.tar.bz2;
-    sha256 = "14pbv6jjk95k7hbgiwyvjdjv8pccm7m8a130k0q7mjssf4qmpx1v";
+    url = http://www.java.net/download/openjdk/jdk7/promoted/b147/openjdk-7-fcs-src-b147-27_jun_2011.zip;
+    sha256 = "1qhwlz9y5qmwmja4qnxg6sn3pgsg1i11fb9j41w8l26acyhk34rs";
   };
 
-  installPhase = ''
-    ensureDir $out
-    cp -vR * $out/
-  '';
-
+  buildInputs = [ unzip ];
 }
