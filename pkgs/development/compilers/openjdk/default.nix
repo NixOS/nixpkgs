@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     ZIPEXE=${zip}/bin/zip \
     FREETYPE_HEADERS_PATH=${freetype}/include \
     FREETYPE_LIB_PATH=${freetype}/lib \
+    MILESTONE="release" \
+    BUILD_NUMBER="127" \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
