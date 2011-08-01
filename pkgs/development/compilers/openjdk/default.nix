@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXi
- ;
+  ];
 
   postUnpack = ''
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
