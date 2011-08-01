@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     GREP=${gnugrep}/bin/grep \
     DATE=${coreutils}/bin/date \
     PWD=${coreutils}/bin/pwd \
+    TR=${coreutils}/bin/tr \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
