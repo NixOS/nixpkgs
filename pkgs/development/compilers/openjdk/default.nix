@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip procps ant which zip ];
 
+  postUnpack = ''
+    sed -i s@/usr/bin/test@${coreutils}/bin/test@ \
+      openjdk/hotspot/make/linux/makefiles/sa.make 
+  '';
+
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
     TOUCH=${coreutils}/bin/touch \
