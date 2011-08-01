@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
     GREP=${gnugrep}/bin/grep \
+    DATE=${coreutils}/bin/date \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
