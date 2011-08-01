@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     COMPILER_PATH="/" \
     DEVTOOLS_PATH="/" \
     NAWK=${gawk}/bin/gawk \
+    PRINTF=${coreutils}/bin/printf \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
