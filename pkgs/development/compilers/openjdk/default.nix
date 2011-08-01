@@ -29,10 +29,12 @@ stdenv.mkDerivation rec {
 
     sed -i s@/bin/ls@${coreutils}/bin/ls@ \
       openjdk/hotspot/make/linux/makefiles/sa.make 
+
+    sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
+      openjdk/jdk/make/common/shared/Defs-utils.gmk
   '';
 
   makeFlags = [
-    "ECHO=${coreutils}/bin/echo"
     "SORT=${coreutils}/bin/sort"
     "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
     "FREETYPE_HEADERS_PATH=${freetype}/include"
