@@ -26,6 +26,8 @@ recurseIntoAttrs rec {
 
   ffmpeg = ffmpeg_0_6_90;
 
+  shared_desktop_ontologies = callPackage ./support/shared-desktop-ontologies { };
+
   kde = callPackage ./kde-package { inherit release; };
 
 ### SUPPORT

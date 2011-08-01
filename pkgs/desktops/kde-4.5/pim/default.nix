@@ -16,7 +16,7 @@ kde.package rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.name}-${meta.kde.version}.tar.bz2";
-    sha256 = "02nbdn8s4504ljqz0qylm1jyw4hpg5fjw3vi6sbzm522xvkax4wh";
+    sha256 = "0pr1n6k51aadi8fsk7rkv0vrfl4y6llywxjkzci6if7g300yd8r8";
   };
 
   meta = {
@@ -28,7 +28,7 @@ kde.package rec {
     homepage = http://pim.kde.org;
     kde = {
       name = "kdepim";
-      version = "4.4.8";
+      version = "4.4.9";
     };
   };
 }

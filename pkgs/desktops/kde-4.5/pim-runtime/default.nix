@@ -12,7 +12,7 @@ kde.package rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/kdepim-${meta.kde.version}/src/${meta.kde.name}-${meta.kde.version}.tar.bz2";
-    sha256 = "029a0i83b2yrc1xn9as7gc9rakpxjh5cjmqcmhrrj0xwalqz490n";
+    sha256 = "0w99jv0lzajmz9gvgss8gkgffm0lpqv3r6pzfsnqhrdhcf6h853y";
   };
 
   meta = {
@@ -21,7 +21,7 @@ kde.package rec {
     license = "GPL";
     kde = {
       name = "kdepim-runtime";
-      version = "4.4.8";
+      version = "4.4.9";
     };
   };
 }
