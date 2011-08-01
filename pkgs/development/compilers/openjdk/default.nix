@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
     GREP=${gnugrep}/bin/grep \
+    EGREP=${gnugrep}/bin/egrep \
     DATE=${coreutils}/bin/date \
     PWD=${coreutils}/bin/pwd \
     TR=${coreutils}/bin/tr \
