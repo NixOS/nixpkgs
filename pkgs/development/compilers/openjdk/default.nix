@@ -1,4 +1,13 @@
-{stdenv, fetchurl, unzip, procps, coreutils, gnugrep, gnused, alsaLib, ant}:
+{ stdenv
+, fetchurl
+, unzip
+, procps
+, coreutils
+, gnugrep
+, gnused
+, alsaLib
+, ant
+}:
 
 stdenv.mkDerivation rec {
   name = "openjdk-7b127";
