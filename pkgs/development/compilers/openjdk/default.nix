@@ -11,6 +11,7 @@
 , freetype
 , cups
 , gawk
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qhwlz9y5qmwmja4qnxg6sn3pgsg1i11fb9j41w8l26acyhk34rs";
   };
 
-  buildInputs = [ unzip procps ant ];
+  buildInputs = [ unzip procps ant which ];
 
   postUnpack = ''
     substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk \
