@@ -1,4 +1,4 @@
-{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47 } :
+{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, ffmpeg_0_6_90 } :
 
 let
 
@@ -23,6 +23,8 @@ recurseIntoAttrs rec {
   inherit callPackage stdenv;
 
   qt4 = qt47;
+
+  ffmpeg = ffmpeg_0_6_90;
 
   kde = callPackage ./kde-package { inherit release; };
 
