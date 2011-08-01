@@ -8,6 +8,7 @@
 , gnused
 , alsaLib
 , ant
+, freetype
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     ALSA_INCLUDE=${alsaLib}/include \
     HEAD=${coreutils}/bin/head \
     ZIPEXE=${zip}/bin/zip \
+    FREETYPE_HEADERS_PATH=${freetype}/include \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
