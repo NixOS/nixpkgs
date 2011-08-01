@@ -10,6 +10,7 @@
 , ant
 , freetype
 , cups
+, gawk
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     USRBIN_PATH="/" \
     COMPILER_PATH="/" \
     DEVTOOLS_PATH="/" \
+    NAWK=${gawk}/bin/gawk \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
