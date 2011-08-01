@@ -18,6 +18,7 @@
 , libXtst
 , libXi
 , cpio
+, jreOnly ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ensureDir $out
-    cp -av build/*/j2sdk-image/* $out
+    cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
   '';
 
   meta = {

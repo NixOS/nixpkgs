@@ -2119,6 +2119,10 @@ let
 
   openjdk = callPackage ../development/compilers/openjdk { };
 
+  openjre = callPackage ../development/compilers/openjdk {
+    jreOnly = true;
+  };
+
   j2sdk14x = (
     assert system == "i686-linux";
     import ../development/compilers/jdk/default-1.4.nix {
