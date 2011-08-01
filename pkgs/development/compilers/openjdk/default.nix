@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qhwlz9y5qmwmja4qnxg6sn3pgsg1i11fb9j41w8l26acyhk34rs";
   };
 
-  buildInputs = [ unzip procps ant which zip nettools ];
+  buildInputs = [ unzip procps ant which zip nettools alsaLib ];
 
   postUnpack = ''
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
