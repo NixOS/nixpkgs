@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     PWD=${coreutils}/bin/pwd \
     TR=${coreutils}/bin/tr \
     SED=${gnused}/bin/sed \
-    ALSA_INCLUDE=${alsaLib}/include \
+    ALSA_INCLUDE=${alsaLib}/include/alsa/version.h \
     HEAD=${coreutils}/bin/head \
     ZIPEXE=${zip}/bin/zip \
     FREETYPE_HEADERS_PATH=${freetype}/include \
