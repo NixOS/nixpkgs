@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     MKDIR=${coreutils}/bin/mkdir \
     LDD=${glibc}/bin/ldd \
     NM=${binutils}/bin/nm \
+    READELF=${binutils}/bin/readelf \
     MV=${coreutils}/bin/mv \
     TOUCH=${coreutils}/bin/touch \
     CP=${coreutils}/bin/cp \
