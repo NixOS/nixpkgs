@@ -37,25 +37,13 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = ''
-    MKDIR=${coreutils}/bin/mkdir \
-    LN=${coreutils}/bin/ln \
     LDD=${glibc}/bin/ldd \
     NM=${binutils}/bin/nm \
     READELF=${binutils}/bin/readelf \
-    MV=${coreutils}/bin/mv \
-    TOUCH=${coreutils}/bin/touch \
-    CP=${coreutils}/bin/cp \
-    CHMOD=${coreutils}/bin/chmod \
-    ECHO=${coreutils}/bin/echo \
-    CAT=${coreutils}/bin/cat \
     GREP=${gnugrep}/bin/grep \
     EGREP=${gnugrep}/bin/egrep \
-    DATE=${coreutils}/bin/date \
-    PWD=${coreutils}/bin/pwd \
-    TR=${coreutils}/bin/tr \
     SED=${gnused}/bin/sed \
     ALSA_INCLUDE=${alsaLib}/include/alsa/version.h \
-    HEAD=${coreutils}/bin/head \
     ZIPEXE=${zip}/bin/zip \
     FREETYPE_HEADERS_PATH=${freetype}/include \
     FREETYPE_LIB_PATH=${freetype}/lib \
@@ -66,7 +54,6 @@ stdenv.mkDerivation rec {
     COMPILER_PATH="" \
     DEVTOOLS_PATH="" \
     NAWK=${gawk}/bin/gawk \
-    PRINTF=${coreutils}/bin/printf \
     BOOTDIR=${jdk} \
     FIND=${findutils}/bin/find \
     ALLOW_DOWNLOADS=true \
