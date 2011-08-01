@@ -22,7 +22,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openjdk-7b127";
+  name = "openj${if jreOnly then "re" else "dk"}-7b127";
 
   src = fetchurl {
     url = http://www.java.net/download/openjdk/jdk7/promoted/b147/openjdk-7-fcs-src-b147-27_jun_2011.zip;
