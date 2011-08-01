@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''
     MKDIR=${coreutils}/bin/mkdir \
+    LN=${coreutils}/bin/ln \
     LDD=${glibc}/bin/ldd \
     NM=${binutils}/bin/nm \
     READELF=${binutils}/bin/readelf \
