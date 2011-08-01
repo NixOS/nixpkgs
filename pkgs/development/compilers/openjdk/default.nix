@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    make sanity
+    make MKDIR=${coreutils}/bin/mkdir sanity
   '';
 }
 
