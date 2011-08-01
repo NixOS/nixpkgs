@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildFlags="-f unix/Makefile generic";
 
-  installFlags="-f unix/Makefile prefix=$out INSTALL=cp";
+  installFlags="-f unix/Makefile prefix=$(out) INSTALL=cp";
 
   meta = {
     homepage = http://www.info-zip.org;
