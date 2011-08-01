@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     TR=${coreutils}/bin/tr \
     SED=${gnused}/bin/sed \
     ALSA_INCLUDE=${alsaLib}/include \
+    HEAD=${coreutils}/bin/head \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
