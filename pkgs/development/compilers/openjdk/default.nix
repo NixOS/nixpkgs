@@ -12,6 +12,7 @@
 , cups
 , gawk
 , which
+, jdk
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     DEVTOOLS_PATH="/" \
     NAWK=${gawk}/bin/gawk \
     PRINTF=${coreutils}/bin/printf \
+    BOOTDIR=${jdk} \
     CC=${stdenv.gcc}/bin/gcc
   '';
 
