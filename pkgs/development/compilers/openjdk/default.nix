@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     ensureDir $out
     cp -av build/*/j2sdk-image/* $out
-    rm $out/src.zip
   '';
 
   meta = {
