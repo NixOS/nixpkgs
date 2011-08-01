@@ -17,6 +17,7 @@
 , libXrender
 , libXtst
 , libXi
+, cpio
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     ant
     which
     zip
+    cpio
     nettools
     alsaLib
     libX11
