@@ -15,13 +15,23 @@ let cfg = config.hardware.pulseaudio; in
       '';
     };
 
+    hardware.pulseaudio.package = mkOption {
+      default = pkgs.pulseaudio;
+      example = "pkgs.pulseaudio.override { jackaudioSupport = true; }";
+      description = ''
+        The PulseAudio derivation to use.  This can be used to enable
+        features (such as JACK support) that are not enabled in the
+        default PulseAudio in Nixpkgs.
+      '';
+    };
+
   };
   
 
   config = mkIf cfg.enable {
 
     environment.systemPackages =
-      [ pkgs.pulseaudio ];
+      [ cfg.package ];
 
     environment.etc = mkAlways (
       [ # Create pulse/client.conf even if PulseAudio is disabled so
@@ -31,6 +41,9 @@ let cfg = config.hardware.pulseaudio; in
           source = pkgs.writeText "client.conf"
             ''
               autospawn=${if cfg.enable then "yes" else "no"}
+              ${optionalString cfg.enable ''
+                daemon-binary=${cfg.package}/bin/pulseaudio
+              ''}
             '';
         }
         
@@ -61,11 +74,11 @@ let cfg = config.hardware.pulseaudio; in
         }
 
         { target = "pulse/default.pa";
-          source = "${pkgs.pulseaudio}/etc/pulse/default.pa";
+          source = "${cfg.package}/etc/pulse/default.pa";
         }
 
         { target = "pulse/system.pa";
-          source = "${pkgs.pulseaudio}/etc/pulse/system.pa";
+          source = "${cfg.package}/etc/pulse/system.pa";
         }
 
       ]);
