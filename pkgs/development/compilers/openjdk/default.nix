@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''
     ECHO=${coreutils}/bin/echo \
+    SORT=${coreutils}/bin/sort \
     ALSA_INCLUDE=${alsaLib}/include/alsa/version.h \
     FREETYPE_HEADERS_PATH=${freetype}/include \
     FREETYPE_LIB_PATH=${freetype}/lib \
