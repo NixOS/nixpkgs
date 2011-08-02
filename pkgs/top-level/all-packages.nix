@@ -1612,6 +1612,10 @@ let
     buildClang = true;
   };
 
+  clangSVN = llvmSVN.override {
+    buildClang = true;
+  };
+
   clean = callPackage ../development/compilers/clean { };
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
@@ -2164,6 +2168,7 @@ let
   };
 
   llvm = callPackage ../development/compilers/llvm { };
+  llvmSVN = callPackage ../development/compilers/llvm/svn-head.nix { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
@@ -2267,6 +2272,8 @@ let
   };
 
   roadsend = callPackage ../development/compilers/roadsend { };
+
+  rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper clisp;
@@ -2892,6 +2899,8 @@ let
   acl = callPackage ../development/libraries/acl { };
 
   adns = callPackage ../development/libraries/adns { };
+
+  afflib = callPackage ../development/libraries/afflib {};
 
   agg = callPackage ../development/libraries/agg { };
 
