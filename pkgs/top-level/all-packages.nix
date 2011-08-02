@@ -912,6 +912,8 @@ let
     guile = guile_1_8;
   };
 
+  mairix = callPackage ../tools/text/mairix { };
+
   man = callPackage ../tools/misc/man { };
 
   man_db = callPackage ../tools/misc/man-db { };
@@ -7619,6 +7621,8 @@ let
   };
 
   xconq = callPackage ../games/xconq {};
+
+  xracer = callPackage ../games/xracer { };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;
