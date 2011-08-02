@@ -442,6 +442,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) zlib;
   };
 
+  dimensional = callPackage ../development/libraries/haskell/dimensional {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   dlist = callPackage ../development/libraries/haskell/dlist {};
@@ -753,6 +755,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
+
+  numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
