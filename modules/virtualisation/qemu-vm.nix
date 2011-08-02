@@ -109,8 +109,8 @@ let
 
     virtualisation.qemu.options =
       mkOption {
-        default = "";
-        example = "-vga std";
+        default = [];
+        example = [ "-vga std" ];
         description = "Options passed to QEMU.";
       };
 
@@ -173,8 +173,8 @@ let
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
           ''} \
           ${qemuGraphics} \
-          $QEMU_OPTS \
-          ${config.virtualisation.qemu.options}
+          ${toString config.virtualisation.qemu.options} \
+          $QEMU_OPTS
     '';
 
     
@@ -297,6 +297,8 @@ in
     '';
       
   virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
+
+  virtualisation.qemu.options = [ "-usbdevice tablet" ];
   
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
   # of the host into our own filesystem.  We use mkOverride to allow
