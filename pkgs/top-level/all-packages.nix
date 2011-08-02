@@ -1660,7 +1660,8 @@ let
   });
 
   gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.1) {
-    inherit fetchurl stdenv noSysDirs;
+    inherit fetchurl noSysDirs gmp mpfr;
+    stdenv = overrideGCC stdenv gcc42;
     texinfo = texinfo49;
     profiledCompiler = false;
   });
