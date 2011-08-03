@@ -7637,7 +7637,8 @@ let
 
   xconq = callPackage ../games/xconq {};
 
-  xracer = callPackage ../games/xracer { };
+  # TODO: the corresponding nix file is missing
+  # xracer = callPackage ../games/xracer { };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;
