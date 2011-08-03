@@ -27,6 +27,11 @@ in rec {
         sed -i '/SUBDIRS/s/ tools//' Makefile.in
       '';
 
+    # Enable X11 autolaunch support in libdbus.  This doesn't actually
+    # depend on X11 (it just execs dbus-launch in dbus.tools),
+    # contrary to what the configure script demands.
+    NIX_CFLAGS_COMPILE = "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
+
     installFlags = "sysconfdir=$(out)/etc";
   };
 
