@@ -361,6 +361,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
+  bnfc = callPackage ../development/tools/haskell/bnfc {};
+
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
