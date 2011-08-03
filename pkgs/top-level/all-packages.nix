@@ -2170,6 +2170,8 @@ let
   };
 
   llvm = callPackage ../development/compilers/llvm { };
+
+  # Works partially
   llvmSVN = callPackage ../development/compilers/llvm/svn-head.nix { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
