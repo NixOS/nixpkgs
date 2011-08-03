@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;
     description = "A daemon and command-line utility for querying and manipulating storage devices";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

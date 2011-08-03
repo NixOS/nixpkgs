@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://upower.freedesktop.org/;
     description = "A D-Bus service for power management";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
