@@ -967,6 +967,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
 
+  tabular = callPackage ../development/libraries/haskell/tabular {};
+
   tagged = callPackage ../development/libraries/haskell/tagged {};
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
