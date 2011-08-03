@@ -2277,7 +2277,8 @@ let
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
-  rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
+  # TODO: the corresponding nix file is missing
+  # rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper clisp;
