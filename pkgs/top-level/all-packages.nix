@@ -4769,6 +4769,8 @@ let
     ps = procps; /* !!! Linux only */
   };
 
+  mysql55 = callPackage ../servers/sql/mysql55 { };
+
   mysql = mysql51;
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
