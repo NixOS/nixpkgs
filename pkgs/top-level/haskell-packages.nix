@@ -361,6 +361,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
+  bnfc = callPackage ../development/tools/haskell/bnfc {};
+
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
@@ -441,6 +443,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
+
+  dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
@@ -754,6 +758,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
 
+  numtype = callPackage ../development/libraries/haskell/numtype {};
+
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {
@@ -960,6 +966,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
+
+  tabular = callPackage ../development/libraries/haskell/tabular {};
 
   tagged = callPackage ../development/libraries/haskell/tagged {};
 

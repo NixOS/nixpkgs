@@ -912,6 +912,8 @@ let
     guile = guile_1_8;
   };
 
+  mairix = callPackage ../tools/text/mairix { };
+
   man = callPackage ../tools/misc/man { };
 
   man_db = callPackage ../tools/misc/man-db { };
@@ -1281,6 +1283,8 @@ let
 
   siege = callPackage ../tools/networking/siege {};
 
+  sleuthkit = callPackage ../tools/system/sleuthkit {};
+
   slimrat = callPackage ../tools/networking/slimrat {
     inherit (perlPackages) WWWMechanize LWP;
   };
@@ -1606,6 +1610,10 @@ let
     buildClang = true;
   };
 
+  clangSVN = llvmSVN.override {
+    buildClang = true;
+  };
+
   clean = callPackage ../development/compilers/clean { };
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
@@ -1654,7 +1662,8 @@ let
   });
 
   gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.1) {
-    inherit fetchurl stdenv noSysDirs;
+    inherit fetchurl noSysDirs gmp mpfr;
+    stdenv = overrideGCC stdenv gcc42;
     texinfo = texinfo49;
     profiledCompiler = false;
   });
@@ -2113,6 +2122,12 @@ let
 
   openjdkDarwin = callPackage ../development/compilers/openjdk-darwin { };
 
+  openjdk = callPackage ../development/compilers/openjdk { };
+
+  openjre = callPackage ../development/compilers/openjdk {
+    jreOnly = true;
+  };
+
   j2sdk14x = (
     assert system == "i686-linux";
     import ../development/compilers/jdk/default-1.4.nix {
@@ -2151,6 +2166,9 @@ let
   };
 
   llvm = callPackage ../development/compilers/llvm { };
+
+  # Works partially
+  llvmSVN = callPackage ../development/compilers/llvm/svn-head.nix { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
@@ -2254,6 +2272,9 @@ let
   };
 
   roadsend = callPackage ../development/compilers/roadsend { };
+
+  # TODO: the corresponding nix file is missing
+  # rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper clisp;
@@ -2884,6 +2905,8 @@ let
 
   adns = callPackage ../development/libraries/adns { };
 
+  afflib = callPackage ../development/libraries/afflib {};
+
   agg = callPackage ../development/libraries/agg { };
 
   allegro = callPackage ../development/libraries/allegro {};
@@ -3200,7 +3223,7 @@ let
   glibc = glibc212;
 
   glibc25 = callPackage ../development/libraries/glibc-2.5 {
-    kernelHeaders = linuxHeaders;
+    kernelHeaders = linuxHeaders_2_6_28;
     installLocales = false;
   };
 
@@ -7635,6 +7658,9 @@ let
   };
 
   xconq = callPackage ../games/xconq {};
+
+  # TODO: the corresponding nix file is missing
+  # xracer = callPackage ../games/xracer { };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;

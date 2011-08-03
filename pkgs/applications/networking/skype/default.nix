@@ -1,5 +1,6 @@
-{stdenv, fetchurl, alsaLib, libXv, libXi, libXrender, libXrandr, zlib, glib
-, libXext, libX11, libXScrnSaver, libSM, qt4, libICE, freetype, fontconfig}:
+{ stdenv, fetchurl, alsaLib, libXv, libXi, libXrender, libXrandr, zlib, glib
+, libXext, libX11, libXScrnSaver, libSM, qt4, libICE, freetype, fontconfig
+, pulseaudio }:
 
 assert stdenv.system == "i686-linux";
 
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib 
+    alsaLib
+    pulseaudio
     stdenv.glibc 
     stdenv.gcc.gcc
     libXv

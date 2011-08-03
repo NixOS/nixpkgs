@@ -1,11 +1,13 @@
-{ fetchurl, stdenv, zlib, openssl, libuuid }:
+{ fetchurl, stdenv, zlib, openssl, libuuid, file }:
 
 stdenv.mkDerivation rec {
-  name = "libewf-20080501";
+  name = "libewf-20100226";
   src = fetchurl {
-    url = mirror://sourceforge/libewf/libewf-20080501.tar.gz;
-    sha256 = "0s8fp7kmpk0976zii0fbk8vhi8k1br2fjp510rmgr6q1ssqdbi36";
+    url = "mirror://sourceforge/libewf/${name}.tar.gz";
+    sha256 = "aedd2a6b3df6525ff535ab95cd569ebb361a4022eb4163390f26257913c2941a";
   };
+
+  preConfigure = ''sed -e 's@/usr/bin/file@file@g' -i configure'';
 
   buildInputs = [ zlib openssl libuuid ];
 
