@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "04m0wn20jwzyy8xhbs9a4vjqhh33c3dikr5vm5wa24irjiyqr84q";
+        sha256 = "14x80qirwlfxhphzqvi92lpgs82qnzb7hq0vd02rkbwvvnkhgdxd";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
