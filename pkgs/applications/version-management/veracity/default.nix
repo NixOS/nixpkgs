@@ -65,6 +65,7 @@ rec {
 
   prepareMakefiles = a.fullDepEntry ''
     sed -e 's@ /bin/uname @ uname @g' -i CMakeLists.txt
+    sed -e 's@ /bin/uname @ uname @g' -i common-CMakeLists.txt
     cd ..
     mkdir build
     cd build
