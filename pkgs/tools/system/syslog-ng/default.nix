@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     description = "Next-generation syslogd with advanced networking and filtering capabilities.";
     license = "GPLv2";
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
