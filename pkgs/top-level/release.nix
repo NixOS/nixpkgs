@@ -207,6 +207,7 @@ with (import ./release-lib.nix);
   mutt = linux;
   mysql = linux;
   mysql51 = linux;
+  mysql55 = linux;
   namazu = all;
   nano = allBut "i686-cygwin";
   ncat = linux;

@@ -18,6 +18,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
+    rm -rf $out/mysql-test $out/sql-bench
   '';
 
   meta = {
