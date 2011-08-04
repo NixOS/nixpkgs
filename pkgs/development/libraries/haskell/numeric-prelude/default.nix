@@ -7,6 +7,8 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [HUnit QuickCheck parsec nonNegative utilityHt storableRecord];
   meta = {
     description = "An experimental alternative hierarchy of numeric type classes";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
 
