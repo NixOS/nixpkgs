@@ -74,7 +74,7 @@ in
 
         preStart =
           ''
-            iptables -t nat -F
+            iptables -t nat -F POSTROUTING
             iptables -t nat -X
 
             iptables -t nat -A POSTROUTING \
@@ -88,7 +88,7 @@ in
 
         postStop =
           ''
-            iptables -t nat -F
+            iptables -t nat -F POSTROUTING
           '';
       };
 
