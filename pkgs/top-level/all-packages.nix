@@ -431,7 +431,7 @@ let
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
-  syslogng = callPackage ../tools/misc/syslog-ng { };
+  syslogng = callPackage ../tools/system/syslog-ng { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc { };
 
