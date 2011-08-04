@@ -19,10 +19,10 @@ kde.package rec {
       -DCUSTOM_PERL_SITE_ARCH_DIR=$CUSTOM_PERL_SITE_ARCH_DIR
     )
   '';
-  
+
   # TODO: okular, qimageblitz, qwt5, qscintilla2, c#
   buildInputs = [ cmake perl python sip pyqt4 zlib libpng freetype fontconfig qt4 boost
-          kdelibs kdepimlibs automoc4 soprano akonadi attica polkit_qt_1 ruby ];
+          kdelibs kdepimlibs automoc4 soprano attica polkit_qt_1 ruby ];
 
   meta = {
     description = "KDE bindings";

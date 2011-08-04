@@ -1,14 +1,15 @@
 { stdenv, fetchurl
-, alsaLib, gstreamer, gstPluginsBase, pulseaudio
+, alsaLib, pulseaudio
 , libXft, libXrender, randrproto, xextproto, libXinerama, xineramaproto, libXcursor, libXmu
 , libXv, libXext, libXfixes, inputproto, fixesproto, libXrandr, freetype, fontconfig
 , zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig, libtiff, glib
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
-, buildDemos ? false, buildExamples ? false, useDocs ? true}:
+, buildDemos ? false, buildExamples ? false, useDocs ? false
+}:
 
 let
-  v = "4.7.2";
+  v = "4.7.3";
 in
 
 stdenv.mkDerivation rec {
@@ -16,21 +17,39 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0dlknhzcslymqbmlkpmmgv29c5mmbw6s7rznriqd5g4h9d93ny6l";
+    sha256 = "0zlk0lcrkhi8wdb5j2lqz3nclk07blbiial7lzs03708kpb6yayh";
   };
 
-  preConfigure = ''
-    export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
-    configureFlags+="
-      -docdir $out/share/doc/${name}
-      -plugindir $out/lib/qt4/plugins
-      -importdir $out/lib/qt4/imports
-      -examplesdir $out/share/doc/${name}/examples
-      -demosdir $out/share/doc/${name}/demos
-      -datadir $out/share/${name}
-      -translationdir $out/share/${name}/translations
-    "
-  '';
+  preConfigure =
+    ''
+      export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
+      configureFlags+="
+        -docdir $out/share/doc/${name}
+        -plugindir $out/lib/qt4/plugins
+        -importdir $out/lib/qt4/imports
+        -examplesdir $out/share/doc/${name}/examples
+        -demosdir $out/share/doc/${name}/demos
+        -datadir $out/share/${name}
+        -translationdir $out/share/${name}/translations
+      "
+    '';
+
+  configureFlags =
+    ''
+      -v -no-separate-debug-info -release -fast -confirm-license -opensource
+      -system-zlib -system-libpng -system-libjpeg -qt-gif -system-libmng
+      -opengl -xrender -xrandr -xinerama -xcursor
+      -plugin-sql-mysql -system-sqlite
+      -qdbus -cups -glib -xfixes -dbus-linked -openssl-linked
+      -fontconfig -I${freetype}/include/freetype2
+      -exceptions -xmlpatterns
+      -multimedia -audio-backend -no-phonon
+      -webkit -javascript-jit
+      -make libs -make tools -make translations
+      ${if buildDemos == true then "-make demos" else "-nomake demos"}
+      ${if buildExamples == true then "-make examples" else "-nomake examples"}
+      ${if useDocs then "-make docs" else "-nomake docs"}
+    '';
 
   propagatedBuildInputs = [
     alsaLib
@@ -66,29 +85,12 @@ stdenv.mkDerivation rec {
     libXfixes
     glib
     libtiff
-    gstreamer
-    gstPluginsBase
     pulseaudio
   ];
 
   buildInputs = [ perl ];
 
   prefixKey = "-prefix ";
-
-  configureFlags = ''
-    -v -no-separate-debug-info -release -fast -confirm-license -opensource
-    -system-zlib -system-libpng -system-libjpeg -qt-gif -system-libmng
-    -opengl -xrender -xrandr -xinerama -xcursor
-    -plugin-sql-mysql -system-sqlite
-    -qdbus -cups -glib -xfixes -dbus-linked -openssl-linked
-    -fontconfig -I${freetype}/include/freetype2
-    -exceptions -xmlpatterns
-    -multimedia -audio-backend -phonon -phonon-backend
-    -webkit -javascript-jit
-    -make libs -make tools -make translations
-    ${if buildDemos == true then "-make demos" else "-nomake demos"}
-    ${if buildExamples == true then "-make examples" else "-nomake examples"}
-    ${if useDocs then "-make docs" else "-nomake docs"}'';
 
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${if useDocs then "rm -rfv $out/share/doc/${name}/{html,src}" else ""}
-    ln -sv phonon $out/include/Phonon'';
+  '';
 
   enableParallelBuilding = true;
 
@@ -108,6 +110,5 @@ stdenv.mkDerivation rec {
     license = "GPL/LGPL";
     maintainers = with maintainers; [ urkud sander ];
     platforms = platforms.linux;
-    priority = 10;
   };
 }

@@ -1,7 +1,7 @@
-diff -ru -x '*~' gtk+-2.24.0-orig//gtk/Makefile.in gtk+-2.24.0//gtk/Makefile.in
---- gtk+-2.24.0-orig//gtk/Makefile.in	2011-01-30 05:39:20.000000000 +0100
-+++ gtk+-2.24.0//gtk/Makefile.in	2011-02-14 00:06:56.000000000 +0100
-@@ -1601,7 +1601,173 @@
+diff -ru gtk+-2.24.5-orig/gtk/Makefile.in gtk+-2.24.5/gtk/Makefile.in
+--- gtk+-2.24.5-orig/gtk/Makefile.in	2011-06-16 01:56:37.000000000 +0200
++++ gtk+-2.24.5/gtk/Makefile.in	2011-07-07 15:38:06.000000000 +0200
+@@ -1616,7 +1616,173 @@
  	stock-icons/24/folder-remote.png 		\
  	stock-icons/24/user-home.png 			\
  	stock-icons/24/user-desktop.png 		\
@@ -176,10 +176,10 @@ diff -ru -x '*~' gtk+-2.24.0-orig//gtk/Makefile.in gtk+-2.24.0//gtk/Makefile.in
  
  @CROSS_COMPILING_FALSE@gtk_update_icon_cache_program = \
  @CROSS_COMPILING_FALSE@	   ./gtk-update-icon-cache
-@@ -2873,7 +3039,91 @@
+@@ -2887,7 +3053,91 @@
  	   && $(LN_S) folder.png user-desktop.png 			\
- 	   && $(RM) text-x-generic.png 					\
- 	   && $(LN_S) document-x-generic.png text-x-generic.png 	\
+ 	   && $(RM) user-home.png 					\
+ 	   && $(LN_S) folder.png user-home.png 				\
 +	   && $(LN_S) application-exit.png gtk-quit.png			\
 +	   && $(LN_S) dialog-information.png gtk-info.png			\
 +	   && $(LN_S) document-new.png gtk-file.png			\

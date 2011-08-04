@@ -2,7 +2,7 @@
 
 let
   baseName = "gobject-introspection";
-  v = "0.10.2";
+  v = "0.10.8";
 in
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${baseName}/0.10/${name}.tar.bz2";
-    sha256 = "18di6v39hibb6j39vs0a5icaafihfryh8250kz7x1q1313pvm62v";
+    sha256 = "5b1387ff37f03db880a2b1cbd6c6b6dfb923a29468d4d8367c458abf7704c61e";
   };
 
   postInstall = "rm -rf $out/share/gtk-doc";

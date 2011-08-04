@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, udev }:
+{ stdenv, fetchurl, pkgconfig, udev }:
 
 let
-  v = "2.02.65";
+  v = "2.02.86";
 in
 
 stdenv.mkDerivation {
@@ -9,12 +9,13 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${v}.tgz";
-    sha256 = "1lbskrj4pxbipq8f0qhql3p1nqa796v4i1cy6n2fmmbs3fwmfh9a";
+    sha256 = "0bam8ampdqn4xx2agrvh5vn4xdi0gb9lmfsm31fm302y52jsyz2m";
   };
   
-  configureFlags = "--disable-readline --enable-udev_rules --enable-udev_sync";
+  configureFlags =
+    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
 
-  buildInputs = [ udev ];
+  buildInputs = [ pkgconfig udev ];
   
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";

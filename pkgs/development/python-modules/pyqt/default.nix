@@ -1,39 +1,42 @@
-{stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
+{ stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "PyQt-x11-gpl-4.8.1";
+  name = "PyQt-x11-gpl-4.8.4";
   
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${name}.tar.gz";
-    sha256 = "0w7k1jz7wcfwqq77hiwgds5s6py7kkg1rszd6c94bk9dr06vishz";
+    url = "http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/${name}.tar.gz";
+    sha256 = "161y1c39zr9dyl2nkllxw5711sl1dxmb6lbp4a9nvbag1g63xypw";
   };
   
-  preConfigure = ''
-    ensureDir $out
+  configurePhase = ''
+    mkdir -p $out
     lndir ${pythonDBus} $out
+
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
+    
+    substituteInPlace configure.py \
+      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'"
+  
     configureFlagsArray=( \
       --confirm-license --bindir $out/bin \
       --destdir $out/lib/${python.libPrefix}/site-packages \
       --plugin-destdir $out/lib/qt4/plugins --sipdir $out/share/sip \
       --dbus=$out/include/dbus-1.0 --verbose)
-    '';
 
-  configureScript="./configure.py";
-
-  configurePhase = ''
-    runHook preConfigure
     python configure.py $configureFlags "''${configureFlagsArray[@]}"
-    runHook postConfigure'';
-  
-  propagatedBuildInputs = [ python sip qt4 ]
-    ++ pythonDBus.propagatedBuildNativeInputs;
-  buildInputs = [ pkgconfig makeWrapper lndir ];
+  '';
+
+  buildInputs = [ python pkgconfig makeWrapper qt4 lndir ];
+
+  propagatedBuildInputs = [ sip ];
 
   postInstall = ''
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done'';
+    done
+  ''; # */
+
+  enableParallelBuilding = true;
   
   meta = {
     description = "Python bindings for Qt";

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "glib-2.28.3";
+  name = "glib-2.28.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/2.28/${name}.tar.bz2";
-    sha256 = "7e1ab62d0f0cdc3f0ce8214b77d104b3abbd51185a9f3fc9b6a504cce26f6fab";
+    sha256 = "222f3055d6c413417b50901008c654865e5a311c73f0ae918b0a9978d1f9466f";
   };
 
   # configure script looks for d-bus but it is only needed for tests

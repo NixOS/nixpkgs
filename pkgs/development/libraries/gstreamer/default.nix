@@ -1,13 +1,15 @@
-{ callPackage, pkgs }:
+{ callPackage }:
 
 rec {
-  gstreamer = callPackage ./gstreamer {
-    flex = pkgs.flex2535;
-  };
+  gstreamer = callPackage ./gstreamer { };
 
   gstPluginsBase = callPackage ./gst-plugins-base { };
 
   gstPluginsGood = callPackage ./gst-plugins-good { };
+
+  gstPluginsUgly = callPackage ./gst-plugins-ugly { };
+
+  gstPluginsBad = callPackage ./gst-plugins-bad { };
 
   gstFfmpeg = callPackage ./gst-ffmpeg { };
 

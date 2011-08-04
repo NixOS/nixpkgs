@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libraw1394 }:
 
-stdenv.mkDerivation {
-  name = "libavc1394-0.5.3";
+stdenv.mkDerivation rec {
+  name = "libavc1394-0.5.4";
 
   src = fetchurl {
-    url = mirror://sourceforge/libavc1394/libavc1394-0.5.3.tar.gz;
-    sha256 = "19i40i3722ilhziknfds3a6w5xzv66fvc68gvbir1p2fvwi6ij93";
+    url = "mirror://sourceforge/libavc1394/${name}.tar.gz";
+    sha256 = "0lsv46jdqvdx5hx92v0z2cz3yh6212pz9gk0k3513sbaa04zzcbw";
   };
 
   buildInputs = [ pkgconfig ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, graphviz, perl, flex, bison, gnumake, libX11, libXext, qt}:
+{ stdenv, fetchurl, perl, flex, bison, qt }:
 
 stdenv.mkDerivation rec {
   name = "doxygen-1.7.4";
@@ -10,24 +10,26 @@ stdenv.mkDerivation rec {
 
   patches = [ ./tmake.patch ];
 
-  buildInputs = [ graphviz perl flex bison libX11 libXext ]
-    ++ (if (qt != null) then [ qt ] else []);
+  buildInputs =
+    [ perl flex bison ]
+    ++ stdenv.lib.optional (qt != null) qt;
 
   prefixKey = "--prefix ";
-  configureFlags = "--release"
-		 + (if qt == null then "" else " --with-doxywizard")
-		 ;
-  makeFlags = "MAN1DIR=share/man/man1";
-  preConfigure =
-   (if (qt == null)
-    then ""
-    else ''
+  
+  configureFlags =
+    [ "--dot dot" ]
+    ++ stdenv.lib.optional (qt != null) "--with-doxywizard";
+
+  preConfigure = stdenv.lib.optionalString (qt != null)
+    ''
       echo "using QTDIR=${qt}..."
       export QTDIR=${qt}
-    '');
-      # export CPLUS_INCLUDE_PATH="${qt}/include:$CPLUS_INCLUDE_PATH"
-      # export LIBRARY_PATH="${qt}/lib:$LIBRARY_PATH"
+    '';
 
+  makeFlags = "MAN1DIR=share/man/man1";
+
+  enableParallelBuilding = true;
+  
   meta = {
     license = "GPLv2+";
     homepage = "http://doxygen.org/";

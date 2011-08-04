@@ -1182,10 +1182,7 @@ let
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pythonDBus = builderDefsPackage (import ../development/python-modules/dbus) {
-    inherit python pkgconfig dbus_glib;
-    dbus = dbus.libs;
-  };
+  pythonDBus = callPackage ../development/python-modules/dbus { };
 
   pythonIRClib = builderDefsPackage (import ../development/python-modules/irclib) {
     inherit python;
@@ -1336,7 +1333,6 @@ let
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
   system_config_printer = callPackage ../tools/misc/system-config-printer {
-    inherit (pythonPackages) notify;
     libxml2 = libxml2Python;
    };
 
@@ -2688,7 +2684,11 @@ let
     inherit python pil makeWrapper;
   };
 
-  doxygen = callPackage ../development/tools/documentation/doxygen {
+  doxygen = lowPrio (callPackage ../development/tools/documentation/doxygen {
+    qt = null;
+  });
+
+  doxygen_gui = doxygen.override {
     qt = qt4;
   };
 
@@ -2935,6 +2935,8 @@ let
 
   aterm28 = lowPrio (callPackage ../development/libraries/aterm/2.8.nix { });
 
+  attica = callPackage ../development/libraries/attica { };
+
   attr = callPackage ../development/libraries/attr { };
 
   aubio = callPackage ../development/libraries/aubio { };
@@ -3018,7 +3020,9 @@ let
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
   };
 
-  cluceneCore = callPackage ../development/libraries/clucene-core { };
+  clucene_core = callPackage ../development/libraries/clucene-core { };
+
+  cluceneCore = clucene_core; # !!! remove this
 
   clutter = callPackage ../development/libraries/clutter {
     inherit (gnome) glib pango gtk;
@@ -3344,7 +3348,8 @@ let
 
   gst_all = recurseIntoAttrs
     (let callPackage = newScope pkgs.gst_all; in
-     import ../development/libraries/gstreamer { inherit callPackage pkgs; });
+     import ../development/libraries/gstreamer { inherit callPackage; }
+    );
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -3477,11 +3482,7 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  herqqSvn = callPackage ../development/libraries/herqq/svn.nix { };
-
-  herqq070 = callPackage ../development/libraries/herqq/0.7.0.nix { };
-
-  herqq080 = callPackage ../development/libraries/herqq/0.8.0.nix { };
+  herqq = callPackage ../development/libraries/herqq { };
 
   hspell = callPackage ../development/libraries/hspell { };
 
@@ -3592,13 +3593,7 @@ let
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
-    /* Using GNU Make 3.82 leads to this:
-
-         Makefile:939: *** missing separator (did you mean TAB instead of 8 spaces?).  Stop.
-
-       So use 3.81.  */
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    gstreamer = gst_all.gstreamer;
+    # gstreamer = gst_all.gstreamer;
   };
 
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
@@ -3742,9 +3737,7 @@ let
 
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
-  libspectre = callPackage ../development/libraries/libspectre {
-    ghostscript = ghostscriptX;
-  };
+  libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf {
     inherit (gnome) glib gnomevfs libbonobo;
@@ -4027,7 +4020,9 @@ let
     qt = qt4;
   };
 
-  mpeg2dec = callPackage ../development/libraries/mpeg2dec { };
+  libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
+
+  mpeg2dec = libmpeg2;
 
   msilbc = callPackage ../development/libraries/msilbc { };
 
@@ -4098,7 +4093,8 @@ let
   openct = callPackage ../development/libraries/openct { };
 
   opencv = callPackage ../development/libraries/opencv {
-      inherit (gst_all) gstreamer;
+    ffmpeg = ffmpeg_0_6_90;
+    inherit (gst_all) gstreamer;
   };
 
   # this ctl version is needed by openexr_viewers
@@ -4143,6 +4139,10 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
+  phonon = callPackage ../development/libraries/phonon { };
+
+  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
+
   phonon_backend_vlc = newScope pkgs.kde4 ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
@@ -4155,14 +4155,17 @@ let
 
   polkit = callPackage ../development/libraries/polkit { };
 
+  polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 { };
+
   policykit = callPackage ../development/libraries/policykit { };
 
   poppler = callPackage ../development/libraries/poppler {
+    gtkSupport = true;
     qt4Support = false;
   };
 
   popplerQt4 = poppler.override {
-    inherit qt4;
+    gtkSupport = false;
     qt4Support = true;
   };
 
@@ -4206,7 +4209,6 @@ let
   };
 
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
-    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
     inherit (pkgs.gnome) glib;
   };
 
@@ -4236,6 +4238,8 @@ let
 
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
+  librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };
+
   librdf_rasqal = callPackage ../development/libraries/librdf/rasqal.nix { };
 
   librdf = callPackage ../development/libraries/librdf { };
@@ -4245,6 +4249,7 @@ let
   redland = callPackage ../development/libraries/redland/1.0.10.nix {
     bdb = db4;
     postgresql = null;
+    mysql = null;
   };
 
   rhino = callPackage ../development/libraries/java/rhino {
@@ -4724,7 +4729,9 @@ let
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
-  mediatomb = callPackage ../servers/mediatomb { };
+  mediatomb = callPackage ../servers/mediatomb {
+    ffmpeg = ffmpeg_0_6_90;
+  };
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
@@ -4744,6 +4751,11 @@ let
 
   pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome.GConf;
+    # The following are disabled in the default build, because if this
+    # functionality is desired, they are only needed in the PulseAudio
+    # server.
+    bluez = null;
+    avahi = null;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -4867,7 +4879,10 @@ let
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
-  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
+  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
+    jackaudio = null;
+  };
+  
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
@@ -5054,6 +5069,8 @@ let
 
   libaio = callPackage ../os-specific/linux/libaio { };
 
+  libatasmart = callPackage ../os-specific/linux/libatasmart { };
+  
   libcgroup = callPackage ../os-specific/linux/libcg { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
@@ -5666,6 +5683,8 @@ let
 
   rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
+  rtkit = callPackage ../os-specific/linux/rtkit { };
+
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
@@ -5733,9 +5752,11 @@ let
   };
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
-  udev166 = callPackage ../os-specific/linux/udev/166.nix { };
-  udev = udev166;
+  udev172 = callPackage ../os-specific/linux/udev/172.nix { };
+  udev = udev172;
 
+  udisks = callPackage ../os-specific/linux/udisks { };
+  
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     userModeLinux = true;
@@ -5747,6 +5768,8 @@ let
 
   untie = callPackage ../os-specific/linux/untie {};
 
+  upower = callPackage ../os-specific/linux/upower { };
+  
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
@@ -5991,6 +6014,7 @@ let
 
   audacity = callPackage ../applications/audio/audacity {
     portaudio = portaudioSVN;
+    ffmpeg = ffmpeg_0_6_90;
   };
 
   aumix = callPackage ../applications/audio/aumix {
@@ -7200,8 +7224,6 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    dbus = dbus.libs;
-    alsa = alsaLib;
     lua = lua5;
   };
 
@@ -7720,10 +7742,10 @@ let
     callPackage = newScope pkgs.kde45;
   };
 
-  kde46 = callPackage ../desktops/kde-4.6 {
-    callPackage = newScope pkgs.kde46;
+  kde47 = callPackage ../desktops/kde-4.7 {
+    callPackage = newScope pkgs.kde47;
   };
-
+    
   redshift = callPackage ../applications/misc/redshift {
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
       xf86vidmodeproto;

@@ -152,6 +152,10 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
 
+  xvinfo = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.libXext];
+  };
+
   xkbcomp = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
   };

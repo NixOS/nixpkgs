@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
   
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/PolicyKit;
-    description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
+    description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes (obsolete)";
   };
 }

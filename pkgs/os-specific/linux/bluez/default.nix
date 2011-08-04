@@ -9,21 +9,30 @@ let
 in
    
 stdenv.mkDerivation rec {
-  name = "bluez-4.90";
+  name = "bluez-4.95";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.gz";
-    sha256 = "18wq75m45q00fvddzgfqy1d4368649r2jl3j4yvpijymalc4jra7";
+    sha256 = "1xi087x2ggdywq63qp55wvi1iclk50hc42fp40kcsazw23j9vsnn";
   };
 
-  buildInputs = [ pkgconfig dbus.libs glib libusb alsaLib python makeWrapper
-    gst_all.gstreamer gst_all.gstPluginsBase readline libsndfile ];
+  buildInputs =
+    [ pkgconfig dbus.libs glib libusb alsaLib python makeWrapper
+      readline libsndfile
+      # Disables GStreamer; not clear what it gains us other than a
+      # zillion extra dependencies.
+      # gst_all.gstreamer gst_all.gstPluginsBase 
+    ];
 
-  configureFlags = "--localstatedir=/var --enable-udevrules --enable-configrules --enable-cups";
+  configureFlags = "--localstatedir=/var --enable-cups";
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
 
+  makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
+
+  /* !!! Move these into a separate package to prevent Bluez from
+    depending on Python etc. */
   postInstall = ''
     pushd test
     for a in simple-agent test-adapter test-device; do

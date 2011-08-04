@@ -1,11 +1,22 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, coreutils, gnugrep, utillinux, module_init_tools
+, procps, kbd }:
+
+let
+
+  binPath = stdenv.lib.makeSearchPath "bin"
+    [ coreutils gnugrep utillinux module_init_tools procps kbd ];
+
+  sbinPath = stdenv.lib.makeSearchPath "sbin"
+    [ procps ];
+    
+in 
 
 stdenv.mkDerivation rec {
-  name = "pm-utils-1.3.0";
+  name = "pm-utils-1.4.1";
 
   src = fetchurl {
     url = "http://pm-utils.freedesktop.org/releases/${name}.tar.gz";
-    md5 = "37d71f8adbb409442212a85a080d324d";
+    sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
   };
 
   configureFlags = "--sysconfdir=/etc";
@@ -15,9 +26,11 @@ stdenv.mkDerivation rec {
       # Install the manpages (xmlto isn't really needed).
       substituteInPlace man/Makefile.in --replace '@HAVE_XMLTO_TRUE@' ""
 
-      # Don't screw up the PATH.
-      substituteInPlace pm/pm-functions.in --replace '/sbin:/usr/sbin:/bin:/usr/bin' '$PATH'
+      # Set the PATH properly.
+      substituteInPlace pm/pm-functions.in --replace '/sbin:/usr/sbin:/bin:/usr/bin' '$PATH:${binPath}:${sbinPath}'
 
+      substituteInPlace src/pm-action.in --replace 'tr ' '${coreutils}/bin/tr '
+      
       substituteInPlace pm/sleep.d/00logging --replace /bin/uname "$(type -P uname)"
     '';
 

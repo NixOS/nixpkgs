@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, xlibs, libdvdnav
-, zlib, a52dec, libmad, faad2, ffmpeg, alsa
+, zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
 , pkgconfig, dbus, hal, fribidi, qt4, freefont_ttf
 , libvorbis, libtheora, speex, lua, libgcrypt, libupnp
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
@@ -10,17 +10,17 @@
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "1.1.9";
+  version = "1.1.11";
 
   patchPhase = ''sed -e "s@/bin/echo@echo@g" -i configure'';
 
   src = fetchurl {
     url = "mirror://sourceforge/vlc/${name}.tar.bz2";
-    sha256 = "02rdrfxh7d70yxz0qinmkw2jad2hxzfrw0r1hiyyxandrgg73ggh";
+    sha256 = "1jz1yklvh5apy2ygqwnyq61mhg09h0fn32hdygxfsaxq12z609b8";
   };
 
   buildInputs = [
-    perl zlib a52dec libmad faad2 ffmpeg alsa libdvdnav libdvdnav.libdvdread
+    perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
     pkgconfig dbus hal fribidi qt4 libvorbis libtheora speex lua libgcrypt
     libupnp libcaca pulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib

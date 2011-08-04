@@ -1,15 +1,15 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "cdparanoia-III-alpha9.8";
+stdenv.mkDerivation rec {
+  name = "cdparanoia-III-10.2";
+  
   src = fetchurl {
-    url = http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-alpha9.8.src.tgz;
-    md5 = "7218e778b5970a86c958e597f952f193";
+    url = "http://downloads.xiph.org/releases/cdparanoia/${name}.src.tgz";
+    sha256 = "1pv4zrajm46za0f6lv162iqffih57a8ly4pc69f7y0gfyigb8p80";
   };
   
-  patches = [./fix.patch];
-
   meta = {
     homepage = http://xiph.org/paranoia;
+    description = "A tool and library for reading digital audio from CDs";
   };
 }

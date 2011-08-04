@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, yasm
+{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, vorbisSupport ? true, libvorbis ? null
+, vorbisSupport ? false, libvorbis ? null
 , vpxSupport ? false, libvpx ? null
 , x264Support ? true, x264 ? null
-, xvidSupport ? true, xvidcore ? null
+, xvidSupport ? false, xvidcore ? null
 , faacSupport ? false, faac ? null
 }:
 
@@ -18,11 +18,11 @@ assert xvidSupport -> xvidcore != null;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.7-rc1";
+  name = "ffmpeg-0.8.1";
   
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "07ma2b80nslwwy4ddfrz8k575dxyc8x9mvja55ghrwxys8lkhw2m";
+    sha256 = "0vdq6bmrsi55p1l3dddiwyqsspb3l5dgqb87lysf5cz3sjxcfw2v";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree";
 
-  buildInputs = [ pkgconfig lame yasm ]
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional faacSupport faac;
 
+  enableParallelBuilding = true;
+    
   crossAttrs = {
     dontSetConfigureCross = true;
     configureFlags = configureFlags ++ [

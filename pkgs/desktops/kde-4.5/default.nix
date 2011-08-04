@@ -1,4 +1,4 @@
-{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47 } :
+{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, ffmpeg_0_6_90 } :
 
 let
 
@@ -24,7 +24,9 @@ recurseIntoAttrs rec {
 
   qt4 = qt47;
 
-  phonon = null;
+  ffmpeg = ffmpeg_0_6_90;
+
+  shared_desktop_ontologies = callPackage ./support/shared-desktop-ontologies { };
 
   kde = callPackage ./kde-package { inherit release; };
 
@@ -125,7 +127,7 @@ recurseIntoAttrs rec {
     ktimer = callPackage ./utils/ktimer.nix { };
     kwallet = callPackage ./utils/kwallet.nix { };
     okteta = callPackage ./utils/okteta.nix { };
-    printer_applet = callPackage ./utils/printer-applet.nix { };
+    #printer_applet = callPackage ./utils/printer-applet.nix { };
     superkaramba = callPackage ./utils/superkaramba.nix { };
     sweeper = callPackage ./utils/sweeper.nix { };
   };
@@ -142,7 +144,8 @@ recurseIntoAttrs rec {
 
 ### DEVELOPMENT
 
-  kdebindings = callPackage ./bindings { };
+  #kdebindings = callPackage ./bindings { };
+  kdebindings = null;
 
   l10n = callPackage ./l10n { inherit release; };
 
