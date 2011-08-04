@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, libgadu, libXScrnSaver, libsndfile, libX11,
-  alsaLib, aspell, libidn, qca2 }:
+  alsaLib, aspell, libidn, qca2, phonon }:
 
 stdenv.mkDerivation {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2
+    cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon
   ];
 
   configureFlags = "CPPFLAGS=-DQT_NO_DEBUG";
