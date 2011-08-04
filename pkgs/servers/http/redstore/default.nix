@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, redland, pkgconfig, gmp }:
+{ stdenv, fetchurl, redland, pkgconfig, gmp, zlib }:
 
 stdenv.mkDerivation rec {
   name = "redstore-0.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fs54v0d0kkqaz9ajacabb8wifrglvg6kkhd5b0mxmnng352wpp7";
   };
 
-  buildInputs = [ gmp pkgconfig redland ];
+  buildInputs = [ gmp pkgconfig redland zlib ];
       
   meta = {
     description = "An HTTP interface to Redland RDF store";
