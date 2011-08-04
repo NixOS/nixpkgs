@@ -1,10 +1,10 @@
-{cabal, mtl, time}:
+{cabal, mtl, time, text}:
 
 cabal.mkDerivation (self : {
   pname = "convertible";
-  version = "1.0.9.1";
-  sha256 = "a1f46bf1166356c02e7a241d0bfea7010dc3e5f9f15181cfc2405a95df402914";
-  propagatedBuildInputs = [mtl time];
+  version = "1.0.10.0";
+  sha256 = "1phjxd40mfxzp2ma1yif5f2wrjqg21a5bwz05mh38lxrw68vm711";
+  propagatedBuildInputs = [mtl time text];
   meta = {
     description = "Typeclasses and instances for converting between types";
   };
