@@ -369,6 +369,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
+  async = callPackage ../development/libraries/haskell/async {};
+
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
@@ -692,6 +694,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
+  hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
+
   html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
   html = self.html_1_0_1_2;
 
@@ -953,6 +957,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
+
+  streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
   # TODO: investigate status of syb in older platform versions
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
