@@ -405,6 +405,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
+  cabal2nix = callPackage ../development/libraries/haskell/cabal2nix {};
+
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
   };
