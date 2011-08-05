@@ -155,13 +155,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformDefaults_future =
     self : self.haskellPlatformArgs_future self // {
-      haskellPlatform = self.haskellPlatform_future;
       mtl1 = self.mtl_1_1_1_1;
     };
-
-  haskellPlatform_future =
-    callPackage ../development/libraries/haskell/haskell-platform/2011.2.0.1.nix
-      (self.haskellPlatformArgs_future self);
 
   haskellPlatformArgs_2011_2_0_1 = self : {
     inherit (self) cabal ghc;
@@ -348,6 +343,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
     };
+
+  haskellPlatform_2009_2_0_2 =
+    callPackage ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix
+      (self.haskellPlatformArgs_2009_2_0_2 self);
 
 
   # Haskell libraries.
