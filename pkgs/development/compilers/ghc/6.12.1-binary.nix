@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux-n.tar.bz2";
-        sha256 = "1fw0zr2qshlpk8s0d16k27zcv5263nqdg2xds5ymw8ff6qz9rz9b";
+        sha256 = "15kp8mnm4ig6a7k1a1j12lyhdcs75myv6ralfywjzpl27pd77gmk";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux-n.tar.bz2";
-        sha256 = "bae351afe8cdb323103dcf0ed3a7b480282803d2f812aff0d27808e9df228b21";
+        sha256 = "08cb4bgyj23qsbqay4pqs81jha40njkx63ng7l827cydx2pm3qxs";
       }
     else throw "cannot bootstrap GHC on this platform"; 
 
