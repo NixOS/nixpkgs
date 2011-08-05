@@ -437,6 +437,8 @@ let
 
   autossh = callPackage ../tools/networking/autossh { };
 
+  bacula = callPackage ../tools/backup/bacula { };
+
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
     inherit (strategoPackages016) strategoxt sdf;
   };
