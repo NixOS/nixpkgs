@@ -123,39 +123,39 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    cgi          = self.cgi_3001_1_7_4;
-    fgl          = self.fgl_5_4_2_3;
-    GLUT         = self.GLUT_2_1_2_1;
-    haskellSrc   = self.haskellSrc_1_0_1_4;
-    html         = self.html_1_0_1_2;
-    HUnit        = self.HUnit_1_2_2_3;
-    network      = self.network_2_3_0_2;
-    OpenGL       = self.OpenGL_2_2_3_0;
-    parallel     = self.parallel_3_1_0_1;
-    parsec       = self.parsec_3_1_1;
-    QuickCheck   = self.QuickCheck_2_4_0_1;
-    regexBase    = self.regexBase_0_93_2;
-    regexCompat  = self.regexCompat_0_93_1;
-    regexPosix   = self.regexPosix_0_94_4;
-    stm          = self.stm_2_2_0_1;
-    syb          = self.syb_0_3_3;
-    xhtml        = self.xhtml_3000_2_0_1;
-    zlib         = self.zlib_0_5_3_1;
-    HTTP         = self.HTTP_4000_1_1;
-    deepseq      = self.deepseq_1_1_0_2;
-    text         = self.text_0_11_1_5;
-    transformers = self.transformers_0_2_2_0;
-    mtl          = self.mtl_2_0_1_0;
-    random       = self.random_1_0_0_3;
-    cabalInstall = self.cabalInstall_0_10_2;
-    alex         = self.alex_3_0;
-    happy        = self.happy_1_18_6;
-    haddock      = self.haddock_2_9_2;
+    cgi          = self.cgi_3001_1_7_4; # 7.2 ok, 7.3 ok
+    fgl          = self.fgl_5_4_2_3; # 7.2 fails, 7.3 fails
+    GLUT         = self.GLUT_2_1_2_1; # 7.2 ok, 7.3 ok
+    haskellSrc   = self.haskellSrc_1_0_1_4; # 7.2 fails, 7.3 fails
+    html         = self.html_1_0_1_2; # 7.2 ok, 7.3 ok
+    HUnit        = self.HUnit_1_2_2_3; # 7.2 ok, 7.3 ok
+    network      = self.network_2_3_0_5; # 7.2 ok, 7.3 ok
+    OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
+    parallel     = self.parallel_3_1_0_1; # 7.2 ok, 7.3 ok
+    parsec       = self.parsec_3_1_1; # 7.2 ok, 7.3 ok
+    QuickCheck   = self.QuickCheck_2_4_0_1; # 7.2 ok, 7.3 ok
+    regexBase    = self.regexBase_0_93_2; # 7.2 ok, 7.3 ok
+    regexCompat  = self.regexCompat_0_93_1; # 7.2 ok, 7.3 ok
+    regexPosix   = self.regexPosix_0_94_4; # 7.2 ok, 7.3 ok
+    stm          = self.stm_2_2_0_1; # 7.2 ok, 7.3 ok
+    syb          = self.syb_0_3_3; # 7.2 ok, 7.3 ok
+    xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
+    zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
+    HTTP         = self.HTTP_4000_1_1; # 7.2 fails, 7.3 fails
+    deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
+    text         = self.text_0_11_1_5; # 7.2 fails, 7.3 fails
+    transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
+    mtl          = self.mtl_2_0_1_0; # 7.2 ok, 7.3 ok
+    random       = self.random_1_0_0_3; # 7.2 ok, 7.3 ok
+    cabalInstall = self.cabalInstall_0_10_2; # 7.2 fails, 7.3 fails
+    alex         = self.alex_3_0; # 7.2 ok, 7.3 ok
+    happy        = self.happy_1_18_6; # 7.2 ok, 7.3 ok
+    haddock      = self.haddock_2_9_2; # 7.2 fails, 7.3 fails
   };
 
   haskellPlatformDefaults_future =
     self : self.haskellPlatformArgs_future self // {
-      mtl1 = self.mtl_1_1_1_1;
+      mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
     };
 
   haskellPlatformArgs_2011_2_0_1 = self : {
@@ -788,6 +788,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
+  network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network = self.network_2_2_1_4;
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
