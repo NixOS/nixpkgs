@@ -88,7 +88,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ghc702Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_0 super;
   ghc703Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super;
   ghc704Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super; # link
-  ghcHEADPrefs = super : super // super.haskellPlatformDefaults_2011_2_0_1 super; # link
+  ghc721Prefs  = super : super // super.haskellPlatformDefaults_future super;
+  ghcHEADPrefs = super : super // super.haskellPlatformDefaults_future super; # link
 
   # GHC and its wrapper
   #
@@ -118,9 +119,49 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # We try to support several platform versions. For these, we set all
   # versions explicitly.
 
-  haskellPlatform = self.haskellPlatform_2011_2_0_0; # global platform default
-  # NOTE: 2011.2.0.0 is the current default. 2011.2.0.1 is not yet released
-  # and provided for testing purposes.
+  # NOTE: 2011.2.0.1 is the current default.
+
+  haskellPlatformArgs_future = self : {
+    inherit (self) cabal ghc;
+    cgi          = self.cgi_3001_1_7_4;
+    fgl          = self.fgl_5_4_2_3;
+    GLUT         = self.GLUT_2_1_2_1;
+    haskellSrc   = self.haskellSrc_1_0_1_4;
+    html         = self.html_1_0_1_2;
+    HUnit        = self.HUnit_1_2_2_3;
+    network      = self.network_2_3_0_2;
+    OpenGL       = self.OpenGL_2_2_3_0;
+    parallel     = self.parallel_3_1_0_1;
+    parsec       = self.parsec_3_1_1;
+    QuickCheck   = self.QuickCheck_2_4_0_1;
+    regexBase    = self.regexBase_0_93_2;
+    regexCompat  = self.regexCompat_0_93_1;
+    regexPosix   = self.regexPosix_0_94_4;
+    stm          = self.stm_2_2_0_1;
+    syb          = self.syb_0_3_3;
+    xhtml        = self.xhtml_3000_2_0_1;
+    zlib         = self.zlib_0_5_3_1;
+    HTTP         = self.HTTP_4000_1_1;
+    deepseq      = self.deepseq_1_1_0_2;
+    text         = self.text_0_11_1_5;
+    transformers = self.transformers_0_2_2_0;
+    mtl          = self.mtl_2_0_1_0;
+    random       = self.random_1_0_0_3;
+    cabalInstall = self.cabalInstall_0_10_2;
+    alex         = self.alex_3_0;
+    happy        = self.happy_1_18_6;
+    haddock      = self.haddock_2_9_2;
+  };
+
+  haskellPlatformDefaults_future =
+    self : self.haskellPlatformArgs_future self // {
+      haskellPlatform = self.haskellPlatform_future;
+      mtl1 = self.mtl_1_1_1_1;
+    };
+
+  haskellPlatform_future =
+    callPackage ../development/libraries/haskell/haskell-platform/2011.2.0.1.nix
+      (self.haskellPlatformArgs_future self);
 
   haskellPlatformArgs_2011_2_0_1 = self : {
     inherit (self) cabal ghc;
@@ -307,10 +348,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
     };
-
-  haskellPlatform_2009_2_0_2 =
-    callPackage ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix
-      (self.haskellPlatformArgs_2009_2_0_2 self);
 
 
   # Haskell libraries.
@@ -841,9 +878,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
-  random_newtime = callPackage ../development/libraries/haskell/random {
+  random_1_0_0_2_newtime = callPackage ../development/libraries/haskell/random/1.0.0.2.nix {
     time = self.time_1_2_0_3;
   };
+  random_1_0_0_3 = callPackage ../development/libraries/haskell/random/1.0.0.3.nix {};
+  random = null; # core package until ghc-7.2.1
+  random_newtime = self.random_1_0_0_2_newtime;
 
   randomFu = callPackage ../development/libraries/haskell/random-fu {};
 
@@ -915,6 +955,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # TODO: investigate status of syb in older platform versions
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
+  syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
   syb02     = self.syb_0_2_2;
   syb03     = self.syb_0_3;
   syb       = null; # by default, we assume that syb ships with GHC, which is
@@ -992,6 +1033,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
   text_0_11_0_6 = callPackage ../development/libraries/haskell/text/0.11.0.6.nix {};
+  text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
   text = self.text_0_11_0_5;
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
@@ -1165,6 +1207,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   alex_2_3_2 = callPackage ../development/tools/parsing/alex/2.3.2.nix {};
   alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
   alex_2_3_5 = callPackage ../development/tools/parsing/alex/2.3.5.nix {};
+  alex_3_0   = callPackage ../development/tools/parsing/alex/3.0.nix   {};
   alex = self.alex_2_3_1;
 
   cpphs = callPackage ../development/tools/misc/cpphs {};

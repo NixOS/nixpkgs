@@ -2042,11 +2042,15 @@ let
     inherit fetchurl stdenv perl ncurses gmp libedit;
   });
 
+  ghc6121Binary = lowPrio (import ../development/compilers/ghc/6.12.1-binary.nix {
+    inherit fetchurl stdenv perl ncurses gmp;
+  });
+
   # For several compiler versions, we export a large set of Haskell-related
   # packages.
 
   # This should point to the current default version.
-  haskellPackages = haskellPackages_ghc702;
+  haskellPackages = haskellPackages_ghc704;
 
   # NOTE: After discussion, we decided to enable recurseIntoAttrs for all
   # currently available ghc versions. (Before, it used to be enabled only
@@ -2055,45 +2059,59 @@ let
   # reducing the number or "enabled" versions again.
 
   # Helper functions to abstract away from repetitive instantiations.
-  haskellPackagesFun = ghcPath : prefFun : profDefault : modifyPrio : recurseIntoAttrs (import ./haskell-packages.nix {
-    inherit pkgs newScope modifyPrio prefFun;
-    enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
-    ghc = callPackage ghcPath { ghc = ghc6101Binary; };
-  });
+  haskellPackagesFun =
+    ghcPath : ghcBinary : prefFun : profDefault : modifyPrio : recurseIntoAttrs
+      (import ./haskell-packages.nix {
+        inherit pkgs newScope modifyPrio prefFun;
+        enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
+        ghc = callPackage ghcPath { ghc = ghcBinary; };
+      });
 
   # Currently active GHC versions.
   haskellPackages_ghc6104 =
-    haskellPackagesFun ../development/compilers/ghc/6.10.4.nix (x : x.ghc6104Prefs) false (x : x);
+    haskellPackagesFun ../development/compilers/ghc/6.10.4.nix
+      ghc6101Binary (x : x.ghc6104Prefs) false (x : x);
 
   haskellPackages_ghc6121 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.1.nix (x : x.ghc6121Prefs) false (x : x);
+    haskellPackagesFun ../development/compilers/ghc/6.12.1.nix
+      ghc6101Binary (x : x.ghc6121Prefs) false (x : x);
 
   haskellPackages_ghc6122 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.2.nix (x : x.ghc6122Prefs) false (x : x);
+    haskellPackagesFun ../development/compilers/ghc/6.12.2.nix
+      ghc6101Binary (x : x.ghc6122Prefs) false (x : x);
 
   haskellPackages_ghc6123 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.3.nix (x : x.ghc6123Prefs) false (x : x);
+    haskellPackagesFun ../development/compilers/ghc/6.12.3.nix
+      ghc6101Binary (x : x.ghc6123Prefs) false (x : x);
 
   # Will never make it into a platform release, severe bugs; leave at lowPrio.
   haskellPackages_ghc701 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.1.nix  (x : x.ghc701Prefs) false lowPrio;
+    haskellPackagesFun ../development/compilers/ghc/7.0.1.nix
+      ghc6101Binary (x : x.ghc701Prefs) false lowPrio;
+
+  haskellPackages_ghc702 =
+    haskellPackagesFun ../development/compilers/ghc/7.0.2.nix
+      ghc6101Binary (x : x.ghc702Prefs) false (x : x);
+
+  haskellPackages_ghc703 =
+    haskellPackagesFun ../development/compilers/ghc/7.0.3.nix
+      ghc6101Binary (x : x.ghc703Prefs) false (x : x);
 
   # Current default version.
-  haskellPackages_ghc702 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.2.nix  (x : x.ghc702Prefs) false (x : x);
-
-  # The only thing that keeps this one from becoming default is that
-  # the Haskell Platform based on 703 is released improperly.
-  # Please keep at lowPrio until fixed.
-  haskellPackages_ghc703 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.3.nix  (x : x.ghc703Prefs) false lowPrio;
-
-  # Just released. Needs some testing first. Please keep at lowPrio for now.
+  # Note that the platform isn't officially released for ghc-7.0.4, but
+  # it works without problems.
   haskellPackages_ghc704 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.4.nix  (x : x.ghc704Prefs) false lowPrio;
+    haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
+      ghc6101Binary (x : x.ghc704Prefs) false (x : x);
+
+  # Still a release candidate.
+  haskellPackages_ghc721 =
+    haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
+      ghc6121Binary (x : x.ghc721Prefs) false lowPrio;
 
   haskellPackages_ghcHEAD =
-    haskellPackagesFun ../development/compilers/ghc/head.nix   (x : x.ghcHEADPrefs) false lowPrio;
+    haskellPackagesFun ../development/compilers/ghc/head.nix
+      ghc6121Binary (x : x.ghcHEADPrefs) false lowPrio;
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
