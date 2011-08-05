@@ -3,16 +3,16 @@
 , libgnome, libgnomeui, scrollkeeper, libxslt
 , libglade, gnome_keyring, dbus, dbus_glib
 , poppler, libspectre, djvulibre, shared_mime_info
-, makeWrapper, which
+, makeWrapper, which, ghostscript
 , recentListSize ? null # 5 is not enough, allow passing a different number
 }:
 
 stdenv.mkDerivation rec {
-  name = "evince-2.26.0";
+  name = "evince-2.32.0";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/evince/2.26/${name}.tar.bz2";
-    sha256 = "1wsl5vdrj0829wq223dryq5p7izgzsz6mfl4igix7b5wga42zff1";
+    url = "http://ftp.gnome.org/pub/GNOME/sources/evince/2.32/${name}.tar.bz2";
+    sha256 = "2a4c91ae38f8b5028cebb91b9da9ddc50ea8ae3f3d429df89ba351da2d787ff7";
   };
 
   buildInputs = [
@@ -21,10 +21,13 @@ stdenv.mkDerivation rec {
     scrollkeeper gnome_keyring
     libxslt  # for `xsltproc'
     dbus dbus_glib poppler libspectre djvulibre makeWrapper which
+    ghostscript
   ];
 
   configureFlags = "--with-libgnome --enable-dbus --enable-pixbuf "
 
+    # Do not use nautilus
+    + " --disable-nautilus "
     # Do not update Scrollkeeper's database (GNOME's help system).
     + "--disable-scrollkeeper";
 
