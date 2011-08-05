@@ -2,13 +2,14 @@
 
 cabal.mkDerivation (self : {
   pname = "hsemail";
-  version = "1.6";
-  sha256 = "a8ba7e8cfb9213bb2ee61166bc8352e4353560d06f418a0c729aeb1d50b3a1fd";
+  version = "1.7.1";
+  sha256 = "0059015ab93d5facf6060404984a295090ebfc667ae5b84b283163e126805a9e";
   propagatedBuildInputs = [mtl parsec];
   meta = {
+    homepage = "http://gitorious.org/hsemail";
     description = "Internet Message Parsers";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [self.stdenv.lib.maintainers.simons];
   };
 })
-
