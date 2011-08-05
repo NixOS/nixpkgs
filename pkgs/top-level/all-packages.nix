@@ -4117,6 +4117,11 @@ let
     inherit (gst_all) gstreamer;
   };
 
+  opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
+    ffmpeg = ffmpeg_0_6_90;
+    inherit (gst_all) gstreamer;
+  };
+
   # this ctl version is needed by openexr_viewers
   openexr_ctl = callPackage ../development/libraries/openexr_ctl { };
 
@@ -6509,7 +6514,8 @@ let
   };
 
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
-    inherit libpng opencv;
+    inherit libpng;
+    opencv = opencv_2_1;
   };
 
   qrencode = builderDefsPackage (import ../tools/graphics/qrencode) {
