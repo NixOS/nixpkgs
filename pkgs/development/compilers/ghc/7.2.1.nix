@@ -1,13 +1,13 @@
 {stdenv, fetchurl, ghc, perl, gmp, ncurses, darwinInstallNameToolUtility}:
 
 stdenv.mkDerivation rec {
-  version = "7.2.0.20110728";
-  label = "7.2.1-rc1";
+  version = "7.2.0.20110804";
+  label = "7.2.1-rc2";
   name = "ghc-${version}";
 
   src = fetchurl {
     url = "http://haskell.org/ghc/dist/${label}/${name}-src.tar.bz2";
-    sha256 = "8747038f1b863a553f3250a415514705df5919932722e68a1477cf6e13363250";
+    sha256 = "1q089pwfnjpgr44gd4pwp7794kw36dp3q5v0kpbcp1l24sbdf1x8";
   };
 
   buildInputs = [ghc perl gmp ncurses] ++
