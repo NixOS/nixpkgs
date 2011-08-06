@@ -684,7 +684,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) adns;
   };
 
-  hsemail = callPackage ../development/libraries/haskell/hsemail {};
+  hsemail_1_6 = callPackage ../development/libraries/haskell/hsemail/1.6.nix {};
+  hsemail_1_7_1 = callPackage ../development/libraries/haskell/hsemail/1.7.1.nix {};
+  hsemail = self.hsemail_1_7_1;
 
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
 
@@ -997,7 +999,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
 
-  SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
+  SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {
+    hsemail = self.hsemail_1_6;
+  };
 
   split = callPackage ../development/libraries/haskell/split {};
 
