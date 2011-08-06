@@ -1,13 +1,14 @@
-{cabal, bmp, repa, repaBytestring}:
+{cabal, bmp, repa, repaBytestring} :
 
 cabal.mkDerivation (self : {
   pname = "repa-io";
-  version = "2.0.0.3";
-  sha256 = "1p8h2855jv8nnvf9vq2ywrmm9qk9qdqy6yqr4dj9p90kfcqxgw2g";
-  propagatedBuildInputs = [bmp repa repaBytestring];
+  version = "2.1.0.1";
+  sha256 = "1mjv90rr1vymrnv5kz8i4kvjal6mwhb2042ylbdggvv8hjsc8awq";
+  propagatedBuildInputs = [ bmp repa repaBytestring ];
   meta = {
-    description = "Read and write Repa arrays in various formats";
-    license = "BSD";
+    homepage = "http://repa.ouroborus.net";
+    description = "Read and write Repa arrays in various formats.";
+    license = self.stdenv.lib.licenses.bsd3;
     maintainers = [self.stdenv.lib.maintainers.andres];
   };
 })
