@@ -4,14 +4,14 @@
 , xorriso, makeself, perl, jdk
 }:
 
-let version = "4.0.4"; in
+let version = "4.1.0"; in
 
 stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "1iqagfkpjczdf4xqdwjk49cbsl80d12av0rjb6jccm1gir1gwjgh";
+    sha256 = "1pi066xnjgr3fl42i1vc1pbwic9l4m1k6mzs4ip41fz99w59xfzp";
   };
 
   buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation {
         -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 
+    find . -type f | xargs sed 's/depmod -a/true/' -i
     export USER=nix
     set +x
   ";
