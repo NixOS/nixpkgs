@@ -17,7 +17,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Wiki using happstack, git or darcs, and pandoc";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    maintainers = [self.stdenv.lib.maintainers.andres self.stdenv.lib.maintainers.simons];
   };
 })
 
