@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
     HTTP         = self.HTTP_4000_1_1; # 7.2 fails, 7.3 fails
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
-    text         = self.text_0_11_1_5; # 7.2 fails, 7.3 fails
+    text         = self.text_0_11_1_5; # 7.2 ok, 7.3 fails
     transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
     mtl          = self.mtl_2_0_1_0; # 7.2 ok, 7.3 ok
     random       = self.random_1_0_0_3; # 7.2 ok, 7.3 ok
