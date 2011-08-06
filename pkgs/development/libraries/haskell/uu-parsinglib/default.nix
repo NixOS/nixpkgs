@@ -1,12 +1,13 @@
-{cabal, ListLike}:
+{cabal, ListLike} :
 
 cabal.mkDerivation (self : {
   pname = "uu-parsinglib";
-  version = "2.7.1";
-  sha256 = "10zpgpg93lp1jkrd77wkcdhf1a78hdzbvshq87q846nbv74f59cd";
-  propagatedBuildInputs = [ListLike];
+  version = "2.7.1.1";
+  sha256 = "1qn3impl64cvbzyvhc73yxyibgak4dkgl1vkbrzxrxb770kb5r4p";
+  propagatedBuildInputs = [ ListLike ];
   meta = {
-    description = "New version of the Utrecht University parser combinator library";
+    homepage = "http://www.cs.uu.nl/wiki/bin/view/HUT/ParserCombinators";
+    description = "Fast, online, error-correcting, monadic, applicative, merging, permuting, idiomatic parser combinators.";
+    license = self.stdenv.lib.licenses.mit;
   };
 })
-
