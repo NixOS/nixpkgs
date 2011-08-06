@@ -12,6 +12,7 @@ export LD_LIBRARY_PATH=/var/run/opengl-driver/lib:/var/run/opengl-driver-32/lib 
 export MODULE_DIR=@modulesTree@/lib/modules
 export NIXPKGS_CONFIG=/nix/etc/config.nix
 export NIXPKGS_ALL=/etc/nixos/nixpkgs
+export NIX_PATH=nixpkgs=/etc/nixos/nixpkgs:nixos=/etc/nixos/nixos:nixos-config=/etc/nixos/configuration.nix:services=/etc/nixos/services
 export PAGER="less -R"
 export EDITOR=nano
 export LOCATE_PATH=/var/cache/locatedb
@@ -49,6 +50,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     export XDG_CONFIG_DIRS=$i/etc/xdg${XDG_CONFIG_DIRS:+:}$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 done
+
 @shellInit@
 
 
