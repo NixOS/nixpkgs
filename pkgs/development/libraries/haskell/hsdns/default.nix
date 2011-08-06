@@ -11,6 +11,6 @@ cabal.mkDerivation (self : {
     description = "Asynchronous DNS Resolver";
     license = self.stdenv.lib.licenses.lgpl3;
     platforms = self.stdenv.lib.platforms.haskellPlatforms;
-    maintainers = [self.stdenv.lib.maintainers.simons];
+    maintainers = [self.stdenv.lib.maintainers.andres self.stdenv.lib.maintainers.simons];
   };
 })
