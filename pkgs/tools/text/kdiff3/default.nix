@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, perl, kdelibs, kdebase, automoc4, phonon, gettext}:
+{ stdenv, fetchurl, cmake, qt4, perl, kdelibs, automoc4, phonon, gettext}:
 
 stdenv.mkDerivation rec {
   name = "kdiff3-0.9.95";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   # kdebase allows having a konqueror plugin built
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon gettext kdebase ];
+  buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon gettext ];
 
   # Adjust the version of the DocBook XML to 4.2 ( so that it validates ).
   patches = [ ./adjust-docbook-xml-version-to-4.2.patch ];
