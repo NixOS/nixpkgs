@@ -67,19 +67,11 @@ recurseIntoAttrs rec {
 
 ### OTHER MODULES
 
-  gwenview = callPackage ./gwenview.nix { };
-
-  okular = callPackage ./okular.nix { };
-
   konsole = callPackage ./konsole.nix { };
 
   kcolorchooser = callPackage ./kcolorchooser.nix { };
 
   kate = callPackage ./kate.nix { };
-
-  ksnapshot = callPackage ./ksnapshot.nix { };
-
-  kamera = callPackage ./kamera.nix { };
 
   kde_wallpapers = callPackage ./wallpapers.nix { };
 
@@ -88,10 +80,6 @@ recurseIntoAttrs rec {
   kdegames = callPackage ./games.nix { };
   
   kdemultimedia = callPackage ./multimedia.nix { };
-
-  kolourpaint = callPackage ./kolourpaint.nix { };
-
-  kgamma = callPackage ./kgamma.nix { };
 
   kdeaccessibility = combinePkgs "kdeaccessibility" {
     #jovie = callPackage ./accessibility/jovie.nix { };
@@ -122,7 +110,17 @@ recurseIntoAttrs rec {
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
   */
-  
+
+  kdegraphics = combinePkgs "kdegraphics" {
+    gwenview = callPackage ./graphics/gwenview.nix { };
+    kamera = callPackage ./graphics/kamera.nix { };
+    kgamma = callPackage ./graphics/kgamma.nix { };
+    kolourpaint = callPackage ./graphics/kolourpaint.nix { };
+    kruler = callPackage ./graphics/kruler.nix { };
+    ksnapshot = callPackage ./graphics/ksnapshot.nix { };
+    okular = callPackage ./graphics/okular.nix { };
+  };
+
   kdesdk = combinePkgs "kdesdk" {
     cervisia = callPackage ./sdk/cervisia.nix { };
     kapptemplate = callPackage ./sdk/kapptemplate.nix { };
