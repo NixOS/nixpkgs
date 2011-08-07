@@ -955,7 +955,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   salvia = callPackage ../development/libraries/haskell/salvia {};
 
-  salviaProtocol = callPackage ../development/libraries/haskell/salvia-protocol {};
+  salviaProtocol = callPackage ../development/libraries/haskell/salvia-protocol {
+    parsec = self.parsec2;
+  };
 
   scion = callPackage ../development/libraries/haskell/scion {};
 
