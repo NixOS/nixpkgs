@@ -1,14 +1,18 @@
-{cabal, HList, mtl}:
+{cabal, HList, mtl} :
 
 cabal.mkDerivation (self : {
   pname = "AspectAG";
-  version = "0.2";
-  sha256 = "5184ba55bc89d4afd12d1fe5f20e5d62b3b7306e771a7418db805afb70638ce7";
-  propagatedBuildInputs = [HList mtl];
+  version = "0.3.3";
+  sha256 = "06vmdg72f7v11603a0y6f5wq5lydi5inx1d98nwgpp4vj8y138j1";
+  propagatedBuildInputs = [ HList mtl ];
   meta = {
+    homepage = "http://www.cs.uu.nl/wiki/bin/view/Center/AspectAG";
     description = "Attribute Grammars in the form of an EDSL";
     license = "LGPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
