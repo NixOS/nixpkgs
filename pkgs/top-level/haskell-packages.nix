@@ -1061,6 +1061,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {
+  Tensor = callPackage ../development/libraries/haskell/Tensor {};
+
     inherit (self) extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
