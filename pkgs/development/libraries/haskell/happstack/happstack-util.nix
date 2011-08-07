@@ -1,17 +1,18 @@
-{cabal, mtl, hslogger, HUnit, QuickCheck, strictConcurrency,
- unixCompat, SMTPClient}:
+{cabal, hslogger, mtl, network, parsec, unixCompat} :
 
 cabal.mkDerivation (self : {
-    pname = "happstack-util";
-    version = "0.5.0.3";
-    sha256 = "1ipr09d0s1d0dffc1g3js8infhybw9rimabrl96a2vw7app3ys44";
-    propagatedBuildInputs = [
-      mtl hslogger HUnit QuickCheck strictConcurrency unixCompat
-      SMTPClient
+  pname = "happstack-util";
+  version = "6.0.0";
+  sha256 = "06qla74kb58q0rvlfa9k16s4crnylq99hm80xx4phlddyzn0cy4z";
+  propagatedBuildInputs = [ hslogger mtl network parsec unixCompat ];
+  meta = {
+    homepage = "http://happstack.com";
+    description = "Web framework";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
     ];
-    meta = {
-        description = "Miscellaneous utilities for Happstack packages";
-        license = "BSD";
-        maintainers = [self.stdenv.lib.maintainers.andres];
-    };
+  };
 })
