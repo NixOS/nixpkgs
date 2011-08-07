@@ -744,9 +744,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
-  leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {
-    network = self.network_2_2_1_7;
-  };
+  leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
@@ -1315,8 +1313,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   leksah = callPackage ../applications/editors/leksah {
-    network = self.network_2_2_1_7;
-    regexBase = self.regexBase_0_93_2;
     inherit (pkgs) makeWrapper;
   };
 

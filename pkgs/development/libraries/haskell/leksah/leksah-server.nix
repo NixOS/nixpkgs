@@ -1,15 +1,22 @@
-{cabal, haddock, binary, binaryShared, deepseq, hslogger, ltk, mtl,
- network, parsec, processLeksah}:
+{cabal, binary, binaryShared, deepseq, ghc, haddock, hslogger, ltk,
+ mtl, network, parsec, processLeksah} :
 
 cabal.mkDerivation (self : {
   pname = "leksah-server";
-  version = "0.8.0.8";
-  sha256 = "10srf3wzrnyjhw7q8lzzfqammjr9k1fgwqlkkcfkljbmsz9j0nfm";
-  propagatedBuildInputs =
-    [binary binaryShared deepseq hslogger ltk mtl network parsec processLeksah haddock];
+  version = "0.10.0.4";
+  sha256 = "0g523dkiaclk5ym16vzqiabh7mwksjqp0kbx17a899k5gzfwfjp6";
+  propagatedBuildInputs = [
+    binary binaryShared deepseq ghc haddock hslogger ltk mtl network
+    parsec processLeksah
+  ];
   meta = {
-    description = "The interface to GHC-API for leksah";
+    homepage = "http://leksah.org";
+    description = "Metadata collection for leksah";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
