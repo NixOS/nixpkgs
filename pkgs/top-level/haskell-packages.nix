@@ -666,7 +666,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
-  hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
+  hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {
+    vty = self.vty_4_6_0_4;
+  };
   hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
@@ -1108,9 +1110,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
-  vty = callPackage ../development/libraries/haskell/vty {
-    mtl = self.mtl2;
-  };
+  vty_4_6_0_4 = callPackage ../development/libraries/haskell/vty/4.6.0.4.nix {};
+  vty_4_7_0_4 = callPackage ../development/libraries/haskell/vty/4.7.0.4.nix {};
+  vty = self.vty_4_7_0_4;
 
   wai = callPackage ../development/libraries/haskell/wai {};
 
