@@ -1,12 +1,13 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "bktrees";
-  version = "0.3";
-  sha256 = "ddef9fbf5114175cefe2908cd4360a4b94cbc91daac6d5194a8911bacaa1a5da";
+  version = "0.3.1";
+  sha256 = "1d2iz48n0ayn0hi9xa110pxy1mv5a4m21rmbpvs6ki1a7cv4ghn9";
   meta = {
-    description = "Burkhard-Keller trees sets implementation";
-    license = "BSD3";
+    description = "A set data structure with approximate searching";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
