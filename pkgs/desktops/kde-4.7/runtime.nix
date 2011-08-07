@@ -1,5 +1,6 @@
 { automoc4, cmake, kde, kdelibs, qt4, strigi, soprano, shared_desktop_ontologies
-, bzip2, xz, shared_mime_info, libssh, exiv2, attica, phonon, libcanberra, virtuoso
+, bzip2, xz, shared_mime_info, libssh, exiv2, attica, phonon, libcanberra
+, virtuoso, makeWrapper
 }:
 
 kde.package {
@@ -7,7 +8,7 @@ kde.package {
   buildInputs =
     [ phonon cmake kdelibs qt4 automoc4 strigi soprano
       shared_desktop_ontologies bzip2 xz shared_mime_info libssh
-      exiv2 attica virtuoso
+      exiv2 attica virtuoso makeWrapper
       (libcanberra.override { gtk = null; })
     ];
 
