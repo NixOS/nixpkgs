@@ -1,12 +1,17 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "failure";
-  version = "0.1.0";
-  sha256 = "08c4e51dbbc0852836ff5bf791e9c62dca748aed8554bb6271618ab3d6a04b2c";
+  version = "0.1.0.1";
+  sha256 = "15zkhnxkfsd3qf4wmcp6kcfip9ahb4s3ywnh14whmhicp9mkm3q0";
   meta = {
-    description = "A simple type class for success/failure computations";
-    license = "Public Domain";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://www.haskell.org/haskellwiki/Failure";
+    description = "A simple type class for success/failure computations.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
