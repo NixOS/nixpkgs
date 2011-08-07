@@ -1,9 +1,14 @@
-{cabal,HTTP}:
+{fetchgit,cabal,HTTP}:
 
 cabal.mkDerivation (self : {
   pname = "cabal2nix";
-  version = "1.7";
-  sha256 = "1inb1rv11dphgvg72zyfmzkcmw7dac1jrc40s7frhvwjhrnr4syv";
+  version = "v1.8-beta-1";
+
+  src = fetchgit {
+    url = "git://github.com/peti/cabal2nix.git";
+    rev = "5ad59780b88208e20f2ba086572a2ba8783fc56f";
+  };
+
   propagatedBuildInputs = [HTTP];
   meta = {
     homepage = "http://github.com/peti/cabal2nix";
