@@ -1,13 +1,17 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "base-unicode-symbols";
-  version = "0.2.1.5";
-  sha256 = "1ir1dckrpax4xlrfp7jdsjn7s403a8n8mcmv3wdnpzkg1klfahyq";
+  version = "0.2.2";
+  sha256 = "06m31fzy387ylk9yw4lbba8fwzql1d2q774251870z8xgqfc52gk";
   meta = {
+    homepage = "http://haskell.org/haskellwiki/Unicode-symbols";
     description = "Unicode alternatives for common functions and operators";
-    license = "BSD3";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
