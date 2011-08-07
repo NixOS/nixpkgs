@@ -1,11 +1,13 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "storable-complex";
-  version = "0.2";
-  sha256 = "4e0e48e641d415b8e549ca3db84468ae18fc74aa3e9848674c48a9024635b8bb";
+  version = "0.2.1";
+  sha256 = "0dnxnsi7m5whwwki3fry6db6gyy5qzfz8jcj1fg3fhfyf4f9wpaz";
   meta = {
     description = "Storable instance for Complex";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
