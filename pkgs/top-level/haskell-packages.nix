@@ -763,8 +763,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadControl = callPackage ../development/libraries/haskell/monad-control {};
 
-  monadlab = callPackage ../development/libraries/haskell/monadlab {};
-
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
   monadPar = callPackage ../development/libraries/haskell/monad-par {};
