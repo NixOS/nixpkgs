@@ -8,5 +8,10 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/ekmett/semigroups/";
     description = "Haskell 98 semigroups";
     license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

@@ -1,14 +1,14 @@
-{cabal, binary}:
+{cabal, binary, cereal, cryptoApi, tagged} :
 
 cabal.mkDerivation (self : {
   pname = "pureMD5";
-  version = "1.0.0.3";
-  sha256 = "3698e5bc8a0e20bed91b52f976235e52f2c1dd876aa40e94d6c7be293d67d482";
-  propagatedBuildInputs = [binary];
+  version = "2.1.0.3";
+  sha256 = "0whlsb6zq4zcp3wq0bd6pgcsl0namr8b2s6i4l5aykq8v7fx40ii";
+  propagatedBuildInputs = [ binary cereal cryptoApi tagged ];
   meta = {
-    description = "An unrolled implementation of MD5 purely in Haskell";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    description = "A Haskell-only implementation of the MD5 digest (hash) algorithm.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
-
