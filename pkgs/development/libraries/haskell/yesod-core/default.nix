@@ -1,20 +1,25 @@
-{cabal, blazeBuilder, blazeHtml, caseInsensitive, cereal, clientsession,
- cookie, enumerator, failure, hamlet, httpTypes, monadControl, parsec,
- text, transformers, wai, waiExtra, webRoutesQuasi}:
+{cabal, blazeBuilder, blazeHtml, caseInsensitive, cereal,
+ clientsession, cookie, enumerator, failure, hamlet, httpTypes,
+ monadControl, parsec, text, transformers, wai, waiExtra,
+ webRoutesQuasi} :
 
 cabal.mkDerivation (self : {
   pname = "yesod-core";
-  version = "0.8.2";
-  sha256 = "15h5nm45w3z1g4ayn0dj9grviqm857krad1453rway76yrrv7xsr";
+  version = "0.8.3.2";
+  sha256 = "0k0lgd9p8mrwwcypx1nfr1z2rq5wk4gvjc1fbvla0c9nabqnbfzs";
   propagatedBuildInputs = [
-    blazeBuilder blazeHtml caseInsensitive cereal clientsession
-    cookie enumerator failure hamlet httpTypes monadControl parsec
-    text transformers wai waiExtra webRoutesQuasi
+    blazeBuilder blazeHtml caseInsensitive cereal clientsession cookie
+    enumerator failure hamlet httpTypes monadControl parsec text
+    transformers wai waiExtra webRoutesQuasi
   ];
   meta = {
-    description = "Creation of type-safe, RESTful web applications";
-    license = "BSD3";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://www.yesodweb.com/";
+    description = "Creation of type-safe, RESTful web applications.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
