@@ -531,6 +531,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
+  gamma = callPackage ../development/libraries/haskell/gamma {};
+
   gdiff = callPackage ../development/libraries/haskell/gdiff {};
 
   getOptions = callPackage ../development/libraries/haskell/get-options {};
