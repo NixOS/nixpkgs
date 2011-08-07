@@ -442,6 +442,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_1_3;
   };
 
+  converge = callPackage ../development/libraries/haskell/converge {};
+
   cookie = callPackage ../development/libraries/haskell/cookie {};
 
   criterion = callPackage ../development/libraries/haskell/criterion {
