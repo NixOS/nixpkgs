@@ -1,12 +1,15 @@
-{cabal, mtl}:
+{cabal, mtl, time} :
 
 cabal.mkDerivation (self : {
   pname = "benchpress";
-  version = "0.2.2";
-  sha256 = "185j2viimr1vbbgh9havdj2nskim8apih1fyvwln76jfrwypy194";
-  propagatedBuildInputs = [mtl];
+  version = "0.2.2.4";
+  sha256 = "0cabjx0gkbk5blqkm9pmnz8kmi3573367365gny4r3m431iwxgnf";
+  propagatedBuildInputs = [ mtl time ];
   meta = {
-    description = "Benchmarks actions and produces statistics such as min, mean, and median execution time.";
+    homepage = "http://github.com/tibbe/benchpress";
+    description = "Micro-benchmarking with detailed statistics.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-

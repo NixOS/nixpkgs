@@ -374,7 +374,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
-  benchpress = callPackage ../development/libraries/haskell/benchpress {};
+  benchpress = callPackage ../development/libraries/haskell/benchpress {
+    time = self.time_1_1_3;
+  };
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
