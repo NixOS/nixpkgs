@@ -517,6 +517,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   feed = callPackage ../development/libraries/haskell/feed {};
 
+  flexibleDefaults = callPackage ../development/libraries/haskell/flexible-defaults {};
+
   filestore = callPackage ../development/libraries/haskell/filestore {};
 
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
