@@ -987,6 +987,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
+  StateVar = callPackage ../development/libraries/haskell/StateVar {};
+
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
 
