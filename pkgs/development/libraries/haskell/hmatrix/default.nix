@@ -1,19 +1,21 @@
-{cabal, QuickCheck, HUnit, storableComplex, gsl, liblapack, blas, vector}:
+{cabal, HUnit, QuickCheck, binary, storableComplex, vector, gsl, liblapack, blas} :
 
 cabal.mkDerivation (self : {
   pname = "hmatrix";
-  version = "0.9.3.0";
-  sha256 = "1p2c37j29nxq1ijs78xn7293cwjzgcl6hx8ri5qz7nijifmpcrkr";
-  propagatedBuildInputs = [QuickCheck HUnit storableComplex blas gsl liblapack vector];
-  configureFlags = "-fvector";
-  /* dirty hack to find blas at link time */
-  postConfigure = ''
-    sed -i -e "/^extra-libraries/ s/: /: blas /" hmatrix.buildinfo
-    sed -i -e "/^extra-libraries/ s/$/ blas/" hmatrix.buildinfo
-  '';
-  extraLibDirs = "--extra-lib-dir=${blas}/lib --extra-lib-dir=${gsl}/lib --extra-lib-dir=${liblapack}/lib";
+  version = "0.11.1.0";
+  sha256 = "19915xmf6m2092s1rzwirxy0rwjcr6482y5wg4bil0afm0xjnb9n";
+  propagatedBuildInputs = [
+    HUnit QuickCheck binary storableComplex vector
+    gsl liblapack blas
+  ];
   meta = {
+    homepage = "http://perception.inf.um.es/hmatrix";
     description = "Linear algebra and numerical computation";
-    maintainers = [ self.stdenv.lib.maintainers.guibert ];
+    license = "GPL";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.guibert
+    ];
   };
 })
