@@ -747,7 +747,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
-  MaybeTTransformers = callPackage ../development/libraries/haskell/MaybeT-transformers {};
+  MaybeTTransformers = callPackage ../development/libraries/haskell/MaybeT-transformers {
+    monadsFd = self.monadsFd_0_0_0_1;
+  };
 
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
@@ -773,7 +775,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
-  monadsFd = callPackage ../development/libraries/haskell/monads-fd {};
+  monadsFd_0_0_0_1 = callPackage ../development/libraries/haskell/monads-fd/0.0.0.1.nix {};
+  monadsFd_0_2_0_0 = callPackage ../development/libraries/haskell/monads-fd/0.2.0.0.nix {};
+  monadsFd = self.monadsFd_0_2_0_0;
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
