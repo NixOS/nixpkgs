@@ -1,13 +1,15 @@
-{cabal, WebBits}:
+{cabal, WebBits, mtl, parsec, syb} :
 
 cabal.mkDerivation (self : {
   pname = "WebBits-Html";
-  version = "1.0.1";
-  sha256 = "134rmm5ccfsjdr0pdwn2mf81l81rgxapa3wjjfjkxrkxq6hav35n";
-
-  propagatedBuildInputs = [ WebBits ];
-
+  version = "1.0.2";
+  sha256 = "18dd52970cd27kra4l89vvrx2mrdbqd4w4f76xrq3142daxsagal";
+  propagatedBuildInputs = [ WebBits mtl parsec syb ];
   meta = {
-    description = "WebBits is a collection of libraries for working with JavaScript embeded in HTML files.";
+    homepage = "http://www.cs.brown.edu/research/plt/";
+    description = "JavaScript analysis tools";
+    license = "LGPL";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
