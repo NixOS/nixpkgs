@@ -1,10 +1,14 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "split";
-  version = "0.1.3";
-  sha256 = "1i43xa11d5jn30j9948bypi8dzdxr7nx4v9xhcgpmaggssv9bvcs";
+  version = "0.1.4.1";
+  sha256 = "0cdn2sb3m62bnxdz59diwwaxysh3kj4kk1srn4m80p03fj60s0q5";
   meta = {
-    description = "Combinator library for splitting lists";
+    homepage = "http://code.haskell.org/~byorgey/code/split";
+    description = "Combinator library for splitting lists.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
