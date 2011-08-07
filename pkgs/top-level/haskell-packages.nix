@@ -597,7 +597,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     gtkC = pkgs.gtkLibs.gtk;
   };
 
-  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
+    pandoc = self.pandoc_1_6_0_1;
+  };
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {
     polyparse = self.polyparse14;

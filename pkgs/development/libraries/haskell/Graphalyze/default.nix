@@ -1,13 +1,14 @@
-{cabal, bktrees, fgl, graphviz, pandoc}:
+{cabal, bktrees, fgl, graphviz, pandoc} :
 
 cabal.mkDerivation (self : {
   pname = "Graphalyze";
-  version = "0.10.0.1";
-  sha256 = "8f273de41c7c340d2c7c8b4797d30535e4038616055099cc52bc5d21c10d9f22";
-  propagatedBuildInputs = [bktrees fgl graphviz pandoc ];
+  version = "0.11.0.0";
+  sha256 = "1aplfd0qp7ypr9rh4v4x5g8f4b0d1w0dcgz7hgjm9haqcsv37a79";
+  propagatedBuildInputs = [ bktrees fgl graphviz pandoc ];
   meta = {
-    description = "A library to use graph theory analysis";
-    license = "OtherLicene";
+    description = "Graph-Theoretic Analysis library.";
+    license = "unknown";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
