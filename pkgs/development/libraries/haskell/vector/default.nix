@@ -1,14 +1,18 @@
-{cabal, primitive}:
+{cabal, primitive} :
 
 cabal.mkDerivation (self : {
   pname = "vector";
-  version = "0.7.0.1";
-  sha256 = "147kwm3p6w1qg1sg3ls7i8zj3mcnyxf80il4r5kz5fd3n1ibvyxj";
-  propagatedBuildInputs = [primitive];
+  version = "0.7.1";
+  sha256 = "1cdbkabw49pgc1j5h96inpmhn8ly230885d22smmynrq369pmg07";
+  propagatedBuildInputs = [ primitive ];
   meta = {
-    description = "Efficient arrays";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://code.haskell.org/vector";
+    description = "Efficient Arrays";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
