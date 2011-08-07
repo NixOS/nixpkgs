@@ -1,12 +1,14 @@
-{cabal, hslogger, mtl}:
+{cabal, hslogger, mtl} :
 
 cabal.mkDerivation (self : {
   pname = "hslogger-template";
-  version = "1.0.0";
-  sha256 = "0lnscbilzr5avi2h831kv2xhahh7pi5g054bw0sy57a1ccm2pvs1";
+  version = "2.0.0";
+  sha256 = "1x8c132ckxjhnhlrnm92h0hkalkrgcc91cn73kv9kvcwy9b2fqcr";
   propagatedBuildInputs = [ hslogger mtl ];
   meta = {
-    description = "Library for generating hslogger functions using Template Haskell";
+    description = "Automatic generation of hslogger functions";
+    license = self.stdenv.lib.licenses.publicDomain;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
