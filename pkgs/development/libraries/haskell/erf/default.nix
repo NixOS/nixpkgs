@@ -1,13 +1,16 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "erf";
-  version = "1.0.0.0";
-  sha256 = "0zkb9csnfqcrzdkqqn0xihfx1k17fw9ki7y3d1di67lnlmjpkqnn";
+  version = "2.0.0.0";
+  sha256 = "0dxk2r32ajmmc05vaxcp0yw6vgv4lkbmh8jcshncn98xgsfbgw14";
   meta = {
-    description = "The error function, erf, and friends";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    description = "The error function, erf, and related functions.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
