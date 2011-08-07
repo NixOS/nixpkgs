@@ -906,6 +906,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
 
+  rvar = callPackage ../development/libraries/haskell/rvar {};
+
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline ncurses;
   };
