@@ -1,14 +1,18 @@
-{cabal, dataDefault}:
+{cabal, dataDefault, semigroups} :
 
 cabal.mkDerivation (self : {
   pname = "tagged";
-  version = "0.2";
-  sha256 = "0hwc0hhq5pzihx6danxvgs4k1z0nqcrwf3ji0w2i1gx3298cwrz5";
-  propagatedBuildInputs = [dataDefault];
+  version = "0.2.2.3";
+  sha256 = "16xnalvq7mch0zsxn2kix4xysn0lvcp9jdkxb1i5n03f94c92k52";
+  propagatedBuildInputs = [ dataDefault semigroups ];
   meta = {
+    homepage = "http://github.com/ekmett/tagged";
     description = "Provides newtype wrappers for phantom types to avoid unsafely passing dummy arguments";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
