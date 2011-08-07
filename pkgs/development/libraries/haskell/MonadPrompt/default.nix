@@ -1,17 +1,17 @@
-{cabal, mtl}:
+{cabal, mtl} :
 
 cabal.mkDerivation (self : {
   pname = "MonadPrompt";
-  version = "1.0.0.2";
-  sha256 = "01inbw0lfjrsgs68fvak1rxi76nhwsiyarfwl1g5mis4glmh4w4c";
-  propagatedBuildInputs = [mtl];
-  preConfigure = ''
-    sed -i 's|base<=4|base >= 3 \&\& < 5|' ${self.pname}.cabal
-  '';
+  version = "1.0.0.3";
+  sha256 = "0v6svyiajri7c463bz1a1x1nin5s9s7c3s7y0gjc4cn7lhgdsvf2";
+  propagatedBuildInputs = [ mtl ];
   meta = {
     description = "MonadPrompt, implementation & examples";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
