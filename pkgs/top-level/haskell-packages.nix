@@ -902,6 +902,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   randomFu = callPackage ../development/libraries/haskell/random-fu {};
 
+  randomSource = callPackage ../development/libraries/haskell/random-source {};
+
   randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
