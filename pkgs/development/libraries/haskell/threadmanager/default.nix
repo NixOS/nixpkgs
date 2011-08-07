@@ -1,13 +1,17 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "threadmanager";
-  version = "0.1.3";
-  sha256 = "22ca45d7e32518736abb9cde6d2d14163128888769fc02bbc2641fd97318a15a";
+  version = "0.1.4";
+  sha256 = "0p35ihdc9k9svzbwiszll5i53km09rvw5mqshph273fby7nvni9i";
   meta = {
+    homepage = "http://github.com/bsl/threadmanager";
     description = "Simple thread management";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
