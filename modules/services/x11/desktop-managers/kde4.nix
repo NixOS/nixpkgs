@@ -113,10 +113,10 @@ in
           pkgs.kde4.oxygen_icons
           pkgs.kde4.konsole
           pkgs.kde4.kcolorchooser
-          pkgs.kde4.ksnapshot
+          pkgs.kde4.kdegraphics.ksnapshot
           pkgs.kde4.kate
-          pkgs.kde4.okular
-          pkgs.kde4.gwenview
+          pkgs.kde4.kdegraphics.okular
+          pkgs.kde4.kdegraphics.gwenview
 
           # Phonon backends.
           pkgs.phonon_backend_gstreamer
