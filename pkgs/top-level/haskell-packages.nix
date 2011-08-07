@@ -984,6 +984,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
+  semigroups = callPackage ../development/libraries/haskell/semigroups {};
+
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
