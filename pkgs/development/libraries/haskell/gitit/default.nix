@@ -1,23 +1,28 @@
-{cabal, happstackServer, happstackUtil, HStringTemplate, HTTP,
- SHA, cgi, datetime,
- filestore, highlightingKate, safe, mtl, network, pandoc, parsec,
- recaptcha, utf8String, xhtml, zlib, ConfigFile, url,
- cautiousFile, feed, xssSanitize}:
+{cabal, ConfigFile, HStringTemplate, HTTP, SHA, cgi, feed,
+ filestore, ghc, ghcPaths, happstackServer, happstackUtil,
+ highlightingKate, hslogger, json, mtl, network, pandoc,
+ pandocTypes, parsec, recaptcha, safe, syb, url, utf8String, xhtml,
+ xml, xssSanitize, zlib} :
 
 cabal.mkDerivation (self : {
   pname = "gitit";
-  version = "0.7.3.12";
-  sha256 = "1z5cbkgfvwc9h6jciw7ghlj9ra6xph5z4lmliwkdnf38wfparxja";
+  version = "0.8.0.1";
+  sha256 = "0y2gcxlbb44vflj0jl3zkbsn47n7nccikxwdw6ccf9kxgcmrz0zy";
   propagatedBuildInputs = [
-    HStringTemplate happstackServer happstackUtil HTTP SHA cgi datetime
-    filestore highlightingKate safe
-    mtl network pandoc parsec recaptcha utf8String xhtml zlib ConfigFile
-    url cautiousFile feed xssSanitize
+    ConfigFile HStringTemplate HTTP SHA cgi feed filestore ghc ghcPaths
+    happstackServer happstackUtil highlightingKate hslogger json mtl
+    network pandoc pandocTypes parsec recaptcha safe syb url utf8String
+    xhtml xml xssSanitize zlib
   ];
   meta = {
-    description = "Wiki using happstack, git or darcs, and pandoc";
+    homepage = "http://github.com/jgm/gitit/tree/master";
+    description = "Wiki using happstack, git or darcs, and pandoc.";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres self.stdenv.lib.maintainers.simons];
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
