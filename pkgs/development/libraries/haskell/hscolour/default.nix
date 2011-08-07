@@ -1,11 +1,14 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "hscolour";
-  version = "1.17"; # Haskell Platform 2011.2.0.0
-  sha256 = "1c14rrw69a5yjni2mdgdm21fsssc3c1j6i4sa7hxl9vq3ggcsidn";
+  version = "1.19";
+  sha256 = "17wzd1b7kd4di7djj8d203rn6r1zvd6rykpxhqv7j06kzgx2r7bz";
   meta = {
-    description = "Colourise Haskell code";
+    homepage = "http://code.haskell.org/~malcolm/hscolour/";
+    description = "Colourise Haskell code.";
+    license = "GPL";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
