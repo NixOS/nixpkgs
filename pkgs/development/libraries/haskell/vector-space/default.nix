@@ -1,14 +1,18 @@
-{cabal, Boolean, MemoTrie}:
+{cabal, Boolean, MemoTrie} :
 
 cabal.mkDerivation (self : {
   pname = "vector-space";
-  version = "0.5.9";
-  sha256 = "39045384ee1f37f92fc8a84b75eb63091d083298f7be5f51f81112dd42a553b0";
-  propagatedBuildInputs = [Boolean MemoTrie];
+  version = "0.7.3";
+  sha256 = "00lzhml1pc328iw9cip9yh54n0yqkwz1mxkv4gq2wlb7bzpfq1fx";
+  propagatedBuildInputs = [ Boolean MemoTrie ];
   meta = {
-    description = "Vector & affine spaces, linear maps, and derivatives";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://haskell.org/haskellwiki/vector-space";
+    description = "Vector & affine spaces, linear maps, and derivatives (requires ghc 6.9 or better)";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
