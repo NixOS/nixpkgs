@@ -1048,6 +1048,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
   text = self.text_0_11_0_5;
 
+  thLift = callPackage ../development/libraries/haskell/th-lift {};
+
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
