@@ -1,12 +1,14 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "bytestring-nums";
-  version = "0.3.2";
-  sha256 = "16d99xm692x88vx27w4g6iqi4sbi9il8c10r1zaqq2hqviv0k1wg";
+  version = "0.3.3";
+  sha256 = "09gdbyj5qw98j57cs9phzsbmvdm7y6j07wg908i34jklwm24nxfd";
   meta = {
-    description = "Parse numeric literals from ByteStrings";
-    license = "BSD3";
+    homepage = "http://github.com/solidsnack/bytestring-nums";
+    description = "Parse numeric literals from ByteStrings.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
