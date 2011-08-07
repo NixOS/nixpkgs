@@ -825,6 +825,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
+  ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
+
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {
     inherit (pkgs) openal;
