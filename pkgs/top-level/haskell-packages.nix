@@ -412,7 +412,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) cairo zlib;
   };
 
-  caseInsensitive = callPackage ../development/libraries/haskell/case-insensitive {};
+  caseInsensitive_0_2_0_2 = callPackage ../development/libraries/haskell/case-insensitive/0.2.0.2.nix {};
+  caseInsensitive_0_3 = callPackage ../development/libraries/haskell/case-insensitive/0.3.nix {};
+  caseInsensitive = self.caseInsensitive_0_3;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
@@ -977,7 +979,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
-  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
+  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {
+    caseInsensitive = self.caseInsensitive_0_2_0_2;
+  };
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {
     vectorAlgorithms = self.vectorAlgorithms_0_4;
   };
