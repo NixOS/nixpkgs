@@ -962,7 +962,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
-  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
+  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {
+    vectorAlgorithms = self.vectorAlgorithms_0_4;
+  };
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
@@ -1100,7 +1102,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vector = callPackage ../development/libraries/haskell/vector {};
 
-  vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
+  vectorAlgorithms_0_4 = callPackage ../development/libraries/haskell/vector-algorithms/0.4.nix {};
+  vectorAlgorithms_0_5_2 = callPackage ../development/libraries/haskell/vector-algorithms/0.5.2.nix {};
+  vectorAlgorithms = self.vectorAlgorithms_0_5_2;
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
