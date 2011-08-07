@@ -362,7 +362,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
-  ansiWLPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
+  ansiWlPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
