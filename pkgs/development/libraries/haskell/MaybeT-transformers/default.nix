@@ -1,14 +1,17 @@
-{cabal, transformers, monadsFd}:
+{cabal, monadsFd, transformers} :
 
 cabal.mkDerivation (self : {
   pname = "MaybeT-transformers";
-  version = "0.1";
-  sha256 = "b24b78e3a895587722c9ce899f9ef07b509db1a5b3b86f5b7b0e8bc986c8fb8f";
-  propagatedBuildInputs = [transformers monadsFd];
+  version = "0.2";
+  sha256 = "189w8dpxyq7gksca6k08hb4vpanpz06c99akgzpcpjy0i7k22ily";
+  propagatedBuildInputs = [ monadsFd transformers ];
   meta = {
-    description = "Support for computations with failures";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    description = "MaybeT monad transformer using transformers instead of mtl.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
