@@ -845,6 +845,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGL = self.OpenGL_2_2_1_1;
 
+  pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
+
   pandoc_1_6_0_1 = callPackage ../development/libraries/haskell/pandoc/1.6.0.1.nix {
     texmath = self.texmath_0_4;
   };
