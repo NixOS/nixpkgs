@@ -489,6 +489,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
+  doubleConversion = callPackage ../development/libraries/haskell/double-conversion {
+    text = self.text_0_11_1_5;
+  };
+
   editline = callPackage ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
   };
