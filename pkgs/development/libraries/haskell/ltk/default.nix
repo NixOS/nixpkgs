@@ -1,13 +1,18 @@
-{cabal, glib, gtk, haddock, mtl, parsec}:
+{cabal, ghc, glib, gtk, haddock, mtl, parsec} :
 
 cabal.mkDerivation (self : {
   pname = "ltk";
-  version = "0.8.0.8";
-  sha256 = "172l3nvvyqqgzy43b7mjxs8vpfw0wlyl993g77zjiy8qbhlcd9mg";
-  propagatedBuildInputs = [glib gtk mtl parsec haddock];
+  version = "0.10.0.4";
+  sha256 = "1dp6dl8a0pfj6lx8n8a2y1j3c2z57k9pf81yr45qsp7wg53d6qhf";
+  propagatedBuildInputs = [ ghc glib gtk haddock mtl parsec ];
   meta = {
-    description = "UI framework used by leksah";
+    homepage = "http://www.leksah.org";
+    description = "Leksah tool kit";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
