@@ -1,4 +1,4 @@
-{cabal, transformers, extensibleExceptions} :
+{cabal, transformers} :
 
 cabal.mkDerivation (self : {
   pname = "MonadCatchIO-transformers";
