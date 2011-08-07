@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, cmake, qt4, automoc4, phonon, kdebase, gettext  }:
+{ stdenv, fetchurl, kdelibs, cmake, qt4, automoc4, phonon, kde_baseapps, gettext  }:
 
 stdenv.mkDerivation rec {
   name = "konq-plugins-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hn722rcdcwmhfnn89rnvp2b4d8gds4nm483ps3jkk83d7f2xmbi";
   };
 
-  buildInputs = [ cmake kdelibs qt4 automoc4 phonon kdebase gettext ];
+  buildInputs = [ cmake kdelibs qt4 automoc4 phonon kde_baseapps gettext ];
 
   patches = [ ./qt47.patch ];
 

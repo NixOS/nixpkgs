@@ -49,6 +49,9 @@ recurseIntoAttrs rec {
 ### BASE
   kdebase = callPackage ./base { };
 
+  # Forward compatibility.
+  kde_baseapps = kdebase;
+
   kdebase_workspace = callPackage ./base-workspace { };
 
   kdebase_runtime = callPackage ./base-runtime { };
