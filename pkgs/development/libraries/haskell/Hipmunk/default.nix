@@ -1,11 +1,15 @@
-{cabal}:
+{cabal, StateVar, transformers} :
 
 cabal.mkDerivation (self : {
   pname = "Hipmunk";
-  version = "0.2.1";
-  sha256 = "6482f73367526fae215808098296c3e11e39c7466a441c5c475193a3ccccd4d9";
+  version = "5.2.0.2";
+  sha256 = "18ly05q953x59smqqrhwjlfa1v6lqma0xiarmr689i63zzb7ji8z";
+  propagatedBuildInputs = [ StateVar transformers ];
   meta = {
-    description = "A Haskell binding for Chipmunk";
+    homepage = "http://patch-tag.com/r/felipe/hipmunk/home";
+    description = "A Haskell binding for Chipmunk.";
+    license = "unknown";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
