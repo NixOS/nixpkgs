@@ -1,22 +1,16 @@
-{cabal, time, parsec, stm, wxdirect, libX11, mesa, wxGTK}:
+{cabal, parsec, stm, wxdirect, wxGTK, mesa, libX11}:
+
 
 cabal.mkDerivation (self : {
   pname = "wxcore";
-  version = "0.12.1.6";
-  sha256 = "162m7z8nzdwsszha87mvz7dzxh268n0sgymf3vq2yn5axw7zx5ap";
-  propagatedBuildInputs = [time parsec stm libX11 wxGTK mesa wxdirect];
-  preConfigure = ''
-    sed -i 's|\(containers.*\) && < 0.4|\1|' ${self.pname}.cabal
-  '';
-  /* configureFlags = [ "--with-opengl" ]; */
-  /*
-  preConfigure = ''
-    sed -i 's/ghc-pkg latest/ghc-pkg --global latest/g' configure
-    sed -i 's/pkg describe/pkg --global describe/g' configure
-  '';
-  */
+  version = "0.12.1.7";
+  sha256 = "12vs449xg2xjp503ywjwxadan3v7dq38ph66292szwj1vmhl07v4";
+  propagatedBuildInputs = [ parsec stm wxdirect wxGTK mesa libX11];
   meta = {
+    homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";
+    license = "LGPL";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
