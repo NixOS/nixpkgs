@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self : {
   pname = "cabal2nix";
-  version = "v1.8-beta-4";
+  version = "v1.8-beta-7";
 
   src = fetchgit {
     url = "git://github.com/peti/cabal2nix.git";
-    rev = "c108759bdf32a0291e6d9c4ed182f105a89e42a3";
+    rev = "d72475c412873a45db16d8bb0e5c1e4859e35544";
   };
 
   propagatedBuildInputs = [HTTP];
