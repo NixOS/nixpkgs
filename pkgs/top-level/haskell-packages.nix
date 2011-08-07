@@ -595,9 +595,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
-  happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {
-    HaXml = self.HaXml113;
-  };
+  happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {};
 
   happstackUtil = callPackage ../development/libraries/haskell/happstack/happstack-util.nix {};
 
