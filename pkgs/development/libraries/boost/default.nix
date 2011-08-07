@@ -6,6 +6,7 @@
 , enableShared ? true
 , enableStatic ? false
 , enablePIC ? false
+, enableExceptions ? false
 }:
 
 let
@@ -28,8 +29,14 @@ let
     (enableShared && enableStatic)) then
     "tagged" else "system";
 
-  cflags = if (enablePIC) then "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC" else "";
-
+  cflags = if (enablePIC && enableExceptions) then
+             "cflags=-fPIC -fexceptions cxxflags=-fPIC linkflags=-fPIC"
+           else if (enablePIC) then
+             "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC"
+           else if (enableExceptions) then
+             "cflags=-fexceptions"
+           else
+             "";
 in
 
 stdenv.mkDerivation {

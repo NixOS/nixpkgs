@@ -1,4 +1,4 @@
-{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, system_config_printer } @ args:
+{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, system_config_printer, boost } @ args:
 
 let
 
@@ -106,10 +106,19 @@ recurseIntoAttrs rec {
   
   /*
   kdeedu = callPackage ./edu { };
-  kdegraphics = callPackage ./graphics { };
   kdenetwork = callPackage ./network { };
   kdeplasma_addons = callPackage ./plasma-addons { };
   */
+
+  kdeedu = combinePkgs "kdeedu" {
+    klettres = callPackage ./edu/klettres.nix { };
+    kmplot = callPackage ./edu/kmplot.nix { };
+    kstars = callPackage ./edu/kstars.nix { };
+    rocs = callPackage ./edu/rocs.nix {
+      boost = args.boost.override {enableExceptions = true;};
+    };
+    step = callPackage ./edu/step.nix { };
+  };
 
   kdegraphics = combinePkgs "kdegraphics" {
     gwenview = callPackage ./graphics/gwenview.nix { };
