@@ -1,13 +1,15 @@
-{cabal, colour, fgl, polyparse, transformers, QuickCheck}:
+{cabal, colour, fgl, polyparse, transformers} :
 
 cabal.mkDerivation (self : {
   pname = "graphviz";
-  version = "2999.10.0.1";
-  sha256 = "5a3aebd3874303dcf554aef3bf511dd22e72053a9672c823d1d820d2b90ca076";
-  propagatedBuildInputs = [colour fgl polyparse transformers QuickCheck];
+  version = "2999.11.0.0";
+  sha256 = "1ky8hi9vda8hli7dkvsmmbz9j1swkzsn548905asqz0i46kpspnk";
+  propagatedBuildInputs = [ colour fgl polyparse transformers ];
   meta = {
-    description = "Bindings for the Dot language (Graphviz)";
-    license = "BSD3";
+    homepage = "http://projects.haskell.org/graphviz/";
+    description = "Graphviz bindings for Haskell.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
