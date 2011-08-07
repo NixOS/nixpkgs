@@ -352,11 +352,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # Haskell libraries.
 
   Agda = callPackage ../development/libraries/haskell/Agda {
-    # I've been trying to get the latest Agda to build with ghc-6.12, too,
-    # but failed so far.
-    # mtl        = self.mtl2;
-    # QuickCheck = self.QuickCheck2;
-    syb        = self.syb02;
+    syb = self.syb02;
+    haskellSrcExts = self.haskellSrcExts_1_9_6;
   };
 
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
@@ -615,7 +612,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellSrc_1_0_1_4 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.4.nix {};
   haskellSrc = self.haskellSrc_1_0_1_3;
 
-  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
+  # The old version is required for Agda.
+  haskellSrcExts_1_11_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.11.1.nix {};
+  haskellSrcExts_1_9_6 = callPackage ../development/libraries/haskell/haskell-src-exts/1.9.6.nix {};
+  haskellSrcExts = self.haskellSrcExts_1_11_1;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
