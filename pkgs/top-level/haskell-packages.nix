@@ -643,7 +643,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haxr = callPackage ../development/libraries/haskell/haxr {
     HaXml = self.HaXml_1_22_3;
   };
-
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
 
   HaXml_1_13_3 = callPackage ../development/libraries/haskell/HaXml/1.13.3.nix {};
@@ -825,8 +824,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
-  ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
+  ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {
     inherit (pkgs) openal;
@@ -991,8 +990,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
-  StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
+  StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
 
@@ -1062,9 +1061,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
 
-  terminfo = callPackage ../development/libraries/haskell/terminfo {
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
+  terminfo = callPackage ../development/libraries/haskell/terminfo {
     inherit (self) extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
