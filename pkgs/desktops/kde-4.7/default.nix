@@ -60,6 +60,7 @@ recurseIntoAttrs rec {
 
   # Backwards compatibility.
   kdebase_workspace = kde_workspace;
+  kdebase = kde_baseapps;
 
 ### BINDINGS
 
