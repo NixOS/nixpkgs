@@ -1,14 +1,18 @@
-{cabal, blazeBuilder, text}:
+{cabal, blazeBuilder, text} :
 
 cabal.mkDerivation (self : {
   pname = "cookie";
-  version = "0.2.1";
-  sha256 = "0jn4as09qx2948k0r916vy5igz0xmrvng37s0il81b0ndvhnsc6c";
-  propagatedBuildInputs = [blazeBuilder text];
+  version = "0.3.0";
+  sha256 = "0ix7g29a7kj48yx2dqjj1g6vy89rmidsnjfnfj7mali86q9i7bdw";
+  propagatedBuildInputs = [ blazeBuilder text ];
   meta = {
+    homepage = "http://github.com/snoyberg/cookie";
     description = "HTTP cookie parsing and rendering";
-    license = "BSD3";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.simons
+      self.stdenv.lib.maintainers.andres
+    ];
   };
 })
-
