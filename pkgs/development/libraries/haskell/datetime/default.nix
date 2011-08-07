@@ -1,11 +1,15 @@
-{cabal, QuickCheck, time}:
+{cabal, QuickCheck} :
 
 cabal.mkDerivation (self : {
   pname = "datetime";
-  version = "0.1";
-  sha256 = "0j2h369ydmlnkvk6m9j7b6fgs6cyc425s8n3yaajr4j5rdqcq6lk";
-  propagatedBuildInputs = [QuickCheck time];
+  version = "0.2.1";
+  sha256 = "1yfg3wvi13r725dhfsmcdw4ns3cgl2ayrb5jck0q8b4crk2dlrzg";
+  propagatedBuildInputs = [ QuickCheck ];
   meta = {
-    description = "Utilities to make Data.Time.* easier to use";
+    homepage = "http://github.com/esessoms/datetime";
+    description = "Utilities to make Data.Time.* easier to use.";
+    license = "GPL";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

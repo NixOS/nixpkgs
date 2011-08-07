@@ -467,9 +467,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
-  datetime = callPackage ../development/libraries/haskell/datetime {
-    QuickCheck = self.QuickCheck1;
-  };
+  datetime = callPackage ../development/libraries/haskell/datetime {};
 
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
   deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
