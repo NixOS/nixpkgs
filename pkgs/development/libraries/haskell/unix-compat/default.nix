@@ -1,12 +1,14 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "unix-compat";
-  version = "0.2.1.3";
-  sha256 = "12645n23b7b86w3fllg3vl39pvbxazqx9rflgnhc6qrlfklkyxxd";
+  version = "0.2.2.1";
+  sha256 = "009dg6mxjmdkcmr2d1qq9r3f4qfx4d362lyxj9vvgwrzcdnsgzqi";
   meta = {
-    description = "Portable POSIX-compatibility layer";
-    license = "BSD";
+    homepage = "http://github.com/jystic/unix-compat";
+    description = "Portable POSIX-compatibility layer.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
