@@ -1,11 +1,13 @@
-{cabal}:
+{cabal} :
 
 cabal.mkDerivation (self : {
   pname = "Diff";
-  version = "0.1.2";
-  sha256 = "f831ce6029a75b54dd69801d865ed45284f7dacf723fe5fd81758ad03f8eef5e";
+  version = "0.1.3";
+  sha256 = "02dhy4rp3mkzm5x3h1rkdin2h8qcb7h7nhn14gl2gvl6wdykfh5w";
   meta = {
-    description = "O(ND) diff algorithm in Haskell";
+    description = "O(ND) diff algorithm in haskell.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
