@@ -537,9 +537,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
+  ghcPaths_0_1_0_5 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.5.nix {};
   ghcPaths_0_1_0_6 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.6.nix {};
-
-  ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
+  ghcPaths_0_1_0_8 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.8.nix {};
+  ghcPaths = self.ghcPaths_0_1_0_6; # version 0.1.0.5 doesn't build with an up-to-date GHC
 
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
 
