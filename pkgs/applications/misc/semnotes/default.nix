@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, kdelibs, soprano, automoc4, phonon }:
+{ stdenv, fetchurl, cmake, qt4, kdelibs, soprano, automoc4, phonon, shared_desktop_ontologies }:
 stdenv.mkDerivation {
   name = "semnotes-0.4.0-1";
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1zh5jfh7pyhyz5fbzcgzyckdg0ny7sf8s16yy6rjw9n021zz5i7m";
   };
 
-  buildInputs = [ cmake qt4 kdelibs automoc4 phonon soprano ];
+  buildInputs = [ cmake qt4 kdelibs automoc4 phonon soprano shared_desktop_ontologies ];
 
   meta = with stdenv.lib; {
     description = "Semantic note-taking tool for KDE based on Nepomuk-KDE";
