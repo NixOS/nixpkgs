@@ -1,12 +1,18 @@
-{cabal, HaXml, HTTP, dataenc, time}:
+{cabal, HTTP, HaXml, blazeBuilder, dataenc, mtl, network,
+ utf8String} :
 
 cabal.mkDerivation (self : {
   pname = "haxr";
-  version = "3000.1.1.2";
-  sha256 = "c24741a92e27d851a3376158230a52782c1e2b494405ebdde1d256819598c8e8";
+  version = "3000.8.4";
+  sha256 = "0cyf1q1ngz0jqxdrvblcy9iw7l478v0rfr7bgkpq0l4brw0ca1pg";
+  propagatedBuildInputs = [
+    HTTP HaXml blazeBuilder dataenc mtl network utf8String
+  ];
   meta = {
-    description = "a Haskell library for writing XML-RPC client and server applications";
+    homepage = "http://www.haskell.org/haskellwiki/HaXR";
+    description = "XML-RPC client and server library.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
-  propagatedBuildInputs = [HaXml HTTP dataenc time];
 })
-

@@ -641,7 +641,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP = self.HTTP_4000_0_6;
 
   haxr = callPackage ../development/libraries/haskell/haxr {
-    HaXml = self.HaXml113;
+    HaXml = self.HaXml_1_22_3;
   };
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
