@@ -1,12 +1,14 @@
-{cabal, SDL}:
+{cabal, SDL} :
 
 cabal.mkDerivation (self : {
   pname = "SDL";
-  version = "0.5.5";
-  sha256 = "cc56c723e03befd99be0a293347690ba7d2cb7fdafcbbc287f067a8cf70af172";
-  propagatedBuildInputs = [SDL];
+  version = "0.6.2";
+  sha256 = "1fqj3sw709q28rmjzcffa3k1mcp7r9cvdrrqmcppaz5yv63ychly";
+  propagatedBuildInputs = [ SDL ];
   meta = {
     description = "Binding to libSDL";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
-
