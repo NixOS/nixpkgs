@@ -6708,7 +6708,9 @@ let
 
   konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
 
-  krename = newScope pkgs.kde4 ../applications/misc/krename { };
+  krename = newScope pkgs.kde4 ../applications/misc/krename {
+    qt = qt4;
+  };
 
   krusader = newScope pkgs.kde4 ../applications/misc/krusader { };
 
