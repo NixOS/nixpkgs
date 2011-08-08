@@ -56,6 +56,8 @@ let
       IPW2200_MONITOR y # support promiscuous mode
       HOSTAP_FIRMWARE y # Support downloading firmware images with Host AP driver
       HOSTAP_FIRMWARE_NVRAM y
+      ATH9K_PCI y # Detect Atheros AR9xxx cards on PCI(e) bus
+      ATH9K_AHB y # Ditto, AHB bus
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
