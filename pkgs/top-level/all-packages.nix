@@ -4054,6 +4054,8 @@ let
 
   mpich2 = callPackage ../development/libraries/mpich2 { };
 
+  mtdev = callPackage ../development/libraries/mtdev { };
+
   muparser = callPackage ../development/libraries/muparser { };
 
   mygui = callPackage ../development/libraries/mygui {};
