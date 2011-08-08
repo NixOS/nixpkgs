@@ -306,6 +306,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformDefaults_2010_1_0_0 =
     self : self.haskellPlatformArgs_2010_1_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
+      extensibleExceptions = self.extensibleExceptions_0_1_1_0;
     };
 
   haskellPlatform_2010_1_0_0 =
@@ -342,6 +343,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformDefaults_2009_2_0_2 =
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
+      extensibleExceptions = self.extensibleExceptions_0_1_1_0;
     };
 
   haskellPlatform_2009_2_0_2 =
@@ -543,7 +545,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   emgm = callPackage ../development/libraries/haskell/emgm {};
 
-  extensibleExceptions = callPackage ../development/libraries/haskell/extensible-exceptions {};
+  extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions {};
+  extensibleExceptions = null; # a core package in recent GHCs
 
   failure = callPackage ../development/libraries/haskell/failure {};
 
@@ -1117,7 +1120,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {
-    inherit (self) extensibleExceptions /* only required for <= ghc6102  ?*/;
     inherit (pkgs) ncurses;
   };
 
