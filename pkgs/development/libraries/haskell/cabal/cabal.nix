@@ -1,10 +1,17 @@
 # generic builder for Cabal packages
 
-{stdenv, fetchurl, lib, ghc, enableLibraryProfiling ? false} :
+{stdenv, fetchurl, lib, pkgconfig, ghc, enableLibraryProfiling ? false} :
 {
   mkDerivation =
     args : # arguments for the individual package, can modify the defaults
-    let defaults =
+    let # These attributes are removed in the end. This is in order not to spoil the build
+        # environment overly, but also to keep hash-backwards-compatible with the old cabal.nix.
+        internalAttrs = [
+          "internalAttrs" "buildDepends" "buildTools" "extraLibraries" "pkgconfigDepends"
+          "isLibrary" "isExecutable"
+        ];
+
+        defaults =
           self : { # self is the final version of the attribute set
 
             # pname should be defined by the client to be the package basename
@@ -17,10 +24,13 @@
             # all packages with haskell- to avoid name clashes for libraries;
             # if that is not desired (for applications), name can be set to
             # fname.
-            name = if enableLibraryProfiling then
-                     "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling"
+            name = if self.isLibrary then
+                     if enableLibraryProfiling then
+                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling"
+                     else
+                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}"
                    else
-                     "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}";
+                     "${self.pname}-${self.version}";
 
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
@@ -33,14 +43,31 @@
             # buildInputs can be extended by the client by using extraBuildInputs,
             # but often propagatedBuildInputs is preferable anyway
             buildInputs = [ghc] ++ self.extraBuildInputs;
-            extraBuildInputs = [];
+            extraBuildInputs = self.buildTools ++
+                               (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
+                               (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
             # we make sure that propagatedBuildInputs is defined, so that we don't
             # have to check for its existence
-            propagatedBuildInputs = [];
+            propagatedBuildInputs = if self.isLibrary then self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends else [];
 
             # library directories that have to be added to the Cabal files
             extraLibDirs = [];
+
+            # build-depends Cabal field
+            buildDepends = [];
+
+            # build-tools Cabal field
+            buildTools = [];
+
+            # extra-libraries Cabal field
+            extraLibraries = [];
+
+            # pkgconfig-depends Cabal field
+            pkgconfigDepends = [];
+
+            isLibrary = ! self.isExecutable;
+            isExecutable = false;
 
             libraryProfiling =
               if enableLibraryProfiling then ["--enable-library-profiling"]
@@ -115,5 +142,5 @@
             # in Cabal derivations.
             inherit stdenv ghc;
           };
-    in  stdenv.mkDerivation ((rec { f = defaults f // args f; }).f);
+    in  stdenv.mkDerivation (removeAttrs ((rec { f = defaults f // args f; }).f) internalAttrs) ;
 }
