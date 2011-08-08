@@ -695,6 +695,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) sqlite;
   };
 
+  HFuse = callPackage ../development/libraries/haskell/hfuse {
+    inherit (pkgs) fuse;
+  };
+
   HGL = callPackage ../development/libraries/haskell/HGL {};
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
