@@ -482,7 +482,9 @@ rec {
      a set of RPM packages. */
     
   fillDiskWithRPMs =
-    {size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
+    { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
+    , runScripts ? true
+    }:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
@@ -527,7 +529,7 @@ rec {
         ${utillinux}/bin/umount /mnt
       '';
 
-      passthru = {inherit fullName;};
+      passthru = { inherit fullName; };
     });
 
 
@@ -625,7 +627,7 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    {size ? 4096, debs, name, fullName, postInstall ? null}:
+    { size ? 4096, debs, name, fullName, postInstall ? null }:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall;
@@ -697,7 +699,7 @@ rec {
         ${utillinux}/bin/umount /mnt
       '';
 
-      passthru = {inherit fullName;};
+      passthru = { inherit fullName; };
     });
 
 
@@ -730,7 +732,7 @@ rec {
       rpms = import (rpmClosureGenerator {
         inherit name packagesList urlPrefix archs;
         packages = packages ++ extraPackages;
-      }) {inherit fetchurl;};
+      }) { inherit fetchurl; };
     };
 
 
@@ -815,10 +817,10 @@ rec {
       name = "fedora-7-i386";
       fullName = "Fedora 7 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/7/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "0zq7ifirj45wry7b2qkm12qhzzazal3hn610h5kwbrfr2xavs882";
+        url = mirror://fedora/linux/releases/7/Everything/i386/os/repodata/primary.xml.gz;
+        sha256 = "0ssfa01jbwdf566rsxm443yi8f9b1drgfpv51904bark4glgvs33";
       };
-      urlPrefix = mirror://fedora/linux/releases/7/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/7/Everything/i386/os;
       packages = commonFedoraPackages;
     };
     
@@ -826,10 +828,10 @@ rec {
       name = "fedora-8-i386";
       fullName = "Fedora 8 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/8/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "0vr9345rrk0vhs4pc9cjp8npdkqz0xqyirv84vhyfn533m9ws36f";
+        url = mirror://fedora/linux/releases/8/Everything/i386/os/repodata/primary.xml.gz;
+        sha256 = "0kwf0jcp63pygpvgvwl4w58pph24xbcy6db6fnq2f3ly5myhz53n";
       };
-      urlPrefix = mirror://fedora/linux/releases/8/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/8/Everything/i386/os;
       packages = commonFedoraPackages;
     };
 
@@ -837,10 +839,10 @@ rec {
       name = "fedora-9-i386";
       fullName = "Fedora 9 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/9/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "18780xgyag5acx79warcpvzlfkm0mni8xawl6jjvgxg9n3lp6zg0";
+        url = mirror://fedora/linux/releases/9/Everything/i386/os/repodata/primary.xml.gz;
+        sha256 = "1qd7wb5hfxg4mkpf4k3w49hy0qqf704dqlj3igaibyzmrn9rvk7h";
       };
-      urlPrefix = mirror://fedora/linux/releases/9/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/9/Everything/i386/os;
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
 
@@ -848,10 +850,10 @@ rec {
       name = "fedora-9-x86_64";
       fullName = "Fedora 9 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/9/Fedora/x86_64/os/repodata/primary.xml.gz;
-        sha256 = "0qcjigzbw29ahhkfjaw5pbpyl7mj9l349hikwv25jcnid1cbpmx7";
+        url = mirror://fedora/linux/releases/9/Everything/x86_64/os/repodata/primary.xml.gz;
+        sha256 = "1qv68i5s6gis4fbj4lxkibx8zxw5kqxapk95lvm76ml59gm7axxx";
       };
-      urlPrefix = mirror://fedora/linux/releases/9/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/9/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -860,10 +862,10 @@ rec {
       name = "fedora-10-i386";
       fullName = "Fedora 10 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/10/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "15ha8pxzvlch707mpy06c7pkr2ra2vpd5b8x30qhydvx8fgcqcx9";
+        url = mirror://fedora/linux/releases/10/Everything/i386/os/repodata/beeea88d162e76993c25b9dd8139868274ee7fa1-primary.xml.gz;
+        sha1 = "beeea88d162e76993c25b9dd8139868274ee7fa1";
       };
-      urlPrefix = mirror://fedora/linux/releases/10/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/10/Everything/i386/os;
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
 
@@ -871,10 +873,10 @@ rec {
       name = "fedora-10-x86_64";
       fullName = "Fedora 10 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/10/Fedora/x86_64/os/repodata/primary.xml.gz;
-        sha256 = "1pmaav6mdaw13fq99wfggbsmhcix306cimijjxh35qi7yc3wbsz4";
+        url = mirror://fedora/linux/releases/10/Everything/x86_64/os/repodata/7958210175e86b5cc843cf4bd0bc8659e445e261-primary.xml.gz;
+        sha1 = "7958210175e86b5cc843cf4bd0bc8659e445e261";
       };
-      urlPrefix = mirror://fedora/linux/releases/10/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/10/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -883,10 +885,10 @@ rec {
       name = "fedora-11-i386";
       fullName = "Fedora 11 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/11/Fedora/i386/os/repodata/36af1d88214b770fd3d814a5126083b8e808510c76acfdc3a234d6f7e43c2425-primary.xml.gz;
-        sha256 = "09947kjggmillb1zvb3n1i8his5qhdh1598lv39hyxsb4641vbrn";
+        url = mirror://fedora/linux/releases/11/Everything/i386/os/repodata/4a59e5ec0a3a55979f2045c9e6824b87feb1c8c3df12d893e9ee3057ba482485-primary.xml.gz;
+        sha256 = "4a59e5ec0a3a55979f2045c9e6824b87feb1c8c3df12d893e9ee3057ba482485";
       };
-      urlPrefix = mirror://fedora/linux/releases/11/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/11/Everything/i386/os;
       archs = ["noarch" "i386" "i586"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -895,10 +897,10 @@ rec {
       name = "fedora-11-x86_64";
       fullName = "Fedora 11 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/11/Fedora/x86_64/os/repodata/c792495863f5314329c463d51860fc74c6367f72c3cb1c132f6c3290102d68da-primary.xml.gz;
-        sha256 = "1nk85l890ckc5w9irjy3f9zkdiklzih1imb3qhll6cgmcdc4k4n7";
+        url = mirror://fedora/linux/releases/11/Everything/x86_64/os/repodata/b3e9f0d474893d14b0352deddabc7e3ee017d038614e82d7c6d7717510d6ce7e-primary.xml.gz;
+        sha256 = "b3e9f0d474893d14b0352deddabc7e3ee017d038614e82d7c6d7717510d6ce7e";
       };
-      urlPrefix = mirror://fedora/linux/releases/11/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/11/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -907,10 +909,10 @@ rec {
       name = "fedora-12-i386";
       fullName = "Fedora 12 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/12/Fedora/i386/os/repodata/92857daf45687583ffa0fa6f8f97c71d08c50d8b6305dfeea8a3332bf2f7f27c-primary.xml.gz;
-        sha256 = "0z7jyzr2ncx3m3pdy1b3ic6wa20xqybqyvzsl3zq6xb88nppv1cj";
+        url = mirror://fedora/linux/releases/12/Everything/i386/os/repodata/e27694b7824ee6bbf87af629950e6953eaddf91c73e489f5de690a7ecb9d726e-primary.xml.gz;
+        sha256 = "e27694b7824ee6bbf87af629950e6953eaddf91c73e489f5de690a7ecb9d726e";
       };
-      urlPrefix = mirror://fedora/linux/releases/12/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/12/Everything/i386/os;
       archs = ["noarch" "i386" "i586" "i686"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -919,10 +921,10 @@ rec {
       name = "fedora-12-x86_64";
       fullName = "Fedora 12 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/12/Fedora/x86_64/os/repodata/a4ebee776b3c4898086e124a512e7f8c701ab1699fd83b2dcea3d7592b5c9ff0-primary.xml.gz;
-        sha256 = "1w4zbhmmkmx3rqnkpn4zd6qilw4cgwp52jhjdq49hj1wddvyxsx4";
+        url = mirror://fedora/linux/releases/12/Everything/x86_64/os/repodata/6b142ef02acbc77f405fbfdedd82451e692a01201471665052a0e00ba8ac0959-primary.xml.gz;
+        sha256 = "6b142ef02acbc77f405fbfdedd82451e692a01201471665052a0e00ba8ac0959";
       };
-      urlPrefix = mirror://fedora/linux/releases/12/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/12/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -931,10 +933,10 @@ rec {
       name = "fedora-13-i386";
       fullName = "Fedora 13 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/13/Fedora/i386/os/repodata/48c649978f695e8bf6214d16ff5413f8ab303976b33d0e96e0a5706e6f870682-primary.xml.gz;
-        sha256 = "10h6hxpnww55w2b0wgdkfqwk1azq2dagy5jd47v8npk9iyblkij8";
+        url = mirror://fedora/linux/releases/13/Everything/i386/os/repodata/be70ac9e1031fd34222b2ec6cc8a337bc6fabd1d06969990955c5f358d138e35-primary.xml.gz;
+        sha256 = "be70ac9e1031fd34222b2ec6cc8a337bc6fabd1d06969990955c5f358d138e35";
       };
-      urlPrefix = mirror://fedora/linux/releases/13/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/13/Everything/i386/os;
       archs = ["noarch" "i386" "i586" "i686"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -943,10 +945,10 @@ rec {
       name = "fedora-13-x86_64";
       fullName = "Fedora 13 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/13/Fedora/x86_64/os/repodata/ed88d22fca1c8bcc07d85bb677d5f8f45422a373a53b6dd213d57d7dfc278878-primary.xml.gz;
-        sha256 = "0y484zy7szfm2g96sfx5ffij4m7lz3apgdjvv03wr2qwr8px527d";
+        url = mirror://fedora/linux/releases/13/Everything/x86_64/os/repodata/01996e6d20b0a4bf3390767bd26709932e42c54422b39005ec2dd4ef2e8b0f3a-primary.xml.gz;
+        sha256 = "01996e6d20b0a4bf3390767bd26709932e42c54422b39005ec2dd4ef2e8b0f3a";
       };
-      urlPrefix = mirror://fedora/linux/releases/13/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/13/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
