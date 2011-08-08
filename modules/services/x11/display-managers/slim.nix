@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -106,8 +106,17 @@ in
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.
-    security.pam.services = [ { name = "slim"; allowNullPassword = true; } ];
+    security.pam.services = singleton
+      { name = "slim";
+        allowNullPassword = true;
+        ownDevices = true;
+      };
 
+    # The ConsoleKit PAM connector launches a local session, but it's
+    # not set as "active" (maybe because x11-display-device is not
+    # set).  Launching a child session seems to fix that.
+    services.xserver.displayManager.forceCKSession = true;
+    
   };
 
 }

@@ -75,7 +75,8 @@ in
     security.pam.services =
       [ { name = "chsh"; rootOK = true; }
         { name = "chfn"; rootOK = true; }
-        { name = "su"; rootOK = true; forwardXAuth = true; }
+        # Enable ‘ownDevices’ for the services/x11/display-managers/auto.nix module.
+        { name = "su"; rootOK = true; ownDevices = true; forwardXAuth = true; }
         { name = "passwd"; }
         # Note: useradd, groupadd etc. aren't setuid root, so it
         # doesn't really matter what the PAM config says as long as it
