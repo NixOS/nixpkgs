@@ -6,6 +6,9 @@
 , # The kernel version.
   version
 
+, # The version number used for the module directory
+  modDirVersion ? version
+
 , # The kernel configuration.
   config
 
@@ -66,7 +69,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version;
+    inherit version modDirVersion;
     # Combine the `features' attribute sets of all the kernel patches.
     features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
   };
