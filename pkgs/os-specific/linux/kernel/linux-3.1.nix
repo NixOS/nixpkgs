@@ -193,6 +193,8 @@ import ./generic.nix (
 
   rec {
     version = "3.1-rc1";
+
+    modDirVersion = "3.1.0-rc1";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.bz2";

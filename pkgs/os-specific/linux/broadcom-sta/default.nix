@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     (! builtins.lessThan (builtins.compareVersions kernel.version "2.6.37") 0)
       [ ./mutex-sema.patch ];
 
-  makeFlags = "KDIR=${kernel}/lib/modules/${kernel.version}/build";
+  makeFlags = "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build";
 
   unpackPhase =
     ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      binDir="$out/lib/modules/${kernel.version}/kernel/net/wireless/"
+      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
       docDir="$out/share/doc/broadcom-sta/"
       ensureDir "$binDir" "$docDir"
       cp wl.ko "$binDir"
