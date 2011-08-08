@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     sha256 = "de705e34bc75654139dfcbedfe43a3d182d140b198fcd57ab190d549471305ca";
   };
 
+  # Configuration from http://bitmath.org/code/multitouch/
   confFile = ''
     Section "InputClass"
         MatchIsTouchpad "true"
