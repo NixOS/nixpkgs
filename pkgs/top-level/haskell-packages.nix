@@ -990,6 +990,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexPosix = self.regexPosix_0_72_0_3;
 
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
+  regexTdfa = self.regexTDFA;
 
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
   regexPcre = self.regexPCRE;
