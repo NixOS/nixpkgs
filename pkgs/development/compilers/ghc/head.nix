@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   version = "7.3.20110804";
-  
+
   name = "ghc-${version}";
-  
+
   # TODO: Does this have to be here, or can it go to meta?
   homepage = "http://haskell.org/ghc";
 

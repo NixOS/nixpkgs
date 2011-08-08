@@ -24,7 +24,7 @@ stdenv.mkDerivation {
         url = http://www.haskell.org/ghc/dist/6.6.1/ghc-6.6.1-i386-apple-darwin.tar.bz2;
         sha256 = "1drbsicanr6jlykvs4vs6gbi2q9ac1bcaxz2vzwh3pfv3lfibwia";
       }
-    else throw "cannot bootstrap GHC on this platform"; 
+    else throw "cannot bootstrap GHC on this platform";
 
   buildInputs = [perl];
 

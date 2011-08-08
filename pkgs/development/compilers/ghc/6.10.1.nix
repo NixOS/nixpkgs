@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   version = "6.10.1";
-  
+
   name = "ghc-${version}";
-  
+
   homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "The Glasgow Haskell Compiler";
   };
 
-  
+
   passthru = {
     corePackages = [
       [ "Cabal" "1.6.0.1" ]

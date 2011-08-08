@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "7.0.1";
-  
+
   name = "ghc-${version}";
 
   src = fetchurl {

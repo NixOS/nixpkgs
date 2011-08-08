@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
       }
-    else throw "cannot bootstrap GHC on this platform"; 
+    else throw "cannot bootstrap GHC on this platform";
 
   buildInputs = [perl];
 

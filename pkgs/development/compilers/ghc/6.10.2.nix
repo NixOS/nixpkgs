@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
-  
+
   name = "ghc-${version}";
-  
+
   homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
