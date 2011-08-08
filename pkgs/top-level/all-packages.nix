@@ -5865,6 +5865,9 @@ let
 
   wpa_supplicant_gui = pkgs.wpa_supplicant.gui;
 
+  xf86_input_multitouch =
+    callPackage ../os-specific/linux/xf86-input-multitouch { };
+
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
   xmoto = builderDefsPackage (import ../games/xmoto) {
