@@ -298,7 +298,7 @@ in
       
   virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
-  virtualisation.qemu.options = [ "-usbdevice tablet" ];
+  virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
   
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
   # of the host into our own filesystem.  We use mkOverride to allow
@@ -365,8 +365,9 @@ in
   # When building a regular system configuration, override whatever
   # video driver the host uses.
   services.xserver.videoDriver = mkOverride 50 null;
-  services.xserver.videoDrivers = mkOverride 50 [ "cirrus" "vesa" ];
+  services.xserver.videoDrivers = mkOverride 50 [ "vesa" ];
   services.xserver.defaultDepth = mkOverride 50 0;
+  services.xserver.resolutions = mkOverride 50 [ { x = 1024; y = 768; } ];
   services.xserver.monitorSection =
     ''
       # Set a higher refresh rate so that resolutions > 800x600 work.
