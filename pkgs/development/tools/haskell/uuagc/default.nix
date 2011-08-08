@@ -1,12 +1,17 @@
-{cabal, uulib}:
+{ cabal, haskellSrcExts, mtl, uulib }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "uuagc";
-  version = "0.9.36";
-  name = self.fname;
-  sha256 = "02sl19apxwhgj7zq37pl6xkl35pafma2683d7hyzyyn6y5kqma1j";
-  extraBuildInputs = [uulib];
+  version = "0.9.38.6";
+  sha256 = "1dr8vxis16rcdvklp0rv2d50bi33jag7n4wynbfqw9bzgyfbagnw";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ haskellSrcExts mtl uulib ];
   meta = {
+    homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";
     description = "Attribute Grammar System of Universiteit Utrecht";
+    license = "GPL";
+    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

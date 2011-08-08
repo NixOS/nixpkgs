@@ -1028,6 +1028,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     parsec = self.parsec2;
   };
 
+  # known not to work with anything above ghc-6.10.*
   scion = callPackage ../development/libraries/haskell/scion {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
