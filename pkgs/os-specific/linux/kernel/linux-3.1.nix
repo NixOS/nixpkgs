@@ -193,7 +193,7 @@ import ./generic.nix (
     version = "3.1-rc1";
   
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.0/testing/linux-${version}.tar.bz2";
+      url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.bz2";
       sha256 = "04m3zh6pn54hi39awvsrh5bgmhz2pkkw0i07grgjv5spai90wls1";
     };
 
