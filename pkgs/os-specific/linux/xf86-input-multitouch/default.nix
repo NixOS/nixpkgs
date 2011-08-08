@@ -38,4 +38,15 @@ stdenv.mkDerivation {
     ensureDir $out/include/xorg
     echo -n "$confFile" > $out/include/xorg/10-multitouch.conf
   '';
+
+  meta = {
+    homepage = http://bitmath.org/code/multitouch/;
+
+    description = "Brings multitouch gestures to the Linux desktop";
+
+    license = "gplv2";
+
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
+  };
 }
+
