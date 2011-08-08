@@ -27,8 +27,6 @@ let
     *.*;mail.none;local1.none    -/var/log/messages
   '';
 
-  syslogdParameters = if cfg.enableNetworkInput then "-r " else "";
-
 in
 
 {
@@ -75,6 +73,15 @@ in
         '';
       };
 
+      extraParams = mkOption {
+        type = types.listOf types.string;
+        default = [ ];
+        example = [ "-m 0" ];
+        description = ''
+          Additional parameters passed to <command>syslogd</command>.
+        '';
+      };
+
     };
 
   };
@@ -83,6 +90,8 @@ in
   ###### implementation
 
   config = {
+
+    services.syslogd.extraParams = optional cfg.enableNetworkInput "-r";
 
     jobs.syslogd =
       { description = "Syslog daemon";
@@ -93,7 +102,7 @@ in
 
         daemonType = "fork";
 
-        exec = "${pkgs.sysklogd}/sbin/syslogd ${syslogdParameters} -f ${syslogConf}";
+        exec = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf}";
       };
 
   };
