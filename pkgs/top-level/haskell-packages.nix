@@ -1045,6 +1045,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
+  strict = callPackage ../development/libraries/haskell/strict {};
+
   # TODO: investigate status of syb in older platform versions
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
@@ -1369,9 +1371,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     parsec = self.parsec2;
   };
 
-  leksah = callPackage ../applications/editors/leksah {
-    inherit (pkgs) makeWrapper;
-  };
+  leksah = callPackage ../applications/editors/leksah {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
 
