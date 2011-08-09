@@ -7,7 +7,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Knowledge of GHC's installation directories";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "https://github.com/bos/mwc-random";
     description = "Fast, high quality pseudo random number generation";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

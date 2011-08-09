@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Collects together existing Haskell cryptographic functions into a package";
     license = "unknown";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.haskell.org/haxr/";
     description = "Automatic deriving of XML-RPC structs for Haskell records.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

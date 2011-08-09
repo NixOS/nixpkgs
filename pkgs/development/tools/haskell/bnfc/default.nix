@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Compiler construction tool generating a compiler front-end from a Labelled BNF grammar";
-    platforms = stdenv.lib.platforms.haskellPlatforms;
+    platforms = ghc.meta.platforms;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

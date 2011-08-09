@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Graph-Theoretic Analysis library.";
     license = "unknown";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

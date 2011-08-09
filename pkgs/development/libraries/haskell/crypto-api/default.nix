@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://trac.haskell.org/crypto-api/wiki";
     description = "A generic interface for cryptographic operations";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

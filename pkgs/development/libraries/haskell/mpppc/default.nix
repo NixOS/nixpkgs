@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Multi-dimensional parametric pretty-printer with color";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

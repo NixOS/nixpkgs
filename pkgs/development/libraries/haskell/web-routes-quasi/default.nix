@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://docs.yesodweb.com/web-routes-quasi/";
     description = "Define data types and parse/build functions for web-routes via a quasi-quoted DSL";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
     homepage = "http://code.haskell.org/haskell-src-exts";
     description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

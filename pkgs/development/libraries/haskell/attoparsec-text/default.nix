@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://patch-tag.com/r/felipe/attoparsec-text/home";
     description = "Fast combinator parsing for texts";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

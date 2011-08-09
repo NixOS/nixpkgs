@@ -7,7 +7,7 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [hledger hledgerLib vty safe];
   meta = {
     description = "a simple curses-style console interface to hledger";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

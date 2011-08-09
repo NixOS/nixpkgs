@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/snoyberg/file-embed/tree/master";
     description = "Use Template Haskell to embed file contents directly.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

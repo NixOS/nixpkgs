@@ -12,7 +12,7 @@ cabal.mkDerivation (self : {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

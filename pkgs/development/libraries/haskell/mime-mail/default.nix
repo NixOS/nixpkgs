@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/snoyberg/mime-mail";
     description = "Compose MIME email messages.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -10,7 +10,7 @@ cabal.mkDerivation (self : {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";
     license = "LGPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

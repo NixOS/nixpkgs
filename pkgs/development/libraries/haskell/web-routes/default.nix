@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Library for maintaining correctness and composability of URLs within an application.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

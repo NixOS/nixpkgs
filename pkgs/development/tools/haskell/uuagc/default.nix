@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";
     description = "Attribute Grammar System of Universiteit Utrecht";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.haskell.org/haskellwiki/Record_access";
     description = "Utilities for accessing and manipulating fields of records";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

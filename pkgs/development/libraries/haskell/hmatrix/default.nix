@@ -12,7 +12,7 @@ cabal.mkDerivation (self : {
     homepage = "http://perception.inf.um.es/hmatrix";
     description = "Linear algebra and numerical computation";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.guibert

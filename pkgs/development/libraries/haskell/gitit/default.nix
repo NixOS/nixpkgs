@@ -18,7 +18,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/jgm/gitit/tree/master";
     description = "Wiki using happstack, git or darcs, and pandoc.";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.simons

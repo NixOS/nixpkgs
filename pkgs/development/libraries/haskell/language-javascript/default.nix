@@ -10,7 +10,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/alanz/language-javascript";
     description = "Parser for JavaScript";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

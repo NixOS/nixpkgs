@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/esessoms/datetime";
     description = "Utilities to make Data.Time.* easier to use.";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

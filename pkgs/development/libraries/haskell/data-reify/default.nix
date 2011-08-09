@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.ittc.ku.edu/csdl/fpg/Tools/IOReification";
     description = "Reify a recursive data structure into an explicit graph.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

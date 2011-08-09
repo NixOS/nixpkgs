@@ -11,7 +11,7 @@ cabal.mkDerivation (self : {
     homepage = "http://community.haskell.org/~ndm/hlint/";
     description = "Source code suggestions";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

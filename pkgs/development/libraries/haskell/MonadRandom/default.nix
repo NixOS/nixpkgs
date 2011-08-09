@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "Random-number generation monad.";
     license = "unknown";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

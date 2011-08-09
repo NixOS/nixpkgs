@@ -11,7 +11,7 @@ cabal.mkDerivation (self : {
     homepage = "http://batterseapower.github.com/test-framework/";
     description = "Framework for running and organising tests, with HUnit and QuickCheck support";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

@@ -14,7 +14,7 @@ cabal.mkDerivation (self : {
     homepage = "http://happstack.com";
     description = "Web related tools and services.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

@@ -12,7 +12,7 @@ cabal.mkDerivation (self : {
     homepage = "https://github.com/coreyoconnor/vty";
     description = "A simple terminal access library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

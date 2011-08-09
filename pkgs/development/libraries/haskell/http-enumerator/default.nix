@@ -18,7 +18,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/snoyberg/http-enumerator";
     description = "HTTP client package with enumerator interface and HTTPS support.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

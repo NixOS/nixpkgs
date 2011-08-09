@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A Haskell-only implementation of the MD5 digest (hash) algorithm.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.cs.brown.edu/research/plt/";
     description = "JavaScript analysis tools";
     license = "LGPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

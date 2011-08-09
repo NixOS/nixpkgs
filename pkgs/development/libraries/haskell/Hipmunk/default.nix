@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://patch-tag.com/r/felipe/hipmunk/home";
     description = "A Haskell binding for Chipmunk.";
     license = "unknown";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

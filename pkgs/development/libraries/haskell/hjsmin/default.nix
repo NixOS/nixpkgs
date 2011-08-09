@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/alanz/hjsmin";
     description = "Haskell implementation of a javascript minifier";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

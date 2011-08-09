@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
     homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";
     description = "Haskell Utrecht Tools Library";
     license = "LGPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

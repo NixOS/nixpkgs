@@ -7,7 +7,7 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [hledgerLib csv haskeline];
   meta = {
     description = "a reliable, practical financial reporting tool for day-to-day use";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

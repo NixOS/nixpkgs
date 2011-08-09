@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/vincenthz/hs-cprng-aes";
     description = "Crypto Pseudo Random Number Generator using AES in counter mode.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

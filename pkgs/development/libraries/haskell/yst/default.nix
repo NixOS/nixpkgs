@@ -13,7 +13,7 @@ cabal.mkDerivation (self : {
     description = "Builds a static website from templates and data in YAML or
 CSV files.";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "Various cryptographic hashes for bytestrings; CRC32 and Adler32 for now.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

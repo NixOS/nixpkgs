@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://haskell.org/haskellwiki/vector-space";
     description = "Vector & affine spaces, linear maps, and derivatives (requires ghc 6.9 or better)";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

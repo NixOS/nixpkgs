@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://haskell.org/haskellwiki/Multiplate";
     description = "Lightweight generic library for mutually recursive data types.";
     license = self.stdenv.lib.licenses.mit;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

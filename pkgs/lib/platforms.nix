@@ -13,5 +13,4 @@ rec {
   all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd;
   allBut = platform: lists.filter (x: platform != x) all;
   mesaPlatforms = linux ++ darwin ++ freebsd;
-  haskellPlatforms = ["i686-linux" "x86_64-linux" "i686-darwin"];
 }

@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A simple graphics library based on X11 or Win32";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

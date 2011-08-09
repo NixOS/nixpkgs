@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://code.haskell.org/~dons/code/ghc-core";
     description = "Display GHC's core and assembly output in a pager";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

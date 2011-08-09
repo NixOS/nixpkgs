@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://gitorious.org/hsemail";
     description = "Internet Message Parsers";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [self.stdenv.lib.maintainers.andres self.stdenv.lib.maintainers.simons];
   };
 })

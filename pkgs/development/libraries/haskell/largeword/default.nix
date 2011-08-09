@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
     homepage = "http://trac.haskell.org/largeword/wiki";
     description = "Provides Word128, Word192 and Word256 and a way of producing other large words if required.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

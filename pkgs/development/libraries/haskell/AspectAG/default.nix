@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.cs.uu.nl/wiki/bin/view/Center/AspectAG";
     description = "Attribute Grammars in the form of an EDSL";
     license = "LGPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

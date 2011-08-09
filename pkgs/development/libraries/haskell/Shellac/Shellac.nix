@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.cs.princeton.edu/~rdockins/shellac/home/";
     description = "A framework for creating shell envinronments";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

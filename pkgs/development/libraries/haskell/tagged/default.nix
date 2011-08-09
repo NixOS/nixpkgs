@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/ekmett/tagged";
     description = "Provides newtype wrappers for phantom types to avoid unsafely passing dummy arguments";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://savannah.nongnu.org/projects/funcmp/";
     description = "Functional MetaPost";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [self.stdenv.lib.maintainers.simons];
   };
 })

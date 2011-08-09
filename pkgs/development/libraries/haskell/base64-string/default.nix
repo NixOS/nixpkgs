@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
     homepage = "http://urchin.earth.li/~ian/cabal/base64-string/";
     description = "Base64 implementation for String's.";
     license = "unknown";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

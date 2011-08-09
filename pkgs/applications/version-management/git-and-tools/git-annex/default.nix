@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       control.
     '';
 
-    platforms = stdenv.lib.platforms.haskellPlatforms;
+    platforms = ghc.meta.platforms;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

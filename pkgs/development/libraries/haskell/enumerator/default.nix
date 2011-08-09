@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://john-millikin.com/software/enumerator/";
     description = "Reliable, high-performance processing with left-fold enumerators";
     license = self.stdenv.lib.licenses.mit;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

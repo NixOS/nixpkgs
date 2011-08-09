@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Types for representing a structured document";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

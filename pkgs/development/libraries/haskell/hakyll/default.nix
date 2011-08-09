@@ -13,7 +13,7 @@ cabal.mkDerivation (self : {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

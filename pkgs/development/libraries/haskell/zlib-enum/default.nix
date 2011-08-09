@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/maltem/zlib-enum";
     description = "Enumerator interface for zlib compression";
     license = self.stdenv.lib.licenses.mit;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

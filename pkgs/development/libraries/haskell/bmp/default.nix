@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://code.ouroborus.net/bmp";
     description = "Read and write uncompressed BMP image files.";
     license = self.stdenv.lib.licenses.mit;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

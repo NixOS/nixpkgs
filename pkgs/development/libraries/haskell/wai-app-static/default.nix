@@ -13,7 +13,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.yesodweb.com/";
     description = "WAI application for static serving";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

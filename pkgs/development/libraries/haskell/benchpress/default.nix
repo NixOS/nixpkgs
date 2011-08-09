@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/tibbe/benchpress";
     description = "Micro-benchmarking with detailed statistics.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

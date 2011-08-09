@@ -8,7 +8,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.cse.unsw.edu.au/~rl/code/strict.html";
     description = "Strict data types and String IO.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

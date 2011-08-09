@@ -15,7 +15,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.yesodweb.com/";
     description = "Form handling support for Yesod Web Framework";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

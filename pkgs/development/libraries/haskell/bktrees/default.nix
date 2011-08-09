@@ -7,7 +7,7 @@ cabal.mkDerivation (self : {
   meta = {
     description = "A set data structure with approximate searching";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

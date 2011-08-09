@@ -7,7 +7,7 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [polyparse];
   meta = {
     description = "Haskell utilities for parsing, filtering, transforming and generating XML documents.";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

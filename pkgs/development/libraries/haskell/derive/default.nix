@@ -11,7 +11,7 @@ cabal.mkDerivation (self : {
     homepage = "http://community.haskell.org/~ndm/derive/";
     description = "A program and library to derive instances for data types";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

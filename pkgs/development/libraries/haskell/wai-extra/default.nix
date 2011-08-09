@@ -14,7 +14,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/snoyberg/wai-extra";
     description = "Provides some basic WAI handlers and middleware.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres

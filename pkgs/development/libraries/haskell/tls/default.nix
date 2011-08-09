@@ -12,7 +12,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/vincenthz/hs-tls";
     description = "TLS/SSL protocol native implementation (Server and Client)";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

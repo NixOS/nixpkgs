@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://connect.creativelabs.com/openal/";
     description = "A binding to the OpenAL cross-platform 3D audio API";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

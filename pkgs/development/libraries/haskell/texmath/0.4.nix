@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/jgm/texmath";
     description = "Conversion of LaTeX math formulas to MathML.";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

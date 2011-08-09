@@ -12,7 +12,7 @@ cabal.mkDerivation (self : {
     homepage = "https://github.com/mokus0/random-fu";
     description = "Generic basis for random number generators";
     license = self.stdenv.lib.licenses.publicDomain;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

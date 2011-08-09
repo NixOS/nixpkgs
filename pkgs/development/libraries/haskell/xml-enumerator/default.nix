@@ -15,7 +15,7 @@ cabal.mkDerivation (self : {
     homepage = "http://github.com/snoyberg/xml-enumerator";
     description = "Pure-Haskell utilities for dealing with XML with the enumerator package.";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
