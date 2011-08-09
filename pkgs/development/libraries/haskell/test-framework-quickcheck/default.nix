@@ -1,14 +1,21 @@
-{cabal, QuickCheck1, testFramework, deepseq}:
+{ cabal, QuickCheck, deepseq, extensibleExceptions, testFramework
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "test-framework-quickcheck";
   version = "0.2.7";
   sha256 = "065nazli8vh9dz8xi71gwzlwy81anfd471jhz6hv3m893cc9vvx8";
-  propagatedBuildInputs = [QuickCheck1 testFramework deepseq];
+  buildDepends = [
+    QuickCheck deepseq extensibleExceptions testFramework
+  ];
   meta = {
-    description = "QuickCheck support for the test-framework package";
-    license = "BSD3";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://batterseapower.github.com/test-framework/";
+    description = "QuickCheck support for the test-framework package.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

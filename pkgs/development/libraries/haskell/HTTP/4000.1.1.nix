@@ -1,12 +1,18 @@
-{cabal, mtl, network, parsec}:
+{ cabal, mtl, network, parsec }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "HTTP";
-  version = "4000.1.1"; # Haskell Platform 2011.2.0.0
+  version = "4000.1.1";
   sha256 = "09khx5fb673a0d7m3bl39xjdxvc60m52rmm4865cha2mby0zidy3";
-  propagatedBuildInputs = [mtl network parsec];
+  buildDepends = [ mtl network parsec ];
   meta = {
-    description = "a Haskell library for client-side HTTP";
+    homepage = "http://projects.haskell.org/http/";
+    description = "A library for client-side HTTP";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

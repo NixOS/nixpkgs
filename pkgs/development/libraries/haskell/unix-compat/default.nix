@@ -1,6 +1,6 @@
-{cabal} :
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "unix-compat";
   version = "0.2.2.1";
   sha256 = "009dg6mxjmdkcmr2d1qq9r3f4qfx4d362lyxj9vvgwrzcdnsgzqi";
@@ -9,6 +9,9 @@ cabal.mkDerivation (self : {
     description = "Portable POSIX-compatibility layer.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

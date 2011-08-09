@@ -1,14 +1,20 @@
-{cabal, polyparse}:
+{ cabal, polyparse }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "HaXml";
   version = "1.22.3";
   sha256 = "10gbax7nih45ck5fg056gnfgzr7zyndxpvdhvx3af2wnrmilkcbh";
-  propagatedBuildInputs = [polyparse];
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ polyparse ];
   meta = {
-    description = "Haskell utilities for parsing, filtering, transforming and generating XML documents.";
+    homepage = "http://www.cs.york.ac.uk/fp/HaXml/";
+    description = "Utilities for manipulating XML documents";
+    license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

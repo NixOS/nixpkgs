@@ -1,14 +1,18 @@
-{cabal, deepseq}:
+{ cabal, deepseq }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "text";
-  version = "0.11.0.5"; # Haskell Platform 2011.2.0.0
+  version = "0.11.0.5";
   sha256 = "1a5y2i7qrkyyvm112q44rhd7jbqxvfxssz2g5ngbx11yypl3hcdv";
-  propagatedBuildInputs = [deepseq];
+  buildDepends = [ deepseq ];
   meta = {
-    description = "An efficient package Unicode text type";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://bitbucket.org/bos/text";
+    description = "An efficient packed Unicode text type.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

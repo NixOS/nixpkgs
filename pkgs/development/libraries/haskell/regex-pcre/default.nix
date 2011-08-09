@@ -1,13 +1,19 @@
-{cabal, regexBase, pcre}:
+{ cabal, pcre, regexBase }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "regex-pcre";
   version = "0.94.2";
   sha256 = "0p4az8z4jlrcmmyz9bjf7n90hpg6n242vq4255w2dz5v29l822wn";
-  propagatedBuildInputs = [regexBase];
-  extraBuildInputs = [pcre];
+  buildDepends = [ regexBase ];
+  extraLibraries = [ pcre ];
   meta = {
+    homepage = "http://sourceforge.net/projects/lazy-regex";
     description = "Replaces/Enhances Text.Regex";
-    license = "BSD3";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

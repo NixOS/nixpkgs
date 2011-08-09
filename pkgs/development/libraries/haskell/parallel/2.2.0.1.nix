@@ -1,12 +1,17 @@
-{cabal, deepseq}:
+{ cabal, deepseq }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "parallel";
-  version = "2.2.0.1"; # Haskell Platform 2010.1.0.0 and 2010.2.0.0
+  version = "2.2.0.1";
   sha256 = "255310023138ecf618c8b450203fa2fc65feb68cd08ee4d369ceae72054168fd";
-  propagatedBuildInputs = [deepseq];
+  buildDepends = [ deepseq ];
   meta = {
-    description = "parallel programming library";
+    description = "Parallel programming library";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

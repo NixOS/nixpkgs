@@ -1,12 +1,21 @@
-{cabal, HDBC, postgresql, parsec}:
+{ cabal, postgresql, HDBC, mtl, parsec, time, utf8String }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "HDBC-postgresql";
-  version = "2.2.3.3";
-  sha256 = "1wh3pwqgxilz4v108q88z1gcqyzxp1fzd47s6g4857m1fzbdj7an";
-  propagatedBuildInputs = [HDBC parsec postgresql];
+  version = "2.3.2.0";
+  sha256 = "0fwza9h2ghl70x44c4snfybnnfsj1mwlf5a1x12ddl1fbj6fx6gs";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ HDBC mtl parsec time utf8String ];
+  extraLibraries = [ postgresql ];
   meta = {
-    description = "This package provides a PostgreSQL driver for HDBC";
+    homepage = "http://software.complete.org/hdbc-postgresql";
+    description = "PostgreSQL driver for HDBC";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

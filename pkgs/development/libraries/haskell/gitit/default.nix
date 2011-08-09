@@ -1,18 +1,21 @@
-{cabal, ConfigFile, HStringTemplate, HTTP, SHA, cgi, feed,
- filestore, ghc, ghcPaths, happstackServer, happstackUtil,
- highlightingKate, hslogger, json, mtl, network, pandoc,
- pandocTypes, parsec, recaptcha, safe, syb, url, utf8String, xhtml,
- xml, xssSanitize, zlib} :
+{ cabal, ConfigFile, HStringTemplate, HTTP, SHA, cgi, feed
+, filestore, ghcPaths, happstackServer, happstackUtil
+, highlightingKate, hslogger, json, mtl, network, pandoc
+, pandocTypes, parsec, recaptcha, safe, syb, time, url, utf8String
+, xhtml, xml, xssSanitize, zlib
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "gitit";
   version = "0.8.0.1";
   sha256 = "0y2gcxlbb44vflj0jl3zkbsn47n7nccikxwdw6ccf9kxgcmrz0zy";
-  propagatedBuildInputs = [
-    ConfigFile HStringTemplate HTTP SHA cgi feed filestore ghc ghcPaths
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [
+    ConfigFile HStringTemplate HTTP SHA cgi feed filestore ghcPaths
     happstackServer happstackUtil highlightingKate hslogger json mtl
-    network pandoc pandocTypes parsec recaptcha safe syb url utf8String
-    xhtml xml xssSanitize zlib
+    network pandoc pandocTypes parsec recaptcha safe syb time url
+    utf8String xhtml xml xssSanitize zlib
   ];
   meta = {
     homepage = "http://github.com/jgm/gitit/tree/master";
@@ -20,9 +23,8 @@ cabal.mkDerivation (self : {
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [
-      self.stdenv.lib.maintainers.simons
-      self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

@@ -1,18 +1,25 @@
-{cabal, QuickCheck, binary, haskeline, haskellSrcExts, mtl, utf8String,
- syb, xhtml, zlib,
- happy, alex}:
+{ cabal, alex, happy, QuickCheck, binary, haskeline, haskellSrcExts
+, mtl, syb, xhtml, zlib
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "Agda";
   version = "2.2.10";
   sha256 = "1bh96g5c6b6jzaf3m9gm0vr64avgi86kb45p8i1vg1jbfjdbdlsw";
-  extraBuildInputs = [happy alex];
-  propagatedBuildInputs =
-    [QuickCheck binary haskeline haskellSrcExts mtl utf8String
-     syb xhtml zlib];
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [
+    QuickCheck binary haskeline haskellSrcExts mtl syb xhtml zlib
+  ];
+  buildTools = [ alex happy ];
   meta = {
-    description = "A dependently typed functional language and proof assistant";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://wiki.portal.chalmers.se/agda/";
+    description = "A dependently typed functional programming language and proof assistant";
+    license = "unknown";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

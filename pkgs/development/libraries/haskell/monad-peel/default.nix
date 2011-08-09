@@ -1,13 +1,18 @@
-{cabal, transformers}:
+{ cabal, extensibleExceptions, transformers }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "monad-peel";
   version = "0.1";
   sha256 = "0q56hdjgbj7ykpjx5z8qlqqkngmgm5wzm9vwcd7v675k2ywcl3ys";
-  propagatedBuildInputs = [transformers];
+  buildDepends = [ extensibleExceptions transformers ];
   meta = {
+    homepage = "http://andersk.mit.edu/haskell/monad-peel/";
     description = "Lift control operations like exception catching through monad transformers";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

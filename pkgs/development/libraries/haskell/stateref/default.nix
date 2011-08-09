@@ -1,14 +1,18 @@
-{cabal, mtl}:
+{ cabal, mtl, stm }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "stateref";
   version = "0.3";
   sha256 = "0hdpw6g255lj7jjvgqwhjdpzmka546vda5qjvry8gjj6nfm91lvx";
-  propagatedBuildInputs = [mtl];
+  buildDepends = [ mtl stm ];
   meta = {
-    description = "Abstraction for things that work like IORef";
-    license = "Public Domain";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://code.haskell.org/~mokus/stateref/";
+    description = "Abstraction for things that work like IORef.";
+    license = self.stdenv.lib.licenses.publicDomain;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

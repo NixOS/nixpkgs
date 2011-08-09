@@ -1,6 +1,6 @@
-{cabal} :
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "MemoTrie";
   version = "0.4.10";
   sha256 = "1hkraq33sai046gwqlabc9nkz6jbl6vgj0c6lc6j4j5h5d8v08kk";
@@ -10,8 +10,8 @@ cabal.mkDerivation (self : {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
-      self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

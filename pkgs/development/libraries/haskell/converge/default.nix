@@ -1,6 +1,6 @@
-{cabal} :
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "converge";
   version = "0.1";
   sha256 = "01n5xnzb769rflgzk1f2v2y3yik9q2cmpq3b2pw68pxl1z3qfvpw";
@@ -8,5 +8,10 @@ cabal.mkDerivation (self : {
     homepage = "/dev/null";
     description = "Limit operations for converging sequences";
     license = self.stdenv.lib.licenses.publicDomain;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

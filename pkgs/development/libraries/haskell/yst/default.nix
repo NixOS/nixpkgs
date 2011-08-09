@@ -1,12 +1,16 @@
-{cabal, HStringTemplate, HsSyck, csv, pandoc, parsec, split,
- utf8String, xhtml} :
+{ cabal, HStringTemplate, HsSyck, csv, pandoc, parsec, split, time
+, utf8String, xhtml
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "yst";
   version = "0.2.4.1";
   sha256 = "0y620p6kn1mky30fia63na5idppfjfmc828jcaa0ads08rmj5wgy";
-  propagatedBuildInputs = [
-    HStringTemplate HsSyck csv pandoc parsec split utf8String xhtml
+  isLibrary = false;
+  isExecutable = true;
+  buildDepends = [
+    HStringTemplate HsSyck csv pandoc parsec split time utf8String
+    xhtml
   ];
   meta = {
     homepage = "http://github.com/jgm/yst";
@@ -14,6 +18,9 @@ cabal.mkDerivation (self : {
 CSV files.";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

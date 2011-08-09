@@ -1,14 +1,17 @@
-{cabal, utf8String, xml}:
+{ cabal, utf8String, xml }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "feed";
   version = "0.3.8";
   sha256 = "1yvigcvb8cvxfa8vb2i11xkrylqw57jwzkaji6m1wp03k80zf576";
-  propagatedBuildInputs = [utf8String xml];
+  buildDepends = [ utf8String xml ];
   meta = {
-    description = "Interfacing with RSS and Atom feeds";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    description = "Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

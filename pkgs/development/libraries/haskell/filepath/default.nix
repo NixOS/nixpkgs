@@ -1,6 +1,6 @@
-{cabal} :
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "filepath";
   version = "1.2.0.0";
   sha256 = "14jji7byjlkzsylsnqwfsiw5vsc7nlaisqabzcw9f7nhrxkq2n20";
@@ -9,6 +9,9 @@ cabal.mkDerivation (self : {
     description = "Library for manipulating FilePaths in a cross platform way.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

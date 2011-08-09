@@ -1,13 +1,18 @@
-{cabal, binary, mtl}:
+{ cabal, binary, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "binary-shared";
   version = "0.8.1";
   sha256 = "0niq6hgsawsdg3kkjgkwyrgy8w7pfkqfph5d1x5bzcjrcl982jrg";
-  propagatedBuildInputs = [binary mtl];
+  buildDepends = [ binary mtl ];
   meta = {
-    description = "Binary serialization with support for sharing identical elements";
+    homepage = "http://www.leksah.org";
+    description = "Sharing for the binary package";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

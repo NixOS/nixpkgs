@@ -1,12 +1,20 @@
-{cabal, HUnit, QuickCheck, mtl, time, utf8String, convertible, text, testpack}:
+{ cabal, convertible, mtl, text, time, utf8String }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "HDBC";
-  version = "2.2.7.0";
-  sha256 = "10bkmrd48knkr1zsm3fmnp7ah9y13pjwaya7z1f93sg29jq3k906";
-  propagatedBuildInputs =
-    [HUnit QuickCheck mtl time utf8String convertible text testpack];
+  version = "2.3.1.0";
+  sha256 = "1y3qcc0ids9k3af4qkhabwg82q03a21wl4vdqhj1h0zmf08b3m6k";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ convertible mtl text time utf8String ];
   meta = {
-    description = "HDBC provides an abstraction layer between Haskell programs and SQL relational databases";
+    homepage = "https://github.com/jgoerzen/hdbc/wiki";
+    description = "Haskell Database Connectivity";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

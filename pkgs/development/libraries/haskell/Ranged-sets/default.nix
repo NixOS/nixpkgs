@@ -1,14 +1,18 @@
-{cabal, HUnit, QuickCheck}:
+{ cabal, HUnit, QuickCheck }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "Ranged-sets";
-  version = "0.2.1";
-  sha256 = "dee83d2ea0ae56ff31eb7c74a0785328ca8621792c0859e223b12c17bb775f12";
-  propagatedBuildInputs = [HUnit QuickCheck];
+  version = "0.3.0";
+  sha256 = "1am0lsd3yiyn7ayk9k4ff7zdj67m0pxjl10cxi5f9hgjj4y9380l";
+  buildDepends = [ HUnit QuickCheck ];
   meta = {
+    homepage = "http://code.haskell.org/ranged-sets";
     description = "Ranged sets for Haskell";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

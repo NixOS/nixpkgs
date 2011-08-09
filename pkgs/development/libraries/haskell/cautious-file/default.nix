@@ -1,6 +1,6 @@
-{cabal} :
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "cautious-file";
   version = "1.0";
   sha256 = "1s2la91vk9c99bj0ipzc4r6w81rcs4jfmn0xr1cgjab00bzj880q";
@@ -9,8 +9,8 @@ cabal.mkDerivation (self : {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
-      self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

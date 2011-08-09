@@ -1,12 +1,13 @@
-{cabal, blazeBuilder, blazeBuilderEnumerator, caseInsensitive,
- enumerator, httpTypes, network, simpleSendfile, transformers,
- unixCompat, wai} :
+{ cabal, blazeBuilder, blazeBuilderEnumerator, caseInsensitive
+, enumerator, httpTypes, network, simpleSendfile, transformers
+, unixCompat, wai
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "warp";
   version = "0.4.3";
   sha256 = "1g1fyys4j5cd2lp8818060i970f6fpxnjgyvb5m4r9asn7p1z4yc";
-  propagatedBuildInputs = [
+  buildDepends = [
     blazeBuilder blazeBuilderEnumerator caseInsensitive enumerator
     httpTypes network simpleSendfile transformers unixCompat wai
   ];
@@ -16,8 +17,8 @@ cabal.mkDerivation (self : {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
-      self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

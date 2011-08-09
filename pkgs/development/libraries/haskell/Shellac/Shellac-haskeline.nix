@@ -1,12 +1,17 @@
-{cabal, Shellac, haskeline}:
+{ cabal, Shellac, haskeline, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "Shellac-haskeline";
-  version = "0.2";
-  sha256 = "e3024b1915efd9841be9f405503f26c52524e7ea2a9c630ad651a9986e5329e0";
-  propagatedBuildInputs = [Shellac haskeline];
+  version = "0.2.0.1";
+  sha256 = "1xvs2ni83yyf7rx3ikmn2bkx20fyj03d03crqyyfw28mikhgv5br";
+  buildDepends = [ Shellac haskeline mtl ];
   meta = {
     description = "Haskeline backend module for Shellac";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

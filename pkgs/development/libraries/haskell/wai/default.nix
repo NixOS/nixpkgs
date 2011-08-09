@@ -1,11 +1,12 @@
-{cabal, blazeBuilder, enumerator, httpTypes, network, text,
- transformers} :
+{ cabal, blazeBuilder, enumerator, httpTypes, network, text
+, transformers
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "wai";
   version = "0.4.1";
   sha256 = "089i9qj7vban1qdrdpx836c31yakg3l3lx7y36h56livy6n37k72";
-  propagatedBuildInputs = [
+  buildDepends = [
     blazeBuilder enumerator httpTypes network text transformers
   ];
   meta = {
@@ -14,8 +15,8 @@ cabal.mkDerivation (self : {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
-      self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

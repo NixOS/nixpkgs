@@ -1,12 +1,18 @@
-{cabal, mtl}:
+{ cabal, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "fgl";
-  version = "5.4.2.3"; # Haskell Platform 2010.2.0.0 and 2011.2.0.0
+  version = "5.4.2.3";
   sha256 = "1f46siqqv8bc9v8nxr72nxabpzfax117ncgdvif6rax5ansl48g7";
-  propagatedBuildInputs = [mtl];
+  buildDepends = [ mtl ];
   meta = {
+    homepage = "http://web.engr.oregonstate.edu/~erwig/fgl/haskell";
     description = "Martin Erwig's Functional Graph Library";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

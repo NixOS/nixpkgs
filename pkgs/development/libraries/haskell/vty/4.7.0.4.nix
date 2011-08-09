@@ -1,11 +1,12 @@
-{cabal, deepseq, mtl, parallel, parsec, terminfo, utf8String,
- vector} :
+{ cabal, deepseq, mtl, parallel, parsec, terminfo, utf8String
+, vector
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "vty";
   version = "4.7.0.4";
   sha256 = "1rwki3ch1r3dqzb1cxmzxn05k49ams64licl0silbhsj3qibbj53";
-  propagatedBuildInputs = [
+  buildDepends = [
     deepseq mtl parallel parsec terminfo utf8String vector
   ];
   meta = {
@@ -13,6 +14,9 @@ cabal.mkDerivation (self : {
     description = "A simple terminal access library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
