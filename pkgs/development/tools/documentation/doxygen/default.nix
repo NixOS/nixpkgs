@@ -1,7 +1,10 @@
 { stdenv, fetchurl, perl, flex, bison, qt }:
 
-stdenv.mkDerivation rec {
+let
   name = "doxygen-1.7.4";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (qt != null) qt;
 
   prefixKey = "--prefix ";
-  
+
   configureFlags =
     [ "--dot dot" ]
     ++ stdenv.lib.optional (qt != null) "--with-doxywizard";
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
   makeFlags = "MAN1DIR=share/man/man1";
 
   enableParallelBuilding = true;
-  
+
   meta = {
     license = "GPLv2+";
     homepage = "http://doxygen.org/";
@@ -44,6 +47,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = [stdenv.lib.maintainers.simons];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = if (qt != null) then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
   };
 }
