@@ -399,6 +399,7 @@ with (import ./release-lib.nix);
     gtk = linux;
   };
 
+  /*
   haskellPackages_ghc6104 = {
     ghc = ghcSupported;
     haskellPlatform_2009_2_0_2 = ghcSupported;
@@ -434,6 +435,7 @@ with (import ./release-lib.nix);
     lhs2tex = ghcSupported;
     xmonad = linux;
   };
+  */
 
   kde3 = {
     kdebase = linux;
