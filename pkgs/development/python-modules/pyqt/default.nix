@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "PyQt-x11-gpl-4.8.4";
+  name = "PyQt-x11-gpl-4.8.5";
   
   src = fetchurl {
     url = "http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/${name}.tar.gz";
-    sha256 = "161y1c39zr9dyl2nkllxw5711sl1dxmb6lbp4a9nvbag1g63xypw";
+    sha256 = "0838nfis6xj92n4gccih7j14yigfm3x7p59yr7qa5jy75wxdzqn9";
   };
   
   configurePhase = ''
