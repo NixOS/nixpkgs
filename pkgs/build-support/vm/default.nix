@@ -99,10 +99,6 @@ rec {
           set -- $(IFS==; echo $o)
           command=$2
           ;;
-        tmpDir=*)
-          set -- $(IFS==; echo $o)
-          export tmpDir=$2
-          ;;
         out=*)
           set -- $(IFS==; echo $o)
           export out=$2
@@ -134,19 +130,19 @@ rec {
       mount -t ext2 /dev/${hd} /fs
     fi
 
-    mkdir -p /fs/hostfs
-    
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    echo "mounting host filesystem..."
-    mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,sec=none
-
+    echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -o bind /fs/hostfs/nix/store /fs/nix/store
-    
+    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none
+
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
+
+    echo "mounting host's temporary directory..."
+    mkdir -p /fs/tmp/xchg
+    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -161,8 +157,8 @@ rec {
     test -n "$command"
 
     set +e
-    chroot /fs $command /tmp $out /hostfs/$tmpDir
-    echo $? > /fs/hostfs/$tmpDir/in-vm-exit
+    chroot /fs $command $out
+    echo $? > /fs/tmp/xchg/in-vm-exit
 
     mount -o remount,ro dummy /fs
 
@@ -182,14 +178,13 @@ rec {
   
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
-    source $3/saved-env
+    source /tmp/xchg/saved-env
     
     export NIX_STORE=/nix/store
-    export NIX_BUILD_TOP="$1"
-    export TMPDIR="$1"
+    export NIX_BUILD_TOP=/tmp
+    export TMPDIR=/tmp
     export PATH=/empty
-    out="$2"
-    export ORIG_TMPDIR="$3"
+    out="$1"
     cd "$NIX_BUILD_TOP"
 
     if ! test -e /bin/sh; then
@@ -221,7 +216,7 @@ rec {
       -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
+      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
   '';
 
@@ -229,6 +224,7 @@ rec {
   startSamba =
     ''
       export WHO=`whoami`
+      mkdir -p $TMPDIR/xchg
 
       cat > $TMPDIR/smb.conf <<SMB
       [global]
@@ -240,9 +236,14 @@ rec {
         log file = $TMPDIR/log.smbd
         smb passwd file = $TMPDIR/smbpasswd
         security = share
-      [qemu]
+      [store]
         force user = $WHO
-        path = /
+        path = /nix/store
+        read only = no
+        guest ok = yes
+      [xchg]
+        force user = $WHO
+        path = $TMPDIR/xchg
         read only = no
         guest ok = yes
       SMB
@@ -257,6 +258,8 @@ rec {
     export > saved-env
 
     PATH=${coreutils}/bin
+    mkdir xchg
+    mv saved-env xchg/
 
     diskImage=''${diskImage:-/dev/null}
 
@@ -279,14 +282,14 @@ rec {
     chmod +x ./run-vm
     source ./run-vm
     
-    if ! test -e in-vm-exit; then
+    if ! test -e xchg/in-vm-exit; then
       echo "Virtual machine didn't produce an exit code."
       exit 1
     fi
     
     eval "$postVM"
 
-    exit $(cat in-vm-exit)
+    exit $(cat xchg/in-vm-exit)
   '';
 
 
@@ -550,7 +553,8 @@ rec {
     export out=/dummy
     export origBuilder=
     export origArgs=
-    export > $TMPDIR/saved-env
+    mkdir $TMPDIR/xchg
+    export > $TMPDIR/xchg/saved-env
     mountDisk=1
     ${qemuCommandLinux}
   '';
