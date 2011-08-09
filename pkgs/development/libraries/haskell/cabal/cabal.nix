@@ -11,6 +11,15 @@
           "isLibrary" "isExecutable"
         ];
 
+        # Stuff happening after the user preferences have been processed. We remove
+        # internal attributes and strip null elements from the dependency lists, all
+        # in the interest of keeping hashes stable.
+        postprocess =
+          x : (removeAttrs x internalAttrs) // {
+                buildInputs           = stdenv.lib.filter (y : ! (y == null)) x.buildInputs;
+                propagatedBuildInputs = stdenv.lib.filter (y : ! (y == null)) x.propagatedBuildInputs;
+              };
+
         defaults =
           self : { # self is the final version of the attribute set
 
@@ -142,5 +151,5 @@
             # in Cabal derivations.
             inherit stdenv ghc;
           };
-    in  stdenv.mkDerivation (removeAttrs ((rec { f = defaults f // args f; }).f) internalAttrs) ;
+    in  stdenv.mkDerivation (postprocess ((rec { f = defaults f // args f; }).f)) ;
 }
