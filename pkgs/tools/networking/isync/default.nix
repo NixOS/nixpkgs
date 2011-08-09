@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xmgzypl5a3i0fz1ca55vfbs5mv2l9icwf2gk8rvlbwrkn2wid68";
   };
 
+  patches = [ ./isync-recursice-imap.patch ]; # usefull patch to enable subfolders listing
   buildInputs = [ openssl pkgconfig db4 ];
 
   meta = {
