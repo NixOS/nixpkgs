@@ -32,6 +32,8 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ ];
+
+    boot.extraModulePackages = [ pkgs.linuxPackages.virtualboxGuestAdditions ];
     
     jobs.virtualbox =
       { description = "VirtualBox service";
