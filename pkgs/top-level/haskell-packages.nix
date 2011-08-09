@@ -493,6 +493,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   csv = callPackage ../development/libraries/haskell/csv {};
 
+  cssText = callPackage ../development/libraries/haskell/css-text {};
+
   dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
@@ -759,6 +761,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   httpdShed = callPackage ../development/libraries/haskell/httpd-shed {};
 
+  httpDate = callPackage ../development/libraries/haskell/http-date {};
+
   httpEnumerator = callPackage ../development/libraries/haskell/http-enumerator {};
 
   httpTypes = callPackage ../development/libraries/haskell/http-types {};
@@ -944,6 +948,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
+
+  pwstoreFast = callPackage ../development/libraries/haskell/pwstore-fast {};
 
   QuickCheck_1_2_0_0 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.0.nix {};
   QuickCheck_1_2_0_1 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.1.nix {};
