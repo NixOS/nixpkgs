@@ -10,7 +10,7 @@ cabal.mkDerivation (self : {
     homepage = "http://gitorious.org/hsdns";
     description = "Asynchronous DNS Resolver";
     license = self.stdenv.lib.licenses.lgpl3;
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.ghc.meta.platforms;
     maintainers = [self.stdenv.lib.maintainers.andres self.stdenv.lib.maintainers.simons];
   };
 })
