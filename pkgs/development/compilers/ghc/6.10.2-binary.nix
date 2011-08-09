@@ -1,7 +1,7 @@
 {stdenv, fetchurl, perl, libedit, ncurses, gmp}:
 
 let
-  supportedPlatforms = ["i686-darwin" "x86_64-linux" "i686-linux"];
+  supportedPlatforms = ["x86_64-linux" "i686-linux"];
 in
 
 assert stdenv.lib.elem stdenv.system supportedPlatforms;
