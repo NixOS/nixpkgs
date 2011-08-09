@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, which, perl
+{ stdenv, fetchurl, ncurses, which, perl, gpgme
 , sslSupport ? true
 , imapSupport ? true
 , headerCache ? true
@@ -12,18 +12,16 @@ assert headerCache -> gdbm != null;
 assert sslSupport -> openssl != null;
 assert saslSupport -> cyrus_sasl != null;
 
-stdenv.mkDerivation {
-  name = "mutt-1.5.20";
+stdenv.mkDerivation rec {
+  name = "mutt-1.5.21";
   
   src = fetchurl {
-    url = ftp://ftp.mutt.org/mutt/devel/mutt-1.5.20.tar.gz;
-    sha256 = "15m7m419r82awx4mr4nam25m0kpg0bs9vw1z4a4mrzvlkl3zqycm";
+    url = "ftp://ftp.mutt.org/mutt/devel/${name}.tar.gz";
+    sha256 = "1864cwz240gh0zy56fb47qqzwyf6ghg01037rb4p2kqgimpg6h91";
   };
 
-  patches = [ ./openssl.patch ];
-  
   buildInputs = [
-    ncurses which perl
+    ncurses which perl gpgme
     (if headerCache then gdbm else null)
     (if sslSupport then openssl else null)
     (if saslSupport then cyrus_sasl else null)
@@ -33,7 +31,7 @@ stdenv.mkDerivation {
     "--with-mailpath=" "--enable-smtp"
 
     # This allows calls with "-d N", that output debug info into ~/.muttdebug*
-    "--enable-debug"
+    "--enable-debug" "--enable-pop" "--enable-imap" "--enable-gpgme"
 
     # The next allows building mutt without having anything setgid
     # set by the installer, and removing the need for the group 'mail'
