@@ -148,8 +148,8 @@ $ ./result/bin/run-*-vm
       filesystem, which is automatically created when the VM is first
       started, and is persistent across reboots of the VM.  It is
       stored in <literal>./<replaceable>hostname</replaceable>.qcow2</literal>.
-      The entire filesystem hierarchy of the host is available in the
-      VM under <filename>/hostfs</filename>.</para>
+      <!-- The entire filesystem hierarchy of the host is available in the
+      VM under <filename>/hostfs</filename>.--></para>
     </listitem>
   </varlistentry>
 
