@@ -2074,20 +2074,20 @@ let
   haskellPackages_ghc6104 =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/6.10.4.nix
-        ghc6101Binary (x : x.ghc6104Prefs) false false (x : x));
+        ghc6101Binary (x : x.ghc6104Prefs) false false lowPrio);
 
   haskellPackages_ghc6121 =
     haskellPackagesFun ../development/compilers/ghc/6.12.1.nix
-      ghc6101Binary (x : x.ghc6121Prefs) false false (x : x);
+      ghc6101Binary (x : x.ghc6121Prefs) false false lowPrio;
 
   haskellPackages_ghc6122 =
     haskellPackagesFun ../development/compilers/ghc/6.12.2.nix
-      ghc6101Binary (x : x.ghc6122Prefs) false false (x : x);
+      ghc6101Binary (x : x.ghc6122Prefs) false false lowPrio;
 
   haskellPackages_ghc6123 =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/6.12.3.nix
-        ghc6101Binary (x : x.ghc6123Prefs) false false (x : x));
+        ghc6101Binary (x : x.ghc6123Prefs) false false lowPrio);
 
   # Will never make it into a platform release, severe bugs; leave at lowPrio.
   haskellPackages_ghc701 =
@@ -2096,11 +2096,11 @@ let
 
   haskellPackages_ghc702 =
     haskellPackagesFun ../development/compilers/ghc/7.0.2.nix
-      ghc6101Binary (x : x.ghc702Prefs) false false (x : x);
+      ghc6101Binary (x : x.ghc702Prefs) false false lowPrio;
 
   haskellPackages_ghc703 =
     haskellPackagesFun ../development/compilers/ghc/7.0.3.nix
-      ghc6101Binary (x : x.ghc703Prefs) false false (x : x);
+      ghc6101Binary (x : x.ghc703Prefs) false false lowPrio;
 
   # Current default version.
   # Note that the platform isn't officially released for ghc-7.0.4, but
