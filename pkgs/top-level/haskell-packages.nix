@@ -623,6 +623,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
+  gtk2hsC2hs = self.gtk2hsBuildtools;
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
     inherit (pkgs) pkgconfig glibc;
