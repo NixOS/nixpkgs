@@ -45,8 +45,7 @@ stdenv.mkDerivation {
     for i in *
     do
 	cd $i
-	sed -i -e "s/depmod/echo/g" Makefile
-	sed -i -e "s/depmod/echo/g" */Makefile
+	find . -type f | xargs sed 's/depmod -a/true/' -i
 	make
 	cd ..
     done
@@ -117,8 +116,8 @@ stdenv.mkDerivation {
         cd $i
 	kernelVersion=$(cd ${kernel}/lib/modules; ls)
 	export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-	sed -i -e "s|-o root||g" \
-	       -e "s|-g root||g" Makefile
+	find . -type f | xargs sed -i -e "s|-o root||g" \
+	                              -e "s|-g root||g"
 	make install
 	cd ..
     done    
