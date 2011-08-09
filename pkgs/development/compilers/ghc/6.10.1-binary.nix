@@ -1,6 +1,10 @@
 {stdenv, fetchurl, perl, libedit, ncurses, gmp}:
 
-assert stdenv.system == "i686-darwin" || stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+let
+  supportedPlatforms = ["i686-darwin" "x86_64-linux" "i686-linux"];
+in
+
+assert stdenv.lib.elem stdenv.system supportedPlatforms;
 
 stdenv.mkDerivation rec {
   version = "6.10.1";
@@ -100,5 +104,5 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
-  meta.platforms = stdenv.lib.platforms.haskellPlatforms;
+  meta.platforms = supportedPlatforms;
 }
