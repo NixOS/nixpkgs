@@ -1,5 +1,5 @@
 {stdenv}: {pathname, md5}: stdenv.mkDerivation {
-  name = baseNameOf (toString url);
+  name = baseNameOf (toString pathname);
   builder = ./builder.sh;
   pathname = pathname;
   md5 = md5;
