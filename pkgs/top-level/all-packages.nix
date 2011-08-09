@@ -6968,16 +6968,12 @@ let
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
-  pidgin = import ../applications/networking/instant-messengers/pidgin {
-    inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 nss nspr farsight2 python
-      gtkspell aspell gettext ncurses avahi dbus dbus_glib lib intltool libidn;
+  pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;
     libgcrypt = if (getConfig ["pidgin" "gnutls"] false) then libgcrypt else null;
     GStreamer = gst_all.gstreamer;
-    inherit (gtkLibs) gtk;
     inherit (gnome) startupnotification;
-    inherit (xlibs) libXScrnSaver;
     inherit (gst_all) gstPluginsBase;
   };
 
