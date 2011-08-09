@@ -2108,7 +2108,7 @@ let
   haskellPackages_ghc704_no_profiling =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        ghc6101Binary (x : x.ghc704Prefs) true true (x : x));
+        ghc6101Binary (x : x.ghc704Prefs) true false (x : x));
 
   haskellPackages_ghc704_profiling =
     recurseIntoAttrs
