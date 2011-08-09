@@ -272,6 +272,9 @@ in
 
   boot.initrd.postMountCommands =
     ''
+      # Fix the permissions on /tmp.
+      chmod 1777 $targetRoot/tmp
+      
       mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''

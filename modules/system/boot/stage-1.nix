@@ -127,6 +127,7 @@ let
       cp -v ${pkgs.coreutils}/bin/basename $out/bin
       cp -v ${pkgs.coreutils}/bin/mkdir $out/bin
       cp -v ${pkgs.coreutils}/bin/mknod $out/bin
+      cp -v ${pkgs.coreutils}/bin/chmod $out/bin
       cp -v ${pkgs.coreutils}/bin/cat $out/bin
       cp -v ${pkgs.coreutils}/bin/chroot $out/bin
       cp -v ${pkgs.coreutils}/bin/sleep $out/bin
