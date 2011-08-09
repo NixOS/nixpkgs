@@ -59,9 +59,9 @@ rec {
           touch $out/nix-support/hydra-build-products
           echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
 
-          for i in */coverage-data; do
+          for i in */xchg/coverage-data; do
             mkdir -p $out/coverage-data
-            mv $i $out/coverage-data/$(dirname $i)
+            mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
 
           [ -z "$failed" ] || touch $out/nix-support/failed
@@ -193,13 +193,14 @@ rec {
       testscript = ''
         startAll;
         ${preBuild}
-        $client->succeed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /hostfs".$client->stateDir."/saved-env >&2");
+        $client->succeed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2");
         ${postBuild}
       '';
 
       vmRunCommand = writeText "vm-run" ''
-        ${coreutils}/bin/mkdir -p vm-state-client
-        export > vm-state-client/saved-env
+        ${coreutils}/bin/mkdir $out
+        ${coreutils}/bin/mkdir -p vm-state-client/xchg
+        export > vm-state-client/xchg/saved-env
         export tests='${testscript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */

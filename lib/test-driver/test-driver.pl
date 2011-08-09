@@ -129,7 +129,7 @@ sub runTests {
             # sources.
             my $kernelDir = $vm->mustSucceed("echo \$(dirname \$(readlink -f /var/run/current-system/kernel))/.build/linux-*");
             chomp $kernelDir;
-            my $coverageDir = "/hostfs" . $vm->stateDir() . "/coverage-data/$kernelDir";
+            my $coverageDir = "/tmp/xchg/coverage-data/$kernelDir";
 
             # Copy all the *.gcda files.
             $vm->execute("for d in $gcovDir/nix/store/*/.build/linux-*; do for i in \$(cd \$d && find -name '*.gcda'); do echo \$i; mkdir -p $coverageDir/\$(dirname \$i); cp -v \$d/\$i $coverageDir/\$i; done; done");

@@ -153,6 +153,7 @@ let
           TMPDIR=$(mktemp -d nix-vm-smbd.XXXXXXXXXX --tmpdir)
       fi
       cd $TMPDIR
+      mkdir -p $TMPDIR/xchg
 
       ${pkgs.vmTools.startSamba}
 
@@ -310,16 +311,16 @@ in
     [ { mountPoint = "/";
         device = "/dev/vda";
       }
-      { mountPoint = "/hostfs";
-        device = "//10.0.2.4/qemu";
+      { mountPoint = "/nix/store";
+        device = "//10.0.2.4/store";
         fsType = "cifs";
         options = "guest,sec=none,noperm,noacl";
         neededForBoot = true;
       }
-      { mountPoint = "/nix/store";
-        device = "/hostfs/nix/store";
-        fsType = "none";
-        options = "bind";
+      { mountPoint = "/tmp/xchg";
+        device = "//10.0.2.4/xchg";
+        fsType = "cifs";
+        options = "guest,sec=none,noperm,noacl";
         neededForBoot = true;
       }
     ] ++ optional cfg.useBootLoader

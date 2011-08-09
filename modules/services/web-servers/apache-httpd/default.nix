@@ -558,22 +558,17 @@ in
         startOn = "started ${startingDependency} and filesystem";
 
         environment =
-          { # !!! This should be added in test-instrumentation.nix.  It
-            # shouldn't hurt though, since packages usually aren't built
-            # with coverage enabled.
-           GCOV_PREFIX = "/tmp/coverage-data";
+          { PATH = concatStringsSep ":" (
+              [ "${pkgs.coreutils}/bin" "${pkgs.gnugrep}/bin" ]
+              ++ # Needed for PHP's mail() function.  !!! Probably the
+                 # ssmtp module should export the path to sendmail in
+                 # some way.
+                 optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
+              ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
 
-           PATH = concatStringsSep ":" (
-             [ "${pkgs.coreutils}/bin" "${pkgs.gnugrep}/bin" ]
-             ++ # Needed for PHP's mail() function.  !!! Probably the
-                # ssmtp module should export the path to sendmail in
-                # some way.
-                optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
-             ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
+            PHPRC = if enablePHP then phpIni else "";
 
-           PHPRC = if enablePHP then phpIni else "";
-
-           TZ = config.time.timeZone;
+            TZ = config.time.timeZone;
 
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 

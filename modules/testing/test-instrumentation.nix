@@ -64,13 +64,8 @@ in
         # to failures that are hard to diagnose.
         echo 2 > /proc/sys/vm/panic_on_oom
 
-        # Coverage data is written into /tmp/coverage-data.  Symlink
-        # it to the host filesystem so that we don't need to copy it
-        # on shutdown.
-        ( eval $(cat /proc/cmdline)
-          mkdir -p /hostfs/$hostTmpDir/coverage-data
-          ln -sfn /hostfs/$hostTmpDir/coverage-data /tmp/coverage-data
-        )
+        # Coverage data is written into /tmp/coverage-data.
+        mkdir -p /tmp/xchg/coverage-data
 
         # Mount debugfs to gain access to the kernel coverage data (if
         # available).
@@ -103,7 +98,7 @@ in
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
 
-    system.upstartEnvironment.GCOV_PREFIX = "/tmp/coverage-data";
+    system.upstartEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
       
   };
 

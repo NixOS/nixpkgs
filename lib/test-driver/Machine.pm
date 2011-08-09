@@ -127,7 +127,6 @@ sub start {
             "-no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
             "-device virtio-serial -device virtconsole,chardev=shell " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
-        $ENV{QEMU_KERNEL_PARAMS} = "hostTmpDir=$ENV{TMPDIR}";
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
         die "running VM script: $!";
