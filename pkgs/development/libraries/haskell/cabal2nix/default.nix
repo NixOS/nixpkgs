@@ -1,4 +1,4 @@
-{fetchgit,cabal,HTTP}:
+{ fetchgit, cabal, HTTP, regexPosix }:
 
 cabal.mkDerivation (self : {
   pname = "cabal2nix";
@@ -9,7 +9,8 @@ cabal.mkDerivation (self : {
     rev = "aeba53e8da1250603b227ad2c705eee446cd3337";
   };
 
-  propagatedBuildInputs = [HTTP];
+  extraBuildInputs = [HTTP regexPosix];
+
   meta = {
     homepage = "http://github.com/peti/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
