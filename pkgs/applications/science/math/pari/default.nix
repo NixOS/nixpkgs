@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="pari";
-    version="2.3.5";
+    version="2.5.0";
     name="${baseName}-${version}";
     url="http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    hash="124xr2jdz2c15v45i1zvgylng44lhf23729a1mk7ci1vywdaxpa7";
+    hash="18ipxj4hzj7s3fqz878fiypkzrkbjj8wvbygz9j8c3ya06q27jax";
   };
 in
 rec {
