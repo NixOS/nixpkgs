@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
     ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = ghc.meta.platforms;
   };
 
   # TODO: requires a comment as to what it does and why it is needed.

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
     ];
-    platforms = stdenv.lib.platforms.haskellPlatforms;
+    platforms = ghc.meta.platforms;
   };
 
 }
