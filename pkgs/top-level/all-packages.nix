@@ -2054,25 +2054,25 @@ let
   # This should point to the current default version.
   haskellPackages = haskellPackages_ghc704;
 
-  # NOTE: After discussion, we decided to enable recurseIntoAttrs for all
-  # currently available ghc versions. (Before, it used to be enabled only
-  # for a selected few versions.) If someone complains about nix-env -qa
-  # output being spammed by lots of Haskell packages, we can talk about
-  # reducing the number or "enabled" versions again.
+  # NOTE (recurseIntoAttrs): After discussion, we originally decided to
+  # enable it for all GHC versions. However, this is getting too much,
+  # particularly in connection with Hydra builds for all these packages.
+  # So we enable it for selected versions only.
 
   # Helper functions to abstract away from repetitive instantiations.
   haskellPackagesFun =
-    ghcPath : ghcBinary : prefFun : profDefault : modifyPrio : recurseIntoAttrs
-      (import ./haskell-packages.nix {
+    ghcPath : ghcBinary : prefFun : profDefault : modifyPrio :
+      import ./haskell-packages.nix {
         inherit pkgs newScope modifyPrio prefFun;
         enableLibraryProfiling = getConfig [ "cabal" "libraryProfiling" ] profDefault;
         ghc = callPackage ghcPath { ghc = ghcBinary; };
-      });
+      };
 
   # Currently active GHC versions.
   haskellPackages_ghc6104 =
-    haskellPackagesFun ../development/compilers/ghc/6.10.4.nix
-      ghc6101Binary (x : x.ghc6104Prefs) false (x : x);
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/6.10.4.nix
+        ghc6101Binary (x : x.ghc6104Prefs) false (x : x));
 
   haskellPackages_ghc6121 =
     haskellPackagesFun ../development/compilers/ghc/6.12.1.nix
@@ -2083,8 +2083,9 @@ let
       ghc6101Binary (x : x.ghc6122Prefs) false (x : x);
 
   haskellPackages_ghc6123 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.3.nix
-      ghc6101Binary (x : x.ghc6123Prefs) false (x : x);
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/6.12.3.nix
+        ghc6101Binary (x : x.ghc6123Prefs) false (x : x));
 
   # Will never make it into a platform release, severe bugs; leave at lowPrio.
   haskellPackages_ghc701 =
@@ -2103,13 +2104,15 @@ let
   # Note that the platform isn't officially released for ghc-7.0.4, but
   # it works without problems.
   haskellPackages_ghc704 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-      ghc6101Binary (x : x.ghc704Prefs) false (x : x);
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
+        ghc6101Binary (x : x.ghc704Prefs) false (x : x));
 
   # Still a release candidate.
   haskellPackages_ghc721 =
-    haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
-      ghc6121Binary (x : x.ghc721Prefs) false lowPrio;
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
+        ghc6121Binary (x : x.ghc721Prefs) false lowPrio);
 
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
