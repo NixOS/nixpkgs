@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gecko-mediaplayer-1.0.3beta";
+  name = "gecko-mediaplayer-1.0.4";
 
   src = fetchurl {
     url = "http://gecko-mediaplayer.googlecode.com/files/${name}.tar.gz";
-    sha256 = "5d639d9e11b24e71a50643d461ba2826978fecb4a7cec8049656d46a084c1a37";
+    sha256 = "18asxxsqng303cxcww75k4r6syqjs7lylibv997kq0869kz4spsp";
   };
 
   buildInputs = [pkgconfig glib dbus dbus_glib browser x11 GConf browser.xulrunner];
