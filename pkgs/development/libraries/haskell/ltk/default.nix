@@ -9,7 +9,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.leksah.org";
     description = "Leksah tool kit";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.stdenv.lib.platforms.linux;
     maintainers = [
       self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
