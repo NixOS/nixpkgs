@@ -16,7 +16,7 @@ cabal.mkDerivation (self : {
     homepage = "http://www.leksah.org";
     description = "Haskell IDE written in Haskell";
     license = "GPL";
-    platforms = self.stdenv.lib.platforms.haskellPlatforms;
+    platforms = self.stdenv.lib.platforms.linux;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
