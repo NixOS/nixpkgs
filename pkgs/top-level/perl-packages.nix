@@ -1777,6 +1777,15 @@ rec {
     };
   };
 
+  LockFileSimple = buildPerlPackage rec {
+    name = "LockFile-Simple-0.207";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/LockFile-Simple-0.207.tar.gz";
+      sha256 = "171vi9y6jlkny0d4jaavz48d1vbxljknnmbq8h22fi8lnc5kvipa";
+    };
+  };
+
+
   LWP = buildPerlPackage rec {
     name = "libwww-perl-5.825";
     src = fetchurl {
