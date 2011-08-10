@@ -1395,6 +1395,8 @@ let
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
+  vifm = callPackage ../applications/misc/vifm {};
+
   viking = callPackage ../applications/misc/viking { };
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
