@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libxml2, openssl, readline, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "virtuoso-opensource-6.1.1";
+  name = "virtuoso-opensource-6.1.3";
 
   src = fetchurl {
     url = "mirror://sf/virtuoso/${name}.tar.gz";
-    sha256 = "1sd70j9i26ml16lig9r9lmrdf5q0kybq71r6vzzzc5v5jxjz0l7w";
+    sha256 = "0rj629qjsibpllazngbhzhsh90x6nidpn292qz1xdvirwvb2h3s2";
   };
 
   buildInputs = [ libxml2 openssl readline gawk ];
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   postInstall=''
     echo Move documentation
-    mkdir $out/share/doc
-    mv $out/share/virtuoso/doc $out/share/doc/${name}
+    mkdir -pv $out/share/doc
+    mv -v $out/share/virtuoso/doc $out/share/doc/${name}
     find $out -name "*.a" -delete -o -name "*.jar" -delete -o -type d -empty -delete
     '';
   
