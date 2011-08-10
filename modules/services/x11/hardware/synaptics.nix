@@ -42,7 +42,7 @@ let cfg = config.services.xserver.synaptics; in
       };
 
       vertEdgeScroll = mkOption {
-        default = true;
+        default = ! cfg.twoFingerScroll;
         description = "Whether to enable vertical edge drag-scrolling.";
       };
 
