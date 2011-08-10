@@ -2143,12 +2143,12 @@ let
     haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
       ghc6101Binary (x : x.ghc704Prefs) false false (x : x);
 
-  # Still a release candidate.
   haskellPackages_ghc721 =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
         ghc6121Binary (x : x.ghc721Prefs) false false lowPrio);
 
+  # Still a release candidate.
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
       ghc6121Binary (x : x.ghcHEADPrefs) false false lowPrio;
