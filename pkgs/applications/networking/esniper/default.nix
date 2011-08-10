@@ -1,14 +1,11 @@
 { stdenv, fetchurl, openssl, curl }:
 
-let
-  name = "esniper";
-in
 stdenv.mkDerivation {
-  name = "${name}-2.25.0";
+  name = "esniper-2.26.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-2-25-0.tgz";
-    sha256 = "64658eaca2fa27eaec0436a016648b12f6c49d7486cc3a6827f307aa93871def";
+    url = "mirror://sourceforge/esniper/esniper-2-26-0.tgz";
+    sha256 = "5fd9a0f4b27b98deca303cd3d16c1ed060e05a165a40b2f4a9f8546db5e3877d";
   };
 
   buildInputs = [openssl curl];
