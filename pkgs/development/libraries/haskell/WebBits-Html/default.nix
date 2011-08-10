@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "WebBits-Html";
-  version = "1.0.2";
-  sha256 = "18dd52970cd27kra4l89vvrx2mrdbqd4w4f76xrq3142daxsagal";
+  version = "1.0.1";
+  sha256 = "134rmm5ccfsjdr0pdwn2mf81l81rgxapa3wjjfjkxrkxq6hav35n";
   buildDepends = [ WebBits mtl parsec syb ];
   meta = {
     homepage = "http://www.cs.brown.edu/research/plt/";
