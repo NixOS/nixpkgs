@@ -2102,18 +2102,42 @@ let
     haskellPackagesFun ../development/compilers/ghc/7.0.3.nix
       ghc6101Binary (x : x.ghc703Prefs) false false lowPrio;
 
-  # Current default version.
+  # Current default version: 7.0.4
   # Note that the platform isn't officially released for ghc-7.0.4, but
   # it works without problems.
+
+  # The following items are a bit convoluted, but they serve the
+  # following purpose:
+  #   - for the default version of GHC, both profiling and
+  #     non-profiling versions should be built by Hydra --
+  #     therefore, the _no_profiling and _profiling calls;
+  #   - however, if a user just upgrades a profile, then the
+  #     cabal/libraryProfiling setting should be respected; i.e.,
+  #     the versions not matching the profiling config setting
+  #     should have low priority -- therefore, the use of
+  #     haskellDefaultVersionPrioFun;
+  #   - it should be possible to select library versions that
+  #     respect the config setting using the standard
+  #     haskellPackages_ghc704 path -- therefore, the additional
+  #     call in haskellPackages_ghc704, without recurseIntoAttrs,
+  #     so that Hydra doesn't build these.
+  haskellDefaultVersionPrioFun =
+    profDefault :
+    if getConfig [ "cabal" "libraryProfiling" ] false == profDefault
+      then (x : x)
+      else lowPrio;
+
   haskellPackages_ghc704_no_profiling =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        ghc6101Binary (x : x.ghc704Prefs) true false (x : x));
+        ghc6101Binary (x : x.ghc704Prefs) true false
+        (haskellDefaultVersionPrioFun false));
 
   haskellPackages_ghc704_profiling =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        ghc6101Binary (x : x.ghc704Prefs) true true lowPrio);
+        ghc6101Binary (x : x.ghc704Prefs) true true
+        (haskellDefaultVersionPrioFun true));
 
   haskellPackages_ghc704 =
     haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
