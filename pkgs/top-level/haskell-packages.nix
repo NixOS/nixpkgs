@@ -1281,6 +1281,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
+  yap = callPackage ../development/libraries/haskell/yap {};
+
   yesod = callPackage ../development/libraries/haskell/yesod {};
 
   yesodAuth = callPackage ../development/libraries/haskell/yesod-auth {};
