@@ -8,5 +8,10 @@ cabal.mkDerivation (self: {
   meta = {
     description = "A small library for parsing IRC messages.";
     license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
