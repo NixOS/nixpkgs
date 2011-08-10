@@ -772,6 +772,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
   HUnit = self.HUnit_1_2_0_3;
 
+  irc = callPackage ../development/libraries/haskell/irc {
+    parsec = self.parsec2;
+  };
+
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
