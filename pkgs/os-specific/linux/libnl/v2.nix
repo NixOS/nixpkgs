@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ bison flex ];
-  postConfigure = "type -tp flex";
 
   meta = {
     homepage = "http://www.infradead.org/~tgr/libnl/";
