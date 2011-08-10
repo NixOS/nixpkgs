@@ -424,8 +424,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
-  cabal2nix = callPackage ../development/libraries/haskell/cabal2nix {};
-
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
   };
@@ -1414,6 +1412,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
   myhasktags = callPackage ../tools/misc/myhasktags {};
+
+  cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
   # Games.
 
