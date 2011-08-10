@@ -2874,6 +2874,8 @@ let
 
   patchelf06 = callPackage ../development/tools/misc/patchelf/0.6.nix { };
 
+  peg = callPackage ../development/tools/parsing/peg { };
+
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
