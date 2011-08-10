@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, alsaLib, bzip2, fftw, jackaudio, libX11, liblo,
 libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate,
-libsndfile, makeWrapper, pulseaudio, qt, redland, rubberband, vampSDK
+libsndfile, makeWrapper, pulseaudio, qt4, redland, rubberband, vampSDK
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ libsndfile qt fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
+    [ libsndfile qt4 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
       # optional
       jackaudio

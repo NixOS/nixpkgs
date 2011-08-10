@@ -7140,11 +7140,12 @@ let
     guile = guile_1_8;
   };
 
-  sonicVisualiser = callPackage ../applications/audio/sonic-visualiser {
-    inherit (vamp) vampSDK;
-    inherit (xlibs) libX11;
-    qt = qt4;
-    fftw = fftwSinglePrec;
+  sonicVisualiser = builtins.trace "Use sonic_visualiser instead of sonicVisualiser" pkgs.sonic_visualiser;
+
+  sonic_visualiser = callPackage ../applications/audio/sonic-visualiser {
+    inherit (pkgs.vamp) vampSDK;
+    inherit (pkgs.xlibs) libX11;
+    fftw = pkgs.fftwSinglePrec;
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
