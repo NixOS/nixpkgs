@@ -402,7 +402,7 @@ let
   };
 
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
-  
+
   axel = callPackage ../tools/networking/axel { };
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
@@ -4951,7 +4951,7 @@ let
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
     jackaudio = null;
   };
-  
+
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
@@ -5139,7 +5139,7 @@ let
   libaio = callPackage ../os-specific/linux/libaio { };
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
-  
+
   libcgroup = callPackage ../os-specific/linux/libcg { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
@@ -5836,7 +5836,7 @@ let
   udev = udev172;
 
   udisks = callPackage ../os-specific/linux/udisks { };
-  
+
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
     userModeLinux = true;
@@ -5849,7 +5849,7 @@ let
   untie = callPackage ../os-specific/linux/untie {};
 
   upower = callPackage ../os-specific/linux/upower { };
-  
+
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
@@ -7827,7 +7827,7 @@ let
   kde47 = callPackage ../desktops/kde-4.7 {
     callPackage = newScope pkgs.kde47;
   };
-    
+
   redshift = callPackage ../applications/misc/redshift {
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
       xf86vidmodeproto;
