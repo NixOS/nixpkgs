@@ -21,11 +21,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "samba-3.5.8";
+  name = "samba-3.6.0";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "15i7i0agcsrsq23d8pmbw5n9mbb76djiwjwgni9xijpd0ql3y7ik";
+    sha256 = "0gzm09l75i95iibcxykc2h2m9haqx70jp1bpis1mhmvqwillbhg1";
   };
 
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
 
   # Need to use a DESTDIR because `make install' tries to write in /var and /etc.
   installFlags = "DESTDIR=$(TMPDIR)/inst";
+
+  stripAllList = [ "bin" "sbin" ];
 
   postInstall =
     ''
