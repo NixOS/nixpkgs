@@ -1,20 +1,27 @@
-{cabal, curl, html, mtl, parsec, regexCompat, haskeline, hashedStorage, zlib, tar, text} :
+{ cabal, curl, HTTP, extensibleExceptions, hashedStorage, haskeline
+, html, mmap, mtl, network, parsec, regexCompat, tar, terminfo
+, text, zlib
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "darcs";
-  name = self.fname;
-  version = "2.5.1";
-  sha256 = "0h7i2nw1fkmdrvwgzccqvbbfx8bdhn0h9d5rd98ayjs207dnvrj8";
-
-  propagatedBuildInputs = [
-    curl html parsec regexCompat haskeline hashedStorage zlib tar text
+  version = "2.5.2";
+  sha256 = "11mk1xcrxk2x5c0s96s19wb4xvhjl9s59bdqcrj8f4w09zbgjlw9";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [
+    HTTP extensibleExceptions hashedStorage haskeline html mmap mtl
+    network parsec regexCompat tar terminfo text zlib
   ];
-
+  extraLibraries = [ curl ];
   meta = {
-    homepage = http://darcs.net/;
-    description = "Patch-based version management system";
+    homepage = "http://darcs.net/";
+    description = "a distributed, interactive, smart revision control system";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-
 })

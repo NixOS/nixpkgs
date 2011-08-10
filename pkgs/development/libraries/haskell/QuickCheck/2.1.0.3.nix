@@ -1,14 +1,18 @@
-{cabal, mtl}:
+{ cabal, extensibleExceptions, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "QuickCheck";
-  version = "2.1.0.3"; # Haskell Platform 2010.1.0.0
+  version = "2.1.0.3";
   sha256 = "91a861233fe0a37a032d092dd5e8ec40c2c99fbbf0701081394eb244f23757b1";
-  propagatedBuildInputs = [mtl];
+  buildDepends = [ extensibleExceptions mtl ];
   meta = {
+    homepage = "http://www.cs.chalmers.se/~koen";
     description = "Automatic testing of Haskell programs";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

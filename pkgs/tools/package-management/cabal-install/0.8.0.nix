@@ -1,13 +1,20 @@
-{cabal, HTTP, network, zlib} :
+{ cabal, HTTP, network, time, zlib }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "cabal-install";
-  name = self.fname;
-  version = "0.8.0"; # Haskell Platform 2010.1.0.0
+  version = "0.8.0";
   sha256 = "6d16618ff454f8d732cad64a53b767b5b6bb95ba4970b260a40e8f467035493c";
-  extraBuildInputs = [HTTP network zlib];
-
+  isLibrary = false;
+  isExecutable = true;
+  buildDepends = [ HTTP network time zlib ];
   meta = {
-    description = "The command-line interface for Cabal and Hackage";
+    homepage = "http://www.haskell.org/cabal/";
+    description = "The command-line interface for Cabal and Hackage.";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

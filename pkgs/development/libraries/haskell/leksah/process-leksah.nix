@@ -1,6 +1,6 @@
-{cabal} :
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "process-leksah";
   version = "1.0.1.4";
   sha256 = "1899ybhnsj22sir2l933lhkk9fpcgjbb4qd6gscnby28qcs5bwbv";
@@ -9,8 +9,8 @@ cabal.mkDerivation (self : {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
-      self.stdenv.lib.maintainers.simons
       self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

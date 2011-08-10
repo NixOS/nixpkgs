@@ -1,12 +1,20 @@
-{cabal, mtl, pcreLight, readline}:
+{ cabal, extensibleExceptions, mtl, pcreLight, readline }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "mkcabal";
-  version = "0.4.2";
-  name = self.fname;
-  sha256 = "a3d781fdcdea4ac27a897888593091d4afee10dfc3eff5a49f9108b346232f50";
-  propagatedBuildInputs = [mtl pcreLight readline];
+  version = "1.0.0";
+  sha256 = "1cmawm49i01xxvzgf67cin6s9hihfc3ihr6s5hn2makasfxbnryc";
+  isLibrary = false;
+  isExecutable = true;
+  buildDepends = [ extensibleExceptions mtl pcreLight readline ];
   meta = {
+    homepage = "http://code.haskell.org/~dons/code/mkcabal";
     description = "Generate cabal files for a Haskell project";
+    license = "GPL";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
