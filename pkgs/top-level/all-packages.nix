@@ -7142,8 +7142,6 @@ let
     guile = guile_1_8;
   };
 
-  sonicVisualiser = builtins.trace "Use sonic_visualiser instead of sonicVisualiser" pkgs.sonic_visualiser;
-
   sonic_visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
     inherit (pkgs.xlibs) libX11;
