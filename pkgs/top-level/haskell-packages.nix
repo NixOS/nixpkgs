@@ -1024,7 +1024,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   repaExamples = callPackage ../development/libraries/haskell/repa-examples {};
 
-  repaIO = callPackage ../development/libraries/haskell/repa-io {};
+  repaIo = callPackage ../development/libraries/haskell/repa-io {};
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
