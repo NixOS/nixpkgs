@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
     sha256 = "1js8m1a6lcn95byplmjjs1lja1maisyl6lgfjy1jx3lqi1hlr4n5";
   };
 
+  jaf_src_name = "jdk7-jaf-2010_08_19.zip";
+
+  jaf_src = fetchurl {
+    url = "http://java.net/downloads/jax-ws/JDK7/${jaf_src_name}";
+    sha256 = "17n0i5cgvfsd6ric70h3n7hr8aqnzd216gaq3603wrxlvggzxbp6";
+  };
+
   buildInputs = [
     unzip
     procps
@@ -64,6 +71,7 @@ stdenv.mkDerivation rec {
     ensureDir drops
     cp ${jaxp_src} drops/${jaxp_src_name}
     cp ${jaxws_src} drops/${jaxws_src_name}
+    cp ${jaf_src} drops/${jaf_src_name}
     export DROPS_PATH=$(pwd)/drops
 
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
