@@ -463,6 +463,8 @@ let
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
+  bup = callPackage ../tools/backup/bup { };
+
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
