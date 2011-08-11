@@ -29,6 +29,20 @@ stdenv.mkDerivation rec {
     sha256 = "1qhwlz9y5qmwmja4qnxg6sn3pgsg1i11fb9j41w8l26acyhk34rs";
   };
 
+  jaxws_src_name = "jdk7-jaxws2_2_4-b03-2011_05_27.zip";
+
+  jaxws_src = fetchurl {
+    url = "http://download.java.net/glassfish/components/jax-ws/openjdk/jdk7/${jaxws_src_name}";
+    sha256 = "1mpzgr9lnbf2p3x45npcniy47kbzi3hyqqbd4w3j63sxnxcp5bh5";
+  };
+
+  jaxp_src_name = "jaxp145_01.zip";
+
+  jaxp_src = fetchurl {
+    url = "http://download.java.net/jaxp/1.4.5/${jaxp_src_name}";
+    sha256 = "1js8m1a6lcn95byplmjjs1lja1maisyl6lgfjy1jx3lqi1hlr4n5";
+  };
+
   buildInputs = [
     unzip
     procps
@@ -47,6 +61,11 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
+    ensureDir drops
+    cp ${jaxp_src} drops/${jaxp_src_name}
+    cp ${jaxws_src} drops/${jaxws_src_name}
+    export DROPS_PATH=$(pwd)/drops
+
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
       -e "s@/bin/ls@${coreutils}/bin/ls@" \
       openjdk/hotspot/make/linux/makefiles/sa.make 
@@ -73,7 +92,7 @@ stdenv.mkDerivation rec {
     "DEVTOOLS_PATH="
     "UNIXCOMMAND_PATH="
     "BOOTDIR=${jdk}"
-    "ALLOW_DOWNLOADS=true"
+    "DROPS_DIR=$(DROPS_PATH)"
   ];
 
   configurePhase = ''
