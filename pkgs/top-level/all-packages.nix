@@ -7466,26 +7466,7 @@ let
     qt = qt4;
   };
 
-  # doesn't compile yet - in case someone else want's to continue ..
-  # use Trunk because qgisReleased segfaults no resize for now
-  qgis = qgisTrunk;
-  qgisReleased = (import ../applications/misc/qgis) {
-    inherit composableDerivation fetchsvn stdenv flex lib
-            ncurses fetchurl perl cmake gdal geos proj x11
-            gsl libpng zlib bison
-            sqlite glibc fontconfig freetype /* use libc from stdenv ? - to lazy now - Marc */
-            python postgresql pyqt4;
-    inherit (xlibs) libSM libXcursor libXinerama libXrandr libXrender;
-    inherit (xorg) libICE;
-    qt = qt4;
-
-    # optional features
-    # grass = "not yet supported" # cmake -D WITH_GRASS=TRUE  and GRASS_PREFX=..
-  };
-
-  qgisTrunk = callPackage ../applications/misc/qgis/trunk.nix {
-    qgis = qgisReleased;
-  };
+  qgis = callPackage ../applications/misc/qgis {};
 
   yakuake = newScope pkgs.kde4 ../applications/misc/yakuake { };
 

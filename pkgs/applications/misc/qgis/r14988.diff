@@ -1,0 +1,38 @@
+Index: qgis/python/core/conversions.sip
+===================================================================
+--- qgis/python/core/conversions.sip	(revision 14323)
++++ qgis/python/core/conversions.sip	(revision 14988)
+@@ -16,4 +16,5 @@
+ 
+ %Feature QSETINT_CONVERSION
++%Feature QSETTYPE_CONVERSION
+ 
+ %ModuleHeaderCode
+@@ -321,5 +322,5 @@
+ %End
+ 
+-
++%If (QSETTYPE_CONVERSION)
+ template <TYPE>
+ %MappedType QSet<TYPE>
+@@ -395,6 +396,5 @@
+ 
+ };
+-
+-
++%End
+ 
+ template<TYPE>
+Index: qgis/python/CMakeLists.txt
+===================================================================
+--- qgis/python/CMakeLists.txt	(revision 14330)
++++ qgis/python/CMakeLists.txt	(revision 14988)
+@@ -44,4 +44,8 @@
+ ENDIF(NOT PYQT4_VERSION_NUM LESS 263941)
+ 
++IF(NOT PYQT4_VERSION_NUM LESS 264194)	# 0x040802
++  SET(SIP_DISABLE_FEATURES ${SIP_DISABLE_FEATURES} QSETTYPE_CONVERSION)
++ENDIF(NOT PYQT4_VERSION_NUM LESS 264194)
++
+ # core module
+ FILE(GLOB sip_files_core core/*.sip)
