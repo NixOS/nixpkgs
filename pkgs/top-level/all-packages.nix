@@ -4299,6 +4299,8 @@ let
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  qwt = callPackage ../development/libraries/qwt {};
+
   readline = readline6;
 
   readline4 = callPackage ../development/libraries/readline/readline4.nix { };
