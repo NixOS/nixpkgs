@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ text ];
   meta = {
     homepage = "http://github.com/meiersi/blaze-builder";
-    description = "Efficient buffered output.";
+    description = "Efficient buffered output";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

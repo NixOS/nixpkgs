@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ QuickCheck extensibleExceptions testFramework ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";
-    description = "QuickCheck2 support for the test-framework package.";
+    description = "QuickCheck2 support for the test-framework package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

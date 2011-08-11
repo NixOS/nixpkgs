@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ HUnit extensibleExceptions testFramework ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";
-    description = "HUnit support for the test-framework package.";
+    description = "HUnit support for the test-framework package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ repa vector ];
   meta = {
     homepage = "http://repa.ouroborus.net";
-    description = "Conversions between Repa Arrays and ByteStrings.";
+    description = "Conversions between Repa Arrays and ByteStrings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

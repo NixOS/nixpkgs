@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   meta = {
     homepage = "http://haskell.org/cpphs/";
-    description = "A liberalised re-implementation of cpp, the C pre-processor.";
+    description = "A liberalised re-implementation of cpp, the C pre-processor";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

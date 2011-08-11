@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ transformers ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Multiplate";
-    description = "Lightweight generic library for mutually recursive data types.";
+    description = "Lightweight generic library for mutually recursive data types";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [

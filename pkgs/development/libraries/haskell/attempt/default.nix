@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ failure ];
   meta = {
     homepage = "http://github.com/snoyberg/attempt/tree/master";
-    description = "Concrete data type for handling extensible exceptions as failures.";
+    description = "Concrete data type for handling extensible exceptions as failures";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

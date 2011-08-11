@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ attempt transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/control-monad-attempt";
-    description = "Monad transformer for attempt.";
+    description = "Monad transformer for attempt";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

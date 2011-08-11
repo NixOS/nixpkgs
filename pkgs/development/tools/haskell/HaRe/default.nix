@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ hint mtl network syb ];
   meta = {
     homepage = "http://www.cs.kent.ac.uk/projects/refactor-fp";
-    description = "the Haskell Refactorer.";
+    description = "the Haskell Refactorer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ blazeBuilder dataenc text ];
   meta = {
     homepage = "http://github.com/snoyberg/mime-mail";
-    description = "Compose MIME email messages.";
+    description = "Compose MIME email messages";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ bmp repa repaBytestring ];
   meta = {
     homepage = "http://repa.ouroborus.net";
-    description = "Read and write Repa arrays in various formats.";
+    description = "Read and write Repa arrays in various formats";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

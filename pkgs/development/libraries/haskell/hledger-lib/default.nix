@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://hledger.org";
-    description = "Reusable types and utilities for the hledger accounting tool and financial apps in general.";
+    description = "Reusable types and utilities for the hledger accounting tool and financial apps in general";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ deepseq ];
   meta = {
     homepage = "https://bitbucket.org/bos/text";
-    description = "An efficient packed Unicode text type.";
+    description = "An efficient packed Unicode text type";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -16,7 +16,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://happstack.com";
-    description = "Web related tools and services.";
+    description = "Web related tools and services";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

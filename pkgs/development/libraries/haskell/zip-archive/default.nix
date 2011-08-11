@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ binary digest mtl utf8String zlib ];
   meta = {
     homepage = "http://github.com/jgm/zip-archive";
-    description = "Library for creating and modifying zip archives.";
+    description = "Library for creating and modifying zip archives";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

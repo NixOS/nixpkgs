@@ -12,7 +12,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/snoyberg/json-enumerator";
-    description = "Pure-Haskell utilities for dealing with JSON with the enumerator package.";
+    description = "Pure-Haskell utilities for dealing with JSON with the enumerator package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

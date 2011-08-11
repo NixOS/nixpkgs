@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ mtl stm ];
   meta = {
     homepage = "http://code.haskell.org/~mokus/stateref/";
-    description = "Abstraction for things that work like IORef.";
+    description = "Abstraction for things that work like IORef";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
     maintainers = [

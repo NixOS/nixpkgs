@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ zlib ];
   meta = {
     homepage = "http://github.com/snoyberg/zlib-bindings";
-    description = "Low-level bindings to the zlib package.";
+    description = "Low-level bindings to the zlib package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

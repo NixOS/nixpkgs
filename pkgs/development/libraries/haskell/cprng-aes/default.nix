@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ cereal cryptoApi cryptocipher ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cprng-aes";
-    description = "Crypto Pseudo Random Number Generator using AES in counter mode.";
+    description = "Crypto Pseudo Random Number Generator using AES in counter mode";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

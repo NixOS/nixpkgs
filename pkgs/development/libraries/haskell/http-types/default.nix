@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ blazeBuilder caseInsensitive text ];
   meta = {
     homepage = "https://github.com/aristidb/http-types";
-    description = "Generic HTTP types for Haskell (for both client and server code).";
+    description = "Generic HTTP types for Haskell (for both client and server code)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

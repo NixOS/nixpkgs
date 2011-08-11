@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   meta = {
     homepage = "http://github.com/snoyberg/clientsession/tree/master";
-    description = "Store session data in a cookie.";
+    description = "Store session data in a cookie";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

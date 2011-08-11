@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
     deepseq mtl parsec syb sybWithClass text time utf8String
   ];
   meta = {
-    description = "StringTemplate implementation in Haskell.";
+    description = "StringTemplate implementation in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

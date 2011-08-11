@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
-    description = "Static file serving subsite for Yesod Web Framework.";
+    description = "Static file serving subsite for Yesod Web Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

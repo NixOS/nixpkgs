@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ QuickCheck vector ];
   meta = {
     homepage = "http://repa.ouroborus.net";
-    description = "High performance, regular, shape polymorphic parallel arrays.";
+    description = "High performance, regular, shape polymorphic parallel arrays";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

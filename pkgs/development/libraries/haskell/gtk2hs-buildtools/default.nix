@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildTools = [ alex happy ];
   meta = {
     homepage = "http://www.haskell.org/gtk2hs/";
-    description = "Tools to build the Gtk2Hs suite of User Interface libraries.";
+    description = "Tools to build the Gtk2Hs suite of User Interface libraries";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
     maintainers = [

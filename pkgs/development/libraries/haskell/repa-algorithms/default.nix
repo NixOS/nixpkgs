@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ repa vector ];
   meta = {
     homepage = "http://repa.ouroborus.net";
-    description = "Algorithms using the Repa array library.";
+    description = "Algorithms using the Repa array library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

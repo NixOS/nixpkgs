@@ -5,7 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.0.2";
   sha256 = "1csq0ffsqbbv6ymf707nzfb7c9bmykwk9bcgj21mxmh6khlqn9jp";
   meta = {
-    description = "Random shuffle implementation.";
+    description = "Random shuffle implementation";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ base64Bytestring cryptohash ];
   meta = {
     homepage = "https://github.com/PeterScott/pwstore";
-    description = "Secure password storage.";
+    description = "Secure password storage";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

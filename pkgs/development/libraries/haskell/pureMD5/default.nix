@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ binary cereal cryptoApi tagged ];
   meta = {
-    description = "A Haskell-only implementation of the MD5 digest (hash) algorithm.";
+    description = "A Haskell-only implementation of the MD5 digest (hash) algorithm";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

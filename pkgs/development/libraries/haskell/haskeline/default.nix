@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ extensibleExceptions mtl terminfo utf8String ];
   meta = {
     homepage = "http://trac.haskell.org/haskeline";
-    description = "A command-line interface for user input, written in Haskell.";
+    description = "A command-line interface for user input, written in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

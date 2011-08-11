@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ hledger hledgerLib safe vty ];
   meta = {
     homepage = "http://hledger.org";
-    description = "A curses-style interface for the hledger accounting tool.";
+    description = "A curses-style interface for the hledger accounting tool";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

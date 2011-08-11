@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ Diff parsec split time utf8String xml ];
   meta = {
     homepage = "http://johnmacfarlane.net/repos/filestore";
-    description = "Interface for versioning file stores.";
+    description = "Interface for versioning file stores";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

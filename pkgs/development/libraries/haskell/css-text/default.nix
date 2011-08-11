@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ attoparsecText text ];
   meta = {
     homepage = "http://www.yesodweb.com/";
-    description = "CSS parser and renderer.";
+    description = "CSS parser and renderer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

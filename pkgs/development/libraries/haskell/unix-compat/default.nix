@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "009dg6mxjmdkcmr2d1qq9r3f4qfx4d362lyxj9vvgwrzcdnsgzqi";
   meta = {
     homepage = "http://github.com/jystic/unix-compat";
-    description = "Portable POSIX-compatibility layer.";
+    description = "Portable POSIX-compatibility layer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

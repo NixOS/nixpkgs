@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ failure monadPeel transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/neither";
-    description = "Provide versions of Either with good monad and applicative instances.";
+    description = "Provide versions of Either with good monad and applicative instances";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

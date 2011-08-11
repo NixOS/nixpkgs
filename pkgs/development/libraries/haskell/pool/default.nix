@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ monadControl transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/pool";
-    description = "Thread-safe resource pools.";
+    description = "Thread-safe resource pools";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

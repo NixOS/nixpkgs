@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
     binary dataenc extensibleExceptions mmap mtl zlib
   ];
   meta = {
-    description = "Hashed file storage support code.";
+    description = "Hashed file storage support code";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

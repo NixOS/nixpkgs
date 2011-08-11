@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
-    description = "Some helpers for using Persistent from Yesod.";
+    description = "Some helpers for using Persistent from Yesod";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

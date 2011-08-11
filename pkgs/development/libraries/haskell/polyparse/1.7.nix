@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ text ];
   meta = {
     homepage = "http://code.haskell.org/~malcolm/polyparse/";
-    description = "A variety of alternative parser combinator libraries.";
+    description = "A variety of alternative parser combinator libraries";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

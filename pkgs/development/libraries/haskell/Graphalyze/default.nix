@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
     bktrees extensibleExceptions fgl graphviz pandoc time
   ];
   meta = {
-    description = "Graph-Theoretic Analysis library.";
+    description = "Graph-Theoretic Analysis library";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
     maintainers = [

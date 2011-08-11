@@ -7,8 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ MonadCatchIOMtl mtl ];
   meta = {
     homepage = "http://code.haskell.org/~jcpetruzza/ghc-mtl";
-    description = "An mtl compatible version of the Ghc-Api monads
-and monad-transformers.";
+    description = "An mtl compatible version of the Ghc-Api monads and monad-transformers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

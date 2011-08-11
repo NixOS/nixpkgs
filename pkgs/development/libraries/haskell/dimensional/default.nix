@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ numtype time ];
   meta = {
     homepage = "http://dimensional.googlecode.com/";
-    description = "Statically checked physical dimensions.";
+    description = "Statically checked physical dimensions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

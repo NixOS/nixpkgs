@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/snoyberg/warp";
-    description = "A fast, light-weight web server for WAI applications.";
+    description = "A fast, light-weight web server for WAI applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

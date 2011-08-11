@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ parsec syb xml ];
   meta = {
     homepage = "http://github.com/jgm/texmath";
-    description = "Conversion of LaTeX math formulas to MathML.";
+    description = "Conversion of LaTeX math formulas to MathML";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

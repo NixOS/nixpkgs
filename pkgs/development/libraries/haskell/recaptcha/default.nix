@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ HTTP network xhtml ];
   meta = {
     homepage = "http://github.com/jgm/recaptcha/tree/master";
-    description = "Functions for using the reCAPTCHA service in web applications.";
+    description = "Functions for using the reCAPTCHA service in web applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

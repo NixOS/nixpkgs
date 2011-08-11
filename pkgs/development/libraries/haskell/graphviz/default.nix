@@ -12,7 +12,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
-    description = "Graphviz bindings for Haskell.";
+    description = "Graphviz bindings for Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

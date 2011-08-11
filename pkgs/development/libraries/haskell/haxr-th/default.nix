@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ haxr ];
   meta = {
     homepage = "http://www.haskell.org/haxr/";
-    description = "Automatic deriving of XML-RPC structs for Haskell records.";
+    description = "Automatic deriving of XML-RPC structs for Haskell records";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

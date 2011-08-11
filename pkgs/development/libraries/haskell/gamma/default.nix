@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ continuedFractions converge vector ];
   meta = {
     homepage = "https://github.com/mokus0/gamma";
-    description = "Gamma function and related functions.";
+    description = "Gamma function and related functions";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
     maintainers = [

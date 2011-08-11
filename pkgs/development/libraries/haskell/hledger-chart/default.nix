@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ Chart colour hledger hledgerLib safe ];
   meta = {
     homepage = "http://hledger.org";
-    description = "A pie chart generator for the hledger accounting tool.";
+    description = "A pie chart generator for the hledger accounting tool";
     license = "GPL";
     platforms = self.stdenv.lib.platforms.linux;
     maintainers = [

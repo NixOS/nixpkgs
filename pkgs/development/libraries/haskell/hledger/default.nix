@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://hledger.org";
-    description = "A robust command-line accounting tool with a simple human-editable data format, similar to ledger.";
+    description = "A robust command-line accounting tool with a simple human-editable data format, similar to ledger";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

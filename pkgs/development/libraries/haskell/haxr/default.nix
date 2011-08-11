@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/HaXR";
-    description = "XML-RPC client and server library.";
+    description = "XML-RPC client and server library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ binary ];
   meta = {
     homepage = "http://code.haskell.org/~wren/";
-    description = "An efficient finite map from (byte)strings to values.";
+    description = "An efficient finite map from (byte)strings to values";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

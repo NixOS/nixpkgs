@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ utf8String ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Url";
-    description = "A library for working with URLs.";
+    description = "A library for working with URLs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

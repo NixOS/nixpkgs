@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";
-    description = "QuickCheck support for the test-framework package.";
+    description = "QuickCheck support for the test-framework package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

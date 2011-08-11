@@ -19,7 +19,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/jgm/gitit/tree/master";
-    description = "Wiki using happstack, git or darcs, and pandoc.";
+    description = "Wiki using happstack, git or darcs, and pandoc";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

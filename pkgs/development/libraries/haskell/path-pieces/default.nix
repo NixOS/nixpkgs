@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ text ];
   meta = {
     homepage = "http://github.com/snoyberg/path-pieces";
-    description = "Components of paths.";
+    description = "Components of paths";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

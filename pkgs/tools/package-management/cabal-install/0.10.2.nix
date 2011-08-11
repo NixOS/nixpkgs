@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ HTTP network time zlib ];
   meta = {
     homepage = "http://www.haskell.org/cabal/";
-    description = "The command-line interface for Cabal and Hackage.";
+    description = "The command-line interface for Cabal and Hackage";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

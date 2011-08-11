@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/snoyberg/wai-extra";
-    description = "Provides some basic WAI handlers and middleware.";
+    description = "Provides some basic WAI handlers and middleware";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

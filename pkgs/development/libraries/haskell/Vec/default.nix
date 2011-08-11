@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ QuickCheck ];
   meta = {
     homepage = "http://graphics.cs.ucdavis.edu/~sdillard/Vec";
-    description = "Fixed-length lists and low-dimensional linear algebra.";
+    description = "Fixed-length lists and low-dimensional linear algebra";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

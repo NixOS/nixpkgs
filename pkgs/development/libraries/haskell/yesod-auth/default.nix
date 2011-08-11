@@ -16,7 +16,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
-    description = "Authentication for Yesod.";
+    description = "Authentication for Yesod";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

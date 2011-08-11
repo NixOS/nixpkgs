@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ syb ];
   meta = {
     homepage = "http://github.com/nominolo/ghc-syb";
-    description = "Scrap Your Boilerplate utilities for the GHC API.";
+    description = "Scrap Your Boilerplate utilities for the GHC API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

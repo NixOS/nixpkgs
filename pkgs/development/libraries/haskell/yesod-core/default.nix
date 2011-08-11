@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
-    description = "Creation of type-safe, RESTful web applications.";
+    description = "Creation of type-safe, RESTful web applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

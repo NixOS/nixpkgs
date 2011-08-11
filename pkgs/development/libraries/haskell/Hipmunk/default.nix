@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ StateVar transformers ];
   meta = {
     homepage = "http://patch-tag.com/r/felipe/hipmunk/home";
-    description = "A Haskell binding for Chipmunk.";
+    description = "A Haskell binding for Chipmunk";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
     maintainers = [

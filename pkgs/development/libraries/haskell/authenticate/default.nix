@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/snoyberg/authenticate/tree/master";
-    description = "Authentication methods for Haskell web applications.";
+    description = "Authentication methods for Haskell web applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

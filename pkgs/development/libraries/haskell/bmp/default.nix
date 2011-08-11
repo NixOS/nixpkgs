@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ binary ];
   meta = {
     homepage = "http://code.ouroborus.net/bmp";
-    description = "Read and write uncompressed BMP image files.";
+    description = "Read and write uncompressed BMP image files";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [

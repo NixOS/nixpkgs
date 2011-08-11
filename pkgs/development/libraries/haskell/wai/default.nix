@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/snoyberg/wai";
-    description = "Web Application Interface.";
+    description = "Web Application Interface";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

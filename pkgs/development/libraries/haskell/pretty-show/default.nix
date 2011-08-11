@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ haskellLexer ];
   meta = {
     homepage = "http://wiki.github.com/yav/pretty-show";
-    description = "Tools for working with derived Show instances.";
+    description = "Tools for working with derived Show instances";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   meta = {
     homepage = "http://github.com/solidsnack/bytestring-nums";
-    description = "Parse numeric literals from ByteStrings.";
+    description = "Parse numeric literals from ByteStrings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ monadControl persistent text webRoutesQuasi ];
   meta = {
     homepage = "http://www.yesodweb.com/";
-    description = "Type-safe, non-relational, multi-backend persistence.";
+    description = "Type-safe, non-relational, multi-backend persistence";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

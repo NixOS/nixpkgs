@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ transformers ];
   meta = {
     homepage = "https://github.com/mokus0/flexible-defaults";
-    description = "Generate default function implementations for complex type classes.";
+    description = "Generate default function implementations for complex type classes";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
     maintainers = [

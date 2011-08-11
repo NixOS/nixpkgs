@@ -19,7 +19,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/snoyberg/http-enumerator";
-    description = "HTTP client package with enumerator interface and HTTPS support.";
+    description = "HTTP client package with enumerator interface and HTTPS support";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

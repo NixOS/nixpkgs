@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   meta = {
     homepage = "http://code.haskell.org/~malcolm/hscolour/";
-    description = "Colourise Haskell code.";
+    description = "Colourise Haskell code";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

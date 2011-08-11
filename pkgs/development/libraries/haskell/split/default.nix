@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0cdn2sb3m62bnxdz59diwwaxysh3kj4kk1srn4m80p03fj60s0q5";
   meta = {
     homepage = "http://code.haskell.org/~byorgey/code/split";
-    description = "Combinator library for splitting lists.";
+    description = "Combinator library for splitting lists";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

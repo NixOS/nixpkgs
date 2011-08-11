@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
     utf8String
   ];
   meta = {
-    description = "Modular web application framework.";
+    description = "Modular web application framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

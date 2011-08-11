@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   meta = {
     homepage = "http://www.ittc.ku.edu/csdl/fpg/Tools/IOReification";
-    description = "Reify a recursive data structure into an explicit graph.";
+    description = "Reify a recursive data structure into an explicit graph";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
