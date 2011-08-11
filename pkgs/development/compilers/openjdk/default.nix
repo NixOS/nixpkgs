@@ -85,7 +85,11 @@ stdenv.mkDerivation rec {
       openjdk/jdk/src/solaris/native/sun/java2d/x11/XRSurfaceData.c
   '';
 
-  patches = [ ./cppflags-include-fix.patch ./printf-fix.patch ];
+  patches = [
+    ./cppflags-include-fix.patch
+    ./printf-fix.patch
+    ./linux-version-check-fix.patch
+  ];
 
   makeFlags = [
     "SORT=${coreutils}/bin/sort"
