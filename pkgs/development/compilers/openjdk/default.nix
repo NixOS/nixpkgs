@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     sha256 = "17n0i5cgvfsd6ric70h3n7hr8aqnzd216gaq3603wrxlvggzxbp6";
   };
 
+  outputs = [ "out" ] ++ stdenv.lib.optionals (! jreOnly) [ "jre" ];
+
   buildInputs = [
     unzip
     procps
@@ -114,7 +116,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     ensureDir $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
-  '';
+  '' + (if jreOnly then "" else ''
+    ensureDir $jre
+    cp -av build/*/j2re-image/* $jre
+  '');
 
   meta = {
     homepage = http://openjdk.java.net/;
