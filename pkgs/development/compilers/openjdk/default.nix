@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     "FREETYPE_HEADERS_PATH=${freetype}/include"
     "FREETYPE_LIB_PATH=${freetype}/lib"
     "MILESTONE=release"
-    "BUILD_NUMBER=127"
+    "BUILD_NUMBER=b127"
     "CUPS_HEADERS_PATH=${cups}/include"
     "USRBIN_PATH="
     "COMPILER_PATH="
