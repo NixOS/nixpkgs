@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
     description = "The open-source Java Development Kit";
 
     maintainers = [ stdenv.lib.maintainers.shlevy ];
+
+    platforms = stdenv.lib.platforms.all;
   };
 }
 
