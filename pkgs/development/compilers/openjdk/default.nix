@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.shlevy ];
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 
