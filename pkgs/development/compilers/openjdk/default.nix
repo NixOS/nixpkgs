@@ -117,6 +117,9 @@ stdenv.mkDerivation rec {
     ensureDir $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
   '' + (if jreOnly then "" else ''
+    if [ -z $jre ]; then
+      exit 0
+    fi
     ensureDir $jre
     cp -av build/*/j2re-image/* $jre
   '');
