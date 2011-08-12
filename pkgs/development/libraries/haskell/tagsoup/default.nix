@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tagsoup";
-  version = "0.12.2";
-  sha256 = "066nmp4fd5pcx9xiq7lhxcrhmnhkxk8z7zx5laa19bbb8jbjjl4y";
+  version = "0.12.3";
+  sha256 = "0f41kc6kdzslyhskyql431nq0kkdzf13vn9saqi48ycajnrm1vcb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ text ];
