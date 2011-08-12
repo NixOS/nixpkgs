@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "MonadCatchIO-mtl";
-  version = "0.3.0.3";
-  sha256 = "0sqvdrvl1z6y176jwxv02aam4fz2awmqyjba803w816pp9m9a5pr";
+  version = "0.3.0.4";
+  sha256 = "0wzdrfplwa4v9miv88rg3jvf7l6gphc29lpdp5qjm5873y57jxm7";
   buildDepends = [ extensibleExceptions mtl ];
   meta = {
-    homepage = "http://code.haskell.org/~jcpetruzza/MonadCatchIO-mtl";
+    homepage = "http://darcsden.com/jcpetruzza/MonadCatchIO-mtl";
     description = "Monad-transformer version of the Control.Exception module";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
