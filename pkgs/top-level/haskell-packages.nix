@@ -1390,6 +1390,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
+  uuagcBootstrap = callPackage ../development/tools/haskell/uuagc/bootstrap.nix {};
+  uuagcCabal = callPackage ../development/tools/haskell/uuagc/cabal.nix {};
   uuagc = callPackage ../development/tools/haskell/uuagc {};
 
   # Applications.
