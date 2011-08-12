@@ -783,9 +783,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     WebBits = self.WebBits_1_0;
   };
 
-  json = callPackage ../development/libraries/haskell/json {};
-
   json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
+  json_0_4_4 = callPackage ../development/libraries/haskell/json/0.4.4.nix {};
+  json = self.json_0_4_4;
 
   jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
 
