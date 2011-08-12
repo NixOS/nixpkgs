@@ -655,7 +655,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskeline = callPackage ../development/libraries/haskell/haskeline {};
 
-  haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
+  haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {
+    mtl = self.mtl1;
+  };
 
   haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
 
