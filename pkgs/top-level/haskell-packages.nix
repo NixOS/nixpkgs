@@ -794,6 +794,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
+  languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
@@ -1134,13 +1136,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
-  testFrameworkHUnit = callPackage ../development/libraries/haskell/test-framework-hunit {};
+  testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
-  testFrameworkQuickCheck = callPackage ../development/libraries/haskell/test-framework-quickcheck {
+  testFrameworkQuickcheck = callPackage ../development/libraries/haskell/test-framework-quickcheck {
     QuickCheck = self.QuickCheck1;
   };
 
-  testFrameworkQuickCheck2 = callPackage ../development/libraries/haskell/test-framework-quickcheck2 {};
+  testFrameworkQuickcheck2 = callPackage ../development/libraries/haskell/test-framework-quickcheck2 {};
+
+  testFrameworkTh = callPackage ../development/libraries/haskell/test-framework-th {};
 
   testpack = callPackage ../development/libraries/haskell/testpack {};
 
