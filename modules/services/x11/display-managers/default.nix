@@ -21,6 +21,8 @@ let
     ''
       #! /bin/sh
 
+      cd "$HOME"
+
       # The first argument of this script is the session type.
       sessionType="$1"
       if [ "$sessionType" = default ]; then sessionType=""; fi
