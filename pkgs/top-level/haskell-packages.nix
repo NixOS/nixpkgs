@@ -414,8 +414,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
-  bnfc = callPackage ../development/tools/haskell/bnfc {};
-
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
@@ -1353,6 +1351,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   alex_3_0   = callPackage ../development/tools/parsing/alex/3.0.nix   {};
   alex = self.alex_2_3_1;
 
+  alexMeta = callPackage ../development/tools/haskell/alex-meta {};
+
+  BNFC = callPackage ../development/tools/haskell/BNFC {};
+
+  BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
+
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   frown = callPackage ../development/tools/parsing/frown {};
@@ -1370,6 +1374,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
   happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
   happy = self.happy_1_18_4;
+
+  happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
   HaRe = callPackage ../development/tools/haskell/HaRe {};
 
