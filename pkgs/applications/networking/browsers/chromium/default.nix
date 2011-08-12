@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   phases = "unpackPhase installPhase";
 
-  buildInputs = [makeWrapper unzip];
+  buildInputs = [ makeWrapper unzip ];
 
   libPath =
     stdenv.lib.makeLibraryPath
@@ -38,20 +38,17 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ensureDir $out/bin
-    ensureDir $out/chrome
-    ensureDir $out/lib
+    ensureDir $out/libexec/chrome
 
-    cp -R * $out/chrome
-    ln -s $out/chrome/chrome $out/bin/chrome
-    ${patchelf}/bin/patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath ${libPath}:$out/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib $out/chrome/chrome
+    cp -R * $out/libexec/chrome
+    
+    ${patchelf}/bin/patchelf \
+      --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-rpath ${libPath}:$out/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib \
+      $out/libexec/chrome/chrome
 
-    ln -s ${nss}/lib/libsmime3.so $out/lib/libsmime3.so.1d
-    ln -s ${nss}/lib/libnssutil3.so $out/lib/libnssutil3.so.1d
-    ln -s ${nss}/lib/libssl3.so $out/lib/libssl3.so.1d
-    ln -s ${nss}/lib/libnss3.so $out/lib/libnss3.so.1d
-    ln -s ${nspr}/lib/libnspr4.so $out/lib/libnspr4.so.0d
-    ln -s ${nspr}/lib/libplds4.so $out/lib/libplds4.so.0d
-    ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so.0d
+    makeWrapper $out/libexec/chrome/chrome $out/bin/chrome \
+      --prefix LD_LIBRARY_PATH : "${nss}/lib"
   '';
 
   meta =  with stdenv.lib; {
