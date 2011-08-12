@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/finnsson/template-helper";
     description = "Module to automatically extract functions from the local code";
     license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.simons

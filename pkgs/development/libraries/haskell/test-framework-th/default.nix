@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/finnsson/test-generator";
     description = "Automagically generate the HUnit- and Quickcheck-bulk-code using Template Haskell";
     license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.simons
