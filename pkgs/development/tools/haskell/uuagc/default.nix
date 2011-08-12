@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuagc";
-  version = "0.9.39.0";
-  sha256 = "1jx1cisch97dd2dy2ddlx7s8zxrrv1wwp9pm2bl59sjakpp1kqwh";
+  version = "0.9.39.1";
+  sha256 = "0zqhwpafq51czy97z0f93cbxd8k6hllnmb24a6yzr4y6kzzv65hd";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
