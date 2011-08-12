@@ -105,8 +105,8 @@ stdenv.mkDerivation {
     
     # Install Xorg drivers
     ensureDir $out/lib/xorg/modules/{drivers,input}
-    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_18.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
-    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_18.so $out/lib/xorg/modules/input/vboxmouse_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_19.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_19.so $out/lib/xorg/modules/input/vboxmouse_drv.so
     
     # Install kernel modules
     cd src
