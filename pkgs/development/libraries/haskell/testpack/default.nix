@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "testpack";
-  version = "2.1.0";
-  sha256 = "8128f3a409855fca1d431391b2cbf6a9f4dec32dd6f26825960b936fe578c476";
+  version = "2.1.1";
+  sha256 = "1z8g3xhvy901h7kr7q4wcms5b23xniskrgxfpq42w4b34acwvhmg";
   buildDepends = [ HUnit QuickCheck mtl random ];
   meta = {
     homepage = "http://hackage.haskell.org/cgi-bin/hackage-scripts/package/testpack";
