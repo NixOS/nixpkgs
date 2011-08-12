@@ -1387,7 +1387,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Applications.
 
-  darcs = callPackage ../applications/version-management/darcs/darcs-2.nix {
+  darcs = callPackage ../applications/version-management/darcs {
     inherit (pkgs) curl;
     parsec = self.parsec2;
   };
