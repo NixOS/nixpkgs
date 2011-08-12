@@ -1,5 +1,5 @@
 { cabal, MonadCatchIOMtl, extensibleExceptions, ghcMtl, ghcPaths
-, haskellSrc, mtl, utf8String
+, haskellSrc, mtl, random, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1qm74hjz8cxypvavcw7s094zg9ic3r1ll2lj3y159ipc79cw2sn1";
   buildDepends = [
     MonadCatchIOMtl extensibleExceptions ghcMtl ghcPaths haskellSrc mtl
-    utf8String
+    random utf8String
   ];
   meta = {
     homepage = "http://projects.haskell.org/hint";

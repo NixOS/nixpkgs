@@ -1,4 +1,5 @@
-{ cabal, QuickCheck, deepseq, extensibleExceptions, testFramework
+{ cabal, QuickCheck, deepseq, extensibleExceptions, random
+, testFramework
 }:
 
 cabal.mkDerivation (self: {
@@ -6,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.2.7";
   sha256 = "065nazli8vh9dz8xi71gwzlwy81anfd471jhz6hv3m893cc9vvx8";
   buildDepends = [
-    QuickCheck deepseq extensibleExceptions testFramework
+    QuickCheck deepseq extensibleExceptions random testFramework
   ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";

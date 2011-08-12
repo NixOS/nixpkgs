@@ -1,5 +1,5 @@
 { cabal, flexibleDefaults, mersenneRandomPure64, mtl, mwcRandom
-, stateref, syb
+, random, stateref, syb
 }:
 
 cabal.mkDerivation (self: {
@@ -7,7 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.3";
   sha256 = "08nj7mq8gjj9rv1zmkr2m30z295k5b352103wb1ag1ryw5wyzg1n";
   buildDepends = [
-    flexibleDefaults mersenneRandomPure64 mtl mwcRandom stateref syb
+    flexibleDefaults mersenneRandomPure64 mtl mwcRandom random stateref
+    syb
   ];
   meta = {
     homepage = "https://github.com/mokus0/random-fu";

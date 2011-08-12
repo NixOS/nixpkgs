@@ -1,10 +1,10 @@
-{ cabal, HUnit, QuickCheck, mtl }:
+{ cabal, HUnit, QuickCheck, mtl, random }:
 
 cabal.mkDerivation (self: {
   pname = "testpack";
   version = "2.1.0";
   sha256 = "8128f3a409855fca1d431391b2cbf6a9f4dec32dd6f26825960b936fe578c476";
-  buildDepends = [ HUnit QuickCheck mtl ];
+  buildDepends = [ HUnit QuickCheck mtl random ];
   meta = {
     homepage = "http://hackage.haskell.org/cgi-bin/hackage-scripts/package/testpack";
     description = "Test Utililty Pack for HUnit and QuickCheck";

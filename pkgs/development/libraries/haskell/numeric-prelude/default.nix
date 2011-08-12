@@ -1,4 +1,5 @@
-{ cabal, QuickCheck, nonNegative, parsec, storableRecord, utilityHt
+{ cabal, QuickCheck, nonNegative, parsec, random, storableRecord
+, utilityHt
 }:
 
 cabal.mkDerivation (self: {
@@ -8,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    QuickCheck nonNegative parsec storableRecord utilityHt
+    QuickCheck nonNegative parsec random storableRecord utilityHt
   ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Numeric_Prelude";

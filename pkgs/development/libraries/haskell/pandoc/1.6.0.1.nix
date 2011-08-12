@@ -1,5 +1,5 @@
-{ cabal, HTTP, extensibleExceptions, mtl, network, parsec, syb
-, texmath, utf8String, xhtml, xml, zipArchive
+{ cabal, HTTP, extensibleExceptions, mtl, network, parsec, random
+, syb, texmath, utf8String, xhtml, xml, zipArchive
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    HTTP extensibleExceptions mtl network parsec syb texmath utf8String
-    xhtml xml zipArchive
+    HTTP extensibleExceptions mtl network parsec random syb texmath
+    utf8String xhtml xml zipArchive
   ];
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";

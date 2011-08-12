@@ -1,7 +1,7 @@
 { cabal, blazeBuilder, blazeHtml, caseInsensitive, cereal
 , clientsession, cookie, enumerator, failure, hamlet, httpTypes
-, monadControl, parsec, text, time, transformers, wai, waiExtra
-, webRoutesQuasi
+, monadControl, parsec, random, text, time, transformers, wai
+, waiExtra, webRoutesQuasi
 }:
 
 cabal.mkDerivation (self: {
@@ -12,8 +12,8 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     blazeBuilder blazeHtml caseInsensitive cereal clientsession cookie
-    enumerator failure hamlet httpTypes monadControl parsec text time
-    transformers wai waiExtra webRoutesQuasi
+    enumerator failure hamlet httpTypes monadControl parsec random text
+    time transformers wai waiExtra webRoutesQuasi
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
