@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "haskeline";
-  version = "0.6.4.0";
-  sha256 = "0p2qbckvdhzid6zrcgjwr8b5h8vxd7wdswsm2qp3hiyg48v4y5hd";
+  version = "0.6.4.2";
+  sha256 = "0za3n0kyfnya9lc6p07702rn393ghhsb3b08i1lpxz6587fbdzjb";
   buildDepends = [ extensibleExceptions mtl terminfo utf8String ];
-  patchPhase = "sed -i -e 's|base >=4.1 && < 4.4|base >=4.1 \\&\\& < 5|g' -e 's|unix>=2.0 && < 2.5|unix>=2.0 \\&\\& < 3|g' haskeline.cabal";
   meta = {
     homepage = "http://trac.haskell.org/haskeline";
     description = "A command-line interface for user input, written in Haskell";
