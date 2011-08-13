@@ -386,7 +386,6 @@ with (import ./release-lib.nix);
   };
 
   firefox36Pkgs.firefox = linux;
-  firefox40Pkgs.firefox = linux;
   firefox50Pkgs.firefox = linux;
 
   gnome = {
