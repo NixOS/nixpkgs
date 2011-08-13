@@ -6458,13 +6458,6 @@ let
 
   firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
 
-  firefox40Pkgs = callPackage ../applications/networking/browsers/firefox/4.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  };
-
-  firefox40Wrapper = wrapFirefox firefox40Pkgs.firefox "firefox" "";
-
   firefox50Pkgs = callPackage ../applications/networking/browsers/firefox/5.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
