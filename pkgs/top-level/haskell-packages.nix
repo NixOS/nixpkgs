@@ -148,7 +148,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     mtl          = self.mtl_2_0_1_0; # 7.2 ok, 7.3 ok
     random       = self.random_1_0_0_3; # 7.2 ok, 7.3 ok
     cabalInstall = self.cabalInstall_0_10_2; # 7.2 fails, 7.3 fails
-    alex         = self.alex_3_0; # 7.2 ok, 7.3 ok
+    alex         = self.alex_3_0_1; # 7.2 ok, 7.3 ok
     happy        = self.happy_1_18_6; # 7.2 ok, 7.3 ok
     haddock      = self.haddock_2_9_2; # 7.2 fails, 7.3 fails
   };
@@ -1365,7 +1365,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   alex_2_3_2 = callPackage ../development/tools/parsing/alex/2.3.2.nix {};
   alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
   alex_2_3_5 = callPackage ../development/tools/parsing/alex/2.3.5.nix {};
-  alex_3_0   = callPackage ../development/tools/parsing/alex/3.0.nix   {};
+  alex_3_0_1 = callPackage ../development/tools/parsing/alex/3.0.1.nix {};
   alex = self.alex_2_3_1;
 
   alexMeta = callPackage ../development/tools/haskell/alex-meta {};
