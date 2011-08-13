@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
+  postInstall = ''
+    mv -v $out/usr/bin/* $out/bin
+    mv -v $out/usr/sbin/* $out/sbin
+    rm -fRv $out/usr/
+  '';
+
   crossAttrs = {
     extraCrossConfig = ''
       CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cross.config}-"
