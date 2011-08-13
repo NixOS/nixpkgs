@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskeline-class";
-  version = "0.6.1";
-  sha256 = "da954acea7ae215865a647fff776df9621ee5c5133a5f95c16b1ac5646ef0b31";
+  version = "0.6.2";
+  sha256 = "0xgdq2xgw2ccyfzkj5n36s5n6km5l947d2iy4y1qms8kbc05zmfl";
   buildDepends = [ haskeline mtl ];
   meta = {
     homepage = "http://community.haskell.org/~aslatter/code/haskeline-class";
