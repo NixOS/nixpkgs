@@ -13,14 +13,14 @@ assert monotoneSupport -> (monotone != null);
 
 let
   name = "ikiwiki";
-  version = "3.20110707";
+  version = "3.20110715";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "b51fa7452a900212ab1c8c879227b83a688c10f770552aee61944695f8c6f1bf";
+    sha256 = "ef9cbe5ddf484e6b75de05cc6a5b51dfdff1f5920b1c4c66309b1409266df9c7";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
@@ -28,7 +28,6 @@ stdenv.mkDerivation {
     RpcXML XMLSimple PerlMagick YAML]
     ++ stdenv.lib.optionals gitSupport [git]
     ++ stdenv.lib.optionals monotoneSupport [monotone];
-
 
   patchPhase = ''
     sed -i s@/usr/bin/perl@${perl}/bin/perl@ pm_filter mdwn2man
