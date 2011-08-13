@@ -5873,6 +5873,8 @@ let
     inherit ncurses perl;
   };
 
+  v4l_utils = callPackage ../os-specific/linux/v4l-utils {};
+
   windows = rec {
     w32api = callPackage ../os-specific/windows/w32api {
       gccCross = gccCrossStageStatic;
