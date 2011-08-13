@@ -1002,12 +1002,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexCompat_0_71_0_1 = callPackage ../development/libraries/haskell/regex-compat/0.71.0.1.nix {};
   regexCompat_0_92     = callPackage ../development/libraries/haskell/regex-compat/0.92.nix     {};
   regexCompat_0_93_1   = callPackage ../development/libraries/haskell/regex-compat/0.93.1.nix   {};
+  regexCompat_0_95_1   = callPackage ../development/libraries/haskell/regex-compat/0.95.1.nix   {
+    regexPosix = self.regexPosix_0_95_1;
+  };
   regexCompat = self.regexCompat_0_71_0_1;
 
   regexPosix_0_72_0_3 = callPackage ../development/libraries/haskell/regex-posix/0.72.0.3.nix {};
   regexPosix_0_94_1   = callPackage ../development/libraries/haskell/regex-posix/0.94.1.nix   {};
   regexPosix_0_94_2   = callPackage ../development/libraries/haskell/regex-posix/0.94.2.nix   {};
   regexPosix_0_94_4   = callPackage ../development/libraries/haskell/regex-posix/0.94.4.nix   {};
+  regexPosix_0_95_1   = callPackage ../development/libraries/haskell/regex-posix/0.95.1.nix   {};
   regexPosix = self.regexPosix_0_72_0_3;
 
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
