@@ -1267,6 +1267,8 @@ let
 
   s3backer = callPackage ../tools/filesystems/s3backer { };
 
+  s3cmd = callPackage ../tools/networking/s3cmd { };
+
   s3sync = callPackage ../tools/networking/s3sync { };
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
