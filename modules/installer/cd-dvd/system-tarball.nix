@@ -40,11 +40,7 @@ in
 
   # In stage 1 of the boot, mount the CD/DVD as the root FS by label
   # so that we don't need to know its device.
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/sda";
-      }
-    ];
+  fileSystems = [ ];
 
   # boot.initrd.availableKernelModules = [ "mvsdio" "mmc_block" "reiserfs" "ext3" "ext4" ];
 
@@ -80,7 +76,10 @@ in
     ''
       # After booting, register the contents of the Nix store on the
       # CD in the Nix database in the tmpfs.
-      ${config.environment.nix}/bin/nix-store --load-db < /nix-path-registration
+      if [ -f /nix-path-registration ]; then
+        ${config.environment.nix}/bin/nix-store --load-db < /nix-path-registration &&
+        rm /nix-path/registration
+      fi
 
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.
