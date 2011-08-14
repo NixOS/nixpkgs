@@ -7244,6 +7244,10 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
+  trayer = callPackage ../applications/window-managers/trayer {
+    inherit (gtkLibs) gdk_pixbuf;
+  };
+
   tree = callPackage ../tools/system/tree { };
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
