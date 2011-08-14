@@ -898,12 +898,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
   };
-
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libX11;
   };
-
+  OpenGL_2_4_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.1.nix {
+    inherit (pkgs) mesa;
+    inherit (pkgs.xlibs) libX11;
+  };
   OpenGL = self.OpenGL_2_2_1_1;
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {
