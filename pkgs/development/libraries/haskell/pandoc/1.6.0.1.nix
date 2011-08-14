@@ -1,4 +1,4 @@
-{ cabal, HTTP, extensibleExceptions, mtl, network, parsec, random
+{ cabal, extensibleExceptions, HTTP, mtl, network, parsec, random
 , syb, texmath, utf8String, xhtml, xml, zipArchive
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    HTTP extensibleExceptions mtl network parsec random syb texmath
+    extensibleExceptions HTTP mtl network parsec random syb texmath
     utf8String xhtml xml zipArchive
   ];
   meta = {

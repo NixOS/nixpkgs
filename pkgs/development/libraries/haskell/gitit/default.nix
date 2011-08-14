@@ -1,8 +1,8 @@
-{ cabal, ConfigFile, HStringTemplate, HTTP, SHA, cgi, feed
-, filestore, ghcPaths, happstackServer, happstackUtil
-, highlightingKate, hslogger, json, mtl, network, pandoc
-, pandocTypes, parsec, random, recaptcha, safe, syb, time, url
-, utf8String, xhtml, xml, xssSanitize, zlib
+{ cabal, cgi, ConfigFile, feed, filestore, ghcPaths
+, happstackServer, happstackUtil, highlightingKate, hslogger
+, HStringTemplate, HTTP, json, mtl, network, pandoc, pandocTypes
+, parsec, random, recaptcha, safe, SHA, syb, time, url, utf8String
+, xhtml, xml, xssSanitize, zlib
 }:
 
 cabal.mkDerivation (self: {
@@ -12,10 +12,10 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ConfigFile HStringTemplate HTTP SHA cgi feed filestore ghcPaths
-    happstackServer happstackUtil highlightingKate hslogger json mtl
-    network pandoc pandocTypes parsec random recaptcha safe syb time
-    url utf8String xhtml xml xssSanitize zlib
+    cgi ConfigFile feed filestore ghcPaths happstackServer
+    happstackUtil highlightingKate hslogger HStringTemplate HTTP json
+    mtl network pandoc pandocTypes parsec random recaptcha safe SHA syb
+    time url utf8String xhtml xml xssSanitize zlib
   ];
   meta = {
     homepage = "http://github.com/jgm/gitit/tree/master";

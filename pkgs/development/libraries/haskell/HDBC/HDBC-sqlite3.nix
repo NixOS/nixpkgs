@@ -1,4 +1,4 @@
-{ cabal, sqlite, HDBC, mtl, utf8String }:
+{ cabal, HDBC, mtl, sqlite, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "HDBC-sqlite3";

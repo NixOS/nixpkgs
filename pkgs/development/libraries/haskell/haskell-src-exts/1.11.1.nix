@@ -1,4 +1,4 @@
-{ cabal, happy, cpphs }:
+{ cabal, cpphs, happy }:
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-exts";

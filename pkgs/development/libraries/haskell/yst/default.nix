@@ -1,4 +1,4 @@
-{ cabal, HStringTemplate, HsSyck, csv, pandoc, parsec, split, time
+{ cabal, csv, HsSyck, HStringTemplate, pandoc, parsec, split, time
 , utf8String, xhtml
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    HStringTemplate HsSyck csv pandoc parsec split time utf8String
+    csv HsSyck HStringTemplate pandoc parsec split time utf8String
     xhtml
   ];
   meta = {

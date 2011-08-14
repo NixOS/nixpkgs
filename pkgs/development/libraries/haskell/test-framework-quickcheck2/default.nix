@@ -1,11 +1,11 @@
-{ cabal, QuickCheck, extensibleExceptions, random, testFramework }:
+{ cabal, extensibleExceptions, QuickCheck, random, testFramework }:
 
 cabal.mkDerivation (self: {
   pname = "test-framework-quickcheck2";
   version = "0.2.10";
   sha256 = "12c37m74idjydxshgms9ib9ii2rpvy4647kra2ards1w2jmnr6w3";
   buildDepends = [
-    QuickCheck extensibleExceptions random testFramework
+    extensibleExceptions QuickCheck random testFramework
   ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";

@@ -1,6 +1,6 @@
-{ cabal, SHA, aeson, authenticate, blazeHtml, controlMonadAttempt
+{ cabal, aeson, authenticate, blazeHtml, controlMonadAttempt
 , hamlet, httpEnumerator, mimeMail, persistent, persistentTemplate
-, pureMD5, random, text, transformers, wai, webRoutesQuasi
+, pureMD5, random, SHA, text, transformers, wai, webRoutesQuasi
 , yesodCore, yesodForm, yesodJson, yesodPersistent
 }:
 
@@ -9,9 +9,9 @@ cabal.mkDerivation (self: {
   version = "0.4.0.2";
   sha256 = "1vf02kgm3pcak4igvp8009lgv8i8bir272byw0ma2mg6bl0sgyvl";
   buildDepends = [
-    SHA aeson authenticate blazeHtml controlMonadAttempt hamlet
+    aeson authenticate blazeHtml controlMonadAttempt hamlet
     httpEnumerator mimeMail persistent persistentTemplate pureMD5
-    random text transformers wai webRoutesQuasi yesodCore yesodForm
+    random SHA text transformers wai webRoutesQuasi yesodCore yesodForm
     yesodJson yesodPersistent
   ];
   meta = {

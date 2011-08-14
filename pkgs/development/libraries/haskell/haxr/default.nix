@@ -1,4 +1,4 @@
-{ cabal, HTTP, HaXml, blazeBuilder, dataenc, mtl, network, time
+{ cabal, blazeBuilder, dataenc, HaXml, HTTP, mtl, network, time
 , utf8String
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "3000.8.4";
   sha256 = "0cyf1q1ngz0jqxdrvblcy9iw7l478v0rfr7bgkpq0l4brw0ca1pg";
   buildDepends = [
-    HTTP HaXml blazeBuilder dataenc mtl network time utf8String
+    blazeBuilder dataenc HaXml HTTP mtl network time utf8String
   ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/HaXR";

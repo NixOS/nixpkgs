@@ -1,4 +1,4 @@
-{ cabal, postgresql, HDBC, mtl, parsec, time, utf8String }:
+{ cabal, HDBC, mtl, parsec, postgresql, time, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "HDBC-postgresql";

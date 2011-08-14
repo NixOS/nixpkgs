@@ -1,6 +1,6 @@
-{ cabal, MaybeT, blazeHtml, extensibleExceptions, happstackData
-, happstackUtil, hslogger, html, mtl, network, parsec, sendfile
-, syb, text, time, utf8String, xhtml, zlib
+{ cabal, blazeHtml, extensibleExceptions, happstackData
+, happstackUtil, hslogger, html, MaybeT, mtl, network, parsec
+, sendfile, syb, text, time, utf8String, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
@@ -10,8 +10,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    MaybeT blazeHtml extensibleExceptions happstackData happstackUtil
-    hslogger html mtl network parsec sendfile syb text time utf8String
+    blazeHtml extensibleExceptions happstackData happstackUtil hslogger
+    html MaybeT mtl network parsec sendfile syb text time utf8String
     xhtml zlib
   ];
   meta = {

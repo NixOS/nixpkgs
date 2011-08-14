@@ -1,4 +1,4 @@
-{ cabal, MonadCatchIOMtl, extensibleExceptions, mtl, network
+{ cabal, extensibleExceptions, MonadCatchIOMtl, mtl, network
 , parsec, xhtml
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "3001.1.8.2";
   sha256 = "09ly7bn5ck563jq1wip5w628g74xj4p1ha9rllfdck33pqrl2mgz";
   buildDepends = [
-    MonadCatchIOMtl extensibleExceptions mtl network parsec xhtml
+    extensibleExceptions MonadCatchIOMtl mtl network parsec xhtml
   ];
   meta = {
     homepage = "http://andersk.mit.edu/haskell/cgi/";

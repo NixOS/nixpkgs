@@ -1,4 +1,4 @@
-{ cabal, perl, mtl }:
+{ cabal, mtl, perl }:
 
 cabal.mkDerivation (self: {
   pname = "happy";

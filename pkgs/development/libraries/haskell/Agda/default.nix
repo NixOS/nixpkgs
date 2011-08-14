@@ -1,5 +1,5 @@
-{ cabal, alex, happy, QuickCheck, binary, haskeline, haskellSrcExts
-, mtl, syb, xhtml, zlib
+{ cabal, alex, binary, happy, haskeline, haskellSrcExts, mtl
+, QuickCheck, syb, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    QuickCheck binary haskeline haskellSrcExts mtl syb xhtml zlib
+    binary haskeline haskellSrcExts mtl QuickCheck syb xhtml zlib
   ];
   buildTools = [ alex happy ];
   meta = {

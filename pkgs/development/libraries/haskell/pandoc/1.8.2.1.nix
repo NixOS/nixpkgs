@@ -1,6 +1,6 @@
-{ cabal, HTTP, base64Bytestring, citeprocHs, dlist
-, extensibleExceptions, json, mtl, network, pandocTypes, parsec
-, random, syb, tagsoup, texmath, utf8String, xhtml, xml, zipArchive
+{ cabal, base64Bytestring, citeprocHs, dlist, extensibleExceptions
+, HTTP, json, mtl, network, pandocTypes, parsec, random, syb
+, tagsoup, texmath, utf8String, xhtml, xml, zipArchive
 }:
 
 cabal.mkDerivation (self: {
@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    HTTP base64Bytestring citeprocHs dlist extensibleExceptions json
+    base64Bytestring citeprocHs dlist extensibleExceptions HTTP json
     mtl network pandocTypes parsec random syb tagsoup texmath
     utf8String xhtml xml zipArchive
   ];

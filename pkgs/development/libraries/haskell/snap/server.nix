@@ -1,8 +1,8 @@
-{ cabal, MonadCatchIOTransformers, PSQueue, attoparsec
-, attoparsecEnumerator, binary, blazeBuilder
+{ cabal, attoparsec, attoparsecEnumerator, binary, blazeBuilder
 , blazeBuilderEnumerator, bytestringNums, caseInsensitive
-, directoryTree, enumerator, mtl, murmurHash, network, snapCore
-, text, time, transformers, unixCompat, vector, vectorAlgorithms
+, directoryTree, enumerator, MonadCatchIOTransformers, mtl
+, murmurHash, network, PSQueue, snapCore, text, time, transformers
+, unixCompat, vector, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
@@ -10,9 +10,9 @@ cabal.mkDerivation (self: {
   version = "0.5.3.1";
   sha256 = "0rbfklgngrpp2aggkmyamfxn9hpnz3bsxd58lw0fi4ls76bagxvz";
   buildDepends = [
-    MonadCatchIOTransformers PSQueue attoparsec attoparsecEnumerator
-    binary blazeBuilder blazeBuilderEnumerator bytestringNums
-    caseInsensitive directoryTree enumerator mtl murmurHash network
+    attoparsec attoparsecEnumerator binary blazeBuilder
+    blazeBuilderEnumerator bytestringNums caseInsensitive directoryTree
+    enumerator MonadCatchIOTransformers mtl murmurHash network PSQueue
     snapCore text time transformers unixCompat vector vectorAlgorithms
   ];
   meta = {

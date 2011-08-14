@@ -1,10 +1,10 @@
-{ cabal, HUnit, extensibleExceptions, testFramework }:
+{ cabal, extensibleExceptions, HUnit, testFramework }:
 
 cabal.mkDerivation (self: {
   pname = "test-framework-hunit";
   version = "0.2.6";
   sha256 = "1ivgyh71wwvrrgnk3fp6hsfssvy39jikhjdzr7x68pv1ca7f247r";
-  buildDepends = [ HUnit extensibleExceptions testFramework ];
+  buildDepends = [ extensibleExceptions HUnit testFramework ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";
     description = "HUnit support for the test-framework package";

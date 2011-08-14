@@ -1,4 +1,4 @@
-{ cabal, HUnit, csv, haskeline, hledgerLib, mtl, parsec, regexpr
+{ cabal, csv, haskeline, hledgerLib, HUnit, mtl, parsec, regexpr
 , safe, split, time, utf8String
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    HUnit csv haskeline hledgerLib mtl parsec regexpr safe split time
+    csv haskeline hledgerLib HUnit mtl parsec regexpr safe split time
     utf8String
   ];
   meta = {

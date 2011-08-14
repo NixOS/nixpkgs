@@ -1,4 +1,4 @@
-{ cabal, X11, X11Xft, extensibleExceptions, mtl, random, utf8String
+{ cabal, extensibleExceptions, mtl, random, utf8String, X11, X11Xft
 , xmonad
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.9.2";
   sha256 = "06hg5j4w8iz62wmyygq4c7xcbi9dxlhhh3dbic438cjk7c0w1h5p";
   buildDepends = [
-    X11 X11Xft extensibleExceptions mtl random utf8String xmonad
+    extensibleExceptions mtl random utf8String X11 X11Xft xmonad
   ];
   meta = {
     homepage = "http://xmonad.org/";

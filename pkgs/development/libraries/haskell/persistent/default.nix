@@ -1,4 +1,4 @@
-{ cabal, sqlite, blazeHtml, enumerator, monadControl, parsec, pool
+{ cabal, blazeHtml, enumerator, monadControl, parsec, pool, sqlite
 , text, time, transformers
 }:
 

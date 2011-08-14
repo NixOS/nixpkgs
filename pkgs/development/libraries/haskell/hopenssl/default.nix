@@ -1,4 +1,4 @@
-{ cabal, openssl, mtl }:
+{ cabal, mtl, openssl }:
 
 cabal.mkDerivation (self: {
   pname = "hopenssl";
