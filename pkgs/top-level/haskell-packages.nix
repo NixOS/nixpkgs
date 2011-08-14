@@ -611,13 +611,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
-
   GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
     inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
-
+  GLUT_2_2_2_0 = callPackage ../development/libraries/haskell/GLUT/2.2.2.0.nix {
+    glut = pkgs.freeglut;
+    OpenGL = self.OpenGL_2_4_0_1;
+    inherit (pkgs) mesa;
+    inherit (pkgs.xlibs) libSM libICE libXmu libXi;
+  };
   GLUT = self.GLUT_2_1_1_2;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
