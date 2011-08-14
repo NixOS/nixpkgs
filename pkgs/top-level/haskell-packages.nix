@@ -742,6 +742,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
 
+  hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
+
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
   hsdns = callPackage ../development/libraries/haskell/hsdns {
