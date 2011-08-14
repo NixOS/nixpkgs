@@ -2,9 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal2nix";
-  version = "1.10";
-  sha256 = "1zyglwiv5xb5h21gcb0chcawlncnagivd2rziay4wv30xb06l804";
-  isLibrary = false;
+  version = "1.11";
+  sha256 = "1df6bxgdzd3jfxfs3qg8qw6pmsfbd5l32krx9xdfkiqvfxa6vpy9";
+  isLibrary = true;
   isExecutable = true;
   buildDepends = [ HTTP mtl regexPosix ];
   meta = {
