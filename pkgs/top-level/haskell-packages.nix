@@ -602,6 +602,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
+  GLURaw = callPackage ../development/libraries/haskell/GLURaw {
+    GLU = pkgs.freeglut;
+  };
+
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {
     glut = pkgs.freeglut;
     inherit (pkgs) mesa;
