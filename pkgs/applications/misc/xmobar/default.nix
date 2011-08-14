@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     homepage = "http://projects.haskell.org/xmobar/";
     description = "A Minimalistic Text Based Status Bar";
     license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.simons
