@@ -3857,6 +3857,8 @@ let
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
+  libmms = callPackage ../development/libraries/libmms { };
+
   libmowgli = callPackage ../development/libraries/libmowgli { };
 
   libmng = callPackage ../development/libraries/libmng { };
