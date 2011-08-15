@@ -55,8 +55,8 @@ let
 
       # Start a ConsoleKit session so that we get ownership of various
       # devices.
-      if [ \( -z "$XDG_SESSION_COOKIE" -o -n "${toString cfg.displayManager.forceCKSession}" \) -a -z "$CK_STARTED" ]; then
-          CK_STARTED=1 exec ${pkgs.consolekit}/bin/ck-launch-session "$0" "$sessionType"
+      if test -z "$XDG_SESSION_COOKIE"; then
+          exec ${pkgs.consolekit}/bin/ck-launch-session "$0" "$sessionType"
       fi
 
       # Handle being called by kdm.
@@ -162,12 +162,6 @@ in
         example = [ "-ac" "-logverbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
         apply = toString;
-      };
-
-      forceCKSession = mkOption {
-        internal = true;
-        default = false;
-        description = "Whether to force launching of a ConsoleKit session.";
       };
 
       session = mkOption {

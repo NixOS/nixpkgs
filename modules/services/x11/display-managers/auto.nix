@@ -52,11 +52,6 @@ in
           '';
       };
 
-    # The ConsoleKit PAM connector launches a local session, but it's
-    # not set as "active" (maybe because x11-display-device is not
-    # set).  Launching a child session seems to fix that.
-    services.xserver.displayManager.forceCKSession = true;
-    
   };
 
 }
