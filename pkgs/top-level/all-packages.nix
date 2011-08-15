@@ -6121,6 +6121,8 @@ let
   avidemux = callPackage ../applications/video/avidemux {
   };
 
+  avogadro = callPackage ../applications/science/chemistry/avogadro { };
+
   awesome = callPackage ../applications/window-managers/awesome {
     inherit (gtkLibs) glib pango;
     lua = lua5;
