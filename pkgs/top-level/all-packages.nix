@@ -4251,6 +4251,8 @@ let
   portaudio = callPackage ../development/libraries/portaudio { };
   portaudioSVN = callPackage ../development/libraries/portaudio/svn-head.nix { };
 
+  prison = callPackage ../development/libraries/prison { };
+
   proj = callPackage ../development/libraries/proj { };
 
   postgis = callPackage ../development/libraries/postgis { };
