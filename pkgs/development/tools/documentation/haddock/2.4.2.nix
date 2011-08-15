@@ -1,6 +1,6 @@
 {cabal, ghcPaths, libedit}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "haddock";
   version = "2.4.2"; # Haskell Platform 2009.0.0
   name = self.fname;
@@ -8,6 +8,13 @@ cabal.mkDerivation (self : {
   # TODO: adding libedit here is a hack
   propagatedBuildInputs = [ghcPaths libedit];
   meta = {
-    description = "a tool for automatically generating documentation from annotated Haskell source code";
+    homepage = "http://www.haskell.org/haddock/";
+    description = "A documentation-generation tool for Haskell libraries";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

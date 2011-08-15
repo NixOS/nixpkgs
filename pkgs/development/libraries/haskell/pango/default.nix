@@ -7,8 +7,13 @@ cabal.mkDerivation (self : {
   extraBuildInputs = [pkgconfig gtk2hsBuildtools pango glibc];
   propagatedBuildInputs = [cairo glib mtl];
   meta = {
+    homepage = "http://www.haskell.org/gtk2hs/";
     description = "Binding to the Pango text rendering engine";
-    license = "LGPLv2+";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.lgpl21;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

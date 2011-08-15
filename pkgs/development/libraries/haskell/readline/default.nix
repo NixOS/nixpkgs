@@ -12,6 +12,11 @@ cabal.mkDerivation (self : {
   '';
   meta = {
     description = "An interface to the GNU readline library";
+    license = "GPL";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

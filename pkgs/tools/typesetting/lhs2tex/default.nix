@@ -1,6 +1,6 @@
 {cabal, texLive, regexCompat}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "lhs2tex";
   version = "1.17";
   name = self.fname;
@@ -14,9 +14,14 @@ cabal.mkDerivation (self : {
   '';
 
   meta = {
+    homepage = "http://www.andres-loeh.de/lhs2tex/";
     description = "Preprocessor for typesetting Haskell sources with LaTeX";
-    license = "GPLv2";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = "GPL";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
 

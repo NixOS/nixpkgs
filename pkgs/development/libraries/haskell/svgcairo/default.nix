@@ -7,8 +7,13 @@ cabal.mkDerivation (self : {
   extraBuildInputs = [pkgconfig librsvg glibc gtk2hsBuildtools];
   propagatedBuildInputs = [cairo glib mtl];
   meta = {
-    description = "Binding to the Cairo library";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://www.haskell.org/gtk2hs/";
+    description = "Binding to the libsvg-cairo library";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

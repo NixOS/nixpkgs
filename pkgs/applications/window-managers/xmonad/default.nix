@@ -1,6 +1,6 @@
 {cabal, X11, mtl, xmessage, syb}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "xmonad";
   name = "${self.fname}";
   version = "0.9.2";
@@ -8,8 +8,14 @@ cabal.mkDerivation (self : {
   noHaddock = true;
   propagatedBuildInputs = [X11 mtl syb];
   meta = {
-    description = "xmonad is a tiling window manager for X";
-    homepage = http://xmonad.org/;
+    homepage = "http://xmonad.org";
+    description = "A tiling window manager";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 
   preConfigure = '' 

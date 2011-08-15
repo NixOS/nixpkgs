@@ -7,9 +7,12 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [ X11 utf8String ];
   configureFlags=["--extra-include-dirs=${freetype}/include/freetype2"];
   meta = {
-    homepage = http://hackage.haskell.org/package/X11-xft;
-    description = "Haskell bindings to the Xft and some Xrender parts";
-    maintainers = with self.stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with self.stdenv.lib.platforms; linux;
+    description = "Bindings to the Xft, X Free Type interface library, and some Xrender parts";
+    license = "LGPL";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

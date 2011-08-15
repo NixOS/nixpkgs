@@ -8,7 +8,11 @@ cabal.mkDerivation (self : {
   propagatedBuildInputs = [mtl];
   meta = {
     description = "Binding to the Cairo library";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

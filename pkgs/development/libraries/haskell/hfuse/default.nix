@@ -12,7 +12,7 @@ cabal.mkDerivation (self: {
 
   meta = {
     homepage = "https://github.com/realdesktop/hfuse";
-    description = "HFuse is a binding for the Linux FUSE library.";
+    description = "HFuse is a binding for the Linux FUSE library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

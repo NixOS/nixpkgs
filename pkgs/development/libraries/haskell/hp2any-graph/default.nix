@@ -6,9 +6,13 @@ cabal.mkDerivation (self : {
   sha256 = "1al20pxfgkgwynrx7vr0i57342s91lcm3cnd9qjx8b6vkqmzykkq";
   propagatedBuildInputs = [GLUT OpenGL hp2anyCore network parseargs];
   meta = {
+    homepage = "http://www.haskell.org/haskellwiki/Hp2any";
     description = "Real-time heap graphing utility and profile stream server with a reusable graphing module";
-    license = "BSD3";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-
