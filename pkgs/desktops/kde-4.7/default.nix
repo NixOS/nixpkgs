@@ -48,7 +48,11 @@ let
         pkgs);
     in
       runCommand "${module}-${release}"
-      ({passthru = attrs // { propagatedUserEnvPackages = list; recurseForDerivations = true;};})
+      ({passthru = attrs // {
+       propagatedUserEnvPackages = list;
+       recurseForDerivations = true;
+       projects = attrs;
+       };})
         ''
           mkdir -pv $out/nix-support
           echo "${toString list}" | tee $out/nix-support/propagated-user-env-packages
@@ -117,9 +121,12 @@ kdepkgs // kdepkgs.kdebase //
 
   inherit release;
 
+# nix-instantiate /etc/nixos/nixpkgs -A kde47.moduleNames --strict to see
+# available packages
+  moduleNames = stdenv.lib.mapAttrs
+    (n: v: if v ? projects then builtins.attrNames v.projects else null) kdepkgs;
+
   full = stdenv.lib.attrValues kdepkgs;
 
   l10n = callPackage ./l10n { inherit release; };
-
-  subdirNames = map (x: x.module) (stdenv.lib.filter (x: !x.split && (x ? pkgs)) manifest.modules);
 }
