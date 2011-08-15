@@ -1,22 +1,22 @@
 { stdenv, fetchurl, libxml2, libxslt, curl }:
 
 stdenv.mkDerivation rec {
-  name = "raptor2-2.0.3";
+  name = "raptor2-2.0.4";
 
   src = fetchurl {
     url = "http://download.librdf.org/source/${name}.tar.gz";
-    sha256 = "1icfg01zx3d3czqz774ar2mmnp8a9m248y5zvi5yn0fzs0nyc8g2";
+    sha256 = "0viaam60adhsxim2vaq5xs1pfmm6wiidxpkrhwyl7x9mz8x9vx1l";
   };
 
   buildInputs = [ libxml2 libxslt ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  postInstall = "rm -rvf $out/share/gtk-doc";
 
   meta = { 
     description = "The RDF Parser Toolkit";
     homepage = "http://librdf.org/raptor";
     license = "LGPL-2.1 Apache-2.0";
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber urkud ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
