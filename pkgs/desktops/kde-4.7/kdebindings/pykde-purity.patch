@@ -1,0 +1,49 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c853e38..5df3253 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -73,7 +73,7 @@ INCLUDE_DIRECTORIES(
+     ${QT_QTWEBKIT_INCLUDE_DIR}
+     ${KDE4_INCLUDE_DIR}
+     ${KDE4_INCLUDE_DIR}/solid
+-    ${KDE4_INCLUDE_DIR}/phonon
++	${PHONON_INCLUDE_DIR}/phonon
+     ${KDE4_INCLUDE_DIR}/kio
+     ${KDE4_INCLUDE_DIR}/kdeprint
+     ${KDE4_INCLUDE_DIR}/kdeprint/lpr
+@@ -232,7 +232,7 @@ _pkg_config = {
+     'pykde_kde_sip_flags':  '${_SIP_TAGS} ${_SIP_X} ${SIP_EXTRA_OPTIONS}',
+     'pykde_mod_dir':        '${PYTHON_SITE_PACKAGES_INSTALL_DIR}/PyKDE4',
+     'pykde_modules':        '${PYKDE_MODULES}',
+-    'pykde_sip_dir':        '${SIP_DEFAULT_SIP_DIR}/PyKDE4',
++    'pykde_sip_dir':        '${CMAKE_INSTALL_PREFIX}/share/sip/PyKDE4',
+     'pykde_version':        kde_version_hex,
+     'pykde_version_str':    '${KDE_VERSION}'
+ }
+@@ -244,7 +244,7 @@ PYTHON_INSTALL(${CMAKE_CURRENT_BINARY_DIR}/pykdeconfig.py ${PYTHON_SITE_PACKAGES
+ 
+ # Install the .sip files for anyone that wants to build bindings on top of PyKDE4.
+ # (Don't forget the / at the end of sip/.)
+-INSTALL(DIRECTORY sip/ DESTINATION ${SIP_DEFAULT_SIP_DIR}/PyKDE4
++INSTALL(DIRECTORY sip/ DESTINATION ${CMAKE_INSTALL_PREFIX}/share/sip/PyKDE4
+     PATTERN "*~" EXCLUDE    # This sucks, why can't I just whitelist what I _do_ want?
+     PATTERN ".svn" EXCLUDE
+     PATTERN "*.in" EXCLUDE)
+diff --git a/kpythonpluginfactory/CMakeLists.txt b/kpythonpluginfactory/CMakeLists.txt
+index 41fa0fe..642d867 100644
+--- a/kpythonpluginfactory/CMakeLists.txt
++++ b/kpythonpluginfactory/CMakeLists.txt
+@@ -3,7 +3,12 @@
+ set(kpythonpluginfactory_SRCS
+     kpythonpluginfactory.cpp)
+ 
+-GET_FILENAME_COMPONENT(LIB_PYTHON ${PYTHON_LIBRARY} NAME)
++option(HARDCODE_LIB_PYTHON_PATH "Whether the path to libpython.so should be hardcoded" OFF)
++if(HARDCODE_LIB_PYTHON_PATH)
++	get_filename_component(LIB_PYTHON ${PYTHON_LIBRARY} REALPATH)
++else(HARDCODE_LIB_PYTHON_PATH)
++    get_filename_component(LIB_PYTHON ${PYTHON_LIBRARY} NAME)
++endif(HARDCODE_LIB_PYTHON_PATH)
+ ADD_DEFINITIONS(-DLIB_PYTHON=\\"${LIB_PYTHON}\\")
+ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=15000)
+ 
