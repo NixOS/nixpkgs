@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib
-, libX11, polkit, expat }:
+{ stdenv, fetchurl, pkgconfig, dbus_glib, zlib, pam, glib, 
+  libX11, polkit, expat }:
 
 stdenv.mkDerivation rec {
-  name = "ConsoleKit-0.4.5";
+  name = "consolekit-0.4.1";
   
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/ConsoleKit/dist/${name}.tar.bz2";
-    sha256 = "0f4wddl27cmi19mcw25l94z57hsd91z88gzczig153h7ac67iq23";
+    url = http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-0.4.1.tar.bz2;
+    sha256 = "0gj0airrgyi14a06w3d4407g62bs5a1cam2h64s50x3d2k3ascph";
   };
   
   buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 polkit expat ];
+  patches = [ ./0001-Don-t-daemonize-when-activated.patch
+    ./0002-Don-t-take-bus-name-until-ready.patch ];
 
   # For console-kit to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_LDFLAGS = "-lgcc_s";
