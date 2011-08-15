@@ -1,4 +1,4 @@
-{cabal, fetchgit, json, time, hslogger, Crypto, base64string, CouchDB, WebServer, WebServerExtras}:
+{cabal, fetchgit, json, time, hslogger, Crypto, base64String, CouchDB, WebServer, WebServerExtras}:
 
 cabal.mkDerivation (self : {
   pname = "CS173Tourney";
@@ -10,7 +10,7 @@ cabal.mkDerivation (self : {
     md5 = "21e5e5c2e184b4b70696d4d6c60e51d3";
   };
   patches = [./sendmail.patch];
-  propagatedBuildInputs = [json time hslogger Crypto base64string CouchDB WebServer WebServerExtras];
+  propagatedBuildInputs = [json time hslogger Crypto base64String CouchDB WebServer WebServerExtras];
   meta = {
     description = "";
   };
