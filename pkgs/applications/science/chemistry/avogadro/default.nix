@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "avogadro-1.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/avogardro/${name}.tar.bz2";
+    url = "mirror://sourceforge/avogadro/${name}.tar.bz2";
     sha256 = "0s44r78vm7hf4cs13d2qki3gf178gjj1ihph6rs04g6s4figvdpg";
   };
 
