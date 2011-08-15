@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1drjcy1k9g72iis0ghllzn7n0w03bahhrd2p5hs39anbm6mr0yk9";
   };
 
-  buildInputs = [ pkgconfig librdf_raptor2 gmp pcre libxml2 ];
+  buildNativeInputs = [ pkgconfig ];
+
+  buildInputs = [ gmp pcre libxml2 ];
+
+  propagatedBuildInputs = [ librdf_raptor2 ];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
   

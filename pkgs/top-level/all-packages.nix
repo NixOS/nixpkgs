@@ -4319,15 +4319,13 @@ let
 
   librdf_rasqal = callPackage ../development/libraries/librdf/rasqal.nix { };
 
+  librdf_redland = callPackage ../development/libraries/librdf/redland.nix { };
+
   librdf = callPackage ../development/libraries/librdf { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
-  redland = callPackage ../development/libraries/redland/1.0.10.nix {
-    bdb = db4;
-    postgresql = null;
-    mysql = null;
-  };
+  redland = pkgs.librdf_redland;
 
   rhino = callPackage ../development/libraries/java/rhino {
     ant = apacheAntGcj;
