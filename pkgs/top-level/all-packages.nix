@@ -6445,7 +6445,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
-  filelight = newScope pkgs.kde4 ../applications/misc/filelight { };
+  filelight = if pkgs.kde4.kdeutils ? filelight then pkgs.kde4.kdeutils.filelight
+    else newScope pkgs.kde4 ../applications/misc/filelight { };
 
   firefox = firefoxPkgs.firefox;
 
