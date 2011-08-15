@@ -8,7 +8,7 @@ let
   cfg = xcfg.desktopManager.kde4;
   xorg = pkgs.xorg;
 
-  isKDE47 = !(pkgs.kde4 ? kdebase);
+  isKDE47 = pkgs.kde4 ? kde_wallpapers;
 
 in
 
@@ -106,17 +106,9 @@ in
       else
         # KDE >= 4.7
         [ pkgs.kde4.kdelibs
-          pkgs.kde4.kde_baseapps
-          pkgs.kde4.kde_runtime
-          pkgs.kde4.kde_workspace
+          pkgs.kde4.kdebase # contains kde-workspace etc.
           pkgs.kde4.kde_wallpapers # contains kdm's default background
           pkgs.kde4.oxygen_icons
-          pkgs.kde4.konsole
-          pkgs.kde4.kcolorchooser
-          pkgs.kde4.kdegraphics.ksnapshot
-          pkgs.kde4.kate
-          pkgs.kde4.kdegraphics.okular
-          pkgs.kde4.kdegraphics.gwenview
 
           # Phonon backends.
           pkgs.phonon_backend_gstreamer
@@ -133,6 +125,8 @@ in
           xorg.xmessage # so that startkde can show error messages
           xorg.xset # used by startkde, non-essential
           xorg.xauth # used by kdesu
+          pkgs.shared_desktop_ontologies # used by nepomuk
+          pkgs.strigi # used by nepomuk
         ]
       ) ++ config.environment.kdePackages;
 
