@@ -124,7 +124,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4; # 7.2 ok, 7.3 ok
-    fgl          = self.fgl_5_4_2_3; # 7.2 fails, 7.3 fails
+    fgl          = self.fgl_5_4_2_4; # 7.2 ok, 7.3 fails
     GLUT         = self.GLUT_2_1_2_1; # 7.2 ok, 7.3 ok
     haskellSrc   = self.haskellSrc_1_0_1_4; # 7.2 fails, 7.3 fails
     html         = self.html_1_0_1_2; # 7.2 ok, 7.3 ok
@@ -563,6 +563,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
+  fgl_5_4_2_4 = callPackage ../development/libraries/haskell/fgl/5.4.2.4.nix {};
   fgl = self.fgl_5_4_2_2;
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
