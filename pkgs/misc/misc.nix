@@ -16,10 +16,6 @@ in
 	    [ pkgs.ruby l.chronic l.sup ];
 	};
       }
-
-    Warning: Using this function, it is possible to install packages
-    into one profile that have file collisions, and these will not be
-    detected.
   */
   collection = {list, name} : runCommand "collection-${name}" {} ''
     mkdir -p $out/nix-support
