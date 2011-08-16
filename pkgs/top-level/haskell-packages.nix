@@ -1271,6 +1271,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     json = self.json_0_3_6;
   };
 
+  wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
+
   wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
 
   wxcore = callPackage ../development/libraries/haskell/wxHaskell/wxcore.nix {
