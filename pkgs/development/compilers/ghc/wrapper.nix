@@ -43,8 +43,8 @@ stdenv.mkDerivation {
     chmod +x $out/bin/ghc-packages
     ensureDir $out/nix-support
     ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-  ''; 
-  
+  '';
+
   GHCGetPackages = ./ghc-get-packages.sh;
 
   inherit ghc;
