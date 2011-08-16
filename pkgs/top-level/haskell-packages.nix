@@ -483,11 +483,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
-  CS173Tourney = callPackage ../development/libraries/haskell/CS173Tourney {
-    inherit (pkgs) fetchgit;
-    json = self.json_0_3_6;
-  };
-
   csv = callPackage ../development/libraries/haskell/csv {};
 
   cssText = callPackage ../development/libraries/haskell/css-text {};
