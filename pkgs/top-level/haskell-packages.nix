@@ -635,9 +635,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     gtkC = pkgs.gtkLibs.gtk;
   };
 
-  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {
-    pandoc = self.pandoc_1_6_0_1;
-  };
+  Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
@@ -913,11 +911,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
-  pandoc_1_6_0_1 = callPackage ../development/libraries/haskell/pandoc/1.6.0.1.nix {
-    texmath = self.texmath_0_4;
-  };
-  pandoc_1_8_2_1 = callPackage ../development/libraries/haskell/pandoc/1.8.2.1.nix {};
-  pandoc = self.pandoc_1_8_2_1;
+  pandoc = callPackage ../development/libraries/haskell/pandoc/default.nix {};
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 

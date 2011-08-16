@@ -1,13 +1,13 @@
 { cabal, bktrees, extensibleExceptions, fgl, graphviz, pandoc
-, random, time
+, random, text, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "Graphalyze";
-  version = "0.11.0.0";
-  sha256 = "1aplfd0qp7ypr9rh4v4x5g8f4b0d1w0dcgz7hgjm9haqcsv37a79";
+  version = "0.12.0.0";
+  sha256 = "0lsbwf08flaifdddbg6d3ndrb2d1wzs943hk7n0m316bvahq6kgx";
   buildDepends = [
-    bktrees extensibleExceptions fgl graphviz pandoc random time
+    bktrees extensibleExceptions fgl graphviz pandoc random text time
   ];
   meta = {
     description = "Graph-Theoretic Analysis library";
