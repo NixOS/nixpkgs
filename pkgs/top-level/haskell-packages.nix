@@ -1266,15 +1266,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {};
 
-  WebServer = callPackage ../development/libraries/haskell/WebServer {
-    inherit (pkgs) fetchgit;
-  };
-
-  WebServerExtras = callPackage ../development/libraries/haskell/WebServer-Extras {
-    json = self.json_0_3_6;
-    inherit (pkgs) fetchgit;
-  };
-
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {
     HTTP = self.HTTP_3001_1_5;
     json = self.json_0_3_6;
