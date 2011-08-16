@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   configureFlags = "--enable-shared --enable-sharedlib";
 
   buildInputs = [ python perl gfortran ];
-  propagatedBuildInputs = [ stdenv.glibc ];
+  propagatedBuildInputs = stdenv.lib.optional (stdenv ? glibc) [ stdenv.glibc ];
 
   patchPhase =
     '' for i in $(find -type f -not -name Makefile.\*)
