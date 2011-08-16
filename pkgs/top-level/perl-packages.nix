@@ -194,13 +194,12 @@ rec {
     };
   };
 
-  CacheFastMmap = buildPerlPackage {
-    name = "Cache-FastMmap-1.28";
+  CacheFastMmap = buildPerlPackage rec {
+    name = "Cache-FastMmap-1.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.28.tar.gz;
-      sha256 = "1m851bz5025wy24mzsi1i8hdyg8bm7lszx9rnn47llsv6hb9v0da";
+      url = "mirror://cpan/modules/by-module/Cache/${name}.tar.gz";
+      sha256 = "0dq93pz6lqya26pzgpgfa7c7i67h8rg0ylshzmvqzq4brqjpbqsk";
     };
-    doCheck = false;
   };
 
   cam_pdf = buildPerlPackage rec {
@@ -427,15 +426,14 @@ rec {
   };
 
   CatalystPluginSession = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-0.27";
+    name = "Catalyst-Plugin-Session-0.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-      sha256 = "1sdrcip5ipi2jz9af3ak200l4qdimypljfc55wyp7228s2rlv99s";
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "1pyrvwfan3qiaixbii57q4g34r9i1v61c5rfri6c25wryfh4f2bj";
     };
-    propagatedBuildInputs = [
-      CatalystRuntime TestMockObject ObjectSignature
-      TestDeep MROCompat
-    ];
+    buildInputs = [ TestMockObject TestDeep ];
+    propagatedBuildInputs =
+      [ CatalystRuntime ObjectSignature MROCompat ];
   };
 
   CatalystPluginSessionStateCookie = buildPerlPackage rec {
@@ -444,20 +442,18 @@ rec {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
       sha256 = "1rvxbfnpf9x2pc2zgpazlcgdlr2dijmxgmcs0m5nazs0w6xikssb";
     };
-    propagatedBuildInputs = [
-      CatalystRuntime CatalystPluginSession TestMockObject
-    ];
+    buildInputs = [ TestMockObject ];
+    propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession ];
   };
 
   CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-Store-FastMmap-0.13";
+    name = "Catalyst-Plugin-Session-Store-FastMmap-0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
-      sha256 = "0h46848mr3i9yadaxvsrdpfn7z22bvk8pa3g71hs7f8m4wd19ns7";
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "1ywm96k1kpw9vbh7ihrxlfnfc5s4frb37cbix7xxlfz2vk10jw0d";
     };
-    propagatedBuildInputs = [
-      PathClass CatalystPluginSession CacheFastMmap
-    ];
+    propagatedBuildInputs =
+      [ PathClass CatalystPluginSession CacheFastMmap MROCompat ];
   };
 
   CatalystPluginStackTrace = buildPerlPackage rec {
