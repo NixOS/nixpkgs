@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "flexible-defaults";
-  version = "0.0.0.1";
-  sha256 = "07a0gfs9qw1z5j1hq1m4aywgfmg67mkw6pc5xljyip99gvrxdngl";
+  version = "0.0.0.2";
+  sha256 = "0hr3x4hlah6pd88xvr9lgvz1v4pyxpyv6q9zms96jkm5wc4mkbwx";
   buildDepends = [ transformers ];
   meta = {
     homepage = "https://github.com/mokus0/flexible-defaults";
