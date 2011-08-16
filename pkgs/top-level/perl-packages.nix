@@ -1380,10 +1380,20 @@ rec {
     makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xlibs.libXpm}";
   };
 
+  GeoIP = buildPerlPackage rec {
+    name = "Geo-IP-1.39";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
+      sha256 = "1yc0rn67nk4z8aq8d82axhfmgi0l91rkksqbf27ylasrhyb6ykx5";
+    };
+    makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
+    doCheck = false; # seems to access the network
+  };
+
   GetoptLong = buildPerlPackage rec {
     name = "Getopt-Long-2.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/modules/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/J/JV/JV/${name}.tar.gz";
       sha256 = "0lrsm8vlqhdnkzfvyaiyfivmaar0rirrnwa2v0qk6l130a497mky";
     };
   };
