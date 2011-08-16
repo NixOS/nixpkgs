@@ -698,7 +698,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HaXml_1_22_5 = callPackage ../development/libraries/haskell/HaXml/1.22.5.nix {};
   HaXml113 = self.HaXml_1_13_3;
   HaXml120 = self.HaXml_1_20_2;
-  HaXml123 = self.HaXml_1_22_5;
+  HaXml122 = self.HaXml_1_22_5;
   HaXml    = self.HaXml120;
 
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
