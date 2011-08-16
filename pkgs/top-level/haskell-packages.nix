@@ -639,9 +639,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     pandoc = self.pandoc_1_6_0_1;
   };
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {
-    polyparse = self.polyparse14;
-  };
+  graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
@@ -953,9 +951,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
-  polyparse14 = callPackage ../development/libraries/haskell/polyparse/1.4.nix {};
-  polyparse17 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
-  polyparse = self.polyparse17;
+  polyparse = callPackage ../development/libraries/haskell/polyparse/default.nix {};
 
   pool = callPackage ../development/libraries/haskell/pool {};
 
