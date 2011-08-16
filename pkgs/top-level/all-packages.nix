@@ -4820,6 +4820,8 @@ let
 
   mpd = callPackage ../servers/mpd { };
 
+  miniHttpd = callPackage ../servers/http/mini-httpd {};
+
   myserver = callPackage ../servers/http/myserver { };
 
   nginx = builderDefsPackage (import ../servers/http/nginx) {
