@@ -126,5 +126,38 @@ in {
         };
   };
 
+  eclipse_sdk_37 = buildEclipse {
+    name = "eclipse-sdk-3.7";
+    description = "Eclipse Classic";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://eclipse.ialto.com/eclipse/downloads/drops/R-3.7-201106131736/eclipse-SDK-3.7-linux-gtk-x86_64.tar.gz;
+          sha256 = "00ig3ww98r8imf32sx5npm6csn5nx288gvdk6w653nijni0di16j";
+        }
+      else
+        fetchurl {
+          url = http://eclipse.ialto.com/eclipse/downloads/drops/R-3.7-201106131736/eclipse-SDK-3.7-linux-gtk.tar.gz;
+          sha256 = "08rgw85cam51l98mzb39fdc3ykb369v8pap93qhknbs6a3f5dnff";
+        };
+  };
+
+  eclipse_cpp_37 = buildEclipse {
+    name = "eclipse-cpp-3.7";
+    description = "Eclipse IDE for C/C++ Developers";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://eclipse.ialto.com/technology/epp/downloads/release/indigo/R/eclipse-cpp-indigo-incubation-linux-gtk-x86_64.tar.gz;
+          sha256 = "14ppc9g9igzvj1pq7jl01vwhzb66nmzbl9wsdl1sf3xnwa9wnqk3";
+        }
+      else
+        fetchurl {
+          url = http://eclipse.ialto.com/technology/epp/downloads/release/indigo/R/eclipse-cpp-indigo-incubation-linux-gtk.tar.gz;
+          sha256 = "1cvg1vgyazrkinwzlvlf0dpl197p4784752srqybqylyj5psdi3b";
+        };
+  };
+
+
 }
 
