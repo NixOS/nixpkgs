@@ -107,6 +107,15 @@ rec {
     };
   };
 
+  AuthenHtpasswd = buildPerlPackage rec {
+    name = "Authen-Htpasswd-0.171";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Authen/${name}.tar.gz";
+      sha256 = "0rw06hwpxg388d26l0jvirczx304f768ijvc20l4b2ll7xzg9ymm";
+    };
+    propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
+  };
+
   AuthenSASL = buildPerlPackage rec {
     name = "Authen-SASL-2.1401";
     src = fetchurl {
@@ -266,6 +275,17 @@ rec {
       [ CatalystRuntime HTTPRequestAsCGI DataVisitor MROCompat ];
   };
 
+  CatalystAuthenticationStoreHtpasswd = buildPerlPackage rec {
+    name = "Catalyst-Authentication-Store-Htpasswd-1.003";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "09mn0wjwfvnfi28y47g816nx50zdpvwvbxp0nrpsap0ir1m80wi3";
+    };
+    buildInputs = [ TestWWWMechanizeCatalyst TestUseOk ];
+    propagatedBuildInputs =
+      [ CatalystPluginAuthentication ClassAccessor CryptPasswdMD5 AuthenHtpasswd ];
+  };
+
   CatalystAuthenticationStoreDBIxClass = buildPerlPackage rec {
     name = "Catalyst-Authentication-Store-DBIx-Class-0.1082";
     src = fetchurl {
@@ -378,12 +398,13 @@ rec {
   };
 
   CatalystPluginAuthentication = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Authentication-0.10015";
+    name = "Catalyst-Plugin-Authentication-0.10018";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "01hfsxgbpkvcli4hpmzig1hfrjfllwnig6p287v0bc72l6gklzbd";
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "1znm81baidzhiiyanigy8rs8jq97vh94fiv4xvkrmaxz0k6vppdx";
     };
-    propagatedBuildInputs = [CatalystRuntime CatalystPluginSession];
+    propagatedBuildInputs =
+      [ CatalystRuntime CatalystPluginSession ClassInspector ];
   };
 
   CatalystPluginAuthorizationACL = buildPerlPackage rec {
@@ -805,7 +826,7 @@ rec {
     buildInputs = [CryptCBC];
   };
 
-  CryptPasswordMD5 = buildPerlPackage {
+  CryptPasswdMD5 = buildPerlPackage {
     name = "Crypt-PasswdMD5-1.3";
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
@@ -1620,6 +1641,14 @@ rec {
       sha256 = "1g6ilxqv2a7spf273v7k0721c6am7pwpjrin3h5zaqxfmd312nav";
     };
     propagatedBuildInputs = [PerlIOviadynamic];
+  };
+
+  IOLockedFile = buildPerlPackage rec {
+    name = "IO-LockedFile-0.23";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
+      sha256 = "1dgq8zfkaszisdb5hz8jgcl0xc3qpv7bbv562l31xgpiddm7xnxi";
+    };
   };
 
   IOPager = buildPerlPackage {
