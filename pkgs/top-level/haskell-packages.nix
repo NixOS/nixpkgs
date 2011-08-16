@@ -788,9 +788,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     WebBits = self.WebBits_1_0;
   };
 
-  json_0_3_6 = callPackage ../development/libraries/haskell/json/0.3.6.nix {};
-  json_0_4_4 = callPackage ../development/libraries/haskell/json/0.4.4.nix {};
-  json = self.json_0_4_4;
+  json = callPackage ../development/libraries/haskell/json/default.nix {};
 
   jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
 
@@ -1251,10 +1249,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {};
 
-  CouchDB = callPackage ../development/libraries/haskell/CouchDB {
-    HTTP = self.HTTP_3001_1_5;
-    json = self.json_0_3_6;
-  };
+  CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
   wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
 
