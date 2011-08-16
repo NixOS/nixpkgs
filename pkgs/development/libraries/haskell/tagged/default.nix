@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tagged";
-  version = "0.2.2.3";
-  sha256 = "16xnalvq7mch0zsxn2kix4xysn0lvcp9jdkxb1i5n03f94c92k52";
+  version = "0.2.3";
+  sha256 = "0d4nn0lrgj9v5hy7wgm56dgfvb5021z24sz0xmqxjy2pzq7fxwhc";
   buildDepends = [ dataDefault semigroups ];
   meta = {
     homepage = "http://github.com/ekmett/tagged";
