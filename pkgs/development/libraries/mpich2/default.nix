@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, python, perl }:
+{ stdenv, fetchurl, python, perl, gfortran }:
 
-let version = "1.2.1"; in
+let version = "1.4"; in
 stdenv.mkDerivation {
   name = "mpich2-${version}";
 
   src = fetchurl {
     url = "http://www.mcs.anl.gov/research/projects/mpich2/downloads/tarballs/${version}/mpich2-${version}.tar.gz";
-    sha256 = "1h91hygal4h33yci7sw76hibf803r9c0mx7kfgmc06h27xa3cirr";
+    sha256 = "0bvvk4n9g4rmrncrgs9jnkcfh142i65wli5qp1akn9kwab1q80z6";
   };
 
-  buildInputs = [ python perl ];
+  configureFlags = "--enable-shared --enable-sharedlib";
+
+  buildInputs = [ python perl gfortran ];
+  propagatedBuildInputs = [ stdenv.glibc ];
 
   patchPhase =
     '' for i in $(find -type f -not -name Makefile.\*)
