@@ -14,8 +14,8 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlagsArray=(
-      --with-linux=${kernel}/lib/modules/${kernel.version}/build
-      --with-kmod-dir=$out/lib/modules/${kernel.version}
+      --with-linux=${kernel}/lib/modules/${kernel.modDirVersion}/build
+      --with-kmod-dir=$out/lib/modules/${kernel.modDirVersion}
       --with-system-map=${kernel}/System.map
     )
   '';
