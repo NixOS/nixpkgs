@@ -6479,7 +6479,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox60Wrapper = wrapFirefox firefox60Pkgs.firefox "firefox" "";
+  firefox60Wrapper = lowPrio (wrapFirefox firefox60Pkgs.firefox "firefox" "");
 
   flac = callPackage ../applications/audio/flac { };
 
