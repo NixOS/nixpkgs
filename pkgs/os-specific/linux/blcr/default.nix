@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, perl, makeWrapper }:
+{ stdenv, fetchurl, kernel, perl }:
 
 assert stdenv.isLinux;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "c8243c9a7a215d4fc4e8f2199045711cf711a6f2e0b39a94413478ffae110eac";
   };
 
-  buildInputs = [ perl makeWrapper ];
+  buildInputs = [ perl ];
 
   preConfigure = ''
     configureFlagsArray=(
@@ -18,13 +18,6 @@ stdenv.mkDerivation {
       --with-kmod-dir=$out/lib/modules/${kernel.version}
       --with-system-map=${kernel}/System.map
     )
-  '';
-
-  postInstall = ''
-    for prog in "$out/bin/"*
-    do
-      wrapProgram "$prog" --prefix LD_LIBRARY_PATH ":" "$out/lib"
-    done
   '';
       
   meta = {
