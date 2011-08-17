@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, perl, makeWrapper, autoconf, automake, libtool }:
+{ stdenv, fetchurl, kernel, perl, makeWrapper }:
 
 assert stdenv.isLinux;
 
@@ -10,13 +10,12 @@ stdenv.mkDerivation {
     sha256 = "c8243c9a7a215d4fc4e8f2199045711cf711a6f2e0b39a94413478ffae110eac";
   };
 
-  buildInputs = [ perl makeWrapper autoconf automake libtool ];
+  buildInputs = [ perl makeWrapper ];
 
   preConfigure = ''
-    ./autogen.sh
     configureFlagsArray=(
-      --with-linux=$(ls -d ${kernel}/lib/modules/*/build)
-      --with-kmod-dir=$out/lib/modules/$(cd ${kernel}/lib/modules; ls -d 2.6.*)
+      --with-linux=${kernel}/lib/modules/${kernel.version}/build
+      --with-kmod-dir=$out/lib/modules/${kernel.version}
       --with-system-map=${kernel}/System.map
     )
   '';
