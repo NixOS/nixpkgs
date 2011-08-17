@@ -1,15 +1,21 @@
-{ stdenv, fetchurl, redland, pkgconfig, gmp, zlib }:
+{ stdenv, fetchurl, redland, pkgconfig, gmp, zlib, librdf_raptor2
+  , librdf_rasqal }:
 
 stdenv.mkDerivation rec {
-  name = "redstore-0.4";
+  name = "redstore-0.5.2";
 
   src = fetchurl {
-    url = "http://redstore.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1fs54v0d0kkqaz9ajacabb8wifrglvg6kkhd5b0mxmnng352wpp7";
+    url = "http://www.aelius.com/njh/redstore/${name}.tar.gz";
+    sha256 = "fdbe499a7bbe8c8a756ecb738b83ea375e96af16a1d74245b75600d4d40adb7d";
   };
 
-  buildInputs = [ gmp pkgconfig redland zlib ];
-      
+  buildInputs = [ gmp pkgconfig redland zlib librdf_raptor2 librdf_rasqal ];
+     
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${librdf_raptor2}/include/raptor2"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${librdf_rasqal}/include/rasqal"
+  '';
+
   meta = {
     description = "An HTTP interface to Redland RDF store";
     maintainers = [ stdenv.lib.maintainers.raskin ];
