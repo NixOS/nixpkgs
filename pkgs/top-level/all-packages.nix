@@ -5848,8 +5848,8 @@ let
   };
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
-  udev172 = callPackage ../os-specific/linux/udev/172.nix { };
-  udev = udev172;
+  udev173 = callPackage ../os-specific/linux/udev/173.nix { };
+  udev = pkgs.udev173;
 
   udisks = callPackage ../os-specific/linux/udisks { };
 
