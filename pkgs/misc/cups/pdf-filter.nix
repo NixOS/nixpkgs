@@ -1,14 +1,9 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler }:
 
-let version = "1.4.5"; in
-
 stdenv.mkDerivation {
-  name = "cups-pdf-filter-${version}";
+  name = "cups-pdf-filter-${cups.version}";
 
-  src = fetchurl {
-    url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1zhf3hvx11i0qnbwyybmdhx4fxkxfd4ch69k59fj5bz8wvcdcl04";
-  };
+  inherit (cups) src;
 
   buildInputs = [ pkgconfig cups poppler ];
 

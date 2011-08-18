@@ -6,6 +6,8 @@ let version = "1.4.7"; in
 stdenv.mkDerivation {
   name = "cups-${version}";
 
+  passthru = { inherit version; };
+
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
     sha256 = "1xlnkdqldq81pdqgisqbyh92k249bzz35m1f5bp4la06p00ksvjf";
