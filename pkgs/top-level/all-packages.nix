@@ -3449,11 +3449,9 @@ let
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = gtkLibs224;
+  gtkLibs = pkgs.gtkLibs224;
 
-  glib = gtkLibs.glib;
-  gtk = gtkLibs.gtk;
-  pango = gtkLibs.pango;
+  inherit (pkgs.gtkLibs) glib gtk pango;
 
   gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
 
