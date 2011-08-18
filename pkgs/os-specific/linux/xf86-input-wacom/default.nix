@@ -1,30 +1,23 @@
-{ stdenv, fetchurl, 
-  file, inputproto, libX11, libXext, libXi, libXrandr, libXrender,
-  ncurses, pkgconfig, randrproto, xorgserver, xproto }:
+{ stdenv, fetchurl
+, file, inputproto, libX11, libXext, libXi, libXrandr, libXrender
+, ncurses, pkgconfig, randrproto, xorgserver, xproto, udev }:
 
 stdenv.mkDerivation rec {
-  name = "xf86-input-wacom";
-  version = "0.10.10";
+  name = "xf86-input-wacom-0.11.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/linuxwacom/${name}-${version}.tar.bz2";
-    sha256 = "03yggp2ww64va6gmasl0gy0rbfcyb1zlj9kapp9kvhk2j4458fdr";
+    url = "mirror://sourceforge/linuxwacom/${name}.tar.bz2";
+    sha256 = "1jmnrkf89a3jjbpn17gyndlv9lqc0n7qwyi22hraxypq213gjclx";
   };
 
-  buildInputs = [ file inputproto libX11 libXext libXi libXrandr libXrender
-    ncurses pkgconfig randrproto xorgserver xproto ];
+  buildInputs = [ inputproto libX11 libXext libXi libXrandr libXrender
+    ncurses pkgconfig randrproto xorgserver xproto udev ];
 
   preConfigure = ''
     ensureDir $out/share/X11/xorg.conf.d
     configureFlags="--with-xorg-module-dir=$out/lib/xorg/modules
     --with-sdkdir=$out/include/xorg --with-xorg-conf-dir=$out/share/X11/xorg.conf.d"
   '';
-
-  postInstall =
-    ''
-      ensureDir $out/lib/udev/rules.d
-      cp ${./10-wacom.rules} $out/lib/udev/rules.d/10-wacom.rules
-    '';
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.goibhniu maintainers.urkud ];
