@@ -1,11 +1,12 @@
 { stdenv, fetchurl, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-ng-2.18";
+  version = "2.19.1";
+  name = "util-linux-ng-2.19.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux-ng/v2.18/${name}.tar.bz2";
-    sha256 = "1k1in1ba9kvh0kplri9765wh0yk68qrkk1a55dqsm21qfryc1idq";
+    url = "mirror://kernel/linux/utils/util-linux-ng/v2.19/util-linux-${version}.tar.bz2";
+    sha256 = "d3eac4afcc687b3ae1ffedcab2dc12df84c7ba7045cce31386d2b7040a011c7d";
   };
 
   # !!! It would be better to obtain the path to the mount helpers
