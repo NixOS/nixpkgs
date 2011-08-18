@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ pkgconfig ];
 
-  meta = { 
+  meta = {
     description = "GnuPG's interface to passphrase input";
 
     longDescription = ''

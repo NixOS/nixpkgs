@@ -1142,7 +1142,7 @@ let
 
   philter = callPackage ../tools/networking/philter { };
 
-  pinentry = callPackage ../tools/misc/pinentry {
+  pinentry = callPackage ../tools/security/pinentry {
     inherit (gnome) glib gtk;
   };
 
@@ -1160,7 +1160,9 @@ let
 
   polipo = callPackage ../servers/polipo { };
 
-  polkit_gnome = callPackage ../tools/misc/polkit-gnome { };
+  polkit_gnome = callPackage ../tools/security/polkit-gnome { };
+
+  polkit_kde_agent = newScope pkgs.kde4 ../tools/security/polkit-kde-agent { };
 
   povray = callPackage ../tools/graphics/povray { };
 
