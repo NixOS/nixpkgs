@@ -184,6 +184,13 @@ let
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
 
+      # Linux Containers
+      RT_GROUP_SCHED? y
+      CGROUP_DEVICE? y
+      CGROUP_MEM_RES_CTLR? y
+      CGROUP_MEM_RES_CTLR_SWAP? y
+      DEVPTS_MULTIPLE_INSTANCES? y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
