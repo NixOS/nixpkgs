@@ -1,16 +1,16 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, libosip, libexosip, speex,
-  readline, ffmpeg, alsaLib, SDL, libv4l, libtheora }:
+  readline, ffmpeg, alsaLib, SDL, libv4l, libtheora, libXv }:
         
-stdenv.mkDerivation {
-  name = "linphone-3.3.2";
+stdenv.mkDerivation rec {
+  name = "linphone-3.4.3";
 
   src = fetchurl {
-    url = http://download.savannah.gnu.org/releases/linphone/3.3.x/sources/linphone-3.3.2.tar.gz;
-    sha256 = "0plxqs6v2jz6s7ig8wfzg2ivjvdjja5xhqvrcsv644zl3b4igax7";
+    url = "mirror://savannah/linphone/3.4.x/sources/${name}.tar.gz";
+    sha256 = "14k655z0kfmnm42nxhsl25rjim9swrr4kpnplkx3pd9b3yha1rwj";
   };
 
   buildInputs = [ intltool pkgconfig gtk libglade libosip libexosip speex readline
-    ffmpeg alsaLib SDL libv4l libtheora ];
+    ffmpeg alsaLib SDL libv4l libtheora libXv ];
 
   meta = {
     homepage = http://www.linphone.org/;
