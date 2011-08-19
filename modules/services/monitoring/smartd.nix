@@ -73,6 +73,8 @@ in
     jobs.smartd =
       { description = "S.M.A.R.T. Daemon";
 
+        environment.TZ = config.time.timeZone;
+
         startOn = "started syslogd";
 
         daemonType = "daemon";
