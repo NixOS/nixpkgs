@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "css-text";
-  version = "0.1.0";
-  sha256 = "1yns9qm817ga9vsf75maai1fyqds9svawf8xsc2fq5wlicvb3h6n";
+  version = "0.1.0.1";
+  sha256 = "004ky2s6jmiliw8faja5kzp99i36qf56cixvn43n3pnq8gg26kfi";
   buildDepends = [ attoparsecText text ];
   meta = {
     homepage = "http://www.yesodweb.com/";
