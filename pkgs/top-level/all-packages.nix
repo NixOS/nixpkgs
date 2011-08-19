@@ -7838,6 +7838,7 @@ let
 
   kde47 = callPackage ../desktops/kde-4.7 {
     callPackage = newScope pkgs.kde47;
+    callPackageOrig = callPackage;
   };
 
   redshift = callPackage ../applications/misc/redshift {
