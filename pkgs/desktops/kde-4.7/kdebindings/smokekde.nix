@@ -1,7 +1,7 @@
-{ kde, kdelibs, kdebindings }:
+{ kde, kdelibs, smokeqt }:
 
 kde {
-  propagatedBuildInputs = [ kdelibs kdebindings.smokeqt ];
+  propagatedBuildInputs = [ kdelibs smokeqt ];
 
   meta = {
     description = "C++ parser used to generate language bindings for Qt/KDE";

@@ -1,13 +1,13 @@
 { kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, shared_desktop_ontologies,
   lm_sensors, pciutils, libraw1394, libusb, libxklavier, python, libqalculate,
   consolekit, xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi,
-  kdebindings
+  pykde4
 }:
 
 kde {
 
   buildInputs =
-    [ kdelibs qimageblitz libdbusmenu_qt kdebindings.pykde4
+    [ kdelibs qimageblitz libdbusmenu_qt pykde4
       xorg.libxkbfile xorg.libXcomposite xorg.libXScrnSaver xorg.libXtst
       xorg.libXcomposite xorg.libXdamage xorg.libXau xorg.libXdmcp
       xorg.libpthreadstubs

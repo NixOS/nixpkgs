@@ -1,7 +1,7 @@
-{ kde, kdelibs, kdegraphics }:
+{ kde, kdelibs, okular }:
 
 kde {
-  buildInputs = [ kdelibs kdegraphics.okular ];
+  buildInputs = [ kdelibs okular ];
 
   meta = {
     description = "A collection of plugins to handle mobipocket files";

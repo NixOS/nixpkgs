@@ -1,7 +1,7 @@
-{ kde, cmake, kdebindings, perl }:
+{ kde, cmake, smokeqt, perl }:
 
 kde {
-  buildInputs = [ kdebindings.smokeqt perl ];
+  buildInputs = [ smokeqt perl ];
   buildNativeInputs = [ cmake ];
 
   meta = {

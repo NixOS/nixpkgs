@@ -1,9 +1,9 @@
-{ kde, qt4, cmake, phonon, qimageblitz, kdebindings }:
+{ kde, qt4, cmake, phonon, qimageblitz, smokegen }:
 
 kde {
   propagatedBuildInputs = [ qt4 phonon qimageblitz ];
   buildNativeInputs = [ cmake ];
-  propagatedBuildNativeInputs = [ kdebindings.smokegen ];
+  propagatedBuildNativeInputs = [ smokegen ];
 
   meta = {
     description = "C++ parser used to generate language bindings for Qt/KDE";
