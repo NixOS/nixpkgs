@@ -2591,7 +2591,7 @@ let
       inherit stdenv application launcher xulrunner;
     };
 
-  xulrunner = firefoxPkgs.xulrunner;
+  xulrunner = pkgs.firefoxPkgs.xulrunner;
 
   ### DEVELOPMENT / MISC
 
@@ -6454,11 +6454,11 @@ let
   filelight = if pkgs.kde4.kdeutils ? filelight then pkgs.kde4.kdeutils.filelight
     else newScope pkgs.kde4 ../applications/misc/filelight { };
 
-  firefox = firefoxPkgs.firefox;
+  firefox = pkgs.firefoxPkgs.firefox;
 
-  firefoxWrapper = wrapFirefox firefox "firefox" "";
+  firefoxWrapper = wrapFirefox pkgs.firefox "firefox" "";
 
-  firefoxPkgs = firefox50Pkgs;
+  firefoxPkgs = pkgs.firefox50Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
