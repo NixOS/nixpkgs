@@ -6771,7 +6771,9 @@ let
     inherit (gnome) libglade;
   };
 
-  kipi_plugins = newScope pkgs.kde4 ../applications/graphics/kipi-plugins { };
+  kipi_plugins = newScope pkgs.kde47 ../applications/graphics/kipi-plugins {
+    inherit (pkgs.gtkLibs) gdk_pixbuf;
+  };
 
   kmplayer = newScope pkgs.kde4 ../applications/video/kmplayer {
     inherit (pkgs.gtkLibs) pango;
