@@ -16,6 +16,7 @@ rec {
 
   # Map a function over a list and concatenate the resulting strings.
   concatMapStrings = f: list: concatStrings (map f list);
+  concatImapStrings = f: list: concatStrings (lib.imap f list);
   
 
   # Place an element between each element of a list, e.g.,
