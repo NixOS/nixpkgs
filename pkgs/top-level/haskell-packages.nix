@@ -1389,8 +1389,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
-  mkcabal = callPackage ../development/tools/haskell/mkcabal {};
-
   tar = callPackage ../development/tools/haskell/tar {};
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
