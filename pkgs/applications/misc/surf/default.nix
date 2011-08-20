@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
       description = "surf is a simple web browser based on WebKit/GTK+. It is able to display websites and follow links. It supports the XEmbed protocol which makes it possible to embed it in another application. Furthermore, one can point surf to another URI by setting its XProperties.";
       homepage = http://surf.suckless.org;
       license = "MIT";
-      platforms = with stdenv.lib.platforms; all;
+      platforms = stdenv.lib.platforms.linux;
   };
 }
