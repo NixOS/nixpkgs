@@ -7585,6 +7585,8 @@ let
 
   flightgear = callPackage ../games/flightgear {};
 
+  freeciv = callPackage ../games/freeciv { };
+
   freedink = callPackage ../games/freedink { };
 
   fsg = callPackage ../games/fsg {
