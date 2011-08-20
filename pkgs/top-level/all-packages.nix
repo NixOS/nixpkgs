@@ -5297,6 +5297,7 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.aufs2_2_6_32
         kernelPatches.tracehook_2_6_32
         kernelPatches.utrace_2_6_32
       ];
@@ -5322,6 +5323,7 @@ let
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_33
+        kernelPatches.aufs2_2_6_33
         kernelPatches.sec_perm_2_6_24
 	kernelPatches.cifs_timeout_2_6_29
       ];
@@ -5379,11 +5381,17 @@ let
   linux_nanonote_jz_2_6_34 = makeOverridable
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.34.nix) {
       inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
+      kernelPatches =
+        [ kernelPatches.aufs2_2_6_34
+        ];
     };
 
   linux_nanonote_jz_2_6_35 = makeOverridable
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.35.nix) {
       inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
+      kernelPatches =
+        [ kernelPatches.aufs2_2_6_35
+        ];
     };
 
   linux_nanonote_jz_2_6_36 = makeOverridable
