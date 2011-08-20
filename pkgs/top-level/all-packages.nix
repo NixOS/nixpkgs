@@ -7262,6 +7262,10 @@ let
     inherit (gnome) libIDL;
   };
 
+  thunderbird5 = callPackage ../applications/networking/mailreaders/thunderbird/5.x.nix {
+    inherit (gnome) libIDL;
+  };
+
   timidity = callPackage ../tools/misc/timidity { };
 
   tkcvs = callPackage ../applications/version-management/tkcvs { };
