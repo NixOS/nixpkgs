@@ -164,22 +164,22 @@ rec {
     };
 
   tracehook_2_6_32 =
-    { # From <http://people.redhat.com/roland/utrace/>.
+    { # From <http://userweb.kernel.org/~frob/utrace/>.
       name = "tracehook";
       patch = fetchurl {
-        url = http://people.redhat.com/roland/utrace/2.6.32/tracehook.patch;
+        url = http://userweb.kernel.org/~frob/utrace/2.6.32/tracehook.patch;
         sha256 = "1y009p8dyqknbjm8ryb495jqmvl372gfhswdn167xh2g1f24xqv8";
       };
     };
 
   utrace_2_6_32 =
-    { # From <http://people.redhat.com/roland/utrace/>, depends on the
+    { # From <http://userweb.kernel.org/~frob/utrace/>, depends on the
       # `tracehook' patch above.
       # See also <http://sourceware.org/systemtap/wiki/utrace>.
       name = "utrace";
       patch = fetchurl {
-        url = http://people.redhat.com/roland/utrace/2.6.32/utrace.patch;
-        sha256 = "1951mwc8jfiwrl0d2bb1zk9yrl7n7kadc00ymjsxrg2irda1b89r";
+        url = http://userweb.kernel.org/~frob/utrace/2.6.32/utrace.patch;
+        sha256 = "0argf19k9f0asiv4l4cnsxm5hw2xx8d794npaln88vwz87sj5nnq";
       };
       extraConfig =
         '' UTRACE y
