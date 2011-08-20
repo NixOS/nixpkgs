@@ -1,21 +1,41 @@
-{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
-, dejagnu, python, target ? null }:
+{ fetchurl, fetchgit, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
+, dejagnu, python, target ? null
+
+# Set it to true to fetch the latest release/branchpoint from git.
+, bleedingEdgeVersion ? false
+
+# needed for the git version
+, flex, bison }:
 
 let
-    basename = "gdb-7.2";
+    basename =
+      if bleedingEdgeVersion
+      then "gdb-7.3.20110726"
+      else "gdb-7.3";
 in
+
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (target != null)
       ("-" + target.config);
 
-  src = fetchurl {
-    url = "mirror://gnu/gdb/${basename}.tar.bz2";
-    sha256 = "1w0h6hya0bl46xddd57mdzwmffplwglhnh9x9hv46ll4mf44ni5z";
-  };
+  src =
+    if bleedingEdgeVersion
+    then fetchgit {
+        url = "git://sourceware.org/git/gdb.git";
+        rev = "refs/tags/gdb_7_3-2011-07-26-release";
+      }
+    else fetchurl {
+        url = "mirror://gnu/gdb/${basename}.tar.bz2";
+        # md5 is provided by the annoucement page
+        # http://www.gnu.org/s/gdb/download/ANNOUNCEMENT
+        md5 = "485022b8df7ba2221f217e128f479fe7";
+      };
 
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
-  buildNativeInputs = [ texinfo python ];
+  buildNativeInputs = [ texinfo python ]
+  ++ stdenv.lib.optionals bleedingEdgeVersion [ flex bison ];
+
   buildInputs = [ ncurses readline gmp mpfr expat ]
     ++ stdenv.lib.optional doCheck dejagnu;
 
@@ -42,7 +62,7 @@ stdenv.mkDerivation rec {
   # TODO: Investigate & fix the test failures.
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GDB, the GNU Project debugger";
 
     longDescription = ''
@@ -55,7 +75,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.cygwin;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = with platforms; linux ++ cygwin;
+    maintainers = with maintainers; [ ludo pierron ];
   };
 }
