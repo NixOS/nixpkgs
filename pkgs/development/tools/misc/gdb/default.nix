@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # Do not add --with-python here to avoid cross building it.
     configureFlags =
       '' --with-gmp=${gmp.hostDrv} --with-mpfr=${mpfr.hostDrv} --with-system-readline
-         --with-expat --with-libexpat-prefix=${expat.hostDrv}
+         --with-expat --with-libexpat-prefix=${expat.hostDrv} --without-python
       '' + stdenv.lib.optionalString (target != null)
          " --target=${target.config}";
   };
