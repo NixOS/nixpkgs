@@ -3,26 +3,64 @@
 url=$1
 rev=$2
 expHash=$3
-
 hashType=$NIX_HASH_ALGO
-if test -z "$hashType"; then
-    hashType=sha256
+deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
+leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
+builder=
+
+if test -n "$deepClone"; then
+  deepClone=true
+else
+  deepClone=false
 fi
+
+if test "$leaveDotGit" != 1; then
+  leaveDotGit=
+else
+  leaveDotGit=true
+fi
+
+
+argi=0
+argfun=""
+for arg; do
+  if test -z "$argfun"; then
+    case $arg in
+      --out) argfun=set_out;;
+      --url) argfun=set_url;;
+      --rev) argfun=set_rev;;
+      --hash) argfun=set_hashType;;
+      --deepClone) deepClone=true;;
+      --no-deepClone) deepClone=false;;
+      --leave-dotGit) leaveDotGit=true;;
+      --keep-dotGit) leaveDotGit=;;
+      --builder) builder=true;;
+      *)
+          argi=$(($argi + 1))
+          case $argi in
+              1) url=$arg;;
+              2) rev=$arg;;
+              3) expHash=$arg;;
+              *) exit 1;;
+          esac
+          ;;
+    esac
+  else
+    case $argfun in
+      set_*)
+        var=$(echo $argfun | sed 's,^set_,,')
+        eval $var=$arg
+        ;;
+    esac
+    argfun=""
+  fi
+done
 
 if test -z "$url"; then
     echo "syntax: nix-prefetch-git URL [REVISION [EXPECTED-HASH]]" >&2
     exit 1
 fi
 
-# If the hash was given, a file with that hash may already be in the
-# store.
-if test -n "$expHash"; then
-    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" git-export)
-    if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
-        finalPath=
-    fi
-    hash=$expHash
-fi
 
 init_remote(){
     local url=$1;
@@ -51,8 +89,8 @@ checkout_hash(){
         hash=$(hash_from_ref $ref);
     fi;
 
-    git fetch origin || return 1
-    git checkout $hash || return 1
+    git fetch ${builder:+--progress} origin || return 1
+    git checkout -b fetchgit $hash || return 1
 }
 
 # Fetch only a branch/tag and checkout it.
@@ -60,7 +98,7 @@ checkout_ref(){
     local hash="$1";
     local ref="$2";
 
-    if test -n "$NIX_PREFETCH_GIT_DEEP_CLONE"; then
+    if "$deepClone"; then
 	# The caller explicitly asked for a deep clone.  Deep clones
 	# allow "git describe" and similar tools to work.  See
 	# http://thread.gmane.org/gmane.linux.distributions.nixos/3569
@@ -74,8 +112,8 @@ checkout_ref(){
 
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
-        git fetch --depth 1 origin +"$ref" || return 1
-        git checkout FETCH_HEAD || return 1
+        git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        git checkout -b fetchgit FETCH_HEAD || return 1
     else
         return 1;
     fi;
@@ -120,7 +158,7 @@ clone(){
     # Checkout linked sources.
     init_submodules;
 
-    if [ -f .topdeps ]; then
+    if [ -z "$builder" -a -f .topdeps ]; then
 	if tg help 2>&1 > /dev/null
 	then
 	    echo "populating TopGit branches..."
@@ -134,56 +172,83 @@ clone(){
     cd $top;
 }
 
-# If we don't know the hash or a path with that hash doesn't exist,
-# download the file and add it to the store.
-if test -z "$finalPath"; then
-
-    tmpPath=/tmp/git-checkout-tmp-$$
-    tmpFile=$tmpPath/git-export
-    mkdir $tmpPath $tmpFile
-
-    trap "rm -rf $tmpPath" EXIT
+clone_user_rev() {
+    local dir="$1"
+    local url="$2"
+    local rev="$3"
 
     # Perform the checkout.
     case "$rev" in
         HEAD|refs/*)
-            clone "$tmpFile" "$url" "" "$rev" 1>&2;;
+            clone "$dir" "$url" "" "$rev" 1>&2;;
         [0-9a-f]*)
             if test -z "$(echo $rev | tr -d 0123456789abcdef)"; then
-                clone "$tmpFile" "$url" "$rev" "" 1>&2;
+                clone "$dir" "$url" "$rev" "" 1>&2;
             else
                 echo 1>&2 "Bad commit hash or bad reference.";
                 exit 1;
             fi;;
         "")
-            clone "$tmpFile" "$url" "" "HEAD" 1>&2;;
+            clone "$dir" "$url" "" "HEAD" 1>&2;;
     esac
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
-    if test "$NIX_PREFETCH_GIT_LEAVE_DOT_GIT" != 1
-    then
+    if test -z "$leaveDotGit"; then
 	echo "removing \`.git'..." >&2
-	rm -rf $tmpFile/.git
+        find $out -name .git\* | xargs rm -rf
     fi
+}
 
-    # Compute the hash.
-    hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
-    if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
+if test -n "$builder"; then
+    mkdir $out
+    clone_user_rev "$out" "$url" "$rev"
+else
+  if test -z "$hashType"; then
+      hashType=sha256
+  fi
 
-    # Add the downloaded file to the Nix store.
-    finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+  # If the hash was given, a file with that hash may already be in the
+  # store.
+  if -n "$expHash"; then
+      finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" git-export)
+      if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+          finalPath=
+      fi
+      hash=$expHash
+  fi
 
-    if test -n "$expHash" -a "$expHash" != "$hash"; then
-        echo "hash mismatch for URL \`$url'"
-        exit 1
-    fi
-fi
+  # If we don't know the hash or a path with that hash doesn't exist,
+  # download the file and add it to the store.
+  if test -z "$finalPath"; then
 
-if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
+      tmpPath=/tmp/git-checkout-tmp-$$
+      tmpFile=$tmpPath/git-export
+      mkdir $tmpPath $tmpFile
 
-echo $hash
+      trap "rm -rf $tmpPath" EXIT
 
-if test -n "$PRINT_PATH"; then
-    echo $finalPath
+      # Perform the checkout.
+      clone_user_rev "$tmpFile" "$url" "$rev"
+
+      # Compute the hash.
+      hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
+      if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
+
+      # Add the downloaded file to the Nix store.
+      finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+
+      if test -n "$expHash" -a "$expHash" != "$hash"; then
+          echo "hash mismatch for URL \`$url'"
+          exit 1
+      fi
+  fi
+
+  if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
+
+  echo $hash
+
+  if test -n "$PRINT_PATH"; then
+      echo $finalPath
+  fi
 fi
