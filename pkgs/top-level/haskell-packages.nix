@@ -451,6 +451,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
+  cmdlib = callPackage ../development/libraries/haskell/cmdlib {};
+
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
 
   colour = callPackage ../development/libraries/haskell/colour {};
