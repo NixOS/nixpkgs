@@ -73,7 +73,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client";
-    homepage = http://www.mozilla.com/en-US/thunderbird/;
+    homepage = http://www.mozilla.org/en-US/thunderbird/;
     license =
       # Official branding implies thunderbird name and logo cannot be reuse,
       # see http://www.mozilla.org/foundation/licensing.html

@@ -101,7 +101,7 @@ rec {
 
     meta = {
       description = "Mozilla Firefox XUL runner";
-      homepage = http://www.mozilla.com/en-US/firefox/;
+      homepage = http://www.mozilla.org/en-US/firefox/;
     };
 
     passthru = { inherit gtk; version = xulVersion; };
@@ -141,7 +141,7 @@ rec {
 
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
-      homepage = http://www.mozilla.com/en-US/firefox/;
+      homepage = http://www.mozilla.org/en-US/firefox/;
     };
 
     passthru = {
