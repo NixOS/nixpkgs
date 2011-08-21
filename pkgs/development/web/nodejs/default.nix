@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, python }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.2";
+  version = "0.5.4";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "16z16gq5pibw5l830pv5dgx7v2gw6syrddphikcgia92pw4r33qr";
+    sha256 = "d32d3af4e3286b383640df857d76c2fcca1a2e2cb85abb484483a0a49d09ae71";
   };
 
   patchPhase = ''
