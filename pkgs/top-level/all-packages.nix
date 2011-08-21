@@ -2744,6 +2744,8 @@ let
 
   cscope = callPackage ../development/tools/misc/cscope { };
 
+  csslint = callPackage ../development/web/csslint { };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   ddd = callPackage ../development/tools/misc/ddd { };
