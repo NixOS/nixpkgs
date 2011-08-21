@@ -724,6 +724,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     vty = self.vty_4_6_0_4;
   };
   hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
+  hledgerInterest = callPackage ../applications/office/hledger-interest {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
