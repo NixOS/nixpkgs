@@ -39,11 +39,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline gmp mpfr expat ]
     ++ stdenv.lib.optional doCheck dejagnu;
 
-  configureFlags =
+  configureFlags = with stdenv.lib;
     '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
        --with-expat --with-libexpat-prefix=${expat} --with-python
-    '' + stdenv.lib.optionalString (target != null)
-       " --target=${target.config}";
+    ''
+    + optionalString (target != null) " --target=${target.config}"
+    + optionalString (elem stdenv.system platforms.cygwin) "  --without-python"
+  ;
 
   crossAttrs = {
     # Do not add --with-python here to avoid cross building it.
