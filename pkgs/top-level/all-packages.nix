@@ -810,6 +810,8 @@ let
 
   hdf5 = callPackage ../tools/misc/hdf5 { };
 
+  heimdall = callPackage ../tools/misc/heimdall { };
+
   hevea = callPackage ../tools/typesetting/hevea { };
 
   highlight = callPackage ../tools/text/highlight { };
