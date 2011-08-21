@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # Tell Glib/GIO about the MIME info directory, which is used
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
-      --prefix XDG_DATA_DIRS "${shared_mime_info}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "${shared_mime_info}/share:$out/share"
   '';
 
   meta = {
