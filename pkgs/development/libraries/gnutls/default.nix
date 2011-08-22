@@ -1,27 +1,30 @@
-{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle
+{ fetchurl, stdenv, xz, zlib, lzo, libtasn1, nettle
 , guileBindings, guile }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-2.12.7";
+  name = "gnutls-3.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gnutls/${name}.tar.bz2";
-    sha256 = "09vmm1b2iypwk5vh0adyqzra7sgx5hb9xyr1wjncv7947bk4zn3p";
+    url = "mirror://gnu/gnutls/${name}.tar.xz";
+    sha256 = "1z3dqjv8zvma2adbwbcw704zf91hazz8ilmxy91gkrdpi5z2kpz2";
   };
+
+  patches = [ ./fix-guile-priorities-test.patch ];
 
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
+      --without-p11-kit                                         \
       --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
         else ""}
   '';
 
-  buildInputs = [ zlib lzo libtasn1 ]
+  buildInputs = [ xz zlib lzo libtasn1 ]
     ++ stdenv.lib.optional guileBindings guile;
 
   propagatedBuildInputs = [ nettle ];
