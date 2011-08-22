@@ -33,6 +33,15 @@ stdenv.mkDerivation rec {
     ( map (var: ''-DPACKAGE_${var}_DIR=\""${builtins.getAttr var foolVars}"\"'')
         (builtins.attrNames foolVars) );
 
+  preBuild =
+    ''
+      # ‘libpolkit-agent-1.so’ should call the setuid wrapper on
+      # NixOS.  Hard-coding the path is kinda ugly.  Maybe we can just
+      # call through $PATH, but that might have security implications.
+      substituteInPlace src/polkitagent/polkitagentsession.c \
+        --replace PACKAGE_LIBEXEC_DIR '"/var/setuid-wrappers"'
+    '';
+
   makeFlags =
     ''
       INTROSPECTION_GIRDIR=$(out)/share/gir-1.0
