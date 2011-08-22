@@ -1323,8 +1323,9 @@ let
 
   sudo = callPackage ../tools/security/sudo { };
 
-  suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) {
-  };
+  suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) { };
+
+  super = callPackage ../tools/security/super { };
 
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
