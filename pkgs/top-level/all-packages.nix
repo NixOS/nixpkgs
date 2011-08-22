@@ -6493,6 +6493,13 @@ let
 
   firefox60Wrapper = lowPrio (wrapFirefox firefox60Pkgs.firefox "firefox" "");
 
+  firefox70b1Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
+  firefox70b1Wrapper = lowPrio (wrapFirefox firefox70b1Pkgs.firefox "firefox" "");
+  
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer10;
