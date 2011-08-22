@@ -7,6 +7,8 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.xfce;
 
+  isXfce48 = pkgs.xfce ? libxfce4ui;
+
 in
 
 {
@@ -69,12 +71,16 @@ in
         pkgs.gnome.gnomeicontheme
         pkgs.desktop_file_utils
       ]
+      ++ optionals isXfce48 [
+        pkgs.xfce.libxfce4ui
+        pkgs.xfce.garcon
+      ]
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
 
     environment.pathsToLink =
-      [ "/share/xfce4" "/share/themes" "/share/mime" ];
+      [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" ];
       
-    services.hal.enable = true;
+    services.hal = mkIf (!isXfce48) { enable = true; };
     
   };
 
