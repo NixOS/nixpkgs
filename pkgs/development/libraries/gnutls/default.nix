@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
         else ""}
   '';
 
-  buildInputs = [ xz zlib lzo libtasn1 ]
+  buildInputs = [ xz zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  propagatedBuildInputs = [ nettle ];
+  propagatedBuildInputs = [ nettle libtasn1 ];
 
   doCheck = true;
 
