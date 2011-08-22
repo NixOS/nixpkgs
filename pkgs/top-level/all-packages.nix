@@ -4709,6 +4709,8 @@ let
 
   pycups = callPackage ../development/python-modules/pycups { };
 
+  pyexiv2 = callPackage ../development/python-modules/pyexiv2 { };
+
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygobject = callPackage ../development/python-modules/pygobject { };
@@ -6764,6 +6766,10 @@ let
   jigdo = callPackage ../applications/misc/jigdo { };
 
   joe = callPackage ../applications/editors/joe { };
+
+  jbrout = callPackage ../applications/graphics/jbrout {
+    inherit (pythonPackages) lxml;
+  };
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
