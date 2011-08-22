@@ -1,20 +1,18 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, dbus_glib, xfconf
-, libxfcegui4, libxfce4util, libnotify, xfce4panel }:
+, libxfce4ui, libxfce4util, libnotify, xfce4panel }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-power-manager-0.8.5";
+  name = "xfce4-power-manager-1.0.10";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/src/apps/xfce4-power-manager/0.8/${name}.tar.bz2";
-    sha1 = "b1ce0f120733ec1a6267d50ba5c2990bbbbccfd4";
+    url = "http://archive.xfce.org/src/apps/xfce4-power-manager/1.0/${name}.tar.bz2";
+    sha1 = "64dd7a8fae9cd1cbcf6403d2f51f2281f38cca05";
   };
 
   buildInputs =
-    [ pkgconfig intltool gtk dbus_glib xfconf libxfcegui4 libxfce4util
+    [ pkgconfig intltool gtk dbus_glib xfconf libxfce4ui libxfce4util
       libnotify xfce4panel
     ];
-
-  NIX_CFLAGS_COMPILE = "-I${libxfcegui4}/include/xfce4";
 
   meta = {
     homepage = http://goodies.xfce.org/projects/applications/xfce4-power-manager;
