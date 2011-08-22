@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, groff }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "super-3.30.0";
