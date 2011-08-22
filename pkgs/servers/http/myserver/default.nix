@@ -1,17 +1,17 @@
 { fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
 , libxml2, zlib, guile, texinfo, cppunit, xz, psmisc }:
 
-let version = "0.10"; in
+let version = "0.11"; in
   stdenv.mkDerivation (rec {
     name = "myserver-${version}";
 
     src = fetchurl {
       url = "mirror://gnu/myserver/${version}/${name}.tar.xz";
-      sha256 = "0w8njgka54if8ycd9cyxgmqa0ivv7r0rka7gda3x2rfr2z4nxvpb";
+      sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
     };
 
     patches =
-      [ ./disable-dns-lookup-in-chroot.patch ./installable-binary.patch ];
+      [ ./disable-dns-lookup-in-chroot.patch ];
 
     buildInputs =
       [ libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo xz ]
