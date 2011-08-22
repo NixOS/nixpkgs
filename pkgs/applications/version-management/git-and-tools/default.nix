@@ -104,11 +104,11 @@ rec {
   };
 
   gitSubtree = stdenv.mkDerivation {
-    name = "git-subtree-0.3";
+    name = "git-subtree-0.4";
     src = fetchurl {
-      url = "http://github.com/apenwarr/git-subtree/tarball/v0.3";
+      url = "http://github.com/apenwarr/git-subtree/tarball/v0.4";
 #      sha256 = "0y57lpbcc2142jgrr4lflyb9xgzs9x33r7g4b919ncn3alb95vdr";
-      sha256 = "f2ccac1e9cff4c35d989dc2a5581133c96b72d96c6a5ed89e51b6446dadac03f";
+      sha256 = "19s8352igwh7x1nqgdfs7rgxahw9cnfv7zmpzpd63m1r3l2945d4";
     };
     unpackCmd = "gzip -d < $curSrc | tar xvf -";
     buildInputs = [ git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];
