@@ -110,6 +110,9 @@ in
           pkgs.kde4.kde_wallpapers # contains kdm's default background
           pkgs.kde4.oxygen_icons
 
+          # Starts KDE's Polkit authentication agent.
+          pkgs.polkit_kde_agent
+
           # Phonon backends.
           pkgs.phonon_backend_gstreamer
           pkgs.gst_all.gstPluginsBase
