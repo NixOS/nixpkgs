@@ -80,7 +80,10 @@ in
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" ];
       
+    # Enable helpful DBus services.
     services.hal = mkIf (!isXfce48) { enable = true; };
+    services.udisks = mkIf isXfce48 { enable = true; };
+    services.upower = mkIf (isXfce48 && config.powerManagement.enable) { enable = true; };
     
   };
 

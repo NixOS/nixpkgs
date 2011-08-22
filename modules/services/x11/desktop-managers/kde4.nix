@@ -140,10 +140,10 @@ in
         target = "X11/xkb";
       };
 
-    # Enable required DBus services.
+    # Enable helpful DBus services.
     services.hal = mkIf (!isKDE47) { enable = true; };
     services.udisks = mkIf isKDE47 { enable = true; };
-    services.upower = mkIf isKDE47 { enable = true; };
+    services.upower = mkIf (isKDE47 && config.powerManagement.enable) { enable = true; };
 
   };
 
