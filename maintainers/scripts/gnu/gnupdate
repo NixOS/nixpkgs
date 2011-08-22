@@ -553,7 +553,9 @@ replaced by the result of their application to DERIVATIONS, a vhash."
     "automake110x"
     "bison1875"
     "bison23"
-    "bison" ;; = 2.3
+    "bison24"
+    "bison" ;; = 2.4
+    "ccrtp_1_8"
     "emacs22"
     "emacsSnapshot"
     "gcc295"
@@ -581,6 +583,8 @@ replaced by the result of their application to DERIVATIONS, a vhash."
     "icecat3Xul" ;; redundant with `icecat'
     "icecatWrapper"
     "icecatXulrunner3"
+    "libzrtpcpp_1_6"
+    "parted_2_3"
     ))
 
 (define (gnu? package)
