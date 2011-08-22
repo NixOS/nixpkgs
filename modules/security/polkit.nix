@@ -6,25 +6,6 @@ let
 
   cfg = config.security.polkit;
 
-  pkWrapper = pkgs.stdenv.mkDerivation {
-    name = "polkit-wrapper";
-    helper = "libexec/polkit-1/polkit-agent-helper-1";
-    buildInputs = [ pkgs.xorg.lndir ];
-
-    builder = pkgs.writeScript "pkwrap-builder" ''
-      source $stdenv/setup
-
-      mkdir -pv $out
-      lndir ${pkgs.polkit} $out
-
-      # !!! I'm pretty sure the wrapper doesn't work because
-      # libpolkit-agent-1.so has a hard-coded reference to
-      # polkit-agent-helper-1.
-      rm $out/$helper
-      ln -sv ${config.security.wrapperDir}/polkit-agent-helper-1 $out/$helper
-      '';
-  };
-  
 in
 
 {
@@ -85,7 +66,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkWrapper ];
+    environment.systemPackages = [ pkgs.polkit ];
 
     # The polkit daemon reads action files 
     environment.pathsToLink = [ "/share/polkit-1/actions" ];
@@ -111,7 +92,7 @@ in
         }
       ];
 
-    services.dbus.packages = [ pkWrapper ];
+    services.dbus.packages = [ pkgs.polkit ];
 
     security.pam.services = [ { name = "polkit-1"; } ];
     
@@ -122,7 +103,7 @@ in
         owner = "root";
         group = "root";
         setuid = true;
-        source = pkgs.polkit + "/" + pkWrapper.helper;
+        source = "${pkgs.polkit}/libexec/polkit-1/polkit-agent-helper-1";
       };
 
     system.activationScripts.polkit =
