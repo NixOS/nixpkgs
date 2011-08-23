@@ -6500,7 +6500,7 @@ let
   };
 
   firefox70b1Wrapper = lowPrio (wrapFirefox firefox70b1Pkgs.firefox "firefox" "");
-  
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer10;
