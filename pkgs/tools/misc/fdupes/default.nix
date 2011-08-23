@@ -1,16 +1,18 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "fdupes-1.40";
+  name = "fdupes-1.50-PR2";
   src = fetchurl {
-    url = http://premium.caribe.net/~adrian2/programs/fdupes-1.40.tar.gz;
-    sha256 = "1ryxpckgrmqa4y7nx9a9xpg4z1r00k11kc1cm7lqv87l9g293vg1";
+    url = http://fdupes.googlecode.com/files/fdupes-1.50-PR2.tar.gz;
+    sha256 = "068nxcn3xilaphq53sywli9ndydy4gijfi2mz7h45kpy0q9cgwjs";
   };
 
-  installPhase =  ''
-    mkdir -p $out/{bin,man/man1}
-    make INSTALLDIR=$out/bin MANPAGEDIR=$out/man install
-  '';
+  # workaround: otherwise make install fails (should be fixed in trunk)
+  preInstall = "ensureDir $out/bin $out/man/man1";
+
+  makeFlags = "PREFIX=\${out}";
+
+  preBuild = "type -p make";
 
   meta = {
     description = "identifies duplicate files residing within specified directories.";
@@ -18,7 +20,11 @@ stdenv.mkDerivation {
       FDUPES uses md5sums and then a byte by byte comparison to finde duplicate
       files within a set of directories.
     '';
-    homepage = http://premium.caribe.net/~adrian2/fdupes.html;
+    homepage = http://code.google.com/p/fdupes/;
     license = "MIT";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }
