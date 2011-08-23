@@ -1,12 +1,12 @@
-{ cabal, HTTP, mtl, regexPosix }:
+{ cabal, HTTP, mtl, nixosTypes, regexPosix }:
 
 cabal.mkDerivation (self: {
   pname = "cabal2nix";
-  version = "1.11";
-  sha256 = "1df6bxgdzd3jfxfs3qg8qw6pmsfbd5l32krx9xdfkiqvfxa6vpy9";
-  isLibrary = true;
+  version = "1.12";
+  sha256 = "14bijci07hkm3ksbqpzbnmwiysy5s3ll89r2iqkr1rbmj7bqxdwy";
+  isLibrary = false;
   isExecutable = true;
-  buildDepends = [ HTTP mtl regexPosix ];
+  buildDepends = [ HTTP mtl nixosTypes regexPosix ];
   meta = {
     homepage = "http://github.com/haskell4nix/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
