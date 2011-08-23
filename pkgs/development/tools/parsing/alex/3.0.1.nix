@@ -1,4 +1,4 @@
-{ cabal, QuickCheck, perl }:
+{ cabal, perl, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "alex";

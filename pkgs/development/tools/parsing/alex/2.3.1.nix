@@ -1,11 +1,12 @@
-{cabal, perl}:
+{ cabal, perl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "alex";
-  version = "2.3.1"; # Haskell Platform 2009.0.0
-  name = self.fname;
+  version = "2.3.1";
   sha256 = "cdd42fd992a72fedeff1f38debc21aa315d90dc070f0945d7819c0bccd549a44";
-  extraBuildInputs = [perl];
+  isLibrary = false;
+  isExecutable = true;
+  buildTools = [ perl ];
   meta = {
     homepage = "http://www.haskell.org/alex/";
     description = "Alex is a tool for generating lexical analysers in Haskell";

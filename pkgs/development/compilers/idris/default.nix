@@ -1,4 +1,4 @@
-{ cabal, binary, epic, ivor, mtl, parsec, readline, happy }:
+{ cabal, binary, epic, happy, ivor, mtl, parsec, readline }:
 
 cabal.mkDerivation (self: {
   pname = "idris";

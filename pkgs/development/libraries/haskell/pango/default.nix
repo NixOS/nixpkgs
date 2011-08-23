@@ -1,11 +1,15 @@
-{cabal, cairo, glib, mtl, gtk2hsBuildtools, pkgconfig, pango, glibc}:
+{ cabal, cairo, glib, glibc, gtk2hsBuildtools, mtl, pango
+, pkgconfig
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "pango";
   version = "0.12.0";
   sha256 = "1vp0hl4kpgcc3xphml1hmy04hqcn12y0ks03nn32g6g33ni9mwrb";
-  extraBuildInputs = [pkgconfig gtk2hsBuildtools pango glibc];
-  propagatedBuildInputs = [cairo glib mtl];
+  buildDepends = [ cairo glib mtl ];
+  buildTools = [ gtk2hsBuildtools ];
+  extraLibraries = [ pkgconfig glibc ];
+  pkgconfigDepends = [ cairo pango ];
   meta = {
     homepage = "http://www.haskell.org/gtk2hs/";
     description = "Binding to the Pango text rendering engine";

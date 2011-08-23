@@ -1,4 +1,6 @@
-{ cabal, GLURaw, ObjectName, OpenGLRaw, StateVar, Tensor, mesa, libX11 }:
+{ cabal, GLURaw, libX11, mesa, ObjectName, OpenGLRaw, StateVar
+, Tensor
+}:
 
 cabal.mkDerivation (self: {
   pname = "OpenGL";

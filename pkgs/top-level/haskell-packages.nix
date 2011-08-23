@@ -592,7 +592,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
-    inherit (pkgs) pkgconfig gnome glibc;
+    inherit (pkgs) pkgconfig glibc;
+    inherit (pkgs.gnome) libglade;
+    gtkC = pkgs.gnome.gtk;
   };
 
   glib = callPackage ../development/libraries/haskell/glib {
@@ -634,7 +636,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
     inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gnome) gtksourceview;
-    gtkC = pkgs.gtkLibs.gtk;
   };
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
@@ -740,7 +741,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hp2anyCore = callPackage ../development/libraries/haskell/hp2any-core {};
 
-  hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
+  hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {
+    glut = pkgs.freeglut;
+  };
 
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 

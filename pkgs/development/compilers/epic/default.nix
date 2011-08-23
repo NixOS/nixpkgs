@@ -1,4 +1,4 @@
-{ cabal, mtl, happy, gmp, boehmgc }:
+{ cabal, boehmgc, gmp, happy, mtl }:
 
 cabal.mkDerivation (self: {
   pname = "epic";
@@ -7,9 +7,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl ];
+  buildTools = [ happy ];
   extraLibraries = [ gmp boehmgc ];
   noHaddock = true;
-  buildTools = [ happy ];
   meta = {
     homepage = "http://www.dcs.st-and.ac.uk/~eb/epic.php";
     description = "Compiler for a simple functional language";
