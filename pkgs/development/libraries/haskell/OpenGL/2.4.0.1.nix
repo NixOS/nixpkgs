@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "2.4.0.1";
   sha256 = "0xdclf0m7qxp4157053cbsybpy7fqiiiak0g2kyf8awr7a5736n5";
   buildDepends = [ GLURaw ObjectName OpenGLRaw StateVar Tensor ];
-  extraLibraries = [ mesa libX11 ];
+  extraLibraries = [ libX11 mesa ];
   meta = {
     homepage = "http://www.haskell.org/HOpenGL/";
     description = "A binding for the OpenGL graphics system";

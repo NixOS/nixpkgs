@@ -5,7 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.12.1.7";
   sha256 = "12vs449xg2xjp503ywjwxadan3v7dq38ph66292szwj1vmhl07v4";
   buildDepends = [ parsec stm time wxdirect ];
-  extraLibraries = [ wxGTK mesa libX11 ];
+  extraLibraries = [ libX11 mesa wxGTK ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";

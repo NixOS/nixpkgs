@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     binary HUnit QuickCheck random storableComplex vector
   ];
-  extraLibraries = [ gsl liblapack blas ];
+  extraLibraries = [ blas gsl liblapack ];
   meta = {
     homepage = "http://perception.inf.um.es/hmatrix";
     description = "Linear algebra and numerical computation";

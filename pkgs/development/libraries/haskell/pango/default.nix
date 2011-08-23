@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1vp0hl4kpgcc3xphml1hmy04hqcn12y0ks03nn32g6g33ni9mwrb";
   buildDepends = [ cairo glib mtl ];
   buildTools = [ gtk2hsBuildtools ];
-  extraLibraries = [ pkgconfig glibc ];
+  extraLibraries = [ glibc pkgconfig ];
   pkgconfigDepends = [ cairo pango ];
   meta = {
     homepage = "http://www.haskell.org/gtk2hs/";

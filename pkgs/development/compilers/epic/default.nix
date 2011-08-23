@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ mtl ];
   buildTools = [ happy ];
-  extraLibraries = [ gmp boehmgc ];
+  extraLibraries = [ boehmgc gmp ];
   noHaddock = true;
   meta = {
     homepage = "http://www.dcs.st-and.ac.uk/~eb/epic.php";

@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "2.2.2.0";
   sha256 = "0hilpjwkjvpz4sz0zqa36vmx8m1yycjnqdd721mqns7lib2fnzrx";
   buildDepends = [ OpenGL StateVar Tensor ];
-  extraLibraries = [ glut libSM libICE libXmu libXi mesa glut ];
+  extraLibraries = [ glut libICE libSM libXi libXmu mesa ];
   meta = {
     homepage = "http://www.haskell.org/HOpenGL/";
     description = "A binding for the OpenGL Utility Toolkit";
