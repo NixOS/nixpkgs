@@ -5781,7 +5781,7 @@ let
 
   radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
   radeonR600 = callPackage ../os-specific/linux/firmware/radeon-r600 { };
-  radeonJuniperPfp = callPackage ../os-specific/linux/firmware/radeon-juniper-pfp { };
+  radeonJuniper = callPackage ../os-specific/linux/firmware/radeon-juniper { };
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
