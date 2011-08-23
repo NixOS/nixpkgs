@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "radeon-juniper-pfp-firmware-2010-04-08";
 
   src = fetchurl {

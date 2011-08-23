@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "radeon-r700-firmware-2009-12-09";
 
   src = fetchurl {
