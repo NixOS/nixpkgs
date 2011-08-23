@@ -1,6 +1,6 @@
 { cabal, base64Bytestring, citeprocHs, dlist, extensibleExceptions
-, HTTP, json, mtl, network, pandocTypes, parsec, random, syb
-, tagsoup, texmath, utf8String, xhtml, xml, zipArchive
+, highlightingKate, HTTP, json, mtl, network, pandocTypes, parsec
+, random, syb, tagsoup, texmath, utf8String, xhtml, xml, zipArchive
 }:
 
 cabal.mkDerivation (self: {
@@ -10,9 +10,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    base64Bytestring citeprocHs dlist extensibleExceptions HTTP json
-    mtl network pandocTypes parsec random syb tagsoup texmath
-    utf8String xhtml xml zipArchive
+    base64Bytestring citeprocHs dlist extensibleExceptions
+    highlightingKate HTTP json mtl network pandocTypes parsec random
+    syb tagsoup texmath utf8String xhtml xml zipArchive
   ];
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
