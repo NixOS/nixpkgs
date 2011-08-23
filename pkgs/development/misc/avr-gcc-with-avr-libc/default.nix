@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, writeTextFile, coreutils, gnumake, gcc, gnutar, bzip2, gnugrep, gnused, gawk }:
+{ stdenv, fetchurl, writeTextFile, coreutils, gnumake, gcc, gnutar, bzip2
+  , gnugrep, gnused, gawk, diffutils, patch
+  , gmp, mpfr, mpc }:
 
 stdenv.mkDerivation {
   name = "avr-gcc-libc";
 
   srcBinutils = fetchurl {
-    url = ftp://ftp.gnu.org/gnu/binutils/binutils-2.17.tar.bz2;
-    sha256 = "0pm20n2l9ddgdpgzk3zhnbb8nbyb4rb2kvcw21pkd6iwybk3rhz2";
+    url = "mirror://gnu/binutils/binutils-2.21.tar.bz2";
+    sha256 = "1iyhc42zfa0j2gaxy4zvpk47sdqj4rqvib0mb8597ss8yidyrav0";
   };
 
   srcGCC = fetchurl {
-    url = ftp://ftp.gnu.org/gnu/gcc/gcc-4.1.2/gcc-core-4.1.2.tar.bz2;
-    sha256 = "07binc1hqlr0g387zrg5sp57i12yzd5ja2lgjb83bbh0h3gwbsbv";
+    url = "mirror://gcc/releases/gcc-4.6.1/gcc-core-4.6.1.tar.bz2";
+    sha256 = "0bbb8f754a31f29013f6e9ad4c755d92bb0f154a665c4b623e86ae7174d98e33";
   };
 
   srcAVRLibc = fetchurl {
-    url = http://www.very-clever.com/download/nongnu/avr-libc/avr-libc-1.4.5.tar.bz2;
-    sha256 = "058iv3vs6syy01pfkd5894xap9zakjx8ki1bpjdnihn6vk6fr80l";
+    url = http://download.savannah.gnu.org/releases/avr-libc/avr-libc-1.7.1.tar.bz2;
+    sha256 = "1b1s4cf787izlm3r094vvkzrzb3w3bg6bwiz2wz71cg7q07kzzn6";
   };
 
   phases = "doAll";
@@ -24,7 +26,7 @@ stdenv.mkDerivation {
   builder = writeTextFile {
     name = "avrbinutilsgccavrlibc-builder-script";
     text =  ''
-    PATH=${coreutils}/bin:${gnumake}/bin:${gcc}/bin:${gnutar}/bin:${bzip2}/bin:${gnugrep}/bin:${gnused}/bin:${gawk}/bin
+    PATH=${coreutils}/bin:${gnumake}/bin:${gcc}/bin:${gnutar}/bin:${bzip2}/bin:${gnugrep}/bin:${gnused}/bin:${gawk}/bin:${diffutils}/bin:${patch}/bin
     # that's all a bit too hacky...!
     for i in `cat ${gcc}/nix-support/propagated-user-env-packages`; do
       echo adding $i
@@ -32,6 +34,11 @@ stdenv.mkDerivation {
     done
     mkdir -p "$out"
     export > env-vars
+
+    for i in "${gmp}" "${mpfr}" "${mpc}"; do
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$i/include "
+      export NIX_LDFLAGS="$NIX_LDFLAGS -L$i/lib "
+    done
 
     # important, without this gcc won't find the binutils executables
     PATH=$PATH:$out/bin
@@ -51,13 +58,14 @@ stdenv.mkDerivation {
       cd gcc-*
       mkdir obj-avr
       cd obj-avr
-      ../configure --target=avr --prefix="$prefix" --disable-nls --enable-languages=c --disable-libssp
+      ../configure --target=avr --prefix="$prefix" --disable-nls --enable-languages=c --disable-libssp --with-dwarf2
       make $MAKE_FLAGS
       make install
 
     cd $TMP
       tar jxf $srcAVRLibc
       cd avr-libc-*
+      patch -Np1 -i ${./avr-libc-fix-gcc-4.6.0.patch}
       ./configure --prefix="$prefix" --build=`./config.guess` --host=avr
       make $MAKE_FLAGS
       make install
