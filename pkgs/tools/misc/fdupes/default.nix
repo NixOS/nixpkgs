@@ -12,8 +12,6 @@ stdenv.mkDerivation {
 
   makeFlags = "PREFIX=\${out}";
 
-  preBuild = "type -p make";
-
   meta = {
     description = "identifies duplicate files residing within specified directories.";
     longDescription = ''
