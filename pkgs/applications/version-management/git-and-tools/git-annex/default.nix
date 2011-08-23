@@ -3,14 +3,14 @@
 , monadControl }:
 
 let
-  version = "3.20110719";
+  version = "3.20110819";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/g/git-annex/git-annex_${version}.tar.gz";
-    sha256 = "0wkfm6sc3rnprigi8xxw1h0d1bs3lwzzzwgqfzlcbsh44rdlnz54";
+    sha256 = "1442ba4ff35ec8f92f336a5f1055d7ad8306348871a9697262f4f2af3b3c0943";
   };
 
   buildInputs = [ghc libuuid rsync findutils curl perl MissingH utf8String QuickCheck2 pcreLight
