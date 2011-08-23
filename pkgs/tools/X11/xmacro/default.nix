@@ -8,7 +8,12 @@ stdenv.mkDerivation {
     md5 = "d2956b82f3d5380e58a75ccc721fb746";
   };
 
-  preBuild = " sed -e 's/-pedantic//g' -i Makefile ";
+  preBuild = ''
+    sed -e 's/-pedantic//g' -i Makefile
+    sed -e 's/iostream[.]h/iostream/' -i *.cpp
+    sed -e 's/iomanip[.]h/iomanip/' -i *.cpp
+    sed -e '1iusing namespace std;' -i *.cpp
+  '';
 
   preInstall = "echo -e 'install:\n	mkdir \${out}/bin;\n	cp xmacrorec xmacrorec2 xmacroplay \${out}/bin;' >>Makefile; ";
 
