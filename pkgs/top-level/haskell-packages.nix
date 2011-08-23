@@ -881,6 +881,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network = self.network_2_2_1_4;
 
+  nixosTypes = callPackage ../development/libraries/haskell/nixos-types {};
+
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
