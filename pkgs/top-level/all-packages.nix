@@ -266,11 +266,7 @@ let
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
-  fetchmtn = import ../build-support/fetchmtn {
-    inherit monotone stdenv;
-    cacheDB = getConfig ["fetchmtn" "cacheDB"] "";
-    defaultDBMirrors = getConfig ["fetchmtn" "defaultDBMirrors"] [];
-  };
+  fetchmtn = callPackage ../build-support/fetchmtn (getConfig ["fetchmtn"] {});
 
   fetchsvn = import ../build-support/fetchsvn {
     inherit stdenv subversion openssh;
