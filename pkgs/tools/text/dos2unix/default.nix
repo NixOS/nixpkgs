@@ -1,41 +1,24 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, perl, gettext }:
 
 stdenv.mkDerivation {
-  name = "dos2unix-2.2";
+  name = "dos2unix-5.3.1";
   
   src = fetchurl {
-    url = http://cvs.fedoraproject.org/repo/pkgs/dos2unix/dos2unix-3.1.tar.bz2/f90026a397cf787083ec2e4892c6dcdd/dos2unix-3.1.tar.bz2;
-    md5 = "f90026a397cf787083ec2e4892c6dcdd";
+    url = http://waterlan.home.xs4all.nl/dos2unix/dos2unix-5.3.1.tar.gz;
+    sha256 = "0bwqw3wi0j4f1x8d39xw5v57ac0bc58j41vjx8v2qm1smg9jyci1";
   };
-  
-  patches = [
-    ./dos2unix-3.1.patch
-    ./dos2unix-3.1-segfault.patch
-    ./dos2unix-3.1-safeconv.patch
-    ./dos2unix-3.1-manpage-update-57507.patch
-    ./dos2unix-3.1-preserve-file-modes.patch
-    ./dos2unix-3.1-tmppath.patch
-    ./dos2unix-c-missing-arg.patch
-    ./dos2unix-missing-proto.patch
-    ./dos2unix-manpage.patch
-    ./dos2unix-preserve-file-modes.patch
-  ];
 
-  installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/share/man/man1
-    install -p -m755 dos2unix $out/bin
-    install  -p -m644 dos2unix.1 $out/share/man/man1
-    ln -s dos2unix $out/bin/mac2unix
+  configurePhase = ''
+    sed -i -e s,/usr,$out, Makefile
   '';
 
-  buildPhase = ''
-    rm -f dos2unix
-    make dos2unix
-  '';
+  buildInputs = [ perl gettext ];
 
   meta = {
-    homepage = http://unknown/;
-    description = "dos2unix tool";
+    homepage = http://waterlan.home.xs4all.nl/dos2unix.html;
+    description = "Tools to transform text files from dos to unix formats and vicervesa";
+    license = "BSD";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; all;
   };
 }

@@ -24,6 +24,10 @@ rec {
       '';
   };
 
+  pc_simplekernel = pc // {
+    kernelAutoModules = false;
+  };
+
   sheevaplug = {
     name = "sheevaplug";
     kernelMajor = "2.6";
