@@ -2,7 +2,7 @@
 
 let
   pname = "polyml";
-  version = "5.3";
+  version = "5.4";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}.${version}.tar.gz";
-    sha256 = "154e836f4e65b5c72f8190d3c02e5ed237921cef716cb49add1e0e1e35fb2af4";
+    sha256 = "1ykbm4zk260dkdr8jl7mjaqxy98h65fq0z82k44b1fp5q8zy5d34";
   };
 
   meta = {
@@ -20,5 +20,9 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.polyml.org/;
     license = "LGPL";
+    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ #Add your name here!
+      stdenv.lib.maintainers.z77z
+    ];
   };
 }

@@ -1,12 +1,12 @@
 {stdenv, fetchurl, yasm}:
 
 stdenv.mkDerivation rec {
-  version = "snapshot-20100624-2245";
+  version = "snapshot-20110724-2245-stable";
   name = "x264-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-${version}.tar.bz2";
-    sha256 = "0hva3j7h99hl3l1p32a1j6p35s5aakkg3plp8xx1wk6qplxhkqsq";
+    sha256 = "07bylkh8cwcmj01sr41hhrvfbciyixhw1irdpj01kz9d0h8dhhpz";
   };
 
   patchPhase = ''
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ yasm ];
 
   meta = { 
-      description = "library for encoding H264/AVC video streams";
-      homepage = http://www.videolan.org/developers/x264.html;
-      license = "GPL";
+    description = "library for encoding H264/AVC video streams";
+    homepage = http://www.videolan.org/developers/x264.html;
+    license = "GPL";
   };
 }

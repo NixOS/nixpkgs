@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let versionNumber = "260.19.29"; in
+let versionNumber = "280.13"; in
 
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
@@ -18,12 +18,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0zbjmpwbc35bzg15j8zs7xy3qlaywhrb8mmps7df8bv59fb0krxn";
+        sha256 = "16xcidshamxvc80sdnkph5rpgf72m5zz4x155amg2433kkhsy8mj";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "119dhzafkfijfw94hw7sz0iffp1lshdh6vadvr6d1vr6hpcggdw6";
+        sha256 = "14x80qirwlfxhphzqvi92lpgs82qnzb7hq0vd02rkbwvvnkhgdxd";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
 
   programPath = optionalString (!libsOnly) (stdenv.lib.makeLibraryPath
-    [ gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib xlibs.libXv ] );
+    [ gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib gtkLibs.gdk_pixbuf xlibs.libXv ] );
 
   buildInputs = [ perl ];
 

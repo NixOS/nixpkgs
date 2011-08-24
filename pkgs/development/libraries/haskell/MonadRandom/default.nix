@@ -1,12 +1,17 @@
-{cabal, mtl}:
+{ cabal, mtl, random }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "MonadRandom";
-  version = "0.1.3";
-  sha256 = "be4dd46a93b59a5e94b58e6986934ca91feace9962a1741b6107a3dd06879fea";
-  propagatedBuildInputs = [mtl];
+  version = "0.1.6";
+  sha256 = "1429w2h66sf0cw992xj4w9clapcqgpdzmh80as7zxf8l87rarqqp";
+  buildDepends = [ mtl random ];
   meta = {
     description = "Random-number generation monad";
+    license = "unknown";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

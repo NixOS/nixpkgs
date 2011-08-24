@@ -10,7 +10,7 @@ let
     allPackages {
       inherit system;
       config.packageOverrides = pkgs: {
-        guile = pkgs.guile_1_9;
+        guile = pkgs.guile_2_0;
       };
     };
 
@@ -64,6 +64,7 @@ in (mapTestOn {
   guileGnome = linux;
   guile_lib = linux;
   guileLint = linux;
+  guile_ncurses = linux;
   gwrap = linux;
   swig = linux;
   gnutls = linux;
@@ -78,4 +79,6 @@ in (mapTestOn {
   ballAndPaddle = linux;
   drgeo = linux;
   lilypond = linux;
+  liquidwar = linux;
+  freetalk = linux;
 })

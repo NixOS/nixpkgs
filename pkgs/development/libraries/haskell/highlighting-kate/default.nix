@@ -1,11 +1,20 @@
-{cabal, parsec, pcreLight, xhtml}:
+{ cabal, parsec, regexPcreBuiltin, xhtml }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "highlighting-kate";
-  version = "0.2.7.1";
-  sha256 = "330c5fdc6b5dae62c12ee2455892319df12723346aa75401aea05ea0b24cf5ed";
-  propagatedBuildInputs = [parsec pcreLight xhtml];
+  version = "0.2.10";
+  sha256 = "0cw89qsslrp4zh47ics7bg79fkqnxpnyz1a9xws0xzd9xmg3zrhh";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ parsec regexPcreBuiltin xhtml ];
   meta = {
+    homepage = "http://github.com/jgm/highlighting-kate";
     description = "Syntax highlighting";
+    license = "GPL";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
+})

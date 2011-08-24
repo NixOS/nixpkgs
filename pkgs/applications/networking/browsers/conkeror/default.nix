@@ -1,13 +1,13 @@
 { stdenv, fetchurl, unzip }:
 stdenv.mkDerivation {
-  name = "conkeror-0.9.2";
+  name = "conkeror-0.9.3-20110606";
   src = fetchurl {
-    url = http://repo.or.cz/w/conkeror.git/snapshot/efacc207b0d6c7b3899fc584c9f48547b18da076.zip;
-    sha256 = "1bkrrskrmhpx2xp90zgi5jrz4akynkxv2nzk5hzg0a17ikdi5ql8";
+    url = http://repo.or.cz/w/conkeror.git/snapshot/0d883dfd5e61e7d0b8a96a079d69b46af064fdca.zip;
+    sha256 = "0h21fw78iq4hljy5p98mpy0wgd5wpx9a0jdwv7l5wrds5vp23dhh";
   };
   buildInputs = [ unzip ];
   installPhase = ''
-    cp -r . $out
+    cp -v -r . $out
   '';
   meta = {
     description = "A keyboard-oriented, customizable, extensible web browser";

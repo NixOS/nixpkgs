@@ -10,8 +10,10 @@
 , libxml2 ? null
 , docbook5_xsl ? null, libxslt ? null
 , docbook5 ? null, docbook_xml_dtd_43 ? null 
+, perlPackages
 , boehmgc ? null
 , pkgconfig ? null
+, sqlite ? null
 , configureFlags ? []
 , lib
 , enableScripts ? []
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
   	++ (if w3m != null then [w3m] else [])
   	++ (if libxml2 != null then [libxml2] else [])
   	++ (if boehmgc != null then [boehmgc] else [])
+  	++ (if sqlite != null then [sqlite] else [])
   	++ (if pkgconfig != null then [pkgconfig] else [])
   ;
 
@@ -50,7 +53,10 @@ stdenv.mkDerivation {
   configureFlags = ''
     --with-store-dir=${storeDir} --localstatedir=${stateDir}
     --with-aterm=${aterm} --with-bdb=${db4} --with-bzip2=${bzip2}
+    --with-sqlite=${sqlite}
     --disable-init-state
+    --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
+    --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
     ${toString configureFlags}
   '';
 

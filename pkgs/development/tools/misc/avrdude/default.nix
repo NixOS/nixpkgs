@@ -2,12 +2,12 @@
 
 let edf = composableDerivation.edf; in
 
-composableDerivation.composableDerivation {} {
-  name="avrdude-5.4";
+composableDerivation.composableDerivation {} rec {
+  name="avrdude-5.10";
 
   src = fetchurl {
-    url = http://mirror.switch.ch/mirror/gentoo/distfiles/avrdude-5.4.tar.gz;
-    sha256 = "bee4148c51ec95999d803cb9f68f12ac2e9128b06f07afe307d38966c0833b30";
+    url = "http://download.savannah.gnu.org/releases/avrdude/${name}.tar.gz";
+    sha256 = "0pmy73777x8p7f2aj2w2q1dnk1bvhd1cm7hcs1s9hsdqsmiinl41";
   };
 
   configureFlags = [ "--disable-dependency-tracking" ];

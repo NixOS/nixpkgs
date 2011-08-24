@@ -1,12 +1,12 @@
 { stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinuxng, xz, enableStatic ? false, hurd ? null }:
+, utillinuxng, xz, check, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
-  name = "parted-2.3";
+  name = "parted-3.0";
 
   src = fetchurl {
     url = "mirror://gnu/parted/${name}.tar.xz";
-    sha256 = "0sabj81nawcjm8ww34lxg65ka8crv3w2ab4crh8ypw5agg681836";
+    sha256 = "054ybvjkj1mbm4mpn1rl12jzhvqg37b0xwwr4ly1zisvzrjhi11a";
   };
 
   buildNativeInputs = [ xz ];
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
     ++ stdenv.lib.optional (devicemapper != null) devicemapper
-    ++ stdenv.lib.optional (hurd != null) hurd;
+    ++ stdenv.lib.optional (hurd != null) hurd
+    ++ stdenv.lib.optional doCheck check;
 
   configureFlags =
        (if (readline != null)

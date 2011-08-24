@@ -12,19 +12,20 @@
 , libtool
 , jasper
 , libX11
+, xz
 , tetex ? null
 , librsvg ? null
 }:
 
 let
-  version = "6.6.5-4";
+  version = "6.6.9-4";
 in
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
-    url = "mirror://imagemagick/${name}.tar.bz2";
-    sha256 = "1s3l98xc1gnxi2wdg3sy9723f6qf5yk81wln8ghn2z9kvi09w7gw";
+    url = "mirror://imagemagick/${name}.tar.xz";
+    sha256 = "035j3i3cm29bwc9lipn838gznswrc69g7mwh8h9jj24ss2dmqrf1";
   };
 
   configureFlags = ''
@@ -34,10 +35,13 @@ stdenv.mkDerivation rec {
     ${if librsvg != null then "--with-rsvg" else ""}
   '';
 
-  buildInputs =
-    [ bzip2 freetype graphviz ghostscript libjpeg libpng
-      libtiff libxml2 zlib tetex librsvg libtool jasper libX11
-    ];
+  propagatedBuildInputs =
+    [ bzip2 freetype ghostscript libjpeg libpng libtiff libxml2 zlib librsvg
+    libtool jasper libX11 ];
+
+  buildInputs = [ tetex graphviz ];
+
+  buildNativeInputs = [ xz ];
 
   preConfigure = if tetex != null then
     ''

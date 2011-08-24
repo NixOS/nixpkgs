@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, python, pyrex, pygobject, pygtk
 , notify, pythonDBus, bluez, glib, gtk, libstartup_notification
-, makeWrapper, xdg_utils
+, makeWrapper, xdg_utils, obex_data_server
 }:
    
 stdenv.mkDerivation rec {
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
               --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH" \
               --prefix PATH : ${xdg_utils}/bin
       done
+
+      mkdir -p $out/nix-support
+      echo ${obex_data_server} > $out/nix-support/propagated-user-env-packages
     ''; # */
 
   meta = {

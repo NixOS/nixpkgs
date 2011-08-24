@@ -1,12 +1,20 @@
-{cabal, binary, mtl, utf8String, zlib, digest}:
+{ cabal, binary, digest, mtl, utf8String, zlib }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "zip-archive";
-  version = "0.1.1.6";
-  sha256 = "16aafc5f74c880398413a7c2adaaf90cae86006dcda58f663c1e1d795add90aa";
-  propagatedBuildInputs = [binary mtl utf8String zlib digest];
+  version = "0.1.1.7";
+  sha256 = "1q52v18kl1j049kk3yb7rp0k27p6q7r72mg1vcbdid6qd7a9dh48";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ binary digest mtl utf8String zlib ];
   meta = {
+    homepage = "http://github.com/jgm/zip-archive";
     description = "Library for creating and modifying zip archives";
+    license = "GPL";
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

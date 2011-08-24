@@ -1,10 +1,10 @@
 { fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo }:
 
 stdenv.mkDerivation {
-  name = "rrdtool-1.3.6";
+  name = "rrdtool-1.4.5";
   src = fetchurl {
-    url = http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.3.6.tar.gz;
-    sha256 = "e958760cb0d182c53a878cb2ba5c290c252c2c506082c988e5dd3f3301b895a2";
+    url = http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.4.5.tar.gz;
+    sha256 = "07fgn0y4yj7p2vh6a37q273hf98gkfw2sdam5r1ldn1k0m1ayrqj";
   };
   buildInputs = [ gettext perl pkgconfig libxml2 pango cairo ];
 

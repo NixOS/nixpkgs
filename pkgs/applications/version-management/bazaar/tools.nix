@@ -1,9 +1,5 @@
 args : with args; 
 
-if ! bazaar.python.readlineSupport then 
-  throw "Bazaar Tools require readline support in python."
-else
-
 rec {
   version = "2.2.0";
   src = fetchurl {

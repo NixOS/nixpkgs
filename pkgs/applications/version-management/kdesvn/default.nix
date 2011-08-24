@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, gettext, apr, aprutil, subversion, db4
-, kdelibs, automoc4, phonon, kdebase}:
+, kdelibs, automoc4, phonon, kde_baseapps }:
 
 stdenv.mkDerivation {
   name = "kdesvn-1.5.5";

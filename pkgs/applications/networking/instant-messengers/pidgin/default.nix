@@ -17,14 +17,14 @@
   , lib, python
   , openssl ? null
   , gnutls ? null
-  , voice ? null
+  , libgcrypt ? null
 } :
 
 stdenv.mkDerivation {
-  name = "pidgin-2.7.8";
+  name = "pidgin-2.9.0";
   src = fetchurl {
-    url = mirror://sourceforge/pidgin/pidgin-2.7.8.tar.bz2;
-    sha256 = "1ci173g1xshfi4pl9wqv9g3fwxyqvdz5v61bgqpfij0hl1ss9k4c";
+    url = mirror://sourceforge/pidgin/pidgin-2.9.0.tar.bz2;
+    sha256 = "1mygaap7cbak9n9zm4wshxnvb27a68w633d712vy2knr8z78xvi8";
   };
 
   inherit nss ncurses;
@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     libxml2] 
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
+  ++ (lib.optional (libgcrypt != null) libgcrypt)
   ++
   [nss nspr farsight2
     libXScrnSaver ncurses python
@@ -45,7 +46,7 @@ stdenv.mkDerivation {
     pkgconfig gtk perl perlXMLParser gettext
   ];
 
-  patches = [./pidgin-makefile.patch];
+  patches = [./pidgin-makefile.patch ];
 
   configureFlags="--with-nspr-includes=${nspr}/include/nspr --with-nspr-libs=${nspr}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl"
   + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")

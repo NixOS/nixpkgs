@@ -18,6 +18,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "The Glasgow Haskell Compiler";
+    platforms = ghc.meta.platforms;
   };
 
   configureFlags=[

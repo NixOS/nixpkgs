@@ -2,7 +2,7 @@
 
 cabal.mkDerivation (self : {
   pname = "get-options";
-  version = "x"; # ? 
+  version = "x"; # ?
   name = self.fname;
   # REGION AUTO UPDATE:             { name="getOptions"; type="darcs"; url = "http://repetae.net/john/repos/GetOptions"; }
   src = sourceFromHead "getOptions-nrmtag1.tar.gz"

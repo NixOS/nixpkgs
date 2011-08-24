@@ -8,9 +8,9 @@ in
 
 composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.3.4";
+  version = "5.3.6";
 
-  name = "php_configurable-${version}";
+  name = "php-${version}";
 
   buildInputs = ["flex" "bison" "pkgconfig"];
 
@@ -45,6 +45,11 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
         buildInputs = [ libxml2 ];
       };
     
+      readline = {
+        configureFlags = ["--with-readline=${readline}"];
+        buildInputs = [ readline ];
+      };
+
       sqlite = {
         configureFlags = ["--with-pdo-sqlite=${sqlite}"];
         buildInputs = [ sqlite ];
@@ -126,6 +131,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
     curlSupport = getConfig ["php" "curl"] true;
     gettextSupport = getConfig ["php" "gettext"] true;
     postgresqlSupport = getConfig ["php" "postgresql"] true;
+    readlineSupport = getConfig ["php" "readline"] true;
     sqliteSupport = getConfig ["php" "sqlite"] true;
     soapSupport = getConfig ["php" "soap"] true;
     zlibSupport = getConfig ["php" "zlib"] true;
@@ -151,7 +157,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "1391yibyc7kcrnprv6g57s2m6ld6n9j2iybzvwd2srdihl8q6cm8";
+    sha256 = "161iimjsnbvzqbf6chxv778n8qqdig2y704vrkn97vp3487qibih";
     name = "php-${version}.tar.bz2";
   };
 

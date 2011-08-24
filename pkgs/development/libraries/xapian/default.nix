@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, fetchurl, libuuid, zlib }:
 
 stdenv.mkDerivation {
-  name = "xapian-1.0.14";
+  name = "xapian-1.2.5";
 
   src = fetchurl {
-    url = http://oligarchy.co.uk/xapian/1.0.14/xapian-core-1.0.14.tar.gz;
-    sha256 = "0d51p6210059dbf0vn6zh2iyg4i5pynmhyh0gphnph2b317a1dcx";
+    url = http://oligarchy.co.uk/xapian/1.2.5/xapian-core-1.2.5.tar.gz;
+    sha256 = "392ccfccb4372725be24509e5ee95a7422f07c3d47d0cbdbb8545e789cc936f7";
   };
 
-  buildInputs = [zlib];
+  buildInputs = [ libuuid zlib ];
 
   meta = { 
     description = "Xapian Probabilistic Information Retrieval library";
     homepage = "http://xapian.org";
-    license = "GPLv2";
+    license = "GPLv2+";
+    maintainers = [ stdenv.lib.maintainers.chaoflow ];
   };
 }

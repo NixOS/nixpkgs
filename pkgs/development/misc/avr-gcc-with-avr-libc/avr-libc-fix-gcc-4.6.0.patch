@@ -1,0 +1,29 @@
+# Patch from Gentoo
+
+diff -ur 1/include/avr/pgmspace.h 2/include/avr/pgmspace.h
+--- 1/include/avr/pgmspace.h	2011-05-31 18:19:44.524000823 +0200
++++ 2/include/avr/pgmspace.h	2011-05-31 18:20:27.576000824 +0200
+@@ -252,7 +252,7 @@
+ # define PSTR(s) ((const PROGMEM char *)(s))
+ #else  /* !DOXYGEN */
+ /* The real thing. */
+-# define PSTR(s) (__extension__({static char __c[] PROGMEM = (s); &__c[0];}))
++# define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
+ #endif /* DOXYGEN */
+ 
+ #define __LPM_classic__(addr)   \
+diff -ur 1/libc/stdlib/dtostre.c 2/libc/stdlib/dtostre.c
+--- 1/libc/stdlib/dtostre.c	2011-05-31 18:19:44.639000823 +0200
++++ 2/libc/stdlib/dtostre.c	2011-05-31 18:20:27.639000824 +0200
+@@ -37,9 +37,9 @@
+ char *
+ dtostre (double val, char *sbeg, unsigned char prec, unsigned char flags)
+ {
+-    __attribute__((progmem)) static char str_nan[2][4] =
++    __attribute__((progmem)) static const char str_nan[2][4] =
+ 	{"nan", "NAN"};
+-    __attribute__((progmem)) static char str_inf[2][sizeof(str_nan[0])] =
++    __attribute__((progmem)) static const char str_inf[2][sizeof(str_nan[0])] =
+ 	{"inf", "INF"};
+     char *d;		/* dst	*/
+     char *s;		/* src	*/

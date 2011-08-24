@@ -1,12 +1,28 @@
-{stdenv, fetchurl, faad2, libtheora, speex, libvorbis, x264, pkgconfig, xvidcore, lame, yasm
-, vpxSupport ? false, libvpx ? null}:
+{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2
+, mp3Support ? true, lame ? null
+, speexSupport ? true, speex ? null
+, theoraSupport ? true, libtheora ? null
+, vorbisSupport ? false, libvorbis ? null
+, vpxSupport ? false, libvpx ? null
+, x264Support ? true, x264 ? null
+, xvidSupport ? false, xvidcore ? null
+, faacSupport ? false, faac ? null
+}:
 
-stdenv.mkDerivation {
-  name = "ffmpeg-0.6";
+assert speexSupport -> speex != null;
+assert theoraSupport -> libtheora != null;
+assert vorbisSupport -> libvorbis != null;
+assert vpxSupport -> libvpx != null;
+assert x264Support -> x264 != null;
+assert xvidSupport -> xvidcore != null;
+assert faacSupport -> faac != null;
+
+stdenv.mkDerivation rec {
+  name = "ffmpeg-0.8.1";
   
   src = fetchurl {
-    url = http://www.ffmpeg.org/releases/ffmpeg-0.6.tar.bz2;
-    sha256 = "08419kg2i8j7x4mb3vm6a73fdszivj6lzh7lypxby30gfnkblc37";
+    url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
+    sha256 = "0vdq6bmrsi55p1l3dddiwyqsspb3l5dgqb87lysf5cz3sjxcfw2v";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -18,20 +34,39 @@ stdenv.mkDerivation {
     "--enable-swscale"
     "--disable-ffserver"
     "--disable-ffplay"
-    "--enable-libfaad"
     "--enable-shared"
-    "--enable-libtheora"
-    "--enable-libvorbis"
-    "--enable-libspeex"
-    "--enable-libx264"
-    "--enable-libxvid"
-    "--enable-libmp3lame"
     "--enable-runtime-cpudetect"
-  ] ++
-    stdenv.lib.optional vpxSupport "--enable-libvpx";
+  ]
+    ++ stdenv.lib.optional mp3Support "--enable-libmp3lame"
+    ++ stdenv.lib.optional speexSupport "--enable-libspeex"
+    ++ stdenv.lib.optional theoraSupport "--enable-libtheora"
+    ++ stdenv.lib.optional vorbisSupport "--enable-libvorbis"
+    ++ stdenv.lib.optional vpxSupport "--enable-libvpx"
+    ++ stdenv.lib.optional x264Support "--enable-libx264"
+    ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
+    ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree";
 
-  buildInputs = [ faad2 libtheora speex libvorbis x264 pkgconfig xvidcore lame yasm ]
-    ++ stdenv.lib.optional vpxSupport libvpx;
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 ]
+    ++ stdenv.lib.optional mp3Support lame
+    ++ stdenv.lib.optional speexSupport speex
+    ++ stdenv.lib.optional theoraSupport libtheora
+    ++ stdenv.lib.optional vorbisSupport libvorbis
+    ++ stdenv.lib.optional vpxSupport libvpx
+    ++ stdenv.lib.optional x264Support x264
+    ++ stdenv.lib.optional xvidSupport xvidcore
+    ++ stdenv.lib.optional faacSupport faac;
+
+  enableParallelBuilding = true;
+    
+  crossAttrs = {
+    dontSetConfigureCross = true;
+    configureFlags = configureFlags ++ [
+      "--cross-prefix=${stdenv.cross.config}-"
+      "--enable-cross-compile"
+      "--target_os=linux"
+      "--arch=${stdenv.cross.arch}"
+      ];
+  };
 
   meta = {
     homepage = http://www.ffmpeg.org/;

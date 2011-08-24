@@ -3,18 +3,18 @@
 assert readline != null -> ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.7.4";
+  name = "sqlite-3.7.7.1";
 
   src = fetchurl {
-    url = http://www.sqlite.org/sqlite-autoconf-3070400.tar.gz;
-    sha256 = "131lwjqh1nfyrx4vjya2wdl6bnc0gzvcrg0wf06sz2iisj0h9vsl";
+    url = http://www.sqlite.org/sqlite-autoconf-3070701.tar.gz;
+    sha256 = "1pvf72gb6yidc4zjml3k6kwhlvvhbgmbm8hfin9y5jvvbyr3dk3x";
   };
 
   buildInputs = [ readline ncurses ];
   
   configureFlags = "--enable-threadsafe";
 
-  NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1";
+  NIX_CFLAGS_COMPILE = "-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1";
   NIX_CFLAGS_LINK = if readline != null then "-lncurses" else "";
 
   meta = {

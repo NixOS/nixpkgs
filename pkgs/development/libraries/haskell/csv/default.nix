@@ -1,12 +1,17 @@
-{cabal, parsec}:
+{ cabal, parsec }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "csv";
-  version = "0.1.1";
-  sha256 = "046e989f4bb76c9b15c33c3ec63f57a689317de8170449c9cf9e152393b7f1a0";
-  propagatedBuildInputs = [parsec];
+  version = "0.1.2";
+  sha256 = "00767ai09wm7f0yzmpqck3cpgxncpr9djnmmz5l17ajz69139x4c";
+  buildDepends = [ parsec ];
   meta = {
     description = "CSV loader and dumper";
+    license = self.stdenv.lib.licenses.mit;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

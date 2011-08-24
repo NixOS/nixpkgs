@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, libogg, libvorbis }:
+{ stdenv, fetchurl, SDL, libogg, libvorbis, enableNativeMidi ? false }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_mixer";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [SDL libogg libvorbis];
 
-  configureFlags = "--disable-music-ogg-shared";
+  configureFlags = "--disable-music-ogg-shared" + stdenv.lib.optionalString enableNativeMidi "--enable-music-native-midi-gpl";
 
   postInstall = "ln -s $out/include/SDL/SDL_mixer.h $out/include/";
 

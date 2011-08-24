@@ -1,12 +1,18 @@
-{cabal, mtl, extensibleExceptions} :
+{ cabal, extensibleExceptions, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "MonadCatchIO-mtl";
-  version = "0.3.0.1";
-  sha256 = "56113319439a10e338b2e3169e1df575024fbaf97827511f4856e46efbac9a07";
-  propagatedBuildInputs = [mtl extensibleExceptions];
+  version = "0.3.0.4";
+  sha256 = "0wzdrfplwa4v9miv88rg3jvf7l6gphc29lpdp5qjm5873y57jxm7";
+  buildDepends = [ extensibleExceptions mtl ];
   meta = {
+    homepage = "http://darcsden.com/jcpetruzza/MonadCatchIO-mtl";
     description = "Monad-transformer version of the Control.Exception module";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

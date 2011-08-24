@@ -1,46 +1,21 @@
-x@{builderDefsPackage
-  , python, makeWrapper
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="iotop";
-    version="0.4.1";
-    name="${baseName}-${version}";
-    url="http://guichaz.free.fr/${baseName}/files/${name}.tar.bz2";
-    hash="1dfvw3khr2rvqllvs9wad9ca3ld4i7szqf0ibq87rn36ickrf3ll";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+buildPythonPackage rec {
+  name = "iotop-0.4.1";
+  namePrefix = "";
+
+  src = fetchurl {
+    url = "http://guichaz.free.fr/iotop/files/${name}.tar.bz2";
+    sha256 = "1dfvw3khr2rvqllvs9wad9ca3ld4i7szqf0ibq87rn36ickrf3ll";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  pythonPath = [ pythonPackages.curses ];
 
-  phaseNames = ["installPythonPackage" "wrapBinContentsPython"];
-      
+  doCheck = false;
+
   meta = {
     description = "A tool to find out the processes doing the most IO";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://guichaz.free.fr/iotop/";
-    };
-  };
-}) x
-
+}

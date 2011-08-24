@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.2.24";
+  version = "1.4.14";
   
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "0j2wb79kndq4b1qqr59n1g6s0lm7yp6r9ny3skimadkh9a7p8b7i";
+    sha256 = "0xsqkq2q2hb09dcdsw0y359zvml480h79qvl9g31r7da57y7xwj7";
   };
 
   patches = [ ./ignore-missing-includedirs.patch ];
@@ -26,6 +26,11 @@ in rec {
         sed -i '/mkinstalldirs.*localstatedir/d' bus/Makefile.in
         sed -i '/SUBDIRS/s/ tools//' Makefile.in
       '';
+
+    # Enable X11 autolaunch support in libdbus.  This doesn't actually
+    # depend on X11 (it just execs dbus-launch in dbus.tools),
+    # contrary to what the configure script demands.
+    NIX_CFLAGS_COMPILE = "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
 
     installFlags = "sysconfdir=$(out)/etc";
   };

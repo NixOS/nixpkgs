@@ -1,11 +1,18 @@
-{cabal, haxr, HaXml, HTTP}:
+{ cabal, haxr }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "haxr-th";
-  version = "3000.0.0";
-  sha256 = "00wqhri2fljjds6rwws0hgk7z27ii1lgvxr8db2li0780q5fa6ic";
+  version = "3000.5";
+  sha256 = "1h1g4r7c5k3rja49ip4m21f2sscn06xjxharnlyazvvs6mzfysif";
+  buildDepends = [ haxr ];
   meta = {
-    description = "Automatic deriving of XML-RPC structs for Haskell records.";
+    homepage = "http://www.haskell.org/haxr/";
+    description = "Automatic deriving of XML-RPC structs for Haskell records";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-  propagatedBuildInputs = [HaXml HTTP haxr];
 })

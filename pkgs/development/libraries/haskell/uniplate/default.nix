@@ -1,12 +1,18 @@
-{cabal, mtl}:
+{ cabal, syb }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "uniplate";
-  version = "1.5.1";
-  sha256 = "cfeaaaabbbe318992df0c51a0c04729b22dac244f415b80a3b388708ed9cfc33";
-  propagatedBuildInputs = [mtl];
+  version = "1.6.2";
+  sha256 = "1lns0llhszk68jnq5if3xrk997idzszqc267q63kkdwp1zxdicrd";
+  buildDepends = [ syb ];
   meta = {
-    description = "Uniform type generic traversals";
+    homepage = "http://community.haskell.org/~ndm/uniplate/";
+    description = "Help writing simple, concise and fast generic operations";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

@@ -8,7 +8,6 @@ kde.package {
     kde = {
       name = "ColorSchemes";
       module = "kdeaccessibility";
-      version = "4.5.4";
     };
   };
 }

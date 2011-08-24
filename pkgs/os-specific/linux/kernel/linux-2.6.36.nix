@@ -192,11 +192,11 @@ in
 import ./generic.nix (
 
   rec {
-    version = "2.6.36.2";
+    version = "2.6.36.4";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "06wshmpgwfswdfqx5cc5nsqaa8vjyg3wab2zpzmvmc1gw564b8ll";
+      sha256 = "16pqjz3dgvaghfi0jqp2d0nqyz5fgbbxzs914vxslh2xxdxql0cg";
     };
 
     config = configWithPlatform stdenv.platform;

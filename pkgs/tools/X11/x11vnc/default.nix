@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, zlib, libjpeg, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "x11vnc-0.9.10";
+  name = "x11vnc-0.9.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/libvncserver/${name}.tar.gz";
-    sha256 = "04g0da04g4iw0qwvn43a8vh2im4wx9rwl1w41acsbdi8b0amhlck";
+    sha256 = "60a7cceee2c9a5f1c854340b2bae13f975ac55906237042f81f795b28a154a79";
   };
 
   buildInputs =

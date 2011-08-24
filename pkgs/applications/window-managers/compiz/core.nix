@@ -16,6 +16,9 @@ stdenv.mkDerivation {
       # directories to be overriden through $COMPIZ_PLUGINDIR and
       # $COMPIZ_METADATADIR, respectively.
       ./plugindir-core.patch
+
+      # Fix compilation with recent GTK versions.
+      ./gdk-deprecated.patch
     ];
 
   buildInputs =

@@ -1,12 +1,21 @@
-{cabal, HDBC, sqlite}:
+{ cabal, HDBC, mtl, sqlite, utf8String }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "HDBC-sqlite3";
-  version = "2.1.0.0";
-  sha256 = "a95f28fadd67ba1593cf75774308b7cfdde4a78ee5cba0a6aeb6c18723d8d67b";
-  propagatedBuildInputs = [HDBC sqlite];
+  version = "2.3.3.0";
+  sha256 = "11765nsncgyv9j6r5wpziqyhy0lxrmqbhgricbdx0c788ky75y92";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ HDBC mtl utf8String ];
+  extraLibraries = [ sqlite ];
   meta = {
-    description = "This is the Sqlite v3 driver for HDBC, the generic database access system for Haskell";
+    homepage = "http://software.complete.org/hdbc-sqlite3";
+    description = "Sqlite v3 driver for HDBC";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
-

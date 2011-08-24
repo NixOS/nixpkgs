@@ -1,11 +1,11 @@
 { fetchurl, stdenv, emacs, texinfo, which }:
 
 stdenv.mkDerivation rec {
-  name = "org-7.01f";
+  name = "org-7.5";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "1db7s57g8gh8w0464n18lxpcz270x9ns63b2blhkz8wrdnk57fia";
+    sha256 = "978822bc4c5f9f67450fbaa8572f1d4217406b7e28551278c9f23f7e9515cd4b";
   };
 
   buildInputs = [ emacs texinfo ];
@@ -19,11 +19,21 @@ stdenv.mkDerivation rec {
            -e "s|^prefix=.*$|prefix=$out|g"
     '';
 
+  #XXX: fails because of missing UTILITIES/manfull.pl, currently not
+  # included in the release tarball, but git.
+
+  #postBuild =
+  #  '' make doc
+  #  '';
+
   installPhase =
     '' make install install-info
 
        ensureDir "$out/share/doc/${name}"
-       cp -v doc/orgcard*.{pdf,txt} "$out/share/doc/${name}"
+       cp -v doc/org*.{html,pdf,txt} "$out/share/doc/${name}"
+
+       ensureDir "$out/share/org"
+       cp -R contrib "$out/share/org/contrib"
     '';
 
   meta = {
@@ -39,7 +49,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.chaoflow ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

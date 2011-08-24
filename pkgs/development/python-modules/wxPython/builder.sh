@@ -12,6 +12,11 @@ buildPhase() {
 
 installPhase() {
     python setup.py $flags install --prefix=$out
+
+    # Ugly workaround for Nixpkgs/111.
+    ln -s $out/lib/python*/site-packages/wx-*-gtk2-unicode/* $out/lib/python*/site-packages
+    
+    wrapPythonPrograms    
 }
 
 genericBuild

@@ -37,6 +37,8 @@ stdenv.mkDerivation {
   inherit noSysDirs profiledCompiler staticCompiler;
 
   buildInputs = [gmp mpfr texinfo];
+
+  enableParallelBuilding = true;
   
   configureFlags = "
     --disable-multilib

@@ -1,15 +1,22 @@
-{cabal, cairo, colour, dataAccessor, dataAccessorTemplate, gtk, mtl}:
+{ cabal, cairo, colour, dataAccessor, dataAccessorTemplate, gtk
+, mtl, time
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "Chart";
-  version = "0.13.1";
-  sha256 = "1gh8qw8xil543wssflhpjrgnig4v79vi7xizrm93a93i4n84npd5";
-  propagatedBuildInputs =
-    [cairo colour dataAccessor dataAccessorTemplate gtk mtl];
+  version = "0.14";
+  sha256 = "0ji81j4c2by5zyrdhx1s17j6kqsi3ngr9y1zh7hr9wv7jsrj3rf2";
+  buildDepends = [
+    cairo colour dataAccessor dataAccessorTemplate gtk mtl time
+  ];
   meta = {
+    homepage = "http://www.dockerz.net/software/chart.html";
     description = "A library for generating 2D Charts and Plots";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

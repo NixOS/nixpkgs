@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, x11, libpng, libjpeg, expat, libXaw
-, yacc, libtool, fontconfig, pango, gd
+{ stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat, libXaw
+, yacc, libtool, fontconfig, pango, gd, xlibs
 }:
 
-assert libpng != null && libjpeg != null && expat != null;
-
 stdenv.mkDerivation rec {
-  name = "graphviz-2.22.2";
+  name = "graphviz-2.28.0";
 
   src = fetchurl {
     url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/${name}.tar.gz";
-    sha256 = "1yzda1al32la3wyrxwc1hs83sx9p84zh6xlpcpkx90xvjaav827v";
+    sha256 = "0xpwg99cd8sp0c6r8klsmc66h1pday64kmnr4v6f9jkqqmrpkank";
   };
 
-  buildInputs = [pkgconfig x11 libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
+  buildInputs =
+    [ pkgconfig libpng libjpeg expat libXaw yacc libtool fontconfig
+      pango gd
+    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ];
   
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
@@ -22,7 +23,11 @@ stdenv.mkDerivation rec {
       "--with-expatincludedir=${expat}/include"
       "--with-expatlibdir=${expat}/lib"
     ]
-    ++ stdenv.lib.optional (x11 == null) "--without-x";
+    ++ stdenv.lib.optional (xlibs == null) "--without-x";
+
+  preBuild = ''
+    sed -e 's@am__append_5 *=.*@am_append_5 =@' -i lib/gvc/Makefile
+  '';
 
   meta = {
     description = "A program for visualising graphs";

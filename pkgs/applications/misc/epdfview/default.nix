@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, gtk, poppler }:
 stdenv.mkDerivation rec {
-  name = "epdfview-0.1.7";
+  name = "epdfview-0.1.8";
   src = fetchurl {
     url = "http://trac.emma-soft.com/epdfview/chrome/site/releases/${name}.tar.bz2";
-    sha256 = "1s2af09ij5jjqryv4dl10flsdk5p953qp94dymn93fnl93rv1yqa";
+    sha256 = "1w7qybh8ssl4dffi5qfajq8mndw7ipsd92vkim03nywxgjp4i1ll";
   };
   buildInputs = [ pkgconfig gtk poppler ];
   meta = {

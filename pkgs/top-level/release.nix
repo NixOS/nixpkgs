@@ -21,7 +21,6 @@ with (import ./release-lib.nix);
   apacheHttpd = linux;
   aspell = all;
   at = linux;
-  aterm242fixes = all;
   aterm25 = all;
   aterm28 = all;
   audacious = linux;
@@ -66,6 +65,9 @@ with (import ./release-lib.nix);
   dico = linux;
   dietlibc = linux;
   diffutils = all;
+  disnix = all;
+  disnixos = linux;
+  DisnixWebService = linux;
   docbook5 = all;
   docbook5_xsl = all;
   docbook_xml_dtd_42 = all;
@@ -200,11 +202,12 @@ with (import ./release-lib.nix);
   mod_python = linux;
   module_init_tools = linux;
   mono = linux;
-  monotone = linux;
   mpg321 = linux;
+  mupen64plus = linux;
   mutt = linux;
   mysql = linux;
   mysql51 = linux;
+  mysql55 = linux;
   namazu = all;
   nano = allBut "i686-cygwin";
   ncat = linux;
@@ -305,6 +308,7 @@ with (import ./release-lib.nix);
   tightvnc = linux;
   time = linux;
   tinycc = ["i686-linux"];
+  uae = linux;
   udev = linux;
   uml = ["i686-linux"];
   unrar = linux;
@@ -318,6 +322,7 @@ with (import ./release-lib.nix);
   vice = linux;
   vim = linux;
   vimHugeX = linux;
+  VisualBoyAdvance = linux;
   vlc = linux;
   vncrec = linux;
   vorbisTools = linux;
@@ -351,6 +356,7 @@ with (import ./release-lib.nix);
   zile = linux;
   zip = all;
   zsh = linux;
+  zsnes = ["i686-linux"];
 
   aspellDicts = {
     de = all;
@@ -379,13 +385,9 @@ with (import ./release-lib.nix);
     jdee = linux;
   };
 
-  firefox35Pkgs = {
-    firefox = prio 150 linux;
-  };
-
-  firefox36Pkgs = {
-    firefox = linux;
-  };
+  firefox36Pkgs.firefox = linux;
+  firefox50Pkgs.firefox = linux;
+  firefox60Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;
@@ -397,47 +399,43 @@ with (import ./release-lib.nix);
     gtk = linux;
   };
 
-  haskellPackages_ghc6102 = {
-    ghc = ghcSupported;
-  };
-
-  haskellPackages_ghc6103 = {
-    ghc = ghcSupported;
-  };
-
+  /*
   haskellPackages_ghc6104 = {
     ghc = ghcSupported;
-    gtk2hs = linux;
     haskellPlatform_2009_2_0_2 = ghcSupported;
-    xmonad = linux;
   };
 
   haskellPackages_ghc6121 = {
-    darcs = ghcSupported;
-    ghc = ghcSupported;
-    haskellPlatform_2010_1_0_0 = ghcSupported;
-  };
-
-  haskellPackages_ghc6122 = {
-    darcs = ghcSupported;
     ghc = ghcSupported;
     haskellPlatform_2010_1_0_0 = ghcSupported;
   };
 
   haskellPackages_ghc6123 = {
-    darcs = ghcSupported;
     ghc = ghcSupported;
     gitit = linux;
     gtk = linux;
-    leksah = linux;
-    haskellPlatform_2010_2_0_0 = ghcSupported;
-    lhs2tex = ghcSupported;
-    xmonad = linux;
+    haskellPlatform = ghcSupported;
   };
 
   haskellPackages_ghc701 = {
     ghc = ghcSupported;
   };
+
+  haskellPackages_ghc702 = {
+    ghc = ghcSupported;
+    haskellPlatform = ghcSupported;
+  };
+
+  haskellPackages_ghc704 = {
+    darcs = ghcSupported;
+    ghc = ghcSupported;
+    gitit = linux;
+    gtk = linux;
+    haskellPlatform = ghcSupported;
+    lhs2tex = ghcSupported;
+    xmonad = linux;
+  };
+  */
 
   kde3 = {
     kdebase = linux;
@@ -447,11 +445,31 @@ with (import ./release-lib.nix);
     kile = linux;
   };
 
+  linuxPackages_2_6_25 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
   linuxPackages_2_6_27 = {
     aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_28 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
+  linuxPackages_2_6_29 = {
+    aufs = linux;
+    kernel = linux;
+  };
+
+  linuxPackages_2_6_31 = {
+    aufs = linux;
+    kernel = linux;
   };
 
   linuxPackages_2_6_32 = {
@@ -467,6 +485,18 @@ with (import ./release-lib.nix);
   };
 
   linuxPackages_2_6_36 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_37 = {
+    kernel = linux;
+    virtualbox = linux;
+    virtualboxGuestAdditions = linux;
+  };
+
+  linuxPackages_2_6_38 = {
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;

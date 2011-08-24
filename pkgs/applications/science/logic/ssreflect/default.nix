@@ -1,13 +1,12 @@
 # TODO:
-# - ssrcoqide does not build successfully (missing coqide libraries in the coq installation).
-# - ssrcoq needs to be invoked with the explicit path to the ssreflect theory
-#   e.g.. ssrcoq -I /nix/store/rp09dlb2y2hpddb0xa7fyrgjlzb284ar-ssreflect-1.2/lib/coq/user-contrib/theories/
+# - coq needs to be invoked with the explicit path to the ssreflect theory
+#   e.g. coqide -R ~/.nix-profile/lib/coq/user-contrib/ ''
 
 {stdenv, fetchurl, ocaml, camlp5, coq}:
 
 let
   pname = "ssreflect";
-  version = "1.2";
+  version = "1.3pl1";
   name = "${pname}-${version}";
   webpage = http://www.msr-inria.inria.fr/Projects/math-components;
 in
@@ -16,17 +15,11 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "${webpage}/${name}.tgz";
-    sha256 = "0800b085e6a0caec5093c6c02aacdd8dfd9cc282177e8586f14f9a9e15f64d0b";
+    url = "${webpage}/${name}.tar.gz";
+    sha256 = "0ykrhqb68aanl5d4dmn0vnx8m34gg0jsbdhwx2852rqi7r00b9ri";
   };
 
   buildInputs = [ ocaml camlp5 coq ];
-
-  preBuild = ''
-    coq_makefile -f Make -o Makefile
-    substituteInPlace Makefile \
-      --replace 'install -D $$i $(COQLIB)' 'install -D $$i '$out'/lib/coq'
-  '';
 
   # this fails
   /*
@@ -36,10 +29,9 @@ stdenv.mkDerivation {
   '';
   */
 
-  postInstall = ''
+  installPhase = ''
+    COQLIB=$out/lib/coq make -f Makefile.coq install -e
     ensureDir $out/bin
-    #cp -a bin/ssrcoq bin/ssrcoqide $out/bin
-    cp -a bin/ssrcoq $out/bin
   '';
 
   meta = {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "gamin-0.1.9";
+  name = "gamin-0.1.10";
 
   src = fetchurl {
     url = "http://www.gnome.org/~veillard/gamin/sources/${name}.tar.gz";
-    sha256 = "0fgjfyr0nlkpdxj94a4qfm82wypljdyv1b6l56v7i9jdx0hcdqhr";
+    sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 
   buildInputs = [ python pkgconfig glib ];

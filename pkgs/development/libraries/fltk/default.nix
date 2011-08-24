@@ -4,11 +4,11 @@
 let inherit (composableDerivation) edf; in
 
 composableDerivation.composableDerivation {} rec {
-  name = "fltk-2.0.x-r6970";
+  name = "fltk-2.0.x-alpha-r8550";
 
   src = fetchurl {
     url = "ftp://ftp.easysw.com/pub/fltk/snapshots/${name}.tar.bz2";
-    sha256 = "0d88c16967ca40b26a70736b0d6874046c31a9e74816806816252e4eb72a84a3";
+    sha256 = "0y9fazsv61j8dkg9aiinnw4nd68h7zxmvapmygrl4rq5ywqygng7";
   };
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];

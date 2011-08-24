@@ -26,6 +26,7 @@
 stdenv.mkDerivation {
   name = "git-export";
   builder = ./builder.sh;
+  fetcher = ./nix-prefetch-git;
   buildInputs = [git];
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";

@@ -9,6 +9,10 @@ stdenv.mkDerivation {
 
 	buildInputs = [djvulibre qt4];
 
+  passthru = {
+    mozillaPlugin = "/lib/netscape/plugins";
+  };
+
 	meta = {
 		homepage = http://djvu.sourceforge.net/djview4.html;
 		description = "A new portable DjVu viewer and browser plugin";

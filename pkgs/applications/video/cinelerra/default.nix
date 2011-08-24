@@ -1,39 +1,43 @@
-{ stdenv, fetchurl, sourceFromHead, autoconf, automake, libtool
+{ stdenv, fetchgit, sourceFromHead, autoconf, automake, libtool
 , pkgconfig, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
 , libiec61883, libraw1394, libsndfile, libvorbis, libogg, libjpeg
-, libtiff, freetype, mjpegtools, x264, gettext, openexr, esound 
-, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
-, libdv, nasm, perl, e2fsprogs }:
+, libtiff, freetype, mjpegtools, x264, gettext, openexr, esound
+, libXext, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
+, libdv, libuuid, file, nasm, perl }:
         
 stdenv.mkDerivation {
   name = "cinelerra-git";
 
-  # REGION AUTO UPDATE:    { name="cinelerra"; type="git"; url="git://git.cinelerra.org/j6t/cinelerra.git"; }
-  src= sourceFromHead "cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz"; sha256 = "0b264e2a770d2257550c9a23883a060afcaff12293fe43828954e7373f5f4fb4"; });
-  # END
+  # # REGION AUTO UPDATE:    { name="cinelerra"; type="git"; url="git://git.cinelerra.org/j6t/cinelerra.git"; }
+  # src= sourceFromHead "cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz"
+  #              (fetchurl { url = "http://mawercer.de/~nix/repos/cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz"; sha256 = "0b264e2a770d2257550c9a23883a060afcaff12293fe43828954e7373f5f4fb4"; });
+  # # END
 
-  # touch confi.rpath: work around bug in automake 1.10 ?
+  src = fetchgit {
+    url = "git://git.cinelerra.org/j6t/cinelerra.git";
+    rev = "01dc4375a0fb65d10dd95151473d0e195239175f";
+    sha256 = "afb406a5637e4d0afad94e62ffd3af5b61e39f75aba9c08521523d00a0a5fec5";
+  };
+
+  # touch config.rpath: work around bug in automake 1.10 ?
   preConfigure = ''
     find -type f -print0 | xargs --null sed -e "s@/usr/bin/perl@${perl}/bin/perl@" -i
     touch config.rpath
     ./autogen.sh
+    sed -i -e "s@/usr/bin/file@${file}/bin/file@" ./configure
   '';
-  
-  configureFlags = [ "--enable-freetype2" ];
 
   buildInputs =
     [ automake
-      autoconf libtool pkgconfig
+      autoconf libtool pkgconfig file
       faad2 faac
       a52dec alsaLib   fftw lame libavc1394 libiec61883
       libraw1394 libsndfile libvorbis libogg libjpeg libtiff freetype
       mjpegtools x264 gettext openexr esound 
-      libXxf86vm libXv libXi libX11 xextproto
-      libtheora libpng libdv
+      libXext libXxf86vm libXv libXi libX11 xextproto
+      libtheora libpng libdv libuuid
       nasm
       perl
-      e2fsprogs
     ];
 
   meta = { 

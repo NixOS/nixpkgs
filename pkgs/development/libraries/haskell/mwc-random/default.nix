@@ -1,14 +1,18 @@
-{cabal, primitive, vector}:
+{ cabal, primitive, time, vector }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "mwc-random";
-  version = "0.8.0.2";
-  sha256 = "1lry31abyz6wh3x8ipclgkfc889azs7mw2ppp9kpdlx41wbzhdj6";
-  propagatedBuildInputs = [primitive vector];
+  version = "0.10.0.1";
+  sha256 = "0mmkl90rf57f2rxg3y2nibd37l9mwr2j4c71bwyvxqzfk7cylw9b";
+  buildDepends = [ primitive time vector ];
   meta = {
+    homepage = "https://github.com/bos/mwc-random";
     description = "Fast, high quality pseudo random number generation";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

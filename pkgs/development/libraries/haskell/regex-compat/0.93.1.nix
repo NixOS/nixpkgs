@@ -1,12 +1,18 @@
-{cabal, regexBase, regexPosix}:
+{ cabal, regexBase, regexPosix }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "regex-compat";
-  version = "0.93.1"; # Haskell Platform 2010.2.0.0
-  sha256 = "ee0374f780378e8c04a63d9cbaca525e116dbe2bdce4cff3abaffc28d4e99afe";
-  propagatedBuildInputs = [regexBase regexPosix];
+  version = "0.93.1";
+  sha256 = "1zlsx7a2iz5gmgrwzr6w5fz6s4ayab5bm71xlq28r3iph3vp80zf";
+  buildDepends = [ regexBase regexPosix ];
   meta = {
+    homepage = "http://sourceforge.net/projects/lazy-regex";
     description = "Replaces/Enhances Text.Regex";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

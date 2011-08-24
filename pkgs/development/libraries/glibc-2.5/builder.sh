@@ -19,6 +19,9 @@ preConfigure() {
             --replace "@PWD@" "pwd"
     done
 
+    # Fix shell code that tries to determine whether GNU ld is recent enough.
+    substituteInPlace configure --replace '2.1[3-9]*)' '2.1[3-9]*|2.[2-9][0-9]*)'
+
     mkdir ../build
     cd ../build
 

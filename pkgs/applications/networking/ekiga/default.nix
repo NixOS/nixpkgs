@@ -3,7 +3,7 @@ x@{builderDefsPackage
   , perl, perlXMLParser, evolution_data_server, gnome_doc_utils, avahi
   , libsigcxx, gtk, dbus_glib, libnotify, libXext, xextproto, automake
   , autoconf, pkgconfig, libxml2, videoproto, unixODBC, db4, nspr, nss, zlib
-  , libXrandr, randrproto, which, libxslt, libtasn1
+  , libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle
   , ...}:
 builderDefsPackage
 (a :  

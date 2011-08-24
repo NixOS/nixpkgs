@@ -1,7 +1,7 @@
 { cmake, kde, automoc4, kdelibs }:
 
 kde.package rec {
-  name = "kde-desktop-themes-${meta.kde.version}";
+  name = "kde-desktop-themes-${kde.release}";
 
   buildInputs = [ cmake automoc4 kdelibs ];
   meta = {
@@ -9,7 +9,6 @@ kde.package rec {
     kde = {
       name = "desktopthemes";
       module = "kdeartwork";
-      version = "4.5.4";
     };
   };
 }

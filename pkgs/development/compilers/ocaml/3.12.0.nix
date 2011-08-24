@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
          generators, a pre-processor pretty-printer (camlp4) and a
          documentation generator (ocamldoc).
        '';
+
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 
 }

@@ -1,19 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk
-, alsaLib, pulseaudio, gstreamer, libvorbis, libcap }:
+{ stdenv, fetchurl, pkgconfig, libtool, gtk ? null
+, alsaLib, pulseaudio, gstreamer ? null, libvorbis, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "libcanberra-0.23";
+  name = "libcanberra-0.28";
 
   src = fetchurl {
     url = "http://0pointer.de/lennart/projects/libcanberra/${name}.tar.gz";
-    sha256 = "0q09gasvm5dc9d4640lzb5nnmy2cpyi74aq83kjd3j4z58lczl57";
+    sha256 = "1346d2y24wiyanyr5bvdnjjgq7iysy8nlq2dwjv0fzxdmcn8n7zb";
   };
 
   buildInputs =
-    [ pkgconfig libtool alsaLib pulseaudio gstreamer libvorbis libcap ];
-  propagatedBuildInputs = [ gtk ];
+    [ pkgconfig libtool alsaLib pulseaudio gstreamer libvorbis libcap gtk ];
 
-  configureFlags = "--disable-oss";
+  configureFlags = "--disable-oss --disable-schemas-install";
 
   meta = {
     description = "libcanberra, an implementation of the XDG Sound Theme and Name Specifications";

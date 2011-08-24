@@ -2,10 +2,10 @@
   libxml2, perl, intltool, gettext}:
 
 stdenv.mkDerivation {
-  name = "gtksourceview-2.8.1";
+  name = "gtksourceview-2.9.9";
   src = fetchurl {
-    url = mirror://gnome/sources/gtksourceview/2.8/gtksourceview-2.8.1.tar.bz2;
-    sha256 = "02irdw8sz374d3k51sx21hm7vmpkcwrhmnpp3v6afa2jcwi84zp6";
+    url = mirror://gnome/sources/gtksourceview/2.9/gtksourceview-2.9.9.tar.bz2;
+    sha256 = "0d0i586nj8jsqqfcjcvaj0yzc3sid3s1a4y62xr0qbddkbn1wllj";
   };
   buildInputs = [pkgconfig atk cairo glib gtk pango libxml2 perl intltool
     gettext];

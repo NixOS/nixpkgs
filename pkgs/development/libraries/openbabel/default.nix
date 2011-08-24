@@ -1,15 +1,22 @@
-{stdenv, fetchurl, zlib, libxml2}:
+{stdenv, fetchurl, cmake, zlib, libxml2, eigen, python }:
 
-stdenv.mkDerivation {
-  name = "openbabel-2.2.1";
+stdenv.mkDerivation rec {
+  name = "openbabel-2.3.0";
   
   src = fetchurl { 
-    url = mirror://sf/openbabel/openbabel-2.2.1.tar.gz;
-    sha256 = "822345d70778de1d2d9afe65a659f1719b8ca300066fb1fa2f473bc97c457e80";
+    url = "mirror://sourceforge/openbabel/${name}.tar.gz";
+    sha256 = "1yv1z04il8q6nhcc3l9019aj7nzs3bfm667s2vkg5cc3dljwpbbd";
   };
   
   # TODO : perl & python bindings;
   # TODO : wxGTK: I have no time to compile
   # TODO : separate lib and apps
-  buildInputs = [ zlib libxml2 ];
+  buildInputs = [ zlib libxml2 eigen python ];
+
+  buildNativeInputs = [ cmake ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+  };
 }

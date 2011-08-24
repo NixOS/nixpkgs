@@ -13,3 +13,6 @@ done
 makeWrapper $game/ioquake3.* $out/bin/quake3 \
     --suffix-each LD_LIBRARY_PATH ':' "$mesa/lib $gcc/lib" \
     --add-flags "+set fs_basepath $out +set r_allowSoftwareGL 1"
+
+makeWrapper $game/ioq3ded.* $out/bin/quake3-server \
+    --add-flags "+set fs_basepath $out"

@@ -11,14 +11,14 @@
     
 }:
 
-let version = "3.1.6"; in
+let version = "3.1.9"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "d9c089c64cc7a784e128d9c594ef649a35babe30";
+    sha1 = "22b153102939430180ae1873ce15ef52286ff08d";
   };
 
   buildInputs =
@@ -66,6 +66,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mozilla Thunderbird, a full-featured email client";
-    homepage = http://www.mozilla.com/en-US/thunderbird/;
+    homepage = http://www.mozilla.org/en-US/thunderbird/;
   };
 }

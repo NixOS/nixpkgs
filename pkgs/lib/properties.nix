@@ -223,6 +223,11 @@ rec {
       content = mkNotdef;
     };
 
+  mkAssert = assertion: message: content:
+    mkIf
+      (if assertion then true else throw "\nFailed assertion: ${message}")
+      content;
+
   # Remove all "If" statement defined on a value.
   rmIf = foldProperty (
       foldFilter isIf

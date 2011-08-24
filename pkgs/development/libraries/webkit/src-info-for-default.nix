@@ -1,6 +1,6 @@
 {
-  downloadPage = "http://nightly.webkit.org/";
-  versionExtractorSedScript = "s/.*-(r[0-9]+)[.].*/\\1/";
-  versionReferenceCreator = "s/-(r[0-9.]+)[.]/-\${version}./";
+  downloadPage = "http://webkitgtk.org/?page=download";
+  versionExtractorSedScript = "s/.*-([.0-9]+)[.].*/\\1/";
+  versionReferenceCreator = "s/-([.0-9.]+)[.]/-\${version}./";
   baseName = "webkit";
 }

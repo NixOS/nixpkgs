@@ -6,33 +6,38 @@
 let
 
   hpnSrc = fetchurl {
-    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.3p1-hpn13v7.diff.gz;
-    sha256 = "1kqir6v14z77l0wn9j4jzdqsip5s1ky34w749psvbshbp9dzizn8";
+    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.8p1-hpn13v11.diff.gz;
+    sha256 = "1xwx2m2sihpy57mwdnc9km3c72hxfdjyp5mmr1vcx2c8kp901db2";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-5.6p1";
+  name = "openssh-5.8p2";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "0avc7jgp8i2jlp7b8q8g4nyil56v5fp09c1v54dc4ql15cxzb2jk";
+    sha1 = "64798328d310e4f06c9f01228107520adbc8b3e5";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
     ''
       gunzip -c ${hpnSrc} | patch -p1
+      export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
     
   patches = [ ./locale_archive.patch ];
 
-  buildInputs = [ zlib openssl perl libedit pkgconfig pam ];
+  buildNativeInptus = [ perl ];
+  buildInputs = [ zlib openssl libedit pkgconfig pam ];
 
+  # I set --disable-strip because later we strip anyway. And it fails to strip
+  # properly when cross building.
   configureFlags =
     ''
       --with-mantype=man
       --with-libedit=yes
+      --disable-strip
       ${if pam != null then "--with-pam" else "--without-pam"}
       ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
     '';

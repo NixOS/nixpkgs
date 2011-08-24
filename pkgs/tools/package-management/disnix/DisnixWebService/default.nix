@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "DisnixWebService-0.2";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/792274/download/3/DisnixWebService-0.2.tar.bz2;
-    sha256 = "1ccgrab896cs7bg5m99iam4cyvdj9q3gkmjkg9awqb710l9168sh";
+    url = http://hydra.nixos.org/build/910953/download/4/DisnixWebService-0.2.tar.bz2;
+    sha256 = "1469l2ykhdjmplkw01x64f7aq9rms05ig9sagyb8l2zksjm6lla8";
   };
   buildInputs = [ apacheAnt ];
   PREFIX = ''''${env.out}'';
@@ -18,4 +18,10 @@ stdenv.mkDerivation {
   '';
   buildPhase = "ant";
   installPhase = "ant install";
+  
+  meta = {
+    description = "A SOAP interface and client for Disnix";
+    license = "MIT";
+    maintainers = [ stdenv.lib.maintainers.sander ];
+  };
 }

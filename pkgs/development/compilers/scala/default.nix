@@ -3,11 +3,11 @@
 # at runtime, need jre or jdk
 
 stdenv.mkDerivation rec {
-  name = "scala-2.7.7";
+  name = "scala-2.8.1";
 
   src = fetchurl {
     url = "http://www.scala-lang.org/downloads/distrib/files/${name}.final.tgz";
-    md5 = "5d2294d5aab72fec869c0ba666d28b7e";
+    sha256 = "0lf76fclvd5l2as3gvzx9jc1b9narx4j046111bmbkcwqw7iw8bl";
   };
 
   installPhase = ''

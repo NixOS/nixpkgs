@@ -1,11 +1,11 @@
-args : with args; 
+args : with args;
 rec {
-  src = fetchurl { 
+  src = fetchurl {
     url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2009.orig.tar.gz;
     sha256 = "0ywc8h4jnig53fs0bji2ivw5f9j6zlgdy477jqw7xvpc7migjpw7";
   };
-  
-  texmfSrc = fetchurl { 
+
+  texmfSrc = fetchurl {
     url = mirror://debian/pool/main/t/texlive-base/texlive-base_2009.orig.tar.gz;
     sha256 = "130z907xcxr10yrzbbmp9l8a00dabvi4bi702s5jxamjzav17cmf";
   };
@@ -19,7 +19,7 @@ rec {
 
   doMainBuild = fullDepEntry (''
     ensureDir $out
-    ensureDir $out/nix-support 
+    ensureDir $out/nix-support
     cp ${setupHook} $out/nix-support/setup-hook.sh
     ensureDir $out/share
     tar xf ${texmfSrc} -C $out --strip-components=1
@@ -32,7 +32,7 @@ rec {
     sed -e 's@\<env python@${python}/bin/python@' -i $(grep 'env python' -rl . )
 
     sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
-    sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . ) 
+    sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . )
     sed -e '1i\#include <string.h>\n\#include <stdlib.h>' -i $( find libs/teckit -name '*.cpp' -o -name '*.c' )
 
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
@@ -47,12 +47,13 @@ rec {
     mv $out/bin $out/libexec
     ensureDir $out/bin
     for i in "$out/libexec/"*"/"*; do
-        echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i)
+        test \( \! -d "$i" \) -a -x "$i" || continue
+        echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i)
         chmod a+x $out/bin/$(basename $i)
     done
     [ -d $out/texmf-config ] || ln -s $out/texmf $out/texmf-config
     ln -s "$out/"*texmf* "$out/share/"
-    
+
     sed -e 's/.*pyhyph.*/=&/' -i $out/texmf-config/tex/generic/config/language.dat
 
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
@@ -76,18 +77,16 @@ rec {
 
   buildInputs = [
     zlib bzip2 ncurses libpng flex bison libX11 libICE
-    xproto freetype t1lib gd libXaw icu ghostscript ed 
-    libXt libXpm libXmu libXext xextproto perl libSM 
+    xproto freetype t1lib gd libXaw icu ghostscript ed
+    libXt libXpm libXmu libXext xextproto perl libSM
     ruby expat curl libjpeg python fontconfig
   ];
 
-  configureFlags = [ "--with-x11" 
+  configureFlags = [ "--with-x11"
     "--enable-ipc" "--with-mktexfmt"
   ];
 
-  phaseNames = ["addInputs" (doDump "0") "doMainBuild" 
-    (doDump "1")
-    "doMakeInstall" "doPostInstall"];
+  phaseNames = ["addInputs" "doMainBuild" "doMakeInstall" "doPostInstall"];
 
   name = "texlive-core-2009";
   meta = {

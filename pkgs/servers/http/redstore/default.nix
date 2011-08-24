@@ -1,32 +1,25 @@
-x@{builderDefsPackage
-  , redland, pkgconfig, gmp
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  s = import ./src-for-default.nix;
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, redland, pkgconfig, gmp, zlib, librdf_raptor2
+  , librdf_rasqal }:
 
-  inherit (s) name;
-  inherit buildInputs;
+stdenv.mkDerivation rec {
+  name = "redstore-0.5.2";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  src = fetchurl {
+    url = "http://www.aelius.com/njh/redstore/${name}.tar.gz";
+    sha256 = "fdbe499a7bbe8c8a756ecb738b83ea375e96af16a1d74245b75600d4d40adb7d";
+  };
+
+  buildInputs = [ gmp pkgconfig redland zlib librdf_raptor2 librdf_rasqal ];
+     
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${librdf_raptor2}/include/raptor2"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${librdf_rasqal}/include/rasqal"
+  '';
+
   meta = {
     description = "An HTTP interface to Redland RDF store";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = with stdenv.lib.platforms;
       linux ++ freebsd ++ gnu;
   };
-}) x
-
+}

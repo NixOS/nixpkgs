@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "libmowgli-0.7.0";
+stdenv.mkDerivation rec {
+  name = "libmowgli-0.9.50";
   
   src = fetchurl {
-    url = http://distfiles.atheme.org/libmowgli-0.7.0.tbz2;
-    sha256 = "1d6318zfr4khlq8j290wxn026gnwdd6p81klkh6h0fkdawpvplzx";
+    url = "http://distfiles.atheme.org/${name}.tar.bz2";
+    sha256 = "0wbnpd2rzk5jg6pghgxyx7brjrdmsyg4p0mm9blwmrdrj5ybxx9z";
   };
   
   meta = {

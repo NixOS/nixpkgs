@@ -1,6 +1,10 @@
 {stdenv, fetchurl, perl, libedit, ncurses, gmp}:
 
-assert stdenv.system == "i686-darwin" || stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+let
+  supportedPlatforms = ["x86_64-linux" "i686-linux"];
+in
+
+assert stdenv.lib.elem stdenv.system supportedPlatforms;
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
       }
-    else throw "cannot bootstrap GHC on this platform"; 
+    else throw "cannot bootstrap GHC on this platform";
 
   buildInputs = [perl];
 
@@ -99,4 +103,5 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
+  meta.platforms = supportedPlatforms;
 }

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip;
-    sha256 = "0wsgd656wiwn0maqanz6c61jdwaz0gva8wx25x312xnsl8k0gy94";
+    sha256 = "310e3b405c11b979b1cd210c5b4c32e97065d616f6bfa449c4e1e50420ce8002";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're

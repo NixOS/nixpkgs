@@ -7,14 +7,14 @@
 
 { fetchurl, stdenv, perl }:
 
-let version = "2.3.6";
+let version = "2.5";
 in
   stdenv.mkDerivation rec {
     name = "pthread-man-pages-${version}";
 
     src = fetchurl {
       url = "mirror://gnu/glibc/glibc-linuxthreads-${version}.tar.bz2";
-      sha256 = "0f56msimlyfmragqa69jd39rb47h09l9b0agn67k1rfi8yic8fvc";
+      sha256 = "0b5xg7ba64d1gbqw4k1qk96qgy7h2y4qksr0qx8v7a14c6xaw9zf";
     };
 
     buildInputs = [ perl ];

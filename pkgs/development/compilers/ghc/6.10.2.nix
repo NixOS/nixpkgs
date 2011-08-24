@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
-  
+
   name = "ghc-${version}";
-  
+
   homepage = "http://haskell.org/ghc";
 
   src = fetchurl {
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit homepage;
     description = "The Glasgow Haskell Compiler";
+    platforms = ghc.meta.platforms;
   };
 
   passthru = {

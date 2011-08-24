@@ -1,13 +1,14 @@
-{stdenv, fetchurl, SDL, mesa, SDL_image, freealut}:
+{stdenv, fetchurl, SDL, mesa, SDL_image, freealut, openal, libvorbis,
+pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "ultimate-stunts-0.7.5.1";
+  name = "ultimate-stunts-0.7.6.1";
   src = fetchurl {
-    url = mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-0751.tar.gz;
-    sha256 = "1s4xkaw0i6vqkjhi63plmrbrhhr408i3pv36qkpchpiiiw5bb7lv";
+    url = mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-0761.tar.gz;
+    sha256 = "0rd565ml6l927gyq158klhni7myw8mgllhv0xl1fg9m8hlzssgrv";
   };
 
-  buildInputs = [ SDL mesa SDL_image freealut ];
+  buildInputs = [ SDL mesa SDL_image freealut openal libvorbis pkgconfig ];
 
   meta = {
     homepage = http://www.ultimatestunts.nl/;

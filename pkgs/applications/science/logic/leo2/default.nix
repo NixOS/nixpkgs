@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="leo2";
-    version="1.2.6";
+    version="1.2.8";
     name="${baseName}_v${version}";
     url="http://www.ags.uni-sb.de/~leo/${name}.tgz";
-    hash="0gjgcm6nb9kzdl0y72sgvf2w2q92s1ix70lh6wjz9lj2qdf7gi1z";
+    hash="d46a94f5991623386eb9061cfb0d748e258359a8c690fded173d45303e0e9e3a";
   };
 in
 rec {

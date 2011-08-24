@@ -1,13 +1,20 @@
-{cabal, webRoutes}:
+{ cabal, pathPieces, text }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "web-routes-quasi";
-  version = "0.5.0";
-  sha256 = "07ef2717b44f92bccee9af4b4d9a173c12ec3b3b1d49a8495811dad0af240673";
-  propagatedBuildInputs = [webRoutes];
+  version = "0.7.1";
+  sha256 = "0m5p21kbiawjpcs5c83aaypmpmx4avjcj0kzkn95zgdkqcz5kr12";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ pathPieces text ];
   meta = {
+    homepage = "http://docs.yesodweb.com/web-routes-quasi/";
     description = "Define data types and parse/build functions for web-routes via a quasi-quoted DSL";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

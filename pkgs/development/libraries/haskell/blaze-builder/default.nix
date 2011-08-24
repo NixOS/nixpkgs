@@ -1,13 +1,18 @@
-{cabal, text}:
+{ cabal, text }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "blaze-builder";
-  version = "0.1";
-  sha256 = "dc4c542a39cf9e82b6a7ca99d6f460d6fa8dc4c8f648224368eac3fe054127c5";
-  propagatedBuildInputs = [text];
+  version = "0.3.0.1";
+  sha256 = "1p3xlifcr7v987zx8l2sppn9yydph332mn1xxk0yfi78a6386nfb";
+  buildDepends = [ text ];
   meta = {
-    description = "Builder to efficiently append text";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://github.com/meiersi/blaze-builder";
+    description = "Efficient buffered output";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

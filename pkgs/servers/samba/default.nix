@@ -1,5 +1,5 @@
 { stdenv, fetchurl, readline, pam, openldap, popt, iniparser, libunwind, fam
-, acl
+, acl, cups
 , useKerberos ? false, kerberos ? null, winbind ? true
 
 # Eg. smbclient and smbspool require a smb.conf file.
@@ -21,15 +21,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "samba-3.5.6";
+  name = "samba-3.6.0";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1nj78bahph9fwxv0v3lz31cy6z167jgmvz63d8l9mlbmhf310r26";
+    sha256 = "0gzm09l75i95iibcxykc2h2m9haqx70jp1bpis1mhmvqwillbhg1";
   };
 
-  buildInputs = [ readline pam openldap popt iniparser libunwind fam acl ]
+  buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
     ++ stdenv.lib.optional useKerberos kerberos;
+
+  enableParallelBuilding = true;
 
   preConfigure = "cd source3";
 
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
   # Need to use a DESTDIR because `make install' tries to write in /var and /etc.
   installFlags = "DESTDIR=$(TMPDIR)/inst";
 
+  stripAllList = [ "bin" "sbin" ];
+
   postInstall =
     ''
       mkdir -p $out
@@ -56,6 +60,8 @@ stdenv.mkDerivation rec {
   
       mkdir -pv $out/lib/cups/backend
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
+      mkdir -pv $out/etc/openldap/schema
+      cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
 }

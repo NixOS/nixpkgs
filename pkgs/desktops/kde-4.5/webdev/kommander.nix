@@ -8,8 +8,6 @@ kde.package {
     kde = {
       name = "kommander";
       module = "kdewebdev";
-      version = "1.91";
-      release = "4.5.4";
       versionFile = "lib/kommanderversion.h";
     };
   };

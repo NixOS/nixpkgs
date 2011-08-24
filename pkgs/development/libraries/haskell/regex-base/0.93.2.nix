@@ -1,12 +1,18 @@
-{cabal, mtl}:
+{ cabal, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "regex-base";
-  version = "0.93.2"; # Haskell Platform 2010.2.0.0
-  sha256 = "20dc5713a16f3d5e2e6d056b4beb9cfdc4368cd09fd56f47414c847705243278";
-  propagatedBuildInputs = [mtl];
+  version = "0.93.2";
+  sha256 = "0y1j4h2pg12c853nzmczs263di7xkkmlnsq5dlp5wgbgl49mgp10";
+  buildDepends = [ mtl ];
   meta = {
-    description = "Replaces/Ehances Text.Regex";
+    homepage = "http://sourceforge.net/projects/lazy-regex";
+    description = "Replaces/Enhances Text.Regex";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

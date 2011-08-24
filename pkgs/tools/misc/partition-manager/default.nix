@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kdelibs, kdebase,
+{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kdelibs, kde_baseapps,
   automoc4, phonon, perl }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ cmake gettext parted libuuid qt4 kdelibs kdebase automoc4 perl phonon ];
+    [ cmake gettext parted libuuid qt4 kdelibs kde_baseapps automoc4 perl phonon ];
 
   preConfigure = ''
     export VERBOSE=1

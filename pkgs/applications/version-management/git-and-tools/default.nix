@@ -4,18 +4,16 @@
 args: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchurl subversion;
-  config = getPkgConfig "git";
 in
 rec {
 
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_45 libxslt
+      asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion;
-    svnSupport = config "svnSupport" false; # for git-svn support
-    guiSupport = config "guiSupport" false;
-    sendEmailSupport = config "sendEmailSupport" false;
+    svnSupport = false;		# for git-svn support
+    guiSupport = false;		# requires tcl/tk
+    sendEmailSupport = false;	# requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
       perlPackages.NetSMTP perlPackages.NetSMTPSSL
@@ -25,21 +23,32 @@ rec {
     ];
   };
 
+  # Git with SVN support, but without GUI.
+  gitSVN = lowPrio (appendToName "with-svn" (git.override {
+    svnSupport = true;
+  }));
+
   # The full-featured Git.
-  gitFull = git.override {
+  gitFull = appendToName "full" (git.override {
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = stdenv.isDarwin == false;
-  };
+  });
 
   gitGit = import ./git/git-git.nix {
     inherit fetchurl sourceFromHead stdenv curl openssl zlib expat perl gettext
       asciidoc texinfo xmlto docbook2x
       docbook_xsl docbook_xml_dtd_45 libxslt
       cpio tcl tk makeWrapper subversion autoconf;
-    svnSupport = config "svnSupport" false; # for git-svn support
-    guiSupport = config "guiSupport" false;
+    svnSupport = false;
+    guiSupport = false;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
+  };
+
+  gitAnnex = lib.makeOverridable (import ./git-annex) {
+    inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which;
+    inherit (haskellPackages) ghc MissingH utf8String QuickCheck2 pcreLight SHA dataenc
+      HTTP testpack monadControl;
   };
 
   qgit = import ./qgit {
@@ -56,37 +65,11 @@ rec {
 
 
   stgit = import ./stgit {
-        inherit fetchurl stdenv python git;
+    inherit fetchurl stdenv python git;
   };
 
-  topGit = stdenv.mkDerivation rec {
-    name = "topgit-0.8-32-g8b0f1f9";
-
-    src = fetchurl {
-      url = "http://repo.or.cz/w/topgit.git/snapshot/${name}.zip";
-      sha256 = "0v3binh7wc2di57w6rdnlww30ryszzsklfdmm61sl1ildyl1klk4";
-    };
-
-    buildInputs = [unzip];
-    configurePhase = "export prefix=$out";
-
-    postInstall = ''
-      mkdir -p "$out/share/doc/${name}"
-      cp -v README "$out/share/doc/${name}"
-
-      mkdir -p $out/etc/bash_completion.d
-      make prefix=$out \
-        install
-      mv contrib/tg-completion.bash $out/etc/bash_completion.d
-    '';
-
-    meta = {
-      description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-      maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo lib.maintainers.simons ];
-      homepage = http://repo.or.cz/w/topgit.git;
-      license = "GPLv2";
-      platforms = stdenv.lib.platforms.unix;
-    };
+  topGit = lib.makeOverridable (import ./topgit) {
+    inherit stdenv fetchurl unzip;
   };
 
   tig = stdenv.mkDerivation {
@@ -116,12 +99,16 @@ rec {
     inherit fetchgit stdenv perl;
   };
 
+  svn2git = import ./svn2git {
+    inherit stdenv fetchgit qt47 subversion apr;
+  };
+
   gitSubtree = stdenv.mkDerivation {
-    name = "git-subtree-0.3";
+    name = "git-subtree-0.4";
     src = fetchurl {
-      url = "http://github.com/apenwarr/git-subtree/tarball/v0.3";
+      url = "http://github.com/apenwarr/git-subtree/tarball/v0.4";
 #      sha256 = "0y57lpbcc2142jgrr4lflyb9xgzs9x33r7g4b919ncn3alb95vdr";
-      sha256 = "f2ccac1e9cff4c35d989dc2a5581133c96b72d96c6a5ed89e51b6446dadac03f";
+      sha256 = "19s8352igwh7x1nqgdfs7rgxahw9cnfv7zmpzpd63m1r3l2945d4";
     };
     unpackCmd = "gzip -d < $curSrc | tar xvf -";
     buildInputs = [ git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];

@@ -1,23 +1,21 @@
-{ stdenv, fetchurl, autoconf, automake, libtool
-, pkgconfig, alsaLib, ffmpeg, speex, ortp }:
+{ stdenv, fetchurl, pkgconfig, alsaLib, ffmpeg, speex, ortp, pulseaudio, xorg,
+  libv4l, libtheora }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer2-2.2.0-cvs20080207";
+  name = "mediastreamer-2.7.2";
 
-# This url is not related to mediastreamer. fetchcvs doesn't work on my laptop,
-# so I've created cvs snapshot and put it to my server.
   src = fetchurl {
-    url = "http://www.loegria.net/misc/" + name + ".tar.bz2";
-    sha256 = "1nmvyqh4x3nsw4qbj754jwagj9ia183kvp8valdr7m44my0sw5p1";
+    url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
+    sha256 = "1w5j5shzd5f7q3l2gm4cl82f3vnrdzp78lcyjbjb416c4vzw2nr2";
   };
 
-  buildInputs = [automake libtool autoconf pkgconfig];
+# TODO: make it load plugins from *_PLUGIN_PATH
+  buildNativeInputs = [pkgconfig];
 
-  propagatedBuildInputs = [alsaLib ffmpeg speex ortp];
+  propagatedBuildInputs = [alsaLib ffmpeg speex ortp pulseaudio xorg.libX11
+    xorg.libXv xorg.libXext libv4l libtheora];
 
-  preConfigure = "./autogen.sh";
-
-  patches = [ ./h264.patch ./plugins.patch ];
+#patches = [ ./h264.patch ./plugins.patch ];
 
   configureFlags = "--enable-external-ortp";
 }

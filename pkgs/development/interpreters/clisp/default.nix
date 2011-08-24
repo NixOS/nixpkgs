@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libsigsegv, gettext, ncurses, readline, libX11
 , libXau, libXt, pcre, zlib, libXpm, xproto, libXext, xextproto
-, libffi, libffcall, coreutils }:
+, libffi, libffcall, coreutils}:
 
 stdenv.mkDerivation rec {
   v = "2.49";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     ''
-      --with-readline builddir --with-dynamic-ffi
+      --with-readline builddir --with-dynamic-ffi --with-ffcall 
       --with-module=clx/new-clx --with-module=i18n --with-module=bindings/glibc
       --with-module=pcre --with-module=rawsock --with-module=readline
       --with-module=syscalls --with-module=wildcard --with-module=zlib

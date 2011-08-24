@@ -1,17 +1,20 @@
 {stdenv, fetchurl, libao, libmad, libid3tag, zlib}:
 
-stdenv.mkDerivation {
-  name = "mpg321-0.2.10";
+stdenv.mkDerivation rec {
+  name = "mpg321-0.2.13-2";
+
   src = fetchurl {
-    url = mirror://sourceforge/mpg321/mpg321-0.2.10.tar.gz;
-    sha256 = "db0c299592b8f1f704f41bd3fc3a2bf138658108588d51af61638c551af1b0d4";
+    url = "mirror://sourceforge/mpg321/0.2.13/${name}.tar.gz";
+    sha256 = "0zx9xyr97frlyrwyk2msm9h1sn2b84vqaxcy5drbzcd2n585lwlx";
   };
 
   buildInputs = [libao libid3tag libmad zlib];
 
   meta = {
-    description = "Command-line MP3 player.";
+    description = "mpg321, a command-line MP3 player";
     homepage = http://mpg321.sourceforge.net/;
     license = "GPLv2";
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;
   };
 }

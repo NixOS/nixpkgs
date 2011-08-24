@@ -3,7 +3,7 @@ x@{builderDefsPackage
   , db4, krb5, openldap, glib, libxml2, GConf
   , nss, gtk, libgnome, libsoup, gnome_keyring
   , gtkdoc, sqlite, libgweather, libical, icu
-  , dbus_glib, gperf, nspr
+  , dbus_glib, gperf, nspr, gmp, nettle, libgdata_0_6
   , ...}:
 builderDefsPackage
 (a :  
@@ -14,9 +14,9 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    url = "mirror://gnome/sources/evolution-data-server/2.30/evolution-data-server-2.30.3.tar.bz2";
-    hash = "147qkpiafrlq220qg2pmp9lbvh8bn339wh1699bgb7rvmdvycwrp";
-    version = "2.30.3";
+    url = "mirror://gnome/sources/evolution-data-server/2.32/evolution-data-server-2.32.3.tar.bz2";
+    hash = "744026a745b711b3e393b61fed21c4926d1b10a3aa7da64f4b33a3e3bf5b085c";
+    version = "2.32.3";
     name = "evolution-data-server-${version}";
   };
 in

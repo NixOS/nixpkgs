@@ -1,6 +1,6 @@
 { stdenv, fetchurl, kernel }:
 
-let version = "5.60.246.6";
+let version = "5_100_82_38";
     bits = if stdenv.system == "i686-linux" then "32" else
       assert stdenv.system == "x86_64-linux"; "64";
 in
@@ -8,16 +8,19 @@ in
 stdenv.mkDerivation {
   name = "broadcom-sta-${version}";
   src = fetchurl {
-    url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86-${bits}_v${version}.tar.gz";
+    url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_${bits}-v${version}.tar.gz";
     sha256 = if bits == "32"
-      then "0y8ap9zhfsg1k603qf5a7n73zvsw7nkqh42dlcyxan5zdzmgcqdx"
-      else "0z8a57fpajiag830g1ifc9vrm7wk5bm7dwi7a9ljm3cns3an07fl";
+      then "0dzvnk0vmi5dlbsi9k2agvs5xsqn07mv66g9v1jzn1gsl8fsydpp"
+      else "19rm9m949yqahgii7wr14lj451sd84s72mqj15yd0dnpm4k5n5hw";
   };
 
   buildInputs = [ kernel ];
-  patches = [ ./makefile.patch ];
+  patches = [ ./makefile.patch ]
+    ++ stdenv.lib.optional
+    (! builtins.lessThan (builtins.compareVersions kernel.version "2.6.37") 0)
+      [ ./mutex-sema.patch ];
 
-  makeFlags = "KDIR=${kernel}/lib/modules/${kernel.version}/build";
+  makeFlags = "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build";
 
   unpackPhase =
     ''
@@ -28,7 +31,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      binDir="$out/lib/modules/${kernel.version}/kernel/net/wireless/"
+      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
       docDir="$out/share/doc/broadcom-sta/"
       ensureDir "$binDir" "$docDir"
       cp wl.ko "$binDir"

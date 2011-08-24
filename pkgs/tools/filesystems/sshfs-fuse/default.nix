@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ pkgconfig glib fuse ];
+  postInstall = ''
+    ensureDir $out/sbin
+    ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
+  '';
 
   meta = {
     homepage = http://fuse.sourceforge.net/sshfs.html;

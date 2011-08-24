@@ -1,14 +1,23 @@
-{cabal, mtl, happy, gmp, boehmgc}:
+{ cabal, boehmgc, gmp, happy, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "epic";
-  version = "0.1.5";
-  sha256 = "5a3d94e88cb85beb3c13f3b9f3c00c6768e1b067ff88d40ea63d9961a92347ff";
-  propagatedBuildInputs = [mtl];
-  extraBuildInputs = [happy gmp boehmgc];
+  version = "0.1.11";
+  sha256 = "12dz1wjaf3n8fqk46vhpnxq9z633wi6wyihcmif7amxmqv3l8zn9";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ mtl ];
+  buildTools = [ happy ];
+  extraLibraries = [ boehmgc gmp ];
+  noHaddock = true;
   meta = {
-    description = "An experimental language with full dependent types";
-    license = "BSD";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://www.dcs.st-and.ac.uk/~eb/epic.php";
+    description = "Compiler for a simple functional language";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

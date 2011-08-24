@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "dhcp-4.1.1-P1";
+  name = "dhcp-4.1.2-P1";
   
   src = fetchurl {
     url = "http://ftp.isc.org/isc/dhcp/${name}.tar.gz";
-    sha256 = "1nk36bk7yiqaj779czvlbxjs6jfn53qw7601171nx5mird806r1g";
+    sha256 = "1kcdsylyx0ai0wlmc6rc6b1qi2fsndqh1pvgvddd3i4hmbhi6vmz";
   };
 
   patches =
@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
       # recover when the wlan interface goes down.  Instead just flush
       # all addresses, routes and neighbours of the interface.
       ./flush-if.patch
+
+      # Make sure that the hostname gets set on reboot.  Without this
+      # patch, the hostname doesn't get set properly if the old
+      # hostname (i.e. before reboot) is equal to the new hostname.
+      ./set-hostname.patch
     ];
 
   # Fixes "socket.c:591: error: invalid application of 'sizeof' to
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
   # due to an uninitialized variable.
   CFLAGS = "-g -O2 -Wall";
 
-  buildInputs = [makeWrapper];
+  buildInputs = [ makeWrapper ];
 
   postInstall =
     ''

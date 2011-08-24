@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     homepage = "http://distcc.org";
     license = "GPL";
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

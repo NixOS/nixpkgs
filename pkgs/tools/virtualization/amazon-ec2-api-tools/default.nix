@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip, makeWrapper, jre }:
 
 stdenv.mkDerivation {
-  name = "ec2-api-tools-1.3-53907";
+  name = "ec2-api-tools-1.4.2.2";
   
   src = fetchurl {
     url = http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip;
-    sha256 = "1jdkc74a9fmjqwvq1pnbsnfqyxxjg5zgaynybmdms5piinvb204d";
+    sha256 = "e4dea0fb23b7e17bfe794b80f83bef47f290e2c9296105a80a7aecf7d33ecaf2";
   };
 
   buildInputs = [ unzip makeWrapper ];

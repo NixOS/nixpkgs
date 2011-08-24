@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, guile, pkgconfig, cairo, guile_lib }:
+{ fetchurl, stdenv, guile, pkgconfig, cairo, expat, guile_lib }:
 
 stdenv.mkDerivation rec {
-  name = "guile-cairo-1.4.0";
+  name = "guile-cairo-1.4.1";
 
   src = fetchurl {
     url = "http://download.gna.org/guile-cairo/${name}.tar.gz";
-    sha256 = "01wmpflfyxh239b5xvm41qn24z9k414klcqyh46r6xwvq2vd9mds";
+    sha256 = "1f5nd9n46n6cwfl1byjml02q3y2hgn7nkx98km1czgwarxl7ws3x";
   };
 
-  buildInputs = [ guile pkgconfig cairo ]
+  buildInputs = [ guile pkgconfig cairo expat ]
     ++ stdenv.lib.optional doCheck guile_lib;
 
   doCheck = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
          programming environment.
       '';
 
-    license = "LGPLv2+";
+    license = "LGPLv3+";
 
     homepage = http://home.gna.org/guile-cairo/;
 

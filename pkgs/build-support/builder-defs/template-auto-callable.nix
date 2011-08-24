@@ -37,7 +37,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       (abort "Specify platforms");
-    license = "${abort ''Specify license''}";
+    license = a.lib.licenses.(abort "Specify license");
   };
   passthru = {
     updateInfo = {

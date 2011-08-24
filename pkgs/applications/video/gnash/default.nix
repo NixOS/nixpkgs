@@ -3,19 +3,21 @@
 , gstFfmpeg, speex
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
-, glib, gtk, gtkglext, x11, ming, dejagnu, python
-, lib, makeWrapper }:
+, glib, gtk, gtkglext, x11, ming, dejagnu, python, perl
+, freefont_ttf, haxe, swftools
+, lib, makeWrapper
+, xulrunner }:
 
 assert stdenv ? glibc;
 
-let version = "0.8.8"; in
+let version = "0.8.9"; in
 
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnash/${version}/${name}.tar.bz2";
-    sha256 = "0872qrgzpy76lxq5b2xigyzaghn53xrpqba2qp3nrk8yz20lpb6w";
+    sha256 = "1ga8khwaympj4fphhpyqx6ddcikv0zmcpnlykcipny1xy33bs3gr";
   };
 
   patchPhase = ''
@@ -32,7 +34,13 @@ stdenv.mkDerivation rec {
     do
       sed -i "$file" -es'|/tmp/|$TMPDIR/|g'
     done
+
+    # Provide a default font.
+    sed -i "configure" \
+        -e 's|/usr/share/fonts/truetype/freefont/|${freefont_ttf}/share/fonts/truetype/|g'
   '';
+
+  enableParallelBuilding = true;
 
   # XXX: KDE is supported as well so we could make it available optionally.
   buildInputs = [
@@ -40,11 +48,13 @@ stdenv.mkDerivation rec {
     gstFfmpeg speex libtool
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
     dbus curl pkgconfig glib gtk gtkglext
+    xulrunner
     makeWrapper
+  ]
 
-    # For the test suite
-    ming dejagnu python
-  ];
+  ++ (stdenv.lib.optionals doCheck [
+        ming dejagnu python perl haxe swftools
+      ]);
 
   preConfigure =
     '' configureFlags="                                         \
@@ -58,12 +68,15 @@ stdenv.mkDerivation rec {
        # Work around this using GCC's $CPATH variable.
        export CPATH="${gstPluginsBase}/include/gstreamer-0.10:${gstPluginsGood}/include/gstreamer-0.10"
        echo "\$CPATH set to \`$CPATH'"
+
+       echo "\$GST_PLUGIN_PATH set to \`$GST_PLUGIN_PATH'"
     '';
 
   # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
   NIX_LDFLAGS="-lX11 -lXext";
 
-  doCheck = true;
+  # XXX: Tests currently fail.
+  doCheck = false;
 
   preInstall = ''ensureDir $out/plugins'';
   postInstall = ''

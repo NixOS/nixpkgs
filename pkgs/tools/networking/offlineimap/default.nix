@@ -1,4 +1,4 @@
-{fetchurl, buildPythonPackage}:
+{ fetchurl, buildPythonPackage, ssl }:
 
 buildPythonPackage {
   name = "offlineimap-6.2.0.2";
@@ -8,10 +8,9 @@ buildPythonPackage {
     sha256 = "1w69qv1dm37m53k8cd068lk5z3qjlscnjxr397gs8kdsfds67v7c";
   };
 
-  doCheck = false;
+  propagatedBuildInputs = [ ssl ];
 
-  preConfigure = "set -x";
-  buildInputs = [ ];
+  doCheck = false;
 
   meta = {
     description = "IMAP to local files bridge";

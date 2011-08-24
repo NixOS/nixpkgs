@@ -2,15 +2,13 @@
 , pythonSupport ? false, python}:
 
 stdenv.mkDerivation rec {
-  name = "vte-0.25.1";
+  name = "vte-0.28.0";
   
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/vte/0.25/${name}.tar.bz2";
-    sha256 = "105f5ifyg09nh5p6fw2w7c0n9wd8vw9cvwlh6zg49ibsar893qi5";
+    url = "http://ftp.gnome.org/pub/gnome/sources/vte/0.28/${name}.tar.bz2";
+    sha256 = "0blmblvjr35xajr0a07zcd58lk6x2hzympx17biw2mcym9kcarql";
   };
 
-  patches = [ ./cursor.patch ];
-  
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
                 stdenv.lib.optional pythonSupport python;
                 

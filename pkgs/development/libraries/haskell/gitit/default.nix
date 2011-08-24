@@ -1,23 +1,30 @@
-{cabal, happstackServer, happstackUtil, HStringTemplate, HTTP,
- SHA, cgi, datetime,
- filestore, highlightingKate, safe, mtl, network, pandoc, parsec,
- recaptcha, utf8String, xhtml, zlib, ConfigFile, url,
- cautiousFile, feed}:
+{ cabal, cgi, ConfigFile, feed, filestore, ghcPaths
+, happstackServer, happstackUtil, highlightingKate, hslogger
+, HStringTemplate, HTTP, json, mtl, network, pandoc, pandocTypes
+, parsec, random, recaptcha, safe, SHA, syb, time, url, utf8String
+, xhtml, xml, xssSanitize, zlib
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.7.3.8";
-  sha256 = "356c82604dcfe2eec4faeb36ee46546ea3e26738780723f457366b2e35f6211a";
-  propagatedBuildInputs = [
-    HStringTemplate happstackServer happstackUtil HTTP SHA cgi datetime
-    filestore highlightingKate safe
-    mtl network pandoc parsec recaptcha utf8String xhtml zlib ConfigFile
-    url cautiousFile feed
+  version = "0.8.0.1";
+  sha256 = "0y2gcxlbb44vflj0jl3zkbsn47n7nccikxwdw6ccf9kxgcmrz0zy";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [
+    cgi ConfigFile feed filestore ghcPaths happstackServer
+    happstackUtil highlightingKate hslogger HStringTemplate HTTP json
+    mtl network pandoc pandocTypes parsec random recaptcha safe SHA syb
+    time url utf8String xhtml xml xssSanitize zlib
   ];
   meta = {
-    description = "Wiki using HAppS, git or darcs, and pandoc";
+    homepage = "http://github.com/jgm/gitit/tree/master";
+    description = "Wiki using happstack, git or darcs, and pandoc";
     license = "GPL";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

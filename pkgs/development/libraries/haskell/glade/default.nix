@@ -1,14 +1,23 @@
-{cabal, cairo, glib, gtk, mtl, pango, gtk2hsBuildtools, pkgconfig, gnome, glibc}:
+{ cabal, cairo, glib, glibc, gtk, gtk2hsBuildtools, gtkC, libglade
+, mtl, pango, pkgconfig
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "glade";
-  version = "0.11.1";
-  sha256 = "0d96a8576f89a81aa1ecdaf172e42e9eb1e7b40ce1b23cff36ab473165832c6a";
-  extraBuildInputs = [pkgconfig gtk2hsBuildtools gnome.libglade gnome.gtk glibc];
-  propagatedBuildInputs = [cairo glib gtk mtl pango];
+  version = "0.12.0";
+  sha256 = "0h7l1kp9y17xqyz16kv0dvwgblph9r70wimyl8aq9gi1r4is5lmq";
+  buildDepends = [ cairo glib gtk mtl pango ];
+  buildTools = [ gtk2hsBuildtools ];
+  extraLibraries = [ glibc pkgconfig ];
+  pkgconfigDepends = [ gtkC libglade ];
   meta = {
+    homepage = "http://www.haskell.org/gtk2hs/";
     description = "Binding to the glade library";
-    license = "LGPLv2+";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.lgpl21;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

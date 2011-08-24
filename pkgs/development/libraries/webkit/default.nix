@@ -13,40 +13,45 @@ rec {
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant python ruby which renderproto libXrender
+    enchant python ruby which renderproto libXrender geoclue
     ];
 
   propagatedBuildInputs = [
     gstreamer gstPluginsBase gstFfmpeg gstPluginsGood
     ];
 
-  configureCommand = "./autogen.sh ";
   configureFlags = [
     "--enable-3D-transforms"
     "--enable-web-sockets"
     "--enable-web-timing"
-    "--enable-image-resizer"
+    
+    # https://bugs.webkit.org/show_bug.cgi?id=55294
+    # "--enable-image-resizer"
+
+    "--enable-geolocation"
+
+    # Not implemented?
+    # "--enable-web-audio"
 
     "--enable-mathml"
 
-    # https://bugs.webkit.org/show_bug.cgi?id=42943
-    # "--enable-wml"
+    #"--enable-wml"
     
     # https://bugs.webkit.org/show_bug.cgi?id=45110
     # "--enable-indexed-database"
 
-    # Related bug is marked as closed, but seems to persist
-    # "--enable-xhtmlmp"
+    "--enable-xhtmlmp"
 
     # "--enable-input-speech"
 
-    # https://bugs.webkit.org/show_bug.cgi?id=43878
-    # "--enable-file-writer"
-    # "--enable-blob"
+    "--enable-file-writer"
+    "--enable-blob"
 
-    # May be or not be triggering  https://bugs.webkit.org/show_bug.cgi?id=43878
+    # https://bugs.webkit.org/show_bug.cgi?id=59430
+    # "--enable-directory-upload"
+
+    # https://bugs.webkit.org/show_bug.cgi?id=58443
     # "--enable-file-system"
-    "--enable-directory-upload"
     ];
 
   /* doConfigure should be specified separately */

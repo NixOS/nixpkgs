@@ -1,13 +1,20 @@
-{cabal, gtk2hsBuildtools, pkgconfig, glib, glibc}:
+{ cabal, glib, glibc, gtk2hsBuildtools, pkgconfig }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "glib";
-  version = "0.11.2";
-  sha256 = "e0fb5f3c22701807db364dff86d55f2a33a57d8a4e58d37a80d367bca50b3dbb";
-  extraBuildInputs = [pkgconfig glib glibc gtk2hsBuildtools];
+  version = "0.12.0";
+  sha256 = "1sqkj6adg87ccdnl9yy1p8yrv5xnfcrlaflj52nrh6anwlqy9z19";
+  buildTools = [ gtk2hsBuildtools ];
+  extraLibraries = [ glibc pkgconfig ];
+  pkgconfigDepends = [ glib ];
   meta = {
+    homepage = "http://www.haskell.org/gtk2hs/";
     description = "Binding to the GLIB library for Gtk2Hs";
-    license = "LGPLv2+";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.lgpl21;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

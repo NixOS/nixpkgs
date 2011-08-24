@@ -2,10 +2,10 @@
 , usePulseAudio }:
 
 stdenv.mkDerivation {
-  name = "libao-0.8.8";
+  name = "libao-1.1.0";
   src = fetchurl {
-    url = http://downloads.xiph.org/releases/ao/libao-0.8.8.tar.gz;
-    sha256 = "e52e05af6b10f42d2ee9845df1a581bf2b352060eabf7946aee0a600c3878954";
+    url = http://downloads.xiph.org/releases/ao/libao-1.1.0.tar.gz;
+    sha256 = "1m0v2y6bhr4iwsgdkc7b3y0qgpvpv1ifbxsy8n8ahsvjn6wmppi9";
   };
 
   buildInputs = [ pkgconfig alsaLib ] ++ (if usePulseAudio then [ pulseaudio ]

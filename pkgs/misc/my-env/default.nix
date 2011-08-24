@@ -45,7 +45,7 @@ mkDerivation {
   # the buildNativeInputs environment variable.
   buildNativeInputs = [ ] ++ buildInputs ;
   name = "env-${name}";
-  phases = "buildPhase";
+  phases = [ "buildPhase" ];
   setupNew = substituteAll {
     src = ../../stdenv/generic/setup.sh;
     preHook="";
@@ -53,6 +53,7 @@ mkDerivation {
     initialPath= (import ../../stdenv/common-path.nix) { inherit pkgs; };
     gcc = stdenv.gcc;
   };
+
   buildPhase = ''
     set -x
     mkdir -p "$out/dev-envs" "$out/nix-support"
@@ -110,5 +111,6 @@ mkDerivation {
       export PATH
       echo $name loaded
     EOF
+    exit 0
   '';
 }

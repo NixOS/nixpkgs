@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     done
     sed '/-x $WGET/d' -i download
     ./download
+
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
 
@@ -53,6 +54,9 @@ stdenv.mkDerivation rec {
 
     set -x
     pushd build/${tag}
+
+    patch -p1 < ${./xlib.patch}
+
     # Fix svtools: hardcoded jpeg path
     sed -i -e 's,^JPEG3RDLIB=.*,JPEG3RDLIB=${libjpeg}/lib/libjpeg.so,' solenv/inc/libs.mk
     # Fix sysui: wants to create a tar for root
@@ -64,6 +68,7 @@ stdenv.mkDerivation rec {
     # Fix redland: wants to set rpath to /usr/local/lib
     sed -i -e 's,^CONFIGURE_FLAGS.*,& --prefix='$TMPDIR, redland/redland/makefile.mk \
       redland/raptor/makefile.mk redland/rasqal/makefile.mk
+
     popd
 
     set +x

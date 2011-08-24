@@ -1,9 +1,9 @@
 rec {
-   version="r70732";
-   name="webkit-r70732";
-   hash="1y81rir7mwqxd40i4zzq79c7wa0pvvgvk332k1j94xwqfrffnxzi";
-   url="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r70732.tar.bz2";
-   advertisedUrl="http://builds.nightly.webkit.org/files/trunk/src/WebKit-r70732.tar.bz2";
+   version="1.4.0";
+   name="webkit-1.4.0";
+   hash="123zllzlnkjgw4d2ag73dvrjmkikbapxlz5730ps6y4qm43gxc1y";
+   url="http://webkitgtk.org/webkit-1.4.0.tar.gz";
+   advertisedUrl="http://webkitgtk.org/webkit-1.4.0.tar.gz";
   
   
 }

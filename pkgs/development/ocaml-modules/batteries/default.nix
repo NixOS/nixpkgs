@@ -2,20 +2,27 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.2.0";
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-batteries-${version}";
+  name = "ocaml-batteries-1.4.0";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/423/batteries-${version}.tar.gz";
-    sha256 = "0lkkbfj51zkhhr56nx167448pvg02nrzjjkl57ycic2ikzgq6lmx";
+    url = https://forge.ocamlcore.org/frs/download.php/643/batteries-1.4.0.tar.gz;
+    sha256 = "1qyhiyanlhpbj0dv0vyqak87qfadjzg2pb8q93iybmg59akaxl15";
   };
 
   buildInputs = [ocaml findlib camomile ounit];
 
+  patchPhase = ''
+    substituteInPlace Makefile --replace '/bin/echo -n' echo
+  '';
+
   configurePhase = "true"; 	# Skip configure
+
+  preInstall = ''
+    ensureDir "$out/lib/ocaml/${ocaml_version}/site-lib"
+  '';
 
   doCheck = true;
 

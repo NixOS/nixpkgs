@@ -470,7 +470,7 @@ Additional file types can be supported by setting the
 <section><title>The configure phase</title>
 
 <para>The configure phase prepares the source tree for building.  The
-default <function>unpackPhase</function> runs
+default <function>configurePhase</function> runs
 <filename>./configure</filename> (typically an Autoconf-generated
 script) if it exists.</para>
 
@@ -879,7 +879,7 @@ distribution of the package.  The default
 <function>distPhase</function> first calls <command>make
 dist</command>, then it copies the resulting source tarballs to
 <filename>$out/tarballs/</filename>.  This phase is only executed if
-the attribute <varname>doDist</varname> is not set.</para>
+the attribute <varname>doDist</varname> is set.</para>
 
 <variablelist>
   <title>Variables controlling the distribution phase</title>

@@ -10,9 +10,9 @@ diff --exclude '*~' -rc dhcp-4.1.0p1-orig/client/scripts/linux dhcp-4.1.0p1/clie
 + # Delete the old addresses, routes and ARP information for this
 + # interface.
 + flush_if() {
-+   ${ip} address flush dev $interface
-+   ${ip} route flush dev $interface
-+   ${ip} neighbour flush dev $interface
++   ${ip} -4 address flush dev $interface
++   ${ip} -4 route flush dev $interface
++   ${ip} -4 neighbour flush dev $interface
 + }
 + 
   # Invoke the local dhcp client enter hooks, if they exist.

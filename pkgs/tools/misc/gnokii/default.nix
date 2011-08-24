@@ -5,7 +5,8 @@ let
   s = import ./src-for-default.nix; 
   buildInputs = with a; [
     perl intltool gettext libusb
-    glib pkgconfig
+    glib gtk pkgconfig bluez readline
+    libXpm pcsclite libical
   ];
 in
 
@@ -18,19 +19,8 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = [ "setDebug" "doConfigure" "doMakeInstall"];
+  phaseNames = [ "doConfigure" "doMakeInstall"];
 
-  setDebug = a.fullDepEntry ''
-    mkdir -p $out/src
-    cp -R * $out/src
-    cd $out/src
-
-    export NIX_STRIP_DEBUG=0
-    export CFLAGS="-ggdb -O0 -include ${a.stdenv.glibc}/include/locale.h"
-    export CXXFLAGS="-ggdb -O0"
-
-  '' [ "minInit" "doUnpack" ];
-      
   inherit(s) name;
   meta = {
     description = "Cellphone tool";

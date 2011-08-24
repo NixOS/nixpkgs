@@ -1,0 +1,81 @@
+commit 7f6b2f2b9b2be1e4f257582a04b194c69f705bc7
+Author: Casper Boemann <cbr@boemann.dk>
+Date:   Sat Dec 4 10:44:02 2010 +0000
+
+    ------------------------------------------------------------------------
+    r1203267 | rempt | 2010-12-03 14:20:03 +0100 (Fri, 03 Dec 2010) | 1 line
+    Changed paths:
+       M /trunk/koffice/krita/ui/kis_aboutdata.h
+    
+    correct url for animtim
+    
+    ------------------------------------------------------------------------
+    r1203281 | uzak | 2010-12-03 14:43:32 +0100 (Fri, 03 Dec 2010) | 2 lines
+    Changed paths:
+       M /trunk/koffice/filters/kpresenter/powerpoint/pptstyle.cpp
+    
+    PPT: Fine tuned processing of the TextCFException structure for MS Office 2007.
+    
+    
+    ------------------------------------------------------------------------
+    r1203296 | danders | 2010-12-03 15:44:01 +0100 (Fri, 03 Dec 2010) | 3 lines
+    Changed paths:
+       M /trunk/koffice/kplato/libs/kernel/kptaccount.cpp
+    
+    Fix data loss on xml load.
+    BUG: 258685
+    
+    
+    ------------------------------------------------------------------------
+    r1203344 | bero | 2010-12-03 18:08:24 +0100 (Fri, 03 Dec 2010) | 2 lines
+    Changed paths:
+       M /trunk/koffice/krita/ui/kisexiv2/kis_exif_io.cpp
+    
+    Fix build with exiv2 0.21
+    
+    
+    
+    svn path=/branches/work/koffice-essen/; revision=1203491
+
+diff krita/ui/kisexiv2/kis_exif_io.cpp krita/ui/kisexiv2/kis_exif_io.cpp
+index 6eb7f30..c85da65 100644
+--- krita/ui/kisexiv2/kis_exif_io.cpp
++++ krita/ui/kisexiv2/kis_exif_io.cpp
+@@ -406,7 +406,11 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
+                 v = kmdIntOrderedArrayToExifArray(entry.value());
+             } else if (exivKey == "Exif.Image.Artist") { // load as dc:creator
+                 KisMetaData::Value creator = entry.value().asArray()[0];
++#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+                 v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
++#else
++                v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
++#endif
+             } else if (exivKey == "Exif.Photo.OECF") {
+                 v = kmdOECFStructureToExifOECF(entry.value());
+             } else if (exivKey == "Exif.Photo.DeviceSettingDescription") {
+@@ -419,13 +423,25 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
+                 Q_ASSERT(entry.value().type() == KisMetaData::Value::LangArray);
+                 QMap<QString, KisMetaData::Value> langArr = entry.value().asLangArray();
+                 if (langArr.contains("x-default")) {
++#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+                     v = kmdValueToExivValue(langArr.value("x-default"), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
++#else
++                    v = kmdValueToExivValue(langArr.value("x-default"), exifKey.defaultTypeId());
++#endif
+                 } else if (langArr.size() > 0) {
++#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+                     v = kmdValueToExivValue(langArr.begin().value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
++#else
++                    v = kmdValueToExivValue(langArr.begin().value(), exifKey.defaultTypeId());
++#endif
+                 }
+             } else {
+                 dbgFile << exifKey.tag();
++#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+                 v = kmdValueToExivValue(entry.value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
++#else
++                v = kmdValueToExivValue(entry.value(), exifKey.defaultTypeId());
++#endif
+             }
+             if (v && v->typeId() != Exiv2::invalidTypeId) {
+                 dbgFile << "Saving key" << exivKey; // << " of KMD value" << entry.value();

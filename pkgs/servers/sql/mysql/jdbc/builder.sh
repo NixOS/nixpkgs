@@ -2,7 +2,7 @@ source $stdenv/setup
 
 set -e
 
-tar zxvf $src
+unzip $src
 cd mysql-connector-java-*
 
 ensureDir $out/share/java

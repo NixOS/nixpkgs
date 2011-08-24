@@ -3,25 +3,27 @@
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
-  version = "0.5";
+  version = "0.62";
+  mversion = "0.61";  # sometimes only engine is updated
   src1 = fetchurl {
-    url = "http://static.warsow.net/release/warsow_${version}_sdk.zip";
-    sha256 = "018z83irj6wr5mj4pnya1r4abmg9sqznnkyq0gw9sr9q9dxr7k1m";
+    url = "http://www.zcdn.org/dl/warsow_${version}_sdk.zip";
+    sha256 = "0nb1z55lzmwarnn71dcyg9b3k7r7wxagqxks8a7rnlq7acsnra71";
   };
   src2 = fetchurl {
-    url = "http://static.warsow.net/release/warsow_${version}_unified.zip";
-    sha256 = "002idzqjq41ygjny9kk31fjx7l9clxy4xm38hc5dky6yfx17ib36";
+    url = "http://www.zcdn.org/dl/warsow_${mversion}_unified.zip";
+    sha256 = "1b5bv4dsly7i7c4fqlkckv4da1knxl9m3kg8nlgkgr8waczgvazv";
   };
   unpackPhase = ''
     mkdir warsow_${version}_sdk
     cd warsow_${version}_sdk
     unzip $src1
+    unzip $src2
+    ensureDir source/release/
+    mv warsow_${mversion}_unified/basewsw source/release/
     cd source
-    unzip $src2 'basewsw/*' -d release
   '';
   patchPhase = ''
-    substituteInPlace Makefile --replace openal-config 'pkg-config openal'
-    substituteInPlace snd_openal/snd_main.c --replace libopenal.so.0 ${openal}/lib/libopenal.so
+    substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
   '';
   buildInputs = [ unzip pkgconfig zlib curl libjpeg libvorbis libXxf86dga
                   libXxf86vm libXinerama SDL mesa openal ];

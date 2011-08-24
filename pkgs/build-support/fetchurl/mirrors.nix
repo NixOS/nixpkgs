@@ -10,6 +10,7 @@ rec {
   
   # SourceForge.
   sourceforge = [
+    http://prdownloads.sourceforge.net/
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
@@ -17,7 +18,6 @@ rec {
     http://ovh.dl.sourceforge.net/sourceforge/
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
-    http://prdownloads.sourceforge.net/
   ];
 
   sf = sourceforge;
@@ -101,6 +101,7 @@ rec {
 
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
   kde = [
+    "http://download.kde.org/download.php?url="
     http://ftp.gwdg.de/pub/x11/kde/
     ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
     ftp://ftp.kde.org/pub/kde/
@@ -195,6 +196,7 @@ rec {
     http://ftp.belnet.be/mirror/ftp.opensuse.org/distribution/
     http://ftp.uni-kassel.de/opensuse/distribution/
     http://ftp.opensuse.org/pub/opensuse/distribution/
+    http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/
     http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/
     http://opensuse.mirror.server4you.net/distribution/
     http://ftp.nsysu.edu.tw/Linux/OpenSuSE/distribution/
@@ -243,6 +245,12 @@ rec {
     ftp://ftp.nl.postgresql.org/pub/mirror/postgresql/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
+  ];
+
+  metalab = [
+    ftp://mirrors.kernel.org/metalab/
+    ftp://ftp.gwdg.de/pub/linux/metalab/
+    ftp://ftp.xemacs.org/sites/metalab.unc.edu/
   ];
 
 }

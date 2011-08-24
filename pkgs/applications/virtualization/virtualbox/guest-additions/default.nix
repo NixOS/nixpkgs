@@ -1,11 +1,13 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
 
+let version = "4.1.0"; in
+
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-3.2.8";
+  name = "VirtualBox-GuestAdditions-${version}";
   src = fetchurl {
-    url = http://download.virtualbox.org/virtualbox/3.2.8/VBoxGuestAdditions_3.2.8.iso;
-    sha256 = "1pyfgrcdmw6zf3yxgzcd8c5qzqqn62bz4085ka453gfmi9d65lys";
+    url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
+    sha256 = "0azj08l0457cjl5v2ddgb5kz8gblsi7cgjgdmyiszvlqpyfbh98w";
   };
   KERN_DIR = "${kernel}/lib/modules/*/build";
   buildInputs = [ patchelf cdrkit makeWrapper ];
@@ -17,22 +19,25 @@ stdenv.mkDerivation {
   '';
   
   buildCommand = ''
-    ${if stdenv.system == "i686-linux" then ''
-        isoinfo -J -i $src -x /VBoxLinuxAdditions-x86.run > ./VBoxLinuxAdditions-x86.run
-        chmod 755 ./VBoxLinuxAdditions-x86.run
-        ./VBoxLinuxAdditions-x86.run --noexec --keep
-      ''
-      else if stdenv.system == "x86_64-linux" then ''
-        isoinfo -J -i $src -x /VBoxLinuxAdditions-amd64.run > ./VBoxLinuxAdditions-amd64.run
-        chmod 755 ./VBoxLinuxAdditions-amd64.run
-	./VBoxLinuxAdditions-amd64.run --noexec --keep
+    ${if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
+        isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
+        chmod 755 ./VBoxLinuxAdditions.run
+	./VBoxLinuxAdditions.run --noexec --keep
       ''
       else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
     }
     
     # Unpack files
     cd install
-    tar xfvj VBoxGuestAdditions.tar.bz2
+    ${if stdenv.system == "i686-linux" then ''
+        tar xfvj VBoxGuestAdditions-x86.tar.bz2
+      ''
+      else if stdenv.system == "x86_64-linux" then ''
+        tar xfvj VBoxGuestAdditions-amd64.tar.bz2
+      ''
+      else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+    }
+
     
     # Build kernel modules    
     cd src        
@@ -40,10 +45,11 @@ stdenv.mkDerivation {
     for i in *
     do
 	cd $i
-	sed -i -e "s/depmod/echo/g" Makefile
+	find . -type f | xargs sed 's/depmod -a/true/' -i
 	make
 	cd ..
     done
+
     cd ..
     
     # Change the interpreter for various binaries
@@ -99,8 +105,8 @@ stdenv.mkDerivation {
     
     # Install Xorg drivers
     ensureDir $out/lib/xorg/modules/{drivers,input}
-    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_18.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
-    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_18.so $out/lib/xorg/modules/input/vboxmouse_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_19.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_19.so $out/lib/xorg/modules/input/vboxmouse_drv.so
     
     # Install kernel modules
     cd src
@@ -110,8 +116,8 @@ stdenv.mkDerivation {
         cd $i
 	kernelVersion=$(cd ${kernel}/lib/modules; ls)
 	export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-	sed -i -e "s|-o root||g" \
-	       -e "s|-g root||g" Makefile
+	find . -type f | xargs sed -i -e "s|-o root||g" \
+	                              -e "s|-g root||g"
 	make install
 	cd ..
     done    

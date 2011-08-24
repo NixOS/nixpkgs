@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, libglade, libgnomecanvas, fribidi
-, libpng, popt, libgsf, enchant, wv, librsvg, bzip2
+, libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg
 }:
 
 stdenv.mkDerivation {
@@ -12,6 +12,6 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig gtk libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
-      libgsf enchant wv
+      libgsf enchant wv libjpeg
     ];
 }

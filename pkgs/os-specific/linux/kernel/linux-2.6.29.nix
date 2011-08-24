@@ -30,7 +30,7 @@ import ./generic.nix (
         PARAVIRT_GUEST y
         KVM_CLOCK y
         KVM_GUEST y
-        XEN y
+        XEN n
 
         # We need 64 GB (PAE) support for Xen guest support.
         HIGHMEM64G? y

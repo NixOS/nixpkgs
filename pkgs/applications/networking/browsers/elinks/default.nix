@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1li4vlbq8wvnigxlkzb15490y90jg6y9yzzrqpqcz2h965w5869d";
   };
 
+  patches = [ ./gc-init.patch ];
+
   buildInputs = [ python perl ncurses x11 bzip2 zlib openssl spidermonkey guile gpm ];
-  
+
   configureFlags =
     ''
       --enable-finger --enable-html-highlight --with-guile

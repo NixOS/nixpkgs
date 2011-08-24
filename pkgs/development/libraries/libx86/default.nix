@@ -13,9 +13,13 @@ rec {
 
   phaseNames = ["doPatch" "fixX86Def" "killUsr" "doMakeInstall"];
   patches = [./constants.patch];
+
+  # using BACKEND=x86emu on 64bit systems fixes:
+  #  http://www.mail-archive.com/suspend-devel@lists.sourceforge.net/msg02355.html
   makeFlags = [
     "DESTDIR=$out"
-    ];
+  ] ++ a.stdenv.lib.optionals ( a.stdenv.system == "x86_64-linux" ) [ "BACKEND=x86emu" ]; 
+
   fixX86Def = a.fullDepEntry (''
     sed -i lrmi.c -e 's@defined(__i386__)@(defined(__i386__) || defined(__x86_64__))@'
   '') ["doUnpack" "minInit"];

@@ -6,18 +6,16 @@ in
 
 {
 
-  /* 
+  /*
+    Usage example creating a derivation installing ruby, sup and a lib:
 
-    usage example creating a derivation installing ruby, sup and a lib:
-
-    packageOverrides = {
-      rubyCollection = collection {
-        name = "ruby";
-        list = let l = rubyLibs; in 
-          [ pkgs.ruby l.chronic l.sup ];
-      };
-    }
-
+      packageOverrides = {
+	rubyCollection = collection {
+	  name = "ruby";
+	  list = let l = rubyLibs; in
+	    [ pkgs.ruby l.chronic l.sup ];
+	};
+      }
   */
   collection = {list, name} : runCommand "collection-${name}" {} ''
     mkdir -p $out/nix-support
@@ -128,7 +126,7 @@ in
       for var in CFLAGS CXXFLAGS NIX_CFLAGS_COMPILE; do
         declare -x "$var=''${!var} -ggdb -O0"
       done
-      echo "file should tell that executable has not been strippee"
+      echo "file should tell that executable has not been stripped"
     '';
 
   });

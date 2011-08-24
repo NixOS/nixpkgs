@@ -18,9 +18,6 @@ kde.package {
   meta = {
     description = "KDE Administration Utilities";
     license = "GPL";
-    kde = {
-      name = "kdeadmin";
-      version = "4.5.4";
-    };
+    kde.name = "kdeadmin";
   };
 }

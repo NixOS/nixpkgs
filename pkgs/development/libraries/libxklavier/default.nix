@@ -2,18 +2,18 @@
 , libICE, glib, libxkbfile, isocodes }:
 
 stdenv.mkDerivation rec {
-  name = "libxklavier-4.0";
+  name = "libxklavier-5.0";
 
   src = fetchurl {
     url = "mirror://sf/gswitchit/${name}.tar.bz2";
-    sha256 = "210ed5803109a8cef3b2ab1195bc73fe3385a97a8749d01673e020642d8e5a71";
+    sha256 = "1c2dxinjfpq1lzxi0z46r0j80crbmwb0lkvnh6987cjjlwblpnfz";
   };
 
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
-  
-  buildInputs = [ pkgconfig ];
-  
+
+  buildNativeInputs = [ pkgconfig ];
+
   configureFlags = ''
     --with-xkb-base=${xkeyboard_config}/etc/X11/xkb
     --disable-xmodmap-support

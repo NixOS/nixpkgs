@@ -1,12 +1,15 @@
 {stdenv, fetchurl, libsepol}:
 
-stdenv.mkDerivation {
-  builder = ./builder.sh;
-  name = "libselinux-1.30";
+stdenv.mkDerivation rec {
+  name = "libselinux-${version}";
+  version = "2.0.98";
+
   src = fetchurl {
-    url = http://www.nsa.gov/selinux/archives/libselinux-1.30.tgz;
-    md5 = "0b7d269c9b7d847059e4b11a710ab404";
+    url = "http://userspace.selinuxproject.org/releases/20101221/devel/${name}.tar.gz";
+    sha256 = "00irm7nyakgi4z8d6dlm6c70fkbl6rzk5w1w0ny2c564yw0d0dlz";
   };
 
-  buildInputs = [libsepol];
+  buildInputs = [ libsepol ];
+
+  preBuild = '' makeFlags="$makeFlags PREFIX=$out DESTDIR=$out" '';
 }

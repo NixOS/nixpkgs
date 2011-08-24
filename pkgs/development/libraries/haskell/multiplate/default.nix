@@ -1,14 +1,18 @@
-{cabal, transformers}:
+{ cabal, transformers }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "multiplate";
-  version = "0.0.1";
-  sha256 = "06bdj0r83arxxl6vqif9dmna140qcgvjizcyhvyqymsid605hrp4";
-  propagatedBuildInputs = [transformers];
+  version = "0.0.1.1";
+  sha256 = "00rxgkvgx1rfvk15gjyyg00vqyg4j24d8d19q6rj07j2mgfvdxw6";
+  buildDepends = [ transformers ];
   meta = {
-    description = "Lightweight generic library for mutually recursive datatypes";
-    license = "MIT";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://haskell.org/haskellwiki/Multiplate";
+    description = "Lightweight generic library for mutually recursive data types";
+    license = self.stdenv.lib.licenses.mit;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

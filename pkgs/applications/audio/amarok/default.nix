@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   pname = "amarok";
-  version = "2.3.2";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "0dw2928vkd42h3d8nsb8i4xhp8qfj1zsfc1m9wrzrsxl0vd6j9c4";
+    sha256 = "0242psqci1b6wfhrrds14h4c4qin9s83cxk1259d9hqcsgn4ir3c";
   };
 
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";

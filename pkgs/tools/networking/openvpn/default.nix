@@ -1,11 +1,11 @@
 {stdenv, fetchurl, iproute, lzo, openssl, nettools}:
 
 stdenv.mkDerivation rec {
-  name = "openvpn-2.1.4";
+  name = "openvpn-2.2.0";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
-    sha256 = "1x9aymbk580zp35b7dhhkn29a4chhxnzrxjfmp948bgqvvjpizk7";
+    sha256 = "0rr59b3ybqr2j5jxl2fdzmm5qbh0hvwi03xfaha6s7k4l6mymsvi";
   };
 
   buildInputs = [ iproute lzo openssl ];

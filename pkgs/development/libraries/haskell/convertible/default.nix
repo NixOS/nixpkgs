@@ -1,12 +1,20 @@
-{cabal, mtl, time}:
+{ cabal, mtl, text, time }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "convertible";
-  version = "1.0.5";
-  sha256 = "caf75727a35cf249690f3da60fce770642c8a1fad6080f3ba57e924fbe3c9465";
-  propagatedBuildInputs = [mtl time];
+  version = "1.0.11.0";
+  sha256 = "0qkz760ddshmglmrf47a01978c9zhxfss44b6vmfkwwfcjb7da2b";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ mtl text time ];
   meta = {
+    homepage = "http://hackage.haskell.org/cgi-bin/hackage-scripts/package/convertible";
     description = "Typeclasses and instances for converting between types";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

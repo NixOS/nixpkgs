@@ -16,6 +16,7 @@ rec {
 
   # Map a function over a list and concatenate the resulting strings.
   concatMapStrings = f: list: concatStrings (map f list);
+  concatImapStrings = f: list: concatStrings (lib.imap f list);
   
 
   # Place an element between each element of a list, e.g.,
@@ -44,6 +45,10 @@ rec {
   # libraries for a set of packages, e.g. "${pkg1}/lib:${pkg2}/lib:...".
   makeLibraryPath = makeSearchPath "lib";
 
+
+  # Idem for Perl search paths.
+  makePerlPath = makeSearchPath "lib/perl5/site_perl";
+  
 
   # Dependening on the boolean `cond', return either the given string
   # or the empty string.

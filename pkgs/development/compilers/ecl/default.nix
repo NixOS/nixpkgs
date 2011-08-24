@@ -1,11 +1,13 @@
-a :  
+{builderDefsPackage
+  , gmp, mpfr, libffi
+  , ...} @ x:
+builderDefsPackage (a :  
 let 
   s = import ./src-for-default.nix;
-  buildInputs = with a; [
-  ];
   propagatedBuildInputs = with a; [
     gmp mpfr
   ];
+  buildInputs = [ gmp libffi mpfr ];
 in
 rec {
   src = a.fetchUrlFromSrcInfo s;
@@ -35,4 +37,4 @@ rec {
     platforms = with a.lib.platforms; 
       linux;
   };
-}
+}) x

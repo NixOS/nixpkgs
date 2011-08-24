@@ -1,10 +1,16 @@
-{cabal}:
+{ cabal }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "syb-with-class";
-  version = "0.6.1";
-  sha256 = "72cf0a98862181fea81b77c11f35efd22eafa29107f3acd624fd08be68ed850b";
+  version = "0.6.1.2";
+  sha256 = "1hzwhfpl4w5nblkr2l4l4i7xxkvv7n5adr3i9miqmw1krlxs852d";
   meta = {
     description = "Scrap Your Boilerplate With Class";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

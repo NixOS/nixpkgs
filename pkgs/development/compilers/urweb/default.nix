@@ -1,28 +1,33 @@
-{ stdenv, fetchurl, file, libmhash, mlton, mysql, postgresql, sqlite }:
+{ stdenv, fetchurl, file, openssl, mlton, mysql, postgresql, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20101102";
+  version = "20110715";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "1x661z6hg8gb7v1n580kdij9mr6vv3psm28zr4mmipj2kqh66gfi";
+    sha256 = "1qaz6alabhi7jmpsj7x0x4sskkjf05619maym133y2lkgdnvhydh";
   };
 
-  buildInputs = [ stdenv.gcc file libmhash mlton mysql postgresql sqlite ];
+  buildInputs = [ stdenv.gcc file openssl mlton mysql postgresql sqlite ];
 
-  patches = [ ./remove-header-include-directory-prefix.patch ];
-
-  postPatch = ''
+  prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
     sed -e 's@gcc @${stdenv.gcc}/bin/gcc @g' -i src/compiler.sml
     '';
 
   preConfigure =
     ''
-      export GCCARGS="-I${mysql}/include/mysql -I${postgresql}/include -I${sqlite}/include -L${libmhash}/lib -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib"
+      export GCCARGS="-I$out/include \
+                      -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib";
+
+      export PGHEADER="${postgresql}/include/libpq-fe.h";
+      export MSHEADER="${mysql}/include/mysql/mysql.h";
+      export SQHEADER="${sqlite}/include/sqlite3.h";
     '';
+
+  configureFlags = "--with-openssl=${openssl}"; 
 
   dontDisableStatic = true;
 

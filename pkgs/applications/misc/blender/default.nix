@@ -1,23 +1,26 @@
-{stdenv, fetchurl, cmake, mesa, gettext, python, libjpeg, libpng, zlib, openal, SDL
-, openexr, libsamplerate, libXi, libtiff, ilmbase }:
+{ stdenv, fetchurl, SDL, cmake, gettext, ilmbase, libXi, libjpeg,
+libpng, libsamplerate, libtiff, mesa, openal, openexr, openjpeg,
+python, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.50a1";
+  name = "blender-2.57";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "1cik05fmf9b8z3qpwsm6q9h1ia87w1piz87hxhfs24jw6l5pyiwr";
+    sha256 = "1f4l0zkfmbd8ydzwvmb5jw89y7ywd9k8m2f1b3hrdpgjcqhq3lcb";
   };
 
-  buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal SDL openexr libsamplerate
-    libXi libtiff ilmbase ];
+  buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal
+    SDL openexr libsamplerate libXi libtiff ilmbase openjpeg ];
 
-  cmakeFlags = [ "-DOPENEXR_INC=${openexr}/include/OpenEXR" "-DWITH_OPENCOLLADA=OFF"
-    "-DPYTHON_LIBPATH=${python}/lib" ];
+  patchPhase = ''
+      sed -e "s@/usr/local@${python}@" -i build_files/cmake/FindPythonLibsUnix.cmake
+  '';
+
+  cmakeFlags = [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
+    "-DWITH_OPENCOLLADA=OFF" "-DWITH_INSTALL_PORTABLE=OFF"];
 
   NIX_CFLAGS_COMPILE = "-iquote ${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
-
-  patches = [ ./python-chmod.patch ];
 
   meta = { 
     description = "3D Creation/Animation/Publishing System";

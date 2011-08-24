@@ -1,4 +1,4 @@
-{ fetchurl, stdenv}:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "talloc-2.0.1";
@@ -9,12 +9,11 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = "--enable-talloc-compat1 --enable-largefile";
+  
   meta = {
     description = "talloc is a hierarchical pool based memory allocator with destructors";
-
     homepage = http://tdb.samba.org/;
     license = "GPLv3";
-
     platforms = stdenv.lib.platforms.all;
   };
 }

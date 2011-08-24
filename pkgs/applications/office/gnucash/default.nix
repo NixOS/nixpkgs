@@ -1,38 +1,54 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk
-, libglade, libgnomeui, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant
-, gettext, intltool, perl, guile, slibGuile, swig, isocodes, bzip2
-, makeWrapper }:
+{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
+, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
+, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
+}:
 
-stdenv.mkDerivation rec {
-  name = "gnucash-2.2.9";
+/* If you experience GConf errors when running GnuCash on NixOS, see
+ * http://wiki.nixos.org/wiki/Solve_GConf_errors_when_running_GNOME_applications
+ * for a possible solution.
+ */
+
+let
+  name = "gnucash-2.4.7";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
-    url = "http://ftp.at.gnucash.org/pub/gnucash/gnucash/sources/stable/${name}.tar.bz2";
-    sha256 = "0sj83mmshx50122n1i3y782p4b54k37n7sb4vldmqmhwww32925i";
+    url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
+    sha256 = "eeb3b17f9081a544f8705db735df88ab3f468642a1d01552ea4e36bcb5b0730e";
   };
 
   buildInputs = [
-    pkgconfig libxml2 gconf glib gtk
-    libglade libgnomeui libgtkhtml gtkhtml libgnomeprint goffice enchant
-    gettext intltool perl guile slibGuile swig isocodes bzip2 makeWrapper
+    pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
+    libgnomeprint goffice enchant gettext intltool perl guile slibGuile
+    swig isocodes bzip2 makeWrapper libofx
   ];
 
-  preConfigure = ''
-    # The `.gnucash' directory, used by the test suite.
-    export GNC_DOT_DIR="$PWD/dot-gnucash"
-    echo "\$GNC_DOT_DIR set to \`$GNC_DOT_DIR'"
-  '';
+  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
 
   postInstall = ''
+    sed -i $out/bin/update-gnucash-gconf                                \
+       -e 's|--config-source=[^ ]* --install-schema-file|--makefile-install-rule|'
     for prog in "$out/bin/"*
     do
-      wrapProgram "$prog"                                       \
-        --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"        \
-        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"
+      wrapProgram "$prog"                                               \
+        --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"                \
+        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"                 \
+        --prefix LD_LIBRARY_PATH ":" "${libgnomeui}/lib/libglade/2.0"   \
+        --prefix LD_LIBRARY_PATH ":" "${libbonoboui}/lib/libglade/2.0"  \
+        --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
+        --prefix PATH ":" "${gconf}/bin"                                \
+        --suffix PATH ":" "$out/bin"
     done
   '';
 
+  # The following settings fix failures in the test suite. It's not required otherwise.
+  NIX_LDFLAGS = "-rpath=${guile}/lib";
+  preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
   doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "GnuCash, a personal and small-business financial-accounting application";
@@ -52,7 +68,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnucash.org/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

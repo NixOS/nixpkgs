@@ -33,5 +33,7 @@ stdenv.mkDerivation rec {
     homepage = http://neverball.org/;
     description = "Tilt the floor to roll a ball";
     license = "GPL";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

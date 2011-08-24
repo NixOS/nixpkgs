@@ -1,4 +1,8 @@
-{ pkgs }:
+{ pkgs
+, linuxKernel ? pkgs.linux
+, img ? "bzImage"
+, rootModules ? [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3" "unix" ]
+}:
 
 with pkgs;
 
@@ -7,16 +11,13 @@ rec {
   # The 15 second CIFS timeout is too short if the host if heavily
   # loaded (e.g., in the Hydra build farm when it's running many jobs
   # in parallel).  So apply a patch to increase the timeout to 120s.
-  kernel = assert pkgs.linux.features.cifsTimeout; pkgs.linux;
+  kernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
 
   kvm = pkgs.qemu_kvm;
 
 
   modulesClosure = makeModulesClosure {
-    inherit kernel;
-    rootModules =
-      [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon"
-        "nls_utf8" "ext2" "ext3" "unix" ];
+    inherit kernel rootModules;
   };
 
 
@@ -98,10 +99,6 @@ rec {
           set -- $(IFS==; echo $o)
           command=$2
           ;;
-        tmpDir=*)
-          set -- $(IFS==; echo $o)
-          export tmpDir=$2
-          ;;
         out=*)
           set -- $(IFS==; echo $o)
           export out=$2
@@ -133,19 +130,19 @@ rec {
       mount -t ext2 /dev/${hd} /fs
     fi
 
-    mkdir -p /fs/hostfs
-    
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
-    echo "mounting host filesystem..."
-    mount -t cifs //10.0.2.4/qemu /fs/hostfs -o guest,sec=none
-
+    echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -o bind /fs/hostfs/nix/store /fs/nix/store
-    
+    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none
+
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
+
+    echo "mounting host's temporary directory..."
+    mkdir -p /fs/tmp/xchg
+    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -160,8 +157,8 @@ rec {
     test -n "$command"
 
     set +e
-    chroot /fs $command /tmp $out /hostfs/$tmpDir
-    echo $? > /fs/hostfs/$tmpDir/in-vm-exit
+    chroot /fs $command $out
+    echo $? > /fs/tmp/xchg/in-vm-exit
 
     mount -o remount,ro dummy /fs
 
@@ -181,14 +178,13 @@ rec {
   
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
-    source $3/saved-env
+    source /tmp/xchg/saved-env
     
     export NIX_STORE=/nix/store
-    export NIX_BUILD_TOP="$1"
-    export TMPDIR="$1"
+    export NIX_BUILD_TOP=/tmp
+    export TMPDIR=/tmp
     export PATH=/empty
-    out="$2"
-    export ORIG_TMPDIR="$3"
+    out="$1"
     cd "$NIX_BUILD_TOP"
 
     if ! test -e /bin/sh; then
@@ -217,10 +213,10 @@ rec {
       -net nic,model=virtio \
       -chardev socket,id=samba,path=./samba \
       -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
-      -drive file=$diskImage,if=virtio,boot=on,cache=writeback,werror=report \
-      -kernel ${kernel}/bzImage \
+      -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
+      -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} tmpDir=$TMPDIR out=$out mountDisk=$mountDisk" \
+      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
   '';
 
@@ -228,6 +224,7 @@ rec {
   startSamba =
     ''
       export WHO=`whoami`
+      mkdir -p $TMPDIR/xchg
 
       cat > $TMPDIR/smb.conf <<SMB
       [global]
@@ -239,9 +236,14 @@ rec {
         log file = $TMPDIR/log.smbd
         smb passwd file = $TMPDIR/smbpasswd
         security = share
-      [qemu]
+      [store]
         force user = $WHO
-        path = /
+        path = /nix/store
+        read only = no
+        guest ok = yes
+      [xchg]
+        force user = $WHO
+        path = $TMPDIR/xchg
         read only = no
         guest ok = yes
       SMB
@@ -256,6 +258,8 @@ rec {
     export > saved-env
 
     PATH=${coreutils}/bin
+    mkdir xchg
+    mv saved-env xchg/
 
     diskImage=''${diskImage:-/dev/null}
 
@@ -273,17 +277,19 @@ rec {
     ${qemuCommand}
     EOF
 
+    mkdir -p -m 0700 $out
+
     chmod +x ./run-vm
     source ./run-vm
     
-    if ! test -e in-vm-exit; then
+    if ! test -e xchg/in-vm-exit; then
       echo "Virtual machine didn't produce an exit code."
       exit 1
     fi
     
     eval "$postVM"
 
-    exit $(cat in-vm-exit)
+    exit $(cat xchg/in-vm-exit)
   '';
 
 
@@ -342,6 +348,56 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
   });
 
+  extractFs = {file, fs ? null} :
+    with pkgs; runInLinuxVM (
+    stdenv.mkDerivation {
+      name = "extract-file";
+      buildInputs = [utillinuxng];
+      buildCommand = ''
+        ln -s ${linux}/lib /lib
+        ${module_init_tools}/sbin/modprobe loop
+        ${module_init_tools}/sbin/modprobe ext4
+        ${module_init_tools}/sbin/modprobe hfs
+        ${module_init_tools}/sbin/modprobe hfsplus
+        ${module_init_tools}/sbin/modprobe squashfs
+        ${module_init_tools}/sbin/modprobe iso9660
+        ${module_init_tools}/sbin/modprobe ufs
+        ${module_init_tools}/sbin/modprobe cramfs
+        mknod /dev/loop0 b 7 0
+
+        ensureDir $out
+        ensureDir tmp
+        mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
+          mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
+        cp -Rv tmp/* $out/ || exit 0
+      '';
+    });
+
+  extractMTDfs = {file, fs ? null} :
+    with pkgs; runInLinuxVM (
+    stdenv.mkDerivation {
+      name = "extract-file-mtd";
+      buildInputs = [utillinuxng mtdutils];
+      buildCommand = ''
+        ln -s ${linux}/lib /lib
+        ${module_init_tools}/sbin/modprobe mtd
+        ${module_init_tools}/sbin/modprobe mtdram total_size=131072
+        ${module_init_tools}/sbin/modprobe mtdchar
+        ${module_init_tools}/sbin/modprobe mtdblock
+        ${module_init_tools}/sbin/modprobe jffs2
+        ${module_init_tools}/sbin/modprobe zlib
+        mknod /dev/mtd0 c 90 0
+        mknod /dev/mtdblock0 b 31 0
+
+        ensureDir $out
+        ensureDir tmp
+
+        dd if=${file} of=/dev/mtd0
+        mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
+
+        cp -R tmp/* $out/
+      '';
+    });
 
   qemuCommandGeneric = ''
     ${kvm}/bin/qemu-system-x86_64 \
@@ -429,7 +485,9 @@ rec {
      a set of RPM packages. */
     
   fillDiskWithRPMs =
-    {size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? "", runScripts ? true}:
+    { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
+    , runScripts ? true
+    }:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
@@ -474,7 +532,7 @@ rec {
         ${utillinux}/bin/umount /mnt
       '';
 
-      passthru = {inherit fullName;};
+      passthru = { inherit fullName; };
     });
 
 
@@ -495,7 +553,8 @@ rec {
     export out=/dummy
     export origBuilder=
     export origArgs=
-    export > $TMPDIR/saved-env
+    mkdir $TMPDIR/xchg
+    export > $TMPDIR/xchg/saved-env
     mountDisk=1
     ${qemuCommandLinux}
   '';
@@ -551,7 +610,7 @@ rec {
 
     installPhase = ''
       eval "$preInstall"
-    
+
       ensureDir $out/$outDir
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
@@ -572,7 +631,7 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    {size ? 4096, debs, name, fullName, postInstall ? null}:
+    { size ? 4096, debs, name, fullName, postInstall ? null }:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall;
@@ -629,7 +688,7 @@ rec {
           done
           chroot=$(type -tP chroot)
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            /usr/bin/dpkg --install --force-all $debs < /dev/null
+            /usr/bin/dpkg --install --force-all $debs < /dev/null || true
         done
         
         echo "running post-install script..."
@@ -644,7 +703,7 @@ rec {
         ${utillinux}/bin/umount /mnt
       '';
 
-      passthru = {inherit fullName;};
+      passthru = { inherit fullName; };
     });
 
 
@@ -677,7 +736,7 @@ rec {
       rpms = import (rpmClosureGenerator {
         inherit name packagesList urlPrefix archs;
         packages = packages ++ extraPackages;
-      }) {inherit fetchurl;};
+      }) { inherit fetchurl; };
     };
 
 
@@ -762,10 +821,10 @@ rec {
       name = "fedora-7-i386";
       fullName = "Fedora 7 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/7/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "0zq7ifirj45wry7b2qkm12qhzzazal3hn610h5kwbrfr2xavs882";
+        url = mirror://fedora/linux/releases/7/Everything/i386/os/repodata/primary.xml.gz;
+        sha256 = "0ssfa01jbwdf566rsxm443yi8f9b1drgfpv51904bark4glgvs33";
       };
-      urlPrefix = mirror://fedora/linux/releases/7/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/7/Everything/i386/os;
       packages = commonFedoraPackages;
     };
     
@@ -773,10 +832,10 @@ rec {
       name = "fedora-8-i386";
       fullName = "Fedora 8 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/8/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "0vr9345rrk0vhs4pc9cjp8npdkqz0xqyirv84vhyfn533m9ws36f";
+        url = mirror://fedora/linux/releases/8/Everything/i386/os/repodata/primary.xml.gz;
+        sha256 = "0kwf0jcp63pygpvgvwl4w58pph24xbcy6db6fnq2f3ly5myhz53n";
       };
-      urlPrefix = mirror://fedora/linux/releases/8/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/8/Everything/i386/os;
       packages = commonFedoraPackages;
     };
 
@@ -784,10 +843,10 @@ rec {
       name = "fedora-9-i386";
       fullName = "Fedora 9 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/9/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "18780xgyag5acx79warcpvzlfkm0mni8xawl6jjvgxg9n3lp6zg0";
+        url = mirror://fedora/linux/releases/9/Everything/i386/os/repodata/primary.xml.gz;
+        sha256 = "1qd7wb5hfxg4mkpf4k3w49hy0qqf704dqlj3igaibyzmrn9rvk7h";
       };
-      urlPrefix = mirror://fedora/linux/releases/9/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/9/Everything/i386/os;
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
 
@@ -795,10 +854,10 @@ rec {
       name = "fedora-9-x86_64";
       fullName = "Fedora 9 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/9/Fedora/x86_64/os/repodata/primary.xml.gz;
-        sha256 = "0qcjigzbw29ahhkfjaw5pbpyl7mj9l349hikwv25jcnid1cbpmx7";
+        url = mirror://fedora/linux/releases/9/Everything/x86_64/os/repodata/primary.xml.gz;
+        sha256 = "1qv68i5s6gis4fbj4lxkibx8zxw5kqxapk95lvm76ml59gm7axxx";
       };
-      urlPrefix = mirror://fedora/linux/releases/9/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/9/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -807,10 +866,10 @@ rec {
       name = "fedora-10-i386";
       fullName = "Fedora 10 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/10/Fedora/i386/os/repodata/primary.xml.gz;
-        sha256 = "15ha8pxzvlch707mpy06c7pkr2ra2vpd5b8x30qhydvx8fgcqcx9";
+        url = mirror://fedora/linux/releases/10/Everything/i386/os/repodata/beeea88d162e76993c25b9dd8139868274ee7fa1-primary.xml.gz;
+        sha1 = "beeea88d162e76993c25b9dd8139868274ee7fa1";
       };
-      urlPrefix = mirror://fedora/linux/releases/10/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/10/Everything/i386/os;
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
 
@@ -818,10 +877,10 @@ rec {
       name = "fedora-10-x86_64";
       fullName = "Fedora 10 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/10/Fedora/x86_64/os/repodata/primary.xml.gz;
-        sha256 = "1pmaav6mdaw13fq99wfggbsmhcix306cimijjxh35qi7yc3wbsz4";
+        url = mirror://fedora/linux/releases/10/Everything/x86_64/os/repodata/7958210175e86b5cc843cf4bd0bc8659e445e261-primary.xml.gz;
+        sha1 = "7958210175e86b5cc843cf4bd0bc8659e445e261";
       };
-      urlPrefix = mirror://fedora/linux/releases/10/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/10/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -830,10 +889,10 @@ rec {
       name = "fedora-11-i386";
       fullName = "Fedora 11 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/11/Fedora/i386/os/repodata/36af1d88214b770fd3d814a5126083b8e808510c76acfdc3a234d6f7e43c2425-primary.xml.gz;
-        sha256 = "09947kjggmillb1zvb3n1i8his5qhdh1598lv39hyxsb4641vbrn";
+        url = mirror://fedora/linux/releases/11/Everything/i386/os/repodata/4a59e5ec0a3a55979f2045c9e6824b87feb1c8c3df12d893e9ee3057ba482485-primary.xml.gz;
+        sha256 = "4a59e5ec0a3a55979f2045c9e6824b87feb1c8c3df12d893e9ee3057ba482485";
       };
-      urlPrefix = mirror://fedora/linux/releases/11/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/11/Everything/i386/os;
       archs = ["noarch" "i386" "i586"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -842,10 +901,10 @@ rec {
       name = "fedora-11-x86_64";
       fullName = "Fedora 11 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/11/Fedora/x86_64/os/repodata/c792495863f5314329c463d51860fc74c6367f72c3cb1c132f6c3290102d68da-primary.xml.gz;
-        sha256 = "1nk85l890ckc5w9irjy3f9zkdiklzih1imb3qhll6cgmcdc4k4n7";
+        url = mirror://fedora/linux/releases/11/Everything/x86_64/os/repodata/b3e9f0d474893d14b0352deddabc7e3ee017d038614e82d7c6d7717510d6ce7e-primary.xml.gz;
+        sha256 = "b3e9f0d474893d14b0352deddabc7e3ee017d038614e82d7c6d7717510d6ce7e";
       };
-      urlPrefix = mirror://fedora/linux/releases/11/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/11/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -854,10 +913,10 @@ rec {
       name = "fedora-12-i386";
       fullName = "Fedora 12 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/12/Fedora/i386/os/repodata/92857daf45687583ffa0fa6f8f97c71d08c50d8b6305dfeea8a3332bf2f7f27c-primary.xml.gz;
-        sha256 = "0z7jyzr2ncx3m3pdy1b3ic6wa20xqybqyvzsl3zq6xb88nppv1cj";
+        url = mirror://fedora/linux/releases/12/Everything/i386/os/repodata/e27694b7824ee6bbf87af629950e6953eaddf91c73e489f5de690a7ecb9d726e-primary.xml.gz;
+        sha256 = "e27694b7824ee6bbf87af629950e6953eaddf91c73e489f5de690a7ecb9d726e";
       };
-      urlPrefix = mirror://fedora/linux/releases/12/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/12/Everything/i386/os;
       archs = ["noarch" "i386" "i586" "i686"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -866,10 +925,10 @@ rec {
       name = "fedora-12-x86_64";
       fullName = "Fedora 12 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/12/Fedora/x86_64/os/repodata/a4ebee776b3c4898086e124a512e7f8c701ab1699fd83b2dcea3d7592b5c9ff0-primary.xml.gz;
-        sha256 = "1w4zbhmmkmx3rqnkpn4zd6qilw4cgwp52jhjdq49hj1wddvyxsx4";
+        url = mirror://fedora/linux/releases/12/Everything/x86_64/os/repodata/6b142ef02acbc77f405fbfdedd82451e692a01201471665052a0e00ba8ac0959-primary.xml.gz;
+        sha256 = "6b142ef02acbc77f405fbfdedd82451e692a01201471665052a0e00ba8ac0959";
       };
-      urlPrefix = mirror://fedora/linux/releases/12/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/12/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -878,10 +937,10 @@ rec {
       name = "fedora-13-i386";
       fullName = "Fedora 13 (i386)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/13/Fedora/i386/os/repodata/48c649978f695e8bf6214d16ff5413f8ab303976b33d0e96e0a5706e6f870682-primary.xml.gz;
-        sha256 = "10h6hxpnww55w2b0wgdkfqwk1azq2dagy5jd47v8npk9iyblkij8";
+        url = mirror://fedora/linux/releases/13/Everything/i386/os/repodata/be70ac9e1031fd34222b2ec6cc8a337bc6fabd1d06969990955c5f358d138e35-primary.xml.gz;
+        sha256 = "be70ac9e1031fd34222b2ec6cc8a337bc6fabd1d06969990955c5f358d138e35";
       };
-      urlPrefix = mirror://fedora/linux/releases/13/Fedora/i386/os;
+      urlPrefix = mirror://fedora/linux/releases/13/Everything/i386/os;
       archs = ["noarch" "i386" "i586" "i686"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -890,10 +949,10 @@ rec {
       name = "fedora-13-x86_64";
       fullName = "Fedora 13 (x86_64)";
       packagesList = fetchurl {
-        url = mirror://fedora/linux/releases/13/Fedora/x86_64/os/repodata/ed88d22fca1c8bcc07d85bb677d5f8f45422a373a53b6dd213d57d7dfc278878-primary.xml.gz;
-        sha256 = "0y484zy7szfm2g96sfx5ffij4m7lz3apgdjvv03wr2qwr8px527d";
+        url = mirror://fedora/linux/releases/13/Everything/x86_64/os/repodata/01996e6d20b0a4bf3390767bd26709932e42c54422b39005ec2dd4ef2e8b0f3a-primary.xml.gz;
+        sha256 = "01996e6d20b0a4bf3390767bd26709932e42c54422b39005ec2dd4ef2e8b0f3a";
       };
-      urlPrefix = mirror://fedora/linux/releases/13/Fedora/x86_64/os;
+      urlPrefix = mirror://fedora/linux/releases/13/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
@@ -1054,7 +1113,7 @@ rec {
         sha256 = "6e3e813857496f2af6cd7e6ada06b3398fa067a7992c5fd7e8bd8fa92e3548b7";
       };
       urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diff" ];
+      packages = commonDebPackages ++ [ "diff" "mktemp" ];
     };
  
     ubuntu910x86_64 = {
@@ -1065,7 +1124,7 @@ rec {
         sha256 = "3a604fcb0c135eeb8b95da3e90a8fd4cfeff519b858cd3c9e62ea808cb9fec40";
       };
       urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diff" ];
+      packages = commonDebPackages ++ [ "diff" "mktemp" ];
     };
 
     ubuntu1004i386 = {
@@ -1076,7 +1135,7 @@ rec {
         sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
       };
       urlPrefix = mirror://ubuntu;
-      packages = commonDebPackages ++ [ "diffutils" ];
+      packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
  
     ubuntu1004x86_64 = {
@@ -1085,6 +1144,28 @@ rec {
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
         sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
+    };
+
+    ubuntu1010i386 = {
+      name = "ubuntu-10.04-maverick-i386";
+      fullName = "Ubuntu 10.04 Maverick (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
+        sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+ 
+    ubuntu1010x86_64 = {
+      name = "ubuntu-10.04-maverick-amd64";
+      fullName = "Ubuntu 10.04 Maverick (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
+        sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
@@ -1113,22 +1194,44 @@ rec {
     };
 
     debian50i386 = {
-      name = "debian-5.0.5-lenny-i386";
-      fullName = "Debian 5.0.5 Lenny (i386)";
+      name = "debian-5.0.8-lenny-i386";
+      fullName = "Debian 5.0.8 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "1nzd0r44lnvw2bmshqpbhghs84fxbcr1jkg55d37v4d09gsdmln0";
+        sha256 = "0dcvd8ivn71dwln7mx5dbqj30v4cqmc61lj21ry05karkglb5scg";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
         
     debian50x86_64 = {
-      name = "debian-5.0.5-lenny-amd64";
-      fullName = "Debian 5.0.5 Lenny (amd64)";
+      name = "debian-5.0.8-lenny-amd64";
+      fullName = "Debian 5.0.8 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "04hab4ybjilppr1hwnl4k50vr5y88w7zn6v22phfrsrxf23nrlv3";
+        sha256 = "1wrqjfcqfs7q5i7jnr8115zsjlhzxxm2x41agp546d3wpj68k938";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian60i386 = {
+      name = "debian-6.0.2.1-squeeze-i386";
+      fullName = "Debian 6.0.2.1 Squeeze (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
+        sha256 = "0fv1vkyaci489a8np1aaqbrwnc2d0as39hadyj9dswhm7zgfvmk1";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+        
+    debian60x86_64 = {
+      name = "debian-6.0.2.1-squeeze-amd64";
+      fullName = "Debian 6.0.2.1 Squeeze (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
+        sha256 = "1hvaqsmd801syifqwhpd1aqv30xg33z8g74k5pqcqhxqzah653d5";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1211,11 +1314,9 @@ rec {
     # Needed because it provides /etc/login.defs, whose absence causes
     # the "passwd" post-installs script to fail.
     "login"
-    # For shutting up some messages during some post-install scripts:
-    "mktemp"
   ];
 
-  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" ];
+  commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
   
 
   /* A set of functions that build the Linux distributions specified

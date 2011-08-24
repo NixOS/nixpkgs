@@ -8,8 +8,7 @@ kde.package {
     kde = {
       name = "okteta";
       module = "kdeutils";
-      version = "0.5.2";
-      release = "4.5.4";
+      version = "0.5.3";
       versionFile = "program/about.cpp";
     };
   };

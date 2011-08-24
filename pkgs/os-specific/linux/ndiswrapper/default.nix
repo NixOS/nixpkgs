@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel, perl }:
 
 stdenv.mkDerivation {
-  name = "ndiswrapper-1.53-stable";
+  name = "ndiswrapper-1.56-stable";
 
   # need at least .config and include 
   inherit kernel;
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   # should we use unstable? 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/ndiswrapper/ndiswrapper-1.53.tar.gz;
-    sha256 = "00622nxa3q9n8v7qdz274d0nzz9r13lx77xi27s5bnk0mkila03q";
+    url = http://downloads.sourceforge.net/ndiswrapper/ndiswrapper-1.56.tar.gz;
+    sha256 = "10yqg1a08v6z1qm1qr1v4rbhl35c90gzrazapr09vp372hky8f57";
   };
 
   buildInputs = [ kernel perl ];

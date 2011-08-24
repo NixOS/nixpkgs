@@ -9,7 +9,10 @@ stdenv.mkDerivation (rec {
   };
 
   propagatedBuildInputs =
-    stdenv.lib.optional (! (stdenv ? glibc)) libiconv;
+    stdenv.lib.optional ((! (stdenv ? glibc))
+                         || (stdenv ? cross &&
+                             stdenv.cross.config == "i686-pc-mingw32"))
+     libiconv;
 
   # XXX: There are test failures on non-GNU systems, see
   # http://lists.gnu.org/archive/html/bug-libunistring/2010-02/msg00004.html .
@@ -55,4 +58,11 @@ stdenv.mkDerivation (rec {
 # can't find the dll, it will only create a static library.
 (if (stdenv ? glibc)
  then {}
- else { configureFlags = "--with-libiconv-prefix=${libiconv}"; }))
+ else { configureFlags = "--with-libiconv-prefix=${libiconv}"; })
+
+//
+
+# Don't run the native `strip' when cross-compiling.
+(if (stdenv ? cross)
+ then { dontStrip = true; }
+ else { }))

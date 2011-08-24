@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, python, makeWrapper
-, guiSupport ? false, tk ? null }:
+{ stdenv, fetchurl, python, makeWrapper, docutils
+, guiSupport ? false, tk ? null, ssl }:
 
 stdenv.mkDerivation rec {
-  name = "mercurial-1.6.4";
-  
+  name = "mercurial-1.9";
+
   src = fetchurl {
-    url = "http://www.selenic.com/mercurial/release/${name}.tar.gz";
-    sha256 = "04c8vj942ys71dn0bjga33i0qi5hybjjhq087xd0jp29ijzxp3hy";
+    url = "http://mercurial.selenic.com/release/${name}.tar.gz";
+    sha256 = "1q1307rv5cyv7qalwkampy1h2f92j4d46v4x9647ljljs8f4n7ki";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ python makeWrapper ];
-  
+  buildInputs = [ python makeWrapper docutils ];
+
   makeFlags = "PREFIX=$(out)";
-  
+
   postInstall = (stdenv.lib.optionalString guiSupport
     ''
       ensureDir $out/etc/mercurial
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath $out)" \
+          --prefix PYTHONPATH : "$(toPythonPath "$out ${ssl}")" \
           $WRAP_TK
       done
 

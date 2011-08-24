@@ -1,17 +1,19 @@
 { stdenv, fetchurl, openssl, perl, zlib
 , sslSupport, proxySupport ? true
 , apr, aprutil, pcre
+, ldapSupport ? true, openldap
 }:
 
 assert sslSupport -> openssl != null;
+assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
-  version = "2.2.17";
+  version = "2.2.19";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "017vc5g0dwjycai2qa8427vkw6wpa57ylhajw6nrmynq7qgg32l6";
+    sha1 = "5676da63f3203129287d7c09a16cf523c00ec6cf";
   };
 
   buildInputs = [perl apr aprutil pcre] ++
@@ -29,6 +31,7 @@ stdenv.mkDerivation rec {
     --enable-authn-alias
     ${if proxySupport then "--enable-proxy" else ""}
     ${if sslSupport then "--enable-ssl --with-ssl=${openssl}" else ""}
+    ${if ldapSupport then "--enable-ldap --enable-authnz-ldap" else ""}
   '';
 
   postInstall = ''

@@ -1,12 +1,22 @@
-{cabal, xmonad, X11, utf8String, X11Xft}:
+{ cabal, extensibleExceptions, mtl, random, utf8String, X11, X11Xft
+, xmonad
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "xmonad-contrib";
-  name = "${self.fname}";
-  version = "0.9.1";
-  sha256 = "b4ca1d71d12903be76187ce58898697086e7af3ef73468987cb7ef03b076ec47";
-  propagatedBuildInputs = [X11 xmonad utf8String X11Xft];
+  version = "0.9.2";
+  sha256 = "06hg5j4w8iz62wmyygq4c7xcbi9dxlhhh3dbic438cjk7c0w1h5p";
+  buildDepends = [
+    extensibleExceptions mtl random utf8String X11 X11Xft xmonad
+  ];
   meta = {
-    description = "a huge extension library for xmonad";
+    homepage = "http://xmonad.org/";
+    description = "Third party extensions for xmonad";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

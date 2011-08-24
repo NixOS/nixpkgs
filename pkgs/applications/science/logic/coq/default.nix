@@ -4,7 +4,7 @@
 {stdenv, fetchurl, ocaml, findlib, camlp5, lablgtk, ncurses}:
 
 let
-  version = "8.3";
+  version = "8.3pl1";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "02iy4rxz1n1kc85fb3vs4xpxqfxjw87y2gvmi39fxrj8742qx0dx";
+    sha256 = "0a791gsbf17y2wi0a376n78pxkhpl0lkzifhy5d3mx3lpn376j9s";
   };
 
   buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     configureFlagsArray=(
       -camldir ${ocaml}/bin
       -camlp5dir $(ocamlfind query camlp5)
-      -lablgtkdir ${lablgtk}/lib/ocaml/lablgtk2 -opt -coqide opt
+      -lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -opt -coqide opt
     )
   '';
 
@@ -38,9 +38,12 @@ stdenv.mkDerivation {
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
     substituteInPlace scripts/coqmktop.ml --replace \
       "\"-I\"; \"+lablgtk2\"" \
-      "\"-I\"; \"${lablgtk}/lib/ocaml/lablgtk2\"; \"-I\"; \"${lablgtk}/lib/ocaml/stublibs\""
+      "\"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)\"; \"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/stublibs)\""
   '';
 
+  # This post install step is needed to build ssrcoqide from the ssreflect package
+  # It could be made optional, but I see little harm in including it in the default
+  # distribution -- roconnor
   postInstall = ''
    cp ide/*.cmi ide/ide.*a $out/lib/coq/ide/
   '';

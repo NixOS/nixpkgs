@@ -2,11 +2,11 @@
 , pkgconfig, gtkmm, gnomedocutils, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "gparted-0.5.1";
+  name = "gparted-0.8.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/gparted/gparted-0.5.1/gparted-0.5.1.tar.bz2;
-    sha256 = "1mqi1hxv6bahp771bqld0a6wx7khdxvz353n47q1wmqykmn4wbp0";
+    url = mirror://sourceforge/gparted/gparted-0.5.1/gparted-0.8.1.tar.bz2;
+    sha256 = "128pnrcqp3d4a4jnjxm0mqglbyrs2q841pmg5g8ilyc827b6j163";
   };
 
   configureFlags = "--disable-doc";
@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     description = "Graphical disk partitioning tool";
     homepage = http://gparted.sourceforge.net;
     license = "GPLv2";
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

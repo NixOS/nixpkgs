@@ -1,12 +1,18 @@
-{cabal, datetime, parsec, regexPosix, split, time, utf8String, xml, Diff}:
+{ cabal, Diff, parsec, split, time, utf8String, xml }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "filestore";
-  version = "0.3.4.1";
-  sha256 = "ad04333fae938ae7de747457a6bdee30c6e4b700733265dbd1f4f8ee363c8230";
-  propagatedBuildInputs = [datetime parsec regexPosix split time utf8String xml Diff];
+  version = "0.4.0.4";
+  sha256 = "14rp2689gjnk9pqk2xv4m3q3icgfvbik32c2d6gx4l2y7n78dsbx";
+  buildDepends = [ Diff parsec split time utf8String xml ];
   meta = {
+    homepage = "http://johnmacfarlane.net/repos/filestore";
     description = "Interface for versioning file stores";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
-})  
-
+})

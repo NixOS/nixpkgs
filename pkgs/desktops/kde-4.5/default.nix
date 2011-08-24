@@ -1,15 +1,15 @@
-{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47 } :
+{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, ffmpeg_0_6_90 } :
 
 let
 
-  version = "4.5.4";
+  release = "4.5.5";
 
   # Various packages (e.g. kdesdk) have been split up into many
   # smaller packages.  Some people may want to install the entire
   # package, so provide a wrapper package that recombines them.
   combinePkgs = name: pkgs:
     let pkgs' = stdenv.lib.attrValues pkgs; in
-    runCommand "${name}-${version}" ({ passthru = pkgs // { inherit pkgs; }; })
+    runCommand "${name}-${release}" ({ passthru = pkgs // { inherit pkgs; }; })
       ''
         mkdir -p $out/nix-support
         echo ${toString pkgs'} > $out/nix-support/propagated-user-env-packages
@@ -24,32 +24,22 @@ recurseIntoAttrs rec {
 
   qt4 = qt47;
 
-  phonon = null;
+  ffmpeg = ffmpeg_0_6_90;
 
-  kde = callPackage ./kde-package { };
+  shared_desktop_ontologies = callPackage ./support/shared-desktop-ontologies { };
+
+  kde = callPackage ./kde-package { inherit release; };
 
 ### SUPPORT
   akonadi = callPackage ./support/akonadi { };
 
   attica = callPackage ./support/attica { };
 
-  automoc4 = callPackage ./support/automoc4 { };
-
-  eigen = callPackage ./support/eigen { };
-
   oxygen_icons = callPackage ./support/oxygen-icons { };
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };
 
-  strigi = callPackage ./support/strigi { };
-
   soprano = callPackage ./support/soprano { };
-
-  qca2 = callPackage ./support/qca2 { };
-
-  qca2_ossl = callPackage ./support/qca2/ossl.nix { };
-
-  qimageblitz = callPackage ./support/qimageblitz { };
 
 ### LIBS
   kdelibs = callPackage ./libs { };
@@ -58,6 +48,9 @@ recurseIntoAttrs rec {
 
 ### BASE
   kdebase = callPackage ./base { };
+
+  # Forward compatibility.
+  kde_baseapps = kdebase;
 
   kdebase_workspace = callPackage ./base-workspace { };
 
@@ -137,7 +130,7 @@ recurseIntoAttrs rec {
     ktimer = callPackage ./utils/ktimer.nix { };
     kwallet = callPackage ./utils/kwallet.nix { };
     okteta = callPackage ./utils/okteta.nix { };
-    printer_applet = callPackage ./utils/printer-applet.nix { };
+    #printer_applet = callPackage ./utils/printer-applet.nix { };
     superkaramba = callPackage ./utils/superkaramba.nix { };
     sweeper = callPackage ./utils/sweeper.nix { };
   };
@@ -154,9 +147,10 @@ recurseIntoAttrs rec {
 
 ### DEVELOPMENT
 
-  kdebindings = callPackage ./bindings { };
+  #kdebindings = callPackage ./bindings { };
+  kdebindings = null;
 
-  l10n = callPackage ./l10n { };
+  l10n = callPackage ./l10n { inherit release; };
 
   # Make the split packages visible to `nix-env -q'.
   misc = recurseIntoAttrs

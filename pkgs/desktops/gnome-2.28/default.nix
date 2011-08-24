@@ -84,6 +84,11 @@ pkgs.makeOverridable
     inherit intltool libart_lgpl libglade;
   };
 
+  libgnomecanvasmm = import ./platform/libgnomecanvasmm {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit libgnomecanvas gtkmm;
+  };
+
   # for git-head builds
   gnome_common = import platform/gnome-common {
     inherit (pkgs) stdenv fetchgit pkgconfig
@@ -137,6 +142,11 @@ pkgs.makeOverridable
     inherit intltool libbonobo ORBit2;
   };
 
+  glib_networking = import ./platform/glib-networking {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib libtool intltool gnutls
+      libproxy libgcrypt libtasn1;
+  };
+
   gtk_doc = import ./platform/gtk-doc {
     inherit (pkgs) stdenv fetchurl pkgconfig perl python libxml2 libxslt;
     inherit (pkgs) docbook_xml_dtd_43 docbook_xsl dblatex;
@@ -183,12 +193,6 @@ pkgs.makeOverridable
     inherit GConf gnome_keyring;
   };
 
-  libsoup_2_31 = import ./desktop/libsoup/2.31.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 gnutls libproxy sqlite curl;
-    inherit (pkgs.gtkLibs) glib;
-    inherit GConf gnome_keyring;
-  };
-
   libwnck = import ./desktop/libwnck {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit (pkgs.xlibs) libX11;
@@ -209,7 +213,7 @@ pkgs.makeOverridable
   };
 
   libgweather = import ./desktop/libgweather {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 libtasn1;
+    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 libtasn1 nettle gmp;
     inherit (pkgs.gtkLibs) gtk;
     inherit intltool GConf libsoup;
   };

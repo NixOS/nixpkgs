@@ -80,19 +80,29 @@ rec {
 
   moduleClosure = initModules: args:
     let
-      moduleImport = m:
+      moduleImport = origin: index: m:
         let m' = applyIfFunction (importIfPath m) args;
         in (unifyModuleSyntax m') // {
           # used by generic closure to avoid duplicated imports.
-          key = if isPath m then m else if m' ? key then m'.key else "<unknown location>";
+          key =
+            if isPath m then m
+            else if m' ? key then m'.key
+            else newModuleName origin index;
         };
 
       getImports = m: attrByPath ["imports"] [] m;
 
+      newModuleName = origin: index:
+        "${origin.key}:<import-${toString index}>";
+
+      topLevel = {
+        key = "<top-level>";
+      };
+
     in
       (lazyGenericClosure {
-        startSet = map moduleImport initModules;
-        operator = m: map moduleImport (getImports m);
+        startSet = imap (moduleImport topLevel) initModules;
+        operator = m: imap (moduleImport m) (getImports m);
       });
 
   selectDeclsAndDefs = modules:

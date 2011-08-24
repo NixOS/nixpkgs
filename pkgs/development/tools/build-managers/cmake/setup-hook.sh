@@ -52,7 +52,7 @@ if test -z "$dontUseCmakeConfigure"; then
 fi
 
 if test -n "$crossConfig"; then
-    crossEnvHooks=(${crossEnvHooks[@]} addCMakeParams)
+    crossEnvHooks+=(addCMakeParams)
 else
-    envHooks=(${envHooks[@]} addCMakeParams)
+    envHooks+=(addCMakeParams)
 fi

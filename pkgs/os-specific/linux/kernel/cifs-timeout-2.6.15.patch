@@ -1,0 +1,44 @@
+--- a/fs/cifs/transport.c	2011-04-12 15:16:00.253887813 +0200
++++ b/fs/cifs/transport.c	2011-04-12 15:17:22.650296413 +0200
+@@ -247,9 +247,9 @@
+ 				    n_vec - first_vec, total_len);
+ 		if ((rc == -ENOSPC) || (rc == -EAGAIN)) {
+ 			i++;
+-			if(i >= 14) {
++			if(i >= 119) {
+ 				cERROR(1,
+-				   ("sends on sock %p stuck for 15 seconds",
++				   ("sends on sock %p stuck for 120 seconds",
+ 				    ssocket));
+ 				rc = -EAGAIN;
+ 				break;
+@@ -421,12 +421,12 @@
+ 	else if (long_op == 2) /* writes past end of file can take loong time */
+ 		timeout = 180 * HZ;
+ 	else if (long_op == 1)
+-		timeout = 45 * HZ; /* should be greater than 
++		timeout = 120 * HZ; /* should be greater than 
+ 			servers oplock break timeout (about 43 seconds) */
+ 	else if (long_op > 2) {
+ 		timeout = MAX_SCHEDULE_TIMEOUT;
+ 	} else
+-		timeout = 15 * HZ;
++		timeout = 120 * HZ;
+ 	/* wait for 15 seconds or until woken up due to response arriving or 
+ 	   due to last connection to this server being unmounted */
+ 	if (signal_pending(current)) {
+@@ -687,12 +687,12 @@
+ 	else if (long_op == 2) /* writes past end of file can take loong time */
+ 		timeout = 180 * HZ;
+ 	else if (long_op == 1)
+-		timeout = 45 * HZ; /* should be greater than 
++		timeout = 120 * HZ; /* should be greater than 
+ 			servers oplock break timeout (about 43 seconds) */
+ 	else if (long_op > 2) {
+ 		timeout = MAX_SCHEDULE_TIMEOUT;
+ 	} else
+-		timeout = 15 * HZ;
++		timeout = 120 * HZ;
+ 	/* wait for 15 seconds or until woken up due to response arriving or 
+ 	   due to last connection to this server being unmounted */
+ 	if (signal_pending(current)) {

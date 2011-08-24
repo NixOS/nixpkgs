@@ -2,7 +2,7 @@
 
 # TODO: statically check if mercurial as the https support if the url starts woth https.
 stdenv.mkDerivation {
-  name = "fetchhg" + (if (name != null) then "-${name}" else "");
+  name = "hg-archive" + (if (name != null) then "-${name}" else "");
   builder = ./builder.sh;
   buildInputs = [mercurial nix];
 

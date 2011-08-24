@@ -1,4 +1,4 @@
-{ fetchurl }:
+{ stdenv, fetchurl }:
 
 let
 
@@ -20,9 +20,25 @@ let
       FRAMEBUFFER_CONSOLE y
     '';
 
+  makeTuxonicePatch = { version, kernelVersion, sha256,
+    url ? "http://tuxonice.net/files/tuxonice-${version}-for-${kernelVersion}.patch.bz2" }:
+    { name = "tuxonice-${kernelVersion}";
+      patch = stdenv.mkDerivation {
+        name = "tuxonice-${version}-for-${kernelVersion}.patch";
+        src = fetchurl {
+          inherit url sha256;
+        };
+        phases = [ "installPhase" ];
+        installPhase = ''
+          source $stdenv/setup
+          bunzip2 -c $src > $out
+        '';
+      };
+    };
+
 in
 
-{
+rec {
 
   sec_perm_2_6_24 =
     { name = "sec_perm-2.6.24";
@@ -39,7 +55,7 @@ in
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
     };
-      
+
   fbcondecor_2_6_27 =
     { name = "fbcondecor-0.9.4-2.6.27";
       patch = fetchurl {
@@ -59,7 +75,7 @@ in
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
     };
-    
+
   fbcondecor_2_6_29 =
     { name = "fbcondecor-0.9.6-2.6.29.2";
       patch = fetchurl {
@@ -69,7 +85,7 @@ in
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
     };
-    
+
   fbcondecor_2_6_31 =
     { name = "fbcondecor-0.9.6-2.6.31.2";
       patch = fetchurl {
@@ -101,6 +117,28 @@ in
       features.fbConDecor = true;
     };
 
+  fbcondecor_2_6_37 =
+    rec {
+      name = "fbcondecor-0.9.6-2.6.37";
+      patch = fetchurl {
+        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
+        sha256 = "1yap9q6mp15jhsysry4x17cpm5dj35g8l2d0p0vn1xq25x3jfkqk";
+      };
+      extraConfig = fbcondecorConfig;
+      features.fbConDecor = true;
+    };
+
+  fbcondecor_2_6_38 =
+    rec {
+      name = "fbcondecor-0.9.6-2.6.38";
+      patch = fetchurl {
+        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
+        sha256 = "1l8xqf5z227m5ay6azqba1qw10y26a4cwfhzzapzmmwq1bpr8mlw";
+      };
+      extraConfig = fbcondecorConfig;
+      features.fbConDecor = true;
+    };
+
   # From http://patchwork.kernel.org/patch/19495/
   ext4_softlockups_2_6_28 =
     { name = "ext4-softlockups-fix";
@@ -110,7 +148,7 @@ in
       };
     };
 
-  gcov_2_6_28 = 
+  gcov_2_6_28 =
     { name = "gcov";
       patch = fetchurl {
         url = http://buildfarm.st.ewi.tudelft.nl/~eelco/dist/linux-2.6.28-gcov.patch;
@@ -126,22 +164,22 @@ in
     };
 
   tracehook_2_6_32 =
-    { # From <http://people.redhat.com/roland/utrace/>.
+    { # From <http://userweb.kernel.org/~frob/utrace/>.
       name = "tracehook";
       patch = fetchurl {
-        url = http://people.redhat.com/roland/utrace/2.6.32/tracehook.patch;
+        url = http://userweb.kernel.org/~frob/utrace/2.6.32/tracehook.patch;
         sha256 = "1y009p8dyqknbjm8ryb495jqmvl372gfhswdn167xh2g1f24xqv8";
       };
     };
 
   utrace_2_6_32 =
-    { # From <http://people.redhat.com/roland/utrace/>, depends on the
+    { # From <http://userweb.kernel.org/~frob/utrace/>, depends on the
       # `tracehook' patch above.
       # See also <http://sourceware.org/systemtap/wiki/utrace>.
       name = "utrace";
       patch = fetchurl {
-        url = http://people.redhat.com/roland/utrace/2.6.32/utrace.patch;
-        sha256 = "1951mwc8jfiwrl0d2bb1zk9yrl7n7kadc00ymjsxrg2irda1b89r";
+        url = http://userweb.kernel.org/~frob/utrace/2.6.32/utrace.patch;
+        sha256 = "0argf19k9f0asiv4l4cnsxm5hw2xx8d794npaln88vwz87sj5nnq";
       };
       extraConfig =
         '' UTRACE y
@@ -154,6 +192,15 @@ in
       # standalone package.
       name = "aufs2";
       patch = ./aufs2.patch;
+      features.aufsBase = true;
+    };
+
+  aufs2_2_6_33 =
+    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-33;hb=aufs2-33
+      # Note that this merely the patch needed to build AUFS2 as a
+      # standalone package.
+      name = "aufs2";
+      patch = ./aufs2-33.patch;
       features.aufsBase = true;
     };
 
@@ -175,13 +222,89 @@ in
       features.aufsBase = true;
     };
 
+  aufs2_2_6_36 =
+    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-36;hb=aufs2.1-36
+      # Note that this merely the patch needed to build AUFS2 as a
+      # standalone package.
+      name = "aufs2";
+      patch = ./aufs2.1-36.patch;
+      features.aufsBase = true;
+      features.aufs2_1 = true;
+    };
+
+  aufs2_1_2_6_37 =
+    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-37;hb=refs/heads/aufs2.1-37
+      # Note that this merely the patch needed to build AUFS2.1 as a
+      # standalone package.
+      name = "aufs2.1";
+      patch = ./aufs2.1-37.patch;
+      features.aufsBase = true;
+      features.aufs2_1 = true;
+    };
+
+  aufs2_1_2_6_38 =
+    { # From http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-38;hb=refs/heads/aufs2.1-38
+      # Note that this merely the patch needed to build AUFS2.1 as a
+      # standalone package.
+      name = "aufs2.1";
+      patch = ./aufs2.1-38.patch;
+      features.aufsBase = true;
+      features.aufs2_1 = true;
+    };
+
+  aufs2_1_2_6_39 =
+    { # From http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-39;hb=refs/heads/aufs2.1-39
+      # Note that this merely the patch needed to build AUFS2.1 as a
+      # standalone package.
+      name = "aufs2.1";
+      patch = ./aufs2.1-39.patch;
+      features.aufsBase = true;
+      features.aufs2_1 = true;
+    };
+
+  aufs2_1_3_0 =
+    { # From http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs2-standalone.git;a=tree;h=ac52a37b0debba539bdfabba101f82b99136b380;hb=ac52a37b0debba539bdfabba101f82b99136b380
+      # Note that this merely the patch needed to build AUFS2.1 as a
+      # standalone package.
+      name = "aufs2.1";
+      patch = ./aufs2.1-3.0.patch;
+      features.aufsBase = true;
+      features.aufs2_1 = true;
+    };
+
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
-  cifs_timeout =
+  cifs_timeout_2_6_15 =
     { name = "cifs-timeout";
-      patch = ./cifs-timeout.patch;
+      patch = ./cifs-timeout-2.6.15.patch;
       features.cifsTimeout = true;
     };
+
+  cifs_timeout_2_6_25 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.25.patch;
+      features.cifsTimeout = true;
+    };
+
+  cifs_timeout_2_6_29 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.29.patch;
+      features.cifsTimeout = true;
+    };
+
+  cifs_timeout_2_6_35 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.35.patch;
+      features.cifsTimeout = true;
+    };
+
+  cifs_timeout_2_6_38 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-2.6.38.patch;
+      features.cifsTimeout = true;
+    };
+
+  cifs_timeout = cifs_timeout_2_6_29;
 
   no_xsave =
     { name = "no-xsave";
@@ -224,10 +347,36 @@ in
       patch = ./guruplug-mach-type.patch;
     };
 
-  xen_pvclock_resume =
-    { # Fix the clock after a DomU restore following a Dom0 reboot or migration.
-      name = "xen-pvclock-resume";
-      patch = ./xen-pvclock-resume.patch;
+  tuxonice_2_6_34 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.34";
+    sha256 = "0bagqinmky1kmvg3vw8cdysqklxrsfjm7gqrpxviq9jq8vyycviz";
+  };
+
+  tuxonice_2_6_35 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.35";
+    sha256 = "00jbrqq6p1lyvli835wczc0vqsn0z73jpb2aak3ak0vgnvsxw37q";
+  };
+
+  tuxonice_2_6_36 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.36";
+    sha256 = "1vcw3gpjdghnkli46j37pc6rp8mqk8dh688jv8rppzsry0ll7b7k";
+  };
+
+  tuxonice_2_6_37 = makeTuxonicePatch {
+    version = "3.2-rc2";
+    kernelVersion = "2.6.37";
+    url = "http://tuxonice.net/files/current-tuxonice-for-2.6.37.patch_0.bz2";
+    sha256 = "0acllabvbm9pmjnh0zx9mgnp47xbrl9ih6i037c85h0ymnjsxdhk";
+  };
+
+  glibc_getline =
+    {
+      # Patch to work around conflicting types for the `getline' function
+      # with recent Glibcs (2009).
+      name = "glibc-getline";
+      patch = ./getline.patch;
     };
-  
 }

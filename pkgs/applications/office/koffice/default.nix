@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
         sha256 = "11h4rxdrv5vakym5786vr4bysi4627m53qqvk1vhxf3rkawvcafj";
       })
       ./wpd.patch
+      ./krita-exiv-0.21.diff
     ];
 
   buildInputs = [ cmake qt4 perl lcms exiv2 libxml2 libxslt boost glew

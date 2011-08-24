@@ -1,16 +1,19 @@
-{ fetchurl, stdenv, gnutls, glib, pkgconfig, check }:
+{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr }:
 
 stdenv.mkDerivation rec {
-  name = "bitlbee-1.2.8";
+  name = "bitlbee-3.0.3";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "11lfxvra46mwcnlxvhnywv6xbp7zl3h27hsbfwdh16b6fy41n1is";
+    sha256 = "09dgwfqznd2cnqraksivmh132nnl99gwgplynjmfsyyf6y4pbjl2";
   };
 
-  buildInputs = [ gnutls glib pkgconfig ]
+  buildInputs = [ gnutls glib pkgconfig libotr ]
     ++ stdenv.lib.optional doCheck check;
 
+  configureFlags = [ "--otr=1" ];
+
+  preCheck = "mkdir tests/.depend";
   doCheck = true;
 
   meta = {

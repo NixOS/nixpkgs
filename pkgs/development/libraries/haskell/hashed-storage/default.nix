@@ -1,12 +1,21 @@
-{cabal, mtl, zlib, mmap, binary, dataenc}:
+{ cabal, binary, dataenc, extensibleExceptions, mmap, mtl, zlib }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "hashed-storage";
-  version = "0.5.3";
-  sha256 = "0ql8hgsaazs0wxvr920vm2s2iljcnh6lnivcy3vgd5wjaw6lkd00";
-  propagatedBuildInputs = [mtl zlib mmap binary dataenc];
+  version = "0.5.8";
+  sha256 = "1730hg6h7a1b0vgr9dvish41bpgly5cjpdwhqny75fi5in7dqplh";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [
+    binary dataenc extensibleExceptions mmap mtl zlib
+  ];
   meta = {
     description = "Hashed file storage support code";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

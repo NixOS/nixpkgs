@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
              _argp_program_version$non_lazy_ptr in libcflow.a(argp-parse.o)
        ld: symbol(s) not found
      */
-    platforms = stdenv.lib.platforms.allBut "i686-darwin";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

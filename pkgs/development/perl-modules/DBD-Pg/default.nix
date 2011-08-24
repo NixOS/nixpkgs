@@ -1,11 +1,11 @@
-{fetchurl, buildPerlPackage, DBI, postgresql}:
+{ fetchurl, buildPerlPackage, DBI, postgresql }:
 
-buildPerlPackage {
-  name = "DBD-Pg-2.13.1";
+buildPerlPackage rec {
+  name = "DBD-Pg-2.18.1";
   
   src = fetchurl {
-    url = mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-2.13.1.tar.gz;
-    sha256 = "9af40f47dc440b6ab031d6109ee694ef2d4a0aa899bc9870d8a992f2e4e6d1e6";
+    url = "mirror://cpan/modules/by-module/DBD/${name}.tar.gz";
+    sha256 = "10nrmi0hgc9h8c0jbpd9bbbzkdb1riymnlk7a86537c0d4gfqcpm";
   };
   
   buildInputs = [postgresql] ;

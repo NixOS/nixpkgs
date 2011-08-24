@@ -1,14 +1,14 @@
-{stdenv, fetchurl, pkgconfig, libmowgli}:
+{ stdenv, fetchurl, pkgconfig, libmowgli }:
 
-stdenv.mkDerivation {
-  name = "libmcs-0.7.1";
+stdenv.mkDerivation rec {
+  name = "libmcs-0.7.2";
   
   src = fetchurl {
-    url = http://distfiles.atheme.org/libmcs-0.7.1.tbz2;
-    sha256 = "16ckfdprqyb9jhhnhvyhw2rkwadq1z6l3a00fvix16sjzh8dgcz0";
+    url = "http://distfiles.atheme.org/${name}.tbz2";
+    sha256 = "1knmgxrg2kxdlin8qyf6351943ldg8myllwf860af58x1wncxc74";
   };
 
-  buildInputs = [pkgconfig libmowgli];
+  buildInputs = [ pkgconfig libmowgli ];
   
   meta = {
     description = "A library and set of userland tools which abstract the storage of configuration settings away from userland applications";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, autoconf, automake, boost, file, gettext
+{ stdenv, fetchurl, makeWrapper, boost, file, gettext
 , glib, glibc, gnome_keyring, gtk, gtkmm, intltool, libctemplate, libglade
 , libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
 , pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
@@ -6,22 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.30";
+  version = "5.2.33";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "0dlhnq7pv2ccgm0d7a3hzf9jxa09jzw36h0ljs9vw9q5nyd5kq71";
+    sha256 = "193iikz0wfm3yvazficxfiqb84f34psq0bcasp3l41n9dygbgldc";
   };
 
-  buildInputs = [ autoconf automake boost file gettext glib glibc gnome_keyring gtk gtkmm intltool
+  buildInputs = [ boost file gettext glib glibc gnome_keyring gtk gtkmm intltool
     libctemplate libglade libgnome libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
     mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
     substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
-
-    ./autogen.sh --prefix=$out
   '';
 
   postInstall = ''
@@ -29,6 +27,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
       --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64" \
       --prefix PATH : "${gnome_keyring}/bin" \
+      --prefix PATH : "${python}/bin" \
       --set PYTHONPATH $PYTHONPATH \
       --run '
 # The gnome-keyring-daemon must be running.  To allow for environments like
@@ -57,7 +56,7 @@ mkfifo $FIFOCTL
 ) &
 
 exec 19> $FIFOCTL
-            ' 
+            '
   '';
 
   meta = with stdenv.lib; {

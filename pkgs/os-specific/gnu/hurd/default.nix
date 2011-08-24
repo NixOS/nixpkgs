@@ -10,8 +10,8 @@ assert (hurdPartedCross != null) -> (libuuid != null);
 let
   # Unfortunately we can't use `master@{DATE}', see
   # <http://www.bramschoenmakers.nl/en/node/645>.
-  date   = "20100512";
-  rev    = "7913beaef3e6a2c4f7f315a8db7a31dbe1f713e0";
+  date   = "20110516";
+  rev    = "ffd73488f9eecdb9da40e15f5fdcebf392cb88f8";
   suffix = if headersOnly
            then "-headers"
            else (if buildTarget != "all"
@@ -23,7 +23,7 @@ stdenv.mkDerivation ({
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/hurd.git";
-    sha256 = "bf4f1376b26b0dcdfd23ff9c9b01440f50d032f48946fad6d3861539978f8f4d";
+    sha256 = "6527e85347fe387bd3119fbf2ea07590a35ecad9eec14bb00cd6a443507111a9";
     inherit rev;
   };
 
@@ -36,7 +36,9 @@ stdenv.mkDerivation ({
   propagatedBuildInputs = [ machHeaders ];
 
   configureFlags = stdenv.lib.optionals headersOnly [ "--build=i586-pc-gnu" ]
-    ++ stdenv.lib.optional (hurdPartedCross != null) [ "--with-parted" ];
+    ++ (if hurdPartedCross != null
+        then [ "--with-parted" ]
+        else [ "--without-parted" ]);
 
   preConfigure = "autoreconf -vfi";
 

@@ -7,17 +7,25 @@ rec {
 
   doAggregate = fullDepEntry (''
 
+    ensureDir $out/bin
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
         find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*/) ! -type d | while read; do
             REPLY="''${REPLY#$currentPath}"
-	    ensureDir $out/"$(dirname "$REPLY")"
-	    ln -fs $currentPath/"$REPLY" $out/"$REPLY"
-	    echo
+            ensureDir $out/"$(dirname "$REPLY")"
+            ln -fs $currentPath/"$REPLY" $out/"$REPLY"
+            echo
         done | while read; do head -n 99 >/dev/null; echo -n .; done
-	echo
 
-	cp -Trfp $currentPath/libexec $out/libexec || true
+        for i in "$currentPath/bin/"* :; do
+            test "$i" != : || continue
+            echo -ne "#! $SHELL\\nexec $i \"\$@\"" > "$out/bin/$(basename "$i")" && \
+            chmod a+x "$out/bin/$(basename "$i")"
+        done
+
+        echo
+
+        cp -Trfp $currentPath/libexec $out/libexec || true
     done
 
     ln -s $out/texmf* $out/share/
@@ -28,11 +36,11 @@ rec {
       ensureDir $out/texmf-config/"$REPLY"
     done
 
-    ensureDir $out/bin
-    for i in $out/libexec/*/*; do
+    for i in $out/libexec/*/* :; do
+        test "$i" = : && continue;
         test -f "$i" && \
-	test -x "$i" && \
-	echo -ne "#! /bin/sh\\n$i \"\$@\"" >$out/bin/$(basename $i) && \
+        test -x "$i" && \
+        echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i) && \
         chmod a+x $out/bin/$(basename $i)
     done
 
@@ -50,12 +58,12 @@ rec {
   meta = {
     description = "TeX distribution directory";
     longDescription = ''
-      Here all the files from different TeX-related 
-      packages are collected in one directory. Of 
-      course, mktexlsr is called. Later placed 
+      Here all the files from different TeX-related
+      packages are collected in one directory. Of
+      course, mktexlsr is called. Later placed
       directories take precedence. It is supposed that
       share and libexec are symlinked, and bin is
-      recreated with wrappers for libexec-located 
+      recreated with wrappers for libexec-located
       linked binaries.
     '';
   };

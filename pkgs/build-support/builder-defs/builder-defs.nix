@@ -26,6 +26,7 @@ let inherit (builtins) head tail trace; in
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
                 else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
                 else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
+                else if (hasSuffixHack ".rpm" s) then "rpm"
 
                 # Mostly for manually specified directories..
                 else if (hasSuffixHack "/" s) then "dir"
@@ -234,7 +235,12 @@ let inherit (builtins) head tail trace; in
         " else if (archiveType s) == "narbz2" then "
                 bzip2 <${s} | nix-store --restore \$PWD/\$(basename ${s} .nar.bz2)
                 cd \$(basename ${s} .nar.bz2)
-        " else if (archiveType s) == "plain-bz2" then "
+        " else if (archiveType s) == "rpm" then ''
+                rpm2cpio ${s} > ${s}.cpio
+                cpio -iv < ${s}.cpio
+		test -f *.tar.* && tar -xvf *.tar.*
+		test -d */ && cd */
+        '' else if (archiveType s) == "plain-bz2" then "
                 mkdir \$PWD/\$(basename ${s} .bz2)
                 NAME=\$(basename ${s} .bz2)
                 bzip2 -d <${s} > \$PWD/\$(basename ${s} .bz2)/\${NAME#*-}
@@ -329,6 +335,8 @@ let inherit (builtins) head tail trace; in
 
         doDump = n: noDepEntry "echo Dump number ${n}; set";
 
+	saveEnv = noDepEntry ''export > $TMP/env-vars'';
+
 	doDumpBuildInputs = noDepEntry (''
 	  echo "${toString realBuildInputs}"
 	'');
@@ -384,13 +392,30 @@ let inherit (builtins) head tail trace; in
                 echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
-        cmakeFlags = "";
+        cmakeFlags = attrByPath ["cmakeFlags"] [] args;
+
+        cmakeRPathFlag = if (attrByPath ["cmakeSkipRpath "] true args) then " -DCMAKE_SKIP_BUILD_RPATH=ON " else "";
+
+        cmakeBuildDir = attrByPath ["cmakeBuildDir"] "build" args;
 
 	doCmake = fullDepEntry (''
-          mkdir build
-	  cd build
-	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${toString cmakeFlags} ..
+          mkdir ${cmakeBuildDir}
+	  cd ${cmakeBuildDir}
+	  cmake -D CMAKE_INSTALL_PREFIX="$out" ${cmakeRPathFlag}${toString cmakeFlags} ..
 	'') ["minInit" "addInputs" "doUnpack"];
+
+	doScons = fullDepEntry (''
+		ensureDir $out
+		${if (attrByPath ["sconsCleanEnv"] false args)
+		 then ""
+		 else ''
+                   sed -e '1iimport os' -i SConstruct
+                   sed -e 's/env *= *Environment *.*/&; env['"'"'ENV'"'"']=os.environ;/' -i SConstruct
+		 ''
+		}
+		scons ${toString (attrByPath ["sconsFlags"] [] args)} PREFIX=$out 
+		scons ${toString (attrByPath ["sconsFlags"] [] args)} PREFIX=$out install
+	'') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
         /*debug = x:(trace x x);
         debugX = x:(trace (toXML x) x);*/

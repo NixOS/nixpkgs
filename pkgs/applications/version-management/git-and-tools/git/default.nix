@@ -12,11 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "git-1.7.3.2";
+  name = "git-1.7.6";
 
   src = fetchurl {
     url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "0w9yappfl0jb88fk28vv680p33c2j4b0afzl1q2mcq0igjygck5w";
+    sha256 = "778795cece63cd758192378f3a999870cea290181b3a4c9de573c77192561082";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -41,16 +41,25 @@ stdenv.mkDerivation rec {
         chmod +x $1
       }
 
-      # Install Emacs mode.
-      echo "installing Emacs mode..."
+      # Install contrib stuff.
+      ensureDir $out/share/git
+      mv contrib $out/share/git/
       ensureDir $out/share/emacs/site-lisp
-      cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
+      ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
+      ensureDir $out/etc/bash_completion.d
+      ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
 
       # grep is a runtime dependence, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
-    '' # */
+
+      # Fix references to the perl binary. Note that the tab character
+      # in the patterns is important.
+      sed -i -e 's|	perl -ne|	${perl}/bin/perl -ne|g' \
+             -e 's|	perl -e|	${perl}/bin/perl -e|g' \
+             $out/libexec/git-core/{git-am,git-submodule}
+    ''
 
    + (if svnSupport then
 
@@ -84,41 +93,37 @@ stdenv.mkDerivation rec {
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
-       for prog in bin/gitk bin/git
-       do
-         wrapProgram "$out/$prog"                       \
-                     --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
-                     --prefix PATH : "${tk}/bin"
+       for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
+         sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
+                -e "s|exec wish|exec '${tk}/bin/wish'|g" \
+		"$out/$prog"
        done
      '' else ''
-      # Don't wrap Tcl/Tk, replace them by notification scripts
-       for prog in bin/gitk libexec/git-core/git-gui
-       do
+       # Don't wrap Tcl/Tk, replace them by notification scripts
+       for prog in bin/gitk libexec/git-core/git-gui; do
          notSupported "$out/$prog" \
                       "reinstall with config git = { guiSupport = true; } set"
        done
      '')
 
-   + ''# install bash completion script
-      d="$out/etc/bash_completion.d"
-      ensureDir $d; cp contrib/completion/git-completion.bash "$d"
-     ''
    # Don't know why hardlinks aren't created. git installs the same executable
    # multiple times into $out so replace duplicates by symlinks because I
    # haven't tested whether the nix distribution system can handle hardlinks.
    # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
-   + ''#
+   + ''
       declare -A seen
-      find $out -type f | while read f; do
+      shopt -s globstar
+      for f in "$out/"**; do
+        if [ -L "$f" ]; then continue; fi
+        test -f "$f" || continue
         sum=$(md5sum "$f");
         sum=''\${sum/ */}
         if [ -z "''\${seen["$sum"]}" ]; then
           seen["$sum"]="$f"
         else
-          rm "$f"; ln -s "''\${seen["$sum"]}" "$f"
+          rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
         fi
       done
-
      '';
 
   enableParallelBuilding = true;

@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.6.13";
+  firefoxVersion = "3.6.16";
   
-  xulVersion = "1.9.2.13"; # this attribute is used by other packages
+  xulVersion = "1.9.2.16"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "1d1bc70d651bce4006687f5762638563c0494267";
+    sha1 = "38124597440b7d60aa568adeef23659575841e92";
   };
 
 
@@ -97,9 +97,11 @@ rec {
       rm -f $out/bin/run-mozilla.sh
     ''; # */
 
+    enableParallelBuilding = true;
+
     meta = {
       description = "Mozilla Firefox XUL runner";
-      homepage = http://www.mozilla.com/en-US/firefox/;
+      homepage = http://www.mozilla.org/en-US/firefox/;
     };
 
     passthru = { inherit gtk; version = xulVersion; };
@@ -139,7 +141,7 @@ rec {
 
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
-      homepage = http://www.mozilla.com/en-US/firefox/;
+      homepage = http://www.mozilla.org/en-US/firefox/;
     };
 
     passthru = {

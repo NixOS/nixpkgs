@@ -1,14 +1,23 @@
-{cabal, gtk2hsBuildtools, pkgconfig, gtksourceview, glib, gtk, gtkC, glibc}:
+{ cabal, glib, glibc, gtk, gtk2hsBuildtools, gtksourceview, mtl
+, pkgconfig
+}:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "gtksourceview2";
-  version = "0.11.1";
-  sha256 = "1skb13ssp6sd06jb3nshv97wjqvwa0mnzcxgmrxwd5l21r6k1m2v";
-  extraBuildInputs = [pkgconfig gtksourceview gtkC glibc gtk2hsBuildtools];
-  propagatedBuildInputs = [glib gtk];
+  version = "0.12.2";
+  sha256 = "0l9y48kmzqzps6k54fgf0dkmmv0ppxx8amggfdswwk86zsf8j81r";
+  buildDepends = [ glib gtk mtl ];
+  buildTools = [ gtk2hsBuildtools ];
+  extraLibraries = [ glibc pkgconfig ];
+  pkgconfigDepends = [ gtksourceview ];
   meta = {
-    description = "GtkSourceView is a text widget that extends the standard GTK+ 2.x text widget GtkTextView";
-    license = "LGPLv2+";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    homepage = "http://www.haskell.org/gtk2hs/";
+    description = "Binding to the GtkSourceView library";
+    license = self.stdenv.lib.licenses.lgpl21;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
