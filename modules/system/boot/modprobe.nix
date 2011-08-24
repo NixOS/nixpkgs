@@ -83,6 +83,11 @@ with pkgs.lib;
         # of log output, so it should never be loaded automatically.
         "evbug"
 
+        # This module causes ALSA to occassionally select the wrong
+        # default sound device, and is little more than an annoyance
+        # on modern machines.
+        "snd_pcsp"
+
         # !!! Hm, Ubuntu blacklists all framebuffer devices because
         # they're "buggy" and cause suspend problems.  Maybe we should
         # too?
