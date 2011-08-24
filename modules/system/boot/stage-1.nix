@@ -15,7 +15,7 @@ let
       default = "";
       example = "0:0";
       description = "
-        Device for manual resume attempt during boot. Looks like 
+        Device for manual resume attempt during boot. Looks like
         major:minor. ls -l /dev/SWAP_PARTION shows them.
       ";
     };
@@ -74,7 +74,7 @@ let
         ";
       };
     };
-  
+
   };
 
 
@@ -107,7 +107,7 @@ let
     ''
       ensureDir $out/bin
       ensureDir $out/lib
-      
+
       # Copy what we need from Glibc.
       cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
       cp -pv ${pkgs.glibc}/lib/libc.so.* $out/lib
@@ -133,7 +133,7 @@ let
       cp -v ${pkgs.coreutils}/bin/sleep $out/bin
       cp -v ${pkgs.coreutils}/bin/ln $out/bin
 
-      # Copy e2fsck and friends.      
+      # Copy e2fsck and friends.
       cp -v ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
       cp -v ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
       cp -v ${pkgs.reiserfsprogs}/sbin/reiserfsck $out/bin
@@ -154,9 +154,9 @@ let
 
       # Copy udev.
       cp -v ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
-      cp -v ${pkgs.udev}/libexec/*_id $out/bin
+      cp -v ${pkgs.udev}/lib/udev/*_id $out/bin
       cp -pdv ${pkgs.udev}/lib/libudev.so.* $out/lib
-      
+
       # Copy bash.
       cp -v ${pkgs.bash}/bin/bash $out/bin
       ln -sv bash $out/bin/sh
@@ -191,7 +191,7 @@ let
       exec $out/bin/modprobe.real "\$@"
       EOF
       chmod u+x $out/bin/modprobe
-      
+
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/bash --version | grep "bash, version"
@@ -209,7 +209,7 @@ let
       $out/bin/basename --version
       $out/bin/modprobe --version
     ''; # */
-  
+
 
   # The initrd only has to mount / or any FS marked as necessary for
   # booting (such as the FS containing /nix/store, or an FS needed for
@@ -225,12 +225,12 @@ let
       ensureDir $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
-      
-      cp ${pkgs.udev}/libexec/rules.d/60-cdrom_id.rules $out/
-      cp ${pkgs.udev}/libexec/rules.d/60-persistent-storage.rules $out/
-      cp ${pkgs.udev}/libexec/rules.d/80-drivers.rules $out/
-      cp ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
-      cp ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
+
+      cp -v ${pkgs.udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
+      cp -v ${pkgs.udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
+      cp -v ${pkgs.udev}/lib/udev/rules.d/80-drivers.rules $out/
+      cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
+      cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
 
       for i in $out/*.rules; do
           substituteInPlace $i \
@@ -243,10 +243,9 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/modprobe ${extraUtils}/bin/modprobe \
             --replace '$env{DM_SBIN_PATH}/blkid' ${extraUtils}/bin/blkid \
-            --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"' \
+            --replace 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"' \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm
       done
-
       # !!! Remove this after merging the x-updates branch:
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -264,13 +263,13 @@ let
     ''; # */
   };
 
-  
+
   # The udev configuration file for in the initrd.
   udevConf = pkgs.writeText "udev-initrd.conf" ''
     udev_rules="${udevRules}"
     #udev_log="debug"
   '';
-  
+
 
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
@@ -319,7 +318,7 @@ let
           }
         ];
   };
-  
+
 in {
 
   require = [options];

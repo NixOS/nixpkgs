@@ -34,9 +34,6 @@ let
       ensureDir $out
       shopt -s nullglob
 
-      # Use all the default udev rules.
-      cp -v ${udev}/libexec/rules.d/*.rules $out/
-
       # Set a reasonable $PATH for programs called by udev rules.
       echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
 
@@ -48,25 +45,58 @@ let
       for i in ${toString cfg.packages}; do
         echo "Adding rules for package $i"
         for j in $i/*/udev/rules.d/*; do
-          ln -sv $j $out/$(basename $j)
+          echo "Copying $j to $out/$(basename $j)"
+          echo "# Copied from $j" > $out/$(basename $j)
+          cat $j >> $out/$(basename $j)
         done
       done
 
       # Fix some paths in the standard udev rules.  Hacky.
       for i in $out/*.rules; do
         substituteInPlace $i \
-          --replace /sbin/modprobe ${modprobe}/sbin/modprobe \
-          --replace /sbin/blkid ${pkgs.utillinux}/sbin/blkid \
-          --replace /sbin/mdadm ${pkgs.mdadm}/sbin/mdadm \
-          --replace '$env{DM_SBIN_PATH}/blkid' ${pkgs.utillinux}/sbin/blkid \
-          --replace 'ENV{DM_SBIN_PATH}="/sbin"' 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"' \
-          --replace /bin/mount ${pkgs.utillinux}/bin/mount
+          --replace \"/sbin/modprobe \"${modprobe}/sbin/modprobe \
+          --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
+          --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
+          --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount
       done
 
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
       # automatically calling modprobe.
       ${if !config.boot.hardwareScan then "rm $out/80-drivers.rules" else ""}
+
+      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev ... "
+      import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
+        sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
+      run_progs=$(grep 'RUN+="[^/$]' $out/* |
+        sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
+      for i in $import_progs $run_progs; do
+        if [[ ! -x ${pkgs.udev}/lib/udev/$i ]]; then
+          echo "FAIL"
+          echo "$i is called in udev rules but not installed by udev"
+          exit 1
+        fi
+      done
+      echo "OK"
+
+      echo -n "Checking that all programs call by absolute paths in udev rules exist ... "
+      import_progs=$(grep 'IMPORT{program}="/' $out/* |
+        sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
+      run_progs=$(grep 'RUN+="/' $out/* |
+        sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
+      for i in $import_progs $run_progs; do
+        if [[ ! -x $i ]]; then
+          echo "FAIL"
+          echo "$i is called in udev rules but not installed by udev"
+          exit 1
+        fi
+      done
+      echo "OK"
+
+      echo "Consider fixing the following udev rules:"
+      for i in ${toString cfg.packages}; do
+        grep -l '\(RUN+\|IMPORT{program}\)="\(/usr\)\?/s\?bin' $i/*/udev/rules.d/* || true
+      done
 
       # Use the persistent device rules (naming for CD/DVD and
       # network devices) stored in 
@@ -178,7 +208,7 @@ in
 
     services.udev.extraRules = nixosRules;
     
-    services.udev.packages = [ extraUdevRules ];
+    services.udev.packages = [ pkgs.udev extraUdevRules ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux pkgs.udev ];
 

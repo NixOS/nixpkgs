@@ -38,6 +38,7 @@ with pkgs.lib;
         mkdir -m 0755 -p /var/lib/udisks
       '';
 
+    services.udev.packages = [ pkgs.udisks ];
   };
 
 }

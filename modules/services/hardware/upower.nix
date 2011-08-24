@@ -33,6 +33,8 @@ with pkgs.lib;
 
     services.dbus.packages = [ pkgs.upower ];
 
+    services.udev.packages = [ pkgs.upower ];
+
   };
 
 }

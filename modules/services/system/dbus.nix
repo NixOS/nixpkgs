@@ -17,7 +17,7 @@ let
     buildCommand = ''
       ensureDir $out
       
-      cp ${dbus}/etc/dbus-1/system.conf $out/system.conf
+      cp -v ${dbus}/etc/dbus-1/system.conf $out/system.conf
 
       # !!! Hm, these `sed' calls are rather error-prone...
 
