@@ -179,9 +179,6 @@ let
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
 
-  # Return the first available value in the order: pkg.val, val, or default.
-  getPkgConfig = pkg : val : default : (getConfig [ pkg val ] (getConfig [ val ] default));
-
   builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
       fetchurl fetchmtn fetchgit;
@@ -3317,19 +3314,19 @@ let
 
   glibc29 = callPackage ../development/libraries/glibc-2.9 {
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
   glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic;
     kernelHeaders = linuxHeadersCross;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
   });
 
   glibc213 = (callPackage ../development/libraries/glibc-2.13 {
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
@@ -3341,7 +3338,7 @@ let
        inherit stdenv fetchurl;
        gccCross = gccCrossStageStatic;
        kernelHeaders = if crossGNU then hurdHeaders else linuxHeadersCross;
-       installLocales = getPkgConfig "glibc" "locales" false;
+       installLocales = getConfig [ "glibc" "locales" ] false;
      }
 
      //
@@ -3362,7 +3359,7 @@ let
 
   eglibc = callPackage ../development/libraries/eglibc {
     kernelHeaders = linuxHeaders;
-    installLocales = getPkgConfig "glibc" "locales" false;
+    installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
   glibcLocales = callPackage ../development/libraries/glibc-2.13/locales.nix { };
@@ -3789,7 +3786,7 @@ let
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
-    useGTK = getPkgConfig "libiodbc" "gtk" false;
+    useGTK = getConfig [ "libiodbc" "gtk" ] false;
   };
 
   libktorrent = newScope pkgs.kde4 ../development/libraries/libktorrent { };
@@ -6346,11 +6343,11 @@ let
   };
 
   emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
-    xawSupport = getPkgConfig "emacs" "xawSupport" false;
-    xaw3dSupport = getPkgConfig "emacs" "xaw3dSupport" false;
-    gtkGUI = getPkgConfig "emacs" "gtkSupport" true;
-    xftSupport = getPkgConfig "emacs" "xftSupport" true;
-    dbusSupport = getPkgConfig "emacs" "dbusSupport" true;
+    xawSupport = getConfig [ "emacs" "xawSupport" ] false;
+    xaw3dSupport = getConfig [ "emacs" "xaw3dSupport" ] false;
+    gtkGUI = getConfig [ "emacs" "gtkSupport" ] true;
+    xftSupport = getConfig [ "emacs" "xftSupport" ] true;
+    dbusSupport = getConfig [ "emacs" "dbusSupport" ] true;
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
@@ -7271,7 +7268,7 @@ let
 
     # KDE support is not working yet.
     inherit (kde3) kdelibs kdebase;
-    withKde = getPkgConfig "taskJuggler" "kde" false;
+    withKde = getConfig [ "taskJuggler" "kde" ] false;
   };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -8153,7 +8150,7 @@ let
 
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
-    cupsSupport = getPkgConfig "ghostscript" "cups" true;
+    cupsSupport = getConfig [ "ghostscript" "cups" ] true;
     gnuFork = getConfig [ "ghostscript" "gnu" ] true;
   };
 
@@ -8194,13 +8191,13 @@ let
   nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
-    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
-    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
+    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
+    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
-    storeDir = getPkgConfig "nix" "storeDir" "/nix/store";
-    stateDir = getPkgConfig "nix" "stateDir" "/nix/var";
+    storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
+    stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
   nixSqlite = nixUnstable;
