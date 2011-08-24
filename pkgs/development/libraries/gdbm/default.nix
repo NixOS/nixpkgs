@@ -1,22 +1,40 @@
-{ stdenv, fetchurl, automake }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.8.3";
+  name = "gdbm-1.9.1";
+
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "1j8x51xc71di1fx23sl22n5ghlqxl9a57sxri82l12z2l8w06d6c";
+    sha256 = "1vcs39nhvwyicjfx4qc17k54n22azla5yjr9yachcavp6wk8a9b0";
   };
 
-  patches = [ ./install.patch ];
-
-  # The fuloong2f is not supported by gdbm 1.8.3 still
-  preConfigure = ''
-    cp ${automake}/share/automake*/config.{sub,guess} .
-  '';
+  doCheck = true;
 
   meta = {
-    description = "GNU DBM key/value database library";
+    description = "GNU dbm key/value database library";
+
+    longDescription =
+      '' GNU dbm (or GDBM, for short) is a library of database functions that
+         use extensible hashing and work similar to the standard UNIX dbm.
+         These routines are provided to a programmer needing to create and
+         manipulate a hashed database.
+
+         The basic use of GDBM is to store key/data pairs in a data file.
+         Each key must be unique and each key is paired with only one data
+         item.
+
+         The library provides primitives for storing key/data pairs,
+         searching and retrieving the data by its key and deleting a key
+         along with its data.  It also support sequential iteration over all
+         key/data pairs in a database.
+
+         For compatibility with programs using old UNIX dbm function, the
+         package also provides traditional dbm and ndbm interfaces.
+      '';
+
     homepage = http://www.gnu.org/software/gdbm/;
-    license = "GPLv2+";
+    license = "GPLv3+";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
