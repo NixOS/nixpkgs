@@ -682,6 +682,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_1_2 = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
   HTTP = self.HTTP_4000_0_6;
 
+  hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
+
   haxr = callPackage ../development/libraries/haskell/haxr {
     HaXml = self.HaXml_1_22_5;
   };
