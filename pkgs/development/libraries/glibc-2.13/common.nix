@@ -74,6 +74,8 @@ stdenv.mkDerivation ({
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
 
+    /* Without this patch many KDE binaries crash. */
+    ./glibc-elf-localscope.patch
   ];
 
   postPatch = ''
