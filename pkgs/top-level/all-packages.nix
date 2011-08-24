@@ -595,6 +595,8 @@ let
 
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
+  dvgrab = callPackage ../tools/video/dvgrab { };
+
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
   ebook_tools = callPackage ../tools/text/ebook-tools { };
