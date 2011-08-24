@@ -566,7 +566,7 @@ with (import ./release-lib.nix);
     xwininfo = linux;
   };
 
-  xfce4 = {
+  xfce = {
     gtk_xfce_engine = linux;
     mousepad = linux;
     ristretto = linux;
