@@ -537,6 +537,8 @@ let
     neon = neon029;
   };
 
+  dbench = callPackage ../development/tools/misc/dbench { };
+
   dcraw = callPackage ../tools/graphics/dcraw { };
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
