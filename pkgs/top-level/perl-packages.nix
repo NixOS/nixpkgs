@@ -516,6 +516,15 @@ rec {
     propagatedBuildInputs = [ CatalystRuntime TextCSV XMLSimple ];
   };
 
+  CatalystViewJSON = buildPerlPackage rec {
+    name = "Catalyst-View-JSON-0.33";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "03yda9skcfnwkm4hf2a3y7g2rdjdia5hzfnll0h7z4wiyb8kxfii";
+    };
+    propagatedBuildInputs = [ CatalystRuntime JSONAny YAML ];
+  };
+
   CatalystViewTT = buildPerlPackage rec {
     name = "Catalyst-View-TT-0.37";
     src = fetchurl {
