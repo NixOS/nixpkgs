@@ -39,13 +39,14 @@ rec {
   kdeSubdirPkg = module:
     {name, subdir ? name, sane ? name}:
     let name_ = name; in
-    a@{cmakeFlags ? [], name ? name_, ...}:
+    a@{cmakeFlags ? [], name ? name_, meta ? {}, ...}:
     stdenv.mkDerivation ({
       name = "${name}-${release}";
       src = kdesrc module;
       cmakeFlags = ["-DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE"
       "-DBUILD_doc=TRUE" "-DBUILD_${subdir}=TRUE"] ++ cmakeFlags;
-    } // (removeAttrs a [ "cmakeFlags" ]));
+      meta = defMeta // meta;
+    } // (removeAttrs a [ "meta" "name" "cmakeFlags" ]));
 
   # A KDE monolithic module
   kdeMonoModule = name: path: callPackage path { kde = kdeMonoPkg name; };
