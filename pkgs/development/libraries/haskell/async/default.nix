@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "async";
-  version = "1.2";
-  sha256 = "a5963d36fc1ba142d18920f967190b25cf80f700d863372b6d33ad5257a1773a";
+  version = "1.3";
+  sha256 = "0chpp8kfwccp57hl7mnralyn4s2x8f0vvkblmywfzb8sbdqgnril";
   meta = {
     homepage = "http://gitorious.org/async/";
     description = "Asynchronous Computations";
