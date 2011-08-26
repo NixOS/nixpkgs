@@ -988,6 +988,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_2_0_3;
   };
   random_1_0_0_3 = callPackage ../development/libraries/haskell/random/1.0.0.3.nix {};
+  random_1_0_1_0 = callPackage ../development/libraries/haskell/random/1.0.1.0.nix {};
   random = null; # core package until ghc-7.2.1
   random_newtime = self.random_1_0_0_2_newtime;
 
