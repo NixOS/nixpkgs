@@ -8,8 +8,6 @@ let
 
   cfg = config.services.dbus;
 
-  inherit (pkgs) dbus;
-
   homeDir = "/var/run/dbus";
 
   configDir = pkgs.stdenv.mkDerivation {
@@ -17,7 +15,7 @@ let
     buildCommand = ''
       ensureDir $out
       
-      cp -v ${dbus}/etc/dbus-1/system.conf $out/system.conf
+      cp -v ${pkgs.dbus_daemon}/etc/dbus-1/system.conf $out/system.conf
 
       # !!! Hm, these `sed' calls are rather error-prone...
 
@@ -32,7 +30,7 @@ let
           -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|' \
           -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
 
-      cp ${dbus}/etc/dbus-1/session.conf $out/session.conf
+      cp ${pkgs.dbus_daemon}/etc/dbus-1/session.conf $out/session.conf
       
       # Add the services and session.d directories to the session bus
       # search path.
@@ -97,7 +95,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ dbus.daemon dbus.tools ];
+    environment.systemPackages = [ pkgs.dbus_daemon pkgs.dbus_tools ];
 
     environment.etc = singleton
       { source = configDir;
@@ -126,14 +124,14 @@ in
             chown messagebus ${homeDir}
 
             mkdir -m 0755 -p /var/lib/dbus
-            ${dbus.tools}/bin/dbus-uuidgen --ensure
+            ${pkgs.dbus_tools}/bin/dbus-uuidgen --ensure
  
             rm -f ${homeDir}/pid
           '';
 
         daemonType = "fork";
 
-        exec = "${dbus}/bin/dbus-daemon --system";
+        exec = "${pkgs.dbus_daemon}/bin/dbus-daemon --system";
 
         postStop =
           ''
@@ -148,7 +146,7 @@ in
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
-        source = "${dbus}/libexec/dbus-daemon-launch-helper";
+        source = "${pkgs.dbus_daemon}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;
