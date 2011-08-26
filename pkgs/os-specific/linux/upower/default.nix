@@ -11,10 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1c2b2f74vxx1y7vkwbrx5z4j5pdgvsw00l6cldvy7a4k7hrbprq6";
   };
 
-  buildInputs =
-    [ xz pkgconfig glib dbus dbus_glib polkit intltool
-      libxslt docbook_xsl udev libusb1
-    ];
+  buildInputs = [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ];
+
+  buildNativeInputs = [ xz pkgconfig ];
 
   configureFlags = "--with-backend=linux --localstatedir=/var";
 
