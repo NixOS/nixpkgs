@@ -41,7 +41,6 @@ in
 kde.modules // kde.individual //
 {
   inherit (kde) manifest modules individual splittedModuleList;
-  recurseForRelease = true;
 
   akonadi = callPackage ./support/akonadi { };
   soprano = callPackage ./support/soprano { };

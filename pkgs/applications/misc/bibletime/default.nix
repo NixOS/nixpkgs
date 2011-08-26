@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, sword, qt, boost, cluceneCore}:
+{stdenv, fetchurl, cmake, sword, qt4, boost, cluceneCore}:
 
 stdenv.mkDerivation rec {
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "bibletime-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bibletime/BibleTime%202/BibleTime%202%20source%20code/${name}.tar.bz2";
+    url = "mirror://sourceforge/bibletime/${name}.tar.bz2";
     sha256 = "0171hlwg4rjv93b3gwcyv3nsj2kzwf4n8f6jw6ld18x7xmk9rkdg";
   };
   
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     export SWORD_HOME=${sword};
   '';
 
-  buildInputs = [ cmake sword qt boost cluceneCore ];
+  buildInputs = [ cmake sword qt4 boost cluceneCore ];
 
   cmakeFlags = "-DUSE_QT_WEBKIT=ON -DCMAKE_BUILD_TYPE=Debug";
 

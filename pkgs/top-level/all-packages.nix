@@ -411,8 +411,6 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
-  bluedevil = newScope pkgs.kde4 ../tools/bluetooth/bluedevil { };
-
   bootchart = callPackage ../tools/system/bootchart { };
 
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
@@ -876,8 +874,6 @@ let
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
-  kdiff3 = newScope pkgs.kde4 ../tools/text/kdiff3 { };
-
   keychain = callPackage ../tools/misc/keychain { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
@@ -1161,8 +1157,6 @@ let
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
-
-  polkit_kde_agent = newScope pkgs.kde4 ../tools/security/polkit-kde-agent { };
 
   povray = callPackage ../tools/graphics/povray { };
 
@@ -3625,8 +3619,6 @@ let
 
   judy = callPackage ../development/libraries/judy { };
 
-  kdevplatform = newScope pkgs.kde4 ../development/libraries/kdevplatform { };
-
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
   lcms = lcms1;
@@ -3790,13 +3782,9 @@ let
     useGTK = getConfig [ "libiodbc" "gtk" ] false;
   };
 
-  libktorrent = newScope pkgs.kde4 ../development/libraries/libktorrent { };
-
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
-
-  liblikeback = newScope pkgs.kde4 ../development/libraries/liblikeback { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (gnome) glib;
@@ -4303,18 +4291,6 @@ let
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
-
-  quassel = newScope pkgs.kde4 ../applications/networking/irc/quassel { };
-
-  quasselDaemon = appendToName "daemon" (quassel.override {
-    monolithic = false;
-    daemon = true;
-  });
-
-  quasselClient = appendToName "client" (quassel.override {
-    monolithic = false;
-    client = true;
-  });
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
@@ -6109,10 +6085,6 @@ let
 
   adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
 
-  akunambol = newScope pkgs.kde4 ../applications/networking/sync/akunambol { };
-
-  amarok = newScope pkgs.kde4 ../applications/audio/amarok { };
-
   amsn = callPackage ../applications/networking/instant-messengers/amsn {
     libstdcpp = gcc33.gcc;
   };
@@ -6153,8 +6125,6 @@ let
     cairo = cairo.override { xcbSupport = true; };
   };
 
-  bangarang = newScope pkgs.kde4 ../applications/video/bangarang { };
-
   batik = callPackage ../applications/graphics/batik { };
 
   bazaar = callPackage ../applications/version-management/bazaar { };
@@ -6168,9 +6138,7 @@ let
     guile = guile_1_8;
   };
 
-  bibletime = newScope pkgs.kde45 ../applications/misc/bibletime {
-    qt = qt4;
-  };
+  bibletime = callPackage ../applications/misc/bibletime { };
 
   bitcoin = callPackage ../applications/misc/bitcoin {
     wxGTK = wxGTK290;
@@ -6284,8 +6252,6 @@ let
   };
 
   dia = callPackage ../applications/graphics/dia { };
-
-  digikam = newScope pkgs.kde4 ../applications/graphics/digikam { };
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
@@ -6470,9 +6436,6 @@ let
   fdupes = callPackage ../tools/misc/fdupes { };
 
   feh = callPackage ../applications/graphics/feh { };
-
-  filelight = if pkgs.kde4.kdeutils ? filelight then pkgs.kde4.kdeutils.filelight
-    else newScope pkgs.kde4 ../applications/misc/filelight { };
 
   firefox = pkgs.firefoxPkgs.firefox;
 
@@ -6778,20 +6741,6 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
-  k3b = newScope pkgs.kde4 ../applications/misc/k3b { };
-
-  kadu = newScope pkgs.kde45 ../applications/networking/instant-messengers/kadu { };
-
-  kbluetooth = newScope pkgs.kde4 ../tools/bluetooth/kbluetooth { };
-
-  kde_wacomtablet = newScope pkgs.kde4 ../applications/misc/kde-wacomtablet { };
-
-  kdenlive = newScope pkgs.kde4 ../applications/video/kdenlive { };
-
-  kdesvn = newScope pkgs.kde4 ../applications/version-management/kdesvn { };
-
-  kdevelop = newScope pkgs.kde4 ../applications/editors/kdevelop { };
-
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
   };
@@ -6801,28 +6750,6 @@ let
   kino = callPackage ../applications/video/kino {
     inherit (gnome) libglade;
   };
-
-  kipi_plugins = newScope pkgs.kde47 ../applications/graphics/kipi-plugins {
-    inherit (pkgs.gtkLibs) gdk_pixbuf;
-  };
-
-  kmplayer = newScope pkgs.kde4 ../applications/video/kmplayer {
-    inherit (pkgs.gtkLibs) pango;
-  };
-
-  koffice = newScope pkgs.kde4 ../applications/office/koffice { };
-
-  konq_plugins = newScope pkgs.kde4 ../applications/networking/browsers/konq-plugins { };
-
-  konversation = newScope pkgs.kde4 ../applications/networking/irc/konversation { };
-
-  krename = newScope pkgs.kde4 ../applications/misc/krename {
-    qt = qt4;
-  };
-
-  krusader = newScope pkgs.kde4 ../applications/misc/krusader { };
-
-  ktorrent = newScope pkgs.kde4 ../applications/networking/p2p/ktorrent { };
 
   lame = callPackage ../applications/audio/lame { };
 
@@ -7042,8 +6969,6 @@ let
   paraview = callPackage ../applications/graphics/paraview {
   };
 
-  partitionManager = newScope pkgs.kde4 ../tools/misc/partition-manager { };
-
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
@@ -7127,10 +7052,6 @@ let
     libstdcpp5 = gcc33.gcc;
   };
 
-  rekonq = newScope pkgs.kde4 ../applications/networking/browsers/rekonq { };
-
-  rsibreak = newScope pkgs.kde4 ../applications/misc/rsibreak { };
-
   recode = callPackage ../tools/text/recode { };
 
   retroshare = callPackage ../applications/networking/p2p/retroshare {
@@ -7165,8 +7086,6 @@ let
   seg3d = callPackage ../applications/graphics/seg3d {
     wxGTK = wxGTK28.override { unicode = false; };
   };
-
-  semnotes = newScope pkgs.kde4 ../applications/misc/semnotes { };
 
   seq24 = callPackage ../applications/audio/seq24 {
     inherit (gtkLibs) gtkmm;
@@ -7529,8 +7448,6 @@ let
 
   qgis = callPackage ../applications/misc/qgis {};
 
-  yakuake = newScope pkgs.kde4 ../applications/misc/yakuake { };
-
   yoshimi = callPackage ../applications/audio/yoshimi {
     fltk = fltk11;
   };
@@ -7867,16 +7784,74 @@ let
 
   };
 
-  kde4 = kde45;
+  kde4 = recurseIntoAttrs pkgs.kde45;
 
-  kde45 = callPackage ../desktops/kde-4.5 {
-    callPackage = newScope pkgs.kde45;
-  };
+  kde45 = kdePackagesFor pkgs.kde45 "4.5";
+  kde47 = kdePackagesFor pkgs.kde47 "4.7";
 
-  kde47 = callPackage ../desktops/kde-4.7 {
-    callPackage = newScope pkgs.kde47;
-    callPackageOrig = callPackage;
-  };
+  kdePackagesFor = self: version:
+  let callPackageOrig = callPackage; in
+  let
+    callPackage = newScope self;
+    kde4 = callPackageOrig (../desktops/kde- + version) {
+      inherit callPackage callPackageOrig;
+    };
+  in
+  ({
+    inherit kde4;
+
+    recurseForRelease = true;
+
+    akunambol = callPackage ../applications/networking/sync/akunambol { };
+    amarok = callPackage ../applications/audio/amarok { };
+    bangarang = callPackage ../applications/video/bangarang { };
+    bluedevil = callPackage ../tools/bluetooth/bluedevil { };
+    digikam = callPackage ../applications/graphics/digikam { };
+    filelight = callPackage ../applications/misc/filelight { };
+    k3b = callPackage ../applications/misc/k3b { };
+    kadu = callPackage ../applications/networking/instant-messengers/kadu { };
+    kbluetooth = callPackage ../tools/bluetooth/kbluetooth { };
+    kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
+    kdenlive = callPackage ../applications/video/kdenlive { };
+    kdesvn = callPackage ../applications/version-management/kdesvn { };
+    kdevelop = callPackage ../applications/editors/kdevelop { };
+    kdevplatform = callPackage ../development/libraries/kdevplatform { };
+    kdiff3 = callPackage ../tools/text/kdiff3 { };
+    kmplayer = callPackage ../applications/video/kmplayer {
+      inherit (pkgs.gtkLibs) pango;
+    };
+    kipi_plugins = callPackage ../applications/graphics/kipi-plugins {
+      inherit (pkgs.gtkLibs) gdk_pixbuf;
+    };
+    koffice = callPackage ../applications/office/koffice { };
+    konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
+    konversation = callPackage ../applications/networking/irc/konversation { };
+    krename = callPackage ../applications/misc/krename { };
+    krusader = callPackage ../applications/misc/krusader { };
+    ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
+    libktorrent = callPackage ../development/libraries/libktorrent { };
+    liblikeback = callPackage ../development/libraries/liblikeback { };
+    partitionManager = callPackage ../tools/misc/partition-manager { };
+    polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
+    psi = callPackage ../applications/networking/instant-messengers/psi { };
+
+    quassel = callPackage ../applications/networking/irc/quassel { };
+
+    quasselDaemon = appendToName "daemon" (self.quassel.override {
+      monolithic = false;
+      daemon = true;
+    });
+
+    quasselClient = appendToName "client" (self.quassel.override {
+      monolithic = false;
+      client = true;
+    });
+
+    rekonq = callPackage ../applications/networking/browsers/rekonq { };
+    rsibreak = callPackage ../applications/misc/rsibreak { };
+    semnotes = callPackage ../applications/misc/semnotes { };
+    yakuake = callPackage ../applications/misc/yakuake { };
+  } // kde4);
 
   redshift = callPackage ../applications/misc/redshift {
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
@@ -8256,8 +8231,6 @@ let
   pjsip = callPackage ../applications/networking/pjsip { };
 
   polytable = callPackage ../misc/tex/polytable { };
-
-  psi = newScope pkgs.kde45 ../applications/networking/instant-messengers/psi { };
 
   uae = callPackage ../misc/emulators/uae { };
 

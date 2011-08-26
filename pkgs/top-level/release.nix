@@ -167,7 +167,6 @@ with (import ./release-lib.nix);
   kbd = linux;
   keen4 = ["i686-linux"];
 #  klibc = linux;
-  ktorrent = linux;
   kvm = linux;
   qemu = linux;
   qemu_kvm = linux;

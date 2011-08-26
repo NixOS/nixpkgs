@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, kdelibs, qimageblitz, qca2, libkexiv2, libkdcraw, libkipi
-, libksane, kdepimlibs, libxml2, libxslt, gettext, opencv, libgpod, gdk_pixbuf
-, qjson , pkgconfig }:
+{ stdenv, fetchurl, kdelibs, qimageblitz, qca2, kdepimlibs, libxml2, libxslt
+, gettext, opencv, libgpod, gdk_pixbuf , qjson, pkgconfig
+, cmake, automoc4
+, kdegraphics, libkexiv2 ? kdegraphics, libkdcraw ? kdegraphics
+, libkipi ? kdegraphics, libksane ? kdegraphics }:
 
 stdenv.mkDerivation rec {
   name = "kipi-plugins-1.9.0";
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
       libksane libxslt gettext opencv libgpod gdk_pixbuf qjson
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  buildNativeInputs = [ pkgconfig cmake automoc4 ];
 
   meta = {
     description = "Photo Management Program";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, automoc4, kdelibs, taglib, exiv2, podofo, gettext, qt, phonon }:
+{ stdenv, fetchurl, cmake, automoc4, kdelibs, taglib, exiv2, podofo, gettext, qt4, phonon }:
 
 stdenv.mkDerivation rec {
   name = "krename-4.0.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "12qhclw1vbg5bv6619qd4408y8d1w26499gcr8gwhgfzk0v83hic";
   };
 
-  buildInputs = [ cmake automoc4 kdelibs taglib exiv2 podofo gettext qt phonon ];
+  buildInputs = [ cmake automoc4 kdelibs taglib exiv2 podofo gettext qt4 phonon ];
 
   meta = {
     homepage = http://www.krename.net;
