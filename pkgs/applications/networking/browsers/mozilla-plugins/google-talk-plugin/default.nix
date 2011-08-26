@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm";
-        sha256 = "01c8w221azvmqvxf5lgb8l151086d72ll5wnjndwn50dvi6rphvx";
+        sha256 = "14cf9bef6f70ff850b773dbb92833bbe45645db2636b7e17720fdc6b60e76d63";
       }
     else
       throw "Google Talk does not support your platform.";
