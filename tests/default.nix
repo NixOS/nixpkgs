@@ -25,6 +25,7 @@ with import ../lib/testing.nix { inherit nixpkgs system; };
   remote_builds = makeTest (import ./remote-builds.nix);
   simple = makeTest (import ./simple.nix);
   #subversion = makeTest (import ./subversion.nix);
+  tomcat = makeTest (import ./tomcat.nix);
   trac = makeTest (import ./trac.nix);
   xfce = makeTest (import ./xfce.nix);
 }
