@@ -367,7 +367,7 @@ with (import ./release-lib.nix);
     ru = all;
   };
 
-  dbus = {
+  dbus_all = {
     libs = linux;
     tools = linux;
   };

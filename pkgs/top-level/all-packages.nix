@@ -3138,7 +3138,15 @@ let
 
   db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
 
-  dbus = callPackage ../development/libraries/dbus {
+  dbus = pkgs.dbus_all.libs // { inherit (pkgs.dbus_all) libs; };
+
+  dbus_daemon = pkgs.dbus_all.daemon;
+
+  dbus_tools = pkgs.dbus_all.tools;
+
+  dbus_libs = pkgs.dbus_all.libs;
+
+  dbus_all = callPackage ../development/libraries/dbus {
     useX11 = true;
   };
 
