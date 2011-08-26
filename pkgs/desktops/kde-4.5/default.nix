@@ -18,8 +18,6 @@ let
 in
 
 rec {
-  recurseForRelease = true;
-
   inherit callPackage stdenv;
 
   qt4 = qt47;
