@@ -47,8 +47,9 @@ rec {
 
   gitAnnex = lib.makeOverridable (import ./git-annex) {
     inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which;
-    inherit (haskellPackages) ghc MissingH utf8String QuickCheck2 pcreLight SHA dataenc
+    inherit (haskellPackages) ghc MissingH utf8String pcreLight SHA dataenc
       HTTP testpack monadControl;
+    QuickCheck2 = haskellPackages.QuickCheck_2_4_0_1;
   };
 
   qgit = import ./qgit {
