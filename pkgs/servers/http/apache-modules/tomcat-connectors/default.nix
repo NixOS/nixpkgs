@@ -1,12 +1,12 @@
 {stdenv, fetchurl, apacheHttpd, jdk}:
 
 stdenv.mkDerivation {
-  name = "tomcat-connectors-1.2.31";
+  name = "tomcat-connectors-1.2.32";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://apache.hippo.nl//tomcat/tomcat-connectors/jk/source/jk-1.2.31/tomcat-connectors-1.2.31-src.tar.gz;
-    sha256 = "0604mcxj7zdzdl2f8krpj8ig1r5qkga3hia28pijdpvy9n6pxij8";
+    url = http://apache.xl-mirror.nl//tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.32-src.tar.gz;
+    sha256 = "1dim62warzy1hqvc7cvnqsbq475sr6vpgwd6gfmddmkgw155saji";
   };
 
   inherit apacheHttpd;
