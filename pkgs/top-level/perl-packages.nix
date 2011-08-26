@@ -3509,24 +3509,25 @@ rec {
     propagatedBuildInputs = [XMLRegExp XMLParser LWP libxml_perl];
   };
 
-  XMLLibXML = buildPerlPackage {
-    name = "XML-LibXML-1.70";
+  XMLLibXML = buildPerlPackage rec {
+    name = "XML-LibXML-1.86";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PA/PAJAS/XML-LibXML-1.70.tar.gz;
-      sha256 = "181viglnw93kz9w3bvs8dqvx4xnqvf448vnwam8dia9bfw3czrjk";
+      url = "mirror://cpan/modules/by-module/XML/${name}.tar.gz";
+      sha256 = "0wgf9898vmjac4mr2k4zvz6aw7nx0yvfv8f093y6w44vv6prxchp";
     };
-    SKIP_SAX_INSTALL=1;
-    buildInputs = [pkgs.libxml2];
-    propagatedBuildInputs = [XMLLibXMLCommon XMLSAX];
+    SKIP_SAX_INSTALL = 1;
+    buildInputs = [ pkgs.libxml2 ];
+    propagatedBuildInputs = [ XMLSAX ];
   };
 
-  XMLLibXMLCommon = buildPerlPackage {
-    name = "XML-LibXML-Common-0.13";
+  XMLLibXSLT = buildPerlPackage rec {
+    name = "XML-LibXSLT-1.70";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHISH/XML-LibXML-Common-0.13.tar.gz;
-      md5 = "13b6d93f53375d15fd11922216249659";
+      url = "mirror://cpan/modules/by-module/XML/${name}.tar.gz";
+      sha256 = "0x8lqlxr6xhgwwa6zj4shrwrqlgbgs0piripc1fsnw4z1yl2gf9p";
     };
-    buildInputs = [pkgs.libxml2];
+    buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
+    propagatedBuildInputs = [ XMLLibXML ];
   };
 
   XMLNamespaceSupport = buildPerlPackage {
