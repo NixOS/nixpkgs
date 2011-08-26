@@ -81,7 +81,7 @@ in
             HALD_RUNNER_PATH = concatStringsSep ":"
               [ "${pkgs.coreutils}/bin"
                 "${pkgs.gnugrep}/bin"
-                "${pkgs.dbus.tools}/bin"
+                "${pkgs.dbus_tools}/bin"
                 "${pkgs.procps}/bin"
                 "${pkgs.procps}/sbin"
                 "${config.system.sbin.modprobe}/sbin"
