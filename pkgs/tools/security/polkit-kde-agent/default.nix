@@ -13,4 +13,9 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ gettext ];
 
   patchPhase = "sed -e s/KDE4_AUTOSTART/AUTOSTART/ -i CMakeLists.txt";
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+    description = "PolicyKit authentication agent for KDE";
+  };
 }
