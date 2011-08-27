@@ -3438,6 +3438,10 @@ let
     guileBindings = getConfig ["gnutls" "guile"] true;
   };
 
+  gnutls2 = callPackage ../development/libraries/gnutls/2.12.nix {
+    guileBindings = getConfig ["gnutls" "guile"] true;
+  };
+
   gpgme = callPackage ../development/libraries/gpgme { };
 
   grantlee = callPackage ../development/libraries/grantlee { };

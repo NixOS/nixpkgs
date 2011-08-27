@@ -143,7 +143,7 @@ pkgs.makeOverridable
   };
 
   glib_networking = import ./platform/glib-networking {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib libtool intltool gnutls
+    inherit (pkgs) stdenv fetchurl pkgconfig glib libtool intltool gnutls2
       libproxy libgcrypt libtasn1;
   };
 
