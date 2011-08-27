@@ -51,6 +51,8 @@ rec {
     
     inherit src;
 
+    patches = [ ./6.0-install-sdk-bin.patch ];
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi

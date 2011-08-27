@@ -6449,7 +6449,7 @@ let
 
   firefoxWrapper = wrapFirefox pkgs.firefox "firefox" "";
 
-  firefoxPkgs = pkgs.firefox50Pkgs;
+  firefoxPkgs = pkgs.firefox60Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
@@ -6470,7 +6470,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox60Wrapper = lowPrio (wrapFirefox firefox60Pkgs.firefox "firefox" "");
+  firefox60Wrapper = wrapFirefox firefox60Pkgs.firefox "firefox" "";
 
   firefox70b1Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
     inherit (gtkLibs) gtk pango;
