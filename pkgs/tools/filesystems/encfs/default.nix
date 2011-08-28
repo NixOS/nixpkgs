@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, fuse, boost, rlog }:
 
 stdenv.mkDerivation {
-  name = "encfs-1.6.1";
+  name = "encfs-1.7.4";
 
   src = fetchurl {
-    url = "http://encfs.googlecode.com/files/encfs-1.6-1.tgz";
-    sha256 = "0k50ic5nyibb9giif9dqm6sj20q0yzri3drg78m788z17xp060mw";
+    url = "http://encfs.googlecode.com/files/encfs-1.7.4.tgz";
+    sha256 = "1a3h47f4h0qdc0bf3vic1i8wrdw5nkx22mml4wsvmmrd9zqg0bi8";
   };
 
   buildInputs = [ boost fuse openssl rlog ];
