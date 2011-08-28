@@ -261,7 +261,7 @@ let
   };
 
   fetchgit = import ../build-support/fetchgit {
-    inherit stdenv git;
+    inherit stdenv git cacert;
   };
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
