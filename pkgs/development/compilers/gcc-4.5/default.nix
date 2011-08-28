@@ -1,5 +1,5 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
+, langC ? true, langCC ? true, langFortran ? false
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -11,7 +11,6 @@
 , gmp, mpfr, mpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
 , ppl ? null, cloogppl ? null # optional, for the Graphite optimization framework
-, bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -29,7 +28,6 @@
 , stripped ? true
 }:
 
-assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
@@ -203,7 +201,6 @@ stdenv.mkDerivation ({
   buildInputs = [ gmp mpfr mpc libelf gettext ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
-    ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
@@ -245,7 +242,6 @@ stdenv.mkDerivation ({
         ++ optional langCC       "c++"
         ++ optional langFortran  "fortran"
         ++ optional langJava     "java"
-        ++ optional langTreelang "treelang"
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         )
@@ -292,7 +288,6 @@ stdenv.mkDerivation ({
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
-          ++ optional langTreelang "treelang"
           ++ optional langAda      "ada"
           ++ optional langVhdl     "vhdl"
           )
@@ -357,7 +352,7 @@ stdenv.mkDerivation ({
            " -L${libpthreadCross}/lib -Wl,${libpthreadCross.TARGET_LDFLAGS}")
     else null;
 
-  passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
+  passthru = { inherit langC langCC langAda langFortran langVhdl
       enableMultilib version; };
 
   enableParallelBuilding = true;

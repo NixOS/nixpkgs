@@ -1,5 +1,5 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
+, langC ? true, langCC ? true, langFortran ? false
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -9,7 +9,6 @@
 , texinfo ? null
 , gmp, mpfr, gettext, which
 , ppl ? null, cloogppl ? null  # used by the Graphite optimization framework
-, bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -25,7 +24,6 @@
 , gnat ? null
 }:
 
-assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null;
 assert langAda      -> gnatboot != null;
@@ -131,7 +129,6 @@ stdenv.mkDerivation ({
   buildInputs = [ gmp mpfr gettext ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
-    ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
@@ -160,7 +157,6 @@ stdenv.mkDerivation ({
         ++ optional langCC       "c++"
         ++ optional langFortran  "fortran"
         ++ optional langJava     "java"
-        ++ optional langTreelang "treelang"
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         )
@@ -209,7 +205,6 @@ stdenv.mkDerivation ({
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
-          ++ optional langTreelang "treelang"
           ++ optional langAda      "ada"
           ++ optional langVhdl     "vhdl"
           )
@@ -244,7 +239,7 @@ stdenv.mkDerivation ({
                                           ++ optionals javaAwtGtk [ gmp mpfr ])));
 
 
-  passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
+  passthru = { inherit langC langCC langAda langFortran langVhdl
       enableMultilib version; };
 
   # ghdl does not build fine with parallel building

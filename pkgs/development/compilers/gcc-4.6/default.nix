@@ -1,5 +1,5 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
+, langC ? true, langCC ? true, langFortran ? false
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -12,7 +12,6 @@
 , gmp, mpfr, mpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
 , ppl ? null, cloogppl ? null, cloog ? null # optional, for the Graphite optimization framework. Cannot pass both cloog and cloogppl
-, bison ? null, flex ? null
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -30,7 +29,6 @@
 , stripped ? true
 }:
 
-assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
@@ -209,7 +207,6 @@ stdenv.mkDerivation ({
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optional (cloog != null) cloog)
-    ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
@@ -252,7 +249,6 @@ stdenv.mkDerivation ({
         ++ optional langCC       "c++"
         ++ optional langFortran  "fortran"
         ++ optional langJava     "java"
-        ++ optional langTreelang "treelang"
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         ++ optional langGo       "go"
@@ -306,7 +302,6 @@ stdenv.mkDerivation ({
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
-          ++ optional langTreelang "treelang"
           ++ optional langAda      "ada"
           ++ optional langVhdl     "vhdl"
           ++ optional langGo       "go"
@@ -372,7 +367,7 @@ stdenv.mkDerivation ({
            " -L${libpthreadCross}/lib -Wl,${libpthreadCross.TARGET_LDFLAGS}")
     else null;
 
-  passthru = { inherit langC langCC langAda langFortran langTreelang langVhdl
+  passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo enableMultilib version; };
 
   enableParallelBuilding = true;
