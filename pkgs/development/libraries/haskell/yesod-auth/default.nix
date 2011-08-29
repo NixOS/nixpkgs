@@ -1,18 +1,19 @@
-{ cabal, aeson, authenticate, blazeHtml, controlMonadAttempt
+{ cabal, aesonNative, authenticate, blazeHtml, controlMonadAttempt
 , hamlet, httpEnumerator, mimeMail, persistent, persistentTemplate
-, pureMD5, random, SHA, text, transformers, wai, webRoutesQuasi
-, yesodCore, yesodForm, yesodJson, yesodPersistent
+, pureMD5, pwstoreFast, random, SHA, shakespeareCss, text
+, transformers, wai, yesodCore, yesodForm, yesodJson
+, yesodPersistent
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth";
-  version = "0.4.0.2";
-  sha256 = "1vf02kgm3pcak4igvp8009lgv8i8bir272byw0ma2mg6bl0sgyvl";
+  version = "0.7.1";
+  sha256 = "066aq7c5gwbspbib748ky3lsb84llnb954n018fk5xs7b4gbyybk";
   buildDepends = [
-    aeson authenticate blazeHtml controlMonadAttempt hamlet
+    aesonNative authenticate blazeHtml controlMonadAttempt hamlet
     httpEnumerator mimeMail persistent persistentTemplate pureMD5
-    random SHA text transformers wai webRoutesQuasi yesodCore yesodForm
-    yesodJson yesodPersistent
+    pwstoreFast random SHA shakespeareCss text transformers wai
+    yesodCore yesodForm yesodJson yesodPersistent
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
