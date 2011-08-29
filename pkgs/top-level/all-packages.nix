@@ -387,6 +387,8 @@ let
 
   at = callPackage ../tools/system/at { };
 
+  atftp = callPackage ../tools/networking/atftp {};
+
   autogen = callPackage ../development/tools/misc/autogen {
     guile = guile_1_8;
   };
@@ -4435,6 +4437,8 @@ let
 ##  tapioca_qt = import ../development/libraries/tapioca-qt {
 ##    inherit stdenv fetchurl cmake qt4 telepathy_qt;
 ##  };
+
+  tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
 
   tdb = callPackage ../development/libraries/tdb { };
 
