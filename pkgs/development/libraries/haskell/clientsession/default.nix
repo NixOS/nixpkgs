@@ -1,12 +1,10 @@
-{ cabal, random }:
+{ cabal, base64Bytestring, cryptoApi, cryptocipher }:
 
 cabal.mkDerivation (self: {
   pname = "clientsession";
-  version = "0.6.0";
-  sha256 = "0h92jjkhldn7f9b78cajfda8rprsj5scdsyl3pjpzicpvvy9g00y";
-  isLibrary = true;
-  isExecutable = true;
-  buildDepends = [ random ];
+  version = "0.7.0";
+  sha256 = "08a6k0dqx9qp7j87iq6kmyzg1aw8ykc7vrbzdbr1lfkwh05dvglm";
+  buildDepends = [ base64Bytestring cryptoApi cryptocipher ];
   meta = {
     homepage = "http://github.com/snoyberg/clientsession/tree/master";
     description = "Store session data in a cookie";
