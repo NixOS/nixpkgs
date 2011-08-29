@@ -1006,6 +1006,8 @@ let
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
+  netboot = callPackage ../tools/networking/netboot {};
+
   netcat = callPackage ../tools/networking/netcat { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
