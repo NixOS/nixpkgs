@@ -83,26 +83,7 @@ stdenv.mkDerivation rec {
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
   # that the executables work with no special setup.
   postInstall =
-    (if stdenv.isDarwin then
       ''
-        ensureDir $out/frameworks/GMP.framework/Versions/A
-        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
-        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
-        # !!! fix this
-
-        mv $out/bin $out/bin-orig
-        mkdir $out/bin
-        for i in $(cd $out/bin-orig && ls); do
-            echo "#! $SHELL -e" >> $out/bin/$i
-            echo "DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \"\$@\"" >> $out/bin/$i
-            chmod +x $out/bin/$i
-        done
-      '' else "")
-    +
-      ''
-        # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
-        # sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp}/lib\",\2@" $out/lib/ghc-${version}/package.conf
-
         # Sanity check, can ghc create executables?
         cd $TMP
         mkdir test-ghc; cd test-ghc
