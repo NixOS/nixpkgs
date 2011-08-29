@@ -2141,13 +2141,15 @@ let
   haskellPackages_ghc704_no_profiling =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        ghc6101Binary (x : x.ghc704Prefs) true false
+        (if stdenv.isDarwin then ghc704Binary else ghc6101Binary)
+        (x : x.ghc704Prefs) true false
         (haskellDefaultVersionPrioFun false));
 
   haskellPackages_ghc704_profiling =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        ghc6101Binary (x : x.ghc704Prefs) true true
+        (if stdenv.isDarwin then ghc704Binary else ghc6101Binary)
+        (x : x.ghc704Prefs) true true
         (haskellDefaultVersionPrioFun true));
 
   haskellPackages_ghc704 =
