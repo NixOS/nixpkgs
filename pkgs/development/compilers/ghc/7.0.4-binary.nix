@@ -1,7 +1,7 @@
 {stdenv, fetchurl, perl, ncurses, gmp}:
 
 let
-  supportedPlatforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+  supportedPlatforms = ["x86_64-linux" "i686-linux" "i686-darwin" "x86_64-darwin"];
 in
 
 assert stdenv.lib.elem stdenv.system supportedPlatforms;
@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
       fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "0mc4rhqcxz427wq4zgffmnn0d2yjqvy6af4x9mha283p1gdj5q99";
+      }
+    else if stdenv.system == "i686-darwin" then
+      fetchurl {
+        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
+        sha256 = "0qj45hslrrr8zfks8m1jcb3awwx9rh35ndnpfmb0gwb6j7azq5n3";
       }
     else if stdenv.system == "x86_64-darwin" then
       fetchurl {
