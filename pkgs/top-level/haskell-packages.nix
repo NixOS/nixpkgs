@@ -1127,6 +1127,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
+  shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
+
+  shakespeareJs = callPackage ../development/libraries/haskell/shakespeare-js {};
+
+  shakespeareCss = callPackage ../development/libraries/haskell/shakespeare-css {};
+
   Shellac = callPackage ../development/libraries/haskell/Shellac/Shellac.nix {};
 
   ShellacHaskeline = callPackage ../development/libraries/haskell/Shellac/Shellac-haskeline.nix {};
