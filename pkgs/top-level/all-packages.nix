@@ -7820,63 +7820,63 @@ let
       recurseForRelease = true;
 
       akunambol = callPackage ../applications/networking/sync/akunambol { };
-      
+
       amarok = callPackage ../applications/audio/amarok { };
-      
+
       bangarang = callPackage ../applications/video/bangarang { };
-      
+
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
-      
+
       digikam = callPackage ../applications/graphics/digikam { };
-      
+
       filelight = callPackage ../applications/misc/filelight { };
-      
+
       k3b = callPackage ../applications/misc/k3b { };
-      
+
       kadu = callPackage ../applications/networking/instant-messengers/kadu { };
-      
+
       kbluetooth = callPackage ../tools/bluetooth/kbluetooth { };
-      
+
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
-      
+
       kdenlive = callPackage ../applications/video/kdenlive { };
-      
+
       kdesvn = callPackage ../applications/version-management/kdesvn { };
-      
+
       kdevelop = callPackage ../applications/editors/kdevelop { };
-      
+
       kdevplatform = callPackage ../development/libraries/kdevplatform { };
-      
+
       kdiff3 = callPackage ../tools/text/kdiff3 { };
-      
+
       kmplayer = callPackage ../applications/video/kmplayer {
         inherit (pkgs.gtkLibs) pango;
       };
-      
+
       kipi_plugins = callPackage ../applications/graphics/kipi-plugins {
         inherit (pkgs.gtkLibs) gdk_pixbuf;
       };
-      
+
       koffice = callPackage ../applications/office/koffice { };
-      
+
       konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
-      
+
       konversation = callPackage ../applications/networking/irc/konversation { };
-      
+
       krename = callPackage ../applications/misc/krename { };
-      
+
       krusader = callPackage ../applications/misc/krusader { };
-      
+
       ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
-      
+
       libktorrent = callPackage ../development/libraries/libktorrent { };
-      
+
       liblikeback = callPackage ../development/libraries/liblikeback { };
-      
+
       partitionManager = callPackage ../tools/misc/partition-manager { };
-      
+
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
-      
+
       psi = callPackage ../applications/networking/instant-messengers/psi { };
 
       quassel = callPackage ../applications/networking/irc/quassel { };
@@ -7892,11 +7892,11 @@ let
       });
 
       rekonq = callPackage ../applications/networking/browsers/rekonq { };
-      
+
       rsibreak = callPackage ../applications/misc/rsibreak { };
-      
+
       semnotes = callPackage ../applications/misc/semnotes { };
-      
+
       yakuake = callPackage ../applications/misc/yakuake { };
     };
 
