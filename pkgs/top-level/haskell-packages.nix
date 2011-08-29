@@ -649,9 +649,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {};
+  hakyll = callPackage ../development/libraries/haskell/hakyll {
+    hamlet = self.hamlet_0_8_2_1;
+  };
 
-  hamlet = callPackage ../development/libraries/haskell/hamlet {};
+  hamlet_0_8_2_1 = callPackage ../development/libraries/haskell/hamlet/0.8.2.1.nix {};
+  hamlet_0_10_0 = callPackage ../development/libraries/haskell/hamlet/0.10.0.nix {};
+  hamlet = self.hamlet_0_10_0;
 
   happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {};
 
