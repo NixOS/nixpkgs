@@ -859,10 +859,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
-  monadsFd_0_0_0_1 = callPackage ../development/libraries/haskell/monads-fd/0.0.0.1.nix {};
-  monadsFd_0_2_0_0 = callPackage ../development/libraries/haskell/monads-fd/0.2.0.0.nix {};
-  monadsFd = self.monadsFd_0_2_0_0;
-
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
   mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
@@ -1063,12 +1059,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
-
-  salvia = callPackage ../development/libraries/haskell/salvia {};
-
-  salviaProtocol = callPackage ../development/libraries/haskell/salvia-protocol {
-    parsec = self.parsec2;
-  };
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
