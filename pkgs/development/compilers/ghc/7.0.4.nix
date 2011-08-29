@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
+      stdenv.lib.maintainers.simons
     ];
     platforms = ghc.meta.platforms;
   };
