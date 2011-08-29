@@ -3724,10 +3724,10 @@ let
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
 
-  libdrm = if stdenv.isDarwin then null else (callPackage ../development/libraries/libdrm {
+  libdrm = callPackage ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
-  });
+  };
 
   libdv = callPackage ../development/libraries/libdv { };
 
