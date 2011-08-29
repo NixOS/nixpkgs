@@ -35,11 +35,11 @@
       # Check whether ConsoleKit/udev gives and removes device
       # ownership as needed.
       subtest "device permissions", sub {
+          $machine->fail("getfacl /dev/snd/timer | grep -q alice");
           $machine->succeed("chvt 1");
-          $machine->sleep(1); # urgh
-          $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+          $machine->waitUntilSucceeds("getfacl /dev/snd/timer | grep -q alice");
           $machine->succeed("chvt 2");
-          $machine->sleep(1); # urgh
+          $machine->sleep(2); # urgh
           $machine->fail("getfacl /dev/snd/timer | grep -q alice");
       };
 

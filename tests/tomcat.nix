@@ -25,7 +25,8 @@
 
     $server->waitForJob("tomcat");
     $server->sleep(30); # Dirty, but it takes a while before Tomcat handles to requests properly
-    $client->mustSucceed("curl --fail http://server/examples/servlets/servlet/HelloWorldExample");
-    $client->mustSucceed("curl --fail http://server/examples/jsp/jsp2/simpletag/hello.jsp");
+    $client->waitForJob("network-interfaces");
+    $client->succeed("curl --fail http://server/examples/servlets/servlet/HelloWorldExample");
+    $client->succeed("curl --fail http://server/examples/jsp/jsp2/simpletag/hello.jsp");
   '';
 }
