@@ -2148,12 +2148,14 @@ let
 
   haskellPackages_ghc704 =
     haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-      ghc6101Binary (x : x.ghc704Prefs) false false (x : x);
+      (if stdenv.isDarwin then ghc704Binary else ghc6101Binary)
+      (x : x.ghc704Prefs) false false (x : x);
 
   haskellPackages_ghc721 =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
-        ghc6121Binary (x : x.ghc721Prefs) false false lowPrio);
+        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+        (x : x.ghc721Prefs) false false lowPrio);
 
   # Still a release candidate.
   haskellPackages_ghcHEAD =
