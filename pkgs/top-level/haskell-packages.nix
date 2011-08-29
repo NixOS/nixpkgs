@@ -829,10 +829,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
-  MaybeTTransformers = callPackage ../development/libraries/haskell/MaybeT-transformers {
-    monadsFd = self.monadsFd_0_0_0_1;
-  };
-
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
