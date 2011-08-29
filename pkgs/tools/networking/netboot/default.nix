@@ -9,6 +9,7 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
+    version="git-head-${rev}";
     baseName="netboot";
     rev="19a955cd87b399a5b56";
     name="${baseName}-git-head";
