@@ -79,9 +79,6 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   buildPhase = "true";
 
-  # The binaries for Darwin use frameworks, so fake those frameworks,
-  # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
-  # that the executables work with no special setup.
   postInstall =
       ''
         # Sanity check, can ghc create executables?
