@@ -29,7 +29,12 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
       
-  patches = [./debian.patch];
+  debianPatch = a.fetchurl {
+    url = http://patch-tracker.debian.org/patch/nondebian/dl/atftp/0.7.dfsg-10;
+    sha256 = "0vannjp0wxvk10xxlr3hirgf0g57n9dr4vhmsyfd8x4cwgxwfgsa";
+  };
+
+  patches = [debianPatch];
 
   meta = {
     description = "Advanced tftp tools";
