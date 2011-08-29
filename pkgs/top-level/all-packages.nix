@@ -7863,6 +7863,8 @@ let
         inherit (pkgs.gtkLibs) pango;
       };
 
+      kmymoney = callPackage ../applications/office/kmymoney { };
+
       kipi_plugins = callPackage ../applications/graphics/kipi-plugins {
         inherit (pkgs.gtkLibs) gdk_pixbuf;
       };
