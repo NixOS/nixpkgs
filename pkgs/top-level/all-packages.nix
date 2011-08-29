@@ -2051,6 +2051,10 @@ let
     inherit fetchurl stdenv perl ncurses gmp;
   });
 
+  ghc704Binary = lowPrio (import ../development/compilers/ghc/7.0.4-binary.nix {
+    inherit fetchurl stdenv perl ncurses gmp;
+  });
+
   # For several compiler versions, we export a large set of Haskell-related
   # packages.
 
