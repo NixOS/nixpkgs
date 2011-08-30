@@ -1180,6 +1180,19 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  protobuf = buildPythonPackage rec {
+    inherit (pkgs.protobuf) name src;
+
+    propagatedBuildInputs = [pkgs.protobuf];
+    sourceRoot = "${name}/python";
+
+    meta = {
+      description = "Protocol Buffers are Google's data interchange format.";
+      homepage = http://code.google.com/p/protobuf/;
+    };
+  };
+
+
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.0.13";
 
