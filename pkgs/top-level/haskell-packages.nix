@@ -693,18 +693,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
-  haxr = callPackage ../development/libraries/haskell/haxr {
-    HaXml = self.HaXml_1_22_5;
-  };
+  haxr = callPackage ../development/libraries/haskell/haxr {};
+
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
 
-  HaXml_1_13_3 = callPackage ../development/libraries/haskell/HaXml/1.13.3.nix {};
-  HaXml_1_20_2 = callPackage ../development/libraries/haskell/HaXml/1.20.2.nix {};
-  HaXml_1_22_5 = callPackage ../development/libraries/haskell/HaXml/1.22.5.nix {};
-  HaXml113 = self.HaXml_1_13_3;
-  HaXml120 = self.HaXml_1_20_2;
-  HaXml122 = self.HaXml_1_22_5;
-  HaXml    = self.HaXml120;
+  HaXml = callPackage ../development/libraries/haskell/HaXml {};
 
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
