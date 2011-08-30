@@ -199,13 +199,13 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc3";
+    version = "3.1-rc4";
 
-    modDirVersion = "3.1.0-rc3";
+    modDirVersion = "3.1.0-rc4";
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.bz2";
-      sha256 = "0ky6pawracgc27m0d4mq71f87yiwbp90k5aqn8qh5bdfq3ml84i6";
+      sha256 = "1inb4iyj9r7lk68bw1mznxk726n3cxcbylqnb62ycisi1z2gxwjw";
     };
 
     config = configWithPlatform stdenv.platform;
