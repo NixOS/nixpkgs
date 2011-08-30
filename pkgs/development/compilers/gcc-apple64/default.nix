@@ -1,5 +1,5 @@
 { stdenv, fetchurl, noSysDirs
-, langC ? true, langCC ? true, langF77 ? false
+, langC ? true, langCC ? true, langObjC ? true, langF77 ? false
 , profiledCompiler ? false
 , gmp ? null, mpfr ? null, bison ? null, flex ? null
 }:
@@ -34,5 +34,5 @@ stdenv.mkDerivation ({
   patches =
     [./pass-cxxcpp.patch ]
     ++ (if noSysDirs then [./no-sys-dirs.patch] else []);
-  inherit noSysDirs langC langCC langF77 profiledCompiler;
+  inherit noSysDirs langC langCC langF77 langObjC profiledCompiler;
 } // (if langF77 then {buildInputs = [gmp mpfr bison flex];} else {}))
