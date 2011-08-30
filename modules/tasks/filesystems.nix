@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   # Packages that provide fsck backends.
-  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs ];
+  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs pkgs.dosfstools ];
 
 in
 
