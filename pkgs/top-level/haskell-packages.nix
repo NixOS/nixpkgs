@@ -193,6 +193,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2011_2_0_1 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       mtl1 = self.mtl_1_1_1_1;
+      text = self.text_0_11_1_5;
     };
 
   haskellPlatform_2011_2_0_1 =
@@ -525,9 +526,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
-  doubleConversion = callPackage ../development/libraries/haskell/double-conversion {
-    text = self.text_0_11_1_5;
-  };
+  doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
 
   editline = callPackage ../development/libraries/haskell/editline {
     inherit (pkgs) libedit;
@@ -1168,7 +1167,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
   text_0_11_0_6 = callPackage ../development/libraries/haskell/text/0.11.0.6.nix {};
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
-  text = self.text_0_11_0_5;
+  text = self.text_0_11_1_5;
 
   thLift = callPackage ../development/libraries/haskell/th-lift {};
 
