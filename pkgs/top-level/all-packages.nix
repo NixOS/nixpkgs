@@ -6529,6 +6529,8 @@ let
     gtksharp = gtksharp1;
   };
 
+  get_iplayer = callPackage ../applications/misc/get_iplayer {};
+
   gimp = callPackage ../applications/graphics/gimp {
     inherit (gnome) gtk libart_lgpl;
   };
