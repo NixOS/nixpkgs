@@ -1422,6 +1422,8 @@ let
 
   htmlTidy = callPackage ../tools/text/html-tidy { };
 
+  tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
+
   tigervnc = callPackage ../tools/admin/tigervnc {
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
       xorg.fontbhlucidatypewriter75dpi ];
@@ -1565,6 +1567,8 @@ let
   };
 
   xsel = callPackage ../tools/misc/xsel { };
+
+  xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
@@ -4920,9 +4924,11 @@ let
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
-    inherit fetchurl stdenv perl lib composableDerivation;
+    inherit fetchurl stdenv perl lib composableDerivation
+      openldap pam db4 cyrus_sasl kerberos libcap expat libxml2 libtool
+      openssl;
   });
-  squid = squids.squid3Beta; # has ipv6 support
+  squid = squids.squid31; # has ipv6 support
 
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
