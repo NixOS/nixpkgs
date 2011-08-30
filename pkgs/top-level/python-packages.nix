@@ -373,6 +373,25 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  enum = buildPythonPackage rec {
+    name = "enum-0.4.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/enum/${name}.tar.gz";
+      md5 = "ce75c7c3c86741175a84456cc5bd531e";
+    };
+
+    buildInputs = [ ];
+
+    propagatedBuildInputs = [ ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/enum/;
+      description = "Robust enumerated type support in Python.";
+    };
+  };
+
+
   eventlet = buildPythonPackage rec {
     name = "eventlet-0.9.16";
 
