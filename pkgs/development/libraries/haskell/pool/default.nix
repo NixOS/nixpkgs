@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "pool";
-  version = "0.1.0.4";
-  sha256 = "11jsls81njkwhn48xdyrqydhr4yz82g7a6pji80ckplkdyycgx6p";
+  version = "0.1.1";
+  sha256 = "0h498pi7048m4cida10s28dp9f8c2ig3m4s9chwrfw3yiyai926l";
   buildDepends = [ monadControl transformers ];
   meta = {
-    homepage = "http://github.com/snoyberg/pool";
+    homepage = "http://www.yesodweb.com/book/persistent";
     description = "Thread-safe resource pools";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
