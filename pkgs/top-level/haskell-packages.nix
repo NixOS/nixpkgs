@@ -1278,6 +1278,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
+  xhtml_3000_2_0_2 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.2.nix {};
   xhtml = self.xhtml_3000_2_0_1;
 
   xml = callPackage ../development/libraries/haskell/xml {};
