@@ -11,7 +11,10 @@ stdenv.mkDerivation {
     sha256 = "1b7mi1l20jhj09kyh0bq14qzz8vdhhyf35gzwsq43mn6rc7h0b4f";
   };
 
-  installFlags = "GLOBAL_INSTALL_DIR=$$out/bin GLOBAL_RESOURCES_DIR=$$out/share/antiword";
+  patchPhase = ''
+    sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/share|$out/share|g" Makefile antiword.h
+  '';
+
   installTargets = "global_install";
 
   meta = {
