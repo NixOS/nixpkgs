@@ -6121,6 +6121,8 @@ let
     libstdcpp = gcc33.gcc;
   };
 
+  antiword = callPackage ../applications/office/antiword {};
+
   ardour = callPackage ../applications/audio/ardour {
     inherit (gtkLibs) glib pango gtk glibmm gtkmm;
     inherit (gnome) libgnomecanvas;
