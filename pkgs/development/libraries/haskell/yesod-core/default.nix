@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "0.9.1";
-  sha256 = "03dbn915g6jkwk9fp5naqv5bq613nlfpc8jd7568cc1l41b95cbf";
+  version = "0.9.1.1";
+  sha256 = "1cwywjks37i7411m6ab827q5vx1yjgnqn04am0bxzw001vciadm5";
   buildDepends = [
     blazeBuilder blazeHtml caseInsensitive cereal clientsession cookie
     enumerator failure hamlet httpTypes monadControl parsec pathPieces
