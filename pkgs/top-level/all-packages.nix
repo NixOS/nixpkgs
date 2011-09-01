@@ -2447,6 +2447,15 @@ let
   clisp_2_44_1 = callPackage ../development/interpreters/clisp/2.44.1.nix {
     libsigsegv = libsigsegv_25;  };
 
+  clojure = callPackage ../development/interpreters/clojure { };
+
+  clojure_binary = callPackage ../development/interpreters/clojure/binary.nix { };
+
+  clojure_wrapper = callPackage ../development/interpreters/clojure/wrapper.nix {
+    #clojure = clojure_binary;
+  };
+
+
   erlang = callPackage ../development/interpreters/erlang { };
 
   erlangR13B = callPackage ../development/interpreters/erlang/R13B.nix { };
