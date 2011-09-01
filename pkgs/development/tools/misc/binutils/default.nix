@@ -1,7 +1,7 @@
 { stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
 
 let
-    basename = "binutils-2.21a";
+    basename = "binutils-2.21.1a";
 in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
