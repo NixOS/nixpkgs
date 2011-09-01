@@ -20,9 +20,8 @@ let
     else needsPortsCross;
 
   srcPorts = fetchurl {
-    # These should work equally well for 2.13
-    url = "mirror://gnu/glibc/glibc-ports-2.12.1.tar.bz2";
-    sha256 = "041ix0nq7nc5r7jf80jsdlw4idah2mjp5nf7khybhc4cs1kc31ir";
+    url = "mirror://gnu/glibc/glibc-ports-2.13.tar.bz2";
+    sha256 = "0npffql62m1xba15l1wkaqf2p0l2bvb33720gx28764jmq0la75i";
   };
 
 in
