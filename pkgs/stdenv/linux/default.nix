@@ -218,10 +218,13 @@ rec {
         static = true;
       };
     };
-    cloogppl = stdenvLinuxBoot3Pkgs.cloogppl.override {
-      inherit ppl;
+    cloog = stdenvLinuxBoot3Pkgs.cloog.override {
+      isl = stdenvLinuxBoot3Pkgs.isl.override {
+        static = true;
+      };
       static = true;
     };
+    cloogppl = null;
   });
 
   # 8) Construct a fourth stdenv identical to the second, except that

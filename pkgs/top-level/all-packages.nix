@@ -1642,7 +1642,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc45;
+  gcc = gcc46;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
