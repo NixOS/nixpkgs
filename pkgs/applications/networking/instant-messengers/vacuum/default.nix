@@ -1,6 +1,7 @@
 x@{builderDefsPackage
   , qt4, openssl
   , xproto, libX11, libXScrnSaver, scrnsaverproto
+  , xz
   , ...}:
 builderDefsPackage
 (a :  
@@ -11,11 +12,11 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="1.1.0";
-    baseName="vacuum";
+    version="1.1.1";
+    baseName="vacuum-im";
     name="${baseName}-${version}";
-    url="http://vacuum-im.googlecode.com/files/${name}.tar.gz";
-    hash="c956b0cf5cc0a1acee47a96f0b0e7ab5d716e48cac4a7fcbca496f901a219dcc";
+    url="http://vacuum-im.googlecode.com/files/${name}.tar.xz";
+    hash="b4b3472bf83173f6be1bbe69520bf6cab97e24cf9fd8a7b60e4ffdc1cb43b1dc";
   };
 in
 rec {
@@ -28,7 +29,7 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["preBuild" "doQMake" "doMakeInstall"];
+  phaseNames = ["addInputs" "preBuild" "doQMake" "doMakeInstall"];
 
   preBuild = a.fullDepEntry (''
     echo "Fixing a name collision with a function added in Qt 4.7"
