@@ -7343,6 +7343,8 @@ let
 
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
+  vue = callPackage ../applications/misc/vue {};
+
   vwm = callPackage ../applications/window-managers/vwm { };
 
   w3m = callPackage ../applications/networking/browsers/w3m {
