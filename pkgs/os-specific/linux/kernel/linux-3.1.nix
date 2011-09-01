@@ -149,6 +149,7 @@ let
       BT_HCIUART_H4 y # UART (H4) protocol support
       BT_HCIUART_LL y
       BT_L2CAP y
+      BT_SCO y # audio support
       BT_RFCOMM m
       BT_RFCOMM_TTY y # RFCOMM TTY support
       CRASH_DUMP n
