@@ -1,8 +1,7 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
-, ... }:
+{ stdenv, fetchurl, extraConfig ? "", ... } @ args:
 
 let
-  configWithPlatform = kernelPlatform :
+  configWithPlatform = kernelPlatform:
     ''
       # Don't include any debug features.
       DEBUG_KERNEL n
