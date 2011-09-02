@@ -6186,6 +6186,7 @@ let
   bibletime = callPackage ../applications/misc/bibletime { };
 
   bitcoin = callPackage ../applications/misc/bitcoin {
+    boost = boost144;
     wxGTK = wxGTK290;
     db4 = db47;
     inherit (xlibs) libSM;
