@@ -700,6 +700,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HDBC = callPackage ../development/libraries/haskell/HDBC/HDBC.nix {};
 
+  HDBCOdbc = callPackage ../development/libraries/haskell/HDBC/HDBC-odbc.nix {
+    odbc = pkgs.unixODBC;
+  };
+
   HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {
     inherit (pkgs) postgresql;
   };
