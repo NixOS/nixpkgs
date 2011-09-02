@@ -692,6 +692,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
+  haskellForMaths = callPackage ../development/libraries/haskell/HaskellForMaths {};
+
   haxr = callPackage ../development/libraries/haskell/haxr {};
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
