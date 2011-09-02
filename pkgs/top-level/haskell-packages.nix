@@ -1201,7 +1201,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
-  unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+  unixCompat_0_2_2_1 = callPackage ../development/libraries/haskell/unix-compat/0.2.2.1.nix {};
+  unixCompat_0_3 = callPackage ../development/libraries/haskell/unix-compat/0.3.nix {};
+  unixCompat = self.unixCompat_0_2_2_1;
 
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 
