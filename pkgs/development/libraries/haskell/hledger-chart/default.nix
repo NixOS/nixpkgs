@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger-chart";
-  version = "0.15";
-  sha256 = "03i09fsf1h7w62as6d3q4f7fadjykbhbi95jbv0scb67rb0g9cw1";
+  version = "0.15.1";
+  sha256 = "1sb48ajc4fg2xin7nd35kwd3rqg4zg2318mgwqld8l0xv77jv5fh";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
