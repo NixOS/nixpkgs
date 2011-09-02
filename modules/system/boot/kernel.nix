@@ -49,7 +49,7 @@ let kernel = config.boot.kernelPackages.kernel; in
       default = true;
       example = false;
       description = ''
-        Whether to activate VESA video mode on boot
+        Whether to activate VESA video mode on boot.
       '';
     };
 
@@ -91,8 +91,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     };
     
     boot.initrd.kernelModules = mkOption {
-      default = [
-      ];
+      default = [];
       description = "List of modules that are always loaded by the initrd.";
     };
 
@@ -121,7 +120,10 @@ let kernel = config.boot.kernelPackages.kernel; in
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
     boot.kernelParams =
-      [ "splash=verbose" ] ++ 
+      [ "splash=verbose"
+        # Force the Completely Fair Scheduler to be used by default.
+        "elevator=cfq"
+      ] ++ 
       optional config.boot.vesa "vga=0x317";
       
     boot.kernelModules = [ "loop" ];
@@ -162,6 +164,9 @@ let kernel = config.boot.kernelPackages.kernel; in
 
         # Unix domain sockets (needed by udev).
         "unix"
+
+        # Provide the CFQ scheduler in the initrd.
+        "cfq_iosched"
         
         # Misc. stuff.
         "pcips2" "serio" "atkbd" "xtkbd"
@@ -170,8 +175,9 @@ let kernel = config.boot.kernelPackages.kernel; in
     boot.initrd.kernelModules =
       [ # For LVM.
         "dm_mod"
-        # For usual AT keyboards
-        "i8042" 
+        
+        # For usual AT keyboards.
+        "i8042"        
       ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
