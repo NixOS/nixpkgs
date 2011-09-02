@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hmatrix";
-  version = "0.11.1.0";
-  sha256 = "19915xmf6m2092s1rzwirxy0rwjcr6482y5wg4bil0afm0xjnb9n";
+  version = "0.12.0.0";
+  sha256 = "1j4c3my6i3xz6b4pyy98722zmgky27ls7a7w13ilwmnhb7pvq9al";
   buildDepends = [
     binary HUnit QuickCheck random storableComplex vector
   ];
