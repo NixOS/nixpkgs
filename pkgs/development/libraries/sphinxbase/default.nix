@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/cmusphinx/${name}.tar.gz";
-    sha256 = "0xab4ph9215rw5865gihmahbbnbi58klll5xg0il9ifld4wdjacq";
+    sha256 = "1v3kfzw42ahxmr002i6wqigs832958vgghrv5dd62zazajdbk71q";
   };
 
   buildInputs = [ pkgconfig bison ];
