@@ -2,6 +2,7 @@ x@{builderDefsPackage
   , cmake, curl, patch, zlib, icu, sqlite, libuuid
   , readline, openssl, spidermonkey_1_8_0rc1
   , nspr, nss
+  , unzip, glibcLocales
   , runTests ? false
   , ...}:
 builderDefsPackage
@@ -20,16 +21,17 @@ rec {
   inherit (s) name;
   inherit buildInputs;
 
-  phaseNames = ["prepare_sgneeds" "dump0" "prepareMakefiles" "doMake" "doTest" "doDeploy"];
+  phaseNames = ["prepare_sgneeds" "dump0" "prepareMakefiles" "fixPaths" "doMake" "doTest" "doDeploy"];
 
   dump0 = (a.doDump "0");
 
   runTests = a.stdenv.lib.attrByPath ["runTests"] false a;
 
   doTest = a.fullDepEntry (if runTests then ''
-    sed -e "s@/bin/bash@${a.stdenv.shell}@" -i $(find .. -type f)
     mkdir pseudo-home
     export HOME=$PWD/pseudo-home
+    export LC_ALL=en_US.UTF-8
+    ${if a.stdenv.isLinux then "export LOCALE_ARCHIVE=${a.glibcLocales}/lib/locale-archive;" else ""}
     make test || true
   '' else "") ["doMake" "minInit"];
 
@@ -72,6 +74,13 @@ rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lssl"
     cmake -G "Unix Makefiles" -D SGNEEDS_DIR="$SGNEEDS_DIR" -D VVTHIRDPARTY="$VVTHIRDPARTY" -D SPIDERMONKEY_INCDIR="${a.spidermonkey_1_8_0rc1}/include" -D SPIDERMONKEY_LIB="${a.spidermonkey_1_8_0rc1}/lib/libjs.so" ../veracity*
   '' ["minInit" "addInputs" "doUnpack"];
+
+  fixPaths = a.fullDepEntry ''
+    sed -e "s@/bin/bash@${a.stdenv.shell}@" -i $(find .. -type f)
+    sed -e 's@/bin/ln@#{a.coreutils}/bin/ln@g' -i ../veracity/src/js_tests/*.js
+    sed -e 's@/usr/bin/gdb@#{a.gdb}/bin/gdb@g' -i ../veracity/testsuite/c_test.sh
+    sed -e 's@"/bin/@"@g' -i ../veracity/testsuite/u*.c
+  '' ["minInit"];
 
   doDeploy = a.fullDepEntry ''
     ensureDir "$out/bin" "$out/share/veracity/"
