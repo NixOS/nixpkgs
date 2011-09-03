@@ -754,6 +754,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     glut = pkgs.freeglut;
   };
 
+  hS3 = callPackage ../development/libraries/haskell/hS3 {};
+
   hsBibutils = callPackage ../development/libraries/haskell/hs-bibutils {};
 
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
