@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, bison, pkgconfig }:
+{ stdenv
+, fetchurl
+, bison
+, pkgconfig
+, multipleOutputs ? false #Uses incomplete features of nix!
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "sphinxbase-0.7";
 
   src = fetchurl {
@@ -16,4 +21,15 @@ stdenv.mkDerivation rec {
     license = "free-non-copyleft";
     maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
-}
+} // (stdenv.lib.optionalAttrs multipleOutputs {
+  outputs = [ "out" "lib" "headers" ];
+
+  postInstall = ''
+    ensureDir $lib
+    cp -av $out/lib* $lib
+
+    ensureDir $headers
+    cp -av $out/include $headers
+  '';
+}))
+
