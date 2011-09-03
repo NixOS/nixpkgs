@@ -793,6 +793,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
   HUnit = self.HUnit_1_2_0_3;
 
+  hxt = callPackage ../development/libraries/haskell/hxt {};
+
+  hxtCharproperties = callPackage ../development/libraries/haskell/hxt-charproperties {};
+
+  hxtRegexXmlschema = callPackage ../development/libraries/haskell/hxt-regex-xmlschema {};
+
+  hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
+
   irc = callPackage ../development/libraries/haskell/irc {
     parsec = self.parsec2;
   };
