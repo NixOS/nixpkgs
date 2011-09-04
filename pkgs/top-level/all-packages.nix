@@ -1570,6 +1570,8 @@ let
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
+  zbar = callPackage ../tools/graphics/zbar {};
+
   zdelta = callPackage ../tools/compression/zdelta { };
 
   zile = callPackage ../applications/editors/zile { };
