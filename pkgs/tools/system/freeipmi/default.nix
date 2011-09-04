@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgcrypt, readline }:
 
 stdenv.mkDerivation rec {
-  name = "freeipmi-1.0.5";
+  name = "freeipmi-1.0.6";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${name}.tar.gz";
-    sha256 = "0wxq6h530wjiyaz8s12zqzp4rj4a8bg3cnsqf0aaq70d20gmxf1x";
+    sha256 = "1990y1qkx1g5pb5flgzk0n7ms6ipcams576bna9hpkgg1h0rcbb6";
   };
 
   buildInputs = [ libgcrypt readline ];
