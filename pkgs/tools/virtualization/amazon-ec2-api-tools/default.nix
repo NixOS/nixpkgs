@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip;
-    sha256 = "e4dea0fb23b7e17bfe794b80f83bef47f290e2c9296105a80a7aecf7d33ecaf2";
+    sha256 = "1e0f183c1e6d90338dbf427697908167a61c66dc7761ae5a73bb849f39f701fe";
   };
 
   buildInputs = [ unzip makeWrapper ];
