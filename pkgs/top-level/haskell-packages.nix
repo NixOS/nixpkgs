@@ -591,9 +591,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
 
-  gitit = callPackage ../development/libraries/haskell/gitit {
-    xssSanitize = self.xssSanitize_0_2_6;
-  };
+  gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs) pkgconfig glibc;
@@ -1305,9 +1303,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
-  xssSanitize_0_2_6 = callPackage ../development/libraries/haskell/xss-sanitize/0.2.6.nix {};
-  xssSanitize_0_3_0_1 = callPackage ../development/libraries/haskell/xss-sanitize/0.3.0.1.nix {};
-  xssSanitize = self.xssSanitize_0_3_0_1;
+  xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
   yap = callPackage ../development/libraries/haskell/yap {};
 
