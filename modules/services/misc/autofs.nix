@@ -29,7 +29,7 @@ in
       };
 
       autoMaster = mkOption {
-        example = ''
+        example = literalExample ''
           autoMaster = let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
