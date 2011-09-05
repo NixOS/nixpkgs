@@ -528,9 +528,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
 
-  editline = callPackage ../development/libraries/haskell/editline {
-    inherit (pkgs) libedit;
-  };
+  editline = callPackage ../development/libraries/haskell/editline {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
@@ -594,13 +592,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
-    inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gnome) libglade;
     gtkC = pkgs.gnome.gtk;
   };
 
   glib = callPackage ../development/libraries/haskell/glib {
-    inherit (pkgs) pkgconfig glib glibc;
+    glib = pkgs.glib;
   };
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
@@ -609,26 +606,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLU = pkgs.freeglut;
   };
 
-  GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {
-    glut = pkgs.freeglut;
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libSM libICE libXmu libXi;
-  };
-  GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {
-    glut = pkgs.freeglut;
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libSM libICE libXmu libXi;
-  };
+  GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
+  GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {};
   GLUT_2_2_2_0 = callPackage ../development/libraries/haskell/GLUT/2.2.2.0.nix {
-    glut = pkgs.freeglut;
     OpenGL = self.OpenGL_2_4_0_1;
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libSM libICE libXmu libXi;
   };
   GLUT = self.GLUT_2_1_1_2;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
-    inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gtkLibs) gtk;
   };
 
@@ -636,7 +621,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   gtk2hsC2hs = self.gtk2hsBuildtools;
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
-    inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gnome) gtksourceview;
   };
 
@@ -704,25 +688,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     odbc = pkgs.unixODBC;
   };
 
-  HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {
-    inherit (pkgs) postgresql;
-  };
+  HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {};
 
-  HDBCSqlite = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {
-    inherit (pkgs) sqlite;
-  };
+  HDBCSqlite = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
 
-  HFuse = callPackage ../development/libraries/haskell/hfuse {
-    inherit (pkgs) fuse;
-  };
+  HFuse = callPackage ../development/libraries/haskell/hfuse {};
 
   HGL = callPackage ../development/libraries/haskell/HGL {};
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
 
-  hint = callPackage ../development/libraries/haskell/hint {
-    ghcPaths = self.ghcPaths_0_1_0_6;
-  };
+  hint = callPackage ../development/libraries/haskell/hint {};
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
 
@@ -730,17 +706,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
-  hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {
-    vty = self.vty_4_6_0_4;
-  };
+  hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
   hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
-  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
-    inherit (pkgs) gsl liblapack/* lapack library */ blas;
-  };
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
@@ -748,9 +720,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hp2anyCore = callPackage ../development/libraries/haskell/hp2any-core {};
 
-  hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {
-    glut = pkgs.freeglut;
-  };
+  hp2anyGraph = callPackage ../development/libraries/haskell/hp2any-graph {};
 
   hS3 = callPackage ../development/libraries/haskell/hS3 {};
 
@@ -758,9 +728,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hscolour = callPackage ../development/libraries/haskell/hscolour {};
 
-  hsdns = callPackage ../development/libraries/haskell/hsdns {
-    inherit (pkgs) adns;
-  };
+  hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
@@ -902,27 +870,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
-  OpenAL = callPackage ../development/libraries/haskell/OpenAL {
-    inherit (pkgs) openal;
-  };
+  OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
-  OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libX11;
-  };
-  OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libX11;
-  };
-  OpenGL_2_4_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.1.nix {
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libX11;
-  };
+  OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
+  OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
+  OpenGL_2_4_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.1.nix {};
   OpenGL = self.OpenGL_2_2_1_1;
 
-  OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {
-    GL = pkgs.mesa;
-  };
+  OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
@@ -931,7 +886,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
   pango = callPackage ../development/libraries/haskell/pango {
-    inherit (pkgs) pkgconfig glibc;
     inherit (pkgs.gtkLibs) pango;
   };
 
@@ -952,9 +906,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
-  pcreLight = callPackage ../development/libraries/haskell/pcre-light {
-    inherit (pkgs) pcre;
-  };
+  pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
@@ -1009,7 +961,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   rvar = callPackage ../development/libraries/haskell/rvar {};
 
   readline = callPackage ../development/libraries/haskell/readline {
-    inherit (pkgs) readline ncurses;
+    inherit (pkgs) readline;
   };
 
   recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
@@ -1099,17 +1051,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   sybWithClassInstancesText = callPackage ../development/libraries/haskell/syb/syb-with-class-instances-text.nix {};
 
-  SDLImage = callPackage ../development/libraries/haskell/SDL-image {
-    inherit (pkgs) SDL_image;
-  };
+  SDLImage = callPackage ../development/libraries/haskell/SDL-image {};
 
-  SDLMixer = callPackage ../development/libraries/haskell/SDL-mixer {
-    inherit (pkgs) SDL_mixer;
-  };
+  SDLMixer = callPackage ../development/libraries/haskell/SDL-mixer {};
 
-  SDLTtf = callPackage ../development/libraries/haskell/SDL-ttf {
-    inherit (pkgs) SDL_ttf;
-  };
+  SDLTtf = callPackage ../development/libraries/haskell/SDL-ttf {};
 
   SDL = callPackage ../development/libraries/haskell/SDL {
     inherit (pkgs) SDL;
@@ -1156,9 +1102,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
-  terminfo = callPackage ../development/libraries/haskell/terminfo {
-    inherit (pkgs) ncurses;
-  };
+  terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
   testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
@@ -1277,18 +1221,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wxcore = callPackage ../development/libraries/haskell/wxHaskell/wxcore.nix {
     wxGTK = pkgs.wxGTK28;
-    inherit (pkgs) mesa;
-    inherit (pkgs.xlibs) libX11;
   };
 
   wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
   X11 = callPackage ../development/libraries/haskell/X11 {};
 
-  X11Xft = callPackage ../development/libraries/haskell/X11-xft {
-    inherit (pkgs) pkgconfig freetype fontconfig;
-    inherit (pkgs.xlibs) libXft;
-  };
+  X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
   xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};
@@ -1348,9 +1287,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AgdaExecutable = callPackage ../development/compilers/Agda-executable {};
 
-  ehc = callPackage ../development/compilers/ehc {
-    inherit (pkgs) fetchsvn stdenv coreutils glibc m4 libtool llvm;
-  };
+  ehc = callPackage ../development/compilers/ehc {};
 
   epic = callPackage ../development/compilers/epic {};
 
@@ -1417,18 +1354,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Applications.
 
-  darcs = callPackage ../applications/version-management/darcs {
-    inherit (pkgs) curl;
-    parsec = self.parsec2;
-  };
+  darcs = callPackage ../applications/version-management/darcs {};
 
   leksah = callPackage ../applications/editors/leksah {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
 
-  xmonad = callPackage ../applications/window-managers/xmonad {
-    inherit (pkgs.xlibs) xmessage;
-  };
+  xmonad = callPackage ../applications/window-managers/xmonad {};
 
   xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
