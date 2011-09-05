@@ -27,10 +27,11 @@ rec {
   # released as individual tarballs
   kdeMonoPkg = name: let n_ = name; in a@{meta, name ? n_, ...}:
     stdenv.mkDerivation ({
-        name = "${name}-${release}";
-        src = kdesrc name;
-        meta = defMeta // meta;
-      } // (removeAttrs a [ "meta" "name" ]));
+      name = "${name}-${release}";
+      src = kdesrc name;
+      meta = defMeta // meta;
+      enableParallelBuilding = true;
+    } // (removeAttrs a [ "meta" "name" ]));
 
   # kdeMonoPkg wrapper for modules splitted upstream. Used in TODO
   kdeSplittedPkg = module: {name, sane ? name}: kdeMonoPkg name;
@@ -43,9 +44,13 @@ rec {
     stdenv.mkDerivation ({
       name = "${name}-${release}";
       src = kdesrc module;
-      cmakeFlags = ["-DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE"
-      "-DBUILD_doc=TRUE" "-DBUILD_${subdir}=TRUE"] ++ cmakeFlags;
+      cmakeFlags =
+        [ "-DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE"
+          "-DBUILD_doc=TRUE"
+          "-DBUILD_${subdir}=TRUE"
+        ] ++ cmakeFlags;
       meta = defMeta // meta;
+      enableParallelBuilding = true;
     } // (removeAttrs a [ "meta" "name" "cmakeFlags" ]));
 
   # A KDE monolithic module
