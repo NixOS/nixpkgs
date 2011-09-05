@@ -16,5 +16,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.xfce.org/;
     description = "Utilities and scripts for Xfce";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

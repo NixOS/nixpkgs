@@ -20,5 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://thunar.xfce.org/;
     description = "Thunar extension for automatic management of removable drives and media";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

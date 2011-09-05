@@ -20,5 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.xfce.org/;
     description = "Settings manager for Xfce";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

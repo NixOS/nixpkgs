@@ -19,5 +19,7 @@ stdenv.mkDerivation {
     homepage = http://www.xfce.org/projects/terminal;
     description = "A modern terminal emulator primarily for the Xfce desktop environment";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
