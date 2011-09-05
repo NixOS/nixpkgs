@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16qqnlh0dy3r92shzm2q36h5qi3m06pihr4h5cq944hpvqz5w7qi";
   };
   
-  includeAllQtDirs=true;
+  includeAllQtDirs = true;
 
   CLUCENE_HOME = clucene_core;
 
