@@ -82,7 +82,7 @@ in
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" ];
 
-    environment.shellInit =
+    environment.shellInit = optionalString isXfce48
       ''
         export GIO_EXTRA_MODULES=${pkgs.xfce.gvfs}/lib/gio/modules
       '';
