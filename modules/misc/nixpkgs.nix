@@ -30,9 +30,9 @@ in
 {
   options = {
 
-    nixpkgs.config = pkgs.lib.mkOption {
+    nixpkgs.config = mkOption {
       default = {};
-      example =
+      example = literalExample
         ''
           { firefox.enableGeckoMediaPlayer = true;
             packageOverrides = pkgs: {
@@ -54,7 +54,7 @@ in
       '';
     };
 
-    nixpkgs.system = pkgs.lib.mkOption {
+    nixpkgs.system = mkOption {
       default = "";
       description = ''
         Specifies the Nix platform type for which NixOS should be built.

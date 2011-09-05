@@ -52,12 +52,20 @@
                </para>
 
                <xsl:if test="attr[@name = 'example']">
+                 
                  <para>
                    <emphasis>Example:</emphasis>
                    <xsl:text> </xsl:text>
-                   <literal>
-                     <xsl:apply-templates select="attr[@name = 'example']" />
-                   </literal>
+                   <xsl:choose>
+                     <xsl:when test="attr[@name = 'example']/attrs[attr[@name = '_type' and string[@value = 'literalExample']]]">
+                       <programlisting><xsl:value-of select="attr[@name = 'example']/attrs/attr[@name = 'text']/string/@value" /></programlisting>
+                     </xsl:when>
+                     <xsl:otherwise>
+                       <literal>
+                         <xsl:apply-templates select="attr[@name = 'example']" />
+                       </literal>
+                     </xsl:otherwise>
+                   </xsl:choose>
                  </para>
                </xsl:if>
 
