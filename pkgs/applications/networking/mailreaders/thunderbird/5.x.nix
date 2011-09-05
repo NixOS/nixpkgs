@@ -79,5 +79,6 @@ stdenv.mkDerivation {
       # see http://www.mozilla.org/foundation/licensing.html
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
     maintainers = with maintainers; [ pierron ];
+    platforms = with platforms; linux;
   };
 }
