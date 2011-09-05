@@ -1227,10 +1227,7 @@ let
 
   replace = callPackage ../tools/text/replace { };
 
-  /*
-  rdiff_backup = callPackage ../tools/backup/rdiff-backup {
-    python=python;  };
-  */
+  rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
