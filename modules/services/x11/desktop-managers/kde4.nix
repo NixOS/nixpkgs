@@ -109,6 +109,7 @@ in
           pkgs.kde4.kdebase # contains kde-workspace etc.
           pkgs.kde4.kde_wallpapers # contains kdm's default background
           pkgs.kde4.oxygen_icons
+          pkgs.virtuoso # to enable Nepomuk to find Virtuoso
 
           # Starts KDE's Polkit authentication agent.
           pkgs.kde4.polkit_kde_agent
