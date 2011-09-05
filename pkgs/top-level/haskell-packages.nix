@@ -1194,13 +1194,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   warp = callPackage ../development/libraries/haskell/warp {};
 
-  WebBits = callPackage ../development/libraries/haskell/WebBits {
-    parsec = self.parsec2;
-  };
-
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
     parsec = self.parsec2;
   };
+  WebBits_2_0 = callPackage ../development/libraries/haskell/WebBits/2.0.nix {
+    parsec = self.parsec2;
+  };
+  WebBits = self.WebBits_2_0;
 
   WebBitsHtml = callPackage ../development/libraries/haskell/WebBits-Html {};
 
