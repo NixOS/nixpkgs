@@ -8,11 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ki92wg0i9nhn1fh5mdcls5h9h3lf2k5r66snsags4x7zw0dmv2z";
   };
 
-  patches = [ (fetchurl {
-    url = https://git.reviewboard.kde.org/r/102466/diff/raw/;
-    name = "soprano-virtuoso-restart.patch";
-    sha256 = "0jk038fp7ii6847mbxdajhhc7f6ap6lriaklxcqqxf6ddj37gf3y";
-  })];
+  patches =
+    [ (fetchurl {
+        url = https://git.reviewboard.kde.org/r/102466/diff/raw/;
+        name = "soprano-virtuoso-restart.patch";
+        sha256 = "0jk038fp7ii6847mbxdajhhc7f6ap6lriaklxcqqxf6ddj37gf3y";
+      })
+    ];
 
   # We disable the Java backend, since we do not need them and they make the closure size much bigger
   buildInputs = [ cmake qt4 clucene_core librdf_redland libiodbc ];

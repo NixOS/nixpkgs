@@ -2,8 +2,10 @@
 , kdelibs, akonadi, shared_desktop_ontologies, libxml2, libxslt, prison }:
 
 kde {
-  buildInputs = [ boost gpgme shared_desktop_ontologies libical libxml2 libxslt
-    openldap cyrus_sasl akonadi prison ];
+  buildInputs =
+    [ boost gpgme shared_desktop_ontologies libical libxml2 libxslt
+      openldap cyrus_sasl akonadi prison
+    ];
 
   propagatedBuildInputs = [ kdelibs ];
 
