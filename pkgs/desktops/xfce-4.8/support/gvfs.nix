@@ -14,5 +14,5 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library (for Xfce)";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
-  }
+  };
 }
