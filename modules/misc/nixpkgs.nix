@@ -32,20 +32,25 @@ in
 
     nixpkgs.config = pkgs.lib.mkOption {
       default = {};
-      example = {
-        firefox.enableGeckoMediaPlayer = true;
-      };
+      example =
+        ''
+          { firefox.enableGeckoMediaPlayer = true;
+            packageOverrides = pkgs: {
+              firefox60Pkgs = pkgs.firefox60Pkgs.override {
+                enableOfficialBranding = true;
+              };
+            }; 
+          }
+        '';
       type = configType;
       description = ''
-        The configuration of the Nix Packages collection.  This expression
-        defines default value of attributes and allow packages to be
-        overriden globally via the `packageOverrides'.
-
-        the `packageOverrides' configuration option must be a set of new or
-        overriden packages.  Any occurence of `pkgs' inside this attribute
-        set refers to the *original* (un-overriden) set of packages,
-        allowing packageOverrides attributes to refer to the original
-        attributes (e.g. "packageOverrides.foo = ... pkgs.foo ...").
+        The configuration of the Nix Packages collection.  (For
+        details, see the Nixpkgs documentation.)  It allows you to set
+        package configuration options, and to override packages
+        globally through the <varname>packageOverrides</varname>
+        option.  The latter is a function that takes as an argument
+        the <emphasis>original</emphasis> Nixpkgs, and must evaluate
+        to a set of new or overriden packages.
       '';
     };
 
