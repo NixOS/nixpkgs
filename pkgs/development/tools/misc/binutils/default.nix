@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/${basename}.tar.bz2";
+    url = "http://nixos.org/tarballs/${basename}.tar.bz2";
     sha256 = "1iyhc42zfa0j2gaxy4zvpk47sdqj4rqvib0mb8597ss8yidyrav0";
   };
 
