@@ -165,9 +165,6 @@ let kernel = config.boot.kernelPackages.kernel; in
         # Unix domain sockets (needed by udev).
         "unix"
 
-        # Provide the CFQ scheduler in the initrd.
-        "cfq_iosched"
-        
         # Misc. stuff.
         "pcips2" "serio" "atkbd" "xtkbd"
       ];
@@ -177,7 +174,10 @@ let kernel = config.boot.kernelPackages.kernel; in
         "dm_mod"
         
         # For usual AT keyboards.
-        "i8042"        
+        "i8042"
+
+        # Provide the CFQ scheduler in the initrd.
+        "cfq_iosched"
       ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
