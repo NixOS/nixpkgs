@@ -2166,7 +2166,7 @@ let
         (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
         (x : x.ghc721Prefs) false false lowPrio);
 
-  # Still a release candidate.
+  # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
       ghc6121Binary (x : x.ghcHEADPrefs) false false lowPrio;
