@@ -1283,10 +1283,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
-  X11 = callPackage ../development/libraries/haskell/X11 {
-    inherit (pkgs.xlibs) libX11 libXinerama libXext;
-    xineramaSupport = true;
-  };
+  X11 = callPackage ../development/libraries/haskell/X11 {};
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {
     inherit (pkgs) pkgconfig freetype fontconfig;
