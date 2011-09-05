@@ -478,9 +478,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {
-    parsec = self.parsec3;
-  };
+  criterion = callPackage ../development/libraries/haskell/criterion {};
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
@@ -574,9 +572,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
-  ghcEvents = callPackage ../development/libraries/haskell/ghc-events {
-    mtl = self.mtl1;
-  };
+  ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
@@ -599,9 +595,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
-  GLURaw = callPackage ../development/libraries/haskell/GLURaw {
-    GLU = pkgs.freeglut;
-  };
+  GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
   GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {};
@@ -645,9 +639,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskeline = callPackage ../development/libraries/haskell/haskeline {};
 
-  haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {
-    mtl = self.mtl1;
-  };
+  haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
 
   haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
 
@@ -1263,15 +1255,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_0_0 = callPackage ../development/libraries/haskell/zlib/0.5.0.0.nix {
     inherit (pkgs) zlib;
   };
-
   zlib_0_5_2_0 = callPackage ../development/libraries/haskell/zlib/0.5.2.0.nix {
     inherit (pkgs) zlib;
   };
-
   zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
     inherit (pkgs) zlib;
   };
-
   zlib = self.zlib_0_5_0_0;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
