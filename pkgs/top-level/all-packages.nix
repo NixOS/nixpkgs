@@ -5175,6 +5175,10 @@ let
 
   iwlwifi6000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000-ucode { };
 
+  iwlwifi6000g2aucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2a-ucode { };
+
+  iwlwifi6000g2bucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2b-ucode { };
+
   kbd = callPackage ../os-specific/linux/kbd { };
 
   libaio = callPackage ../os-specific/linux/libaio { };
