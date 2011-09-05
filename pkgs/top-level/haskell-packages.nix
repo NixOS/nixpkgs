@@ -580,10 +580,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
-  ghcPaths_0_1_0_5 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.5.nix {};
-  ghcPaths_0_1_0_6 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.6.nix {};
-  ghcPaths_0_1_0_8 = callPackage ../development/libraries/haskell/ghc-paths/0.1.0.8.nix {};
-  ghcPaths = self.ghcPaths_0_1_0_6; # version 0.1.0.5 doesn't build with an up-to-date GHC
+  ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
 
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
 
@@ -1171,9 +1168,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uuParsingLib = callPackage ../development/libraries/haskell/uu-parsinglib {};
 
-  vacuum = callPackage ../development/libraries/haskell/vacuum {
-    ghcPaths = self.ghcPaths_0_1_0_6;
-  };
+  vacuum = callPackage ../development/libraries/haskell/vacuum {};
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
 
@@ -1323,12 +1318,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   frown = callPackage ../development/tools/parsing/frown {};
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
-  haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {
-    ghcPaths = self.ghcPaths_0_1_0_6;
-  };
-  haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {
-    ghcPaths = self.ghcPaths_0_1_0_6;
-  };
+  haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
+  haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
   haddock = self.haddock_2_7_2;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
