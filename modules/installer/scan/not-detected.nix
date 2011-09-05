@@ -8,6 +8,8 @@ with pkgs.lib;
   imports =
     [ ../../hardware/network/intel-5000.nix
       ../../hardware/network/intel-6000.nix
+      ../../hardware/network/intel-6000g2a.nix
+      ../../hardware/network/intel-6000g2b.nix
     ];
 
   config = mkDefault {
