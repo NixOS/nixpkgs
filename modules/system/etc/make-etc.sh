@@ -20,3 +20,4 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
         echo "${modes_[$i]}" > $out/etc/${targets_[$i]}.mode
     fi
 done
+

@@ -22,6 +22,30 @@ sub atomicSymlink {
 atomicSymlink $etc, $static or die;
 
 
+# Remove dangling symlinks that point to /etc/static.  These are
+# configuration files that existed in a previous configuration but not
+# in the current one.  For efficiency, don't look under /etc/nixos
+# (where all the NixOS sources live).
+sub cleanup {
+    if ($File::Find::name eq "/etc/nixos") {
+        $File::Find::prune = 1;
+        return;
+    }
+    if (-l $_) {
+        my $target = readlink $_;
+        if (substr($target, 0, length $static) eq $static) {
+            my $x = "/etc/static/" . substr($File::Find::name, length "/etc/");
+            unless (-l $x) {
+                print STDERR "removing obsolete symlink ‘$File::Find::name’...\n";
+                unlink "$_";
+            }
+        }
+    }
+}
+
+find(\&cleanup, "/etc");
+
+
 # For every file in the etc tree, create a corresponding symlink in
 # /etc to /etc/static.  The indirection through /etc/static is to make
 # switching to a new configuration somewhat more atomic.
@@ -42,24 +66,3 @@ sub link {
 }
 
 find(\&link, $etc);
-
-
-# Remove dangling symlinks that point to /etc/static.  These are
-# configuration files that existed in a previous configuration but not
-# in the current one.  For efficiency, don't look under /etc/nixos
-# (where all the NixOS sources live).
-sub cleanup {
-    if ($File::Find::name eq "/etc/nixos") {
-        $File::Find::prune = 1;
-        return;
-    }
-    if (-l $_) {
-        my $target = readlink $_;
-        if (substr($target, 0, length $static) eq $static) {
-            my $x = "/etc/static/" . substr($File::Find::name, length "/etc/");
-            unlink "$_" unless -e "$x";
-        }
-    }
-}
-
-find(\&cleanup, "/etc");
