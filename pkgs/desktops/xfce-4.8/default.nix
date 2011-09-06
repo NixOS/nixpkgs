@@ -5,7 +5,7 @@ rec {
 
   #### SUPPORT
 
-  #gnome_disk_utility = callPackage ./support/gnome-disk-utility.nix { };  
+  libgdu = callPackage ./support/libgdu.nix { };  
 
   # Gvfs is required by Thunar for the trash feature and for volume
   # mounting.  Should use the one from Gnome, but I don't want to mess
