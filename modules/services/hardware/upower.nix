@@ -35,6 +35,11 @@ with pkgs.lib;
 
     services.udev.packages = [ pkgs.upower ];
 
+    system.activationScripts.upower =
+      ''
+        mkdir -m 0755 -p /var/lib/upower
+      '';
+
   };
 
 }
