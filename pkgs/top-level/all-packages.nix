@@ -812,7 +812,9 @@ let
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
-  highlight = callPackage ../tools/text/highlight { };
+  highlight = callPackage ../tools/text/highlight {
+    lua = lua5;
+  };
 
   host = callPackage ../tools/networking/host { };
 
