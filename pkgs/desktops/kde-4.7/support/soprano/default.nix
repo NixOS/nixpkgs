@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
         name = "soprano-virtuoso-restart.patch";
         sha256 = "0jk038fp7ii6847mbxdajhhc7f6ap6lriaklxcqqxf6ddj37gf3y";
       })
+      ./find-virtuoso.patch 
     ];
 
   # We disable the Java backend, since we do not need them and they make the closure size much bigger
