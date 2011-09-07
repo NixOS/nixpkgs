@@ -18,15 +18,15 @@
 
 assert printerSupport -> cups != null;
 
-let rev = "0d412ba629471aeb83d1c39d167d389d8f4262e5"; in
+let rev = "93d09e1a38a94c2436c53ef5ff99668e6c55ef96"; in
 
 stdenv.mkDerivation (rec {
   name = "freerdp-1.0pre${rev}";
 
   src = fetchgit {
-    url = git://github.com/FreeRDP/FreeRDP-1.0.git;
+    url = git://github.com/FreeRDP/FreeRDP.git;
     inherit rev;
-    sha256 = "e8997677bde3d99c8ae6b6dd85ca2b6a17cca49f7dbd4d460908c969088130e6";
+    sha256 = "02594c248c7d3f30d43ac11ae5ea79df1c72d98b183caf041fc05db35d211837";
   };
 
   buildInputs = [
