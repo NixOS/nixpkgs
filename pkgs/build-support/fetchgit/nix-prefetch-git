@@ -55,9 +55,24 @@ for arg; do
   fi
 done
 
-if test -z "$url"; then
-    echo "syntax: nix-prefetch-git URL [REVISION [EXPECTED-HASH]]" >&2
+usage(){
+    echo  >&2 "syntax: nix-prefetch-git [options] [URL [REVISION [EXPECTED-HASH]]]
+
+Options:
+      --out path      Path where the output would be stored.
+      --url url       Any url understand by 'git clone'.
+      --rev ref       Any sha1 or references (such as refs/heads/master)
+      --hash h        Expected hash.
+      --deepClone     Clone submodules recursively.
+      --no-deepClone  Do not clone submodules.
+      --leave-dotGit  Keep the .git directories.
+      --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+"
     exit 1
+}
+
+if test -z "$url"; then
+  usage
 fi
 
 
@@ -200,8 +215,9 @@ clone_user_rev() {
 }
 
 if test -n "$builder"; then
-    mkdir $out
-    clone_user_rev "$out" "$url" "$rev"
+  test -n "$out" -a -n "$url" -a -n "$rev" || usage
+  mkdir $out
+  clone_user_rev "$out" "$url" "$rev"
 else
   if test -z "$hashType"; then
       hashType=sha256
