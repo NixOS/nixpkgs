@@ -26,7 +26,7 @@ stdenv.mkDerivation (rec {
   src = fetchgit {
     url = git://github.com/FreeRDP/FreeRDP.git;
     inherit rev;
-    sha256 = "02594c248c7d3f30d43ac11ae5ea79df1c72d98b183caf041fc05db35d211837";
+    sha256 = "a6662826fa0d8e5ecaaf42b40f1f3c54577a1d76ad58a01bd154647d5a1c01f7";
   };
 
   buildInputs = [
