@@ -909,7 +909,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
 
-  primitive = callPackage ../development/libraries/haskell/primitive {};
+  primitive_0_3_1 = callPackage ../development/libraries/haskell/primitive/0.3.1.nix {};
+  primitive_0_4_0_1 = callPackage ../development/libraries/haskell/primitive/0.4.0.1.nix {};
+  primitive = self.primitive_0_3_1;
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
