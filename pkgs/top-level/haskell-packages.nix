@@ -1093,6 +1093,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
 
+  systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
+
+  systemFileio = callPackage ../development/libraries/haskell/system-fileio {};
+
   tabular = callPackage ../development/libraries/haskell/tabular {};
 
   tagged = callPackage ../development/libraries/haskell/tagged {};
