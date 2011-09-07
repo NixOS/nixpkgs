@@ -35,7 +35,7 @@ let
       # Add the services and session.d directories to the session bus
       # search path.
       sed -i $out/session.conf \
-          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}|' \
+          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}&|' \
           -e 's|<includedir>session.d</includedir>|${sessionIncludeDirs}|'
     ''; # */
   };
