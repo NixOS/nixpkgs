@@ -1,14 +1,14 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper
-, svnSupport, subversion, perlLibs, smtpPerlLibs
+, svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , pythonSupport ? true
 , sendEmailSupport
 }:
 
 let
-  svn = subversion.override { perlBindings = true; };
+  svn = subversionClient.override { perlBindings = true; };
 in
 
 stdenv.mkDerivation rec {
