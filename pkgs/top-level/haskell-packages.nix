@@ -1288,9 +1288,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   epic = callPackage ../development/compilers/epic {};
 
-  flapjax = callPackage ../development/compilers/flapjax {
-    WebBits = self.WebBits_1_0;
-  };
+  flapjax = callPackage ../development/compilers/flapjax {};
 
   helium = callPackage ../development/compilers/helium {};
 
