@@ -30,5 +30,20 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-x"
   ] ++ stdenv.lib.optional printerSupport "--with-printer=cups";
+
+  meta = {
+    description = "A Remote Desktop Protocol Client";
+
+    longDescription = ''
+      FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
+      following the Microsoft Open Specifications.
+    '';
+
+    homepage = http://www.freerdp.com/;
+
+    license = "free-non-copyleft";
+
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
+  };
 }
 
