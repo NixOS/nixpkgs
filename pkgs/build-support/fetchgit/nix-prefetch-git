@@ -33,7 +33,6 @@ for arg; do
       --deepClone) deepClone=true;;
       --no-deepClone) deepClone=false;;
       --leave-dotGit) leaveDotGit=true;;
-      --keep-dotGit) leaveDotGit=;;
       --builder) builder=true;;
       *)
           argi=$(($argi + 1))
