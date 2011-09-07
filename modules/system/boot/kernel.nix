@@ -9,7 +9,7 @@ let kernel = config.boot.kernelPackages.kernel; in
   ###### interface
 
   options = {
-  
+
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       # We don't want to evaluate all of linuxPackages for the manual
@@ -89,7 +89,7 @@ let kernel = config.boot.kernelPackages.kernel; in
         include it in <option>boot.initrd.kernelModules</option>.
       '';
     };
-    
+
     boot.initrd.kernelModules = mkOption {
       default = [];
       description = "List of modules that are always loaded by the initrd.";
@@ -116,16 +116,16 @@ let kernel = config.boot.kernelPackages.kernel; in
   config = {
 
     system.build = { inherit kernel; };
-    
+
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
     boot.kernelParams =
       [ "splash=verbose"
         # Force the Completely Fair Scheduler to be used by default.
         "elevator=cfq"
-      ] ++ 
+      ] ++
       optional config.boot.vesa "vga=0x317";
-      
+
     boot.kernelModules = [ "loop" ];
 
     boot.initrd.availableKernelModules =
@@ -134,7 +134,7 @@ let kernel = config.boot.kernelPackages.kernel; in
         # detects them, but I'm keeping them for now for backwards
         # compatibility.
 
-        # Some SATA/PATA stuff.        
+        # Some SATA/PATA stuff.
         "ahci"
         "sata_nv"
         "sata_via"
@@ -168,11 +168,11 @@ let kernel = config.boot.kernelPackages.kernel; in
         # Misc. stuff.
         "pcips2" "serio" "atkbd" "xtkbd"
       ];
-      
+
     boot.initrd.kernelModules =
       [ # For LVM.
         "dm_mod"
-        
+
         # For usual AT keyboards.
         "i8042"
 
@@ -184,5 +184,5 @@ let kernel = config.boot.kernelPackages.kernel; in
     hardware.firmware = [ "${kernel}/lib/firmware" ];
 
   };
-  
+
 }
