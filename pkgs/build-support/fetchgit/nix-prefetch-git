@@ -210,7 +210,7 @@ clone_user_rev() {
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
 	echo "removing \`.git'..." >&2
-        find $out -name .git\* | xargs rm -rf
+        find $dir -name .git\* | xargs rm -rf
     fi
 }
 
