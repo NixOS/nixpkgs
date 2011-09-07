@@ -6553,6 +6553,8 @@ let
 
   freerdp = callPackage ../applications/networking/remote/freerdp { };
 
+  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
+
   fspot = callPackage ../applications/graphics/f-spot {
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
