@@ -771,6 +771,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   JsContracts = callPackage ../development/libraries/haskell/JsContracts {
     WebBits = self.WebBits_1_0;
+    WebBitsHtml = self.WebBitsHtml_1_0_1;
   };
 
   json = callPackage ../development/libraries/haskell/json/default.nix {};
@@ -1207,7 +1208,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   WebBits = self.WebBits_2_0;
 
-  WebBitsHtml = callPackage ../development/libraries/haskell/WebBits-Html {};
+  WebBitsHtml_1_0_1 = callPackage ../development/libraries/haskell/WebBits-Html/1.0.1.nix {};
+  WebBitsHtml_1_0_2 = callPackage ../development/libraries/haskell/WebBits-Html/1.0.2.nix {};
+  WebBitsHtml = self.WebBitsHtml_1_0_2;
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
