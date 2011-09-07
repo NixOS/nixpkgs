@@ -1168,7 +1168,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
-  vector = callPackage ../development/libraries/haskell/vector {};
+  vector_0_7_1 = callPackage ../development/libraries/haskell/vector/0.7.1.nix {};
+  vector_0_9 = callPackage ../development/libraries/haskell/vector/0.9.nix {
+    primitive = self.primitive_0_4_0_1;
+  };
+  vector = self.vector_0_7_1;
 
   vectorAlgorithms_0_4 = callPackage ../development/libraries/haskell/vector-algorithms/0.4.nix {};
   vectorAlgorithms_0_5_3 = callPackage ../development/libraries/haskell/vector-algorithms/0.5.3.nix {};
