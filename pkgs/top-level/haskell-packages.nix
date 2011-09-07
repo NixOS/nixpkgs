@@ -989,7 +989,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   regular = callPackage ../development/libraries/haskell/regular {};
 
-  repa = callPackage ../development/libraries/haskell/repa {};
+  repa = callPackage ../development/libraries/haskell/repa {
+    vector = self.vector_0_9;
+  };
 
   repaAlgorithms = callPackage ../development/libraries/haskell/repa-algorithms {};
 
