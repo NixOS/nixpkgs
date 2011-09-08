@@ -651,6 +651,8 @@ let
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  flvtool2 = callPackage ../tools/video/flvtool2 { };
+
   fontforge = callPackage ../tools/misc/fontforge { };
 
   fontforgeX = callPackage ../tools/misc/fontforge {
