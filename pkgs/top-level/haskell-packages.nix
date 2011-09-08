@@ -511,6 +511,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
   deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
+  deepseq_1_2_0_1 = callPackage ../development/libraries/haskell/deepseq/1.2.0.1.nix {};
   deepseq = self.deepseq_1_1_0_0;
 
   derive = callPackage ../development/libraries/haskell/derive {};
