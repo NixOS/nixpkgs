@@ -7202,13 +7202,11 @@ let
     httpd = apacheHttpd;
   };
 
-
   subversionClient = lowPrio (appendToName "client" (subversion.override {
     bdbSupport = false;
     perlBindings = true;
     pythonBindings = true;
   }));
-
 
   surf = callPackage ../applications/misc/surf {
     inherit (gtkLibs) gtk glib;
