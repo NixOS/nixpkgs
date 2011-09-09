@@ -17,7 +17,6 @@ stdenv.mkDerivation {
     install -t $out/lib/java clojure.jar
   ";
 
-
   meta = {
     description = "a Lisp dialect for the JVM";
     homepage = http://clojure.org/;

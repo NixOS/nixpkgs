@@ -2460,6 +2460,11 @@ let
     #clojure = clojure_binary;
   };
 
+  clooj_standalone_binary = callPackage ../development/interpreters/clojure/clooj.nix { };
+
+  clooj_wrapper = callPackage ../development/interpreters/clojure/clooj-wrapper.nix {
+    clooj = clooj_standalone_binary;
+  };
 
   erlang = callPackage ../development/interpreters/erlang { };
 
