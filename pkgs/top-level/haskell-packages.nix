@@ -769,6 +769,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
+
   irc = callPackage ../development/libraries/haskell/irc {
     parsec = self.parsec2;
   };
