@@ -640,6 +640,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {};
 
+  happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
+
   hashable = callPackage ../development/libraries/haskell/hashable {};
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
