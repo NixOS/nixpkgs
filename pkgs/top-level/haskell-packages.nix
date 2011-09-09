@@ -576,6 +576,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gdiff = callPackage ../development/libraries/haskell/gdiff {};
 
+  genericDeriving = callPackage ../development/libraries/haskell/generic-deriving {};
+
   getOptions = callPackage ../development/libraries/haskell/get-options {};
 
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
