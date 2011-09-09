@@ -616,7 +616,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs.gtkLibs) gtk;
-    glibc = if pkgs.stdenv.isLinux then pkgs.stdenv.glibc else null;
   };
 
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
