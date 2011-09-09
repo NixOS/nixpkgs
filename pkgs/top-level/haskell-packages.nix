@@ -1016,6 +1016,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   repaIo = callPackage ../development/libraries/haskell/repa-io {};
 
+  RepLib = callPackage ../development/libraries/haskell/RepLib {};
+
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
@@ -1160,6 +1162,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   transformers = self.transformers_0_2_2_0;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
+
+  typeEquality = callPackage ../development/libraries/haskell/type-equality {};
+
+  unbound = callPackage ../development/libraries/haskell/unbound {};
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
 
