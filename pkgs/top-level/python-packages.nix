@@ -734,11 +734,10 @@ let pythonPackages = python.modules // rec {
 
 
   matplotlib = buildPythonPackage ( rec {
-    name = "matplotlib-0.99.1.2";
-
+    name = "matplotlib-1.0.1";
     src = fetchurl {
       url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
-      sha256 = "12lhwgkahck795946hb8wp605c912zq9ds8067ybbifqs56q24b9";
+      sha256 = "1xksjix227n9hm6jnhlwkdf1yf1zgz18665cisqk8grv6xvn7g43";
     };
 
     doCheck = false;
@@ -975,18 +974,18 @@ let pythonPackages = python.modules // rec {
   });
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.4.1";
+    name = "numpy-1.6.1";
 
     src = fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "01lf3nc2lp1qkrqnnar50vb7i6y07d1zs6f9yc3kw4p5fd2vhyrf";
+      sha256 = "1pawfmf7j7pd3mjzhmmw9hkglc2qdirrkvv29m5nsmpf2b3ip2vq";
     };
 
     # TODO: add ATLAS=${pkgs.atlas}
     installCommand = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
       python setup.py build --fcompiler="gnu95"
-      python setup.py install --root="$out"
+      python setup.py install --prefix=$out
     '';
     doCheck = false;
 
@@ -1357,6 +1356,24 @@ let pythonPackages = python.modules // rec {
         };
       };
 
+  pyreport = buildPythonPackage (rec {
+    name = "pyreport-0.3.4c";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyreport/${name}.tar.gz";
+      md5 = "3076164a7079891d149a23f9435581db";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/pyreport;
+      license = "BSD";
+      description = "Pyreport makes notes out of a python script.";
+    };
+  });
+
+
   pysqlite = buildPythonPackage (rec {
     name = "pysqlite-2.5.5";
 
@@ -1510,6 +1527,25 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  reportlab = 
+   let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
+   in buildPythonPackage rec {
+    name = "reportlab-2.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/reportlab/${name}.tar.gz";
+      md5 = "cdf8b87a6cf1501de1b0a8d341a217d3";
+    };
+
+    buildInputs = [freetype];
+    doCheck = false; 
+
+    meta = {
+      description = "The ReportLab Toolkit. An Open Source Python library for generating PDFs and graphics.";
+      homepage = http://www.reportlab.com/;
+    };
+  };
+
   rdflib = buildPythonPackage (rec {
     name = "rdflib-3.0.0";
 
@@ -1591,6 +1627,32 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
       homepage = http://routes.groovie.org/;
+    };
+  };
+
+
+  scipy = buildPythonPackage rec {
+    name = "scipy-0.9.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
+      md5 = "ebfef6e8e82d15c875a4ee6a46d4e1cd";
+    };
+
+    buildInputs = [pkgs.gfortran];
+    propagatedBuildInputs = [ numpy ];
+    doCheck = false; 
+
+    # TODO: add ATLAS=${pkgs.atlas}
+    installCommand = ''
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      python setup.py build --fcompiler="gnu95"
+      python setup.py install --prefix=$out
+    '';
+
+    meta = {
+      description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
+      homepage = http://www.scipy.org/;
     };
   };
 
