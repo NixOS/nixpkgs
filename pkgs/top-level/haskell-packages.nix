@@ -124,7 +124,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4; # 7.2 ok, 7.3 ok
-    fgl          = self.fgl_5_4_2_4; # 7.2 ok, 7.3 fails
+    fgl          = self.fgl_5_4_2_4; # 7.2 ok, 7.3 ok
     GLUT         = self.GLUT_2_1_2_1; # 7.2 ok, 7.3 ok
     haskellSrc   = self.haskellSrc_1_0_1_4; # 7.2 fails, 7.3 fails
     html         = self.html_1_0_1_2; # 7.2 ok, 7.3 ok
@@ -141,9 +141,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb          = self.syb_0_3_3; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
-    HTTP         = self.HTTP_4000_1_2; # 7.2 ok, 7.3 fails
+    HTTP         = self.HTTP_4000_1_2; # 7.2 ok, 7.3 ok
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
-    text         = self.text_0_11_1_5; # 7.2 ok, 7.3 fails
+    text         = self.text_0_11_1_5; # 7.2 ok, 7.3 ok
     transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
     mtl          = self.mtl_2_0_1_0; # 7.2 ok, 7.3 ok
     random       = self.random_1_0_0_3; # 7.2 ok, 7.3 ok
