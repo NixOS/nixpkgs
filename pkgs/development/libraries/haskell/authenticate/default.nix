@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "authenticate";
-  version = "0.10.2";
-  sha256 = "02zgl7r2jpiw2srd6bzxkhxmbzvggbqs4qd4fhv7jn5y4jbwaw75";
+  version = "0.10.2.1";
+  sha256 = "1bi46bls57wzmd90grrp6rpvgzsz064yi804b6pavq0pxiz1yaj9";
   buildDepends = [
     aesonNative attoparsec base64Bytestring blazeBuilder
     caseInsensitive enumerator failure httpEnumerator httpTypes network
