@@ -1,4 +1,4 @@
-{ cabal, cairo, glib, glibc, gtk, gtk2hsBuildtools, mtl, pango
+{ cabal, cairo, glib, gtk, gtk2hsBuildtools, mtl, pango
 , pkgconfig
 }:
 
@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1rqy0390rahdrlb1ba1hjrygwin8ynxzif5flcici22bg5ixsgs2";
   buildDepends = [ cairo glib mtl pango ];
   buildTools = [ gtk2hsBuildtools ];
-  extraLibraries = [ glibc pkgconfig ];
+  extraLibraries = [ self.stdenv.gcc.libc pkgconfig ];
   pkgconfigDepends = [ glib gtk ];
   meta = {
     homepage = "http://www.haskell.org/gtk2hs/";

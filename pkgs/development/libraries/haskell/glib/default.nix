@@ -1,11 +1,11 @@
-{ cabal, glib, glibc, gtk2hsBuildtools, pkgconfig }:
+{ cabal, glib, gtk2hsBuildtools, pkgconfig }:
 
 cabal.mkDerivation (self: {
   pname = "glib";
   version = "0.12.0";
   sha256 = "1sqkj6adg87ccdnl9yy1p8yrv5xnfcrlaflj52nrh6anwlqy9z19";
   buildTools = [ gtk2hsBuildtools ];
-  extraLibraries = [ glibc pkgconfig ];
+  extraLibraries = [ self.stdenv.gcc.libc pkgconfig ];
   pkgconfigDepends = [ glib ];
   meta = {
     homepage = "http://www.haskell.org/gtk2hs/";
