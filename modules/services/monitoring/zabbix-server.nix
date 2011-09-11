@@ -63,7 +63,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.postgresql.enable = true;
+    services.postgresql.enable = cfg.dbServer == "localhost";
 
     users.extraUsers = singleton
       { name = "zabbix";
