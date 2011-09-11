@@ -11,7 +11,11 @@ let
     then f x
     else f;
 
-  mergeConfig = lhs: rhs:
+  mergeConfig = lhs_: rhs_:
+    let
+      lhs = optCall lhs_ { inherit pkgs; };
+      rhs = optCall rhs_ { inherit pkgs; };
+    in
     lhs // rhs //
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
