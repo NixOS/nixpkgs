@@ -634,8 +634,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   hamlet_0_8_2_1 = callPackage ../development/libraries/haskell/hamlet/0.8.2.1.nix {};
-  hamlet_0_10_0 = callPackage ../development/libraries/haskell/hamlet/0.10.0.nix {};
-  hamlet = self.hamlet_0_10_0;
+  hamlet_0_10_1 = callPackage ../development/libraries/haskell/hamlet/0.10.1.nix {};
+  hamlet = self.hamlet_0_10_1;
 
   happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {};
 
