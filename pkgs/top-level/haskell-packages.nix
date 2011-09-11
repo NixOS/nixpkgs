@@ -434,6 +434,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
+    glibc = if pkgs.stdenv.isDarwin then null else pkgs.glibc;
   };
 
   caseInsensitive_0_3 = callPackage ../development/libraries/haskell/case-insensitive/0.3.nix {};
@@ -601,6 +602,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   glib = callPackage ../development/libraries/haskell/glib {
     glib = pkgs.glib;
+    glibc = if pkgs.stdenv.isDarwin then null else pkgs.glibc;
   };
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
@@ -616,6 +618,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs.gtkLibs) gtk;
+    glibc = if pkgs.stdenv.isDarwin then null else pkgs.glibc;
   };
 
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
@@ -891,6 +894,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pango = callPackage ../development/libraries/haskell/pango {
     inherit (pkgs.gtkLibs) pango;
+    glibc = if pkgs.stdenv.isDarwin then null else pkgs.glibc;
   };
 
   parallel_1_1_0_1 = callPackage ../development/libraries/haskell/parallel/1.1.0.1.nix {};
