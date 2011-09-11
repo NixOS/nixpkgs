@@ -2490,6 +2490,8 @@ let
 
   kona = callPackage ../development/interpreters/kona {};
 
+  love = callPackage ../development/interpreters/love {};
+
   lua4 = callPackage ../development/interpreters/lua-4 { };
 
   lua5 = callPackage ../development/interpreters/lua-5 { };
