@@ -106,7 +106,13 @@ in
       else
         # KDE >= 4.7
         [ pkgs.kde4.kdelibs
-          pkgs.kde4.kdebase # contains kde-workspace etc.
+
+          pkgs.kde4.kde_baseapps # Splitted kdebase
+          pkgs.kde4.kde_workspace
+          pkgs.kde4.kde_runtime
+          pkgs.kde4.konsole
+          pkgs.kde4.kate
+
           pkgs.kde4.kde_wallpapers # contains kdm's default background
           pkgs.kde4.oxygen_icons
           pkgs.virtuoso # to enable Nepomuk to find Virtuoso
