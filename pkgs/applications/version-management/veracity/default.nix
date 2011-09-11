@@ -31,7 +31,8 @@ rec {
     mkdir pseudo-home
     export HOME=$PWD/pseudo-home
     export LC_ALL=en_US.UTF-8
-    ${if a.stdenv.isLinux then "export LOCALE_ARCHIVE=${a.glibcLocales}/lib/locale-archive;" else ""}
+    export LANG=en_US.UTF-8
+    ${if a.stdenv.isLinux then "export LOCALE_ARCHIVE=${a.glibcLocales}/lib/locale/locale-archive;" else ""}
     make test || true
   '' else "") ["doMake" "minInit"];
 
