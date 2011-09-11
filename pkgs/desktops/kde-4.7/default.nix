@@ -1,7 +1,7 @@
 { callPackage, callPackageOrig, stdenv, qt47 }:
 
 let
-  release = "4.7.0";
+  release = "4.7.1";
 
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {
@@ -47,7 +47,12 @@ kde.modules // kde.individual //
 
   qt4 = qt47;
 
-  kdebase_workspace = kde.individual.kde_workspace;
+  kdebase_workspace = kde.modules.kde_workspace;
+
+  kde_baseapps = kde.modules.kde_baseapps // {
+    inherit (kde.individual) kate konsole;
+    propagatedUserEnvPackages = [ kde.individual.kate kde.individual.konsole ];
+  };
 
   inherit release;
 
