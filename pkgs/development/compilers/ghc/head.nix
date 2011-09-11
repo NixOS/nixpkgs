@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ghc, perl, gmp, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "7.3.20110825";
+  version = "7.3.20110910";
 
   name = "ghc-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${homepage}/dist/current/dist/${name}-src.tar.bz2";
-    sha256 = "06ngp3blg1nb1akiyxx2iypiwmybw4jg67lk9nmsn1jmj41v7dsm";
+    sha256 = "1y8ixh6vcbqxqddc872kjfzxj94q4dhyaprdv7kv2yzwgp49qza5";
   };
 
   buildInputs = [ghc perl gmp ncurses];
