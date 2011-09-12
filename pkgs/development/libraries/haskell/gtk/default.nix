@@ -1,17 +1,17 @@
-{ cabal, cairo, glib, gtk, gtk2hsBuildtools, mtl, pango
+{ cabal, cairo, glib, gtk, gtk2hsBuildtools, libc, mtl, pango
 , pkgconfig
 }:
 
 cabal.mkDerivation (self: {
   pname = "gtk";
-  version = "0.12.0";
-  sha256 = "1rqy0390rahdrlb1ba1hjrygwin8ynxzif5flcici22bg5ixsgs2";
+  version = "0.12.1";
+  sha256 = "007wxxff2ibfi3848yjxg7hqgpiqpn0zpyivjvjv0zphk1d2j9sv";
   buildDepends = [ cairo glib mtl pango ];
   buildTools = [ gtk2hsBuildtools ];
-  extraLibraries = [ self.stdenv.gcc.libc pkgconfig ];
+  extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ glib gtk ];
   meta = {
-    homepage = "http://www.haskell.org/gtk2hs/";
+    homepage = "http://projects.haskell.org/gtk2hs/";
     description = "Binding to the Gtk+ graphical user interface library";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
