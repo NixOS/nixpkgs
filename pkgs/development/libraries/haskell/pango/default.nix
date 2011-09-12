@@ -1,17 +1,16 @@
-{ cabal, cairo, glib, gtk2hsBuildtools, mtl, pango
-, pkgconfig
+{ cabal, cairo, glib, gtk2hsBuildtools, libc, mtl, pango, pkgconfig
 }:
 
 cabal.mkDerivation (self: {
   pname = "pango";
-  version = "0.12.0";
-  sha256 = "1vp0hl4kpgcc3xphml1hmy04hqcn12y0ks03nn32g6g33ni9mwrb";
+  version = "0.12.1";
+  sha256 = "0bfwgz2wx0hw9lrf9fdc0pic7xjkiqnv1wr1lfp55gm2qhakz83w";
   buildDepends = [ cairo glib mtl ];
   buildTools = [ gtk2hsBuildtools ];
-  extraLibraries = [ self.stdenv.gcc.libc pkgconfig ];
+  extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ cairo pango ];
   meta = {
-    homepage = "http://www.haskell.org/gtk2hs/";
+    homepage = "http://projects.haskell.org/gtk2hs/";
     description = "Binding to the Pango text rendering engine";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
