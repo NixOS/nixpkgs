@@ -434,6 +434,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
+    libc = pkgs.stdenv.gcc.libc;
   };
 
   caseInsensitive = callPackage ../development/libraries/haskell/case-insensitive {};
@@ -595,10 +596,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs.gnome) libglade;
     gtkC = pkgs.gnome.gtk;
+    libc = pkgs.stdenv.gcc.libc;
   };
 
   glib = callPackage ../development/libraries/haskell/glib {
     glib = pkgs.glib;
+    libc = pkgs.stdenv.gcc.libc;
   };
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
@@ -614,6 +617,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs.gtkLibs) gtk;
+    libc = pkgs.stdenv.gcc.libc;
   };
 
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
@@ -621,6 +625,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
     inherit (pkgs.gnome) gtksourceview;
+    libc = pkgs.stdenv.gcc.libc;
   };
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
@@ -889,6 +894,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pango = callPackage ../development/libraries/haskell/pango {
     inherit (pkgs.gtkLibs) pango;
+    libc = pkgs.stdenv.gcc.libc;
   };
 
   parallel_1_1_0_1 = callPackage ../development/libraries/haskell/parallel/1.1.0.1.nix {};
@@ -1097,7 +1103,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
-  svgcairo = callPackage ../development/libraries/haskell/svgcairo {};
+  svgcairo = callPackage ../development/libraries/haskell/svgcairo {
+    libc = pkgs.stdenv.gcc.libc;
+  };
 
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
 
