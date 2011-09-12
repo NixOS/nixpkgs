@@ -122,7 +122,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     boot.kernelParams =
       [ "splash=verbose"
         # Force the Completely Fair Scheduler to be used by default.
-        "elevator=cfq"
+        #"elevator=cfq"
       ] ++
       optional config.boot.vesa "vga=0x317";
 
