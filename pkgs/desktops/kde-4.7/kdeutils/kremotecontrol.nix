@@ -1,7 +1,7 @@
-{ kde, kdelibs, libXtst }:
+{ kde, kdelibs, kde_workspace, libXtst }:
 
 kde {
-  buildInputs = [ kdelibs libXtst ];
+  buildInputs = [ kdelibs kde_workspace libXtst ];
 
   meta = {
     description = "KDE remote control";
