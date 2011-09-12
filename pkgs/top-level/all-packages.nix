@@ -4253,6 +4253,8 @@ let
     fetchurl = fetchurlBoot;
   };
 
+  opensslNew = callPackage ../development/libraries/openssl/1.0.0e.nix { };
+
   ortp = callPackage ../development/libraries/ortp { };
 
   pangoxsl = callPackage ../development/libraries/pangoxsl {
