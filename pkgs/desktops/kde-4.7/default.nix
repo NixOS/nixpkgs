@@ -49,11 +49,6 @@ kde.modules // kde.individual //
 
   kdebase_workspace = kde.modules.kde_workspace;
 
-  kde_baseapps = kde.modules.kde_baseapps // {
-    inherit (kde.individual) kate konsole;
-    propagatedUserEnvPackages = [ kde.individual.kate kde.individual.konsole ];
-  };
-
   inherit release;
 
   full = stdenv.lib.attrValues kde.modules;
