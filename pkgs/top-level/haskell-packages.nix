@@ -1030,9 +1030,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
-  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {
-    caseInsensitive = self.caseInsensitive_0_3;
-  };
+  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {
     vectorAlgorithms = self.vectorAlgorithms_0_4;
