@@ -200,13 +200,14 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc4";
+    version = "3.1-rc5";
 
-    modDirVersion = "3.1.0-rc4";
+    modDirVersion = "3.1.0-rc5";
   
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.bz2";
-      sha256 = "1inb4iyj9r7lk68bw1mznxk726n3cxcbylqnb62ycisi1z2gxwjw";
+      url = "https://github.com/torvalds/linux/tarball/v${version}";
+      sha256 = "1gs12hnkci1w21wwkpd9985ws6aldki6gzgdi4xmffcr4ypf1j4k";
+      name = "v${version}.tar.gz";
     };
 
     config = configWithPlatform stdenv.platform;
