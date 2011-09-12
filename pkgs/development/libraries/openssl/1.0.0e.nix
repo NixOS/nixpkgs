@@ -14,7 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "1xw0ffzmr4wbnb0glywgks375dvq8x87pgxmwx6vhgvkflkxqqg3";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+  patches =
+    [ # Allow the location of the X509 certificate file (the CA
+      # bundle) to be set through the environment variable
+      # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
+      # default location ($out/ssl/cert.pem) doesn't exist, and
+      # hardcoding something like /etc/ssl/cert.pem is impure and
+      # cannot be overriden per-process.  For security, the
+      # environment variable is ignored for setuid binaries.
+      ./cert-file.patch
+    ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
   
