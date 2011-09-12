@@ -1032,10 +1032,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
-  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {
-    vectorAlgorithms = self.vectorAlgorithms_0_4;
-    caseInsensitive = self.caseInsensitive_0_3;
-  };
+  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
