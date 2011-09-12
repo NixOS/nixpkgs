@@ -2,14 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "epic";
-  version = "0.1.11";
-  sha256 = "12dz1wjaf3n8fqk46vhpnxq9z633wi6wyihcmif7amxmqv3l8zn9";
+  version = "0.1.13";
+  sha256 = "00rdprgndrvssrjlp6jh5jak2rxq6bcd2dknldx6i8h1cq6i69rb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl ];
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];
-  noHaddock = true;
   meta = {
     homepage = "http://www.dcs.st-and.ac.uk/~eb/epic.php";
     description = "Compiler for a simple functional language";
