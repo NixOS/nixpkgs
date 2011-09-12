@@ -8389,6 +8389,8 @@ let
   texLiveAggregationFun =
     (builderDefsPackage (import ../misc/tex/texlive/aggregate.nix));
 
+  texDisser = callPackage ../misc/tex/disser {};
+
   texLiveContext = builderDefsPackage (import ../misc/tex/texlive/context.nix) {
     inherit texLive;
   };
