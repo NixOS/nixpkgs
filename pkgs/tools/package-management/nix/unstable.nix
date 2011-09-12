@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.0pre29060";
+  name = "nix-1.0pre29200";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/1301810/download/4/${name}.tar.bz2";
-    sha256 = "f403213b56acfb2e74ae1e6fd136f3726940f098220d2ae8b46fa54c08f1aad0";
+    url = "http://hydra.nixos.org/build/1320284/download/4/${name}.tar.bz2";
+    sha256 = "a10f65b52bcf72b9ec7bf5610e16de2d49c1cc4c008bf0a93281e8e2233fa1b1";
   };
 
   buildNativeInputs = [ perl pkgconfig ];
