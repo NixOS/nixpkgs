@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = { 
-    description = "flex sdk flash / action script developement kit";
+    description = "Flex SDK for Adobe Flash / ActionScript";
     homepage = "http://www.adobe.com/support/documentation/en/flex/3/releasenotes_flex3_sdk.html#installation";
     license = "MPLv1.1"; #  Mozilla Public License Version 1.1
   };
