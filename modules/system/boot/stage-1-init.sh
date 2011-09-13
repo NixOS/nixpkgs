@@ -55,7 +55,7 @@ mkdir -p /sys
 mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
 mkdir -p /run
-mount -t tmpfs none /run
+mount -t tmpfs -o "mode=1777,size=@runSize@" none /run
 
 
 # Process the kernel command line.

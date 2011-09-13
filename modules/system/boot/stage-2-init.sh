@@ -126,7 +126,7 @@ rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 if ! mountpoint -q /run; then
     rm -rf /run
     mkdir -m 0755 -p /run
-    mount -t tmpfs -o "mode=755" none /run
+    mount -t tmpfs -o "mode=1777,size=@runSize@" none /run
 fi
 
 mkdir -m 0700 -p /run/lock

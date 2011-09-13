@@ -282,7 +282,7 @@ let
 
     inherit udevConf extraUtils;
 
-    inherit (config.boot) resumeDevice devSize;
+    inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
       postDeviceCommands postMountCommands kernelModules;

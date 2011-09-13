@@ -32,6 +32,14 @@ let
         '';
       };
 
+      runSize = pkgs.lib.mkOption {
+        default = "50%";
+        example = "256m";
+        description = ''
+          Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+          for the accepted syntax.
+        '';
+      };
     };
 
   };
@@ -43,7 +51,7 @@ let
     src = ./stage-2-init.sh;
     isExecutable = true;
     inherit kernel;
-    inherit (config.boot) devShmSize;
+    inherit (config.boot) devShmSize runSize;
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
     path =
