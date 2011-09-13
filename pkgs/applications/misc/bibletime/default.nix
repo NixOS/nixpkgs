@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
 
-  version = "2.7.3";
+  version = "2.8.1";
 
   name = "bibletime-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/bibletime/${name}.tar.bz2";
-    sha256 = "0171hlwg4rjv93b3gwcyv3nsj2kzwf4n8f6jw6ld18x7xmk9rkdg";
+    sha256 = "00xrgv4cx50ddbcfjiz3vl0cvsixwd0vj7avjvhrh617qqg8w325";
   };
-  
+
   prePatch = ''
     patchShebangs .;
   '';
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.bibletime.info/;
     platforms = stdenv.lib.platforms.linux;
     license = "GPLv2";
+    maintainers = [ stdenv.lib.maintainers.piotr ];
   };
-
 }
-
