@@ -27,8 +27,10 @@ stdenv.mkDerivation rec {
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings" ];
 
-  buildInputs = [ intltool wirelesstools pkgconfig dbus dbus_glib udev libnl1
+  buildInputs = [ intltool wirelesstools pkgconfig dbus udev libnl1
     libuuid polkit gnutls ppp libtasn1 libgcrypt ];
+
+  propagatedBuildInputs = [ dbus_glib ];
 
   patches = [ ./nixos-purity.patch ];
 
