@@ -33,7 +33,21 @@ stdenv.mkDerivation {
     ${preBuild}
   '';
   
-  installPhase = ''        
+  installPhase = ''
+    addDeps()
+    {
+	if [ -f $1/nix-support/dotnet-assemblies ]
+	then
+	    for i in $(cat $1/nix-support/dotnet-assemblies)
+	    do
+		windowsPath=$(cygpath --windows $i)
+		assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+		
+		addDeps $i
+	    done
+	fi
+    }
+    
     for i in ${toString assemblyInputs}
     do
 	windowsPath=$(cygpath --windows $i) 
@@ -45,6 +59,8 @@ stdenv.mkDerivation {
 	else
 	    assemblySearchPaths="$assemblySearchPaths;$windowsPath"
 	fi
+	
+	addDeps $i
     done
       
     echo "Assembly search paths are: $assemblySearchPaths"

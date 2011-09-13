@@ -28,12 +28,27 @@ dotnetenv.buildSolution {
   slnFile = "Wrapper.sln";
   assemblyInputs = [ application ];
   preBuild = ''
+    addRuntimeDeps()
+    {
+	if [ -f $1/nix-support/dotnet-assemblies ]
+	then
+	    for i in $(cat $1/nix-support/dotnet-assemblies)
+	    do
+		windowsPath=$(cygpath --windows $i | sed 's|\\|\\\\|g')
+		assemblySearchArray="$assemblySearchArray @\"$windowsPath\""
+		
+		addRuntimeDeps $i
+	    done
+	fi
+    }
+    
     export exePath=$(cygpath --windows $(find ${application} -name \*.exe) | sed 's|\\|\\\\|g')
     
     # Generate assemblySearchPaths string array contents
     for path in ${toString assemblyInputs}
     do
         assemblySearchArray="$assemblySearchArray @\"$(cygpath --windows $path | sed 's|\\|\\\\|g')\", "
+	addRuntimeDeps $path
     done
     
     sed -e "s|@ROOTNAMESPACE@|${namespace}Wrapper|" \
