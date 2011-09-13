@@ -1,0 +1,64 @@
+using System;
+using System.Reflection;
+using System.IO;
+
+namespace @NAMESPACE@
+{
+    class @MAINCLASSNAME@Wrapper
+    {
+        private String[] AssemblySearchPaths = { @ASSEMBLYSEARCHPATHS@ };
+
+        public @MAINCLASSNAME@Wrapper()
+        {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve += new ResolveEventHandler(MyResolveEventHandler);
+        }
+
+        static void Main(string[] args)
+        {
+            // Initialise the wrapper so that the missing library assemblies are loaded
+            new @MAINCLASSNAME@Wrapper();
+
+            // Call the original main method
+            @MAINCLASSNAME@.Main2(args);
+        }
+
+        private Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            //This handler is called only when the common language runtime tries to bind to the assembly and fails.
+
+            //Retrieve the list of referenced assemblies in an array of AssemblyName.
+            Assembly MyAssembly, executingAssemblies;
+            string assemblyPath = "";
+
+            executingAssemblies = Assembly.GetExecutingAssembly();
+            AssemblyName[] referencedAssemblies = executingAssemblies.GetReferencedAssemblies();
+
+            //Loop through the array of referenced assembly names.
+            foreach (AssemblyName assemblyName in referencedAssemblies)
+            {
+                //Check for the assembly names that have raised the "AssemblyResolve" event.
+                if (assemblyName.FullName.Substring(0, assemblyName.FullName.IndexOf(",")) == args.Name.Substring(0, args.Name.IndexOf(",")))
+                {
+                    //Retrieve the name of the assembly from where it has to be loaded.				
+                    String dllName = args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
+
+                    //Search for the right path of the library assembly
+                    foreach (String currentAssemblyPath in AssemblySearchPaths)
+                    {
+                        assemblyPath = currentAssemblyPath + "/" + dllName;
+                        if (File.Exists(assemblyPath))
+                            break;
+                    }
+                }
+            }
+
+            //Load the assembly from the specified path. 					
+            MyAssembly = Assembly.LoadFrom(assemblyPath);
+
+            //Return the loaded assembly.
+            return MyAssembly;
+        }
+
+    }
+}
