@@ -773,6 +773,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
+  ioStorage = callPackage ../development/libraries/haskell/io-storage {};
+
   irc = callPackage ../development/libraries/haskell/irc {
     parsec = self.parsec2;
   };
