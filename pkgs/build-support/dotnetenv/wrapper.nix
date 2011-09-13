@@ -33,7 +33,7 @@ dotnetenv.buildSolution {
     # Generate assemblySearchPaths string array contents
     for path in ${toString assemblyInputs}
     do
-        assemblySearchArray="$assemblySearchArray @\"$(cygpath --windows $path | sed 's|\\|\\\\|g')\""
+        assemblySearchArray="$assemblySearchArray @\"$(cygpath --windows $path | sed 's|\\|\\\\|g')\", "
     done
     
     sed -e "s|@ROOTNAMESPACE@|${namespace}Wrapper|" \
