@@ -66,7 +66,7 @@ let
         ${config.powerManagement.powerUpCommands}
       '';
   };
-  
+
 in
 
 {

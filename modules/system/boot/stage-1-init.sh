@@ -8,7 +8,7 @@ export PATH=@extraUtils@/bin
 
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
-    
+
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
     cat <<EOF
@@ -24,7 +24,7 @@ of the following keys:
 EOF
 
     read reply
-    
+
     case $reply in
         f)
             exec @shell@;;
@@ -126,7 +126,7 @@ udevadm control --env=STARTUP=
 echo "starting device mapper and LVM..."
 lvm vgscan
 lvm vgchange -ay
-                                                                        
+
 if test -n "$debug1devices"; then fail; fi
 
 
@@ -176,7 +176,7 @@ checkFS() {
     then
         return 0
     fi
-    
+
     # Don't run `fsck' if the machine is on battery power.  !!! Is
     # this a good idea?
     if ! onACPower; then

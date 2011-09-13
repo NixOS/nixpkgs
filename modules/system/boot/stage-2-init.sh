@@ -36,7 +36,7 @@ mount -n -o remount,rw none /
 if [ ! -e /proc/1 ]; then
     mkdir -m 0755 -p /proc
     mount -n -t proc none /proc
-    mkdir -m 0755 -p /sys 
+    mkdir -m 0755 -p /sys
     mount -t sysfs none /sys
     mkdir -m 0755 -p /dev
     mount -t tmpfs -o "mode=0755" none /dev
@@ -86,9 +86,9 @@ done
 mkdir -m 0777 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
-mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts 
+mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
-mkdir -m 01777 -p /tmp 
+mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var
 mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
