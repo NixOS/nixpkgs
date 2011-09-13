@@ -1230,11 +1230,11 @@ let pythonPackages = python.modules // rec {
   });
 
   pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.5.19";
+    name = "pycryptopp-0.5.29";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
-      sha256 = "6b610b3e5742d366d4fbe96b5f20d8459db9aba4fb802e6e5aab547f22ad04b9";
+      sha256 = "d504775b73d30fb05a3237f83c4e9e1ff3312cbba90a4a23e6cbb7d32219502b";
     };
 
     # Prefer crypto++ library from the Nix store over the one that's included
