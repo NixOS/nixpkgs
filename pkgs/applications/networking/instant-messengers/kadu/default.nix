@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     homepage = http://www.kadu.net/w/English:Main_Page;
     license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.piotr ];
   };
 }
