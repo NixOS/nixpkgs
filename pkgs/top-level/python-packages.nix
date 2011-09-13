@@ -966,7 +966,7 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.gtkLibs.glib pkgs.gtkLibs.gtk pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
-    
+
     meta = {
       description = "Python bindings for libnotify";
       homepage = http://www.galago-project.org/;
@@ -1527,7 +1527,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  reportlab = 
+  reportlab =
    let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
     name = "reportlab-2.5";
@@ -1538,7 +1538,7 @@ let pythonPackages = python.modules // rec {
     };
 
     buildInputs = [freetype];
-    doCheck = false; 
+    doCheck = false;
 
     meta = {
       description = "The ReportLab Toolkit. An Open Source Python library for generating PDFs and graphics.";
@@ -1641,7 +1641,7 @@ let pythonPackages = python.modules // rec {
 
     buildInputs = [pkgs.gfortran];
     propagatedBuildInputs = [ numpy ];
-    doCheck = false; 
+    doCheck = false;
 
     # TODO: add ATLAS=${pkgs.atlas}
     installCommand = ''
