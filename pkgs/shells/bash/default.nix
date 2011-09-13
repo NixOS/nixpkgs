@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, bison}:
+{stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, bison, bashCompletion ? null}:
 
 assert interactive -> readline != null;
 
@@ -47,18 +47,22 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [bison]
     ++ stdenv.lib.optional (texinfo != null) texinfo
     ++ stdenv.lib.optional interactive readline;
-   
+
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
 
+  '' + (if interactive && bashCompletion != null then ''
+    ensureDir "$out/etc"
+    echo >"$out/etc/bash_completion" '. "${bashCompletion}/etc/bash_completion"'
+  '' else ''
     # Install the completion examples.
     ensureDir "$out/etc"
     cp -v "examples/complete/bash_completion" "$out/etc"
 
     ensureDir "$out/etc/bash_completion.d"
     cp -v "examples/complete/complete.gnu-longopt" "$out/etc/bash_completion.d"
-  '';
+  '');
 
   meta = {
     homepage = http://www.gnu.org/software/bash/;
@@ -79,7 +83,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
   };
 
   passthru = {
