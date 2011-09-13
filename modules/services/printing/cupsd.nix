@@ -125,10 +125,10 @@ in
 
     environment.etc =
       [ # CUPS expects the following files in its ServerRoot.
-        { source = "${cups}/etc/cups/mime.convs";
+        { source = "${cups}/share/cups/mime/mime.convs";
           target = "cups/mime.convs";
         }
-        { source = "${cups}/etc/cups/mime.types";
+        { source = "${cups}/share/cups/mime/mime.types";
           target = "cups/mime.types";
         }
       ];
@@ -153,7 +153,7 @@ in
       };
 
     services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];
-    
+
     services.printing.cupsdConf =
       ''
         LogLevel info
