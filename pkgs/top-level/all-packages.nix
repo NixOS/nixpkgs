@@ -1178,6 +1178,8 @@ let
   ppp = builderDefsPackage (import ../tools/networking/ppp) {
   };
 
+  pptp = callPackage ../tools/networking/pptp {};
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
