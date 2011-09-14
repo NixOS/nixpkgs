@@ -70,16 +70,14 @@ in
 
   config = mkIf cfg.enable {
 
-    jobs.smartd =
-      { description = "S.M.A.R.T. Daemon";
+    jobs.smartd = {
+        description = "S.M.A.R.T. Daemon";
 
         environment.TZ = config.time.timeZone;
 
         startOn = "started syslogd";
 
-        daemonType = "daemon";
-
-        exec = "${pkgs.smartmontools}/sbin/smartd --pidfile=/var/run/smartd.pid ${smartdFlags}";
+        exec = "${pkgs.smartmontools}/sbin/smartd --no-fork --pidfile=/var/run/smartd.pid ${smartdFlags}";
       };
 
   };
