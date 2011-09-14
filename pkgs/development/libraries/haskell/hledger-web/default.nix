@@ -20,5 +20,9 @@ cabal.mkDerivation (self: {
     description = "A web interface for the hledger accounting tool";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
