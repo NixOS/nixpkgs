@@ -123,16 +123,6 @@ in
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
 
-    environment.etc =
-      [ # CUPS expects the following files in its ServerRoot.
-        { source = "${cups}/etc/cups/mime.convs";
-          target = "cups/mime.convs";
-        }
-        { source = "${cups}/etc/cups/mime.types";
-          target = "cups/mime.types";
-        }
-      ];
-
     jobs.cupsd =
       { description = "CUPS printing daemon";
 
