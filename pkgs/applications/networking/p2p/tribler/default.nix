@@ -34,7 +34,7 @@ stdenv.mkDerivation {
           --set _TRIBLERPATH $out/share/tribler \
           --set PYTHONPATH $out/share/tribler:$program_PYTHONPATH \
           --run 'cd $_TRIBLERPATH' \
-          --add-flags $out/share/tribler/Tribler/Main/tribler.py
+          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py"
     '';
 
   meta = {
