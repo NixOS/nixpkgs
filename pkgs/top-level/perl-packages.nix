@@ -2326,7 +2326,7 @@ rec {
     patches =
       [ ../development/perl-modules/net-amazon-mechanicalturk.patch ];
     propagatedBuildInputs =
-      [ DigestHMAC LWP URI XMLParser IOString ];
+      [ DigestHMAC LWP URI XMLParser IOString CryptSSLeay ];
     buildInputs = [ DBI DBDSQLite ];
   };
 
