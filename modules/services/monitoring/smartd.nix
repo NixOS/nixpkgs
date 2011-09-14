@@ -24,7 +24,7 @@ let
 
   smartdConf = pkgs.writeText "smartd.conf" (concatMapStrings (device:
     ''
-      ${device} -m root -M exec ${smartdMail}
+      ${device} -a -m root -M exec ${smartdMail}
     ''
     ) cfg.devices);
 
