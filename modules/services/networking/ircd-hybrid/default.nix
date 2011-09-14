@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.ircdHybrid;
-  
+
   ircdService = pkgs.stdenv.mkDerivation rec {
     name = "ircd-hybrid-service";
     scripts = [ "=>/bin" ./control.in ];
@@ -17,7 +17,7 @@ let
     inherit (cfg) serverName sid description adminEmail
             extraPort;
 
-    cryptoSettings = 
+    cryptoSettings =
       (optionalString (cfg.rsaKey != null) "rsa_private_key_file = \"${cfg.rsaKey}\";\n") +
       (optionalString (cfg.certificate != null) "ssl_certificate_file = \"${cfg.certificate}\";\n");
 
@@ -35,7 +35,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.ircdHybrid = {
 
       enable = mkOption {
@@ -70,7 +70,7 @@ in
         default = null;
         example = /root/certificates/irc.key;
         description = "
-          IRCD server RSA key. 
+          IRCD server RSA key.
         ";
       };
 
@@ -86,7 +86,7 @@ in
         default = "<bit-bucket@example.com>";
         example = "<name@domain.tld>";
         description = "
-          IRCD server administrator e-mail. 
+          IRCD server administrator e-mail.
         ";
       };
 
@@ -115,7 +115,7 @@ in
   config = mkIf config.services.ircdHybrid.enable {
 
     users.extraUsers = singleton
-      { name = "ircd"; 
+      { name = "ircd";
         description = "IRCD owner";
       };
 

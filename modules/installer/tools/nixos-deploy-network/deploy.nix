@@ -6,16 +6,16 @@
 
 let
   pkgs = import nixpkgs {};
-  
+
   inherit (builtins) attrNames getAttr listToAttrs;
   inherit (pkgs.lib) concatMapStrings zipAttrs;
-  
+
   networks = map (networkExpr: import networkExpr) networkExprs;
-  
+
   network = zipAttrs networks;
-  
+
   generateRollbackSucceededPhase = network: configs:
-    concatMapStrings (configurationName: 
+    concatMapStrings (configurationName:
       let
 	config = getAttr configurationName configs;
       in
@@ -24,15 +24,15 @@ let
 	then
 	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback
 	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
-	    
+
 	    rollback=$((rollback + 1))
 	fi
       ''
-    ) (attrNames network)  
+    ) (attrNames network)
   ;
-  
+
   generateDistributionPhase = network: configs:
-    concatMapStrings (configurationName: 
+    concatMapStrings (configurationName:
       let
 	config = getAttr configurationName configs;
       in
@@ -42,28 +42,28 @@ let
       ''
     ) (attrNames network)
   ;
-  
+
   generateActivationPhase = network: configs:
-    concatMapStrings (configurationName: 
+    concatMapStrings (configurationName:
       let
 	config = getAttr configurationName configs;
       in
       ''
         echo "=== activating system configuration on ${getAttr targetProperty (config.deployment)} ==="
-	ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} || 
+	ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} ||
 	  (ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback; rollbackSucceeded)
-	
+
         ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch ||
 	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback
 	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
 	    rollbackSucceeded
 	  )
-	
+
 	succeeded=$((succeeded + 1))
       ''
     ) (attrNames network)
   ;
-  
+
   evaluateMachines = network:
     listToAttrs (map (configurationName:
       let
@@ -93,27 +93,27 @@ pkgs.stdenv.mkDerivation {
   # This script has a zillion dependencies and is trivial to build, so
   # we don't want to build it remotely.
   preferLocalBuild = true;
-  
-  buildCommand = 
+
+  buildCommand =
   ''
     ensureDir $out/bin
     cat > $out/bin/deploy-systems << "EOF"
     #! ${pkgs.stdenv.shell} -e
-    
+
     rollbackSucceeded()
     {
         rollback=0
         ${generateRollbackSucceededPhase network configs}
     }
-    
+
     # Distribution phase
-    
+
     ${generateDistributionPhase network configs}
-    
+
     # Activation phase
-    
+
     succeeded=0
-    
+
     ${generateActivationPhase network configs}
     EOF
     chmod +x $out/bin/deploy-systems

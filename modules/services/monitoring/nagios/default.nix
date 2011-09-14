@@ -48,7 +48,7 @@ let
       illegal_macro_output_chars=`~$&|'"<>
       retain_state_information=1
     ''; # "
-    
+
   # Plain configuration for the Nagios web-interface with no
   # authentication.
   nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf"
@@ -83,12 +83,12 @@ let
     '';
 
 in
-  
+
 {
   ###### interface
 
   options = {
-  
+
     services.nagios = {
 
       enable = mkOption {
@@ -141,7 +141,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-  
+
     users.extraUsers = singleton
       { name = nagiosUser;
         uid = config.ids.uids.nagios;
@@ -190,7 +190,7 @@ in
         elsePart = "";
       };
     };
-    
+
   };
 
 }

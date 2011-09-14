@@ -2,7 +2,7 @@
 
 {
 
-  machine = 
+  machine =
     { config, pkgs, ... }:
 
     { require = [ ./common/user-account.nix ];
@@ -40,8 +40,8 @@
       $machine->waitForWindow(qr/Valgrind.*Konqueror/);
 
       $machine->sleep(5);
-      
+
       $machine->screenshot("screen");
     '';
-  
+
 }

@@ -4,9 +4,9 @@
 
 with pkgs.lib;
 
-let 
+let
 
-  cfg = config.virtualisation.xen; 
+  cfg = config.virtualisation.xen;
 
   xen = pkgs.xen;
 
@@ -24,7 +24,7 @@ in
 
   options = {
 
-    virtualisation.xen.enable = 
+    virtualisation.xen.enable =
       mkOption {
         default = false;
         description =
@@ -38,7 +38,7 @@ in
           '';
       };
 
-    virtualisation.xen.bootParams = 
+    virtualisation.xen.bootParams =
       mkOption {
         default = "";
         description =
@@ -47,7 +47,7 @@ in
           '';
       };
 
-    virtualisation.xen.domain0MemorySize = 
+    virtualisation.xen.domain0MemorySize =
       mkOption {
         default = 0;
         example = 512;
@@ -70,8 +70,8 @@ in
     # Domain 0 requires a pvops-enabled kernel.
     boot.kernelPackages = pkgs.linuxPackages_2_6_32_xen;
 
-    boot.kernelModules = 
-      [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback" 
+    boot.kernelModules =
+      [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback"
         "blktap" "tun"
       ];
 
@@ -87,7 +87,7 @@ in
         options loop max_loop=64
       '';
 
-    virtualisation.xen.bootParams = 
+    virtualisation.xen.bootParams =
       [ "loglvl=all" "guest_loglvl=all" ] ++
       optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";
 
@@ -111,19 +111,19 @@ in
 
         startOn = "stopped udevtrigger";
 
-        path = 
-          [ pkgs.bridge_utils pkgs.gawk pkgs.iproute pkgs.nettools 
+        path =
+          [ pkgs.bridge_utils pkgs.gawk pkgs.iproute pkgs.nettools
             pkgs.utillinux pkgs.bash xen pkgs.pciutils pkgs.procps
           ];
 
         environment.XENCONSOLED_TRACE = "hv";
 
-        preStart = 
+        preStart =
           ''
             mkdir -p /var/log/xen/console -m 0700
 
             ${xen}/sbin/xend start
-  
+
             # Wait until Xend is running.
             for ((i = 0; i < 60; i++)); do echo "waiting for xend..."; ${xen}/sbin/xend status && break; done
 
@@ -144,7 +144,7 @@ in
 
         environment.XENDOM_CONFIG = "${xen}/etc/sysconfig/xendomains";
 
-        preStart = 
+        preStart =
           ''
             mkdir -p /var/lock/subsys -m 755
             ${xen}/etc/init.d/xendomains start

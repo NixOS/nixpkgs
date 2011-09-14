@@ -2,9 +2,9 @@
 
 {
   nodes = {
-    server = 
+    server =
       { pkgs, config, ... }:
-      
+
       {
         services.tomcat.enable = true;
         services.httpd.enable = true;
@@ -16,10 +16,10 @@
           }
         ];
       };
-      
+
     client = { };
   };
-  
+
   testScript = ''
     startAll;
 

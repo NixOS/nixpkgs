@@ -8,7 +8,7 @@ with pkgs.lib;
 {
 
   options = {
-  
+
     security.rtkit.enable = mkOption {
       default = false;
       description = ''
@@ -20,7 +20,7 @@ with pkgs.lib;
     };
 
   };
-  
+
 
   config = mkIf config.security.rtkit.enable {
 

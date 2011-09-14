@@ -25,7 +25,7 @@ in
 
   options = {
 
-    virtualisation.nova.enableSingleNode = 
+    virtualisation.nova.enableSingleNode =
       mkOption {
         default = false;
         description =
@@ -41,7 +41,7 @@ in
           '';
       };
 
-    virtualisation.nova.extraConfig = 
+    virtualisation.nova.extraConfig =
       mkOption {
         default = false;
         description =
@@ -84,10 +84,10 @@ in
         # nova-api) to work.
         mkdir -m 700 -p /var/lib/nova/CA /var/lib/nova/CA/private
 
-        # Initialise the SQLite database.        
+        # Initialise the SQLite database.
         ${nova}/bin/nova-manage db sync
       '';
-      
+
     # `nova-api' receives and executes external client requests from
     # tools such as euca2ools.  It listens on port 8773 (XML) and 8774
     # (JSON).
@@ -103,7 +103,7 @@ in
         path = [ pkgs.openssl pkgs.openssh pkgs.bash ];
 
         respawn = false;
-        
+
         exec = "${nova}/bin/nova-api --flagfile=${novaConf} --api_paste_config=${nova}/etc/nova/api-paste.ini";
       };
 

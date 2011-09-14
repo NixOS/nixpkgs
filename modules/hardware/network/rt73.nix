@@ -5,7 +5,7 @@
   ###### interface
 
   options = {
-  
+
     networking.enableRT73Firmware = pkgs.lib.mkOption {
       default = false;
       type = pkgs.lib.types.bool;
@@ -18,9 +18,9 @@
 
 
   ###### implementation
-  
+
   config = pkgs.lib.mkIf config.networking.enableRT73Firmware {
     hardware.firmware = [ pkgs.rt73fw ];
   };
-  
+
 }

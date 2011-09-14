@@ -32,7 +32,7 @@ let
         ${pkgs.subversion}/bin/svn co https://svn.nixos.org/repos/nix/nixpkgs/trunk nixpkgs
       '';
    };
-  
+
 in
 
 {

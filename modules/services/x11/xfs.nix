@@ -5,12 +5,12 @@ with pkgs.lib;
 let
 
   configFile = ./xfs.conf;
-  
+
   startingDependency =
     if config.services.gw6c.enable && config.services.gw6c.autorun
     then "gw6c"
     else "network-interfaces";
-  
+
 in
 
 {
@@ -18,7 +18,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.xfs = {
 
       enable = mkOption {
@@ -40,12 +40,12 @@ in
 
     jobs.xfs =
       { description = "X Font Server";
-      
+
         startOn = "started ${startingDependency}";
 
         exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
       };
 
   });
-  
+
 }

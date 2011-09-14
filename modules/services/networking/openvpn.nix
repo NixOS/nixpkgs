@@ -75,15 +75,15 @@ let
   };
 
 in
-  
+
 {
 
   ###### interface
 
   options = {
-  
+
     services.openvpn = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable OpenVPN.";
@@ -98,7 +98,7 @@ in
             mostSimple = {
               config = ''
                 # Most simple configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
-                # server : 
+                # server :
                 dev tun
                 ifconfig 10.8.0.1 10.8.0.2
                 secret static.key
@@ -132,7 +132,7 @@ in
           Each instance will result in a new job file.
 
           Additionally you can specify the up/ down scripts by setting
-          the up down properties. 
+          the up down properties.
           Config lines up=/nix/store/xxx-up-script down=...
           will be appended to your configuration file automatically
 
@@ -161,5 +161,5 @@ in
     environment.systemPackages = [ openvpn ];
 
   };
-  
+
 }

@@ -13,7 +13,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.synergy = {
 
       # !!! All these option descriptions needs to be cleaned up.
@@ -27,13 +27,13 @@ in
         };
         screenName = mkOption {
           default = "";
-          description = " 
+          description = "
             use screen-name instead the hostname to identify
             ourselfs to the server.
             ";
         };
         serverAddress = mkOption {
-          description = " 
+          description = "
             The server address is of the form: [hostname][:port].  The
             hostname must be the address or hostname of the server.  The
             port overrides the default port, 24800.
@@ -56,7 +56,7 @@ in
         };
         screenName = mkOption {
           default = "";
-          description = " 
+          description = "
             use screen-name instead the hostname to identify
             this screen in the configuration.
             ";
@@ -76,9 +76,9 @@ in
   config = {
 
     jobs =
-    
+
       optionalAttrs cfgC.enable
-        { synergyClient = 
+        { synergyClient =
           { name = "synergy-client";
 
             description = "Synergy client";
@@ -92,9 +92,9 @@ in
             '';
           };
         }
-        
+
       // optionalAttrs cfgS.enable
-        { synergyServer = 
+        { synergyServer =
           { name = "synergy-server";
 
             description = "Synergy server";
@@ -122,7 +122,7 @@ section: screens
   win:
 end
 section: aliases
-    laptop: 
+    laptop:
       192.168.5.5
     dm:
       192.168.5.78

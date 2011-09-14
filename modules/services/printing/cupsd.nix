@@ -143,7 +143,7 @@ in
       };
 
     services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];
-    
+
     services.printing.cupsdConf =
       ''
         LogLevel info

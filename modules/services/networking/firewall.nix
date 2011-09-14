@@ -5,7 +5,7 @@
    uses several chains:
 
    - ‘nixos-fw-input’ is the main chain for input packet processing.
-   
+
    - ‘nixos-fw-log-refuse’ and ‘nixos-fw-refuse’ are called for
      refused packets.  (The former jumps to the latter after logging
      the packet.)  If you want additional logging, or want to accept
@@ -17,7 +17,7 @@
      can insert rules at the start of this chain.
 
 */
-  
+
 
 
 { config, pkgs, ... }:
@@ -44,7 +44,7 @@ in
   ###### interface
 
   options = {
-  
+
     networking.firewall.enable = mkOption {
       default = false;
       description =
@@ -55,7 +55,7 @@ in
           forwarding.
         '';
     };
-  
+
     networking.firewall.logRefusedConnections = mkOption {
       default = true;
       description =
@@ -63,7 +63,7 @@ in
           Whether to log rejected or dropped incoming connections.
         '';
     };
-  
+
     networking.firewall.logRefusedPackets = mkOption {
       default = false;
       description =
@@ -95,7 +95,7 @@ in
           port scanning somewhat easier.
         '';
     };
-  
+
     networking.firewall.allowedTCPPorts = mkOption {
       default = [];
       example = [ 22 80 ];
@@ -106,7 +106,7 @@ in
           accepted.
         '';
     };
-  
+
     networking.firewall.allowedUDPPorts = mkOption {
       default = [];
       example = [ 53 ];
@@ -116,7 +116,7 @@ in
           List of open UDP ports.
         '';
     };
-  
+
     networking.firewall.allowPing = mkOption {
       default = false;
       type = types.bool;
@@ -128,7 +128,7 @@ in
           less effective.
         '';
     };
-  
+
     networking.firewall.extraCommands = mkOption {
       default = "";
       example = "iptables -A INPUT -p icmp -j ACCEPT";
@@ -140,7 +140,7 @@ in
           to allow packets that would otherwise be refused.
         '';
     };
-  
+
   };
 
 
@@ -184,7 +184,7 @@ in
 
             # The "nixos-fw-refuse" chain rejects or drops packets.
             ip46tables -N nixos-fw-refuse
-            
+
             ${if cfg.rejectPackets then ''
               # Send a reset for existing TCP connections that we've
               # somehow forgotten about.  Send ICMP "port unreachable"
@@ -219,7 +219,7 @@ in
 
             # The "nixos-fw" chain does the actual work.
             ip46tables -N nixos-fw
-            
+
             # Accept all traffic on the loopback interface.
             ip46tables -A nixos-fw -i lo -j nixos-fw-accept
 

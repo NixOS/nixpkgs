@@ -2,10 +2,10 @@
 
 with pkgs.lib;
 
-let 
+let
 
   cfg = config.services.xinetd;
-  
+
   inherit (pkgs) xinetd;
 
   configFile = pkgs.writeText "xinetd.conf"
@@ -16,7 +16,7 @@ let
         log_on_failure = HOST
         log_on_success = PID HOST DURATION EXIT
       }
-      
+
       ${concatMapStrings makeService cfg.services}
     '';
 
@@ -35,15 +35,15 @@ let
         ${optionalString (srv.serverArgs != "") "server_args = ${srv.serverArgs}"}
       }
     '';
-  
+
 in
-  
+
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.xinetd.enable = mkOption {
       default = false;
       description = ''
@@ -58,7 +58,7 @@ in
       '';
 
       type = types.list types.optionSet;
-      
+
       options = {
 
         name = mkOption {
@@ -120,7 +120,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 

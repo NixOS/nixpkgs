@@ -18,7 +18,7 @@ let
       Server = ${cfg.server}
 
       LogFile = ${logDir}/zabbix_agentd
-  
+
       PidFile = ${pidFile}
 
       StartAgents = 1
@@ -27,13 +27,13 @@ let
     '';
 
 in
-  
+
 {
 
   ###### interface
 
   options = {
-  
+
     services.zabbixAgent = {
 
       enable = mkOption {
@@ -61,7 +61,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -103,7 +103,7 @@ in
             ${pkgs.zabbix.agent}/sbin/zabbix_agentd --config ${configFile} 100>${stateDir}/dummy2
             wait "$pid"
           '';
-        
+
         postStop =
           ''
             pid=$(cat ${pidFile} 2> /dev/null || true)

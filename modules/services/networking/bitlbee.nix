@@ -5,9 +5,9 @@ with pkgs.lib;
 let
 
   bitlbeeUid = config.ids.uids.bitlbee;
-  
+
   inherit (config.services.bitlbee) portNumber interface;
-  
+
 in
 
 {
@@ -15,7 +15,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.bitlbee = {
 
       enable = mkOption {
@@ -46,7 +46,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -58,7 +58,7 @@ in
         description = "BitlBee user";
         home = "/var/empty";
       };
-    
+
     users.extraGroups = singleton
       { name = "bitlbee";
         gid = config.ids.gids.bitlbee;
@@ -88,5 +88,5 @@ in
     environment.systemPackages = [ pkgs.bitlbee ];
 
   };
-  
+
 }

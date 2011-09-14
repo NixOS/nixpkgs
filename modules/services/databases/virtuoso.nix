@@ -10,9 +10,9 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.virtuoso = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable Virtuoso Opensource database server.";
@@ -94,5 +94,5 @@ with pkgs.lib;
     '';
 
   };
-  
+
 }

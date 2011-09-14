@@ -4,7 +4,7 @@ with pkgs.lib;
 
 {
   options = {
-  
+
     deployment.targetEnv = mkOption {
       default = "none";
       example = "ec2";
@@ -37,7 +37,7 @@ with pkgs.lib;
     };
 
     # EC2/Nova/Eucalyptus-specific options.
-        
+
     deployment.ec2.type = mkOption {
       default = "ec2";
       example = "nova";
@@ -63,7 +63,7 @@ with pkgs.lib;
         machine.  This must be a NixOS image providing SSH access.
       '';
     };
-    
+
     deployment.ec2.instanceType = mkOption {
       default = "m1.small";
       example = "m1.large";
@@ -93,7 +93,7 @@ with pkgs.lib;
         SSH) to execute commands to start VMs or query their status.
       '';
     };
-    
+
     deployment.adhoc.createVMCommand = mkOption {
       default = "create-vm";
       description = ''
@@ -101,7 +101,7 @@ with pkgs.lib;
         print an identifier denoting the VM on standard output.
       '';
     };
-    
+
     deployment.adhoc.destroyVMCommand = mkOption {
       default = "destroy-vm";
       description = ''
@@ -109,7 +109,7 @@ with pkgs.lib;
         machine.
       '';
     };
-    
+
     deployment.adhoc.queryVMCommand = mkOption {
       default = "query-vm";
       description = ''
@@ -118,6 +118,6 @@ with pkgs.lib;
         the VM on standard output.
       '';
     };
-    
+
   };
 }

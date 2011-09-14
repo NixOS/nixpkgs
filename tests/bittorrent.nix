@@ -19,13 +19,13 @@ let
       listening_ip=${nodes.router.config.networking.ifaces.eth2.ipAddress}/24
       allow 1024-65535 192.168.2.0/24 1024-65535
     '';
-  
+
 in
 
 {
 
   nodes =
-    { tracker = 
+    { tracker =
         { config, pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission pkgs.bittorrent ];
 
@@ -35,7 +35,7 @@ in
           services.httpd.documentRoot = "/tmp";
         };
 
-      router = 
+      router =
         { config, pkgs, ... }:
         { environment.systemPackages = [ pkgs.miniupnpd ];
           virtualisation.vlans = [ 1 2 ];
@@ -44,7 +44,7 @@ in
           networking.nat.externalInterface = "eth1";
         };
 
-      client1 = 
+      client1 =
         { config, pkgs, nodes, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
           virtualisation.vlans = [ 2 ];
@@ -52,7 +52,7 @@ in
             nodes.router.config.networking.ifaces.eth2.ipAddress;
         };
 
-      client2 = 
+      client2 =
         { config, pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
         };
@@ -103,5 +103,5 @@ in
       $client2->waitForFile("/tmp/test.tar.bz2");
       $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");
     '';
-  
+
 }

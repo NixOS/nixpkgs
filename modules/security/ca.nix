@@ -25,7 +25,7 @@ with pkgs.lib;
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-bundle.crt
         export GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt
       '';
-      
+
   };
 
 }

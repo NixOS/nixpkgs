@@ -20,8 +20,8 @@ let
 
   };
 
-in    
-   
+in
+
 {
   require = [options];
 
@@ -52,7 +52,7 @@ in
         target = "skel/.bashrc";
         mode = "0644";
       }
-      
+
       { # Configuration for readline in bash.
         source = ./inputrc;
         target = "inputrc";
@@ -68,5 +68,5 @@ in
       mkdir -m 0755 -p /bin
       ln -sfn ${config.system.build.binsh}/bin/sh /bin/sh
     '';
-  
+
 }

@@ -23,7 +23,7 @@
           $machine->sendChars("touch done\n");
           $machine->waitForFile("/home/alice/done");
       };
-      
+
       # Check whether switching VTs works.
       subtest "virtual console switching", sub {
           $machine->sendKeys("alt-f10");
@@ -50,12 +50,12 @@
           $machine->waitUntilFails("pgrep -u alice bash");
           $machine->screenshot("mingetty");
       };
-      
+
       # Check whether ctrl-alt-delete works.
       subtest "ctrl-alt-delete", sub {
           $machine->sendKeys("ctrl-alt-delete");
           $machine->waitForShutdown;
       };
     '';
-  
+
 }

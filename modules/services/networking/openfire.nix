@@ -5,12 +5,12 @@ with pkgs.lib;
 let
 
   inherit (pkgs) jre openfire coreutils which gnugrep gawk gnused;
-    
+
   startDependency =
     if config.services.openfire.usePostgreSQL then "postgresql" else
     if config.services.gw6c.enable then "gw6c" else
     "network-interfaces";
-    
+
 in
 
 {
@@ -18,16 +18,16 @@ in
   ###### interface
 
   options = {
-  
+
     services.openfire = {
-    
+
       enable = mkOption {
         default = false;
         description = "
           Whether to enable OpenFire XMPP server.
         ";
       };
-      
+
       usePostgreSQL = mkOption {
         default = true;
         description = "
@@ -56,8 +56,8 @@ in
           ''
             export PATH=${jre}/bin:${openfire}/bin:${coreutils}/bin:${which}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
             export HOME=/tmp
-            mkdir /var/log/openfire || true 
-            mkdir /etc/openfire || true 
+            mkdir /var/log/openfire || true
+            mkdir /etc/openfire || true
             for i in ${openfire}/conf.inst/*; do
                 if ! test -f /etc/openfire/$(basename $i); then
                     cp $i /etc/openfire/
@@ -68,5 +68,5 @@ in
       };
 
   });
-  
+
 }

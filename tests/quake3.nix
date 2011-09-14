@@ -11,10 +11,10 @@ let
     };
 
 in
-      
+
 rec {
 
-  client = 
+  client =
     { config, pkgs, ... }:
 
     { require = [ ./common/x11.nix ];
@@ -52,7 +52,7 @@ rec {
 
       $client1->execute("quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
       $client2->execute("quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
- 
+
       $server->waitUntilSucceeds("grep -q 'Foo.*entered the game' /tmp/log");
       $server->waitUntilSucceeds("grep -q 'Bar.*entered the game' /tmp/log");
 
@@ -76,5 +76,5 @@ rec {
       $client2->shutdown();
       $server->succeed("stop quake3-server");
     '';
-  
+
 }

@@ -19,9 +19,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.tor.torsocks = {
 
       enable = mkOption {

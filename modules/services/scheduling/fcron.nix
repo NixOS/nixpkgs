@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.fcron;
-  
+
   queuelen = if cfg.queuelen == "" then "" else "-q ${toString cfg.queuelen}";
 
   systemCronJobs =
@@ -28,38 +28,38 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.fcron = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable the `fcron' daemon.";
       };
-      
+
       allow = mkOption {
         default = [ "all" ];
         description = ''
           Users allowed to use fcrontab and fcrondyn (one name per line, "all" for everyone).
         '';
       };
-      
+
       deny = mkOption {
         default = [];
         description = "Users forbidden from using fcron.";
       };
-      
+
       maxSerialJobs = mkOption {
         default = 1;
         description = "Maximum number of serial jobs which can run simultaneously.";
       };
-      
+
       queuelen = mkOption {
         default = "";
         description = "Number of jobs the serial queue and the lavg queue can contain - empty to net set this number (-q)";
       };
-      
+
       systab = mkOption {
         default = "";
         description = ''The "system" crontab contents.'';

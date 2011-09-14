@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.security.sudo;
-  
+
   inherit (pkgs) sudo;
 
 in

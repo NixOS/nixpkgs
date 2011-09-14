@@ -16,7 +16,7 @@ let
       upstart
     ];
 
-    
+
   # From a job description, generate an Upstart job file.
   makeJob = job:
 
@@ -29,7 +29,7 @@ let
         let log = "/var/log/upstart/${job.name}"; in
         ''
           # Upstart job `${job.name}'.  This is a generated file.  Do not edit.
-        
+
           description "${job.description}"
 
           ${if isList job.startOn then
@@ -38,20 +38,20 @@ let
               "start on ${job.startOn}"
             else ""
           }
-          
+
           ${optionalString (job.stopOn != "") "stop on ${job.stopOn}"}
 
           env PATH=${makeSearchPath "bin" (job.path ++ upstartPath)}:${makeSearchPath "sbin" (job.path ++ upstartPath)}
 
           ${concatMapStrings (n: "env ${n}=\"${getAttr n env}\"\n") (attrNames env)}
-          
+
           ${optionalString (job.preStart != "") ''
             pre-start script
               exec >> ${log} 2>&1
               ${job.preStart}
             end script
           ''}
-          
+
           ${if job.script != "" && job.exec != "" then
               abort "Job ${job.name} has both a `script' and `exec' attribute."
             else if job.script != "" then
@@ -77,7 +77,7 @@ let
               ${job.postStart}
             end script
           ''}
-          
+
           ${optionalString job.task "task"}
           ${optionalString (!job.task && job.respawn) "respawn"}
 
@@ -116,7 +116,7 @@ let
           echo "$jobText" > $out
         '';
 
-        
+
   jobOptions = {
 
     name = mkOption {
@@ -149,7 +149,7 @@ let
 
     startOn = mkOption {
       # !!! Re-enable this once we're on Upstart >= 0.6.
-      #type = types.string; 
+      #type = types.string;
       default = "";
       description = ''
         The Upstart event that triggers this job to be started.
@@ -278,16 +278,16 @@ let
       default = [ ];
       description = ''
         Packages added to the job's <envar>PATH</envar> environment variable.
-        Both the <filename>bin</filename> and <filename>sbin</filename> 
+        Both the <filename>bin</filename> and <filename>sbin</filename>
         subdirectories of each package are added.
       '';
     };
 
   };
 
-  
+
   upstartJob = {name, config, ...}: {
-  
+
     options = {
       jobDrv = mkOption {
         default = makeJob config;
@@ -305,15 +305,15 @@ let
         replaceChars ["<" ">" "*"] ["_" "_" "_name_"] name
       );
     };
-    
+
   };
 
 in
-  
+
 {
 
   ###### interface
-  
+
   options = {
 
     jobs = mkOption {
@@ -325,7 +325,7 @@ in
       type = types.loaOf types.optionSet;
       options = [ jobOptions upstartJob ];
     };
-  
+
     tests.upstartJobs = mkOption {
       internal = true;
       default = {};
@@ -335,7 +335,7 @@ in
         tests.upstartJobs.xserver</command>).
       '';
     };
-    
+
     system.upstartEnvironment = mkOption {
       type = types.attrs;
       default = {};
@@ -349,7 +349,7 @@ in
 
 
   ###### implementation
-  
+
   config = {
 
     system.build.upstart = upstart;

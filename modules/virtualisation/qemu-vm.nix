@@ -13,14 +13,14 @@ with pkgs.lib;
 
 let
 
-  vmName = 
-    if config.networking.hostName == "" 
-    then "noname" 
+  vmName =
+    if config.networking.hostName == ""
+    then "noname"
     else config.networking.hostName;
 
   options = {
-  
-    virtualisation.memorySize = 
+
+    virtualisation.memorySize =
       mkOption {
         default = 384;
         description =
@@ -28,8 +28,8 @@ let
             Memory size (M) of virtual machine.
           '';
       };
-      
-    virtualisation.diskSize = 
+
+    virtualisation.diskSize =
       mkOption {
         default = 512;
         description =
@@ -37,7 +37,7 @@ let
             Disk size (M) of virtual machine.
           '';
       };
-      
+
     virtualisation.diskImage =
       mkOption {
         default = "./${vmName}.qcow2";
@@ -48,7 +48,7 @@ let
             exist.
           '';
       };
-      
+
     virtualisation.graphics =
       mkOption {
         default = true;
@@ -72,7 +72,7 @@ let
           '';
       };
 
-    virtualisation.vlans = 
+    virtualisation.vlans =
       mkOption {
         default = [ 1 ];
         example = [ 1 2 ];
@@ -89,7 +89,7 @@ let
           '';
       };
 
-    virtualisation.writableStore = 
+    virtualisation.writableStore =
       mkOption {
         default = false;
         description =
@@ -127,7 +127,7 @@ let
             altogether.
           '';
       };
-            
+
   };
 
   cfg = config.virtualisation;
@@ -140,7 +140,7 @@ let
   startVM =
     ''
       #! ${pkgs.stdenv.shell}
-      
+
       NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
 
       if ! test -e "$NIX_DISK_IMAGE"; then
@@ -178,7 +178,7 @@ let
           $QEMU_OPTS
     '';
 
-    
+
   regInfo = pkgs.runCommand "reginfo"
     { exportReferencesGraph =
         map (x: [("closure-" + baseNameOf x) x]) config.virtualisation.pathsInNixDB;
@@ -221,21 +221,21 @@ let
           echo '(hd0) /dev/vda' > /boot/grub/device.map
 
           # Install GRUB and generate the GRUB boot menu.
-          touch /etc/NIXOS 
+          touch /etc/NIXOS
           mkdir -p /nix/var/nix/profiles
           ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
           umount /boot
         ''
     );
-    
+
 in
 
 {
   require = [ options ../profiles/qemu-guest.nix ];
 
   boot.loader.grub.device = mkOverride 50 "/dev/vda";
-  
+
   # All the modules the initrd needs to mount the host filesystem via
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
@@ -255,7 +255,7 @@ in
       cp ${pkgs.iproute}/sbin/ip $out/bin
       cp ${pkgs.glibc}/lib/libresolv.so.* $out/lib
     '';
-      
+
   boot.initrd.postDeviceCommands =
     ''
       # Set up networking.  Needed for CIFS mounting.
@@ -274,7 +274,7 @@ in
     ''
       # Fix the permissions on /tmp.
       chmod 1777 $targetRoot/tmp
-      
+
       mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''
@@ -283,7 +283,7 @@ in
         mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
       ''}
     '';
-    
+
   # After booting, register the closure of the paths in
   # `virtualisation.pathsInNixDB' in the Nix database in the VM.  This
   # allows Nix operations to work in the VM.  The path to the
@@ -299,11 +299,11 @@ in
         fi
       )
     '';
-      
+
   virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
   virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
-  
+
   # Mount the host filesystem via CIFS, and bind-mount the Nix store
   # of the host into our own filesystem.  We use mkOverride to allow
   # this module to be applied to "normal" NixOS system configuration,
@@ -351,7 +351,7 @@ in
 
   # Don't run ntpd in the guest.  It should get the correct time from KVM.
   services.ntp.enable = false;
-    
+
   system.build.vm = pkgs.runCommand "nixos-vm" {}
     ''
       ensureDir $out/bin

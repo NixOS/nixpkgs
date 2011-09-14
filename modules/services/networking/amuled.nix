@@ -12,7 +12,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.amule = {
 
       enable = mkOption {
@@ -39,7 +39,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -67,5 +67,5 @@ in
       };
 
   };
-  
+
 }

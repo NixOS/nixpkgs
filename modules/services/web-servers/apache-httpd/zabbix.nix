@@ -29,10 +29,10 @@ in
       max_execution_time = 300
       mbstring.func_overload = 2
     '';
-  
+
   extraConfig = ''
     Alias ${config.urlPrefix}/ ${zabbixPHP}/
-    
+
     <Directory ${zabbixPHP}>
       DirectoryIndex index.php
       Order deny,allow

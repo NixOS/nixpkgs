@@ -7,9 +7,9 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.mail = {
-    
+
       sendmailSetuidWrapper = mkOption {
         default = null;
         description = ''

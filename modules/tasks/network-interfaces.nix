@@ -6,7 +6,7 @@ let
 
   cfg = config.networking;
 
-in 
+in
 
 {
 
@@ -120,7 +120,7 @@ in
         };
 
       };
-      
+
     };
 
     networking.ifaces = mkOption {
@@ -132,7 +132,7 @@ in
         as an attribute set keyed on the interface name.
       '';
     };
-    
+
     networking.bridges = mkOption {
       default = { };
       example =
@@ -160,7 +160,7 @@ in
         };
 
       };
-      
+
     };
 
   };
@@ -179,13 +179,13 @@ in
         pkgs.nettools
         pkgs.wirelesstools
         pkgs.rfkill
-      ] 
+      ]
       ++ optional (cfg.bridges != {}) pkgs.bridge_utils
       ++ optional cfg.enableIPv6 pkgs.ndisc6;
 
     security.setuidPrograms = [ "ping" "ping6" ];
-    
-    jobs.networkInterfaces = 
+
+    jobs.networkInterfaces =
       { name = "network-interfaces";
 
         startOn = "stopped udevtrigger";
@@ -195,7 +195,7 @@ in
         preStart =
           ''
             set +e # continue in case of errors
-          
+
             ${flip concatMapStrings cfg.interfaces (i:
               optionalString (i.macAddress != "")
                 ''
@@ -213,7 +213,7 @@ in
             ${concatStrings (attrValues (flip mapAttrs cfg.bridges (n: v: ''
                 echo "Creating bridge ${n}..."
                 ${pkgs.bridge_utils}/sbin/brctl addbr "${n}"
-                
+
                 ${flip concatMapStrings v.interfaces (i: ''
                   ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}"
                   ip addr flush dev "${i}"
@@ -226,11 +226,11 @@ in
                 ${optionalString cfg.enableIPv6 ''
                   echo 5 > /proc/sys/net/ipv6/conf/${n}/router_solicitations
                 ''}
-                
+
                 # !!! Should delete (brctl delif) any interfaces that
                 # no longer belong to the bridge.
             '')))}
-            
+
             # Configure the manually specified interfaces.
             ${flip concatMapStrings cfg.interfaces (i:
               optionalString (i.ipAddress != "")
@@ -276,5 +276,5 @@ in
       '';
 
   };
-  
+
 }

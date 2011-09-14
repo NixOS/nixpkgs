@@ -12,9 +12,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.kerberos_server = {
 
       enable = mkOption {
@@ -32,9 +32,9 @@ in
   ###### implementation
 
   config = mkIf config.services.kerberos_server.enable {
-  
+
     environment.systemPackages = [ heimdal ];
-  
+
     services.xinetd.enable = true;
     services.xinetd.services = pkgs.lib.singleton
       { name = "kerberos-adm";
@@ -67,5 +67,5 @@ in
         exec = "${heimdal}/sbin/kpasswdd";
       };
   };
-  
+
 }

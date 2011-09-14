@@ -2,7 +2,7 @@
 
 let
 
-  backend = 
+  backend =
     { config, pkgs, ... }:
 
     {

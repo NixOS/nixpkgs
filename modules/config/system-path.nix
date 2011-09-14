@@ -8,7 +8,7 @@ with pkgs.lib;
 let
 
   cfg = config.environment;
-  
+
   requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
       config.system.sbin.mount # must take precedence over util-linux
@@ -91,7 +91,7 @@ let
         description = ''
           The packages you want in the boot environment.
         '';
-        
+
         apply = list: pkgs.buildEnv {
           name = "system-path";
           paths = list;
@@ -109,11 +109,11 @@ let
               fi
             '';
         };
-        
+
       };
 
     };
-      
+
   };
 
 

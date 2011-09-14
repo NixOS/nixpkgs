@@ -6,7 +6,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.disnix;
-  
+
   disnix_activation_scripts = pkgs.disnix_activation_scripts.override (origArgs: {
     enableApacheWebApplication = config.services.httpd.enable;
     enableAxis2WebService = config.services.tomcat.axis2.enable;
@@ -21,47 +21,47 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.disnix = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable Disnix";
       };
-      
+
       useWebServiceInterface = mkOption {
         default = false;
 	description = "Whether to enable the DisnixWebService interface running on Apache Tomcat";
       };
-      
+
       publishInfrastructure = {
         enable = mkOption {
           default = false;
 	  description = "Whether to publish capabilities/properties of this machine in as attributes in the infrastructure option";
 	};
-	
+
 	enableAuthentication = mkOption {
 	  default = false;
 	  description = "Whether to publish authentication credentials through the infrastructure attribute (not recommended in combination with Avahi)";
 	};
-      };            
-      
+      };
+
       infrastructure = mkOption {
         default = {};
 	description = "List of name value pairs containing properties for the infrastructure model";
       };
-      
+
       publishAvahi = mkOption {
         default = false;
 	description = "Whether to publish capabilities/properties as a Disnix service through Avahi";
       };
 
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -84,7 +84,7 @@ in
       { name = "disnix";
         gid = config.ids.gids.disnix;
       };
-    
+
     services.disnix.infrastructure =
       optionalAttrs (cfg.publishInfrastructure.enable)
       ( { hostname = config.networking.hostName;
@@ -97,12 +97,12 @@ in
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
 	// optionalAttrs (config.services.svnserve.enable) { svnBaseDir = config.services.svnserve.svnBaseDir; }
 	// optionalAttrs (cfg.publishInfrastructure.enableAuthentication) (
-          optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = builtins.readFile config.services.mysql.rootPassword; }) 
+          optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = builtins.readFile config.services.mysql.rootPassword; })
 	)
     ;
-    
+
     services.disnix.publishInfrastructure.enable = cfg.publishAvahi;
-    
+
     jobs = {
       disnix =
         { description = "Disnix server";
@@ -124,9 +124,9 @@ in
     } // optionalAttrs cfg.publishAvahi {
       disnixAvahi =
         { description = "Disnix Avahi publisher";
-      
+
           startOn = "started avahi-daemon";
-	
+
 	  exec =
           ''
             ${pkgs.avahi}/bin/avahi-publish-service disnix-${config.networking.hostName} _disnix._tcp 22 \

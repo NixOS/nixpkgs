@@ -10,6 +10,6 @@ in
   environment.systemPackages = [wis_go7007];
 
   hardware.firmware = ["${wis_go7007}/firmware"];
-  
+
   services.udev.packages = [wis_go7007];
 }

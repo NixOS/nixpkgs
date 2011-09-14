@@ -18,7 +18,7 @@ let
     '';
 
 in
-    
+
 {
 
   config =
@@ -30,7 +30,7 @@ in
     jobs.backdoor =
       { startOn = "startup";
         stopOn = "never";
-        
+
         script =
           ''
             export USER=root
@@ -56,7 +56,7 @@ in
         # timeouts in the VM should also be delayed).
         echo acpi_pm > /sys/devices/system/clocksource/clocksource0/current_clocksource
       '';
-    
+
     boot.postBootCommands =
       ''
         # Panic on out-of-memory conditions rather than letting the
@@ -77,7 +77,7 @@ in
     boot.kernelModules = [ "gcov-proc" ];
 
     # Panic if an error occurs in stage 1 (rather than waiting for
-    # user intervention). 
+    # user intervention).
     boot.kernelParams =
       [ "console=tty1" "console=ttyS0" "panic=1" "stage1panic=1" ];
 
@@ -90,7 +90,7 @@ in
     # Disable "-- MARK --" messages.  These prevent hanging tests from
     # being killed after 1 hour of silence.
     services.syslogd.extraParams = [ "-m 0" ];
-    
+
     # Don't run klogd.  Kernel messages appear on the serial console anyway.
     jobs.klogd.startOn = mkOverride 50 "";
 
@@ -99,7 +99,7 @@ in
     networking.nameservers = mkOverride 150 [ ];
 
     system.upstartEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
-      
+
   };
 
 }

@@ -29,7 +29,7 @@ let
         description = "Kerberos Domain Controller";
       };
 
-      kerberosAdminServer = mkOption { 
+      kerberosAdminServer = mkOption {
         default = "kerberos.mit.edu";
         description = "Kerberos Admin Server";
       };

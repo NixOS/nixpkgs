@@ -8,7 +8,7 @@ let
   gid = config.ids.gids.portmap;
 
   portmap = pkgs.portmap.override { daemonUID = uid; daemonGID = gid; };
-  
+
 in
 
 {
@@ -16,9 +16,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.portmap = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -45,7 +45,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 

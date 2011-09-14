@@ -7,7 +7,7 @@ let
   uid = config.ids.uids.gpsd;
   gid = config.ids.gids.gpsd;
   cfg = config.services.gpsd;
-  
+
 in
 
 {
@@ -15,7 +15,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.gpsd = {
 
       enable = mkOption {
@@ -70,9 +70,9 @@ in
 
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
-  
+
     users.extraUsers = singleton
       { name = "gpsd";
         inherit uid;
@@ -100,5 +100,5 @@ in
       };
 
   };
-  
+
 }

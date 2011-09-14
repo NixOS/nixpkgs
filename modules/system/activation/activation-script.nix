@@ -18,18 +18,18 @@ let
       pkgs.shadow
       pkgs.nettools # needed for hostname
     ];
-    
+
 in
 
 {
 
   ###### interface
-  
+
   options = {
-  
+
     system.activationScripts = mkOption {
       default = {};
-      
+
       example = {
         stdio = {
           text = ''
@@ -42,21 +42,21 @@ in
           deps = [];
         };
       };
-      
+
       description = ''
         Activate the new configuration (i.e., update /etc, make accounts,
         and so on).
       '';
-      
+
       merge = mergeTypedOption "script" builtins.isAttrs (fold mergeAttrs {});
-      
+
       apply = set: {
         script =
           ''
             #! ${pkgs.stdenv.shell}
 
             systemConfig=@out@
-            
+
             export PATH=/empty
             for i in ${toString path}; do
                 PATH=$PATH:$i/bin:$i/sbin;
@@ -79,12 +79,12 @@ in
             ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
           '';
       };
-      
+
     };
-    
+
   };
 
-  
+
   ###### implementation
 
   config = {
@@ -128,7 +128,7 @@ in
       ''
         mkdir -p /media
       '';
-    
+
     system.activationScripts.cgroups =
       ''
         if ! ${pkgs.sysvtools}/bin/mountpoint -q /dev/cgroup; then
@@ -136,7 +136,7 @@ in
             ${pkgs.utillinux}/bin/mount -t cgroup -o freezer,cpuacct,cpu,cpuset none /dev/cgroup
         fi
       '';
-    
+
   };
-  
+
 }

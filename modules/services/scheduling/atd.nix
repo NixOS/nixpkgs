@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.atd;
-  
+
   inherit (pkgs) at;
 
 in
@@ -15,7 +15,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.atd.enable = mkOption {
       default = true;
       description = ''
@@ -26,14 +26,14 @@ in
     services.atd.allowEveryone = mkOption {
       default = false;
       description = ''
-        Whether to make /var/spool/at{jobs,spool} writeable 
+        Whether to make /var/spool/at{jobs,spool} writeable
         by everyone (and sticky).  This is normally not needed since
         the `at' commands are setuid/setgid `atd'.
      '';
     };
-    
+
   };
-  
+
 
   ###### implementation
 

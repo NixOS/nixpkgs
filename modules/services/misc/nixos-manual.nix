@@ -15,7 +15,7 @@ let
     inherit (cfg) revision;
     inherit pkgs options;
   };
-    
+
 in
 
 {
@@ -73,7 +73,7 @@ in
     boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
     jobs = mkIf cfg.showManual
-      { nixosManual = 
+      { nixosManual =
         { name = "nixos-manual";
 
           description = "NixOS manual";
@@ -88,7 +88,7 @@ in
         };
       };
 
-    services.ttyBackgrounds.specificThemes = mkIf cfg.showManual 
+    services.ttyBackgrounds.specificThemes = mkIf cfg.showManual
       [ { tty = "tty${cfg.ttyNumber}";
           theme = pkgs.themes "green";
         }
@@ -96,7 +96,7 @@ in
 
     services.mingetty.helpLine = mkIf cfg.showManual
       "\nPress <Alt-F${toString cfg.ttyNumber}> for the NixOS manual.";
-      
+
   };
 
 }

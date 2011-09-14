@@ -8,7 +8,7 @@ let
 
   # Don't start dhclient on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
-  ignoredInterfaces = 
+  ignoredInterfaces =
     map (i: i.name) (lib.filter (i: i ? ipAddress && i.ipAddress != "" ) config.networking.interfaces)
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges));
 
@@ -29,7 +29,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation.
           ${config.system.build.upstart}/sbin/initctl stop ntpd
-          
+
           ${config.system.build.upstart}/sbin/initctl emit -n ip-up
       fi
 
@@ -37,7 +37,7 @@ let
           ${config.system.build.upstart}/sbin/initctl emit -n ip-down
       fi
     '';
-  
+
 in
 
 {
@@ -45,7 +45,7 @@ in
   ###### interface
 
   options = {
-  
+
     networking.useDHCP = mkOption {
       default = true;
       merge = mergeEnableOption;
@@ -55,15 +55,15 @@ in
         configured.
       ";
     };
-  
+
   };
 
 
   ###### implementation
-  
+
   config = mkIf config.networking.useDHCP {
 
-    jobs.dhclient = 
+    jobs.dhclient =
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
@@ -83,7 +83,7 @@ in
                 # (1), i.e. Ethernet.  Ignore peth* devices; on Xen,
                 # they're renamed physical Ethernet cards used for
                 # bridging.  Likewise for vif* and tap* (Xen) and
-                # virbr* and vnet* (libvirt). 
+                # virbr* and vnet* (libvirt).
                 if [ "$(cat /sys/class/net/$i/type)" = 1 ]; then
                     if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i" &&
                        ! echo "$i" | grep -x -q "peth.*\|vif.*\|tap.*\|virbr.*\|vnet.*";
@@ -121,7 +121,7 @@ in
         initctl restart dhclient
       '';
 
-  };  
-  
+  };
+
 }
 

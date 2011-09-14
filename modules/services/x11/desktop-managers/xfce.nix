@@ -22,7 +22,7 @@ in
 
   };
 
-  
+
   config = mkIf (xcfg.enable && cfg.enable) {
 
     services.xserver.desktopManager.session = singleton
@@ -32,7 +32,7 @@ in
           ''
             # Set GTK_PATH so that GTK+ can find the Xfce theme engine.
             export GTK_PATH=${pkgs.xfce.gtk_xfce_engine}/lib/gtk-2.0
-            
+
             # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
             export GTK_DATA_PREFIX=${config.system.path}
 
@@ -86,12 +86,12 @@ in
       ''
         export GIO_EXTRA_MODULES=${pkgs.xfce.gvfs}/lib/gio/modules
       '';
-      
+
     # Enable helpful DBus services.
     services.hal = mkIf (!isXfce48) { enable = true; };
     services.udisks = mkIf isXfce48 { enable = true; };
     services.upower = mkIf (isXfce48 && config.powerManagement.enable) { enable = true; };
-    
+
   };
 
 }

@@ -14,9 +14,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     sound = {
 
       enable = mkOption {
@@ -26,7 +26,7 @@ in
         '';
         merge = mergeEnableOption;
       };
-      
+
       enableOSSEmulation = mkOption {
         default = true;
 	description = ''
@@ -35,14 +35,14 @@ in
       };
 
     };
-    
+
   };
 
 
   ###### implementation
-  
+
   config = mkIf config.sound.enable {
-  
+
     environment.systemPackages = [alsaUtils];
 
     users.extraGroups = singleton
@@ -78,7 +78,7 @@ in
             ${alsaUtils}/sbin/alsactl -f ${soundState} store
           '';
       };
-      
+
   };
 
 }

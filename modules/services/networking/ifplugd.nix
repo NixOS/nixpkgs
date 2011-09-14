@@ -20,14 +20,14 @@ let
       fi
     '';
 
-in 
+in
 
 {
 
   ###### interface
 
   options = {
-  
+
     networking.interfaceMonitor.enable = mkOption {
       default = false;
       description = "
@@ -46,7 +46,7 @@ in
         plugged in or unplugged.
       ";
     };
-    
+
   };
 
 
@@ -69,7 +69,7 @@ in
       };
 
     environment.systemPackages = [ifplugd];
-      
+
   };
 
 }

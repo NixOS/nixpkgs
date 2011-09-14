@@ -5,16 +5,16 @@ with pkgs.lib;
 let
 
   inherit (pkgs) stdenv;
-  
+
   kernelPackages = config.boot.kernelPackages;
   splashutils = kernelPackages.splashutils;
   requiredTTYs = config.requiredTTYs;
-  
+
   backgrounds =
     let
-    
+
       specificThemes = config.services.ttyBackgrounds.specificThemes;
-        
+
       overridenTTYs = map (x: x.tty) specificThemes;
 
       # Use the default theme for all the mingetty ttys and for the
@@ -23,7 +23,7 @@ let
       defaultTTYs =
         filter (x: !(elem x overridenTTYs)) requiredTTYs;
 
-    in      
+    in
       (map (tty: { inherit tty; }) defaultTTYs) ++ specificThemes;
 
   themesUnpacked = stdenv.mkDerivation {
@@ -44,9 +44,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.ttyBackgrounds = {
 
       enable = mkOption {
@@ -74,9 +74,9 @@ in
           This option overrides the theme for specific virtual consoles.
         '';
       };
-      
+
     };
-    
+
   };
 
 
@@ -142,7 +142,7 @@ in
             done
           '';
       };
-    
+
   });
-  
+
 }

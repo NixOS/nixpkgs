@@ -7,15 +7,15 @@ let
   cfg = config.services.gpm;
 
 in
-  
+
 {
 
   ###### interface
 
   options = {
-  
+
     services.gpm = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -23,16 +23,16 @@ in
           which enables mouse support in virtual consoles.
         '';
       };
-        
+
       protocol = mkOption {
         default = "ps/2";
         description = "Mouse protocol to use.";
       };
 
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -47,5 +47,5 @@ in
       };
 
   };
-  
+
 }

@@ -30,7 +30,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.avahi = {
 
       enable = mkOption {
@@ -83,11 +83,11 @@ in
           domain by transparently querying the Avahi daemon.
         '';
       };
-      
+
     };
-    
+
   };
-  
+
 
   ###### implementation
 

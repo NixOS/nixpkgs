@@ -1,9 +1,9 @@
 # This module allows you to export something from configuration
-# Use case: export kernel source expression for ease of configuring 
+# Use case: export kernel source expression for ease of configuring
 
 {config, pkgs, ...}:
 
-let 
+let
 
 options = {
   passthru = pkgs.lib.mkOption {
@@ -14,7 +14,7 @@ options = {
   };
 };
 
-in 
+in
 
 {
   require = options;

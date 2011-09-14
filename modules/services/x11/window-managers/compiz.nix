@@ -8,13 +8,13 @@ let
   xorg = config.services.xserver.package;
 
 in
-  
+
 {
 
   options = {
 
     services.xserver.windowManager.compiz = {
-    
+
       enable = mkOption {
         default = false;
         description = "Enable the Compiz window manager.";
@@ -25,14 +25,14 @@ in
         example = "--indirect-rendering";
         description = "Pass the <option>--indirect-rendering</option> flag to Compiz.";
       };
-      
+
     };
 
   };
-  
+
 
   config = mkIf cfg.enable {
-  
+
     services.xserver.windowManager.session = singleton
       { name = "compiz";
         start =

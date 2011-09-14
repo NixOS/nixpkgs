@@ -35,9 +35,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.mysql = {
-    
+
       enable = mkOption {
         default = false;
         description = "
@@ -54,7 +54,7 @@ in
 
       port = mkOption {
         default = "3306";
-        description = "Port of MySQL"; 
+        description = "Port of MySQL";
       };
 
       user = mkOption {
@@ -75,8 +75,8 @@ in
       pidDir = mkOption {
         default = "/var/run/mysql";
         description = "Location of the file which stores the PID of the MySQL server";
-      };           
-      
+      };
+
       initialDatabases = mkOption {
         default = [];
         description = "List of database names and their initial schemas that should be used to create databases on the first startup of MySQL";
@@ -85,47 +85,47 @@ in
 	  { name = "bardatabase"; schema = ./bardatabase.sql; }
 	];
       };
-      
+
       initialScript = mkOption {
         default = null;
 	description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
-      
+
       rootPassword = mkOption {
         default = null;
-	description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";	
+	description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";
       };
-      
+
       replication = {
         role = mkOption {
 	  default = "none";
 	  description = "Role of the MySQL server instance. Can be either: master, slave or none";
 	};
-	
+
         serverId = mkOption {
 	  default = 1;
 	  description = "Id of the MySQL server instance. This number must be unique for each instance";
 	};
-	
+
 	masterHost = mkOption {
 	  description = "Hostname of the MySQL master server";
 	};
-	
+
 	masterUser = mkOption {
 	  description = "Username of the MySQL replication user";
 	};
-	
+
 	masterPassword = mkOption {
 	  description = "Password of the MySQL replication user";
 	};
-	
+
 	masterPort = mkOption {
 	  default = 3306;
 	  description = "Port number on which the MySQL master server runs";
 	};
       };
     };
-    
+
   };
 
 
@@ -159,7 +159,7 @@ in
           '';
 
         exec = "${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
-	
+
 	postStart =
 	  ''
             # Wait until the MySQL server is available for use
@@ -181,7 +181,7 @@ in
 	    then
 	        # Create initial databases
 
-                ${concatMapStrings (database: 
+                ${concatMapStrings (database:
                   ''
                     if ! test -e "${cfg.dataDir}/${database.name}"; then
                         echo "Creating initial database: ${database.name}"
@@ -196,17 +196,17 @@ in
 		          fi
 		        ) | ${mysql}/bin/mysql -u root -N
                     fi
-                  '') cfg.initialDatabases}            
-	
+                  '') cfg.initialDatabases}
+
 	        # Execute initial script
-		
+
 		${optionalString (cfg.initialScript != null)
 		  ''
 		    cat ${cfg.initialScript} | ${mysql}/bin/mysql -u root -N
 		  ''}
-		
+
 	        # Change root password
-		
+
 		${optionalString (cfg.rootPassword != null)
 		  ''
 		    ( echo "use mysql;"
@@ -214,11 +214,11 @@ in
 		      echo "flush privileges;"
 		    ) | ${mysql}/bin/mysql -u root -N
 		  ''}
-		  
+
 	      rm /tmp/mysql_init
 	    fi
 	  '';
-	  	  
+
         # !!! Need a postStart script to wait until mysqld is ready to
         # accept connections.
 

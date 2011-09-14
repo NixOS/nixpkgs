@@ -5,9 +5,9 @@ let
   inherit (pkgs.lib) mkOption;
 
   urlPrefix = config.urlPrefix;
-  
+
   cgi = pkgs.stdenv.mkDerivation {
-    name = "mercurial-cgi";  
+    name = "mercurial-cgi";
     buildCommand = ''
       ensureDir $out
       cp -v ${mercurial}/share/cgi-bin/hgweb.cgi $out
@@ -21,7 +21,7 @@ let
       " > $out/hgweb.config
     '';
   };
-      
+
 in {
 
   extraConfig = ''
@@ -45,18 +45,18 @@ in {
         PassEnv PYTHONPATH
     </Directory>
   '';
-  
+
   robotsEntries = ''
     User-agent: *
     Disallow: ${urlPrefix}
   '';
-  
+
   extraServerPath = [
-    (pkgs.python+"/bin")    
+    (pkgs.python+"/bin")
   ];
-  
+
   globalEnvVars = [ { name = "PYTHONPATH"; value = "${mercurial}/lib/${pkgs.python.libPrefix}/site-packages"; } ];
-  
+
   options = {
     urlPrefix = mkOption {
       default = "/hg";
@@ -65,7 +65,7 @@ in {
         Use the empty string to have it appear in the server root.
       ";
     };
-    
+
     dataDir = mkOption {
       example = "/data/mercurial";
       description = "
@@ -73,5 +73,5 @@ in {
       ";
     };
   };
-  
+
 }

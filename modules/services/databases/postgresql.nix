@@ -33,46 +33,46 @@ let
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'syslog'
       ${cfg.extraConfig}
-    '';  
+    '';
 
 in
 
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.postgresql = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
           Whether to run PostgreSQL.
         '';
       };
-      
+
       port = mkOption {
         default = "5432";
         description = ''
           Port for PostgreSQL.
         '';
       };
-      
+
       logDir = mkOption {
         default = "/var/log/postgresql";
         description = ''
           Log directory for PostgreSQL.
         '';
       };
-      
+
       dataDir = mkOption {
         default = "/var/db/postgresql";
         description = ''
           Data directory for PostgreSQL.
         '';
       };
-      
+
       authentication = mkOption {
         default = ''
           # Generated file; do not edit!
@@ -85,22 +85,22 @@ in
           Defines how users authenticate themselves to the server.
         '';
       };
-      
+
       identMap = mkOption {
         default = "";
         description = ''
           Defines the mapping from system users to database users.
         '';
       };
-      
+
       authMethod = mkOption {
         default = " ident sameuser ";
         description = ''
-          How to authorize users. 
+          How to authorize users.
           Note: ident needs absolute trust to all allowed client hosts.
         '';
       };
-      
+
       enableTCPIP = mkOption {
         default = false;
         description = ''
@@ -122,7 +122,7 @@ in
         # So a nicer solution was patching postgresql to allow setting the
         # libdir explicitely.
       };
-      
+
       extraConfig = mkOption {
         default = "";
         description = "Additional text to be appended to <filename>postgresql.conf</filename>.";
@@ -133,7 +133,7 @@ in
 
 
   ###### implementation
-  
+
   config = mkIf config.services.postgresql.enable {
 
     users.extraUsers = singleton
@@ -196,5 +196,5 @@ in
       };
 
   };
-  
+
 }

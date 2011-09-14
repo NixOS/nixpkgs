@@ -68,7 +68,7 @@ in
 
     environment.systemPackages = [ pkgs.polkit ];
 
-    # The polkit daemon reads action files 
+    # The polkit daemon reads action files
     environment.pathsToLink = [ "/share/polkit-1/actions" ];
 
     environment.etc =
@@ -86,7 +86,7 @@ in
             '';
           target = "polkit-1/localauthority.conf.d/10-nixos.conf";
         }
-        
+
         { source = pkgs.writeText "org.nixos.pkla" cfg.permissions;
           target = "polkit-1/localauthority/10-vendor.d/org.nixos.pkla";
         }
@@ -95,7 +95,7 @@ in
     services.dbus.packages = [ pkgs.polkit ];
 
     security.pam.services = [ { name = "polkit-1"; } ];
-    
+
     security.setuidPrograms = [ "pkexec" ];
 
     security.setuidOwners = singleton
@@ -115,7 +115,7 @@ in
         # configuration.
         ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
       '';
-      
+
   };
 
 }

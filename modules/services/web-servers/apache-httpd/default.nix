@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   mainCfg = config.services.httpd;
-  
+
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
   httpd = pkgs.apacheHttpd;
@@ -16,7 +16,7 @@ let
   extraForeignModules = filter builtins.isAttrs extraModules;
   extraApacheModules = filter (x: !(builtins.isAttrs x)) extraModules; # I'd prefer using builtins.isString here, but doesn't exist yet
 
-  
+
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
     canonicalName =
@@ -40,7 +40,7 @@ let
   };
 
   vhosts = let
-    makeVirtualHost = cfgIn: 
+    makeVirtualHost = cfgIn:
       let
         # Fill in defaults for missing options.
         cfg = addDefaultOptionValues vhostOptions cfgIn;
@@ -49,11 +49,11 @@ let
 
 
   allHosts = [mainCfg] ++ vhosts;
-    
+
 
   callSubservices = serverInfo: defs:
     let f = svc:
-      let 
+      let
         svcFunction =
           if svc ? function then svc.function
           else import "${./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix";
@@ -77,7 +77,7 @@ let
     in map f defs;
 
 
-  # !!! callSubservices is expensive   
+  # !!! callSubservices is expensive
   subservicesFor = cfg: callSubservices (makeServerInfo cfg) cfg.extraSubservices;
 
   mainSubservices = subservicesFor mainCfg;
@@ -91,10 +91,10 @@ let
 
 
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
-  
+
 
   # Names of modules from ${httpd}/modules that we want to load.
-  apacheModules = 
+  apacheModules =
     [ # HTTP authentication mechanisms: basic and digest.
       "auth_basic" "auth_digest"
 
@@ -110,10 +110,10 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
-    ] 
+    ]
     ++ optional enableSSL "ssl"
     ++ extraApacheModules;
-    
+
 
   loggingConf = ''
     ErrorLog ${mainCfg.logDir}/error_log
@@ -208,7 +208,7 @@ let
       SSLCertificateFile ${cfg.sslServerCert}
       SSLCertificateKeyFile ${cfg.sslServerKey}
     '' else ""}
-    
+
     ${if cfg.enableSSL then ''
       SSLEngine on
     '' else if enableSSL then /* i.e., SSL is enabled for some host, but not this one */
@@ -230,10 +230,10 @@ let
     ${if isMainServer || cfg.documentRoot != null then documentRootConf else ""}
 
     ${if cfg.enableUserDir then ''
-    
+
       UserDir public_html
       UserDir disabled root
-      
+
       <Directory "/home/*/public_html">
           AllowOverride FileInfo AuthConfig Limit Indexes
           Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
@@ -246,7 +246,7 @@ let
               Deny from all
           </LimitExcept>
       </Directory>
-      
+
     '' else ""}
 
     ${if cfg.globalRedirect != "" then ''
@@ -278,9 +278,9 @@ let
     ${cfg.extraConfig}
   '';
 
-  
+
   httpdConf = pkgs.writeText "httpd.conf" ''
-  
+
     ServerRoot ${httpd}
 
     PidFile ${mainCfg.stateDir}/httpd.pid
@@ -305,7 +305,7 @@ let
           concatMap (svc: svc.extraModulesPre) allSubservices
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
           ++ optional enablePHP { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
-          ++ concatMap (svc: svc.extraModules) allSubservices 
+          ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
     }
@@ -325,7 +325,7 @@ let
     Include ${httpd}/conf/extra/httpd-autoindex.conf
     Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
     Include ${httpd}/conf/extra/httpd-languages.conf
-    
+
     ${if enableSSL then sslConf else ""}
 
     # Fascist default - deny access to everything.
@@ -346,7 +346,7 @@ let
 
     # Generate directives for the main server.
     ${perServerConf true mainCfg}
-    
+
     # Always enable virtual hosts; it doesn't seem to hurt.
     ${let
         ports = map getPort allHosts;
@@ -387,9 +387,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.httpd = {
-      
+
       enable = mkOption {
         default = false;
         description = "
@@ -609,5 +609,5 @@ in
       };
 
   };
-  
+
 }

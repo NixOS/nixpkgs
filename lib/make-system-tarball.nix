@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   name = "tarball";
   builder = ./make-system-tarball.sh;
   buildInputs = [perl xz];
-  
+
   inherit fileName pathsFromGraph;
 
   # !!! should use XML.
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   # !!! should use XML.
   objects = map (x: x.object) storeContents;
   symlinks = map (x: x.symlink) storeContents;
-  
+
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;

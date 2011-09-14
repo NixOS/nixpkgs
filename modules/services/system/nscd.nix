@@ -7,7 +7,7 @@ let
   nssModulesPath = config.system.nssModules.path;
 
   inherit (pkgs.lib) singleton;
-  
+
 in
 
 {
@@ -32,7 +32,7 @@ in
   ###### implementation
 
   config = mkIf config.services.nscd.enable {
-  
+
     users.extraUsers = singleton
       { name = "nscd";
         uid = config.ids.uids.nscd;
@@ -45,7 +45,7 @@ in
         startOn = "startup";
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
-        
+
         preStart =
           ''
             mkdir -m 0755 -p /var/run/nscd

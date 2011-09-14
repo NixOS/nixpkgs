@@ -25,7 +25,7 @@ let
         inherit system nixpkgs;
         modules = [ module versionModule ];
       }).config;
-      
+
       iso = config.system.build.isoImage;
 
     in
@@ -85,11 +85,11 @@ let
 
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
-        
+
         version = builtins.readFile ./VERSION;
-        
+
         src = nixosSrc;
-        
+
         inherit officialRelease;
 
         distPhase = ''
@@ -115,7 +115,7 @@ let
             inherit nixpkgs;
             modules = [ { fileSystems = []; } ];
           }).options;
-        revision = 
+        revision =
           if nixosSrc.rev == 1234 then "HEAD" else toString nixosSrc.rev;
       }).manual;
 
@@ -130,7 +130,7 @@ let
       type = "graphical";
     };
 
-    
+
     # Provide a tarball that can be unpacked into an SD card, and easily
     # boot that system from uboot (like for the sheevaplug).
     # The pc variant helps preparing the expression for the system tarball
@@ -152,9 +152,9 @@ let
       } { system = "armv5tel-linux"; };
 
 
-    tests = 
+    tests =
       let
-        t = import ./tests { 
+        t = import ./tests {
           inherit nixpkgs;
           system = "i686-linux";
         };
@@ -187,6 +187,6 @@ let
       };
 
   };
-  
+
 
 in jobs

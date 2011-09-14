@@ -3,7 +3,7 @@
 }:
 
 let
-  
+
   eval = import ./lib/eval-config.nix {
     inherit system;
     modules = [ configuration ];
@@ -26,7 +26,7 @@ let
         { virtualisation.useBootLoader = true; }
       ];
   }).config;
-      
+
 in
 
 {

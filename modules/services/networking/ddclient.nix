@@ -33,9 +33,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.ddclient = {
 
       enable = mkOption {
@@ -102,7 +102,7 @@ in
 
   config = mkIf config.services.ddclient.enable {
     environment.systemPackages = [ ddclient ];
-  
+
     users.extraUsers = singleton
       { name = ddclientUser;
         uid = config.ids.uids.ddclient;
@@ -128,5 +128,5 @@ in
       };
 
   };
-  
+
 }

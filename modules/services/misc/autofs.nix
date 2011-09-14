@@ -17,9 +17,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.autofs = {
-    
+
       enable = mkOption {
         default = false;
         description = "
@@ -97,7 +97,7 @@ in
           pkgs.lib.concatMapStrings (module : "modprobe ${module} || true\n")
                                     (["autofs4"] ++ cfg.kernelModules);
 
-        preStop = 
+        preStop =
           ''
             set -e; while :; do pkill -TERM automount; sleep 1; done
           '';
@@ -125,7 +125,7 @@ in
             exec ${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} "${autoMaster}" ${if cfg.debug then "-l7" else ""}
           '';
       };
-          
+
   };
-  
+
 }

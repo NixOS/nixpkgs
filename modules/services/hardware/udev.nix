@@ -15,9 +15,9 @@ let
   };
 
   modprobe = config.system.sbin.modprobe;
-    
+
   nixosRules = ''
-  
+
     # Miscellaneous devices.
     KERNEL=="sonypi",               MODE="0666"
     KERNEL=="kvm",                  MODE="0666"
@@ -26,7 +26,7 @@ let
     KERNEL=="vboxadd",  NAME="vboxadd",  OWNER="root", GROUP="root", MODE="0660"
     KERNEL=="vboxuser", NAME="vboxuser", OWNER="root", GROUP="root", MODE="0666"
   '';
-  
+
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
@@ -40,7 +40,7 @@ let
       # Set the firmware search path so that the firmware.sh helper
       # called by 50-firmware.rules works properly.
       echo 'ENV{FIRMWARE_DIRS}="/root/test-firmware ${toString config.hardware.firmware}"' >> $out/00-path.rules
-      
+
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
         echo "Adding rules for package $i"
@@ -99,7 +99,7 @@ let
       done
 
       # Use the persistent device rules (naming for CD/DVD and
-      # network devices) stored in 
+      # network devices) stored in
       # /var/lib/udev/rules.d/70-persistent-{cd,net}.rules.  These are
       # modified by the write_{cd,net}_rules helpers called from
       # 75-cd-aliases-generator.rules and
@@ -129,7 +129,7 @@ in
 {
 
   ###### interface
-  
+
   options = {
 
     boot.hardwareScan = mkOption {
@@ -143,7 +143,7 @@ in
         parameter to the kernel command line.
       '';
     };
-  
+
     services.udev = {
 
       packages = mkOption {
@@ -181,11 +181,11 @@ in
       };
 
     };
-    
+
     hardware.firmware = mkOption {
       default = [];
       example = [ "/root/my-firmware" ];
-      merge = mergeListOption; 
+      merge = mergeListOption;
       description = ''
         List of directories containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
@@ -198,16 +198,16 @@ in
         pathsToLink = [ "/" ];
       };
     };
-    
+
   };
-  
+
 
   ###### implementation
 
   config = {
 
     services.udev.extraRules = nixosRules;
-    
+
     services.udev.packages = [ pkgs.udev extraUdevRules ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux pkgs.udev ];

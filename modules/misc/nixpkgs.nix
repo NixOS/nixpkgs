@@ -43,7 +43,7 @@ in
               firefox60Pkgs = pkgs.firefox60Pkgs.override {
                 enableOfficialBranding = true;
               };
-            }; 
+            };
           }
         '';
       type = configType;

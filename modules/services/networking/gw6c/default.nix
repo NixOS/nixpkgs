@@ -44,9 +44,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.gw6c = {
-    
+
       enable = mkOption {
         default = false;
         description = "
@@ -57,7 +57,7 @@ in
       autorun = mkOption {
         default = true;
         description = "
-          Switch to false to create upstart-job and configuration, 
+          Switch to false to create upstart-job and configuration,
           but not run it automatically
         ";
       };
@@ -109,23 +109,23 @@ in
       };
 
     };
-    
+
     security.seccureKeys = {
 
       # !!! It's not clear to me (ED) what additional security this
       # provides.  Passwords shouldn't be in configuration.nix,
       # period.  You could just place the password in
       # /var/blah/password or whatever.
-    
+
       public = mkOption {
         default = /var/elliptic-keys/public;
         description = "
           Public key. Make it path argument, so it is copied into store and
-          hashed. 
+          hashed.
 
           The key is used to encrypt Gateway 6 configuration in store, as it
-          contains a password for external service. Unfortunately, 
-          derivation file should be protected by other means. For example, 
+          contains a password for external service. Unfortunately,
+          derivation file should be protected by other means. For example,
           nix-http-export.cgi will happily export any non-derivation path,
           but not a derivation.
         ";
@@ -141,7 +141,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -149,7 +149,7 @@ in
 
     jobs.gw6c =
       { description = "Gateway6 client";
-      
+
         startOn = if cfg.autorun then "started network-interfaces" else "";
         stopOn = "stopping network-interfaces";
 

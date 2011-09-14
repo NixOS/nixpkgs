@@ -20,11 +20,11 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.hal = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -40,12 +40,12 @@ in
       };
 
     };
-    
+
   };
 
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ hal ];
@@ -67,7 +67,7 @@ in
 
     jobs.hal =
       { description = "HAL daemon";
-        
+
         startOn = "started dbus" + optionalString config.services.acpid.enable " and started acpid";
 
         environment =
@@ -95,7 +95,7 @@ in
           ''
             mkdir -m 0755 -p /var/cache/hald
             mkdir -m 0755 -p /var/run/hald
-            
+
             rm -f /var/cache/hald/fdi-cache
           '';
 
@@ -111,7 +111,7 @@ in
 
     services.dbus.enable = true;
     services.dbus.packages = [hal];
-    
+
   };
 
 }

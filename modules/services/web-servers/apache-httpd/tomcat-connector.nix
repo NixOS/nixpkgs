@@ -43,8 +43,8 @@ JkLogLevel info
 JkLogStampFormat "[%a %b %d %H:%M:%S %Y]"
 
 # JkOptions indicates to send SSK KEY SIZE
-# Note: Changed from +ForwardURICompat. 
-# See http://tomcat.apache.org/security-jk.html  
+# Note: Changed from +ForwardURICompat.
+# See http://tomcat.apache.org/security-jk.html
 JkOptions +ForwardKeySize +ForwardURICompatUnparsed -ForwardDirectories
 
 # JkRequestLogFormat
@@ -63,13 +63,13 @@ JkMount /__application__/* loadbalancer
 # This directive is present with 1.2.10 and
 # later versions of mod_jk, and is needed for
 # for load balancing to work properly
-# Note: Replaced JkShmFile logs/jk.shm due to SELinux issues. Refer to 
+# Note: Replaced JkShmFile logs/jk.shm due to SELinux issues. Refer to
 # https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=225452
 JkShmFile ${config.stateDir}/jk.shm
 
 # Static files in all Tomcat webapp context directories are served by apache
 JkAutoAlias /var/tomcat/webapps
-    
+
 # All requests go to worker by default
 JkMount /* loadbalancer
 # Serve some static files using httpd

@@ -36,11 +36,11 @@ let
       [X-*-Greeter]
       HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10
       PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so
-      
+
       ${optionalString (cfg.enableXDMCP)
       ''
         [Xdmcp]
-        Enable=true    
+        Enable=true
       ''}
     '';
 
@@ -59,11 +59,11 @@ in
 {
 
   ###### interface
-  
+
   options = {
 
     services.xserver.displayManager.kdm = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -85,18 +85,18 @@ in
           configuration file of KDM.
         '';
       };
-      
+
     };
 
   };
-  
-  
+
+
   ###### implementation
-  
+
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.slim.enable = false;
-  
+
     services.xserver.displayManager.job =
       { execCmd =
           ''
@@ -109,7 +109,7 @@ in
       };
 
     security.pam.services = [ { name = "kde"; } ];
-      
+
     users.extraUsers = singleton
       { name = "kdm";
         uid = config.ids.uids.kdm;
@@ -117,5 +117,5 @@ in
       };
 
   };
-  
+
 }

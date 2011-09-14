@@ -7,11 +7,11 @@ with pkgs.lib;
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.upower = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -21,12 +21,12 @@ with pkgs.lib;
       };
 
     };
-    
+
   };
 
 
   ###### implementation
-  
+
   config = mkIf config.services.upower.enable {
 
     environment.systemPackages = [ pkgs.upower ];

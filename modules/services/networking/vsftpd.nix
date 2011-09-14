@@ -2,10 +2,10 @@
 
 with pkgs.lib;
 
-let 
+let
 
   cfg = config.services.vsftpd;
-  
+
   inherit (pkgs) vsftpd;
 
   yesNoOption = p : name :
@@ -18,9 +18,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.vsftpd = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable the vsftpd FTP server.";
@@ -72,9 +72,9 @@ in
       };
 
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -133,5 +133,5 @@ in
       };
 
   };
-  
+
 }

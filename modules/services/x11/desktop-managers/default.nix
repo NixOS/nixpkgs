@@ -10,7 +10,7 @@ let
   # Whether desktop manager `d' is capable of setting a background.
   # If it isn't, the `feh' program is used as a fallback.
   needBGCond = d: ! (d ? bgSupport && d.bgSupport);
-  
+
 in
 
 {
@@ -20,7 +20,7 @@ in
   imports = [ ./none.nix ./xterm.nix ./xfce.nix ./gnome.nix ./kde4.nix ];
 
   options = {
-  
+
     services.xserver.desktopManager = {
 
       session = mkOption {
@@ -64,7 +64,7 @@ in
       };
 
     };
-    
+
   };
 
   config = {

@@ -13,7 +13,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.xserver.windowManager.twm.enable = mkOption {
       default = false;
       description = "Enable the twm window manager.";
@@ -36,7 +36,7 @@ in
       };
 
     environment.x11Packages = [ pkgs.xorg.twm ];
-    
+
   };
 
 }

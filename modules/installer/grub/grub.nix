@@ -16,7 +16,7 @@ let
       extraConfig extraEntries extraEntriesBeforeNixOS extraPerEntryConfig
       splashImage configurationLimit version default timeout;
   };
-  
+
 in
 
 {
@@ -146,7 +146,7 @@ in
       timeout = mkOption {
         default = 5;
         description = ''
-          Timeout (in seconds) until GRUB boots the default menu item.          
+          Timeout (in seconds) until GRUB boots the default menu item.
         '';
       };
 
@@ -160,12 +160,12 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
   config = mkIf config.boot.loader.grub.enable {
-  
+
     system.build.menuBuilder = grubMenuBuilder;
 
     # Common attribute for boot loaders so only one of them can be
@@ -178,5 +178,5 @@ in
     system.build.grub = grub;
 
   };
-  
+
 }

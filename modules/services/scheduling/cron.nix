@@ -22,7 +22,7 @@ let
     # should have sendmail in this path.
     sendmailPath = "/var/setuid-wrappers/sendmail";
   };
-  
+
 in
 
 {
@@ -30,7 +30,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.cron = {
 
       enable = mkOption {
@@ -66,7 +66,7 @@ in
       };
 
     };
-    
+
   };
 
 
@@ -89,7 +89,7 @@ in
       { description = "Cron daemon";
 
         startOn = "startup";
- 
+
         # Needed to interpret times in the local timezone.
         environment = { TZ = config.time.timeZone; };
 
@@ -108,5 +108,5 @@ in
       };
 
   };
-  
+
 }

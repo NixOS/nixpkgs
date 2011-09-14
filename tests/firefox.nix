@@ -2,7 +2,7 @@
 
 {
 
-  machine = 
+  machine =
     { config, pkgs, ... }:
 
     { require = [ ./common/x11.nix ];
@@ -17,5 +17,5 @@
       $machine->sleep(40); # wait until Firefox has finished loading the page
       $machine->screenshot("screen");
     '';
-  
+
 }

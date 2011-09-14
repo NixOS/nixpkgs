@@ -2,7 +2,7 @@
 
 with pkgs.lib;
 
-let 
+let
 
   cfg = config.services.sabnzbd;
   inherit (pkgs) sabnzbd;
@@ -25,7 +25,7 @@ in
       };
     };
   };
-  
+
 
   ###### implementation
 

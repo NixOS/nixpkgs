@@ -20,7 +20,7 @@ in
 {
 
   options = {
-  
+
     security.policykit.enable = mkOption {
       default = false;
       description = "Enable PolicyKit (obsolete).";
@@ -60,7 +60,7 @@ in
           target = "PolicyKit/policy";
         }
       ];
-      
+
     system.activationScripts.policyKit = stringAfter [ "users" ]
       ''
         mkdir -m 0770 -p /var/run/PolicyKit
@@ -68,7 +68,7 @@ in
 
         mkdir -m 0770 -p /var/lib/PolicyKit
         chown root.polkituser /var/lib/PolicyKit
-        
+
         mkdir -p /var/lib/misc
         touch /var/lib/misc/PolicyKit.reload
         chmod 0664 /var/lib/misc/PolicyKit.reload

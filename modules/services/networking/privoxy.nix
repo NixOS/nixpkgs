@@ -28,9 +28,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.privoxy = {
 
       enable = mkOption {
@@ -69,7 +69,7 @@ in
 
   config = mkIf config.services.privoxy.enable {
     environment.systemPackages = [ privoxy ];
-  
+
     users.extraUsers = singleton
       { name = privoxyUser;
         uid = config.ids.uids.privoxy;
@@ -95,5 +95,5 @@ in
       };
 
   };
-  
+
 }

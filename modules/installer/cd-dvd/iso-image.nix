@@ -85,7 +85,7 @@ let
 
 
   # The configuration file for Grub.
-  grubCfg = 
+  grubCfg =
     ''
       set default=${builtins.toString config.boot.loader.grub.default}
       set timeout=${builtins.toString config.boot.loader.grub.timeout}
@@ -104,12 +104,12 @@ let
           set menu_color_normal=cyan/blue
           set menu_color_highlight=white/blue
         fi
-        
+
       fi
 
       ${config.boot.loader.grub.extraEntries}
     '';
-  
+
 in
 
 {
@@ -154,13 +154,13 @@ in
   # We need squashfs in the initrd to mount the compressed Nix store,
   # and aufs to make the root filesystem appear writable.
   boot.extraModulePackages =
-    optional 
-      (! ( config.boot.kernelPackages.kernel.features ? aufs || config.boot.kernelPackages.kernel.features ? aufs2_1 ) ) 
+    optional
+      (! ( config.boot.kernelPackages.kernel.features ? aufs || config.boot.kernelPackages.kernel.features ? aufs2_1 ) )
       config.boot.kernelPackages.aufs2
     ++ optional
       ( config.boot.kernelPackages.kernel.features ? aufs2_1 )
       config.boot.kernelPackages.aufs2_1;
-      
+
   boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
 
   boot.initrd.kernelModules = [ "loop" ];
@@ -184,7 +184,7 @@ in
   # Closures to be copied to the Nix store on the CD, namely the init
   # script and the top-level system configuration directory.
   isoImage.storeContents =
-    [ config.system.build.toplevel ] ++ 
+    [ config.system.build.toplevel ] ++
     optional config.isoImage.includeSystemBuildDependencies
       config.system.build.toplevel.drvPath;
 
@@ -237,13 +237,13 @@ in
         chainloader +1
       }
     '';
-    
+
   boot.loader.grub.timeout = 10;
 
   # Create the ISO image.
   system.build.isoImage = import ../../../lib/make-iso9660-image.nix {
     inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
-    
+
     inherit (config.isoImage) isoName compressImage volumeID contents;
 
     bootable = true;

@@ -14,7 +14,7 @@ let
     if method == "magicpacket" then "wol g"
     else if method == "password" then "wol s so ${passwordParameter password}"
     else throw "Wake-On-Lan method not supported";
-    
+
   line = { interface, method ? "magicpacket", password ? "" }: ''
     ${ethtool} -s ${interface} ${methodParameter {inherit method password;}}
   '';
@@ -26,7 +26,7 @@ in
 {
 
   ###### interface
-  
+
   options = {
 
     services.wakeonlan.interfaces = mkOption {

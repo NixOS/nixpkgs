@@ -40,21 +40,21 @@ let
     # Example configuration for booting PXE.
     allow booting;
     allow bootp;
-    
+
     # Adapt this to your network configuration.
     option domain-name "local";
     option subnet-mask 255.255.255.0;
     option broadcast-address 192.168.1.255;
     option domain-name-servers 192.168.1.1;
     option routers 192.168.1.1;
-    
+
     # PXE-specific configuration directives...
     # Some BIOS don't accept slashes for paths inside the tftp servers,
     # and will report Access Violation if they see slashes.
     filename "pxelinux.0";
     # For the TFTP and NFS root server. Set the IP of your server.
     next-server 192.168.1.34;
-    
+
     subnet 192.168.1.0 netmask 255.255.255.0 {
       range 192.168.1.50 192.168.1.55;
     }
@@ -86,7 +86,7 @@ let
 
     You can test qemu pxe boot without having a DHCP server adapted, but having nfsroot,
     like this:
-      qemu-system-x86_64 -tftp /home/pcroot/boot -net nic -net user,bootfile=pxelinux.0 -boot n 
+      qemu-system-x86_64 -tftp /home/pcroot/boot -net nic -net user,bootfile=pxelinux.0 -boot n
 
     I don't know how to use NFS through the qemu '-net user' though.
 
@@ -114,7 +114,7 @@ in
 {
   require = [
     ./system-tarball.nix
- 
+
    # Profiles of this basic installation.
     ../../profiles/base.nix
     ../../profiles/installation-device.nix
@@ -150,7 +150,7 @@ in
         target = "/boot/memtest";
       }
     ];
-     
+
   # Allow sshd to be started manually through "start sshd".  It should
   # not be started by default on the installation CD because the
   # default root password is empty.

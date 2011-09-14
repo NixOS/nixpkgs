@@ -7,11 +7,11 @@ with pkgs.lib;
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.udisks = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -21,12 +21,12 @@ with pkgs.lib;
       };
 
     };
-    
+
   };
 
 
   ###### implementation
-  
+
   config = mkIf config.services.udisks.enable {
 
     environment.systemPackages = [ pkgs.udisks ];

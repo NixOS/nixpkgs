@@ -23,32 +23,32 @@
       pkgs.patch
       pkgs.which
       pkgs.diffutils
-      pkgs.file 
+      pkgs.file
       pkgs.irssi
       pkgs.mcabber
-      pkgs.mutt 
+      pkgs.mutt
       pkgs.emacs
       pkgs.vimHugeX
-      pkgs.bvi 
+      pkgs.bvi
       pkgs.ddrescue
-      pkgs.cdrkit 
+      pkgs.cdrkit
       pkgs.btrfsProgs
       pkgs.xfsprogs
       pkgs.jfsutils
       pkgs.jfsrec
-      pkgs.ntfs3g 
+      pkgs.ntfs3g
       pkgs.subversion16
       pkgs.monotone
       pkgs.git
       pkgs.darcs
       pkgs.mercurial
       pkgs.bazaar
-      pkgs.cvs 
+      pkgs.cvs
       pkgs.pciutils
       pkgs.hddtemp
       pkgs.sdparm
       pkgs.hdparm
-      pkgs.usbutils 
+      pkgs.usbutils
       pkgs.openssh
       pkgs.lftp
       pkgs.w3m
@@ -64,9 +64,9 @@
       pkgs.unzip
       pkgs.lzma
       pkgs.cabextract
-      pkgs.cpio 
+      pkgs.cpio
       pkgs.lsof
-      pkgs.ltrace 
+      pkgs.ltrace
       pkgs.perl
       pkgs.python
       pkgs.ruby
@@ -74,5 +74,5 @@
       pkgs.clisp
       pkgs.tcl
     ];
-  
+
 }

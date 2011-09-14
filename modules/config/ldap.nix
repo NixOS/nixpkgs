@@ -69,7 +69,7 @@ mkIf config.users.ldap.enable {
           '';
         target = "ldap.conf";
       }
-      
+
     ];
   };
 

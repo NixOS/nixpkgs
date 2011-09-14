@@ -13,9 +13,9 @@ let
       modules =
         [ ../modules/installer/cd-dvd/installation-cd-graphical.nix
           ../modules/testing/test-instrumentation.nix
-          { key = "serial"; 
+          { key = "serial";
             boot.loader.grub.timeout = mkOverrideTemplate 0 {} 0;
-            
+
             # The test cannot access the network, so any sources we
             # need must be included in the ISO.
             isoImage.storeContents =
@@ -27,7 +27,7 @@ let
         ];
     }).config.system.build.isoImage;
 
-    
+
   # The configuration to install.
   config = { fileSystems, testChannel }: pkgs.writeText "configuration.nix"
     ''
@@ -42,7 +42,7 @@ let
         boot.loader.grub.device = "/dev/vda";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" "virtio_console" ];
-      
+
         fileSystems = [ ${fileSystems} ];
         swapDevices = [ { label = "swap"; } ];
 
@@ -56,7 +56,7 @@ let
         device = "/dev/disk/by-label/nixos";
       }
     '';
-    
+
   bootFS =
     ''
       { mountPoint = "/boot";
@@ -64,10 +64,10 @@ let
       }
     '';
 
-    
+
   # Configuration of a web server that simulates the Nixpkgs channel
   # distribution server.
-  webserver = 
+  webserver =
     { config, pkgs, ... }:
 
     { services.httpd.enable = true;
@@ -82,7 +82,7 @@ let
     };
 
   channelContents = [ pkgs.hello.src pkgs.rlwrap ];
-  
+
 
   # The test script boots the CD, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
@@ -93,7 +93,7 @@ let
     ''
       createDisk("harddisk", 4 * 1024);
 
-      my $machine = createMachine({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"), 
+      my $machine = createMachine({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"),
         qemuFlags => '${if testChannel then qemuNICFlags 1 1 2 else ""}'});
       $machine->start;
 
@@ -108,7 +108,7 @@ let
             "http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable " .
             "file:///tmp/channel/MANIFEST ${toString channelContents} >&2");
       ''}
-      
+
       # Make sure that we get a login prompt etc.
       $machine->mustSucceed("echo hello");
       $machine->waitForJob("tty1");
@@ -150,14 +150,14 @@ let
 
       # Perform the installation.
       $machine->mustSucceed("nixos-install >&2");
-      
+
       $machine->mustSucceed("cat /mnt/boot/grub/grub.cfg >&2");
-      
+
       $machine->shutdown;
 
       # Now see if we can boot the installation.
       my $machine = createMachine({ hda => "harddisk" });
-      
+
       # Did /boot get mounted, if appropriate?
       # !!! There is currently no good way to wait for the
       # `filesystems' task to finish.
@@ -166,7 +166,7 @@ let
       # Did the swap device get activated?
       # !!! Idem.
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
-      
+
       $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
@@ -174,7 +174,7 @@ let
       $machine->mustSucceed("nixos-rebuild switch >&2");
 
       $machine->mustSucceed("cat /boot/grub/grub.cfg >&2");
-      
+
       $machine->shutdown;
 
       # And just to be sure, check that the machine still boots after
@@ -184,7 +184,7 @@ let
       $machine->shutdown;
     '';
 
-    
+
   makeTest = { createPartitions, fileSystems, testChannel ? false }:
     { inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
@@ -192,7 +192,7 @@ let
         inherit createPartitions fileSystems testChannel;
       };
     };
-    
+
 
 in {
 
@@ -202,7 +202,7 @@ in {
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
   simple = makeTest
-    { createPartitions = 
+    { createPartitions =
         ''
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
@@ -218,7 +218,7 @@ in {
       fileSystems = rootFS;
       testChannel = true;
     };
-      
+
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeTest
     { createPartitions =
@@ -240,7 +240,7 @@ in {
         '';
       fileSystems = rootFS + bootFS;
     };
-  
+
   # Create two physical LVM partitions combined into one volume group
   # that contains the logical swap and root partitions.
   lvm = makeTest
@@ -296,7 +296,7 @@ in {
     };
 
   # Rebuild the CD configuration with a little modification.
-  rebuildCD = 
+  rebuildCD =
     { inherit iso;
       nodes = { };
       testScript =

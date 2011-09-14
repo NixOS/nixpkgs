@@ -31,7 +31,7 @@ in
 {
 
   ###### interface
-  
+
   options = {
 
     users.defaultUserShell = pkgs.lib.mkOption {
@@ -44,10 +44,10 @@ in
         actual shell in the Nix store.
       '';
     };
-  
+
   };
 
-  
+
   ###### implementation
 
   config = {
@@ -56,10 +56,10 @@ in
 
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
-          # cannot login without it! 
+          # cannot login without it!
           source = pkgs.writeText "login.defs" loginDefs;
           target = "login.defs";
-        } 
+        }
 
         { # /etc/default/useradd: configuration for useradd.
           source = pkgs.writeText "useradd"
@@ -84,14 +84,14 @@ in
         { name = "usermod"; rootOK = true; }
         { name = "userdel"; rootOK = true; }
         { name = "groupadd"; rootOK = true; }
-        { name = "groupmod"; rootOK = true; } 
+        { name = "groupmod"; rootOK = true; }
         { name = "groupmems"; rootOK = true; }
         { name = "groupdel"; rootOK = true; }
         { name = "login"; ownDevices = true; allowNullPassword = true; }
       ];
-      
+
     security.setuidPrograms = [ "passwd" "chfn" "su" ];
-    
+
   };
-  
+
 }

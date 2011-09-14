@@ -10,7 +10,7 @@ let
         default = [];
         example = "map (x : x.ini) (with pkgs.unixODBCDrivers; [ mysql psql psqlng ] )";
         description = ''
-          specifies unix odbc drivers to be registered at /etc/odbcinst.ini. 
+          specifies unix odbc drivers to be registered at /etc/odbcinst.ini.
           Maybe you also want to add pkgs.unixODBC to the system path to get a
           command line client t connnect to odbc databases.
         '';
@@ -30,10 +30,10 @@ mkIf (config.environment.unixODBCDrivers != []) {
   require = [
     options
   ];
-  
+
   environment = {
     etc = [
-      { source = 
+      { source =
           let inis = config.environment.unixODBCDrivers;
           in pkgs.writeText "odbcinst.ini" (pkgs.lib.concatStringsSep "\n" inis);
         target = "odbcinst.ini";

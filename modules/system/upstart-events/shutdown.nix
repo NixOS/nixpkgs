@@ -20,7 +20,7 @@ with pkgs.lib;
           set +e # continue in case of errors
 
           ${pkgs.kbd}/bin/chvt 1
-      
+
           exec < /dev/console > /dev/console 2>&1
           echo ""
           if test "$MODE" = maintenance; then
@@ -31,7 +31,7 @@ with pkgs.lib;
           echo ""
 
           ${config.powerManagement.powerDownCommands}
-      
+
           export PATH=${pkgs.utillinux}/bin:${pkgs.utillinux}/sbin:$PATH
 
 
@@ -44,10 +44,10 @@ with pkgs.lib;
           # event, as these are necessary to complete the shutdown.
           omittedPids=$(initctl list | sed -e 's/.*process \([0-9]\+\)/-o \1/;t;d')
           #echo "saved PIDs: $omittedPids"
-          
+
           echo "sending the TERM signal to all processes..."
           ${pkgs.sysvtools}/bin/killall5 -15 $job $omittedPids
-      
+
           sleep 1 # wait briefly
 
           echo "sending the KILL signal to all processes..."
@@ -95,7 +95,7 @@ with pkgs.lib;
                   # mount points are typically tmpfs/aufs mounts from
                   # the initrd.
                   if [ "$mp" = /proc -o "$mp" = /sys -o "$mp" = /dev -o "$device" = "rootfs" -o "$mp" = /run -o "$mp" = /var/run -o "$mp" = /var/lock -o ! -e "$mp" ]; then continue; fi
-              
+
                   echo "unmounting $mp..."
 
                   # We need to remount,ro before attempting any
@@ -132,8 +132,8 @@ with pkgs.lib;
 
           # Final sync.
           sync
-      
-      
+
+
           # Either reboot or power-off the system.
           if test "$MODE" = reboot; then
               echo "rebooting..."

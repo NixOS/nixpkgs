@@ -15,7 +15,7 @@ with pkgs.lib;
               ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "4G"
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
-          exportReferencesGraph = 
+          exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
         }
         ''
@@ -24,7 +24,7 @@ with pkgs.lib;
           ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
           . /sys/class/block/vda1/uevent
           mknod /dev/vda1 b $MAJOR $MINOR
-        
+
           # Create an empty filesystem and mount it.
           ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda1
           ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
@@ -83,9 +83,9 @@ with pkgs.lib;
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.timeout = 0;
 
-  # Put /tmp and /var on /ephemeral0, which has a lot more space.  
-  # Unfortunately we can't do this with the `fileSystems' option 
-  # because it has no support for creating the source of a bind 
+  # Put /tmp and /var on /ephemeral0, which has a lot more space.
+  # Unfortunately we can't do this with the `fileSystems' option
+  # because it has no support for creating the source of a bind
   # mount.  Also, "move" /nix to /ephemeral0 by layering an AUFS
   # on top of it so we have a lot more space for Nix operations.
   /*

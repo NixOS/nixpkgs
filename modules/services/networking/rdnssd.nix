@@ -10,7 +10,7 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.rdnssd.enable = mkOption {
       default = false;
       #default = config.networking.enableIPv6;
@@ -32,7 +32,7 @@ with pkgs.lib;
 
     jobs.rdnssd =
       { description = "RDNSS daemon";
-      
+
         # Start before the network interfaces are brought up so that
         # the daemon receives RDNSS advertisements from the kernel.
         startOn = "starting network-interfaces";
@@ -44,5 +44,5 @@ with pkgs.lib;
       };
 
   };
-  
+
 }

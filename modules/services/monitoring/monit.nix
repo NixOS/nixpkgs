@@ -1,7 +1,7 @@
 # Monit system watcher
 # http://mmonit.org/monit/
 
-{config, pkgs, ...}: 
+{config, pkgs, ...}:
 
 let inherit (pkgs.lib) mkOption mkIf;
 in
@@ -25,9 +25,9 @@ in
       };
     };
   };
-  
+
   config = mkIf config.services.monit.enable {
-  
+
     environment.etc = [
       {
         source = pkgs.writeTextFile {
@@ -38,10 +38,10 @@ in
         mode = "0400";
       }
     ];
-    
+
     jobs.monit = {
       description = "Monit system watcher";
-      
+
       startOn = config.services.monit.startOn;
 
       exec = "${pkgs.monit}/bin/monit -I -c /etc/monit.conf";

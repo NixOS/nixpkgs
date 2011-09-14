@@ -29,7 +29,7 @@ in
           label = "bigdisk";
         }
       ];
-      
+
       description = "
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = \"/\"</literal>).  Each
@@ -46,10 +46,10 @@ in
         systems that support it, such as ext2/ext3 (see <command>mke2fs
         -L</command>).
 
-        <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with 
+        <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with
         <command>mkdir -p</command> .
       ";
-      
+
       type = types.nullOr (types.loaOf types.optionSet);
       apply = x: attrValues x;
 
@@ -114,7 +114,7 @@ in
         };
       };
     };
-  
+
     system.sbin.mount = mkOption {
       internal = true;
       default = pkgs.utillinuxng;
@@ -122,7 +122,7 @@ in
         Package containing mount and umount.
       ";
     };
-    
+
   };
 
 
@@ -134,7 +134,7 @@ in
     environment.systemPackages =
       [ pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils pkgs.mountall ]
       ++ fsPackages;
-    
+
     environment.etc = singleton
       { source = pkgs.writeText "fstab"
           ''
@@ -170,7 +170,7 @@ in
           + optionalString config.services.nfsKernel.client.enable " and started nfs-kernel-statd";
 
         task = true;
-        
+
         script =
           ''
             exec > /dev/console 2>&1
@@ -218,7 +218,7 @@ in
         script =
           ''
             [ -n "$MOUNTPOINT" ] || exit 0
-            
+
             exec < /dev/console > /dev/console 2>&1
 
             cat <<EOF
@@ -237,7 +237,7 @@ in
 
             - Remove the failed filesystem from the system configuration in
               /etc/nixos/configuration.nix and run \`nixos-rebuild switch'.
-            
+
             EOF
 
             ${pkgs.shadow}/bin/login root || false

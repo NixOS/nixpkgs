@@ -5,7 +5,7 @@
   ###### interface
 
   options = {
-  
+
     networking.enableRTL8192cFirmware = pkgs.lib.mkOption {
       default = false;
       type = pkgs.lib.types.bool;
@@ -18,9 +18,9 @@
 
 
   ###### implementation
-  
+
   config = pkgs.lib.mkIf config.networking.enableRTL8192cFirmware {
     hardware.firmware = [ pkgs.rtl8192cfw ];
   };
-  
+
 }

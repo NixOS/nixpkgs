@@ -7,7 +7,7 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.mingetty = {
 
       ttys = mkOption {
@@ -47,7 +47,7 @@ with pkgs.lib;
       };
 
     };
-    
+
   };
 
 
@@ -55,25 +55,25 @@ with pkgs.lib;
 
   config = {
 
-    # Generate a separate job for each tty.  
+    # Generate a separate job for each tty.
     jobs = listToAttrs (map (tty: nameValuePair tty {
-    
+
       startOn = "started udev and filesystem";
 
       exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
-      
+
     }) config.services.mingetty.ttys);
 
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
-      
+
           [1;32m${config.services.mingetty.greetingLine}[0m
           ${config.services.mingetty.helpLine}
-        
+
         '';
         target = "issue";
       };
   };
-  
+
 }

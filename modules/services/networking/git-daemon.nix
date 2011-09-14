@@ -9,7 +9,7 @@ in
 {
 
   ###### interface
-  
+
   options = {
     services.gitDaemon = {
 
@@ -18,7 +18,7 @@ in
         description = ''
           Enable Git daemon, which allows public hosting  of git repositories
           without any access controls. This is mostly intended for read-only access.
-          
+
           You can allow write access by setting daemon.receivepack configuration
           item of the repository to true. This is solely meant for a closed LAN setting
           where everybody is friendly.

@@ -8,19 +8,19 @@
 
   # Useful for rescue..
   environment.systemPackages = with pkgs; [
-    utillinuxCurses ddrescue 
+    utillinuxCurses ddrescue
     pciutils sdparm hdparm hddtemp usbutils
     btrfsProgs xfsprogs jfsutils jfsrec
-    iproute 
+    iproute
     fuse ntfs3g smbfsFuse sshfsFuse
-    manpages irssi elinks mcabber mutt openssh lftp 
+    manpages irssi elinks mcabber mutt openssh lftp
     openssl ncat socat
     gnupg1 gnupg
     patch which diffutils gcc binutils bc file
     screen
-    bvi joe nvi 
+    bvi joe nvi
     subversion16 monotone git darcs mercurial bazaar cvs
-    unrar unzip zip lzma cabextract cpio 
+    unrar unzip zip lzma cabextract cpio
     lsof
   ];
 

@@ -10,7 +10,7 @@ let
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   };
-  
+
 in
 
 {
@@ -37,15 +37,15 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
   config = {
-  
+
     system.build.initScriptBuilder =
        if config.boot.loader.initScript.enable then initScriptBuilder else "";
 
   };
-  
+
 }

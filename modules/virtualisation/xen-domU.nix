@@ -18,7 +18,7 @@
   services.syslogd.tty = "hvc0";
 
   # Start a mingetty on the Xen console (so that you can login using
-  # "xm console" in Dom0). 
+  # "xm console" in Dom0).
   services.mingetty.ttys = [ "hvc0" "tty1" "tty2" ];
 
   # Don't run ntpd, since we should get the correct time from Dom0.

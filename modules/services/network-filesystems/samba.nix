@@ -5,13 +5,13 @@ with pkgs.lib;
 let
 
   cfg = config.services.samba;
-  
+
   user = "smbguest";
   group = "smbguest";
 
   logDir = "/var/log/samba";
   privateDir = "/var/samba/private";
- 
+
   inherit (pkgs) samba;
 
   setupScript =
@@ -72,7 +72,7 @@ let
         TZ = config.time.timeZone;
         LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
       };
-  
+
       daemonType = "fork";
 
       exec = "${samba}/sbin/${appName} ${args}";
@@ -87,7 +87,7 @@ in
   options = {
 
     # !!! clean up the descriptions.
-  
+
     services.samba = {
 
       enable = mkOption {
@@ -176,7 +176,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -218,5 +218,5 @@ in
     jobs.winbindd = daemonJob "winbindd" "-D";
 
   };
-  
+
 }

@@ -10,9 +10,9 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.fourStoreEndpoint = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable 4Store SPARQL endpoint.";
@@ -68,5 +68,5 @@ with pkgs.lib;
     };
 
   });
-  
+
 }

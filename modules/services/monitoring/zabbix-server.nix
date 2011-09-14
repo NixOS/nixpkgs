@@ -18,7 +18,7 @@ let
   configFile = pkgs.writeText "zabbix_server.conf"
     ''
       LogFile = ${logDir}/zabbix_server
-  
+
       PidFile = ${pidFile}
 
       DBHost = ${cfg.dbServer}
@@ -33,13 +33,13 @@ let
     '';
 
 in
-  
+
 {
 
   ###### interface
 
   options = {
-  
+
     services.zabbixServer.enable = mkOption {
       default = false;
       description = ''
@@ -119,7 +119,7 @@ in
             while ${pkgs.procps}/bin/pkill -u zabbix zabbix_server; do true; done
           '';
       };
-      
+
   };
 
 }

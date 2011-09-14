@@ -6,7 +6,7 @@ let
 
   ids = config.ids;
 
-  
+
   # User accounts to be created/updated by NixOS.
   users =
     let
@@ -46,7 +46,7 @@ let
   # Groups to be created/updated by NixOS.
   groups =
     let
-      defaultGroups = 
+      defaultGroups =
         [ { name = "root";
             gid = ids.gids.root;
           }
@@ -108,10 +108,10 @@ let
   # having an empty password, and not having a password.
   serializedUser = u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n";
   serializedGroup = g: "${g.name}\n${toString g.gid}";
-  
+
   # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
   usersFile = pkgs.writeText "users" (concatStrings (map serializedUser users));
-  
+
 in
 
 {
@@ -119,7 +119,7 @@ in
   ###### interface
 
   options = {
-  
+
     users.extraUsers = mkOption {
       default = [];
       example =
@@ -152,7 +152,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -230,7 +230,7 @@ in
     system.activationScripts.groups = stringAfter [ "rootPasswd" "binsh" "etc" "var" ]
       ''
         echo "updating groups..."
-        
+
         while true; do
             read name || break
             read gid

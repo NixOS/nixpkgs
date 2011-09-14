@@ -28,7 +28,7 @@ in
   ###### interface
 
   options = {
-  
+
     powerManagement = {
 
       enable = mkOption {
@@ -44,7 +44,7 @@ in
         default = "";
         description = "Commands executed after the system resumes from suspend-to-RAM.";
       };
-      
+
       powerUpCommands = mkOption {
         default = "";
         example = "${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda";
@@ -66,11 +66,11 @@ in
             it goes to suspend or hibernation.
           '';
       };
-      
+
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -86,11 +86,11 @@ in
         target = "pm/sleep.d/00sleep-hook";
       };
 
-    boot.kernelModules = 
-      [ "acpi_cpufreq" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand" 
+    boot.kernelModules =
+      [ "acpi_cpufreq" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
         "p4_clockmod"
       ];
-    
+
   };
 
 }

@@ -30,9 +30,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.ntp = {
 
       enable = mkOption {
@@ -62,7 +62,7 @@ in
   ###### implementation
 
   config = mkIf config.services.ntp.enable {
-  
+
     users.extraUsers = singleton
       { name = ntpUser;
         uid = config.ids.uids.ntp;
@@ -93,7 +93,7 @@ in
 
         exec = "${ntp}/bin/ntpd -g -n ${ntpFlags}";
       };
-    
+
   };
-  
+
 }

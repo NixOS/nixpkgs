@@ -14,9 +14,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.xserver.displayManager.auto = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -42,7 +42,7 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.slim.enable = false;
-  
+
     services.xserver.displayManager.job =
       { execCmd =
           ''

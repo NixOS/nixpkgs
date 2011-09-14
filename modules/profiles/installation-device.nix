@@ -144,7 +144,7 @@ in
     # Some more help text.
     services.mingetty.helpLine =
       ''
-          
+
         Log in as "root" with an empty password.  ${
           if config.services.xserver.enable then
             "Type `start xserver' to start\nthe graphical user interface."

@@ -15,7 +15,7 @@ in
       description = '';
         The device that should be decrypted using LUKS before trying to mount the
         root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
-         
+
         Make sure that initrd has the crypto modules needed for decryption.
 
         The decrypted device name is /dev/mapper/luksroot.

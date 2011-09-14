@@ -35,7 +35,7 @@ in
         <option>boot.extraTTYs</option> to <literal>["tty7"]</literal>.
       '';
     };
-    
+
     # dummy option so that requiredTTYs can be passed
     requiredTTYs = mkOption {
       default = [];
@@ -44,18 +44,18 @@ in
         FIXME: find a good description.
       ";
     };
-  
+
   };
 
 
   ###### implementation
 
-  config = {  
-  
+  config = {
+
     inherit requiredTTYs; # pass it to ./modules/tasks/tty-backgrounds.nix
 
     environment.systemPackages = [pkgs.kbd];
-  
+
     jobs.kbd =
       { description = "Keyboard / console initialisation";
 
@@ -82,7 +82,7 @@ in
             for tty in ${toString ttys}; do
 
               # Tell the console output driver that the bytes arriving are
-              # UTF-8 encoded multibyte sequences. 
+              # UTF-8 encoded multibyte sequences.
               echo -n -e '\033%G' > $tty
 
             done
@@ -98,7 +98,7 @@ in
             for tty in ${toString ttys}; do
 
               # Tell the console output driver that the bytes arriving are
-              # UTF-8 encoded multibyte sequences. 
+              # UTF-8 encoded multibyte sequences.
               echo -n -e '\033%@' > $tty
 
             done

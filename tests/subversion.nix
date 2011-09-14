@@ -30,7 +30,7 @@ let
       };
 
 in
-      
+
 {
 
   nodes =
@@ -73,11 +73,11 @@ in
       # Create a new user through the web interface.
       $client->mustSucceed("curl --fail -F username=alice -F fullname='Alice Lastname' -F address=alice\@example.org -F password=foobar -F password_again=foobar http://webserver/repoman/adduser");
 
-      # Let Alice create a new repository.      
+      # Let Alice create a new repository.
       $client->mustSucceed("curl --fail -u alice:foobar --form repo=xyzzy --form description=Xyzzy http://webserver/repoman/create");
 
       $client->mustSucceed("curl --fail http://webserver/") =~ /alice/ or die;
-      
+
       # Let Alice do a checkout.
       my $svnFlags = "--non-interactive --username alice --password foobar";
       $client->mustSucceed("svn co $svnFlags http://webserver/repos/xyzzy wc");
@@ -98,10 +98,10 @@ in
       # !!! Repoman should really return a 403 here.
       $client->succeed("curl --fail -u bob:fnord -F description=Xyzzy -F readers=alice,bob -F writers=alice -F watchers= -F tardirs= http://webserver/repoman/update/xyzzy")
           =~ /not authorised/ or die;
-      
+
       # Give Bob access.
       $client->mustSucceed("curl --fail -u alice:foobar -F description=Xyzzy -F readers=alice,bob -F writers=alice -F watchers= -F tardirs= http://webserver/repoman/update/xyzzy");
-      
+
       # So now his checkout should succeed.
       $client->mustSucceed("svn co $svnFlagsBob http://webserver/repos/xyzzy wc2");
 

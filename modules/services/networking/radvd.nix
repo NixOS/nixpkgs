@@ -17,7 +17,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.radvd.enable = mkOption {
       default = false;
       description =
@@ -53,10 +53,10 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.radvd ];
-    
+
     jobs.radvd =
       { description = "IPv6 Router Advertisement Daemon";
-      
+
         startOn = "started network-interfaces";
 
         preStart =
@@ -66,12 +66,12 @@ in
             # necessarily for all interfaces).
             echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
           '';
-        
+
         exec = "${pkgs.radvd}/sbin/radvd -m syslog -s -C ${confFile}";
 
         daemonType = "fork";
       };
 
   };
-  
+
 }

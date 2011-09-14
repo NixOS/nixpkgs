@@ -10,12 +10,12 @@ let
   cfg = config.services.rogue;
 
 in
-  
+
 {
   ###### interface
 
   options = {
-  
+
     services.rogue.enable = mkOption {
       default = false;
       description = ''
@@ -33,13 +33,13 @@ in
 
   };
 
-  
+
   ###### implementation
 
   config = mkIf cfg.enable {
 
     boot.extraTTYs = [ cfg.tty ];
-  
+
     jobs.rogue =
       { description = "Rogue dungeon crawling game";
 
@@ -56,5 +56,5 @@ in
       };
 
   };
-    
+
 }

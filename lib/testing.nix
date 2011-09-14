@@ -14,13 +14,13 @@ rec {
     buildInputs = [ makeWrapper perl ];
 
     unpackPhase = "true";
-    
+
     installPhase =
       ''
         mkdir -p $out/bin
         cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
         chmod u+x $out/bin/nixos-test-driver
-        
+
         libDir=$out/lib/perl5/site_perl
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
@@ -38,9 +38,9 @@ rec {
   runTests = driver:
     stdenv.mkDerivation {
       name = "vm-test-run";
-      
+
       requiredSystemFeatures = [ "kvm" ];
-      
+
       buildInputs = [ pkgs.libxslt ];
 
       buildCommand =
@@ -49,7 +49,7 @@ rec {
 
           LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver || failed=1
 
-          # Generate a pretty-printed log.          
+          # Generate a pretty-printed log.
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
           ln -s ${./test-driver/logfile.css} $out/logfile.css
           ln -s ${./test-driver/treebits.js} $out/treebits.js
@@ -96,12 +96,12 @@ rec {
           done
 
           find $TMPDIR/gcov -name "*.gcda" -exec chmod 644 {} \;
-          
+
           echo "producing info..."
           ${pkgs.lcov}/bin/geninfo --ignore-errors source,gcov $TMPDIR/gcov --output-file $TMPDIR/app.info
           cat $TMPDIR/app.info >> $TMPDIR/full.info
       done
-            
+
       echo "making report..."
       mkdir -p $out/coverage
       ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/full.info -o $out/coverage
@@ -131,11 +131,11 @@ rec {
       if builtins.isFunction t.testScript
       then t.testScript { inherit nodes; }
       else t.testScript;
-      
+
     vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
 
     vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
-    
+
     # Generate onvenience wrappers for running the test driver
     # interactively with the specified network, and for starting the
     # VMs from the command line.
@@ -161,11 +161,11 @@ rec {
       ''; # "
 
     test = runTests driver;
-      
+
     report = makeReport test;
   };
 
-  
+
   runInMachine =
     { drv
     , machine
@@ -181,12 +181,12 @@ rec {
 
       buildrunner = writeText "vm-build" ''
         source $1
- 
+
         ${coreutils}/bin/mkdir -p $TMPDIR
         cd $TMPDIR
-        
+
         $origBuilder $origArgs
-         
+
         exit $?
       '';
 
@@ -211,10 +211,10 @@ rec {
         builder = "${bash}/bin/sh";
         args = ["-e" vmRunCommand];
         origArgs = attrs.args;
-        origBuilder = attrs.builder;   
+        origBuilder = attrs.builder;
       });
 
-      
+
   runInMachineWithX = { require ? [], ... } @ args:
     let
       client =
@@ -238,7 +238,7 @@ rec {
           '';
       } // args);
 
-          
+
   simpleTest = as: (makeTest ({ ... }: as)).test;
 
 }

@@ -3,7 +3,7 @@
 with pkgs.lib;
 
 let
-  
+
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
   subversion = pkgs.subversion.override (origArgs: {
     bdbSupport = true;
@@ -14,18 +14,18 @@ let
   });
 
   pythonLib = p: "${p}/";
-  
+
 in
 
 {
 
   options = {
-  
+
     projectsLocation = mkOption {
       description = "URL path in which Trac projects can be accessed";
       default = "/projects";
     };
-    
+
     projects = mkOption {
       description = "List of projects that should be provided by Trac. If they are not defined yet empty projects are created.";
       default = [];
@@ -37,7 +37,7 @@ in
           }
         ];
     };
-    
+
     user = mkOption {
       default = "wwwrun";
       description = "User account under which Trac runs.";
@@ -64,12 +64,12 @@ in
         description = "AuthName";
       };
     };
-    
+
   };
 
   extraModules = singleton
     { name = "python"; path = "${pkgs.mod_python}/modules/mod_python.so"; };
-  
+
   extraConfig = ''
     <Location ${config.projectsLocation}>
       SetHandler mod_python
@@ -89,7 +89,7 @@ in
     '' else ""}
     </LocationMatch>
   '';
-  
+
   globalEnvVars = singleton
     { name = "PYTHONPATH";
       value =
@@ -103,11 +103,11 @@ in
             subversion
           ];
     };
-  
+
   startupScript = pkgs.writeScript "activateTrac" ''
     mkdir -p /var/trac
     chown ${config.user}:${config.group} /var/trac
-    
+
     ${concatMapStrings (project:
       ''
         if [ ! -d /var/trac/${project.identifier} ]
@@ -117,5 +117,5 @@ in
         fi
       '' ) (config.projects)}
   '';
-  
+
 }

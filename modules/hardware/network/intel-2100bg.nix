@@ -5,7 +5,7 @@
   ###### interface
 
   options = {
-  
+
     networking.enableIntel2100BGFirmware = pkgs.lib.mkOption {
       default = false;
       type = pkgs.lib.types.bool;
@@ -22,13 +22,13 @@
 
 
   ###### implementation
-  
+
   config = pkgs.lib.mkIf config.networking.enableIntel2100BGFirmware {
-  
+
     # Warning: setting this option requires acceptance of the firmware
     # license, see http://ipw2100.sourceforge.net/firmware.php?fid=2.
     hardware.firmware = [ pkgs.ipw2100fw ];
 
   };
-  
+
 }

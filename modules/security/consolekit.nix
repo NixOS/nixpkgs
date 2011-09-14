@@ -13,7 +13,7 @@ let
     name = "var-run-console.ck";
     destination = "/etc/ConsoleKit/run-session.d/var-run-console.ck";
     executable = true;
-    
+
     text =
       ''
         #! ${pkgs.stdenv.shell} -e

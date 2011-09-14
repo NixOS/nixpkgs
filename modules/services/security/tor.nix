@@ -22,15 +22,15 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.tor = {
 
       config = mkOption {
         default = "";
         description = ''
-          Extra configuration. Contents will be added verbatim to the 
+          Extra configuration. Contents will be added verbatim to the
           configuration file.
         '';
       };
@@ -49,7 +49,7 @@ in
           default = "127.0.0.1:9050";
           example = "192.168.0.1:9100";
           description = ''
-            Bind to this address to listen for connections from Socks-speaking 
+            Bind to this address to listen for connections from Socks-speaking
             applications.
           '';
         };
@@ -70,9 +70,9 @@ in
             default = true;
             description = ''
               Whether to enable a special instance of privoxy dedicated to Tor.
-              To have anonymity, protocols need to be scrubbed of identifying 
+              To have anonymity, protocols need to be scrubbed of identifying
               information.
-              Most people using Tor want to anonymize their web traffic, so by 
+              Most people using Tor want to anonymize their web traffic, so by
               default we enable an special instance of privoxy specifically for
               Tor.
               However, if you are only going to use Tor only for other kinds of
@@ -84,9 +84,9 @@ in
             default = "127.0.0.1:8118";
             description = ''
               Address that Tor's instance of privoxy is listening to.
-              *This does not configure the standard NixOS instance of privoxy.*  
-              This is for Tor connections only! 
-              See services.privoxy.listenAddress to configure the standard NixOS 
+              *This does not configure the standard NixOS instance of privoxy.*
+              This is for Tor connections only!
+              See services.privoxy.listenAddress to configure the standard NixOS
               instace of privoxy.
             '';
           };
@@ -94,11 +94,11 @@ in
           config = mkOption {
             default = "";
             description = ''
-              Extra configuration for Tor's instance of privoxy. Contents will be 
+              Extra configuration for Tor's instance of privoxy. Contents will be
               added verbatim to the configuration file.
-              *This does not configure the standard NixOS instance of privoxy.* 
-              This is for Tor connections only! 
-              See services.privoxy.extraConfig to configure the standard NixOS 
+              *This does not configure the standard NixOS instance of privoxy.*
+              This is for Tor connections only!
+              See services.privoxy.extraConfig to configure the standard NixOS
               instace of privoxy.
             '';
           };
@@ -107,7 +107,7 @@ in
 
       };
 
-      relay = {      
+      relay = {
 
         enable = mkOption {
           default = false;
@@ -246,7 +246,7 @@ in
       torPrivoxy = { name = "tor-privoxy";
 
                      startOn = "starting tor";
-                     stopOn = "stopping tor"; 
+                     stopOn = "stopping tor";
 
                      preStart = ''
                        mkdir -m 0755 -p ${privoxyDir}
@@ -275,7 +275,7 @@ in
         ${if cfg.relay.isExit then opt "ExitPolicy" cfg.relay.exitPolicy else "ExitPolicy reject *:*"}
         ${if cfg.relay.isBridge then "BridgeRelay 1" else ""}
       '';
-    
+
       services.tor.client.privoxy.config = ''
         # Generally, this file goes in /etc/privoxy/config
         #
@@ -287,14 +287,14 @@ in
         actionsfile default.action   # Main actions file
         actionsfile user.action      # User customizations
         filterfile default.filter
-        
+
         # Don't log interesting things, only startup messages, warnings and errors
         logfile logfile
         #jarfile jarfile
         #debug   0    # show each GET/POST/CONNECT request
         debug   4096 # Startup banner and warnings
         debug   8192 # Errors - *we highly recommended enabling this*
-        
+
         user-manual ${privoxy}/doc/privoxy/user-manual
         listen-address  ${cfg.client.privoxy.listenAddress}
         toggle  1
@@ -302,10 +302,10 @@ in
         enable-edit-actions 0
         enable-remote-http-toggle 0
         buffer-limit 4096
-    
+
         # Extra config goes here
       '';
-     
+
   });
-  
+
 }

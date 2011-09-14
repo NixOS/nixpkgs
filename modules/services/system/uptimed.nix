@@ -19,9 +19,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.uptimed = {
 
       enable = mkOption {
@@ -39,9 +39,9 @@ in
   ###### implementation
 
   config = mkIf config.services.uptimed.enable {
-  
+
     environment.systemPackages = [ uptimed ];
-  
+
     users.extraUsers = singleton
       { name = uptimedUser;
         uid = config.ids.uids.uptimed;
@@ -69,7 +69,7 @@ in
 
         exec = "${uptimed}/sbin/uptimed ${uptimedFlags}";
       };
-    
+
   };
-  
+
 }

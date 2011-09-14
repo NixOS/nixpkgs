@@ -7,18 +7,18 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.pcscd = {
 
       enable = mkOption {
         default = false;
         description = "Whether to enable the PCSC-Lite daemon.";
       };
-      
+
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -40,7 +40,7 @@ with pkgs.lib;
 
         exec = "${pkgs.pcsclite}/sbin/pcscd";
       };
-      
+
   };
-  
+
 }

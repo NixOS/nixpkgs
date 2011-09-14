@@ -16,9 +16,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.openldap = {
-    
+
       enable = mkOption {
         default = false;
         description = "
@@ -33,7 +33,7 @@ in
         ";
       };
     };
-    
+
   };
 
 

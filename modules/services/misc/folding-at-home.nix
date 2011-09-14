@@ -7,9 +7,9 @@ let
 in {
 
   ###### interface
-  
+
   options = {
-  
+
     services.foldingAtHome = {
 
       enable = mkOption {
@@ -29,7 +29,7 @@ in {
       config = mkOption {
         default = "";
         description = ''
-          Extra configuration. Contents will be added verbatim to the 
+          Extra configuration. Contents will be added verbatim to the
           configuration file.
         '';
       };

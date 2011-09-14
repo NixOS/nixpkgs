@@ -48,9 +48,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.gnunet = {
-      
+
       enable = mkOption {
         default = false;
         description = ''

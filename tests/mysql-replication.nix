@@ -6,9 +6,9 @@ let
 in
 {
   nodes = {
-    master = 
+    master =
       { pkgs, config, ... }:
-      
+
       {
         services.mysql.enable = true;
 	services.mysql.replication.role = "master";
@@ -19,22 +19,22 @@ in
           grant replication slave on *.* to '${replicateUser}'@'%';
         '';
       };
-    
+
     slave1 =
       { pkgs, config, nodes, ... }:
-      
+
       {
         services.mysql.enable = true;
 	services.mysql.replication.role = "slave";
 	services.mysql.replication.serverId = 2;
 	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
 	services.mysql.replication.masterUser = replicateUser;
-	services.mysql.replication.masterPassword = replicatePassword;	
+	services.mysql.replication.masterPassword = replicatePassword;
       };
-      
+
     slave2 =
       { pkgs, config, nodes, ... }:
-      
+
       {
         services.mysql.enable = true;
 	services.mysql.replication.role = "slave";
@@ -44,10 +44,10 @@ in
 	services.mysql.replication.masterPassword = replicatePassword;
       };
   };
-  
+
   testScript = ''
     startAll;
-    
+
     $master->waitForJob("mysql");
     $master->waitForJob("mysql");
     $slave2->waitForJob("mysql");

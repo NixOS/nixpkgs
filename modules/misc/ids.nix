@@ -22,7 +22,7 @@ let
   };
 
 in
-  
+
 {
   require = options;
 
@@ -51,7 +51,7 @@ in
     uptimed = 29;
     ddclient = 30;
     davfs2 = 31;
-    privoxy = 32;    
+    privoxy = 32;
     osgi = 34;
     tor = 35;
     cups = 36;

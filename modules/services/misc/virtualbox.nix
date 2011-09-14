@@ -12,20 +12,20 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.virtualbox = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable the VirtualBox service and other guest additions.";
-      };        
+      };
 
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -34,10 +34,10 @@ in
     environment.systemPackages = [ ];
 
     boot.extraModulePackages = [ pkgs.linuxPackages.virtualboxGuestAdditions ];
-    
+
     jobs.virtualbox =
       { description = "VirtualBox service";
-      
+
         startOn = "started udev";
 
         exec = "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/VBoxService";

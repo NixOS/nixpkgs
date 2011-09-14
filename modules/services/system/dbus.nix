@@ -14,13 +14,13 @@ let
     name = "dbus-conf";
     buildCommand = ''
       ensureDir $out
-      
+
       cp -v ${pkgs.dbus_daemon}/etc/dbus-1/system.conf $out/system.conf
 
       # !!! Hm, these `sed' calls are rather error-prone...
 
       # Tell the daemon where the setuid wrapper around
-      # dbus-daemon-launch-helper lives.      
+      # dbus-daemon-launch-helper lives.
       sed -i $out/system.conf \
           -e 's|<servicehelper>.*/libexec/dbus-daemon-launch-helper|<servicehelper>${config.security.wrapperDir}/dbus-daemon-launch-helper|'
 
@@ -31,7 +31,7 @@ let
           -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
 
       cp ${pkgs.dbus_daemon}/etc/dbus-1/session.conf $out/session.conf
-      
+
       # Add the services and session.d directories to the session bus
       # search path.
       sed -i $out/session.conf \
@@ -63,7 +63,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.dbus = {
 
       enable = mkOption {
@@ -87,7 +87,7 @@ in
       };
 
     };
-    
+
   };
 
 
@@ -125,7 +125,7 @@ in
 
             mkdir -m 0755 -p /var/lib/dbus
             ${pkgs.dbus_tools}/bin/dbus-uuidgen --ensure
- 
+
             rm -f ${homeDir}/pid
           '';
 
@@ -160,7 +160,7 @@ in
       ];
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
-    
+
   };
- 
+
 }

@@ -13,7 +13,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.quassel = {
 
       enable = mkOption {
@@ -56,7 +56,7 @@ in
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -66,7 +66,7 @@ in
       { name = "quassel";
         description = "Quassel IRC client daemon";
       }];
-    
+
 
     jobs.quassel =
       { description = "Quassel IRC client daemon";
@@ -86,5 +86,5 @@ in
       };
 
   };
-  
+
 }

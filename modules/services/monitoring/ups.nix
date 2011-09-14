@@ -119,7 +119,7 @@ in
         description = ''
           The MODE determines which part of the NUT is to be started, and
           which configuration files must be modified.
-          
+
           The values of MODE can be:
 
           - none: NUT is not configured, or use the Integrated Power
@@ -263,7 +263,7 @@ in
         description = "UPnP A/V Media Server user";
       }
     ];
-  
+
     users.extraGroups = [
       { name = "nut";
         gid = 84;

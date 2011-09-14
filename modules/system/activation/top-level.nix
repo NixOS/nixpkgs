@@ -3,7 +3,7 @@
 let
 
   options = {
-  
+
     system.build = pkgs.lib.mkOption {
       default = {};
       description = ''
@@ -58,14 +58,14 @@ let
         This code will be added to the builder creating the system store path.
       '';
     };
-    
+
   };
 
-    
-  # This attribute is responsible for creating boot entries for 
+
+  # This attribute is responsible for creating boot entries for
   # child configuration. They are only (directly) accessible
   # when the parent configuration is boot default. For example,
-  # you can provide an easy way to boot the same configuration 
+  # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
   cloner = inheritParent: list: with pkgs.lib;
@@ -99,12 +99,12 @@ let
 
       ln -s ${kernelPath} $out/kernel
       ln -s ${config.system.modulesTree} $out/kernel-modules
-      if [ -n "$grub" ]; then 
+      if [ -n "$grub" ]; then
         ln -s $grub $out/grub
       fi
-      
+
       ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
-      
+
       echo "$activationScript" > $out/activate
       substituteInPlace $out/activate --subst-var out
       chmod u+x $out/activate
@@ -112,7 +112,7 @@ let
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
-      
+
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
       ln -s ${config.system.build.upstart} $out/upstart
@@ -136,7 +136,7 @@ let
       ${config.system.extraSystemBuilderCmds}
     '';
 
-  
+
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, the Upstart services, the init scripts, etc.) as well as a
@@ -167,7 +167,7 @@ let
       if config.boot.loader.grub.enable
       then config.system.build.grub
       else null;
-    grubVersion = 
+    grubVersion =
       if config.boot.loader.grub.enable
       then (builtins.parseDrvName config.system.build.grub.name).version
       else "";

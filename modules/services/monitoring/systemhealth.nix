@@ -118,7 +118,7 @@ in
       { function = f: {
           extraConfig = ''
             Alias ${cfg.urlPrefix} ${htmlDir}
-            
+
             <Directory ${htmlDir}>
                 Order allow,deny
                 Allow from all

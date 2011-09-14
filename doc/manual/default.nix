@@ -3,7 +3,7 @@
 , revision ? "HEAD"
 }:
 
-let 
+let
 
   # To prevent infinite recursion, remove system.path from the
   # options.  Not sure why this happens.
@@ -59,7 +59,7 @@ in rec {
 
       ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $dst/
       cp ${./style.css} $dst/style.css
-      
+
       ensureDir $out/nix-support
       echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
     '';

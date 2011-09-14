@@ -207,24 +207,24 @@ in
         description = "This option defines how to start the display manager.";
 
         options = {
-  
+
           preStart = mkOption {
             default = "";
             example = "rm -f /var/log/my-display-manager.log";
             description = "Script executed before the display manager is started.";
           };
-         
+
           execCmd = mkOption {
             example = "${pkgs.slim}/bin/slim";
             description = "Command to start the display manager.";
           };
-         
+
           environment = mkOption {
             default = {};
             example = { SLIM_CFGFILE = /etc/slim.conf; };
             description = "Additional environment variables needed by the display manager.";
           };
-         
+
           logsXsession = mkOption {
             default = false;
             description = ''
@@ -233,13 +233,13 @@ in
               <filename>~/.xsession-errors</filename>.
             '';
           };
-         
+
         };
-        
+
       };
 
     };
-    
+
   };
 
 }

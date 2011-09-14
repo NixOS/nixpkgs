@@ -9,7 +9,7 @@ rec {
 
   inherit pkgs;
 
-  
+
   # Build a virtual network from an attribute set `{ machine1 =
   # config1; ... machineN = configN; }', where `machineX' is the
   # hostname and `configX' is a NixOS system configuration.  Each
@@ -38,7 +38,7 @@ rec {
   assignIPAddresses = nodes:
 
     let
-    
+
       machines = lib.attrNames nodes;
 
       machinesNumbered = lib.zipTwoLists machines (lib.range 1 254);
@@ -47,7 +47,7 @@ rec {
         [ ( { config, pkgs, nodes, ... }:
             let
               interfacesNumbered = lib.zipTwoLists config.virtualisation.vlans (lib.range 1 255);
-              interfaces = 
+              interfaces =
                 lib.flip map interfacesNumbered ({ first, second }:
                   { name = "eth${toString second}";
                     ipAddress = "192.168.${toString first}.${toString m.second}";
@@ -58,12 +58,12 @@ rec {
             { key = "ip-address";
               config =
                 { networking.hostName = m.first;
-                
+
                   networking.interfaces = interfaces;
-                    
+
                   networking.primaryIPAddress =
                     lib.optionalString (interfaces != []) (lib.head interfaces).ipAddress;
-                  
+
                   # Put the IP addresses of all VMs in this machine's
                   # /etc/hosts file.  If a machine has multiple
                   # interfaces, use the IP address corresponding to
@@ -74,7 +74,7 @@ rec {
                       lib.optionalString (config.networking.primaryIPAddress != "")
                         ("${config.networking.primaryIPAddress} " +
                          "${config.networking.hostName}\n"));
-                  
+
                   virtualisation.qemu.options =
                     lib.flip map interfacesNumbered
                       ({ first, second }: qemuNICFlags second first m.second);

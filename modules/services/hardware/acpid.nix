@@ -19,22 +19,22 @@ let
         in pkgs.lib.concatMapStrings f events
       }
     '';
-  
+
   events = [powerEvent lidEvent acEvent];
-  
+
   # Called when the power button is pressed.
   powerEvent =
     { name = "power-button";
       event = "button/power.*";
-      action = 
+      action =
         ''
           #! ${pkgs.bash}/bin/sh
           ${config.services.acpid.powerEventCommands}
         '';
     };
-  
+
   # Called when the laptop lid is opened/closed.
-  lidEvent = 
+  lidEvent =
     { name = "lid";
       event = "button/lid.*";
       action =
@@ -43,12 +43,12 @@ let
           ${config.services.acpid.lidEventCommands}
         '';
     };
-  
+
   # Called when the AC power is connected or disconnected.
   acEvent =
     { name = "ac-power";
       event = "ac_adapter.*";
-      action = 
+      action =
         ''
           #! ${pkgs.bash}/bin/sh
           ${config.services.acpid.acEventCommands}
@@ -62,7 +62,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.acpid = {
 
       enable = mkOption {
@@ -86,9 +86,9 @@ in
       };
 
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -101,7 +101,7 @@ in
 
         exec = "${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}";
       };
-      
+
   };
-  
+
 }

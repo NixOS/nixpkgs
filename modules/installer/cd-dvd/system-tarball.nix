@@ -68,7 +68,7 @@ in
   # Create the tarball
   system.build.tarball = import ../../../lib/make-system-tarball.nix {
     inherit (pkgs) stdenv perl xz pathsFromGraph;
-    
+
     inherit (config.tarball) contents storeContents;
   };
 

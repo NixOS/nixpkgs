@@ -102,7 +102,7 @@ in
                 # system profile.
                 source=/nix/var/nix/profiles/default/bin/${program}
             fi
-            
+
             cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}/${program}
             echo -n "$source" > ${wrapperDir}/${program}.real
             chmod 0000 ${wrapperDir}/${program} # to prevent races
@@ -110,7 +110,7 @@ in
             chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
           '';
 
-      in stringAfter [ "users" ] 
+      in stringAfter [ "users" ]
         ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.
@@ -123,5 +123,5 @@ in
         '';
 
   };
-  
+
 }

@@ -13,7 +13,7 @@ let
         Additional entries to be appended to <filename>/etc/hosts</filename>.
       '';
     };
-    
+
   };
 
 in

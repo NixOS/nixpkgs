@@ -2,7 +2,7 @@
 
 {
   nodes = {
-    storage = 
+    storage =
       {pkgs, config, ...}:
       {
         services.portmap.enable = true;
@@ -28,16 +28,16 @@
         '';
       };
 
-    webserver = 
+    webserver =
       {config, pkgs, ...}:
       {
-        fileSystems = pkgs.lib.mkOverride 50  
+        fileSystems = pkgs.lib.mkOverride 50
           [ { mountPoint = "/repos";
               device = "storage:/repos";
 	      fsType = "nfs";
-	      options = "bootwait"; } 
+	      options = "bootwait"; }
           ];
-      
+
         services.portmap.enable = true;
         services.nfsKernel.client.enable = true;
         services.httpd.enable = true;
@@ -45,34 +45,34 @@
         services.httpd.extraSubservices = [ { serviceType = "trac"; } ];
         environment.systemPackages = [ pkgs.pythonPackages.trac pkgs.subversion ];
       };
-      
-    client = 
+
+    client =
       {config, pkgs, ...}:
       {
         require = [ ./common/x11.nix ];
         services.xserver.desktopManager.kde4.enable = true;
       };
   };
-    
+
   testScript =
     ''
       startAll;
-      
+
       $postgresql->waitForJob("postgresql");
       $postgresql->mustSucceed("createdb trac");
-      
+
       $webserver->mustSucceed("mkdir -p /repos/trac");
       $webserver->mustSucceed("svnadmin create /repos/trac");
-      
-      $webserver->waitForFile("/var/trac");      
+
+      $webserver->waitForFile("/var/trac");
       $webserver->mustSucceed("mkdir -p /var/trac/projects/test");
       $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/${pkgs.python.libPrefix}/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
-      
+
       $client->waitForX;
       $client->execute("konqueror http://webserver/projects/test &");
       $client->waitForWindow(qr/Test.*Konqueror/);
       $client->sleep(30); # loading takes a long time
-      
+
       $client->screenshot("screen");
     '';
 }

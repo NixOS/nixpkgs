@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
-  
+
   cfg = config.services.bind;
 
   confFile = pkgs.writeText "named.conf"
@@ -26,7 +26,7 @@ let
 
       ${ concatMapStrings
           ({ name, file, master ? true, slaves ? [], masters ? [] }:
-            ''           
+            ''
               zone "${name}" {
                 type ${if master then "master" else "slave"};
                 file "${file}";
@@ -56,35 +56,35 @@ in
   ###### interface
 
   options = {
-  
+
     services.bind = {
-    
+
       enable = mkOption {
         default = false;
         description = "
           Whether to enable BIND domain name server.
         ";
       };
-      
+
       cacheNetworks = mkOption {
         default = ["127.0.0.0/24"];
         description = "
           What networks are allowed to use us as a resolver.
         ";
       };
-      
+
       blockedNetworks = mkOption {
         default = [];
         description = "
           What networks are just blocked.
         ";
       };
-      
+
       zones = mkOption {
         default = [];
         description = "
           List of zones we claim authority over.
-            master=false means slave server; slaves means addresses 
+            master=false means slave server; slaves means addresses
            who may request zone transfer.
         ";
         example = [{
@@ -95,11 +95,11 @@ in
           slaves = [];
         }];
       };
-      
+
     };
 
   };
-  
+
 
   ###### implementation
 
@@ -117,5 +117,5 @@ in
       };
 
   };
-  
+
 }

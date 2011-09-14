@@ -35,7 +35,7 @@ in
 ###### implementation
 let
   locatedb = "/var/cache/locatedb";
-  
+
   updatedbCmd =
     "${config.services.locate.period}  root  " +
     "mkdir -m 0755 -p $(dirname ${locatedb}) && " +

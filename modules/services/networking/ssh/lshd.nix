@@ -2,7 +2,7 @@
 
 with pkgs.lib;
 
-let 
+let
 
   inherit (pkgs) lsh;
 
@@ -15,7 +15,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.lshd = {
 
       enable = mkOption {
@@ -106,7 +106,7 @@ in
           an executable implementing it.
         '';
       };
-      
+
     };
 
   };
@@ -169,7 +169,7 @@ in
                                                    subsystems)}
           '';
       };
-         
+
   };
-  
+
 }

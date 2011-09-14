@@ -25,7 +25,7 @@ let
         #   services.openssh.enable = true;
       }
     '';
-  
+
 
   pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
 
@@ -45,7 +45,7 @@ let
       init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
   '';
 
-  
+
 in
 
 {
@@ -91,7 +91,7 @@ in
       pkgs.zip
       pkgs.xz
       pkgs.dar # disk archiver
-      
+
       # Some editors.
       pkgs.nvi
       pkgs.bvi # binary editor

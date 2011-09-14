@@ -25,7 +25,7 @@ let
   nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource pkgs.path);
 
   includeSources = true;
-  
+
 in
 
 {
@@ -40,9 +40,9 @@ in
 
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
-    
+
   isoImage.volumeID = "NIXOS_INSTALL_CD_${config.system.nixosVersion}";
-  
+
   boot.postBootCommands =
     ''
       export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH

@@ -41,9 +41,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.xserver.displayManager.slim = {
-    
+
       enable = mkOption {
         default = true;
         description = ''

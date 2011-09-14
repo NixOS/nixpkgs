@@ -14,9 +14,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.pulseaudio = {
-    
+
       enable = mkOption {
         default = false;
         description = ''
@@ -38,9 +38,9 @@ in
       };
 
     };
-    
+
   };
-  
+
 
   ###### implementation
 
@@ -83,5 +83,5 @@ in
       };
 
   };
-  
+
 }

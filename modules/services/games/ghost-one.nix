@@ -10,7 +10,7 @@ in
 {
 
   ###### interface
-  
+
   options = {
     services.ghostOne = {
 
@@ -24,7 +24,7 @@ in
         check = lang: elem lang [ "English" "Spanish" "Russian" "Serbian" "Turkish" ];
         description = "The language of bot messages: English, Spanish, Russian, Serbian or Turkish.";
       };
-      
+
       war3path = mkOption {
         default = "";
         description = ''

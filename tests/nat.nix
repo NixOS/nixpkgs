@@ -9,14 +9,14 @@
 {
 
   nodes =
-    { client = 
+    { client =
         { config, pkgs, nodes, ... }:
         { virtualisation.vlans = [ 1 ];
           networking.defaultGateway =
             nodes.router.config.networking.ifaces.eth2.ipAddress;
         };
 
-      router = 
+      router =
         { config, pkgs, ... }:
         { virtualisation.vlans = [ 2 1 ];
           networking.nat.enable = true;
@@ -24,7 +24,7 @@
           networking.nat.externalInterface = "eth1";
         };
 
-      server = 
+      server =
         { config, pkgs, ... }:
         { virtualisation.vlans = [ 2 ];
           services.httpd.enable = true;
@@ -49,19 +49,19 @@
       $client->waitForJob("network-interfaces");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
-      
+
       # Test whether passive FTP works.
       $server->waitForJob("vsftpd");
       $server->succeed("echo Hello World > /home/ftp/foo.txt");
       $client->succeed("curl -v ftp://server/foo.txt >&2");
-      
+
       # Test whether active FTP works.
       $client->succeed("curl -v -P - ftp://server/foo.txt >&2");
 
       # Test ICMP.
       $client->succeed("ping -c 1 router >&2");
       $router->succeed("ping -c 1 client >&2");
-      
+
       # If we turn off NAT, the client shouldn't be able to reach the server.
       $router->succeed("stop nat");
       $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");

@@ -71,7 +71,7 @@ let
             done
           fi
         done
-                
+
         for i in $(find ${toString cfg.modules} -type d); do
           if test $(echo $i/*.so* | wc -w) -ne 0; then
             echo "  ModulePath \"$i\"" >> $out
@@ -79,7 +79,7 @@ let
         done
 
         echo 'EndSection' >> $out
-        
+
         echo "$config" >> $out
       ''; # */
   };
@@ -96,9 +96,9 @@ in
 
 
   ###### interface
-  
+
   options = {
-  
+
     services.xserver = {
 
       enable = mkOption {
@@ -311,7 +311,7 @@ in
           Virtual screen size for Xrandr.
         '';
       };
-      
+
     };
 
     environment.x11Packages = mkOption {
@@ -322,7 +322,7 @@ in
         activated (<option>services.xserver.enable</option>).
       '';
     };
-    
+
   };
 
 
@@ -337,7 +337,7 @@ in
   {
 
     boot.extraModulePackages =
-      optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++ 
+      optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++
       optional (elem "nvidiaLegacy96" driverNames) kernelPackages.nvidia_x11_legacy96 ++
       optional (elem "nvidiaLegacy173" driverNames) kernelPackages.nvidia_x11_legacy173 ++
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions ++
@@ -352,7 +352,7 @@ in
           target = "X11/xkb";
         }
       ];
-    
+
     environment.x11Packages =
       [ xorg.xorgserver
         xorg.xrandr
@@ -370,7 +370,7 @@ in
       ++ optional (elem "nvidiaLegacy173" driverNames) kernelPackages.nvidia_x11_legacy173
       ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
-      
+
     environment.systemPackages = config.environment.x11Packages;
 
     environment.pathsToLink =
@@ -378,7 +378,7 @@ in
 
     jobs.xserver =
       { startOn = if cfg.autorun then "filesystem and stopped udevtrigger" else "";
- 
+
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
@@ -440,7 +440,7 @@ in
       [ xorg.xorgserver
         xorg.xf86inputevdev
       ];
-    
+
     services.xserver.config =
       ''
         Section "ServerFlags"
@@ -478,7 +478,7 @@ in
         # For each supported driver, add a "Device" and "Screen"
         # section.
         ${flip concatMapStrings drivers (driver: ''
-        
+
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName}"
@@ -521,7 +521,7 @@ in
                   '';
               in concatMapStrings f [8 16 24]
             )}
-          
+
           EndSection
         '')}
       '';

@@ -9,13 +9,13 @@ let
 
   sitecopyCron = backup : ''
     ${if backup ? period then backup.period else config.services.sitecopy.period} root ${sitecopy}/bin/sitecopy --storepath=${stateDir} --rcfile=${stateDir}/${backup.name}.conf --update ${backup.name}
-  ''; 
+  '';
 in
 
 {
 
   options = {
-  
+
     services.sitecopy = {
 
       enable = mkOption {
@@ -36,8 +36,8 @@ in
 
       backups = mkOption {
         example = [
-          { name = "test"; 
-            local = "/tmp/backup"; 
+          { name = "test";
+            local = "/tmp/backup";
             remote = "/staff-groups/ewi/st/strategoxt/backup/test";
             server = "webdata.tudelft.nl";
             protocol = "webdav";
@@ -47,15 +47,15 @@ in
         ];
         default = [];
         description = ''
-           List of attributesets describing the backups. 
+           List of attributesets describing the backups.
 
-           Username/password are extracted from <filename>${stateDir}/sitecopy.secrets</filename> at activation 
+           Username/password are extracted from <filename>${stateDir}/sitecopy.secrets</filename> at activation
            time. The secrets file lines should have the following structure:
            <screen>
              server username password
            </screen>
         '';
-      }; 
+      };
 
     };
 
@@ -67,7 +67,7 @@ in
     services.cron.systemCronJobs = map sitecopyCron config.services.sitecopy.backups;
 
     system.activationScripts.sitecopyBackup = stringAfter [ "stdio" "users" ]
-      ''  
+      ''
         mkdir -m 0700 -p ${stateDir}
         chown root ${stateDir}
         touch ${stateDir}/sitecopy.secrets
@@ -96,9 +96,9 @@ in
             else
               echo " * Sitecopy '${b.name}' already initialized"
             fi
-          '' ) config.services.sitecopy.backups 
+          '' ) config.services.sitecopy.backups
         )}
       '';
   };
-  
+
 }

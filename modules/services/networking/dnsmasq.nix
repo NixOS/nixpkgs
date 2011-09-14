@@ -13,9 +13,9 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.dnsmasq = {
 
       enable = mkOption {
@@ -41,7 +41,7 @@ in
   ###### implementation
 
   config = mkIf config.services.dnsmasq.enable {
-  
+
     jobs.dnsmasq =
       { description = "dnsmasq daemon";
 
@@ -51,7 +51,7 @@ in
 
         exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam}";
       };
-    
+
   };
-  
+
 }

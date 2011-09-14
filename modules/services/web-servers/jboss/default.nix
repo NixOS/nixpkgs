@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.jboss;
-  
+
   jbossService = pkgs.stdenv.mkDerivation {
     name = "jboss-server";
     builder = ./builder.sh;
@@ -20,9 +20,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.jboss = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable jboss";
@@ -62,7 +62,7 @@ in
         default = false;
         description = "Whether to use to connector to the Apache HTTP server";
       };
-      
+
     };
 
   };
@@ -79,5 +79,5 @@ in
       };
 
   };
-  
+
 }

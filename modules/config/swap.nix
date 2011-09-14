@@ -5,7 +5,7 @@ with pkgs.lib;
 {
 
   ###### interface
-  
+
   options = {
 
     swapDevices = mkOption {
@@ -30,7 +30,7 @@ with pkgs.lib;
       options = {config, options, ...}: {
 
         options = {
-        
+
           device = mkOption {
             example = "/dev/sda3";
             type = types.string;
@@ -64,9 +64,9 @@ with pkgs.lib;
             else
               mkNotdef;
         };
-        
+
       };
-      
+
     };
 
   };

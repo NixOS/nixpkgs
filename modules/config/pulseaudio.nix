@@ -7,7 +7,7 @@ let cfg = config.hardware.pulseaudio; in
 {
 
   options = {
-  
+
     hardware.pulseaudio.enable = mkOption {
       default = false;
       description = ''
@@ -26,7 +26,7 @@ let cfg = config.hardware.pulseaudio; in
     };
 
   };
-  
+
 
   config = mkIf cfg.enable {
 
@@ -46,7 +46,7 @@ let cfg = config.hardware.pulseaudio; in
               ''}
             '';
         }
-        
+
       ] ++ optionals cfg.enable
       [ # Write an /etc/asound.conf that causes all ALSA applications to
         # be re-routed to the PulseAudio server through ALSA's Pulse
@@ -57,16 +57,16 @@ let cfg = config.hardware.pulseaudio; in
               pcm_type.pulse {
                 lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so
               }
-            
+
               pcm.!default {
                 type pulse
                 hint.description "Default Audio Device (via PulseAudio)"
               }
-              
+
               ctl_type.pulse {
                 lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so
               }
-            
+
               ctl.!default {
                 type pulse
               }
@@ -85,7 +85,7 @@ let cfg = config.hardware.pulseaudio; in
 
     # Allow PulseAudio to get realtime priority using rtkit.
     security.rtkit.enable = true;
-      
+
   };
 
 }

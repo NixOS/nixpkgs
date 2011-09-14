@@ -29,7 +29,7 @@ let
       INFOPATH=$dir:$INFOPATH ${pkgs.texinfo}/bin/info "$@"
     ''; # */
 
-in 
+in
 
 {
   environment.systemPackages = [infoWrapper];

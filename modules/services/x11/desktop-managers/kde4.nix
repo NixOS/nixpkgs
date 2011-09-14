@@ -30,7 +30,7 @@ in
 
   };
 
-  
+
   config = mkIf (xcfg.enable && cfg.enable) {
 
     # If KDE 4 is enabled, make it the default desktop manager (unless
@@ -86,7 +86,7 @@ in
       (if !isKDE47 then
         # KDE <= 4.6
         [ # temporary workarounds
-          pkgs.shared_desktop_ontologies 
+          pkgs.shared_desktop_ontologies
           pkgs.strigi
 
           pkgs.kde4.kdelibs

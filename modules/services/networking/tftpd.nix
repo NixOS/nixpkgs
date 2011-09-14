@@ -5,7 +5,7 @@ with pkgs.lib;
 {
 
   ###### interface
-  
+
   options = {
 
     services.tftpd.enable = mkOption {

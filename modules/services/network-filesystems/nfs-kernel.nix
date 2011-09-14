@@ -17,7 +17,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.nfsKernel = {
 
       client.enable = mkOption {
@@ -53,7 +53,7 @@ in
             <manvolnum>8</manvolnum></citerefentry>.
           '';
         };
-      
+
         nproc = mkOption {
           default = 8;
           description = ''
@@ -66,7 +66,7 @@ in
           description = "Whether to create the mount points in the exports file at startup time.";
         };
       };
-      
+
     };
 
   };
@@ -89,9 +89,9 @@ in
 
     jobs =
       optionalAttrs cfg.server.enable
-        { nfs_kernel_exports = 
+        { nfs_kernel_exports =
           { name = "nfs-kernel-exports";
-      
+
             description = "Kernel NFS server";
 
             startOn = "started network-interfaces";
@@ -100,7 +100,7 @@ in
               ''
                 export PATH=${pkgs.nfsUtils}/sbin:$PATH
                 mkdir -p /var/lib/nfs
-                
+
                 ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
                 ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
@@ -122,9 +122,9 @@ in
               '';
           };
         }
-    
+
       // optionalAttrs cfg.server.enable
-        { nfs_kernel_nfsd = 
+        { nfs_kernel_nfsd =
           { name = "nfs-kernel-nfsd";
 
             description = "Kernel NFS server";
@@ -132,7 +132,7 @@ in
             startOn = "started nfs-kernel-exports and started nfs-kernel-mountd and started nfs-kernel-statd and started portmap";
             stopOn = "stopping nfs-kernel-exports";
 
-            preStart = 
+            preStart =
               ''
                 # Create a state directory required by NFSv4.
                 mkdir -p /var/lib/nfs/v4recovery
@@ -162,7 +162,7 @@ in
         }
 
       // optionalAttrs (cfg.client.enable || cfg.server.enable)
-        { nfs_kernel_statd = 
+        { nfs_kernel_statd =
           { name = "nfs-kernel-statd";
 
             description = "Kernel NFS server - Network Status Monitor";
@@ -171,7 +171,7 @@ in
             stopOn = "never";
 
             preStart =
-              ''	
+              ''
                 mkdir -p /var/lib/nfs
                 mkdir -p /var/lib/nfs/sm
                 mkdir -p /var/lib/nfs/sm.bak
@@ -184,7 +184,7 @@ in
             postStart = "${pkgs.nfsUtils}/sbin/sm-notify -d";
           };
         };
-      
+
   };
-  
+
 }

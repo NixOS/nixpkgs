@@ -11,7 +11,7 @@ let
   group = cfg.group;
   setgidGroup = cfg.setgidGroup;
 
-  mainCf = 
+  mainCf =
     ''
       queue_directory = /var/postfix/queue
       command_directory = ${pkgs.postfix}/sbin
@@ -30,7 +30,7 @@ let
         ''
       else if cfg.networksStyle != "" then
         ''
-          mynetworks_style = ${cfg.networksStyle} 
+          mynetworks_style = ${cfg.networksStyle}
         ''
       else
         # Postfix default is subnet, but let's play safe
@@ -54,12 +54,12 @@ let
     ''
     + ''
       local_recipient_maps =
-      
-      relayhost = ${if cfg.lookupMX || cfg.relayHost == "" then 
-          cfg.relayHost 
-        else 
+
+      relayhost = ${if cfg.lookupMX || cfg.relayHost == "" then
+          cfg.relayHost
+        else
           "[" + cfg.relayHost + "]"}
-          
+
       alias_maps = hash:/var/postfix/conf/aliases
 
       mail_spool_directory = /var/spool/mail/
@@ -78,13 +78,13 @@ let
       smtpd_tls_cert_file = ${cfg.sslCert}
       smtpd_tls_key_file = ${cfg.sslKey}
 
-      smtpd_use_tls = yes 
+      smtpd_use_tls = yes
 
       recipientDelimiter = ${cfg.recipientDelimiter}
     ''
     + cfg.extraConfig;
 
-  aliases = 
+  aliases =
     optionalString (cfg.postmasterAlias != "") ''
       postmaster: ${cfg.postmasterAlias}
     ''
@@ -96,7 +96,7 @@ let
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
- 
+
 in
 
 {
@@ -104,9 +104,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.postfix = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to run the Postfix mail server.";
@@ -116,44 +116,44 @@ in
         default = true;
         description = "Whether to set the system sendmail to postfix's.";
       };
-      
+
       user = mkOption {
         default = "postfix";
         description = "What to call the Postfix user (must be used only for postfix).";
       };
-      
+
       group = mkOption {
         default = "postfix";
         description = "What to call the Postfix group (must be used only for postfix).";
       };
-      
+
       setgidGroup = mkOption {
         default = "postdrop";
         description = "
-          How to call postfix setgid group (for postdrop). Should 
+          How to call postfix setgid group (for postdrop). Should
           be uniquely used group.
         ";
       };
-      
+
       networks = mkOption {
         default = null;
         example = ["192.168.0.1/24"];
         description = "
-          Net masks for trusted - allowed to relay mail to third parties - 
-          hosts. Leave empty to use mynetworks_style configuration or use 
+          Net masks for trusted - allowed to relay mail to third parties -
+          hosts. Leave empty to use mynetworks_style configuration or use
           default (localhost-only).
         ";
       };
-      
+
       networksStyle = mkOption {
         default = "";
         description = "
           Name of standard way of trusted network specification to use,
-          leave blank if you specify it explicitly or if you want to use 
+          leave blank if you specify it explicitly or if you want to use
           default (localhost-only).
         ";
       };
-      
+
       hostname = mkOption {
         default = "";
         description ="
@@ -161,65 +161,65 @@ in
           It should be FQDN.
         ";
       };
-      
+
       domain = mkOption {
         default = "";
         description ="
           Domain to use. Leave blank to use hostname minus first component.
         ";
       };
-      
+
       origin = mkOption {
         default = "";
         description ="
           Origin to use in outgoing e-mail. Leave blank to use hostname.
         ";
       };
-      
+
       destination = mkOption {
         default = null;
         example = ["localhost"];
         description = "
-          Full (!) list of domains we deliver locally. Leave blank for 
+          Full (!) list of domains we deliver locally. Leave blank for
           acceptable Postfix default.
         ";
       };
-      
+
       relayDomains = mkOption {
         default = null;
         example = ["localdomain"];
         description = "
-          List of domains we agree to relay to. Default is the same as 
+          List of domains we agree to relay to. Default is the same as
           destination.
         ";
       };
-      
+
       relayHost = mkOption {
         default = "";
         description = "
           Mail relay for outbound mail.
         ";
       };
-      
+
       lookupMX = mkOption {
         default = false;
         description = "
           Whether relay specified is just domain whose MX must be used.
         ";
       };
-      
+
       postmasterAlias = mkOption {
         default = "root";
         description = "Who should receive postmaster e-mail.";
       };
-      
+
       rootAlias = mkOption {
         default = "";
         description = "
           Who should receive root e-mail. Blank for no redirection.
         ";
       };
-      
+
       extraAliases = mkOption {
         default = "";
         description = "
@@ -238,12 +238,12 @@ in
         default = "";
         description = "SSL certificate to use.";
       };
-      
+
       sslCACert = mkOption {
         default = "";
         description = "SSL certificate of CA.";
       };
-      
+
       sslKey = mkOption {
         default = "";
         description = "SSL key to use.";
@@ -293,19 +293,19 @@ in
       };
 
     users.extraGroups =
-      [ { name = group; 
+      [ { name = group;
           gid = config.ids.gids.postfix;
         }
-        { name = setgidGroup; 
+        { name = setgidGroup;
           gid = config.ids.gids.postdrop;
         }
       ];
 
     jobs.postfix =
-      # I copy _lots_ of shipped configuration filed 
+      # I copy _lots_ of shipped configuration filed
       # that can be left as is. I am afraid the exact
-      # will list slightly change in next Postfix 
-      # release, so listing them all one-by-one in an 
+      # will list slightly change in next Postfix
+      # release, so listing them all one-by-one in an
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
@@ -330,20 +330,20 @@ in
             if ! [ -d /var/spool/postfix ]; then
               ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
             fi
-              
-            ${pkgs.coreutils}/bin/chown -R ${user}.${group} /var/postfix 
-            ${pkgs.coreutils}/bin/chown -R ${user}.${setgidGroup} /var/postfix/queue 
-            ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue 
+
+            ${pkgs.coreutils}/bin/chown -R ${user}.${group} /var/postfix
+            ${pkgs.coreutils}/bin/chown -R ${user}.${setgidGroup} /var/postfix/queue
+            ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue
             ${pkgs.coreutils}/bin/chown root.root /var/spool/mail
             ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
-            
+
             ln -sf ${pkgs.postfix}/share/postfix/conf/* /var/postfix/conf
 
             ln -sf ${aliasesFile} /var/postfix/conf/aliases
             ln -sf ${mainCfFile} /var/postfix/conf/main.cf
 
             ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
-            
+
             exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
           ''; # */
 

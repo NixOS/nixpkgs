@@ -12,7 +12,7 @@
   swapDevices = [
     { device = "/dev/sdb1"; }
   ];
-  
+
   services = {
     openssh = {
       enable = true;

@@ -5,13 +5,13 @@ with pkgs.lib;
 let
 
   src_clean_skin = pkgs.fetchurl {
-    url = "http://lastlog.de/misc/clean-1.01.tar.gz"; 
-    sha256 = "5fb1736b64b33ca3429d035f1358cf8217da2d02019d8a80b14c7985367f659f"; 
+    url = "http://lastlog.de/misc/clean-1.01.tar.gz";
+    sha256 = "5fb1736b64b33ca3429d035f1358cf8217da2d02019d8a80b14c7985367f659f";
   };
 
   src_nixos_skin = pkgs.fetchurl {
-    url = "http://lastlog.de/misc/nixos-1.0.tar.gz"; 
-    sha256 = "413b0f451bde81ac2dd0bede17dd088f9abcd0f3cea1722279311ca648a855cf"; 
+    url = "http://lastlog.de/misc/nixos-1.0.tar.gz";
+    sha256 = "413b0f451bde81ac2dd0bede17dd088f9abcd0f3cea1722279311ca648a855cf";
   };
 
   mediawikiConfig = pkgs.writeText "LocalSettings.php"
@@ -83,7 +83,7 @@ let
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
     name= "mediawiki-1.15.5";
-    
+
     src = pkgs.fetchurl {
       url = "http://download.wikimedia.org/mediawiki/1.15/${name}.tar.gz";
       sha256 = "1d8afbdh3lsg54b69mnh6a47psb3lg978xpp277qs08yz15cjf7q";
@@ -116,7 +116,7 @@ let
           --add-flags ${mediawikiRoot}/maintenance/$i
       done
     '';
-  
+
 in
 
 {
@@ -132,7 +132,7 @@ in
             Options -Indexes
         </Directory>
       ''}
-      
+
       Alias ${config.urlPrefix} ${mediawikiRoot}
 
       <Directory ${mediawikiRoot}>
@@ -170,7 +170,7 @@ in
       default = "mediawiki";
       description = "Name of the database that holds the MediaWiki data.";
     };
-    
+
     dbServer = mkOption {
       default = ""; # use a Unix domain socket
       example = "10.0.2.2";
@@ -185,7 +185,7 @@ in
       default = "mediawiki";
       description = "The user name for accessing the database.";
     };
-    
+
     dbPassword = mkOption {
       default = "";
       example = "foobar";
@@ -194,7 +194,7 @@ in
         cleartext in the Nix store!
       '';
     };
-    
+
     emergencyContact = mkOption {
       default = serverInfo.serverConfig.adminAddr;
       example = "admin@example.com";
@@ -203,7 +203,7 @@ in
         admin address.
       '';
     };
-    
+
     passwordSender = mkOption {
       default = serverInfo.serverConfig.adminAddr;
       example = "password@example.com";
@@ -277,7 +277,7 @@ in
   extraPath = [ mediawikiScripts ];
 
   # !!! Need to specify that Apache has a dependency on PostgreSQL!
-  
+
   startupScript = pkgs.writeScript "mediawiki_startup.sh"
     # Initialise the database automagically if we're using a Postgres
     # server on localhost.

@@ -10,14 +10,14 @@ let
   postgresqlBackupCron = db:
     ''
       ${config.services.postgresqlBackup.period} root ${postgresql}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
-    ''; 
+    '';
 
 in
 
 {
 
   options = {
-  
+
     services.postgresqlBackup = {
 
       enable = mkOption {
@@ -39,10 +39,10 @@ in
       databases = mkOption {
         default = [];
         description = ''
-          List of database names to dump. 
+          List of database names to dump.
         '';
       };
- 
+
       location = mkOption {
         default = "/var/backup/postgresql";
         description = ''
@@ -62,5 +62,5 @@ in
         chown root ${config.services.postgresqlBackup.location}
       '';
   };
-  
+
 }

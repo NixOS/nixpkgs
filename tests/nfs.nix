@@ -2,14 +2,14 @@
 
 let
 
-  client = 
+  client =
     { config, pkgs, ... }:
-    { fileSystems = pkgs.lib.mkOverride 50 
+    { fileSystems = pkgs.lib.mkOverride 50
         [ { mountPoint = "/data";
             device = "server:/data";
             fsType = "nfs";
             options = "bootwait";
-          } 
+          }
         ];
     };
 
@@ -21,7 +21,7 @@ in
     { client1 = client;
       client2 = client;
 
-      server = 
+      server =
         { config, pkgs, ... }:
         { services.nfsKernel.server.enable = true;
           services.nfsKernel.server.exports =
@@ -52,7 +52,7 @@ in
       # seconds because the NFS server waits that long after booting
       # before accepting new locks.
       $client2->succeed("time flock -n -s /data/lock true");
-      
+
       # Test locking: client 1 acquires an exclusive lock, so client 2
       # should then fail to acquire a shared lock.
       $client1->succeed("flock -x /data/lock -c 'touch locked; sleep 100000' &");

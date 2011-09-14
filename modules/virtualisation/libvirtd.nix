@@ -4,9 +4,9 @@
 
 with pkgs.lib;
 
-let 
+let
 
-  cfg = config.virtualisation.libvirtd; 
+  cfg = config.virtualisation.libvirtd;
 
 in
 
@@ -15,7 +15,7 @@ in
 
   options = {
 
-    virtualisation.libvirtd.enable = 
+    virtualisation.libvirtd.enable =
       mkOption {
         default = false;
         description =
@@ -27,7 +27,7 @@ in
           '';
       };
 
-    virtualisation.libvirtd.enableKVM = 
+    virtualisation.libvirtd.enableKVM =
       mkOption {
         default = true;
         description =
@@ -43,7 +43,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = 
+    environment.systemPackages =
       [ pkgs.libvirt ]
        ++ optional cfg.enableKVM pkgs.qemu_kvm;
 
@@ -59,7 +59,7 @@ in
             pkgs.ebtables
           ] ++ optional cfg.enableKVM pkgs.qemu_kvm;
 
-        preStart = 
+        preStart =
           ''
             mkdir -p /var/log/libvirt/qemu -m 755
             rm -f /var/run/libvirtd.pid
@@ -100,7 +100,7 @@ in
     # !!! Split this into save and restore tasks.
     jobs.libvirt_guests =
       { name = "libvirt-guests";
-      
+
         description = "Job to save/restore libvirtd VMs";
 
         startOn = "started libvirtd";
@@ -111,7 +111,7 @@ in
 
         path = [ pkgs.gettext pkgs.libvirt pkgs.gawk ];
 
-        preStart = 
+        preStart =
           ''
             mkdir -p /var/lock/subsys -m 755
             ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start || true

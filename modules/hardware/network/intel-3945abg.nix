@@ -5,7 +5,7 @@
   ###### interface
 
   options = {
-  
+
     networking.enableIntel3945ABGFirmware = pkgs.lib.mkOption {
       default = false;
       type = pkgs.lib.types.bool;
@@ -19,11 +19,11 @@
 
 
   ###### implementation
-  
+
   config = pkgs.lib.mkIf config.networking.enableIntel3945ABGFirmware {
-  
+
     hardware.firmware = [ pkgs.iwlwifi3945ucode ];
 
   };
-  
+
 }

@@ -7,7 +7,7 @@ let
   failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
 
 in
-  
+
 {
 
   options = {
@@ -33,5 +33,5 @@ in
       else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}";
 
   };
-  
+
 }

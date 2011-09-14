@@ -5,7 +5,7 @@
 let
 
   # The configuration of the build slaves.
-  slave = 
+  slave =
     { config, pkgs, ... }:
     { services.openssh.enable = true;
       virtualisation.writableStore = true;

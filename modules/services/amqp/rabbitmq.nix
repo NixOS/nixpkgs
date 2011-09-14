@@ -14,9 +14,9 @@ in
 
 
   ###### interface
-  
+
   options = {
-  
+
     services.rabbitmq = {
 
       enable = mkOption {
@@ -74,7 +74,7 @@ in
         environment.HOME = "/var/lib/rabbitmq";
         environment.RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
 
-        exec = 
+        exec =
           ''
             ${run "${pkgs.rabbitmq_server}/sbin/rabbitmq-server"}
           '';

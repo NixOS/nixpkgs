@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl cdrkit];
-  
+
   inherit isoName bootable bootImage compressImage volumeID pathsFromGraph;
 
   # !!! should use XML.
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   # !!! should use XML.
   objects = map (x: x.object) storeContents;
   symlinks = map (x: x.symlink) storeContents;
-  
+
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;

@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   inherit (config.environment) nix;
-  
+
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
       description = "Nix build user ${toString nr}";
@@ -34,7 +34,7 @@ in
         This option specifies the Nix package instance to use throughout the system.
       ";
     };
-    
+
     nix = {
 
       maxJobs = mkOption {
@@ -76,10 +76,10 @@ in
           gc-keep-derivations = true
         ";
         description = "
-          This option allows to append lines to nix.conf. 
+          This option allows to append lines to nix.conf.
         ";
       };
-      
+
       distributedBuilds = mkOption {
         default = false;
         description = "
@@ -97,8 +97,8 @@ in
       manualNixMachines = mkOption {
         default = false;
         description = "
-          Whether to manually manage the list of buildmachines used in distributed 
-          builds in /etc/nix.machines. 
+          Whether to manually manage the list of buildmachines used in distributed
+          builds in /etc/nix.machines.
         ";
       };
 
@@ -113,7 +113,7 @@ in
       daemonIONiceLevel = mkOption {
         default = 7;
         description = "
-          Nix daemon process I/O priority. This priority propagates to build processes.        
+          Nix daemon process I/O priority. This priority propagates to build processes.
           0 is the default Unix process I/O priority, 7 is the lowest.
         ";
       };
@@ -155,11 +155,11 @@ in
           on the remote machine.
         ";
       };
-   
+
       proxy = mkOption {
         default = "";
         description = "
-          This option specifies the proxy to use for fetchurl. The real effect 
+          This option specifies the proxy to use for fetchurl. The real effect
           is just exporting http_proxy, https_proxy and ftp_proxy with that
           value.
         ";
@@ -208,13 +208,13 @@ in
               # in `build-chroot-dirs' - otherwise any builder that uses
               # /bin/sh won't work.
               binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
-  
+
               # Likewise, if chroots are turned on, we need Nix's own
               # closure in the chroot.  Otherwise nix-channel and nix-env
               # won't work because the dependencies of its builders (like
               # coreutils and Perl) aren't visible.  Sigh.
               nixDeps = pkgs.writeReferencesToFile config.environment.nix;
-            in 
+            in
               pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
                 extraPaths=$(for i in $(cat ${binshDeps} ${nixDeps}); do if test -d $i; then echo $i; fi; done)
                 cat > $out <<END
@@ -236,7 +236,7 @@ in
           source = pkgs.writeText "nix.machines"
             (concatStrings (map (machine:
               "${machine.sshUser}@${machine.hostName} "
-              + (if machine ? system then machine.system else concatStringsSep "," machine.systems) 
+              + (if machine ? system then machine.system else concatStringsSep "," machine.systems)
               + " ${machine.sshKey} ${toString machine.maxJobs} "
               + (if machine ? speedFactor then toString machine.speedFactor else "1" )
               + "\n"
@@ -259,7 +259,7 @@ in
               ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
           '';
 
-        extraConfig = 
+        extraConfig =
           ''
             limit nofile 4096 4096
           '';
@@ -269,7 +269,7 @@ in
       ''
         # Set up the environment variables for running Nix.
         ${config.nix.envVars}
-      
+
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.
         if test "$USER" != root; then

@@ -11,9 +11,9 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     services.fourStore = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable 4Store RDF database server.";
@@ -67,5 +67,5 @@ with pkgs.lib;
     };
 
   });
-  
+
 }

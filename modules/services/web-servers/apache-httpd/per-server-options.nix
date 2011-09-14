@@ -40,9 +40,9 @@
   # Note: sslServerCert and sslServerKey can be left empty, but this
   # only makes sense for virtual hosts (they will inherit from the
   # main server).
-  
+
   sslServerCert = mkOption {
-    default = ""; 
+    default = "";
     example = "/var/host.cert";
     description = "
       Path to server SSL certificate.

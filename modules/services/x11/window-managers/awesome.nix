@@ -13,7 +13,7 @@ in
   ###### interface
 
   options = {
-  
+
     services.xserver.windowManager.awesome.enable = mkOption {
       default = false;
       description = "Enable the Awesome window manager.";
@@ -36,7 +36,7 @@ in
       };
 
     environment.x11Packages = [ pkgs.awesome ];
-    
+
   };
 
 }

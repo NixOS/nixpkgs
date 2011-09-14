@@ -5,7 +5,7 @@
 {
 
   nodes =
-    { walled = 
+    { walled =
         { config, pkgs, nodes, ... }:
         { networking.firewall.enable = true;
           networking.firewall.logRefusedPackets = true;
@@ -13,7 +13,7 @@
           services.httpd.adminAddr = "foo@example.org";
         };
 
-      attacker = 
+      attacker =
         { config, pkgs, ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";

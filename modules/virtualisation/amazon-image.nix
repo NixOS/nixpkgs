@@ -15,7 +15,7 @@ with pkgs.lib;
               ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "4G"
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
-          exportReferencesGraph = 
+          exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
         }
         ''
@@ -27,7 +27,7 @@ with pkgs.lib;
 
           # The initrd expects these directories to exist.
           mkdir /mnt/dev /mnt/proc /mnt/sys
-          
+
           mount -o bind /proc /mnt/proc
 
           # Copy all paths in the closure to the filesystem.
@@ -83,9 +83,9 @@ with pkgs.lib;
   boot.loader.grub.timeout = 0;
   boot.loader.grub.extraPerEntryConfig = "root (hd0)";
 
-  # Put /tmp and /var on /ephemeral0, which has a lot more space.  
-  # Unfortunately we can't do this with the `fileSystems' option 
-  # because it has no support for creating the source of a bind 
+  # Put /tmp and /var on /ephemeral0, which has a lot more space.
+  # Unfortunately we can't do this with the `fileSystems' option
+  # because it has no support for creating the source of a bind
   # mount.  Also, "move" /nix to /ephemeral0 by layering an AUFS
   # on top of it so we have a lot more space for Nix operations.
   boot.initrd.postMountCommands =

@@ -1,32 +1,32 @@
 # GNU Virtual Private Ethernet
 
-{config, pkgs, ...}: 
+{config, pkgs, ...}:
 
-let 
+let
   inherit (pkgs.lib) mkOption mkIf;
 
   cfg = config.services.gvpe;
 
-  finalConfig = if cfg.configFile != null then 
+  finalConfig = if cfg.configFile != null then
     cfg.configFile
   else if cfg.configText != null then
     pkgs.writeTextFile {
       name = "gvpe.conf";
       text = cfg.configText;
     }
-  else 
+  else
     throw "You must either specify contents of the config file or the config file itself for GVPE";
 
-  ifupScript = if cfg.ipAddress == null || cfg.subnet == null then 
-     throw "Specify IP address and subnet (with mask) for GVPE" 
-   else if cfg.nodename == null then 
-     throw "You must set node name for GVPE" 
+  ifupScript = if cfg.ipAddress == null || cfg.subnet == null then
+     throw "Specify IP address and subnet (with mask) for GVPE"
+   else if cfg.nodename == null then
+     throw "You must set node name for GVPE"
    else
-   (pkgs.writeTextFile { 
+   (pkgs.writeTextFile {
     name = "gvpe-if-up";
     text = ''
       #! /bin/sh
-      
+
       export PATH=$PATH:${pkgs.iproute}/sbin
 
       ip link set $IFNAME up
@@ -80,7 +80,7 @@ in
           udp-port = 655
           mtu = 1480
           ifname = vpn0
-          
+
           node = alpha
           hostname = alpha.example.org
           connect = always
@@ -124,7 +124,7 @@ in
   config = mkIf cfg.enable {
     jobs.gvpe = {
       description = "GNU Virtual Private Ethernet node";
-      
+
       inherit startOn stopOn;
 
       preStart = ''

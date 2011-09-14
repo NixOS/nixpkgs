@@ -2,7 +2,7 @@
   boot = {
     grubDevice = "/dev/sda";
   };
-  
+
   fileSystems = [
     { mountPoint = "/";
       device = "/dev/sda1";
@@ -10,7 +10,7 @@
   ];
 
   services = {
-  
+
     sshd = {
       enable = true;
     };
@@ -28,9 +28,9 @@
         };
 
       };
-      
+
     };
-    
+
   };
-  
+
 }

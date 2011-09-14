@@ -28,7 +28,7 @@ with pkgs.lib;
         Section "InputClass"
           MatchIsTouchpad "true"
           Identifier "Multitouch Touchpad"
-          Driver "multitouch" 
+          Driver "multitouch"
         EndSection
       '';
 

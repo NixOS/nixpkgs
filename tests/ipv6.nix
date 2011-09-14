@@ -7,14 +7,14 @@
 
   nodes =
     { client = { config, pkgs, ... }: { };
-    
+
       server =
         { config, pkgs, ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
         };
 
-      router = 
+      router =
         { config, pkgs, ... }:
         { services.radvd.enable = true;
           services.radvd.config =
@@ -32,9 +32,9 @@
     ''
       # Start the router first so that it respond to router solicitations.
       $router->waitForJob("radvd");
-    
+
       startAll;
-    
+
       $client->waitForJob("network-interfaces");
       $server->waitForJob("network-interfaces");
 
@@ -48,12 +48,12 @@
           $machine->log("$scope address on $iface is $ip");
           return $ip;
       }
-      
+
       subtest "loopback address", sub {
-          $client->succeed("ping6 -c 1 ::1 >&2");  
-          $client->fail("ping6 -c 1 ::2 >&2");  
+          $client->succeed("ping6 -c 1 ::1 >&2");
+          $client->fail("ping6 -c 1 ::2 >&2");
       };
-    
+
       subtest "local link addressing", sub {
           my $clientIp = waitForAddress $client, "eth1", "link";
           my $serverIp = waitForAddress $server, "eth1", "link";

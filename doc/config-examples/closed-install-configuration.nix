@@ -18,15 +18,15 @@
   swapDevices = [
     { device = "/dev/sda2"; }
   ];
-  
+
   services = {
     sshd = {
       enable = true;
     };
   };
 
-  fonts = { 
-    enableFontConfig = false; 
+  fonts = {
+    enableFontConfig = false;
   };
 
 }

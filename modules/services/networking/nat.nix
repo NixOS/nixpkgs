@@ -15,7 +15,7 @@ in
   ###### interface
 
   options = {
-  
+
     networking.nat.enable = mkOption {
       default = false;
       description =
@@ -23,7 +23,7 @@ in
           Whether to enable Network Address Translation (NAT).
         '';
     };
-  
+
     networking.nat.internalIPs = mkOption {
       example = "192.168.1.0/24";
       description =
@@ -33,7 +33,7 @@ in
           interface will be rewritten.
         '';
     };
-  
+
     networking.nat.externalInterface = mkOption {
       example = "eth1";
       description =
@@ -41,7 +41,7 @@ in
           The name of the external network interface.
         '';
     };
-  
+
     networking.nat.externalIP = mkOption {
       default = "";
       example = "203.0.113.123";
@@ -53,7 +53,7 @@ in
           used.
         '';
     };
-  
+
   };
 
 

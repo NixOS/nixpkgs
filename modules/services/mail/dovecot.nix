@@ -8,9 +8,9 @@ let
 
   cfg = config.services.dovecot;
 
-  dovecotConf = 
+  dovecotConf =
     ''
-      base_dir = /var/run/dovecot/ 
+      base_dir = /var/run/dovecot/
 
       protocols = imap imaps pop3 pop3s
     ''
@@ -33,12 +33,12 @@ let
       maildir_copy_with_hardlinks = yes
 
       auth default {
-        mechanisms = plain login 
+        mechanisms = plain login
         userdb passwd {
         }
         passdb pam {
         }
-        user = root 
+        user = root
       }
       auth_debug = yes
       auth_verbose = yes
@@ -47,7 +47,7 @@ let
 
       log_path = /var/log/dovecot.log
     '';
-  
+
   confFile = pkgs.writeText "dovecot.conf" dovecotConf;
 
 in
@@ -57,9 +57,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.dovecot = {
-    
+
       enable = mkOption {
         default = false;
         description = "Whether to enable the Dovecot POP3/IMAP server.";
@@ -69,7 +69,7 @@ in
         default = "dovecot";
         description = "Dovecot user name.";
       };
-      
+
       group = mkOption {
         default = "dovecot";
         description = "Dovecot group name.";
@@ -79,22 +79,22 @@ in
         default = "";
         description = "Server certificate";
       };
-      
+
       sslCACert = mkOption {
         default = "";
         description = "CA certificate used by the server certificate.";
       };
-      
+
       sslServerKey = mkOption {
         default = "";
         description = "Server key.";
       };
 
     };
-    
+
   };
 
-  
+
   ###### implementation
 
   config = mkIf config.services.dovecot.enable {
@@ -120,13 +120,13 @@ in
 
         preStart =
           ''
-            ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login 
+            ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login
             ${pkgs.coreutils}/bin/chown -R ${cfg.user}.${cfg.group} /var/run/dovecot
           '';
 
         exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}";
       };
-      
+
   };
-  
+
 }

@@ -35,8 +35,8 @@ let
       enableFontDir = mkOption {
         default = false;
         description = "
-          Whether to create a directory with links to all fonts in share - 
-          so user can configure vncserver script one time (I mean per-user 
+          Whether to create a directory with links to all fonts in share -
+          so user can configure vncserver script one time (I mean per-user
           vncserver, so global service is not a good solution).
         ";
       };
@@ -122,7 +122,7 @@ let
     for i in \$list ; do
       fontDirs=\"\$fontDirs \$(dirname \$i)\";
     done;
-    mkdir -p \$out/share/X11-fonts/; 
+    mkdir -p \$out/share/X11-fonts/;
     find \$fontDirs -type f -o -type l | while read i; do
       j=\"\${i##*/}\"
       if ! test -e \"\$out/share/X11-fonts/\${j}\"; then
@@ -142,7 +142,7 @@ let
   x11Fonts = with localDefs; stdenv.mkDerivation rec {
     name = "X11-fonts";
     builder = writeScript (name + "-builder")
-      (textClosure localDefs 
+      (textClosure localDefs
         [installPhase doForceShare doPropagate]);
     meta = {
       description = "
@@ -169,7 +169,7 @@ in
     ];
 
   environment.shellInit =
-    '' 
+    ''
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
     '';
 

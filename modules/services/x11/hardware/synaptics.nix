@@ -9,7 +9,7 @@ let cfg = config.services.xserver.synaptics; in
   options = {
 
     services.xserver.synaptics = {
-      
+
       enable = mkOption {
         default = false;
         example = true;
@@ -19,7 +19,7 @@ let cfg = config.services.xserver.synaptics; in
       dev = mkOption {
         default = null;
 	example = "/dev/input/event0";
-        description = 
+        description =
           ''
             Path for touchpad device.  Set to null to apply to any
             auto-detected touchpad.

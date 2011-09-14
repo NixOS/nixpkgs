@@ -10,13 +10,13 @@ let
   location = cfg.location ;
   mysqlBackupCron = db : ''
     ${cfg.period} ${cfg.user} ${mysql}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
-  ''; 
+  '';
 
 in
 
 {
   options = {
-  
+
     services.mysqlBackup = {
 
       enable = mkOption {
@@ -48,7 +48,7 @@ in
           List of database names to dump.
         '';
       };
- 
+
       location = mkOption {
         default = "/var/backup/mysql";
         description = ''
@@ -67,7 +67,7 @@ in
   };
 
   config = mkIf config.services.mysqlBackup.enable {
-  
+
     services.cron.systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
 
     system.activationScripts.mysqlBackup = stringAfter [ "stdio" "defaultPath" "systemConfig" "users" ]
@@ -75,7 +75,7 @@ in
         mkdir -m 0700 -p ${config.services.mysqlBackup.location}
         chown ${config.services.mysqlBackup.user} ${config.services.mysqlBackup.location}
       '';
-    
+
   };
-  
+
 }
