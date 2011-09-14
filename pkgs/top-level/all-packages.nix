@@ -1026,6 +1026,8 @@ let
 
   networkmanager = callPackage ../tools/networking/network-manager { };
 
+  networkmanager_pptp = callPackage ../tools/networking/network-manager/pptp.nix { };
+
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
