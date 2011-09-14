@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cacert-20110806";
+  name = "cacert-20110902";
 
   src = fetchurl {
     url = "http://nixos.org/tarballs/${name}.pem.bz2";
-    sha256 = "0vn1hic2a7p1vr2pf9hy8da4zm9qjndid4nwgj1m035y4ldjqlyw";
+    sha256 = "05vwziwrckgdg4l029jsb8apj65lcvk0rfcyyrvz34m2znk0vlmi";
   };
 
   unpackPhase = "true";
