@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus, dbus_glib
-, udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables, libtasn1
+{ stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib
+, udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings" ];
 
-  buildInputs = [ intltool wirelesstools pkgconfig dbus udev libnl1
-    libuuid polkit gnutls ppp libtasn1 libgcrypt ];
+  buildInputs = [ wirelesstools udev libnl1 libuuid polkit ppp ];
 
-  propagatedBuildInputs = [ dbus_glib ];
+  propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
+
+  buildNativeInputs = [ intltool pkgconfig ];
 
   patches = [ ./nixos-purity.patch ];
 
