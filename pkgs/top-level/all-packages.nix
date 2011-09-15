@@ -5578,6 +5578,8 @@ let
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };
 
+    e1000e = callPackage ../os-specific/linux/e1000e {};
+
     exmap = callPackage ../os-specific/linux/exmap {
       inherit (gtkLibs) gtkmm;
     };
