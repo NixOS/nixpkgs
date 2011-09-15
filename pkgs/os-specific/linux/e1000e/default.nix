@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     install -v -D -m 644 e1000e.ko "$out/lib/modules/$kernel_version/kernel/drivers/net/e1000e/e1000e.ko"
   '';
 
+  dontStrip = true;
+
+  enableParallelBuilding = true;
+
   meta = {
     description = "Linux kernel drivers for Intel Ethernet adapters and LOMs (LAN On Motherboard)";
     homepage = "http://e1000.sf.net/";
