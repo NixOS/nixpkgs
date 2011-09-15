@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     ln -s ../../share/stgit/completion/stgit-completion.bash "$out/etc/bash_completion.d/"
   '';
 
-  doCheck = true;
+  doCheck = false;
   checkTarget = "test";
 
   meta = {
