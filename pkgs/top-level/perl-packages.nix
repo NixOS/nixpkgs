@@ -2401,13 +2401,13 @@ rec {
   };
 
   nixPerl = buildPerlPackage {
-    name = "Nix-1.0pre26388";
+    name = "Nix-1.0pre29083";
     src = fetchsvn {
       url = https://svn.nixos.org/repos/nix/nix-perl/trunk;
-      rev = 26388;
-      sha256 = "0780q2hgklv841za0w2swkxbyks2h6693ab2vd617s38bjm7bppa";
+      rev = 29083;
+      sha256 = "02wfy4l355s57w7lrynbwx97nlxvasx3xfsn72gla0i8mg6pdgaw";
     };
-    NIX_PREFIX = pkgs.nixSqlite;
+    NIX_PREFIX = pkgs.nixUnstable;
     doCheck = false; # tests currently don't work
   };
 

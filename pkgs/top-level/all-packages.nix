@@ -825,7 +825,7 @@ let
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   hydra = callPackage ../development/tools/misc/hydra {
-    nix = nixSqlite;
+    nix = nixUnstable;
   };
 
   iasl = callPackage ../development/compilers/iasl { };
