@@ -1,25 +1,34 @@
-args:
-args.stdenv.mkDerivation {
-  name = "stgit-0.14.3";
+{ stdenv, fetchurl, python, git }:
 
-  src = args.fetchurl {
-    url = http://homepage.ntlworld.com/cmarinas/stgit/stgit-0.14.3.tar.gz;
-    sha256 = "13gcvz6x91m2860n26xp12j0xsshzvwij03sfzm5g3ckm18ffkw7";
+let
+  name = "stgit-0.15";
+in
+stdenv.mkDerivation {
+  inherit name;
+
+  src = fetchurl {
+    url = "http://download.gna.org/stgit/${name}.tar.gz";
+    sha256 = "0kgq9x0i7riwcl1lmmm40z0jiz5agr1kqxm2byv1qsf0q1ny47v9";
   };
 
-  buildInputs =(with args; [python git]);
+  buildInputs = [ python git ];
 
-  buildPhase = "true";
-  
-  installPhase = ''
-    python ./setup.py install --prefix=$out
-      d="$out/etc/bash_completion.d"
-      ensureDir $d; ln -s "$out/share/stgit/contrib/stgit-completion.bash" "$d"
+  makeFlags = "prefix=$$out";
+
+  postInstall = ''
+    ensureDir "$out/etc/bash_completion.d/"
+    ln -s ../../share/stgit/completion/stgit-completion.bash "$out/etc/bash_completion.d/"
   '';
 
-  meta = { 
-      description = "quilt for git (stacking patches)";
-      homepage = http://procode.org/stgit/;
-      license = "GPL";
+  doCheck = true;
+  checkTarget = "test";
+
+  meta = {
+    homepage = "http://procode.org/stgit/";
+    description = "StGit is a patch manager implemented on top of Git";
+    license = "GPL";
+
+    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
