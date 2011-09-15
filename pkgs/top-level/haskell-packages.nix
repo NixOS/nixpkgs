@@ -606,6 +606,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
+  gloss = callPackage ../development/libraries/haskell/gloss {
+    GLUT   = self.GLUT22;
+    OpenGL = self.OpenGL24;
+  };
+
   GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
@@ -613,6 +618,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GLUT_2_2_2_0 = callPackage ../development/libraries/haskell/GLUT/2.2.2.0.nix {
     OpenGL = self.OpenGL_2_4_0_1;
   };
+  GLUT22 = self.GLUT_2_2_2_0;
   GLUT = self.GLUT_2_1_1_2;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
@@ -885,6 +891,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
   OpenGL_2_4_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.1.nix {};
+  OpenGL24 = self.OpenGL_2_4_0_1;
   OpenGL = self.OpenGL_2_2_1_1;
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
