@@ -8,7 +8,7 @@ let
   stateDir = "/var/spool/sitecopy";
 
   sitecopyCron = backup : ''
-    ${if backup ? period then backup.period else config.services.sitecopy.period} root ${sitecopy}/bin/sitecopy --storepath=${stateDir} --rcfile=${stateDir}/${backup.name}.conf --update ${backup.name}
+    ${if backup ? period then backup.period else config.services.sitecopy.period} root ${sitecopy}/bin/sitecopy --storepath=${stateDir} --rcfile=${stateDir}/${backup.name}.conf --update ${backup.name} >> /var/log/sitecopy.log 2>&1
   '';
 in
 
