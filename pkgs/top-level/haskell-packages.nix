@@ -1321,8 +1321,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   flapjax = callPackage ../development/compilers/flapjax {};
 
-  helium = callPackage ../development/compilers/helium {};
-
   idris = callPackage ../development/compilers/idris {};
 
   pakcs = callPackage ../development/compilers/pakcs {
