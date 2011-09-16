@@ -6633,6 +6633,8 @@ let
     gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
   };
 
+  gnunet09 = lowPrio (callPackage ../applications/networking/p2p/gnunet/0.9.nix { });
+
   gocr = callPackage ../applications/graphics/gocr { };
 
   gobby5 = callPackage ../applications/editors/gobby {

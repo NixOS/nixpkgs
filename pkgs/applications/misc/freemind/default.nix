@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jdk, jre, ant, coreutils, gnugrep }:
 
 stdenv.mkDerivation {
-  name = "freemind-0.9.0_RC_6";
+  name = "freemind-0.9.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/freemind/freemind-src-0.9.0_RC_6.tar.gz;
-    sha256 = "0qxpwqmb4xd8c83zh76gczmx0hsx5m209k7p60kh7c4f25snhngf";
+    url = mirror://sourceforge/freemind/freemind-src-0.9.0.tar.gz;
+    sha256 = "1qd535gwx00d8z56mplxli5529yds2gsmbgla5b0bhhmsdwmrxmf";
   };
 
   buildInputs = [ jdk ant ];
