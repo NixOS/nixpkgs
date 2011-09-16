@@ -5686,7 +5686,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_2_6_32;
+  linuxPackages = linuxPackages_2_6_35;
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
