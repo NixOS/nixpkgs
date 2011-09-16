@@ -768,9 +768,7 @@ rec {
       url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
       sha256 = "1k1i539fszhxay8yllh687sw06i68g8ikw51pvy1c84p3kg6yk4v";
     };
-    propagatedBuildInputs = [
-      CompressRawZlib IOCompressBase IOCompressGzip
-    ];
+    propagatedBuildInputs = [ CompressRawZlib IOCompress ];
   };
 
   CompressUnLZMA = buildPerlPackage rec {
@@ -779,9 +777,7 @@ rec {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
       sha256 = "0sg9gj3rhif6hgmhwpz6w0g52l65vj5hx9818v5cdhvcif0jhg0b";
     };
-    propagatedBuildInputs = [
-      IOCompressBase
-    ];
+    propagatedBuildInputs = [ IOCompress ];
   };
 
   ConfigAny = buildPerlPackage rec {
@@ -1313,12 +1309,16 @@ rec {
     };
   };
 
-  ExtUtilsMakeMaker = buildPerlPackage {
-    name = "ExtUtils-MakeMaker-6.56";
+  ExtUtilsMakeMaker = buildPerlPackage rec{
+    name = "ExtUtils-MakeMaker-6.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz;
-      sha256 = "1i24ljkwv4b2nr18a8rr82250wgr3c95pxalzgvfa132w08skd4b";
+      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      sha256 = "0fwhb2cf5x7y87xwml66p624iynf0mzvhy1q4aq5yv7l3lhwhaby";
     };
+    propagatedBuildInputs = 
+      [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
+        FileCopyRecursive VersionRequirements ExtUtilsManifest 
+      ]; 
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
@@ -1358,11 +1358,11 @@ rec {
     };
   };
 
-  FileCopyRecursive = buildPerlPackage {
-    name = "File-Copy-Recursive-0.37";
+  FileCopyRecursive = buildPerlPackage rec {
+    name = "File-Copy-Recursive-0.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.37.tar.gz;
-      sha256 = "12j0s01zwm67g4bcgbs0k61jwz59q1lndrnxyywxsz3xd30ki8rr";
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/${name}.tar.gz";
+      sha256 = "1syyyvylr51iicialdmv0dw06q49xzv8zrkb5cn8ma4l73gvvk44";
     };
   };
 
@@ -1694,30 +1694,15 @@ rec {
     };
   };
 
-  IOCompressBase = buildPerlPackage rec {
-    name = "IO-Compress-Base-2.015";
+  IOCompress = buildPerlPackage rec {
+    name = "IO-Compress-2.037";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-      sha256 = "10njlwa50mhs5nqws5yidfmmb7hwmwc6x06gk2vnpyn82g3szgqd";
+      url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
+      sha256 = "07hs3afzg9ry6ir2f9rf3fg8b129cihs989mr0nh9wdvxgxqmr1q";
     };
-  };
-
-  IOCompressBzip2 = buildPerlPackage rec {
-    name = "IO-Compress-Bzip2-2.015";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-      sha256 = "1kfksf2bslfkviry228p07m1ksnf06mh8gkmdpbrmlmxlbs2idnc";
-    };
-    propagatedBuildInputs = [IOCompressBase CompressRawBzip2];
-  };
-
-  IOCompressGzip = buildPerlPackage rec {
-    name = "IO-Compress-Zlib-2.015";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-      sha256 = "0sbnx6xdryaajwpssrfgm5b2zasa4ri8pihqwsx3rm5kmkgzy9cx";
-    };
-    propagatedBuildInputs = [IOCompressBase CompressRawZlib];
+    propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
+    # Work around a self-referencing Makefile variable.
+    makeFlags = "INSTALLARCHLIB=$(INSTALLSITEARCH)";
   };
 
   IODigest = buildPerlPackage {

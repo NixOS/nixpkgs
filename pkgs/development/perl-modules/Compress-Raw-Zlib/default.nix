@@ -1,11 +1,11 @@
-{fetchurl, buildPerlPackage, zlib}:
+{ fetchurl, buildPerlPackage, zlib }:
 
 buildPerlPackage rec {
-  name = "Compress-Raw-Zlib-2.015";
+  name = "Compress-Raw-Zlib-2.037";
     
   src = fetchurl {
-    url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "0g6kz73jxqjfln2pi500y7rr96mhad16hrp5wy6542fapamv4xcd";
+    url = "mirror://cpan/modules/by-module/Compress/${name}.tar.gz";
+    sha256 = "18grvxjlsqlqiwxgdf26s4z4q9ag0vacrswxbyaqf11a03sciw7d";
   };
     
   preConfigure = ''
