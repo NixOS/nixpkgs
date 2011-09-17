@@ -78,9 +78,10 @@ rec {
         }' ';'
       '';
 
-    # !!! Temporary hack.
+    # !!! Temporary hacks.
     preBuild =
       ''
+        ln -s Linux2.6.mk security/coreconf/Linux3.0.mk
         export NIX_ENFORCE_PURITY=
       '';
 
