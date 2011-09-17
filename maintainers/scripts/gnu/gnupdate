@@ -715,8 +715,10 @@ Return #t if the signature was good, #f otherwise."
                       (match attr
                         (('attribute _ "description" value)
                          (string-prefix? "GNU" value))
-                        (('attribute _ "homepage" value)
+                        (('attribute _ "homepage" (? string? value))
                          (string-contains value "www.gnu.org"))
+                        (('attribute _ "homepage" ((? string? value) ...))
+                         (any (cut string-contains <> "www.gnu.org") value))
                         (_ #f)))
                     metas))
               (_ #f)))
