@@ -30,7 +30,7 @@ let
       ./nix-store-mtime.patch
     ];
 
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
     substituteInPlace ./Lib/plat-generic/regen \
                       --replace /usr/include/netinet/in.h \
                                 ${stdenv.gcc.libc}/include/netinet/in.h
