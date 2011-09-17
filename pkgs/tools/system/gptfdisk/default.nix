@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, libuuid, popt, icu }:
+{ fetchurl, stdenv, libuuid, popt, icu, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gptfdisk-0.7.1";
+  name = "gptfdisk-0.8.0";
 
   src = fetchurl {
-    url = "http://www.rodsbooks.com/gdisk/${name}.tgz";
-    sha256 = "142mrlcaprh7a6r55wvaxpvjmkffh7w8lcagarmwq4cfibfrnwd8";
+    url = "mirror://sourceforge/gptfdisk/${name}.tar.gz";
+    sha256 = "096qmlqcsvjklihggwphdmd0y78jz4ghf7gf4fvjnskp7mg4ng31";
   };
 
-  buildInputs = [ libuuid popt icu ];
+  buildInputs = [ libuuid popt icu ncurses ];
 
   installPhase = ''
     ensureDir $out/sbin
