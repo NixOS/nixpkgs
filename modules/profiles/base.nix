@@ -55,6 +55,7 @@
     pkgs.testdisk # useful for repairing boot problems
     pkgs.mssys # for writing Microsoft boot sectors / MBRs
     pkgs.parted
+    pkgs.gptfdisk
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
