@@ -30,6 +30,12 @@ let
       ./nix-store-mtime.patch
     ];
 
+  postPatch = ''
+    substituteInPlace ./Lib/plat-generic/regen \
+                      --replace /usr/include/netinet/in.h \
+                                ${stdenv.gcc.libc}/include/netinet/in.h
+  '';
+
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
     [ bzip2 ]
@@ -49,7 +55,7 @@ let
   python = stdenv.mkDerivation {
     name = "python-${version}";
 
-    inherit majorVersion version src patches buildInputs;
+    inherit majorVersion version src patches postPatch buildInputs;
 
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
@@ -110,7 +116,7 @@ let
     stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches;
+      inherit src patches postPatch;
 
       buildInputs = [ python ] ++ deps;
 
