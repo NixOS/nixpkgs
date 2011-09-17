@@ -1,4 +1,6 @@
-{ cabal, freeglut, GLUT, hp2anyCore, network, OpenGL, parseargs }:
+{ cabal, freeglut, GLUT, hp2anyCore, mesa, network, OpenGL
+, parseargs
+}:
 
 cabal.mkDerivation (self: {
   pname = "hp2any-graph";
@@ -7,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ GLUT hp2anyCore network OpenGL parseargs ];
-  extraLibraries = [ freeglut ];
+  extraLibraries = [ freeglut mesa ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Hp2any";
     description = "Real-time heap graphing utility and profile stream server with a reusable graphing module";
