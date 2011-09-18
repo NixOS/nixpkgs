@@ -1,4 +1,4 @@
-{ cabal, mtl, parsec, stm, time, utf8String, X11 }:
+{ cabal, mtl, parsec, stm, time, utf8String, X11, X11Xft }:
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
@@ -6,7 +6,8 @@ cabal.mkDerivation (self: {
   sha256 = "0ijava0vn2dmc6v57i6x663rvxz3ryb2gqks18qk1qli4k0m3hf7";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ mtl parsec stm time utf8String X11 ];
+  buildDepends = [ mtl parsec stm time utf8String X11 X11Xft ];
+  configureFlags = "--flags=with_xft";
   meta = {
     homepage = "http://projects.haskell.org/xmobar/";
     description = "A Minimalistic Text Based Status Bar";
