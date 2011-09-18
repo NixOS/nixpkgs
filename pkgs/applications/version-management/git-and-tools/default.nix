@@ -104,24 +104,7 @@ rec {
     inherit stdenv fetchgit qt47 subversion apr;
   };
 
-  gitSubtree = stdenv.mkDerivation {
-    name = "git-subtree-0.4";
-    src = fetchurl {
-      url = "http://github.com/apenwarr/git-subtree/tarball/v0.4";
-#      sha256 = "0y57lpbcc2142jgrr4lflyb9xgzs9x33r7g4b919ncn3alb95vdr";
-      sha256 = "19s8352igwh7x1nqgdfs7rgxahw9cnfv7zmpzpd63m1r3l2945d4";
-    };
-    unpackCmd = "gzip -d < $curSrc | tar xvf -";
-    buildInputs = [ git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];
-    configurePhase = "export prefix=$out";
-    buildPhase = "true";
-    installPhase = ''
-      make install prefix=$out gitdir=$out/bin #work around to deal with a wrong makefile
-    '';
-    meta= {
-      description = "An experimental alternative to the git-submodule command";
-      homepage = http://github.com/apenwarr/git-subtree;
-      license = "GPLv2";
-    };
+  gitSubtree = import ./git-subtree {
+    inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
   };
 }
