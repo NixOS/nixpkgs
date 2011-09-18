@@ -1,25 +1,24 @@
 { fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
-, expat, gettext, intltool, glib, gtk, qt4 ? null, lib
+, expat, gettext, intltool, glib, qt4 ? null, lib
 , qt4Support ? false
-, withLibdnsCompat ? false }:
+, withLibdnssdCompat ? false }:
 
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-0.6.28";
+  name = "avahi-0.6.30";
 
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "14gw611d3srn2r18a6g4y04r571w3l4lihiiaffryar1i2n0mn50";
+    sha256 = "07zzaxs81rbrfhj0rnq616c3j37f3g84dn7d4q3h5l1r4dn33r7r";
   };
 
   patches = [ ./no-mkdir-localstatedir.patch ];
 
-  buildInputs = [
-      pkgconfig libdaemon dbus perl perlXMLParser glib expat
-      gettext intltool
-    ]
+  buildInputs = [ libdaemon dbus perl perlXMLParser glib expat ]
     ++ (lib.optional qt4Support qt4);
+
+  buildNativeInputs = [ pkgconfig gettext intltool ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
       "--${if qt4Support then "enable" else "disable"}-qt4"
       "--disable-python"
       "--with-distro=none" "--localstatedir=/var"
-    ] ++ stdenv.lib.optional withLibdnsCompat "--enable-compat-libdns_sd";
+    ] ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd";
 
   meta = {
     description = "Avahi, an mDNS/DNS-SD implementation";
