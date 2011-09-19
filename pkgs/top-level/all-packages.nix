@@ -6080,7 +6080,7 @@ let
 
   iana_etc = callPackage ../data/misc/iana-etc { };
 
-  popplerData = callPackage ../data/misc/poppler-data { };
+  poppler_data = callPackage ../data/misc/poppler-data { };
 
   r3rs = callPackage ../data/documentation/rnrs/r3rs.nix { };
 
