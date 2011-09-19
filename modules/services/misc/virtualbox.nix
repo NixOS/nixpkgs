@@ -6,6 +6,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.virtualbox;
+  kernel = config.boot.kernelPackages;
 
 in
 
@@ -33,14 +34,14 @@ in
 
     environment.systemPackages = [ ];
 
-    boot.extraModulePackages = [ pkgs.linuxPackages.virtualboxGuestAdditions ];
+    boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
     jobs.virtualbox =
       { description = "VirtualBox service";
 
         startOn = "started udev";
 
-        exec = "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/VBoxService";
+        exec = "${kernel.virtualboxGuestAdditions}/sbin/VBoxService";
       };
 
   };
