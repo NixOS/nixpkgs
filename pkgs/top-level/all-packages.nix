@@ -8349,7 +8349,9 @@ let
 
   splix = callPackage ../misc/cups/drivers/splix { };
 
-  tetex = callPackage ../misc/tex/tetex { };
+  tetex = callPackage ../misc/tex/tetex { 
+    libpng = libpng12;
+  };
 
   tex4ht = callPackage ../misc/tex/tex4ht { };
 
