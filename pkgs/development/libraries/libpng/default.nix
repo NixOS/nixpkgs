@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, zlib }:
-
-assert zlib != null;
+{ stdenv, fetchurl, zlib, xz }:
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.2.44";
+  name = "libpng-1.5.4";
   
   src = fetchurl {
-    url = "mirror://sourceforge/libpng/${name}.tar.gz";
-    md5 = "89b62f8daaeeab1342e307d6d1411ff1";
+    url = "mirror://sourceforge/libpng/${name}.tar.xz";
+    sha256 = "1rw58zi3hxyinah2dz0jzq81c7ninbmfjf10xax2a8cpd5h45agz";
   };
   
   propagatedBuildInputs = [ zlib ];
+
+  buildNativeInputs = [ xz ];
 
   passthru = { inherit zlib; };
   
