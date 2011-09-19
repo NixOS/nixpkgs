@@ -97,6 +97,7 @@ rec {
     http://www.all.kernel.org/pub/
     http://www.eu.kernel.org/pub/
     http://www.de.kernel.org/pub/
+    http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/
   ];
 
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
