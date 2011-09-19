@@ -3535,24 +3535,6 @@ let
 
   });
 
-  gtkLibs220 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs220; in {
-
-    glib = callPackage ../development/libraries/glib/2.24.x.nix { };
-
-    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/1.30.x.nix { };
-
-    pango = callPackage ../development/libraries/pango/1.28.x.nix { };
-
-    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.20.x.nix { };
-
-    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
-
-  });
-
   gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
