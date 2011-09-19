@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ mtl parsec stm time utf8String X11 X11Xft ];
-  configureFlags = "--flags=with_xft";
+  configureFlags = "-fwith_xft";
   meta = {
     homepage = "http://projects.haskell.org/xmobar/";
     description = "A Minimalistic Text Based Status Bar";
