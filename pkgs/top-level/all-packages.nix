@@ -7671,7 +7671,6 @@ let
   scummvm = callPackage ../games/scummvm { };
 
   scorched3d = callPackage ../games/scorched3d {
-    wxGTK = wxGTK26;
   };
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
