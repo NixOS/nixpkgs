@@ -7,7 +7,7 @@ rec {
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
-  
+
   # SourceForge.
   sourceforge = [
     http://prdownloads.sourceforge.net/
