@@ -6951,7 +6951,7 @@ let
 
   mumble = callPackage ../applications/networking/mumble {
     avahi = avahi.override {
-      withLibdnsCompat = true;
+      withLibdnssdCompat = true;
     };
     jackSupport = getConfig [ "mumble" "jackSupport" ] false;
   };
