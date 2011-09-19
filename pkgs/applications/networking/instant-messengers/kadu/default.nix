@@ -3,15 +3,14 @@
 
 stdenv.mkDerivation {
 
-  name = "kadu-0.9.2";
+  name = "kadu-0.10.0";
 
   src = fetchurl {
-    url = http://www.kadu.net/download/stable/kadu-0.9.2.tar.bz2;
-    sha256 = "05lpx7m2adx8vv4h62rsiwlgay24m6cxdbibg7vzl4xkq9ybv30b";
+    url = http://www.kadu.net/download/stable/kadu-0.10.0.tar.bz2;
+    sha256 = "039dx8y6vzqmv86prk1srmi7fvxlrbisyd6rcfs0gv497bfi1995";
   };
 
-  buildInputs = [
-    cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon
+  buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon
   ];
 
   configureFlags = "CPPFLAGS=-DQT_NO_DEBUG";
@@ -22,7 +21,8 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  patches = [ ./config.patch ];
+  # because I was not able to get those working
+  patches = [ ./disable_encryption_plugins.patch ];
 
   NIX_LDFLAGS="-lX11";
 
