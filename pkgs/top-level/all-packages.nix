@@ -6276,9 +6276,7 @@ let
     python = pythonFull;
   };
 
-  comical = callPackage ../applications/graphics/comical {
-    wxGTK = wxGTK26;
-  };
+  comical = callPackage ../applications/graphics/comical { };
 
   conkeror = xulrunnerWrapper {
     launcher = "conkeror";
