@@ -759,7 +759,7 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng12 pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
 
     meta = {
       description = "python plotting library, making publication quality plots";
