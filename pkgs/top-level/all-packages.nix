@@ -3944,7 +3944,7 @@ let
   libpcap = callPackage ../development/libraries/libpcap { };
 
   libpng = callPackage ../development/libraries/libpng { };
-  libpng12 = callPackage ../development/libraries/libpng/1.2.44 { };
+  libpng12 = callPackage ../development/libraries/libpng/1.2.44.nix { };
   libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
 
   libproxy = callPackage ../development/libraries/libproxy { };
