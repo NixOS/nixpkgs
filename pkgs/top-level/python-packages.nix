@@ -358,6 +358,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  docutils = buildPythonPackage rec {
+    name = "docutils-0.8.1";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/docutils/${name}.tar.gz";
+      sha256 = "0wfz4nxl95jcr2f2mc5gijgighavcghg33plzbz5jyi531jpffss";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://docutils.sourceforge.net/;
+      description = "Docutils is an open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX.";
+    };
+  };
+
+
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
 
@@ -742,7 +759,7 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng12 pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
 
     meta = {
       description = "python plotting library, making publication quality plots";
@@ -1290,6 +1307,50 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  pydot = buildPythonPackage rec {
+    name = "pydot-1.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pydot/${name}.tar.gz";
+      md5 = "cd739651ae5e1063a89f7efd5a9ec72b";
+    };
+    propagatedBuildInputs = [pyparsing pkgs.graphviz];
+    meta = {
+      homepage = http://code.google.com/p/pydot/;
+      description = "pydot allows to easily create both directed and non directed graphs from Python.";
+    };
+  };
+
+
+  pygments = buildPythonPackage rec {
+    name = "Pygments-1.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
+      md5 = "d77ac8c93a7fb27545f2522abe9cc462";
+    };
+    meta = {
+      homepage = http://pygments.org/;
+      description = "Pygments is a generic syntax highlighter for general use in all kinds of software such as forum systems, wikis or other applications that need to prettify source code.";
+    };
+  };
+
+
+  pyparsing = buildPythonPackage rec {
+    name = "pyparsing-1.5.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
+      md5 = "1e41cb219dae9fc353bd4cd47636b283";
+    };
+    doCheck = false;
+    meta = {
+      homepage = http://pyparsing.wikispaces.com/;
+      description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
+    };
+  };
+
+
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
 
@@ -1737,6 +1798,26 @@ let pythonPackages = python.modules // rec {
       homepage = http://code.google.com/p/simplejson/;
 
       license = "MIT";
+    };
+  });
+
+
+  sphinx = buildPythonPackage (rec {
+    name = "Sphinx-1.0.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
+      md5 = "42c722d48e52d4888193965dd473adb5";
+    };
+
+    propagatedBuildInputs = [docutils jinja2 pygments]; 
+
+    meta = {
+      description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";
+
+      homepage = http://sphinx.pocoo.org/;
+
+      license = "BSD";
     };
   });
 
