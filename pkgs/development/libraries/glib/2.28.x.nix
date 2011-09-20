@@ -1,24 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib }:
+{ stdenv, fetchurl_gnome, pkgconfig, gettext, perl, libiconv, zlib, xz }:
 
+# TODO:
+# * Add gio-module-fam
+#     Problem: cyclic dependency on gamin
+#     Possible solution: build as a standalone module, set env. vars
 stdenv.mkDerivation rec {
-  name = "glib-2.28.8";
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/glib/2.28/${name}.tar.bz2";
-    sha256 = "222f3055d6c413417b50901008c654865e5a311c73f0ae918b0a9978d1f9466f";
+  src = fetchurl_gnome {
+    project = "glib";
+    major = "2"; minor = "28"; patchlevel = "8"; extension = "xz";
+    sha256 = "0lw3fjsffpnf0cc4j5lkxgllp95qvfq6bir8nh5gds78pmfsjz2d";
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ pkgconfig gettext ]
-                ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
-  buildNativeInputs = [ perl ];
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildNativeInputs = [ perl pkgconfig gettext xz ];
 
   propagatedBuildInputs = [ zlib ];
 
   # glib buildsystem fails to find python, thus hardcodes python2.4 in #!
   postInstall = ''
     rm -rvf $out/share/gtk-doc
-    sed -e 's@python2\.4@python@' -i $out/bin/gtester-report'';
+    sed -e 's@python2\.[0-9]@python@' -i $out/bin/gtester-report'';
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin urkud];
     platforms = stdenv.lib.platforms.linux;
   };
 }
