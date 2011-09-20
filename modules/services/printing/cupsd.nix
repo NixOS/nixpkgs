@@ -17,7 +17,7 @@ let
     builder = pkgs.writeScript "additional-backends-builder.sh" ''
       PATH=${pkgs.coreutils}/bin
       mkdir -pv $out
-      if [ ! -e ${pkgs.samba}/lib/cups/backend/smb ]; then
+      if [ ! -e ${pkgs.cups}/lib/cups/backend/smb ]; then
         mkdir -pv $out/lib/cups/backend
         ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
