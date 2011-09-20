@@ -3084,8 +3084,6 @@ let
 
   buddy = callPackage ../development/libraries/buddy { };
 
-  cairo = callPackage ../development/libraries/cairo { };
-
   cairomm = callPackage ../development/libraries/cairomm { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
@@ -3510,7 +3508,7 @@ let
 
   gtkLibs = pkgs.gtkLibs224;
 
-  inherit (pkgs.gtkLibs) glib gtk pango;
+  inherit (pkgs.gtkLibs) glib gtk pango cairo;
 
   gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
 
@@ -3527,6 +3525,8 @@ let
     glibmm = callPackage ../development/libraries/glibmm/2.18.x.nix { };
 
     atk = callPackage ../development/libraries/atk/1.24.x.nix { };
+
+    cairo = callPackage ../development/libraries/cairo { };
 
     pango = callPackage ../development/libraries/pango/1.24.x.nix { };
 
@@ -3545,6 +3545,8 @@ let
     glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
 
     atk = callPackage ../development/libraries/atk/1.32.x.nix { };
+
+    cairo = callPackage ../development/libraries/cairo { };
 
     pango = callPackage ../development/libraries/pango/1.28.x.nix { };
 

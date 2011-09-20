@@ -2,6 +2,7 @@
 , pdfSupport ? true
 , pngSupport ? true
 , xcbSupport ? false
+, gobjectSupport ? true, glib
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
 , zlib, libpng, pixman, libxcb ? null, xcbutil ? null
 }:
@@ -19,8 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig x11 fontconfig pixman xlibs.libXrender ] ++ 
-    stdenv.lib.optionals xcbSupport [ libxcb xcbutil ];
+    [ pkgconfig x11 fontconfig pixman xlibs.libXrender ]
+    ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
+    ++ stdenv.lib.optional gobjectSupport glib;
 
   propagatedBuildInputs =
     [ freetype ] ++
