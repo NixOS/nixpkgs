@@ -3558,7 +3558,7 @@ let
 
     gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
 
-    gtkmm = callPackage ../development/libraries/gtkmm/2.18.x.nix { };
+    gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
 
     gob2 = callPackage ../development/tools/misc/gob2 { };
 

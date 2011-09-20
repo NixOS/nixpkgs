@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gtk, atk, glibmm, cairomm, pangomm }:
+{ stdenv, fetchurl_gnome, pkgconfig, gtk, glibmm, cairomm, pangomm, atkmm, xz }:
 
 stdenv.mkDerivation rec {
-  name = "gtkmm-2.18.2";
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtkmm/2.18/${name}.tar.bz2";
-    sha256 = "0kj71db6qwgybmrs0myaz6hfz1zdfzh286vkmv5ldh6d5vi07h6z";
+  src = fetchurl_gnome {
+    project = "gtkmm";
+    major = "2"; minor = "24"; patchlevel = "2"; extension = "xz";
+    sha256 = "0gcm91sc1a05c56kzh74l370ggj0zz8nmmjvjaaxgmhdq8lpl369";
   };
 
-  buildInputs = [pkgconfig];
-  propagatedBuildInputs = [ glibmm gtk atk cairomm pangomm ];
+  buildNativeInputs = [pkgconfig xz];
+
+  propagatedBuildInputs = [ glibmm gtk atkmm cairomm pangomm ];
 
   meta = {
     description = "C++ interface to the GTK+ graphical user interface library";
