@@ -1,14 +1,14 @@
 { stdenv, fetchsvn, pythonPackages, makeWrapper, nettools }:
 
-let rev = "22245"; in
+let rev = "22523"; in
 
 stdenv.mkDerivation {
-  name = "tribler-5.4.2-pre${rev}";
+  name = "tribler-5.4.3-pre${rev}";
 
   src = fetchsvn {
     url = http://svn.tribler.org/abc/branches/release-5.4.x;
     inherit rev;
-    sha256 = "09b3iz3yy1dpl30cd2iningzhm1grz6qjgv0qb3wk0v1vxkacddz";
+    sha256 = "09hscrnl50s9qncklnqqzwxwvidl3hj7hr7qsysmv6sw7b9rbx0g";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
