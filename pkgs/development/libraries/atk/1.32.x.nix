@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib }:
+{ stdenv, fetchurl_gnome, pkgconfig, perl, glib }:
 
 stdenv.mkDerivation rec {
-  name = "atk-1.32.0";
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/atk/1.32/${name}.tar.bz2";
-    sha256 = "e9a3e598f75c4db1af914f8b052dd9f7e89e920a96cc187c18eb06b8339cb16e";
+  src = fetchurl_gnome {
+    project = "atk";
+    major = "1"; minor = "32"; patchlevel = "0";
+    sha256 = "0vmikhrvh1pb31y1ik4n1a99xs7pv4nhb2sgj6pv2kawyycfb8z9";
   };
 
-  buildInputs = [ pkgconfig perl ];
+  buildNativeInputs = [ pkgconfig perl ];
+
   propagatedBuildInputs = [ glib ];
 
   postInstall = "rm -rf $out/share/gtk-doc";
