@@ -3564,6 +3564,23 @@ let
 
   });
 
+  gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
+    glib = callPackage ../development/libraries/glib/2.29.x.nix { };
+
+    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
+
+    atk = callPackage ../development/libraries/atk/2.1.x.nix { };
+
+    cairo = callPackage ../development/libraries/cairo { };
+
+    pango = callPackage ../development/libraries/pango/1.29.x.nix { };
+
+    gtk = callPackage ../development/libraries/gtk+/3.1.x.nix { };
+
+    # Let hydra build gtk-3.x but do not show this to users yet
+    recurseForRelease = true;
+  };
+
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     inherit (gnome) gtk;
     gtksharp = gtksharp2;
