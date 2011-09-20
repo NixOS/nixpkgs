@@ -1,14 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng }:
+{ stdenv, fetchurl_gnome, pkgconfig, gettext, x11, glib, cairo, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "pango-1.28.4";
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/pango/1.28/${name}.tar.bz2";
-    sha256 = "7eb035bcc10dd01569a214d5e2bc3437de95d9ac1cfa9f50035a687c45f05a9f";
+  src = fetchurl_gnome {
+    project = "pango";
+    major = "1"; minor = "28"; patchlevel = "4";
+    sha256 = "17ssy12pqs2s0d89zyhwmkcrbpip6jyf5m8ll9libl0dq6y3bc3y";
   };
 
-  buildInputs = [ pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin gettext;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
+
+  buildNativeInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng ];
 
