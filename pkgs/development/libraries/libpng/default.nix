@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "libpng-1.2.46";
   
   src = fetchurl {
-    url = "mirror://sourceforge/libpng/${name}.tar.gz";
+    url = "mirror://sourceforge/libpng/${name}.tar.xz";
     sha256 = "0rcx4v4khdkrvz7b02fmx7lab2pk1lal4dhx9widv36b7g2xvwzn";
   };
   
