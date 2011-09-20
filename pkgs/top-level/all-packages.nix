@@ -1147,9 +1147,7 @@ let
     ssh = openssh;
   };
 
-  pfstools = callPackage ../tools/graphics/pfstools {
-    qt = qt3;
-  };
+  pfstools = callPackage ../tools/graphics/pfstools { };
 
   philter = callPackage ../tools/networking/philter { };
 
