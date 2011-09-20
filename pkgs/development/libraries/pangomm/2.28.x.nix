@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng }:
+{ stdenv, fetchurl_gnome, pkgconfig, pango, glibmm, cairomm, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "pangomm-2.26.0";
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/pangomm/2.26/${name}.tar.bz2";
-    sha256 = "0ph93cjbzmb36k6a9cjd1pcch0ba4bzq1jnf69f1xj0j5kjfn9mz";
+  src = fetchurl_gnome {
+    project = "pangomm";
+    major = "2"; minor = "28"; patchlevel = "2";
+    sha256 = "13yq5zwxzliiss4ladaa7di2b3s965p3zbz7s0ccz9ddbqj9f7gc";
   };
 
-  buildInputs = [ pkgconfig ];
+  buildNativeInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pango glibmm cairomm libpng ];
 
   meta = {

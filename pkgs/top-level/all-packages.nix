@@ -3550,7 +3550,7 @@ let
 
     pango = callPackage ../development/libraries/pango/1.28.x.nix { };
 
-    pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
+    pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
     gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
 
