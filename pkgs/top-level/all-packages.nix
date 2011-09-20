@@ -3546,6 +3546,8 @@ let
 
     atk = callPackage ../development/libraries/atk/1.32.x.nix { };
 
+    atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
+
     cairo = callPackage ../development/libraries/cairo { };
 
     pango = callPackage ../development/libraries/pango/1.28.x.nix { };
