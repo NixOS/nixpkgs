@@ -3542,7 +3542,7 @@ let
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
 
-    glibmm = callPackage ../development/libraries/glibmm/2.22.x.nix { };
+    glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
 
     atk = callPackage ../development/libraries/atk/1.32.x.nix { };
 
