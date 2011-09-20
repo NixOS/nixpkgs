@@ -1216,9 +1216,7 @@ let
 
   qhull = callPackage ../development/libraries/qhull { };
 
-  qshowdiff = callPackage ../tools/text/qshowdiff {
-    qt = qt4;
-  };
+  qshowdiff = callPackage ../tools/text/qshowdiff { };
 
   radvd = callPackage ../tools/networking/radvd { };
 
@@ -8130,9 +8128,7 @@ let
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  qucs = callPackage ../applications/science/electronics/qucs {
-    qt = qt3;
-  };
+  qucs = callPackage ../applications/science/electronics/qucs { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
