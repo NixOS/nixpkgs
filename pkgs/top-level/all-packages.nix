@@ -3550,7 +3550,7 @@ let
 
     pangomm = callPackage ../development/libraries/pangomm/2.26.x.nix { };
 
-    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.22.x.nix { };
+    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
 
     gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
 
