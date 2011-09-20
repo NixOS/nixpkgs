@@ -6310,7 +6310,9 @@ let
     inherit (xlibs) libxcb pixman libpthreadstubs libXau;
   };
 
-  dia = callPackage ../applications/graphics/dia { };
+  dia = callPackage ../applications/graphics/dia {
+    inherit (pkgs.gnome) libart_lgpl libgnomeui;
+  };
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
 

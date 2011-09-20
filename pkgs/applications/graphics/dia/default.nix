@@ -1,19 +1,29 @@
-{stdenv, fetchurl, gtk, pkgconfig, glib, perl, perlXMLParser, libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool }:
-stdenv.mkDerivation {
-  name = "dia-0.97";
+{stdenv, fetchurl_gnome, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
+, python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool, libart_lgpl
+, withGNOME ? false, libgnomeui }:
 
-  src = fetchurl {
-    url = mirror://gnome/sources/dia/0.97/dia-0.97.tar.bz2;
-    sha256 = "0nngdjklap3x1b7cxnwawh29axbwk8siyq7w4iinsns3slmki0wh";
+stdenv.mkDerivation rec {
+  inherit (src) name;
+
+  src = fetchurl_gnome {
+    project = "dia";
+    major = "0"; minor = "97"; patchlevel = "1";
+    sha256 = "0hli89fdzzbshqdznxrbgyqw55qlr4z5xpn86jcg5fl7kln8pzld";
   };
 
-  buildInputs = [gtk glib perl pkgconfig perlXMLParser libxml2 gettext python libxml2Python docbook5 libxslt docbook_xsl intltool];
+  buildInputs =
+    [ gtk perlXMLParser libxml2 gettext python libxml2Python docbook5
+      libxslt docbook_xsl libart_lgpl
+    ] ++ stdenv.lib.optional withGNOME libgnomeui;
+
+  buildNativeInputs = [ pkgconfig intltool perl ];
+
+  configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
 
   meta = {
-    description = "Gnome Diagram drawing software.";
+    description = "Gnome Diagram drawing software";
     homepage = http://live.gnome.org/Dia;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = with stdenv.lib.platforms;
-      linux;
+    maintainers = with stdenv.lib.maintainers; [raskin urkud];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
