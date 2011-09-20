@@ -90,7 +90,7 @@ in
         stopOn = "stopping network-interfaces";
 
         environment =
-          { PATH = "${pkgs.nfsUtils}/sbin:${config.system.sbin.modprobe}/sbin";
+          { PATH = "${pkgs.nfsUtils}/sbin:${config.system.sbin.modprobe}/sbin:${pkgs.sshfsFuse}/sbin:${pkgs.sshfsFuse}/bin:$PATH";
           };
 
         preStart =
