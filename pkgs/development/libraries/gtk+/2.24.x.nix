@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/gtk-doc";
   
-  passthru = { inherit libtiff libjpeg libpng; };
-
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 

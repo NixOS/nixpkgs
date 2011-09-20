@@ -2,12 +2,6 @@
 , compat22 ? false, compat24 ? true, unicode ? true
 }:
 
-assert pkgconfig != null && gtk != null;
-assert gtk.libtiff != null;
-assert gtk.libjpeg != null;
-assert gtk.libpng != null;
-assert gtk.libpng.zlib != null;
-
 stdenv.mkDerivation {
   name = "wxGTK-2.6.4";
 
@@ -16,10 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1yilzg9qxvdpqhhd3sby1w9pj00k7jqw0ikmwyhh5jmaqnnnrb2x";
   };
 
-  buildInputs = [
-    pkgconfig gtk gtk.libtiff gtk.libjpeg gtk.libpng gtk.libpng.zlib
-    libXinerama libSM libXxf86vm xf86vidmodeproto
-  ];
+  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   configureFlags = [
     "--enable-gtk2"

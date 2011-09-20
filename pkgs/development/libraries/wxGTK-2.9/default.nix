@@ -2,12 +2,6 @@
 , mesa, compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
-assert pkgconfig != null && gtk != null;
-assert gtk.libtiff != null;
-assert gtk.libjpeg != null;
-assert gtk.libpng != null;
-assert gtk.libpng.zlib != null;
-
 stdenv.mkDerivation {
   name = "wxwidgets-2.9.1";
 
@@ -16,10 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1f6pdlzjawhhs17hmimk0l1n3g4g48n2iqrgl181xqfrbxyz75b8";
   };
 
-  buildInputs = [
-    pkgconfig gtk gtk.libtiff gtk.libjpeg gtk.libpng gtk.libpng.zlib
-    libXinerama libSM libXxf86vm xf86vidmodeproto mesa
-  ];
+  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto mesa ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   configureFlags = [
     "--enable-gtk2"
