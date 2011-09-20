@@ -289,6 +289,9 @@ let
     inherit curl stdenv;
   };
 
+  # A wrapper around fetchurl that generates miror://gnome URLs automatically
+  fetchurl_gnome = callPackage ../build-support/fetchurl/gnome.nix { };
+
   # fetchurlBoot is used for curl and its dependencies in order to
   # prevent a cyclic dependency (curl depends on curl.tar.bz2,
   # curl.tar.bz2 depends on fetchurl, fetchurl depends on curl).  It
