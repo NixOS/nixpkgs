@@ -567,7 +567,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
   fgl_5_4_2_4 = callPackage ../development/libraries/haskell/fgl/5.4.2.4.nix {};
-  fgl = self.fgl_5_4_2_2;
+  fgl = self.fgl_5_4_2_4;
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
