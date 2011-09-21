@@ -2,15 +2,14 @@
 
 let
   inherit (pkgs.lib) mkOption mkIf;
-
   cfg = config.environment.blcr;
-
-  blcrPkg = config.boot.kernelPackages.blcr;
+  kernelPkgs = config.boot.kernelPackages;
+  blcrPkg = kernelPkgs.blcr;
 
   insmod = "${pkgs.module_init_tools}/sbin/insmod";
   rmmod  = "${pkgs.module_init_tools}/sbin/rmmod";
 
-  modulesDir      = "${blcrPkg}/lib/modules/${pkgs.linux.version}";
+  modulesDir      = "${blcrPkg}/lib/modules/${kernelPkgs.kernel.version}";
   blcr_imports_ko = "${modulesDir}/blcr_imports.ko";
   blcr_ko         = "${modulesDir}/blcr.ko";
 in
