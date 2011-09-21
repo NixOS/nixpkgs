@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
-  
+
   # On x86_64-darwin, "./config" misdetects the system as
   # "darwin-i386-cc".  So specify the system type explicitly.
   configureScript =
     if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
-  
+
   configureFlags = "shared --libdir=lib";
 
   makeFlags = "MANDIR=$(out)/share/man";
@@ -66,5 +66,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
