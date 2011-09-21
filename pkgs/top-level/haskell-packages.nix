@@ -1054,6 +1054,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
+  skein = callPackage ../development/libraries/haskell/skein {};
+
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
