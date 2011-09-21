@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-talloc-compat1 --enable-largefile";
   
+  patchPhase = if stdenv.isDarwin then ''
+    substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -install_name"
+  '' else "";
+
   meta = {
     description = "talloc is a hierarchical pool based memory allocator with destructors";
     homepage = http://tdb.samba.org/;
