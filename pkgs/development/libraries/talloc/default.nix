@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-talloc-compat1 --enable-largefile";
   
-  patchPhase = if stdenv.isDarwin then ''
+  # https://bugzilla.samba.org/show_bug.cgi?id=7000
+  postConfigure = if stdenv.isDarwin then ''
     substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -install_name"
   '' else "";
 
