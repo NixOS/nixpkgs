@@ -1165,6 +1165,8 @@ let
 
   plotutils = callPackage ../tools/graphics/plotutils { };
 
+  pngcrush = callPackage ../tools/graphics/pngcrush { };
+
   pngnq = callPackage ../tools/graphics/pngnq { };
 
   polipo = callPackage ../servers/polipo { };
