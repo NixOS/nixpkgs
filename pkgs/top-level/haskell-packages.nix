@@ -948,6 +948,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
+  prolog = callPackage ../development/libraries/haskell/prolog {};
+  prologGraphLib = callPackage ../development/libraries/haskell/prolog-graph-lib {
+    fgl = self.fgl_5_4_2_4;
+  };
+  prologGraph = callPackage ../development/libraries/haskell/prolog-graph {
+    fgl = self.fgl_5_4_2_4;
+  };
+
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
