@@ -771,14 +771,7 @@ rec {
     inherit (pkgs) zlib;
   };
 
-  CompressZlib = buildPerlPackage rec {
-    name = "Compress-Zlib-2.015";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-      sha256 = "1k1i539fszhxay8yllh687sw06i68g8ikw51pvy1c84p3kg6yk4v";
-    };
-    propagatedBuildInputs = [ CompressRawZlib IOCompress ];
-  };
+  CompressZlib = IOCompress;
 
   CompressUnLZMA = buildPerlPackage rec {
     name = "Compress-unLZMA-0.04";
