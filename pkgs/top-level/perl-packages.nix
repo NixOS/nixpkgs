@@ -455,8 +455,6 @@ rec {
       sha256 = "0bz33xnh0wa6py6jz31wr38krad9hcv4gxdsy0lyhqn0k4v6b6dx";
     };
     propagatedBuildInputs = [ CatalystRuntime LWP ];
-    #propagatedBuildInputs =
-    #  [ CatalystRuntime CatalystPluginSession ClassInspector ];
   };
 
   CatalystPluginHTMLWidget = buildPerlPackage {
