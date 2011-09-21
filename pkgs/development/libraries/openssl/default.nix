@@ -1,13 +1,15 @@
 { stdenv, fetchurl, perl }:
 
 let
+  name = "openssl-1.0.0d";
+
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
 in
 
-stdenv.mkDerivation rec {
-  name = "openssl-1.0.0d";
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
