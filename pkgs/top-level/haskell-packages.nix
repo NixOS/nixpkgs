@@ -567,7 +567,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
   fgl_5_4_2_4 = callPackage ../development/libraries/haskell/fgl/5.4.2.4.nix {};
-  fgl = self.fgl_5_4_2_2;
+  fgl = self.fgl_5_4_2_4;
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
@@ -634,7 +634,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {};
+  graphviz = callPackage ../development/libraries/haskell/graphviz {
+    fgl = self.fgl_5_4_2_4;
+  };
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {
     hamlet = self.hamlet_0_8_2_1;
@@ -793,7 +795,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     WebBitsHtml = self.WebBitsHtml_1_0_1;
   };
 
-  json = callPackage ../development/libraries/haskell/json/default.nix {};
+  json_0_4_4 = callPackage ../development/libraries/haskell/json/0.4.4.nix {};
+  json_0_5 = callPackage ../development/libraries/haskell/json/0.5.nix {};
+  json = self.json_0_4_4;
 
   jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
 
@@ -812,6 +816,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
+
+  maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
@@ -942,6 +948,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
+  prolog = callPackage ../development/libraries/haskell/prolog {};
+  prologGraphLib = callPackage ../development/libraries/haskell/prolog-graph-lib {
+    fgl = self.fgl_5_4_2_4;
+  };
+  prologGraph = callPackage ../development/libraries/haskell/prolog-graph {
+    fgl = self.fgl_5_4_2_4;
+  };
+
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
@@ -1039,6 +1053,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
+
+  skein = callPackage ../development/libraries/haskell/skein {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 

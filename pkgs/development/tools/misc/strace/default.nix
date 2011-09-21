@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "12n2faqq7whmszpjhv2lcb06r7900j53p0zl7vipi18inr0smycy";
   };
 
-  buildInputs = [ xz perl ];
+  buildNativeInputs = [ xz perl ];
 
   meta = {
     homepage = http://strace.sourceforge.net/;

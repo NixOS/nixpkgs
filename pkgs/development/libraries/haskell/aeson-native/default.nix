@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson-native";
-  version = "0.3.3";
-  sha256 = "1ckf0fqx0mdw7467kjk3q48fb4q5w6336i8fxk6j0wfk17xjfs8l";
+  version = "0.3.3.1";
+  sha256 = "15733f5ivymkbwvqgbd8scynl9adva3fnid4bzlr9l4sb3yvcz9p";
   buildDepends = [
     attoparsec blazeBuilder blazeTextualNative deepseq hashable mtl syb
     text time unorderedContainers vector

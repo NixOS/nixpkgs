@@ -27,6 +27,7 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -i -e "/^PREFIX =/s:= /usr:= $out:" \
                 "mozilla/security/nss/config/Makefile"
+    ln -s Linux2.6.mk mozilla/security/coreconf/Linux3.0.mk
   '';
 
   preConfigure = "cd mozilla/security/nss";

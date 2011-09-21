@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "system-fileio";
-  version = "0.3.2";
-  sha256 = "10s0mih3mhpm0mh424kk330680qplwaddffr4rm4cf1bi7gbzrcq";
+  version = "0.3.2.1";
+  sha256 = "0a0vkbj9z5i74g6kkz3n4ffmvinavmnak0zxsx0fck18ppdgv394";
   buildDepends = [ systemFilepath text time ];
   meta = {
     homepage = "https://john-millikin.com/software/hs-fileio/";
