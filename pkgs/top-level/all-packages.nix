@@ -2706,7 +2706,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   });
 
-  bison = bison24;
+  bison = bison25;
 
   bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
