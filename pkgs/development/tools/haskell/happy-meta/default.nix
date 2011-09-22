@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "happy-meta";
-  version = "0.2.0.2";
-  sha256 = "1r9i01bnw0dz10balhpgiwcls5jwv5p09jafi8jl6hy0jwx7xydp";
+  version = "0.2.0.3";
+  sha256 = "0bvm4rbmd48vfpyjjfq476466s9hf7x3y0bgzdfkacm89xx080g9";
   buildDepends = [ haskellSrcMeta mtl ];
   meta = {
     description = "Quasi-quoter for Happy parsers";
