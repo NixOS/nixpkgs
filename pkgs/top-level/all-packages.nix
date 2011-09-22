@@ -6459,6 +6459,10 @@ let
 
   esniper = callPackage ../applications/networking/esniper { };
 
+  etherape = callPackage ../applications/networking/sniffers/etherape {
+    inherit (gnome) gnomedocutils libgnome libglade gtk libgnomeui scrollkeeper;
+  };
+
   evopedia = callPackage ../applications/misc/evopedia { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
