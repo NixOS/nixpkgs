@@ -1142,6 +1142,8 @@ let
 
   pdfread = callPackage ../tools/graphics/pdfread { };
 
+  pdnsd = callPackage ../tools/networking/pdnsd { };
+
   pg_top = callPackage ../tools/misc/pg_top { };
 
   pdsh = callPackage ../tools/networking/pdsh {
