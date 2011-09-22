@@ -9,5 +9,9 @@ cabal.mkDerivation (self: {
     description = "Skein, a family of cryptographic hash functions. Includes Skein-MAC as well.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
