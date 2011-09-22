@@ -6226,7 +6226,11 @@ let
     inherit (xlibs) libSM;
   };
 
-  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
+  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
+    # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
+    # connect to jabber.org, for instance.)
+    gnutls = gnutls2;
+  };
 
   blender = callPackage ../applications/misc/blender/2.49.nix { };
 
