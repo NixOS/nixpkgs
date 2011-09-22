@@ -17,7 +17,7 @@
 
   testScript =
     ''
-      $machine->waitForWindow(qr/Tips/);
+      $machine->waitForWindow(qr/xfce4-panel/);
       $machine->sleep(10);
 
       # Check that logging in has given the user ownership of devices.
