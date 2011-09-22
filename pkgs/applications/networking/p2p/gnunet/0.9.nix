@@ -8,7 +8,7 @@
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
 let
-  rev = "16910";
+  rev = "17000";
   version = "0.9-svn-${rev}";
 in
   stdenv.mkDerivation {
@@ -16,7 +16,7 @@ in
 
     src = fetchsvn {
       url = "https://gnunet.org/svn/gnunet";
-      sha256 = "1jxvh3wvhss0pn286p848zifc8f9pkhcb12m2bpkssh409wwyzkd";
+      sha256 = "17nkvykg3xb5m1y86i9lahgsic9jpj6h0nr73ywzpxpp7ql45cm4";
       inherit rev;
     };
 
