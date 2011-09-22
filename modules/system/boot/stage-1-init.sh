@@ -293,7 +293,11 @@ done
 
 
 # Stop udevd.
-kill -- -1
+udevadm control --exit
+
+# Kill any remaining processes, just to be sure we're not taking any
+# with us into stage 2.
+kill -9 -- -1
 
 
 if test -n "$debug1mounts"; then fail; fi
