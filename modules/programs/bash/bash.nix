@@ -26,31 +26,21 @@ in
   require = [options];
 
   environment.etc =
-    [ { # /etc/bashrc: script executed when the shell starts as a
-        # non-login shell.  /etc/profile also sources this file, so
-        # most global configuration (such as environment variables)
-        # should go into this script.
+    [ { # Script executed when the shell starts as a login shell.
         source = pkgs.substituteAll {
-          src = ./bashrc.sh;
-
-          bash = pkgs.bash;
+          src = ./profile.sh;
           wrapperDir = config.security.wrapperDir;
           modulesTree = config.system.modulesTree;
           shellInit = config.environment.shellInit;
         };
-        target = "bashrc";
-      }
-
-      { # Script executed when the shell starts as a login shell.
-        source = ./profile.sh;
         target = "profile";
       }
 
-      { # Template for ~/.bashrc: script executed when the shell
-        # starts as a non-login shell.
-        source = ./bashrc-user.sh;
-        target = "skel/.bashrc";
-        mode = "0644";
+      { # /etc/bashrc: executed every time a bash starts. Sources
+        # /etc/profile to ensure that the system environment is
+        # configured properly.
+         source = ./bashrc.sh;
+         target = "bashrc";
       }
 
       { # Configuration for readline in bash.
