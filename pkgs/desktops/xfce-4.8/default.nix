@@ -3,6 +3,16 @@
 rec {
   inherit (pkgs.gtkLibs) gtk glib;
 
+  #### SUPPORT
+
+  libgdu = callPackage ./support/libgdu.nix { };  
+
+  # Gvfs is required by Thunar for the trash feature and for volume
+  # mounting.  Should use the one from Gnome, but I don't want to mess
+  # with the Gnome packages (or pull in a zillion Gnome dependencies).
+  gvfs = callPackage ./support/gvfs.nix { };
+
+  
   #### CORE
 
   libxfce4util = callPackage ./core/libxfce4util.nix { };
@@ -43,10 +53,13 @@ rec {
 
   thunar = callPackage ./core/thunar.nix { };
 
+  thunar_volman = callPackage ./core/thunar-volman.nix { };
+
   gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { };
 
   # !!! Add xfce4-appfinder
 
+  
   #### APPLICATIONS
   
   terminal = callPackage ./applications/terminal.nix {
@@ -61,6 +74,7 @@ rec {
 
   xfce4mixer = callPackage ./applications/xfce4-mixer.nix { };
 
+  
   #### ART
 
   xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };

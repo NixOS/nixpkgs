@@ -34,5 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.xfce.org/projects/xfce4-mixer;
     description = "A volume control application for the Xfce desktop environment";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, python, pyrex, pygobject, pygtk
 , notify, pythonDBus, bluez, glib, gtk, libstartup_notification
 , makeWrapper, xdg_utils, obex_data_server
+, pulseaudio
 }:
    
 stdenv.mkDerivation rec {
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
       for i in $out/bin/* $out/libexec/*; do
           wrapProgram $i \
               --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH" \
+              --set LD_LIBRARY_PATH "${pulseaudio}/lib:" \
               --prefix PATH : ${xdg_utils}/bin
       done
 

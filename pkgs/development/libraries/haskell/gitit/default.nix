@@ -1,24 +1,24 @@
 { cabal, cgi, ConfigFile, feed, filestore, ghcPaths
 , happstackServer, happstackUtil, highlightingKate, hslogger
 , HStringTemplate, HTTP, json, mtl, network, pandoc, pandocTypes
-, parsec, random, recaptcha, safe, SHA, syb, time, url, utf8String
-, xhtml, xml, xssSanitize, zlib
+, parsec, random, recaptcha, safe, SHA, syb, text, time, url
+, utf8String, xhtml, xml, xssSanitize, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.8.0.1";
-  sha256 = "0y2gcxlbb44vflj0jl3zkbsn47n7nccikxwdw6ccf9kxgcmrz0zy";
+  version = "0.8.1";
+  sha256 = "1b5i6fm68vwhlvgz0m7xxzklkxc2c6lrqyqfqyjs93p5j0aqgvfn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     cgi ConfigFile feed filestore ghcPaths happstackServer
     happstackUtil highlightingKate hslogger HStringTemplate HTTP json
     mtl network pandoc pandocTypes parsec random recaptcha safe SHA syb
-    time url utf8String xhtml xml xssSanitize zlib
+    text time url utf8String xhtml xml xssSanitize zlib
   ];
   meta = {
-    homepage = "http://github.com/jgm/gitit/tree/master";
+    homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";
     license = "GPL";
     platforms = self.ghc.meta.platforms;

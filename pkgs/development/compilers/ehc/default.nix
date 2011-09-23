@@ -1,25 +1,23 @@
-{stdenv, coreutils, glibc, fetchsvn, m4, libtool, ghc, uulib, uuagc, mtl, network, binary, llvm, fgl}:
+{ stdenv, coreutils, glibc, fetchsvn, m4, libtool, ghc, uulib
+, uuagc, mtl, network, binary, llvm, fgl, syb
+}:
 
-stdenv.mkDerivation (rec {
-  revision = "1996";
+let
+  revision = "2293";
+in
+stdenv.mkDerivation {
   name = "ehc-svn-${revision}";
-  homepage = "http://www.cs.uu.nl/wiki/Ehc/WebHome/";
 
   src = fetchsvn {
-          url = https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC;
-          rev = revision;
-          sha256 = "92c658cd15dd513ccaeb81341f2680056276a46d053330f66c0214d10a6729e2";
+     url = https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC;
+     rev = revision;
+     sha256 = "f4c3d83734cffd64b11e31637598330271a2bb8d2573235d063b27b2ef5f76b6";
   };
 
-  propagatedBuildInputs = [mtl network binary fgl];
+  propagatedBuildInputs = [mtl network binary fgl syb];
   buildInputs = [coreutils m4 ghc libtool uulib uuagc];
 
-  # --force is required because the dependencies are not properly
-  # detected by Nix, being located in several package config files
-  configureFlags = [
-    "--with-cabal-config-options=--ghc-pkg-options=--force"
-    "--with-cpp-ehc-options=-I${glibc}/include"
-  ];
+  configureFlags = "--with-cpp-ehc-options=-I${glibc}/include";
 
   # EHC builds packages during compilation; these are by default
   # installed in the user-specific package config file. We do not
@@ -34,8 +32,12 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = {
+    homepage = "http://www.cs.uu.nl/wiki/Ehc/WebHome";
     description = "Essential Haskell Compiler";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [
+      stdenv.lib.maintainers.andres
+      stdenv.lib.maintainers.simons
+    ];
   };
-
-  inherit coreutils;
-})
+}

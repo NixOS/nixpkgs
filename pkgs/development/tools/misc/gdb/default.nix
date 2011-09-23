@@ -11,7 +11,7 @@ let
     basename =
       if bleedingEdgeVersion
       then "gdb-7.3.20110726"
-      else "gdb-7.3";
+      else "gdb-7.3.1";
 in
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
         url = "mirror://gnu/gdb/${basename}.tar.bz2";
         # md5 is provided by the annoucement page
         # http://www.gnu.org/s/gdb/download/ANNOUNCEMENT
-        md5 = "485022b8df7ba2221f217e128f479fe7";
+        md5 = "b89a5fac359c618dda97b88645ceab47";
       };
 
   # I think python is not a native input, but I leave it
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = with stdenv.lib;
     '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
-       --with-expat --with-libexpat-prefix=${expat} --with-python
+       --with-expat --with-libexpat-prefix=${expat}
     ''
     + optionalString (target != null) " --target=${target.config}"
     + optionalString (elem stdenv.system platforms.cygwin) "  --without-python"

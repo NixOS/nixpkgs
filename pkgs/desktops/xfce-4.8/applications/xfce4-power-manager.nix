@@ -18,5 +18,7 @@ stdenv.mkDerivation rec {
     homepage = http://goodies.xfce.org/projects/applications/xfce4-power-manager;
     description = "A power manager for the Xfce Desktop Environment";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

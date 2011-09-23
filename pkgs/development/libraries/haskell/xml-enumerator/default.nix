@@ -1,21 +1,19 @@
 { cabal, attoparsecText, attoparsecTextEnumerator, blazeBuilder
-, blazeBuilderEnumerator, enumerator, failure, text, transformers
-, xmlTypes
+, blazeBuilderEnumerator, dataDefault, enumerator, failure, text
+, transformers, xmlTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "xml-enumerator";
-  version = "0.3.4";
-  sha256 = "0sfscsfcfmx56sdxc0wn2j1pyqjd9w92igz1n9xaph7zfz61g9k2";
-  isLibrary = true;
-  isExecutable = true;
+  version = "0.4.1";
+  sha256 = "081avccvkakcbf2m22xdda63jhwykqxxclmlhj6msawkyyqniadj";
   buildDepends = [
     attoparsecText attoparsecTextEnumerator blazeBuilder
-    blazeBuilderEnumerator enumerator failure text transformers
-    xmlTypes
+    blazeBuilderEnumerator dataDefault enumerator failure text
+    transformers xmlTypes
   ];
   meta = {
-    homepage = "http://github.com/snoyberg/xml-enumerator";
+    homepage = "http://github.com/snoyberg/xml";
     description = "Pure-Haskell utilities for dealing with XML with the enumerator package";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

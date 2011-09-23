@@ -2,7 +2,7 @@
 args : with args; 
 rec {
   src = fetchurl {
-    url = http://grahame.angrygoats.net/source/viewmtn/viewmtn-0.10.tgz;
+    url = http://viewmtn.1erlei.de/downloads/viewmtn-0.10.tgz;
     sha256 = "1c6y708xaf6pds1r6l00q7vpgfagfbnf95kqj168vw3xr3l8a4yx";
   };
 

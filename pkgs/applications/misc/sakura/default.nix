@@ -1,9 +1,10 @@
 { stdenv, fetchurl, cmake, pkgconfig, gtk, vte, pixman, gettext, perl }:
 stdenv.mkDerivation rec {
-  name = "sakura-2.4.0";
+  name = "sakura-${version}";
+  version = "2.4.2";
   src = fetchurl {
-    url = "http://www.pleyades.net/david/projects/sakura/${name}.tar.bz2";
-    sha256 = "12k9ra5b3vgslry5wc40lf4a64mh3p9wy7qfirr8alyvgvw2pb0h";
+    url = "http://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
+    sha256 = "1mpsjsk7dgz56h7yagd9aq0d92vj59yrz4ri6za3mfmglhn29rn5";
   };
   buildInputs = [ cmake pkgconfig gtk vte pixman gettext perl ];
   meta = {

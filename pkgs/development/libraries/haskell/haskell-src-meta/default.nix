@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-meta";
-  version = "0.4.0.2";
-  sha256 = "1i3lhik0sa34x6rnkfa9scai9cdgx05h6mrbhwsfc7p2jlsixk92";
+  version = "0.5";
+  sha256 = "0403j2ks2as61rfl049v4h43xpgx06bm739y80vada6jc85rfinr";
   buildDepends = [ haskellSrcExts syb thLift ];
   meta = {
     description = "Parse source to template-haskell abstract syntax";

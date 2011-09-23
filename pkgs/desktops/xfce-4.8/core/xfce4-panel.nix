@@ -20,5 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.xfce.org/;
     description = "Xfce panel";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

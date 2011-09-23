@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, getopt }:
+{ stdenv, fetchurl, getopt, lua, boost }:
         
 stdenv.mkDerivation rec {
-  name = "highlight-2.6.10";
+  name = "highlight-3.5";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "18f2ki9pajxlp0aq4ingxj7m0cp7wlbc40xm25pnxc1yis9vlira";
+    sha256 = "0jpidd2fwn5mbrgzjmh53qvfmqqp6g0mah7i5zsf9bd71ga1lp28";
   };
 
-  buildInputs = [getopt];
+  buildInputs = [ getopt lua boost ];
 
-  preBuild = ''
-    sed -e '/#include <map>/i#include <stdio.h>' -i src/re/Pattern.h
-  '';
-
-  makeFlags = ["PREFIX=$out"];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "conf_dir=$(out)/etc/highlight/"
+  ];
 
   meta = {
     description = "Source code highlighting tool";

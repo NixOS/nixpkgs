@@ -105,7 +105,7 @@ $ svn add pkgs/development/libraries/libfoo/default.nix</screen>
 
         <listitem>
           <para>Thunderbird: <link
-          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/networking/mailreaders/thunderbird-2.x/default.nix"><filename>pkgs/applications/networking/mailreaders/thunderbird-2.x/default.nix</filename></link>.
+          xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/applications/networking/mailreaders/thunderbird/3.x.nix"><filename>pkgs/applications/networking/mailreaders/thunderbird/3.x.nix</filename></link>.
           Lots of dependencies.</para>
         </listitem>
 

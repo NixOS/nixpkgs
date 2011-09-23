@@ -1,10 +1,10 @@
 { stdenv, fetchurl, coreutils, gnugrep, utillinux, module_init_tools
-, procps, kbd }:
+, procps, kbd, dbus_tools }:
 
 let
 
   binPath = stdenv.lib.makeSearchPath "bin"
-    [ coreutils gnugrep utillinux module_init_tools procps kbd ];
+    [ coreutils gnugrep utillinux module_init_tools procps kbd dbus_tools ];
 
   sbinPath = stdenv.lib.makeSearchPath "sbin"
     [ procps ];
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
       substituteInPlace src/pm-action.in --replace 'tr ' '${coreutils}/bin/tr '
       
       substituteInPlace pm/sleep.d/00logging --replace /bin/uname "$(type -P uname)"
+
+      substituteInPlace pm/sleep.d/90clock --replace /sbin/hwclock hwclock
     '';
 
   meta = {

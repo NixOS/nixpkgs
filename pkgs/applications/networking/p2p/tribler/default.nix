@@ -1,12 +1,14 @@
 { stdenv, fetchsvn, pythonPackages, makeWrapper, nettools }:
 
+let rev = "22523"; in
+
 stdenv.mkDerivation {
-  name = "tribler-5.3.9-pre21071";
+  name = "tribler-5.4.3-pre${rev}";
 
   src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.3.x;
-    rev = 21071;
-    sha256 = "0plzw5m9rligz66rbq8qr9sj0fiqx8gwmchdw3p4mwlwfx72gixm";
+    url = http://svn.tribler.org/abc/branches/release-5.4.x;
+    inherit rev;
+    sha256 = "09hscrnl50s9qncklnqqzwxwvidl3hj7hr7qsysmv6sw7b9rbx0g";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
@@ -32,7 +34,7 @@ stdenv.mkDerivation {
           --set _TRIBLERPATH $out/share/tribler \
           --set PYTHONPATH $out/share/tribler:$program_PYTHONPATH \
           --run 'cd $_TRIBLERPATH' \
-          --add-flags $out/share/tribler/Tribler/Main/tribler.py
+          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py"
     '';
 
   meta = {

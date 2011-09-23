@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , ghostscript, atk, gtk, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
-, pango, libX11, xproto, zlib, poppler, popplerData
+, pango, libX11, xproto, zlib, poppler, poppler_data
 , autoconf, automake, libtool, pkgconfig}:
 stdenv.mkDerivation rec {
   version = "0.4.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ghostscript atk gtk glib fontconfig freetype
     libgnomecanvas libgnomeprint libgnomeprintui
-    pango libX11 xproto zlib poppler popplerData
+    pango libX11 xproto zlib poppler poppler_data
     autoconf automake libtool pkgconfig
   ];
 

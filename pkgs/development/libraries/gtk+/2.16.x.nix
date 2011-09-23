@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     x11 glib atk pango libtiff libjpeg libpng cairo xlibs.libXrandr
   ] ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama;
     
-  passthru = { inherit libtiff libjpeg libpng; };
-
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 

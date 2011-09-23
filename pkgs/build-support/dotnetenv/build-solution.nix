@@ -7,19 +7,47 @@
 , verbosity ? "detailed"
 , options ? "/p:Configuration=Debug;Platform=Win32"
 , assemblyInputs ? []
-, runtimeAssemblies ? []
 , preBuild ? ""
+, modifyPublicMain ? false
+, mainClassFile ? null
 }:
 
+assert modifyPublicMain -> mainClassFile != null;
+
+let
+  wrapperCS = ./Wrapper.cs.in;  
+in
 stdenv.mkDerivation {
-  inherit name src preBuild;  
+  inherit name src;
   
   buildInputs = [ dotnetfx ];  
+
   preConfigure = ''
     cd ${baseDir}
   '';
   
-  installPhase = ''        
+  preBuild = ''
+    ${stdenv.lib.optionalString modifyPublicMain ''
+      sed -i -e "s|static void Main|public static void Main|" ${mainClassFile}
+    ''}
+    ${preBuild}
+  '';
+  
+  installPhase = ''
+    addDeps()
+    {
+	if [ -f $1/nix-support/dotnet-assemblies ]
+	then
+	    for i in $(cat $1/nix-support/dotnet-assemblies)
+	    do
+		windowsPath=$(cygpath --windows $i)
+		assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+		
+		addDeps $i
+	    done
+	fi
+    }
+    
     for i in ${toString assemblyInputs}
     do
 	windowsPath=$(cygpath --windows $i) 
@@ -31,6 +59,8 @@ stdenv.mkDerivation {
 	else
 	    assemblySearchPaths="$assemblySearchPaths;$windowsPath"
 	fi
+	
+	addDeps $i
     done
       
     echo "Assembly search paths are: $assemblySearchPaths"
@@ -44,18 +74,15 @@ stdenv.mkDerivation {
     ensureDir $out
     MSBuild.exe ${toString slnFile} /nologo /t:${targets} /p:IntermediateOutputPath=$(cygpath --windows $out)\\ /p:OutputPath=$(cygpath --windows $out)\\ /verbosity:${verbosity} ${options}
     
-    # Create references to runtime dependencies
-    # !!! Should be more efficient (e.g. symlinking)
+    # Because .NET assemblies store strings as UTF-16 internally, we cannot detect
+    # hashes. Therefore a text files containing the proper paths is created
+    # We can also use this file the propagate transitive dependencies.
     
-    for i in ${toString runtimeAssemblies}
+    ensureDir $out/nix-support
+    
+    for i in ${toString assemblyInputs}
     do
-        cd $i
-	
-        for j in $(find . -type f)
-	do
-	    mkdir -p $out/$(dirname $j)
-	    cp $j $out/$(dirname $j)
-	done
+        echo $i >> $out/nix-support/dotnet-assemblies
     done
   '';
 }

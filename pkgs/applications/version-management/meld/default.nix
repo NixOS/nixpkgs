@@ -1,19 +1,19 @@
-{stdenv, fetchurl, pygtk, python, intltool, scrollkeeper, makeWrapper }:
+{stdenv, fetchurl, xz, pygtk, python, intltool, scrollkeeper, makeWrapper }:
 
 let
   minor = "1.5";
-  version = "${minor}.1";
+  version = "${minor}.2";
 in
 
 stdenv.mkDerivation {
   name = "meld-${version}";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/meld/${minor}/meld-${version}.tar.bz2";
-    sha256 = "0ykj3rb5hvcr4dmc52mz8q3iknrsh042v1x7yvffgs6yibakcac2";
+    url = "http://ftp.gnome.org/pub/gnome/sources/meld/${minor}/meld-${version}.tar.xz";
+    sha256 = "05rbkqflbqnh2c4682d2fmidhwz2bvlggrhp1p7xbi3z8ci87pdx";
   };
 
-  buildInputs = [ pygtk python intltool scrollkeeper makeWrapper ];
+  buildInputs = [ pygtk python intltool scrollkeeper makeWrapper xz ];
 
   patchPhase = ''
     sed -e s,/usr/local,$out, -i INSTALL

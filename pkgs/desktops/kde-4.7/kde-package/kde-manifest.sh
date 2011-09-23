@@ -33,6 +33,8 @@ if [[ ! -f kde_projects.xml ]]; then
 fi
 eval `xsltproc kde-submodules.xslt kde_projects.xml`
 
+module[kde-baseapps]=kde-baseapps
+
 print_sane() {
   echo "Called print_sane $1" >&2
   sane="${1//[^a-z0-9_]/_}"
@@ -62,38 +64,39 @@ done
 
 
 print_pkg_hash() {
-  echo -n "{name=\"${1}\";value=\"${hash[$1]}\";}"
+  echo "  {name=\"${1}\";value=\"${hash[$1]}\";}"
 }
 
 print_hashes(){
-  echo -n "hashes=builtins.listToAttrs["
+  echo "hashes=builtins.listToAttrs["
   for p in "${packages[@]}"; do print_pkg_hash "$p"; done
-  echo -n "];"
+  echo "];"
 }
 
 print_split_module(){
   echo -n "$1:" >&2
-  echo -n "{module=\"$1\";"
+  echo -e "{\n  module=\"$1\";"
   print_sane "$1"
-  echo -n "split=true;"
-  echo -n "pkgs=["
+  echo "  split=true;"
+  echo "  pkgs=["
   for p in "${packages[@]}"; do
     if [[ "${module[$p]}" == "$1" ]]; then
-      echo -n "{name=\"$p\";"
+      echo -n "    { name=\"$p\"; "
       print_sane "$p"
-      echo -n "}"
+      echo " }"
       echo -n " $p" >&2
     fi
   done
-  echo -n "];}"
+  echo "  ];"
+  echo "}"
   echo >&2
 }
 
 print_mono_module(){
-  echo -n "{module=\"$1\";"
+  echo -en "{ module=\"$1\"; "
   print_sane "$1"
   echo -n "$1 ... " >&2
-  echo -n "split=false;"
+  echo -n " split=false;"
   cml="$1-$release/CMakeLists.txt"
   tar -xf "${dir}/$1-${release}.tar.bz2" "$cml"
   if grep '^[^#]*add_subdirectory' $cml >/dev/null; then
@@ -104,38 +107,39 @@ print_mono_module(){
         sed -e 's/[^#]*add_subdirectory *( *\(.*\) *)/\1/' |
         grep -v '\(doc\|cmake\)'` )
       echo " seems splittable, subdirs: ${subdirs[*]}" >&2
-      echo -n "pkgs=["
+      echo -e "\n  pkgs=["
       for s in "${subdirs[@]}"; do
-        echo -n "{name=\"${s//\//-}\";"
+        echo -en "    {"
+		echo -n " name=\"${s//\//-}\"; "
         print_sane "$s"
         if [[ $s != "${s//\//-}" ]]; then
-          echo -n "subdir=\"$s\";"
+          echo -n "subdir=\"$s\"; "
         fi
-        echo -n "}"
+        echo "}"
       done
-    echo -n "];"
+      echo -e "  ];\n"
     fi
   else
     echo " is monolithic (has no subdirs)" >&2
   fi
   rm $cml
   rmdir $1-$release
-  echo -n "}"
+  echo "}"
 }
 
 print_modules(){
-  echo -n "modules=["
+  echo "modules=["
   echo "Printing modules splitted by upstream" >&2
   for m in "${!modules[@]}"; do print_split_module "$m"; done
   echo >&2
   echo "Printing modules not splitted by upstream (${top_level[*]})" >&2
   for m in "${top_level[@]}"; do print_mono_module "$m"; done
-  echo -n "];"
+  echo "];"
 }
 
 echo "Writing ${release}.nix" >&2
 exec > "${release}.nix"
-echo -n "{stable=${stable};"
+echo "{stable=${stable};"
 print_hashes
 print_modules
-echo -n "}"
+echo "}"

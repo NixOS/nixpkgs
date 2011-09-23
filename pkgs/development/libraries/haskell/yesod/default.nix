@@ -1,20 +1,21 @@
-{ cabal, attoparsecText, blazeBuilder, hamlet, hjsmin, httpTypes
-, mimeMail, monadControl, parsec, text, time, transformers
-, unixCompat, wai, waiExtra, warp, yesodAuth, yesodCore, yesodForm
-, yesodJson, yesodPersistent, yesodStatic
+{ cabal, attoparsecText, blazeBuilder, blazeHtml, hamlet, httpTypes
+, monadControl, parsec, shakespeareCss, shakespeareJs
+, shakespeareText, text, time, transformers, unixCompat, wai
+, waiExtra, warp, yesodAuth, yesodCore, yesodForm, yesodJson
+, yesodPersistent
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "0.8.2.1";
-  sha256 = "0idpgzbzy31bl5khc83wgi9a9mzrymris0mg5dlc4kj4sd5a1ksi";
+  version = "0.9.2.2";
+  sha256 = "09l7cdsrxlr1nb03h3nisih9sm824gnp3nkblvgh8b1pfi54wdkl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsecText blazeBuilder hamlet hjsmin httpTypes mimeMail
-    monadControl parsec text time transformers unixCompat wai waiExtra
-    warp yesodAuth yesodCore yesodForm yesodJson yesodPersistent
-    yesodStatic
+    attoparsecText blazeBuilder blazeHtml hamlet httpTypes monadControl
+    parsec shakespeareCss shakespeareJs shakespeareText text time
+    transformers unixCompat wai waiExtra warp yesodAuth yesodCore
+    yesodForm yesodJson yesodPersistent
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

@@ -1,7 +1,7 @@
-{ kde, kdelibs, subversion, apr, aprutil }:
+{ kde, kdelibs, subversionClient, apr, aprutil }:
 
 kde {
-  buildInputs = [ kdelibs subversion apr aprutil ];
+  buildInputs = [ kdelibs subversionClient apr aprutil ];
 
   patches = [ ./find-svn.patch ];
 

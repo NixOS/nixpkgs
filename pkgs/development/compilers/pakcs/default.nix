@@ -1,9 +1,7 @@
 { stdenv, fetchurl, ghc, swiProlog, syb, mtl, makeWrapper, rlwrap, tk }:
 
-stdenv.mkDerivation rec {
-  pname = "pakcs";
-  version = "1.9.2";
-  name = "${pname}-${version}";
+stdenv.mkDerivation {
+  name = "pakcs-1.9.2";
 
   src = fetchurl {
     url = "http://www.informatik.uni-kiel.de/~pakcs/download/pakcs_src.tar.gz";
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     (cd $out/curry2prolog/ ; make)
 
     ensureDir $out/share/emacs/site-lisp/curry-pakcs
-    for e in $out/tools/emacs/*.el ; do
+    for e in "$out/tools/emacs/"*.el ; do
       ln -s $out/tools/emacs/$e $out/share/emacs/site-lisp/curry-pakcs/;
     done
 
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "PAKCS is an implementation of the multi-paradigm declarative language Curry.";
+    description = "an implementation of the multi-paradigm declarative language Curry";
     longDescription = ''
       PAKCS is an implementation of the multi-paradigm declarative language
       Curry jointly developed by the Portland State University, the Aachen
@@ -75,7 +73,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.informatik.uni-kiel.de/~pakcs/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.kkallio ];
+    maintainers = [ stdenv.lib.maintainers.kkallio stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

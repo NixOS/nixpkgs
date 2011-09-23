@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "6.0";
+  firefoxVersion = "6.0.2";
   
-  xulVersion = "6.0"; # this attribute is used by other packages
+  xulVersion = "6.0.2"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "0ws96gc1mkmilgsikirhmqc6s7m0bcyh58820l08wd82r9abagyc";
+    sha1 = "074eb9c1df4de0fe0a4bb9226ca3c2822c334cd6";
   };
 
   
@@ -51,6 +51,8 @@ rec {
     
     inherit src;
 
+    patches = [ ./6.0-install-sdk-bin.patch ];
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
@@ -76,9 +78,10 @@ rec {
         }' ';'
       '';
 
-    # !!! Temporary hack.
+    # !!! Temporary hacks.
     preBuild =
       ''
+        ln -s Linux2.6.mk security/coreconf/Linux3.0.mk
         export NIX_ENFORCE_PURITY=
       '';
 
@@ -108,7 +111,7 @@ rec {
 
     meta = {
       description = "Mozilla Firefox XUL runner";
-      homepage = http://www.mozilla.org/en-US/firefox/;
+      homepage = http://www.mozilla.org/firefox/;
     };
 
     passthru = { inherit gtk; version = xulVersion; };
@@ -154,7 +157,7 @@ rec {
 
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
-      homepage = http://www.mozilla.org/en-US/firefox/;
+      homepage = http://www.mozilla.org/firefox/;
     };
 
     passthru = {

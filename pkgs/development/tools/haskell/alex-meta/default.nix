@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "alex-meta";
-  version = "0.2.0.1";
-  sha256 = "1b508pg4a9f0ln9k91j5dj0mja3faxasz5k6qyxqz3zqnlysm2gj";
+  version = "0.2.0.2";
+  sha256 = "1v47p1nrx2nb92aasq7ml6i0sy1nfyybgm9n4r1sw1g86dg1y8z1";
   buildDepends = [ haskellSrcMeta ];
   meta = {
     description = "Quasi-quoter for Alex lexers";

@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 
+  patches = [ ./datadir_env.patch ];
+
   # XXX: The Poppler/Qt4 test suite refers to non-existent PDF files
   # such as `../../../test/unittestcases/UseNone.pdf'.
   #doCheck = !qt4Support;

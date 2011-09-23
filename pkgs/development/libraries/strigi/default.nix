@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, perl, bzip2, libxml2, exiv2
-, clucene_core, fam, zlib, dbus
+, clucene_core, fam, zlib, dbus_tools
 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "16qqnlh0dy3r92shzm2q36h5qi3m06pihr4h5cq944hpvqz5w7qi";
   };
   
-  includeAllQtDirs=true;
+  includeAllQtDirs = true;
 
   CLUCENE_HOME = clucene_core;
 
   buildInputs =
-    [ cmake perl zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus.tools ];
+    [ cmake perl zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
 
   enableParallelBuilding = true;
 

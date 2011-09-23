@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, zlib, mpeg2dec}:
+{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib }:
 
 stdenv.mkDerivation {
   name = "scummvm-1.2.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "029abzvpz85accwk7x79w255wr83gnkqg3yc5n6ryl28zg00z3j8";
   };
   
-  buildInputs = [SDL zlib mpeg2dec];
+  buildInputs = [ SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ];
 
   crossAttrs = {
     preConfigure = ''
@@ -27,3 +27,4 @@ stdenv.mkDerivation {
     homepage = http://www.scummvm.org/;
   };
 }
+

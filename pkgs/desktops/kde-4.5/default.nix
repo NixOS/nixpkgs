@@ -1,4 +1,4 @@
-{ callPackage, recurseIntoAttrs, runCommand, stdenv, fetchurl, qt47, ffmpeg_0_6_90 } :
+{ callPackage, recurseIntoAttrs, callPackageOrig, runCommand, stdenv, fetchurl, qt47, ffmpeg_0_6_90 } :
 
 let
 
@@ -17,9 +17,7 @@ let
 
 in
 
-recurseIntoAttrs rec {
-  recurseForRelease = true;
-
+rec {
   inherit callPackage stdenv;
 
   qt4 = qt47;

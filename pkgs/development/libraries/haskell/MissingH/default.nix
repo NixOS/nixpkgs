@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MissingH";
-  version = "1.1.0.3";
-  sha256 = "2d566511e8a347189cf864188d97f8406c6958c6f0a6fcf8cb1593c6bae13dbf";
+  version = "1.1.1.0";
+  sha256 = "1i2fdr6p0jnn9w865ngjcchbsamrvnvdf9c4vzhjhzy500z2k1ry";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://software.complete.org/missingh";
     description = "Large utility library";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.andres

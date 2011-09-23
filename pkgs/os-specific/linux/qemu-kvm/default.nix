@@ -1,14 +1,14 @@
 { stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
-, libjpeg, libpng, ncurses }:
+, libjpeg, libpng, ncurses, python, glib }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "qemu-kvm-0.14.1";
+  name = "qemu-kvm-0.15.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/kvm/${name}.tar.gz";
-    sha256 = "09yshk2qzlb37hyp8iygyyf2if2d7r21b7rgkl0jyvv4p1m4z755";
+    sha256 = "0y247bc2cyawliaiyk8k41kl3mcjvh52b9bgzvxv0h55zwdpg3l2";
   };
 
   patches = [ ./smb-tmpdir.patch ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
-      ncurses
+      ncurses python glib
     ];
 
   preBuild =

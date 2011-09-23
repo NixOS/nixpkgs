@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Crypto";
-  version = "4.2.3";
-  sha256 = "02wi8lyi27i8cdj8vclrl7vcng38srdzz9qpqwsc4y4lmvgg82br";
+  version = "4.2.4";
+  sha256 = "05wafv8flrh1893rh208azzig5k5pa022s2fg3f8lrqb23c6v63p";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ HUnit QuickCheck random ];

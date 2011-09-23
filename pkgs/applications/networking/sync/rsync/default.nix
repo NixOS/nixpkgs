@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1j77vwz6q3dvgr8w6wvigd5v4m5952czaqdvihr8di13q0b0vq4y";
   };
 
-  buildInputs = [perl] ++ stdenv.lib.optional enableACLs acl;
+  buildInputs = stdenv.lib.optional enableACLs acl;
+  buildNativeInputs = [perl];
 
   meta = {
     homepage = http://samba.anu.edu.au/rsync/;

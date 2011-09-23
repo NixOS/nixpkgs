@@ -1,4 +1,5 @@
-args: with args;
+{stdenv, fetchurl, python, librsync, gnused }:
+
 stdenv.mkDerivation {
   name = "rdiff-backup-1.1.14";
 
@@ -7,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0sh2kz90z47yfa9786dyn3q9ba1xcmjvd65rykvm7mg5apnrg27h";
   };
 
-  phases = "installPhase";
+  phases = "unpackPhase installPhase";
   installPhase = ''
-    python setup.py install --prefix=$out
+    python ./setup.py install --prefix=$out
     sed -i $out/bin/rdiff-backup -e \
       "/import sys/ asys.path += [ \"$out/lib/python2.4/site-packages/\" ]"
   '';

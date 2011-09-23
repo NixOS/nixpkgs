@@ -47,6 +47,10 @@ in
     buildNativeInputs = [ args.perl ];
   };
 
+  libpciaccess = attrs : attrs // {
+    patches = [ ./libpciaccess-apple.patch ];
+  };
+
   libX11 = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     postInstall =

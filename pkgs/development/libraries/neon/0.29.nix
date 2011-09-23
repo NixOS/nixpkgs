@@ -10,11 +10,11 @@ assert sslSupport -> openssl != null;
 assert static || shared;
 
 stdenv.mkDerivation rec {
-  name = "neon-0.29.3";
+  name = "neon-0.29.6";
 
   src = fetchurl {
     url = "http://www.webdav.org/neon/${name}.tar.gz";
-    sha256 = "1d1c6zhr00yvg0fbhpkq8kmsq9cchr112ii9rl39gdybyflh9444";
+    sha256 = "0hzbjqdx1z8zw0vmbknf159wjsxbcq8ii0wgwkqhxj3dimr0nr4w";
   };
 
   buildInputs = [libxml2 pkgconfig openssl]

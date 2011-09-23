@@ -4,15 +4,15 @@ stdenv.mkDerivation rec {
   name = "virtuoso-opensource-6.1.3";
 
   src = fetchurl {
-    url = "mirror://sf/virtuoso/${name}.tar.gz";
+    url = "mirror://sourceforge/virtuoso/${name}.tar.gz";
     sha256 = "0rj629qjsibpllazngbhzhsh90x6nidpn292qz1xdvirwvb2h3s2";
   };
 
   buildInputs = [ libxml2 openssl readline gawk ];
 
-  CPP="${stdenv.gcc}/bin/gcc -E";
+  CPP = "${stdenv.gcc}/bin/gcc -E";
 
-  configureFlags="
+  configureFlags = "
     --enable-shared --disable-all-vads --with-readline=${readline}
     --disable-hslookup --disable-wbxml2 --without-iodbc
     --enable-openssl=${openssl}

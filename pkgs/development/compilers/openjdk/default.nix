@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
       -e "s@/bin/ls@${coreutils}/bin/ls@" \
-      openjdk/hotspot/make/linux/makefiles/sa.make 
+      openjdk/hotspot/make/linux/makefiles/sa.make
 
     sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
       openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk

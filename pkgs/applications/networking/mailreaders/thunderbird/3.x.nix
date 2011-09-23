@@ -66,6 +66,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mozilla Thunderbird, a full-featured email client";
-    homepage = http://www.mozilla.org/en-US/thunderbird/;
+    homepage = http://www.mozilla.org/thunderbird/;
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt, libX11}:
+{stdenv, fetchurl, qt3, libX11}:
 
 stdenv.mkDerivation rec {
   name = "qucs-0.0.15";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ggs2nicj8q270l0rbmzg4jc0d0zdxvfsjh4wgww670ma5855xsp";
   };
 
-  buildInputs = [ qt libX11 ];
+  buildInputs = [ qt3 libX11 ];
 
   meta = {
     description = "Integrated circuit simulator";

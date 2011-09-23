@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     description = "map arbitrary files as block devices over the network";
     license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

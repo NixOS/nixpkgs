@@ -3,11 +3,11 @@
 assert stdenv.isLinux && stdenv.system != "powerpc-linux";
 
 stdenv.mkDerivation {
-  name = "cpufrequtils-005";
-  
+  name = "cpufrequtils-008";
+
   src = fetchurl {
-    url = http://www.kernel.org/pub/linux/utils/kernel/cpufreq/cpufrequtils-005.tar.gz;
-    md5 = "100a8220a546ce61ce943d4107e67db9";
+    url = "mirror://kernel/linux/utils/kernel/cpufreq/cpufrequtils-008.tar.gz";
+    md5 = "52d3e09e47ffef634833f7fab168eccf";
   };
 
   patchPhase = ''

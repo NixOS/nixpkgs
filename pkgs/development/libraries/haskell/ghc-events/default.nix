@@ -1,13 +1,12 @@
-{cabal, binary, mtl}:
+{ cabal, binary, mtl }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "ghc-events";
-  version = "0.2.0.1";
-  sha256 = "18cb82ebe143f58a25bf32ee88118a8bfb333b67a53285c2550e866f2afebbc6";
-  propagatedBuildInputs = [binary mtl];
-  preConfigure = ''
-    sed -i 's|\(containers.*\) && < 0.4|\1|' ${self.pname}.cabal
-  '';
+  version = "0.3.0.1";
+  sha256 = "08jnri6cwybg8b2f53rn8y1xzcpz32r0svahcw01g837p07mcpla";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ binary mtl ];
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";
     license = self.stdenv.lib.licenses.bsd3;

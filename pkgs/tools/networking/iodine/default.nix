@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "iodine-0.4.1";
+  name = "iodine-0.6.0-rc1";
 
   src = fetchurl {
     url = "http://code.kryo.se/iodine/${name}.tar.gz";
-    sha256 = "1d0v6wbrciwd0xi9khrna956v5wy7wy1inllzrn187as358kiiv5";
+    sha256 = "dacf950198b68fd1dae09fe980080155b0c75718f581c08e069eee0c1b6c5e60";
   };
 
   buildInputs = [ zlib ];

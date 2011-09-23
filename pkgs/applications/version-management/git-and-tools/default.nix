@@ -10,7 +10,7 @@ rec {
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversion;
+      cpio tcl tk makeWrapper subversionClient;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
     sendEmailSupport = false;	# requires plenty of perl libraries
@@ -47,8 +47,9 @@ rec {
 
   gitAnnex = lib.makeOverridable (import ./git-annex) {
     inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which;
-    inherit (haskellPackages) ghc MissingH utf8String QuickCheck2 pcreLight SHA dataenc
-      HTTP testpack monadControl;
+    inherit (haskellPackages) ghc MissingH utf8String pcreLight SHA dataenc
+      HTTP testpack monadControl hS3 mtl network hslogger hxt json;
+    QuickCheck2 = haskellPackages.QuickCheck_2_4_0_1;
   };
 
   qgit = import ./qgit {
@@ -103,24 +104,7 @@ rec {
     inherit stdenv fetchgit qt47 subversion apr;
   };
 
-  gitSubtree = stdenv.mkDerivation {
-    name = "git-subtree-0.4";
-    src = fetchurl {
-      url = "http://github.com/apenwarr/git-subtree/tarball/v0.4";
-#      sha256 = "0y57lpbcc2142jgrr4lflyb9xgzs9x33r7g4b919ncn3alb95vdr";
-      sha256 = "19s8352igwh7x1nqgdfs7rgxahw9cnfv7zmpzpd63m1r3l2945d4";
-    };
-    unpackCmd = "gzip -d < $curSrc | tar xvf -";
-    buildInputs = [ git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];
-    configurePhase = "export prefix=$out";
-    buildPhase = "true";
-    installPhase = ''
-      make install prefix=$out gitdir=$out/bin #work around to deal with a wrong makefile
-    '';
-    meta= {
-      description = "An experimental alternative to the git-submodule command";
-      homepage = http://github.com/apenwarr/git-subtree;
-      license = "GPLv2";
-    };
+  gitSubtree = import ./git-subtree {
+    inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
   };
 }

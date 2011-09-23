@@ -1,56 +1,13 @@
-diff -ur poppler-0.6.1/poppler/GlobalParams.cc poppler-0.6.1-patched/poppler/GlobalParams.cc
---- poppler-0.6.1/poppler/GlobalParams.cc	2007-09-17 20:37:58.000000000 +0200
-+++ poppler-0.6.1-patched/poppler/GlobalParams.cc	2007-11-06 16:11:55.995595933 +0100
-@@ -654,27 +654,39 @@
+diff --git a/poppler/GlobalParams.cc b/poppler/GlobalParams.cc
+index 2e11bb0..a277ab9 100644
+--- a/poppler/GlobalParams.cc
++++ b/poppler/GlobalParams.cc
+@@ -748,7 +748,7 @@ GlobalParams::GlobalParams(const char *customPopplerDataDir)
+ void GlobalParams::scanEncodingDirs() {
    GDir *dir;
    GDirEntry *entry;
- 
--  dir = new GDir(POPPLER_DATADIR "/nameToUnicode", gFalse);
-+  GooString *real_datadir = new GooString (getenv("POPPLER_DATADIR"));
-+  if (!real_datadir->getCString())
-+	  real_datadir->Set(POPPLER_DATADIR);
-+  GooString *dirname;
-+
-+  dirname = real_datadir->copy();
-+  dir = new GDir(dirname->append("/nameToUnicode")->getCString(), gFalse);
-   while (entry = dir->getNextEntry(), entry != NULL) {
-     parseNameToUnicode(entry->getFullPath());
-     delete entry;
-   }
-   delete dir;
-+  delete dirname;
- 
--  dir = new GDir(POPPLER_DATADIR "/cidToUnicode", gFalse);
-+  dirname = real_datadir->copy();
-+  dir = new GDir(dirname->append("/cidToUnicode")->getCString(), gFalse);
-   while (entry = dir->getNextEntry(), entry != NULL) {
-     addCIDToUnicode(entry->getName(), entry->getFullPath());
-     delete entry;
-   }
-   delete dir;
-+  delete dirname;
- 
--  dir = new GDir(POPPLER_DATADIR "/unicodeMap", gFalse);
-+  dirname = real_datadir->copy();
-+  dir = new GDir(dirname->append("/unicodeMap")->getCString(), gFalse);
-   while (entry = dir->getNextEntry(), entry != NULL) {
-     addUnicodeMap(entry->getName(), entry->getFullPath());
-     delete entry;
-   }
-   delete dir;
-+  delete dirname;
- 
-+  dirname = real_datadir->copy();
-   dir = new GDir(POPPLER_DATADIR "/cMap", gFalse);
-   while (entry = dir->getNextEntry(), entry != NULL) {
-     addCMapDir(entry->getName(), entry->getFullPath());
-@@ -682,6 +694,9 @@
-     delete entry;
-   }
-   delete dir;
-+  delete dirname;
-+
-+  delete real_datadir;
- }
- 
- void GlobalParams::parseNameToUnicode(GooString *name) {
+-  const char *dataRoot = popplerDataDir ? popplerDataDir : POPPLER_DATADIR;
++  const char *dataRoot = popplerDataDir ? popplerDataDir : ( getenv("POPPLER_DATADIR") ? getenv("POPPLER_DATADIR") : POPPLER_DATADIR );
+   
+   // allocate buffer large enough to append "/nameToUnicode"
+   size_t bufSize = strlen(dataRoot) + strlen("/nameToUnicode") + 1;

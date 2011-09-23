@@ -1,4 +1,4 @@
-{ cabal, mtl }:
+{ cabal, mtl, perl }:
 
 cabal.mkDerivation (self: {
   pname = "happy";
@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ mtl ];
+  buildTools = [ perl ];
   meta = {
     homepage = "http://www.haskell.org/happy/";
     description = "Happy is a parser generator for Haskell";

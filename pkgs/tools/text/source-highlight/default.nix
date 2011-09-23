@@ -2,22 +2,17 @@
 
 let
   name = "source-highlight";
-  version = "3.1.4";
+  version = "3.1.5";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
       url = "mirror://gnu/src-highlite/${name}-${version}.tar.gz";
-      sha256 = "1jd30ansx2pld196lik6r85aifdhd0cav701vasf4ws8kc8zkcxc";
+      sha256 = "16a2ybd0i7gk926ipp7c63mxcfwklbb20fw65npyrjzr94z1agwx";
     };
 
-  # Help it find Boost::Regex.
-  preConfigure =
-    '' export ax_cv_boost_regex=yes
-       export link_regex=yes
-       export BOOST_REGEX_LIB=-lboost_regex
-    '';
+  configureFlags = [ "--with-boost=${boost}" ];
 
   buildInputs = [boost];
   doCheck = true;

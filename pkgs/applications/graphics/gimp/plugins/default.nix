@@ -195,6 +195,35 @@ rec {
     ";
   };
 
+  gimplensfun = pluginDerivation rec {
+    name = "gimplensfun-0.1.1";
+
+    src = fetchurl {
+      url = "http://lensfun.sebastiankraft.net/${name}.tar.gz";
+      sha256 = "0kr296n4k7gsjqg1abmvpysxi88iq5wrzdpcg7vm7l1ifvbs972q";
+    };
+
+    patchPhase = '' sed -i Makefile -e's|/usr/bin/g++|g++|' '';
+
+    buildInputs = [ gimp pkgconfig glib gimp.gtk pkgs.lensfun pkgs.exiv2 ];
+
+    installPhase = "
+      installPlugins gimplensfun
+      ensureDir $out/bin
+      cp gimplensfun $out/bin
+    ";
+
+    meta = {
+      description = "GIMP plugin to correct lens distortion using the lensfun library and database";
+
+      homepage = http://lensfun.sebastiankraft.net/;
+
+      license = "GPLv3+";
+      maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = stdenv.lib.platforms.gnu;
+    };
+  };
+
   /* =============== simple script files ==================== */
 
   # also have a look at enblendenfuse in all-packages.nix

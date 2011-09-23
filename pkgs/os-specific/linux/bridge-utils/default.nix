@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     description = "http://sourceforge.net/projects/bridge/";
     homepage = [ "http://www.linux-foundation.org/en/Net:Bridge/" "http://sourceforge.net/projects/bridge/" ];
     license = "GPL";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

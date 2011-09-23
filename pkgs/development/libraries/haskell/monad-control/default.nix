@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-control";
-  version = "0.2.0.2";
-  sha256 = "18kakshbjr6nspc6m2ckpbi3sx7r10qmmbh8qbzibg19n9mnq2ni";
+  version = "0.2.0.3";
+  sha256 = "0z7wjilrx6phqs2gxwv65dy1n3mc0j8hj3adshkwy6z8ggj283nh";
   buildDepends = [ baseUnicodeSymbols transformers ];
   meta = {
     homepage = "https://github.com/basvandijk/monad-control/";

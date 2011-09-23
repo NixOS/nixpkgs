@@ -287,5 +287,12 @@ rec {
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
 
-    
+
+  /* For use in the ‘example’ option attribute.  It causes the given
+     text to be included verbatim in documentation.  This is necessary
+     for example values that are not simple values, e.g.,
+     functions. */
+  literalExample = text: { _type = "literalExample"; inherit text; };
+
+
 }

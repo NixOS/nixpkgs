@@ -1,10 +1,10 @@
-{stdenv, fetchurl, openssl, qt4, inkscape}:
+{stdenv, fetchurl, openssl, qt4, inkscape, dbus_libs, pkgconfig, libnl1}:
 
 let
-  version = "0.7.2";
+  version = "0.7.3";
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/wpa_supplicant-${version}.tar.gz";
-    sha256 = "1gnwhnczli50gidsq22ya68hixmdrhd1sxw202ygihvg6xsjl06z";
+    sha256 = "0hwlsn512q2ps8wxxjmkjfdg3vjqqb9mxnnwfv1wqijkm3551kfh";
   };
 in
 
@@ -16,15 +16,32 @@ in
     cd wpa_supplicant
     cp -v defconfig .config
     echo CONFIG_DEBUG_SYSLOG=y | tee -a .config
+    echo CONFIG_CTRL_IFACE_DBUS=y | tee -a .config
+    echo CONFIG_CTRL_IFACE_DBUS_NEW=y | tee -a .config
+    echo CONFIG_CTRL_IFACE_DBUS_INTRO=y | tee -a .config
+    echo CONFIG_DRIVER_NL80211=y | tee -a .config
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  buildInputs = [openssl];
+  buildInputs = [openssl dbus_libs libnl1];
+
+  buildNativeInputs = [ pkgconfig ];
+
+  # Upstream patch required for NetworkManager-0.9
+  patches = [ (fetchurl {
+    url = "http://w1.fi/gitweb/gitweb.cgi?p=hostap-07.git;a=commitdiff_plain;h=b80b5639935d37b95d00f86b57f2844a9c775f57";
+    name = "wpa_supplicant-nm-0.9.patch";
+    sha256 = "1pqba0l4rfhba5qafvvbywi9x1qmphs944p704bh1flnx7cz6ya8";
+    }) ];
 
   postInstall = ''
     ensureDir $out/share/man/man5 $out/share/man/man8
     cp -v doc/docbook/*.5 $out/share/man/man5/
     cp -v doc/docbook/*.8 $out/share/man/man8/
+    ensureDir $out/etc/dbus-1/system.d $out/share/dbus-1/system-services
+    cp -v dbus/*service $out/share/dbus-1/system-services
+    sed -e "s@/sbin/wpa_supplicant@$out&@" -i $out/share/dbus-1/system-services/*
+    cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
   '';
 
   meta = {

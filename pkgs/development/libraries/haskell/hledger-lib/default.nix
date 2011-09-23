@@ -1,16 +1,17 @@
-{ cabal, HUnit, mtl, parsec, regexpr, safe, split, time, utf8String
+{ cabal, cmdargs, HUnit, mtl, parsec, regexpr, safe, split, time
+, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger-lib";
-  version = "0.14";
-  sha256 = "9a6d6ab4383800279e135e9bbcd886e95cea45232d093202c5d43e6edd1f927c";
+  version = "0.15.2";
+  sha256 = "1if20197nyg1as6v1c4a0js694zg213nf7rhfhv2a46af58n0bgq";
   buildDepends = [
-    HUnit mtl parsec regexpr safe split time utf8String
+    cmdargs HUnit mtl parsec regexpr safe split time utf8String
   ];
   meta = {
     homepage = "http://hledger.org";
-    description = "Reusable types and utilities for the hledger accounting tool and financial apps in general";
+    description = "Core data types, parsers and utilities for the hledger accounting tool";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

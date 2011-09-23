@@ -3,8 +3,10 @@
 
 kde {
 
-  buildInputs = [ kdepimlibs boost akonadi shared_desktop_ontologies libxml2
-    libxslt cyrus_sasl gpgme libassuan grantlee ];
+  buildInputs =
+    [ kdepimlibs boost akonadi shared_desktop_ontologies libxml2
+      libxslt cyrus_sasl gpgme libassuan grantlee
+    ];
 
   passthru.propagatedUserEnvPackages = [ akonadi kdepimlibs kdepim_runtime ];
 

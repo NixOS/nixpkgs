@@ -1,14 +1,15 @@
-{ cabal, alex, happy }:
+{ cabal, alex, happy, random }:
 
 cabal.mkDerivation (self: {
   pname = "gtk2hs-buildtools";
-  version = "0.12.0";
-  sha256 = "1czlmyr9zhzc0h1j0z3chv06ma77cibq2yc6h1slfphb1lkv66a8";
+  version = "0.12.1";
+  sha256 = "003d48q8q6ji4axa69bh0sp95fic19cgw3hwigsjbl46qgh6n9gl";
   isLibrary = false;
   isExecutable = true;
+  buildDepends = [ random ];
   buildTools = [ alex happy ];
   meta = {
-    homepage = "http://www.haskell.org/gtk2hs/";
+    homepage = "http://projects.haskell.org/gtk2hs/";
     description = "Tools to build the Gtk2Hs suite of User Interface libraries";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;

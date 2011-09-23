@@ -2,11 +2,11 @@
 , ffmpeg, exiv2, libgsf, rpm, pkgconfig, glib, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "libextractor-0.5.23";
+  name = "libextractor-0.6.2";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "1zyfshayjrp7kd87pm7blyq0dvbv5bbh3f368pp4jws4qxs8aj9f";
+    sha256 = "1pyh599717vjblyjch95r76afdxfhrzqr7nx1pz1davy5fpsw5aw";
   };
 
   preConfigure =

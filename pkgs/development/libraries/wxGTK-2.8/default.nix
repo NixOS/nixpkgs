@@ -2,12 +2,6 @@
 , mesa, compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
-assert pkgconfig != null && gtk != null;
-assert gtk.libtiff != null;
-assert gtk.libjpeg != null;
-assert gtk.libpng != null;
-assert gtk.libpng.zlib != null;
-
 stdenv.mkDerivation {
   name = "wxGTK-2.8.12";
 
@@ -16,10 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1gjs9vfga60mk4j4ngiwsk9h6c7j22pw26m3asxr1jwvqbr8kkqk";
   };
 
-  buildInputs = [
-    pkgconfig gtk gtk.libtiff gtk.libjpeg gtk.libpng gtk.libpng.zlib
-    libXinerama libSM libXxf86vm xf86vidmodeproto mesa
-  ];
+  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto mesa ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   configureFlags = [
     "--enable-gtk2"

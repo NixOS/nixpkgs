@@ -1,13 +1,13 @@
-{ cabal, binary, blazeHtml, hamlet, hopenssl, mtl, pandoc, parsec
+{ cabal, binary, blazeHtml, cryptohash, hamlet, mtl, pandoc, parsec
 , regexBase, regexPcre, snapCore, snapServer, tagsoup, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "3.2.0.5";
-  sha256 = "1rwmdkzwshhi6b27zff42gg65vds866l68h33p4kn6pq1rns3bz4";
+  version = "3.2.0.7";
+  sha256 = "1p06596yfsa0lk5ipdxm1b8j81aph2k30pm2g6ghw6k7fglklyl5";
   buildDepends = [
-    binary blazeHtml hamlet hopenssl mtl pandoc parsec regexBase
+    binary blazeHtml cryptohash hamlet mtl pandoc parsec regexBase
     regexPcre snapCore snapServer tagsoup time
   ];
   meta = {

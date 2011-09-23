@@ -1,7 +1,7 @@
 { callPackage, callPackageOrig, stdenv, qt47 }:
 
 let
-  release = "4.7.0";
+  release = "4.7.1";
 
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {
@@ -41,14 +41,13 @@ in
 kde.modules // kde.individual //
 {
   inherit (kde) manifest modules individual splittedModuleList;
-  recurseForRelease = true;
 
   akonadi = callPackage ./support/akonadi { };
   soprano = callPackage ./support/soprano { };
 
   qt4 = qt47;
 
-  kdebase_workspace = kde.individual.kde_workspace;
+  kdebase_workspace = kde.modules.kde_workspace;
 
   inherit release;
 

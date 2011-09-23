@@ -1,4 +1,4 @@
-{stdenv, git}:
+{stdenv, git, cacert}:
 {url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false }:
 
 /* NOTE:
@@ -34,6 +34,8 @@ stdenv.mkDerivation {
   outputHash = if sha256 == "" then md5 else sha256;
 
   inherit url rev leaveDotGit;
+
+  GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow

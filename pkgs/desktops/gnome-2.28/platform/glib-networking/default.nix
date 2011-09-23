@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, libtool, intltool, gnutls, libproxy
+{stdenv, fetchurl, pkgconfig, glib, libtool, intltool, gnutls2, libproxy
   , libgcrypt, libtasn1
   }:
 
@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libtool intltool gnutls libproxy libgcrypt 
+  propagatedBuildInputs = [ glib libtool intltool gnutls2 libproxy libgcrypt 
     libtasn1];
 }

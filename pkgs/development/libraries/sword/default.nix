@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.crosswire.org/sword/;
     platforms = stdenv.lib.platforms.linux;
     license = "GPLv2";
+    maintainers = [ stdenv.lib.maintainers.piotr ];
   };
 
 }

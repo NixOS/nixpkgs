@@ -149,6 +149,7 @@ let
       BT_HCIUART_H4 y # UART (H4) protocol support
       BT_HCIUART_LL y
       BT_L2CAP y
+      BT_SCO y # audio support
       BT_RFCOMM m
       BT_RFCOMM_TTY y # RFCOMM TTY support
       CRASH_DUMP n
@@ -199,13 +200,14 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc3";
+    version = "3.1-rc6";
 
-    modDirVersion = "3.1.0-rc3";
+    modDirVersion = "3.1.0-rc6";
   
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.x/testing/linux-${version}.tar.bz2";
-      sha256 = "0ky6pawracgc27m0d4mq71f87yiwbp90k5aqn8qh5bdfq3ml84i6";
+      url = "https://github.com/torvalds/linux/tarball/v${version}";
+      sha256 = "047a5qkcghn0q9b611vpdwbl87qb0k0q9x0bdpywlpy644l5dfwy";
+      name = "v${version}.tar.gz";
     };
 
     config = configWithPlatform stdenv.platform;

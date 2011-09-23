@@ -3,7 +3,7 @@
 , libXi, libXau, libXdmcp, libXtst, libXcomposite, libXdamage, libXScrnSaver
 , lm_sensors, libxklavier, libusb, libpthreadstubs, boost
 , automoc4, strigi, soprano, qimageblitz, akonadi
-, libdbusmenu_qt, libqalculate, pciutils, libraw1394, bluez, networkmanager
+, libdbusmenu_qt, libqalculate, pciutils, libraw1394, bluez
 }:
 
 kde.package {
@@ -13,7 +13,7 @@ kde.package {
     kdepimlibs kdebindings boost libusb libXi libXau libXdmcp libraw1394
     libXcomposite libXdamage libXScrnSaver lm_sensors libxklavier automoc4
     strigi soprano qimageblitz akonadi libpthreadstubs libdbusmenu_qt libqalculate
-    pciutils bluez networkmanager ];
+    pciutils bluez ];
 
   patches =
     [ # Don't do compositing with the software GLX driver, since it's

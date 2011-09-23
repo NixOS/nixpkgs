@@ -1,14 +1,12 @@
 { stdenv, fetchurl, gettext, perl, LWP, gnutls ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.12";
+  name = "wget-1.13.3";
 
   src = fetchurl {
-    url = "mirror://gnu/wget/${name}.tar.bz2";
-    sha256 = "16msgly5xn0qj6ngsw34q9j7ag8jkci6020w21d30jgqw8wdj8y8";
+    url = "mirror://gnu/wget/${name}.tar.gz";
+    sha256 = "07wxl38qiy95k3hv2fd1sglgrlp6z920pr9mcfsj8dg7iaxbhppi";
   };
-
-  patches = [ ./gnutls-support.patch ];
 
   preConfigure =
     '' for i in "doc/texi2pod.pl" "tests/run-px" "util/rmold.pl"

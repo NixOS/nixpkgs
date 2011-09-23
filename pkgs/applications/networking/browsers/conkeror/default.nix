@@ -1,9 +1,9 @@
 { stdenv, fetchurl, unzip }:
 stdenv.mkDerivation {
-  name = "conkeror-0.9.3-20110606";
+  name = "conkeror-1.0pre-20110917";
   src = fetchurl {
-    url = http://repo.or.cz/w/conkeror.git/snapshot/0d883dfd5e61e7d0b8a96a079d69b46af064fdca.zip;
-    sha256 = "0h21fw78iq4hljy5p98mpy0wgd5wpx9a0jdwv7l5wrds5vp23dhh";
+    url = http://repo.or.cz/w/conkeror.git/snapshot/9d1f522674379874e502545babe0c843f78fa43c.zip;
+    sha256 = "1ga3d9rc3xfaxvjnhnar752q9ga897q9fck0864i7rh0w7xbrhx2";
   };
   buildInputs = [ unzip ];
   installPhase = ''

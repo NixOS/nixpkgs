@@ -33,7 +33,6 @@ for arg; do
       --deepClone) deepClone=true;;
       --no-deepClone) deepClone=false;;
       --leave-dotGit) leaveDotGit=true;;
-      --keep-dotGit) leaveDotGit=;;
       --builder) builder=true;;
       *)
           argi=$(($argi + 1))
@@ -56,9 +55,24 @@ for arg; do
   fi
 done
 
-if test -z "$url"; then
-    echo "syntax: nix-prefetch-git URL [REVISION [EXPECTED-HASH]]" >&2
+usage(){
+    echo  >&2 "syntax: nix-prefetch-git [options] [URL [REVISION [EXPECTED-HASH]]]
+
+Options:
+      --out path      Path where the output would be stored.
+      --url url       Any url understand by 'git clone'.
+      --rev ref       Any sha1 or references (such as refs/heads/master)
+      --hash h        Expected hash.
+      --deepClone     Clone submodules recursively.
+      --no-deepClone  Do not clone submodules.
+      --leave-dotGit  Keep the .git directories.
+      --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+"
     exit 1
+}
+
+if test -z "$url"; then
+  usage
 fi
 
 
@@ -196,13 +210,14 @@ clone_user_rev() {
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
 	echo "removing \`.git'..." >&2
-        find $out -name .git\* | xargs rm -rf
+        find $dir -name .git\* | xargs rm -rf
     fi
 }
 
 if test -n "$builder"; then
-    mkdir $out
-    clone_user_rev "$out" "$url" "$rev"
+  test -n "$out" -a -n "$url" -a -n "$rev" || usage
+  mkdir $out
+  clone_user_rev "$out" "$url" "$rev"
 else
   if test -z "$hashType"; then
       hashType=sha256
@@ -210,7 +225,7 @@ else
 
   # If the hash was given, a file with that hash may already be in the
   # store.
-  if -n "$expHash"; then
+  if test -n "$expHash"; then
       finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" git-export)
       if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
           finalPath=

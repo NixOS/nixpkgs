@@ -20,5 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://goodies.xfce.org/projects/applications/ristretto;
     description = "A fast and lightweight picture-viewer for the Xfce desktop environment";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

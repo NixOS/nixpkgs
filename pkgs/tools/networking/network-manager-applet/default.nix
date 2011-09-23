@@ -1,24 +1,31 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, glib, libglade
 , networkmanager, GConf, libnotify, gnome_keyring, dbus_glib
-, polkit}:
-stdenv.mkDerivation rec {
+, polkit, xz }:
 
+let
+  pn = "network-manager-applet";
+  major = "0.9";
+  version = "${major}.0";
+in
+
+stdenv.mkDerivation rec {
   name = "network-manager-applet-${version}";
-  version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/network-manager-applet/0.8/network-manager-applet-${version}.tar.bz2";
-    sha256 = "0rn3mr0v8i3bkfhpvx6bbyhv1i6j6s120pkayq2318bg5ivbk12a";
+    url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
+    sha256 = "097y7c29bgd9wm0im06ka3cd94zssg4s626y5lw7yrypq3hzg18f";
   };
 
-  buildInputs = [ intltool pkgconfig gtk glib libglade networkmanager GConf libnotify
-                  gnome_keyring dbus_glib polkit];
+  buildInputs = [ gtk libglade networkmanager GConf libnotify gnome_keyring
+    polkit];
+
+  buildNativeInputs = [ intltool pkgconfig xz ];
 
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;
-    description = "NetworkManager control appler for GNOME.";
+    description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.urkud ];
     platforms = platforms.linux;
   };
 }

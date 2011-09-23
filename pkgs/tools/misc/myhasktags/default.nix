@@ -4,7 +4,7 @@
 
    packageOverrides = {
 
-    haskellCollection = 
+    haskellCollection =
      let hp = haskellPackages;
          install = [ hp.QuickCheck /* ... * /];
       in
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   version = "0.0"; # Haskell Platform 2009.0.0
   src = fetchurl {
     url = http://mawercer.de/~nix/hasktags.hs;
-    sha256 = "e5ce4c4e1f5916baf9395174978faee67a86ff5350936c82e115939812a4d579";
+    sha256 = "0zdin03n357viyyqbn2d029jxd83nyazhaxbxfc8v3jrz5pkwl2c";
   };
   phases="buildPhase";
   buildPhase = ''

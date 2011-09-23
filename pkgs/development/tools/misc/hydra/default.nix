@@ -1,38 +1,41 @@
-{stdenv, fetchurl, nix, perlPackages, perl, makeWrapper, libtool,
-unzip, nukeReferences, pkgconfig, boehmgc, libxslt, sqlite,
-subversion, openssh, coreutils, findutils, gzip, bzip2, lzma,
-gnutar, git, mercurial, gnused, graphviz, rpm, dpkg, cdrkit
+{ stdenv, fetchurl, nix, perlPackages, perl, makeWrapper, libtool
+, unzip, nukeReferences, pkgconfig, boehmgc, libxslt, sqlite
+, subversion, openssh, coreutils, findutils, gzip, bzip2, lzma
+, gnutar, git, mercurial, gnused, graphviz, rpm, dpkg, cdrkit
 }:
 
 let
-  perldeps = with perlPackages; [ 
-  CatalystDevel
-  CatalystPluginSessionStoreFastMmap
-  CatalystPluginStackTrace
-  CatalystPluginAuthorizationRoles
-  CatalystAuthenticationStoreDBIxClass
-  CatalystViewTT
-  CatalystEngineHTTPPrefork
-  CatalystViewDownload
-  XMLSimple
-  IPCRun
-  IOCompressBzip2
-  Readonly
-  DBDPg
-  EmailSender
-  TextTable
-  NetTwitterLite
-  PadWalker
-  DataDump
-  JSONXS
-  DateTime
-  DigestSHA1
-  CryptRandPasswd
-  nixPerl
-  ];
+
+  perldeps = with perlPackages; 
+    [ CatalystDevel
+      CatalystPluginSessionStoreFastMmap
+      CatalystPluginStackTrace
+      CatalystPluginAuthorizationRoles
+      CatalystAuthenticationStoreDBIxClass
+      CatalystViewTT
+      CatalystEngineHTTPPrefork
+      CatalystViewDownload
+      XMLSimple
+      IPCRun
+      IOCompress
+      Readonly
+      DBDPg
+      EmailSender
+      TextTable
+      NetTwitterLite
+      PadWalker
+      DataDump
+      JSONXS
+      DateTime
+      DigestSHA1
+      CryptRandPasswd
+      nixPerl
+    ];
+
+  version = "0.1pre27592"; 
+
 in
 
-let version = "0.1pre27592"; in
 stdenv.mkDerivation {
   name = "hydra-${version}";
 

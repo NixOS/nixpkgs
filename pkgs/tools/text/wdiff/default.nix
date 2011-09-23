@@ -1,12 +1,18 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, which, screen }:
 
-stdenv.mkDerivation rec {
-  name = "wdiff-0.6.5";
+let
+  name = "wdiff-1.0.1";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "mirror://gnu/wdiff/${name}.tar.gz";
-    sha256 = "1fij74hni4mi1zipf5is8kr1i9cssyyq5kqqhcxi0j7mynb5d1sm";
+    sha256 = "1jyg8vmdlazpcwii8a1ddbc0sxcklp9cvj5y0x9zqaybvwzg9r4l";
   };
+
+  # Required for the compile-time for the test suite.
+  buildInputs = [ which screen ];
 
   doCheck = true;
 

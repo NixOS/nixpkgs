@@ -61,6 +61,9 @@ preConfigure() {
     if test -n "$langF77"; then
         langs="$langs,f95"
     fi
+    if test -n "$langObjC"; then
+        langs="$langs,objc"
+    fi
 
     # Perform the build in a different directory.
     mkdir ../build

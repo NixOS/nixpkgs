@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   postInstall = ''
     rm $out/etc/profile.d/bash_completion.sh
     rmdir $out/etc/profile.d
+    sed -i -e "s|/etc/bash_completion|$out/etc/bash_completion|g" $out/etc/bash_completion
   '';
 
   meta = {

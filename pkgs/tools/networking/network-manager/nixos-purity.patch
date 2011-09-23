@@ -1,0 +1,123 @@
+diff --git a/src/backends/NetworkManagerExherbo.c b/src/backends/NetworkManagerExherbo.c
+index d7e24cf..aa64210 100644
+--- a/src/backends/NetworkManagerExherbo.c
++++ b/src/backends/NetworkManagerExherbo.c
+@@ -56,9 +56,9 @@ void nm_system_enable_loopback (void)
+  */
+ void nm_system_update_dns (void)
+ {
+-	if (g_file_test ("/usr/sbin/nscd", G_FILE_TEST_IS_EXECUTABLE)) {
++	if (g_file_test ("@glibc@/sbin/nscd", G_FILE_TEST_IS_EXECUTABLE)) {
+ 		nm_log_info (LOGD_DNS, "Clearing nscd hosts cache.");
+-		nm_spawn_process ("/usr/sbin/nscd -i hosts");
++		nm_spawn_process ("@glibc@/sbin/nscd -i hosts");
+ 	}
+ }
+ 
+diff --git a/src/dhcp-manager/nm-dhcp-dhclient.c b/src/dhcp-manager/nm-dhcp-dhclient.c
+index 88136a9..b4113a9 100644
+--- a/src/dhcp-manager/nm-dhcp-dhclient.c
++++ b/src/dhcp-manager/nm-dhcp-dhclient.c
+@@ -68,10 +68,6 @@ const char *
+ nm_dhcp_dhclient_get_path (const char *try_first)
+ {
+ 	static const char *dhclient_paths[] = {
+-		"/sbin/dhclient",
+-		"/usr/sbin/dhclient",
+-		"/usr/pkg/sbin/dhclient",
+-		"/usr/local/sbin/dhclient",
+ 		NULL
+ 	};
+ 	const char **path = dhclient_paths;
+diff --git a/src/dhcp-manager/nm-dhcp-dhcpcd.c b/src/dhcp-manager/nm-dhcp-dhcpcd.c
+index 237661f..48bc33f 100644
+--- a/src/dhcp-manager/nm-dhcp-dhcpcd.c
++++ b/src/dhcp-manager/nm-dhcp-dhcpcd.c
+@@ -51,10 +51,6 @@ const char *
+ nm_dhcp_dhcpcd_get_path (const char *try_first)
+ {
+ 	static const char *dhcpcd_paths[] = {
+-		"/sbin/dhcpcd",
+-		"/usr/sbin/dhcpcd",
+-		"/usr/pkg/sbin/dhcpcd",
+-		"/usr/local/sbin/dhcpcd",
+ 		NULL
+ 	};
+ 	const char **path = dhcpcd_paths;
+diff --git a/src/dns-manager/nm-dns-dnsmasq.c b/src/dns-manager/nm-dns-dnsmasq.c
+index 2767208..6562015 100644
+--- a/src/dns-manager/nm-dns-dnsmasq.c
++++ b/src/dns-manager/nm-dns-dnsmasq.c
+@@ -52,9 +52,7 @@ static inline const char *
+ find_dnsmasq (void)
+ {
+ 	static const char *paths[] = {
+-		"/usr/local/sbin/dnsmasq",
+-		"/usr/sbin/dnsmasq",
+-		"/sbin/dnsmasq",
++		"@dnsmasq@/sbin/dnsmasq",
+ 		NULL
+ 	};
+ 	const char **binary = paths;
+diff --git a/src/dnsmasq-manager/nm-dnsmasq-manager.c b/src/dnsmasq-manager/nm-dnsmasq-manager.c
+index ca2f9dc..7afb118 100644
+--- a/src/dnsmasq-manager/nm-dnsmasq-manager.c
++++ b/src/dnsmasq-manager/nm-dnsmasq-manager.c
+@@ -170,9 +170,7 @@ static inline const char *
+ nm_find_dnsmasq (void)
+ {
+ 	static const char *dnsmasq_binary_paths[] = {
+-		"/usr/local/sbin/dnsmasq",
+-		"/usr/sbin/dnsmasq",
+-		"/sbin/dnsmasq",
++		"@dnsmasq@/sbin/dnsmasq",
+ 		NULL
+ 	};
+ 
+diff --git a/src/nm-device.c b/src/nm-device.c
+index 3522ea4..75b2db3 100644
+--- a/src/nm-device.c
++++ b/src/nm-device.c
+@@ -1285,8 +1285,7 @@ aipd_exec (NMDevice *self, GError **error)
+ 	gboolean success = FALSE;
+ 	const char **aipd_binary = NULL;
+ 	static const char *aipd_paths[] = {
+-		"/usr/sbin/avahi-autoipd",
+-		"/usr/local/sbin/avahi-autoipd",
++		"@avahi@/sbin/autoipd",
+ 		NULL
+ 	};
+ 	int i = 0;
+@@ -2446,7 +2445,7 @@ share_init (void)
+ 	}
+ 
+ 	for (iter = modules; *iter; iter++) {
+-		char *argv[3] = { "/sbin/modprobe", *iter, NULL };
++		char *argv[3] = { "/var/run/current-system/sw/sbin/modprobe", *iter, NULL };
+ 		char *envp[1] = { NULL };
+ 		GError *error = NULL;
+ 
+diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
+index e863aab..27c14e2 100644
+--- a/src/ppp-manager/nm-ppp-manager.c
++++ b/src/ppp-manager/nm-ppp-manager.c
+@@ -661,9 +661,7 @@ static inline const char *
+ nm_find_pppd (void)
+ {
+ 	static const char *pppd_binary_paths[] = {
+-		"/usr/local/sbin/pppd",
+-		"/usr/sbin/pppd",
+-		"/sbin/pppd",
++		"@ppp@/sbin/pppd",
+ 		NULL
+ 	};
+ 
+@@ -992,7 +990,7 @@ nm_ppp_manager_start (NMPPPManager *manager,
+ 
+ 	/* Make sure /dev/ppp exists (bgo #533064) */
+ 	if (stat ("/dev/ppp", &st) || !S_ISCHR (st.st_mode))
+-		ignored = system ("/sbin/modprobe ppp_generic");
++		ignored = system ("/var/run/current-system/sw/sbin/modprobe ppp_generic");
+ 
+ 	connection = nm_act_request_get_connection (req);
+ 	g_assert (connection);
