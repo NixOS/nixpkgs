@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -31,9 +31,15 @@ stdenv.mkDerivation {
       mv $out/usr/* $out/
       rmdir $out/usr
 
+      # Work around Spotify referring to a specific minor version of
+      # OpenSSL.
+      mkdir $out/lib
+      ln -s ${openssl}/lib/libssl.so $out/lib/libssl.so.0.9.8
+      ln -s ${openssl}/lib/libcrypto.so $out/lib/libcrypto.so.0.9.8
+
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64 \
+        --set-rpath ${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib openssl stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64:$out/lib \
         $out/bin/spotify
 
       preload=$out/libexec/spotify/libpreload.so
