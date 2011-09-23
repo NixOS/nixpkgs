@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.33";
+  version = "5.2.34";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "193iikz0wfm3yvazficxfiqb84f34psq0bcasp3l41n9dygbgldc";
+    sha256 = "1b5ijaccy2k7if4pld8ihz1wa1wr1f9gj2m5xa4kf7v05zcx93c6";
   };
 
   buildInputs = [ boost file gettext glib glibc gnome_keyring gtk gtkmm intltool
