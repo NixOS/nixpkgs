@@ -2585,6 +2585,8 @@ let
     extraLibs = lib.attrValues python.modules;
   };
 
+  pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
