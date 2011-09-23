@@ -133,6 +133,7 @@ in
 
         preStart =
           ''
+            mkdir -m 0755 -p /etc/cups
             mkdir -m 0755 -p ${logDir}
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
