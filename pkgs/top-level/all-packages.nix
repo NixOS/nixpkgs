@@ -2600,7 +2600,7 @@ let
   regina = callPackage ../development/interpreters/regina {};
 
   ruby18 = callPackage ../development/interpreters/ruby { };
-  #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
+  ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
   ruby = ruby18;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
