@@ -884,6 +884,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
 
+  NumInstances = callPackage ../development/libraries/haskell/NumInstances {};
+
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
