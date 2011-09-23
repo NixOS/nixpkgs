@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20110715";
+  version = "20110917";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "1qaz6alabhi7jmpsj7x0x4sskkjf05619maym133y2lkgdnvhydh";
+    sha256 = "1qgb25bwpdcs303q7yz1dm577xyy5pzzyvaqabhkvhbgxmlcpl73";
   };
 
   buildInputs = [ stdenv.gcc file openssl mlton mysql postgresql sqlite ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export GCCARGS="-I$out/include \
+      export CCARGS="-I$out/include \
                       -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib";
 
       export PGHEADER="${postgresql}/include/libpq-fe.h";
