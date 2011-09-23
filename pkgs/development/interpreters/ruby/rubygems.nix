@@ -4,10 +4,10 @@ rec {
   # some packages (eg ruby-debug) still require 1.8. So let's stick to that for
   # now if nobody has different requirements
 
-  version = "1.4.1";
+  version = "1.8.10";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
-    sha256 = "189wg1msb4sdjvdzv9ia6q3lvjlygpp67wlbkl7cjb22bpjy4w4b";
+    sha256 = "0ll5swf4mi4nbgnr5jcyzmnlwb1zr2md9kvsgy3d1f485bb1n59q";
   };
 
 
