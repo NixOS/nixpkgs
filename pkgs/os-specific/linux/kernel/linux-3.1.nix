@@ -200,13 +200,13 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc6";
+    version = "3.1-rc7";
 
-    modDirVersion = "3.1.0-rc6";
+    modDirVersion = "3.1.0-rc7";
   
     src = fetchurl {
       url = "https://github.com/torvalds/linux/tarball/v${version}";
-      sha256 = "047a5qkcghn0q9b611vpdwbl87qb0k0q9x0bdpywlpy644l5dfwy";
+      sha256 = "05zlg522svyym6cab7lrqpihzrk8j356dyahyc321nd8yw0qfv2x";
       name = "v${version}.tar.gz";
     };
 
