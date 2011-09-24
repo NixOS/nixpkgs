@@ -2,6 +2,7 @@
 
 assert zlib != null;
 
+# If you want to upgrade libpng, look at libpng15 branch
 stdenv.mkDerivation rec {
   name = "libpng-1.2.46";
   
