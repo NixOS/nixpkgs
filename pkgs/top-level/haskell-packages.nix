@@ -517,6 +517,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   derive = callPackage ../development/libraries/haskell/derive {};
 
+  derp = callPackage ../development/libraries/haskell/derp {};
+
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
   digest = callPackage ../development/libraries/haskell/digest {
