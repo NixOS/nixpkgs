@@ -1,12 +1,11 @@
-{ cabal, haskellSrcMeta }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "alex-meta";
-  version = "0.2.0.2";
-  sha256 = "1v47p1nrx2nb92aasq7ml6i0sy1nfyybgm9n4r1sw1g86dg1y8z1";
-  buildDepends = [ haskellSrcMeta ];
+  pname = "derp";
+  version = "0.1.5";
+  sha256 = "0mpc4hav5iqrcjns5sz8q0v2c0d7nb2hbzn58cmbl7cma2kp36li";
   meta = {
-    description = "Quasi-quoter for Alex lexers";
+    description = "Derivative Parsing";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
 
+  postInstall = "install -D -m 444 doc/rtorrent.1 $out/share/man/man1/rtorrent.1";
+
   meta = {
     homepage = "http://libtorrent.rakshasa.no/";
     description = "An ncurses client for libtorrent, ideal for use with screen or dtach";

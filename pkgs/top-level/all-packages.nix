@@ -446,7 +446,9 @@ let
     gui = true;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
+  bittornado = callPackage ../tools/networking/p2p/bit-tornado { 
+    inherit (pythonPackages) ssl;
+  };
 
   blueman = callPackage ../tools/bluetooth/blueman {
     inherit (pythonPackages) notify;
@@ -1139,6 +1141,8 @@ let
   pdfjam = callPackage ../tools/typesetting/pdfjam { };
 
   pdfread = callPackage ../tools/graphics/pdfread { };
+
+  pdnsd = callPackage ../tools/networking/pdnsd { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
 
@@ -2581,6 +2585,8 @@ let
     extraLibs = lib.attrValues python.modules;
   };
 
+  pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
@@ -2596,7 +2602,7 @@ let
   regina = callPackage ../development/interpreters/regina {};
 
   ruby18 = callPackage ../development/interpreters/ruby { };
-  #ruby19 = import ../development/interpreters/ruby/ruby-19.nix { inherit ruby18 fetchurl; };
+  ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
   ruby = ruby18;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
@@ -2853,6 +2859,8 @@ let
   help2man = callPackage ../development/tools/misc/help2man {
     inherit (perlPackages) LocaleGettext;
   };
+
+  hyenae = callPackage ../tools/networking/hyenae { };
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
@@ -3760,6 +3768,8 @@ let
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
+
+  libdnet = callPackage ../development/libraries/libdnet { };
 
   libdrm = callPackage ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
@@ -6222,7 +6232,11 @@ let
     inherit (xlibs) libSM;
   };
 
-  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
+  bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
+    # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
+    # connect to jabber.org, for instance.)
+    gnutls = gnutls2;
+  };
 
   blender = callPackage ../applications/misc/blender/2.49.nix { };
 
@@ -6456,6 +6470,10 @@ let
   espeak = callPackage ../applications/audio/espeak { };
 
   esniper = callPackage ../applications/networking/esniper { };
+
+  etherape = callPackage ../applications/networking/sniffers/etherape {
+    inherit (gnome) gnomedocutils libgnome libglade gtk libgnomeui scrollkeeper;
+  };
 
   evopedia = callPackage ../applications/misc/evopedia { };
 

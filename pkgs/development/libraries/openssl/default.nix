@@ -1,13 +1,15 @@
 { stdenv, fetchurl, perl }:
 
 let
+  name = "openssl-1.0.0d";
+
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
 in
 
-stdenv.mkDerivation rec {
-  name = "openssl-1.0.0d";
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
@@ -17,12 +19,12 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
-  
+
   # On x86_64-darwin, "./config" misdetects the system as
   # "darwin-i386-cc".  So specify the system type explicitly.
   configureScript =
     if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
-  
+
   configureFlags = "shared --libdir=lib";
 
   postInstall =
@@ -54,5 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.openssl.org/;
     description = "A cryptographic library that implements the SSL and TLS protocols";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

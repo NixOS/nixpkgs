@@ -19,6 +19,12 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  ipython = import ../shells/ipython {
+    inherit (pkgs) stdenv fetchurl;
+    inherit buildPythonPackage pythonPackages;
+  };
+
+
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;

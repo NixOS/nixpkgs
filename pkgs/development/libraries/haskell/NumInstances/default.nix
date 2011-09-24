@@ -1,12 +1,11 @@
-{ cabal, haskellSrcMeta }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "alex-meta";
-  version = "0.2.0.2";
-  sha256 = "1v47p1nrx2nb92aasq7ml6i0sy1nfyybgm9n4r1sw1g86dg1y8z1";
-  buildDepends = [ haskellSrcMeta ];
+  pname = "NumInstances";
+  version = "1.0";
+  sha256 = "1fmg3slwma5f88a2qxj54ny40s67qbdyvsyh506bkp11v54958fy";
   meta = {
-    description = "Quasi-quoter for Alex lexers";
+    description = "Instances of numeric classes for functions and tuples";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

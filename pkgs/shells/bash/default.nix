@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, bison, bashCompletion ? null}:
+{ stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, bison }:
 
 assert interactive -> readline != null;
 
@@ -52,10 +52,7 @@ stdenv.mkDerivation rec {
     # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
 
-  '' + (if interactive && bashCompletion != null then ''
-    ensureDir "$out/etc"
-    echo >"$out/etc/bash_completion" '. "${bashCompletion}/etc/bash_completion"'
-  '' else ''
+  '' + (if interactive then "" else ''
     # Install the completion examples.
     ensureDir "$out/etc"
     cp -v "examples/complete/bash_completion" "$out/etc"

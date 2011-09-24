@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, text }:
 
 cabal.mkDerivation (self: {
   pname = "xml";
-  version = "1.3.9";
-  sha256 = "1sx6k5dscpcy4aq09g7h0fz0sl4w2nrr4pnklgwrbrh6bf6kc6w2";
+  version = "1.3.10";
+  sha256 = "0mmibqzbbqmw4a8gc4f2yy144nx48gpfwj3iqq6dydvcikajxav2";
+  buildDepends = [ text ];
   meta = {
     homepage = "http://code.galois.com";
     description = "A simple XML library";
