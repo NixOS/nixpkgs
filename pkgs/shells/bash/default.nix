@@ -51,15 +51,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
-
-  '' + (if interactive then "" else ''
-    # Install the completion examples.
-    ensureDir "$out/etc"
-    cp -v "examples/complete/bash_completion" "$out/etc"
-
-    ensureDir "$out/etc/bash_completion.d"
-    cp -v "examples/complete/complete.gnu-longopt" "$out/etc/bash_completion.d"
-  '');
+  '';
 
   meta = {
     homepage = http://www.gnu.org/software/bash/;
