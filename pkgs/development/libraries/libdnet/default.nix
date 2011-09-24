@@ -1,0 +1,31 @@
+{stdenv, fetchurl, automake, autoconf, libtool}:
+
+stdenv.mkDerivation {
+  name = "libdnet-1.12";
+
+  enableParallelBuilding = true;
+
+  src = fetchurl {
+    url = http://libdnet.googlecode.com/files/libdnet-1.12.tgz;
+    sha1 = "71302be302e84fc19b559e811951b5d600d976f8";
+  };
+
+  configureFlags = [ "--enable-shared" ]; # shared libs required by hyenae
+
+  buildInputs = [ automake autoconf libtool ];
+
+  # .so endings are missing (quick and dirty fix)
+  postInstall = ''
+    for i in $out/lib/*; do
+      ln -s $i $i.so
+    done
+  '';
+
+  meta = {
+    description = "libdnet provides a simplified, portable interface to several low-level networking routines";
+    homepage = http://code.google.com/p/libdnet/;
+    license = "BSD"; # New BSD license
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

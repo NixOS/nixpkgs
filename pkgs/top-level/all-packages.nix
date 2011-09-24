@@ -2860,6 +2860,8 @@ let
     inherit (perlPackages) LocaleGettext;
   };
 
+  hyenae = callPackage ../tools/networking/hyenae { };
+
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
   };
@@ -3766,6 +3768,8 @@ let
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
+
+  libdnet = callPackage ../development/libraries/libdnet { };
 
   libdrm = callPackage ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
