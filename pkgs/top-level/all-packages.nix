@@ -3027,6 +3027,7 @@ let
   agg = callPackage ../development/libraries/agg { };
 
   allegro = callPackage ../development/libraries/allegro {};
+  allegro5 = callPackage ../development/libraries/allegro/5.nix {};
 
   amrnb = callPackage ../development/libraries/amrnb { };
 
