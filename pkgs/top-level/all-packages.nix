@@ -7879,11 +7879,6 @@ let
       qt = qt3;
     };
 
-    kcachegrind = callPackage ../development/tools/misc/kcachegrind {
-      inherit (kde3) kdelibs;
-      qt = qt3;
-    };
-
   };
 
   kde4 = recurseIntoAttrs pkgs.kde45;
