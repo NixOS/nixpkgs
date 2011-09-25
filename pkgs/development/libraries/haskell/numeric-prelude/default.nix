@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "numeric-prelude";
-  version = "0.2.2";
-  sha256 = "bc6adb8c2f04e0e1f62e183e052974700143dc93b1a3cbafe3562aa1f7a649fd";
+  version = "0.2.2.1";
+  sha256 = "12b2h103f43rlrfk3zck6mzbvw6v4jf8g4kxz1k14v201lrvb2da";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
