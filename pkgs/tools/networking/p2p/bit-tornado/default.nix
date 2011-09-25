@@ -1,7 +1,7 @@
 {stdenv,fetchurl,python, wxPython, makeWrapper, 
   ssl}:
 stdenv.mkDerivation {
-  name = "bit-tornado";
+  name = "bit-tornado-0.3.18";
 
   src = fetchurl {
     url = http://download2.bittornado.com/download/BitTornado-0.3.18.tar.gz;
