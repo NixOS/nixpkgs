@@ -13,11 +13,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="allegro";
-    version="4.4.0.1";
+    version="4.4.2";
     name="${baseName}-${version}";
     project="alleg";
-    url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="0qgkmazr07lmnbj6h6yk10vmcm15gafcwy5jn7xpwy7bahzraiz0";
+    url="mirror://sourceforge/project/${project}/${name}.tar.gz";
+    hash="1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
   };
 in
 rec {
