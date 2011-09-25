@@ -16,7 +16,7 @@ let
     version="4.4.2";
     name="${baseName}-${version}";
     project="alleg";
-    url="mirror://sourceforge/project/${project}/${name}.tar.gz";
+    url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
     hash="1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
   };
 in
