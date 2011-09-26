@@ -214,18 +214,13 @@ in
                 echo "Creating bridge ${n}..."
                 ${pkgs.bridge_utils}/sbin/brctl addbr "${n}"
 
+                # Set bridge's hello time to 0 to avoid startup delays.
+                ${pkgs.bridge_utils}/sbin/brctl setfd "${n}" 0
+
                 ${flip concatMapStrings v.interfaces (i: ''
                   ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}"
                   ip addr flush dev "${i}"
                 '')}
-
-                # For some reason enslaving an interface to a bridge
-                # causes traffic to be blocked for a few seconds, long
-                # enough for IPv6 router solicitations to get lost.
-                # So increase the number of attemts.
-                ${optionalString cfg.enableIPv6 ''
-                  echo 5 > /proc/sys/net/ipv6/conf/${n}/router_solicitations
-                ''}
 
                 # !!! Should delete (brctl delif) any interfaces that
                 # no longer belong to the bridge.
