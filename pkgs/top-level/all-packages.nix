@@ -915,7 +915,7 @@ let
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lxc = callPackage ../tools/system/lxc { };
+  lxc = callPackage ../applications/virtualization/lxc { };
 
   lzma = xz;
 
