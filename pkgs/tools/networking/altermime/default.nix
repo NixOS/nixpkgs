@@ -26,7 +26,9 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixTarget" "doMakeInstall"];
+  patches = [./altermime.patch];
+
+  phaseNames = ["doPatch" "fixTarget" "doMakeInstall"];
   fixTarget = a.fullDepEntry (''
     sed -i Makefile -e "s@/usr/local@$out@"
     ensureDir "$out/bin"
