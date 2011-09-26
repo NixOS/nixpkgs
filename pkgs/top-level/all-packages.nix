@@ -446,7 +446,7 @@ let
     gui = true;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { 
+  bittornado = callPackage ../tools/networking/p2p/bit-tornado {
     inherit (pythonPackages) ssl;
   };
 
@@ -915,7 +915,7 @@ let
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lxc = callPackage ../tools/system/lxc { };
+  lxc = callPackage ../applications/virtualization/lxc { };
 
   lzma = xz;
 

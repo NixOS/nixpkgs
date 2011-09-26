@@ -3,6 +3,9 @@
 stdenv.mkDerivation rec {
   name = "automake-1.11.1";
 
+  # TODO: Remove the `aclocal' wrapper when $ACLOCAL_PATH support is
+  # available upstream; see
+  # <http://debbugs.gnu.org/cgi/bugreport.cgi?bug=9026>.
   builder = ./builder.sh;
 
   setupHook = ./setup-hook.sh;
