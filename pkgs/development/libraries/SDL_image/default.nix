@@ -1,17 +1,27 @@
-{ stdenv, fetchurl, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
+{ stdenv, fetchhg, SDL, libpng, libjpeg, libtiff, libungif, libXpm, automake,
+  autoconf, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_image";
-  version = "1.2.10";
+  version = "1.2.10-20110925";
 
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://www.libsdl.org/projects/${pname}/release/${name}.tar.gz";
-    sha256 = "0xhqw56xgc0rn3ziccirib8ai2whbbidjmvig527n9znjlg5vq3m";
+  src = fetchhg {
+    url = http://hg.libsdl.org/SDL_image;
+    tag = "bb611e7cb1e5";
+    sha256 = "0003inlvvmlc2fyrzy01lwhhfb90ppsar2skaa7x6rhmpc71dakz";
   };
 
   buildInputs = [SDL libpng libjpeg libtiff libungif libXpm];
+
+  buildNativeInputs = [ automake autoconf pkgconfig ];
+
+  patches = [ ./jpeg-linux.diff ];
+
+  preConfigure = ''
+    ./autogen.sh
+    '';
 
   postInstall = ''
     sed -i -e 's,"SDL.h",<SDL/SDL.h>,' \
