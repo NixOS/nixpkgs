@@ -1,7 +1,9 @@
+
 x@{builderDefsPackage
   , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
   , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
   , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
+  , kbproto
   , ...}:
 builderDefsPackage
 (a :  
@@ -13,11 +15,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="allegro";
-    version="4.4.2";
+    version="5.0.4";
     name="${baseName}-${version}";
     project="alleg";
     url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
+    hash="0vm93kqvvw4rw2zx4l64c2i86xl5giwbqbyki4b2b83z0acpmc1n";
   };
 in
 rec {

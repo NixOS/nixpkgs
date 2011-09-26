@@ -440,7 +440,6 @@ with (import ./release-lib.nix);
     kdebase = linux;
     kdelibs = linux;
     k3b = linux;
-    kcachegrind = linux;
     kile = linux;
   };
 
