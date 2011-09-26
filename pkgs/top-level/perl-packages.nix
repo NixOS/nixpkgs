@@ -2809,6 +2809,14 @@ rec {
     ];
   };
 
+  StatisticsDescriptive = buildPerlPackage rec {
+    name = "Statistics-Descriptive-3.0202";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Statistics/${name}.tar.gz";
+      sha256 = "0y8l3dkhfc2gqwfigrg363ac7pxcyshdna66afpdvs8r1gd53a1i";
+    };
+  };
+
   StringFormat = buildPerlPackage rec {
     name = "String-Format-1.16";
     src = fetchurl {
