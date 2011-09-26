@@ -7832,6 +7832,11 @@ let
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
+  # e17 = recurseIntoAttrs (
+  #   let callPackage = newScope pkgs.e17; in
+  #   import ../desktops/e17 { inherit callPackage pkgs; }
+  # );
+
   gnome28 = recurseIntoAttrs (import ../desktops/gnome-2.28 pkgs);
 
   gnome = gnome28;
