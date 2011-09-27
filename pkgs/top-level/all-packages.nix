@@ -4442,6 +4442,8 @@ let
         # optional
   };
 
+  soprano = callPackage ../development/libraries/soprano { };
+
   soqt = callPackage ../development/libraries/soqt { };
 
   speechd = callPackage ../development/libraries/speechd { };

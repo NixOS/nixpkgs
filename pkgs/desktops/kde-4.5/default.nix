@@ -37,8 +37,6 @@ rec {
 
   polkit_qt_1 = callPackage ./support/polkit-qt-1 { };
 
-  soprano = callPackage ./support/soprano { };
-
 ### LIBS
   kdelibs = callPackage ./libs { };
 
