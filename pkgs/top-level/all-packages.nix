@@ -3475,6 +3475,8 @@ let
     inherit (gnome) gtk glib;
   };
 
+  google_perftools = callPackage ../development/libraries/google-perftools { };
+
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
 
