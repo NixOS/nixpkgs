@@ -770,6 +770,8 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "python plotting library, making publication quality plots";
       homepage = "http://matplotlib.sourceforge.net/";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.simons ];
     };
   });
 
