@@ -2817,6 +2817,23 @@ rec {
     };
   };
 
+  StatisticsDistributions = buildPerlPackage rec {
+    name = "Statistics-Distributions-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Statistics/${name}.tar.gz";
+      sha256 = "1j1kswl98f4i9dn176f9aa3y9bissx2sscga5jm3gjl4pxm3k7zr";
+    };
+  };
+
+  StatisticsTTest = buildPerlPackage rec {
+    name = "Statistics-TTest-1.1.0";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Statistics/${name}.tar.gz";
+      sha256 = "0rkifgzm4rappiy669dyi6lyxn2sdqaf0bl6gndlfa67b395kndj";
+    };
+    propagatedBuildInputs = [ StatisticsDescriptive StatisticsDistributions ];
+  };
+
   StringFormat = buildPerlPackage rec {
     name = "String-Format-1.16";
     src = fetchurl {
