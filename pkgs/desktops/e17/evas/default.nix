@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, eina, freetype }:
+{ stdenv, fetchurl, pkgconfig, freetype, fontconfig, libpng, libjpeg
+, libX11, libXext, eina, eet }:
 stdenv.mkDerivation rec {
   name = "evas-${version}";
   version = "1.0.1";
@@ -6,7 +7,9 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
     sha256 = "0xkwyvxy32dwja0i3j8r8bzlybjwlrgmrhcri1bscp3aaj75x2rx";
   };
-  buildInputs = [ pkgconfig eina freetype ];
+  buildInputs = [ pkgconfig freetype fontconfig libpng libjpeg
+                  libX11 libXext eina eet
+                ];
   meta = {
     description = "Enlightenment's canvas and scenegraph rendering library";
     longDescription = ''

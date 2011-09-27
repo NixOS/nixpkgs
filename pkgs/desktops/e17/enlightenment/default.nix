@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, eina, eet, evas, ecore, edje, efreet, e_dbus }:
+{ stdenv, fetchurl, pkgconfig, eina, eet, evas, ecore, edje, efreet, e_dbus, embryo }:
 stdenv.mkDerivation rec {
   name = "enlightenment-0.16.999.55225";
   src = fetchurl {
     url = "http://download.enlightenment.org/snapshots/2010-12-03/${name}.tar.gz";
     sha256 = "1cv701fidp9mx3g5m9klmzsp0fj149rb133v1w76rzms3a0wljl1";
   };
-  buildInputs = [ pkgconfig eina eet ecore evas edje efreet e_dbus ];
-  configureFlags = "--with-profile=FAST_PC";
+  buildInputs = [ pkgconfig eina eet ecore evas edje efreet e_dbus embryo ];
+  configureFlags = ''
+    --with-profile=FAST_PC
+    --disable-illume
+    --disable-illume2
+  '';
   meta = {
     description = "Enlightenment, the window manager";
     longDescription = ''
