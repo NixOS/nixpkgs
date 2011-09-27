@@ -1818,7 +1818,7 @@ let pythonPackages = python.modules // rec {
       md5 = "42c722d48e52d4888193965dd473adb5";
     };
 
-    propagatedBuildInputs = [docutils jinja2 pygments]; 
+    propagatedBuildInputs = [docutils jinja2 pygments];
 
     meta = {
       description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";
