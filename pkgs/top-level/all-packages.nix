@@ -5550,6 +5550,7 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
+        (kernelPatches.aufs3_0 linux_3_0.src)
         #kernelPatches.aufs2_1_3_0
         #kernelPatches.mips_restart_2_6_36
       ];

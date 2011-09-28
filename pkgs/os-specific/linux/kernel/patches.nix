@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchgit }:
 
 let
 
@@ -35,6 +35,38 @@ let
         '';
       };
     };
+
+    makeAufs3StandalonePatch =  {kernelSrc, version, rev, sha256}:
+
+      stdenv.mkDerivation {
+        name = "aufs3-standalone-${version}.patch";
+
+        src = fetchgit {
+          url = git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git;
+          inherit sha256 rev;
+        };
+
+        #Instructions from http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs3-standalone.git;a=blob;f=Documentation/filesystems/aufs/README;h=b8cf077635b323d1b454266366f05f476bbd09cb;hb=1067b9d8d64d23c70d905c9cd3c90a669e39c4d4
+        buildPhase = ''
+          tar xvf ${kernelSrc}
+          mv -v linux* a
+          cp -av a b
+          cd b
+          patch -Np1 -i ../aufs3-kbuild.patch
+          patch -Np1 -i ../aufs3-base.patch
+          patch -Np1 -i ../aufs3-proc_map.patch
+          patch -Np1 -i ../aufs3-standalone.patch
+          cp -av ../{Documentation,fs} .
+          cp -av ../include/linux/aufs_type.h include/linux/aufs_type.h
+        '';
+
+        installPhase = ''
+          cd ..
+          set +e
+          diff -Naur a b > $out
+          set -e
+        '';
+      };
 
 in
 
@@ -270,6 +302,18 @@ rec {
       patch = ./aufs2.1-3.0.patch;
       features.aufsBase = true;
       features.aufs2_1 = true;
+    };
+
+  aufs3_0 = kernelSrc:
+    { name = "aufs3.0";
+      patch = makeAufs3StandalonePatch {
+        inherit kernelSrc;
+        version = "3.0";
+        rev = "1067b9d8d64d23c70d905c9cd3c90a669e39c4d4";
+        sha256 = "b508cab5987a623f057ae5fdc006c909a6bae6151af6e12fe672bf97b1a7549d";
+      };
+      features.aufsBase = true;
+      features.aufs3 = true;
     };
 
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
