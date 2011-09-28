@@ -5588,6 +5588,10 @@ let
       callPackage ../os-specific/linux/aufs2.1 { }
       else null;
 
+    aufs3 = if kernel.features ? aufs3 then
+      callPackage ../os-specific/linux/aufs3 { }
+      else null;
+
     aufs2_1_util = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1-util { }
       else null;

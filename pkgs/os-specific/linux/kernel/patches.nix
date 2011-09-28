@@ -290,16 +290,17 @@ rec {
       features.aufs2_1 = true;
     };
 
-  aufs3_0 =
-    { name = "aufs3.0";
-      patch = makeAufs3StandalonePatch {
-        version = "3.0";
-        rev = "1067b9d8d64d23c70d905c9cd3c90a669e39c4d4";
-        sha256 = "b508cab5987a623f057ae5fdc006c909a6bae6151af6e12fe672bf97b1a7549d";
-      };
-      features.aufsBase = true;
-      features.aufs3 = true;
+  aufs3_0 = rec {
+    name = "aufs3.0";
+    version = "3.0";
+    patch = makeAufs3StandalonePatch {
+      inherit version;
+      rev = "1067b9d8d64d23c70d905c9cd3c90a669e39c4d4";
+      sha256 = "b508cab5987a623f057ae5fdc006c909a6bae6151af6e12fe672bf97b1a7549d";
     };
+    features.aufsBase = true;
+    features.aufs3 = true;
+  };
 
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
