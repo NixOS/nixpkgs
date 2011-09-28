@@ -2,7 +2,7 @@
 
 let
   pname = "icu4c";
-  version = "4.6";
+  version = "4.8.1";
 in
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "1z6zklqdf6pq7fckk8ar4vmfrnw79bih6yc8gwc7k2vx2alav8dm";
+    sha256 = "13zq190gl54zr84f0k48w9knarjsb966jkailyy06yhqjipcv90r";
   };
 
   postUnpack = "
