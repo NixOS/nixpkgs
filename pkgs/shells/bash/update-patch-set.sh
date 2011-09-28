@@ -16,7 +16,7 @@ VERSION="$2"
 VERSION_CONDENSED="$(echo $VERSION | sed -es/\\.//g)"
 
 GPG="$(if $(type -P gpg2 > /dev/null); then echo gpg2; else echo gpg; fi)"
-PATCH_LIST="$PROJECT-patches.nix"
+PATCH_LIST="$PROJECT-$VERSION-patches.nix"
 
 set -e
 
