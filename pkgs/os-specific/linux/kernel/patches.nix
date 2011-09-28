@@ -211,6 +211,7 @@ rec {
       name = "aufs2";
       patch = ./aufs2.patch;
       features.aufsBase = true;
+      features.aufs2 = true;
     };
 
   aufs2_2_6_33 =
@@ -220,6 +221,7 @@ rec {
       name = "aufs2";
       patch = ./aufs2-33.patch;
       features.aufsBase = true;
+      features.aufs2 = true;
     };
 
   aufs2_2_6_34 =
@@ -229,6 +231,7 @@ rec {
       name = "aufs2";
       patch = ./aufs2-34.patch;
       features.aufsBase = true;
+      features.aufs2 = true;
     };
 
   aufs2_2_6_35 =
@@ -238,6 +241,7 @@ rec {
       name = "aufs2";
       patch = ./aufs2-35.patch;
       features.aufsBase = true;
+      features.aufs2 = true;
     };
 
   aufs2_2_6_36 =
