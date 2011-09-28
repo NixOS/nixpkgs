@@ -7069,7 +7069,9 @@ let
   };
 
   opera = callPackage ../applications/networking/browsers/opera {
-    qt = qt3;
+    inherit (pkgs.gtkLibs) gdk_pixbuf atk;
+    inherit (pkgs.kde4) kdelibs;
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
