@@ -5582,7 +5582,9 @@ let
 
     aufs = callPackage ../os-specific/linux/aufs { };
 
-    aufs2 = callPackage ../os-specific/linux/aufs2 { };
+    aufs2 = if kernel.features ? aufs2 then
+      callPackage ../os-specific/linux/aufs2 { }
+      else null;
 
     aufs2_1 = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1 { }
@@ -5592,11 +5594,13 @@ let
       callPackage ../os-specific/linux/aufs3 { }
       else null;
 
+    aufs2_util = if kernel.features ? aufs2 then
+      callPackage ../os-specific/linux/aufs2-util { }
+      else null;
+
     aufs2_1_util = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1-util { }
       else null;
-
-    aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
 
     aufs3_util = if kernel.features ? aufs3 then
       callPackage ../os-specific/linux/aufs3-util { }
