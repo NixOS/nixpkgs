@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
-    sha256 = "1n5kbblp5ykbz5q8aq88lsif2z0gnvddg9babk33024wxiwi2ym2";
+    sha256 = "a27a1179ec9c0830c65c6aa5d7dab60f7ce1a2a608618570f96bfa72e95ab3d8";
   };
 
   NIX_CFLAGS_COMPILE = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
           inherit sha256;
         };
     in
-      import ./bash-patches.nix patch;
+      import ./bash-4.2-patches.nix patch;
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.all;
   };
 
   passthru = {

@@ -1,0 +1,24 @@
+diff -ubr lxc-0.7.5-orig/src/lxc/Makefile.am lxc-0.7.5/src/lxc/Makefile.am
+--- lxc-0.7.5-orig/src/lxc/Makefile.am	2011-07-25 00:27:10.000000000 +0200
++++ lxc-0.7.5/src/lxc/Makefile.am	2011-09-26 09:58:03.479916848 +0200
+@@ -115,7 +115,7 @@
+ 
+ install-exec-local: install-soPROGRAMS
+ 	mv $(DESTDIR)$(libdir)/liblxc.so $(DESTDIR)$(libdir)/liblxc.so.$(VERSION)
+-	/sbin/ldconfig -l $(DESTDIR)$(libdir)/liblxc.so.$(VERSION)
++	: /sbin/ldconfig -l $(DESTDIR)$(libdir)/liblxc.so.$(VERSION)
+ 	cd $(DESTDIR)$(libdir); \
+ 	ln -sf liblxc.so.$(firstword $(subst ., ,$(VERSION))) liblxc.so
+ 
+diff -ubr lxc-0.7.5-orig/src/lxc/Makefile.in lxc-0.7.5/src/lxc/Makefile.in
+--- lxc-0.7.5-orig/src/lxc/Makefile.in	2011-08-11 19:02:19.000000000 +0200
++++ lxc-0.7.5/src/lxc/Makefile.in	2011-09-26 09:58:18.812685181 +0200
+@@ -1322,7 +1322,7 @@
+ 
+ install-exec-local: install-soPROGRAMS
+ 	mv $(DESTDIR)$(libdir)/liblxc.so $(DESTDIR)$(libdir)/liblxc.so.$(VERSION)
+-	/sbin/ldconfig -l $(DESTDIR)$(libdir)/liblxc.so.$(VERSION)
++	: /sbin/ldconfig -l $(DESTDIR)$(libdir)/liblxc.so.$(VERSION)
+ 	cd $(DESTDIR)$(libdir); \
+ 	ln -sf liblxc.so.$(firstword $(subst ., ,$(VERSION))) liblxc.so
+ 

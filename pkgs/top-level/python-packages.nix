@@ -765,11 +765,13 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
 
     meta = {
       description = "python plotting library, making publication quality plots";
       homepage = "http://matplotlib.sourceforge.net/";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.simons ];
     };
   });
 
@@ -1816,7 +1818,7 @@ let pythonPackages = python.modules // rec {
       md5 = "42c722d48e52d4888193965dd473adb5";
     };
 
-    propagatedBuildInputs = [docutils jinja2 pygments]; 
+    propagatedBuildInputs = [docutils jinja2 pygments];
 
     meta = {
       description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";

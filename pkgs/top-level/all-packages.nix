@@ -446,7 +446,7 @@ let
     gui = true;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { 
+  bittornado = callPackage ../tools/networking/p2p/bit-tornado {
     inherit (pythonPackages) ssl;
   };
 
@@ -915,7 +915,7 @@ let
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lxc = callPackage ../tools/system/lxc { };
+  lxc = callPackage ../applications/virtualization/lxc { };
 
   lzma = xz;
 
@@ -1591,11 +1591,11 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (callPackage ../shells/bash {
+  bash = lowPrio (callPackage ../shells/bash/4.1.nix {
     texinfo = null;
   });
 
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.2.nix {
     interactive = true;
   });
 
@@ -2869,6 +2869,8 @@ let
     inherit (perlPackages) LocaleGettext;
   };
 
+  hyenae = callPackage ../tools/networking/hyenae { };
+
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
   };
@@ -3034,6 +3036,7 @@ let
   agg = callPackage ../development/libraries/agg { };
 
   allegro = callPackage ../development/libraries/allegro {};
+  allegro5 = callPackage ../development/libraries/allegro/5.nix {};
 
   amrnb = callPackage ../development/libraries/amrnb { };
 
@@ -3481,6 +3484,8 @@ let
     inherit (gnome) gtk glib;
   };
 
+  google_perftools = callPackage ../development/libraries/google-perftools { };
+
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
 
@@ -3775,6 +3780,8 @@ let
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
+
+  libdnet = callPackage ../development/libraries/libdnet { };
 
   libdrm = callPackage ../development/libraries/libdrm {
     inherit fetchurl stdenv pkgconfig;
@@ -4445,6 +4452,8 @@ let
   snack = callPackage ../development/libraries/snack {
         # optional
   };
+
+  soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
 
@@ -5551,7 +5560,7 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_3_0
+        #kernelPatches.aufs2_1_3_0
         #kernelPatches.mips_restart_2_6_36
       ];
   };
@@ -7837,6 +7846,11 @@ let
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
+  # e17 = recurseIntoAttrs (
+  #   let callPackage = newScope pkgs.e17; in
+  #   import ../desktops/e17 { inherit callPackage pkgs; }
+  # );
+
   gnome28 = recurseIntoAttrs (import ../desktops/gnome-2.28 pkgs);
 
   gnome = gnome28;
@@ -7881,11 +7895,6 @@ let
 
     kuickshow = callPackage ../applications/graphics/kuickshow {
       inherit (kde3) arts kdelibs;
-      qt = qt3;
-    };
-
-    kcachegrind = callPackage ../development/tools/misc/kcachegrind {
-      inherit (kde3) kdelibs;
       qt = qt3;
     };
 

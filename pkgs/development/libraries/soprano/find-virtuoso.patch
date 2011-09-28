@@ -2,15 +2,23 @@ From: Yury G. Kudryashov <urkud.urkud@gmail.com>
 Subject: [PATCH] Find virtuoso if virtuoso-t is in PATH
 
 ---
- backends/virtuoso/virtuosobackend.cpp |   29 ++++++++++++++++++++---------
+ backends/virtuoso/virtuosobackend.cpp |   31 ++++++++++++++++++++++---------
  backends/virtuoso/virtuosobackend.h   |    2 +-
- 2 files changed, 21 insertions(+), 10 deletions(-)
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
 diff --git a/backends/virtuoso/virtuosobackend.cpp b/backends/virtuoso/virtuosobackend.cpp
-index c83605d..c24854e 100644
+index c83605d..8c30c81 100644
 --- a/backends/virtuoso/virtuosobackend.cpp
 +++ b/backends/virtuoso/virtuosobackend.cpp
-@@ -188,19 +188,19 @@ namespace {
+@@ -27,6 +27,7 @@
+ #include "odbcconnectionpool.h"
+ 
+ #include "sopranodirs.h"
++#include "soprano-config.h"
+ 
+ #include <QtCore/QDebug>
+ #include <QtCore/QtPlugin>
+@@ -188,19 +189,19 @@ namespace {
  
  bool Soprano::Virtuoso::BackendPlugin::isAvailable() const
  {
@@ -37,7 +45,7 @@ index c83605d..c24854e 100644
      QString vs = determineVirtuosoVersion( virtuosoBin );
      if ( vs.isEmpty() ) {
          qDebug() << Q_FUNC_INFO << "Failed to determine version of the Virtuoso server at" << virtuosoBin;
-@@ -217,9 +217,20 @@ bool Soprano::Virtuoso::BackendPlugin::isAvailable() const
+@@ -217,9 +218,21 @@ bool Soprano::Virtuoso::BackendPlugin::isAvailable() const
  
  
  #ifndef Q_OS_WIN
@@ -53,8 +61,9 @@ index c83605d..c24854e 100644
 +
 +    QDir virtuosoBinDir = QFileInfo(virtuosoBin).absoluteDir();
 +    return Soprano::findLibraryPath( "virtodbc_r",
-+            QStringList() << virtuosoBinDir.absolutePath()
-+            << virtuosoBinDir.absoluteFilePath("../lib"),
++            QStringList()
++			<< virtuosoBinDir.absoluteFilePath("../lib"SOPRANO_LIB_SUFFIX)
++			<< virtuosoBinDir.absoluteFilePath("../lib"),
 +            QStringList() << QLatin1String( "virtuoso/plugins/" ) <<
 +            QLatin1String( "odbc/" ) );
  }
@@ -74,4 +83,4 @@ index 3971b83..0807e5d 100644
          };
      }
 -- 
-tg: (432b73f..) t/find-virtuoso (depends on: master)
+tg: (da390be..) t/find-virtuoso (depends on: master)

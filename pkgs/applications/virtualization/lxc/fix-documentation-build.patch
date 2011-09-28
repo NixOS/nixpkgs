@@ -1,0 +1,40 @@
+diff -ubr '--exclude=*sgml*' lxc-0.7.5-orig/doc/Makefile.am lxc-0.7.5/doc/Makefile.am
+--- lxc-0.7.5-orig/doc/Makefile.am	2011-02-14 09:14:07.000000000 +0100
++++ lxc-0.7.5/doc/Makefile.am	2011-09-26 09:53:02.192817940 +0200
+@@ -30,13 +30,13 @@
+ 
+ 
+ %.1 : %.sgml 
+-	docbook2man -w all $<
++	docbook2man $<
+ 
+ %.5 : %.sgml 
+-	docbook2man -w all $<
++	docbook2man $<
+ 
+ %.7 : %.sgml 
+-	docbook2man -w all $<
++	docbook2man $<
+ 
+ lxc-%.sgml : common_options.sgml see_also.sgml
+ 
+diff -ubr '--exclude=*sgml*' lxc-0.7.5-orig/doc/Makefile.in lxc-0.7.5/doc/Makefile.in
+--- lxc-0.7.5-orig/doc/Makefile.in	2011-08-11 19:02:18.000000000 +0200
++++ lxc-0.7.5/doc/Makefile.in	2011-09-26 09:53:13.835401448 +0200
+@@ -786,13 +786,13 @@
+ 
+ 
+ @ENABLE_DOCBOOK_TRUE@%.1 : %.sgml 
+-@ENABLE_DOCBOOK_TRUE@	docbook2man -w all $<
++@ENABLE_DOCBOOK_TRUE@	docbook2man $<
+ 
+ @ENABLE_DOCBOOK_TRUE@%.5 : %.sgml 
+-@ENABLE_DOCBOOK_TRUE@	docbook2man -w all $<
++@ENABLE_DOCBOOK_TRUE@	docbook2man $<
+ 
+ @ENABLE_DOCBOOK_TRUE@%.7 : %.sgml 
+-@ENABLE_DOCBOOK_TRUE@	docbook2man -w all $<
++@ENABLE_DOCBOOK_TRUE@	docbook2man $<
+ 
+ @ENABLE_DOCBOOK_TRUE@lxc-%.sgml : common_options.sgml see_also.sgml
+ 

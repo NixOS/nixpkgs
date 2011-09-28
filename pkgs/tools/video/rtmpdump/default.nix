@@ -1,21 +1,19 @@
-{stdenv, fetchurl, zlib, gnutls, libgcrypt}:
+{stdenv, fetchgit, zlib, gnutls, libgcrypt}:
 
 stdenv.mkDerivation {
-  name = "rtmpdump-2.2d";
-  src = fetchurl {
-    url = http://rtmpdump.mplayerhq.hu/download/rtmpdump-2.2d.tgz;
-    sha256 = "0w2cr3mgp4dcabmr7d7pnsn8f2r1zvar553vfavnzqv61gnhyrm5";
+  name = "rtmpdump-2.4";
+  src = fetchgit {
+    url = git://git.ffmpeg.org/rtmpdump;
+    rev = "c28f1bab7822de97353849e7787b59e50bbb1428";
+    sha256 = "927e7ea7a686adb7cbce9d0a0c710de1e0921bbb1f0c1b35d17bdb816e6c73d8";
   };
 
   buildInputs = [ zlib gnutls libgcrypt ];
 
-  makeFlags = "CRYPTO=GNUTLS posix";
+  makeFlags = "CRYPTO=GNUTLS";
 
-  installPhase = ''
-    ensureDir $out/bin $out/share/man/man{1,8}
-    cp rtmpdump rtmpsrv rtmpsuck rtmpgw $out/bin
-    cp *.1 $out/share/man/man1
-    cp *.8 $out/share/man/man8
+  configurePhase = ''
+    sed -i s,/usr/local,$out, Makefile librtmp/Makefile
   '';
 
   meta = {
