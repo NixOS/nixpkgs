@@ -1,13 +1,13 @@
-{ cabal, deepseq, mtl, mwcRandom, parsec, statistics, time, vector
-, vectorAlgorithms
+{ cabal, aeson, deepseq, mtl, mwcRandom, parsec, statistics, time
+, vector, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
   pname = "criterion";
-  version = "0.5.0.10";
-  sha256 = "0sd289s7wnyg0p37j327hv55aw4a18bdv56z26v4qi3j8p2fbpbj";
+  version = "0.5.1.0";
+  sha256 = "0v43dm1d84zvn32q89dq0nh4dvqr4r6fjdzwcjac0mjics3iy29d";
   buildDepends = [
-    deepseq mtl mwcRandom parsec statistics time vector
+    aeson deepseq mtl mwcRandom parsec statistics time vector
     vectorAlgorithms
   ];
   meta = {
