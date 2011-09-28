@@ -293,6 +293,8 @@ rec {
   aufs3_0 = rec {
     name = "aufs3.0";
     version = "3.0";
+    utilRev = "a08d17d433567c7c2586c5fc2625a714b20fe155";
+    utilHash = "4772c1c6a36da7bbd448057c227a9cd1856ccf72748765cf85421ab0c4e34535";
     patch = makeAufs3StandalonePatch {
       inherit version;
       rev = "1067b9d8d64d23c70d905c9cd3c90a669e39c4d4";

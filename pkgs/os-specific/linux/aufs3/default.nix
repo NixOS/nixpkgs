@@ -30,6 +30,7 @@ stdenv.mkDerivation {
       cp -v usr/include/linux/aufs_type.h $out/include/linux
     '';
 
+  passthru = { inherit patch; };
   meta = {
     description = "Another Unionfs implementation for Linux (third generation)";
     homepage = http://aufs.sourceforge.net/;

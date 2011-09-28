@@ -5598,6 +5598,10 @@ let
 
     aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
 
+    aufs3_util = if kernel.features ? aufs3 then
+      callPackage ../os-specific/linux/aufs3-util { }
+      else null;
+
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };
