@@ -1591,11 +1591,11 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (callPackage ../shells/bash/4.1.nix {
+  bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
   });
 
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.2.nix {
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
   });
 
