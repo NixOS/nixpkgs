@@ -6576,12 +6576,12 @@ let
 
   firefox60Wrapper = wrapFirefox firefox60Pkgs.firefox "firefox" "";
 
-  firefox70b1Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
+  firefox70Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox70b1Wrapper = lowPrio (wrapFirefox firefox70b1Pkgs.firefox "firefox" "");
+  firefox70Wrapper = lowPrio (wrapFirefox firefox70Pkgs.firefox "firefox" "");
 
   flac = callPackage ../applications/audio/flac { };
 
