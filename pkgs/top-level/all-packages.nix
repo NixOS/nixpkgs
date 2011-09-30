@@ -5242,7 +5242,7 @@ let
 
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
-  linuxHeaders = linuxHeaders_2_6_32;
+  linuxHeaders = linuxPackages.kernelHeaders;
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
@@ -5626,6 +5626,8 @@ let
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
+
+    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
