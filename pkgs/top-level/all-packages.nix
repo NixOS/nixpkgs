@@ -6583,6 +6583,11 @@ let
 
   firefox70Wrapper = lowPrio (wrapFirefox firefox70Pkgs.firefox "firefox" "");
 
+  firefox80bPkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer10;
