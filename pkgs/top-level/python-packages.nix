@@ -614,11 +614,11 @@ let pythonPackages = python.modules // rec {
 
 
   jinja2 = buildPythonPackage {
-    name = "jinja2-2.2.1";
+    name = "jinja2-2.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.2.1.tar.gz";
-      md5 = "fea849d68891218eb0b21c170f1c32d5";
+      url = "http://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.6.tar.gz";
+      md5 = "1c49a8825c993bfdcf55bb36897d28a2";
     };
 
     meta = {
