@@ -13,7 +13,7 @@ in
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
 
-  src = kernel.src;
+  src = kernel.headersSrc;
 
   targetConfig = if (cross != null) then cross.config else null;
 

@@ -3,6 +3,9 @@
 , # The kernel source tarball.
   src
 
+, # The kernel headers source tarball.
+  headersSrc ? src
+
 , # The kernel version.
   version
 
@@ -69,7 +72,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version modDirVersion;
+    inherit version modDirVersion headersSrc;
     # Combine the `features' attribute sets of all the kernel patches.
     features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
   };
