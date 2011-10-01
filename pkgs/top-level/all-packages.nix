@@ -5242,7 +5242,16 @@ let
 
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
-  linuxHeaders = linuxPackages.kernelHeaders;
+  linuxHeaders =
+  let
+  
+    kernel = {
+      src = linuxPackages.kernel.src;
+      version = linuxPackages.kernel.version;
+    };
+
+  in
+  callPackage ../os-specific/linux/kernel-headers { inherit kernel; };
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;

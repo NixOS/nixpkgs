@@ -3,7 +3,7 @@
 assert cross == null -> stdenv.isLinux;
 
 let
-  version = kernel.headersVersion;
+  version = kernel.version;
   kernelHeadersBaseConfig = if (cross == null) then
       stdenv.platform.kernelHeadersBaseConfig
     else
@@ -13,7 +13,7 @@ in
 stdenv.mkDerivation {
   name = "linux-headers-${version}";
 
-  src = kernel.headersSrc;
+  src = kernel.src;
 
   targetConfig = if (cross != null) then cross.config else null;
 
