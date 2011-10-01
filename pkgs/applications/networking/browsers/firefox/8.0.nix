@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite
+, yasm, mesa, sqlite, unzip
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "7.0";
+  firefoxVersion = "8.0b1";
   
-  xulVersion = "7.0"; # this attribute is used by other packages
+  xulVersion = "8.0"; # this attribute is used by other packages
 
   
   src = fetchurl {
-    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1fpadlsdc8d739cz52dicn68v2ilv044hxivilgy9jnrazznrm42";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/${firefoxVersion}-candidates/build1/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha256 = "1sdahpawgngvjh4cap2vdg00ngiwji5nkb40dh5kd393wa6c8mpm";
   };
   
   commonConfigureFlags =
@@ -56,7 +56,7 @@ rec {
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto
-        xlibs.libXext xlibs.xextproto sqlite
+        xlibs.libXext xlibs.xextproto sqlite unzip
       ];
 
     configureFlags =
@@ -73,10 +73,6 @@ rec {
           stdenv.lib.concatStringsSep ":" 
             (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
         }' ';'
-        cp -i security/coreconf/Linux{2.6,3.0}.mk
-        cp -i security/coreconf/Linux{2.6,3.1}.mk
-        cp -i security/coreconf/Linux{2.6,3.2}.mk
-        cp -i security/coreconf/Linux{2.6,3.3}.mk
 
         export NIX_LDFLAGS="$NIX_LDFLAGS -L$out/lib/xulrunner-${xulVersion}"
       '';
@@ -134,7 +130,7 @@ rec {
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
-        xlibs.pixman yasm mesa sqlite file
+        xlibs.pixman yasm mesa sqlite file unzip
       ];
 
     propagatedBuildInputs = [xulrunner];

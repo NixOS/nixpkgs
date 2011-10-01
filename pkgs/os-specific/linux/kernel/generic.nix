@@ -75,7 +75,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version modDirVersion headersSrc headersVersion;
+    inherit version modDirVersion kernelPatches headersSrc headersVersion;
     # Combine the `features' attribute sets of all the kernel patches.
     features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
   };

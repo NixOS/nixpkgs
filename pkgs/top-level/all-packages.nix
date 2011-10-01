@@ -2610,9 +2610,9 @@ let
 
   regina = callPackage ../development/interpreters/regina {};
 
-  ruby18 = callPackage ../development/interpreters/ruby { };
-  ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  ruby = ruby18;
+  ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
+  ruby19 = callPackage ../development/interpreters/ruby { };
+  ruby = ruby19;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
@@ -5560,6 +5560,7 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.aufs3_0
         #kernelPatches.aufs2_1_3_0
         #kernelPatches.mips_restart_2_6_36
       ];
@@ -5591,17 +5592,29 @@ let
 
     aufs = callPackage ../os-specific/linux/aufs { };
 
-    aufs2 = callPackage ../os-specific/linux/aufs2 { };
+    aufs2 = if kernel.features ? aufs2 then
+      callPackage ../os-specific/linux/aufs2 { }
+      else null;
 
     aufs2_1 = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1 { }
+      else null;
+
+    aufs3 = if kernel.features ? aufs3 then
+      callPackage ../os-specific/linux/aufs3 { }
+      else null;
+
+    aufs2_util = if kernel.features ? aufs2 then
+      callPackage ../os-specific/linux/aufs2-util { }
       else null;
 
     aufs2_1_util = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1-util { }
       else null;
 
-    aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
+    aufs3_util = if kernel.features ? aufs3 then
+      callPackage ../os-specific/linux/aufs3-util { }
+      else null;
 
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
@@ -6575,12 +6588,17 @@ let
 
   firefox60Wrapper = wrapFirefox firefox60Pkgs.firefox "firefox" "";
 
-  firefox70b1Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
+  firefox70Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox70b1Wrapper = lowPrio (wrapFirefox firefox70b1Pkgs.firefox "firefox" "");
+  firefox70Wrapper = lowPrio (wrapFirefox firefox70Pkgs.firefox "firefox" "");
+
+  firefox80bPkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
 
   flac = callPackage ../applications/audio/flac { };
 

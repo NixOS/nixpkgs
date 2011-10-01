@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
+{ stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
 , libjpeg, libpng, ncurses, python, glib }:
 
 assert stdenv.isLinux;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-    [ zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
+    [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses python glib
     ];
 
