@@ -1474,9 +1474,8 @@ let
 
   unshield = callPackage ../tools/archivers/unshield { };
 
-  unzip = unzip552;
+  unzip = unzip60;
 
-  # TODO: remove in the next stdenv update.
   unzip552 = callPackage ../tools/archivers/unzip/5.52.nix { };
 
   unzip60 = callPackage ../tools/archivers/unzip/6.0.nix { };
