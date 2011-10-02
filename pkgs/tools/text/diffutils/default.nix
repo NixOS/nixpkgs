@@ -1,11 +1,11 @@
 {stdenv, fetchurl, coreutils ? null}:
 
 stdenv.mkDerivation {
-  name = "diffutils-3.0";
+  name = "diffutils-3.2";
   
   src = fetchurl {
-    url = mirror://gnu/diffutils/diffutils-3.0.tar.gz;
-    sha256 = "02g8i6jv0j0vr5nl13ns50lv2dbjy9kkk8jvp11n0g5fpdjizf9g";
+    url = mirror://gnu/diffutils/diffutils-3.2.tar.gz;
+    sha256 = "1lsf0ln0h3mnm2y0mwgrfk0lyfi7bnm4r886acvdrrsvc7pypaia";
   };
   
   /* If no explicit coreutils is given, use the one from stdenv. */
