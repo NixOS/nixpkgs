@@ -504,6 +504,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
+  dataObject = callPackage ../development/libraries/haskell/data-object {};
+
+  dataObjectYaml = callPackage ../development/libraries/haskell/data-object-yaml {};
+
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
   datetime = callPackage ../development/libraries/haskell/datetime {};
