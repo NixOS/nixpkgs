@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "X11-xft";
-  version = "0.3";
-  sha256 = "48892d0d0a90d5b47658877facabf277bf8466b7388eaf6ce163b843432a567d";
+  version = "0.3.1";
+  sha256 = "1lgqb0s2qfwwgbvwxhjbi23rbwamzdi0l0slfr20c3jpcbp3zfjf";
   buildDepends = [ utf8String X11 ];
   extraLibraries = [ fontconfig freetype pkgconfig ];
   pkgconfigDepends = [ libXft ];
