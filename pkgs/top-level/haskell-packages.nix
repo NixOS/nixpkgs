@@ -1293,6 +1293,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
+  yaml = callPackage ../development/libraries/haskell/yaml {};
+
   yap = callPackage ../development/libraries/haskell/yap {};
 
   yesod = callPackage ../development/libraries/haskell/yesod {};
