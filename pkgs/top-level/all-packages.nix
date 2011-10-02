@@ -4997,7 +4997,7 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
-      xkeyboard_config dbus hal libuuid openssl gperf m4
+      xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python;
     automake = automake110x;
   });
