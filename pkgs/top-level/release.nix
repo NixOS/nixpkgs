@@ -436,13 +436,6 @@ with (import ./release-lib.nix);
   };
   */
 
-  kde3 = {
-    kdebase = linux;
-    kdelibs = linux;
-    k3b = linux;
-    kile = linux;
-  };
-
   linuxPackages_2_6_25 = {
     aufs = linux;
     kernel = linux;
