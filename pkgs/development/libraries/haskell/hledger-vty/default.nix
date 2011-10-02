@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger-vty";
-  version = "0.15.2";
-  sha256 = "0sii9psh1mm5f8w782bv2m5rxn29q23v17avhw0x5ssm9zy9yxqd";
+  version = "0.16";
+  sha256 = "161ziq4vwg6wsxijq065g1dpfnvcpxzzbarsj7znbqq4gs02mxx2";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ cmdargs hledger hledgerLib HUnit safe time vty ];
