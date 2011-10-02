@@ -240,7 +240,6 @@ with (import ./release-lib.nix);
   pkgconfig = all;
   pltScheme = linux;
   pmccabe = linux;
-  policykit = linux;
   portmap = linux;
   postgresql = all;
   postfix = linux;
