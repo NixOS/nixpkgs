@@ -474,6 +474,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_1_3;
   };
 
+  convertibleText = callPackage ../development/libraries/haskell/convertible-text {};
+
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
   converge = callPackage ../development/libraries/haskell/converge {};
