@@ -77,7 +77,7 @@ stdenv.mkDerivation {
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion postInstall;
+  inherit preConfigure src module_init_tools localVersion postInstall postBuild;
 
   patches = map (p: p.patch) kernelPatches;
 
