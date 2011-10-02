@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
-, pkgconfig, gstreamer, xineLib }:
+, pkgconfig, gstreamer, xineLib, glib }:
 
 let v = "2.3.1a"; in
 
