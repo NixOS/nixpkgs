@@ -18,7 +18,7 @@ for module in $rootModules; do
         | sed 's/^insmod //') \
         || if test -z "$allowMissing"; then exit 1; fi
     #for i in $deps; do echo $i; done
-    if [ "$deps" -ne "builtin" ]
+    if [[ "$deps" != builtin* ]]
     then
         closure="$closure $deps"
     fi
