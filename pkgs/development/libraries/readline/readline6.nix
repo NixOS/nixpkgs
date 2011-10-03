@@ -21,7 +21,7 @@ stdenv.mkDerivation (rec {
            inherit sha256;
          };
      in
-       import ./readline-patches.nix patch);
+       import ./readline-6.2-patches.nix patch);
 
   meta = {
     description = "GNU Readline, a library for interactive line editing";
