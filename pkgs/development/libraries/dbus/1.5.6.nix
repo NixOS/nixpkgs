@@ -49,7 +49,7 @@ in rec {
 
     preConfigure =
       ''
-        sed -i 's@ $(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
+        sed -i 's@$(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
         substituteInPlace tools/Makefile.in --replace 'install-localstatelibDATA:' 'disabled:'
       '';
 

@@ -1474,9 +1474,8 @@ let
 
   unshield = callPackage ../tools/archivers/unshield { };
 
-  unzip = unzip552;
+  unzip = unzip60;
 
-  # TODO: remove in the next stdenv update.
   unzip552 = callPackage ../tools/archivers/unzip/5.52.nix { };
 
   unzip60 = callPackage ../tools/archivers/unzip/6.0.nix { };
@@ -1596,11 +1595,11 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (callPackage ../shells/bash {
+  bash = lowPrio (callPackage ../shells/bash/4.1.nix {
     texinfo = null;
   });
 
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.2.nix {
     interactive = true;
   });
 
@@ -2601,9 +2600,9 @@ let
 
   regina = callPackage ../development/interpreters/regina {};
 
-  ruby18 = callPackage ../development/interpreters/ruby { };
+  ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  ruby = ruby18;
+  ruby = callPackage ../development/interpreters/ruby { };
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
@@ -3474,6 +3473,8 @@ let
   goocanvas = callPackage ../development/libraries/goocanvas {
     inherit (gnome) gtk glib;
   };
+
+  google_perftools = callPackage ../development/libraries/google-perftools { };
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
@@ -4442,6 +4443,8 @@ let
         # optional
   };
 
+  soprano = callPackage ../development/libraries/soprano { };
+
   soqt = callPackage ../development/libraries/soqt { };
 
   speechd = callPackage ../development/libraries/speechd { };
@@ -4993,7 +4996,7 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
-      xkeyboard_config dbus hal libuuid openssl gperf m4
+      xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python;
     automake = automake110x;
   });
@@ -5546,7 +5549,8 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_3_0
+        kernelPatches.aufs3_0
+        #kernelPatches.aufs2_1_3_0
         #kernelPatches.mips_restart_2_6_36
       ];
   };
@@ -5556,6 +5560,7 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.efi_stub
         #kernelPatches.aufs2_1_2_6_38
         #kernelPatches.mips_restart_2_6_36
       ];
@@ -5577,17 +5582,29 @@ let
 
     aufs = callPackage ../os-specific/linux/aufs { };
 
-    aufs2 = callPackage ../os-specific/linux/aufs2 { };
+    aufs2 = if kernel.features ? aufs2 then
+      callPackage ../os-specific/linux/aufs2 { }
+      else null;
 
     aufs2_1 = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1 { }
+      else null;
+
+    aufs3 = if kernel.features ? aufs3 then
+      callPackage ../os-specific/linux/aufs3 { }
+      else null;
+
+    aufs2_util = if kernel.features ? aufs2 then
+      callPackage ../os-specific/linux/aufs2-util { }
       else null;
 
     aufs2_1_util = if kernel.features ? aufs2_1 then
       callPackage ../os-specific/linux/aufs2.1-util { }
       else null;
 
-    aufs2_util = callPackage ../os-specific/linux/aufs2-util { };
+    aufs3_util = if kernel.features ? aufs3 then
+      callPackage ../os-specific/linux/aufs3-util { }
+      else null;
 
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
@@ -6559,12 +6576,17 @@ let
 
   firefox60Wrapper = wrapFirefox firefox60Pkgs.firefox "firefox" "";
 
-  firefox70b1Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
+  firefox70Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox70b1Wrapper = lowPrio (wrapFirefox firefox70b1Pkgs.firefox "firefox" "");
+  firefox70Wrapper = lowPrio (wrapFirefox firefox70Pkgs.firefox "firefox" "");
+
+  firefox80bPkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7055,7 +7077,9 @@ let
   };
 
   opera = callPackage ../applications/networking/browsers/opera {
-    qt = qt3;
+    inherit (pkgs.gtkLibs) gdk_pixbuf atk;
+    inherit (pkgs.kde4) kdelibs;
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
@@ -7831,6 +7855,11 @@ let
 
 
   enlightenment = callPackage ../desktops/enlightenment { };
+
+  # e17 = recurseIntoAttrs (
+  #   let callPackage = newScope pkgs.e17; in
+  #   import ../desktops/e17 { inherit callPackage pkgs; }
+  # );
 
   gnome28 = recurseIntoAttrs (import ../desktops/gnome-2.28 pkgs);
 

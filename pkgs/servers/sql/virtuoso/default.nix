@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 openssl readline gawk ];
 
+  patchFlags = "-p0";
+
+  patches =
+    [ (fetchurl {
+        url = "http://bugsfiles.kde.org/attachment.cgi?id=63510";
+        name = "virtuoso-charset-fix.diff";
+        sha256 = "09kxjhsy3rbys0bcxpmgga4sa6qjyy79dyl4n8b0gp1hnzjskvkz";
+      })
+    ];
+
   CPP = "${stdenv.gcc}/bin/gcc -E";
 
   configureFlags = "
@@ -19,13 +29,14 @@ stdenv.mkDerivation rec {
     ";
 
   postInstall=''
-    echo Move documentation
+    echo Moving documentation
     mkdir -pv $out/share/doc
     mv -v $out/share/virtuoso/doc $out/share/doc/${name}
     find $out -name "*.a" -delete -o -name "*.jar" -delete -o -type d -empty -delete
     '';
   
   meta = with stdenv.lib; {
+    description = "SQL/RDF database used by, e.g., KDE-nepomuk";
     homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;
     platforms = platforms.all;
     maintainers = [ maintainers.urkud ];

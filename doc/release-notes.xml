@@ -80,7 +80,7 @@ worth listing:
   <listitem><para>Support for building derivations in a virtual
   machine, including RPM and Debian builds in automatically generated
   VM images.  See
-  <filename>pkgs/build-support/vm.default.nix</filename> for
+  <filename>pkgs/build-support/vm/default.nix</filename> for
   details.</para></listitem>
 
   <listitem><para>Improved support for building Haskell

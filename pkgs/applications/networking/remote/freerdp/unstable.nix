@@ -17,7 +17,7 @@
 
 assert printerSupport -> cups != null;
 
-let rev = "42fb9f84e82268073a3838e6082783ba956ecc99"; in
+let rev = "498b88a1da748a4a2b4dbd12c795ca87fee24bab"; in
 
 stdenv.mkDerivation rec {
   name = "freerdp-1.0pre${rev}";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/FreeRDP/FreeRDP.git;
     inherit rev;
-    sha256 = "5e77163e2a728802fc426860b3f5ff88cb2f2f3b0bbf0912e9e44c3d8fa060e5";
+    sha256 = "91ef562e96db483ada28236e524326a75b6942becce4fd2a65ace386186eccf7";
   };
 
   buildInputs = [
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     cunit
   ] ++ stdenv.lib.optional printerSupport cups;
 
-  postUnpack = ''
-    sed -i 's@xf_GetWorkArea(xfi)@///xf_GetWorkArea(xfi)@' git-export/client/X11/xf_monitor.c
-  '';
+  doCheck = false;
+
+  checkPhase = ''LD_LIBRARY_PATH="libfreerdp-cache:libfreerdp-chanman:libfreerdp-common:libfreerdp-core:libfreerdp-gdi:libfreerdp-kbd:libfreerdp-rail:libfreerdp-rfx:libfreerdp-utils" cunit/test_freerdp'';
 
   cmakeFlags = [ "-DWITH_DIRECTFB=ON" "-DWITH_CUNIT=ON" ];
 

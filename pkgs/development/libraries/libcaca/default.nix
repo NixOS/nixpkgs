@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "libcaca-0.99.beta16";
+  name = "libcaca-0.99.beta17";
   
   src = fetchurl {
-    url = "http://caca.zoy.org/raw-attachment/wiki/libcaca/${name}.tar.gz";
-    sha256 = "1k2anqc9jxvlyar6ximf9l55xzzhgwdbjbclpj64vg6lpqf96k6a";
+    url = "http://caca.zoy.org/files/libcaca/${name}.tar.gz";
+    sha256 = "1mpicj3xf4d0mf8papb1zbks5yzi4lnj6yh5cvpq7sb176gawmb3";
   };
   
   configureFlags = "--disable-x11 --disable-imlib2 --disable-doc";

@@ -614,11 +614,11 @@ let pythonPackages = python.modules // rec {
 
 
   jinja2 = buildPythonPackage {
-    name = "jinja2-2.2.1";
+    name = "jinja2-2.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.2.1.tar.gz";
-      md5 = "fea849d68891218eb0b21c170f1c32d5";
+      url = "http://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.6.tar.gz";
+      md5 = "1c49a8825c993bfdcf55bb36897d28a2";
     };
 
     meta = {
@@ -765,11 +765,13 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    buildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
 
     meta = {
       description = "python plotting library, making publication quality plots";
       homepage = "http://matplotlib.sourceforge.net/";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.simons ];
     };
   });
 
@@ -1816,7 +1818,7 @@ let pythonPackages = python.modules // rec {
       md5 = "42c722d48e52d4888193965dd473adb5";
     };
 
-    propagatedBuildInputs = [docutils jinja2 pygments]; 
+    propagatedBuildInputs = [docutils jinja2 pygments];
 
     meta = {
       description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";

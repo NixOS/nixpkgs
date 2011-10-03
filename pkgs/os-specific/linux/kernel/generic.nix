@@ -38,7 +38,6 @@
 , extraMeta ? {}
 , ubootChooser ? null
 , postInstall ? ""
-, setModuleDir ? true
 
 , # After the builder did a 'make all' (kernel + modules)
   # we force building the target asked: bzImage/zImage/uImage/...
@@ -69,7 +68,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version modDirVersion;
+    inherit version modDirVersion kernelPatches;
     # Combine the `features' attribute sets of all the kernel patches.
     features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
   };
@@ -78,16 +77,7 @@ stdenv.mkDerivation {
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion postInstall;
-
-  #Currently, the builder sets $MODULE_DIR during installPhase. This causes
-  #problems with at least linux 3.0, so we need to conditionally avoid
-  #setting $MODULE_DIR. This prepend to postBuild accomplishes this with a
-  #sed/eval trick thanks to MarcWeber
-
-  postBuild = (if setModuleDir then "" else '' 
-    eval "$(type installPhase | sed -e '1d' -e '/export MODULE_DIR/d')";
-  '') + postBuild;
+  inherit preConfigure src module_init_tools localVersion postInstall postBuild;
 
   patches = map (p: p.patch) kernelPatches;
 

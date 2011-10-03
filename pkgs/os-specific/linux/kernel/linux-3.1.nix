@@ -200,20 +200,22 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc7";
+    version = "3.1-rc8";
 
-    modDirVersion = "3.1.0-rc7";
+    modDirVersion = "3.1.0-rc8";
+
+    preConfigure = ''
+      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
+    '';
   
     src = fetchurl {
       url = "https://github.com/torvalds/linux/tarball/v${version}";
-      sha256 = "05zlg522svyym6cab7lrqpihzrk8j356dyahyc321nd8yw0qfv2x";
+      sha256 = "1sz6snv2wavzasrswaprkjpzpll4247v4br0x2i6sndl2nqa6jz7";
       name = "v${version}.tar.gz";
     };
 
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
-
-    setModuleDir = false;
 
     features.iwlwifi = true;
   }

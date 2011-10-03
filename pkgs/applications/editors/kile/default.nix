@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     description = "An integrated LaTeX editor for KDE";
     homepage = http://kile.sourceforge.net;
     license = "GPLv2";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

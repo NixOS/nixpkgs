@@ -240,7 +240,6 @@ with (import ./release-lib.nix);
   pkgconfig = all;
   pltScheme = linux;
   pmccabe = linux;
-  policykit = linux;
   portmap = linux;
   postgresql = all;
   postfix = linux;
@@ -387,6 +386,7 @@ with (import ./release-lib.nix);
   firefox36Pkgs.firefox = linux;
   firefox50Pkgs.firefox = linux;
   firefox60Pkgs.firefox = linux;
+  firefox70Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;
@@ -435,13 +435,6 @@ with (import ./release-lib.nix);
     xmonad = linux;
   };
   */
-
-  kde3 = {
-    kdebase = linux;
-    kdelibs = linux;
-    k3b = linux;
-    kile = linux;
-  };
 
   linuxPackages_2_6_25 = {
     aufs = linux;

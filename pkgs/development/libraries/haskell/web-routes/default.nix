@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "web-routes";
-  version = "0.25.2";
-  sha256 = "0gspjvk5859zwg55q8fjyz4a0d2p6lf2qwa41b8s6kcqi38nnp08";
+  version = "0.25.3";
+  sha256 = "09bqz7vn2050jr67m3rrqi0krfxa9n1fxm9rgi3c837g522nb4kk";
   buildDepends = [ mtl network parsec utf8String ];
   meta = {
     description = "Library for maintaining correctness and composability of URLs within an application";

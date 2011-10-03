@@ -103,6 +103,7 @@ in
 
   libXext = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXau];
+    propagatedBuildInputs = [ xorg.xproto ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 

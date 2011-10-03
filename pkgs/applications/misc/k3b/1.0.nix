@@ -15,5 +15,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A CD and DVD authoring application for KDE";
     homepage = http://www.k3b.org/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
