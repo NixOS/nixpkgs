@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-ghci";
-  version = "0.1.1";
-  sha256 = "09r66fv8ncsdj90zrhg4srxhmbhmf7q61kvfc39x4jbyskgciqms";
+  version = "0.2.0";
+  sha256 = "0920q103g626f8syvn73bwqnix8x6q58xyazys6yinhr7dgi2x6m";
   isLibrary = true;
   isExecutable = true;
   meta = {
