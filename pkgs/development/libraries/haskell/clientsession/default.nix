@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "clientsession";
-  version = "0.7.3";
-  sha256 = "1f5ri7h8l3v60bj6ywhn2v3kih5lclk76qx7y6jc7nyf9499aja5";
+  version = "0.7.3.1";
+  sha256 = "0q16brla4m5g7dmgln3awx964ms7pi1s2r21idmc0mk4rnw2rpi7";
   buildDepends = [
     base64Bytestring cereal cryptoApi cryptocipher skein
   ];
