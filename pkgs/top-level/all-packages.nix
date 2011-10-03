@@ -2601,8 +2601,8 @@ let
   regina = callPackage ../development/interpreters/regina {};
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
-  ruby19 = callPackage ../development/interpreters/ruby { };
-  ruby = ruby19;
+  ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
+  ruby = callPackage ../development/interpreters/ruby { };
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
