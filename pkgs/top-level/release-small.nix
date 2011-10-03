@@ -41,6 +41,7 @@ with (import ./release-lib.nix);
   coreutils = all;
   cpio = all;
   cron = linux;
+  cups = linux;
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
