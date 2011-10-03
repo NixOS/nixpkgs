@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-fPIC";
 
-  patches = [ ./purity.patch ./urw-font-files.patch ]
+  patches = [ ./purity.patch ./urw-font-files.patch ./libpng-1.5.patch ]
     ++ stdenv.lib.optional gnuFork ./pstoraster.patch;
 
   doCheck = true;
