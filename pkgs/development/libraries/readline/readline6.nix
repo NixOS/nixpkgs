@@ -17,7 +17,7 @@ stdenv.mkDerivation (rec {
     (let
        patch = nr: sha256:
          fetchurl {
-           url = "mirror://gnu/readline/${name}-patches/readline61-${nr}";
+           url = "mirror://gnu/readline/${name}-patches/readline62-${nr}";
            inherit sha256;
          };
      in
