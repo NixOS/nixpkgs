@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # {enter "anoncvs" as the password}
   # cvs -z 9 -d :pserver:anoncvs@sourceware.org:/cvs/src co cgen
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${basename}.tar.bz2";
+    url = "mirror://gnu/binutils/${basename}.tar.bz2";
     sha256 = "0m7nmd7gc9d9md43wbrv65hz6lbi2crqwryzpigv19ray1lzmv6d";
   };
 
