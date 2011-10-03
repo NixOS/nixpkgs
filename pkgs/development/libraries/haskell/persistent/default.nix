@@ -1,14 +1,14 @@
-{ cabal, blazeHtml, enumerator, monadControl, mtl, pathPieces, pool
-, sqlite, text, time, transformers
+{ cabal, blazeHtml, dataObject, enumerator, monadControl, mtl
+, pathPieces, pool, sqlite, text, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "persistent";
-  version = "0.6.2";
-  sha256 = "1bzv3wqqy32z20xbda8kr4m1fybnziv0gp6m8v3w0brrvmns20g2";
+  version = "0.6.3";
+  sha256 = "0m50z9k941bhh05jjz1268sn1bi7w8i6jzccldgnbjjvsw2xaisx";
   buildDepends = [
-    blazeHtml enumerator monadControl mtl pathPieces pool text time
-    transformers
+    blazeHtml dataObject enumerator monadControl mtl pathPieces pool
+    text time transformers
   ];
   extraLibraries = [ sqlite ];
   meta = {
