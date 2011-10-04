@@ -13,7 +13,8 @@ with pkgs.lib;
     ];
 
   config = mkDefault {
-    # Wireless card firmware
-    networking.enableRT73Firmware = true;
+    # That wireless card firmware not enabled because the corresponding
+    # build expression 'rt73fw' is broken.
+    networking.enableRT73Firmware = false;
   };
 }
