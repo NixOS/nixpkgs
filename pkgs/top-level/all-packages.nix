@@ -2289,6 +2289,8 @@ let
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
 
+    camlidl = callPackage ../development/tools/ocaml/camlidl { };
+
     camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
 
     camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
