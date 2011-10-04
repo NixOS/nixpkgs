@@ -2289,6 +2289,8 @@ let
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
 
+    camlidl = callPackage ../development/tools/ocaml/camlidl { };
+
     camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
 
     camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
@@ -7893,7 +7895,7 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kile = callPackage ../applications/editors/kile {
+    kile = callPackage ../applications/editors/kile/2.0.nix {
       inherit (kde3) arts kdelibs;
       qt = qt3;
     };
@@ -7959,6 +7961,8 @@ let
       kdevplatform = callPackage ../development/libraries/kdevplatform { };
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
+
+      kile = callPackage ../applications/editors/kile/2.1.nix { };
 
       kmplayer = callPackage ../applications/video/kmplayer {
         inherit (pkgs.gtkLibs) pango;
