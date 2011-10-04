@@ -241,7 +241,7 @@ let
 
   dotnetenv = import ../build-support/dotnetenv {
     inherit stdenv;
-    dotnetfx = dotnetfx35;
+    dotnetfx = dotnetfx40;
   };
 
   vsenv = callPackage ../build-support/vsenv {
@@ -591,6 +591,8 @@ let
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
+
+  dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
   dropbear = callPackage ../tools/networking/dropbear {
     enableStatic = true;
