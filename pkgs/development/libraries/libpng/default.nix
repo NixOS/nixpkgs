@@ -3,19 +3,19 @@
 assert zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.5.4";
-  
+  name = "libpng-1.5.5";
+
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.xz";
-    sha256 = "1rw58zi3hxyinah2dz0jzq81c7ninbmfjf10xax2a8cpd5h45agz";
+    sha256 = "03rsqxhrvpiklagzldjqpgs8v43xnb56adn2ramsbdhrnz68pdsi";
   };
-  
+
   propagatedBuildInputs = [ zlib ];
 
   buildNativeInputs = [ xz ];
 
   passthru = { inherit zlib; };
-  
+
   meta = {
     description = "The official reference implementation for the PNG file format";
     homepage = http://www.libpng.org/pub/png/libpng.html;
