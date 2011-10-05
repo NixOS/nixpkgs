@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger-lib";
-  version = "0.16";
-  sha256 = "095hghg7b6x355yfd3xcp8cngl94k8qbl5x7qm12ncin9dsmz8h8";
+  version = "0.16.1";
+  sha256 = "15imhdkzfnxr72lsghrbsfisc7c2al4jkzcp72yf4hhra4zym1sd";
   buildDepends = [
     cmdargs HUnit mtl parsec regexpr safe split time utf8String
   ];
