@@ -1378,7 +1378,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
-  haddock_2_9_3 = callPackage ../development/tools/documentation/haddock/2.9.3.nix {};
+  haddock_2_9_4 = callPackage ../development/tools/documentation/haddock/2.9.4.nix {};
   haddock = self.haddock_2_7_2;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};

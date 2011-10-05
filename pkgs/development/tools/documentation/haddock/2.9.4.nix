@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haddock";
-  version = "2.9.3";
-  sha256 = "0r3yp5s7qv9hmwwfz8rxbwj39qpysgyg53ka4alaxnfma0a96iyj";
+  version = "2.9.4";
+  sha256 = "18w5pa1zpjy9mmdzjh0hs8jybmky8j87vzry54nni6a3517c5x86";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ ghcPaths xhtml ];
