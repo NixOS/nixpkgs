@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gdb, autoconf, automake }:
+{ stdenv, fetchurl, perl, gdb }:
 
 stdenv.mkDerivation (rec {
   name = "valgrind-3.6.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildNativeInputs = [ perl autoconf automake ];
+  buildNativeInputs = [ perl ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =
