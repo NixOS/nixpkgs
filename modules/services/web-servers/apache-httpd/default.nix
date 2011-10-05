@@ -143,9 +143,9 @@ let
 
 
   sslConf = ''
-    SSLSessionCache dbm:${mainCfg.stateDir}/ssl_scache
+    SSLSessionCache shm:${mainCfg.stateDir}/ssl_scache(512000)
 
-    SSLMutex file:${mainCfg.stateDir}/ssl_mutex
+    SSLMutex posixsem
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
