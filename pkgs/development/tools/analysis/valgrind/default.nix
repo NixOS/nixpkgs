@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, gdb, autoconf, automake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "valgrind-3.6.1";
 
   src = fetchurl {
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =
-    if stdenv.system == "x86_64-linux" then ["--enable-only64bit"] else [];
+    if (stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin")
+    then [ "--enable-only64bit" ]
+    else [];
 
   postInstall = ''
     for i in $out/lib/valgrind/*.supp; do
@@ -40,7 +42,39 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    
+
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
+
+//
+
+(if stdenv.isDarwin
+ then {
+   patchPhase =
+     # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
+     '' echo "getting rid of the \`-arch' GCC option..."
+        find -name Makefile\* -exec \
+          sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
+
+        sed -i coregrind/link_tool_exe_darwin.in \
+            -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
+     '';
+
+   preConfigure =
+     # Shamelessly drag in MIG.
+     '' mkdir -p "$TMPDIR/impure-deps/bin"
+
+        # MIG assumes the standard Darwin core utilities (e.g., `rm -d'), so
+        # let it see the impure directories.
+        cat > "$TMPDIR/impure-deps/bin/mig" <<EOF
+#!/bin/sh
+export PATH="/usr/bin:/bin:\$PATH"
+exec /usr/bin/mig "\$@"
+EOF
+        chmod +x "$TMPDIR/impure-deps/bin/mig"
+
+        export PATH="$TMPDIR/impure-deps/bin:$PATH"
+     '';
+ }
+ else {}))
