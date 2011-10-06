@@ -1,13 +1,16 @@
 { stdenv, fetchurl, pkgconfig, libxml2, perl }:
 
-stdenv.mkDerivation rec {
-  name = "libsmbios-2.2.19";
+let
+  name = "libsmbios-2.2.28";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "http://linux.dell.com/libsmbios/download/libsmbios/${name}/${name}.tar.gz";
-    sha256 = "0f4wnjml734ssg583r448ypax7vf3f9n8gybzvzg170lc3byayhv";
+    sha256 = "03m0n834w49acwbf5cf9ync1ksnn2jkwaysvy7584y60qpmngb91";
   };
-  
+
   buildInputs = [ pkgconfig libxml2 perl ];
 
   # It tries to install some Python stuff even when Python is disabled.
@@ -16,13 +19,16 @@ stdenv.mkDerivation rec {
   # It forgets to install headers.
   postInstall =
     ''
-      cp -a src/include/* $out/include
-      cp -a out/public-include/* $out/include
-    ''; # */
+      cp -va "src/include/"* "$out/include/"
+      cp -va "out/public-include/"* "$out/include/"
+    '';
 
   meta = {
-    homepage = http://linux.dell.com/libsmbios/main/index.html;
-    description = "A library to obtain BIOS information";
-    license = "GPLv2+"; # alternatively, under the Open Software License version 2.1
+    homepage = "http://linux.dell.com/libsmbios/main";
+    description = "a library to obtain BIOS information";
+    license = stdenv.lib.licenses.gpl2Plus; # alternatively, under the Open Software License version 2.1
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
