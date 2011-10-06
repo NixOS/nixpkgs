@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ groff ];
 
-  preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -i Makefile";
+  preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile";
 
   # Force mdadm to use /var/run/mdadm.map for its map file (or
   # /dev/.mdadm/map as a fallback).
