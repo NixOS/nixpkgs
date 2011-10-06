@@ -1,17 +1,20 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg
-, librsvg, pango, gtk }:
+, librsvg, pango, gtk, bzip2 }:
         
-stdenv.mkDerivation {
-  name = "gegl-0.0.22";
+stdenv.mkDerivation rec {
+  name = "gegl-0.1.6";
 
   src = fetchurl {
-    url = ftp://ftp.gimp.org/pub/gegl/0.0/gegl-0.0.22.tar.bz2;
-    sha256 = "0nx6r9amzhw5d2ghlw3z8qnry18rwz1ymvl2cm31b8p49z436wl5";
+    url = "ftp://ftp.gimp.org/pub/gegl/0.1/${name}.tar.bz2";
+    sha256 = "1l966ygss2zkksyw62nm139v2abfzbqqrj0psizvbgzf4mb24rm1";
   };
 
-  configureFlags = "--disable-docs"; # needs fonts otherwise  don't know how to pass them
+  # needs fonts otherwise  don't know how to pass them
+  configureFlags = "--disable-docs";
 
-  buildInputs = [ pkgconfig glib babl libpng cairo libjpeg librsvg pango gtk ];
+  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   meta = { 
     description = "Graph-based image processing framework";

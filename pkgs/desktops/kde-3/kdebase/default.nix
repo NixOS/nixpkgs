@@ -52,4 +52,6 @@ stdenv.mkDerivation {
 
   # Work around some inexplicable build failure starting in kdebase 3.5.9.
   LDFLAGS = "-L${kdelibs}/lib";
+
+  meta.platforms = stdenv.lib.platforms.linux;
 }

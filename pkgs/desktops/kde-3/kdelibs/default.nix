@@ -49,4 +49,6 @@ stdenv.mkDerivation {
     --x-includes=${xlibs.libX11}/include
     --x-libraries=${xlibs.libX11}/lib
   '';
+
+  meta.platforms = stdenv.lib.platforms.linux;
 }

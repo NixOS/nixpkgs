@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, docbook2x}:
 
 stdenv.mkDerivation {
   name = "module-init-tools-3.16";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  patches = [./module-dir.patch];
+  patches = [ ./module-dir.patch ./docbook2man.patch ];
 
   postInstall = "rm $out/sbin/insmod.static"; # don't need it
 

@@ -9,7 +9,7 @@
 }:
 
 let
-  v = "4.7.3";
+  v = "4.7.4";
 in
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0zlk0lcrkhi8wdb5j2lqz3nclk07blbiial7lzs03708kpb6yayh";
+    sha256 = "07i283si8rckdsg3h9a4sp213l16hgjrl7cpzclrjvx4x2y5w6cp";
   };
 
   preConfigure =

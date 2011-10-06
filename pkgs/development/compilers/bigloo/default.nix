@@ -1,12 +1,17 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "bigloo3.2a";
+  name = "bigloo3.7a";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/mimosa/fp/Bigloo/${name}.tar.gz";
-    sha256 = "131jnn17rcccbijpji7v5xlx4z2jldhbn46gkysf6axdcwxwqgg4";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/${name}.tar.gz";
+    sha256 = "0y8i87c2bpqzap8rhzgpyfgdzq21py5xq6mgp0w6xv4rjcj9d0v1";
   };
+
+  preConfigure =
+    # Help libgc's configure.
+    '' export CXXCPP="g++ -E"
+    '';
 
   patchPhase = ''
     # Fix absolute paths.
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
         -e 's=/tmp=$TMPDIR=g' -i configure autoconf/*		\
 	[Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
 	*/*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
-	comptime/Cc/cc.scm gc/install-gc-*
+	comptime/Cc/cc.scm gc/install-*
 
     # Make sure we don't change string lengths in the generated
     # C files.
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  meta = { 
+  meta = {
     description = "Bigloo, an efficient Scheme compiler";
 
     longDescription = ''
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
       between Scheme and C# programs.
     '';
 
-    homepage = http://www-sop.inria.fr/mimosa/fp/Bigloo/;
+    homepage = http://www-sop.inria.fr/indes/fp/Bigloo/;
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];

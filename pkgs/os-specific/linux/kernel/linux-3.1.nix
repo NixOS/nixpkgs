@@ -203,6 +203,10 @@ import ./generic.nix (
     version = "3.1-rc8";
 
     modDirVersion = "3.1.0-rc8";
+
+    preConfigure = ''
+      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
+    '';
   
     src = fetchurl {
       url = "https://github.com/torvalds/linux/tarball/v${version}";
@@ -212,8 +216,6 @@ import ./generic.nix (
 
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
-
-    setModuleDir = false;
 
     features.iwlwifi = true;
   }

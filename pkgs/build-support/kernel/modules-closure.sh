@@ -18,7 +18,10 @@ for module in $rootModules; do
         | sed 's/^insmod //') \
         || if test -z "$allowMissing"; then exit 1; fi
     #for i in $deps; do echo $i; done
-    closure="$closure $deps"
+    if [[ "$deps" != builtin* ]]
+    then
+        closure="$closure $deps"
+    fi
 done
 
 echo "closure:"

@@ -415,4 +415,13 @@ rec {
       name = "glibc-getline";
       patch = ./getline.patch;
     };
+
+  efi_stub = 
+    {
+      # Patch to enable making the kernel a bootable efi image to avoid
+      # needing a bootloader on efi systems
+      # From the x86/efi-stub branch of git://github.com/mfleming/linux-2.6.git
+      name = "efi-stub";
+      patch = ./efi-stub.patch;
+    };
 }

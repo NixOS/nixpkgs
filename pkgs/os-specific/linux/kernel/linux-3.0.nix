@@ -202,6 +202,10 @@ import ./generic.nix (
   rec {
     version = "3.0.4";
   
+    preConfigure = ''
+      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
+    '';
+
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
       sha256 = "1vypjcdii75h5f4zsw9lm8wzxd5ix0mk5p94c96hxv828mqqkmhk";
@@ -209,8 +213,6 @@ import ./generic.nix (
 
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
-
-    setModuleDir = false;
 
     features.iwlwifi = true;
   }

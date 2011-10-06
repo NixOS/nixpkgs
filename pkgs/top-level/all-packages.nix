@@ -241,7 +241,7 @@ let
 
   dotnetenv = import ../build-support/dotnetenv {
     inherit stdenv;
-    dotnetfx = dotnetfx35;
+    dotnetfx = dotnetfx40;
   };
 
   vsenv = callPackage ../build-support/vsenv {
@@ -591,6 +591,8 @@ let
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
+
+  dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
   dropbear = callPackage ../tools/networking/dropbear {
     enableStatic = true;
@@ -2299,6 +2301,8 @@ let
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
 
+    camlidl = callPackage ../development/tools/ocaml/camlidl { };
+
     camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
 
     camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
@@ -2611,8 +2615,8 @@ let
   regina = callPackage ../development/interpreters/regina {};
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
-  ruby19 = callPackage ../development/interpreters/ruby { };
-  ruby = ruby19;
+  ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
+  ruby = callPackage ../development/interpreters/ruby { };
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
@@ -5006,7 +5010,7 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
-      xkeyboard_config dbus hal libuuid openssl gperf m4
+      xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python;
     automake = automake110x;
   });
@@ -5244,7 +5248,7 @@ let
 
   linuxHeaders =
   let
-  
+
     kernel = {
       src = linuxPackages.kernel.src;
       version = linuxPackages.kernel.version;
@@ -5580,6 +5584,7 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.efi_stub
         #kernelPatches.aufs2_1_2_6_38
         #kernelPatches.mips_restart_2_6_36
       ];
@@ -7914,7 +7919,7 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kile = callPackage ../applications/editors/kile {
+    kile = callPackage ../applications/editors/kile/2.0.nix {
       inherit (kde3) arts kdelibs;
       qt = qt3;
     };
@@ -7980,6 +7985,8 @@ let
       kdevplatform = callPackage ../development/libraries/kdevplatform { };
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
+
+      kile = callPackage ../applications/editors/kile/2.1.nix { };
 
       kmplayer = callPackage ../applications/video/kmplayer {
         inherit (pkgs.gtkLibs) pango;

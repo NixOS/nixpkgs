@@ -474,6 +474,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_1_3;
   };
 
+  convertibleText = callPackage ../development/libraries/haskell/convertible-text {};
+
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
   converge = callPackage ../development/libraries/haskell/converge {};
@@ -503,6 +505,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
+
+  dataObject = callPackage ../development/libraries/haskell/data-object {};
+
+  dataObjectYaml = callPackage ../development/libraries/haskell/data-object-yaml {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
@@ -640,13 +646,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     fgl = self.fgl_5_4_2_4;
   };
 
-  hakyll = callPackage ../development/libraries/haskell/hakyll {
-    hamlet = self.hamlet_0_8_2_1;
-  };
+  hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
-  hamlet_0_8_2_1 = callPackage ../development/libraries/haskell/hamlet/0.8.2.1.nix {};
-  hamlet_0_10_1 = callPackage ../development/libraries/haskell/hamlet/0.10.1.nix {};
-  hamlet = self.hamlet_0_10_1;
+  hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
   happstackData = callPackage ../development/libraries/haskell/happstack/happstack-data.nix {};
 
@@ -878,7 +880,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
-  network = self.network_2_2_1_4;
+  network_2_3_0_6 = callPackage ../development/libraries/haskell/network/2.3.0.6.nix {};
+  network = self.network_2_3_0_6;
 
   nixosTypes = callPackage ../development/libraries/haskell/nixos-types {};
 
@@ -1292,6 +1295,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
+  yaml = callPackage ../development/libraries/haskell/yaml {};
+
   yap = callPackage ../development/libraries/haskell/yap {};
 
   yesod = callPackage ../development/libraries/haskell/yesod {};
@@ -1369,6 +1374,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
+  haddock_2_9_4 = callPackage ../development/tools/documentation/haddock/2.9.4.nix {};
   haddock = self.haddock_2_7_2;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
