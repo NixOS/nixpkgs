@@ -6302,7 +6302,7 @@ let
     patchelf = patchelf06;
   };
 
-  chromeWrapper = wrapFirefox chrome "chrome" "";
+  chromeWrapper = wrapFirefox { browser = chrome; browserName = "chrome"; desktopName = "Chrome"; };
 
   cinelerra = callPackage ../applications/video/cinelerra {
     inherit (gnome) esound;
@@ -6554,37 +6554,37 @@ let
 
   firefox = pkgs.firefoxPkgs.firefox;
 
-  firefoxWrapper = wrapFirefox pkgs.firefox "firefox" "";
+  firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox60Pkgs;
+  firefoxPkgs = pkgs.firefox70Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox36Wrapper = wrapFirefox firefox36Pkgs.firefox "firefox" "";
+  firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
 
   firefox50Pkgs = callPackage ../applications/networking/browsers/firefox/5.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox50Wrapper = wrapFirefox firefox50Pkgs.firefox "firefox" "";
+  firefox50Wrapper = wrapFirefox { browser = firefox50Pkgs.firefox; };
 
   firefox60Pkgs = callPackage ../applications/networking/browsers/firefox/6.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox60Wrapper = wrapFirefox firefox60Pkgs.firefox "firefox" "";
+  firefox60Wrapper = wrapFirefox { browser = firefox60Pkgs.firefox; };
 
   firefox70Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
-  firefox70Wrapper = lowPrio (wrapFirefox firefox70Pkgs.firefox "firefox" "");
+  firefox70Wrapper = wrapFirefox { browser = firefox70Pkgs.firefox; };
 
   firefox80bPkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
     inherit (gtkLibs) gtk pango;
@@ -6786,7 +6786,7 @@ let
        [ icecat3 icecatXulrunner3 ])
     // { inherit (icecat3) gtk isFirefox3Like meta; };
 
-  icecat3Wrapper = wrapFirefox icecat3Xul "icecat" "";
+  icecat3Wrapper = wrapFirefox { browser = icecat3Xul; browserName = "icecat"; desktopName = "IceCat"; };
 
   icecat4 = lowPrio (import ../applications/networking/browsers/icecat-4 {
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
@@ -6812,7 +6812,7 @@ let
        [ icecat4 icecatXulrunner4 ])
     // { inherit (icecat4) gtk meta; };
 
-  icecat4Wrapper = wrapFirefox icecat4Xul "icecat" "";
+  icecat4Wrapper = wrapFirefox { browser = icecat4Xul; browserName = "icecat"; desktopName = "IceCat"; };
 
   icewm = callPackage ../applications/window-managers/icewm {
     inherit (gtkLibs) gtk;
@@ -7454,26 +7454,28 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
-  wrapFirefox = browser: browserName: nameSuffix: import ../applications/networking/browsers/firefox/wrapper.nix {
-    inherit stdenv nameSuffix makeWrapper makeDesktopItem browser browserName;
-    plugins =
-      let
-        enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
-        enableGnash = getConfig [ browserName "enableGnash" ] false;
-      in
-       assert !(enableGnash && enableAdobeFlash);
-       ([ ]
-        ++ lib.optional enableGnash gnash
-        ++ lib.optional enableAdobeFlash flashplayer
-        # RealPlayer is disabled by default for legal reasons.
-        ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
-        ++ lib.optional (getConfig [browserName "enableDjvu"] false) (djview4)
-        ++ lib.optional (getConfig [browserName "enableMPlayer"] false) (MPlayerPlugin browser)
-        ++ lib.optional (getConfig [browserName "enableGeckoMediaPlayer"] false) gecko_mediaplayer
-        ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
-        ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin
-       );
-  };
+  wrapFirefox =
+    { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? "" }:
+    import ../applications/networking/browsers/firefox/wrapper.nix {
+      inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix;
+      plugins =
+        let
+          enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
+          enableGnash = getConfig [ browserName "enableGnash" ] false;
+        in
+         assert !(enableGnash && enableAdobeFlash);
+         ([ ]
+          ++ lib.optional enableGnash gnash
+          ++ lib.optional enableAdobeFlash flashplayer
+          # RealPlayer is disabled by default for legal reasons.
+          ++ lib.optional (system != "i686-linux" && getConfig [browserName "enableRealPlayer"] false) RealPlayer
+          ++ lib.optional (getConfig [browserName "enableDjvu"] false) (djview4)
+          ++ lib.optional (getConfig [browserName "enableMPlayer"] false) (MPlayerPlugin browser)
+          ++ lib.optional (getConfig [browserName "enableGeckoMediaPlayer"] false) gecko_mediaplayer
+          ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
+          ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin
+         );
+    };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
