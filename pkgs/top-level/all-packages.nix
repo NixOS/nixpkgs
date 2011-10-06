@@ -4203,6 +4203,7 @@ let
   neon029 = callPackage ../development/libraries/neon/0.29.nix {
     compressionSupport = true;
     sslSupport = true;
+    openssl = opensslNew;
   };
 
   nethack = builderDefsPackage (import ../games/nethack) {
@@ -5958,7 +5959,7 @@ let
     tunctl = true; mconsole = true;
   };
 
-  untie = callPackage ../os-specific/linux/untie {};
+  untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower {
     dbus_glib = pkgs.dbus_glib_0_94;
