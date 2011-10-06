@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig perl python zip bzip2 gtk dbus_glib alsaLib libIDL nspr libnotify
-      libnotify cairo pixman fontconfig yasm mesa nss
+      libnotify cairo pixman fontconfig yasm mesa /* nss */
     ];
 
   patches = [
@@ -69,6 +69,18 @@ stdenv.mkDerivation {
       substituteInPlace $out/lib/thunderbird-*/thunderbird \
           --replace /bin/pwd "$(type -tP pwd)" \
           --replace /bin/ls "$(type -tP ls)"
+
+      # Create a desktop item.
+      mkdir -p $out/share/applications
+      cat > $out/share/applications/thunderbird.desktop <<EOF
+      [Desktop Entry]
+      Type=Application
+      Exec=$out/bin/thunderbird
+      Icon=$out/lib/thunderbird-${version}/chrome/icons/default/default256.png
+      Name=Thunderbird
+      GenericName=Mail Reader
+      Categories=Application;Network;
+      EOF
     '';
 
   meta = with stdenv.lib; {
