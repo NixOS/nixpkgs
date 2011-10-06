@@ -8208,6 +8208,8 @@ let
 
   ### SCIENCE / MISC
 
+  boinc = callPackage ../applications/science/misc/boinc { };
+
   golly = callPackage ../applications/science/misc/golly { };
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
