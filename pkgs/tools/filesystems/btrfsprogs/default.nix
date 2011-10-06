@@ -18,7 +18,7 @@ rec {
 
   inherit buildInputs;
   configureFlags = [];
-  makeFlags = ["prefix=$out"];
+  makeFlags = ["prefix=$out CFLAGS=-Os"];
 
   patches = [ ./glibc212.patch ];
   phaseNames = ["doPatch" "doEnsureBtrfsImage" "doMakeInstall"];
