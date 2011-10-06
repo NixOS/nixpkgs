@@ -3168,7 +3168,6 @@ let
   ctl = callPackage ../development/libraries/ctl { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
-  cppunit_1_10 = callPackage ../development/libraries/cppunit/1.10.nix { };
 
   cracklib = callPackage ../development/libraries/cracklib { };
 
