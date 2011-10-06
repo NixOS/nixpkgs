@@ -1,10 +1,10 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.19" a; 
+  version = a.lib.attrByPath ["version"] "0.19" a;
   buildInputs = with a; [
-    zlib libuuid acl 
+    zlib libuuid acl
   ];
 in
 
@@ -18,13 +18,13 @@ rec {
 
   inherit buildInputs;
   configureFlags = [];
-  makeFlags = ["prefix=$out"];
+  makeFlags = ["prefix=$out CFLAGS=-Os"];
 
   patches = [ ./glibc212.patch ];
   phaseNames = ["doPatch" "doEnsureBtrfsImage" "doMakeInstall"];
-      
+
   doEnsureBtrfsImage = a.fullDepEntry (''
-    if ! grep 'progs = ' Makefile | grep btrfs-image; then 
+    if ! grep 'progs = ' Makefile | grep btrfs-image; then
       sed -e 's/progs = .*/& btrfs-image/' -i Makefile
     fi
   '') ["minInit" "doUnpack"];

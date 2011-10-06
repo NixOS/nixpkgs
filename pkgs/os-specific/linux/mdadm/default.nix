@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "mdadm-3.1.2";
-  
+
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.bz2";
     sha256 = "0s2d2a01j8cizxqvbgd0sn5bpa1j46q8976078b3jq1q7i1ir0zz";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ groff ];
 
-  preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -i Makefile";
+  preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile";
 
   # Force mdadm to use /var/run/mdadm.map for its map file (or
   # /dev/.mdadm/map as a fallback).
