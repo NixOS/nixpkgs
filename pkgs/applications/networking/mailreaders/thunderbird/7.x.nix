@@ -11,17 +11,17 @@
 
 }:
 
-let version = "5.0"; in
+let version = "7.0.1"; in
 
-# from wikipedia: This Release no longer supports versions of Mac OS X
-# before Mac OS X 10.5 Leopard or Mac computers with PowerPC processors.
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "392c3e0ef70b62c29a543f88b2b8d5a51bfe69a7";
+    sha1 = "ccfc6fe3fe4ad07b214e20bc440d20e14d3ffbe5";
   };
+
+  enableParallelBuilding = true;
 
   buildInputs =
     [ pkgconfig perl python zip bzip2 gtk dbus_glib alsaLib libIDL nspr libnotify
