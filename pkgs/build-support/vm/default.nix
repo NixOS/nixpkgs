@@ -1194,22 +1194,22 @@ rec {
     };
 
     debian50i386 = {
-      name = "debian-5.0.8-lenny-i386";
-      fullName = "Debian 5.0.8 Lenny (i386)";
+      name = "debian-5.0.9-lenny-i386";
+      fullName = "Debian 5.0.9 Lenny (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-i386/Packages.bz2;
-        sha256 = "0dcvd8ivn71dwln7mx5dbqj30v4cqmc61lj21ry05karkglb5scg";
+        sha256 = "07f54775e2b54e201c7020cd65212fbb44288b1071a73f630f58b68b2d08b2af";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
-        
+
     debian50x86_64 = {
-      name = "debian-5.0.8-lenny-amd64";
-      fullName = "Debian 5.0.8 Lenny (amd64)";
+      name = "debian-5.0.9-lenny-amd64";
+      fullName = "Debian 5.0.9 Lenny (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/lenny/main/binary-amd64/Packages.bz2;
-        sha256 = "1wrqjfcqfs7q5i7jnr8115zsjlhzxxm2x41agp546d3wpj68k938";
+        sha256 = "1jqb3rr5q5y7yyhrymwa51djsydm92zbbmg4vbif65i7sp9ggky0";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
