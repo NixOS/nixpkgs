@@ -182,7 +182,7 @@ pkgs.makeOverridable
 #### DESKTOP
 
   gnome_keyring = import ./desktop/gnome-keyring {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus libgcrypt libtasn1 pam hal python;
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus libgcrypt libtasn1 pam python;
     inherit (pkgs.gtkLibs) glib gtk;
     inherit intltool GConf;
   };
