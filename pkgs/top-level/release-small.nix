@@ -208,7 +208,7 @@ with (import ./release-lib.nix);
   zile = linux;
   zip = all;
 
-  dbus = {
+  dbus_all = {
     libs = linux;
     tools = linux;
   };
