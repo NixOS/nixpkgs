@@ -6303,7 +6303,10 @@ let
     patchelf = patchelf06;
   };
 
-  chromeWrapper = wrapFirefox { browser = chrome; browserName = "chrome"; desktopName = "Chrome"; };
+  chromeWrapper = wrapFirefox
+    { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
+      icon = "${chrome}/libexec/chrome/product_logo_48.png";
+    };
 
   cinelerra = callPackage ../applications/video/cinelerra {
     inherit (gnome) esound;
@@ -7446,9 +7449,10 @@ let
   wordnet = callPackage ../applications/misc/wordnet { };
 
   wrapFirefox =
-    { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? "" }:
+    { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
+    , icon ? "${browser}/lib/${browser.name}/icons/mozicon128.png" }:
     import ../applications/networking/browsers/firefox/wrapper.nix {
-      inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix;
+      inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
       plugins =
         let
           enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
