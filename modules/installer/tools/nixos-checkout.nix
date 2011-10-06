@@ -28,8 +28,8 @@ let
         fi
 
         # Check out the NixOS and Nixpkgs sources.
-        ${pkgs.subversion}/bin/svn co https://svn.nixos.org/repos/nix/nixos/trunk nixos
-        ${pkgs.subversion}/bin/svn co https://svn.nixos.org/repos/nix/nixpkgs/trunk nixpkgs
+        ${pkgs.subversion}/bin/svn co https://nixos.org/repos/nix/nixos/trunk nixos
+        ${pkgs.subversion}/bin/svn co https://nixos.org/repos/nix/nixpkgs/trunk nixpkgs
       '';
    };
 

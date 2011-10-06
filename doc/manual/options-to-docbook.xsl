@@ -156,7 +156,7 @@
           or to the local filesystem. -->
           <xsl:choose>
             <xsl:when test="$revision != 'local' and contains(@value, '/modules/')">
-              <xsl:attribute name="xlink:href">https://svn.nixos.org/viewvc/nix/nixos/trunk/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/>?revision=<xsl:value-of select="$revision"/></xsl:attribute>
+              <xsl:attribute name="xlink:href">https://nixos.org/viewvc/nix/nixos/trunk/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/>?revision=<xsl:value-of select="$revision"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>

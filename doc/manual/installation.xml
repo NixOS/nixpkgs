@@ -35,11 +35,11 @@ $ nix-channel --update</screen>
   </para></listitem>
 
   <listitem><para>Check out NixOS from <link
-  xlink:href="https://svn.nixos.org/repos/nix/nixos/trunk"/> as
+  xlink:href="https://nixos.org/repos/nix/nixos/trunk"/> as
   <literal>nixos</literal>.</para></listitem>
 
   <listitem><para>Check out Nixpkgs from
-  <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk"/> as
+  <link xlink:href="https://nixos.org/repos/nix/nixpkgs/trunk"/> as
   <literal>nixpkgs</literal>.</para></listitem>
 
   <listitem><para>Build the ISO image:
@@ -175,7 +175,7 @@ $ nixos-option --install</screen>
     <para>Examples are available in
     <filename>/etc/nixos/nixos/doc/config-examples</filename> and some
     actual NixOS configuration can be found at <link
-    xlink:href="https://svn.nixos.org/repos/nix/configurations/trunk/"/>.</para>
+    xlink:href="https://nixos.org/repos/nix/configurations/trunk/"/>.</para>
 
   </listitem>
 
