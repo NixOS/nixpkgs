@@ -6292,11 +6292,9 @@ let
 
   cdrtools = callPackage ../applications/misc/cdrtools { };
 
-  chatzilla =
-    xulrunnerWrapper {
-      launcher = "chatzilla";
-      application = callPackage ../applications/networking/irc/chatzilla { };
-    };
+  chatzilla = callPackage ../applications/networking/irc/chatzilla {
+    xulrunner = firefox36Pkgs.xulrunner;
+  };
 
   chrome = callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
@@ -6339,10 +6337,7 @@ let
 
   comical = callPackage ../applications/graphics/comical { };
 
-  conkeror = xulrunnerWrapper {
-    launcher = "conkeror";
-    application = callPackage ../applications/networking/browsers/conkeror { };
-  };
+  conkeror = callPackage ../applications/networking/browsers/conkeror { };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
