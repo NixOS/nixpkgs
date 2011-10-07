@@ -7882,11 +7882,6 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kile = callPackage ../applications/editors/kile/2.0.nix {
-      inherit (kde3) arts kdelibs;
-      qt = qt3;
-    };
-
     kphone = callPackage ../applications/networking/kphone {
       qt = qt3;
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
@@ -7949,7 +7944,7 @@ let
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
 
-      kile = callPackage ../applications/editors/kile/2.1.nix { };
+      kile = callPackage ../applications/editors/kile { };
 
       kmplayer = callPackage ../applications/video/kmplayer {
         inherit (pkgs.gtkLibs) pango;
